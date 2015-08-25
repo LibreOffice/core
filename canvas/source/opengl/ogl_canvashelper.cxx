@@ -139,10 +139,8 @@ namespace oglcanvas
             TransformationPreserver aPreserver;
             setupState(rTransform, eSrcBlend, eDstBlend, rColor);
 
-            ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
-            const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
-            while( aCurr != aEnd )
-                renderPolyPolygon(*aCurr++);
+            for( const auto& rPoly : rPolyPolygons )
+                renderPolyPolygon( rPoly );
 
             return true;
         }
@@ -157,12 +155,10 @@ namespace oglcanvas
             TransformationPreserver aPreserver;
             setupState(rTransform, eSrcBlend, eDstBlend, rColor);
 
-            ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
-            const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
-            while( aCurr != aEnd )
+            for( const auto& rPoly : rPolyPolygons )
             {
-                glBegin(GL_TRIANGLES);
-                renderComplexPolyPolygon(*aCurr++);
+                glBegin( GL_TRIANGLES );
+                renderComplexPolyPolygon( rPoly );
                 glEnd();
             }
 
@@ -186,10 +182,8 @@ namespace oglcanvas
             ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
                                                             rTexture.AffineTransform );
             ::basegfx::B2DRange aBounds;
-            ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
-            const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
-            while( aCurr != aEnd )
-                aBounds.expand(::basegfx::tools::getRange(*aCurr++));
+            for( const auto& rPoly : rPolyPolygons )
+                aBounds.expand( ::basegfx::tools::getRange( rPoly ) );
             aTextureTransform.translate(-aBounds.getMinX(), -aBounds.getMinY());
             aTextureTransform.scale(1/aBounds.getWidth(), 1/aBounds.getHeight());
 
@@ -228,11 +222,10 @@ namespace oglcanvas
             }
 
 
-            aCurr=rPolyPolygons.begin();
-            while( aCurr != aEnd )
+            for( const auto& rPoly : rPolyPolygons )
             {
                 glBegin(GL_TRIANGLES);
-                renderComplexPolyPolygon(*aCurr++);
+                renderComplexPolyPolygon( rPoly );
                 glEnd();
             }
 
@@ -333,10 +326,8 @@ namespace oglcanvas
             ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
                                                             rTexture.AffineTransform );
             ::basegfx::B2DRange aBounds;
-            ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
-            const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
-            while( aCurr != aEnd )
-                aBounds.expand(::basegfx::tools::getRange(*aCurr++));
+            for( const auto& rPolyPolygon : rPolyPolygons )
+                aBounds.expand( ::basegfx::tools::getRange( rPolyPolygon ) );
             aTextureTransform.translate(-aBounds.getMinX(), -aBounds.getMinY());
             aTextureTransform.scale(1/aBounds.getWidth(), 1/aBounds.getHeight());
             aTextureTransform.invert();
@@ -354,11 +345,10 @@ namespace oglcanvas
             // blend against fixed vertex color; texture alpha is multiplied in
             glColor4f(1,1,1,rTexture.Alpha);
 
-            aCurr=rPolyPolygons.begin();
-            while( aCurr != aEnd )
+            for( const auto& rPolyPolygon : rPolyPolygons )
             {
                 glBegin(GL_TRIANGLES);
-                renderComplexPolyPolygon(*aCurr++);
+                renderComplexPolyPolygon( rPolyPolygon );
                 glEnd();
             }
 
@@ -973,19 +963,15 @@ namespace oglcanvas
 
     bool CanvasHelper::renderRecordedActions() const
     {
-        std::vector<Action>::const_iterator aCurr(mpRecordedActions->begin());
-        const std::vector<Action>::const_iterator aEnd(mpRecordedActions->end());
-        while( aCurr != aEnd )
+        for( const auto& rRecordedAction : *mpRecordedActions )
         {
-            if( !aCurr->maFunction( *this,
-                                    aCurr->maTransform,
-                                    aCurr->meSrcBlendMode,
-                                    aCurr->meDstBlendMode,
-                                    aCurr->maARGBColor,
-                                    aCurr->maPolyPolys ) )
+            if( !rRecordedAction.maFunction( *this,
+                                             rRecordedAction.maTransform,
+                                             rRecordedAction.meSrcBlendMode,
+                                             rRecordedAction.meDstBlendMode,
+                                             rRecordedAction.maARGBColor,
+                                             rRecordedAction.maPolyPolys ) )
                 return false;
-
-            ++aCurr;
         }
 
         return true;

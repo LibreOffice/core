@@ -123,17 +123,14 @@ namespace canvas
                     // translate this area to the final position,
                     // coordinates need to be relative to the
                     // spritecanvas.
-                    VectorOfRects::const_iterator       aCurr( aClipDifferences.begin() );
-                    const VectorOfRects::const_iterator aEnd( aClipDifferences.end() );
-                    while( aCurr != aEnd )
+                    for( const auto& rClipDiff : aClipDifferences )
                     {
                         mpSpriteCanvas->updateSprite(
                             rSprite,
                             maPosition,
                             ::basegfx::B2DRectangle(
-                                maPosition + aCurr->getMinimum(),
-                                maPosition + aCurr->getMaximum() ) );
-                        ++aCurr;
+                                maPosition + rClipDiff.getMinimum(),
+                                maPosition + rClipDiff.getMaximum() ) );
                     }
 
                     // update calls all done

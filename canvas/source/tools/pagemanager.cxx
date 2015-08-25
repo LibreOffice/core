@@ -28,11 +28,9 @@ namespace canvas
         // we are asked to find a location for the requested size.
         // first we try to satisfy the request from the
         // remaining space in the existing pages.
-        const PageContainer_t::iterator aEnd(maPages.end());
-        PageContainer_t::iterator       it(maPages.begin());
-        while(it != aEnd)
+        for( const auto& pPage : maPages )
         {
-            FragmentSharedPtr pFragment((*it)->allocateSpace(rSize));
+            FragmentSharedPtr pFragment( pPage->allocateSpace(rSize) );
             if(pFragment)
             {
                 // the page created a new fragment, since we maybe want
@@ -41,8 +39,6 @@ namespace canvas
                 maFragments.push_back(pFragment);
                 return pFragment;
             }
-
-            ++it;
         }
 
         // otherwise try to create a new page and allocate space there...
@@ -140,23 +136,18 @@ namespace canvas
         // be naked, that is it is not located on any page.
         // we try all available pages again, maybe some
         // other fragment was deleted and we can exploit the space.
-        const PageContainer_t::iterator aEnd(maPages.end());
-        PageContainer_t::iterator       it(maPages.begin());
-        while(it != aEnd)
+        for( const auto& pPage : maPages )
         {
             // if the page at hand takes the fragment, we immediately
             // call select() to pull the information from the associated
             // image to the hardware surface.
-            if((*it)->nakedFragment(pFragment))
+            if( pPage->nakedFragment( pFragment ) )
             {
                 // dirty, since newly allocated.
                 pFragment->select(true);
                 return true;
             }
-
-            ++it;
         }
-
         return false;
     }
 
