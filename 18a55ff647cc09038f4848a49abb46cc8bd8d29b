@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_4f131d5d",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3196,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-08-26T15:58:27Z",
+      "side": 1,
+      "message": "You forgot to use the var. here.",
+      "revId": "18a55ff647cc09038f4848a49abb46cc8bd8d29b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
