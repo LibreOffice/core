@@ -2826,9 +2826,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
             else
             {
                 // export empty href for empty placeholders to be valid ODF
-                OUString sEmptyURL;
-
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sEmptyURL );
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, "" );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
