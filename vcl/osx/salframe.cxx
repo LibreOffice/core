@@ -1257,10 +1257,12 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     getAppleScrollBarVariant(aStyleSettings);
 
     // set scrollbar size
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        // 'NSRegularControlSize' is deprecated: first deprecated in macOS 10.12
+#if MACOSX_SDK_VERSION >= 1070
     aStyleSettings.SetScrollBarSize( static_cast<long int>([NSScroller scrollerWidthForControlSize:NSRegularControlSize scrollerStyle:NSScrollerStyleLegacy]) );
-SAL_WNODEPRECATED_DECLARATIONS_POP
+#else
+    aStyleSettings.SetScrollBarSize( static_cast<long int>([NSScroller scrollerWidth]) );
+#endif
+
     // images in menus false for MacOSX
     aStyleSettings.SetPreferredUseImagesInMenus( false );
     aStyleSettings.SetHideDisabledMenuItems( true );

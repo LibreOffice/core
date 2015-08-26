@@ -284,8 +284,12 @@ int CoreTextFontFace::GetFontTable( const char pTagName[5], unsigned char* pResu
 
     // get the raw table length
     CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>( GetFontId());
-    CTFontRef rCTFont = CTFontCreateWithFontDescriptor( pFontDesc, 0.0, nullptr);
+    CTFontRef rCTFont = CTFontCreateWithFontDescriptor( pFontDesc, 0.0, nullptr );
+#if defined(MACOSX) && MACOSX_SDK_VERSION < 1080
+    const uint32_t opts( kCTFontTableOptionExcludeSynthetic );
+#else
     const uint32_t opts( kCTFontTableOptionNoOptions );
+#endif
     CFDataRef pDataRef = CTFontCopyTable( rCTFont, nTagCode, opts);
     CFRelease( rCTFont);
     if( !pDataRef)
