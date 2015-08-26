@@ -475,6 +475,8 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             option.sliderValue = sbVal->mnCur;
             option.sliderPosition = sbVal->mnCur;
             option.pageStep = sbVal->mnVisibleSize;
+            if (part == PART_DRAW_BACKGROUND_HORZ)
+                option.upsideDown = sbVal->maButton1Rect.Left() > sbVal->maButton2Rect.Left();
 
             //setup the active control...always the slider
             if (sbVal->mnThumbState & ControlState::ROLLOVER)
