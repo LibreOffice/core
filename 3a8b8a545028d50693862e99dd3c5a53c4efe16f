@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "1af94dfe_e4397043",
+        "filename": "sw/source/uibase/sidebar/WrapPropertyPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-26T11:36:38Z",
+      "side": 1,
+      "message": "... and of course adjust those function signatures accordingly",
+      "revId": "3a8b8a545028d50693862e99dd3c5a53c4efe16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_443f8425",
+        "filename": "sw/source/uibase/sidebar/WrapPropertyPanel.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-26T11:36:38Z",
+      "side": 1,
+      "message": "... and after code refactoring, this line can be removed",
+      "revId": "3a8b8a545028d50693862e99dd3c5a53c4efe16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_415e5646",
         "filename": "sw/source/uibase/sidebar/WrapPropertyPanel.cxx",
         "patchSetId": 7
@@ -30,6 +64,23 @@
       "writtenOn": "2015-08-25T14:08:50Z",
       "side": 1,
       "message": "Uhm, I\u0027m not convinced this is the best way to do things, I\u0027d maybe prefer not to use ComboBoxText but some other widget whose items can store some data (think liststore) and those data would contain the value needed for spacing ... \n\nLet me check how other sidebar code does things and update this commend then accordingly",
+      "revId": "3a8b8a545028d50693862e99dd3c5a53c4efe16f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_04357c45",
+        "filename": "sw/source/uibase/sidebar/WrapPropertyPanel.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-26T11:36:38Z",
+      "side": 1,
+      "message": "Due to code refactoring (typed links) here\u0027s where you get conflicts. Please change those to:\n\nDECL_LINK(EnableContourHdl, Button*, void);\nDECL_LINK(EditContourHdl, CheckBox*, void);\nDECL_LINK(SpacingLBHdl, ListBox*, void);",
       "revId": "3a8b8a545028d50693862e99dd3c5a53c4efe16f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
