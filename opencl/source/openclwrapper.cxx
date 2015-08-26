@@ -772,7 +772,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     cps[2] = 0;
     cl_context context = clCreateContext( cps, 1, &pDeviceId, NULL, NULL, &nState );
     if (nState != CL_SUCCESS)
-        SAL_WARN("opencl", "clCreateContext failed: " << nState);
+        SAL_WARN("opencl", "clCreateContext failed: " << errorString(nState));
 
     if(nState != CL_SUCCESS || context == NULL)
     {
@@ -790,7 +790,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         command_queue[i] = clCreateCommandQueue(
             context, pDeviceId, 0, &nState);
         if (nState != CL_SUCCESS)
-            SAL_WARN("opencl", "clCreateCommandQueue failed: " << nState);
+            SAL_WARN("opencl", "clCreateCommandQueue failed: " << errorString(nState));
 
         if (command_queue[i] == NULL || nState != CL_SUCCESS)
         {
