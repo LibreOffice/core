@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <vcl/checksum.hxx>
 #include <vcl/salbtype.hxx>
 
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
@@ -37,8 +38,11 @@ enum class BmpScaleFlag;
 class VCL_PLUGIN_PUBLIC SalBitmap
 {
 public:
-    SalBitmap() {}
-    virtual ~SalBitmap();
+
+    typedef BitmapChecksum  ChecksumType;
+
+                            SalBitmap() : mbChecksumValid(false) {}
+    virtual                 ~SalBitmap();
 
     virtual bool            Create( const Size& rSize,
                                     sal_uInt16 nBitCount,
@@ -63,6 +67,50 @@ public:
     virtual bool            Erase( const Color& rFillColor ) = 0;
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) = 0;
     virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) = 0;
+
+
+    virtual bool GetChecksum(ChecksumType& rChecksum) const
+    {
+        updateChecksum();
+        if (!mbChecksumValid)
+            rChecksum = 0;
+        else
+            rChecksum = mnChecksum;
+        return mbChecksumValid;
+    }
+
+    virtual void InvalidateChecksum()
+    {
+        mbChecksumValid = false;
+    }
+
+protected:
+    ChecksumType mnChecksum;
+    bool         mbChecksumValid;
+
+protected:
+    virtual void updateChecksum() const
+    {
+        if (mbChecksumValid)
+            return;
+
+        ChecksumType nCrc = 0;
+        SalBitmap* pThis = const_cast<SalBitmap*>(this);
+        BitmapBuffer* pBuf = pThis->AcquireBuffer(BITMAP_READ_ACCESS);
+        if (pBuf)
+        {
+            nCrc = vcl_get_checksum(0, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
+            pThis->ReleaseBuffer(pBuf, BITMAP_READ_ACCESS);
+            pThis->mnChecksum = nCrc;
+            pThis->mbChecksumValid = true;
+        }
+        else
+        {
+            pThis->mbChecksumValid = false;
+        }
+    }
+
+
 };
 
 #endif

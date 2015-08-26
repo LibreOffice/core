@@ -276,7 +276,7 @@ void OpenGLProgram::SetBlendMode( GLenum nSFactor, GLenum nDFactor )
     mbBlending = true;
 }
 
-bool OpenGLProgram::DrawTexture( OpenGLTexture& rTexture )
+bool OpenGLProgram::DrawTexture( const OpenGLTexture& rTexture )
 {
     if (!rTexture)
         return false;

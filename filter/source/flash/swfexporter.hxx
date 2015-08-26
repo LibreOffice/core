@@ -29,11 +29,12 @@
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <osl/file.hxx>
+#include <vcl/checksum.hxx>
 
 #include <vector>
 #include <map>
 
-typedef ::std::map<sal_uInt32, sal_uInt16> ChecksumCache;
+typedef ::std::map<BitmapChecksum, sal_uInt16> ChecksumCache;
 
 class GDIMetaFile;
 
@@ -185,8 +186,8 @@ private:
     void exportShapes( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes, bool bStream, bool bMaster );
     void exportShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, bool bMaster);
 
-    sal_uInt32 ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape);
-    sal_uInt32 ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes);
+    BitmapChecksum ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape);
+    BitmapChecksum ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes);
 
     void animateShape( ShapeAnimationInfo& rAnimInfo );
     void animatePage( PageInfo* pPageInfo );

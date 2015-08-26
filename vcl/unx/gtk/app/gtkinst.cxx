@@ -341,7 +341,7 @@ SalBitmap* GtkInstance::CreateSalBitmap()
 {
     EnsureInit();
 #if GTK_CHECK_VERSION(3,0,0)
-    return new SvpSalBitmap();
+    return SvpSalInstance::CreateSalBitmap();//new SvpSalBitmap();
 #else
     return X11SalInstance::CreateSalBitmap();
 #endif

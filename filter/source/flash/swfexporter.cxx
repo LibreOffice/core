@@ -431,8 +431,8 @@ sal_uInt16 FlashExporter::exportDrawPageBackground(sal_uInt16 nPage, Reference< 
     getMetaFile( xCompMaster, aMtfMaster, true );
     getMetaFile( xComponent, aMtfPrivate, true );
 
-    sal_uInt32 masterchecksum = aMtfMaster.GetChecksum();
-    sal_uInt32 privatechecksum = aMtfPrivate.GetChecksum();
+    BitmapChecksum masterchecksum = aMtfMaster.GetChecksum();
+    BitmapChecksum privatechecksum = aMtfPrivate.GetChecksum();
 
     // AS: If the slide has its own background
     if (privatechecksum)
@@ -484,7 +484,7 @@ sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< X
 {
     Reference< XShapes > xShapes( xMasterPage, UNO_QUERY );
 
-    sal_uInt32 shapesum = ActionSummer(xShapes);
+    BitmapChecksum shapesum = ActionSummer(xShapes);
 
     ChecksumCache::iterator it = gObjectCache.find(shapesum);
 
@@ -631,7 +631,7 @@ void FlashExporter::exportShape( const Reference< XShape >& xShape, bool bMaster
                 getMetaFile( xComponent, aMtf, false, true );
 
             sal_uInt16 nID;
-            sal_uInt32 checksum = aMtf.GetChecksum();
+            BitmapChecksum checksum = aMtf.GetChecksum();
 
             ChecksumCache::iterator it = gMetafileCache.find(checksum);
 
@@ -748,7 +748,7 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
     return rMtf.GetActionSize() != 0;
 }
 
-sal_uInt32 FlashExporter::ActionSummer(Reference< XShape >& xShape)
+BitmapChecksum FlashExporter::ActionSummer(Reference< XShape >& xShape)
 {
     Reference< XShapes > xShapes( xShape, UNO_QUERY );
 
@@ -767,10 +767,10 @@ sal_uInt32 FlashExporter::ActionSummer(Reference< XShape >& xShape)
     }
 }
 
-sal_uInt32 FlashExporter::ActionSummer(Reference< XShapes >& xShapes)
+BitmapChecksum FlashExporter::ActionSummer(Reference< XShapes >& xShapes)
 {
     sal_uInt32 nShapeCount = xShapes->getCount();
-    sal_uInt32 shapecount = 0;
+    BitmapChecksum shapecount = 0;
 
     Reference< XShape > xShape2;
 
