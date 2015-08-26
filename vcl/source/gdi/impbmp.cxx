@@ -26,14 +26,12 @@
 
 ImpBitmap::ImpBitmap() :
             mnRefCount  ( 1 ),
-            mnChecksum  ( 0 ),
             mpSalBitmap ( ImplGetSVData()->mpDefInst->CreateSalBitmap() )
 {
 }
 
 ImpBitmap::ImpBitmap(SalBitmap* pBitmap) :
             mnRefCount  ( 1 ),
-            mnChecksum  ( 0 ),
             mpSalBitmap ( pBitmap )
 {
 }
@@ -43,14 +41,20 @@ ImpBitmap::~ImpBitmap()
     delete mpSalBitmap;
 }
 
-bool ImpBitmap::ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
+bool ImpBitmap::ImplIsEqual(const ImpBitmap& rBmp) const
+{
+    return (rBmp.ImplGetSize() == ImplGetSize() &&
+        rBmp.ImplGetBitCount() == ImplGetBitCount() &&
+        rBmp.ImplGetChecksum() == ImplGetChecksum());
+}
+
+bool ImpBitmap::ImplCreate(const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal)
 {
     return mpSalBitmap->Create( rSize, nBitCount, rPal );
 }
 
 bool ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap )
 {
-    mnChecksum = rImpBitmap.mnChecksum;
     return mpSalBitmap->Create( *rImpBitmap.mpSalBitmap );
 }
 
@@ -85,7 +89,20 @@ void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode
     mpSalBitmap->ReleaseBuffer( pBuffer, nMode );
 
     if( nMode == BITMAP_WRITE_ACCESS )
-        mnChecksum = 0;
+        ImplInvalidateChecksum();
+}
+
+sal_uLong ImpBitmap::ImplGetChecksum() const
+{
+    SalBitmap::ChecksumType aChecksum;
+    mpSalBitmap->GetChecksum(aChecksum);
+    sal_uLong a32BitChecksum = aChecksum;
+    return a32BitChecksum;
+}
+
+void ImpBitmap::ImplInvalidateChecksum()
+{
+    mpSalBitmap->InvalidateChecksum();
 }
 
 bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
