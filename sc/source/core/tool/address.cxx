@@ -1521,7 +1521,7 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
                     nRes2 |= SCA_COL_ABSOLUTE;
                 }
             }
-            if (nRes1 && nRes2)
+            if ((nRes1 & SCA_VALID) && (nRes2 & SCA_VALID))
             {
                 // PutInOrder / Justify
                 sal_uInt16 nMask, nBits1, nBits2;
