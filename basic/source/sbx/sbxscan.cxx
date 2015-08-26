@@ -236,7 +236,7 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
             p++;
         }
         OUString aBufStr( aBuf.makeStringAndClear());
-        long l = 0;
+        sal_Int32 l = 0;
         for( const sal_Unicode* q = aBufStr.getStr(); bRes && *q; q++ )
         {
             int i = *q - '0';
