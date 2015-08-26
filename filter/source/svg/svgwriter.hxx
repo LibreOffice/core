@@ -371,7 +371,7 @@ private:
 public:
 
     static OUString  GetPathString( const tools::PolyPolygon& rPolyPoly, bool bLine );
-    static sal_uLong        GetChecksum( const MetaAction* pAction );
+    static BitmapChecksum GetChecksum( const MetaAction* pAction );
 
 public:
 

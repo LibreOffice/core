@@ -52,7 +52,7 @@ public:
     Size        GetSizePixel() const { return Bitmap::GetSizePixel(); }
     sal_uLong   GetSizeBytes() const { return Bitmap::GetSizeBytes(); }
 
-    sal_uLong   GetChecksum() const { return Bitmap::GetChecksum(); }
+    BitmapChecksum   GetChecksum() const { return Bitmap::GetChecksum(); }
 
     Bitmap      GetBitmap() const;
 
