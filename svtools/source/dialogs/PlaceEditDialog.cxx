@@ -23,7 +23,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     , m_xCurrentDetails()
     , m_nCurrentType( 0 )
     , bLabelChanged( false )
-    , m_bShowPassword( false )
+    , m_bShowPassword( true )
 {
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
@@ -36,11 +36,6 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     get( m_pEDPassword, "password" );
     get( m_pFTPasswordLabel, "passwordLabel" );
 
-    m_pEDPassword->Hide();
-    m_pFTPasswordLabel->Hide();
-    m_pCBPassword->Hide();
-    m_pCBPassword->SetToggleHdl( LINK( this, PlaceEditDialog, ToggledPassHdl ) );
-
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTOk->Enable( false );
 
@@ -52,6 +47,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
 
     m_pLBServerType->SetSelectHdl( LINK( this, PlaceEditDialog, SelectTypeHdl ) );
     m_pEDUsername->SetModifyHdl( LINK( this, PlaceEditDialog, EditUsernameHdl ) );
+    m_pEDPassword->SetModifyHdl( LINK( this, PlaceEditDialog, EditUsernameHdl ) );
 
     InitDetails( );
 }
@@ -76,7 +72,6 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
     m_pEDPassword->Hide();
     m_pFTPasswordLabel->Hide();
     m_pCBPassword->Hide();
-    m_pCBPassword->SetToggleHdl( LINK( this, PlaceEditDialog, ToggledPassHdl ) );
 
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTDelete->SetClickHdl ( LINK( this, PlaceEditDialog, DelHdl) );
@@ -147,19 +142,6 @@ OUString PlaceEditDialog::GetServerUrl()
 std::shared_ptr<Place> PlaceEditDialog::GetPlace()
 {
     return std::make_shared<Place>(m_pEDServerName->GetText(), GetServerUrl(), true);
-}
-
-IMPL_LINK( PlaceEditDialog, ToggledPassHdl, CheckBox*, pCheckBox )
-{
-    bool bChecked = pCheckBox->IsEnabled() && pCheckBox->IsChecked();
-
-    m_pEDPassword->Enable( bChecked );
-    m_pFTPasswordLabel->Enable( bChecked );
-
-    if ( !bChecked )
-        m_pEDPassword->SetText( "" );
-
-    return 0;
 }
 
 void PlaceEditDialog::InitDetails( )
@@ -322,6 +304,7 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl )
             it != m_aDetailsContainers.end( ); ++it )
     {
         ( *it )->setUsername( OUString( m_pEDUsername->GetText() ) );
+        ( *it )->setPassword( m_pEDPassword->GetText() );
     }
 
     EditHdl(NULL);
@@ -350,12 +333,9 @@ IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
 
     m_xCurrentDetails->show();
 
-    bool bShowPass = m_xCurrentDetails->hasPassEntry();
-    m_pCBPassword->Show( bShowPass );
-    m_pEDPassword->Show( bShowPass );
-    m_pFTPasswordLabel->Show( bShowPass );
-
-    ToggledPassHdl( m_pCBPassword );
+    m_pCBPassword->Show( m_bShowPassword );
+    m_pEDPassword->Show( m_bShowPassword );
+    m_pFTPasswordLabel->Show( m_bShowPassword );
 
     SetSizePixel(GetOptimalSize());
 

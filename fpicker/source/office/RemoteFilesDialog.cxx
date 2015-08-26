@@ -687,11 +687,16 @@ void RemoteFilesDialog::DisableControls()
     m_pCancel_btn->Enable( true );
 }
 
-void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUser, const OUString& rPassword )
+void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUser
+                                    , const OUString& rPassword, bool bPersistent )
 {
+    if( rURL.isEmpty() || rUser.isEmpty() || rPassword.isEmpty() )
+        return;
+
     try
     {
-        if( m_xMasterPasswd->isPersistentStoringAllowed() && m_xMasterPasswd->authorizateWithMasterPassword( Reference< XInteractionHandler>() ) )
+        if( m_xMasterPasswd->isPersistentStoringAllowed() &&
+            ( !bPersistent || m_xMasterPasswd->authorizateWithMasterPassword( Reference< XInteractionHandler>() ) ) )
         {
             Reference< XInteractionHandler > xInteractionHandler(
                 InteractionHandler::createWithParent( m_xContext, 0 ),
@@ -700,8 +705,11 @@ void RemoteFilesDialog::SavePassword( const OUString& rURL, const OUString& rUse
             Sequence< OUString > aPasswd( 1 );
             aPasswd[0] = rPassword;
 
-            m_xMasterPasswd->addPersistent(
-                rURL, rUser, aPasswd, xInteractionHandler );
+            if( bPersistent )
+                m_xMasterPasswd->addPersistent(
+                    rURL, rUser, aPasswd, xInteractionHandler );
+            else
+                m_xMasterPasswd->add( rURL, rUser, aPasswd, xInteractionHandler );
         }
     }
     catch( const Exception& )
@@ -725,7 +733,8 @@ IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, AddServiceHdl, Button*, void )
             OUString sUser = aDlg->GetUser();
             if( !sUser.isEmpty() && !sPassword.isEmpty() )
             {
-                SavePassword( newService->GetUrl(), sUser, sPassword );
+                bool bPersistent = aDlg->IsRememberChecked();
+                SavePassword( newService->GetUrl(), sUser, sPassword, bPersistent );
             }
 
             OUString sPrefix = lcl_GetServiceType( newService );

@@ -12,6 +12,8 @@
 #include <map>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/task/PasswordContainer.hpp>
+#include <com/sun/star/task/XPasswordContainer2.hpp>
 
 #include <tools/urlobj.hxx>
 #include <vcl/builder.hxx>
@@ -53,10 +55,9 @@ class DetailsContainer
         virtual bool setUrl( const INetURLObject& rUrl );
 
         virtual void setUsername( const OUString& /*rUsername*/ ) { };
+        virtual void setPassword( const OUString& ) { };
 
         virtual void setActive( bool bActive = true );
-
-        virtual bool hasPassEntry() { return true; }
 
     protected:
         void notifyChange( );
@@ -124,6 +125,7 @@ class CmisDetailsContainer : public DetailsContainer
 {
     private:
         OUString m_sUsername;
+        OUString m_sPassword;
         com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xCmdEnv;
         std::vector< OUString > m_aRepoIds;
         OUString m_sRepoId;
@@ -142,7 +144,7 @@ class CmisDetailsContainer : public DetailsContainer
         virtual INetURLObject getUrl( ) SAL_OVERRIDE;
         virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;
         virtual void setUsername( const OUString& rUsername ) SAL_OVERRIDE;
-        virtual bool hasPassEntry() SAL_OVERRIDE { return false; }
+        virtual void setPassword( const OUString& rPass ) SAL_OVERRIDE;
 
     private:
         void selectRepository( );

@@ -382,6 +382,11 @@ void CmisDetailsContainer::setUsername( const OUString& rUsername )
     m_sUsername = rUsername;
 }
 
+void CmisDetailsContainer::setPassword( const OUString& rPass )
+{
+    m_sPassword = rPass;
+}
+
 void CmisDetailsContainer::selectRepository( )
 {
     // Get the repo ID and call the Change listener
@@ -395,6 +400,10 @@ void CmisDetailsContainer::selectRepository( )
 
 IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
 {
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference< XPasswordContainer2 > xMasterPasswd = PasswordContainer::create( xContext );
+
+
     OUString sBindingUrl = m_pEDHost->GetText().trim( );
 
     OUString sEncodedUsername = "";
@@ -423,6 +432,25 @@ IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
                 RTL_TEXTENCODING_UTF8 );
         sUrl = "vnd.libreoffice.cmis://" + sEncodedUsername + sEncodedBinding;
     }
+
+    // temporary remember the password
+    try
+    {
+        if( xMasterPasswd->isPersistentStoringAllowed() && !sUrl.isEmpty() && !m_sUsername.isEmpty() && !m_sPassword.isEmpty() )
+        {
+            Reference< XInteractionHandler > xInteractionHandler(
+                InteractionHandler::createWithParent( xContext, 0 ),
+                UNO_QUERY );
+
+            Sequence< OUString > aPasswd( 1 );
+            aPasswd[0] = m_sPassword;
+
+            xMasterPasswd->add(
+                sUrl, m_sUsername, aPasswd, xInteractionHandler );
+        }
+    }
+    catch( const Exception& )
+    {}
 
     // Get the Content
     ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
@@ -456,6 +484,14 @@ IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
         m_pLBRepository->SelectEntryPos( 0 );
         selectRepository( );
     }
+
+    // remove temporary password
+    try
+    {
+        xMasterPasswd->remove( sUrl, m_sUsername );
+    }
+    catch( const Exception& )
+    {}
 }
 
 IMPL_LINK_NOARG( CmisDetailsContainer, SelectRepoHdl  )
