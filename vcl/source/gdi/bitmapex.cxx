@@ -316,21 +316,22 @@ sal_uLong BitmapEx::GetSizeBytes() const
     return nSizeBytes;
 }
 
-sal_uLong BitmapEx::GetChecksum() const
+BitmapChecksum BitmapEx::GetChecksum() const
 {
-    sal_uInt32  nCrc = aBitmap.GetChecksum();
+    BitmapChecksum  nCrc = aBitmap.GetChecksum();
     SVBT32      aBT32;
+    BitmapChecksumOctetArray aBCOA;
 
     UInt32ToSVBT32( (long) eTransparent, aBT32 );
-    nCrc = rtl_crc32( nCrc, aBT32, 4 );
+    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     UInt32ToSVBT32( (long) bAlpha, aBT32 );
-    nCrc = rtl_crc32( nCrc, aBT32, 4 );
+    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     if( ( TRANSPARENT_BITMAP == eTransparent ) && !aMask.IsEmpty() )
     {
-        UInt32ToSVBT32( aMask.GetChecksum(), aBT32 );
-        nCrc = rtl_crc32( nCrc, aBT32, 4 );
+        BCToBCOA( aMask.GetChecksum(), aBCOA );
+        nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
     }
 
     return nCrc;
