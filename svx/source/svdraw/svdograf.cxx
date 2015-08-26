@@ -1268,7 +1268,7 @@ void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
     }
 }
 
-IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
+IMPL_LINK_TYPED( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
 {
     SvStream* pRet = GRFMGR_AUTOSWAPSTREAM_NONE;
 
@@ -1380,7 +1380,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
     }
 
-    return reinterpret_cast<sal_IntPtr>(pRet);
+    return pRet;
 }
 
 void SdrGrafObj::SetGrafAnimationAllowed(bool bNew)

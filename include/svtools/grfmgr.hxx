@@ -184,7 +184,7 @@ private:
     GraphicType             meType;
     GraphicManager*         mpMgr;
     OUString                maLink;
-    Link<>*                 mpSwapStreamHdl;
+    Link<const GraphicObject*, SvStream*> maSwapStreamHdl;
     OUString                maUserData;
     Timer*                  mpSwapOutTimer;
     GrfSimpleCacheObj*      mpSimpleCache;
@@ -339,9 +339,9 @@ public:
     bool                    operator==( const GraphicObject& rCacheObj ) const;
     bool                    operator!=( const GraphicObject& rCacheObj ) const { return !( *this == rCacheObj ); }
 
-    bool                    HasSwapStreamHdl() const { return( mpSwapStreamHdl != NULL && mpSwapStreamHdl->IsSet() ); }
+    bool                    HasSwapStreamHdl() const { return maSwapStreamHdl.IsSet(); }
     void                    SetSwapStreamHdl();
-    void                    SetSwapStreamHdl(const Link<>& rHdl);
+    void                    SetSwapStreamHdl(const Link<const GraphicObject*, SvStream*>& rHdl);
 
     void                    FireSwapInRequest();
     void                    FireSwapOutRequest();

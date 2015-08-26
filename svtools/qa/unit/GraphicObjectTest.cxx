@@ -52,7 +52,7 @@ public:
     }
 
 private:
-    DECL_LINK(getLinkStream, GraphicObject*);
+    DECL_LINK_TYPED(getLinkStream, const GraphicObject*, SvStream*);
 
 private:
     CPPUNIT_TEST_SUITE(GraphicObjectTest);
@@ -72,9 +72,9 @@ const Graphic lcl_loadGraphic(const rtl::OUString &rUrl)
     return Graphic(aImage.GetBitmapEx());
 }
 
-IMPL_LINK(GraphicObjectTest, getLinkStream, GraphicObject*, /*pGraphObj*/)
+IMPL_LINK_NOARG_TYPED(GraphicObjectTest, getLinkStream, const GraphicObject*, SvStream*)
 {
-    return reinterpret_cast<sal_IntPtr>(GRFMGR_AUTOSWAPSTREAM_LINK);
+    return GRFMGR_AUTOSWAPSTREAM_LINK;
 }
 
 void GraphicObjectTest::testSwap()

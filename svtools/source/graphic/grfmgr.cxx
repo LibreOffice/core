@@ -130,14 +130,13 @@ GraphicObject::~GraphicObject()
     }
 
     delete mpSwapOutTimer;
-    delete mpSwapStreamHdl;
     delete mpSimpleCache;
 }
 
 void GraphicObject::ImplConstruct()
 {
     mpMgr = NULL;
-    mpSwapStreamHdl = NULL;
+    maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
     mpSwapOutTimer = NULL;
     mpSimpleCache = NULL;
     mnAnimationLoopCount = 0;
@@ -350,7 +349,7 @@ GraphicObject& GraphicObject::operator=( const GraphicObject& rGraphicObj )
     {
         mpMgr->ImplUnregisterObj( *this );
 
-        delete mpSwapStreamHdl, mpSwapStreamHdl = NULL;
+        maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
         delete mpSimpleCache, mpSimpleCache = NULL;
 
         maGraphic = rGraphicObj.GetGraphic();
@@ -391,7 +390,7 @@ OString GraphicObject::GetUniqueID() const
 SvStream* GraphicObject::GetSwapStream() const
 {
     if( HasSwapStreamHdl() )
-        return reinterpret_cast<SvStream*>( mpSwapStreamHdl->Call( const_cast<void*>(static_cast<const void*>(this)) ) );
+        return maSwapStreamHdl.Call( this );
     else
         return GRFMGR_AUTOSWAPSTREAM_NONE;
 }
@@ -428,11 +427,11 @@ void GraphicObject::SetUserData( const OUString& rUserData )
 
 void GraphicObject::SetSwapStreamHdl()
 {
-    if( mpSwapStreamHdl )
+    if( mpSwapOutTimer )
     {
         delete mpSwapOutTimer, mpSwapOutTimer = NULL;
-        delete mpSwapStreamHdl, mpSwapStreamHdl = NULL;
     }
+    maSwapStreamHdl = Link<const GraphicObject*, SvStream*>();
 }
 
 static sal_uInt32 GetCacheTimeInMs()
@@ -444,9 +443,9 @@ static sal_uInt32 GetCacheTimeInMs()
     return nSeconds * 1000;
 }
 
-void GraphicObject::SetSwapStreamHdl(const Link<>& rHdl)
+void GraphicObject::SetSwapStreamHdl(const Link<const GraphicObject*, SvStream*>& rHdl)
 {
-    delete mpSwapStreamHdl, mpSwapStreamHdl = new Link<>( rHdl );
+    maSwapStreamHdl = rHdl;
 
     sal_uInt32 const nSwapOutTimeout(GetCacheTimeInMs());
     if( nSwapOutTimeout )

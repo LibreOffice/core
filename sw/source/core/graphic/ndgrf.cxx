@@ -953,7 +953,7 @@ SwContentNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     return pGrfNd;
 }
 
-IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
+IMPL_LINK_TYPED( SwGrfNode, SwapGraphic, const GraphicObject*, pGrfObj, SvStream* )
 {
     SvStream* pRet;
 
@@ -985,7 +985,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
         pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
     }
 
-    return reinterpret_cast<sal_IntPtr>(pRet);
+    return pRet;
 }
 
 /// returns the Graphic-Attr-Structure filled with our graphic attributes
