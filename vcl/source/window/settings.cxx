@@ -270,40 +270,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
         rSettings.SetStyleSettings( aStyleSettings );
     }
 
-#if defined(DBG_UTIL)
-    // If needed, set AppFont to bold, in order to check
-    // if there is enough space available for texts on other systems
-    if ( DbgIsBoldAppFont() )
-    {
-        aStyleSettings = rSettings.GetStyleSettings();
-        aFont = aStyleSettings.GetAppFont();
-        aFont.SetWeight( WEIGHT_BOLD );
-        aStyleSettings.SetAppFont( aFont );
-        aFont = aStyleSettings.GetGroupFont();
-        aFont.SetWeight( WEIGHT_BOLD );
-        aStyleSettings.SetGroupFont( aFont );
-        aFont = aStyleSettings.GetLabelFont();
-        aFont.SetWeight( WEIGHT_BOLD );
-        aStyleSettings.SetLabelFont( aFont );
-        aFont = aStyleSettings.GetRadioCheckFont();
-        aFont.SetWeight( WEIGHT_BOLD );
-        aStyleSettings.SetRadioCheckFont( aFont );
-        aFont = aStyleSettings.GetPushButtonFont();
-        aFont.SetWeight( WEIGHT_BOLD );
-        aStyleSettings.SetPushButtonFont( aFont );
-        aFont = aStyleSettings.GetFieldFont();
-        aFont.SetWeight( WEIGHT_BOLD );
-        aStyleSettings.SetFieldFont( aFont );
-        aFont = aStyleSettings.GetIconFont();
-        aFont.SetWeight( WEIGHT_BOLD );
-        aStyleSettings.SetIconFont( aFont );
-        aFont = aStyleSettings.GetTabFont();
-        aFont.SetWeight( WEIGHT_BOLD );
-        aStyleSettings.SetTabFont( aFont );
-        rSettings.SetStyleSettings( aStyleSettings );
-    }
-#endif
-
     if ( bCallHdl )
         GetpApp()->OverrideSystemSettings( rSettings );
 }

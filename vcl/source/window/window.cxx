@@ -2521,13 +2521,6 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
         if( aDogTag.IsDead() )
             return;
 
-#if OSL_DEBUG_LEVEL > 0
-        if ( IsDialog() || (GetType() == WINDOW_TABPAGE) || (GetType() == WINDOW_DOCKINGWINDOW) )
-        {
-            DBG_DIALOGTEST( this );
-        }
-#endif
-
         ImplShowAllOverlaps();
     }
 

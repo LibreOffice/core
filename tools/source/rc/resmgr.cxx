@@ -397,7 +397,7 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
 void Resource::TestRes()
 {
     if( m_pResMgr )
-        m_pResMgr->TestStack( this );
+        m_pResMgr->TestStack();
 }
 #endif
 
@@ -889,7 +889,7 @@ void ResMgr::decStack()
 
 #ifdef DBG_UTIL
 
-void ResMgr::TestStack( const Resource* pResObj )
+void ResMgr::TestStack()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
@@ -904,20 +904,6 @@ void ResMgr::TestStack( const Resource* pResObj )
     {
         OSL_FAIL( "stack occupation index > allocated stack size" );
         upperLimit = aStack.size() - 1;
-    }
-
-    if ( DbgIsResource() )
-    {
-        for( int i = 1; i <= upperLimit; ++i )
-        {
-            if ( aStack[i].pResObj == pResObj )
-            {
-                RscError_Impl( "Resource not freed! ", this,
-                               aStack[i].pResource->GetRT(),
-                               aStack[i].pResource->GetId(),
-                               aStack, i-1 );
-            }
-        }
     }
 }
 
@@ -1092,36 +1078,9 @@ void ResMgr::PopContext( const Resource* pResObj )
         return;
     }
 
-#ifdef DBG_UTIL
-    if ( DbgIsResource() )
-    {
-        if ( (aStack[nCurStack].pResObj != pResObj) || nCurStack == 0 )
-        {
-            RscError_Impl( "Cannot free resource! ", this,
-                           RSC_NOTYPE, 0, aStack, nCurStack );
-        }
-    }
-#endif
-
     if ( nCurStack > 0 )
     {
         ImpRCStack* pTop = &aStack[nCurStack];
-#ifdef DBG_UTIL
-        if ( DbgIsResource() && !(pTop->Flags & RCFlags::NOTFOUND) )
-        {
-            void* pRes = reinterpret_cast<sal_uInt8*>(pTop->pResource) +
-                         pTop->pResource->GetLocalOff();
-
-            if ( pTop->pClassRes != pRes )
-            {
-                RscError_Impl( "Classpointer not at the end!",
-                               this, pTop->pResource->GetRT(),
-                               pTop->pResource->GetId(),
-                               aStack, nCurStack-1 );
-            }
-        }
-#endif
-
         // free resource
         if( (pTop->Flags & (RCFlags::GLOBAL | RCFlags::NOTFOUND)) == RCFlags::GLOBAL )
             // free global resource if resource is foreign

@@ -41,60 +41,11 @@
 
 typedef void (*DbgTestSolarMutexProc)();
 
-#define DBG_TEST_RESOURCE           (0x02000000)
-#define DBG_TEST_DIALOG             (0x04000000)
-#define DBG_TEST_BOLDAPPFONT        (0x08000000)
-
-struct DbgData
-{
-    sal_uIntPtr       nTestFlags;
-    sal_Char    aDbgWinState[50];           // DbgGUIData for VCL
-};
-
 // Dbg prototypes
-#define DBG_FUNC_GETDATA            0
-#define DBG_FUNC_SAVEDATA           1
 #define DBG_FUNC_SETTESTSOLARMUTEX  2
 #define DBG_FUNC_TESTSOLARMUTEX     3
 
 TOOLS_DLLPUBLIC void* DbgFunc( sal_uInt16 nAction, void* pData = NULL );
-
-inline DbgData* DbgGetData()
-{
-    return static_cast<DbgData*>(DbgFunc( DBG_FUNC_GETDATA ));
-}
-
-inline void DbgSaveData( const DbgData& rData )
-{
-    DbgFunc( DBG_FUNC_SAVEDATA, const_cast<DbgData *>(&rData) );
-}
-
-inline bool DbgIsResource()
-{
-    DbgData* pData = DbgGetData();
-    if ( pData )
-        return pData->nTestFlags & DBG_TEST_RESOURCE;
-    else
-        return false;
-}
-
-inline bool DbgIsDialog()
-{
-    DbgData* pData = DbgGetData();
-    if ( pData )
-        return pData->nTestFlags & DBG_TEST_DIALOG;
-    else
-        return false;
-}
-
-inline bool DbgIsBoldAppFont()
-{
-    DbgData* pData = DbgGetData();
-    if ( pData )
-        return pData->nTestFlags & DBG_TEST_BOLDAPPFONT;
-    else
-        return false;
-}
 
 inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
 {

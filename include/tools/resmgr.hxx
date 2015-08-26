@@ -143,7 +143,7 @@ public:
 
     #ifdef DBG_UTIL
     /// Test whether resource still exists
-    void                TestStack( const Resource * );
+    void                TestStack();
     #endif
 
     /// Check whether resource is available

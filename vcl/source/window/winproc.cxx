@@ -920,15 +920,6 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
     // handle tracking window
     if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
     {
-#ifdef DBG_UTIL
-        // #105224# use Ctrl-Alt-Shift-D, Ctrl-Shift-D must be useable by app
-        if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && (aKeyCode.IsMod2() || aKeyCode.IsMod3()) && (aKeyCode.GetCode() == KEY_D) )
-        {
-            DBGGUI_START();
-            return true;
-        }
-#endif
-
         if ( pSVData->maHelpData.mbExtHelpMode )
         {
             Help::EndExtHelp();
