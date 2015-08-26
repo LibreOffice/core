@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_af3bc19b",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 751,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-08-26T19:12:45Z",
+      "side": 0,
+      "message": "Why can we remove this?",
+      "revId": "685fb2b08c9097c57d9d98e81e1a6a44e32826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_cf360db4",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-08-26T19:12:45Z",
+      "side": 0,
+      "message": "Why can we remove this?",
+      "revId": "685fb2b08c9097c57d9d98e81e1a6a44e32826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
