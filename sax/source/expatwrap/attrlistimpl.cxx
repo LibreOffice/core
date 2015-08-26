@@ -64,7 +64,7 @@ sal_Int16 AttributeList::getLength() throw (RuntimeException, std::exception)
 
 
 AttributeList::AttributeList( const AttributeList &r ) :
-    cppu::WeakImplHelper2<XAttributeList, XCloneable>()
+    cppu::WeakImplHelper<XAttributeList, XCloneable>()
 {
     m_pImpl = new AttributeList_impl;
     *m_pImpl = *(r.m_pImpl);

@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
@@ -138,7 +138,7 @@ class SaxExpatParser_Impl;
 
 // This class implements the external Parser interface
 class SaxExpatParser
-    : public WeakImplHelper3< XInitialization
+    : public WeakImplHelper< XInitialization
                             , XServiceInfo
                             , XParser >
 {
@@ -357,7 +357,7 @@ extern "C"
 // LocatorImpl
 
 class LocatorImpl :
-    public WeakImplHelper2< XLocator, com::sun::star::io::XSeekable >
+    public WeakImplHelper< XLocator, com::sun::star::io::XSeekable >
     // should use a different interface for stream positions!
 {
 public:

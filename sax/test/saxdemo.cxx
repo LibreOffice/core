@@ -40,8 +40,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/diagnose.h>
 
@@ -57,7 +56,7 @@ using namespace ::com::sun::star::io;
 /************
  * Sequence of bytes -> InputStream
  ************/
-class OInputStream : public WeakImplHelper1 < XInputStream >
+class OInputStream : public WeakImplHelper < XInputStream >
 {
 public:
     OInputStream( const Sequence< sal_Int8 >&seq ) :
@@ -130,7 +129,7 @@ Reference< XInputStream > createStreamFromFile(
 // The Documenthandler for reading sax
 
 class TestDocumentHandler :
-    public WeakImplHelper3< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
+    public WeakImplHelper< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
 {
 public:
     TestDocumentHandler(  )
@@ -251,7 +250,7 @@ public:
 // implements an XAttributeList
 
 struct AttributeListImpl_impl;
-class AttributeListImpl : public WeakImplHelper1< XAttributeList >
+class AttributeListImpl : public WeakImplHelper< XAttributeList >
 {
 public:
     AttributeListImpl();
@@ -431,7 +430,7 @@ void writeParagraphHelper(
 // writes data to a file
 
 class OFileWriter :
-        public WeakImplHelper1< XOutputStream >
+        public WeakImplHelper< XOutputStream >
 {
 public:
     OFileWriter( char *pcFile ) { strncpy( m_pcFile , pcFile, 256 - 1 ); m_f = 0; }

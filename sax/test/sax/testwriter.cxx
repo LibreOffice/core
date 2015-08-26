@@ -31,8 +31,7 @@
 #include <osl/time.h>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 using namespace ::std;
@@ -47,7 +46,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace sax_test {
 
 class OFileWriter :
-        public WeakImplHelper1< XOutputStream >
+        public WeakImplHelper< XOutputStream >
 {
 public:
     OFileWriter( char *pcFile ) { strncpy( m_pcFile, pcFile, 256 - 1 ); m_f = 0; }
@@ -92,7 +91,7 @@ void OFileWriter::closeOutput()
 
 
 class OSaxWriterTest :
-        public WeakImplHelper1< XSimpleTest >
+        public WeakImplHelper< XSimpleTest >
 {
 public:
     OSaxWriterTest( const Reference < XMultiServiceFactory > & rFactory ) : m_rFactory( rFactory )
@@ -144,7 +143,7 @@ private:
 *
 *----------------------------------------*/
 struct AttributeListImpl_impl;
-class AttributeListImpl : public WeakImplHelper1< XAttributeList >
+class AttributeListImpl : public WeakImplHelper< XAttributeList >
 {
 public:
     AttributeListImpl();
