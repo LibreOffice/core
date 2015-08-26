@@ -4071,8 +4071,18 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     }
 
     rSlideHd.SeekToContent( rIn );
+
+    auto nEndRecPos = rSlideHd.GetRecEndFilePos();
+    auto nStreamLen = rIn.Tell() + rIn.remainingSize();
+    if (nEndRecPos > nStreamLen)
+    {
+        SAL_WARN("filter.ms", "Parsing error: " << nStreamLen <<
+                 " max end pos, but " << nEndRecPos << " claimed, truncating");
+        nEndRecPos = nStreamLen;
+    }
+
     DffRecordHeader aTxMasterStyleHd;
-    while ( rIn.Tell() < rSlideHd.GetRecEndFilePos() )
+    while (rIn.Tell() < nEndRecPos)
     {
         ReadDffRecordHeader( rIn, aTxMasterStyleHd );
         if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
@@ -4080,7 +4090,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
         else
             aTxMasterStyleHd.SeekToEndOfRecord( rIn );
     }
-    while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < rSlideHd.GetRecEndFilePos() ) ) //TODO: aTxMasterStyleHd may be used without having been properly initialized
+    while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < nEndRecPos ) ) //TODO: aTxMasterStyleHd may be used without having been properly initialized
     {
         sal_uInt32 nInstance = aTxMasterStyleHd.nRecInstance;
         if ( ( nInstance < PPT_STYLESHEETENTRYS ) &&
