@@ -821,7 +821,12 @@ bool ImplSdPPTImport::Import()
                             }
                             break;
                         }
-                        aHd.SeekToEndOfRecord( rStCtrl );
+                        bool bSuccess = aHd.SeekToEndOfRecord(rStCtrl);
+                        if (!bSuccess)
+                        {
+                            SAL_WARN("filter.ms", "Count not seek to end of record");
+                            break;
+                        }
                     }
                 }
                 rStCtrl.Seek( nFPosMerk );
