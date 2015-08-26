@@ -17,284 +17,172 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
-#include <com/sun/star/uno/Type.hxx>
+#include <sal/config.h>
+
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/CrossReference.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/ucb/DocumentHeaderField.hpp>
+#include <com/sun/star/ucb/DocumentStoreMode.hpp>
+#include <com/sun/star/ucb/Priority.hpp>
 #include <com/sun/star/ucb/RecipientInfo.hpp>
 #include <com/sun/star/ucb/RuleSet.hpp>
 #include <com/sun/star/ucb/SendInfo.hpp>
 #include <com/sun/star/ucb/SendMediaTypes.hpp>
+#include <com/sun/star/ucb/SynchronizePolicy.hpp>
+#include <com/sun/star/ucb/VerificationMode.hpp>
 #include <com/sun/star/ucb/XDataContainer.hpp>
-#include "ucbprops.hxx"
+
+#include <ucbprops.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::util;
-
-
-
-
-// struct PropertyTableEntry
-
-
-
-struct PropertyTableEntry
-{
-    const char* pName;
-    sal_Int32   nHandle;
-    sal_Int16   nAttributes;
-    const com::sun::star::uno::Type& (*pGetCppuType)();
-};
-
-
-
-// CPPU type access functions.
-
-
-
-static const com::sun::star::uno::Type& OUString_getCppuType()
-{
-    return cppu::UnoType<OUString>::get();
-}
-
-static const com::sun::star::uno::Type& sal_uInt16_getCppuType()
-{
-    // ! uInt -> Int, because of Java !!!
-    return cppu::UnoType<sal_Int16>::get();
-}
-
-static const com::sun::star::uno::Type& sal_uInt32_getCppuType()
-{
-    // ! uInt -> Int, because of Java !!!
-    return cppu::UnoType<sal_Int32>::get();
-}
-
-static const com::sun::star::uno::Type& sal_uInt64_getCppuType()
-{
-    // ! uInt -> Int, because of Java !!!
-    return cppu::UnoType<sal_Int64>::get();
-}
-
-static const com::sun::star::uno::Type& enum_getCppuType()
-{
-    // ! enum -> Int, because of Java !!!
-    return cppu::UnoType<sal_Int16>::get();
-}
-
-static const com::sun::star::uno::Type& sal_Bool_getCppuType()
-{
-    return cppu::UnoType<bool>::get();
-}
-
-static const com::sun::star::uno::Type& byte_getCppuType()
-{
-    return cppu::UnoType<sal_Int8>::get();
-}
-
-static const com::sun::star::uno::Type& Sequence_CrossReference_getCppuType()
-{
-    return cppu::UnoType<
-        com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::CrossReference >>::get();
-}
-
-static const com::sun::star::uno::Type& DateTime_getCppuType()
-{
-    return cppu::UnoType<
-        com::sun::star::util::DateTime>::get();
-}
-
-static const com::sun::star::uno::Type& Sequence_byte_getCppuType()
-{
-    return cppu::UnoType<
-        com::sun::star::uno::Sequence< sal_Int8 >>::get();
-}
-
-static const com::sun::star::uno::Type& Sequence_DocumentHeaderField_getCppuType()
-{
-    return cppu::UnoType<
-        com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::DocumentHeaderField >>::get();
-}
-
-static const com::sun::star::uno::Type& XDataContainer_getCppuType()
-{
-    return cppu::UnoType<
-        com::sun::star::uno::Reference<
-            com::sun::star::ucb::XDataContainer >>::get();
-}
-
-static const com::sun::star::uno::Type& Sequence_RecipientInfo_getCppuType()
-{
-    return cppu::UnoType<
-        com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::RecipientInfo >>::get();
-}
-
-static const com::sun::star::uno::Type& RuleSet_getCppuType()
-{
-    return cppu::UnoType<com::sun::star::ucb::RuleSet>::get();
-}
-
-static const com::sun::star::uno::Type& Sequence_SendInfo_getCppuType()
-{
-    return cppu::UnoType<
-        com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::SendInfo >>::get();
-}
-
-static const com::sun::star::uno::Type& Sequence_SendMediaTypes_getCppuType()
-{
-    return cppu::UnoType<
-        com::sun::star::uno::Sequence<
-                        com::sun::star::ucb::SendMediaTypes >>::get();
-}
-
-
-// A table with all well-known UCB properties.
-
 
 #define ATTR_DEFAULT ( PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID | PropertyAttribute::MAYBEDEFAULT )
 
-static const PropertyTableEntry __aPropertyTable[] =
-{
-    { "Account",            -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "AutoUpdateInterval", -1,                                 ATTR_DEFAULT,   &sal_uInt32_getCppuType },
-    { "ConfirmEmpty",       -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "ConnectionLimit",    -1,                                 ATTR_DEFAULT,   &byte_getCppuType },
-    { "ConnectionMode",     -1,                                 ATTR_DEFAULT,   &enum_getCppuType },
-    { "ContentCountLimit",  -1,                                 ATTR_DEFAULT,   &sal_uInt16_getCppuType },
-    { "ContentType",        -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "Cookie",             -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "CrossReferences",    -1,                                 ATTR_DEFAULT,   &Sequence_CrossReference_getCppuType },
-    { "DateCreated",        -1,                                 ATTR_DEFAULT,   &DateTime_getCppuType },
-    { "DateModified",       -1,                                 ATTR_DEFAULT,   &DateTime_getCppuType },
-    { "DeleteOnServer",     -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "DocumentBody",       -1,                                 ATTR_DEFAULT,   &Sequence_byte_getCppuType },
-    { "DocumentCount",      -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_uInt32_getCppuType },
-    { "DocumentCountMarked",
-                            -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_uInt32_getCppuType },
-    { "DocumentHeader",     -1,                                 ATTR_DEFAULT,   &Sequence_DocumentHeaderField_getCppuType },
-    { "DocumentStoreMode",  -1,                                 ATTR_DEFAULT,   &enum_getCppuType },
-    { "DocumentViewMode",   -1,                                 ATTR_DEFAULT,   &enum_getCppuType },
-    { "FTPAccount",         -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "Flags",              -1,                                 ATTR_DEFAULT,   &sal_uInt32_getCppuType },
-    { "FolderCount",        -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_uInt32_getCppuType },
-    { "FolderViewMode",     -1,                                 ATTR_DEFAULT,   &enum_getCppuType },
-    { "FreeSpace",          -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_uInt64_getCppuType },
-    { "HasDocuments",       -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_Bool_getCppuType },
-    { "HasFolders",         -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_Bool_getCppuType },
-    { "IsAutoDelete",       -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "IsAutoUpdate",       -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "IsDocument",         -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_Bool_getCppuType },
-    { "IsFolder",           -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_Bool_getCppuType },
-    { "IsKeepExpired",      -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "IsLimitedContentCount",
-                            -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "IsMarked",           -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "IsRead",             -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "IsReadOnly",         -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "IsSubscribed",       -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "IsTimeLimitedStore", -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "Keywords",           -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "LocalBase",          -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "MessageBCC",         -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "MessageBody",        -1,                                 ATTR_DEFAULT,   &XDataContainer_getCppuType },
-    { "MessageCC",          -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "MessageFrom",        -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "MessageId",          -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "MessageInReplyTo",   -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "MessageReplyTo",     -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "MessageTo",          -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "NewsGroups",         -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "NoCacheList",        -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "Origin",             -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &OUString_getCppuType },
-    { "OutgoingMessageRecipients",
-                            -1,                                 ATTR_DEFAULT,   &Sequence_RecipientInfo_getCppuType },
-    { "OutgoingMessageState",
-                            -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &enum_getCppuType },
-    { "OutgoingMessageViewMode",
-                            -1,                                 ATTR_DEFAULT,   &enum_getCppuType },
-    { "Password",           -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "Priority",           -1,                                 ATTR_DEFAULT,   &enum_getCppuType },
-    { "References",         -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "Referer",            -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "Rules",              -1,                                 ATTR_DEFAULT,   &RuleSet_getCppuType },
-    { "SearchCriteria",     -1,                                 ATTR_DEFAULT,   &RuleSet_getCppuType },
-    { "SearchIndirections", -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "SearchLocations",    -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "SearchRecursive",    -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "SeenCount",          -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_uInt32_getCppuType },
-    { "SendCopyTarget",     -1,                                 ATTR_DEFAULT,   &Sequence_SendInfo_getCppuType },
-    { "SendFormats",        -1,                                 ATTR_DEFAULT,   &Sequence_SendMediaTypes_getCppuType },
-    { "SendFroms",          -1,                                 ATTR_DEFAULT,   &Sequence_SendInfo_getCppuType },
-    { "SendPasswords",      -1,                                 ATTR_DEFAULT,   &Sequence_SendInfo_getCppuType },
-    { "SendProtocolPrivate",-1,                                 ATTR_DEFAULT,   &sal_uInt16_getCppuType },
-    { "SendProtocolPublic", -1,                                 ATTR_DEFAULT,   &sal_uInt16_getCppuType },
-    { "SendReplyTos",       -1,                                 ATTR_DEFAULT,   &Sequence_SendInfo_getCppuType },
-    { "SendServerNames",    -1,                                 ATTR_DEFAULT,   &Sequence_SendInfo_getCppuType },
-    { "SendUserNames",      -1,                                 ATTR_DEFAULT,   &Sequence_SendInfo_getCppuType },
-    { "SendVIMPostOfficePath",
-                            -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "ServerBase",         -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "ServerName",         -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "ServerPort",         -1,                                 ATTR_DEFAULT,   &sal_uInt16_getCppuType },
-    { "Size",               -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_uInt64_getCppuType },
-    { "SizeLimit",          -1,                                 ATTR_DEFAULT,   &sal_uInt64_getCppuType },
-    { "SubscribedCount",    -1,                                 ATTR_DEFAULT | PropertyAttribute::READONLY,
-                                                                                            &sal_uInt32_getCppuType },
-    { "SynchronizePolicy",  -1,                                 ATTR_DEFAULT,   &enum_getCppuType },
-    { "TargetFrames",       -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "TargetURL",          -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "TimeLimitStore",     -1,                                 ATTR_DEFAULT,   &sal_uInt16_getCppuType },
-    { "Title",              -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "UpdateOnOpen",       -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "UseOutBoxPrivateProtocolSettings",
-                            -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "UseOutBoxPublicProtocolSettings",
-                            -1,                                 ATTR_DEFAULT,   &sal_Bool_getCppuType },
-    { "UserName",           -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "UserSortCriterium",  -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "VIMPostOfficePath",  -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
-    { "VerificationMode",   -1,                                 ATTR_DEFAULT,   &enum_getCppuType },
-
-
-    // EOT.
-
-
-    { 0, 0, 0, 0 }
-};
-
-
-
-
-// UcbPropertiesManager Implementation.
-
-
-
-
 UcbPropertiesManager::UcbPropertiesManager(
                         const Reference< XMultiServiceFactory >& )
-: m_pProps( 0 )
+: m_pProps({
+    { "Account", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "AutoUpdateInterval", -1, cppu::UnoType<sal_Int32>::get(), ATTR_DEFAULT },
+    { "ConfirmEmpty", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "ConnectionLimit", -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
+    { "ConnectionMode", -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
+    { "ContentCountLimit", -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
+    { "ContentType", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "Cookie", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "CrossReferences", -1,
+      cppu::UnoType<css::uno::Sequence<css::ucb::CrossReference>>::get(),
+      ATTR_DEFAULT },
+    { "DateCreated", -1, cppu::UnoType<css::util::DateTime>::get(),
+      ATTR_DEFAULT },
+    { "DateModified", -1, cppu::UnoType<css::util::DateTime>::get(),
+      ATTR_DEFAULT },
+    { "DeleteOnServer", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "DocumentBody", -1, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(),
+      ATTR_DEFAULT },
+    { "DocumentCount", -1, cppu::UnoType<sal_Int32>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "DocumentCountMarked", -1, cppu::UnoType<sal_Int32>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "DocumentHeader", -1,
+      cppu::UnoType<css::uno::Sequence<css::ucb::DocumentHeaderField>>::get(),
+      ATTR_DEFAULT },
+    { "DocumentStoreMode", -1,
+      cppu::UnoType<css::ucb::DocumentStoreMode>::get(), ATTR_DEFAULT },
+    { "DocumentViewMode", -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
+    { "FTPAccount", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "Flags", -1, cppu::UnoType<sal_Int32>::get(), ATTR_DEFAULT },
+    { "FolderCount", -1, cppu::UnoType<sal_Int32>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "FolderViewMode", -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
+    { "FreeSpace", -1, cppu::UnoType<sal_Int64>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "HasDocuments", -1, cppu::UnoType<bool>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "HasFolders", -1, cppu::UnoType<bool>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "IsAutoDelete", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "IsAutoUpdate", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "IsDocument", -1, cppu::UnoType<bool>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "IsFolder", -1, cppu::UnoType<bool>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "IsKeepExpired", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "IsLimitedContentCount", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "IsMarked", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "IsRead", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "IsReadOnly", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "IsSubscribed", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "IsTimeLimitedStore", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "Keywords", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "LocalBase", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "MessageBCC", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "MessageBody", -1, cppu::UnoType<css::ucb::XDataContainer>::get(),
+      ATTR_DEFAULT },
+    { "MessageCC", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "MessageFrom", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "MessageId", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "MessageInReplyTo", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "MessageReplyTo", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "MessageTo", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "NewsGroups", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "NoCacheList", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "Origin", -1, cppu::UnoType<OUString>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "OutgoingMessageRecipients", -1,
+      cppu::UnoType<css::uno::Sequence<css::ucb::RecipientInfo>>::get(),
+      ATTR_DEFAULT },
+    { "OutgoingMessageState", -1,
+      cppu::UnoType<css::ucb::OutgoingMessageState>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "OutgoingMessageViewMode", -1, cppu::UnoType<sal_Int16>::get(),
+      ATTR_DEFAULT },
+    { "Password", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "Priority", -1, cppu::UnoType<css::ucb::Priority>::get(), ATTR_DEFAULT },
+    { "References", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "Referer", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "Rules", -1, cppu::UnoType<css::ucb::RuleSet>::get(), ATTR_DEFAULT },
+    { "SearchCriteria", -1, cppu::UnoType<css::ucb::RuleSet>::get(),
+      ATTR_DEFAULT },
+    { "SearchIndirections", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "SearchLocations", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "SearchRecursive", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "SeenCount", -1, cppu::UnoType<sal_Int32>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "SendCopyTarget", -1,
+      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      ATTR_DEFAULT },
+    { "SendFormats", -1,
+      cppu::UnoType<css::uno::Sequence<css::ucb::SendMediaTypes>>::get(),
+      ATTR_DEFAULT },
+    { "SendFroms", -1,
+      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      ATTR_DEFAULT },
+    { "SendPasswords", -1,
+      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      ATTR_DEFAULT },
+    { "SendProtocolPrivate", -1, cppu::UnoType<sal_Int16>::get(),
+      ATTR_DEFAULT },
+    { "SendProtocolPublic", -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
+    { "SendReplyTos", -1,
+      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      ATTR_DEFAULT },
+    { "SendServerNames", -1,
+      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      ATTR_DEFAULT },
+    { "SendUserNames", -1,
+      cppu::UnoType<css::uno::Sequence<css::ucb::SendInfo>>::get(),
+      ATTR_DEFAULT },
+    { "SendVIMPostOfficePath", -1, cppu::UnoType<OUString>::get(),
+      ATTR_DEFAULT },
+    { "ServerBase", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "ServerName", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "ServerPort", -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
+    { "Size", -1, cppu::UnoType<sal_Int64>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "SizeLimit", -1, cppu::UnoType<sal_Int64>::get(), ATTR_DEFAULT },
+    { "SubscribedCount", -1, cppu::UnoType<sal_Int32>::get(),
+      ATTR_DEFAULT | PropertyAttribute::READONLY },
+    { "SynchronizePolicy", -1,
+      cppu::UnoType<css::ucb::SynchronizePolicy>::get(), ATTR_DEFAULT },
+    { "TargetFrames", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "TargetURL", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "TimeLimitStore", -1, cppu::UnoType<sal_Int16>::get(), ATTR_DEFAULT },
+    { "Title", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "UpdateOnOpen", -1, cppu::UnoType<bool>::get(), ATTR_DEFAULT },
+    { "UseOutBoxPrivateProtocolSettings", -1, cppu::UnoType<bool>::get(),
+      ATTR_DEFAULT },
+    { "UseOutBoxPublicProtocolSettings", -1, cppu::UnoType<bool>::get(),
+      ATTR_DEFAULT },
+    { "UserName", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "UserSortCriterium", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "VIMPostOfficePath", -1, cppu::UnoType<OUString>::get(), ATTR_DEFAULT },
+    { "VerificationMode", -1, cppu::UnoType<css::ucb::VerificationMode>::get(),
+      ATTR_DEFAULT }})
 {
 }
 
@@ -302,7 +190,6 @@ UcbPropertiesManager::UcbPropertiesManager(
 // virtual
 UcbPropertiesManager::~UcbPropertiesManager()
 {
-    delete m_pProps;
 }
 
 
@@ -333,49 +220,7 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbPropertiesManager );
 Sequence< Property > SAL_CALL UcbPropertiesManager::getProperties()
     throw( RuntimeException, std::exception )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-    if ( !m_pProps )
-    {
-        m_pProps = new Sequence< Property >( 128 );
-        Property* pProps = m_pProps->getArray();
-        sal_Int32 nPos  = 0;
-        sal_Int32 nSize = m_pProps->getLength();
-
-
-        // Get info for well-known properties.
-
-
-        const PropertyTableEntry* pCurr = &__aPropertyTable[ 0 ];
-        while ( pCurr->pName )
-        {
-            if ( nSize <= nPos )
-            {
-                OSL_FAIL( "UcbPropertiesManager::getProperties - "
-                            "Initial size of property sequence too small!" );
-
-                m_pProps->realloc( 128 );
-                nSize += 128;
-            }
-
-            Property& rProp = pProps[ nPos ];
-
-            rProp.Name       = OUString::createFromAscii( pCurr->pName );
-            rProp.Handle     = pCurr->nHandle;
-            rProp.Type       = pCurr->pGetCppuType();
-            rProp.Attributes = pCurr->nAttributes;
-
-            nPos++;
-            pCurr++;
-        }
-
-        if ( nPos > 0 )
-        {
-            m_pProps->realloc( nPos );
-            nSize = m_pProps->getLength();
-        }
-    }
-    return *m_pProps;
+    return m_pProps;
 }
 
 
@@ -408,12 +253,8 @@ sal_Bool SAL_CALL UcbPropertiesManager::hasPropertyByName( const OUString& Name 
 bool UcbPropertiesManager::queryProperty(
                                 const OUString& rName, Property& rProp )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-    getProperties();
-
-    const Property* pProps = m_pProps->getConstArray();
-    sal_Int32 nCount = m_pProps->getLength();
+    const Property* pProps = m_pProps.getConstArray();
+    sal_Int32 nCount = m_pProps.getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
     {
         const Property& rCurrProp = pProps[ n ];
