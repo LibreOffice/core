@@ -14,7 +14,7 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <sax/fastparser.hxx>
 #include <test/bootstrapfixture.hxx>
 
@@ -23,7 +23,7 @@ using namespace css::xml::sax;
 
 namespace {
 
-class DummyTokenHandler : public cppu::WeakImplHelper1< xml::sax::XFastTokenHandler >
+class DummyTokenHandler : public cppu::WeakImplHelper< xml::sax::XFastTokenHandler >
 {
 public:
              DummyTokenHandler() {}

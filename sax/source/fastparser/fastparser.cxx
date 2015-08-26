@@ -28,6 +28,7 @@
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/conditn.hxx>
@@ -329,7 +330,7 @@ static int call_callbackExternalEntityRef( XML_Parser parser,
 #endif
 }
 
-class FastLocatorImpl : public WeakImplHelper1< XLocator >
+class FastLocatorImpl : public WeakImplHelper< XLocator >
 {
 public:
     FastLocatorImpl( FastSaxParserImpl *p ) : mpParser(p) {}

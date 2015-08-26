@@ -35,7 +35,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <osl/diagnose.h>
@@ -869,7 +869,7 @@ static inline sal_Int32 getFirstLineBreak( const OUString & str ) throw ()
 }
 
 class SAXWriter :
-    public WeakImplHelper2<
+    public WeakImplHelper<
             XWriter,
             XServiceInfo >
 {

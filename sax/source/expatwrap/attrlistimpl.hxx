@@ -21,7 +21,7 @@
 #define INCLUDED_SAX_SOURCE_EXPATWRAP_ATTRLISTIMPL_HXX
 
 #include "sal/config.h"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -33,7 +33,7 @@ struct AttributeList_impl;
 
 //FIXME
 class AttributeList :
-    public ::cppu::WeakImplHelper2<
+    public ::cppu::WeakImplHelper<
                 ::com::sun::star::xml::sax::XAttributeList,
                 ::com::sun::star::util::XCloneable >
 {

@@ -30,8 +30,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -45,7 +44,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace sax_test {
 
-class OSaxParserTest : public WeakImplHelper1< XSimpleTest >
+class OSaxParserTest : public WeakImplHelper< XSimpleTest >
 {
 public:
     OSaxParserTest( const Reference < XMultiServiceFactory > & rFactory ) : m_rFactory( rFactory )
@@ -236,7 +235,7 @@ Reference< XInputStream > createStreamFromFile(
 }
 
 class TestDocumentHandler :
-    public WeakImplHelper3< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
+    public WeakImplHelper< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
 {
 public:
     TestDocumentHandler( const Reference < XMultiServiceFactory >  &r , sal_Bool bPrint )
