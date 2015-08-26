@@ -48,6 +48,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmap.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -294,6 +295,11 @@ OUString AboutDialog::GetVersionString()
             m_sBuildStr += " $BUILDID";
         }
         sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
+    }
+
+    if (OpenGLHelper::isVCLOpenGLEnabled())
+    {
+        sVersion += "-GL";
     }
 
     if (EXTRA_BUILDID[0] != '\0')
