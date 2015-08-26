@@ -318,6 +318,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/bitmapscalesuper \
     vcl/source/bitmap/BitmapSymmetryCheck \
     vcl/source/bitmap/BitmapFilterStackBlur \
+    vcl/source/bitmap/checksum \
     vcl/source/helper/canvasbitmap \
     vcl/source/helper/canvastools \
     vcl/source/helper/evntpost \
