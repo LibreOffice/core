@@ -44,7 +44,6 @@ public:
 #ifdef TODO
     void testNorthernThai();
 #endif
-    void testKhmer();
     void testJapanese();
     void testChinese();
 
@@ -60,9 +59,6 @@ public:
 #endif
 #ifdef TODO
     CPPUNIT_TEST(testNorthernThai);
-#endif
-#if (U_ICU_VERSION_MAJOR_NUM > 4)
-    CPPUNIT_TEST(testKhmer);
 #endif
     CPPUNIT_TEST(testJapanese);
     CPPUNIT_TEST(testChinese);
@@ -888,33 +884,6 @@ void TestBreakIterator::testNorthernThai()
         i18n::WordType::DICTIONARY_WORD, true);
     CPPUNIT_ASSERT_MESSAGE("Should skip full word",
         aBounds.startPos == 0 && aBounds.endPos == aTest.getLength());
-}
-#endif
-
-#if (U_ICU_VERSION_MAJOR_NUM > 4)
-// Not sure if any version earlier than 49 did have Khmer word boundary
-// dictionaries, 4.6 does not.
-
-//A test to ensure that our khmer word boundary detection is useful
-//https://bugs.libreoffice.org/show_bug.cgi?id=52020
-void TestBreakIterator::testKhmer()
-{
-    lang::Locale aLocale;
-    aLocale.Language = "km";
-    aLocale.Country = "KH";
-
-    const sal_Unicode KHMER[] = { 0x17B2, 0x17D2, 0x1799, 0x1782, 0x17C1 };
-
-    OUString aTest(KHMER, SAL_N_ELEMENTS(KHMER));
-    i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
-        i18n::WordType::DICTIONARY_WORD, true);
-
-    CPPUNIT_ASSERT(aBounds.startPos == 0 && aBounds.endPos == 3);
-
-    aBounds = m_xBreak->getWordBoundary(aTest, aBounds.endPos, aLocale,
-        i18n::WordType::DICTIONARY_WORD, true);
-
-    CPPUNIT_ASSERT(aBounds.startPos == 3 && aBounds.endPos == 5);
 }
 #endif
 
