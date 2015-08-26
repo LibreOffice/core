@@ -97,7 +97,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
                                     rAnimBmp.aBmpEx.IsEqual( aBmpEx ) );
                         }
 
-    sal_uLong       GetChecksum() const;
+    BitmapChecksum  GetChecksum() const;
 };
 
 struct AInfo
@@ -173,7 +173,7 @@ public:
     void            Replace( const AnimationBitmap& rNewAnimationBmp, sal_uInt16 nAnimation );
 
     sal_uLong       GetSizeBytes() const;
-    sal_uLong       GetChecksum() const;
+    BitmapChecksum  GetChecksum() const;
 
 public:
 

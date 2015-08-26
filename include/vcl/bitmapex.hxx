@@ -96,7 +96,7 @@ public:
 
     sal_uInt16          GetBitCount() const { return aBitmap.GetBitCount(); }
     sal_uLong           GetSizeBytes() const;
-    sal_uLong           GetChecksum() const;
+    BitmapChecksum      GetChecksum() const;
 
 public:
 

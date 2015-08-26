@@ -43,7 +43,7 @@ private:
     sal_uInt32  mnID1;
     sal_uInt32  mnID2;
     sal_uInt32  mnID3;
-    sal_uInt32  mnID4;
+    BitmapChecksum  mnID4;
 
 public:
 
@@ -79,7 +79,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
                 mnID1 |= rSvgDataPtr->getSvgDataArrayLength();
                 mnID2 = basegfx::fround(rRange.getWidth());
                 mnID3 = basegfx::fround(rRange.getHeight());
-                mnID4 = rtl_crc32(0, rSvgDataPtr->getSvgDataArray().get(), rSvgDataPtr->getSvgDataArrayLength());
+                mnID4 = vcl_get_checksum(0, rSvgDataPtr->getSvgDataArray().get(), rSvgDataPtr->getSvgDataArrayLength());
             }
             else if( rGraphic.IsAnimated() )
             {
@@ -123,7 +123,7 @@ OString GraphicID::GetIDString() const
 {
     OStringBuffer aHexStr;
     sal_Int32 nShift, nIndex = 0;
-    aHexStr.setLength(32);
+    aHexStr.setLength(24 + (2 * BITMAP_CHECKSUM_SIZE));
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
         aHexStr[nIndex++] = aHexData[ ( mnID1 >> (sal_uInt32) nShift ) & 0xf ];
@@ -134,7 +134,7 @@ OString GraphicID::GetIDString() const
     for( nShift = 28; nShift >= 0; nShift -= 4 )
         aHexStr[nIndex++] = aHexData[ ( mnID3 >> (sal_uInt32) nShift ) & 0xf ];
 
-    for( nShift = 28; nShift >= 0; nShift -= 4 )
+    for( nShift = BITMAP_CHECKSUM_BITS - 4; nShift >= 0; nShift -= 4 )
         aHexStr[nIndex++] = aHexData[ ( mnID4 >> (sal_uInt32) nShift ) & 0xf ];
 
     return aHexStr.makeStringAndClear();

@@ -552,7 +552,7 @@ bool Graphic::IsLink() const
     return mpImpGraphic->ImplIsLink();
 }
 
-sal_uLong Graphic::GetChecksum() const
+BitmapChecksum Graphic::GetChecksum() const
 {
     return mpImpGraphic->ImplGetChecksum();
 }
