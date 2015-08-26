@@ -6147,8 +6147,8 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, co
 
     if( !nRet )
     {
-        SwWW8ImplReader* pRdr = new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
-            rBaseURL, bNew, bSkipImages, *rPaM.GetPoint());
+        std::unique_ptr<SwWW8ImplReader> pRdr(new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
+            rBaseURL, bNew, bSkipImages, *rPaM.GetPoint()));
         if (bNew)
         {
             // Remove Frame and offsets from Frame Template
@@ -6166,7 +6166,6 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, co
         {
             nRet = ERR_WW8_NO_WW8_FILE_ERR;
         }
-        delete pRdr;
 
         if( refStrm.Is() )
         {
