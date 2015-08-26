@@ -28,6 +28,7 @@
 #include "vcl/window.hxx"
 #include "vcl/syswin.hxx"
 #include <vcl/settings.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include "osx/saldata.hxx"
 #include "quartz/salgdi.h"
@@ -37,6 +38,7 @@
 #include "osx/salframeview.h"
 #include "osx/a11yfactory.h"
 #include "quartz/utils.h"
+
 
 #include "salwtype.hxx"
 
@@ -881,6 +883,7 @@ void AquaSalFrame::Flush()
     {
         [mpNSView display];
     }
+    OpenGLHelper::flush();
 }
 
 void AquaSalFrame::Flush( const Rectangle& rRect )
@@ -902,6 +905,7 @@ void AquaSalFrame::Flush( const Rectangle& rRect )
     {
         [mpNSView display];
     }
+    OpenGLHelper::flush();
 }
 
 void AquaSalFrame::Sync()
@@ -914,6 +918,7 @@ void AquaSalFrame::Sync()
         [mpNSView setNeedsDisplay: YES];
         [mpNSView display];
     }
+    OpenGLHelper::flush();
 }
 
 void AquaSalFrame::SetInputContext( SalInputContext* pContext )
