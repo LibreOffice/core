@@ -1187,7 +1187,7 @@
 
       <node oor:name="ChartTrendlinePanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Trnedline</value>
+          <value xml:lang="en-US">Trendline</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>ChartTrendlinePanel</value>
