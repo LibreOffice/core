@@ -321,6 +321,39 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
 
     ScRange aRange;
+
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse(":B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("B:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse(":B2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("B2:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse(":2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("2:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse(":2B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("2B:", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Should fail to parse.", (nRes & SCA_VALID) == 0);
+
     aRange.aStart.SetTab(0);
     nRes = aRange.Parse("B:B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
