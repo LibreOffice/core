@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "1af94dfe_64ee00ee",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-26T01:49:15Z",
+      "side": 1,
+      "message": "Gotcha! Thanks for the catch!",
+      "parentUuid": "1af94dfe_c42b9432",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_04a57c03",
         "filename": "vcl/opengl/texture.cxx",
         "patchSetId": 1
@@ -87,6 +105,24 @@
     },
     {
       "key": {
+        "uuid": "1af94dfe_a43008a0",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-26T01:49:15Z",
+      "side": 1,
+      "message": "True, somehow I missed the double cast on the denominator and was worried about a floating point exception.",
+      "parentUuid": "1af94dfe_e4a970e1",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_44af84e3",
         "filename": "vcl/opengl/texture.cxx",
         "patchSetId": 1
@@ -104,6 +140,24 @@
     },
     {
       "key": {
+        "uuid": "1af94dfe_04261c68",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-26T01:49:15Z",
+      "side": 1,
+      "message": "Good point, I missed that",
+      "parentUuid": "1af94dfe_44af84e3",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_24acf8ec",
         "filename": "vcl/opengl/texture.cxx",
         "patchSetId": 1
@@ -115,6 +169,24 @@
       "writtenOn": "2015-08-25T19:25:09Z",
       "side": 1,
       "message": "same here, shared copy gets clobbered",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_4420244a",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-26T01:49:15Z",
+      "side": 1,
+      "message": "Good point",
+      "parentUuid": "1af94dfe_24acf8ec",
       "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
