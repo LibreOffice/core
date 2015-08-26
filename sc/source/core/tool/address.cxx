@@ -1198,7 +1198,14 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
             // Need document name if inherited.
             if (bExtDocInherited)
             {
-                const OUString* pFileName = pRefMgr->getExternalFileName( pExtInfo->mnFileId);
+                // The FileId was created using the original file name, so
+                // obtain that. Otherwise lcl_ScRange_External_TabSpan() would
+                // retrieve a FileId for the real name and bail out if that
+                // differed from pExtInfo->mnFileId, as is the case when
+                // loading documents that refer external files relative to the
+                // current own document but were saved from a different path
+                // than loaded.
+                const OUString* pFileName = pRefMgr->getExternalFileName( pExtInfo->mnFileId, true);
                 if (pFileName)
                     aDocName = *pFileName;
                 else
@@ -1521,7 +1528,7 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
                     nRes2 |= SCA_COL_ABSOLUTE;
                 }
             }
-            if (nRes1 && nRes2)
+            if ((nRes1 & SCA_VALID) && (nRes2 & SCA_VALID))
             {
                 // PutInOrder / Justify
                 sal_uInt16 nMask, nBits1, nBits2;
