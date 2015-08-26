@@ -61,6 +61,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
  #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
@@ -99,6 +100,7 @@ public:
     void testLineStyle();
     void testCellLeftAndRightMargin();
     void testRightToLeftParaghraph();
+    void testTextboxWithHyperlink();
     void testTableCellBorder();
     void testBulletColor();
     void testBulletCharAndFont();
@@ -134,6 +136,7 @@ public:
     CPPUNIT_TEST(testLineStyle);
     CPPUNIT_TEST(testCellLeftAndRightMargin);
     CPPUNIT_TEST(testRightToLeftParaghraph);
+    CPPUNIT_TEST(testTextboxWithHyperlink);
     CPPUNIT_TEST(testTableCellBorder);
     CPPUNIT_TEST(testBulletColor);
     CPPUNIT_TEST(testBulletCharAndFont);
@@ -910,6 +913,49 @@ void SdExportTest::testRightToLeftParaghraph()
     sal_Int16 nWritingMode = 0;
     xPropSet->getPropertyValue( "WritingMode" ) >>= nWritingMode;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong paragraph WritingMode", text::WritingMode2::RL_TB, nWritingMode);
+
+    xDocShRef->DoClose();
+}
+
+void SdExportTest::testTextboxWithHyperlink()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/hyperlinktest.pptx"), PPTX);
+
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+    xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< drawing::XDrawPage > xPage(
+    xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+
+    uno::Reference< beans::XPropertySet > xShape(
+        xPage->getByIndex(0), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "no shape", xShape.is() );
+
+    // Get first paragraph
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess;
+    paraEnumAccess.set(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> paraEnum = paraEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> const xParagraph(paraEnum->nextElement(),
+                uno::UNO_QUERY_THROW);
+
+    // first chunk of text
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xPropSet( xRun, uno::UNO_QUERY_THROW );
+
+    uno::Reference<text::XTextField> xField;
+    xPropSet->getPropertyValue("TextField") >>= xField;
+    CPPUNIT_ASSERT_MESSAGE("Where is the text field?", xField.is() );
+
+    xPropSet.set(xField, uno::UNO_QUERY);
+    OUString aURL;
+    xPropSet->getPropertyValue("URL") >>= aURL;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("URLs don't match", OUString("http://www.xkcd.com/"), aURL);
 
     xDocShRef->DoClose();
 }

@@ -108,7 +108,7 @@ protected:
     bool GetPropertyAndState( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
                   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState > rXPropState,
                   const OUString& aName, ::com::sun::star::beans::PropertyState& eState );
-    const char* GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, bool& bIsField );
+    OUString GetFieldValue( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, bool& bIsURLField );
 
 
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
