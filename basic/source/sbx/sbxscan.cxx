@@ -202,7 +202,7 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
             case 'H': break;
             default : bRes = sal_False;
         }
-        long l = 0;
+        sal_Int32 l = 0;
         int i;
         while( isalnum( *p ) )
         {
