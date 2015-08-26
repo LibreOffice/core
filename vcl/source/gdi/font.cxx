@@ -225,7 +225,6 @@ void Font::MakeUnique()
 
 Font::Font()
 {
-
     static Impl_Font aStaticImplFont;
     // RefCount is zero for static objects
     aStaticImplFont.mnRefCount = 0;
@@ -245,7 +244,6 @@ Font::Font( const vcl::Font& rFont )
 
 Font::Font( const OUString& rFamilyName, const Size& rSize )
 {
-
     mpImplFont               = new Impl_Font;
     mpImplFont->maFamilyName = rFamilyName;
     mpImplFont->maSize       = rSize;
@@ -253,7 +251,6 @@ Font::Font( const OUString& rFamilyName, const Size& rSize )
 
 Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size& rSize )
 {
-
     mpImplFont              = new Impl_Font;
     mpImplFont->maFamilyName= rFamilyName;
     mpImplFont->maStyleName = rStyleName;
@@ -262,7 +259,6 @@ Font::Font( const OUString& rFamilyName, const OUString& rStyleName, const Size&
 
 Font::Font( FontFamily eFamily, const Size& rSize )
 {
-
     mpImplFont              = new Impl_Font;
     mpImplFont->meFamily    = eFamily;
     mpImplFont->maSize      = rSize;
@@ -270,7 +266,6 @@ Font::Font( FontFamily eFamily, const Size& rSize )
 
 Font::~Font()
 {
-
     // decrement reference counter and delete if last reference
     // if the object is not static (Refcounter==0)
     if ( mpImplFont->mnRefCount )
@@ -284,7 +279,6 @@ Font::~Font()
 
 void Font::SetColor( const Color& rColor )
 {
-
     if( mpImplFont->maColor != rColor )
     {
         MakeUnique();
@@ -294,19 +288,14 @@ void Font::SetColor( const Color& rColor )
 
 void Font::SetFillColor( const Color& rColor )
 {
-
     MakeUnique();
     mpImplFont->maFillColor = rColor;
     if ( rColor.GetTransparency() )
         mpImplFont->mbTransparent = true;
-    if (GetUnderline() == UNDERLINE_SINGLE ) {
-        SAL_INFO("vcl.gdi", "I'm setting a filling (from Font) of (" << rColor.GetRed() << "," << rColor.GetGreen() << "," << rColor.GetBlue() << ")");
-    }
 }
 
 void Font::SetTransparent( bool bTransparent )
 {
-
     if( mpImplFont->mbTransparent != bTransparent )
     {
         MakeUnique();
@@ -316,7 +305,6 @@ void Font::SetTransparent( bool bTransparent )
 
 void Font::SetAlign( FontAlign eAlign )
 {
-
     if( mpImplFont->meAlign != eAlign )
     {
         MakeUnique();
@@ -326,21 +314,18 @@ void Font::SetAlign( FontAlign eAlign )
 
 void Font::SetName( const OUString& rFamilyName )
 {
-
     MakeUnique();
     mpImplFont->maFamilyName = rFamilyName;
 }
 
 void Font::SetStyleName( const OUString& rStyleName )
 {
-
     MakeUnique();
     mpImplFont->maStyleName = rStyleName;
 }
 
 void Font::SetSize( const Size& rSize )
 {
-
     if( mpImplFont->maSize != rSize )
     {
         MakeUnique();
@@ -350,7 +335,6 @@ void Font::SetSize( const Size& rSize )
 
 void Font::SetFamily( FontFamily eFamily )
 {
-
     if( mpImplFont->meFamily != eFamily )
     {
         MakeUnique();
@@ -360,7 +344,6 @@ void Font::SetFamily( FontFamily eFamily )
 
 void Font::SetCharSet( rtl_TextEncoding eCharSet )
 {
-
     if( mpImplFont->meCharSet != eCharSet )
     {
         MakeUnique();
@@ -370,7 +353,6 @@ void Font::SetCharSet( rtl_TextEncoding eCharSet )
 
 void Font::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
-
     if( mpImplFont->maLanguageTag != rLanguageTag )
     {
         MakeUnique();
@@ -380,7 +362,6 @@ void Font::SetLanguageTag( const LanguageTag& rLanguageTag )
 
 void Font::SetCJKContextLanguageTag( const LanguageTag& rLanguageTag )
 {
-
     if( mpImplFont->maCJKLanguageTag != rLanguageTag )
     {
         MakeUnique();
@@ -390,7 +371,6 @@ void Font::SetCJKContextLanguageTag( const LanguageTag& rLanguageTag )
 
 void Font::SetLanguage( LanguageType eLanguage )
 {
-
     if( mpImplFont->maLanguageTag.getLanguageType( false) != eLanguage )
     {
         MakeUnique();
@@ -400,7 +380,6 @@ void Font::SetLanguage( LanguageType eLanguage )
 
 void Font::SetCJKContextLanguage( LanguageType eLanguage )
 {
-
     if( mpImplFont->maCJKLanguageTag.getLanguageType( false) != eLanguage )
     {
         MakeUnique();
@@ -410,7 +389,6 @@ void Font::SetCJKContextLanguage( LanguageType eLanguage )
 
 void Font::SetPitch( FontPitch ePitch )
 {
-
     if( mpImplFont->mePitch != ePitch )
     {
         MakeUnique();
@@ -420,7 +398,6 @@ void Font::SetPitch( FontPitch ePitch )
 
 void Font::SetOrientation( short nOrientation )
 {
-
     if( mpImplFont->mnOrientation != nOrientation )
     {
         MakeUnique();
@@ -430,7 +407,6 @@ void Font::SetOrientation( short nOrientation )
 
 void Font::SetVertical( bool bVertical )
 {
-
     if( mpImplFont->mbVertical != bVertical )
     {
         MakeUnique();
@@ -440,7 +416,6 @@ void Font::SetVertical( bool bVertical )
 
 void Font::SetKerning( FontKerning nKerning )
 {
-
     if( mpImplFont->mnKerning != nKerning )
     {
         MakeUnique();
@@ -455,7 +430,6 @@ bool Font::IsKerning() const
 
 void Font::SetWeight( FontWeight eWeight )
 {
-
     if( mpImplFont->meWeight != eWeight )
     {
         MakeUnique();
@@ -465,7 +439,6 @@ void Font::SetWeight( FontWeight eWeight )
 
 void Font::SetWidthType( FontWidth eWidth )
 {
-
     if( mpImplFont->meWidthType != eWidth )
     {
         MakeUnique();
@@ -475,7 +448,6 @@ void Font::SetWidthType( FontWidth eWidth )
 
 void Font::SetItalic( FontItalic eItalic )
 {
-
     if( mpImplFont->meItalic != eItalic )
     {
         MakeUnique();
@@ -485,7 +457,6 @@ void Font::SetItalic( FontItalic eItalic )
 
 void Font::SetOutline( bool bOutline )
 {
-
     if( mpImplFont->mbOutline != bOutline )
     {
         MakeUnique();
@@ -495,7 +466,6 @@ void Font::SetOutline( bool bOutline )
 
 void Font::SetShadow( bool bShadow )
 {
-
     if( mpImplFont->mbShadow != bShadow )
     {
         MakeUnique();
@@ -505,7 +475,6 @@ void Font::SetShadow( bool bShadow )
 
 void Font::SetUnderline( FontUnderline eUnderline )
 {
-
     if( mpImplFont->meUnderline != eUnderline )
     {
         MakeUnique();
@@ -515,7 +484,6 @@ void Font::SetUnderline( FontUnderline eUnderline )
 
 void Font::SetOverline( FontUnderline eOverline )
 {
-
     if( mpImplFont->meOverline != eOverline )
     {
         MakeUnique();
@@ -525,7 +493,6 @@ void Font::SetOverline( FontUnderline eOverline )
 
 void Font::SetStrikeout( FontStrikeout eStrikeout )
 {
-
     if( mpImplFont->meStrikeout != eStrikeout )
     {
         MakeUnique();
@@ -535,7 +502,6 @@ void Font::SetStrikeout( FontStrikeout eStrikeout )
 
 void Font::SetRelief( FontRelief eRelief )
 {
-
     if( mpImplFont->meRelief != eRelief )
     {
         MakeUnique();
@@ -545,7 +511,6 @@ void Font::SetRelief( FontRelief eRelief )
 
 void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
 {
-
     if( mpImplFont->meEmphasisMark != eEmphasisMark )
     {
         MakeUnique();
@@ -555,7 +520,6 @@ void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
 
 void Font::SetWordLineMode( bool bWordLine )
 {
-
     if( mpImplFont->mbWordLine != bWordLine )
     {
         MakeUnique();
