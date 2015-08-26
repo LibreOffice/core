@@ -43,7 +43,6 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     const OUString   sShareContent;
     const OUString   sContent;
     const OUString   sContentLeft;
-    const OUString   sEmpty;
     OUString           sCont;
 
     bool    bDisplay;

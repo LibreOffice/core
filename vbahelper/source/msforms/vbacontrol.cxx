@@ -318,7 +318,6 @@ ScVbaControl::getControlSource() throw (uno::RuntimeException, std::exception)
 void SAL_CALL
 ScVbaControl::setControlSource( const OUString& _controlsource ) throw (uno::RuntimeException, std::exception)
 {
-    OUString sEmpty;
     // afaik this is only relevant for Excel documents ( and we need to set up a
     // reference tab in case no Sheet is specified in "_controlsource"
     // Can't use the active sheet either, code may of course access
@@ -352,7 +351,7 @@ ScVbaControl::setControlSource( const OUString& _controlsource ) throw (uno::Run
             break;
     }
 
-    svt::BindableControlHelper::ApplyListSourceAndBindableData( m_xModel, m_xProps, _controlsource, sEmpty, sal_uInt16( nRefTab ) );
+    svt::BindableControlHelper::ApplyListSourceAndBindableData( m_xModel, m_xProps, _controlsource, "", sal_uInt16( nRefTab ) );
 }
 
 OUString SAL_CALL
@@ -383,8 +382,7 @@ ScVbaControl::getRowSource() throw (uno::RuntimeException, std::exception)
 void SAL_CALL
 ScVbaControl::setRowSource( const OUString& _rowsource ) throw (uno::RuntimeException, std::exception)
 {
-    OUString sEmpty;
-    svt::BindableControlHelper::ApplyListSourceAndBindableData( m_xModel, m_xProps, sEmpty, _rowsource );
+    svt::BindableControlHelper::ApplyListSourceAndBindableData( m_xModel, m_xProps, "", _rowsource );
 }
 
 OUString SAL_CALL

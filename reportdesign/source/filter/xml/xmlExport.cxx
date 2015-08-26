@@ -835,7 +835,6 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                         sal_Int32 nFormatKey = xFormattedField->getFormatKey();
                         XMLNumberFormatAttributesExportHelper aHelper(GetNumberFormatsSupplier(),*this);
                         bool bIsStandard = false;
-                        OUString sEmpty;
                         sal_Int16 nCellType = aHelper.GetCellType(nFormatKey,bIsStandard);
                         // "Standard" means "no format set, value could be anything",
                         // so don't set a format attribute in this case.
@@ -843,7 +842,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                         if (!bIsStandard)
                         {
                             if ( nCellType == util::NumberFormat::TEXT )
-                                aHelper.SetNumberFormatAttributes(sEmpty, sEmpty);
+                                aHelper.SetNumberFormatAttributes("", "");
                             else
                                 aHelper.SetNumberFormatAttributes(nFormatKey, 0.0, false);
                         }

@@ -117,7 +117,7 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
             if( xHeaderFooterContent.is() )
             {
                 uno::Reference < text::XText > xText(xHeaderFooterContent->getCenterText());
-                xText->setString(sEmpty);
+                xText->setString("");
                 xTextCursor.set(xText->createTextCursor());
                 xOldTextCursor.set(GetImport().GetTextImport()->GetCursor());
                 GetImport().GetTextImport()->SetCursor( xTextCursor );
@@ -154,7 +154,7 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
                 }
                 if (xText.is())
                 {
-                    xText->setString(sEmpty);
+                    xText->setString("");
                     //SvXMLImport aSvXMLImport( GetImport() );
                     uno::Reference < text::XTextCursor > xTempTextCursor(xText->createTextCursor());
                     pContext = new XMLHeaderFooterRegionContext( GetImport(), nPrefix, rLocalName, xAttrList, xTempTextCursor);
@@ -176,7 +176,7 @@ void XMLTableHeaderFooterContext::EndElement()
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, true ) )
         {
             GetImport().GetTextImport()->GetText()->insertString(
-                GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
+                GetImport().GetTextImport()->GetCursorAsRange(), "",
                 true );
         }
         GetImport().GetTextImport()->ResetCursor();
@@ -186,11 +186,11 @@ void XMLTableHeaderFooterContext::EndElement()
     if (xHeaderFooterContent.is())
     {
         if (!bContainsLeft)
-            xHeaderFooterContent->getLeftText()->setString(sEmpty);
+            xHeaderFooterContent->getLeftText()->setString("");
         if (!bContainsCenter)
-            xHeaderFooterContent->getCenterText()->setString(sEmpty);
+            xHeaderFooterContent->getCenterText()->setString("");
         if (!bContainsRight)
-            xHeaderFooterContent->getRightText()->setString(sEmpty);
+            xHeaderFooterContent->getRightText()->setString("");
 
         xPropSet->setPropertyValue( sCont, uno::makeAny(xHeaderFooterContent) );
     }
@@ -243,9 +243,8 @@ void XMLHeaderFooterRegionContext::EndElement()
         //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, true ) )
         {
-            OUString sEmpty;
             GetImport().GetTextImport()->GetText()->insertString(
-                GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
+                GetImport().GetTextImport()->GetCursorAsRange(), "",
                 true );
         }
         GetImport().GetTextImport()->ResetCursor();

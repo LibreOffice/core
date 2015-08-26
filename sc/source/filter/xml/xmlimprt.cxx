@@ -2899,7 +2899,7 @@ void ScXMLImport::SetStyleToRange(const ScRange& rRange, const OUString* pStyleN
         if (pCurrency)
             sPrevCurrency = *pCurrency;
         else if (!sPrevCurrency.isEmpty())
-            sPrevCurrency = sEmpty;
+            sPrevCurrency.clear();
     }
     else if ((nCellType != nPrevCellType) ||
         ((pStyleName && !pStyleName->equals(sPrevStyleName)) ||
@@ -2912,11 +2912,11 @@ void ScXMLImport::SetStyleToRange(const ScRange& rRange, const OUString* pStyleN
         if (pStyleName)
             sPrevStyleName = *pStyleName;
         else if(!sPrevStyleName.isEmpty())
-            sPrevStyleName = sEmpty;
+            sPrevStyleName.clear();
         if (pCurrency)
             sPrevCurrency = *pCurrency;
         else if(!sPrevCurrency.isEmpty())
-            sPrevCurrency = sEmpty;
+            sPrevCurrency.clear();
     }
     table::CellRangeAddress aCellRange;
     aCellRange.StartColumn = rRange.aStart.Col();
@@ -2952,7 +2952,7 @@ ScMyStyleNumberFormats* ScXMLImport::GetStyleNumberFormats()
 void ScXMLImport::SetStylesToRangesFinished()
 {
     SetStyleToRanges();
-    sPrevStyleName = sEmpty;
+    sPrevStyleName.clear();
 }
 
 // XImporter

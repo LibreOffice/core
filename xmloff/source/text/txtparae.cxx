@@ -3675,9 +3675,8 @@ void XMLTextParagraphExport::exportRuby(
 
             // ruby style
             GetExport().CheckAttrList();
-            OUString sEmpty;
             OUString sStyleName(Find( XML_STYLE_FAMILY_TEXT_RUBY, rPropSet,
-                                        sEmpty ));
+                                        "" ));
             DBG_ASSERT(!sStyleName.isEmpty(), "I can't find the style!");
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_STYLE_NAME, sStyleName);

@@ -1194,13 +1194,12 @@ void BookmarksBox_Impl::dispose()
     // save bookmarks to configuration
     SvtHistoryOptions aHistOpt;
     aHistOpt.Clear( eHELPBOOKMARKS );
-    OUString sEmpty;
     sal_uInt16 nCount = GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         OUString aTitle = GetEntry(i);
         OUString* pURL = static_cast<OUString*>(GetEntryData(i));
-        aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, sEmpty, aTitle, sEmpty, boost::none);
+        aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, "", aTitle, "", boost::none);
         delete pURL;
     }
     ListBox::dispose();

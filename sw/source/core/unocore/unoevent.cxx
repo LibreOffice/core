@@ -136,7 +136,7 @@ void SwHyperlinkEventDescriptor::copyMacrosIntoINetFormat(
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         if (hasById(nEvent))
         {
-            SvxMacro aMacro(sEmpty, sEmpty);
+            SvxMacro aMacro("", "");
             getByName(aMacro, nEvent);
             aFormat.SetMacro(nEvent, aMacro);
         }

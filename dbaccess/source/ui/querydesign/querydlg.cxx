@@ -204,8 +204,7 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
                 m_pTableControl->lateInit();
                 m_pCBNatural->Check(false);
                 m_pTableControl->enableRelation(false);
-                OUString sEmpty;
-                m_pConnData->AppendConnLine(sEmpty,sEmpty);
+                m_pConnData->AppendConnLine("","");
                 m_pPB_OK->Enable(true);
             }
             break;

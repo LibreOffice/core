@@ -247,7 +247,6 @@ void ScSolverOptionsDialog::FillListBox()
     m_pLbSettings->SetUpdateMode(false);
     m_pLbSettings->Clear();
 
-    OUString sEmpty;
     if (!mpCheckButtonData)
         mpCheckButtonData = new SvLBoxButtonData(m_pLbSettings);
 
@@ -281,7 +280,7 @@ void ScSolverOptionsDialog::FillListBox()
             // value entry
             pEntry = new SvTreeListEntry;
             pEntry->AddItem(std::unique_ptr<SvLBoxString>(
-                new SvLBoxString(pEntry, 0, sEmpty))); // empty column
+                new SvLBoxString(pEntry, 0, ""))); // empty column
             pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
                 new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false)));
             std::unique_ptr<ScSolverOptionsString> pItem(

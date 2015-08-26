@@ -405,8 +405,7 @@ void XMLDocumentSettingsContext::EndElement()
 
                 if ( sProp == "PrinterName" )
                 {
-                    OUString sEmpty;
-                    aSeqConfigProps[i].Value = uno::makeAny( sEmpty );
+                    aSeqConfigProps[i].Value = uno::makeAny( OUString() );
                     nFound++;
                 }
                 else if ( sProp == "PrinterSetup" )

@@ -190,12 +190,11 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
 {
     if( pFontFamilyName )
     {
-        OUString sEmpty;
         Any aAny;
 
         if( !pFontStyleName )
         {
-            aAny <<= sEmpty;
+            aAny <<= OUString();
     #if OSL_DEBUG_LEVEL > 0
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 1 );

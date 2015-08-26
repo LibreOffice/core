@@ -234,7 +234,7 @@ void XMLSectionImportContext::StartElement(
 
                 // and delete first marker (in section)
                 rHelper->GetText()->insertString(
-                    rHelper->GetCursorAsRange(), sEmpty, sal_True);
+                    rHelper->GetCursorAsRange(), "", sal_True);
 
                 // finally, check for redlines that should start at
                 // the section start node
@@ -339,13 +339,13 @@ void XMLSectionImportContext::EndElement()
     {
         rHelper->GetCursor()->goLeft(1, sal_True);
         rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                         sEmpty, sal_True);
+                                         "", sal_True);
     }
 
     // and delete second marker
     rHelper->GetCursor()->goRight(1, sal_True);
     rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
-                                     sEmpty, sal_True);
+                                     "", sal_True);
 
     // check for redlines to our endnode
     rHelper->RedlineAdjustStartNodeCursor(false);

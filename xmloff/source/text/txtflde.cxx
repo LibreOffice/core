@@ -1127,7 +1127,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         // show style, unless name will be shown
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
-                            sEmpty, sEmpty, 0.0, // values not used
+                            "", "", 0.0, // values not used
                             false,
                             bExportValueType,
                             !bCmd,
@@ -1168,7 +1168,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                        bCmd);
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
-                            sEmpty, sEmpty, 0.0, // values not used
+                            "", "", 0.0, // values not used
                             false, false, !bCmd,
                             ! GetOptionalBoolProperty(
                                  sPropertyIsFixedLanguage,
@@ -1251,7 +1251,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             ProcessValueAndType(false,
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
-                                sEmpty, sEmpty, 0.0, // not used
+                                "", "", 0.0, // not used
                                 false, false, true,
                                 ! GetOptionalBoolProperty(
                                     sPropertyIsFixedLanguage,
@@ -1293,7 +1293,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             ProcessValueAndType(false,
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
-                                sEmpty, sEmpty, 0.0, // not used
+                                "", "", 0.0, // not used
                                 false, false, true,
                                 ! GetOptionalBoolProperty(
                                     sPropertyIsFixedLanguage,
@@ -1398,7 +1398,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessCommandType(GetIntProperty(sPropertyDataCommandType, rPropSet));
         ProcessString(XML_CONDITION, XML_NAMESPACE_OOOW,
                       GetStringProperty(sPropertyCondition, rPropSet));
-        DBG_ASSERT(sPresentation.equals(sEmpty),
+        DBG_ASSERT(sPresentation.isEmpty(),
                    "Unexpected presentation for database next field");
         ExportDataBaseElement(XML_DATABASE_NEXT, OUString(),
                               rPropSet, xPropSetInfo);
@@ -1412,7 +1412,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                       GetStringProperty(sPropertyCondition, rPropSet));
         ProcessInteger(XML_ROW_NUMBER,
                        GetIntProperty(sPropertySetNumber, rPropSet));
-        DBG_ASSERT(sPresentation.equals(sEmpty),
+        DBG_ASSERT(sPresentation.isEmpty(),
                    "Unexpected presentation for database select field");
         ExportDataBaseElement(XML_DATABASE_ROW_SELECT, OUString(),
                               rPropSet, xPropSetInfo);
@@ -1432,7 +1432,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             ProcessValueAndType(false,  // doesn't happen for text
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
-                                sEmpty, sEmpty, 0.0, // not used
+                                "", "", 0.0, // not used
                                 false, false, true, false);
         }
         ProcessDisplay(GetBoolProperty(sPropertyIsVisible, rPropSet),
@@ -1457,7 +1457,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_DOCINFO_PRINT_DATE:
         ProcessValueAndType(false,
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
-                            sEmpty, sEmpty, 0.0,
+                            "", "", 0.0,
                             false, false, true,
                             ! GetOptionalBoolProperty(
                                     sPropertyIsFixedLanguage,
@@ -1488,7 +1488,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     {
         ProcessValueAndType(false,  // doesn't happen for text
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
-                                sEmpty, sEmpty, 0.0, // not used
+                                "", "", 0.0, // not used
                                 false, false, true,
                                 ! GetOptionalBoolProperty(
                                     sPropertyIsFixedLanguage,
@@ -1549,7 +1549,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessBoolean(XML_IS_HIDDEN,
                        GetBoolProperty(sPropertyIsHidden, rPropSet),
                        false);
-        DBG_ASSERT(sPresentation.equals(sEmpty),
+        DBG_ASSERT(sPresentation.isEmpty(),
                    "Unexpected presentation for hidden paragraph field");
         ExportElement(XML_HIDDEN_PARAGRAPH);
         break;
@@ -1593,7 +1593,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                        GetBoolProperty(sPropertyOn, rPropSet), true);
         ProcessIntegerDef(XML_PAGE_ADJUST,
                        GetInt16Property(sPropertyOffset, rPropSet), 0);
-        DBG_ASSERT(sPresentation.equals(sEmpty),
+        DBG_ASSERT(sPresentation.isEmpty(),
                    "Unexpected presentation page variable field");
         ExportElement(XML_PAGE_VARIABLE_SET);
         break;
@@ -1709,7 +1709,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString(XML_LANGUAGE,
                       GetStringProperty(sPropertyScriptType, rPropSet),
                       true, XML_NAMESPACE_SCRIPT);
-        DBG_ASSERT(sPresentation.equals(sEmpty),
+        DBG_ASSERT(sPresentation.isEmpty(),
                    "Unexpected presentation for script field");
         if (GetBoolProperty(sPropertyURLContent, rPropSet))
         {
@@ -1728,7 +1728,7 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_ANNOTATION:
     {
         // check for empty presentation (just in case)
-        DBG_ASSERT(sPresentation.equals(sEmpty),
+        DBG_ASSERT(sPresentation.isEmpty(),
                    "Unexpected presentation for annotation field");
 
         // annotation element + content
@@ -1818,7 +1818,7 @@ void XMLTextFieldExport::ExportFieldHelper(
                         GetBoolProperty(sPropertyIsShowFormula, rPropSet) );
         ProcessValueAndType( false,
                              GetIntProperty(sPropertyNumberFormat, rPropSet),
-                             sEmpty, sEmpty, 0.0f,
+                             "", "", 0.0f,
                              false, false, true,
                              false );
         ExportElement( XML_TABLE_FORMULA, sPresentation );
@@ -2026,7 +2026,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 ProcessValueAndType(
                     bIsString,
                     GetIntProperty(sPropertyNumberFormat, xFieldPropSet),
-                    sEmpty, sEmpty, 0.0,
+                    "", "", 0.0,
                     false, true, false, false);
             }
             else
@@ -2039,7 +2039,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 // from NumberFormats
                 ProcessValueAndType(
                     bIsString,
-                    0, sEmpty, sEmpty, 0.0,
+                    0, "", "", 0.0,
                     false, true, false, false);
             }
 
@@ -2120,7 +2120,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 // expression:
                 ProcessValueAndType(
                     false,
-                    0, sEmpty, sEmpty,
+                    0, "", "",
                     GetDoubleProperty(sPropertyValue, xPropSet),
                     true,
                     true,
@@ -2343,7 +2343,7 @@ void XMLTextFieldExport::ExportMetaField(
         // style:data-style-name
         ProcessValueAndType(false,
             GetIntProperty(sPropertyNumberFormat, i_xMeta),
-            sEmpty, sEmpty, 0.0, false, false, true,
+            "", "", 0.0, false, false, true,
             false  );
 
         // text:meta-field without xml:id is invalid

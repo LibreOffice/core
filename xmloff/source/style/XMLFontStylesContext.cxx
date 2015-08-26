@@ -90,9 +90,8 @@ XMLFontStyleContextFontFace::XMLFontStyleContextFontFace( SvXMLImport& rImport,
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_FONT ),
     xStyles( &rStyles )
 {
-    OUString sEmpty;
-    aFamilyName <<= sEmpty;
-    aStyleName <<= sEmpty;
+    aFamilyName <<= OUString();
+    aStyleName <<= OUString();
     aFamily <<= (sal_Int16)awt::FontFamily::DONTKNOW;
     aPitch <<= (sal_Int16)awt::FontPitch::DONTKNOW;
     aEnc <<= (sal_Int16)rStyles.GetDfltCharset();

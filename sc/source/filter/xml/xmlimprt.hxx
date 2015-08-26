@@ -954,7 +954,6 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
 
     com::sun::star::uno::Reference <com::sun::star::sheet::XSheetCellRangeContainer> xSheetCellRanges;
 
-    OUString           sEmpty;
     OUString           sPrevStyleName;
     OUString           sPrevCurrency;
     sal_uInt32              nSolarMutexLocked;

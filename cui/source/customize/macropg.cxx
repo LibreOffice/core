@@ -398,14 +398,13 @@ void _SvxMacroTabPage::Reset( const SfxItemSet* )
 
     try
     {
-            OUString sEmpty;
             if( m_xAppEvents.is() )
             {
                 EventsHash::iterator h_itEnd =  m_appEventsHash.end();
                 EventsHash::iterator h_it = m_appEventsHash.begin();
                 for ( ; h_it !=  h_itEnd; ++h_it )
                 {
-                    h_it->second.second = sEmpty;
+                    h_it->second.second.clear();
                 }
             }
             if( m_xDocEvents.is() && bDocModified )
@@ -414,7 +413,7 @@ void _SvxMacroTabPage::Reset( const SfxItemSet* )
                 EventsHash::iterator h_it = m_docEventsHash.begin();
                 for ( ; h_it !=  h_itEnd; ++h_it )
                 {
-                    h_it->second.second = sEmpty;
+                    h_it->second.second.clear();
                 }
                 // if we have a valid XModifiable (in the case of doc events)
                 // call setModified(true)

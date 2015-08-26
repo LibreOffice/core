@@ -853,8 +853,7 @@ bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
             AddToTextElement_Impl( rString.copy( 0, nPos ) );
         }
         //  currency symbol (empty string -> default)
-        OUString sEmpty;
-        WriteCurrencyElement_Impl( sEmpty, sEmpty );
+        WriteCurrencyElement_Impl( "", "" );
         bRet = true;
 
         //  text after currency symbol

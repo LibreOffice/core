@@ -1617,8 +1617,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
 
             if ( nType != DataType::BOOLEAN && DataType::BIT != nType )
             {
-                OUString sEmpty;
-                lcl_addFilterCriteria_throw(filterOperator,sEmpty,aSQL);
+                lcl_addFilterCriteria_throw(filterOperator,"",aSQL);
             }
 
             switch(nType)
@@ -1690,8 +1689,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             sal_Int32 nFilterOp = filterOperator;
             if ( filterOperator != SQLFilterOperator::SQLNULL && filterOperator != SQLFilterOperator::NOT_SQLNULL )
                 nFilterOp = SQLFilterOperator::SQLNULL;
-            OUString sEmpty;
-            lcl_addFilterCriteria_throw(nFilterOp,sEmpty,aSQL);
+            lcl_addFilterCriteria_throw(nFilterOp,"",aSQL);
         }
 
         // Attach filter

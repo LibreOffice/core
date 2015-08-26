@@ -2073,8 +2073,7 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
 
     if ( !pItem )
     {
-        OUString sEmpty;
-        InsertDoc( nSlot, sEmpty, sEmpty );
+        InsertDoc( nSlot, "", "" );
     }
     else
     {

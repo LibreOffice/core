@@ -709,7 +709,7 @@ public:
     /// get the last open redline ID
     OUString GetOpenRedlineId();
     /// modify the last open redline ID
-    void SetOpenRedlineId( OUString& rId);
+    void SetOpenRedlineId( OUString const & rId);
     /// reset the last open redline ID
     void ResetOpenRedlineId();
 

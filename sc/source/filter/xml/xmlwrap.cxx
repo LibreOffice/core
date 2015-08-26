@@ -324,7 +324,6 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
     uno::Reference<xml::sax::XParser> xXMLParser = xml::sax::Parser::create(xContext);
 
     // get filter
-    OUString sEmpty;
     uno::Reference<frame::XModel> xModel = mrDocShell.GetModel();
 
     /** property map for export info set */
@@ -499,7 +498,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
                             xContext, xModel, xXMLParser, aParserInput,
                             bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisSettingsImporter")
                                    : OUString("com.sun.star.comp.Calc.XMLSettingsImporter"),
-                            "settings.xml", sEmpty, aSettingsArgs, false);
+                            "settings.xml", "", aSettingsArgs, false);
 
         SAL_INFO( "sc.filter", "settings import end" );
     }
@@ -513,7 +512,7 @@ bool ScXMLImportWrapper::Import( sal_uInt8 nMode, ErrCode& rError )
             bOasis ? OUString("com.sun.star.comp.Calc.XMLOasisStylesImporter")
                    : OUString("com.sun.star.comp.Calc.XMLStylesImporter"),
             OUString("styles.xml"),
-            sEmpty, aStylesArgs, true);
+            "", aStylesArgs, true);
 
         SAL_INFO( "sc.filter", "styles import end" );
     }

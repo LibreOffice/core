@@ -158,7 +158,7 @@ void XMLSectionExport::ExportSectionStart(
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME,
                                      GetParaExport().Find(
                                      XML_STYLE_FAMILY_TEXT_SECTION,
-                                     xPropertySet, sEmpty ) );
+                                     xPropertySet, "" ) );
 
         // xml:id for RDF metadata
         GetExport().AddAttributeXmlId(rSection);

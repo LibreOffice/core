@@ -51,7 +51,6 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
 
     Sequence< OUString > aTypes(1);
     aTypes[0] = "TABLE";
-    OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 
@@ -67,7 +66,7 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
                     aName,
                     xRow->getString(4),
                     xRow->getString(5),
-                    sEmpty);
+                    "");
                     xRet = pRet;
         }
     }

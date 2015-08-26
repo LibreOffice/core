@@ -314,10 +314,9 @@ void SwEditShell::ApplyAutoMark()
 
         sal_Int32 nSrchFlags = SearchFlags::LEV_RELAXED;
 
-        OUString sEmpty;
         SearchOptions aSearchOpt(
                             SearchAlgorithms_ABSOLUTE, nSrchFlags,
-                            sEmpty, sEmpty,
+                            "", "",
                             SvtSysLocale().GetLanguageTag().getLocale(),
                             nLEV_Other, nLEV_Longer, nLEV_Shorter,
                             nTransliterationFlags );

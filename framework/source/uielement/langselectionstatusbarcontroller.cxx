@@ -149,7 +149,6 @@ throw (css::uno::RuntimeException, std::exception)
     // add first few entries to main menu
     sal_Int16 nItemId = static_cast< sal_Int16 >(MID_LANG_SEL_1);
     const OUString sAsterisk("*");  // multiple languages in current selection
-    const OUString sEmpty;  // 'no language found' from language guessing
     const OUString sNone( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ));
     std::map< sal_Int16, OUString > aLangMap;
     std::set< OUString >::const_iterator it;
@@ -158,7 +157,7 @@ throw (css::uno::RuntimeException, std::exception)
         const OUString & rStr( *it );
         if ( rStr != sNone &&
              rStr != sAsterisk &&
-             rStr != sEmpty)
+             !rStr.isEmpty()) // 'no language found' from language guessing
         {
             DBG_ASSERT( MID_LANG_SEL_1 <= nItemId && nItemId <= MID_LANG_SEL_9,
                     "nItemId outside of expected range!" );
@@ -186,7 +185,7 @@ throw (css::uno::RuntimeException, std::exception)
         const OUString & rStr( *it );
         if( rStr != sNone &&
             rStr != sAsterisk &&
-            rStr != sEmpty)
+            !rStr.isEmpty()) // 'no language found' from language guessing
         {
             DBG_ASSERT( MID_LANG_PARA_1 <= nItemId && nItemId <= MID_LANG_PARA_9,
                     "nItemId outside of expected range!" );

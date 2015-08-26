@@ -196,9 +196,8 @@ void XMLErrors::AddRecord(
     }
     else
     {
-        OUString sEmpty;
         AddRecord( nId, rParams, rExceptionMessage,
-                   -1, -1, sEmpty, sEmpty );
+                   -1, -1, "", "" );
     }
 }
 

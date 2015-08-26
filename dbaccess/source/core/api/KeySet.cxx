@@ -549,8 +549,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_CONDITION_FOR_PK ), SQL_GENERAL_ERROR, m_xConnection );
 
     // now create end execute the prepared statement
-    OUString sEmpty;
-    executeUpdate(_rInsertRow ,_rOriginalRow,aSql.makeStringAndClear(),sEmpty,aIndexColumnPositions);
+    executeUpdate(_rInsertRow ,_rOriginalRow,aSql.makeStringAndClear(),"",aIndexColumnPositions);
 }
 
 void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const OUString& i_sSQL,const OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions)
@@ -657,8 +656,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     aValues[aValues.getLength() - 1] = ')';
     aSql.append(aValues.makeStringAndClear());
     // now create,fill and execute the prepared statement
-    OUString sEmpty;
-    executeInsert(_rInsertRow,aSql.makeStringAndClear(),sEmpty,bRefetch);
+    executeInsert(_rInsertRow,aSql.makeStringAndClear(),"",bRefetch);
 }
 
 void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQL,const OUString& i_sTableName,bool bRefetch )

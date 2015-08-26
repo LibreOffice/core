@@ -518,8 +518,6 @@ private:
     const OUString sPropertyTooltip;
     const OUString sPropertyTextRange;
 
-    const OUString sEmpty;
-
     XMLPropertyState* pCombinedCharactersPropertyState;
 
 };

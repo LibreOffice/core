@@ -99,7 +99,7 @@ class SvtDynMenu
         //           The while-loop starts with pointer on internal member list lSetupEntries, change to
         //           lUserEntries then and stop after that with NULL!
         //           Separator entries will be packed in another way then normal entries! We define
-        //           special strings "sEmpty" and "sSeparator" to perform too ...
+        //           special string "sSeparator" to perform too ...
         Sequence< Sequence< PropertyValue > > GetList() const
         {
             sal_Int32                             nSetupCount = (sal_Int32)lSetupEntries.size();
@@ -108,7 +108,6 @@ class SvtDynMenu
             Sequence< PropertyValue >             lProperties ( PROPERTYCOUNT );
             Sequence< Sequence< PropertyValue > > lResult     ( nSetupCount+nUserCount );
             OUString                              sSeparator  ( "private:separator" );
-            OUString                              sEmpty;
             const vector< SvtDynMenuEntry >*            pList       = &lSetupEntries;
 
             lProperties[OFFSET_URL            ].Name = PROPERTYNAME_URL;
@@ -125,9 +124,9 @@ class SvtDynMenu
                     if( pItem->sURL == sSeparator )
                     {
                         lProperties[OFFSET_URL              ].Value <<= sSeparator;
-                        lProperties[OFFSET_TITLE            ].Value <<= sEmpty;
-                        lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= sEmpty;
-                        lProperties[OFFSET_TARGETNAME       ].Value <<= sEmpty;
+                        lProperties[OFFSET_TITLE            ].Value <<= OUString();
+                        lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= OUString();
+                        lProperties[OFFSET_TARGETNAME       ].Value <<= OUString();
                     }
                     else
                     {

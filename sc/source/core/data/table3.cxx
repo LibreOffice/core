@@ -106,7 +106,7 @@ bool SplitString( const OUString &sWhole,
     i18n::LocaleDataItem aLocaleItem = ScGlobal::pLocaleData->getLocaleItem();
 
     // Get prefix element
-    OUString sEmpty, sUser = "-";
+    OUString sUser = "-";
     ParseResult aPRPre = ScGlobal::pCharClass->parsePredefinedToken(
         KParseType::IDENTNAME, sWhole, 0,
         KParseTokens::ANY_LETTER, sUser, KParseTokens::ANY_LETTER, sUser );
@@ -120,7 +120,7 @@ bool SplitString( const OUString &sWhole,
     sUser = aLocaleItem.decimalSeparator;
     ParseResult aPRNum = ScGlobal::pCharClass->parsePredefinedToken(
         KParseType::ANY_NUMBER, sWhole, aPRPre.EndPos,
-        KParseTokens::ANY_NUMBER, sEmpty, KParseTokens::ANY_NUMBER, sUser );
+        KParseTokens::ANY_NUMBER, "", KParseTokens::ANY_NUMBER, sUser );
 
     if ( aPRNum.EndPos == aPRPre.EndPos )
         return false;

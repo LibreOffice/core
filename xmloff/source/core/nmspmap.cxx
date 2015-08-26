@@ -301,7 +301,7 @@ sal_uInt16 SvXMLNamespaceMap::_GetKeyByAttrName( const OUString& rAttrName,
         if ( pNamespace )
         {
             NameSpaceMap::const_iterator aMapIter = aNameMap.find (nKey);
-            *pNamespace = aMapIter != aNameMap.end() ? (*aMapIter).second->sName : sEmpty;
+            *pNamespace = aMapIter != aNameMap.end() ? (*aMapIter).second->sName : OUString();
         }
     }
     else

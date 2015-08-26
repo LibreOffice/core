@@ -402,7 +402,6 @@ void XMLSettingsExportHelper::exportIndexAccess(
     DBG_ASSERT(!rName.isEmpty(), "no name");
     DBG_ASSERT(rIndexed->getElementType().equals(cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get() ),
                 "wrong IndexAccess" );
-    OUString sEmpty;
     if (rIndexed->hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
@@ -410,7 +409,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
         sal_Int32 nCount = rIndexed->getCount();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            exportMapEntry(rIndexed->getByIndex(i), sEmpty, false);
+            exportMapEntry(rIndexed->getByIndex(i), "", false);
         }
         m_rContext.EndElement( true );
     }

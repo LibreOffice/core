@@ -2390,8 +2390,7 @@ void SvXMLExport::SetError(
     sal_Int32 nId,
     const Sequence<OUString>& rMsgParams)
 {
-    OUString sEmpty;
-    SetError( nId, rMsgParams, sEmpty, NULL );
+    SetError( nId, rMsgParams, "", NULL );
 }
 
 void SvXMLExport::DisposingModel()

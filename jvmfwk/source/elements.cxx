@@ -617,10 +617,9 @@ void NodeJava::setJavaInfo(const JavaInfo * pInfo, bool bAutoSelect)
     else
     {
         m_javaInfo->m_bEmptyNode = true;
-        OUString sEmpty;
-        m_javaInfo->sVendor = sEmpty;
-        m_javaInfo->sLocation = sEmpty;
-        m_javaInfo->sVersion = sEmpty;
+        m_javaInfo->sVendor.clear();
+        m_javaInfo->sLocation.clear();
+        m_javaInfo->sVersion.clear();
         m_javaInfo->nFeatures = 0;
         m_javaInfo->nRequirements = 0;
         m_javaInfo->arVendorData = rtl::ByteSequence();

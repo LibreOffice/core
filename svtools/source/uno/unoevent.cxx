@@ -50,7 +50,6 @@ SvBaseEventDescriptor::SvBaseEventDescriptor( const SvEventDescription* pSupport
         sScript("Script"),
         sNone("None"),
         sServiceName(sAPI_ServiceName),
-        sEmpty(),
         mpSupportedMacroItems(pSupportedMacroItems),
         mnMacroItems(0)
 {
@@ -86,7 +85,7 @@ void SvBaseEventDescriptor::replaceByName(
     rElement >>= aSequence;
 
     // perform replace (in subclass)
-    SvxMacro aMacro(sEmpty,sEmpty);
+    SvxMacro aMacro("","");
     getMacroFromAny(aMacro, rElement);
     replaceByName(nMacroID, aMacro);
 }
@@ -106,7 +105,7 @@ Any SvBaseEventDescriptor::getByName(
 
     // perform get (in subclass)
     Any aAny;
-    SvxMacro aMacro( sEmpty, sEmpty );
+    SvxMacro aMacro( "", "" );
     getByName(aMacro, nMacroID);
     getAnyFromMacro(aAny, aMacro);
     return aAny;
@@ -338,7 +337,7 @@ void SvBaseEventDescriptor::getMacroFromAny(
         if (bNone)
         {
             // return empty macro
-            rMacro = SvxMacro( sEmpty, sEmpty );
+            rMacro = SvxMacro( "", "" );
         }
         else
         {
@@ -411,7 +410,7 @@ void SvEventDescriptor::getByName(
         rMacro = rItem.GetMacro(nEvent);
     else
     {
-        SvxMacro aEmptyMacro(sEmpty, sEmpty);
+        SvxMacro aEmptyMacro("", "");
         rMacro = aEmptyMacro;
     }
 }
@@ -547,7 +546,7 @@ void SvMacroTableEventDescriptor::copyMacrosIntoTable(
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         if (hasById(nEvent))
         {
-            SvxMacro& rMacro = rMacroTable.Insert(nEvent, SvxMacro(sEmpty, sEmpty));
+            SvxMacro& rMacro = rMacroTable.Insert(nEvent, SvxMacro("", ""));
             getByName(rMacro, nEvent);
         }
     }

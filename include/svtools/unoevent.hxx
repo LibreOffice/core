@@ -73,8 +73,6 @@ class SVT_DLLPUBLIC SvBaseEventDescriptor : public cppu::WeakImplHelper2
     const OUString sServiceName;
 
 protected:
-    const OUString sEmpty;
-
     /// last element is 0, 0
     const SvEventDescription* mpSupportedMacroItems;
     sal_Int16 mnMacroItems;

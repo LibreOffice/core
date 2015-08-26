@@ -67,7 +67,6 @@ class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > xNumberFormats;
     SvXMLExport*        pExport;
-    const OUString sEmpty;
     const OUString sStandardFormat;
     const OUString sType;
     const OUString sAttrValue;

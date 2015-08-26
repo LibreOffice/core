@@ -118,7 +118,7 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
 
     sal_uInt16 nShape = IMAP_OBJ_RECTANGLE;
     std::vector<sal_uInt32> aCoords;
-    OUString aName, aHRef, aAlt, aTarget, sEmpty;
+    OUString aName, aHRef, aAlt, aTarget;
     bool bNoHRef = false;
     SvxMacroTableDtor aMacroTbl;
 
@@ -171,7 +171,7 @@ IMAPOBJ_SETEVENT:
                 if( !sTmp.isEmpty() )
                 {
                     sTmp = convertLineEnd(sTmp, GetSystemLineEnd());
-                    aMacroTbl.Insert( nEvent, SvxMacro( sTmp, sEmpty, eScrpType ));
+                    aMacroTbl.Insert( nEvent, SvxMacro( sTmp, "", eScrpType ));
                 }
             }
             break;

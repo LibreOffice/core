@@ -130,8 +130,6 @@ class XMLSectionExport
     const OUString sIsCurrentlyVisible;
     const OUString sHeadingStyleName;
 
-    const OUString sEmpty;
-
     SvXMLExport& rExport;
     XMLTextParagraphExport& rParaExport;
 

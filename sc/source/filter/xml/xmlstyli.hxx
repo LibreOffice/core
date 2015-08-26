@@ -218,7 +218,6 @@ namespace com { namespace sun { namespace star {
 class ScMasterPageContext : public XMLTextMasterPageContext
 {
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet;
-    const OUString     sEmpty;
     bool                bContainsRightHeader;
     bool                bContainsRightFooter;
 

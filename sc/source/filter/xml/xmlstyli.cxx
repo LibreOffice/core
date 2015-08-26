@@ -1034,9 +1034,9 @@ void ScMasterPageContext::ClearContent(const OUString& rContent)
         uno::Reference < sheet::XHeaderFooterContent > xHeaderFooterContent(xPropSet->getPropertyValue( rContent ), uno::UNO_QUERY);
         if (xHeaderFooterContent.is())
         {
-            xHeaderFooterContent->getLeftText()->setString(sEmpty);
-            xHeaderFooterContent->getCenterText()->setString(sEmpty);
-            xHeaderFooterContent->getRightText()->setString(sEmpty);
+            xHeaderFooterContent->getLeftText()->setString("");
+            xHeaderFooterContent->getCenterText()->setString("");
+            xHeaderFooterContent->getRightText()->setString("");
             xPropSet->setPropertyValue( rContent, uno::makeAny(xHeaderFooterContent) );
         }
     }

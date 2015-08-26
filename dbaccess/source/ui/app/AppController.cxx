@@ -1064,9 +1064,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         ::std::vector<SotClipboardFormatId> aFormatIds;
                         getSupportedFormats(getContainer()->getElementType(),aFormatIds);
                         const ::std::vector<SotClipboardFormatId>::iterator aEnd = aFormatIds.end();
-                        OUString sEmpty;
                         for (::std::vector<SotClipboardFormatId>::iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
-                            pDlg->Insert(*aIter,sEmpty);
+                            pDlg->Insert(*aIter,"");
 
                         const TransferableDataHelper& rClipboard = getViewClipboard();
                         pasteFormat(pDlg->GetFormat(rClipboard.GetTransferable()));

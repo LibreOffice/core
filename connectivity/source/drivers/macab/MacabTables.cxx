@@ -43,7 +43,6 @@ sdbcx::ObjectType MacabTables::createObject(const OUString& _rName)
 
     Sequence< OUString > aTypes(1);
     aTypes[0] = "%";
-    OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(), aSchema, aName, aTypes);
 
@@ -59,7 +58,7 @@ sdbcx::ObjectType MacabTables::createObject(const OUString& _rName)
                     aName,
                     xRow->getString(4),
                     xRow->getString(5),
-                    sEmpty);
+                    "");
             xRet = pRet;
         }
     }

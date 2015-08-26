@@ -335,9 +335,8 @@ void SvXMLAutoStylePoolP::RegisterNames(
 OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
                                   const vector< XMLPropertyState >& rProperties )
 {
-    OUString sEmpty;
     OUString sName;
-    pImpl->Add(sName, nFamily, sEmpty, rProperties );
+    pImpl->Add(sName, nFamily, "", rProperties );
     return sName;
 }
 

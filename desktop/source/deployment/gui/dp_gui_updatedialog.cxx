@@ -929,14 +929,13 @@ void UpdateDialog::initDescription()
 
 void UpdateDialog::clearDescription()
 {
-    OUString sEmpty;
     m_pPublisherLabel->Hide();
     m_pPublisherLink->Hide();
-    m_pPublisherLink->SetText( sEmpty );
-    m_pPublisherLink->SetURL( sEmpty );
+    m_pPublisherLink->SetText( "" );
+    m_pPublisherLink->SetURL( "" );
     m_pReleaseNotesLabel->Hide();
     m_pReleaseNotesLink->Hide();
-    m_pReleaseNotesLink->SetURL( sEmpty );
+    m_pReleaseNotesLink->SetURL( "" );
     m_pDescriptions->SetText("");
 }
 

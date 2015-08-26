@@ -78,7 +78,7 @@ XMLNumberFormatAttributesExportHelper::~XMLNumberFormatAttributesExportHelper()
 
 sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNumberFormat, OUString& sCurrency, bool& bIsStandard)
 {
-    XMLNumberFormat aFormat(sEmpty, nNumberFormat, 0);
+    XMLNumberFormat aFormat("", nNumberFormat, 0);
     XMLNumberFormatSet::iterator aItr(aNumberFormats.find(aFormat));
     XMLNumberFormatSet::iterator aEndItr(aNumberFormats.end());
     if (aItr != aEndItr)

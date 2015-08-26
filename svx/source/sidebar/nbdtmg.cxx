@@ -645,7 +645,7 @@ bool GraphyicBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex
         GrfBulDataRelation* pEntry = aGrfDataLst[nIndex];
         if ( !aGrfName.isEmpty() )
             pEntry->sGrfName = aGrfName;
-        //pEntry->sDescription = sEmpty;
+        //pEntry->sDescription.clear();
         pEntry->nGallaryIndex = (sal_uInt16)0xFFFF;
         pEntry->bIsCustomized = true;
         OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);

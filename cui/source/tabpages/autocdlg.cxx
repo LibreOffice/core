@@ -477,14 +477,13 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
                     pEntry, 0, Image(), Image(), false)));
 
-    OUString sEmpty;
     if (nCol == CBCOL_SECOND)
-        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, sEmpty)));
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, "")));
     else
         pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
 
     if (nCol == CBCOL_FIRST)
-        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, sEmpty)));
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, "")));
     else
         pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
     pEntry->AddItem(std::unique_ptr<OfaImpBrwString>(new OfaImpBrwString( pEntry, 0, rTxt)));
@@ -1800,14 +1799,13 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(OUString& rTxt, sal_uInt16 nCol)
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
                 new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false)));
 
-    OUString sEmpty;
     if (nCol == CBCOL_SECOND)
-        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, sEmpty)));
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, "")));
     else
         pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
 
     if (nCol == CBCOL_FIRST)
-        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, sEmpty)));
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, "")));
     else
         pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
             pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));

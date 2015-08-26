@@ -1805,13 +1805,12 @@ SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData(m_pLinguOptionsCLB);
 
-    OUString sEmpty;
     if (CBCOL_FIRST == nCol)
         pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
             pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
     if (CBCOL_SECOND == nCol)
         pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
-            pEntry, 0, sEmpty)));    // empty column
+            pEntry, 0, "")));    // empty column
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
             pEntry, 0, Image(), Image(), false)));
     pEntry->AddItem(std::unique_ptr<BrwString_Impl>(new BrwString_Impl(
@@ -1940,11 +1939,10 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
         pCheckButtonData->SetLink( m_pModulesCLB->GetCheckButtonHdl() );
     }
 
-    OUString sEmpty;
     if (CBCOL_FIRST == nCol)
         pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
     if (CBCOL_SECOND == nCol)
-        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, sEmpty)));    // empty column
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, "")));    // empty column
     pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false)));
     pEntry->AddItem(std::unique_ptr<BrwStringDic_Impl>(new BrwStringDic_Impl(pEntry, 0, rTxt)));
 

@@ -1218,9 +1218,8 @@ void ScXMLChangeCellContext::EndElement()
                 //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
                 if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
                 {
-                    OUString sEmpty;
                     GetImport().GetTextImport()->GetText()->insertString(
-                        GetImport().GetTextImport()->GetCursorAsRange(), sEmpty,
+                        GetImport().GetTextImport()->GetCursorAsRange(), "",
                         sal_True );
                 }
             }

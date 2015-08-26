@@ -58,7 +58,6 @@ class XMLSectionImportContext : public SvXMLImportContext
     const OUString sProtectionKey;
     const OUString sIsProtected;
     const OUString sIsCurrentlyVisible;
-    const OUString sEmpty;
 
     OUString sXmlId;
     OUString sStyleName;

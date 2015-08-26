@@ -1181,9 +1181,8 @@ void XMLTextImportHelper::DeleteParagraph()
     {
         if (m_xImpl->m_xCursor->goLeft( 1, sal_True ))
         {
-            OUString sEmpty;
             m_xImpl->m_xText->insertString(m_xImpl->m_xCursorAsRange,
-                                           sEmpty, sal_True);
+                                           "", sal_True);
         }
     }
 }
@@ -2779,15 +2778,14 @@ OUString XMLTextImportHelper::GetOpenRedlineId()
     return m_xImpl->m_sOpenRedlineIdentifier;
 }
 
-void XMLTextImportHelper::SetOpenRedlineId( OUString& rId)
+void XMLTextImportHelper::SetOpenRedlineId( OUString const & rId)
 {
     m_xImpl->m_sOpenRedlineIdentifier = rId;
 }
 
 void XMLTextImportHelper::ResetOpenRedlineId()
 {
-    OUString sEmpty;
-    SetOpenRedlineId(sEmpty);
+    SetOpenRedlineId("");
 }
 
 void
