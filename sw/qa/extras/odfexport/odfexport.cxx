@@ -244,6 +244,23 @@ DECLARE_ODFEXPORT_TEST(testTdf92379, "tdf92379.fodt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffcc99), getProperty<sal_Int32>(xStyle, "FillColor"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle, "FillTransparence"));
 
+    uno::Reference<beans::XPropertySet> xFrameStyle2(xStyles->getByName("Untitled1"),
+            uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xFrameStyle2, "BackColorRGB"));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xFrameStyle2, "BackTransparent"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xFrameStyle2, "BackColorTransparency"));
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xFrameStyle2, "FillStyle"));
+// unfortunately this is actually the pool default value, which would be hard to fix - but it isn't a problem because style is NONE
+//    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xFrameStyle2, "FillColor"));
+//    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xFrameStyle2, "FillTransparence"));
+
+    if (xmlDocPtr pXmlDoc = parseExport("styles.xml"))
+    {
+        // check that fo:background-color attribute is exported properly
+        assertXPath(pXmlDoc, "//style:style[@style:family='graphic' and @style:name='encarts']/style:graphic-properties[@fo:background-color='#ffcc99']", 1);
+        assertXPath(pXmlDoc, "//style:style[@style:family='graphic' and @style:name='Untitled1']/style:graphic-properties[@fo:background-color='transparent']", 1);
+    }
+
     // paragraph style fo:background-color was wrongly inherited despite being
     // overridden in derived style
     uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"));
