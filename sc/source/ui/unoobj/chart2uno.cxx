@@ -1999,7 +1999,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
             OUString aNewLabel;
             OUString aOldValues;
             OUString aNewValues;
-            OUString aEmpty;
 
             for( sal_Int32 nNewIndex = 0; nNewIndex < aNewSequences.getLength(); nNewIndex++ )
             {
@@ -2010,7 +2009,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
                     if( xOld.is() && xNew.is() )
                     {
-                        aOldLabel = aNewLabel = aOldValues = aNewValues = aEmpty;
+                        aOldLabel.clear();
+                        aNewLabel.clear();
+                        aOldValues.clear();
+                        aNewValues.clear();
                         if( xOld.is() && xOld->getLabel().is() )
                             aOldLabel = xOld->getLabel()->getSourceRangeRepresentation();
                         if( xNew.is() && xNew->getLabel().is() )

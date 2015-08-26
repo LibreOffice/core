@@ -62,7 +62,6 @@ bool QuickDiagrammingImport::importDocument() throw (css::uno::RuntimeException,
         file:///<path-to-oox-module>/source/dump/pptxdumper.ini. */
     OOX_DUMP_FILE( ::oox::dump::pptx::Dumper );
 
-    OUString aEmpty;
     OUString aFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "diagramLayout" );
 
     Reference<drawing::XShapes> xParentShape(getParentShape(),
@@ -71,10 +70,10 @@ bool QuickDiagrammingImport::importDocument() throw (css::uno::RuntimeException,
         new oox::drawingml::Shape( "com.sun.star.drawing.DiagramShape" ) );
     drawingml::loadDiagram(pShape,
                            *this,
-                           aEmpty,
+                           "",
                            aFragmentPath,
-                           aEmpty,
-                           aEmpty);
+                           "",
+                           "");
     oox::drawingml::ThemePtr pTheme(
         new oox::drawingml::Theme());
     basegfx::B2DHomMatrix aMatrix;

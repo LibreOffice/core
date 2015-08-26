@@ -27,13 +27,12 @@ IMPL_LINK_NOARG_TYPED(SvxPasswordDialog, ButtonHdl, Button*, void)
 {
     bool bOK = true;
     short nRet = RET_OK;
-    OUString aEmpty;
 
     if ( m_pNewPasswdED->GetText() != m_pRepeatPasswdED->GetText() )
     {
         ScopedVclPtrInstance<MessageDialog>::Create(this, aRepeatPasswdErrStr)->Execute();
-        m_pNewPasswdED->SetText( aEmpty );
-        m_pRepeatPasswdED->SetText( aEmpty );
+        m_pNewPasswdED->SetText( "" );
+        m_pRepeatPasswdED->SetText( "" );
         m_pNewPasswdED->GrabFocus();
         bOK = false;
     }
@@ -41,7 +40,7 @@ IMPL_LINK_NOARG_TYPED(SvxPasswordDialog, ButtonHdl, Button*, void)
     if ( bOK && aCheckPasswordHdl.IsSet() && !aCheckPasswordHdl.Call( this ) )
     {
         ScopedVclPtrInstance<MessageDialog>::Create(this, aOldPasswdErrStr)->Execute();
-        m_pOldPasswdED->SetText( aEmpty );
+        m_pOldPasswdED->SetText( "" );
         m_pOldPasswdED->GrabFocus();
         bOK = false;
     }

@@ -754,10 +754,9 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 
             ReadGraphic( *xStm, aGraphic );
 
-            const OUString aEmpty;
             const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
 
-            if(pScDrawView->ApplyGraphicToObject( rHitObj, aGraphic, aBeginUndo, aEmpty, aEmpty ))
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, aGraphic, aBeginUndo, "", "" ))
             {
                 return true;
             }
@@ -770,10 +769,9 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 
         if( pScDrawView && aDataHelper.GetGDIMetaFile( SotClipboardFormatId::GDIMETAFILE, aMtf ) )
         {
-            const OUString aEmpty;
             const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
 
-            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aMtf), aBeginUndo, aEmpty, aEmpty ))
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aMtf), aBeginUndo, "", "" ))
             {
                 return true;
             }
@@ -786,10 +784,9 @@ bool ScViewFunc::PasteOnDrawObjectLinked(
 
         if( pScDrawView && aDataHelper.GetBitmapEx( SotClipboardFormatId::BITMAP, aBmpEx ) )
         {
-            const OUString aEmpty;
             const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
 
-            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aBmpEx), aBeginUndo, aEmpty, aEmpty ))
+            if(pScDrawView->ApplyGraphicToObject( rHitObj, Graphic(aBmpEx), aBeginUndo, "", "" ))
             {
                 return true;
             }

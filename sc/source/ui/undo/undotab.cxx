@@ -1086,12 +1086,11 @@ OUString ScUndoRemoveLink::GetComment() const
 void ScUndoRemoveLink::DoChange( bool bLink ) const
 {
     ScDocument& rDoc = pDocShell->GetDocument();
-    OUString aEmpty;
     for (sal_uInt16 i=0; i<nCount; i++)
         if (bLink)      // establish link
             rDoc.SetLink( pTabs[i], pModes[i], aDocName, aFltName, aOptions, pTabNames[i], nRefreshDelay );
         else            // remove link
-            rDoc.SetLink( pTabs[i], SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty, 0 );
+            rDoc.SetLink( pTabs[i], SC_LINK_NONE, "", "", "", "", 0 );
     pDocShell->UpdateLinks();
 }
 

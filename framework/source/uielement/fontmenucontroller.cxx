@@ -156,7 +156,6 @@ void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& ) th
         // find new font name and set check mark!
         sal_uInt16        nChecked = 0;
         sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
-        OUString aEmpty;
         for( sal_uInt16 i = 0; i < nItemCount; i++ )
         {
             sal_uInt16 nItemId = m_xPopupMenu->getItemId( i );
@@ -169,7 +168,7 @@ void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& ) th
             // TODO: must be replaced by implementation of VCL, when available
             sal_Int32 nIndex = aText.indexOf( (sal_Unicode)'~' );
             if ( nIndex >= 0 )
-                aText = aText.replaceAt( nIndex, 1, aEmpty );
+                aText = aText.replaceAt( nIndex, 1, "" );
             // TODO: must be replaced by implementation of VCL, when available
 
             if ( aText == m_aFontFamilyName )

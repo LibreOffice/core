@@ -106,14 +106,13 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
             //sal_Int8 nAction(DND_ACTION_MOVE);
             //Point aPos;
             const OUString aBeginUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
-            const OUString aEmpty;
 
             SdrObject* pResult = pDrawView->ApplyGraphicToObject(
                 *pPickObj,
                 rGraphic,
                 aBeginUndo,
-                bAsLink ? rFileName : aEmpty,
-                bAsLink ? rFilterName : aEmpty);
+                bAsLink ? rFileName : OUString(),
+                bAsLink ? rFilterName : OUString());
 
             if(pResult)
             {

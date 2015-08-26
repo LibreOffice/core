@@ -131,8 +131,7 @@ void XMLFilterTabPageXSLT::SetURL( SvtURLBox* rURLBox, const OUString& rURL )
     else
     {
         rURLBox->SetBaseURL( sInstPath );
-        OUString aEmpty;
-        rURLBox->SetText( aEmpty );
+        rURLBox->SetText( "" );
     }
 }
 

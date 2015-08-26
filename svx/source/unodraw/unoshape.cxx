@@ -1581,12 +1581,11 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName,
         case XATTR_LINEEND:
         case XATTR_LINESTART:
             {
-                const OUString aEmpty;
                 const basegfx::B2DPolyPolygon aEmptyPoly;
                 if( nWID == XATTR_LINEEND )
-                    rSet.Put( XLineEndItem( aEmpty, aEmptyPoly ) );
+                    rSet.Put( XLineEndItem( "", aEmptyPoly ) );
                 else
-                    rSet.Put( XLineStartItem( aEmpty, aEmptyPoly ) );
+                    rSet.Put( XLineStartItem( "", aEmptyPoly ) );
 
                 return true;
             }

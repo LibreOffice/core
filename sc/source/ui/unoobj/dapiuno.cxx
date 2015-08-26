@@ -828,8 +828,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                 OUString aStrVal;
                 if ( aValue >>= aStrVal )
                 {
-                    OUString aEmpty;
-                    ScDPServiceDesc aServiceDesc(aEmpty, aEmpty, aEmpty, aEmpty, aEmpty);
+                    ScDPServiceDesc aServiceDesc("", "", "", "", "");
 
                     const ScDPServiceDesc* pOldDesc = pDPObject->GetDPServiceDesc();
                     if (pOldDesc)
@@ -845,8 +844,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                 uno::Sequence<beans::PropertyValue> aArgSeq;
                 if ( aValue >>= aArgSeq )
                 {
-                    OUString aEmpty;
-                    ScDPServiceDesc aServiceDesc(aEmpty, aEmpty, aEmpty, aEmpty, aEmpty);
+                    ScDPServiceDesc aServiceDesc("", "", "", "", "");
 
                     const ScDPServiceDesc* pOldDesc = pDPObject->GetDPServiceDesc();
                     if (pOldDesc)

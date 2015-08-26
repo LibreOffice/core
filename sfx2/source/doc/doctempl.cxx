@@ -1059,7 +1059,6 @@ bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, s
         return false;
 
     uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
-    OUString aEmpty;
 
     if ( nIdx == USHRT_MAX )
     {
@@ -1070,8 +1069,8 @@ bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, s
         if ( xTemplates->renameGroup( pRegion->GetTitle(), rName ) )
         {
             pRegion->SetTitle( rName );
-            pRegion->SetTargetURL( aEmpty );
-            pRegion->SetHierarchyURL( aEmpty );
+            pRegion->SetTargetURL( "" );
+            pRegion->SetHierarchyURL( "" );
             return true;
         }
     }
@@ -1090,8 +1089,8 @@ bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegion, s
                                          rName ) )
         {
             pEntry->SetTitle( rName );
-            pEntry->SetTargetURL( aEmpty );
-            pEntry->SetHierarchyURL( aEmpty );
+            pEntry->SetTargetURL( "" );
+            pEntry->SetHierarchyURL( "" );
             return true;
         }
     }

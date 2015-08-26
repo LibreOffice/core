@@ -2991,15 +2991,14 @@ void ScInputHandler::ClearText()
 
     DataChanging();                         // Cannot be new
 
-    OUString aEmpty;
     if (pTableView)
     {
-        pTableView->GetEditEngine()->SetText( aEmpty );
+        pTableView->GetEditEngine()->SetText( "" );
         pTableView->SetSelection( ESelection(0,0, 0,0) );
     }
     if (pTopView)
     {
-        pTopView->GetEditEngine()->SetText( aEmpty );
+        pTopView->GetEditEngine()->SetText( "" );
         pTopView->SetSelection( ESelection(0,0, 0,0) );
     }
 

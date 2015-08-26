@@ -1150,7 +1150,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         framework::AddonMenuManager::MergeAddonHelpMenu( rFrame, static_cast<MenuBar *>(pMenu), m_xContext );
     }
 
-    OUString    aEmpty;
     bool    bAccessibilityEnabled( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() );
     sal_uInt16 nItemCount = pMenu->GetItemCount();
     OUString aItemCommand;
@@ -1190,7 +1189,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             if (!pMenu->GetHelpCommand(nItemId).isEmpty())
             {
                 aModuleIdentifier = pMenu->GetHelpCommand( nItemId );
-                pMenu->SetHelpCommand( nItemId, aEmpty );
+                pMenu->SetHelpCommand( nItemId, "" );
             }
 
             if ( m_xPopupMenuControllerFactory.is() &&

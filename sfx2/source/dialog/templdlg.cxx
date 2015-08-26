@@ -879,14 +879,13 @@ void SfxCommonTemplateDialog_Impl::Initialize()
 
 SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
 {
-    OUString aEmpty;
 #if defined STYLESPREVIEW
     Execute_Impl(SID_STYLE_END_PREVIEW,
         OUString(), OUString(),
         0, 0, 0, 0 );
 #endif
     if ( bIsWater )
-        Execute_Impl(SID_STYLE_WATERCAN, aEmpty, aEmpty, 0);
+        Execute_Impl(SID_STYLE_WATERCAN, "", "", 0);
     GetWindow()->Hide();
     impl_clear();
     if ( pStyleSheetPool )
@@ -1732,7 +1731,6 @@ void SfxCommonTemplateDialog_Impl::FamilySelect(sal_uInt16 nEntry)
 
 void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
 {
-    OUString aEmpty;
     switch(nEntry)
     {
         case SID_STYLE_WATERCAN:
@@ -1746,13 +1744,13 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                 const OUString aTemplName(
                     GetSelectedEntry());
                 Execute_Impl(
-                    SID_STYLE_WATERCAN, aTemplName, aEmpty,
+                    SID_STYLE_WATERCAN, aTemplName, "",
                     (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
                 bCheck = true;
             }
             else
             {
-                Execute_Impl(SID_STYLE_WATERCAN, aEmpty, aEmpty, 0);
+                Execute_Impl(SID_STYLE_WATERCAN, "", "", 0);
                 bCheck = false;
             }
             CheckItem(nEntry, bCheck);
@@ -1784,7 +1782,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                     pStyleSheetPool->SetSearchMask(eFam, nFilter);
                     const OUString aTemplName(pDlg->GetName());
                     Execute_Impl(SID_STYLE_NEW_BY_EXAMPLE,
-                                 aTemplName, aEmpty,
+                                 aTemplName, "",
                                  (sal_uInt16)GetFamilyItem_Impl()->GetFamily(),
                                  nFilter);
                 }
@@ -1795,7 +1793,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         {
             Execute_Impl(SID_STYLE_UPDATE_BY_EXAMPLE,
-                    aEmpty, aEmpty,
+                    "", "",
                     (sal_uInt16)GetFamilyItem_Impl()->GetFamily());
             break;
         }
@@ -1880,7 +1878,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, DropHdl, StyleTreeListBox_Impl *, pBox 
 // Handler for the New-Buttons
 void SfxCommonTemplateDialog_Impl::NewHdl(void *)
 {
-    OUString aEmpty;
     if ( nActFamily != 0xffff && (pTreeBox || aFmtLb->GetSelectionCount() <= 1))
     {
         vcl::Window* pTmp;
@@ -1905,7 +1902,7 @@ void SfxCommonTemplateDialog_Impl::NewHdl(void *)
         pStyleSheetPool->SetSearchMask(eFam,nMask);
 
         Execute_Impl(SID_STYLE_NEW,
-                     aEmpty, GetSelectedEntry(),
+                     "", GetSelectedEntry(),
                      ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
                      nMask);
 
@@ -2120,11 +2117,10 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
              // only if that region is allowed
              0 != pFamilyState[nActFamily-1] && (pTreeBox || aFmtLb->GetSelectionCount() <= 1) )
         {
-            OUString aEmpty;
             Execute_Impl(SID_STYLE_WATERCAN,
-                         aEmpty, aEmpty, 0);
+                         "", "", 0);
             Execute_Impl(SID_STYLE_WATERCAN,
-                         GetSelectedEntry(), aEmpty,
+                         GetSelectedEntry(), "",
                          ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily());
         }
         EnableItem(SID_STYLE_WATERCAN, !bWaterDisabled);
@@ -2415,12 +2411,11 @@ Size SfxTemplateDialog_Impl::GetMinOutputSizePixel()
 
 void SfxTemplateDialog_Impl::EnableItem(sal_uInt16 nMesId, bool bCheck)
 {
-    OUString aEmpty;
     switch(nMesId)
     {
         case SID_STYLE_WATERCAN :
             if(!bCheck && IsCheckedItem(SID_STYLE_WATERCAN))
-                Execute_Impl(SID_STYLE_WATERCAN, aEmpty, aEmpty, 0);
+                Execute_Impl(SID_STYLE_WATERCAN, "", "", 0);
             //fall-through
         case SID_STYLE_NEW_BY_EXAMPLE:
         case SID_STYLE_UPDATE_BY_EXAMPLE:

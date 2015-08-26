@@ -256,9 +256,8 @@ static void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImport
     {
         //  descriptor has to be complete anyway
 
-        OUString aEmpty;
-        aDescriptor[svx::daDataSource]  <<= aEmpty;
-        aDescriptor[svx::daCommand]     <<= aEmpty;
+        aDescriptor[svx::daDataSource]  <<= OUString();
+        aDescriptor[svx::daCommand]     <<= OUString();
         aDescriptor[svx::daCommandType] <<= (sal_Int32)sdb::CommandType::TABLE;
     }
     rEvent.State <<= aDescriptor.createPropertyValueSequence();

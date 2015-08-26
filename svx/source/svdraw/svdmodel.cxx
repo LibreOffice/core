@@ -479,8 +479,7 @@ void SdrModel::BegUndo()
 {
     if( mpImpl->mpUndoManager )
     {
-        const OUString aEmpty;
-        mpImpl->mpUndoManager->EnterListAction(aEmpty,aEmpty);
+        mpImpl->mpUndoManager->EnterListAction("","");
         nUndoLevel++;
     }
     else if( IsUndoEnabled() )
@@ -501,8 +500,7 @@ void SdrModel::BegUndo(const OUString& rComment)
 {
     if( mpImpl->mpUndoManager )
     {
-        const OUString aEmpty;
-        mpImpl->mpUndoManager->EnterListAction( rComment, aEmpty );
+        mpImpl->mpUndoManager->EnterListAction( rComment, "" );
         nUndoLevel++;
     }
     else if( IsUndoEnabled() )
@@ -524,8 +522,7 @@ void SdrModel::BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrR
         {
             aComment = aComment.replaceFirst("%1", rObjDescr);
         }
-        const OUString aEmpty;
-        mpImpl->mpUndoManager->EnterListAction( aComment,aEmpty );
+        mpImpl->mpUndoManager->EnterListAction( aComment,"" );
         nUndoLevel++;
     }
     else if( IsUndoEnabled() )

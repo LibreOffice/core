@@ -415,21 +415,20 @@ SbxBase* SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
 {
     if( nCreator ==  SBXCR_SBX )
     {
-        OUString aEmpty;
         switch( nSbxId )
         {
         case SBXID_BASIC:
             return new StarBASIC( NULL );
         case SBXID_BASICMOD:
-            return new SbModule( aEmpty );
+            return new SbModule( "" );
         case SBXID_BASICPROP:
-            return new SbProperty( aEmpty, SbxVARIANT, NULL );
+            return new SbProperty( "", SbxVARIANT, NULL );
         case SBXID_BASICMETHOD:
-            return new SbMethod( aEmpty, SbxVARIANT, NULL );
+            return new SbMethod( "", SbxVARIANT, NULL );
         case SBXID_JSCRIPTMOD:
-            return new SbJScriptModule( aEmpty );
+            return new SbJScriptModule( "" );
         case SBXID_JSCRIPTMETH:
-            return new SbJScriptMethod( aEmpty, SbxVARIANT, NULL );
+            return new SbJScriptMethod( "", SbxVARIANT, NULL );
         }
     }
     return NULL;

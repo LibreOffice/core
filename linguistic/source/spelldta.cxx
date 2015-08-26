@@ -110,7 +110,6 @@ void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
         Reference< XSearchableDictionaryList > &rxDicList,
         sal_Int16 nLanguage )
 {
-    static const OUString aEmpty;
     bool bSthRemoved = false;
     sal_Int32 nLen = rSeq.getLength();
     OUString *pEntries = rSeq.getArray();
@@ -120,7 +119,7 @@ void SeqRemoveNegEntries( Sequence< OUString > &rSeq,
                     pEntries[i], nLanguage, false, true ) );
         if (xNegEntry.is())
         {
-            pEntries[i] = aEmpty;
+            pEntries[i].clear();
             bSthRemoved = true;
         }
     }

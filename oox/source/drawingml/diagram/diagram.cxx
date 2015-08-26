@@ -500,15 +500,13 @@ void loadDiagram( const ShapePtr& pShape,
     DiagramLayoutPtr pLayout( new DiagramLayout() );
     pDiagram->setLayout( pLayout );
 
-    OUString aEmpty;
-
     // data
     if( rXDataModelDom.is() )
         importFragment(rFilter,
                        rXDataModelDom,
                        "OOXData",
                        pDiagram,
-                       new DiagramDataFragmentHandler( rFilter, aEmpty, pData ));
+                       new DiagramDataFragmentHandler( rFilter, "", pData ));
 
     // layout
     if( rXLayoutDom.is() )
@@ -516,7 +514,7 @@ void loadDiagram( const ShapePtr& pShape,
                        rXLayoutDom,
                        "OOXLayout",
                        pDiagram,
-                       new DiagramLayoutFragmentHandler( rFilter, aEmpty, pLayout ));
+                       new DiagramLayoutFragmentHandler( rFilter, "", pLayout ));
 
     // style
     if( rXQStyleDom.is() )
@@ -524,7 +522,7 @@ void loadDiagram( const ShapePtr& pShape,
                        rXQStyleDom,
                        "OOXStyle",
                        pDiagram,
-                       new DiagramQStylesFragmentHandler( rFilter, aEmpty, pDiagram->getStyles() ));
+                       new DiagramQStylesFragmentHandler( rFilter, "", pDiagram->getStyles() ));
 
     // colors
     if( rXColorStyleDom.is() )
@@ -532,7 +530,7 @@ void loadDiagram( const ShapePtr& pShape,
                        rXColorStyleDom,
                        "OOXColor",
                        pDiagram,
-                       new ColorFragmentHandler( rFilter, aEmpty, pDiagram->getColors() ));
+                       new ColorFragmentHandler( rFilter, "", pDiagram->getColors() ));
 
     // diagram loaded. now lump together & attach to shape
     pDiagram->addTo(pShape);

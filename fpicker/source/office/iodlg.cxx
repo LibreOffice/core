@@ -2268,7 +2268,6 @@ std::vector<OUString> SvtFileDialog::GetPathList() const
 
 bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilter )
 {
-    OUString aEmpty;
     OUString aReversePath = comphelper::string::reverseString(rPath);
     sal_Int32 nQuestionMarkPos = rPath.indexOf( '?' );
     sal_Int32 nWildCardPos = rPath.indexOf( FILEDIALOG_DEF_WILDCARD );
@@ -2284,7 +2283,7 @@ bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilt
         nWildCardPos = std::min( nWildCardPos, nQuestionMarkPos );
     }
 
-    rFilter = aEmpty;
+    rFilter.clear();
 
     if ( nWildCardPos != -1 )
     {
@@ -2331,7 +2330,7 @@ bool SvtFileDialog::IsolateFilterFromPath_Impl( OUString& rPath, OUString& rFilt
         else
         {
             rFilter = rPath;
-            rPath = aEmpty;
+            rPath.clear();
         }
     }
 

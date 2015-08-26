@@ -117,18 +117,17 @@ IMPL_LINK_NOARG_TYPED( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, Button *,
 
             Edit* pEdit = !bToOpenMatch ? m_pPasswdToOpenED : m_pPasswdToModifyED;
             Edit* pRepeatEdit = !bToOpenMatch? m_pReenterPasswdToOpenED : m_pReenterPasswdToModifyED;
-            OUString aEmpty;
             if (nMismatch == 1)
             {
-                pEdit->SetText( aEmpty );
-                pRepeatEdit->SetText( aEmpty );
+                pEdit->SetText( "" );
+                pRepeatEdit->SetText( "" );
             }
             else if (nMismatch == 2)
             {
-                m_pPasswdToOpenED->SetText( aEmpty );
-                m_pReenterPasswdToOpenED->SetText( aEmpty );
-                m_pPasswdToModifyED->SetText( aEmpty );
-                m_pReenterPasswdToModifyED->SetText( aEmpty );
+                m_pPasswdToOpenED->SetText( "" );
+                m_pReenterPasswdToOpenED->SetText( "" );
+                m_pPasswdToModifyED->SetText( "" );
+                m_pReenterPasswdToModifyED->SetText( "" );
             }
             pEdit->GrabFocus();
         }

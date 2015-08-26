@@ -347,12 +347,11 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
 {
     SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
-    OUString aEmpty;
-    appendEntry(0, aEmpty, maImgDepth0);
-    appendEntry(1, aEmpty, maImgDepth1);
-    appendEntry(2, aEmpty, maImgDepth2);
-    appendEntry(3, aEmpty, maImgDepth3);
-    appendEntry(4, aEmpty, maImgDepth4);
+    appendEntry(0, "", maImgDepth0);
+    appendEntry(1, "", maImgDepth1);
+    appendEntry(2, "", maImgDepth2);
+    appendEntry(3, "", maImgDepth3);
+    appendEntry(4, "", maImgDepth4);
     appendEntry(5, SVX_RESSTR(RID_SVXSTR_INFINITY), maImgDepthInfinity);
     appendEntry(6, SVX_RESSTR(RID_SVXSTR_CUSTOM));
 

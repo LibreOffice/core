@@ -172,11 +172,10 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
         nPos = nIdx == -1 ? 0 : nIdx + 1;
         nPos1 = nPos;   //save for later use in 2) below
         const OUString aTmp( sal_Unicode( HYPH_POS_CHAR ) );
-        const OUString aEmpty;
         while (nPos != -1)
         {
             nPos++;
-            aTxt = aTxt.replaceFirst( aTmp, aEmpty, &nPos);
+            aTxt = aTxt.replaceFirst( aTmp, "", &nPos);
         }
 
         // 2) remove all hyphenation positions from the start that are not considered by the core
@@ -189,7 +188,7 @@ OUString SvxHyphenWordDialog::EraseUnusableHyphens_Impl()
             while (nPos != -1)
             {
                 nPos++;
-                aLeft = aLeft.replaceFirst( aTmp, aEmpty, &nPos );
+                aLeft = aLeft.replaceFirst( aTmp, "", &nPos );
                 if (nPos != -1)
                     ++m_nHyphenationPositionsOffset;
             }

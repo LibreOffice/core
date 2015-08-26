@@ -7588,8 +7588,7 @@ void SAL_CALL ScTableSheetObj::setLinkMode( sheet::SheetLinkMode nLinkMode )
     OUString aUrl(getLinkUrl());
     OUString aSheet(getLinkSheetName());
 
-    OUString aEmpty;
-    link( aUrl, aSheet, aEmpty, aEmpty, nLinkMode );
+    link( aUrl, aSheet, "", "", nLinkMode );
 }
 
 OUString SAL_CALL ScTableSheetObj::getLinkUrl() throw(uno::RuntimeException, std::exception)
@@ -7612,8 +7611,7 @@ void SAL_CALL ScTableSheetObj::setLinkUrl( const OUString& aLinkUrl )
     sheet::SheetLinkMode eMode = getLinkMode();
     OUString aSheet(getLinkSheetName());
 
-    OUString aEmpty;
-    link( aLinkUrl, aSheet, aEmpty, aEmpty, eMode );
+    link( aLinkUrl, aSheet, "", "", eMode );
 }
 
 OUString SAL_CALL ScTableSheetObj::getLinkSheetName() throw(uno::RuntimeException, std::exception)
@@ -7636,8 +7634,7 @@ void SAL_CALL ScTableSheetObj::setLinkSheetName( const OUString& aLinkSheetName 
     sheet::SheetLinkMode eMode = getLinkMode();
     OUString aUrl(getLinkUrl());
 
-    OUString aEmpty;
-    link( aUrl, aLinkSheetName, aEmpty, aEmpty, eMode );
+    link( aUrl, aLinkSheetName, "", "", eMode );
 }
 
 void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aSheetName,

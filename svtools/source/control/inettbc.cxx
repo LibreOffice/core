@@ -694,7 +694,7 @@ void SvtMatchContext_Impl::doExecute()
     bool bFull = false;
 
     INetURLObject aCurObj;
-    OUString aEmpty, aCurString, aCurMainURL;
+    OUString aCurString, aCurMainURL;
     INetURLObject aObj;
     aObj.SetSmartProtocol( eSmartProt == INetProtocol::NotValid ? INetProtocol::Http : eSmartProt );
     for( ;; )
@@ -735,9 +735,9 @@ void SvtMatchContext_Impl::doExecute()
                                 aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
                             else
                             {
-                                aCurObj.SetMark( aEmpty );
-                                aCurObj.SetParam( aEmpty );
-                                aCurObj.SetURLPath( aEmpty );
+                                aCurObj.SetMark( "" );
+                                aCurObj.SetParam( "" );
+                                aCurObj.SetURLPath( "" );
                                 aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
                             }
 
@@ -754,9 +754,9 @@ void SvtMatchContext_Impl::doExecute()
                             aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
                         else
                         {
-                            aCurObj.SetMark( aEmpty );
-                            aCurObj.SetParam( aEmpty );
-                            aCurObj.SetURLPath( aEmpty );
+                            aCurObj.SetMark( "" );
+                            aCurObj.SetParam( "" );
+                            aCurObj.SetURLPath( "" );
                             aMatch = aCurObj.GetMainURL( INetURLObject::NO_DECODE );
                         }
 

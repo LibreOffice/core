@@ -348,11 +348,10 @@ void VistaFilePickerImpl::impl_sta_appendFilterGroup(const RequestRef& rRequest)
         rRequest->getArgumentOrDefault(PROP_FILTER_GROUP, css::uno::Sequence< css::beans::StringPair >());
 
     // SYNCHRONIZED->
-    OUString aEmpty;
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     if ( m_lFilters.numFilter() > 0 && aFilterGroup.getLength() > 0 )
-        m_lFilters.addFilter( STRING_SEPARATOR, aEmpty, sal_True );
+        m_lFilters.addFilter( STRING_SEPARATOR, "", sal_True );
 
     ::sal_Int32 c = aFilterGroup.getLength();
     ::sal_Int32 i = 0;

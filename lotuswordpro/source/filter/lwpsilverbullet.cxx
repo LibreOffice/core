@@ -189,12 +189,10 @@ void LwpSilverBullet::RegisterStyle()
  */
 OUString LwpSilverBullet::GetBulletFontName()
 {
-    OUString aEmpty;
-
     //foundry has been set?
     if (!m_pFoundry)
     {
-        return aEmpty;
+        return "";
     }
 
     LwpFontManager& rFontMgr = m_pFoundry->GetFontManger();
@@ -205,7 +203,7 @@ OUString LwpSilverBullet::GetBulletFontName()
     //final fontid is valid?
     if (nFinalFont > 255 || nFinalFont == 0)
     {
-        return aEmpty;
+        return "";
     }
 
     //get font name from font manager.
@@ -251,12 +249,10 @@ LwpPara* LwpSilverBullet::GetBulletPara()
  */
 OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumber)
 {
-    OUString aEmpty;
-
     if (!pParaNumber)
     {
         assert(false);
-        return aEmpty;
+        return "";
     }
 
     OUString strNumChar("1");
@@ -303,7 +299,7 @@ OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumber)
         }
         break;
     case NUMCHAR_none:
-        strNumChar = aEmpty;
+        strNumChar.clear();
         break;
     default:
         break;
@@ -359,7 +355,7 @@ sal_uInt16 LwpSilverBullet::GetDisplayLevel(sal_uInt8 nPos)
  */
 OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
 {
-    OUString aRet, aEmpty;
+    OUString aRet;
     sal_uInt16 nHideBit = (1 << nPos);
     bool bDivisionName = false;
     bool bSectionName = false;
@@ -367,7 +363,7 @@ OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
     LwpFrib* pParaFrib = m_pBulletPara->GetFribs().GetFribs();
     if (!pParaFrib)
     {
-        return aEmpty;
+        return "";
     }
 
     while (pParaFrib)
@@ -377,7 +373,7 @@ OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
             ModifierInfo* pMoInfo = pParaFrib->GetModifiers();
             if (!pMoInfo)
             {
-                return aEmpty;
+                return "";
             }
             sal_uInt16 nHideLevels = pMoInfo->aTxtAttrOverride.GetHideLevels();
             sal_uInt16 nType = static_cast<LwpFribDocVar*>(pParaFrib)->GetType();
@@ -435,11 +431,10 @@ OUString LwpSilverBullet::GetDivisionName()
 
 OUString LwpSilverBullet::GetSectionName()
 {
-    OUString aEmpty;
     LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY).get());
     if (!pStory)
     {
-        return aEmpty;
+        return "";
     }
 
     return pStory->GetSectionName();

@@ -1947,7 +1947,6 @@ void ScDocument::SetExtDocOptions( ScExtDocOptions* pNewOptions )
 void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow )
 {
-    OUString aEmpty;
     OUStringBuffer aTotal;
     OUString aCellStr;
     SCCOL nCol;
@@ -1963,7 +1962,7 @@ void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                 aTotal.append(aCellStr);
             }
             if (nCol != nStartCol || nRow != nStartRow)
-                SetString(nCol,nRow,nTab,aEmpty);
+                SetString(nCol,nRow,nTab,"");
         }
 
     SetString(nStartCol,nStartRow,nTab,aTotal.makeStringAndClear());

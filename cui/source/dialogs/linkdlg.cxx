@@ -496,9 +496,8 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
             m_pPbChangeSource->Disable();
             m_pPbBreakLink->Disable();
 
-            OUString aEmpty;
-            m_pFtFullSourceName->SetText( aEmpty );
-            m_pFtFullTypeName->SetText( aEmpty );
+            m_pFtFullSourceName->SetText( "" );
+            m_pFtFullTypeName->SetText( "" );
         }
         if( pLinkMgr && pLinkMgr->GetPersist() )
             pLinkMgr->GetPersist()->SetModified();

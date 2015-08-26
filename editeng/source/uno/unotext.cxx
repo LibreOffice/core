@@ -377,8 +377,7 @@ OUString SAL_CALL SvxUnoTextRangeBase::getString()
     }
     else
     {
-        const OUString aEmpty;
-        return aEmpty;
+        return "";
     }
 }
 
@@ -1864,8 +1863,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
 
                 if( bAbsorb )
                 {
-                    const OUString aEmpty;
-                    pForwarder->QuickInsertText( aEmpty, aRange );
+                    pForwarder->QuickInsertText( "", aRange );
 
                     aRange.nEndPos = aRange.nStartPos;
                     aRange.nEndPara = aRange.nStartPara;

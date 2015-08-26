@@ -840,9 +840,8 @@ IMPL_LINK_NOARG_TYPED(SfxDocumentPage, DeleteHdl, Button*, void)
     DateTime now( DateTime::SYSTEM );
     util::DateTime uDT( now.GetUNODateTime() );
     m_pCreateValFt->SetText( ConvertDateTime_Impl( aName, uDT, rLocaleWrapper ) );
-    OUString aEmpty;
-    m_pChangeValFt->SetText( aEmpty );
-    m_pPrintValFt->SetText( aEmpty );
+    m_pChangeValFt->SetText( "" );
+    m_pPrintValFt->SetText( "" );
     const tools::Time aTime( 0 );
     m_pTimeLogValFt->SetText( rLocaleWrapper.getDuration( aTime ) );
     m_pDocNoValFt->SetText(OUString('1'));

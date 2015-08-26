@@ -453,7 +453,6 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         OUString aContent;
         OUString aFirstName;
         OUString aLastName;
-        OUString aEmpty;
 
         // do we have CurrentPresentation given?
         // mimic behaviour of writer, which means:
@@ -476,7 +475,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         }
 
         // #92009# pass fixed attribute to constructor
-        pData = new SvxAuthorField( aFirstName, aLastName, aEmpty,
+        pData = new SvxAuthorField( aFirstName, aLastName, "",
                                     mpImpl->mbBoolean1 ? SVXAUTHORTYPE_FIX : SVXAUTHORTYPE_VAR );
 
         if( !mpImpl->mbBoolean2 )

@@ -100,25 +100,23 @@ LwpBulletStyleMgr::~LwpBulletStyleMgr()
 OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
     LwpIndentOverride* pIndent)
 {
-    OUString aEmpty;
-
     if(!pPara || !pIndent || !pBullOver)
     {
-        return aEmpty;
+        return "";
     }
 
     LwpSilverBullet* pSilverBullet = pPara->GetSilverBullet();
     if (!pSilverBullet)
     {
         assert(false);
-        return aEmpty;
+        return "";
     }
 
     LwpPara* pBulletPara = pSilverBullet->GetBulletPara();
     if (!pBulletPara)
     {
         assert(false);
-        return aEmpty;
+        return "";
     }
 
     LwpParaProperty* pProp = pPara->GetProperty(PP_LOCAL_INDENT);

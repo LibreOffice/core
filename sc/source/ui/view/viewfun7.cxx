@@ -365,16 +365,14 @@ bool ScViewFunc::PasteObject( const Point& rPos, const uno::Reference < embed::X
 
 bool ScViewFunc::PasteBitmapEx( const Point& rPos, const BitmapEx& rBmpEx )
 {
-    OUString aEmpty;
     Graphic aGraphic(rBmpEx);
-    return PasteGraphic( rPos, aGraphic, aEmpty, aEmpty );
+    return PasteGraphic( rPos, aGraphic, "", "" );
 }
 
 bool ScViewFunc::PasteMetaFile( const Point& rPos, const GDIMetaFile& rMtf )
 {
-    OUString aEmpty;
     Graphic aGraphic(rMtf);
-    return PasteGraphic( rPos, aGraphic, aEmpty, aEmpty );
+    return PasteGraphic( rPos, aGraphic, "", "" );
 }
 
 bool ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,

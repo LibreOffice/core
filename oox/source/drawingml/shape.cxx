@@ -581,8 +581,7 @@ Reference< XShape > Shape::createAndInsert(
             uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
             if ( xText.is() )
             {
-                OUString aEmpty;
-                xText->setString( aEmpty );
+                xText->setString( "" );
             }
         }
 

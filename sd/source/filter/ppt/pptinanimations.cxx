@@ -659,8 +659,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
     if( (nNodeType == AnimationNodeType::ANIMATEMOTION) ||
         (nNodeType == AnimationNodeType::ANIMATETRANSFORM) )
     {
-        OUString aEmpty;
-        aAttributeName = aEmpty;
+        aAttributeName.clear();
     }
     else
     {

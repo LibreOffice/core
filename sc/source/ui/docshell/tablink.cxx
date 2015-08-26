@@ -97,12 +97,11 @@ ScTableLink::~ScTableLink()
     // Verbindung aufheben
 
     StopRefreshTimer();
-    OUString aEmpty;
     ScDocument& rDoc = pImpl->m_pDocSh->GetDocument();
     SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (rDoc.IsLinked(nTab) && aFileName.equals(rDoc.GetLinkDoc(nTab)))
-            rDoc.SetLink( nTab, SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty, 0 );
+            rDoc.SetLink( nTab, SC_LINK_NONE, "", "", "", "", 0 );
     delete pImpl;
 }
 

@@ -125,8 +125,7 @@ ScValidationData::~ScValidationData()
 
 bool ScValidationData::IsEmpty() const
 {
-    OUString aEmpty;
-    ScValidationData aDefault( SC_VALID_ANY, SC_COND_EQUAL, aEmpty, aEmpty, GetDocument(), ScAddress() );
+    ScValidationData aDefault( SC_VALID_ANY, SC_COND_EQUAL, "", "", GetDocument(), ScAddress() );
     return EqualEntries( aDefault );
 }
 

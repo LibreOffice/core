@@ -191,8 +191,6 @@ static HMENU createSystrayMenu( )
         { SvtModuleOptions::EModule::MATH,      IDM_MATH,   ICON_MATH_DOCUMENT,         MATH_URL },
     };
 
-    OUString aEmpty;
-
     // insert the menu entries for launching the applications
     for ( size_t i = 0; i < sizeof( aMenuItems ) / sizeof( aMenuItems[0] ); ++i )
     {
@@ -208,21 +206,21 @@ static HMENU createSystrayMenu( )
             continue;
 
         addMenuItem( hMenu, aMenuItems[i].nMenuItemID, aMenuItems[i].nMenuIconID,
-            pShutdownIcon->GetUrlDescription( sURL ), pos, true, aEmpty );
+            pShutdownIcon->GetUrlDescription( sURL ), pos, true, "" );
     }
 
 
 
     // insert the remaining menu entries
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
-        pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, aEmpty);
-    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
+        pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true, "");
+    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
     addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true, OUString("SHELL32"));
-    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
+    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
 #endif
-    addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false, aEmpty );
-    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, aEmpty );
-    addMenuItem( hMenu, IDM_EXIT,   0, pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ), pos, false, aEmpty );
+    addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false, "" );
+    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false, "" );
+    addMenuItem( hMenu, IDM_EXIT,   0, pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ), pos, false, "" );
 
     // indicate status of autostart folder
     CheckMenuItem( hMenu, IDM_INSTALL, MF_BYCOMMAND | (ShutdownIcon::GetAutostart() ? MF_CHECKED : MF_UNCHECKED) );
