@@ -140,7 +140,6 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
 {
     util::URL url;
     url.Complete = aUrl;
-    OUString emptyString( "" );
     uno::Reference<frame::XController> xController = xModel->getCurrentController();
     uno::Reference<frame::XFrame> xFrame = xController->getFrame();
     uno::Reference<frame::XDispatchProvider> xDispatchProvider (xFrame,uno::UNO_QUERY_THROW);
@@ -156,7 +155,7 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
         return;
     }
 
-    uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,emptyString,0);
+    uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,"",0);
 
     uno::Sequence<beans::PropertyValue> dispatchProps(1);
 

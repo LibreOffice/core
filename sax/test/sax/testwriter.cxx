@@ -657,7 +657,6 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
     // for performance testing
     sal_Int32 i2;
     OUString huhu( "huhu" );
-    OUString emptyString;
     const int ITERATIONS = 125;
     for( i2 = 0 ; i2 < ITERATIONS ; i2 ++ )
     {
@@ -665,17 +664,17 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
                          OUString::valueOf( i2 ), rList );
         for( sal_Int32 i = 0 ; i < 450 ; i ++ )
         {
-            r->ignorableWhitespace( emptyString );
+            r->ignorableWhitespace( "" );
             r->startElement( huhu , rList );
             r->characters( testParagraph );
 
-            r->ignorableWhitespace( emptyString );
+            r->ignorableWhitespace( "" );
             r->endElement( huhu );
         }
     }
     for( i2 = ITERATIONS-1 ; i2 >= 0  ; i2-- )
     {
-        r->ignorableWhitespace( emptyString );
+        r->ignorableWhitespace( "" );
         r->endElement( OUString( "tag" ) + OUString::valueOf( i2 ) );
     }
 
