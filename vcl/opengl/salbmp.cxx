@@ -31,6 +31,7 @@
 #include "opengl/program.hxx"
 #include "opengl/salbmp.hxx"
 
+#include "../inc/checksum.hxx"
 #include "opengl/FixedTextureAtlas.hxx"
 
 namespace
@@ -508,6 +509,94 @@ sal_uInt16 OpenGLSalBitmap::GetBitCount() const
     return mnBits;
 }
 
+bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType& rChecksum) const
+{
+    OUString FragShader("areaHashCRC64TFragmentShader");
+
+    static const OpenGLTexture aCRCTableTexture(512, 1, GL_RGBA, GL_UNSIGNED_BYTE,
+            (sal_uInt8*)(vcl_crc64Table));
+
+    // First Pass
+
+    int nWidth = rInputTexture.GetWidth();
+    int nHeight = rInputTexture.GetHeight();
+
+    OpenGLProgram* pProgram = mpContext->UseProgram("textureVertexShader", FragShader);
+    if (pProgram == 0)
+        return false;
+
+    int nNewWidth = ceil( nWidth / 4.0 );
+    int nNewHeight = ceil( nHeight / 4.0 );
+
+    OpenGLTexture aFirstPassTexture = OpenGLTexture(nNewWidth, nNewHeight);
+    OpenGLFramebuffer* pFramebuffer = mpContext->AcquireFramebuffer(aFirstPassTexture);
+
+    pProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
+    pProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
+
+    pProgram->SetTexture("crc_table", (OpenGLTexture&)(aCRCTableTexture));
+    pProgram->SetTexture("sampler", rInputTexture);
+    pProgram->DrawTexture(rInputTexture);
+    pProgram->Clean();
+
+    OpenGLContext::ReleaseFramebuffer(pFramebuffer);
+
+    CHECK_GL_ERROR();
+
+
+    // Second Pass
+
+    nWidth = aFirstPassTexture.GetWidth();
+    nHeight = aFirstPassTexture.GetHeight();
+
+    pProgram = mpContext->UseProgram("textureVertexShader", FragShader);
+    if (pProgram == 0)
+        return false;
+
+    nNewWidth = ceil( nWidth / 4.0 );
+    nNewHeight = ceil( nHeight / 4.0 );
+
+    OpenGLTexture aSecondPassTexture = OpenGLTexture(nNewWidth, nNewHeight);
+    pFramebuffer = mpContext->AcquireFramebuffer(aSecondPassTexture);
+
+    pProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
+    pProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
+
+    pProgram->SetTexture("crc_table", (OpenGLTexture&)(aCRCTableTexture));
+    pProgram->SetTexture("sampler", aFirstPassTexture);
+    pProgram->DrawTexture(aFirstPassTexture);
+    pProgram->Clean();
+
+    OpenGLContext::ReleaseFramebuffer(pFramebuffer);
+
+    CHECK_GL_ERROR();
+
+    // Final CRC on CPU
+    OpenGLTexture& aFinalTexture = aSecondPassTexture;
+    std::vector<sal_uInt8> aBuf( aFinalTexture.GetWidth() * aFinalTexture.GetHeight() * 4 );
+    aFinalTexture.Read(GL_RGBA, GL_UNSIGNED_BYTE, aBuf.data());
+
+    ChecksumType nCrc = vcl_crc64(0, aBuf.data(), aBuf.size());
+
+    rChecksum = nCrc;
+    return true;
+}
+
+void OpenGLSalBitmap::updateChecksum() const
+{
+    if (mbChecksumValid)
+        return;
+
+    OpenGLSalBitmap* pThis = const_cast<OpenGLSalBitmap*>(this);
+
+    if (!mpContext)
+    {
+        pThis->CreateTexture();
+    }
+
+    pThis->mbChecksumValid = calcChecksumGL(pThis->maTexture, pThis->maChecksum);
+}
+
 OpenGLContext* OpenGLSalBitmap::GetBitmapContext()
 {
     return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
@@ -581,6 +670,7 @@ void OpenGLSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMo
     {
         maTexture = OpenGLTexture();
         mbDirtyTexture = true;
+        mbChecksumValid = false;
     }
     // The palette is modified on read during the BitmapWriteAccess,
     // but of course, often it is not modified; interesting.

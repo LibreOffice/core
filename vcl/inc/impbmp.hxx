@@ -34,7 +34,6 @@ class ImpBitmap
 {
 private:
     sal_uLong           mnRefCount;
-    sal_uLong           mnChecksum;
     SalBitmap*          mpSalBitmap;
 
 public:
@@ -44,6 +43,8 @@ public:
                          */
                         ImpBitmap(SalBitmap* pBitmap);
                         ~ImpBitmap();
+
+    bool                ImplIsEqual(const ImpBitmap& rBmp) const;
 
     SalBitmap*          ImplGetSalBitmap() const { return mpSalBitmap; }
 
@@ -62,8 +63,8 @@ public:
     void                ImplIncRefCount() { mnRefCount++; }
     void                ImplDecRefCount() { mnRefCount--; }
 
-    inline void         ImplSetChecksum( sal_uLong nChecksum ) { mnChecksum = nChecksum; }
-    inline sal_uLong    ImplGetChecksum() const { return mnChecksum; }
+    sal_uLong           ImplGetChecksum() const;
+    void                ImplInvalidateChecksum();
 
     bool                ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
     bool                ImplReplace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol );

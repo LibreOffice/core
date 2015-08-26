@@ -750,7 +750,7 @@ DECLARE_OOXMLIMPORT_TEST(testN777345, "n777345.docx")
     Graphic aGraphic(xGraphic);
     // If this changes later, feel free to update it, but make sure it's not
     // the checksum of a white/transparent placeholder rectangle.
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(2529763117U), aGraphic.GetChecksum());
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(1256330431U), aGraphic.GetChecksum());
 #endif
 }
 
