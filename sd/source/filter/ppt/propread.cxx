@@ -306,7 +306,7 @@ bool Section::GetDictionary( Dictionary& rDict )
 
 void Section::Read( SotStorageStream *pStrm )
 {
-    sal_uInt32 i, nSecOfs, nSecSize, nPropCount, nPropId, nPropOfs, nPropType, nPropSize, nCurrent, nVectorCount, nTemp, nStrmSize;
+    sal_uInt32 i, nSecOfs, nPropType, nPropSize, nCurrent, nVectorCount, nTemp, nStrmSize;
     nSecOfs = pStrm->Tell();
 
     pStrm->Seek( STREAM_SEEK_TO_END );
@@ -314,9 +314,11 @@ void Section::Read( SotStorageStream *pStrm )
     pStrm->Seek( nSecOfs );
 
     mnTextEnc = RTL_TEXTENCODING_MS_1252;
+    sal_uInt32 nSecSize(0), nPropCount(0);
     pStrm->ReadUInt32( nSecSize ).ReadUInt32( nPropCount );
-    while( nPropCount-- && ( pStrm->GetError() == ERRCODE_NONE ) )
+    while (nPropCount-- && pStrm->good())
     {
+        sal_uInt32 nPropId(0), nPropOfs(0);
         pStrm->ReadUInt32( nPropId ).ReadUInt32( nPropOfs );
         nCurrent = pStrm->Tell();
         pStrm->Seek( nPropOfs + nSecOfs );
