@@ -748,7 +748,6 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
     std::vector<OUString> aNameList;
     CreateLayoutSheetNames(rLayoutName,aNameList);
 
-    OUString sEmpty;
     for (std::vector<OUString>::const_iterator it = aNameList.begin(); it != aNameList.end(); ++it)
     {
         pSheet = Find(*it, SD_STYLE_FAMILY_MASTERPAGE);
@@ -760,7 +759,8 @@ void SdStyleSheetPool::CopyLayoutSheets(const OUString& rLayoutName, SdStyleShee
             {
                 // In the case one comes with Methusalem-Docs.
                 SfxStyleSheetBase& rNewSheet = Make(*it, SD_STYLE_FAMILY_MASTERPAGE);
-                rNewSheet.SetHelpId( sEmpty, pSourceSheet->GetHelpId( sEmpty ) );
+                OUString file;
+                rNewSheet.SetHelpId( file, pSourceSheet->GetHelpId( file ) );
                 rNewSheet.GetItemSet().Put(pSourceSheet->GetItemSet());
                 rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( &rNewSheet ) ) );
             }
