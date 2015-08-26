@@ -1820,17 +1820,9 @@ RTLFUNC(Val)
 sal_Int16 implGetDateDay( double aDate )
 {
     aDate -= 2.0; // standardize: 1.1.1900 => 0.0
+    aDate = floor( aDate );
     Date aRefDate( 1, 1, 1900 );
-    if ( aDate >= 0.0 )
-    {
-        aDate = floor( aDate );
-        aRefDate += static_cast<long>(aDate);
-    }
-    else
-    {
-        aDate = ceil( aDate );
-        aRefDate -= static_cast<long>(-1.0 * aDate);
-    }
+    aRefDate += static_cast<long>(aDate);
 
     sal_Int16 nRet = (sal_Int16)( aRefDate.GetDay() );
     return nRet;
@@ -2270,10 +2262,6 @@ RTLFUNC(Year)
 
 sal_Int16 implGetHour( double dDate )
 {
-    if( dDate < 0.0 )
-    {
-        dDate *= -1.0;
-    }
     double nFrac = dDate - floor( dDate );
     nFrac *= 86400.0;
     sal_Int32 nSeconds = (sal_Int32)(nFrac + 0.5);
@@ -2333,10 +2321,6 @@ RTLFUNC(Month)
 
 sal_Int16 implGetSecond( double dDate )
 {
-    if( dDate < 0.0 )
-    {
-        dDate *= -1.0;
-    }
     double nFrac = dDate - floor( dDate );
     nFrac *= 86400.0;
     sal_Int32 nSeconds = (sal_Int32)(nFrac + 0.5);
@@ -5016,10 +5000,6 @@ bool implDateTimeSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
 
 sal_Int16 implGetMinute( double dDate )
 {
-    if( dDate < 0.0 )
-    {
-        dDate *= -1.0;
-    }
     double nFrac = dDate - floor( dDate );
     nFrac *= 86400.0;
     sal_Int32 nSeconds = (sal_Int32)(nFrac + 0.5);
