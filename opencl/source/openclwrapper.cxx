@@ -788,7 +788,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
     {
         command_queue[i] = clCreateCommandQueue(
-            context, pDeviceId, CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, &nState);
+            context, pDeviceId, 0, &nState);
         if (nState != CL_SUCCESS)
             SAL_WARN("opencl", "clCreateCommandQueue failed: " << nState);
 
