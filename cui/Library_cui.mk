@@ -70,6 +70,7 @@ $(eval $(call gb_Library_use_externals,cui,\
 	boost_headers \
     icuuc \
     icu_headers \
+    glew \
 ))
 
 ifeq ($(OS),WNT)
