@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_e43fb0d4",
+        "filename": "sc/source/core/opencl/formulagroupcl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2658,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-26T15:57:54Z",
+      "side": 1,
+      "message": "Well, since the outer condition is\n\n (n || (!n \u0026\u0026 s))\n\nthat actually can be reduced to (n || s) and the inner condition is\n\n (n \u0026\u0026 tn \u0026\u0026 s \u0026\u0026 ts)\n\nto form\n\n (n || s) \u0026\u0026 (n \u0026\u0026 tn \u0026\u0026 s \u0026\u0026 ts)\n\nwhich effectively is (n \u0026\u0026 tn \u0026\u0026 s \u0026\u0026 ts), the else of the inner condition is\n\n (n || s) \u0026\u0026 !(n \u0026\u0026 tn \u0026\u0026 s \u0026\u0026 ts)\n\nwhich is identical to (n || s) except one case false for (n \u0026\u0026 tn \u0026\u0026 s \u0026\u0026 ts)",
+      "revId": "2e14ad88695521c70d5b16a93fb94087921e8a01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_4425c4c0",
+        "filename": "sc/source/core/opencl/formulagroupcl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2667,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-26T15:57:54Z",
+      "side": 1,
+      "message": "This is just !(n || s) ... or (!n \u0026\u0026 !s) ...",
+      "revId": "2e14ad88695521c70d5b16a93fb94087921e8a01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_24099832",
+        "filename": "sc/source/core/opencl/formulagroupcl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2672,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-26T15:57:54Z",
+      "side": 1,
+      "message": "So, the entire if{if{}else{}}else{} IMHO could also had been\n\n if (n \u0026\u0026 tn \u0026\u0026 s \u0026\u0026 ts)\n     ...\n else if (n || s)\n     ...\n else\n     ...",
+      "revId": "2e14ad88695521c70d5b16a93fb94087921e8a01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

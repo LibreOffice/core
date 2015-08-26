@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af94dfe_2f10514e",
+        "filename": "sc/source/core/opencl/op_spreadsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-26T15:57:54Z",
+      "side": 0,
+      "message": "I have no idea whether removing this is correct or not. Someone familiar with the OpenCL stuff should check.",
+      "revId": "6a43628ab4bfc2a4702e36812b4bd3dc51717813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_8f1d2569",
+        "filename": "sc/source/core/opencl/op_spreadsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-26T15:57:54Z",
+      "side": 0,
+      "message": "ditto",
+      "revId": "6a43628ab4bfc2a4702e36812b4bd3dc51717813",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
