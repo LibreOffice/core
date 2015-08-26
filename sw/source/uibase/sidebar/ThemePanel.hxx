@@ -32,7 +32,11 @@
 #include <svl/intitem.hxx>
 #include <svl/lstner.hxx>
 
+#include <svtools/valueset.hxx>
+
 #include <svx/fntctrl.hxx>
+
+#include <svx/ColorSets.hxx>
 
 #include "docsh.hxx"
 
@@ -56,18 +60,23 @@ private:
     ThemePanel(vcl::Window* pParent,
                    const css::uno::Reference<css::frame::XFrame>& rxFrame,
                    SfxBindings* pBindings);
-
     virtual ~ThemePanel();
+
     virtual void dispose() SAL_OVERRIDE;
+
+    BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet);
 
     SfxBindings* mpBindings;
 
     VclPtr<ListBox> mpListBoxFonts;
-    VclPtr<ListBox> mpListBoxColors;
+    VclPtr<ValueSet> mpValueSetColors;
     VclPtr<PushButton> mpApplyButton;
+
+    svx::ColorSets maColorSets;
 
     DECL_LINK_TYPED(ClickHdl, Button*, void);
     DECL_LINK(DoubleClickHdl, void*);
+
 };
 
 }} // end of namespace sw::sidebar
