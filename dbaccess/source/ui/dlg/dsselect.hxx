@@ -63,7 +63,7 @@ public:
 protected:
     DECL_LINK( ListDblClickHdl, ListBox * );
 #ifdef HAVE_ODBC_ADMINISTRATION
-    DECL_LINK( ManageClickHdl, void* );
+    DECL_LINK_TYPED(ManageClickHdl, Button*, void);
     DECL_LINK( ManageProcessFinished, void* );
 #endif
     void fillListBox(const StringBag& _rDatasources);

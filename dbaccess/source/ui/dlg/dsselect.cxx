@@ -102,7 +102,7 @@ bool ODatasourceSelectDialog::Close()
 }
 
 #ifdef HAVE_ODBC_ADMINISTRATION
-IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl)
+IMPL_LINK_NOARG_TYPED(ODatasourceSelectDialog, ManageClickHdl, Button*, void)
 {
     if ( !m_pODBCManagement.get() )
         m_pODBCManagement.reset( new OOdbcManagement( LINK( this, ODatasourceSelectDialog, ManageProcessFinished ) ) );
@@ -112,7 +112,7 @@ IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl)
         // TODO: error message
         m_pDatasource->GrabFocus();
         m_pManageDatasources->Disable();
-        return 1L;
+        return;
     }
 
     m_pDatasource->Disable();
@@ -121,7 +121,6 @@ IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl)
     m_pManageDatasources->Disable();
 
     SAL_WARN_IF( !m_pODBCManagement->isRunning(), "dbaccess.ui", "ODatasourceSelectDialog::ManageClickHdl: success, but not running - you were *fast*!" );
-    return 0L;
 }
 
 IMPL_LINK_NOARG( ODatasourceSelectDialog, ManageProcessFinished )
