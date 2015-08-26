@@ -1945,7 +1945,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
             aValue += rLocaleData.getDate( (*aIt)->maModDate );
             aValue += aDateSep;
-            aValue += rLocaleData.getTime( (*aIt)->maModDate );
+            aValue += rLocaleData.getTime( (*aIt)->maModDate, false );
         }
         (*aIt)->maDisplayText = aValue;
 
