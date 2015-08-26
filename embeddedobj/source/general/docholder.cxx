@@ -714,9 +714,8 @@ bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLay
                     xContainerLM->setDockingAreaAcceptor( uno::Reference < ui::XDockingAreaAcceptor >() );
 
                     // prevent further changes at this LM
-                    // TODO: moggi: why is this necessary?
-                    // xContainerLM->setVisible( sal_False );
-                    // xContainerLM->lock();
+                    xContainerLM->setVisible( sal_False );
+                       xContainerLM->lock();
                     bUnlock = true;
 
                     // by unlocking the LM each layout change will now resize the containers window; pending layouts will be processed now
