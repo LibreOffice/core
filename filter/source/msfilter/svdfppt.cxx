@@ -707,6 +707,21 @@ void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic
     }
 }
 
+namespace
+{
+    sal_uLong SanitizeEndPos(SvStream &rIn, sal_uLong nEndRecPos)
+    {
+        auto nStreamLen = rIn.Tell() + rIn.remainingSize();
+        if (nEndRecPos > nStreamLen)
+        {
+            SAL_WARN("filter.ms", "Parsing error: " << nStreamLen <<
+                     " max end pos, but " << nEndRecPos << " claimed, truncating");
+            nEndRecPos = nStreamLen;
+        }
+        return nEndRecPos;
+    }
+}
+
 /* ProcessObject is called from ImplSdPPTImport::ProcessObj to handle all application specific things,
    such as the import of text, animation effects, header footer and placeholder.
 
@@ -732,7 +747,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         {
             sal_Int16 nHeaderFooterInstance = -1;
             DffRecordHeader aClientDataHd;
-            while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < maShapeRecords.Current()->GetRecEndFilePos() ) )
+            auto nEndRecPos = SanitizeEndPos(rSt, maShapeRecords.Current()->GetRecEndFilePos());
+            while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nEndRecPos ) )
             {
                 ReadDffRecordHeader( rSt, aClientDataHd );
                 switch ( aClientDataHd.nRecType )
@@ -1353,9 +1369,8 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
             while( nCurrentEditAtomStrmPos )
             {
                 sal_uInt32 nPersistIncPos = aCurrentEditAtom.nOffsetPersistDirectory;
-                if ( nPersistIncPos )
+                if (nPersistIncPos && rStCtrl.Seek(nPersistIncPos) == nPersistIncPos)
                 {
-                    rStCtrl.Seek( nPersistIncPos );
                     DffRecordHeader aPersistHd;
                     ReadDffRecordHeader( rStCtrl, aPersistHd );
                     if ( aPersistHd.nRecType == PPT_PST_PersistPtrIncrementalBlock )
@@ -1785,8 +1800,10 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
     if ( const_cast<SdrPowerPointImport*>(this)->maShapeRecords.SeekToContent( rStCtrl, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
     {
         DffRecordHeader aPlaceHd;
+
+        auto nEndRecPos = SanitizeEndPos(rStCtrl, const_cast<SdrPowerPointImport*>(this)->maShapeRecords.Current()->GetRecEndFilePos());
         while ( ( rStCtrl.GetError() == 0 )
-            && ( rStCtrl.Tell() < const_cast<SdrPowerPointImport*>(this)->maShapeRecords.Current()->GetRecEndFilePos() ) )
+            && ( rStCtrl.Tell() < nEndRecPos ) )
         {
             ReadDffRecordHeader( rStCtrl, aPlaceHd );
             if ( aPlaceHd.nRecType == PPT_PST_RecolorInfoAtom )
@@ -2643,7 +2660,9 @@ void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, 
     sal_Int32       nPosX = 0;
     sal_Int32       nPosY = 0;
 
-    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < rComment10Hd.GetRecEndFilePos() ) )
+
+    auto nEndRecPos = SanitizeEndPos(rStCtrl, rComment10Hd.GetRecEndFilePos());
+    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nEndRecPos ) )
     {
         DffRecordHeader aCommentHd;
         ReadDffRecordHeader( rStCtrl, aCommentHd );
@@ -2718,7 +2737,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
     {
         rSlidePersist.pHeaderFooterEntry = new HeaderFooterEntry( pMasterPersist );
         ProcessData aProcessData( rSlidePersist, SdPageCapsule(pRet) );
-        while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
+        auto nEndRecPos = SanitizeEndPos(rStCtrl, aPageHd.GetRecEndFilePos());
+        while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nEndRecPos ) )
         {
             DffRecordHeader aHd;
             ReadDffRecordHeader( rStCtrl, aHd );
@@ -2753,7 +2773,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                         sal_uInt32 nPPDrawOfs = rStCtrl.Tell();
 
                         // importing the background object before importing the page
-                        while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPPDrawHd.GetRecEndFilePos() ) )
+                        auto nPPEndRecPos = SanitizeEndPos(rStCtrl, aPPDrawHd.GetRecEndFilePos());
+                        while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPPEndRecPos ) )
                         {
                             DffRecordHeader aEscherObjListHd;
                             ReadDffRecordHeader( rStCtrl, aEscherObjListHd );
@@ -2815,7 +2836,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
 
                         // now importing page
                         rStCtrl.Seek( nPPDrawOfs );
-                        while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPPDrawHd.GetRecEndFilePos() ) )
+                        auto nHdEndRecPos = SanitizeEndPos(rStCtrl, aPPDrawHd.GetRecEndFilePos());
+                        while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nHdEndRecPos ) )
                         {
                             DffRecordHeader aEscherObjListHd;
                             ReadDffRecordHeader( rStCtrl, aEscherObjListHd );
@@ -2827,7 +2849,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                     if ( SeekToRec( rStCtrl, DFF_msofbtSpContainer, aEscherObjListHd.GetRecEndFilePos(), &aShapeHd ) )
                                     {
                                         aShapeHd.SeekToEndOfRecord( rStCtrl );
-                                        while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aEscherObjListHd.GetRecEndFilePos() ) )
+                                        auto nListEndRecPos = SanitizeEndPos(rStCtrl, aEscherObjListHd.GetRecEndFilePos());
+                                        while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nListEndRecPos ) )
                                         {
                                             ReadDffRecordHeader( rStCtrl, aShapeHd );
                                             if ( ( aShapeHd.nRecType == DFF_msofbtSpContainer ) || ( aShapeHd.nRecType == DFF_msofbtSpgrContainer ) )
@@ -3071,7 +3094,8 @@ sal_uInt32 HeaderFooterEntry::NeedToImportInstance( const sal_uInt32 nInstance, 
 void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader& rHd, HeaderFooterEntry& rE )
 {
     rHd.SeekToContent( rStCtrl );
-    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < rHd.GetRecEndFilePos() ) )
+    auto nEndRecPos = SanitizeEndPos(rStCtrl, rHd.GetRecEndFilePos());
+    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nEndRecPos ) )
     {
         DffRecordHeader aHd;
         ReadDffRecordHeader( rStCtrl, aHd );
@@ -3171,14 +3195,16 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
         pListHd->SeekToContent( rSt );
     if ( pListHd && SdrPowerPointImport::SeekToContentOfProgTag( 9, rSt, *pListHd, aContentDataHd ) )
     {
-        while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aContentDataHd.GetRecEndFilePos() ) )
+        auto nEndRecPos = SanitizeEndPos(rSt, aContentDataHd.GetRecEndFilePos());
+        while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nEndRecPos ) )
         {
             ReadDffRecordHeader( rSt, aHd );
             switch ( aHd.nRecType )
             {
                 case PPT_PST_ExtendedBuGraContainer :
                 {
-                    while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aHd.GetRecEndFilePos() ) )
+                    auto nHdEndRecPos = SanitizeEndPos(rSt, aHd.GetRecEndFilePos());
+                    while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nHdEndRecPos ) )
                     {
                         sal_uInt16 nType;
                         DffRecordHeader aBuGraAtomHd;
@@ -3249,7 +3275,8 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
 
     if ( pHd && SdrPowerPointImport::SeekToContentOfProgTag( 9, rSt, *pHd, aContentDataHd ) )
     {   // get the extended paragraph styles on mainmaster ( graphical bullets, num ruling ... )
-        while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aContentDataHd.GetRecEndFilePos() ) )
+        auto nEndRecPos = SanitizeEndPos(rSt, aContentDataHd.GetRecEndFilePos());
+        while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nEndRecPos ) )
         {
             ReadDffRecordHeader( rSt, aHd );
             switch ( aHd.nRecType )
@@ -3258,12 +3285,12 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                 {
                     if ( aHd.nRecInstance < PPT_STYLESHEETENTRYS )
                     {
-                        sal_uInt16 nDepth, i = 0;
+                        sal_uInt16 nDepth = 0, i = 0;
                         rSt.ReadUInt16( nDepth );
                         if ( i <= 5 )
                         {
-
-                            while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aHd.GetRecEndFilePos() ) && ( i < nDepth ) )
+                            auto nHdEndRecPos = SanitizeEndPos(rSt, aHd.GetRecEndFilePos());
+                            while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nHdEndRecPos ) && ( i < nDepth ) )
                             {
                                 bStyles = true;
                                 ReadPPTExtParaLevel( rSt, aExtParaSheet[ aHd.nRecInstance ].aExtParaLevel[ i++ ] );
@@ -4024,7 +4051,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     {
         pEnvHeader->SeekToContent( rIn );
         DffRecordHeader aTxMasterStyleHd;
-        while ( rIn.Tell() < pEnvHeader->GetRecEndFilePos() )
+        auto nEndRecPos = SanitizeEndPos(rIn, pEnvHeader->GetRecEndFilePos());
+        while (rIn.Tell() < nEndRecPos)
         {
             ReadDffRecordHeader( rIn, aTxMasterStyleHd );
             if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
@@ -4035,7 +4063,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 sal_uInt16 nLev = 0;
                 bool bFirst = true;
                 bFoundTxMasterStyleAtom04 = true;
-                while (rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz && nLev < nMaxPPTLevels)
+                auto nTxEndRecPos = SanitizeEndPos(rIn, aTxMasterStyleHd.GetRecEndFilePos());
+                while (rIn.GetError() == 0 && rIn.Tell() < nTxEndRecPos && nLev < nLevelAnz && nLev < nMaxPPTLevels)
                 {
                     if ( nLev )
                     {
@@ -4072,16 +4101,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
 
     rSlideHd.SeekToContent( rIn );
 
-    auto nEndRecPos = rSlideHd.GetRecEndFilePos();
-    auto nStreamLen = rIn.Tell() + rIn.remainingSize();
-    if (nEndRecPos > nStreamLen)
-    {
-        SAL_WARN("filter.ms", "Parsing error: " << nStreamLen <<
-                 " max end pos, but " << nEndRecPos << " claimed, truncating");
-        nEndRecPos = nStreamLen;
-    }
-
     DffRecordHeader aTxMasterStyleHd;
+    auto nEndRecPos = SanitizeEndPos(rIn, rSlideHd.GetRecEndFilePos());
     while (rIn.Tell() < nEndRecPos)
     {
         ReadDffRecordHeader( rIn, aTxMasterStyleHd );
@@ -4130,17 +4151,18 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     break;
                 }
             }
-            sal_uInt16 nLevelAnz;
-            rIn.ReadUInt16( nLevelAnz );
-            if ( nLevelAnz > 5 )
+            sal_uInt16 nLevelAnz(0);
+            rIn.ReadUInt16(nLevelAnz);
+            if (nLevelAnz > nMaxPPTLevels)
             {
                 OSL_FAIL( "PPTStyleSheet::Ppt-TextStylesheet hat mehr als 5 Ebenen! (SJ)" );
-                nLevelAnz = 5;
+                nLevelAnz = nMaxPPTLevels;
             }
             sal_uInt16  nLev = 0;
             bool    bFirst = true;
 
-            while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() && nLev < nLevelAnz )
+            auto nTxEndRecPos = SanitizeEndPos(rIn, aTxMasterStyleHd.GetRecEndFilePos());
+            while ( rIn.GetError() == 0 && rIn.Tell() < nTxEndRecPos && nLev < nLevelAnz )
             {
                 if ( nLev && ( nInstance < 5 ) )
                 {
@@ -4219,7 +4241,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
         {
             pEnvHeader2->SeekToContent( rIn );
             DffRecordHeader aTxMasterStyleHd2;
-            while ( rIn.Tell() < pEnvHeader2->GetRecEndFilePos() )
+            auto nEnvEndRecPos = SanitizeEndPos(rIn, pEnvHeader2->GetRecEndFilePos());
+            while (rIn.Tell() < nEnvEndRecPos)
             {
                 ReadDffRecordHeader( rIn, aTxMasterStyleHd2 );
                 if ( aTxMasterStyleHd2.nRecType == PPT_PST_TxMasterStyleAtom )
@@ -4229,7 +4252,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
 
                     sal_uInt16 nLev = 0;
                     bool bFirst = true;
-                    while ( rIn.GetError() == 0 && rIn.Tell() < aTxMasterStyleHd2.GetRecEndFilePos() && nLev < nLevelAnz )
+                    auto nTxEndRecPos = SanitizeEndPos(rIn, aTxMasterStyleHd2.GetRecEndFilePos());
+                    while ( rIn.GetError() == 0 && rIn.Tell() < nTxEndRecPos && nLev < nLevelAnz )
                     {
                         if ( nLev )
                         {
@@ -4746,17 +4770,18 @@ bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader&
     sal_uInt32  nCharIdx = 0;
     rRecHd.SeekToContent( rIn );
 
-    while ( rIn.Tell() < rRecHd.GetRecEndFilePos() )
+    auto nEndRecPos = SanitizeEndPos(rIn, rRecHd.GetRecEndFilePos());
+    while (rIn.Tell() < nEndRecPos && rIn.good())
     {
-        sal_uInt32  nCharCount,
-                    nFlags, i;
-
         if ( nRecordType == PPT_PST_TextSpecInfoAtom )
         {
+            sal_uInt32 nCharCount(0);
             rIn.ReadUInt32( nCharCount );
             nCharIdx += nCharCount;
         }
-        rIn.ReadUInt32( nFlags );
+
+        sal_uInt32 nFlags(0);
+        rIn.ReadUInt32(nFlags);
 
         PPTTextSpecInfo* pEntry = new PPTTextSpecInfo( nCharIdx );
         if ( pTextSpecDefault )
@@ -4766,7 +4791,7 @@ bool PPTTextSpecInfoAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader&
             pEntry->nLanguage[ 1 ] = pTextSpecDefault->nLanguage[ 1 ];
             pEntry->nLanguage[ 2 ] = pTextSpecDefault->nLanguage[ 2 ];
         }
-        for ( i = 1; nFlags && i ; i <<= 1 )
+        for (sal_uInt32 i = 1; nFlags && i ; i <<= 1)
         {
             sal_uInt16 nLang = 0;
             switch( nFlags & i )
@@ -5092,7 +5117,9 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     if ( rExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom  )
     {
         rIn.Seek( rExtParaHd.nFilePos + 8 );
-        while( ( rIn.GetError() == 0 ) && ( rIn.Tell() < rExtParaHd.GetRecEndFilePos() ) )
+
+        auto nEndRecPos = SanitizeEndPos(rIn, rExtParaHd.GetRecEndFilePos());
+        while( ( rIn.GetError() == 0 ) && ( rIn.Tell() < nEndRecPos ) )
         {
             aStyleTextProp9.resize( aStyleTextProp9.size() + 1 );
             aStyleTextProp9.back().Read( rIn );
@@ -6616,7 +6643,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             // or ParaTabStops and append them on this textobj
                             rIn.Seek( nFilePos );
                             ::std::vector< PPTFieldEntry* > FieldList;
-                            while ( rIn.Tell() < aClientTextBoxHd.GetRecEndFilePos() )
+                            auto nEndRecPos = SanitizeEndPos(rIn, aClientTextBoxHd.GetRecEndFilePos());
+                            while (rIn.Tell() < nEndRecPos)
                             {
                                 ReadDffRecordHeader( rIn, aTextHd );
                                 sal_uInt16 nVal = 0;
