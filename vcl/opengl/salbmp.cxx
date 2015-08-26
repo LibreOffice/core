@@ -330,11 +330,11 @@ void lclInstantiateTexture(OpenGLTexture& rTexture, const int nWidth, const int 
     {
         if (sTextureAtlases.empty())
         {
-            sTextureAtlases.push_back(std::move(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 16))));
-            sTextureAtlases.push_back(std::move(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 24))));
-            sTextureAtlases.push_back(std::move(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 32))));
-            sTextureAtlases.push_back(std::move(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 48))));
-            sTextureAtlases.push_back(std::move(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 64))));
+            sTextureAtlases.push_back(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 16)));
+            sTextureAtlases.push_back(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 24)));
+            sTextureAtlases.push_back(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 32)));
+            sTextureAtlases.push_back(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 48)));
+            sTextureAtlases.push_back(std::unique_ptr<FixedTextureAtlasManager>(new FixedTextureAtlasManager(8, 8, 64)));
         }
         for (size_t i = 0; i < sTextureAtlases.size(); i++)
         {
