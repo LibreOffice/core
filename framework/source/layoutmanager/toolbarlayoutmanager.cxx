@@ -1032,13 +1032,17 @@ void ToolbarLayoutManager::setParentWindow(
     {
         SolarMutexGuard aGuard;
         VclPtr< ::DockingAreaWindow > pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xTopDockWindow ).get() );
-        if( pWindow ) pWindow->SetAlign( WindowAlign::Top );
+        if( pWindow )
+            pWindow->SetAlign( WindowAlign::Top );
         pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xBottomDockWindow ).get() );
-        if( pWindow ) pWindow->SetAlign( WindowAlign::Bottom );
+        if( pWindow )
+            pWindow->SetAlign( WindowAlign::Bottom );
         pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xLeftDockWindow ).get() );
-        if( pWindow ) pWindow->SetAlign( WindowAlign::Left );
+        if( pWindow )
+            pWindow->SetAlign( WindowAlign::Left );
         pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xRightDockWindow ).get() );
-        if( pWindow ) pWindow->SetAlign( WindowAlign::Right );
+        if( pWindow )
+            pWindow->SetAlign( WindowAlign::Right );
         implts_reparentToolbars();
     }
     else
