@@ -19,6 +19,7 @@
 
 #include <editeng/numitem.hxx>
 #include <osl/file.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/urihelper.hxx>
@@ -68,6 +69,7 @@
 #include <cusshow.hxx>
 #include <vcl/bmpacc.hxx>
 #include "customshowlist.hxx"
+#include "sddll.hxx"
 
 #include "../../ui/inc/DrawDocShell.hxx"
 #include "../../ui/inc/FrameView.hxx"
@@ -539,8 +541,14 @@ bool ImplSdPPTImport::Import()
 
     // create master pages:
 
-    SfxProgress* pStbMgr = new SfxProgress( pDocShell, SD_RESSTR( STR_POWERPOINT_IMPORT ),
-        m_pMasterPages->size() + m_pSlidePages->size() + m_pNotePages->size() );
+    std::unique_ptr<SfxProgress> xStbMgr;
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        xStbMgr.reset(new SfxProgress(pDocShell,
+                        SD_RESSTR( STR_POWERPOINT_IMPORT),
+                        m_pMasterPages->size() +
+                        m_pSlidePages->size() + m_pNotePages->size()));
+    }
 
     sal_uInt32 nImportedPages = 0;
     {
@@ -852,7 +860,8 @@ bool ImplSdPPTImport::Import()
                 }
             }
         }
-        pStbMgr->SetState( nImportedPages++ );
+        if (xStbMgr)
+            xStbMgr->SetState( nImportedPages++ );
     }
 
     // importing slide pages
@@ -982,7 +991,8 @@ bool ImplSdPPTImport::Import()
                         static_cast<SdrPageObj*>(pPageObj)->SetReferencedPage(pSdrModel->GetPage(( nPage << 1 ) + 1));
                 }
 
-                pStbMgr->SetState( nImportedPages++ );
+                if (xStbMgr)
+                    xStbMgr->SetState( nImportedPages++ );
             }
         }
         else
@@ -1347,7 +1357,7 @@ bool ImplSdPPTImport::Import()
         }
     }
 
-    delete pStbMgr;
+    xStbMgr.reset();
 
     // read DocumentProperties
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -2687,6 +2697,32 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT(
     bool bRet = pImport->Import();
 
     delete pImport;
+
+    return bRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPT(const OUString &rURL)
+{
+    SvFileStream aFileStream(rURL, StreamMode::READ);
+    tools::SvRef<SotStorage> xStorage(new SotStorage(aFileStream));
+    if (xStorage->GetError())
+        return false;
+
+    tools::SvRef<SotStorageStream> xDocStream(xStorage->OpenSotStream( OUString("PowerPoint Document"), STREAM_STD_READ));
+    if (!xDocStream)
+        return false;
+
+    SdDLL::Init();
+
+    SfxMedium aSrcMed(rURL, STREAM_STD_READ);
+
+    xDocStream->SetVersion(xStorage->GetVersion());
+    xDocStream->SetCryptMaskKey(xStorage->GetKey());
+
+    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+
+    bool bRet = ImportPPT(pDoc, *xDocStream, *xStorage, aSrcMed);
 
     return bRet;
 }

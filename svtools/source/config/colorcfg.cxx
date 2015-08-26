@@ -392,10 +392,10 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
     }
 }
 
-
-
 ColorConfig::ColorConfig()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
     ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
     if ( !m_pImpl )
     {
@@ -506,8 +506,12 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 
 ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, bool bSmart) const
 {
-    ColorConfigValue aRet = m_pImpl->GetColorConfigValue(eEntry);
-    if(bSmart)
+    ColorConfigValue aRet;
+
+    if (m_pImpl)
+        aRet = m_pImpl->GetColorConfigValue(eEntry);
+
+    if (bSmart)
     {
         if(COL_AUTO == sal::static_int_cast<ColorData>(aRet.nColor))
             aRet.nColor = ColorConfig::GetDefaultColor(eEntry).GetColor();

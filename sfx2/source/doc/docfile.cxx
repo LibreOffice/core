@@ -65,6 +65,7 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <tools/urlobj.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
@@ -450,7 +451,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
     const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>( GetItemSet()->GetItem(SID_DOC_BASEURL) );
     if ( pBaseURLItem )
         aBaseURL = pBaseURLItem->GetValue();
-    else if ( GetContent().is() )
+    else if (!utl::ConfigManager::IsAvoidConfig() && GetContent().is())
     {
         try
         {

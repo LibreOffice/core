@@ -572,6 +572,7 @@ void SvtAccessibilityOptions_Impl::SetVCLSettings()
 
 SvtAccessibilityOptions::SvtAccessibilityOptions()
 {
+    if (!utl::ConfigManager::IsAvoidConfig())
     {
         ::osl::MutexGuard aGuard( SingletonMutex::get() );
         if(!sm_pSingleImplConfig)
@@ -584,8 +585,6 @@ SvtAccessibilityOptions::SvtAccessibilityOptions()
     //StartListening( *sm_pSingleImplConfig, sal_True );
 }
 
-
-
 SvtAccessibilityOptions::~SvtAccessibilityOptions()
 {
     //EndListening( *sm_pSingleImplConfig, sal_True );
@@ -597,8 +596,6 @@ SvtAccessibilityOptions::~SvtAccessibilityOptions()
         DELETEZ( sm_pSingleImplConfig );
     }
 }
-
-
 
 void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {

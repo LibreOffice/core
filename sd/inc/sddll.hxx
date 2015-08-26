@@ -21,6 +21,7 @@
 #define INCLUDED_SD_INC_SDDLL_HXX
 
 #include <sfx2/module.hxx>
+#include "sddllapi.h"
 
 /*************************************************************************
 |*
@@ -32,7 +33,7 @@
 |*
 \************************************************************************/
 
-class SdDLL
+class SD_DLLPUBLIC SdDLL
 {
 protected:
 #ifdef ENABLE_SDREMOTE

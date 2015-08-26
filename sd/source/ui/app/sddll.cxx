@@ -22,6 +22,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/svdobj.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svx/fmobjfac.hxx>
 #include <svx/svdfield.hxx>
@@ -98,7 +99,7 @@ using namespace ::com::sun::star;
 // Register all Factories
 void SdDLL::RegisterFactorys()
 {
-    if (SvtModuleOptions().IsImpress())
+    if (utl::ConfigManager::IsAvoidConfig() || SvtModuleOptions().IsImpress())
     {
         ::sd::ImpressViewShellBase::RegisterFactory (
             ::sd::IMPRESS_FACTORY_ID);
@@ -109,7 +110,7 @@ void SdDLL::RegisterFactorys()
         ::sd::PresentationViewShellBase::RegisterFactory (
             ::sd::PRESENTATION_FACTORY_ID);
     }
-    if (SvtModuleOptions().IsDraw())
+    if (!utl::ConfigManager::IsAvoidConfig() && SvtModuleOptions().IsDraw())
     {
         ::sd::GraphicViewShellBase::RegisterFactory (::sd::DRAW_FACTORY_ID);
     }
@@ -255,10 +256,10 @@ void SdDLL::Init()
     SfxObjectFactory* pDrawFact = NULL;
     SfxObjectFactory* pImpressFact = NULL;
 
-    if (SvtModuleOptions().IsImpress())
+    if (utl::ConfigManager::IsAvoidConfig() || SvtModuleOptions().IsImpress())
         pImpressFact = &::sd::DrawDocShell::Factory();
 
-    if (SvtModuleOptions().IsDraw())
+    if (!utl::ConfigManager::IsAvoidConfig() && SvtModuleOptions().IsDraw())
         pDrawFact = &::sd::GraphicDocShell::Factory();
 
     // the SdModule must be created
@@ -276,14 +277,14 @@ void SdDLL::Init()
         (*ppShlPtr) = new SdModule( pDrawFact, pImpressFact );
      }
 
-    if (SvtModuleOptions().IsImpress())
+    if (!utl::ConfigManager::IsAvoidConfig() && SvtModuleOptions().IsImpress())
     {
         // Register the Impress shape types in order to make the shapes accessible.
         ::accessibility::RegisterImpressShapeTypes ();
         ::sd::DrawDocShell::Factory().SetDocumentServiceName( "com.sun.star.presentation.PresentationDocument" );
     }
 
-    if (SvtModuleOptions().IsDraw())
+    if (!utl::ConfigManager::IsAvoidConfig() && SvtModuleOptions().IsDraw())
     {
         ::sd::GraphicDocShell::Factory().SetDocumentServiceName( "com.sun.star.drawing.DrawingDocument" );
     }
@@ -311,7 +312,7 @@ void SdDLL::Init()
 
     // register your exotic remote controls here
 #ifdef ENABLE_SDREMOTE
-    if ( !Application::IsHeadlessModeEnabled() )
+    if (!utl::ConfigManager::IsAvoidConfig() && !Application::IsHeadlessModeEnabled())
         RegisterRemotes();
 #endif
 }

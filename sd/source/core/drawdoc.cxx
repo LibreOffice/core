@@ -30,6 +30,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 
+#include <unotools/configmgr.hxx>
 #include <unotools/useroptions.hxx>
 #include <officecfg/Office/Impress.hxx>
 
@@ -149,7 +150,7 @@ PresentationSettings::PresentationSettings( const PresentationSettings& r )
 }
 
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
-: FmFormModel( SvtPathOptions().GetPalettePath(), NULL, pDrDocSh )
+: FmFormModel( !utl::ConfigManager::IsAvoidConfig() ? SvtPathOptions().GetPalettePath() : OUString(), NULL, pDrDocSh )
 , bReadOnly(false)
 , mpOutliner(NULL)
 , mpInternalOutliner(NULL)
@@ -217,6 +218,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SetCalcFieldValueHdl( &rOutliner );
 
     // set linguistic options
+    if (!utl::ConfigManager::IsAvoidConfig())
     {
         const SvtLinguConfig    aLinguConfig;
         SvtLinguOptions         aOptions;
@@ -980,6 +982,9 @@ sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const OUString& rAuthor )
 
 void SdDrawDocument::InitLayoutVector()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
+
     const Reference<css::uno::XComponentContext> xContext(
         ::comphelper::getProcessComponentContext() );
 
@@ -1016,6 +1021,9 @@ void SdDrawDocument::InitLayoutVector()
 
 void SdDrawDocument::InitObjectVector()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
+
     const Reference<css::uno::XComponentContext> xContext(
         ::comphelper::getProcessComponentContext() );
 
