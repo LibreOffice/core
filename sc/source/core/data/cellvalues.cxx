@@ -13,7 +13,6 @@
 
 #include <cassert>
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace sc {
 
@@ -268,13 +267,13 @@ void CellValues::copyCellTextAttrsTo( ScColumn& rCol, SCROW nRow ) const
     }
 }
 
-typedef boost::ptr_vector<CellValues> TableType;
-typedef boost::ptr_vector<TableType> TablesType;
+typedef std::vector<std::unique_ptr<CellValues>> TableType;
+typedef std::vector<std::unique_ptr<TableType>> TablesType;
 
 struct TableValues::Impl
 {
     ScRange maRange;
-    TablesType maTables;
+    TablesType m_Tables;
 
     Impl( const ScRange& rRange ) : maRange(rRange)
     {
@@ -283,10 +282,10 @@ struct TableValues::Impl
 
         for (size_t nTab = 0; nTab < nTabs; ++nTab)
         {
-            maTables.push_back(new TableType);
-            TableType& rTab = maTables.back();
+            m_Tables.push_back(std::unique_ptr<TableType>(new TableType));
+            std::unique_ptr<TableType>& rTab2 = m_Tables.back();
             for (size_t nCol = 0; nCol < nCols; ++nCol)
-                rTab.push_back(new CellValues);
+                rTab2.get()->push_back(std::unique_ptr<CellValues>(new CellValues));
         }
     }
 
@@ -295,22 +294,17 @@ struct TableValues::Impl
         if (nTab < maRange.aStart.Tab() || maRange.aEnd.Tab() < nTab)
             // sheet index out of bound.
             return NULL;
-
         if (nCol < maRange.aStart.Col() || maRange.aEnd.Col() < nCol)
             // column index out of bound.
             return NULL;
-
         size_t nTabOffset = nTab - maRange.aStart.Tab();
-        if (nTabOffset >= maTables.size())
+        if (nTabOffset >= m_Tables.size())
             return NULL;
-
-        TableType& rTab = maTables[nTab-maRange.aStart.Tab()];
-
+        std::unique_ptr<TableType>& rTab2 = m_Tables[nTab-maRange.aStart.Tab()];
         size_t nColOffset = nCol - maRange.aStart.Col();
-        if (nColOffset >= rTab.size())
+        if(nColOffset >= rTab2.get()->size())
             return NULL;
-
-        return &rTab[nColOffset];
+        return &rTab2.get()[0][nColOffset].get()[0];
     }
 };
 
