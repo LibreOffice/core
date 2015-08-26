@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_fa562905",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1730,
+      "author": {
+        "id": 1000292
+      },
+      "writtenOn": "2015-08-26T22:02:38Z",
+      "side": 1,
+      "message": "Converting *this to be the RenderContext for drawing strings might be incorrect, requires further investigation.",
+      "revId": "685fb2b08c9097c57d9d98e81e1a6a44e32826fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
