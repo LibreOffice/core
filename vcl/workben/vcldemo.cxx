@@ -37,6 +37,7 @@
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/help.hxx>
+#include <vcl/menu.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -1455,6 +1456,9 @@ public:
 
 class DemoWidgets : public WorkWindow
 {
+    MenuBar *mpBar;
+    PopupMenu *mpPopup;
+
     VclPtr<VclBox> mpBox;
     VclPtr<ToolBox> mpToolbox;
     VclPtr<PushButton> mpButton;
@@ -1507,6 +1511,13 @@ public:
         mpGLButton->Show();
         mpHBox->Show();
 
+        mpBar = new MenuBar();
+        mpBar->InsertItem(0,"File");
+        mpPopup = new PopupMenu();
+        mpPopup->InsertItem(0,"Item");
+        mpBar->SetPopupMenu(0, mpPopup);
+        SetMenuBar(mpBar);
+
         Show();
     }
     virtual ~DemoWidgets() { disposeOnce(); }
@@ -1519,6 +1530,8 @@ public:
         mpToolbox.disposeAndClear();
         mpButton.disposeAndClear();
         mpBox.disposeAndClear();
+        delete mpPopup;
+        delete mpBar;
         WorkWindow::dispose();
     }
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE
