@@ -74,7 +74,8 @@ static int tst_processEventsExcludeSocket()
     QSocketNotifier notifier( pipes[ 0 ], QSocketNotifier::Read );
     QObject::connect( &notifier, SIGNAL( activated( int )), &test, SLOT( slotReceived()));
     char dummy = 'a';
-    write( pipes[ 1 ], &dummy, 1 );
+    if( 1 != write( pipes[ 1 ], &dummy, 1 ) )
+        return 1;
     QEventLoop loop;
     loop.processEvents( QEventLoop::ExcludeSocketNotifiers );
     QVERIFY( !test.received );
