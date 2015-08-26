@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 #include <ucbhelper/macros.hxx>
 #include <cppuhelper/implbase2.hxx>
 
@@ -43,8 +42,7 @@ class UcbPropertiesManager : public cppu::WeakImplHelper2 <
     css::lang::XServiceInfo,
     css::beans::XPropertySetInfo >
 {
-    css::uno::Sequence< css::beans::Property >* m_pProps;
-    osl::Mutex m_aMutex;
+    css::uno::Sequence< css::beans::Property > m_pProps;
 
 private:
     bool queryProperty( const OUString& rName,
