@@ -20,6 +20,7 @@
 #include <osl/thread.h>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
@@ -408,6 +409,8 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pAllMargin = 0;
     XMLPropertyState* pMargins[4] = { 0, 0, 0, 0 };
     ::std::unique_ptr<XMLPropertyState> pNewMargins[4];
+    XMLPropertyState* pFillStyle(nullptr);
+    XMLPropertyState* pFillColor(nullptr);
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
@@ -491,6 +494,8 @@ void XMLTextImportPropertyMapper::finished(
                                         bHasAnyWidth = true; break;
         case CTF_BACKGROUND_TRANSPARENCY: pBackTransparency = property; break;
         case CTF_BACKGROUND_TRANSPARENT:  pBackTransparent = property; break;
+        case CTF_FILLSTYLE:             pFillStyle = property; break;
+        case CTF_FILLCOLOR:             pFillColor = property; break;
         case CTF_PARAMARGINALL:
         case CTF_PARAMARGINALL_REL:
                 pAllParaMargin = property; break;
@@ -652,6 +657,15 @@ void XMLTextImportPropertyMapper::finished(
     FontDefaultsCheck( pFontFamilyNameCTL,
                        pFontStyleNameCTL, pFontFamilyCTL, pFontPitchCTL, pFontCharSetCTL,
                        &pNewFontStyleNameCTL, &pNewFontFamilyCTL, &pNewFontPitchCTL, &pNewFontCharSetCTL );
+
+    if (pFillStyle && !pFillColor && pBackTransparent
+        && drawing::FillStyle_SOLID == pFillStyle->maValue.get<drawing::FillStyle>()
+        && pBackTransparent->maValue.get<bool>())
+    {
+        // fo:background="transparent", draw:fill="solid" without draw:fill-color
+        // prevent getSvxBrushItemFromSourceSet from adding bogus default color
+        pFillStyle->mnIndex = -1;
+    }
 
     // #i5775# don't overwrite %transparency with binary transparency
     if( ( pBackTransparency != NULL ) && ( pBackTransparent != NULL ) )
