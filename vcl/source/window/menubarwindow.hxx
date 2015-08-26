@@ -144,7 +144,7 @@ public:
     Size            MinCloseButtonSize();
 
     /// Add an arbitrary button to the menubar that will appear next to the close button.
-    virtual sal_uInt16 AddMenuBarButton(const Image&, const Link<>&, const OUString&, sal_uInt16 nPos) SAL_OVERRIDE;
+    virtual sal_uInt16 AddMenuBarButton(const Image&, const Link<>&, const OUString&) SAL_OVERRIDE;
     virtual void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link<>&) SAL_OVERRIDE;
     virtual Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId) SAL_OVERRIDE;
     virtual void RemoveMenuBarButton(sal_uInt16 nId) SAL_OVERRIDE;

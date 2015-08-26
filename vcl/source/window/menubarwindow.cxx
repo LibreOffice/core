@@ -1139,13 +1139,11 @@ css::uno::Reference<css::accessibility::XAccessible> MenuBarWindow::CreateAccess
     return xAcc;
 }
 
-sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<>& i_rLink, const OUString& i_rToolTip, sal_uInt16 i_nPos )
+sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<>& i_rLink, const OUString& i_rToolTip )
 {
     // find first free button id
     sal_uInt16 nId = IID_DOCUMENTCLOSE;
     std::map< sal_uInt16, AddButtonEntry >::const_iterator it;
-    if( i_nPos > m_aAddButtons.size() )
-        i_nPos = static_cast<sal_uInt16>(m_aAddButtons.size());
     do
     {
         nId++;
