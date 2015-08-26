@@ -1414,7 +1414,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
         Reference< XTextField > rXTextField;
         GET( rXTextField, TextField );
         if( rXTextField.is() )
-            rRun.set( rXTextField, UNO_QUERY );
+            rXPropSet.set( rXTextField, UNO_QUERY );
     }
 
     // field properties starts here
