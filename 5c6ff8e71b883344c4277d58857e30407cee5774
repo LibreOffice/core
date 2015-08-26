@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "1af94dfe_c42b9432",
+        "filename": "vcl/opengl/texture.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-08-26T01:37:46Z",
+      "side": 1,
+      "message": "Oh. Now that I read through the whole patch this is absolutely a no-go. This actually results in a double delete of the OpenGL texture (calling glDeleteTexture twice with the same texture id).\n\nIn general the ImplOpenGLTexture needs to be noncopyable (while not technically prevented yet the copy c\u0027tor and assignment operator were not used).",
+      "revId": "5c6ff8e71b883344c4277d58857e30407cee5774",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_04a57c03",
         "filename": "vcl/opengl/texture.cxx",
         "patchSetId": 1
