@@ -799,9 +799,8 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
 void MacroChooser::UpdateFields()
 {
     SvTreeListEntry*    pMacroEntry = m_pMacroBox->GetCurEntry();
-    OUString            aEmptyStr;
 
-    m_pMacroNameEdit->SetText( aEmptyStr );
+    m_pMacroNameEdit->SetText( "" );
     if ( pMacroEntry )
         m_pMacroNameEdit->SetText( m_pMacroBox->GetEntryText( pMacroEntry ) );
 }

@@ -191,8 +191,7 @@ bool SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
             pRequest->Execute();
         }
 
-        OUString aEmptyStr;
-        rData <<= aEmptyStr;
+        rData <<= OUString();
     }
     return 0 == pConnection->GetError();
 }

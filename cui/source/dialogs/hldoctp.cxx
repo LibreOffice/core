@@ -120,7 +120,7 @@ OUString SvxHyperlinkDocTp::GetCurrentURL ()
     OUString aStrPath ( m_pCbbPath->GetText() );
     OUString aStrMark( m_pEdTarget->GetText() );
 
-    if ( aStrPath != aEmptyStr )
+    if ( !aStrPath.isEmpty() )
     {
         INetURLObject aURL( aStrPath );
         if ( aURL.GetProtocol() != INetProtocol::NotValid )    // maybe the path is already a valid
@@ -129,11 +129,11 @@ OUString SvxHyperlinkDocTp::GetCurrentURL ()
             osl::FileBase::getFileURLFromSystemPath( aStrPath, aStrURL );
 
         //#105788# always create a URL even if it is not valid
-        if( aStrURL == aEmptyStr )
+        if( aStrURL.isEmpty() )
             aStrURL = aStrPath;
     }
 
-    if( aStrMark != aEmptyStr )
+    if( !aStrMark.isEmpty() )
     {
         aStrURL += OUString( sHash );
         aStrURL += aStrMark;
@@ -238,7 +238,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, ClickTargetHdl_Impl, Button*, void)
         EnterWait();
 
         if ( maStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
-            mpMarkWnd->RefreshTree ( aEmptyStr );
+            mpMarkWnd->RefreshTree ( "" );
         else
             mpMarkWnd->RefreshTree ( maStrURL );
 
@@ -283,7 +283,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
         EnterWait();
 
         if ( maStrURL.equalsIgnoreAsciiCase( sFileScheme ) )
-            mpMarkWnd->RefreshTree ( aEmptyStr );
+            mpMarkWnd->RefreshTree ( "" );
         else
             mpMarkWnd->RefreshTree ( maStrURL );
 

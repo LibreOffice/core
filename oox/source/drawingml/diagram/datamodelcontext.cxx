@@ -141,18 +141,16 @@ public:
         ContextHandler2( rParent ),
         mrPoint( rPoint )
     {
-        OUString aEmptyStr;
-
-        mrPoint.msColorTransformCategoryId = rAttribs.getString( XML_csCatId, aEmptyStr );
-        mrPoint.msColorTransformTypeId = rAttribs.getString( XML_csTypeId, aEmptyStr );
-        mrPoint.msLayoutCategoryId = rAttribs.getString( XML_loCatId, aEmptyStr );
-        mrPoint.msLayoutTypeId = rAttribs.getString( XML_loTypeId, aEmptyStr );
-        mrPoint.msPlaceholderText = rAttribs.getString( XML_phldrT, aEmptyStr );
-        mrPoint.msPresentationAssociationId = rAttribs.getString( XML_presAssocID, aEmptyStr );
-        mrPoint.msPresentationLayoutName = rAttribs.getString( XML_presName, aEmptyStr );
-        mrPoint.msPresentationLayoutStyleLabel = rAttribs.getString( XML_presStyleLbl, aEmptyStr );
-        mrPoint.msQuickStyleCategoryId = rAttribs.getString( XML_qsCatId, aEmptyStr );
-        mrPoint.msQuickStyleTypeId = rAttribs.getString( XML_qsTypeId, aEmptyStr );
+        mrPoint.msColorTransformCategoryId = rAttribs.getString( XML_csCatId, "" );
+        mrPoint.msColorTransformTypeId = rAttribs.getString( XML_csTypeId, "" );
+        mrPoint.msLayoutCategoryId = rAttribs.getString( XML_loCatId, "" );
+        mrPoint.msLayoutTypeId = rAttribs.getString( XML_loTypeId, "" );
+        mrPoint.msPlaceholderText = rAttribs.getString( XML_phldrT, "" );
+        mrPoint.msPresentationAssociationId = rAttribs.getString( XML_presAssocID, "" );
+        mrPoint.msPresentationLayoutName = rAttribs.getString( XML_presName, "" );
+        mrPoint.msPresentationLayoutStyleLabel = rAttribs.getString( XML_presStyleLbl, "" );
+        mrPoint.msQuickStyleCategoryId = rAttribs.getString( XML_qsCatId, "" );
+        mrPoint.msQuickStyleTypeId = rAttribs.getString( XML_qsTypeId, "" );
 
         mrPoint.mnCustomAngle = rAttribs.getInteger( XML_custAng, -1 );
         mrPoint.mnPercentageNeighbourWidth = rAttribs.getInteger( XML_custLinFactNeighborX, -1 );

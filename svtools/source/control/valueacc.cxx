@@ -366,9 +366,8 @@ lang::Locale SAL_CALL ValueSetAcc::getLocale()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const OUString                           aEmptyStr;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
-    lang::Locale                                    aRet( aEmptyStr, aEmptyStr, aEmptyStr );
+    lang::Locale                                    aRet( "", "", "" );
 
     if( xParent.is() )
     {
@@ -1004,9 +1003,8 @@ lang::Locale SAL_CALL ValueItemAcc::getLocale()
     throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aSolarGuard;
-    const OUString                           aEmptyStr;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
-    lang::Locale                                    aRet( aEmptyStr, aEmptyStr, aEmptyStr );
+    lang::Locale                                    aRet( "", "", "" );
 
     if( xParent.is() )
     {

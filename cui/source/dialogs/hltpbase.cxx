@@ -36,6 +36,38 @@
 
 using namespace ::ucbhelper;
 
+namespace {
+
+OUString CreateUiNameFromURL( const OUString& aStrURL )
+{
+    OUString          aStrUiURL;
+    INetURLObject   aURLObj( aStrURL );
+
+    switch(aURLObj.GetProtocol())
+    {
+        case INetProtocol::File:
+            osl::FileBase::getSystemPathFromFileURL(aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrUiURL);
+            break;
+        case INetProtocol::Ftp :
+            {
+                //remove password from name
+                INetURLObject   aTmpURL(aURLObj);
+                aTmpURL.SetPass("");
+                aStrUiURL = aTmpURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
+            }
+            break;
+        default :
+            {
+                aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+            }
+    }
+    if(aStrUiURL.isEmpty())
+        return aStrURL;
+    return aStrUiURL;
+}
+
+}
+
 //# ComboBox-Control for URL's with History and Autocompletion           #
 
 SvxHyperURLBox::SvxHyperURLBox( vcl::Window* pParent, INetProtocol eSmart )
@@ -98,8 +130,7 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( vcl::Window *pParent,
     mpBtScript              ( NULL ),
     mbIsCloseDisabled       ( false ),
     mpDialog                ( pDlg ),
-    mbStdControlsInit       ( false ),
-    aEmptyStr()
+    mbStdControlsInit       ( false )
 {
     // create bookmark-window
     mpMarkWnd = VclPtr<SvxHlinkDlgMarkWnd>::Create( this );
@@ -437,7 +468,7 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
 {
 
     // Set dialog-fields from create-itemset
-    maStrInitURL = aEmptyStr;
+    maStrInitURL.clear();
 
     const SvxHyperlinkItem *pHyperlinkItem = static_cast<const SvxHyperlinkItem *>(
                                        rItemSet.GetItem (SID_HYPERLINK_GETLINK));
@@ -473,34 +504,6 @@ bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet* rOut)
     rOut->Put (aItem);
 
     return true;
-}
-
-OUString SvxHyperlinkTabPageBase::CreateUiNameFromURL( const OUString& aStrURL )
-{
-    OUString          aStrUiURL;
-    INetURLObject   aURLObj( aStrURL );
-
-    switch(aURLObj.GetProtocol())
-    {
-        case INetProtocol::File:
-            osl::FileBase::getSystemPathFromFileURL(aURLObj.GetMainURL(INetURLObject::NO_DECODE), aStrUiURL);
-            break;
-        case INetProtocol::Ftp :
-            {
-                //remove password from name
-                INetURLObject   aTmpURL(aURLObj);
-                aTmpURL.SetPass(aEmptyStr);
-                aStrUiURL = aTmpURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
-            }
-            break;
-        default :
-            {
-                aStrUiURL = aURLObj.GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
-            }
-    }
-    if(aStrUiURL.isEmpty())
-        return aStrURL;
-    return aStrUiURL;
 }
 
 // Activate / Deactivate Tabpage

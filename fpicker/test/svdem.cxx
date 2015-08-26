@@ -60,10 +60,6 @@ using namespace ::com::sun::star::lang;
 // Forward declaration
 void Main();
 
-String aEmptyStr;
-
-
-
 SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMS;

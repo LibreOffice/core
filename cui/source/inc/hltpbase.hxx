@@ -95,15 +95,12 @@ protected:
     virtual void GetCurentItemData     ( OUString& rStrURL, OUString& aStrName,
                                          OUString& aStrIntName, OUString& aStrFrame,
                                          SvxLinkInsertMode& eMode ) = 0;
-    OUString CreateUiNameFromURL( const OUString& aStrURL );
 
     void         GetDataFromCommonFields( OUString& aStrName,
                                           OUString& aStrIntName, OUString& aStrFrame,
                                           SvxLinkInsertMode& eMode );
 
     DECL_LINK_TYPED (ClickScriptHdl_Impl, Button*, void ); ///< Button : Script
-
-    OUString            aEmptyStr;
 
     static OUString GetSchemeFromURL( const OUString& rStrURL );
 

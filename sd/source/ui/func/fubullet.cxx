@@ -124,12 +124,12 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
         pOL->SetUpdateMode(false);
 
         // remove old selected text
-        pOV->InsertText( aEmptyStr );
+        pOV->InsertText( "" );
 
         // prepare undo
         ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
         rUndoMgr.EnterListAction(SD_RESSTR(STR_UNDO_INSERT_SPECCHAR),
-                                    aEmptyStr );
+                                    "" );
 
         // insert given text
         OUString aStr( cMark );
@@ -250,14 +250,14 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
                With that, we get unique attributes (and since there is no
                DeleteSelected() in OutlinerView, it is deleted by inserting an
                empty string). */
-            pOV->InsertText( aEmptyStr );
+            pOV->InsertText( "" );
 
             SfxItemSet aOldSet( mpDoc->GetPool(), EE_CHAR_FONTINFO, EE_CHAR_FONTINFO, 0 );
             aOldSet.Put( pOV->GetAttribs() );
 
             ::svl::IUndoManager& rUndoMgr =  pOL->GetUndoManager();
             rUndoMgr.EnterListAction(SD_RESSTR(STR_UNDO_INSERT_SPECCHAR),
-                                     aEmptyStr );
+                                     "" );
             pOV->InsertText(aChars, true);
 
             // set attributes (set font)

@@ -300,7 +300,6 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
 
         PopupMenu* pPopup = new PopupMenu;
-        OUString aEmptyStr;
         sal_uInt32 i = 0;
         nNumMenuGalleryItems = aGrfNames.size();
         for(std::vector<OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
@@ -315,7 +314,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
                 pUIName = &aPhysicalName;
             }
 
-            SvxBrushItem* pBrushItem = new SvxBrushItem(*it, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
+            SvxBrushItem* pBrushItem = new SvxBrushItem(*it, "", GPOS_AREA, SID_ATTR_BRUSH);
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
             pInfo->pBrushItem = pBrushItem;
@@ -374,7 +373,6 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         pView->ShowSdrPage(pPage);
 
         PopupMenu* pPopup = new PopupMenu;
-        OUString aEmptyStr;
 
         // Generate invisible square to give all symbols a
         // bitmap size, which is independent from specific glyph
@@ -390,7 +388,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
             if(pObj==NULL)
                 break;
             pObj=pObj->Clone();
-            aGrfNames.push_back(aEmptyStr);
+            aGrfNames.push_back("");
             pPage->NbcInsertObject(pObj);
             if(pSymbolAttr)
             {
@@ -428,7 +426,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
                 aBitmapEx.Scale(nScale, nScale);
             }
             Image aImage(aBitmapEx);
-            pPopup->InsertItem(pInfo->nItemId,aEmptyStr,aImage);
+            pPopup->InsertItem(pInfo->nItemId,"",aImage);
         }
         pInvisibleSquare=pPage->RemoveObject(0);
         SdrObject::Free(pInvisibleSquare);

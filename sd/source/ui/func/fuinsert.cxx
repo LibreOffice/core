@@ -231,7 +231,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
                 ( mpViewShell && mpViewShell->ISA( DrawViewShell ) ) )
             {
                 DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(mpViewShell);
-                INetBookmark        aINetBookmark( aEmptyStr, aEmptyStr );
+                INetBookmark        aINetBookmark( "", "" );
 
                 if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
                     aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
@@ -240,7 +240,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
                     ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
                     aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                 {
-                    pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
+                    pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "", NULL );
                 }
             }
         }
@@ -412,7 +412,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         else
         {
             ErrorHandler::HandleError(* new StringErrorInfo(ERRCODE_SFX_OLEGENERAL,
-                                        aEmptyStr ) );
+                                        "" ) );
         }
     }
     else

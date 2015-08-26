@@ -924,7 +924,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                                           GetActiveWindow()->PixelToLogic( Rectangle( Point(), GetActiveWindow()->GetOutputSizePixel() ).Center() ),
                                           nAction, false, nFormat ) )
                 {
-                    INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
+                    INetBookmark    aINetBookmark( "", "" );
 
                     if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
                           aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
@@ -933,7 +933,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                         ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
                           aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                     {
-                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
+                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "", NULL );
                     }
                 }
             }

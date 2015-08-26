@@ -2869,8 +2869,7 @@ RTLFUNC(Dir)
                         }
                         else
                         {
-                            OUString aEmptyStr;
-                            rPar.Get(0)->PutString( aEmptyStr );
+                            rPar.Get(0)->PutString( "" );
                         }
 
                         sal_uInt16 nFlags = 0;

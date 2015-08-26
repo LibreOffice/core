@@ -489,7 +489,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
                 if( !mpDrawView->InsertData( aDataHelper, aPos, nDnDAction, false ) )
                 {
-                    INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
+                    INetBookmark    aINetBookmark( "", "" );
 
                     if( ( aDataHelper.HasFormat( SotClipboardFormatId::NETSCAPE_BOOKMARK ) &&
                           aDataHelper.GetINetBookmark( SotClipboardFormatId::NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
@@ -498,7 +498,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                         ( aDataHelper.HasFormat( SotClipboardFormatId::UNIFORMRESOURCELOCATOR ) &&
                           aDataHelper.GetINetBookmark( SotClipboardFormatId::UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
                     {
-                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
+                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), "", NULL );
                     }
                 }
             }

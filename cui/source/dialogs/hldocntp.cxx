@@ -290,7 +290,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
     // get data from dialog-controls
     OUString aStrNewName = m_pCbbPath->GetText();
 
-    if ( aStrNewName == aEmptyStr )
+    if ( aStrNewName.isEmpty() )
         aStrNewName = maStrInitURL;
 
 
@@ -330,7 +330,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                 // current document
                 SfxViewFrame* pCurrentDocFrame = SfxViewFrame::Current();
 
-                if ( aStrNewName != aEmptyStr )
+                if ( !aStrNewName.isEmpty() )
                 {
                     // get private-url
                     sal_Int32 nPos = m_pLbDocTypes->GetSelectEntryPos();

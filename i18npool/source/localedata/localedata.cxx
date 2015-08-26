@@ -1385,8 +1385,6 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(R
 
         Sequence< Reference<container::XIndexAccess> > aRet( nStyles );
 
-        OUString aEmptyStr;
-
         sal_Unicode const **** pStyle = p0;
         for( i=0;  i<nStyles;  i++ )
         {
@@ -1419,16 +1417,16 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(R
                     }
                 }
             }
-            level[j].sPrefix             = aEmptyStr;
+            level[j].sPrefix.clear();
             level[j].nNumType            = 0;
-            level[j].sSuffix             = aEmptyStr;
+            level[j].sSuffix.clear();
             level[j].cBulletChar         = 0;
-            level[j].sBulletFontName     = aEmptyStr;
+            level[j].sBulletFontName.clear();
             level[j].nParentNumbering    = 0;
             level[j].nLeftMargin         = 0;
             level[j].nSymbolTextDistance = 0;
             level[j].nFirstLineOffset    = 0;
-            level[j].sTransliteration    = aEmptyStr;
+            level[j].sTransliteration.clear();
             level[j].nNatNum             = 0;
             aRet[i] = new OutlineNumbering( level, nLevels );
         }

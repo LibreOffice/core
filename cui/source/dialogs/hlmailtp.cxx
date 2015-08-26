@@ -115,7 +115,7 @@ void SvxHyperlinkMailTp::FillDlgFields(const OUString& rStrURL)
     }
     else
     {
-        m_pEdSubject->SetText (aEmptyStr);
+        m_pEdSubject->SetText ("");
     }
 
     m_pCbbReceiver->SetText ( aStrURLc );
@@ -151,7 +151,7 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
     // subject for EMail-url
     if( aURL.GetProtocol() == INetProtocol::Mailto )
     {
-        if ( m_pEdSubject->GetText() != OUString(aEmptyStr) )
+        if ( !m_pEdSubject->GetText().isEmpty() )
         {
             OUString aQuery("subject=");
             aQuery += m_pEdSubject->GetText();
@@ -212,10 +212,10 @@ void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
 void SvxHyperlinkMailTp::RemoveImproperProtocol(const OUString& aProperScheme)
 {
     OUString aStrURL ( m_pCbbReceiver->GetText() );
-    if ( aStrURL != aEmptyStr )
+    if ( !aStrURL.isEmpty() )
     {
         OUString aStrScheme = GetSchemeFromURL( aStrURL );
-        if ( aStrScheme != aEmptyStr && aStrScheme != aProperScheme )
+        if ( !aStrScheme.isEmpty() && aStrScheme != aProperScheme )
         {
             aStrURL = aStrURL.copy( aStrScheme.getLength() );
             m_pCbbReceiver->SetText ( aStrURL );

@@ -156,7 +156,6 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     if( nSbxId == 0x65 )    // Dialog Id
         return new SbxVariable;
 
-    OUString aEmptyStr;
     if( nCreator == SBXCR_SBX )
       switch( nSbxId )
     {
@@ -164,12 +163,12 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
         case SBXID_VARIABLE:    return new SbxVariable;
         case SBXID_ARRAY:       return new SbxArray;
         case SBXID_DIMARRAY:    return new SbxDimArray;
-        case SBXID_OBJECT:      return new SbxObject( aEmptyStr );
-        case SBXID_COLLECTION:  return new SbxCollection( aEmptyStr );
+        case SBXID_OBJECT:      return new SbxObject( "" );
+        case SBXID_COLLECTION:  return new SbxCollection( "" );
         case SBXID_FIXCOLLECTION:
-                                return new SbxStdCollection( aEmptyStr, aEmptyStr );
-        case SBXID_METHOD:      return new SbxMethod( aEmptyStr, SbxEMPTY );
-        case SBXID_PROPERTY:    return new SbxProperty( aEmptyStr, SbxEMPTY );
+                                return new SbxStdCollection( "", "" );
+        case SBXID_METHOD:      return new SbxMethod( "", SbxEMPTY );
+        case SBXID_PROPERTY:    return new SbxProperty( "", SbxEMPTY );
     }
     // Unknown type: go over the factories!
     SbxAppData& r = GetSbxData_Impl();

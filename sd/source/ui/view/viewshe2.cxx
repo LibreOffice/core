@@ -75,8 +75,6 @@ using namespace com::sun::star;
 
 namespace sd {
 
-const OUString aEmptyStr;
-
 /**
  * adjust Thumbpos and VisibleSize
  */

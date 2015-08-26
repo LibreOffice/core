@@ -50,8 +50,6 @@ namespace embed {
 
 namespace sd {
 
-extern const OUString aEmptyStr;
-
 class DrawDocShell;
 class FrameView;
 class LayerTabBar;

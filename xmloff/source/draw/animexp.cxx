@@ -311,8 +311,6 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
         Reference< XPropertySet > xProps( xShape, UNO_QUERY );
         if( xProps.is() )
         {
-            const OUString aEmptyStr;
-
             Reference< XPropertySetInfo > xInfo( xProps->getPropertySetInfo() );
             AnimationEffect eEffect;
             XMLEffectHint aEffect;
@@ -371,7 +369,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
                     mpImpl->maEffects.push_back( aEffect );
 
                     aEffect.mnPathShapeId = -1;
-                    aEffect.maSoundURL = aEmptyStr;
+                    aEffect.maSoundURL.clear();
                 }
 
                 xProps->getPropertyValue( mpImpl->msTextEffect ) >>= eEffect;
@@ -390,7 +388,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
 
                     mpImpl->maEffects.push_back( aEffect );
                     aEffect.mbTextEffect = false;
-                    aEffect.maSoundURL = aEmptyStr;
+                    aEffect.maSoundURL.clear();
                 }
 
                 bool bDimPrev = false;
@@ -416,7 +414,7 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rE
                     }
 
                     mpImpl->maEffects.push_back( aEffect );
-                    aEffect.maSoundURL = aEmptyStr;
+                    aEffect.maSoundURL.clear();
                 }
             }
         }

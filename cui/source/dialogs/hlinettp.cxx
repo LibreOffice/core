@@ -121,7 +121,7 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
 
         //do not show password and user in url
         if(!aURL.GetUser().isEmpty() || !aURL.GetPass().isEmpty() )
-            aURL.SetUserAndPass(aEmptyStr,aEmptyStr);
+            aURL.SetUserAndPass("", "");
     }
 
     // set URL-field
@@ -310,7 +310,7 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
 void SvxHyperlinkInternetTp::RemoveImproperProtocol(const OUString& aProperScheme)
 {
     OUString aStrURL ( m_pCbbTarget->GetText() );
-    if ( aStrURL != aEmptyStr )
+    if ( !aStrURL.isEmpty() )
     {
         OUString aStrScheme(GetSchemeFromURL(aStrURL));
         if ( !aStrScheme.isEmpty() && aStrScheme != aProperScheme )
@@ -362,8 +362,8 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, Button*, v
     {
         if ( m_pEdLogin->GetText().toAsciiLowerCase().startsWith( sAnonymous ) )
         {
-            maStrOldUser = aEmptyStr;
-            maStrOldPassword = aEmptyStr;
+            maStrOldUser.clear();
+            maStrOldPassword.clear();
         }
         else
         {
@@ -418,7 +418,7 @@ void SvxHyperlinkInternetTp::RefreshMarkWindow()
     {
         EnterWait();
         OUString aStrURL( CreateAbsoluteURL() );
-        if ( aStrURL != aEmptyStr )
+        if ( !aStrURL.isEmpty() )
             mpMarkWnd->RefreshTree ( aStrURL );
         else
             mpMarkWnd->SetError( LERR_DOCNOTOPEN );

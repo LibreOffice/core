@@ -384,8 +384,6 @@ void SmParser::NextToken()
     static const sal_Int32 coNumContFlags =
         coNumStartFlags & ~KParseTokens::IGNORE_LEADING_WS;
 
-    static const OUString aEmptyStr;
-
     sal_Int32   nBufLen = m_aBufferString.getLength();
     ParseResult aRes;
     sal_Int32   nRealStart;
@@ -405,16 +403,16 @@ void SmParser::NextToken()
         aCC.setLanguageTag(LanguageTag(m_aDotLoc));
         aRes = aCC.parsePredefinedToken(KParseType::ASC_NUMBER,
                                         m_aBufferString, m_nBufferIndex,
-                                        coNumStartFlags, aEmptyStr,
-                                        coNumContFlags, aEmptyStr);
+                                        coNumStartFlags, "",
+                                        coNumContFlags, "");
         aCC.setLanguageTag(aOldLoc);
 
         if (aRes.TokenType == 0)
         {
             // Try again with the default token parsing.
             aRes = aCC.parseAnyToken(m_aBufferString, m_nBufferIndex,
-                                     coStartFlags, aEmptyStr,
-                                     coContFlags, aEmptyStr);
+                                     coStartFlags, "",
+                                     coContFlags, "");
         }
 
         nRealStart = m_nBufferIndex + aRes.LeadingWhiteSpace;
@@ -651,9 +649,9 @@ void SmParser::NextToken()
                         ParseResult aTmpRes = aCC.parseAnyToken(
                                 m_aBufferString, rnEndPos,
                                 KParseTokens::ANY_LETTER,
-                                aEmptyStr,
+                                "",
                                 coUserDefinedCharContFlags,
-                                aEmptyStr );
+                                "" );
 
                         sal_Int32 nTmpStart = rnEndPos + aTmpRes.LeadingWhiteSpace;
 

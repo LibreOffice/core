@@ -262,9 +262,8 @@ lang::Locale SAL_CALL ThumbnailViewAcc::getLocale()
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const OUString                           aEmptyStr;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
-    lang::Locale                                    aRet( aEmptyStr, aEmptyStr, aEmptyStr );
+    lang::Locale                                    aRet( "", "", "" );
 
     if( xParent.is() )
     {
@@ -809,9 +808,8 @@ lang::Locale SAL_CALL ThumbnailViewItemAcc::getLocale()
     throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aSolarGuard;
-    const OUString                           aEmptyStr;
     uno::Reference< accessibility::XAccessible >    xParent( getAccessibleParent() );
-    lang::Locale                                    aRet( aEmptyStr, aEmptyStr, aEmptyStr );
+    lang::Locale                                    aRet( "", "", "" );
 
     if( xParent.is() )
     {

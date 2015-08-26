@@ -280,9 +280,8 @@ Locale SAL_CALL ToolbarMenuAcc::getLocale() throw (IllegalAccessibleComponentSta
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    const OUString aEmptyStr;
     Reference< XAccessible > xParent( getAccessibleParent() );
-    Locale aRet( aEmptyStr, aEmptyStr, aEmptyStr );
+    Locale aRet( "", "", "" );
 
     if( xParent.is() )
     {
@@ -761,8 +760,7 @@ Reference< XAccessibleStateSet > SAL_CALL ToolbarMenuEntryAcc::getAccessibleStat
 
 Locale SAL_CALL ToolbarMenuEntryAcc::getLocale() throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
 {
-    const OUString aEmptyStr;
-    Locale aRet( aEmptyStr, aEmptyStr, aEmptyStr );
+    Locale aRet( "", "", "" );
 
     Reference< XAccessible > xParent( getAccessibleParent() );
     if( xParent.is() )
