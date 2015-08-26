@@ -36,6 +36,11 @@
         <style:columns fo:column-count="1" fo:column-gap="0in"/>
       </style:graphic-properties>
     </style:style>
+    <style:style style:name="Untitled1" style:family="graphic" style:parent-style-name="encarts">
+      <style:graphic-properties fo:background-color="transparent" style:background-transparency="100%" draw:fill="solid">
+        <style:background-image/>
+      </style:graphic-properties>
+    </style:style>
 
     <!-- "Titre Avis expert" and derived styles from bugdoc -->
     <style:style style:name="Titre_20_Avis_20_expert" style:display-name="Titre Avis expert" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="">
