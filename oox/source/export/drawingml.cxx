@@ -1438,7 +1438,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
         Reference< XTextField > rXTextField;
         GET( rXTextField, TextField );
         if( rXTextField.is() )
-            rRun.set( rXTextField, UNO_QUERY );
+            rXPropSet.set( rXTextField, UNO_QUERY );
     }
 
     // field properties starts here
@@ -1461,11 +1461,10 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     mpFS->endElementNS( XML_a, nElement );
 }
 
-const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, bool& bIsField )
+OUString DrawingML::GetFieldValue( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, bool& bIsURLField )
 {
-    const char* sType = NULL;
     Reference< XPropertySet > rXPropSet( rRun, UNO_QUERY );
-    OUString aFieldType;
+    OUString aFieldType, aFieldValue;
 
     if( GETA( TextPortionType ) )
     {
@@ -1479,7 +1478,6 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
         GET( rXTextField, TextField );
         if( rXTextField.is() )
         {
-            bIsField = true;
             rXPropSet.set( rXTextField, UNO_QUERY );
             if( rXPropSet.is() )
             {
@@ -1487,17 +1485,19 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
                 DBG(fprintf (stderr, "field kind: %s\n", USS(aFieldKind) ));
                 if( aFieldKind == "Page" )
                 {
-                    return "slidenum";
+                    aFieldValue = OUString("slidenum");
                 }
-        // else if( aFieldKind == "URL" ) {
-        // do not return here
-        // and make URL field text run with hyperlink property later
-        // }
+                else if( aFieldKind == "URL" )
+                {
+                    bIsURLField = true;
+                    GET( aFieldValue, Representation)
+
+                }
             }
         }
     }
 
-    return sType;
+    return aFieldValue;
 }
 
 void DrawingML::GetUUID( OStringBuffer& rBuffer )
@@ -1546,13 +1546,18 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
     sal_Int16 nLevel = -1;
     GET( nLevel, NumberingLevel );
 
-    const char* sFieldType;
-    bool bIsField = false;
+    bool bIsURLField = false;
+    OUString sFieldValue = GetFieldValue( rRun, bIsURLField );
+    bool bWriteField  = !( sFieldValue.isEmpty() || bIsURLField );
+
     OUString sText = rRun->getString();
 
     //if there is no text following the bullet, add a space after the bullet
     if (nLevel !=-1 && sText.isEmpty() )
          sText=" ";
+
+    if ( bIsURLField )
+        sText = sFieldValue;
 
     if( sText.isEmpty())
     {
@@ -1571,15 +1576,14 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
         }
     }
 
-    sFieldType = GetFieldType( rRun, bIsField );
-    if( ( sFieldType != NULL ) )
+    if( ( bWriteField ) )
     {
         OStringBuffer sUUID(39);
 
         GetUUID( sUUID );
         mpFS->startElementNS( XML_a, XML_fld,
                               XML_id, sUUID.getStr(),
-                              XML_type, sFieldType,
+                              XML_type, OUStringToOString( sFieldValue, RTL_TEXTENCODING_UTF8 ).getStr(),
                               FSEND );
     }
     else
@@ -1588,13 +1592,13 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
     }
 
     Reference< XPropertySet > xPropSet( rRun, uno::UNO_QUERY );
-    WriteRunProperties( xPropSet, bIsField );
+    WriteRunProperties( xPropSet, bIsURLField );
 
     mpFS->startElementNS( XML_a, XML_t, FSEND );
     mpFS->writeEscaped( sText );
     mpFS->endElementNS( XML_a, XML_t );
 
-    if( sFieldType )
+    if( bWriteField )
         mpFS->endElementNS( XML_a, XML_fld );
     else
         mpFS->endElementNS( XML_a, XML_r );
