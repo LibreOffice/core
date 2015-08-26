@@ -677,7 +677,7 @@ int fd;
     return buffer;
 }
 
-static void _cancel_relative(char* base, char** ref_cursor, char** ref_cursor_out, char* end)
+static void _cancel_relative(char const * base, char** ref_cursor, char** ref_cursor_out, char const * end)
 {
     char* cursor = *ref_cursor;
     char* cursor_out = *ref_cursor_out;
@@ -853,9 +853,9 @@ static inline char * eat_space_at_end(char * end)
 }
 
 static char* phony_content_buffer;
-static inline char* generate_phony_line(char* phony_target, char* extension)
+static inline char* generate_phony_line(char const * phony_target, char const * extension)
 {
-char* src;
+char const * src;
 char* dest;
 char* last_dot = NULL;
     //fprintf(stderr, "generate_phony_line called with phony_target %s and extension %s\n", phony_target, extension);
@@ -878,7 +878,7 @@ char* last_dot = NULL;
     return phony_content_buffer;
 }
 
-static inline int generate_phony_file(char* fn, char* content)
+static inline int generate_phony_file(char* fn, char const * content)
 {
 FILE* depfile;
     depfile = fopen(fn, "w");
