@@ -79,8 +79,6 @@ public:
 
     void writeModifications();
 
-    bool hasModifications() const;
-
     void flushModifications();
         // must be called with configmgr::lock unaquired; must be called before
         // shutdown if writeModifications has ever been called (probably

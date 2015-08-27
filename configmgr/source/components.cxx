@@ -273,14 +273,8 @@ void Components::addModification(Path const & path) {
     data_.modifications.add(path);
 }
 
-bool Components::hasModifications() const
-{
-    return data_.modifications.getRoot().children.begin() !=
-        data_.modifications.getRoot().children.end();
-}
-
 void Components::writeModifications() {
-    if (hasModifications()) {
+    if (!data_.modifications.empty()) {
         switch (modificationTarget_) {
             case ModificationTarget::None:
                 break;
