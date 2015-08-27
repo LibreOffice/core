@@ -57,7 +57,6 @@ enum class NumberingPageType
 
 class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
-    Color           aLineColor;
     NumberingPageType ePageType;
     bool            bHTMLMode;
     Rectangle       aOrgRect;
