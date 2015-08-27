@@ -24,6 +24,7 @@
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <vcl/salgtype.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
@@ -289,7 +290,7 @@ public:
     */
     bool                    GetSystemData( BitmapSystemData& rData ) const;
 
-    sal_uLong               GetChecksum() const;
+    SalChecksum             GetChecksum() const;
 
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
 

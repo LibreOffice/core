@@ -134,6 +134,7 @@ OString GraphicID::GetIDString() const
     for( nShift = 28; nShift >= 0; nShift -= 4 )
         aHexStr[nIndex++] = aHexData[ ( mnID3 >> (sal_uInt32) nShift ) & 0xf ];
 
+#error update me ...
     for( nShift = 28; nShift >= 0; nShift -= 4 )
         aHexStr[nIndex++] = aHexData[ ( mnID4 >> (sal_uInt32) nShift ) & 0xf ];
 

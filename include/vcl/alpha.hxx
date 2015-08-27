@@ -23,7 +23,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/bitmap.hxx>
 
-
 class ImageList;
 class BitmapEx;
 
@@ -49,7 +48,7 @@ public:
 
     Size        GetSizePixel() const { return Bitmap::GetSizePixel(); }
 
-    sal_uLong   GetChecksum() const { return Bitmap::GetChecksum(); }
+    ::SalChecksum GetChecksum() const { return Bitmap::GetChecksum(); }
 
     Bitmap      GetBitmap() const;
 

@@ -145,7 +145,7 @@ private:
     GfxLink             ImplGetLink();
     bool                ImplIsLink() const;
 
-    sal_uLong               ImplGetChecksum() const;
+    SalChecksum         ImplGetChecksum() const;
 
     bool                ImplExportNative( SvStream& rOStm ) const;
 
