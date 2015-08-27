@@ -1746,10 +1746,9 @@ void OReportController::impl_initialize( )
     }
 }
 
-IMPL_LINK_NOARG( OReportController, OnOpenHelpAgent )
+IMPL_LINK_NOARG_TYPED( OReportController, OnOpenHelpAgent, void*, void )
 {
     doOpenHelpAgent();
-    return 0L;
 }
 
 IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow* ,_pAddFieldDlg)
@@ -3147,10 +3146,9 @@ void OReportController::createNewFunction(const uno::Any& _aValue)
     xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(xFunction));
 }
 
-IMPL_LINK_NOARG( OReportController, OnExecuteReport )
+IMPL_LINK_NOARG_TYPED( OReportController, OnExecuteReport, void*, void )
 {
     executeReport();
-    return 0L;
 }
 
 void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,const uno::Reference< report::XSection>& _xSection,const OUString& _sFunction,sal_uInt16 _nObjectId)

@@ -46,12 +46,12 @@ void EventPoster::Post( UserEvent* pEvent )
     m_nId = Application::PostUserEvent( ( LINK( this, EventPoster, DoEvent_Impl ) ), pEvent );
 }
 
-IMPL_LINK( EventPoster, DoEvent_Impl, UserEvent*, pEvent )
+IMPL_LINK_TYPED( EventPoster, DoEvent_Impl, void*, p, void )
 {
+    UserEvent* pEvent = static_cast<UserEvent*>(p);
     DBG_TESTSOLARMUTEX();
     m_nId = 0;
     m_aLink.Call( pEvent );
-    return 0;
 }
 
 }

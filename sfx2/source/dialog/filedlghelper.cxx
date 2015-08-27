@@ -1158,14 +1158,12 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     }
 }
 
-IMPL_LINK_NOARG( FileDialogHelper_Impl, InitControls )
+IMPL_LINK_NOARG_TYPED( FileDialogHelper_Impl, InitControls, void*, void )
 {
     mnPostUserEventId = 0;
     enablePasswordBox( true );
     updateFilterOptionsBox( );
     updateSelectionBox( );
-
-    return 0L;
 }
 
 void FileDialogHelper_Impl::preExecute()
@@ -2301,13 +2299,11 @@ void FileDialogHelper::SetContext( Context _eNewContext )
     mpImp->SetContext( _eNewContext );
 }
 
-IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker)
+IMPL_LINK_NOARG_TYPED(FileDialogHelper, ExecuteSystemFilePicker, void*, void)
 {
     m_nError = mpImp->execute();
     if ( m_aDialogClosedLink.IsSet() )
         m_aDialogClosedLink.Call( this );
-
-    return 0L;
 }
 
 // rDirPath has to be a directory

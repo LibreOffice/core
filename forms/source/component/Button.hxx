@@ -181,7 +181,7 @@ protected:
     virtual void    actionPerformed_Impl( bool bNotifyListener, const ::com::sun::star::awt::MouseEvent& _rEvt ) SAL_OVERRIDE;
 
 private:
-    DECL_LINK( OnClick, void* );
+    DECL_LINK_TYPED( OnClick, void*, void );
 
     /// to be called whenever the feature URL represented by our model has potentially changed
     void        modelFeatureUrlPotentiallyChanged( );

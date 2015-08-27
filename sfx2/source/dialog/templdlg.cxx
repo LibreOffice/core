@@ -284,10 +284,9 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-IMPL_LINK_NOARG(DropListBox_Impl, OnAsyncExecuteDrop)
+IMPL_LINK_NOARG_TYPED(DropListBox_Impl, OnAsyncExecuteDrop, void*, void)
 {
     pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
-    return 0;
 }
 
 bool DropListBox_Impl::Notify( NotifyEvent& rNEvt )
@@ -2151,25 +2150,23 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
     return 0;
 }
 
-IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu )
 {
-    if( pMenu )
-    {
-        nLastItemId = pMenu->GetCurItemId();
-        Application::PostUserEvent(
-            LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectHdl ), 0 );
-        return sal_IntPtr(true);
-    }
+    nLastItemId = pMenu->GetCurItemId();
+    Application::PostUserEvent(
+        LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectAsyncHdl ), 0 );
+    return sal_IntPtr(true);
+}
 
+IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectAsyncHdl, void*, void )
+{
     switch(nLastItemId) {
     case ID_NEW: NewHdl(0); break;
     case ID_EDIT: EditHdl(0); break;
     case ID_DELETE: DeleteHdl(0); break;
     case ID_HIDE: HideHdl(0); break;
     case ID_SHOW: ShowHdl(0); break;
-    default: return sal_IntPtr(false);
     }
-    return sal_IntPtr(true);
 }
 
 SfxStyleFamily SfxCommonTemplateDialog_Impl::GetActualFamily() const

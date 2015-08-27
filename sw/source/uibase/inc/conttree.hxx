@@ -299,7 +299,7 @@ protected:
 
     static const SfxObjectShell*    GetShowShell() {return pShowShell;}
     static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
-    DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, SwGlobalTree*);
+    DECL_STATIC_LINK_TYPED(SwGlobalTree, ShowFrameHdl, void*, void);
 
     virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;

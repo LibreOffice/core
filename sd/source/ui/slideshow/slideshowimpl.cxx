@@ -1424,13 +1424,12 @@ void SlideshowImpl::endPresentation()
         mnEndShowEvent = Application::PostUserEvent( LINK(this, SlideshowImpl, endPresentationHdl) );
 }
 
-IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl)
+IMPL_LINK_NOARG_TYPED(SlideshowImpl, endPresentationHdl, void*, void)
 {
     mnEndShowEvent = 0;
 
     if( mxPresentation.is() )
         mxPresentation->end();
-    return 0;
 }
 
 void SAL_CALL SlideshowImpl::pause() throw (RuntimeException, std::exception)
@@ -2092,12 +2091,12 @@ void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
     }
 }
 
-IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
+IMPL_LINK_NOARG_TYPED(SlideshowImpl, ContextMenuHdl, void*, void)
 {
     mnContextMenuEvent = 0;
 
     if( mpSlideController.get() == 0 )
-        return 0;
+        return;
 
     mbWasPaused = mbIsPaused;
     if( !mbWasPaused )
@@ -2223,7 +2222,6 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
 
     if( !mbWasPaused )
         resume();
-    return 0;
 }
 
 IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )

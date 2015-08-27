@@ -80,7 +80,7 @@ IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
     return 0;
 }
 
-IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
+IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
 {
     bool bFound = false;
     for( std::vector< PluginConnector* >::iterator it = allConnectors.begin();
@@ -90,7 +90,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
             bFound = true;
     }
     if( ! bFound )
-        return 0;
+        return;
 
     MediatorMessage* pMessage;
     CommandAtoms nCommand;
@@ -323,7 +323,6 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 
         delete pMessage;
     }
-    return 0;
 }
 
 #define GET_INSTANCE() \

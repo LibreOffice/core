@@ -108,8 +108,7 @@ public:
 private:
     void processQueue();
 
-    DECL_STATIC_LINK(
-        MissingPluginInstaller, launchUi, MissingPluginInstallerThread *);
+    DECL_STATIC_LINK_TYPED(MissingPluginInstaller, launchUi, void*, void);
 
     osl::Mutex mutex_;
     std::set<OString> reported_;
@@ -236,9 +235,9 @@ void MissingPluginInstaller::processQueue() {
     queued_.clear();
 }
 
-IMPL_STATIC_LINK(
-    MissingPluginInstaller, launchUi, MissingPluginInstallerThread *, thread)
+IMPL_STATIC_LINK_TYPED(MissingPluginInstaller, launchUi, void *, p, void)
 {
+    MissingPluginInstallerThread* thread = static_cast<MissingPluginInstallerThread*>(p);
     rtl::Reference<MissingPluginInstallerThread> ref(thread, SAL_NO_ACQUIRE);
     gst_pb_utils_init();
         // not thread safe; hopefully fine to consistently call from our event
@@ -249,7 +248,6 @@ IMPL_STATIC_LINK(
         // gst_missing_plugin_message_get_installer_detail before calling
         // gst_pb_utils_init
     ref->launch();
-    return 0;
 }
 
 struct TheMissingPluginInstaller:

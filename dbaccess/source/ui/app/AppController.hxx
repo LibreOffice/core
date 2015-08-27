@@ -525,8 +525,8 @@ namespace dbaui
 
         void OnInvalidateClipboard();
         DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );
-        DECL_LINK( OnAsyncDrop, void* );
-        DECL_LINK( OnCreateWithPilot, void* );
+        DECL_LINK_TYPED( OnAsyncDrop, void*, void );
+        DECL_LINK_TYPED( OnCreateWithPilot, void*, void );
         DECL_LINK( OnSelectContainer, void* );
         void OnFirstControllerConnected();
 

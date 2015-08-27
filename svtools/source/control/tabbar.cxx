@@ -395,7 +395,7 @@ private:
     Idle            maLoseFocusIdle;
     bool            mbPostEvt;
 
-                    DECL_LINK( ImplEndEditHdl, void* );
+                    DECL_LINK_TYPED( ImplEndEditHdl, void*, void );
                     DECL_LINK_TYPED( ImplEndTimerHdl, Idle*, void );
 
 public:
@@ -458,7 +458,7 @@ void TabBarEdit::LoseFocus()
     Edit::LoseFocus();
 }
 
-IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
+IMPL_LINK_TYPED( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
 {
     ResetPostEvent();
     maLoseFocusIdle.Stop();
@@ -473,8 +473,6 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
     }
     else
         GetParent()->EndEditMode( pCancel != 0 );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(TabBarEdit, ImplEndTimerHdl, Idle *, void)

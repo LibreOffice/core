@@ -269,17 +269,15 @@ struct PrintJobAsync
     : mxController( i_xController ), maInitSetup( i_rInitSetup )
     {}
 
-    DECL_LINK( ExecJob, void* );
+    DECL_LINK_TYPED( ExecJob, void*, void );
 };
 
-IMPL_LINK_NOARG(PrintJobAsync, ExecJob)
+IMPL_LINK_NOARG_TYPED(PrintJobAsync, ExecJob, void*, void)
 {
     Printer::ImplPrintJob(mxController, maInitSetup);
 
     // clean up, do not access members after this
     delete this;
-
-    return 0;
 }
 
 void Printer::PrintJob(const std::shared_ptr<PrinterController>& i_xController,

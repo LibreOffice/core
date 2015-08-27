@@ -121,7 +121,7 @@ private:
 
     /** Callback function for the PostUserEvent() call.
     */
-    DECL_LINK(ProcessEvent,void*);
+    DECL_LINK_TYPED(ProcessEvent, void*, void);
 };
 
 } } // end of namespace sd::framework

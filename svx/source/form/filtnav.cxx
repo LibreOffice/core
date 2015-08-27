@@ -1243,11 +1243,11 @@ bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rN
 }
 
 
-IMPL_LINK( FmFilterNavigator, OnRemove, SvTreeListEntry*, pEntry )
+IMPL_LINK_TYPED( FmFilterNavigator, OnRemove, void*, p, void )
 {
+    SvTreeListEntry* pEntry = static_cast<SvTreeListEntry*>(p);
     // now remove the entry
     m_pModel->Remove(static_cast<FmFilterData*>(pEntry->GetUserData()));
-    return 0L;
 }
 
 

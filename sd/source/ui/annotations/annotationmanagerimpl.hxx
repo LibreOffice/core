@@ -96,7 +96,7 @@ public:
     void invalidateSlots();
 
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
-    DECL_LINK(UpdateTagsHdl, void *);
+    DECL_LINK_TYPED(UpdateTagsHdl, void *, void);
 
     void UpdateTags(bool bSynchron = false);
     void CreateTags();

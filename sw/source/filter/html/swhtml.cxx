@@ -489,7 +489,7 @@ SwHTMLParser::~SwHTMLParser()
     }
 }
 
-IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback )
+IMPL_LINK_NOARG_TYPED( SwHTMLParser, AsyncCallback, void*, void )
 {
     nEventId=0;
 
@@ -503,7 +503,6 @@ IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback )
     }
 
     GetAsynchCallLink().Call(0);
-    return 0;
 }
 
 SvParserState SwHTMLParser::CallParser()

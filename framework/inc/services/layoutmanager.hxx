@@ -168,7 +168,7 @@ namespace framework
             virtual void SAL_CALL addLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual void SAL_CALL removeLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-            DECL_LINK(MenuBarClose, void *);
+            DECL_LINK_TYPED( MenuBarClose, void *, void);
             DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
             //  ILayoutNotifications

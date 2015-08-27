@@ -77,7 +77,7 @@ namespace dbaui
         virtual void reset() SAL_OVERRIDE;
         virtual void impl_initialize() SAL_OVERRIDE;
         virtual OUString getPrivateTitle( ) const SAL_OVERRIDE;
-        DECL_LINK( OnThreadFinished, void* );
+        DECL_LINK_TYPED( OnThreadFinished, void*, void );
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONCONTROLLER_HXX

@@ -437,11 +437,11 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox 
     return 0;
 }
 
-IMPL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox *, pBox )
+IMPL_STATIC_LINK_TYPED( SvxThesaurusDialog, SelectFirstHdl_Impl, void *, p, void )
 {
+    SvxCheckListBox* pBox = static_cast<SvxCheckListBox*>(p);
     if (pBox && pBox->GetEntryCount() >= 2)
         pBox->SelectEntryPos( 1 );  // pos 0 is a 'header' that is not selectable
-    return 0;
 }
 
 // class SvxThesaurusDialog ----------------------------------------------

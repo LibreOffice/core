@@ -190,7 +190,7 @@ public:
 private:
     SlideShow( SdDrawDocument* pDoc );
 
-    DECL_LINK( StartInPlacePresentationConfigurationHdl, void * );
+    DECL_LINK_TYPED( StartInPlacePresentationConfigurationHdl, void *, void );
     void StartInPlacePresentationConfigurationCallback();
 
     void StartInPlacePresentation();

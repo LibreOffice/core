@@ -549,7 +549,7 @@ namespace sfx2
         static bool
                 impl_isToolPanelResource( const OUString& i_rResourceURL );
 
-        DECL_LINK( OnActivatePanel, void* );
+        DECL_LINK_TYPED( OnActivatePanel, void*, void );
 
     private:
         ModuleTaskPane&              m_rAntiImpl;
@@ -571,10 +571,9 @@ namespace sfx2
     }
 
 
-    IMPL_LINK( ModuleTaskPane_Impl, OnActivatePanel, void*, i_pArg )
+    IMPL_LINK_TYPED( ModuleTaskPane_Impl, OnActivatePanel, void*, i_pArg, void )
     {
         m_aPanelDeck->ActivatePanel( reinterpret_cast< size_t >( i_pArg ) );
-        return 1L;
     }
 
 

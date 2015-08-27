@@ -1109,7 +1109,7 @@ void AssignmentPersistentData::ImplCommit()
     }
 
 
-    IMPL_LINK_NOARG(AddressBookSourceDialog, OnDelayedInitialize)
+    IMPL_LINK_NOARG_TYPED(AddressBookSourceDialog, OnDelayedInitialize, void*, void)
     {
         // load the initial data from the configuration
         loadConfiguration();
@@ -1119,8 +1119,6 @@ void AssignmentPersistentData::ImplCommit()
         if ( !m_pImpl->bWorkingPersistent )
             if ( m_pImpl->pFields[0] )
                 m_pImpl->pFields[0]->GrabFocus();
-
-        return 0L;
     }
 
 

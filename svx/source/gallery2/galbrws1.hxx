@@ -111,11 +111,11 @@ private:
 
                             DECL_LINK_TYPED( ClickNewThemeHdl, Button*, void );
                             DECL_LINK( SelectThemeHdl, void* );
-                            DECL_LINK( ShowContextMenuHdl, void* );
+                            DECL_LINK_TYPED( ShowContextMenuHdl, void*, void );
                             DECL_LINK( PopupMenuHdl, Menu* );
                             DECL_LINK( EndNewThemePropertiesDlgHdl, VclAbstractDialog2* );
                             DECL_LINK( EndThemePropertiesDlgHdl, VclAbstractDialog2* );
-                            DECL_LINK( DestroyThemePropertiesDlgHdl, VclAbstractDialog2* );
+                            DECL_LINK_TYPED( DestroyThemePropertiesDlgHdl, void*, void );
 
 public:
 

@@ -167,18 +167,16 @@ bool OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
     return EditBrowseBox::PreNotify(rNEvt);
 }
 
-IMPL_LINK_NOARG(OTableGrantControl, AsynchActivate)
+IMPL_LINK_NOARG_TYPED(OTableGrantControl, AsynchActivate, void*, void)
 {
     m_nDeactivateEvent = 0;
     ActivateCell();
-    return 0L;
 }
 
-IMPL_LINK_NOARG(OTableGrantControl, AsynchDeactivate)
+IMPL_LINK_NOARG_TYPED(OTableGrantControl, AsynchDeactivate, void*, void)
 {
     m_nDeactivateEvent = 0;
     DeactivateCell();
-    return 0L;
 }
 
 bool OTableGrantControl::IsTabAllowed(bool bForward) const

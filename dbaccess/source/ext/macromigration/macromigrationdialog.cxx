@@ -278,7 +278,7 @@ namespace dbmm
         return MacroMigrationDialog_Base::onFinish();
     }
 
-    IMPL_LINK_NOARG( MacroMigrationDialog, OnStartMigration )
+    IMPL_LINK_NOARG_TYPED( MacroMigrationDialog, OnStartMigration, void*, void )
     {
         // prevent closing
         m_pData->bMigrationIsRunning = true;
@@ -307,9 +307,6 @@ namespace dbmm
         {   // if there was an error, show the summary automatically
             travelNext();
         }
-
-        // outta here
-        return 0L;
     }
 
     void MacroMigrationDialog::impl_showCloseDocsError( bool _bShow )

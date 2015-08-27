@@ -245,7 +245,7 @@ IMPL_LINK_NOARG_TYPED(SearchProgress, ClickCancelBtn, Button*, void)
 
 
 
-IMPL_LINK_NOARG(SearchProgress, CleanUpHdl)
+IMPL_LINK_NOARG_TYPED(SearchProgress, CleanUpHdl, void*, void)
 {
     if (maSearchThread.is())
         maSearchThread->join();
@@ -253,7 +253,6 @@ IMPL_LINK_NOARG(SearchProgress, CleanUpHdl)
     EndDialog( RET_OK );
 
     disposeOnce();
-    return 0L;
 }
 
 
@@ -381,7 +380,7 @@ IMPL_LINK_NOARG_TYPED(TakeProgress, ClickCancelBtn, Button*, void)
     Terminate();
 }
 
-IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
+IMPL_LINK_NOARG_TYPED(TakeProgress, CleanUpHdl, void*, void)
 {
     if (maTakeThread.is())
         maTakeThread->join();
@@ -430,7 +429,6 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
 
     EndDialog( RET_OK );
     disposeOnce();
-    return 0L;
 }
 
 

@@ -50,8 +50,8 @@ namespace dbaui
         DECL_LINK( OnDoubleClick, SvTreeListBox* );
         DECL_LINK_TYPED( ScrollUpHdl, Timer*, void );
         DECL_LINK_TYPED( ScrollDownHdl, Timer*, void );
-        DECL_LINK( DropHdl, void* );
-        DECL_LINK( LookForUiHdl, void* );
+        DECL_LINK_TYPED( DropHdl, void*, void );
+        DECL_LINK_TYPED( LookForUiHdl, void*, void );
 
         Timer                       m_aScrollTimer;
         Point                       m_aMousePos;

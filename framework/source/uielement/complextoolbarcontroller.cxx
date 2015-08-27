@@ -196,8 +196,9 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-IMPL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_TYPED( ComplexToolbarController, ExecuteHdl_Impl, void*, p, void )
 {
+   ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
    SolarMutexReleaser aReleaser;
    try
    {
@@ -211,11 +212,11 @@ IMPL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExec
    }
 
    delete pExecuteInfo;
-   return 0;
 }
 
-IMPL_STATIC_LINK( ComplexToolbarController, Notify_Impl, NotifyInfo*, pNotifyInfo )
+IMPL_STATIC_LINK_TYPED( ComplexToolbarController, Notify_Impl, void*, p, void )
 {
+   NotifyInfo* pNotifyInfo = static_cast<NotifyInfo*>(p);
    SolarMutexReleaser aReleaser;
    try
    {
@@ -233,7 +234,6 @@ IMPL_STATIC_LINK( ComplexToolbarController, Notify_Impl, NotifyInfo*, pNotifyInf
    }
 
    delete pNotifyInfo;
-   return 0;
 }
 
 void ComplexToolbarController::addNotifyInfo(

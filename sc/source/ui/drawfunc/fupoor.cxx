@@ -211,7 +211,7 @@ IMPL_LINK_NOARG_TYPED(FuPoor, DragTimerHdl, Timer *, void)
     Application::PostUserEvent( LINK( this, FuPoor, DragHdl ) );
 }
 
-IMPL_LINK_NOARG(FuPoor, DragHdl)
+IMPL_LINK_NOARG_TYPED(FuPoor, DragHdl, void*, void)
 {
     SdrHdl* pHdl = pView->PickHandle(aMDPos);
 
@@ -221,7 +221,6 @@ IMPL_LINK_NOARG(FuPoor, DragHdl)
         bIsInDragMode = true;
         pViewShell->GetScDrawView()->BeginDrag(pWindow, aMDPos);
     }
-    return 0;
 }
 
 //  Detektiv-Linie

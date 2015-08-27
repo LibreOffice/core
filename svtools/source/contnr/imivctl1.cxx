@@ -2963,7 +2963,7 @@ bool SvxIconChoiceCtrl_Impl::IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos 
 
 
 
-IMPL_LINK(SvxIconChoiceCtrl_Impl, UserEventHdl, void*, nId )
+IMPL_LINK_TYPED(SvxIconChoiceCtrl_Impl, UserEventHdl, void*, nId, void )
 {
     if( nId == EVENTID_ADJUST_SCROLLBARS )
     {
@@ -2975,7 +2975,6 @@ IMPL_LINK(SvxIconChoiceCtrl_Impl, UserEventHdl, void*, nId )
         nUserEventShowCursor = 0;
         ShowCursor( true );
     }
-    return 0;
 }
 
 void SvxIconChoiceCtrl_Impl::CancelUserEvents()

@@ -1651,11 +1651,10 @@ Mutex& AddonsOptions::GetOwnStaticMutex()
     return *pMutex;
 }
 
-IMPL_STATIC_LINK_NOARG( AddonsOptions, Notify )
+IMPL_STATIC_LINK_NOARG_TYPED( AddonsOptions, Notify, void*, void )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->ReadConfigurationData();
-    return 0;
 }
 
 }

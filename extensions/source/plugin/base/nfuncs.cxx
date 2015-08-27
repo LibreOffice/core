@@ -177,11 +177,12 @@ struct AsynchronousGetURL
     OUString                        aTarget;
     Reference< XEventListener >     xListener;
 
-    DECL_LINK( getURL, XPlugin_Impl* );
+    DECL_LINK_TYPED( getURL, void*, void );
 };
 
-IMPL_LINK( AsynchronousGetURL, getURL, XPlugin_Impl*, pImpl )
+IMPL_LINK_TYPED( AsynchronousGetURL, getURL, void*, p, void )
 {
+    XPlugin_Impl* pImpl = static_cast<XPlugin_Impl*>(p);
     try
     {
         pImpl->enterPluginCallback();
@@ -202,7 +203,6 @@ IMPL_LINK( AsynchronousGetURL, getURL, XPlugin_Impl*, pImpl )
     }
     pImpl->leavePluginCallback();
     delete this;
-    return 0;
 }
 
 

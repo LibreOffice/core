@@ -296,10 +296,10 @@ private:
 
     /// the auto focus to the first (in terms of the tab order) control
     void AutoFocus( bool _bSync = false );
-    DECL_LINK( OnActivate, void* );
-    DECL_LINK( OnAutoFocus, void* );
-    DECL_LINK( OnDelayedErrorMessage, void* );
-    DECL_LINK( OnStartControlWizard, void* );
+    DECL_LINK_TYPED( OnActivate, void*, void );
+    DECL_LINK_TYPED( OnAutoFocus, void*, void );
+    DECL_LINK_TYPED( OnDelayedErrorMessage, void*, void );
+    DECL_LINK_TYPED( OnStartControlWizard, void*, void );
 
 private:
     ::svxform::DocumentType impl_getDocumentType() const;

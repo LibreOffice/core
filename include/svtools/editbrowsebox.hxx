@@ -667,9 +667,9 @@ namespace svt
         SVT_DLLPRIVATE void impl_construct();
 
         DECL_DLLPRIVATE_LINK(ModifyHdl, void* );
-        DECL_DLLPRIVATE_LINK(StartEditHdl, void* );
-        DECL_DLLPRIVATE_LINK(EndEditHdl, void* );
-        DECL_DLLPRIVATE_LINK(CellModifiedHdl, void* );
+        DECL_DLLPRIVATE_LINK_TYPED(StartEditHdl, void*, void );
+        DECL_DLLPRIVATE_LINK_TYPED(EndEditHdl, void*, void );
+        DECL_DLLPRIVATE_LINK_TYPED(CellModifiedHdl, void*, void );
     };
 
 

@@ -188,7 +188,7 @@ public:
     ~VCLXWindowImpl();
 
 private:
-    DECL_LINK( OnProcessCallbacks, void* );
+    DECL_LINK_TYPED( OnProcessCallbacks, void*, void );
 };
 
 
@@ -271,7 +271,7 @@ void VCLXWindowImpl::callBackAsync( const VCLXWindow::Callback& i_callback )
 }
 
 
-IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks)
+IMPL_LINK_NOARG_TYPED(VCLXWindowImpl, OnProcessCallbacks, void*, void)
 {
     const Reference< uno::XInterface > xKeepAlive( mrAntiImpl );
 
@@ -287,7 +287,7 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks)
 
         if ( !mnCallbackEventId )
             // we were disposed while waiting for the mutex to lock
-            return 1L;
+            return;
 
         mnCallbackEventId = 0;
     }
@@ -302,8 +302,6 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks)
             (*loop)();
         }
     }
-
-    return 0L;
 }
 
 Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()

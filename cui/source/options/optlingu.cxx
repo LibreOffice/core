@@ -1534,10 +1534,9 @@ IMPL_LINK( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox )
 
 
 
-IMPL_LINK_NOARG(SvxLinguTabPage, PostDblClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxLinguTabPage, PostDblClickHdl_Impl, void*, void)
 {
     ClickHdl_Impl(m_pLinguModulesEditPB);
-    return 0;
 }
 
 

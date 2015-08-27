@@ -189,7 +189,7 @@ private:
 
     OUString m_sMessage;
 
-    DECL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, OUString* );
+    DECL_STATIC_LINK_TYPED( SvxScriptErrorDialog, ShowDialog, void*, void );
 
 public:
 

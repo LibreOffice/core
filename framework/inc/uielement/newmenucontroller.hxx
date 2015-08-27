@@ -77,7 +77,7 @@ namespace framework
             // XEventListener
             virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-            DECL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, NewDocument* );
+            DECL_STATIC_LINK_TYPED( NewMenuController, ExecuteHdl_Impl, void*, void );
 
         private:
             virtual void impl_setPopupMenu() SAL_OVERRIDE;

@@ -65,7 +65,7 @@ void OAsynchronousLink::CancelCall()
     m_nEventId = 0;
 }
 
-IMPL_LINK(OAsynchronousLink, OnAsyncCall, void*, _pArg)
+IMPL_LINK_TYPED(OAsynchronousLink, OnAsyncCall, void*, _pArg, void)
 {
     {
         ::osl::MutexGuard aDestructionGuard( m_aDestructionSafety );
@@ -74,14 +74,12 @@ IMPL_LINK(OAsynchronousLink, OnAsyncCall, void*, _pArg)
             if (!m_nEventId)
                 // our destructor deleted the event just while we are waiting for m_aEventSafety
                 // -> get outta here
-                return 0;
+                return;
             m_nEventId = 0;
         }
     }
     if (m_aHandler.IsSet())
-        return m_aHandler.Call(_pArg);
-
-    return 0L;
+        m_aHandler.Call(_pArg);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

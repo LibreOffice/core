@@ -1877,14 +1877,14 @@ void SwPostItMgr::SetActiveSidebarWin( SwSidebarWin* p)
     }
 }
 
-IMPL_LINK_NOARG( SwPostItMgr, CalcHdl )
+IMPL_LINK_NOARG_TYPED( SwPostItMgr, CalcHdl, void*, void )
 {
     mnEventId = 0;
     if ( mbLayouting )
     {
         OSL_FAIL("Reentrance problem in Layout Manager!");
         mbWaitingForCalcRects = false;
-        return 0;
+        return;
     }
 
     // do not change order, even if it would seem so in the first place, we need the calcrects always
@@ -1893,7 +1893,6 @@ IMPL_LINK_NOARG( SwPostItMgr, CalcHdl )
         mbLayout = false;
         LayoutPostIts();
     }
-    return 0;
 }
 
 void SwPostItMgr::Rescale()

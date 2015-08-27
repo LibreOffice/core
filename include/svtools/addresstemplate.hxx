@@ -132,7 +132,7 @@ namespace svt
         DECL_LINK(OnComboLoseFocus, ComboBox*);
         DECL_LINK(OnComboSelect, ComboBox*);
         DECL_LINK_TYPED(OnOkClicked, Button*, void);
-        DECL_LINK(OnDelayedInitialize, void*);
+        DECL_LINK_TYPED(OnDelayedInitialize, void*, void);
     };
 
 

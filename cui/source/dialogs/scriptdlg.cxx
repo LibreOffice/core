@@ -1480,9 +1480,9 @@ short SvxScriptErrorDialog::Execute()
     return 0;
 }
 
-IMPL_STATIC_LINK(
-    SvxScriptErrorDialog, ShowDialog, OUString*, pMessage )
+IMPL_STATIC_LINK_TYPED( SvxScriptErrorDialog, ShowDialog, void*, p, void )
 {
+    OUString* pMessage = static_cast<OUString*>(p);
     OUString message;
 
     if ( pMessage && !pMessage->isEmpty() )
@@ -1499,8 +1499,6 @@ IMPL_STATIC_LINK(
     pBox->Execute();
 
     delete pMessage;
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

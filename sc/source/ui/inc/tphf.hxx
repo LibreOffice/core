@@ -53,9 +53,9 @@ private:
     sal_uInt16           nPageUsage;
     VclPtr<ScStyleDlg>   pStyleDlg;
 
-    DECL_LINK_TYPED(BtnHdl, Button*, void);
-    DECL_LINK( HFEditHdl, void* );
-    DECL_LINK_TYPED(TurnOnHdl, Button*, void);
+    DECL_LINK_TYPED( BtnHdl, Button*, void );
+    DECL_LINK_TYPED( HFEditHdl, void*, void );
+    DECL_LINK_TYPED( TurnOnHdl, Button*, void );
 };
 
 class ScHeaderPage : public ScHFPage

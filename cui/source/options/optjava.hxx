@@ -84,18 +84,18 @@ private:
     css::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
-    DECL_LINK_TYPED(EnableHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(        EnableHdl_Impl, Button*, void);
     DECL_LINK(              CheckHdl_Impl, SvSimpleTable * );
-    DECL_LINK(SelectHdl_Impl, void *);
-    DECL_LINK_TYPED(AddHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(ParameterHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(ClassPathHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(ResetHdl_Impl, Idle *, void);
+    DECL_LINK(              SelectHdl_Impl, void *);
+    DECL_LINK_TYPED(        AddHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(        ParameterHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(        ClassPathHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(        ResetHdl_Impl, Idle *, void);
 
-    DECL_LINK(              StartFolderPickerHdl, void * );
+    DECL_LINK_TYPED(        StartFolderPickerHdl, void *, void );
     DECL_LINK_TYPED(        DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 
-    DECL_LINK_TYPED(ExpertConfigHdl_Impl, Button*, void);
+    DECL_LINK_TYPED(        ExpertConfigHdl_Impl, Button*, void);
 
     void                    ClearJavaInfo();
     void                    ClearJavaList();

@@ -137,7 +137,7 @@ namespace dbaui
         DECL_LINK( OnModified, void* );
         DECL_LINK_TYPED( OnCloseDialog, Button*, void );
 
-        DECL_LINK( OnEditIndexAgain, SvTreeListEntry* );
+        DECL_LINK_TYPED( OnEditIndexAgain, void*, void );
 
     private:
         sal_uInt16 mnNewCmdId;
