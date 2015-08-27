@@ -23,9 +23,8 @@
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <vcl/checksum.hxx>
 #include <vcl/salbtype.hxx>
-
-#include <checksum.hxx>
 
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 

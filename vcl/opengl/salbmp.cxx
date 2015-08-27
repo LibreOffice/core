@@ -22,6 +22,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include "vcl/bitmap.hxx"
+#include "vcl/checksum.hxx"
 #include "vcl/outdev.hxx"
 #include "vcl/salbtype.hxx"
 #include "svdata.hxx"
@@ -31,7 +32,6 @@
 #include "opengl/program.hxx"
 #include "opengl/salbmp.hxx"
 
-#include "../inc/checksum.hxx"
 #include "opengl/FixedTextureAtlas.hxx"
 
 namespace
