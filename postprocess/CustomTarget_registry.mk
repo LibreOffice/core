@@ -329,8 +329,10 @@ postprocess_DRIVERS += ado
 endif
 ifneq ($(WITH_WEBDAV),)
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/ucb/Configuration-neon.xcu
+ifeq ($(WITH_WEBDAV),neon)
 ifeq ($(ENABLE_GNOMEVFS),TRUE)
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/ucb/Configuration-neon_gnomevfs.xcu
+endif
 endif
 endif
 ifeq ($(ENABLE_EVOAB2),TRUE)
