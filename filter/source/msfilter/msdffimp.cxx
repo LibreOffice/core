@@ -399,7 +399,8 @@ SvStream& ReadSvxMSDffSolverContainer( SvStream& rIn, SvxMSDffSolverContainer& r
     if ( aHd.nRecType == DFF_msofbtSolverContainer )
     {
         DffRecordHeader aCRule;
-        while ( ( rIn.GetError() == 0 ) && ( rIn.Tell() < aHd.GetRecEndFilePos() ) )
+        auto nEndPos = DffPropSet::SanitizeEndPos(rIn, aHd.GetRecEndFilePos());
+        while ( ( rIn.GetError() == 0 ) && ( rIn.Tell() < nEndPos ) )
         {
             ReadDffRecordHeader( rIn, aCRule );
             if ( aCRule.nRecType == DFF_msofbtConnectorRule )
@@ -408,7 +409,8 @@ SvStream& ReadSvxMSDffSolverContainer( SvStream& rIn, SvxMSDffSolverContainer& r
                 rIn >> *pRule;
                 rContainer.aCList.push_back( pRule );
             }
-            aCRule.SeekToEndOfRecord( rIn );
+            if (!aCRule.SeekToEndOfRecord(rIn))
+                break;
         }
     }
     return rIn;
