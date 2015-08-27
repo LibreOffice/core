@@ -26,6 +26,11 @@
 #include <sal/types.h>
 #include <tools/solar.h>
 
+#include <boost/preprocessor/arithmetic/inc.hpp>
+#include <boost/preprocessor/arithmetic/mul.hpp>
+#include <boost/preprocessor/repetition/repeat_from_to.hpp>
+
+
 /*========================================================================
  *
  * vcl_crc64Table (CRC polynomial 0x95AC9329AC4BC9B5ULL).
@@ -120,9 +125,21 @@ static const sal_uInt64 vcl_crc64Table[256] = {
   0x29b7d047efec8728ULL
 };
 
-typedef sal_uLong      BitmapChecksum;
+#define BITMAP_CHECKSUM_SIZE 4
+#define BITMAP_CHECKSUM_BITS BOOST_PP_MUL(BITMAP_CHECKSUM_SIZE, 8)
 
-#define BITMAP_CHECKSUM_BITS (sizeof(BitmapChecksum) * 8)
+typedef sal_uLong   BitmapChecksum;
+
+typedef sal_uInt8   BitmapChecksumOctetArray[BITMAP_CHECKSUM_SIZE];
+
+#define BITMAP_CHECKSUM_SET_OCTET(z, i, unused) \
+p[i] = (sal_uInt8)(n >> BOOST_PP_MUL(8, i));
+
+
+inline void BCToBCOA( BitmapChecksum n , BitmapChecksumOctetArray p )
+{
+    BOOST_PP_REPEAT(BITMAP_CHECKSUM_SIZE , BITMAP_CHECKSUM_SET_OCTET, unused)
+}
 
 #ifdef __cplusplus
 extern "C" {
