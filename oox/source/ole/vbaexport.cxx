@@ -589,6 +589,19 @@ void exportDirStream(SvStream& rStrm)
     rStrm.WriteUInt32(0x00000000); // reserved
 }
 
+void exportSheet1Stream(SvStream& rStrm)
+{
+    const OUString thisSheet1Stream = "Attribute VB_Name = \"Sheet1\"\r\n"
+                                      "Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n"
+                                      "Attribute VB_GlobalNameSpace = False\r\n"
+                                      "Attribute VB_Creatable = False\r\n"
+                                      "Attribute VB_PredeclaredId = True\r\n"
+                                      "Attribute VB_Exposed = True\r\n"
+                                      "Attribute VB_TemplateDerived = False\r\n"
+                                      "Attribute VB_Customizable = True\r\n";
+    exportString(rStrm, thisSheet1Stream);
+}
+
 void exportModule1Stream(SvStream& rStrm)
 {
     const OUString module1Stream = "Attribute VB_Name = \"Module1\"\r\n"
@@ -638,6 +651,9 @@ void VbaExport::exportVBA()
     const OUString aModule1FileName("/tmp/vba_module1_out.bin");
     SvFileStream aModule1Stream(aModule1FileName, STREAM_READWRITE);
 
+    const OUString aSheet1FileName("/tmp/vba_sheet1_out.bin");
+    SvFileStream aSheet1Stream(aSheet1FileName, STREAM_READWRITE);
+
     const OUString aThisWorkbookFileName("/tmp/vba_workbook_out.bin");
     SvFileStream aThisWorkbookStream(aThisWorkbookFileName, STREAM_READWRITE);
 
@@ -646,8 +662,9 @@ void VbaExport::exportVBA()
 
     // export
     exportDirStream(aDirStream);
-    exportThisWorkbookStream(aThisWorkbookStream);
+    exportSheet1Stream(aSheet1Stream);
     exportModule1Stream(aModule1Stream);
+    exportThisWorkbookStream(aThisWorkbookStream);
     exportVBAProjectStream(aVBAProjectStream);
 
     aDirStream.Seek(0);
