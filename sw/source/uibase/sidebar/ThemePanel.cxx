@@ -393,25 +393,7 @@ void applyTheme(SfxStyleSheetBasePool* pPool, const OUString& sFontSetName, cons
     }
 }
 
-} // end anonymous namespace
-
-namespace sw { namespace sidebar {
-
-VclPtr<vcl::Window> ThemePanel::Create (vcl::Window* pParent,
-                                        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                        SfxBindings* pBindings)
-{
-    if (pParent == NULL)
-        throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", NULL, 0);
-    if (!rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", NULL, 1);
-    if (pBindings == NULL)
-        throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
-
-    return VclPtr<ThemePanel>::Create(pParent, rxFrame, pBindings);
-}
-
-BitmapEx ThemePanel::GenerateColorPreview(const svx::ColorSet& rColorSet)
+BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev(*Application::GetDefaultDevice());
     sal_Int32 nScaleFactor = pVirtualDev->GetDPIScaleFactor();
@@ -439,6 +421,24 @@ BitmapEx ThemePanel::GenerateColorPreview(const svx::ColorSet& rColorSet)
     }
 
     return pVirtualDev->GetBitmapEx(Point(), aSize);
+}
+
+} // end anonymous namespace
+
+namespace sw { namespace sidebar {
+
+VclPtr<vcl::Window> ThemePanel::Create (vcl::Window* pParent,
+                                        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                        SfxBindings* pBindings)
+{
+    if (pParent == NULL)
+        throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", NULL, 0);
+    if (!rxFrame.is())
+        throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", NULL, 1);
+    if (pBindings == NULL)
+        throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
+
+    return VclPtr<ThemePanel>::Create(pParent, rxFrame, pBindings);
 }
 
 ThemePanel::ThemePanel(vcl::Window* pParent,

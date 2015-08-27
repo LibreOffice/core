@@ -64,8 +64,6 @@ private:
 
     virtual void dispose() SAL_OVERRIDE;
 
-    BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet);
-
     SfxBindings* mpBindings;
 
     VclPtr<ListBox> mpListBoxFonts;
