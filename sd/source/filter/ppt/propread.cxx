@@ -319,7 +319,7 @@ bool Section::GetDictionary( Dictionary& rDict )
 
 void Section::Read( SotStorageStream *pStrm )
 {
-    sal_uInt32 i, nSecOfs, nPropType, nPropSize, nCurrent, nVectorCount, nTemp, nStrmSize;
+    sal_uInt32 i, nSecOfs, nPropSize, nStrmSize;
     nSecOfs = pStrm->Tell();
 
     pStrm->Seek( STREAM_SEEK_TO_END );
@@ -329,16 +329,20 @@ void Section::Read( SotStorageStream *pStrm )
     mnTextEnc = RTL_TEXTENCODING_MS_1252;
     sal_uInt32 nSecSize(0), nPropCount(0);
     pStrm->ReadUInt32( nSecSize ).ReadUInt32( nPropCount );
-    while (nPropCount-- && pStrm->good())
+    while (nPropCount--)
     {
         sal_uInt32 nPropId(0), nPropOfs(0);
-        pStrm->ReadUInt32( nPropId ).ReadUInt32( nPropOfs );
-        nCurrent = pStrm->Tell();
-        pStrm->Seek( nPropOfs + nSecOfs );
+        pStrm->ReadUInt32(nPropId).ReadUInt32(nPropOfs);
+        if (!pStrm->good())
+            break;
+        auto nCurrent = pStrm->Tell();
+        sal_uInt64 nOffset = nPropOfs + nSecOfs;
+        if (nOffset != pStrm->Seek(nOffset))
+            break;
         if ( nPropId )                  // do not read dictionary
         {
-
-            pStrm->ReadUInt32( nPropType );
+            sal_uInt32 nPropType(0), nVectorCount(0);
+            pStrm->ReadUInt32(nPropType);
 
             nPropSize = 4;
 
@@ -360,6 +364,7 @@ void Section::Read( SotStorageStream *pStrm )
                     pStrm->ReadUInt32( nPropType );
                     nPropSize += 4;
                 }
+                sal_uInt32 nTemp(0);
                 switch( nPropType )
                 {
                     case VT_UI1 :
@@ -457,11 +462,11 @@ void Section::Read( SotStorageStream *pStrm )
                 PropItem aPropItem;
                 if ( GetProperty( 1, aPropItem ) )
                 {
-                    sal_uInt16 nCodePage;
                     aPropItem.ReadUInt32( nPropType );
                     if ( nPropType == VT_I2 )
                     {
-                        aPropItem.ReadUInt16( nCodePage );
+                        sal_uInt16 nCodePage(0);
+                        aPropItem.ReadUInt16(nCodePage);
 
                         if ( nCodePage == 1200 )
                         {
@@ -503,7 +508,7 @@ void Section::Read( SotStorageStream *pStrm )
             AddProperty( 0xffffffff, pBuf, nSize );
             delete[] pBuf;
         }
-        pStrm->Seek( nCurrent );
+        pStrm->Seek(nCurrent);
     }
     pStrm->Seek( nSecOfs + nSecSize );
 }
