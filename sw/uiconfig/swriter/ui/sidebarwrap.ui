@@ -1,6 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkListStore" id="spacinglist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name gint1 -->
+      <column type="gint"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">None</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Extra Small (0.16cm)</col>
+        <col id="1">91</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Small (0.32cm)</col>
+        <col id="1">181</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Small Medium (0.64cm)</col>
+        <col id="1">363</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Medium (0.95cm)</col>
+        <col id="1">539</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Medium Large (1.27cm)</col>
+        <col id="1">720</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Large (1.9cm)</col>
+        <col id="1">1077</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Extra Large (2.54cm)</col>
+        <col id="1">1440</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkGrid" id="WrapPropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -28,7 +71,6 @@
                 <property name="tooltip_markup" translatable="yes">None</property>
                 <property name="tooltip_text" translatable="yes">None</property>
                 <property name="action_name">.uno:WrapOff</property>
-                <property name="use_action_appearance">False</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -40,15 +82,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioButton" id="buttonbefore">
+              <object class="GtkRadioButton" id="buttonparallel">
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_markup" translatable="yes">Before</property>
-                <property name="tooltip_text" translatable="yes">Before</property>
-                <property name="action_name">.uno:WrapLeft</property>
-                <property name="use_action_appearance">False</property>
+                <property name="tooltip_markup" translatable="yes">Parallel</property>
+                <property name="tooltip_text" translatable="yes">Parallel</property>
+                <property name="action_name">.uno:WrapOn</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -60,15 +101,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioButton" id="buttonafter">
+              <object class="GtkRadioButton" id="buttonoptimal">
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_markup" translatable="yes">After</property>
-                <property name="tooltip_text" translatable="yes">After</property>
-                <property name="action_name">.uno:WrapRight</property>
-                <property name="use_action_appearance">False</property>
+                <property name="tooltip_markup" translatable="yes">Optimal</property>
+                <property name="tooltip_text" translatable="yes">Optimal</property>
+                <property name="action_name">.uno:WrapIdeal</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -80,15 +120,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioButton" id="buttonparallel">
+              <object class="GtkRadioButton" id="buttonbefore">
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_markup" translatable="yes">Parallel</property>
-                <property name="tooltip_text" translatable="yes">Parallel</property>
-                <property name="action_name">.uno:WrapOn</property>
-                <property name="use_action_appearance">False</property>
+                <property name="tooltip_markup" translatable="yes">Before</property>
+                <property name="tooltip_text" translatable="yes">Before</property>
+                <property name="action_name">.uno:WrapLeft</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -100,15 +139,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioButton" id="buttonthrough">
+              <object class="GtkRadioButton" id="buttonafter">
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_markup" translatable="yes">Through</property>
-                <property name="tooltip_text" translatable="yes">Through</property>
-                <property name="action_name">.uno:WrapThrough</property>
-                <property name="use_action_appearance">False</property>
+                <property name="tooltip_markup" translatable="yes">After</property>
+                <property name="tooltip_text" translatable="yes">After</property>
+                <property name="action_name">.uno:WrapRight</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -120,15 +158,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkRadioButton" id="buttonoptimal">
+              <object class="GtkRadioButton" id="buttonthrough">
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="tooltip_markup" translatable="yes">Optimal</property>
-                <property name="tooltip_text" translatable="yes">Optimal</property>
-                <property name="action_name">.uno:WrapIdeal</property>
-                <property name="use_action_appearance">False</property>
+                <property name="tooltip_markup" translatable="yes">Through</property>
+                <property name="tooltip_text" translatable="yes">Through</property>
+                <property name="action_name">.uno:WrapThrough</property>
                 <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
@@ -146,12 +183,103 @@
             <property name="position">0</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkBox" id="box3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkCheckButton" id="enablecontour">
+                <property name="label" translatable="yes">Enable Contour</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip_markup" translatable="yes">Click to automatically trim unnecessary parts of the image</property>
+                <property name="tooltip_text" translatable="yes">Click to automatically trim unnecessary parts of the image</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="editcontour">
+                <property name="label" translatable="yes">Edit Contour</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_markup" translatable="yes">Edit the trimmed area of the image</property>
+                <property name="tooltip_text" translatable="yes">Edit the trimmed area of the image</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Spacing:</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="spacingLB">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="tooltip_markup" translatable="yes">Set the amount of space between the image and surrounding text</property>
+                <property name="tooltip_text" translatable="yes">Set the amount of space between the image and surrounding text</property>
+                <property name="model">spacinglist</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="customlabel">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Custom</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>
