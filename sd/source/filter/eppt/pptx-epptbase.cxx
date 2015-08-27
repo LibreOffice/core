@@ -153,6 +153,7 @@ PPTWriterBase::PPTWriterBase( const Reference< XModel > & rXModel,
     , mbStatusIndicator(false)
     , mbPresObj(false)
     , mbEmptyPresObj(false)
+    , mbIsBackgroundDark(false)
     , mnAngle(0)
     , mnPages(0)
     , mnMasterPages(0)
