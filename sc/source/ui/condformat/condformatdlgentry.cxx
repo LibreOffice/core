@@ -757,9 +757,9 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument
     if(pFormat)
     {
         ScColorScaleFormat::const_iterator itr = pFormat->begin();
-        SetColorScaleEntryTypes(*itr, *maLbEntryTypeMin.get(), *maEdMin.get(), *maLbColMin.get(), pDoc);
+        SetColorScaleEntryTypes(*itr[0], *maLbEntryTypeMin.get(), *maEdMin.get(), *maLbColMin.get(), pDoc);
         ++itr;
-        SetColorScaleEntryTypes(*itr, *maLbEntryTypeMax.get(), *maEdMax.get(), *maLbColMax.get(), pDoc);
+        SetColorScaleEntryTypes(*itr[0], *maLbEntryTypeMax.get(), *maEdMax.get(), *maLbColMax.get(), pDoc);
     }
     else
     {
@@ -929,12 +929,12 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument
     if(pFormat)
     {
         ScColorScaleFormat::const_iterator itr = pFormat->begin();
-        SetColorScaleEntryTypes(*itr, *maLbEntryTypeMin.get(), *maEdMin.get(), *maLbColMin.get(), pDoc);
+        SetColorScaleEntryTypes(*itr[0], *maLbEntryTypeMin.get(), *maEdMin.get(), *maLbColMin.get(), pDoc);
         assert(pFormat->size() == 3);
         ++itr;
-        SetColorScaleEntryTypes(*itr, *maLbEntryTypeMiddle.get(), *maEdMiddle.get(), *maLbColMiddle.get(), pDoc);
+        SetColorScaleEntryTypes(*itr[0], *maLbEntryTypeMiddle.get(), *maEdMiddle.get(), *maLbColMiddle.get(), pDoc);
         ++itr;
-        SetColorScaleEntryTypes(*itr, *maLbEntryTypeMax.get(), *maEdMax.get(), *maLbColMax.get(), pDoc);
+        SetColorScaleEntryTypes(*itr[0], *maLbEntryTypeMax.get(), *maEdMax.get(), *maLbColMax.get(), pDoc);
     }
     else
     {
