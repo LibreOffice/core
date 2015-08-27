@@ -1101,7 +1101,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     break;
                 case '\\':
                     cChar = sTheDateEditFormat.iterateCodePoints( &nIndex);
-                    break;
+                    goto handleDefault;
                 case '-':
                 case '.':
                 case '/':
@@ -1114,6 +1114,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     cDateSep2 = cChar;
                     // fallthru
                 default:
+                handleDefault:
                     if (!cDateSep)
                         cDateSep = cChar;
                     if (!cDateSep2)
