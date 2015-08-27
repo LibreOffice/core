@@ -88,15 +88,15 @@ uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleChild( sal_Int
     return CreateChild(i, mrPixelCtl.IndexToPoint(i));
 }
 
-
-
 uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleParent(  )
     throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     vcl::Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
-    assert(pTabPage && WINDOW_TABPAGE == pTabPage->GetType());
-    return pTabPage->GetAccessible();
+    if (!pTabPage || WINDOW_TABPAGE != pTabPage->GetType())
+        return uno::Reference< XAccessible >();
+    else
+        return pTabPage->GetAccessible();
 }
 
 sal_Int32 SvxPixelCtlAccessible::getAccessibleIndexInParent(  )
@@ -105,13 +105,15 @@ sal_Int32 SvxPixelCtlAccessible::getAccessibleIndexInParent(  )
     ::osl::MutexGuard   aGuard( m_aMutex );
     sal_uInt16 nIdx = 0;
     vcl::Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
-    assert(pTabPage && WINDOW_TABPAGE == pTabPage->GetType());
+    if (!pTabPage || WINDOW_TABPAGE != pTabPage->GetType())
+        return -1;
     sal_uInt16 nChildren = pTabPage->GetChildCount();
     for(nIdx = 0; nIdx < nChildren; nIdx++)
         if(pTabPage->GetChild( nIdx ) == &mrPixelCtl)
             break;
     return nIdx;
 }
+
 sal_Int16 SvxPixelCtlAccessible::getAccessibleRole(  ) throw (uno::RuntimeException, std::exception)
 {
     return AccessibleRole::LIST;
