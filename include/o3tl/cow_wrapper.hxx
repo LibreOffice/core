@@ -256,6 +256,15 @@ int cow_wrapper_client::queryUnmodified() const
             return *this;
         }
 
+        /// assigning new value type
+        cow_wrapper& operator=( const value_type& rSrc )
+        {
+            release();
+            m_pimpl = new impl_t( rSrc );
+
+            return *this;
+        }
+
         /// unshare with any other cow_wrapper instance
         value_type& make_unique()
         {
