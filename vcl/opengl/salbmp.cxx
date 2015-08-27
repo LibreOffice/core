@@ -576,7 +576,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     std::vector<sal_uInt8> aBuf( aFinalTexture.GetWidth() * aFinalTexture.GetHeight() * 4 );
     aFinalTexture.Read(GL_RGBA, GL_UNSIGNED_BYTE, aBuf.data());
 
-    ChecksumType nCrc = vcl_crc64(0, aBuf.data(), aBuf.size());
+    ChecksumType nCrc = vcl_get_checksum(0, aBuf.data(), aBuf.size());
 
     rChecksum = nCrc;
     return true;
