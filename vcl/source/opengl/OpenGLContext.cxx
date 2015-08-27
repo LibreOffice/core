@@ -871,6 +871,9 @@ bool OpenGLContext::ImplInit()
 
     bool bRet = InitGLEW();
     InitGLEWDebugging();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
     return bRet;
 }
 
@@ -1012,6 +1015,8 @@ bool OpenGLContext::ImplInit()
     GetClientRect(WindowFromDC(m_aGLWin.hDC), &clientRect);
     m_aGLWin.Width = clientRect.right - clientRect.left;
     m_aGLWin.Height = clientRect.bottom - clientRect.top;
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     return true;
 }
