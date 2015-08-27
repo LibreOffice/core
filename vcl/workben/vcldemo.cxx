@@ -1469,6 +1469,25 @@ class DemoWidgets : public WorkWindow
 
     DECL_LINK_TYPED(GLTestClick, Button*, void);
 
+    // Show the popup menu after a small delay
+    class DelayedPopuper : private Timer
+    {
+        DemoWidgets *mpDemo;
+    public:
+        DelayedPopuper(DemoWidgets *pDemo) :
+            Timer("delayed popup timer"),
+            mpDemo(pDemo)
+        {
+            SetTimeout(1000);
+            Start();
+        }
+        virtual void Invoke() SAL_OVERRIDE
+        {
+            mpDemo->mpPopup->Execute(mpDemo, Point());
+        }
+    };
+    DelayedPopuper aDelayedPopup;
+
 public:
     DemoWidgets() :
         WorkWindow(NULL, WB_APP | WB_STDWORK),
@@ -1478,7 +1497,8 @@ public:
         mpHBox(VclPtrInstance<VclHBox>(mpBox.get(), true, 3)),
         mpGLCheck(VclPtrInstance<CheckBox>(mpHBox.get())),
         mpGLCombo(VclPtrInstance<ComboBox>(mpHBox.get())),
-        mpGLButton(VclPtrInstance<PushButton>(mpHBox.get()))
+        mpGLButton(VclPtrInstance<PushButton>(mpHBox.get())),
+        aDelayedPopup(this)
     {
         SetText("VCL widget demo");
 
