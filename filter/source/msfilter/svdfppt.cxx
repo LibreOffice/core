@@ -2552,11 +2552,17 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
                     while( ( pMasterPersist && pMasterPersist->aSlideAtom.nFlags & 2 )  // it is possible that a masterpage
                         && pMasterPersist->aSlideAtom.nMasterId )                        // itself is following a master colorscheme
                     {
-                        sal_uInt16 nNextMaster = pMasterPages->FindPage( pMasterPersist->aSlideAtom.nMasterId );
+                        auto nOrigMasterId = pMasterPersist->aSlideAtom.nMasterId;
+                        sal_uInt16 nNextMaster = pMasterPages->FindPage(nOrigMasterId);
                         if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                             break;
                         else
                             pMasterPersist = &(*pPageList2)[ nNextMaster ];
+                        if (pMasterPersist->aSlideAtom.nMasterId == nOrigMasterId)
+                        {
+                            SAL_WARN("filter.ms", "loop in atom chain");
+                            break;
+                        }
                     }
                 }
                 if ( pMasterPersist )
@@ -2565,7 +2571,7 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
                 }
             }
         }
-        // resgister current color scheme
+        // register current color scheme
         const_cast<SdrPowerPointImport*>(this)->nPageColorsNum = nAktPageNum;
         const_cast<SdrPowerPointImport*>(this)->ePageColorsKind = eAktPageKind;
     }
@@ -2789,11 +2795,17 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                             PptSlidePersistEntry* pE = &(*pPageList)[ nMasterNum ];
                                             while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
                                             {
-                                                sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
+                                                auto nOrigMasterId = pE->aSlideAtom.nMasterId;
+                                                sal_uInt16 nNextMaster = pMasterPages->FindPage(nOrigMasterId);
                                                 if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                                                     break;
                                                 else
                                                     pE = &(*pPageList)[ nNextMaster ];
+                                                if (pE->aSlideAtom.nMasterId == nOrigMasterId)
+                                                {
+                                                    SAL_WARN("filter.ms", "loop in atom chain");
+                                                    break;
+                                                }
                                             }
                                             if ( pE->nBackgroundOffset )
                                             {
