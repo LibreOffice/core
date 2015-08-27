@@ -20,7 +20,7 @@
 
 #include "lzwdecom.hxx"
 #include <algorithm>
-#include <vector>
+#include <set>
 
 #define MAX_TABLE_SIZE 4096
 
@@ -163,16 +163,16 @@ void LZWDecompressor::AddToTable(sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData
         return;
     }
 
-    std::vector<sal_uInt16> aSeenIndexes;
+    unsigned char aSeenIndexes[MAX_TABLE_SIZE] = {0};
     while (pTable[nCodeFirstData].nDataCount>1)
     {
-        if (std::find(aSeenIndexes.begin(), aSeenIndexes.end(), nCodeFirstData) != aSeenIndexes.end())
+        if (aSeenIndexes[nCodeFirstData])
         {
             SAL_WARN("filter.tiff", "Loop in chain");
             bEOIFound = true;
             return;
         }
-        aSeenIndexes.push_back(nCodeFirstData);
+        aSeenIndexes[nCodeFirstData] = 1;
         nCodeFirstData=pTable[nCodeFirstData].nPrevCode;
     }
 
