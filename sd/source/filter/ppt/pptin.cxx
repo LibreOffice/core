@@ -742,7 +742,8 @@ bool ImplSdPPTImport::Import()
                 DffRecordHeader aPageHd;
                 if ( SeekToAktPage( &aPageHd ) )
                 {
-                    while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
+                    auto nEndRecPos = SanitizeEndPos(rStCtrl, aPageHd.GetRecEndFilePos());
+                    while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nEndRecPos ) )
                     {
                         DffRecordHeader aHd;
                         ReadDffRecordHeader( rStCtrl, aHd );
@@ -763,7 +764,8 @@ bool ImplSdPPTImport::Import()
                                         if ( SeekToRec( rStCtrl, DFF_msofbtSpgrContainer, nEscherF002End, &aEscherObjListHd ) )
                                         {
                                             sal_uInt32 nObjCount = 0;
-                                            while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aEscherObjListHd.GetRecEndFilePos() ) )
+                                            auto nListEndRecPos = SanitizeEndPos(rStCtrl, aEscherObjListHd.GetRecEndFilePos());
+                                            while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nListEndRecPos ) )
                                             {
                                                 DffRecordHeader aHd2;
                                                 ReadDffRecordHeader( rStCtrl, aHd2 );
@@ -794,7 +796,8 @@ bool ImplSdPPTImport::Import()
                                 DffRecordHeader aProgTagHd;
                                 if ( SeekToContentOfProgTag( 10, rStCtrl, aPageHd, aProgTagHd ) )
                                 {
-                                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aProgTagHd.GetRecEndFilePos() ) )
+                                    auto nTagEndRecPos = SanitizeEndPos(rStCtrl, aProgTagHd.GetRecEndFilePos());
+                                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nTagEndRecPos ) )
                                     {
                                         DffRecordHeader aProgTagContentHd;
                                         ReadDffRecordHeader( rStCtrl, aProgTagContentHd );
@@ -901,7 +904,8 @@ bool ImplSdPPTImport::Import()
                     bool bNewAnimationsUsed = false;
 
                     aPageHd.SeekToContent( rStCtrl );
-                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
+                    auto nEndRecPos = SanitizeEndPos(rStCtrl, aPageHd.GetRecEndFilePos());
+                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nEndRecPos ) )
                     {
                         DffRecordHeader aHd;
                         ReadDffRecordHeader( rStCtrl, aHd );
@@ -912,7 +916,8 @@ bool ImplSdPPTImport::Import()
                                 DffRecordHeader aProgTagHd;
                                 if ( SeekToContentOfProgTag( 10, rStCtrl, aPageHd, aProgTagHd ) )
                                 {
-                                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aProgTagHd.GetRecEndFilePos() ) )
+                                    auto nHdEndRecPos = SanitizeEndPos(rStCtrl, aProgTagHd.GetRecEndFilePos());
+                                    while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nHdEndRecPos ) )
                                     {
                                         DffRecordHeader aProgTagContentHd;
                                         ReadDffRecordHeader( rStCtrl, aProgTagContentHd );
@@ -1485,7 +1490,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
         DffRecordHeader aPageRecHd;
         if ( SeekToAktPage( &aPageRecHd ) )
         {
-            sal_uLong nPageRecEnd = aPageRecHd.GetRecEndFilePos();
+            sal_uLong nPageRecEnd = SanitizeEndPos(rStCtrl, aPageRecHd.GetRecEndFilePos());
 
             bool bTryTwice = ( eAktPageKind == PPT_SLIDEPAGE );
             bool bSSSlideInfoAtom = false;
@@ -1778,12 +1783,12 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
                             assert( !pPageList->is_null( nMasterNum ) );
                             const PptSlidePersistEntry& rE = (*pPageList)[ nMasterNum ];
                             sal_uInt32 nOfs = rE.aPersistAtom.nReserved;
-                                if ( nOfs )
-                                {
-                                    rStCtrl.Seek( nOfs );
-                                    nPageRecEnd = nOfs + 16;
-                                    continue;
-                                }
+                            if ( nOfs )
+                            {
+                                rStCtrl.Seek( nOfs );
+                                nPageRecEnd = nOfs + 16;
+                                continue;
+                            }
                         }
 
                     }
@@ -1942,7 +1947,8 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
     if ( pHd )
     {
         pHd->SeekToContent( rStCtrl );
-        while ( ( rStCtrl.Tell() < pHd->GetRecEndFilePos() ) && aRetVal.isEmpty() )
+        auto nEndRecPos = SanitizeEndPos(rStCtrl, pHd->GetRecEndFilePos());
+        while ( ( rStCtrl.Tell() < nEndRecPos ) && aRetVal.isEmpty() )
         {
             DffRecordHeader aHdMovie;
             ReadDffRecordHeader( rStCtrl, aHdMovie );
@@ -1962,7 +1968,8 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
                             if ( nRef == nMediaRef )
                             {
                                 aExVideoHd.SeekToContent( rStCtrl );
-                                while( rStCtrl.Tell() < aExVideoHd.GetRecEndFilePos() )
+                                auto nHdEndRecPos = SanitizeEndPos(rStCtrl, aExVideoHd.GetRecEndFilePos());
+                                while (rStCtrl.Tell() < nHdEndRecPos)
                                 {
                                     DffRecordHeader aHd;
                                     ReadDffRecordHeader( rStCtrl, aHd );
