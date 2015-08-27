@@ -149,7 +149,7 @@ class SVT_DLLPUBLIC ToolboxController :
                 {}
         };
 
-        DECL_STATIC_LINK( ToolboxController, ExecuteHdl_Impl, DispatchInfo* );
+        DECL_STATIC_LINK_TYPED( ToolboxController, ExecuteHdl_Impl, void*, void );
 
         typedef std::unordered_map< OUString,
                                     css::uno::Reference< css::frame::XDispatch >,

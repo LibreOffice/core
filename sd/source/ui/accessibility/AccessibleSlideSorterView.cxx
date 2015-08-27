@@ -82,10 +82,10 @@ public:
     void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
     DECL_LINK(WindowEventListener, VclWindowEvent*);
     DECL_LINK(SelectionChangeListener, void*);
-    DECL_LINK(BroadcastSelectionChange, void*);
+    DECL_LINK_TYPED(BroadcastSelectionChange, void*, void);
     DECL_LINK(FocusChangeListener, void*);
     DECL_LINK(VisibilityChangeListener, void*);
-    DECL_LINK(UpdateChildrenCallback, void*);
+    DECL_LINK_TYPED(UpdateChildrenCallback, void*, void);
 
     void Activated();
 private:
@@ -699,7 +699,7 @@ void AccessibleSlideSorterView::Implementation::RequestUpdateChildren()
     if (mnUpdateChildrenUserEventId == 0)
         mnUpdateChildrenUserEventId = Application::PostUserEvent(
             LINK(this, AccessibleSlideSorterView::Implementation,
-            UpdateChildrenCallback));
+                 UpdateChildrenCallback));
 }
 
 void AccessibleSlideSorterView::Implementation::UpdateChildren()
@@ -928,14 +928,13 @@ IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, SelectionChangeListen
     return 1;
 }
 
-IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, BroadcastSelectionChange)
+IMPL_LINK_NOARG_TYPED(AccessibleSlideSorterView::Implementation, BroadcastSelectionChange, void*, void)
 {
     mnSelectionChangeUserEventId = 0;
     mrAccessibleSlideSorter.FireAccessibleEvent(
         AccessibleEventId::SELECTION_CHANGED,
         Any(),
         Any());
-    return 1;
 }
 
 IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener)
@@ -981,12 +980,10 @@ IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener)
     return 1;
 }
 
-IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, UpdateChildrenCallback)
+IMPL_LINK_NOARG_TYPED(AccessibleSlideSorterView::Implementation, UpdateChildrenCallback, void*, void)
 {
     mnUpdateChildrenUserEventId = 0;
     UpdateChildren();
-
-    return 1;
 }
 
 IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, VisibilityChangeListener)

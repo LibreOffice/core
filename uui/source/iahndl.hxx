@@ -129,16 +129,14 @@ private:
         bool & bHasErrorString,
         OUString & rErrorString);
 
-    static sal_IntPtr
-    handlerequest(void* pHandleData, void* pInteractionHandler);
+    static void handlerequest(void* pHandleData, void* pInteractionHandler);
 
     com::sun::star::beans::Optional< OUString >
     getStringFromRequest_impl(
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionRequest > const & rRequest);
 
-    static sal_IntPtr
-    getstringfromrequest(void* pHandleData, void* pInteractionHandler);
+    static void getstringfromrequest(void* pHandleData, void* pInteractionHandler);
 
     vcl::Window *
     getParentProperty();

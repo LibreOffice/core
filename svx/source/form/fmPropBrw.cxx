@@ -485,11 +485,10 @@ void FmPropBrw::FillInfo( SfxChildWinInfo& rInfo ) const
 }
 
 
-IMPL_LINK_NOARG( FmPropBrw, OnAsyncGetFocus )
+IMPL_LINK_NOARG_TYPED( FmPropBrw, OnAsyncGetFocus, void*, void )
 {
     if (m_xBrowserComponentWindow.is())
         m_xBrowserComponentWindow->setFocus();
-    return 0L;
 }
 
 

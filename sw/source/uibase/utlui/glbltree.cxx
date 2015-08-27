@@ -1216,14 +1216,13 @@ SwNavigationPI* SwGlobalTree::GetParentWindow()
     return static_cast<SwNavigationPI*>(Window::GetParent());
 }
 
-IMPL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, SwGlobalTree*,)
+IMPL_STATIC_LINK_NOARG_TYPED(SwGlobalTree, ShowFrameHdl, void*, void)
 {
     const SfxObjectShell* pShell = SwGlobalTree::GetShowShell();
     SfxViewFrame* pFirst = pShell ? SfxViewFrame::GetFirst(pShell) : NULL;
     if (pFirst)
         pFirst->ToTop();
     SwGlobalTree::SetShowShell(0);
-    return 0;
 }
 
 void SwGlobalTree::InitEntry(SvTreeListEntry* pEntry,

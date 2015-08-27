@@ -168,13 +168,13 @@ protected:
 
 private:
 
-    DECL_LINK( DelayedPaste, void* );
-    DECL_LINK( CBChangeHdl,ComboBox*);
+    DECL_LINK_TYPED( DelayedPaste, void*, void );
+    DECL_LINK( CBChangeHdl, ComboBox*);
 
     void InsertRows( long nRow );
 
 public:
-    DECL_LINK( DelayedDelete, void* );
+    DECL_LINK_TYPED( DelayedDelete, void*, void );
 
 };
 
@@ -858,7 +858,7 @@ void OFieldExpressionControl::paste()
     }
 }
 
-IMPL_LINK_NOARG( OFieldExpressionControl, DelayedPaste )
+IMPL_LINK_NOARG_TYPED( OFieldExpressionControl, DelayedPaste, void*, void )
 {
     m_nPasteEvent = 0;
 
@@ -867,15 +867,12 @@ IMPL_LINK_NOARG( OFieldExpressionControl, DelayedPaste )
     InsertRows( nPastePosition );
     SetNoSelection();
     GoToRow( nPastePosition );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG( OFieldExpressionControl, DelayedDelete )
+IMPL_LINK_NOARG_TYPED( OFieldExpressionControl, DelayedDelete, void*, void )
 {
     m_nDeleteEvent = 0;
     DeleteRows();
-    return 0;
 }
 
 void OFieldExpressionControl::InsertRows( long nRow )

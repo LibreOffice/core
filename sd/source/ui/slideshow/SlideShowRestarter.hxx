@@ -75,7 +75,7 @@ private:
     */
     sal_Int32 GetDisplayCount();
 
-    DECL_LINK(EndPresentation, void*);
+    DECL_LINK_TYPED(EndPresentation, void*, void);
 
     /** Restart the presentation on the slide last shown before the restart
         was initiated.

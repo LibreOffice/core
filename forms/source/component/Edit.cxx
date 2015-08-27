@@ -238,7 +238,7 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
     // Because we're still in the header, trigger submit asynchronously
     if( m_nKeyEvent )
         Application::RemoveUserEvent( m_nKeyEvent );
-    m_nKeyEvent = Application::PostUserEvent( LINK(this, OEditControl,OnKeyPressed) );
+    m_nKeyEvent = Application::PostUserEvent( LINK(this, OEditControl, OnKeyPressed) );
 }
 
 
@@ -247,7 +247,7 @@ void OEditControl::keyReleased(const ::com::sun::star::awt::KeyEvent& /*e*/) thr
 }
 
 
-IMPL_LINK_NOARG(OEditControl, OnKeyPressed)
+IMPL_LINK_NOARG_TYPED(OEditControl, OnKeyPressed, void*, void)
 {
     m_nKeyEvent = 0;
 
@@ -256,7 +256,6 @@ IMPL_LINK_NOARG(OEditControl, OnKeyPressed)
     Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
         xSubmit->submit( Reference<XControl>(), ::com::sun::star::awt::MouseEvent() );
-    return 0L;
 }
 
 

@@ -123,7 +123,7 @@ IMPL_LINK_NOARG_TYPED(ODatasourceSelectDialog, ManageClickHdl, Button*, void)
     SAL_WARN_IF( !m_pODBCManagement->isRunning(), "dbaccess.ui", "ODatasourceSelectDialog::ManageClickHdl: success, but not running - you were *fast*!" );
 }
 
-IMPL_LINK_NOARG( ODatasourceSelectDialog, ManageProcessFinished )
+IMPL_LINK_NOARG_TYPED( ODatasourceSelectDialog, ManageProcessFinished, void*, void )
 {
     StringBag aOdbcDatasources;
     OOdbcEnumeration aEnumeration;
@@ -134,8 +134,6 @@ IMPL_LINK_NOARG( ODatasourceSelectDialog, ManageProcessFinished )
     m_pOk->Enable();
     m_pCancel->Enable();
     m_pManageDatasources->Enable();
-
-    return 0L;
 }
 
 #endif

@@ -43,7 +43,7 @@ void AsynchronousCall::RequestCall()
 {
     if (mnCallId == 0)
     {
-        Link<> aLink (LINK(this, AsynchronousCall, HandleUserCall));
+        Link<void*,void> aLink (LINK(this, AsynchronousCall, HandleUserCall));
         mnCallId = Application::PostUserEvent(aLink);
     }
 }
@@ -57,13 +57,11 @@ void AsynchronousCall::CancelRequest()
     }
 }
 
-IMPL_LINK_NOARG(AsynchronousCall, HandleUserCall )
+IMPL_LINK_NOARG_TYPED(AsynchronousCall, HandleUserCall, void*, void )
 {
     mnCallId = 0;
     if (maAction)
         maAction();
-
-    return sal_IntPtr(true);
 }
 
 } } // end of namespace sfx2::sidebar

@@ -148,11 +148,11 @@ void PopupMenuControllerBase::dispatchCommand( const OUString& sCommandURL, cons
 
 }
 
-IMPL_STATIC_LINK( PopupMenuControllerBase, ExecuteHdl_Impl, PopupMenuControllerBaseDispatchInfo*, pDispatchInfo )
+IMPL_STATIC_LINK_TYPED( PopupMenuControllerBase, ExecuteHdl_Impl, void*, p, void )
 {
+    PopupMenuControllerBaseDispatchInfo* pDispatchInfo = static_cast<PopupMenuControllerBaseDispatchInfo*>(p);
     pDispatchInfo->mxDispatch->dispatch( pDispatchInfo->maURL, pDispatchInfo->maArgs );
     delete pDispatchInfo;
-    return 0;
 }
 
 void SAL_CALL PopupMenuControllerBase::itemActivated( const awt::MenuEvent& ) throw (RuntimeException, std::exception)

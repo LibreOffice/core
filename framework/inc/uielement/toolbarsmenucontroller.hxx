@@ -80,7 +80,7 @@ namespace framework
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
             };
 
-            DECL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInfo* );
+            DECL_STATIC_LINK_TYPED( ToolbarsMenuController, ExecuteHdl_Impl, void*, void );
 
         private:
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );

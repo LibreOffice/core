@@ -297,8 +297,9 @@ IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
+IMPL_LINK_TYPED(ScCondFormatList, AfterTypeListHdl, void*, p, void)
 {
+    ListBox* pBox = static_cast<ListBox*>(p);
     EntryContainer::iterator itr = maEntries.begin();
     for(; itr != maEntries.end(); ++itr)
     {
@@ -306,7 +307,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
             break;
     }
     if(itr == maEntries.end())
-        return 0;;
+        return;
 
     sal_Int32 nPos = pBox->GetSelectEntryPos();
     switch(nPos)
@@ -322,7 +323,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
                 case condformat::entry::COLORSCALE3:
                 case condformat::entry::DATABAR:
                 case condformat::entry::ICONSET:
-                    return 0;
+                    return;
             }
             itr->disposeAndClear();
             *itr = VclPtr<ScColorScale3FrmtEntry>::Create(this, mpDoc, maPos);
@@ -331,7 +332,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
             break;
         case 1:
             if((*itr)->GetType() == condformat::entry::CONDITION)
-                return 0;
+                return;
 
             itr->disposeAndClear();
             *itr = VclPtr<ScConditionFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
@@ -340,7 +341,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
             break;
         case 2:
             if((*itr)->GetType() == condformat::entry::FORMULA)
-                return 0;
+                return;
 
             itr->disposeAndClear();
             *itr = VclPtr<ScFormulaFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
@@ -349,7 +350,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
             break;
         case 3:
             if((*itr)->GetType() == condformat::entry::DATE)
-                return 0;
+                return;
 
             itr->disposeAndClear();
             *itr = VclPtr<ScDateFrmtEntry>::Create( this, mpDoc );
@@ -359,7 +360,6 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
 
     }
     RecalcAll();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( ScCondFormatList, AddBtnHdl, Button*, void )

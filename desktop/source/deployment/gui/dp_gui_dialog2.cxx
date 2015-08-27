@@ -655,7 +655,7 @@ bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
     return true;
 }
 
-void DialogHelper::PostUserEvent( const Link<>& rLink, void* pCaller, bool bReferenceLink )
+void DialogHelper::PostUserEvent( const Link<void*,void>& rLink, void* pCaller, bool bReferenceLink )
 {
     if ( m_nEventID )
         Application::RemoveUserEvent( m_nEventID );
@@ -967,7 +967,7 @@ IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleCloseBtn, Button*, void)
 
 
 
-IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
+IMPL_LINK_TYPED( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     bool bLockInterface = (bool) _bLockInterface;
@@ -994,8 +994,6 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface )
     m_pExtensionBox->enableButtons( !bLockInterface );
 
     clearEventID();
-
-    return 0;
 }
 
 
@@ -1287,7 +1285,7 @@ IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, HandleCancelBtn, Button*, void)
 }
 
 
-IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface )
+IMPL_LINK_TYPED( UpdateRequiredDialog, startProgress, void*, _bLockInterface, void )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     bool bLockInterface = (bool) _bLockInterface;
@@ -1310,8 +1308,6 @@ IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface )
     m_pCancelBtn->Enable( bLockInterface );
     m_pUpdateBtn->Enable( false );
     clearEventID();
-
-    return 0;
 }
 
 

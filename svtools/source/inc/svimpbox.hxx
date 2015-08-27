@@ -164,7 +164,7 @@ private:
     DECL_LINK_TYPED(EditTimerCall, Idle *, void);
 
     DECL_LINK_TYPED( BeginDragHdl, Idle*, void );
-    DECL_LINK( MyUserEvent,void*);
+    DECL_LINK_TYPED( MyUserEvent,  void*, void);
     void                StopUserEvent();
 
     void                InvalidateEntriesFrom( long nY ) const;

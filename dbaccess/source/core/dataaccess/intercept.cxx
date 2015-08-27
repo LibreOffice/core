@@ -177,7 +177,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyVal
     }
 }
 
-IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher )
+IMPL_LINK_TYPED( OInterceptor, OnDispatch, void*, _pDispatcher, void )
 {
     boost::scoped_ptr<DispatchHelper> pHelper( static_cast< DispatchHelper* >( _pDispatcher ) );
     try
@@ -200,8 +200,6 @@ IMPL_LINK( OInterceptor, OnDispatch, void*, _pDispatcher )
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-
-    return 0L;
 }
 
 void SAL_CALL OInterceptor::addStatusListener(

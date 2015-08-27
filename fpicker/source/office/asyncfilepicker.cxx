@@ -125,7 +125,7 @@ namespace svt
     }
 
 
-    IMPL_LINK( AsyncPickerAction, OnActionDone, void*, pEmptyArg )
+    IMPL_LINK_TYPED( AsyncPickerAction, OnActionDone, void*, pEmptyArg, void )
     {
         DBG_TESTSOLARMUTEX();
             // if this asserts, we'd need to have an own mutex per instance
@@ -143,12 +143,12 @@ namespace svt
 
         if ( eFailure == eResult )
             // TODO: do we need some kind of cleanup here?
-            return 0L;
+            return;
 
         if ( eTimeout == eResult )
         {
             SvtFileDialog::displayIOException( m_sURL, ::com::sun::star::ucb::IOErrorCode_CANT_READ );
-            return 0L;
+            return;
         }
 
         OSL_ENSURE( eSuccess == eResult, "AsyncPickerAction::OnActionDone: what else valid results are there?" );
@@ -173,8 +173,6 @@ namespace svt
             OSL_FAIL( "AsyncPickerAction::OnActionDone: unknown action!" );
             break;
         }
-
-        return 1L;
     }
 
 

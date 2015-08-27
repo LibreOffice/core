@@ -73,8 +73,9 @@ struct DispatchInfo
     css::uno::Reference< css::frame::XDispatch >    Dispatch;
 };
 
-IMPL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, DispatchInfo*, pDispatchInfo )
+IMPL_STATIC_LINK_TYPED( GalleryBrowser2, AsyncDispatch_Impl, void*, p, void )
 {
+    DispatchInfo* pDispatchInfo = static_cast<DispatchInfo*>(p);
     if ( pDispatchInfo && pDispatchInfo->Dispatch.is() )
     {
         try
@@ -88,7 +89,6 @@ IMPL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, DispatchInfo*, pDispatchI
     }
 
     delete pDispatchInfo;
-    return 0;
 }
 
 namespace

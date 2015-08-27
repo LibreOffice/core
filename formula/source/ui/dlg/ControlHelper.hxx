@@ -34,7 +34,7 @@ private:
     Selection       aOldSel;
     bool            bMouseFlag;
 
-    DECL_LINK(ChangedHdl, void *);
+    DECL_LINK_TYPED(ChangedHdl, void *, void);
 
 protected:
 

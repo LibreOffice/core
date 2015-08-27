@@ -171,120 +171,120 @@ class SwPostItMgr: public SfxListener
                                       const Rectangle& rBorder,
                                       long lNeededHeight);
         void            CheckForRemovedPostIts();
-            bool                ArrowEnabled(sal_uInt16 aDirection,unsigned long aPage) const;
-            bool                BorderOverPageBorder(unsigned long aPage) const;
-            bool                HasScrollbars() const;
+        bool            ArrowEnabled(sal_uInt16 aDirection,unsigned long aPage) const;
+        bool            BorderOverPageBorder(unsigned long aPage) const;
+        bool            HasScrollbars() const;
         void            Focus(SfxBroadcaster& rBC);
 
-            sal_Int32           GetInitialAnchorDistance() const;
-            sal_Int32           GetScrollSize() const;
-            sal_Int32           GetSpaceBetween() const;
+        sal_Int32       GetInitialAnchorDistance() const;
+        sal_Int32       GetScrollSize() const;
+        sal_Int32       GetSpaceBetween() const;
         void            SetReadOnlyState();
-                    DECL_LINK( CalcHdl, void*);
+        DECL_LINK_TYPED( CalcHdl, void*, void);
 
         sw::sidebarwindows::SwSidebarWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
 
-        void InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
-        void RemoveItem( SfxBroadcaster* pBroadcast );
+        void            InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
+        void            RemoveItem( SfxBroadcaster* pBroadcast );
 
-        void Sort();
+        void            Sort();
 
     public:
-            SwPostItMgr(SwView* aDoc);
-            virtual ~SwPostItMgr();
+        SwPostItMgr(SwView* aDoc);
+        virtual ~SwPostItMgr();
 
-            typedef std::list< SwSidebarItem* >::const_iterator const_iterator;
-            const_iterator begin()  const { return mvPostItFields.begin(); }
-            const_iterator end()    const { return mvPostItFields.end();  }
+        typedef std::list< SwSidebarItem* >::const_iterator const_iterator;
+        const_iterator begin()  const { return mvPostItFields.begin(); }
+        const_iterator end()    const { return mvPostItFields.end();  }
 
-            void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+        void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-            void LayoutPostIts();
-            bool CalcRects();
+        void LayoutPostIts();
+        bool CalcRects();
 
-            void MakeVisible( const sw::sidebarwindows::SwSidebarWin* pPostIt,
-                              long aPage = -1);
+        void MakeVisible( const sw::sidebarwindows::SwSidebarWin* pPostIt,
+                          long aPage = -1);
 
-            bool ShowScrollbar(const unsigned long aPage) const;
-            bool HasNotes() const ;
-            bool ShowNotes() const;
-            bool IsShowAnchor() { return mbIsShowAnchor;}
-            unsigned long GetSidebarWidth(bool bPx = false) const;
-            unsigned long GetSidebarBorderWidth(bool bPx = false) const;
-            unsigned long GetNoteWidth();
+        bool ShowScrollbar(const unsigned long aPage) const;
+        bool HasNotes() const ;
+        bool ShowNotes() const;
+        bool IsShowAnchor() { return mbIsShowAnchor;}
+        unsigned long GetSidebarWidth(bool bPx = false) const;
+        unsigned long GetSidebarBorderWidth(bool bPx = false) const;
+        unsigned long GetNoteWidth();
 
-            void PrepareView(bool bIgnoreCount = false);
+        void PrepareView(bool bIgnoreCount = false);
 
-            void CorrectPositions();
+        void CorrectPositions();
 
-            void SetLayout() { mbLayout = true; };
-            void Delete(const OUString& aAuthor);
-            void Delete();
+        void SetLayout() { mbLayout = true; };
+        void Delete(const OUString& aAuthor);
+        void Delete();
 
-            void ExecuteFormatAllDialog(SwView& rView);
-            void FormatAll(const SfxItemSet &rNewAttr);
+        void ExecuteFormatAllDialog(SwView& rView);
+        void FormatAll(const SfxItemSet &rNewAttr);
 
-            void Hide( const OUString& rAuthor );
-            void Hide();
-            void Show();
+        void Hide( const OUString& rAuthor );
+        void Hide();
+        void Show();
 
-            void Rescale();
+        void Rescale();
 
-            Rectangle GetBottomScrollRect(const unsigned long aPage) const;
-            Rectangle GetTopScrollRect(const unsigned long aPage) const;
+        Rectangle GetBottomScrollRect(const unsigned long aPage) const;
+        Rectangle GetTopScrollRect(const unsigned long aPage) const;
 
-            bool IsHit(const Point &aPointPixel);
-            Color GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) const;
+        bool IsHit(const Point &aPointPixel);
+        Color GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) const;
 
-            sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pField) const;
+        sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pField) const;
 
-            sw::sidebarwindows::SwSidebarWin* GetNextPostIt( sal_uInt16 aDirection,
-                                                             sw::sidebarwindows::SwSidebarWin* aPostIt);
-            long GetNextBorder();
+        sw::sidebarwindows::SwSidebarWin* GetNextPostIt( sal_uInt16 aDirection,
+                                                         sw::sidebarwindows::SwSidebarWin* aPostIt);
+        long GetNextBorder();
 
-            sw::sidebarwindows::SwSidebarWin* GetActiveSidebarWin() { return mpActivePostIt; }
-            void SetActiveSidebarWin( sw::sidebarwindows::SwSidebarWin* p);
-            bool HasActiveSidebarWin() const;
-            bool HasActiveAnnotationWin() const;
-            void GrabFocusOnActiveSidebarWin();
-            void UpdateDataOnActiveSidebarWin();
-            void DeleteActiveSidebarWin();
-            void HideActiveSidebarWin();
-            void ToggleInsModeOnActiveSidebarWin();
+        sw::sidebarwindows::SwSidebarWin* GetActiveSidebarWin() { return mpActivePostIt; }
+        void SetActiveSidebarWin( sw::sidebarwindows::SwSidebarWin* p);
+        bool HasActiveSidebarWin() const;
+        bool HasActiveAnnotationWin() const;
+        void GrabFocusOnActiveSidebarWin();
+        void UpdateDataOnActiveSidebarWin();
+        void DeleteActiveSidebarWin();
+        void HideActiveSidebarWin();
+        void ToggleInsModeOnActiveSidebarWin();
 
-            sal_Int32 GetMinimumSizeWithMeta() const;
-            sal_Int32 GetSidebarScrollerHeight() const;
+        sal_Int32 GetMinimumSizeWithMeta() const;
+        sal_Int32 GetSidebarScrollerHeight() const;
 
-            void SetShadowState(const SwPostItField* pField,bool bCursor = true);
+        void SetShadowState(const SwPostItField* pField,bool bCursor = true);
 
-            void SetSpellChecking();
+        void SetSpellChecking();
 
-            static Color           GetColorDark(sal_uInt16 aAuthorIndex);
-            static Color           GetColorLight(sal_uInt16 aAuthorIndex);
-            static Color           GetColorAnchor(sal_uInt16 aAuthorIndex);
+        static Color           GetColorDark(sal_uInt16 aAuthorIndex);
+        static Color           GetColorLight(sal_uInt16 aAuthorIndex);
+        static Color           GetColorAnchor(sal_uInt16 aAuthorIndex);
 
-            void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
-            OutlinerParaObject* IsAnswer() {return mpAnswer;}
-            void CheckMetaText();
+        void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
+        OutlinerParaObject* IsAnswer() {return mpAnswer;}
+        void CheckMetaText();
 
-            sal_uInt16 Replace(SvxSearchItem* pItem);
-            sal_uInt16 SearchReplace(const SwFormatField &pField, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
-            sal_uInt16 FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
+        sal_uInt16 Replace(SvxSearchItem* pItem);
+        sal_uInt16 SearchReplace(const SwFormatField &pField, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
+        sal_uInt16 FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
 
-            void AssureStdModeAtShell();
+        void AssureStdModeAtShell();
 
-            void ConnectSidebarWinToFrm( const SwFrm& rFrm,
-                                         const SwFormatField& rFormatField,
-                                         sw::sidebarwindows::SwSidebarWin& rSidebarWin );
-            void DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
-                                              sw::sidebarwindows::SwSidebarWin& rSidebarWin );
-            bool HasFrmConnectedSidebarWins( const SwFrm& rFrm );
-            vcl::Window* GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
-                                                const sal_Int32 nIndex );
-            void GetAllSidebarWinForFrm( const SwFrm& rFrm,
-                                         std::vector< vcl::Window* >* pChildren );
+        void ConnectSidebarWinToFrm( const SwFrm& rFrm,
+                                     const SwFormatField& rFormatField,
+                                     sw::sidebarwindows::SwSidebarWin& rSidebarWin );
+        void DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
+                                          sw::sidebarwindows::SwSidebarWin& rSidebarWin );
+        bool HasFrmConnectedSidebarWins( const SwFrm& rFrm );
+        vcl::Window* GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
+                                            const sal_Int32 nIndex );
+        void GetAllSidebarWinForFrm( const SwFrm& rFrm,
+                                     std::vector< vcl::Window* >* pChildren );
 
-            void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);
+        void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);
 };
 
 #endif

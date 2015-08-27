@@ -341,7 +341,7 @@ protected:
 
     ::rtl::Reference< ::svt::FileViewContentEnumerator >
                                         m_xContentEnumerator;
-    Link<>                              m_aCurrentAsyncActionHandler;
+    Link<void*,void>                    m_aCurrentAsyncActionHandler;
     ::osl::Condition                    m_aAsyncActionFinished;
     ::rtl::Reference< ::salhelper::Timer > m_xCancelAsyncTimer;
     ::svt::EnumerationResult            m_eAsyncActionResult;
@@ -1597,7 +1597,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     // don't (yet) set m_aCurrentAsyncActionHandler to pTimeout->aFinishHandler.
     // By definition, this handler *only* get's called when the result cannot be obtained
     // during the minimum wait time, so it is only set below, when needed.
-    m_aCurrentAsyncActionHandler = Link<>();
+    m_aCurrentAsyncActionHandler = Link<void*,void>();
 
     // minimum time to wait
     boost::scoped_ptr< TimeValue > pTimeout( new TimeValue );
@@ -1856,7 +1856,7 @@ void SvtFileView_Impl::onTimeout( CallbackTimer* )
     if ( m_aCurrentAsyncActionHandler.IsSet() )
     {
         Application::PostUserEvent( m_aCurrentAsyncActionHandler, reinterpret_cast< void* >( eTimeout ) );
-        m_aCurrentAsyncActionHandler = Link<>();
+        m_aCurrentAsyncActionHandler = Link<void*,void>();
     }
 }
 
@@ -1886,7 +1886,7 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult eResult )
     if ( m_aCurrentAsyncActionHandler.IsSet() )
     {
         Application::PostUserEvent( m_aCurrentAsyncActionHandler, reinterpret_cast< void* >( m_eAsyncActionResult ) );
-        m_aCurrentAsyncActionHandler = Link<>();
+        m_aCurrentAsyncActionHandler = Link<void*,void>();
     }
 }
 

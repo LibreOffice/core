@@ -92,7 +92,7 @@ public:
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry* );
 
     DECL_LINK( TypeListHdl, ListBox*);
-    DECL_LINK( AfterTypeListHdl, ListBox*);
+    DECL_LINK_TYPED( AfterTypeListHdl, void*, void);
     DECL_LINK( ColFormatTypeHdl, ListBox*);
 };
 

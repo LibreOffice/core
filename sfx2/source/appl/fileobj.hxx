@@ -54,7 +54,7 @@ class SvFileObject : public sfx2::SvLinkSource
     bool LoadFile_Impl();
     void SendStateChg_Impl( sfx2::LinkManager::LinkState nState );
 
-    DECL_LINK( DelMedium_Impl, SfxMediumRef* );
+    DECL_LINK_TYPED( DelMedium_Impl, void*, void );
     DECL_LINK( LoadGrfReady_Impl, void* );
     DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 

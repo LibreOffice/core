@@ -58,7 +58,7 @@ namespace dbaui
         void CancelCall();
 
     protected:
-        DECL_LINK(OnAsyncCall, void*);
+        DECL_LINK_TYPED(OnAsyncCall, void*, void);
     };
 }
 #endif // INCLUDED_DBACCESS_ASYNCRONOUSLINK_HXX

@@ -148,7 +148,7 @@ private:
 
     SVX_DLLPRIVATE void findMergeOrigin( CellPos& rPos );
 
-    DECL_LINK( UpdateHdl, void * );
+    DECL_LINK_TYPED( UpdateHdl, void *, void );
 
     //TableModelRef mxTable;
     rtl::Reference< TableModel > mxTable;

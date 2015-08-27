@@ -282,19 +282,18 @@ OUString CreateMD5FromString( const OUString& aMsg )
 class ProcessEventsClass_Impl
 {
 public:
-    DECL_STATIC_LINK( ProcessEventsClass_Impl, CallEvent, void* pEvent );
-    DECL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void* pEvent );
+    DECL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, CallEvent, void*, void );
+    DECL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, void );
 };
 
-IMPL_STATIC_LINK( ProcessEventsClass_Impl, CallEvent, void*, pEvent )
+IMPL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, CallEvent, void*, pEvent, void )
 {
     // Application events are processed by the Desktop::HandleAppEvent implementation.
     Desktop::HandleAppEvent( *static_cast<ApplicationEvent*>(pEvent) );
     delete static_cast<ApplicationEvent*>(pEvent);
-    return 0;
 }
 
-IMPL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent )
+IMPL_STATIC_LINK_TYPED( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent, void )
 {
     // Documents requests are processed by the OfficeIPCThread implementation
     ProcessDocumentsRequest* pDocsRequest = static_cast<ProcessDocumentsRequest*>(pEvent);
@@ -304,7 +303,6 @@ IMPL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent 
         OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
         delete pDocsRequest;
     }
-    return 0;
 }
 
 void ImplPostForeignAppEvent( ApplicationEvent* pEvent )

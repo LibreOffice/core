@@ -87,7 +87,7 @@ void CanvasUpdateRequester::RequestUpdate (const bool bUpdateAll)
     }
 }
 
-IMPL_LINK_NOARG(CanvasUpdateRequester, Callback)
+IMPL_LINK_NOARG_TYPED(CanvasUpdateRequester, Callback, void*, void)
 {
     mnUserEventId = 0;
     if (mxCanvas.is())
@@ -95,7 +95,6 @@ IMPL_LINK_NOARG(CanvasUpdateRequester, Callback)
         mxCanvas->updateScreen(mbUpdateFlag);
         mbUpdateFlag = false;
     }
-    return 0;
 }
 
 } } // end of namespace ::sd::presenter

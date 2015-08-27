@@ -1862,11 +1862,10 @@ IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent*, pEvent )
     return 0;
 }
 
-IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu)
+IMPL_LINK_NOARG_TYPED(ToolBox, ImplCallExecuteCustomMenu, void*, void)
 {
     mpData->mnEventId = 0;
     ImplExecuteCustomMenu();
-    return 0;
 }
 
 void ToolBox::ImplExecuteCustomMenu()

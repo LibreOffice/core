@@ -249,7 +249,7 @@ struct ContextMenuEvent
     Point           aChildPos;
 };
 
-static sal_IntPtr ContextMenuEventLink( void* pCEvent, void* )
+static void ContextMenuEventLink( void* pCEvent, void* )
 {
     ContextMenuEvent* pEv = static_cast<ContextMenuEvent*>(pCEvent);
 
@@ -259,8 +259,6 @@ static sal_IntPtr ContextMenuEventLink( void* pCEvent, void* )
         ImplCallCommand( pEv->pWindow, CommandEventId::ContextMenu, NULL, true, &pEv->aChildPos );
     }
     delete pEv;
-
-    return 0;
 }
 
 bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
@@ -818,7 +816,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                             pEv->pWindow = pChild;
                             pEv->aChildPos = aChildPos;
                             pChild->ImplAddDel( &pEv->aDelData );
-                            Application::PostUserEvent( Link<>( pEv, ContextMenuEventLink ) );
+                            Application::PostUserEvent( Link<void*,void>( pEv, ContextMenuEventLink ) );
                         }
                         else
                             bRet = ! ImplCallCommand( pChild, CommandEventId::ContextMenu, NULL, true, &aChildPos );
@@ -1772,7 +1770,7 @@ static void ImplActivateFloatingWindows( vcl::Window* pWindow, bool bActive )
     }
 }
 
-IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl)
+IMPL_LINK_NOARG_TYPED(vcl::Window, ImplAsyncFocusHdl, void*, void)
 {
     ImplGetWindowImpl()->mpFrameData->mnFocusId = 0;
 
@@ -1877,8 +1875,6 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl)
         if ( ImplGetWindowImpl()->mpFrameData->mbStartFocusState != bHasFocus )
             ImplActivateFloatingWindows( this, bHasFocus );
     }
-
-    return 0;
 }
 
 static void ImplHandleGetFocus( vcl::Window* pWindow )
@@ -1933,7 +1929,7 @@ struct DelayedCloseEvent
     ImplDelData     aDelData;
 };
 
-static sal_IntPtr DelayedCloseEventLink( void* pCEvent, void* )
+static void DelayedCloseEventLink( void* pCEvent, void* )
 {
     DelayedCloseEvent* pEv = static_cast<DelayedCloseEvent*>(pCEvent);
 
@@ -1947,8 +1943,6 @@ static sal_IntPtr DelayedCloseEventLink( void* pCEvent, void* )
             static_cast<DockingWindow*>(pEv->pWindow.get())->Close();
     }
     delete pEv;
-
-    return 0;
 }
 
 void ImplHandleClose( vcl::Window* pWindow )
@@ -2002,7 +1996,7 @@ void ImplHandleClose( vcl::Window* pWindow )
         DelayedCloseEvent* pEv = new DelayedCloseEvent;
         pEv->pWindow = pWin;
         pWin->ImplAddDel( &pEv->aDelData );
-        Application::PostUserEvent( Link<>( pEv, DelayedCloseEventLink ) );
+        Application::PostUserEvent( Link<void*,void>( pEv, DelayedCloseEventLink ) );
     }
 }
 
@@ -2015,15 +2009,14 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
             if ( pSVEvent->mpWindow )
             {
                 pSVEvent->mpWindow->ImplRemoveDel( &(pSVEvent->maDelData) );
-                pSVEvent->mpLink->Call( pSVEvent->mpData );
+                pSVEvent->maLink.Call( pSVEvent->mpData );
             }
             else
             {
-                pSVEvent->mpLink->Call( pSVEvent->mpData );
+                pSVEvent->maLink.Call( pSVEvent->mpData );
             }
         }
 
-        delete pSVEvent->mpLink;
         delete pSVEvent;
     }
 }
