@@ -787,7 +787,7 @@ void getBitmapData( const BitmapEx& aBmpEx, sal_uInt8*& tgadata, sal_uInt8*& tga
 
 sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQualityLevel )
 {
-    const sal_uInt32 bmpChecksum = bmpSource.GetChecksum();
+    BitmapChecksum bmpChecksum = bmpSource.GetChecksum();
 
     ChecksumCache::iterator it = mBitmapCache.find(bmpChecksum);
 
