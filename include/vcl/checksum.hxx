@@ -152,6 +152,15 @@ SAL_DLLPUBLIC sal_uInt64 SAL_CALL vcl_crc64 (
 }
 #endif
 
+inline BitmapChecksum vcl_get_checksum (
+    BitmapChecksum  Checksum,
+    const void *Data,
+    sal_uInt32 DatLen
+)
+{
+    return (BitmapChecksum)(vcl_crc64( Checksum, Data, DatLen ));
+}
+
 
 #endif // INCLUDED_VCL_INC_CHECKSUM_HXX
 
