@@ -23,6 +23,7 @@
 #include <tools/color.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
+#include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
@@ -289,7 +290,7 @@ public:
     */
     bool                    GetSystemData( BitmapSystemData& rData ) const;
 
-    sal_uInt32              GetChecksum() const;
+    BitmapChecksum          GetChecksum() const;
 
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
 

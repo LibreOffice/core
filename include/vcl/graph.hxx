@@ -158,9 +158,9 @@ public:
     void                SetAnimationNotifyHdl( const Link<>& rLink );
     Link<>              GetAnimationNotifyHdl() const;
 
-    sal_uLong               GetAnimationLoopCount() const;
+    sal_uLong           GetAnimationLoopCount() const;
 
-    sal_uInt32          GetChecksum() const;
+    BitmapChecksum      GetChecksum() const;
 
 public:
 
