@@ -749,16 +749,18 @@ void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
 void SvXMLExportPropertyMapper::exportXML(
         SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,
-        SvXmlExportFlags nFlags ) const
+        SvXmlExportFlags nFlags,
+        bool bUseExtensionNamespaceForGraphicProperties) const
 {
-    exportXML( rExport, rProperties, -1, -1,  nFlags );
+    exportXML(rExport, rProperties, -1, -1,  nFlags, bUseExtensionNamespaceForGraphicProperties);
 }
+
 
 void SvXMLExportPropertyMapper::exportXML(
         SvXMLExport& rExport,
         const ::std::vector< XMLPropertyState >& rProperties,
         sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
-        SvXmlExportFlags nFlags, bool bExtensionNamespace ) const
+        SvXmlExportFlags nFlags, bool bUseExtensionNamespaceForGraphicProperties) const
 {
     sal_uInt16 nPropTypeFlags = 0;
     for( sal_uInt16 i=0; i<MAX_PROP_TYPES; ++i )
@@ -766,6 +768,17 @@ void SvXMLExportPropertyMapper::exportXML(
         sal_uInt16 nPropType = aPropTokens[i].nType;
         if( 0==i || (nPropTypeFlags & (1 << nPropType)) != 0 )
         {
+            sal_uInt16 nNamespace = XML_NAMESPACE_STYLE;
+            if (bUseExtensionNamespaceForGraphicProperties &&
+                aPropTokens[i].eToken == xmloff::token::XML_GRAPHIC_PROPERTIES)
+            {
+                nNamespace = XML_NAMESPACE_LO_EXT;
+                if (rExport.getDefaultVersion() <= SvtSaveOptions::ODFVER_012)
+                {
+                    continue; // don't write for ODF <= 1.2
+                }
+            }
+
             std::vector<sal_uInt16> aIndexArray;
 
             _exportXML( nPropType, nPropTypeFlags,
@@ -779,10 +792,6 @@ void SvXMLExportPropertyMapper::exportXML(
                 (nFlags & SvXmlExportFlags::EMPTY) ||
                 !aIndexArray.empty() )
             {
-                sal_uInt16 nNamespace = XML_NAMESPACE_STYLE;
-                if(bExtensionNamespace && aPropTokens[i].eToken ==
-                        xmloff::token::XML_GRAPHIC_PROPERTIES)
-                    nNamespace = XML_NAMESPACE_LO_EXT;
                 SvXMLElementExport aElem( rExport, nNamespace,
                                   aPropTokens[i].eToken,
                                   bool(nFlags & SvXmlExportFlags::IGN_WS),
