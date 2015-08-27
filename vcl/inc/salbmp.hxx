@@ -39,7 +39,7 @@ class VCL_PLUGIN_PUBLIC SalBitmap
 {
 public:
 
-    typedef sal_uInt64      ChecksumType;
+    typedef BitmapChecksum  ChecksumType;
 
                             SalBitmap() : mbChecksumValid(false) {}
     virtual                 ~SalBitmap();
@@ -96,7 +96,7 @@ protected:
         if (pBuf)
         {
             pThis->ReleaseBuffer(pBuf, BITMAP_READ_ACCESS);
-            nCrc = vcl_crc64(0, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
+            nCrc = vcl_get_checksum(0, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
             pThis->maChecksum = nCrc;
             pThis->mbChecksumValid = true;
         }
