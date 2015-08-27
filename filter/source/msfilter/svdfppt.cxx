@@ -5245,9 +5245,13 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
 
             PPTCharPropSet aCharPropSet( nCurrentPara );
             if ( bTextPropAtom )
+            {
                 ReadCharProps( rIn, aCharPropSet, aString, nCharCount, nCharAnzRead,
                                bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
                                nBuBlip, nHasAnm, nAnmScheme );
+                if (!rIn.good())
+                    break;
+            }
             else
                 nCharCount = nStringLen;
 
@@ -5314,7 +5318,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                     break;
                 }
             }
-         }
+        }
         if ( !aCharPropList.empty() && ( aCharPropList.back()->mnParagraph != nCurrentPara ) )
         {
             PPTCharPropSet* pCharPropSet = new PPTCharPropSet( *aCharPropList.back(), nCurrentPara );
