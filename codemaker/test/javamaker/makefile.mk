@@ -28,9 +28,9 @@ TARGET := test_codemaker_javamaker
 PACKAGE := test$/codemaker$/javamaker
 JAVATESTFILES := Test.java
 IDLTESTFILES := types.idl
-JARFILES := juh.jar jurt.jar ridl.jar
+JARFILES := juh.jar jurt.jar ridl.jar OOoRunner.jar
 
-JAVAMAKER = $(BIN)$/javamaker$(EXECPOST)
+JAVAMAKER = $(AUGMENT_LIBRARY_PATH) $(BIN)$/javamaker$(EXECPOST)
 
 .INCLUDE: javaunittest.mk
 

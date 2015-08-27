@@ -29,26 +29,27 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
 
-DLLPRE = # no leading "lib" on .so files
+.ELSE
 
 INCPRE += $(MISC)$/$(TARGET)$/inc
 
-SHL1TARGET = $(TARGET)
-SHL1OBJS = $(SLO)$/test_codemaker_cppumaker.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB) $(TESTSHL2LIB)
-SHL1VERSIONMAP = version.map
-SHL1IMPLIB = i$(SHL1TARGET)
-DEF1NAME = $(SHL1TARGET)
+APP1TARGET = $(TARGET)
+APP1OBJS = $(SLO)$/test_codemaker_cppumaker.obj
+APP1STDLIBS = $(CPPULIB) $(GTESTLIB) $(SALLIB) $(TESTSHL2LIB)
+APP1VERSIONMAP = version.map
+APP1IMPLIB = i$(APP1TARGET)
+DEF1NAME = $(APP1TARGET)
+APP1TEST = enabled
 
-SLOFILES = $(SHL1OBJS)
+SLOFILES = $(APP1OBJS)
 
 .INCLUDE: target.mk
 
-ALLTAR: test
-
-$(SHL1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+$(APP1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
 
 $(MISC)$/$(TARGET).cppumaker.flag: $(BIN)$/cppumaker$(EXECPOST)
 $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
@@ -65,5 +66,5 @@ $(MISC)$/$(TARGET)$/types.urd: types.idl
     - $(MKDIR) $(MISC)$/$(TARGET)
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
-test .PHONY: $(SHL1TARGETN)
-    $(AUGMENT_LIBRARY_PATH) testshl2 $<
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
