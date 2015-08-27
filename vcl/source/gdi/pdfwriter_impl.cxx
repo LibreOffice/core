@@ -11516,7 +11516,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     aID.m_aPixelSize    = rSizePixel;
     aID.m_nSize         = pStream->Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    aID.m_nChecksum     = rtl_crc32( 0, pStream->GetData(), aID.m_nSize );
+    aID.m_nChecksum     = vcl_get_checksum( 0, pStream->GetData(), aID.m_nSize );
     if( ! rMask.IsEmpty() )
         aID.m_nMaskChecksum = rMask.GetChecksum();
 
