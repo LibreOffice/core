@@ -21,6 +21,7 @@
 #define INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
 
 #include "o3tl/cow_wrapper.hxx"
+#include "cppunit/extensions/HelperMacros.h"
 
 /* Definition of Cow_Wrapper_Clients classes */
 
@@ -139,6 +140,61 @@ private:
     o3tl::cow_wrapper< int > maImpl;
 };
 
+// singleton ref-counting policy used to keep track of when
+// incrementing and decrementing occurs
+struct BogusRefCountPolicy
+{
+    static bool s_bShouldIncrement;
+    static bool s_bShouldDecrement;
+    static sal_uInt32 s_nEndOfScope;
+    typedef sal_uInt32 ref_count_t;
+    static void incrementCount( ref_count_t& rCount ) {
+        if(s_bShouldIncrement)
+        {
+            ++rCount;
+            s_bShouldIncrement = 0;
+        }
+        else
+            CPPUNIT_FAIL("Ref-counting policy incremented when it should not have.");
+    }
+    static bool decrementCount( ref_count_t& rCount ) {
+        if(s_nEndOfScope)
+        {
+            --rCount;
+            --s_nEndOfScope;
+            return true;
+        }
+        if(s_bShouldDecrement)
+        {
+            --rCount;
+            s_bShouldDecrement = 0;
+        }
+        else
+            CPPUNIT_FAIL("Ref-counting policy decremented when it should not have.");
+        return true;
+    }
+};
+
+class cow_wrapper_client5
+{
+public:
+    cow_wrapper_client5();
+    explicit cow_wrapper_client5(int);
+    ~cow_wrapper_client5();
+
+    cow_wrapper_client5( const cow_wrapper_client5& );
+    cow_wrapper_client5( cow_wrapper_client5&& );
+    cow_wrapper_client5& operator=( const cow_wrapper_client5& );
+    cow_wrapper_client5& operator=( cow_wrapper_client5&& );
+
+    sal_uInt32 use_count() const { return maImpl.use_count(); }
+
+    bool operator==( const cow_wrapper_client5& rRHS ) const;
+    bool operator!=( const cow_wrapper_client5& rRHS ) const;
+
+private:
+    o3tl::cow_wrapper< int, BogusRefCountPolicy > maImpl;
+};
 } // namespace o3tltests
 
 #endif // INCLUDED_O3TL_QA_COW_WRAPPER_CLIENTS_HXX
