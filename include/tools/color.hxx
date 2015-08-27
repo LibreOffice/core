@@ -156,8 +156,8 @@ public:
     bool                operator!=( const Color& rColor ) const
                             { return !(Color::operator==( rColor )); }
 
-    SvStream&           Read( SvStream& rIStm, bool bNewFormat = true );
-    SvStream&           Write( SvStream& rOStm, bool bNewFormat = true );
+    SvStream& Read(SvStream& rIStream, bool bNewFormat = true);
+    SvStream& Write(SvStream& rOStream, bool bNewFormat = true) const;
 
     TOOLS_DLLPUBLIC friend SvStream&    ReadColor( SvStream& rIStream, Color& rColor );
     TOOLS_DLLPUBLIC friend SvStream&    WriteColor( SvStream& rOStream, const Color& rColor );
