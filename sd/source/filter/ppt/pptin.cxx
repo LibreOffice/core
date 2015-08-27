@@ -779,7 +779,8 @@ bool ImplSdPPTImport::Import()
                                                     if ( nObjCount++ )      // skipping the first object
                                                     {
                                                         Rectangle aEmpty;
-                                                        aHd2.SeekToBegOfRecord( rStCtrl );
+                                                        if (!aHd2.SeekToBegOfRecord( rStCtrl ))
+                                                            break;
                                                         SdrObject* pImpObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
                                                         if ( pImpObj )
                                                         {
@@ -788,7 +789,8 @@ bool ImplSdPPTImport::Import()
                                                         }
                                                     }
                                                 }
-                                                aHd2.SeekToEndOfRecord( rStCtrl );
+                                                if (!aHd2.SeekToEndOfRecord(rStCtrl))
+                                                    break;
                                             }
                                         }
                                     }
