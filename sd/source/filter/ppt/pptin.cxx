@@ -726,11 +726,17 @@ bool ImplSdPPTImport::Import()
                 PptSlidePersistEntry* pE = pPersist;
                 while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
                 {
-                    sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
+                    auto nOrigMasterId = pE->aSlideAtom.nMasterId;
+                    sal_uInt16 nNextMaster = pMasterPages->FindPage(nOrigMasterId);
                     if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                         break;
                     else
                         pE = &(*pList)[ nNextMaster ];
+                    if (pE->aSlideAtom.nMasterId == nOrigMasterId)
+                    {
+                        SAL_WARN("filter.ms", "loop in atom chain");
+                        break;
+                    }
                 }
                 SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pE->nBackgroundOffset, true );   // import background
                 if ( pObj )
