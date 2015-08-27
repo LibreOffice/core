@@ -2340,14 +2340,14 @@ GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
     return aRet;
 }
 
-sal_uInt32 GDIMetaFile::GetChecksum() const
+BitmapChecksum GDIMetaFile::GetChecksum() const
 {
     GDIMetaFile         aMtf;
     SvMemoryStream      aMemStm( 65535, 65535 );
     ImplMetaWriteData   aWriteData;
     SVBT16              aBT16;
     SVBT32              aBT32;
-    sal_uInt32          nCrc = 0;
+    BitmapChecksum      nCrc = 0;
 
     aWriteData.meActualCharSet = aMemStm.GetStreamCharSet();
     for( size_t i = 0, nObjCount = GetActionSize(); i < nObjCount; i++ )

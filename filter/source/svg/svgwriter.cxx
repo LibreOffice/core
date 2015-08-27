@@ -1359,7 +1359,7 @@ void SVGTextWriter::writeBitmapPlaceholder( const MetaBitmapActionType* pAction 
     }
 
     // bitmap placeholder element
-    const sal_uInt32 nId = SVGActionWriter::GetChecksum( pAction );
+    BitmapChecksum nId = SVGActionWriter::GetChecksum( pAction );
     OUString sId = "bitmap-placeholder("  + msShapeId + "." +
                    OUString::number( nId ) + ")";
 
@@ -1381,7 +1381,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
         const GDIMetaFile& rMtf = *mpTextEmbeddedBitmapMtf;
 
         OUString sId, sRefId;
-        sal_uInt32 nChecksum = 0;
+        BitmapChecksum nId, nChecksum = 0;
         Point aPt;
         Size  aSz;
         sal_uLong nCount = rMtf.GetActionSize();
@@ -1779,7 +1779,7 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
      return aPathData;
 }
 
-sal_uInt32 SVGActionWriter::GetChecksum( const MetaAction* pAction )
+BitmapChecksum SVGActionWriter::GetChecksum( const MetaAction* pAction )
 {
     GDIMetaFile aMtf;
     MetaAction* pA = const_cast<MetaAction*>(pAction);

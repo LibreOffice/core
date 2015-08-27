@@ -1360,9 +1360,9 @@ bool ImpGraphic::ImplIsLink() const
     return ( mpGfxLink != NULL );
 }
 
-sal_uInt32 ImpGraphic::ImplGetChecksum() const
+BitmapChecksum ImpGraphic::ImplGetChecksum() const
 {
-    sal_uInt32 nRet = 0;
+    BitmapChecksum nRet = 0;
 
     if( ImplIsSupportedGraphic() && !ImplIsSwapOut() )
     {
