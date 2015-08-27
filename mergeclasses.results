@@ -5,7 +5,6 @@ merge AbstractMailMergeWizard with AbstractMailMergeWizard_Impl
 merge AbstractSearchProgress with AbstractSearchProgress_Impl
 merge AbstractSwInsertDBColAutoPilot with AbstractSwInsertDBColAutoPilot_Impl
 merge AbstractTakeProgress with AbstractTakeProgress_Impl
-merge BiNode with NameNode
 merge CffGlobal with CffSubsetterContext
 merge CompareLine with SwCompareLine
 merge DdeGetPutItem with sfx2::ImplDdeItem
@@ -53,7 +52,6 @@ merge ImplGlyphFallbackFontSubstitution with FcGlyphFallbackSubstititution
 merge ImplPreMatchFontSubstitution with FcPreMatchSubstititution
 merge LwpDLList with LwpParaProperty
 merge LwpDLVListHead with LwpPropList
-merge Obj0Type with ObjkType
 merge OldBasicPassword with basic::SfxScriptLibraryContainer
 merge OpenGLDeviceInfo with X11OpenGLDeviceInfo
 merge OpenGLSalBitmapOp with ScaleOp

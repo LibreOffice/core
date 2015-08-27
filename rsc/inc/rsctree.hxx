@@ -22,40 +22,30 @@
 #include <tools/link.hxx>
 #include <rsctools.hxx>
 
-class BiNode
-{
-protected:
-    BiNode*     pLeft;    // left subtree
-    BiNode*     pRight;   // right subtree
-
-public:
-
-                         // convert a double linked list into a binary tree
-            BiNode *    ChangeDLListBTree( BiNode * pList );
-
-                        BiNode();
-    virtual             ~BiNode();
-
-
-                        // convert a binary tree in a double linked list
-                        BiNode* ChangeBTreeDLList();
-
-            BiNode *    Left() const { return pLeft  ; }
-            BiNode *    Right() const{ return pRight ; }
-            void        EnumNodes( Link<> aLink ) const;
-};
-
-class NameNode : public BiNode
+class NameNode
 {
     void                SubOrderTree( NameNode * pOrderNode );
 
 protected:
-                        // pCmp is a pointer to name
+    NameNode*     pLeft;    // left subtree
+    NameNode*     pRight;   // right subtree
+
+                        // pCmp ist Zeiger auf Namen
             NameNode*   Search( const void * pCmp ) const;
 
+                         // convert a double linked list into a binary tree
+            NameNode*   ChangeDLListBTree( NameNode * pList );
+
+                        NameNode();
+    virtual             ~NameNode();
+
+                        // convert a binary tree in a double linked list
+                        NameNode* ChangeBTreeDLList();
+
 public:
-            NameNode*   Left() const { return static_cast<NameNode *>(pLeft); }
-            NameNode*   Right() const{ return static_cast<NameNode *>(pRight); }
+            void        EnumNodes( Link<> aLink ) const;
+            NameNode*   Left() const { return pLeft; }
+            NameNode*   Right() const{ return pRight; }
             NameNode*   Search( const NameNode * pName ) const;
                         // insert a new node in the b-tree
             bool        Insert( NameNode * pTN, sal_uInt32 * nDepth );

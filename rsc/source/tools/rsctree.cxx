@@ -26,32 +26,32 @@
 #include <rsctree.hxx>
 
 
-BiNode::BiNode()
+NameNode::NameNode()
 {
     pLeft = pRight = NULL;
 }
 
-BiNode::~BiNode()
+NameNode::~NameNode()
 {
 }
 
-void BiNode::EnumNodes( Link<> aLink ) const
+void NameNode::EnumNodes( Link<> aLink ) const
 {
     if( Left() )
         Left()->EnumNodes( aLink );
-    aLink.Call( const_cast<BiNode *>(this) );
+    aLink.Call( const_cast<NameNode *>(this) );
     if( Right() )
         Right()->EnumNodes( aLink );
 }
 
-BiNode * BiNode::ChangeDLListBTree( BiNode * pList )
+NameNode * NameNode::ChangeDLListBTree( NameNode * pList )
 {
-    BiNode * pMiddle;
-    BiNode * pTmp;
+    NameNode * pMiddle;
+    NameNode * pTmp;
     sal_uInt32 nEle, i;
 
     if( pList )
-{
+    {
         while( pList->Left() )
             pList = pList->Left();
         pTmp = pList;
@@ -75,7 +75,7 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList )
             pTmp->pRight = nullptr;
 
         // set left pointer to NULL
-        BiNode * pRightNode = pMiddle->Right();
+        NameNode * pRightNode = pMiddle->Right();
         if (pRightNode)
             pRightNode->pLeft = nullptr;
 
@@ -87,10 +87,10 @@ BiNode * BiNode::ChangeDLListBTree( BiNode * pList )
     return pList;
 }
 
-BiNode * BiNode::ChangeBTreeDLList()
+NameNode * NameNode::ChangeBTreeDLList()
 {
-    BiNode * pList;
-    BiNode * pLL_RN;    // right node of left list
+    NameNode * pList;
+    NameNode * pLL_RN;    // right node of left list
 
     if( Right() )
     {

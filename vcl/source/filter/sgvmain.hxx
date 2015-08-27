@@ -137,14 +137,8 @@ public:
     void   SetFont(sal_uInt32 FontID);
 };
 
-class Obj0Type {                // SuperClass for Apple-VMT
-public:
-    virtual void Draw(OutputDevice& rOut);
-    virtual ~Obj0Type() {}
-};
-
 #define ObjkSize 20                /* should be 21. due to alignment we shifted the flag */
-class ObjkType: public Obj0Type {  // basic componenents of all Stardraw objects
+class ObjkType {  // basic componenents of all Stardraw objects
 public:
     sal_uInt32     Last;
     sal_uInt32     Next;
@@ -161,9 +155,10 @@ public:
         , Layer(0)
     {
     }
+    virtual ~ObjkType() {}
     friend SvStream& ReadObjkType(SvStream& rIStream, ObjkType& rObjk);
     friend bool ObjOverSeek(SvStream& rInp, ObjkType& rObjk);
-    virtual void Draw(OutputDevice& rOut) SAL_OVERRIDE;
+    virtual void Draw(OutputDevice& rOut);
 };
 
 #define StrkSize 38

@@ -339,8 +339,6 @@ void ObjkType::Draw(OutputDevice&)
 {
 }
 
-void Obj0Type::Draw(OutputDevice&) {}
-
 void StrkType::Draw(OutputDevice& rOut)
 {
     SetLine(L,rOut);
