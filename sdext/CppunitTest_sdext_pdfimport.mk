@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_set_include,sdext_pdfimport,\
 
 $(eval $(call gb_CppunitTest_use_externals,sdext_pdfimport,\
     boost_headers \
+    boost_system \
     zlib \
 ))
 
