@@ -18,7 +18,7 @@
  */
 
 #include <sal/types.h>
-#include <checksum.hxx>
+#include <vcl/checksum.hxx>
 
 /*========================================================================
  *
