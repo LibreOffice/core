@@ -255,7 +255,7 @@ SvStream& Color::Read( SvStream& rIStm, bool bNewFormat )
     return rIStm;
 }
 
-SvStream& Color::Write( SvStream& rOStm, bool bNewFormat )
+SvStream& Color::Write( SvStream& rOStm, bool bNewFormat ) const
 {
     if ( bNewFormat )
         rOStm.WriteUInt32( mnColor );
