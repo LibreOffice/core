@@ -2661,7 +2661,7 @@ void Content::transfer(
 
         // Check source's and target's URL scheme
 
-        const OUString aScheme = sourceURI.GetScheme().toAsciiLowerCase();
+        OUString aScheme = sourceURI.GetScheme().toAsciiLowerCase();
         if ( aScheme == WEBDAV_URL_SCHEME )
         {
             sourceURI.SetScheme(
@@ -2691,12 +2691,16 @@ void Content::transfer(
             }
         }
 
-        if ( targetURI.GetScheme().toAsciiLowerCase() == WEBDAV_URL_SCHEME )
+        aScheme = targetURI.GetScheme().toAsciiLowerCase();
+        if ( aScheme == WEBDAV_URL_SCHEME )
             targetURI.SetScheme(
                 OUString( HTTP_URL_SCHEME ) );
-        else if ( targetURI.GetScheme().toAsciiLowerCase() == DAV_URL_SCHEME )
+        else if ( aScheme == DAV_URL_SCHEME )
             targetURI.SetScheme(
                 OUString( HTTP_URL_SCHEME ) );
+        else if ( aScheme == DAVS_URL_SCHEME )
+            targetURI.SetScheme(
+                OUString( HTTPS_URL_SCHEME ) );
 
         // @@@ This implementation of 'transfer' only works
         //     if the source and target are located at same host.
