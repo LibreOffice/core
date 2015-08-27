@@ -108,7 +108,7 @@ BitmapEx StylePresetsPanel::CreatePreview(OUString& aUrl, OUString& aName)
 }
 
 void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevice,
-                   OUString sName, sal_Int32 nHeight, Rectangle& aRect)
+                   OUString const & sName, sal_Int32 nHeight, Rectangle& aRect)
 {
     sfx2::StylePreviewRenderer* pStylePreviewRenderer;
 
