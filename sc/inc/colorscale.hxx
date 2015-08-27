@@ -248,7 +248,7 @@ private:
 class SC_DLLPUBLIC ScColorScaleFormat : public ScColorFormat
 {
 private:
-    typedef boost::ptr_vector<ScColorScaleEntry> ColorScaleEntries;
+    typedef std::vector<std::unique_ptr<ScColorScaleEntry>> ColorScaleEntries;
     ColorScaleEntries maColorScales;
 
     double GetMinValue() const;
