@@ -78,7 +78,7 @@ void Test::test_readAndWriteStream()
     }
 }
 
-bool checkTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, OUString sReference, sal_Int16 nTintShade, OUString sExpected)
+bool checkTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, OUString const & sReference, sal_Int16 nTintShade, OUString const & sExpected)
 {
     Color aColor(nR, nG, nB);
     if (sReference != aColor.AsRGBHexString())
