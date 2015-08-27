@@ -27,22 +27,19 @@
 #include <tools/globname.hxx>
 
 // ImpSvGlobalName ------------------------------------------------------------
-ImpSvGlobalName::ImpSvGlobalName( const ImpSvGlobalName & rObj )
-    : szData(rObj.szData)
-    , nRefCount(0)
-{
-}
-
-ImpSvGlobalName::ImpSvGlobalName( Empty )
-    : nRefCount(1)
+ImpSvGlobalName::ImpSvGlobalName()
 {
     memset( &szData, 0, sizeof( szData ) );
+}
+
+ImpSvGlobalName::ImpSvGlobalName( const ImpSvGlobalName & rObj )
+    : szData(rObj.szData)
+{
 }
 
 ImpSvGlobalName::ImpSvGlobalName(sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                           sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                           sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15)
-    : nRefCount(0)
 {
     szData.Data1 = n1;
     szData.Data2 = n2;
@@ -63,53 +60,49 @@ bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
 }
 
 // SvGlobalName ----------------------------------------------------------------
-SvGlobalName::SvGlobalName()
+SvGlobalName::SvGlobalName() :
+    pImp()
 {
-    static ImpSvGlobalName aNoName( ImpSvGlobalName::EMPTY );
-
-    pImp = &aNoName;
-    pImp->nRefCount++;
 }
 
-SvGlobalName::SvGlobalName( const SvGUID & rId )
+SvGlobalName::SvGlobalName( const SvGUID & rId ) :
+    pImp( ImpSvGlobalName( rId ) )
 {
-    pImp = new ImpSvGlobalName(rId);
-    pImp->nRefCount++;
 }
 
 SvGlobalName::SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                             sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                            sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
+                            sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 ) :
+    pImp( ImpSvGlobalName(n1, n2, n3, b8, b9, b10, b11, b12, b13, b14, b15) )
 {
-    pImp = new ImpSvGlobalName(n1, n2, n3, b8, b9, b10, b11, b12, b13, b14, b15);
-    pImp->nRefCount++;
+}
+
+SvGlobalName::SvGlobalName( const com::sun::star::uno::Sequence < sal_Int8 >& aSeq )
+{
+    // create SvGlobalName from a platform independent representation
+    SvGUID aResult;
+    memset( &aResult, 0, sizeof( aResult ) );
+    if ( aSeq.getLength() == 16 )
+    {
+        aResult.Data1 = ( ( ( ( ( ( sal_uInt8 )aSeq[0] << 8 ) + ( sal_uInt8 )aSeq[1] ) << 8 ) + ( sal_uInt8 )aSeq[2] ) << 8 ) + ( sal_uInt8 )aSeq[3];
+        aResult.Data2 = ( ( sal_uInt8 )aSeq[4] << 8 ) + ( sal_uInt8 )aSeq[5];
+        aResult.Data3 = ( ( sal_uInt8 )aSeq[6] << 8 ) + ( sal_uInt8 )aSeq[7];
+        for( int nInd = 0; nInd < 8; nInd++ )
+            aResult.Data4[nInd] = ( sal_uInt8 )aSeq[nInd+8];
+    }
+
+    pImp = ::o3tl::cow_wrapper< ImpSvGlobalName >(aResult);
 }
 
 SvGlobalName::~SvGlobalName()
 {
-    pImp->nRefCount--;
-    if( !pImp->nRefCount )
-        delete pImp;
 }
 
 SvGlobalName & SvGlobalName::operator = ( const SvGlobalName & rObj )
 {
-    rObj.pImp->nRefCount++;
-    pImp->nRefCount--;
-    if( !pImp->nRefCount )
-        delete pImp;
     pImp = rObj.pImp;
-    return *this;
-}
 
-void SvGlobalName::NewImp()
-{
-    if( pImp->nRefCount > 1 )
-    {
-        pImp->nRefCount--;
-        pImp = new ImpSvGlobalName( *pImp );
-        pImp->nRefCount++;
-    }
+    return *this;
 }
 
 SvStream& WriteSvGlobalName( SvStream& rOStr, const SvGlobalName & rObj )
@@ -123,7 +116,8 @@ SvStream& WriteSvGlobalName( SvStream& rOStr, const SvGlobalName & rObj )
 
 SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
 {
-    rObj.NewImp(); // copy if necessary
+    // the non-const dereferencing operator
+    // ensures pImp is unique
     rStr.ReadUInt32( rObj.pImp->szData.Data1 );
     rStr.ReadUInt16( rObj.pImp->szData.Data2 );
     rStr.ReadUInt16( rObj.pImp->szData.Data3 );
@@ -149,8 +143,6 @@ bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
 
 SvGlobalName & SvGlobalName::operator += ( sal_uInt32 n )
 {
-    NewImp();
-
     sal_uInt32 nOld = pImp->szData.Data1;
     pImp->szData.Data1 += n;
 
@@ -164,12 +156,11 @@ SvGlobalName & SvGlobalName::operator += ( sal_uInt32 n )
 
 bool SvGlobalName::operator == ( const SvGlobalName & rObj ) const
 {
-    return *pImp == *rObj.pImp;
+    return pImp == rObj.pImp;
 }
 
 void SvGlobalName::MakeFromMemory( void * pData )
 {
-    NewImp();
     memcpy( &pImp->szData, pData, sizeof( pImp->szData ) );
 }
 
@@ -241,7 +232,6 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
                 pStr++;
         }
 
-        NewImp();
         memcpy(&pImp->szData.Data1, &nFirst, sizeof(nFirst));
         memcpy(&pImp->szData.Data2, &nSec, sizeof(nSec));
         memcpy(&pImp->szData.Data3, &nThird, sizeof(nThird));
@@ -303,24 +293,6 @@ com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
     aResult[15] = pImp->szData.Data4[ 7 ];
 
     return aResult;
-}
-
-SvGlobalName::SvGlobalName( const com::sun::star::uno::Sequence < sal_Int8 >& aSeq )
-{
-    // create SvGlobalName from a platform independent representation
-    SvGUID aResult;
-    memset( &aResult, 0, sizeof( aResult ) );
-    if ( aSeq.getLength() == 16 )
-    {
-        aResult.Data1 = ( ( ( ( ( ( sal_uInt8 )aSeq[0] << 8 ) + ( sal_uInt8 )aSeq[1] ) << 8 ) + ( sal_uInt8 )aSeq[2] ) << 8 ) + ( sal_uInt8 )aSeq[3];
-        aResult.Data2 = ( ( sal_uInt8 )aSeq[4] << 8 ) + ( sal_uInt8 )aSeq[5];
-        aResult.Data3 = ( ( sal_uInt8 )aSeq[6] << 8 ) + ( sal_uInt8 )aSeq[7];
-        for( int nInd = 0; nInd < 8; nInd++ )
-            aResult.Data4[nInd] = ( sal_uInt8 )aSeq[nInd+8];
-    }
-
-    pImp = new ImpSvGlobalName(aResult);
-    pImp->nRefCount++;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
