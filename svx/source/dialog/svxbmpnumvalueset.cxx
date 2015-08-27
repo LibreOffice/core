@@ -141,9 +141,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         25, 90,
     };
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    const Color aBackColor = rStyleSettings.GetFieldColor();
-    const Color aTextColor = rStyleSettings.GetFieldTextColor();
+    const Color aBackColor(COL_WHITE);
+    const Color aTextColor(COL_BLACK);
 
     vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     Rectangle aRect = rUDEvt.GetRect();
@@ -187,10 +186,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
          pVDev->SetOutputSize( aRectSize );
         aOrgRect = aRect;
         pVDev->SetFillColor( aBackColor );
-
-        if(aBackColor == aLineColor)
-            aLineColor.Invert();
-        pVDev->SetLineColor(aLineColor);
+        pVDev->SetLineColor(COL_LIGHTGRAY);
         // Draw line only once
         if(nPageType != NUM_PAGETYPE_NUM)
         {
@@ -402,7 +398,6 @@ VCL_BUILDER_FACTORY_ARGS(SvxNumValueSet, WB_TABSTOP)
 
 void SvxNumValueSet::init(sal_uInt16 nType)
 {
-    aLineColor = COL_LIGHTGRAY;
     nPageType = nType;
     bHTMLMode = false;
     pVDev = NULL;

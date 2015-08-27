@@ -49,7 +49,6 @@ struct SvxBmpItemInfo
 
 class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
-    Color           aLineColor;
     sal_uInt16      nPageType;
     bool            bHTMLMode;
     Rectangle       aOrgRect;
