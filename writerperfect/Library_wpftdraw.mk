@@ -45,6 +45,7 @@ $(eval $(call gb_Library_use_libraries,wpftdraw,\
 
 $(eval $(call gb_Library_use_externals,wpftdraw,\
 	boost_headers \
+	boost_system \
 	cdr \
 	freehand \
 	mspub \

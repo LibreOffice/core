@@ -57,6 +57,7 @@ $(eval $(call gb_Library_use_libraries,svgfilter,\
 
 $(eval $(call gb_Library_use_externals,svgfilter,\
 	boost_headers \
+	boost_system \
 	libxml2 \
 ))
 
