@@ -399,17 +399,19 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
 {
     OpenGLZone aZone;
 
-    GLenum glErr = glGetError();
-    if (glErr != GL_NO_ERROR)
+    for (;;)
     {
+        GLenum glErr = glGetError();
+        if (glErr == GL_NO_ERROR)
+        {
+            break;
+        }
         const char* sError = OpenGLHelper::GLErrorString(glErr);
 
         if (sError)
             SAL_WARN("vcl.opengl", "GL Error #" << glErr << "(" << sError << ") in File " << pFile << " at line: " << nLine);
         else
             SAL_WARN("vcl.opengl", "GL Error #" << glErr << " (no message available) in File " << pFile << " at line: " << nLine);
-
-        glErr = glGetError();
     }
 }
 
