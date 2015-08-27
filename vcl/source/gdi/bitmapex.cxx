@@ -312,6 +312,7 @@ BitmapChecksum BitmapEx::GetChecksum() const
 {
     BitmapChecksum  nCrc = aBitmap.GetChecksum();
     SVBT32      aBT32;
+    BitmapChecksumOctetArray aBCOA;
 
     UInt32ToSVBT32( (long) eTransparent, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
@@ -321,8 +322,8 @@ BitmapChecksum BitmapEx::GetChecksum() const
 
     if( ( TRANSPARENT_BITMAP == eTransparent ) && !aMask.IsEmpty() )
     {
-        UInt32ToSVBT32( aMask.GetChecksum(), aBT32 );
-        nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+        BCToBCOA( aMask.GetChecksum(), aBCOA );
+        nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
     }
 
     return nCrc;

@@ -209,6 +209,7 @@ sal_uLong Animation::GetSizeBytes() const
 BitmapChecksum Animation::GetChecksum() const
 {
     SVBT32      aBT32;
+    BitmapChecksumOctetArray aBCOA;
     BitmapChecksum  nCrc = GetBitmapEx().GetChecksum();
 
     UInt32ToSVBT32( maList.size(), aBT32 );
@@ -225,8 +226,8 @@ BitmapChecksum Animation::GetChecksum() const
 
     for( size_t i = 0, nCount = maList.size(); i < nCount; i++ )
     {
-        UInt32ToSVBT32( maList[ i ]->GetChecksum(), aBT32 );
-        nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+        BCToBCOA( maList[ i ]->GetChecksum(), aBCOA );
+        nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
     }
 
     return nCrc;

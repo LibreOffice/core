@@ -2342,12 +2342,13 @@ GDIMetaFile GDIMetaFile::GetMonochromeMtf( const Color& rColor ) const
 
 BitmapChecksum GDIMetaFile::GetChecksum() const
 {
-    GDIMetaFile         aMtf;
-    SvMemoryStream      aMemStm( 65535, 65535 );
-    ImplMetaWriteData   aWriteData;
-    SVBT16              aBT16;
-    SVBT32              aBT32;
-    BitmapChecksum      nCrc = 0;
+    GDIMetaFile                 aMtf;
+    SvMemoryStream              aMemStm( 65535, 65535 );
+    ImplMetaWriteData           aWriteData;
+    SVBT16                      aBT16;
+    SVBT32                      aBT32;
+    BitmapChecksumOctetArray    aBCOA;
+    BitmapChecksum              nCrc = 0;
 
     aWriteData.meActualCharSet = aMemStm.GetStreamCharSet();
     for( size_t i = 0, nObjCount = GetActionSize(); i < nObjCount; i++ )
@@ -2363,8 +2364,8 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 ShortToSVBT16( static_cast<sal_uInt16>(pAct->GetType()), aBT16 );
                 nCrc = vcl_get_checksum( nCrc, aBT16, 2 );
 
-                UInt32ToSVBT32( pAct->GetBitmap().GetChecksum(), aBT32 );
-                nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+                BCToBCOA( pAct->GetBitmap().GetChecksum(), aBCOA );
+                nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
                 UInt32ToSVBT32( pAct->GetPoint().X(), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
@@ -2381,8 +2382,8 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 ShortToSVBT16( static_cast<sal_uInt16>(pAct->GetType()), aBT16 );
                 nCrc = vcl_get_checksum( nCrc, aBT16, 2 );
 
-                UInt32ToSVBT32( pAct->GetBitmap().GetChecksum(), aBT32 );
-                nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+                BCToBCOA( pAct->GetBitmap().GetChecksum(), aBCOA );
+                nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
                 UInt32ToSVBT32( pAct->GetPoint().X(), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
@@ -2405,8 +2406,8 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 ShortToSVBT16( static_cast<sal_uInt16>(pAct->GetType()), aBT16 );
                 nCrc = vcl_get_checksum( nCrc, aBT16, 2 );
 
-                UInt32ToSVBT32( pAct->GetBitmap().GetChecksum(), aBT32 );
-                nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+                BCToBCOA( pAct->GetBitmap().GetChecksum(), aBCOA );
+                nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
                 UInt32ToSVBT32( pAct->GetDestPoint().X(), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
@@ -2441,8 +2442,8 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 ShortToSVBT16( static_cast<sal_uInt16>(pAct->GetType()), aBT16 );
                 nCrc = vcl_get_checksum( nCrc, aBT16, 2 );
 
-                UInt32ToSVBT32( pAct->GetBitmapEx().GetChecksum(), aBT32 );
-                nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+                BCToBCOA( pAct->GetBitmapEx().GetChecksum(), aBCOA );
+                nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
                 UInt32ToSVBT32( pAct->GetPoint().X(), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
@@ -2459,8 +2460,8 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 ShortToSVBT16( static_cast<sal_uInt16>(pAct->GetType()), aBT16 );
                 nCrc = vcl_get_checksum( nCrc, aBT16, 2 );
 
-                UInt32ToSVBT32( pAct->GetBitmapEx().GetChecksum(), aBT32 );
-                nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+                BCToBCOA( pAct->GetBitmapEx().GetChecksum(), aBCOA );
+                nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
                 UInt32ToSVBT32( pAct->GetPoint().X(), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
@@ -2483,8 +2484,8 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 ShortToSVBT16( static_cast<sal_uInt16>(pAct->GetType()), aBT16 );
                 nCrc = vcl_get_checksum( nCrc, aBT16, 2 );
 
-                UInt32ToSVBT32( pAct->GetBitmapEx().GetChecksum(), aBT32 );
-                nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+                BCToBCOA( pAct->GetBitmapEx().GetChecksum(), aBCOA );
+                nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
                 UInt32ToSVBT32( pAct->GetDestPoint().X(), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
@@ -2519,8 +2520,8 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 ShortToSVBT16( static_cast<sal_uInt16>(pAct->GetType()), aBT16 );
                 nCrc = vcl_get_checksum( nCrc, aBT16, 2 );
 
-                UInt32ToSVBT32( pAct->GetBitmap().GetChecksum(), aBT32 );
-                nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+                BCToBCOA( pAct->GetBitmap().GetChecksum(), aBCOA );
+                nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
                 UInt32ToSVBT32( pAct->GetColor().GetColor(), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
@@ -2540,8 +2541,8 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 ShortToSVBT16( static_cast<sal_uInt16>(pAct->GetType()), aBT16 );
                 nCrc = vcl_get_checksum( nCrc, aBT16, 2 );
 
-                UInt32ToSVBT32( pAct->GetBitmap().GetChecksum(), aBT32 );
-                nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+                BCToBCOA( pAct->GetBitmap().GetChecksum(), aBCOA );
+                nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
                 UInt32ToSVBT32( pAct->GetColor().GetColor(), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
@@ -2567,8 +2568,8 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                 ShortToSVBT16( static_cast<sal_uInt16>(pAct->GetType()), aBT16 );
                 nCrc = vcl_get_checksum( nCrc, aBT16, 2 );
 
-                UInt32ToSVBT32( pAct->GetBitmap().GetChecksum(), aBT32 );
-                nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
+                BCToBCOA( pAct->GetBitmap().GetChecksum(), aBCOA );
+                nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
 
                 UInt32ToSVBT32( pAct->GetColor().GetColor(), aBT32 );
                 nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
