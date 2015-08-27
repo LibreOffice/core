@@ -604,11 +604,12 @@ struct ExecuteInfo
 class AsyncExecute
 {
 public:
-    DECL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo* );
+    DECL_STATIC_LINK_TYPED( AsyncExecute, ExecuteHdl_Impl, void*, void );
 };
 
-IMPL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_TYPED( AsyncExecute, ExecuteHdl_Impl, void*, p, void )
 {
+    ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
     SolarMutexReleaser aReleaser;
     try
     {
@@ -622,7 +623,6 @@ IMPL_STATIC_LINK( AsyncExecute, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
     }
 
     delete pExecuteInfo;
-    return 0;
 }
 //!! End of extra code for context menu modifying extensions
 

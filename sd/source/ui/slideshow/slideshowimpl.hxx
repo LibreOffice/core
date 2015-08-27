@@ -277,9 +277,9 @@ private:
     DECL_LINK_TYPED(updateHdl, Timer *, void);
     DECL_LINK( PostYieldListener, void* );
     DECL_LINK_TYPED(ReadyForNextInputHdl, Timer *, void);
-    DECL_LINK( endPresentationHdl, void* );
+    DECL_LINK_TYPED( endPresentationHdl, void*, void );
     DECL_LINK( ContextMenuSelectHdl, Menu * );
-    DECL_LINK( ContextMenuHdl, void* );
+    DECL_LINK_TYPED( ContextMenuHdl, void*, void );
     DECL_LINK_TYPED(deactivateHdl, Timer *, void);
     DECL_LINK( EventListenerHdl, VclSimpleEvent* );
 

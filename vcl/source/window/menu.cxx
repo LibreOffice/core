@@ -2204,11 +2204,10 @@ void Menu::ImplCallHighlight(sal_uInt16 nItem)
     }
 }
 
-IMPL_LINK_NOARG(Menu, ImplCallSelect)
+IMPL_LINK_NOARG_TYPED(Menu, ImplCallSelect, void*, void)
 {
     nEventId = 0;
     Select();
-    return 0;
 }
 
 Menu* Menu::ImplFindSelectMenu()

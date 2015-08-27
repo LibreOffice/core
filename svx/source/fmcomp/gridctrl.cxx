@@ -2849,11 +2849,10 @@ void DbGridControl::Command(const CommandEvent& rEvt)
     }
 }
 
-IMPL_LINK_NOARG(DbGridControl, OnDelete)
+IMPL_LINK_NOARG_TYPED(DbGridControl, OnDelete, void*, void)
 {
     m_nDeleteEvent = 0;
     DeleteSelectedRows();
-    return 0;
 }
 
 void DbGridControl::DeleteSelectedRows()
@@ -3461,7 +3460,7 @@ void DbGridControl::implAdjustInSolarThread(bool _bRows)
     }
 }
 
-IMPL_LINK(DbGridControl, OnAsyncAdjust, void*, pAdjustWhat)
+IMPL_LINK_TYPED(DbGridControl, OnAsyncAdjust, void*, pAdjustWhat, void)
 {
     m_nAsynAdjustEvent = 0;
 
@@ -3470,8 +3469,6 @@ IMPL_LINK(DbGridControl, OnAsyncAdjust, void*, pAdjustWhat)
 
     if ( !pAdjustWhat )
         AdjustDataSource();
-
-    return 0L;
 }
 
 void DbGridControl::BeginCursorAction()

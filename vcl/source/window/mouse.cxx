@@ -163,7 +163,7 @@ void Window::ImplGenerateMouseMove()
         mpWindowImpl->mpFrameData->mnMouseMoveId = Application::PostUserEvent( LINK( mpWindowImpl->mpFrameWindow, Window, ImplGenerateMouseMoveHdl ), NULL, true );
 }
 
-IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl)
+IMPL_LINK_NOARG_TYPED(Window, ImplGenerateMouseMoveHdl, void*, void)
 {
     mpWindowImpl->mpFrameData->mnMouseMoveId = 0;
     vcl::Window* pCaptureWin = ImplGetSVData()->maWinData.mpCaptureWin;
@@ -173,7 +173,6 @@ IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl)
     {
         ImplCallMouseMove( mpWindowImpl->mpFrameData->mnMouseCode );
     }
-    return 0;
 }
 
 void Window::ImplInvertFocus( const Rectangle& rRect )

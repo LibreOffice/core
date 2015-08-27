@@ -100,7 +100,7 @@ public:
     // XEventListener
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    DECL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile* );
+    DECL_STATIC_LINK_TYPED( RecentFilesMenuController, ExecuteHdl_Impl, void*, void );
 
 private:
     virtual void impl_setPopupMenu() SAL_OVERRIDE;
@@ -439,8 +439,9 @@ throw( RuntimeException, std::exception )
     }
 }
 
-IMPL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
+IMPL_STATIC_LINK_TYPED( RecentFilesMenuController, ExecuteHdl_Impl, void*, p, void )
 {
+    LoadRecentFile* pLoadRecentFile = static_cast<LoadRecentFile*>(p);
     try
     {
         // Asynchronous execution as this can lead to our own destruction!
@@ -453,7 +454,6 @@ IMPL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile*, p
     }
 
     delete pLoadRecentFile;
-    return 0;
 }
 
 }

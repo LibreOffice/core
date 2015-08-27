@@ -44,7 +44,7 @@ private:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
     };
 
-    DECL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo* );
+    DECL_STATIC_LINK_TYPED( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, void*, void );
 
 public:
 

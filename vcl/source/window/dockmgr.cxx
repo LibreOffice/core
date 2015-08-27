@@ -50,7 +50,7 @@ private:
     bool            mbInMove;
     ImplSVEvent *   mnLastUserEvent;
 
-    DECL_LINK(DockingHdl, void *);
+    DECL_LINK_TYPED(DockingHdl, void *, void);
     DECL_LINK_TYPED(DockTimerHdl, Idle *, void);
     DECL_LINK_TYPED(EndDockTimerHdl, Idle *, void);
 public:
@@ -151,7 +151,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, EndDockTimerHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
+IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockingHdl, void*, void)
 {
     // called during move of a floating window
     mnLastUserEvent = 0;
@@ -221,7 +221,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
         }
     }
     mbInMove = false;
-    return 0;
 }
 
 void ImplDockFloatWin2::Move()

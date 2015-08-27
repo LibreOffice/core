@@ -85,10 +85,9 @@ IMPL_LINK_NOARG_TYPED( AsynchronLink, HandleCall_Idle, Idle*, void )
     Call_Impl( _pArg );
 }
 
-IMPL_LINK_NOARG( AsynchronLink, HandleCall_PostUserEvent )
+IMPL_LINK_NOARG_TYPED( AsynchronLink, HandleCall_PostUserEvent, void*, void )
 {
     HandleCall_Idle(nullptr);
-    return 0;
 }
 
 void AsynchronLink::ClearPendingCall()

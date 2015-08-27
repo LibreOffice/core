@@ -39,11 +39,10 @@ void SfxHintPoster::Post( SfxRequest* pHintToPost )
     AddFirstRef();
 }
 
-IMPL_LINK( SfxHintPoster, DoEvent_Impl, SfxRequest *, pPostedHint )
+IMPL_LINK_TYPED( SfxHintPoster, DoEvent_Impl, void *, pPostedHint, void )
 {
-    m_Link.Call( pPostedHint );
+    m_Link.Call( static_cast<SfxRequest*>(pPostedHint) );
     ReleaseRef();
-    return 0;
 }
 
 void SfxHintPoster::SetEventHdl(const Link<SfxRequest*,void>& rLink)

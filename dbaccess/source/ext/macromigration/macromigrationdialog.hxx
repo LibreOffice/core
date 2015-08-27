@@ -65,7 +65,7 @@ namespace dbmm
         void    impl_reloadDocument_nothrow( bool _bMigrationSuccess );
 
     private:
-        DECL_LINK( OnStartMigration, void* );
+        DECL_LINK_TYPED( OnStartMigration, void*, void );
 
     private:
         ::std::unique_ptr< MacroMigrationDialog_Data >    m_pData;

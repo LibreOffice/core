@@ -54,7 +54,7 @@ namespace bib
             VclPtr<BibToolBar>      pToolBar;
             VclPtr<BibGridwin>      pGridWin;
 
-            DECL_LINK( RecalcLayout_Impl, void* );
+            DECL_LINK_TYPED( RecalcLayout_Impl, void*, void );
 
         protected:
 

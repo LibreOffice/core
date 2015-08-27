@@ -231,7 +231,7 @@ private:
     OUString                            m_sCurrentURL;
     ImplSVEvent * m_nStartWizard;
 
-    DECL_LINK( OnStartTableWizard, void* );
+    DECL_LINK_TYPED( OnStartTableWizard, void*, void );
 public:
     explicit DBContentLoader(const Reference< XComponentContext >&);
     virtual ~DBContentLoader();
@@ -562,7 +562,7 @@ void DBContentLoader::cancel() throw(std::exception)
 {
 }
 
-IMPL_LINK_NOARG( DBContentLoader, OnStartTableWizard )
+IMPL_LINK_NOARG_TYPED( DBContentLoader, OnStartTableWizard, void*, void )
 {
     m_nStartWizard = 0;
     try
@@ -583,7 +583,6 @@ IMPL_LINK_NOARG( DBContentLoader, OnStartTableWizard )
         OSL_FAIL("caught an exception while starting the table wizard!");
     }
     m_xMySelf = NULL;
-    return 0L;
 }
 
 }

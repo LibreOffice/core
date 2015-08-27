@@ -2789,7 +2789,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
 
 
 
-IMPL_LINK_NOARG(SvxTableController, UpdateHdl)
+IMPL_LINK_NOARG_TYPED(SvxTableController, UpdateHdl, void*, void)
 {
     mnUpdateEvent = 0;
 
@@ -2805,8 +2805,6 @@ IMPL_LINK_NOARG(SvxTableController, UpdateHdl)
         }
     }
     updateSelectionOverlay();
-
-    return 0;
 }
 
 namespace

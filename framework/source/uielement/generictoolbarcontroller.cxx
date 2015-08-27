@@ -269,8 +269,9 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-IMPL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_TYPED( GenericToolbarController, ExecuteHdl_Impl, void*, p, void )
 {
+   ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
    SolarMutexReleaser aReleaser;
    try
    {
@@ -284,7 +285,6 @@ IMPL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo*, pExec
    }
 
    delete pExecuteInfo;
-   return 0;
 }
 
 MenuToolbarController::MenuToolbarController( const Reference< XComponentContext >& rxContext,

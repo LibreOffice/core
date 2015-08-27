@@ -123,7 +123,7 @@ class BibToolBar:   public ToolBox
         sal_uInt16              nMenuId;
         sal_uInt16              nSelMenuItem;
         OUString                aQueryField;
-        Link<>                  aLayoutManager;
+        Link<void*,void>        aLayoutManager;
         sal_Int16               nSymbolsSize;
         sal_Int16               nOutStyle;
 
@@ -148,7 +148,7 @@ class BibToolBar:   public ToolBox
 
     public:
 
-        BibToolBar(vcl::Window* pParent, Link<> aLink, WinBits nStyle = WB_3DLOOK );
+        BibToolBar(vcl::Window* pParent, Link<void*,void> aLink, WinBits nStyle = WB_3DLOOK );
         virtual ~BibToolBar();
         virtual void dispose() SAL_OVERRIDE;
 

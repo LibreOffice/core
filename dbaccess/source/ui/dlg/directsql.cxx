@@ -318,10 +318,9 @@ namespace dbaui
     {
         EndDialog( RET_OK );
     }
-    IMPL_LINK_NOARG( DirectSQLDialog, OnClose )
+    IMPL_LINK_NOARG_TYPED( DirectSQLDialog, OnClose, void*, void )
     {
         EndDialog( RET_OK );
-        return 0L;
     }
 
     IMPL_LINK_NOARG_TYPED( DirectSQLDialog, OnExecute, Button*, void )

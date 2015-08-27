@@ -165,8 +165,8 @@ namespace pcr
     class HyperlinkInput : public Edit
     {
     private:
-        Point   m_aMouseButtonDownPos;
-        Link<>  m_aClickHandler;
+        Point             m_aMouseButtonDownPos;
+        Link<void*,void>  m_aClickHandler;
 
     public:
         HyperlinkInput( vcl::Window* _pParent, WinBits _nWinStyle );
@@ -174,7 +174,7 @@ namespace pcr
         /** sets the handler which will (asynchronously, with locked SolarMutex) be called
             when the hyperlink has been clicked by the user
         */
-        void        SetClickHdl( const Link<>& _rHdl ) { m_aClickHandler = _rHdl; }
+        void    SetClickHdl( const Link<void*,void>& _rHdl ) { m_aClickHandler = _rHdl; }
 
     protected:
         virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -213,7 +213,7 @@ namespace pcr
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     protected:
-        DECL_LINK( OnHyperlinkClicked, void* );
+        DECL_LINK_TYPED( OnHyperlinkClicked, void*, void );
     };
 
 

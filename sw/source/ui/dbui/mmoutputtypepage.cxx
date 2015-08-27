@@ -388,10 +388,9 @@ IMPL_LINK_NOARG_TYPED(SwSendMailDialog, CloseHdl_Impl, Button*, void)
     ModelessDialog::Show( false );
 }
 
-IMPL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog*, pDialog )
+IMPL_STATIC_LINK_TYPED( SwSendMailDialog, StartSendMails, void*, pDialog, void )
 {
-    pDialog->SendMails();
-    return 0;
+    static_cast<SwSendMailDialog*>(pDialog)->SendMails();
 }
 
 IMPL_LINK_TYPED( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
@@ -416,8 +415,9 @@ IMPL_LINK_TYPED( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
     }
 }
 
-IMPL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog*, pDialog )
+IMPL_STATIC_LINK_TYPED( SwSendMailDialog, StopSendMails, void*, p, void )
 {
+    SwSendMailDialog* pDialog = static_cast<SwSendMailDialog*>(p);
     if(pDialog->m_pImpl->xMailDispatcher.is() &&
         pDialog->m_pImpl->xMailDispatcher->isStarted())
     {
@@ -425,7 +425,6 @@ IMPL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog*, pDialog )
         pDialog->m_pStop->SetText(pDialog->m_sContinue);
         pDialog->m_pPaused->Show();
     }
-    return 0;
 }
 
 void  SwSendMailDialog::SendMails()

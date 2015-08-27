@@ -339,12 +339,12 @@ IMPL_LINK( GalleryBrowser1, EndThemePropertiesDlgHdl, VclAbstractDialog2*, pDial
     return 0L;
 }
 
-IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, VclAbstractDialog2*, pDialog )
+IMPL_LINK_TYPED( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, p, void )
 {
+    VclAbstractDialog2* pDialog = static_cast<VclAbstractDialog2*>(p);
     delete pDialog;
     delete mpThemePropsDlgItemSet;
     mpThemePropsDlgItemSet = 0;
-    return 0L;
 }
 
 void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
@@ -581,7 +581,7 @@ bool GalleryBrowser1::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
     return bRet;
 }
 
-IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl)
+IMPL_LINK_NOARG_TYPED(GalleryBrowser1, ShowContextMenuHdl, void*, void)
 {
     ::std::vector< sal_uInt16 > aExecVector;
     ImplGetExecuteVector(aExecVector);
@@ -606,8 +606,6 @@ IMPL_LINK_NOARG(GalleryBrowser1, ShowContextMenuHdl)
 
         aMenu.Execute( this, aSelPos );
     }
-
-    return 0L;
 }
 
 IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )

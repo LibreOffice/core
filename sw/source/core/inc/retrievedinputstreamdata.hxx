@@ -75,7 +75,7 @@ class SwRetrievedInputStreamDataManager
         bool PopData( const tDataKey nDataKey,
                       tData& rData );
 
-        DECL_LINK( LinkedInputStreamReady, SwRetrievedInputStreamDataManager::tDataKey* );
+        DECL_LINK_TYPED( LinkedInputStreamReady, void*, void );
 
     private:
 

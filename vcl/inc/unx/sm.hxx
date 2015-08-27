@@ -57,10 +57,10 @@ class SessionManagerClient
 
     static OString getPreviousSessionID();
 
-    DECL_STATIC_LINK( SessionManagerClient, ShutDownHdl, void* );
-    DECL_STATIC_LINK( SessionManagerClient, ShutDownCancelHdl, void* );
-    DECL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void* );
-    DECL_STATIC_LINK( SessionManagerClient, InteractionHdl, void* );
+    DECL_STATIC_LINK_TYPED( SessionManagerClient, ShutDownHdl, void*, void );
+    DECL_STATIC_LINK_TYPED( SessionManagerClient, ShutDownCancelHdl, void*, void );
+    DECL_STATIC_LINK_TYPED( SessionManagerClient, SaveYourselfHdl, void*, void );
+    DECL_STATIC_LINK_TYPED( SessionManagerClient, InteractionHdl, void*, void );
 public:
     static void open(SalSession * pSession);
     static void close();

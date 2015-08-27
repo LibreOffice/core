@@ -554,9 +554,9 @@ private:
 public:
 
     DECL_DLLPRIVATE_LINK_TYPED( ImplHandlePaintHdl, Idle*, void );
-    DECL_DLLPRIVATE_LINK(      ImplGenerateMouseMoveHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplGenerateMouseMoveHdl, void*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplTrackTimerHdl, Timer*, void );
-    DECL_DLLPRIVATE_LINK(      ImplAsyncFocusHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplAsyncFocusHdl, void*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplHandleResizeTimerHdl, Idle*, void );
 
 
@@ -884,7 +884,7 @@ public:
     void                                AddChildEventListener( const Link<>& rEventListener );
     void                                RemoveChildEventListener( const Link<>& rEventListener );
 
-    ImplSVEvent *                       PostUserEvent( const Link<>& rLink, void* pCaller = NULL, bool bReferenceLink = false );
+    ImplSVEvent *                       PostUserEvent( const Link<void*,void>& rLink, void* pCaller = NULL, bool bReferenceLink = false );
     void                                RemoveUserEvent( ImplSVEvent * nUserEvent );
 
     void                                IncrementLockCount();

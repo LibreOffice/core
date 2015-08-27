@@ -522,8 +522,9 @@ void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
     }
 }
 
-IMPL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, NewDocument*, pNewDocument )
+IMPL_STATIC_LINK_TYPED( NewMenuController, ExecuteHdl_Impl, void*, p, void )
 {
+    NewDocument* pNewDocument = static_cast<NewDocument*>(p);
 /*  i62706: Don't catch all exceptions. We hide all problems here and are not able
             to handle them on higher levels.
     try
@@ -534,7 +535,6 @@ IMPL_STATIC_LINK( NewMenuController, ExecuteHdl_Impl, NewDocument*, pNewDocument
         // elements if a component gets detached from its frame!
         pNewDocument->xDispatch->dispatch( pNewDocument->aTargetURL, pNewDocument->aArgSeq );
     delete pNewDocument;
-    return 0;
 }
 
 }

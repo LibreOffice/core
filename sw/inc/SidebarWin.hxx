@@ -190,7 +190,7 @@ class SwSidebarWin : public vcl::Window
 
         DECL_LINK(ModifyHdl, void*);
         DECL_LINK(ScrollHdl, ScrollBar*);
-        DECL_LINK(DeleteHdl, void*);
+        DECL_LINK_TYPED(DeleteHdl, void*, void);
 
         inline SwView& DocView() { return mrView;}
         inline SwPostItMgr& Mgr() { return mrMgr; }

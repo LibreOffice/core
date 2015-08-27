@@ -67,7 +67,7 @@ private:
     bool            mbInMove;
     ImplSVEvent *   mnLastUserEvent;
 
-    DECL_LINK(DockingHdl, void *);
+    DECL_LINK_TYPED(DockingHdl, void *, void);
     DECL_LINK_TYPED(DockTimerHdl, Idle *, void);
 public:
     ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
@@ -153,7 +153,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockTimerHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
+IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockingHdl, void*, void)
 {
     PointerState aState = mpDockWin->GetParent()->GetPointerState();
 
@@ -187,7 +187,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
         }
     }
     mbInMove = false;
-    return 0;
 }
 
 void ImplDockFloatWin::Move()

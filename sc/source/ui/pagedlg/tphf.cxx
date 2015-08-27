@@ -166,14 +166,14 @@ IMPL_LINK_NOARG_TYPED(ScHFPage, BtnHdl, Button*, void)
     Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ), NULL, true );
 }
 
-IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
+IMPL_LINK_NOARG_TYPED(ScHFPage, HFEditHdl, void*, void)
 {
     SfxViewShell*   pViewSh = SfxViewShell::Current();
 
     if ( !pViewSh )
     {
         OSL_FAIL( "Current ViewShell not found." );
-        return 0;
+        return;
     }
 
     if (   m_pCntSharedBox->IsEnabled()
@@ -233,8 +233,6 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
             aDataSet.Put( *pDlg->GetOutputItemSet() );
         }
     }
-
-    return 0;
 }
 
 // class ScHeaderPage

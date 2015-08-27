@@ -111,7 +111,7 @@ namespace svt
             virtual void impl_setPopupMenu();
             static OUString determineBaseURL( const OUString& aURL );
 
-            DECL_STATIC_LINK( PopupMenuControllerBase, ExecuteHdl_Impl, PopupMenuControllerBaseDispatchInfo* );
+            DECL_STATIC_LINK_TYPED( PopupMenuControllerBase, ExecuteHdl_Impl, void*, void );
 
 
             bool                                                                             m_bInitialized;

@@ -790,7 +790,7 @@ void AnnotationManagerImpl::UpdateTags( bool bSynchron )
     }
 }
 
-IMPL_LINK_NOARG(AnnotationManagerImpl, UpdateTagsHdl)
+IMPL_LINK_NOARG_TYPED(AnnotationManagerImpl, UpdateTagsHdl, void*, void)
 {
     mnUpdateTagsEvent  = 0;
     DisposeTags();
@@ -802,8 +802,6 @@ IMPL_LINK_NOARG(AnnotationManagerImpl, UpdateTagsHdl)
         static_cast< ::sd::View* >( mrBase.GetDrawView() )->updateHandles();
 
     invalidateSlots();
-
-    return 0;
 }
 
 void AnnotationManagerImpl::CreateTags()

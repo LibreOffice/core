@@ -189,7 +189,7 @@ void XPlugin_Impl::checkListeners( const char* normalizedURL )
     }
 }
 
-IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
+IMPL_LINK_NOARG_TYPED( XPlugin_Impl, secondLevelDispose, void*, void )
 {
     Guard< Mutex > aGuard( m_aMutex );
 
@@ -206,7 +206,7 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
                 break;
         }
         if( iter == rList.end() || ! isDisposable() )
-            return 0;
+            return;
     }
 
     if (m_pDisposer)
@@ -229,7 +229,6 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
 #endif
     destroyInstance();
     PluginControl_Impl::dispose();
-    return 0;
 }
 
 void XPlugin_Impl::dispose() throw(std::exception)
