@@ -95,8 +95,8 @@ protected:
         BitmapBuffer* pBuf = pThis->AcquireBuffer(BITMAP_READ_ACCESS);
         if (pBuf)
         {
-            pThis->ReleaseBuffer(pBuf, BITMAP_READ_ACCESS);
             nCrc = vcl_get_checksum(0, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
+            pThis->ReleaseBuffer(pBuf, BITMAP_READ_ACCESS);
             pThis->maChecksum = nCrc;
             pThis->mbChecksumValid = true;
         }
