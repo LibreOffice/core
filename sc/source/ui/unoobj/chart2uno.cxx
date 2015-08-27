@@ -2857,7 +2857,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
                 if( m_pDocument )
                 {
                     for ( size_t n=0; n<m_aValueListeners.size(); n++ )
-                        m_pDocument->AddUnoListenerCall( m_aValueListeners[n], aEvent );
+                        m_pDocument->AddUnoListenerCall( *m_aValueListeners[n], aEvent );
                 }
 
                 m_bGotDataChangedHint = false;
@@ -3379,7 +3379,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
     ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens, ScAddress());
     uno::Reference<util::XModifyListener> *pObj =
             new uno::Reference<util::XModifyListener>( aListener );
-    m_aValueListeners.push_back( pObj );
+    m_aValueListeners.push_back( std::unique_ptr<XModifyListenerRef>(pObj) );
 
     if ( m_aValueListeners.size() == 1 )
     {
@@ -3423,7 +3423,7 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
     sal_uInt16 nCount = m_aValueListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
     {
-        uno::Reference<util::XModifyListener>& rObj = m_aValueListeners[n];
+        uno::Reference<util::XModifyListener>& rObj = *m_aValueListeners[n];
         if ( rObj == aListener )
         {
             m_aValueListeners.erase( m_aValueListeners.begin() + n );

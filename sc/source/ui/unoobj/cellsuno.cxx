@@ -1613,7 +1613,10 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 lang::EventObject aEvent;
                 aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
                 for ( size_t n=0; n<aValueListeners.size(); n++ )
-                    aValueListeners[n]->disposing( aEvent );
+                {
+                    std::unique_ptr<XModifyListenerRef>& xmlr = aValueListeners[n];
+                    xmlr.get()[0]->disposing(aEvent);
+                }
 
                 aValueListeners.clear();
 
@@ -1643,7 +1646,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                 ScDocument& rDoc = pDocShell->GetDocument();
                 for ( size_t n=0; n<aValueListeners.size(); n++ )
-                    rDoc.AddUnoListenerCall( aValueListeners[n], aEvent );
+                    rDoc.AddUnoListenerCall( aValueListeners[n]->get(), aEvent );
 
                 bGotDataChangedHint = false;
             }
@@ -3415,7 +3418,7 @@ void SAL_CALL ScCellRangesBase::addModifyListener(const uno::Reference<util::XMo
 
     uno::Reference<util::XModifyListener> *pObj =
             new uno::Reference<util::XModifyListener>( aListener );
-    aValueListeners.push_back( pObj );
+    aValueListeners.push_back(std::unique_ptr<XModifyListenerRef>(pObj) );
 
     if ( aValueListeners.size() == 1 )
     {
@@ -3443,7 +3446,7 @@ void SAL_CALL ScCellRangesBase::removeModifyListener( const uno::Reference<util:
     sal_uInt16 nCount = aValueListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
     {
-        uno::Reference<util::XModifyListener>& rObj = aValueListeners[n];
+        uno::Reference<util::XModifyListener>& rObj = *aValueListeners[n];
         if ( rObj == aListener )
         {
             aValueListeners.erase( aValueListeners.begin() + n );

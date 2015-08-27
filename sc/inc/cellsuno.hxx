@@ -120,8 +120,7 @@ public:
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XModifyListener > XModifyListenerRef;
-typedef boost::ptr_vector<XModifyListenerRef> XModifyListenerArr_Impl;
-
+typedef std::vector<std::unique_ptr<XModifyListenerRef>> XModifyListenerArr_Impl;
 //  ScCellRangesBase - base class for ScCellRangesObj (with access by index)
 //                                and ScCellRangeObj  (without access by index)
 

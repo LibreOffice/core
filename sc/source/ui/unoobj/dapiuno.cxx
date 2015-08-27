@@ -1305,7 +1305,7 @@ void SAL_CALL ScDataPilotTableObj::addModifyListener( const uno::Reference<util:
     SolarMutexGuard aGuard;
 
     uno::Reference<util::XModifyListener> *pObj = new uno::Reference<util::XModifyListener>( aListener );
-    aModifyListeners.push_back( pObj );
+    aModifyListeners.push_back( std::unique_ptr<XModifyListenerRef>(pObj) );
 
     if ( aModifyListeners.size() == 1 )
     {
@@ -1323,7 +1323,7 @@ void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<ut
     sal_uInt16 nCount = aModifyListeners.size();
     for ( sal_uInt16 n=nCount; n--; )
     {
-        uno::Reference<util::XModifyListener>& rObj = aModifyListeners[n];
+        uno::Reference<util::XModifyListener>& rObj = *aModifyListeners[n];
         if ( rObj == aListener )
         {
             aModifyListeners.erase( aModifyListeners.begin() + n );
@@ -1377,7 +1377,7 @@ void ScDataPilotTableObj::Refreshed_Impl()
 
     ScDocument& rDoc = GetDocShell()->GetDocument();
     for ( size_t n=0; n<aModifyListeners.size(); n++ )
-        rDoc.AddUnoListenerCall( aModifyListeners[n], aEvent );
+        rDoc.AddUnoListenerCall( *aModifyListeners[n], aEvent );
 }
 
 ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
