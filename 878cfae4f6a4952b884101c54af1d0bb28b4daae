@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_ba5f9174",
+        "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-27T17:02:27Z",
+      "side": 1,
+      "message": "i don\u0027t think this is necessary - can\u0027t have a Set without a Pool",
+      "revId": "878cfae4f6a4952b884101c54af1d0bb28b4daae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_fa590990",
+        "filename": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-27T17:02:27Z",
+      "side": 1,
+      "message": "i\u0027m not sure if that is a good default for the ruby text - in the examples usually the ruby text is smaller than the text of the paragraph itself?\n\nwhat would happen if you just don\u0027t write the font in this case?",
+      "revId": "878cfae4f6a4952b884101c54af1d0bb28b4daae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
