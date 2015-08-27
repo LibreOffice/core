@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_bad2f132",
+        "filename": "include/sfx2/sidebar/ContextList.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-27T09:43:21Z",
+      "side": 1,
+      "message": "Return a const reference here instead to avoid creating copies of the vector unnecessarily -- iiuc, you\u0027re only reading from the vector, not actually modifying the values.\n\nSure, the vector will never have 10k items so it doesn\u0027t matter performance-wise, but it\u0027s better-ish ;) style",
+      "revId": "0412e6317937741d7e4dde5a2976c38452107ecc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_5a1755ed",
+        "filename": "sfx2/source/sidebar/ResourceManager.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-08-27T09:43:21Z",
+      "side": 1,
+      "message": "I was idly wondering: wouldn\u0027t this loop be useful also elsewhere? You could then make it a separate func, FindPanelByID or somesuch",
+      "revId": "0412e6317937741d7e4dde5a2976c38452107ecc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
