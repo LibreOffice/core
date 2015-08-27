@@ -1295,9 +1295,9 @@ XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleF
     {
         // exact position is not important, we allow only absolute refs
 
-        XclExpCfvoList::RecordRefType xCfvo( new XclExpCfvo( GetRoot(), *itr, aAddr ) );
+        XclExpCfvoList::RecordRefType xCfvo( new XclExpCfvo( GetRoot(), *itr[0], aAddr ) );
         maCfvoList.AppendRecord( xCfvo );
-        XclExpColScaleColList::RecordRefType xClo( new XclExpColScaleCol( GetRoot(), itr->GetColor() ) );
+        XclExpColScaleColList::RecordRefType xClo( new XclExpColScaleCol( GetRoot(), itr[0]->GetColor() ) );
         maColList.AppendRecord( xClo );
     }
 }

@@ -1816,8 +1816,8 @@ ScConditionalFormat* ScConditionalFormat::Clone(ScDocument* pNewDoc) const
 
     for (CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        ScFormatEntry* pNewEntry = itr->Clone(pNewDoc);
-        pNew->maEntries.push_back( pNewEntry );
+        ScFormatEntry* pNewEntry = itr[0]->Clone(pNewDoc);
+        pNew->maEntries.push_back( std::unique_ptr<ScFormatEntry>(pNewEntry) );
         pNewEntry->SetParent(pNew);
     }
     pNew->SetRange( maRanges );
@@ -1849,7 +1849,7 @@ void ScConditionalFormat::SetRange( const ScRangeList& rRanges )
 
 void ScConditionalFormat::AddEntry( ScFormatEntry* pNew )
 {
-    maEntries.push_back(pNew);
+    maEntries.push_back( std::unique_ptr<ScFormatEntry>(pNew));
     pNew->SetParent(this);
 }
 
@@ -1879,7 +1879,7 @@ ScConditionalFormat::~ScConditionalFormat()
 const ScFormatEntry* ScConditionalFormat::GetEntry( sal_uInt16 nPos ) const
 {
     if ( nPos < size() )
-        return &maEntries[nPos];
+        return &maEntries[nPos].get()[0];
     else
         return NULL;
 }
@@ -1888,15 +1888,15 @@ const OUString& ScConditionalFormat::GetCellStyle( ScRefCellValue& rCell, const 
 {
     for (CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        if(itr->GetType() == condformat::CONDITION)
+        if(itr[0]->GetType() == condformat::CONDITION)
         {
-            const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*itr);
+            const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*itr[0]);
             if (rEntry.IsCellValid(rCell, rPos))
                 return rEntry.GetStyle();
         }
-        else if(itr->GetType() == condformat::DATE)
+        else if(itr[0]->GetType() == condformat::DATE)
         {
-            const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(*itr);
+            const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(*itr[0]);
             if (rEntry.IsValid( rPos ))
                 return rEntry.GetStyleName();
         }
@@ -1910,30 +1910,30 @@ ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAd
     ScCondFormatData aData;
     for(CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        if(itr->GetType() == condformat::CONDITION && aData.aStyleName.isEmpty())
+        if(itr[0]->GetType() == condformat::CONDITION && aData.aStyleName.isEmpty())
         {
-            const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*itr);
+            const ScCondFormatEntry& rEntry = static_cast<const ScCondFormatEntry&>(*itr[0]);
             if (rEntry.IsCellValid(rCell, rPos))
                 aData.aStyleName = rEntry.GetStyle();
         }
-        else if(itr->GetType() == condformat::COLORSCALE && !aData.pColorScale)
+        else if(itr[0]->GetType() == condformat::COLORSCALE && !aData.pColorScale)
         {
-            const ScColorScaleFormat& rEntry = static_cast<const ScColorScaleFormat&>(*itr);
+            const ScColorScaleFormat& rEntry = static_cast<const ScColorScaleFormat&>(*itr[0]);
             aData.pColorScale = rEntry.GetColor(rPos);
         }
-        else if(itr->GetType() == condformat::DATABAR && !aData.pDataBar)
+        else if(itr[0]->GetType() == condformat::DATABAR && !aData.pDataBar)
         {
-            const ScDataBarFormat& rEntry = static_cast<const ScDataBarFormat&>(*itr);
+            const ScDataBarFormat& rEntry = static_cast<const ScDataBarFormat&>(*itr[0]);
             aData.pDataBar = rEntry.GetDataBarInfo(rPos);
         }
-        else if(itr->GetType() == condformat::ICONSET && !aData.pIconSet)
+        else if(itr[0]->GetType() == condformat::ICONSET && !aData.pIconSet)
         {
-            const ScIconSetFormat& rEntry = static_cast<const ScIconSetFormat&>(*itr);
+            const ScIconSetFormat& rEntry = static_cast<const ScIconSetFormat&>(*itr[0]);
             aData.pIconSet = rEntry.GetIconSetInfo(rPos);
         }
-        else if(itr->GetType() == condformat::DATE && aData.aStyleName.isEmpty())
+        else if(itr[0]->GetType() == condformat::DATE && aData.aStyleName.isEmpty())
         {
-            const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(*itr);
+            const ScCondDateFormatEntry& rEntry = static_cast<const ScCondDateFormatEntry&>(*itr[0]);
             if ( rEntry.IsValid( rPos ) )
                 aData.aStyleName = rEntry.GetStyleName();
         }
@@ -1958,21 +1958,21 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
 void ScConditionalFormat::CompileAll()
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
-        if(itr->GetType() == condformat::CONDITION)
-            static_cast<ScCondFormatEntry&>(*itr).CompileAll();
+        if(itr[0]->GetType() == condformat::CONDITION)
+            static_cast<ScCondFormatEntry&>(*itr[0]).CompileAll();
 }
 
 void ScConditionalFormat::CompileXML()
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
-        if(itr->GetType() == condformat::CONDITION)
-            static_cast<ScCondFormatEntry&>(*itr).CompileXML();
+        if(itr[0]->GetType() == condformat::CONDITION)
+            static_cast<ScCondFormatEntry&>(*itr[0]).CompileXML();
 }
 
 void ScConditionalFormat::UpdateReference( sc::RefUpdateContext& rCxt, bool bCopyAsMove )
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
-        itr->UpdateReference(rCxt);
+        itr[0]->UpdateReference(rCxt);
 
     if (rCxt.meMode == URM_COPY && bCopyAsMove)
         maRanges.UpdateReference(URM_MOVE, pDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
@@ -2007,7 +2007,7 @@ void ScConditionalFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     }
 
     for (CondFormatContainer::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
-        it->UpdateInsertTab(rCxt);
+        it[0]->UpdateInsertTab(rCxt);
 }
 
 void ScConditionalFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
@@ -2036,7 +2036,7 @@ void ScConditionalFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
     }
 
     for (CondFormatContainer::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
-        it->UpdateDeleteTab(rCxt);
+        it[0]->UpdateDeleteTab(rCxt);
 }
 
 void ScConditionalFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
@@ -2073,7 +2073,7 @@ void ScConditionalFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
     }
 
     for (CondFormatContainer::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
-        it->UpdateMoveTab(rCxt);
+        it[0]->UpdateMoveTab(rCxt);
 }
 
 void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
@@ -2088,9 +2088,9 @@ void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 void ScConditionalFormat::RenameCellStyle(const OUString& rOld, const OUString& rNew)
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
-        if(itr->GetType() == condformat::CONDITION)
+        if(itr[0]->GetType() == condformat::CONDITION)
         {
-            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*itr);
+            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*itr[0]);
             if(rFormat.GetStyle() == rOld)
                 rFormat.UpdateStyleName( rNew );
         }
@@ -2100,17 +2100,17 @@ void ScConditionalFormat::SourceChanged( const ScAddress& rAddr )
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        condformat::ScFormatEntryType eEntryType = itr->GetType();
+        condformat::ScFormatEntryType eEntryType = itr[0]->GetType();
         if( eEntryType == condformat::CONDITION)
         {
-            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*itr);
+            ScCondFormatEntry& rFormat = static_cast<ScCondFormatEntry&>(*itr[0]);
             rFormat.SourceChanged( rAddr );
         }
         else if( eEntryType == condformat::COLORSCALE ||
                 eEntryType == condformat::DATABAR ||
                 eEntryType == condformat::ICONSET )
         {
-            ScColorFormat& rFormat = static_cast<ScColorFormat&>(*itr);
+            ScColorFormat& rFormat = static_cast<ScColorFormat&>(*itr[0]);
             if(rFormat.NeedsRepaint())
             {
                 // we need to repaint the whole range anyway
@@ -2125,9 +2125,9 @@ bool ScConditionalFormat::MarkUsedExternalReferences() const
 {
     bool bAllMarked = false;
     for(CondFormatContainer::const_iterator itr = maEntries.begin(); itr != maEntries.end() && !bAllMarked; ++itr)
-        if(itr->GetType() == condformat::CONDITION)
+        if(itr[0]->GetType() == condformat::CONDITION)
         {
-            const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(*itr);
+            const ScCondFormatEntry& rFormat = static_cast<const ScCondFormatEntry&>(*itr[0]);
             bAllMarked = rFormat.MarkUsedExternalReferences();
         }
 
@@ -2138,7 +2138,7 @@ void ScConditionalFormat::startRendering()
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        itr->startRendering();
+        itr[0]->startRendering();
     }
 }
 
@@ -2146,7 +2146,7 @@ void ScConditionalFormat::endRendering()
 {
     for(CondFormatContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        itr->endRendering();
+        itr[0]->endRendering();
     }
 }
 

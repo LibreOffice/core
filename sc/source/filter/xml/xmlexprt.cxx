@@ -4304,17 +4304,17 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                         for(ScColorScaleFormat::const_iterator it = mrColorScale.begin();
                                 it != mrColorScale.end(); ++it)
                         {
-                            if(it->GetType() == COLORSCALE_FORMULA)
+                            if(it[0]->GetType() == COLORSCALE_FORMULA)
                             {
-                                OUString sFormula = it->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
+                                OUString sFormula = it[0]->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
                             }
                             else
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it->GetValue()));
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it[0]->GetValue()));
 
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it[0]));
                             OUStringBuffer aBuffer;
-                            ::sax::Converter::convertColor(aBuffer, it->GetColor().GetColor());
+                            ::sax::Converter::convertColor(aBuffer, it[0]->GetColor().GetColor());
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_COLOR, aBuffer.makeStringAndClear());
                             SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, true, true);
                         }

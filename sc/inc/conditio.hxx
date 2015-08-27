@@ -382,7 +382,7 @@ class SC_DLLPUBLIC ScConditionalFormat: private boost::noncopyable
     ScDocument*         pDoc;
     sal_uInt32          nKey;               // Index in attributes
 
-    typedef boost::ptr_vector<ScFormatEntry> CondFormatContainer;
+    typedef std::vector<std::unique_ptr<ScFormatEntry>> CondFormatContainer;
     CondFormatContainer maEntries;
     ScRangeList maRanges;            // Ranges for conditional format
 
