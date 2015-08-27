@@ -22,10 +22,10 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/button.hxx>
 #include <vcl/image.hxx>
-
+#include <vcl/fixed.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
-
+#include <vcl/lstbox.hxx>
 #include <boost/scoped_ptr.hpp>
 
 namespace sw { namespace sidebar {
@@ -64,6 +64,19 @@ namespace sw { namespace sidebar {
         VclPtr<RadioButton> mpRBWrapParallel;
         VclPtr<RadioButton> mpRBWrapThrough;
         VclPtr<RadioButton> mpRBIdealWrap;
+        VclPtr<Button>      mpEditContour;
+        VclPtr<CheckBox> mpEnableContour;
+        VclPtr<ListBox>  mpSpacingLB;
+        VclPtr<FixedText> mpCustomEntry;
+
+        //Spacing
+        sal_uInt16 nTop;
+        sal_uInt16 nBottom;
+        sal_uInt16 nLeft;
+        sal_uInt16 nRight;
+
+        //custom entry
+        OUString aCustomEntry;
 
         //Image resource.
         ImageList aWrapIL;
@@ -75,10 +88,18 @@ namespace sw { namespace sidebar {
         ::sfx2::sidebar::ControllerItem maSwWrapParallelControl;
         ::sfx2::sidebar::ControllerItem maSwWrapThroughControl;
         ::sfx2::sidebar::ControllerItem maSwWrapIdealControl;
+        ::sfx2::sidebar::ControllerItem maSwEnableContourControl;
+        ::sfx2::sidebar::ControllerItem maSwLRSpacingControl;
+        ::sfx2::sidebar::ControllerItem maSwULSpacingControl;
 
         void Initialize();
+        void UpdateEditContour();
+        void UpdateSpacingLB();
 
         DECL_LINK_TYPED(WrapTypeHdl, Button*, void);
+        DECL_LINK_TYPED(EnableContourHdl, Button*, void);
+        DECL_LINK_TYPED(EditContourHdl, Button*, void);
+        DECL_LINK(SpacingLBHdl, ListBox*);
     };
 
 } } // end of namespace ::sw::sidebar
