@@ -50,9 +50,7 @@ common class for MenuFloatingWindow and MenuBarWindow:
 */
 class MenuWindow
 {
-public:
-    virtual ~MenuWindow() {}
-
+protected:
     /// Show the appropriate help tooltip.
     static bool ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
             const HelpEvent& rHEvt, const Rectangle &rHighlightRect);
