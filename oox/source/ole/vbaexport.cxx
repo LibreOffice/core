@@ -609,6 +609,14 @@ void exportDirStream(SvStream& rStrm)
     aCompression.write();
 }
 
+void exportVBAProjectStream(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x61CC); // Reserved1
+    rStrm.WriteUInt16(0xFFFF); // Version
+    rStrm.WriteUInt8(0x00); // Reserved2
+    rStrm.WriteUInt16(0x0000); // Undefined
+}
+
 }
 
 void VbaExport::exportVBA(SotStorage* pRootStorage)
@@ -616,9 +624,12 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     // start here with the VBA export
     SotStorage* pVBAStream = pRootStorage->OpenSotStorage("VBA", STREAM_READWRITE);
     SotStorageStream* pDirStream = pVBAStream->OpenSotStream("dir", STREAM_READWRITE);
+    SotStorageStream* pVBAProjectStream = pVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
 
     // export
     exportDirStream(*pDirStream);
+    exportVBAProjectStream(*pVBAProjectStream);
+
 
     css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
@@ -631,6 +642,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
         SAL_DEBUG(aModuleInfo.ModuleType);
     }
+    pVBAProjectStream->Commit();
     pDirStream->Commit();
     pVBAStream->Commit();
     pRootStorage->Commit();
