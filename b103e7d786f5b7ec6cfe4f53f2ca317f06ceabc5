@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fa0719c6_bd25cbaf",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T21:46:45Z",
+      "side": 0,
+      "message": "So - here\u0027s a bit of nuance. operator\u003d\u003d compares for pointer equality, if every default-constructed instance here gets its own heap-allocated EMPTY ImplObject, that one will never compare equal two default-constructed SvGlobalNames.\n\nSee e.g. basegfx/source/matrix/b2dhommatrix.cxx and the IdentityMatrix there for how to implement this sort of global default.",
+      "revId": "b103e7d786f5b7ec6cfe4f53f2ca317f06ceabc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0719c6_3a2541c2",
         "filename": "tools/source/ref/globname.cxx",
         "patchSetId": 1
@@ -13,6 +30,24 @@
       "writtenOn": "2015-08-27T21:08:52Z",
       "side": 0,
       "message": "make_unique takes care of this for us and this, since this is only used inside this class it isn\u0027t used any more.",
+      "revId": "b103e7d786f5b7ec6cfe4f53f2ca317f06ceabc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_1d10374e",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T21:46:45Z",
+      "side": 0,
+      "message": "yeap. love that sort of code vanishing. pretty easy to get the details wrong ...",
+      "parentUuid": "fa0719c6_3a2541c2",
       "revId": "b103e7d786f5b7ec6cfe4f53f2ca317f06ceabc5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

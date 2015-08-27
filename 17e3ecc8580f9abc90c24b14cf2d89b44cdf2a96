@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "fa0719c6_fd08e32a",
+        "filename": "include/tools/globname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T21:46:45Z",
+      "side": 1,
+      "message": "Yeah, but also I\u0027m pretty sure it\u0027s nowhere used - can you try to simply drop it?",
+      "parentUuid": "fa0719c6_da16c554",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0719c6_9a356df9",
         "filename": "tools/source/ref/globname.cxx",
         "patchSetId": 1
@@ -82,6 +100,24 @@
       "writtenOn": "2015-08-27T21:08:52Z",
       "side": 1,
       "message": "This is exactly the same as ImpSvGGlobalName( Empty ). I figured that was probably the best option for a default constructor.",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_dd0d1f39",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T21:46:45Z",
+      "side": 1,
+      "message": "Yep. And I\u0027d kill the other one with the Empty enum type in exchange.",
+      "parentUuid": "fa0719c6_9a356df9",
       "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -105,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "fa0719c6_3d137b5e",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T21:46:45Z",
+      "side": 1,
+      "message": "See above - why not get rid of that thing?",
+      "parentUuid": "fa0719c6_da3fe5d4",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0719c6_ba179153",
         "filename": "tools/source/ref/globname.cxx",
         "patchSetId": 1
@@ -116,6 +170,24 @@
       "writtenOn": "2015-08-27T21:08:52Z",
       "side": 1,
       "message": "Me being lazy :-)",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_7d1df365",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T21:46:45Z",
+      "side": 1,
+      "message": "So I got you with the unit test? ;)",
+      "parentUuid": "fa0719c6_ba179153",
       "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
