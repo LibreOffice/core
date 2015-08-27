@@ -591,28 +591,41 @@ void exportDirStream(SvStream& rStrm)
 
 void exportSheet1Stream(SvStream& rStrm)
 {
-    const OUString thisSheet1Stream = "Attribute VB_Name = \"Sheet1\"\r\n"
-                                      "Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n"
-                                      "Attribute VB_GlobalNameSpace = False\r\n"
-                                      "Attribute VB_Creatable = False\r\n"
-                                      "Attribute VB_PredeclaredId = True\r\n"
-                                      "Attribute VB_Exposed = True\r\n"
-                                      "Attribute VB_TemplateDerived = False\r\n"
-                                      "Attribute VB_Customizable = True\r\n";
-    exportString(rStrm, thisSheet1Stream);
+    const OUString Sheet1Stream = "Attribute VB_Name = \"Sheet1\"\r\n"
+                                  "Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n"
+                                  "Attribute VB_GlobalNameSpace = False\r\n"
+                                  "Attribute VB_Creatable = False\r\n"
+                                  "Attribute VB_PredeclaredId = True\r\n"
+                                  "Attribute VB_Exposed = True\r\n"
+                                  "Attribute VB_TemplateDerived = False\r\n"
+                                  "Attribute VB_Customizable = True\r\n";
+    exportString(rStrm, Sheet1Stream);
 }
 
 void exportSheet2Stream(SvStream& rStrm)
 {
-    const OUString thisSheet1Stream = "Attribute VB_Name = \"Sheet2\"\r\n"
-                                      "Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n"
-                                      "Attribute VB_GlobalNameSpace = False\r\n"
-                                      "Attribute VB_Creatable = False\r\n"
-                                      "Attribute VB_PredeclaredId = True\r\n"
-                                      "Attribute VB_Exposed = True\r\n"
-                                      "Attribute VB_TemplateDerived = False\r\n"
-                                      "Attribute VB_Customizable = True\r\n";
-    exportString(rStrm, thisSheet1Stream);
+    const OUString Sheet2Stream = "Attribute VB_Name = \"Sheet2\"\r\n"
+                                  "Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n"
+                                  "Attribute VB_GlobalNameSpace = False\r\n"
+                                  "Attribute VB_Creatable = False\r\n"
+                                  "Attribute VB_PredeclaredId = True\r\n"
+                                  "Attribute VB_Exposed = True\r\n"
+                                  "Attribute VB_TemplateDerived = False\r\n"
+                                  "Attribute VB_Customizable = True\r\n";
+    exportString(rStrm, Sheet2Stream);
+}
+
+void exportSheet3Stream(SvStream& rStrm)
+{
+    const OUString Sheet3Stream = "Attribute VB_Name = \"Sheet3\"\r\n"
+                                  "Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n"
+                                  "Attribute VB_GlobalNameSpace = False\r\n"
+                                  "Attribute VB_Creatable = False\r\n"
+                                  "Attribute VB_PredeclaredId = True\r\n"
+                                  "Attribute VB_Exposed = True\r\n"
+                                  "Attribute VB_TemplateDerived = False\r\n"
+                                  "Attribute VB_Customizable = True\r\n";
+    exportString(rStrm, Sheet3Stream);
 }
 
 void exportModule1Stream(SvStream& rStrm)
@@ -670,6 +683,9 @@ void VbaExport::exportVBA()
     const OUString aSheet2FileName("/tmp/vba_sheet2_out.bin");
     SvFileStream aSheet2Stream(aSheet2FileName, STREAM_READWRITE);
 
+    const OUString aSheet3FileName("/tmp/vba_sheet3_out.bin");
+    SvFileStream aSheet3Stream(aSheet3FileName, STREAM_READWRITE);
+
     const OUString aThisWorkbookFileName("/tmp/vba_workbook_out.bin");
     SvFileStream aThisWorkbookStream(aThisWorkbookFileName, STREAM_READWRITE);
 
@@ -680,6 +696,7 @@ void VbaExport::exportVBA()
     exportDirStream(aDirStream);
     exportSheet1Stream(aSheet1Stream);
     exportSheet2Stream(aSheet2Stream);
+    exportSheet3Stream(aSheet3Stream);
     exportModule1Stream(aModule1Stream);
     exportThisWorkbookStream(aThisWorkbookStream);
     exportVBAProjectStream(aVBAProjectStream);
