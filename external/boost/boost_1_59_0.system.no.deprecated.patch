@@ -1,0 +1,74 @@
+Starting from 1.59.0 final release, there are undefined generic_category()
+errors in internal and external modules: [1].
+
+Instead of defining the -DBOOST_SYSTEM_NO_DEPRECATED in internal and external
+modules, patch the boost to not define the deprecated stuff per default.
+
+[1] http://paste.openstack.org/show/430509
+
+diff -ru boost.orig/boost/system/detail/error_code.ipp boost/boost/system/detail/error_code.ipp
+--- foo/misc/boost.orig/boost/system/detail/error_code.ipp	2015-01-06 17:08:27.000000000 +0100
++++ foo/misc/boost/boost/system/detail/error_code.ipp	2015-08-28 21:47:00.941340365 +0200
+@@ -437,7 +437,7 @@
+ } // unnamed namespace
+ 
+ 
+-# ifndef BOOST_SYSTEM_NO_DEPRECATED
++# ifdef BOOST_SYSTEM_DEPRECATED
+     BOOST_SYSTEM_DECL error_code throws; // "throw on error" special error_code;
+                                          //  note that it doesn't matter if this
+                                          //  isn't initialized before use since
+diff -ru boost.orig/boost/system/error_code.hpp boost/boost/system/error_code.hpp
+--- foo/misc/boost.orig/boost/system/error_code.hpp	2015-01-06 17:08:27.000000000 +0100
++++ foo/misc/boost/boost/system/error_code.hpp	2015-08-28 21:47:58.318344217 +0200
+@@ -139,7 +139,7 @@
+ 
+     } // namespace errc
+ 
+-# ifndef BOOST_SYSTEM_NO_DEPRECATED
++# ifdef BOOST_SYSTEM_DEPRECATED
+     namespace posix = errc;
+     namespace posix_error = errc;
+ # endif
+@@ -214,7 +214,7 @@
+ #endif
+     //  deprecated synonyms --------------------------------------------------//
+ 
+-# ifndef BOOST_SYSTEM_NO_DEPRECATED
++# ifdef BOOST_SYSTEM_DEPRECATED
+     inline const error_category &  get_system_category() { return system_category(); }
+     inline const error_category &  get_generic_category() { return generic_category(); }
+     inline const error_category &  get_posix_category() { return generic_category(); }
+@@ -394,7 +394,7 @@
+     };
+ 
+     //  predefined error_code object used as "throw on error" tag
+-# ifndef BOOST_SYSTEM_NO_DEPRECATED
++# ifdef BOOST_SYSTEM_DEPRECATED
+     BOOST_SYSTEM_DECL extern error_code throws;
+ # endif
+ 
+diff -ru boost.orig/boost/system/linux_error.hpp boost/boost/system/linux_error.hpp
+--- foo/misc/boost.orig/boost/system/linux_error.hpp	2015-01-06 17:08:27.000000000 +0100
++++ foo/misc/boost/boost/system/linux_error.hpp	2015-08-28 21:47:17.172341455 +0200
+@@ -89,7 +89,7 @@
+       };
+     }  // namespace linux_error
+ 
+-# ifndef BOOST_SYSTEM_NO_DEPRECATED
++# ifdef BOOST_SYSTEM_DEPRECATED
+     namespace Linux = linux_error;
+ # endif
+ 
+diff -ru boost.orig/boost/system/windows_error.hpp boost/boost/system/windows_error.hpp
+--- foo/misc/boost.orig/boost/system/windows_error.hpp	2015-01-06 17:08:27.000000000 +0100
++++ foo/misc/boost/boost/system/windows_error.hpp	2015-08-28 21:46:39.802338946 +0200
+@@ -105,7 +105,7 @@
+ 
+     }  // namespace windows
+ 
+-# ifndef BOOST_SYSTEM_NO_DEPRECATED
++# ifdef BOOST_SYSTEM_DEPRECATED
+     namespace windows = windows_error;
+ # endif
+ 

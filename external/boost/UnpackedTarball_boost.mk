@@ -70,8 +70,6 @@ boost_patches += rtti.patch.0
 
 # https://svn.boost.org/trac/boost/ticket/11505
 boost_patches += boost_1_59_0.mpl.config.wundef.patch
-# https://svn.boost.org/trac/boost/ticket/11503
-boost_patches += boost_1_59_0.type_index.wshadow.patch
 # https://svn.boost.org/trac/boost/ticket/11502
 boost_patches += boost_1_59_0.property_tree.wtype-limits.patch
 # https://svn.boost.org/trac/boost/ticket/11507
@@ -82,19 +80,12 @@ boost_patches += boost_1_59_0.iostreams.wshadow.patch
 boost_patches += boost_1_59_0.iostreams.wunused.patch
 # https://svn.boost.org/trac/boost/ticket/11506
 boost_patches += boost_1_59_0.rational.wshadow.patch
-# https://svn.boost.org/trac/boost/ticket/11510
-boost_patches += boost_1_59_0.unique_ptr.wshadow.patch
-# fixed upstream
-# https://svn.boost.org/trac/boost/ticket/11500
-boost_patches += boost_1_59_0.move.Bool-type-collision.4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d.patch
 # https://svn.boost.org/trac/boost/ticket/11511
 boost_patches += boost_1_59_0.multi_array.wshadow.patch
-# https://svn.boost.org/trac/boost/ticket/11512
-boost_patches += boost_1_59_0.signal2.wshadow.patch
 # https://svn.boost.org/trac/boost/ticket/11501
 boost_patches += boost_1_59_0.property_tree.wreturn-type.patch
-# fixed upstream by bdcd06c4cc1971d763e528b8cb1d0f16fcc5ecf4
-boost_patches += boost.concept_check.Wunused-local-typedefs.warnings.patch.1
+# https://svn.boost.org/trac/boost/ticket/11597
+boost_patches += boost_1_59_0.system.no.deprecated.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
