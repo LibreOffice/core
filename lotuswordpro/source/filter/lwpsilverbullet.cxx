@@ -192,7 +192,7 @@ OUString LwpSilverBullet::GetBulletFontName()
     //foundry has been set?
     if (!m_pFoundry)
     {
-        return "";
+        return OUString();
     }
 
     LwpFontManager& rFontMgr = m_pFoundry->GetFontManger();
@@ -203,7 +203,7 @@ OUString LwpSilverBullet::GetBulletFontName()
     //final fontid is valid?
     if (nFinalFont > 255 || nFinalFont == 0)
     {
-        return "";
+        return OUString();
     }
 
     //get font name from font manager.
@@ -252,7 +252,7 @@ OUString LwpSilverBullet::GetNumCharByStyleID(LwpFribParaNumber* pParaNumber)
     if (!pParaNumber)
     {
         assert(false);
-        return "";
+        return OUString();
     }
 
     OUString strNumChar("1");
@@ -363,7 +363,7 @@ OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
     LwpFrib* pParaFrib = m_pBulletPara->GetFribs().GetFribs();
     if (!pParaFrib)
     {
-        return "";
+        return OUString();
     }
 
     while (pParaFrib)
@@ -373,7 +373,7 @@ OUString LwpSilverBullet::GetAdditionalName(sal_uInt8 nPos)
             ModifierInfo* pMoInfo = pParaFrib->GetModifiers();
             if (!pMoInfo)
             {
-                return "";
+                return OUString();
             }
             sal_uInt16 nHideLevels = pMoInfo->aTxtAttrOverride.GetHideLevels();
             sal_uInt16 nType = static_cast<LwpFribDocVar*>(pParaFrib)->GetType();
@@ -434,7 +434,7 @@ OUString LwpSilverBullet::GetSectionName()
     LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY).get());
     if (!pStory)
     {
-        return "";
+        return OUString();
     }
 
     return pStory->GetSectionName();

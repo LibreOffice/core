@@ -377,7 +377,7 @@ OUString SAL_CALL SvxUnoTextRangeBase::getString()
     }
     else
     {
-        return "";
+        return OUString();
     }
 }
 

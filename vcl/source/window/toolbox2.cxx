@@ -1584,7 +1584,7 @@ OUString ToolBox::GetQuickHelpText( sal_uInt16 nItemId ) const
     if ( pItem )
         return pItem->maQuickHelpText;
     else
-        return "";
+        return OUString();
 }
 
 void ToolBox::SetHelpText( sal_uInt16 nItemId, const OUString& rText )
