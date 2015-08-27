@@ -168,20 +168,23 @@ OpenGLTexture::OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int
         mpImpl->IncreaseRefCount(nSlotNumber);
 }
 
-OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, bool bAllocate ) :
-    maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, bool bAllocate )
+    : maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+    , mnSlotNumber(-1)
 {
     mpImpl = new ImplOpenGLTexture( nWidth, nHeight, bAllocate );
 }
 
-OpenGLTexture::OpenGLTexture( int nX, int nY, int nWidth, int nHeight ) :
-    maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+OpenGLTexture::OpenGLTexture( int nX, int nY, int nWidth, int nHeight )
+    : maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+    , mnSlotNumber(-1)
 {
     mpImpl = new ImplOpenGLTexture( nX, nY, nWidth, nHeight );
 }
 
-OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData ) :
-    maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData )
+    : maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
+    , mnSlotNumber(-1)
 {
     mpImpl = new ImplOpenGLTexture( nWidth, nHeight, nFormat, nType, pData );
 }
