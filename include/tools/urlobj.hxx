@@ -390,6 +390,10 @@ public:
 
     inline INetProtocol GetProtocol() const { return m_eScheme; }
 
+    bool hasScheme(INetProtocol scheme) const { return scheme == m_eScheme; }
+
+    bool hasScheme(OUString const & scheme) const;
+
     /** Return the URL 'prefix' for a given scheme.
 
         @param eTheScheme  One of the supported URL schemes.

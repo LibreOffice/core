@@ -3914,6 +3914,15 @@ OUString INetURLObject::getExternalURL(DecodeMechanism eMechanism,
     return aTheExtURIRef;
 }
 
+bool INetURLObject::hasScheme(OUString const & scheme) const {
+    return m_aScheme.isPresent()
+        && (rtl_ustr_compareIgnoreAsciiCase_WithLength(
+                scheme.getStr(), scheme.getLength(),
+                m_aAbsURIRef.getStr() + m_aScheme.getBegin(),
+                m_aScheme.getLength())
+            == 0);
+}
+
 // static
 OUString INetURLObject::GetScheme(INetProtocol eTheScheme)
 {
