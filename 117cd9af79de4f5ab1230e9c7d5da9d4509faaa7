@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_1ae4bd0b",
+        "filename": "sw/source/filter/html/wrthtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1203,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T09:55:29Z",
+      "side": 1,
+      "message": "That one will probably cause compiler warnings about empty branches, how about inverting the check \u0026 merging with the else branch?",
+      "revId": "117cd9af79de4f5ab1230e9c7d5da9d4509faaa7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
