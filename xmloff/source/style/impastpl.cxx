@@ -683,6 +683,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                 GetExport().AddAttribute(
                     XML_NAMESPACE_STYLE, XML_FAMILY, aStrFamilyName );
                 if(aStrFamilyName != "graphic" &&
+                        aStrFamilyName != "drawing-page" &&
                         aStrFamilyName != "presentation" &&
                         aStrFamilyName != "chart" )
                     bExtensionNamespace = true;
