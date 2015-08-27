@@ -296,7 +296,7 @@ class Parser:
             "registry" : 1,
             "remotebridges" : 1,
             "reportdesign" : 0, #
-            "rsc" : 0, #
+            "rsc" : 1,
             "sal" : 1,
             "salhelper" : 1,
             "sax" : 1,
