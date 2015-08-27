@@ -529,7 +529,6 @@ void VclGtkClipboard::setContents(
 
     std::list< Reference< datatransfer::clipboard::XClipboardListener > > xListeners( m_aListeners );
     datatransfer::clipboard::ClipboardEvent aEv;
-    aEv.Contents = m_aContents;
 
     if (m_aContents.is())
     {
@@ -578,6 +577,8 @@ void VclGtkClipboard::setContents(
                                     ClipboardGetFunc, ClipboardClearFunc, G_OBJECT(m_pOwner));
         m_aGtkTargets = aGtkTargets;
     }
+
+    aEv.Contents = getContents();
 
     aGuard.clear();
 
