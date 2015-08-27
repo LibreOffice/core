@@ -329,6 +329,23 @@ namespace tools_urlobj
             CPPUNIT_ASSERT(strm == 0);
         }
 
+        void urlobjTest_hasScheme() {
+            CPPUNIT_ASSERT(INetURLObject().hasScheme(INetProtocol::NotValid));
+            CPPUNIT_ASSERT(!INetURLObject().hasScheme(""));
+            CPPUNIT_ASSERT(
+                INetURLObject("http://example.org").hasScheme(
+                    INetProtocol::Http));
+            CPPUNIT_ASSERT(
+                !INetURLObject("http://example.org").hasScheme(
+                    INetProtocol::Https));
+            CPPUNIT_ASSERT(
+                INetURLObject("http://example.org").hasScheme("Http"));
+            CPPUNIT_ASSERT(
+                !INetURLObject("http://example.org").hasScheme("dav"));
+            CPPUNIT_ASSERT(
+                INetURLObject("dav://example.org").hasScheme("dav"));
+        }
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -343,6 +360,7 @@ namespace tools_urlobj
         CPPUNIT_TEST( urlobjCmisTest );
         CPPUNIT_TEST( urlobjTest_emptyPath );
         CPPUNIT_TEST( urlobjTest_data );
+        CPPUNIT_TEST( urlobjTest_hasScheme );
         CPPUNIT_TEST_SUITE_END(  );
     };                          // class createPool
 

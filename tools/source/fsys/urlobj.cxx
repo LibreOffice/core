@@ -1488,10 +1488,10 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
 
     sal_Unicode const * pPrefixBegin = p;
     PrefixInfo const * pPrefix = getPrefix(pPrefixBegin, pEnd);
-    bool hasScheme = pPrefix != 0;
-    if (!hasScheme) {
+    bool scheme = pPrefix != 0;
+    if (!scheme) {
         pPrefixBegin = p;
-        hasScheme = !parseScheme(&pPrefixBegin, pEnd, '#').isEmpty();
+        scheme = !parseScheme(&pPrefixBegin, pEnd, '#').isEmpty();
     }
 
     sal_uInt32 nSegmentDelimiter = '/';
@@ -1500,7 +1500,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
     sal_uInt32 nFragmentDelimiter = '#';
     Part ePart = PART_VISIBLE;
 
-    if (!hasScheme && bSmart)
+    if (!scheme && bSmart)
     {
         // If the input matches any of the following productions (for which
         // the appropriate style bit is set in eStyle), it is assumed to be an
@@ -1594,13 +1594,13 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
     if (pPrefix && pPrefix->m_eScheme == m_eScheme
         && getSchemeInfo().m_bHierarchical)
     {
-        hasScheme = false;
+        scheme = false;
         while (p != pEnd && *p++ != ':') ;
     }
-    rWasAbsolute = hasScheme;
+    rWasAbsolute = scheme;
 
     // Fast solution for non-relative URIs:
-    if (hasScheme)
+    if (scheme)
     {
         INetURLObject aNewURI(rTheRelURIRef, eMechanism, eCharset);
         if (aNewURI.HasError())
@@ -3912,6 +3912,15 @@ OUString INetURLObject::getExternalURL(DecodeMechanism eMechanism,
     translateToExternal(
         m_aAbsURIRef.toString(), aTheExtURIRef, eMechanism, eCharset);
     return aTheExtURIRef;
+}
+
+bool INetURLObject::hasScheme(OUString const & scheme) const {
+    return m_aScheme.isPresent()
+        && (rtl_ustr_compareIgnoreAsciiCase_WithLength(
+                scheme.getStr(), scheme.getLength(),
+                m_aAbsURIRef.getStr() + m_aScheme.getBegin(),
+                m_aScheme.getLength())
+            == 0);
 }
 
 // static
