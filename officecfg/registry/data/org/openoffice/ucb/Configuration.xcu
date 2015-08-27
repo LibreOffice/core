@@ -45,7 +45,7 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider3" oor:op="replace" install:module="neon">
+            <node oor:name="Provider3" oor:op="replace" install:module="webdav">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -56,7 +56,7 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider4" oor:op="replace" install:module="neon">
+            <node oor:name="Provider4" oor:op="replace" install:module="webdav">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -90,7 +90,7 @@
               </prop>
             </node>
             <node oor:name="Provider7" oor:op="replace"
-                install:module="neon_gnomevfs">
+                install:module="webdav_neon_gnomevfs">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -145,7 +145,8 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider12" oor:op="replace" install:module="neon">
+            <node oor:name="Provider12" oor:op="replace"
+                install:module="webdav">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -156,7 +157,8 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider12a" oor:op="replace" install:module="neon">
+            <node oor:name="Provider12a" oor:op="replace"
+                install:module="webdav">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
@@ -168,7 +170,7 @@
               </prop>
             </node>
             <node oor:name="Provider13" oor:op="replace"
-                install:module="neon_gnomevfs">
+                install:module="webdav_neon_gnomevfs">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.WebDAVContentProvider</value>
               </prop>
