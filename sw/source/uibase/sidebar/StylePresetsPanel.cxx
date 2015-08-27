@@ -98,7 +98,7 @@ BitmapEx StylePresetsPanel::CreatePreview(OUString& aUrl, OUString& aName)
 {
     SfxMedium aMedium(aUrl, STREAM_STD_READWRITE);
     SfxObjectShell* pObjectShell = SfxObjectShell::Current();
-    SfxObjectShellLock xTemplDoc = pObjectShell->CreateObjectByFactoryName(pObjectShell->GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER);
+    SfxObjectShellLock xTemplDoc = SfxObjectShell::CreateObjectByFactoryName(pObjectShell->GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER);
     xTemplDoc->DoInitNew(0);
     if (xTemplDoc->LoadFrom(aMedium))
     {
