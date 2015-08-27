@@ -269,6 +269,7 @@ void TimerTest::testMultiAutoTimers()
         AutoTimerCount aCountY(nDurationMsY, nCountY);
 
         AutoTimerCount aCount(nDurationMs, nCount);
+        // coverity[loop_top] - Application::Yield allows the timer to fire and toggle nCount
         while (nCount < nEventsCount) {
             Application::Yield();
         }
