@@ -312,7 +312,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 // but then we'd have to save 2 indices
         for( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
-            const SwTextAttr* pHt = (*pTextAttrs)[i];
+            const SwTextAttr* pHt = pTextAttrs->Get(i);
             sal_Int32 nPos = pHt->GetStart();    // first Attr characters
             if( nPos >= nStartPos && nPos <= nMinPos )
                 nMinPos = nPos;
@@ -419,7 +419,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
     {
         for( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
-            const SwTextAttr* pHt = (*pTextAttrs)[i];
+            const SwTextAttr* pHt = pTextAttrs->Get(i);
             const sal_Int32* pEnd = pHt->End();
 
             if (pEnd ? ( nSwPos >= pHt->GetStart() && nSwPos < *pEnd)
@@ -665,7 +665,7 @@ bool SwWW8AttrIter::IsTextAttr( sal_Int32 nSwPos )
     {
         for (size_t i = 0; i < pTextAttrs->Count(); ++i)
         {
-            const SwTextAttr* pHt = (*pTextAttrs)[i];
+            const SwTextAttr* pHt = pTextAttrs->Get(i);
             if ( ( pHt->HasDummyChar() || pHt->HasContent() )
                  && (pHt->GetStart() == nSwPos) )
             {
@@ -722,7 +722,7 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
         const sal_Int32 nTmpSwPos = m_rExport.m_aCurrentCharPropStarts.top();
         for (size_t i = 0; i < pTextAttrs->Count(); ++i)
         {
-            const SwTextAttr* pHt = (*pTextAttrs)[i];
+            const SwTextAttr* pHt = pTextAttrs->Get(i);
             const SfxPoolItem* pItem = &pHt->GetAttr();
             const sal_Int32 * pAtrEnd = 0;
             if( 0 != ( pAtrEnd = pHt->End() ) &&        // only Attr with an end
@@ -1234,9 +1234,9 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
         m_rExport.m_aCurrentCharPropStarts.push( nPos );
         const sal_Int32* pEnd;
         // first process ends of attributes with extent
-        for (size_t i = 0; i < pTextAttrs->GetEndCount(); ++i)
+        for (size_t i = 0; i < pTextAttrs->Count(); ++i)
         {
-            const SwTextAttr* pHt = pTextAttrs->GetEnd(i);
+            const SwTextAttr* pHt = pTextAttrs->GetSortedByEnd(i);
             const SfxPoolItem* pItem = &pHt->GetAttr();
             switch ( pItem->Which() )
             {
@@ -1270,7 +1270,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
         }
         for ( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
-            const SwTextAttr* pHt = (*pTextAttrs)[i];
+            const SwTextAttr* pHt = pTextAttrs->Get(i);
             const SfxPoolItem* pItem = &pHt->GetAttr();
             switch ( pItem->Which() )
             {
@@ -2763,7 +2763,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
     {
         for( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
-            const SwTextAttr* pHt = (*pTextAttrs)[i];
+            const SwTextAttr* pHt = pTextAttrs->Get(i);
             const sal_Int32 startPos = pHt->GetStart();    // first Attr characters
             const sal_Int32* endPos = pHt->End();    // end Attr characters
             // Check if these attributes are for the last character in the paragraph

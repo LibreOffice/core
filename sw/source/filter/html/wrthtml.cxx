@@ -915,7 +915,7 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
     sal_Int32 nOldPos = 0;
     for( size_t i=0; i<nCntAttr; ++i )
     {
-        const SwTextAttr *pHt = pTextNd->GetSwpHints()[i];
+        const SwTextAttr *pHt = pTextNd->GetSwpHints().Get(i);
         if( !pHt->End() )
         {
             sal_Int32 nPos = pHt->GetStart();

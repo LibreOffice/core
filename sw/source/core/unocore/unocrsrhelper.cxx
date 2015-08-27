@@ -675,9 +675,9 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 }
                 Sequence< OUString> aCharStyles;
                 SwpHints* pHints = pTextNode->GetpSwpHints();
-                for( size_t nAttr = 0; nAttr < pHints->GetStartCount(); ++nAttr )
+                for( size_t nAttr = 0; nAttr < pHints->Count(); ++nAttr )
                 {
-                    SwTextAttr* pAttr = pHints->GetStart( nAttr );
+                    SwTextAttr* pAttr = pHints->Get( nAttr );
                     if(pAttr->Which() != RES_TXTATR_CHARFMT)
                         continue;
                     const sal_Int32 nAttrStart = pAttr->GetStart();

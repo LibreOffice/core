@@ -254,7 +254,7 @@ SwTextNode::~SwTextNode()
         {
             // first remove the attribute from the array otherwise
             // if would delete itself
-            DestroyAttr( pTmpHints->GetTextHint( --j ) );
+            DestroyAttr( pTmpHints->Get( --j ) );
         }
 
         delete pTmpHints;
@@ -311,7 +311,7 @@ static void lcl_ChangeFootnoteRef( SwTextNode &rNode )
         SwFootnoteFrm* pFirstFootnoteOfNode = 0;
         for( size_t j = pSwpHints->Count(); j; )
         {
-            SwTextAttr* pHt = pSwpHints->GetTextHint(--j);
+            SwTextAttr* pHt = pSwpHints->Get(--j);
             if (RES_TXTATR_FTN == pHt->Which())
             {
                 if( !pFrm )
@@ -464,7 +464,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
             {
                 for ( size_t j = m_pSwpHints->Count(); j; )
                 {
-                    SwTextAttr* const pHt = m_pSwpHints->GetTextHint( --j );
+                    SwTextAttr* const pHt = m_pSwpHints->Get( --j );
                     if ( RES_TXTATR_FLYCNT == pHt ->Which() )
                     {
                         pHt->GetFlyCnt().GetFrameFormat()->DelFrms();
@@ -552,7 +552,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         {
             for ( size_t j = m_pSwpHints->Count(); j; )
             {
-                SwTextAttr* const pHt = m_pSwpHints->GetTextHint( --j );
+                SwTextAttr* const pHt = m_pSwpHints->Get( --j );
                 const sal_Int32* const pEnd = pHt->GetEnd();
                 if ( pHt->DontExpand() && pEnd && (pHt->GetStart() == *pEnd) )
                 {
@@ -609,7 +609,7 @@ void SwTextNode::MoveTextAttr_To_AttrSet()
     OSL_ENSURE( m_pSwpHints, "MoveTextAttr_To_AttrSet without SwpHints?" );
     for ( size_t i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
-        SwTextAttr *pHt = m_pSwpHints->GetTextHint(i);
+        SwTextAttr *pHt = m_pSwpHints->Get(i);
 
         if( pHt->GetStart() )
             break;
@@ -866,7 +866,7 @@ void SwTextNode::Update(
             {
                 bool bTextAttrChanged = false;
                 bool bStartOfTextAttrChanged = false;
-                SwTextAttr * const pHint = m_pSwpHints->GetTextHint(n);
+                SwTextAttr * const pHint = m_pSwpHints->Get(n);
                 sal_Int32 &       rStart = pHint->GetStart();
                 if ( rStart > nChangePos )
                 {
@@ -930,7 +930,7 @@ void SwTextNode::Update(
             for ( size_t n = 0; n < m_pSwpHints->Count(); ++n )
             {
                 bool bTextAttrChanged = false;
-                SwTextAttr * const pHint = m_pSwpHints->GetTextHint(n);
+                SwTextAttr * const pHint = m_pSwpHints->Get(n);
                 sal_Int32 &       rStart = pHint->GetStart();
                 sal_Int32 * const pEnd = pHint->GetEnd();
                 if ( rStart >= nChangePos )
@@ -1244,11 +1244,11 @@ bool SwTextNode::DontExpandFormat( const SwIndex& rIdx, bool bFlag,
     bool bRet = false;
     if ( HasHints() )
     {
-        const size_t nEndCnt = m_pSwpHints->GetEndCount();
+        const size_t nEndCnt = m_pSwpHints->Count();
         size_t nPos = nEndCnt;
         while( nPos )
         {
-            SwTextAttr *pTmp = m_pSwpHints->GetEnd( --nPos );
+            SwTextAttr *pTmp = m_pSwpHints->GetSortedByEnd( --nPos );
             sal_Int32 *pEnd = pTmp->GetEnd();
             if( !pEnd || *pEnd > nIdx )
                 continue;
@@ -1300,7 +1300,7 @@ lcl_GetTextAttrs(
 
     for( size_t i = 0; i < nSize; ++i )
     {
-        SwTextAttr *const pHint = pSwpHints->GetTextHint(i);
+        SwTextAttr *const pHint = pSwpHints->Get(i);
         sal_Int32 const nHintStart = pHint->GetStart();
         if (nIndex < nHintStart)
         {
@@ -1580,7 +1580,7 @@ void SwTextNode::CopyAttr( SwTextNode *pDest, const sal_Int32 nTextStartIdx,
 
         for ( size_t i = 0; i < m_pSwpHints->Count(); ++i )
         {
-            SwTextAttr *const pHt = m_pSwpHints->GetTextHint(i);
+            SwTextAttr *const pHt = m_pSwpHints->Get(i);
             sal_Int32 const nAttrStartIdx = pHt->GetStart();
             if ( nTextStartIdx < nAttrStartIdx )
                 break; // ueber das Textende, da nLen == 0
@@ -1764,11 +1764,11 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     //Achtung: kann ungueltig sein!!
     for (size_t n = 0; n < nSize; ++n)
     {
-        const sal_Int32 nAttrStartIdx = (*m_pSwpHints)[n]->GetStart();
+        const sal_Int32 nAttrStartIdx = m_pSwpHints->Get(n)->GetStart();
         if (!( nAttrStartIdx < nEnd))
             break;
 
-        SwTextAttr * const pHt = m_pSwpHints->GetTextHint(n);
+        SwTextAttr * const pHt = m_pSwpHints->Get(n);
         const sal_Int32 * const pEndIdx = pHt->GetEnd();
         const sal_uInt16 nWhich = pHt->Which();
 
@@ -1948,9 +1948,9 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
     {
         bool bMergePortionsNeeded(false);
         for ( size_t i = 0; i < m_pSwpHints->Count() &&
-                rIdx >= (*m_pSwpHints)[i]->GetStart(); ++i )
+                rIdx >= m_pSwpHints->Get(i)->GetStart(); ++i )
         {
-            SwTextAttr * const pHt = m_pSwpHints->GetTextHint( i );
+            SwTextAttr * const pHt = m_pSwpHints->Get( i );
             sal_Int32 * const pEndIdx = pHt->GetEnd();
             if( !pEndIdx )
                 continue;
@@ -2110,7 +2110,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     size_t nAttrCnt = 0;
     while (m_pSwpHints && (nAttrCnt < m_pSwpHints->Count()))
     {
-        SwTextAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
+        SwTextAttr * const pHt = m_pSwpHints->Get(nAttrCnt);
         const sal_Int32 nAttrStartIdx = pHt->GetStart();
         if (!( nAttrStartIdx < nEnd ))
             break;
@@ -2204,7 +2204,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         SwpHts aArr;
         while (nAttrCnt < m_pSwpHints->Count())
         {
-            SwTextAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
+            SwTextAttr * const pHt = m_pSwpHints->Get(nAttrCnt);
             if (nEnd != pHt->GetStart())
                 break;
             const sal_Int32 * const pEndIdx = pHt->GetEnd();
@@ -2266,7 +2266,7 @@ void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
 
     for ( size_t i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
-        SwTextAttr *pHt = m_pSwpHints->GetTextHint(i);
+        SwTextAttr *pHt = m_pSwpHints->Get(i);
 
         const sal_Int32 nHintStart = pHt->GetStart();
 
@@ -2362,7 +2362,7 @@ void SwTextNode::GCAttr()
 
     for ( size_t i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
-        SwTextAttr * const pHt = m_pSwpHints->GetTextHint(i);
+        SwTextAttr * const pHt = m_pSwpHints->Get(i);
 
         // wenn Ende und Start gleich sind --> loeschen
         const sal_Int32 * const pEndIdx = pHt->GetEnd();
@@ -2653,7 +2653,7 @@ SwTextAttr * SwTextNode::GetTextAttrForCharAt(
     {
         for ( size_t i = 0; i < m_pSwpHints->Count(); ++i )
         {
-            SwTextAttr * const pHint = m_pSwpHints->GetTextHint(i);
+            SwTextAttr * const pHint = m_pSwpHints->Get(i);
             const sal_Int32 nStartPos = pHint->GetStart();
             if ( nIndex < nStartPos )
             {
@@ -3080,7 +3080,7 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
         sal_Int32 nInsPos = nDestStt - nIdx;
         for ( size_t i = 0; i < m_pSwpHints->Count(); ++i )
         {
-            const SwTextAttr* pHt = (*m_pSwpHints)[i];
+            const SwTextAttr* pHt = m_pSwpHints->Get(i);
             const sal_Int32 nAttrStartIdx = pHt->GetStart();
             const sal_uInt16 nWhich = pHt->Which();
             if (nIdx + nLen <= nAttrStartIdx)
@@ -4862,7 +4862,7 @@ void SwTextNode::dumpAsXml(xmlTextWriterPtr pWriter) const
         xmlTextWriterStartElement(pWriter, BAD_CAST("swpHints"));
         const SwpHints& rHints = GetSwpHints();
         for (size_t i = 0; i < rHints.Count(); ++i)
-            rHints.GetTextHint(i)->dumpAsXml(pWriter);
+            rHints.Get(i)->dumpAsXml(pWriter);
         xmlTextWriterEndElement(pWriter);
     }
 

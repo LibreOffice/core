@@ -74,7 +74,7 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
     {
         if ( bNewHint )
             nHintStart = pHts && n < pHts->Count() ?
-                         (*pHts)[n]->GetStart() :
+                         pHts->Get(n)->GetStart() :
                          -1;
 
         if ( bNewSoftHyphen )
@@ -118,7 +118,7 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
 
         if ( bNewHint )
         {
-            const SwTextAttr* pHt = (*pHts)[n];
+            const SwTextAttr* pHt = pHts->Get(n);
             if ( pHt->HasDummyChar() && (nStt >= nStart) )
             {
                 switch( pHt->Which() )
@@ -198,7 +198,7 @@ size_t GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
         for (size_t i = 0; i < pHts->Count(); ++i )
         {
             aIndex++;
-            const SwTextAttr* pTextAttr = (*pHts)[i];
+            const SwTextAttr* pTextAttr = pHts->Get(i);
             if ( pTextAttr->Which() == RES_TXTATR_ANNOTATION )
             {
                 aCount--;
@@ -210,7 +210,7 @@ size_t GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
     // throw away all following non postits
     for( size_t i = aIndex; i < pHts->Count(); ++i )
     {
-        const SwTextAttr* pTextAttr = (*pHts)[i];
+        const SwTextAttr* pTextAttr = pHts->Get(i);
         if ( pTextAttr->Which() == RES_TXTATR_ANNOTATION )
             break;
         else
@@ -275,7 +275,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
 
                 for( size_t i = 0; i < pHts->Count(); ++i )
                 {
-                    const SwTextAttr* pTextAttr = (*pHts)[i];
+                    const SwTextAttr* pTextAttr = pHts->Get(i);
                     if ( pTextAttr->Which()==RES_TXTATR_ANNOTATION )
                     {
                         const sal_Int32 aPos = pTextAttr->GetStart();
@@ -410,14 +410,14 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                 {
                     if (bSrchForward)
                     {
-                        nStartInside = aLoop==0 ? nStart : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
-                        nEndInside = aLoop==aNumberPostits ? nEnd : (*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
+                        nStartInside = aLoop==0 ? nStart : pHts->Get(GetPostIt(aLoop+aIgnore-1,pHts))->GetStart()+1;
+                        nEndInside = aLoop==aNumberPostits ? nEnd : pHts->Get(GetPostIt(aLoop+aIgnore,pHts))->GetStart();
                         nTextLen = nEndInside - nStartInside;
                     }
                     else
                     {
-                        nStartInside =  aLoop==aNumberPostits ? nStart : (*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
-                        nEndInside = aLoop==0 ? nEnd : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
+                        nStartInside =  aLoop==aNumberPostits ? nStart : pHts->Get(GetPostIt(aLoop+aIgnore,pHts))->GetStart();
+                        nEndInside = aLoop==0 ? nEnd : pHts->Get(GetPostIt(aLoop+aIgnore-1,pHts))->GetStart()+1;
                         nTextLen = nStartInside - nEndInside;
                     }
                     // search inside the text between a note
@@ -432,7 +432,9 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                         // we should now be right in front of a note, search inside
                         if ( (bSrchForward && (GetPostIt(aLoop + aIgnore,pHts) < pHts->Count()) ) || ( !bSrchForward && (aLoop!=0) ))
                         {
-                            const SwTextAttr* pTextAttr = bSrchForward ?  (*pHts)[GetPostIt(aLoop+aIgnore,pHts)] : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)];
+                            const SwTextAttr* pTextAttr = bSrchForward
+                                    ? pHts->Get(GetPostIt(aLoop+aIgnore,pHts))
+                                    : pHts->Get(GetPostIt(aLoop+aIgnore-1,pHts));
                             if (pPostItMgr && pPostItMgr->SearchReplace(
                                     static_txtattr_cast<SwTextField const*>(pTextAttr)->GetFormatField(),rSearchOpt,bSrchForward))
                             {

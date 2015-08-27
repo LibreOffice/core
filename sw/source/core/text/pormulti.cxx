@@ -865,7 +865,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     const size_t nCount = pHints ? pHints->Count() : 0;
     for( size_t i = 0; i < nCount; ++i )
     {
-        const SwTextAttr *pTmp = (*pHints)[i];
+        const SwTextAttr *pTmp = pHints->Get(i);
         sal_Int32 nStart = pTmp->GetStart();
         if( rPos < nStart )
             break;
@@ -918,7 +918,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         if( n2Lines < nCount )
         {
             pRet->pItem = NULL;
-            pRet->pAttr = (*pHints)[n2Lines];
+            pRet->pAttr = pHints->Get(n2Lines);
             aEnd.push_front( *pRet->pAttr->End() );
             if( pItem )
             {
@@ -957,7 +957,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         // continuity attribute.
         for( size_t i = 0; i < nCount; ++i )
         {
-            const SwTextAttr *pTmp = (*pHints)[i];
+            const SwTextAttr *pTmp = pHints->Get(i);
             if( *pTmp->GetAnyEnd() <= rPos )
                 continue;
             if( rPos < pTmp->GetStart() )
@@ -1035,7 +1035,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         sal_Int32 n2Start = rPos;
         for( size_t i = 0; i < nCount; ++i )
         {
-            const SwTextAttr *pTmp = (*pHints)[i];
+            const SwTextAttr *pTmp = pHints->Get(i);
             if( *pTmp->GetAnyEnd() <= n2Start )
                 continue;
             if( n2Start < pTmp->GetStart() )
@@ -1090,7 +1090,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         if( nRotate < nCount )
         {
             pRet->pItem = NULL;
-            pRet->pAttr = (*pHints)[nRotate];
+            pRet->pAttr = pHints->Get(nRotate);
             aEnd.push_front( *pRet->pAttr->End() );
             if( pRotItem )
             {
@@ -1107,7 +1107,7 @@ SwMultiCreator* SwTextSizeInfo::GetMultiCreator( sal_Int32 &rPos,
         }
         for( size_t i = 0; i < nCount; ++i )
         {
-            const SwTextAttr *pTmp = (*pHints)[i];
+            const SwTextAttr *pTmp = pHints->Get(i);
             if( *pTmp->GetAnyEnd() <= rPos )
                 continue;
             if( rPos < pTmp->GetStart() )

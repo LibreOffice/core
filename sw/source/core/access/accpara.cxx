@@ -1445,7 +1445,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             const size_t nSize = pSwpHints->Count();
             for( size_t i = 0; i < nSize; ++i )
             {
-                const SwTextAttr* pHt = (*pSwpHints)[i];
+                const SwTextAttr* pHt = pSwpHints->Get(i);
                 if ( ( pHt->Which() == RES_TXTATR_FIELD
                        || pHt->Which() == RES_TXTATR_ANNOTATION
                        || pHt->Which() == RES_TXTATR_INPUTFIELD )
@@ -3113,7 +3113,7 @@ const SwTextAttr *SwHyperlinkIter_Impl::next()
     {
         while( !pAttr && nPos < pHints->Count() )
         {
-            const SwTextAttr *pHt = (*pHints)[nPos];
+            const SwTextAttr *pHt = pHints->Get(nPos);
             if( RES_TXTATR_INETFMT == pHt->Which() )
             {
                 const sal_Int32 nHtStt = pHt->GetStart();

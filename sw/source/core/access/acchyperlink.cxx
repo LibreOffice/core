@@ -53,7 +53,7 @@ const SwTextAttr *SwAccessibleHyperlink::GetTextAttr() const
         const SwpHints *pHints = pTextNd->GetpSwpHints();
         if( pHints && nHintPos < pHints->Count() )
         {
-            const SwTextAttr *pHt = (*pHints)[nHintPos];
+            const SwTextAttr *pHt = pHints->Get(nHintPos);
             if( RES_TXTATR_INETFMT == pHt->Which() )
                 pTextAttr = pHt;
         }

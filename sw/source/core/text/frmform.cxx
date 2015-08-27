@@ -610,7 +610,7 @@ SwContentFrm *SwTextFrm::JoinFrm()
             SwFootnoteBossFrm *pEndBoss = 0;
             for ( size_t i = 0; i < pHints->Count(); ++i )
             {
-                const SwTextAttr *pHt = (*pHints)[i];
+                const SwTextAttr *pHt = pHints->Get(i);
                 if( RES_TXTATR_FTN==pHt->Which() && pHt->GetStart()>=nStart )
                 {
                     if( pHt->GetFootnote().IsEndNote() )
@@ -703,7 +703,7 @@ SwContentFrm *SwTextFrm::SplitFrm( const sal_Int32 nTextPos )
             SwFootnoteBossFrm *pEndBoss = 0;
             for ( size_t i = 0; i < pHints->Count(); ++i )
             {
-                const SwTextAttr *pHt = (*pHints)[i];
+                const SwTextAttr *pHt = pHints->Get(i);
                 if( RES_TXTATR_FTN==pHt->Which() && pHt->GetStart()>=nTextPos )
                 {
                     if( pHt->GetFootnote().IsEndNote() )

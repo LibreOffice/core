@@ -87,7 +87,7 @@ sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
         // are sorted by starting position. We would need to remember two indices, however.
         for ( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
-            const SwTextAttr* pHt = (*pTextAttrs)[i];
+            const SwTextAttr* pHt = pTextAttrs->Get(i);
             if ( pHt->HasDummyChar() )
             {
                 sal_Int32 nPos = pHt->GetStart();
@@ -125,7 +125,7 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
     {
         for( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
-            const SwTextAttr* pHt = (*pTextAttrs)[i];
+            const SwTextAttr* pHt = pTextAttrs->Get(i);
             if ( ( pHt->HasDummyChar()
                    || pHt->HasContent() )
                  && nSwPos == pHt->GetStart() )

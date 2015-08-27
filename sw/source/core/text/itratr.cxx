@@ -164,8 +164,8 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     {
         SwTextAttr *pTextAttr;
         // While we've not reached the end of the StartArray && the TextAttribute starts at position 0...
-        while ( ( nStartIndex < pHints->GetStartCount() ) &&
-                !((pTextAttr=pHints->GetStart(nStartIndex))->GetStart()) )
+        while ( ( nStartIndex < pHints->Count() ) &&
+                !((pTextAttr = pHints->Get(nStartIndex))->GetStart()) )
         {
             // open the TextAttributes
             Chg( pTextAttr );
@@ -202,8 +202,8 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 
         // As long as we've not yet reached the end of EndArray and the
         // TextAttribute ends before or at the new position ...
-        while ( ( nEndIndex < pHints->GetEndCount() ) &&
-                (*(pTextAttr=pHints->GetEnd(nEndIndex))->GetAnyEnd()<=nNewPos))
+        while ( ( nEndIndex < pHints->Count() ) &&
+                (*(pTextAttr=pHints->GetSortedByEnd(nEndIndex))->GetAnyEnd()<=nNewPos))
         {
             // Close the TextAttributes, whose StartPos were before or at
             // the old nPos and are currently open
@@ -213,8 +213,8 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
     }
     else // skip the not opended ends
     {
-        while ( (nEndIndex < pHints->GetEndCount()) &&
-                (*pHints->GetEnd(nEndIndex)->GetAnyEnd() <= nNewPos) )
+        while ( (nEndIndex < pHints->Count()) &&
+                (*pHints->GetSortedByEnd(nEndIndex)->GetAnyEnd() <= nNewPos) )
         {
             nEndIndex++;
         }
@@ -222,8 +222,8 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 
     // As long as we've not yet reached the end of EndArray and the
     // TextAttribute ends before or at the new position ...
-    while ( ( nStartIndex < pHints->GetStartCount() ) &&
-            ((pTextAttr=pHints->GetStart(nStartIndex))->GetStart()<=nNewPos) )
+    while ( ( nStartIndex < pHints->Count() ) &&
+            ((pTextAttr=pHints->Get(nStartIndex))->GetStart()<=nNewPos) )
     {
 
         // open the TextAttributes, whose ends lie behind the new position
@@ -286,9 +286,9 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
     if( pHints )
     {
         // are there attribute starts left?
-        for (size_t i = nStartIndex; i < pHints->GetStartCount(); ++i)
+        for (size_t i = nStartIndex; i < pHints->Count(); ++i)
         {
-            SwTextAttr *const pAttr(pHints->GetStart(i));
+            SwTextAttr *const pAttr(pHints->Get(i));
             if (!pAttr->IsFormatIgnoreStart())
             {
                 nNext = pAttr->GetStart();
@@ -296,9 +296,9 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
             }
         }
         // are there attribute ends left?
-        for (size_t i = nEndIndex; i < pHints->GetEndCount(); ++i)
+        for (size_t i = nEndIndex; i < pHints->Count(); ++i)
         {
-            SwTextAttr *const pAttr(pHints->GetEnd(i));
+            SwTextAttr *const pAttr(pHints->GetSortedByEnd(i));
             if (!pAttr->IsFormatIgnoreEnd())
             {
                 sal_Int32 const nNextEnd = *pAttr->GetAnyEnd();

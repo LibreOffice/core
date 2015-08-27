@@ -282,7 +282,7 @@ lcl_DoSplitNew(NestList_t & rSplits, SwTextNode & rNode,
  */
 void SwpHints::InsertNesting(SwTextAttrNesting & rNewHint)
 {
-    SwpHintsArray::Insert(& rNewHint);
+    Insert(& rNewHint);
     NoteInHistory( & rNewHint, true );
 }
 
@@ -375,9 +375,9 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
     SplitNew.push_back(& rNewHint);
 
     // pass 1: split the inserted hint into fragments if necessary
-    for ( size_t i = 0; i < GetEndCount(); ++i )
+    for ( size_t i = 0; i < Count(); ++i )
     {
-        SwTextAttr * const pOther = GetEnd(i);
+        SwTextAttr * const pOther = GetSortedByEnd(i);
 
         if (pOther->IsNesting())
         {
@@ -610,7 +610,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
     {
         for ( size_t i = 0; i < Count(); ++i )
         {
-            SwTextAttr* pOther = GetTextHint(i);
+            SwTextAttr* pOther = Get(i);
 
             if ( RES_TXTATR_CHARFMT != pOther->Which() &&
                  RES_TXTATR_AUTOFMT != pOther->Which() )
@@ -661,7 +661,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
         // Insert the newly created attributes:
         for ( aIter = aInsDelHints.begin(); aIter != aInsDelHints.end(); ++aIter )
         {
-            SwpHintsArray::Insert( *aIter );
+            Insert( *aIter );
             NoteInHistory( *aIter, true );
         }
     }
@@ -681,7 +681,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
     {
         for ( size_t i = 0; i < Count(); ++i )
         {
-            const SwTextAttr* pOther = GetTextHint(i);
+            const SwTextAttr* pOther = Get(i);
 
             if ( RES_TXTATR_CHARFMT != pOther->Which() &&
                  RES_TXTATR_AUTOFMT != pOther->Which() )
@@ -713,7 +713,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
         // Get all hints that are in [nPorStart, nPorEnd[:
         for ( size_t i = 0; i < Count(); ++i )
         {
-            SwTextAttr *pOther = GetTextHint(i);
+            SwTextAttr *pOther = Get(i);
 
             if ( RES_TXTATR_CHARFMT != pOther->Which() &&
                  RES_TXTATR_AUTOFMT != pOther->Which() )
@@ -798,7 +798,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                     {
                         pNewAttr = MakeTextAttr( *rNode.GetDoc(),
                                 aNewSet, nPorStart, nPorEnd );
-                        SwpHintsArray::Insert( pNewAttr );
+                        Insert( pNewAttr );
                         NoteInHistory( pNewAttr, true );
                     }
                 }
@@ -940,7 +940,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
 
         if ( pNewAttr )
         {
-            SwpHintsArray::Insert( pNewAttr );
+            Insert( pNewAttr );
 //            if ( bDestroyHint )
                 NoteInHistory( pNewAttr, true );
         }
@@ -1694,7 +1694,7 @@ void SwTextNode::DeleteAttributes(
 
     for ( size_t nPos = 0; m_pSwpHints && nPos < m_pSwpHints->Count(); ++nPos )
     {
-        SwTextAttr * const pTextHt = m_pSwpHints->GetTextHint( nPos );
+        SwTextAttr * const pTextHt = m_pSwpHints->Get( nPos );
         const sal_Int32 nHintStart = pTextHt->GetStart();
         if (nStart < nHintStart)
         {
@@ -1874,7 +1874,7 @@ bool SwTextNode::SetAttr(
         {
             for ( size_t n = 0; n < m_pSwpHints->Count(); ++n )
             {
-                if ( (*m_pSwpHints)[ n ]->IsCharFormatAttr() )
+                if ( m_pSwpHints->Get( n )->IsCharFormatAttr() )
                 {
                     bHasCharFormats = true;
                     break;
@@ -2109,7 +2109,7 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
         {
             for (size_t n = 0; n < nSize; ++n)
             {
-                const SwTextAttr* pHt = (*m_pSwpHints)[n];
+                const SwTextAttr* pHt = m_pSwpHints->Get(n);
                 const sal_Int32 nAttrStart = pHt->GetStart();
                 if( nAttrStart > nEnd )         // ueber den Bereich hinaus
                     break;
@@ -2135,7 +2135,7 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
 
             for (size_t n = 0; n < nSize; ++n)
             {
-                const SwTextAttr* pHt = (*m_pSwpHints)[n];
+                const SwTextAttr* pHt = m_pSwpHints->Get(n);
                 const sal_Int32 nAttrStart = pHt->GetStart();
                 if( nAttrStart > nEnd )         // ueber den Bereich hinaus
                     break;
@@ -2359,7 +2359,7 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_Int32 nLength,
 
     for (size_t i = 0; i < i_rHints.Count(); ++i)
     {
-        const SwTextAttr* const pHint(i_rHints[i]);
+        const SwTextAttr* pHint = i_rHints.Get(i);
         const sal_uInt16 nWhich(pHint->Which());
         if (nWhich == RES_TXTATR_CHARFMT || nWhich == RES_TXTATR_AUTOFMT)
         {
@@ -2580,7 +2580,7 @@ void SwpHints::CalcFlags()
     const size_t nSize = Count();
     for( size_t nPos = 0; nPos < nSize; ++nPos )
     {
-        const SwTextAttr* pAttr = (*this)[ nPos ];
+        const SwTextAttr* pAttr = Get( nPos );
         switch( pAttr->Which() )
         {
         case RES_TXTATR_FTN:
@@ -2613,7 +2613,7 @@ bool SwpHints::CalcHiddenParaField()
 
     for( size_t nPos = 0; nPos < nSize; ++nPos )
     {
-        pTextHt = (*this)[ nPos ];
+        pTextHt = Get(nPos);
         const sal_uInt16 nWhich = pTextHt->Which();
 
         if( RES_TXTATR_FIELD == nWhich )
@@ -2648,7 +2648,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
         return false;
 
     // sort before merging
-    SwpHintsArray::Resort();
+    Resort();
 
     bool bRet = false;
     typedef std::multimap< int, std::pair<SwTextAttr*, bool> > PortionMap;
@@ -2660,7 +2660,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
     // get portions by start position:
     for ( size_t i = 0; i < Count(); ++i )
     {
-        SwTextAttr *pHt = GetTextHint( i );
+        SwTextAttr *pHt = Get( i );
         if ( RES_TXTATR_CHARFMT != pHt->Which() &&
              RES_TXTATR_AUTOFMT != pHt->Which() )
              //&&
@@ -2679,7 +2679,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
                 // could be produced by ReplaceText or (maybe?) RstAttr
                 if (pHt->GetStart() == *pHt->GetEnd())
                 {
-                    SwpHintsArray::DeleteAtPos(i); // kill it without History!
+                    DeleteAtPos(i); // kill it without History!
                     SwTextAttr::Destroy(pHt, rNode.GetDoc()->GetAttrPool());
                     --i;
                     continue;
@@ -2871,7 +2871,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
 
             if (bRet)
             {
-                SwpHintsArray::Resort();
+                Resort();
             }
         }
         else
@@ -2922,7 +2922,7 @@ static void lcl_CheckSortNumber( const SwpHints& rHints, SwTextCharFormat& rNewC
 
     for ( size_t i = 0; i < rHints.Count(); ++i )
     {
-        const SwTextAttr* pOtherHt = rHints[i];
+        const SwTextAttr* pOtherHt = rHints.Get(i);
 
         const sal_Int32 nOtherStart = pOtherHt->GetStart();
 
@@ -3115,7 +3115,7 @@ bool SwpHints::TryInsertHint(
             sal_Int32 *pTmpHintEnd;
             for( size_t n = 0, nEnd = Count(); n < nEnd; ++n )
             {
-                if (RES_TXTATR_REFMARK == (pTmpHt = GetTextHint(n))->Which() &&
+                if (RES_TXTATR_REFMARK == (pTmpHt = Get(n))->Which() &&
                     pHint->GetAttr() == pTmpHt->GetAttr() &&
                     0 != ( pTmpHtEnd = pTmpHt->GetEnd() ) &&
                     0 != ( pTmpHintEnd = pHint->GetEnd() ) )
@@ -3181,7 +3181,7 @@ bool SwpHints::TryInsertHint(
     sal_Int32 nHtStart = pHint->GetStart();
     if( !pHtEnd )
     {
-        SwpHintsArray::Insert( pHint );
+        Insert( pHint );
         CalcFlags();
 #ifdef DBG_UTIL
         if( !rNode.GetDoc()->IsInReading() )
@@ -3266,7 +3266,7 @@ bool SwpHints::TryInsertHint(
             if ( RES_TXTATR_CHARFMT == nWhich )
                 lcl_CheckSortNumber(*this, *static_txtattr_cast<SwTextCharFormat*>(pHint));
 
-            SwpHintsArray::Insert( pHint );
+            Insert( pHint );
             NoteInHistory( pHint, true );
         }
     }
@@ -3292,10 +3292,19 @@ bool SwpHints::TryInsertHint(
 
 void SwpHints::DeleteAtPos( const size_t nPos )
 {
-    SwTextAttr *pHint = GetTextHint(nPos);
+    SwTextAttr *pHint = Get(nPos);
     // ChainDelete( pHint );
     NoteInHistory( pHint );
-    SwpHintsArray::DeleteAtPos( nPos );
+
+    // optimization: nPos is the position in the Starts array
+    SwTextAttr *pHt = m_HintsByStart[ nPos ];
+    m_HintsByStart.erase( m_HintsByStart.begin() + nPos );
+
+    Resort();
+
+    bool const done = m_HintsByEnd.erase(pHt);
+    assert(done);
+    (void) done; // unused in NDEBUG
 
     if( pHint->Which() == RES_TXTATR_FIELD )
     {
@@ -3331,7 +3340,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
 void SwpHints::Delete( SwTextAttr* pTextHt )
 {
     // Attr 2.0: SwpHintsArr::Delete( pTextHt );
-    const size_t nPos = GetStartOf( pTextHt );
+    const size_t nPos = GetIndexOf( pTextHt );
     OSL_ENSURE( SAL_MAX_SIZE != nPos, "Attribut nicht im Attribut-Array!" );
     if( SAL_MAX_SIZE != nPos )
         DeleteAtPos( nPos );
@@ -3344,7 +3353,7 @@ void SwTextNode::ClearSwpHintsArr( bool bDelFields )
         size_t nPos = 0;
         while ( nPos < m_pSwpHints->Count() )
         {
-            SwTextAttr* pDel = m_pSwpHints->GetTextHint( nPos );
+            SwTextAttr* pDel = m_pSwpHints->Get( nPos );
             bool bDel = false;
 
             switch( pDel->Which() )
@@ -3365,7 +3374,7 @@ void SwTextNode::ClearSwpHintsArr( bool bDelFields )
 
             if( bDel )
             {
-                m_pSwpHints->SwpHintsArray::DeleteAtPos( nPos );
+                m_pSwpHints->DeleteAtPos( nPos );
                 DestroyAttr( pDel );
             }
             else
@@ -3394,7 +3403,7 @@ sal_uInt16 SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
         for ( size_t i = 0; i < nSize; ++i )
         {
             // ist der Attribut-Anfang schon groesser als der Idx ?
-            const SwTextAttr *pHt = m_pSwpHints->operator[](i);
+            const SwTextAttr *pHt = m_pSwpHints->Get(i);
             const sal_Int32 nAttrStart = pHt->GetStart();
             if( nEnd < nAttrStart )
                 break;

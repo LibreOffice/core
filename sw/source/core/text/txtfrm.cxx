@@ -483,7 +483,7 @@ void SwTextFrm::HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd )
         SwPageFrm *pPage = 0;
         for ( size_t i = 0; i < nSize; ++i )
         {
-            const SwTextAttr *pHt = (*pHints)[i];
+            const SwTextAttr *pHt = pHints->Get(i);
             if ( pHt->Which() == RES_TXTATR_FTN )
             {
                 const sal_Int32 nIdx = pHt->GetStart();
@@ -1616,7 +1616,7 @@ bool SwTextFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                                     GetFollow()->GetOfst() : COMPLETE_STRING;
                 for ( size_t i = 0; i < nSize; ++i )
                 {
-                    const SwTextAttr *pHt = (*pHints)[i];
+                    const SwTextAttr *pHt = pHints->Get(i);
                     const sal_Int32 nStart = pHt->GetStart();
                     if( nStart >= GetOfst() )
                     {

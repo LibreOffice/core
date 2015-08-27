@@ -1244,7 +1244,7 @@ void SwHistory::CopyAttr(
     for( size_t n = 0; n < pHts->Count(); ++n )
     {
         // nAttrStt must even be set when !pEndIdx
-        pHt = pHts->GetTextHint(n);
+        pHt = pHts->Get(n);
         const sal_Int32 nAttrStt = pHt->GetStart();
         const sal_Int32 * pEndIdx = pHt->GetEnd();
         if( 0 !=  pEndIdx && nAttrStt > nEnd )

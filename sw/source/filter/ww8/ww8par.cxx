@@ -5293,7 +5293,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
                     const SwpHints* pHints = pTextNode->GetpSwpHints();
                     for( size_t nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
                     {
-                        const SwTextAttr *pHt = (*pHints)[nHintPos];
+                        const SwTextAttr *pHt = pHints->Get(nHintPos);
                         const sal_Int32 st = pHt->GetStart();
                         if( pHt
                             && pHt->Which() == RES_TXTATR_FLYCNT

@@ -95,7 +95,7 @@ const SwTextAttr* GetFrwrdTextHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
 {
     while( rPos < rHtsArr.Count() )
     {
-        const SwTextAttr *pTextHt = rHtsArr.GetStart( rPos++ );
+        const SwTextAttr *pTextHt = rHtsArr.Get( rPos++ );
         // the start of an attribute has to be in the section
         if( pTextHt->GetStart() >= nContentPos )
             return pTextHt; // valid text attribute
@@ -108,7 +108,7 @@ const SwTextAttr* GetBkwrdTextHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
 {
     while( rPos > 0 )
     {
-        const SwTextAttr *pTextHt = rHtsArr.GetStart( --rPos );
+        const SwTextAttr *pTextHt = rHtsArr.Get( --rPos );
         // the start of an attribute has to be in the section
         if( pTextHt->GetStart() < nContentPos )
             return pTextHt; // valid text attribute
@@ -715,7 +715,7 @@ static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpAr
     if( rCmpArr.Found() )
     {
         for( ; nPos < rHtArr.Count(); ++nPos )
-            if( !rCmpArr.SetAttrFwd( *( pAttr = rHtArr.GetStart( nPos )) ) )
+            if( !rCmpArr.SetAttrFwd( *( pAttr = rHtArr.Get( nPos )) ) )
             {
                 if( rCmpArr.GetNdStt() < pAttr->GetStart() )
                 {
@@ -739,12 +739,12 @@ static bool lcl_SearchForward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpAr
 
     sal_Int32 nSttPos;
     for( ; nPos < rHtArr.Count(); ++nPos )
-        if( rCmpArr.SetAttrFwd( *( pAttr = rHtArr.GetStart( nPos )) ) )
+        if( rCmpArr.SetAttrFwd( *( pAttr = rHtArr.Get( nPos )) ) )
         {
             // Do multiple start at that position? Do also check those:
             nSttPos = pAttr->GetStart();
             while( ++nPos < rHtArr.Count() && nSttPos ==
-                    ( pAttr = rHtArr.GetStart( nPos ))->GetStart() &&
+                    ( pAttr = rHtArr.Get( nPos ))->GetStart() &&
                     rCmpArr.SetAttrFwd( *pAttr ) )
                 ;
 
@@ -790,7 +790,7 @@ static bool lcl_SearchBackward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpA
     if( rCmpArr.Found() )
     {
         while( nPos )
-            if( !rCmpArr.SetAttrBwd( *( pAttr = rHtArr.GetEnd( --nPos )) ) )
+            if( !rCmpArr.SetAttrBwd( *( pAttr = rHtArr.GetSortedByEnd( --nPos )) ) )
             {
                 nSttPos = *pAttr->GetAnyEnd();
                 if( nSttPos < rCmpArr.GetNdEnd() )
@@ -815,14 +815,14 @@ static bool lcl_SearchBackward( const SwTextNode& rTextNd, SwAttrCheckArr& rCmpA
     }
 
     while( nPos )
-        if( rCmpArr.SetAttrBwd( *( pAttr = rHtArr.GetEnd( --nPos )) ) )
+        if( rCmpArr.SetAttrBwd( *( pAttr = rHtArr.GetSortedByEnd( --nPos )) ) )
         {
             // Do multiple start at that position? Do also check those:
             if( nPos )
             {
                 nEndPos = *pAttr->GetAnyEnd();
                 while( --nPos && nEndPos ==
-                        *( pAttr = rHtArr.GetEnd( nPos ))->GetAnyEnd() &&
+                        *( pAttr = rHtArr.GetSortedByEnd( nPos ))->GetAnyEnd() &&
                         rCmpArr.SetAttrBwd( *pAttr ) )
                     ;
             }

@@ -88,7 +88,6 @@ merge SvxUnoDrawMSFactory with SvxFmMSFactory
 merge SwXParaFrameEnumeration with SwXParaFrameEnumerationImpl
 merge SwXParagraphEnumeration with SwXParagraphEnumerationImpl
 merge SwXTextRanges with SwXTextRangesImpl
-merge SwpHintsArray with SwpHints
 merge UniqueIndexImpl with UniqueIndex
 merge UpdateCheckConfigListener with UpdateCheck
 merge ValueGetter with CellValueGetter

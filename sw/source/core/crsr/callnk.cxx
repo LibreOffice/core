@@ -165,7 +165,7 @@ SwCallLink::~SwCallLink()
 
                 for( size_t n = 0; n < rHts.Count(); ++n )
                 {
-                    const SwTextAttr* pHt = rHts[ n ];
+                    const SwTextAttr* pHt = rHts.Get( n );
                     const sal_Int32 *pEnd = pHt->End();
                     const sal_Int32 nStart = pHt->GetStart();
 

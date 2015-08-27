@@ -901,7 +901,7 @@ namespace
                         const size_t nCount = pHints->Count();
                         for( size_t i = 0; i < nCount; ++i )
                         {
-                            SwTextAttr *pAttr = pHints->GetTextHint( i );
+                            SwTextAttr *pAttr = pHints->Get( i );
                             if ( pAttr->Which() == RES_TXTATR_FTN )
                             {
                                 rSaveArr.insert( static_cast<SwTextFootnote*>(pAttr) );
@@ -3620,7 +3620,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
             const sal_Int32 nMkCntPos = rPam.GetMark()->nContent.GetIndex();
             for( size_t n = pHts->Count(); n; )
             {
-                const SwTextAttr* pAttr = (*pHts)[ --n ];
+                const SwTextAttr* pAttr = pHts->Get( --n );
                 if( nMkCntPos > pAttr->GetStart() )
                     break;
 

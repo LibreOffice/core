@@ -1257,7 +1257,7 @@ bool DocumentFieldsManager::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLon
                     const size_t nEnd = pTNd->GetSwpHints().Count();
                     for( size_t n = 0 ; n < nEnd; ++n )
                     {
-                        const SwTextAttr* pAttr = pTNd->GetSwpHints()[ n ];
+                        const SwTextAttr* pAttr = pTNd->GetSwpHints().Get(n);
                         if ( pAttr->Which() == RES_TXTATR_FIELD )
                         {
                             b = true;

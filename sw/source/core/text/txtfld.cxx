@@ -319,9 +319,9 @@ SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo & rInf
     if (pHints)
     {
         const sal_Int32 nIdx(rInfo.GetIdx());
-        while (m_nHintEndIndex < pHints->GetEndCount())
+        while (m_nHintEndIndex < pHints->Count())
         {
-            SwTextAttr & rHint( *pHints->GetEnd(m_nHintEndIndex) );
+            SwTextAttr & rHint( *pHints->GetSortedByEnd(m_nHintEndIndex) );
             sal_Int32 const nEnd( *rHint.GetAnyEnd() );
             if (nEnd > nIdx)
             {
@@ -413,7 +413,7 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFor
     {
         for( size_t i = 0; i < hints->Count(); ++i )
         {
-            SwTextAttr* hint = hints->GetTextHint( i );
+            SwTextAttr* hint = hints->Get( i );
             // Formatting for the paragraph mark is set to apply only to the (non-existent) extra character
             // the at end of the txt node.
             if( hint->Which() == RES_TXTATR_AUTOFMT && hint->GetEnd() != NULL

@@ -324,7 +324,7 @@ static const OUString lcl_dbg_out(const SwpHints & rHints)
     for (size_t i = 0; i < rHints.Count(); ++i)
     {
         aStr += "  ";
-        aStr += lcl_dbg_out(*rHints[i]);
+        aStr += lcl_dbg_out(*rHints.Get(i));
         aStr += "\n";
     }
 

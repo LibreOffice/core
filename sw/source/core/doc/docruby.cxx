@@ -210,7 +210,7 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
     {
         for( size_t nHtIdx = 0; nHtIdx < pHts->Count(); ++nHtIdx )
         {
-            const SwTextAttr* pHt = (*pHts)[ nHtIdx ];
+            const SwTextAttr* pHt = pHts->Get(nHtIdx);
             if( RES_TXTATR_CJK_RUBY == pHt->Which() &&
                 *pHt->GetAnyEnd() > nStart )
             {

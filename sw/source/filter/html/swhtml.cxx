@@ -2289,7 +2289,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
         SwpHints& rHints = pTextNd->GetSwpHints();
         for( size_t i=0; i < nCntAttr; i++ )
         {
-            SwTextAttr *pHt = rHints.GetTextHint( i );
+            SwTextAttr *pHt = rHints.Get( i );
             sal_uInt16 nWhich = pHt->Which();
             sal_Int16 nIdx = 0;
             bool bFont = false;
@@ -2429,7 +2429,7 @@ void SwHTMLParser::AddParSpace()
 
             for(size_t i = 0; i < nCntAttr; ++i)
             {
-                SwTextAttr *const pHt = pTextNode->GetSwpHints().GetTextHint(i);
+                SwTextAttr *const pHt = pTextNode->GetSwpHints().Get(i);
                 sal_uInt16 const nWhich = pHt->Which();
                 if (RES_CHRATR_CJK_FONT == nWhich ||
                     RES_CHRATR_CJK_FONTSIZE == nWhich ||

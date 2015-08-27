@@ -58,15 +58,8 @@ SwTextAttr* MakeRedlineTextAttr(
     SwDoc & rDoc,
     SfxPoolItem& rAttr );
 
-/** Class SwpHints is derived indirectly via SwpHts, because only the
-   class SwTextNode should be allowed to insert and remove attributes.
-   Other classes like the Frames are given only reading access via
-   the index-operator.
-   Size when created is 1 because an array is created only if
-   also a hint is inserted. */
 
- /// Class SwpHtStart/End
-
+/// SwTextAttr's, sorted by start
 struct CompareSwpHtStart
 {
     bool operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) const;
@@ -74,6 +67,7 @@ struct CompareSwpHtStart
 class SwpHtStart : public o3tl::sorted_vector<SwTextAttr*, CompareSwpHtStart,
     o3tl::find_partialorder_ptrequals> {};
 
+/// SwTextAttr's, sorted by end
 struct CompareSwpHtEnd
 {
     bool operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) const;
@@ -81,97 +75,28 @@ struct CompareSwpHtEnd
 class SwpHtEnd : public o3tl::sorted_vector<SwTextAttr*, CompareSwpHtEnd,
     o3tl::find_partialorder_ptrequals> {};
 
-/// Class SwpHintsArr
 
-/// the Hints array
-class SwpHintsArray
+
+class SwpHints
 {
-
-protected:
-    SwpHtStart m_HintStarts;
-    SwpHtEnd   m_HintEnds;
-
+private:
     // SAL_MAX_SIZE is used by GetStartOf to return
     // failure, so just allow SAL_MAX_SIZE-1 hints
     static const size_t MAX_HINTS = SAL_MAX_SIZE-1;
 
-    //FIXME: why are the non-const methods public?
-public:
-    void Insert( const SwTextAttr *pHt );
-    void DeleteAtPos( const size_t nPosInStart );
-    void Resort();
-    SwTextAttr * Cut( const size_t nPosInStart )
-    {
-        SwTextAttr *pHt = GetTextHint(nPosInStart);
-        DeleteAtPos( nPosInStart );
-        return pHt;
-    }
-    const SwTextAttr * GetStart( const size_t nPos ) const
-    {
-        assert(nPos < m_HintStarts.size());
-        return m_HintStarts[nPos];
-    }
-    const SwTextAttr * GetEnd( const size_t nPos ) const
-    {
-        assert(nPos < m_HintEnds.size());
-        return m_HintEnds[nPos];
-    }
-    SwTextAttr * GetStart( const size_t nPos )
-    {
-        assert(nPos < m_HintStarts.size());
-        return m_HintStarts[nPos];
-    }
-    SwTextAttr * GetEnd( const size_t nPos )
-    {
-        assert(nPos < m_HintEnds.size());
-        return m_HintEnds[nPos];
-    }
+    SwpHtStart    m_HintsByStart;
+    SwpHtEnd      m_HintsByEnd;
 
-    size_t GetEndCount()   const { return m_HintEnds.size(); }
-    size_t GetStartCount() const { return m_HintStarts.size(); }
+    SwRegHistory* m_pHistory;                   ///< for Undo
 
-    size_t GetStartOf( const SwTextAttr *pHt ) const
-    {
-        SwpHtStart::const_iterator const it =
-            m_HintStarts.find(const_cast<SwTextAttr*>(pHt));
-        if ( it == m_HintStarts.end() )
-        {
-            return SAL_MAX_SIZE;
-        }
-        return it - m_HintStarts.begin();
-    }
-
-    bool Contains( const SwTextAttr *pHt ) const;
-
-    const SwTextAttr * GetTextHint( const size_t nIdx ) const
-        { return GetStart(nIdx); }
-    SwTextAttr * GetTextHint( const size_t nIdx )
-        { return GetStart(nIdx); }
-    const SwTextAttr * operator[]( const size_t nIdx ) const
-        { return GetStart(nIdx); }
-    size_t Count() const { return GetStartCount(); }
-
-#ifdef DBG_UTIL
-    bool Check(bool) const;
-#endif
-};
-
-// Class SwpHints
-
-/// public interface
-class SwpHints : public SwpHintsArray
-{
-private:
-    SwRegHistory* m_pHistory;          ///< for Undo
-
-    bool m_bFontChange          : 1;   ///< font change
+    bool          m_bFontChange          : 1;   ///< font change
     /// true: the Node is in Split and Frames are moved
-    bool m_bInSplitNode         : 1;
+    bool          m_bInSplitNode         : 1;
     /// m_bHasHiddenParaField is invalid, call CalcHiddenParaField()
-    bool m_bCalcHiddenParaField : 1;
-    bool m_bHasHiddenParaField  : 1;   ///< HiddenParaField
-    bool m_bFootnote            : 1;   ///< footnotes
-    bool m_bDDEFields           : 1;   ///< the TextNode has DDE fields
+    bool          m_bCalcHiddenParaField : 1;
+    bool          m_bHasHiddenParaField  : 1;   ///< HiddenParaField
+    bool          m_bFootnote            : 1;   ///< footnotes
+    bool          m_bDDEFields           : 1;   ///< the TextNode has DDE fields
 
     /// records a new attibute in m_pHistory.
     void NoteInHistory( SwTextAttr *pAttr, const bool bNew = false );
@@ -182,7 +107,7 @@ private:
        Because the TextNode also guarantees removal of the Character for
        attributes without an end. */
     friend class SwTextNode;
-    void DeleteAtPos( const size_t nPos );
+    void DeleteAtPos( size_t nPos );
     /// Delete the given Hint. The Hint must actually be in the array!
     void Delete( SwTextAttr* pTextHt );
 
@@ -204,10 +129,45 @@ private:
             const SetAttrMode nMode );
     bool MergePortions( SwTextNode& rNode );
 
+    void Insert( const SwTextAttr *pHt );
+    void Resort();
+
+    size_t GetIndexOf( const SwTextAttr *pHt ) const
+    {
+        SwpHtStart::const_iterator const it =
+            m_HintsByStart.find(const_cast<SwTextAttr*>(pHt));
+        if ( it == m_HintsByStart.end() )
+        {
+            return SAL_MAX_SIZE;
+        }
+        return it - m_HintsByStart.begin();
+    }
+
+#ifdef DBG_UTIL
+    bool Check(bool) const;
+#endif
+
 public:
     SwpHints();
 
-    bool CanBeDeleted() const    { return !Count(); }
+    size_t Count() const { return m_HintsByStart.size(); }
+    bool Contains( const SwTextAttr *pHt ) const;
+    SwTextAttr * Get( size_t nPos ) const
+    {
+        return m_HintsByStart[nPos];
+    }
+    SwTextAttr * GetSortedByEnd( size_t nPos ) const
+    {
+        return m_HintsByEnd[nPos];
+    }
+    SwTextAttr * Cut( const size_t nPosInStart )
+    {
+        SwTextAttr *pHt = m_HintsByStart[nPosInStart];
+        DeleteAtPos( nPosInStart );
+        return pHt;
+    }
+
+    bool CanBeDeleted() const    { return m_HintsByStart.empty(); }
 
     /// register a History, which receives all attribute changes (for Undo)
     void Register( SwRegHistory* pHist ) { m_pHistory = pHist; }

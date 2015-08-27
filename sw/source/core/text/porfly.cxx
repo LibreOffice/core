@@ -189,7 +189,7 @@ sal_Int32 SwTextFrm::CalcFlyPos( SwFrameFormat* pSearch )
     SwTextAttr* pFound = NULL;
     for ( size_t i = 0; i < pHints->Count(); ++i )
     {
-        SwTextAttr *pHt = pHints->GetTextHint( i );
+        SwTextAttr *pHt = pHints->Get( i );
         if( RES_TXTATR_FLYCNT == pHt->Which() )
         {
             SwFrameFormat* pFrameFormat = pHt->GetFlyCnt().GetFrameFormat();

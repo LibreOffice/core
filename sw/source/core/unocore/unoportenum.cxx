@@ -728,13 +728,13 @@ lcl_ExportHints(
     //search for special text attributes - first some ends
     size_t nEndIndex = 0;
     sal_Int32 nNextEnd = 0;
-    while(nEndIndex < pHints->GetEndCount() &&
-        (!pHints->GetEnd(nEndIndex)->GetEnd() ||
-        nCurrentIndex >= (nNextEnd = (*pHints->GetEnd(nEndIndex)->GetEnd()))))
+    while(nEndIndex < pHints->Count() &&
+        (!pHints->GetSortedByEnd(nEndIndex)->GetEnd() ||
+        nCurrentIndex >= (nNextEnd = (*pHints->GetSortedByEnd(nEndIndex)->GetEnd()))))
     {
-        if(pHints->GetEnd(nEndIndex)->GetEnd())
+        if(pHints->GetSortedByEnd(nEndIndex)->GetEnd())
         {
-            SwTextAttr * const pAttr = pHints->GetEnd(nEndIndex);
+            SwTextAttr * const pAttr = pHints->GetSortedByEnd(nEndIndex);
             if (nNextEnd == nCurrentIndex)
             {
                 const sal_uInt16 nWhich( pAttr->Which() );
@@ -779,7 +779,7 @@ lcl_ExportHints(
                             // (necessary for SwXMeta::createEnumeration)
                             if (pAttr->GetStart() + 1 == i_nStartPos)
                             {
-                                nEndIndex = pHints->GetEndCount() - 1;
+                                nEndIndex = pHints->Count() - 1;
                             }
                             break;
                         }
@@ -809,10 +809,10 @@ lcl_ExportHints(
     // then some starts
     size_t nStartIndex = 0;
     sal_Int32 nNextStart = 0;
-    while(nStartIndex < pHints->GetStartCount() &&
-        nCurrentIndex >= (nNextStart = pHints->GetStart(nStartIndex)->GetStart()))
+    while(nStartIndex < pHints->Count() &&
+        nCurrentIndex >= (nNextStart = pHints->Get(nStartIndex)->GetStart()))
     {
-        SwTextAttr * const pAttr = pHints->GetStart(nStartIndex);
+        SwTextAttr * const pAttr = pHints->Get(nStartIndex);
         sal_uInt16 nAttrWhich = pAttr->Which();
         if (nNextStart == nCurrentIndex)
         {
@@ -995,14 +995,14 @@ lcl_ExportHints(
 
         nStartIndex = 0;
         nNextStart = 0;
-        while(nStartIndex < pHints->GetStartCount() &&
-            nCurrentIndex >= (nNextStart = pHints->GetStart(nStartIndex)->GetStart()))
+        while(nStartIndex < pHints->Count() &&
+            nCurrentIndex >= (nNextStart = pHints->Get(nStartIndex)->GetStart()))
             nStartIndex++;
 
         nEndIndex = 0;
         nNextEnd = 0;
-        while(nEndIndex < pHints->GetEndCount() &&
-            nCurrentIndex >= (nNextEnd = (*pHints->GetEnd(nEndIndex)->GetAnyEnd())))
+        while(nEndIndex < pHints->Count() &&
+            nCurrentIndex >= (nNextEnd = (*pHints->GetSortedByEnd(nEndIndex)->GetAnyEnd())))
             nEndIndex++;
 
         sal_Int32 nNextPos =

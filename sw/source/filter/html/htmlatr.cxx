@@ -2342,7 +2342,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     sal_Int32 nStrPos = rHTMLWrt.pCurPam->GetPoint()->nContent.GetIndex();
     const SwTextAttr * pHt = 0;
     const size_t nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
-    if( nCntAttr && nStrPos > ( pHt = pNd->GetSwpHints()[ 0 ] )->GetStart() )
+    if( nCntAttr && nStrPos > ( pHt = pNd->GetSwpHints().Get(0) )->GetStart() )
     {
         // Ok, es gibt vorher Attribute, die ausgegeben werden muessen
         do {
@@ -2382,7 +2382,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             }
 
         } while( nAttrPos < nCntAttr && nStrPos >
-            ( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
+            ( pHt = pNd->GetSwpHints().Get( nAttrPos ) )->GetStart() );
 
         // dann gebe mal alle gesammelten Attribute von der String-Pos aus
         aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset );
@@ -2448,7 +2448,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         bOutChar = false;       // keine 255 ausgeben
                     }
                 } while( ++nAttrPos < nCntAttr && nStrPos ==
-                    ( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
+                    ( pHt = pNd->GetSwpHints().Get( nAttrPos ) )->GetStart() );
             }
 
             // Manche Draw-Formate koennen auch noch Attribute mitbringen

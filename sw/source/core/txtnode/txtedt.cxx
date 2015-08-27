@@ -421,10 +421,10 @@ void SwTextNode::RstTextAttr(
     sal_Int32 nAttrStart;
     SwTextAttr *pHt = NULL;
     while ( (i < m_pSwpHints->Count())
-            && ( ( ( nAttrStart = (*m_pSwpHints)[i]->GetStart()) < nEnd )
+            && ( ( ( nAttrStart = m_pSwpHints->Get(i)->GetStart()) < nEnd )
                  || nLen==0 ) && !bExactRange)
     {
-        pHt = m_pSwpHints->GetTextHint(i);
+        pHt = m_pSwpHints->Get(i);
 
         // attributes without end stay in!
         // but consider <bInclRefToxMark> used by Undo
@@ -605,7 +605,7 @@ void SwTextNode::RstTextAttr(
         // Only delete the hints which start at nStt and end at nEnd.
         for (i = 0; i < m_pSwpHints->Count(); ++i)
         {
-            SwTextAttr* pHint = m_pSwpHints->GetTextHint(i);
+            SwTextAttr* pHint = m_pSwpHints->Get(i);
             if (pHint->GetStart() != nStt)
                 continue;
 

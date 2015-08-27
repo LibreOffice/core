@@ -1548,7 +1548,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 {
                     for( size_t i = 0; i < pTextNd->GetSwpHints().Count(); ++i )
                     {
-                        const SwTextAttr* pHt = pTextNd->GetSwpHints()[i];
+                        const SwTextAttr* pHt = pTextNd->GetSwpHints().Get(i);
                         const sal_Int32 nAttrStart = pHt->GetStart();
                         if( nAttrStart > n ) // over the section
                             break;

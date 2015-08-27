@@ -494,9 +494,9 @@ void SwTextPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
     if( HasHints() )
     {
-        for ( size_t nTmp = 0; nTmp < pHints->GetStartCount(); ++nTmp )
+        for ( size_t nTmp = 0; nTmp < pHints->Count(); ++nTmp )
         {
-            SwTextAttr* const pTextAttr = pHints->GetStart( nTmp );
+            SwTextAttr* const pTextAttr = pHints->Get( nTmp );
 
             const SvxUnderlineItem* pItem =
                     static_cast<const SvxUnderlineItem*>(CharFormat::GetItem( *pTextAttr, RES_CHRATR_UNDERLINE ));

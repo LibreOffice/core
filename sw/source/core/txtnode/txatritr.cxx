@@ -202,7 +202,7 @@ void SwTextAttrIterator::SearchNextChg()
         const SfxPoolItem* pItem = 0;
         for( ; nAttrPos < pHts->Count(); ++nAttrPos )
         {
-            const SwTextAttr* pHt = (*pHts)[ nAttrPos ];
+            const SwTextAttr* pHt = pHts->Get( nAttrPos );
             const sal_Int32* pEnd = pHt->End();
             const sal_Int32 nHtStt = pHt->GetStart();
             if( nHtStt < nStt && ( !pEnd || *pEnd <= nStt ))

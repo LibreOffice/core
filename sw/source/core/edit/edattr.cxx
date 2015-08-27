@@ -325,7 +325,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                 const size_t nSize = pTextNd->GetpSwpHints()->Count();
                 for( size_t m = 0; m < nSize; m++ )
                 {
-                    const SwTextAttr* pHt = (*pTextNd->GetpSwpHints())[m];
+                    const SwTextAttr* pHt = pTextNd->GetpSwpHints()->Get(m);
                     if( pHt->Which() == RES_TXTATR_AUTOFMT ||
                         pHt->Which() == RES_TXTATR_CHARFMT ||
                         pHt->Which() == RES_TXTATR_INETFMT )

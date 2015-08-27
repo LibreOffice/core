@@ -2509,7 +2509,7 @@ sal_uLong SwTableBox::IsValidNumTextNd( bool bCheckAttr ) const
                     sal_Int32 nNextSetField = 0;
                     for( size_t n = 0; n < pHts->Count(); ++n )
                     {
-                        const SwTextAttr* pAttr = (*pHts)[ n ];
+                        const SwTextAttr* pAttr = pHts->Get(n);
                         if( RES_TXTATR_NOEND_BEGIN <= pAttr->Which() )
                         {
                             if ( (pAttr->GetStart() == nNextSetField)

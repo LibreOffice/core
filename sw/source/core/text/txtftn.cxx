@@ -103,7 +103,7 @@ void SwTextFrm::CalcFootnoteFlag()
 
     for ( size_t i = 0; i < nSize; ++i )
     {
-        const SwTextAttr *pHt = (*pHints)[i];
+        const SwTextAttr *pHt = pHints->Get(i);
         if ( pHt->Which() == RES_TXTATR_FTN )
         {
             const sal_Int32 nIdx = pHt->GetStart();
@@ -422,7 +422,7 @@ void SwTextFrm::RemoveFootnote( const sal_Int32 nStart, const sal_Int32 nLen )
             = FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFootnoteInfo().ePos;
         for ( size_t i = nSize; i; )
         {
-            SwTextAttr *pHt = pHints->GetTextHint(--i);
+            SwTextAttr *pHt = pHints->Get(--i);
             if ( RES_TXTATR_FTN != pHt->Which() )
                 continue;
 

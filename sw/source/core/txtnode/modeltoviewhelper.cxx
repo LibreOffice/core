@@ -130,7 +130,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
         const SwpHints* pSwpHints2 = rNode.GetpSwpHints();
         for ( size_t i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
         {
-            const SwTextAttr* pAttr = (*pSwpHints2)[i];
+            const SwTextAttr* pAttr = pSwpHints2->Get(i);
             if (pAttr->HasDummyChar())
             {
                 const sal_Int32 nDummyCharPos = pAttr->GetStart();

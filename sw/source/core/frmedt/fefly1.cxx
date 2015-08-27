@@ -1303,7 +1303,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             const size_t nEnd = pHts->Count();
             for( size_t n = 0; n < nEnd; ++n )
             {
-                const SfxPoolItem* pItem = &(*pHts)[ n ]->GetAttr();
+                const SfxPoolItem* pItem = &pHts->Get(n)->GetAttr();
                 if( RES_TXTATR_FIELD == pItem->Which()
                     && TYP_SEQFLD == static_cast<const SwFormatField*>(pItem)->GetField()->GetTypeId() )
                 {

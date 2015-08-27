@@ -491,7 +491,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
 
             for( size_t n = 0; n < nSize; ++n )
             {
-                SwTextAttr* pHt = pTextNd->GetpSwpHints()->GetTextHint( n );
+                SwTextAttr* pHt = pTextNd->GetpSwpHints()->Get( n );
                 nAttrStart = pHt->GetStart();
                 if( nAttrStart > nStart )       // beyond the area
                     break;

@@ -264,7 +264,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                             GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds);
                         for( size_t i = pHts->Count(); i; )
                         {
-                            SwTextAttr * const pAttr = pHts->GetTextHint( --i );
+                            SwTextAttr * const pAttr = pHts->Get( --i );
                             switch ( pAttr->Which() )
                             {
                             case RES_TXTATR_FIELD:
@@ -2232,7 +2232,7 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
                     std::vector<SwTextAttr*> flys;
                     for (size_t i = 0; i < pHints->Count(); ++i)
                     {
-                        SwTextAttr *const pHint(pHints->GetTextHint(i));
+                        SwTextAttr *const pHint(pHints->Get(i));
                         if (RES_TXTATR_FLYCNT == pHint->Which())
                         {
                             flys.push_back(pHint);

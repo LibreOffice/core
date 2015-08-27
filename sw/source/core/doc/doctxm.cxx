@@ -126,7 +126,7 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
 
     for( size_t n = 0; n < rHts.Count(); ++n )
     {
-        const SwTextAttr* pHt = rHts[n];
+        const SwTextAttr* pHt = rHts.Get(n);
         if( RES_TXTATR_TOXMARK != pHt->Which() )
             continue;
         if( ( nSttIdx = pHt->GetStart() ) < nAktPos )
@@ -1700,9 +1700,9 @@ void SwTOXBaseSection::_UpdatePageNum( SwTextNode* pNd,
     SwCharFormat* pPageNoCharFormat = 0;
     SwpHints* pHints = pNd->GetpSwpHints();
     if(pHints)
-        for(size_t nHintIdx = 0; nHintIdx < pHints->GetStartCount(); ++nHintIdx)
+        for(size_t nHintIdx = 0; nHintIdx < pHints->Count(); ++nHintIdx)
         {
-            SwTextAttr* pAttr = pHints->GetStart(nHintIdx);
+            const SwTextAttr* pAttr = pHints->Get(nHintIdx);
             const sal_Int32 nTmpEnd = pAttr->End() ? *pAttr->End() : 0;
             if( nStartPos >= pAttr->GetStart() &&
                 (nStartPos + 2) <= nTmpEnd &&

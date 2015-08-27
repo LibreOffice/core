@@ -106,38 +106,25 @@ bool CompareSwpHtEnd::operator()(SwTextAttr* const lhs, SwTextAttr* const rhs) c
   return lcl_IsLessEnd( *lhs, *rhs );
 }
 
-void SwpHintsArray::Insert( const SwTextAttr *pHt )
+void SwpHints::Insert( const SwTextAttr *pHt )
 {
     Resort();
-    assert(m_HintStarts.find(const_cast<SwTextAttr*>(pHt))
-            == m_HintStarts.end()); // "Insert: hint already in HtStart"
-    assert(m_HintEnds.find(const_cast<SwTextAttr*>(pHt))
-            == m_HintEnds.end());   // "Insert: hint already in HtEnd"
-    m_HintStarts.insert( const_cast<SwTextAttr*>(pHt) );
-    m_HintEnds  .insert( const_cast<SwTextAttr*>(pHt) );
+    assert(m_HintsByStart.find(const_cast<SwTextAttr*>(pHt))
+            == m_HintsByStart.end()); // "Insert: hint already in HtStart"
+    assert(m_HintsByEnd.find(const_cast<SwTextAttr*>(pHt))
+            == m_HintsByEnd.end());   // "Insert: hint already in HtEnd"
+    m_HintsByStart.insert( const_cast<SwTextAttr*>(pHt) );
+    m_HintsByEnd  .insert( const_cast<SwTextAttr*>(pHt) );
 }
 
-void SwpHintsArray::DeleteAtPos( const size_t nPos )
-{
-    // optimization: nPos is the position in the Starts array
-    SwTextAttr *pHt = m_HintStarts[ nPos ];
-    m_HintStarts.erase( m_HintStarts.begin() + nPos );
-
-    Resort();
-
-    bool const done = m_HintEnds.erase(pHt);
-    assert(done);
-    (void) done; // unused in NDEBUG
-}
-
-bool SwpHintsArray::Contains( const SwTextAttr *pHt ) const
+bool SwpHints::Contains( const SwTextAttr *pHt ) const
 {
     // DO NOT use find() or CHECK here!
     // if called from SwTextNode::InsertItem, pHt has already been deleted,
     // so it cannot be dereferenced
-    for (size_t i = 0; i < m_HintStarts.size(); ++i)
+    for (size_t i = 0; i < m_HintsByStart.size(); ++i)
     {
-        if (m_HintStarts[i] == pHt)
+        if (m_HintsByStart[i] == pHt)
         {
             return true;
         }
@@ -151,14 +138,14 @@ bool SwpHintsArray::Contains( const SwTextAttr *pHt ) const
         if(!(cond)) \
         { \
             SAL_WARN("sw.core", text); \
-            (const_cast<SwpHintsArray*>(this))->Resort(); \
+            (const_cast<SwpHints*>(this))->Resort(); \
             return false; \
         }
 
-bool SwpHintsArray::Check(bool bPortionsMerged) const
+bool SwpHints::Check(bool bPortionsMerged) const
 {
     // 1) gleiche Anzahl in beiden Arrays
-    CHECK_ERR( m_HintStarts.size() == m_HintEnds.size(),
+    CHECK_ERR( m_HintsByStart.size() == m_HintsByEnd.size(),
         "HintsCheck: wrong sizes" );
     sal_Int32 nLastStart = 0;
     sal_Int32 nLastEnd   = 0;
@@ -170,7 +157,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
     {
         for (size_t i = 0; i < Count(); ++i)
         {
-            SwTextAttr const*const pHint(m_HintStarts[i]);
+            SwTextAttr const*const pHint(m_HintsByStart[i]);
             if (RES_TXTATR_AUTOFMT == pHint->Which())
             {
                 std::shared_ptr<SfxItemSet> const pSet(
@@ -188,7 +175,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         // --- Start-Kontrolle ---
 
         // 2a) gueltiger Pointer? vgl. DELETEFF
-        const SwTextAttr *pHt = m_HintStarts[i];
+        const SwTextAttr *pHt = m_HintsByStart[i];
         CHECK_ERR( 0xFF != *reinterpret_cast<unsigned char const *>(pHt), "HintsCheck: start ptr was deleted" );
 
         // 3a) Stimmt die Start-Sortierung?
@@ -205,7 +192,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         // --- End-Kontrolle ---
 
         // 2b) gueltiger Pointer? vgl. DELETEFF
-        const SwTextAttr *pHtEnd = m_HintEnds[i];
+        const SwTextAttr *pHtEnd = m_HintsByEnd[i];
         CHECK_ERR( 0xFF != *reinterpret_cast<unsigned char const *>(pHtEnd), "HintsCheck: end ptr was deleted" );
 
         // 3b) Stimmt die End-Sortierung?
@@ -223,13 +210,13 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         // --- Ueberkreuzungen ---
 
         // 5) gleiche Pointer in beiden Arrays
-        if (m_HintStarts.find(const_cast<SwTextAttr*>(pHt)) == m_HintStarts.end())
+        if (m_HintsByStart.find(const_cast<SwTextAttr*>(pHt)) == m_HintsByStart.end())
             nIdx = COMPLETE_STRING;
 
         CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetStartOf" );
 
         // 6) gleiche Pointer in beiden Arrays
-        if (m_HintEnds.find(const_cast<SwTextAttr*>(pHt)) == m_HintEnds.end())
+        if (m_HintsByEnd.find(const_cast<SwTextAttr*>(pHt)) == m_HintsByEnd.end())
             nIdx = COMPLETE_STRING;
 
         CHECK_ERR( COMPLETE_STRING != nIdx, "HintsCheck: no GetEndOf" );
@@ -245,8 +232,8 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                    "HintsCheck: Character attribute in end array" );
 
         // 8) style portion check
-        const SwTextAttr* pHtThis = m_HintStarts[i];
-        const SwTextAttr* pHtLast = i > 0 ? m_HintStarts[i-1] : 0;
+        const SwTextAttr* pHtThis = m_HintsByStart[i];
+        const SwTextAttr* pHtLast = i > 0 ? m_HintsByStart[i-1] : 0;
         CHECK_ERR( (0 == i)
             ||  (   (RES_TXTATR_CHARFMT != pHtLast->Which())
                 &&  (RES_TXTATR_AUTOFMT != pHtLast->Which()))
@@ -297,7 +284,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                     bool bFound(false);
                     for (size_t j = i + 1; j < Count(); ++j)
                     {
-                        SwTextAttr *const pOther(m_HintStarts[j]);
+                        SwTextAttr *const pOther(m_HintsByStart[j]);
                         if (pOther->GetStart() > *pHt->End())
                         {
                             break; // done
@@ -343,7 +330,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         {
             for ( size_t j = 0; j < Count(); ++j )
             {
-                SwTextAttr const * const pOther( m_HintStarts[j] );
+                SwTextAttr const * const pOther( m_HintsByStart[j] );
                 if ( pOther->IsNesting() &&  (i != j) )
                 {
                     SwComparePosition cmp = ComparePosition(
@@ -361,7 +348,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         {
             for ( size_t j = 0; j < i; ++j )
             {
-                SwTextAttr const * const pOther( m_HintStarts[j] );
+                SwTextAttr const * const pOther( m_HintsByStart[j] );
                 if (pOther->HasDummyChar())
                 {
                     CHECK_ERR( (pOther->GetStart() != pHtThis->GetStart()),
@@ -377,13 +364,13 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
 
 // Resort() is called before every Insert and Delete.
 // Various SwTextNode methods modify hints in a way that violates the
-// sort order of the m_HintStarts, m_HintEnds arrays, so this method is needed
+// sort order of the m_HintsByStart, m_HintsByEnd arrays, so this method is needed
 // to restore the order.
 
-void SwpHintsArray::Resort()
+void SwpHints::Resort()
 {
-    m_HintStarts.Resort();
-    m_HintEnds.Resort();
+    m_HintsByStart.Resort();
+    m_HintsByEnd.Resort();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
