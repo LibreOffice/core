@@ -319,13 +319,13 @@ void Color::ApplyTintOrShade(sal_Int16 n100thPercent)
 
     basegfx::BColor aBColor = basegfx::tools::rgb2hsl(getBColor());
     double fFactor = 1.0 - (std::abs(double(n100thPercent)) / 10000.0);
-    double fResult = 0;
+    double fResult;
 
     if (n100thPercent > 0) // tint
     {
         fResult = aBColor.getBlue() * fFactor + (1.0 - fFactor);
     }
-    else if (n100thPercent < 0) // shade
+    else // shade
     {
         fResult = aBColor.getBlue() * fFactor;
     }
