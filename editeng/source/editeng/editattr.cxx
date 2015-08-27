@@ -221,7 +221,6 @@ void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
 {
     Color aColor = static_cast<const SvxColorItem*>(GetItem())->GetValue();
     rFont.SetColor( aColor);
-    //fprintf(stderr, "Called SetFont with Color %d\n", aColor.GetColor());
 }
 
 // class EditCharAttribBackgroundColor
@@ -238,14 +237,11 @@ EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
 void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
 {
     Color aColor = static_cast<const SvxBackgroundColorItem*>(GetItem())->GetValue();
-    rFont.SetFillColor( aColor);
     rFont.SetTransparent(false);
-
+    rFont.SetFillColor(aColor);
 }
 
-
 // class EditCharAttribLanguage
-
 EditCharAttribLanguage::EditCharAttribLanguage( const SvxLanguageItem& rAttr, sal_uInt16 _nStart, sal_uInt16 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
