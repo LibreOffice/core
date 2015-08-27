@@ -22,42 +22,33 @@
 #include <tools/link.hxx>
 #include <rsctools.hxx>
 
-class BiNode
-{
-protected:
-    BiNode*     pLeft;    // left subtree
-    BiNode*     pRight;   // right subtree
-
-public:
-
-                         // Wandelt eine doppelt verkettete Liste in
-                         // einen binaeren Baum um
-            BiNode *    ChangeDLListBTree( BiNode * pList );
-
-                        BiNode();
-    virtual             ~BiNode();
-
-
-                        // Wandelt einen binaeren Baum in eine doppelt
-                        // verkettete Liste um
-                        BiNode* ChangeBTreeDLList();
-
-            BiNode *    Left() const { return pLeft  ; }
-            BiNode *    Right() const{ return pRight ; }
-            void        EnumNodes( Link<> aLink ) const;
-};
-
-class NameNode : public BiNode
+class NameNode
 {
     void                SubOrderTree( NameNode * pOrderNode );
 
 protected:
+    NameNode*     pLeft;    // left subtree
+    NameNode*     pRight;   // right subtree
+
                         // pCmp ist Zeiger auf Namen
             NameNode*   Search( const void * pCmp ) const;
 
 public:
-            NameNode*   Left() const { return static_cast<NameNode *>(pLeft); }
-            NameNode*   Right() const{ return static_cast<NameNode *>(pRight); }
+                         // Wandelt eine doppelt verkettete Liste in
+                         // einen binaeren Baum um
+            NameNode*   ChangeDLListBTree( NameNode * pList );
+
+                        NameNode();
+    virtual             ~NameNode();
+
+                        // Wandelt einen binaeren Baum in eine doppelt
+                        // verkettete Liste um
+                        NameNode* ChangeBTreeDLList();
+
+            void        EnumNodes( Link<> aLink ) const;
+
+            NameNode*   Left() const { return pLeft; }
+            NameNode*   Right() const{ return pRight; }
             NameNode*   Search( const NameNode * pName ) const;
                         // insert a new node in the b-tree
             bool        Insert( NameNode * pTN, sal_uInt32 * nDepth );

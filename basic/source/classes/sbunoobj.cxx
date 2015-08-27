@@ -4311,18 +4311,9 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
 
 
-namespace {
-class OMutexBasis
+class ModuleInvocationProxy : public WeakImplHelper< XInvocation, XComponent >
 {
-protected:
-    // this mutex is necessary for OInterfaceContainerHelper
-    ::osl::Mutex m_aMutex;
-};
-} // namespace
-
-class ModuleInvocationProxy : public OMutexBasis,
-                              public WeakImplHelper< XInvocation, XComponent >
-{
+    ::osl::Mutex        m_aMutex;
     OUString            m_aPrefix;
     SbxObjectRef        m_xScopeObj;
     bool                m_bProxyIsClassModuleObject;
@@ -4357,7 +4348,8 @@ public:
 };
 
 ModuleInvocationProxy::ModuleInvocationProxy( const OUString& aPrefix, SbxObjectRef xScopeObj )
-    : m_aPrefix( aPrefix + "_" )
+    : m_aMutex()
+    , m_aPrefix( aPrefix + "_" )
     , m_xScopeObj( xScopeObj )
     , m_aListeners( m_aMutex )
 {
