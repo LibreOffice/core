@@ -48,7 +48,7 @@ class CommandEvent;
 class MenuFloatingWindow;
 namespace vcl { class Window; }
 class SalMenu;
-class IMenuBarWindow;
+class MenuBarWindow;
 struct SystemMenuData;
 enum class FloatWinPopupFlags;
 
@@ -434,8 +434,8 @@ class VCL_DLLPUBLIC MenuBar : public Menu
 
 protected:
 
-    /// Return the IMenuBarWindow interface.
-    IMenuBarWindow* getMenuBarWindow();
+    /// Return the MenuBarWindow.
+    MenuBarWindow* getMenuBarWindow();
 
 public:
     MenuBar();
