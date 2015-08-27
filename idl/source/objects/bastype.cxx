@@ -175,7 +175,7 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
     return false;
 }
 
-bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
+bool SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvStringHashEntry * pName,
                                     SvTokenStream & rInStm )
 {
@@ -198,7 +198,7 @@ bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
     return false;
 }
 
-bool SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
+bool SvIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();

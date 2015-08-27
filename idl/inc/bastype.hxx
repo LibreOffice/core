@@ -66,39 +66,20 @@ public:
 
 class SvIdentifier
 {
-private:
-    OString m_aStr;
-public:
-    SvIdentifier()
-    {
-    }
-    void setString(const OString& rStr)
-    {
-        m_aStr = rStr;
-    }
-    const OString& getString() const
-    {
-        return m_aStr;
-    }
-
-    bool IsSet() const
-    {
-        return !m_aStr.isEmpty();
-    }
-    bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
-};
-
-
-class SvNumberIdentifier : public SvIdentifier
-{
+    OString     m_aStr;
     sal_uInt32  nValue;
 public:
-                SvNumberIdentifier() : nValue( 0 ) {};
+                SvIdentifier() : nValue( 0 ) {};
+
+    void        setString(const OString& rStr) { m_aStr = rStr; }
+    const OString& getString() const { return m_aStr; }
+
+    bool        ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm );
     bool        IsSet() const
                 {
-                    return SvIdentifier::IsSet() || nValue != 0;
+                    return !m_aStr.isEmpty() || nValue != 0;
                 }
-    sal_uInt32      GetValue() const { return nValue; }
+    sal_uInt32  GetValue() const { return nValue; }
     void        SetValue( sal_uInt32 nVal ) { nValue = nVal; }
 
     bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -140,7 +121,7 @@ public:
 };
 
 
-class SvHelpContext : public SvNumberIdentifier
+class SvHelpContext : public SvIdentifier
 {
 };
 

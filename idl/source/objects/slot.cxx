@@ -595,7 +595,7 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
                 sal_uLong nValue;
                 if ( rBase.FindId(aSId , &nValue) )
                 {
-                    SvNumberIdentifier aId;
+                    SvIdentifier aId;
                     aId.setString(aSId);
                     aId.SetValue(nValue);
                     xEnumSlot->SetSlotId(aId);

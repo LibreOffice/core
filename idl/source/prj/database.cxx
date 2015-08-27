@@ -417,7 +417,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
 
 SvMetaAttribute* SvIdlDataBase::SearchKnownAttr
 (
-    const SvNumberIdentifier& rId
+    const SvIdentifier& rId
 )
 {
     sal_uLong n;

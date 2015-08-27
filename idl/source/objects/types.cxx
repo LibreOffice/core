@@ -55,7 +55,7 @@ SvMetaType * SvMetaAttribute::GetType() const
     return static_cast<SvMetaAttribute *>(GetRef())->GetType();
 }
 
-const SvNumberIdentifier & SvMetaAttribute::GetSlotId() const
+const SvIdentifier & SvMetaAttribute::GetSlotId() const
 {
     if( aSlotId.IsSet() || !GetRef() ) return aSlotId;
     return static_cast<SvMetaAttribute *>(GetRef())->GetSlotId();

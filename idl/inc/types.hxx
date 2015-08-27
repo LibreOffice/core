@@ -35,7 +35,7 @@ typedef tools::SvRef<SvMetaType> SvMetaTypeRef;
 class SvMetaAttribute : public SvMetaReference
 {
     SvMetaTypeRef       aType;
-    SvNumberIdentifier  aSlotId;
+    SvIdentifier        aSlotId;
     SvBOOL              aAutomation;
     SvBOOL              aExport;
     SvBOOL              aReadonly;
@@ -55,9 +55,9 @@ public:
     void                SetNewAttribute( bool bNew )
                         { bNewAttr = bNew; }
     bool                GetReadonly() const;
-    void                SetSlotId( const SvNumberIdentifier & rId )
+    void                SetSlotId( const SvIdentifier & rId )
                         { aSlotId = rId; }
-    const SvNumberIdentifier & GetSlotId() const;
+    const SvIdentifier & GetSlotId() const;
     bool                GetExport() const;
     bool                GetHidden() const;
     bool                GetAutomation() const;

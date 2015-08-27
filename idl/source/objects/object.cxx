@@ -133,7 +133,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         {
             if( !xAttr->GetSlotId().IsSet() )
             {
-                SvNumberIdentifier aI;
+                SvIdentifier aI;
                 aI.SetValue( rBase.GetUniqueId() );
                 xAttr->SetSlotId( aI );
             }
