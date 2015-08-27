@@ -671,44 +671,44 @@ diff -ru boost.orig/boost/foreach.hpp boost/boost/foreach.hpp
      typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
      typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iterator;
 diff -ru boost.orig/boost/function/function_template.hpp boost/boost/function/function_template.hpp
---- foo/misc/boost.orig/boost/function/function_template.hpp	2015-01-18 18:32:44.000000000 +0100
-+++ foo/misc/boost/boost/function/function_template.hpp	2015-07-16 22:03:43.157979869 +0200
+--- foo/misc/boost.orig/boost/function/function_template.hpp	2015-07-22 19:33:01.000000000 +0200
++++ foo/misc/boost/boost/function/function_template.hpp	2015-08-27 10:14:49.023960640 +0200
 @@ -717,7 +717,7 @@
      template<typename Functor>
      BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f
  #ifndef BOOST_NO_SFINAE
--                            ,typename enable_if_c<
-+                            ,__attribute__ ((unused)) typename enable_if_c<
-                             (boost::type_traits::ice_not<
-                              (is_integral<Functor>::value)>::value),
+-                            ,typename boost::enable_if_c<
++                            ,__attribute__ ((unused)) typename boost::enable_if_c<
+                              !(is_integral<Functor>::value),
                                          int>::type = 0
-@@ -730,7 +730,7 @@
+ #endif // BOOST_NO_SFINAE
+@@ -729,7 +729,7 @@
      template<typename Functor,typename Allocator>
      BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f, Allocator a
  #ifndef BOOST_NO_SFINAE
--                            ,typename enable_if_c<
-+                            ,__attribute__ ((unused)) typename enable_if_c<
-                             (boost::type_traits::ice_not<
-                              (is_integral<Functor>::value)>::value),
+-                            ,typename boost::enable_if_c<
++                            ,__attribute__ ((unused)) typename boost::enable_if_c<
+                               !(is_integral<Functor>::value),
                                          int>::type = 0
-@@ -1068,7 +1068,7 @@
+ #endif // BOOST_NO_SFINAE
+@@ -1065,7 +1065,7 @@
    template<typename Functor>
    function(Functor f
  #ifndef BOOST_NO_SFINAE
--           ,typename enable_if_c<
-+           ,__attribute__ ((unused)) typename enable_if_c<
-                             (boost::type_traits::ice_not<
-                           (is_integral<Functor>::value)>::value),
+-           ,typename boost::enable_if_c<
++           ,__attribute__ ((unused)) typename boost::enable_if_c<
+                           !(is_integral<Functor>::value),
                         int>::type = 0
-@@ -1080,7 +1080,7 @@
+ #endif
+@@ -1076,7 +1076,7 @@
    template<typename Functor,typename Allocator>
    function(Functor f, Allocator a
  #ifndef BOOST_NO_SFINAE
--           ,typename enable_if_c<
-+           ,__attribute__ ((unused)) typename enable_if_c<
-                             (boost::type_traits::ice_not<
-                           (is_integral<Functor>::value)>::value),
+-           ,typename boost::enable_if_c<
++           ,__attribute__ ((unused)) typename boost::enable_if_c<
+                            !(is_integral<Functor>::value),
                         int>::type = 0
+ #endif
 diff -ru boost.orig/boost/iterator/reverse_iterator.hpp boost/boost/iterator/reverse_iterator.hpp
 --- foo/misc/boost.orig/boost/iterator/reverse_iterator.hpp	2014-09-06 19:18:28.000000000 +0200
 +++ foo/misc/boost/boost/iterator/reverse_iterator.hpp	2015-07-16 22:04:18.012979478 +0200
