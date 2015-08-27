@@ -617,7 +617,7 @@ void EnhWMFReader::ReadAndDrawPolyPolygon()
 bool EnhWMFReader::ReadEnhWMF()
 {
     sal_uInt32  nStretchBltMode = 0;
-    sal_uInt32  nRecType(0), nRecSize(0), nNextPos(0),
+    sal_uInt32  nNextPos(0),
                 nW(0), nH(0), nColor(0), nIndex(0),
                 nDat32(0), nNom1(0), nDen1(0), nNom2(0), nDen2(0);
     sal_Int32   nX32(0), nY32(0), nx32(0), ny32(0);
@@ -629,7 +629,8 @@ bool EnhWMFReader::ReadEnhWMF()
 
     while( bStatus && nRecordCount-- && pWMF->good())
     {
-        pWMF->ReadUInt32( nRecType ).ReadUInt32( nRecSize );
+        sal_uInt32  nRecType(0), nRecSize(0);
+        pWMF->ReadUInt32(nRecType).ReadUInt32(nRecSize);
 
         if ( !pWMF->good() || ( nRecSize < 8 ) || ( nRecSize & 3 ) )     // Parameters are always divisible by 4
         {
@@ -637,14 +638,22 @@ bool EnhWMFReader::ReadEnhWMF()
             break;
         }
 
-        const sal_uInt32 nMaxPossibleRecSize = nEndPos - pWMF->Tell() + 8;
+        auto nCurPos = pWMF->Tell();
+
+        if (nEndPos < nCurPos - 8)
+        {
+            bStatus = false;
+            break;
+        }
+
+        const sal_uInt32 nMaxPossibleRecSize = nEndPos - (nCurPos - 8);
         if (nRecSize > nMaxPossibleRecSize)
         {
             bStatus = false;
             break;
         }
 
-        nNextPos = pWMF->Tell() + ( nRecSize - 8 );
+        nNextPos = nCurPos + (nRecSize - 8);
 
         if(  !aBmpSaveList.empty()
           && ( nRecType != EMR_STRETCHBLT )
@@ -1423,7 +1432,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 case EMR_EXTTEXTOUTW :
                 {
                     sal_Int32   nLeft, nTop, nRight, nBottom, ptlReferenceX, ptlReferenceY, nGfxMode, nXScale, nYScale;
-                    sal_uInt32  nCurPos, nOffString, nOptions, offDx;
+                    sal_uInt32  nOffString, nOptions, offDx;
                     sal_Int32   nLen;
                     std::vector<long> aDX;
 
