@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_fa6c690a",
+        "filename": "rsc/source/parser/rsclex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T20:02:59Z",
+      "side": 1,
+      "message": "the original meaning is more: true, if last symbol was INCLUDE",
+      "revId": "db9ed229f97036c43c679efccb27e324f6b627e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_da71a5e2",
+        "filename": "rsc/source/parser/rsclex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T20:02:59Z",
+      "side": 1,
+      "message": "better: because of unsigned longs\n\n(wg. -\u003e wegen)",
+      "revId": "db9ed229f97036c43c679efccb27e324f6b627e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_3a7701d6",
+        "filename": "rsc/source/parser/rsclex.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T20:02:59Z",
+      "side": 1,
+      "message": "Umm - Leerzeichen \u003d\u003d space (characters) ;)",
+      "revId": "db9ed229f97036c43c679efccb27e324f6b627e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_1a74bdcd",
+        "filename": "rsc/source/parser/rscpar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T20:02:59Z",
+      "side": 1,
+      "message": "point -\u003e pointer",
+      "revId": "db9ed229f97036c43c679efccb27e324f6b627e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_7a81798f",
+        "filename": "rsc/source/res/rscclass.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T20:02:59Z",
+      "side": 1,
+      "message": "slightly better: is given/provided via pointer",
+      "revId": "db9ed229f97036c43c679efccb27e324f6b627e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_5a7e35af",
+        "filename": "rsc/source/res/rsccont.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 533,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T20:02:59Z",
+      "side": 1,
+      "message": "check for duplicate..",
+      "revId": "db9ed229f97036c43c679efccb27e324f6b627e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_ba495191",
+        "filename": "rsc/source/res/rsccont.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T20:02:59Z",
+      "side": 1,
+      "message": "smallish typo sur -\u003e sub",
+      "revId": "db9ed229f97036c43c679efccb27e324f6b627e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_9a4e0d95",
+        "filename": "rsc/source/tools/rscdef.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T20:02:59Z",
+      "side": 1,
+      "message": "\"must be deleted after use\", perhaps?",
+      "revId": "db9ed229f97036c43c679efccb27e324f6b627e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_fa43c96a",
+        "filename": "rsc/source/tools/rsctree.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T20:02:59Z",
+      "side": 1,
+      "message": "into the tree ;)",
+      "revId": "db9ed229f97036c43c679efccb27e324f6b627e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
