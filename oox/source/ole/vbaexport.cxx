@@ -589,6 +589,14 @@ void exportDirStream(SvStream& rStrm)
     rStrm.WriteUInt32(0x00000000); // reserved
 }
 
+void exportVBAProjectStream(SvStream& rStrm)
+{
+    rStrm.WriteUInt16(0x61CC); // Reserved1
+    rStrm.WriteUInt16(0xFFFF); // Version
+    rStrm.WriteUInt8(0x00); // Reserved2
+    rStrm.WriteUInt16(0x0000); // Undefined
+}
+
 }
 
 void VbaExport::exportVBA()
@@ -605,8 +613,12 @@ void VbaExport::exportVBA()
     const OUString aDirFileName("/tmp/vba_dir_out.bin");
     SvFileStream aDirStream(aDirFileName, STREAM_READWRITE);
 
+    const OUString aVBAProjectFileName("/tmp/vba_project_stream_out.bin");
+    SvFileStream aVBAProjectStream(aVBAProjectFileName, STREAM_READWRITE);
+
     // export
     exportDirStream(aDirStream);
+    exportVBAProjectStream(aVBAProjectStream);
 
     aDirStream.Seek(0);
 
