@@ -50,6 +50,9 @@ namespace webdav_ucp {
 #define WEBDAV_URL_SCHEME           "vnd.sun.star.webdav"
 #define WEBDAV_URL_SCHEME_LENGTH    19
 
+#define WEBDAVS_URL_SCHEME "vnd.sun.star.webdavs"
+#define WEBDAVS_URL_SCHEME_LENGTH 20
+
 #define HTTP_URL_SCHEME         "http"
 
 #define HTTPS_URL_SCHEME        "https"

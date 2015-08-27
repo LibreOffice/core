@@ -2667,6 +2667,11 @@ void Content::transfer(
             sourceURI.SetScheme(
                 OUString( HTTP_URL_SCHEME ) );
         }
+        else if ( aScheme == WEBDAVS_URL_SCHEME )
+        {
+            sourceURI.SetScheme(
+                OUString( HTTPS_URL_SCHEME ) );
+        }
         else if ( aScheme == DAV_URL_SCHEME )
         {
             sourceURI.SetScheme(
@@ -2695,6 +2700,9 @@ void Content::transfer(
         if ( aScheme == WEBDAV_URL_SCHEME )
             targetURI.SetScheme(
                 OUString( HTTP_URL_SCHEME ) );
+        else if ( aScheme == WEBDAVS_URL_SCHEME )
+            targetURI.SetScheme(
+                OUString( HTTPS_URL_SCHEME ) );
         else if ( aScheme == DAV_URL_SCHEME )
             targetURI.SetScheme(
                 OUString( HTTP_URL_SCHEME ) );

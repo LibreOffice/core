@@ -744,6 +744,7 @@ static bool UCBOpenContentSync(
     if( ! aScheme.equalsIgnoreAsciiCase("http")                &&
         ! aScheme.equalsIgnoreAsciiCase("https")               &&
         ! aScheme.equalsIgnoreAsciiCase("vnd.sun.star.webdav") &&
+        ! aScheme.equalsIgnoreAsciiCase("vnd.sun.star.webdavs") &&
         ! aScheme.equalsIgnoreAsciiCase("ftp"))
         return _UCBOpenContentSync(
             xLockBytes,xContent,rArg,xSink,xInteract);

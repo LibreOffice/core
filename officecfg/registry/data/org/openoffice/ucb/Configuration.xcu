@@ -156,6 +156,17 @@
                 <value/>
               </prop>
             </node>
+            <node oor:name="Provider12a" oor:op="replace" install:module="neon">
+              <prop oor:name="ServiceName">
+                <value>com.sun.star.ucb.WebDAVContentProvider</value>
+              </prop>
+              <prop oor:name="URLTemplate">
+                <value>vnd.sun.star.webdavs</value>
+              </prop>
+              <prop oor:name="Arguments">
+                <value/>
+              </prop>
+            </node>
             <node oor:name="Provider13" oor:op="replace"
                 install:module="neon_gnomevfs">
               <prop oor:name="ServiceName">

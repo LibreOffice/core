@@ -123,8 +123,8 @@ ContentProvider::queryContent(
     const OUString aScheme
         = Identifier->getContentProviderScheme().toAsciiLowerCase();
     if ( aScheme != HTTP_URL_SCHEME && aScheme != HTTPS_URL_SCHEME &&
-         aScheme != WEBDAV_URL_SCHEME && aScheme != DAV_URL_SCHEME &&
-         aScheme != DAVS_URL_SCHEME )
+         aScheme != WEBDAV_URL_SCHEME && aScheme != WEBDAVS_URL_SCHEME &&
+         aScheme != DAV_URL_SCHEME && aScheme != DAVS_URL_SCHEME )
         throw ucb::IllegalIdentifierException();
 
     // Normalize URL and create new Id, if nessacary.
@@ -145,6 +145,13 @@ ContentProvider::queryContent(
         aURL = aURL.replaceAt( 0,
                                WEBDAV_URL_SCHEME_LENGTH,
                                OUString( HTTP_URL_SCHEME ) );
+        bNewId = true;
+    }
+    else if ( aScheme == WEBDAVS_URL_SCHEME )
+    {
+        aURL = aURL.replaceAt( 0,
+                               WEBDAVS_URL_SCHEME_LENGTH,
+                               OUString( HTTPS_URL_SCHEME ) );
         bNewId = true;
     }
     else if ( aScheme == DAV_URL_SCHEME )
