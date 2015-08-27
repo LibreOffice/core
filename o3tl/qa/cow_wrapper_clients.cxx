@@ -219,6 +219,56 @@ bool cow_wrapper_client4::operator<( const cow_wrapper_client4& rRHS ) const
     return maImpl < rRHS.maImpl;
 }
 
+bool BogusRefCountPolicy::s_bShouldIncrement = 0;
+bool BogusRefCountPolicy::s_bShouldDecrement = 0;
+sal_uInt32 BogusRefCountPolicy::s_nEndOfScope = 0;
+
+cow_wrapper_client5::cow_wrapper_client5() :
+    maImpl()
+{
+}
+
+cow_wrapper_client5::cow_wrapper_client5(int nX) :
+    maImpl(nX)
+{
+}
+
+cow_wrapper_client5::cow_wrapper_client5( const cow_wrapper_client5& rSrc ) :
+    maImpl( rSrc.maImpl )
+{
+}
+
+cow_wrapper_client5::cow_wrapper_client5( cow_wrapper_client5&& rSrc ) :
+    maImpl( std::move( rSrc.maImpl ) )
+{
+}
+
+cow_wrapper_client5::~cow_wrapper_client5()
+{
+}
+
+cow_wrapper_client5& cow_wrapper_client5::operator=( const cow_wrapper_client5& rSrc )
+{
+    maImpl = rSrc.maImpl;
+
+    return *this;
+}
+
+cow_wrapper_client5& cow_wrapper_client5::operator=( cow_wrapper_client5&& rSrc )
+{
+    maImpl = std::move( rSrc.maImpl );
+
+    return *this;
+}
+
+bool cow_wrapper_client5::operator==( const cow_wrapper_client5& rSrc ) const {
+    return maImpl == rSrc.maImpl;
+}
+
+bool cow_wrapper_client5::operator!=( const cow_wrapper_client5& rSrc ) const {
+    return maImpl != rSrc.maImpl;
+}
+
 } // namespace o3tltests
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

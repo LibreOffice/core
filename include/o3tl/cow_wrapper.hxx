@@ -272,13 +272,13 @@ int cow_wrapper_client::queryUnmodified() const
         /// true, if not shared with any other cow_wrapper instance
         bool is_unique() const // nothrow
         {
-            return m_pimpl->m_ref_count == 1;
+            return m_pimpl ? m_pimpl->m_ref_count == 1 : true;
         }
 
         /// return number of shared instances (1 for unique object)
         typename MTPolicy::ref_count_t use_count() const // nothrow
         {
-            return m_pimpl->m_ref_count;
+            return m_pimpl ? m_pimpl->m_ref_count : 0;
         }
 
         void swap(cow_wrapper& r) // never throws

@@ -161,6 +161,89 @@ public:
                                !aTestObj1.is_default() );
     }
 
+    void testRefCounting()
+    {
+        // add scope to ensure appropriate number of calls to
+        // the reference counting policy have been made
+        {
+            // if any incrementing/decrementing occurs a failure
+            // will occur
+            cow_wrapper_client5 aTestObj1(1);
+            cow_wrapper_client5 aTestObj2( std::move( aTestObj1 ) );
+            CPPUNIT_ASSERT_MESSAGE("aTestObj2.use_count() == 1",
+                                   aTestObj2.use_count() == 1 );
+
+            // the following should increment
+            BogusRefCountPolicy::s_bShouldIncrement = 1;
+            cow_wrapper_client5 aTestObj3( aTestObj2 );
+            CPPUNIT_ASSERT_MESSAGE("s_bShouldIncrement == 0",
+                                   BogusRefCountPolicy::s_bShouldIncrement == 0 );
+
+            CPPUNIT_ASSERT_MESSAGE("aTestObj3.use_count() == 2",
+                                   aTestObj3.use_count() == 2 );
+            {
+                cow_wrapper_client5 aTestObj4;
+                // the following should decrement the lvalue and then increment the rvalue
+                BogusRefCountPolicy::s_bShouldIncrement = 1;
+                BogusRefCountPolicy::s_bShouldDecrement = 1;
+                aTestObj4 = aTestObj2;
+                CPPUNIT_ASSERT_MESSAGE("s_bShouldIncrement == 0",
+                                       BogusRefCountPolicy::s_bShouldIncrement == 0 );
+                CPPUNIT_ASSERT_MESSAGE("s_bShouldDecrement == 0",
+                                       BogusRefCountPolicy::s_bShouldDecrement == 0 );
+
+                CPPUNIT_ASSERT_MESSAGE("aTestObj2.use_count() == 3",
+                                       aTestObj2.use_count() == 3 );
+                CPPUNIT_ASSERT_MESSAGE("aTestObj3.use_count() == 3",
+                                       aTestObj3.use_count() == 3 );
+                CPPUNIT_ASSERT_MESSAGE("aTestObj4.use_count() == 3",
+                                       aTestObj4.use_count() == 3 );
+                CPPUNIT_ASSERT_MESSAGE("aTestObj2 == aTestObj3",
+                                       aTestObj2 == aTestObj3 );
+                CPPUNIT_ASSERT_MESSAGE("aTestObj3 == aTestObj4",
+                                       aTestObj3 == aTestObj4 );
+                CPPUNIT_ASSERT_MESSAGE("aTestObj2 == aTestObj4",
+                                       aTestObj2 == aTestObj4 );
+
+                // only decrement the lvalue before assignment
+                BogusRefCountPolicy::s_bShouldDecrement = 1;
+                aTestObj4 = cow_wrapper_client5( 4 );
+                CPPUNIT_ASSERT_MESSAGE("s_bShouldIncrement == 0",
+                                       BogusRefCountPolicy::s_bShouldIncrement == 0 );
+
+                // only one call should be made to the ref counting policy's
+                // decrementing function at the end of the scope
+                BogusRefCountPolicy::s_bShouldDecrement = 1;
+            }
+            CPPUNIT_ASSERT_MESSAGE("s_bShouldDecrement == 0",
+                                   BogusRefCountPolicy::s_bShouldDecrement == 0 );
+
+            // self assignment
+            // aTestObj2 is defunct afterwards, one decrement happens
+            BogusRefCountPolicy::s_bShouldDecrement = 1;
+            aTestObj3 = std::move( aTestObj2 );
+            CPPUNIT_ASSERT_MESSAGE("aTestObj2.use_count() == 0",
+                                   aTestObj2.use_count() == 0 );
+            CPPUNIT_ASSERT_MESSAGE("aTestObj3.use_count() == 1",
+                                   aTestObj3.use_count() == 1 );
+
+            cow_wrapper_client5 aTestObj5;
+
+            // only decrement the lvalue before assignment
+            BogusRefCountPolicy::s_bShouldDecrement = 1;
+            aTestObj3 = std::move( aTestObj5 );
+            CPPUNIT_ASSERT_MESSAGE("s_bShouldDecrement == 0",
+                                   BogusRefCountPolicy::s_bShouldDecrement == 0);
+
+            // one call should be made to the ref-counting policy's
+            // decrementing function at the end of the scope. Only
+            // aTestObj3 still holds a valid instance
+            BogusRefCountPolicy::s_nEndOfScope = 1;
+        }
+        CPPUNIT_ASSERT_MESSAGE("s_EndOfScope == 0",
+                               BogusRefCountPolicy::s_nEndOfScope == 0 );
+    }
+
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -168,6 +251,7 @@ public:
     CPPUNIT_TEST_SUITE(cow_wrapper_test);
     CPPUNIT_TEST(testCowWrapper);
     CPPUNIT_TEST(testStaticDefault);
+    CPPUNIT_TEST(testRefCounting);
     CPPUNIT_TEST_SUITE_END();
 };
 
