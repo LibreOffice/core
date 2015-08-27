@@ -60,6 +60,7 @@ class MSFILTER_DLLPUBLIC DffPropSet
         OUString    GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
         bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
         void        InitializePropSet( sal_uInt16 nPropSetType ) const;
+        static sal_uLong SanitizeEndPos(SvStream &rIn, sal_uLong nEndRecPos);
 
         friend SvStream& ReadDffPropSet( SvStream& rIn, DffPropSet& rPropSet );
         friend SvStream& operator|=( SvStream& rIn, DffPropSet& rPropSet );
