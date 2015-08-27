@@ -160,7 +160,7 @@ private:
     /** Posts a Workbook_WindowResize user event. */
     void postWindowResizeEvent( vcl::Window* pWindow );
     /** Callback link for Application::PostUserEvent(). */
-    DECL_LINK( processWindowResizeEvent, vcl::Window* );
+    DECL_LINK_TYPED( processWindowResizeEvent, void*, void );
 
 private:
     typedef ::std::map< VclPtr<vcl::Window>, uno::Reference< frame::XController > > WindowControllerMap;
@@ -477,8 +477,9 @@ void ScVbaEventListener::postWindowResizeEvent( vcl::Window* pWindow )
     }
 }
 
-IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, vcl::Window*, pWindow )
+IMPL_LINK_TYPED( ScVbaEventListener, processWindowResizeEvent, void*, p, void )
 {
+    vcl::Window* pWindow = static_cast<vcl::Window*>(p);
     ::osl::MutexGuard aGuard( maMutex );
 
     /*  Check that the passed window is still alive (it must be registered in
@@ -507,7 +508,6 @@ IMPL_LINK( ScVbaEventListener, processWindowResizeEvent, vcl::Window*, pWindow )
     }
     maPostedWindows.erase(pWindow);
     release();
-    return 0;
 }
 
 ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& xContext ) :

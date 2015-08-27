@@ -2386,12 +2386,11 @@ namespace svt { namespace table
     }
 
 
-    IMPL_LINK_NOARG( TableControl_Impl, OnUpdateScrollbars )
+    IMPL_LINK_NOARG_TYPED( TableControl_Impl, OnUpdateScrollbars, void*, void )
     {
         // TODO: can't we simply use lcl_updateScrollbar here, so the scrollbars ranges are updated, instead of
         // doing a complete re-layout?
         impl_ni_relayout();
-        return 1L;
     }
 
 

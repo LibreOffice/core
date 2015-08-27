@@ -201,7 +201,7 @@ public:
     void            enterPluginCallback() { m_nCalledFromPlugin++; }
     void            leavePluginCallback() { m_nCalledFromPlugin--; }
     bool            isDisposable() { return m_nCalledFromPlugin < 1; }
-    DECL_LINK( secondLevelDispose, XPlugin_Impl* );
+    DECL_LINK_TYPED( secondLevelDispose, void*, void );
 
     void addPluginEventListener( PluginEventListener* pListener  )
         { m_aPEventListeners.push_back( pListener ); }

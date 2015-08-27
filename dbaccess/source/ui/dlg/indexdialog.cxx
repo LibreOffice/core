@@ -603,11 +603,11 @@ namespace dbaui
         EndDialog(RET_OK);
     }
 
-    IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, SvTreeListEntry*, _pEntry )
+    IMPL_LINK_TYPED( DbaIndexDialog, OnEditIndexAgain, void*, p, void )
     {
+        SvTreeListEntry* _pEntry = static_cast<SvTreeListEntry*>(p);
         m_bEditAgain = false;
         m_pIndexList->EditEntry(_pEntry);
-        return 0L;
     }
 
     IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvTreeListEntry*, _pEntry )

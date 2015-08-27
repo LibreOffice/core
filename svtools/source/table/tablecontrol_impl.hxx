@@ -459,7 +459,7 @@ namespace svt { namespace table
         void        impl_invalidateColumn( ColPos const i_column );
 
         DECL_LINK( OnScroll, ScrollBar* );
-        DECL_LINK( OnUpdateScrollbars, void* );
+        DECL_LINK_TYPED( OnUpdateScrollbars, void*, void );
     };
 
     //see seleng.hxx, seleng.cxx, FunctionSet overridables, part of selection engine

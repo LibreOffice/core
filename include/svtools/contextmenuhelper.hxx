@@ -63,7 +63,7 @@ class SVT_DLLPUBLIC ContextMenuHelper
 
     private:
         // asynchronous link to prevent destruction while on stack
-        DECL_STATIC_LINK( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo* );
+        DECL_STATIC_LINK_TYPED( ContextMenuHelper, ExecuteHdl_Impl, void*, void );
 
         ContextMenuHelper( const ContextMenuHelper& ) SAL_DELETED_FUNCTION;
         const ContextMenuHelper& operator=( const ContextMenuHelper& ) SAL_DELETED_FUNCTION;

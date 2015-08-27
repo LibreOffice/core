@@ -55,7 +55,7 @@ protected:
 
     Timer           aDragTimer;             // for Drag&Drop
     DECL_LINK_TYPED( DragTimerHdl, Timer *, void );
-    DECL_LINK( DragHdl, void * );
+    DECL_LINK_TYPED( DragHdl, void *, void );
     bool            bIsInDragMode;
     Point           aMDPos;                 // Position of MouseButtonDown
 

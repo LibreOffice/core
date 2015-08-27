@@ -147,7 +147,7 @@ private:
                     DECL_LINK( HighlightHdl, MenuBar::MenuBarButtonCallbackArg* );
                     DECL_LINK_TYPED(WaitTimeOutHdl, Idle *, void);
                     DECL_LINK_TYPED(TimeOutHdl, Timer *, void);
-                    DECL_LINK(UserEventHdl, void *);
+                    DECL_LINK_TYPED(UserEventHdl, void *, void);
                     DECL_LINK( WindowEventHdl, VclWindowEvent* );
                     DECL_LINK( ApplicationEventHdl, VclSimpleEvent* );
 
@@ -631,7 +631,7 @@ IMPL_LINK_NOARG_TYPED(UpdateCheckUI, TimeOutHdl, Timer *, void)
 }
 
 
-IMPL_LINK_NOARG(UpdateCheckUI, UserEventHdl)
+IMPL_LINK_NOARG_TYPED(UpdateCheckUI, UserEventHdl, void*, void)
 {
     SolarMutexGuard aGuard;
 
@@ -659,8 +659,6 @@ IMPL_LINK_NOARG(UpdateCheckUI, UserEventHdl)
 
     if ( pActiveSysWin )
         AddMenuBarIcon( pActiveSysWin, true );
-
-    return 0;
 }
 
 

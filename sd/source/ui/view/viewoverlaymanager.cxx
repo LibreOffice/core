@@ -472,7 +472,7 @@ void ViewOverlayManager::UpdateTags()
         mnUpdateTagsEvent = Application::PostUserEvent( LINK( this, ViewOverlayManager, UpdateTagsHdl ) );
 }
 
-IMPL_LINK_NOARG(ViewOverlayManager, UpdateTagsHdl)
+IMPL_LINK_NOARG_TYPED(ViewOverlayManager, UpdateTagsHdl, void*, void)
 {
     OSL_TRACE("ViewOverlayManager::UpdateTagsHdl");
 
@@ -482,7 +482,6 @@ IMPL_LINK_NOARG(ViewOverlayManager, UpdateTagsHdl)
 
     if( bChanges && mrBase.GetDrawView() )
         static_cast< ::sd::View* >( mrBase.GetDrawView() )->updateHandles();
-    return 0;
 }
 
 bool ViewOverlayManager::CreateTags()

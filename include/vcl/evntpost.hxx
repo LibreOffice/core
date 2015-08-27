@@ -38,7 +38,7 @@ namespace vcl
         ImplSVEvent *   m_nId;
         Link<>          m_aLink;
 
-        DECL_DLLPRIVATE_LINK( DoEvent_Impl, UserEvent* );
+        DECL_DLLPRIVATE_LINK_TYPED( DoEvent_Impl, void*, void );
 
     public:
                         EventPoster( const Link<>& rLink );

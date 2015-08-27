@@ -354,7 +354,7 @@ namespace dbaui
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
 
-        DECL_LINK( OnAsyncDrop, void* );
+        DECL_LINK_TYPED( OnAsyncDrop, void*, void );
 
         void implRemoveStatusListeners();
 

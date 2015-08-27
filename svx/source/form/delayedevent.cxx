@@ -37,10 +37,10 @@ namespace svxform
         m_nEventId = 0;
     }
 
-    IMPL_LINK( DelayedEvent, OnCall, void*, _pArg )
+    IMPL_LINK_TYPED( DelayedEvent, OnCall, void*, _pArg, void )
     {
         m_nEventId = 0;
-        return m_aHandler.Call( _pArg );
+        m_aHandler.Call( _pArg );
     }
 }
 

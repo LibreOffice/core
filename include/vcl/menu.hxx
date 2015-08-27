@@ -183,7 +183,7 @@ protected:
     SAL_DLLPRIVATE void ImplSelect();
     SAL_DLLPRIVATE void ImplCallHighlight( sal_uInt16 nHighlightItem );
     SAL_DLLPRIVATE void ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos );
-    DECL_DLLPRIVATE_LINK(ImplCallSelect, void* );
+    DECL_DLLPRIVATE_LINK_TYPED(ImplCallSelect, void*, void );
 
     SAL_DLLPRIVATE void ImplFillLayoutData() const;
     SAL_DLLPRIVATE SalMenu* ImplGetSalMenu() { return mpSalMenu; }
@@ -412,7 +412,7 @@ VCL_DLLPUBLIC void Invalidated();
 
 class VCL_DLLPUBLIC MenuBar : public Menu
 {
-    Link<> maCloseHdl;
+    Link<void*,void> maCloseHdl;
     Link<> maFloatHdl;
     Link<> maHideHdl;
     bool mbCloseBtnVisible : 1;
@@ -468,10 +468,10 @@ public:
     bool HandleMenuCommandEvent(Menu *pMenu, sal_uInt16 nEventId) const;
     bool HandleMenuButtonEvent(Menu *pMenu, sal_uInt16 nEventId);
 
-    void SetCloseButtonClickHdl( const Link<>& rLink ) { maCloseHdl = rLink; }
-    const Link<>& GetCloseButtonClickHdl() const              { return maCloseHdl; }
-    const Link<>& GetFloatButtonClickHdl() const              { return maFloatHdl; }
-    const Link<>& GetHideButtonClickHdl() const               { return maHideHdl; }
+    void SetCloseButtonClickHdl( const Link<void*,void>& rLink ) { maCloseHdl = rLink; }
+    const Link<void*,void>& GetCloseButtonClickHdl() const       { return maCloseHdl; }
+    const Link<>& GetFloatButtonClickHdl() const                 { return maFloatHdl; }
+    const Link<>& GetHideButtonClickHdl() const                  { return maHideHdl; }
 
     //  - by default a menubar is displayable
     //  - if a menubar is not displayable, its MenuBarWindow will never be shown

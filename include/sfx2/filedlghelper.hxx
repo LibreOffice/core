@@ -223,7 +223,7 @@ public:
     */
     void                    SetContext( Context _eNewContext );
 
-   DECL_LINK( ExecuteSystemFilePicker, void* );
+   DECL_LINK_TYPED( ExecuteSystemFilePicker, void*, void );
 
    ErrCode                  Execute( std::vector<OUString>& rpURLList,
                                      SfxItemSet *&   rpSet,

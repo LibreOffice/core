@@ -327,7 +327,7 @@ private:
     SaveInData*                         pCurrentSaveInData;
 
     DECL_LINK(  SelectSaveInLocation, ListBox * );
-    DECL_LINK(  AsyncInfoMsg, OUString* );
+    DECL_LINK_TYPED( AsyncInfoMsg, void*, void );
 
 protected:
 

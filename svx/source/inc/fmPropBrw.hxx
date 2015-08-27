@@ -67,7 +67,7 @@ protected:
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const SAL_OVERRIDE;
     virtual bool Close() SAL_OVERRIDE;
 
-    DECL_LINK( OnAsyncGetFocus, void* );
+    DECL_LINK_TYPED( OnAsyncGetFocus, void*, void );
 
     void implSetNewSelection( const InterfaceBag& _rSelection );
     void implDetachController();

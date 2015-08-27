@@ -68,7 +68,7 @@ public:
 
     void            openWebBrowser( const OUString & sURL, const OUString & sTitle ) const;
     Dialog*         getWindow() const { return m_pVCLWindow; };
-    void            PostUserEvent( const Link<>& rLink, void* pCaller, bool bReferenceLink = false );
+    void            PostUserEvent( const Link<void*,void>& rLink, void* pCaller, bool bReferenceLink = false );
     void            clearEventID() { m_nEventID = 0; }
 
     virtual void    showProgress( bool bStart ) = 0;
@@ -138,7 +138,7 @@ class ExtMgrDialog : public ModelessDialog,
     DECL_DLLPRIVATE_LINK_TYPED( HandleExtTypeCbx, Button*, void );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
     DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
-    DECL_DLLPRIVATE_LINK( startProgress, void * );
+    DECL_DLLPRIVATE_LINK_TYPED( startProgress, void *, void );
 
 public:
                     ExtMgrDialog( vcl::Window * pParent, TheExtensionManager *pManager, Dialog::InitFlag eFlag = Dialog::InitFlag::Default );
@@ -201,7 +201,7 @@ class UpdateRequiredDialog : public ModalDialog,
     DECL_DLLPRIVATE_LINK_TYPED( HandleCloseBtn, Button*, void );
     DECL_DLLPRIVATE_LINK_TYPED( HandleCancelBtn, Button*, void );
     DECL_DLLPRIVATE_LINK_TYPED(TimeOutHdl, Idle *, void);
-    DECL_DLLPRIVATE_LINK( startProgress, void * );
+    DECL_DLLPRIVATE_LINK_TYPED( startProgress, void *, void );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
 
     static bool     isEnabled( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );

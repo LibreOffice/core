@@ -36,7 +36,7 @@ SolarThreadExecutor::~SolarThreadExecutor()
     osl_destroyCondition( m_aFinish );
 }
 
-IMPL_LINK_NOARG(SolarThreadExecutor, worker)
+IMPL_LINK_NOARG_TYPED(SolarThreadExecutor, worker, void*, void)
 {
     if ( !m_bTimeout )
     {
@@ -44,7 +44,6 @@ IMPL_LINK_NOARG(SolarThreadExecutor, worker)
         m_nReturn = doIt();
         osl_setCondition( m_aFinish );
     }
-    return m_nReturn;
 }
 
 long SolarThreadExecutor::impl_execute( const TimeValue* _pTimeout )

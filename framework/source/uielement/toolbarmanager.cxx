@@ -2121,8 +2121,9 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager, AsyncUpdateControllersHdl, Timer *, void)
     UpdateControllers();
 }
 
-IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_TYPED( ToolBarManager, ExecuteHdl_Impl, void*, p, void )
 {
+    ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
     try
     {
         // Asynchronous execution as this can lead to our own destruction!
@@ -2158,7 +2159,6 @@ IMPL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
     }
 
     delete pExecuteInfo;
-    return 0;
 }
 
 Image ToolBarManager::QueryAddonsImage( const OUString& aCommandURL, bool bBigImages )

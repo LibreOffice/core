@@ -58,7 +58,7 @@ private:
 
     void                        CheckSelectionState();
 
-                                DECL_LINK( PlayMusicHdl, void * );
+                                DECL_LINK_TYPED( PlayMusicHdl, void *, void );
 
     Idle                        maUpdateIdle;
 
@@ -96,7 +96,7 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
     }
 }
 
-IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
+IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, PlayMusicHdl, void*, void)
 {
     maUpdateIdle.Stop();
     mnPlaySoundEvent = 0;
@@ -159,8 +159,6 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
             }
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, IsMusicStoppedHdl, Idle *, void)

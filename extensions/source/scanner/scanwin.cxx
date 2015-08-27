@@ -105,7 +105,7 @@ class ImpTwain : public ::cppu::WeakImplHelper< util::XCloseListener >
     uno::Reference< util::XCloseBroadcaster >   ImplGetActiveFrameCloseBroadcaster();
 
                                                 DECL_LINK( ImplFallbackHdl, void* );
-                                                DECL_LINK( ImplDestroyHdl, void* );
+                                                DECL_LINK_TYPED( ImplDestroyHdl, void*, void );
 
     // from util::XCloseListener
     virtual void SAL_CALL queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException);
@@ -493,7 +493,7 @@ IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
     return 0L;
 }
 
-IMPL_LINK_NOARG( ImpTwain, ImplDestroyHdl )
+IMPL_LINK_NOARG_TYPED( ImpTwain, ImplDestroyHdl, void*, void )
 {
     if( hTwainWnd )
         DestroyWindow( hTwainWnd );
@@ -505,8 +505,6 @@ IMPL_LINK_NOARG( ImpTwain, ImplDestroyHdl )
     // should drop to zero exactly here)
     mxSelfRef = NULL;
     pImpTwainInstance = NULL;
-
-    return 0L;
 }
 
 uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()

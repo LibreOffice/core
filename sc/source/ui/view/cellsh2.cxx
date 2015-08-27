@@ -187,10 +187,9 @@ static bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
 //after end execute from !IsModalInputMode, it is safer to delay deleting
 namespace
 {
-    sal_IntPtr DelayDeleteAbstractDialog( void *pAbstractDialog, void * /*pArg*/ )
+    void DelayDeleteAbstractDialog( void *pAbstractDialog, void * /*pArg*/ )
     {
         delete static_cast<SfxAbstractTabDialog*>( pAbstractDialog );
-        return 0;
     }
 }
 
@@ -947,7 +946,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
                     //after end execute from !IsModalInputMode, it is safer to delay deleting
                     //delete pDlg;
-                    Application::PostUserEvent( Link<>( pDlg, &DelayDeleteAbstractDialog ) );
+                    Application::PostUserEvent( Link<void*,void>( pDlg, &DelayDeleteAbstractDialog ) );
                 }
             }
             break;

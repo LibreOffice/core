@@ -215,7 +215,7 @@ namespace dbaui
         if (pTransfer)
             pTransfer->CopyToClipboard(getView());
     }
-    IMPL_LINK_NOARG( SbaTableQueryBrowser, OnAsyncDrop )
+    IMPL_LINK_NOARG_TYPED( SbaTableQueryBrowser, OnAsyncDrop, void*, void )
     {
         m_nAsyncDrop = 0;
         SolarMutexGuard aSolarGuard;
@@ -232,8 +232,6 @@ namespace dbaui
         }
 
         m_aAsyncDrop.aDroppedData.clear();
-
-        return 0L;
     }
     void SbaTableQueryBrowser::clearTreeModel()
     {

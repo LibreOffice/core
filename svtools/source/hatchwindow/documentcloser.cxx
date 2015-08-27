@@ -77,7 +77,7 @@ class MainThreadFrameCloserRequest
         : m_xFrame( xFrame )
         {}
 
-        DECL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserRequest* );
+        DECL_STATIC_LINK_TYPED( MainThreadFrameCloserRequest, worker, void*, void );
 
         static void Start( MainThreadFrameCloserRequest* pRequest );
 };
@@ -98,8 +98,9 @@ void MainThreadFrameCloserRequest::Start( MainThreadFrameCloserRequest* pMTReque
 }
 
 
-IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserRequest*, pMTRequest )
+IMPL_STATIC_LINK_TYPED( MainThreadFrameCloserRequest, worker, void*, p, void )
 {
+    MainThreadFrameCloserRequest* pMTRequest = static_cast<MainThreadFrameCloserRequest*>(p);
     if ( pMTRequest )
     {
         if ( pMTRequest->m_xFrame.is() )
@@ -140,8 +141,6 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, MainThreadFrameCloserReq
 
         delete pMTRequest;
     }
-
-    return 0;
 }
 
 ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArguments)

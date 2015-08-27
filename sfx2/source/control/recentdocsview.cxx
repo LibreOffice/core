@@ -312,8 +312,9 @@ void RecentDocsView::Clear()
     ThumbnailView::Clear();
 }
 
-IMPL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )
+IMPL_STATIC_LINK_TYPED( RecentDocsView, ExecuteHdl_Impl, void*, p, void )
 {
+    LoadRecentFile* pLoadRecentFile = static_cast< LoadRecentFile*>(p);
     try
     {
         // Asynchronous execution as this can lead to our own destruction!
@@ -326,7 +327,6 @@ IMPL_STATIC_LINK( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentF
     }
 
     delete pLoadRecentFile;
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -88,7 +88,7 @@ namespace svt
         virtual ~AsyncPickerAction();
 
     private:
-        DECL_LINK( OnActionDone, void* );
+        DECL_LINK_TYPED( OnActionDone, void*, void );
 
         AsyncPickerAction( const AsyncPickerAction& ) SAL_DELETED_FUNCTION;
         AsyncPickerAction& operator=( const AsyncPickerAction& ) SAL_DELETED_FUNCTION;

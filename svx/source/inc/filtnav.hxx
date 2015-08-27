@@ -280,7 +280,7 @@ protected:
     void Insert(FmFilterData* pItem, sal_uLong nPos);
     void Remove(FmFilterData* pItem);
 
-    DECL_LINK(OnRemove, SvTreeListEntry*);
+    DECL_LINK_TYPED(OnRemove, void*, void);
     DECL_LINK_TYPED(OnDropActionTimer, Timer*, void);
 
 private:

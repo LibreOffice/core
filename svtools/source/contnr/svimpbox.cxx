@@ -3341,7 +3341,7 @@ bool SvImpLBox::IsNowExpandable() const
     return IsExpandable() && !pView->IsExpanded( pCursor );
 }
 
-IMPL_LINK(SvImpLBox, MyUserEvent, void*, pArg )
+IMPL_LINK_TYPED(SvImpLBox, MyUserEvent, void*, pArg, void )
 {
     nCurUserEvent = 0;
     if( !pArg )
@@ -3355,7 +3355,6 @@ IMPL_LINK(SvImpLBox, MyUserEvent, void*, pArg )
         ShowVerSBar();
         pView->Invalidate( GetVisibleArea() );
     }
-    return 0;
 }
 
 

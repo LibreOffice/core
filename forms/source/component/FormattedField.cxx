@@ -240,7 +240,7 @@ void OFormattedControl::keyReleased(const ::com::sun::star::awt::KeyEvent& /*e*/
 {
 }
 
-IMPL_LINK_NOARG(OFormattedControl, OnKeyPressed)
+IMPL_LINK_NOARG_TYPED(OFormattedControl, OnKeyPressed, void*, void)
 {
     m_nKeyEvent = 0;
     Reference<XFormComponent>  xFComp(getModel(), UNO_QUERY);
@@ -248,7 +248,6 @@ IMPL_LINK_NOARG(OFormattedControl, OnKeyPressed)
     Reference<XSubmit>  xSubmit(xParent, UNO_QUERY);
     if (xSubmit.is())
         xSubmit->submit( Reference<XControl> (), ::com::sun::star::awt::MouseEvent() );
-    return 0L;
 }
 
 css::uno::Sequence<OUString>  OFormattedControl::getSupportedServiceNames() throw(std::exception)

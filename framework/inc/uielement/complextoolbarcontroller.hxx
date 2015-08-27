@@ -71,8 +71,8 @@ class ComplexToolbarController : public svt::ToolboxController
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        DECL_STATIC_LINK( ComplexToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
-        DECL_STATIC_LINK( ComplexToolbarController, Notify_Impl, NotifyInfo* );
+        DECL_STATIC_LINK_TYPED( ComplexToolbarController, ExecuteHdl_Impl, void*, void );
+        DECL_STATIC_LINK_TYPED( ComplexToolbarController, Notify_Impl, void*, void);
 
     protected:
         static sal_Int32 getFontSizePixel( const vcl::Window* pWindow );

@@ -92,7 +92,7 @@ class XIMStatusWindow : public StatusWindow
     void layout();
     bool checkLastParent() const;
 
-    DECL_LINK( DelayedShowHdl, void* );
+    DECL_LINK_TYPED( DelayedShowHdl, void*, void );
 public:
     explicit XIMStatusWindow( bool bOn );
     virtual ~XIMStatusWindow();
@@ -258,7 +258,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
     }
 }
 
-IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
+IMPL_LINK_NOARG_TYPED(XIMStatusWindow, DelayedShowHdl, void*, void)
 {
     m_nDelayedEvent = 0;
     const SystemEnvData* pData = GetSystemData();
@@ -276,7 +276,6 @@ IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
         XRaiseWindow( static_cast<Display*>(pData->pDisplay),
                       (::Window)pData->aShellWindow );
     }
-    return 0;
 }
 
 void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )

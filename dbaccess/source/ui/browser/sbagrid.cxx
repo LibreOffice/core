@@ -361,7 +361,7 @@ Reference< css::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const c
     return FmXGridPeer::queryDispatch(aURL, aTargetFrameName, nSearchFlags);
 }
 
-IMPL_LINK_NOARG( SbaXGridPeer, OnDispatchEvent )
+IMPL_LINK_NOARG_TYPED( SbaXGridPeer, OnDispatchEvent, void*, void )
 {
     VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if ( pGrid )    // if this fails, we were disposing before arriving here
@@ -380,8 +380,6 @@ IMPL_LINK_NOARG( SbaXGridPeer, OnDispatchEvent )
             SbaXGridPeer::dispatch( aArgs.aURL, aArgs.aArgs );
         }
     }
-
-    return 0;
 }
 
 SbaXGridPeer::DispatchType SbaXGridPeer::classifyDispatchURL( const URL& _rURL )
@@ -1444,7 +1442,7 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
     return xReturn;
 }
 
-IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent)
+IMPL_LINK_NOARG_TYPED(SbaGridControl, AsynchDropEvent, void*, void)
 {
     m_nAsyncDropEvent = 0;
 
@@ -1487,8 +1485,6 @@ IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent)
             setDataSource(Reference< XRowSet >(xDataSource,UNO_QUERY));
     }
     m_aDataDescriptor.clear();
-
-    return 0L;
 }
 
 OUString SbaGridControl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition) const

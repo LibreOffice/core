@@ -238,7 +238,7 @@ bool SessionManagerClient::checkDocumentsSaved()
     return m_bDocSaveDone;
 }
 
-IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pStateVal )
+IMPL_STATIC_LINK_TYPED( SessionManagerClient, SaveYourselfHdl, void*, pStateVal, void )
 {
     // Decode argument smuggled in as void*:
     sal_uIntPtr nStateVal = reinterpret_cast< sal_uIntPtr >(pStateVal);
@@ -277,11 +277,9 @@ IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pStateVal )
     }
     else
         saveDone();
-
-    return 0;
 }
 
-IMPL_STATIC_LINK_NOARG( SessionManagerClient, InteractionHdl )
+IMPL_STATIC_LINK_NOARG_TYPED( SessionManagerClient, InteractionHdl, void*, void )
 {
     SAL_INFO("vcl.sm", "interaction link");
     if( m_pSession )
@@ -289,11 +287,9 @@ IMPL_STATIC_LINK_NOARG( SessionManagerClient, InteractionHdl )
         SalSessionInteractionEvent aEvent( true );
         m_pSession->CallCallback( &aEvent );
     }
-
-    return 0;
 }
 
-IMPL_STATIC_LINK_NOARG( SessionManagerClient, ShutDownCancelHdl )
+IMPL_STATIC_LINK_NOARG_TYPED( SessionManagerClient, ShutDownCancelHdl, void*, void )
 {
     SAL_INFO("vcl.sm", "shutdown cancel");
     if( m_pSession )
@@ -301,8 +297,6 @@ IMPL_STATIC_LINK_NOARG( SessionManagerClient, ShutDownCancelHdl )
         SalSessionShutdownCancelEvent aEvent;
         m_pSession->CallCallback( &aEvent );
     }
-
-    return 0;
 }
 
 void SessionManagerClient::SaveYourselfProc(
@@ -343,7 +337,7 @@ void SessionManagerClient::SaveYourselfProc(
     SAL_INFO("vcl.sm", "waiting for save yourself event to be processed" );
 }
 
-IMPL_STATIC_LINK_NOARG( SessionManagerClient, ShutDownHdl )
+IMPL_STATIC_LINK_NOARG_TYPED( SessionManagerClient, ShutDownHdl, void*, void )
 {
     if( m_pSession )
     {
@@ -355,7 +349,6 @@ IMPL_STATIC_LINK_NOARG( SessionManagerClient, ShutDownHdl )
     SAL_INFO("vcl.sm", (!rFrames.empty() ? "shutdown on first frame" : "shutdown event but no frame"));
     if( !rFrames.empty() )
         rFrames.front()->CallCallback( SALEVENT_SHUTDOWN, 0 );
-    return 0;
 }
 
 void SessionManagerClient::DieProc(

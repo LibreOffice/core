@@ -1483,13 +1483,11 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG(NavigatorTree, OnEdit)
+    IMPL_LINK_NOARG_TYPED(NavigatorTree, OnEdit, void*, void)
     {
         nEditEvent = 0;
         EditEntry( m_pEditEntry );
         m_pEditEntry = NULL;
-
-        return 0L;
     }
 
 

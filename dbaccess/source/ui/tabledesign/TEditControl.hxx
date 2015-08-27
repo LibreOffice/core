@@ -176,11 +176,11 @@ namespace dbaui
 
     private:
         DECL_LINK( StartIndexing, void* );
-        DECL_LINK( DelayedCut, void* );
-        DECL_LINK( DelayedPaste, void* );
-        DECL_LINK( DelayedDelete, void* );
-        DECL_LINK( DelayedInsNewRows, void* );
-        DECL_LINK( InvalidateFieldType, void* );
+        DECL_LINK_TYPED( DelayedCut, void*, void );
+        DECL_LINK_TYPED( DelayedPaste, void*, void );
+        DECL_LINK_TYPED( DelayedDelete, void*, void );
+        DECL_LINK_TYPED( DelayedInsNewRows, void*, void );
+        DECL_LINK_TYPED( InvalidateFieldType, void*, void );
 
         void InitCellController();
         sal_Int32 HasFieldName( const OUString& rFieldName );

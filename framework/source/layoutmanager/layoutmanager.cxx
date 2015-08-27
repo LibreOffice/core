@@ -2595,7 +2595,7 @@ bool LayoutManager::implts_resetMenuBar()
     return false;
 }
 
-IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
+IMPL_LINK_NOARG_TYPED(LayoutManager, MenuBarClose, void*, void)
 {
     SolarMutexClearableGuard aReadLock;
     uno::Reference< frame::XDispatchProvider >   xProvider(m_xFrame, uno::UNO_QUERY);
@@ -2603,7 +2603,7 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
     aReadLock.clear();
 
     if ( !xProvider.is())
-        return 0;
+        return;
 
     uno::Reference< frame::XDispatchHelper > xDispatcher = frame::DispatchHelper::create( xContext );
 
@@ -2613,8 +2613,6 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
         OUString("_self"),
         0,
         uno::Sequence< beans::PropertyValue >());
-
-    return 0;
 }
 
 //  XLayoutManagerEventBroadcaster

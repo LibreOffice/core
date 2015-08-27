@@ -54,10 +54,10 @@ namespace dbaui
         }
 
     private:
-        DECL_LINK( onExecute, void* );
+        DECL_LINK_TYPED( onExecute, void*, void );
     };
 
-    IMPL_LINK_NOARG( DialogExecutor_Impl, onExecute )
+    IMPL_LINK_NOARG_TYPED( DialogExecutor_Impl, onExecute, void*, void )
     {
         try
         {
@@ -69,7 +69,6 @@ namespace dbaui
         }
 
         delete this;
-        return 0L;
     }
 
     // AsyncDialogExecutor

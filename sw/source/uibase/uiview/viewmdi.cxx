@@ -313,10 +313,11 @@ int SwView::_CreateScrollbar( bool bHori )
     return 1;
 }
 
-IMPL_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
+IMPL_LINK_TYPED( SwView, MoveNavigationHdl, void*, p, void )
 {
+    bool* pbNext = static_cast<bool*>(p);
     if ( !pbNext )
-        return 0;
+        return;
     const bool bNext = *pbNext;
     SwWrtShell& rSh = GetWrtShell();
     switch( m_nMoveType )
@@ -462,7 +463,6 @@ IMPL_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
     }
     m_pEditWin->GrabFocus();
     delete pbNext;
-    return 0;
 }
 
 int SwView::CreateTab()
