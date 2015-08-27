@@ -277,18 +277,11 @@ void Components::addModification(Path const & path) {
     data_.modifications.add(path);
 }
 
-bool Components::hasModifications() const
-{
-    return data_.modifications.getRoot().children.begin() !=
-        data_.modifications.getRoot().children.end();
-}
-
 void Components::writeModifications() {
 
-    if (!hasModifications() || modificationFileUrl_.isEmpty())
-        return;
-
-    if (!writeThread_.is()) {
+    if (!(data_.modifications.empty() || modificationFileUrl_.isEmpty()
+          || writeThread_.is()))
+    {
         writeThread_ = new WriteThread(
             &writeThread_, *this, modificationFileUrl_, data_);
         writeThread_->launch();
