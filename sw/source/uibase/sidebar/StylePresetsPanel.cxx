@@ -43,69 +43,7 @@
 
 namespace sw { namespace sidebar {
 
-VclPtr<vcl::Window> StylePresetsPanel::Create (vcl::Window* pParent,
-                                        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                                        SfxBindings* pBindings)
-{
-    if (pParent == NULL)
-        throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", NULL, 0);
-    if (!rxFrame.is())
-        throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", NULL, 1);
-    if (pBindings == NULL)
-        throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
-
-    return VclPtr<StylePresetsPanel>::Create(pParent, rxFrame, pBindings);
-}
-
-StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
-                               const css::uno::Reference<css::frame::XFrame>& rxFrame,
-                               SfxBindings* pBindings)
-    : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame)
-    , mpBindings(pBindings)
-{
-    get(mpValueSet, "valueset");
-
-    mpValueSet->SetColCount(2);
-
-    mpValueSet->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
-
-    RefreshList();
-}
-
-void StylePresetsPanel::RefreshList()
-{
-    SfxDocumentTemplates aTemplates;
-    sal_uInt16 nCount = aTemplates.GetRegionCount();
-    for (sal_uInt16 i = 0; i < nCount; ++i)
-    {
-        OUString aRegionName(aTemplates.GetFullRegionName(i));
-        if (aRegionName == "styles")
-        {
-            for (sal_uInt16 j = 0; j < aTemplates.GetCount(i); ++j)
-            {
-                OUString aName = aTemplates.GetName(i,j);
-                OUString aURL = aTemplates.GetPath(i,j);
-                BitmapEx aPreview = CreatePreview(aURL, aName);
-                mpValueSet->InsertItem(j, Image(aPreview), aName);
-                maTemplateEntries.push_back(std::unique_ptr<TemplateEntry>(new TemplateEntry(aName, aURL)));
-                mpValueSet->SetItemData(j, maTemplateEntries.back().get());
-            }
-        }
-    }
-}
-
-BitmapEx StylePresetsPanel::CreatePreview(OUString& aUrl, OUString& aName)
-{
-    SfxMedium aMedium(aUrl, STREAM_STD_READWRITE);
-    SfxObjectShell* pObjectShell = SfxObjectShell::Current();
-    SfxObjectShellLock xTemplDoc = SfxObjectShell::CreateObjectByFactoryName(pObjectShell->GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER);
-    xTemplDoc->DoInitNew(0);
-    if (xTemplDoc->LoadFrom(aMedium))
-    {
-        return GenerateStylePreview(*xTemplDoc, aName);
-    }
-    return BitmapEx();
-}
+namespace {
 
 void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevice,
                    OUString const & sName, sal_Int32 nHeight, Rectangle& aRect)
@@ -122,7 +60,7 @@ void renderPreview(sfx2::StyleManager* pStyleManager, OutputDevice& aOutputDevic
     }
 }
 
-BitmapEx StylePresetsPanel::GenerateStylePreview(SfxObjectShell& rSource, OUString& aName)
+BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString& aName)
 {
     sfx2::StyleManager* pStyleManager = rSource.GetStyleManager();
 
@@ -189,6 +127,72 @@ BitmapEx StylePresetsPanel::GenerateStylePreview(SfxObjectShell& rSource, OUStri
     }
 
     return pVirtualDev->GetBitmapEx(Point(), aSize);
+}
+
+BitmapEx CreatePreview(OUString& aUrl, OUString& aName)
+{
+    SfxMedium aMedium(aUrl, STREAM_STD_READWRITE);
+    SfxObjectShell* pObjectShell = SfxObjectShell::Current();
+    SfxObjectShellLock xTemplDoc = SfxObjectShell::CreateObjectByFactoryName(pObjectShell->GetFactory().GetFactoryName(), SfxObjectCreateMode::ORGANIZER);
+    xTemplDoc->DoInitNew(0);
+    if (xTemplDoc->LoadFrom(aMedium))
+    {
+        return GenerateStylePreview(*xTemplDoc, aName);
+    }
+    return BitmapEx();
+}
+
+}
+
+VclPtr<vcl::Window> StylePresetsPanel::Create (vcl::Window* pParent,
+                                        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                                        SfxBindings* pBindings)
+{
+    if (pParent == NULL)
+        throw css::lang::IllegalArgumentException("no parent Window given to PagePropertyPanel::Create", NULL, 0);
+    if (!rxFrame.is())
+        throw css::lang::IllegalArgumentException("no XFrame given to PagePropertyPanel::Create", NULL, 1);
+    if (pBindings == NULL)
+        throw css::lang::IllegalArgumentException("no SfxBindings given to PagePropertyPanel::Create", NULL, 2);
+
+    return VclPtr<StylePresetsPanel>::Create(pParent, rxFrame, pBindings);
+}
+
+StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
+                               const css::uno::Reference<css::frame::XFrame>& rxFrame,
+                               SfxBindings* pBindings)
+    : PanelLayout(pParent, "StylePresetsPanel", "modules/swriter/ui/sidebarstylepresets.ui", rxFrame)
+    , mpBindings(pBindings)
+{
+    get(mpValueSet, "valueset");
+
+    mpValueSet->SetColCount(2);
+
+    mpValueSet->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
+
+    RefreshList();
+}
+
+void StylePresetsPanel::RefreshList()
+{
+    SfxDocumentTemplates aTemplates;
+    sal_uInt16 nCount = aTemplates.GetRegionCount();
+    for (sal_uInt16 i = 0; i < nCount; ++i)
+    {
+        OUString aRegionName(aTemplates.GetFullRegionName(i));
+        if (aRegionName == "styles")
+        {
+            for (sal_uInt16 j = 0; j < aTemplates.GetCount(i); ++j)
+            {
+                OUString aName = aTemplates.GetName(i,j);
+                OUString aURL = aTemplates.GetPath(i,j);
+                BitmapEx aPreview = CreatePreview(aURL, aName);
+                mpValueSet->InsertItem(j, Image(aPreview), aName);
+                maTemplateEntries.push_back(std::unique_ptr<TemplateEntry>(new TemplateEntry(aName, aURL)));
+                mpValueSet->SetItemData(j, maTemplateEntries.back().get());
+            }
+        }
+    }
 }
 
 StylePresetsPanel::~StylePresetsPanel()

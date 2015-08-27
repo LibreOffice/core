@@ -69,8 +69,6 @@ private:
     };
 
     void RefreshList();
-    BitmapEx CreatePreview(OUString& aUrl, OUString& aName);
-    BitmapEx GenerateStylePreview(SfxObjectShell& rSource, OUString& aName);
 
     StylePresetsPanel(vcl::Window* pParent,
                    const css::uno::Reference<css::frame::XFrame>& rxFrame,
