@@ -414,7 +414,11 @@ void Section::Read( SvStorageStream *pStrm )
                 if ( nPropSize )
                 {
                     if ( ( nVectorCount - i ) > 1 )
-                        pStrm->Seek( nPropOfs + nSecOfs + nPropSize );
+                    {
+                        nOffset = nPropOfs + nSecOfs + nPropSize;
+                        if (nOffset != pStrm->Seek(nOffset))
+                            break;
+                    }
                 }
                 else
                     break;
