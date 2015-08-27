@@ -236,7 +236,7 @@ namespace dbaui
         virtual bool allowQueries() const SAL_OVERRIDE;
 
     private:
-        DECL_LINK( OnExecuteAddTable, void* );
+        DECL_LINK_TYPED( OnExecuteAddTable, void*, void );
 
     private:
         using OQueryController_PBase::getFastPropertyValue;

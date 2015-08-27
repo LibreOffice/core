@@ -186,7 +186,7 @@ namespace svt
     private:
         void        stopWindowListening();
 
-        DECL_LINK( OnCancelPicker, void* );
+        DECL_LINK_TYPED( OnCancelPicker, void*, void );
     };
 
 }   // namespace svt

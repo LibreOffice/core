@@ -796,7 +796,7 @@ bool OApplicationController::isTableFormat()  const
     return OTableCopyHelper::isTableFormat(getViewClipboard());
 }
 
-IMPL_LINK_NOARG( OApplicationController, OnAsyncDrop )
+IMPL_LINK_NOARG_TYPED( OApplicationController, OnAsyncDrop, void*, void )
 {
     m_nAsyncDrop = 0;
     SolarMutexGuard aSolarGuard;
@@ -828,8 +828,6 @@ IMPL_LINK_NOARG( OApplicationController, OnAsyncDrop )
     }
 
     m_aAsyncDrop.aDroppedData.clear();
-
-    return 0L;
 }
 
 }   // namespace dbaui

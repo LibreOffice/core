@@ -122,14 +122,14 @@ bool SwRetrievedInputStreamDataManager::PopData( const tDataKey nDataKey,
     #i73788#
     Note: This method has to be run in the main thread.
 */
-IMPL_LINK( SwRetrievedInputStreamDataManager,
+IMPL_LINK_TYPED( SwRetrievedInputStreamDataManager,
            LinkedInputStreamReady,
-           SwRetrievedInputStreamDataManager::tDataKey*,
-           pDataKey )
+           void*, p, void )
 {
+    SwRetrievedInputStreamDataManager::tDataKey* pDataKey = static_cast<SwRetrievedInputStreamDataManager::tDataKey*>(p);
     if ( !pDataKey )
     {
-        return 0;
+        return;
     }
 
     osl::MutexGuard aGuard(maMutex);
@@ -148,8 +148,6 @@ IMPL_LINK( SwRetrievedInputStreamDataManager,
         }
     }
     delete pDataKey;
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

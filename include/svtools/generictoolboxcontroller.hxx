@@ -47,7 +47,7 @@ class SVT_DLLPUBLIC GenericToolboxController : public svt::ToolboxController
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-         DECL_STATIC_LINK( GenericToolboxController, ExecuteHdl_Impl, ExecuteInfo* );
+         DECL_STATIC_LINK_TYPED( GenericToolboxController, ExecuteHdl_Impl, void*, void );
 
     private:
         VclPtr<ToolBox>    m_pToolbox;

@@ -181,13 +181,13 @@ void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
         SvTreeListBox::MouseButtonDown(rMEvt);
 }
 
-IMPL_LINK(DBTreeListBox, OnResetEntry, SvTreeListEntry*, pEntry)
+IMPL_LINK_TYPED(DBTreeListBox, OnResetEntry, void*, p, void)
 {
+    SvTreeListEntry* pEntry = static_cast<SvTreeListEntry*>(p);
     // set the flag which allows if the entry can be expanded
     pEntry->SetFlags( (pEntry->GetFlags() & ~SvTLEntryFlags(SvTLEntryFlags::NO_NODEBMP | SvTLEntryFlags::HAD_CHILDREN)) | SvTLEntryFlags::CHILDREN_ON_DEMAND );
     // redraw the entry
     GetModel()->InvalidateEntry( pEntry );
-    return 0L;
 }
 
 void DBTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* _pEntry )

@@ -396,7 +396,7 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ResetHdl_Impl, Idle *, void)
 
 
 
-IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl)
+IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, StartFolderPickerHdl, void*, void)
 {
     try
     {
@@ -410,8 +410,6 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, StartFolderPickerHdl)
     {
         SAL_WARN( "cui.options", "SvxJavaOptionsPage::StartFolderPickerHdl(): caught exception" );
     }
-
-    return 0L;
 }
 
 

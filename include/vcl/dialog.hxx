@@ -58,7 +58,7 @@ private:
     SAL_DLLPRIVATE         Dialog (const Dialog &) SAL_DELETED_FUNCTION;
     SAL_DLLPRIVATE         Dialog & operator= (const Dialog &) SAL_DELETED_FUNCTION;
 
-    DECL_DLLPRIVATE_LINK( ImplAsyncCloseHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplAsyncCloseHdl, void*, void );
 
 protected:
     using Window::ImplInit;

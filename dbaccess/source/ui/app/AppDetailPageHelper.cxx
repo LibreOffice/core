@@ -127,7 +127,7 @@ namespace
     // class OPreviewWindow
     class OTablePreviewWindow : public vcl::Window
     {
-        DECL_LINK(OnDisableInput, void*);
+        DECL_LINK_TYPED(OnDisableInput, void*, void);
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
@@ -146,10 +146,9 @@ namespace
             PostUserEvent( LINK( this, OTablePreviewWindow, OnDisableInput), NULL, true );
         return nRet;
     }
-    IMPL_LINK_NOARG(OTablePreviewWindow, OnDisableInput)
+    IMPL_LINK_NOARG_TYPED(OTablePreviewWindow, OnDisableInput, void*, void)
     {
         EnableInput(false);
-        return 0L;
     }
     void OTablePreviewWindow::DataChanged( const DataChangedEvent& rDCEvt )
     {

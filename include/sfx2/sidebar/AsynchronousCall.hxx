@@ -46,7 +46,7 @@ private:
     Action maAction;
     ImplSVEvent * mnCallId;
 
-    DECL_LINK(HandleUserCall, void*);
+    DECL_LINK_TYPED(HandleUserCall, void*, void);
 };
 
 } } // end of namespace sfx2::sidebar

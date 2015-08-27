@@ -79,12 +79,12 @@ class Desktop : public Application
         virtual void            OverrideSystemSettings( AllSettings& rSettings ) SAL_OVERRIDE;
         virtual void            AppEvent( const ApplicationEvent& rAppEvent ) SAL_OVERRIDE;
 
-        DECL_LINK( OpenClients_Impl, void* );
+        DECL_LINK_TYPED( OpenClients_Impl, void*, void );
 
         static void             OpenClients();
         static void             OpenDefault();
 
-        DECL_STATIC_LINK( Desktop, EnableAcceptors_Impl, void*);
+        DECL_STATIC_LINK_TYPED( Desktop, EnableAcceptors_Impl, void*, void);
 
         static void             HandleAppEvent( const ApplicationEvent& rAppEvent );
         static ResMgr*          GetDesktopResManager();

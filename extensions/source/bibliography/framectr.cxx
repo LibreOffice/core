@@ -630,10 +630,9 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         }
     }
 }
-IMPL_LINK_NOARG( BibFrameController_Impl, DisposeHdl )
+IMPL_LINK_NOARG_TYPED( BibFrameController_Impl, DisposeHdl, void*, void )
 {
     xFrame->dispose();
-    return 0;
 };
 
 void BibFrameController_Impl::addStatusListener(

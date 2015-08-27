@@ -389,7 +389,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(OCommonPicker, OnCancelPicker)
+    IMPL_LINK_NOARG_TYPED(OCommonPicker, OnCancelPicker, void*, void)
     {
         // By definition, the solar mutex is locked when we arrive here. Note that this
         // is important, as for instance the consistency of m_pDlg depends on this mutex.
@@ -400,13 +400,11 @@ namespace svt
             // nothing to do. This may be because the dialog was canceled after our cancel method
             // posted this async event, or because somebody called cancel without the dialog
             // being executed at this time.
-            return 0;
+            return;
 
         OSL_ENSURE( getDialog(), "OCommonPicker::OnCancelPicker: executing, but no dialog!" );
         if ( getDialog() )
             getDialog()->EndDialog();
-
-        return 0L;
     }
 
 

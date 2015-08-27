@@ -275,14 +275,13 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     return nDND_Action;
 }
 
-IMPL_LINK_NOARG( OTableWindowListBox, LookForUiHdl )
+IMPL_LINK_NOARG_TYPED( OTableWindowListBox, LookForUiHdl, void*, void )
 {
     m_nUiEvent = 0;
     m_pTabWin->getTableView()->lookForUiActivities();
-    return 0L;
 }
 
-IMPL_LINK_NOARG( OTableWindowListBox, DropHdl )
+IMPL_LINK_NOARG_TYPED( OTableWindowListBox, DropHdl, void*, void )
 {
     // create the connection
     m_nDropEvent = 0;
@@ -298,7 +297,6 @@ IMPL_LINK_NOARG( OTableWindowListBox, DropHdl )
         // remember the exception so that we can show them later when d&d is finished
         m_pTabWin->getDesignView()->getController().setErrorOccurred(::dbtools::SQLExceptionInfo(e));
     }
-    return 0L;
 }
 
 sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )

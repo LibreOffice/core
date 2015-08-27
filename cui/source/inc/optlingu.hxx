@@ -140,7 +140,7 @@ private:
     DECL_LINK_TYPED( ClickHdl_Impl, Button *, void );
     DECL_LINK( BoxDoubleClickHdl_Impl, SvTreeListBox * );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox * );
-    DECL_LINK(PostDblClickHdl_Impl, void *);
+    DECL_LINK_TYPED(PostDblClickHdl_Impl, void *, void);
     DECL_LINK(OpenURLHdl_Impl, void *);
 
     void                UpdateModulesBox_Impl();

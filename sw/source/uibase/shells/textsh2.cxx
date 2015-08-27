@@ -154,8 +154,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                     pNew->xCursor               = xCursor;
                     pNew->xConnection           = xConnection;
 
-                    Application::PostUserEvent( LINK( this, SwBaseShell,
-                                                      InsertDBTextHdl ), pNew );
+                    Application::PostUserEvent( LINK( this, SwBaseShell, InsertDBTextHdl ), pNew );
                     // the pNew will be removed in InsertDBTextHdl !!
                 }
             }
@@ -234,8 +233,9 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     }
 }
 
-IMPL_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
+IMPL_LINK_TYPED( SwBaseShell, InsertDBTextHdl, void*, p, void )
 {
+    DBTextStruct_Impl* pDBStruct = static_cast<DBTextStruct_Impl*>(p);
     if( pDBStruct )
     {
         bool bDispose = false;
@@ -243,7 +243,7 @@ IMPL_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
         Reference<XDataSource> xSource = SwDBManager::getDataSourceAsParent(xConnection,pDBStruct->aDBData.sDataSource);
         // #111987# the connection is disposed an so no parent has been found
         if(xConnection.is() && !xSource.is())
-            return 0;
+            return;
 
         if ( !xConnection.is()  )
         {
@@ -278,7 +278,6 @@ IMPL_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
     }
 
     delete pDBStruct;
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

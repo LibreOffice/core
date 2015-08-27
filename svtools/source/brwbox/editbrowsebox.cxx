@@ -252,7 +252,7 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(EditBrowseBox, StartEditHdl)
+    IMPL_LINK_NOARG_TYPED(EditBrowseBox, StartEditHdl, void*, void)
     {
         nStartEvent = 0;
         if (IsEditing())
@@ -261,7 +261,6 @@ namespace svt
             if (!aController->GetWindow().HasFocus() && (m_pFocusWhileRequest.get() == Application::GetFocusWindow()))
                 aController->GetWindow().GrabFocus();
         }
-        return 0;
     }
 
 
@@ -1079,15 +1078,13 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(EditBrowseBox, EndEditHdl)
+    IMPL_LINK_NOARG_TYPED(EditBrowseBox, EndEditHdl, void*, void)
     {
         nEndEvent = 0;
 
         aOldController  = CellControllerRef();
         nOldEditRow     = -1;
         nOldEditCol     =  0;
-
-        return 0;
     }
 
 
@@ -1100,11 +1097,10 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(EditBrowseBox, CellModifiedHdl)
+    IMPL_LINK_NOARG_TYPED(EditBrowseBox, CellModifiedHdl, void*, void)
     {
         nCellModifiedEvent = 0;
         CellModified();
-        return 0;
     }
 
 

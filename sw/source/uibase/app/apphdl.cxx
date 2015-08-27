@@ -268,11 +268,10 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
     AbstractMailMergeWizard* m_pWizard;     // always owner
 
     DECL_LINK( EndDialogHdl, AbstractMailMergeWizard* );
-    DECL_LINK( DestroyDialogHdl, void* );
-    DECL_STATIC_LINK(
-        SwMailMergeWizardExecutor, DestroyWizardHdl, AbstractMailMergeWizard* );
-    DECL_LINK( CancelHdl, void* );
-    DECL_LINK( CloseFrameHdl, void* );
+    DECL_LINK_TYPED( DestroyDialogHdl, void*, void );
+    DECL_STATIC_LINK_TYPED( SwMailMergeWizardExecutor, DestroyWizardHdl, void*, void );
+    DECL_LINK_TYPED( CancelHdl, void*, void );
+    DECL_LINK_TYPED( CloseFrameHdl, void*, void );
 
     void ExecutionFinished( bool bDeleteConfigItem );
     void ExecuteWizard();
@@ -575,24 +574,20 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
     return 0L;
 }
 
-IMPL_LINK_NOARG(SwMailMergeWizardExecutor, DestroyDialogHdl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, DestroyDialogHdl, void*, void)
 {
     delete m_pWizard;
     m_pWizard = 0;
 
     release();
-    return 0L;
 }
 
-IMPL_STATIC_LINK(
-    SwMailMergeWizardExecutor, DestroyWizardHdl, AbstractMailMergeWizard*,
-    pDialog )
+IMPL_STATIC_LINK_TYPED(SwMailMergeWizardExecutor, DestroyWizardHdl, void*, pDialog, void )
 {
-    delete pDialog;
-    return 0L;
+    delete static_cast<AbstractMailMergeWizard*>(pDialog);
 }
 
-IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CancelHdl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CancelHdl, void*, void)
 {
     if(m_pMMConfig->GetTargetView())
     {
@@ -608,19 +603,15 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CancelHdl)
     // m_pWizard already deleted by closing the target view
     m_pWizard = 0;
     release();
-
-    return 0L;
 }
 
-IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CloseFrameHdl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CloseFrameHdl, void*, void)
 {
     if ( m_pView2Close )
     {
         m_pView2Close->GetViewFrame()->DoClose();
         m_pView2Close = NULL;
     }
-
-    return 0L;
 }
 
 } // namespace

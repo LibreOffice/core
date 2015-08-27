@@ -460,15 +460,13 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG( OHyperlinkControl, OnHyperlinkClicked )
+    IMPL_LINK_NOARG_TYPED( OHyperlinkControl, OnHyperlinkClicked, void*, void )
     {
         ActionEvent aEvent( *this, OUString( "clicked" ) );
         m_aActionListeners.forEach< XActionListener >(
             boost::bind(
                 &XActionListener::actionPerformed,
                 _1, boost::cref(aEvent) ) );
-
-        return 0;
     }
 
 

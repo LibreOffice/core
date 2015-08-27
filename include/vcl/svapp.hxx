@@ -853,7 +853,7 @@ public:
 
      @return the event ID used to post the event.
     */
-    static ImplSVEvent * PostUserEvent( const Link<>& rLink, void* pCaller = NULL,
+    static ImplSVEvent * PostUserEvent( const Link<void*,void>& rLink, void* pCaller = NULL,
                                         bool bReferenceLink = false );
 
     /** Remove user event based on event ID
@@ -1489,7 +1489,7 @@ private:
 
     static void InitSettings(ImplSVData* pSVData);
 
-    DECL_STATIC_LINK( Application, PostEventHandler, void* );
+    DECL_STATIC_LINK_TYPED( Application, PostEventHandler, void*, void );
 };
 
 
@@ -1682,7 +1682,7 @@ VCL_DLLPUBLIC void JoinMainLoopThread();
 
 inline void Application::EndYield()
 {
-    PostUserEvent( Link<>() );
+    PostUserEvent( Link<void*,void>() );
 }
 
 namespace vcl

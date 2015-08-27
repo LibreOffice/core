@@ -469,13 +469,12 @@ public:
         uno::Reference< frame::XDesktop2 > xDeskTop = frame::Desktop::create( comphelper::getProcessComponentContext() );
         xDeskTop->terminate();
     }
-    DECL_STATIC_LINK( AsyncQuitHandler, OnAsyncQuit, void* );
+    DECL_STATIC_LINK_TYPED( AsyncQuitHandler, OnAsyncQuit, void*, void );
 };
 
-IMPL_STATIC_LINK_NOARG( AsyncQuitHandler, OnAsyncQuit )
+IMPL_STATIC_LINK_NOARG_TYPED( AsyncQuitHandler, OnAsyncQuit, void*, void )
 {
     QuitApplication();
-    return 0L;
 }
 
 // A Basic module has set EXTSEARCH, so that the elements, that the modul contains,

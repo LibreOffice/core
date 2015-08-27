@@ -154,7 +154,7 @@ public:
     void    CalcAll()           { CalcPages(); }
     void    SetInGetState(bool bSet) { bInGetState = bSet; }
 
-    DECL_STATIC_LINK( ScPreview, InvalidateHdl, void* );
+    DECL_STATIC_LINK_TYPED( ScPreview, InvalidateHdl, void*, void );
     static void StaticInvalidate();
 
     FmFormView* GetDrawView() { return pDrawView; }

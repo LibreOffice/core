@@ -698,7 +698,7 @@ struct ImplDelayedDispatch
     ~ImplDelayedDispatch() {}
 };
 
-static sal_IntPtr implDispatchDelayed( void*, void* pArg )
+static void implDispatchDelayed( void*, void* pArg )
 {
     struct ImplDelayedDispatch* pDispatch = static_cast<ImplDelayedDispatch*>(pArg);
     try
@@ -711,8 +711,6 @@ static sal_IntPtr implDispatchDelayed( void*, void* pArg )
 
     // clean up
     delete pDispatch;
-
-    return 0;
 }
 
 void BackingWindow::dispatchURL( const OUString& i_rURL,
@@ -745,7 +743,7 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
         if ( xDispatch.is() )
         {
             ImplDelayedDispatch* pDisp = new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs );
-            if( Application::PostUserEvent( Link<>( NULL, implDispatchDelayed ), pDisp ) == 0 )
+            if( Application::PostUserEvent( Link<void*,void>( NULL, implDispatchDelayed ), pDisp ) == 0 )
                 delete pDisp; // event could not be posted for unknown reason, at least don't leak
         }
     }

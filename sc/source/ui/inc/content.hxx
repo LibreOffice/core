@@ -103,7 +103,7 @@ class ScContentTree : public SvTreeListBox
     ScDocument* GetSourceDocument();
 
     DECL_LINK( ContentDoubleClickHdl, void* );
-    DECL_LINK( ExecDragHdl, void* );
+    DECL_LINK_TYPED( ExecDragHdl, void*, void );
 public:
     SvTreeListEntry* pTmpEntry;
     bool m_bFirstPaint;

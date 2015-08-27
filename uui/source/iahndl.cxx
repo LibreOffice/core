@@ -146,8 +146,7 @@ UUIInteractionHelper::~UUIInteractionHelper()
 {
 }
 
-sal_IntPtr
-UUIInteractionHelper::handlerequest(
+void UUIInteractionHelper::handlerequest(
     void* pHandleData, void* pInteractionHelper)
 {
     HandleData* pHND
@@ -159,7 +158,6 @@ UUIInteractionHelper::handlerequest(
     pHND->bHandled
         = pUUI->handleRequest_impl(pHND->m_rRequest, false, bDummy, aDummy);
     pHND->set();
-    return 0;
 }
 
 bool
@@ -176,7 +174,7 @@ UUIInteractionHelper::handleRequest(
     ) {
         // we are not in the main thread, let it handle that stuff
         HandleData aHD(rRequest);
-        Link<> aLink(&aHD,handlerequest);
+        Link<void*,void> aLink(&aHD,handlerequest);
         Application::PostUserEvent(aLink,this);
         SolarMutexReleaser aReleaser;
         aHD.wait();
@@ -190,15 +188,13 @@ UUIInteractionHelper::handleRequest(
     }
 }
 
-sal_IntPtr
-UUIInteractionHelper::getstringfromrequest(
+void UUIInteractionHelper::getstringfromrequest(
     void* pHandleData,void* pInteractionHelper)
 {
     HandleData* pHND = static_cast<HandleData*>(pHandleData);
     UUIInteractionHelper* pUUI = static_cast<UUIInteractionHelper*>(pInteractionHelper);
     pHND->m_aResult = pUUI->getStringFromRequest_impl(pHND->m_rRequest);
     pHND->set();
-    return 0;
 }
 
 beans::Optional< OUString >
@@ -232,7 +228,7 @@ UUIInteractionHelper::getStringFromRequest(
     ) {
         // we are not in the main thread, let it handle that stuff
         HandleData aHD(rRequest);
-        Link<> aLink(&aHD,getstringfromrequest);
+        Link<void*,void> aLink(&aHD,getstringfromrequest);
         Application::PostUserEvent(aLink,this);
         SolarMutexReleaser aReleaser;
         aHD.wait();

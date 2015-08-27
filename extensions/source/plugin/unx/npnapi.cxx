@@ -520,7 +520,7 @@ PluginConnector::~PluginConnector()
 {
 }
 
-IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
+IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )
 {
     MediatorMessage* pMessage;
     CommandAtoms nCommand;
@@ -928,7 +928,6 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
         }
         delete pMessage;
     }
-    return 0;
 }
 
 void LoadAdditionalLibs( const char* _pPluginLib )

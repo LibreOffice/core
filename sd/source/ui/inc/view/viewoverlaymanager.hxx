@@ -41,7 +41,7 @@ public:
     void UpdateTags();
 
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
-    DECL_LINK(UpdateTagsHdl, void *);
+    DECL_LINK_TYPED(UpdateTagsHdl, void *, void);
 
     bool CreateTags();
     bool DisposeTags();

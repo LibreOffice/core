@@ -1189,11 +1189,10 @@ IMPL_LINK_NOARG(SwSidebarWin, ModifyHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwSidebarWin, DeleteHdl)
+IMPL_LINK_NOARG_TYPED(SwSidebarWin, DeleteHdl, void*, void)
 {
     mnEventId = 0;
     Delete();
-    return 0;
 }
 
 void SwSidebarWin::ResetAttributes()

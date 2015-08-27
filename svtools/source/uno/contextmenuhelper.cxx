@@ -609,8 +609,9 @@ ContextMenuHelper::completeMenuProperties(
 }
 
 
-IMPL_STATIC_LINK( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+IMPL_STATIC_LINK_TYPED( ContextMenuHelper, ExecuteHdl_Impl, void*, p, void )
 {
+    ExecuteInfo* pExecuteInfo = static_cast<ExecuteInfo*>(p);
     // Release solar mutex to prevent deadlocks with clipboard thread
     SolarMutexReleaser aReleaser;
     try
@@ -624,7 +625,6 @@ IMPL_STATIC_LINK( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo
     }
 
     delete pExecuteInfo;
-    return 0;
 }
 
 } // namespace svt
