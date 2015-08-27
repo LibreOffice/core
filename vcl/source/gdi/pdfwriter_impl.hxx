@@ -177,8 +177,8 @@ public:
     {
         Size        m_aPixelSize;
         sal_Int32   m_nSize;
-        sal_Int32   m_nChecksum;
-        sal_Int32   m_nMaskChecksum;
+        BitmapChecksum   m_nChecksum;
+        BitmapChecksum   m_nMaskChecksum;
 
         BitmapID() : m_nSize( 0 ), m_nChecksum( 0 ), m_nMaskChecksum( 0 ) {}
 

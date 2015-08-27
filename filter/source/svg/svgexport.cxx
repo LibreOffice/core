@@ -424,9 +424,9 @@ bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresentation
 namespace
 {
 
-sal_uInt32 GetBitmapChecksum( const MetaAction* pAction )
+BitmapChecksum GetBitmapChecksum( const MetaAction* pAction )
 {
-    sal_uInt32 nChecksum = 0;
+    BitmapChecksum nChecksum = 0;
     const MetaActionType nType = pAction->GetType();
 
     switch( nType )
@@ -509,8 +509,8 @@ bool EqualityBitmap::operator()( const ObjectRepresentation& rObjRep1,
     const GDIMetaFile& aMtf2 = rObjRep2.GetRepresentation();
     if( aMtf1.GetActionSize() == 1 && aMtf2.GetActionSize() == 1 )
     {
-        const sal_uInt32 nChecksum1 = GetBitmapChecksum( aMtf1.GetAction( 0 ) );
-        const sal_uInt32 nChecksum2 = GetBitmapChecksum( aMtf2.GetAction( 0 ) );
+        BitmapChecksum nChecksum1 = GetBitmapChecksum( aMtf1.GetAction( 0 ) );
+        BitmapChecksum nChecksum2 = GetBitmapChecksum( aMtf2.GetAction( 0 ) );
         return ( nChecksum1 == nChecksum2 );
     }
     else
@@ -1302,7 +1302,7 @@ bool SVGFilter::implExportTextEmbeddedBitmaps()
             MetaAction* pAction = aMtf.GetAction( 0 );
             if( pAction )
             {
-                const sal_uInt32 nId = GetBitmapChecksum( pAction );
+                BitmapChecksum nId = GetBitmapChecksum( pAction );
                 sId = "bitmap(" + OUString::number( nId ) + ")";
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
 

@@ -69,7 +69,7 @@ public:
     void                ImplIncRefCount() { mnRefCount++; }
     void                ImplDecRefCount() { mnRefCount--; }
 
-    sal_uLong           ImplGetChecksum() const;
+    BitmapChecksum      ImplGetChecksum() const;
     void                ImplInvalidateChecksum();
 
     bool                ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag );
