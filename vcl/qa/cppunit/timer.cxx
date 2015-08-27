@@ -46,7 +46,7 @@ public:
     }
 };
 
-static WatchDog aWatchDog( 12 /* 12 secs should be enough */);
+static WatchDog aWatchDog( 120 ); // random high number in secs
 
 class TimerTest : public test::BootstrapFixture
 {
