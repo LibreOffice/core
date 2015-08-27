@@ -1,15 +1,3 @@
-diff -ur boost.orig/boost/preprocessor/config/config.hpp boost/boost/preprocessor/config/config.hpp
---- foo/misc/boost.orig/boost/preprocessor/config/config.hpp	2015-03-28 09:19:20.000000000 +0100
-+++ foo/misc/boost/boost/preprocessor/config/config.hpp	2015-07-16 07:47:54.969987660 +0200
-@@ -79,7 +79,7 @@
- #        define BOOST_PP_VARIADICS 1
- #        define BOOST_PP_VARIADICS_MSVC 1
- #    /* Wave (C/C++), GCC (C++) */
--#    elif defined __WAVE__ && __WAVE_HAS_VARIADICS__ || defined __GNUC__ && __GXX_EXPERIMENTAL_CXX0X__
-+#    elif defined __WAVE__ && __WAVE_HAS_VARIADICS__ || defined __GNUC__ && defined(__GXX_EXPERIMENTAL_CXX0X__) && __GXX_EXPERIMENTAL_CXX0X__
- #        define BOOST_PP_VARIADICS 1
- #    /* EDG-based (C/C++), GCC (C), and unknown (C/C++) */
- #    elif !defined __cplusplus && __STDC_VERSION__ >= 199901L || __cplusplus >= 201103L
 diff -ur boost.orig/boost/preprocessor/tuple/detail/is_single_return.hpp boost/boost/preprocessor/tuple/detail/is_single_return.hpp
 --- foo/misc/boost.orig/boost/preprocessor/tuple/detail/is_single_return.hpp	2015-03-28 09:19:20.000000000 +0100
 +++ foo/misc/boost/boost/preprocessor/tuple/detail/is_single_return.hpp	2015-07-16 07:57:29.881981198 +0200
