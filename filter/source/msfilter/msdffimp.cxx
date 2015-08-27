@@ -3253,12 +3253,19 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
                 if ( pRecHd != NULL )
                     *pRecHd = aHd;
                 else
-                    aHd.SeekToBegOfRecord( rSt );
+                {
+                    bool bSeekSuccess = aHd.SeekToBegOfRecord(rSt);
+                    if (!bSeekSuccess)
+                    {
+                        bRet = false;
+                        break;
+                    }
+                }
             }
         }
         if ( !bRet )
         {
-            bool bSeekSuccess = aHd.SeekToEndOfRecord( rSt );
+            bool bSeekSuccess = aHd.SeekToEndOfRecord(rSt);
             if (!bSeekSuccess)
                 break;
         }
@@ -3287,11 +3294,22 @@ bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uL
                 if ( pRecHd )
                     *pRecHd = aHd;
                 else
-                    aHd.SeekToBegOfRecord( rStCtrl );
+                {
+                    bool bSeekSuccess = aHd.SeekToBegOfRecord(rStCtrl);
+                    if (!bSeekSuccess)
+                    {
+                        bRet = false;
+                        break;
+                    }
+                }
             }
         }
         if ( !bRet )
-            aHd.SeekToEndOfRecord( rStCtrl );
+        {
+            bool bSeekSuccess = aHd.SeekToEndOfRecord(rStCtrl);
+            if (!bSeekSuccess)
+                break;
+        }
     }
     while ( rStCtrl.good() && rStCtrl.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
