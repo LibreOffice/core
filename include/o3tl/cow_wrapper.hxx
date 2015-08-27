@@ -113,9 +113,11 @@ class cow_wrapper_client
 public:
     cow_wrapper_client();
     cow_wrapper_client( const cow_wrapper_client& );
+    cow_wrapper_client( cow_wrapper_client&& );
     ~cow_wrapper_client();
 
     cow_wrapper_client& operator=( const cow_wrapper_client& );
+    cow_wrapper_client& operator=( cow_wrapper_client&& );
 
     void modify( int nVal );
     int queryUnmodified() const;
@@ -144,12 +146,21 @@ cow_wrapper_client::cow_wrapper_client( const cow_wrapper_client& rSrc ) :
     maImpl( rSrc.maImpl )
 {
 }
+cow_wrapper_client::cow_wrapper_client( cow_wrapper_client& rSrc ) :
+    maImpl( std::move( rSrc.maImpl ) )
+{
+}
 cow_wrapper_client::~cow_wrapper_client()
 {
 }
 cow_wrapper_client& cow_wrapper_client::operator=( const cow_wrapper_client& rSrc )
 {
     maImpl = rSrc.maImpl;
+    return *this;
+}
+cow_wrapper_client& cow_wrapper_client::operator=( cow_wrapper_client&& rSrc )
+{
+    maImpl = std::move( rSrc.maImpl );
     return *this;
 }
 void cow_wrapper_client::modify( int nVal )
@@ -272,13 +283,13 @@ int cow_wrapper_client::queryUnmodified() const
         /// true, if not shared with any other cow_wrapper instance
         bool is_unique() const // nothrow
         {
-            return m_pimpl->m_ref_count == 1;
+            return m_pimpl ? m_pimpl->m_ref_count == 1 : true;
         }
 
         /// return number of shared instances (1 for unique object)
         typename MTPolicy::ref_count_t use_count() const // nothrow
         {
-            return m_pimpl->m_ref_count;
+            return m_pimpl ? m_pimpl->m_ref_count : 0;
         }
 
         void swap(cow_wrapper& r) // never throws
