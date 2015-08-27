@@ -143,7 +143,8 @@ public:
     void exportXML(
             SvXMLExport& rExport,
             const ::std::vector< XMLPropertyState >& rProperties,
-            sal_uInt16 nFlags = 0 ) const;
+            sal_uInt16 nFlags = 0,
+            bool bUseExtensionNamespaceForGraphicProperties = false ) const;
 
     /** like above but only properties whose property map index is within the
      *  specified range are exported

@@ -320,8 +320,14 @@ bool XMLStyleExport::exportStyle(
         // <style:properties>
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->Filter( xPropSet, true );
+        bool const bUseExtensionNamespaceForGraphicProperties(
+                rXMLFamily != "drawing-page" &&
+                rXMLFamily != "graphic" &&
+                rXMLFamily != "presentation" &&
+                rXMLFamily != "chart");
         rPropMapper->exportXML( GetExport(), xPropStates,
-                                XML_EXPORT_FLAG_IGN_WS );
+                                static_cast<sal_uInt16>(XML_EXPORT_FLAG_IGN_WS),
+                                bUseExtensionNamespaceForGraphicProperties );
 
         rPropMapper->SetStyleName( OUString() );
 
