@@ -39,9 +39,6 @@ enum class BmpScaleFlag;
 class VCL_PLUGIN_PUBLIC SalBitmap
 {
 public:
-
-    typedef sal_uInt64      ChecksumType;
-
                             SalBitmap() : mbChecksumValid(false) {}
     virtual                 ~SalBitmap();
 
@@ -68,7 +65,7 @@ public:
     virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) = 0;
 
 
-    virtual bool GetChecksum(ChecksumType& rChecksum) const
+    virtual bool GetChecksum(SalChecksum& rChecksum) const
     {
         updateChecksum();
         assert(mbChecksumValid);
@@ -82,8 +79,8 @@ public:
     }
 
 protected:
-    ChecksumType mnChecksum;
-    bool         mbChecksumValid;
+    SalChecksum mnChecksum;
+    bool        mbChecksumValid;
 
 protected:
     virtual void updateChecksum() const
@@ -91,7 +88,7 @@ protected:
         if (mbChecksumValid)
             return;
 
-        ChecksumType nCrc = 0;
+        SalChecksum nCrc = 0;
         SalBitmap* pThis = const_cast<SalBitmap*>(this);
         BitmapBuffer* pBuf = pThis->AcquireBuffer(BITMAP_READ_ACCESS);
         if (pBuf)

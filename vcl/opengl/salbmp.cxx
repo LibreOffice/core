@@ -509,7 +509,7 @@ sal_uInt16 OpenGLSalBitmap::GetBitCount() const
     return mnBits;
 }
 
-bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType& rChecksum) const
+bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, SalChecksum& rChecksum) const
 {
     OUString FragShader("areaHashCRC64TFragmentShader");
 
@@ -576,9 +576,8 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     std::vector<sal_uInt8> aBuf( aFinalTexture.GetWidth() * aFinalTexture.GetHeight() * 4 );
     aFinalTexture.Read(GL_RGBA, GL_UNSIGNED_BYTE, aBuf.data());
 
-    ChecksumType nCrc = vcl_crc64(0, aBuf.data(), aBuf.size());
+    rChecksum = vcl_crc64(0, aBuf.data(), aBuf.size());
 
-    rChecksum = nCrc;
     return true;
 }
 

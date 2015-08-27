@@ -55,7 +55,7 @@ private:
     void makeCurrent();
     virtual void updateChecksum() const;
 
-    bool calcChecksumGL(OpenGLTexture& rHashTexture, ChecksumType& rHash) const;
+    bool calcChecksumGL(OpenGLTexture& rHashTexture, SalChecksum& rHash) const;
 
 public:
     OpenGLSalBitmap();
