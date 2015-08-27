@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_9a1c4d79",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-27T21:02:50Z",
+      "side": 1,
+      "message": "Ok, that one makes that ImplType assignment possible. In theory, with the move ctor in place, a pImpl \u003d cow_wrapper\u003c ImplType \u003e(value) would be about the same.\n\nNo strong opinion on whether to add this method or not (clearly, if there\u0027s more than, say, three places in the code base that need it, it\u0027s worth it) - but if you do, please add a unit test for it under o3tl/qa ;)",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
