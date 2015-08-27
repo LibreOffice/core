@@ -203,7 +203,7 @@ void WrapPropertyPanel::UpdateSpacingLB()
 {
     if( (nLeft == nRight) && (nTop == nBottom) && (nLeft == nTop) )
     {
-        for(sal_uInt16 i = 0; i < mpSpacingLB->GetEntryCount(); i++)
+        for(sal_Int32 i = 0; i < mpSpacingLB->GetEntryCount(); i++)
         {
             if(reinterpret_cast<sal_uLong>(mpSpacingLB->GetEntryData(i)) == nLeft )
             {
