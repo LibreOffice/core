@@ -2974,7 +2974,7 @@ void  DomainMapper_Impl::handleRubyEQField( FieldContextPtr pContext)
         nIndex = 0;
         OUString sPart1 = sRubyParts.getToken(0, ',', nIndex);
         OUString sPart2 = sRubyParts.getToken(0, ',', nIndex);
-        if ((nIndex = sPart1.indexOf('(', 0)) != -1 && (nEnd = sPart1.lastIndexOf(')'))!=-1 )
+        if ((nIndex = sPart1.indexOf('(')) != -1 && (nEnd = sPart1.lastIndexOf(')'))!=-1 )
         {
             aInfo.sRubyText = sPart1.copy(nIndex+1,nEnd-nIndex-1);
         }
