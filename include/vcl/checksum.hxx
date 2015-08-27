@@ -22,9 +22,9 @@
 #define INCLUDED_VCL_INC_CHECKSUM_HXX
 
 #include <sal/config.h>
-
 #include <sal/saldllapi.h>
 #include <sal/types.h>
+#include <tools/solar.h>
 
 /*========================================================================
  *
@@ -119,6 +119,10 @@ static const sal_uInt64 vcl_crc64Table[256] = {
   0xa6df411fbfb21ca3ULL, 0xdc0731d78f8795daULL, 0x536fa08fdfd90e51ULL,
   0x29b7d047efec8728ULL
 };
+
+typedef sal_uLong      BitmapChecksum;
+
+#define BITMAP_CHECKSUM_BITS (sizeof(BitmapChecksum) * 8)
 
 #ifdef __cplusplus
 extern "C" {

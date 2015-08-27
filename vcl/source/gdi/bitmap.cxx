@@ -284,9 +284,9 @@ bool Bitmap::HasGreyPalette() const
     return bRet;
 }
 
-sal_uLong Bitmap::GetChecksum() const
+BitmapChecksum Bitmap::GetChecksum() const
 {
-    sal_uLong nRet = 0UL;
+    BitmapChecksum nRet = 0;
 
     if( mpImpBmp )
     {

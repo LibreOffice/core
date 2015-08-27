@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <vcl/checksum.hxx>
 #include <vcl/font.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/vclptr.hxx>
@@ -106,7 +107,7 @@ sal_uInt32 getFixed( double fValue );
 
 
 
-typedef ::std::map<sal_uInt32, sal_uInt16> ChecksumCache;
+typedef ::std::map<BitmapChecksum, sal_uInt16> ChecksumCache;
 
 /** unsigned int 16 compare operation for stl */
 struct ltuint16

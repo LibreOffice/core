@@ -308,9 +308,9 @@ sal_uLong BitmapEx::GetSizeBytes() const
     return nSizeBytes;
 }
 
-sal_uLong BitmapEx::GetChecksum() const
+BitmapChecksum BitmapEx::GetChecksum() const
 {
-    sal_uInt32  nCrc = aBitmap.GetChecksum();
+    BitmapChecksum  nCrc = aBitmap.GetChecksum();
     SVBT32      aBT32;
 
     UInt32ToSVBT32( (long) eTransparent, aBT32 );

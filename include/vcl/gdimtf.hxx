@@ -190,7 +190,7 @@ public:
     void            SetPrefMapMode( const MapMode& rMapMode ) { aPrefMapMode = rMapMode; }
 
 
-    sal_uLong       GetChecksum() const;
+    BitmapChecksum  GetChecksum() const;
     sal_uLong       GetSizeBytes() const;
 
     // Methods for reading and writing the new formats;
