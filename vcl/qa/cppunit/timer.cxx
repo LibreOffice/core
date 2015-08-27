@@ -42,6 +42,7 @@ public:
         aWait.Seconds = mnSeconds;
         aWait.Nanosec = 1000000; // +1ms
         osl::Thread::wait( aWait );
+        fprintf(stderr, "ERROR: WatchDog timer thread expired, failing the test!");
         CPPUNIT_ASSERT_MESSAGE("watchdog triggered", false);
     }
 };
