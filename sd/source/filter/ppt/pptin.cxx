@@ -2544,7 +2544,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             DffRecordHeader& rHdClientData = *maShapeRecords.Current();
             while( true )
             {
-                sal_uInt32 nClientDataLen = rHdClientData.GetRecEndFilePos();
+                sal_uInt32 nClientDataLen = SanitizeEndPos(rSt, rHdClientData.GetRecEndFilePos());
                 DffRecordHeader aHd;
                 do
                 {
