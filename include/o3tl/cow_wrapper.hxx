@@ -24,9 +24,6 @@
 
 #include <algorithm>
 
-#include <boost/noncopyable.hpp>
-#include <boost/checked_delete.hpp>
-
 namespace o3tl
 {
     /** Thread-unsafe refcounting
@@ -167,28 +164,38 @@ int cow_wrapper_client::queryUnmodified() const
         /** shared value object - gets cloned before cow_wrapper hands
             out a non-const reference to it
          */
-        struct impl_t : private boost::noncopyable
+
+        struct impl_t
         {
-            impl_t() :
-                m_value(),
-                m_ref_count(1)
-            {
-            }
+            // ensure that impl_t is noncopyable
+            private:
+                impl_t(const impl_t&);
+                impl_t& operator=(const impl_t&);
 
-            explicit impl_t( const T& v ) :
-                m_value(v),
-                m_ref_count(1)
-            {
-            }
+            public:
+                impl_t() :
+                    m_value(),
+                    m_ref_count(1)
+                {
+                }
 
-            T                              m_value;
-            typename MTPolicy::ref_count_t m_ref_count;
+                explicit impl_t( const T& v ) :
+                    m_value(v),
+                    m_ref_count(1)
+                {
+                }
+
+                T                              m_value;
+                typename MTPolicy::ref_count_t m_ref_count;
         };
 
         void release()
         {
             if( m_pimpl && !MTPolicy::decrementCount(m_pimpl->m_ref_count) )
-                boost::checked_delete(m_pimpl), m_pimpl = nullptr;
+            {
+                delete m_pimpl;
+                m_pimpl = nullptr;
+            }
         }
 
     public:
