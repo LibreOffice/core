@@ -13,7 +13,7 @@
 namespace svx
 {
 
-ColorSet::ColorSet(OUString aName)
+ColorSet::ColorSet(OUString const & aName)
     : maName(aName)
     , maColors(12)
 {}

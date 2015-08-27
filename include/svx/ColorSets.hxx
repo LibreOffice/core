@@ -24,7 +24,7 @@ class SVX_DLLPUBLIC ColorSet
     OUString maName;
     std::vector<Color> maColors;
 public:
-    ColorSet(OUString aName);
+    ColorSet(OUString const & aName);
     ~ColorSet();
 
     void add(sal_uInt32 nIndex, sal_uInt32 aColorData)
