@@ -253,15 +253,16 @@ namespace sfx2
             WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE));
         SetAlignment(SfxChildAlignment::RIGHT);
 
-        GetWindow()->SetHelpId( HID_TASKPANE_WINDOW );
-        GetWindow()->SetOutputSizePixel( Size( 300, 450 ) );
+        vcl::Window& rWindow = *GetWindow();
 
-        dynamic_cast<SfxDockingWindow*>(GetWindow())->Initialize(i_pInfo);
+        rWindow.SetHelpId( HID_TASKPANE_WINDOW );
+        rWindow.SetOutputSizePixel( Size( 300, 450 ) );
+
+        dynamic_cast<SfxDockingWindow&>(rWindow).Initialize(i_pInfo);
         SetHideNotDelete( true );
 
-        GetWindow()->Show();
+        rWindow.Show();
     }
-
 
     void TaskPaneWrapper::ActivateToolPanel( const OUString& i_rPanelURL )
     {
