@@ -411,10 +411,9 @@ void Application::ReAcquireSolarMutex(sal_uLong const nReleased)
 #endif
 }
 
-IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplQuitMsg )
+IMPL_STATIC_LINK_NOARG_TYPED( ImplSVAppData, ImplQuitMsg, void*, void )
 {
     ImplGetSVData()->maAppData.mbAppQuit = true;
-    return 0;
 }
 
 void Application::Quit()
@@ -777,12 +776,12 @@ ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, 
 }
 
 
-IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData )
+IMPL_STATIC_LINK_TYPED( Application, PostEventHandler, void*, pCallData, void )
 {
     const SolarMutexGuard aGuard;
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );
     const void*         pEventData;
-    sal_uLong               nEvent;
+    sal_uLong           nEvent;
     ImplSVEvent * const nEventId = pData->mnEventId;
 
     switch( pData->mnEvent )
@@ -844,8 +843,6 @@ IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData )
         else
             ++aIter;
     }
-
-    return 0;
 }
 
 void Application::RemoveMouseAndKeyEvents( vcl::Window* pWin )
@@ -870,12 +867,12 @@ void Application::RemoveMouseAndKeyEvents( vcl::Window* pWin )
     }
 }
 
-ImplSVEvent * Application::PostUserEvent( const Link<>& rLink, void* pCaller,
+ImplSVEvent * Application::PostUserEvent( const Link<void*,void>& rLink, void* pCaller,
                                           bool bReferenceLink )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mpData    = pCaller;
-    pSVEvent->mpLink    = new Link<>( rLink );
+    pSVEvent->maLink    = rLink;
     pSVEvent->mpWindow  = NULL;
     pSVEvent->mbCall    = true;
     if (bReferenceLink)
@@ -891,7 +888,6 @@ ImplSVEvent * Application::PostUserEvent( const Link<>& rLink, void* pCaller,
     vcl::Window* pDefWindow = ImplGetDefaultWindow();
     if ( pDefWindow == 0 || !pDefWindow->ImplGetFrame()->PostEvent( pSVEvent ) )
     {
-        delete pSVEvent->mpLink;
         delete pSVEvent;
         pSVEvent = 0;
     }

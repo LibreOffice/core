@@ -154,8 +154,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
     }
 }
 
-IMPL_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
-                                    SfxTemplateControllerItem*,)
+IMPL_LINK_NOARG_TYPED(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl, void*, void)
 {
     nUserEventId = 0;
     SfxBoolItem* pState = 0;
@@ -168,7 +167,6 @@ IMPL_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
     }
     rTemplateDlg.SetWaterCanState(pState);
     delete pState;
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

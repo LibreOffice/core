@@ -171,7 +171,7 @@ private:
     bool mbContainerCleaningPending;
 
     typedef ::std::pair<MasterPageContainerChangeEvent::EventType,Token> EventData;
-    DECL_LINK(AsynchronousNotifyCallback, EventData*);
+    DECL_LINK_TYPED(AsynchronousNotifyCallback, void*, void);
 
     Image GetPreviewSubstitution (sal_uInt16 nId, PreviewSize ePreviewSize);
 
@@ -618,8 +618,9 @@ Size MasterPageContainer::Implementation::GetPreviewSizePixel (PreviewSize eSize
         return maLargePreviewSizePixel;
 }
 
-IMPL_LINK(MasterPageContainer::Implementation,AsynchronousNotifyCallback, EventData*, pData)
+IMPL_LINK_TYPED(MasterPageContainer::Implementation,AsynchronousNotifyCallback, void*, p, void)
 {
+    EventData* pData = static_cast<EventData*>(p);
     const ::osl::MutexGuard aGuard (maMutex);
 
     if (pData != NULL)
@@ -627,8 +628,6 @@ IMPL_LINK(MasterPageContainer::Implementation,AsynchronousNotifyCallback, EventD
         FireContainerChange(pData->first, pData->second);
         delete pData;
     }
-
-    return 0;
 }
 
 MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (

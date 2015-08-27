@@ -68,7 +68,7 @@ class SwTestAccountSettingsDialog : public SfxModalDialog
 
     void                Test();
     DECL_LINK_TYPED(StopHdl, Button*, void);
-    DECL_LINK(TestHdl, void*);
+    DECL_LINK_TYPED(TestHdl, void*, void);
 public:
     explicit SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
     virtual ~SwTestAccountSettingsDialog();
@@ -278,12 +278,11 @@ IMPL_LINK_NOARG_TYPED(SwTestAccountSettingsDialog, StopHdl, Button*, void)
     m_bStop = true;
 }
 
-IMPL_LINK_NOARG(SwTestAccountSettingsDialog, TestHdl)
+IMPL_LINK_NOARG_TYPED(SwTestAccountSettingsDialog, TestHdl, void*, void)
 {
     EnterWait();
     Test();
     LeaveWait();
-    return 0;
 }
 
 void SwTestAccountSettingsDialog::Test()

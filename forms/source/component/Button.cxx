@@ -415,7 +415,7 @@ void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( Ru
 void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
     // Asynchronous for css::util::URL-Button
-    ImplSVEvent * n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
+    ImplSVEvent * n = Application::PostUserEvent( LINK(this, OButtonControl, OnClick) );
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_nClickEvent = n;
@@ -423,7 +423,7 @@ void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::co
 }
 
 
-IMPL_LINK_NOARG(OButtonControl, OnClick)
+IMPL_LINK_NOARG_TYPED(OButtonControl, OnClick, void*, void)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     m_nClickEvent = 0;
@@ -443,7 +443,7 @@ IMPL_LINK_NOARG(OButtonControl, OnClick)
         // recognize the button type
         Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
         if (!xSet.is())
-            return 0L;
+            return;
 
         if (FormButtonType_PUSH == *static_cast<FormButtonType const *>(xSet->getPropertyValue(PROPERTY_BUTTONTYPE).getValue()))
         {
@@ -474,7 +474,6 @@ IMPL_LINK_NOARG(OButtonControl, OnClick)
         else
             actionPerformed_Impl( false, ::com::sun::star::awt::MouseEvent() );
     }
-    return 0L;
 }
 
 

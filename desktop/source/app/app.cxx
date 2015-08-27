@@ -1870,7 +1870,7 @@ class ExitTimer : public Timer
     }
 };
 
-IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
+IMPL_LINK_NOARG_TYPED(Desktop, OpenClients_Impl, void*, void)
 {
     try {
         OpenClients();
@@ -1892,14 +1892,12 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
         OUString a( "UNO exception during client open:\n"  );
         Application::Abort( a + e.Message );
     }
-    return 0;
 }
 
 // enable acceptors
-IMPL_STATIC_LINK_NOARG(Desktop, EnableAcceptors_Impl)
+IMPL_STATIC_LINK_NOARG_TYPED(Desktop, EnableAcceptors_Impl, void*, void)
 {
     enableAcceptors();
-    return 0;
 }
 
 

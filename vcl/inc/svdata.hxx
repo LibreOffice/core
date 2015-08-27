@@ -148,7 +148,7 @@ struct ImplSVAppData
      */
     ImeStatusWindowMode meShowImeStatusWindow;
 
-    DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
+    DECL_STATIC_LINK_TYPED( ImplSVAppData, ImplQuitMsg, void*, void );
 };
 
 struct ImplSVGDIData
@@ -403,7 +403,7 @@ struct ImplFocusDelData : public ImplDelData
 struct ImplSVEvent
 {
     void*               mpData;
-    Link<>*             mpLink;
+    Link<void*,void>    maLink;
     VclPtr<vcl::Window> mpInstanceRef;
     VclPtr<vcl::Window> mpWindow;
     ImplDelData         maDelData;

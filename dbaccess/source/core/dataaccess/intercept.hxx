@@ -39,7 +39,7 @@ class OInterceptor : public ::cppu::WeakImplHelper< css::frame::XDispatchProvide
                                                     css::frame::XDispatch,
                                                     css::document::XDocumentEventListener>
 {
-    DECL_LINK( OnDispatch, void*  );
+    DECL_LINK_TYPED( OnDispatch, void*, void );
 protected:
     virtual ~OInterceptor();
 public:

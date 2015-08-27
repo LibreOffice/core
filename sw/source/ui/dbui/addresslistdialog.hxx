@@ -82,7 +82,7 @@ class SwAddressListDialog : public SfxModalDialog
     DECL_LINK_TYPED(TableSelectHdl_Impl, Button*, void);
     DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
 
-    DECL_LINK(StaticListBoxSelectHdl_Impl, SvTreeListEntry*);
+    DECL_LINK_TYPED(StaticListBoxSelectHdl_Impl, void*, void);
 
 public:
     SwAddressListDialog(SwMailMergeAddressBlockPage* pParent);

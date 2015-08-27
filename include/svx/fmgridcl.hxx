@@ -85,7 +85,7 @@ protected:
     */
     void notifyColumnSelect(sal_uInt16 nColumnId);
 private:
-    DECL_LINK( OnAsyncExecuteDrop, void* );
+    DECL_LINK_TYPED( OnAsyncExecuteDrop, void*, void );
 };
 
 

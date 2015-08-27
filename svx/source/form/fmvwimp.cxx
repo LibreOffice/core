@@ -606,11 +606,10 @@ void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
 }
 
 
-IMPL_LINK_NOARG(FmXFormView, OnDelayedErrorMessage)
+IMPL_LINK_NOARG_TYPED(FmXFormView, OnDelayedErrorMessage, void*, void)
 {
     m_nErrorMessageEvent = 0;
     displayException( m_aAsyncError );
-    return 0L;
 }
 
 
@@ -715,14 +714,14 @@ namespace
 }
 
 
-IMPL_LINK_NOARG(FmXFormView, OnActivate)
+IMPL_LINK_NOARG_TYPED(FmXFormView, OnActivate, void*, void)
 {
     m_nActivationEvent = 0;
 
     if ( !m_pView )
     {
         OSL_FAIL( "FmXFormView::OnActivate: well .... seems we have a timing problem (the view already died)!" );
-        return 0;
+        return;
     }
 
     // setting the controller to activate
@@ -731,7 +730,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate)
         FmXFormShell* const pShImpl =  m_pView->GetFormShell()->GetImpl();
 
         if(!pShImpl)
-            return 0;
+            return;
 
         find_active_databaseform fad(pShImpl->getActiveController());
 
@@ -775,7 +774,6 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate)
             pShImpl->setActiveController( xControllerToActivate );
         }
     }
-    return 0;
 }
 
 
@@ -955,15 +953,12 @@ Reference< XFormController > FmXFormView::getFormController( const Reference< XF
 }
 
 
-IMPL_LINK_NOARG(FmXFormView, OnAutoFocus)
+IMPL_LINK_NOARG_TYPED(FmXFormView, OnAutoFocus, void*, void)
 {
     m_nAutoFocusEvent = 0;
 
     // go to the first form of our page, examine it's TabController, go to it's first (in terms of the tab order)
     // control, give it the focus
-
-    do
-    {
 
     SdrPageView *pPageView = m_pView ? m_pView->GetSdrPageView() : NULL;
     SdrPage *pSdrPage = pPageView ? pPageView->GetPage() : NULL;
@@ -974,13 +969,13 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus)
     const PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];
     const vcl::Window* pWindow = pAdapter.get() ? pAdapter->getWindow() : NULL;
 
-    ENSURE_OR_RETURN( xForms.is() && pWindow, "FmXFormView::OnAutoFocus: could not collect all essentials!", 0L );
+    ENSURE_OR_RETURN_VOID( xForms.is() && pWindow, "FmXFormView::OnAutoFocus: could not collect all essentials!" );
 
     try
     {
         // go for the tab controller of the first form
         if ( !xForms->getCount() )
-            break;
+            return;
         Reference< XForm > xForm( xForms->getByIndex( 0 ), UNO_QUERY_THROW );
         Reference< XTabController > xTabController( pAdapter->getController( xForm ), UNO_QUERY_THROW );
 
@@ -1005,7 +1000,7 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus)
         // set the focus to this first control
         Reference< XWindow > xControlWindow( lcl_firstFocussableControl( aControls ), UNO_QUERY );
         if ( !xControlWindow.is() )
-            break;
+            return;
 
         xControlWindow->setFocus();
 
@@ -1023,11 +1018,6 @@ IMPL_LINK_NOARG(FmXFormView, OnAutoFocus)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-
-    }   // do
-    while ( false );
-
-    return 1L;
 }
 
 
@@ -1077,12 +1067,12 @@ void FmXFormView::breakCreateFormObject()
     m_xLastCreatedControlModel.clear();
 }
 
-IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard )
+IMPL_LINK_NOARG_TYPED( FmXFormView, OnStartControlWizard, void*, void )
 {
     m_nControlWizardEvent = 0;
     OSL_PRECOND( m_xLastCreatedControlModel.is(), "FmXFormView::OnStartControlWizard: illegal call!" );
     if ( !m_xLastCreatedControlModel.is() )
-        return 0L;
+        return;
 
     sal_Int16 nClassId = FormComponentType::CONTROL;
     try
@@ -1146,7 +1136,6 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard )
     }
 
     m_xLastCreatedControlModel.clear();
-    return 1L;
 }
 
 

@@ -96,8 +96,8 @@ protected:
     virtual void CellModified() SAL_OVERRIDE;
 
 private:
-    DECL_LINK( AsynchActivate, void* );
-    DECL_LINK( AsynchDeactivate, void* );
+    DECL_LINK_TYPED( AsynchActivate, void*, void );
+    DECL_LINK_TYPED( AsynchDeactivate, void*, void );
 
     static bool isAllowed(sal_uInt16 _nColumnId,sal_Int32 _nPrivilege);
     void        fillPrivilege(sal_Int32 _nRow) const;

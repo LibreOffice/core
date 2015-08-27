@@ -375,7 +375,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     return DND_ACTION_LINK;
 }
 
-IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop )
+IMPL_LINK_NOARG_TYPED( FmGridHeader, OnAsyncExecuteDrop, void*, void )
 {
     OUString             sCommand, sFieldName,sURL;
     sal_Int32                   nCommandType = CommandType::COMMAND;
@@ -402,7 +402,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop )
         {
             ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
             ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
-            return 0L;
+            return;
         }
 
         // Vom Feld werden nun zwei Informationen benoetigt:
@@ -420,7 +420,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop )
             case DataType::OTHER:
                 ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
                 ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
-                return 0L;
+                return;
         }
 
         // Erstellen der Column
@@ -527,7 +527,7 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop )
             ::comphelper::disposeComponent(xCol);   // in case only the creation of the second column failed
             ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
             ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
-            return 0L;
+            return;
         }
 
         if (bDateNTimeCol)
@@ -626,12 +626,11 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop )
         OSL_FAIL("FmGridHeader::OnAsyncExecuteDrop: caught an exception while creatin' the column !");
         ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
         ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
-        return 0L;
+        return;
     }
 
     ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
     ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
-    return 1L;
 }
 
 void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu)

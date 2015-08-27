@@ -441,7 +441,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
 /* Initialize, asynchronous to prevent virtial calls
    from a constructor
  */
-IMPL_LINK( SpellDialog, InitHdl, SpellDialog *, )
+IMPL_LINK_NOARG_TYPED( SpellDialog, InitHdl, void*, void)
 {
     SetUpdateMode( false );
     //show or hide AutoCorrect depending on the modules abilities
@@ -468,7 +468,6 @@ IMPL_LINK( SpellDialog, InitHdl, SpellDialog *, )
     m_pCheckGrammarCB->Check( rParent.IsGrammarChecking() );
     SetUpdateMode( true );
     Show();
-    return 0;
 };
 
 

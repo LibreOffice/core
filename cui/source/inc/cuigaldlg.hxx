@@ -96,7 +96,7 @@ public:
     virtual             ~SearchProgress();
     virtual void        dispose() SAL_OVERRIDE;
 
-                        DECL_LINK( CleanUpHdl, void* );
+                        DECL_LINK_TYPED( CleanUpHdl, void*, void );
 
     virtual short       Execute() SAL_OVERRIDE;
     virtual void        StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
@@ -142,7 +142,7 @@ public:
     virtual ~TakeProgress();
     virtual void dispose() SAL_OVERRIDE;
 
-    DECL_LINK( CleanUpHdl, void* );
+    DECL_LINK_TYPED( CleanUpHdl, void*, void );
 
     void                SetFile( const INetURLObject& rURL ) { m_pFtTakeFile->SetText( GetReducedString( rURL, 30 ) ); }
     virtual short       Execute() SAL_OVERRIDE;

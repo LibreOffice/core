@@ -467,7 +467,7 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
     }
 }
 
-IMPL_LINK_NOARG( ORelationController, OnThreadFinished )
+IMPL_LINK_NOARG_TYPED( ORelationController, OnThreadFinished, void*, void )
 {
     ::SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -486,7 +486,6 @@ IMPL_LINK_NOARG( ORelationController, OnThreadFinished )
         DBG_UNHANDLED_EXCEPTION();
     }
     m_pWaitObject.reset();
-    return 0L;
 }
 
 void ORelationController::loadData()

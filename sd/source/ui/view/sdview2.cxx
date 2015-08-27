@@ -807,8 +807,9 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
     return nRet;
 }
 
-IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEvent )
+IMPL_LINK_TYPED( View, ExecuteNavigatorDrop, void*, p, void )
 {
+    SdNavigatorDropEvent*                   pSdNavigatorDropEvent = static_cast<SdNavigatorDropEvent*>(p);
     TransferableDataHelper                  aDataHelper( pSdNavigatorDropEvent->maDropEvent.Transferable );
     SdPageObjsTLB::SdPageObjsTransferable*  pPageObjsTransferable = SdPageObjsTLB::SdPageObjsTransferable::getImplementation( aDataHelper.GetXTransferable() );
     INetBookmark                            aINetBookmark;
@@ -860,8 +861,6 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
     }
 
     delete pSdNavigatorDropEvent;
-
-    return 0;
 }
 
 bool View::GetExchangeList (std::vector<OUString> &rExchangeList,

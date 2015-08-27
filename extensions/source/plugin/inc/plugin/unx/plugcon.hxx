@@ -133,7 +133,7 @@ protected:
     static std::vector<PluginConnector*>  allConnectors;
 
     DECL_LINK( NewMessageHdl, Mediator* );
-    DECL_LINK( WorkOnNewMessageHdl, Mediator* );
+    DECL_LINK_TYPED( WorkOnNewMessageHdl, void*, void );
 
     std::vector<NPStream*>              m_aNPWrapStreams;
     std::vector<ConnectorInstance*>     m_aInstances;

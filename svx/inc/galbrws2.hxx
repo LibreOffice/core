@@ -182,7 +182,7 @@ public:
                    const com::sun::star::uno::Reference< com::sun::star::frame::XDispatch > &rxDispatch = com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >(),
                    const com::sun::star::util::URL &rURL = com::sun::star::util::URL() );
 
-    DECL_STATIC_LINK( GalleryBrowser2, AsyncDispatch_Impl, DispatchInfo* );
+    DECL_STATIC_LINK_TYPED( GalleryBrowser2, AsyncDispatch_Impl, void*, void );
 };
 
 #endif

@@ -207,12 +207,13 @@ namespace
     class MacroExecution
     {
     public:
-        DECL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, MacroExecutionData* );
+        DECL_STATIC_LINK_TYPED( MacroExecution, ExecuteMacroEvent, void*, void );
     };
 
-    IMPL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, MacroExecutionData*, i_pData )
+    IMPL_STATIC_LINK_TYPED( MacroExecution, ExecuteMacroEvent, void*, p, void )
     {
-        ENSURE_OR_RETURN( i_pData, "wrong MacroExecutionData", 0L );
+        MacroExecutionData* i_pData = static_cast<MacroExecutionData*>(p);
+        ENSURE_OR_RETURN_VOID( i_pData, "wrong MacroExecutionData" );
         // take ownership of the data
         boost::scoped_ptr< MacroExecutionData > pData( i_pData );
 
@@ -225,8 +226,6 @@ namespace
             pUndoGuard.reset( new ::framework::DocumentUndoGuard( pData->aDocument.getDocument() ) );
 
         RunMethod(pData->xMethod);
-
-        return 1L;
     }
 }
 

@@ -264,11 +264,11 @@ void Window::RemoveChildEventListener( const Link<>& rEventListener )
         mpWindowImpl->maChildEventListeners.removeListener( rEventListener );
 }
 
-ImplSVEvent * Window::PostUserEvent( const Link<>& rLink, void* pCaller, bool bReferenceLink )
+ImplSVEvent * Window::PostUserEvent( const Link<void*,void>& rLink, void* pCaller, bool bReferenceLink )
 {
     ImplSVEvent* pSVEvent = new ImplSVEvent;
     pSVEvent->mpData    = pCaller;
-    pSVEvent->mpLink    = new Link<>( rLink );
+    pSVEvent->maLink    = rLink;
     pSVEvent->mpWindow  = this;
     pSVEvent->mbCall    = true;
     if (bReferenceLink)
@@ -284,7 +284,6 @@ ImplSVEvent * Window::PostUserEvent( const Link<>& rLink, void* pCaller, bool bR
     if ( !mpWindowImpl->mpFrame->PostEvent( pSVEvent ) )
     {
         ImplRemoveDel( &(pSVEvent->maDelData) );
-        delete pSVEvent->mpLink;
         delete pSVEvent;
         pSVEvent = 0;
     }

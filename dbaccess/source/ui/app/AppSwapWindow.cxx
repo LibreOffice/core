@@ -170,10 +170,9 @@ IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pCo
     return 1L;
 }
 
-IMPL_LINK_NOARG(OApplicationSwapWindow, ChangeToLastSelected)
+IMPL_LINK_NOARG_TYPED(OApplicationSwapWindow, ChangeToLastSelected, void*, void)
 {
     selectContainer(m_eLastType);
-    return 0L;
 }
 
 void OApplicationSwapWindow::selectContainer(ElementType _eType)

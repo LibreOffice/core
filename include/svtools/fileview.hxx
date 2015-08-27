@@ -51,7 +51,7 @@ struct FileViewAsyncAction
 {
     sal_uInt32  nMinTimeout;    /// minimum time to wait for a result, in milliseconds
     sal_uInt32  nMaxTimeout;    /// maximum time to wait for a result, in milliseconds, until eTimeout is returned
-    Link<>      aFinishHandler; /// the handler to be called when the action is finished. Called in every case, no matter of the result
+    Link<void*,void>  aFinishHandler; /// the handler to be called when the action is finished. Called in every case, no matter of the result
 
     FileViewAsyncAction()
     {

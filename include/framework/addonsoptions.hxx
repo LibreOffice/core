@@ -229,7 +229,7 @@ class FWE_DLLPUBLIC AddonsOptions
                         We create a static mutex only for one ime and use at different times.
             @return     A reference to a static mutex member.
         *//*-*****************************************************************************************************/
-        DECL_STATIC_LINK( AddonsOptions, Notify, void* );
+        DECL_STATIC_LINK_TYPED( AddonsOptions, Notify, void*, void );
 
     private:
 

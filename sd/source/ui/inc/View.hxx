@@ -278,7 +278,7 @@ protected:
 
                             DECL_LINK_TYPED( DropErrorHdl, Idle*, void );
                             DECL_LINK_TYPED( DropInsertFileHdl, Idle*, void );
-                            DECL_LINK( ExecuteNavigatorDrop, SdNavigatorDropEvent* );
+                            DECL_LINK_TYPED( ExecuteNavigatorDrop, void*, void );
 
     void ImplClearDrawDropMarker();
 

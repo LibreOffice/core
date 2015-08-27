@@ -324,9 +324,9 @@ private:
     static OUString GetToolBarResourceName (const OUString& rsBaseName);
     bool CheckPlugInMode (const OUString& rsName) const;
 
-    DECL_LINK(UpdateCallback, void *);
+    DECL_LINK_TYPED(UpdateCallback, void *, void);
     DECL_LINK(EventMultiplexerCallback, sd::tools::EventMultiplexerEvent*);
-    DECL_LINK(SetValidCallback,void*);
+    DECL_LINK_TYPED(SetValidCallback, void*, void);
 };
 
 //===== ToolBarManager ========================================================
@@ -848,7 +848,7 @@ void ToolBarManager::Implementation::Update (
     }
 }
 
-IMPL_LINK_NOARG(ToolBarManager::Implementation, UpdateCallback)
+IMPL_LINK_NOARG_TYPED(ToolBarManager::Implementation, UpdateCallback, void*, void)
 {
     mnPendingUpdateCall = 0;
     if (mnLockCount == 0)
@@ -860,7 +860,6 @@ IMPL_LINK_NOARG(ToolBarManager::Implementation, UpdateCallback)
         if (mbIsValid && mxLayouter.is())
             mpAsynchronousLayouterLock.reset();
     }
-    return 0;
 }
 
 IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
@@ -888,11 +887,10 @@ IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
     return 0;
 }
 
-IMPL_LINK_NOARG(ToolBarManager::Implementation, SetValidCallback)
+IMPL_LINK_NOARG_TYPED(ToolBarManager::Implementation, SetValidCallback, void*, void)
 {
     mnPendingSetValidCall = 0;
     SetValid(true);
-    return 0;
 }
 
 OUString ToolBarManager::Implementation::GetToolBarResourceName (

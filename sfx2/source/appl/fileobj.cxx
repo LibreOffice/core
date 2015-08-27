@@ -497,13 +497,13 @@ IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl )
     return 0;
 }
 
-IMPL_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, deleteMedium )
+IMPL_LINK_TYPED( SvFileObject, DelMedium_Impl, void*, p, void )
 {
+    SfxMediumRef* deleteMedium = static_cast<SfxMediumRef*>(p);
     nPostUserEventId = 0;
     assert(pDelMed == deleteMedium);
     pDelMed = NULL;
     delete deleteMedium;
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )

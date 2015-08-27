@@ -539,14 +539,13 @@ bool FloatingWindow::ImplIsFloatPopupModeWindow( const vcl::Window* pWindow )
     return false;
 }
 
-IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl)
+IMPL_LINK_NOARG_TYPED(FloatingWindow, ImplEndPopupModeHdl, void*, void)
 {
     VclPtr<FloatingWindow> pThis(this);
     mnPostId            = 0;
     mnPopupModeFlags    = FloatWinPopupFlags::NONE;
     mbPopupMode         = false;
     PopupModeEnd();
-    return 0;
 }
 
 bool FloatingWindow::Notify( NotifyEvent& rNEvt )

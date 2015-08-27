@@ -170,7 +170,7 @@ public:
     virtual void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& _rxToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& _rxParent ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
-    DECL_LINK( OnKeyPressed, void* );
+    DECL_LINK_TYPED( OnKeyPressed, void*, void );
 };
 
 }

@@ -579,10 +579,9 @@ void Dialog::dispose()
     SystemWindow::dispose();
 }
 
-IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
+IMPL_LINK_NOARG_TYPED(Dialog, ImplAsyncCloseHdl, void*, void)
 {
     Close();
-    return 0;
 }
 
 bool Dialog::ImplHandleCmdEvent( const CommandEvent& rCEvent )
@@ -999,7 +998,7 @@ void Dialog::EndAllDialogs( vcl::Window* pParent )
      if(!pParent || pParent->IsWindowOrChild(pModDialog,true))
      {
         pModDialog->EndDialog();
-        pModDialog->PostUserEvent( Link<>() );
+        pModDialog->PostUserEvent( Link<void*,void>() );
      }
      pModDialog = pTempModDialog;
    }

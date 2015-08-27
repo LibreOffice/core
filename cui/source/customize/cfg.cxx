@@ -2113,16 +2113,12 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
     return pNewEntry;
 }
 
-IMPL_LINK( SvxConfigPage, AsyncInfoMsg, OUString*, pMsg )
+IMPL_LINK_NOARG_TYPED( SvxConfigPage, AsyncInfoMsg, void*, void )
 {
-    (void)pMsg;
-
     // Asynchronous msg because of D&D
     ScopedVclPtr<MessageDialog>::Create( this,
         CUI_RES( RID_SVXSTR_MNUCFG_ALREADY_INCLUDED ),
         VCL_MESSAGE_INFO )->Execute();
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxConfigPage, MoveHdl, Button *, pButton, void )

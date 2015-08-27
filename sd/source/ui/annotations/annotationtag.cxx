@@ -668,11 +668,10 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
     return sal_IntPtr(true);
 }
 
-IMPL_LINK_NOARG(AnnotationTag, ClosePopupHdl)
+IMPL_LINK_NOARG_TYPED(AnnotationTag, ClosePopupHdl, void*, void)
 {
     mnClosePopupEvent = 0;
     ClosePopup();
-    return 0;
 }
 
 } // end of namespace sd

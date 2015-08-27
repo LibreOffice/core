@@ -477,11 +477,12 @@ IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl)
     return 0;
 }
 
-IMPL_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEntry*, pSelect)
+IMPL_LINK_TYPED(SwAddressListDialog, StaticListBoxSelectHdl_Impl, void*, p, void)
 {
+    SvTreeListEntry* pSelect = static_cast<SvTreeListEntry*>(p);
     //prevent nested calls of the select handler
     if(m_bInSelectHdl)
-        return 0;
+        return;
     EnterWait();
     m_bInSelectHdl = true;
     AddressUserData_Impl* pUserData = 0;
@@ -530,7 +531,6 @@ IMPL_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEntry*, pS
                     !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL ) );
     m_bInSelectHdl = false;
     LeaveWait();
-    return 0;
 }
 
 // detect the number of tables for a data source

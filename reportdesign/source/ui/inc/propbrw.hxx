@@ -83,7 +83,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> CreateComponentPair(
              const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xFormComponent
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
-    DECL_LINK( OnAsyncGetFocus, void* );
+    DECL_LINK_TYPED( OnAsyncGetFocus, void*, void );
 
 public:
     PropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xORB

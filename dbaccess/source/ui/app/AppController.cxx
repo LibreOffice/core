@@ -1897,11 +1897,10 @@ IMPL_LINK( OApplicationController, OnSelectContainer, void*, _pType )
     return 0L;
 }
 
-IMPL_LINK( OApplicationController, OnCreateWithPilot, void*, _pType )
+IMPL_LINK_TYPED( OApplicationController, OnCreateWithPilot, void*, _pType, void )
 {
     ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
     newElementWithPilot( eType );
-    return 0L;
 }
 
 void OApplicationController::newElementWithPilot( ElementType _eType )

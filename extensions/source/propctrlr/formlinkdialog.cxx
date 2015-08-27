@@ -673,13 +673,12 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG( FormLinkDialog, OnInitialize )
+    IMPL_LINK_NOARG_TYPED( FormLinkDialog, OnInitialize, void*, void )
     {
         initializeColumnLabels();
         initializeFieldLists();
         initializeLinks();
         initializeSuggest();
-        return 0L;
     }
 
 }   // namespace pcr

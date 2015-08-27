@@ -120,10 +120,10 @@ namespace dbaui
 
         virtual void CellModified() SAL_OVERRIDE;
 
-        DECL_LINK( AsynchDeactivate, void* );
+        DECL_LINK_TYPED( AsynchDeactivate, void*, void );
     private:
 
-        DECL_LINK( AsynchActivate, void* );
+        DECL_LINK_TYPED( AsynchActivate, void*, void );
 
     };
 
@@ -200,16 +200,14 @@ namespace dbaui
         return EditBrowseBox::PreNotify(rNEvt);
     }
 
-    IMPL_LINK_NOARG(ORelationControl, AsynchActivate)
+    IMPL_LINK_NOARG_TYPED(ORelationControl, AsynchActivate, void*, void)
     {
         ActivateCell();
-        return 0L;
     }
 
-    IMPL_LINK_NOARG(ORelationControl, AsynchDeactivate)
+    IMPL_LINK_NOARG_TYPED(ORelationControl, AsynchDeactivate, void*, void)
     {
         DeactivateCell();
-        return 0L;
     }
 
     bool ORelationControl::IsTabAllowed(bool bForward) const

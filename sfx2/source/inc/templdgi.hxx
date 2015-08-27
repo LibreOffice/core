@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 class DropListBox_Impl : public SvTreeListBox
 {
 private:
-    DECL_LINK(OnAsyncExecuteDrop, void *);
+    DECL_LINK_TYPED(OnAsyncExecuteDrop, void *, void);
 
 protected:
     SfxCommonTemplateDialog_Impl* pDialog;
@@ -292,6 +292,7 @@ public:
     virtual ~SfxCommonTemplateDialog_Impl();
 
     DECL_LINK( MenuSelectHdl, Menu * );
+    DECL_LINK_TYPED( MenuSelectAsyncHdl, void*, void );
 
     virtual void EnableEdit( bool b = true )
     {

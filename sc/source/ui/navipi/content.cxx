@@ -1448,13 +1448,12 @@ void ScContentTree::DoDrag()
     delete pDocLoader;              // falls Dokument zum Draggen geladen wurde
 }
 
-IMPL_LINK_NOARG(ScContentTree, ExecDragHdl)
+IMPL_LINK_NOARG_TYPED(ScContentTree, ExecDragHdl, void*, void)
 {
     //  als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch der
     //  Navigator geloescht werden darf
 
     DoDrag();
-    return 0;
 }
 
 bool ScContentTree::LoadFile( const OUString& rUrl )

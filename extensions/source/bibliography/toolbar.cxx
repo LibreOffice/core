@@ -176,7 +176,7 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
     }
 }
 
-BibToolBar::BibToolBar(vcl::Window* pParent, Link<> aLink, WinBits nStyle):
+BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink, WinBits nStyle):
     ToolBox(pParent,BibResId(RID_BIB_TOOLBAR)),
     aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
     aBigImgLst(BibResId( RID_TOOLBAR_BIGIMGLIST )),

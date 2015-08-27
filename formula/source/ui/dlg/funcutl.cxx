@@ -437,7 +437,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
 
 //When an Event cleared wurde, this routine is
 //first called.
-IMPL_LINK_NOARG(EditBox, ChangedHdl)
+IMPL_LINK_NOARG_TYPED(EditBox, ChangedHdl, void*, void)
 {
     if(pMEdit!=nullptr)
     {
@@ -449,7 +449,6 @@ IMPL_LINK_NOARG(EditBox, ChangedHdl)
             aOldSel=aNewSel;
         }
     }
-    return 0;
 }
 
 void EditBox::UpdateOldSel()

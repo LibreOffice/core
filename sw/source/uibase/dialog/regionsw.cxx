@@ -174,8 +174,9 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     }
 }
 
-IMPL_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
+IMPL_LINK_TYPED( SwWrtShell, InsertRegionDialog, void*, p, void )
 {
+    SwSectionData* pSect = static_cast<SwSectionData*>(p);
     boost::scoped_ptr<SwSectionData> xSectionData(pSect);
     if (xSectionData.get())
     {
@@ -199,7 +200,6 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         aTabDlg->SetSectionData(*xSectionData);
         aTabDlg->Execute();
     }
-    return 0;
 }
 
 void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
