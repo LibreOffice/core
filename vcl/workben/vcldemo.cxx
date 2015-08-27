@@ -1636,6 +1636,11 @@ class DemoPopup : public FloatingWindow
         DrawRect( Rectangle( Point( 1, 1 ), aSize ) );
         SetLineColor( aColor );
     }
+
+    virtual void MouseButtonDown( const MouseEvent & ) SAL_OVERRIDE
+    {
+        Application::Quit();
+    }
 };
 
 class DemoApp : public Application
