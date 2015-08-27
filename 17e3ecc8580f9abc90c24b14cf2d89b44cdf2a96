@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa0719c6_1a095d32",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-27T21:10:36Z",
+      "side": 1,
+      "message": "Haha beat me to it. I\u0027ll check if there are any other places that could use it. If so I\u0027ll add a second patch with a unit test.",
+      "parentUuid": "fa0719c6_9a1c4d79",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0719c6_ba303109",
         "filename": "include/o3tl/cow_wrapper.hxx",
         "patchSetId": 1
