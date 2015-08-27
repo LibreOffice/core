@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_3a2541c2",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-27T21:08:52Z",
+      "side": 0,
+      "message": "make_unique takes care of this for us and this, since this is only used inside this class it isn\u0027t used any more.",
+      "revId": "b103e7d786f5b7ec6cfe4f53f2ca317f06ceabc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_1a22fdb9",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-27T21:08:52Z",
+      "side": 0,
+      "message": "Same as above.",
+      "revId": "b103e7d786f5b7ec6cfe4f53f2ca317f06ceabc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_7a2fb9a1",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-27T21:08:52Z",
+      "side": 0,
+      "message": "Same as above.",
+      "revId": "b103e7d786f5b7ec6cfe4f53f2ca317f06ceabc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_5a2c75ab",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-27T21:08:52Z",
+      "side": 0,
+      "message": "Same.",
+      "revId": "b103e7d786f5b7ec6cfe4f53f2ca317f06ceabc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

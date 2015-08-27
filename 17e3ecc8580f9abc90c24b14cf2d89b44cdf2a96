@@ -16,6 +16,91 @@
       "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_ba303109",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-27T21:08:52Z",
+      "side": 1,
+      "message": "This is purely me being lazy :-) I\u0027m not attached to this change. I only did it for line 300 of globname.cxx.",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_da16c554",
+        "filename": "include/tools/globname.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-27T21:08:52Z",
+      "side": 1,
+      "message": "The internals of this constructor are entirely different from its older counterpart as the one on the left should do a shallow copy, but the cow_wrapper should initially do a deep copy. Correct me if I\u0027m wrong.",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_9a356df9",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-27T21:08:52Z",
+      "side": 1,
+      "message": "This is exactly the same as ImpSvGGlobalName( Empty ). I figured that was probably the best option for a default constructor.",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_da3fe5d4",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-27T21:08:52Z",
+      "side": 1,
+      "message": "Again, I figured the explicit EMPTY constructor was the best constructor to use",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_ba179153",
+        "filename": "tools/source/ref/globname.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-27T21:08:52Z",
+      "side": 1,
+      "message": "Me being lazy :-)",
+      "revId": "17e3ecc8580f9abc90c24b14cf2d89b44cdf2a96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
