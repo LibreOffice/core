@@ -594,7 +594,7 @@ void OpenGLSalBitmap::updateChecksum() const
         pThis->CreateTexture();
     }
 
-    pThis->mbChecksumValid = calcChecksumGL(pThis->maTexture, pThis->maChecksum);
+    pThis->mbChecksumValid = calcChecksumGL(pThis->maTexture, pThis->mnChecksum);
 }
 
 OpenGLContext* OpenGLSalBitmap::GetBitmapContext()
