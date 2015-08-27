@@ -76,7 +76,7 @@ public:
 
     void ApplyMatrix(float fWidth, float fHeight, float fPixelOffset = 0.0f);
 
-    bool DrawTexture( OpenGLTexture& rTexture );
+    bool DrawTexture( const OpenGLTexture& rTexture );
 
 protected:
     void SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData );

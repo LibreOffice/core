@@ -245,10 +245,8 @@ Bitmap& Bitmap::operator=( const Bitmap& rBitmap )
 
 bool Bitmap::IsEqual( const Bitmap& rBmp ) const
 {
-    return( IsSameInstance( rBmp ) ||
-            ( rBmp.GetSizePixel() == GetSizePixel() &&
-              rBmp.GetBitCount() == GetBitCount() &&
-              rBmp.GetChecksum() == GetChecksum() ) );
+    return(IsSameInstance(rBmp) || // Includes both are nullptr
+        (rBmp.mpImpBmp && mpImpBmp && mpImpBmp->ImplIsEqual(*rBmp.mpImpBmp)));
 }
 
 void Bitmap::SetEmpty()
@@ -293,49 +291,6 @@ sal_uLong Bitmap::GetChecksum() const
     if( mpImpBmp )
     {
         nRet = mpImpBmp->ImplGetChecksum();
-
-        if( !nRet )
-        {
-            BitmapReadAccess* pRAcc = const_cast<Bitmap*>(this)->AcquireReadAccess();
-
-            if( pRAcc && pRAcc->Width() && pRAcc->Height() )
-            {
-                sal_uInt32  nCrc = 0;
-                SVBT32      aBT32;
-
-                pRAcc->ImplZeroInitUnusedBits();
-
-                UInt32ToSVBT32( pRAcc->Width(), aBT32 );
-                nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-                UInt32ToSVBT32( pRAcc->Height(), aBT32 );
-                nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-                UInt32ToSVBT32( pRAcc->GetBitCount(), aBT32 );
-                nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-                UInt32ToSVBT32( pRAcc->GetColorMask().GetRedMask(), aBT32 );
-                nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-                UInt32ToSVBT32( pRAcc->GetColorMask().GetGreenMask(), aBT32 );
-                nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-                UInt32ToSVBT32( pRAcc->GetColorMask().GetBlueMask(), aBT32 );
-                nCrc = rtl_crc32( nCrc, aBT32, 4 );
-
-                if( pRAcc->HasPalette() )
-                {
-                    nCrc = rtl_crc32( nCrc, pRAcc->GetPalette().ImplGetColorBuffer(),
-                                      pRAcc->GetPaletteEntryCount() * sizeof( BitmapColor ) );
-                }
-
-                nCrc = rtl_crc32( nCrc, pRAcc->GetBuffer(), pRAcc->GetScanlineSize() * pRAcc->Height() );
-
-                mpImpBmp->ImplSetChecksum( nRet = nCrc );
-            }
-
-            if (pRAcc) ReleaseAccess( pRAcc );
-        }
     }
 
     return nRet;
@@ -549,6 +504,7 @@ bool Bitmap::Invert()
                     pAcc->SetPixel( nY, nX, pAcc->GetPixel( nY, nX ).Invert() );
         }
 
+        mpImpBmp->ImplInvalidateChecksum();
         ReleaseAccess( pAcc );
         bRet = true;
     }

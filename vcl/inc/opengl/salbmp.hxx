@@ -53,6 +53,9 @@ private:
     std::deque< OpenGLSalBitmapOp* >    maPendingOps;
 
     void makeCurrent();
+    virtual void updateChecksum() const;
+
+    bool calcChecksumGL(OpenGLTexture& rHashTexture, ChecksumType& rHash) const;
 
 public:
     OpenGLSalBitmap();

@@ -10,6 +10,7 @@
 $(eval $(call gb_Package_Package,vcl_opengl_shader,$(SRCDIR)/vcl/opengl))
 
 $(eval $(call gb_Package_add_files,vcl_opengl_shader,$(LIBO_ETC_FOLDER)/opengl,\
+    areaHashCRC64TFragmentShader.glsl \
 	areaScaleFastFragmentShader.glsl \
 	areaScaleFragmentShader.glsl \
 	blendedTextureFragmentShader.glsl \
