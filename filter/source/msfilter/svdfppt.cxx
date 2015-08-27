@@ -6508,10 +6508,12 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             bStatus = false;
                         else
                         {
-                            rIn.Seek( pE->nSlidePersistStartOffset );
+                            auto nOffset(pE->nSlidePersistStartOffset);
+                            bStatus = (nOffset == rIn.Seek(nOffset));
                             // now we got the right page and are searching for the right
                             // TextHeaderAtom
-                            while ( rIn.Tell() < pE->nSlidePersistEndOffset )
+                            auto nEndRecPos = DffPropSet::SanitizeEndPos(rIn, pE->nSlidePersistEndOffset);
+                            while (bStatus && rIn.Tell() < nEndRecPos)
                             {
                                 ReadDffRecordHeader( rIn, aClientTextBoxHd );
                                 if ( aClientTextBoxHd.nRecType == PPT_PST_TextHeaderAtom )
@@ -6522,7 +6524,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                         break;
                                     }
                                 }
-                                aClientTextBoxHd.SeekToEndOfRecord( rIn );
+                                if (!aClientTextBoxHd.SeekToEndOfRecord(rIn))
+                                    break;
                             }
                             if ( rIn.Tell() > pE->nSlidePersistEndOffset )
                                 bStatus = false;
@@ -6535,12 +6538,14 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                 // we have to calculate the correct record len
                                 DffRecordHeader aTmpHd;
-                                while ( rIn.Tell() < pE->nSlidePersistEndOffset )
+                                nEndRecPos = DffPropSet::SanitizeEndPos(rIn, pE->nSlidePersistEndOffset);
+                                while (rIn.Tell() < nEndRecPos)
                                 {
                                     ReadDffRecordHeader( rIn, aTmpHd );
                                     if ( ( aTmpHd.nRecType == PPT_PST_SlidePersistAtom ) || ( aTmpHd.nRecType == PPT_PST_TextHeaderAtom ) )
                                         break;
-                                    aTmpHd.SeekToEndOfRecord( rIn );
+                                    if (!aTmpHd.SeekToEndOfRecord(rIn))
+                                        break;
                                     aClientTextBoxHd.nRecLen += aTmpHd.nRecLen + DFF_COMMON_RECORD_HEADER_SIZE;
                                 }
                                 aClientTextBoxHd.SeekToContent( rIn );
