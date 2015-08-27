@@ -2857,7 +2857,9 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                         insertShapeId( nShapeId, pObj );
                                                 }
                                             }
-                                            aShapeHd.SeekToEndOfRecord( rStCtrl );
+                                            bool bSuccess = aShapeHd.SeekToEndOfRecord(rStCtrl);
+                                            if (!bSuccess)
+                                                break;
                                         }
                                     }
                                 }
