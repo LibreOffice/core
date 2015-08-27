@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sot_test_sot))
 
+$(eval $(call gb_CppunitTest_use_external,tools_test,boost_headers))
+
 $(eval $(call gb_CppunitTest_add_exception_objects,sot_test_sot, \
     sot/qa/cppunit/test_sot \
 ))
