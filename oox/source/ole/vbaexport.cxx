@@ -589,6 +589,14 @@ void exportDirStream(SvStream& rStrm)
     rStrm.WriteUInt32(0x00000000); // reserved
 }
 
+void exportModule1Stream(SvStream& rStrm)
+{
+    const OUString module1Stream = "Attribute VB_Name = \"Module1\"\r\n"
+                                   "Sub hello()\r\n"
+                                   " MsgBox \"Hello World - Excel VBA here\"\r\n"
+                                   "End Sub\r\n";
+    exportString(rStrm, module1Stream);
+}
 
 void exportThisWorkbookStream(SvStream& rStrm)
 {
@@ -610,6 +618,7 @@ void exportVBAProjectStream(SvStream& rStrm)
     rStrm.WriteUInt8(0x00); // Reserved2
     rStrm.WriteUInt16(0x0000); // Undefined
 }
+
 }
 
 void VbaExport::exportVBA()
@@ -626,6 +635,9 @@ void VbaExport::exportVBA()
     const OUString aDirFileName("/tmp/vba_dir_out.bin");
     SvFileStream aDirStream(aDirFileName, STREAM_READWRITE);
 
+    const OUString aModule1FileName("/tmp/vba_module1_out.bin");
+    SvFileStream aModule1Stream(aModule1FileName, STREAM_READWRITE);
+
     const OUString aThisWorkbookFileName("/tmp/vba_workbook_out.bin");
     SvFileStream aThisWorkbookStream(aThisWorkbookFileName, STREAM_READWRITE);
 
@@ -635,6 +647,7 @@ void VbaExport::exportVBA()
     // export
     exportDirStream(aDirStream);
     exportThisWorkbookStream(aThisWorkbookStream);
+    exportModule1Stream(aModule1Stream);
     exportVBAProjectStream(aVBAProjectStream);
 
     aDirStream.Seek(0);
