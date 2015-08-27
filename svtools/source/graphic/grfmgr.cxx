@@ -436,6 +436,9 @@ void GraphicObject::SetSwapStreamHdl()
 
 static sal_uInt32 GetCacheTimeInMs()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return 20000;
+
     const sal_uInt32 nSeconds =
         officecfg::Office::Common::Cache::GraphicManager::ObjectReleaseTime::get(
             comphelper::getProcessComponentContext());

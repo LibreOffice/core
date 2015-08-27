@@ -27,6 +27,7 @@
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
@@ -134,6 +135,9 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
 
 bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return false;
+
     bool bRet = false;
 
     try
