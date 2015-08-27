@@ -73,7 +73,7 @@ public:
     {
         updateChecksum();
         assert(mbChecksumValid);
-        rChecksum = maChecksum;
+        rChecksum = mnChecksum;
         return mbChecksumValid;
     }
 
@@ -83,8 +83,8 @@ public:
     }
 
 protected:
-    ChecksumType           maChecksum;
-    bool               mbChecksumValid;
+    ChecksumType mnChecksum;
+    bool         mbChecksumValid;
 
 protected:
     virtual void updateChecksum() const
@@ -99,7 +99,7 @@ protected:
         {
             nCrc = vcl_get_checksum(0, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
             pThis->ReleaseBuffer(pBuf, BITMAP_READ_ACCESS);
-            pThis->maChecksum = nCrc;
+            pThis->mnChecksum = nCrc;
             pThis->mbChecksumValid = true;
         }
         else
