@@ -1577,16 +1577,14 @@ void ToolBox::SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText )
         pItem->maQuickHelpText = rText;
 }
 
-const OUString& ToolBox::GetQuickHelpText( sal_uInt16 nItemId ) const
+OUString ToolBox::GetQuickHelpText( sal_uInt16 nItemId ) const
 {
-    static const OUString sEmpty;
-
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
     if ( pItem )
         return pItem->maQuickHelpText;
     else
-        return sEmpty;
+        return "";
 }
 
 void ToolBox::SetHelpText( sal_uInt16 nItemId, const OUString& rText )

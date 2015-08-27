@@ -437,7 +437,7 @@ public:
     using Window::SetQuickHelpText;
     void                SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText );
     using Window::GetQuickHelpText;
-    const OUString&     GetQuickHelpText( sal_uInt16 nItemId ) const;
+    OUString            GetQuickHelpText( sal_uInt16 nItemId ) const;
 
     void                SetHelpText( sal_uInt16 nItemId, const OUString& rText );
     const OUString&     GetHelpText( sal_uInt16 nItemId ) const;
