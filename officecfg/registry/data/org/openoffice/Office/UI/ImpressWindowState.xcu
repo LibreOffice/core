@@ -22,10 +22,10 @@
     <node oor:name="States">
       <node oor:name="private:resource/toolbar/extrusionobjectbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
-          <value>0,0</value>
+          <value>1,1</value>
         </prop>
         <prop oor:name="DockingArea" oor:type="xs:int">
-          <value>1</value>
+          <value>0</value>
         </prop>
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>true</value>
@@ -632,11 +632,14 @@
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
+        <prop oor:name="DockPos" oor:type="xs:string">
+          <value>0,1</value>
+        </prop>
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>true</value>
         </prop>
         <prop oor:name="DockingArea" oor:type="xs:int">
-          <value>1</value>
+          <value>0</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
           <value>true</value>
@@ -645,7 +648,7 @@
           <value xml:lang="en-US">Drawing</value>
         </prop>
         <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/tableobjectbar" oor:op="replace">
@@ -701,10 +704,10 @@
       </node>
       <node oor:name="private:resource/toolbar/bezierobjectbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
-          <value>0,0</value>
+          <value>1,1</value>
         </prop>
         <prop oor:name="DockingArea" oor:type="xs:int">
-          <value>1</value>
+          <value>0</value>
         </prop>
         <prop oor:name="Docked" oor:type="xs:boolean">
           <value>true</value>
