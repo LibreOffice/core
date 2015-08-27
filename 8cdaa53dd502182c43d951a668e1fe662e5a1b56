@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_ba04b1c6",
+        "filename": "sc/inc/cellsuno.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-08-27T07:36:46Z",
+      "side": 1,
+      "message": "Ah, you have stumbled upon some rather dodgy code here.\nThere is no point at all in putting an uno::Reference inside a std::unique_ptr, since it is already a reference-counting class.\nRather just change the definition to:\nstd::vector\u003cXModifyListenerRef\u003e",
+      "revId": "8cdaa53dd502182c43d951a668e1fe662e5a1b56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
