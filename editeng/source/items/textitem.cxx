@@ -1809,9 +1809,12 @@ SvxBackgroundColorItem::SvxBackgroundColorItem( const Color& rCol,
 {
 }
 
-SvxBackgroundColorItem:: SvxBackgroundColorItem( SvStream& rStrm, const sal_uInt16 Id  ) :
-    SvxColorItem( rStrm, Id )
+SvxBackgroundColorItem::SvxBackgroundColorItem(SvStream& rStrm, const sal_uInt16 nId)
+    : SvxColorItem(nId)
 {
+    Color aColor;
+    aColor.Read(rStrm);
+    SetValue(aColor);
 }
 
 SvxBackgroundColorItem::SvxBackgroundColorItem( const SvxBackgroundColorItem& rCopy ) :
@@ -1821,9 +1824,14 @@ SvxBackgroundColorItem::SvxBackgroundColorItem( const SvxBackgroundColorItem& rC
 
 SfxPoolItem* SvxBackgroundColorItem::Clone( SfxItemPool * ) const
 {
-    return new SvxBackgroundColorItem( *this );
+    return new SvxBackgroundColorItem(*this);
 }
 
+SvStream& SvxBackgroundColorItem::Store(SvStream& rStrm, sal_uInt16) const
+{
+    GetValue().Write(rStrm);
+    return rStrm;
+}
 
 SfxPoolItem* SvxBackgroundColorItem::Create(SvStream& rStrm, sal_uInt16 ) const
 {
@@ -1877,22 +1885,17 @@ bool SvxBackgroundColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId
 }
 
 // class SvxColorItem ----------------------------------------------------
-
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     mColor( COL_BLACK )
 {
 }
 
-
-
 SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     mColor( rCol )
 {
 }
-
-
 
 SvxColorItem::SvxColorItem( SvStream &rStrm, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
@@ -1902,20 +1905,15 @@ SvxColorItem::SvxColorItem( SvStream &rStrm, const sal_uInt16 nId ) :
     mColor = aColor;
 }
 
-
-
 SvxColorItem::SvxColorItem( const SvxColorItem &rCopy ) :
     SfxPoolItem( rCopy ),
     mColor( rCopy.mColor )
 {
 }
 
-
-
 SvxColorItem::~SvxColorItem()
 {
 }
-
 
 sal_uInt16 SvxColorItem::GetVersion( sal_uInt16 nFFVer ) const
 {
@@ -1926,8 +1924,6 @@ sal_uInt16 SvxColorItem::GetVersion( sal_uInt16 nFFVer ) const
     return  SOFFICE_FILEFORMAT_50 >= nFFVer ? VERSION_USEAUTOCOLOR : 0;
 }
 
-
-
 bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
@@ -1935,15 +1931,11 @@ bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
     return  mColor == static_cast<const SvxColorItem&>( rAttr ).mColor;
 }
 
-
-
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= (sal_Int32)(mColor.GetColor());
     return true;
 }
-
-
 
 bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
@@ -1955,14 +1947,10 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     return true;
 }
 
-
-
 SfxPoolItem* SvxColorItem::Clone( SfxItemPool * ) const
 {
     return new SvxColorItem( *this );
 }
-
-
 
 SvStream& SvxColorItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
@@ -1974,14 +1962,10 @@ SvStream& SvxColorItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
     return rStrm;
 }
 
-
-
 SfxPoolItem* SvxColorItem::Create(SvStream& rStrm, sal_uInt16 /*nVer*/ ) const
 {
     return new SvxColorItem( rStrm, Which() );
 }
-
-
 
 bool SvxColorItem::GetPresentation
 (

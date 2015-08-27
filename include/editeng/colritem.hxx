@@ -91,11 +91,11 @@ class EDITENG_DLLPUBLIC SvxBackgroundColorItem : public SvxColorItem
         SvxBackgroundColorItem( SvStream& rStrm, const sal_uInt16 nId  );
         SvxBackgroundColorItem( const SvxBackgroundColorItem& rCopy );
 
-        virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-        virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-
-        virtual bool QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
-        virtual bool PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0) SAL_OVERRIDE;
+        virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
+        virtual SvStream& Store(SvStream& rStream, sal_uInt16 nVersion) const SAL_OVERRIDE;
+        virtual SfxPoolItem* Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
+        virtual bool QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId = 0) const SAL_OVERRIDE;
+        virtual bool PutValue(const css::uno::Any& rVal, sal_uInt8 nMemberId) SAL_OVERRIDE;
 };
 
 #endif
