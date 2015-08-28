@@ -856,7 +856,9 @@
            <desc>Specifies if OpenGL rendering should be used in VCL backends
                 supporting it.</desc>
         </info>
-        <value>false</value>
+        <value install:module="macosx">false</value>
+        <value install:module="unx">false</value>
+        <value install:module="wnt">true</value>
       </prop>
       <prop oor:name="ForceOpenGL" oor:type="xs:boolean" oor:nillable="false">
         <info>
