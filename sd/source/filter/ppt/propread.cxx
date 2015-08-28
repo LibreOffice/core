@@ -93,7 +93,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
     {
         case VT_LPSTR :
         {
-            if ( nItemSize )
+            if (nItemSize)
             {
                 auto nMaxSizePossible = remainingSize();
                 if (nItemSize > nMaxSizePossible)
@@ -101,6 +101,10 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                     SAL_WARN("sd.filter", "String of Len " << nItemSize << " claimed, only " << nMaxSizePossible << " possible");
                     nItemSize = nMaxSizePossible;
                 }
+            }
+
+            if (nItemSize)
+            {
                 try
                 {
                     sal_Char* pString = new sal_Char[ nItemSize ];
@@ -144,7 +148,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
 
         case VT_LPWSTR :
         {
-            if ( nItemSize )
+            if (nItemSize)
             {
                 auto nMaxSizePossible = remainingSize() / sizeof(sal_Unicode);
                 if (nItemSize > nMaxSizePossible)
@@ -152,7 +156,10 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                     SAL_WARN("sd.filter", "String of Len " << nItemSize << " claimed, only " << nMaxSizePossible << " possible");
                     nItemSize = nMaxSizePossible;
                 }
+            }
 
+            if (nItemSize)
+            {
                 try
                 {
                     sal_Unicode* pString = new sal_Unicode[ nItemSize ];
