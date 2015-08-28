@@ -64,7 +64,6 @@ APP1STDLIBS= \
 APP1IMPLIB= i$(APP1TARGET)
 APP1RPATH = NONE
 DEF1NAME    =$(APP1TARGET)
-APP1VERSIONMAP = export.map
 APP1TEST = enabled
 
 # END ------------------------------------------------------------------
