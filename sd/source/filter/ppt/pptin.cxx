@@ -520,7 +520,8 @@ bool ImplSdPPTImport::Import()
                     break;
                 rStCtrl.SeekRel( 8 );
                 rStCtrl.ReadUInt32( pPtr->nIndex );
-                aHyperE.SeekToEndOfRecord( rStCtrl );
+                if (!aHyperE.SeekToEndOfRecord(rStCtrl))
+                    break;
             }
         }
     }
@@ -819,7 +820,8 @@ bool ImplSdPPTImport::Import()
                                             }
                                             break;
                                         }
-                                        aProgTagContentHd.SeekToEndOfRecord( rStCtrl );
+                                        if (!aProgTagContentHd.SeekToEndOfRecord(rStCtrl))
+                                            break;
                                     }
                                 }
                             }
@@ -945,7 +947,8 @@ bool ImplSdPPTImport::Import()
                                             case PPT_PST_SlideTime10Atom :  // ??? don't know, this atom is always 8 bytes big
                                             break;                          // and is appearing in nearly every l10 progtag
                                         }
-                                        aProgTagContentHd.SeekToEndOfRecord( rStCtrl );
+                                        if (!aProgTagContentHd.SeekToEndOfRecord(rStCtrl))
+                                            break;
                                     }
                                 }
                             }
@@ -957,7 +960,8 @@ bool ImplSdPPTImport::Import()
                             break;
                         }
 
-                        aHd.SeekToEndOfRecord( rStCtrl );
+                        if (!aHd.SeekToEndOfRecord(rStCtrl))
+                            break;
                     }
                     ImportPageEffect( pPage, bNewAnimationsUsed );
                 }
@@ -1777,7 +1781,8 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
                             }
                         }
                     }
-                    aHd.SeekToEndOfRecord( rStCtrl );
+                    if (!aHd.SeekToEndOfRecord(rStCtrl))
+                        break;
                 }
                 if ( bTryTwice && !bSSSlideInfoAtom )
                 {
@@ -1939,7 +1944,10 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                     }
                 }
                 if ( !bDone )
-                    aSoundRecHd.SeekToEndOfRecord( rStCtrl );
+                {
+                    if (!aSoundRecHd.SeekToEndOfRecord(rStCtrl))
+                        break;
+                }
             }
         }
     }
@@ -1999,7 +2007,8 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
                                         }
                                         break;
                                     }
-                                    aHd.SeekToEndOfRecord( rStCtrl );
+                                    if (!aHd.SeekToEndOfRecord(rStCtrl))
+                                        break;
                                 }
                                 break;
                             }
@@ -2008,7 +2017,8 @@ OUString ImplSdPPTImport::ReadMedia( sal_uInt32 nMediaRef ) const
                 }
                 break;
             }
-            aHdMovie.SeekToEndOfRecord( rStCtrl );
+            if (!aHdMovie.SeekToEndOfRecord(rStCtrl))
+                break;
         }
     }
     return aRetVal;
@@ -2663,7 +2673,8 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         }
                         break;
                     }
-                    aHd.SeekToEndOfRecord( rSt );
+                    if (!aHd.SeekToEndOfRecord(rSt))
+                        break;
                 }
                 while( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nClientDataLen ) );
 
