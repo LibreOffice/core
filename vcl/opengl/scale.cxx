@@ -305,7 +305,7 @@ bool OpenGLSalBitmap::ImplScaleArea( double rScaleX, double rScaleY )
 
 bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag )
 {
-    SAL_INFO( "vcl.opengl", "::ImplScale" );
+    VCL_GL_INFO( "vcl.opengl", "::ImplScale" );
 
     maUserBuffer.reset();
     makeCurrent();
@@ -353,13 +353,13 @@ ScaleOp::ScaleOp(
 
 bool ScaleOp::Execute()
 {
-    SAL_INFO( "vcl.opengl", "::Execute" );
+    VCL_GL_INFO( "vcl.opengl", "::Execute" );
     return mpBitmap->ImplScale( mfScaleX, mfScaleY, mnScaleFlag );
 }
 
 void ScaleOp::GetSize( Size& rSize ) const
 {
-    SAL_INFO( "vcl.opengl", "::GetSize" );
+    VCL_GL_INFO( "vcl.opengl", "::GetSize" );
     rSize.setWidth( rSize.Width() * mfScaleX );
     rSize.setHeight( rSize.Height() * mfScaleY );
 }
@@ -368,7 +368,7 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpSc
 {
     OpenGLZone aZone;
 
-    SAL_INFO("vcl.opengl", "::Scale " << int(nScaleFlag)
+    VCL_GL_INFO("vcl.opengl", "::Scale " << int(nScaleFlag)
              << " from " << mnWidth << "x" << mnHeight
              << " to " << (mnWidth * rScaleX) << "x" << (mnHeight * rScaleY) );
 
@@ -382,7 +382,7 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpSc
         makeCurrent();
         if( mpContext == NULL )
         {
-            SAL_INFO( "vcl.opengl", "Add ScaleOp to pending operations" );
+            VCL_GL_INFO( "vcl.opengl", "Add ScaleOp to pending operations" );
             maPendingOps.push_back( new ScaleOp( this, rScaleX, rScaleY, nScaleFlag ) );
         }
         else
