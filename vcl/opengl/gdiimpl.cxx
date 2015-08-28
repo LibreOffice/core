@@ -1418,27 +1418,31 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     basegfx::B2DPolygon aPolygon = rPolygon;
     const double fHalfWidth = 0.5 * rLineWidth.getX();
 
-    // #i122456# This is probably thought to happen to align hairlines to pixel positions, so
-    // it should be a 0.5 translation, not more. It will definitely go wrong with fat lines
-    aPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix(0.5, 0.5) );
-
     // shortcut for hairline drawing to improve performance
-    //bool bDrawnOk = true;
     if( bIsHairline )
     {
-        PreDraw();
-        if( UseSolidAA( mnLineColor ) )
+        basegfx::B2DTrapezoidVector aTrapezVector;
+        basegfx::tools::createLineTrapezoidFromB2DPolygon(aTrapezVector, aPolygon, rLineWidth.getX());
+        if (aTrapezVector.size())
         {
-            sal_uInt32 nPoints = rPolygon.count();
-            for (sal_uInt32 i = 0; i < nPoints - 1; ++i)
+            PreDraw();
+            if (UseSolidAA(mnLineColor, fTransparency))
             {
-                const basegfx::B2DPoint& rPt1 = rPolygon.getB2DPoint(i);
-                const basegfx::B2DPoint& rPt2 = rPolygon.getB2DPoint(i+1);
-                DrawLineAA(rPt1.getX(), rPt1.getY(),
-                           rPt2.getX(), rPt2.getY());
+                for (size_t i = 0; i < aTrapezVector.size(); ++i)
+                {
+                    const basegfx::B2DPolygon& rTrapezPolygon = aTrapezVector[i].getB2DPolygon();
+                    sal_uInt32 nPoints = rTrapezPolygon.count();
+                    for (sal_uInt32 j = 0; j < nPoints - 1; ++j)
+                    {
+                        const basegfx::B2DPoint& rPoint1 = rTrapezPolygon.getB2DPoint(j);
+                        const basegfx::B2DPoint& rPoint2 = rTrapezPolygon.getB2DPoint(j + 1);
+                        DrawLineAA(rPoint1.getX(), rPoint1.getY(),
+                                   rPoint2.getX(), rPoint2.getY());
+                    }
+                }
             }
+            PostDraw();
         }
-        PostDraw();
         return true;
     }
 
