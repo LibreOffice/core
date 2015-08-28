@@ -684,7 +684,6 @@ void DdeTopic::Connect( sal_IntPtr nId )
 
 void DdeTopic::Disconnect( sal_IntPtr nId )
 {
-    aDisconnectLink.Call( (void*)nId );
 }
 
 void DdeTopic::_Disconnect( sal_IntPtr nId )

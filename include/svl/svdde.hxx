@@ -309,7 +309,6 @@ private:
     DdeString*            pName;
     OUString              aItem;
     std::vector<DdeItem*> aItems;
-    Link<>                aDisconnectLink;
 
 public:
                     DdeTopic( SAL_UNUSED_PARAMETER const OUString& );
