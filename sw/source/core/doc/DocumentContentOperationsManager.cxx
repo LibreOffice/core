@@ -3201,7 +3201,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     const SwNodeRange& rRg,
     const sal_Int32 nEndContentIndex,
     const SwNodeIndex& rStartIdx,
-    bool bCopyFlyAtFly,
+    const bool bCopyFlyAtFly,
     const bool bMergedFirstNode ) const
 {
     // First collect all Flys, sort them according to their ordering number,
@@ -3223,22 +3223,25 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         bool bAtContent = (pAnchor->GetAnchorId() == FLY_AT_PARA);
         if ( !pAPos )
             continue;
+        sal_uLong nSkipAfter = pAPos->nNode.GetIndex();
+        sal_uLong nStart = rRg.aStart.GetIndex();
         switch ( pAnchor->GetAnchorId() )
         {
             case FLY_AT_FLY:
-                if( bCopyFlyAtFly && rRg.aStart > pAPos->nNode.GetIndex() + 1 )
-                    continue;
+                if(bCopyFlyAtFly)
+                    ++nSkipAfter;
+                else if(m_rDoc.getIDocumentRedlineAccess().IsRedlineMove())
+                    ++nStart;
             break;
             case FLY_AT_CHAR:
             case FLY_AT_PARA:
-                bCopyFlyAtFly = false;
+                if(m_rDoc.getIDocumentRedlineAccess().IsRedlineMove())
+                    ++nStart;
             break;
             default:
                 continue;
         }
-        if ( !bCopyFlyAtFly && ( m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()
-                    ? rRg.aStart >= pAPos->nNode
-                    : rRg.aStart > pAPos->nNode ))
+        if ( nStart > nSkipAfter )
             continue;
         if ( pAPos->nNode > rRg.aEnd )
             continue;
