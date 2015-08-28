@@ -21,7 +21,7 @@
 #define INCLUDED_SCRIPTING_SOURCE_PROVIDER_BROWSENODEFACTORYIMPL_HXX
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -36,7 +36,7 @@ namespace browsenodefactory
 {
 
 class BrowseNodeFactoryImpl :
-    public ::cppu::WeakImplHelper2 <
+    public ::cppu::WeakImplHelper <
         css::script::browse::XBrowseNodeFactory,
         css::lang::XServiceInfo >
 {

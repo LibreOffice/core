@@ -25,7 +25,7 @@
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 
 
@@ -61,7 +61,7 @@ namespace scripting_protocolhandler
 {
 
 class ScriptProtocolHandler :
-public ::cppu::WeakImplHelper4< css::frame::XDispatchProvider,
+public ::cppu::WeakImplHelper< css::frame::XDispatchProvider,
     css::frame::XNotifyingDispatch, css::lang::XServiceInfo, css::lang::XInitialization >
 {
 private:

@@ -22,7 +22,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
 
@@ -51,7 +51,7 @@ using namespace ::sf_misc;
 namespace browsenodefactory
 {
 class BrowseNodeAggregator :
-    public ::cppu::WeakImplHelper1< browse::XBrowseNode >
+    public ::cppu::WeakImplHelper< browse::XBrowseNode >
 {
 private:
     OUString m_Name;
@@ -172,7 +172,7 @@ struct alphaSort
     }
 };
 class LocationBrowseNode :
-    public ::cppu::WeakImplHelper1< browse::XBrowseNode >
+    public ::cppu::WeakImplHelper< browse::XBrowseNode >
 {
 private:
     BrowseNodeAggregatorHash* m_hBNA;
@@ -370,7 +370,7 @@ struct alphaSortForBNodes
     }
 };
 
-typedef ::cppu::WeakImplHelper1< browse::XBrowseNode > t_BrowseNodeBase;
+typedef ::cppu::WeakImplHelper< browse::XBrowseNode > t_BrowseNodeBase;
 class DefaultBrowseNode :
     public t_BrowseNodeBase
 {
@@ -529,7 +529,7 @@ public:
 };
 
 class DefaultRootBrowseNode :
-    public ::cppu::WeakImplHelper1< browse::XBrowseNode >
+    public ::cppu::WeakImplHelper< browse::XBrowseNode >
 {
 
 private:
@@ -596,7 +596,7 @@ public:
 
 
 class SelectorBrowseNode :
-    public ::cppu::WeakImplHelper1< browse::XBrowseNode >
+    public ::cppu::WeakImplHelper< browse::XBrowseNode >
 {
 private:
     Reference< XComponentContext > m_xComponentContext;

@@ -35,7 +35,7 @@
 #include <com/sun/star/script/XScriptEventsAttacher.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <memory>
 
@@ -63,7 +63,7 @@ namespace dlgprov
                 const ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager,
                 const ::com::sun::star::uno::Any &aDialogSourceURL) throw ( ::com::sun::star::uno::Exception );
 
-    typedef ::cppu::WeakImplHelper4<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::awt::XDialogProvider2,

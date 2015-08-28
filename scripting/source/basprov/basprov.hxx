@@ -28,7 +28,7 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class BasicManager;
 
@@ -42,7 +42,7 @@ namespace basprov
     //  class BasicProviderImpl
 
 
-    typedef ::cppu::WeakImplHelper4<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::script::provider::XScriptProvider,
