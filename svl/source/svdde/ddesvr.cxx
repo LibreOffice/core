@@ -680,7 +680,6 @@ void DdeTopic::NotifyClient( const OUString& rItem )
 
 void DdeTopic::Connect( sal_IntPtr nId )
 {
-    aConnectLink.Call( (void*)nId );
 }
 
 void DdeTopic::Disconnect( sal_IntPtr nId )

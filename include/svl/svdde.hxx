@@ -309,7 +309,6 @@ private:
     DdeString*            pName;
     OUString              aItem;
     std::vector<DdeItem*> aItems;
-    Link<>                aConnectLink;
     Link<>                aDisconnectLink;
 
 public:
