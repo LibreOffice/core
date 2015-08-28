@@ -59,8 +59,8 @@ namespace svx
 
         DECL_LINK(PathSelect_Impl, void *);
 
-        DECL_LINK( HeaderSelect_Impl, HeaderBar * );
-        DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );
+        DECL_LINK_TYPED( HeaderSelect_Impl, HeaderBar *, void );
+        DECL_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar *, void );
         DECL_LINK( NameValidator, OUString*);
 
 

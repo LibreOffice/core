@@ -1445,10 +1445,10 @@ IMPL_LINK( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTabListBox*, /* pList */ )
     return 0;
 }
 
-IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
+IMPL_LINK_TYPED( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     if ( pBar && !pBar->GetCurItemId() )
-        return 0;
+        return;
 
     if ( !m_pHeaderBar->IsItemMode() )
     {
@@ -1471,7 +1471,6 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
             SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
         }
     }
-    return 1;
 }
 
 /** adds a new filter info entry to the ui filter list */

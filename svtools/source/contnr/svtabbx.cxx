@@ -615,7 +615,7 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)
 {
     vcl::Window* pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvHeaderTabListBox..CreateAccessibleHdl_Impl - accessible parent not found" );
@@ -629,7 +629,6 @@ IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl)
             m_pImpl->m_pHeaderBar->SetAccessible( xAccessible );
         }
     }
-    return 0;
 }
 
 void SvHeaderTabListBox::RecalculateAccessibleChildren()

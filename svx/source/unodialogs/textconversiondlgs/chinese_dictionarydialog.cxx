@@ -821,7 +821,7 @@ short ChineseDictionaryDialog::Execute()
     return nRet;
 }
 
-IMPL_LINK(ChineseDictionaryDialog, HeaderBarClick, HeaderBar*, pHeaderBar)
+IMPL_LINK_TYPED(ChineseDictionaryDialog, HeaderBarClick, HeaderBar*, pHeaderBar, void)
 {
     sal_uInt16 nId = pHeaderBar->GetCurItemId();
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits(nId);
@@ -840,8 +840,6 @@ IMPL_LINK(ChineseDictionaryDialog, HeaderBarClick, HeaderBar*, pHeaderBar)
         getActiveDictionary().sortByColumn(nId-1,bSortAtoZ);
         getReverseDictionary().sortByColumn(nId-1,bSortAtoZ);
     }
-
-    return 0;
 }
 
 

@@ -53,13 +53,13 @@ private:
 
     void        ChangeCurrentEntry( const OUString& _rFolder );
 
-    DECL_LINK_TYPED(PathHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( PathHdl_Impl, Button*, void);
     DECL_LINK(DoubleClickPathHdl_Impl, void *);
-    DECL_LINK_TYPED(StandardHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( StandardHdl_Impl, Button*, void);
 
     DECL_LINK(PathSelect_Impl, void *);
-    DECL_LINK(  HeaderSelect_Impl, HeaderBar * );
-    DECL_LINK(  HeaderEndDrag_Impl, HeaderBar * );
+    DECL_LINK_TYPED( HeaderSelect_Impl, HeaderBar *, void );
+    DECL_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar *, void );
 
     DECL_LINK_TYPED( DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );
 

@@ -235,7 +235,7 @@ protected:
 
     DECL_LINK_TYPED( ButtonHdl, Button *, void );
     DECL_LINK(TreeListHdl, void *);
-    DECL_LINK( implEndDragHdl, HeaderBar * );
+    DECL_LINK_TYPED( implEndDragHdl, HeaderBar *, void );
     DECL_LINK_TYPED( EditAccHdl, Accelerator *, void );
 
 

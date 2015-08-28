@@ -636,7 +636,7 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
 
     DECL_LINK_TYPED(OkHdl, Button*, void);
     DECL_LINK_TYPED(LeftRightHdl, Button*, void);
-    DECL_LINK(HeaderDragHdl, void *);
+    DECL_LINK_TYPED(HeaderDragHdl, HeaderBar*, void);
 
 public:
     SwAddStylesDlg_Impl(vcl::Window* pParent, SwWrtShell& rWrtSh, OUString rStringArr[]);
@@ -750,10 +750,9 @@ IMPL_LINK_NOARG_TYPED(SwAddStylesDlg_Impl, OkHdl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG(SwAddStylesDlg_Impl, HeaderDragHdl)
+IMPL_LINK_NOARG_TYPED(SwAddStylesDlg_Impl, HeaderDragHdl, HeaderBar*, void)
 {
     m_pHeaderTree->Invalidate();
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwAddStylesDlg_Impl, LeftRightHdl, Button*, pBtn, void)

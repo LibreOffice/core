@@ -64,11 +64,11 @@ private:
 
     const CollatorWrapper aCollator;
 
-    DECL_LINK( StartDragHdl, HeaderBar* );
-    DECL_LINK( DragHdl, HeaderBar* );
-    DECL_LINK( EndDragHdl, HeaderBar* );
-    DECL_LINK( HeaderBarClick, HeaderBar* );
-    DECL_LINK( HeaderBarDblClick, HeaderBar* );
+    DECL_LINK_TYPED( StartDragHdl, HeaderBar*, void );
+    DECL_LINK_TYPED( DragHdl, HeaderBar*, void );
+    DECL_LINK_TYPED( EndDragHdl, HeaderBar*, void );
+    DECL_LINK_TYPED( HeaderBarClick, HeaderBar*, void );
+    DECL_LINK_TYPED( HeaderBarDblClick, HeaderBar*, void );
     DECL_LINK( CompareHdl, SvSortData* );
 
 protected:

@@ -133,7 +133,7 @@ private:
     AccessibleChildren              m_aAccessibleChildren;
 
     DECL_DLLPRIVATE_LINK( ScrollHdl_Impl, void* );
-    DECL_DLLPRIVATE_LINK( CreateAccessibleHdl_Impl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( CreateAccessibleHdl_Impl, HeaderBar*, void );
 
     void            RecalculateAccessibleChildren();
 

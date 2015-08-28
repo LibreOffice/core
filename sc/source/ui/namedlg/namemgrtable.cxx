@@ -60,8 +60,7 @@ ScRangeManagerTable::ScRangeManagerTable( SvSimpleTableContainer& rParent, boost
     ShowTable();
     SetSelectionMode(MULTIPLE_SELECTION);
     SetScrolledHdl( LINK( this, ScRangeManagerTable, ScrollHdl ) );
-    void* pNull = NULL;
-    HeaderEndDragHdl(pNull);
+    HeaderEndDragHdl(NULL);
 }
 
 void ScRangeManagerTable::Resize()
@@ -99,8 +98,7 @@ void ScRangeManagerTable::setColWidths()
     rHeaderBar.SetItemSize( ITEMID_SCOPE, nTabSize);
     static long aStaticTabs[] = {3, 0, nTabSize, 2*nTabSize };
     SetTabs( &aStaticTabs[0], MAP_PIXEL );
-    void* pNull = NULL;
-    HeaderEndDragHdl(pNull);
+    HeaderEndDragHdl(NULL);
 }
 
 ScRangeManagerTable::~ScRangeManagerTable()
@@ -278,7 +276,7 @@ void CalculateItemSize(const long& rTableSize, long& rItemNameSize, long& rItemR
 
 }
 
-IMPL_LINK_NOARG(ScRangeManagerTable, HeaderEndDragHdl)
+IMPL_LINK_NOARG_TYPED(ScRangeManagerTable, HeaderEndDragHdl, HeaderBar*, void)
 {
     HeaderBar& rHeaderBar = GetTheHeaderBar();
 
@@ -299,8 +297,6 @@ IMPL_LINK_NOARG(ScRangeManagerTable, HeaderEndDragHdl)
     SetTab(1, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
     aSz.Width() += nItemRangeSize;
     SetTab(2, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScRangeManagerTable, ScrollHdl)

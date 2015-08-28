@@ -129,7 +129,7 @@ private:
     DECL_LINK_TYPED( AddHdl, Button*, void );
     DECL_LINK_TYPED( ModifyHdl, Button*, void );
     DECL_LINK_TYPED( DeleteHdl, Button*, void );
-    DECL_LINK( HeaderBarClick, HeaderBar* );
+    DECL_LINK_TYPED( HeaderBarClick, HeaderBar*, void );
 
     void initDictionaryControl(DictionaryList *pList,
         const css::uno::Reference< css::linguistic2::XConversionDictionary>& xDictionary);

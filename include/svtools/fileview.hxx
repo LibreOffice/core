@@ -68,8 +68,8 @@ private:
 
     ::com::sun::star::uno::Sequence< OUString > mpBlackList;
 
-    DECL_DLLPRIVATE_LINK(               HeaderSelect_Impl, HeaderBar * );
-    DECL_DLLPRIVATE_LINK(               HeaderEndDrag_Impl, HeaderBar * );
+    DECL_DLLPRIVATE_LINK_TYPED( HeaderSelect_Impl, HeaderBar*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar*, void );
 
 protected:
     virtual void GetFocus() SAL_OVERRIDE;

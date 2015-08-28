@@ -82,13 +82,13 @@ static long nTabs[] =
 #define LB_MACROS_ITEMPOS    2
 
 
-IMPL_LINK( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
+IMPL_LINK_TYPED( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     DBG_ASSERT( pBar == maHeaderBar.get(), "*MacroEventListBox::HeaderEndDrag_Impl: something is wrong here..." );
     (void)pBar;
 
     if( !maHeaderBar->GetCurItemId() )
-        return 0;
+        return;
 
     if( !maHeaderBar->IsItemMode() )
     {
@@ -113,7 +113,6 @@ IMPL_LINK( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
             }
         }
     }
-    return 1;
 }
 
 bool MacroEventListBox::Notify( NotifyEvent& rNEvt )

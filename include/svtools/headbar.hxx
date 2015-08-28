@@ -249,12 +249,12 @@ private:
     bool                mbOutDrag;
     bool                mbButtonStyle;
     bool                mbItemMode;
-    Link<>              maStartDragHdl;
-    Link<>              maDragHdl;
-    Link<>              maEndDragHdl;
-    Link<>              maSelectHdl;
-    Link<>              maDoubleClickHdl;
-    Link<>              maCreateAccessibleHdl;
+    Link<HeaderBar*,void> maStartDragHdl;
+    Link<HeaderBar*,void> maDragHdl;
+    Link<HeaderBar*,void> maEndDragHdl;
+    Link<HeaderBar*,void> maSelectHdl;
+    Link<HeaderBar*,void> maDoubleClickHdl;
+    Link<HeaderBar*,void> maCreateAccessibleHdl;
 
     VCLXHeaderBar*      m_pVCLXHeaderBar;
 
@@ -340,12 +340,12 @@ public:
     inline void         SetHelpId( const OString& rId )    { Window::SetHelpId( rId ); }
 
 
-    inline void         SetStartDragHdl( const Link<>& rLink )      { maStartDragHdl = rLink; }
-    inline void         SetDragHdl( const Link<>& rLink )           { maDragHdl = rLink; }
-    inline void         SetEndDragHdl( const Link<>& rLink )        { maEndDragHdl = rLink; }
-    inline void         SetSelectHdl( const Link<>& rLink )         { maSelectHdl = rLink; }
-    inline void         SetDoubleClickHdl( const Link<>& rLink )    { maDoubleClickHdl = rLink; }
-    inline void         SetCreateAccessibleHdl( const Link<>& rLink ) { maCreateAccessibleHdl = rLink; }
+    inline void         SetStartDragHdl( const Link<HeaderBar*,void>& rLink )      { maStartDragHdl = rLink; }
+    inline void         SetDragHdl( const Link<HeaderBar*,void>& rLink )           { maDragHdl = rLink; }
+    inline void         SetEndDragHdl( const Link<HeaderBar*,void>& rLink )        { maEndDragHdl = rLink; }
+    inline void         SetSelectHdl( const Link<HeaderBar*,void>& rLink )         { maSelectHdl = rLink; }
+    inline void         SetDoubleClickHdl( const Link<HeaderBar*,void>& rLink )    { maDoubleClickHdl = rLink; }
+    inline void         SetCreateAccessibleHdl( const Link<HeaderBar*,void>& rLink ) { maCreateAccessibleHdl = rLink; }
 
     inline bool         IsDragable() const                          { return mbDragable; }
 

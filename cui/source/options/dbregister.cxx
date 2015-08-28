@@ -315,12 +315,12 @@ IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, EditHdl, Button*, void)
 
 
 
-IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
+IMPL_LINK_TYPED( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar, void )
 {
     assert(pBar);
 
     if (!pBar || pBar->GetCurItemId() != ITEMID_TYPE)
-        return 0;
+        return;
 
     HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
     bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
@@ -341,17 +341,16 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
     SvTreeList* pModel = m_pPathBox->GetModel();
     pModel->SetSortMode( eMode );
     pModel->Resort();
-    return 1;
 }
 
 
 
-IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
+IMPL_LINK_TYPED( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     assert(pBar);
 
     if (!pBar || !pBar->GetCurItemId())
-        return 0;
+        return;
 
     if ( !pBar->IsItemMode() )
     {
@@ -374,7 +373,6 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
             m_pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
         }
     }
-    return 1;
 }
 
 

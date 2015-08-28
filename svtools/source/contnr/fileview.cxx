@@ -1301,7 +1301,7 @@ void SvtFileView::EndInplaceEditing( bool _bCancel )
     return mpImp->EndEditing( _bCancel );
 }
 
-IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
+IMPL_LINK_TYPED( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar, void )
 {
     DBG_ASSERT( pBar, "no headerbar" );
     sal_uInt16 nItemID = pBar->GetCurItemId();
@@ -1340,11 +1340,10 @@ IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
 
     pBar->SetItemBits( nItemID, nBits );
     mpImp->Resort_Impl( nItemID, !bUp );
-    return 1;
 }
 
 
-IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar )
+IMPL_LINK_TYPED( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     if ( !pBar->IsItemMode() )
     {
@@ -1360,8 +1359,6 @@ IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar )
             mpImp->mpView->SetTab( i, aSize.Width(), MAP_PIXEL );
         }
     }
-
-    return 0;
 }
 
 

@@ -63,7 +63,7 @@ private:
     VclPtr<HeaderBar>  m_pHeaderBar;
 
     DECL_LINK( TabBoxScrollHdl_Impl, SvTabListBox* );
-    DECL_LINK( HeaderEndDrag_Impl, HeaderBar* );
+    DECL_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar*, void );
 
     static OUString getEntryString( const filter_info_impl* pInfo );
 

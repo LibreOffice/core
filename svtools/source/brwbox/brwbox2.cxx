@@ -1367,10 +1367,9 @@ IMPL_LINK_NOARG(BrowseBox, EndScrollHdl)
 
 
 
-IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar )
+IMPL_LINK_TYPED( BrowseBox, StartDragHdl, HeaderBar*, pBar, void )
 {
     pBar->SetDragSize( pDataWin->GetOutputSizePixel().Height() );
-    return 0;
 }
 
 

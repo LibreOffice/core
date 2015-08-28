@@ -634,10 +634,10 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
 
 
 
-IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
+IMPL_LINK_TYPED( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar, void )
 {
     if (!pBar || pBar->GetCurItemId() != ITEMID_TYPE)
-        return 0;
+        return;
 
     HeaderBarItemBits nBits = pBar->GetItemBits(ITEMID_TYPE);
     bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
@@ -658,15 +658,14 @@ IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
     SvTreeList* pModel = pPathBox->GetModel();
     pModel->SetSortMode( eMode );
     pModel->Resort();
-    return 1;
 }
 
 
 
-IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
+IMPL_LINK_TYPED( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 {
     if (!pBar || !pBar->GetCurItemId())
-        return 0;
+        return;
 
     if ( !pBar->IsItemMode() )
     {
@@ -689,7 +688,6 @@ IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
             pPathBox->SetTab( i, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
         }
     }
-    return 1;
 }
 
 

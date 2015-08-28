@@ -317,7 +317,7 @@ private:
 
     DECL_DLLPRIVATE_LINK(       ScrollHdl, ScrollBar * );
     DECL_DLLPRIVATE_LINK(       EndScrollHdl, void * );
-    DECL_DLLPRIVATE_LINK(       StartDragHdl, HeaderBar * );
+    DECL_DLLPRIVATE_LINK_TYPED(    StartDragHdl, HeaderBar *, void );
 
     SVT_DLLPRIVATE long            GetFrozenWidth() const;
 

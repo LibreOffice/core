@@ -1799,10 +1799,8 @@ IMPL_LINK_NOARG(WatchWindow, TreeListHdl)
     return 0;
 }
 
-IMPL_LINK( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
+IMPL_LINK_NOARG_TYPED( WatchWindow, implEndDragHdl, HeaderBar *, void )
 {
-    (void)pBar;
-
     const sal_Int32 TAB_WIDTH_MIN = 10;
     sal_Int32 nMaxWidth =
         aHeaderBar->GetSizePixel().getWidth() - 2 * TAB_WIDTH_MIN;
@@ -1829,7 +1827,6 @@ IMPL_LINK( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
         nPos += aHeaderBar->GetItemSize( i );
         aTreeListBox->SetTab( i, nPos, MAP_PIXEL );
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( WatchWindow, EditAccHdl, Accelerator *, pAcc, void )

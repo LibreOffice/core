@@ -82,7 +82,7 @@ public:
     std::vector<ScRangeNameLine> GetSelectedEntries();
 
     DECL_LINK( ScrollHdl, void*);
-    DECL_LINK( HeaderEndDragHdl, void*);
+    DECL_LINK_TYPED( HeaderEndDragHdl, HeaderBar*, void);
 };
 
 #endif

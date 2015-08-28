@@ -394,49 +394,44 @@ void SvSimpleTable::Command( const CommandEvent& rCEvt )
     SvHeaderTabListBox::Command(rCEvt);
 }
 
-IMPL_LINK( SvSimpleTable, StartDragHdl, HeaderBar*, pCtr)
+IMPL_LINK_TYPED( SvSimpleTable, StartDragHdl, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
     {
         HBarStartDrag();
     }
-    return 0;
 }
 
-IMPL_LINK( SvSimpleTable, DragHdl, HeaderBar*, pCtr)
+IMPL_LINK_TYPED( SvSimpleTable, DragHdl, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
     {
         HBarDrag();
     }
-    return 0;
 }
 
-IMPL_LINK( SvSimpleTable, EndDragHdl, HeaderBar*, pCtr)
+IMPL_LINK_TYPED( SvSimpleTable, EndDragHdl, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
     {
         HBarEndDrag();
     }
-    return 0;
 }
 
-IMPL_LINK( SvSimpleTable, HeaderBarClick, HeaderBar*, pCtr)
+IMPL_LINK_TYPED( SvSimpleTable, HeaderBarClick, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
     {
         HBarClick();
     }
-    return 0;
 }
 
-IMPL_LINK( SvSimpleTable, HeaderBarDblClick, HeaderBar*, pCtr)
+IMPL_LINK_TYPED( SvSimpleTable, HeaderBarDblClick, HeaderBar*, pCtr, void)
 {
     if(pCtr==aHeaderBar.get())
     {
         HBarDblClick();
     }
-    return 0;
 }
 
 SvLBoxItem* SvSimpleTable::GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const
