@@ -22,6 +22,30 @@
       "revId": "3147ab27b387aa4dee45efb3a444035e1447a4be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_dd2a3f2c",
+        "filename": "filter/Library_svgfilter.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-28T08:33:56Z",
+      "side": 1,
+      "message": "Looks like we are not alone here: [1], [2]; still it\u0027s not clear, why this problem shows up now, during migration from 1.59-rc1 to 1.59 final. Deprecated names were added in 1.41: [3].\n\n* [1] http://stackoverflow.com/questions/31110409/boost-error-code-header-only-does-not-have-the-advertised-effect\n* [2] https://svn.boost.org/trac/boost/ticket/9542\n* [3] http://www.boost.org/doc/libs/1_41_0/libs/system/doc/reference.html",
+      "parentUuid": "fa0719c6_3ddd3b71",
+      "range": {
+        "startLine": 60,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 15
+      },
+      "revId": "3147ab27b387aa4dee45efb3a444035e1447a4be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
