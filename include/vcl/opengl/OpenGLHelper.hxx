@@ -24,16 +24,15 @@
 #endif
 
 /// Helper to do a SAL_INFO as well as a GL log.
-#if OSL_DEBUG_LEVEL > 0
-#  define VCL_GL_INFO(area,stream)          \
-    do {                                    \
-        ::std::ostringstream detail_stream; \
-        detail_stream << stream;            \
-        OpenGLHelper::debugMsgStream((area),detail_stream); \
-    } while (0)
-#else
-#  define VCL_GL_INFO(area,stream)
-#endif
+#define VCL_GL_INFO(area,stream) \
+    do { \
+        if (SAL_DETAIL_ENABLE_LOG_INFO) \
+        { \
+            ::std::ostringstream detail_stream; \
+            detail_stream << stream;            \
+            OpenGLHelper::debugMsgStream((area),detail_stream); \
+        } \
+    } while (false)
 
 class VCL_DLLPUBLIC OpenGLHelper
 {
