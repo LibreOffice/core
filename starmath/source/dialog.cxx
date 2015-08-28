@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "tools/rcid.h"
 #include <comphelper/string.hxx>
 #include <svl/eitem.hxx>
@@ -77,7 +81,6 @@ class SmFontStyles
     OUString aBold;
     OUString aItalic;
     OUString aBoldItalic;
-    OUString aEmpty;
 
 public:
     SmFontStyles();
@@ -118,17 +121,14 @@ const OUString& SmFontStyles::GetStyleName( sal_uInt16 nIdx ) const
     // 0 = "normal",  1 = "italic",
     // 2 = "bold",    3 = "bold italic"
 
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( nIdx < GetCount(), "index out of range" );
-#endif
+    assert( nIdx < GetCount() );
     switch (nIdx)
     {
         case 0 : return aNormal;
         case 1 : return aItalic;
         case 2 : return aBold;
-        case 3 : return aBoldItalic;
+        default: /*case 3:*/ return aBoldItalic;
     }
-    return aEmpty;
 }
 
 const SmFontStyles & GetFontStyles()
