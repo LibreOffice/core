@@ -73,7 +73,7 @@ static sal_Int32 lcl_getMaxSafeStrLen(sal_uInt32 nSize)
 
 bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
 {
-    sal_uInt32  i, nItemSize, nType, nItemPos;
+    sal_uInt32 nType, nItemPos;
     bool    bRetValue = false;
 
     nItemPos = Tell();
@@ -86,8 +86,8 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
     else
         nType = nStringType & VT_TYPEMASK;
 
-    nItemSize = 0; // Initialize in case stream fails.
-    ReadUInt32( nItemSize );
+    sal_uInt32 nItemSize(0); // Initialize in case stream fails.
+    ReadUInt32(nItemSize);
 
     switch( nType )
     {
@@ -95,6 +95,12 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
         {
             if ( nItemSize )
             {
+                auto nMaxSizePossible = remainingSize();
+                if (nItemSize > nMaxSizePossible)
+                {
+                    SAL_WARN("sd.filter", "String of Len " << nItemSize << " claimed, only " << nMaxSizePossible << " possible");
+                    nItemSize = nMaxSizePossible;
+                }
                 try
                 {
                     sal_Char* pString = new sal_Char[ nItemSize ];
@@ -104,7 +110,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                         if ( nItemSize > 1 )
                         {
                             sal_Unicode* pWString = reinterpret_cast<sal_Unicode*>(pString);
-                            for ( i = 0; i < nItemSize; i++ )
+                            for (sal_uInt32 i = 0; i < nItemSize; ++i)
                                 ReadUInt16( pWString[ i ] );
                             rString = OUString(pWString, lcl_getMaxSafeStrLen(nItemSize));
                         }
@@ -140,12 +146,19 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
         {
             if ( nItemSize )
             {
+                auto nMaxSizePossible = remainingSize() / sizeof(sal_Unicode);
+                if (nItemSize > nMaxSizePossible)
+                {
+                    SAL_WARN("sd.filter", "String of Len " << nItemSize << " claimed, only " << nMaxSizePossible << " possible");
+                    nItemSize = nMaxSizePossible;
+                }
+
                 try
                 {
                     sal_Unicode* pString = new sal_Unicode[ nItemSize ];
-                    for ( i = 0; i < nItemSize; i++ )
+                    for (sal_uInt32 i = 0; i < nItemSize; ++i)
                         ReadUInt16( pString[ i ] );
-                    if ( pString[ i - 1 ] == 0 )
+                    if ( pString[ nItemSize - 1 ] == 0 )
                     {
                         if ( (sal_uInt16)nItemSize > 1 )
                             rString = OUString(pString, lcl_getMaxSafeStrLen(nItemSize));
