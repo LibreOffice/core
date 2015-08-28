@@ -20,12 +20,12 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <data.hxx>
+#include <dconf.hxx>
 #include <groupnode.hxx>
 #include <localizedpropertynode.hxx>
 #include <localizedvaluenode.hxx>
 #include <nodemap.hxx>
 #include <propertynode.hxx>
-#include <readdconflayer.hxx>
 #include <setnode.hxx>
 
 // component-data is encoded in dconf as follows:
@@ -95,7 +95,7 @@
 //
 // TODO: support "mandatory" and "external"?
 
-namespace configmgr {
+namespace configmgr { namespace dconf {
 
 namespace {
 
@@ -941,13 +941,13 @@ void readDir(
 
 }
 
-void readDconfLayer(Data & data, int layer) {
+void readLayer(Data & data, int layer) {
     GObjectHolder<DConfClient> client(dconf_client_new());
     readDir(
         data, layer, rtl::Reference<Node>(), data.getComponents(), client,
         "/org/libreoffice/registry/");
 }
 
-}
+} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

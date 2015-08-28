@@ -7,18 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_READDCONFLAYER_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_READDCONFLAYER_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_DCONF_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_DCONF_HXX
 
 #include <sal/config.h>
 
 namespace configmgr { struct Data; }
 
-namespace configmgr {
+namespace configmgr { namespace dconf {
 
-void readDconfLayer(Data & data, int layer);
+void readLayer(Data & data, int layer);
 
-}
+} }
 
 #endif
 

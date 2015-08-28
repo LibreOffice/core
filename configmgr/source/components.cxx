@@ -66,7 +66,7 @@
 #include "xcsparser.hxx"
 
 #if ENABLE_DCONF
-#include <readdconflayer.hxx>
+#include <dconf.hxx>
 #endif
 
 #if defined WNT
@@ -536,7 +536,7 @@ Components::Components(
             if (url == "!") {
                 modificationTarget_ = ModificationTarget::Dconf;
             } else if (url == "*") {
-                readDconfLayer(data_, layer);
+                dconf::readLayer(data_, layer);
             } else {
                 throw css::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: unknown \"dconf\" kind \"" + url
