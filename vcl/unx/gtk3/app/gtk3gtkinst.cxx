@@ -385,6 +385,8 @@ Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents() thr
 void VclGtkClipboard::ClipboardGet(GtkClipboard* /*clipboard*/, GtkSelectionData *selection_data,
                                    guint info)
 {
+    if (!m_aContents.is())
+        return;
 
     GdkAtom type(gdk_atom_intern(OUStringToOString(m_aInfoToFlavor[info].MimeType,
                                                    RTL_TEXTENCODING_UTF8).getStr(),
