@@ -651,12 +651,7 @@ private:
 
     RulerSelection  maHoverSelection;
 
-    Link<>          maStartDragHdl;
-    Link<>          maDragHdl;
-    Link<>          maEndDragHdl;
-    Link<>          maClickHdl;
-    Link<>          maDoubleClickHdl;
-    Link<>          maExtraDownHdl;
+    Link<Ruler*,void>  maDoubleClickHdl;
 
     std::unique_ptr<RulerSelection> mxCurrentHitTest;
     std::unique_ptr<RulerSelection> mxPreviousHitTest;
@@ -792,8 +787,7 @@ public:
     void            SetStyle( WinBits nStyle );
     WinBits         GetStyle() const { return mnWinStyle; }
 
-    const Link<>&   GetStartDragHdl() const { return maStartDragHdl; }
-    void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
+    void            SetDoubleClickHdl( const Link<Ruler*,void>& rLink ) { maDoubleClickHdl = rLink; }
 
     void            SetTextRTL(bool bRTL);
     bool            GetTextRTL();

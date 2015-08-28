@@ -3181,9 +3181,6 @@ bool SvxRuler::StartDrag()
 
     bool bOk = true;
 
-    if(GetStartDragHdl().IsSet())
-        bOk = Ruler::StartDrag();
-
     if(bOk)
     {
         lInitialDragPos = GetDragPos();

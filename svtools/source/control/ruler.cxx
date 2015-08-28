@@ -2282,25 +2282,19 @@ void Ruler::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool Ruler::StartDrag()
 {
-    if ( maStartDragHdl.IsSet() )
-        return maStartDragHdl.Call( this );
-    else
-        return false;
+    return false;
 }
 
 void Ruler::Drag()
 {
-    maDragHdl.Call( this );
 }
 
 void Ruler::EndDrag()
 {
-    maEndDragHdl.Call( this );
 }
 
 void Ruler::Click()
 {
-    maClickHdl.Call( this );
 }
 
 void Ruler::DoubleClick()
@@ -2310,7 +2304,6 @@ void Ruler::DoubleClick()
 
 void Ruler::ExtraDown()
 {
-    maExtraDownHdl.Call( this );
 }
 
 void Ruler::Activate()

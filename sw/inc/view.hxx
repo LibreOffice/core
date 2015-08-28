@@ -502,7 +502,7 @@ public:
     void            ExecDraw(SfxRequest&);
     void            ExecTabWin(SfxRequest&);
     void            ExecuteStatusLine(SfxRequest&);
-    DECL_LINK( ExecRulerClick, Ruler * );
+    DECL_LINK_TYPED( ExecRulerClick, Ruler *, void );
     void            ExecSearch(SfxRequest&, bool bNoMessage = false);
     void            ExecViewOptions(SfxRequest &);
 
