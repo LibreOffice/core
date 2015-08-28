@@ -38,7 +38,7 @@ namespace svt
     {
     protected:
         HyperLabelImpl*     m_pImpl;
-        Link<>              maClickHdl;
+        Link<HyperLabel*,void>  maClickHdl;
 
         virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -69,7 +69,7 @@ namespace svt
         void                ToggleBackgroundColor( const Color& _rGBColor );
         void                SetInteractive( bool _bInteractive );
 
-        void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
+        void                SetClickHdl( const Link<HyperLabel*,void>& rLink ) { maClickHdl = rLink; }
 
         Size                CalcMinimumSize( long nMaxWidth = 0 ) const;
 

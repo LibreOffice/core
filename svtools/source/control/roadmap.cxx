@@ -69,7 +69,7 @@ public:
     void                    ToggleBackgroundColor( const Color& _rGBColor );
     void                    SetInteractive( bool _bInteractive );
 
-    void                    SetClickHdl( const Link<>& rLink );
+    void                    SetClickHdl( const Link<HyperLabel*,void>& rLink );
     void                    Enable( bool bEnable = true);
     bool                    IsEnabled() const;
     void                    GrabFocus();
@@ -646,9 +646,9 @@ bool ORoadmap::PreNotify(NotifyEvent& _rNEvt)
     return Window::PreNotify( _rNEvt );
 }
 
-IMPL_LINK(ORoadmap, ImplClickHdl, HyperLabel*, _CurHyperLabel)
+IMPL_LINK_TYPED(ORoadmap, ImplClickHdl, HyperLabel*, _CurHyperLabel, void)
 {
-   return SelectRoadmapItemByID( _CurHyperLabel->GetID() ) ? 1 : 0;
+   SelectRoadmapItemByID( _CurHyperLabel->GetID() );
 }
 
 void ORoadmap::DataChanged(const DataChangedEvent& rDCEvt)
@@ -813,7 +813,7 @@ void RoadmapItem::Update(ItemIndex _RMIndex, const OUString& _rText)
     ImplUpdateIndex( _RMIndex );
 }
 
-void RoadmapItem::SetClickHdl(const Link<>& rLink)
+void RoadmapItem::SetClickHdl(const Link<HyperLabel*,void>& rLink)
 {
     if ( mpDescription )
         mpDescription->SetClickHdl( rLink);
