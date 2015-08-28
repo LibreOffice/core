@@ -68,7 +68,7 @@ SvFileObject::~SvFileObject()
 {
     if (xMed.Is())
     {
-        xMed->SetDoneLink( Link<>() );
+        xMed->SetDoneLink( Link<void*,void>() );
         xMed.Clear();
     }
     if (nPostUserEventId)
@@ -463,7 +463,7 @@ void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Li
     }
 }
 
-IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl )
+IMPL_LINK_NOARG_TYPED( SvFileObject, LoadGrfReady_Impl, void*, void )
 {
     // When we come form here there it can not be an error no more.
     bLoadError = false;
@@ -485,7 +485,7 @@ IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl )
         bLoadAgain = true;
         if( xMed.Is() )
         {
-            xMed->SetDoneLink( Link<>() );
+            xMed->SetDoneLink( Link<void*,void>() );
             pDelMed = new SfxMediumRef(xMed);
             nPostUserEventId = Application::PostUserEvent(
                         LINK( this, SvFileObject, DelMedium_Impl ),
@@ -493,8 +493,6 @@ IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl )
             xMed.Clear();
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvFileObject, DelMedium_Impl, void*, p, void )

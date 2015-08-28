@@ -827,11 +827,10 @@ namespace frm
     }
 
 
-    IMPL_LINK_NOARG( OClickableImageBaseModel, DownloadDoneLink )
+    IMPL_LINK_NOARG_TYPED( OClickableImageBaseModel, DownloadDoneLink, void*, void )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         DownloadDone();
-        return 0;
     }
 
 

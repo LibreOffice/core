@@ -106,7 +106,7 @@ class SvtMatchContext_Impl: public salhelper::Thread
     css::uno::Reference< css::ucb::XCommandProcessor > processor_;
     sal_Int32 commandId_;
 
-    DECL_LINK(                      Select_Impl, void* );
+    DECL_LINK_TYPED(                Select_Impl, void*, void );
 
     virtual                         ~SvtMatchContext_Impl();
     virtual void                    execute() SAL_OVERRIDE;
@@ -207,14 +207,14 @@ void SvtMatchContext_Impl::execute( )
 // Cancellable does not discard the information gained so far, it
 // inserts all collected completions into the listbox.
 
-IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl )
+IMPL_LINK_NOARG_TYPED( SvtMatchContext_Impl, Select_Impl, void*, void )
 {
     // avoid recursion through cancel button
     {
         osl::MutexGuard g(mutex_);
         if (stopped_) {
             // Completion was stopped, no display:
-            return 0;
+            return;
         }
     }
 
@@ -273,8 +273,6 @@ IMPL_LINK_NOARG( SvtMatchContext_Impl, Select_Impl )
     // the box has this control as a member so we have to set that member
     // to zero before deleting ourself.
     pBox->pCtx.clear();
-
-    return 0;
 }
 
 

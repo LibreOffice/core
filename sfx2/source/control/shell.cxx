@@ -406,10 +406,9 @@ bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
     return aSet.GetItemState(nId) != SfxItemState::DISABLED;
 }
 
-sal_IntPtr ShellCall_Impl( void* pObj, void* pArg )
+void ShellCall_Impl( void* pObj, void* pArg )
 {
     static_cast<SfxShell*>(pObj)->ExecuteSlot( *static_cast<SfxRequest*>(pArg), nullptr );
-    return 0;
 }
 
 const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
@@ -420,7 +419,7 @@ const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
     {
         if( !pImp->pExecuter )
             pImp->pExecuter = new svtools::AsynchronLink(
-                Link<>( this, ShellCall_Impl ) );
+                Link<void*,void>( this, ShellCall_Impl ) );
         pImp->pExecuter->Call( new SfxRequest( rReq ) );
         return 0;
     }
@@ -670,11 +669,10 @@ bool SfxShell::HasUIFeature( sal_uInt32 )
     return false;
 }
 
-sal_IntPtr DispatcherUpdate_Impl( void*, void* pArg )
+void DispatcherUpdate_Impl( void*, void* pArg )
 {
     static_cast<SfxDispatcher*>(pArg)->Update_Impl( true );
     static_cast<SfxDispatcher*>(pArg)->GetBindings()->InvalidateAll(false);
-    return 0;
 }
 
 void SfxShell::UIFeatureChanged()
@@ -686,7 +684,7 @@ void SfxShell::UIFeatureChanged()
         // something my get stuck in the bunkered tools. Asynchronous call to
         // prevent recursion.
         if ( !pImp->pUpdater )
-            pImp->pUpdater = new svtools::AsynchronLink( Link<>( this, DispatcherUpdate_Impl ) );
+            pImp->pUpdater = new svtools::AsynchronLink( Link<void*,void>( this, DispatcherUpdate_Impl ) );
 
         // Multiple views allowed
         pImp->pUpdater->Call( pFrame->GetDispatcher(), true );

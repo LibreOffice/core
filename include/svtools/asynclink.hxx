@@ -32,20 +32,20 @@ namespace svtools {
 
 class SVT_DLLPUBLIC AsynchronLink
 {
-    Link<> _aLink;
-    ImplSVEvent * _nEventId;
-    Idle*  _pIdle;
-    bool   _bInCall;
-    bool*  _pDeleted;
-    void*  _pArg;
-    ::osl::Mutex* _pMutex;
+    Link<void*,void> _aLink;
+    ImplSVEvent*     _nEventId;
+    Idle*            _pIdle;
+    bool             _bInCall;
+    bool*            _pDeleted;
+    void*            _pArg;
+    ::osl::Mutex*    _pMutex;
 
     DECL_DLLPRIVATE_LINK_TYPED( HandleCall_Idle, Idle*, void );
     DECL_DLLPRIVATE_LINK_TYPED( HandleCall_PostUserEvent, void*, void );
     SVT_DLLPRIVATE void Call_Impl( void* pArg );
 
 public:
-    AsynchronLink( const Link<>& rLink )
+    AsynchronLink( const Link<void*,void>& rLink )
         : _aLink( rLink )
         , _nEventId( 0 )
         , _pIdle( 0 )
@@ -65,7 +65,7 @@ public:
     ~AsynchronLink();
 
     void CreateMutex();
-    void operator=( const Link<>& rLink ) { _aLink = rLink; }
+    void operator=( const Link<void*,void>& rLink ) { _aLink = rLink; }
     void Call( void* pObj, bool bAllowDoubles = false, bool bUseTimer = false );
     void ClearPendingCall( );
 };

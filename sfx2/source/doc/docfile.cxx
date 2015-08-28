@@ -2378,12 +2378,12 @@ const OUString& SfxMedium::GetLongName() const
     return pImp->m_aLongName;
 }
 
-void SfxMedium::SetDoneLink( const Link<>& rLink )
+void SfxMedium::SetDoneLink( const Link<void*,void>& rLink )
 {
     pImp->aDoneLink = rLink;
 }
 
-void SfxMedium::Download( const Link<>& aLink )
+void SfxMedium::Download( const Link<void*,void>& aLink )
 {
     SetDoneLink( aLink );
     GetInStream();

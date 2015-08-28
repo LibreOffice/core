@@ -77,7 +77,7 @@ namespace frm
         ::com::sun::star::uno::Reference< ::com::sun::star::form::submission::XSubmission >
                                                 m_xSubmissionDelegate;
 
-        DECL_LINK( DownloadDoneLink, void* );
+        DECL_LINK_TYPED( DownloadDoneLink, void*, void );
 
         inline ImageProducer* GetImageProducer() { return m_pProducer; }
 
