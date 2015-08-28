@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_20650ee1",
+        "filename": "o3tl/qa/cow_wrapper_clients.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-28T16:33:55Z",
+      "side": 1,
+      "message": "This has to be done to check for self assignment. In addition, if std::move is not explicitly used here the copy assignment operator will be used. As stated in the original patch there isn\u0027t a big difference in the two, so that\u0027s not a big deal in most cases. However, if you can confirm this, maybe we should make a note of this in the short docs in the cow_wrapper header.\n\nI\u0027m interested to see how other compilers and versions of compilers do with the move ctor/assignment. I keep my compilers up to date, so I\u0027d be interested to see how older compilers do with this.",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_80621ad7",
+        "filename": "o3tl/qa/cow_wrapper_clients.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-28T16:33:55Z",
+      "side": 1,
+      "message": "I wanted to throw errors directly from the BogusRefCountPolicy.",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_605f060f",
+        "filename": "o3tl/qa/cow_wrapper_clients.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-28T16:33:55Z",
+      "side": 1,
+      "message": "I used theses static variables to keep track of when the incrementing/decrementing functions are called. Not a fan of using singleton objects, but for what I wanted I couldn\u0027t see another way. \n\nI could accomplish close to the same result with use_count(), but I couldn\u0027t capture and increment and decrement that occur on the same line (for instance the copy assignment operator when it tries to copy itself, or the copy of an xvalue).",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_e0a956e1",
+        "filename": "o3tl/qa/test-cow_wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-28T16:33:55Z",
+      "side": 1,
+      "message": "The flag values are at the default \"0\" so any incrementing/decrementing that happens will cause an error here.",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_40af62e3",
+        "filename": "o3tl/qa/test-cow_wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-28T16:33:55Z",
+      "side": 1,
+      "message": "If the self assignment check is not done in the move assignment operator I believe this part of the test should fail. In addition, since the flag values are at the default if the copy assignment operator is used, that would fail too.",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_00a56a03",
+        "filename": "o3tl/qa/test-cow_wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-28T16:33:55Z",
+      "side": 1,
+      "message": "Not gorgeous by any standards, but it should get the job done.",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_20aceeec",
+        "filename": "o3tl/qa/test-cow_wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-28T16:33:55Z",
+      "side": 1,
+      "message": "I added this as a separate test to the test suite.",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
