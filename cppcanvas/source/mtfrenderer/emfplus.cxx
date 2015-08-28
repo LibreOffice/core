@@ -1111,31 +1111,35 @@ namespace cppcanvas
 
             void Read (SvMemoryStream &s, sal_uInt32 dataSize, bool bUseWholeStream)
             {
-                sal_uInt32 header, unknown;
+                sal_uInt32 header, bitmapType;
 
                 s.ReadUInt32( header ).ReadUInt32( type );
 
                 SAL_INFO("cppcanvas.emf", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec );
 
                 if (type == 1) { // bitmap
-                    s.ReadInt32( width ).ReadInt32( height ).ReadInt32( stride ).ReadInt32( pixelFormat ).ReadUInt32( unknown );
+                    s.ReadInt32( width ).ReadInt32( height ).ReadInt32( stride ).ReadInt32( pixelFormat ).ReadUInt32( bitmapType );
                     SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << std::dec);
-                    if (width == 0) { // non native formats
+                    if ((bitmapType != 0) || (width == 0)) { // non native formats
                         GraphicFilter filter;
 
                         filter.ImportGraphic (graphic, OUString(), s);
                         SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: "  << graphic.GetBitmap().GetSizePixel().Width() << " height: " << graphic.GetBitmap().GetSizePixel().Height());
                     }
 
-                } else if (type == 2) {
+                } else if (type == 2) { // metafile
                     sal_Int32 mfType, mfSize;
 
                     s.ReadInt32( mfType ).ReadInt32( mfSize );
-                    SAL_INFO("cppcanvas.emf", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize - 16);
+                    if (bUseWholeStream)
+                        dataSize = s.remainingSize();
+                    else
+                        dataSize -= 16;
+                    SAL_INFO("cppcanvas.emf", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize);
 
                     GraphicFilter filter;
                     // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
-                    SvMemoryStream mfStream (const_cast<char *>(static_cast<char const *>(s.GetData()) + s.Tell()), bUseWholeStream ? s.remainingSize() : dataSize - 16, StreamMode::READ);
+                    SvMemoryStream mfStream (const_cast<char *>(static_cast<char const *>(s.GetData()) + s.Tell()), dataSize, StreamMode::READ);
 
                     filter.ImportGraphic (graphic, OUString(), mfStream);
 
@@ -1810,9 +1814,12 @@ namespace cppcanvas
             sal_uInt32 length = pAct->GetDataSize ();
             SvMemoryStream rMF ((void*) pAct->GetData (), length, StreamMode::READ);
 
-            length -= 4;
+            if (length < 12) {
+                SAL_INFO("cppcanvas.emf", "length is less than required header size");
+            }
 
-            while (length > 0) {
+            // 12 is minimal valid EMF+ record size; remaining bytes are padding
+            while (length >= 12) {
                 sal_uInt16 type, flags;
                 sal_uInt32 size, dataSize;
                 sal_Size next;
@@ -1823,6 +1830,11 @@ namespace cppcanvas
 
                 if (size < 12) {
                     SAL_INFO("cppcanvas.emf", "Size field is less than 12 bytes");
+                } else if (size > length) {
+                    SAL_INFO("cppcanvas.emf", "Size field is greater than bytes left");
+                }
+                if (dataSize > (size-12)) {
+                    SAL_INFO("cppcanvas.emf", "DataSize field is greater than Size-12");
                 }
 
                 SAL_INFO("cppcanvas.emf", "EMF+ record size: " << size << " type: " << emfTypeToName(type) << " flags: " << flags << " data size: " << dataSize);
@@ -1834,14 +1846,15 @@ namespace cppcanvas
                         mMStream.Seek(0);
                     }
 
-                    // 1st 4 bytes are unknown
+                    OSL_ENSURE(dataSize >= 4, "No room for TotalObjectSize in EmfPlusContinuedObjectRecord");
+                    // 1st 4 bytes are TotalObjectSize
                     mMStream.Write (static_cast<const char *>(rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
                     SAL_INFO("cppcanvas.emf", "EMF+ read next object part size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
                 } else {
                     if (mbMultipart) {
                         SAL_INFO("cppcanvas.emf", "EMF+ multipart record flags: " << mMFlags);
                         mMStream.Seek (0);
-                        processObjectRecord (mMStream, mMFlags, dataSize, true);
+                        processObjectRecord (mMStream, mMFlags, 0, true);
                     }
                     mbMultipart = false;
                 }
