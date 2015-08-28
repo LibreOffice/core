@@ -1595,7 +1595,7 @@ void FontSizeBox::Modify()
                 pStr++;
             }
         }
-        else
+        else if (!aStr.isEmpty())
         {
             if ( -1 != aStr.indexOf('%') )
             {
