@@ -82,13 +82,13 @@ class ContentProperties
 public:
     ContentProperties();
 
-    ContentProperties( const DAVResource& rResource );
+    explicit ContentProperties( const DAVResource& rResource );
 
     // Mini props for transient contents.
     ContentProperties( const OUString & rTitle, bool bFolder );
 
     // Micro props for non-existing contents.
-    ContentProperties( const OUString & rTitle );
+    explicit ContentProperties( const OUString & rTitle );
 
     ContentProperties( const ContentProperties & rOther );
 
@@ -175,7 +175,7 @@ private:
     CachableContentProperties( const CachableContentProperties & ) SAL_DELETED_FUNCTION;
 
 public:
-    CachableContentProperties( const ContentProperties & rProps );
+    explicit CachableContentProperties( const ContentProperties & rProps );
 
     void addProperties( const ContentProperties & rProps );
 

@@ -78,10 +78,12 @@ class Content : public ::ucbhelper::ContentImplHelper,
 {
     enum ResourceType
     {
-        UNKNOWN,
-        FTP,
-        NON_DAV,
-        DAV
+        UNKNOWN,    // the type of the Web resource is unknown
+        NOT_FOUND,  // the Web resource does not exists
+        FTP,        // the Web resource exists but it's ftp
+        NON_DAV,    // the Web resource exists but it's not DAV
+        DAV,        // the type of the Web resource is DAV with lock/unlock available
+        DAV_NOLOCK  // the type of the Web resource is DAV with no lock/unlock available
     };
 
     std::unique_ptr< DAVResourceAccess > m_xResAccess;
@@ -89,7 +91,9 @@ class Content : public ::ucbhelper::ContentImplHelper,
                       m_xCachedProps; // locally cached props
     OUString     m_aEscapedTitle;
     ResourceType      m_eResourceType;
+    ResourceType      m_eResourceTypeForLocks;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object
+    rtl::Reference< DAVSessionFactory > m_rSessionFactory;
     bool              m_bTransient;
     bool              m_bCollection;
     bool              m_bDidGetOrHead;
@@ -197,7 +201,7 @@ private:
 
     static bool shouldAccessNetworkAfterException( const DAVException & e );
 
-    bool supportsExclusiveWriteLock(
+    ResourceType resourceTypeForLocks(
         const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment >& Environment );
 

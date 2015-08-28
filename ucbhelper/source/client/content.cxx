@@ -1096,7 +1096,28 @@ bool Content::isDocument()
 
 SAL_WNOUNREACHABLE_CODE_POP
 
+void Content::lock()
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    Command aCommand;
+    aCommand.Name     = rtl::OUString::createFromAscii( "lock" );
+    aCommand.Handle   = -1; // n/a
 
+    m_xImpl->executeCommand( aCommand );
+
+}
+
+void Content::unlock()
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+
+    Command aCommand;
+    aCommand.Name     = rtl::OUString::createFromAscii( "unlock" );
+    aCommand.Handle   = -1; // n/a
+
+    m_xImpl->executeCommand( aCommand );
+
+}
 
 
 // Content_Impl Implementation.

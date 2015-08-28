@@ -831,6 +831,20 @@ void NeonSession::PROPFIND( const OUString & inPath,
                             const DAVRequestEnvironment & rEnv )
     throw ( std::exception )
 {
+#if defined SAL_LOG_INFO
+    { //debug
+        SAL_INFO( "ucb.ucp.webdav", "PROPFIND - inPath: <" << inPath << "> inDepth: " << inDepth );
+        OUString aProps;
+        for(std::vector< OUString >::const_iterator it = inPropNames.begin();
+            it < inPropNames.end(); it++)
+        {
+            aProps += *it;
+            aProps += ", ";
+        }
+        SAL_INFO( "ucb.ucp.webdav", " properties: " << aProps);
+    } //debug
+#endif
+
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
     Init( rEnv );
@@ -853,6 +867,8 @@ void NeonSession::PROPFIND( const OUString & inPath,
                             const DAVRequestEnvironment & rEnv )
     throw( std::exception )
 {
+    SAL_INFO( "ucb.ucp.webdav", "PROPFIND - inPath: <" << inPath << "> inDepth: " << inDepth );
+
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
     Init( rEnv );
@@ -864,6 +880,23 @@ void NeonSession::PROPFIND( const OUString & inPath,
                                     inDepth,
                                     ioResInfo,
                                     theRetVal );
+
+#if defined SAL_LOG_INFO
+    { //debug
+        for ( std::vector< DAVResourceInfo >::const_iterator itres = ioResInfo.begin();
+              itres < ioResInfo.end(); itres++)
+        {
+            OUString aProps;
+            for ( std::vector< OUString >::const_iterator it = (*itres).properties.begin();
+                  it < (*itres).properties.end(); it++)
+            {
+                aProps += *it;
+                aProps += ", ";
+            }
+            SAL_INFO( "ucb.ucp.webdav", " returned property names: " << aProps);
+        }
+    } //debug
+#endif
 
     HandleError( theRetVal, inPath, rEnv );
 }
@@ -1315,6 +1348,18 @@ void NeonSession::LOCK( const OUString & inPath,
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
+    // before issuing the lock command,
+    // better check first if we already have one on this href
+    if ( m_aNeonLockStore.findByUri(
+                         makeAbsoluteURL( inPath ) ) != 0 )
+    {
+        // we already own a lock for this href
+        // no need to ask for another
+        // TODO: add a lockdiscovery request for confirmation
+        // checking the locktoken, the only item that's unique
+        return;
+    }
+
     Init( rEnv );
 
     /* Create a depth zero, exclusive write lock, with default timeout
@@ -1612,6 +1657,7 @@ void NeonSession::HandleError( int nError,
 
             sal_uInt16 code = makeStatusCode( aText );
 
+            SAL_WARN( "ucb.ucp.webdav","Neon received http error: '" << aText << "'");
             if ( code == SC_LOCKED )
             {
                 if ( m_aNeonLockStore.findByUri(
@@ -1640,6 +1686,7 @@ void NeonSession::HandleError( int nError,
             throw DAVException( DAVException::DAV_HTTP_ERROR, aText, code );
         }
         case NE_LOOKUP:       // Name lookup failed.
+            SAL_WARN( "ucb.ucp.webdav","Name lookup failed" );
             throw DAVException( DAVException::DAV_HTTP_LOOKUP,
                                 NeonUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
@@ -1665,6 +1712,7 @@ void NeonSession::HandleError( int nError,
                                     m_aHostName, m_nPort ) );
 
         case NE_FAILED:       // The precondition failed
+            SAL_WARN( "ucb.ucp.webdav","The precondition failed" );
             throw DAVException( DAVException::DAV_HTTP_FAILED,
                                 NeonUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
@@ -1682,7 +1730,7 @@ void NeonSession::HandleError( int nError,
         }
         default:
         {
-            OSL_TRACE( "NeonSession::HandleError : Unknown Neon error code!" );
+            SAL_WARN( "ucb.ucp.webdav", "Unknown Neon error code!" );
             throw DAVException( DAVException::DAV_HTTP_ERROR,
                                 OUString::createFromAscii(
                                     ne_get_error( m_pHttpSession ) ) );

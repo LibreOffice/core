@@ -1774,6 +1774,9 @@ bool SfxObjectShell::SaveTo_Impl
 }
 
 
+// This method contains a call to disable the UNLOCK of a WebDAV resource, that work while saving a file.
+// If the method is called from another process (e.g. not when saving a file),
+// that disabling needs tweaking
 bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& rTargetMedium )
 {
     // this method disconnects the storage from source medium, and attaches it to the backup created by the target medium
@@ -1794,7 +1797,12 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
                 rTargetMedium.ResetError();
                 xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
                 rSrcMedium.CanDisposeStorage_Impl( false );
+                // need to modify this for WebDAV if this method is called outside
+                // the process of saving a file
+                rSrcMedium.DisableUnlockWebDAV();
                 rSrcMedium.Close();
+                // see comment on the previou third row
+                rSrcMedium.DisableUnlockWebDAV( false );
 
                 // now try to create the backup
                 rTargetMedium.GetBackup_Impl();
