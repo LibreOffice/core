@@ -46,7 +46,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
     glBindTexture( GL_TEXTURE_2D, 0 );
 
-    SAL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " allocate" );
+    VCL_GL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " allocate" );
 
     CHECK_GL_ERROR();
 }
@@ -73,7 +73,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, 0 );
 
-    SAL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " from x" << nX << ", y" << nY );
+    VCL_GL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " from x" << nX << ", y" << nY );
 
     CHECK_GL_ERROR();
 }
@@ -98,14 +98,14 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, mnWidth, mnHeight, 0, nFormat, nType, pData );
     glBindTexture( GL_TEXTURE_2D, 0 );
 
-    SAL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " from data" );
+    VCL_GL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " " << nWidth << "x" << nHeight << " from data" );
 
     CHECK_GL_ERROR();
 }
 
 ImplOpenGLTexture::~ImplOpenGLTexture()
 {
-    SAL_INFO( "vcl.opengl", "~OpenGLTexture " << mnTexture );
+    VCL_GL_INFO( "vcl.opengl", "~OpenGLTexture " << mnTexture );
     if( mnTexture != 0 )
         glDeleteTextures( 1, &mnTexture );
 }
@@ -119,7 +119,7 @@ bool ImplOpenGLTexture::InsertBuffer(int nX, int nY, int nWidth, int nHeight, in
     glTexSubImage2D(GL_TEXTURE_2D, 0, nX, mnHeight - nY - nHeight, nWidth, nHeight, nFormat, nType, pData);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    SAL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " Insert buff. to " << nX << " " << nY
+    VCL_GL_INFO( "vcl.opengl", "OpenGLTexture " << mnTexture << " Insert buff. to " << nX << " " << nY
                                              << " size " << nWidth << "x" << nHeight << " from data" );
     CHECK_GL_ERROR();
 
@@ -208,7 +208,7 @@ OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture,
     mnSlotNumber = rTexture.mnSlotNumber;
     if (mpImpl)
         mpImpl->IncreaseRefCount(mnSlotNumber);
-    SAL_INFO( "vcl.opengl", "Copying texture " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
+    VCL_GL_INFO( "vcl.opengl", "Copying texture " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
 }
 
 OpenGLTexture::~OpenGLTexture()
@@ -245,7 +245,7 @@ int OpenGLTexture::GetHeight() const
 
 void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool bInverted ) const
 {
-    SAL_INFO( "vcl.opengl", "Getting coord " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
+    VCL_GL_INFO( "vcl.opengl", "Getting coord " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
 
     if( mpImpl == NULL )
     {
@@ -362,7 +362,7 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
     Bind();
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
 
-    SAL_INFO( "vcl.opengl", "Reading texture " << Id() << " " << GetWidth() << "x" << GetHeight() );
+    VCL_GL_INFO( "vcl.opengl", "Reading texture " << Id() << " " << GetWidth() << "x" << GetHeight() );
 
     if( GetWidth() == mpImpl->mnWidth && GetHeight() == mpImpl->mnHeight )
     {
