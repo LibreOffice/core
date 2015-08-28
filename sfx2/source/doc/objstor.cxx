@@ -1794,7 +1794,9 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
                 rTargetMedium.ResetError();
                 xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
                 rSrcMedium.CanDisposeStorage_Impl( false );
+                rSrcMedium.DisableUnlockWebDAV();
                 rSrcMedium.Close();
+                rSrcMedium.DisableUnlockWebDAV( false );
 
                 // now try to create the backup
                 rTargetMedium.GetBackup_Impl();

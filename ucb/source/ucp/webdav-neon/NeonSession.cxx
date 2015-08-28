@@ -1315,6 +1315,18 @@ void NeonSession::LOCK( const OUString & inPath,
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
+    // before issuing the lock command,
+    // better check first if we already have one on this href
+    if ( m_aNeonLockStore.findByUri(
+                         makeAbsoluteURL( inPath ) ) != 0 )
+    {
+        // we already own a lock for this href
+        // no need to ask for another
+        // TODO: add a lockdiscovery request for confirmation
+        // checking the locktoken, the only item that's unique
+        return;
+    }
+
     Init( rEnv );
 
     /* Create a depth zero, exclusive write lock, with default timeout

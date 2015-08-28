@@ -686,6 +686,25 @@ public:
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
 
+    /**
+      *  This method lock the resource.
+      *
+      */
+    void
+      lock()
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+
+    /**
+      * This method unlock the resource.
+      *
+      */
+    void
+      unlock()
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
 
     // Required properties.
 
@@ -712,6 +731,7 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
+
 };
 
 } /* namespace ucbhelper */
