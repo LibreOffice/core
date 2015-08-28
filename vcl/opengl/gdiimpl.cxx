@@ -270,7 +270,7 @@ const vcl::Region& OpenGLSalGraphicsImpl::getClipRegion() const
 
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 {
-    SAL_INFO( "vcl.opengl", "::setClipRegion " << rClip );
+    VCL_GL_INFO( "vcl.opengl", "::setClipRegion " << rClip );
     maClipRegion = rClip;
 
     mbUseStencil = false;
@@ -286,7 +286,7 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 // set the clip region to empty
 void OpenGLSalGraphicsImpl::ResetClipRegion()
 {
-    SAL_INFO( "vcl.opengl", "::ResetClipRegion" );
+    VCL_GL_INFO( "vcl.opengl", "::ResetClipRegion" );
     maClipRegion.SetEmpty();
     mbUseScissor = false;
     mbUseStencil = false;
@@ -1216,7 +1216,7 @@ void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const
 // draw --> LineColor and FillColor and RasterOp and ClipRegion
 void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY )
 {
-    SAL_INFO( "vcl.opengl", "::drawPixel" );
+    VCL_GL_INFO( "vcl.opengl", "::drawPixel" );
     if( mnLineColor != SALCOLOR_NONE )
     {
         PreDraw();
@@ -1228,7 +1228,7 @@ void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY )
 
 void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
 {
-    SAL_INFO( "vcl.opengl", "::drawPixel" );
+    VCL_GL_INFO( "vcl.opengl", "::drawPixel" );
     if( nSalColor != SALCOLOR_NONE )
     {
         PreDraw();
@@ -1240,7 +1240,7 @@ void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
 
 void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    SAL_INFO( "vcl.opengl", "::drawLine" );
+    VCL_GL_INFO( "vcl.opengl", "::drawLine" );
     if( mnLineColor != SALCOLOR_NONE )
     {
         PreDraw();
@@ -1252,7 +1252,7 @@ void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
 
 void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
-    SAL_INFO( "vcl.opengl", "::drawRect" );
+    VCL_GL_INFO( "vcl.opengl", "::drawRect" );
     PreDraw();
 
     if( UseSolid( mnFillColor ) )
@@ -1286,7 +1286,7 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
 
 void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    SAL_INFO( "vcl.opengl", "::drawPolyLine" );
+    VCL_GL_INFO( "vcl.opengl", "::drawPolyLine" );
 
     if( mnLineColor != SALCOLOR_NONE && nPoints > 1 )
     {
@@ -1299,7 +1299,7 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
 
 void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    SAL_INFO( "vcl.opengl", "::drawPolygon" );
+    VCL_GL_INFO( "vcl.opengl", "::drawPolygon" );
     if( nPoints == 0 )
         return;
     if( nPoints == 1 )
@@ -1327,7 +1327,7 @@ void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
 
 void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry )
 {
-    SAL_INFO( "vcl.opengl", "::drawPolyPolygon" );
+    VCL_GL_INFO( "vcl.opengl", "::drawPolyPolygon" );
     if( nPoly <= 0 )
         return;
 
@@ -1364,7 +1364,7 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
 
 bool OpenGLSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency )
 {
-    SAL_INFO( "vcl.opengl", "::drawPolyPolygon trans " << fTransparency );
+    VCL_GL_INFO( "vcl.opengl", "::drawPolyPolygon trans " << fTransparency );
     if( rPolyPolygon.count() <= 0 )
         return true;
 
@@ -1393,7 +1393,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
             basegfx::B2DLineJoin eLineJoin,
             com::sun::star::drawing::LineCap eLineCap)
 {
-    SAL_INFO( "vcl.opengl", "::drawPolyLine trans " << fTransparency );
+    VCL_GL_INFO( "vcl.opengl", "::drawPolyLine trans " << fTransparency );
     if( mnLineColor == SALCOLOR_NONE )
         return true;
 
@@ -1503,7 +1503,7 @@ void OpenGLSalGraphicsImpl::copyArea(
             long nSrcWidth, long nSrcHeight,
             sal_uInt16 /*nFlags*/ )
 {
-    SAL_INFO( "vcl.opengl", "::copyArea " << nSrcX << "," << nSrcY << " >> " << nDestX << "," << nDestY << " (" << nSrcWidth << "," << nSrcHeight << ")" );
+    VCL_GL_INFO( "vcl.opengl", "::copyArea " << nSrcX << "," << nSrcY << " >> " << nDestX << "," << nDestY << " (" << nSrcWidth << "," << nSrcHeight << ")" );
     OpenGLTexture aTexture;
     SalTwoRect aPosAry(0, 0, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
 
@@ -1519,7 +1519,7 @@ void OpenGLSalGraphicsImpl::copyArea(
 // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
 void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGraphicsImpl& rImpl )
 {
-    SAL_INFO( "vcl.opengl", "::copyBits" );
+    VCL_GL_INFO( "vcl.opengl", "::copyBits" );
 
     if( &rImpl == this &&
         (rPosAry.mnSrcWidth == rPosAry.mnDestWidth) &&
@@ -1556,7 +1556,7 @@ void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitm
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     OpenGLTexture& rTexture = rBitmap.GetTexture();
 
-    SAL_INFO( "vcl.opengl", "::drawBitmap" );
+    VCL_GL_INFO( "vcl.opengl", "::drawBitmap" );
     PreDraw();
     DrawTexture( rTexture, rPosAry );
     PostDraw();
@@ -1572,7 +1572,7 @@ void OpenGLSalGraphicsImpl::drawBitmap(
     OpenGLTexture& rTexture( rBitmap.GetTexture() );
     OpenGLTexture& rMaskTex( rMask.GetTexture() );
 
-    SAL_INFO( "vcl.opengl", "::drawBitmap with MASK" );
+    VCL_GL_INFO( "vcl.opengl", "::drawBitmap with MASK" );
     PreDraw();
     DrawTextureWithMask( rTexture, rMaskTex, rPosAry );
     PostDraw();
@@ -1586,7 +1586,7 @@ void OpenGLSalGraphicsImpl::drawMask(
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     OpenGLTexture& rTexture( rBitmap.GetTexture() );
 
-    SAL_INFO( "vcl.opengl", "::drawMask" );
+    VCL_GL_INFO( "vcl.opengl", "::drawMask" );
     PreDraw();
     DrawMask( rTexture, nMaskColor, rPosAry );
     PostDraw();
@@ -1595,7 +1595,7 @@ void OpenGLSalGraphicsImpl::drawMask(
 SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
     OpenGLSalBitmap* pBitmap = new OpenGLSalBitmap;
-    SAL_INFO( "vcl.opengl", "::getBitmap " << nX << "," << nY <<
+    VCL_GL_INFO( "vcl.opengl", "::getBitmap " << nX << "," << nY <<
               " " << nWidth << "x" << nHeight );
     //TODO really needed?
     PreDraw();
@@ -1687,7 +1687,7 @@ bool OpenGLSalGraphicsImpl::blendBitmap(
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     OpenGLTexture& rTexture( rBitmap.GetTexture() );
 
-    SAL_INFO( "vcl.opengl", "::blendBitmap" );
+    VCL_GL_INFO( "vcl.opengl", "::blendBitmap" );
     PreDraw();
     glEnable( GL_BLEND );
     glBlendFunc( GL_ZERO, GL_SRC_COLOR );
@@ -1710,7 +1710,7 @@ bool OpenGLSalGraphicsImpl::blendAlphaBitmap(
     OpenGLTexture& rMask( rMaskBitmap.GetTexture() );
     OpenGLTexture& rAlpha( rAlphaBitmap.GetTexture() );
 
-    SAL_INFO( "vcl.opengl", "::blendAlphaBitmap" );
+    VCL_GL_INFO( "vcl.opengl", "::blendAlphaBitmap" );
     PreDraw();
     DrawBlendedTexture( rTexture, rMask, rAlpha, rPosAry );
     PostDraw();
@@ -1739,7 +1739,7 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
     OpenGLTexture& rTexture( rBitmap.GetTexture() );
     OpenGLTexture& rAlphaTex( rAlpha.GetTexture() );
 
-    SAL_INFO( "vcl.opengl", "::drawAlphaBitmap" );
+    VCL_GL_INFO( "vcl.opengl", "::drawAlphaBitmap" );
     PreDraw();
     DrawTextureWithMask( rTexture, rAlphaTex, rPosAry );
     PostDraw();
@@ -1762,7 +1762,7 @@ bool OpenGLSalGraphicsImpl::drawTransformedBitmap(
     if( pMaskBitmap != NULL )
         aMask = pMaskBitmap->GetTexture();
 
-    SAL_INFO( "vcl.opengl", "::drawTransformedBitmap" );
+    VCL_GL_INFO( "vcl.opengl", "::drawTransformedBitmap" );
     PreDraw();
     DrawTransformedTexture( rTexture, aMask, rNull, rX, rY );
     PostDraw();
@@ -1781,7 +1781,7 @@ bool OpenGLSalGraphicsImpl::drawAlphaRect(
                 long nWidth, long nHeight,
                 sal_uInt8 nTransparency )
 {
-    SAL_INFO( "vcl.opengl", "::drawAlphaRect" );
+    VCL_GL_INFO( "vcl.opengl", "::drawAlphaRect" );
     if( mnFillColor != SALCOLOR_NONE && nTransparency < 100 )
     {
         PreDraw();
@@ -1798,7 +1798,7 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 {
     Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
 
-    SAL_INFO( "vcl.opengl", "::drawGradient" );
+    VCL_GL_INFO( "vcl.opengl", "::drawGradient" );
 
     if( aBoundRect.IsEmpty() )
         return true;
