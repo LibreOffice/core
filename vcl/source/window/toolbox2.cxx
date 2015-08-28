@@ -1300,6 +1300,7 @@ void ToolBox::SetItemWindow( sal_uInt16 nItemId, vcl::Window* pNewWindow )
     if ( nPos != TOOLBOX_ITEM_NOTFOUND )
     {
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
+        pItem->mpWindow.disposeAndClear();
         pItem->mpWindow = pNewWindow;
         if ( pNewWindow )
             pNewWindow->Hide();

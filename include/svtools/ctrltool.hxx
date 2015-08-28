@@ -149,8 +149,8 @@ private:
     OUString                maBlack;
     OUString                maBlackItalic;
     sal_IntPtr*             mpSizeAry;
-    VclPtr<OutputDevice>    mpDev;
-    VclPtr<OutputDevice>    mpDev2;
+    OutputDevice*           mpDev;
+    OutputDevice*           mpDev2;
     std::vector<std::unique_ptr<ImplFontListNameInfo>> m_Entries;
 
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const OUString& rSearchName, sal_uLong* pIndex ) const;

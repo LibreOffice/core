@@ -74,7 +74,7 @@ class ImplFontListFontInfo : public vcl::FontInfo
     friend class FontList;
 
 private:
-    VclPtr<OutputDevice>    mpDevice;
+    OutputDevice*           mpDevice;
     ImplFontListFontInfo*   mpNext;
 
 public:
