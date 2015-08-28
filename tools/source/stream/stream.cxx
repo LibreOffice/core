@@ -1899,9 +1899,13 @@ bool SvMemoryStream::ReAllocateMemory( long nDiff )
             if( nEndOfData >= nNewSize )
                 nEndOfData = nNewSize-1L;
         }
-        else if (nSize != 0)
+        else
         {
-            memcpy( pNewBuf, pBuf, (size_t)nSize );
+            if (nSize != 0)
+            {
+                memcpy( pNewBuf, pBuf, (size_t)nSize );
+            }
+            memset(pNewBuf + nSize, 0x00, nNewSize - nSize);
         }
 
         FreeMemory();

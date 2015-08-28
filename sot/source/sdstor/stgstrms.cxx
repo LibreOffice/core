@@ -1188,9 +1188,9 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
             SvFileStream* s = new SvFileStream( aName, STREAM_READWRITE );
             sal_uLong nCur = Tell();
             sal_uLong i = nEndOfData;
+            std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
             if( i )
             {
-                std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
                 Seek( 0L );
                 while( i )
                 {
@@ -1207,8 +1207,17 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
                 // We have to write one byte at the end of the file
                 // if the file is bigger than the memstream to see
                 // if it fits on disk
-                s->Seek( n - 1 );
-                s->Write( &i, 1 );
+                s->Seek(nEndOfData);
+                memset(p.get(), 0x00, 4096);
+                i = n - nEndOfData;
+                while (i)
+                {
+                    sal_uLong const nb = (i > 4096) ? 4096 : i;
+                    if (s->Write(p.get(), nb) == nb)
+                        i -= nb;
+                    else
+                        break; // error
+                }
                 s->Flush();
                 if( s->GetError() != SVSTREAM_OK )
                     i = 1;
