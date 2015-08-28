@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "fa0719c6_801a1a16",
+        "filename": "o3tl/qa/cow_wrapper_clients.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-28T19:37:45Z",
+      "side": 1,
+      "message": "yeps, std::move is still needed.",
+      "parentUuid": "fa0719c6_e02af62b",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0719c6_80621ad7",
         "filename": "o3tl/qa/cow_wrapper_clients.hxx",
         "patchSetId": 1
