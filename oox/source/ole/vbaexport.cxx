@@ -641,6 +641,11 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         SAL_DEBUG(aElementNames[i]);
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
         SAL_DEBUG(aModuleInfo.ModuleType);
+
+        css::uno::Any aCode = xNameContainer->getByName(aElementNames[i]);
+        OUString aSourceCode;
+        aCode >>= aSourceCode;
+        SAL_DEBUG(aSourceCode);
     }
     pVBAProjectStream->Commit();
     pDirStream->Commit();
