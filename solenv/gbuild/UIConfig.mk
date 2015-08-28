@@ -123,7 +123,7 @@ gb_UIImageListTarget_XSLTFILE := $(SRCDIR)/solenv/bin/uiimagelist.xsl
 define gb_UIImageListTarget__command
 $(call gb_Output_announce,$(2),$(true),UIL,1)
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_UIImageListTarget_COMMAND) -o $@ $(gb_UIImageListTarget_XSLTFILE) $(UIFILE) && \
+	$(gb_UIImageListTarget_COMMAND) --nonet -o $@ $(gb_UIImageListTarget_XSLTFILE) $(UIFILE) && \
 	touch $@ \
 )
 endef

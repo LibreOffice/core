@@ -355,7 +355,7 @@ endif
 
 define gb_UIMenubarTarget__command
 $(call gb_Output_announce,$(2),$(true),UIM,1)
-$(call gb_ExternalExecutable_get_command,xsltproc) -o $(1) $(UI_MENUBAR_XSLT) $(3)
+$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $(1) $(UI_MENUBAR_XSLT) $(3)
 
 endef
 

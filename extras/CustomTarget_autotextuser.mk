@@ -36,7 +36,7 @@ $(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/%/mimetype : $(S
 $(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/%.xml : $(SRCDIR)/extras/source/autotext/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$*.xml,$(true),XSL,1)
-	$(call gb_ExternalExecutable_get_command,xsltproc) -o $@ $(SRCDIR)/extras/util/compact.xsl $<
+	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/%.bau :
 	$(call gb_Output_announce,$*.bau,$(true),ZIP,2)
