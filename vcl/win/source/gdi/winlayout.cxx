@@ -276,9 +276,10 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         return false;
     }
 
+    std::ostringstream sLine;
     for (int i = 0; i < nCount; i++)
-        std::cerr << aABC[i].abcA << ":" << aABC[i].abcB << ":" << aABC[i].abcC << " ";
-    std::cerr << std::endl;
+        sLine << aABC[i].abcA << ":" << aABC[i].abcB << ":" << aABC[i].abcC << " ";
+    SAL_INFO("vcl.gdi.opengl", "ABC widths: " << sLine.str());
 
     // Try hard to avoid overlap as we want to be able to use
     // individual rectangles for each glyph. The ABC widths don't
