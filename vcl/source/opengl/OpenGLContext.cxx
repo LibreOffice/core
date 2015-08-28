@@ -1358,7 +1358,7 @@ void OpenGLContext::makeCurrent()
 #endif
 
     // move the context to the end of the contexts list
-    static int nSwitch = 0;
+    static int nSwitch = 0; (void)nSwitch;
     VCL_GL_INFO("vcl.opengl", "******* CONTEXT SWITCH " << ++nSwitch << " *********");
     if( mpNextContext )
     {
