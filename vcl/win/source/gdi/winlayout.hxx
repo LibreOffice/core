@@ -41,6 +41,7 @@ class WinLayout : public SalLayout
 {
 public:
                         WinLayout(HDC, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
+    virtual             ~WinLayout();
     virtual void        InitFont() const SAL_OVERRIDE;
     void                SetFontScale( float f ) { mfFontScale = f; }
     HFONT               DisableFontScaling() const;

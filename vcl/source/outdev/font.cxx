@@ -970,7 +970,8 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
 }
 
 ImplFontEntry::ImplFontEntry( const FontSelectPattern& rFontSelData )
-    : maFontSelData( rFontSelData )
+    : m_pFontCache(nullptr)
+    , maFontSelData( rFontSelData )
     , maMetric( rFontSelData )
     , mpConversion( NULL )
     , mnLineHeight( 0 )
@@ -987,6 +988,7 @@ ImplFontEntry::ImplFontEntry( const FontSelectPattern& rFontSelData )
 ImplFontEntry::~ImplFontEntry()
 {
     delete mpUnicodeFallbackList;
+    m_pFontCache = nullptr;
 }
 
 size_t ImplFontEntry::GFBCacheKey_Hash::operator()( const GFBCacheKey& rData ) const
@@ -1322,6 +1324,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     {
         // create a new logical font instance from this physical font face
         pEntry = pFontData->CreateFontInstance( aFontSelData );
+        pEntry->m_pFontCache = this;
 
         // if we're subtituting from or to a symbol font we may need a symbol
         // conversion table
