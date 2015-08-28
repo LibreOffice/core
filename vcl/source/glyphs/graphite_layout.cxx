@@ -225,6 +225,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
             clusterStart = mvGlyphs.size();
             clusterFirstChar = firstChar;
         }
+
         int baseGlyph = mvGlyphs.size();
         mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, firstChar - mnSegCharOffset));
         mvChar2BaseGlyph[firstChar - mnMinCharPos] = baseGlyph;
@@ -289,7 +290,6 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     bool bIsBase, int baseChar, int baseGlyph)
 {
     bool bRtl(rArgs.mnFlags & SalLayoutFlags::BiDiRtl);
-    float nextOrigin;
     assert(gi);
     assert(gr_slot_before(gi) <= gr_slot_after(gi));
     int firstChar = gr_slot_before(gi) + mnSegCharOffset;
@@ -302,28 +302,14 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
         mvCharDxs[firstChar - mnMinCharPos] = mvCharDxs[baseChar - mnMinCharPos];
         mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSeg, firstChar - mnSegCharOffset));
     }
-    else
-        mvGlyph2Char[mvGlyphs.size()] = baseChar; //firstChar;
-    // is the next glyph attached or in the next cluster?
-    //glyph_set_range_t iAttached = gi.attachedClusterGlyphs();
-//    if (pFirstAttached)
-//        nextOrigin = gr_slot_origin_X(pFirstAttached);
-//    else if (!bIsBase && pNextSibling)
-//        nextOrigin = gr_slot_origin_X(pNextSibling);
-//    else
-    nextOrigin = nextGlyphOrigin;
     long glyphId = gr_slot_gid(gi);
     long deltaOffset = 0;
     int scaledGlyphPos = round_to_long(gr_slot_origin_X(gi) * scaling);
-    int glyphWidth = round_to_long((nextOrigin - gOrigin) * scaling);
-//    if (glyphWidth < 0)
-//    {
-//        nextOrigin = gOrigin;
-//        glyphWidth = 0;
-//    }
+    int glyphWidth = round_to_long((nextGlyphOrigin - gOrigin) * scaling);
+
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"c%d g%ld,X%d W%d nX%f ", firstChar, glyphId,
-        (int)(gr_slot_origin_X(gi) * scaling), glyphWidth, nextOrigin * scaling);
+        (int)(gr_slot_origin_X(gi) * scaling), glyphWidth, nextGlyphOrigin * scaling);
 #endif
     if (glyphId == 0)
     {
@@ -369,7 +355,7 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     rDXOffset += deltaOffset;
 
     // Recursively append all the attached glyphs.
-    float cOrigin = nextOrigin;
+    float cOrigin = nextGlyphOrigin;
     for (const gr_slot * agi = gr_slot_first_attachment(gi); agi != NULL; agi = gr_slot_next_sibling_attachment(agi))
         if (!gr_slot_can_insert_before(agi))
             cOrigin = append(pSeg, rArgs, agi, cOrigin, nextGlyphOrigin, scaling, rDXOffset, false, baseChar, baseGlyph);
@@ -499,10 +485,10 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
                  rArgs.mpStr + limit, NULL);
         if (mpFeatures)
             pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures->values(), gr_utf16,
-                                        rArgs.mpStr + mnSegCharOffset, numchars, bRtl);
+                                        rArgs.mpStr + mnSegCharOffset, numchars, 2 | bRtl);
         else
             pSegment = gr_make_seg(mpFont, mpFace, 0, NULL, gr_utf16,
-                                        rArgs.mpStr + mnSegCharOffset, numchars, bRtl);
+                                        rArgs.mpStr + mnSegCharOffset, numchars, 2 | bRtl);
 
         //pSegment = new gr::RangeSegment((gr::Font *)&mrFont, mpTextSrc, &maLayout, mnMinCharPos, limit);
         if (pSegment != NULL)
