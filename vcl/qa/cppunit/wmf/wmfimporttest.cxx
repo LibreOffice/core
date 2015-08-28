@@ -44,12 +44,14 @@ public:
     void testSine();
     void testEmfProblem();
     void testWorldTransformFontSize();
+    void testTdf93750();
 
     CPPUNIT_TEST_SUITE(WmfTest);
     CPPUNIT_TEST(testNonPlaceableWmf);
     CPPUNIT_TEST(testSine);
     CPPUNIT_TEST(testEmfProblem);
     CPPUNIT_TEST(testWorldTransformFontSize);
+    CPPUNIT_TEST(testTdf93750);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -146,6 +148,21 @@ void WmfTest::testWorldTransformFontSize()
     assertXPath(pDoc, "/metafile/font[3]", "height", "530");
     assertXPath(pDoc, "/metafile/font[3]", "orientation", "900");
     assertXPath(pDoc, "/metafile/font[3]", "weight", "normal");
+}
+
+void WmfTest::testTdf93750()
+{
+    SvFileStream aFileStream(getFullUrl("tdf93750.emf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+
+    CPPUNIT_ASSERT (pDoc);
+
+    assertXPath(pDoc, "/metafile/push[1]/comment[2]", "datasize", "28");
+    assertXPath(pDoc, "/metafile/push[1]/comment[3]", "datasize", "72");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WmfTest);
