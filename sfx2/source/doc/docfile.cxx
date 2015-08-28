@@ -41,6 +41,8 @@
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/InteractiveLockingLockedException.hpp>
+#include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
@@ -181,6 +183,7 @@ public:
     bool m_bSalvageMode:1;
     bool m_bVersionsAlreadyLoaded:1;
     bool m_bLocked:1;
+    bool m_bDisableUnlockWebDAV:1;
     bool m_bGotDateTime:1;
     bool m_bRemoveBackup:1;
     bool m_bOriginallyReadOnly:1;
@@ -257,6 +260,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_bSalvageMode( false ),
     m_bVersionsAlreadyLoaded( false ),
     m_bLocked( false ),
+    m_bDisableUnlockWebDAV( false ),
     m_bGotDateTime( false ),
     m_bRemoveBackup( false ),
     m_bOriginallyReadOnly(false),
@@ -381,7 +385,8 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 
 bool SfxMedium::DocNeedsFileDateCheck() const
 {
-    return !IsReadOnly() && GetURLObject().GetProtocol() == INetProtocol::File;
+    return ( !IsReadOnly() && ( GetURLObject().GetProtocol() == INetProtocol::File ||
+                                GetURLObject().isAnyKnownWebDAVScheme() ) );
 }
 
 util::DateTime SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
@@ -942,6 +947,100 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
     (void) bLoading;
     (void) bNoUI;
 #else
+    // check if path scheme is http:// or https://
+    // may be this is better if used always, in Android and iOS as well?
+    // if this code should be always there, remember to move the relevant code in UnlockFile method as well !
+
+    if ( GetURLObject().isAnyKnownWebDAVScheme() )
+    {
+        try
+        {
+            bool bResult = pImp->m_bLocked;
+            // so, this is webdav stuff...
+            if ( !bResult )
+            {
+                // no read-write access is necessary on loading if the document is explicitly opened as copy
+                SFX_ITEMSET_ARG( GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, false );
+                bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
+            }
+
+            if ( !bResult && !IsReadOnly() )
+            {
+                sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
+                do
+                {
+                    if( !bResult )
+                    {
+                        Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+                        uno::Reference< task::XInteractionHandler > xCHandler = GetInteractionHandler( true );
+                        xComEnv = new ::ucbhelper::CommandEnvironment(
+                            xCHandler, Reference< ::com::sun::star::ucb::XProgressHandler >() );
+
+                        ucbhelper::Content aContentToLock(
+                            GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
+                            xComEnv, comphelper::getProcessComponentContext() );
+
+                        try
+                        {
+                            aContentToLock.lock();
+                            bResult = true;
+                        }
+                        catch ( ucb::InteractiveLockingLockedException& )
+                        {
+                            // received when the resource is already locked
+                            // get the lock owner, using a special ucb.webdav property
+                            // the owner property retrieved here is  what the other principal send the server
+                            // when activating the lock.
+                            // See http://tools.ietf.org/html/rfc4918#section-14.17 for details
+                            LockFileEntry aLockData;
+                            aLockData[LockFileComponent::OOOUSERNAME] = OUString("Unknown user");
+
+                            uno::Sequence< ::com::sun::star::ucb::Lock >  aLocks;
+                            if( aContentToLock.getPropertyValue( "DAV:lockdiscovery" )  >>= aLocks )
+                            {
+                                // got at least a lock, show the owner of the first lock returned
+                                ::com::sun::star::ucb::Lock aLock = aLocks[0];
+                                OUString aOwner;
+                                if(aLock.Owner >>= aOwner)
+                                    aLockData[LockFileComponent::OOOUSERNAME] = aOwner;
+                            }
+
+                            if ( !bResult && !bNoUI )
+                            {
+                                bUIStatus = ShowLockedDocumentDialog( aLockData, bLoading, false );
+                            }
+                        }
+                        catch( uno::Exception& )
+                        {}
+                    }
+                } while( !bResult && bUIStatus == LOCK_UI_TRY );
+            }
+
+            pImp->m_bLocked = bResult;
+
+            if ( !bResult && GetError() == ERRCODE_NONE )
+            {
+                // the error should be set in case it is storing process
+                // or the document has been opened for editing explicitly
+                SFX_ITEMSET_ARG( pImp->m_pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, false );
+
+                if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
+                    SetError( ERRCODE_IO_ACCESSDENIED, OUString( OSL_LOG_PREFIX  ) );
+                else
+                    GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+            }
+
+            // when the file is locked, get the current file date
+            if ( bResult && DocNeedsFileDateCheck() )
+                GetInitFileDate( true );
+        }
+        catch ( const uno::Exception& )
+        {
+            SAL_WARN( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
+        }
+        return;
+    }
+
     if (!IsLockingUsed() || GetURLObject().HasError())
         return;
 
@@ -2305,8 +2404,15 @@ void SfxMedium::GetMedium_Impl()
                         aMedium.addInputStreamOwnLock();
                     }
                     else
+                    {
+                        // add a check for protocol, if it's http or https or provate webdav then add
+                        // the interaction handler to be used by the authentication dialog
+                        if ( GetURLObject().isAnyKnownWebDAVScheme() )
+                        {
+                            aMedium[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()] <<= GetInteractionHandler( true );
+                        }
                         aMedium.addInputStream();
-
+                    }
                     // the ReadOnly property set in aMedium is ignored
                     // the check is done in LockOrigFileOnDemand() for file and non-file URLs
 
@@ -2500,10 +2606,10 @@ void SfxMedium::UseInteractionHandler( bool bUse )
 
 
 ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
-SfxMedium::GetInteractionHandler()
+SfxMedium::GetInteractionHandler( bool bGetAlways )
 {
     // if interaction isn't allowed explicitly ... return empty reference!
-    if ( !pImp->bUseInteractionHandler )
+    if ( !bGetAlways && !pImp->bUseInteractionHandler )
         return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
 
     // search a possible existing handler inside cached item set
@@ -2516,7 +2622,7 @@ SfxMedium::GetInteractionHandler()
     }
 
     // if default interaction isn't allowed explicitly ... return empty reference!
-    if ( !pImp->bAllowDefaultIntHdl )
+    if ( !bGetAlways && !pImp->bAllowDefaultIntHdl )
         return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
 
     // otherwise return cached default handler ... if it exist.
@@ -2597,11 +2703,41 @@ void SfxMedium::CloseAndRelease()
     UnlockFile( true );
 }
 
+void SfxMedium::DisableUnlockWebDAV( bool bDisableUnlockWebDAV )
+{
+    pImp->m_bDisableUnlockWebDAV = bDisableUnlockWebDAV;
+}
+
 void SfxMedium::UnlockFile( bool bReleaseLockStream )
 {
 #if !HAVE_FEATURE_MULTIUSER_ENVIRONMENT
     (void) bReleaseLockStream;
 #else
+    // check if webdav
+    if ( GetURLObject().isAnyKnownWebDAVScheme() )
+    {
+        if ( pImp->m_bLocked )
+        {
+            // an interaction handler should be used for authentication, if needed
+            try {
+                uno::Reference< ::com::sun::star::task::XInteractionHandler > xHandler = GetInteractionHandler( true );
+                uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+                xComEnv = new ::ucbhelper::CommandEnvironment( xHandler,
+                                                               Reference< ::com::sun::star::ucb::XProgressHandler >() );
+                ucbhelper::Content aContentToUnlock( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext());
+                pImp->m_bLocked = false;
+                //check if WebDAV unlock was explicitly disabled
+                if ( !pImp->m_bDisableUnlockWebDAV )
+                    aContentToUnlock.unlock();
+            }
+            catch ( uno::Exception& )
+            {
+                SAL_WARN( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
+            }
+        }
+        return;
+    }
+
     if ( pImp->m_xLockingStream.is() )
     {
         if ( bReleaseLockStream )
