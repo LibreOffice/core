@@ -1265,7 +1265,7 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
         GLfloat fX2(nX + nWidth - 1);
         GLfloat fY2(nY + nHeight - 1);
 
-        GLfloat pPoints[16];
+        GLfloat pPoints[8];
 
         pPoints[0] = fX1;
         pPoints[1] = fY1;
