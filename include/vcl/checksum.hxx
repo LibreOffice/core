@@ -125,11 +125,10 @@ static const sal_uInt64 vcl_crc64Table[256] = {
   0x29b7d047efec8728ULL
 };
 
-#define BITMAP_CHECKSUM_SIZE 4
+#define BITMAP_CHECKSUM_SIZE 8
 #define BITMAP_CHECKSUM_BITS BOOST_PP_MUL(BITMAP_CHECKSUM_SIZE, 8)
 
-typedef sal_uLong   BitmapChecksum;
-
+typedef sal_uInt64   BitmapChecksum;
 typedef sal_uInt8   BitmapChecksumOctetArray[BITMAP_CHECKSUM_SIZE];
 
 #define BITMAP_CHECKSUM_SET_OCTET(z, i, unused) \
