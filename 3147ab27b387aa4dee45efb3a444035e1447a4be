@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_3ddd3b71",
+        "filename": "filter/Library_svgfilter.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-28T07:18:06Z",
+      "side": 1,
+      "message": "This part of code in boost/boost/system/error_code.hpp is protected with BOOST_SYSTEM_NO_DEPRECATED:\n\n  # ifndef BOOST_SYSTEM_NO_DEPRECATED\n    inline const error_category \u0026  get_system_category() { return system_category(); }\n    inline const error_category \u0026  get_generic_category() { return generic_category(); }\n    inline const error_category \u0026  get_posix_category() { return generic_category(); }\n    static const error_category \u0026  posix_category \u003d generic_category();\n    static const error_category \u0026  errno_ecat     \u003d generic_category();\n    static const error_category \u0026  native_ecat    \u003d system_category();\n  # endif\n\nSo I wonder if BOOST_SYSTEM_NO_DEPRECATED should be defined instead of adding boost_system as dependency here and other palces. The better question is why this problem arises only now?",
+      "range": {
+        "startLine": 60,
+        "startChar": 1,
+        "endLine": 60,
+        "endChar": 15
+      },
+      "revId": "3147ab27b387aa4dee45efb3a444035e1447a4be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
