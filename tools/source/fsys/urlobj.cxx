@@ -3914,6 +3914,22 @@ OUString INetURLObject::getExternalURL(DecodeMechanism eMechanism,
     return aTheExtURIRef;
 }
 
+bool INetURLObject::isSchemeEqualTo(OUString const & scheme) const {
+    return m_aScheme.isPresent()
+        && (rtl_ustr_compareIgnoreAsciiCase_WithLength(
+                scheme.getStr(), scheme.getLength(),
+                m_aAbsURIRef.getStr() + m_aScheme.getBegin(),
+                m_aScheme.getLength())
+            == 0);
+}
+
+bool INetURLObject::isAnyKnownWebDAVScheme() const {
+    return ( isSchemeEqualTo( INetProtocol::Http ) ||
+             isSchemeEqualTo( INetProtocol::Https ) ||
+             isSchemeEqualTo( INetProtocol::VndSunStarWebdav ) ||
+             isSchemeEqualTo( "vnd.sun.star.webdavs" ) );
+}
+
 // static
 OUString INetURLObject::GetScheme(INetProtocol eTheScheme)
 {

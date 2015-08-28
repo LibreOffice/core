@@ -1315,6 +1315,18 @@ void NeonSession::LOCK( const OUString & inPath,
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
+    // before issuing the lock command,
+    // better check first if we already have one on this href
+    if ( m_aNeonLockStore.findByUri(
+                         makeAbsoluteURL( inPath ) ) != 0 )
+    {
+        // we already own a lock for this href
+        // no need to ask for another
+        // TODO: add a lockdiscovery request for confirmation
+        // checking the locktoken, the only item that's unique
+        return;
+    }
+
     Init( rEnv );
 
     /* Create a depth zero, exclusive write lock, with default timeout
@@ -1612,6 +1624,7 @@ void NeonSession::HandleError( int nError,
 
             sal_uInt16 code = makeStatusCode( aText );
 
+            SAL_WARN( "ucb.ucp.webdav","Neon received http error: '" << aText << "'");
             if ( code == SC_LOCKED )
             {
                 if ( m_aNeonLockStore.findByUri(
@@ -1640,6 +1653,7 @@ void NeonSession::HandleError( int nError,
             throw DAVException( DAVException::DAV_HTTP_ERROR, aText, code );
         }
         case NE_LOOKUP:       // Name lookup failed.
+            SAL_WARN( "ucb.ucp.webdav","Name lookup failed" );
             throw DAVException( DAVException::DAV_HTTP_LOOKUP,
                                 NeonUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
@@ -1665,6 +1679,7 @@ void NeonSession::HandleError( int nError,
                                     m_aHostName, m_nPort ) );
 
         case NE_FAILED:       // The precondition failed
+            SAL_WARN( "ucb.ucp.webdav","The precondition failed" );
             throw DAVException( DAVException::DAV_HTTP_FAILED,
                                 NeonUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
@@ -1682,7 +1697,7 @@ void NeonSession::HandleError( int nError,
         }
         default:
         {
-            OSL_TRACE( "NeonSession::HandleError : Unknown Neon error code!" );
+            SAL_WARN( "ucb.ucp.webdav", "Unknown Neon error code!" );
             throw DAVException( DAVException::DAV_HTTP_ERROR,
                                 OUString::createFromAscii(
                                     ne_get_error( m_pHttpSession ) ) );

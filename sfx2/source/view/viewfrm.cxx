@@ -432,13 +432,31 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             INetURLObject aMedObj( pMed->GetName() );
 
-            // the logic below is following, if the document seems not to need to be reloaded and the physical name is different
-            // to the logical one, then on file system it can be checked that the copy is still newer than the original and no document reload is required
-            if ( ( !bNeedsReload && ( (aMedObj.GetProtocol() == INetProtocol::File &&
-                    aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT) &&
-                    !::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::NO_DECODE ), aPhysObj.GetMainURL( INetURLObject::NO_DECODE ) ))
-                  || pMed->IsRemote() ) )
-               || pVersionItem )
+            // -> tdf#82744
+            // the logic below is following:
+            // if the document seems not to need to be reloaded
+            //     and the physical name is different to the logical one,
+            // then on file system it can be checked that the copy is still newer than the original and no document reload is required.
+            // Did some semplification to enhance readability of the 'if' expression
+            //
+            // when the 'http/https' protocol is active, the bool bPhysObjIsYounger relies upon the getlastmodified Property of a WebDAV resource.
+            // Said property should be implemented, but sometimes it's not.
+            // implemented. On this case the reload activated here will not work properly.
+            // TODO: change the check age method for WebDAV to etag (entity-tag) property value, need some rethinking, since the
+            // etag tells that the cache representation (e.g. in LO) is different from the one on the server,
+            // but tells nothing about the age
+            // Details at this link: http://tools.ietf.org/html/rfc4918#section-15, section 15.7
+            bool bPhysObjIsYounger = ::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::NO_DECODE ),
+                                                                         aPhysObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            bool bIsWebDAV = aMedObj.isAnyKnownWebDAVScheme();
+
+            if ( ( !bNeedsReload && ( ( aMedObj.GetProtocol() == INetProtocol::File &&
+                                        aMedObj.getFSysPath( INetURLObject::FSYS_DETECT ) != aPhysObj.getFSysPath( INetURLObject::FSYS_DETECT ) &&
+                                        !bPhysObjIsYounger )
+                                      || ( bIsWebDAV && !bPhysObjIsYounger )
+                                      || ( pMed->IsRemote() && !bIsWebDAV ) ) )
+                 || pVersionItem )
+            // <- tdf#82744
             {
                 bool bOK = false;
                 if ( !pVersionItem )
