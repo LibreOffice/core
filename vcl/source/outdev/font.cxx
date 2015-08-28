@@ -1402,7 +1402,7 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection* pFon
 
 void ImplFontCache::Release( ImplFontEntry* pEntry )
 {
-    static const int FONTCACHE_MAX = 50;
+    static const int FONTCACHE_MAX = getenv("LO_TESTNAME") ? 1 : 50;
 
     assert(pEntry->mnRefCount > 0 && "ImplFontCache::Release() - font refcount underflow");
     if( --pEntry->mnRefCount > 0 )
