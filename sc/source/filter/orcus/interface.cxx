@@ -751,6 +751,7 @@ ScOrcusStyles::protection::protection():
 
 void ScOrcusStyles::protection::applyToItemSet(SfxItemSet& /*rSet*/) const
 {
+    (void)this; // loplugin:staticmethods
 }
 
 ScOrcusStyles::border::border()
@@ -759,10 +760,12 @@ ScOrcusStyles::border::border()
 
 void ScOrcusStyles::border::applyToItemSet(SfxItemSet& /*rSet*/) const
 {
+    (void)this; // loplugin:staticmethods
 }
 
 void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& /*rSet*/) const
 {
+    (void)this; // loplugin:staticmethods
 }
 
 ScOrcusStyles::xf::xf():
