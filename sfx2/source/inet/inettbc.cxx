@@ -170,7 +170,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, SelectHdl)
     return 1L;
 }
 
-IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl)
+IMPL_LINK_NOARG_TYPED(SfxURLToolBoxControl_Impl, OpenHdl, SvtURLBox*, void)
 {
     SvtURLBox* pURLBox = GetURLBox();
     OpenURL( pURLBox->GetURL(), pURLBox->IsCtrlOpen() );
@@ -186,8 +186,6 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl)
             pWin->ToTop( ToTopFlags::RestoreWhenMin );
         }
     }
-
-    return 1L;
 }
 
 

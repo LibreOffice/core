@@ -34,7 +34,7 @@ private:
     SvtURLBox*              GetURLBox() const;
     void                    OpenURL( const OUString& rName, bool bNew ) const;
 
-    DECL_LINK(              OpenHdl, void* );
+    DECL_LINK_TYPED(        OpenHdl, SvtURLBox*, void );
     DECL_LINK(              SelectHdl, void* );
 
     struct ExecuteInfo

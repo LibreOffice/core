@@ -43,17 +43,11 @@
 
 #include <set>
 
-// @@@ using namespace com::sun::star::ucb;
-
-
 
 class SvTabListBox;
 class SvtFileView;
 class SvtFileDialogFilter_Impl;
-
-// SvtFileDialog
-
-
+class SvtURLBox;
 class SvtExpFileDlg_Impl;
 class CustomContainer;
 
@@ -91,21 +85,22 @@ private:
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
 
     DECL_LINK( FilterSelectHdl_Impl, void* );
-    DECL_LINK_TYPED( FilterSelectTimerHdl_Impl, Timer*, void );
-    DECL_LINK_TYPED( NewFolderHdl_Impl, Button*, void );
-    DECL_LINK( OpenHdl_Impl, void* );
-    DECL_LINK_TYPED( OpenClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED( CancelHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(            FilterSelectTimerHdl_Impl, Timer*, void );
+    DECL_LINK_TYPED(            NewFolderHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(            OpenUrlHdl_Impl, SvtURLBox*, void );
+    DECL_LINK_TYPED(            OpenClickHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(            CancelHdl_Impl, Button*, void );
     DECL_LINK( FileNameGetFocusHdl_Impl, void* );
     DECL_LINK( FileNameModifiedHdl_Impl, void* );
 
-    DECL_LINK( URLBoxModifiedHdl_Impl, void* );
-    DECL_LINK_TYPED( ConnectToServerPressed_Hdl, Button*, void );
+    DECL_LINK_TYPED(            URLBoxModifiedHdl_Impl, SvtURLBox*, void );
+    DECL_LINK_TYPED(            ConnectToServerPressed_Hdl, Button*, void );
 
-    DECL_LINK_TYPED(                AddPlacePressed_Hdl, Button*, void );
-    DECL_LINK_TYPED(                RemovePlacePressed_Hdl, Button*, void );
-    DECL_LINK      (                Split_Hdl, void* );
+    DECL_LINK_TYPED(            AddPlacePressed_Hdl, Button*, void );
+    DECL_LINK_TYPED(            RemovePlacePressed_Hdl, Button*, void );
+    DECL_LINK      (            Split_Hdl, void* );
 
+    void                        OpenHdl_Impl(void* pVoid);
     void                        Init_Impl( WinBits nBits );
     /** find a filter with the given wildcard
     @param _rFilter

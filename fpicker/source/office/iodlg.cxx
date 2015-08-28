@@ -523,7 +523,7 @@ void SvtFileDialog::Init_Impl
 
     // Create control element, the order defines the tab control.
     _pImp->_pEdFileName->SetSelectHdl( LINK( this, SvtFileDialog, EntrySelectHdl_Impl ) );
-    _pImp->_pEdFileName->SetOpenHdl( LINK( this, SvtFileDialog, OpenHdl_Impl ) );
+    _pImp->_pEdFileName->SetOpenHdl( LINK( this, SvtFileDialog, OpenUrlHdl_Impl ) );
 
     // in folder picker mode, only auto-complete directories (no files)
     bool bIsFolderPicker = ( _pImp->_eDlgType == FILEDLG_TYPE_PATHDLG );
@@ -832,13 +832,17 @@ IMPL_LINK_TYPED( SvtFileDialog, OpenClickHdl_Impl, Button*, pVoid, void )
 {
     OpenHdl_Impl(pVoid);
 }
-IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
+IMPL_LINK_TYPED( SvtFileDialog, OpenUrlHdl_Impl, SvtURLBox*, pVoid, void )
+{
+    OpenHdl_Impl(pVoid);
+}
+void SvtFileDialog::OpenHdl_Impl(void* pVoid)
 {
     if ( _pImp->_bMultiSelection && _pFileView->GetSelectionCount() > 1 )
     {
         // special open in case of multiselection
         OpenMultiSelection_Impl();
-        return 0;
+        return;
     }
 
     OUString aFileName;
@@ -860,7 +864,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     {
         if ( _pImp->_eMode == FILEDLG_MODE_OPEN && _pImp->_pEdFileName->IsTravelSelect() )
             // OpenHdl called from URLBox; travelling through the list of URLs should not cause an opening
-            return 0;                   // MBA->PB: seems to be called never ?!
+            return;                   // MBA->PB: seems to be called never ?!
 
         // get the URL from the edit field ( if not empty )
         if ( !_pImp->_pEdFileName->GetText().isEmpty() )
@@ -873,7 +877,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                 if ( ( aText.getLength() == 2 && aText == ".." ) ||
                      ( aText.getLength() == 3 && ( aText == "..\\" || aText == "../" ) ) )
                     // don't go higher than the root
-                    return 0;
+                    return;
             }
 
 #if defined( UNX )
@@ -891,7 +895,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                 aFileName = _pImp->_pEdFileName->GetURL();
             }
         }
-        else if ( pVoid == _pImp->_pBtnFileOpen )
+        else if ( pVoid == _pImp->_pBtnFileOpen.get() )
             // OpenHdl was called for the "Open" Button; if edit field is empty, use selected element in the view
             aFileName = _pFileView->GetCurrentURL();
     }
@@ -900,7 +904,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     if ( aFileName.isEmpty() && pVoid == _pImp->_pEdFileName && _pImp->_pUserFilter )
     {
         DELETEZ( _pImp->_pUserFilter );
-        return 0;
+        return;
     }
 
     sal_Int32 nLen = aFileName.getLength();
@@ -914,7 +918,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         }
         else
             // no file selected !
-            return 0;
+            return;
     }
 
     // mark input as selected
@@ -923,7 +927,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     // if a path with wildcards is given, divide the string into path and wildcards
     OUString aFilter;
     if ( !SvtFileDialog::IsolateFilterFromPath_Impl( aFileName, aFilter ) )
-        return 0;
+        return;
 
     // if a filter was retrieved, there were wildcards !
     sal_uInt16 nNewFilterFlags = adjustFilter( aFilter );
@@ -976,7 +980,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         OSL_ENSURE( pHandler, "Got no Interaction Handler!!!" );
 
         if ( pHandler->wasAccessDenied() )
-            return 0;
+            return;
 
         if ( m_aContent.isInvalid() &&
              ( _pImp->_eMode == FILEDLG_MODE_OPEN ) )
@@ -984,7 +988,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
             if ( !pHandler->wasUsed() )
                 ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTS );
 
-            return 0;
+            return;
         }
 
         // restore previous Interaction Handler
@@ -1032,7 +1036,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     ExecuteFilter();
             }
 
-            return 0;
+            return;
         }
     }
     else if ( !( nNewFilterFlags & FLT_NONEMPTY ) )
@@ -1045,14 +1049,14 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         // if applicable filter again
         if ( nNewFilterFlags & FLT_CHANGED )
             ExecuteFilter();
-        return 0;
+        return;
     }
 
     INetURLObject aFileObj( aFileName );
     if ( aFileObj.HasError() )
     {
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
-        return 0;
+        return;
     }
 
     switch ( _pImp->_eMode )
@@ -1068,7 +1072,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                 );
                 ScopedVclPtrInstance< MessageDialog > aBox(this, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 if ( aBox->Execute() != RET_YES )
-                    return 0;
+                    return;
             }
             else
             {
@@ -1082,7 +1086,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     if ( !bFolder )
                     {
                         ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTSPATH );
-                        return 0;
+                        return;
                     }
                 }
             }
@@ -1113,7 +1117,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
 
                     ScopedVclPtrInstance< MessageDialog > aError(this, sError);
                     aError->Execute();
-                    return 0;
+                    return;
                 }
             }
         }
@@ -1135,8 +1139,6 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     {
         EndDialog( RET_OK );
     }
-
-    return nRet;
 }
 
 
@@ -1245,11 +1247,10 @@ IMPL_LINK_NOARG( SvtFileDialog, FileNameModifiedHdl_Impl )
 
 
 
-IMPL_LINK_NOARG( SvtFileDialog, URLBoxModifiedHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SvtFileDialog, URLBoxModifiedHdl_Impl, SvtURLBox*, void )
 {
     OUString aPath = _pImp->_pEdCurrentPath->GetURL();
     OpenURL_Impl(aPath);
-    return 0;
 }
 
 
