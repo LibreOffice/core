@@ -45,11 +45,12 @@ int AtomProvider::getAtom( const OUString& rString, bool bCreate )
     return m_nAtoms-1;
 }
 
-OUString AtomProvider::getString( int nAtom ) const
+const OUString& AtomProvider::getString( int nAtom ) const
 {
+    static OUString aEmpty;
     std::unordered_map<int, OUString>::const_iterator it = m_aStringMap.find( nAtom );
 
-    return it == m_aStringMap.end() ? OUString() : it->second;
+    return it == m_aStringMap.end() ? aEmpty : it->second;
 }
 
 MultiAtomProvider::MultiAtomProvider()
@@ -78,14 +79,15 @@ int MultiAtomProvider::getAtom( int atomClass, const OUString& rString, bool bCr
     return INVALID_ATOM;
 }
 
-OUString MultiAtomProvider::getString( int atomClass, int atom ) const
+const OUString& MultiAtomProvider::getString( int atomClass, int atom ) const
 {
     std::unordered_map<int, AtomProvider*>::const_iterator it =
           m_aAtomLists.find( atomClass );
     if( it != m_aAtomLists.end() )
         return it->second->getString( atom );
 
-    return OUString();
+    static OUString aEmpty;
+    return aEmpty;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

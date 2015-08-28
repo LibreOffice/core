@@ -47,7 +47,7 @@ namespace utl {
         ~AtomProvider();
 
         int getAtom( const OUString&, bool bCreate = false );
-        OUString getString( int ) const;
+        const OUString& getString( int ) const;
     };
 
     class UNOTOOLS_DLLPUBLIC MultiAtomProvider
@@ -59,7 +59,7 @@ namespace utl {
 
         int getAtom( int atomClass, const OUString& rString, bool bCreate = false );
 
-        OUString getString( int atomClass, int atom ) const;
+        const OUString& getString( int atomClass, int atom ) const;
     };
 }
 
