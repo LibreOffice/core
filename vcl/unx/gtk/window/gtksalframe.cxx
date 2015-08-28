@@ -37,7 +37,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
 
 #if !GTK_CHECK_VERSION(3,0,0)
 #  include <unx/x11/xlimits.hxx>
@@ -2935,13 +2934,11 @@ void GtkSalFrame::Flush()
 #else
     XFlush (GDK_DISPLAY_XDISPLAY (getGdkDisplay()));
 #endif
-    OpenGLHelper::flush();
 }
 
 void GtkSalFrame::Sync()
 {
     gdk_display_sync( getGdkDisplay() );
-    OpenGLHelper::flush();
 }
 
 #ifndef GDK_Open

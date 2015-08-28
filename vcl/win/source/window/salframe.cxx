@@ -46,7 +46,6 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/opengl/OpenGLHelper.hxx>
 
 // Warning in SDK header
 #ifdef _MSC_VER
@@ -2202,13 +2201,11 @@ void WinSalFrame::SetPointerPos( long nX, long nY )
 void WinSalFrame::Flush()
 {
     GdiFlush();
-    OpenGLHelper::flush();
 }
 
 void WinSalFrame::Sync()
 {
     GdiFlush();
-    OpenGLHelper::flush();
 }
 
 static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pContext )

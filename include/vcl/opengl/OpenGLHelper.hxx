@@ -67,9 +67,6 @@ public:
      */
     static bool isVCLOpenGLEnabled();
 
-    /// flush the OpenGL command queue - if OpenGL is enabled.
-    static void flush();
-
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     static bool GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rVI);
     static GLXFBConfig GetPixmapFBConfig( Display* pDisplay, bool& bInverted );
