@@ -99,10 +99,6 @@ InterfaceOleWrapper_Impl::~InterfaceOleWrapper_Impl()
     IT_Uno it= UnoObjToWrapperMap.find( (sal_uInt32) m_xOrigin.get());
     if(it != UnoObjToWrapperMap.end())
         UnoObjToWrapperMap.erase(it);
-#if OSL_DEBUG_LEVEL > 0
-    fprintf(stderr,"[automation bridge] UnoObjToWrapperMap  contains: %i \n",
-            UnoObjToWrapperMap.size());
-#endif
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::QueryInterface(REFIID riid, LPVOID FAR * ppv)

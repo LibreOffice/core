@@ -127,11 +127,6 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
      IT_Com it_c= ComPtrToWrapperMap.find( (sal_uInt32) m_spUnknown.p);
     if(it_c != ComPtrToWrapperMap.end())
         ComPtrToWrapperMap.erase(it_c);
-
-#if OSL_DEBUG_LEVEL > 0
-    fprintf(stderr,"[automation bridge] ComPtrToWrapperMap  contains: %i \n",
-            ComPtrToWrapperMap.size());
-#endif
 }
 
 Any IUnknownWrapper_Impl::queryInterface(const Type& t)
