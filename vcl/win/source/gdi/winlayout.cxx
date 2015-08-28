@@ -27,6 +27,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
+#include <outdev.h>
 
 #include "sft.hxx"
 #include "sallayout.hxx"
@@ -113,8 +114,14 @@ WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWF
     mrWinFontData( rWFD ),
     mrWinFontEntry(rWFE),
     mbUseOpenGL(bUseOpenGL)
-{}
+{
+    ++mrWinFontEntry.mnRefCount; // keep it alive
+}
 
+WinLayout::~WinLayout()
+{
+    mrWinFontEntry.m_pFontCache->Release(&mrWinFontEntry);
+}
 void WinLayout::InitFont() const
 {
     ::SelectObject( mhDC, mhFont );
