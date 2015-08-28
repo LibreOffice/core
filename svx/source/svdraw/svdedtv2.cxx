@@ -1181,7 +1181,19 @@ void SdrEditView::EqualizeMarkedObjects(bool bWidth)
     if (nMarked < 2)
         return;
 
-    SdrObject* pLastSelectedObj = rMarkList.GetMark(nMarked-1)->GetMarkedSdrObj();
+    size_t nLastSelected = 0;
+    sal_Int64 nLastSelectedTime = rMarkList.GetMark(0)->getTimeStamp();
+    for (size_t a = 1; a < nMarked; ++a)
+    {
+        sal_Int64 nCandidateTime = rMarkList.GetMark(a)->getTimeStamp();
+        if (nCandidateTime > nLastSelectedTime)
+        {
+            nLastSelectedTime = nCandidateTime;
+            nLastSelected = a;
+        }
+    }
+
+    SdrObject* pLastSelectedObj = rMarkList.GetMark(nLastSelected)->GetMarkedSdrObj();
     Size aLastRectSize(pLastSelectedObj->GetLogicRect().GetSize());
 
     const bool bUndo = IsUndoEnabled();
@@ -1189,8 +1201,10 @@ void SdrEditView::EqualizeMarkedObjects(bool bWidth)
     if (bUndo)
         BegUndo();
 
-    for (size_t a = 0; a < nMarked-1; ++a)
+    for (size_t a = 0; a < nMarked; ++a)
     {
+        if (a == nLastSelected)
+            continue;
         SdrMark* pM = rMarkList.GetMark(a);
         SdrObject* pObj = pM->GetMarkedSdrObj();
         Rectangle aLogicRect(pObj->GetLogicRect());

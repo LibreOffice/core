@@ -42,7 +42,10 @@ typedef std::set<sal_uInt16> SdrUShortCont;
  */
 class SVX_DLLPUBLIC SdrMark : public sdr::ObjectUser
 {
+private:
+    void setTime();
 protected:
+    sal_Int64                                           mnTimeStamp;
     SdrObject*                                          mpSelectedSdrObject; // the selected object
     SdrPageView*                                        mpPageView;
     SdrUShortCont*                                      mpPoints;     // Selected Points
@@ -144,6 +147,11 @@ public:
             mpGluePoints = new SdrUShortCont;
 
         return mpGluePoints;
+    }
+
+    sal_Int64 getTimeStamp() const
+    {
+        return mnTimeStamp;
     }
 };
 

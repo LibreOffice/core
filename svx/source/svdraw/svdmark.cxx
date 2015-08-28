@@ -38,8 +38,12 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svx/svdoedge.hxx>
 
-
-
+void SdrMark::setTime()
+{
+    TimeValue aNow;
+    osl_getSystemTime(&aNow);
+    mnTimeStamp = sal_Int64(aNow.Seconds) * 1000000000L + aNow.Nanosec;
+}
 
 SdrMark::SdrMark(SdrObject* pNewObj, SdrPageView* pNewPageView)
 :   mpSelectedSdrObject(pNewObj),
@@ -55,10 +59,12 @@ SdrMark::SdrMark(SdrObject* pNewObj, SdrPageView* pNewPageView)
     {
         mpSelectedSdrObject->AddObjectUser( *this );
     }
+    setTime();
 }
 
 SdrMark::SdrMark(const SdrMark& rMark)
 :   ObjectUser(),
+    mnTimeStamp(0),
     mpSelectedSdrObject(0L),
     mpPageView(0L),
     mpPoints(0L),
@@ -117,10 +123,10 @@ void SdrMark::SetMarkedSdrObj(SdrObject* pNewObj)
     }
 }
 
-
 SdrMark& SdrMark::operator=(const SdrMark& rMark)
 {
     SetMarkedSdrObj(rMark.mpSelectedSdrObject);
+    mnTimeStamp = rMark.mnTimeStamp;
     mpPageView = rMark.mpPageView;
     mbCon1 = rMark.mbCon1;
     mbCon2 = rMark.mbCon2;
