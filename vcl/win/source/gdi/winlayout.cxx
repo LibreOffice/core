@@ -1482,7 +1482,7 @@ void UniscribeLayout::DropGlyph( int nStartx8 )
 {
     DBG_ASSERT( !(nStartx8 & 0xff), "USP::DropGlyph(): glyph injection not disabled!" );
     int nStart = nStartx8 >> 8;
-    DBG_ASSERT( nStart<=mnGlyphCount, "USPLayout::MoveG nStart overflow" );
+    assert(nStart <= mnGlyphCount);
 
     if( nStart > 0 )        // nStart>0 means absolute glyph pos + 1
         --nStart;
@@ -1492,7 +1492,7 @@ void UniscribeLayout::DropGlyph( int nStartx8 )
         for( int i = mnItemCount, nDummy; --i >= 0; ++pVI )
             if( GetItemSubrange( *pVI, nStart, nDummy ) )
                 break;
-        DBG_ASSERT( nStart <= mnGlyphCount, "USPLayout::DropG overflow" );
+        assert(nStart <= mnGlyphCount);
 
         int j = pVI->mnMinGlyphPos;
         while (j < mnGlyphCount && mpOutGlyphs[j] == DROPPED_OUTGLYPH) j++;
