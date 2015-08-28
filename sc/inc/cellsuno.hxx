@@ -88,8 +88,7 @@
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -1355,7 +1354,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScCellsObj : public cppu::WeakImplHelper2<
+class ScCellsObj : public cppu::WeakImplHelper<
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::lang::XServiceInfo >,
                         public SfxListener
@@ -1388,7 +1387,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScCellsEnumeration : public cppu::WeakImplHelper2<
+class ScCellsEnumeration : public cppu::WeakImplHelper<
                                 com::sun::star::container::XEnumeration,
                                 com::sun::star::lang::XServiceInfo >,
                             public SfxListener
@@ -1426,7 +1425,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScCellFormatsObj : public cppu::WeakImplHelper3<
+class ScCellFormatsObj : public cppu::WeakImplHelper<
                             com::sun::star::container::XIndexAccess,
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::lang::XServiceInfo >,
@@ -1470,7 +1469,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScCellFormatsEnumeration : public cppu::WeakImplHelper2<
+class ScCellFormatsEnumeration : public cppu::WeakImplHelper<
                                     com::sun::star::container::XEnumeration,
                                     com::sun::star::lang::XServiceInfo >,
                                  public SfxListener
@@ -1511,7 +1510,7 @@ public:
 
 typedef std::vector< ScRangeList > ScMyRangeLists;
 
-class ScUniqueCellFormatsObj : public cppu::WeakImplHelper3<
+class ScUniqueCellFormatsObj : public cppu::WeakImplHelper<
                             com::sun::star::container::XIndexAccess,
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::lang::XServiceInfo >,
@@ -1556,7 +1555,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScUniqueCellFormatsEnumeration : public cppu::WeakImplHelper2<
+class ScUniqueCellFormatsEnumeration : public cppu::WeakImplHelper<
                                     com::sun::star::container::XEnumeration,
                                     com::sun::star::lang::XServiceInfo >,
                                  public SfxListener

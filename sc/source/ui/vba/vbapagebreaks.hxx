@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAPAGEBREAKS_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAPAGEBREAKS_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/excel/XHPageBreaks.hpp>
 #include <ooo/vba/excel/XHPageBreak.hpp>
 #include <ooo/vba/excel/XVPageBreaks.hpp>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBASHEETOBJECTS_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBASHEETOBJECTS_HXX
 
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XGraphicObjects.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 #include <rtl/ref.hxx>
@@ -61,7 +62,7 @@ protected:
     ScVbaObjectContainerRef mxContainer;
 };
 
-typedef ::cppu::ImplInheritanceHelper1< ScVbaSheetObjectsBase, ov::excel::XGraphicObjects > ScVbaGraphicObjects_BASE;
+typedef ::cppu::ImplInheritanceHelper< ScVbaSheetObjectsBase, ov::excel::XGraphicObjects > ScVbaGraphicObjects_BASE;
 
 /** Base class for collections containing a specific type of graphic object
     from a sheet.

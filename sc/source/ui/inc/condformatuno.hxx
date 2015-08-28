@@ -20,8 +20,7 @@
 #include <com/sun/star/sheet/XDataBarEntry.hpp>
 #include <com/sun/star/sheet/XIconSetEntry.hpp>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ref.hxx>
@@ -49,7 +48,7 @@ class XSheetCellRanges;
 
 } } }
 
-class ScCondFormatsObj : public cppu::WeakImplHelper1<com::sun::star::sheet::XConditionalFormats>,
+class ScCondFormatsObj : public cppu::WeakImplHelper<com::sun::star::sheet::XConditionalFormats>,
                             public SfxListener
 {
 public:
@@ -82,7 +81,7 @@ private:
     ScDocShell* mpDocShell;
 };
 
-class ScCondFormatObj : public cppu::WeakImplHelper2<com::sun::star::sheet::XConditionalFormat,
+class ScCondFormatObj : public cppu::WeakImplHelper<com::sun::star::sheet::XConditionalFormat,
                             com::sun::star::beans::XPropertySet>
 {
 public:
@@ -168,7 +167,7 @@ private:
     sal_Int32 mnKey;
 };
 
-class ScConditionEntryObj : public cppu::WeakImplHelper2<com::sun::star::beans::XPropertySet,
+class ScConditionEntryObj : public cppu::WeakImplHelper<com::sun::star::beans::XPropertySet,
                                 com::sun::star::sheet::XConditionEntry>
 {
 public:
@@ -231,7 +230,7 @@ private:
     const ScCondFormatEntry* mpFormat;
 };
 
-class ScColorScaleFormatObj : public cppu::WeakImplHelper2<com::sun::star::beans::XPropertySet,
+class ScColorScaleFormatObj : public cppu::WeakImplHelper<com::sun::star::beans::XPropertySet,
                                 com::sun::star::sheet::XConditionEntry>
 {
 public:
@@ -293,7 +292,7 @@ private:
     const ScColorScaleFormat* mpFormat;
 };
 
-class ScColorScaleEntryObj : public cppu::WeakImplHelper1<com::sun::star::sheet::XColorScaleEntry>
+class ScColorScaleEntryObj : public cppu::WeakImplHelper<com::sun::star::sheet::XColorScaleEntry>
 {
 public:
     ScColorScaleEntryObj(rtl::Reference<ScColorScaleFormatObj> xParent, size_t nPos);
@@ -325,7 +324,7 @@ private:
     size_t mnPos;
 };
 
-class ScDataBarFormatObj : public cppu::WeakImplHelper2<com::sun::star::beans::XPropertySet,
+class ScDataBarFormatObj : public cppu::WeakImplHelper<com::sun::star::beans::XPropertySet,
                                 com::sun::star::sheet::XConditionEntry>
 {
 public:
@@ -386,7 +385,7 @@ private:
     const ScDataBarFormat* mpFormat;
 };
 
-class ScDataBarEntryObj : public cppu::WeakImplHelper1<com::sun::star::sheet::XDataBarEntry>
+class ScDataBarEntryObj : public cppu::WeakImplHelper<com::sun::star::sheet::XDataBarEntry>
 {
 public:
     ScDataBarEntryObj(rtl::Reference<ScDataBarFormatObj> xParent, size_t nPos);
@@ -412,7 +411,7 @@ private:
     size_t mnPos;
 };
 
-class ScIconSetFormatObj : public cppu::WeakImplHelper2<com::sun::star::beans::XPropertySet,
+class ScIconSetFormatObj : public cppu::WeakImplHelper<com::sun::star::beans::XPropertySet,
                                 com::sun::star::sheet::XConditionEntry>
 {
 public:
@@ -473,7 +472,7 @@ private:
     const ScIconSetFormat* mpFormat;
 };
 
-class ScIconSetEntryObj : public cppu::WeakImplHelper1<com::sun::star::sheet::XIconSetEntry>
+class ScIconSetEntryObj : public cppu::WeakImplHelper<com::sun::star::sheet::XIconSetEntry>
 {
 public:
     ScIconSetEntryObj(rtl::Reference<ScIconSetFormatObj> xParent, size_t nPos);
@@ -499,7 +498,7 @@ private:
     size_t mnPos;
 };
 
-class ScCondDateFormatObj : public cppu::WeakImplHelper2<com::sun::star::beans::XPropertySet,
+class ScCondDateFormatObj : public cppu::WeakImplHelper<com::sun::star::beans::XPropertySet,
                                 com::sun::star::sheet::XConditionEntry>
 {
 public:

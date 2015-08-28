@@ -21,7 +21,7 @@
 #include "document.hxx"
 
 #include <basic/basmgr.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/objsh.hxx>
 #include "formulacell.hxx"
@@ -99,7 +99,7 @@ ScMacroManager::~ScMacroManager()
 {
 }
 
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener > ContainerListenerHelper;
+typedef ::cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener > ContainerListenerHelper;
 
 class VBAProjectListener : public ContainerListenerHelper
 {

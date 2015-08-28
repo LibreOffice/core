@@ -22,14 +22,14 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 
 #include "global.hxx"
 
 class ScDocShell;
 
-class ScSheetEventsObj : public cppu::WeakImplHelper2<
+class ScSheetEventsObj : public cppu::WeakImplHelper<
                                         com::sun::star::container::XNameReplace,
                                         com::sun::star::lang::XServiceInfo>,
                                     public SfxListener

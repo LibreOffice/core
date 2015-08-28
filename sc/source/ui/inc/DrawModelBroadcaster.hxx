@@ -22,13 +22,13 @@
 
 #include <svl/lstner.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 
 class SdrModel;
 
 class ScDrawModelBroadcaster : public SfxListener,
-    public ::cppu::WeakImplHelper1< com::sun::star::document::XEventBroadcaster >
+    public ::cppu::WeakImplHelper< com::sun::star::document::XEventBroadcaster >
 {
     mutable ::osl::Mutex maListenerMutex;
     ::cppu::OInterfaceContainerHelper maEventListeners;

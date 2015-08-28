@@ -24,11 +24,12 @@
 
 #include "vbaoleobject.hxx"
 #include "vbaoleobjects.hxx"
+#include <cppuhelper/implbase.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-typedef ::cppu::WeakImplHelper1< container::XIndexAccess > XIndexAccess_BASE;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
 
 namespace {
 

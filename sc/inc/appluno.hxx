@@ -29,9 +29,7 @@
 #include <com/sun/star/sheet/XGlobalSheetSettings.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 
@@ -76,7 +74,7 @@ OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw();
 css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr ) throw( css::uno::Exception );
 
-class ScSpreadsheetSettings : public cppu::WeakImplHelper3<
+class ScSpreadsheetSettings : public cppu::WeakImplHelper<
                                         com::sun::star::sheet::XGlobalSheetSettings,
                                         com::sun::star::beans::XPropertySet,
                                         com::sun::star::lang::XServiceInfo>
@@ -228,7 +226,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScRecentFunctionsObj : public cppu::WeakImplHelper2<
+class ScRecentFunctionsObj : public cppu::WeakImplHelper<
                                         com::sun::star::sheet::XRecentFunctions,
                                         com::sun::star::lang::XServiceInfo>
 {
@@ -254,7 +252,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScFunctionListObj : public cppu::WeakImplHelper4<
+class ScFunctionListObj : public cppu::WeakImplHelper<
                                         com::sun::star::sheet::XFunctionDescriptions,
                                         com::sun::star::container::XEnumerationAccess,
                                         com::sun::star::container::XNameAccess,

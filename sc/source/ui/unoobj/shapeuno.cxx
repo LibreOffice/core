@@ -28,7 +28,7 @@
 #include <editeng/unofield.hxx>
 #include <svx/shapepropertynotifier.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
@@ -1361,7 +1361,7 @@ SdrObject* ScShapeObj::GetSdrObject() const throw()
 #define SC_EVENTACC_SCRIPT      "Script"
 #define SC_EVENTACC_EVENTTYPE   "EventType"
 
-class ShapeUnoEventAccessImpl : public ::cppu::WeakImplHelper1< container::XNameReplace >
+class ShapeUnoEventAccessImpl : public ::cppu::WeakImplHelper< container::XNameReplace >
 {
 private:
     ScShapeObj* mpShape;

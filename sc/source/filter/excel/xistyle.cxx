@@ -63,12 +63,12 @@
 
 using ::std::list;
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper1< container::XIndexAccess > XIndexAccess_BASE;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
 typedef ::std::vector< ColorData > ColorDataVec;
 
 class PaletteIndex : public XIndexAccess_BASE

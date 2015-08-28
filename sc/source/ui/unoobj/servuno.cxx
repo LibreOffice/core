@@ -63,6 +63,7 @@
 #include <sfx2/app.hxx>
 
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 using namespace ::com::sun::star;
@@ -76,7 +77,7 @@ bool isInVBAMode( ScDocShell& rDocSh )
     return false;
 }
 
-class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper1< container::XNameAccess >
+class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container::XNameAccess >
 {
     uno::Any maWorkbook;
     uno::Any maCachedObject;
@@ -165,7 +166,7 @@ public:
 
 };
 
-class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
+class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper< document::XCodeNameQuery >
 {
     ScDocShell& mrDocShell;
 public:

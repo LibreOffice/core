@@ -26,14 +26,14 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sheet/XFilterFormulaParser.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace oox {
 namespace xls {
 
 class OOXMLFormulaParserImpl;
 
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper<
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::sheet::XFilterFormulaParser > OOXMLFormulaParser_BASE;

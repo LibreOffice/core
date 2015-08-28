@@ -18,11 +18,12 @@
  */
 #include "vbapagebreaks.hxx"
 #include "vbapagebreak.hxx"
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XWorksheet.hpp>
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-class RangePageBreaks : public ::cppu::WeakImplHelper1<container::XIndexAccess >
+class RangePageBreaks : public ::cppu::WeakImplHelper<container::XIndexAccess >
 {
 private:
     uno::Reference< XHelperInterface > mxParent;

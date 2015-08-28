@@ -19,14 +19,14 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CHARTRANGESELECTIONLISTENER_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CHARTRANGESELECTIONLISTENER_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 class ScTabViewShell;
 
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
         ::com::sun::star::view::XSelectionChangeListener,
         ::com::sun::star::lang::XServiceInfo >
     ScChartRangeSelectionListener_Base;

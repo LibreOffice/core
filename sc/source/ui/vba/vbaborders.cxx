@@ -19,7 +19,7 @@
 #include "vbaborders.hxx"
 
 #include <sal/macros.h>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XlBordersIndex.hpp>
 #include <ooo/vba/excel/XlBorderWeight.hpp>
 #include <ooo/vba/excel/XlLineStyle.hpp>
@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel;
 
-typedef ::cppu::WeakImplHelper1<container::XIndexAccess > RangeBorders_Base;
+typedef ::cppu::WeakImplHelper<container::XIndexAccess > RangeBorders_Base;
 typedef InheritedHelperInterfaceImpl1<excel::XBorder > ScVbaBorder_Base;
 
 // #TODO sort these indexes to match the order in which Excel iterates over the

@@ -24,11 +24,11 @@
 #include <com/sun/star/sheet/XResultListener.hpp>
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class ScDocument;
 
-class ScAddInListener : public cppu::WeakImplHelper2<
+class ScAddInListener : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XResultListener,
                             com::sun::star::lang::XServiceInfo >,
                         public SvtBroadcaster

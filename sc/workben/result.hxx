@@ -26,12 +26,12 @@
 
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XResultListener >* XResultListenerPtr;
 typedef boost::ptr_vector<XResultListenerPtr> XResultListenerArr_Impl;
 
-class ScAddInResult : public cppu::WeakImplHelper1<
+class ScAddInResult : public cppu::WeakImplHelper<
                                 com::sun::star::sheet::XVolatileResult>
 {
 private:

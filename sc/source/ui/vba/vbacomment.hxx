@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBACOMMENT_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBACOMMENT_HXX
 
-#include <cppuhelper/implbase1.hxx>
-
 #include <ooo/vba/excel/XComment.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
 #include <ooo/vba/msforms/XShape.hpp>

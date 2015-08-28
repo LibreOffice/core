@@ -24,12 +24,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
 
 class ScDocShell;
 
-class ScDocDefaultsObj : public ::cppu::WeakImplHelper3<
+class ScDocDefaultsObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::beans::XPropertySet,
                             ::com::sun::star::beans::XPropertyState,
                             ::com::sun::star::lang::XServiceInfo >,

@@ -48,8 +48,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XElementAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class ScDocShell;
 
@@ -63,7 +62,7 @@ class ScDocShell;
 
 //! Graphic / OleObject (need separate collections!)
 
-class ScLinkTargetTypesObj : public ::cppu::WeakImplHelper2<
+class ScLinkTargetTypesObj : public ::cppu::WeakImplHelper<
                                 ::com::sun::star::container::XNameAccess,
                                 ::com::sun::star::lang::XServiceInfo >,
                             public SfxListener
@@ -96,7 +95,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL      getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-class ScLinkTargetTypeObj : public ::cppu::WeakImplHelper3<
+class ScLinkTargetTypeObj : public ::cppu::WeakImplHelper<
                                 ::com::sun::star::beans::XPropertySet,
                                 ::com::sun::star::document::XLinkTargetSupplier,
                                 ::com::sun::star::lang::XServiceInfo >,
@@ -158,7 +157,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-class ScLinkTargetsObj : public ::cppu::WeakImplHelper2<
+class ScLinkTargetsObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::container::XNameAccess,
                             ::com::sun::star::lang::XServiceInfo >
 {

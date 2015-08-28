@@ -31,6 +31,7 @@
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include "vbasheetobject.hxx"
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -65,7 +66,7 @@ inline double lclPointsToHmm( const uno::Any& rPoints ) throw (uno::RuntimeExcep
     Derived classes provide all required functionality specific to the type of
     shapes covered by the container.
  */
-class ScVbaObjectContainer : public ::cppu::WeakImplHelper1< container::XIndexAccess >
+class ScVbaObjectContainer : public ::cppu::WeakImplHelper< container::XIndexAccess >
 {
 public:
     explicit ScVbaObjectContainer(

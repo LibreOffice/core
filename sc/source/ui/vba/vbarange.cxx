@@ -156,6 +156,7 @@
 #include "queryentry.hxx"
 #include "markdata.hxx"
 #include <comphelper/anytostring.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <global.hxx>
 
@@ -310,7 +311,7 @@ public:
 // very simple class to pass to ScVbaCollectionBaseImpl containing
 // just one item
 
-class SingleRangeIndexAccess : public ::cppu::WeakImplHelper2< container::XIndexAccess,
+class SingleRangeIndexAccess : public ::cppu::WeakImplHelper< container::XIndexAccess,
                                                                container::XEnumerationAccess >
 {
 private:
@@ -604,7 +605,7 @@ sal_Int32 m_nCol;
 sal_Int32 m_nArea;
 };
 
-typedef ::cppu::WeakImplHelper1< container::XEnumeration > CellsEnumeration_BASE;
+typedef ::cppu::WeakImplHelper< container::XEnumeration > CellsEnumeration_BASE;
 typedef ::std::vector< CellPos > vCellPos;
 
 // #FIXME - QUICK

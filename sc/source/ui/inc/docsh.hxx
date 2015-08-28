@@ -36,7 +36,6 @@
 #include "docuno.hxx"
 
 #include <boost/scoped_ptr.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <config_telepathy.h>
 #include <unordered_map>
 

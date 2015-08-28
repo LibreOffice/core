@@ -9,12 +9,13 @@
 #include "vbamenuitems.hxx"
 #include "vbamenuitem.hxx"
 #include "vbamenu.hxx"
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/office/MsoControlType.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-typedef ::cppu::WeakImplHelper1< container::XEnumeration > MenuEnumeration_BASE;
+typedef ::cppu::WeakImplHelper< container::XEnumeration > MenuEnumeration_BASE;
 
 class MenuEnumeration : public MenuEnumeration_BASE
 {

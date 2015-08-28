@@ -22,7 +22,7 @@
 
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include "global.hxx"
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -37,7 +37,7 @@ typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XStatusListener > XStatusListenerRef;
 typedef boost::ptr_vector<XStatusListenerRef> XStatusListenerArr_Impl;
 
-class ScDispatchProviderInterceptor : public cppu::WeakImplHelper2<
+class ScDispatchProviderInterceptor : public cppu::WeakImplHelper<
                                         com::sun::star::frame::XDispatchProviderInterceptor,
                                         com::sun::star::lang::XEventListener>,
                                     public SfxListener
@@ -94,7 +94,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScDispatch : public cppu::WeakImplHelper2<
+class ScDispatch : public cppu::WeakImplHelper<
                                     com::sun::star::frame::XDispatch,
                                     com::sun::star::view::XSelectionChangeListener >,
                                 public SfxListener

@@ -48,10 +48,7 @@
 #include <com/sun/star/sheet/opencl/XOpenCLSelection.hpp>
 #include <com/sun/star/sheet/opencl/OpenCLPlatform.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <svl/itemprop.hxx>
 #include <vcl/ITiledRenderable.hxx>
@@ -416,7 +413,7 @@ public:
     virtual void resetSelection() SAL_OVERRIDE;
 };
 
-class ScDrawPagesObj : public cppu::WeakImplHelper2<
+class ScDrawPagesObj : public cppu::WeakImplHelper<
                                 com::sun::star::drawing::XDrawPages,
                                 com::sun::star::lang::XServiceInfo>,
                         public SfxListener
@@ -462,7 +459,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScTableSheetsObj : public cppu::WeakImplHelper5<
+class ScTableSheetsObj : public cppu::WeakImplHelper<
                                 com::sun::star::sheet::XSpreadsheets2,
                                 com::sun::star::sheet::XCellRangesAccess,
                                 com::sun::star::container::XEnumerationAccess,
@@ -572,7 +569,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScTableColumnsObj : public cppu::WeakImplHelper5<
+class ScTableColumnsObj : public cppu::WeakImplHelper<
                                 com::sun::star::table::XTableColumns,
                                 com::sun::star::container::XEnumerationAccess,
                                 com::sun::star::container::XNameAccess,
@@ -679,7 +676,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScTableRowsObj : public cppu::WeakImplHelper4<
+class ScTableRowsObj : public cppu::WeakImplHelper<
                                 com::sun::star::table::XTableRows,
                                 com::sun::star::container::XEnumerationAccess,
                                 com::sun::star::beans::XPropertySet,
@@ -774,7 +771,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScSpreadsheetSettingsObj : public cppu::WeakImplHelper2<
+class ScSpreadsheetSettingsObj : public cppu::WeakImplHelper<
                                     com::sun::star::beans::XPropertySet,
                                     com::sun::star::lang::XServiceInfo>,
                                  public SfxListener
@@ -837,7 +834,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScAnnotationsObj : public cppu::WeakImplHelper3<
+class ScAnnotationsObj : public cppu::WeakImplHelper<
                                 com::sun::star::sheet::XSheetAnnotations,
                                 com::sun::star::container::XEnumerationAccess,
                                 com::sun::star::lang::XServiceInfo>,
@@ -890,7 +887,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScScenariosObj : public cppu::WeakImplHelper4<
+class ScScenariosObj : public cppu::WeakImplHelper<
                                 com::sun::star::sheet::XScenarios,
                                 com::sun::star::container::XEnumerationAccess,
                                 com::sun::star::container::XIndexAccess,

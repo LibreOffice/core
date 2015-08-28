@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 
 class ScDocument;
@@ -52,7 +52,7 @@ public:
     void        Clear();
 };
 
-class ScFunctionAccess : public cppu::WeakImplHelper3<
+class ScFunctionAccess : public cppu::WeakImplHelper<
                                         com::sun::star::sheet::XFunctionAccess,
                                         com::sun::star::beans::XPropertySet,
                                         com::sun::star::lang::XServiceInfo>,

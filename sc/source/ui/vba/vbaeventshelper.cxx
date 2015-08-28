@@ -32,7 +32,7 @@
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/eventcfg.hxx>
 #include <vcl/svapp.hxx>
@@ -108,7 +108,7 @@ uno::Reference< awt::XWindow > lclGetWindowForController( const uno::Reference< 
 } // namespace
 
 // This class is to process Workbook window related event
-class ScVbaEventListener : public ::cppu::WeakImplHelper4< awt::XTopWindowListener,
+class ScVbaEventListener : public ::cppu::WeakImplHelper< awt::XTopWindowListener,
                                                            awt::XWindowListener,
                                                            frame::XBorderResizeListener,
                                                            util::XChangesListener >

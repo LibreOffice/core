@@ -20,10 +20,10 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAAXISTITLE_HXX
 
 #include "vbatitle.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XAxisTitle.hpp>
 
-typedef  TitleImpl< cppu::WeakImplHelper1< ov::excel::XAxisTitle > > AxisTitleBase;
+typedef  TitleImpl< cppu::WeakImplHelper< ov::excel::XAxisTitle > > AxisTitleBase;
 
 class ScVbaAxisTitle : public AxisTitleBase
 {

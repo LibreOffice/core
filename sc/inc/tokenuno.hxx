@@ -26,7 +26,7 @@
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include <formula/FormulaOpCodeMapperObj.hxx>
 #include "address.hxx"
@@ -48,7 +48,7 @@ public:
                         const ScTokenArray& rTokenArray );
 };
 
-class ScFormulaParserObj : public ::cppu::WeakImplHelper3<
+class ScFormulaParserObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::sheet::XFormulaParser,
                             ::com::sun::star::beans::XPropertySet,
                             ::com::sun::star::lang::XServiceInfo >,

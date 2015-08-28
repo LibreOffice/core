@@ -33,6 +33,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <cppuhelper/implbase.hxx>
 
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
@@ -54,12 +55,12 @@ SCTAB, OUStringHash,
 
 typedef std::vector< uno::Reference< sheet::XSpreadsheet > > Sheets;
 
-typedef ::cppu::WeakImplHelper3< container::XEnumerationAccess
+typedef ::cppu::WeakImplHelper< container::XEnumerationAccess
     , com::sun::star::container::XIndexAccess
     , com::sun::star::container::XNameAccess
     > SelectedSheets_BASE;
 
-class SelectedSheetsEnum : public ::cppu::WeakImplHelper1< container::XEnumeration >
+class SelectedSheetsEnum : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
 public:
     uno::Reference< uno::XComponentContext > m_xContext;

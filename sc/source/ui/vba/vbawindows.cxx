@@ -21,7 +21,7 @@
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "vbawindow.hxx"
 #include "vbaglobals.hxx"
@@ -103,7 +103,7 @@ public:
     }
 };
 
-typedef ::cppu::WeakImplHelper3< container::XEnumerationAccess
+typedef ::cppu::WeakImplHelper< container::XEnumerationAccess
     , com::sun::star::container::XIndexAccess
     , com::sun::star::container::XNameAccess
     > WindowsAccessImpl_BASE;

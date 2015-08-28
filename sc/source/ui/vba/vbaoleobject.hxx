@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECT_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECT_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <ooo/vba/excel/XOLEObject.hpp>
 #include <ooo/vba/msforms/XControl.hpp>

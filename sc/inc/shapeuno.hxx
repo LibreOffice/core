@@ -29,7 +29,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -49,7 +49,7 @@ class  ScMacroInfo;
 //  object which aggregates all svx shape objects,
 //  to add own properties
 
-typedef ::cppu::WeakImplHelper5 <   ::com::sun::star::beans::XPropertySet
+typedef ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertySet
                                 ,   ::com::sun::star::beans::XPropertyState
                                 ,   ::com::sun::star::text::XTextContent
                                 ,   ::com::sun::star::document::XEventsSupplier
