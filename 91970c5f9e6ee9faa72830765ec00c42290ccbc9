@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa0719c6_e02af62b",
+        "filename": "o3tl/qa/cow_wrapper_clients.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-28T19:27:36Z",
+      "side": 1,
+      "message": "Now that I think about it the self assignment check should be able to be caught in cow_wrapper with.\n\n    if( same_object( rSrc ) )\n        return *this;\n\nor something along those lines. The problem is I didn\u0027t think to add anything to keep rSrc.maImpl from being assigned to nullptr or release from being called... That\u0027s embarrassing :-)\n\n    maImpl \u003d std::move( rSrc.maImpl );\n\nwill still be needed in the client code.",
+      "parentUuid": "fa0719c6_20486e2d",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0719c6_80621ad7",
         "filename": "o3tl/qa/cow_wrapper_clients.hxx",
         "patchSetId": 1
