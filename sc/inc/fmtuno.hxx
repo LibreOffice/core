@@ -36,9 +36,7 @@
 
 #include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 
 #include "address.hxx"
@@ -68,7 +66,7 @@ struct ScCondFormatEntryItem
     ScCondFormatEntryItem();
 };
 
-class ScTableConditionalFormat : public cppu::WeakImplHelper5<
+class ScTableConditionalFormat : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XSheetConditionalEntries,
                             com::sun::star::container::XNameAccess,
                             com::sun::star::container::XEnumerationAccess,
@@ -141,7 +139,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScTableConditionalEntry : public cppu::WeakImplHelper3<
+class ScTableConditionalEntry : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XSheetCondition2,
                             com::sun::star::sheet::XSheetConditionalEntry,
                             com::sun::star::lang::XServiceInfo >
@@ -190,7 +188,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScTableValidationObj : public cppu::WeakImplHelper5<
+class ScTableValidationObj : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XSheetCondition2,
                             com::sun::star::sheet::XMultiFormulaTokens,
                             com::sun::star::beans::XPropertySet,

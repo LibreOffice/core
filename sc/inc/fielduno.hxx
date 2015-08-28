@@ -36,8 +36,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
 #include <boost/noncopyable.hpp>
@@ -50,7 +49,7 @@ class ScEditFieldObj;
 class ScDocShell;
 class ScHeaderFooterTextData;
 
-class ScCellFieldsObj : public cppu::WeakImplHelper5<
+class ScCellFieldsObj : public cppu::WeakImplHelper<
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::container::XIndexAccess,
                             com::sun::star::container::XContainer,
@@ -123,7 +122,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScHeaderFieldsObj : public cppu::WeakImplHelper5<
+class ScHeaderFieldsObj : public cppu::WeakImplHelper<
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::container::XIndexAccess,
                             com::sun::star::container::XContainer,
@@ -194,7 +193,7 @@ public:
  * Generic UNO wrapper for edit engine's field item in cells, headers, and
  * footers.
  */
-class ScEditFieldObj : public cppu::WeakImplHelper4<
+class ScEditFieldObj : public cppu::WeakImplHelper<
                             com::sun::star::text::XTextField,
                             com::sun::star::beans::XPropertySet,
                             com::sun::star::lang::XUnoTunnel,

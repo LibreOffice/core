@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAFONT_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAFONT_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XFont.hpp>
@@ -29,7 +29,7 @@
 
 class ScCellRangeObj;
 
-typedef cppu::ImplInheritanceHelper1< VbaFontBase, ov::excel::XFont > ScVbaFont_BASE;
+typedef cppu::ImplInheritanceHelper< VbaFontBase, ov::excel::XFont > ScVbaFont_BASE;
 
 class ScVbaFont : public ScVbaFont_BASE
 {

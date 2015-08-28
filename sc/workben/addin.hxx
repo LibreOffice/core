@@ -25,12 +25,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <stardiv/starcalc/test/XTestAddIn.hpp>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 com::sun::star::uno::Reference<com::sun::star::uno::XInterface> ScTestAddIn_CreateInstance(
     const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& );
 
-class ScTestAddIn : public cppu::WeakImplHelper4<
+class ScTestAddIn : public cppu::WeakImplHelper<
                         com::sun::star::sheet::XAddIn,
                         stardiv::starcalc::test::XTestAddIn,
                         com::sun::star::lang::XServiceName,

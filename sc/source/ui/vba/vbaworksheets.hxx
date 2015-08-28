@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAWORKSHEETS_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAWORKSHEETS_HXX
 
-#include <cppuhelper/implbase1.hxx>
-
 #include <ooo/vba/excel/XWorksheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>

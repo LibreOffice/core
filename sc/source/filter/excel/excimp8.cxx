@@ -99,6 +99,7 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "xltoolbar.hxx"
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>
@@ -109,7 +110,7 @@ using namespace ::comphelper;
 
 //OleNameOverrideContainer
 
-class OleNameOverrideContainer : public ::cppu::WeakImplHelper1< container::XNameContainer >
+class OleNameOverrideContainer : public ::cppu::WeakImplHelper< container::XNameContainer >
 {
 private:
     typedef std::unordered_map< OUString, uno::Reference< container::XIndexContainer >, OUStringHash,

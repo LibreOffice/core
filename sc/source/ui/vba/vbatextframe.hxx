@@ -18,12 +18,13 @@
  */
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBATEXTFRAME_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBATEXTFRAME_HXX
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XTextFrame.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbatextframe.hxx>
 
 //typedef InheritedHelperInterfaceImpl1< ov::excel::XTextFrame > ScVbaTextFrame_BASE;
-typedef cppu::ImplInheritanceHelper1< VbaTextFrame, ov::excel::XTextFrame > ScVbaTextFrame_BASE;
+typedef cppu::ImplInheritanceHelper< VbaTextFrame, ov::excel::XTextFrame > ScVbaTextFrame_BASE;
 
 class ScVbaTextFrame : public ScVbaTextFrame_BASE
 {

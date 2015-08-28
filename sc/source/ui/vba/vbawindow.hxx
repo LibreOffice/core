@@ -27,12 +27,13 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <ooo/vba/excel/XPane.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
+#include <cppuhelper/implbase.hxx>
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbawindowbase.hxx>
 #include "vbaworkbook.hxx"
 
-typedef cppu::ImplInheritanceHelper1< VbaWindowBase, ov::excel::XWindow > WindowImpl_BASE;
+typedef cppu::ImplInheritanceHelper< VbaWindowBase, ov::excel::XWindow > WindowImpl_BASE;
 
 class ScVbaWindow : public WindowImpl_BASE
 {

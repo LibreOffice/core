@@ -28,8 +28,7 @@
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <rtl/ref.hxx>
 #include "scdllapi.h"
@@ -57,7 +56,7 @@ struct ScHeaderFieldData;
 //  ScHeaderFooterContentObj is a dumb container which must be re-written into
 //  the page template using setPropertyValue
 
-class ScHeaderFooterContentObj : public cppu::WeakImplHelper3<
+class ScHeaderFooterContentObj : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XHeaderFooterContent,
                             com::sun::star::lang::XUnoTunnel,
                             com::sun::star::lang::XServiceInfo >
@@ -140,7 +139,7 @@ public:
  *
  * ScHeaderFooterTextObj changes the text in a ScHeaderFooterContentObj.
  */
-class ScHeaderFooterTextObj : public cppu::WeakImplHelper5<
+class ScHeaderFooterTextObj : public cppu::WeakImplHelper<
                             com::sun::star::text::XText,
                             com::sun::star::text::XTextRangeMover,
                             com::sun::star::container::XEnumerationAccess,

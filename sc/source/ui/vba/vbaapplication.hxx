@@ -25,9 +25,9 @@
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbaapplicationbase.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
-typedef cppu::ImplInheritanceHelper1< VbaApplicationBase, ov::excel::XApplication > ScVbaApplication_BASE;
+typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ov::excel::XApplication > ScVbaApplication_BASE;
 
 struct ScVbaAppSettings;
 

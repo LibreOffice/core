@@ -20,11 +20,12 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAPANE_HXX
 
 #include <com/sun/star/sheet/XViewPane.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XPane.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include "excelvbahelper.hxx"
 
-class ScVbaPane : public cppu::WeakImplHelper1< ov::excel::XPane >
+class ScVbaPane : public cppu::WeakImplHelper< ov::excel::XPane >
 {
 public:
     ScVbaPane(

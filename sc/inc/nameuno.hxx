@@ -36,10 +36,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 class ScDocShell;
@@ -48,7 +45,7 @@ class ScRangeData;
 class ScTokenArray;
 class ScNamedRangesObj;
 
-class SC_DLLPUBLIC ScNamedRangeObj : public ::cppu::WeakImplHelper6<
+class SC_DLLPUBLIC ScNamedRangeObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::sheet::XNamedRange,
                             ::com::sun::star::sheet::XFormulaTokens,
                             ::com::sun::star::sheet::XCellRangeReferrer,
@@ -171,7 +168,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScNamedRangesObj : public ::cppu::WeakImplHelper6<
+class ScNamedRangesObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::sheet::XNamedRanges,
                             ::com::sun::star::container::XEnumerationAccess,
                             ::com::sun::star::container::XIndexAccess,
@@ -337,7 +334,7 @@ public:
     virtual                 ~ScLocalNamedRangesObj();
 };
 
-class ScLabelRangeObj : public ::cppu::WeakImplHelper2<
+class ScLabelRangeObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::sheet::XLabelRange,
                             ::com::sun::star::lang::XServiceInfo >,
                         public SfxListener
@@ -376,7 +373,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScLabelRangesObj : public ::cppu::WeakImplHelper3<
+class ScLabelRangesObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::sheet::XLabelRanges,
                             ::com::sun::star::container::XEnumerationAccess,
                             ::com::sun::star::lang::XServiceInfo >,

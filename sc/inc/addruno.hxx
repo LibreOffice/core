@@ -22,12 +22,12 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include "global.hxx"
 #include "address.hxx"
 
-class ScAddressConversionObj : public ::cppu::WeakImplHelper2<
+class ScAddressConversionObj : public ::cppu::WeakImplHelper<
                                     ::com::sun::star::beans::XPropertySet,
                                     ::com::sun::star::lang::XServiceInfo >,
                                public SfxListener

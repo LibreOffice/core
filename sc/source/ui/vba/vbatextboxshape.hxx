@@ -18,14 +18,14 @@
  */
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBATEXTBOXSHAPE_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBATEXTBOXSHAPE_HXX
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <ooo/vba/msforms/XTextBoxShape.hpp>
 #include <vbahelper/vbashape.hxx>
 #include "excelvbahelper.hxx"
 #include "vbacharacters.hxx"
 
-typedef cppu::ImplInheritanceHelper1< ScVbaShape, ov::msforms::XTextBoxShape > TextBoxShapeImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaShape, ov::msforms::XTextBoxShape > TextBoxShapeImpl_BASE;
 
 class ScVbaTextBoxShape : public TextBoxShapeImpl_BASE
 {

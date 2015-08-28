@@ -28,7 +28,7 @@
 #include <svl/eitem.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -59,7 +59,7 @@ typedef std::vector< uno::Reference< sheet::XSpreadsheet > >  SheetMap;
 // #FIXME #TODO the implementation of the Sheets collections sucks,
 // e.g. there is no support for tracking sheets added/removed from the collection
 
-class WorkSheetsEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
+class WorkSheetsEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     SheetMap mSheetMap;
     SheetMap::iterator mIt;
@@ -78,7 +78,7 @@ public:
     }
 };
 
-class SheetCollectionHelper : public ::cppu::WeakImplHelper3< container::XNameAccess,
+class SheetCollectionHelper : public ::cppu::WeakImplHelper< container::XNameAccess,
                                                               container::XIndexAccess,
                                                               container::XEnumerationAccess >
 {

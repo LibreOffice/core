@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "scdllapi.h"
 
@@ -84,7 +84,7 @@ sal_Bool SAL_CALL ClassName::supportsService( const OUString& ServiceName ) \
     if (rType == cppu::UnoType<x>::get())  \
     { uno::Any aR; aR <<= uno::Reference<x>(static_cast<y*>(this)); return aR; }
 
-class ScIndexEnumeration : public cppu::WeakImplHelper2<
+class ScIndexEnumeration : public cppu::WeakImplHelper<
                                 com::sun::star::container::XEnumeration,
                                 com::sun::star::lang::XServiceInfo >
 {
@@ -115,7 +115,7 @@ public:
 };
 
 //  new (uno 3) variant
-class ScNameToIndexAccess : public cppu::WeakImplHelper2<
+class ScNameToIndexAccess : public cppu::WeakImplHelper<
                                 com::sun::star::container::XIndexAccess,
                                 com::sun::star::lang::XServiceInfo >
 {

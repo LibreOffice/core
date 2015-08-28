@@ -8,12 +8,13 @@
  */
 #include "vbamenubars.hxx"
 #include "vbamenubar.hxx"
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XlSheetType.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-class MenuBarEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
+class MenuBarEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     uno::Reference< XHelperInterface > m_xParent;
     uno::Reference< uno::XComponentContext > m_xContext;

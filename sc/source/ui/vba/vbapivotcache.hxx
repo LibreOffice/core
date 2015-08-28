@@ -18,7 +18,6 @@
  */
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAPIVOTCACHE_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAPIVOTCACHE_HXX
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 

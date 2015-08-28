@@ -19,10 +19,10 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBACHARTTITLE_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBACHARTTITLE_HXX
 #include "vbatitle.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XChartTitle.hpp>
 
-typedef TitleImpl< cppu::WeakImplHelper1< ov::excel::XChartTitle > > ChartTitleBase;
+typedef TitleImpl< cppu::WeakImplHelper< ov::excel::XChartTitle > > ChartTitleBase;
 
 class ScVbaChartTitle : public ChartTitleBase
 {

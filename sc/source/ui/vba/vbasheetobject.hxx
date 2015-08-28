@@ -23,6 +23,7 @@
 #include <ooo/vba/excel/XButton.hpp>
 #include <ooo/vba/excel/XControlObject.hpp>
 #include <ooo/vba/excel/XSheetObject.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbapalette.hxx"
 
@@ -117,7 +118,7 @@ protected:
     css::uno::Reference< css::beans::XPropertySet > mxShapeProps;
 };
 
-typedef ::cppu::ImplInheritanceHelper1< ScVbaSheetObjectBase, ov::excel::XControlObject > ScVbaControlObject_BASE;
+typedef ::cppu::ImplInheritanceHelper< ScVbaSheetObjectBase, ov::excel::XControlObject > ScVbaControlObject_BASE;
 
 class ScVbaControlObjectBase : public ScVbaControlObject_BASE
 {
@@ -162,7 +163,7 @@ protected:
     OUString maEventMethod;
 };
 
-typedef ::cppu::ImplInheritanceHelper1< ScVbaControlObjectBase, ov::excel::XButton > ScVbaButton_BASE;
+typedef ::cppu::ImplInheritanceHelper< ScVbaControlObjectBase, ov::excel::XButton > ScVbaButton_BASE;
 
 class ScVbaButton : public ScVbaButton_BASE
 {

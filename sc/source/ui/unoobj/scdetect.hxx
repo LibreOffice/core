@@ -23,7 +23,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 }}}
 
-class ScFilterDetect : public ::cppu::WeakImplHelper2< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
+class ScFilterDetect : public ::cppu::WeakImplHelper< ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
 {
 public:
     ScFilterDetect( const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext );

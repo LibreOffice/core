@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include "address.hxx"
 
@@ -33,7 +33,7 @@ class ScDocShell;
 class SvxUnoText;
 class ScPostIt;
 
-class ScAnnotationObj : public cppu::WeakImplHelper5<
+class ScAnnotationObj : public cppu::WeakImplHelper<
                             com::sun::star::container::XChild,
                             com::sun::star::text::XSimpleText,
                             com::sun::star::sheet::XSheetAnnotation,

@@ -20,6 +20,7 @@
 #include "vbahyperlinks.hxx"
 #include <algorithm>
 #include <vector>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/office/MsoHyperlinkType.hpp>
 #include "rangelst.hxx"
 #include "vbahyperlink.hxx"
@@ -100,7 +101,7 @@ bool EqualAnchorFunctor::operator()( const uno::Reference< excel::XHyperlink >& 
 
 namespace detail {
 
-class ScVbaHlinkContainer : public ::cppu::WeakImplHelper1< container::XIndexAccess >
+class ScVbaHlinkContainer : public ::cppu::WeakImplHelper< container::XIndexAccess >
 {
 public:
     explicit ScVbaHlinkContainer() throw (uno::RuntimeException);

@@ -34,8 +34,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 
 
@@ -46,7 +45,7 @@ class SfxObjectShell;
 class ScStyleFamilyObj;
 class ScStyleObj;
 
-class ScStyleFamiliesObj : public ::cppu::WeakImplHelper4<
+class ScStyleFamiliesObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::container::XIndexAccess,
                             ::com::sun::star::container::XNameAccess,
                             ::com::sun::star::style::XStyleLoader2,
@@ -118,7 +117,7 @@ private:
                                             ::com::sun::star::uno::RuntimeException, std::exception);
 };
 
-class ScStyleFamilyObj : public ::cppu::WeakImplHelper4<
+class ScStyleFamilyObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::container::XNameContainer,
                             ::com::sun::star::container::XIndexAccess,
                             ::com::sun::star::beans::XPropertySet,
@@ -210,7 +209,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScStyleObj : public ::cppu::WeakImplHelper7<
+class ScStyleObj : public ::cppu::WeakImplHelper<
                     ::com::sun::star::style::XStyle,
                     ::com::sun::star::beans::XPropertySet,
                     ::com::sun::star::beans::XMultiPropertySet,

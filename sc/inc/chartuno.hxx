@@ -33,13 +33,13 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/compbase4.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class ScDocShell;
 class ScChartObj;
 
-class ScChartsObj : public cppu::WeakImplHelper4<
+class ScChartsObj : public cppu::WeakImplHelper<
                             com::sun::star::table::XTableCharts,
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::container::XIndexAccess,
@@ -105,7 +105,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-typedef ::cppu::WeakComponentImplHelper4<
+typedef ::cppu::WeakComponentImplHelper<
     ::com::sun::star::table::XTableChart,
     ::com::sun::star::document::XEmbeddedObjectSupplier,
     ::com::sun::star::container::XNamed,

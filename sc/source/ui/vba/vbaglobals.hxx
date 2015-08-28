@@ -25,14 +25,14 @@
 #include <ooo/vba/excel/XGlobals.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "excelvbahelper.hxx"
 
 #include <vbahelper/vbaglobalbase.hxx>
 
     // class ScVbaGlobals
 
-typedef ::cppu::ImplInheritanceHelper1< VbaGlobalsBase, ov::excel::XGlobals > ScVbaGlobals_BASE;
+typedef ::cppu::ImplInheritanceHelper< VbaGlobalsBase, ov::excel::XGlobals > ScVbaGlobals_BASE;
 
     class ScVbaGlobals : public ScVbaGlobals_BASE
     {

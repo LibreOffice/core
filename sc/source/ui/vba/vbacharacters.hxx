@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBACHARACTERS_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBACHARACTERS_HXX
 
-#include <cppuhelper/implbase1.hxx>
-
 #include <ooo/vba/excel/XCharacters.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>

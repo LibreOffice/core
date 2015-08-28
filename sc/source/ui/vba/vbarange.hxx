@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBARANGE_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBARANGE_HXX
 
-#include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
 #include <ooo/vba/excel/XRange.hpp>

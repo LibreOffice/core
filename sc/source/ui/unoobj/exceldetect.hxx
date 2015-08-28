@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_UNOOBJ_EXCELDETECT_HXX
 #define INCLUDED_SC_SOURCE_UI_UNOOBJ_EXCELDETECT_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
@@ -19,7 +19,7 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 }}}}
 
-class ScExcelBiffDetect : public cppu::WeakImplHelper2<com::sun::star::document::XExtendedFilterDetection, com::sun::star::lang::XServiceInfo>
+class ScExcelBiffDetect : public cppu::WeakImplHelper<com::sun::star::document::XExtendedFilterDetection, com::sun::star::lang::XServiceInfo>
 {
 public:
     ScExcelBiffDetect( const com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext>& xContext );

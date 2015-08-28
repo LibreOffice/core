@@ -50,10 +50,7 @@
 #include <com/sun/star/sheet/XDataPilotTable2.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vector>
 
@@ -82,7 +79,7 @@ public:
 };
 
 /** DataPilotTables collection per sheet. */
-class ScDataPilotTablesObj : public cppu::WeakImplHelper4<
+class ScDataPilotTablesObj : public cppu::WeakImplHelper<
                                         com::sun::star::sheet::XDataPilotTables,
                                         com::sun::star::container::XEnumerationAccess,
                                         com::sun::star::container::XIndexAccess,
@@ -421,7 +418,7 @@ private:
     ScDataPilotChildObjBase& operator=( const ScDataPilotChildObjBase& ) SAL_DELETED_FUNCTION;
 };
 
-typedef ::cppu::WeakImplHelper4
+typedef ::cppu::WeakImplHelper
 <
     ::com::sun::star::container::XEnumerationAccess,
     ::com::sun::star::container::XIndexAccess,
@@ -485,7 +482,7 @@ private:
     ::com::sun::star::uno::Any maOrient;    /// Field orientation, no value = all fields.
 };
 
-typedef ::cppu::WeakImplHelper5
+typedef ::cppu::WeakImplHelper
 <
     ::com::sun::star::container::XNamed,
     ::com::sun::star::beans::XPropertySet,
@@ -630,7 +627,7 @@ struct ScFieldGroup
 
 typedef ::std::vector< ScFieldGroup > ScFieldGroups;
 
-typedef ::cppu::WeakImplHelper4
+typedef ::cppu::WeakImplHelper
 <
     ::com::sun::star::container::XNameContainer,
     ::com::sun::star::container::XEnumerationAccess,
@@ -716,7 +713,7 @@ private:
     ScFieldGroups       maGroups;
 };
 
-typedef ::cppu::WeakImplHelper5
+typedef ::cppu::WeakImplHelper
 <
     ::com::sun::star::container::XNameContainer,
     ::com::sun::star::container::XEnumerationAccess,
@@ -796,7 +793,7 @@ private:
     OUString     maGroupName;
 };
 
-typedef ::cppu::WeakImplHelper2
+typedef ::cppu::WeakImplHelper
 <
     ::com::sun::star::container::XNamed,
     ::com::sun::star::lang::XServiceInfo
@@ -827,7 +824,7 @@ private:
     OUString     maName;
 };
 
-typedef ::cppu::WeakImplHelper4
+typedef ::cppu::WeakImplHelper
 <
     ::com::sun::star::container::XEnumerationAccess,
     ::com::sun::star::container::XIndexAccess,
@@ -880,7 +877,7 @@ private:
     ScDataPilotItemObj* GetObjectByIndex_Impl( sal_Int32 nIndex ) const;
 };
 
-typedef ::cppu::WeakImplHelper3
+typedef ::cppu::WeakImplHelper
 <
     ::com::sun::star::container::XNamed,
     ::com::sun::star::beans::XPropertySet,

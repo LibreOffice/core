@@ -24,11 +24,11 @@
 #include <svl/lstner.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class ScDocShell;
 
-class ScDocumentConfiguration : public cppu::WeakImplHelper2<
+class ScDocumentConfiguration : public cppu::WeakImplHelper<
                                         com::sun::star::beans::XPropertySet,
                                         com::sun::star::lang::XServiceInfo>,
                                 public SfxListener

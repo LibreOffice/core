@@ -20,7 +20,7 @@
 #include "vbapalette.hxx"
 
 #include <sal/macros.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include "excelvbahelper.hxx"
@@ -46,7 +46,7 @@ static const ColorData spnDefColorTable8[] =
 /* 56 */    0x003366, 0x339966, 0x003300, 0x333300, 0x993300, 0x993366, 0x333399, 0x333333
 };
 
-typedef ::cppu::WeakImplHelper1< container::XIndexAccess > XIndexAccess_BASE;
+typedef ::cppu::WeakImplHelper< container::XIndexAccess > XIndexAccess_BASE;
 
 class DefaultPalette : public XIndexAccess_BASE
 {

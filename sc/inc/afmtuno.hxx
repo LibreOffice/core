@@ -35,16 +35,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class ScAutoFormatFieldObj;
 class ScAutoFormatObj;
 
 #define SC_AFMTOBJ_INVALID  USHRT_MAX
 
-class ScAutoFormatsObj : public ::cppu::WeakImplHelper4<
+class ScAutoFormatsObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::container::XNameContainer,
                             ::com::sun::star::container::XEnumerationAccess,
                             ::com::sun::star::container::XIndexAccess,
@@ -114,7 +112,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScAutoFormatObj : public ::cppu::WeakImplHelper6<
+class ScAutoFormatObj : public ::cppu::WeakImplHelper<
                             ::com::sun::star::container::XIndexAccess,
                             ::com::sun::star::container::XEnumerationAccess,
                             ::com::sun::star::container::XNamed,
@@ -219,7 +217,7 @@ public:
     static ScAutoFormatObj* getImplementation(const css::uno::Reference<css::uno::XInterface>& rObj);
 };
 
-class ScAutoFormatFieldObj : public ::cppu::WeakImplHelper2<
+class ScAutoFormatFieldObj : public ::cppu::WeakImplHelper<
                                 ::com::sun::star::beans::XPropertySet,
                                 ::com::sun::star::lang::XServiceInfo >,
                             public SfxListener

@@ -21,7 +21,6 @@
 #define INCLUDED_SC_INC_ACCESSIBLEFILTERTOPWINDOW_HXX
 
 #include "AccessibleFilterMenu.hxx"
-#include <cppuhelper/implbase1.hxx>
 
 class ScCheckListMenuWindow;
 

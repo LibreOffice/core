@@ -13,7 +13,6 @@
 #include <ooo/vba/excel/XMenuBar.hpp>
 #include <ooo/vba/XCommandBars.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbacollectionimpl.hxx>
 

@@ -24,11 +24,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <svl/itemprop.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SvxSearchItem;
 
-class ScCellSearchObj : public cppu::WeakImplHelper3<
+class ScCellSearchObj : public cppu::WeakImplHelper<
                                 com::sun::star::util::XReplaceDescriptor,
                                 com::sun::star::lang::XUnoTunnel,
                                 com::sun::star::lang::XServiceInfo >

@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAPIVOTTABLES_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAPIVOTTABLES_HXX
 
-#include <cppuhelper/implbase1.hxx>
-
 #include <ooo/vba/excel/XPivotTables.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

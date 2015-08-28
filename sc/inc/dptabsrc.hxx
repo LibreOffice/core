@@ -40,10 +40,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 #include "dptabdat.hxx"
@@ -82,7 +79,7 @@ class ScDPLevel;
 class ScDPMembers;
 class ScDPMember;
 
-class ScDPSource : public cppu::WeakImplHelper6<
+class ScDPSource : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XDimensionsSupplier,
                             com::sun::star::sheet::XDataPilotResults,
                             com::sun::star::util::XRefreshable,
@@ -267,7 +264,7 @@ public:
 #endif
 };
 
-class ScDPDimensions : public cppu::WeakImplHelper2<
+class ScDPDimensions : public cppu::WeakImplHelper<
                             com::sun::star::container::XNameAccess,
                             com::sun::star::lang::XServiceInfo >
 {
@@ -309,7 +306,7 @@ public:
     ScDPDimension*  getByIndex(long nIndex) const;
 };
 
-class ScDPDimension : boost::noncopyable, public cppu::WeakImplHelper5<
+class ScDPDimension : boost::noncopyable, public cppu::WeakImplHelper<
                             com::sun::star::sheet::XHierarchiesSupplier,
                             com::sun::star::container::XNamed,
                             com::sun::star::util::XCloneable,
@@ -421,7 +418,7 @@ public:
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const { return aReferenceValue;}
 };
 
-class ScDPHierarchies : public cppu::WeakImplHelper2<
+class ScDPHierarchies : public cppu::WeakImplHelper<
                             com::sun::star::container::XNameAccess,
                             com::sun::star::lang::XServiceInfo >
 {
@@ -462,7 +459,7 @@ public:
     ScDPHierarchy*  getByIndex(long nIndex) const;
 };
 
-class ScDPHierarchy : public cppu::WeakImplHelper3<
+class ScDPHierarchy : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XLevelsSupplier,
                             com::sun::star::container::XNamed,
                             com::sun::star::lang::XServiceInfo >
@@ -497,7 +494,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScDPLevels : public cppu::WeakImplHelper2<
+class ScDPLevels : public cppu::WeakImplHelper<
                             com::sun::star::container::XNameAccess,
                             com::sun::star::lang::XServiceInfo >
 {
@@ -539,7 +536,7 @@ public:
     ScDPLevel*      getByIndex(long nIndex) const;
 };
 
-class ScDPLevel : public cppu::WeakImplHelper5<
+class ScDPLevel : public cppu::WeakImplHelper<
                             com::sun::star::sheet::XMembersSupplier,
                             com::sun::star::container::XNamed,
                             com::sun::star::sheet::XDataPilotMemberResults,
@@ -672,7 +669,7 @@ public:
 // hash map from name to index in the member array, for fast name access
 typedef std::unordered_map< OUString, sal_Int32, OUStringHash > ScDPMembersHashMap;
 
-class ScDPMembers : public cppu::WeakImplHelper2<
+class ScDPMembers : public cppu::WeakImplHelper<
                             com::sun::star::container::XNameAccess,
                             com::sun::star::lang::XServiceInfo >
 {
@@ -723,7 +720,7 @@ public:
     SCROW                   GetSrcItemsCount();
 };
 
-class ScDPMember : boost::noncopyable, public cppu::WeakImplHelper3<
+class ScDPMember : boost::noncopyable, public cppu::WeakImplHelper<
                             com::sun::star::container::XNamed,
                             com::sun::star::beans::XPropertySet,
                             com::sun::star::lang::XServiceInfo >

@@ -19,12 +19,12 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBADIALOG_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBADIALOG_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XDialog.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadialogbase.hxx>
 
-typedef cppu::ImplInheritanceHelper1< VbaDialogBase, ov::excel::XDialog > ScVbaDialog_BASE;
+typedef cppu::ImplInheritanceHelper< VbaDialogBase, ov::excel::XDialog > ScVbaDialog_BASE;
 
 class ScVbaDialog : public ScVbaDialog_BASE
 {

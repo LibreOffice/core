@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBACOMMENTS_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBACOMMENTS_HXX
 
-#include <cppuhelper/implbase1.hxx>
-
 #include <ooo/vba/excel/XComments.hpp>
 
 #include "excelvbahelper.hxx"

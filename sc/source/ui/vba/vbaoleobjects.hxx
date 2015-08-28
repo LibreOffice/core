@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECTS_HXX
 #define INCLUDED_SC_SOURCE_UI_VBA_VBAOLEOBJECTS_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/excel/XOLEObjects.hpp>
 
 #include <vbahelper/vbacollectionimpl.hxx>
