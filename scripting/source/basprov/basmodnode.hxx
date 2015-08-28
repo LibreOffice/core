@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SbModule;
 
@@ -37,7 +37,7 @@ namespace basprov
     //  class BasicModuleNodeImpl
 
 
-    typedef ::cppu::WeakImplHelper1<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::script::browse::XBrowseNode > BasicModuleNodeImpl_BASE;
 
 

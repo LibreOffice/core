@@ -21,7 +21,7 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -51,7 +51,7 @@ typedef std::unordered_map< OUString,
 
 class NonDocMSPCreator;
 
-class ActiveMSPList : public ::cppu::WeakImplHelper1< css::lang::XEventListener  >
+class ActiveMSPList : public ::cppu::WeakImplHelper< css::lang::XEventListener  >
 {
 
 public:

@@ -22,7 +22,7 @@
 
 #include "sal/config.h"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase4.hxx"
+#include <cppuhelper/implbase.hxx>
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/container/XNameContainer.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
@@ -32,7 +32,7 @@
 namespace dlgprov{
 
 class DialogModelProvider:
-    public ::cppu::WeakImplHelper4<
+    public ::cppu::WeakImplHelper<
         css::lang::XInitialization,
         css::container::XNameContainer,
         css::beans::XPropertySet,

@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -39,7 +39,7 @@
 namespace func_provider
 {
 
- typedef ::cppu::WeakImplHelper5<
+ typedef ::cppu::WeakImplHelper<
      css::script::provider::XScriptProvider,
      css::script::browse::XBrowseNode, css::lang::XServiceInfo,
      css::lang::XInitialization,
