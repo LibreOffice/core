@@ -28,8 +28,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
 
@@ -91,7 +90,7 @@ typedef std::vector< LocaleItem* > LocaleItemVector;
 typedef std::vector< LocaleItem* >::iterator LocaleItemVectorIt;
 typedef std::vector< LocaleItem* >::const_iterator LocaleItemVectorConstIt;
 
-typedef ::cppu::WeakImplHelper2<
+typedef ::cppu::WeakImplHelper<
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::resource::XStringResourceManager > StringResourceImpl_BASE;
 
@@ -233,7 +232,7 @@ public:
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
  };
 
-typedef ::cppu::ImplInheritanceHelper1<
+typedef ::cppu::ImplInheritanceHelper<
         StringResourceImpl,
         ::com::sun::star::resource::XStringResourcePersistence > StringResourcePersistenceImpl_BASE;
 
@@ -408,7 +407,7 @@ public:
 };
 
 
-typedef ::cppu::ImplInheritanceHelper2<
+typedef ::cppu::ImplInheritanceHelper<
         StringResourcePersistenceImpl,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::resource::XStringResourceWithStorage > StringResourceWithStorageImpl_BASE;
@@ -530,7 +529,7 @@ public:
 };
 
 
-typedef ::cppu::ImplInheritanceHelper2<
+typedef ::cppu::ImplInheritanceHelper<
         StringResourcePersistenceImpl,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::resource::XStringResourceWithLocation > StringResourceWithLocationImpl_BASE;

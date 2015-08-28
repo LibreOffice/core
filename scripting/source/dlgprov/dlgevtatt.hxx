@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 
@@ -42,7 +42,7 @@ namespace dlgprov
         OUStringHash,
         std::equal_to< OUString > > ListenerHash;
 
-    typedef ::cppu::WeakImplHelper1<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::script::XScriptEventsAttacher > DialogEventsAttacherImpl_BASE;
 
 
@@ -84,7 +84,7 @@ namespace dlgprov
     // class DialogAllListenerImpl
 
 
-    typedef ::cppu::WeakImplHelper1<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::script::XAllListener > DialogAllListenerImpl_BASE;
 
 
@@ -118,7 +118,7 @@ namespace dlgprov
     // class DialogScriptListenerImpl
 
 
-    typedef ::cppu::WeakImplHelper1<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::script::XScriptListener > DialogScriptListenerImpl_BASE;
 
 

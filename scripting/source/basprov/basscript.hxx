@@ -23,7 +23,7 @@
 #include "bcholder.hxx"
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <basic/sbmeth.hxx>
@@ -40,7 +40,7 @@ namespace basprov
     //  class BasicScriptImpl
 
 
-    typedef ::cppu::WeakImplHelper1<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::script::provider::XScript > BasicScriptImpl_BASE;
 
 
