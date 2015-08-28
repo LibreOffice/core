@@ -32,18 +32,17 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(WITH_CPPUNIT)" != "YES"
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
 
-@all:
-    @echo "cppunit disabled. nothing do do."
+all:
+    @echo "unit tests are disabled. Nothing do do."
 
 .ELSE
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 # --- Common ----------------------------------------------------------
 
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/basegfx1d.obj      \
     $(SLO)$/basegfx2d.obj      \
     $(SLO)$/basegfx3d.obj      \
@@ -51,34 +50,34 @@ SHL1OBJS=  \
     $(SLO)$/basegfxtools.obj   \
     $(SLO)$/clipstate.obj      \
     $(SLO)$/genericclipper.obj \
+    $(SLO)$/main.obj           \
     $(SLO)$/testtools.obj	
 
-SHL1TARGET= basegfx_tests
-SHL1STDLIBS= \
+APP1TARGET= basegfx_tests
+APP1STDLIBS= \
                 $(BASEGFXLIB) \
                 $(SALLIB)        \
                 $(CPPUHELPERLIB) \
                 $(CPPULIB)       \
-                $(CPPUNITLIB)
+                $(GTESTLIB)
 
-SHL1IMPLIB= i$(SHL1TARGET)
-
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map
-SHL1RPATH = NONE
+APP1IMPLIB= i$(APP1TARGET)
+APP1RPATH = NONE
+DEF1NAME    =$(APP1TARGET)
+APP1VERSIONMAP = export.map
+APP1TEST = enabled
 
 # END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS)
+SLOFILES=$(APP1OBJS)
 
 # --- Targets ------------------------------------------------------
 
-.ENDIF # "$(WITH_CPPUNIT)" != "YES"
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk
 
 .IF "$(verbose)"!="" || "$(VERBOSE)"!=""
 CDEFS+= -DVERBOSE
