@@ -108,7 +108,9 @@ Content::Content(
   throw ( ucb::ContentCreationException )
 : ContentImplHelper( rxContext, pProvider, Identifier ),
   m_eResourceType( UNKNOWN ),
+  m_eResourceTypeForLocks( UNKNOWN ),
   m_pProvider( pProvider ),
+  m_rSessionFactory( rSessionFactory ),
   m_bTransient( false ),
   m_bCollection( false ),
   m_bDidGetOrHead( false )
@@ -140,6 +142,7 @@ Content::Content(
   throw ( ucb::ContentCreationException )
 : ContentImplHelper( rxContext, pProvider, Identifier ),
   m_eResourceType( UNKNOWN ),
+  m_eResourceTypeForLocks( UNKNOWN ),
   m_pProvider( pProvider ),
   m_bTransient( true ),
   m_bCollection( isCollection ),
@@ -605,22 +608,28 @@ uno::Any SAL_CALL Content::execute(
 
         // lock
 
-        // supportsExclusiveWriteLock()  does not work if the file is being created.
-        // The lack of lock functionality is taken care of inside lock(),
-        // a temporary measure.
-        // This current implementation will result in a wasted lock request issued to web site
-        // that don't support it.
-        // TODO: need to rewrite the managing of the m_bTransient flag, when the resource is non yet existent
-        // and the first lock on a non existed resource first creates it then lock it.
-        lock( Environment );
+        ResourceType eType = resourceTypeForLocks( Environment );
+        // when the resource is not yet present the lock is used to create it
+        // see: http://tools.ietf.org/html/rfc4918#section-7.3
+        // If the resource doesn't exists and the lock is not enabled (DAV with
+        // no lock or a simple web) the error will be dealt with inside lock() method
+        if ( eType == NOT_FOUND ||
+            eType == DAV )
+        {
+            lock( Environment );
+            if ( eType == NOT_FOUND )
+            {
+                m_eResourceType = UNKNOWN;  // lock may have created it, need to check again
+                m_eResourceTypeForLocks = UNKNOWN;
+            }
+        }
     }
-    else if ( aCommand.Name == "unlock" && supportsExclusiveWriteLock( Environment ) )
+    else if ( aCommand.Name == "unlock" )
     {
 
         // unlock
-
-
-        unlock( Environment );
+        if ( resourceTypeForLocks( Environment ) == DAV )
+            unlock( Environment );
     }
     else if ( aCommand.Name == "createNewContent" && isFolder( Environment ) )
     {
@@ -716,9 +725,7 @@ uno::Any SAL_CALL Content::execute(
         // Unreachable
     }
 
-    OSL_TRACE( "<<<<< Content::execute: end: command: %s",
-               OUStringToOString( aCommand.Name,
-                                       RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO( "ucb.ucp.webdav", "Content::execute: end: command: " << aCommand.Name );
 
     return aRet;
 }
@@ -2022,9 +2029,9 @@ uno::Any Content::open(
                     // cache headers.
                     if ( !m_xCachedProps.get())
                         m_xCachedProps.reset(
-                            new CachableContentProperties( aResource ) );
+                            new CachableContentProperties( ContentProperties( aResource ) ) );
                     else
-                        m_xCachedProps->addProperties( aResource );
+                        m_xCachedProps->addProperties( ContentProperties( aResource ) );
 
                     m_xResAccess.reset(
                         new DAVResourceAccess( *xResAccess.get() ) );
@@ -2070,7 +2077,7 @@ uno::Any Content::open(
                         // cache headers.
                         if ( !m_xCachedProps.get())
                             m_xCachedProps.reset(
-                                new CachableContentProperties( aResource ) );
+                                new CachableContentProperties( ContentProperties( aResource ) ) );
                         else
                             m_xCachedProps->addProperties(
                                 aResource.properties );
@@ -2375,7 +2382,15 @@ void Content::insert(
             if ( bCollection )
                 xResAccess->MKCOL( Environment );
             else
+            {
                 xResAccess->PUT( xInputStream, Environment );
+            }
+            // no error , set the resourcetype to unknown type
+            // the resource may have transitioned from NOT FOUND or UNKNOWN to something else
+            // depending on the server behaviour
+            // this will force a recheck of the resource type
+            m_eResourceType = UNKNOWN;
+            m_eResourceTypeForLocks = UNKNOWN;
         }
         catch ( DAVException const & except )
         {
@@ -2755,30 +2770,156 @@ void Content::destroy( bool bDeletePhysical )
     }
 }
 
-
-bool Content::supportsExclusiveWriteLock(
+// returns the resource type, to be checked for locks
+Content::ResourceType Content::resourceTypeForLocks(
   const uno::Reference< ucb::XCommandEnvironment >& Environment )
 {
-    if ( getResourceType( Environment ) == DAV )
+    ResourceType eResourceTypeForLocks = UNKNOWN;
     {
+        osl::MutexGuard g(m_aMutex);
+        //check if cache contains what we need, usually the first PROPFIND on the URI has supported lock
+        std::unique_ptr< ContentProperties > xProps;
         if ( m_xCachedProps.get() )
         {
+            std::unique_ptr< ContentProperties > xCachedProps;
+            xCachedProps.reset( new ContentProperties( *m_xCachedProps.get() ) );
             uno::Sequence< ucb::LockEntry > aSupportedLocks;
             if ( m_xCachedProps->getValue( DAVProperties::SUPPORTEDLOCK )
-                >>= aSupportedLocks )
+                 >>= aSupportedLocks )            //get the cached value for supportedlock
             {
                 for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
                 {
                     if ( aSupportedLocks[ n ].Scope
-                            == ucb::LockScope_EXCLUSIVE &&
+                         == ucb::LockScope_EXCLUSIVE &&
                          aSupportedLocks[ n ].Type
-                            == ucb::LockType_WRITE )
-                        return true;
+                         == ucb::LockType_WRITE )
+                        eResourceTypeForLocks = DAV;
                 }
             }
         }
     }
-    return false;
+
+    const OUString & rURL = m_xIdentifier->getContentIdentifier();
+
+    if ( eResourceTypeForLocks == UNKNOWN )
+    {
+        // resource type for lock/unlock operations still unknown, need to ask the server
+        std::unique_ptr< DAVResourceAccess > xResAccess;
+
+        xResAccess.reset( new DAVResourceAccess(
+                              m_xContext,
+                              m_rSessionFactory,
+                              rURL ) );
+
+        const OUString aScheme(
+            rURL.copy( 0, rURL.indexOf( ':' ) ).toAsciiLowerCase() );
+
+        if ( aScheme == FTP_URL_SCHEME )
+        {
+            eResourceTypeForLocks = FTP;
+        }
+        else
+        {
+            try
+            {
+                // we need only DAV:supportedlock
+                std::vector< DAVResource > resources;
+                std::vector< OUString > aPropNames;
+                uno::Sequence< beans::Property > aProperties( 1 );
+                aProperties[ 0 ].Name = DAVProperties::SUPPORTEDLOCK;
+
+                ContentProperties::UCBNamesToDAVNames( aProperties, aPropNames );
+                xResAccess->PROPFIND( DAVZERO, aPropNames, resources, Environment );
+
+                // only one resource should be returned
+                if ( resources.size() == 1 )
+                {
+                    // we may have received a bunch of other properties
+                    // (some servers seems to do so)
+                    // but we need only supported lock for this check
+                    // all returned properties are in
+                    // resources.properties[n].Name/.Value
+
+                    std::vector< DAVPropertyValue >::iterator it;
+
+                    for ( it = resources[0].properties.begin();
+                          it != resources[0].properties.end(); it++)
+                    {
+                        if ( (*it).Name ==  DAVProperties::SUPPORTEDLOCK )
+                        {
+                            uno::Sequence< ucb::LockEntry > aSupportedLocks;
+                            if ( (*it).Value >>= aSupportedLocks )
+                            {
+                                // this is at least a DAV, no lock confirmed yet
+                                eResourceTypeForLocks = DAV_NOLOCK;
+                                for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
+                                {
+                                    if ( aSupportedLocks[ n ].Scope == ucb::LockScope_EXCLUSIVE &&
+                                         aSupportedLocks[ n ].Type == ucb::LockType_WRITE )
+                                    {
+                                        // requested locking mode is supported
+                                        eResourceTypeForLocks = DAV;
+                                        SAL_INFO( "ucb.ucp.webdav", "resourceTypeForLocks - URL: <"
+                                                  << m_xIdentifier->getContentIdentifier() << ">, DAV lock/unlock supported");
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch ( DAVException const & e )
+            {
+                xResAccess->resetUri();
+                //grab the error code
+                switch( e.getStatus() )
+                {
+                    case SC_NOT_FOUND:
+                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks - URL: <"
+                                  << m_xIdentifier->getContentIdentifier() << "> was not found. ");
+                        eResourceTypeForLocks = NOT_FOUND;
+                        break;
+                        // some servers returns this, instead
+                        // TODO: probably remove it, when OPTIONS implemented
+                        // the meaning of SC_FORBIDDEN is, according to http://tools.ietf.org/html/rfc7231#section-6.5.3
+                        // The 403 (Forbidden) status code indicates that the server understood
+                        // the request but refuses to authorize it
+                    case SC_FORBIDDEN:
+                        // this returned errors are part of base http 1.1 RFCs
+                        // see:
+                    case SC_NOT_IMPLEMENTED:    // http://tools.ietf.org/html/rfc7231#section-6.6.2
+                    case SC_METHOD_NOT_ALLOWED: // http://tools.ietf.org/html/rfc7231#section-6.5.5
+                        // they all mean the resource is NON_DAV
+                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks DAVException (SC_FORBIDDEN, SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
+                                  << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
+                        eResourceTypeForLocks = NON_DAV;
+                        break;
+                    default:
+                        //fallthrough
+                        SAL_WARN( "ucb.ucp.webdav", "resourceTypeForLocks DAVException - URL: <"
+                                  << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
+                        eResourceTypeForLocks = UNKNOWN;
+                }
+            }
+        }
+    }
+    osl::MutexGuard g(m_aMutex);
+    if (m_eResourceTypeForLocks == UNKNOWN)
+    {
+        m_eResourceTypeForLocks = eResourceTypeForLocks;
+    }
+    else
+    {
+        SAL_WARN_IF(
+            eResourceTypeForLocks != m_eResourceTypeForLocks, "ucb.ucp.webdav",
+            "different resource types for <" << rURL << ">: "
+            << +eResourceTypeForLocks << " vs. " << +m_eResourceTypeForLocks);
+    }
+    SAL_INFO( "ucb.ucp.webdav", "resourceTypeForLocks - URL: <"
+              << m_xIdentifier->getContentIdentifier() << ">, m_eResourceTypeForLocks: " << m_eResourceTypeForLocks );
+    return m_eResourceTypeForLocks;
 }
 
 
@@ -2837,37 +2978,56 @@ void Content::lock(
         // this exception should be managed by the issuer of 'lock' command
         switch(e.getError())
         {
-        case DAVException::DAV_LOCKED:
-        {
-            throw(ucb::InteractiveLockingLockedException(
-                      OUString( "Locked!" ),
-                      static_cast< cppu::OWeakObject * >( this ),
-                      task::InteractionClassification_ERROR,
-                      aURL,
-                      false ));
-        }
-        break;
-        case DAVException::DAV_HTTP_ERROR:
-            //grab the error code
-            switch( e.getStatus() )
+            case DAVException::DAV_LOCKED:
             {
-                // this returned error is part of base http 1.1 RFCs
-            case SC_NOT_IMPLEMENTED:
-            case SC_METHOD_NOT_ALLOWED:
-                // this is a temporary measure, means the lock method is not supported
-                // TODO: fix the behaviour of m_bTransient when the file is first created
+                SAL_WARN( "ucb.ucp.webdav", "lock: resource already locked - URL: <"
+                          << m_xIdentifier->getContentIdentifier() << ">");
+                throw
+                    ucb::InteractiveLockingLockedException(
+                        OUString( "Locked!" ),
+                        static_cast< cppu::OWeakObject * >( this ),
+                        task::InteractionClassification_ERROR,
+                        aURL,
+                        false );
+            }
+            break;
+            case DAVException::DAV_HTTP_ERROR:
+                //grab the error code
+                switch( e.getStatus() )
+                {
+                    // this returned error is part of base http 1.1 RFCs
+                    case SC_NOT_IMPLEMENTED:
+                    case SC_METHOD_NOT_ALLOWED:
+                        SAL_WARN( "ucb.ucp.webdav", "lock: DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
+                                  << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
+                        // act as nothing happened
+                        // that's because when a resource is first created
+                        // the lock is sent before the put, so the resource
+                        // is actually created by LOCK, locking it before
+                        // doing the first PUT, but if LOCK is not supported
+                        // (simple web or DAV with lock disabled) we end with one of these two http
+                        // errors
+                        // details to LOCK on an unmapped (i.e. non existent) resource are in:
+                        // http://tools.ietf.org/html/rfc4918#section-7.3
+                        return;
+                        break;
+                    default:
+                        //fallthrough
+                        ;
+                }
+                break;
+            case DAVException::DAV_LOCKED_SELF:
+                // we already hold the lock and it is in our internal lockstore
+                // just return as if the lock was successfull
                 return;
                 break;
             default:
                 //fallthrough
                 ;
-            }
-            break;
-        default:
-            //fallthrough
-            ;
         }
 
+        SAL_WARN( "ucb.ucp.webdav","lock: DAVException - URL: <"
+                  << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
         cancelCommandExecution( e, Environment );
         // Unreachable
     }
@@ -2895,28 +3055,40 @@ void Content::unlock(
     }
     catch ( DAVException const & e )
     {
-        switch(e.getError())
+        switch( e.getError() )
         {
-        case DAVException::DAV_HTTP_ERROR:
-            //grab the error code
-            switch( e.getStatus() )
-            {
-                // this returned error is part of base http 1.1 RFCs
-            case SC_NOT_IMPLEMENTED:
-            case SC_METHOD_NOT_ALLOWED:
-                // this is a temporary measure, means the lock method is not supported
-                // TODO: fix the behaviour of m_bTransient when the file is first created
+            case DAVException::DAV_NOT_LOCKED:
+                SAL_WARN( "ucb.ucp.webdav", "unlock: DAVException::DAV_NOT_LOCKED - URL: <"
+                          << m_xIdentifier->getContentIdentifier() << ">");
+                // means that we don't own any lock on this resource
+                // intercepted here to remove a confusing indication to the user
+                // unfortunately this happens in some WebDAV server configuration
+                // acting as WebDAV and having lock/unlock enabled only
+                // for authorized user.
                 return;
+                break;
+            case DAVException::DAV_HTTP_ERROR:
+                //grab the error code
+                switch( e.getStatus() )
+                {
+                    // this returned error is part of base http 1.1 RFCs
+                    case SC_NOT_IMPLEMENTED:
+                    case SC_METHOD_NOT_ALLOWED:
+                        SAL_WARN( "ucb.ucp.webdav", "unlock: DAVException (SC_NOT_IMPLEMENTED or SC_METHOD_NOT_ALLOWED) - URL: <"
+                                  << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
+                        return;
+                        break;
+                    default:
+                        //fallthrough
+                        ;
+                }
                 break;
             default:
                 //fallthrough
                 ;
-            }
-            break;
-        default:
-            //fallthrough
-            ;
         }
+        SAL_WARN( "ucb.ucp.webdav","unlock: DAVException - URL: <"
+                  << m_xIdentifier->getContentIdentifier() << ">, DAV error: " << e.getError() << ", HTTP error: " << e.getStatus() );
         cancelCommandExecution( e, Environment );
         // Unreachable
     }
@@ -3234,7 +3406,7 @@ Content::getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess )
     return OUString( rResAccess->getURL() );
 }
 
-
+// resource type is the type of the WebDAV resource
 Content::ResourceType Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv,
                     const std::unique_ptr< DAVResourceAccess > & rResAccess,
@@ -3282,11 +3454,10 @@ Content::ResourceType Content::getResourceType(
             {
                 osl::MutexGuard g(m_aMutex);
                 m_xCachedProps.reset(
-                    new CachableContentProperties( resources[ 0 ] ) );
+                    new CachableContentProperties( ContentProperties( resources[ 0 ] ) ) );
                 m_xCachedProps->containsAllNames(
                     aProperties, m_aFailedPropNames );
             }
-
             eResourceType = DAV;
         }
         catch ( DAVException const & e )
