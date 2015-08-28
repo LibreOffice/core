@@ -36,6 +36,7 @@ class PhysicalFontFamily;
 class ImplGetDevFontList;
 class ImplGetDevSizeList;
 class ImplFontEntry;
+class ImplFontCache;
 class ImplPreMatchFontSubstitution;
 class ImplGlyphFallbackFontSubstitution;
 class FontSelectPattern;
@@ -227,6 +228,7 @@ public:
     virtual             ~ImplFontEntry();
 
 public: // TODO: make data members private
+    ImplFontCache * m_pFontCache;
     FontSelectPattern  maFontSelData;      // FontSelectionData
     ImplFontMetricData  maMetric;           // Font Metric
     const ConvertChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
