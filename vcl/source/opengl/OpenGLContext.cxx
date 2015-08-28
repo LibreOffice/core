@@ -1065,6 +1065,8 @@ bool OpenGLContext::InitGLEW()
         }
     }
 
+    // Test hooks for inserting tracing messages into the stream
+    VCL_GL_INFO("vcl.opengl", "LibreOffice GLContext initialized: " << this);
 #endif
 
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----end");
