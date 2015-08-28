@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_5dc58f59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-08-28T09:10:44Z",
+      "side": 1,
+      "message": "Please do not use \"fdo\" in commit messages. The correct notation is \"tdf\".",
+      "revId": "31b806f59a1c74166726c2b8f4b24e42e42cc042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
