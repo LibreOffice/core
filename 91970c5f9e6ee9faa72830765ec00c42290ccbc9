@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa0719c6_20486e2d",
+        "filename": "o3tl/qa/cow_wrapper_clients.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-28T18:54:52Z",
+      "side": 1,
+      "message": "Hmm. The self-assignment check is annoying, you sure that\u0027s needed in the client code?\n\nthe move though is inevitable, since rSrc is an lvalue. but I agree, it should be added into cow_wrappers example code documentation",
+      "parentUuid": "fa0719c6_20650ee1",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0719c6_80621ad7",
         "filename": "o3tl/qa/cow_wrapper_clients.hxx",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2015-08-28T16:33:55Z",
       "side": 1,
       "message": "I used theses static variables to keep track of when the incrementing/decrementing functions are called. Not a fan of using singleton objects, but for what I wanted I couldn\u0027t see another way. \n\nI could accomplish close to the same result with use_count(), but I couldn\u0027t capture and increment and decrement that occur on the same line (for instance the copy assignment operator when it tries to copy itself, or the copy of an xvalue).",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_8055fac7",
+        "filename": "o3tl/qa/cow_wrapper_clients.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-28T18:54:52Z",
+      "side": 1,
+      "message": "Nah, perfectly ok - no need for extra contortions here.",
+      "parentUuid": "fa0719c6_605f060f",
       "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -98,6 +134,24 @@
       "writtenOn": "2015-08-28T16:33:55Z",
       "side": 1,
       "message": "Not gorgeous by any standards, but it should get the job done.",
+      "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_c05d32ee",
+        "filename": "o3tl/qa/test-cow_wrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-28T18:54:52Z",
+      "side": 1,
+      "message": "For a test, that\u0027s all I want :)\n\n(the only other constraint is the DRY principle)",
+      "parentUuid": "fa0719c6_00a56a03",
       "revId": "91970c5f9e6ee9faa72830765ec00c42290ccbc9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
