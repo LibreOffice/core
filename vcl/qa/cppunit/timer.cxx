@@ -22,7 +22,8 @@
 #include "salinst.hxx"
 
 // #define TEST_WATCHDOG
-// Comment if UT fails randomly.
+
+// Enables timer tests that appear to provoke windows under load unduly.
 //#define TEST_TIMERPRECISION
 
 /// Avoid our timer tests just wedging the build if they fail.
@@ -61,8 +62,10 @@ public:
     void testWatchdog();
 #endif
     void testDurations();
+#ifdef TEST_TIMERPRECISION
     void testAutoTimer();
     void testMultiAutoTimers();
+#endif
     void testRecursiveTimer();
     void testSlowTimerCallback();
 
@@ -73,8 +76,10 @@ public:
     CPPUNIT_TEST(testWatchdog);
 #endif
     CPPUNIT_TEST(testDurations);
+#ifdef TEST_TIMERPRECISION
     CPPUNIT_TEST(testAutoTimer);
     CPPUNIT_TEST(testMultiAutoTimers);
+#endif
     CPPUNIT_TEST(testRecursiveTimer);
     CPPUNIT_TEST(testSlowTimerCallback);
 
@@ -195,6 +200,8 @@ public:
     }
 };
 
+#ifdef TEST_TIMERPRECISION
+
 void TimerTest::testAutoTimer()
 {
     const sal_Int32 nDurationMs = 30;
@@ -231,9 +238,7 @@ void TimerTest::testAutoTimer()
         }
     }
 
-#ifdef TEST_TIMERPRECISION
     CPPUNIT_FAIL(msg.str().c_str());
-#endif
 }
 
 void TimerTest::testMultiAutoTimers()
@@ -295,10 +300,9 @@ void TimerTest::testMultiAutoTimers()
         }
     }
 
-#ifdef TEST_TIMERPRECISION
     CPPUNIT_FAIL(msg.str().c_str());
-#endif
 }
+#endif // TEST_TIMERPRECISION
 
 // --------------------------------------------------------------------
 
