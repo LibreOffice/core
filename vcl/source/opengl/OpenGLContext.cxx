@@ -70,7 +70,7 @@ OpenGLContext::OpenGLContext():
     mpPrevContext(NULL),
     mpNextContext(NULL)
 {
-    SAL_INFO("vcl.opengl", "new context: " << this);
+    VCL_GL_INFO("vcl.opengl", "new context: " << this);
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     mbPixmap = false;
@@ -92,7 +92,7 @@ OpenGLContext::OpenGLContext():
 
 OpenGLContext::~OpenGLContext()
 {
-    SAL_INFO("vcl.opengl", "delete context: " << this);
+    VCL_GL_INFO("vcl.opengl", "delete context: " << this);
     reset();
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -522,7 +522,7 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return NULL;
 
-    SAL_INFO("vcl.opengl", "window: " << win);
+    VCL_GL_INFO("vcl.opengl", "window: " << win);
 
     XWindowAttributes xattr;
     if( !XGetWindowAttributes( dpy, win, &xattr ) )
@@ -609,7 +609,7 @@ Visual* getVisual(Display* dpy, Window win)
         SAL_WARN("vcl.opengl", "Failed to get window attributes for getVisual " << win);
         xattr.visual = NULL;
     }
-    SAL_INFO("vcl.opengl", "using VisualID " << xattr.visual);
+    VCL_GL_INFO("vcl.opengl", "using VisualID " << xattr.visual);
     return xattr.visual;
 }
 
@@ -687,7 +687,7 @@ bool OpenGLContext::ImplInit()
     TempErrorHandler aErrorHandler(m_aGLWin.dpy, unxErrorHandler);
 #endif
 
-    SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
+    VCL_GL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
 
     if (!g_vShareList.empty())
         pSharedCtx = g_vShareList.front();
@@ -787,7 +787,7 @@ bool OpenGLContext::ImplInit()
             if( errorTriggered )
                 SAL_WARN("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
             else
-                SAL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
+                VCL_GL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
         }
     }
 
@@ -815,7 +815,7 @@ bool OpenGLContext::ImplInit()
 {
     OpenGLZone aZone;
 
-    SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
+    VCL_GL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
     // PixelFormat tells Windows how we want things to be
     PIXELFORMATDESCRIPTOR PixelFormatFront =
     {
@@ -946,7 +946,7 @@ bool OpenGLContext::ImplInit()
 {
     OpenGLZone aZone;
 
-    SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
+    VCL_GL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
     NSOpenGLView* pView = getOpenGLView();
     OpenGLWrapper::makeCurrent(pView);
 
@@ -959,7 +959,7 @@ bool OpenGLContext::ImplInit()
 
 bool OpenGLContext::ImplInit()
 {
-    SAL_INFO("vcl.opengl", "OpenGLContext not implemented for this platform");
+    VCL_GL_INFO("vcl.opengl", "OpenGLContext not implemented for this platform");
     return false;
 }
 
@@ -983,7 +983,7 @@ bool OpenGLContext::InitGLEW()
             bGlewInit = true;
     }
 
-    SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----end");
+    VCL_GL_INFO("vcl.opengl", "OpenGLContext::ImplInit----end");
     mbInitialized = true;
     return true;
 }
@@ -1282,7 +1282,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 
     if( vi )
     {
-        SAL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
+        VCL_GL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
         aWinData.pVisual = static_cast<void*>(vi->visual);
     }
 #endif
@@ -1359,7 +1359,7 @@ void OpenGLContext::makeCurrent()
 
     // move the context to the end of the contexts list
     static int nSwitch = 0;
-    SAL_INFO("vcl.opengl", "******* CONTEXT SWITCH " << ++nSwitch << " *********");
+    VCL_GL_INFO("vcl.opengl", "******* CONTEXT SWITCH " << ++nSwitch << " *********");
     if( mpNextContext )
     {
         if( mpPrevContext )
