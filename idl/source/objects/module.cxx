@@ -225,7 +225,7 @@ bool SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         {
             // set pointer to itself
             SetModule( rBase );
-            bOk = SvMetaName::ReadSvIdl( rBase, rInStm );
+            bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
         }
         rBase.GetStack().Pop(); // remove from stack
     }

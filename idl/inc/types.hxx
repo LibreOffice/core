@@ -182,7 +182,7 @@ public:
 
 class SvMetaTypeStringMemberList : public SvRefMemberList<SvMetaTypeString *> {};
 
-class SvMetaEnumValue : public SvMetaName
+class SvMetaEnumValue : public SvMetaObject
 {
 public:
     TYPEINFO_OVERRIDE();

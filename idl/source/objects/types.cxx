@@ -160,7 +160,7 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
             bOk = aType->ReadMethodArgs( rBase, rInStm );
         }
         if( bOk )
-            bOk = SvMetaName::ReadSvIdl( rBase, rInStm );
+            bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
     }
     else
     {
@@ -664,7 +664,7 @@ SvMetaTypeString::SvMetaTypeString()
 {
 }
 
-TYPEINIT1( SvMetaEnumValue, SvMetaName );
+TYPEINIT1( SvMetaEnumValue, SvMetaObject );
 SvMetaEnumValue::SvMetaEnumValue()
 {
 }
@@ -730,7 +730,7 @@ bool SvMetaTypeEnum::ReadSvIdl( SvIdlDataBase & rBase,
     if( SvMetaType::ReadHeaderSvIdl( rBase, rInStm )
       && GetType() == TYPE_ENUM )
     {
-        if( SvMetaName::ReadSvIdl( rBase, rInStm ) )
+        if( SvMetaObject::ReadSvIdl( rBase, rInStm ) )
              return true;
     }
     rInStm.Seek( nTokPos );

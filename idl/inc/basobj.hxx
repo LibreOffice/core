@@ -32,8 +32,23 @@ typedef SvMetaObject * (*CreateMetaObjectType)();
 
 #define C_PREF  "C_"
 
+class SvMetaObjectMemberList : public SvRefMemberList<SvMetaObject *> {};
+
 class SvMetaObject : public SvRttiBase
 {
+protected:
+    SvString      aName;
+    SvHelpContext aHelpContext;
+    SvHelpText    aHelpText;
+    SvString      aConfigName;
+    SvString      aDescription;
+
+    bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+            void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm,
+                                     char c = '\0' );
+    virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
+                                      SvTokenStream & rInStm );
 public:
             TYPEINFO_OVERRIDE();
             SvMetaObject();
@@ -42,13 +57,16 @@ public:
     static void         Back2Delemitter( SvStream & );
     static void         WriteStars( SvStream & );
 
+    virtual bool                SetName( const OString& rName, SvIdlDataBase * = NULL  );
+    const SvHelpContext&        GetHelpContext() const { return aHelpContext; }
+    virtual const SvString &    GetName() const { return aName; }
+    virtual const SvString &    GetHelpText() const { return aHelpText; }
+    virtual const SvString &    GetConfigName() const{ return aConfigName; }
+    virtual const SvString&     GetDescription() const{ return aDescription; }
+
+    virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-
-protected:
-    virtual ~SvMetaObject() {}
 };
-
-class SvMetaObjectMemberList : public SvRefMemberList<SvMetaObject *> {};
 
 class SvMetaObjectMemberStack
 {
@@ -68,39 +86,9 @@ public:
                     }
 };
 
-class SvMetaName : public SvMetaObject
-{
-    SvString      aName;
-    SvHelpContext aHelpContext;
-    SvHelpText    aHelpText;
-    SvString      aConfigName;
-    SvString      aDescription;
+class SvMetaNameMemberList : public SvRefMemberList<SvMetaObject *> {};
 
-protected:
-    bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-            void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm,
-                                     char c = '\0' );
-    virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
-                                      SvTokenStream & rInStm );
-public:
-            TYPEINFO_OVERRIDE();
-            SvMetaName();
-
-    virtual bool                SetName( const OString& rName, SvIdlDataBase * = NULL  );
-    const SvHelpContext&        GetHelpContext() const { return aHelpContext; }
-    virtual const SvString &    GetName() const { return aName; }
-    virtual const SvString &    GetHelpText() const { return aHelpText; }
-    virtual const SvString &    GetConfigName() const{ return aConfigName; }
-    virtual const SvString&     GetDescription() const{ return aDescription; }
-
-    virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
-};
-
-class SvMetaNameMemberList : public SvRefMemberList<SvMetaName *> {};
-
-class SvMetaReference : public SvMetaName
+class SvMetaReference : public SvMetaObject
 {
 protected:
     tools::SvRef<SvMetaReference>  aRef;
@@ -111,32 +99,32 @@ public:
     const SvString &    GetName() const SAL_OVERRIDE
                         {
                             return ( !aRef.Is()
-                                    || !SvMetaName::GetName().getString().isEmpty() )
-                                ? SvMetaName::GetName()
+                                    || !SvMetaObject::GetName().getString().isEmpty() )
+                                ? SvMetaObject::GetName()
                                 : aRef->GetName();
                         }
 
     const SvString &    GetHelpText() const SAL_OVERRIDE
                         {
                             return ( !aRef.Is()
-                                    || !SvMetaName::GetHelpText().getString().isEmpty() )
-                                ? SvMetaName::GetHelpText()
+                                    || !SvMetaObject::GetHelpText().getString().isEmpty() )
+                                ? SvMetaObject::GetHelpText()
                                 : aRef->GetHelpText();
                         }
 
     const SvString &    GetConfigName() const SAL_OVERRIDE
                         {
                             return ( !aRef.Is()
-                                    || !SvMetaName::GetConfigName().getString().isEmpty() )
-                                ? SvMetaName::GetConfigName()
+                                    || !SvMetaObject::GetConfigName().getString().isEmpty() )
+                                ? SvMetaObject::GetConfigName()
                                 : aRef->GetConfigName();
                         }
 
     const SvString &    GetDescription() const SAL_OVERRIDE
                         {
                             return ( !aRef.Is()
-                                    || !SvMetaName::GetDescription().getString().isEmpty() )
-                                ? SvMetaName::GetDescription()
+                                    || !SvMetaObject::GetDescription().getString().isEmpty() )
+                                ? SvMetaObject::GetDescription()
                                 : aRef->GetDescription();
                         }
     SvMetaReference *   GetRef() const { return aRef; }

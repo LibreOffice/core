@@ -164,7 +164,7 @@ bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         if( bOk )
         {
             rBase.Write(OString('.'));
-            bOk = SvMetaName::ReadSvIdl( rBase, rInStm );
+            bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
         }
         if( bOk )
             return bOk;

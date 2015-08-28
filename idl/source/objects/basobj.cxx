@@ -28,11 +28,6 @@
 #include <globals.hxx>
 #include <database.hxx>
 
-TYPEINIT1( SvMetaObject, SvRttiBase )
-SvMetaObject::SvMetaObject()
-{
-}
-
 void SvMetaObject::WriteTab( SvStream & rOutStm, sal_uInt16 nTab )
 {
     while( nTab-- )
@@ -67,23 +62,18 @@ void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
         rOutStm.Seek( nPos );
 }
 
-bool SvMetaObject::ReadSvIdl( SvIdlDataBase &, SvTokenStream & )
-{
-    return false;
-}
-
-TYPEINIT1( SvMetaName, SvMetaObject );
-SvMetaName::SvMetaName()
+TYPEINIT1( SvMetaObject, SvRttiBase );
+SvMetaObject::SvMetaObject()
 {
 }
 
-bool SvMetaName::SetName( const OString& rName, SvIdlDataBase * )
+bool SvMetaObject::SetName( const OString& rName, SvIdlDataBase * )
 {
     aName.setString(rName);
     return true;
 }
 
-bool SvMetaName::ReadNameSvIdl( SvIdlDataBase & rBase,
+bool SvMetaObject::ReadNameSvIdl( SvIdlDataBase & rBase,
                                 SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
@@ -98,7 +88,7 @@ bool SvMetaName::ReadNameSvIdl( SvIdlDataBase & rBase,
     return false;
 }
 
-void SvMetaName::ReadAttributesSvIdl( SvIdlDataBase & rBase,
+void SvMetaObject::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
@@ -114,7 +104,7 @@ void SvMetaName::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     aDescription.ReadSvIdl( SvHash_Description(), rInStm );
 }
 
-void SvMetaName::DoReadContextSvIdl( SvIdlDataBase & rBase,
+void SvMetaObject::DoReadContextSvIdl( SvIdlDataBase & rBase,
                                    SvTokenStream & rInStm, char cDel )
 {
     sal_uInt32 nBeginPos = 0; // can not happen with Tell
@@ -129,16 +119,16 @@ void SvMetaName::DoReadContextSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-void SvMetaName::ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & )
+void SvMetaObject::ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & )
 {
 }
 
-bool SvMetaName::Test( SvIdlDataBase &, SvTokenStream & )
+bool SvMetaObject::Test( SvIdlDataBase &, SvTokenStream & )
 {
     return true;
 }
 
-bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+bool SvMetaObject::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     sal_uInt32 nTokPos = rInStm.Tell();
     bool bOk = true;
@@ -168,7 +158,7 @@ bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     return bOk;
 }
 
-TYPEINIT1( SvMetaReference, SvMetaName );
+TYPEINIT1( SvMetaReference, SvMetaObject );
 
 SvMetaReference::SvMetaReference()
 {

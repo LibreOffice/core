@@ -433,7 +433,7 @@ bool SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
         {
             SetRef( pKnownSlot );
             SetName( pKnownSlot->GetName().getString(), &rBase );
-            bOk = SvMetaName::ReadSvIdl( rBase, rInStm );
+            bOk = SvMetaObject::ReadSvIdl( rBase, rInStm );
         }
         else
         {
