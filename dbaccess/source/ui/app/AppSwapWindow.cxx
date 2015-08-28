@@ -157,7 +157,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
     return false;
 }
 
-IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pControl)
+IMPL_LINK_TYPED(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pControl, void)
 {
     SvxIconChoiceCtrlEntry* pEntry = _pControl->GetSelectedEntry();
     ElementType eType = E_NONE;
@@ -166,8 +166,6 @@ IMPL_LINK(OApplicationSwapWindow, OnContainerSelectHdl, SvtIconChoiceCtrl*, _pCo
         eType = *static_cast<ElementType*>(pEntry->GetUserData());
         onContainerSelected( eType ); // i87582
     }
-
-    return 1L;
 }
 
 IMPL_LINK_NOARG_TYPED(OApplicationSwapWindow, ChangeToLastSelected, void*, void)

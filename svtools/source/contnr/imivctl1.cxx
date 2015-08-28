@@ -2751,13 +2751,11 @@ IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Idle *, void)
 IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Idle *, void)
 {
     aVisRectChangedIdle.Stop();
-    pView->VisibleRectChanged();
 }
 
 IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Idle *, void)
 {
     aDocRectChangedIdle.Stop();
-    pView->DocumentRectChanged();
 }
 
 bool SvxIconChoiceCtrl_Impl::IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos )

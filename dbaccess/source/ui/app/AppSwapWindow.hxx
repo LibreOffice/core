@@ -37,7 +37,7 @@ namespace dbaui
 
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 
-        DECL_LINK( OnContainerSelectHdl,    SvtIconChoiceCtrl* );
+        DECL_LINK_TYPED( OnContainerSelectHdl, SvtIconChoiceCtrl*, void );
         DECL_LINK_TYPED( ChangeToLastSelected, void*, void );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;

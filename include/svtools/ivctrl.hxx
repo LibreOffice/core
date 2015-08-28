@@ -206,18 +206,14 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
 {
     friend class SvxIconChoiceCtrl_Impl;
 
-    Link<>                  _aClickIconHdl;
-    Link<>                  _aDocRectChangedHdl;
-    Link<>                  _aVisRectChangedHdl;
-    KeyEvent*               _pCurKeyEvent;
-    SvxIconChoiceCtrl_Impl* _pImp;
-    bool                    _bAutoFontColor;
+    Link<SvtIconChoiceCtrl*,void>  _aClickIconHdl;
+    KeyEvent*                      _pCurKeyEvent;
+    SvxIconChoiceCtrl_Impl*        _pImp;
+    bool                           _bAutoFontColor;
 
 protected:
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    void                DocumentRectChanged();
-    void                VisibleRectChanged();
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -257,8 +253,8 @@ public:
     void                SetFont( const vcl::Font& rFont );
     void                SetPointFont( const vcl::Font& rFont );
 
-    void                SetClickHdl( const Link<>& rLink ) { _aClickIconHdl = rLink; }
-    const Link<>&       GetClickHdl() const { return _aClickIconHdl; }
+    void                SetClickHdl( const Link<SvtIconChoiceCtrl*,void>& rLink ) { _aClickIconHdl = rLink; }
+    const Link<SvtIconChoiceCtrl*,void>& GetClickHdl() const { return _aClickIconHdl; }
 
     using OutputDevice::SetBackground;
     void                SetBackground( const Wallpaper& rWallpaper );

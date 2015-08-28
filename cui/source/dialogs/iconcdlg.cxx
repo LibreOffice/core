@@ -356,7 +356,7 @@ void IconChoiceDialog::ShowPage(sal_uInt16 nId)
 | select a page
 |
 \**********************************************************************/
-IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl)
+IMPL_LINK_NOARG_TYPED(IconChoiceDialog , ChosePageHdl_Impl, SvtIconChoiceCtrl*, void)
 {
     SvxIconChoiceCtrlEntry *pEntry = m_pIconCtrl->GetSelectedEntry();
     if ( !pEntry )
@@ -368,8 +368,6 @@ IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl)
     {
         ShowPage(*pId);
     }
-
-    return 0L;
 }
 
 /**********************************************************************

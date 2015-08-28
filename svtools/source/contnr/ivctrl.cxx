@@ -194,16 +194,6 @@ Point SvtIconChoiceCtrl::GetPixelPos( const Point& rPosLogic ) const
     return aPos;
 }
 
-void SvtIconChoiceCtrl::DocumentRectChanged()
-{
-    _aDocRectChangedHdl.Call( this );
-}
-
-void SvtIconChoiceCtrl::VisibleRectChanged()
-{
-    _aVisRectChangedHdl.Call( this );
-}
-
 void SvtIconChoiceCtrl::GetFocus()
 {
     _pImp->GetFocus();
