@@ -29,13 +29,13 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace func_provider
 {
 
 class ScriptingFrameworkURIHelper :
-    public ::cppu::WeakImplHelper3<
+    public ::cppu::WeakImplHelper<
         css::script::provider::XScriptURIHelper,
         css::lang::XServiceInfo,
         css::lang::XInitialization >

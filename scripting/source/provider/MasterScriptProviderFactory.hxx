@@ -22,7 +22,7 @@
 
 #include "rtl/ustring.hxx"
 #include "rtl/ref.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -38,7 +38,7 @@ namespace func_provider
 {
 
 class MasterScriptProviderFactory :
-    public ::cppu::WeakImplHelper2 <
+    public ::cppu::WeakImplHelper <
         css::script::provider::XScriptProviderFactory,
         css::lang::XServiceInfo >
 {

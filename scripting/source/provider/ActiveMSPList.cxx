@@ -19,7 +19,6 @@
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <util/MiscUtils.hxx>
 

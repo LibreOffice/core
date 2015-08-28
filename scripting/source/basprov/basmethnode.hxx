@@ -28,7 +28,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 class SbMethod;
@@ -43,7 +43,7 @@ namespace basprov
     //  class BasicMethodNodeImpl
 
 
-    typedef ::cppu::WeakImplHelper2<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::script::browse::XBrowseNode,
         ::com::sun::star::script::XInvocation > BasicMethodNodeImpl_BASE;
 
