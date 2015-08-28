@@ -433,10 +433,8 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 
     bHaveDC = false;
 
-    OSL_ASSERT(length >= 4);
-    // reduce by 32bit length itself, skip in SeekRel if
-    // impossibly unavailable
-    sal_uInt32 nRemainder = length >= 4 ? length-4 : length;
+    // skip in SeekRel if impossibly unavailable
+    sal_uInt32 nRemainder = length;
 
     const size_t nRequiredHeaderSize = 12;
     while (nRemainder >= nRequiredHeaderSize)
@@ -682,7 +680,9 @@ bool EnhWMFReader::ReadEnhWMF()
 
                 // EMF+ comment (FIXME: BE?)
                 if( id == 0x2B464D45 && nRecSize >= 12 )
-                    ReadEMFPlusComment( length, bHaveDC );
+                    // [MS-EMF] 2.3.3: DataSize includes both CommentIdentifier and CommentRecordParm fields.
+                    // We have already read 4-byte CommentIdentifier, so reduce length appropriately
+                    ReadEMFPlusComment( length-4, bHaveDC );
                 // GDIC comment, doesn't do anything useful yet
                 else if( id == 0x43494447 && nRecSize >= 12 ) {
                     // TODO: ReadGDIComment()
