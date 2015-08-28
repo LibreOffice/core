@@ -47,6 +47,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <comphelper/processfactory.hxx>
+#include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 
 namespace utl {
@@ -689,12 +690,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
                     // If the protocol is webdav, then we need to treat the stream as readonly, even if the
                     // operation was requested as read/write explicitly (the WebDAV UCB implementation is monodirectional
                     // read or write not both at the same time).
-                    OUString aScheme;
-                    css::uno::Reference< css::ucb::XContentIdentifier > xContId(
-                        aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
-                    if ( xContId.is() )
-                        aScheme = xContId->getContentProviderScheme();
-                    if(!aScheme.equalsIgnoreAsciiCase( "http" ) && !aScheme.equalsIgnoreAsciiCase( "https" ))
+                    if ( !INetURLObject( sURL ).isAnyKnownWebDAVScheme() )
                         return false;
                 }
                 xStream.clear();
