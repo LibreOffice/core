@@ -11,6 +11,7 @@
 #define INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 
 #include <GL/glew.h>
+#include <sal/log.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
 
@@ -20,6 +21,18 @@
 #  include <prex.h>
 #  include "GL/glxew.h"
 #  include <postx.h>
+#endif
+
+/// Helper to do a SAL_INFO as well as a GL log.
+#if OSL_DEBUG_LEVEL > 0
+#  define VCL_GL_INFO(area,stream)          \
+    do {                                    \
+        ::std::ostringstream detail_stream; \
+        detail_stream << stream;            \
+        OpenGLHelper::debugMsgStream((area),detail_stream); \
+    } while (0)
+#else
+#  define VCL_GL_INFO(area,stream)
 #endif
 
 class VCL_DLLPUBLIC OpenGLHelper
@@ -48,15 +61,23 @@ public:
     static void createFramebuffer(long nWidth, long nHeight, GLuint& nFramebufferId,
             GLuint& nRenderbufferDepthId, GLuint& nRenderbufferColorId, bool bRenderbuffer = true);
 
-    // Get OpenGL version (needs a context)
+    /// Get OpenGL version (needs a context)
     static float getGLVersion();
 
     static void checkGLError(const char* aFile, size_t nLine);
 
     /**
+     * Insert a glDebugMessage into the queue - helpful for debugging
+     * with apitrace to annotate the output and correlate it with code.
+     */
+    static void debugMsgPrint(const char *pArea, const char *pFormat, ...);
+    static void debugMsgStream(const char *pArea, std::ostringstream const &pStream);
+
+    /**
      * checks if the device/driver pair is on our OpenGL blacklist
      */
     static bool isDeviceBlacklisted();
+
     /**
      * checks if the system supports all features that are necessary for the OpenGL VCL support
      */
