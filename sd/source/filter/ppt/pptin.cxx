@@ -279,7 +279,6 @@ bool ImplSdPPTImport::Import()
                     if ( nSlideCount && pSection->GetProperty( PID_HEADINGPAIR, aPropItem ) )
                     {
                         sal_uInt32  nSlideTitleIndex = 0, nSlideTitleCount = 0;
-                        sal_uInt32  i, nTemp;
 
                         OUString aUString;
 
@@ -290,13 +289,14 @@ bool ImplSdPPTImport::Import()
                         {
                             nVecCount >>= 1;
                             sal_uInt32 nEntryCount = 0;
-                            for ( i = 0; i < nVecCount; i++ )
+                            for (sal_uInt32 i = 0; i < nVecCount; ++i)
                             {
                                 if ( !aPropItem.Read( aUString, VT_EMPTY, false ) )
                                     break;
                                 aPropItem.ReadUInt32( nType );
                                 if ( ( nType != VT_I4 ) && ( nType != VT_UI4 ) )
                                     break;
+                                sal_uInt32 nTemp(0);
                                 aPropItem.ReadUInt32( nTemp );
                                 if ( aUString == "Slide Titles" || aUString == "Folientitel" )
                                 {
@@ -311,17 +311,33 @@ bool ImplSdPPTImport::Import()
                             aPropItem.ReadUInt32( nType )
                                      .ReadUInt32( nVecCount );
 
-                            if ( ( nVecCount >= ( nSlideTitleIndex + nSlideTitleCount ) )
-                                    && ( nType == ( VT_LPSTR | VT_VECTOR ) ) )
+                            bool bVecOk = ( ( nVecCount >= (nSlideTitleIndex + nSlideTitleCount) )
+                                    && ( nType == ( VT_LPSTR | VT_VECTOR ) ) );
+
+                            if (bVecOk)
                             {
-                                for ( i = 0; i != nSlideTitleIndex; i++ )
+                                for (sal_uInt32 i = 0; i != nSlideTitleIndex; ++i)
                                 {
-                                    aPropItem.ReadUInt32( nTemp );
-                                    aPropItem.SeekRel( nTemp );
+                                    sal_uInt32 nTemp(0);
+                                    aPropItem.ReadUInt32(nTemp);
+                                    if (!aPropItem.good())
+                                    {
+                                        bVecOk = false;
+                                        break;
+                                    }
+                                    auto nPos = aPropItem.Tell() + nTemp;
+                                    if (nPos != aPropItem.Seek(nPos))
+                                    {
+                                        bVecOk = false;
+                                        break;
+                                    }
                                 }
-                                for ( i = 0; i < nSlideTitleCount; i++ )
+                            }
+                            if (bVecOk)
+                            {
+                                for (sal_uInt32 i = 0; i < nSlideTitleCount; ++i)
                                 {
-                                    if ( !aPropItem.Read( aUString, nType, false ) )
+                                    if (!aPropItem.Read(aUString, nType, false))
                                         break;
 
                                     OUString aString( aUString );
