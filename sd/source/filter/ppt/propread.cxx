@@ -319,7 +319,7 @@ bool Section::GetDictionary( Dictionary& rDict )
 
 void Section::Read( SotStorageStream *pStrm )
 {
-    sal_uInt32 i, nSecOfs, nPropSize, nStrmSize;
+    sal_uInt32 nSecOfs, nPropSize, nStrmSize;
     nSecOfs = pStrm->Tell();
 
     pStrm->Seek( STREAM_SEEK_TO_END );
@@ -357,7 +357,7 @@ void Section::Read( SotStorageStream *pStrm )
 
             bool bVariant = ( nPropType == VT_VARIANT );
 
-            for ( i = 0; nPropSize && ( i < nVectorCount ); i++ )
+            for (sal_uInt32 i = 0; nPropSize && ( i < nVectorCount ); ++i)
             {
                 if ( bVariant )
                 {
@@ -453,7 +453,7 @@ void Section::Read( SotStorageStream *pStrm )
                 if( nPropSize > nSecSize - nSecOfs )
                     nPropSize = nSecSize - nSecOfs;
                 sal_uInt8* pBuf = new sal_uInt8[ nPropSize ];
-                pStrm->Read( pBuf, nPropSize );
+                nPropSize = pStrm->Read(pBuf, nPropSize);
                 AddProperty( nPropId, pBuf, nPropSize );
                 delete[] pBuf;
             }
@@ -488,14 +488,17 @@ void Section::Read( SotStorageStream *pStrm )
         }
         else
         {
-            sal_uInt32 nDictCount, nSize;
-            pStrm->ReadUInt32( nDictCount );
-            for ( i = 0; i < nDictCount; i++ )
+            sal_uInt32 nDictCount(0);
+            pStrm->ReadUInt32(nDictCount);
+            for (sal_uInt32 i = 0; i < nDictCount; ++i)
             {
+                sal_uInt32 nSize(0);
                 pStrm->ReadUInt32( nSize ).ReadUInt32( nSize );
-                pStrm->SeekRel( nSize );
+                sal_uInt64 nPos = pStrm->Tell() + nSize;
+                if (nPos != pStrm->Seek(nPos))
+                    break;
             }
-            nSize = pStrm->Tell();
+            sal_uInt32 nSize = pStrm->Tell();
             pStrm->Seek( nPropOfs + nSecOfs );
             nSize -= pStrm->Tell();
             if ( nSize > nStrmSize )
@@ -504,7 +507,7 @@ void Section::Read( SotStorageStream *pStrm )
                 break;
             }
             sal_uInt8* pBuf = new sal_uInt8[ nSize ];
-            pStrm->Read( pBuf, nSize );
+            nSize = pStrm->Read(pBuf, nSize);
             AddProperty( 0xffffffff, pBuf, nSize );
             delete[] pBuf;
         }
