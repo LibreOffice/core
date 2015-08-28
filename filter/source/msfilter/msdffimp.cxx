@@ -4170,17 +4170,17 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         SEEK_FROM_BEGINNING ) )
     {
         sal_uInt32  nBytesLeft = maShapeRecords.Current()->nRecLen;
-        sal_uInt32  nUDData;
-        sal_uInt16  nPID;
         while( 5 < nBytesLeft )
         {
-            rSt.ReadUInt16( nPID );
-            if ( rSt.GetError() != 0 )
+            sal_uInt16 nPID(0);
+            rSt.ReadUInt16(nPID);
+            if (!rSt.good())
                 break;
-            rSt.ReadUInt32( nUDData );
-            if ( rSt.GetError() != 0 )
+            sal_uInt32 nUDData(0);
+            rSt.ReadUInt32(nUDData);
+            if (!rSt.good())
                 break;
-            if ( nPID == 447 )
+            if (nPID == 447)
             {
                 mbRotateGranientFillWithAngle = nUDData & 0x20;
                 break;
@@ -5009,15 +5009,15 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             && maShapeRecords.Current()->nRecLen )
         {
             sal_uInt32  nBytesLeft = maShapeRecords.Current()->nRecLen;
-            sal_uInt32  nUDData;
-            sal_uInt16  nPID;
             while( 5 < nBytesLeft )
             {
-                rSt.ReadUInt16( nPID );
-                if ( rSt.GetError() != 0 )
+                sal_uInt16 nPID(0);
+                rSt.ReadUInt16(nPID);
+                if (!rSt.good())
                     break;
-                rSt.ReadUInt32( nUDData );
-                switch( nPID )
+                sal_uInt32 nUDData(0);
+                rSt.ReadUInt32(nUDData);
+                switch (nPID)
                 {
                     case 0x038F: pImpRec->nXAlign = nUDData; break;
                     case 0x0390:
@@ -5045,7 +5045,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                         pImpRec->isHorizontalRule = true;
                         break;
                 }
-                if ( rSt.GetError() != 0 )
+                if (!rSt.good())
                     break;
                 nBytesLeft  -= 6;
             }
