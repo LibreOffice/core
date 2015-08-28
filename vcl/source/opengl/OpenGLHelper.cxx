@@ -23,6 +23,7 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
+#include <stdarg.h>
 #include <vector>
 
 #include "opengl/zone.hxx"
@@ -621,6 +622,43 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
         OpenGLWatchdogThread::start();
 
     return bRet;
+}
+
+void OpenGLHelper::debugMsgStream(const char *pArea, std::ostringstream const &pStream)
+{
+    debugMsgPrint(pArea, "%s", pStream.str().c_str());
+}
+
+void OpenGLHelper::debugMsgPrint(const char *pArea, const char *pFormat, ...)
+{
+    va_list aArgs;
+    va_start (aArgs, pFormat);
+
+    char pStr[1024];
+#ifdef _WIN32
+#define vsnprintf _vsnprintf
+#endif
+    vsnprintf(pStr, sizeof(pStr), pFormat, aArgs);
+    pStr[sizeof(pStr)-1] = '\0';
+
+    SAL_INFO(pArea, pStr);
+
+    OpenGLZone aZone;
+
+    if (GLEW_KHR_debug)
+        glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
+                             GL_DEBUG_TYPE_OTHER,
+                             1, // one[sic] id is as good as another ?
+                             // GL_DEBUG_SEVERITY_NOTIFICATION for >= GL4.3 ?
+                             GL_DEBUG_SEVERITY_LOW,
+                             strlen(pStr), pStr);
+    else if (GLEW_AMD_debug_output)
+        glDebugMessageInsertAMD(GL_DEBUG_CATEGORY_APPLICATION_AMD,
+                                GL_DEBUG_SEVERITY_LOW_AMD,
+                                1, // one[sic] id is as good as another ?
+                                strlen(pStr), pStr);
+
+    va_end (aArgs);
 }
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
