@@ -22,7 +22,6 @@
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

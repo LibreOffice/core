@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SCRIPTING_SOURCE_PROVIDER_SCRIPTIMPL_HXX
 #define INCLUDED_SCRIPTING_SOURCE_PROVIDER_SCRIPTIMPL_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -36,7 +36,7 @@ namespace func_provider
 {
 
 class ScriptImpl :
-            public ::cppu::WeakImplHelper1 < ::drafts::com::sun::star::script::framework::provider::XScript >
+            public ::cppu::WeakImplHelper < ::drafts::com::sun::star::script::framework::provider::XScript >
 {
 
 public:
