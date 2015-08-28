@@ -786,7 +786,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                     break;
                 }
-                aClientDataHd.SeekToEndOfRecord( rSt );
+                if (!aClientDataHd.SeekToEndOfRecord(rSt))
+                    break;
             }
         }
         if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE ) && !rPersistEntry.bNotesMaster )
@@ -1810,7 +1811,10 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                 break;
             }
             else
-                aPlaceHd.SeekToEndOfRecord( rStCtrl );
+            {
+                if (!aPlaceHd.SeekToEndOfRecord(rStCtrl))
+                    break;
+            }
         }
     }
 
@@ -2402,7 +2406,8 @@ bool SdrPowerPointImport::SeekToContentOfProgTag( sal_Int32 nVersion, SvStream& 
                     }
                 }
             }
-            aProgTagBinaryDataHd.SeekToEndOfRecord( rSt );
+            if (!aProgTagBinaryDataHd.SeekToEndOfRecord(rSt))
+                break;
         }
     }
     if ( !bRetValue )
@@ -2703,7 +2708,8 @@ void ImportComment10( SvxMSDffManager& rMan, SvStream& rStCtrl, SdrPage* pPage, 
             }
             break;
         }
-        aCommentHd.SeekToEndOfRecord( rStCtrl );
+        if (!aCommentHd.SeekToEndOfRecord(rStCtrl))
+            break;
     }
     Point aPosition( nPosX, nPosY );
     rMan.Scale( aPosition );
@@ -2763,7 +2769,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                         while( ( rStCtrl.GetError() == 0 ) && SeekToRec( rStCtrl, PPT_PST_Comment10, aContentDataHd.GetRecEndFilePos(), &aComment10Hd ) )
                         {
                             ImportComment10( *this, rStCtrl, pRet, aComment10Hd );
-                            aComment10Hd.SeekToEndOfRecord( rStCtrl );
+                            if (!aComment10Hd.SeekToEndOfRecord(rStCtrl))
+                                break;
                         }
                     }
                 }
@@ -2841,7 +2848,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             }
                             if ( aEscherObjListHd.nRecType == DFF_msofbtSpContainer )
                                 break;
-                            aEscherObjListHd.SeekToEndOfRecord( rStCtrl );
+                            if (!aEscherObjListHd.SeekToEndOfRecord(rStCtrl))
+                                break;
                         }
 
                         // now importing page
@@ -2891,7 +2899,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                             }
                             if ( aEscherObjListHd.nRecType == DFF_msofbtSpgrContainer )
                                 break;
-                            aEscherObjListHd.SeekToEndOfRecord( rStCtrl );
+                            if (!aEscherObjListHd.SeekToEndOfRecord(rStCtrl))
+                                break;
                         }
 
                         if ( rSlidePersist.pBObj )
@@ -2907,7 +2916,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                 }
                 break;
             }
-            aHd.SeekToEndOfRecord( rStCtrl );
+            if (!aHd.SeekToEndOfRecord(rStCtrl))
+                break;
         }
         if ( rSlidePersist.pSolverContainer )
             SolveSolver( *rSlidePersist.pSolverContainer );
@@ -3116,7 +3126,8 @@ void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader& rHd, HeaderF
             }
             break;
         }
-        aHd.SeekToEndOfRecord( rStCtrl );
+        if (!aHd.SeekToEndOfRecord(rStCtrl))
+            break;
     }
 }
 
@@ -3246,7 +3257,8 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
 #ifdef DBG_UTIL
                         else OSL_FAIL( "PPTExParaProv::PPTExParaProv - unknown atom interpreting the PPT_PST_ExtendedBuGraContainer (SJ)" );
 #endif
-                        aBuGraAtomHd.SeekToEndOfRecord( rSt );
+                        if (!aBuGraAtomHd.SeekToEndOfRecord(rSt))
+                            break;
                     }
                     if ( !aBuGraList.empty() )
                         bGraphics = true;
@@ -3270,7 +3282,8 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                 break;
 #endif
             }
-            aHd.SeekToEndOfRecord( rSt );
+            if (!aHd.SeekToEndOfRecord(rSt))
+                break;
         }
     }
 
@@ -3319,7 +3332,8 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                 case 0xf144 :
                 break;
             }
-            aHd.SeekToEndOfRecord( rSt );
+            if (!aHd.SeekToEndOfRecord(rSt))
+                break;
         }
     }
     rSt.Seek( nOldPos );
@@ -4096,7 +4110,10 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 break;
             }
             else
-                aTxMasterStyleHd.SeekToEndOfRecord( rIn );
+            {
+                if (!aTxMasterStyleHd.SeekToEndOfRecord(rIn))
+                    break;
+            }
         }
     }
 
@@ -4110,7 +4127,10 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
         if ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom )
             break;
         else
-            aTxMasterStyleHd.SeekToEndOfRecord( rIn );
+        {
+            if (!aTxMasterStyleHd.SeekToEndOfRecord(rIn))
+                break;
+        }
     }
     while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < nEndRecPos ) ) //TODO: aTxMasterStyleHd may be used without having been properly initialized
     {
@@ -4212,7 +4232,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             }
 #endif
         }
-        aTxMasterStyleHd.SeekToEndOfRecord( rIn );
+        if (!aTxMasterStyleHd.SeekToEndOfRecord(rIn))
+            break;
         ReadDffRecordHeader( rIn, aTxMasterStyleHd );
     }
     if ( !mpCharSheet[ TSS_TYPE_SUBTITLE ] )
@@ -4285,7 +4306,10 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     break;
                 }
                 else
-                    aTxMasterStyleHd2.SeekToEndOfRecord( rIn );
+                {
+                    if (!aTxMasterStyleHd2.SeekToEndOfRecord(rIn))
+                        break;
+                }
             }
         }
     }
@@ -6480,7 +6504,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                 if ( ( nTmpSlideId == nSlideId ) && ( pHd->nRecInstance == nRefNum ) )
                                 {
-                                    pHd->SeekToEndOfRecord( rIn );
+                                    if (!pHd->SeekToEndOfRecord(rIn))
+                                        break;
                                     ReadDffRecordHeader( rIn, aPresRuleHd );
                                     if ( aPresRuleHd.nRecType == PPT_PST_ExtendedParagraphAtom )
                                     {
@@ -6810,7 +6835,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     }
                                     break;
                                 }
-                                aTextHd.SeekToEndOfRecord( rIn );
+                                if (!aTextHd.SeekToEndOfRecord(rIn))
+                                    break;
                                 if ( pEntry )
                                 {
                                     // sorting fields ( hi >> lo )
