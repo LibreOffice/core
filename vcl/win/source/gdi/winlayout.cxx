@@ -1495,7 +1495,7 @@ void UniscribeLayout::DropGlyph( int nStartx8 )
         DBG_ASSERT( nStart <= mnGlyphCount, "USPLayout::DropG overflow" );
 
         int j = pVI->mnMinGlyphPos;
-        while (mpOutGlyphs[j] == DROPPED_OUTGLYPH) j++;
+        while (j < mnGlyphCount && mpOutGlyphs[j] == DROPPED_OUTGLYPH) j++;
         if (j == nStart)
         {
             pVI->mnXOffset += ((mpJustifications)? mpJustifications[nStart] : mpGlyphAdvances[nStart]);
