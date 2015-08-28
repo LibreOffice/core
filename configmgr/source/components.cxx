@@ -279,12 +279,21 @@ void Components::addModification(Path const & path) {
 
 void Components::writeModifications() {
 
-    if (!(data_.modifications.empty() || modificationFileUrl_.isEmpty()
-          || writeThread_.is()))
-    {
-        writeThread_ = new WriteThread(
-            &writeThread_, *this, modificationFileUrl_, data_);
-        writeThread_->launch();
+    if (!data_.modifications.empty()) {
+        switch (modificationTarget_) {
+        case ModificationTarget::None:
+            break;
+        case ModificationTarget::File:
+            if (!writeThread_.is()) {
+                writeThread_ = new WriteThread(
+                    &writeThread_, *this, modificationFileUrl_, data_);
+                writeThread_->launch();
+            }
+            break;
+        case ModificationTarget::Dconf:
+            //TODO
+            break;
+        }
     }
 }
 
@@ -455,7 +464,8 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
 
 Components::Components(
     css::uno::Reference< css::uno::XComponentContext > const & context):
-    context_(context), sharedExtensionLayer_(-1), userExtensionLayer_(-1)
+    context_(context), sharedExtensionLayer_(-1), userExtensionLayer_(-1),
+    modificationTarget_(ModificationTarget::None)
 {
     assert(context.is());
     lock_ = lock();
@@ -468,9 +478,10 @@ Components::Components(
         if (i == conf.getLength()) {
             break;
         }
-        if (!modificationFileUrl_.isEmpty()) {
+        if (modificationTarget_ != ModificationTarget::None) {
             throw css::uno::RuntimeException(
-                "CONFIGURATION_LAYERS: \"user\" followed by further layers");
+                "CONFIGURATION_LAYERS: modification target layer followed by"
+                " further layers");
         }
         sal_Int32 c = i;
         for (;; ++c) {
@@ -522,11 +533,15 @@ Components::Components(
             ++layer; //TODO: overflow
 #if ENABLE_DCONF
         } else if (type == "dconf") {
-            if (!url.isEmpty()) {
+            if (url == "!") {
+                modificationTarget_ = ModificationTarget::Dconf;
+            } else if (url == "*") {
+                readDconfLayer(data_, layer);
+            } else {
                 throw css::uno::RuntimeException(
-                    "CONFIGURATION_LAYERS: non-empty \"dconf\" URL");
+                    "CONFIGURATION_LAYERS: unknown \"dconf\" kind \"" + url
+                    + "\"");
             }
-            readDconfLayer(data_, layer);
             ++layer; //TODO: overflow
 #endif
 #if defined WNT
@@ -549,12 +564,24 @@ Components::Components(
             ++layer; //TODO: overflow
 #endif
         } else if (type == "user") {
+            bool write;
+            if (url.startsWith("!", &url)) {
+                write = true;
+            } else if (url.startsWith("*", &url)) {
+                write = false;
+            } else {
+                write = true; // for backwards compatibility
+            }
             if (url.isEmpty()) {
                 throw css::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: empty \"user\" URL");
             }
-            modificationFileUrl_ = url;
-            parseModificationLayer(url);
+            if (write) {
+                modificationTarget_ = ModificationTarget::File;
+                modificationFileUrl_ = url;
+            }
+            parseModificationLayer(write ? Data::NO_LAYER : layer, url);
+            ++layer; //TODO: overflow
         } else {
             throw css::uno::RuntimeException(
                 "CONFIGURATION_LAYERS: unknown layer type \"" + type + "\"");
@@ -789,9 +816,9 @@ void Components::parseResLayer(int layer, OUString const & url) {
     parseFiles(layer, ".xcu", &parseXcuFile, resUrl, false);
 }
 
-void Components::parseModificationLayer(OUString const & url) {
+void Components::parseModificationLayer(int layer, OUString const & url) {
     try {
-        parseFileLeniently(&parseXcuFile, url, Data::NO_LAYER, 0, 0, 0);
+        parseFileLeniently(&parseXcuFile, url, layer, 0, 0, 0);
     } catch (css::container::NoSuchElementException &) {
         SAL_INFO(
             "configmgr", "user registrymodifications.xcu does not (yet) exist");
@@ -799,7 +826,7 @@ void Components::parseModificationLayer(OUString const & url) {
         // longer relevant, probably OOo 4; also see hack for xsi namespace in
         // xmlreader::XmlReader::registerNamespaceIri):
         parseFiles(
-            Data::NO_LAYER, ".xcu", &parseXcuFile,
+            layer, ".xcu", &parseXcuFile,
             expand(
                 "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap")
                 ":UserInstallation}/user/registry/data"),

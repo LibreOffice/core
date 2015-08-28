@@ -139,7 +139,7 @@ private:
 
     void parseResLayer(int layer, OUString const & url);
 
-    void parseModificationLayer(OUString const & url);
+    void parseModificationLayer(int layer, OUString const & url);
 
     int getExtensionLayer(bool shared);
 
@@ -153,6 +153,8 @@ private:
 
     class WriteThread;
 
+    enum class ModificationTarget { None, File, Dconf };
+
     css::uno::Reference< css::uno::XComponentContext >
         context_;
     Data data_;
@@ -161,6 +163,7 @@ private:
     rtl::Reference< WriteThread > writeThread_;
     int sharedExtensionLayer_;
     int userExtensionLayer_;
+    ModificationTarget modificationTarget_;
     OUString modificationFileUrl_;
     std::shared_ptr<osl::Mutex> lock_;
 };
