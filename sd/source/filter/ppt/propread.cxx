@@ -497,10 +497,18 @@ void Section::Read( SotStorageStream *pStrm )
         {
             sal_uInt32 nDictCount(0);
             pStrm->ReadUInt32(nDictCount);
+            auto nMaxRecordsPossible = pStrm->remainingSize() / (sizeof(sal_uInt32)*2);
+            if (nDictCount > nMaxRecordsPossible)
+            {
+                SAL_WARN("sd.filter", "Dictionary count of " << nDictCount << " claimed, only " << nMaxRecordsPossible << " possible");
+                nDictCount = nMaxRecordsPossible;
+            }
             for (sal_uInt32 i = 0; i < nDictCount; ++i)
             {
                 sal_uInt32 nSize(0);
                 pStrm->ReadUInt32( nSize ).ReadUInt32( nSize );
+                if (!pStrm->good())
+                    break;
                 sal_uInt64 nPos = pStrm->Tell() + nSize;
                 if (nPos != pStrm->Seek(nPos))
                     break;
