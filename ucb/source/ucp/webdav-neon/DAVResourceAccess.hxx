@@ -252,6 +252,9 @@ private:
         throw ( DAVException );
     void initialize()
         throw ( DAVException );
+
+    const OUString prepareURL( const OUString & aURL );
+
 };
 
 } // namespace webdav_ucp

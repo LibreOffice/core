@@ -39,6 +39,8 @@
 #include "DAVAuthListenerImpl.hxx"
 #include "DAVResourceAccess.hxx"
 
+#include "../inc/urihelper.hxx"
+
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
@@ -142,9 +144,9 @@ DAVResourceAccess::DAVResourceAccess(
     const uno::Reference< uno::XComponentContext > & rxContext,
     rtl::Reference< DAVSessionFactory > const & rSessionFactory,
     const OUString & rURL )
-: m_aURL( rURL ),
-  m_xSessionFactory( rSessionFactory ),
-  m_xContext( rxContext )
+    : m_aURL( prepareURL( rURL ) ),
+      m_xSessionFactory( rSessionFactory ),
+      m_xContext( rxContext )
 {
 }
 
@@ -1223,6 +1225,46 @@ bool DAVResourceAccess::handleException( const DAVException & e, int errorCount 
     default:
         return false; // Abort
     }
+}
+
+const OUString DAVResourceAccess::prepareURL( const OUString & aURL )
+{
+    // get the parent
+    // <scheme>://              -> ""
+    // <scheme>://foo           -> ""
+    // <scheme>://foo/          -> ""
+    // <scheme>://foo/bar       -> <scheme>://foo/
+    // <scheme>://foo/bar/      -> <scheme>://foo/
+    // <scheme>://foo/bar/abc   -> <scheme>://foo/bar/
+
+    sal_Int32 nPos = aURL.lastIndexOf( '/' );
+    if ( nPos == ( aURL.getLength() - 1 ) )
+    {
+        // Trailing slash found. Skip.
+        nPos = aURL.lastIndexOf( '/', nPos );
+    }
+
+    sal_Int32 nPos1 = aURL.lastIndexOf( '/', nPos );
+    if ( nPos1 != -1 )
+        nPos1 = aURL.lastIndexOf( '/', nPos1 );
+
+    if ( nPos1 == -1 )
+        return OUString();
+
+    OUString aEscapedParentURL = aURL.copy( 0, nPos + 1 );
+
+    if ( aEscapedParentURL.lastIndexOf( '/' ) != ( aEscapedParentURL.getLength() - 1 ) )
+        aEscapedParentURL += "/";
+
+    // unescape/escape the last segment
+    NeonUri aURI( aURL );
+    OUString aUnEscapedTitle = aURI.GetPathBaseNameUnescaped();
+
+    aEscapedParentURL +=  NeonUri::escapeSegment( aUnEscapedTitle );
+    // re escape correctly the entire url
+    // encodeURI won't touch the already escaped chars
+    // will escape what is needed
+    return aEscapedParentURL; //ucb_impl::urihelper::encodeURI( aEscapedParentURL );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
