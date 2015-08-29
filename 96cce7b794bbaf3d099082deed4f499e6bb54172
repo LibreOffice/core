@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_03573403",
+        "filename": "include/vcl/gradient.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-29T23:47:18Z",
+      "side": 1,
+      "message": "I\u0027d perhaps leave those out. For the default refcounting policy, the performance implications are absolutely negligible (one integer increment less or so).\n\n(I\u0027d be with you for the atomic increments of the multithreaded policy, the penalty there can be substantial for mass objects)",
+      "revId": "96cce7b794bbaf3d099082deed4f499e6bb54172",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
