@@ -39,6 +39,8 @@
 #include "DAVAuthListenerImpl.hxx"
 #include "DAVResourceAccess.hxx"
 
+#include "../inc/urihelper.hxx"
+
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
@@ -142,7 +144,7 @@ DAVResourceAccess::DAVResourceAccess(
     const uno::Reference< uno::XComponentContext > & rxContext,
     rtl::Reference< DAVSessionFactory > const & rSessionFactory,
     const OUString & rURL )
-: m_aURL( rURL ),
+: m_aURL( ucb_impl::urihelper::encodeURI( NeonUri::unescape(rURL) ) ),
   m_xSessionFactory( rSessionFactory ),
   m_xContext( rxContext )
 {
