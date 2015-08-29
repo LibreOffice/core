@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_40d122fb",
+        "filename": "vcl/qa/cppunit/wmf/wmfimporttest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2015-08-29T04:35:18Z",
+      "side": 1,
+      "message": "These tests only check the size of comments; but in case of padding, even if the size of comment is OK, the processing in ImplRenderer::processEMFPlus may produce wrong results (wrong number of objects?)",
+      "range": {
+        "startLine": 164,
+        "startChar": 4,
+        "endLine": 165,
+        "endChar": 72
+      },
+      "revId": "e5c7cc058aa1cf3c059225c5d6ce0137042791ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
