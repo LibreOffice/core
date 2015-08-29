@@ -25,14 +25,13 @@ PRJ=..
 
 PRJNAME=basebmp
 TARGET=tests
-TARGETTYPE=GUI
 
 ENABLE_EXCEPTIONS=TRUE
 
-.IF "$(WITH_CPPUNIT)" != "YES"
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
 
 @all:
-    @echo "cppunit disabled. nothing do do."
+    @echo "unit tests are disabled. Nothing do do."
 
 .ELSE
 
@@ -63,34 +62,29 @@ CDEFS+=-xalias_level=compatible
 .ENDIF
 .ENDIF
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
 # --- Common ----------------------------------------------------------
 .IF "$(L10N_framework)"==""
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:tests by codegen.pl
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/basictest.obj		\
     $(SLO)$/bmpmasktest.obj		\
     $(SLO)$/bmptest.obj		    \
     $(SLO)$/cliptest.obj		\
     $(SLO)$/filltest.obj		\
     $(SLO)$/linetest.obj		\
+    $(SLO)$/main.obj		\
     $(SLO)$/masktest.obj		\
     $(SLO)$/polytest.obj		\
     $(SLO)$/tools.obj
-SHL1TARGET= tests
-SHL1STDLIBS=    $(BASEBMPLIB) \
-                $(SALLIB)		 \
-                $(CPPUNITLIB)	 \
+APP1TARGET= tests
+APP1STDLIBS=			$(BASEBMPLIB) \
+                $(SALLIB)     \
+                $(GTESTLIB) \
                 $(BASEGFXLIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map
-SHL1RPATH = NONE
+APP1RPATH = NONE
+APP1TEST  = enabled
 
 .ENDIF
 # END ------------------------------------------------------------------
@@ -116,15 +110,12 @@ SHL1RPATH = NONE
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS)
+SLOFILES=$(APP1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
 
 # --- Enable test execution in normal build ------------------------
-.IF "$(L10N_framework)"==""
-.INCLUDE : _cppunit.mk
-.ENDIF
 
-.ENDIF # "$(WITH_CPPUNIT)" != "YES"
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
