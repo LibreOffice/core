@@ -79,7 +79,7 @@ public:
     int FindFreeSlot();
 };
 
-class VCL_PLUGIN_PUBLIC OpenGLTexture
+class VCL_DLLPUBLIC OpenGLTexture
 {
 private:
     // if the rect size doesn't match the mpImpl one, this instance
