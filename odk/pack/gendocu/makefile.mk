@@ -112,7 +112,7 @@ $(JAVA_DOCU_INDEX_FILE) .SEQUENTIAL : $(JAVA_SRC_FILES)
     -$(MKDIRHIER) $(@:d)        
     $(JAVADOC) -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
 .IF "$(OS)" != "MACOSX"
-    patch $(JAVA_DOCU_INDEX_FILE) idl_ref_javadoc.patch
+        cd $(shell dirname $(JAVA_DOCU_INDEX_FILE)) && patch $(shell basename $(JAVA_DOCU_INDEX_FILE)) $(PWD)/idl_ref_javadoc.patch
 .ENDIF
 .ENDIF
 
