@@ -61,16 +61,10 @@ APP1STDLIBS= \
                 $(CPPULIB)       \
                 $(GTESTLIB)
 
-APP1IMPLIB= i$(APP1TARGET)
 APP1RPATH = NONE
-DEF1NAME    =$(APP1TARGET)
 APP1TEST = enabled
 
 # END ------------------------------------------------------------------
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-SLOFILES=$(APP1OBJS)
 
 # --- Targets ------------------------------------------------------
 

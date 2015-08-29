@@ -108,9 +108,6 @@ APP1TEST  = enabled
 #APP2DEF=	$(MISC)$/$(TARGET).def
 #.ENDIF
 
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-SLOFILES=$(APP1OBJS)
 
 # --- Targets ------------------------------------------------------
 
