@@ -438,6 +438,8 @@ void Window::ImplHideAllOverlaps()
 
 void Window::ToTop( ToTopFlags nFlags )
 {
+    if (!mpWindowImpl)
+        return;
 
     ImplStartToTop( nFlags );
     ImplFocusToTop( nFlags, IsReallyVisible() );
