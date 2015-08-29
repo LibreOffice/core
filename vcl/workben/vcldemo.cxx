@@ -43,6 +43,14 @@
 #include <vcldemo-debug.hxx>
 #include <opengl/zone.hxx>
 
+// internal headers for OpenGLTests class.
+#include "salgdi.hxx"
+#include "salframe.hxx"
+#include "openglgdiimpl.hxx"
+#include "opengl/texture.hxx"
+#include "opengl/framebuffer.hxx"
+#include <vcl/opengl/OpenGLHelper.hxx>
+
 #include <rtl/math.hxx>
 
 #define FIXME_SELF_INTERSECTING_WORKING 0
@@ -1627,6 +1635,71 @@ class DemoPopup : public FloatingWindow
     }
 };
 
+class OpenGLTests
+{
+    VclPtr<WorkWindow> mxWinA;
+    VclPtr<WorkWindow> mxWinB;
+    OpenGLSalGraphicsImpl *mpImplA;
+    OpenGLSalGraphicsImpl *mpImplB;
+    OpenGLContext *mpA;
+    OpenGLContext *mpB;
+
+    OpenGLSalGraphicsImpl *getImpl(const VclPtr<WorkWindow> &xWin)
+    {
+        SalGraphics *pGraphics = xWin->GetGraphics();
+        return dynamic_cast<OpenGLSalGraphicsImpl *>(pGraphics->GetImpl());
+    }
+public:
+    OpenGLTests() :
+        mxWinA(VclPtr<WorkWindow>::Create(nullptr, WB_APP | WB_STDWORK)),
+        mxWinB(VclPtr<WorkWindow>::Create(nullptr, WB_APP | WB_STDWORK))
+    {
+        if (!OpenGLHelper::isVCLOpenGLEnabled())
+        {
+            fprintf (stderr, "OpenGL is not enabled: try SAL_FORCEGL=1\n");
+            return;
+        }
+
+        mpImplA = getImpl(mxWinA);
+        mpImplB = getImpl(mxWinB);
+        assert (mpImplA && mpImplB);
+        mpA = mpImplA->GetOpenGLContext();
+        mpB = mpImplB->GetOpenGLContext();
+
+        assert (mpA && mpB);
+    }
+    ~OpenGLTests()
+    {
+        mxWinB.disposeAndClear();
+        mxWinA.disposeAndClear();
+    }
+
+    void testCurrentFramebuffer()
+    {
+        fprintf(stderr,"test OpenGLContext's framebuffer association.\n");
+        mpA->makeCurrent();
+        OpenGLFramebuffer *pBuffer;
+        {
+            OpenGLTexture aTexture(256,128);
+            pBuffer = mpA->AcquireFramebuffer(aTexture);
+            pBuffer->DetachTexture(); // TESTME - remove this line too ...
+        }
+        assert (pBuffer->IsFree());
+        mpB->makeCurrent();
+        assert (mpA->mpCurrentFramebuffer == NULL);
+    }
+
+    int execute()
+    {
+        if (!OpenGLHelper::isVCLOpenGLEnabled())
+            return 1;
+
+        testCurrentFramebuffer();
+
+        return 0;
+    }
+};
+
 class DemoApp : public Application
 {
     static int showHelp(DemoRenderer &rRenderer)
@@ -1640,6 +1713,7 @@ class DemoApp : public Application
         fprintf(stderr,"  --test <iterCount> - create benchmark data\n");
         fprintf(stderr,"  --widgets          - launch the widget test.\n");
         fprintf(stderr,"  --threads          - render from multiple threads.\n");
+        fprintf(stderr,"  --gltest           - run openGL regression tests.\n");
         fprintf(stderr, "\n");
         return 0;
     }
@@ -1651,7 +1725,8 @@ public:
     {
         try
         {
-            bool bWidgets = false, bThreads = false, bPopup = false;
+            bool bWidgets = false, bThreads = false;
+            bool bPopup = false, bGLTest = false;
             DemoRenderer aRenderer;
 
             for (sal_Int32 i = 0; i < GetCommandLineParamCount(); i++)
@@ -1678,6 +1753,8 @@ public:
                     bWidgets = true;
                 else if (aArg == "--popup")
                     bPopup = true;
+                else if (aArg == "--gltest")
+                    bGLTest = true;
                 else if (aArg == "--threads")
                     bThreads = true;
                 else if (aArg.startsWith("--"))
@@ -1694,7 +1771,12 @@ public:
 
             aMainWin->SetText("Interactive VCL demo #1");
 
-            if (bWidgets)
+            if (bGLTest)
+            {
+                OpenGLTests aTests;
+                return aTests.execute();
+            }
+            else if (bWidgets)
                 xWidgets = VclPtr< DemoWidgets >::Create ();
             else if (bPopup)
                 xPopup = VclPtrInstance< DemoPopup> ();

@@ -32,8 +32,8 @@ OpenGLFramebuffer::~OpenGLFramebuffer()
 
 void OpenGLFramebuffer::Bind()
 {
-    glBindFramebuffer( GL_FRAMEBUFFER, mnId );
     VCL_GL_INFO( "vcl.opengl", "Binding framebuffer " << (int)mnId );
+    glBindFramebuffer( GL_FRAMEBUFFER, mnId );
     CHECK_GL_ERROR();
 }
 

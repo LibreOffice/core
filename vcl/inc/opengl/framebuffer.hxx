@@ -15,7 +15,7 @@
 
 #include <opengl/texture.hxx>
 
-class VCL_PLUGIN_PUBLIC OpenGLFramebuffer
+class VCL_DLLPUBLIC OpenGLFramebuffer
 {
 private:
     GLuint      mnId;

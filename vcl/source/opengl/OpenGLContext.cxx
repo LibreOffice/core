@@ -1614,6 +1614,7 @@ void OpenGLContext::ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer )
 void OpenGLContext::ReleaseFramebuffer( const OpenGLTexture& rTexture )
 {
     OpenGLZone aZone;
+
     OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
 
     while( pFramebuffer )
@@ -1622,6 +1623,8 @@ void OpenGLContext::ReleaseFramebuffer( const OpenGLTexture& rTexture )
         {
             BindFramebuffer( pFramebuffer );
             pFramebuffer->DetachTexture();
+            if (mpCurrentFramebuffer == pFramebuffer)
+                BindFramebuffer( NULL );
         }
         pFramebuffer = pFramebuffer->mpPrevFramebuffer;
     }
@@ -1630,6 +1633,7 @@ void OpenGLContext::ReleaseFramebuffer( const OpenGLTexture& rTexture )
 void OpenGLContext::ReleaseFramebuffers()
 {
     OpenGLZone aZone;
+
     OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
     while( pFramebuffer )
     {
@@ -1637,6 +1641,7 @@ void OpenGLContext::ReleaseFramebuffers()
         pFramebuffer->DetachTexture();
         pFramebuffer = pFramebuffer->mpPrevFramebuffer;
     }
+    BindFramebuffer( NULL );
 }
 
 OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
