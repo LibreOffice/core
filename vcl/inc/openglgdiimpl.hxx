@@ -34,6 +34,7 @@
 
 class SalFrame;
 class SalVirtualDevice;
+class OpenGLTests;
 
 namespace basegfx
 {
@@ -46,8 +47,9 @@ struct TextureCombo
     std::unique_ptr<OpenGLTexture> mpMask;
 };
 
-class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
+class VCL_DLLPUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
+    friend class OpenGLTests;
 protected:
 
     OpenGLContext* mpContext;
