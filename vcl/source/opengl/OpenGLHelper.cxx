@@ -140,6 +140,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
 {
     OpenGLZone aZone;
 
+    VCL_GL_INFO("vcl.opengl", "Load shader: vertex " << rVertexShaderName << " fragment " << rFragmentShaderName);
     // Create the shaders
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
     GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
