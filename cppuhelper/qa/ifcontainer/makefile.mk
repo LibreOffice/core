@@ -31,27 +31,31 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:joblist by codegen.pl
-SHL1OBJS=  \
-    $(SLO)$/cppu_ifcontainer.obj
-SHL1TARGET= cppu_ifcontainer
-SHL1STDLIBS=\
+APP1OBJS=  \
+    $(SLO)$/cppu_ifcontainer.obj \
+    $(SLO)$/main.obj
+APP1TARGET= cppu_ifcontainer
+APP1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(SALLIB) \
     $(CPPULIB) \
     $(TESTSHL2LIB)\
-    $(CPPUNITLIB)
-SHL1IMPLIB= i$(SHL1TARGET)
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP= export.map
+    $(GTESTLIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 # auto generated Target:joblist
 # END ------------------------------------------------------------------
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
 
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"

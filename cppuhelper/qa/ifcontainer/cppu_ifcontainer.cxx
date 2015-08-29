@@ -21,13 +21,12 @@
 
 
 
-#include <testshl/simpleheader.hxx>
-
 #include "com/sun/star/lang/XEventListener.hpp"
 #include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/queryinterface.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/propshlp.hxx"
+#include "gtest/gtest.h"
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -57,79 +56,12 @@ public:
 
 namespace cppu_ifcontainer
 {
-    class IfTest : public CppUnit::TestFixture
+    class IfTest : public ::testing::Test
     {
+    protected:
         osl::Mutex m_aGuard;
         static const int nTests = 10;
     public:
-        void testCreateDispose()
-        {
-            ContainerStats aStats;
-            cppu::OInterfaceContainerHelper *pContainer;
-
-            pContainer = new cppu::OInterfaceContainerHelper(m_aGuard);
-
-            CPPUNIT_ASSERT_MESSAGE("Empty container not empty",
-                                   pContainer->getLength() == 0);
-
-            int i;
-            for (i = 0; i < nTests; i++)
-            {
-                Reference<XEventListener> xRef = new ContainerListener(&aStats);
-                int nNewLen = pContainer->addInterface(xRef);
-
-                CPPUNIT_ASSERT_MESSAGE("addition length mismatch",
-                                       nNewLen == i + 1);
-                CPPUNIT_ASSERT_MESSAGE("addition length mismatch",
-                                       pContainer->getLength() == i + 1);
-            }
-            CPPUNIT_ASSERT_MESSAGE("alive count mismatch",
-                                   aStats.m_nAlive == nTests);
-
-            EventObject aObj;
-            pContainer->disposeAndClear(aObj);
-
-            CPPUNIT_ASSERT_MESSAGE("dispose count mismatch",
-                                   aStats.m_nDisposed == nTests);
-            CPPUNIT_ASSERT_MESSAGE("leaked container left alive",
-                                   aStats.m_nAlive == 0);
-
-            delete pContainer;
-        }
-
-        void testEnumerate()
-        {
-            int i;
-            ContainerStats aStats;
-            cppu::OInterfaceContainerHelper *pContainer;
-            pContainer = new cppu::OInterfaceContainerHelper(m_aGuard);
-
-            std::vector< Reference< XEventListener > > aListeners;
-            for (i = 0; i < nTests; i++)
-            {
-                Reference<XEventListener> xRef = new ContainerListener(&aStats);
-                int nNewLen = pContainer->addInterface(xRef);
-                aListeners.push_back(xRef);
-            }
-            Sequence< Reference< XInterface > > aElements;
-            aElements = pContainer->getElements();
-
-            CPPUNIT_ASSERT_MESSAGE("query contents",
-                                   (int)aElements.getLength() == nTests);
-            if ((int)aElements.getLength() == nTests)
-            {
-                for (i = 0; i < nTests; i++)
-                {
-                    CPPUNIT_ASSERT_MESSAGE("mismatching elements",
-                                           aElements[i] == aListeners[i]);
-                }
-            }
-            pContainer->clear();
-
-            CPPUNIT_ASSERT_MESSAGE("non-empty container post clear",
-                                   pContainer->getLength() == 0);
-            delete pContainer;
-        }
 
         template < typename ContainerType, typename ContainedType >
         void doContainerTest(const ContainedType *pTypes)
@@ -155,11 +87,11 @@ namespace cppu_ifcontainer
 
                 pHelper = pContainer->getContainer(pTypes[i]);
 
-                CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != NULL);
+                ASSERT_TRUE(pHelper != NULL) << "no helper";
                 Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 2);
-                CPPUNIT_ASSERT_MESSAGE("match", aSeq[0] == xRefs[i*2]);
-                CPPUNIT_ASSERT_MESSAGE("match", aSeq[1] == xRefs[i*2+1]);
+                ASSERT_TRUE(aSeq.getLength() == 2) << "wrong num elements";
+                ASSERT_TRUE(aSeq[0] == xRefs[i*2]) << "match";
+                ASSERT_TRUE(aSeq[1] == xRefs[i*2+1]) << "match";
             }
 
             // remove every other interface
@@ -173,10 +105,10 @@ namespace cppu_ifcontainer
 
                 pHelper = pContainer->getContainer(pTypes[i]);
 
-                CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != NULL);
+                ASSERT_TRUE(pHelper != NULL) << "no helper";
                 Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 1);
-                CPPUNIT_ASSERT_MESSAGE("match", aSeq[0] == xRefs[i*2]);
+                ASSERT_TRUE(aSeq.getLength() == 1) << "wrong num elements";
+                ASSERT_TRUE(aSeq[0] == xRefs[i*2]) << "match";
             }
 
             // remove the 1st half of the rest
@@ -189,75 +121,124 @@ namespace cppu_ifcontainer
                 cppu::OInterfaceContainerHelper *pHelper;
 
                 pHelper = pContainer->getContainer(pTypes[i]);
-                CPPUNIT_ASSERT_MESSAGE("no helper", pHelper != NULL);
+                ASSERT_TRUE(pHelper != NULL) << "no helper";
                 Sequence<Reference< XInterface > > aSeq = pHelper->getElements();
-                CPPUNIT_ASSERT_MESSAGE("wrong num elements", aSeq.getLength() == 0);
+                ASSERT_TRUE(aSeq.getLength() == 0) << "wrong num elements";
             }
 
             delete pContainer;
         }
-
-        void testOMultiTypeInterfaceContainerHelper()
-        {
-            uno::Type pTypes[nTests] =
-            {
-                ::cppu::UnoType< bool >::get(),
-                ::cppu::UnoType< float >::get(),
-                ::cppu::UnoType< double >::get(),
-                ::cppu::UnoType< ::sal_uInt64 >::get(),
-                ::cppu::UnoType< ::sal_Int64 >::get(),
-                ::cppu::UnoType< ::sal_uInt32 >::get(),
-                ::cppu::UnoType< ::sal_Int32 >::get(),
-                ::cppu::UnoType< ::sal_Int16 >::get(),
-                ::cppu::UnoType< ::rtl::OUString >::get(),
-                ::cppu::UnoType< ::sal_Int8 >::get()
-            };
-            doContainerTest< cppu::OMultiTypeInterfaceContainerHelper,
-                uno::Type> (pTypes);
-        }
-
-        void testOMultiTypeInterfaceContainerHelperInt32()
-        {
-            sal_Int32 pTypes[nTests] =
-            {
-                0,
-                -1,
-                1,
-                256,
-                1024,
-                3,
-                7,
-                8,
-                9,
-                10
-            };
-            doContainerTest< cppu::OMultiTypeInterfaceContainerHelperInt32, sal_Int32> (pTypes);
-        }
-
-        void testOMultiTypeInterfaceContainerHelperVar()
-        {
-            typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<
-                const char*, rtl::CStringHash, rtl::CStringEqual> StrContainer;
-
-            const char *pTypes[nTests] =
-            {
-                "this_is", "such", "fun", "writing", "unit", "tests", "when", "it", "works", "anyway"
-            };
-            doContainerTest< StrContainer, const char *> (pTypes);
-        }
-
-        // Automatic registration code
-        CPPUNIT_TEST_SUITE(IfTest);
-        CPPUNIT_TEST(testCreateDispose);
-        CPPUNIT_TEST(testEnumerate);
-        CPPUNIT_TEST(testOMultiTypeInterfaceContainerHelper);
-        CPPUNIT_TEST(testOMultiTypeInterfaceContainerHelperVar);
-        CPPUNIT_TEST(testOMultiTypeInterfaceContainerHelperInt32);
-        CPPUNIT_TEST_SUITE_END();
     };
+
+    TEST_F(IfTest, testCreateDispose)
+    {
+        ContainerStats aStats;
+        cppu::OInterfaceContainerHelper *pContainer;
+
+        pContainer = new cppu::OInterfaceContainerHelper(m_aGuard);
+
+        ASSERT_TRUE(pContainer->getLength() == 0) << "Empty container not empty";
+
+        int i;
+        for (i = 0; i < nTests; i++)
+        {
+            Reference<XEventListener> xRef = new ContainerListener(&aStats);
+            int nNewLen = pContainer->addInterface(xRef);
+
+            ASSERT_TRUE(nNewLen == i + 1) << "addition length mismatch";
+            ASSERT_TRUE(pContainer->getLength() == i + 1) << "addition length mismatch";
+        }
+        ASSERT_TRUE(aStats.m_nAlive == nTests) << "alive count mismatch";
+
+        EventObject aObj;
+        pContainer->disposeAndClear(aObj);
+
+        ASSERT_TRUE(aStats.m_nDisposed == nTests) << "dispose count mismatch";
+        ASSERT_TRUE(aStats.m_nAlive == 0) << "leaked container left alive";
+
+        delete pContainer;
+    }
+
+    TEST_F(IfTest, testEnumerate)
+    {
+        int i;
+        ContainerStats aStats;
+        cppu::OInterfaceContainerHelper *pContainer;
+        pContainer = new cppu::OInterfaceContainerHelper(m_aGuard);
+
+        std::vector< Reference< XEventListener > > aListeners;
+        for (i = 0; i < nTests; i++)
+        {
+            Reference<XEventListener> xRef = new ContainerListener(&aStats);
+            int nNewLen = pContainer->addInterface(xRef);
+            aListeners.push_back(xRef);
+        }
+        Sequence< Reference< XInterface > > aElements;
+        aElements = pContainer->getElements();
+
+        ASSERT_TRUE((int)aElements.getLength() == nTests) << "query contents";
+        if ((int)aElements.getLength() == nTests)
+        {
+            for (i = 0; i < nTests; i++)
+            {
+                ASSERT_TRUE(aElements[i] == aListeners[i]) << "mismatching elements";
+            }
+        }
+        pContainer->clear();
+
+        ASSERT_TRUE(pContainer->getLength() == 0) << "non-empty container post clear";
+        delete pContainer;
+    }
+
+    TEST_F(IfTest, testOMultiTypeInterfaceContainerHelper)
+    {
+        uno::Type pTypes[nTests] =
+        {
+            ::cppu::UnoType< bool >::get(),
+            ::cppu::UnoType< float >::get(),
+            ::cppu::UnoType< double >::get(),
+            ::cppu::UnoType< ::sal_uInt64 >::get(),
+            ::cppu::UnoType< ::sal_Int64 >::get(),
+            ::cppu::UnoType< ::sal_uInt32 >::get(),
+            ::cppu::UnoType< ::sal_Int32 >::get(),
+            ::cppu::UnoType< ::sal_Int16 >::get(),
+            ::cppu::UnoType< ::rtl::OUString >::get(),
+            ::cppu::UnoType< ::sal_Int8 >::get()
+        };
+        doContainerTest< cppu::OMultiTypeInterfaceContainerHelper,
+            uno::Type> (pTypes);
+    }
+
+    TEST_F(IfTest, testOMultiTypeInterfaceContainerHelperInt32)
+    {
+        sal_Int32 pTypes[nTests] =
+        {
+            0,
+            -1,
+            1,
+            256,
+            1024,
+            3,
+            7,
+            8,
+            9,
+            10
+        };
+        doContainerTest< cppu::OMultiTypeInterfaceContainerHelperInt32, sal_Int32> (pTypes);
+    }
+
+    TEST_F(IfTest, testOMultiTypeInterfaceContainerHelperVar)
+    {
+        typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<
+            const char*, rtl::CStringHash, rtl::CStringEqual> StrContainer;
+
+        const char *pTypes[nTests] =
+        {
+            "this_is", "such", "fun", "writing", "unit", "tests", "when", "it", "works", "anyway"
+        };
+        doContainerTest< StrContainer, const char *> (pTypes);
+    }
+
+
 } // namespace cppu_ifcontainer
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(cppu_ifcontainer::IfTest,
-                                      "cppu_ifcontainer");
-
-NOADDITIONAL;
