@@ -594,7 +594,18 @@ void OpenGLSalBitmap::updateChecksum() const
         pThis->CreateTexture();
     }
 
-    pThis->mbChecksumValid = calcChecksumGL(pThis->maTexture, pThis->mnChecksum);
+    OpenGLTexture& rInputTexture = pThis->maTexture;
+    int nWidth = rInputTexture.GetWidth();
+    int nHeight = rInputTexture.GetHeight();
+
+    if( (nWidth * nHeight) < (1024*768) || nWidth < 128 || nHeight < 128 )
+    {
+        SalBitmap::updateChecksum();
+    }
+    else
+    {
+        pThis->mbChecksumValid = calcChecksumGL(rInputTexture, pThis->mnChecksum);
+    }
 }
 
 OpenGLContext* OpenGLSalBitmap::GetBitmapContext()
