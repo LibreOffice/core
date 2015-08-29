@@ -15,7 +15,12 @@ $(eval $(call gb_Executable_use_api,vcldemo,\
     udkapi \
 ))
 
-$(eval $(call gb_Executable_use_external,vcldemo,boost_headers))
+$(eval $(call gb_Executable_use_externals,vcldemo,\
+    boost_headers \
+    glew \
+    glm_headers \
+    mesa_headers \
+))
 
 $(eval $(call gb_Executable_set_include,vcldemo,\
     $$(INCLUDE) \
