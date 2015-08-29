@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_NEEDED_CAST_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_NEEDED_CAST_HXX
 
-#include "staticassert.hxx"
-
 namespace ww
 {
     template<typename Ret, typename Param> Ret checking_cast(Param in, Ret)
