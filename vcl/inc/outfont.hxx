@@ -290,7 +290,7 @@ public:
     void                AddLine( ImplTextLineInfo* pLine );
     void                Clear();
 
-    ImplTextLineInfo*   GetLine( sal_uInt16 nLine ) const
+    ImplTextLineInfo*   GetLine( sal_Int32 nLine ) const
                             { return mpLines[nLine]; }
     sal_Int32           Count() const { return mnLines; }
 
