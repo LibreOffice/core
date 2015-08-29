@@ -677,7 +677,7 @@ Const cstMaxLength = 64000
 					Line Input #iFile, sBuffer
 					lFileLength = lFileLength + Len(sBuffer) + 1
 					If lFileLength &gt; cstMaxLength Then Exit Do
-					sMemo = sMemo &amp; sBuffer &amp; Chr(10)
+					sMemo = sMemo &amp; sBuffer &amp; vbNewLine
 				Loop
 				If lFileLength = 0 Or lFileLength &gt; cstMaxLength Then
 					Close #iFile

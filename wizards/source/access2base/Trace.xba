@@ -32,7 +32,7 @@ Public Sub TraceConsole()
 	If _ErrorHandler() Then On Local Error Goto Error_Sub
 
 Dim sLineBreak As String, oDialogLib As Object, oTraceDialog As Object
-	sLineBreak = Chr(10)
+	sLineBreak = vbNewLine
 	 
 	Set oDialogLib = DialogLibraries
 	If oDialogLib.hasByName(&quot;Access2BaseDev&quot;) Then
@@ -85,7 +85,7 @@ Dim i As Integer, sText As String, iOKCancel As Integer
 			Loop While i &lt;&gt; _A2B_.TraceLogLast
 			oDump.Enabled = 1		&apos;	Enable DumpToFile only if there is something to dump
 		End If
-		If Len(sText) &gt; 0 Then sText = Left(sText, Len(sText) - 1)	&apos;	Skip last linefeed
+		If Len(sText) &gt; 0 Then sText = Left(sText, Len(sText) - Len(sLineBreak))	&apos;	Skip last linefeed
 		oTraceLog.Text = sText
 	Else
 		oTraceLog.Text = _GetLabel(&quot;DLGTRACE_TXTTRACELOG_TEXT&quot;)

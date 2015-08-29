@@ -2423,7 +2423,7 @@ Private Function _SendWithoutAttachment(ByVal pvTo As Variant _
 Dim sMailTo As String, sTo As String, sCc As String, sBcc As String, sSubject As String, sBody As String, oDispatch As Object
 Const cstComma = &quot;,&quot;
 Const cstSpace = &quot;%20&quot;
-Const cstCR = &quot;%0A&quot;
+Const cstLF = &quot;%0A&quot;
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 
@@ -2432,7 +2432,7 @@ Const cstCR = &quot;%0A&quot;
 	If UBound(pvBcc) &gt;= 0	Then sBcc = Trim(Join(pvBcc, cstComma))	Else sBcc = &quot;&quot;
 	If psSubject &lt;&gt; &quot;&quot;		Then sSubject = Join(Split(psSubject, &quot; &quot;), cstSpace)	Else sSubject = &quot;&quot;
 	If psBody &lt;&gt; &quot;&quot;	Then
-		sBody = Join(Split(psBody, Chr(13)), cstCR)
+		sBody = Join(Split(Join(Split(psBody, Chr(13)), &quot;&quot;), Chr(10), cstLF)
 		sBody = Join(Split(sBody, &quot; &quot;), cstSpace)
 	End If
 	
