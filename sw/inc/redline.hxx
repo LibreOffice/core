@@ -27,6 +27,7 @@
 
 #include <IDocumentRedlineAccess.hxx>
 
+#include <boost/noncopyable.hpp>
 #include <svl/smplhint.hxx>
 #include <vector>
 

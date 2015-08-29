@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <boost/noncopyable.hpp>
 
 #include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>

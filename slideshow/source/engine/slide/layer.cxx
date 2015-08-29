@@ -25,6 +25,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <boost/noncopyable.hpp>
 
 #include "layer.hxx"
 

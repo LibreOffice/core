@@ -50,6 +50,7 @@
 #include <xmloff/xmlprhdl.hxx>
 #include "xmlithlp.hxx"
 #include <com/sun/star/uno/Any.hxx>
+#include <boost/noncopyable.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

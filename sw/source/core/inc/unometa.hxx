@@ -34,6 +34,7 @@
 #include <cppuhelper/implbase6.hxx>
 
 #include <sfx2/Metadatable.hxx>
+#include <boost/noncopyable.hpp>
 
 #include <unobaseclass.hxx>
 

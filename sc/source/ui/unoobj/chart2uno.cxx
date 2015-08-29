@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <utility>
+#include <boost/noncopyable.hpp>
 
 #include "chart2uno.hxx"
 #include "miscuno.hxx"

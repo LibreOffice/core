@@ -27,7 +27,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/processfactory.hxx>
-
+#include <boost/noncopyable.hpp>
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>

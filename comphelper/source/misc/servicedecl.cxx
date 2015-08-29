@@ -26,6 +26,7 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <vector>
+#include <boost/noncopyable.hpp>
 
 using namespace com::sun::star;
 

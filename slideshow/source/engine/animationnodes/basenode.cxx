@@ -37,6 +37,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 

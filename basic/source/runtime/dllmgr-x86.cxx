@@ -38,6 +38,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <boost/noncopyable.hpp>
 
 #undef max
 

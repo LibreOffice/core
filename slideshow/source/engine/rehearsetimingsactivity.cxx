@@ -46,6 +46,7 @@
 #include "rehearsetimingsactivity.hxx"
 
 #include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
 #include <algorithm>
 
 using namespace com::sun::star;

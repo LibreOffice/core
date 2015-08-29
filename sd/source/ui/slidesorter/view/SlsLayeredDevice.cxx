@@ -26,6 +26,7 @@
 #include <tools/fract.hxx>
 
 #include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <functional>
 

@@ -76,6 +76,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/miscopt.hxx>
 #include <uielement/menubarmerger.hxx>
+#include <boost/noncopyable.hpp>
 
 // Be careful removing this "bad" construct. There are serious problems
 // with #define STRICT and including windows.h. Changing this needs some

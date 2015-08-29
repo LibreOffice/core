@@ -46,6 +46,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <svx/tabline.hxx>
+#include <boost/checked_delete.hpp>
 
 #include <functional>
 #include <algorithm>
