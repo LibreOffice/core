@@ -785,9 +785,13 @@ bool OpenGLContext::ImplInit()
             glXSwapInterval( 1 );
 
             if( errorTriggered )
+            {
                 SAL_WARN("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
+            }
             else
+            {
                 VCL_GL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
+            }
         }
     }
 
@@ -1359,6 +1363,7 @@ void OpenGLContext::makeCurrent()
 
     // move the context to the end of the contexts list
     static int nSwitch = 0;
+    (void) nSwitch; // -Werror=unused-variable
     VCL_GL_INFO("vcl.opengl", "******* CONTEXT SWITCH " << ++nSwitch << " *********");
     if( mpNextContext )
     {
