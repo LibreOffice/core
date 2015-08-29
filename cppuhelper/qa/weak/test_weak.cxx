@@ -34,9 +34,9 @@
 #include "com/sun/star/uno/XWeak.hpp"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/weak.hxx"
-#include "testshl/simpleheader.hxx"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -74,16 +74,11 @@ protected:
     }
 };
 
-class Test: public ::CppUnit::TestFixture {
+class Test: public ::testing::Test {
 public:
-    void testReferenceDispose();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testReferenceDispose);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::testReferenceDispose() {
+TEST_F(Test, testReferenceDispose) {
     css::uno::Reference< css::uno::XWeak > w(new ::cppu::OWeakObject);
     css::uno::Reference< css::uno::XAdapter > a(w->queryAdapter());
     ::rtl::Reference< Reference > r1(new RuntimeExceptionReference);
@@ -93,13 +88,10 @@ void Test::testReferenceDispose() {
     a->addReference(r2.get());
     a->addReference(r3.get());
     w.clear();
-    CPPUNIT_ASSERT(r1->isDisposed());
-    CPPUNIT_ASSERT(r2->isDisposed());
-    CPPUNIT_ASSERT(r3->isDisposed());
+    ASSERT_TRUE(r1->isDisposed());
+    ASSERT_TRUE(r2->isDisposed());
+    ASSERT_TRUE(r3->isDisposed());
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
-
 }
 
-NOADDITIONAL;
