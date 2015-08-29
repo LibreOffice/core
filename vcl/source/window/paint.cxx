@@ -32,6 +32,7 @@
 #include <salframe.hxx>
 #include <svdata.hxx>
 #include <comphelper/lok.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)
 #define IMPL_PAINT_PAINTALL         ((sal_uInt16)0x0002)
@@ -245,6 +246,7 @@ void PaintHelper::PaintBuffer()
 void PaintHelper::DoPaint(const vcl::Region* pRegion)
 {
     WindowImpl* pWindowImpl = m_pWindow->ImplGetWindowImpl();
+
     vcl::Region* pWinChildClipRegion = m_pWindow->ImplGetWinChildClipRegion();
     ImplFrameData* pFrameData = m_pWindow->mpWindowImpl->mpFrameData;
     if (pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL || pFrameData->mbInBufferedPaint)
@@ -271,6 +273,9 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
     pWindowImpl->mnPaintFlags = 0;
     if (!pWindowImpl->maInvalidateRegion.IsEmpty())
     {
+        VCL_GL_INFO("vcl.opengl", "PaintHelper::DoPaint on " <<
+                    typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "' begin");
+
         m_pWindow->BeginPaint();
 
         // double-buffering: setup the buffer if it does not exist
@@ -302,6 +307,9 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         }
 
         m_pWindow->EndPaint();
+
+        VCL_GL_INFO("vcl.opengl", "PaintHelper::DoPaint end on " <<
+                    typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "'");
     }
 }
 
