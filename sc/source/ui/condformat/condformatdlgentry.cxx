@@ -313,7 +313,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
     boost::scoped_ptr<ScTokenArray> ta(aComp.CompileString(aFormula));
 
     // Error, warn the user
-    if( ta->GetCodeError() )
+    if( ta->GetCodeError() || ( ta->GetLen() == 0 ) )
     {
         pEdit->SetControlBackground(COL_LIGHTRED);
         maFtVal->SetText(ScGlobal::GetRscString(STR_VALID_DEFERROR));
