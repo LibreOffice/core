@@ -89,6 +89,7 @@ class SVX_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 private:
     // fObjectRotation is containing the object rotation in degrees.
     double fObjectRotation;
+    bool   bAdjustingTextFrameWidthAndHeight;
 
 protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
