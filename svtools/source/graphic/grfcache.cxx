@@ -79,7 +79,7 @@ GraphicID::GraphicID( const GraphicObject& rObj )
                 mnID1 |= rSvgDataPtr->getSvgDataArrayLength();
                 mnID2 = basegfx::fround(rRange.getWidth());
                 mnID3 = basegfx::fround(rRange.getHeight());
-                mnID4 = rtl_crc32(0, rSvgDataPtr->getSvgDataArray().get(), rSvgDataPtr->getSvgDataArrayLength());
+                mnID4 = vcl_get_checksum(0, rSvgDataPtr->getSvgDataArray().get(), rSvgDataPtr->getSvgDataArrayLength());
             }
             else if( rGraphic.IsAnimated() )
             {
