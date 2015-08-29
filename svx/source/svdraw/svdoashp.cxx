@@ -848,7 +848,8 @@ sdr::properties::BaseProperties* SdrObjCustomShape::CreateObjectSpecificProperti
 TYPEINIT1(SdrObjCustomShape,SdrTextObj);
 SdrObjCustomShape::SdrObjCustomShape() :
     SdrTextObj(),
-    fObjectRotation( 0.0 ),
+    fObjectRotation(0.0),
+    bAdjustingTextFrameWidthAndHeight(false),
     mpLastShadowGeometry(0L)
 {
     bClosedObj = true; // custom shapes may be filled
@@ -2510,10 +2511,16 @@ Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, const bool 
 
 bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
+    if (bAdjustingTextFrameWidthAndHeight)
+    {
+        SAL_WARN("svx", "recursive NbcAdjustTextFrameWidthAndHeight");
+        return false;
+    }
     Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, bWdt );
     bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != maRect );
     if ( bRet )
     {
+        bAdjustingTextFrameWidthAndHeight = true;
         // taking care of handles that should not been changed
         std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
 
@@ -2534,6 +2541,7 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
             }
         }
         InvalidateRenderGeometry();
+        bAdjustingTextFrameWidthAndHeight = false;
     }
     return bRet;
 }
@@ -2846,6 +2854,7 @@ SdrObjCustomShape& SdrObjCustomShape::operator=(const SdrObjCustomShape& rObj)
     SdrTextObj::operator=( rObj );
     aName = rObj.aName;
     fObjectRotation = rObj.fObjectRotation;
+    bAdjustingTextFrameWidthAndHeight = rObj.bAdjustingTextFrameWidthAndHeight;
     InvalidateRenderGeometry();
     return *this;
 }
