@@ -114,7 +114,7 @@ protected:
     {
         try
         {
-            sal_uInt32 nCmdParams = GetCommandLineParamCount();
+            const sal_uInt16 nCmdParams = GetCommandLineParamCount();
 
             if (nCmdParams == 0)
                 showHelp();

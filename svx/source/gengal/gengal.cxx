@@ -281,7 +281,7 @@ int GalApp::Main()
         OUString aName( "Default name" );
         std::vector<INetURLObject> aFiles;
 
-        for( sal_uInt32 i = 0; i < GetCommandLineParamCount(); i++ )
+        for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); ++i )
         {
             OUString aParam = GetCommandLineParam( i );
 

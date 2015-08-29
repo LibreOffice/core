@@ -1785,7 +1785,7 @@ public:
             bool bPopup = false, bGLTest = false;
             DemoRenderer aRenderer;
 
-            for (sal_Int32 i = 0; i < GetCommandLineParamCount(); i++)
+            for (sal_uInt16 i = 0; i < GetCommandLineParamCount(); ++i)
             {
                 bool bLast = i == GetCommandLineParamCount() - 1;
                 OUString aArg = GetCommandLineParam(i);
