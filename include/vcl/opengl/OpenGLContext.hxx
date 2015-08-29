@@ -63,6 +63,7 @@ class OpenGLFramebuffer;
 class OpenGLProgram;
 class OpenGLTexture;
 class SalGraphicsImpl;
+class OpenGLTests;
 
 /// Holds the information of our new child window
 struct GLWindow
@@ -166,6 +167,7 @@ struct GLWindow
 
 class VCL_DLLPUBLIC OpenGLContext
 {
+    friend class OpenGLTests;
 public:
     OpenGLContext();
     ~OpenGLContext();
