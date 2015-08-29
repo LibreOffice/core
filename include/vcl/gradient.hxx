@@ -25,6 +25,7 @@
 #include <tools/color.hxx>
 
 #include <vcl/vclenum.hxx>
+#include <o3tl/cow_wrapper.hxx>
 
 
 // - Impl_Gradient -
@@ -52,8 +53,10 @@ public:
     friend SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImplGradient );
     friend SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImplGradient );
 
-                    Impl_Gradient();
-                    Impl_Gradient( const Impl_Gradient& rImplGradient );
+    Impl_Gradient();
+    Impl_Gradient( const Impl_Gradient& rImplGradient );
+
+    bool operator==( const Impl_Gradient& rImpl_Gradient ) const;
 };
 
 
@@ -63,8 +66,7 @@ public:
 class VCL_DLLPUBLIC Gradient
 {
 private:
-    Impl_Gradient*  mpImplGradient;
-    void            MakeUnique();
+    ::o3tl::cow_wrapper< Impl_Gradient >  mpImplGradient;
 
 public:
                     Gradient();

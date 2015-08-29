@@ -53,37 +53,36 @@ Impl_Gradient::Impl_Gradient( const Impl_Gradient& rImplGradient ) :
     mnStepCount         = rImplGradient.mnStepCount;
 }
 
-void Gradient::MakeUnique()
+bool Impl_Gradient::operator==( const Impl_Gradient& rImpl_Gradient ) const
 {
-    // If there are still other references, copy
-    if ( mpImplGradient->mnRefCount != 1 )
-    {
-        if( mpImplGradient->mnRefCount )
-            mpImplGradient->mnRefCount--;
-
-        mpImplGradient = new Impl_Gradient( *mpImplGradient );
-    }
+    if ( (meStyle           == rImpl_Gradient.meStyle)           &&
+         (mnAngle           == rImpl_Gradient.mnAngle)           &&
+         (mnBorder          == rImpl_Gradient.mnBorder)          &&
+         (mnOfsX            == rImpl_Gradient.mnOfsX)            &&
+         (mnOfsY            == rImpl_Gradient.mnOfsY)            &&
+         (mnStepCount       == rImpl_Gradient.mnStepCount)       &&
+         (mnIntensityStart  == rImpl_Gradient.mnIntensityStart)  &&
+         (mnIntensityEnd    == rImpl_Gradient.mnIntensityEnd)    &&
+         (maStartColor      == rImpl_Gradient.maStartColor)      &&
+         (maEndColor        == rImpl_Gradient.maEndColor) )
+         return true;
+    return false;
 }
 
-Gradient::Gradient()
+Gradient::Gradient() :
+    mpImplGradient()
 {
-
-    mpImplGradient = new Impl_Gradient;
 }
 
-Gradient::Gradient( const Gradient& rGradient )
+Gradient::Gradient( const Gradient& rGradient ) :
+    mpImplGradient( rGradient.mpImplGradient )
 {
-
-    // Take over instance data and increment refcount
-    mpImplGradient = rGradient.mpImplGradient;
-    mpImplGradient->mnRefCount++;
 }
 
 Gradient::Gradient( GradientStyle eStyle,
-                    const Color& rStartColor, const Color& rEndColor )
+                    const Color& rStartColor, const Color& rEndColor ) :
+    mpImplGradient()
 {
-
-    mpImplGradient                  = new Impl_Gradient;
     mpImplGradient->meStyle         = eStyle;
     mpImplGradient->maStartColor    = rStartColor;
     mpImplGradient->maEndColor      = rEndColor;
@@ -91,82 +90,55 @@ Gradient::Gradient( GradientStyle eStyle,
 
 Gradient::~Gradient()
 {
-
-    // If it's the last reference, delete it, otherwise
-    // decrement refcount
-    if ( mpImplGradient->mnRefCount == 1 )
-        delete mpImplGradient;
-    else
-        mpImplGradient->mnRefCount--;
 }
 
 void Gradient::SetStyle( GradientStyle eStyle )
 {
-
-    MakeUnique();
     mpImplGradient->meStyle = eStyle;
 }
 
 void Gradient::SetStartColor( const Color& rColor )
 {
-
-    MakeUnique();
     mpImplGradient->maStartColor = rColor;
 }
 
 void Gradient::SetEndColor( const Color& rColor )
 {
-
-    MakeUnique();
     mpImplGradient->maEndColor = rColor;
 }
 
 void Gradient::SetAngle( sal_uInt16 nAngle )
 {
-
-    MakeUnique();
     mpImplGradient->mnAngle = nAngle;
 }
 
 void Gradient::SetBorder( sal_uInt16 nBorder )
 {
-
-    MakeUnique();
     mpImplGradient->mnBorder = nBorder;
 }
 
 void Gradient::SetOfsX( sal_uInt16 nOfsX )
 {
-
-    MakeUnique();
     mpImplGradient->mnOfsX = nOfsX;
 }
 
 void Gradient::SetOfsY( sal_uInt16 nOfsY )
 {
-
-    MakeUnique();
     mpImplGradient->mnOfsY = nOfsY;
 }
 
 void Gradient::SetStartIntensity( sal_uInt16 nIntens )
 {
-
-    MakeUnique();
     mpImplGradient->mnIntensityStart = nIntens;
 }
 
 void Gradient::SetEndIntensity( sal_uInt16 nIntens )
 {
-
-    MakeUnique();
     mpImplGradient->mnIntensityEnd = nIntens;
 }
 
 void Gradient::SetSteps( sal_uInt16 nSteps )
 {
-
-    MakeUnique();
     mpImplGradient->mnStepCount = nSteps;
 }
 
@@ -250,15 +222,6 @@ void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Poin
 
 Gradient& Gradient::operator=( const Gradient& rGradient )
 {
-
-    // Increment refcount first so that we can reference ourselves
-    rGradient.mpImplGradient->mnRefCount++;
-
-    // If it's the last reference, delete it, otherwise decrement
-    if ( mpImplGradient->mnRefCount == 1 )
-        delete mpImplGradient;
-    else
-        mpImplGradient->mnRefCount--;
     mpImplGradient = rGradient.mpImplGradient;
 
     return *this;
@@ -266,23 +229,7 @@ Gradient& Gradient::operator=( const Gradient& rGradient )
 
 bool Gradient::operator==( const Gradient& rGradient ) const
 {
-
-    if ( mpImplGradient == rGradient.mpImplGradient )
-        return true;
-
-    if ( (mpImplGradient->meStyle           == rGradient.mpImplGradient->meStyle)           &&
-         (mpImplGradient->mnAngle           == rGradient.mpImplGradient->mnAngle)           &&
-         (mpImplGradient->mnBorder          == rGradient.mpImplGradient->mnBorder)          &&
-         (mpImplGradient->mnOfsX            == rGradient.mpImplGradient->mnOfsX)            &&
-         (mpImplGradient->mnOfsY            == rGradient.mpImplGradient->mnOfsY)            &&
-         (mpImplGradient->mnStepCount       == rGradient.mpImplGradient->mnStepCount)       &&
-         (mpImplGradient->mnIntensityStart  == rGradient.mpImplGradient->mnIntensityStart)  &&
-         (mpImplGradient->mnIntensityEnd    == rGradient.mpImplGradient->mnIntensityEnd)    &&
-         (mpImplGradient->maStartColor      == rGradient.mpImplGradient->maStartColor)      &&
-         (mpImplGradient->maEndColor        == rGradient.mpImplGradient->maEndColor) )
-         return true;
-    else
-        return false;
+    return mpImplGradient == rGradient.mpImplGradient;
 }
 
 SvStream& ReadImpl_Gradient( SvStream& rIStm, Impl_Gradient& rImpl_Gradient )
@@ -319,7 +266,6 @@ SvStream& WriteImpl_Gradient( SvStream& rOStm, const Impl_Gradient& rImpl_Gradie
 
 SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient )
 {
-    rGradient.MakeUnique();
     return ReadImpl_Gradient( rIStm, *rGradient.mpImplGradient );
 }
 
