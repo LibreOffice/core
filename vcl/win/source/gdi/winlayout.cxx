@@ -104,6 +104,10 @@ public:
     const OpenGLGlyphCacheChunk&  GetCachedGlyphChunkFor(int nGlyphIndex) const;
 };
 
+#ifdef SAL_DETAIL_ENABLE_LOG_INFO
+
+namespace {
+
 char ColorFor(COLORREF aColor)
 {
     if (aColor == RGB(0xFF, 0xFF, 0xFF))
@@ -114,46 +118,38 @@ char ColorFor(COLORREF aColor)
     return '0' + (10*(GetRValue(aColor) + GetGValue(aColor) + GetBValue(aColor))) / (0xFF*3);
 }
 
-OUString DumpGlyphBitmap(OpenGLGlyphCacheChunk& rChunk, HDC hDC)
+void DumpGlyphBitmap(OpenGLGlyphCacheChunk& rChunk, HDC hDC)
 {
     HBITMAP hBitmap = static_cast<HBITMAP>(GetCurrentObject(hDC, OBJ_BITMAP));
     if (hBitmap == NULL)
     {
         SAL_WARN("vcl.gdi", "GetCurrentObject failed: " << WindowsErrorString(GetLastError()));
-        return "";
+        return;
     }
 
     BITMAP aBitmap;
     if (!GetObjectW(hBitmap, sizeof(aBitmap), &aBitmap))
     {
         SAL_WARN("vcl.gdi", "GetObjectW failed: " << WindowsErrorString(GetLastError()));
-        return "";
+        return;
     }
 
-    std::cerr << "Bitmap " << hBitmap << ": " << aBitmap.bmWidth << "x" << aBitmap.bmHeight << ":" << std::endl;
+    SAL_INFO("vcl.gdi.opengl", "Bitmap " << hBitmap << ": " << aBitmap.bmWidth << "x" << aBitmap.bmHeight << ":");
 
-    // Print out start pos of each glyph only in the horizontal font case
-    int nPos = 0;
-    if (rChunk.mnGlyphCount > 1 && rChunk.maLocation[1].Left() > rChunk.maLocation[0].Left())
-    {
-        for (int i = 1; i < rChunk.mnGlyphCount && nPos < 75; i++)
-        {
-            for (int j = nPos; j < rChunk.maLocation[i].Left(); j++)
-                std::cerr << " ";
-            std::cerr << "!";
-            nPos = rChunk.maLocation[i].Left() + 1;
-        }
-    }
-    std::cerr << std::endl;
-
+    std::ostringstream sLine("\n");
     for (long y = 0; y < aBitmap.bmHeight; y++)
     {
         for (long x = 0; x < std::min(75l, aBitmap.bmWidth); x++)
-            std::cerr << ColorFor(GetPixel(hDC, x, y));
-        std::cerr << std::endl;
+            sLine << ColorFor(GetPixel(hDC, x, y));
+        if (y < aBitmap.bmHeight - 1)
+            sLine << "\n";
     }
-    return "";
+    SAL_INFO("vcl.gdi.opengl", sLine.str());
 }
+
+} // anonymous namespace
+
+#endif // SAL_DETAIL_ENABLE_LOG_INFO
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
@@ -431,7 +427,10 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     if (hNonAntialiasedFont != NULL)
         DeleteObject(hNonAntialiasedFont);
 
-    SAL_INFO("vcl.gdi.opengl", "this=" << this << " now: " << maOpenGLGlyphCache << DumpGlyphBitmap(aChunk, aDC.getCompatibleHDC()));
+#ifdef SAL_DETAIL_ENABLE_LOG_INFO
+    SAL_INFO("vcl.gdi.opengl", "this=" << this << " now: " << maOpenGLGlyphCache);
+    DumpGlyphBitmap(aChunk, aDC.getCompatibleHDC());
+#endif
 
     return true;
 }
