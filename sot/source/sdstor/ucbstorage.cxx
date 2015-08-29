@@ -398,9 +398,9 @@ SvGlobalName GetClassId_Impl( SotClipboardFormatId nFormat )
 // class, that uses the refcounted object as impl-class.
 
 enum RepresentModes {
-        nonset,
-        svstream,
-        xinputstream
+    nonset,
+    svstream,
+    xinputstream
 };
 
 class UCBStorageStream_Impl : public SvRefBase, public SvStream
@@ -450,7 +450,7 @@ public:
     BaseStorage*                CreateStorage();// create an OLE Storage on the UCBStorageStream
     sal_uLong                   GetSize();
 
-    sal_uInt64                   ReadSourceWriteTemporary( sal_uInt64 aLength ); // read aLength from source and copy to temporary,
+    sal_uInt64                  ReadSourceWriteTemporary( sal_uInt64 aLength ); // read aLength from source and copy to temporary,
                                                                            // no seeking is produced
     sal_uLong                   ReadSourceWriteTemporary();                // read source till the end and copy to temporary,
 
@@ -489,10 +489,10 @@ public:
                                                 // this means that the root storage does an autocommit when its external
                                                 // reference is destroyed
     bool                        m_bIsRoot;      // marks this storage as root storages that manages all oommits and reverts
-    bool                        m_bDirty;           // ???
+    bool                        m_bDirty;       // ???
     bool                        m_bIsLinked;
     bool                        m_bListCreated;
-    SotClipboardFormatId                 m_nFormat;
+    SotClipboardFormatId        m_nFormat;
     OUString                    m_aUserTypeName;
     SvGlobalName                m_aClassId;
 
@@ -518,22 +518,25 @@ public:
     void                        ReadContent();
     void                        CreateContent();
     ::ucbhelper::Content*       GetContent()
-                                { if ( !m_pContent ) CreateContent(); return m_pContent; }
+                                {
+                                    if ( !m_pContent )
+                                        CreateContent();
+                                    return m_pContent;
+                                }
     UCBStorageElementList_Impl& GetChildrenList()
                                 {
-                                  long nError = m_nError;
-                                  ReadContent();
-                                  if ( m_nMode & StreamMode::WRITE )
-                                  {
-                                    m_nError = nError;
-                                    if ( m_pAntiImpl )
+                                    long nError = m_nError;
+                                    ReadContent();
+                                    if ( m_nMode & StreamMode::WRITE )
                                     {
-                                        m_pAntiImpl->ResetError();
-                                        m_pAntiImpl->SetError( nError );
+                                        m_nError = nError;
+                                        if ( m_pAntiImpl )
+                                        {
+                                            m_pAntiImpl->ResetError();
+                                            m_pAntiImpl->SetError( nError );
+                                        }
                                     }
-                                  }
-
-                                  return m_aChildrenList;
+                                    return m_aChildrenList;
                                 }
 
     void                        SetError( long nError );
@@ -661,8 +664,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
 
         if ( bRepair )
         {
-            xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
-                                                     xProgress );
+            xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(), xProgress );
             aTemp += "?repairpackage";
         }
 

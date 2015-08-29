@@ -405,22 +405,22 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream)
     : ScCollection(4, 4)
     , nError(0)
 {
-  sal_uInt16 ID(0);
-  rStream.ReadUInt16( ID );
-  if (ID == FontID)
-  {
-    sal_uInt16 nAnz(0);
-    rStream.ReadUInt16( nAnz );
-    for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+    sal_uInt16 ID(0);
+    rStream.ReadUInt16( ID );
+    if (ID == FontID)
     {
-        nError = insert_new<Sc10FontData>( this, rStream);
+        sal_uInt16 nAnz(0);
+        rStream.ReadUInt16( nAnz );
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        {
+            nError = insert_new<Sc10FontData>( this, rStream);
+        }
     }
-  }
-  else
-  {
-    OSL_FAIL( "FontID" );
-    nError = errUnknownID;
-  }
+    else
+    {
+        OSL_FAIL( "FontID" );
+        nError = errUnknownID;
+    }
 }
 
 // named regions
@@ -446,22 +446,22 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
     ScCollection (4, 4),
     nError     (0)
 {
-  sal_uInt16 ID;
-  rStream.ReadUInt16( ID );
-  if (ID == NameID)
-  {
-    sal_uInt16 nAnz;
-    rStream.ReadUInt16( nAnz );
-    for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+    sal_uInt16 ID;
+    rStream.ReadUInt16( ID );
+    if (ID == NameID)
     {
-        nError = insert_new<Sc10NameData>( this, rStream);
+        sal_uInt16 nAnz;
+        rStream.ReadUInt16( nAnz );
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        {
+            nError = insert_new<Sc10NameData>( this, rStream);
+        }
     }
-  }
-  else
-  {
-    OSL_FAIL( "NameID" );
-    nError = errUnknownID;
-  }
+    else
+    {
+        OSL_FAIL( "NameID" );
+        nError = errUnknownID;
+    }
 }
 
 // templates
@@ -492,26 +492,26 @@ Sc10PatternData::Sc10PatternData(SvStream& rStream)
     rStream.Read(Reserved, sizeof(Reserved));
 }
 
-Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
-  ScCollection (4, 4),
-  nError     (0)
+Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream)
+    : ScCollection(4, 4)
+    , nError(0)
 {
-  sal_uInt16 ID;
-  rStream.ReadUInt16( ID );
-  if (ID == PatternID)
-  {
-    sal_uInt16 nAnz;
-    rStream.ReadUInt16( nAnz );
-    for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+    sal_uInt16 ID;
+    rStream.ReadUInt16( ID );
+    if (ID == PatternID)
     {
-        nError = insert_new<Sc10PatternData>( this, rStream);
+        sal_uInt16 nAnz;
+        rStream.ReadUInt16( nAnz );
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        {
+            nError = insert_new<Sc10PatternData>( this, rStream);
+        }
     }
-  }
-  else
-  {
-    OSL_FAIL( "PatternID" );
-    nError = errUnknownID;
-  }
+    else
+    {
+        OSL_FAIL( "PatternID" );
+        nError = errUnknownID;
+    }
 }
 
 // database
@@ -551,27 +551,27 @@ Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
     DataBaseRec.QueryValue2 = ScfTools::ReadLongDouble(rStream);
 }
 
-Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream) :
-  ScCollection (4, 4),
-  nError     (0)
+Sc10DataBaseCollection::Sc10DataBaseCollection(SvStream& rStream)
+    : ScCollection(4, 4)
+    , nError(0)
 {
-  sal_uInt16 ID;
-  rStream.ReadUInt16( ID );
-  if (ID == DataBaseID)
-  {
-    lcl_ReadFixedString( rStream, ActName, sizeof(ActName));
-    sal_uInt16 nAnz;
-    rStream.ReadUInt16( nAnz );
-    for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+    sal_uInt16 ID;
+    rStream.ReadUInt16( ID );
+    if (ID == DataBaseID)
     {
-        nError = insert_new<Sc10DataBaseData>( this, rStream);
+        lcl_ReadFixedString( rStream, ActName, sizeof(ActName));
+        sal_uInt16 nAnz;
+        rStream.ReadUInt16( nAnz );
+        for (sal_uInt16 i=0; (i < nAnz) && (nError == 0); i++)
+        {
+            nError = insert_new<Sc10DataBaseData>( this, rStream);
+        }
     }
-  }
-  else
-  {
-    OSL_FAIL( "DataBaseID" );
-    nError = errUnknownID;
-  }
+    else
+    {
+        OSL_FAIL( "DataBaseID" );
+        nError = errUnknownID;
+    }
 }
 
 bool Sc10LogFont::operator==( const Sc10LogFont& rData ) const
@@ -656,10 +656,10 @@ sal_uInt16 Sc10PageCollection::InsertFormat( const Sc10PageFormat& rData )
 
 static inline sal_uInt8 GetMixedCol( const sal_uInt8 nB, const sal_uInt8 nF, const sal_uInt16 nFak )
 {
-    sal_Int32       nT = nB - nF;
-                nT *= ( sal_Int32 ) nFak;
-                nT /= 0xFFFF;
-                nT += nF;
+    sal_Int32 nT = nB - nF;
+    nT *= ( sal_Int32 ) nFak;
+    nT /= 0xFFFF;
+    nT += nF;
     return ( sal_uInt8 ) nT;
 }
 static inline Color GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt16 nFact )
@@ -777,12 +777,12 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             bool        bSwapCol = false;
             switch (pHeadFootLine->Raster)
             {
-               case raNone:     nFact = 0xffff; bSwapCol = true; break;
-               case raGray12:   nFact = (0xffff / 100) * 12;    break;
-               case raGray25:   nFact = (0xffff / 100) * 25;    break;
-               case raGray50:   nFact = (0xffff / 100) * 50;    break;
-               case raGray75:   nFact = (0xffff / 100) * 75;    break;
-               default: nFact = 0xffff;
+                case raNone:     nFact = 0xffff; bSwapCol = true; break;
+                case raGray12:   nFact = (0xffff / 100) * 12;    break;
+                case raGray25:   nFact = (0xffff / 100) * 25;    break;
+                case raGray50:   nFact = (0xffff / 100) * 50;    break;
+                case raGray75:   nFact = (0xffff / 100) * 75;    break;
+                default: nFact = 0xffff;
             }
             if( bSwapCol )
                 aSetItemItemSet.Put( SvxBrushItem( GetMixedColor( aBColor, aRColor, nFact ), ATTR_BACKGROUND ) );
@@ -791,58 +791,58 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
 
             if (pHeadFootLine->Frame != 0)
             {
-              sal_uInt16 nLeft = 0;
-              sal_uInt16 nTop = 0;
-              sal_uInt16 nRight = 0;
-              sal_uInt16 nBottom = 0;
-              sal_uInt16 fLeft   = (pHeadFootLine->Frame & 0x000F);
-              sal_uInt16 fTop    = (pHeadFootLine->Frame & 0x00F0) / 0x0010;
-              sal_uInt16 fRight  = (pHeadFootLine->Frame & 0x0F00) / 0x0100;
-              sal_uInt16 fBottom = (pHeadFootLine->Frame & 0xF000) / 0x1000;
-              if (fLeft > 1)
-                nLeft = 50;
-              else if (fLeft > 0)
-                nLeft = 20;
-              if (fTop > 1)
-                nTop = 50;
-              else if (fTop > 0)
-                nTop = 20;
-              if (fRight > 1)
-                nRight = 50;
-              else if (fRight > 0)
-                nRight = 20;
-              if (fBottom > 1)
-                nBottom = 50;
-              else if (fBottom > 0)
-                nBottom = 20;
-              Color  ColorLeft(COL_BLACK);
-              Color  ColorTop(COL_BLACK);
-              Color  ColorRight(COL_BLACK);
-              Color  ColorBottom(COL_BLACK);
-              sal_uInt16 cLeft   = (pHeadFootLine->FrameColor & 0x000F);
-              sal_uInt16 cTop    = (pHeadFootLine->FrameColor & 0x00F0) >> 4;
-              sal_uInt16 cRight  = (pHeadFootLine->FrameColor & 0x0F00) >> 8;
-              sal_uInt16 cBottom = (pHeadFootLine->FrameColor & 0xF000) >> 12;
-              lcl_ChangeColor(cLeft, ColorLeft);
-              lcl_ChangeColor(cTop, ColorTop);
-              lcl_ChangeColor(cRight, ColorRight);
-              lcl_ChangeColor(cBottom, ColorBottom);
-              ::editeng::SvxBorderLine aLine;
-              SvxBoxItem aBox( ATTR_BORDER );
-              aLine.SetWidth(nLeft);
-              aLine.SetColor(ColorLeft);
-              aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
-              aLine.SetWidth(nTop);
-              aLine.SetColor(ColorTop);
-              aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
-              aLine.SetWidth(nRight);
-              aLine.SetColor(ColorRight);
-              aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
-              aLine.SetWidth(nBottom);
-              aLine.SetColor(ColorBottom);
-              aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
+                sal_uInt16 nLeft = 0;
+                sal_uInt16 nTop = 0;
+                sal_uInt16 nRight = 0;
+                sal_uInt16 nBottom = 0;
+                sal_uInt16 fLeft   = (pHeadFootLine->Frame & 0x000F);
+                sal_uInt16 fTop    = (pHeadFootLine->Frame & 0x00F0) / 0x0010;
+                sal_uInt16 fRight  = (pHeadFootLine->Frame & 0x0F00) / 0x0100;
+                sal_uInt16 fBottom = (pHeadFootLine->Frame & 0xF000) / 0x1000;
+                if (fLeft > 1)
+                    nLeft = 50;
+                else if (fLeft > 0)
+                    nLeft = 20;
+                if (fTop > 1)
+                    nTop = 50;
+                else if (fTop > 0)
+                    nTop = 20;
+                if (fRight > 1)
+                    nRight = 50;
+                else if (fRight > 0)
+                    nRight = 20;
+                if (fBottom > 1)
+                    nBottom = 50;
+                else if (fBottom > 0)
+                    nBottom = 20;
+                Color  ColorLeft(COL_BLACK);
+                Color  ColorTop(COL_BLACK);
+                Color  ColorRight(COL_BLACK);
+                Color  ColorBottom(COL_BLACK);
+                sal_uInt16 cLeft   = (pHeadFootLine->FrameColor & 0x000F);
+                sal_uInt16 cTop    = (pHeadFootLine->FrameColor & 0x00F0) >> 4;
+                sal_uInt16 cRight  = (pHeadFootLine->FrameColor & 0x0F00) >> 8;
+                sal_uInt16 cBottom = (pHeadFootLine->FrameColor & 0xF000) >> 12;
+                lcl_ChangeColor(cLeft, ColorLeft);
+                lcl_ChangeColor(cTop, ColorTop);
+                lcl_ChangeColor(cRight, ColorRight);
+                lcl_ChangeColor(cBottom, ColorBottom);
+                ::editeng::SvxBorderLine aLine;
+                SvxBoxItem aBox( ATTR_BORDER );
+                aLine.SetWidth(nLeft);
+                aLine.SetColor(ColorLeft);
+                aBox.SetLine(&aLine, SvxBoxItemLine::LEFT);
+                aLine.SetWidth(nTop);
+                aLine.SetColor(ColorTop);
+                aBox.SetLine(&aLine, SvxBoxItemLine::TOP);
+                aLine.SetWidth(nRight);
+                aLine.SetColor(ColorRight);
+                aBox.SetLine(&aLine, SvxBoxItemLine::RIGHT);
+                aLine.SetWidth(nBottom);
+                aLine.SetColor(ColorBottom);
+                aBox.SetLine(&aLine, SvxBoxItemLine::BOTTOM);
 
-              aSetItemItemSet.Put(aBox);
+                aSetItemItemSet.Put(aBox);
             }
 
             pSet->Put( SvxULSpaceItem( 0, 0, ATTR_ULSPACE ) );
@@ -1698,48 +1698,49 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     if (nError == 0) LoadAttr(aFlag);
     if (nError == 0) LoadAttr(aPattern);
 
-    if (nError == 0)
-    {
-        SCROW nStart;
-        SCROW nEnd;
-        sal_uInt16 i;
-        sal_uInt16 nLimit;
-        sal_uInt16 nValue1;
-        Sc10ColData *pColData;
+    if (nError)
+        return;
 
-        // Font (Name, Size)
-        nStart = 0;
-        nEnd = 0;
-        nLimit = aFont.Count;
-        pColData = aFont.pData;
-        for( i = 0 ; i < nLimit ; i++, pColData++ )
+    SCROW nStart;
+    SCROW nEnd;
+    sal_uInt16 i;
+    sal_uInt16 nLimit;
+    sal_uInt16 nValue1;
+    Sc10ColData *pColData;
+
+    // Font (Name, Size)
+    nStart = 0;
+    nEnd = 0;
+    nLimit = aFont.Count;
+    pColData = aFont.pData;
+    for( i = 0 ; i < nLimit ; i++, pColData++ )
+    {
+        nEnd = static_cast<SCROW>(pColData->Row);
+        if ((nStart <= nEnd) && (pColData->Value))
         {
-            nEnd = static_cast<SCROW>(pColData->Row);
-            if ((nStart <= nEnd) && (pColData->Value))
+            FontFamily eFam = FAMILY_DONTKNOW;
+            Sc10FontData* pFont = pFontCollection->At(pColData->Value);
+            if (pFont)
             {
-                FontFamily eFam = FAMILY_DONTKNOW;
-                Sc10FontData* pFont = pFontCollection->At(pColData->Value);
-                if (pFont)
+                switch (pFont->PitchAndFamily & 0xF0)
                 {
-                    switch (pFont->PitchAndFamily & 0xF0)
-                    {
-                        case ffDontCare   : eFam = FAMILY_DONTKNOW;     break;
-                        case ffRoman      : eFam = FAMILY_ROMAN;        break;
-                        case ffSwiss      : eFam = FAMILY_SWISS;        break;
-                        case ffModern     : eFam = FAMILY_MODERN;       break;
-                        case ffScript     : eFam = FAMILY_SCRIPT;       break;
-                        case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
-                        default: eFam = FAMILY_DONTKNOW;        break;
-                    }
-                    ScPatternAttr aScPattern(pDoc->GetPool());
-                    aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_OUSTRING,
-                        PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
-                    aScPattern.GetItemSet().Put(SvxFontHeightItem(std::abs(pFont->Height), 100, ATTR_FONT_HEIGHT ));
-                    pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
+                    case ffDontCare   : eFam = FAMILY_DONTKNOW;     break;
+                    case ffRoman      : eFam = FAMILY_ROMAN;        break;
+                    case ffSwiss      : eFam = FAMILY_SWISS;        break;
+                    case ffModern     : eFam = FAMILY_MODERN;       break;
+                    case ffScript     : eFam = FAMILY_SCRIPT;       break;
+                    case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
+                    default: eFam = FAMILY_DONTKNOW;        break;
                 }
+                ScPatternAttr aScPattern(pDoc->GetPool());
+                aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_OUSTRING,
+                    PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ));
+                aScPattern.GetItemSet().Put(SvxFontHeightItem(std::abs(pFont->Height), 100, ATTR_FONT_HEIGHT ));
+                pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
             }
-            nStart = nEnd + 1;
         }
+        nStart = nEnd + 1;
+    }
 
     // Font color
     nStart = 0;
@@ -1773,13 +1774,13 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         {
             ScPatternAttr aScPattern(pDoc->GetPool());
             if ((nValue1 & atBold) == atBold)
-             aScPattern.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+                aScPattern.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
             if ((nValue1 & atItalic) == atItalic)
-             aScPattern.GetItemSet().Put(SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE));
+                aScPattern.GetItemSet().Put(SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE));
             if ((nValue1 & atUnderline) == atUnderline)
-             aScPattern.GetItemSet().Put(SvxUnderlineItem(UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE));
+                aScPattern.GetItemSet().Put(SvxUnderlineItem(UNDERLINE_SINGLE, ATTR_FONT_UNDERLINE));
             if ((nValue1 & atStrikeOut) == atStrikeOut)
-             aScPattern.GetItemSet().Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, ATTR_FONT_CROSSEDOUT));
+                aScPattern.GetItemSet().Put(SvxCrossedOutItem(STRIKEOUT_SINGLE, ATTR_FONT_CROSSEDOUT));
             pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
         }
         nStart = nEnd + 1;
@@ -2121,7 +2122,6 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         }
         nStart = nEnd + 1;
     }
-  }
 }
 
 void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
@@ -2155,246 +2155,247 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
 
 void Sc10Import::ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& nKey)
 {
-  // TODO: formats are mapped only for StarCalc 3.0 internal formats
-  //       more correctly, at times new formats need to be created (Stephan: please check!)
-  nKey = 0;
-  switch (nFormat)
-  {
-    case vfStandard :
-     if (nInfo > 0)
-       nKey = 2;
-     break;
-    case vfMoney :
-     if (nInfo > 0)
-       nKey = 21;
-     else
-       nKey = 20;
-     break;
-    case vfThousend :
-     if (nInfo > 0)
-       nKey = 4;
-     else
-       nKey = 5;
-     break;
-    case vfPercent :
-     if (nInfo > 0)
-       nKey = 11;
-     else
-       nKey = 10;
-     break;
-    case vfExponent :
-     nKey = 60;
-     break;
-    case vfZerro :
-     // TODO: no equivalent
-     break;
-    case vfDate :
-      switch (nInfo)
-      {
-        case df_NDMY_Long :
-         nKey = 31;
-         break;
-        case df_DMY_Long :
-         nKey = 30;
-         break;
-        case df_MY_Long :
-         nKey = 32;
-         break;
-        case df_NDM_Long :
-         nKey = 31;
-         break;
-        case df_DM_Long :
-         nKey = 33;
-         break;
-        case df_M_Long :
-         nKey = 34;
-         break;
-        case df_NDMY_Short :
-         nKey = 31;
-         break;
-        case df_DMY_Short :
-         nKey = 30;
-         break;
-        case df_MY_Short :
-         nKey = 32;
-         break;
-        case df_NDM_Short :
-         nKey = 31;
-         break;
-        case df_DM_Short :
-         nKey = 33;
-         break;
-        case df_M_Short :
-         nKey = 34;
-         break;
-        case df_Q_Long :
-         nKey = 35;
-         break;
-        case df_Q_Short :
-         nKey = 35;
-         break;
+    // TODO: formats are mapped only for StarCalc 3.0 internal formats
+    //       more correctly, at times new formats need to be created (Stephan: please check!)
+    nKey = 0;
+    switch (nFormat)
+    {
+        case vfStandard :
+            if (nInfo > 0)
+                nKey = 2;
+            break;
+        case vfMoney :
+            if (nInfo > 0)
+                nKey = 21;
+            else
+                nKey = 20;
+            break;
+        case vfThousend :
+            if (nInfo > 0)
+                nKey = 4;
+            else
+                nKey = 5;
+            break;
+        case vfPercent :
+            if (nInfo > 0)
+                nKey = 11;
+            else
+                nKey = 10;
+            break;
+        case vfExponent :
+            nKey = 60;
+            break;
+        case vfZerro :
+            // TODO: no equivalent
+            break;
+        case vfDate :
+            switch (nInfo)
+            {
+                case df_NDMY_Long :
+                    nKey = 31;
+                    break;
+                case df_DMY_Long :
+                    nKey = 30;
+                    break;
+                case df_MY_Long :
+                    nKey = 32;
+                    break;
+                case df_NDM_Long :
+                    nKey = 31;
+                    break;
+                case df_DM_Long :
+                    nKey = 33;
+                    break;
+                case df_M_Long :
+                    nKey = 34;
+                    break;
+                case df_NDMY_Short :
+                    nKey = 31;
+                    break;
+                case df_DMY_Short :
+                    nKey = 30;
+                    break;
+                case df_MY_Short :
+                    nKey = 32;
+                    break;
+                case df_NDM_Short :
+                    nKey = 31;
+                    break;
+                case df_DM_Short :
+                    nKey = 33;
+                    break;
+                case df_M_Short :
+                    nKey = 34;
+                    break;
+                case df_Q_Long :
+                    nKey = 35;
+                    break;
+                case df_Q_Short :
+                    nKey = 35;
+                    break;
+                default :
+                    nKey = 30;
+                    break;
+            }
+            break;
+        case vfTime :
+            switch (nInfo)
+            {
+                case tf_HMS_Long :
+                    nKey = 41;
+                    break;
+                case tf_HM_Long :
+                    nKey = 40;
+                    break;
+                case tf_HMS_Short :
+                    nKey = 43;
+                    break;
+                case tf_HM_Short :
+                    nKey = 42;
+                    break;
+                default :
+                    nKey = 41;
+                    break;
+            }
+            break;
+        case vfBoolean :
+            nKey = 99;
+            break;
+        case vfStandardRed :
+            if (nInfo > 0)
+                nKey = 2;
+            break;
+        case vfMoneyRed :
+            if (nInfo > 0)
+                nKey = 23;
+            else
+                nKey = 22;
+            break;
+        case vfThousendRed :
+            if (nInfo > 0)
+                nKey = 4;
+            else
+                nKey = 5;
+            break;
+        case vfPercentRed :
+            if (nInfo > 0)
+                nKey = 11;
+            else
+                nKey = 10;
+            break;
+        case vfExponentRed :
+            nKey = 60;
+            break;
+        case vfFormula :
+            break;
+        case vfString :
+            break;
         default :
-         nKey = 30;
-         break;
-      }
-      break;
-    case vfTime :
-     switch (nInfo)
-     {
-       case tf_HMS_Long :
-        nKey = 41;
-        break;
-       case tf_HM_Long :
-        nKey = 40;
-        break;
-       case tf_HMS_Short :
-        nKey = 43;
-        break;
-       case tf_HM_Short :
-        nKey = 42;
-        break;
-       default :
-        nKey = 41;
-        break;
-     }
-     break;
-    case vfBoolean :
-     nKey = 99;
-     break;
-    case vfStandardRed :
-     if (nInfo > 0)
-       nKey = 2;
-     break;
-    case vfMoneyRed :
-     if (nInfo > 0)
-       nKey = 23;
-     else
-       nKey = 22;
-     break;
-    case vfThousendRed :
-     if (nInfo > 0)
-       nKey = 4;
-     else
-       nKey = 5;
-     break;
-    case vfPercentRed :
-     if (nInfo > 0)
-       nKey = 11;
-     else
-       nKey = 10;
-     break;
-    case vfExponentRed :
-     nKey = 60;
-     break;
-    case vfFormula :
-     break;
-    case vfString :
-     break;
-    default :
-     break;
-  }
+            break;
+    }
 }
 
 void Sc10Import::LoadObjects()
 {
-  sal_uInt16 ID;
-  rStream.ReadUInt16( ID );
-  if (rStream.IsEof()) return;
-  if (ID == ObjectID)
-  {
-    sal_uInt16 nAnz;
-    rStream.ReadUInt16( nAnz );
-    sal_Char Reserved[32];
-    rStream.Read(Reserved, sizeof(Reserved));
-    nError = rStream.GetError();
-    if ((nAnz > 0) && (nError == 0))
+    sal_uInt16 ID;
+    rStream.ReadUInt16( ID );
+    if (rStream.IsEof())
+        return;
+    if (ID == ObjectID)
     {
-      sal_uInt8 ObjectType;
-      Sc10GraphHeader GraphHeader;
-      bool IsOleObject = false; // TODO: this is only a bandaid
-      for (sal_uInt16 i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
-      {
-        rStream.ReadUChar( ObjectType );
-        lcl_ReadGraphHeader(rStream, GraphHeader);
-
-        double nPPTX = ScGlobal::nScreenPPTX;
-        double nPPTY = ScGlobal::nScreenPPTY;
-
-        long nStartX = 0;
-        SCCOL nMaxCol = SanitizeCol(GraphHeader.CarretX);
-        for (SCCOL nX = 0; nX < nMaxCol; ++nX)
-            nStartX += pDoc->GetColWidth(nX, static_cast<SCTAB>(GraphHeader.CarretZ));
-        nStartX = (long) ( nStartX * HMM_PER_TWIPS );
-        nStartX += (long) ( GraphHeader.x / nPPTX * HMM_PER_TWIPS );
-        long nSizeX = (long) ( GraphHeader.w / nPPTX * HMM_PER_TWIPS );
-        long nStartY = pDoc->GetRowHeight( 0,
-                SanitizeRow(static_cast<SCsROW>(GraphHeader.CarretY) - 1),
-                SanitizeTab(static_cast<SCTAB>(GraphHeader.CarretZ)));
-        nStartY = (long) ( nStartY * HMM_PER_TWIPS );
-        nStartY += (long) ( GraphHeader.y / nPPTY * HMM_PER_TWIPS );
-        long nSizeY = (long) ( GraphHeader.h / nPPTY * HMM_PER_TWIPS );
-
-        switch (ObjectType)
-        {
-          case otOle :
-           // TODO: here we need to do something like OleLoadFromStream
-           IsOleObject = true;
-           break;
-          case otImage :
-          {
-           Sc10ImageHeader ImageHeader;
-           lcl_ReadImageHeaer(rStream, ImageHeader);
-
-           // Attention: here come the data (Bitmap oder Metafile)
-           // Typ = 1 Device-dependend Bitmap DIB
-           // Typ = 2 MetaFile
-           rStream.SeekRel(ImageHeader.Size);
-
-            if( ImageHeader.Typ != 1 && ImageHeader.Typ != 2 )
-                nError = errUnknownFormat;
-           break;
-          }
-          case otChart :
-          {
-            Sc10ChartHeader ChartHeader;
-            Sc10ChartSheetData ChartSheetData;
-            Sc10ChartTypeData* pTypeData = new (::std::nothrow) Sc10ChartTypeData;
-            if (!pTypeData)
-                nError = errOutOfMemory;
-            else
-            {
-                lcl_ReadChartHeader(rStream, ChartHeader);
-
-                // TODO: use old Metafile ??
-                rStream.SeekRel(ChartHeader.Size);
-
-                lcl_ReadChartSheetData(rStream, ChartSheetData);
-
-                lcl_ReadChartTypeData(rStream, *pTypeData);
-
-                Rectangle aRect( Point(nStartX,nStartY), Size(nSizeX,nSizeY) );
-                Sc10InsertObject::InsertChart( pDoc, static_cast<SCTAB>(GraphHeader.CarretZ), aRect,
-                        static_cast<SCTAB>(GraphHeader.CarretZ),
-                        ChartSheetData.DataX1, ChartSheetData.DataY1,
-                        ChartSheetData.DataX2, ChartSheetData.DataY2 );
-
-                delete pTypeData;
-            }
-          }
-          break;
-          default :
-           nError = errUnknownFormat;
-           break;
-        }
+        sal_uInt16 nAnz;
+        rStream.ReadUInt16( nAnz );
+        sal_Char Reserved[32];
+        rStream.Read(Reserved, sizeof(Reserved));
         nError = rStream.GetError();
-      }
+        if ((nAnz > 0) && (nError == 0))
+        {
+            sal_uInt8 ObjectType;
+            Sc10GraphHeader GraphHeader;
+            bool IsOleObject = false; // TODO: this is only a bandaid
+            for (sal_uInt16 i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
+            {
+                rStream.ReadUChar( ObjectType );
+                lcl_ReadGraphHeader(rStream, GraphHeader);
+
+                double nPPTX = ScGlobal::nScreenPPTX;
+                double nPPTY = ScGlobal::nScreenPPTY;
+
+                long nStartX = 0;
+                SCCOL nMaxCol = SanitizeCol(GraphHeader.CarretX);
+                for (SCCOL nX = 0; nX < nMaxCol; ++nX)
+                    nStartX += pDoc->GetColWidth(nX, static_cast<SCTAB>(GraphHeader.CarretZ));
+                nStartX = (long) ( nStartX * HMM_PER_TWIPS );
+                nStartX += (long) ( GraphHeader.x / nPPTX * HMM_PER_TWIPS );
+                long nSizeX = (long) ( GraphHeader.w / nPPTX * HMM_PER_TWIPS );
+                long nStartY = pDoc->GetRowHeight( 0,
+                        SanitizeRow(static_cast<SCsROW>(GraphHeader.CarretY) - 1),
+                        SanitizeTab(static_cast<SCTAB>(GraphHeader.CarretZ)));
+                nStartY = (long) ( nStartY * HMM_PER_TWIPS );
+                nStartY += (long) ( GraphHeader.y / nPPTY * HMM_PER_TWIPS );
+                long nSizeY = (long) ( GraphHeader.h / nPPTY * HMM_PER_TWIPS );
+
+                switch (ObjectType)
+                {
+                    case otOle :
+                        // TODO: here we need to do something like OleLoadFromStream
+                        IsOleObject = true;
+                        break;
+                    case otImage :
+                    {
+                        Sc10ImageHeader ImageHeader;
+                        lcl_ReadImageHeaer(rStream, ImageHeader);
+
+                        // Attention: here come the data (Bitmap oder Metafile)
+                        // Typ = 1 Device-dependend Bitmap DIB
+                        // Typ = 2 MetaFile
+                        rStream.SeekRel(ImageHeader.Size);
+
+                        if( ImageHeader.Typ != 1 && ImageHeader.Typ != 2 )
+                            nError = errUnknownFormat;
+                        break;
+                    }
+                    case otChart :
+                    {
+                        Sc10ChartHeader ChartHeader;
+                        Sc10ChartSheetData ChartSheetData;
+                        Sc10ChartTypeData* pTypeData = new (::std::nothrow) Sc10ChartTypeData;
+                        if (!pTypeData)
+                            nError = errOutOfMemory;
+                        else
+                        {
+                            lcl_ReadChartHeader(rStream, ChartHeader);
+
+                            // TODO: use old Metafile ??
+                            rStream.SeekRel(ChartHeader.Size);
+
+                            lcl_ReadChartSheetData(rStream, ChartSheetData);
+
+                            lcl_ReadChartTypeData(rStream, *pTypeData);
+
+                            Rectangle aRect( Point(nStartX,nStartY), Size(nSizeX,nSizeY) );
+                            Sc10InsertObject::InsertChart( pDoc, static_cast<SCTAB>(GraphHeader.CarretZ), aRect,
+                                    static_cast<SCTAB>(GraphHeader.CarretZ),
+                                    ChartSheetData.DataX1, ChartSheetData.DataY1,
+                                    ChartSheetData.DataX2, ChartSheetData.DataY2 );
+
+                            delete pTypeData;
+                        }
+                        break;
+                    }
+                    default :
+                        nError = errUnknownFormat;
+                        break;
+                }
+                nError = rStream.GetError();
+            }
+        }
     }
-  }
-  else
-  {
-    OSL_FAIL( "ObjectID" );
-    nError = errUnknownID;
-  }
+    else
+    {
+        OSL_FAIL( "ObjectID" );
+        nError = errUnknownID;
+    }
 }
 
 FltError ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
