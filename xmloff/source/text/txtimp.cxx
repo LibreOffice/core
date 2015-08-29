@@ -60,6 +60,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <txtlists.hxx>
 #include <xmloff/odffields.hxx>
+#include <boost/noncopyable.hpp>
 
 using ::com::sun::star::ucb::XAnyCompare;
 

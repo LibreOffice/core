@@ -40,6 +40,7 @@
 #include <hintids.hxx>
 #include <fmtornt.hxx>
 #include <editsh.hxx>
+#include <boost/noncopyable.hpp>
 
 /*
  * XXX: BIG RED NOTICE! Changes MUST be binary file format compatible and MUST

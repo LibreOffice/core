@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <boost/noncopyable.hpp>
 #include <o3tl/functional.hxx>
 
 namespace dbaccess

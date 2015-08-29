@@ -26,6 +26,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <vector>
+#include <boost/noncopyable.hpp>
 
 // predefines
 namespace svgio

@@ -67,6 +67,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <canvas/elapsedtime.hxx>
+#include <boost/noncopyable.hpp>
 
 //#define DEBUG_TIMING
 #ifdef DEBUG_TIMING

@@ -58,6 +58,7 @@
 #include "global.hxx"
 #include "zforauto.hxx"
 
+#include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
 /**

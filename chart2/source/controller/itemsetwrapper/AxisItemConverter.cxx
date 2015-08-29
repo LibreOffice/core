@@ -42,6 +42,7 @@
 #include <svx/chrtitem.hxx>
 #include <svl/intitem.hxx>
 #include <rtl/math.hxx>
+#include <boost/checked_delete.hpp>
 
 #include <algorithm>
 

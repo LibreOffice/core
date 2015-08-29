@@ -24,6 +24,7 @@
 #include <set>
 #include <unordered_set>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <svl/broadcast.hxx>
 

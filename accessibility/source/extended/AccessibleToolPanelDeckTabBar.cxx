@@ -37,6 +37,7 @@
 #include <vcl/button.hxx>
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
+#include <boost/noncopyable.hpp>
 
 #include <vector>
 

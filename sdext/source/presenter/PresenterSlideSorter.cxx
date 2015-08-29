@@ -45,6 +45,7 @@
 #include <algorithm>
 #include <math.h>
 #include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

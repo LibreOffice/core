@@ -37,6 +37,7 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <vcl/svapp.hxx>

@@ -34,6 +34,7 @@
 #include <map>
 #include <unordered_map>
 #include <boost/optional.hpp>
+#include <boost/noncopyable.hpp>
 
 class SvBorder;
 
