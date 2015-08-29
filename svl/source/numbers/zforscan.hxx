@@ -167,7 +167,6 @@ private: // Private section
     sal_uInt16 nCntExp;                         // Counts exponent digits AM/PM
                                                 // Internal info:
     sal_uInt16 nAnzStrings;                     // Symbol count
-    sal_uInt16 nRepPos;                         // Position of a '*'
     sal_uInt16 nExpPos;                         // Internal position of E
     sal_uInt16 nBlankPos;                       // Internal position of the Blank
     short nDecPos;                              // Internal position of the ,

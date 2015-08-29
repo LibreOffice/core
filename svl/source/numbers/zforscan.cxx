@@ -649,7 +649,6 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
     }
     const CharClass* pChrCls = pFormatter->GetCharClass();
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    const sal_Int32 nStart = nPos;
     short eType = 0;
     ScanState eState = SsStart;
     sSymbol.clear();
@@ -866,7 +865,6 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
         case SsGetStar:
             eState = SsStop;
             sSymbol += OUString(cToken);
-            nRepPos = (nPos - nStart) - 1; // every time > 0!!
             break;
         case SsGetBlank:
             eState = SsStop;
@@ -1091,7 +1089,6 @@ void ImpSvNumberformatScan::Reset()
     nAnzStrings = 0;
     nAnzResStrings = 0;
     eScannedType = css::util::NumberFormat::UNDEFINED;
-    nRepPos = 0;
     bExp = false;
     bThousand = false;
     nThousand = 0;
