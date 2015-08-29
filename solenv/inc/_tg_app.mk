@@ -287,6 +287,7 @@ $(APP1TARGET)_run: $(APP1TARGETN)
 
 .ENDIF
 
+
 # Instruction for linking
 # unroll begin
 
@@ -545,6 +546,14 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF			# "$(GUI)" == "OS2"
 
 .ENDIF			# "$(APP2TARGETN)"!=""
+
+# New rule for automatic run targets of unit test targets
+.IF "$(APP2TEST)" == "enabled" &&  "$(APP2TARGET)" != ""
+
+$(APP2TARGET)_run: $(APP2TARGETN)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP2TARGETN) --gtest_output="xml:$(BIN)/$(APP2TARGET)_result.xml"
+
+.ENDIF
 
 
 # Instruction for linking
@@ -806,6 +815,14 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 
 .ENDIF			# "$(APP3TARGETN)"!=""
 
+# New rule for automatic run targets of unit test targets
+.IF "$(APP3TEST)" == "enabled" &&  "$(APP3TARGET)" != ""
+
+$(APP3TARGET)_run: $(APP3TARGETN)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP3TARGETN) --gtest_output="xml:$(BIN)/$(APP3TARGET)_result.xml"
+
+.ENDIF
+
 
 # Instruction for linking
 # unroll begin
@@ -1065,6 +1082,14 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF			# "$(GUI)" == "OS2"
 
 .ENDIF			# "$(APP4TARGETN)"!=""
+
+# New rule for automatic run targets of unit test targets
+.IF "$(APP4TEST)" == "enabled" &&  "$(APP4TARGET)" != ""
+
+$(APP4TARGET)_run: $(APP4TARGETN)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP4TARGETN) --gtest_output="xml:$(BIN)/$(APP4TARGET)_result.xml"
+
+.ENDIF
 
 
 # Instruction for linking
@@ -1326,6 +1351,14 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 
 .ENDIF			# "$(APP5TARGETN)"!=""
 
+# New rule for automatic run targets of unit test targets
+.IF "$(APP5TEST)" == "enabled" &&  "$(APP5TARGET)" != ""
+
+$(APP5TARGET)_run: $(APP5TARGETN)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP5TARGETN) --gtest_output="xml:$(BIN)/$(APP5TARGET)_result.xml"
+
+.ENDIF
+
 
 # Instruction for linking
 # unroll begin
@@ -1585,6 +1618,14 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF			# "$(GUI)" == "OS2"
 
 .ENDIF			# "$(APP6TARGETN)"!=""
+
+# New rule for automatic run targets of unit test targets
+.IF "$(APP6TEST)" == "enabled" &&  "$(APP6TARGET)" != ""
+
+$(APP6TARGET)_run: $(APP6TARGETN)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP6TARGETN) --gtest_output="xml:$(BIN)/$(APP6TARGET)_result.xml"
+
+.ENDIF
 
 
 # Instruction for linking
@@ -1846,6 +1887,14 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 
 .ENDIF			# "$(APP7TARGETN)"!=""
 
+# New rule for automatic run targets of unit test targets
+.IF "$(APP7TEST)" == "enabled" &&  "$(APP7TARGET)" != ""
+
+$(APP7TARGET)_run: $(APP7TARGETN)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP7TARGETN) --gtest_output="xml:$(BIN)/$(APP7TARGET)_result.xml"
+
+.ENDIF
+
 
 # Instruction for linking
 # unroll begin
@@ -2105,6 +2154,14 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF			# "$(GUI)" == "OS2"
 
 .ENDIF			# "$(APP8TARGETN)"!=""
+
+# New rule for automatic run targets of unit test targets
+.IF "$(APP8TEST)" == "enabled" &&  "$(APP8TARGET)" != ""
+
+$(APP8TARGET)_run: $(APP8TARGETN)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP8TARGETN) --gtest_output="xml:$(BIN)/$(APP8TARGET)_result.xml"
+
+.ENDIF
 
 
 # Instruction for linking
@@ -2366,6 +2423,14 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 
 .ENDIF			# "$(APP9TARGETN)"!=""
 
+# New rule for automatic run targets of unit test targets
+.IF "$(APP9TEST)" == "enabled" &&  "$(APP9TARGET)" != ""
+
+$(APP9TARGET)_run: $(APP9TARGETN)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP9TARGETN) --gtest_output="xml:$(BIN)/$(APP9TARGET)_result.xml"
+
+.ENDIF
+
 
 # Instruction for linking
 # unroll begin
@@ -2625,6 +2690,14 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF			# "$(GUI)" == "OS2"
 
 .ENDIF			# "$(APP10TARGETN)"!=""
+
+# New rule for automatic run targets of unit test targets
+.IF "$(APP10TEST)" == "enabled" &&  "$(APP10TARGET)" != ""
+
+$(APP10TARGET)_run: $(APP10TARGETN)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP10TARGETN) --gtest_output="xml:$(BIN)/$(APP10TARGET)_result.xml"
+
+.ENDIF
 
 
 # Instruction for linking
