@@ -119,7 +119,7 @@ char ColorFor(COLORREF aColor)
     return '0' + (10*(GetRValue(aColor) + GetGValue(aColor) + GetBValue(aColor))) / (0xFF*3);
 }
 
-void DumpGlyphBitmap(OpenGLGlyphCacheChunk& rChunk, HDC hDC)
+void DumpGlyphBitmap(HDC hDC)
 {
     HBITMAP hBitmap = static_cast<HBITMAP>(GetCurrentObject(hDC, OBJ_BITMAP));
     if (hBitmap == NULL)
@@ -430,7 +430,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
 
 #ifdef SAL_DETAIL_ENABLE_LOG_INFO
     SAL_INFO("vcl.gdi.opengl", "this=" << this << " now: " << maOpenGLGlyphCache);
-    DumpGlyphBitmap(aChunk, aDC.getCompatibleHDC());
+    DumpGlyphBitmap(aDC.getCompatibleHDC());
 #endif
 
     return true;
