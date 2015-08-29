@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_e0b4b6d2",
+        "filename": "o3tl/qa/test-cow_wrapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-29T03:29:57Z",
+      "side": 1,
+      "message": "This makes much more sense. Thanks for the edit!",
+      "revId": "6637facabe47dcd7865fb89fd987687b48784b05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_40cac250",
+        "filename": "o3tl/qa/test-cow_wrapper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-29T03:29:57Z",
+      "side": 1,
+      "message": "Again, this makes much more sense. After viewing the code again I think you\u0027re right. It makes more sense to make no exceptions to the \"object is unusable after the move\" rule.",
+      "revId": "6637facabe47dcd7865fb89fd987687b48784b05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
