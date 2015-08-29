@@ -1581,7 +1581,7 @@ void VCLXListBox::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::s
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
-        for ( sal_uInt16 n = nCount; n; )
+        for ( sal_Int16 n = nCount; n; )
             pBox->RemoveEntry( nPos + (--n) );
     }
 }
@@ -1613,12 +1613,12 @@ OUString VCLXListBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::Run
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
-        sal_uInt16 nEntries = pBox->GetEntryCount();
-        aSeq = ::com::sun::star::uno::Sequence< OUString>( nEntries );
-        for ( sal_uInt16 n = nEntries; n; )
+        auto n = pBox->GetEntryCount();
+        aSeq = ::com::sun::star::uno::Sequence< OUString>( n );
+        while (n)
         {
             --n;
-            aSeq.getArray()[n] = OUString( pBox->GetEntry( n ) );
+            aSeq.getArray()[n] = pBox->GetEntry( n );
         }
     }
     return aSeq;
@@ -1639,9 +1639,9 @@ sal_Int16 VCLXListBox::getSelectedItemPos() throw(::com::sun::star::uno::Runtime
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
-        sal_uInt16 nSelEntries = pBox->GetSelectEntryCount();
+        const sal_Int32 nSelEntries = pBox->GetSelectEntryCount();
         aSeq = ::com::sun::star::uno::Sequence<sal_Int16>( nSelEntries );
-        for ( sal_uInt16 n = 0; n < nSelEntries; n++ )
+        for ( sal_Int32 n = 0; n < nSelEntries; ++n )
             aSeq.getArray()[n] = pBox->GetSelectEntryPos( n );
     }
     return aSeq;
@@ -1666,10 +1666,10 @@ OUString VCLXListBox::getSelectedItem() throw(::com::sun::star::uno::RuntimeExce
     VclPtr< ListBox > pBox = GetAs< ListBox >();
     if ( pBox )
     {
-        sal_uInt16 nSelEntries = pBox->GetSelectEntryCount();
+        const sal_Int32 nSelEntries = pBox->GetSelectEntryCount();
         aSeq = ::com::sun::star::uno::Sequence< OUString>( nSelEntries );
-        for ( sal_uInt16 n = 0; n < nSelEntries; n++ )
-            aSeq.getArray()[n] = OUString( pBox->GetSelectEntry( n ) );
+        for ( sal_Int32 n = 0; n < nSelEntries; ++n )
+            aSeq.getArray()[n] = pBox->GetSelectEntry( n );
     }
     return aSeq;
 }
@@ -1701,9 +1701,9 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
     if ( pBox )
     {
         bool bChanged = false;
-        for ( sal_uInt16 n = (sal_uInt16)aPositions.getLength(); n; )
+        for ( auto n = aPositions.getLength(); n; )
         {
-            sal_uInt16 nPos = (sal_uInt16) aPositions.getConstArray()[--n];
+            const auto nPos = aPositions.getConstArray()[--n];
             if ( pBox->IsEntryPosSelected( nPos ) != bool(bSelect) )
             {
                 pBox->SelectEntryPos( nPos, bSelect );
@@ -1891,7 +1891,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
                 ::com::sun::star::uno::Sequence<sal_Int16> aItems;
                 if ( Value >>= aItems )
                 {
-                    for ( sal_uInt16 n = pListBox->GetEntryCount(); n; )
+                    for ( auto n = pListBox->GetEntryCount(); n; )
                         pListBox->SelectEntryPos( --n, false );
 
                     if ( aItems.getLength() )
@@ -1947,10 +1947,10 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const ::com::sun::s
             break;
             case BASEPROPERTY_STRINGITEMLIST:
             {
-                sal_uInt16 nItems = pListBox->GetEntryCount();
+                const sal_Int32 nItems = pListBox->GetEntryCount();
                 ::com::sun::star::uno::Sequence< OUString> aSeq( nItems );
                 OUString* pStrings = aSeq.getArray();
-                for ( sal_uInt16 n = 0; n < nItems; n++ )
+                for ( sal_Int32 n = 0; n < nItems; ++n )
                     pStrings[n] = pListBox->GetEntry( n );
                 aProp <<= aSeq;
 
@@ -4288,9 +4288,9 @@ OUString VCLXComboBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::Ru
     VclPtr< ComboBox > pBox = GetAs< ComboBox >();
     if ( pBox )
     {
-        sal_uInt16 nEntries = pBox->GetEntryCount();
-        aSeq = ::com::sun::star::uno::Sequence< OUString>( nEntries );
-        for ( sal_uInt16 n = nEntries; n; )
+        auto n = pBox->GetEntryCount();
+        aSeq = ::com::sun::star::uno::Sequence< OUString>( n );
+        while ( n )
         {
             --n;
             aSeq.getArray()[n] = pBox->GetEntry( n );
@@ -4398,10 +4398,10 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const ::com::sun::
             break;
             case BASEPROPERTY_STRINGITEMLIST:
             {
-                sal_uInt16 nItems = pComboBox->GetEntryCount();
+                const sal_Int32 nItems = pComboBox->GetEntryCount();
                 ::com::sun::star::uno::Sequence< OUString> aSeq( nItems );
                 OUString* pStrings = aSeq.getArray();
-                for ( sal_uInt16 n = 0; n < nItems; n++ )
+                for ( sal_Int32 n = 0; n < nItems; ++n )
                     pStrings[n] = pComboBox->GetEntry( n );
                 aProp <<= aSeq;
 
