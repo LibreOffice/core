@@ -327,7 +327,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
     }
 }
 
-sal_uLong XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
+bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
 {
     SvMemoryStream aOStm;
     OUString aMimeType;
@@ -357,14 +357,14 @@ sal_uLong XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUStri
     if ( nErr )
     {
         SAL_WARN("svx", "XOutBitmap::GraphicToBase64() invalid Graphic? error: " << nErr );
-        return nErr;
+        return false;
     }
     aOStm.Seek(STREAM_SEEK_TO_END);
     css::uno::Sequence<sal_Int8> aOStmSeq( static_cast<sal_Int8 const *>(aOStm.GetData()),aOStm.Tell() );
     OUStringBuffer aStrBuffer;
     ::sax::Converter::encodeBase64(aStrBuffer,aOStmSeq);
     rOUString = aMimeType + ";base64," + aStrBuffer.makeStringAndClear();
-    return 0;
+    return true;
 }
 
 sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,

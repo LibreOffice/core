@@ -3235,8 +3235,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     const Graphic* pGrf = static_cast<const SvxBrushItem &>(rHt).GetGraphic();
     if( pGrf )
     {
-        sal_uLong nErr = XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64);
-        if( nErr )
+        if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
         {
             rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
         }

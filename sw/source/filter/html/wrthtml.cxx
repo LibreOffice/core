@@ -1233,8 +1233,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
     const Graphic* pGrf = pBrushItem->GetGraphic();
     if( pGrf )
     {
-        sal_uLong nErr = XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64);
-        if( nErr )
+        if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
         {
             nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
         }
