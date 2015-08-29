@@ -32,7 +32,7 @@
             detail_stream << stream;            \
             OpenGLHelper::debugMsgStream((area),detail_stream); \
         } \
-    } while (0)
+    } while (false)
 
 class VCL_DLLPUBLIC OpenGLHelper
 {
