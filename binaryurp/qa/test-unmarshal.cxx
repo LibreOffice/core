@@ -26,10 +26,7 @@
 #include "com/sun/star/io/IOException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "cppu/unotype.hxx"
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include "gtest/gtest.h"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
 #include "sal/types.h"
@@ -44,19 +41,11 @@ namespace {
 
 namespace css = com::sun::star;
 
-class Test: public CppUnit::TestFixture {
-private:
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testTypeOfBooleanSequence);
-    CPPUNIT_TEST(testTypeOfVoidSequence);
-    CPPUNIT_TEST_SUITE_END();
-
-    void testTypeOfBooleanSequence();
-
-    void testTypeOfVoidSequence();
+class Test: public ::testing::Test {
+public:
 };
 
-void Test::testTypeOfBooleanSequence() {
+TEST_F(Test, testTypeOfBooleanSequence) {
     binaryurp::ReaderState state;
     css::uno::Sequence< sal_Int8 > buf(13);
     buf[0] = static_cast< sal_Int8 >(20 | 0x80); // sequence type | cache flag
@@ -74,14 +63,14 @@ void Test::testTypeOfBooleanSequence() {
     buf[12] = 'n';
     binaryurp::Unmarshal m(rtl::Reference< binaryurp::Bridge >(), state, buf);
     css::uno::TypeDescription t(m.readType());
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         t.equals(
             css::uno::TypeDescription(
                 cppu::UnoType< css::uno::Sequence< bool > >::get())));
     m.done();
 }
 
-void Test::testTypeOfVoidSequence() {
+TEST_F(Test, testTypeOfVoidSequence) {
     binaryurp::ReaderState state;
     css::uno::Sequence< sal_Int8 > buf(10);
     buf[0] = static_cast< sal_Int8 >(20 | 0x80); // sequence type | cache flag
@@ -97,12 +86,9 @@ void Test::testTypeOfVoidSequence() {
     binaryurp::Unmarshal m(rtl::Reference< binaryurp::Bridge >(), state, buf);
     try {
         m.readType();
-        CPPUNIT_FAIL("exception expected");
+        FAIL() << "exception expected";
     } catch (css::io::IOException &) {}
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
-
-CPPUNIT_PLUGIN_IMPLEMENT();

@@ -29,39 +29,21 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
 
 @all:
-.IF "$(GUI)" == "OS2"
-    @echo "Skipping, cppunit broken."
-.ELIF "$(WITH_CPPUNIT)" != "YES"
-    @echo "cppunit disabled. nothing do do."
-.END
+    @echo unit tests are disabled. Nothing to do.
 
 .ELSE
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-DLLPRE =
+APP1OBJS = $(SLO)/test-cache.obj $(SLO)/main.obj
+APP1RPATH = NONE
+APP1STDLIBS = $(GTESTLIB) $(SALLIB)
+APP1TARGET = test-cache
+APP1TEST = enabled
 
-.IF "$(GUI)" != "OS2"
-SLOFILES = $(SLO)/test-cache.obj $(SLO)/test-unmarshal.obj
-.ENDIF
-
-SHL1IMPLIB = i$(SHL1TARGET)
-SHL1OBJS = $(SLO)/test-cache.obj
-SHL1RPATH = NONE
-SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB)
-.IF "$(GUI)" != "OS2"
-SHL1TARGET = test-cache
-.ELSE
-SHL1TARGET = test-c
-.ENDIF
-SHL1VERSIONMAP = version.map
-DEF1NAME = $(SHL1TARGET)
-
-SHL2IMPLIB = i$(SHL2TARGET)
-SHL2OBJS = \
+APP2OBJS = \
     $(SLO)/test-unmarshal.obj \
     $(SLO)/binaryany.obj \
     $(SLO)/bridge.obj \
@@ -69,29 +51,27 @@ SHL2OBJS = \
     $(SLO)/currentcontext.obj \
     $(SLO)/incomingrequest.obj \
     $(SLO)/lessoperators.obj \
+    $(SLO)/main.obj \
     $(SLO)/marshal.obj \
     $(SLO)/outgoingrequests.obj \
     $(SLO)/proxy.obj \
     $(SLO)/reader.obj \
     $(SLO)/unmarshal.obj \
     $(SLO)/writer.obj
-SHL2RPATH = NONE
-SHL2STDLIBS = \
+APP2RPATH = NONE
+APP2STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    $(CPPUNITLIB) \
+    $(GTESTLIB) \
     $(SALHELPERLIB) \
     $(SALLIB)
 .IF "$(GUI)" != "OS2"
-SHL2TARGET = test-unmarshal
+APP2TARGET = test-unmarshal
 .ELSE
-SHL2TARGET = test-u
+APP2TARGET = test-u
 .ENDIF
-SHL2VERSIONMAP = version.map
-DEF2NAME = $(SHL2TARGET)
-
-.ENDIF # "$(GUI)" == "OS2"
+APP2TEST = enabled
 
 .INCLUDE: target.mk
-.INCLUDE: _cppunit.mk
 
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"

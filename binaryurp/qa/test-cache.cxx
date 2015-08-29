@@ -23,26 +23,18 @@
 
 #include "sal/config.h"
 
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include "gtest/gtest.h"
 
 #include "../source/cache.hxx"
 
 namespace {
 
-class Test: public CppUnit::TestFixture {
-private:
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testNothingLostFromLruList);
-    CPPUNIT_TEST_SUITE_END();
-
-    void testNothingLostFromLruList();
+class Test: public ::testing::Test {
+public:
 };
 
 // cf. jurt/test/com/sun/star/lib/uno/protocols/urp/Cache_Test.java:
-void Test::testNothingLostFromLruList() {
+TEST_F(Test, testNothingLostFromLruList) {
     int a[8];
     for (int i = 0; i != sizeof a / sizeof a[0]; ++i) {
         for (int j = 0; j != i; ++j) {
@@ -55,7 +47,7 @@ void Test::testNothingLostFromLruList() {
                 c.add(a[k], &f);
             }
             bool f;
-            CPPUNIT_ASSERT_EQUAL(
+            ASSERT_EQ(
                 6,
                 c.add(-1, &f) + c.add(-2, &f) + c.add(-3, &f) + c.add(-4, &f));
             int j = i - 1;
@@ -73,8 +65,5 @@ void Test::testNothingLostFromLruList() {
     }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
-
-CPPUNIT_PLUGIN_IMPLEMENT();
