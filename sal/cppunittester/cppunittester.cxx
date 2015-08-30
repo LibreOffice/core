@@ -21,6 +21,11 @@
 #include <windows.h>
 #endif
 
+#ifdef UNX
+#include <sys/time.h>
+#include <sys/resource.h>
+#endif
+
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -292,11 +297,48 @@ public:
     }
 };
 
+#ifdef UNX
+
+double get_time(timeval* time)
+{
+    double nTime = (double)time->tv_sec;
+    nTime += ((double)time->tv_usec)/1000000.0;
+    return nTime;
+}
+
+OString generateTestName(const OUString& rPath)
+{
+    sal_Int32 nPathSep = rPath.lastIndexOf("/");
+    OUString aTestName = rPath.copy(nPathSep+1);
+    return OUStringToOString(aTestName, RTL_TEXTENCODING_UTF8);
+}
+
+void reportResourceUsage(const OUString& rPath)
+{
+    OUString aFullPath = rPath + OUString(".resource.log");
+    rusage resource_usage;
+    getrusage(RUSAGE_SELF, &resource_usage);
+
+    OString aPath = OUStringToOString(aFullPath, RTL_TEXTENCODING_UTF8);
+    std::ofstream resource_file(aPath.getStr());
+    resource_file << "Name = " << generateTestName(rPath) << std::endl;
+    double nUserSpace = get_time(&resource_usage.ru_utime);
+    double nKernelSpace = get_time(&resource_usage.ru_stime);
+    resource_file << "UserSpace = " << nUserSpace << std::endl;
+    resource_file << "KernelSpace = " << nKernelSpace << std::endl;
+}
+#else
+void reportResourceUsage(const OUString& /*rPath*/)
+{
+}
+#endif
+
 }
 
 SAL_IMPLEMENT_MAIN()
 {
     bool ok = false;
+    OUString path;
     try
     {
 #ifdef WNT
@@ -322,6 +364,12 @@ SAL_IMPLEMENT_MAIN()
         while (index < rtl_getAppCommandArgCount())
         {
             rtl::OUString arg = getArgument(index);
+            if (arg == "--target")
+            {
+                path = getArgument(++index);
+                ++index;
+                continue;
+            }
             if ( arg != "--protector" )
             {
                 if (testlib.empty())
@@ -382,6 +430,8 @@ SAL_IMPLEMENT_MAIN()
     {
         SAL_WARN("vcl.app", "Fatal exception: " << e.what());
     }
+
+    reportResourceUsage(path);
 
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }
