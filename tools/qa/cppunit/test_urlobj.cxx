@@ -329,6 +329,44 @@ namespace tools_urlobj
             CPPUNIT_ASSERT(strm == 0);
         }
 
+        void urlobjTest_isSchemeEqualTo() {
+            CPPUNIT_ASSERT(INetURLObject().isSchemeEqualTo(INetProtocol::NotValid));
+            CPPUNIT_ASSERT(!INetURLObject().isSchemeEqualTo(""));
+            CPPUNIT_ASSERT(
+                INetURLObject("http://example.org").isSchemeEqualTo(
+                    INetProtocol::Http));
+            CPPUNIT_ASSERT(
+                !INetURLObject("http://example.org").isSchemeEqualTo(
+                    INetProtocol::Https));
+            CPPUNIT_ASSERT(
+                INetURLObject("http://example.org").isSchemeEqualTo("Http"));
+            CPPUNIT_ASSERT(
+                !INetURLObject("http://example.org").isSchemeEqualTo("dav"));
+            CPPUNIT_ASSERT(
+                INetURLObject("dav://example.org").isSchemeEqualTo("dav"));
+        }
+
+        void urlobjTest_isAnyKnownWebDAVScheme() {
+            CPPUNIT_ASSERT(
+                INetURLObject("http://example.org").isAnyKnownWebDAVScheme());
+            CPPUNIT_ASSERT(
+                INetURLObject("https://example.org").isAnyKnownWebDAVScheme());
+            CPPUNIT_ASSERT(
+                INetURLObject("vnd.sun.star.webdav://example.org").isAnyKnownWebDAVScheme());
+            CPPUNIT_ASSERT(
+                INetURLObject("vnd.sun.star.webdavs://example.org").isAnyKnownWebDAVScheme());
+            CPPUNIT_ASSERT(
+                !INetURLObject("ftp://example.org").isAnyKnownWebDAVScheme());
+            CPPUNIT_ASSERT(
+                !INetURLObject("file://example.org").isAnyKnownWebDAVScheme());
+            CPPUNIT_ASSERT(
+                !INetURLObject("dav://example.org").isAnyKnownWebDAVScheme());
+            CPPUNIT_ASSERT(
+                !INetURLObject("davs://example.org").isAnyKnownWebDAVScheme());
+            CPPUNIT_ASSERT(
+                !INetURLObject("vnd.sun.star.pkg://example.org").isAnyKnownWebDAVScheme());
+        }
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -343,6 +381,8 @@ namespace tools_urlobj
         CPPUNIT_TEST( urlobjCmisTest );
         CPPUNIT_TEST( urlobjTest_emptyPath );
         CPPUNIT_TEST( urlobjTest_data );
+        CPPUNIT_TEST( urlobjTest_isSchemeEqualTo );
+        CPPUNIT_TEST( urlobjTest_isAnyKnownWebDAVScheme );
         CPPUNIT_TEST_SUITE_END(  );
     };                          // class createPool
 
