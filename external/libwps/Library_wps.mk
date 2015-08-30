@@ -12,7 +12,6 @@ $(eval $(call gb_Library_Library,wps))
 $(eval $(call gb_Library_use_unpacked,wps,libwps))
 
 $(eval $(call gb_Library_use_externals,wps,\
-    boost_headers \
 	revenge \
 ))
 
@@ -28,6 +27,7 @@ $(eval $(call gb_Library_add_defs,wps,\
 	-DBUILD_WPS\
 	-DDLL_EXPORT \
 	-DNDEBUG \
+	-DSHAREDPTR_STD \
 ))
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,wps,cpp))
