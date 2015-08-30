@@ -431,6 +431,24 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                             aToken = sSave;
                             bRTF_InTextRead = false;
                         }
+                        else if ( 'c' == nNextCh )
+                        {
+                            // Prevent text breaking into multiple tokens.
+                            rInput.SeekRel( 2 );
+                            nNextCh = GetNextChar();
+                            if (RTF_ISDIGIT( nNextCh ))
+                            {
+                                sal_uInt8 nNewOverread = 0 ;
+                                do {
+                                    nNewOverread *= 10;
+                                    nNewOverread += nNextCh - '0';
+                                    nNextCh = GetNextChar();
+                                } while ( RTF_ISDIGIT( nNextCh ) );
+                                nUCharOverread = nNewOverread;
+                                aParserStates.top().nUCharOverread = nNewOverread;
+                            }
+                            bNextCh = 0x20 == nNextCh;
+                        }
                         else
                         {
                             nNextCh = '\\';
@@ -448,8 +466,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
             }
             break;
 
-        case sal_Unicode(EOF):
-                eState = SVPAR_ERROR;
+        case sal_Unicode(EOF): eState = SVPAR_ERROR;
                 // continue
         case '{':
         case '}':
