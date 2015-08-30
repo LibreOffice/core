@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_c3a09ca8",
+        "filename": "svtools/source/svrtf/parrtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-08-30T16:07:10Z",
+      "side": 1,
+      "message": "bNextCh \u003d false achieve the same goal I think, cheaper.\nif it is not a space the current character is deemed not consumed yet right ?\nbNextCh is used to that at the end of the loop",
+      "revId": "cdd755a64669de302dfd9a9ff04c54b0e26ef908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
