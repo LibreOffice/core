@@ -50,6 +50,23 @@
       "revId": "6900bf41e2b7d7840e11ee1847efd671cf9b0921",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_030c5493",
+        "filename": "canvas/source/tools/pagemanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-30T21:37:05Z",
+      "side": 0,
+      "message": "Wow, very simple concept. As long as relocate returns bool we need to find the largest fragment in mpFragments as long as there is a non-naked fragment in mpFragments.",
+      "revId": "6900bf41e2b7d7840e11ee1847efd671cf9b0921",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
