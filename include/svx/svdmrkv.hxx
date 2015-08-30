@@ -73,7 +73,7 @@ enum SdrHitKind {SDRHIT_NONE,      // No hit
                  SDRHIT_GLUEPOINT,       // Glue point
                  SDRHIT_TEXTEDIT,        // Open OutlinerView was hit
                  SDRHIT_TEXTEDITOBJ,     // Object for SdrBeginTextEdit (Textbereich)
-                 SDRHIT_URLFIELD,        // Field im TextObj was hit (while it is currently not edited)
+                 SDRHIT_URLFIELD,        // Field in TextObj was hit (while it is currently not edited)
                  SDRHIT_MACRO,           // Object for BegMacroObj
                  SDRHIT_MARKEDOBJECT,    // Marked object (e.g. for dragging)
                  SDRHIT_UNMARKEDOBJECT, // non-marked Object (e.g. for marking)
@@ -121,17 +121,17 @@ protected:
     sal_uIntPtr                 mnInsPointNum;      // Number of the InsPoint
     sal_uIntPtr                     mnMarkableObjCount;
 
-    SdrDragMode                 meDragMode;        // Persistent
+    SdrDragMode                 meDragMode;      // Persistent
     SdrViewEditMode             meEditMode;      // Persistent
     SdrViewEditMode             meEditMode0;     // Persistent
 
     //HMHbool                       bHdlShown : 1;
-    bool                        mbRefHdlShownOnly : 1; // Axis of reflextion during dragging (ni)
-    bool                        mbDesignMode : 1;      // DesignMode for SdrUnoObj
-    bool                        mbForceFrameHandles : 1; // Persistent - FrameDrag auch bei Einzelobjekten
-    bool                        mbPlusHdlAlways : 1;   // Persistent
+    bool                        mbRefHdlShownOnly : 1;     // Axis of reflextion during dragging (ni)
+    bool                        mbDesignMode : 1;          // DesignMode for SdrUnoObj
+    bool                        mbForceFrameHandles : 1;   // Persistent - FrameDrag also for single objects
+    bool                        mbPlusHdlAlways : 1;       // Persistent
     bool                        mbMarkHdlWhenTextEdit : 1; // Persistent, default=FALSE
-    bool                        mbInsPolyPoint : 1;     // at this time InsPolyPointDragging
+    bool                        mbInsPolyPoint : 1;        // at this time InsPolyPointDragging
     bool                        mbMarkedObjRectDirty : 1;
     bool                        mbMrkPntDirty : 1;
     bool                        mbMarkedPointsRectsDirty : 1;
