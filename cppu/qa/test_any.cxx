@@ -51,13 +51,13 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/Type.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "testshl/simpleheader.hxx"
 #include "osl/diagnose.h"
 #include "osl/interlck.h"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -190,2137 +190,2006 @@ public:
     }
 };
 
-class Test: public CppUnit::TestFixture {
+class Test: public ::testing::Test {
 public:
-    void testVoid();
-
-    void testBoolean();
-
-    void testByte();
-
-    void testShort();
-
-    void testUnsignedShort();
-
-    void testLong();
-
-    void testUnsignedLong();
-
-    void testHyper();
-
-    void testUnsignedHyper();
-
-    void testFloat();
-
-    void testDouble();
-
-    void testChar();
-
-    void testString();
-
-    void testType();
-
-    void testSequence();
-
-    void testEnum();
-
-    void testStruct();
-
-    void testPoly();
-
-    void testException();
-
-    void testInterface();
-
-    void testNull();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testVoid);
-    CPPUNIT_TEST(testBoolean);
-    CPPUNIT_TEST(testByte);
-    CPPUNIT_TEST(testShort);
-    CPPUNIT_TEST(testUnsignedShort);
-    CPPUNIT_TEST(testLong);
-    CPPUNIT_TEST(testUnsignedLong);
-    CPPUNIT_TEST(testHyper);
-    CPPUNIT_TEST(testUnsignedHyper);
-    CPPUNIT_TEST(testFloat);
-    CPPUNIT_TEST(testDouble);
-    CPPUNIT_TEST(testChar);
-    CPPUNIT_TEST(testString);
-    CPPUNIT_TEST(testType);
-    CPPUNIT_TEST(testSequence);
-    CPPUNIT_TEST(testEnum);
-    CPPUNIT_TEST(testStruct);
-    CPPUNIT_TEST(testPoly);
-    CPPUNIT_TEST(testException);
-    CPPUNIT_TEST(testInterface);
-    CPPUNIT_TEST(testNull);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::testVoid() {
+TEST_F(Test, testVoid) {
     css::uno::Any a;
-    CPPUNIT_ASSERT(a.getValueType() == getVoidCppuType());
+    ASSERT_TRUE(a.getValueType() == getVoidCppuType());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(
+            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) << "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(
+            !(a >>= b) && b == getCppuType< rtl::OUString >()) << "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>", !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) << "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testBoolean() {
+TEST_F(Test, testBoolean) {
     css::uno::Any a(false);
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< sal_Bool >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< sal_Bool >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", (a >>= b) && !b);
+        ASSERT_TRUE((a >>= b) && !b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", (a >>= b) && !b);
+        ASSERT_TRUE((a >>= b) && !b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
         if (boost::is_same< sal_uInt8, sal_Bool >::value) {
-            CPPUNIT_ASSERT_MESSAGE("@sal_uInt8", (a >>= b) && b == 0);
+            ASSERT_TRUE((a >>= b) && b == 0) << "@sal_uInt8";
         } else {
-            CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+            ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
         }
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testByte() {
+TEST_F(Test, testByte) {
     css::uno::Any a(static_cast< sal_Int8 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< sal_Int8 >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< sal_Int8 >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "double";
     }
     {
         sal_Unicode b = '2';
         if (boost::is_same< sal_Unicode, sal_uInt16 >::value) {
-            CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", (a >>= b) && b == 1);
+            ASSERT_TRUE((a >>= b) && b == 1) << "@sal_Unicode";
         } else {
-            CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+            ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
         }
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testShort() {
+TEST_F(Test, testShort) {
     css::uno::Any a(static_cast< sal_Int16 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< sal_Int16 >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< sal_Int16 >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "double";
     }
     {
         sal_Unicode b = '2';
         if (boost::is_same< sal_Unicode, sal_uInt16 >::value) {
-            CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", (a >>= b) && b == 1);
+            ASSERT_TRUE((a >>= b) && b == 1) << "@sal_Unicode";
         } else {
-            CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+            ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
         }
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testUnsignedShort() {
+TEST_F(Test, testUnsignedShort) {
     sal_uInt16 n = 1;
     css::uno::Any a(&n, getCppuType(static_cast< sal_uInt16 const * >(0)));
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         a.getValueType() == getCppuType(static_cast< sal_uInt16 const * >(0)));
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "double";
     }
     {
         sal_Unicode b = '2';
         if (boost::is_same< sal_Unicode, sal_uInt16 >::value) {
-            CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", (a >>= b) && b == 1);
+            ASSERT_TRUE((a >>= b) && b == 1) << "@sal_Unicode";
         } else {
-            CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+            ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
         }
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testLong() {
+TEST_F(Test, testLong) {
     css::uno::Any a(static_cast< sal_Int32 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< sal_Int32 >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< sal_Int32 >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testUnsignedLong() {
+TEST_F(Test, testUnsignedLong) {
     css::uno::Any a(static_cast< sal_uInt32 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< sal_uInt32 >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< sal_uInt32 >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testHyper() {
+TEST_F(Test, testHyper) {
     css::uno::Any a(static_cast< sal_Int64 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< sal_Int64 >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< sal_Int64 >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testUnsignedHyper() {
+TEST_F(Test, testUnsignedHyper) {
     css::uno::Any a(static_cast< sal_uInt64 >(1));
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< sal_uInt64 >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< sal_uInt64 >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testFloat() {
+TEST_F(Test, testFloat) {
     css::uno::Any a(1.f);
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< float >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< float >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testDouble() {
+TEST_F(Test, testDouble) {
     css::uno::Any a(1.);
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< double >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< double >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", (a >>= b) && b == 1);
+        ASSERT_TRUE((a >>= b) && b == 1) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testChar() {
+TEST_F(Test, testChar) {
     sal_Unicode c = '1';
     css::uno::Any a(&c, getCppuType< sal_Unicode >());
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< sal_Unicode >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< sal_Unicode >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
         if (boost::is_same< sal_Unicode, sal_uInt16 >::value) {
-            CPPUNIT_ASSERT_MESSAGE("@sal_Unicode", !(a >>= b) && b == '2');
+            ASSERT_TRUE(!(a >>= b) && b == '2') << "@sal_Unicode";
         } else {
-            CPPUNIT_ASSERT_MESSAGE("sal_Unicode", (a >>= b) && b == '1');
+            ASSERT_TRUE((a >>= b) && b == '1') << "sal_Unicode";
         }
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testString() {
+TEST_F(Test, testString) {
     css::uno::Any a(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1")));
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< rtl::OUString >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< rtl::OUString >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            (a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1")));
+        ASSERT_TRUE((a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("1"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testType() {
+TEST_F(Test, testType) {
     css::uno::Any a(getCppuType< sal_Int32 >());
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< css::uno::Type >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< css::uno::Type >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type", (a >>= b) && b == getCppuType< sal_Int32 >());
+        ASSERT_TRUE((a >>= b) && b == getCppuType< sal_Int32 >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testSequence() {
+TEST_F(Test, testSequence) {
     sal_Int32 n = 1;
     css::uno::Any a(css::uno::Sequence< sal_Int32 >(&n, 1));
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         a.getValueType() == getCppuType< css::uno::Sequence< sal_Int32 > >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         css::uno::Sequence< sal_Int32 > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<sal_Int32>",
-            (a >>= b) && b.getLength() == 1 && b[0] == 1);
+        ASSERT_TRUE((a >>= b) && b.getLength() == 1 && b[0] == 1) <<
+            "css::uno::Sequence<sal_Int32>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testEnum() {
+TEST_F(Test, testEnum) {
     css::uno::Any a(Enum2_M1);
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< Enum2 >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< Enum2 >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Enum2 b = Enum2_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum2", (a >>= b) && b == Enum2_M1);
+        ASSERT_TRUE((a >>= b) && b == Enum2_M1) << "Enum2";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testStruct() {
+TEST_F(Test, testStruct) {
     css::uno::Any a(Struct2a(1, 3));
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< Struct2a >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< Struct2a >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Struct2 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct2", (a >>= b) && b.member == 1);
+        ASSERT_TRUE((a >>= b) && b.member == 1) << "Struct2";
     }
     {
         Struct2a b(2, 2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "Struct2a", (a >>= b) && b.member == 1 && b.member2 == 3);
+        ASSERT_TRUE((a >>= b) && b.member == 1 && b.member2 == 3) <<
+            "Struct2a";
     }
     {
         Struct2b b(2, 2, 2);
-        CPPUNIT_ASSERT_MESSAGE("Struct2b", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct2b";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testPoly() {
+TEST_F(Test, testPoly) {
     css::uno::Any a;
     a <<= Poly< css::uno::Sequence< ::sal_Unicode > >();
-    CPPUNIT_ASSERT_MESSAGE(
-        "type name",
-        a.getValueType().getTypeName().equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("Poly<[]char>")));
-    CPPUNIT_ASSERT_MESSAGE(
-        "constructor",
-        a == css::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >()));
+    ASSERT_TRUE(a.getValueType().getTypeName().equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("Poly<[]char>"))) <<
+        "type name";
+    ASSERT_TRUE(a == css::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >())) <<
+        "constructor";
 }
 
-void Test::testException() {
+TEST_F(Test, testException) {
     css::uno::Any a(
         Exception2a(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 1,
             3));
-    CPPUNIT_ASSERT(a.getValueType() == getCppuType< Exception2a >());
+    ASSERT_TRUE(a.getValueType() == getCppuType< Exception2a >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         Exception2 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception2", (a >>= b) && b.member == 1);
+        ASSERT_TRUE((a >>= b) && b.member == 1) << "Exception2";
     }
     {
         Exception2a b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2,
             2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "Exception2a", (a >>= b) && b.member == 1 && b.member2 == 3);
+        ASSERT_TRUE((a >>= b) && b.member == 1 && b.member2 == 3) <<
+            "Exception2a";
     }
     {
         Exception2b b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2,
             2);
-        CPPUNIT_ASSERT_MESSAGE("Exception2b", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception2b";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
 }
 
-void Test::testInterface() {
+TEST_F(Test, testInterface) {
     css::uno::Reference< Interface2a > i2(new Impl2);
     css::uno::Any a(i2);
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         a.getValueType()
         == getCppuType< css::uno::Reference< Interface2a > >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > i(new Impl1);
         css::uno::Reference< Interface1 > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface1", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface1";
     }
     {
         css::uno::Reference< Interface2 > b(new Impl2);
-        CPPUNIT_ASSERT_MESSAGE("Interface2", (a >>= b) && b == i2);
+        ASSERT_TRUE((a >>= b) && b == i2) << "Interface2";
     }
     {
         css::uno::Reference< Interface2a > b(new Impl2);
-        CPPUNIT_ASSERT_MESSAGE("Interface2a", (a >>= b) && b == i2);
+        ASSERT_TRUE((a >>= b) && b == i2) << "Interface2a";
     }
     {
         css::uno::Reference< Interface2b > i(new Impl2b);
         css::uno::Reference< Interface2b > b(i);
-        CPPUNIT_ASSERT_MESSAGE("Interface2b", !(a >>= b) && b == i);
+        ASSERT_TRUE(!(a >>= b) && b == i) << "Interface2b";
     }
     {
         css::uno::Reference< Interface3 > b(new Impl2);
-        CPPUNIT_ASSERT_MESSAGE("Interface3", (a >>= b) && b == i2);
+        ASSERT_TRUE((a >>= b) && b == i2) << "Interface3";
     }
 }
 
-void Test::testNull() {
+TEST_F(Test, testNull) {
     css::uno::Any a = css::uno::Any(css::uno::Reference< Interface2a >());
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         a.getValueType()
         == getCppuType< css::uno::Reference< Interface2a > >());
     {
         bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "bool";
     }
     {
         sal_Bool b = true;
-        CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b) && b);
+        ASSERT_TRUE(!(a >>= b) && b) << "sal_Bool";
     }
     {
         sal_Int8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int8";
     }
     {
         sal_uInt8 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt8", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt8";
     }
     {
         sal_Int16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int16";
     }
     {
         sal_uInt16 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt16", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt16";
     }
     {
         sal_Int32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int32";
     }
     {
         sal_uInt32 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt32", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt32";
     }
     {
         sal_Int64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_Int64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_Int64";
     }
     {
         sal_uInt64 b = 2;
-        CPPUNIT_ASSERT_MESSAGE("sal_uInt64", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "sal_uInt64";
     }
     {
         float b = 2;
-        CPPUNIT_ASSERT_MESSAGE("float", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "float";
     }
     {
         double b = 2;
-        CPPUNIT_ASSERT_MESSAGE("double", !(a >>= b) && b == 2);
+        ASSERT_TRUE(!(a >>= b) && b == 2) << "double";
     }
     {
         sal_Unicode b = '2';
-        CPPUNIT_ASSERT_MESSAGE("sal_Unicode", !(a >>= b) && b == '2');
+        ASSERT_TRUE(!(a >>= b) && b == '2') << "sal_Unicode";
     }
     {
         rtl::OUString b(RTL_CONSTASCII_USTRINGPARAM("2"));
-        CPPUNIT_ASSERT_MESSAGE(
-            "rtl::OUString",
-            !(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2")));
+        ASSERT_TRUE(!(a >>= b) && b.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("2"))) <<
+            "rtl::OUString";
     }
     {
         css::uno::Type b(getCppuType< rtl::OUString >());
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Type",
-            !(a >>= b) && b == getCppuType< rtl::OUString >());
+        ASSERT_TRUE(!(a >>= b) && b == getCppuType< rtl::OUString >()) <<
+            "css::uno::Type";
     }
     {
         css::uno::Any b(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2")));
-        CPPUNIT_ASSERT_MESSAGE("css::uno::Any", (a >>= b) && b == a);
+        ASSERT_TRUE((a >>= b) && b == a) << "css::uno::Any";
     }
     {
         css::uno::Sequence< rtl::OUString > b(2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "css::uno::Sequence<rtl::OUString>",
-            !(a >>= b) && b.getLength() == 2);
+        ASSERT_TRUE(!(a >>= b) && b.getLength() == 2) <<
+            "css::uno::Sequence<rtl::OUString>";
     }
     {
         Enum1 b = Enum1_M2;
-        CPPUNIT_ASSERT_MESSAGE("Enum1", !(a >>= b) && b == Enum1_M2);
+        ASSERT_TRUE(!(a >>= b) && b == Enum1_M2) << "Enum1";
     }
     {
         Struct1 b(2);
-        CPPUNIT_ASSERT_MESSAGE("Struct1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Struct1";
     }
     {
         Exception1 b(
             rtl::OUString(), css::uno::Reference< css::uno::XInterface >(), 2);
-        CPPUNIT_ASSERT_MESSAGE("Exception1", !(a >>= b) && b.member == 2);
+        ASSERT_TRUE(!(a >>= b) && b.member == 2) << "Exception1";
     }
     {
         css::uno::Reference< Interface1 > b(new Impl1);
-        CPPUNIT_ASSERT_MESSAGE(
-            "Interface1", (a >>= b) && !b.is());
+        ASSERT_TRUE((a >>= b) && !b.is()) <<
+            "Interface1";
     }
     {
         css::uno::Reference< Interface2 > b(new Impl2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "Interface2", (a >>= b) && !b.is());
+        ASSERT_TRUE((a >>= b) && !b.is()) <<
+            "Interface2";
     }
     {
         css::uno::Reference< Interface2a > b(new Impl2);
-        CPPUNIT_ASSERT_MESSAGE("Interface2a", (a >>= b) && !b.is());
+        ASSERT_TRUE((a >>= b) && !b.is()) << "Interface2a";
     }
     {
         css::uno::Reference< Interface2b > b(new Impl2b);
-        CPPUNIT_ASSERT_MESSAGE(
-            "Interface2b", (a >>= b) && !b.is());
+        ASSERT_TRUE((a >>= b) && !b.is()) <<
+            "Interface2b";
     }
     {
         css::uno::Reference< Interface3 > b(new Impl2);
-        CPPUNIT_ASSERT_MESSAGE(
-            "Interface3", (a >>= b) && !b.is());
+        ASSERT_TRUE((a >>= b) && !b.is()) <<
+            "Interface3";
     }
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
-
 }
-
-NOADDITIONAL;

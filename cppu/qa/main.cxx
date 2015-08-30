@@ -19,26 +19,10 @@
  *
  *************************************************************/
 
-
-
-#include "precompiled_cppu.hxx"
-#include "sal/config.h"
-
-#include "sal/types.h"
-
-#include "Rec.hpp"
 #include "gtest/gtest.h"
 
-namespace
+int main(int argc, char **argv)
 {
-
-class Test: public ::testing::Test {
-
-public:
-};
-
-TEST_F(Test, testRecursion) {
-    ASSERT_EQ(static_cast< sal_Int32 >(0), Rec().x.getLength());
-}
-
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

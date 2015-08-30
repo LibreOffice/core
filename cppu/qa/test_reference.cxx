@@ -28,9 +28,9 @@
 
 #include "Interface1.hpp"
 
-#include "testshl/simpleheader.hxx"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "gtest/gtest.h"
 
 namespace
 {
@@ -91,18 +91,13 @@ private:
     oslInterlockedCount m_refCount;
 };
 
-class Test: public ::CppUnit::TestFixture
+class Test: public ::testing::Test
 {
 
 public:
-    void testUnoSetThrow();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testUnoSetThrow);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::testUnoSetThrow()
+TEST_F(Test, testUnoSetThrow)
 {
     Reference< Interface1 > xNull;
     Reference< Interface1 > xFoo( new Foo );
@@ -110,43 +105,39 @@ void Test::testUnoSetThrow()
     // ctor taking Reference< interface_type >
     bool bCaughtException = false;
     try { Reference< Interface1 > x( xNull, UNO_SET_THROW ); (void)x; } catch( const RuntimeException& ) { bCaughtException = true; }
-    CPPUNIT_ASSERT_EQUAL( true, bCaughtException );
+    ASSERT_EQ( true, bCaughtException );
 
     bCaughtException = false;
     try { Reference< Interface1 > x( xFoo, UNO_SET_THROW ); (void)x; } catch( const RuntimeException& ) { bCaughtException = true; }
-    CPPUNIT_ASSERT_EQUAL( false, bCaughtException );
+    ASSERT_EQ( false, bCaughtException );
 
     // ctor taking interface_type*
     bCaughtException = false;
     try { Reference< Interface1 > x( xNull.get(), UNO_SET_THROW ); (void)x; } catch( const RuntimeException& ) { bCaughtException = true; }
-    CPPUNIT_ASSERT_EQUAL( true, bCaughtException );
+    ASSERT_EQ( true, bCaughtException );
 
     bCaughtException = false;
     try { Reference< Interface1 > x( xFoo.get(), UNO_SET_THROW ); (void)x; } catch( const RuntimeException& ) { bCaughtException = true; }
-    CPPUNIT_ASSERT_EQUAL( false, bCaughtException );
+    ASSERT_EQ( false, bCaughtException );
 
     Reference< Interface1 > x;
     // "set" taking Reference< interface_type >
     bCaughtException = false;
     try { x.set( xNull, UNO_SET_THROW ); } catch( const RuntimeException& ) { bCaughtException = true; }
-    CPPUNIT_ASSERT_EQUAL( true, bCaughtException );
+    ASSERT_EQ( true, bCaughtException );
 
     bCaughtException = false;
     try { x.set( xFoo, UNO_SET_THROW ); } catch( const RuntimeException& ) { bCaughtException = true; }
-    CPPUNIT_ASSERT_EQUAL( false, bCaughtException );
+    ASSERT_EQ( false, bCaughtException );
 
     // "set" taking interface_type*
     bCaughtException = false;
     try { x.set( xNull.get(), UNO_SET_THROW ); } catch( const RuntimeException& ) { bCaughtException = true; }
-    CPPUNIT_ASSERT_EQUAL( true, bCaughtException );
+    ASSERT_EQ( true, bCaughtException );
 
     bCaughtException = false;
     try { x.set( xFoo.get(), UNO_SET_THROW ); } catch( const RuntimeException& ) { bCaughtException = true; }
-    CPPUNIT_ASSERT_EQUAL( false, bCaughtException );
+    ASSERT_EQ( false, bCaughtException );
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
-
 }   // namespace
-
-NOADDITIONAL;

@@ -29,47 +29,42 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
 
-DLLPRE = # no leading "lib" on .so files
+.ELSE
+
 
 INCPRE += $(MISC)$/$(TARGET)$/inc
 
-SHL1TARGET = $(TARGET)_any
-SHL1OBJS = $(SLO)$/test_any.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
-SHL1VERSIONMAP = version.map
-SHL1IMPLIB = i$(SHL1TARGET)
-DEF1NAME = $(SHL1TARGET)
+APP1TARGET = $(TARGET)_any
+APP1OBJS = $(SLO)$/test_any.obj $(SLO)$/main.obj
+APP1STDLIBS = $(CPPULIB) $(GTESTLIB) $(TESTSHL2LIB) $(SALLIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 
-SHL2TARGET = $(TARGET)_unotype
-SHL2OBJS = $(SLO)$/test_unotype.obj
-SHL2STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
-SHL2VERSIONMAP = version.map
-SHL2IMPLIB = i$(SHL2TARGET)
-DEF2NAME = $(SHL2TARGET)
+APP2TARGET = $(TARGET)_unotype
+APP2OBJS = $(SLO)$/test_unotype.obj $(SLO)$/main.obj
+APP2STDLIBS = $(CPPULIB) $(GTESTLIB) $(TESTSHL2LIB) $(SALLIB)
+APP2RPATH = NONE
+APP2TEST = enabled
 
-SHL3TARGET = $(TARGET)_reference
-SHL3OBJS = $(SLO)$/test_reference.obj
-SHL3STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
-SHL3VERSIONMAP = version.map
-SHL3IMPLIB = i$(SHL3TARGET)
-DEF3NAME = $(SHL3TARGET)
+APP3TARGET = $(TARGET)_reference
+APP3OBJS = $(SLO)$/test_reference.obj $(SLO)$/main.obj
+APP3STDLIBS = $(CPPULIB) $(GTESTLIB) $(TESTSHL2LIB) $(SALLIB)
+APP3RPATH = NONE
+APP3TEST = enabled
 
-SHL4TARGET = $(TARGET)_recursion
-SHL4OBJS = $(SLO)$/test_recursion.obj
-SHL4STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
-SHL4VERSIONMAP = version.map
-SHL4IMPLIB = i$(SHL4TARGET)
-DEF4NAME = $(SHL4TARGET)
-
-SLOFILES = $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS) $(SHL4OBJS)
+APP4TARGET = $(TARGET)_recursion
+APP4OBJS = $(SLO)$/test_recursion.obj $(SLO)$/main.obj
+APP4STDLIBS = $(CPPULIB) $(GTESTLIB) $(TESTSHL2LIB) $(SALLIB)
+APP4RPATH = NONE
+APP4TEST = enabled
 
 .INCLUDE: target.mk
 
-ALLTAR: test
-
-$(SHL1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+$(APP1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
 
 $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
     - $(MKDIRHIER) $(MISC)$/$(TARGET)$/inc
@@ -85,8 +80,4 @@ $(MISC)$/$(TARGET)$/types.urd: types.idl
     - $(MKDIR) $(MISC)$/$(TARGET)
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
-test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(SHL3TARGETN) $(SHL4TARGETN)
-    $(TESTSHL2) $(SHL1TARGETN)
-    $(TESTSHL2) $(SHL2TARGETN)
-    $(TESTSHL2) $(SHL3TARGETN)
-    $(TESTSHL2) $(SHL4TARGETN)
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
