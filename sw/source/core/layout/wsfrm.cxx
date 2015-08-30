@@ -2933,12 +2933,14 @@ void SwLayoutFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         return;
 
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    const bool hideWhitespace = (pSh && pSh->GetViewOptions()->IsHideWhitespaceMode());
-    const sal_uInt16 nLeft = (sal_uInt16)pAttrs->CalcLeft( this );
-    const sal_uInt16 nUpper = hideWhitespace ? 0 : pAttrs->CalcTop();
+    const bool hideWS = (pSh && pSh->GetViewOptions()->IsHideWhitespaceMode());
+    const long hideWSBorderSize = (pSh ? pSh->GetViewOptions()->GetDocumentBorder() : 0);
+    const bool hideSideWS = (pSh && pSh->GetViewOptions()->IsMultipageView());
+    const sal_uInt16 nLeft = hideSideWS ? hideWSBorderSize * 2 : (sal_uInt16)pAttrs->CalcLeft(this);
+    const sal_uInt16 nUpper = hideWS ? hideWSBorderSize : pAttrs->CalcTop();
 
-    const sal_uInt16 nRight = (sal_uInt16)pAttrs->CalcRight( this );
-    const sal_uInt16 nLower = hideWhitespace ? 0 : pAttrs->CalcBottom();
+    const sal_uInt16 nRight = hideSideWS ? hideWSBorderSize * 2 : (sal_uInt16)pAttrs->CalcRight(this);
+    const sal_uInt16 nLower = hideWS ? hideWSBorderSize : pAttrs->CalcBottom();
 
     bool bVert = IsVertical() && !IsPageFrm();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
