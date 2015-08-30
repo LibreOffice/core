@@ -27,14 +27,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <set>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2 <
+typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XModuleController,
     css::lang::XInitialization
     > ModuleControllerInterfaceBase;

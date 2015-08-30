@@ -26,7 +26,7 @@
 #include <com/sun/star/drawing/framework/XPane2.hpp>
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <vcl/vclptr.hxx>
@@ -36,7 +36,7 @@ namespace vcl { class Window; }
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper3 <
+typedef ::cppu::WeakComponentImplHelper <
     ::com::sun::star::drawing::framework::XPane,
     ::com::sun::star::drawing::framework::XPane2,
       ::com::sun::star::lang::XUnoTunnel

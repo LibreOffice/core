@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/unoipset.hxx>
 
@@ -73,9 +74,7 @@ public:
 /** this class holds the parameters and status of a search or replace operation performed
     by class SdUnoSearchReplaceShape */
 
-#include <cppuhelper/implbase2.hxx>
-
-class SdUnoSearchReplaceDescriptor : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XUnoTunnel, ::com::sun::star::util::XReplaceDescriptor > // public ::com::sun::star::util::XSearchDescriptor, ::com::sun::star::beans::XPropertySet
+class SdUnoSearchReplaceDescriptor : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XUnoTunnel, ::com::sun::star::util::XReplaceDescriptor > // public ::com::sun::star::util::XSearchDescriptor, ::com::sun::star::beans::XPropertySet
 {
 protected:
     SvxItemPropertySet* mpPropSet;
@@ -119,11 +118,9 @@ public:
 
 /* ================================================================= */
 
-#include <cppuhelper/implbase1.hxx>
-
 /** this class holds a sequence that is a result from a find all and
     lets people access it through the XIndexAccess Interface. */
-class SdUnoFindAllAccess : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XIndexAccess > // public ::com::sun::star::container::XElementAccess
+class SdUnoFindAllAccess : public ::cppu::WeakImplHelper< ::com::sun::star::container::XIndexAccess > // public ::com::sun::star::container::XElementAccess
 {
 protected:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  > maSequence;

@@ -68,7 +68,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include "../../ui/inc/DrawController.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
@@ -84,7 +84,7 @@ using namespace ::com::sun::star::ucb;
 using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
-class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper1< com::sun::star::task::XInteractionHandler >
+class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< com::sun::star::task::XInteractionHandler >
 {
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInter;
     sal_uInt16 nFilterError;

@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -48,7 +48,7 @@ namespace com
     }
 }
 
-class SdUnoModule : public ::cppu::WeakImplHelper3< css::frame::XDispatchProvider, css::frame::XNotifyingDispatch, css::lang::XServiceInfo >
+class SdUnoModule : public ::cppu::WeakImplHelper< css::frame::XDispatchProvider, css::frame::XNotifyingDispatch, css::lang::XServiceInfo >
 {
     css::uno::Reference < css::lang::XMultiServiceFactory > m_xFactory;
 

@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_TOOLS_PROPERTYSET_HXX
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <map>
@@ -29,7 +29,7 @@
 namespace sd { namespace tools {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::beans::XPropertySet
     > PropertySetInterfaceBase;
 }

@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <boost/scoped_ptr.hpp>
 
 namespace sd {
@@ -37,7 +37,7 @@ class ViewShellBase;
 namespace sd { namespace framework {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::drawing::framework::XConfigurationChangeListener
         > ToolBarModuleInterfaceBase;
 }

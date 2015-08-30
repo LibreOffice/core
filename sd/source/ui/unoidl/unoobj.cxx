@@ -39,6 +39,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <comphelper/extract.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
@@ -1105,7 +1106,7 @@ uno::Any SdXShape::GetStyleSheet() const throw( beans::UnknownPropertyException 
     return Any( uno::Reference< style::XStyle >( dynamic_cast< SfxUnoStyleSheet* >( pStyleSheet ) ) );
 }
 
-class SdUnoEventsAccess : public cppu::WeakImplHelper2< com::sun::star::container::XNameReplace, com::sun::star::lang::XServiceInfo >
+class SdUnoEventsAccess : public cppu::WeakImplHelper< com::sun::star::container::XNameReplace, com::sun::star::lang::XServiceInfo >
 {
 private:
     const OUString      maStrOnClick;

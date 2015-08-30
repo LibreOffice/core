@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
@@ -48,7 +48,7 @@ class SlideSorter;
 
 namespace sd { namespace slidesorter { namespace controller {
 
-typedef cppu::WeakComponentImplHelper4<
+typedef cppu::WeakComponentImplHelper<
     ::com::sun::star::document::XEventListener,
     ::com::sun::star::beans::XPropertyChangeListener,
     ::com::sun::star::accessibility::XAccessibleEventListener,

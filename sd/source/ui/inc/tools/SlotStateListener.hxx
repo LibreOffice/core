@@ -27,12 +27,12 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <tools/link.hxx>
 
 namespace sd { namespace tools {
 
-typedef cppu::WeakComponentImplHelper1<
+typedef cppu::WeakComponentImplHelper<
     ::com::sun::star::frame::XStatusListener
     > SlotStateListenerInterfaceBase;
 

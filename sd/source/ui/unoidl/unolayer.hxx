@@ -23,7 +23,7 @@
 #include <com/sun/star/drawing/XLayer.hpp>
 #include <com/sun/star/drawing/XLayerManager.hpp>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <unomodel.hxx>
@@ -41,7 +41,7 @@ enum LayerAttribute { VISIBLE, PRINTABLE, LOCKED };
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SdLayer : public ::cppu::WeakImplHelper5< ::com::sun::star::drawing::XLayer,
+class SdLayer : public ::cppu::WeakImplHelper< ::com::sun::star::drawing::XLayer,
                                                 ::com::sun::star::lang::XServiceInfo,
                                                 ::com::sun::star::container::XChild,
                                                 ::com::sun::star::lang::XUnoTunnel,
@@ -106,7 +106,7 @@ private:
 *                                                                      *
 ***********************************************************************/
 
-class SdLayerManager : public ::cppu::WeakImplHelper5< ::com::sun::star::drawing::XLayerManager,
+class SdLayerManager : public ::cppu::WeakImplHelper< ::com::sun::star::drawing::XLayerManager,
                                                        ::com::sun::star::container::XNameAccess,
                                                        ::com::sun::star::lang::XServiceInfo,
                                                        ::com::sun::star::lang::XUnoTunnel,

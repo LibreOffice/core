@@ -31,7 +31,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
@@ -49,7 +49,7 @@ using namespace com::sun::star::ui::dialogs;
 #include "sdabstdlg.hxx"
 #include <boost/scoped_ptr.hpp>
 
-class SdHtmlOptionsDialog : public cppu::WeakImplHelper5
+class SdHtmlOptionsDialog : public cppu::WeakImplHelper
 <
     XExporter,
     XExecutableDialog,

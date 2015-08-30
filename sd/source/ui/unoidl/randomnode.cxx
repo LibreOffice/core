@@ -29,7 +29,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include "CustomAnimationPreset.hxx"
@@ -67,7 +67,7 @@ using namespace ::com::sun::star::animations;
 namespace sd
 {
 
-typedef ::cppu::WeakImplHelper5< XTimeContainer, XEnumerationAccess, XCloneable, XServiceInfo, XInitialization > RandomAnimationNodeBase;
+typedef ::cppu::WeakImplHelper< XTimeContainer, XEnumerationAccess, XCloneable, XServiceInfo, XInitialization > RandomAnimationNodeBase;
 class RandomAnimationNode : public RandomAnimationNodeBase
 {
 public:

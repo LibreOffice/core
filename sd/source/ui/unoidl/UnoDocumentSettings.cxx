@@ -25,7 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
@@ -66,7 +66,7 @@ using namespace ::com::sun::star::i18n;
 
 namespace sd
 {
-    class DocumentSettings : public WeakImplHelper3< XPropertySet, XMultiPropertySet, XServiceInfo >,
+    class DocumentSettings : public WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >,
                              public comphelper::PropertySetHelper,
                              public DocumentSettingsSerializer
     {
@@ -1197,17 +1197,17 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::
 // XInterface
 Any SAL_CALL DocumentSettings::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)
 {
-    return WeakImplHelper3< XPropertySet, XMultiPropertySet, XServiceInfo >::queryInterface( aType );
+    return WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >::queryInterface( aType );
 }
 
 void SAL_CALL DocumentSettings::acquire(  ) throw ()
 {
-    WeakImplHelper3< XPropertySet, XMultiPropertySet, XServiceInfo >::acquire();
+    WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >::acquire();
 }
 
 void SAL_CALL DocumentSettings::release(  ) throw ()
 {
-    WeakImplHelper3< XPropertySet, XMultiPropertySet, XServiceInfo >::release();
+    WeakImplHelper< XPropertySet, XMultiPropertySet, XServiceInfo >::release();
 }
 
 // XPropertySet

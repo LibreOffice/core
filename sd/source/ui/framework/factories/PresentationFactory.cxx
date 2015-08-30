@@ -24,7 +24,7 @@
 #include "ViewShellBase.hxx"
 #include "facreg.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <tools/diagnose_ex.h>
 #include "slideshow.hxx"
 
@@ -39,7 +39,7 @@ namespace sd { namespace framework {
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper1 <lang::XInitialization> PresentationFactoryProviderInterfaceBase;
+typedef ::cppu::WeakComponentImplHelper <lang::XInitialization> PresentationFactoryProviderInterfaceBase;
 
 class PresentationFactoryProvider
     : protected MutexOwner,
@@ -58,7 +58,7 @@ public:
         throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-typedef ::cppu::WeakComponentImplHelper1 <XView> PresentationViewInterfaceBase;
+typedef ::cppu::WeakComponentImplHelper <XView> PresentationViewInterfaceBase;
 
 /** The PresentationView is not an actual view, it is a marker whose
     existence in a configuration indicates that a slideshow is running

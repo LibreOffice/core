@@ -27,11 +27,11 @@
 #include <com/sun/star/drawing/framework/XTabBar.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper1 <
+typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
     > ViewTabBarModuleInterfaceBase;
 

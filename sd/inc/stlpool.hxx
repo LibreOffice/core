@@ -28,8 +28,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <map>
 #include <vector>
 
@@ -46,7 +45,7 @@ class SvxNumberFormat;
 
 typedef std::map< const SdPage*, SdStyleFamilyRef > SdStyleFamilyMap;
 
-typedef ::cppu::ImplInheritanceHelper4< SfxStyleSheetPool,
+typedef ::cppu::ImplInheritanceHelper< SfxStyleSheetPool,
                                         ::com::sun::star::lang::XServiceInfo,
                                         ::com::sun::star::container::XIndexAccess,
                                         ::com::sun::star::container::XNameAccess,

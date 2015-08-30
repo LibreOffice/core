@@ -27,7 +27,7 @@
 
 #include <tools/link.hxx>
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <editeng/unoipset.hxx>
@@ -78,7 +78,7 @@ enum AnimationMode
     ANIMATIONMODE_PREVIEW
 };
 
-typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::presentation::XPresentation2, ::com::sun::star::lang::XServiceInfo > SlideshowBase;
+typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::presentation::XPresentation2, ::com::sun::star::lang::XServiceInfo > SlideshowBase;
 
 class SlideShow : private ::cppu::BaseMutex, public SlideshowBase
 {

@@ -27,14 +27,14 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase5.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <boost/shared_ptr.hpp>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper5    <   ::com::sun::star::lang::XUnoTunnel
+typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::lang::XUnoTunnel
                                             ,   ::com::sun::star::awt::XWindowListener
                                             ,   ::com::sun::star::view::XSelectionSupplier
                                             ,   ::com::sun::star::drawing::framework::XRelocatableResource

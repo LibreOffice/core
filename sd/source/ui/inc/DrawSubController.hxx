@@ -22,17 +22,17 @@
 
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 namespace sd {
 
-    class DrawSubControllerInterfaceBase : public ::cppu::WeakComponentImplHelper2<
+    class DrawSubControllerInterfaceBase : public ::cppu::WeakComponentImplHelper<
                     ::com::sun::star::drawing::XDrawSubController,
                     ::com::sun::star::lang::XServiceInfo >
     {
     public:
         DrawSubControllerInterfaceBase( ::osl::Mutex& aMutex )
-            :  ::cppu::WeakComponentImplHelper2<
+            :  ::cppu::WeakComponentImplHelper<
                     ::com::sun::star::drawing::XDrawSubController,
                     ::com::sun::star::lang::XServiceInfo >( aMutex ) {}
 

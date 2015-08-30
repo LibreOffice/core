@@ -27,7 +27,6 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 
-#include <cppuhelper/implbase1.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/app.hxx>

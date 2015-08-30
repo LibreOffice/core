@@ -26,7 +26,7 @@
 #include <rtl/ustring.hxx>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include "ViewShellBase.hxx"
 
@@ -43,7 +43,7 @@ namespace tools {
 class EventMultiplexerEvent;
 }
 
-typedef ::cppu::WeakComponentImplHelper1 <
+typedef ::cppu::WeakComponentImplHelper <
     com::sun::star::document::XEventListener
     > AnnotationManagerImplBase;
 
@@ -54,7 +54,7 @@ public:
 
     void init();
 
-    // WeakComponentImplHelper1
+    // WeakComponentImplHelper
     virtual void SAL_CALL disposing () SAL_OVERRIDE;
 
     // XEventListener

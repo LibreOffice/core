@@ -29,13 +29,13 @@
 
 #include <comphelper/servicehelper.hxx>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();
 class SdDrawDocument;
 class SfxItemSet;
 
-class SdUnoPageBackground : public ::cppu::WeakImplHelper4<
+class SdUnoPageBackground : public ::cppu::WeakImplHelper<
                                     ::com::sun::star::beans::XPropertySet,
                                     ::com::sun::star::lang::XServiceInfo,
                                     ::com::sun::star::beans::XPropertyState,

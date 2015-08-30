@@ -26,13 +26,13 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <memory>
 
 namespace {
 
-typedef ::cppu::ImplInheritanceHelper1 <
+typedef ::cppu::ImplInheritanceHelper <
     ::sd::framework::Pane,
     ::com::sun::star::lang::XEventListener
     > ChildWindowPaneInterfaceBase;
