@@ -423,6 +423,10 @@ void XMLStyleExport::exportStyleFamily(
             // not export them here and remain silent.
             continue;
         }
+        catch(css::container::NoSuchElementException&)
+        {
+            continue;
+        }
 
         DBG_ASSERT( xStyle.is(), "Style not found for export!" );
         if( xStyle.is() )
