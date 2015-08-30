@@ -203,7 +203,7 @@ void AnnotationManagerImpl::init()
     }
 }
 
-// WeakComponentImplHelper1
+// WeakComponentImplHelper
 void SAL_CALL AnnotationManagerImpl::disposing ()
 {
     try

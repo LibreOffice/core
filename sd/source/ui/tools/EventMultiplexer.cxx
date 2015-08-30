@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star;
@@ -51,7 +51,7 @@ static const sal_Int32 ConfigurationUpdateEvent = 2;
 
 namespace sd { namespace tools {
 
-typedef cppu::WeakComponentImplHelper4<
+typedef cppu::WeakComponentImplHelper<
       ::com::sun::star::beans::XPropertyChangeListener,
       ::com::sun::star::frame::XFrameActionListener,
       ::com::sun::star::view::XSelectionChangeListener,

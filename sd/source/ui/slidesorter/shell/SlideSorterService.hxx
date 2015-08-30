@@ -29,7 +29,7 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -38,7 +38,7 @@
 namespace sd { namespace slidesorter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper3 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::drawing::XSlideSorterBase,
         css::lang::XInitialization,
         css::awt::XWindowListener

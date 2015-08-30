@@ -27,11 +27,11 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2 <
+typedef ::cppu::WeakComponentImplHelper <
       ::com::sun::star::drawing::framework::XConfigurationChangeRequest,
       ::com::sun::star::container::XNamed
     > GenericConfigurationChangeRequestInterfaceBase;

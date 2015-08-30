@@ -22,7 +22,7 @@ using namespace ::com::sun::star::frame;
 
 Listener::Listener( const ::rtl::Reference<Communicator>& rCommunicator,
                     sd::Transmitter *aTransmitter  ):
-      ::cppu::WeakComponentImplHelper1< XSlideShowListener >( m_aMutex ),
+      ::cppu::WeakComponentImplHelper< XSlideShowListener >( m_aMutex ),
       mCommunicator( rCommunicator ),
       pTransmitter( NULL )
 {

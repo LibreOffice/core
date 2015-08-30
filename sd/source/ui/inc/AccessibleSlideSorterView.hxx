@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_ACCESSIBLESLIDESORTERVIEW_HXX
 
 #include "MutexOwner.hxx"
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -45,7 +45,7 @@ namespace accessibility {
 
 class AccessibleSlideSorterObject;
 
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,

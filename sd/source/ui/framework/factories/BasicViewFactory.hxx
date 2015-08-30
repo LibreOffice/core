@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -46,7 +46,7 @@ namespace vcl { class Window; }
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2 <
+typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
     css::lang::XInitialization
     > BasicViewFactoryInterfaceBase;

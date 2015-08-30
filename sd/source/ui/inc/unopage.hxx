@@ -282,9 +282,9 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class SdPageLinkTargets : public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameAccess,
+class SdPageLinkTargets : public ::cppu::WeakImplHelper< ::com::sun::star::container::XNameAccess,
                                                   ::com::sun::star::lang::XServiceInfo >
 {
 private:

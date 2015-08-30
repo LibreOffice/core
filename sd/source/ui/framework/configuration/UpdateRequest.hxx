@@ -24,11 +24,11 @@
 #include <com/sun/star/drawing/framework/XConfigurationChangeRequest.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2 <
+typedef ::cppu::WeakComponentImplHelper <
       ::com::sun::star::drawing::framework::XConfigurationChangeRequest,
       ::com::sun::star::container::XNamed
     > UpdateRequestInterfaceBase;

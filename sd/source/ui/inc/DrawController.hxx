@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/weakbase.hxx>
 #include <memory>
 #include <vector>
@@ -43,7 +43,7 @@
 
 namespace sd {
 
-typedef ::cppu::ImplInheritanceHelper7 <
+typedef ::cppu::ImplInheritanceHelper <
     SfxBaseController,
     ::com::sun::star::view::XSelectionSupplier,
     ::com::sun::star::lang::XServiceInfo,

@@ -14,7 +14,7 @@
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <osl/socket.hxx>
 
@@ -28,7 +28,7 @@ namespace sd {
  */
 class Listener
     : protected ::cppu::BaseMutex,
-      public ::cppu::WeakComponentImplHelper1< css::presentation::XSlideShowListener >
+      public ::cppu::WeakComponentImplHelper< css::presentation::XSlideShowListener >
 {
 public:
     Listener( const ::rtl::Reference<Communicator>& rServer, sd::Transmitter *aTransmitter );

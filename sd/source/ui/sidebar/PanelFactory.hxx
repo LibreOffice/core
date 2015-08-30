@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_PANELFACTORY_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_PANELFACTORY_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 #include "framework/Pane.hxx"
@@ -41,7 +41,7 @@ namespace sd { namespace sidebar {
 
 namespace
 {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::ui::XUIElementFactory
         > PanelFactoryInterfaceBase;
 }

@@ -32,7 +32,7 @@
 #include "app.hrc"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <svl/lstner.hxx>
 
 #include <sfx2/request.hxx>
@@ -53,7 +53,7 @@ namespace {
 
 //----- CallbackCaller --------------------------------------------------------
 
-typedef ::cppu::WeakComponentImplHelper1 <
+typedef ::cppu::WeakComponentImplHelper <
     ::com::sun::star::drawing::framework::XConfigurationChangeListener
     > CallbackCallerInterfaceBase;
 
@@ -110,7 +110,7 @@ private:
 
 //----- LifetimeController ----------------------------------------------------
 
-typedef ::cppu::WeakComponentImplHelper1 <
+typedef ::cppu::WeakComponentImplHelper <
     ::com::sun::star::lang::XEventListener
     > LifetimeControllerInterfaceBase;
 
@@ -285,7 +285,7 @@ public:
 //----- Framework::DiposeListener ---------------------------------------------
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         ::com::sun::star::lang::XEventListener
         > FrameworkHelperDisposeListenerInterfaceBase;
 }

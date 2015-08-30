@@ -50,6 +50,7 @@
 #include <editeng/unoipset.hxx>
 
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <sddllapi.h>
 
 class SdDrawDocument;
@@ -274,9 +275,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-#include <cppuhelper/implbase4.hxx>
-
-class SdDrawPagesAccess : public ::cppu::WeakImplHelper4< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::container::XNameAccess, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XComponent >
+class SdDrawPagesAccess : public ::cppu::WeakImplHelper< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::container::XNameAccess, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XComponent >
 {
 private:
     SdXImpressDocument* mpModel;
@@ -317,9 +316,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-#include <cppuhelper/implbase3.hxx>
-
-class SdMasterPagesAccess : public ::cppu::WeakImplHelper3< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XComponent >
+class SdMasterPagesAccess : public ::cppu::WeakImplHelper< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XComponent >
 {
 private:
     SdXImpressDocument* mpModel;
@@ -357,7 +354,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SdDocLinkTargets : public ::cppu::WeakImplHelper3< ::com::sun::star::container::XNameAccess,
+class SdDocLinkTargets : public ::cppu::WeakImplHelper< ::com::sun::star::container::XNameAccess,
                                                          ::com::sun::star::lang::XServiceInfo , ::com::sun::star::lang::XComponent >
 {
 private:

@@ -29,12 +29,12 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper3 <
+typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
     css::lang::XInitialization,
     css::lang::XEventListener

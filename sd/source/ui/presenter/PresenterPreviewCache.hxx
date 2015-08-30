@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "cache/SlsPageCache.hxx"
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -32,7 +32,7 @@
 namespace sd { namespace presenter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper2<
+    typedef ::cppu::WeakComponentImplHelper<
         css::lang::XInitialization,
         css::drawing::XSlidePreviewCache
     > PresenterPreviewCacheInterfaceBase;

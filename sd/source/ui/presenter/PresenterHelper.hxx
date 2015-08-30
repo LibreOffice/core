@@ -24,13 +24,13 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <boost/noncopyable.hpp>
 
 namespace sd { namespace presenter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper2<
+    typedef ::cppu::WeakComponentImplHelper<
         css::lang::XInitialization,
         css::drawing::XPresenterHelper
     > PresenterHelperInterfaceBase;

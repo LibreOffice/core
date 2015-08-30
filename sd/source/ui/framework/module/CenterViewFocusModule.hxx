@@ -26,11 +26,11 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper1 <
+typedef ::cppu::WeakComponentImplHelper <
     ::com::sun::star::drawing::framework::XConfigurationChangeListener
     > CenterViewFocusModuleInterfaceBase;
 

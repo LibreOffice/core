@@ -20,8 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWVIEWIMPL_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESHOW_SLIDESHOWVIEWIMPL_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -159,7 +158,7 @@ protected:
 class ShowWindow;
 class SlideshowImpl;
 
-typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::presentation::XSlideShowView,
+typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::presentation::XSlideShowView,
                                             ::com::sun::star::awt::XWindowListener,
                                             ::com::sun::star::awt::XMouseListener,
                                             ::com::sun::star::awt::XMouseMotionListener > SlideShowView_Base;

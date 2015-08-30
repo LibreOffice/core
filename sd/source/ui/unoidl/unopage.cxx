@@ -26,6 +26,7 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -2609,7 +2610,7 @@ void SdGenericDrawPage::setNavigationOrder( const Any& rValue )
     throw IllegalArgumentException();
 }
 
-class SdNavigationOrderAccess : public ::cppu::WeakImplHelper1< XIndexAccess >
+class SdNavigationOrderAccess : public ::cppu::WeakImplHelper< XIndexAccess >
 {
 public:
     SdNavigationOrderAccess( SdrPage* pPage );

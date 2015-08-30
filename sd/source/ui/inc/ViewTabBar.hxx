@@ -29,7 +29,7 @@
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <vcl/tabctrl.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include "MutexOwner.hxx"
 
 #include <vector>
@@ -41,7 +41,7 @@ namespace sd {
 }
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper4 <
+    typedef ::cppu::WeakComponentImplHelper <
         ::com::sun::star::drawing::framework::XToolBar,
         ::com::sun::star::drawing::framework::XTabBar,
         ::com::sun::star::drawing::framework::XConfigurationChangeListener,

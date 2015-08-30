@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
 #include <boost/scoped_ptr.hpp>
@@ -41,7 +41,7 @@
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2 <
+typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationController,
     css::lang::XInitialization
     > ConfigurationControllerInterfaceBase;

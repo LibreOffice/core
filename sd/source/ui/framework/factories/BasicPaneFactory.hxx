@@ -30,14 +30,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper3 <
+typedef ::cppu::WeakComponentImplHelper <
     css::lang::XInitialization,
     css::drawing::framework::XResourceFactory,
     css::drawing::framework::XConfigurationChangeListener

@@ -23,7 +23,7 @@
 #include "comphelper/anytostring.hxx"
 #include "comphelper/scopeguard.hxx"
 #include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 #include "osl/diagnose.h"
 #include "osl/time.h"
 #include "rtl/ref.hxx"
@@ -372,15 +372,9 @@
 #include <cppcanvas/vclfactory.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/proptypehlp.hxx>
 #include <cppuhelper/supportsservice.hxx>

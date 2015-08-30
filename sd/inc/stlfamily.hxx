@@ -33,7 +33,7 @@
 
 #include <rtl/ref.hxx>
 
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <svl/style.hxx>
 
@@ -43,7 +43,7 @@ class SdStyleSheet;
 class SdPage;
 struct SdStyleFamilyImpl;
 
-class SdStyleFamily : public ::cppu::WeakImplHelper7< css::container::XNameContainer, css::container::XNamed, css::container::XIndexAccess, css::lang::XSingleServiceFactory,  css::lang::XServiceInfo, css::lang::XComponent, css::beans::XPropertySet >
+class SdStyleFamily : public ::cppu::WeakImplHelper< css::container::XNameContainer, css::container::XNamed, css::container::XIndexAccess, css::lang::XSingleServiceFactory,  css::lang::XServiceInfo, css::lang::XComponent, css::beans::XPropertySet >
 {
 public:
     /// creates the style family for the given SfxStyleFamily

@@ -19,7 +19,7 @@
 
 #include "DrawViewShell.hxx"
 #include <com/sun/star/scanner/ScannerManager.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/svdlayer.hxx>
@@ -81,7 +81,7 @@ bool DrawViewShell::mbPipette = false;
 
 // - ScannerEventListener -
 
-class ScannerEventListener : public ::cppu::WeakImplHelper1< lang::XEventListener >
+class ScannerEventListener : public ::cppu::WeakImplHelper< lang::XEventListener >
 {
 private:
 

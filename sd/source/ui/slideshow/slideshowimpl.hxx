@@ -22,8 +22,8 @@
 
 #include "sal/config.h"
 #include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/compbase1.hxx"
-#include "cppuhelper/compbase2.hxx"
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/propertysetmixin.hxx"
 #include <com/sun/star/awt/XActivateListener.hpp>
@@ -116,7 +116,7 @@ typedef boost::shared_ptr< WrappedShapeEventImpl > WrappedShapeEventImplPtr;
 typedef std::map< css::uno::Reference< css::drawing::XShape >, WrappedShapeEventImplPtr > WrappedShapeEventImplMap;
 
 class SlideShowListenerProxy : private ::cppu::BaseMutex,
-        public ::cppu::WeakImplHelper2< css::presentation::XSlideShowListener, css::presentation::XShapeEventListener >
+        public ::cppu::WeakImplHelper< css::presentation::XSlideShowListener, css::presentation::XShapeEventListener >
 {
 public:
     SlideShowListenerProxy( const rtl::Reference< SlideshowImpl >& xController, const css::uno::Reference< css::presentation::XSlideShow >& xSlideShow );
@@ -157,7 +157,7 @@ public:
     css::uno::Reference< css::presentation::XSlideShow > mxSlideShow;
 };
 
-typedef ::cppu::WeakComponentImplHelper2< css::presentation::XSlideShowController, css::container::XIndexAccess > SlideshowImplBase;
+typedef ::cppu::WeakComponentImplHelper< css::presentation::XSlideShowController, css::container::XIndexAccess > SlideshowImplBase;
 
 class SlideshowImpl : private ::cppu::BaseMutex, public SlideshowImplBase
 {

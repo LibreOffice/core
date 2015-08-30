@@ -30,8 +30,6 @@
 
 #include <editeng/unoipset.hxx>
 
-#include <cppuhelper/implbase2.hxx>
-
 class SdrObject;
 class SdXImpressDocument;
 class SdAnimationInfo;

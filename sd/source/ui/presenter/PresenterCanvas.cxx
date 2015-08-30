@@ -29,7 +29,7 @@
 #include <canvas/canvastools.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -47,7 +47,7 @@ namespace sd { namespace presenter {
 /** Wrapper around a sprite that is displayed on a PresenterCanvas.
 */
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::rendering::XCustomSprite
     > PresenterCustomSpriteInterfaceBase;
 }

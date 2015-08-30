@@ -28,7 +28,7 @@
 #include "vcl/field.hxx"
 
 #include "svtools/extensionlistbox.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/lang/XEventListener.hpp"
@@ -67,7 +67,7 @@ struct ClientBoxEntry
 // class ExtensionBox_Impl
 class ClientBox;
 
-class ClientRemovedListener : public ::cppu::WeakImplHelper1<css::lang::XEventListener>
+class ClientRemovedListener : public ::cppu::WeakImplHelper<css::lang::XEventListener>
 {
     VclPtr<ClientBox> m_pParent;
 

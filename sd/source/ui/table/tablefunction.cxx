@@ -23,7 +23,6 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <vcl/svapp.hxx>

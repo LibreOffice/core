@@ -27,13 +27,13 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <osl/mutex.hxx>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 
 class SdXImpressDocument;
 class SdCustomShow;
 
-class SdXCustomPresentation :   public ::cppu::WeakImplHelper5< ::com::sun::star::container::XIndexContainer,
+class SdXCustomPresentation :   public ::cppu::WeakImplHelper< ::com::sun::star::container::XIndexContainer,
                                                                 ::com::sun::star::container::XNamed,
                                                                 ::com::sun::star::lang::XUnoTunnel,
                                                                 ::com::sun::star::lang::XComponent,
@@ -95,14 +95,12 @@ public:
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <cppuhelper/implbase3.hxx>
-
 #include "unomodel.hxx"
 #include "drawdoc.hxx"
 
 class List;
 
-class SdXCustomPresentationAccess : public ::cppu::WeakImplHelper3< ::com::sun::star::container::XNameContainer,
+class SdXCustomPresentationAccess : public ::cppu::WeakImplHelper< ::com::sun::star::container::XNameContainer,
                                                                     ::com::sun::star::lang::XSingleServiceFactory,
                                                                     ::com::sun::star::lang::XServiceInfo >
 {

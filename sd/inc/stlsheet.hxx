@@ -30,7 +30,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <svl/style.hxx>
@@ -43,7 +43,7 @@
 
 class ModifyListenerForewarder;
 
-typedef cppu::ImplInheritanceHelper5< SfxUnoStyleSheet,
+typedef cppu::ImplInheritanceHelper< SfxUnoStyleSheet,
                                     ::com::sun::star::beans::XPropertySet,
                                     ::com::sun::star::lang::XServiceInfo,
                                     ::com::sun::star::beans::XPropertyState,

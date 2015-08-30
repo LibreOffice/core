@@ -28,7 +28,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include "Annotation.hxx"
@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 namespace sd {
 
 class Annotation : private ::cppu::BaseMutex,
-                   public ::cppu::WeakComponentImplHelper1< XAnnotation>,
+                   public ::cppu::WeakComponentImplHelper< XAnnotation>,
                    public ::cppu::PropertySetMixin< XAnnotation >,
                    private boost::noncopyable
 {
@@ -62,8 +62,8 @@ public:
 
     // XInterface:
     virtual Any SAL_CALL queryInterface(Type const & type) throw (RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE { ::cppu::WeakComponentImplHelper1< XAnnotation >::acquire(); }
-    virtual void SAL_CALL release() throw () SAL_OVERRIDE { ::cppu::WeakComponentImplHelper1< XAnnotation >::release(); }
+    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE { ::cppu::WeakComponentImplHelper< XAnnotation >::acquire(); }
+    virtual void SAL_CALL release() throw () SAL_OVERRIDE { ::cppu::WeakComponentImplHelper< XAnnotation >::release(); }
 
     // ::com::sun::star::beans::XPropertySet:
     virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -167,7 +167,7 @@ void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage )
 }
 
 Annotation::Annotation( const Reference< XComponentContext >& context, SdPage* pPage )
-: ::cppu::WeakComponentImplHelper1< XAnnotation >(m_aMutex)
+: ::cppu::WeakComponentImplHelper< XAnnotation >(m_aMutex)
 , ::cppu::PropertySetMixin< XAnnotation >(context, static_cast< Implements >(IMPLEMENTS_PROPERTY_SET), Sequence< OUString >())
 , mpPage( pPage )
 {
@@ -189,7 +189,7 @@ void SAL_CALL Annotation::disposing()
 
 Any Annotation::queryInterface(Type const & type) throw (RuntimeException, std::exception)
 {
-    return ::cppu::WeakComponentImplHelper1< XAnnotation>::queryInterface(type);
+    return ::cppu::WeakComponentImplHelper< XAnnotation>::queryInterface(type);
 }
 
 // com.sun.star.beans.XPropertySet:

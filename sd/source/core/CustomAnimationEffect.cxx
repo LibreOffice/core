@@ -66,7 +66,7 @@
 
 #include <algorithm>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -2971,7 +2971,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
     }
 }
 
-class AnimationChangeListener : public cppu::WeakImplHelper1< XChangesListener >
+class AnimationChangeListener : public cppu::WeakImplHelper< XChangesListener >
 {
 public:
     AnimationChangeListener( MainSequence* pMainSequence ) : mpMainSequence( pMainSequence ) {}

@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/awt/XPaintListener.hpp>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <boost/scoped_ptr.hpp>
@@ -36,7 +36,7 @@ namespace sd { namespace colortoolpanel
 {
 
     // class SingleColorPanel
-    typedef ::cppu::WeakComponentImplHelper3    <   ::com::sun::star::drawing::framework::XView
+    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::drawing::framework::XView
                                                 ,   ::com::sun::star::ui::XToolPanel
                                                 ,   ::com::sun::star::awt::XPaintListener
                                                 >   SingleColorPanel_Base;

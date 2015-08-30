@@ -30,12 +30,12 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <boost/scoped_ptr.hpp>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper1 <
+typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
     > ShellStackGuardInterfaceBase;
 

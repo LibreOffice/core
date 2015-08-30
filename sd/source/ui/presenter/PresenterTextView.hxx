@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace sd { namespace presenter {
 
 namespace {
-    typedef ::cppu::ImplInheritanceHelper1 <
+    typedef ::cppu::ImplInheritanceHelper <
         tools::PropertySet,
         css::lang::XInitialization
     > PresenterTextViewInterfaceBase;
