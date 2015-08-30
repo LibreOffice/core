@@ -787,7 +787,7 @@ void SpellDialog::Impl_Restore()
     //get a new sentence
     aSentenceED.SetText(rtl::OUString());
     aSentenceED.ResetModified();
-    SpellContinue_Impl();
+    SpellContinue_Impl(true);
     aIgnorePB.SetText(aIgnoreOnceST);
 }
 
