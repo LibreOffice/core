@@ -286,7 +286,7 @@ int cow_wrapper_client::queryUnmodified() const
         /// true, if not shared with any other cow_wrapper instance
         bool is_unique() const // nothrow
         {
-            return m_pimpl ? m_pimpl->m_ref_count == 1 : true;
+            return !m_pimpl || m_pimpl->m_ref_count == 1;
         }
 
         /// return number of shared instances (1 for unique object)
