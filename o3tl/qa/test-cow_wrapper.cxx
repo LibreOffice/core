@@ -177,7 +177,7 @@ public:
             BogusRefCountPolicy::s_bShouldIncrement = 1;
             cow_wrapper_client5 aTestObj3( aTestObj2 );
             CPPUNIT_ASSERT_MESSAGE("s_bShouldIncrement == 0",
-                                   BogusRefCountPolicy::s_bShouldIncrement == 0 );
+                                   !BogusRefCountPolicy::s_bShouldIncrement );
 
             CPPUNIT_ASSERT_MESSAGE("aTestObj3.use_count() == 2",
                                    aTestObj3.use_count() == 2 );
@@ -188,9 +188,9 @@ public:
                 BogusRefCountPolicy::s_bShouldDecrement = 1;
                 aTestObj4 = aTestObj2;
                 CPPUNIT_ASSERT_MESSAGE("s_bShouldIncrement == 0",
-                                       BogusRefCountPolicy::s_bShouldIncrement == 0 );
+                                       !BogusRefCountPolicy::s_bShouldIncrement );
                 CPPUNIT_ASSERT_MESSAGE("s_bShouldDecrement == 0",
-                                       BogusRefCountPolicy::s_bShouldDecrement == 0 );
+                                       !BogusRefCountPolicy::s_bShouldDecrement );
 
                 CPPUNIT_ASSERT_MESSAGE("aTestObj2.use_count() == 3",
                                        aTestObj2.use_count() == 3 );
@@ -209,14 +209,14 @@ public:
                 BogusRefCountPolicy::s_bShouldDecrement = 1;
                 aTestObj4 = cow_wrapper_client5( 4 );
                 CPPUNIT_ASSERT_MESSAGE("s_bShouldIncrement == 0",
-                                       BogusRefCountPolicy::s_bShouldIncrement == 0 );
+                                       !BogusRefCountPolicy::s_bShouldIncrement );
 
                 // only one call should be made to the ref counting policy's
                 // decrementing function at the end of the scope
-                BogusRefCountPolicy::s_bShouldDecrement = 1;
+                BogusRefCountPolicy::s_bShouldDecrement = true;
             }
             CPPUNIT_ASSERT_MESSAGE("s_bShouldDecrement == 0",
-                                   BogusRefCountPolicy::s_bShouldDecrement == 0 );
+                                   !BogusRefCountPolicy::s_bShouldDecrement );
 
             // self assignment
             // aTestObj2 is defunct afterwards, one decrement happens
@@ -233,7 +233,7 @@ public:
             BogusRefCountPolicy::s_bShouldDecrement = 1;
             aTestObj3 = std::move( aTestObj5 );
             CPPUNIT_ASSERT_MESSAGE("s_bShouldDecrement == 0",
-                                   BogusRefCountPolicy::s_bShouldDecrement == 0);
+                                   !BogusRefCountPolicy::s_bShouldDecrement );
 
             // one call should be made to the ref-counting policy's
             // decrementing function at the end of the scope. Only
