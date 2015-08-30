@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_6373904e",
+        "filename": "canvas/source/tools/pagemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-30T16:53:33Z",
+      "side": 0,
+      "message": "The only reason why I can see this while loop being usefull is if we have reason to believe that a candidate in maFragments has changed. If that is not the case then as stated later we will re-check candidates that have already been checked.",
+      "revId": "6900bf41e2b7d7840e11ee1847efd671cf9b0921",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_437c8c20",
+        "filename": "canvas/source/tools/pagemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-30T16:53:33Z",
+      "side": 0,
+      "message": "I don\u0027t understand this. Maybe I\u0027m missing something, but why if-brake just to continue looping below?",
+      "revId": "6900bf41e2b7d7840e11ee1847efd671cf9b0921",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_8376a43c",
+        "filename": "canvas/source/tools/pagemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-30T16:53:33Z",
+      "side": 0,
+      "message": "I also don\u0027t understand why break was used here. I\u0027m probably missing something,\nbut why break just to check if reallocate( pFragment ), possibly continue to loop,\nand end up looping over objects we\u0027ve already checked?\n\nCould this be condensed to something like the following?\n\n    if( !reallocate( pFragment ) )\n        // no break used here, we loop through all of the \"candidates\" in maFragments\n\nJust a thought. This loop was confusing, so I took my best shot at changing it.\nPlease let me know if I missed something!",
+      "revId": "6900bf41e2b7d7840e11ee1847efd671cf9b0921",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

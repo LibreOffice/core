@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_e3868012",
+        "filename": "canvas/source/tools/pagemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-30T16:53:33Z",
+      "side": 1,
+      "message": "Stepping way out on a limb here. I could be very very wrong on this part. I\u0027d be content if this part was left out. I just saw this loop and was very confused, so I took my best shot at making it simpler, but I may have ended up making it more complex. I won\u0027t be heartbroken if this gets chucked.",
+      "revId": "16777a00b1ba88ea9a205ba09d42955084219728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_23799830",
+        "filename": "canvas/source/tools/pagemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-30T16:53:33Z",
+      "side": 1,
+      "message": "No need to check if candidate is end here since we\u0027re sill inside the original loop",
+      "revId": "16777a00b1ba88ea9a205ba09d42955084219728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
