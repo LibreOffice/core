@@ -1895,8 +1895,8 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
     {
         assert(pViewOpt && "CheckViewLayout required ViewOptions");
 
-        const sal_uInt16 nColumns =  pViewOpt->GetViewLayoutColumns();
-        const bool   bBookMode = pViewOpt->IsViewLayoutBookMode();
+        const sal_uInt16 nColumns = pViewOpt->GetViewLayoutColumns();
+        const bool bBookMode = pViewOpt->IsViewLayoutBookMode();
 
         if ( nColumns == mnColumns && bBookMode == mbBookMode && pVisArea->Width() == mnViewWidth && !mbSidebarChanged )
             return;
@@ -1922,7 +1922,10 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
     const long nBorder = Frm().Pos().getX();
     const long nVisWidth = mnViewWidth - 2 * nBorder;
-    const long nGapBetweenPages = GAPBETWEENPAGES;
+    SwViewShell* pSh = GetCurrShell();
+    const long nGapBetweenPages = pViewOpt ? pViewOpt->GetGapBetweenPages()
+                                           : (pSh ? pSh->GetViewOptions()->GetGapBetweenPages()
+                                                  : SwViewOption::GetDefGapBetweenPages());
 
     // check how many pages fit into the first page layout row:
     SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(Lower());
@@ -2181,8 +2184,6 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
         ChgSize( aNewSize );
         ::AdjustSizeChgNotify( this );
         Calc(pRenderContext);
-
-        SwViewShell* pSh = GetCurrShell();
 
         if ( pSh && pSh->GetDoc()->GetDocShell() )
         {

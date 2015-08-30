@@ -1293,12 +1293,13 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
             // between pages (not only for in online mode).
             if ( pLay->IsPageFrm() )
             {
-                const SwTwips nHalfDocBorder = GAPBETWEENPAGES;
+                const SwViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
+                const SwTwips nHalfDocBorder = pSh ? pSh->GetViewOptions()->GetGapBetweenPages()
+                                                   : SwViewOption::GetDefGapBetweenPages();
                 const bool bLeftToRightViewLayout = pRoot->IsLeftToRightViewLayout();
                 const bool bPrev = bLeftToRightViewLayout ? pLay->GetPrev() : pLay->GetNext();
                 const bool bNext = bLeftToRightViewLayout ? pLay->GetNext() : pLay->GetPrev();
                 SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
-                const SwViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
                 SwRect aPageRect( pLay->Frm() );
 
                 if(pSh)

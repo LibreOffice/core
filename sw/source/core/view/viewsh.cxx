@@ -912,7 +912,6 @@ void SwViewShell::Reformat()
 
     if( GetLayout()->IsCallbackActionEnabled() )
     {
-
         StartAction();
         GetLayout()->InvalidateAllContent( INV_SIZE | INV_POS | INV_PRTAREA );
         EndAction();
@@ -1897,7 +1896,7 @@ void SwViewShell::SetBrowseBorder( const Size& rNew )
     {
         maBrowseBorder = rNew;
         if ( maVisArea.HasArea() )
-            CheckBrowseView( false );
+            InvalidateLayout( false );
     }
 }
 
@@ -1920,9 +1919,10 @@ sal_Int32 SwViewShell::GetBrowseWidth() const
         return maVisArea.Width() - 2 * GetOut()->PixelToLogic(maBrowseBorder).Width();
 }
 
-void SwViewShell::CheckBrowseView( bool bBrowseChgd )
+void SwViewShell::InvalidateLayout( bool bSizeChanged )
 {
-    if ( !bBrowseChgd && !GetViewOptions()->getBrowseMode() )
+    if ( !bSizeChanged && !GetViewOptions()->getBrowseMode() &&
+         !GetViewOptions()->IsHideWhitespaceMode() )
         return;
 
     SET_CURR_SHELL( this );
@@ -1952,7 +1952,7 @@ void SwViewShell::CheckBrowseView( bool bBrowseChgd )
     {   pPg->InvalidateSize();
         pPg->_InvalidatePrt();
         pPg->InvaPercentLowers();
-        if ( bBrowseChgd )
+        if ( bSizeChanged )
         {
             pPg->PrepareHeader();
             pPg->PrepareFooter();
@@ -1963,9 +1963,9 @@ void SwViewShell::CheckBrowseView( bool bBrowseChgd )
     // When the size ratios in browse mode change,
     // the Position and PrtArea of the Content and Tab frames must be Invalidated.
     sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_POS;
-    // In case of browse mode change the ContentFrms need a size-Invalidate
-    // because of printer/screen formatting
-    if( bBrowseChgd )
+    // In case of layout or mode change, the ContentFrms need a size-Invalidate
+    // because of printer/screen formatting.
+    if ( bSizeChanged )
         nInv |= INV_SIZE | INV_DIRECTION;
 
     GetLayout()->InvalidateAllContent( nInv );
@@ -2022,7 +2022,6 @@ SfxItemPool& SwViewShell::GetAttrPool()
 
 void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 {
-
     for(SwViewShell& rSh : GetRingContainer())
         rSh.StartAction();
 
@@ -2038,11 +2037,12 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
             continue;
         SwViewOption aOpt( *rSh.GetViewOptions() );
         aOpt.SetFieldName( rOpt.IsFieldName() );
-            aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
+        aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
         aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );
-            aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
-            aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
-            aOpt.SetViewLayoutColumns( rOpt.GetViewLayoutColumns() );
+        aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
+        aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
+        aOpt.SetHideWhitespaceMode(rOpt.IsHideWhitespaceMode());
+        aOpt.SetViewLayoutColumns(rOpt.GetViewLayoutColumns());
         aOpt.SetPostIts(rOpt.IsPostIts());
         if ( !(aOpt == *rSh.GetViewOptions()) )
             rSh.ImplApplyViewOptions( aOpt );
@@ -2107,7 +2107,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         pMyWin->SetMapMode( aMode );
         // if not a reference device (printer) is used for formatting,
         // but the screen, new formatting is needed for zoomfactor changes.
-        if( mpOpt->getBrowseMode() )
+        if (mpOpt->getBrowseMode() || mpOpt->IsHideWhitespaceMode())
             bReformat = true;
     }
 
@@ -2119,6 +2119,17 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     }
     else if( mpOpt->getBrowseMode() && mpOpt->IsPrtFormat() != rOpt.IsPrtFormat() )
         bReformat = true;
+
+    bool bHideWhitespaceModeChanged = false;
+    if (mpOpt->IsHideWhitespaceMode() != rOpt.IsHideWhitespaceMode() ||
+        (rOpt.IsHideWhitespaceMode() &&
+         (mpOpt->IsViewLayoutBookMode() != rOpt.IsViewLayoutBookMode() ||
+          mpOpt->GetViewLayoutColumns() != rOpt.GetViewLayoutColumns())))
+    {
+        // When whitespace is hidden, view change needs reformatting.
+        bHideWhitespaceModeChanged = true;
+        bReformat = true;
+    }
 
     if ( HasDrawView() || rOpt.IsGridVisible() )
     {
@@ -2157,12 +2168,12 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     mpDoc->GetDocumentSettingManager().set(DocumentSettingId::HTML_MODE, 0 != ::GetHtmlMode(mpDoc->GetDocShell()));
 
-    if( bBrowseModeChanged )
+    if( bBrowseModeChanged || bHideWhitespaceModeChanged )
     {
         // #i44963# Good occasion to check if page sizes in
         // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
         mpDoc->CheckDefaultPageFormat();
-        CheckBrowseView( true );
+        InvalidateLayout( true );
     }
 
     pMyWin->Invalidate();

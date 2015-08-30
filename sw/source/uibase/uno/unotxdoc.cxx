@@ -2554,10 +2554,12 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
         if (bFormat)
         {
             // #i38289
-            if( pViewShell->GetViewOptions()->getBrowseMode() )
+            if( pViewShell->GetViewOptions()->getBrowseMode() ||
+                pViewShell->GetViewOptions()->IsHideWhitespaceMode() )
             {
                 SwViewOption aOpt( *pViewShell->GetViewOptions() );
                 aOpt.setBrowseMode( false );
+                aOpt.SetHideWhitespaceMode( false );
                 pViewShell->ApplyViewOptions( aOpt );
                 if (pSwView)
                 {
