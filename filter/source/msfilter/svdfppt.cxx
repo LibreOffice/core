@@ -2576,7 +2576,7 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
 bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const
 {
     bool bRet = SvxMSDffManager::SeekToShape( rSt, pClientData, nId );
-    if ( !bRet )
+    if (!bRet && pClientData)
     {
         ProcessData& rData = *( (ProcessData*)pClientData );
         PptSlidePersistEntry& rPersistEntry = rData.rPersistEntry;
