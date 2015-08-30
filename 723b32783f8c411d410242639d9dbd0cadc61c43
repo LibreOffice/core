@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa0719c6_834b4459",
+        "filename": "canvas/source/opengl/ogl_texturecache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-30T00:04:50Z",
+      "side": 0,
+      "message": "erase(aCurr) invalidates that iterator (but leaves other iterators *not* pointing to that element alone).",
+      "parentUuid": "fa0719c6_a0359ef8",
+      "revId": "723b32783f8c411d410242639d9dbd0cadc61c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0719c6_80585a58",
         "filename": "canvas/source/tools/pagemanager.cxx",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2015-08-29T21:02:36Z",
       "side": 0,
       "message": "I also don\u0027t understand why break was used here. I\u0027m probably missing something, but why break just to check if reallocate( pFragment ), possibly continue to loop, and end up looping over objects we\u0027ve already checked?\n\nCould this be condensed to something like the following?\n\n    if( !reallocate( pFragment ) )\n        // no break used here, we loop through all of the \"candidates\" in maFragments\n\nJust a thought. This loop was confusing, so I took my best shot at changing it. Please let me know if I missed something!",
+      "revId": "723b32783f8c411d410242639d9dbd0cadc61c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_c3737cb3",
+        "filename": "canvas/source/tools/pagemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-30T00:04:50Z",
+      "side": 0,
+      "message": "Yeah, ugly beast. I\u0027ll need to have a closer look, so either you wait for that, or back this out (and submit separately).",
+      "parentUuid": "fa0719c6_c030920a",
       "revId": "723b32783f8c411d410242639d9dbd0cadc61c43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

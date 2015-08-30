@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa0719c6_6348b05c",
+        "filename": "canvas/source/opengl/ogl_texturecache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-08-30T00:04:50Z",
+      "side": 1,
+      "message": "That would not buy us anything, and leads to an extra map lookup.\n\nAs mentioned on the left side, you\u0027ll need to keep the aNext contraption, otherwise you\u0027re working on an invalid iterator",
+      "parentUuid": "fa0719c6_003baaec",
+      "revId": "a46f62326b72e182cc88bcb9480a49aec9f8e56d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0719c6_205b4e56",
         "filename": "canvas/source/tools/pagemanager.cxx",
         "patchSetId": 1
