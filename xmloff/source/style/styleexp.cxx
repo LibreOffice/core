@@ -419,6 +419,10 @@ void XMLStyleExport::exportStyleFamily(
             // not export them here and remain silent.
             continue;
         }
+        catch(css::container::NoSuchElementException&)
+        {
+            continue;
+        }
 
         assert(xStyle.is());
         if (!bUsed || xStyle->isInUse())

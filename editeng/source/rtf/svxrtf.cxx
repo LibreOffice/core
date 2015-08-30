@@ -300,6 +300,7 @@ void SvxRTFParser::ReadStyleTable()
 {
     int nToken, bSaveChkStyleAttr = bChkStyleAttr ? 1 : 0;
     sal_uInt16 nStyleNo = 0;
+    bool bHasStyleNo = false;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
     SvxRTFStyleType* pStyle = new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] );
     pStyle->aAttrSet.Put( GetRTFDefaults() );
@@ -340,12 +341,16 @@ void SvxRTFParser::ReadStyleTable()
         case RTF_SNEXT:     pStyle->nNext = sal_uInt16(nTokenValue);    break;
         case RTF_OUTLINELEVEL:
         case RTF_SOUTLVL:   pStyle->nOutlineNo = sal_uInt8(nTokenValue);    break;
-        case RTF_S:         nStyleNo = (short)nTokenValue;          break;
+        case RTF_S:         nStyleNo = (short)nTokenValue;
+                            bHasStyleNo = true;
+                            break;
         case RTF_CS:        nStyleNo = (short)nTokenValue;
+                            bHasStyleNo = true;
                             pStyle->bIsCharFmt = true;
                             break;
 
         case RTF_TEXTTOKEN:
+            if (bHasStyleNo)
             {
                 pStyle->sName = DelCharAtEnd( aToken, ';' );
 
@@ -358,6 +363,7 @@ void SvxRTFParser::ReadStyleTable()
                 pStyle = new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] );
                 pStyle->aAttrSet.Put( GetRTFDefaults() );
                 nStyleNo = 0;
+                bHasStyleNo = false;
             }
             break;
         default:
