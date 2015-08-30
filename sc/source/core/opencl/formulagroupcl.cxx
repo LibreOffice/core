@@ -135,7 +135,7 @@ std::string StackVarEnumToString(StackVar const e)
     return std::to_string(static_cast<int>(e));
 }
 
-#ifdef SAL_DETAIL_ENABLE_LOG_INFO
+#ifdef SAL_LOG_INFO
 std::string linenumberify(const std::string& s)
 {
     std::stringstream ss;
@@ -3807,7 +3807,7 @@ void DynamicKernel::CodeGen()
     decl << ") {\n\tint gid0 = get_global_id(0);\n\tresult[gid0] = " <<
         DK->GenSlidingWindowDeclRef() << ";\n}\n";
     mFullProgramSrc = decl.str();
-#ifdef SAL_DETAIL_ENABLE_LOG_INFO
+#ifdef SAL_LOG_INFO
     std::stringstream area;
     if (mKernelSignature[0] == '_')
         area << "sc.opencl.source." << mKernelSignature.substr(1, std::string::npos);
