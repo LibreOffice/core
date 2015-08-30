@@ -339,7 +339,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
     mpLineDist->SaveValue();
 
     SvxLineSpacingItem aSpacing(DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
-    sal_uInt16 nPos = mpLineDist->GetSelectEntryPos();
+    const sal_Int32 nPos = mpLineDist->GetSelectEntryPos();
 
     switch ( nPos )
     {
@@ -367,7 +367,7 @@ void ParaLineSpacingControl::ExecuteLineSpace()
             SID_ATTR_PARA_LINESPACE, SfxCallMode::RECORD, &aSpacing, 0L);
 }
 
-void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, int eSpace, long lValue)
+void ParaLineSpacingControl::SetLineSpace(SvxLineSpacingItem& rLineSpace, sal_Int32 eSpace, long lValue)
 {
     switch ( eSpace )
     {
@@ -429,7 +429,7 @@ IMPL_LINK_TYPED(ParaLineSpacingControl, PredefinedValuesHandler, Button*, pContr
     }
 }
 
-void ParaLineSpacingControl::ExecuteLineSpacing(sal_uInt16 nEntry)
+void ParaLineSpacingControl::ExecuteLineSpacing(sal_Int32 nEntry)
 {
     SvxLineSpacingItem aSpacing(DEFAULT_LINE_SPACING, SID_ATTR_PARA_LINESPACE);
 

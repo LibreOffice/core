@@ -103,10 +103,9 @@ ScSpecialFilterDlg::~ScSpecialFilterDlg()
 
 void ScSpecialFilterDlg::dispose()
 {
-    sal_uInt16 nEntries = pLbFilterArea->GetEntryCount();
-    sal_uInt16 i;
+    const sal_Int32 nEntries = pLbFilterArea->GetEntryCount();
 
-    for ( i=1; i<nEntries; i++ )
+    for ( sal_Int32 i=1; i<nEntries; ++i )
         delete static_cast<OUString*>(pLbFilterArea->GetEntryData( i ));
 
     delete pOptionsMgr;
@@ -164,13 +163,12 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
         if (!pRangeNames->empty())
         {
             ScRangeName::const_iterator itr = pRangeNames->begin(), itrEnd = pRangeNames->end();
-            sal_uInt16 nInsert = 0;
             for (; itr != itrEnd; ++itr)
             {
                 if (!itr->second->HasType(RT_CRITERIA))
                     continue;
 
-                nInsert = pLbFilterArea->InsertEntry(itr->second->GetName());
+                const sal_Int32 nInsert = pLbFilterArea->InsertEntry(itr->second->GetName());
                 OUString aSymbol;
                 itr->second->GetSymbol(aSymbol);
                 pLbFilterArea->SetEntryData(nInsert, new OUString(aSymbol));
@@ -432,7 +430,7 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaSelHdl, ListBox*, pLb )
     if ( pLb == pLbFilterArea )
     {
         OUString  aString;
-        sal_uInt16  nSelPos = pLbFilterArea->GetSelectEntryPos();
+        const sal_Int32 nSelPos = pLbFilterArea->GetSelectEntryPos();
 
         if ( nSelPos > 0 )
             aString = *static_cast<OUString*>(pLbFilterArea->GetEntryData( nSelPos ));
@@ -455,8 +453,8 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
                 bool    bFound  = false;
-                sal_uInt16  i       = 0;
-                sal_uInt16  nCount  = pLbFilterArea->GetEntryCount();
+                sal_Int32 i = 0;
+                const sal_Int32 nCount  = pLbFilterArea->GetEntryCount();
 
                 for ( i=1; i<nCount && !bFound; i++ )
                 {

@@ -159,10 +159,9 @@ SmFontPickListBox::SmFontPickListBox (vcl::Window* pParent, WinBits nBits) :
 
 IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 {
-    sal_uInt16  nPos;
     OUString aString;
 
-    nPos = GetSelectEntryPos();
+    const sal_Int32 nPos = GetSelectEntryPos();
 
     if (nPos != 0)
     {

@@ -424,7 +424,7 @@ void SvxFillToolBoxControl::Update()
                         // Check if the entry is not in the list
                         if( mpLbFillAttr->GetSelectEntry() != aString )
                         {
-                            sal_uInt16 nCount = mpLbFillAttr->GetEntryCount();
+                            const sal_Int32 nCount = mpLbFillAttr->GetEntryCount();
                             OUString aTmpStr;
                             if( nCount > 0 )
                             {

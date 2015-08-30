@@ -1590,7 +1590,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
     // all other open documents of the same module type
     if ( !bInitialised )
     {
-        sal_uInt16 nPos = 0;
+        sal_Int32 nPos = 0;
         uno::Reference < css::ui::XUIConfigurationManager > xCfgMgr;
         uno::Reference < css::ui::XUIConfigurationManager > xDocCfgMgr;
 
@@ -1884,7 +1884,7 @@ IMPL_LINK( SvxConfigPage, SelectSaveInLocation, ListBox *, pBox )
 
 void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
 {
-    sal_uInt16 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
+    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
     m_pTopLevelListBox->Clear();
 
     if ( GetSaveInData() && GetSaveInData()->GetEntries() )
@@ -1895,7 +1895,7 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry* pToSelect )
         for ( ; iter != end; ++iter )
         {
             SvxConfigEntry* pEntryData = *iter;
-            sal_uInt16 nPos = m_pTopLevelListBox->InsertEntry( stripHotKey( pEntryData->GetName() ) );
+            const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( stripHotKey( pEntryData->GetName() ) );
             m_pTopLevelListBox->SetEntryData( nPos, pEntryData );
 
             if ( pEntryData == pToSelect )
@@ -1936,7 +1936,7 @@ void SvxConfigPage::AddSubMenusToUI(
             subMenuTitle += aMenuSeparatorStr;
             subMenuTitle += stripHotKey( pEntryData->GetName() );
 
-            sal_uInt16 nPos = m_pTopLevelListBox->InsertEntry( subMenuTitle );
+            const sal_Int32 nPos = m_pTopLevelListBox->InsertEntry( subMenuTitle );
             m_pTopLevelListBox->SetEntryData( nPos, pEntryData );
 
             AddSubMenusToUI( subMenuTitle, pEntryData );
@@ -2958,7 +2958,7 @@ void SvxToolbarConfigPage::dispose()
 
 void SvxToolbarConfigPage::DeleteSelectedTopLevel()
 {
-    sal_uInt16 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
+    const sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
     ToolbarSaveInData* pSaveInData = static_cast<ToolbarSaveInData*>( GetSaveInData() );
     pSaveInData->RemoveToolbar( GetTopLevelSelection() );
 
@@ -3053,7 +3053,7 @@ void SvxToolbarConfigPage::MoveEntry( bool bMoveUp )
 
 IMPL_LINK_TYPED( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, void )
 {
-    sal_uInt16 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
+    sal_Int32 nSelectionPos = m_pTopLevelListBox->GetSelectEntryPos();
 
     SvxConfigEntry* pToolbar =
         static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
@@ -3424,7 +3424,7 @@ void SvxToolbarConfigPage::Init()
 
     ReloadTopLevelListBox();
 
-    sal_uInt16 nPos = 0;
+    sal_Int32 nPos = 0;
     if ( !m_aURLToSelect.isEmpty() )
     {
         for ( sal_Int32 i = 0 ; i < m_pTopLevelListBox->GetEntryCount(); ++i )
@@ -4411,13 +4411,12 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
 
     VclPtrInstance< SvxNewToolbarDialog > pNameDialog( nullptr, aNewName );
 
-    sal_uInt16 nInsertPos;
     for ( sal_Int32 i = 0 ; i < m_pSaveInListBox->GetEntryCount(); ++i )
     {
         SaveInData* pData =
             static_cast<SaveInData*>(m_pSaveInListBox->GetEntryData( i ));
 
-        nInsertPos = pNameDialog->m_pSaveInListBox->InsertEntry(
+        const sal_Int32 nInsertPos = pNameDialog->m_pSaveInListBox->InsertEntry(
             m_pSaveInListBox->GetEntry( i ) );
 
         pNameDialog->m_pSaveInListBox->SetEntryData( nInsertPos, pData );
@@ -4430,7 +4429,7 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
     {
         aNewName = pNameDialog->GetName();
 
-        nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectEntryPos();
+        sal_Int32 nInsertPos = pNameDialog->m_pSaveInListBox->GetSelectEntryPos();
 
         ToolbarSaveInData* pData = static_cast<ToolbarSaveInData*>(
             pNameDialog->m_pSaveInListBox->GetEntryData( nInsertPos ));

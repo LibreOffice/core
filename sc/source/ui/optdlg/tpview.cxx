@@ -246,7 +246,7 @@ SfxTabPage::sfxpg ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
 
 IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox*, pLb )
 {
-    sal_uInt16      nSelPos = pLb->GetSelectEntryPos();
+    const sal_Int32 nSelPos = pLb->GetSelectEntryPos();
     ScVObjMode  eMode   = ScVObjMode(nSelPos);
     ScVObjType  eType   = VOBJ_TYPE_OLE;
 

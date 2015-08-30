@@ -1209,7 +1209,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
         }
         case TYP_SEQFLD:
         {
-            nSubType = m_pChapterLevelLB->GetSelectEntryPos();
+            nSubType = static_cast< sal_uInt16 >(m_pChapterLevelLB->GetSelectEntryPos());
             if (nSubType == 0)
                 nSubType = 0x7f;
             else

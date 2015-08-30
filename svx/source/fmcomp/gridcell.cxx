@@ -4142,9 +4142,9 @@ css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getItems() throw( RuntimeE
     css::uno::Sequence<OUString> aSeq;
     if (m_pBox)
     {
-        sal_uInt16 nEntries = m_pBox ->GetEntryCount();
+        const sal_Int32 nEntries = m_pBox ->GetEntryCount();
         aSeq = css::uno::Sequence<OUString>( nEntries );
-        for ( sal_uInt16 n = nEntries; n; )
+        for ( sal_Int32 n = nEntries; n; )
         {
             --n;
             aSeq.getArray()[n] = m_pBox ->GetEntry( n );
@@ -4177,9 +4177,9 @@ Sequence< sal_Int16 > SAL_CALL FmXListBoxCell::getSelectedItemsPos() throw( Runt
     if (m_pBox)
     {
         UpdateFromColumn();
-        sal_uInt16 nSelEntries = m_pBox->GetSelectEntryCount();
+        const sal_Int32 nSelEntries = m_pBox->GetSelectEntryCount();
         aSeq = Sequence<sal_Int16>( nSelEntries );
-        for ( sal_uInt16 n = 0; n < nSelEntries; n++ )
+        for ( sal_Int32 n = 0; n < nSelEntries; ++n )
             aSeq.getArray()[n] = m_pBox->GetSelectEntryPos( n );
     }
     return aSeq;
@@ -4210,9 +4210,9 @@ css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getSelectedItems() throw( 
     if (m_pBox)
     {
         UpdateFromColumn();
-        sal_uInt16 nSelEntries = m_pBox->GetSelectEntryCount();
+        const sal_Int32 nSelEntries = m_pBox->GetSelectEntryCount();
         aSeq = css::uno::Sequence<OUString>( nSelEntries );
-        for ( sal_uInt16 n = 0; n < nSelEntries; n++ )
+        for ( sal_Int32 n = 0; n < nSelEntries; ++n )
             aSeq.getArray()[n] = m_pBox->GetSelectEntry( n );
     }
     return aSeq;
@@ -4472,10 +4472,10 @@ Sequence< OUString > SAL_CALL FmXComboBoxCell::getItems() throw( RuntimeExceptio
     Sequence< OUString > aItems;
     if ( m_pComboBox )
     {
-        sal_uInt16 nEntries = m_pComboBox->GetEntryCount();
+        const sal_Int32 nEntries = m_pComboBox->GetEntryCount();
         aItems.realloc( nEntries );
         OUString* pItem = aItems.getArray();
-        for ( sal_uInt16 n=0; n<nEntries; ++n, ++pItem )
+        for ( sal_Int32 n=0; n<nEntries; ++n, ++pItem )
             *pItem = m_pComboBox->GetEntry( n );
     }
     return aItems;

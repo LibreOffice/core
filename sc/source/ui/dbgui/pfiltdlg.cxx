@@ -367,7 +367,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 
     for ( SCSIZE i=0; i<3; i++ )
     {
-        sal_uInt16      nField  = aFieldLbArr[i]->GetSelectEntryPos();
+        const sal_Int32 nField = aFieldLbArr[i]->GetSelectEntryPos();
         ScQueryOp   eOp     = (ScQueryOp)aCondLbArr[i]->GetSelectEntryPos();
 
         bool bDoThis = (aFieldLbArr[i]->GetSelectEntryPos() != 0);

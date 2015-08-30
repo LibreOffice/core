@@ -199,9 +199,9 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
 
     std::unique_ptr<ScSubTotalFunc[]> pFunctions;
     std::unique_ptr<SCCOL[]>          pSubTotals;
-    sal_uInt16          nGroup      = mpLbGroup->GetSelectEntryPos();
-    sal_uInt16          nEntryCount = (sal_uInt16)mpLbColumns->GetEntryCount();
-    sal_uInt16          nCheckCount = mpLbColumns->GetCheckedEntryCount();
+    const sal_Int32 nGroup      = mpLbGroup->GetSelectEntryPos();
+    const sal_Int32 nEntryCount = mpLbColumns->GetEntryCount();
+    const sal_Int32 nCheckCount = mpLbColumns->GetCheckedEntryCount();
 
     theSubTotalData.nCol1                   = rSubTotalData.nCol1;
     theSubTotalData.nRow1                   = rSubTotalData.nRow1;
@@ -219,7 +219,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
         pSubTotals.reset(new SCCOL          [nCheckCount]);
         pFunctions.reset(new ScSubTotalFunc [nCheckCount]);
 
-        for ( sal_uInt16 i=0, nCheck=0; i<nEntryCount; i++ )
+        for ( sal_Int32 i=0, nCheck=0; i<nEntryCount; i++ )
         {
             if ( mpLbColumns->IsChecked( i ) )
             {
@@ -351,8 +351,8 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, void *, pLb )
     if (   (mpLbColumns->GetEntryCount() > 0)
         && (mpLbColumns->GetSelectionCount() > 0) )
     {
-        sal_uInt16      nFunction   = mpLbFunctions->GetSelectEntryPos();
-        sal_uInt16      nColumn     = mpLbColumns->GetSelectEntryPos();
+        const sal_Int32 nFunction   = mpLbFunctions->GetSelectEntryPos();
+        const sal_Int32 nColumn     = mpLbColumns->GetSelectEntryPos();
         sal_uInt16*     pFunction   = static_cast<sal_uInt16*>(mpLbColumns->GetEntryData( nColumn ));
 
         OSL_ENSURE( pFunction, "EntryData not found!" );
@@ -365,7 +365,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, void *, pLb )
         }
         else if ( pLb == mpLbFunctions )
         {
-            *pFunction = nFunction;
+            *pFunction = static_cast<sal_uInt16>(nFunction);
             mpLbColumns->CheckEntryPos( nColumn );
         }
     }

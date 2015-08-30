@@ -331,7 +331,7 @@ void SvxCharacterMap::init()
         if ( aFontName != aLastName )
         {
             aLastName = aFontName;
-            sal_uInt16 nPos = m_pFontLB->InsertEntry( aFontName );
+            const sal_Int32 nPos = m_pFontLB->InsertEntry( aFontName );
             m_pFontLB->SetEntryData( nPos, reinterpret_cast<void*>(i) );
         }
     }
@@ -426,8 +426,8 @@ void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
 
 IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
 {
-    sal_uInt16 nPos = m_pFontLB->GetSelectEntryPos(),
-               nFont = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos ));
+    const sal_Int32 nPos = m_pFontLB->GetSelectEntryPos();
+    const sal_uInt16 nFont = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos ));
     aFont = GetDevFont( nFont );
     aFont.SetWeight( WEIGHT_DONTKNOW );
     aFont.SetItalic( ITALIC_NONE );
@@ -460,7 +460,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
         const Subset* s;
         while( NULL != (s = pSubsetMap->GetNextSubset( bFirst ))  )
         {
-            sal_uInt16 nPos_ = m_pSubsetLB->InsertEntry( s->GetName() );
+            const sal_Int32 nPos_ = m_pSubsetLB->InsertEntry( s->GetName() );
             m_pSubsetLB->SetEntryData( nPos_, const_cast<Subset *>(s) );
             // NOTE: subset must live at least as long as the selected font
             if( bFirst )
@@ -481,7 +481,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl)
 
 IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl)
 {
-    sal_uInt16 nPos = m_pSubsetLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pSubsetLB->GetSelectEntryPos();
     const Subset* pSubset = static_cast<const Subset*> (m_pSubsetLB->GetEntryData(nPos));
     if( pSubset )
     {

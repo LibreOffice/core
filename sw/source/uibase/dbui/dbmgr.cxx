@@ -698,7 +698,7 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
             const OUString* pTables = aTables.getConstArray();
             for(long i = 0; i < aTables.getLength(); i++)
             {
-                sal_uInt16 nEntry = pListBox->InsertEntry(pTables[i]);
+                const sal_Int32 nEntry = pListBox->InsertEntry(pTables[i]);
                 pListBox->SetEntryData(nEntry, nullptr);
             }
         }
@@ -710,7 +710,7 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
             const OUString* pQueries = aQueries.getConstArray();
             for(long i = 0; i < aQueries.getLength(); i++)
             {
-                sal_uInt16 nEntry = pListBox->InsertEntry(pQueries[i]);
+                const sal_Int32 nEntry = pListBox->InsertEntry(pQueries[i]);
                 pListBox->SetEntryData(nEntry, reinterpret_cast<void*>(1));
             }
         }

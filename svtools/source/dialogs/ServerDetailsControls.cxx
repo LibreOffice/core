@@ -390,8 +390,8 @@ void CmisDetailsContainer::setPassword( const OUString& rPass )
 void CmisDetailsContainer::selectRepository( )
 {
     // Get the repo ID and call the Change listener
-    sal_uInt16 nPos = m_pLBRepository->GetSelectEntryPos( );
-    if( nPos < m_aRepoIds.size() )
+    const sal_Int32 nPos = m_pLBRepository->GetSelectEntryPos( );
+    if( static_cast<size_t>(nPos) < m_aRepoIds.size() )
     {
         m_sRepoId = m_aRepoIds[nPos];
         notifyChange( );

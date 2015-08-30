@@ -160,7 +160,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
         if( bSelectionFound )
             SelectEntryPos(nEntryPosToSelect);
 
-        sal_uInt16 nEntryCount = GetEntryCount();
+        sal_Int32 nEntryCount = GetEntryCount();
         if( nEntryCount > 100 )
             nEntryCount = 100;
         SetDropDownLineCount( nEntryCount );
@@ -188,8 +188,8 @@ void SelectorListBox::Select()
 
     if ( !IsTravelSelect() )
     {
-        sal_uInt16 nPos = GetSelectEntryPos();
-        if( nPos < m_aEntries.size() )
+        const sal_Int32 nPos = GetSelectEntryPos();
+        if( static_cast<size_t>(nPos) < m_aEntries.size() )
         {
             ObjectHierarchy::tOID aOID = m_aEntries[nPos].OID;
             Reference< view::XSelectionSupplier > xSelectionSupplier( m_xChartController.get(), uno::UNO_QUERY );

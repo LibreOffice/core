@@ -97,7 +97,7 @@ namespace dbaui
         void            SetLine( sal_uInt16 nIdx,const css::beans::PropertyValue& _rItem,bool _bOr );
         void            EnableLines();
         sal_Int32       GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const;
-        static sal_uInt16  GetSelectionPos(sal_Int32 eType,const ListBox& rListBox);
+        static sal_Int32  GetSelectionPos(sal_Int32 eType,const ListBox& rListBox);
         bool            getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,css::beans::PropertyValue& _rFilter) const;
         void            fillLines(const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& _aValues);
 

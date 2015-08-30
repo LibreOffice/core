@@ -1897,8 +1897,7 @@ void CustomAnimationPane::onChangeStart()
     if( mpLBStart->GetSelectEntryCount() == 1 )
     {
         sal_Int16 nNodeType;
-        sal_uInt16 nPos= mpLBStart->GetSelectEntryPos();
-        switch( nPos )
+        switch( mpLBStart->GetSelectEntryPos() )
         {
         case 0: nNodeType = EffectNodeType::ON_CLICK; break;
         case 1: nNodeType = EffectNodeType::WITH_PREVIOUS; break;
@@ -1983,9 +1982,7 @@ void CustomAnimationPane::onChangeSpeed()
 
         double fDuration;
 
-        sal_uInt16 nPos= mpCBSpeed->GetSelectEntryPos();
-
-        switch( nPos )
+        switch( mpCBSpeed->GetSelectEntryPos() )
         {
         case 0: fDuration = 5.0; break;
         case 1: fDuration = 3.0; break;

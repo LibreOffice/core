@@ -1794,7 +1794,7 @@ void SvxNumberFormatTabPage::SetCategory(sal_uInt16 nPos)
 void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect)
 {
     m_pLbLanguage->RemoveLanguage(LANGUAGE_SYSTEM);
-    sal_uInt16 nPos = m_pLbLanguage->InsertEntry(sAutomaticEntry);
+    const sal_Int32 nPos = m_pLbLanguage->InsertEntry(sAutomaticEntry);
     m_pLbLanguage->SetEntryData(nPos, reinterpret_cast<void*>((sal_uLong)eAutoLang));
     if(bSelect)
         m_pLbLanguage->SelectEntryPos(nPos);

@@ -142,9 +142,9 @@ FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent, WinBits nStyle
 
 void FindTextFieldControl::Remember_Impl(const OUString& rStr)
 {
-    sal_uInt16 nCount = GetEntryCount();
+    const sal_Int32 nCount = GetEntryCount();
 
-    for (sal_uInt16 i=0; i<nCount; ++i)
+    for (sal_Int32 i=0; i<nCount; ++i)
     {
         if ( rStr == GetEntry(i))
             return;
@@ -280,9 +280,9 @@ SearchToolbarControllersManager& SearchToolbarControllersManager::createControll
 
 void SearchToolbarControllersManager::saveSearchHistory(const FindTextFieldControl* pFindTextFieldControl)
 {
-    sal_uInt16 nECount( pFindTextFieldControl->GetEntryCount() );
+    const sal_Int32 nECount( pFindTextFieldControl->GetEntryCount() );
     m_aSearchStrings.resize( nECount );
-    for( sal_uInt16 i=0; i<nECount; ++i )
+    for( sal_Int32 i=0; i<nECount; ++i )
     {
         m_aSearchStrings[i] = pFindTextFieldControl->GetEntry(i);
     }

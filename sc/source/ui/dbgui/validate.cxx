@@ -578,7 +578,7 @@ void ScTPValidationValue::RemoveRefDlg()
 
 IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl)
 {
-    sal_uInt16  nPos=m_pLbAllow->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLbAllow->GetSelectEntryPos();
 
     if ( nPos == SC_VALIDDLG_ALLOW_RANGE )
     {
@@ -603,7 +603,7 @@ IMPL_LINK( ScTPValidationValue, KillFocusHdl, vcl::Window *, pWnd )
 
 IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
 {
-    sal_uInt16 nLbPos = m_pLbAllow->GetSelectEntryPos();
+    const sal_Int32 nLbPos = m_pLbAllow->GetSelectEntryPos();
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
     bool bRange = (nLbPos == SC_VALIDDLG_ALLOW_RANGE);
     bool bList = (nLbPos == SC_VALIDDLG_ALLOW_LIST);

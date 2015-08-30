@@ -97,7 +97,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
     OFieldDescription* pCurFieldDescr = getCurrentFieldDescData();
 
-    sal_uInt16 nPos = pListBox->GetEntryPos( OUString( pCurFieldDescr->GetName() ) );
+    const sal_Int32 nPos = pListBox->GetEntryPos( OUString( pCurFieldDescr->GetName() ) );
     pCurFieldDescr = static_cast< OFieldDescription* >( pListBox->GetEntryData( nPos ) );
     OSL_ENSURE( pCurFieldDescr, "OWizTypeSelectControl::CellModified: Columnname/type not found in the listbox!" );
     if ( !pCurFieldDescr )
@@ -121,8 +121,8 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 if ( getMetaData().is() && !getMetaData()->supportsMixedCaseQuotedIdentifiers() )
                 {
                     bCase = false;
-                    sal_uInt16 nCount = pListBox->GetEntryCount();
-                    for (sal_uInt16 i=0 ; !bDoubleName && i < nCount ; ++i)
+                    const sal_Int32 nCount = pListBox->GetEntryCount();
+                    for (sal_Int32 i=0 ; !bDoubleName && i < nCount ; ++i)
                     {
                         OUString sEntry(pListBox->GetEntry(i));
                         bDoubleName = sNewName.equalsIgnoreAsciiCase(sEntry);
@@ -308,11 +308,9 @@ void OWizTypeSelect::Reset()
     ODatabaseExport::TColumnVector::const_iterator aEnd = rDestColumns.end();
     for(;aIter != aEnd;++aIter)
     {
-        sal_uInt16 nPos;
-        if((*aIter)->second->IsPrimaryKey())
-            nPos = m_pColumnNames->InsertEntry((*aIter)->first, m_imgPKey );
-        else
-            nPos = m_pColumnNames->InsertEntry((*aIter)->first);
+        const sal_Int32 nPos = (*aIter)->second->IsPrimaryKey()
+            ? m_pColumnNames->InsertEntry((*aIter)->first, m_imgPKey )
+            : m_pColumnNames->InsertEntry((*aIter)->first);
         m_pColumnNames->SetEntryData(nPos,(*aIter)->second);
     }
     m_bFirstTime = false;
@@ -373,8 +371,8 @@ void OWizTypeSelectList::dispose()
 
 bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 {
-    sal_uInt16 nCount = GetSelectEntryCount();
-    sal_uInt16 j;
+    const sal_Int32 nCount = GetSelectEntryCount();
+    sal_Int32 j;
 
     for( j = 0; m_bPKey && j < nCount; ++j )
     {
@@ -432,8 +430,8 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             {
                 case SID_TABLEDESIGN_TABED_PRIMARYKEY:
                 {
-                    sal_uInt16 nCount = GetEntryCount();
-                    for(sal_uInt16 j = 0 ; j < nCount ; ++j)
+                    const sal_Int32 nCount = GetEntryCount();
+                    for(sal_Int32 j = 0 ; j < nCount ; ++j)
                     {
                         OFieldDescription* pFieldDescr = static_cast<OFieldDescription*>(GetEntryData(j));
                         if( pFieldDescr )

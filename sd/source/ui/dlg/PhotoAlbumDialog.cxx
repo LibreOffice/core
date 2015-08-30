@@ -117,7 +117,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, CreateHdl, Button*, void)
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
 
         // get the option
-        sal_uInt16 nOpt = pInsTypeCombo->GetSelectEntryPos();
+        const sal_Int32 nOpt = pInsTypeCombo->GetSelectEntryPos();
         if ( nOpt == ONE_IMAGE )
         {
             OUString sUrl;
@@ -514,7 +514,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, UpHdl, Button*, void)
     if (pImagesLst->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND
         && pImagesLst->GetSelectEntryPos() != 0)
     {
-        sal_uInt16 nActPos = pImagesLst->GetSelectEntryPos();
+        const sal_Int32 nActPos = pImagesLst->GetSelectEntryPos();
         OUString sActEntry( pImagesLst->GetEntry(nActPos) );
         // actual data
         OUString* pActData = static_cast<OUString*>(pImagesLst->GetEntryData(nActPos));
@@ -542,7 +542,7 @@ IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, UpHdl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SdPhotoAlbumDialog, DownHdl, Button*, void)
 {
-    sal_uInt16 nActPos = pImagesLst->GetSelectEntryPos();
+    const sal_Int32 nActPos = pImagesLst->GetSelectEntryPos();
     if (!pImagesLst->GetEntry(nActPos + 1).isEmpty())
     {
         OUString sActEntry( pImagesLst->GetSelectEntry() );

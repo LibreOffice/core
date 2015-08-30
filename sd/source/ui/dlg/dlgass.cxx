@@ -965,7 +965,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
             if( mpPage5PageListCT->IsPageChecked(nPgAbsNum) )
             {
                 mpPage3EffectLB->applySelected(pPage);
-                const sal_uInt16 nPos = mpPage3SpeedLB->GetSelectEntryPos();
+                const sal_Int32 nPos = mpPage3SpeedLB->GetSelectEntryPos();
                 pPage->setTransitionDuration( (nPos == 0) ? 3.0 : (nPos == 1) ? 2.0 : 1.0 );
                 if(bKiosk)
                 {
@@ -1755,7 +1755,7 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl2)
                 INetURLObject aURL;
                 aURL.SetSmartURL(aFileToOpen);
                 mpImpl->maOpenFilesList.push_back (aURL.GetMainURL(INetURLObject::NO_DECODE));
-                sal_uInt16 nNewPos = mpImpl->mpPage1OpenLB->InsertEntry(aURL.getName());
+                const sal_Int32 nNewPos = mpImpl->mpPage1OpenLB->InsertEntry(aURL.getName());
                 mpImpl->mpPage1OpenLB->SelectEntryPos(nNewPos);
             }
         }

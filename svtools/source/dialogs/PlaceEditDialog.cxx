@@ -327,7 +327,7 @@ IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
     if (m_xCurrentDetails.get())
         m_xCurrentDetails->show(false);
 
-    sal_uInt16 nPos = m_pLBServerType->GetSelectEntryPos( );
+    const sal_Int32 nPos = m_pLBServerType->GetSelectEntryPos( );
     m_xCurrentDetails = m_aDetailsContainers[nPos];
     m_nCurrentType = nPos;
 

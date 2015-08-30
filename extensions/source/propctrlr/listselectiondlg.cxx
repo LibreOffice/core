@@ -132,10 +132,10 @@ namespace pcr
 
     void ListSelectionDialog::collectSelection( Sequence< sal_Int16 >& /* [out] */ _rSelection )
     {
-        sal_uInt16 nSelectedCount = m_pEntries->GetSelectEntryCount( );
+        const sal_Int32 nSelectedCount = m_pEntries->GetSelectEntryCount( );
         _rSelection.realloc( nSelectedCount );
         sal_Int16* pSelection = _rSelection.getArray();
-        for ( sal_uInt16 selected = 0; selected < nSelectedCount; ++selected, ++pSelection )
+        for ( sal_Int32 selected = 0; selected < nSelectedCount; ++selected, ++pSelection )
             *pSelection = static_cast< sal_Int16 >( m_pEntries->GetSelectEntryPos( selected ) );
     }
 

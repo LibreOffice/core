@@ -513,7 +513,7 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
             OUString aName = pStyle->GetName();
             if ( rLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
             {
-                for( sal_uInt16 i = 1, n = rLbStyle.GetEntryCount(); i <= n && !bFound; ++i)
+                for( sal_Int32 i = 1, n = rLbStyle.GetEntryCount(); i <= n && !bFound; ++i)
                 {
                     OUString aStyleName = ScGlobal::pCharClass->uppercase(OUString(rLbStyle.GetEntry(i)));
                     if( i == n )

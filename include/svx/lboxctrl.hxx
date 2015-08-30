@@ -36,7 +36,7 @@ protected:
     OUString                aActionStr;
     VclPtr<SvxPopupWindowListBox> pPopupWin;
 
-    void    Impl_SetInfo( sal_uInt16 nCount );
+    void    Impl_SetInfo( sal_Int32 nCount );
 
     DECL_LINK_TYPED( PopupModeEndHdl, FloatingWindow*, void );
     DECL_LINK( SelectHdl, void * );

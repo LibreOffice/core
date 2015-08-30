@@ -108,7 +108,7 @@ void NumberFormatPropertyPanel::Initialize()
 
 IMPL_LINK( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox*, pBox )
 {
-    sal_uInt16 nVal = pBox->GetSelectEntryPos();
+    const sal_Int32 nVal = pBox->GetSelectEntryPos();
     if( nVal != mnCategorySelected )
     {
         SfxUInt16Item aItem( SID_NUMBER_TYPE_FORMAT,  nVal );

@@ -40,14 +40,18 @@
 // STATIC DATA ---------------------------------------------------------------
 
 // List box positions for print range (PR)
-const sal_uInt16 SC_AREASDLG_PR_ENTIRE  = 1;
-const sal_uInt16 SC_AREASDLG_PR_USER    = 2;
-const sal_uInt16 SC_AREASDLG_PR_SELECT  = 3;
+enum {
+    SC_AREASDLG_PR_ENTIRE  = 1,
+    SC_AREASDLG_PR_USER    = 2,
+    SC_AREASDLG_PR_SELECT  = 3
+};
 
 // List box positions for repeat ranges (RR)
-const sal_uInt16 SC_AREASDLG_RR_NONE    = 0;
-const sal_uInt16 SC_AREASDLG_RR_USER    = 1;
-const sal_uInt16 SC_AREASDLG_RR_OFFSET  = 2;
+enum {
+    SC_AREASDLG_RR_NONE    = 0,
+    SC_AREASDLG_RR_USER    = 1,
+    SC_AREASDLG_RR_OFFSET  = 2
+};
 
 #define HDL(hdl)            LINK( this, ScPrintAreasDlg, hdl )
 #define ERRORBOX(nId)       ScopedVclPtrInstance<MessageDialog>::Create(this, ScGlobal::GetRscString(nId))->Execute()
@@ -146,8 +150,8 @@ void ScPrintAreasDlg::dispose()
 
     for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aLb); ++i)
     {
-        sal_uInt16 nCount = aLb[i]->GetEntryCount();
-        for ( sal_uInt16 j=0; j<nCount; j++ )
+        const sal_Int32 nCount = aLb[i]->GetEntryCount();
+        for ( sal_Int32 j=0; j<nCount; j++ )
             delete static_cast<OUString*>(aLb[i]->GetEntryData(j));
     }
     pLbPrintArea.clear();
@@ -539,13 +543,13 @@ IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
 
 IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )
 {
-    sal_uInt16 nSelPos = pLb->GetSelectEntryPos();
+    const sal_Int32 nSelPos = pLb->GetSelectEntryPos();
     Edit* pEd = NULL;
 
     // list box positions of specific entries, default to "repeat row/column" list boxes
-    sal_uInt16 nAllSheetPos = SC_AREASDLG_RR_NONE;
-    sal_uInt16 nUserDefPos = SC_AREASDLG_RR_USER;
-    sal_uInt16 nFirstCustomPos = SC_AREASDLG_RR_OFFSET;
+    sal_Int32 nAllSheetPos = SC_AREASDLG_RR_NONE;
+    sal_Int32 nUserDefPos = SC_AREASDLG_RR_USER;
+    sal_Int32 nFirstCustomPos = SC_AREASDLG_RR_OFFSET;
 
     // find edit field for list box, and list box positions
     if( pLb == pLbPrintArea )
@@ -578,8 +582,8 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
     ListBox* pLb = NULL;
 
     // list box positions of specific entries, default to "repeat row/column" list boxes
-    sal_uInt16 nUserDefPos = SC_AREASDLG_RR_USER;
-    sal_uInt16 nFirstCustomPos = SC_AREASDLG_RR_OFFSET;
+    sal_Int32 nUserDefPos = SC_AREASDLG_RR_USER;
+    sal_Int32 nFirstCustomPos = SC_AREASDLG_RR_OFFSET;
 
     if( pEd == pEdPrintArea )
     {
@@ -595,7 +599,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
         return 0;
 
     // set list box selection according to edit field
-    sal_uInt16  nEntryCount = pLb->GetEntryCount();
+    const sal_Int32 nEntryCount = pLb->GetEntryCount();
     OUString aStrEd( pEd->GetText() );
     OUString aEdUpper = aStrEd.toAsciiUpperCase();
 

@@ -122,7 +122,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathSelectDialog, AddHdl_Impl, Button*, void)
         }
         else
         {
-            sal_uInt16 nPos = m_pPathLB->InsertEntry( sInsPath );
+            const sal_Int32 nPos = m_pPathLB->InsertEntry( sInsPath );
             m_pPathLB->SetEntryData( nPos, new OUString( aURL ) );
         }
 
@@ -158,9 +158,9 @@ IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, DelHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SvxPathSelectDialog, DelHdl_Impl, Button*, void)
 {
-    sal_uInt16 nPos = m_pPathLB->GetSelectEntryPos();
+    sal_Int32 nPos = m_pPathLB->GetSelectEntryPos();
     m_pPathLB->RemoveEntry( nPos );
-    sal_uInt16 nCnt = m_pPathLB->GetEntryCount();
+    sal_Int32 nCnt = m_pPathLB->GetEntryCount();
 
     if ( nCnt )
     {
@@ -252,7 +252,7 @@ void SvxPathSelectDialog::dispose()
 {
     if (m_pPathLB)
     {
-        sal_uInt16 nPos = m_pPathLB->GetEntryCount();
+        sal_Int32 nPos = m_pPathLB->GetEntryCount();
         while ( nPos-- )
             delete static_cast<OUString*>(m_pPathLB->GetEntryData(nPos));
     }
@@ -337,7 +337,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
 void SvxPathSelectDialog::SetPath(const OUString& rPath)
 {
     sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
-    sal_uInt16 nPos, nCount = comphelper::string::getTokenCount(rPath, cDelim);
+    sal_uInt16 nCount = comphelper::string::getTokenCount(rPath, cDelim);
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
@@ -346,6 +346,7 @@ void SvxPathSelectDialog::SetPath(const OUString& rPath)
         bool bIsSystemPath =
             osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
 
+        sal_Int32 nPos = 0;
         if ( bIsSystemPath )
             nPos = m_pPathLB->InsertEntry( sSystemPath );
         else

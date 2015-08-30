@@ -83,9 +83,8 @@ SvxEventConfigPage::SvxEventConfigPage(vcl::Window *pParent, const SfxItemSet& r
     xSupplier =
         frame::theGlobalEventBroadcaster::get(::comphelper::getProcessComponentContext());
 
-    sal_uInt16 nPos(0);
     m_xAppEvents = xSupplier->getEvents();
-    nPos = m_pSaveInListBox->InsertEntry(
+    const sal_Int32 nPos = m_pSaveInListBox->InsertEntry(
         utl::ConfigManager::getProductName() );
     m_pSaveInListBox->SetEntryData( nPos, new bool(true) );
     m_pSaveInListBox->SelectEntryPos( nPos );
@@ -154,7 +153,7 @@ void SvxEventConfigPage::ImplInitDocument()
             m_xDocumentModifiable.set(xModel, css::uno::UNO_QUERY);
 
             OUString aTitle = ::comphelper::DocumentInfo::getDocumentTitle( xModel );
-            sal_uInt16 nPos = m_pSaveInListBox->InsertEntry( aTitle );
+            const sal_Int32 nPos = m_pSaveInListBox->InsertEntry( aTitle );
 
             m_pSaveInListBox->SetEntryData( nPos, new bool(false) );
             m_pSaveInListBox->SelectEntryPos( nPos );

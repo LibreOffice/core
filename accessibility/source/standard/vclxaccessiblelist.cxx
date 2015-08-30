@@ -174,10 +174,8 @@ void VCLXAccessibleList::notifyVisibleStates(bool _bSetNew )
         VCLXAccessibleListItem* pItem = static_cast<VCLXAccessibleListItem*>(xHold.get());
         if ( pItem )
         {
-            sal_uInt16 nTopEntry = 0;
-            if ( m_pListBoxHelper )
-                nTopEntry = m_pListBoxHelper->GetTopEntry();
-            sal_uInt16 nPos = (sal_uInt16)(aIter - m_aAccessibleChildren.begin());
+            const sal_Int32 nTopEntry = m_pListBoxHelper ? m_pListBoxHelper->GetTopEntry() : 0;
+            const sal_Int32 nPos = static_cast<sal_Int32>(aIter - m_aAccessibleChildren.begin());
             bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
             pItem->SetVisible( m_bVisible && bVisible );
         }
@@ -215,7 +213,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
             Reference< XAccessible > xNewAcc;
         if ( m_pListBoxHelper )
         {
-            sal_uInt32 i=0;
+            sal_Int32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
             for ( ListItems::iterator aIter = m_aAccessibleChildren.begin();
                   aIter != m_aAccessibleChildren.end(); ++aIter,++i)
@@ -244,7 +242,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
                     checkEntrySelected(i,aNewValue,xNewAcc);
                 }
             }
-            sal_uInt16 nCount = m_pListBoxHelper->GetEntryCount();
+            const sal_Int32 nCount = m_pListBoxHelper->GetEntryCount();
             if ( i < nCount ) // here we have to check the if any other listbox entry is selected
             {
                 for (; i < nCount && !checkEntrySelected(i,aNewValue,xNewAcc) ;++i )
@@ -309,7 +307,7 @@ void VCLXAccessibleList::NotifyListItem(css::uno::Any& val)
     }
 }
 
-void VCLXAccessibleList::UpdateFocus_Impl_Acc (sal_uInt16 nPos ,bool b_IsDropDownList)
+void VCLXAccessibleList::UpdateFocus_Impl_Acc (sal_Int32 nPos ,bool b_IsDropDownList)
 {
     if (!(m_aBoxType == LISTBOX && !b_IsDropDownList))
     {
@@ -498,17 +496,16 @@ void VCLXAccessibleList::UpdateSelection (const OUString& sTextOfSelectedItem)
 
 
 
-Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
+Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 nPos)
 {
     Reference<XAccessible> xChild;
 
-    sal_uInt16 nPos = static_cast<sal_uInt16>(i);
-    if ( nPos >= m_aAccessibleChildren.size() )
+    if ( static_cast<size_t>(nPos) >= m_aAccessibleChildren.size() )
     {
         m_aAccessibleChildren.resize(nPos + 1);
 
         // insert into the container
-        xChild = new VCLXAccessibleListItem(m_pListBoxHelper, i, this);
+        xChild = new VCLXAccessibleListItem(m_pListBoxHelper, nPos, this);
         m_aAccessibleChildren[nPos] = xChild;
     }
     else
@@ -517,7 +514,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         // check if position is empty and can be used else we have to adjust all entries behind this
         if (!xChild.is())
         {
-            xChild = new VCLXAccessibleListItem(m_pListBoxHelper, i, this);
+            xChild = new VCLXAccessibleListItem(m_pListBoxHelper, nPos, this);
             m_aAccessibleChildren[nPos] = xChild;
         }
     }
@@ -527,17 +524,15 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 i)
         // Just add the SELECTED state.
         bool bNowSelected = false;
         if ( m_pListBoxHelper )
-            bNowSelected = m_pListBoxHelper->IsEntryPosSelected ((sal_uInt16)i);
+            bNowSelected = m_pListBoxHelper->IsEntryPosSelected(nPos);
         if (bNowSelected)
-            m_nCurSelectedPos = sal_uInt16(i);
+            m_nCurSelectedPos = nPos;
         VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >(xChild.get());
         pItem->SetSelected( bNowSelected );
 
         // Set the child's VISIBLE state.
         UpdateVisibleLineCount();
-        sal_uInt16 nTopEntry = 0;
-        if ( m_pListBoxHelper )
-            nTopEntry = m_pListBoxHelper->GetTopEntry();
+        const sal_Int32 nTopEntry = m_pListBoxHelper ? m_pListBoxHelper->GetTopEntry() : 0;
         bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
         pItem->SetVisible( m_bVisible && bVisible );
     }
@@ -693,7 +688,7 @@ void VCLXAccessibleList::UpdateEntryRange_Impl()
     m_nLastTopEntry = nTop;
 }
 
-bool VCLXAccessibleList::checkEntrySelected(sal_uInt16 _nPos,Any& _rNewValue,Reference< XAccessible >& _rxNewAcc)
+bool VCLXAccessibleList::checkEntrySelected(sal_Int32 _nPos,Any& _rNewValue,Reference< XAccessible >& _rxNewAcc)
 {
     OSL_ENSURE(m_pListBoxHelper,"Helper is not valid!");
     bool bNowSelected = false;
@@ -710,7 +705,7 @@ bool VCLXAccessibleList::checkEntrySelected(sal_uInt16 _nPos,Any& _rNewValue,Ref
 }
 
 
-void VCLXAccessibleList::UpdateSelection_Impl(sal_uInt16)
+void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
 {
     uno::Any aOldValue, aNewValue;
 
@@ -721,7 +716,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_uInt16)
 
         if ( m_pListBoxHelper )
         {
-            sal_uInt16 i=0;
+            sal_Int32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
             for ( ListItems::iterator aIter = m_aAccessibleChildren.begin();
                   aIter != m_aAccessibleChildren.end(); ++aIter,++i)
@@ -750,7 +745,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_uInt16)
                     checkEntrySelected(i,aNewValue,xNewAcc);
                 }
             }
-            sal_uInt16 nCount = m_pListBoxHelper->GetEntryCount();
+            const sal_Int32 nCount = m_pListBoxHelper->GetEntryCount();
             if ( i < nCount ) // here we have to check the if any other listbox entry is selected
             {
                 for (; i < nCount && !checkEntrySelected(i,aNewValue,xNewAcc) ;++i )
@@ -848,8 +843,8 @@ void SAL_CALL VCLXAccessibleList::selectAllAccessibleChildren(  ) throw (Runtime
 
         if ( m_pListBoxHelper )
         {
-            sal_uInt16 nCount = m_pListBoxHelper->GetEntryCount();
-            for ( sal_uInt16 i = 0; i < nCount; ++i )
+            const sal_Int32 nCount = m_pListBoxHelper->GetEntryCount();
+            for ( sal_Int32 i = 0; i < nCount; ++i )
                 m_pListBoxHelper->SelectEntryPos( i );
             // call the select handler, don't handle events in this time
             m_bDisableProcessEvent = true;

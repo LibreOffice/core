@@ -67,7 +67,7 @@ namespace dbaui
 
         void enableButtons();
 
-        sal_uInt16 adjustColumnPosition(ListBox* _pLeft,
+        sal_Int32 adjustColumnPosition(ListBox* _pLeft,
                                     const OUString&  _sColumnName,
                                     ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                     const ::comphelper::UStringMixEqual& _aCase);

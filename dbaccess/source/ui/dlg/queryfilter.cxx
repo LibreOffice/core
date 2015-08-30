@@ -97,8 +97,8 @@ DlgFilterCrit::DlgFilterCrit(vcl::Window * pParent,
     m_pLB_WHERECOMP1->set_width_request(aSize.Width());
     m_pLB_WHERECOMP2->set_width_request(aSize.Width());
     m_pLB_WHERECOMP3->set_width_request(aSize.Width());
-    sal_uInt16 nEntryCount =  m_pLB_WHERECOMP1->GetEntryCount();
-    for (sal_uInt16 i = 0; i < nEntryCount; ++i)
+    const sal_Int32 nEntryCount =  m_pLB_WHERECOMP1->GetEntryCount();
+    for (sal_Int32 i = 0; i < nEntryCount; ++i)
     {
         if (i > 0)
             m_aSTR_COMPARE_OPERATORS += ";";
@@ -265,9 +265,9 @@ sal_Int32 DlgFilterCrit::GetOSQLPredicateType( const OUString& _rSelectedPredica
     return nPredicateType;
 }
 
-sal_uInt16 DlgFilterCrit::GetSelectionPos(sal_Int32 eType,const ListBox& rListBox)
+sal_Int32 DlgFilterCrit::GetSelectionPos(sal_Int32 eType,const ListBox& rListBox)
 {
-    sal_uInt16 nPos;
+    sal_Int32 nPos;
     switch(eType)
     {
         case SQLFilterOperator::EQUAL:
@@ -570,9 +570,9 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,bool _b
 
 void DlgFilterCrit::SelectField( ListBox& rBox, const OUString& rField )
 {
-    sal_uInt16 nCnt = rBox.GetEntryCount();
+    const sal_Int32 nCnt = rBox.GetEntryCount();
 
-    for( sal_uInt16 i=0 ; i<nCnt ; i++ )
+    for( sal_Int32 i=0 ; i<nCnt ; i++ )
     {
         if(rBox.GetEntry(i) == rField)
         {

@@ -78,7 +78,7 @@ private:
     ::sfx2::sidebar::ControllerItem         maNumFormatControl;
     ::sfx2::sidebar::ControllerItem         maFormatControl;
 
-    sal_uInt16                              mnCategorySelected;
+    sal_Int32                               mnCategorySelected;
 
     css::uno::Reference<css::frame::XFrame>     mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;

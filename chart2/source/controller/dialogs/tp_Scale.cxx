@@ -260,7 +260,7 @@ enum AxisTypeListBoxEntry
 
 IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl)
 {
-    sal_uInt16 nPos = m_pLB_AxisType->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLB_AxisType->GetSelectEntryPos();
     if( nPos==TYPE_DATE )
         m_nAxisType = chart2::AxisType::DATE;
     else

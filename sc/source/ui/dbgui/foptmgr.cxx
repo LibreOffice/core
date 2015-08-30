@@ -68,10 +68,9 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
 
 ScFilterOptionsMgr::~ScFilterOptionsMgr()
 {
-    sal_uInt16 nEntries = pLbCopyArea->GetEntryCount();
-    sal_uInt16 i;
+    const sal_Int32 nEntries = pLbCopyArea->GetEntryCount();
 
-    for ( i=2; i<nEntries; i++ )
+    for ( sal_Int32 i=2; i<nEntries; i++ )
         delete static_cast<OUString*>(pLbCopyArea->GetEntryData( i ));
 }
 
@@ -115,7 +114,7 @@ void ScFilterOptionsMgr::Init()
         ScRange aRange;
         while ( aIter.Next( aName, aRange ) )
         {
-            sal_uInt16 nInsert = pLbCopyArea->InsertEntry( aName );
+            const sal_Int32 nInsert = pLbCopyArea->InsertEntry( aName );
 
             OUString aRefStr(aRange.aStart.Format(SCA_ABS_3D, pDoc, eConv));
             pLbCopyArea->SetEntryData( nInsert, new OUString( aRefStr ) );
@@ -215,7 +214,7 @@ IMPL_LINK( ScFilterOptionsMgr, LbAreaSelHdl, ListBox*, pLb )
     if ( pLb == pLbCopyArea )
     {
         OUString aString;
-        sal_uInt16 nSelPos = pLbCopyArea->GetSelectEntryPos();
+        const sal_Int32 nSelPos = pLbCopyArea->GetSelectEntryPos();
 
         if ( nSelPos > 0 )
             aString = *static_cast<OUString*>(pLbCopyArea->GetEntryData( nSelPos ));
@@ -236,8 +235,8 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
             bool    bFound  = false;
-            sal_uInt16  i       = 0;
-            sal_uInt16  nCount  = pLbCopyArea->GetEntryCount();
+            sal_Int32 i = 0;
+            const sal_Int32 nCount = pLbCopyArea->GetEntryCount();
 
             for ( i=2; i<nCount && !bFound; i++ )
             {

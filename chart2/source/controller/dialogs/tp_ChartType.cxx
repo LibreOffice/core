@@ -39,8 +39,10 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-#define POS_3DSCHEME_SIMPLE    0
-#define POS_3DSCHEME_REALISTIC 1
+enum {
+    POS_3DSCHEME_SIMPLE    = 0,
+    POS_3DSCHEME_REALISTIC = 1
+};
 
 class Dim3DLookResourceGroup : public ChangingResource
 {
@@ -93,7 +95,7 @@ void Dim3DLookResourceGroup::fillControls( const ChartTypeParameter& rParameter 
 void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.b3DLook = m_pCB_3DLook->IsChecked();
-    sal_uInt16 nPos = m_pLB_Scheme->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLB_Scheme->GetSelectEntryPos();
     if( POS_3DSCHEME_SIMPLE == nPos )
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Simple;
     else if( POS_3DSCHEME_REALISTIC == nPos )
@@ -600,7 +602,7 @@ IMPL_LINK_NOARG_TYPED(SplineResourceGroup, SplineDetailsDialogHdl, Button*, void
     ChartTypeParameter aOldParameter;
     getSplinePropertiesDialog().fillParameter( aOldParameter, POS_LINETYPE_SMOOTH == m_pLB_LineType->GetSelectEntryPos() );
 
-    sal_uInt16 iOldLineTypePos = m_pLB_LineType->GetSelectEntryPos();
+    const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectEntryPos();
     m_pLB_LineType->SelectEntryPos(POS_LINETYPE_SMOOTH);
     if( RET_OK == getSplinePropertiesDialog().Execute() )
     {
@@ -620,7 +622,7 @@ IMPL_LINK_NOARG_TYPED(SplineResourceGroup, SteppedDetailsDialogHdl, Button*, voi
     ChartTypeParameter aOldParameter;
     getSteppedPropertiesDialog().fillParameter( aOldParameter, POS_LINETYPE_STEPPED == m_pLB_LineType->GetSelectEntryPos() );
 
-    sal_uInt16 iOldLineTypePos = m_pLB_LineType->GetSelectEntryPos();
+    const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectEntryPos();
     m_pLB_LineType->SelectEntryPos(POS_LINETYPE_STEPPED);
     if( RET_OK == getSteppedPropertiesDialog().Execute() )
     {

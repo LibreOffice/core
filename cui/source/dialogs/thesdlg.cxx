@@ -386,7 +386,7 @@ IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox *, pBox )
 {
     if (pBox && !m_pWordCB->IsTravelSelect())  // act only upon return key and not when traveling with cursor keys
     {
-        sal_uInt16 nPos = pBox->GetSelectEntryPos();
+        const sal_Int32 nPos = pBox->GetSelectEntryPos();
         OUString aStr( pBox->GetEntry( nPos ) );
         aStr = linguistic::GetThesaurusReplaceText( aStr );
         m_pWordCB->SetText( aStr );

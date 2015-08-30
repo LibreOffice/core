@@ -383,7 +383,7 @@ void SvxRubyDialog::Activate()
                             }
                             if (!sName.isEmpty())
                             {
-                                sal_uInt16 nPos = m_pCharStyleLB->InsertEntry(sName);
+                                const sal_Int32 nPos = m_pCharStyleLB->InsertEntry(sName);
                                 m_pCharStyleLB->SetEntryData( nPos, new OUString(sCoreName) );
 
                             }
@@ -829,7 +829,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*r
     long nRubyWidth = rRenderContext.GetTextWidth(sRubyText);
     rRenderContext.SetFont(aSaveFont);
 
-    sal_uInt16 nAdjust = m_pParentDlg->m_pAdjustLB->GetSelectEntryPos();
+    sal_Int32 nAdjust = m_pParentDlg->m_pAdjustLB->GetSelectEntryPos();
     //use center if no adjustment is available
     if (nAdjust > 4)
         nAdjust = 1;

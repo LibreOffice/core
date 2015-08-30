@@ -304,7 +304,7 @@ void ScHFEditPage::InitPreDefinedList()
 
 void ScHFEditPage::InsertToDefinedList()
 {
-    sal_uInt16 nCount =  m_pLbDefined->GetEntryCount();
+    const sal_Int32 nCount =  m_pLbDefined->GetEntryCount();
     if(nCount == eEntryCount)
     {
         m_pLbDefined->InsertEntry( m_pFtCustomized->GetText() );
@@ -314,7 +314,7 @@ void ScHFEditPage::InsertToDefinedList()
 
 void ScHFEditPage::RemoveFromDefinedList()
 {
-    sal_uInt16 nCount =  m_pLbDefined->GetEntryCount();
+    const sal_Int32 nCount =  m_pLbDefined->GetEntryCount();
     if(nCount > eEntryCount )
         m_pLbDefined->RemoveEntry( nCount-1);
 }
@@ -341,9 +341,8 @@ void ScHFEditPage::SetSelectDefinedList()
 
     bool bFound = false;
 
-    sal_uInt16 i;
-    sal_uInt16 nCount =  m_pLbDefined->GetEntryCount();
-    for(i = 0; i < nCount && !bFound; i++)
+    const sal_Int32 nCount = m_pLbDefined->GetEntryCount();
+    for(sal_Int32 i = 0; i < nCount && !bFound; ++i)
     {
         switch(static_cast<ScHFEntryId>(i))
         {

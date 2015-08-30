@@ -134,7 +134,7 @@ public:
     void UpdateSelection_Acc (const ::rtl::OUString& sTextOfSelectedItem, bool b_IsDropDownList);
     void UpdateSelection_Impl_Acc (bool b_IsDropDownList);
 
-    void UpdateFocus_Impl_Acc ( sal_uInt16 nPos, bool b_IsDropDownList) ;
+    void UpdateFocus_Impl_Acc ( sal_Int32 nPos, bool b_IsDropDownList) ;
     static void NotifyListItem(css::uno::Any& val);
 protected:
     BoxType     m_aBoxType;
@@ -201,8 +201,8 @@ private:
 
     void UpdateEntryRange_Impl();
 protected:
-    void UpdateSelection_Impl (sal_uInt16 nPos = 0);
-    bool checkEntrySelected(sal_uInt16 _nPos,
+    void UpdateSelection_Impl(sal_Int32 nPos = 0);
+    bool checkEntrySelected(sal_Int32 _nPos,
                             css::uno::Any& _rNewValue,
                             css::uno::Reference< css::accessibility::XAccessible >& _rxNewAcc);
 private:

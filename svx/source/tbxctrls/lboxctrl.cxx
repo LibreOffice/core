@@ -167,7 +167,7 @@ IMPL_LINK_NOARG_TYPED(SvxListBoxControl, PopupModeEndHdl, FloatingWindow*, void)
     if( pPopupWin && FloatWinPopupFlags::NONE == pPopupWin->GetPopupModeFlags()  &&
         pPopupWin->IsUserSelected() )
     {
-        sal_uInt16 nCount = pPopupWin->GetListBox().GetSelectEntryCount();
+        const sal_Int32 nCount = pPopupWin->GetListBox().GetSelectEntryCount();
 
         INetURLObject aObj( m_aCommandURL );
 
@@ -179,7 +179,7 @@ IMPL_LINK_NOARG_TYPED(SvxListBoxControl, PopupModeEndHdl, FloatingWindow*, void)
 }
 
 
-void SvxListBoxControl::Impl_SetInfo( sal_uInt16 nCount )
+void SvxListBoxControl::Impl_SetInfo( sal_Int32 nCount )
 {
     DBG_ASSERT( pPopupWin, "NULL pointer, PopupWindow missing" );
 

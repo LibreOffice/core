@@ -96,7 +96,7 @@
 #define MAX_MRU_FONTNAME_ENTRIES    5
 
 // don't make more than 15 entries visible at once
-#define MAX_STYLES_ENTRIES          static_cast< sal_uInt16 >( 15 )
+#define MAX_STYLES_ENTRIES          15
 
 static void lcl_CalcSizeValueSet( vcl::Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
 
@@ -144,7 +144,7 @@ protected:
 
 private:
     SfxStyleFamily                  eStyleFamily;
-    sal_uInt16                      nCurSel;
+    sal_Int32                       nCurSel;
     bool                            bRelease;
     Size                            aLogicalSize;
     Link<>                          aVisibilityListener;
@@ -162,7 +162,7 @@ private:
     void            ReleaseFocus();
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
     static void     UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
-    void            SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_uInt16 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
+    void            SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_Int32 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
     static bool     AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight);
     void            SetOptimalSize();
     DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
@@ -510,7 +510,7 @@ bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
             {
                 if(IsInDropDown())
                 {
-                    sal_uInt16 nItem = GetSelectEntryPos() - 1;
+                    const sal_Int32 nItem = GetSelectEntryPos() - 1;
                     if(nItem < MAX_STYLES_ENTRIES)
                         m_pButtons[nItem]->ExecuteMenu();
                     nHandled = true;
@@ -613,7 +613,7 @@ void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString
     pDevice->DrawText(aPos, rStyleName);
 }
 
-void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_uInt16 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected)
+void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_Int32 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected)
 {
     unsigned int nId = rRect.GetHeight() != 0 ? (rRect.getY() / rRect.GetHeight()) : MAX_STYLES_ENTRIES;
     if (nItem == 0 || nItem == GetEntryCount() - 1)

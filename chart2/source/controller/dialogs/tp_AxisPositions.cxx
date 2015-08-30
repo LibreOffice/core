@@ -165,7 +165,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
         for( sal_Int32 nN=0; nN<m_aCategories.getLength() && nN<nMaxCount; nN++ )
             m_pED_CrossesAtCategory->InsertEntry( m_aCategories[nN] );
 
-        sal_uInt16 nCount = m_pED_CrossesAtCategory->GetEntryCount();
+        sal_Int32 nCount = m_pED_CrossesAtCategory->GetEntryCount();
         if( nCount>30 )
             nCount=30;
         m_pED_CrossesAtCategory->SetDropDownLineCount( nCount );

@@ -128,7 +128,7 @@ void OWizColumnSelect::Reset()
 
     for(;aIter != aEnd;++aIter)
     {
-        sal_uInt16 nPos = m_pOrgColumnNames->InsertEntry((*aIter)->first);
+        const sal_Int32 nPos = m_pOrgColumnNames->InsertEntry((*aIter)->first);
         m_pOrgColumnNames->SetEntryData(nPos,(*aIter)->second);
     }
 
@@ -152,7 +152,7 @@ void OWizColumnSelect::ActivatePage( )
     ODatabaseExport::TColumnVector::const_iterator aEnd = rDestColumns.end();
     for(;aIter != aEnd;++aIter)
     {
-        sal_uInt16 nPos = m_pNewColumnNames->InsertEntry((*aIter)->first);
+        const sal_Int32 nPos = m_pNewColumnNames->InsertEntry((*aIter)->first);
         m_pNewColumnNames->SetEntryData(nPos,new OFieldDescription(*((*aIter)->second)));
         m_pOrgColumnNames->RemoveEntry((*aIter)->first);
     }
@@ -228,16 +228,16 @@ IMPL_LINK_TYPED( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
         for(sal_Int32 i=0; i < pLeft->GetSelectEntryCount(); ++i)
             moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectEntry(i),sExtraChars,nMaxNameLen,aCase);
 
-        for(sal_uInt16 j=pLeft->GetSelectEntryCount(); j ; --j)
+        for(sal_Int32 j=pLeft->GetSelectEntryCount(); j ; --j)
             pLeft->RemoveEntry(pLeft->GetSelectEntry(j-1));
     }
     else
     {
-        sal_uInt16 nEntries = pLeft->GetEntryCount();
-        for(sal_uInt16 i=0; i < nEntries; ++i)
+        const sal_Int32 nEntries = pLeft->GetEntryCount();
+        for(sal_Int32 i=0; i < nEntries; ++i)
             moveColumn(pRight,pLeft,aRightColumns,pLeft->GetEntry(i),sExtraChars,nMaxNameLen,aCase);
-        for(sal_uInt16 j=pLeft->GetEntryCount(); j ; --j)
-            pLeft->RemoveEntry(j-1);
+        for(sal_Int32 j=pLeft->GetEntryCount(); j ; )
+            pLeft->RemoveEntry(--j);
     }
 
     enableButtons();
@@ -271,8 +271,8 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox *, pListBox )
 
     for(sal_Int32 i=0; i < pLeft->GetSelectEntryCount(); ++i)
         moveColumn(pRight,pLeft,aRightColumns,pLeft->GetSelectEntry(i),sExtraChars,nMaxNameLen,aCase);
-    for(sal_uInt16 j=pLeft->GetSelectEntryCount(); j ; --j)
-        pLeft->RemoveEntry(pLeft->GetSelectEntry(j-1));
+    for(sal_Int32 j=pLeft->GetSelectEntryCount(); j ; )
+        pLeft->RemoveEntry(pLeft->GetSelectEntry(--j));
 
     enableButtons();
     return 0;
@@ -287,9 +287,9 @@ void OWizColumnSelect::clearListBox(ListBox& _rListBox)
 
 void OWizColumnSelect::fillColumns(ListBox* pRight,::std::vector< OUString> &_rRightColumns)
 {
-    sal_uInt16 nCount = pRight->GetEntryCount();
+    const sal_Int32 nCount = pRight->GetEntryCount();
     _rRightColumns.reserve(nCount);
-    for(sal_uInt16 i=0; i < nCount;++i)
+    for(sal_Int32 i=0; i < nCount; ++i)
         _rRightColumns.push_back(pRight->GetEntry(i));
 }
 
@@ -365,21 +365,21 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
 // not enough. We need to take into account what fields have
 // been removed earlier and adjust accordingly. Based on the
 // algorithm employed in moveColumn().
-sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
+sal_Int32 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
                                                const OUString&   _sColumnName,
                                                ODatabaseExport::TColumnVector::size_type nCurrentPos,
                                                const ::comphelper::UStringMixEqual& _aCase)
 {
-    sal_uInt16 nAdjustedPos = 0;
+    sal_Int32 nAdjustedPos = 0;
 
     // if returning all entries to their original position,
     // then there is no need to adjust the positions.
     if (m_pColumns_LH->HasFocus())
         return nAdjustedPos;
 
-    sal_uInt16 nCount = _pLeft->GetEntryCount();
+    const sal_Int32 nCount = _pLeft->GetEntryCount();
     OUString sColumnString;
-    for(sal_uInt16 i=0; i < nCount; ++i)
+    for(sal_Int32 i=0; i < nCount; ++i)
     {
         sColumnString = _pLeft->GetEntry(i);
         if(_sColumnName != sColumnString)

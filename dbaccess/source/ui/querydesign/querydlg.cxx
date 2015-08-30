@@ -122,8 +122,8 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     }
     else
     {
-        const sal_uInt16 nCount = m_pLB_JoinType->GetEntryCount();
-        for (sal_uInt16 i = 0; i < nCount; ++i)
+        const sal_Int32 nCount = m_pLB_JoinType->GetEntryCount();
+        for (sal_Int32 i = 0; i < nCount; ++i)
         {
             const sal_IntPtr nJoinTyp = reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(i));
             if ( !bSupportFullJoin && nJoinTyp == ID_FULL_JOIN )
@@ -167,7 +167,7 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     OUString sSecondWinName   = m_pConnData->getReferencedTable()->GetWinName();
     const EJoinType eOldJoinType = eJoinType;
     sal_uInt16 nResId = 0;
-    const sal_uInt16 nPos = m_pLB_JoinType->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLB_JoinType->GetSelectEntryPos();
     const sal_IntPtr nJoinType = reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(nPos));
     bool bAddHint = true;
     switch ( nJoinType )
@@ -322,8 +322,8 @@ void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)
             break;
     }
 
-    const sal_uInt16 nCount = m_pLB_JoinType->GetEntryCount();
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    const sal_Int32 nCount = m_pLB_JoinType->GetEntryCount();
+    for (sal_Int32 i = 0; i < nCount; ++i)
     {
         if ( nJoinType == reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(i)) )
         {

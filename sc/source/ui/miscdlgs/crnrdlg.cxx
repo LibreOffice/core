@@ -354,7 +354,6 @@ void ScColRowNameRangesDlg::UpdateNames()
     pEdAssign->SetText( EMPTY_OUSTRING );
 
     size_t nCount, j;
-    sal_uInt16 nPos; //@008 inserted auxiliary variable q
 
     SCCOL nCol1;
     SCROW nRow1;    //Extension for range names
@@ -371,7 +370,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     aString = strDelim;
     aString += ScGlobal::GetRscString( STR_COLUMN );
     aString += strDelim;
-    nPos = pLbRange->InsertEntry( aString );
+    sal_Int32 nPos = pLbRange->InsertEntry( aString );
     pLbRange->SetEntryData( nPos, reinterpret_cast<void*>(nEntryDataDelim) );
     if ( (nCount = xColNameRanges->size()) > 0 )
     {
@@ -580,7 +579,7 @@ IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, AddBtnHdl, Button*, void)
 IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
 {
     OUString aRangeStr = pLbRange->GetSelectEntry();
-    sal_uInt16 nSelectPos = pLbRange->GetSelectEntryPos();
+    sal_Int32 nSelectPos = pLbRange->GetSelectEntryPos();
     bool bColName =
         (reinterpret_cast<sal_uLong>(pLbRange->GetEntryData( nSelectPos )) == nEntryDataCol);
     NameRangeMap::const_iterator itr = aRangeMap.find(aRangeStr);
@@ -611,7 +610,7 @@ IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
             delete pPair;
 
             UpdateNames();
-            sal_uInt16 nCnt = pLbRange->GetEntryCount();
+            const sal_Int32 nCnt = pLbRange->GetEntryCount();
             if ( nSelectPos >= nCnt )
             {
                 if ( nCnt )
@@ -640,8 +639,8 @@ IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, RemoveBtnHdl, Button*, void)
 // handler called when a row in the listbox is selected, updates form input fields
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, Range1SelectHdl)
 {
-    sal_uInt16 nSelectPos = pLbRange->GetSelectEntryPos();
-    sal_uInt16 nCnt = pLbRange->GetEntryCount();
+    sal_Int32 nSelectPos = pLbRange->GetSelectEntryPos();
+    const sal_Int32 nCnt = pLbRange->GetEntryCount();
     sal_uInt16 nMoves = 0;
     while ( nSelectPos < nCnt
             && reinterpret_cast<sal_uLong>(pLbRange->GetEntryData( nSelectPos )) == nEntryDataDelim )

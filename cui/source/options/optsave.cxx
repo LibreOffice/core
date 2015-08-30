@@ -560,7 +560,7 @@ static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties)
 
 IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 {
-    sal_uInt16 nCurPos = aDocTypeLB->GetSelectEntryPos();
+    const sal_Int32 nCurPos = aDocTypeLB->GetSelectEntryPos();
 
     sal_IntPtr nData = -1;
     if(nCurPos < APP_COUNT)
@@ -588,7 +588,7 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
             OUString sSelect;
             for(int i = 0; i < pImpl->aUIFilterArr[nData].getLength(); i++)
             {
-                sal_uInt16 nEntryPos = aSaveAsLB->InsertEntry(pUIFilters[i]);
+                const sal_Int32 nEntryPos = aSaveAsLB->InsertEntry(pUIFilters[i]);
                 if ( pImpl->aODFArr[nData][i] )
                     aSaveAsLB->SetEntryData( nEntryPos, static_cast<void*>(pImpl) );
                 if(pFilters[i] == pImpl->aDefaultArr[nData])
@@ -629,8 +629,8 @@ IMPL_LINK_NOARG(SvxSaveTabPage, ODFVersionHdl_Impl)
     if ( bShown )
     {
         bool bHasODFFormat = false;
-        sal_uInt16 i = 0, nCount = aSaveAsLB->GetEntryCount();
-        for ( ; i < nCount; ++ i )
+        const sal_Int32 nCount = aSaveAsLB->GetEntryCount();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             if ( aSaveAsLB->GetEntryData(i) != NULL )
             {

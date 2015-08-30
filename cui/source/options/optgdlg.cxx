@@ -737,7 +737,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     bool bRepaintWindows(false);
 
     SvtMiscOptions aMiscOptions;
-    sal_uInt16 nSizeLB_NewSelection = m_pIconSizeLB->GetSelectEntryPos();
+    const sal_Int32 nSizeLB_NewSelection = m_pIconSizeLB->GetSelectEntryPos();
     if( nSizeLB_InitialSelection != nSizeLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
@@ -753,7 +753,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         aMiscOptions.SetSymbolsSize( eSet );
     }
 
-    sal_uInt16 nStyleLB_NewSelection = m_pIconStyleLB->GetSelectEntryPos();
+    const sal_Int32 nStyleLB_NewSelection = m_pIconStyleLB->GetSelectEntryPos();
     if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
     {
         // 0 means choose style automatically
@@ -761,7 +761,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
             aMiscOptions.SetIconTheme("auto");
         else
         {
-            sal_uInt16 pos = m_pIconStyleLB->GetSelectEntryPos();
+            const sal_Int32 pos = m_pIconStyleLB->GetSelectEntryPos();
             const vcl::IconThemeInfo& iconThemeId = mInstalledIconThemes.at(pos-1);
             aMiscOptions.SetIconTheme(iconThemeId.GetThemeId());
         }
@@ -1069,7 +1069,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
             {
                 //sal_uInt16 p = m_pUserInterfaceLB->InsertLanguage(aLang);
                 OUString aLangStr( SvtLanguageTable::GetLanguageString( aLang, true ) );
-                sal_uInt16 p = m_pUserInterfaceLB->InsertEntry(aLangStr);
+                const sal_Int32 p = m_pUserInterfaceLB->InsertEntry(aLangStr);
                 m_pUserInterfaceLB->SetEntryData(p, reinterpret_cast<void*>(i+1));
             }
         }
@@ -1129,7 +1129,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
         aStr_ = ApplyLreOrRleEmbedding( aStr_ ) +
                 aTwoSpace +
                 ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( pCurr->GetLanguage() ) );
-        sal_uInt16 nPos = m_pCurrencyLB->InsertEntry( aStr_ );
+        const sal_Int32 nPos = m_pCurrencyLB->InsertEntry( aStr_ );
         m_pCurrencyLB->SetEntryData( nPos, const_cast<NfCurrencyEntry *>(pCurr) );
     }
 
@@ -1485,7 +1485,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
         pCurr = SvNumberFormatter::GetCurrencyEntry( aAbbrev, eLang );
     }
     // if pCurr==NULL the SYSTEM entry is selected
-    sal_uInt16 nPos = m_pCurrencyLB->GetEntryPos( static_cast<void const *>(pCurr) );
+    const sal_Int32 nPos = m_pCurrencyLB->GetEntryPos( static_cast<void const *>(pCurr) );
     m_pCurrencyLB->SelectEntryPos( nPos );
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_CURRENCY);
     m_pCurrencyLB->Enable(!bReadonly);
@@ -1673,7 +1673,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
 
     const NfCurrencyEntry* pCurr = &SvNumberFormatter::GetCurrencyEntry(
             ((eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getSystemLanguage() : eLang));
-    sal_uInt16 nPos = m_pCurrencyLB->GetEntryPos( nullptr );
+    sal_Int32 nPos = m_pCurrencyLB->GetEntryPos( nullptr );
     if (pCurr)
     {
         // Update the "Default ..." currency.

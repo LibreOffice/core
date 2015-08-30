@@ -86,9 +86,9 @@ VCL_BUILDER_DECL_FACTORY(FadeEffectLB)
 
 void FadeEffectLB::applySelected( SdPage* pSlide ) const
 {
-    const sal_uInt16 nPos = GetSelectEntryPos();
+    const sal_Int32 nPos = GetSelectEntryPos();
 
-    if( pSlide && (nPos < mpImpl->maPresets.size() ) )
+    if( pSlide && (static_cast<size_t>(nPos) < mpImpl->maPresets.size() ) )
     {
         TransitionPresetPtr pPreset( mpImpl->maPresets[nPos] );
 

@@ -365,7 +365,7 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 
 IMPL_LINK_NOARG_TYPED(ScConsolidateDlg, OkHdl, Button*, void)
 {
-    sal_uInt16 nDataAreaCount = pLbConsAreas->GetEntryCount();
+    const sal_Int32 nDataAreaCount = pLbConsAreas->GetEntryCount();
 
     if ( nDataAreaCount > 0 )
     {
@@ -379,9 +379,8 @@ IMPL_LINK_NOARG_TYPED(ScConsolidateDlg, OkHdl, Button*, void)
             ScConsolidateParam  theOutParam( theConsData );
             ScArea**            ppDataAreas = new ScArea*[nDataAreaCount];
             ScArea*             pArea;
-            sal_uInt16              i=0;
 
-            for ( i=0; i<nDataAreaCount; i++ )
+            for ( sal_Int32 i=0; i<nDataAreaCount; ++i )
             {
                 pArea = new ScArea;
                 ScRangeUtil::MakeArea( pLbConsAreas->GetEntry( i ),
@@ -398,7 +397,7 @@ IMPL_LINK_NOARG_TYPED(ScConsolidateDlg, OkHdl, Button*, void)
             theOutParam.bReferenceData  = pBtnRefs->IsChecked();
             theOutParam.SetAreas( ppDataAreas, nDataAreaCount );
 
-            for ( i=0; i<nDataAreaCount; i++ )
+            for ( sal_Int32 i=0; i<nDataAreaCount; ++i )
                 delete ppDataAreas[i];
             delete [] ppDataAreas;
 
@@ -497,7 +496,7 @@ IMPL_LINK( ScConsolidateDlg, SelectHdl, ListBox*, pLb )
     else if ( (pLb == pLbDataArea) || (pLb == pLbDestArea) )
     {
         Edit*   pEd = (pLb == pLbDataArea) ? pEdDataArea : pEdDestArea;
-        sal_uInt16  nSelPos = pLb->GetSelectEntryPos();
+        const sal_Int32 nSelPos = pLb->GetSelectEntryPos();
 
         if (    pRangeUtil
             && (nSelPos > 0)
@@ -550,7 +549,7 @@ IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 // Resource of the ListBox and these two conversion methods are also in
 // tpsubt and everywhere, where StarCalc functions are selectable.
 
-ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( sal_uInt16 nPos )
+ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( sal_Int32 nPos )
 {
     switch ( nPos )
     {
@@ -570,7 +569,7 @@ ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( sal_uInt16 nPos )
     }
 }
 
-sal_uInt16 ScConsolidateDlg::FuncToLbPos( ScSubTotalFunc eFunc )
+sal_Int32 ScConsolidateDlg::FuncToLbPos( ScSubTotalFunc eFunc )
 {
     switch ( eFunc )
     {

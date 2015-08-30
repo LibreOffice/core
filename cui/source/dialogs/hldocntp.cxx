@@ -448,7 +448,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, Button*, void)
             m_pLbDocTypes->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
             // get private-url
-            sal_uInt16 nPos = m_pLbDocTypes->GetSelectEntryPos();
+            const sal_Int32 nPos = m_pLbDocTypes->GetSelectEntryPos();
             aNewURL.setExtension( static_cast<DocumentTypeData*>(m_pLbDocTypes->GetEntryData( nPos ))->aStrExt );
         }
 

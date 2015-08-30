@@ -499,7 +499,7 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
         OUString aStr( SvxDateTimeField::GetFormatted(
                 aDate, aTime, nDateTimeFormats[nFormat],
                 *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
-        sal_uInt16 nEntry = mpCBDateTimeFormat->InsertEntry( aStr );
+        const sal_Int32 nEntry = mpCBDateTimeFormat->InsertEntry( aStr );
         mpCBDateTimeFormat->SetEntryData( nEntry, reinterpret_cast<void*>((sal_IntPtr)nDateTimeFormats[nFormat] ));
         if( nDateTimeFormats[nFormat] == eFormat )
         {

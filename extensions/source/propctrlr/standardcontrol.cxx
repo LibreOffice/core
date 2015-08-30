@@ -863,10 +863,10 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL OListboxControl::getListEntries(  ) throw (RuntimeException, std::exception)
     {
-        const sal_uInt16 nCount = getTypedControlWindow()->GetEntryCount();
+        const sal_Int32 nCount = getTypedControlWindow()->GetEntryCount();
         Sequence< OUString > aRet(nCount);
         OUString* pIter = aRet.getArray();
-        for (sal_uInt16 i = 0; i < nCount ; ++i,++pIter)
+        for (sal_Int32 i = 0; i < nCount ; ++i,++pIter)
             *pIter = getTypedControlWindow()->GetEntry(i);
 
         return aRet;
@@ -933,10 +933,10 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL OComboboxControl::getListEntries(  ) throw (RuntimeException, std::exception)
     {
-        const sal_uInt16 nCount = getTypedControlWindow()->GetEntryCount();
+        const sal_Int32 nCount = getTypedControlWindow()->GetEntryCount();
         Sequence< OUString > aRet(nCount);
         OUString* pIter = aRet.getArray();
-        for (sal_uInt16 i = 0; i < nCount ; ++i,++pIter)
+        for (sal_Int32 i = 0; i < nCount ; ++i,++pIter)
             *pIter = getTypedControlWindow()->GetEntry(i);
 
         return aRet;

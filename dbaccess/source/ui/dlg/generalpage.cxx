@@ -364,8 +364,8 @@ namespace dbaui
     void OGeneralPage::insertDatasourceTypeEntryData(const OUString& _sType, const OUString& sDisplayName)
     {
         // insert a (temporary) entry
-        sal_uInt16 nPos = m_pDatasourceType->InsertEntry(sDisplayName);
-        if ( nPos >= m_aURLPrefixes.size() )
+        const sal_Int32 nPos = m_pDatasourceType->InsertEntry(sDisplayName);
+        if ( static_cast<size_t>(nPos) >= m_aURLPrefixes.size() )
             m_aURLPrefixes.resize(nPos+1);
         m_aURLPrefixes[nPos] = _sType;
     }
@@ -373,8 +373,8 @@ namespace dbaui
     void OGeneralPageWizard::insertEmbeddedDBTypeEntryData(const OUString& _sType, const OUString& sDisplayName)
     {
         // insert a (temporary) entry
-        sal_uInt16 nPos = m_pEmbeddedDBType->InsertEntry(sDisplayName);
-        if ( nPos >= m_aEmbeddedURLPrefixes.size() )
+        const sal_Int32 nPos = m_pEmbeddedDBType->InsertEntry(sDisplayName);
+        if ( static_cast<size_t>(nPos) >= m_aEmbeddedURLPrefixes.size() )
             m_aEmbeddedURLPrefixes.resize(nPos+1);
         m_aEmbeddedURLPrefixes[nPos] = _sType;
     }
@@ -409,8 +409,8 @@ namespace dbaui
     IMPL_LINK( OGeneralPageWizard, OnEmbeddedDBTypeSelected, ListBox*, _pBox )
     {
         // get the type from the entry data
-        sal_uInt16 nSelected = _pBox->GetSelectEntryPos();
-        if (nSelected >= m_aEmbeddedURLPrefixes.size() )
+        const sal_Int32 nSelected = _pBox->GetSelectEntryPos();
+        if (static_cast<size_t>(nSelected) >= m_aEmbeddedURLPrefixes.size() )
         {
             SAL_WARN("dbaccess.ui.OGeneralPage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): no corresponding URL prefix");
             return 0L;
@@ -429,8 +429,8 @@ namespace dbaui
     IMPL_LINK( OGeneralPage, OnDatasourceTypeSelected, ListBox*, _pBox )
     {
         // get the type from the entry data
-        sal_uInt16 nSelected = _pBox->GetSelectEntryPos();
-        if (nSelected >= m_aURLPrefixes.size() )
+        const sal_Int32 nSelected = _pBox->GetSelectEntryPos();
+        if (static_cast<size_t>(nSelected) >= m_aURLPrefixes.size() )
         {
             SAL_WARN("dbaccess.ui.OGeneralPage", "Got out-of-range value '" << nSelected <<  "' from the DatasourceType selection ListBox's GetSelectEntryPos(): no corresponding URL prefix");
             return 0L;
@@ -477,7 +477,7 @@ namespace dbaui
     {
         bool bChangedSomething = false;
 
-        sal_uInt16 nEntry = m_pDatasourceType->GetSelectEntryPos();
+        const sal_Int32 nEntry = m_pDatasourceType->GetSelectEntryPos();
         OUString sURLPrefix = m_aURLPrefixes[ nEntry ];
 
         if ( m_pDatasourceType->IsValueChangedFromSaved() )
@@ -670,7 +670,7 @@ namespace dbaui
 
         if ( bCommitTypeSelection )
         {
-            sal_uInt16 nEntry = m_pDatasourceType->GetSelectEntryPos();
+            const sal_Int32 nEntry = m_pDatasourceType->GetSelectEntryPos();
             OUString sURLPrefix = m_aURLPrefixes[nEntry];
 
             if  (  m_pDatasourceType->IsValueChangedFromSaved()

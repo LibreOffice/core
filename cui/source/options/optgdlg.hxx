@@ -104,8 +104,8 @@ private:
     VclPtr<ListBox>        m_pMousePosLB;
     VclPtr<ListBox>        m_pMouseMiddleLB;
 
-    sal_uInt16      nSizeLB_InitialSelection;
-    sal_uInt16      nStyleLB_InitialSelection;
+    sal_Int32      nSizeLB_InitialSelection;
+    sal_Int32      nStyleLB_InitialSelection;
 
     SvtTabAppearanceCfg*    pAppearanceCfg;
     CanvasSettings*         pCanvasSettings;

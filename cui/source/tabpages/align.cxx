@@ -381,7 +381,7 @@ void AlignmentTabPage::InitVsRefEgde()
 
 void AlignmentTabPage::UpdateEnableControls()
 {
-    sal_uInt16 nHorAlign = m_pLbHorAlign->GetSelectEntryPos();
+    const sal_Int32 nHorAlign = m_pLbHorAlign->GetSelectEntryPos();
     bool bHorLeft  = (nHorAlign == ALIGNDLG_HORALIGN_LEFT);
     bool bHorBlock = (nHorAlign == ALIGNDLG_HORALIGN_BLOCK);
     bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);

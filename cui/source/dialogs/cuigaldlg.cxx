@@ -92,8 +92,8 @@ void SearchThread::execute()
 
     if( !aFileType.isEmpty() )
     {
-        const sal_uInt16        nFileNumber = mpBrowser->m_pCbbFileType->GetEntryPos( aFileType );
-        sal_uInt16              nBeginFormat, nEndFormat;
+        const sal_Int32 nFileNumber = mpBrowser->m_pCbbFileType->GetEntryPos( aFileType );
+        sal_Int32 nBeginFormat, nEndFormat;
         ::std::vector< OUString > aFormats;
 
         if( !nFileNumber || ( nFileNumber >= mpBrowser->m_pCbbFileType->GetEntryCount() ) )
@@ -104,7 +104,7 @@ void SearchThread::execute()
         else
             nBeginFormat = nEndFormat = nFileNumber;
 
-        for( sal_uInt16 i = nBeginFormat; i <= nEndFormat; ++i )
+        for( sal_Int32 i = nBeginFormat; i <= nEndFormat; ++i )
             aFormats.push_back( mpBrowser->aFilterEntryList[ i ]->aFilterName.toAsciiLowerCase() );
 
         ImplSearch( maStartURL, aFormats, mpBrowser->bSearchRecursive );
@@ -303,9 +303,9 @@ TakeThread::~TakeThread()
 void TakeThread::execute()
 {
     INetURLObject       aURL;
-    sal_uInt16          nEntries;
+    sal_Int32           nEntries;
     GalleryTheme*       pThm = mpBrowser->GetXChgData()->pTheme;
-    sal_uInt16          nPos;
+    sal_Int32           nPos;
     GalleryProgress*    pStatusProgress;
 
     {
@@ -315,7 +315,7 @@ void TakeThread::execute()
         pThm->LockBroadcaster();
     }
 
-    for( sal_uInt16 i = 0; i < nEntries && schedule(); i++ )
+    for( sal_Int32 i = 0; i < nEntries && schedule(); ++i )
     {
         if( mpBrowser->bTakeAll )
             aURL = INetURLObject( mpBrowser->aFoundList[ nPos = i ] );

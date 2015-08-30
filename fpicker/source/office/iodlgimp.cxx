@@ -302,7 +302,7 @@ void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* 
         sName = _pFilterDesc->GetName();
 
     // insert an set user data
-    sal_uInt16 nPos = _pLbFilter->InsertEntry( sName );
+    const sal_Int32 nPos = _pLbFilter->InsertEntry( sName );
     _pLbFilter->SetEntryData( nPos, const_cast< void* >( static_cast< const void* >( _pFilterDesc ) ) );
 }
 

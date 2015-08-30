@@ -367,12 +367,12 @@ namespace dbp
             return false;
 
         OGridSettings& rSettings = getSettings();
-        sal_uInt16 nSelected = m_pSelFields->GetEntryCount();
+        const sal_Int32 nSelected = m_pSelFields->GetEntryCount();
 
         rSettings.aSelectedFields.realloc(nSelected);
         OUString* pSelected = rSettings.aSelectedFields.getArray();
 
-        for (sal_uInt16 i=0; i<nSelected; ++i, ++pSelected)
+        for (sal_Int32 i=0; i<nSelected; ++i, ++pSelected)
             *pSelected = m_pSelFields->GetEntry(i);
 
         return true;
@@ -417,7 +417,7 @@ namespace dbp
         ListBox& rMoveTo = bMoveRight ? *m_pSelFields : *m_pExistFields;
 
         // the index of the selected entry
-        sal_uInt16 nSelected = bMoveRight ? m_pExistFields->GetSelectEntryPos() : m_pSelFields->GetSelectEntryPos();
+        const sal_Int32 nSelected = bMoveRight ? m_pExistFields->GetSelectEntryPos() : m_pSelFields->GetSelectEntryPos();
         // the (original) relative position of the entry
         sal_IntPtr nRelativeIndex = reinterpret_cast<sal_IntPtr>(bMoveRight ? m_pExistFields->GetEntryData(nSelected) : m_pSelFields->GetEntryData(nSelected));
 

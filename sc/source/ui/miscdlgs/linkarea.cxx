@@ -331,8 +331,8 @@ OUString ScLinkedAreaDlg::GetOptions()
 OUString ScLinkedAreaDlg::GetSource()
 {
     OUStringBuffer aBuf;
-    sal_uInt16 nCount = m_pLbRanges->GetSelectEntryCount();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    const sal_Int32 nCount = m_pLbRanges->GetSelectEntryCount();
+    for (sal_Int32 i=0; i<nCount; ++i)
     {
         if (i > 0)
             aBuf.append(';');

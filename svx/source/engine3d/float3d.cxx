@@ -2484,8 +2484,7 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
             Color aColSpec( COL_WHITE );
             sal_uInt16 nSpecIntens = 20;
 
-            sal_uInt16 nPos = m_pLbMatFavorites->GetSelectEntryPos();
-            switch( nPos )
+            switch( m_pLbMatFavorites->GetSelectEntryPos() )
             {
                 case 1: // Metall
                 {
@@ -2721,7 +2720,7 @@ bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
         aStr += SVX_RESSTR(RID_SVXFLOAT3D_FIX_B);
         aStr += OUString::number((sal_Int32)rColor.GetBlue());
 
-        sal_uInt16 nPos = pLb->InsertEntry( rColor, aStr );
+        const sal_Int32 nPos = pLb->InsertEntry( rColor, aStr );
         pLb->SelectEntryPos( nPos );
         bRet = true;
     }

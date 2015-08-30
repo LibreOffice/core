@@ -2346,7 +2346,7 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyl
     const Subset* pSubset;
     while( NULL != (pSubset = pSubsetMap->GetNextSubset( bFirst )) )
     {
-        sal_uInt16 nPos = pFontsSubsetLB->InsertEntry( pSubset->GetName());
+        const sal_Int32 nPos = pFontsSubsetLB->InsertEntry( pSubset->GetName());
         pFontsSubsetLB->SetEntryData( nPos, const_cast<Subset *>(pSubset) );
         // subset must live at least as long as the selected font !!!
         if( bFirst )

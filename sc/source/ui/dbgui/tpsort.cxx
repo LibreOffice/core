@@ -530,9 +530,9 @@ ScTabPageSortOptions::~ScTabPageSortOptions()
 
 void ScTabPageSortOptions::dispose()
 {
-    sal_uInt16 nEntries = m_pLbOutPos->GetEntryCount();
+    const sal_Int32 nEntries = m_pLbOutPos->GetEntryCount();
 
-    for ( sal_uInt16 i=1; i<nEntries; i++ )
+    for ( sal_Int32 i=1; i<nEntries; ++i )
         delete static_cast<OUString*>(m_pLbOutPos->GetEntryData( i ));
 
     delete pColRes;
@@ -594,7 +594,7 @@ void ScTabPageSortOptions::Init()
         ScRange aRange;
         while ( aIter.Next( aName, aRange ) )
         {
-            sal_uInt16 nInsert = m_pLbOutPos->InsertEntry( aName );
+            const sal_Int32 nInsert = m_pLbOutPos->InsertEntry( aName );
 
             OUString aRefStr(aRange.aStart.Format(SCA_ABS_3D, pDoc, eConv));
             m_pLbOutPos->SetEntryData( nInsert, new OUString( aRefStr ) );
@@ -746,7 +746,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     {
         uno::Sequence<OUString> aAlgos = pColWrap->listCollatorAlgorithms(
                 aNewSortData.aCollatorLocale );
-        sal_uInt16 nSel = m_pLbAlgorithm->GetSelectEntryPos();
+        const sal_Int32 nSel = m_pLbAlgorithm->GetSelectEntryPos();
         if ( nSel < aAlgos.getLength() )
             sAlg = aAlgos[nSel];
     }
@@ -881,7 +881,7 @@ IMPL_LINK( ScTabPageSortOptions, SelOutPosHdl, ListBox *, pLb )
     if (pLb == m_pLbOutPos)
     {
         OUString  aString;
-        sal_uInt16  nSelPos = m_pLbOutPos->GetSelectEntryPos();
+        const sal_Int32 nSelPos = m_pLbOutPos->GetSelectEntryPos();
 
         if ( nSelPos > 0 )
             aString = *static_cast<OUString*>(m_pLbOutPos->GetEntryData( nSelPos ));
@@ -913,8 +913,8 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
             bool    bFound  = false;
-            sal_uInt16  i       = 0;
-            sal_uInt16  nCount  = m_pLbOutPos->GetEntryCount();
+            sal_Int32 i = 0;
+            const sal_Int32 nCount = m_pLbOutPos->GetEntryCount();
 
             for ( i=2; i<nCount && !bFound; i++ )
             {

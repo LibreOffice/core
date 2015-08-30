@@ -54,7 +54,7 @@ private:
       */
     std::vector< std::shared_ptr< DetailsContainer > > m_aDetailsContainers;
 
-    unsigned int m_nCurrentType;
+    sal_Int32 m_nCurrentType;
 
     bool bLabelChanged;
     bool m_bShowPassword;

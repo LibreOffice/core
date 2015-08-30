@@ -650,7 +650,7 @@ void IndexTabPage_Impl::InitializeIndex()
             if ( ( aAnySeq[0] >>= aKeywordList ) && ( aAnySeq[1] >>= aKeywordRefList ) &&
                  ( aAnySeq[2] >>= aAnchorRefList ) && ( aAnySeq[3] >>= aTitleRefList ) )
             {
-                sal_uInt16 nPos;
+                sal_Int32 nPos;
                 int ndx,tmp;
                 OUString aIndex, aTempString;
                 OUStringBuffer aData( 128 );            // Capacity of up to 128 characters
@@ -729,8 +729,8 @@ void IndexTabPage_Impl::InitializeIndex()
 
 void IndexTabPage_Impl::ClearIndex()
 {
-    sal_uInt16 nCount = m_pIndexCB->GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    const sal_Int32 nCount = m_pIndexCB->GetEntryCount();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
         delete static_cast<IndexEntry_Impl*>(m_pIndexCB->GetEntryData(i));
     m_pIndexCB->Clear();
 }
@@ -1015,8 +1015,8 @@ void SearchTabPage_Impl::dispose()
 
 void SearchTabPage_Impl::ClearSearchResults()
 {
-    sal_uInt16 nCount = m_pResultsLB->GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    const sal_Int32 nCount = m_pResultsLB->GetEntryCount();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
         delete static_cast<OUString*>(m_pResultsLB->GetEntryData(i));
     m_pResultsLB->Clear();
     m_pResultsLB->Update();
@@ -1070,7 +1070,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
             OUString aTitle = rRow.getToken( 0, '\t', nIdx );
             nIdx = 0;
             OUString* pURL = new OUString( rRow.getToken( 2, '\t', nIdx ) );
-            sal_uInt16 nPos = m_pResultsLB->InsertEntry( aTitle );
+            const sal_Int32 nPos = m_pResultsLB->InsertEntry( aTitle );
             m_pResultsLB->SetEntryData( nPos, pURL );
         }
         LeaveWait();
@@ -1194,8 +1194,8 @@ void BookmarksBox_Impl::dispose()
     // save bookmarks to configuration
     SvtHistoryOptions aHistOpt;
     aHistOpt.Clear( eHELPBOOKMARKS );
-    sal_uInt16 nCount = GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    const sal_Int32 nCount = GetEntryCount();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         OUString aTitle = GetEntry(i);
         OUString* pURL = static_cast<OUString*>(GetEntryData(i));
@@ -1243,7 +1243,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 RemoveEntry( nPos );
-                sal_uInt16 nCount = GetEntryCount();
+                const sal_Int32 nCount = GetEntryCount();
                 if ( nCount )
                 {
                     if ( nPos >= nCount )
@@ -1370,7 +1370,7 @@ void BookmarksTabPage_Impl::AddBookmarks( const OUString& rTitle, const OUString
 {
     OUString aImageURL = IMAGE_URL;
     aImageURL += INetURLObject( rURL ).GetHost();
-    sal_uInt16 nPos = m_pBookmarksBox->InsertEntry( rTitle, SvFileInformationManager::GetImage( INetURLObject(aImageURL) ) );
+    const sal_Int32 nPos = m_pBookmarksBox->InsertEntry( rTitle, SvFileInformationManager::GetImage( INetURLObject(aImageURL) ) );
     m_pBookmarksBox->SetEntryData( nPos, new OUString( rURL ) );
 }
 
@@ -1516,7 +1516,7 @@ void SfxHelpIndexWindow_Impl::Initialize()
         nIdx = 0;
         OUString aURL = rRow.getToken( 2, '\t', nIdx );
         OUString* pFactory = new OUString( INetURLObject( aURL ).GetHost() );
-        sal_uInt16 nPos = m_pActiveLB->InsertEntry( aTitle );
+        const sal_Int32 nPos = m_pActiveLB->InsertEntry( aTitle );
         m_pActiveLB->SetEntryData( nPos, pFactory );
     }
 

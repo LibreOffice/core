@@ -244,10 +244,9 @@ namespace dbp
         {
             const OUString* pNames = _rNames.getConstArray();
             const OUString* pNamesEnd = _rNames.getConstArray() + _rNames.getLength();
-            sal_uInt16 nPos = 0;
             while ( pNames != pNamesEnd )
             {
-                nPos = _rListBox.InsertEntry( *pNames++, _rImage );
+                const sal_Int32 nPos = _rListBox.InsertEntry( *pNames++, _rImage );
                 _rListBox.SetEntryData( nPos, reinterpret_cast< void* >( _nCommandType ) );
             }
         }

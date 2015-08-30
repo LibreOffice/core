@@ -223,10 +223,10 @@ IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, RemoveClickHdl, Button*, void )
 
 IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, AddAllClickHdl, Button*, void )
 {
-    sal_uInt16 nCnt = m_pLB_FreeIndexes->GetEntryCount();
+    const sal_Int32 nCnt = m_pLB_FreeIndexes->GetEntryCount();
     OUString aTableName = m_pCB_Tables->GetText();
 
-    for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
+    for( sal_Int32 nPos = 0; nPos < nCnt; ++nPos )
         InsertTableIndex( aTableName, RemoveFreeIndex( m_pLB_FreeIndexes->GetEntry(0), true ) );
 
     checkButtons();
@@ -234,10 +234,10 @@ IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, AddAllClickHdl, Button*, void )
 
 IMPL_LINK_NOARG_TYPED( ODbaseIndexDialog, RemoveAllClickHdl, Button*, void )
 {
-    sal_uInt16 nCnt = m_pLB_TableIndexes->GetEntryCount();
+    const sal_Int32 nCnt = m_pLB_TableIndexes->GetEntryCount();
     OUString aTableName = m_pCB_Tables->GetText();
 
-    for( sal_uInt16 nPos = 0; nPos < nCnt; ++nPos )
+    for( sal_Int32 nPos = 0; nPos < nCnt; ++nPos )
         InsertFreeIndex( RemoveTableIndex( aTableName, m_pLB_TableIndexes->GetEntry(0), true ) );
 
     checkButtons();

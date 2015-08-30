@@ -2289,13 +2289,13 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
     bModified |= nVal != pOpt->nAutoCmpltListLen;
     pOpt->nAutoCmpltListLen = nVal;
 
-    nVal = m_pDCBExpandKey->GetSelectEntryPos();
-    if( nVal < m_pDCBExpandKey->GetEntryCount() )
+    const sal_Int32 nPos = m_pDCBExpandKey->GetSelectEntryPos();
+    if( nPos < m_pDCBExpandKey->GetEntryCount() )
     {
-        sal_uLong nKey = reinterpret_cast<sal_uLong>(m_pDCBExpandKey->GetEntryData( nVal ));
+        sal_uLong nKey = reinterpret_cast<sal_uLong>(m_pDCBExpandKey->GetEntryData( nPos ));
         bModified |= nKey != pOpt->nAutoCmpltExpandKey;
         pOpt->nAutoCmpltExpandKey = (sal_uInt16)nKey;
-   }
+    }
 
     if (m_pAutoCompleteList && m_nAutoCmpltListCnt != m_pLBEntries->GetEntryCount())
     {

@@ -125,7 +125,7 @@ void ManageLanguageDialog::FillLanguageBox()
             {
                 sLanguage += " " + m_sDefLangStr;
             }
-            sal_uInt16 nPos = m_pLanguageLB->InsertEntry( sLanguage );
+            const sal_Int32 nPos = m_pLanguageLB->InsertEntry( sLanguage );
             m_pLanguageLB->SetEntryData( nPos, new LanguageEntry( sLanguage, pLocale[i], bIsDefault ) );
         }
     }
@@ -135,8 +135,8 @@ void ManageLanguageDialog::FillLanguageBox()
 
 void ManageLanguageDialog::ClearLanguageBox()
 {
-    sal_uInt16 i, nCount = m_pLanguageLB->GetEntryCount();
-    for ( i = 0; i < nCount; ++i )
+    const sal_Int32 nCount = m_pLanguageLB->GetEntryCount();
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
         LanguageEntry* pEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData(i));
         delete pEntry;
@@ -173,13 +173,13 @@ IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, DeleteHdl, Button*, void)
     ScopedVclPtrInstance< MessageDialog > aQBox(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelangdialog.ui");
     if ( aQBox->Execute() == RET_OK )
     {
-        sal_uInt16 i, nCount = m_pLanguageLB->GetSelectEntryCount();
-        sal_uInt16 nPos = m_pLanguageLB->GetSelectEntryPos();
+        sal_Int32 nCount = m_pLanguageLB->GetSelectEntryCount();
+        sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
         // remove locales
         Sequence< Locale > aLocaleSeq( nCount );
-        for ( i = 0; i < nCount; ++i )
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            sal_uInt16 nSelPos = m_pLanguageLB->GetSelectEntryPos(i);
+            const sal_Int32 nSelPos = m_pLanguageLB->GetSelectEntryPos(i);
             LanguageEntry* pEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData( nSelPos ));
             if ( pEntry )
                 aLocaleSeq[i] = pEntry->m_aLocale;
@@ -199,7 +199,7 @@ IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, DeleteHdl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, MakeDefHdl, Button*, void)
 {
-    sal_uInt16 nPos = m_pLanguageLB->GetSelectEntryPos();
+    const sal_Int32 nPos = m_pLanguageLB->GetSelectEntryPos();
     LanguageEntry* pSelectEntry = static_cast<LanguageEntry*>(m_pLanguageLB->GetEntryData( nPos ));
     if ( pSelectEntry && !pSelectEntry->m_bIsDefault )
     {
@@ -216,7 +216,7 @@ IMPL_LINK_NOARG_TYPED(ManageLanguageDialog, MakeDefHdl, Button*, void)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl)
 {
-    sal_uInt16 nCount = m_pLanguageLB->GetEntryCount();
+    const sal_Int32 nCount = m_pLanguageLB->GetEntryCount();
     bool bEmpty = ( !nCount ||
                     m_pLanguageLB->GetEntryPos( m_sCreateLangStr ) != LISTBOX_ENTRY_NOTFOUND );
     bool bSelect = ( m_pLanguageLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND );
@@ -286,13 +286,13 @@ void SetDefaultLanguageDialog::FillLanguageBox()
         // remove the already localized languages
         Sequence< Locale > aLocaleSeq = m_xLocalizationMgr->getStringResourceManager()->getLocales();
         const Locale* pLocale = aLocaleSeq.getConstArray();
-        sal_Int32 i, nCount = aLocaleSeq.getLength();
-        for ( i = 0;  i < nCount;  ++i )
+        const sal_Int32 nCountLoc = aLocaleSeq.getLength();
+        for ( sal_Int32 i = 0;  i < nCountLoc;  ++i )
             m_pLanguageLB->RemoveLanguage( LanguageTag::convertToLanguageType( pLocale[i] ) );
 
         // fill checklistbox if not in default mode
-        sal_uInt16 j, nCount_ = m_pLanguageLB->GetEntryCount();
-        for ( j = 0;  j < nCount_;  ++j )
+        const sal_Int32 nCountLang = m_pLanguageLB->GetEntryCount();
+        for ( sal_Int32 j = 0;  j < nCountLang;  ++j )
         {
             m_pCheckLangLB->InsertEntry(
                 m_pLanguageLB->GetEntry(j), LISTBOX_APPEND, m_pLanguageLB->GetEntryData(j) );
@@ -315,9 +315,9 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     }
     else
     {
-        sal_uInt16 i, nCount = static_cast< sal_uInt16 >( m_pCheckLangLB->GetEntryCount() );
+        const sal_Int32 nCount = m_pCheckLangLB->GetEntryCount();
         sal_Int32 j = 0;
-        for ( i = 0; i < nCount; ++i )
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             if ( m_pCheckLangLB->IsChecked(i) )
             {

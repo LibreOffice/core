@@ -525,7 +525,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     else
         aBinName = mpDefPrinter->GetPaperBinName( (sal_uInt16)nPaperBin );
 
-    sal_uInt16 nEntryPos = m_pPaperTrayBox->InsertEntry( aBinName );
+    const sal_Int32 nEntryPos = m_pPaperTrayBox->InsertEntry( aBinName );
     m_pPaperTrayBox->SetEntryData( nEntryPos, reinterpret_cast<void*>((sal_uLong)nPaperBin) );
     m_pPaperTrayBox->SelectEntry( aBinName );
 

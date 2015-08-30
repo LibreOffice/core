@@ -121,7 +121,7 @@ namespace
         rListBox.SelectEntry( rColor );
         if( rListBox.GetSelectEntryCount() == 0 )
         {
-            sal_uInt16 nPos = rListBox.InsertEntry( rColor, lcl_makeColorName( rColor ) );
+            const sal_Int32 nPos = rListBox.InsertEntry( rColor, lcl_makeColorName( rColor ) );
             rListBox.SelectEntryPos( nPos );
         }
     }

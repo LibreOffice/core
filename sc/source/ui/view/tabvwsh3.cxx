@@ -819,9 +819,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if( pDlg->Execute() == RET_OK )
                 {
-                    sal_uInt16 nSelCount = pDlg->GetSelectEntryCount();
-                    sal_uInt16 nSelIx;
-                    for( nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
+                    const sal_Int32 nSelCount = pDlg->GetSelectEntryCount();
+                    for( sal_Int32 nSelIx = 0; nSelIx < nSelCount; ++nSelIx )
                         aIndexList.insert( aIndexList.begin()+nSelIx, pDlg->GetSelectEntryPos( nSelIx ) );
                     pDlg.reset();
                     rReq.AppendItem( SfxIntegerListItem( SID_SELECT_TABLES, aIndexList ) );

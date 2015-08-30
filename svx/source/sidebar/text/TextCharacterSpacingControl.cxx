@@ -417,7 +417,7 @@ IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*,)
         Invalidate();
         maVSSpacing->StartSelection();
     }
-    sal_uInt16 nPos = maLBKerning->GetSelectEntryPos();
+    const sal_Int32 nPos = maLBKerning->GetSelectEntryPos();
     short nKern = 0;
     SfxMapUnit eUnit = mrTextPropertyPanel.GetSpaceController().GetCoreMetric();
     mnLastCus = SPACING_CLOSE_BY_CUS_EDIT;

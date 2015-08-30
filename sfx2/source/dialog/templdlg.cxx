@@ -1178,7 +1178,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             aFilterLb->SetUpdateMode(false);
             aFilterLb->Clear();
             //insert hierarchical at the beginning
-            sal_uInt16 nPos = aFilterLb->InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString(), 0);
+            sal_Int32 nPos = aFilterLb->InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString(), 0);
             aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(SFXSTYLEBIT_ALL) );
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
             for( size_t i = 0; i < rFilter.size(); ++i)

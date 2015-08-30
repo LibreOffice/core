@@ -526,8 +526,8 @@ void LibPage::dispose()
 {
     if (m_pBasicsBox)
     {
-        sal_uInt16 nCount = m_pBasicsBox->GetEntryCount();
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
+        const sal_Int32 nCount = m_pBasicsBox->GetEntryCount();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
         {
             DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( i ));
             delete pEntry;
@@ -1397,13 +1397,13 @@ void LibPage::FillListBox()
 void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     OUString aEntryText( rDocument.getTitle( eLocation ) );
-    sal_uInt16 nPos = m_pBasicsBox->InsertEntry( aEntryText );
+    const sal_Int32 nPos = m_pBasicsBox->InsertEntry( aEntryText );
     m_pBasicsBox->SetEntryData( nPos, new DocumentEntry(rDocument, eLocation) );
 }
 
 void LibPage::SetCurLib()
 {
-    sal_uInt16 nSelPos = m_pBasicsBox->GetSelectEntryPos();
+    const sal_Int32 nSelPos = m_pBasicsBox->GetSelectEntryPos();
     DocumentEntry* pEntry = static_cast<DocumentEntry*>(m_pBasicsBox->GetEntryData( nSelPos ));
     if ( pEntry )
     {

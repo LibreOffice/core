@@ -424,7 +424,7 @@ void MappingDialog_Impl::dispose()
 
 IMPL_LINK(MappingDialog_Impl, ListBoxSelectHdl, ListBox*, pListBox)
 {
-    sal_uInt16 nEntryPos = pListBox->GetSelectEntryPos();
+    const sal_Int32 nEntryPos = pListBox->GetSelectEntryPos();
     if(0 < nEntryPos)
     {
         for(sal_uInt16 i = 0; i < COLUMN_COUNT; i++)
