@@ -241,7 +241,7 @@ protected:
     // Selektor nicht mehr gespeichert!
     // Der ItemSet darf entsprechend modifiziert werden!
     // Die Implementierung dieser Methode gibt false zurueck.
-    virtual bool StyleParsed( const CSS1Selector *pSelector,
+    virtual bool StyleParsed( const std::unique_ptr<CSS1Selector> *pSelector,
                               SfxItemSet& rItemSet,
                               SvxCSS1PropertyInfo& rPropInfo );
 
