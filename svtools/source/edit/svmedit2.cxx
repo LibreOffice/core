@@ -36,7 +36,7 @@ void ExtMultiLineEdit::SetAutoScroll( bool bAutoScroll )
     GetTextView()->SetAutoScroll( bAutoScroll );
 }
 
-void ExtMultiLineEdit::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
+void ExtMultiLineEdit::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd )
 {
     GetTextEngine()->SetAttrib( rAttr, nPara, nStart, nEnd );
 }

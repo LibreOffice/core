@@ -34,7 +34,7 @@ public:
     void            SetAutoScroll( bool bAutoScroll );
 
                     // methods of TextEngine
-    void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
+    void            SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32 nStart, sal_Int32 nEnd );
     void            SetLeftMargin( sal_uInt16 nLeftMargin );
     sal_uInt32      GetParagraphCount() const;
 };
