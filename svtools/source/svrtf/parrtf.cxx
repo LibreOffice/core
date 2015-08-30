@@ -431,6 +431,25 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
                             aToken = sSave;
                             bRTF_InTextRead = false;
                         }
+                        else if ( 'c' == nNextCh )
+                        {
+                            // Prevent text breaking into multiple tokens.
+                            rInput.SeekRel( 2 );
+                            nNextCh = GetNextChar();
+                            if (RTF_ISDIGIT( nNextCh ))
+                            {
+                                sal_uInt8 nNewOverread = 0 ;
+                                do {
+                                    nNewOverread *= 10;
+                                    nNewOverread += nNextCh - '0';
+                                    nNextCh = GetNextChar();
+                                } while ( RTF_ISDIGIT( nNextCh ) );
+                                nUCharOverread = nNewOverread;
+                                aParserStates.top().nUCharOverread = nNewOverread;
+                            }
+                            if (0x20 != nNextCh)
+                                rInput.SeekRel( -1 );
+                        }
                         else
                         {
                             nNextCh = '\\';
