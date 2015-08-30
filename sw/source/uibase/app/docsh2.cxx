@@ -156,44 +156,38 @@ VclPtr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(
     return pDlg;
 }
 
-// Disable "multiple layout"
-
-void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
+void SwDocShell::ToggleLayoutMode(SwView* pView)
 {
-    GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bSet );
-    UpdateFontList();
-    SwView* pTempView = _pView ? _pView : GetView();
-    if( pTempView )
+    OSL_ENSURE( pView, "SwDocShell::ToggleLayoutMode, pView is null." );
+
+    const SwViewOption& rViewOptions = *pView->GetWrtShell().GetViewOptions();
+
+    //TODO: Should HideWhitespace flag be saved in the document settings?
+    GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, rViewOptions.getBrowseMode());
+    UpdateFontList();  // Why is this necessary here?
+
+    pView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
+    if( !GetDoc()->getIDocumentDeviceAccess().getPrinter( false ) )
+        pView->SetPrinter( GetDoc()->getIDocumentDeviceAccess().getPrinter( false ), SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP );
+    GetDoc()->CheckDefaultPageFormat();
+    SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, false);
+    while (pTmpFrm)
     {
-        pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
-        if( !GetDoc()->getIDocumentDeviceAccess().getPrinter( false ) )
-            pTempView->SetPrinter( GetDoc()->getIDocumentDeviceAccess().getPrinter( false ), SfxPrinterChangeFlags::PRINTER | SfxPrinterChangeFlags::JOBSETUP );
-        GetDoc()->CheckDefaultPageFormat();
-        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, false);
-        while (pTmpFrm)
+        if( pTmpFrm != pView->GetViewFrame() )
         {
-            if( pTmpFrm != pTempView->GetViewFrame() )
-            {
-                pTmpFrm->DoClose();
-                pTmpFrm = SfxViewFrame::GetFirst(this, false);
-            }
-            else
-                pTmpFrm = SfxViewFrame::GetNext(*pTmpFrm, this, false);
+            pTmpFrm->DoClose();
+            pTmpFrm = SfxViewFrame::GetFirst(this, false);
         }
-        const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
-        pTempView->GetWrtShell().CheckBrowseView( true );
-        pTempView->CheckVisArea();
-        if( bSet )
-        {
-            const SvxZoomType eType = (SvxZoomType)rViewOptions.GetZoomType();
-            if ( SvxZoomType::PERCENT != eType)
-                static_cast<SwView*>(GetView())->SetZoom( eType );
-        }
-        pTempView->InvalidateBorder();
-        pTempView->SetNewWindowAllowed(!bSet);
+        else
+            pTmpFrm = SfxViewFrame::GetNext(*pTmpFrm, this, false);
     }
+
+    pView->GetWrtShell().InvalidateLayout(true);
+
+    pView->RecheckBrowseMode();
+
+    pView->SetNewWindowAllowed(!rViewOptions.getBrowseMode());
 }
-// End of disabled "multiple layout"
 
 // update text fields on document properties changes
 void SwDocShell::DoFlushDocInfo()
@@ -1365,7 +1359,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     {
         SwWrtShell& rWrtSh = pCurrView->GetWrtShell();
         if( rWrtSh.GetLayout())
-            rWrtSh.CheckBrowseView( true );
+            rWrtSh.InvalidateLayout( true );
     }
 
     // Take HTTP-Header-Attibutes over into the DokInfo again.
