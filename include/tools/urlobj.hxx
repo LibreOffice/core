@@ -390,6 +390,17 @@ public:
 
     inline INetProtocol GetProtocol() const { return m_eScheme; }
 
+    bool isSchemeEqualTo(INetProtocol scheme) const { return scheme == m_eScheme; }
+
+    bool isSchemeEqualTo(OUString const & scheme) const;
+
+    /** Check if the scheme is one of the WebDAV scheme
+     *  we know about.
+     *
+     *  @return true is one othe scheme either public scheme or private scheme.
+     */
+    bool isAnyKnownWebDAVScheme() const;
+
     /** Return the URL 'prefix' for a given scheme.
 
         @param eTheScheme  One of the supported URL schemes.
