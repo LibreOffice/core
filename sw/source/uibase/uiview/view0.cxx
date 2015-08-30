@@ -303,6 +303,17 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             }
             case FN_VIEW_HIDDEN_PARA:
                 aBool.SetValue( pOpt->IsShowHiddenPara()); break;
+            case FN_VIEW_HIDE_WHITESPACE:
+            {
+                if (pOpt->getBrowseMode())
+                {
+                    rSet.DisableItem(nWhich);
+                    nWhich = 0;
+                }
+                else
+                    aBool.SetValue(pOpt->IsHideWhitespaceMode());
+            }
+            break;
             case SID_GRID_VISIBLE:
                 aBool.SetValue( pOpt->IsGridVisible() ); break;
             case SID_GRID_USE:
@@ -357,6 +368,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     int eState = STATE_TOGGLE;
     bool bSet = false;
     bool bBrowseModeChanged = false;
+    bool bHideWhitespaceModeChanged = false;
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -419,8 +431,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         else if( nSlot == FN_PRINT_LAYOUT )
             bFlag = !bFlag;
         bBrowseModeChanged = bFlag != pOpt->getBrowseMode();
-        // Disable "multiple layout"
-        GetDocShell()->ToggleBrowserMode( bFlag, this );
         pOpt->setBrowseMode( bFlag );
         break;
 
@@ -439,6 +449,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !pOpt->IsShowHiddenPara();
 
         pOpt->SetShowHiddenPara( bFlag );
+        break;
+
+    case FN_VIEW_HIDE_WHITESPACE:
+        if ( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsHideWhitespaceMode();
+        bHideWhitespaceModeChanged = (bFlag != pOpt->IsHideWhitespaceMode());
+        pOpt->SetHideWhitespaceMode(bFlag);
         break;
 
     case FN_VIEW_SMOOTH_SCROLL:
@@ -561,10 +578,9 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     if( !(*rSh.GetViewOptions() == *pOpt ))
     {
         rSh.ApplyViewOptions( *pOpt );
-        if( bBrowseModeChanged )
+        if( bBrowseModeChanged || bHideWhitespaceModeChanged )
         {
-            RecheckBrowseMode();
-            CheckVisArea();
+            GetDocShell()->ToggleLayoutMode(this);
         }
 
         // The UsrPref must be marked as modified.

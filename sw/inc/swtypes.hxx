@@ -75,13 +75,13 @@ const SwTwips cMinHdFtHeight = 56;
 // 28 Twips == 0,4mm
 #define MIN_BORDER_DIST 28
 
-// Minimal document border.
+// Minimal document border: 20mm.
 const SwTwips lMinBorder = 1134;
 
 // Margin left and above document.
 // Half of it is gap between the pages.
+//TODO: Replace with SwViewOption::GetDefDocumentBorder()
 #define DOCUMENTBORDER  284L
-#define GAPBETWEENPAGES 284L
 
 // Constant strings.
 SW_DLLPUBLIC extern OUString aEmptyOUStr;  // remove once aEmptyOUStr can be changed to OUString
