@@ -105,7 +105,7 @@ public:
     const OpenGLGlyphCacheChunk&  GetCachedGlyphChunkFor(int nGlyphIndex) const;
 };
 
-#ifdef SAL_DETAIL_ENABLE_LOG_INFO
+#ifdef SAL_LOG_INFO
 
 namespace {
 
@@ -150,7 +150,7 @@ void DumpGlyphBitmap(OpenGLGlyphCacheChunk& rChunk, HDC hDC)
 
 } // anonymous namespace
 
-#endif // SAL_DETAIL_ENABLE_LOG_INFO
+#endif // SAL_LOG_INFO
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
@@ -428,7 +428,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     if (hNonAntialiasedFont != NULL)
         DeleteObject(hNonAntialiasedFont);
 
-#ifdef SAL_DETAIL_ENABLE_LOG_INFO
+#ifdef SAL_LOG_INFO
     SAL_INFO("vcl.gdi.opengl", "this=" << this << " now: " << maOpenGLGlyphCache);
     DumpGlyphBitmap(aChunk, aDC.getCompatibleHDC());
 #endif
