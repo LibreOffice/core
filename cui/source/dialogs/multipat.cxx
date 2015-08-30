@@ -346,11 +346,7 @@ void SvxPathSelectDialog::SetPath(const OUString& rPath)
         bool bIsSystemPath =
             osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
 
-        sal_Int32 nPos = 0;
-        if ( bIsSystemPath )
-            nPos = m_pPathLB->InsertEntry( sSystemPath );
-        else
-            nPos = m_pPathLB->InsertEntry( sPath );
+        const sal_Int32 nPos = m_pPathLB->InsertEntry( bIsSystemPath ? sSystemPath : sPath );
         m_pPathLB->SetEntryData( nPos, new OUString( sPath ) );
     }
 
