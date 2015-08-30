@@ -949,6 +949,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         switch(nPart)
         {
         case PART_DRAW_BACKGROUND_HORZ:
+        case PART_DRAW_BACKGROUND_VERT:
             context = mpToolbarStyle;
             break;
         case PART_BUTTON:
