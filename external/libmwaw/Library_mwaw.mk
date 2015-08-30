@@ -13,7 +13,6 @@ $(eval $(call gb_Library_use_unpacked,mwaw,libmwaw))
 
 $(eval $(call gb_Library_use_externals,mwaw,\
     revenge \
-    boost_headers \
 ))
 
 $(eval $(call gb_Library_set_warnings_not_errors,mwaw))
@@ -24,10 +23,10 @@ $(eval $(call gb_Library_set_include,mwaw,\
 ))
 
 $(eval $(call gb_Library_add_defs,mwaw,\
-	-DBOOST_ALL_NO_LIB \
 	-DBUILD_MWAW \
 	-DNDEBUG \
 	-D_WINDLL \
+	-DSHAREDPTR_STD \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
