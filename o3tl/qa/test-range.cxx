@@ -22,9 +22,7 @@
 
 
 #include "preextstl.h"
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
+#include "gtest/gtest.h"
 #include "postextstl.h"
 
 #include <o3tl/range.hxx>
@@ -39,7 +37,7 @@ using o3tl::range_of;
 using std::size_t;
 
 
-class range_test : public CppUnit::TestFixture
+class range_test : public ::testing::Test
 {
 public:
 
@@ -51,18 +49,18 @@ public:
             t2(33,33);
 
         // ctor
-        CPPUNIT_ASSERT_MESSAGE("int ctor1", t1.begin() == 12);
-        CPPUNIT_ASSERT_MESSAGE("int ctor2", t1.end() == 88);
-        CPPUNIT_ASSERT_MESSAGE("int ctor3", t2.begin() == 33);
-        CPPUNIT_ASSERT_MESSAGE("int ctor4", t2.end() == 33);
+        ASSERT_TRUE(t1.begin() == 12) << "int ctor1";
+        ASSERT_TRUE(t1.end() == 88) << "int ctor2";
+        ASSERT_TRUE(t2.begin() == 33) << "int ctor3";
+        ASSERT_TRUE(t2.end() == 33) << "int ctor4";
 
         // make_range
-        CPPUNIT_ASSERT_MESSAGE("int make_range1", make_range(0,8).begin() == 0);
-        CPPUNIT_ASSERT_MESSAGE("int make_range2", make_range(0,8).end() == 8);
+        ASSERT_TRUE(make_range(0,8).begin() == 0) << "int make_range1";
+        ASSERT_TRUE(make_range(0,8).end() == 8) << "int make_range2";
 
         // size
-        CPPUNIT_ASSERT_MESSAGE("int size1", t1.size() == size_t(t1.end() - t1.begin()) );
-        CPPUNIT_ASSERT_MESSAGE("int size2", t2.size() == size_t(0) );
+        ASSERT_TRUE(t1.size() == size_t(t1.end() - t1.begin())) << "int size1";
+        ASSERT_TRUE(t2.size() == size_t(0)) << "int size2";
 
         // contains
         range<int>      t3(0,10);
@@ -76,50 +74,50 @@ public:
         range<int>      t11(90, 100);
         range<int>      t12(200,200);
 
-        CPPUNIT_ASSERT_MESSAGE("int contains1", t1.contains(t1));
-        CPPUNIT_ASSERT_MESSAGE("int contains2", t1.contains(t2));
-        CPPUNIT_ASSERT_MESSAGE("int contains3", ! t1.contains(t3));
-        CPPUNIT_ASSERT_MESSAGE("int contains4", ! t1.contains(t4));
-        CPPUNIT_ASSERT_MESSAGE("int contains5", t1.contains(t5));
-        CPPUNIT_ASSERT_MESSAGE("int contains6", t1.contains(t6));
-        CPPUNIT_ASSERT_MESSAGE("int contains7", t1.contains(t7));
-        CPPUNIT_ASSERT_MESSAGE("int contains8", t1.contains(t8));
-        CPPUNIT_ASSERT_MESSAGE("int contains9", ! t1.contains(t9));
-        CPPUNIT_ASSERT_MESSAGE("int contains10", ! t1.contains(t10));
-        CPPUNIT_ASSERT_MESSAGE("int contains11", ! t1.contains(t11));
-        CPPUNIT_ASSERT_MESSAGE("int contains12", ! t1.contains(t12));
+        ASSERT_TRUE(t1.contains(t1)) << "int contains1";
+        ASSERT_TRUE(t1.contains(t2)) << "int contains2";
+        ASSERT_TRUE(! t1.contains(t3)) << "int contains3";
+        ASSERT_TRUE(! t1.contains(t4)) << "int contains4";
+        ASSERT_TRUE(t1.contains(t5)) << "int contains5";
+        ASSERT_TRUE(t1.contains(t6)) << "int contains6";
+        ASSERT_TRUE(t1.contains(t7)) << "int contains7";
+        ASSERT_TRUE(t1.contains(t8)) << "int contains8";
+        ASSERT_TRUE(! t1.contains(t9)) << "int contains9";
+        ASSERT_TRUE(! t1.contains(t10)) << "int contains10";
+        ASSERT_TRUE(! t1.contains(t11)) << "int contains11";
+        ASSERT_TRUE(! t1.contains(t12)) << "int contains12";
 
-        CPPUNIT_ASSERT_MESSAGE("int contains n1", t1.contains(50));
-        CPPUNIT_ASSERT_MESSAGE("int contains n2", t1.contains(12));
-        CPPUNIT_ASSERT_MESSAGE("int contains n3", t1.contains(87));
-        CPPUNIT_ASSERT_MESSAGE("int contains n4", ! t1.contains(3));
-        CPPUNIT_ASSERT_MESSAGE("int contains n5", ! t1.contains(11));
-        CPPUNIT_ASSERT_MESSAGE("int contains n6", ! t1.contains(88));
-        CPPUNIT_ASSERT_MESSAGE("int contains n7", ! t1.contains(100));
+        ASSERT_TRUE(t1.contains(50)) << "int contains n1";
+        ASSERT_TRUE(t1.contains(12)) << "int contains n2";
+        ASSERT_TRUE(t1.contains(87)) << "int contains n3";
+        ASSERT_TRUE(! t1.contains(3)) << "int contains n4";
+        ASSERT_TRUE(! t1.contains(11)) << "int contains n5";
+        ASSERT_TRUE(! t1.contains(88)) << "int contains n6";
+        ASSERT_TRUE(! t1.contains(100)) << "int contains n7";
 
         // overlaps
         range<int>      t13(88,99);
 
-        CPPUNIT_ASSERT_MESSAGE("int overlaps1", t1.overlaps(t1));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps2", t1.overlaps(t2));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps3", ! t1.overlaps(t3));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps4", t1.overlaps(t4));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps5", t1.overlaps(t5));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps6", t1.overlaps(t6));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps7", t1.overlaps(t7));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps8", t1.overlaps(t8));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps9", ! t1.overlaps(t9));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps10", t1.overlaps(t10));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps11", ! t1.overlaps(t11));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps12", ! t1.overlaps(t12));
-        CPPUNIT_ASSERT_MESSAGE("int overlaps13", ! t1.overlaps(t13));
+        ASSERT_TRUE(t1.overlaps(t1)) << "int overlaps1";
+        ASSERT_TRUE(t1.overlaps(t2)) << "int overlaps2";
+        ASSERT_TRUE(! t1.overlaps(t3)) << "int overlaps3";
+        ASSERT_TRUE(t1.overlaps(t4)) << "int overlaps4";
+        ASSERT_TRUE(t1.overlaps(t5)) << "int overlaps5";
+        ASSERT_TRUE(t1.overlaps(t6)) << "int overlaps6";
+        ASSERT_TRUE(t1.overlaps(t7)) << "int overlaps7";
+        ASSERT_TRUE(t1.overlaps(t8)) << "int overlaps8";
+        ASSERT_TRUE(! t1.overlaps(t9)) << "int overlaps9";
+        ASSERT_TRUE(t1.overlaps(t10)) << "int overlaps10";
+        ASSERT_TRUE(! t1.overlaps(t11)) << "int overlaps11";
+        ASSERT_TRUE(! t1.overlaps(t12)) << "int overlaps12";
+        ASSERT_TRUE(! t1.overlaps(t13)) << "int overlaps13";
 
         // distance_to
-        CPPUNIT_ASSERT_MESSAGE("int distance_to1", t1.distance_to(t13) == 0);
-        CPPUNIT_ASSERT_MESSAGE("int distance_to2", t1.distance_to(t9) == 0);
-        CPPUNIT_ASSERT_MESSAGE("int distance_to3", t1.distance_to(t11) == 2);
-        CPPUNIT_ASSERT_MESSAGE("int distance_to4", t1.distance_to(t8) == -1);
-        CPPUNIT_ASSERT_MESSAGE("int distance_to5", t1.distance_to(t3) == -88);
+        ASSERT_TRUE(t1.distance_to(t13) == 0) << "int distance_to1";
+        ASSERT_TRUE(t1.distance_to(t9) == 0) << "int distance_to2";
+        ASSERT_TRUE(t1.distance_to(t11) == 2) << "int distance_to3";
+        ASSERT_TRUE(t1.distance_to(t8) == -1) << "int distance_to4";
+        ASSERT_TRUE(t1.distance_to(t3) == -88) << "int distance_to5";
     }
 
     void iterator_test()
@@ -137,18 +135,18 @@ public:
             t2(hv.begin()+33, hv.begin()+33);
 
         // ctor
-        CPPUNIT_ASSERT_MESSAGE("ivec ctor1", t1.begin() == hit1);
-        CPPUNIT_ASSERT_MESSAGE("ivec ctor2", t1.end() == hit2);
-        CPPUNIT_ASSERT_MESSAGE("ivec ctor3", t2.begin() == hv.begin()+33);
-        CPPUNIT_ASSERT_MESSAGE("ivec ctor4", t2.end() == hv.begin()+33);
+        ASSERT_TRUE(t1.begin() == hit1) << "ivec ctor1";
+        ASSERT_TRUE(t1.end() == hit2) << "ivec ctor2";
+        ASSERT_TRUE(t2.begin() == hv.begin()+33) << "ivec ctor3";
+        ASSERT_TRUE(t2.end() == hv.begin()+33) << "ivec ctor4";
 
         // make_range
-        CPPUNIT_ASSERT_MESSAGE("ivec make_range1", make_range(hv.begin(), hv.begin()+8).begin() == hv.begin());
-        CPPUNIT_ASSERT_MESSAGE("ivec make_range2", make_range(hv.begin(), hv.begin()+8).end() == hv.begin()+8);
+        ASSERT_TRUE(make_range(hv.begin(), hv.begin()+8).begin() == hv.begin()) << "ivec make_range1";
+        ASSERT_TRUE(make_range(hv.begin(), hv.begin()+8).end() == hv.begin()+8) << "ivec make_range2";
 
         // size
-        CPPUNIT_ASSERT_MESSAGE("ivec size1", t1.size() == size_t(t1.end() - t1.begin()) );
-        CPPUNIT_ASSERT_MESSAGE("ivec size2", t2.size() == size_t(0) );
+        ASSERT_TRUE(t1.size() == size_t(t1.end() - t1.begin())) << "ivec size1";
+        ASSERT_TRUE(t2.size() == size_t(0)) << "ivec size2";
 
         // contains
         range<test_it>      t3(hv.begin(), hv.begin() + 10);
@@ -162,71 +160,63 @@ public:
         range<test_it>      t11(hv.begin() + 90, hv.begin() + 100);
         range<test_it>      t12(hv.begin() + 200,hv.begin() + 200);
 
-        CPPUNIT_ASSERT_MESSAGE("ivec contains1", t1.contains(t1));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains2", t1.contains(t2));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains3", ! t1.contains(t3));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains4", ! t1.contains(t4));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains5", t1.contains(t5));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains6", t1.contains(t6));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains7", t1.contains(t7));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains8", t1.contains(t8));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains9", ! t1.contains(t9));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains10", ! t1.contains(t10));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains11", ! t1.contains(t11));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains12", ! t1.contains(t12));
+        ASSERT_TRUE(t1.contains(t1)) << "ivec contains1";
+        ASSERT_TRUE(t1.contains(t2)) << "ivec contains2";
+        ASSERT_TRUE(! t1.contains(t3)) << "ivec contains3";
+        ASSERT_TRUE(! t1.contains(t4)) << "ivec contains4";
+        ASSERT_TRUE(t1.contains(t5)) << "ivec contains5";
+        ASSERT_TRUE(t1.contains(t6)) << "ivec contains6";
+        ASSERT_TRUE(t1.contains(t7)) << "ivec contains7";
+        ASSERT_TRUE(t1.contains(t8)) << "ivec contains8";
+        ASSERT_TRUE(! t1.contains(t9)) << "ivec contains9";
+        ASSERT_TRUE(! t1.contains(t10)) << "ivec contains10";
+        ASSERT_TRUE(! t1.contains(t11)) << "ivec contains11";
+        ASSERT_TRUE(! t1.contains(t12)) << "ivec contains12";
 
-        CPPUNIT_ASSERT_MESSAGE("ivec contains n1", t1.contains(hv.begin() + 50));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains n2", t1.contains(hit1));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains n3", t1.contains(hv.begin() + 87));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains n4", ! t1.contains(hv.begin() + 3));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains n5", ! t1.contains(hv.begin() + 11));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains n6", ! t1.contains(hit2));
-        CPPUNIT_ASSERT_MESSAGE("ivec contains n7", ! t1.contains(hv.begin() + 100));
+        ASSERT_TRUE(t1.contains(hv.begin() + 50)) << "ivec contains n1";
+        ASSERT_TRUE(t1.contains(hit1)) << "ivec contains n2";
+        ASSERT_TRUE(t1.contains(hv.begin() + 87)) << "ivec contains n3";
+        ASSERT_TRUE(! t1.contains(hv.begin() + 3)) << "ivec contains n4";
+        ASSERT_TRUE(! t1.contains(hv.begin() + 11)) << "ivec contains n5";
+        ASSERT_TRUE(! t1.contains(hit2)) << "ivec contains n6";
+        ASSERT_TRUE(! t1.contains(hv.begin() + 100)) << "ivec contains n7";
 
         // overlaps
         range<test_it>      t13(hit2, hv.begin() + 99);
 
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps1", t1.overlaps(t1));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps2", t1.overlaps(t2));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps3", ! t1.overlaps(t3));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps4", t1.overlaps(t4));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps5", t1.overlaps(t5));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps6", t1.overlaps(t6));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps7", t1.overlaps(t7));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps8", t1.overlaps(t8));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps9", ! t1.overlaps(t9));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps10", t1.overlaps(t10));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps11", ! t1.overlaps(t11));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps12", ! t1.overlaps(t12));
-        CPPUNIT_ASSERT_MESSAGE("ivec overlaps13", ! t1.overlaps(t13));
+        ASSERT_TRUE(t1.overlaps(t1)) << "ivec overlaps1";
+        ASSERT_TRUE(t1.overlaps(t2)) << "ivec overlaps2";
+        ASSERT_TRUE(! t1.overlaps(t3)) << "ivec overlaps3";
+        ASSERT_TRUE(t1.overlaps(t4)) << "ivec overlaps4";
+        ASSERT_TRUE(t1.overlaps(t5)) << "ivec overlaps5";
+        ASSERT_TRUE(t1.overlaps(t6)) << "ivec overlaps6";
+        ASSERT_TRUE(t1.overlaps(t7)) << "ivec overlaps7";
+        ASSERT_TRUE(t1.overlaps(t8)) << "ivec overlaps8";
+        ASSERT_TRUE(! t1.overlaps(t9)) << "ivec overlaps9";
+        ASSERT_TRUE(t1.overlaps(t10)) << "ivec overlaps10";
+        ASSERT_TRUE(! t1.overlaps(t11)) << "ivec overlaps11";
+        ASSERT_TRUE(! t1.overlaps(t12)) << "ivec overlaps12";
+        ASSERT_TRUE(! t1.overlaps(t13)) << "ivec overlaps13";
 
         // distance_to
-        CPPUNIT_ASSERT_MESSAGE("ivec distance_to1", t1.distance_to(t13) == 0);
-        CPPUNIT_ASSERT_MESSAGE("ivec distance_to2", t1.distance_to(t8) == -1);
-        CPPUNIT_ASSERT_MESSAGE("ivec distance_to3", t1.distance_to(t9) == 0);
-        CPPUNIT_ASSERT_MESSAGE("ivec distance_to4", t1.distance_to(t11) == 2);
-        CPPUNIT_ASSERT_MESSAGE("ivec distance_to5", t1.distance_to(t3) == -88);
+        ASSERT_TRUE(t1.distance_to(t13) == 0) << "ivec distance_to1";
+        ASSERT_TRUE(t1.distance_to(t8) == -1) << "ivec distance_to2";
+        ASSERT_TRUE(t1.distance_to(t9) == 0) << "ivec distance_to3";
+        ASSERT_TRUE(t1.distance_to(t11) == 2) << "ivec distance_to4";
+        ASSERT_TRUE(t1.distance_to(t3) == -88) << "ivec distance_to5";
 
         const std::vector< int* >   h2(20, (int*)0);
         std::deque< double >        h3(30, 0.0);
 
-        CPPUNIT_ASSERT_MESSAGE("range_of1", range_of(h2).begin() == h2.begin());
-        CPPUNIT_ASSERT_MESSAGE("range_of2", range_of(h3).end() == h3.end());
+        ASSERT_TRUE(range_of(h2).begin() == h2.begin()) << "range_of1";
+        ASSERT_TRUE(range_of(h3).end() == h3.end()) << "range_of2";
     }
 
-    // insert your test code here.
-    void global()
-    {
-        int_test();
-        iterator_test();
-    }
-
-
-    // These macros are needed by auto register mechanism.
-    CPPUNIT_TEST_SUITE(range_test);
-    CPPUNIT_TEST(global);
-    CPPUNIT_TEST_SUITE_END();
 }; // class range_test
 
-// -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_REGISTRATION(range_test);
+TEST_F(range_test, global)
+{
+    int_test();
+    iterator_test();
+}
+
