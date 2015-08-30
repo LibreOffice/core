@@ -16,7 +16,6 @@ $(eval $(call gb_ExternalProject_register_targets,libwps,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libwps,\
-	boost_headers \
 	revenge \
 ))
 
@@ -30,12 +29,13 @@ $(call gb_ExternalProject_get_state_target,libwps,build) :
 			, \
 				--enable-shared --disable-static \
 			) \
+			--with-sharedptr=c++11 \
 			--without-docs \
 			--disable-tools \
 			--disable-debug \
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost)) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX)" \
+			CXXFLAGS="$(CXXFLAGS_CXX11) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX)" \
 			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \

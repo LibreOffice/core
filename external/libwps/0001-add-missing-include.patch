@@ -1,0 +1,24 @@
+From bc6f0f3a006123a89d1321038edeb75f2fd67c6f Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Sun, 30 Aug 2015 11:21:29 +0200
+Subject: [PATCH] add missing include
+
+---
+ src/lib/WPS8.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/lib/WPS8.cpp b/src/lib/WPS8.cpp
+index 04c1e57..8d39fa8 100644
+--- a/src/lib/WPS8.cpp
++++ b/src/lib/WPS8.cpp
+@@ -19,6 +19,7 @@
+  * applicable instead of those above.
+  */
+ 
++#include <algorithm>
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+-- 
+2.4.3
+
