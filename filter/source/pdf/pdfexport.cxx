@@ -844,10 +844,12 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     aSelection = Any();
                     aSelection <<= mxSrcDoc;
                 }
-                bool        bSecondPassForImpressNotes = false;
+                bool bSecondPassForImpressNotes = false;
                 bool bReChangeToNormalView = false;
-                  OUString sShowOnlineLayout( "ShowOnlineLayout" );
-                  uno::Reference< beans::XPropertySet > xViewProperties;
+                const OUString sShowOnlineLayout( "ShowOnlineLayout" );
+                bool bReHideWhitespace = false;
+                const OUString sHideWhitespace("HideWhitespace");
+                uno::Reference< beans::XPropertySet > xViewProperties;
 
                 if ( aCreator == "Writer" )
                 {
@@ -855,11 +857,18 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     try
                     {
                         Reference< view::XViewSettingsSupplier > xVSettingsSupplier( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-                        xViewProperties =  xVSettingsSupplier->getViewSettings();
+                        xViewProperties = xVSettingsSupplier->getViewSettings();
                         xViewProperties->getPropertyValue( sShowOnlineLayout ) >>= bReChangeToNormalView;
                         if( bReChangeToNormalView )
                         {
                             xViewProperties->setPropertyValue( sShowOnlineLayout, uno::makeAny( false ) );
+                        }
+
+                        // Also, disable hide-whitespace during export.
+                        xViewProperties->getPropertyValue(sHideWhitespace) >>= bReHideWhitespace;
+                        if (bReHideWhitespace)
+                        {
+                            xViewProperties->setPropertyValue(sHideWhitespace, uno::makeAny(false));
                         }
                     }
                     catch( const uno::Exception& )
@@ -925,6 +934,16 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     try
                     {
                         xViewProperties->setPropertyValue( sShowOnlineLayout, uno::makeAny( true ) );
+                    }
+                    catch( const uno::Exception& )
+                    {
+                    }
+                }
+                if( bReHideWhitespace )
+                {
+                    try
+                    {
+                        xViewProperties->setPropertyValue( sHideWhitespace, uno::makeAny( true ) );
                     }
                     catch( const uno::Exception& )
                     {

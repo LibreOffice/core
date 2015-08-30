@@ -130,18 +130,18 @@ class SW_DLLPUBLIC SwViewOption
 protected:
     static sal_uInt16   nPixelTwips;// 1 Pixel == ? Twips
 
-    OUString   sSymbolFont;        // Symbolfont.
+    OUString        sSymbolFont;        // Symbolfont.
     sal_uInt32      nCoreOptions;       // Bits for SwViewShell.
     sal_uInt32      nCore2Options;      // Bits for SwViewShell.
     sal_uInt32      nUIOptions;         // UI-Bits
     Color           aRetoucheColor;     // DefaultBackground for BrowseView
     Size            aSnapSize;          // Describes horizontal and vertical snap.
-    sal_uInt16          mnViewLayoutColumns;// # columns for edit view
+    sal_uInt16      mnViewLayoutColumns;// # columns for edit view
     short           nDivisionX;         // Grid division.
     short           nDivisionY;
-    sal_uInt8           nPagePrevRow;       // Page Preview Row/Columns.
-    sal_uInt8           nPagePrevCol;       // Page Preview Row/Columns.
-    sal_uInt8           nShdwCrsrFillMode;  // FillMode for ShadowCrsr.
+    sal_uInt8       nPagePrevRow;       // Page Preview Row/Columns.
+    sal_uInt8       nPagePrevCol;       // Page Preview Row/Columns.
+    sal_uInt8       nShdwCrsrFillMode;  // FillMode for ShadowCrsr.
     bool            bReadonly : 1;      // Readonly-Doc.
     bool            bStarOneSetting : 1;// Prevent from UI automatics (no scrollbars in readonly documents).
     bool            bIsPagePreview : 1; // The preview mustn't print field/footnote/... shadings.
@@ -151,7 +151,7 @@ protected:
     bool            mbBookView : 1;      // View mode for page preview.
     bool            mbViewLayoutBookMode : 1; // Book view mode for edit view.
     bool            mbHideWhitespaceMode : 1; // Hide header, footer, and pagebreak.
-    bool        bShowPlaceHolderFields : 1; // Only used in printing!
+    bool            bShowPlaceHolderFields : 1; // Only used in printing!
     mutable bool    bIdle;
 
     // Scale
@@ -371,6 +371,16 @@ public:
     inline short GetDivisionY() const   { return nDivisionY; }
     inline void  SetDivisionY( short n ){ nDivisionY = n; }
 
+    // Default margin left and above document: 284 twips == 5.0 mm.
+    static SAL_CONSTEXPR sal_uInt16 GetDefDocumentBorder() { return 284; }
+    // Default gap between pages: 284 twips == 5.0 mm.
+    static SAL_CONSTEXPR sal_uInt16 GetDefGapBetweenPages() { return 284; }
+    // Minimum edge-to-text distance: 114 twips == 2.0 mm.
+    static SAL_CONSTEXPR sal_uInt16 GetMinGapBetweenPages() { return 114; }
+
+    inline sal_uInt16 GetDocumentBorder() const { return IsHideWhitespaceMode() ? GetMinGapBetweenPages() : GetDefDocumentBorder(); }
+    inline sal_uInt16 GetGapBetweenPages() const { return IsHideWhitespaceMode() ? GetMinGapBetweenPages() : GetDefGapBetweenPages(); }
+
     inline sal_uInt8  GetPagePrevRow() const      { return nPagePrevRow; }
     inline void  SetPagePrevRow( sal_uInt8 n ) { nPagePrevRow = n; }
     inline sal_uInt8  GetPagePrevCol() const      { return nPagePrevCol; }
@@ -397,6 +407,9 @@ public:
     void   SetViewLayoutColumns( sal_uInt16 nNew ) { mnViewLayoutColumns = nNew; }
     bool   IsHideWhitespaceMode() const { return mbHideWhitespaceMode; }
     void   SetHideWhitespaceMode( bool bMode ) { mbHideWhitespaceMode = bMode; }
+
+    bool   IsMultipageView() const { return IsViewLayoutBookMode() ||
+                                            GetViewLayoutColumns() == 0; }
 
 #ifdef DBG_UTIL
     // Correspond to statements in ui/config/cfgvw.src.

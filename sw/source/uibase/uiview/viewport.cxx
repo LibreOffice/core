@@ -265,7 +265,7 @@ void SwView::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
         if ( aOldSz != m_pWrtShell->VisArea().SSize() &&
              ( std::abs(aOldSz.Width() - m_pWrtShell->VisArea().Width()) > 2 ||
                 std::abs(aOldSz.Height() - m_pWrtShell->VisArea().Height()) > 2 ) )
-            m_pWrtShell->CheckBrowseView( false );
+            m_pWrtShell->InvalidateLayout( false );
     }
 
     if ( !bProtectDocShellVisArea )
@@ -329,7 +329,7 @@ void SwView::SetVisArea( const Point &rPt, bool bUpdateScrollbar )
 void SwView::CheckVisArea()
 {
     m_pHScrollbar->SetAuto( m_pWrtShell->GetViewOptions()->getBrowseMode() &&
-                              !GetViewFrame()->GetFrame().IsInPlace() );
+                            !GetViewFrame()->GetFrame().IsInPlace() );
     if ( IsDocumentBorder() )
     {
         if ( m_aVisArea.Left() != DOCUMENTBORDER ||
