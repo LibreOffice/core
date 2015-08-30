@@ -26,11 +26,11 @@
 
 #include "sal/config.h"
 
-#include "testshl/simpleheader.hxx"
 #include "osl/conditn.hxx"
 #include "osl/thread.hxx"
 #include "osl/time.h"
 #include "sal/types.h"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -45,41 +45,36 @@ private:
 
     virtual void SAL_CALL onTerminated() {
         m_cond.set();
-        CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, global.wait());
+        ASSERT_EQ(osl::Condition::result_ok, global.wait());
     }
 
     osl::Condition & m_cond;
 };
 
-class Test: public CppUnit::TestFixture {
+class Test: public ::testing::Test {
 public:
-    // Nondeterministic, best effort test that an osl::Thread can be destroyed
-    // (and in particular osl_destroyThread---indirectly---be called) before the
-    // corresponding thread has terminated:
-    void test() {
-        for (int i = 0; i < 50; ++i) {
-            osl::Condition c;
-            Thread t(c);
-            CPPUNIT_ASSERT(t.create());
-            // Make sure virtual Thread::run/onTerminated are called before
-            // Thread::~Thread:
-            CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, c.wait());
-        }
-        // Make sure Thread::~Thread is called before each spawned thread
-        // terminates:
-        global.set();
-        // Give the spawned threads enough time to terminate:
-        TimeValue const twentySeconds = { 20, 0 };
-        osl::Thread::wait(twentySeconds);
-    }
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+// Nondeterministic, best effort test that an osl::Thread can be destroyed
+// (and in particular osl_destroyThread---indirectly---be called) before the
+// corresponding thread has terminated:
+TEST_F(Test, test) {
+    for (int i = 0; i < 50; ++i) {
+        osl::Condition c;
+        Thread t(c);
+        ASSERT_TRUE(t.create());
+        // Make sure virtual Thread::run/onTerminated are called before
+        // Thread::~Thread:
+        ASSERT_EQ(osl::Condition::result_ok, c.wait());
+    }
+    // Make sure Thread::~Thread is called before each spawned thread
+    // terminates:
+    global.set();
+    // Give the spawned threads enough time to terminate:
+    TimeValue const twentySeconds = { 20, 0 };
+    osl::Thread::wait(twentySeconds);
+}
+
 
 }
 
-NOADDITIONAL;

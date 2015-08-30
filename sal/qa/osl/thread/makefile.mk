@@ -29,20 +29,18 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-DLLPRE = # no leading "lib" on .so files
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+ 
+.ELSE
 
-SHL1TARGET = $(TARGET)
-SHL1OBJS = $(SLO)$/test_thread.obj
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-SHL1VERSIONMAP = version.map
-SHL1IMPLIB = i$(SHL1TARGET)
-DEF1NAME = $(SHL1TARGET)
-
-SLOFILES = $(SHL1OBJS)
+APP1TARGET = $(TARGET)
+APP1OBJS = $(SLO)$/test_thread.obj $(SLO)$/main.obj
+APP1STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 
 .INCLUDE: target.mk
 
-ALLTAR: test
-
-test .PHONY: $(SHL1TARGETN)
-    testshl2 $(SHL1TARGETN)
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
