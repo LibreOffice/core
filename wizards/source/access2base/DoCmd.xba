@@ -2420,29 +2420,23 @@ Private Function _SendWithoutAttachment(ByVal pvTo As Variant _
 						, ByVal psBody As String _
 						) As Boolean
 &apos;Send simple message with mailto: syntax
-Dim sMailTo As String, sTo As String, sCc As String, sBcc As String, sSubject As String, sBody As String, oDispatch As Object
+Dim sMailTo As String, sTo As String, sCc As String, sBcc As String, oDispatch As Object
 Const cstComma = &quot;,&quot;
-Const cstSpace = &quot;%20&quot;
-Const cstLF = &quot;%0A&quot;
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 
 	If UBound(pvTo) &gt;= 0	Then sTo = Trim(Join(pvTo, cstComma))	Else sTo = &quot;&quot;
 	If UBound(pvCc) &gt;= 0	Then sCc = Trim(Join(pvCc, cstComma))	Else sCc = &quot;&quot;
 	If UBound(pvBcc) &gt;= 0	Then sBcc = Trim(Join(pvBcc, cstComma))	Else sBcc = &quot;&quot;
-	If psSubject &lt;&gt; &quot;&quot;		Then sSubject = Join(Split(psSubject, &quot; &quot;), cstSpace)	Else sSubject = &quot;&quot;
-	If psBody &lt;&gt; &quot;&quot;	Then
-		sBody = Join(Split(Join(Split(psBody, Chr(13)), &quot;&quot;), Chr(10), cstLF)
-		sBody = Join(Split(sBody, &quot; &quot;), cstSpace)
-	End If
 	
 	sMailTo = &quot;mailto:&quot; _
 				&amp; sTo &amp; &quot;?&quot; _
 				&amp; Iif(sCc = &quot;&quot;, &quot;&quot;, &quot;cc=&quot; &amp; sCc &amp; &quot;&amp;&quot;) _
 				&amp; Iif(sBcc = &quot;&quot;, &quot;&quot;, &quot;bcc=&quot; &amp; sBcc &amp; &quot;&amp;&quot;) _
-				&amp; Iif(sSubject = &quot;&quot;, &quot;&quot;, &quot;subject=&quot; &amp; sSubject &amp; &quot;&amp;&quot;) _
-				&amp; Iif(sBody = &quot;&quot;, &quot;&quot;, &quot;body=&quot; &amp; sBody &amp; &quot;&amp;&quot;)
+				&amp; Iif(psSubject = &quot;&quot;, &quot;&quot;, &quot;subject=&quot; &amp; psSubject &amp; &quot;&amp;&quot;) _
+				&amp; Iif(psBody = &quot;&quot;, &quot;&quot;, &quot;body=&quot; &amp; psBody &amp; &quot;&amp;&quot;)
 	If Right(sMailTo, 1) = &quot;&amp;&quot; Or Right(sMailTo, 1) = &quot;?&quot; Then sMailTo = Left(sMailTo, Len(sMailTo) - 1)
+	sMailTo = Utils._URLEncode(sMailTo)
 	
 	oDispatch = createUnoService( &quot;com.sun.star.frame.DispatchHelper&quot;)
 	oDispatch.executeDispatch(StarDesktop, sMailTo, &quot;&quot;, 0, Array())

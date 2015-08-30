@@ -586,6 +586,42 @@ Dim vSubStrings() As Variant, i As Integer, iLen As Integer
 End Function	&apos;	PCase		V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _PercentEncode(ByVal psChar As String) As String
+&apos;	Percent encoding of single psChar character
+&apos;	https://en.wikipedia.org/wiki/UTF-8
+
+Dim lChar As Long, sByte1 As String, sByte2 As String, sByte3 As String
+	lChar = Asc(psChar)
+	
+	Select Case lChar
+		Case 48 To 57, 65 To 90, 97 To 122		&apos;	0-9, A-Z, a-z
+			_PercentEncode = psChar
+		Case &quot;-&quot;, &quot;.&quot;, &quot;_&quot;, &quot;~&quot;
+			_PercentEncode = psChar
+		Case &quot;!&quot;, &quot;$&quot;, &quot;&amp;&quot;, &quot;&apos;&quot;, &quot;(&quot;, &quot;)&quot;, &quot;*&quot;, &quot;+&quot;, &quot;,&quot;, &quot;;&quot;, &quot;=&quot;		&apos;	Reserved characters used as delimitors in query strings
+			_PercentEncode = psChar
+		Case &quot; &quot;, &quot;%&quot;
+			_PercentEncode = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex(lChar), 2)
+		Case 0 To 127
+			_PercentEncode = psChar
+		Case 128 To 2047
+			sByte1 = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex(Int(lChar / 64) + 192), 2)
+			sByte2 = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex((lChar Mod 64) + 128), 2)
+			_PercentEncode = sByte1 &amp; sByte2
+		Case 2048 To 65535
+			sByte1 = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex(Int(lChar / 4096) + 224), 2)
+			sByte2 = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex(Int(lChar - (4096 * Int(lChar / 4096))) /64 + 128), 2)
+			sByte3 = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex((lChar Mod 64) + 128), 2)
+			_PercentEncode = sByte1 &amp; sByte2 &amp; sByte3
+		Case Else				&apos;	Not supported
+			_PercentEncode = psChar
+	End Select
+	
+	Exit Function
+
+End Function	&apos;	_PercentEncode V1.4.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub _ResetCalledSub(ByVal psSub As String)
 &apos;	Called in bottom of each public function. _A2B_.CalledSub variable is used for error handling
 &apos;	Used to trace routine in/outs and to clarify error messages
@@ -690,4 +726,72 @@ Dim sTrim As String, vTrim() As Variant, i As Integer, j As Integer, iCount As I
 	_TrimArray() = vTrim()
 
 End Function	&apos;	TrimArray	V0.9.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _URLEncode(ByVal psToEncode As String) As String
+&apos;	http://www.w3schools.com/tags/ref_urlencode.asp
+&apos;	http://xkr.us/articles/javascript/encode-compare/
+&apos;	http://tools.ietf.org/html/rfc3986
+
+Dim sEncoded As String, sChar As String
+Dim lCurrentChar As Long, bQuestionMark As Boolean
+
+	sEncoded = &quot;&quot;
+	bQuestionMark = False
+	For lCurrentChar = 1 To Len(psToEncode)
+		sChar = Mid(psToEncode, lCurrentChar, 1)
+		Select Case sChar
+			Case &quot; &quot;, &quot;%&quot;
+				sEncoded = sEncoded &amp; _PercentEncode(sChar)
+			Case &quot;?&quot;					&apos;	Is it the first &quot;?&quot; ?
+				If bQuestionMark Then			&apos;	&quot;?&quot; introduces in a URL the arguments part
+					sEncoded = sEncoded &amp; _PercentEncode(sChar)
+				Else
+					sEncoded = sEncoded &amp; sChar
+					bQuestionMark = True
+				End If
+			Case &quot;\&quot;
+				If bQuestionMark Then
+					sEncoded = sEncoded &amp; _PercentEncode(sChar)
+				Else
+					sEncoded = sEncoded &amp; &quot;/&quot;	&apos;	If Windows file naming ...
+				End If
+			Case Else
+				If bQuestionMark Then
+					sEncoded = sEncoded &amp; _PercentEncode(sChar)
+				Else
+					sEncoded = sEncoded &amp; _UTF8Encode(sChar)	&apos;	Because IE does not support %encoding in first part of URL
+				End If
+		End Select
+	Next lCurrentChar
+ 
+	_URLEncode = sEncoded
+
+End Function	&apos;	_URLEncode V1.4.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Private Function _UTF8Encode(ByVal psChar As String) As String
+&apos;	&amp;-encoding of single psChar character (e.g. &quot;é&quot; becomes &quot;&amp;eacute;&quot; or numeric equivalent
+&apos;	http://www.w3schools.com/charsets/ref_html_utf8.asp
+
+	Select Case psChar
+		Case &quot;&quot;&quot;&quot;			:	_UTF8Encode = &quot;&amp;quot;&quot;
+		Case &quot;&amp;&quot;			:	_UTF8Encode = &quot;&amp;amp;&quot;
+		Case &quot;&lt;&quot;			:	_UTF8Encode = &quot;&amp;lt;&quot;
+		Case &quot;&gt;&quot;			:	_UTF8Encode = &quot;&amp;gt;&quot;
+		Case &quot;&apos;&quot;			:	_UTF8Encode = &quot;&amp;apos;&quot;
+		Case &quot;:&quot;, &quot;/&quot;, &quot;?&quot;, &quot;#&quot;, &quot;[&quot;, &quot;]&quot;, &quot;@&quot;				&apos;	Reserved characters
+			_UTF8Encode = psChar
+		Case Chr(13)		:	_UTF8Encode = &quot;&quot;			&apos;	Carriage return
+		Case Chr(10)		:	_UTF8Encode = &quot;&lt;br&gt;&quot;		&apos;	Line Feed
+		Case &lt; Chr(126)		:	_UTF8Encode = psChar
+		Case &quot;€&quot;			:	_UTF8Encode = &quot;&amp;euro;&quot;
+		Case Else			:	_UTF8Encode = &quot;&amp;#&quot; &amp; Asc(psChar) &amp; &quot;;&quot;
+	End Select
+
+	Exit Function
+
+End Function	&apos;	_UTF8Encode V1.4.0
+
+
 </script:module>
