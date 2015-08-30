@@ -152,7 +152,7 @@ struct BogusRefCountPolicy
         if(s_bShouldIncrement)
         {
             ++rCount;
-            s_bShouldIncrement = 0;
+            s_bShouldIncrement = false;
         }
         else
             CPPUNIT_FAIL("Ref-counting policy incremented when it should not have.");
@@ -167,7 +167,7 @@ struct BogusRefCountPolicy
         if(s_bShouldDecrement)
         {
             --rCount;
-            s_bShouldDecrement = 0;
+            s_bShouldDecrement = false;
         }
         else
             CPPUNIT_FAIL("Ref-counting policy decremented when it should not have.");

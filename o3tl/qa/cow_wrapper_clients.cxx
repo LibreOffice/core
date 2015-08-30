@@ -219,8 +219,8 @@ bool cow_wrapper_client4::operator<( const cow_wrapper_client4& rRHS ) const
     return maImpl < rRHS.maImpl;
 }
 
-bool BogusRefCountPolicy::s_bShouldIncrement = 0;
-bool BogusRefCountPolicy::s_bShouldDecrement = 0;
+bool BogusRefCountPolicy::s_bShouldIncrement = false;
+bool BogusRefCountPolicy::s_bShouldDecrement = false;
 sal_uInt32 BogusRefCountPolicy::s_nEndOfScope = 0;
 
 cow_wrapper_client5::cow_wrapper_client5() :
