@@ -28,10 +28,7 @@
 
 #include <cstddef>
 
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include "gtest/gtest.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
@@ -39,16 +36,11 @@
 
 namespace {
 
-class Test: public ::CppUnit::TestFixture {
+class Test: public ::testing::Test {
 public:
-    void test();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::test() {
+TEST_F(Test, test) {
     struct Data {
         rtl::OUString version1;
         rtl::OUString version2;
@@ -70,20 +62,17 @@ void Test::test() {
           ::dp_misc::GREATER }
     };
     for (::std::size_t i = 0; i < sizeof data / sizeof (Data); ++i) {
-        CPPUNIT_ASSERT_EQUAL(
+        ASSERT_EQ(
             data[i].order,
             ::dp_misc::compareVersions(data[i].version1, data[i].version2));
         static ::dp_misc::Order const reverse[3] = {
             ::dp_misc::GREATER, ::dp_misc::EQUAL, ::dp_misc::LESS
         };
-        CPPUNIT_ASSERT_EQUAL(
+        ASSERT_EQ(
             reverse[data[i].order],
             ::dp_misc::compareVersions(data[i].version2, data[i].version1));
     }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
-
-CPPUNIT_PLUGIN_IMPLEMENT();

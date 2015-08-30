@@ -20,18 +20,6 @@
 #**************************************************************
 
 
-
-.IF "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
-
-@all:
-.IF "$(GUI)" == "OS2"
-    @echo "Skipping, cppunit broken."
-.ELIF "$(WITH_CPPUNIT)" != "YES"
-    @echo "cppunit disabled. nothing do do."
-.END
-
-.ENDIF "$(WITH_CPPUNIT)" != "YES" || "$(GUI)" == "OS2"
-
 PRJ := ..$/..
 PRJNAME := desktop
 .IF "$(GUI)" == "OS2"
@@ -45,7 +33,12 @@ ENABLE_EXCEPTIONS := TRUE
 .INCLUDE: settings.mk
 .INCLUDE: $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+ 
+.ELSE
+
 
 # TODO:  On Windows, test_dp_version.cxx fails due to BOOL redefinition between
 # windef.h and tools/solar.h caused by including "precompiled_desktop.hxx"; this
@@ -53,15 +46,12 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 # 112600:
 CFLAGSCXX += -DDISABLE_PCH_HACK
 
-SHL1TARGET = $(TARGET)
-SHL1OBJS = $(SLO)$/test_dp_version.obj
-SHL1STDLIBS = $(CPPUNITLIB) $(DEPLOYMENTMISCLIB) $(SALLIB)
-SHL1VERSIONMAP = version.map
-SHL1RPATH = NONE
-SHL1IMPLIB = i$(SHL1TARGET)
-DEF1NAME = $(SHL1TARGET)
-
-SLOFILES = $(SHL1OBJS)
+APP1TARGET = $(TARGET)
+APP1OBJS = $(SLO)$/test_dp_version.obj $(SLO)$/main.obj
+APP1STDLIBS = $(GTESTLIB) $(DEPLOYMENTMISCLIB) $(SALLIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 
 .INCLUDE: target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
