@@ -693,7 +693,7 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
     }
 }
 
-bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
+bool SwCSS1Parser::StyleParsed( const std::unique_ptr<CSS1Selector> *pSelector,
                                 SfxItemSet& rItemSet,
                                 SvxCSS1PropertyInfo& rPropInfo )
 {

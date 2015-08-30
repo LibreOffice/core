@@ -656,7 +656,7 @@ SvxCSS1MapEntry::SvxCSS1MapEntry( const OUString& rKey, const SfxItemSet& rItemS
     aPropInfo( rProp )
 {}
 
-bool SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
+bool SvxCSS1Parser::StyleParsed( const std::unique_ptr<CSS1Selector> * /*pSelector*/,
                                  SfxItemSet& /*rItemSet*/,
                                  SvxCSS1PropertyInfo& /*rPropInfo*/ )
 {
