@@ -95,42 +95,33 @@ namespace canvas
             // TODO(F1): this is a heuristic, could
             // be designed as a policy.
             const FragmentContainer_t::const_iterator aEnd(maFragments.end());
-            FragmentContainer_t::const_iterator       candidate(maFragments.begin());
-            while(candidate != aEnd)
+            for( auto candidate = maFragments.begin(); candidate != aEnd; ++candidate )
             {
-                if(*candidate && !((*candidate)->isNaked()))
-                    break;
-                ++candidate;
-            }
-
-            if (candidate != aEnd)
-            {
-                const ::basegfx::B2ISize& rSize((*candidate)->getSize());
-                sal_uInt32                nMaxArea(rSize.getX()*rSize.getY());
-
-                FragmentContainer_t::const_iterator it(candidate);
-                while(it != aEnd)
+                if( *candidate && !( ( *candidate )->isNaked() ) )
                 {
-                    if (*it && !((*it)->isNaked()))
+                    const ::basegfx::B2ISize& rSize( ( *candidate )->getSize() );
+                    sal_uInt32                nMaxArea( rSize.getX() * rSize.getY() );
+
+                    for( auto it = candidate; it != aEnd; ++it )
                     {
-                        const ::basegfx::B2ISize& rCandidateSize((*it)->getSize());
-                        const sal_uInt32 nArea(rCandidateSize.getX()*rCandidateSize.getY());
-                        if(nArea > nMaxArea)
+                        if( *it && !( ( *it )->isNaked() ) )
                         {
-                            candidate=it;
-                            nMaxArea=nArea;
+                            const ::basegfx::B2ISize& rCandidateSize( ( *it )->getSize() );
+                            const sal_uInt32 nArea( rCandidateSize.getX() * rCandidateSize.getY() );
+                            if( nArea > nMaxArea )
+                            {
+                                candidate = it;
+                                nMaxArea = nArea;
+                            }
                         }
                     }
 
-                    ++it;
+                    // this does not erase the candidate,
+                    // but makes it 'naked'...
+                    ( *candidate )->free( *candidate );
+                    break;
                 }
-
-                // this does not erase the candidate,
-                // but makes it 'naked'...
-                (*candidate)->free(*candidate);
             }
-            else
-                break;
         }
     }
 
