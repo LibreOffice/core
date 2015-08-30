@@ -48,7 +48,7 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -109,6 +109,17 @@ public:
                                 0 );
         maPaintListeners.notifyEach( &awt::XPaintListener::windowPaint,
                                      aEvent );
+    }
+
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getCanvasArea(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        // FIXME:
+        ::com::sun::star::awt::Rectangle r;
+        r.X = 0;
+        r.Y = 0;
+        r.Width = 0;
+        r.Height = 0;
+        return r;
     }
 
 private:
@@ -452,6 +463,7 @@ void DemoWindow::init()
         {
             uno::Reference< drawing::XDrawPage > xSlide( new DummySlide );
             mxShow->displaySlide( xSlide,
+                                  NULL,
                                   uno::Reference< animations::XAnimationNode >(),
                                   uno::Sequence< beans::PropertyValue >() );
             mxShow->setProperty( beans::PropertyValue(

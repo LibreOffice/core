@@ -21,7 +21,6 @@
 
 
 
-#include <testshl/simpleheader.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
@@ -29,6 +28,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
 
+#include "gtest/gtest.h"
 #include "shape.hxx"
 #include "tests.hxx"
 #include "com/sun/star/presentation/XSlideShowView.hpp"
@@ -88,30 +88,30 @@ private:
     // XShape
     virtual ::rtl::OUString SAL_CALL getShapeType(  ) throw (uno::RuntimeException)
     {
-        CPPUNIT_ASSERT_MESSAGE( "TestShape::getShapeType: unexpected method call", false );
+        ADD_FAILURE() << "TestShape::getShapeType: unexpected method call";
         return ::rtl::OUString();
     }
 
     virtual awt::Point SAL_CALL getPosition(  ) throw (uno::RuntimeException)
     {
-        CPPUNIT_ASSERT_MESSAGE( "TestShape::getPosition: unexpected method call", false );
+        ADD_FAILURE() << "TestShape::getPosition: unexpected method call";
         return awt::Point();
     }
 
     virtual void SAL_CALL setPosition( const awt::Point& ) throw (uno::RuntimeException)
     {
-        CPPUNIT_ASSERT_MESSAGE( "TestShape::setPosition: unexpected method call", false );
+        FAIL() << "TestShape::setPosition: unexpected method call";
     }
 
     virtual awt::Size SAL_CALL getSize(  ) throw (uno::RuntimeException)
     {
-        CPPUNIT_ASSERT_MESSAGE( "TestShape::getSize: unexpected method call", false );
+        ADD_FAILURE() << "TestShape::getSize: unexpected method call";
         return awt::Size();
     }
 
     virtual void SAL_CALL setSize( const awt::Size& /*aSize*/ ) throw (beans::PropertyVetoException, uno::RuntimeException)
     {
-        CPPUNIT_ASSERT_MESSAGE( "TestShape::setSize: unexpected method call", false );
+        FAIL() << "TestShape::setSize: unexpected method call";
     }
 
 

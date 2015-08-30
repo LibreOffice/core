@@ -21,7 +21,6 @@
 
 
 
-#include <testshl/simpleheader.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
@@ -57,6 +56,7 @@ class ImplTestView : public TestView,
     bool                                               mbIsClipSet;
     bool                                               mbIsClipEmptied;
     bool                                               mbIsClearCalled;
+    bool                                               mbIsSoundEnabled;
     bool                                               mbDisposed;
 
 
@@ -70,6 +70,7 @@ public:
         mbIsClipSet(false),
         mbIsClipEmptied(false),
         mbIsClearCalled(false),
+        mbIsSoundEnabled(false),
         mbDisposed( false )
     {
     }
@@ -82,6 +83,17 @@ public:
     virtual uno::Reference< rendering::XSpriteCanvas > SAL_CALL getCanvas(  ) throw (uno::RuntimeException)
     {
         return uno::Reference< rendering::XSpriteCanvas >();
+    }
+
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getCanvasArea(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        // FIXME:
+        ::com::sun::star::awt::Rectangle r;
+        r.X = 0;
+        r.Y = 0;
+        r.Width = 0;
+        r.Height = 0;
+        return r;
     }
 
     virtual void SAL_CALL clear(  ) throw (uno::RuntimeException)
@@ -133,6 +145,16 @@ public:
     virtual bool isClearCalled() const
     {
         return mbIsClearCalled;
+    }
+
+    virtual bool isSoundEnabled() const
+    {
+        return mbIsSoundEnabled;
+    }
+
+    virtual void setIsSoundEnabled(const bool bValue)
+    {
+        mbIsSoundEnabled = bValue;
     }
 
     virtual std::vector<std::pair<basegfx::B2DVector,double> > getCreatedSprites() const

@@ -21,7 +21,6 @@
 
 
 
-#include <testshl/simpleheader.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
@@ -34,6 +33,7 @@
 #include "unoviewcontainer.hxx"
 #include "shape.hxx"
 #include "tests.hxx"
+#include "gtest/gtest.h"
 #include "com/sun/star/presentation/XSlideShowView.hpp"
 
 namespace target = slideshow::internal;
@@ -42,45 +42,24 @@ using namespace ::com::sun::star;
 namespace
 {
 
-class UnoViewContainerTest : public CppUnit::TestFixture
+class UnoViewContainerTest : public ::testing::Test
 {
 public:
-    void testContainer()
-    {
-        target::UnoViewContainer aContainer;
-
-        TestViewSharedPtr pView = createTestView();
-        aContainer.addView( pView );
-
-        CPPUNIT_ASSERT_MESSAGE( "Testing container size",
-                                1 == std::distance( aContainer.begin(),
-                                                    aContainer.end() ));
-        CPPUNIT_ASSERT_MESSAGE( "Testing disposedness",
-                                pView->paintScreen() );
-        aContainer.dispose();
-        CPPUNIT_ASSERT_MESSAGE( "Testing dispose: container must be empty",
-                                0 == std::distance( aContainer.begin(),
-                                                    aContainer.end() ));
-        CPPUNIT_ASSERT_MESSAGE( "Testing dispose: all elements must receive dispose",
-                                !pView->paintScreen() );
-    }
-
-    // hook up the test
-    CPPUNIT_TEST_SUITE(UnoViewContainerTest);
-    CPPUNIT_TEST(testContainer);
-    //CPPUNIT_TEST(testLayerManager);
-    CPPUNIT_TEST_SUITE_END();
-
 }; // class UnoViewContainerTest
 
-// -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(UnoViewContainerTest, "UnoViewContainerTest");
+TEST_F(UnoViewContainerTest, testContainer)
+{
+    target::UnoViewContainer aContainer;
+
+    TestViewSharedPtr pView = createTestView();
+    aContainer.addView( pView );
+
+    ASSERT_TRUE( 1 == std::distance( aContainer.begin(), aContainer.end() )) << "Testing container size";
+    ASSERT_TRUE( pView->paintScreen() ) << "Testing disposedness";
+    aContainer.dispose();
+    ASSERT_TRUE( 0 == std::distance( aContainer.begin(), aContainer.end() )) << "Testing dispose: container must be empty";
+    ASSERT_TRUE( !pView->paintScreen() ) << "Testing dispose: all elements must receive dispose";
+}
+
+
 } // namespace
-
-
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
-

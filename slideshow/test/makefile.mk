@@ -26,7 +26,6 @@ PRJ=..
 PRJNAME=slideshow
 PRJINC=$(PRJ)$/source
 TARGET=tests
-TARGETTYPE=GUI
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -38,37 +37,47 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Common ----------------------------------------------------------
 
 # BEGIN target1 -------------------------------------------------------
-SHL1OBJS=  \
+
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+ 
+.ELSE
+
+
+APP1OBJS=  \
+    $(SLO)$/main.obj \
     $(SLO)$/views.obj	  \
     $(SLO)$/slidetest.obj \
     $(SLO)$/testshape.obj \
     $(SLO)$/testview.obj
 
-SHL1TARGET= tests
-SHL1STDLIBS= 	$(SALLIB)		 \
+APP1TARGET= tests
+APP1STDLIBS= 	$(SALLIB)		 \
                 $(BASEGFXLIB)	 \
                 $(CPPUHELPERLIB) \
                 $(CPPULIB)		 \
                                 $(TESTSHL2LIB)    \
-                $(CPPUNITLIB)	 \
+                $(GTESTLIB)	 \
                 $(UNOTOOLSLIB)	 \
                 $(VCLLIB)
 
 .IF "$(OS)"=="WNT"
-    SHL1STDLIBS+=$(LIBPRE) islideshowtest.lib
+    APP1STDLIBS+=$(LIBPRE) islideshowtest.lib
 .ELSE
-    SHL1STDLIBS+=-lslideshowtest$(DLLPOSTFIX)
+    APP1STDLIBS+=-lslideshowtest$(DLLPOSTFIX)
 .ENDIF
 
-SHL1IMPLIB= i$(SHL1TARGET)
+APP1RPATH = NONE
+APP1TEST = enabled
 
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
 # END target1 ----------------------------------------------------------
 
 # BEGIN target2 --------------------------------------------------------
 APP2OBJS=  \
-    $(SLO)$/demoshow.obj
+    $(SLO)$/demoshow.obj \
+    $(SLO)$/main.obj
 
 APP2TARGET= demoshow
 APP2STDLIBS=$(TOOLSLIB) 		\
@@ -86,12 +95,6 @@ APP2DEF=	$(MISC)$/$(TARGET).def
 .ENDIF
 # END target2 ----------------------------------------------------------------
 
-#------------------------------- All object files ----------------------------
-
-# do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS)
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk
