@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa0719c6_e37200ad",
+        "filename": "canvas/source/opengl/ogl_texturecache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-30T00:31:09Z",
+      "side": 0,
+      "message": "Ha true. I\u0027m an idiot :)",
+      "parentUuid": "fa0719c6_834b4459",
+      "revId": "723b32783f8c411d410242639d9dbd0cadc61c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa0719c6_80585a58",
         "filename": "canvas/source/tools/pagemanager.cxx",
         "patchSetId": 1
@@ -83,6 +101,24 @@
       "side": 0,
       "message": "Yeah, ugly beast. I\u0027ll need to have a closer look, so either you wait for that, or back this out (and submit separately).",
       "parentUuid": "fa0719c6_c030920a",
+      "revId": "723b32783f8c411d410242639d9dbd0cadc61c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_43680cbb",
+        "filename": "canvas/source/tools/pagemanager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-08-30T00:31:09Z",
+      "side": 0,
+      "message": "Great! I\u0027ll submit as a separate patch",
+      "parentUuid": "fa0719c6_c3737cb3",
       "revId": "723b32783f8c411d410242639d9dbd0cadc61c43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
