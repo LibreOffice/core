@@ -88,3 +88,14 @@ cmd/sc_datafilterautofilter.png cmd/sc_autofilter.png
 # text background colour Impress/Draw
 cmd/sc_charbackcolor.png cmd/sc_backcolor.png
 cmd/lc_charbackcolor.png cmd/lc_backcolor.png
+
+# insert rows and columns
+cmd/lc_insertrowsbefore.png cmd/lc_insertrows.png
+cmd/sc_insertrowsbefore.png cmd/sc_insertrows.png
+cmd/lc_insertcolumnsbefore.png cmd/lc_insertcolumns.png
+cmd/sc_insertcolumnsbefore.png cmd/sc_insertcolumns.png
+cmd/lc_insertrowsafter.png cmd/lc_insertrows.png
+cmd/sc_insertrowsafter.png cmd/sc_insertrows.png
+cmd/lc_insertcolumnsafter.png cmd/lc_insertcolumns.png
+cmd/sc_insertcolumnsafter.png cmd/sc_insertcolumns.png
+
