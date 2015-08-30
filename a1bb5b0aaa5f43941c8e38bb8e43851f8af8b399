@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "1af94dfe_9b356bf9",
+        "filename": "vcl/unx/kde4/KDESalGraphics.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000793
+      },
+      "writtenOn": "2015-08-30T23:39:26Z",
+      "side": 1,
+      "message": "That didn\u0027t compile for me.",
+      "parentUuid": "1af94dfe_fbf2af05",
+      "revId": "a1bb5b0aaa5f43941c8e38bb8e43851f8af8b399",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1af94dfe_bbe82718",
         "filename": "vcl/unx/kde4/KDEXLib.cxx",
         "patchSetId": 2
@@ -47,6 +65,24 @@
       "writtenOn": "2015-08-21T06:26:30Z",
       "side": 1,
       "message": "this can be written as\n  m_pApplication \u003d new VCLKDEApplication()",
+      "revId": "a1bb5b0aaa5f43941c8e38bb8e43851f8af8b399",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1af94dfe_3b4b772d",
+        "filename": "vcl/unx/kde4/KDEXLib.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000793
+      },
+      "writtenOn": "2015-08-30T23:39:26Z",
+      "side": 1,
+      "message": "Same here. I get an error that the required std::unique_ptr\u003cT\u003e::operator\u003d(VCLKDEApplication*) function doesn\u0027t exist.",
+      "parentUuid": "1af94dfe_bbe82718",
       "revId": "a1bb5b0aaa5f43941c8e38bb8e43851f8af8b399",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
