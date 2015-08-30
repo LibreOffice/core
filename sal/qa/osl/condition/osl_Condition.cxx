@@ -97,8 +97,7 @@ public:
 
     ~ConditionThread( )
     {
-        // LLA: do not throw in DTors!
-        // LLA: CPPUNIT_ASSERT_MESSAGE( "#ConditionThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        EXPECT_TRUE( sal_False == this -> isRunning( ) ) << "#ConditionThread does not shutdown properly.\n";
     }
 protected:
     ::osl::Condition& m_MyCon;
