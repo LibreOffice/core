@@ -119,8 +119,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
         if (!pArgs || pArgs->Count() == 1 || pArgs->Count() == 2 )
         {
-
-            // Make the layout menu visible in the tool pane.
+            // First make sure that the sidebar is visible
+            mrViewShell.GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
             sfx2::sidebar::Sidebar::ShowPanel(
                 OUString("ImpressLayoutsPanel"),
                 mrViewShell.GetViewFrame()->GetFrame().GetFrameInterface());

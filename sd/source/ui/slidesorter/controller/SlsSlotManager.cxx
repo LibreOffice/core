@@ -179,7 +179,8 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_SLIDE_TRANSITIONS_PANEL:
         {
-            // Make the slide transition panel visible in the sidebar.
+            // First make sure that the sidebar is visible
+            pShell->GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
             ::sfx2::sidebar::Sidebar::ShowPanel(
                 OUString("SlideTransitionPanel"),
                 pShell->GetViewFrame()->GetFrame().GetFrameInterface());
