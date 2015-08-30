@@ -206,8 +206,8 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         }
         else
         {
-            // Make the table design panel visible (expand it) in the
-            // sidebar.
+            // First make sure that the sidebar is visible
+            GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
             ::sfx2::sidebar::Sidebar::ShowPanel(
                 OUString("ImpressTableDesignPanel"),
                 GetViewFrame()->GetFrame().GetFrameInterface());
