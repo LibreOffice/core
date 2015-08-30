@@ -85,46 +85,32 @@ namespace canvas
         // okay, one last chance is left, we try all available
         // pages again. maybe some other fragment was deleted
         // and we can exploit the space.
-        while(!(relocate(pFragment)))
+        while( !( relocate( pFragment ) ) )
         {
             // no way, we need to free up some space...
             // TODO(F1): this is a heuristic, could
             // be designed as a policy.
-            const FragmentContainer_t::const_iterator aEnd(maFragments.end());
-            FragmentContainer_t::const_iterator       candidate(maFragments.begin());
-            while(candidate != aEnd)
+            auto       aEnd( maFragments.cend() );
+            auto       aCurrMax( maFragments.end() );
+            sal_uInt32 nCurrMaxArea = 0;
+            for( auto aCurr = maFragments.begin(); aCurr != aEnd; ++aCurr )
             {
-                if(*candidate && !((*candidate)->isNaked()))
-                    break;
-                ++candidate;
-            }
-
-            if (candidate != aEnd)
-            {
-                const ::basegfx::B2ISize& rSize((*candidate)->getSize());
-                sal_uInt32                nMaxArea(rSize.getX()*rSize.getY());
-
-                FragmentContainer_t::const_iterator it(candidate);
-                while(it != aEnd)
+                if( *aCurr && !( ( *aCurr )->isNaked() ) )
                 {
-                    if (*it && !((*it)->isNaked()))
+                    const ::basegfx::B2ISize& rSize( ( *aCurr )->getSize() );
+                    sal_uInt32                nArea( rSize.getX() * rSize.getY() );
+
+                    if( nCurrMaxArea < nArea )
                     {
-                        const ::basegfx::B2ISize& rCandidateSize((*it)->getSize());
-                        const sal_uInt32 nArea(rCandidateSize.getX()*rCandidateSize.getY());
-                        if(nArea > nMaxArea)
-                        {
-                            candidate=it;
-                            nMaxArea=nArea;
-                        }
+                        aCurrMax = aCurr;
+                        nCurrMaxArea = nArea;
                     }
-
-                    ++it;
                 }
-
-                // this does not erase the candidate,
-                // but makes it 'naked'...
-                (*candidate)->free(*candidate);
             }
+            // this does not erase the candidate,
+            // but makes it 'naked'...
+            if( aCurrMax != aEnd )
+                ( *aCurrMax )->free( *aCurrMax );
             else
                 break;
         }
