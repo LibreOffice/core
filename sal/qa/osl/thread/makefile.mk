@@ -36,7 +36,7 @@ all:
 .ELSE
 
 APP1TARGET = $(TARGET)
-APP1OBJS = $(SLO)$/test_thread.obj $(SLO)$/main.obj
+APP1OBJS = $(SLO)$/test_thread.obj
 APP1STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
 APP1RPATH = NONE
 APP1TEST = enabled
