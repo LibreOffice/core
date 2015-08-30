@@ -16,7 +16,6 @@ $(eval $(call gb_ExternalProject_register_targets,libodfgen,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libodfgen,\
-	boost_headers \
 	revenge \
 ))
 
@@ -34,8 +33,9 @@ $(call gb_ExternalProject_get_state_target,libodfgen,build) :
 			--disable-werror \
 			--disable-weffc \
 			--without-docs \
+			--with-sharedptr=c++11 \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost)) $(if $(SYSTEM_REVENGE),,$(if $(filter-out MSC,$(COM)),-DLIBREVENGE_VISIBILITY))" \
+			CXXFLAGS="$(CXXFLAGS_CXX11) $(if $(SYSTEM_REVENGE),,$(if $(filter-out MSC,$(COM)),-DLIBREVENGE_VISIBILITY))" \
 			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
