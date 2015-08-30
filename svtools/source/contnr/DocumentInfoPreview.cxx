@@ -29,6 +29,7 @@
 #include <svl/inettype.hxx>
 #include <svtools/DocumentInfoPreview.hxx>
 #include <svtools/imagemgr.hxx>
+#include <svtools/svmedit2.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>

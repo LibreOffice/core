@@ -24,13 +24,13 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <svtools/svmedit2.hxx>
 #include <svtools/svtdllapi.h>
 #include <tools/wintypes.hxx>
 #include <vcl/window.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
+class ExtMultiLineEdit;
 class SvtDocInfoTable_Impl;
 
 namespace com { namespace sun { namespace star {
