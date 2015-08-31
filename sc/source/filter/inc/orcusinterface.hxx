@@ -285,6 +285,12 @@ private:
 
     struct border
     {
+        struct border_line
+        {
+            Color maColor;
+        };
+        std::map<orcus::spreadsheet::border_direction_t, border_line> border_lines;
+
         border();
 
         void applyToItemSet(SfxItemSet& rSet) const;

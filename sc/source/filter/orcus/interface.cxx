@@ -28,6 +28,8 @@
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/borderline.hxx>
 
 #include <formula/token.hxx>
 #include <tools/datetime.hxx>
@@ -791,9 +793,44 @@ ScOrcusStyles::border::border()
 {
 }
 
-void ScOrcusStyles::border::applyToItemSet(SfxItemSet& /*rSet*/) const
+namespace {
+
+SvxBoxItemLine getDirection(os::border_direction_t dir)
 {
-    (void)this; // loplugin:staticmethods
+    switch (dir)
+    {
+        case os::border_right:
+            return SvxBoxItemLine::RIGHT;
+        break;
+        case os::border_left:
+            return SvxBoxItemLine::RIGHT;
+        break;
+        case os::border_top:
+            return SvxBoxItemLine::RIGHT;
+        break;
+        case os::border_bottom:
+            return SvxBoxItemLine::RIGHT;
+        break;
+        default:
+        break;
+    }
+    return SvxBoxItemLine::RIGHT;
+}
+
+}
+
+void ScOrcusStyles::border::applyToItemSet(SfxItemSet& rSet) const
+{
+    SvxBoxItem aItem(ATTR_BORDER);
+
+    for (auto& current_border_line : border_lines)
+    {
+        SvxBoxItemLine eDir = getDirection(current_border_line.first);
+        editeng::SvxBorderLine aLine(&current_border_line.second.maColor, 1);
+        aItem.SetLine(&aLine, eDir);
+    }
+
+    rSet.Put(aItem);
 }
 
 void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& /*rSet*/) const
@@ -981,19 +1018,22 @@ void ScOrcusStyles::set_border_style(orcus::spreadsheet::border_direction_t /*di
     // implement later
 }
 
-void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t /*dir*/,
-            orcus::spreadsheet::color_elem_t,
-            orcus::spreadsheet::color_elem_t,
-            orcus::spreadsheet::color_elem_t,
-            orcus::spreadsheet::color_elem_t)
+void ScOrcusStyles::set_border_color(orcus::spreadsheet::border_direction_t dir,
+            orcus::spreadsheet::color_elem_t alpha,
+            orcus::spreadsheet::color_elem_t red,
+            orcus::spreadsheet::color_elem_t green,
+            orcus::spreadsheet::color_elem_t blue)
 {
-    // implement later
+    border::border_line& current_line = maCurrentBorder.border_lines[dir];
+    current_line.maColor = Color(alpha, red, green, blue);
 }
 
 size_t ScOrcusStyles::commit_border()
 {
     SAL_INFO("sc.orcus.style", "commit border");
-    return 0;
+    maBorders.push_back(maCurrentBorder);
+    maCurrentBorder = ScOrcusStyles::border();
+    return maBorders.size() - 1;
 }
 
 // cell protection
