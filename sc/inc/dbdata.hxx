@@ -112,6 +112,7 @@ public:
     bool        IsStripData() const             { return bStripData; }
     void        SetStripData(bool bSet)         { bStripData = bSet; }
     void        SetTableColumnNames( const ::std::vector< OUString >& rNames ) { maTableColumnNames = rNames; }
+    const ::std::vector< OUString >&    GetTableColumnNames() const { return maTableColumnNames; }
 
     /** Finds the column named rName and returns the corresponding offset
         within the table.

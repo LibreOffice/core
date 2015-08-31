@@ -207,7 +207,41 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         // OOXTODO: XML_totalsRowDxfId, ...,
         FSEND);
 
-    /* TODO: columns and stuff */
+    // OOXTODO: write <autoFilter>
+
+    const std::vector< OUString >& rColNames = rData.GetTableColumnNames();
+    if (!rColNames.empty())
+    {
+        pTableStrm->startElement( XML_tableColumns,
+                XML_count, OString::number( aRange.aEnd.Col() - aRange.aStart.Col() + 1).getStr(),
+                FSEND);
+
+        for (size_t i=0, n=rColNames.size(); i < n; ++i)
+        {
+            // OOXTODO: write <calculatedColumnFormula> once we support it, in
+            // which case we'd need start/endElement XML_tableColumn for such
+            // column.
+
+            pTableStrm->singleElement( XML_tableColumn,
+                    XML_id, OString::number(i+1).getStr(),
+                    XML_name, OUStringToOString( rColNames[i], RTL_TEXTENCODING_UTF8).getStr(),
+                    // OOXTODO: XML_dataCellStyle, ...,
+                    // OOXTODO: XML_dataDxfId, ...,
+                    // OOXTODO: XML_headerRowCellStyle, ...,
+                    // OOXTODO: XML_headerRowDxfId, ...,
+                    // OOXTODO: XML_queryTableFieldId, ...,
+                    // OOXTODO: XML_totalsRowCellStyle, ...,
+                    // OOXTODO: XML_totalsRowDxfId, ...,
+                    // OOXTODO: XML_totalsRowFunction, ...,
+                    // OOXTODO: XML_totalsRowLabel, ...,
+                    // OOXTODO: XML_uniqueName, ...,
+                    FSEND);
+        }
+
+        pTableStrm->endElement( XML_tableColumns);
+    }
+
+    // OOXTODO: write <tableStyleInfo> once we have table styles.
 
     pTableStrm->endElement( XML_table);
 }
