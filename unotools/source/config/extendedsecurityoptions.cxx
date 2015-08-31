@@ -205,7 +205,7 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
     {
         // Create access name for property
         OUStringBuffer aExtEntryProp( m_aSecureExtensionsSetName );
-        aExtEntryProp.appendAscii( "/" );
+        aExtEntryProp.append( "/" );
         aExtEntryProp.append( seqNodes[i] );
         aExtEntryProp.append( m_aExtensionPropName );
 

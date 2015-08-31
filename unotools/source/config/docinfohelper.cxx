@@ -69,7 +69,7 @@ OUString DocInfoHelper::GetGeneratorString()
     // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
     // and ':' replaced by '-'
     {
-        aResult.appendAscii( "LibreOffice_project/" );
+        aResult.append( "LibreOffice_project/" );
         OUString aDefault;
         OUString aBuildId( Bootstrap::getBuildIdData( aDefault ) );
         for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )

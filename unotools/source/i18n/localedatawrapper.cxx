@@ -309,9 +309,9 @@ void LocaleDataWrapper::invalidateData()
                 {
                     OUStringBuffer aMsg("ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale (MS-LCID?)\n");
                     aMsg.append(aDebugLocale);
-                    aMsg.appendAscii("  ->  0x");
+                    aMsg.append("  ->  0x");
                     aMsg.append(static_cast<sal_Int32>(eLang), 16);
-                    aMsg.appendAscii("  ->  ");
+                    aMsg.append("  ->  ");
                     aMsg.append(aBackLanguageTag.getBcp47());
                     outputCheckMessage( aMsg.makeStringAndClear() );
                 }
@@ -1682,10 +1682,10 @@ OUString LocaleDataWrapper::appendLocaleInfo(const OUString& rDebugMsg) const
     OUStringBuffer aDebugMsg(rDebugMsg);
     aDebugMsg.append('\n');
     aDebugMsg.append(maLanguageTag.getBcp47());
-    aDebugMsg.appendAscii(" requested\n");
+    aDebugMsg.append(" requested\n");
     LanguageTag aLoaded = getLoadedLanguageTag();
     aDebugMsg.append(aLoaded.getBcp47());
-    aDebugMsg.appendAscii(" loaded");
+    aDebugMsg.append(" loaded");
     return aDebugMsg.makeStringAndClear();
 }
 

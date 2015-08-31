@@ -412,15 +412,15 @@ static void addFileError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiStr
 {
     OUString sSimpleFileName = _aPath.copy(1 +_aPath.lastIndexOf(cURLSeparator));
 
-    _rBuf.appendAscii("The configuration file");
-    _rBuf.appendAscii(" '").append(sSimpleFileName).appendAscii("' ");
+    _rBuf.append("The configuration file");
+    _rBuf.append(" '").append(sSimpleFileName).append("' ");
     _rBuf.appendAscii(_sWhat).appendAscii(PERIOD);
 }
 
 static void addMissingDirectoryError(OUStringBuffer& _rBuf, OUString const& _aPath)
 {
-    _rBuf.appendAscii("The configuration directory");
-    _rBuf.appendAscii(" '").append(_aPath).appendAscii("' ");
+    _rBuf.append("The configuration directory");
+    _rBuf.append(" '").append(_aPath).append("' ");
     _rBuf.appendAscii(IS_MISSING).appendAscii(PERIOD);
 }
 
@@ -436,7 +436,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
 {
     Bootstrap::FailureCode eErrCode = Bootstrap::INVALID_BOOTSTRAP_DATA;
 
-    _rBuf.appendAscii("The program cannot be started. ");
+    _rBuf.append("The program cannot be started. ");
 
     switch (_rData.aUserInstall_.status)
     {
