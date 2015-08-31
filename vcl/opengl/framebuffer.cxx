@@ -46,12 +46,17 @@ void OpenGLFramebuffer::Unbind()
 
 bool OpenGLFramebuffer::IsFree() const
 {
-    return (!mnAttachedTexture);
+    return !mnAttachedTexture;
+}
+
+bool OpenGLFramebuffer::IsAttached( GLuint nTexture ) const
+{
+    return mnAttachedTexture == nTexture;
 }
 
 bool OpenGLFramebuffer::IsAttached( const OpenGLTexture& rTexture ) const
 {
-    return ( mnAttachedTexture == rTexture.Id() );
+    return mnAttachedTexture == rTexture.Id();
 }
 
 void OpenGLFramebuffer::AttachTexture( const OpenGLTexture& rTexture )

@@ -35,6 +35,7 @@ public:
     static void Unbind();
 
     bool    IsFree() const;
+    bool    IsAttached( GLuint nTexture ) const;
     bool    IsAttached( const OpenGLTexture& rTexture ) const;
     void    AttachTexture( const OpenGLTexture& rTexture );
     void    DetachTexture();

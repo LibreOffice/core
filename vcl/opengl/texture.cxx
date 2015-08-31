@@ -107,7 +107,17 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
 {
     VCL_GL_INFO( "vcl.opengl", "~OpenGLTexture " << mnTexture );
     if( mnTexture != 0 )
+    {
+        // FIXME: this is really not optimal performance-wise.
+
+        // Check we have been correctly un-bound from all framebuffers.
+        ImplSVData* pSVData = ImplGetSVData();
+        OpenGLContext* pContext = pSVData->maGDIData.mpLastContext;
+        if (pContext)
+            pContext->UnbindTextureFromFramebuffers( mnTexture );
+
         glDeleteTextures( 1, &mnTexture );
+    }
 }
 
 bool ImplOpenGLTexture::InsertBuffer(int nX, int nY, int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData)
