@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_43776cd4",
+        "filename": "sc/source/core/data/colorscale.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-08-31T09:56:44Z",
+      "side": 1,
+      "message": "Maybe I\u0027m lacking context, but why this odd itr[0] notation all over the place?",
+      "range": {
+        "startLine": 313,
+        "startChar": 96,
+        "endLine": 313,
+        "endChar": 102
+      },
+      "revId": "4aed1c6f384ab372b1c03f607445f92f0181f822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
