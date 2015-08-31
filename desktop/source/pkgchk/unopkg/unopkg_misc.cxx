@@ -51,16 +51,16 @@ OUString toString( OptionInfo const * info )
 {
     assert(info != 0);
     OUStringBuffer buf;
-    buf.appendAscii("--");
+    buf.append("--");
     buf.appendAscii(info->m_name);
     if (info->m_short_option != '\0')
     {
-        buf.appendAscii(" (short -" );
+        buf.append(" (short -" );
         buf.append(info->m_short_option );
-        buf.appendAscii(")");
+        buf.append(")");
     }
     if (info->m_has_argument)
-        buf.appendAscii(" <argument>" );
+        buf.append(" <argument>" );
     return buf.makeStringAndClear();
 }
 
@@ -222,11 +222,11 @@ OUString makeAbsoluteFileUrl(
     {
         if (throw_exc) {
             OUStringBuffer buf;
-            buf.appendAscii( "making absolute file url failed: \"" );
+            buf.append( "making absolute file url failed: \"" );
             buf.append( base_url );
-            buf.appendAscii( "\" (base-url) and \"" );
+            buf.append( "\" (base-url) and \"" );
             buf.append( file_url );
-            buf.appendAscii( "\" (file-url)!" );
+            buf.append( "\" (file-url)!" );
             throw RuntimeException( buf.makeStringAndClear() );
         }
         return OUString();
@@ -378,9 +378,9 @@ Reference<XComponentContext> connectToOffice(
 
     OUString pipeId( ::dp_misc::generateRandomPipeId() );
     OUStringBuffer buf;
-    buf.appendAscii( "--accept=pipe,name=" );
+    buf.append( "--accept=pipe,name=" );
     buf.append( pipeId );
-    buf.appendAscii( ";urp;" );
+    buf.append( ";urp;" );
     args[ 2 ] = buf.makeStringAndClear();
     OUString appURL( getExecutableDir() + "/soffice" );
 
@@ -398,9 +398,9 @@ Reference<XComponentContext> connectToOffice(
         dp_misc::writeConsole("OK.  Connecting...");
 
     OSL_ASSERT( buf.isEmpty() );
-    buf.appendAscii( "uno:pipe,name=" );
+    buf.append( "uno:pipe,name=" );
     buf.append( pipeId );
-    buf.appendAscii( ";urp;StarOffice.ComponentContext" );
+    buf.append( ";urp;StarOffice.ComponentContext" );
     Reference<XComponentContext> xRet(
         ::dp_misc::resolveUnoURL(
             buf.makeStringAndClear(), xLocalComponentContext ),

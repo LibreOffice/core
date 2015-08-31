@@ -882,31 +882,31 @@ void OfficeIPCThread::execute()
                     OUStringBuffer aHelpURLBuffer;
                     if (aCmdLineArgs->IsHelpWriter()) {
                         bShowHelp = true;
-                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
+                        aHelpURLBuffer.append("vnd.sun.star.help://swriter/start");
                     } else if (aCmdLineArgs->IsHelpCalc()) {
                         bShowHelp = true;
-                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://scalc/start");
+                        aHelpURLBuffer.append("vnd.sun.star.help://scalc/start");
                     } else if (aCmdLineArgs->IsHelpDraw()) {
                         bShowHelp = true;
-                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdraw/start");
+                        aHelpURLBuffer.append("vnd.sun.star.help://sdraw/start");
                     } else if (aCmdLineArgs->IsHelpImpress()) {
                         bShowHelp = true;
-                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
+                        aHelpURLBuffer.append("vnd.sun.star.help://simpress/start");
                     } else if (aCmdLineArgs->IsHelpBase()) {
                         bShowHelp = true;
-                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdatabase/start");
+                        aHelpURLBuffer.append("vnd.sun.star.help://sdatabase/start");
                     } else if (aCmdLineArgs->IsHelpBasic()) {
                         bShowHelp = true;
-                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
+                        aHelpURLBuffer.append("vnd.sun.star.help://sbasic/start");
                     } else if (aCmdLineArgs->IsHelpMath()) {
                         bShowHelp = true;
-                        aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
+                        aHelpURLBuffer.append("vnd.sun.star.help://smath/start");
                     }
                     if (bShowHelp) {
-                        aHelpURLBuffer.appendAscii("?Language=");
+                        aHelpURLBuffer.append("?Language=");
                         aHelpURLBuffer.append(utl::ConfigManager::getLocale());
 #if defined UNX
-                        aHelpURLBuffer.appendAscii("&System=UNX");
+                        aHelpURLBuffer.append("&System=UNX");
 #elif defined WNT
                         aHelpURLBuffer.appendAscii("&System=WIN");
 #endif

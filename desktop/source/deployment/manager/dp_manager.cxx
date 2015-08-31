@@ -602,7 +602,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
         OUStringBuffer buf;
         if (!sourceContent.isFolder())
         {
-            buf.appendAscii( "vnd.sun.star.zip://" );
+            buf.append( "vnd.sun.star.zip://" );
             buf.append( ::rtl::Uri::encode( sourceContent.getURL(),
                                             rtl_UriCharClassRegName,
                                             rtl_UriEncodeIgnoreEscapes,
@@ -937,7 +937,7 @@ OUString PackageManagerImpl::getDeployPath( ActivePackages::Data const & data )
     //UTF8 encoded folder name. See PackageManagerImpl::synchronize
     if (!(m_context == "bundled"))
     {
-        buf.appendAscii( "_/" );
+        buf.append( "_/" );
         buf.append( ::rtl::Uri::encode( data.fileName, rtl_UriCharClassPchar,
                                     rtl_UriEncodeIgnoreEscapes,
                                     RTL_TEXTENCODING_UTF8 ) );

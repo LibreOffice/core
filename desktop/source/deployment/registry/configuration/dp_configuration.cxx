@@ -574,19 +574,19 @@ OUString encodeForXml( OUString const & text )
         sal_Unicode c = text[ pos ];
         switch (c) {
         case '<':
-            buf.appendAscii( "&lt;" );
+            buf.append( "&lt;" );
             break;
         case '>':
-            buf.appendAscii( "&gt;" );
+            buf.append( "&gt;" );
             break;
         case '&':
-            buf.appendAscii( "&amp;" );
+            buf.append( "&amp;" );
             break;
         case '\'':
-            buf.appendAscii( "&apos;" );
+            buf.append( "&apos;" );
             break;
         case '\"':
-            buf.appendAscii( "&quot;" );
+            buf.append( "&quot;" );
             break;
         default:
             buf.append( c );

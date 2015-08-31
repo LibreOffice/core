@@ -169,10 +169,10 @@ void ProgressLogImpl::update( Any const & Status )
         buf.append( msg );
     }
     else {
-        buf.appendAscii( "ERROR: " );
+        buf.append( "ERROR: " );
         buf.append( ::comphelper::anyToString(Status) );
     }
-    buf.appendAscii( "\n" );
+    buf.append( "\n" );
     log_write( OUStringToOString(
                    buf.makeStringAndClear(), osl_getThreadTextEncoding() ) );
 }

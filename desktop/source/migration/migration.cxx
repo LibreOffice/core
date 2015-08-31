@@ -821,7 +821,7 @@ void MigrationImpl::copyConfig() {
                 // the configuration is split in many registry files
                 // determine the file names from the first element in included paths
                 OUStringBuffer buf(m_aInfo.userdata);
-                buf.appendAscii("/user/registry/data");
+                buf.append("/user/registry/data");
                 sal_Int32 n = 0;
                 do {
                     OUString seg(i->first.getToken(0, '.', n));
@@ -840,7 +840,7 @@ void MigrationImpl::copyConfig() {
                     buf.append('/');
                     buf.append(enc);
                 } while (n >= 0);
-                buf.appendAscii(".xcu");
+                buf.append(".xcu");
                 regFilePath = buf.toString();
             }
             configuration::Update::get(

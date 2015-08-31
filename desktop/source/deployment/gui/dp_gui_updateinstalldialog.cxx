@@ -418,10 +418,10 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                     for (CIT j = vecExceptions.begin(); j != vecExceptions.end(); ++j)
                     {
                         if (j != vecExceptions.begin())
-                            buf.appendAscii("\n");
+                            buf.append("\n");
                         buf.append("Could not download ");
                         buf.append(j->first);
-                        buf.appendAscii(". ");
+                        buf.append(". ");
                         buf.append(j->second.Message);
                     }
                     m_dialog.setError(UpdateInstallDialog::ERROR_DOWNLOAD, curData.aInstalledPackage->getDisplayName(),

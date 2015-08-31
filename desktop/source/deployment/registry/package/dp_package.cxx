@@ -1074,7 +1074,7 @@ void BackendImpl::PackageImpl::exportTo(
     erase_path( destURL, xCmdEnv );
 
     OUStringBuffer buf;
-    buf.appendAscii( "vnd.sun.star.zip://" );
+    buf.append( "vnd.sun.star.zip://" );
     buf.append( ::rtl::Uri::encode( destURL,
                                     rtl_UriCharClassRegName,
                                     rtl_UriEncodeIgnoreEscapes,

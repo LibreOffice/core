@@ -266,13 +266,13 @@ void PackageRegistryImpl::insertBackend(
         else
         {
             OUStringBuffer buf;
-            buf.appendAscii( "more than one PackageRegistryBackend for media-type=\"" );
+            buf.append( "more than one PackageRegistryBackend for media-type=\"" );
             buf.append( mediaType );
-            buf.appendAscii( "\" => " );
+            buf.append( "\" => " );
             buf.append( Reference<lang::XServiceInfo>(
                             xBackend, UNO_QUERY_THROW )->
                         getImplementationName() );
-            buf.appendAscii( "\"!" );
+            buf.append( "\"!" );
             OSL_FAIL( OUStringToOString(
                             buf.makeStringAndClear(),
                             RTL_TEXTENCODING_UTF8).getStr() );

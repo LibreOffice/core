@@ -378,7 +378,7 @@ OUString MakeStartupErrorMessage(
             STR_BOOTSTRAP_ERR_CANNOT_START, "The program cannot be started.",
             bAlwaysUseFallbackMsg ) );
 
-    aDiagnosticMessage.appendAscii( "\n" );
+    aDiagnosticMessage.append( "\n" );
 
     aDiagnosticMessage.append( aErrorMessage );
 
@@ -393,15 +393,15 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     if ( pResMgr )
         aDiagnosticMessage.append( ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, *pResMgr).toString() );
     else
-        aDiagnosticMessage.appendAscii( "The program cannot be started." );
+        aDiagnosticMessage.append( "The program cannot be started." );
 
     if ( !aInternalErrMsg.isEmpty() )
     {
-        aDiagnosticMessage.appendAscii( "\n\n" );
+        aDiagnosticMessage.append( "\n\n" );
         if ( pResMgr )
             aDiagnosticMessage.append( ResId(STR_INTERNAL_ERRMSG, *pResMgr).toString() );
         else
-            aDiagnosticMessage.appendAscii( "The following internal error has occurred:\n\n" );
+            aDiagnosticMessage.append( "The following internal error has occurred:\n\n" );
         aDiagnosticMessage.append( aInternalErrMsg );
     }
 
@@ -432,7 +432,7 @@ void FatalError(const OUString& sMessage)
 
     OUStringBuffer sTitle (128);
     sTitle.append      (sProductKey     );
-    sTitle.appendAscii (" - Fatal Error");
+    sTitle.append (" - Fatal Error");
 
     Application::ShowNativeErrorBox (sTitle.makeStringAndClear (), sMessage);
     _exit(EXITHELPER_FATAL_ERROR);
@@ -915,12 +915,12 @@ void Desktop::HandleBootstrapErrors(
                             OUString( "The configuration service is not available." ) );
 
         aDiagnosticMessage.append( aErrorMsg );
-        aDiagnosticMessage.appendAscii( "\n" );
+        aDiagnosticMessage.append( "\n" );
         if ( !aErrorMessage.isEmpty() )
         {
-            aDiagnosticMessage.appendAscii( "(\"" );
+            aDiagnosticMessage.append( "(\"" );
             aDiagnosticMessage.append( aErrorMessage );
-            aDiagnosticMessage.appendAscii( "\")\n" );
+            aDiagnosticMessage.append( "\")\n" );
         }
 
         // Due to the fact the we haven't a backup applicat.rdb file anymore it is not possible to
@@ -2125,31 +2125,31 @@ void Desktop::OpenClients()
         OUStringBuffer aHelpURLBuffer;
         if (rArgs.IsHelpWriter()) {
             bShowHelp = true;
-            aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
+            aHelpURLBuffer.append("vnd.sun.star.help://swriter/start");
         } else if (rArgs.IsHelpCalc()) {
             bShowHelp = true;
-            aHelpURLBuffer.appendAscii("vnd.sun.star.help://scalc/start");
+            aHelpURLBuffer.append("vnd.sun.star.help://scalc/start");
         } else if (rArgs.IsHelpDraw()) {
             bShowHelp = true;
-            aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdraw/start");
+            aHelpURLBuffer.append("vnd.sun.star.help://sdraw/start");
         } else if (rArgs.IsHelpImpress()) {
             bShowHelp = true;
-            aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
+            aHelpURLBuffer.append("vnd.sun.star.help://simpress/start");
         } else if (rArgs.IsHelpBase()) {
             bShowHelp = true;
-            aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdatabase/start");
+            aHelpURLBuffer.append("vnd.sun.star.help://sdatabase/start");
         } else if (rArgs.IsHelpBasic()) {
             bShowHelp = true;
-            aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
+            aHelpURLBuffer.append("vnd.sun.star.help://sbasic/start");
         } else if (rArgs.IsHelpMath()) {
             bShowHelp = true;
-            aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
+            aHelpURLBuffer.append("vnd.sun.star.help://smath/start");
         }
         if (bShowHelp) {
-            aHelpURLBuffer.appendAscii("?Language=");
+            aHelpURLBuffer.append("?Language=");
             aHelpURLBuffer.append(utl::ConfigManager::getLocale());
 #if defined UNX
-            aHelpURLBuffer.appendAscii("&System=UNX");
+            aHelpURLBuffer.append("&System=UNX");
 #elif defined WNT
             aHelpURLBuffer.appendAscii("&System=WIN");
 #endif

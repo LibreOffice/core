@@ -51,7 +51,7 @@ OUString getIdentifier(
 
 OUString generateLegacyIdentifier(OUString const & fileName) {
     OUStringBuffer b;
-    b.appendAscii("org.openoffice.legacy.");
+    b.append("org.openoffice.legacy.");
     b.append(fileName);
     return b.makeStringAndClear();
 }

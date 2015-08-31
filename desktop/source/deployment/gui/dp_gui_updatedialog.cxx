@@ -1213,7 +1213,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
                          i < data.unsatisfiedDependencies.getLength(); ++i)
                     {
                         b.append(LF);
-                        b.appendAscii("  ");
+                        b.append("  ");
                             // U+2003 EM SPACE would be better than two spaces,
                             // but some fonts do not contain it
                         b.append(
@@ -1221,7 +1221,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
                                 data.unsatisfiedDependencies[i]));
                     }
                     b.append(LF);
-                    b.appendAscii("  ");
+                    b.append("  ");
                     b.append(m_noDependencyCurVer);
                 }
                 break;

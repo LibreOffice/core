@@ -346,11 +346,11 @@ void CommandEnvironmentImpl::update_( Any const & Status )
     }
     else {
         OUStringBuffer buf;
-        buf.appendAscii( "WARNING: " );
+        buf.append( "WARNING: " );
         deployment::DeploymentException dp_exc;
         if (Status >>= dp_exc) {
             buf.append( dp_exc.Message );
-            buf.appendAscii( ", Cause: " );
+            buf.append( ", Cause: " );
             buf.append( ::comphelper::anyToString(dp_exc.Cause) );
         }
         else {

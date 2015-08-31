@@ -120,7 +120,7 @@ const OUString OfficePipeId::operator () ()
     // create hex-value string from the MD5 value to keep
     // the string size minimal
     OUStringBuffer buf;
-    buf.appendAscii( "SingleOfficeIPC_" );
+    buf.append( "SingleOfficeIPC_" );
     for ( sal_uInt32 i = 0; i < md5_key_len; ++i ) {
         buf.append( static_cast<sal_Int32>(md5_buf[ i ]), 0x10 );
     }

@@ -157,11 +157,11 @@ void BackendDb::removeEntry(OUString const & url)
     const OUString sPrefix = getNSPrefix();
     OUStringBuffer sExpression(500);
     sExpression.append(sPrefix);
-    sExpression.appendAscii(":");
+    sExpression.append(":");
     sExpression.append(sKeyElement);
     sExpression.append("[@url = \"");
     sExpression.append(url);
-    sExpression.appendAscii("\"]");
+    sExpression.append("\"]");
 
     removeElement(sExpression.makeStringAndClear());
 }
@@ -243,11 +243,11 @@ Reference<css::xml::dom::XNode> BackendDb::getKeyElement(
         const OUString sKeyElement = getKeyElementName();
         OUStringBuffer sExpression(500);
         sExpression.append(sPrefix);
-        sExpression.appendAscii(":");
+        sExpression.append(":");
         sExpression.append(sKeyElement);
         sExpression.append("[@url = \"");
         sExpression.append(url);
-        sExpression.appendAscii("\"]");
+        sExpression.append("\"]");
 
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
@@ -580,11 +580,11 @@ OUString BackendDb::readSimpleElement(
         const OUString sKeyElement = getKeyElementName();
         OUStringBuffer buf(512);
         buf.append(sPrefix);
-        buf.appendAscii(":");
+        buf.append(":");
         buf.append(sKeyElement);
-        buf.appendAscii("/");
+        buf.append("/");
         buf.append(sPrefix);
-        buf.appendAscii(":");
+        buf.append(":");
         buf.append(name);
         buf.append("/text()");
 
