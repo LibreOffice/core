@@ -195,7 +195,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
 found:
     if ( nCode == XTYP_DISCONNECT)
     {
-        pC->pTopic->_Disconnect( (sal_IntPtr) hConv );
+        pC->pTopic->Disconnect( (sal_IntPtr) hConv );
         for ( ConvList::iterator it = pService->pConv->begin();
               it != pService->pConv->end();
               ++it
@@ -677,7 +677,7 @@ void DdeTopic::NotifyClient( const OUString& rItem )
     }
 }
 
-void DdeTopic::_Disconnect( sal_IntPtr nId )
+void DdeTopic::Disconnect( sal_IntPtr nId )
 {
     std::vector<DdeItem*>::iterator iter;
     for (iter = aItems.begin(); iter != aItems.end(); ++iter)

@@ -285,7 +285,7 @@ public:
 
 class SVL_DLLPUBLIC DdeTopic
 {
-    SVL_DLLPRIVATE void _Disconnect( sal_IntPtr );
+    SVL_DLLPRIVATE void Disconnect( sal_IntPtr );
 
 public:
     virtual DdeData* Get(SotClipboardFormatId);
