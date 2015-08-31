@@ -83,6 +83,8 @@ SAL_RESID_POINTER_TAB_SELECT_SE         CURSOR          tblselse.cur
 SAL_RESID_POINTER_TAB_SELECT_W          CURSOR          tblselw.cur
 SAL_RESID_POINTER_TAB_SELECT_SW         CURSOR          tblselsw.cur
 SAL_RESID_POINTER_PAINTBRUSH            CURSOR          pntbrsh.cur
+SAL_RESID_POINTER_HIDEWHITESPACE        CURSOR          wshide.cur
+SAL_RESID_POINTER_SHOWWHITESPACE        CURSOR          wsshow.cur
 
 SAL_RESID_BITMAP_50                     BITMAP          "50.bmp"
 

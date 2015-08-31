@@ -188,7 +188,7 @@ void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
     Prt().Width( Frm().Width() - nLeft - nRight );
 }
 
-/// checks the layout direction and invalidates the lower frames rekursivly, if necessary.
+/// checks the layout direction and invalidates the lower frames recursively, if necessary.
 void SwFrm::CheckDirChange()
 {
     bool bOldVert = GetVerticalFlag();
