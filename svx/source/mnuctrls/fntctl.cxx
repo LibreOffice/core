@@ -134,12 +134,11 @@ void SvxFontMenuControl::Notify( SfxBroadcaster&, const SfxHint& rHint )
     weiteren Fontinformationen mu\s durch die Applikation geschehen.
 */
 
-IMPL_LINK( SvxFontMenuControl, MenuSelect, FontNameMenu *, pMen )
+IMPL_LINK_TYPED( SvxFontMenuControl, MenuSelect, FontNameMenu *, pMen, void )
 {
     SvxFontItem aItem( GetId() );
     aItem.SetFamilyName(pMen->GetCurName());
     GetBindings().GetDispatcher()->Execute( GetId(), SfxCallMode::RECORD, &aItem, 0L );
-    return 0;
 }
 
 /*  [Beschreibung]

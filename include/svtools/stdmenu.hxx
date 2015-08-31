@@ -100,9 +100,8 @@ FontList; FontNameMenu; FontSizeBox
 class SVT_DLLPUBLIC FontNameMenu : public PopupMenu
 {
 private:
-    OUString        maCurName;
-    Link<>          maSelectHdl;
-    Link<>          maHighlightHdl;
+    OUString                     maCurName;
+    Link<FontNameMenu*,void>     maSelectHdl;
 
 public:
                     FontNameMenu();
@@ -116,7 +115,7 @@ public:
     void            SetCurName( const OUString& rName );
     const OUString& GetCurName() const { return maCurName; }
 
-    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    void            SetSelectHdl( const Link<FontNameMenu*,void>& rLink ) { maSelectHdl = rLink; }
 };
 
 class SVT_DLLPUBLIC FontSizeMenu : public PopupMenu

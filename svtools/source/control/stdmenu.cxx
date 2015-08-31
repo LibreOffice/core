@@ -41,10 +41,6 @@ void FontNameMenu::Select()
 
 void FontNameMenu::Highlight()
 {
-    OUString aTempName = maCurName;
-    maCurName = GetItemText( GetCurItemId() );
-    maHighlightHdl.Call( this );
-    maCurName = aTempName;
 }
 
 void FontNameMenu::Fill( const FontList* pList )

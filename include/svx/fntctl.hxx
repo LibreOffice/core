@@ -37,7 +37,7 @@ private:
     Menu&           rParent;
 
     SVX_DLLPRIVATE void         FillMenu();
-    DECL_LINK( MenuSelect, FontNameMenu * );
+    DECL_LINK_TYPED( MenuSelect, FontNameMenu *, void);
     SVX_DLLPRIVATE virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void     Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
