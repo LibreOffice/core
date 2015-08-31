@@ -77,14 +77,14 @@ OUString lcl_createClassificationStringForType( ObjectType eObjectType
     if( !rDragMethodServiceName.isEmpty() )
     {
         if( !aRet.isEmpty() )
-            aRet.appendAscii(":");
+            aRet.append(":");
         aRet.append( m_aDragMethodEquals );
         aRet.append( rDragMethodServiceName );
 
         if( !rDragParameterString.isEmpty() )
         {
             if( !aRet.isEmpty() )
-                aRet.appendAscii(":");
+                aRet.append(":");
             aRet.append( m_aDragParameterEquals );
             aRet.append( rDragParameterString );
         }
@@ -507,13 +507,13 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
     OUStringBuffer aRet( m_aProtocol );
     aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
     if(aRet.getLength() > (sal_Int32)strlen(m_aProtocol))
-        aRet.appendAscii("/");
+        aRet.append("/");
 
     if(!rParentParticle.isEmpty())
     {
         aRet.append(rParentParticle);
         if( !rChildParticle.isEmpty() )
-            aRet.appendAscii(":");
+            aRet.append(":");
     }
     aRet.append(rChildParticle);
 
@@ -554,7 +554,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
             if( xCooSys == xCurrentCooSys )
             {
                 aRet = ObjectIdentifier::createParticleForDiagram( xDiagram, rModel );
-                aRet.appendAscii(":CS=");
+                aRet.append(":CS=");
                 aRet.append( OUString::number( nCooSysIndex ) );
                 break;
             }
@@ -582,7 +582,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
             if( xCooSys == xCurrentCooSys )
             {
                 aRet = ObjectIdentifier::createParticleForDiagram( xDiagram, xChartModel );
-                aRet.appendAscii(":CS=");
+                aRet.append(":CS=");
                 aRet.append( OUString::number( nCooSysIndex ) );
                 break;
             }
@@ -599,7 +599,7 @@ OUString ObjectIdentifier::createParticleForAxis(
     OUStringBuffer aRet("Axis=");
 
     aRet.append( OUString::number( nDimensionIndex ) );
-    aRet.appendAscii(",");
+    aRet.append(",");
     aRet.append( OUString::number( nAxisIndex ) );
 
     return aRet.makeStringAndClear();
@@ -611,7 +611,7 @@ OUString ObjectIdentifier::createParticleForGrid(
 {
     OUStringBuffer aRet("Axis=");
     aRet.append( OUString::number( nDimensionIndex ) );
-    aRet.appendAscii(",");
+    aRet.append(",");
     aRet.append( OUString::number( nAxisIndex ) );
     aRet.append( ":Grid=0" );
 
@@ -642,15 +642,15 @@ OUString ObjectIdentifier::createParticleForSeries(
 {
     OUStringBuffer aRet;
 
-    aRet.appendAscii("D=");
+    aRet.append("D=");
     aRet.append( OUString::number( nDiagramIndex ) );
-    aRet.appendAscii(":CS=");
+    aRet.append(":CS=");
     aRet.append( OUString::number( nCooSysIndex ) );
-    aRet.appendAscii(":CT=");
+    aRet.append(":CT=");
     aRet.append( OUString::number( nChartTypeIndex ) );
-    aRet.appendAscii(":");
+    aRet.append(":");
     aRet.append(getStringForType( OBJECTTYPE_DATA_SERIES ));
-    aRet.appendAscii("=");
+    aRet.append("=");
     aRet.append( OUString::number( nSeriesIndex ) );
 
     return aRet.makeStringAndClear();
@@ -666,9 +666,9 @@ OUString ObjectIdentifier::createParticleForLegend(
     //todo: if more than one diagram is implemeted, find the correct diagram which is owner of the given legend
 
     aRet.append( ObjectIdentifier::createParticleForDiagram( xDiagram, rModel ) );
-    aRet.appendAscii(":");
+    aRet.append(":");
     aRet.append(getStringForType( OBJECTTYPE_LEGEND ));
-    aRet.appendAscii("=");
+    aRet.append("=");
 
     return aRet.makeStringAndClear();
 }
@@ -683,9 +683,9 @@ OUString ObjectIdentifier::createParticleForLegend(
     //todo: if more than one diagram is implemeted, find the correct diagram which is owner of the given legend
 
     aRet.append( ObjectIdentifier::createParticleForDiagram( xDiagram, xChartModel ) );
-    aRet.appendAscii(":");
+    aRet.append(":");
     aRet.append(getStringForType( OBJECTTYPE_LEGEND ));
-    aRet.appendAscii("=");
+    aRet.append("=");
 
     return aRet.makeStringAndClear();
 }
@@ -712,13 +712,13 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
     OUStringBuffer aRet( m_aProtocol );
     aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
     if(aRet.getLength() > (sal_Int32)strlen(m_aProtocol))
-        aRet.appendAscii("/");
+        aRet.append("/");
     aRet.append(rParentPartical);
     if(!rParentPartical.isEmpty())
-        aRet.appendAscii(":");
+        aRet.append(":");
 
     aRet.append(getStringForType( eObjectType ));
-    aRet.appendAscii("=");
+    aRet.append("=");
     aRet.append(rParticleID);
 
     return aRet.makeStringAndClear();
@@ -1135,7 +1135,7 @@ OUString ObjectIdentifier::addChildParticle( const OUString& rParticle, const OU
     OUStringBuffer aRet(rParticle);
 
     if( !aRet.isEmpty() && !rChildParticle.isEmpty() )
-        aRet.appendAscii(":");
+        aRet.append(":");
     if( !rChildParticle.isEmpty() )
         aRet.append(rChildParticle);
 
@@ -1147,7 +1147,7 @@ OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType,
     OUStringBuffer aRet( getStringForType( eObjectType ) );
     if( !aRet.isEmpty() )
     {
-        aRet.appendAscii("=");
+        aRet.append("=");
         aRet.append(OUString::number(nIndex));
     }
     return aRet.makeStringAndClear();

@@ -91,9 +91,9 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getErrorBarLabeledSequence(
     aRole.append( '-' );
 
     if( bPositiveValue )
-        aRole = aRole.appendAscii( "positive" );
+        aRole.append( "positive" );
     else
-        aRole = aRole.appendAscii( "negative" );
+        aRole.append( "negative" );
 
     OUString aLongRole = aRole.makeStringAndClear();
     Reference< chart2::data::XLabeledDataSequence > xLSeq(

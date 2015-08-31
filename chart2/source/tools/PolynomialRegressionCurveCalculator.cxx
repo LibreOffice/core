@@ -247,12 +247,12 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         }
         else if (aValue < 0.0)
         {
-            aBuf.appendAscii( " - " );
+            aBuf.append( " - " );
         }
         else
         {
             if (i != aLastIndex)
-                aBuf.appendAscii( " + " );
+                aBuf.append( " + " );
         }
 
         aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, std::abs( aValue ) ) );
@@ -261,11 +261,11 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
         {
             if (i == 1)
             {
-                aBuf.appendAscii( "x" );
+                aBuf.append( "x" );
             }
             else
             {
-                aBuf.appendAscii( "x^" );
+                aBuf.append( "x^" );
                 aBuf.append(i);
             }
         }
