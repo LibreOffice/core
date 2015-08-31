@@ -446,3 +446,9 @@ namespace cppu_unourl
     }
 } // namespace cppu_ifcontainer
 
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
+

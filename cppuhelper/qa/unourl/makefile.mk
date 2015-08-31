@@ -40,8 +40,7 @@ all:
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:joblist by codegen.pl
 APP1OBJS=  \
-    $(SLO)$/cppu_unourl.obj \
-    $(SLO)$/main.obj
+    $(SLO)$/cppu_unourl.obj
 APP1TARGET= cppu_unourl
 APP1STDLIBS=\
     $(CPPUHELPERLIB) \
