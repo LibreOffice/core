@@ -123,7 +123,7 @@ OString GraphicID::GetIDString() const
 {
     OStringBuffer aHexStr;
     sal_Int32 nShift, nIndex = 0;
-    aHexStr.setLength(32);
+    aHexStr.setLength(24 + (2 * BITMAP_CHECKSUM_SIZE));
 
     for( nShift = 28; nShift >= 0; nShift -= 4 )
         aHexStr[nIndex++] = aHexData[ ( mnID1 >> (sal_uInt32) nShift ) & 0xf ];
