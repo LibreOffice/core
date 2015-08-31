@@ -587,6 +587,15 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         // which kind of text pointer have we to show - horz / vert - ?
         if( PointerStyle::Text == eStyle && rSh.IsInVerticalText( &rLPt ))
             eStyle = PointerStyle::TextVertical;
+        else
+        if (rSh.GetViewOptions()->CanHideWhitespace() &&
+            rSh.GetLayout()->IsBetweenPages(rLPt))
+        {
+            if (rSh.GetViewOptions()->IsHideWhitespaceMode())
+                eStyle = PointerStyle::ShowWhitespace;
+            else
+                eStyle = PointerStyle::HideWhitespace;
+        }
 
         SetPointer( eStyle );
     }
@@ -2818,23 +2827,28 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
         if ( !bActive )
         {
-            SwPaM aPam( *rSh.GetCurrentShellCursor().GetPoint() );
-            bool bWasInHeader = aPam.GetPoint( )->nNode.GetNode( ).FindHeaderStartNode( ) != NULL;
-            bool bWasInFooter = aPam.GetPoint( )->nNode.GetNode( ).FindFooterStartNode( ) != NULL;
-
-            // Is the cursor in a part like similar to the one we clicked on? For example,
-            // if the cursor is in a header and we click on an empty header... don't change anything to
-            // keep consistent behaviour due to header edit mode (and the same for the footer as well).
-
-            // Otherwise, we hide the header/footer control if a separator is shown, and vice versa.
-            if ( !( bWasInHeader && eControl == Header ) &&
-                 !( bWasInFooter && eControl == Footer ) )
+            // When in Hide-Whitespace mode, we don't want header
+            // and footer controls.
+            if (!rSh.GetViewOptions()->IsHideWhitespaceMode())
             {
-                rSh.SetShowHeaderFooterSeparator( eControl, !rSh.IsShowHeaderFooterSeparator( eControl ) );
-            }
+                SwPaM aPam(*rSh.GetCurrentShellCursor().GetPoint());
+                const bool bWasInHeader = aPam.GetPoint()->nNode.GetNode().FindHeaderStartNode() != NULL;
+                const bool bWasInFooter = aPam.GetPoint()->nNode.GetNode().FindFooterStartNode() != NULL;
 
-            // Repaint everything
-            Invalidate();
+                // Is the cursor in a part like similar to the one we clicked on? For example,
+                // if the cursor is in a header and we click on an empty header... don't change anything to
+                // keep consistent behaviour due to header edit mode (and the same for the footer as well).
+
+                // Otherwise, we hide the header/footer control if a separator is shown, and vice versa.
+                if (!(bWasInHeader && eControl == Header) &&
+                    !(bWasInFooter && eControl == Footer))
+                {
+                    rSh.SetShowHeaderFooterSeparator(eControl, !rSh.IsShowHeaderFooterSeparator(eControl));
+                }
+
+                // Repaint everything
+                Invalidate();
+            }
         }
         else
         {
@@ -2864,6 +2878,17 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             // FIXME fdo#67358 for unknown reasons this causes painting
             // problems when resizing table columns, so disable it
 //            rSh.GetWin()->Invalidate();
+        }
+
+        // Toggle Hide-Whitespace if between pages.
+        if (_rMEvt.GetClicks() >= 2 &&
+            rSh.GetViewOptions()->CanHideWhitespace() &&
+            rSh.GetLayout()->IsBetweenPages(aDocPos))
+        {
+            SwViewOption aOpt(*rSh.GetViewOptions());
+            aOpt.SetHideWhitespaceMode(!aOpt.IsHideWhitespaceMode());
+            rSh.ApplyViewOptions(aOpt);
+            m_rView.GetDocShell()->ToggleLayoutMode(&m_rView);
         }
     }
 

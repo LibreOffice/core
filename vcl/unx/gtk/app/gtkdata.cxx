@@ -474,6 +474,9 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             // #i20119#
             MAKE_CURSOR( PointerStyle::Paintbrush, paintbrush_ );
 
+            MAKE_CURSOR( PointerStyle::HideWhitespace, hidewhitespace_ );
+            MAKE_CURSOR( PointerStyle::ShowWhitespace, showwhitespace_ );
+
         default:
             SAL_WARN( "vcl.gtk", "pointer " << static_cast<int>(ePointerStyle) << "not implemented" );
             break;

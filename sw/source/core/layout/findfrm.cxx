@@ -582,6 +582,49 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
     return pRet;
 }
 
+bool SwRootFrm::IsBetweenPages(const Point& rPt) const
+{
+    if (!Frm().IsInside(rPt))
+        return false;
+
+    // Top visible page, but not the left area in book view.
+    const SwFrm* pPage = Lower();
+    if (!pPage ||
+        rPt.Y() < pPage->Frm().Bottom() ||
+        pPage->Frm().IsInside(rPt))
+        return false;
+
+    // The worst-case complexity of this algorithm is
+    // visible pages + one row of pages.
+    do
+    {
+        // Skip pages above point.
+        while (pPage && rPt.Y() > pPage->Frm().Bottom())
+            pPage = pPage->GetNext();
+
+        if (!pPage || rPt.Y() > pPage->Frm().Top() ||
+            pPage->Frm().IsInside(rPt))
+            return false;
+
+        if (rPt.X() >= pPage->Frm().Left() &&
+            rPt.X() <= pPage->Frm().Right())
+        {
+            // We're below and within the column of a page.
+            // Find the page right below us, if any.
+            while (pPage && (rPt.X() < pPage->Frm().Left() ||
+                             rPt.X() > pPage->Frm().Right()))
+                pPage = pPage->GetNext();
+
+            return (pPage && !pPage->Frm().IsInside(rPt));
+        }
+
+        pPage = pPage->GetNext();
+    }
+    while (pPage);
+
+    return false;
+}
+
 const SwAttrSet* SwFrm::GetAttrSet() const
 {
     if ( IsContentFrm() )

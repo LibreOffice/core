@@ -2933,13 +2933,12 @@ void SwLayoutFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         return;
 
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    const bool hideWS = (pSh && pSh->GetViewOptions()->IsHideWhitespaceMode());
+    const bool hideWS = (pSh && pSh->GetViewOptions()->IsWhitespaceHidden());
     const long hideWSBorderSize = (pSh ? pSh->GetViewOptions()->GetDocumentBorder() : 0);
-    const bool hideSideWS = (pSh && pSh->GetViewOptions()->IsMultipageView());
-    const sal_uInt16 nLeft = hideSideWS ? hideWSBorderSize * 2 : (sal_uInt16)pAttrs->CalcLeft(this);
+    const sal_uInt16 nLeft = (sal_uInt16)pAttrs->CalcLeft(this);
     const sal_uInt16 nUpper = hideWS ? hideWSBorderSize : pAttrs->CalcTop();
 
-    const sal_uInt16 nRight = hideSideWS ? hideWSBorderSize * 2 : (sal_uInt16)pAttrs->CalcRight(this);
+    const sal_uInt16 nRight = (sal_uInt16)pAttrs->CalcRight(this);
     const sal_uInt16 nLower = hideWS ? hideWSBorderSize : pAttrs->CalcBottom();
 
     bool bVert = IsVertical() && !IsPageFrm();

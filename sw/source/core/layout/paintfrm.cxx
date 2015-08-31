@@ -115,7 +115,7 @@ struct SwPaintProperties;
 #define IS_SUBS (!gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() && \
                  !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() && \
                  !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&\
-                 !gProp.pSGlobalShell->GetViewOptions()->IsHideWhitespaceMode() &&\
+                 !gProp.pSGlobalShell->GetViewOptions()->IsWhitespaceHidden() &&\
                  SwViewOption::IsDocBoundaries())
 //subsidiary lines for sections
 #define IS_SUBS_SECTION (!gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() && \
