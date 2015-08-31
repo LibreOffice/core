@@ -67,7 +67,7 @@ void SAL_CALL ODFSerializer::startDocument(  ) throw (xml::sax::SAXException, un
     OSL_PRECOND(m_xOutStream.is(), "ODFSerializer(): invalid output stream");
 
     OUStringBuffer aElement;
-    aElement.appendAscii("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    aElement.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     characters(aElement.makeStringAndClear());
 }
 
