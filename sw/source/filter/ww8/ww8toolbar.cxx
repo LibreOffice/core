@@ -167,7 +167,7 @@ bool SwCTBWrapper::Read( SvStream& rS )
     {
         rCustomizations[ *it ].bIsDroppedMenuTB = true;
     }
-    return true;
+    return rS.good();
 }
 
 SwTBC* SwCTBWrapper::GetTBCAtOffset( sal_uInt32 nStreamOffset )
@@ -290,7 +290,7 @@ bool Customization::Read( SvStream &rS)
         if ( !customizationDataCTB->Read( rS ) )
                 return false;
     }
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -450,7 +450,7 @@ bool TBDelta::Read(SvStream &rS)
     nOffSet = rS.Tell();
     rS.ReadUChar( doprfatendFlags ).ReadUChar( ibts ).ReadInt32( cidNext ).ReadInt32( cid ).ReadInt32( fc ) ;
     rS.ReadUInt16( CiTBDE ).ReadUInt16( cbTBC );
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -520,7 +520,7 @@ bool SwCTB::Read( SvStream &rS)
             rTBC.push_back( aTBC );
         }
     }
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -633,7 +633,7 @@ bool SwTBC::Read( SvStream &rS )
         if ( !tbcd->Read( rS ) )
             return false;
     }
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -773,7 +773,7 @@ Xst::Read( SvStream& rS )
     SAL_INFO("sw.ww8","Xst::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     sString = read_uInt16_PascalString(rS);
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -909,7 +909,7 @@ bool Tcg255::Read(SvStream &rS)
         nId = 0x40;
         rS.ReadUChar( nId );
     }
-    return true;
+    return rS.good();
     // Peek at
 }
 
@@ -941,7 +941,7 @@ bool Tcg255SubStruct::Read(SvStream &rS)
     nOffSet = rS.Tell();
     if ( mbReadId )
         rS.ReadUChar( ch );
-    return true;
+    return rS.good();
 }
 
 PlfMcd::PlfMcd(bool bReadId)
@@ -965,7 +965,7 @@ bool PlfMcd::Read(SvStream &rS)
                 return false;
         }
     }
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1000,7 +1000,15 @@ bool PlfAcd::Read( SvStream &rS)
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     rS.ReadInt32( iMac );
-    if ( iMac )
+    if (iMac < 0)
+        return false;
+    auto nMaxPossibleRecords = rS.remainingSize() / (sizeof(sal_uInt16)*2);
+    if (static_cast<sal_uInt32>(iMac) > nMaxPossibleRecords)
+    {
+        SAL_WARN("sw.ww8", iMac << " records claimed, but max possible is " << nMaxPossibleRecords);
+        iMac = nMaxPossibleRecords;
+    }
+    if (iMac)
     {
         rgacd = new Acd[ iMac ];
         for ( sal_Int32 index = 0; index < iMac; ++index )
@@ -1009,7 +1017,7 @@ bool PlfAcd::Read( SvStream &rS)
                 return false;
         }
     }
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1053,7 +1061,7 @@ bool PlfKme::Read(SvStream &rS)
                 return false;
         }
     }
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1121,7 +1129,7 @@ bool TcgSttbfCore::Read( SvStream& rS )
             rS.ReadUInt16( dataItems[ index ].extraData );
         }
     }
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1171,7 +1179,7 @@ bool MacroNames::Read( SvStream &rS)
                 return false;
         }
     }
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1225,7 +1233,7 @@ Xstz::Read(SvStream &rS)
     rS.ReadUInt16( chTerm );
     if ( chTerm != 0 ) // should be an assert
         return false;
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1258,7 +1266,7 @@ Kme::Read(SvStream &rS)
     SAL_INFO("sw.ww8","Kme::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     rS.ReadInt16( reserved1 ).ReadInt16( reserved2 ).ReadUInt16( kcm1 ).ReadUInt16( kcm2 ).ReadUInt16( kt ).ReadUInt32( param );
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1286,7 +1294,7 @@ bool Acd::Read(SvStream &rS)
     SAL_INFO("sw.ww8","Acd::Read() stream pos 0x" << std::hex << rS.Tell() );
     nOffSet = rS.Tell();
     rS.ReadInt16( ibst ).ReadUInt16( fciBasedOnABC );
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1349,7 +1357,7 @@ bool MCD::Read(SvStream &rS)
     nOffSet = rS.Tell();
     rS.ReadSChar( reserved1 ).ReadUChar( reserved2 ).ReadUInt16( ibst ).ReadUInt16( ibstName ).ReadUInt16( reserved3 );
     rS.ReadUInt32( reserved4 ).ReadUInt32( reserved5 ).ReadUInt32( reserved6 ).ReadUInt32( reserved7 );
-    return true;
+    return rS.good();
 }
 
 #if OSL_DEBUG_LEVEL > 1
