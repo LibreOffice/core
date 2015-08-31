@@ -895,9 +895,9 @@ OUString AssistentDlgImpl::GetDocFileName()
     OUString aDocFile;
     if( GetStartType() == ST_TEMPLATE )
     {
-        const sal_uInt16 nEntry = mpPage1TemplateLB->GetSelectEntryPos();
+        const sal_Int32 nEntry = mpPage1TemplateLB->GetSelectEntryPos();
         TemplateEntry* pEntry = NULL;
-        if (mpTemplateRegion && nEntry != (sal_uInt16)-1)
+        if (mpTemplateRegion && nEntry != LISTBOX_ENTRY_NOTFOUND)
             pEntry = mpTemplateRegion->maEntries[nEntry];
 
         if(pEntry)
@@ -911,8 +911,8 @@ OUString AssistentDlgImpl::GetDocFileName()
     }
     else if( GetStartType() == ST_OPEN )
     {
-        const sal_uInt16 nEntry = mpPage1OpenLB->GetSelectEntryPos();
-        if(nEntry != (sal_uInt16)-1 )
+        const sal_Int32 nEntry = mpPage1OpenLB->GetSelectEntryPos();
+        if( nEntry != LISTBOX_ENTRY_NOTFOUND )
             aDocFile = maOpenFilesList[nEntry];
     }
 
@@ -924,9 +924,9 @@ OUString AssistentDlgImpl::GetDocFileName()
 
 OUString AssistentDlgImpl::GetLayoutFileName()
 {
-    const sal_uInt16 nEntry = mpPage2LayoutLB->GetSelectEntryPos();
+    const sal_Int32 nEntry = mpPage2LayoutLB->GetSelectEntryPos();
     TemplateEntry* pEntry = NULL;
-    if(nEntry != (sal_uInt16)-1 && nEntry > 0)
+    if(nEntry != LISTBOX_ENTRY_NOTFOUND && nEntry > 0)
         pEntry = mpLayoutRegion->maEntries[nEntry-1];
 
     if(pEntry)
