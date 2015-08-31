@@ -1672,7 +1672,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
                 do
                 {
                     OUStringBuffer aNew = aNewUri.getUri();
-                    aNew.appendAscii( "_" );
+                    aNew.append( "_" );
                     aNew.append( OUString::number( ++nTry ) );
                     aNewUri.setUri( aNew.makeStringAndClear() );
                 }
@@ -1692,7 +1692,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
                 else
                 {
                     OUStringBuffer aNewTitle = m_aProps.getTitle();
-                    aNewTitle.appendAscii( "_" );
+                    aNewTitle.append( "_" );
                     aNewTitle.append( OUString::number( ++nTry ) );
                     m_aProps.setTitle( aNewTitle.makeStringAndClear() );
                 }
@@ -1831,7 +1831,7 @@ Content::queryChildContent( const OUString & rRelativeChildUri )
     const OUString aMyId = getIdentifier()->getContentIdentifier();
     OUStringBuffer aBuf( aMyId );
     if ( !aMyId.endsWith("/") )
-        aBuf.appendAscii( "/" );
+        aBuf.append( "/" );
     if ( !rRelativeChildUri.startsWith("/") )
         aBuf.append( rRelativeChildUri );
     else

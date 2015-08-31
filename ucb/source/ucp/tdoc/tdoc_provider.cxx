@@ -179,7 +179,7 @@ ContentProvider::createDocumentContent(
         if ( !aDocId.isEmpty() )
         {
             OUStringBuffer aBuffer;
-            aBuffer.appendAscii( TDOC_URL_SCHEME ":/" );
+            aBuffer.append( TDOC_URL_SCHEME ":/" );
             aBuffer.append( aDocId );
 
             uno::Reference< ucb::XContentIdentifier > xId

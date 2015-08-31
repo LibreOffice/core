@@ -54,7 +54,7 @@ using namespace cppu;
 OUString makeHierarchalNameSegment( const OUString & rIn  )
 {
     OUStringBuffer aBuffer;
-    aBuffer.appendAscii( "['" );
+    aBuffer.append( "['" );
 
     sal_Int32 nCount = rIn.getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -63,23 +63,23 @@ OUString makeHierarchalNameSegment( const OUString & rIn  )
         switch ( c )
         {
             case '&':
-                aBuffer.appendAscii( "&amp;" );
+                aBuffer.append( "&amp;" );
                 break;
 
             case '"':
-                aBuffer.appendAscii( "&quot;" );
+                aBuffer.append( "&quot;" );
                 break;
 
             case '\'':
-                aBuffer.appendAscii( "&apos;" );
+                aBuffer.append( "&apos;" );
                 break;
 
             case '<':
-                aBuffer.appendAscii( "&lt;" );
+                aBuffer.append( "&lt;" );
                 break;
 
             case '>':
-                aBuffer.appendAscii( "&gt;" );
+                aBuffer.append( "&gt;" );
                 break;
 
             default:
@@ -88,7 +88,7 @@ OUString makeHierarchalNameSegment( const OUString & rIn  )
         }
     }
 
-    aBuffer.appendAscii( "']" );
+    aBuffer.append( "']" );
     return OUString( aBuffer.makeStringAndClear() );
 }
 

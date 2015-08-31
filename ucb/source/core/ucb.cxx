@@ -138,23 +138,23 @@ void makeAndAppendXMLName(
         switch ( c )
         {
             case '&':
-                rBuffer.appendAscii( "&amp;" );
+                rBuffer.append( "&amp;" );
                 break;
 
             case '"':
-                rBuffer.appendAscii( "&quot;" );
+                rBuffer.append( "&quot;" );
                 break;
 
             case '\'':
-                rBuffer.appendAscii( "&apos;" );
+                rBuffer.append( "&apos;" );
                 break;
 
             case '<':
-                rBuffer.appendAscii( "&lt;" );
+                rBuffer.append( "&lt;" );
                 break;
 
             case '>':
-                rBuffer.appendAscii( "&gt;" );
+                rBuffer.append( "&gt;" );
                 break;
 
             default:
@@ -171,7 +171,7 @@ bool createContentProviderData(
 {
     // Obtain service name.
     OUStringBuffer aKeyBuffer (rProvider);
-    aKeyBuffer.appendAscii( "/ServiceName" );
+    aKeyBuffer.append( "/ServiceName" );
 
     OUString aValue;
     try
@@ -192,7 +192,7 @@ bool createContentProviderData(
 
     // Obtain URL Template.
     aKeyBuffer.append(rProvider);
-    aKeyBuffer.appendAscii( "/URLTemplate" );
+    aKeyBuffer.append( "/URLTemplate" );
 
     if ( !( rxHierNameAccess->getByHierarchicalName(
                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
@@ -205,7 +205,7 @@ bool createContentProviderData(
 
     // Obtain Arguments.
     aKeyBuffer.append(rProvider);
-    aKeyBuffer.appendAscii( "/Arguments" );
+    aKeyBuffer.append( "/Arguments" );
 
     if ( !( rxHierNameAccess->getByHierarchicalName(
                 aKeyBuffer.makeStringAndClear() ) >>= aValue ) )
@@ -884,13 +884,13 @@ bool UniversalContentBroker::getContentProviderData(
                 configuration::theDefaultProvider::get( m_xContext );
 
         OUStringBuffer aFullPath;
-        aFullPath.appendAscii(
+        aFullPath.append(
                 "/org.openoffice.ucb.Configuration/ContentProviders"
                 "/['" );
         makeAndAppendXMLName( aFullPath, rKey1 );
-        aFullPath.appendAscii( "']/SecondaryKeys/['" );
+        aFullPath.append( "']/SecondaryKeys/['" );
         makeAndAppendXMLName( aFullPath, rKey2 );
-        aFullPath.appendAscii( "']/ProviderData" );
+        aFullPath.append( "']/ProviderData" );
 
         uno::Sequence< uno::Any > aArguments( 1 );
         beans::PropertyValue      aProperty;
@@ -933,9 +933,9 @@ bool UniversalContentBroker::getContentProviderData(
                     ContentProviderData aInfo;
 
                     OUStringBuffer aElemBuffer;
-                    aElemBuffer.appendAscii( "['" );
+                    aElemBuffer.append( "['" );
                     makeAndAppendXMLName( aElemBuffer, pElems[ n ] );
-                    aElemBuffer.appendAscii( "']" );
+                    aElemBuffer.append( "']" );
 
                     OSL_VERIFY(
                         createContentProviderData(

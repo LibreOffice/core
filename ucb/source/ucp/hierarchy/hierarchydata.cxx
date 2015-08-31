@@ -67,23 +67,23 @@ void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
         switch ( c )
         {
             case '&':
-                rBuffer.appendAscii( "&amp;" );
+                rBuffer.append( "&amp;" );
                 break;
 
             case '"':
-                rBuffer.appendAscii( "&quot;" );
+                rBuffer.append( "&quot;" );
                 break;
 
             case '\'':
-                rBuffer.appendAscii( "&apos;" );
+                rBuffer.append( "&apos;" );
                 break;
 
             case '<':
-                rBuffer.appendAscii( "&lt;" );
+                rBuffer.append( "&lt;" );
                 break;
 
             case '>':
-                rBuffer.appendAscii( "&gt;" );
+                rBuffer.append( "&gt;" );
                 break;
 
             default:
@@ -996,7 +996,7 @@ OUString HierarchyEntry::createPathFromHierarchyURL(
     if ( nLen )
     {
         OUStringBuffer aNewPath;
-        aNewPath.appendAscii( "['" );
+        aNewPath.append( "['" );
 
         sal_Int32 nStart = 0;
         sal_Int32 nEnd   = aPath.indexOf( '/' );
@@ -1011,12 +1011,12 @@ OUString HierarchyEntry::createPathFromHierarchyURL(
 
             if ( nEnd != nLen )
             {
-                aNewPath.appendAscii( "']/Children/['" );
+                aNewPath.append( "']/Children/['" );
                 nStart = nEnd + 1;
                 nEnd   = aPath.indexOf( '/', nStart );
             }
             else
-                aNewPath.appendAscii( "']" );
+                aNewPath.append( "']" );
         }
         while ( nEnd != nLen );
 
@@ -1115,9 +1115,9 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
         try
         {
             OUStringBuffer aKey;
-            aKey.appendAscii( "['" );
+            aKey.append( "['" );
             makeXMLName( m_pImpl->names.getConstArray()[ m_pImpl->pos ], aKey );
-            aKey.appendAscii( "']" );
+            aKey.append( "']" );
 
             OUString aTitle     = aKey.makeStringAndClear();
             OUString aTargetURL = aTitle;

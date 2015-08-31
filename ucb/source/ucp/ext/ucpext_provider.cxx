@@ -145,7 +145,7 @@ namespace ucb { namespace ucp { namespace ext
         if ( sRemaining.isEmpty() )
         {
             // the root content is a special case, it requires /
-            aComposer.appendAscii( "//" );
+            aComposer.append( "//" );
         }
         else
         {

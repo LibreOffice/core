@@ -247,7 +247,7 @@ OUString FTPURL::ident(bool withslash,bool internal) const
     // password. ( These are set together with the command. )
 
     OUStringBuffer bff;
-    bff.appendAscii("ftp://");
+    bff.append("ftp://");
 
     if( m_aUsername != "anonymous" ) {
         bff.append(m_aUsername);
@@ -293,7 +293,7 @@ OUString FTPURL::parent(bool internal) const
 {
     OUStringBuffer bff;
 
-    bff.appendAscii("ftp://");
+    bff.append("ftp://");
 
     if( m_aUsername != "anonymous" ) {
         bff.append(m_aUsername);
@@ -332,9 +332,9 @@ OUString FTPURL::parent(bool internal) const
             bff.append('/').append(m_aPathSegmentVec[i]);
 
     if(last.isEmpty())
-        bff.appendAscii("..");
+        bff.append("..");
     else if ( last == ".." )
-        bff.append(last).appendAscii("/..");
+        bff.append(last).append("/..");
 
     bff.append(m_aType);
     return bff.makeStringAndClear();
