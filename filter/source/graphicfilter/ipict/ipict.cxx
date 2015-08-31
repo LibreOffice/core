@@ -824,8 +824,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     // read and write Bitmap bits:
     if ( nPixelSize == 1 || nPixelSize == 2 || nPixelSize == 4 || nPixelSize == 8 )
     {
-        sal_uInt8   nByteCountAsByte, nFlagCounterByte;
-        sal_uInt16  nByteCount, nSrcBPL, nDestBPL;
+        sal_uInt16  nSrcBPL, nDestBPL;
         size_t nCount;
 
         if      ( nPixelSize == 1 ) nSrcBPL = ( nWidth + 7 ) >> 3;
@@ -851,6 +850,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             }
             else
             {
+                sal_uInt16 nByteCount(0);
                 if ( nRowBytes > 250 )
                 {
                     pPict->ReadUInt16( nByteCount );
@@ -858,14 +858,16 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                 }
                 else
                 {
+                    sal_uInt8 nByteCountAsByte(0);
                     pPict->ReadUChar( nByteCountAsByte );
                     nByteCount = ( (sal_uInt16)nByteCountAsByte ) & 0x00ff;
                     nDataSize += 1 + (sal_uLong)nByteCount;
                 }
 
-                while ( nByteCount )
+                while (pPict->good() && nByteCount)
                 {
-                    pPict->ReadUChar( nFlagCounterByte );
+                    sal_uInt8 nFlagCounterByte(0);
+                    pPict->ReadUChar(nFlagCounterByte);
                     if ( ( nFlagCounterByte & 0x80 ) == 0 )
                     {
                         nCount = ( (sal_uInt16)nFlagCounterByte ) + 1;
