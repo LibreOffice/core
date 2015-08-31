@@ -227,7 +227,7 @@ OUString OReportEngineJFree::getNewOutputName()
             // some meta data
             SvtUserOptions aUserOpts;
             OUStringBuffer sAuthor(aUserOpts.GetFirstName());
-            sAuthor.appendAscii(" ");
+            sAuthor.append(" ");
             sAuthor.append(aUserOpts.GetLastName());
             static const char s_sAuthor[] = "Author";
             aConvertedProperties[nPos].Name = s_sAuthor;

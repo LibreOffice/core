@@ -93,7 +93,7 @@ namespace rptui
                         if ( !sLabel.isEmpty() )
                         {
                             OUStringBuffer aBuffer;
-                            aBuffer.appendAscii( "=" );
+                            aBuffer.append( "=" );
                             aBuffer.append( sLabel );
                             sDataField = aBuffer.makeStringAndClear();
                             bSet = false;

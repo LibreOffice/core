@@ -64,9 +64,9 @@ namespace rptui
         {
             OUStringBuffer aBuffer;
             aBuffer.append( sFieldPrefix );
-            aBuffer.appendAscii( "[" );
+            aBuffer.append( "[" );
             aBuffer.append( _rFieldOrExpression );
-            aBuffer.appendAscii( "]" );
+            aBuffer.append( "]" );
             m_sCompleteFormula = aBuffer.makeStringAndClear();
         }
         break;
@@ -119,10 +119,10 @@ namespace rptui
         bool bIsField = ( getType() == Field );
         OUStringBuffer aFieldContent;
         if ( bIsField )
-            aFieldContent.appendAscii( "[" );
+            aFieldContent.append( "[" );
         aFieldContent.append( getUndecoratedContent() );
         if ( bIsField )
-            aFieldContent.appendAscii( "]" );
+            aFieldContent.append( "]" );
 
         return aFieldContent.makeStringAndClear();
     }
@@ -141,7 +141,7 @@ namespace rptui
     OUString ReportFormula::getEqualUndecoratedContent() const
     {
         OUStringBuffer aBuffer;
-        aBuffer.appendAscii( "=" );
+        aBuffer.append( "=" );
         aBuffer.append( getUndecoratedContent() );
         return aBuffer.makeStringAndClear();
     }
