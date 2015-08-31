@@ -959,13 +959,13 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
     OUStringBuffer sBuffer;
     sBuffer.appendAscii(sAPI_fieldmaster_prefix);
     sBuffer.appendAscii(sAPI_set_expression);
-    sBuffer.appendAscii(".");
+    sBuffer.append(".");
     sBuffer.append(sName);
     OUString sVarServiceName = sBuffer.makeStringAndClear();
 
     sBuffer.appendAscii(sAPI_fieldmaster_prefix);
     sBuffer.appendAscii(sAPI_user);
-    sBuffer.appendAscii(".");
+    sBuffer.append(".");
     sBuffer.append(sName);
     OUString sUserServiceName = sBuffer.makeStringAndClear();
 
@@ -995,7 +995,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
             nCollisionCount++;
             OUStringBuffer aBuf;
             aBuf.append(sName);
-            aBuf.appendAscii("_renamed_");
+            aBuf.append("_renamed_");
             aBuf.append(nCollisionCount);
             sNew = aBuf.makeStringAndClear();
 
@@ -1020,7 +1020,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
             nCollisionCount++;
             OUStringBuffer aBuf;
             aBuf.append(sName);
-            aBuf.appendAscii("_renamed_");
+            aBuf.append("_renamed_");
             aBuf.append(nCollisionCount);
             sNew = aBuf.makeStringAndClear();
 

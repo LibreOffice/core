@@ -113,66 +113,66 @@ void XMLErrors::AddRecord(
 
     OUStringBuffer sMessage;
 
-    sMessage.appendAscii( "An error or a warning has occurred during XML import/export!\n" );
+    sMessage.append( "An error or a warning has occurred during XML import/export!\n" );
 
     // ID & flags
-    sMessage.appendAscii( "Error-Id: 0x");
+    sMessage.append( "Error-Id: 0x");
     sMessage.append( nId, 16 );
-    sMessage.appendAscii( "\n    Flags: " );
+    sMessage.append( "\n    Flags: " );
     sal_Int32 nFlags = (nId & XMLERROR_MASK_FLAG);
     sMessage.append( nFlags >> 28, 16 );
     if( (nFlags & XMLERROR_FLAG_WARNING) != 0 )
-        sMessage.appendAscii( " WARNING" );
+        sMessage.append( " WARNING" );
     if( (nFlags & XMLERROR_FLAG_ERROR) != 0 )
-        sMessage.appendAscii( " ERROR" );
+        sMessage.append( " ERROR" );
     if( (nFlags & XMLERROR_FLAG_SEVERE) != 0 )
-        sMessage.appendAscii( " SEVERE" );
-    sMessage.appendAscii( "\n    Class: " );
+        sMessage.append( " SEVERE" );
+    sMessage.append( "\n    Class: " );
     sal_Int32 nClass = (nId & XMLERROR_MASK_CLASS);
     sMessage.append( nClass >> 16, 16 );
     if( (nClass & XMLERROR_CLASS_IO) != 0 )
-        sMessage.appendAscii( " IO" );
+        sMessage.append( " IO" );
     if( (nClass & XMLERROR_CLASS_FORMAT) != 0 )
-        sMessage.appendAscii( " FORMAT" );
+        sMessage.append( " FORMAT" );
     if( (nClass & XMLERROR_CLASS_API) != 0 )
-        sMessage.appendAscii( " API" );
+        sMessage.append( " API" );
     if( (nClass & XMLERROR_CLASS_OTHER) != 0 )
-        sMessage.appendAscii( " OTHER" );
-    sMessage.appendAscii( "\n    Number: " );
+        sMessage.append( " OTHER" );
+    sMessage.append( "\n    Number: " );
     sal_Int32 nNumber = (nId & XMLERROR_MASK_NUMBER);
     sMessage.append( nNumber, 16 );
-    sMessage.appendAscii( "\n");
+    sMessage.append( "\n");
 
     // the parameters
-    sMessage.appendAscii( "Parameters:\n" );
+    sMessage.append( "Parameters:\n" );
     sal_Int32 nLength = rParams.getLength();
     const OUString* pParams = rParams.getConstArray();
     for( sal_Int32 i = 0; i < nLength; i++ )
     {
-        sMessage.appendAscii( "    " );
+        sMessage.append( "    " );
         sMessage.append( i );
-        sMessage.appendAscii( ": " );
+        sMessage.append( ": " );
         sMessage.append( pParams[i] );
-        sMessage.appendAscii( "\n" );
+        sMessage.append( "\n" );
     }
 
     // the exception message
-    sMessage.appendAscii( "Exception-Message: " );
+    sMessage.append( "Exception-Message: " );
     sMessage.append( rExceptionMessage );
-    sMessage.appendAscii( "\n" );
+    sMessage.append( "\n" );
 
     // position (if given)
     if( (nRow != -1) || (nColumn != -1) )
     {
-        sMessage.appendAscii( "Position:\n    Public Identifier: " );
+        sMessage.append( "Position:\n    Public Identifier: " );
         sMessage.append( rPublicId );
-        sMessage.appendAscii( "\n    System Identifier: " );
+        sMessage.append( "\n    System Identifier: " );
         sMessage.append( rSystemId );
-        sMessage.appendAscii( "\n    Row, Column: " );
+        sMessage.append( "\n    Row, Column: " );
         sMessage.append( nRow );
-        sMessage.appendAscii( "," );
+        sMessage.append( "," );
         sMessage.append( nColumn );
-        sMessage.appendAscii( "\n" );
+        sMessage.append( "\n" );
     }
 
     // convert to byte string and signal the error

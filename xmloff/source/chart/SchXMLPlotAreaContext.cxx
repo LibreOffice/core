@@ -949,9 +949,9 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
         aRoleBuffer.append( '-' );
 
         if( bPositiveValue )
-            aRoleBuffer = aRoleBuffer.appendAscii( "positive" );
+            aRoleBuffer = aRoleBuffer.append( "positive" );
         else
-            aRoleBuffer = aRoleBuffer.appendAscii( "negative" );
+            aRoleBuffer = aRoleBuffer.append( "negative" );
 
         OUString aRole = aRoleBuffer.makeStringAndClear();
 

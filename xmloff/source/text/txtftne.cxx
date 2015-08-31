@@ -170,7 +170,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
         sal_Int32 nNumber = 0;
         aAny >>= nNumber;
         OUStringBuffer aBuf;
-        aBuf.appendAscii("ftn");
+        aBuf.append("ftn");
         aBuf.append(nNumber);
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_ID,
                                  aBuf.makeStringAndClear());

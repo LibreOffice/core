@@ -3513,7 +3513,7 @@ OUString XMLTextFieldExport::MakeFootnoteRefName(
 {
     // generate foot-/endnote ID
     OUStringBuffer aBuf;
-    aBuf.appendAscii("ftn");
+    aBuf.append("ftn");
     aBuf.append((sal_Int32)nSeqNo);
     return aBuf.makeStringAndClear();
 }
@@ -3524,7 +3524,7 @@ OUString XMLTextFieldExport::MakeSequenceRefName(
 {
     // generate foot-/endnote ID
     OUStringBuffer aBuf;
-    aBuf.appendAscii("ref");
+    aBuf.append("ref");
     aBuf.append(rSeqName);
     aBuf.append((sal_Int32)nSeqNo);
     return aBuf.makeStringAndClear();

@@ -1603,7 +1603,7 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
     {
         //  insert empty format as empty string (with quotes)
         //  #93901# this check has to be done before inserting the conditions
-        aFormatCode.appendAscii("\"\"");    // ""
+        aFormatCode.append("\"\"");    // ""
     }
 
     aFormatCode.insert( 0, aConditions.makeStringAndClear() );
@@ -1964,7 +1964,7 @@ void SvXMLNumFormatContext::AddCurrency( const OUString& rContent, LanguageType 
     }
 
     if (!bAutomatic)
-        aFormatCode.appendAscii( "[$" );            // intro for "new" currency symbols
+        aFormatCode.append( "[$" );            // intro for "new" currency symbols
 
     aFormatCode.append( aSymbol );
 
@@ -2179,7 +2179,7 @@ void SvXMLNumFormatContext::UpdateCalendar( const OUString& rNewCalendar )
         sCalendar = rNewCalendar;
         if ( !sCalendar.isEmpty() )
         {
-            aFormatCode.appendAscii( "[~" );            // intro for calendar code
+            aFormatCode.append( "[~" );            // intro for calendar code
             aFormatCode.append( sCalendar );
             aFormatCode.append( ']' );    // end of "new" currency symbolcalendar code
         }
