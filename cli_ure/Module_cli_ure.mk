@@ -9,7 +9,9 @@
 
 $(eval $(call gb_Module_Module,cli_ure))
 
-ifeq ($(COM),MSC)
+# Discontinued starting from LO 5.1
+# TODO(davido): There are probably more things to drop?
+ifeq ($(COM),XXX)
 $(eval $(call gb_Module_add_targets,cli_ure,\
 	CliLibrary_cli_basetypes \
 	CliLibrary_cli_ure \
