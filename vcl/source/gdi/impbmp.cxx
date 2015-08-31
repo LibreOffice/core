@@ -96,8 +96,7 @@ BitmapChecksum ImpBitmap::ImplGetChecksum() const
 {
     SalBitmap::ChecksumType aChecksum;
     mpSalBitmap->GetChecksum(aChecksum);
-    BitmapChecksum a32BitChecksum = aChecksum;
-    return a32BitChecksum;
+    return aChecksum;
 }
 
 void ImpBitmap::ImplInvalidateChecksum()
