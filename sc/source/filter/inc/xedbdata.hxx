@@ -47,7 +47,7 @@ protected:
     typedef std::vector<Entry> TablesType;
     TablesType maTables;
 
-    void                SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry );
+    static void         SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry );
 };
 
 /** Stores all data for database ranges (tables in Excel speak).
