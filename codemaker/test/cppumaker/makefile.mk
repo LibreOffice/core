@@ -21,6 +21,10 @@
 
 
 
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ := ..$/..
 PRJNAME := codemaker
 TARGET := test_codemaker_cppumaker
@@ -63,3 +67,5 @@ $(MISC)$/$(TARGET)$/types.urd: types.idl
 
 
 .ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
+
+.END # "$(OOO_SUBSEQUENT_TESTS)" == ""
