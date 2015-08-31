@@ -38,6 +38,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <comphelper/sequence.hxx>
 
 #include "pq_tools.hxx"
 #include "pq_xbase.hxx"
@@ -65,8 +66,8 @@ ReflectionBase::ReflectionBase(
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &conn,
     ConnectionSettings *pSettings,
     cppu::IPropertyArrayHelper & props /* must survive this object !*/ )
-    : OComponentHelper( refMutex->mutex ),
-      OPropertySetHelper( OComponentHelper::rBHelper ),
+    : ReflectionBase_BASE( refMutex->mutex ),
+      OPropertySetHelper( ReflectionBase_BASE::rBHelper ),
       m_implName( implName ),
       m_supportedServices( supportedServices ),
       m_refMutex( refMutex ),
@@ -164,15 +165,11 @@ Sequence< com::sun::star::uno::Type > ReflectionBase::getTypes()
         throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard guard( m_refMutex->mutex );
-    static cppu::OTypeCollection collection(
-        cppu::UnoType<XPropertySet>::get(),
-        cppu::UnoType<XFastPropertySet>::get(),
-        cppu::UnoType<XMultiPropertySet>::get(),
-        cppu::UnoType<com::sun::star::lang::XServiceInfo>::get(),
-        cppu::UnoType<com::sun::star::sdbcx::XDataDescriptorFactory>::get(),
-        cppu::UnoType<com::sun::star::container::XNamed>::get(),
-        OComponentHelper::getTypes());
-    return collection.getTypes();
+    static Sequence< ::com::sun::star::uno::Type > collection(
+            ::comphelper::concatSequences(
+                ::cppu::OPropertySetHelper::getTypes(),
+                ReflectionBase_BASE::getTypes() ) );
+    return collection;
 }
 
 
@@ -180,18 +177,8 @@ com::sun::star::uno::Any ReflectionBase::queryInterface(
     const com::sun::star::uno::Type & reqType )
     throw (com::sun::star::uno::RuntimeException, std::exception)
 {
-    Any ret;
-    ret = OComponentHelper::queryInterface( reqType );
-    if( ! ret.hasValue() )
-        ret = ::cppu::queryInterface(
-            reqType,
-            static_cast< com::sun::star::beans::XPropertySet * > ( this ),
-            static_cast< com::sun::star::beans::XMultiPropertySet * > ( this ),
-            static_cast< com::sun::star::lang::XServiceInfo * > ( this ),
-            static_cast< com::sun::star::beans::XFastPropertySet * > ( this ) ,
-            static_cast< com::sun::star::sdbcx::XDataDescriptorFactory * > ( this ),
-            static_cast< com::sun::star::container::XNamed * > ( this ) );
-    return ret;
+    Any ret = ReflectionBase_BASE::queryInterface( reqType );
+    return ret.hasValue() ? ret : OPropertySetHelper::queryInterface( reqType );
 
 }
 

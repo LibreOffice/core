@@ -38,6 +38,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_XBASE_HXX
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/component.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -47,12 +48,14 @@
 namespace pq_sdbc_driver
 {
 
+typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::lang::XServiceInfo,
+                                          ::com::sun::star::sdbcx::XDataDescriptorFactory,
+                                          ::com::sun::star::container::XNamed
+                                          > ReflectionBase_BASE;
+
 class ReflectionBase :
-        public cppu::OComponentHelper,
-        public cppu::OPropertySetHelper,
-        public com::sun::star::lang::XServiceInfo,
-        public com::sun::star::sdbcx::XDataDescriptorFactory,
-        public com::sun::star::container::XNamed
+        public ReflectionBase_BASE,
+        public cppu::OPropertySetHelper
 {
 protected:
     const OUString m_implName;
@@ -79,8 +82,8 @@ public: // for initialization purposes only, not exported via an interface !
         const OUString & name, const com::sun::star::uno::Any & value );
 
 public: //XInterface
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OComponentHelper::acquire(); }
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE { OComponentHelper::release(); }
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { ReflectionBase_BASE::acquire(); }
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE { ReflectionBase_BASE::release(); }
     virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
         const com::sun::star::uno::Type & reqType )
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
