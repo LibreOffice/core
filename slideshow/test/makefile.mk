@@ -76,8 +76,7 @@ APP1TEST = enabled
 
 # BEGIN target2 --------------------------------------------------------
 APP2OBJS=  \
-    $(SLO)$/demoshow.obj \
-    $(SLO)$/main.obj
+    $(SLO)$/demoshow.obj
 
 APP2TARGET= demoshow
 APP2STDLIBS=$(TOOLSLIB) 		\
