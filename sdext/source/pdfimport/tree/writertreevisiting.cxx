@@ -166,28 +166,28 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
         // build transformation string
         if( fShearX != 0.0 )
         {
-            aBuf.appendAscii( "skewX( " );
+            aBuf.append( "skewX( " );
             aBuf.append( fShearX );
-            aBuf.appendAscii( " )" );
+            aBuf.append( " )" );
         }
         if( fRotate != 0.0 )
         {
             if( !aBuf.isEmpty() )
                 aBuf.append( ' ' );
-            aBuf.appendAscii( "rotate( " );
+            aBuf.append( "rotate( " );
             aBuf.append( -fRotate );
-            aBuf.appendAscii( " )" );
+            aBuf.append( " )" );
 
         }
         if( ! rElem.isCharacter )
         {
             if( !aBuf.isEmpty() )
                 aBuf.append( ' ' );
-            aBuf.appendAscii( "translate( " );
+            aBuf.append( "translate( " );
             aBuf.append( convertPixelToUnitString( rel_x ) );
             aBuf.append( ' ' );
             aBuf.append( convertPixelToUnitString( rel_y ) );
-            aBuf.appendAscii( " )" );
+            aBuf.append( " )" );
          }
 
         rProps[ "draw:transform" ] = aBuf.makeStringAndClear();
@@ -273,7 +273,7 @@ void WriterXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >
     PropertyMap aProps;
     fillFrameProps( elem, aProps, m_rEmitContext );
     OUStringBuffer aBuf( 64 );
-    aBuf.appendAscii( "0 0 " );
+    aBuf.append( "0 0 " );
     aBuf.append( convPx2mmPrec2(elem.w)*100.0 );
     aBuf.append( ' ' );
     aBuf.append( convPx2mmPrec2(elem.h)*100.0 );
@@ -937,7 +937,7 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::
     // size
     OUStringBuffer aBuf( 32 );
     aBuf.append( rFont.size*72/PDFI_OUTDEV_RESOLUTION );
-    aBuf.appendAscii( "pt" );
+    aBuf.append( "pt" );
     OUString aFSize = aBuf.makeStringAndClear();
     aFontProps[ "fo:font-size" ]            = aFSize;
     aFontProps[ "style:font-size-asian" ]   = aFSize;
@@ -989,7 +989,7 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
             // indent
             OUStringBuffer aBuf( 32 );
             aBuf.append( convPx2mm( elem.x - p_x ) );
-            aBuf.appendAscii( "mm" );
+            aBuf.append( "mm" );
             aParaProps[ "fo:margin-left" ] = aBuf.makeStringAndClear();
         }
 
@@ -1005,7 +1005,7 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
             {
                 OUStringBuffer aBuf( 32 );
                 aBuf.append( convPx2mm( pNextPara->y - (elem.y+elem.h) ) );
-                aBuf.appendAscii( "mm" );
+                aBuf.append( "mm" );
                 aParaProps[ "fo:margin-bottom" ] = aBuf.makeStringAndClear();
             }
         }

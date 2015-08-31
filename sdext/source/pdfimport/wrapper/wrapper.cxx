@@ -959,7 +959,7 @@ static bool checkEncryption( const OUString&                               i_rPa
                     if( bAuthenticated )
                     {
                         OUStringBuffer aBuf( 128 );
-                        aBuf.appendAscii( "_OOO_pdfi_Credentials_" );
+                        aBuf.append( "_OOO_pdfi_Credentials_" );
                         aBuf.append( pPDFFile->getDecryptionKey() );
                         io_rPwd = aBuf.makeStringAndClear();
                     }

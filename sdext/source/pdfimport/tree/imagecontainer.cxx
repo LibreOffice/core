@@ -62,7 +62,7 @@ OUString encodeBase64( const sal_Int8* i_pBuffer, const sal_uInt32 i_nBufferLeng
                                   (((sal_uInt8)i_pBuffer[i + 1]) <<  8) +
                                   ((sal_uInt8)i_pBuffer[i + 2]);
 
-        aBuf.appendAscii("====");
+        aBuf.append("====");
 
         sal_uInt8 nIndex (static_cast<sal_uInt8>((nBinary & 0xFC0000) >> 18));
         aBuf[nBufPos] = aBase64EncodeTable [nIndex];
@@ -78,7 +78,7 @@ OUString encodeBase64( const sal_Int8* i_pBuffer, const sal_uInt32 i_nBufferLeng
     }
     if( nRemain > 0 )
     {
-        aBuf.appendAscii("====");
+        aBuf.append("====");
         sal_Int32 nBinary( 0 );
         const sal_Int32 nStart(i_nBufferLength-nRemain);
         switch(nRemain)

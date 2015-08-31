@@ -224,7 +224,7 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
         double scale = convPx2mm(100);
         mat.scale(scale, scale);
 
-        aBuf.appendAscii("matrix(");
+        aBuf.append("matrix(");
         aBuf.append(mat.get(0, 0));
         aBuf.append(' ');
         aBuf.append(mat.get(1, 0));
@@ -236,7 +236,7 @@ void DrawXmlEmitter::fillFrameProps( DrawElement&       rElem,
         aBuf.append(mat.get(0, 2));
         aBuf.append(' ');
         aBuf.append(mat.get(1, 2));
-        aBuf.appendAscii(")");
+        aBuf.append(")");
 
         rProps["draw:transform"] = aBuf.makeStringAndClear();
     }
@@ -324,7 +324,7 @@ void DrawXmlEmitter::visit( PolyPolyElement& elem, const std::list< Element* >::
     // a PolyPolyElement was already applied (aside form translation)
     fillFrameProps( elem, aProps, m_rEmitContext, true );
     OUStringBuffer aBuf( 64 );
-    aBuf.appendAscii( "0 0 " );
+    aBuf.append( "0 0 " );
     aBuf.append( convPx2mmPrec2(elem.w)*100.0 );
     aBuf.append( ' ' );
     aBuf.append( convPx2mmPrec2(elem.h)*100.0 );
@@ -831,7 +831,7 @@ void SetFontsizeProperties(PropertyMap& props, double fontSize)
 {
     OUStringBuffer aBuf(32);
     aBuf.append(fontSize * 72 / PDFI_OUTDEV_RESOLUTION);
-    aBuf.appendAscii("pt");
+    aBuf.append("pt");
     OUString aFSize = aBuf.makeStringAndClear();
     props["fo:font-size"] = aFSize;
     props["style:font-size-asian"] = aFSize;

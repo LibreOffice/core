@@ -56,7 +56,7 @@ OdfEmitter::OdfEmitter( const uno::Reference<io::XOutputStream>& xOutput ) :
     m_aLineFeed[0] = '\n';
 
     OUStringBuffer aElement;
-    aElement.appendAscii("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    aElement.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     write(aElement.makeStringAndClear());
 }
 
@@ -65,9 +65,9 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     OSL_PRECOND(pTag,"Invalid tag string");
 
     OUStringBuffer aElement;
-    aElement.appendAscii("<");
+    aElement.append("<");
     aElement.appendAscii(pTag);
-    aElement.appendAscii(" ");
+    aElement.append(" ");
 
     std::vector<OUString>        aAttributes;
     PropertyMap::const_iterator       aCurr(rProperties.begin());
@@ -76,9 +76,9 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     {
         OUStringBuffer aAttribute;
         aAttribute.append(aCurr->first);
-        aAttribute.appendAscii("=\"");
+        aAttribute.append("=\"");
         aAttribute.append(aCurr->second);
-        aAttribute.appendAscii("\" ");
+        aAttribute.append("\" ");
         aAttributes.push_back(aAttribute.makeStringAndClear());
         ++aCurr;
     }
@@ -93,7 +93,7 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
                                (&OUStringBuffer::append),
                                boost::ref(aElement),
                                _1 ));
-    aElement.appendAscii(">");
+    aElement.append(">");
 
     write(aElement.makeStringAndClear());
 }
@@ -113,9 +113,9 @@ void OdfEmitter::write( const OUString& rText )
 void OdfEmitter::endTag( const char* pTag )
 {
     OUStringBuffer aElement;
-    aElement.appendAscii("</");
+    aElement.append("</");
     aElement.appendAscii(pTag);
-    aElement.appendAscii(">");
+    aElement.append(">");
     write(aElement.makeStringAndClear());
 }
 
