@@ -479,24 +479,24 @@ private:
     VclPtr<PushButton>         m_pBtnLoad;
     VclPtr<PushButton>         m_pBtnSave;
 
-    const SfxItemSet&   rOutAttrs;
+    const SfxItemSet&   m_rOutAttrs;
 
-    XColorListRef         pColorList;
-    XHatchListRef         pHatchingList;
+    XColorListRef         m_pColorList;
+    XHatchListRef         m_pHatchingList;
 
-    ChangeType*         pnHatchingListState;
-    ChangeType*         pnColorListState;
-    sal_uInt16*         pPageType;
-    sal_uInt16          nDlgType;
-    sal_Int32*          pPos;
-    bool*               pbAreaTP;
+    ChangeType*         m_pnHatchingListState;
+    ChangeType*         m_pnColorListState;
+    sal_uInt16*         m_pPageType;
+    sal_uInt16          m_nDlgType;
+    sal_Int32*          m_pPos;
+    bool*               m_pbAreaTP;
 
-    XFillStyleItem      aXFStyleItem;
-    XFillHatchItem      aXHatchItem;
-    XFillAttrSetItem    aXFillAttr;
-    SfxItemSet&         rXFSet;
+    XFillStyleItem      m_aXFStyleItem;
+    XFillHatchItem      m_aXHatchItem;
+    XFillAttrSetItem    m_aXFillAttr;
+    SfxItemSet&         m_rXFSet;
 
-    SfxMapUnit          ePoolUnit;
+    SfxMapUnit          m_ePoolUnit;
 
     DECL_LINK( ChangeHatchHdl_Impl, void * );
     DECL_LINK( ModifiedHdl_Impl, void * );
@@ -524,17 +524,17 @@ public:
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
-    void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
+    void    SetColorList( XColorListRef pColTab ) { m_pColorList = pColTab; }
     void    SetHatchingList( XHatchListRef pHtchLst)
-                { pHatchingList = pHtchLst; }
+                { m_pHatchingList = pHtchLst; }
 
-    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetPos( sal_Int32* pInPos ) { pPos = pInPos; }
-    void    SetAreaTP( bool* pIn ) { pbAreaTP = pIn; }
+    void    SetPageType( sal_uInt16* pInType ) { m_pPageType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
+    void    SetPos( sal_Int32* pInPos ) { m_pPos = pInPos; }
+    void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
 
-    void    SetHtchChgd( ChangeType* pIn ) { pnHatchingListState = pIn; }
-    void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
+    void    SetHtchChgd( ChangeType* pIn ) { m_pnHatchingListState = pIn; }
+    void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
