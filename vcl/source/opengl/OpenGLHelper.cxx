@@ -400,9 +400,14 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
 {
     OpenGLZone aZone;
 
-    GLenum glErr = glGetError();
-    if (glErr != GL_NO_ERROR)
+    int nErrors = 0;
+    for (;;)
     {
+        GLenum glErr = glGetError();
+        if (glErr == GL_NO_ERROR)
+        {
+            break;
+        }
         const char* sError = OpenGLHelper::GLErrorString(glErr);
 
         if (sError)
@@ -410,7 +415,12 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
         else
             SAL_WARN("vcl.opengl", "GL Error #" << glErr << " (no message available) in File " << pFile << " at line: " << nLine);
 
-        glErr = glGetError();
+        // tdf#93798 - apitrace appears to sometimes cause issues with an infinite loop here.
+        if (++nErrors >= 8)
+        {
+            SAL_WARN("vcl.opengl", "Breaking potentially recursive glGetError loop");
+            break;
+        }
     }
 }
 
