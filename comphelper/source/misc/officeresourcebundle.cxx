@@ -97,7 +97,7 @@ namespace comphelper
     OUString ResourceBundle_Impl::impl_getStringResourceKey( sal_Int32 _resourceId )
     {
         OUStringBuffer key;
-        key.appendAscii( "string:" );
+        key.append( "string:" );
         key.append( _resourceId );
         return key.makeStringAndClear();
     }

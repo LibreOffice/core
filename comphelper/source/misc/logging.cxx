@@ -233,7 +233,7 @@ namespace comphelper
         try
         {
             OUStringBuffer aBuffer;
-            aBuffer.appendAscii( "string:" );
+            aBuffer.append( "string:" );
             aBuffer.append( _nMessageResID );
             OSL_VERIFY( _rxBundle->getDirectElement( aBuffer.makeStringAndClear() ) >>= sMessage );
         }
@@ -262,11 +262,11 @@ namespace comphelper
         if ( sMessage.isEmpty() )
         {
             OUStringBuffer aBuffer;
-            aBuffer.appendAscii( "<invalid event resource: '" );
+            aBuffer.append( "<invalid event resource: '" );
             aBuffer.append( m_pData->sBundleBaseName );
-            aBuffer.appendAscii( ":" );
+            aBuffer.append( ":" );
             aBuffer.append( _nMessageResID );
-            aBuffer.appendAscii( "'>" );
+            aBuffer.append( "'>" );
             sMessage = aBuffer.makeStringAndClear();
         }
         return sMessage;

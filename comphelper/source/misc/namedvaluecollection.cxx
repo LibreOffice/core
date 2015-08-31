@@ -252,11 +252,11 @@ namespace comphelper
 
             // argument exists, but is of wrong type
             OUStringBuffer aBuffer;
-            aBuffer.appendAscii( "Invalid value type for '" );
+            aBuffer.append( "Invalid value type for '" );
             aBuffer.append     ( _rValueName );
-            aBuffer.appendAscii( "'.\nExpected: " );
+            aBuffer.append( "'.\nExpected: " );
             aBuffer.append     ( _rExpectedValueType.getTypeName() );
-            aBuffer.appendAscii( "\nFound: " );
+            aBuffer.append( "\nFound: " );
             aBuffer.append     ( pos->second.getValueType().getTypeName() );
             throw IllegalArgumentException( aBuffer.makeStringAndClear(), NULL, 0 );
         }

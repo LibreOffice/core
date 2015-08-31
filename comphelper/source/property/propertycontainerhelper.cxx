@@ -202,14 +202,14 @@ namespace
     void lcl_throwIllegalPropertyValueTypeException( const PropertyDescription& _rProperty, const Any& _rValue )
     {
         OUStringBuffer aErrorMessage;
-        aErrorMessage.appendAscii( "The given value cannot be converted to the required property type." );
-        aErrorMessage.appendAscii( "\n(property name \"" );
+        aErrorMessage.append( "The given value cannot be converted to the required property type." );
+        aErrorMessage.append( "\n(property name \"" );
         aErrorMessage.append( _rProperty.aProperty.Name );
-        aErrorMessage.appendAscii( "\", found value type \"" );
+        aErrorMessage.append( "\", found value type \"" );
         aErrorMessage.append( _rValue.getValueType().getTypeName() );
-        aErrorMessage.appendAscii( "\", required property type \"" );
+        aErrorMessage.append( "\", required property type \"" );
         aErrorMessage.append( _rProperty.aProperty.Type.getTypeName() );
-        aErrorMessage.appendAscii( "\")" );
+        aErrorMessage.append( "\")" );
         throw IllegalArgumentException( aErrorMessage.makeStringAndClear(), NULL, 4 );
     }
 }

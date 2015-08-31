@@ -38,9 +38,9 @@ namespace comphelper
             // strings only would suffice, and could be realized with an UNO service, so we do not
             // need the dependency to the Tools project)
             OUStringBuffer sMessage;
-            sMessage.appendAscii( "The property \"" );
+            sMessage.append( "The property \"" );
             sMessage.append( _rPropertyName );
-            sMessage.appendAscii( "\" is unknown." );
+            sMessage.append( "\" is unknown." );
             return sMessage.makeStringAndClear();
         }
     }

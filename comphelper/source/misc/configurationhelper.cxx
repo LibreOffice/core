@@ -87,9 +87,9 @@ css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cs
     if (!xProps.is())
     {
         OUStringBuffer sMsg(256);
-        sMsg.appendAscii("The requested path \"");
+        sMsg.append("The requested path \"");
         sMsg.append     (sRelPath               );
-        sMsg.appendAscii("\" does not exists."  );
+        sMsg.append("\" does not exists."  );
 
         throw css::container::NoSuchElementException(
                     sMsg.makeStringAndClear());
@@ -110,9 +110,9 @@ void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::
     if (!xProps.is())
     {
         OUStringBuffer sMsg(256);
-        sMsg.appendAscii("The requested path \"");
+        sMsg.append("The requested path \"");
         sMsg.append     (sRelPath               );
-        sMsg.appendAscii("\" does not exists."  );
+        sMsg.append("\" does not exists."  );
 
         throw css::container::NoSuchElementException(
                     sMsg.makeStringAndClear());
@@ -131,9 +131,9 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
     if (!xSet.is())
     {
         OUStringBuffer sMsg(256);
-        sMsg.appendAscii("The requested path \"");
+        sMsg.append("The requested path \"");
         sMsg.append     (sRelPathToSet          );
-        sMsg.appendAscii("\" does not exists."  );
+        sMsg.append("\" does not exists."  );
 
         throw css::container::NoSuchElementException(
                     sMsg.makeStringAndClear());

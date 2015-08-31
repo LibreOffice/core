@@ -470,11 +470,11 @@ namespace comphelper
         if ( !bValid )
         {
             OUStringBuffer aMessage;
-            aMessage.appendAscii( "Incompatible value type. Found '" );
+            aMessage.append( "Incompatible value type. Found '" );
             aMessage.append( _value.getValueTypeName() );
-            aMessage.appendAscii( "', where '" );
+            aMessage.append( "', where '" );
             aMessage.append( m_aData.m_aValueType.getTypeName() );
-            aMessage.appendAscii( "' (or compatible type) is expected." );
+            aMessage.append( "' (or compatible type) is expected." );
             throw IllegalTypeException( aMessage.makeStringAndClear(), *const_cast< EnumerableMap* >( this ) );
         }
 
