@@ -104,7 +104,6 @@ SvSimpleTable::SvSimpleTable(SvSimpleTableContainer& rParent, WinBits nBits):
     aHeaderBar->SetDragHdl(LINK( this, SvSimpleTable, DragHdl));
     aHeaderBar->SetEndDragHdl(LINK( this, SvSimpleTable, EndDragHdl));
     aHeaderBar->SetSelectHdl(LINK( this, SvSimpleTable, HeaderBarClick));
-    aHeaderBar->SetDoubleClickHdl(LINK( this, SvSimpleTable, HeaderBarDblClick));
 
 
     EnableCellFocus();
@@ -334,11 +333,6 @@ void SvSimpleTable::HBarClick()
     }
 }
 
-void SvSimpleTable::HBarDblClick()
-{
-    aHeaderBarDblClickLink.Call(this);
-}
-
 void SvSimpleTable::HBarStartDrag()
 {
     if(!aHeaderBar->IsItemMode())
@@ -423,14 +417,6 @@ IMPL_LINK_TYPED( SvSimpleTable, HeaderBarClick, HeaderBar*, pCtr, void)
     if(pCtr==aHeaderBar.get())
     {
         HBarClick();
-    }
-}
-
-IMPL_LINK_TYPED( SvSimpleTable, HeaderBarDblClick, HeaderBar*, pCtr, void)
-{
-    if(pCtr==aHeaderBar.get())
-    {
-        HBarDblClick();
     }
 }
 

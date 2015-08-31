@@ -97,9 +97,9 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     DECL_DLLPRIVATE_LINK( SelectHdl,     void* );
     DECL_DLLPRIVATE_LINK_TYPED( SelectTimerHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK_TYPED( GotoHdl, Timer*, void );
-    DECL_DLLPRIVATE_LINK( CommandHdl,        void* );
+    DECL_DLLPRIVATE_LINK_TYPED( CommandHdl, SvSimpleTable*, void );
 
-    SAL_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, bool bChild);
+    SAL_DLLPRIVATE sal_uInt16    CalcDiff(sal_uInt16 nStart, bool bChild);
     SAL_DLLPRIVATE void          InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFormat);
     SAL_DLLPRIVATE void          InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd = USHRT_MAX);
     SAL_DLLPRIVATE void          RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd);
@@ -125,7 +125,7 @@ public:
     void            Initialize(const OUString &rExtraData);
     void            FillInfo(OUString &rExtraData) const;
 
-    void    Activate();
+    void            Activate();
 };
 
 class SwModelessRedlineAcceptDlg : public SfxModelessDialog

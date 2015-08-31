@@ -1691,7 +1691,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, UpdateSelectionHdl, Idle *, void)
     pTPView->EnableReject( bRejectFlag && bEnable );
 }
 
-IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)
+IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
 {
 
     const CommandEvent aCEvt(pTheView->GetCommandEvent());
@@ -1775,7 +1775,6 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)
             }
         }
     }
-    return 0;
 }
 
 void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)

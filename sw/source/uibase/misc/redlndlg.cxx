@@ -1020,7 +1020,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     pTPView->EnableRejectAll( bEnable && !bOnlyFormatedRedlines && !bHasReadonlySel );
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
 {
     const CommandEvent aCEvt(pTable->GetCommandEvent());
 
@@ -1185,8 +1185,6 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
         break;
         default: break;
     }
-
-    return 0;
 }
 
 void SwRedlineAcceptDlg::Initialize(const OUString& rExtraData)

@@ -154,10 +154,9 @@ void WebConnectionInfoDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK( WebConnectionInfoDialog, HeaderBarClickedHdl, SvSimpleTable*, pTable )
+IMPL_LINK_TYPED( WebConnectionInfoDialog, HeaderBarClickedHdl, SvSimpleTable*, pTable, void )
 {
     m_pPasswordsLB->Resort( NULL == pTable );
-    return 0;
 }
 
 

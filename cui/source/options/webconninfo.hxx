@@ -50,13 +50,13 @@ namespace svx
         VclPtr<PushButton>    m_pChangeBtn;
         sal_Int32      m_nPos;
 
-    DECL_LINK( HeaderBarClickedHdl, SvSimpleTable* );
-    DECL_LINK_TYPED(RemovePasswordHdl, Button*, void);
-    DECL_LINK_TYPED(RemoveAllPasswordsHdl, Button*, void);
-    DECL_LINK_TYPED(ChangePasswordHdl, Button*, void);
-    DECL_LINK( EntrySelectedHdl, void* );
+        DECL_LINK_TYPED( HeaderBarClickedHdl, SvSimpleTable*, void );
+        DECL_LINK_TYPED( RemovePasswordHdl, Button*, void );
+        DECL_LINK_TYPED( RemoveAllPasswordsHdl, Button*, void );
+        DECL_LINK_TYPED( ChangePasswordHdl, Button*, void );
+        DECL_LINK( EntrySelectedHdl, void* );
 
-    void FillPasswordList();
+        void FillPasswordList();
 
     public:
         explicit WebConnectionInfoDialog( vcl::Window* pParent );

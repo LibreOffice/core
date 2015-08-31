@@ -51,9 +51,8 @@ class SVT_DLLPUBLIC SvSimpleTable : public SvHeaderTabListBox
 private:
     SvSimpleTableContainer& m_rParentTableContainer;
 
-    Link<>              aHeaderBarClickLink;
-    Link<>              aHeaderBarDblClickLink;
-    Link<>              aCommandLink;
+    Link<SvSimpleTable*, void> aHeaderBarClickLink;
+    Link<SvSimpleTable*, void> aCommandLink;
     CommandEvent        aCEvt;
     VclPtr<HeaderBar>   aHeaderBar;
     long                nOldPos;
@@ -68,7 +67,6 @@ private:
     DECL_LINK_TYPED( DragHdl, HeaderBar*, void );
     DECL_LINK_TYPED( EndDragHdl, HeaderBar*, void );
     DECL_LINK_TYPED( HeaderBarClick, HeaderBar*, void );
-    DECL_LINK_TYPED( HeaderBarDblClick, HeaderBar*, void );
     DECL_LINK( CompareHdl, SvSortData* );
 
 protected:
@@ -79,7 +77,6 @@ protected:
     virtual void            Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual void            HBarClick();
-    void                    HBarDblClick();
     void                    HBarStartDrag();
     void                    HBarDrag();
     void                    HBarEndDrag();
@@ -119,9 +116,9 @@ public:
 
     CommandEvent    GetCommandEvent()const { return aCEvt;}
     inline bool     IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
-    void            SetCommandHdl( const Link<>& rLink ) { aCommandLink = rLink; }
+    void            SetCommandHdl( const Link<SvSimpleTable*,void>& rLink ) { aCommandLink = rLink; }
 
-    void            SetHeaderBarClickHdl( const Link<>& rLink ) { aHeaderBarClickLink = rLink; }
+    void            SetHeaderBarClickHdl( const Link<SvSimpleTable*,void>& rLink ) { aHeaderBarClickLink = rLink; }
     HeaderBar&      GetTheHeaderBar() { return *aHeaderBar.get(); }
 };
 
