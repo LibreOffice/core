@@ -1,0 +1,13 @@
+Only in redland.orig/: redland
+diff -ru redland.orig/src/win32_rdf_config.h redland/src/win32_rdf_config.h
+--- redland.orig/src/win32_rdf_config.h	2015-08-11 23:19:03.675545000 +0200
++++ redland/src/win32_rdf_config.h	2015-08-31 23:50:17.290191800 +0200
+@@ -45,7 +45,7 @@
+ /* MS names for these functions */
+ // next line breaks build on wntmsci12
+ //#define vsnprintf _vsnprintf
+-#define snprintf _snprintf
++//#define snprintf _snprintf
+ #define access _access
+ #define stricmp _stricmp
+ #define strnicmp _strnicmp

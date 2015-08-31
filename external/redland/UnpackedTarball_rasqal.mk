@@ -16,10 +16,12 @@ $(eval $(call gb_UnpackedTarball_add_file,rasqal,src/rasqal.h,external/redland/r
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,rasqal,0))
 
+# TODO(davido): vs2015 only on _MSC_VER 1900 anwenden
 $(eval $(call gb_UnpackedTarball_add_patches,rasqal,\
 	external/redland/rasqal/rasqal-pkgconfig.patch.1 \
 	external/redland/rasqal/rasqal-freebsd.patch.1 \
 	external/redland/rasqal/rasqal-msvc.patch.1 \
+	$(if $(filter-out 120,$(VCVER)),external/redland/rasqal/rasqal-vs2015.patch.1) \
 	external/redland/rasqal/rasqal-aix.patch.1 \
 	$(if $(filter-out WNT,$(OS)),external/redland/rasqal/rasqal-bundled-soname.patch.1) \
 	$(if $(filter ANDROID,$(OS)),external/redland/rasqal/rasqal-android.patch.1) \

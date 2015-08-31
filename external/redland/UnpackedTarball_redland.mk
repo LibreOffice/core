@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,redland,\
 	external/redland/redland/redland-pkgconfig.patch.1 \
 	external/redland/redland/redland-freebsd.patch.1 \
 	external/redland/redland/redland-msvc.patch.1 \
+	$(if $(filter-out 120,$(VCVER)),external/redland/redland/redland-vs2015.patch.1) \
 	$(if $(filter-out WNT,$(OS)),external/redland/redland/redland-bundled-soname.patch.1) \
 	$(if $(filter ANDROID,$(OS)),external/redland/redland/redland-android.patch.1) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),external/redland/redland/redland-mingw.patch.1) \
