@@ -943,7 +943,12 @@
   <block-list:block block-list:abbreviated-name=":pássaro:" block-list:name="🐦"/>
   <block-list:block block-list:abbreviated-name=":pasta:" block-list:name="💼"/>
   <block-list:block block-list:abbreviated-name=":paus 2:" block-list:name="♧"/>
+  <block-list:block block-list:abbreviated-name=":pausa de colcheia:" block-list:name="𝄾"/>
+  <block-list:block block-list:abbreviated-name=":pausa de mínima:" block-list:name="𝄼"/>
+  <block-list:block block-list:abbreviated-name=":pausa de semibreve:" block-list:name="𝄻"/>
+  <block-list:block block-list:abbreviated-name=":pausa de semínima:" block-list:name="𝄽"/>
   <block-list:block block-list:abbreviated-name=":paus:" block-list:name="♣"/>
+  <block-list:block block-list:abbreviated-name=":pavimento escorregadio:" block-list:name="⛐"/>
   <block-list:block block-list:abbreviated-name=":paz:" block-list:name="☮"/>
   <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
   <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
