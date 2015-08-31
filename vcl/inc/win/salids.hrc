@@ -60,12 +60,12 @@
 #define SAL_RESID_POINTER_DRAW_CONNECT              10047
 #define SAL_RESID_POINTER_DRAW_TEXT                 10048
 #define SAL_RESID_POINTER_DRAW_CAPTION              10049
-#define SAL_RESID_POINTER_CHART                                 10050
+#define SAL_RESID_POINTER_CHART                     10050
 #define SAL_RESID_POINTER_DETECTIVE                 10051
 #define SAL_RESID_POINTER_PIVOT_COL                 10052
 #define SAL_RESID_POINTER_PIVOT_ROW                 10053
 #define SAL_RESID_POINTER_PIVOT_FIELD               10054
-#define SAL_RESID_POINTER_CHAIN                                 10055
+#define SAL_RESID_POINTER_CHAIN                     10055
 #define SAL_RESID_POINTER_CHAIN_NOTALLOWED          10056
 #define SAL_RESID_POINTER_TIMEEVENT_MOVE            10057
 #define SAL_RESID_POINTER_TIMEEVENT_SIZE            10058
@@ -80,15 +80,17 @@
 #define SAL_RESID_POINTER_AUTOSCROLL_NS             10067
 #define SAL_RESID_POINTER_AUTOSCROLL_WE             10068
 #define SAL_RESID_POINTER_AUTOSCROLL_NSWE           10069
-#define SAL_RESID_POINTER_AIRBRUSH                              10070
+#define SAL_RESID_POINTER_AIRBRUSH                  10070
 #define SAL_RESID_POINTER_TEXT_VERTICAL             10071
 #define SAL_RESID_POINTER_PIVOT_DELETE              10072
-#define SAL_RESID_POINTER_TAB_SELECT_S                          10073
-#define SAL_RESID_POINTER_TAB_SELECT_E                          10074
-#define SAL_RESID_POINTER_TAB_SELECT_SE                         10075
-#define SAL_RESID_POINTER_TAB_SELECT_W                          10076
-#define SAL_RESID_POINTER_TAB_SELECT_SW                         10077
-#define SAL_RESID_POINTER_PAINTBRUSH                            10078
+#define SAL_RESID_POINTER_TAB_SELECT_S              10073
+#define SAL_RESID_POINTER_TAB_SELECT_E              10074
+#define SAL_RESID_POINTER_TAB_SELECT_SE             10075
+#define SAL_RESID_POINTER_TAB_SELECT_W              10076
+#define SAL_RESID_POINTER_TAB_SELECT_SW             10077
+#define SAL_RESID_POINTER_PAINTBRUSH                10078
+#define SAL_RESID_POINTER_HIDEWHITESPACE            10079
+#define SAL_RESID_POINTER_SHOWWHITESPACE            10080
 
 #define SAL_RESID_BITMAP_50                                             11000
 

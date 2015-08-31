@@ -116,7 +116,9 @@ enum class PointerStyle
     TabSelectW         = 91,
     TabSelectSW        = 92,
     Paintbrush         = 93,
-    LAST               = Paintbrush,
+    HideWhitespace     = 94,
+    ShowWhitespace     = 95,
+    LAST               = ShowWhitespace,
 };
 
 #endif // INCLUDED_VCL_PTRSTYLE_HXX

@@ -291,6 +291,13 @@ public:
      */
     const SwPageFrm* GetPageAtPos( const Point& rPt, const Size* pSize = 0, bool bExtend = false ) const;
 
+    /**
+    * Point rPt: The point to test
+    * @returns true: if rPt is between top/bottom margins of two pages
+    * @returns false: if rPt is in a page or not strictly between two pages
+    */
+    bool IsBetweenPages(const Point& rPt) const;
+
     void CalcFrmRects( SwShellCrsr& );
 
     /**
