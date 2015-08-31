@@ -146,6 +146,7 @@ public:
     void testSheetRunParagraphProperty();
     void testHiddenShape();
     void testMoveCellAnchoredShapes();
+    void testHeaderImage();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -201,6 +202,7 @@ public:
     CPPUNIT_TEST(testSheetRunParagraphProperty);
     CPPUNIT_TEST(testHiddenShape);
     CPPUNIT_TEST(testMoveCellAnchoredShapes);
+    CPPUNIT_TEST(testHeaderImage);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2806,6 +2808,20 @@ void ScExportTest::testMoveCellAnchoredShapes()
     CPPUNIT_ASSERT_EQUAL(pNData->maEnd , aNDataEnd);
 
     xDocSh2->DoClose();
+}
+
+void ScExportTest::testHeaderImage()
+{
+    // Graphic as header background was lost on export.
+    ScDocShellRef xShell = loadDoc("header-image.", ODS);
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), ODS);
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocSh->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName("Default"), uno::UNO_QUERY);
+    OUString aURL;
+    xStyle->getPropertyValue("HeaderBackGraphicURL") >>= aURL;
+    CPPUNIT_ASSERT(aURL.startsWith("vnd.sun.star.GraphicObject:"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
