@@ -1100,15 +1100,15 @@ void SwLayoutFrm::Cut()
     SWRECTFN( this )
     SwTwips nShrink = (Frm().*fnRect->fnGetHeight)();
 
-    //Remove first, then shrink upper.
+    // Remove first, then shrink upper.
     SwLayoutFrm *pUp = GetUpper();
 
     // AdjustNeighbourhood is now also called in columns which are not
-    // placed inside a frame
+    // placed inside a frame.
 
-    // Remove must not be called before a AdjustNeighbourhood, but it has to
+    // Remove must not be called before an AdjustNeighbourhood, but it has to
     // be called before the upper-shrink-call, if the upper-shrink takes care
-    // of his content
+    // of its content.
     if ( pUp && nShrink )
     {
         if( pUp->IsFootnoteBossFrm() )
@@ -2357,7 +2357,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
 {
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-    const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
+    const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse by Body.
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
 
@@ -2933,13 +2933,12 @@ void SwLayoutFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
         return;
 
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    const bool hideWS = (pSh && pSh->GetViewOptions()->IsHideWhitespaceMode());
+    const bool hideWS = (pSh && pSh->GetViewOptions()->IsWhitespaceHidden());
     const long hideWSBorderSize = (pSh ? pSh->GetViewOptions()->GetDocumentBorder() : 0);
-    const bool hideSideWS = (pSh && pSh->GetViewOptions()->IsMultipageView());
-    const sal_uInt16 nLeft = hideSideWS ? hideWSBorderSize * 2 : (sal_uInt16)pAttrs->CalcLeft(this);
+    const sal_uInt16 nLeft = (sal_uInt16)pAttrs->CalcLeft(this);
     const sal_uInt16 nUpper = hideWS ? hideWSBorderSize : pAttrs->CalcTop();
 
-    const sal_uInt16 nRight = hideSideWS ? hideWSBorderSize * 2 : (sal_uInt16)pAttrs->CalcRight(this);
+    const sal_uInt16 nRight = (sal_uInt16)pAttrs->CalcRight(this);
     const sal_uInt16 nLower = hideWS ? hideWSBorderSize : pAttrs->CalcBottom();
 
     bool bVert = IsVertical() && !IsPageFrm();
@@ -3009,8 +3008,22 @@ void SwLayoutFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                 MakePos();
             } while ( !mbValidSize );
         }
+        else if (hideWS)
+        {
+            const auto newHeight = InnerHeight() + nUpper + nLower;
+            ChgSize(Size(Frm().Width(), newHeight));
+            mbValidSize = true;
+        }
         else
             mbValidSize = true;
+
+        // While updating the size, PrtArea might be invalidated.
+        if (!mbValidPrtArea)
+        {
+            mbValidPrtArea = true;
+            (this->*fnRect->fnSetXMargins)(nLeft, nRight);
+            (this->*fnRect->fnSetYMargins)(nUpper, nLower);
+        }
     }
 }
 

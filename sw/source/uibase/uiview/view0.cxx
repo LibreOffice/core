@@ -304,7 +304,8 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( pOpt->IsShowHiddenPara()); break;
             case FN_VIEW_HIDE_WHITESPACE:
             {
-                if (pOpt->getBrowseMode())
+                if (pOpt->getBrowseMode() ||
+                    !pOpt->CanHideWhitespace())
                 {
                     rSet.DisableItem(nWhich);
                     nWhich = 0;

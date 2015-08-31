@@ -324,6 +324,7 @@ public:
     const SwPageFrm& GetFormatPage() const;
 
     /// If in header or footer area, it also indicates the exact area in rControl.
+    /// Header or footer must be active, otherwise returns false.
     bool IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rControl ) const;
 
     // return font used to paint the "empty page" string

@@ -764,6 +764,7 @@ void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
                 else
                 {   // Set FixSize. For pages, this is not done from Upper, but from
                     // the attribute.
+                    //FIXME: This resets the size when (mbValidSize && !mbValidPrtArea).
                     Frm().SSize( pAttrs->GetSize() );
                     Format( pRenderContext, pAttrs );
                 }

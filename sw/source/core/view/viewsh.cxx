@@ -1938,7 +1938,7 @@ sal_Int32 SwViewShell::GetBrowseWidth() const
 void SwViewShell::InvalidateLayout( bool bSizeChanged )
 {
     if ( !bSizeChanged && !GetViewOptions()->getBrowseMode() &&
-         !GetViewOptions()->IsHideWhitespaceMode() )
+         !GetViewOptions()->IsWhitespaceHidden() )
         return;
 
     SET_CURR_SHELL( this );
@@ -2123,7 +2123,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         pMyWin->SetMapMode( aMode );
         // if not a reference device (printer) is used for formatting,
         // but the screen, new formatting is needed for zoomfactor changes.
-        if (mpOpt->getBrowseMode() || mpOpt->IsHideWhitespaceMode())
+        if (mpOpt->getBrowseMode() || mpOpt->IsWhitespaceHidden())
             bReformat = true;
     }
 
@@ -2137,10 +2137,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         bReformat = true;
 
     bool bHideWhitespaceModeChanged = false;
-    if (mpOpt->IsHideWhitespaceMode() != rOpt.IsHideWhitespaceMode() ||
-        (rOpt.IsHideWhitespaceMode() &&
-         (mpOpt->IsViewLayoutBookMode() != rOpt.IsViewLayoutBookMode() ||
-          mpOpt->GetViewLayoutColumns() != rOpt.GetViewLayoutColumns())))
+    if (mpOpt->IsWhitespaceHidden() != rOpt.IsWhitespaceHidden())
     {
         // When whitespace is hidden, view change needs reformatting.
         bHideWhitespaceModeChanged = true;

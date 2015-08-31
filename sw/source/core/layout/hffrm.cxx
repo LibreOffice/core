@@ -674,7 +674,7 @@ void SwPageFrm::PrepareHeader()
 
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bOn = !(pSh && (pSh->GetViewOptions()->getBrowseMode() ||
-                               pSh->GetViewOptions()->IsHideWhitespaceMode()));
+                               pSh->GetViewOptions()->IsWhitespaceHidden()));
 
     if ( bOn && rH.IsActive() )
     {   //Implant header, but remove first, if already present
@@ -717,7 +717,7 @@ void SwPageFrm::PrepareFooter()
 
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bOn = !(pSh && (pSh->GetViewOptions()->getBrowseMode() ||
-                               pSh->GetViewOptions()->IsHideWhitespaceMode()));
+                               pSh->GetViewOptions()->IsWhitespaceHidden()));
 
     if ( bOn && rF.IsActive() )
     {   //Implant footer, but remove first, if already present

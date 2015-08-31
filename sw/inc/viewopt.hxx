@@ -375,11 +375,11 @@ public:
     static SAL_CONSTEXPR sal_uInt16 GetDefDocumentBorder() { return 284; }
     // Default gap between pages: 284 twips == 5.0 mm.
     static SAL_CONSTEXPR sal_uInt16 GetDefGapBetweenPages() { return 284; }
-    // Minimum edge-to-text distance: 114 twips == 2.0 mm.
-    static SAL_CONSTEXPR sal_uInt16 GetMinGapBetweenPages() { return 114; }
+    // Minimum edge-to-text distance: 22 twips == 0.4 mm.
+    static SAL_CONSTEXPR sal_uInt16 GetMinGapBetweenPages() { return 22; }
 
-    inline sal_uInt16 GetDocumentBorder() const { return IsHideWhitespaceMode() ? GetMinGapBetweenPages() : GetDefDocumentBorder(); }
-    inline sal_uInt16 GetGapBetweenPages() const { return IsHideWhitespaceMode() ? GetMinGapBetweenPages() : GetDefGapBetweenPages(); }
+    inline sal_uInt16 GetDocumentBorder() const { return IsWhitespaceHidden() ? GetMinGapBetweenPages() : GetDefDocumentBorder(); }
+    inline sal_uInt16 GetGapBetweenPages() const { return IsWhitespaceHidden() ? GetMinGapBetweenPages() : GetDefGapBetweenPages(); }
 
     inline sal_uInt8  GetPagePrevRow() const      { return nPagePrevRow; }
     inline void  SetPagePrevRow( sal_uInt8 n ) { nPagePrevRow = n; }
@@ -408,6 +408,9 @@ public:
     bool   IsHideWhitespaceMode() const { return mbHideWhitespaceMode; }
     void   SetHideWhitespaceMode( bool bMode ) { mbHideWhitespaceMode = bMode; }
 
+    /// The rules that allow for hiding whitespace.
+    bool   CanHideWhitespace() const { return !IsMultipageView(); }
+    bool   IsWhitespaceHidden() const { return IsHideWhitespaceMode() && !IsMultipageView(); }
     bool   IsMultipageView() const { return IsViewLayoutBookMode() ||
                                             GetViewLayoutColumns() == 0; }
 
