@@ -26,6 +26,8 @@
 #include <stdarg.h>
 #include <vector>
 
+#include "svdata.hxx"
+
 #include "opengl/zone.hxx"
 #include "opengl/watchdog.hxx"
 #include <osl/conditn.h>
@@ -627,7 +629,10 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
         bRet = bEnable;
     }
     if (bRet)
+    {
         OpenGLWatchdogThread::start();
+        ImplGetSVData()->maWinData.mbNoSaveBackground = true;
+    }
 
     return bRet;
 }
