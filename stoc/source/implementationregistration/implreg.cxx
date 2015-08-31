@@ -1485,9 +1485,9 @@ void ImplementationRegistration::prepareRegister(
             else
             {
                 OUStringBuffer buf( 128 );
-                buf.appendAscii( "ImplementationRegistration::registerImplementation() - The service " );
+                buf.append( "ImplementationRegistration::registerImplementation() - The service " );
                 buf.append( activatorName );
-                buf.appendAscii( " cannot be instantiated\n" );
+                buf.append( " cannot be instantiated\n" );
                 throw CannotRegisterImplementationException(
                     buf.makeStringAndClear() );
             }
