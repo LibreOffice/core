@@ -653,8 +653,6 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
     // Try to not have empty names and remember previous name that might had
     // been used to compile formulas, but only if same number of columns and no
     // duplicates.
-    /* TODO: formula references' create string should be adapted to look for
-     * the column name here if the TableRef column header cell is empty. */
     if (bHaveEmpty && aNewNames.size() == maTableColumnNames.size())
     {
         for (size_t i=0, n=aNewNames.size(); i < n; ++i)
