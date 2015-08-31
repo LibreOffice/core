@@ -119,7 +119,7 @@ char ColorFor(COLORREF aColor)
     return '0' + (10*(GetRValue(aColor) + GetGValue(aColor) + GetBValue(aColor))) / (0xFF*3);
 }
 
-void DumpGlyphBitmap(OpenGLGlyphCacheChunk& rChunk, HDC hDC)
+void DumpGlyphBitmap(OpenGLGlyphCacheChunk&, HDC hDC)
 {
     HBITMAP hBitmap = static_cast<HBITMAP>(GetCurrentObject(hDC, OBJ_BITMAP));
     if (hBitmap == NULL)
