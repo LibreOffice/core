@@ -146,12 +146,12 @@ OUString SAL_CALL CLiteral::getStringValue() throw (css::uno::RuntimeException, 
 {
     if (!m_Language.isEmpty()) {
         OUStringBuffer buf(m_Value);
-        buf.appendAscii("@");
+        buf.append("@");
         buf.append(m_Language);
         return buf.makeStringAndClear();
     } else if (m_xDatatype.is()) {
         OUStringBuffer buf(m_Value);
-        buf.appendAscii("^^");
+        buf.append("^^");
         buf.append(m_xDatatype->getStringValue());
         return buf.makeStringAndClear();
     } else {

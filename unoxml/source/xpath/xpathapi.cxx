@@ -268,18 +268,18 @@ namespace XPath
             }
             int line = pError->line;
             if (line) {
-                buf.appendAscii("Line: ");
+                buf.append("Line: ");
                 buf.append(static_cast<sal_Int32>(line));
-                buf.appendAscii("\n");
+                buf.append("\n");
             }
             int column = pError->int2;
             if (column) {
-                buf.appendAscii("Column: ");
+                buf.append("Column: ");
                 buf.append(static_cast<sal_Int32>(column));
-                buf.appendAscii("\n");
+                buf.append("\n");
             }
         } else {
-            buf.appendAscii("no error argument!");
+            buf.append("no error argument!");
         }
         OUString msg = buf.makeStringAndClear();
         return msg;

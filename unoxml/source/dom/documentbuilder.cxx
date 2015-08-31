@@ -176,9 +176,9 @@ namespace DOM
     {
         OUStringBuffer buf;
         buf.appendAscii(ctxt->lastError.message);
-        buf.appendAscii("Line: ");
+        buf.append("Line: ");
         buf.append(static_cast<sal_Int32>(ctxt->lastError.line));
-        buf.appendAscii("\nColumn: ");
+        buf.append("\nColumn: ");
         buf.append(static_cast<sal_Int32>(ctxt->lastError.int2));
         OUString msg = buf.makeStringAndClear();
         return msg;
