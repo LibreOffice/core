@@ -650,7 +650,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 pAcc = aBmp.AcquireWriteAccess();
                 if ( pAcc )
                 {
-                    for (sal_uInt16 y = 0; y < nHeight; y++ )
+                    for (sal_uInt16 y = 0; y < nHeight && pWMF->good(); ++y)
                     {
                         sal_uInt16 x = 0;
                         for (sal_uInt16 scan = 0; scan < nBytesPerScan; scan++ )
