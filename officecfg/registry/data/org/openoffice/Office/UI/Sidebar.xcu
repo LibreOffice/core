@@ -271,6 +271,11 @@
             WriterVariants,   Table,              visible                    ;
             WriterVariants,   Text,               visible                    ;
             WriterVariants,   default,            visible                    ;
+            Calc,             Auditing,           visible                    ;
+            Calc,             Cell,               visible                    ;
+            Calc,             default,            visible                    ;
+            Calc,             EditCell,           visible                    ;
+            Calc,             Pivot,              visible                    ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
