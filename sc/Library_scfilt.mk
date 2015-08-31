@@ -83,6 +83,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/excel/tokstack \
 	sc/source/filter/excel/xechart \
 	sc/source/filter/excel/xecontent \
+	sc/source/filter/excel/xedbdata \
 	sc/source/filter/excel/xeescher \
 	sc/source/filter/excel/xeextlst \
 	sc/source/filter/excel/xeformula \

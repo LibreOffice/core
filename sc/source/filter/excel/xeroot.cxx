@@ -38,6 +38,7 @@
 #include "xestyle.hxx"
 #include "xeroot.hxx"
 #include <xepivotxml.hxx>
+#include "xedbdata.hxx"
 
 #include "excrecds.hxx"
 #include "tabprotection.hxx"
@@ -172,6 +173,12 @@ XclExpXmlPivotTableManager& XclExpRoot::GetXmlPivotTableManager()
     return *mrExpData.mxXmlPTableMgr;
 }
 
+XclExpTablesManager& XclExpRoot::GetTablesManager()
+{
+    assert(mrExpData.mxTablesMgr);
+    return *mrExpData.mxTablesMgr;
+}
+
 void XclExpRoot::InitializeConvert()
 {
     mrExpData.mxTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
@@ -210,6 +217,7 @@ void XclExpRoot::InitializeGlobals()
     if( GetOutput() == EXC_OUTPUT_XML_2007 )
     {
         mrExpData.mxXmlPTableMgr.reset(new XclExpXmlPivotTableManager(GetRoot()));
+        mrExpData.mxTablesMgr.reset(new XclExpTablesManager(GetRoot()));
 
         do
         {

@@ -1,0 +1,215 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "xedbdata.hxx"
+#include "xltools.hxx"
+#include "dbdata.hxx"
+#include "document.hxx"
+#include <oox/export/utils.hxx>
+
+using namespace oox;
+
+/** (So far) dummy implementation of table export for BIFF5/BIFF7. */
+class XclExpTablesImpl5 : public XclExpTables
+{
+public:
+    explicit            XclExpTablesImpl5( const XclExpRoot& rRoot );
+    virtual             ~XclExpTablesImpl5();
+
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+};
+
+/** Implementation of table export for OOXML, so far dummy for BIFF8. */
+class XclExpTablesImpl8 : public XclExpTables
+{
+public:
+    explicit            XclExpTablesImpl8( const XclExpRoot& rRoot );
+    virtual             ~XclExpTablesImpl8();
+
+    virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
+    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
+};
+
+
+XclExpTablesImpl5::XclExpTablesImpl5( const XclExpRoot& rRoot ) :
+    XclExpTables( rRoot )
+{
+}
+
+XclExpTablesImpl5::~XclExpTablesImpl5()
+{
+}
+
+void XclExpTablesImpl5::Save( XclExpStream& /*rStrm*/ )
+{
+    // not implemented
+}
+
+void XclExpTablesImpl5::SaveXml( XclExpXmlStream& /*rStrm*/ )
+{
+    // not applicable
+}
+
+
+XclExpTablesImpl8::XclExpTablesImpl8( const XclExpRoot& rRoot ) :
+    XclExpTables( rRoot )
+{
+}
+
+XclExpTablesImpl8::~XclExpTablesImpl8()
+{
+}
+
+void XclExpTablesImpl8::Save( XclExpStream& /*rStrm*/ )
+{
+    // not implemented
+}
+
+void XclExpTablesImpl8::SaveXml( XclExpXmlStream& rStrm )
+{
+
+    sax_fastparser::FSHelperPtr& pWorksheetStrm = rStrm.GetCurrentStream();
+    pWorksheetStrm->startElement( XML_tableParts, FSEND);
+    for (auto const& it : maTables)
+    {
+        OUString aRelId;
+        sax_fastparser::FSHelperPtr pTableStrm = rStrm.CreateOutputStream(
+                XclXmlUtils::GetStreamName("xl/tables/", "table", it.mnTableId),
+                XclXmlUtils::GetStreamName("../tables/", "table", it.mnTableId),
+                pWorksheetStrm->getOutputStream(),
+                CREATE_XL_CONTENT_TYPE("table"),
+                CREATE_OFFICEDOC_RELATION_TYPE("table"),
+                &aRelId);
+
+        pWorksheetStrm->singleElement( XML_tablePart,
+                FSNS(XML_r, XML_id), XclXmlUtils::ToOString(aRelId).getStr(),
+                FSEND);
+
+        rStrm.PushStream( pTableStrm);
+        SaveTableXml( rStrm, it);
+        rStrm.PopStream();
+    }
+    pWorksheetStrm->endElement( XML_tableParts);
+}
+
+
+XclExpTablesManager::XclExpTablesManager( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot )
+{
+}
+
+XclExpTablesManager::~XclExpTablesManager()
+{
+}
+
+void XclExpTablesManager::Initialize()
+{
+    const ScDocument& rDoc = GetDoc();
+    const ScDBCollection* pDBColl = rDoc.GetDBCollection();
+    if (!pDBColl)
+        return;
+
+    const ScDBCollection::NamedDBs& rDBs = pDBColl->getNamedDBs();
+    if (rDBs.empty())
+        return;
+
+    sal_Int32 nTableId = 0;
+    for (ScDBCollection::NamedDBs::const_iterator itDB(rDBs.begin()); itDB != rDBs.end(); ++itDB)
+    {
+        const ScDBData* pDBData = &(*itDB);
+        ScRange aRange( ScAddress::UNINITIALIZED);
+        pDBData->GetArea( aRange);
+        SCTAB nTab = aRange.aStart.Tab();
+        TablesMapType::iterator it = maTablesMap.find( nTab);
+        if (it == maTablesMap.end())
+        {
+            XclExpTables* pNew;
+            switch( GetBiff() )
+            {
+                case EXC_BIFF5:
+                    pNew = new XclExpTablesImpl5( GetRoot());
+                    break;
+                case EXC_BIFF8:
+                    pNew = new XclExpTablesImpl8( GetRoot());
+                    break;
+                default:
+                    assert(!"Unknown BIFF type!");
+                    continue;   // for
+            }
+            it = maTablesMap.insert( nTab, pNew).first;
+        }
+        XclExpTables* p = it->second;
+        p->AppendTable( pDBData, ++nTableId);
+    }
+}
+
+XclExpTables* XclExpTablesManager::GetTablesBySheet( SCTAB nTab )
+{
+    TablesMapType::iterator it = maTablesMap.find(nTab);
+    return it == maTablesMap.end() ? NULL : it->second;
+}
+
+XclExpTables::Entry::Entry( const ScDBData* pData, sal_Int32 nTableId ) :
+    mpData(pData), mnTableId(nTableId)
+{
+}
+
+XclExpTables::XclExpTables( const XclExpRoot& rRoot ) :
+    XclExpRoot(rRoot)
+{
+}
+
+XclExpTables::~XclExpTables()
+{
+}
+
+void XclExpTables::AppendTable( const ScDBData* pData, sal_Int32 nTableId )
+{
+    maTables.push_back( Entry( pData, nTableId));
+}
+
+void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
+{
+    const ScDBData& rData = *rEntry.mpData;
+    ScRange aRange( ScAddress::UNINITIALIZED);
+    rData.GetArea( aRange);
+    sax_fastparser::FSHelperPtr& pTableStrm = rStrm.GetCurrentStream();
+    pTableStrm->startElement( XML_table,
+        XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        XML_id, OString::number( rEntry.mnTableId).getStr(),
+        XML_name, XclXmlUtils::ToOString( rData.GetName()).getStr(),
+        XML_displayName, XclXmlUtils::ToOString( rData.GetName()).getStr(),
+        XML_ref, XclXmlUtils::ToOString(aRange),
+        XML_headerRowCount, BS(rData.HasHeader()),
+        XML_totalsRowCount, BS(rData.HasTotals()),
+        XML_totalsRowShown, BS(rData.HasTotals()),  // we don't support that but if there are totals they are shown
+        // OOXTODO: XML_comment, ...,
+        // OOXTODO: XML_connectionId, ...,
+        // OOXTODO: XML_dataCellStyle, ...,
+        // OOXTODO: XML_dataDxfId, ...,
+        // OOXTODO: XML_headerRowBorderDxfId, ...,
+        // OOXTODO: XML_headerRowCellStyle, ...,
+        // OOXTODO: XML_headerRowDxfId, ...,
+        // OOXTODO: XML_insertRow, ...,
+        // OOXTODO: XML_insertRowShift, ...,
+        // OOXTODO: XML_published, ...,
+        // OOXTODO: XML_tableBorderDxfId, ...,
+        // OOXTODO: XML_tableType, ...,
+        // OOXTODO: XML_totalsRowBorderDxfId, ...,
+        // OOXTODO: XML_totalsRowCellStyle, ...,
+        // OOXTODO: XML_totalsRowDxfId, ...,
+        FSEND);
+
+    /* TODO: columns and stuff */
+
+    pTableStrm->endElement( XML_table);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

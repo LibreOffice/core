@@ -69,6 +69,7 @@
 #include "xepivot.hxx"
 #include "XclExpChangeTrack.hxx"
 #include <xepivotxml.hxx>
+#include "xedbdata.hxx"
 
 #include <math.h>
 
@@ -743,6 +744,10 @@ void ExcTable::WriteXml( XclExpXmlStream& rStrm )
     if (pPT)
         pPT->SaveXml(rStrm);
 
+    XclExpTables* pTables = GetTablesManager().GetTablesBySheet(mnScTab);
+    if (pTables)
+        pTables->SaveXml(rStrm);
+
     rStrm.GetCurrentStream()->endElement( XML_worksheet );
     rStrm.PopStream();
 }
@@ -770,6 +775,7 @@ void ExcDocument::ReadDoc()
     {
         aHeader.FillAsHeaderXml(maBoundsheetList);
         GetXmlPivotTableManager().Initialize();
+        GetTablesManager().Initialize();    // Move outside conditions if we wanted to support BIFF.
     }
 
     SCTAB nScTab = 0, nScTabCount = GetTabInfo().GetScTabCount();
