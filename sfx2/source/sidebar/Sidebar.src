@@ -170,5 +170,9 @@ String SFX_STR_SIDEBAR_CLOSE_DECK
     Text [en-US] = "Close Sidebar Deck";
 };
 
+String SFX_STR_SIDEBAR_SETTINGS
+{
+    Text [en-US] = "Sidebar Settings";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

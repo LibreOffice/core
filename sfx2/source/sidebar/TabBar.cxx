@@ -25,8 +25,10 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/Tools.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
-
 #include <sfx2/sidebar/SidebarController.hxx>
+
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/sidebar/Sidebar.hrc>
 
 #include <vcl/gradient.hxx>
 #include <vcl/image.hxx>
@@ -60,6 +62,7 @@ TabBar::TabBar(vcl::Window* pParentWindow,
 
     mpMenuButton->SetModeImage(Theme::GetImage(Theme::Image_TabBarMenu));
     mpMenuButton->SetClickHdl(LINK(this, TabBar, OnToolboxClicked));
+    mpMenuButton->SetQuickHelpText(SFX2_RESSTR(SFX_STR_SIDEBAR_SETTINGS));
     Layout();
 
 #ifdef DEBUG
