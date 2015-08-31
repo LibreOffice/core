@@ -915,7 +915,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             {
                 bBool = false;
                 OUStringBuffer sHelpURL;
-                sHelpURL.appendAscii ( INET_HID_SCHEME );
+                sHelpURL.append ( INET_HID_SCHEME );
                 SwEditWin &rEditWin = pView->GetEditWin();
                 sHelpURL.append( OUString::fromUtf8( rEditWin.GetHelpId() ) );
                 rValue <<= sHelpURL.makeStringAndClear();

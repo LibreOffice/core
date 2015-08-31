@@ -374,7 +374,7 @@ OString DocxExport::WriteOLEObject( SwOLEObj& rObject, const OUString& sMediaTyp
 
     OUString sFileName = "embeddings/oleObject" + OUString::number( ++m_nOLEObjects ) + "." + sFileExtension;
     uno::Reference< io::XOutputStream > xOutStream = GetFilter().openFragmentStream( OUStringBuffer()
-                                                                      .appendAscii( "word/" )
+                                                                      .append( "word/" )
                                                                       .append( sFileName )
                                                                       .makeStringAndClear(),
                                                                       sMediaType );
