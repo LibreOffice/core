@@ -139,7 +139,7 @@ namespace treeview {
                 }
 
                 OUStringBuffer strBuff( 22 + len + id.getLength() );
-                strBuff.appendAscii(
+                strBuff.append(
                                     "vnd.sun.star.help://"
                                     ).append(id);
 
