@@ -21,7 +21,9 @@
 
 #include <swtypes.hxx>
 #include <fmtruby.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <memory>
+#include <vector>
 
 class SwRubyListEntry
 {
@@ -39,7 +41,7 @@ public:
     void SetRubyAttr( const SwFormatRuby& rAttr )  { m_aRubyAttr = rAttr; }
 };
 
-class SwRubyList : public boost::ptr_vector<SwRubyListEntry> {};
+class SwRubyList : public std::vector<std::unique_ptr<SwRubyListEntry>> {};
 
 #endif  //_ INCLUDED_SW_INC_RUBYLIST_HXX
 

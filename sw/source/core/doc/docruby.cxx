@@ -60,7 +60,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
         {
             SwPaM aPam( *pStt );
             do {
-                SwRubyListEntry* pNew = new SwRubyListEntry;
+                std::unique_ptr<SwRubyListEntry> pNew(new SwRubyListEntry);
                 if( pEnd != pStt )
                 {
                     aPam.SetMark();
@@ -68,12 +68,11 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                 }
                 if( _SelectNextRubyChars( aPam, *pNew, nMode ))
                 {
-                    rList.push_back( pNew );
+                    rList.push_back(std::move(pNew));
                     aPam.DeleteMark();
                 }
                 else
                 {
-                    delete pNew;
                      if( *aPam.GetPoint() < *pEnd )
                      {
                         // goto next paragraph
@@ -121,7 +120,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                 }
                 if( _SelectNextRubyChars( aPam, aCheckEntry, nMode ))
                 {
-                    const SwRubyListEntry* pEntry = &rList[ nListEntry++ ];
+                    const SwRubyListEntry* pEntry = rList[ nListEntry++ ].get();
                     if( aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr() )
                     {
                         // set/reset the attribute
@@ -153,7 +152,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                      }
                      else
                     {
-                        const SwRubyListEntry* pEntry = &rList[ nListEntry++ ];
+                        const SwRubyListEntry* pEntry = rList[ nListEntry++ ].get();
 
                         // set/reset the attribute
                         if( !pEntry->GetRubyAttr().GetText().isEmpty() &&
