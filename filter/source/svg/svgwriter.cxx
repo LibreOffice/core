@@ -1415,7 +1415,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
             // <g id="?" > (used by animations)
             {
                 // embedded bitmap id
-                const sal_uInt32 nId = SVGActionWriter::GetChecksum( pAction );
+                nId = SVGActionWriter::GetChecksum( pAction );
                 sId = "embedded-bitmap(";
                 sId += msShapeId;
                 sId += ".";
