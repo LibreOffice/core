@@ -49,9 +49,9 @@ struct Bootstrap :
 #ifdef MACOSX
             // For some reason the jvmfwk3rc file is traditionally in
             // LIBO_URE_ETC_FOLDER
-            buf.appendAscii( "/../" LIBO_URE_ETC_FOLDER );
+            buf.append( "/../" LIBO_URE_ETC_FOLDER );
 #endif
-            buf.appendAscii(SAL_CONFIGFILE("/jvmfwk3"));
+            buf.append(SAL_CONFIGFILE("/jvmfwk3"));
             OUString sIni = buf.makeStringAndClear();
             ::rtl::Bootstrap *  bootstrap = new ::rtl::Bootstrap(sIni);
         SAL_INFO("jfw.level2", "Using configuration file " << sIni);

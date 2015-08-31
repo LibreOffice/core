@@ -195,9 +195,9 @@ bool getAndAddJREInfoByPath(
             OUStringBuffer buf( 255);
             buf.append( getLibraryLocation());
 #ifdef MACOSX
-            buf.appendAscii( "/../" LIBO_ETC_FOLDER );
+            buf.append( "/../" LIBO_ETC_FOLDER );
 #endif
-            buf.appendAscii( SAL_CONFIGFILE("/sunjavaplugin") );
+            buf.append( SAL_CONFIGFILE("/sunjavaplugin") );
             sIni = buf.makeStringAndClear();
             JFW_TRACE2("Using configuration file " << sIni);
             return sIni;

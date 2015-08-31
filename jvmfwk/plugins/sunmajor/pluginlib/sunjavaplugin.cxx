@@ -160,9 +160,9 @@ JavaInfo* createJavaInfo(const rtl::Reference<VendorBase> & info)
     buf.append(info->getRuntimeLibrary());
     if (!info->getLibraryPath().isEmpty())
     {
-        buf.appendAscii("\n");
+        buf.append("\n");
         buf.append(info->getLibraryPath());
-        buf.appendAscii("\n");
+        buf.append("\n");
     }
 
     OUString sVendorData = buf.makeStringAndClear();
