@@ -158,9 +158,9 @@ throw ( Exception, RuntimeException, std::exception )
                 Any aError( ::cppu::getCaughtException() );
 
                 OUStringBuffer buf;
-                buf.appendAscii( "MasterScriptProvider::initialize: caught " );
+                buf.append( "MasterScriptProvider::initialize: caught " );
                 buf.append     ( aError.getValueTypeName() );
-                buf.appendAscii( ":" );
+                buf.append( ":" );
 
                 Exception aException; aError >>= aException;
                 buf.append     ( aException.Message );
@@ -318,7 +318,7 @@ throw ( provider::ScriptFrameworkErrorException,
     {
         Reference< provider::XScriptProvider > xScriptProvider;
         OUStringBuffer buf( 80 );
-        buf.appendAscii( "com.sun.star.script.provider.ScriptProviderFor");
+        buf.append( "com.sun.star.script.provider.ScriptProviderFor");
         buf.append( language );
         OUString serviceName = buf.makeStringAndClear();
         if ( providerCache() )

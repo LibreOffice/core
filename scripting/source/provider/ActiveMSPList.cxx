@@ -139,8 +139,8 @@ Reference< provider::XScriptProvider >
     if ( !xScripts.is() )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "Failed to create MasterScriptProvider for ScriptInvocationContext: " );
-        buf.appendAscii( "Component supporting XEmbeddScripts interface not found." );
+        buf.append( "Failed to create MasterScriptProvider for ScriptInvocationContext: " );
+        buf.append( "Component supporting XEmbeddScripts interface not found." );
         throw lang::IllegalArgumentException( buf.makeStringAndClear(), NULL, 1 );
     }
 
@@ -177,9 +177,9 @@ Reference< provider::XScriptProvider >
             if ( !xScripts.is() && !xScriptsContext.is() )
             {
                 OUStringBuffer buf;
-                buf.appendAscii( "Failed to create MasterScriptProvider for '" );
+                buf.append( "Failed to create MasterScriptProvider for '" );
                 buf.append     ( context );
-                buf.appendAscii( "': Either XEmbeddScripts or XScriptInvocationContext need to be supported by the document." );
+                buf.append( "': Either XEmbeddScripts or XScriptInvocationContext need to be supported by the document." );
                 throw lang::IllegalArgumentException( buf.makeStringAndClear(), NULL, 1 );
             }
 
@@ -223,9 +223,9 @@ Reference< provider::XScriptProvider >
     catch( const Exception& )
     {
         OUStringBuffer aMessage;
-        aMessage.appendAscii( "Failed to create MasterScriptProvider for context '" );
+        aMessage.append( "Failed to create MasterScriptProvider for context '" );
         aMessage.append     ( context );
-        aMessage.appendAscii( "'." );
+        aMessage.append( "'." );
         throw lang::WrappedTargetRuntimeException(
             aMessage.makeStringAndClear(), *this, ::cppu::getCaughtException() );
     }

@@ -386,11 +386,11 @@ namespace basprov
         if ( !xScript.is() )
         {
             OUStringBuffer aMessage;
-            aMessage.appendAscii( "The following Basic script could not be found:\n" );
-            aMessage.appendAscii( "library: '" ).append( aLibrary ).appendAscii( "'\n" );
-            aMessage.appendAscii( "module: '" ).append( aModule ).appendAscii( "'\n" );
-            aMessage.appendAscii( "method: '" ).append( aMethod ).appendAscii( "'\n" );
-            aMessage.appendAscii( "location: '" ).append( aLocation ).appendAscii( "'\n" );
+            aMessage.append( "The following Basic script could not be found:\n" );
+            aMessage.append( "library: '" ).append( aLibrary ).append( "'\n" );
+            aMessage.append( "module: '" ).append( aModule ).append( "'\n" );
+            aMessage.append( "method: '" ).append( aMethod ).append( "'\n" );
+            aMessage.append( "location: '" ).append( aLocation ).append( "'\n" );
             throw provider::ScriptFrameworkErrorException(
                 aMessage.makeStringAndClear(),
                 Reference< XInterface >(),

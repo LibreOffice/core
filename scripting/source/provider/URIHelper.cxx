@@ -211,11 +211,11 @@ ScriptingFrameworkURIHelper::getScriptURI(const OUString& rStorageURI)
 {
     OUStringBuffer buf(120);
 
-    buf.appendAscii("vnd.sun.star.script:");
+    buf.append("vnd.sun.star.script:");
     buf.append(getLanguagePart(rStorageURI));
-    buf.appendAscii("?language=");
+    buf.append("?language=");
     buf.append(m_sLanguage);
-    buf.appendAscii("&location=");
+    buf.append("&location=");
     buf.append(m_sLocation);
 
     return buf.makeStringAndClear();
