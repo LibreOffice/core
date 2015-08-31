@@ -368,9 +368,9 @@ public:
     /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
     long                getHeight() const { return nBottom - nTop; }
     /// Set the left edge of the rectangle to x, preserving the width
-    void                setX( long x ) { nLeft = x; nRight += x - nLeft; }
+    void                setX( long x ) { nRight  += x - nLeft; nLeft = x; }
     /// Set the top edge of the rectangle to y, preserving the height
-    void                setY( long y ) { nTop = y; nBottom += y - nTop; }
+    void                setY( long y ) { nBottom += y - nTop;  nTop  = y; }
     void                setWidth( long n ) { nRight = nLeft + n; }
     void                setHeight( long n ) { nBottom = nTop + n; }
     /// Returns the string representation of the rectangle, format is "x, y, width, height".

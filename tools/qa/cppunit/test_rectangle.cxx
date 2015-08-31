@@ -49,6 +49,11 @@ void Test::test_rectangle()
 
         CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetWidth());
         CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetHeight());
+
+        aRect.setX(12);
+        CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetHeight());
+        aRect.setY(12);
+        CPPUNIT_ASSERT_EQUAL(long(1), aRect.GetWidth());
     }
 }
 
