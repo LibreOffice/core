@@ -28,6 +28,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/newstyle.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
@@ -250,16 +251,16 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 
 void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 {
-    // in case of vertical toolbar
-    if ( !rReq.GetArgs() )
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    const sal_uInt16  nSlotId = rReq.GetSlot();
+    if ( !pArgs && nSlotId != SID_STYLE_NEW_BY_EXAMPLE && nSlotId != SID_STYLE_UPDATE_BY_EXAMPLE )
     {
+        // in case of vertical toolbar
         pViewData->GetDispatcher().Execute( SID_STYLE_DESIGNER, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
         return;
     }
 
     SfxBindings&        rBindings   = pViewData->GetBindings();
-    const SfxItemSet*   pArgs       = rReq.GetArgs();
-    const sal_uInt16        nSlotId     = rReq.GetSlot();
     const SCTAB         nCurTab     = GetViewData()->GetTabNo();
     ScDocShell*         pDocSh      = GetViewData()->GetDocShell();
     ScTabViewShell*     pTabViewShell= GetViewData()->GetViewShell();
@@ -430,6 +431,14 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     const SfxPoolItem* pNameItem;
                     if (pArgs && SfxItemState::SET == pArgs->GetItemState( nSlotId, true, &pNameItem ))
                         aStyleName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
+                    else if ( nSlotId == SID_STYLE_NEW_BY_EXAMPLE )
+                    {
+                        ScopedVclPtrInstance<SfxNewStyleDlg> pDlg( nullptr, *pStylePool );
+                        if ( RET_OK != pDlg->Execute() )
+                            return;
+                        aStyleName = pDlg->GetName();
+                    }
+
                     pStyleSheet = pStylePool->Find( aStyleName, eFamily );
 
                     aOldData.InitFromStyle( pStyleSheet );
