@@ -1792,8 +1792,15 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
             break;
 
         // #i20119# Paintbrush tool
-        case PointerStyle::Paintbrush :
+        case PointerStyle::Paintbrush:
             MAKE_CURSOR( paintbrush_ );
+            break;
+
+        case PointerStyle::HideWhitespace:
+            MAKE_CURSOR( hidewhitespace_ );
+            break;
+        case PointerStyle::ShowWhitespace:
+            MAKE_CURSOR( showwhitespace_ );
             break;
 
         default:
