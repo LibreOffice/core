@@ -315,7 +315,7 @@ OString generateTestName(const OUString& rPath)
 
 void reportResourceUsage(const OUString& rPath)
 {
-    OUString aFullPath = rPath + OUString(".resource.log");
+    OUString aFullPath = rPath + ".resource.log";
     rusage resource_usage;
     getrusage(RUSAGE_SELF, &resource_usage);
 
