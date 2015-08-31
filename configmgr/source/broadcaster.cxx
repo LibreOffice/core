@@ -47,7 +47,7 @@ namespace {
 void appendMessage(
     OUStringBuffer & buffer, css::uno::Exception const & exception)
 {
-    buffer.appendAscii("; ");
+    buffer.append("; ");
     buffer.append(exception.Message);
 }
 

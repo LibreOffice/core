@@ -87,25 +87,25 @@ OUString Data::createSegment(
     }
     OUStringBuffer buf(templateName);
         //TODO: verify template name contains no bad chars?
-    buf.appendAscii("['");
+    buf.append("['");
     for (sal_Int32 i = 0; i < name.getLength(); ++i) {
         sal_Unicode c = name[i];
         switch (c) {
         case '&':
-            buf.appendAscii("&amp;");
+            buf.append("&amp;");
             break;
         case '"':
-            buf.appendAscii("&quot;");
+            buf.append("&quot;");
             break;
         case '\'':
-            buf.appendAscii("&apos;");
+            buf.append("&apos;");
             break;
         default:
             buf.append(c);
             break;
         }
     }
-    buf.appendAscii("']");
+    buf.append("']");
     return buf.makeStringAndClear();
 }
 
