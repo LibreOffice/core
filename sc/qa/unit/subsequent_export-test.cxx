@@ -157,6 +157,7 @@ public:
 
     void testRefStringXLSX();
     void testRefStringConfigXLSX();
+    void testHeaderImage();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -221,6 +222,7 @@ public:
 
     CPPUNIT_TEST(testRefStringXLSX);
     CPPUNIT_TEST(testRefStringConfigXLSX);
+    CPPUNIT_TEST(testHeaderImage);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2956,6 +2958,20 @@ void ScExportTest::testRefStringConfigXLSX()
 
     xDocSh->DoClose();
     xNewDocSh->DoClose();
+}
+
+void ScExportTest::testHeaderImage()
+{
+    // Graphic as header background was lost on export.
+    ScDocShellRef xShell = loadDoc("header-image.", ODS);
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), ODS);
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocSh->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xPageStyles(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName("Default"), uno::UNO_QUERY);
+    OUString aURL;
+    xStyle->getPropertyValue("HeaderBackGraphicURL") >>= aURL;
+    CPPUNIT_ASSERT(aURL.startsWith("vnd.sun.star.GraphicObject:"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
