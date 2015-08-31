@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_6e48975c",
+        "filename": "sw/source/filter/html/svxcss1.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-08-31T11:19:50Z",
+      "side": 0,
+      "message": "There are two problems with removing this german comment:\n\n* 1. This removal is unrelated to this change\n* 2. Instead of removing, german comments supposed to be translated\n\nEven if you would like to translate it, and replace the comment above with something like \"List of \u0027open\" selectors\u0027, this should be done in its own change. One reason is, when this change is reverted, it should revert only stuff related to this change.",
+      "range": {
+        "startLine": 203,
+        "startChar": 32,
+        "endLine": 203,
+        "endChar": 65
+      },
+      "revId": "d11715c4c67be4a991cc9fee72ae1c015eac3745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
