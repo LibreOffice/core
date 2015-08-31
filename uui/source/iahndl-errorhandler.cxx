@@ -51,7 +51,7 @@ executeErrorDialog(
 
     OUStringBuffer aText(rContext);
     if (!rContext.isEmpty() && !rMessage.isEmpty())
-        aText.appendAscii(":\n");
+        aText.append(":\n");
             //TODO! must be internationalized
     aText.append(rMessage);
 

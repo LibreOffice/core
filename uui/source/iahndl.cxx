@@ -895,7 +895,7 @@ UUIInteractionHelper::getInteractionHandlerList(
             configuration::theDefaultProvider::get( m_xContext );
 
         OUStringBuffer aFullPath;
-        aFullPath.appendAscii(
+        aFullPath.append(
             "/org.openoffice.ucb.InteractionHandler/InteractionHandlers" );
 
         uno::Sequence< uno::Any > aArguments( 1 );
@@ -934,7 +934,7 @@ UUIInteractionHelper::getInteractionHandlerList(
             for ( sal_Int32 n = 0; n < nCount; ++n )
             {
                 OUStringBuffer aElemBuffer;
-                aElemBuffer.appendAscii( "['" );
+                aElemBuffer.append( "['" );
                 aElemBuffer.append( pElems[ n ] );
 
                 try
@@ -943,7 +943,7 @@ UUIInteractionHelper::getInteractionHandlerList(
 
                     // Obtain service name.
                     OUStringBuffer aKeyBuffer = aElemBuffer;
-                    aKeyBuffer.appendAscii( "']/ServiceName" );
+                    aKeyBuffer.append( "']/ServiceName" );
 
                     OUString aValue;
                     if ( !( xHierNameAccess->getByHierarchicalName(
