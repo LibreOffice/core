@@ -67,8 +67,8 @@ public:
            const OUString &tableName);
 
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OComponentHelper::acquire(); }
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE { OComponentHelper::release(); }
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { ReflectionBase::acquire(); }
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE { ReflectionBase::release(); }
     virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
         const com::sun::star::uno::Type & reqType )
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -102,8 +102,8 @@ public:
         ConnectionSettings *pSettings);
 
 public: // XInterface
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OComponentHelper::acquire(); }
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE { OComponentHelper::release(); }
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { ReflectionBase::acquire(); }
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE { ReflectionBase::release(); }
     virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
         const com::sun::star::uno::Type & reqType )
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
