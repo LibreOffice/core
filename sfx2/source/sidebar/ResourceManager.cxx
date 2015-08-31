@@ -598,9 +598,9 @@ utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (const OUStr
                                        OUString()));
 
         OUStringBuffer aPathComposer;
-        aPathComposer.appendAscii("org.openoffice.Office.UI.");
+        aPathComposer.append("org.openoffice.Office.UI.");
         aPathComposer.append(sWindowStateRef);
-        aPathComposer.appendAscii("/UIElements/States");
+        aPathComposer.append("/UIElements/States");
 
         return utl::OConfigurationTreeRoot(xContext, aPathComposer.makeStringAndClear(), false);
     }
