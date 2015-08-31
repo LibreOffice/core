@@ -262,7 +262,7 @@ namespace {
             OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) );
         INetURLObject aHID( aTmp );
         if ( aHID.GetProtocol() == INetProtocol::NotValid )
-            aBuffer.appendAscii( INET_HID_SCHEME );
+            aBuffer.append( INET_HID_SCHEME );
         aBuffer.append( aTmp.getStr() );
         return aBuffer.makeStringAndClear();
     }
