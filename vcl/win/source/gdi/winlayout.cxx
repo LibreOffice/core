@@ -1755,7 +1755,7 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
             {
                 SalTwoRect a2Rects(rChunk.maLocation[n].Left(), rChunk.maLocation[n].Top(),
                                    rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight(),
-                                   nAdvance + aPos.X() + mpGlyphOffsets[i].du, aPos.Y() + mpGlyphOffsets[i].dv - rChunk.mnAscentPlusIntLeading,
+                                   nAdvance + aPos.X() + mpGlyphOffsets[i].du - 2, aPos.Y() + mpGlyphOffsets[i].dv - rChunk.mnAscentPlusIntLeading,
                                    rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight()); // ???
                 pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
             }
