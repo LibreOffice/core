@@ -31,6 +31,7 @@
 #include "fmtftn.hxx"
 #include <txtfrm.hxx>
 #include <calbck.hxx>
+#include <viewopt.hxx>
 
 /// Searches the first ContentFrm in BodyText below the page.
 SwLayoutFrm *SwFootnoteBossFrm::FindBodyCont()
@@ -580,6 +581,46 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
     }
 
     return pRet;
+}
+
+bool SwRootFrm::IsBetweenPages(const Point& rPt) const
+{
+    if (!Frm().IsInside(rPt))
+        return false;
+
+    // top visible page
+    const SwFrm* pPage = Lower();
+    if (pPage == nullptr)
+        return false;
+
+    // skip pages above point:
+    while (pPage && rPt.Y() > pPage->Frm().Bottom())
+        pPage = pPage->GetNext();
+
+    if (pPage &&
+        rPt.X() >= pPage->Frm().Left() &&
+        rPt.X() <= pPage->Frm().Right())
+    {
+        // Trivial case when we're right in between.
+        if (!pPage->Frm().IsInside(rPt))
+            return true;
+
+        // In normal mode the gap is large enough and
+        // header/footer mouse interaction competes with
+        // handling hide-whitespace within them.
+        // In hide-whitespace, however, the gap is too small
+        // for convenience and there are no headers/footers.
+        const SwViewShell *pSh = GetCurrShell();
+        if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden())
+        {
+            // If we are really close to the bottom or top of a page.
+            const auto toEdge = std::min(abs(pPage->Frm().Top() - rPt.Y()),
+                                         abs(pPage->Frm().Bottom() - rPt.Y()));
+            return toEdge <= MmToTwips(2.0);
+        }
+    }
+
+    return false;
 }
 
 const SwAttrSet* SwFrm::GetAttrSet() const

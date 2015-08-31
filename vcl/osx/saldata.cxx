@@ -206,7 +206,9 @@ curs_ent{ NULL, { 0, 0 } }, //PointerStyle::Arrow
 { "tblselse", { 30, 30 } }, //PointerStyle::TabSelectSE
 { "tblselw", { 1, 16 } }, //PointerStyle::TabSelectW
 { "tblselsw", { 1, 30 } }, //PointerStyle::TabSelectSW
-{ "pntbrsh", { 9, 16 } }  //PointerStyle::Paintbrush
+{ "pntbrsh", { 9, 16 } }, //PointerStyle::Paintbrush
+{ "wshide", { 16, 16 } }, //PointerStyle::HideWhitespace
+{ "wsshow", { 16, 16 } } //PointerStyle::ShowWhitespace
 };
 
 NSCursor* SalData::getCursor( PointerStyle i_eStyle )

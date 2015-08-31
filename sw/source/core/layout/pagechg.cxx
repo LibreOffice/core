@@ -68,9 +68,9 @@ SwBodyFrm::SwBodyFrm( SwFrameFormat *pFormat, SwFrm* pSib ):
 
 void SwBodyFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
-    // Formatting of the body is too simple, thus, it gets an own format method.
+    // Formatting of the body is too simple, thus, it gets its own format method.
     // Borders etc. are not taken into account here.
-    // With is taken from the PrtArea of the Upper, height is the height of the
+    // Width is taken from the PrtArea of the Upper. Height is the height of the
     // PrtArea of the Upper minus any neighbors (for robustness).
     // The PrtArea has always the size of the frame.
 
@@ -597,7 +597,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 mbValidSize = false;
                 // OD 28.10.2002 #97265# - Don't call <SwPageFrm::MakeAll()>
                 // Calculation of the page is not necessary, because its size is
-                // is invalidated here and further invalidation is done in the
+                // invalidated here and further invalidation is done in the
                 // calling method <SwPageFrm::Modify(..)> and probably by calling
                 // <SwLayoutFrm::Modify(..)> at the end.
                 // It can also causes inconsistences, because the lowers are
@@ -2267,15 +2267,19 @@ bool SwPageFrm::IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rCon
 
     if ( aHeaderArea.IsInside( rPt ) )
     {
-        rControl = Header;
-        return true;
+        if (static_cast<const SwFrameFormat*>(GetRegisteredIn())->GetHeader().IsActive())
+        {
+            rControl = Header;
+            return true;
+        }
     }
     else
     {
         SwRect aFooterArea( Point( Frm().Left(), nLowerLimit ),
                 Size( Frm().Width(), Frm().Bottom() - nLowerLimit ) );
 
-        if ( aFooterArea.IsInside( rPt ) )
+        if ( aFooterArea.IsInside( rPt ) &&
+             static_cast<const SwFrameFormat*>(GetRegisteredIn())->GetFooter().IsActive() )
         {
             rControl = Footer;
             return true;
