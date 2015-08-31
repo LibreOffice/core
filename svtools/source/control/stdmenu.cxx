@@ -123,17 +123,6 @@ void FontSizeMenu::Select()
 
 void FontSizeMenu::Highlight()
 {
-    const long nTempHeight = mnCurHeight;
-    const sal_uInt16 nCurItemId = GetCurItemId();
-    if ( !nCurItemId )
-        mnCurHeight = 0;
-    else
-    {
-        //sal_Int32 nValue = GetItemText( nCurItemId ).ToInt32();
-        mnCurHeight = mpHeightAry[ nCurItemId - 1 ];
-    }
-    maHighlightHdl.Call( this );
-    mnCurHeight = nTempHeight;
 }
 
 void FontSizeMenu::Fill( const vcl::FontInfo& rInfo, const FontList* pList )

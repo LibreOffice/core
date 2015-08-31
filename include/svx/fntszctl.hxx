@@ -36,7 +36,7 @@ private:
     Menu&           rParent;
     SfxStatusForwarder  aFontNameForwarder;
 
-    DECL_LINK( MenuSelect, FontSizeMenu * );
+    DECL_LINK_TYPED( MenuSelect, FontSizeMenu *, void );
 
 protected:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,

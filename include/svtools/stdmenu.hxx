@@ -121,10 +121,9 @@ public:
 class SVT_DLLPUBLIC FontSizeMenu : public PopupMenu
 {
 private:
-    long*           mpHeightAry;
-    long            mnCurHeight;
-    Link<>          maSelectHdl;
-    Link<>          maHighlightHdl;
+    long*                     mpHeightAry;
+    long                      mnCurHeight;
+    Link<FontSizeMenu*,void>  maSelectHdl;
 
 public:
                     FontSizeMenu();
@@ -138,7 +137,7 @@ public:
     void            SetCurHeight( long nHeight );
     long            GetCurHeight() const { return mnCurHeight; }
 
-    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    void            SetSelectHdl( const Link<FontSizeMenu*,void>& rLink ) { maSelectHdl = rLink; }
 };
 
 #endif // INCLUDED_SVTOOLS_STDMENU_HXX

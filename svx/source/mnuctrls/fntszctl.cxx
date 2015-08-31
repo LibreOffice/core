@@ -48,13 +48,13 @@ SFX_IMPL_MENU_CONTROL(SvxFontSizeMenuControl, SvxFontHeightItem);
     wird in einem SvxFontHeightItem verschickt.
 */
 
-IMPL_LINK( SvxFontSizeMenuControl, MenuSelect, FontSizeMenu*, pMen )
+IMPL_LINK_TYPED( SvxFontSizeMenuControl, MenuSelect, FontSizeMenu*, pMen, void )
 {
     SfxViewFrame* pFrm = SfxViewFrame::Current();
     SfxShell* pSh = pFrm ? pFrm->GetDispatcher()->GetShell( 0 ) : NULL;
 
     if ( !pSh )
-        return 0;
+        return;
 
     const SfxItemPool& rPool = pSh->GetPool();
     sal_uInt16 nWhich = rPool.GetWhich( SID_ATTR_CHAR_FONTHEIGHT );
@@ -62,7 +62,6 @@ IMPL_LINK( SvxFontSizeMenuControl, MenuSelect, FontSizeMenu*, pMen )
     long nH = LOGIC( pMen->GetCurHeight(), MAP_POINT, (MapUnit)eUnit ) / 10;
     SvxFontHeightItem aItem( nH, 100, GetId() );
     GetBindings().GetDispatcher()->Execute( GetId(), SfxCallMode::RECORD, &aItem, 0L );
-    return 1;
 }
 
 
