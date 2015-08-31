@@ -310,7 +310,7 @@ ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleForma
 {
     for(ScColorScaleEntries::const_iterator itr = rFormat.begin(); itr != rFormat.end(); ++itr)
     {
-        maColorScales.push_back(std::unique_ptr<ScColorScaleEntry>(new ScColorScaleEntry(pDoc, *itr[0])));
+        maColorScales.push_back(std::unique_ptr<ScColorScaleEntry>(new ScColorScaleEntry(pDoc, **itr)));
     }
 }
 
@@ -342,8 +342,8 @@ double ScColorScaleFormat::GetMinValue() const
 {
     ScColorScaleEntries::const_iterator itr = maColorScales.begin();
 
-    if(itr[0]->GetType() == COLORSCALE_VALUE || itr[0]->GetType() == COLORSCALE_FORMULA)
-        return itr[0]->GetValue();
+    if((*itr)->GetType() == COLORSCALE_VALUE || (*itr)->GetType() == COLORSCALE_FORMULA)
+        return (*itr)->GetValue();
     else
     {
         return getMinValue();
@@ -354,8 +354,8 @@ double ScColorScaleFormat::GetMaxValue() const
 {
     ScColorScaleEntries::const_reverse_iterator itr = maColorScales.rbegin();
 
-    if(itr[0]->GetType() == COLORSCALE_VALUE || itr[0]->GetType() == COLORSCALE_FORMULA)
-        return itr[0]->GetValue();
+    if((*itr)->GetType() == COLORSCALE_VALUE || (*itr)->GetType() == COLORSCALE_FORMULA)
+        return (*itr)->GetValue();
     else
     {
         return getMaxValue();
@@ -501,10 +501,10 @@ double GetPercentile( const std::vector<double>& rArray, double fPercentile )
 
 double ScColorScaleFormat::CalcValue(double nMin, double nMax, ScColorScaleEntries::const_iterator& itr) const
 {
-    switch(itr[0]->GetType())
+    switch((*itr)->GetType())
     {
         case COLORSCALE_PERCENT:
-            return nMin + (nMax-nMin)*(itr[0]->GetValue()/100);
+            return nMin + (nMax-nMin)*((*itr)->GetValue()/100);
         case COLORSCALE_MIN:
             return nMin;
         case COLORSCALE_MAX:
@@ -516,7 +516,7 @@ double ScColorScaleFormat::CalcValue(double nMin, double nMax, ScColorScaleEntri
                 return rValues[0];
             else
             {
-                double fPercentile = itr[0]->GetValue()/100.0;
+                double fPercentile = (*itr)->GetValue()/100.0;
                 return GetPercentile(rValues, fPercentile);
             }
         }
@@ -525,7 +525,7 @@ double ScColorScaleFormat::CalcValue(double nMin, double nMax, ScColorScaleEntri
         break;
     }
 
-    return itr[0]->GetValue();
+    return (*itr)->GetValue();
 }
 
 Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
@@ -557,17 +557,17 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 
     ScColorScaleEntries::const_iterator itr = begin();
     double nValMin = CalcValue(nMin, nMax, itr);
-    Color rColMin = itr[0]->GetColor();
+    Color rColMin = (*itr)->GetColor();
     ++itr;
     double nValMax = CalcValue(nMin, nMax, itr);
-    Color rColMax = itr[0]->GetColor();
+    Color rColMax = (*itr)->GetColor();
 
     ++itr;
     while(itr != end() && nVal > nValMax)
     {
         rColMin = rColMax;
         nValMin = nValMax;
-        rColMax = itr[0]->GetColor();
+        rColMax = (*itr)->GetColor();
         nValMax = CalcValue(nMin, nMax, itr);
         ++itr;
     }
@@ -580,25 +580,25 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 void ScColorScaleFormat::UpdateReference( sc::RefUpdateContext& rCxt )
 {
     for(ScColorScaleEntries::iterator itr = begin(); itr != end(); ++itr)
-        itr[0]->UpdateReference(rCxt);
+        (*itr)->UpdateReference(rCxt);
 }
 
 void ScColorScaleFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
     for (ScColorScaleEntries::iterator it = begin(); it != end(); ++it)
-        it[0]->UpdateInsertTab(rCxt);
+        (*it)->UpdateInsertTab(rCxt);
 }
 
 void ScColorScaleFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
 {
     for (ScColorScaleEntries::iterator it = begin(); it != end(); ++it)
-        it[0]->UpdateDeleteTab(rCxt);
+        (*it)->UpdateDeleteTab(rCxt);
 }
 
 void ScColorScaleFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
 {
     for (ScColorScaleEntries::iterator it = begin(); it != end(); ++it)
-        it[0]->UpdateMoveTab(rCxt);
+        (*it)->UpdateMoveTab(rCxt);
 }
 
 bool ScColorScaleFormat::NeedsRepaint() const
@@ -606,7 +606,7 @@ bool ScColorScaleFormat::NeedsRepaint() const
     for(ScColorScaleEntries::const_iterator itr = begin(), itrEnd = end();
             itr != itrEnd; ++itr)
     {
-        if(itr[0]->NeedsRepaint())
+        if((*itr)->NeedsRepaint())
             return true;
     }
     return false;
@@ -644,7 +644,7 @@ ScColorScaleEntry* ScColorScaleFormat::GetEntry(size_t nPos)
     if (maColorScales.size() <= nPos)
         return NULL;
 
-    return &maColorScales[nPos].get()[0];
+    return maColorScales[nPos].get();
 }
 
 const ScColorScaleEntry* ScColorScaleFormat::GetEntry(size_t nPos) const
@@ -652,7 +652,7 @@ const ScColorScaleEntry* ScColorScaleFormat::GetEntry(size_t nPos) const
     if (maColorScales.size() <= nPos)
         return NULL;
 
-    return &maColorScales[nPos].get()[0];
+    return maColorScales[nPos].get();
 }
 
 size_t ScColorScaleFormat::size() const
