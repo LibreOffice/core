@@ -1815,7 +1815,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
             }
         }
         if (bIntersectionOp)
-            rBuffer.appendAscii( "!!");
+            rBuffer.append( "!!");
         else
         {
             // most times it's just one blank
