@@ -408,6 +408,8 @@ ColorConfig::ColorConfig()
 
 ColorConfig::~ColorConfig()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
     ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
     m_pImpl->RemoveListener(this);
     if(!--nColorRefCount_Impl)
