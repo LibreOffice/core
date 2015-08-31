@@ -1313,9 +1313,9 @@ bool PowerPointExport::WriteComments( sal_uInt32 nPageNum )
         if ( xAnnotationEnumeration->hasMoreElements() )
         {
             FSHelperPtr pFS = openFragmentStreamWithSerializer( OUStringBuffer()
-                                                                .appendAscii( "ppt/comments/comment" )
+                                                                .append( "ppt/comments/comment" )
                                                                 .append( (sal_Int32) nPageNum + 1 )
-                                                                .appendAscii( ".xml" )
+                                                                .append( ".xml" )
                                                                 .makeStringAndClear(),
                                                                 "application/vnd.openxmlformats-officedocument.presentationml.comments+xml" );
 
@@ -1376,9 +1376,9 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
     OUString sRelId = addRelation( mPresentationFS->getOutputStream(),
                                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide",
                                    OUStringBuffer()
-                                   .appendAscii( "slides/slide" )
+                                   .append( "slides/slide" )
                                    .append( (sal_Int32) nPageNum + 1 )
-                                   .appendAscii( ".xml" )
+                                   .append( ".xml" )
                                    .makeStringAndClear() );
 
     mPresentationFS->singleElementNS( XML_p, XML_sldId,
@@ -1390,9 +1390,9 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
         mPresentationFS->endElementNS( XML_p, XML_sldIdLst );
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer( OUStringBuffer()
-                                                        .appendAscii( "ppt/slides/slide" )
+                                                        .append( "ppt/slides/slide" )
                                                         .append( (sal_Int32) nPageNum + 1 )
-                                                        .appendAscii( ".xml" )
+                                                        .append( ".xml" )
                                                         .makeStringAndClear(),
                                                         "application/vnd.openxmlformats-officedocument.presentationml.slide+xml" );
 
@@ -1432,9 +1432,9 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
     addRelation( pFS->getOutputStream(),
                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout",
                  OUStringBuffer()
-                 .appendAscii( "../slideLayouts/slideLayout" )
+                 .append( "../slideLayouts/slideLayout" )
                  .append( GetLayoutFileId( GetPPTXLayoutId( GetLayoutOffset( mXPagePropSet ) ), nMasterNum ) )
-                 .appendAscii( ".xml" )
+                 .append( ".xml" )
                  .makeStringAndClear() );
 
     if ( WriteComments( nPageNum ) )
@@ -1442,9 +1442,9 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
         addRelation( pFS->getOutputStream(),
                      "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments",
                      OUStringBuffer()
-                     .appendAscii( "../comments/comment" )
+                     .append( "../comments/comment" )
                      .append( (sal_Int32) nPageNum + 1 )
-                     .appendAscii( ".xml" )
+                     .append( ".xml" )
                      .makeStringAndClear() );
 
     DBG(printf("----------------\n"));
@@ -1458,9 +1458,9 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
     DBG(printf("write Notes %" SAL_PRIuUINT32 "\n----------------\n", nPageNum));
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer( OUStringBuffer()
-                                                        .appendAscii( "ppt/notesSlides/notesSlide" )
+                                                        .append( "ppt/notesSlides/notesSlide" )
                                                         .append( (sal_Int32) nPageNum + 1 )
-                                                        .appendAscii( ".xml" )
+                                                        .append( ".xml" )
                                                         .makeStringAndClear(),
                                                         "application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml" );
 
@@ -1478,9 +1478,9 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
     addRelation( pFS->getOutputStream(),
                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide",
                  OUStringBuffer()
-                 .appendAscii( "../slides/slide" )
+                 .append( "../slides/slide" )
                  .append( (sal_Int32) nPageNum + 1 )
-                 .appendAscii( ".xml" )
+                 .append( ".xml" )
                  .makeStringAndClear() );
 
     // add slide implicit relation to notes
@@ -1488,9 +1488,9 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
         addRelation( mpSlidesFSArray[ nPageNum ]->getOutputStream(),
              "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide",
              OUStringBuffer()
-             .appendAscii( "../notesSlides/notesSlide" )
+             .append( "../notesSlides/notesSlide" )
              .append( (sal_Int32) nPageNum + 1 )
-             .appendAscii( ".xml" )
+             .append( ".xml" )
              .makeStringAndClear() );
 
     // add implicit relation to notes master
@@ -1507,9 +1507,9 @@ void PowerPointExport::AddLayoutIdAndRelation( FSHelperPtr pFS, sal_Int32 nLayou
     OUString sRelId = addRelation( pFS->getOutputStream(),
                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout",
                    OUStringBuffer()
-                   .appendAscii( "../slideLayouts/slideLayout" )
+                   .append( "../slideLayouts/slideLayout" )
                    .append( nLayoutFileId )
-                   .appendAscii( ".xml" )
+                   .append( ".xml" )
                    .makeStringAndClear() );
 
     pFS->singleElementNS( XML_p, XML_sldLayoutId,
@@ -1538,9 +1538,9 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
     OUString sRelId = addRelation( mPresentationFS->getOutputStream(),
                                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster",
                                    OUStringBuffer()
-                                   .appendAscii( "slideMasters/slideMaster" )
+                                   .append( "slideMasters/slideMaster" )
                                    .append( (sal_Int32) nPageNum + 1 )
-                                   .appendAscii( ".xml" )
+                                   .append( ".xml" )
                                    .makeStringAndClear() );
 
     mPresentationFS->singleElementNS( XML_p, XML_sldMasterId,
@@ -1553,9 +1553,9 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
 
     FSHelperPtr pFS =
     openFragmentStreamWithSerializer( OUStringBuffer()
-                      .appendAscii( "ppt/slideMasters/slideMaster" )
+                      .append( "ppt/slideMasters/slideMaster" )
                       .append( (sal_Int32) nPageNum + 1 )
-                      .appendAscii( ".xml" )
+                      .append( ".xml" )
                       .makeStringAndClear(),
                       "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml" );
 
@@ -1566,9 +1566,9 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
     addRelation( pFS->getOutputStream(),
                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
          OUStringBuffer()
-         .appendAscii( "../theme/theme" )
+         .append( "../theme/theme" )
          .append( (sal_Int32) nPageNum + 1 )
-         .appendAscii( ".xml" )
+         .append( ".xml" )
          .makeStringAndClear() );
 
     pFS->startElementNS( XML_p, XML_sldMaster, PNMSS, FSEND );
@@ -1665,9 +1665,9 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
 
     FSHelperPtr pFS
         = openFragmentStreamWithSerializer( OUStringBuffer()
-                                            .appendAscii( "ppt/slideLayouts/slideLayout" )
+                                            .append( "ppt/slideLayouts/slideLayout" )
                                             .append( (sal_Int32) mnLayoutFileIdMax )
-                                            .appendAscii( ".xml" )
+                                            .append( ".xml" )
                                             .makeStringAndClear(),
                                             "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml" );
 
@@ -1675,9 +1675,9 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
     addRelation( pFS->getOutputStream(),
                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster",
                  OUStringBuffer()
-                 .appendAscii( "../slideMasters/slideMaster" )
+                 .append( "../slideMasters/slideMaster" )
                  .append( (sal_Int32) nMasterNum + 1 )
-                 .appendAscii( ".xml" )
+                 .append( ".xml" )
                  .makeStringAndClear() );
 
     pFS->startElementNS( XML_p, XML_sldLayout,
@@ -2042,9 +2042,9 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape( Reference< XShape > x
 void PowerPointExport::WriteTheme( sal_Int32 nThemeNum )
 {
     FSHelperPtr pFS = openFragmentStreamWithSerializer( OUStringBuffer()
-                                .appendAscii( "ppt/theme/theme" )
+                                .append( "ppt/theme/theme" )
                                 .append( (sal_Int32) nThemeNum + 1 )
-                                .appendAscii( ".xml" )
+                                .append( ".xml" )
                                 .makeStringAndClear(),
                                                         "application/vnd.openxmlformats-officedocument.theme+xml" );
 
@@ -2101,9 +2101,9 @@ bool PowerPointExport::WriteNotesMaster()
     addRelation( pFS->getOutputStream(),
                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
          OUStringBuffer()
-         .appendAscii( "../theme/theme" )
+         .append( "../theme/theme" )
          .append( (sal_Int32) mnMasterPages + 1 )
-         .appendAscii( ".xml" )
+         .append( ".xml" )
          .makeStringAndClear() );
 
     pFS->startElementNS( XML_p, XML_notesMaster, PNMSS, FSEND );

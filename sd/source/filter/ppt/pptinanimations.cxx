@@ -1206,15 +1206,15 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
             else
             {
                 OUStringBuffer sBuffer;
-                sBuffer.appendAscii( "ppt_" );
+                sBuffer.append( "ppt_" );
                 switch( nEffectPresetClass )
                 {
-                case EffectPresetClass::ENTRANCE: sBuffer.appendAscii( "entrance_" ); break;
-                case EffectPresetClass::EXIT: sBuffer.appendAscii( "exit_" ); break;
-                case EffectPresetClass::EMPHASIS: sBuffer.appendAscii( "emphasis_" ); break;
-                case EffectPresetClass::MOTIONPATH: sBuffer.appendAscii( "motionpath_" ); break;
-                case EffectPresetClass::OLEACTION: sBuffer.appendAscii( "oleaction_" ); break;
-                case EffectPresetClass::MEDIACALL: sBuffer.appendAscii( "mediacall_" ); break;
+                case EffectPresetClass::ENTRANCE: sBuffer.append( "entrance_" ); break;
+                case EffectPresetClass::EXIT: sBuffer.append( "exit_" ); break;
+                case EffectPresetClass::EMPHASIS: sBuffer.append( "emphasis_" ); break;
+                case EffectPresetClass::MOTIONPATH: sBuffer.append( "motionpath_" ); break;
+                case EffectPresetClass::OLEACTION: sBuffer.append( "oleaction_" ); break;
+                case EffectPresetClass::MEDIACALL: sBuffer.append( "mediacall_" ); break;
                 }
                 sBuffer.append( nPresetId );
 
