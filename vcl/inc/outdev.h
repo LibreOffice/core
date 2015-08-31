@@ -157,7 +157,12 @@ public:
     ImplFontEntry*      GetFontEntry( PhysicalFontCollection*, FontSelectPattern& );
     ImplFontEntry*      GetGlyphFallbackFont( PhysicalFontCollection*, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );
-    void                Release( ImplFontEntry* );
+
+    /// Increase the refcount of the given ImplFontEntry.
+    void                Acquire(ImplFontEntry*);
+    /// Decrease the refcount and potentially cleanup the entries with zero refcount from the cache.
+    void                Release(ImplFontEntry*);
+
     void                Invalidate();
 };
 
