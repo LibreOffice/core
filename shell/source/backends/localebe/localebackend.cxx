@@ -190,7 +190,7 @@ static OUString ImplGetLocale(int category)
     if( uscore != NULL )
     {
         aLocaleBuffer.appendAscii(locale, uscore++ - locale);
-        aLocaleBuffer.appendAscii("-");
+        aLocaleBuffer.append("-");
         aLocaleBuffer.appendAscii(uscore, cp - uscore);
     }
     else
