@@ -12,6 +12,7 @@
 #include <stack>
 #include <string>
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 // Define a "string constant" to be a constant expression either of type "array
@@ -47,10 +48,11 @@ SourceLocation getMemberLocation(Expr const * expr) {
 }
 
 class StringConstant:
-    public RecursiveASTVisitor<StringConstant>, public loplugin::Plugin
+    public RecursiveASTVisitor<StringConstant>, public loplugin::RewritePlugin
 {
 public:
-    explicit StringConstant(InstantiationData const & data): Plugin(data) {}
+    explicit StringConstant(InstantiationData const & data): RewritePlugin(data)
+    {}
 
     void run() override;
 
@@ -83,7 +85,8 @@ private:
 
     void reportChange(
         Expr const * expr, ChangeKind kind, std::string const & original,
-        std::string const & replacement, PassThrough pass);
+        std::string const & replacement, PassThrough pass,
+        char const * rewriteFrom, char const * rewriteTo);
 
     void checkEmpty(
         CallExpr const * expr, std::string const & qname, TreatEmpty treatEmpty,
@@ -91,7 +94,8 @@ private:
 
     void handleChar(
         CallExpr const * expr, unsigned arg, std::string const & qname,
-        std::string const & replacement, TreatEmpty treatEmpty, bool literal);
+        std::string const & replacement, TreatEmpty treatEmpty, bool literal,
+    char const * rewriteFrom = nullptr, char const * rewriteTo = nullptr);
 
     void handleCharLen(
         CallExpr const * expr, unsigned arg1, unsigned arg2,
@@ -524,6 +528,24 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         }
         return true;
     }
+    if (qname == "rtl::OUStringBuffer::appendAscii"
+        && fdecl->getNumParams() == 1)
+    {
+        // u.appendAscii("foo") -> u.append("foo")
+        handleChar(
+            expr, 0, qname, "rtl::OUStringBuffer::append", TreatEmpty::Error,
+            true, "appendAscii", "append");
+        return true;
+    }
+    if (qname == "rtl::OUStringBuffer::appendAscii"
+        && fdecl->getNumParams() == 2)
+    {
+        // u.appendAscii("foo", 3) -> u.append("foo"):
+        handleCharLen(
+            expr, 0, 1, qname, "rtl::OUStringBuffer::append",
+            TreatEmpty::Error);
+        return true;
+    }
     return true;
 }
 
@@ -856,8 +878,10 @@ bool StringConstant::isZero(Expr const * expr) {
 
 void StringConstant::reportChange(
     Expr const * expr, ChangeKind kind, std::string const & original,
-    std::string const & replacement, PassThrough pass)
+    std::string const & replacement, PassThrough pass, char const * rewriteFrom,
+    char const * rewriteTo)
 {
+    assert((rewriteFrom == nullptr) == (rewriteTo == nullptr));
     if (pass != PassThrough::No && !calls_.empty()) {
         Expr const * call = calls_.top();
         CallExpr::const_arg_iterator argsBeg;
@@ -1005,6 +1029,23 @@ void StringConstant::reportChange(
             }
         }
     }
+    if (rewriter != nullptr && rewriteFrom != nullptr) {
+        SourceLocation loc = getMemberLocation(expr);
+        while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
+            loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
+        }
+        if (compat::isMacroBodyExpansion(compiler, loc)) {
+            loc = compiler.getSourceManager().getSpellingLoc(loc);
+        }
+        unsigned n = Lexer::MeasureTokenLength(
+            loc, compiler.getSourceManager(), compiler.getLangOpts());
+        if ((std::string(compiler.getSourceManager().getCharacterData(loc), n)
+             == rewriteFrom)
+            && replaceText(loc, n, rewriteTo))
+        {
+            return;
+        }
+    }
     report(
         DiagnosticsEngine::Warning,
         ("rewrite call of " + original + " with " + describeChangeKind(kind)
@@ -1040,7 +1081,8 @@ void StringConstant::checkEmpty(
 
 void StringConstant::handleChar(
     CallExpr const * expr, unsigned arg, std::string const & qname,
-    std::string const & replacement, TreatEmpty treatEmpty, bool literal)
+    std::string const & replacement, TreatEmpty treatEmpty, bool literal,
+    char const * rewriteFrom, char const * rewriteTo)
 {
     unsigned n;
     bool non;
@@ -1087,7 +1129,8 @@ void StringConstant::handleChar(
          ? (n == 0
             ? PassThrough::EmptyConstantString
             : PassThrough::NonEmptyConstantString)
-         : PassThrough::No));
+         : PassThrough::No),
+        rewriteFrom, rewriteTo);
 }
 
 void StringConstant::handleCharLen(
@@ -1158,7 +1201,9 @@ void StringConstant::handleCharLen(
     }
     std::string repl(replacement);
     checkEmpty(expr, qname, treatEmpty, n, &repl);
-    reportChange(expr, ChangeKind::CharLen, qname, repl, PassThrough::No);
+    reportChange(
+        expr, ChangeKind::CharLen, qname, repl, PassThrough::No, nullptr,
+        nullptr);
 }
 
 void StringConstant::handleOUStringCtor(
@@ -1228,7 +1273,7 @@ void StringConstant::handleOUStringCtor(
         << qname << expr->getSourceRange();
 }
 
-loplugin::Plugin::Registration< StringConstant > X("stringconstant");
+loplugin::Plugin::Registration< StringConstant > X("stringconstant", true);
 
 }
 
