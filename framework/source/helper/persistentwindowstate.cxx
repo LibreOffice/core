@@ -169,9 +169,9 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::
     OUString sWindowState;
 
     OUStringBuffer sRelPathBuf(256);
-    sRelPathBuf.appendAscii("Office/Factories/*[\"");
+    sRelPathBuf.append("Office/Factories/*[\"");
     sRelPathBuf.append     (sModuleName            );
-    sRelPathBuf.appendAscii("\"]"                  );
+    sRelPathBuf.append("\"]"                  );
 
     OUString sPackage("org.openoffice.Setup/");
     OUString sRelPath = sRelPathBuf.makeStringAndClear();
@@ -198,9 +198,9 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
                                                           const OUString&                                    sWindowState)
 {
     OUStringBuffer sRelPathBuf(256);
-    sRelPathBuf.appendAscii("Office/Factories/*[\"");
+    sRelPathBuf.append("Office/Factories/*[\"");
     sRelPathBuf.append     (sModuleName            );
-    sRelPathBuf.appendAscii("\"]"                  );
+    sRelPathBuf.append("\"]"                  );
 
     OUString sPackage("org.openoffice.Setup/");
     OUString sRelPath = sRelPathBuf.makeStringAndClear();

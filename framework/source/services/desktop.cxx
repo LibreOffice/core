@@ -112,7 +112,7 @@ void Desktop::constructorInit()
 
     OUStringBuffer sUntitledPrefix (256);
     sUntitledPrefix.append      (FWK_RESSTR(STR_UNTITLED_DOCUMENT));
-    sUntitledPrefix.appendAscii (" ");
+    sUntitledPrefix.append (" ");
 
     ::comphelper::NumberedCollection* pNumbers = new ::comphelper::NumberedCollection ();
     m_xTitleNumberGenerator = css::uno::Reference< css::frame::XUntitledNumbers >(static_cast< ::cppu::OWeakObject* >(pNumbers), css::uno::UNO_QUERY_THROW);

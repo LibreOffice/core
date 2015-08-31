@@ -973,7 +973,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
                     if ( !aToolbarName.isEmpty() )
                     {
                         OUStringBuffer aBuf(100);
-                        aBuf.appendAscii( "private:resource/toolbar/" );
+                        aBuf.append( "private:resource/toolbar/" );
                         aBuf.append( aToolbarName );
 
                         UIElement aToolbar = implts_findToolbar( aBuf.makeStringAndClear() );

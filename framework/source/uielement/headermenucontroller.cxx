@@ -126,13 +126,13 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                             xPropSet->getPropertyValue( aHeaderFooterIsOnStr ) >>= bHeaderIsOn;
 
                             OUStringBuffer aStrBuf( aCmd );
-                            aStrBuf.appendAscii( "?PageStyle:string=");
+                            aStrBuf.append( "?PageStyle:string=");
                             aStrBuf.append( aDisplayName );
-                            aStrBuf.appendAscii( "&On:bool=" );
+                            aStrBuf.append( "&On:bool=" );
                             if ( !bHeaderIsOn )
-                                aStrBuf.appendAscii( "true" );
+                                aStrBuf.append( "true" );
                             else
-                                aStrBuf.appendAscii( "false" );
+                                aStrBuf.append( "false" );
                             OUString aCommand( aStrBuf.makeStringAndClear() );
                             pVCLPopupMenu->InsertItem( nId, aDisplayName, MenuItemBits::CHECKABLE );
                             if ( !bFirstItemInserted )
@@ -162,13 +162,13 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                     pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, FwlResId(STR_MENU_HEADFOOTALL).toString(), MenuItemBits::NONE, OString(), 0 );
 
                     OUStringBuffer aStrBuf( aCmd );
-                    aStrBuf.appendAscii( "?On:bool=" );
+                    aStrBuf.append( "?On:bool=" );
 
                     // Command depends on check state of first menu item entry
                     if ( !bFirstChecked )
-                        aStrBuf.appendAscii( "true" );
+                        aStrBuf.append( "true" );
                     else
-                        aStrBuf.appendAscii( "false" );
+                        aStrBuf.append( "false" );
 
                     pVCLPopupMenu->SetItemCommand( 1, aStrBuf.makeStringAndClear() );
                     pVCLPopupMenu->InsertSeparator(OString(), 1);

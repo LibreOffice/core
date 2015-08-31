@@ -57,9 +57,9 @@ namespace framework
 static OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, const OUString& aModuleName )
 {
     OUStringBuffer aKey( aType );
-    aKey.appendAscii( "^" );
+    aKey.append( "^" );
     aKey.append( aName );
-    aKey.appendAscii( "^" );
+    aKey.append( "^" );
     aKey.append( aModuleName );
     return aKey.makeStringAndClear();
 }

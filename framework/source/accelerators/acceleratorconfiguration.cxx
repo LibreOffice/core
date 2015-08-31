@@ -63,13 +63,13 @@ namespace framework
         OUStringBuffer sKeyBuffer((_rKeyMapping->mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex));
 
         if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT )
-            sKeyBuffer.appendAscii("_SHIFT");
+            sKeyBuffer.append("_SHIFT");
         if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  )
-            sKeyBuffer.appendAscii("_MOD1");
+            sKeyBuffer.append("_MOD1");
         if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  )
-            sKeyBuffer.appendAscii("_MOD2");
+            sKeyBuffer.append("_MOD2");
         if ( (aKeyEvent.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  )
-            sKeyBuffer.appendAscii("_MOD3");
+            sKeyBuffer.append("_MOD3");
 
         return sKeyBuffer.makeStringAndClear();
     }

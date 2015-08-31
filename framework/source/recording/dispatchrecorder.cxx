@@ -141,14 +141,14 @@ OUString SAL_CALL DispatchRecorder::getRecordedMacro() throw( css::uno::RuntimeE
     aScriptBuffer.ensureCapacity(10000);
     m_nRecordingID = 1;
 
-    aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
-    aScriptBuffer.appendAscii("rem define variables\n");
-    aScriptBuffer.appendAscii("dim document   as object\n");
-    aScriptBuffer.appendAscii("dim dispatcher as object\n");
-    aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
-    aScriptBuffer.appendAscii("rem get access to the document\n");
-    aScriptBuffer.appendAscii("document   = ThisComponent.CurrentController.Frame\n");
-    aScriptBuffer.appendAscii("dispatcher = createUnoService(\"com.sun.star.frame.DispatchHelper\")\n\n");
+    aScriptBuffer.append("rem ----------------------------------------------------------------------\n");
+    aScriptBuffer.append("rem define variables\n");
+    aScriptBuffer.append("dim document   as object\n");
+    aScriptBuffer.append("dim dispatcher as object\n");
+    aScriptBuffer.append("rem ----------------------------------------------------------------------\n");
+    aScriptBuffer.append("rem get access to the document\n");
+    aScriptBuffer.append("document   = ThisComponent.CurrentController.Frame\n");
+    aScriptBuffer.append("dispatcher = createUnoService(\"com.sun.star.frame.DispatchHelper\")\n\n");
 
     std::vector< com::sun::star::frame::DispatchStatement>::iterator p;
     for ( p = m_aStatements.begin(); p != m_aStatements.end(); ++p )
@@ -164,16 +164,16 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
     {
         // structs are recorded as arrays, convert to "Sequence of any"
         Sequence< Any > aSeq = make_seq_out_of_struct( aValue );
-        aArgumentBuffer.appendAscii("Array(");
+        aArgumentBuffer.append("Array(");
         for ( sal_Int32 nAny=0; nAny<aSeq.getLength(); nAny++ )
         {
             AppendToBuffer( aSeq[nAny], aArgumentBuffer );
             if ( nAny+1 < aSeq.getLength() )
                 // not last argument
-                aArgumentBuffer.appendAscii(",");
+                aArgumentBuffer.append(",");
         }
 
-        aArgumentBuffer.appendAscii(")");
+        aArgumentBuffer.append(")");
     }
     else if (aValue.getValueTypeClass() == css::uno::TypeClass_SEQUENCE )
     {
@@ -184,16 +184,16 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
         catch (const css::uno::Exception&) {}
 
         aNew >>= aSeq;
-        aArgumentBuffer.appendAscii("Array(");
+        aArgumentBuffer.append("Array(");
         for ( sal_Int32 nAny=0; nAny<aSeq.getLength(); nAny++ )
         {
             AppendToBuffer( aSeq[nAny], aArgumentBuffer );
             if ( nAny+1 < aSeq.getLength() )
                 // not last argument
-                aArgumentBuffer.appendAscii(",");
+                aArgumentBuffer.append(",");
         }
 
-        aArgumentBuffer.appendAscii(")");
+        aArgumentBuffer.append(")");
     }
     else if (aValue.getValueTypeClass() == css::uno::TypeClass_STRING )
     {
@@ -214,18 +214,18 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
                     if ( bInString )
                     {
                         // close current string
-                        aArgumentBuffer.appendAscii("\"");
+                        aArgumentBuffer.append("\"");
                         bInString = false;
                     }
 
                     if ( nChar>0 )
                         // if this is not the first character, parts of the string have already been added
-                        aArgumentBuffer.appendAscii("+");
+                        aArgumentBuffer.append("+");
 
                     // add the character constant
-                    aArgumentBuffer.appendAscii("CHR$(");
+                    aArgumentBuffer.append("CHR$(");
                     aArgumentBuffer.append( (sal_Int32) pChars[nChar] );
-                    aArgumentBuffer.appendAscii(")");
+                    aArgumentBuffer.append(")");
                 }
                 else
                 {
@@ -233,10 +233,10 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
                     {
                         if ( nChar>0 )
                             // if this is not the first character, parts of the string have already been added
-                            aArgumentBuffer.appendAscii("+");
+                            aArgumentBuffer.append("+");
 
                         // start a new string
-                        aArgumentBuffer.appendAscii("\"");
+                        aArgumentBuffer.append("\"");
                         bInString = true;
                     }
 
@@ -246,21 +246,21 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
 
             // close string
             if ( bInString )
-                aArgumentBuffer.appendAscii("\"");
+                aArgumentBuffer.append("\"");
         }
         else
-            aArgumentBuffer.appendAscii("\"\"");
+            aArgumentBuffer.append("\"\"");
     }
     else if (aValue.getValueType() == cppu::UnoType<cppu::UnoCharType>::get())
     {
         // character variables are recorded as strings, back conversion must be handled in client code
         sal_Unicode nVal = *static_cast<sal_Unicode const *>(aValue.getValue());
-        aArgumentBuffer.appendAscii("\"");
+        aArgumentBuffer.append("\"");
         if ( (sal_Unicode(nVal) == '\"') )
             // encode \" to \"\"
             aArgumentBuffer.append((sal_Unicode)nVal);
         aArgumentBuffer.append((sal_Unicode)nVal);
-        aArgumentBuffer.appendAscii("\"");
+        aArgumentBuffer.append("\"");
     }
     else
     {
@@ -278,7 +278,7 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( css::uno::Any aValue, OUStringBu
         {
             OUString aName = aValue.getValueType().getTypeName();
             aArgumentBuffer.append( aName );
-            aArgumentBuffer.appendAscii(".");
+            aArgumentBuffer.append(".");
         }
 
         aArgumentBuffer.append(sVal);
@@ -294,7 +294,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
     // this value is used to name the arrays of aArgumentBuffer
     sArrayName = "args" + OUString::number(m_nRecordingID);
 
-    aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
+    aScriptBuffer.append("rem ----------------------------------------------------------------------\n");
 
     sal_Int32 nLength = lArguments.getLength();
     sal_Int32 nValidArgs = 0;
@@ -318,23 +318,23 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
         {
             // add arg().Name
             if(bAsComment)
-                aArgumentBuffer.appendAscii(REM_AS_COMMENT);
+                aArgumentBuffer.append(REM_AS_COMMENT);
             aArgumentBuffer.append     (sArrayName);
-            aArgumentBuffer.appendAscii("(");
+            aArgumentBuffer.append("(");
             aArgumentBuffer.append     (nValidArgs);
-            aArgumentBuffer.appendAscii(").Name = \"");
+            aArgumentBuffer.append(").Name = \"");
             aArgumentBuffer.append     (lArguments[i].Name);
-            aArgumentBuffer.appendAscii("\"\n");
+            aArgumentBuffer.append("\"\n");
 
             // add arg().Value
             if(bAsComment)
-                aArgumentBuffer.appendAscii(REM_AS_COMMENT);
+                aArgumentBuffer.append(REM_AS_COMMENT);
             aArgumentBuffer.append     (sArrayName);
-            aArgumentBuffer.appendAscii("(");
+            aArgumentBuffer.append("(");
             aArgumentBuffer.append     (nValidArgs);
-            aArgumentBuffer.appendAscii(").Value = ");
+            aArgumentBuffer.append(").Value = ");
             aArgumentBuffer.append     (sValBuffer.makeStringAndClear());
-            aArgumentBuffer.appendAscii("\n");
+            aArgumentBuffer.append("\n");
 
             ++nValidArgs;
         }
@@ -344,30 +344,30 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
     if(nValidArgs>0)
     {
         if(bAsComment)
-            aScriptBuffer.appendAscii(REM_AS_COMMENT);
-        aScriptBuffer.appendAscii("dim ");
+            aScriptBuffer.append(REM_AS_COMMENT);
+        aScriptBuffer.append("dim ");
         aScriptBuffer.append     (sArrayName);
-        aScriptBuffer.appendAscii("(");
+        aScriptBuffer.append("(");
         aScriptBuffer.append     ((sal_Int32)(nValidArgs-1)); // 0 based!
-        aScriptBuffer.appendAscii(") as new com.sun.star.beans.PropertyValue\n");
+        aScriptBuffer.append(") as new com.sun.star.beans.PropertyValue\n");
         aScriptBuffer.append     (aArgumentBuffer.makeStringAndClear());
-        aScriptBuffer.appendAscii("\n");
+        aScriptBuffer.append("\n");
     }
 
     // add code for dispatches
     if(bAsComment)
-        aScriptBuffer.appendAscii(REM_AS_COMMENT);
-    aScriptBuffer.appendAscii("dispatcher.executeDispatch(document, \"");
+        aScriptBuffer.append(REM_AS_COMMENT);
+    aScriptBuffer.append("dispatcher.executeDispatch(document, \"");
     aScriptBuffer.append     (aURL);
-    aScriptBuffer.appendAscii("\", \"\", 0, ");
+    aScriptBuffer.append("\", \"\", 0, ");
     if(nValidArgs<1)
-        aScriptBuffer.appendAscii("Array()");
+        aScriptBuffer.append("Array()");
     else
     {
         aScriptBuffer.append( sArrayName.getStr() );
-        aScriptBuffer.appendAscii("()");
+        aScriptBuffer.append("()");
     }
-    aScriptBuffer.appendAscii(")\n\n");
+    aScriptBuffer.append(")\n\n");
 
     /* SAFE { */
     m_nRecordingID++;

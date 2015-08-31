@@ -342,9 +342,9 @@ OUString HelpOnStartup::ist_createHelpURL(const OUString& sBaseURL,
 {
     OUStringBuffer sHelpURL(256);
     sHelpURL.append     (sBaseURL    );
-    sHelpURL.appendAscii("?Language=");
+    sHelpURL.append("?Language=");
     sHelpURL.append     (sLocale     );
-    sHelpURL.appendAscii("&System="  );
+    sHelpURL.append("&System="  );
     sHelpURL.append     (sSystem     );
 
     return sHelpURL.makeStringAndClear();

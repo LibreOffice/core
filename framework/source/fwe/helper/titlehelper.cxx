@@ -359,7 +359,7 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
         if (nLeasedNumber != css::frame::UntitledNumbersConst::INVALID_NUMBER)
             sNewTitle.append ((::sal_Int32)nLeasedNumber);
         else
-            sNewTitle.appendAscii("?");
+            sNewTitle.append("?");
 
         sTitle = sNewTitle.makeStringAndClear ();
     }
@@ -419,7 +419,7 @@ void TitleHelper::impl_updateTitleForController (const css::uno::Reference< css:
         sTitle.append      (xModelTitle->getTitle ());
         if ( nLeasedNumber > 1 )
         {
-            sTitle.appendAscii (" : ");
+            sTitle.append (" : ");
             sTitle.append      ((::sal_Int32)nLeasedNumber);
         }
         if (xModel.is ())
@@ -547,7 +547,7 @@ void TitleHelper::impl_appendModuleName (OUStringBuffer& sTitle)
         // So please add it to the title in case it does really exists only.
         if (!sUIName.isEmpty())
         {
-            sTitle.appendAscii (" "    );
+            sTitle.append (" "    );
             sTitle.append      (sUIName);
         }
     }

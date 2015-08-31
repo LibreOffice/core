@@ -115,11 +115,11 @@ OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageListsDescriptor& aI
         OUStringBuffer temp( 20 );
 
         if ( ImagesEntries[i].nNamespace == IMG_NS_IMAGE )
-            temp.appendAscii( XMLNS_IMAGE );
+            temp.append( XMLNS_IMAGE );
         else
-            temp.appendAscii( XMLNS_XLINK );
+            temp.append( XMLNS_XLINK );
 
-        temp.appendAscii( XMLNS_FILTER_SEPARATOR );
+        temp.append( XMLNS_FILTER_SEPARATOR );
         temp.appendAscii( ImagesEntries[i].aEntryName );
         m_aImageMap.insert( ImageHashMap::value_type( temp.makeStringAndClear(), (Image_XML_Entry)i ) );
     }
@@ -703,7 +703,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
         OUStringBuffer   aColorStrBuffer( 8 );
         sal_Int64       nValue = pImageList->aMaskColor.GetRGBColor();
 
-        aColorStrBuffer.appendAscii( "#" );
+        aColorStrBuffer.append( "#" );
         aColorStrBuffer.append( OUString::number( nValue, 16 ));
 
         pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_MASKCOLOR,

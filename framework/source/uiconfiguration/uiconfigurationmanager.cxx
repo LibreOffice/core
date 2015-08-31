@@ -291,7 +291,7 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
             OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
             aBuf.appendAscii( RESOURCEURL_PREFIX );
             aBuf.appendAscii( UIELEMENTTYPENAMES[ nElementType ] );
-            aBuf.appendAscii( "/" );
+            aBuf.append( "/" );
             OUString aResURLPrefix( aBuf.makeStringAndClear() );
 
             UIElementDataHashMap& rHashMap = rElementTypeData.aElementsHashMap;

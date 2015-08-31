@@ -67,44 +67,44 @@ OUString Converter::convert_DateTime2ISO8601( const DateTime& aSource )
 
     // write year formatted as "YYYY"
     if (nYear<10)
-        sBuffer.appendAscii("000");
+        sBuffer.append("000");
     else if (nYear<100)
-        sBuffer.appendAscii("00");
+        sBuffer.append("00");
     else if (nYear<1000)
-        sBuffer.appendAscii("0");
+        sBuffer.append("0");
     sBuffer.append( (sal_Int32)nYear );
 
-    sBuffer.appendAscii("-");
+    sBuffer.append("-");
     // write month formatted as "MM"
     if (nMonth<10)
-        sBuffer.appendAscii("0");
+        sBuffer.append("0");
     sBuffer.append( (sal_Int32)nMonth );
 
-    sBuffer.appendAscii("-");
+    sBuffer.append("-");
     // write day formatted as "DD"
     if (nDay<10)
-        sBuffer.appendAscii("0");
+        sBuffer.append("0");
     sBuffer.append( (sal_Int32)nDay );
 
-    sBuffer.appendAscii("T");
+    sBuffer.append("T");
     // write hours formatted as "hh"
     if (nHour<10)
-        sBuffer.appendAscii("0");
+        sBuffer.append("0");
     sBuffer.append( (sal_Int32)nHour );
 
-    sBuffer.appendAscii(":");
+    sBuffer.append(":");
     // write min formatted as "mm"
     if (nMin<10)
-        sBuffer.appendAscii("0");
+        sBuffer.append("0");
     sBuffer.append( (sal_Int32)nMin );
 
-    sBuffer.appendAscii(":");
+    sBuffer.append(":");
     // write sec formatted as "ss"
     if (nSec<10)
-        sBuffer.appendAscii("0");
+        sBuffer.append("0");
     sBuffer.append( (sal_Int32)nSec );
 
-    sBuffer.appendAscii("Z");
+    sBuffer.append("Z");
 
     return sBuffer.makeStringAndClear();
 }

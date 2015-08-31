@@ -844,7 +844,7 @@ OUString SubstitutePathVariables::GetPathVariableValue() const
             {
                 osl::FileBase::getFileURLFromSystemPath( sToken, aTmp );
                 if ( bAppendSep )
-                    aPathStrBuffer.appendAscii( ";" ); // Office uses ';' as path separator
+                    aPathStrBuffer.append( ";" ); // Office uses ';' as path separator
                 aPathStrBuffer.append( aTmp );
                 bAppendSep = true;
             }

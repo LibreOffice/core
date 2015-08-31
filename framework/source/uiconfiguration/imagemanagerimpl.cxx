@@ -131,15 +131,15 @@ static OUString getCanonicalName( const OUString& rFileName )
         {
             // map forbidden characters to escape
             case '/' : if ( !bRemoveSlash )
-                         aBuf.appendAscii( "%2f" );
+                         aBuf.append( "%2f" );
                        break;
-            case '\\': aBuf.appendAscii( "%5c" ); bRemoveSlash = false; break;
-            case ':' : aBuf.appendAscii( "%3a" ); bRemoveSlash = false; break;
-            case '*' : aBuf.appendAscii( "%2a" ); bRemoveSlash = false; break;
-            case '?' : aBuf.appendAscii( "%3f" ); bRemoveSlash = false; break;
-            case '<' : aBuf.appendAscii( "%3c" ); bRemoveSlash = false; break;
-            case '>' : aBuf.appendAscii( "%3e" ); bRemoveSlash = false; break;
-            case '|' : aBuf.appendAscii( "%7c" ); bRemoveSlash = false; break;
+            case '\\': aBuf.append( "%5c" ); bRemoveSlash = false; break;
+            case ':' : aBuf.append( "%3a" ); bRemoveSlash = false; break;
+            case '*' : aBuf.append( "%2a" ); bRemoveSlash = false; break;
+            case '?' : aBuf.append( "%3f" ); bRemoveSlash = false; break;
+            case '<' : aBuf.append( "%3c" ); bRemoveSlash = false; break;
+            case '>' : aBuf.append( "%3e" ); bRemoveSlash = false; break;
+            case '|' : aBuf.append( "%7c" ); bRemoveSlash = false; break;
             default: aBuf.append( c ); bRemoveSlash = false;
         }
     }

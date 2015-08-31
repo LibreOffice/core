@@ -46,7 +46,7 @@ namespace framework{
     {                                                                   \
         OUStringBuffer sMessage(256);                            \
         sMessage.append     (implts_getErrorLineString());              \
-        sMessage.appendAscii(COMMENT                    );              \
+        sMessage.append(COMMENT                    );              \
                                                                         \
         throw css::xml::sax::SAXException(                              \
                 sMessage.makeStringAndClear(),                          \
@@ -273,11 +273,11 @@ OUString AcceleratorConfigurationReader::implts_getErrorLineString()
         return OUString("Error during parsing XML. (No further info available ...)");
 
     OUStringBuffer sMsg(256);
-    sMsg.appendAscii("Error during parsing XML in\nline = ");
+    sMsg.append("Error during parsing XML in\nline = ");
     sMsg.append     (m_xLocator->getLineNumber()           );
-    sMsg.appendAscii("\ncolumn = "                         );
+    sMsg.append("\ncolumn = "                         );
     sMsg.append     (m_xLocator->getColumnNumber()         );
-    sMsg.appendAscii("."                                   );
+    sMsg.append("."                                   );
     return sMsg.makeStringAndClear();
 }
 

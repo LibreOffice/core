@@ -3507,9 +3507,9 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
 
         // re-throw
         OUStringBuffer sMsg(256);
-        sMsg.appendAscii("Recovery of \"");
+        sMsg.append("Recovery of \"");
         sMsg.append     (sURL            );
-        sMsg.appendAscii("\" failed."    );
+        sMsg.append("\" failed."    );
 
         throw css::lang::WrappedTargetException(
             sMsg.makeStringAndClear(),
@@ -3541,8 +3541,8 @@ void AutoRecovery::implts_generateNewTempURL(const OUString&               sBack
         sUniqueName.append(aURL.Name);
     }
     else if (!rInfo.FactoryURL.isEmpty())
-        sUniqueName.appendAscii("untitled");
-    sUniqueName.appendAscii("_");
+        sUniqueName.append("untitled");
+    sUniqueName.append("_");
 
     // TODO: Must we strip some illegal signes - if we use the title?
 
@@ -4355,7 +4355,7 @@ void AutoRecovery::st_impl_removeLockFile()
 
         OUStringBuffer sLockURLBuf;
         sLockURLBuf.append     (sUserURL);
-        sLockURLBuf.appendAscii("/.lock");
+        sLockURLBuf.append("/.lock");
         OUString sLockURL = sLockURLBuf.makeStringAndClear();
 
         AutoRecovery::st_impl_removeFile(sLockURL);

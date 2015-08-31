@@ -47,7 +47,7 @@ namespace framework
 OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aModuleName )
 {
     OUStringBuffer aKey( aCommandURL );
-    aKey.appendAscii( "-" );
+    aKey.append( "-" );
     aKey.append( aModuleName );
     return aKey.makeStringAndClear();
 }

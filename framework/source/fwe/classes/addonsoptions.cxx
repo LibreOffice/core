@@ -1339,7 +1339,7 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
     {
         OUStringBuffer aFileURL( aImageURL );
         aFileURL.appendAscii( aExtArray[i] );
-        aFileURL.appendAscii( ".bmp" );
+        aFileURL.append( ".bmp" );
 
         aImageEntry.addImage( !i ? IMGSIZE_SMALL : IMGSIZE_BIG,
                               Image(), aFileURL.makeStringAndClear() );
