@@ -2915,9 +2915,9 @@ void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInt
             OUStringBuffer sCompleteCurrentName( sCurrentFormName );
             if ( !_rCurrentLevelPrefix.isEmpty() )
             {
-                sCompleteCurrentName.appendAscii( " (" );
+                sCompleteCurrentName.append( " (" );
                 sCompleteCurrentName.append     ( _rCurrentLevelPrefix );
-                sCompleteCurrentName.appendAscii( ")" );
+                sCompleteCurrentName.append( ")" );
             }
 
             // the prefix for the next level

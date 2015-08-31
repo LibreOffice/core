@@ -954,10 +954,10 @@ namespace svxform
             }
 
             OUStringBuffer aScriptURI;
-            aScriptURI.appendAscii( "vnd.sun.star.script:" );
+            aScriptURI.append( "vnd.sun.star.script:" );
             aScriptURI.append( sScriptCode );
-            aScriptURI.appendAscii( "?language=Basic" );
-            aScriptURI.appendAscii( "&location=" );
+            aScriptURI.append( "?language=Basic" );
+            aScriptURI.append( "&location=" );
             aScriptURI.append( sMacroLocation );
 
             const OUString sScriptURI( aScriptURI.makeStringAndClear() );

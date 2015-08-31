@@ -827,18 +827,18 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
                                 // don't use a parse context here, we need it unlocalized
                                 pParseNode->parseNodeToStr( sCriteria, xConnection, NULL );
                                 if ( condition != rRow.begin() )
-                                    aRowFilter.appendAscii( " AND " );
+                                    aRowFilter.append( " AND " );
                                 aRowFilter.append( sCriteria );
                             }
                         }
                         if ( !aRowFilter.isEmpty() )
                         {
                             if ( !aFilter.isEmpty() )
-                                aFilter.appendAscii( " OR " );
+                                aFilter.append( " OR " );
 
-                            aFilter.appendAscii( "( " );
+                            aFilter.append( "( " );
                             aFilter.append( aRowFilter.makeStringAndClear() );
-                            aFilter.appendAscii( " )" );
+                            aFilter.append( " )" );
                         }
                     }
                 }

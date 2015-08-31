@@ -237,7 +237,7 @@ namespace svx
         );
         aFileDlg.SetDisplayDirectory( impl_getCurrentURL() );
 
-        aFileDlg.AddFilter( m_sFilterUIName, OUStringBuffer().appendAscii( "*." ).append( m_aFilterExtensions[0] ).makeStringAndClear() );
+        aFileDlg.AddFilter( m_sFilterUIName, OUStringBuffer().append( "*." ).append( m_aFilterExtensions[0] ).makeStringAndClear() );
         aFileDlg.SetCurrentFilter( m_sFilterUIName );
 
         if ( aFileDlg.Execute() == ERRCODE_NONE )

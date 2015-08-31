@@ -173,7 +173,7 @@ namespace svxform
                 while ( aUsedLabels.find( sLabel ) != aUsedLabels.end() )
                 {
                     OUStringBuffer aBuffer( _rBaseLabel );
-                    aBuffer.appendAscii( " " );
+                    aBuffer.append( " " );
                     aBuffer.append( (sal_Int32)i++ );
                     sLabel = aBuffer.makeStringAndClear();
                 }
@@ -707,7 +707,7 @@ namespace svxform
         do
         {
             OUStringBuffer aBuf( _rBaseName );
-            aBuf.appendAscii( " " );
+            aBuf.append( " " );
             aBuf.append( ++n );
             sName = aBuf.makeStringAndClear();
         }

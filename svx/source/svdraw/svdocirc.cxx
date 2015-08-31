@@ -576,7 +576,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             const ImpCircUser* pU = static_cast<const ImpCircUser*>(rDrag.GetUser());
             sal_Int32 nAngle;
 
-            aBuf.appendAscii(" (");
+            aBuf.append(" (");
 
             if(3 == nPointCount)
             {
@@ -604,7 +604,7 @@ OUString SdrCircObj::getSpecialDragComment(const SdrDragStat& rDrag) const
             OUString aStr;
             ImpTakeDescriptionStr(STR_DragCircAngle, aStr);
             OUStringBuffer aBuf(aStr);
-            aBuf.appendAscii(" (");
+            aBuf.append(" (");
             aBuf.append(GetAngleStr(nAngle));
             aBuf.append(')');
 
