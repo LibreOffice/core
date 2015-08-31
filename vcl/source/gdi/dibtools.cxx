@@ -715,12 +715,14 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
         const Size aSizePixel(aHeader.nWidth, aHeader.nHeight);
         BitmapPalette aDummyPal;
         Bitmap aNewBmp(aSizePixel, nBitCount, &aDummyPal);
-        Bitmap aNewBmpAlpha;
         BitmapWriteAccess* pAcc = aNewBmp.AcquireWriteAccess();
+        if (!pAcc || pAcc->Width() != aHeader.nWidth || pAcc->Height() != aHeader.nHeight)
+            return false;
+        Bitmap aNewBmpAlpha;
         BitmapWriteAccess* pAccAlpha = 0;
         bool bAlphaPossible(pBmpAlpha && aHeader.nBitCount == 32);
 
-        if(bAlphaPossible)
+        if (bAlphaPossible)
         {
             const bool bRedSet(0 != aHeader.nV5RedMask);
             const bool bGreenSet(0 != aHeader.nV5GreenMask);
@@ -736,120 +738,117 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             }
         }
 
-        if(bAlphaPossible)
+        if (bAlphaPossible)
         {
             aNewBmpAlpha = Bitmap(aSizePixel, 8);
             pAccAlpha = aNewBmpAlpha.AcquireWriteAccess();
         }
 
-        if(pAcc)
+        sal_uInt16 nColors(0);
+        SvStream* pIStm;
+        SvMemoryStream* pMemStm = NULL;
+        sal_uInt8* pData = NULL;
+
+        if (aHeader.nBitCount <= 8)
         {
-            sal_uInt16 nColors(0);
-            SvStream* pIStm;
-            SvMemoryStream* pMemStm = NULL;
-            sal_uInt8* pData = NULL;
-
-            if (aHeader.nBitCount <= 8)
+            if(aHeader.nColsUsed)
             {
-                if(aHeader.nColsUsed)
-                {
-                    nColors = (sal_uInt16)aHeader.nColsUsed;
-                }
-                else
-                {
-                    nColors = ( 1 << aHeader.nBitCount );
-                }
-            }
-
-            if(ZCOMPRESS == aHeader.nCompression)
-            {
-                ZCodec aCodec;
-                sal_uInt32 nCodedSize(0);
-                sal_uInt32  nUncodedSize(0);
-                sal_uLong nCodedPos(0);
-
-                // read coding information
-                rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
-                pData = static_cast<sal_uInt8*>(rtl_allocateMemory( nUncodedSize ));
-
-                // decode buffer
-                nCodedPos = rIStm.Tell();
-                aCodec.BeginCompression();
-                aCodec.Read( rIStm, pData, nUncodedSize );
-                aCodec.EndCompression();
-
-                // skip unread bytes from coded buffer
-                rIStm.SeekRel( nCodedSize - ( rIStm.Tell() - nCodedPos ) );
-
-                // set decoded bytes to memory stream,
-                // from which we will read the bitmap data
-                pIStm = pMemStm = new SvMemoryStream;
-                pMemStm->SetBuffer( pData, nUncodedSize, false, nUncodedSize );
-                nOffset = 0;
+                nColors = (sal_uInt16)aHeader.nColsUsed;
             }
             else
             {
-                pIStm = &rIStm;
+                nColors = ( 1 << aHeader.nBitCount );
             }
+        }
 
-            // read palette
-            if(nColors)
+        if(ZCOMPRESS == aHeader.nCompression)
+        {
+            ZCodec aCodec;
+            sal_uInt32 nCodedSize(0);
+            sal_uInt32  nUncodedSize(0);
+            sal_uLong nCodedPos(0);
+
+            // read coding information
+            rIStm.ReadUInt32( nCodedSize ).ReadUInt32( nUncodedSize ).ReadUInt32( aHeader.nCompression );
+            pData = static_cast<sal_uInt8*>(rtl_allocateMemory( nUncodedSize ));
+
+            // decode buffer
+            nCodedPos = rIStm.Tell();
+            aCodec.BeginCompression();
+            aCodec.Read( rIStm, pData, nUncodedSize );
+            aCodec.EndCompression();
+
+            // skip unread bytes from coded buffer
+            rIStm.SeekRel( nCodedSize - ( rIStm.Tell() - nCodedPos ) );
+
+            // set decoded bytes to memory stream,
+            // from which we will read the bitmap data
+            pIStm = pMemStm = new SvMemoryStream;
+            pMemStm->SetBuffer( pData, nUncodedSize, false, nUncodedSize );
+            nOffset = 0;
+        }
+        else
+        {
+            pIStm = &rIStm;
+        }
+
+        // read palette
+        if(nColors)
+        {
+            pAcc->SetPaletteEntryCount(nColors);
+            ImplReadDIBPalette(*pIStm, *pAcc, aHeader.nSize != DIBCOREHEADERSIZE);
+        }
+
+        // read bits
+        bool bAlphaUsed(false);
+
+        if(!pIStm->GetError())
+        {
+            if(nOffset)
             {
-                pAcc->SetPaletteEntryCount(nColors);
-                ImplReadDIBPalette(*pIStm, *pAcc, aHeader.nSize != DIBCOREHEADERSIZE);
+                pIStm->SeekRel(nOffset - (pIStm->Tell() - nStmPos));
             }
 
-            // read bits
-            bool bAlphaUsed(false);
+            bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, pAccAlpha, bTopDown, bAlphaUsed);
 
-            if(!pIStm->GetError())
+            if(bRet && aHeader.nXPelsPerMeter && aHeader.nYPelsPerMeter)
             {
-                if(nOffset)
-                {
-                    pIStm->SeekRel(nOffset - (pIStm->Tell() - nStmPos));
-                }
+                MapMode aMapMode(
+                    MAP_MM,
+                    Point(),
+                    Fraction(1000, aHeader.nXPelsPerMeter),
+                    Fraction(1000, aHeader.nYPelsPerMeter));
 
-                bRet = ImplReadDIBBits(*pIStm, aHeader, *pAcc, pAccAlpha, bTopDown, bAlphaUsed);
-
-                if(bRet && aHeader.nXPelsPerMeter && aHeader.nYPelsPerMeter)
-                {
-                    MapMode aMapMode(
-                        MAP_MM,
-                        Point(),
-                        Fraction(1000, aHeader.nXPelsPerMeter),
-                        Fraction(1000, aHeader.nYPelsPerMeter));
-
-                    aNewBmp.SetPrefMapMode(aMapMode);
-                    aNewBmp.SetPrefSize(Size(aHeader.nWidth, aHeader.nHeight));
-                }
+                aNewBmp.SetPrefMapMode(aMapMode);
+                aNewBmp.SetPrefSize(Size(aHeader.nWidth, aHeader.nHeight));
             }
+        }
 
-            if( pData )
+        if( pData )
+        {
+            rtl_freeMemory(pData);
+        }
+
+        delete pMemStm;
+        Bitmap::ReleaseAccess(pAcc);
+
+        if(bAlphaPossible)
+        {
+            Bitmap::ReleaseAccess(pAccAlpha);
+
+            if(!bAlphaUsed)
             {
-                rtl_freeMemory(pData);
+                bAlphaPossible = false;
             }
+        }
 
-            delete pMemStm;
-            Bitmap::ReleaseAccess(pAcc);
+        if(bRet)
+        {
+            rBmp = aNewBmp;
 
             if(bAlphaPossible)
             {
-                Bitmap::ReleaseAccess(pAccAlpha);
-
-                if(!bAlphaUsed)
-                {
-                    bAlphaPossible = false;
-                }
-            }
-
-            if(bRet)
-            {
-                rBmp = aNewBmp;
-
-                if(bAlphaPossible)
-                {
-                    *pBmpAlpha = aNewBmpAlpha;
-                }
+                *pBmpAlpha = aNewBmpAlpha;
             }
         }
     }

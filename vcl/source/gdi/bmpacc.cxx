@@ -127,16 +127,21 @@ BitmapReadAccess::~BitmapReadAccess()
 
 void BitmapReadAccess::ImplInitScanBuffer( Bitmap& rBitmap )
 {
+    if (!mpBuffer)
+        return;
+
     ImpBitmap* pImpBmp = rBitmap.ImplGetImpBitmap();
+    if (!pImpBmp)
+        return;
 
-    if( pImpBmp && mpBuffer )
+    maColorMask = mpBuffer->maColorMask;
+
+    bool bOk(true);
+    const long nHeight = mpBuffer->mnHeight;
+    Scanline pTmpLine = mpBuffer->mpBits;
+    try
     {
-        const long  nHeight = mpBuffer->mnHeight;
-        Scanline    pTmpLine = mpBuffer->mpBits;
-
         mpScanBuf = new Scanline[ nHeight ];
-        maColorMask = mpBuffer->maColorMask;
-
         if( BMP_SCANLINE_ADJUSTMENT( mpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
         {
             for( long nY = 0L; nY < nHeight; nY++, pTmpLine += mpBuffer->mnScanlineSize )
@@ -147,15 +152,20 @@ void BitmapReadAccess::ImplInitScanBuffer( Bitmap& rBitmap )
             for( long nY = nHeight - 1; nY >= 0; nY--, pTmpLine += mpBuffer->mnScanlineSize )
                 mpScanBuf[ nY ] = pTmpLine;
         }
+        bOk = ImplSetAccessPointers(BMP_SCANLINE_FORMAT(mpBuffer->mnFormat));
+    }
+    catch (const std::bad_alloc&)
+    {
+        bOk = false;
+    }
 
-        if( !ImplSetAccessPointers( BMP_SCANLINE_FORMAT( mpBuffer->mnFormat ) ) )
-        {
-            delete[] mpScanBuf;
-            mpScanBuf = NULL;
+    if (!bOk)
+    {
+        delete[] mpScanBuf;
+        mpScanBuf = NULL;
 
-            pImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
-            mpBuffer = NULL;
-        }
+        pImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
+        mpBuffer = NULL;
     }
 }
 
