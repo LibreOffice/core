@@ -112,17 +112,17 @@ void throwKdeTooNewException()
     OUStringBuffer aMessage;
     aMessage.append( aResources.getResourceString(STR_KDE_VERSION_TOO_NEW_WORK_AROUND) );
 
-    aMessage.appendAscii( "Sub disableKDEMaxVersionCheck\n" );
-    aMessage.appendAscii( "  BasicLibraries.LoadLibrary( \"Tools\" )\n" );
+    aMessage.append( "Sub disableKDEMaxVersionCheck\n" );
+    aMessage.append( "  BasicLibraries.LoadLibrary( \"Tools\" )\n" );
 
-    aMessage.appendAscii( "  Dim configNode as Object\n" );
-    aMessage.appendAscii( "  configNode = GetRegistryKeyContent( \"" );
+    aMessage.append( "  Dim configNode as Object\n" );
+    aMessage.append( "  configNode = GetRegistryKeyContent( \"" );
     aMessage.append( KabDriver::impl_getConfigurationSettingsPath() );
-    aMessage.appendAscii( "\", true )\n" );
+    aMessage.append( "\", true )\n" );
 
-    aMessage.appendAscii( "  configNode.DisableKDEMaximumVersionCheck = TRUE\n" );
-    aMessage.appendAscii( "  configNode.commitChanges\n" );
-    aMessage.appendAscii( "End Sub\n" );
+    aMessage.append( "  configNode.DisableKDEMaximumVersionCheck = TRUE\n" );
+    aMessage.append( "  configNode.commitChanges\n" );
+    aMessage.append( "End Sub\n" );
 
     aDetails.Message = aMessage.makeStringAndClear();
 
@@ -454,8 +454,8 @@ void SAL_CALL KabDriver::disposing( const EventObject& ) throw (RuntimeException
 OUString KabDriver::impl_getConfigurationSettingsPath()
 {
     OUStringBuffer aPath;
-    aPath.appendAscii( "/org.openoffice.Office.DataAccess/DriverSettings/" );
-    aPath.appendAscii( "com.sun.star.comp.sdbc." KAB_SERVICE_NAME ".Driver" );
+    aPath.append( "/org.openoffice.Office.DataAccess/DriverSettings/" );
+    aPath.append( "com.sun.star.comp.sdbc." KAB_SERVICE_NAME ".Driver" );
     return aPath.makeStringAndClear();
 }
 
