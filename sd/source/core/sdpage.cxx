@@ -1098,8 +1098,10 @@ Rectangle SdPage::GetTitleRect() const
             if ( pRefPage )
             {
                 // scale actually page size into handout rectangle
-                double fH = (double) aPartArea.Width()  / pRefPage->GetWdt();
-                double fV = (double) aPartArea.Height() / pRefPage->GetHgt();
+                double fH = pRefPage->GetWdt() == 0
+                    ? 0 : (double) aPartArea.Width()  / pRefPage->GetWdt();
+                double fV = pRefPage->GetHgt() == 0
+                    ? 0 : (double) aPartArea.Height() / pRefPage->GetHgt();
 
                 if ( fH > fV )
                     fH = fV;
