@@ -207,7 +207,20 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         // OOXTODO: XML_totalsRowDxfId, ...,
         FSEND);
 
-    // OOXTODO: write <autoFilter>
+    if (rData.HasAutoFilter())
+    {
+        /* TODO: does this need to exclude totals row? */
+
+        /* TODO: in OOXML  12.3.21 Table Definition Part  has information
+         * that an applied autoFilter has child elements
+         * <af:filterColumn><af:filters><af:filter>.
+         * When not applied but buttons hidden, Excel writes, for example,
+         * <filterColumn colId="0" hiddenButton="1"/> */
+
+        pTableStrm->singleElement( XML_autoFilter,
+                XML_ref, XclXmlUtils::ToOString(aRange),
+                FSEND);
+    }
 
     const std::vector< OUString >& rColNames = rData.GetTableColumnNames();
     if (!rColNames.empty())
@@ -221,6 +234,8 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
             // OOXTODO: write <calculatedColumnFormula> once we support it, in
             // which case we'd need start/endElement XML_tableColumn for such
             // column.
+
+            // OOXTODO: write <totalsRowFormula> once we support it.
 
             pTableStrm->singleElement( XML_tableColumn,
                     XML_id, OString::number(i+1).getStr(),
