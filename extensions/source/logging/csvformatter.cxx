@@ -220,13 +220,13 @@ namespace logging
     {
         OUStringBuffer buf;
         if(m_LogEventNo)
-            buf.appendAscii("event no,");
+            buf.append("event no,");
         if(m_LogThread)
-            buf.appendAscii("thread,");
+            buf.append("thread,");
         if(m_LogTimestamp)
-            buf.appendAscii("timestamp,");
+            buf.append("timestamp,");
         if(m_LogSource)
-            buf.appendAscii("class,method,");
+            buf.append("class,method,");
         sal_Int32 columns = m_Columnnames.getLength();
         for(sal_Int32 i=0; i<columns; i++)
         {

@@ -766,7 +766,7 @@ namespace pcr
             {
                 // font name
                 displayName.append( aFont.Name );
-                displayName.appendAscii( ", " );
+                displayName.append( ", " );
 
                 // font style
                 ::FontWeight  eWeight = VCLUnoHelper::ConvertFontWeight( aFont.Weight );
@@ -788,7 +788,7 @@ namespace pcr
                 // font size
                 if ( aFont.Height )
                 {
-                    displayName.appendAscii( ", " );
+                    displayName.append( ", " );
                     displayName.append( sal_Int32( aFont.Height ) );
                 }
             }
@@ -2544,7 +2544,7 @@ namespace pcr
             if ( bAdd )
             {
                 sTemp.append(_sName);
-                sTemp.appendAscii("/");
+                sTemp.append("/");
             }
             sTemp.append(*pQueryNames);
             Reference< XNameAccess > xSubQueries(_xQueryNames->getByName(*pQueryNames),UNO_QUERY);

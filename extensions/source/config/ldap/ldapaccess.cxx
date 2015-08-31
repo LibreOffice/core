@@ -71,9 +71,9 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
 
     if (aOperation != NULL)
     {
-        message.appendAscii(aOperation).appendAscii(": ") ;
+        message.appendAscii(aOperation).append(": ") ;
     }
-    message.appendAscii(ldap_err2string(aRetCode)).appendAscii(" (") ;
+    message.appendAscii(ldap_err2string(aRetCode)).append(" (") ;
     sal_Char *stub = NULL ;
 
 #ifndef LDAP_OPT_SIZELIMIT // for use with OpenLDAP
@@ -90,7 +90,7 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
         //ldap_memfree(stub) ;
     }
     else { message.appendAscii(kNoSpecificMessage) ; }
-    message.appendAscii(")") ;
+    message.append(")") ;
     throw ldap::LdapGenericException(message.makeStringAndClear(),
                                      NULL, aRetCode) ;
 }
@@ -154,7 +154,7 @@ void LdapConnection::initConnection()
     {
         OUStringBuffer message ;
 
-        message.appendAscii("Cannot initialise connection to LDAP: No server specified.") ;
+        message.append("Cannot initialise connection to LDAP: No server specified.") ;
         throw ldap::LdapConnectionException(message.makeStringAndClear()) ;
     }
 
@@ -171,9 +171,9 @@ void LdapConnection::initConnection()
     {
         OUStringBuffer message ;
 
-        message.appendAscii("Cannot initialise connection to LDAP server ") ;
+        message.append("Cannot initialise connection to LDAP server ") ;
         message.append(mLdapDefinition.mServer) ;
-        message.appendAscii(":") ;
+        message.append(":") ;
         message.append(mLdapDefinition.mPort) ;
         throw ldap::LdapConnectionException(message.makeStringAndClear());
     }

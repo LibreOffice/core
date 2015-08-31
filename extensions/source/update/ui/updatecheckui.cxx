@@ -333,7 +333,7 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
             if( !maBubbleText.isEmpty() )
             {
                 if( !maBubbleTitle.isEmpty() )
-                    aBuf.appendAscii( "\n\n" );
+                    aBuf.append( "\n\n" );
                 aBuf.append( maBubbleText );
             }
 

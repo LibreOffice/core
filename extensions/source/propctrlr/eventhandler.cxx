@@ -146,9 +146,9 @@ namespace pcr
         ,nId( _nId )
     {
         OUStringBuffer aQualifiedListenerClass;
-        aQualifiedListenerClass.appendAscii( "com.sun.star." );
+        aQualifiedListenerClass.append( "com.sun.star." );
         aQualifiedListenerClass.appendAscii( _pListenerNamespaceAscii );
-        aQualifiedListenerClass.appendAscii( "." );
+        aQualifiedListenerClass.append( "." );
         aQualifiedListenerClass.appendAscii( _pListenerClassAsciiName );
         sListenerClassName = aQualifiedListenerClass.makeStringAndClear();
     }
@@ -264,9 +264,9 @@ namespace pcr
                 OUString sMacroPath = aScriptEvent.ScriptCode.copy( nPrefixLen + 1 );
 
                 OUStringBuffer aNewStyleSpec;
-                aNewStyleSpec.appendAscii( "vnd.sun.star.script:" );
+                aNewStyleSpec.append( "vnd.sun.star.script:" );
                 aNewStyleSpec.append     ( sMacroPath );
-                aNewStyleSpec.appendAscii( "?language=Basic&location=" );
+                aNewStyleSpec.append( "?language=Basic&location=" );
                 aNewStyleSpec.append     ( sLocation );
 
                 aScriptEvent.ScriptCode = aNewStyleSpec.makeStringAndClear();
@@ -658,14 +658,14 @@ namespace pcr
 
                 if ( !(sLocation.isEmpty() && sLanguage.isEmpty()) )
                 {
-                    aComposeBuffer.appendAscii( " (" );
+                    aComposeBuffer.append( " (" );
 
                     // location
                     OSL_ENSURE( !sLocation.isEmpty(), "EventHandler::convertToControlValue: unexpected: no location!" );
                     if ( !sLocation.isEmpty() )
                     {
                         aComposeBuffer.append( sLocation );
-                        aComposeBuffer.appendAscii( ", " );
+                        aComposeBuffer.append( ", " );
                     }
 
                     // language
@@ -1142,7 +1142,7 @@ namespace pcr
 
             OUStringBuffer aCompleteName;
             aCompleteName.append( _rScriptEvent.ListenerType );
-            aCompleteName.appendAscii( "::" );
+            aCompleteName.append( "::" );
             aCompleteName.append( _rScriptEvent.EventMethod );
             OUString sCompleteName( aCompleteName.makeStringAndClear() );
 

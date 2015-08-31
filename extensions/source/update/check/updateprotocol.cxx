@@ -137,13 +137,13 @@ checkForUpdates(
             return false; // something went wrong ..
 
         OUStringBuffer aBuffer;
-        aBuffer.appendAscii("/child::inst:description[inst:os=\'");
+        aBuffer.append("/child::inst:description[inst:os=\'");
         aBuffer.append( rOS );
-        aBuffer.appendAscii("\' and inst:arch=\'");
+        aBuffer.append("\' and inst:arch=\'");
         aBuffer.append( rArch );
-        aBuffer.appendAscii("\' and inst:gitid!=\'");
+        aBuffer.append("\' and inst:gitid!=\'");
         aBuffer.append( rGitID );
-        aBuffer.appendAscii("\']");
+        aBuffer.append("\']");
 
         OUString aXPathExpression = aBuffer.makeStringAndClear();
 

@@ -87,16 +87,16 @@ namespace logging
     OUString SAL_CALL PlainTextFormatter::getHead(  ) throw (RuntimeException, std::exception)
     {
         OUStringBuffer aHeader;
-        aHeader.appendAscii( "  event no" );                 // column 1: the event number
-        aHeader.appendAscii( " " );
-        aHeader.appendAscii( "thread  " );                   // column 2: the thread ID
-        aHeader.appendAscii( " " );
-        aHeader.appendAscii( "date      " );                 // column 3: date
-        aHeader.appendAscii( " " );
-        aHeader.appendAscii( "time       " );         // column 4: time
-        aHeader.appendAscii( " " );
-        aHeader.appendAscii( "(class/method:) message" );    // column 5: class/method/message
-        aHeader.appendAscii( "\n" );
+        aHeader.append( "  event no" );                 // column 1: the event number
+        aHeader.append( " " );
+        aHeader.append( "thread  " );                   // column 2: the thread ID
+        aHeader.append( " " );
+        aHeader.append( "date      " );                 // column 3: date
+        aHeader.append( " " );
+        aHeader.append( "time       " );         // column 4: time
+        aHeader.append( " " );
+        aHeader.append( "(class/method:) message" );    // column 5: class/method/message
+        aHeader.append( "\n" );
         return aHeader.makeStringAndClear();
     }
 
@@ -111,29 +111,29 @@ namespace logging
 
         OUStringBuffer aLogEntry;
         aLogEntry.appendAscii( buffer );
-        aLogEntry.appendAscii( " " );
+        aLogEntry.append( " " );
 
         OString sThreadID( OUStringToOString( _rRecord.ThreadID, osl_getThreadTextEncoding() ) );
         snprintf( buffer, buffer_size, "%8s", sThreadID.getStr() );
         aLogEntry.appendAscii( buffer );
-        aLogEntry.appendAscii( " " );
+        aLogEntry.append( " " );
 
         snprintf( buffer, buffer_size, "%04i-%02i-%02i %02i:%02i:%02i.%09i",
             (int)_rRecord.LogTime.Year, (int)_rRecord.LogTime.Month, (int)_rRecord.LogTime.Day,
             (int)_rRecord.LogTime.Hours, (int)_rRecord.LogTime.Minutes, (int)_rRecord.LogTime.Seconds, (int)_rRecord.LogTime.NanoSeconds );
         aLogEntry.appendAscii( buffer );
-        aLogEntry.appendAscii( " " );
+        aLogEntry.append( " " );
 
         if ( !(_rRecord.SourceClassName.isEmpty() || _rRecord.SourceMethodName.isEmpty()) )
         {
             aLogEntry.append( _rRecord.SourceClassName );
-            aLogEntry.appendAscii( "::" );
+            aLogEntry.append( "::" );
             aLogEntry.append( _rRecord.SourceMethodName );
-            aLogEntry.appendAscii( ": " );
+            aLogEntry.append( ": " );
         }
 
         aLogEntry.append( _rRecord.Message );
-        aLogEntry.appendAscii( "\n" );
+        aLogEntry.append( "\n" );
 
         return aLogEntry.makeStringAndClear();
     }
