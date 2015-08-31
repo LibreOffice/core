@@ -1153,7 +1153,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     //  character is not copied
                     if (eStyle & (FSYS_UNX | FSYS_DOS))
                     {
-                        aSynAbsURIRef.appendAscii("//");
+                        aSynAbsURIRef.append("//");
                         switch (guessFSysStyleByCounting(pPos, pEnd, eStyle))
                         {
                             case FSYS_UNX:
