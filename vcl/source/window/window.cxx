@@ -3303,7 +3303,7 @@ const OUString& Window::GetHelpText() const
         {
             OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.getLength() );
             aTxt.append( mpWindowImpl->maHelpText );
-            aTxt.appendAscii( "\n------------------\n" );
+            aTxt.append( "\n------------------\n" );
             aTxt.append( OUString( aStrHelpId ) );
             mpWindowImpl->maHelpText = aTxt.makeStringAndClear();
         }

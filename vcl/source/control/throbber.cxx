@@ -225,13 +225,13 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     for ( size_t i=0; i<nImageCounts[index]; ++i )
     {
         OUStringBuffer aURL;
-        aURL.appendAscii( "private:graphicrepository/vcl/res/spinner-" );
+        aURL.append( "private:graphicrepository/vcl/res/spinner-" );
         aURL.appendAscii( pResolutions[index] );
-        aURL.appendAscii( "-" );
+        aURL.append( "-" );
         if ( i < 9 )
-            aURL.appendAscii( "0" );
+            aURL.append( "0" );
         aURL.append     ( sal_Int32( i + 1 ) );
-        aURL.appendAscii( ".png" );
+        aURL.append( ".png" );
 
         aImageURLs.push_back( aURL.makeStringAndClear() );
     }

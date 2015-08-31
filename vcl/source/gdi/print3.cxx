@@ -380,10 +380,10 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                     if( nPages > 0 )
                     {
                         OUStringBuffer aBuf( 32 );
-                        aBuf.appendAscii( "1" );
+                        aBuf.append( "1" );
                         if( nPages > 1 )
                         {
-                            aBuf.appendAscii( "-" );
+                            aBuf.append( "-" );
                             aBuf.append( nPages );
                         }
                         xController->setValue(OUString("PageRange"), makeAny(aBuf.makeStringAndClear()));

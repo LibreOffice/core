@@ -367,7 +367,7 @@ class ControllerProperties
         // add a label
         sal_Int32 nPages = mpController->getFilteredPageCount();
         rtl::OUStringBuffer aBuf( 16 );
-        aBuf.appendAscii( "/ " );
+        aBuf.append( "/ " );
         aBuf.append( rtl::OUString::number( nPages ) );
     
         NSString* pText = CreateNSString( aBuf.makeStringAndClear() );

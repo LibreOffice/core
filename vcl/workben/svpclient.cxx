@@ -187,7 +187,7 @@ void MyWin::parseList( const OString& rList )
         {
             OUStringBuffer aNewElement( 64 );
             aNewElement.append( aElementType );
-            aNewElement.appendAscii( ": " );
+            aNewElement.append( ": " );
             aNewElement.append( OStringToOUString( aLine, RTL_TEXTENCODING_ASCII_US ) );
             m_aSvpBitmaps->InsertEntry( aNewElement.makeStringAndClear() );
         }

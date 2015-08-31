@@ -247,7 +247,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     aBuf.appendAscii( eUnit == MAP_MM ? "mm" : "in" );
     if( !i_rPaperName.isEmpty() )
     {
-        aBuf.appendAscii( " (" );
+        aBuf.append( " (" );
         aBuf.append( i_rPaperName );
         aBuf.append( ')' );
     }

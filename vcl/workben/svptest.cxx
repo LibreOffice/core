@@ -269,7 +269,7 @@ void MyWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
         OUStringBuffer aPrintText(1024);
         long nMaxWidth = 0;
 
-        aPrintText.appendAscii( "SVP test program" );
+        aPrintText.append( "SVP test program" );
 
         rRenderContext.DrawText(Rectangle(Point((aPaperSize.Width() - 4000) / 2, 2000),
                                 Size(aPaperSize.Width() - 2100 - nMaxWidth, aPaperSize.Height() - 4000)),
