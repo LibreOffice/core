@@ -1781,11 +1781,10 @@ const Image& SvTreeListBox::GetCollapsedEntryBmp( const SvTreeListEntry* pEntry 
     return pItem->GetBitmap1( );
 }
 
-IMPL_LINK( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData )
+IMPL_LINK_TYPED( SvTreeListBox, CheckButtonClick, SvLBoxButtonData *, pData, void )
 {
     pHdlEntry = pData->GetActEntry();
     CheckButtonHdl();
-    return 0;
 }
 
 SvTreeListEntry* SvTreeListBox::InsertEntry(

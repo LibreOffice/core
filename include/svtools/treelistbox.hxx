@@ -294,7 +294,7 @@ protected:
 private:
     void SetBaseModel(SvTreeList* pNewModel);
 
-    DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData * );
+    DECL_DLLPRIVATE_LINK_TYPED( CheckButtonClick, SvLBoxButtonData *, void );
     DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, void * );
     // Handler that is called by TreeList to clone an Entry
     DECL_DLLPRIVATE_LINK( CloneHdl_Impl, SvTreeListEntry* );

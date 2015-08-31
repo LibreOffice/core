@@ -1935,7 +1935,7 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
     if( !pCheckButtonData )
     {
         pCheckButtonData = new SvLBoxButtonData(m_pModulesCLB);
-        pCheckButtonData->SetLink( m_pModulesCLB->GetCheckButtonHdl() );
+        pCheckButtonData->SetLink( LINK( this, SvxEditModulesDlg, BoxCheckButtonHdl_Impl2 ) );
     }
 
     if (CBCOL_FIRST == nCol)
@@ -1984,33 +1984,36 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
+IMPL_LINK_NOARG_TYPED( SvxEditModulesDlg, BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void )
 {
-        pBox = m_pModulesCLB;
-        SvTreeListEntry *pCurEntry = pBox->GetCurEntry();
-        if (pCurEntry)
+    BoxCheckButtonHdl_Impl(NULL);
+}
+IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, /*pBox*/ )
+{
+    SvTreeListEntry *pCurEntry = m_pModulesCLB->GetCurEntry();
+    if (pCurEntry)
+    {
+        ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl *>(
+                                            pCurEntry->GetUserData());
+        if (!pData->IsParent()  &&  pData->GetType() == TYPE_HYPH)
         {
-            ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl *>(
-                                                pCurEntry->GetUserData());
-            if (!pData->IsParent()  &&  pData->GetType() == TYPE_HYPH)
+            // make hyphenator checkboxes function as radio-buttons
+            // (at most one box may be checked)
+            SvTreeListEntry *pEntry = m_pModulesCLB->First();
+            while (pEntry)
             {
-                // make hyphenator checkboxes function as radio-buttons
-                // (at most one box may be checked)
-                SvTreeListEntry *pEntry = pBox->First();
-                while (pEntry)
+                pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
+                if (!pData->IsParent()  &&
+                     pData->GetType() == TYPE_HYPH  &&
+                     pEntry != pCurEntry)
                 {
-                    pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
-                    if (!pData->IsParent()  &&
-                         pData->GetType() == TYPE_HYPH  &&
-                         pEntry != pCurEntry)
-                    {
-                        lcl_SetCheckButton( pEntry, false );
-                        pBox->InvalidateEntry( pEntry );
-                    }
-                    pEntry = pBox->Next( pEntry );
+                    lcl_SetCheckButton( pEntry, false );
+                    m_pModulesCLB->InvalidateEntry( pEntry );
                 }
+                pEntry = m_pModulesCLB->Next( pEntry );
             }
         }
+    }
     return 0;
 }
 
