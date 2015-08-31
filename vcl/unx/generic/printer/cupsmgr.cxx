@@ -324,7 +324,7 @@ void CUPSManager::initialize()
         }
 
         OUStringBuffer aBuf( 256 );
-        aBuf.appendAscii( "CUPS:" );
+        aBuf.append( "CUPS:" );
         aBuf.append( aPrinterName );
         // note: the parser that goes with the PrinterInfo
         // is created implicitly by the JobData::operator=()

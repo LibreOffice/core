@@ -919,7 +919,7 @@ bool PspSalPrinter::StartJob(
                 OUStringBuffer aFileName( getPdfDir( rInfo ) );
                 aFileName.append( '/' );
                 aFileName.append( rJobName );
-                aFileName.appendAscii( ".pdf" );
+                aFileName.append( ".pdf" );
                 m_aFileName = aFileName.makeStringAndClear();
             }
             break;

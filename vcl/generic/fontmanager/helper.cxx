@@ -119,7 +119,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
     aPathBuffer.append( getOfficePath( psp::InstallationRootPath ) );
     if( !aPathBuffer.isEmpty() )
     {
-        aPathBuffer.appendAscii( "/" LIBO_SHARE_FOLDER "/psprint" );
+        aPathBuffer.append( "/" LIBO_SHARE_FOLDER "/psprint" );
         if( pSubDir )
         {
             aPathBuffer.append( '/' );
@@ -131,7 +131,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
     aPathBuffer.append( getOfficePath( psp::UserPath ) );
     if( !aPathBuffer.isEmpty() )
     {
-        aPathBuffer.appendAscii( "/user/psprint" );
+        aPathBuffer.append( "/user/psprint" );
         if( pSubDir )
         {
             aPathBuffer.append( '/' );
@@ -201,7 +201,7 @@ OUString psp::getFontPath()
             // #i53530# Path from CustomDataUrl will completely
             // replace net and user paths if the path exists
             aPathBuffer.append(aConfigPath);
-            aPathBuffer.appendAscii("/" LIBO_SHARE_FOLDER "/fonts");
+            aPathBuffer.append("/" LIBO_SHARE_FOLDER "/fonts");
             // check existence of config path
             struct stat aStat;
             if( 0 != stat( OUStringToOString( aPathBuffer.makeStringAndClear(), osl_getThreadTextEncoding() ).getStr(), &aStat )
@@ -210,7 +210,7 @@ OUString psp::getFontPath()
             else
             {
                 aPathBuffer.append(aConfigPath);
-                aPathBuffer.appendAscii("/" LIBO_SHARE_FOLDER "/fonts");
+                aPathBuffer.append("/" LIBO_SHARE_FOLDER "/fonts");
             }
         }
         if( aConfigPath.isEmpty() )
@@ -218,14 +218,14 @@ OUString psp::getFontPath()
             if( !aInstallationRootPath.isEmpty() )
             {
                 aPathBuffer.append( aInstallationRootPath );
-                aPathBuffer.appendAscii( "/" LIBO_SHARE_FOLDER "/fonts/truetype;");
+                aPathBuffer.append( "/" LIBO_SHARE_FOLDER "/fonts/truetype;");
                 aPathBuffer.append( aInstallationRootPath );
-                aPathBuffer.appendAscii( "/" LIBO_SHARE_FOLDER "/fonts/type1;" );
+                aPathBuffer.append( "/" LIBO_SHARE_FOLDER "/fonts/type1;" );
             }
             if( !aUserPath.isEmpty() )
             {
                 aPathBuffer.append( aUserPath );
-                aPathBuffer.appendAscii( "/user/fonts" );
+                aPathBuffer.append( "/user/fonts" );
             }
         }
 

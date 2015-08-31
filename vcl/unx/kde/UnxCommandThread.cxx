@@ -48,7 +48,7 @@ namespace {
             if ( pUnicode != pEnd )
             {
                 if ( *pUnicode == 'n' )
-                    aBuffer.appendAscii( "\n", 1 );
+                    aBuffer.append( "\n" );
                 else
                     aBuffer.append( *pUnicode );
             }

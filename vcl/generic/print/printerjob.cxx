@@ -238,7 +238,7 @@ createSpoolDir ()
     {
         OUStringBuffer aDir( aTmpDir.getLength() + 16 );
         aDir.append( aTmpDir );
-        aDir.appendAscii( "/psp" );
+        aDir.append( "/psp" );
         aDir.append(nRand);
         OUString aResult = aDir.makeStringAndClear();
         if( osl::Directory::create( aResult ) == osl::FileBase::E_None )

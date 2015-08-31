@@ -82,21 +82,21 @@ void appendEscaped( OUStringBuffer &rBuffer, const OUString &rString )
     const sal_Unicode *pUnicode = rString.getStr();
     const sal_Unicode *pEnd     = pUnicode + rString.getLength();
 
-    rBuffer.appendAscii( "\"" , 1 );
+    rBuffer.append( "\"" );
 
     for ( ; pUnicode != pEnd; ++pUnicode )
     {
         if ( *pUnicode == '\\' )
-            rBuffer.appendAscii( "\\\\", 2 );
+            rBuffer.append( "\\\\" );
         else if ( *pUnicode == '"' )
-            rBuffer.appendAscii( "\\\"", 2 );
+            rBuffer.append( "\\\"" );
         else if ( *pUnicode == '\n' )
-            rBuffer.appendAscii( "\\n", 2 );
+            rBuffer.append( "\\n" );
         else
             rBuffer.append( *pUnicode );
     }
 
-    rBuffer.appendAscii( "\"", 1 );
+    rBuffer.append( "\"" );
 }
 
 bool controlIdInfo( sal_Int16 nControlId, OUString &rType, sal_Int32 &rTitleId )
@@ -258,7 +258,7 @@ void SAL_CALL UnxFilePicker::setTitle( const OUString &rTitle )
 
     OUStringBuffer aBuffer( 1024 );
 
-    aBuffer.appendAscii( "setTitle " );
+    aBuffer.append( "setTitle " );
     appendEscaped( aBuffer, rTitle );
 
     sendCommand( aBuffer.makeStringAndClear() );
@@ -302,7 +302,7 @@ void SAL_CALL UnxFilePicker::setDefaultName( const OUString &rName )
 
     OUStringBuffer aBuffer( 1024 );
 
-    aBuffer.appendAscii( "setDefaultName " );
+    aBuffer.append( "setDefaultName " );
     appendEscaped( aBuffer, rName );
 
     sendCommand( aBuffer.makeStringAndClear() );
@@ -316,7 +316,7 @@ void SAL_CALL UnxFilePicker::setDisplayDirectory( const OUString &rDirectory )
 
     OUStringBuffer aBuffer( 1024 );
 
-    aBuffer.appendAscii( "setDirectory " );
+    aBuffer.append( "setDirectory " );
     appendEscaped( aBuffer, rDirectory );
 
     sendCommand( aBuffer.makeStringAndClear() );
@@ -354,9 +354,9 @@ void SAL_CALL UnxFilePicker::appendFilter( const OUString &rTitle, const OUStrin
 
     OUStringBuffer aBuffer( 1024 );
 
-    aBuffer.appendAscii( "appendFilter " );
+    aBuffer.append( "appendFilter " );
     appendEscaped( aBuffer, rTitle );
-    aBuffer.appendAscii( " ", 1 );
+    aBuffer.append( " " );
     appendEscaped( aBuffer, rFilter );
 
     sendCommand( aBuffer.makeStringAndClear() );
@@ -370,7 +370,7 @@ void SAL_CALL UnxFilePicker::setCurrentFilter( const OUString &rTitle )
 
     OUStringBuffer aBuffer( 1024 );
 
-    aBuffer.appendAscii( "setCurrentFilter " );
+    aBuffer.append( "setCurrentFilter " );
     appendEscaped( aBuffer, rTitle );
 
     sendCommand( aBuffer.makeStringAndClear() );
@@ -396,16 +396,16 @@ void SAL_CALL UnxFilePicker::appendFilterGroup( const OUString &rGroupTitle, con
 
     OUStringBuffer aBuffer( 1024 );
 
-    aBuffer.appendAscii( "appendFilterGroup " );
+    aBuffer.append( "appendFilterGroup " );
     appendEscaped( aBuffer, rGroupTitle );
 
     for ( sal_Int32 i = 0; i < rFilters.getLength(); ++i )
     {
         beans::StringPair aPair = rFilters[i];
 
-        aBuffer.appendAscii( " ", 1 );
+        aBuffer.append( " " );
         appendEscaped( aBuffer, aPair.First );
-        aBuffer.appendAscii( " ", 1 );
+        aBuffer.append( " " );
         appendEscaped( aBuffer, aPair.Second );
     }
 
@@ -426,18 +426,18 @@ void SAL_CALL UnxFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlA
     {
         OUStringBuffer aBuffer( 1024 );
 
-        aBuffer.appendAscii( "setValue " );
+        aBuffer.append( "setValue " );
         aBuffer.append( static_cast< sal_Int32 >( nControlId ) );
-        aBuffer.appendAscii( " ", 1 );
+        aBuffer.append( " " );
         aBuffer.append( aAction );
 
         if ( aType == "checkbox" )
         {
             bool bControlValue;
             if ( ( rValue >>= bControlValue ) && bControlValue )
-                aBuffer.appendAscii( " true" );
+                aBuffer.append( " true" );
             else
-                aBuffer.appendAscii( " false" );
+                aBuffer.append( " false" );
         }
         else if ( aType == "listbox" )
         {
@@ -449,7 +449,7 @@ void SAL_CALL UnxFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlA
                         OUString aString;
                         if ( rValue >>= aString )
                         {
-                            aBuffer.appendAscii( " ", 1 );
+                            aBuffer.append( " " );
                             appendEscaped( aBuffer, aString );
                         }
                     }
@@ -462,7 +462,7 @@ void SAL_CALL UnxFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlA
                         {
                             for ( sal_Int32 nIdx = 0; nIdx < aSequence.getLength(); ++nIdx )
                             {
-                                aBuffer.appendAscii( " ", 1 );
+                                aBuffer.append( " " );
                                 appendEscaped( aBuffer, aSequence[nIdx] );
                             }
 
@@ -476,7 +476,7 @@ void SAL_CALL UnxFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nControlA
                         sal_Int32 nInt;
                         if ( rValue >>= nInt )
                         {
-                            aBuffer.appendAscii( " ", 1 );
+                            aBuffer.append( " " );
                             aBuffer.append( nInt );
                         }
                     }
@@ -505,9 +505,9 @@ uno::Any SAL_CALL UnxFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nCont
     {
         OUStringBuffer aBuffer( 1024 );
 
-        aBuffer.appendAscii( "getValue " );
+        aBuffer.append( "getValue " );
         aBuffer.append( static_cast< sal_Int32 >( nControlId ) );
-        aBuffer.appendAscii( " ", 1 );
+        aBuffer.append( " " );
         aBuffer.append( aAction );
 
         sendCommand( aBuffer.makeStringAndClear(),
@@ -527,7 +527,7 @@ void SAL_CALL UnxFilePicker::enableControl( sal_Int16 nControlId, sal_Bool bEnab
 
     OUStringBuffer aBuffer( 1024 );
 
-    aBuffer.appendAscii( "enableControl " );
+    aBuffer.append( "enableControl " );
     aBuffer.append( static_cast< sal_Int32 >( nControlId ) );
     aBuffer.appendAscii( bEnable? " true": " false" );
 
@@ -542,9 +542,9 @@ void SAL_CALL UnxFilePicker::setLabel( sal_Int16 nControlId, const OUString &rLa
 
     OUStringBuffer aBuffer( 1024 );
 
-    aBuffer.appendAscii( "setLabel " );
+    aBuffer.append( "setLabel " );
     aBuffer.append( static_cast< sal_Int32 >( nControlId ) );
-    aBuffer.appendAscii( " ", 1 );
+    aBuffer.append( " " );
     appendEscaped( aBuffer, rLabel );
 
     sendCommand( aBuffer.makeStringAndClear() );
@@ -902,11 +902,11 @@ void UnxFilePicker::sendAppendControlCommand( sal_Int16 nControlId )
     {
         OUStringBuffer aBuffer( 1024 );
 
-        aBuffer.appendAscii( "appendControl " );
+        aBuffer.append( "appendControl " );
         aBuffer.append( static_cast< sal_Int32 >( nControlId ) );
-        aBuffer.appendAscii( " ", 1 );
+        aBuffer.append( " " );
         appendEscaped( aBuffer, aType );
-        aBuffer.appendAscii( " ", 1 );
+        aBuffer.append( " " );
         appendEscaped( aBuffer, m_pResMgr? ResId(nTitleId, *m_pResMgr).toString(): OUString() );
 
         sendCommand( aBuffer.makeStringAndClear() );
