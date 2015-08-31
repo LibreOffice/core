@@ -361,14 +361,18 @@ SAL_IMPLEMENT_MAIN()
         std::string args;
         std::string testlib;
         sal_uInt32 index = 0;
-        while (index < rtl_getAppCommandArgCount())
+        while (index < osl_getCommandArgCount())
         {
             rtl::OUString arg = getArgument(index);
-            if (arg == "--target")
+            if (arg.startsWith("-env:CPPUNITTESTTARGET=", &path))
             {
-                path = getArgument(++index);
                 ++index;
                 continue;
+            }
+            if (arg.startsWith("-env:"))
+            {
+                ++index;
+                continue; // ignore it here - will be read later
             }
             if ( arg != "--protector" )
             {
@@ -385,7 +389,7 @@ SAL_IMPLEMENT_MAIN()
                 ++index;
                 continue;
             }
-            if (rtl_getAppCommandArgCount() - index < 3) {
+            if (osl_getCommandArgCount() - index < 3) {
                 usageFailure();
             }
             rtl::OUString lib(getArgument(index + 1));
