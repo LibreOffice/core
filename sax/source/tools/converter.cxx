@@ -2492,7 +2492,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                 sal_Int32 nTempValue = 0;
                 if (rValue >>= nTempValue)
                 {
-                    rsType.appendAscii("integer");
+                    rsType.append("integer");
                     bConverted = true;
                     ::sax::Converter::convertNumber(rsValue, nTempValue);
                 }
@@ -2504,7 +2504,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                 bool bTempValue = false;
                 if (rValue >>= bTempValue)
                 {
-                    rsType.appendAscii("boolean");
+                    rsType.append("boolean");
                     bConverted = true;
                     ::sax::Converter::convertBool(rsValue, bTempValue);
                 }
@@ -2517,7 +2517,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                 double fTempValue = 0.0;
                 if (rValue >>= fTempValue)
                 {
-                    rsType.appendAscii("float");
+                    rsType.append("float");
                     bConverted = true;
                     ::sax::Converter::convertDouble(rsValue, fTempValue);
                 }
@@ -2529,7 +2529,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                 OUString sTempValue;
                 if (rValue >>= sTempValue)
                 {
-                    rsType.appendAscii("string");
+                    rsType.append("string");
                     bConverted = true;
                     rsValue.append(sTempValue);
                 }
@@ -2544,7 +2544,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
 
                 if (rValue >>= aDate)
                 {
-                    rsType.appendAscii("date");
+                    rsType.append("date");
                     bConverted = true;
                     com::sun::star::util::DateTime aTempValue;
                     aTempValue.Day              = aDate.Day;
@@ -2559,7 +2559,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                 else
                 if (rValue >>= aTime)
                 {
-                    rsType.appendAscii("time");
+                    rsType.append("time");
                     bConverted = true;
                     com::sun::star::util::Duration aTempValue;
                     aTempValue.Days             = 0;
@@ -2574,7 +2574,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                 else
                 if (rValue >>= aDateTime)
                 {
-                    rsType.appendAscii("date");
+                    rsType.append("date");
                     bConverted = true;
                     ::sax::Converter::convertDateTime(rsValue, aDateTime, 0);
                 }
