@@ -274,7 +274,7 @@ private:
                 ::rtl::Reference< GridColumn > const pGridColumn = new GridColumn();
                 Reference< XGridColumn > const xColumn( pGridColumn.get() );
                 OUStringBuffer colTitle;
-                colTitle.appendAscii( "Column " );
+                colTitle.append( "Column " );
                 colTitle.append( i + 1 );
                 pGridColumn->setTitle( colTitle.makeStringAndClear() );
                 pGridColumn->setColumnWidth( 80 /* APPFONT */ );

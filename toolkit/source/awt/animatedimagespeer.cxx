@@ -122,7 +122,7 @@ namespace toolkit
 
             OUStringBuffer composer;
             composer.append( i_imageURL.copy( 0, separatorPos ) );
-            composer.appendAscii( "/hicontrast" );
+            composer.append( "/hicontrast" );
             composer.append( i_imageURL.copy( separatorPos ) );
             return composer.makeStringAndClear();
         }

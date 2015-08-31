@@ -1144,13 +1144,13 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                 if (!bConverted)
                 {
                     OUStringBuffer aErrorMessage;
-                    aErrorMessage.appendAscii( "Unable to convert the given value for the property " );
+                    aErrorMessage.append( "Unable to convert the given value for the property " );
                     aErrorMessage.append     ( GetPropertyName( (sal_uInt16)nPropId ) );
-                    aErrorMessage.appendAscii( ".\n" );
-                    aErrorMessage.appendAscii( "Expected type: " );
+                    aErrorMessage.append( ".\n" );
+                    aErrorMessage.append( "Expected type: " );
                     aErrorMessage.append     ( pDestType->getTypeName() );
-                    aErrorMessage.appendAscii( "\n" );
-                    aErrorMessage.appendAscii( "Found type: " );
+                    aErrorMessage.append( "\n" );
+                    aErrorMessage.append( "Found type: " );
                     aErrorMessage.append     ( rValue.getValueType().getTypeName() );
                     throw ::com::sun::star::lang::IllegalArgumentException(
                         aErrorMessage.makeStringAndClear(),
