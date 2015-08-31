@@ -1359,7 +1359,7 @@ void SVGTextWriter::writeBitmapPlaceholder( const MetaBitmapActionType* pAction 
     }
 
     // bitmap placeholder element
-    sal_uInt32 nId = SVGActionWriter::GetChecksum( pAction );
+    BitmapChecksum nId = SVGActionWriter::GetChecksum( pAction );
     OUString sId = "bitmap-placeholder("  + msShapeId + "." +
                    OUString::number( nId ) + ")";
 
@@ -1381,7 +1381,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
         const GDIMetaFile& rMtf = *mpTextEmbeddedBitmapMtf;
 
         OUString sId, sRefId;
-        sal_uInt32 nId, nChecksum = 0;
+        BitmapChecksum nId, nChecksum = 0;
         Point aPt;
         Size  aSz;
         sal_uLong nCount = rMtf.GetActionSize();
@@ -1396,7 +1396,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                 case( MetaActionType::BMPSCALE ):
                 {
                     const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
-                    nChecksum = (sal_uInt32)(pA->GetBitmap().GetChecksum());
+                    nChecksum = pA->GetBitmap().GetChecksum();
                     aPt = pA->GetPoint();
                     aSz = pA->GetSize();
                 }
@@ -1404,7 +1404,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                 case( MetaActionType::BMPEXSCALE ):
                 {
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
-                    nChecksum = (sal_uInt32)(pA->GetBitmapEx().GetChecksum());
+                    nChecksum = pA->GetBitmapEx().GetChecksum();
                     aPt = pA->GetPoint();
                     aSz = pA->GetSize();
                 }
@@ -1779,13 +1779,13 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
      return aPathData;
 }
 
-sal_uInt32 SVGActionWriter::GetChecksum( const MetaAction* pAction )
+BitmapChecksum SVGActionWriter::GetChecksum( const MetaAction* pAction )
 {
     GDIMetaFile aMtf;
     MetaAction* pA = const_cast<MetaAction*>(pAction);
     pA->Duplicate();
     aMtf.AddAction( pA );
-    return (sal_uInt32)(aMtf.GetChecksum());
+    return aMtf.GetChecksum();
 }
 
 void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2,
