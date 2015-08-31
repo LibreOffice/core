@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_ae646f49",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-08-31T21:21:19Z",
+      "side": 1,
+      "message": "Why is this needed? If FontList isn\u0027t holding references to SvxFontNameBox_Impl anymore, that\u0027s enough for the SvxFontNameBox_Impl dtor to be called.",
+      "revId": "f31c7681149ea35b99454c7e6d87cf54e7dedca4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
