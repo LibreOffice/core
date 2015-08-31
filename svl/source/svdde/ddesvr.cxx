@@ -678,11 +678,11 @@ void DdeTopic::NotifyClient( const OUString& rItem )
     }
 }
 
-void DdeTopic::Connect( sal_IntPtr nId )
+void DdeTopic::Connect( sal_IntPtr /*nId*/ )
 {
 }
 
-void DdeTopic::Disconnect( sal_IntPtr nId )
+void DdeTopic::Disconnect( sal_IntPtr /*nId*/ )
 {
 }
 
