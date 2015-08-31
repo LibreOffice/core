@@ -89,7 +89,7 @@ private:
     OUString getPropertyTypeName( sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/ ) const;
     OUString makeTabString( const DictionaryEntry& rEntry ) const;
 
-    DECL_LINK( CompareHdl, SvSortData* );
+    DECL_LINK_TYPED( CompareHdl, const SvSortData&, sal_Int32 );
     sal_Int32 ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry* pRight );
     SvLBoxItem* getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16 nColumn ) const;
 

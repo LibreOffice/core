@@ -407,14 +407,14 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
     }
 }
 
-IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
+IMPL_LINK_TYPED( SwDBTreeList, DBCompare, const SvSortData&, rData, sal_Int32 )
 {
-    SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(pData->pRight);
+    SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(rData.pRight);
 
     if (GetParent(pRight) && GetParent(GetParent(pRight)))
         return 1; // don't sort column names
 
-    return DefaultCompare(pData);   // otherwise call base class
+    return DefaultCompare(rData);   // otherwise call base class
 }
 
 OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sal_Bool* pbIsTable)

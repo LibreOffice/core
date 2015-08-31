@@ -402,10 +402,10 @@ namespace dbaui
     {
         return OnControlModified(static_cast<Button*>(_pControl));
     }
-    IMPL_LINK( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData*, _pSortData )
+    IMPL_LINK_TYPED( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData&, _rSortData, sal_Int32 )
     {
-        const SvTreeListEntry* pLHS = static_cast<const SvTreeListEntry*>(_pSortData->pLeft);
-        const SvTreeListEntry* pRHS = static_cast<const SvTreeListEntry*>(_pSortData->pRight);
+        const SvTreeListEntry* pLHS = static_cast<const SvTreeListEntry*>(_rSortData.pLeft);
+        const SvTreeListEntry* pRHS = static_cast<const SvTreeListEntry*>(_rSortData.pRight);
         OSL_ENSURE(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
 
         const SvLBoxString* pLeftTextItem = static_cast<const SvLBoxString*>(pLHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));

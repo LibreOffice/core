@@ -462,11 +462,11 @@ sal_Int32 SvSimpleTable::ColCompare(SvTreeListEntry* pLeft,SvTreeListEntry* pRig
     return nCompare;
 }
 
-IMPL_LINK( SvSimpleTable, CompareHdl, SvSortData*, pData)
+IMPL_LINK_TYPED( SvSimpleTable, CompareHdl, const SvSortData&, rData, sal_Int32)
 {
-    SvTreeListEntry* pLeft = const_cast<SvTreeListEntry*>(pData->pLeft);
-    SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(pData->pRight);
-    return (long) ColCompare(pLeft,pRight);
+    SvTreeListEntry* pLeft = const_cast<SvTreeListEntry*>(rData.pLeft);
+    SvTreeListEntry* pRight = const_cast<SvTreeListEntry*>(rData.pRight);
+    return ColCompare(pLeft,pRight);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

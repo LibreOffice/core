@@ -67,7 +67,7 @@ private:
     DECL_LINK_TYPED( DragHdl, HeaderBar*, void );
     DECL_LINK_TYPED( EndDragHdl, HeaderBar*, void );
     DECL_LINK_TYPED( HeaderBarClick, HeaderBar*, void );
-    DECL_LINK( CompareHdl, SvSortData* );
+    DECL_LINK_TYPED( CompareHdl, const SvSortData&, sal_Int32 );
 
 protected:
 

@@ -352,7 +352,7 @@ namespace dbaui
 
         DECL_LINK( OnCopyEntry, void* );
 
-        DECL_LINK( OnTreeEntryCompare, const SvSortData* );
+        DECL_LINK_TYPED( OnTreeEntryCompare, const SvSortData&, sal_Int32 );
 
         DECL_LINK_TYPED( OnAsyncDrop, void*, void );
 

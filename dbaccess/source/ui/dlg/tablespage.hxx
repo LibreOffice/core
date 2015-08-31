@@ -64,7 +64,7 @@ namespace dbaui
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) SAL_OVERRIDE;
 
-        DECL_LINK( OnTreeEntryCompare, const SvSortData* );
+        DECL_LINK_TYPED( OnTreeEntryCompare, const SvSortData&, sal_Int32 );
         DECL_LINK( OnTreeEntryChecked, Control* );
 
     private:

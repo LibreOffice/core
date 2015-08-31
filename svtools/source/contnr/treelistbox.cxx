@@ -359,8 +359,6 @@ struct SvTreeListBoxImpl
     bool m_bEntryMnemonicsEnabled:1;
     bool m_bDoingQuickSelection:1;
 
-    Link<>* m_pLink;
-
     vcl::MnemonicEngine m_aMnemonicEngine;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
 
@@ -368,7 +366,6 @@ struct SvTreeListBoxImpl
         m_bIsEmptyTextAllowed(true),
         m_bEntryMnemonicsEnabled(false),
         m_bDoingQuickSelection(false),
-        m_pLink(NULL),
         m_aMnemonicEngine(_rBox),
         m_aQuickSelectionEngine(_rBox) {}
 };
@@ -464,9 +461,9 @@ bool SvTreeListBox::IsEntryMnemonicsEnabled() const
     return mpImpl->m_bEntryMnemonicsEnabled;
 }
 
-IMPL_LINK( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
+IMPL_LINK_TYPED( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry, SvTreeListEntry* )
 {
-    return reinterpret_cast<sal_IntPtr>(CloneEntry(pEntry));
+    return CloneEntry(pEntry);
 }
 
 sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uLong nPos )
@@ -630,7 +627,7 @@ bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTar
     bool bSuccess = true;
     std::vector<SvTreeListEntry*> aList;
     bool bClone = ( pSource->GetModel() != GetModel() );
-    Link<> aCloneLink( pModel->GetCloneLink() );
+    Link<SvTreeListEntry*,SvTreeListEntry*> aCloneLink( pModel->GetCloneLink() );
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
 
     // cache selection to simplify iterating over the selection when doing a D&D
@@ -687,7 +684,7 @@ bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSource, S
     bool bSuccess = true;
     std::vector<SvTreeListEntry*> aList;
     bool bClone = ( pSource->GetModel() != GetModel() );
-    Link<> aCloneLink( pModel->GetCloneLink() );
+    Link<SvTreeListEntry*,SvTreeListEntry*> aCloneLink( pModel->GetCloneLink() );
     if ( bClone )
         pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
 
@@ -1411,9 +1408,6 @@ void SvTreeListBox::InitTreeView()
     nAllItemAccRoleType = SvTreeAccRoleType::NONE;
     mnCheckboxItemWidth = 0;
 
-    Link<>* pLink = new Link<>( LINK(this,SvTreeListBox, DefaultCompare) );
-    mpImpl->m_pLink = pLink;
-
     nTreeFlags = SvTreeFlags::RECALCTABS;
     nIndent = SV_LBOX_DEFAULT_INDENT_PIXEL;
     nEntryHeightOffs = SV_ENTRYHEIGHTOFFS_PIXEL;
@@ -1519,9 +1513,6 @@ void SvTreeListBox::dispose()
     }
     if( mpImpl )
     {
-        delete mpImpl->m_pLink;
-        mpImpl->m_pLink = NULL;
-
         ClearTabList();
 
         delete pEdCtrl;
@@ -2821,7 +2812,7 @@ void SvTreeListBox::ImplInitStyle()
     else
     {
         GetModel()->SetSortMode(SortNone);
-        GetModel()->SetCompareHdl(Link<>());
+        GetModel()->SetCompareHdl(Link<const SvSortData&,sal_Int32>());
     }
     pImp->SetStyle(nWindowStyle);
     pImp->Resize();
@@ -3602,10 +3593,10 @@ void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         Control::RequestHelp( rHEvt );
 }
 
-IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
+IMPL_LINK_TYPED( SvTreeListBox, DefaultCompare, const SvSortData&, rData, sal_Int32 )
 {
-    const SvTreeListEntry* pLeft = pData->pLeft;
-    const SvTreeListEntry* pRight = pData->pRight;
+    const SvTreeListEntry* pLeft = rData.pLeft;
+    const SvTreeListEntry* pRight = rData.pRight;
     OUString aLeft( static_cast<const SvLBoxString*>(pLeft->GetFirstItem(SV_ITEM_ID_LBOXSTRING))->GetText());
     OUString aRight( static_cast<const SvLBoxString*>(pRight->GetFirstItem(SV_ITEM_ID_LBOXSTRING))->GetText());
     pImp->UpdateStringSorter();

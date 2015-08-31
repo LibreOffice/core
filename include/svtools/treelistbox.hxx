@@ -297,7 +297,7 @@ private:
     DECL_DLLPRIVATE_LINK_TYPED( CheckButtonClick, SvLBoxButtonData *, void );
     DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, void * );
     // Handler that is called by TreeList to clone an Entry
-    DECL_DLLPRIVATE_LINK( CloneHdl_Impl, SvTreeListEntry* );
+    DECL_DLLPRIVATE_LINK_TYPED( CloneHdl_Impl, SvTreeListEntry*, SvTreeListEntry* );
 
     // Handler and methods for Drag - finished handler.
     // The Handle retrieved by GetDragFinishedHdl can be set on the
@@ -777,7 +777,7 @@ public:
     // A Parent's Children are turned into Children of the Parent which comes next in hierarchy
     void            RemoveParentKeepChildren( SvTreeListEntry* pParent );
 
-    DECL_LINK( DefaultCompare, SvSortData* );
+    DECL_LINK_TYPED( DefaultCompare, const SvSortData&, sal_Int32 );
     virtual void    ModelNotification( SvListAction nActionId, SvTreeListEntry* pEntry1,
                         SvTreeListEntry* pEntry2, sal_uLong nPos ) SAL_OVERRIDE;
 

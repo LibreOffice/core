@@ -389,7 +389,7 @@ void SvTreeList::InsertTree(SvTreeListEntry* pSrcEntry,
 SvTreeListEntry* SvTreeList::CloneEntry( SvTreeListEntry* pSource ) const
 {
     if( aCloneLink.IsSet() )
-        return reinterpret_cast<SvTreeListEntry*>(aCloneLink.Call( pSource ));
+        return aCloneLink.Call( pSource );
     SvTreeListEntry* pEntry = CreateEntry();
     pEntry->Clone(pSource);
     return pEntry;
@@ -1539,7 +1539,7 @@ sal_Int32 SvTreeList::Compare(const SvTreeListEntry* pLeft, const SvTreeListEntr
         SvSortData aSortData;
         aSortData.pLeft = pLeft;
         aSortData.pRight = pRight;
-        return aCompareLink.Call( &aSortData );
+        return aCompareLink.Call( aSortData );
     }
     return 0;
 }

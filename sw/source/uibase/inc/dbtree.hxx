@@ -41,7 +41,7 @@ class SW_DLLPUBLIC SwDBTreeList : public SvTreeListBox
 
     SwDBTreeList_Impl* pImpl;
 
-    DECL_DLLPRIVATE_LINK( DBCompare, SvSortData* );
+    DECL_DLLPRIVATE_LINK_TYPED( DBCompare, const SvSortData&, sal_Int32 );
 
     SAL_DLLPRIVATE void          InitTreeList();
     SAL_DLLPRIVATE virtual void  RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
