@@ -54,6 +54,7 @@ class SdrObject;
 class ScHintWindow;
 class ScPageBreakData;
 class SdrHdlList;
+class TabBar;
 
 namespace com { namespace sun { namespace star {
 namespace chart2 { namespace data {
@@ -237,7 +238,7 @@ public:
     void            RemoveHintWindow();
     void            TestHintWindow();
 
-    DECL_LINK(      TabBarResize, void* );
+    DECL_LINK_TYPED( TabBarResize, ::TabBar*, void );
     /** Sets an absolute tab bar width (in pixels). */
     void            SetTabBarWidth( long nNewWidth );
     /** Sets a relative tab bar width.

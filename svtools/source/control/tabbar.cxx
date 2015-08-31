@@ -290,7 +290,7 @@ void ImplTabButton::Command(const CommandEvent& rCommandEvent)
     if (rCommandEvent.GetCommand() == CommandEventId::ContextMenu)
     {
         TabBar* pParent = GetParent();
-        pParent->maScrollAreaContextHdl.Call(const_cast<CommandEvent *>(&rCommandEvent));
+        pParent->maScrollAreaContextHdl.Call(rCommandEvent);
     }
     PushButton::Command(rCommandEvent);
 }

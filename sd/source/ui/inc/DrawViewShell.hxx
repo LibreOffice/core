@@ -389,22 +389,22 @@ public:
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
 protected:
-    DrawView*       mpDrawView;
-    SdPage*         mpActualPage;
-    Rectangle       maMarkRect;
-    Point           maMousePos;
-    bool            mbMousePosFreezed;
+    DrawView*           mpDrawView;
+    SdPage*             mpActualPage;
+    Rectangle           maMarkRect;
+    Point               maMousePos;
+    bool                mbMousePosFreezed;
     VclPtr<TabControl>  maTabControl;
-    EditMode        meEditMode;
-    PageKind        mePageKind;
-    bool            mbZoomOnPage;
-    bool            mbIsRulerDrag;
+    EditMode            meEditMode;
+    PageKind            mePageKind;
+    bool                mbZoomOnPage;
+    bool                mbIsRulerDrag;
     sal_uLong           mnLockCount;
-    bool            mbReadOnly;
-    static bool     mbPipette;
+    bool                mbReadOnly;
+    static bool         mbPipette;
 
                     DECL_LINK_TYPED( ClipboardChanged, TransferableDataHelper*, void );
-                    DECL_LINK( TabSplitHdl, TabBar * );
+                    DECL_LINK_TYPED( TabSplitHdl, TabBar *, void );
                     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
                     DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
 

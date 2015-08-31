@@ -42,7 +42,7 @@ private:
     sal_uInt16          GetMaxId() const;
     SCTAB           GetPrivatDropPos(const Point& rPos );
 
-    DECL_LINK(ShowPageList, const CommandEvent*);
+    DECL_LINK_TYPED(ShowPageList, const CommandEvent&, void);
 
     void SwitchToPageId(sal_uInt16 nId);
 protected:

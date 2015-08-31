@@ -606,7 +606,7 @@ void DrawViewShell::SetUIUnit(FieldUnit eUnit)
  * Refresh TabControl on splitter change
  */
 
-IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab )
+IMPL_LINK_TYPED( DrawViewShell, TabSplitHdl, TabBar *, pTab, void )
 {
     const long int nMax = maViewSize.Width() - maScrBarWH.Width()
         - maTabControl->GetPosPixel().X() ;
@@ -626,8 +626,6 @@ IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab )
 
     Size aScrSize(nMax - aTabSize.Width(), maScrBarWH.Height());
     mpHorizontalScrollBar->SetPosSizePixel(aPos, aScrSize);
-
-    return 0;
 }
 
 /// inherited from sd::ViewShell

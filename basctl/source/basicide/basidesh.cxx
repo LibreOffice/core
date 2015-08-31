@@ -449,23 +449,18 @@ void Shell::OuterResizePixel( const Point &rPos, const Size &rSize )
 }
 
 
-IMPL_LINK( Shell, TabBarSplitHdl, TabBar *, pTBar )
+IMPL_LINK_NOARG_TYPED( Shell, TabBarSplitHdl, ::TabBar *, void )
 {
-    (void)pTBar;
     bTabBarSplitted = true;
     ArrangeTabBar();
-
-    return 0;
 }
 
-IMPL_LINK( Shell, TabBarHdl, TabBar *, pCurTabBar )
+IMPL_LINK_TYPED( Shell, TabBarHdl, ::TabBar *, pCurTabBar, void )
 {
     sal_uInt16 nCurId = pCurTabBar->GetCurPageId();
     BaseWindow* pWin = aWindowTable[ nCurId ];
     DBG_ASSERT( pWin, "Eintrag in TabBar passt zu keinem Fenster!" );
     SetCurWindow( pWin );
-
-    return 0;
 }
 
 

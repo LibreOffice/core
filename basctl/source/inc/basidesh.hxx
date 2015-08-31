@@ -105,8 +105,8 @@ private:
 
     void                ImplStartListening( StarBASIC* pBasic );
 
-    DECL_LINK( TabBarHdl, TabBar* );
-    DECL_LINK( TabBarSplitHdl, TabBar * );
+    DECL_LINK_TYPED( TabBarHdl, ::TabBar*, void );
+    DECL_LINK_TYPED( TabBarSplitHdl, ::TabBar *, void );
 
     static unsigned nShellCount;
 

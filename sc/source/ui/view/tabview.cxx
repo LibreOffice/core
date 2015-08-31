@@ -839,7 +839,7 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
         ::std::swap( rBorder.Left(), rBorder.Right() );
 }
 
-IMPL_LINK_NOARG(ScTabView, TabBarResize)
+IMPL_LINK_NOARG_TYPED(ScTabView, TabBarResize, TabBar*, void)
 {
     if (aViewData.IsHScrollMode())
     {
@@ -862,8 +862,6 @@ IMPL_LINK_NOARG(ScTabView, TabBarResize)
             RepeatResize();
         }
     }
-
-    return 0;
 }
 
 void ScTabView::SetTabBarWidth( long nNewWidth )

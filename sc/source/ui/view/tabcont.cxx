@@ -84,7 +84,7 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
     SetScrollAreaContextHdl( LINK( this, ScTabControl, ShowPageList ) );
 }
 
-IMPL_LINK(ScTabControl, ShowPageList, const CommandEvent *, pEvent)
+IMPL_LINK_TYPED(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
 {
     PopupMenu aPopup;
 
@@ -107,10 +107,8 @@ IMPL_LINK(ScTabControl, ShowPageList, const CommandEvent *, pEvent)
         }
     }
 
-    sal_uInt16 nItemId = aPopup.Execute( this, pEvent->GetMousePosPixel() );
+    sal_uInt16 nItemId = aPopup.Execute( this, rEvent.GetMousePosPixel() );
     SwitchToPageId(nItemId);
-
-    return 0;
 }
 
 ScTabControl::~ScTabControl()

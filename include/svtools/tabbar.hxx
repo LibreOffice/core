@@ -348,9 +348,9 @@ private:
     bool            mbMirrored : 1;
     bool            mbScrollAlwaysEnabled : 1;
 
-    Link<>          maSelectHdl;
-    Link<>          maSplitHdl;
-    Link<>          maScrollAreaContextHdl;
+    Link<TabBar*,void>              maSelectHdl;
+    Link<TabBar*,void>              maSplitHdl;
+    Link<const CommandEvent&, void> maScrollAreaContextHdl;
     size_t          maCurrentItemList;
 
     using Window::ImplInit;
@@ -496,9 +496,9 @@ public:
 
     Size            CalcWindowSizePixel() const;
 
-    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
-    void            SetSplitHdl( const Link<>& rLink ) { maSplitHdl = rLink; }
-    void            SetScrollAreaContextHdl( const Link<>& rLink ) { maScrollAreaContextHdl = rLink; }
+    void            SetSelectHdl( const Link<TabBar*,void>& rLink ) { maSelectHdl = rLink; }
+    void            SetSplitHdl( const Link<TabBar*,void>& rLink ) { maSplitHdl = rLink; }
+    void            SetScrollAreaContextHdl( const Link<const CommandEvent&,void>& rLink ) { maScrollAreaContextHdl = rLink; }
 
     // accessibility
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
