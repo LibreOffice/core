@@ -115,7 +115,7 @@ WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWF
     mrWinFontEntry(rWFE),
     mbUseOpenGL(bUseOpenGL)
 {
-    ++mrWinFontEntry.mnRefCount; // keep it alive
+    mrWinFontEntry.m_pFontCache->Acquire(&mrWinFontEntry);
 }
 
 WinLayout::~WinLayout()
