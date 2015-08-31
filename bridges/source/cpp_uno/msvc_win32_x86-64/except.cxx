@@ -245,6 +245,7 @@ void
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 #include <sal/log.hxx>
+#include <osl/mutex.hxx>
 
 #include "com/sun/star/uno/Any.hxx"
 #include <unordered_map>
@@ -874,7 +875,7 @@ int mscx_filterCppException(
             // MSVS9/crt/src/mtdll.h:
             // offsetof (_tiddata, _curexception) -
             // offsetof (_tiddata, _tpxcptinfoptrs):
-#if _MSC_VER <= 1800 // VC 2013
+#if _MSC_VER <= 1900 // VC 2015
             //
             // See dev-tools/uno/uno_exception_offset
             0x48 // msvcr90.dll
