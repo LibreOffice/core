@@ -712,6 +712,18 @@ sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
     return -1;
 }
 
+const OUString& ScDBData::GetTableColumnName( SCCOL nCol ) const
+{
+    if (maTableColumnNames.empty())
+        return EMPTY_OUSTRING;
+
+    SCCOL nOffset = nCol - nStartCol;
+    if (nOffset <  0 || maTableColumnNames.size() <= static_cast<size_t>(nOffset))
+        return EMPTY_OUSTRING;
+
+    return maTableColumnNames[nOffset];
+}
+
 namespace {
 
 class FindByTable : public unary_function<std::unique_ptr<ScDBData>, bool>
