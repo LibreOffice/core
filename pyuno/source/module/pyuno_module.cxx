@@ -111,15 +111,15 @@ public:
         if (initialised[key])
         {
             OUStringBuffer buf;
-            buf.appendAscii( "pyuno._createUnoStructHelper: member '");
+            buf.append( "pyuno._createUnoStructHelper: member '");
             buf.append(key);
-            buf.appendAscii( "'");
+            buf.append( "'");
             if ( pos >= 0 )
             {
-                buf.appendAscii( " at position ");
+                buf.append( " at position ");
                 buf.append(pos);
             }
-            buf.appendAscii( " initialised multiple times.");
+            buf.append( " initialised multiple times.");
             throw RuntimeException(buf.makeStringAndClear());
         }
         initialised[key] = true;
@@ -189,11 +189,11 @@ static void fillStruct(
             if ( ! state.isInitialised( memberName ) )
             {
                 OUStringBuffer buf;
-                buf.appendAscii( "pyuno._createUnoStructHelper: member '");
+                buf.append( "pyuno._createUnoStructHelper: member '");
                 buf.append(memberName);
-                buf.appendAscii( "' of struct type '");
+                buf.append( "' of struct type '");
                 buf.append(pCompType->aBase.pTypeName);
-                buf.appendAscii( "' not given a value.");
+                buf.append( "' not given a value.");
                 throw RuntimeException(buf.makeStringAndClear());
             }
         }
@@ -265,10 +265,10 @@ static PyObject* getComponentContext(
             OUStringBuffer iniFileName;
             iniFileName.append( path );
 #ifdef MACOSX
-            iniFileName.appendAscii( "/../" LIBO_ETC_FOLDER );
+            iniFileName.append( "/../" LIBO_ETC_FOLDER );
 #endif
-            iniFileName.appendAscii( "/" );
-            iniFileName.appendAscii( SAL_CONFIGFILE( "pyuno" ) );
+            iniFileName.append( "/" );
+            iniFileName.append( SAL_CONFIGFILE( "pyuno" ) );
             iniFile = iniFileName.makeStringAndClear();
             osl::DirectoryItem item;
             if( osl::DirectoryItem::get( iniFile, item ) == item.E_None )
@@ -419,10 +419,10 @@ static PyObject *createUnoStructHelper(
                         if( state.getCntConsumed() != PyTuple_Size(initializer) )
                         {
                             OUStringBuffer buf;
-                            buf.appendAscii( "pyuno._createUnoStructHelper: too many ");
-                            buf.appendAscii( "elements in the initializer list, expected " );
+                            buf.append( "pyuno._createUnoStructHelper: too many ");
+                            buf.append( "elements in the initializer list, expected " );
                             buf.append( state.getCntConsumed() );
-                            buf.appendAscii( ", got " );
+                            buf.append( ", got " );
                             buf.append( (sal_Int32) PyTuple_Size(initializer) );
                             throw RuntimeException( buf.makeStringAndClear());
                         }
@@ -521,8 +521,8 @@ static PyObject *getConstantByName(
                   >>= td))
             {
                 OUStringBuffer buf;
-                buf.appendAscii( "pyuno.getConstantByName: " ).append( typeName );
-                buf.appendAscii( "is not a constant" );
+                buf.append( "pyuno.getConstantByName: " ).append( typeName );
+                buf.append( "is not a constant" );
                 throw RuntimeException(buf.makeStringAndClear() );
             }
             PyRef constant = runtime.any2PyObject( td->getConstantValue() );
@@ -663,11 +663,11 @@ static PyObject *systemPathToFileUrl(
     if( e != osl::FileBase::E_None )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "Couldn't convert " );
+        buf.append( "Couldn't convert " );
         buf.append( sysPath );
-        buf.appendAscii( " to a file url for reason (" );
+        buf.append( " to a file url for reason (" );
         buf.append( (sal_Int32) e );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         raisePyExceptionWithAny(
             makeAny( RuntimeException( buf.makeStringAndClear() )));
         return NULL;
@@ -689,11 +689,11 @@ static PyObject * fileUrlToSystemPath(
     if( e != osl::FileBase::E_None )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "Couldn't convert file url " );
+        buf.append( "Couldn't convert file url " );
         buf.append( sysPath );
-        buf.appendAscii( " to a system path for reason (" );
+        buf.append( " to a system path for reason (" );
         buf.append( (sal_Int32) e );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         raisePyExceptionWithAny(
             makeAny( RuntimeException( buf.makeStringAndClear() )));
         return NULL;
@@ -712,13 +712,13 @@ static PyObject * absolutize( SAL_UNUSED_PARAMETER PyObject *, PyObject * args )
         if( e != osl_File_E_None )
         {
             OUStringBuffer buf;
-            buf.appendAscii( "Couldn't absolutize " );
+            buf.append( "Couldn't absolutize " );
             buf.append( ouRel );
-            buf.appendAscii( " using root " );
+            buf.append( " using root " );
             buf.append( ouPath );
-            buf.appendAscii( " for reason (" );
+            buf.append( " for reason (" );
             buf.append( (sal_Int32) e );
-            buf.appendAscii( ")" );
+            buf.append( ")" );
 
             PyErr_SetString(
                 PyExc_OSError,

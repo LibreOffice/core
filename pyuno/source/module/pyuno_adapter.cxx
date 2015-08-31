@@ -241,8 +241,8 @@ Any Adapter::invoke( const OUString &aFunctionName,
         if( !method.is() )
         {
             OUStringBuffer buf;
-            buf.appendAscii( "pyuno::Adapter: Method " ).append( aFunctionName );
-            buf.appendAscii( " is not implemented at object " );
+            buf.append( "pyuno::Adapter: Method " ).append( aFunctionName );
+            buf.append( " is not implemented at object " );
             PyRef str( PyObject_Repr( mWrappedObject.get() ), SAL_NO_ACQUIRE );
             buf.append(pyString2ustring(str.get()));
             throw IllegalArgumentException( buf.makeStringAndClear(), Reference< XInterface > (),0 );
@@ -359,8 +359,8 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
     if( !hasProperty( aPropertyName ) )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "pyuno::Adapter: Property " ).append( aPropertyName );
-        buf.appendAscii( " is unknown." );
+        buf.append( "pyuno::Adapter: Property " ).append( aPropertyName );
+        buf.append( " is unknown." );
         throw UnknownPropertyException( buf.makeStringAndClear() );
     }
 
@@ -406,8 +406,8 @@ Any Adapter::getValue( const OUString & aPropertyName )
         if (!pyRef.is() || PyErr_Occurred())
         {
             OUStringBuffer buf;
-            buf.appendAscii( "pyuno::Adapter: Property " ).append( aPropertyName );
-            buf.appendAscii( " is unknown." );
+            buf.append( "pyuno::Adapter: Property " ).append( aPropertyName );
+            buf.append( " is unknown." );
             throw UnknownPropertyException( buf.makeStringAndClear() );
         }
         ret = runtime.pyObject2Any( pyRef );

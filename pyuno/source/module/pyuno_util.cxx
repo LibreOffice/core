@@ -106,7 +106,7 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * func )
     if( !object.is() )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "couldn't find core function " );
+        buf.append( "couldn't find core function " );
         buf.appendAscii( func );
         throw RuntimeException(buf.makeStringAndClear());
     }

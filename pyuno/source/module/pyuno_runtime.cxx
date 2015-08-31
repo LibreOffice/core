@@ -168,11 +168,11 @@ static PyRef importUnoModule( ) throw ( RuntimeException )
         PyRef str( PyObject_Str( excTraceback.get() ), SAL_NO_ACQUIRE );
 
         OUStringBuffer buf;
-        buf.appendAscii( "python object raised an unknown exception (" );
+        buf.append( "python object raised an unknown exception (" );
         PyRef valueRep( PyObject_Repr( excValue.get() ), SAL_NO_ACQUIRE );
-        buf.appendAscii( PyStr_AsString( valueRep.get())).appendAscii( ", traceback follows\n" );
+        buf.appendAscii( PyStr_AsString( valueRep.get())).append( ", traceback follows\n" );
         buf.appendAscii( PyStr_AsString( str.get() ) );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         throw RuntimeException( buf.makeStringAndClear() );
     }
     PyRef dict( PyModule_GetDict( module.get() ) );
@@ -472,9 +472,9 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             }
         }
         OUStringBuffer buf;
-        buf.appendAscii( "Any carries enum " );
+        buf.append( "Any carries enum " );
         buf.append( a.getValueType().getTypeName());
-        buf.appendAscii( " with invalid value " ).append( l );
+        buf.append( " with invalid value " ).append( l );
         throw RuntimeException( buf.makeStringAndClear() );
     }
     case typelib_TypeClass_EXCEPTION:
@@ -488,7 +488,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         if( ! ret.is() )
         {
             OUStringBuffer buf;
-            buf.appendAscii( "Couldn't instantiate python representation of structured UNO type " );
+            buf.append( "Couldn't instantiate python representation of structured UNO type " );
             buf.append( a.getValueType().getTypeName() );
             throw RuntimeException( buf.makeStringAndClear() );
         }
@@ -561,7 +561,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     default:
     {
         OUStringBuffer buf;
-        buf.appendAscii( "Unknown UNO type class " );
+        buf.append( "Unknown UNO type class " );
         buf.append( (sal_Int32 ) a.getValueTypeClass() );
         throw RuntimeException(buf.makeStringAndClear( ) );
     }
@@ -599,13 +599,13 @@ static OUString
 lcl_ExceptionMessage(PyObject *const o, OUString const*const pWrapped)
 {
     OUStringBuffer buf;
-    buf.appendAscii("Couldn't convert ");
+    buf.append("Couldn't convert ");
     PyRef reprString( PyObject_Str(o), SAL_NO_ACQUIRE );
     buf.appendAscii( PyStr_AsString(reprString.get()) );
-    buf.appendAscii(" to a UNO type");
+    buf.append(" to a UNO type");
     if (pWrapped)
     {
-        buf.appendAscii("; caught exception: ");
+        buf.append("; caught exception: ");
         buf.append(*pWrapped);
     }
     return buf.makeStringAndClear();
@@ -973,9 +973,9 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         }
         else
         {
-            buf.appendAscii( "no typename available" );
+            buf.append( "no typename available" );
         }
-        buf.appendAscii( ": " );
+        buf.append( ": " );
         PyRef valueRep( PyObject_Str( excValue.get() ), SAL_NO_ACQUIRE );
         if( valueRep.is() )
         {
@@ -983,17 +983,17 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         }
         else
         {
-            buf.appendAscii( "Couldn't convert exception value to a string" );
+            buf.append( "Couldn't convert exception value to a string" );
         }
-        buf.appendAscii( ", traceback follows\n" );
+        buf.append( ", traceback follows\n" );
         if( !str.isEmpty() )
         {
             buf.append( str );
-            buf.appendAscii( "\n" );
+            buf.append( "\n" );
         }
         else
         {
-            buf.appendAscii( ", no traceback available\n" );
+            buf.append( ", no traceback available\n" );
         }
         RuntimeException e;
         e.Message = buf.makeStringAndClear();

@@ -50,11 +50,11 @@ void raisePyExceptionWithAny( const com::sun::star::uno::Any &anyExc )
             anyExc >>= e;
 
             OUStringBuffer buf;
-            buf.appendAscii( "Couldn't convert uno exception to a python exception (" );
+            buf.append( "Couldn't convert uno exception to a python exception (" );
             buf.append(anyExc.getValueType().getTypeName());
-            buf.appendAscii( ": " );
+            buf.append( ": " );
             buf.append(e.Message );
-            buf.appendAscii( ")" );
+            buf.append( ")" );
             PyErr_SetString(
                 PyExc_SystemError,
                 OUStringToOString(buf.makeStringAndClear(),RTL_TEXTENCODING_ASCII_US).getStr() );
@@ -87,8 +87,8 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     if( ! desc.is() )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "pyuno.getClass: uno exception " );
-        buf.append(name).appendAscii( " is unknown" );
+        buf.append( "pyuno.getClass: uno exception " );
+        buf.append(name).append( " is unknown" );
         throw RuntimeException( buf.makeStringAndClear() );
     }
 
@@ -98,10 +98,10 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     if( !isStruct  && !isExc && ! isInterface )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "pyuno.getClass: " ).append(name).appendAscii( "is a " );
+        buf.append( "pyuno.getClass: " ).append(name).append( "is a " );
         buf.appendAscii(
             typeClassToString( (com::sun::star::uno::TypeClass) desc.get()->eTypeClass));
-        buf.appendAscii( ", expected EXCEPTION, STRUCT or INTERFACE" );
+        buf.append( ", expected EXCEPTION, STRUCT or INTERFACE" );
         throw RuntimeException( buf.makeStringAndClear() );
     }
 

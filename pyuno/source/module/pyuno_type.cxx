@@ -165,10 +165,10 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
         if(desc.get()->eTypeClass != typelib_TypeClass_ENUM )
         {
             OUStringBuffer buf;
-            buf.appendAscii( "pyuno.checkEnum: " ).append(strTypeName).appendAscii( "is a " );
+            buf.append( "pyuno.checkEnum: " ).append(strTypeName).append( "is a " );
             buf.appendAscii(
                 typeClassToString( (com::sun::star::uno::TypeClass) desc.get()->eTypeClass));
-            buf.appendAscii( ", expected ENUM" );
+            buf.append( ", expected ENUM" );
             throw RuntimeException( buf.makeStringAndClear() );
         }
 
@@ -186,7 +186,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
         if( i == pEnumDesc->nEnumValues )
         {
             OUStringBuffer buf;
-            buf.appendAscii( "value " ).appendAscii( stringValue ).appendAscii( "is unknown in enum " );
+            buf.append( "value " ).appendAscii( stringValue ).append( "is unknown in enum " );
             buf.appendAscii( PyStr_AsString( typeName.get() ) );
             throw RuntimeException( buf.makeStringAndClear() );
         }
@@ -195,7 +195,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
     else
     {
         OUStringBuffer buf;
-        buf.appendAscii( "enum " ).appendAscii( PyStr_AsString(typeName.get()) ).appendAscii( " is unknown" );
+        buf.append( "enum " ).appendAscii( PyStr_AsString(typeName.get()) ).append( " is unknown" );
         throw RuntimeException( buf.makeStringAndClear() );
     }
     return ret;
@@ -219,15 +219,15 @@ Type PyType2Type( PyObject * o ) throw(RuntimeException )
     if( ! desc.is() )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "type " ).append(name).appendAscii( " is unknown" );
+        buf.append( "type " ).append(name).append( " is unknown" );
         throw RuntimeException( buf.makeStringAndClear() );
     }
     if( desc.get()->eTypeClass != (typelib_TypeClass) *static_cast<sal_Int32 const *>(enumValue.getValue()) )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "pyuno.checkType: " ).append(name).appendAscii( " is a " );
+        buf.append( "pyuno.checkType: " ).append(name).append( " is a " );
         buf.appendAscii( typeClassToString( (TypeClass) desc.get()->eTypeClass) );
-        buf.appendAscii( ", but type got construct with typeclass " );
+        buf.append( ", but type got construct with typeclass " );
         buf.appendAscii( typeClassToString( (TypeClass) *static_cast<sal_Int32 const *>(enumValue.getValue()) ) );
         throw RuntimeException( buf.makeStringAndClear() );
     }

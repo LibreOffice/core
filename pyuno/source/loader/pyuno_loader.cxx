@@ -71,7 +71,7 @@ static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
         Runtime runtime;
         com::sun::star::uno::Any a = runtime.extractUnoException( excType, excValue, excTraceback );
         OUStringBuffer buf;
-        buf.appendAscii( "python-loader:" );
+        buf.append( "python-loader:" );
         if( a.hasValue() )
             buf.append( static_cast<com::sun::star::uno::Exception const *>(a.getValue())->Message );
         throw RuntimeException( buf.makeStringAndClear() );
@@ -98,7 +98,7 @@ static PyRef getObjectFromLoaderModule( const char * func )
     if( !object.is() )
     {
         OUStringBuffer buf;
-        buf.appendAscii( "pythonloader: couldn't find core element pythonloader." );
+        buf.append( "pythonloader: couldn't find core element pythonloader." );
         buf.appendAscii( func );
         throw RuntimeException(buf.makeStringAndClear());
     }
