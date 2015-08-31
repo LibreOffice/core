@@ -1660,9 +1660,9 @@ class OpenGLTests
     OpenGLContext *mpA;
     OpenGLContext *mpB;
 
-    static OpenGLSalGraphicsImpl *getImpl(const VclPtr<WorkWindow> &xWin)
+    static OpenGLSalGraphicsImpl *getImpl(const VclPtr<WorkWindow> &xOut)
     {
-        SalGraphics *pGraphics = xWin->GetGraphics();
+        SalGraphics *pGraphics = xOut->GetGraphics();
         return dynamic_cast<OpenGLSalGraphicsImpl *>(pGraphics->GetImpl());
     }
 public:
@@ -1683,6 +1683,7 @@ public:
         mpB = mpImplB->GetOpenGLContext();
 
         assert (mpA && mpB);
+        assert (mpA != mpB);
     }
     ~OpenGLTests()
     {
@@ -1698,11 +1699,48 @@ public:
         {
             OpenGLTexture aTexture(256,128);
             pBuffer = mpA->AcquireFramebuffer(aTexture);
-            pBuffer->DetachTexture(); // TESTME - remove this line too ...
         }
-        assert (pBuffer->IsFree());
+        assert (pBuffer->IsFree()); (void)pBuffer;
         mpB->makeCurrent();
         assert (mpA->mpCurrentFramebuffer == NULL);
+    }
+
+    void testVirtualDevice()
+    {
+        fprintf(stderr, "test sharing OpenGLContexts with virtual-devices reference counting\n");
+        VclPtrInstance<WorkWindow> xTempWin(nullptr, WB_STDWORK);
+        xTempWin->Show();
+        // forcibly make this context current by rendering
+        xTempWin->DrawPixel(Point(0, 0), COL_RED);
+
+        // get some other guys to leach off this context
+        VclPtrInstance<VirtualDevice> xVDev;
+        OpenGLContext *pContext = getImpl(xVDev)->GetOpenGLContext();
+        VclPtrInstance<VirtualDevice> xVDev2;
+        OpenGLContext *pContext2 = getImpl(xVDev)->GetOpenGLContext();
+
+        // sharing the same off-screen context.
+        assert(pContext == pContext2);
+        assert(pContext == getImpl(xTempWin)->GetOpenGLContext());
+        assert(pContext != mpA && pContext != mpB);
+        (void)pContext; (void)pContext2;
+
+        // Kill the parent we free-ride on ...
+        xTempWin.disposeAndClear();
+
+        // This appears to continue working; fun.
+        Point aPt(0, 0);
+        xVDev->DrawPixel(aPt, COL_GREEN);
+        assert(xVDev->GetPixel(aPt) == COL_GREEN);
+        xVDev.disposeAndClear();
+
+        // Switch context to see if we can switch back.
+        mxWinA->DrawPixel(aPt, COL_WHITE);
+
+        // Now try switching back to this guy ...
+        xVDev2->DrawPixel(aPt, COL_BLUE);
+        assert(xVDev2->GetPixel(aPt) == COL_BLUE);
+        xVDev2.disposeAndClear();
     }
 
     int execute()
@@ -1711,6 +1749,7 @@ public:
             return 1;
 
         testCurrentFramebuffer();
+        testVirtualDevice();
 
         return 0;
     }
