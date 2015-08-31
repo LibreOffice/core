@@ -90,12 +90,12 @@
 // at export time using CTF_PM_FLAGMASK and XML_PM_CTF_START as detector
 // to find the first entry for header/footer (!), see
 // SvXMLAutoStylePoolP_Impl::exportXML, look for XML_STYLE_FAMILY_PAGE_MASTER
-#define CTF_PM_REPEAT_OFFSET_X          (XML_PM_CTF_START + 0x0035)
-#define CTF_PM_REPEAT_OFFSET_Y          (XML_PM_CTF_START + 0x0036)
-#define CTF_PM_FILLGRADIENTNAME         (XML_PM_CTF_START + 0x0037)
-#define CTF_PM_FILLHATCHNAME            (XML_PM_CTF_START + 0x0038)
-#define CTF_PM_FILLBITMAPNAME           (XML_PM_CTF_START + 0x0039)
-#define CTF_PM_FILLTRANSNAME            (XML_PM_CTF_START + 0x0040)
+#define CTF_PM_REPEAT_OFFSET_X          (XML_PM_CTF_START + 0x0037)
+#define CTF_PM_REPEAT_OFFSET_Y          (XML_PM_CTF_START + 0x0038)
+#define CTF_PM_FILLGRADIENTNAME         (XML_PM_CTF_START + 0x0039)
+#define CTF_PM_FILLHATCHNAME            (XML_PM_CTF_START + 0x0040)
+#define CTF_PM_FILLBITMAPNAME           (XML_PM_CTF_START + 0x0041)
+#define CTF_PM_FILLTRANSNAME            (XML_PM_CTF_START + 0x0042)
 
 #define CTF_PM_SCALETO                  (XML_PM_CTF_START + 0x0051) // calc specific
 #define CTF_PM_SCALETOPAGES             (XML_PM_CTF_START + 0x0052)
