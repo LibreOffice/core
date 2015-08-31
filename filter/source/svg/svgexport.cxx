@@ -1302,7 +1302,7 @@ bool SVGFilter::implExportTextEmbeddedBitmaps()
             MetaAction* pAction = aMtf.GetAction( 0 );
             if( pAction )
             {
-                sal_uInt32 nId = (sal_uInt32)(GetBitmapChecksum( pAction ));
+                BitmapChecksum nId = GetBitmapChecksum( pAction );
                 sId = "bitmap(" + OUString::number( nId ) + ")";
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
 
