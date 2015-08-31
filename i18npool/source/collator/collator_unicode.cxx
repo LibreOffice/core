@@ -148,12 +148,12 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
 #ifndef DISABLE_DYNLOADING
             OUStringBuffer aBuf;
 #ifdef SAL_DLLPREFIX
-            aBuf.appendAscii(SAL_DLLPREFIX);
+            aBuf.append(SAL_DLLPREFIX);
 #endif
-            aBuf.appendAscii( "collator_data" ).appendAscii( SAL_DLLEXTENSION );
+            aBuf.append( "collator_data" ).append( SAL_DLLEXTENSION );
             hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
             if (hModule) {
-                aBuf.appendAscii("get_").append(rLocale.Language).appendAscii("_");
+                aBuf.append("get_").append(rLocale.Language).append("_");
                 if ( rLocale.Language == "zh" ) {
                     OUString func_base = aBuf.makeStringAndClear();
                     OUString funclen_base = func_base + "_length";
@@ -175,9 +175,9 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
                     if ( rLocale.Language == "ja" ) {
                         // replace algorithm name to implementation name.
                         if (rAlgorithm == "phonetic (alphanumeric first)")
-                            aBuf.appendAscii("phonetic_alphanumeric_first");
+                            aBuf.append("phonetic_alphanumeric_first");
                         else if (rAlgorithm == "phonetic (alphanumeric last)")
-                            aBuf.appendAscii("phonetic_alphanumeric_last");
+                            aBuf.append("phonetic_alphanumeric_last");
                         else
                             aBuf.append(rAlgorithm);
                     } else {

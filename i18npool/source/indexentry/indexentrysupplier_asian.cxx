@@ -188,13 +188,13 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
                 if (address != 0xFFFF) {
                     address = idx[1][address + (ch & 0xFF)];
                     if ( i > 0 && rLocale.Language == "zh" )
-                        candidate.appendAscii(" ");
+                        candidate.append(" ");
                     if (idx[2])
                         candidate.append(&idx[2][address]);
                     else
                         candidate.append(address);
                 } else
-                    candidate.appendAscii(" ");
+                    candidate.append(" ");
             }
         }
         return candidate.makeStringAndClear();

@@ -845,7 +845,7 @@ void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLast, bool
 
     if (value > 1000) {
         makeHebrewNumber(value / 1000, output, num != 0, useGeresh);
-        output.appendAscii(" ");
+        output.append(" ");
     }
     if (num == 0) {
         output.append(value == 1000 ? thousand : isLast ? thousands_last : thousands);

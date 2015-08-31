@@ -508,7 +508,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
             // Library not loaded, load it and add it to the list.
 #ifdef SAL_DLLPREFIX
             aBuf.ensureCapacity(strlen(aLibTable[i].pLib) + 6);    // mostly "lib*.so"
-            aBuf.appendAscii( SAL_DLLPREFIX ).appendAscii(aLibTable[i].pLib).appendAscii( SAL_DLLEXTENSION );
+            aBuf.append( SAL_DLLPREFIX ).appendAscii(aLibTable[i].pLib).append( SAL_DLLEXTENSION );
 #else
             aBuf.ensureCapacity(strlen(aLibTable[i].pLib) + 4);    // mostly "*.dll"
             aBuf.appendAscii(aLibTable[i].pLib).appendAscii( SAL_DLLEXTENSION );

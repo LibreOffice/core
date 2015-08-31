@@ -585,7 +585,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
                  (rLocale.Country == "HK" ||
                   rLocale.Country == "MO" ) &&
                  // if the country code is HK or MO, one more step to try TW.
-                 createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).appendAscii(
+                 createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
                          "TW").makeStringAndClear())) ||
                 (l > 0 &&
                  // load service with name <base>_<lang>
