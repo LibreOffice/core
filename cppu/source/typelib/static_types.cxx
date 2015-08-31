@@ -307,7 +307,7 @@ void SAL_CALL typelib_static_sequence_type_init(
         if (! *ppRef)
         {
             OUStringBuffer aBuf( 32 );
-            aBuf.appendAscii( "[]" );
+            aBuf.append( "[]" );
             aBuf.append( pElementType->pTypeName );
             OUString aTypeName( aBuf.makeStringAndClear() );
 
