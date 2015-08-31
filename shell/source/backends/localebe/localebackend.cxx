@@ -120,7 +120,7 @@ namespace /* private */
         CFStringGuard srefGuard(sref);
 
         OUStringBuffer aLocaleBuffer;
-        aLocaleBuffer.appendAscii("en-US"); // initialize with fallback value
+        aLocaleBuffer.append("en-US"); // initialize with fallback value
 
         if (sref != NULL)
         {
@@ -140,7 +140,7 @@ namespace /* private */
                 // value the second value is always the country!
                 if (CFArrayGetCount(subs) > 1)
                 {
-                    aLocaleBuffer.appendAscii("-");
+                    aLocaleBuffer.append("-");
                     CFStringRef country = static_cast<CFStringRef>(CFArrayGetValueAtIndex(subs, 1));
                     OUStringBufferAppendCFString(aLocaleBuffer, country);
                 }
