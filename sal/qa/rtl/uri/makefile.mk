@@ -32,40 +32,37 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+ 
+.ELSE
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
 # --- BEGIN --------------------------------------------------------
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/rtl_Uri.obj
-SHL1TARGET= rtl_uri_simple
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+APP1TARGET= rtl_uri_simple
+APP1STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 
 # END --------------------------------------------------------------
 
 # --- BEGIN --------------------------------------------------------
-SHL2OBJS=  \
+APP2OBJS=  \
     $(SLO)$/rtl_testuri.obj
-SHL2TARGET= rtl_Uri
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL2IMPLIB= i$(SHL2TARGET)
-DEF2NAME    =$(SHL2TARGET)
-SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
+APP2TARGET= rtl_Uri
+APP2STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP2RPATH = NONE
+APP2TEST = enabled
 
 # END --------------------------------------------------------------
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"

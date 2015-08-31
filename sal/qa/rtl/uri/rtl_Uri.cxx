@@ -31,7 +31,7 @@
 #include <osl/thread.h>
 #include <osl/file.hxx>
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 
 // -----------------------------------------------------------------------------
 
@@ -71,15 +71,16 @@ namespace Stringtest
 
     // -----------------------------------------------------------------------------
 
-    class Convert : public CppUnit::TestFixture
+    class Convert : public ::testing::Test
     {
+    protected:
         rtl::OUString m_aStr;
     public:
         /*
           rtl::OString toUTF8(rtl::OUString const& _suStr)
             {
                 rtl::OString sStrAsUTF8 = rtl::OUStringToOString(_suStr, RTL_TEXTENCODING_UTF8);
-                t_print("%s\n", escapeString(sStrAsUTF8).getStr());
+                printf("%s\n", escapeString(sStrAsUTF8).getStr());
                 return sStrAsUTF8;
             }
         */
@@ -97,7 +98,7 @@ namespace Stringtest
         void showContent(rtl::OUString const& _suStr)
             {
                 rtl::OString sStr = convertToOString(_suStr);
-                t_print("%s\n", sStr.getStr());
+                printf("%s\n", sStr.getStr());
             }
 
         void toUTF8_mech(rtl::OUString const& _suStr, rtl_UriEncodeMechanism _eMechanism)
@@ -123,39 +124,15 @@ namespace Stringtest
 
         void toUTF8(rtl::OUString const& _suStr)
             {
-                t_print("rtl_UriEncodeIgnoreEscapes \n");
+                printf("rtl_UriEncodeIgnoreEscapes \n");
                 toUTF8_mech(_suStr, rtl_UriEncodeIgnoreEscapes);
-                t_print("\n");
-                t_print("# rtl_UriEncodeKeepEscapes\n");
+                printf("\n");
+                printf("# rtl_UriEncodeKeepEscapes\n");
                 toUTF8_mech(_suStr, rtl_UriEncodeKeepEscapes);
-                t_print("\n");
-                t_print("# rtl_UriEncodeCheckEscapes\n");
+                printf("\n");
+                printf("# rtl_UriEncodeCheckEscapes\n");
                 toUTF8_mech(_suStr, rtl_UriEncodeCheckEscapes);
-                t_print("\n");
-            }
-
-        void test_FromUTF8_001()
-            {
-                // string --> ustring
-                rtl::OString sStrUTF8("h%C3%A4llo");
-                rtl::OUString suStrUTF8 = rtl::OStringToOUString(sStrUTF8, RTL_TEXTENCODING_ASCII_US);
-
-                // UTF8 --> real ustring
-                rtl::OUString suStr_UriDecodeToIuri      = rtl::Uri::decode(suStrUTF8, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
-                showContent(suStr_UriDecodeToIuri);
-
-                // string --> ustring
-                rtl::OString sStr("h\xE4llo");
-                rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
-
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suString.equals(suStr_UriDecodeToIuri) == sal_True);
-
-                // ustring --> ustring (UTF8)
-                rtl::OUString suStr2 = rtl::Uri::encode(suStr_UriDecodeToIuri, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
-                showContent(suStr2);
-
-                CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suStr2.equals(suStrUTF8) == sal_True);
-                // suStr should be equal to suStr2
+                printf("\n");
             }
 
         // "%C3%84qypten";
@@ -214,80 +191,96 @@ namespace Stringtest
                 }
                 return sType;
             }
-
-
-        void test_UTF8_files()
-            {
-#ifdef UNX
-                rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///tmp/atestdir"));
-#else /* Windows */
-                rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///c:/temp/atestdir"));
-#endif
-                osl::Directory aDir(suDirURL);
-                aDir.open();
-                if (aDir.isOpen())
-                {
-                    osl::DirectoryItem aItem;
-                    osl::FileStatus aStatus(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Attributes | osl_FileStatus_Mask_Type);
-                    while (aDir.getNextItem(aItem) == ::osl::FileBase::E_None)
-                    {
-                        if (osl::FileBase::E_None == aItem.getFileStatus(aStatus) &&
-                            aStatus.isValid(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Attributes))
-                        {
-                            rtl::OString sType = getFileTypeName(aStatus);
-
-                            rtl::OUString suFilename = aStatus.getFileName();
-                            // rtl::OUString suFullFileURL;
-
-                            rtl::OUString suStrUTF8 = rtl::Uri::encode(suFilename, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
-                            rtl::OString sStrUTF8 = convertToOString(suStrUTF8);
-                            t_print("Type: '%s' file name '%s'\n", sType.getStr(), sStrUTF8.getStr());
-                        }
-                    }
-                    aDir.close();
-                }
-                else
-                {
-                    rtl::OString sStr;
-                    sStr = rtl::OUStringToOString(suDirURL, osl_getThreadTextEncoding());
-                    t_print("can't open dir:'%s'\n", sStr.getStr());
-                }
-            }
-
-        void test_FromUTF8()
-            {
-                rtl::OString sStr("h%C3%A4llo");
-                rtl::OUString suStr = rtl::OStringToOUString(sStr, osl_getThreadTextEncoding());
-
-//    rtl_UriEncodeIgnoreEscapes,
-//    rtl_UriEncodeKeepEscapes,
-//     rtl_UriEncodeCheckEscapes,
-//                rtl::OUString suStr2 = rtl::Uri::encode(suStr, rtl_UriCharClassRegName, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
-                rtl::OUString suStr_UriDecodeNone        = rtl::Uri::decode(suStr, rtl_UriDecodeNone, RTL_TEXTENCODING_UTF8);
-                showContent(suStr_UriDecodeNone);
-                toUTF8(suStr_UriDecodeNone);
-
-                rtl::OUString suStr_UriDecodeToIuri      = rtl::Uri::decode(suStr, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
-                showContent(suStr_UriDecodeToIuri);
-                toUTF8(suStr_UriDecodeToIuri);
-
-                rtl::OUString suStr_UriDecodeWithCharset = rtl::Uri::decode(suStr, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
-                showContent(suStr_UriDecodeWithCharset);
-                toUTF8(suStr_UriDecodeWithCharset);
-            }
-
-        CPPUNIT_TEST_SUITE( Convert );
-        CPPUNIT_TEST( test_FromUTF8_001 );
-//        CPPUNIT_TEST( test_UTF8_files );
-//      CPPUNIT_TEST( test_FromUTF8 );
-        CPPUNIT_TEST_SUITE_END( );
     };
 
+    TEST_F(Convert, test_FromUTF8_001)
+    {
+        // string --> ustring
+        rtl::OString sStrUTF8("h%C3%A4llo");
+        rtl::OUString suStrUTF8 = rtl::OStringToOUString(sStrUTF8, RTL_TEXTENCODING_ASCII_US);
+
+        // UTF8 --> real ustring
+        rtl::OUString suStr_UriDecodeToIuri      = rtl::Uri::decode(suStrUTF8, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
+        showContent(suStr_UriDecodeToIuri);
+
+        // string --> ustring
+        rtl::OString sStr("h\xE4llo");
+        rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
+
+        ASSERT_TRUE(suString.equals(suStr_UriDecodeToIuri) == sal_True) << "Strings must be equal";
+
+        // ustring --> ustring (UTF8)
+        rtl::OUString suStr2 = rtl::Uri::encode(suStr_UriDecodeToIuri, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
+        showContent(suStr2);
+
+        ASSERT_TRUE(suStr2.equals(suStrUTF8) == sal_True) << "Strings must be equal";
+        // suStr should be equal to suStr2
+    }
+
+// These tests were commented out in the pre-gtest code:
+//    TEST_F(Convert, test_UTF8_files)
+//    {
+//#ifdef UNX
+//        rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///tmp/atestdir"));
+//#else /* Windows */
+//        rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///c:/temp/atestdir"));
+//#endif
+//        osl::Directory aDir(suDirURL);
+//        aDir.open();
+//        if (aDir.isOpen())
+//        {
+//            osl::DirectoryItem aItem;
+//            osl::FileStatus aStatus(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Attributes | osl_FileStatus_Mask_Type);
+//            while (aDir.getNextItem(aItem) == ::osl::FileBase::E_None)
+//            {
+//                if (osl::FileBase::E_None == aItem.getFileStatus(aStatus) &&
+//                    aStatus.isValid(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Attributes))
+//                {
+//                    rtl::OString sType = getFileTypeName(aStatus);
+//
+//                    rtl::OUString suFilename = aStatus.getFileName();
+//                    // rtl::OUString suFullFileURL;
+//
+//                    rtl::OUString suStrUTF8 = rtl::Uri::encode(suFilename, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
+//                    rtl::OString sStrUTF8 = convertToOString(suStrUTF8);
+//                    printf("Type: '%s' file name '%s'\n", sType.getStr(), sStrUTF8.getStr());
+//                }
+//            }
+//            aDir.close();
+//        }
+//        else
+//        {
+//            rtl::OString sStr;
+//            sStr = rtl::OUStringToOString(suDirURL, osl_getThreadTextEncoding());
+//            printf("can't open dir:'%s'\n", sStr.getStr());
+//        }
+//    }
+//
+//    TEST_F(Convert, test_FromUTF8)
+//    {
+//        rtl::OString sStr("h%C3%A4llo");
+//        rtl::OUString suStr = rtl::OStringToOUString(sStr, osl_getThreadTextEncoding());
+//
+////    rtl_UriEncodeIgnoreEscapes,
+////    rtl_UriEncodeKeepEscapes,
+////     rtl_UriEncodeCheckEscapes,
+////                rtl::OUString suStr2 = rtl::Uri::encode(suStr, rtl_UriCharClassRegName, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
+//        rtl::OUString suStr_UriDecodeNone        = rtl::Uri::decode(suStr, rtl_UriDecodeNone, RTL_TEXTENCODING_UTF8);
+//        showContent(suStr_UriDecodeNone);
+//        toUTF8(suStr_UriDecodeNone);
+//
+//        rtl::OUString suStr_UriDecodeToIuri      = rtl::Uri::decode(suStr, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
+//        showContent(suStr_UriDecodeToIuri);
+//        toUTF8(suStr_UriDecodeToIuri);
+//
+//        rtl::OUString suStr_UriDecodeWithCharset = rtl::Uri::decode(suStr, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+//        showContent(suStr_UriDecodeWithCharset);
+//        toUTF8(suStr_UriDecodeWithCharset);
+//    }
 }
 
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( Stringtest::Convert, "Stringtest" );
-
-// LLA: doku anpassen!!!
-
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
