@@ -70,7 +70,7 @@ void usageFailure() {
 
 rtl::OUString getArgument(sal_Int32 index) {
     rtl::OUString arg;
-    rtl_getAppCommandArg(index, &arg.pData);
+    osl_getCommandArg(index, &arg.pData);
     return arg;
 }
 
