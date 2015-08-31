@@ -18,6 +18,8 @@
 
 #include "sharedformulagroups.hxx"
 
+#include "conditio.hxx"
+
 #include <rtl/strbuf.hxx>
 
 #define __ORCUS_STATIC_LIB
@@ -135,6 +137,11 @@ private:
 
     SCTAB mnTab;
     ScDocument& mrDoc;
+
+    std::unique_ptr<ScConditionalFormat> mpCurrentFormat;
+    std::unique_ptr<ScFormatEntry> mpCurrentEntry;
+
+    condformat::ScFormatEntryType meEntryType;
 };
 
 class ScOrcusAutoFilter : public orcus::spreadsheet::iface::import_auto_filter
