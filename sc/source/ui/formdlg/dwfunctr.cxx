@@ -573,22 +573,22 @@ void ScFunctionDockWin::SetDescription()
         OUStringBuffer aBuf(pAllFuncList->GetSelectEntry());
         if(nDockMode==0)
         {
-            aBuf.appendAscii(":\n\n");
+            aBuf.append(":\n\n");
         }
         else
         {
-            aBuf.appendAscii(":   ");
+            aBuf.append(":   ");
         }
 
         aBuf.append(pDesc->GetParamList());
 
         if(nDockMode==0)
         {
-            aBuf.appendAscii("\n\n");
+            aBuf.append("\n\n");
         }
         else
         {
-            aBuf.appendAscii("\n");
+            aBuf.append("\n");
         }
 
         aBuf.append(*pDesc->pFuncDesc);

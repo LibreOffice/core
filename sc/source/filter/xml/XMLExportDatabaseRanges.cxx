@@ -139,7 +139,7 @@ public:
 
         // name
         OUStringBuffer aBuf;
-        aBuf.appendAscii(STR_DB_LOCAL_NONAME);
+        aBuf.append(STR_DB_LOCAL_NONAME);
         aBuf.append(static_cast<sal_Int32>(r.first)); // appended number equals sheet index on import.
 
         write(aBuf.makeStringAndClear(), *r.second);
@@ -151,7 +151,7 @@ public:
         {
             // name
             OUStringBuffer aBuf;
-            aBuf.appendAscii(STR_DB_GLOBAL_NONAME);
+            aBuf.append(STR_DB_GLOBAL_NONAME);
             aBuf.append(++mnCounter); // 1-based, for entirely arbitrary reasons.  The numbers are ignored on import.
 
             write(aBuf.makeStringAndClear(), rData);
@@ -353,7 +353,7 @@ private:
             if (aParam.bUserDef)
             {
                 OUStringBuffer aBuf;
-                aBuf.appendAscii(SC_USERLIST);
+                aBuf.append(SC_USERLIST);
                 aBuf.append(aParam.nUserIndex);
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf.makeStringAndClear());
             }
@@ -646,7 +646,7 @@ private:
             if (aParam.bUserDef)
             {
                 OUStringBuffer aBuf;
-                aBuf.appendAscii(SC_USERLIST);
+                aBuf.append(SC_USERLIST);
                 aBuf.append(static_cast<sal_Int32>(aParam.nUserIndex));
                 mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, aBuf.makeStringAndClear());
             }

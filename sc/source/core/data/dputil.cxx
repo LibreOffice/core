@@ -246,7 +246,7 @@ OUString lcl_GetNumGroupName(
     if ( rInfo.mbDateValues )
     {
         lcl_AppendDateStr( aBuffer, fStartValue, pFormatter );
-        aBuffer.appendAscii( " - " );   // with spaces
+        aBuffer.append( " - " );   // with spaces
         lcl_AppendDateStr( aBuffer, fEndValue, pFormatter );
     }
     else

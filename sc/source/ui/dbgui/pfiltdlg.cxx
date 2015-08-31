@@ -172,7 +172,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         }
 
         OUStringBuffer aBuf;
-        aBuf.appendAscii(" (");
+        aBuf.append(" (");
         aBuf.append(theDbName);
         aBuf.append(')');
         m_pFtDbArea->SetText(aBuf.makeStringAndClear());

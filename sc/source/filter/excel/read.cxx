@@ -1247,7 +1247,7 @@ FltError ImportExcel8::Read()
             while ( true )
             {
                 OUStringBuffer aBuf;
-                aBuf.appendAscii("Sheet");
+                aBuf.append("Sheet");
                 aBuf.append(static_cast<sal_Int32>(nTab++));
                 OUString sTmpName = aBuf.makeStringAndClear();
                 std::vector<OUString>::iterator codeName_It = aCodeNames.begin();

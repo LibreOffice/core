@@ -321,14 +321,14 @@ ScVbaFont::getFontStyle() throw ( uno::RuntimeException, std::exception )
     bool bValue = false;
     getBold() >>= bValue;
     if( bValue )
-        aStyles.appendAscii("Bold");
+        aStyles.append("Bold");
 
     getItalic() >>= bValue;
     if( bValue )
     {
         if( !aStyles.isEmpty() )
-            aStyles.appendAscii(" ");
-        aStyles.appendAscii("Italic");
+            aStyles.append(" ");
+        aStyles.append("Italic");
     }
     return uno::makeAny( aStyles.makeStringAndClear() );
 }

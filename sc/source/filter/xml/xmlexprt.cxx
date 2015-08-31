@@ -4035,19 +4035,19 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
             if ((nRangeType & sheet::NamedRangeFlag::ROW_HEADER) == sheet::NamedRangeFlag::ROW_HEADER)
             {
                 if (!sBufferRangeType.isEmpty())
-                    sBufferRangeType.appendAscii(" ");
+                    sBufferRangeType.append(" ");
                 sBufferRangeType.append(GetXMLToken(XML_REPEAT_ROW));
             }
             if ((nRangeType & sheet::NamedRangeFlag::FILTER_CRITERIA) == sheet::NamedRangeFlag::FILTER_CRITERIA)
             {
                 if (!sBufferRangeType.isEmpty())
-                    sBufferRangeType.appendAscii(" ");
+                    sBufferRangeType.append(" ");
                 sBufferRangeType.append(GetXMLToken(XML_FILTER));
             }
             if ((nRangeType & sheet::NamedRangeFlag::PRINT_AREA) == sheet::NamedRangeFlag::PRINT_AREA)
             {
                 if (!sBufferRangeType.isEmpty())
-                    sBufferRangeType.appendAscii(" ");
+                    sBufferRangeType.append(" ");
                 sBufferRangeType.append(GetXMLToken(XML_PRINT_RANGE));
             }
             OUString sRangeType = sBufferRangeType.makeStringAndClear();

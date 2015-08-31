@@ -158,12 +158,12 @@ bool DocumentLinkManager::updateDdeLinks( vcl::Window* pWin )
 
             OUStringBuffer aBuf;
             aBuf.append(OUString(ScResId(SCSTR_DDEDOC_NOT_LOADED)));
-            aBuf.appendAscii("\n\n");
-            aBuf.appendAscii("Source : ");
+            aBuf.append("\n\n");
+            aBuf.append("Source : ");
             aBuf.append(aFile);
-            aBuf.appendAscii("\nElement : ");
+            aBuf.append("\nElement : ");
             aBuf.append(aElem);
-            aBuf.appendAscii("\nType : ");
+            aBuf.append("\nType : ");
             aBuf.append(aType);
             ScopedVclPtrInstance< MessageDialog > aBox(pWin, aBuf.makeStringAndClear());
             aBox->Execute();

@@ -241,7 +241,7 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
     {
         OUStringBuffer aBuf;
         aBuf.append(static_cast<sal_Int32>(nCurrentRow - nStartRow));
-        aBuf.appendAscii(" / ");
+        aBuf.append(" / ");
         aBuf.append(static_cast<sal_Int32>(nEndRow - nStartRow));
         m_pFixedText->SetText(aBuf.makeStringAndClear());
     }

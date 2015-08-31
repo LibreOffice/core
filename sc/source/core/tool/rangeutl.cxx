@@ -785,7 +785,7 @@ static void lcl_appendCellRangeAddress(
         OUString aAddr(rCell1.Format(SCA_ABS, NULL, pDoc->GetAddressConvention()));
         rBuf.append(aAddr);
 
-        rBuf.appendAscii(":");
+        rBuf.append(":");
 
         if (rExtInfo1.maTabName != rExtInfo2.maTabName)
         {

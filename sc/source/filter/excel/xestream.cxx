@@ -699,9 +699,9 @@ OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sStream
     if( nId )
         sBuf.append( nId );
     if( strstr(sStream, "vml") )
-        sBuf.appendAscii( ".vml" );
+        sBuf.append( ".vml" );
     else
-        sBuf.appendAscii( ".xml" );
+        sBuf.append( ".xml" );
     return sBuf.makeStringAndClear();
 }
 

@@ -2661,13 +2661,13 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const OUString& r
                             ScXMLImport::MutexGuard aGuard(*this);
                             LocaleDataWrapper aLocaleData( comphelper::getProcessComponentContext(), LanguageTag( aLocale) );
                             OUStringBuffer aBuffer(15);
-                            aBuffer.appendAscii("#");
+                            aBuffer.append("#");
                             aBuffer.append( aLocaleData.getNumThousandSep() );
-                            aBuffer.appendAscii("##0");
+                            aBuffer.append("##0");
                             aBuffer.append( aLocaleData.getNumDecimalSep() );
-                            aBuffer.appendAscii("00 [$");
+                            aBuffer.append("00 [$");
                             aBuffer.append(rCurrency);
-                            aBuffer.appendAscii("]");
+                            aBuffer.append("]");
                             sFormatString = aBuffer.makeStringAndClear();
                         }
                         sal_Int32 nNewKey = xLocalNumberFormats->queryKey(sFormatString, aLocale, true);

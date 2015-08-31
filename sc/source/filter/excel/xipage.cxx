@@ -221,7 +221,7 @@ void XclImpPageSettings::Finalize()
     // *** create page style sheet ***
 
     OUStringBuffer aStyleName;
-    aStyleName.appendAscii("PageStyle_");
+    aStyleName.append("PageStyle_");
 
     OUString aTableName;
     if( GetDoc().GetName( nScTab, aTableName ) )

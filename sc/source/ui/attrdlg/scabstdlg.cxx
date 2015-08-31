@@ -44,7 +44,7 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
     static ::osl::Module aDialogLibrary;
 
     OUStringBuffer aStrBuf;
-    aStrBuf.appendAscii( SVLIBRARY("scui") );
+    aStrBuf.append( SVLIBRARY("scui") );
 
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, aStrBuf.makeStringAndClear(),
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )

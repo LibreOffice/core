@@ -1644,7 +1644,7 @@ OUString FormulaProcessorBase::generateApiArray( const Matrix< Any >& rMatrix )
             else if( *aIt >>= aString )
                 aBuffer.append( generateApiString( aString ) );
             else
-                aBuffer.appendAscii( "\"\"" );
+                aBuffer.append( "\"\"" );
         }
     }
     aBuffer.append( API_TOKEN_ARRAY_CLOSE );

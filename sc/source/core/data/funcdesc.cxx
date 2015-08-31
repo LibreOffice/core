@@ -128,7 +128,7 @@ OUString ScFuncDesc::GetParamList() const
                     if ( i != nArgCount-1 )
                     {
                         aSig.append(sep);
-                        aSig.appendAscii( " " );
+                        aSig.append( " " );
                     }
                 }
             }
@@ -147,7 +147,7 @@ OUString ScFuncDesc::GetParamList() const
                 {
                     aSig.append(maDefArgNames[nArg]);
                     aSig.append(sep);
-                    aSig.appendAscii( " " );
+                    aSig.append( " " );
                 }
             }
             /* NOTE: Currently there are no suppressed var args parameters. If
@@ -161,7 +161,7 @@ OUString ScFuncDesc::GetParamList() const
             aSig.append(maDefArgNames[nFix]);
             aSig.append('2');
             aSig.append(sep);
-            aSig.appendAscii(" ... ");
+            aSig.append(" ... ");
         }
         else
         {
@@ -172,7 +172,7 @@ OUString ScFuncDesc::GetParamList() const
                 {
                     aSig.append(maDefArgNames[nArg]);
                     aSig.append(sep);
-                    aSig.appendAscii( " " );
+                    aSig.append( " " );
                 }
             }
 
@@ -182,14 +182,14 @@ OUString ScFuncDesc::GetParamList() const
             aSig.append(maDefArgNames[nFix+1]);
             aSig.append('1');
             aSig.append(sep);
-            aSig.appendAscii( " " );
+            aSig.append( " " );
             aSig.append(maDefArgNames[nFix]);
             aSig.append('2');
             aSig.append(sep);
             aSig.append(maDefArgNames[nFix+1]);
             aSig.append('2');
             aSig.append(sep);
-            aSig.appendAscii( " ... " );
+            aSig.append( " ... " );
         }
     }
 
@@ -207,14 +207,14 @@ OUString ScFuncDesc::getSignature() const
         OUString aParamList = GetParamList();
         if( !aParamList.isEmpty() )
         {
-            aSig.appendAscii( "( " );
+            aSig.append( "( " );
             aSig.append(aParamList);
             // U+00A0 (NBSP) prevents automatic line break
             aSig.append( static_cast< sal_Unicode >(0xA0) );
-            aSig.appendAscii( ")" );
+            aSig.append( ")" );
         }
         else
-            aSig.appendAscii( "()" );
+            aSig.append( "()" );
     }
     return aSig.makeStringAndClear();
 }
@@ -229,7 +229,7 @@ OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) 
     {
         aFormula.append( *pFuncName );
 
-        aFormula.appendAscii( "(" );
+        aFormula.append( "(" );
         if ( nArgCount > 0 && !_aArguments.empty() && !_aArguments[0].isEmpty())
         {
             ::std::vector< OUString >::const_iterator aIter = _aArguments.begin();
@@ -245,7 +245,7 @@ OUString ScFuncDesc::getFormula( const ::std::vector< OUString >& _aArguments ) 
             }
         }
 
-        aFormula.appendAscii( ")" );
+        aFormula.append( ")" );
     }
     return aFormula.makeStringAndClear();
 }
@@ -461,9 +461,9 @@ ScFunctionList::ScFunctionList() :
 
         OUStringBuffer aBuf(aArgDesc);
         aBuf.append('\n');
-        aBuf.appendAscii("( AddIn: ");
+        aBuf.append("( AddIn: ");
         aBuf.append(pLegacyFuncData->GetModuleName());
-        aBuf.appendAscii(" )");
+        aBuf.append(" )");
         pDesc->pFuncDesc = new OUString(aBuf.makeStringAndClear());
 
         pDesc->nArgCount   = nArgs;

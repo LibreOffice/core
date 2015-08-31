@@ -111,16 +111,16 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     OSL_ENSURE( pDoc->HasTable( nTab ), "*ScExportDif(): Table not existent!" );
 
     aOS.append(pKeyTABLE);
-    aOS.appendAscii("\n0,1\n\"");
+    aOS.append("\n0,1\n\"");
 
     pDoc->GetName( nTab, aString );
     aOS.append(aString);
-    aOS.appendAscii("\"\n");
+    aOS.append("\"\n");
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
     // VECTORS
     aOS.append(pKeyVECTORS);
-    aOS.appendAscii("\n0,");
+    aOS.append("\n0,");
     aOS.append(static_cast<sal_Int32>(nNumCols));
     aOS.append('\n');
     aOS.appendAscii(p2DoubleQuotes_LF);
@@ -128,7 +128,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 
     // TUPLES
     aOS.append(pKeyTUPLES);
-    aOS.appendAscii("\n0,");
+    aOS.append("\n0,");
     aOS.append(static_cast<sal_Int32>(nNumRows));
     aOS.append('\n');
     aOS.appendAscii(p2DoubleQuotes_LF);
@@ -136,7 +136,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 
     // DATA
     aOS.append(pKeyDATA);
-    aOS.appendAscii("\n0,0\n");
+    aOS.append("\n0,0\n");
     aOS.appendAscii(p2DoubleQuotes_LF);
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
@@ -176,7 +176,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                         pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
                         aOS.append(aString);
                     }
-                    aOS.appendAscii("\nV\n");
+                    aOS.append("\nV\n");
                 break;
                 case CELLTYPE_EDIT:
                 case CELLTYPE_STRING:
@@ -201,7 +201,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                             pDoc->GetInputString( nColCnt, nRowCnt, nTab, aString );
                             aOS.append(aString);
                         }
-                        aOS.appendAscii("\nV\n");
+                        aOS.append("\nV\n");
                     }
                     else
                     {
