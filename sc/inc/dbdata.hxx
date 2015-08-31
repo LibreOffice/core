@@ -114,6 +114,9 @@ public:
     void        SetTableColumnNames( const ::std::vector< OUString >& rNames ) { maTableColumnNames = rNames; }
     const ::std::vector< OUString >&    GetTableColumnNames() const { return maTableColumnNames; }
 
+    /** Refresh/update the column names with the header row's cell contents. */
+    SC_DLLPUBLIC void RefreshTableColumnNames( ScDocument* pDoc );
+
     /** Finds the column named rName and returns the corresponding offset
         within the table.
         @returns -1 if not found.

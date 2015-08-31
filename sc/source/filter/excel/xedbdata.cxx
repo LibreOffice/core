@@ -111,19 +111,21 @@ XclExpTablesManager::~XclExpTablesManager()
 
 void XclExpTablesManager::Initialize()
 {
-    const ScDocument& rDoc = GetDoc();
-    const ScDBCollection* pDBColl = rDoc.GetDBCollection();
+    // All non-const to be able to call RefreshTableColumnNames().
+    ScDocument& rDoc = GetDoc();
+    ScDBCollection* pDBColl = rDoc.GetDBCollection();
     if (!pDBColl)
         return;
 
-    const ScDBCollection::NamedDBs& rDBs = pDBColl->getNamedDBs();
+    ScDBCollection::NamedDBs& rDBs = pDBColl->getNamedDBs();
     if (rDBs.empty())
         return;
 
     sal_Int32 nTableId = 0;
-    for (ScDBCollection::NamedDBs::const_iterator itDB(rDBs.begin()); itDB != rDBs.end(); ++itDB)
+    for (ScDBCollection::NamedDBs::iterator itDB(rDBs.begin()); itDB != rDBs.end(); ++itDB)
     {
-        const ScDBData* pDBData = itDB->get();
+        ScDBData* pDBData = itDB->get();
+        pDBData->RefreshTableColumnNames( &rDoc);   // currently not in sync, so refresh
         ScRange aRange( ScAddress::UNINITIALIZED);
         pDBData->GetArea( aRange);
         SCTAB nTab = aRange.aStart.Tab();

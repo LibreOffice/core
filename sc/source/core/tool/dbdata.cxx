@@ -31,6 +31,7 @@
 #include "globstr.hrc"
 #include "subtotalparam.hxx"
 #include "sortparam.hxx"
+#include "dociter.hxx"
 
 #include <memory>
 #include <utility>
@@ -618,6 +619,64 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
 
     SAL_WARN_IF( !maTableColumnNames.empty() && aNewNames.empty(),
             "sc.core", "ScDBData::AdjustTableColumnNames - invalidating column names/offsets");
+    aNewNames.swap( maTableColumnNames);
+}
+
+void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
+{
+    if (!HasHeader())
+        return;     // sorry, but..
+
+    ::std::vector<OUString> aNewNames;
+    aNewNames.resize( nEndCol - nStartCol + 1);
+    ScHorizontalCellIterator aIter( pDoc, nTable, nStartCol, nStartRow, nEndCol, nStartRow);  // header row only
+    ScRefCellValue* pCell;
+    SCCOL nCol, nLastColFilled = nStartCol - 1;
+    SCROW nRow;
+    bool bHaveEmpty = false;
+    for (size_t i=0; (pCell = aIter.GetNext( nCol, nRow)) != nullptr; ++i)
+    {
+        if (pCell->hasString())
+        {
+            const OUString& rStr = pCell->getString( pDoc);
+            aNewNames[nCol-nStartCol] = rStr;
+            if (rStr.isEmpty())
+                bHaveEmpty = true;
+            else if (nLastColFilled < nCol-1)
+                bHaveEmpty = true;
+            nLastColFilled = nCol;
+        }
+        else
+            bHaveEmpty = true;
+    }
+
+    // Try to not have empty names and remember previous name that might had
+    // been used to compile formulas, but only if same number of columns and no
+    // duplicates.
+    /* TODO: formula references' create string should be adapted to look for
+     * the column name here if the TableRef column header cell is empty. */
+    if (bHaveEmpty && aNewNames.size() == maTableColumnNames.size())
+    {
+        for (size_t i=0, n=aNewNames.size(); i < n; ++i)
+        {
+            if (aNewNames[i].isEmpty())
+            {
+                bool bCopy = true;
+                const OUString& rStr = maTableColumnNames[i];
+                for (size_t j=0; j < n; ++j)
+                {
+                    if (ScGlobal::GetpTransliteration()->isEqual( aNewNames[j], rStr))
+                    {
+                        bCopy = false;
+                        break;  // for
+                    }
+                }
+                if (bCopy)
+                    aNewNames[i] = rStr;
+            }
+        }
+    }
+
     aNewNames.swap( maTableColumnNames);
 }
 
