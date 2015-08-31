@@ -496,7 +496,7 @@ OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XContro
             if ( _bURLEncoded )
                 aResult.append('&');
             else
-                aResult.appendAscii("\r\n");
+                aResult.append("\r\n");
         }
     }
 

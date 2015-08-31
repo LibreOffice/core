@@ -539,9 +539,9 @@ void OComboBoxModel::loadData( bool _bForce )
                     qualifiedNameComponents( xMeta, m_aListSource, sCatalog, sSchema, sTable, eInDataManipulation );
 
                     OUStringBuffer aStatement;
-                    aStatement.appendAscii( "SELECT DISTINCT " );
+                    aStatement.append( "SELECT DISTINCT " );
                     aStatement.append     ( quoteName( aQuote, aFieldName ) );
-                    aStatement.appendAscii( " FROM " );
+                    aStatement.append( " FROM " );
                     aStatement.append     ( composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable ) );
 
                     m_aListRowSet.setEscapeProcessing( false );

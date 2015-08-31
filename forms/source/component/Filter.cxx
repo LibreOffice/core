@@ -423,7 +423,7 @@ namespace frm
             const Reference< XDatabaseMetaData >  xMeta( xConnection->getMetaData(), UNO_SET_THROW );
             const OUString sQuoteChar = xMeta->getIdentifierQuoteString();
 
-            aStatement.appendAscii( "SELECT DISTINCT " );
+            aStatement.append( "SELECT DISTINCT " );
             aStatement.append( sQuoteChar );
             aStatement.append( sRealFieldName );
             aStatement.append( sQuoteChar );
@@ -431,13 +431,13 @@ namespace frm
             // if the field had an alias in our form's statement, give it this alias in the new statement, too
             if ( !sFieldName.isEmpty() && ( sFieldName != sRealFieldName ) )
             {
-                aStatement.appendAscii(" AS ");
+                aStatement.append(" AS ");
                 aStatement.append( sQuoteChar );
                 aStatement.append( sFieldName );
                 aStatement.append( sQuoteChar );
             }
 
-            aStatement.appendAscii( " FROM " );
+            aStatement.append( " FROM " );
 
             OUString sCatalog, sSchema, sTable;
             ::dbtools::qualifiedNameComponents( xMeta, sTableName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );

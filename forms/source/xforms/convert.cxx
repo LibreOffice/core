@@ -115,9 +115,9 @@ namespace
 
         OUStringBuffer sInfo;
         lcl_appendInt32ToBuffer( rDate.Year, sInfo, 4 );
-        sInfo.appendAscii( "-" );
+        sInfo.append( "-" );
         lcl_appendInt32ToBuffer( rDate.Month, sInfo, 2 );
-        sInfo.appendAscii( "-" );
+        sInfo.append( "-" );
         lcl_appendInt32ToBuffer( rDate.Day, sInfo, 2 );
 
         return sInfo.makeStringAndClear();
@@ -167,9 +167,9 @@ namespace
 
         OUStringBuffer sInfo;
         lcl_appendInt32ToBuffer( rTime.Hours, sInfo, 2 );
-        sInfo.appendAscii( ":" );
+        sInfo.append( ":" );
         lcl_appendInt32ToBuffer( rTime.Minutes, sInfo, 2 );
-        sInfo.appendAscii( ":" );
+        sInfo.append( ":" );
         lcl_appendInt32ToBuffer( rTime.Seconds, sInfo, 2 );
         if ( rTime.NanoSeconds != 0 )
         {
