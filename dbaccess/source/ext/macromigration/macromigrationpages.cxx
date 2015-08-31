@@ -142,7 +142,7 @@ namespace dbmm
             OSL_ENSURE( aURLParser.GetProtocol() != INetProtocol::NotValid, "SaveDBDocPage::initializePage: illegal document URL!" );
 
             OUStringBuffer aBaseName( aURLParser.getBase() );
-            aBaseName.appendAscii( ".backup" );
+            aBaseName.append( ".backup" );
             aURLParser.setBase( aBaseName.makeStringAndClear() );
 
             m_pLocationController->setURL( aURLParser.GetMainURL( INetURLObject::NO_DECODE ) );

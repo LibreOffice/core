@@ -106,7 +106,7 @@ namespace dbaui
             if ( !m_pImpl->sRelativeRoot.isEmpty() )
             {
                 aCompleteName.append( m_pImpl->sRelativeRoot );
-                aCompleteName.appendAscii( "/" );
+                aCompleteName.append( "/" );
             }
             aCompleteName.append( _rObjectName );
 

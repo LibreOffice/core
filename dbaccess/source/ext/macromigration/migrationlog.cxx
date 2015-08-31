@@ -346,9 +346,9 @@ namespace dbmm
 
         void lcl_describeErrors( OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const sal_uInt16 _nHeadingResId )
         {
-            _rBuffer.appendAscii( "=== " );
+            _rBuffer.append( "=== " );
             _rBuffer.append     ( OUString( MacroMigrationResId( _nHeadingResId ) ) );
-            _rBuffer.appendAscii( " ===\n" );
+            _rBuffer.append( " ===\n" );
 
             OUString sException( MacroMigrationResId( STR_EXCEPTION ) );
 

@@ -100,7 +100,7 @@ namespace dbaccess
 
             OUStringBuffer aBuffer;
             aBuffer.append( _rError.getValueTypeName() );
-            aBuffer.appendAscii( ":\n" );
+            aBuffer.append( ":\n" );
             aBuffer.append( aExcept.Message );
 
             sDisplayMessage = aBuffer.makeStringAndClear();

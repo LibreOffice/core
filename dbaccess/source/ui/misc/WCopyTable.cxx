@@ -223,7 +223,7 @@ OUString ObjectCopySource::getSelectStatement() const
     else
     {   // table
         OUStringBuffer aSQL;
-        aSQL.appendAscii( "SELECT " );
+        aSQL.append( "SELECT " );
 
         // we need to create the sql stmt with column names
         // otherwise it is possible that names don't match
@@ -237,9 +237,9 @@ OUString ObjectCopySource::getSelectStatement() const
             aSQL.append( ::dbtools::quoteName( sQuote, *pColumnName++ ) );
 
             if ( pColumnName == pEnd )
-                aSQL.appendAscii( " " );
+                aSQL.append( " " );
             else
-                aSQL.appendAscii( ", " );
+                aSQL.append( ", " );
         }
 
         aSQL.append( "FROM " + ::dbtools::composeTableNameForSelect( m_xConnection, m_xObject ) );
@@ -387,7 +387,7 @@ OFieldDescription* NamedTableCopySource::createFieldDescription( const OUString&
 OUString NamedTableCopySource::getSelectStatement() const
 {
     OUStringBuffer aSQL;
-    aSQL.appendAscii( "SELECT * FROM " );
+    aSQL.append( "SELECT * FROM " );
 
     aSQL.append( ::dbtools::composeTableNameForSelect( m_xConnection, m_sTableCatalog, m_sTableSchema, m_sTableBareName ) );
 

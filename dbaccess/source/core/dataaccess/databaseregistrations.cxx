@@ -191,7 +191,7 @@ namespace dbaccess
         OUString sNewNodeName;
         {
             OUStringBuffer aNewNodeName;
-            aNewNodeName.appendAscii( "org.openoffice." );
+            aNewNodeName.append( "org.openoffice." );
             aNewNodeName.append( _rName );
 
             // make unique
@@ -201,7 +201,7 @@ namespace dbaccess
             while ( m_aConfigurationRoot.hasByName( sNewNodeName ) )
             {
                 aNewNodeName = aReset;
-                aNewNodeName.appendAscii( " " );
+                aNewNodeName.append( " " );
                 aNewNodeName.append( i );
                 sNewNodeName = aNewNodeName.makeStringAndClear();
             }

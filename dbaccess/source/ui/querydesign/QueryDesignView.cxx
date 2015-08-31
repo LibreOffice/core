@@ -686,9 +686,9 @@ namespace
                     {
                         OSL_ENSURE(!pEntryField->GetFunction().isEmpty(),"Function name must not be empty! ;-(");
                         OUStringBuffer aTmpStr2( pEntryField->GetFunction());
-                        aTmpStr2.appendAscii("(");
+                        aTmpStr2.append("(");
                         aTmpStr2.append(aTmpStr.makeStringAndClear());
-                        aTmpStr2.appendAscii(")");
+                        aTmpStr2.append(")");
                         aTmpStr = aTmpStr2;
                     }
 

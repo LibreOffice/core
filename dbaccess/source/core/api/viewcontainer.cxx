@@ -144,9 +144,9 @@ ObjectType OViewContainer::appendObject( const OUString& _rForName, const Refere
         descriptor->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
 
         OUStringBuffer aSQL;
-        aSQL.appendAscii( "CREATE VIEW " );
+        aSQL.append( "CREATE VIEW " );
         aSQL.append     ( sComposedName );
-        aSQL.appendAscii( " AS " );
+        aSQL.append( " AS " );
         aSQL.append     ( sCommand );
 
         Reference<XConnection> xCon = m_xConnection;

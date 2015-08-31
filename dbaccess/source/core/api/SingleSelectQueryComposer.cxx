@@ -345,7 +345,7 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
         case CommandType::TABLE:
             if ( m_xConnectionTables->hasByName(Command) )
             {
-                sSQL.appendAscii("SELECT * FROM ");
+                sSQL.append("SELECT * FROM ");
                 Reference< XPropertySet > xTable;
                 try
                 {
@@ -1655,7 +1655,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                         {
                             aSQL.append( "\'" );
                         }
-                        aSQL.appendAscii( "0x" );
+                        aSQL.append( "0x" );
                         const sal_Int8* pBegin  = aSeq.getConstArray();
                         const sal_Int8* pEnd    = pBegin + aSeq.getLength();
                         for(;pBegin != pEnd;++pBegin)

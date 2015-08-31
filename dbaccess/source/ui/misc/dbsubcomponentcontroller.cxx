@@ -541,7 +541,7 @@ namespace dbaui
         if ( xTitle.is() )
         {
             sTitle.append( xTitle->getTitle() );
-            sTitle.appendAscii(" : ");
+            sTitle.append(" : ");
         }
         sTitle.append( getPrivateTitle() );
         return sTitle.makeStringAndClear();
