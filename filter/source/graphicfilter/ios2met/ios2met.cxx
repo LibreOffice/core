@@ -2660,21 +2660,34 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
         pOS2MET->ReadUInt16(nFieldType);
 
         pOS2MET->SeekRel(3);
-        nPos+=8; nFieldSize-=8;
 
-        if (pOS2MET->GetError()) break;
-        if (pOS2MET->IsEof()) {
+        if (pOS2MET->GetError())
+            break;
+
+        if (nFieldType==EndDocumnMagic)
+            break;
+
+        if (pOS2MET->IsEof() || nFieldSize < 8)
+        {
             pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
             ErrorCode=8;
             break;
         }
 
-        if (nFieldType==EndDocumnMagic) break;
+        nPos+=8; nFieldSize-=8;
+
+        if (nFieldSize > pOS2MET->remainingSize())
+        {
+            pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
+            ErrorCode=8;
+            break;
+        }
 
         ReadField(nFieldType, nFieldSize);
+        nPos += nFieldSize;
 
-        nPos+=(sal_uLong)nFieldSize;
-        if (pOS2MET->Tell()>nPos)  {
+        if (pOS2MET->Tell() > nPos)
+        {
             pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
             ErrorCode=9;
             break;
