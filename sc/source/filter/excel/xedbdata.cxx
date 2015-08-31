@@ -123,7 +123,7 @@ void XclExpTablesManager::Initialize()
     sal_Int32 nTableId = 0;
     for (ScDBCollection::NamedDBs::const_iterator itDB(rDBs.begin()); itDB != rDBs.end(); ++itDB)
     {
-        const ScDBData* pDBData = &(*itDB);
+        const ScDBData* pDBData = itDB->get();
         ScRange aRange( ScAddress::UNINITIALIZED);
         pDBData->GetArea( aRange);
         SCTAB nTab = aRange.aStart.Tab();
