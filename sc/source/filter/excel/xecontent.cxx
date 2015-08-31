@@ -1290,7 +1290,7 @@ XclExpColorScale::XclExpColorScale( const XclExpRoot& rRoot, const ScColorScaleF
 {
     const ScRange* pRange = rFormat.GetRange().front();
     ScAddress aAddr = pRange->aStart;
-    for(ScColorScaleFormat::const_iterator itr = rFormat.begin();
+    for(ScColorScaleEntries::const_iterator itr = rFormat.begin();
             itr != rFormat.end(); ++itr)
     {
         // exact position is not important, we allow only absolute refs

@@ -245,17 +245,18 @@ private:
     mutable boost::scoped_ptr<ScColorFormatCache> mpCache;
 };
 
+typedef std::vector<std::unique_ptr<ScColorScaleEntry>> ScColorScaleEntries;
+
 class SC_DLLPUBLIC ScColorScaleFormat : public ScColorFormat
 {
 private:
-    typedef std::vector<std::unique_ptr<ScColorScaleEntry>> ColorScaleEntries;
-    ColorScaleEntries maColorScales;
+    ScColorScaleEntries maColorScales;
 
     double GetMinValue() const;
     double GetMaxValue() const;
 
     void calcMinMax(double& nMin, double& nMax) const;
-    double CalcValue(double nMin, double nMax, ColorScaleEntries::const_iterator& rItr) const;
+    double CalcValue(double nMin, double nMax, ScColorScaleEntries::const_iterator& rItr) const;
 public:
     ScColorScaleFormat(ScDocument* pDoc);
     ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);
@@ -273,12 +274,10 @@ public:
     virtual bool NeedsRepaint() const SAL_OVERRIDE;
 
     virtual condformat::ScFormatEntryType GetType() const SAL_OVERRIDE;
-    typedef ColorScaleEntries::iterator iterator;
-    typedef ColorScaleEntries::const_iterator const_iterator;
-    iterator begin();
-    const_iterator begin() const;
-    iterator end();
-    const_iterator end() const;
+    ScColorScaleEntries::iterator begin();
+    ScColorScaleEntries::const_iterator begin() const;
+    ScColorScaleEntries::iterator end();
+    ScColorScaleEntries::const_iterator end() const;
 
     ScColorScaleEntry* GetEntry(size_t nPos);
     const ScColorScaleEntry* GetEntry(size_t nPos) const;

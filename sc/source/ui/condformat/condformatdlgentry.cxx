@@ -756,7 +756,7 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( vcl::Window* pParent, ScDocument
     Init();
     if(pFormat)
     {
-        ScColorScaleFormat::const_iterator itr = pFormat->begin();
+        ScColorScaleEntries::const_iterator itr = pFormat->begin();
         SetColorScaleEntryTypes(*itr[0], *maLbEntryTypeMin.get(), *maEdMin.get(), *maLbColMin.get(), pDoc);
         ++itr;
         SetColorScaleEntryTypes(*itr[0], *maLbEntryTypeMax.get(), *maEdMax.get(), *maLbColMax.get(), pDoc);
@@ -928,7 +928,7 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( vcl::Window* pParent, ScDocument
     maLbType->SelectEntryPos(0);
     if(pFormat)
     {
-        ScColorScaleFormat::const_iterator itr = pFormat->begin();
+        ScColorScaleEntries::const_iterator itr = pFormat->begin();
         SetColorScaleEntryTypes(*itr[0], *maLbEntryTypeMin.get(), *maEdMin.get(), *maLbColMin.get(), pDoc);
         assert(pFormat->size() == 3);
         ++itr;

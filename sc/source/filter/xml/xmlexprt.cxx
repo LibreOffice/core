@@ -4301,7 +4301,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     {
                         SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, true, true);
                         const ScColorScaleFormat& mrColorScale = static_cast<const ScColorScaleFormat&>(*pFormatEntry);
-                        for(ScColorScaleFormat::const_iterator it = mrColorScale.begin();
+                        for(ScColorScaleEntries::const_iterator it = mrColorScale.begin();
                                 it != mrColorScale.end(); ++it)
                         {
                             if(it[0]->GetType() == COLORSCALE_FORMULA)

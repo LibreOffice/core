@@ -102,7 +102,7 @@ void testColorScale2Entry_Impl(ScDocument& rDoc)
         const ScColorScaleFormat* pColFormat = static_cast<const ScColorScaleFormat*>(pFormatEntry);
         CPPUNIT_ASSERT_EQUAL(size_t(2), pColFormat->size());
 
-        ScColorScaleFormat::const_iterator format_itr = pColFormat->begin();
+        ScColorScaleEntries::const_iterator format_itr = pColFormat->begin();
         CPPUNIT_ASSERT_EQUAL(aData2Entry[i].eLowerType, format_itr[0]->GetType());
         ++format_itr;
         CPPUNIT_ASSERT(format_itr != pColFormat->end());
@@ -141,7 +141,7 @@ void testColorScale3Entry_Impl(ScDocument& rDoc)
         const ScColorScaleFormat* pColFormat = static_cast<const ScColorScaleFormat*>(pFormatEntry);
         CPPUNIT_ASSERT_EQUAL(size_t(3), pColFormat->size());
 
-        ScColorScaleFormat::const_iterator format_itr = pColFormat->begin();
+        ScColorScaleEntries::const_iterator format_itr = pColFormat->begin();
         CPPUNIT_ASSERT_EQUAL(aData3Entry[i].eLowerType, format_itr[0]->GetType());
         ++format_itr;
         CPPUNIT_ASSERT(format_itr != pColFormat->end());

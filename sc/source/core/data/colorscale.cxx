@@ -308,7 +308,7 @@ ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc):
 ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat):
     ScColorFormat(pDoc)
 {
-    for(const_iterator itr = rFormat.begin(); itr != rFormat.end(); ++itr)
+    for(ScColorScaleEntries::const_iterator itr = rFormat.begin(); itr != rFormat.end(); ++itr)
     {
         maColorScales.push_back(std::unique_ptr<ScColorScaleEntry>(new ScColorScaleEntry(pDoc, *itr[0])));
     }
@@ -340,7 +340,7 @@ void ScColorScaleEntry::SetType( ScColorScaleEntryType eType )
 
 double ScColorScaleFormat::GetMinValue() const
 {
-    const_iterator itr = maColorScales.begin();
+    ScColorScaleEntries::const_iterator itr = maColorScales.begin();
 
     if(itr[0]->GetType() == COLORSCALE_VALUE || itr[0]->GetType() == COLORSCALE_FORMULA)
         return itr[0]->GetValue();
@@ -352,7 +352,7 @@ double ScColorScaleFormat::GetMinValue() const
 
 double ScColorScaleFormat::GetMaxValue() const
 {
-    ColorScaleEntries::const_reverse_iterator itr = maColorScales.rbegin();
+    ScColorScaleEntries::const_reverse_iterator itr = maColorScales.rbegin();
 
     if(itr[0]->GetType() == COLORSCALE_VALUE || itr[0]->GetType() == COLORSCALE_FORMULA)
         return itr[0]->GetValue();
@@ -499,7 +499,7 @@ double GetPercentile( const std::vector<double>& rArray, double fPercentile )
 
 }
 
-double ScColorScaleFormat::CalcValue(double nMin, double nMax, ScColorScaleFormat::const_iterator& itr) const
+double ScColorScaleFormat::CalcValue(double nMin, double nMax, ScColorScaleEntries::const_iterator& itr) const
 {
     switch(itr[0]->GetType())
     {
@@ -555,7 +555,7 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     if(nMin >= nMax)
         return NULL;
 
-    const_iterator itr = begin();
+    ScColorScaleEntries::const_iterator itr = begin();
     double nValMin = CalcValue(nMin, nMax, itr);
     Color rColMin = itr[0]->GetColor();
     ++itr;
@@ -579,31 +579,31 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 
 void ScColorScaleFormat::UpdateReference( sc::RefUpdateContext& rCxt )
 {
-    for(iterator itr = begin(); itr != end(); ++itr)
+    for(ScColorScaleEntries::iterator itr = begin(); itr != end(); ++itr)
         itr[0]->UpdateReference(rCxt);
 }
 
 void ScColorScaleFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
 {
-    for (iterator it = begin(); it != end(); ++it)
+    for (ScColorScaleEntries::iterator it = begin(); it != end(); ++it)
         it[0]->UpdateInsertTab(rCxt);
 }
 
 void ScColorScaleFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
 {
-    for (iterator it = begin(); it != end(); ++it)
+    for (ScColorScaleEntries::iterator it = begin(); it != end(); ++it)
         it[0]->UpdateDeleteTab(rCxt);
 }
 
 void ScColorScaleFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
 {
-    for (iterator it = begin(); it != end(); ++it)
+    for (ScColorScaleEntries::iterator it = begin(); it != end(); ++it)
         it[0]->UpdateMoveTab(rCxt);
 }
 
 bool ScColorScaleFormat::NeedsRepaint() const
 {
-    for(const_iterator itr = begin(), itrEnd = end();
+    for(ScColorScaleEntries::const_iterator itr = begin(), itrEnd = end();
             itr != itrEnd; ++itr)
     {
         if(itr[0]->NeedsRepaint())
@@ -619,22 +619,22 @@ condformat::ScFormatEntryType ScColorScaleFormat::GetType() const
     return condformat::COLORSCALE;
 }
 
-ScColorScaleFormat::iterator ScColorScaleFormat::begin()
+ScColorScaleEntries::iterator ScColorScaleFormat::begin()
 {
     return maColorScales.begin();
 }
 
-ScColorScaleFormat::const_iterator ScColorScaleFormat::begin() const
+ScColorScaleEntries::const_iterator ScColorScaleFormat::begin() const
 {
     return maColorScales.begin();
 }
 
-ScColorScaleFormat::iterator ScColorScaleFormat::end()
+ScColorScaleEntries::iterator ScColorScaleFormat::end()
 {
     return maColorScales.end();
 }
 
-ScColorScaleFormat::const_iterator ScColorScaleFormat::end() const
+ScColorScaleEntries::const_iterator ScColorScaleFormat::end() const
 {
     return maColorScales.end();
 }
