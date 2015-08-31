@@ -101,14 +101,14 @@ namespace stoc_connector {
         nPort = m_socket.getPeerPort();
 
         OUStringBuffer buf( 256 );
-        buf.appendAscii( ",peerPort=" );
+        buf.append( ",peerPort=" );
         buf.append( (sal_Int32) nPort );
-        buf.appendAscii( ",peerHost=" );
+        buf.append( ",peerHost=" );
         buf.append( m_socket.getPeerHost() );
 
-        buf.appendAscii( ",localPort=" );
+        buf.append( ",localPort=" );
         buf.append( (sal_Int32) nPort );
-        buf.appendAscii( ",localHost=" );
+        buf.append( ",localHost=" );
         buf.append( m_socket.getLocalHost( ) );
 
         m_sDescription += buf.makeStringAndClear();

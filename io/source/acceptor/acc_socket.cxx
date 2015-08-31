@@ -176,14 +176,14 @@ namespace io_acceptor {
     void SocketConnection::completeConnectionString()
     {
         OUStringBuffer buf( 256 );
-        buf.appendAscii( ",peerPort=" );
+        buf.append( ",peerPort=" );
         buf.append( (sal_Int32) m_socket.getPeerPort() );
-        buf.appendAscii( ",peerHost=" );
+        buf.append( ",peerHost=" );
         buf.append( m_socket.getPeerHost( ) );
 
-        buf.appendAscii( ",localPort=" );
+        buf.append( ",localPort=" );
         buf.append( (sal_Int32) m_socket.getLocalPort() );
-        buf.appendAscii( ",localHost=" );
+        buf.append( ",localHost=" );
         buf.append( m_socket.getLocalHost() );
 
         m_sDescription += buf.makeStringAndClear();
@@ -332,14 +332,14 @@ namespace io_acceptor {
         if( ! m_addr.setPort( m_nPort ) )
         {
             OUStringBuffer message( 128 );
-            message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - invalid tcp/ip port " );
+            message.append( "acc_socket.cxx:SocketAcceptor::init - error - invalid tcp/ip port " );
             message.append( (sal_Int32) m_nPort );
             throw ConnectionSetupException( message.makeStringAndClear() );
         }
         if( ! m_addr.setHostname( m_sSocketName.pData ) )
         {
             OUStringBuffer message( 128 );
-            message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - invalid host " );
+            message.append( "acc_socket.cxx:SocketAcceptor::init - error - invalid host " );
             message.append( m_sSocketName );
             throw ConnectionSetupException( message.makeStringAndClear() );
         }
@@ -348,16 +348,16 @@ namespace io_acceptor {
         if(! m_socket.bind(m_addr) )
         {
             OUStringBuffer message( 128 );
-            message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - couldn't bind on " );
-            message.append( m_sSocketName ).appendAscii( ":" ).append((sal_Int32)m_nPort);
+            message.append( "acc_socket.cxx:SocketAcceptor::init - error - couldn't bind on " );
+            message.append( m_sSocketName ).append( ":" ).append((sal_Int32)m_nPort);
             throw ConnectionSetupException( message.makeStringAndClear() );
         }
 
         if(! m_socket.listen() )
         {
             OUStringBuffer message( 128 );
-            message.appendAscii( "acc_socket.cxx:SocketAcceptor::init - error - can't listen on " );
-            message.append( m_sSocketName ).appendAscii( ":" ).append( (sal_Int32) m_nPort);
+            message.append( "acc_socket.cxx:SocketAcceptor::init - error - can't listen on " );
+            message.append( m_sSocketName ).append( ":" ).append( (sal_Int32) m_nPort);
             throw ConnectionSetupException( message.makeStringAndClear() );
         }
     }
