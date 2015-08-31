@@ -314,8 +314,8 @@ void SAL_CALL MacabDriver::disposing( const EventObject& ) throw (RuntimeExcepti
 OUString MacabDriver::impl_getConfigurationSettingsPath()
 {
     OUStringBuffer aPath;
-    aPath.appendAscii( "/org.openoffice.Office.DataAccess/DriverSettings/" );
-    aPath.appendAscii( "com.sun.star.comp.sdbc.macab.Driver" );
+    aPath.append( "/org.openoffice.Office.DataAccess/DriverSettings/" );
+    aPath.append( "com.sun.star.comp.sdbc.macab.Driver" );
     return aPath.makeStringAndClear();
 }
 

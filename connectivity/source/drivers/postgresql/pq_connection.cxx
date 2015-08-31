@@ -515,7 +515,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     if( aArguments.getLength() != 2 )
     {
         OUStringBuffer buf(128);
-        buf.appendAscii( "pq_driver: expected 2 arguments, got " );
+        buf.append( "pq_driver: expected 2 arguments, got " );
         buf.append( aArguments.getLength( ) );
         throw IllegalArgumentException(buf.makeStringAndClear(), Reference< XInterface > () , 0 );
     }
@@ -523,7 +523,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     if( ! (aArguments[0] >>= url) )
     {
         OUStringBuffer buf(128);
-        buf.appendAscii( "pq_driver: expected string as first argument, got " );
+        buf.append( "pq_driver: expected string as first argument, got " );
         buf.append( aArguments[0].getValueType().getTypeName() );
         throw IllegalArgumentException( buf.makeStringAndClear() , *this, 0 );
     }
@@ -559,9 +559,9 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 else
                     errorMessage = "#no error message#";
                 OUStringBuffer buf( 128 );
-                buf.appendAscii( "Error in database URL '" );
+                buf.append( "Error in database URL '" );
                 buf.append( url );
-                buf.appendAscii( "':\n" );
+                buf.append( "':\n" );
                 buf.append( errorMessage );
                 // HY092 is "Invalid attribute/option identifier."
                 // Just the most likely error; the error might be  HY024 "Invalid attribute value".
@@ -591,9 +591,9 @@ void Connection::initialize( const Sequence< Any >& aArguments )
 
         const char * error = PQerrorMessage( m_settings.pConnection );
         OUString errorMessage( error, strlen( error) , RTL_TEXTENCODING_ASCII_US );
-        buf.appendAscii( "Couldn't establish database connection to '" );
+        buf.append( "Couldn't establish database connection to '" );
         buf.append( url );
-        buf.appendAscii( "'\n" );
+        buf.append( "'\n" );
         buf.append( errorMessage );
         PQfinish( m_settings.pConnection );
         m_settings.pConnection = 0;
@@ -609,9 +609,9 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     if( isLog( &m_settings, LogLevel::INFO ) )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "connection to '" );
+        buf.append( "connection to '" );
         buf.append( url );
-        buf.appendAscii( "' successfully opened" );
+        buf.append( "' successfully opened" );
         log( &m_settings, LogLevel::INFO, buf.makeStringAndClear() );
     }
 }

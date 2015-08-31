@@ -161,13 +161,13 @@ void ResultSetMetaData::checkForTypes()
             extractConnectionFromStatement( m_origin->getStatement() )->createStatement();
         DisposeGuard guard( stmt );
         OUStringBuffer buf(128);
-        buf.appendAscii( "SELECT oid, typname, typtype FROM pg_type WHERE ");
+        buf.append( "SELECT oid, typname, typtype FROM pg_type WHERE ");
         for( int i  = 0 ; i < m_colCount ; i ++ )
         {
             if( i > 0 )
-                buf.appendAscii( " OR " );
+                buf.append( " OR " );
             int oid = m_colDesc[i].typeOid;
-            buf.appendAscii( "oid=" );
+            buf.append( "oid=" );
             buf.append( (sal_Int32) oid );
         }
         Reference< XResultSet > rs = stmt->executeQuery( buf.makeStringAndClear() );
@@ -459,9 +459,9 @@ void ResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
     {
         OUStringBuffer buf(128);
 
-        buf.appendAscii( "pq_resultsetmetadata: index out of range (expected 1 to " );
+        buf.append( "pq_resultsetmetadata: index out of range (expected 1 to " );
         buf.append( m_colCount );
-        buf.appendAscii( ", got " );
+        buf.append( ", got " );
         buf.append( columnIndex );
         throw SQLException(
             buf.makeStringAndClear(), *this, OUString(), 1, Any() );

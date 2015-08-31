@@ -109,12 +109,12 @@ namespace dbtools
         {
             io_appendTo.insert( 0, '(' );
             io_appendTo.insert( 1, ' ' );
-            io_appendTo.appendAscii( " ) AND " );
+            io_appendTo.append( " ) AND " );
         }
 
-        io_appendTo.appendAscii( "( " );
+        io_appendTo.append( "( " );
         io_appendTo.append( i_component );
-        io_appendTo.appendAscii( " )" );
+        io_appendTo.append( " )" );
     }
 
 

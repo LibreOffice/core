@@ -259,11 +259,11 @@ void Indexes::dropByIndex( sal_Int32 index )
     if( index < 0 ||  index >= m_values.getLength() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "Indexes: Index out of range (allowed 0 to " );
+        buf.append( "Indexes: Index out of range (allowed 0 to " );
         buf.append( (sal_Int32) (m_values.getLength() -1) );
-        buf.appendAscii( ", got " );
+        buf.append( ", got " );
         buf.append( index );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         throw com::sun::star::lang::IndexOutOfBoundsException(
             buf.makeStringAndClear(), *this );
     }

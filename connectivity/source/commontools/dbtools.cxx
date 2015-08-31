@@ -830,7 +830,7 @@ static OUString impl_doComposeTableName( const Reference< XDatabaseMetaData >& _
     if ( !_rSchema.isEmpty() && aNameComps.bSchemas )
     {
         aComposedName.append( _bQuote ? quoteName( sQuoteString, _rSchema ) : _rSchema );
-        aComposedName.appendAscii( "." );
+        aComposedName.append( "." );
     }
 
     aComposedName.append( _bQuote ? quoteName( sQuoteString, _rName ) : _rName );
@@ -1933,9 +1933,9 @@ void getBooleanComparisonPredicate( const OUString& _rExpression, const bool _bV
     case BooleanComparisonMode::IS_LITERAL:
         _out_rSQLPredicate.append( _rExpression );
         if ( _bValue )
-            _out_rSQLPredicate.appendAscii( " IS TRUE" );
+            _out_rSQLPredicate.append( " IS TRUE" );
         else
-            _out_rSQLPredicate.appendAscii( " IS FALSE" );
+            _out_rSQLPredicate.append( " IS FALSE" );
         break;
 
     case BooleanComparisonMode::EQUAL_LITERAL:
@@ -1946,16 +1946,16 @@ void getBooleanComparisonPredicate( const OUString& _rExpression, const bool _bV
     case BooleanComparisonMode::ACCESS_COMPAT:
         if ( _bValue )
         {
-            _out_rSQLPredicate.appendAscii( " NOT ( ( " );
+            _out_rSQLPredicate.append( " NOT ( ( " );
             _out_rSQLPredicate.append( _rExpression );
-            _out_rSQLPredicate.appendAscii( " = 0 ) OR ( " );
+            _out_rSQLPredicate.append( " = 0 ) OR ( " );
             _out_rSQLPredicate.append( _rExpression );
-            _out_rSQLPredicate.appendAscii( " IS NULL ) )" );
+            _out_rSQLPredicate.append( " IS NULL ) )" );
         }
         else
         {
             _out_rSQLPredicate.append( _rExpression );
-            _out_rSQLPredicate.appendAscii( " = 0" );
+            _out_rSQLPredicate.append( " = 0" );
         }
         break;
 

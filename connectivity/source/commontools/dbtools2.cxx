@@ -126,7 +126,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         if ( nParenPos == -1 )
         {
             aSql.append(sTypeName);
-            aSql.appendAscii("(");
+            aSql.append("(");
         }
         else
         {
@@ -137,13 +137,13 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         {
             aSql.append(nPrecision);
             if ( (nScale > 0) || (!_sCreatePattern.isEmpty() && sCreateParams.indexOf(_sCreatePattern) != -1) )
-                aSql.appendAscii(",");
+                aSql.append(",");
         }
         if ( (nScale > 0) || ( !_sCreatePattern.isEmpty() && sCreateParams.indexOf(_sCreatePattern) != -1 ) || nDataType == DataType::TIMESTAMP )
             aSql.append(nScale);
 
         if ( nParenPos == -1 )
-            aSql.appendAscii(")");
+            aSql.append(")");
         else
         {
             nParenPos = sTypeName.indexOf(')',nParenPos);
@@ -183,7 +183,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
     if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) )
         xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
 
-    aSql.appendAscii(" ");
+    aSql.append(" ");
 
     aSql.append(createStandardTypePart(xColProp, _xConnection, _sCreatePattern));
 
@@ -192,7 +192,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
 
     if ( bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
     {
-        aSql.appendAscii(" ");
+        aSql.append(" ");
         aSql.append(sAutoIncrementValue);
     }
 
@@ -238,7 +238,7 @@ OUString createStandardCreateStatement(const Reference< XPropertySet >& descript
         if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
         {
             aSql.append(createStandardColumnPart(xColProp,_xConnection,_pHelper,_sCreatePattern));
-            aSql.appendAscii(",");
+            aSql.append(",");
         }
     }
     return aSql.makeStringAndClear();
@@ -366,7 +366,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
         if ( aSql[aSql.getLength() - 1] == ',' )
             aSql[aSql.getLength() - 1] = ')';
         else
-            aSql.appendAscii(")");
+            aSql.append(")");
     }
 
     return aSql.makeStringAndClear();

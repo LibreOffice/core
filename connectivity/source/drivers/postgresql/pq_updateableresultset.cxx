@@ -353,18 +353,18 @@ void UpdateableResultSet::deleteRow(  ) throw (SQLException, RuntimeException, s
     if( m_row < 0 || m_row >= m_rowCount )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "deleteRow cannot be called on invalid row (" );
+        buf.append( "deleteRow cannot be called on invalid row (" );
         buf.append( m_row );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         throw SQLException( buf.makeStringAndClear() , *this, OUString(), 0, Any() );
     }
 
     Reference< XStatement > stmt = extractConnectionFromStatement(m_owner)->createStatement();
     DisposeGuard dispGuard( stmt );
     OUStringBuffer buf( 128 );
-    buf.appendAscii( "DELETE FROM " );
+    buf.append( "DELETE FROM " );
     bufferQuoteQualifiedIdentifier( buf, m_schema, m_table, *m_ppSettings );
-    buf.appendAscii( " " );
+    buf.append( " " );
     buf.append( buildWhereClause() );
 
     stmt->executeUpdate( buf.makeStringAndClear() );

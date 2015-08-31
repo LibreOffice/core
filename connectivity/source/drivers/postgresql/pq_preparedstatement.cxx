@@ -222,13 +222,13 @@ void PreparedStatement::checkColumnIndex( sal_Int32 parameterIndex )
     if( parameterIndex < 1 || parameterIndex > (sal_Int32) m_vars.size() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "pq_preparedstatement: parameter index out of range (expected 1 to " );
+        buf.append( "pq_preparedstatement: parameter index out of range (expected 1 to " );
         buf.append( (sal_Int32 ) m_vars.size() );
-        buf.appendAscii( ", got " );
+        buf.append( ", got " );
         buf.append( parameterIndex );
-        buf.appendAscii( ", statement '" );
+        buf.append( ", statement '" );
         buf.append( OStringToOUString( m_stmt, m_pSettings->encoding ) );
-        buf.appendAscii( "')" );
+        buf.append( "')" );
         throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
     }
 }
@@ -315,18 +315,18 @@ void PreparedStatement::raiseSQLException(
     throw( SQLException )
 {
     OUStringBuffer buf(128);
-    buf.appendAscii( "pq_driver: ");
+    buf.append( "pq_driver: ");
     if( errorType )
     {
-        buf.appendAscii( "[" );
+        buf.append( "[" );
         buf.appendAscii( errorType );
-        buf.appendAscii( "]" );
+        buf.append( "]" );
     }
     buf.append(
         OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
-    buf.appendAscii( " (caused by statement '" );
+    buf.append( " (caused by statement '" );
     buf.appendAscii( m_executedStatement.getStr() );
-    buf.appendAscii( "')" );
+    buf.append( "')" );
     OUString error = buf.makeStringAndClear();
     log( m_pSettings, LogLevel::ERROR, error );
     throw SQLException( error, *this, OUString(), 1, Any() );
@@ -800,9 +800,9 @@ sal_Bool PreparedStatement::convertFastPropertyValue(
     default:
     {
         OUStringBuffer buf(128);
-        buf.appendAscii( "pq_statement: Invalid property handle (" );
+        buf.append( "pq_statement: Invalid property handle (" );
         buf.append( nHandle );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         throw IllegalArgumentException( buf.makeStringAndClear(), *this, 2 );
     }
     }

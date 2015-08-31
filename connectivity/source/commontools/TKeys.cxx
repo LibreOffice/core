@@ -157,19 +157,19 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
         // if we're here, we belong to a table which is not new, i.e. already exists in the database.
         // In this case, really append the new index.
         OUStringBuffer aSql;
-        aSql.appendAscii("ALTER TABLE ");
+        aSql.append("ALTER TABLE ");
         OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
 
         aSql.append(composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable, ::dbtools::eInTableDefinitions, false, false, true ));
-        aSql.appendAscii(" ADD ");
+        aSql.append(" ADD ");
 
         if ( nKeyType == KeyType::PRIMARY )
         {
-            aSql.appendAscii(" PRIMARY KEY (");
+            aSql.append(" PRIMARY KEY (");
         }
         else if ( nKeyType == KeyType::FOREIGN )
         {
-            aSql.appendAscii(" FOREIGN KEY (");
+            aSql.append(" FOREIGN KEY (");
         }
         else
             throw SQLException();
@@ -180,28 +180,28 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
         for(sal_Int32 i = 0 ; i < xColumns->getCount() ; ++i)
         {
             if ( i > 0 )
-                aSql.appendAscii(",");
+                aSql.append(",");
             xColProp.set(xColumns->getByIndex(i), css::uno::UNO_QUERY);
             aSql.append( ::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME)))) );
 
         }
-        aSql.appendAscii(")");
+        aSql.append(")");
 
         if ( nKeyType == KeyType::FOREIGN )
         {
-            aSql.appendAscii(" REFERENCES ");
+            aSql.append(" REFERENCES ");
             aSql.append(::dbtools::quoteTableName(m_pTable->getConnection()->getMetaData(),sReferencedName,::dbtools::eInTableDefinitions));
-            aSql.appendAscii(" (");
+            aSql.append(" (");
 
             for(sal_Int32 i=0;i<xColumns->getCount();++i)
             {
                 if ( i > 0 )
-                    aSql.appendAscii(",");
+                    aSql.append(",");
                 xColumns->getByIndex(i) >>= xColProp;
                 aSql.append(::dbtools::quoteName( aQuote,getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_RELATEDCOLUMN)))));
 
             }
-            aSql.appendAscii(")");
+            aSql.append(")");
             aSql.append(getKeyRuleString(true   ,nUpdateRule));
             aSql.append(getKeyRuleString(false  ,nDeleteRule));
         }
@@ -273,7 +273,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
         else
         {
             OUStringBuffer aSql;
-            aSql.appendAscii("ALTER TABLE ");
+            aSql.append("ALTER TABLE ");
 
             aSql.append( composeTableName( m_pTable->getConnection()->getMetaData(), m_pTable,::dbtools::eInTableDefinitions, false, false, true ));
 
@@ -285,7 +285,7 @@ void OKeysHelper::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
             }
             if ( KeyType::PRIMARY == nKeyType )
             {
-                aSql.appendAscii(" DROP PRIMARY KEY");
+                aSql.append(" DROP PRIMARY KEY");
             }
             else
             {

@@ -165,11 +165,11 @@ Any Container::getByName( const OUString& aName )
     if( ii == m_name2index.end() )
     {
         OUStringBuffer buf(128);
-        buf.appendAscii( "Element "  );
+        buf.append( "Element "  );
         buf.append( aName );
-        buf.appendAscii( " unknown in " );
+        buf.append( " unknown in " );
         buf.append( m_type );
-        buf.appendAscii( "-Container" );
+        buf.append( "-Container" );
         throw NoSuchElementException( buf.makeStringAndClear() , *this );
     }
     OSL_ASSERT( ii->second >= 0 && ii->second < m_values.getLength() );
@@ -217,11 +217,11 @@ Any Container::getByIndex( sal_Int32 Index )
     if( Index < 0 || Index >= m_values.getLength() )
     {
         OUStringBuffer buf(128);
-        buf.appendAscii( "Index " );
+        buf.append( "Index " );
         buf.append( Index );
-        buf.appendAscii(" out of range for " );
+        buf.append(" out of range for " );
         buf.append( m_type );
-        buf.appendAscii("-Container, expected 0 <= x <= " );
+        buf.append("-Container, expected 0 <= x <= " );
         buf.append( (sal_Int32 ) (m_values.getLength() -1));
         throw IndexOutOfBoundsException( buf.makeStringAndClear(), *this );
     }
@@ -329,15 +329,15 @@ void Container::dropByName( const OUString& elementName )
     if( ii == m_name2index.end() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "Column " );
+        buf.append( "Column " );
         buf.append( elementName );
-        buf.appendAscii( " is unknown in " );
+        buf.append( " is unknown in " );
         buf.append( m_type );
 //         buf.appendAscii( " " );
 //         buf.append( m_schemaName );
 //         buf.appendAscii( "." );
 //         buf.append( m_tableName );
-        buf.appendAscii( " container, so it can't be dropped" );
+        buf.append( " container, so it can't be dropped" );
         throw com::sun::star::container::NoSuchElementException(
             buf.makeStringAndClear(), *this );
     }
@@ -353,11 +353,11 @@ void Container::dropByIndex( sal_Int32 index )
     if( index < 0 ||  index >= m_values.getLength() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "Index out of range (allowed 0 to " );
+        buf.append( "Index out of range (allowed 0 to " );
         buf.append((sal_Int32)(m_values.getLength() -1) );
-        buf.appendAscii( ", got " );
+        buf.append( ", got " );
         buf.append( index );
-        buf.appendAscii( ") in " );
+        buf.append( ") in " );
         buf.append( m_type );
         throw com::sun::star::lang::IndexOutOfBoundsException(
             buf.makeStringAndClear(), *this );
@@ -408,11 +408,11 @@ void Container::append(
     if( hasByName( name ) )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "a ");
+        buf.append( "a ");
         buf.append( m_type );
-        buf.appendAscii( " with name " );
+        buf.append( " with name " );
         buf.append( name );
-        buf.appendAscii( " already exists in this container" );
+        buf.append( " already exists in this container" );
         throw com::sun::star::container::ElementExistException(
             buf.makeStringAndClear() , *this );
     }

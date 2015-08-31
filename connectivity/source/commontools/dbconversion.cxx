@@ -105,7 +105,7 @@ namespace dbtools
     {
         css::util::Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year);
         OUStringBuffer aTemp(toDateString(aDate));
-        aTemp.appendAscii(" ");
+        aTemp.append(" ");
         css::util::Time const aTime(_rDateTime.NanoSeconds, _rDateTime.Seconds,
                 _rDateTime.Minutes, _rDateTime.Hours, _rDateTime.IsUTC);
         aTemp.append( toTimeString(aTime) );

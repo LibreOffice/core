@@ -646,11 +646,11 @@ com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( S
             {
 
                 OUStringBuffer buf;
-                buf.appendAscii( "error during array parsing, didn't expect a } at position " );
+                buf.append( "error during array parsing, didn't expect a } at position " );
                 buf.append( (sal_Int32) i );
-                buf.appendAscii( " ('" );
+                buf.append( " ('" );
                 buf.append( str );
-                buf.appendAscii( "')" );
+                buf.append( "')" );
                 throw SQLException(
                     buf.makeStringAndClear(),
                     Reference< XInterface > (), OUString(), 1, Any() );

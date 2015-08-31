@@ -1309,53 +1309,53 @@ OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  ) throw(SQLException, 
     OUStringBuffer aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_STRING_FUNCTIONS,nValue,*this);
     if(nValue & SQL_FN_STR_ASCII)
-        aValue.appendAscii("ASCII,");
+        aValue.append("ASCII,");
     if(nValue & SQL_FN_STR_BIT_LENGTH)
-        aValue.appendAscii("BIT_LENGTH,");
+        aValue.append("BIT_LENGTH,");
     if(nValue & SQL_FN_STR_CHAR)
-        aValue.appendAscii("CHAR,");
+        aValue.append("CHAR,");
     if(nValue & SQL_FN_STR_CHAR_LENGTH)
-        aValue.appendAscii("CHAR_LENGTH,");
+        aValue.append("CHAR_LENGTH,");
     if(nValue & SQL_FN_STR_CHARACTER_LENGTH)
-        aValue.appendAscii("CHARACTER_LENGTH,");
+        aValue.append("CHARACTER_LENGTH,");
     if(nValue & SQL_FN_STR_CONCAT)
-        aValue.appendAscii("CONCAT,");
+        aValue.append("CONCAT,");
     if(nValue & SQL_FN_STR_DIFFERENCE)
-        aValue.appendAscii("DIFFERENCE,");
+        aValue.append("DIFFERENCE,");
     if(nValue & SQL_FN_STR_INSERT)
-        aValue.appendAscii("INSERT,");
+        aValue.append("INSERT,");
     if(nValue & SQL_FN_STR_LCASE)
-        aValue.appendAscii("LCASE,");
+        aValue.append("LCASE,");
     if(nValue & SQL_FN_STR_LEFT)
-        aValue.appendAscii("LEFT,");
+        aValue.append("LEFT,");
     if(nValue & SQL_FN_STR_LENGTH)
-        aValue.appendAscii("LENGTH,");
+        aValue.append("LENGTH,");
     if(nValue & SQL_FN_STR_LOCATE)
-        aValue.appendAscii("LOCATE,");
+        aValue.append("LOCATE,");
     if(nValue & SQL_FN_STR_LOCATE_2)
-        aValue.appendAscii("LOCATE_2,");
+        aValue.append("LOCATE_2,");
     if(nValue & SQL_FN_STR_LTRIM)
-        aValue.appendAscii("LTRIM,");
+        aValue.append("LTRIM,");
     if(nValue & SQL_FN_STR_OCTET_LENGTH)
-        aValue.appendAscii("OCTET_LENGTH,");
+        aValue.append("OCTET_LENGTH,");
     if(nValue & SQL_FN_STR_POSITION)
-        aValue.appendAscii("POSITION,");
+        aValue.append("POSITION,");
     if(nValue & SQL_FN_STR_REPEAT)
-        aValue.appendAscii("REPEAT,");
+        aValue.append("REPEAT,");
     if(nValue & SQL_FN_STR_REPLACE)
-        aValue.appendAscii("REPLACE,");
+        aValue.append("REPLACE,");
     if(nValue & SQL_FN_STR_RIGHT)
-        aValue.appendAscii("RIGHT,");
+        aValue.append("RIGHT,");
     if(nValue & SQL_FN_STR_RTRIM)
-        aValue.appendAscii("RTRIM,");
+        aValue.append("RTRIM,");
     if(nValue & SQL_FN_STR_SOUNDEX)
-        aValue.appendAscii("SOUNDEX,");
+        aValue.append("SOUNDEX,");
     if(nValue & SQL_FN_STR_SPACE)
-        aValue.appendAscii("SPACE,");
+        aValue.append("SPACE,");
     if(nValue & SQL_FN_STR_SUBSTRING)
-        aValue.appendAscii("SUBSTRING,");
+        aValue.append("SUBSTRING,");
     if(nValue & SQL_FN_STR_UCASE)
-        aValue.appendAscii("UCASE,");
+        aValue.append("UCASE,");
 
 
     if ( !aValue.isEmpty() )
@@ -1371,47 +1371,47 @@ OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  ) throw(SQLException
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_TIMEDATE_FUNCTIONS,nValue,*this);
 
     if(nValue & SQL_FN_TD_CURRENT_DATE)
-        aValue.appendAscii("CURRENT_DATE,");
+        aValue.append("CURRENT_DATE,");
     if(nValue & SQL_FN_TD_CURRENT_TIME)
-        aValue.appendAscii("CURRENT_TIME,");
+        aValue.append("CURRENT_TIME,");
     if(nValue & SQL_FN_TD_CURRENT_TIMESTAMP)
-        aValue.appendAscii("CURRENT_TIMESTAMP,");
+        aValue.append("CURRENT_TIMESTAMP,");
     if(nValue & SQL_FN_TD_CURDATE)
-        aValue.appendAscii("CURDATE,");
+        aValue.append("CURDATE,");
     if(nValue & SQL_FN_TD_CURTIME)
-        aValue.appendAscii("CURTIME,");
+        aValue.append("CURTIME,");
     if(nValue & SQL_FN_TD_DAYNAME)
-        aValue.appendAscii("DAYNAME,");
+        aValue.append("DAYNAME,");
     if(nValue & SQL_FN_TD_DAYOFMONTH)
-        aValue.appendAscii("DAYOFMONTH,");
+        aValue.append("DAYOFMONTH,");
     if(nValue & SQL_FN_TD_DAYOFWEEK)
-        aValue.appendAscii("DAYOFWEEK,");
+        aValue.append("DAYOFWEEK,");
     if(nValue & SQL_FN_TD_DAYOFYEAR)
-        aValue.appendAscii("DAYOFYEAR,");
+        aValue.append("DAYOFYEAR,");
     if(nValue & SQL_FN_TD_EXTRACT)
-        aValue.appendAscii("EXTRACT,");
+        aValue.append("EXTRACT,");
     if(nValue & SQL_FN_TD_HOUR)
-        aValue.appendAscii("HOUR,");
+        aValue.append("HOUR,");
     if(nValue & SQL_FN_TD_MINUTE)
-        aValue.appendAscii("MINUTE,");
+        aValue.append("MINUTE,");
     if(nValue & SQL_FN_TD_MONTH)
-        aValue.appendAscii("MONTH,");
+        aValue.append("MONTH,");
     if(nValue & SQL_FN_TD_MONTHNAME)
-        aValue.appendAscii("MONTHNAME,");
+        aValue.append("MONTHNAME,");
     if(nValue & SQL_FN_TD_NOW)
-        aValue.appendAscii("NOW,");
+        aValue.append("NOW,");
     if(nValue & SQL_FN_TD_QUARTER)
-        aValue.appendAscii("QUARTER,");
+        aValue.append("QUARTER,");
     if(nValue & SQL_FN_TD_SECOND)
-        aValue.appendAscii("SECOND,");
+        aValue.append("SECOND,");
     if(nValue & SQL_FN_TD_TIMESTAMPADD)
-        aValue.appendAscii("TIMESTAMPADD,");
+        aValue.append("TIMESTAMPADD,");
     if(nValue & SQL_FN_TD_TIMESTAMPDIFF)
-        aValue.appendAscii("TIMESTAMPDIFF,");
+        aValue.append("TIMESTAMPDIFF,");
     if(nValue & SQL_FN_TD_WEEK)
-        aValue.appendAscii("WEEK,");
+        aValue.append("WEEK,");
     if(nValue & SQL_FN_TD_YEAR)
-        aValue.appendAscii("YEAR,");
+        aValue.append("YEAR,");
 
     if ( !aValue.isEmpty() )
         aValue.setLength(aValue.getLength()-1);
@@ -1426,11 +1426,11 @@ OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  ) throw(SQLException, 
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SYSTEM_FUNCTIONS,nValue,*this);
 
     if(nValue & SQL_FN_SYS_DBNAME)
-        aValue.appendAscii("DBNAME,");
+        aValue.append("DBNAME,");
     if(nValue & SQL_FN_SYS_IFNULL)
-        aValue.appendAscii("IFNULL,");
+        aValue.append("IFNULL,");
     if(nValue & SQL_FN_SYS_USERNAME)
-        aValue.appendAscii("USERNAME,");
+        aValue.append("USERNAME,");
 
     if ( !aValue.isEmpty() )
         aValue.setLength(aValue.getLength()-1);
@@ -1445,53 +1445,53 @@ OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  ) throw(SQLException,
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_NUMERIC_FUNCTIONS,nValue,*this);
 
     if(nValue & SQL_FN_NUM_ABS)
-        aValue.appendAscii("ABS,");
+        aValue.append("ABS,");
     if(nValue & SQL_FN_NUM_ACOS)
-        aValue.appendAscii("ACOS,");
+        aValue.append("ACOS,");
     if(nValue & SQL_FN_NUM_ASIN)
-        aValue.appendAscii("ASIN,");
+        aValue.append("ASIN,");
     if(nValue & SQL_FN_NUM_ATAN)
-        aValue.appendAscii("ATAN,");
+        aValue.append("ATAN,");
     if(nValue & SQL_FN_NUM_ATAN2)
-        aValue.appendAscii("ATAN2,");
+        aValue.append("ATAN2,");
     if(nValue & SQL_FN_NUM_CEILING)
-        aValue.appendAscii("CEILING,");
+        aValue.append("CEILING,");
     if(nValue & SQL_FN_NUM_COS)
-        aValue.appendAscii("COS,");
+        aValue.append("COS,");
     if(nValue & SQL_FN_NUM_COT)
-        aValue.appendAscii("COT,");
+        aValue.append("COT,");
     if(nValue & SQL_FN_NUM_DEGREES)
-        aValue.appendAscii("DEGREES,");
+        aValue.append("DEGREES,");
     if(nValue & SQL_FN_NUM_EXP)
-        aValue.appendAscii("EXP,");
+        aValue.append("EXP,");
     if(nValue & SQL_FN_NUM_FLOOR)
-        aValue.appendAscii("FLOOR,");
+        aValue.append("FLOOR,");
     if(nValue & SQL_FN_NUM_LOG)
-        aValue.appendAscii("LOGF,");
+        aValue.append("LOGF,");
     if(nValue & SQL_FN_NUM_LOG10)
-        aValue.appendAscii("LOG10,");
+        aValue.append("LOG10,");
     if(nValue & SQL_FN_NUM_MOD)
-        aValue.appendAscii("MOD,");
+        aValue.append("MOD,");
     if(nValue & SQL_FN_NUM_PI)
-        aValue.appendAscii("PI,");
+        aValue.append("PI,");
     if(nValue & SQL_FN_NUM_POWER)
-        aValue.appendAscii("POWER,");
+        aValue.append("POWER,");
     if(nValue & SQL_FN_NUM_RADIANS)
-        aValue.appendAscii("RADIANS,");
+        aValue.append("RADIANS,");
     if(nValue & SQL_FN_NUM_RAND)
-        aValue.appendAscii("RAND,");
+        aValue.append("RAND,");
     if(nValue & SQL_FN_NUM_ROUND)
-        aValue.appendAscii("ROUND,");
+        aValue.append("ROUND,");
     if(nValue & SQL_FN_NUM_SIGN)
-        aValue.appendAscii("SIGN,");
+        aValue.append("SIGN,");
     if(nValue & SQL_FN_NUM_SIN)
-        aValue.appendAscii("SIN,");
+        aValue.append("SIN,");
     if(nValue & SQL_FN_NUM_SQRT)
-        aValue.appendAscii("SQRT,");
+        aValue.append("SQRT,");
     if(nValue & SQL_FN_NUM_TAN)
-        aValue.appendAscii("TAN,");
+        aValue.append("TAN,");
     if(nValue & SQL_FN_NUM_TRUNCATE)
-        aValue.appendAscii("TRUNCATE,");
+        aValue.append("TRUNCATE,");
 
     if ( !aValue.isEmpty() )
         aValue.setLength(aValue.getLength()-1);

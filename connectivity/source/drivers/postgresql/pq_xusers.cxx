@@ -157,9 +157,9 @@ void Users::dropByName( const OUString& elementName )
     if( ii == m_name2index.end() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "User " );
+        buf.append( "User " );
         buf.append( elementName );
-        buf.appendAscii( " is unknown, so it can't be dropped" );
+        buf.append( " is unknown, so it can't be dropped" );
         throw com::sun::star::container::NoSuchElementException(
             buf.makeStringAndClear(), *this );
     }
@@ -176,11 +176,11 @@ void Users::dropByIndex( sal_Int32 index )
     if( index < 0 ||  index >= m_values.getLength() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "USERS: Index out of range (allowed 0 to " );
+        buf.append( "USERS: Index out of range (allowed 0 to " );
         buf.append( (sal_Int32) (m_values.getLength() -1) );
-        buf.appendAscii( ", got " );
+        buf.append( ", got " );
         buf.append( index );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         throw com::sun::star::lang::IndexOutOfBoundsException(
             buf.makeStringAndClear(), *this );
     }
@@ -191,7 +191,7 @@ void Users::dropByIndex( sal_Int32 index )
     set->getPropertyValue( getStatics().NAME ) >>= name;
 
     OUStringBuffer update( 128 );
-    update.appendAscii( "DROP USER " );
+    update.append( "DROP USER " );
     bufferQuoteIdentifier( update, name, m_pSettings );
 
     Reference< XStatement > stmt = m_origin->createStatement( );

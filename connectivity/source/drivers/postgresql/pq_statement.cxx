@@ -246,18 +246,18 @@ void Statement::raiseSQLException(
     throw( SQLException )
 {
     OUStringBuffer buf(128);
-    buf.appendAscii( "pq_driver: ");
+    buf.append( "pq_driver: ");
     if( errorType )
     {
-        buf.appendAscii( "[" );
+        buf.append( "[" );
         buf.appendAscii( errorType );
-        buf.appendAscii( "]" );
+        buf.append( "]" );
     }
     buf.append(
         OUString( errorMsg, strlen(errorMsg) , m_pSettings->encoding ) );
-    buf.appendAscii( " (caused by statement '" );
+    buf.append( " (caused by statement '" );
     buf.append( sql );
-    buf.appendAscii( "')" );
+    buf.append( "')" );
     OUString error = buf.makeStringAndClear();
     log( m_pSettings, LogLevel::ERROR, error );
     throw SQLException( error, *this, OUString(), 1, Any() );
@@ -297,18 +297,18 @@ static void raiseSQLException(
     throw( SQLException )
 {
     OUStringBuffer buf(128);
-    buf.appendAscii( "pq_driver: ");
+    buf.append( "pq_driver: ");
     if( errorType )
     {
-        buf.appendAscii( "[" );
+        buf.append( "[" );
         buf.appendAscii( errorType );
-        buf.appendAscii( "]" );
+        buf.append( "]" );
     }
     buf.append(
         OUString( errorMsg, strlen(errorMsg) , pSettings->encoding ) );
-    buf.appendAscii( " (caused by statement '" );
+    buf.append( " (caused by statement '" );
     buf.append( OStringToOUString( sql, pSettings->encoding ) );
-    buf.appendAscii( "')" );
+    buf.append( "')" );
     OUString error = buf.makeStringAndClear();
     log( pSettings, LogLevel::ERROR, error );
     throw SQLException( error, owner, OUString(), 1, Any() );
@@ -939,9 +939,9 @@ sal_Bool Statement::convertFastPropertyValue(
     default:
     {
         OUStringBuffer buf(128);
-        buf.appendAscii( "pq_statement: Invalid property handle (" );
+        buf.append( "pq_statement: Invalid property handle (" );
         buf.append( nHandle );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         throw IllegalArgumentException( buf.makeStringAndClear(), *this, 2 );
     }
     }

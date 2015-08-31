@@ -26,24 +26,24 @@ namespace connectivity { namespace hsqldb
     void HTools::appendTableFilterCrit( OUStringBuffer& _inout_rBuffer, const OUString& _rCatalog,
         const OUString& _rSchema, const OUString& _rName, bool _bShortForm )
     {
-        _inout_rBuffer.appendAscii( " WHERE " );
+        _inout_rBuffer.append( " WHERE " );
         if ( !_rCatalog.isEmpty() )
         {
             _inout_rBuffer.appendAscii( _bShortForm ? "TABLE_CAT" : "TABLE_CATALOG" );
-            _inout_rBuffer.appendAscii( " = '" );
+            _inout_rBuffer.append( " = '" );
             _inout_rBuffer.append     ( _rCatalog );
-            _inout_rBuffer.appendAscii( "' AND " );
+            _inout_rBuffer.append( "' AND " );
         }
         if ( !_rSchema.isEmpty() )
         {
             _inout_rBuffer.appendAscii( _bShortForm ? "TABLE_SCHEM" : "TABLE_SCHEMA" );
-            _inout_rBuffer.appendAscii( " = '" );
+            _inout_rBuffer.append( " = '" );
             _inout_rBuffer.append     ( _rSchema );
-            _inout_rBuffer.appendAscii( "' AND " );
+            _inout_rBuffer.append( "' AND " );
         }
-        _inout_rBuffer.appendAscii( "TABLE_NAME = '" );
+        _inout_rBuffer.append( "TABLE_NAME = '" );
         _inout_rBuffer.append     ( _rName );
-        _inout_rBuffer.appendAscii( "'" );
+        _inout_rBuffer.append( "'" );
     }
 
 

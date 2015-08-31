@@ -94,9 +94,9 @@ namespace connectivity { namespace hsqldb
         // create a statement which can be used to re-create the original view, in case
         // dropping it succeeds, but creating it with a new statement fails
         OUStringBuffer aRestoreCommand;
-        aRestoreCommand.appendAscii( "CREATE VIEW " );
+        aRestoreCommand.append( "CREATE VIEW " );
         aRestoreCommand.append     ( sQualifiedName );
-        aRestoreCommand.appendAscii( " AS " );
+        aRestoreCommand.append( " AS " );
         aRestoreCommand.append     ( impl_getCommand_throwSQLException() );
         OUString sRestoreCommand( aRestoreCommand.makeStringAndClear() );
 
@@ -105,15 +105,15 @@ namespace connectivity { namespace hsqldb
         {
             // drop the existing view
             OUStringBuffer aCommand;
-            aCommand.appendAscii( "DROP VIEW " );
+            aCommand.append( "DROP VIEW " );
             aCommand.append     ( sQualifiedName );
             xStatement->execute( aCommand.makeStringAndClear() );
             bDropSucceeded = true;
 
             // create a new one with the same name
-            aCommand.appendAscii( "CREATE VIEW " );
+            aCommand.append( "CREATE VIEW " );
             aCommand.append     ( sQualifiedName );
-            aCommand.appendAscii( " AS " );
+            aCommand.append( " AS " );
             aCommand.append     ( _rNewCommand );
             xStatement->execute( aCommand.makeStringAndClear() );
         }
@@ -156,7 +156,7 @@ namespace connectivity { namespace hsqldb
     OUString HView::impl_getCommand() const
     {
         OUStringBuffer aCommand;
-        aCommand.appendAscii( "SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.SYSTEM_VIEWS " );
+        aCommand.append( "SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.SYSTEM_VIEWS " );
         HTools::appendTableFilterCrit( aCommand, m_CatalogName, m_SchemaName, m_Name, false );
         ::utl::SharedUNOComponent< XStatement > xStatement; xStatement.set( m_xConnection->createStatement(), UNO_QUERY_THROW );
         Reference< XResultSet > xResult( xStatement->executeQuery( aCommand.makeStringAndClear() ), UNO_QUERY_THROW );

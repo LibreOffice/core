@@ -389,9 +389,9 @@ namespace dbtools
                     if ( !sAdditionalFilter.isEmpty() )
                         sAdditionalFilter.append(" AND ");
 
-                    sAdditionalFilter.appendAscii("( ",((sal_Int32)(sizeof("( ")-1)));
+                    sAdditionalFilter.append("( ");
                     sAdditionalFilter.append(*aComponent);
-                    sAdditionalFilter.appendAscii(" )",((sal_Int32)(sizeof(" )")-1)));
+                    sAdditionalFilter.append(" )");
                 }
 
                 // now set this filter at the 's filter manager

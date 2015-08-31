@@ -1138,9 +1138,9 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "DatabaseMetaData::getTables got called with " );
+        buf.append( "DatabaseMetaData::getTables got called with " );
         buf.append( schemaPattern );
-        buf.appendAscii( "." );
+        buf.append( "." );
         buf.append( tableNamePattern );
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
@@ -1425,8 +1425,8 @@ static void columnMetaData2DatabaseTypeDescription(
         {
             oidMap[row->getInt(12)] = DatabaseTypeDescription();
             if( domains )
-                queryBuf.appendAscii( " OR " );
-            queryBuf.appendAscii( "oid = " );
+                queryBuf.append( " OR " );
+            queryBuf.append( "oid = " );
             queryBuf.append( row->getInt(12 ) );
             domains ++;
         }
@@ -1464,11 +1464,11 @@ static void columnMetaData2DatabaseTypeDescription(
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "DatabaseMetaData::getColumns got called with " );
+        buf.append( "DatabaseMetaData::getColumns got called with " );
         buf.append( schemaPattern );
-        buf.appendAscii( "." );
+        buf.append( "." );
         buf.append( tableNamePattern );
-        buf.appendAscii( "." );
+        buf.append( "." );
         buf.append( columnNamePattern );
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
@@ -1647,11 +1647,11 @@ static void columnMetaData2DatabaseTypeDescription(
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "DatabaseMetaData::getColumnPrivileges got called with " );
+        buf.append( "DatabaseMetaData::getColumnPrivileges got called with " );
         buf.append( schema );
-        buf.appendAscii( "." );
+        buf.append( "." );
         buf.append( table );
-        buf.appendAscii( "." );
+        buf.append( "." );
         buf.append( columnNamePattern );
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
@@ -1676,9 +1676,9 @@ static void columnMetaData2DatabaseTypeDescription(
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "DatabaseMetaData::getTablePrivileges got called with " );
+        buf.append( "DatabaseMetaData::getTablePrivileges got called with " );
         buf.append( schemaPattern );
-        buf.appendAscii( "." );
+        buf.append( "." );
         buf.append( tableNamePattern );
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
@@ -1734,9 +1734,9 @@ static void columnMetaData2DatabaseTypeDescription(
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "DatabaseMetaData::getPrimaryKeys got called with " );
+        buf.append( "DatabaseMetaData::getPrimaryKeys got called with " );
         buf.append( schema );
-        buf.appendAscii( "." );
+        buf.append( "." );
         buf.append( table );
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }

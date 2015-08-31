@@ -30,14 +30,14 @@ OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
     OUStringBuffer buf;
     const ISC_STATUS* pStatus = reinterpret_cast<const ISC_STATUS*>(&rStatusVector);
 
-    buf.appendAscii("firebird_sdbc error:");
+    buf.append("firebird_sdbc error:");
     try
     {
         char msg[512]; // Size is based on suggestion in docs.
         while(fb_interpret(msg, sizeof(msg), &pStatus))
         {
             // TODO: verify encoding
-            buf.appendAscii("\n*");
+            buf.append("\n*");
             buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
         }
     }
@@ -45,7 +45,7 @@ OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
     {
         SAL_WARN("connectivity.firebird", "ignore fb_interpret exception");
     }
-    buf.appendAscii("\ncaused by\n'").append(rCause).appendAscii("'\n");
+    buf.append("\ncaused by\n'").append(rCause).append("'\n");
 
     OUString error = buf.makeStringAndClear();
     SAL_WARN("connectivity.firebird", error);

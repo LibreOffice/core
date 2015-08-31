@@ -213,9 +213,9 @@ void OTables::addComment(const Reference< XPropertySet >& descriptor,OUStringBuf
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION))     >>= sDesc;
     if ( !sDesc.isEmpty() )
     {
-        _rOut.appendAscii(" COMMENT '");
+        _rOut.append(" COMMENT '");
         _rOut.append(sDesc);
-        _rOut.appendAscii("'");
+        _rOut.append("'");
     }
 }
 

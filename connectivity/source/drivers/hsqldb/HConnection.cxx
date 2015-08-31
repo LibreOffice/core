@@ -293,9 +293,9 @@ namespace connectivity { namespace hsqldb
 
             // get the table information
             OUStringBuffer sSQL;
-            sSQL.appendAscii( "SELECT HSQLDB_TYPE FROM INFORMATION_SCHEMA.SYSTEM_TABLES" );
+            sSQL.append( "SELECT HSQLDB_TYPE FROM INFORMATION_SCHEMA.SYSTEM_TABLES" );
             HTools::appendTableFilterCrit( sSQL, sCatalog, sSchema, sName, true );
-            sSQL.appendAscii( " AND TABLE_TYPE = 'TABLE'" );
+            sSQL.append( " AND TABLE_TYPE = 'TABLE'" );
 
             Reference< XStatement > xStatement( xMe->createStatement(), UNO_QUERY_THROW );
             Reference< XResultSet > xTableHsqlType( xStatement->executeQuery( sSQL.makeStringAndClear() ), UNO_QUERY_THROW );
@@ -329,10 +329,10 @@ namespace connectivity { namespace hsqldb
             // assemble the image URL
             OUStringBuffer aImageURL;
             // load the graphic from the global graphic repository
-            aImageURL.appendAscii( "private:graphicrepository/" );
+            aImageURL.append( "private:graphicrepository/" );
             // the relative path within the images.zip
-            aImageURL.appendAscii( "database/" );
-            aImageURL.appendAscii( LINKED_TEXT_TABLE_IMAGE_RESOURCE );
+            aImageURL.append( "database/" );
+            aImageURL.append( LINKED_TEXT_TABLE_IMAGE_RESOURCE );
             // the name of the graphic to use
             OUString sImageURL( aImageURL.makeStringAndClear() );
 

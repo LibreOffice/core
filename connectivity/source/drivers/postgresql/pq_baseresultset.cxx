@@ -635,9 +635,9 @@ sal_Bool BaseResultSet::convertFastPropertyValue(
     default:
     {
         OUStringBuffer buf(128);
-        buf.appendAscii( "pq_resultset: Invalid property handle (" );
+        buf.append( "pq_resultset: Invalid property handle (" );
         buf.append( nHandle );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         throw IllegalArgumentException( buf.makeStringAndClear(), *this, 2 );
     }
     }
@@ -672,11 +672,11 @@ void BaseResultSet::checkColumnIndex(sal_Int32 index ) throw ( SQLException, Run
     if( index < 1 || index > m_fieldCount )
     {
         OUStringBuffer buf(128);
-        buf.appendAscii( "pq_resultset: index out of range (" );
+        buf.append( "pq_resultset: index out of range (" );
         buf.append( index );
-        buf.appendAscii( ", allowed range is 1 to " );
+        buf.append( ", allowed range is 1 to " );
         buf.append( m_fieldCount );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any() );
     }
 
@@ -685,14 +685,14 @@ void BaseResultSet::checkColumnIndex(sal_Int32 index ) throw ( SQLException, Run
 void BaseResultSet::checkRowIndex( bool mustBeOnValidRow )
 {
     OUStringBuffer buf( 128 );
-    buf.appendAscii( "pq_baseresultset: row index out of range, allowed is " );
+    buf.append( "pq_baseresultset: row index out of range, allowed is " );
     if( mustBeOnValidRow )
     {
         if( m_row < 0 || m_row >= m_rowCount )
         {
-            buf.appendAscii( "0 to " );
+            buf.append( "0 to " );
             buf.append( ((sal_Int32)(m_rowCount -1)) );
-            buf.appendAscii( ", got " );
+            buf.append( ", got " );
             buf.append( m_row );
             throw SQLException( buf.makeStringAndClear(), *this, OUString(),1, Any() );
         }
@@ -701,9 +701,9 @@ void BaseResultSet::checkRowIndex( bool mustBeOnValidRow )
     {
         if( m_row < -1 || m_row > m_rowCount )
         {
-            buf.appendAscii( "-1 to " );
+            buf.append( "-1 to " );
             buf.append( m_rowCount );
-            buf.appendAscii( ", got " );
+            buf.append( ", got " );
             buf.append( m_row );
             throw SQLException( buf.makeStringAndClear(), *this, OUString(),1, Any() );
         }

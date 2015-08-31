@@ -63,9 +63,9 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                     if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
                     {
                         if (::cppu::any2bool(_rVal))
-                            aRet.appendAscii("1");
+                            aRet.append("1");
                         else
-                            aRet.appendAscii("0");
+                            aRet.append("0");
                     }
                     else
                     {
@@ -78,7 +78,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
                     if (bQuote)
-                        aRet.appendAscii("'");
+                        aRet.append("'");
                     {
                         OUString aTemp;
                         _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
@@ -96,7 +96,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                         aRet.append(aTemp);
                     }
                     if (bQuote)
-                        aRet.appendAscii("'");
+                        aRet.append("'");
                     break;
                 case DataType::REAL:
                 case DataType::DOUBLE:
@@ -136,10 +136,10 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                     if ( bOk )
                     {
                         if (bQuote)
-                            aRet.appendAscii("{ts '");
+                            aRet.append("{ts '");
                         aRet.append(DBTypeConversion::toDateTimeString(aDateTime));
                         if (bQuote)
-                            aRet.appendAscii("'}");
+                            aRet.append("'}");
                         break;
                     }
                     break;
@@ -166,10 +166,10 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                         bOk = _rVal >>= aDate;
                     OSL_VERIFY_RES( bOk, "DBTypeConversion::toSQLString: _rVal is not date!");
                     if (bQuote)
-                        aRet.appendAscii("{d '");
+                        aRet.append("{d '");
                     aRet.append(DBTypeConversion::toDateString(aDate));
                     if (bQuote)
-                        aRet.appendAscii("'}");
+                        aRet.append("'}");
                 }   break;
                 case DataType::TIME:
                 {
@@ -193,10 +193,10 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                         bOk = _rVal >>= aTime;
                     OSL_VERIFY_RES( bOk,"DBTypeConversion::toSQLString: _rVal is not time!");
                     if (bQuote)
-                        aRet.appendAscii("{t '");
+                        aRet.append("{t '");
                     aRet.append(DBTypeConversion::toTimeString(aTime));
                     if (bQuote)
-                        aRet.appendAscii("'}");
+                        aRet.append("'}");
                 } break;
             }
         }
@@ -206,7 +206,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
         }
     }
     else
-        aRet.appendAscii(" NULL ");
+        aRet.append(" NULL ");
     return aRet.makeStringAndClear();
 }
 

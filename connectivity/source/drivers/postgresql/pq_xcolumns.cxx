@@ -517,11 +517,11 @@ void Columns::dropByIndex( sal_Int32 index )
     if( index < 0 ||  index >= m_values.getLength() )
     {
         OUStringBuffer buf( 128 );
-        buf.appendAscii( "COLUMNS: Index out of range (allowed 0 to " );
+        buf.append( "COLUMNS: Index out of range (allowed 0 to " );
         buf.append((sal_Int32)(m_values.getLength() -1) );
-        buf.appendAscii( ", got " );
+        buf.append( ", got " );
         buf.append( index );
-        buf.appendAscii( ")" );
+        buf.append( ")" );
         throw com::sun::star::lang::IndexOutOfBoundsException(
             buf.makeStringAndClear(), *this );
     }
@@ -533,9 +533,9 @@ void Columns::dropByIndex( sal_Int32 index )
     set->getPropertyValue( st.NAME ) >>= name;
 
     OUStringBuffer update( 128 );
-    update.appendAscii( "ALTER TABLE ONLY");
+    update.append( "ALTER TABLE ONLY");
     bufferQuoteQualifiedIdentifier( update, m_schemaName, m_tableName, m_pSettings );
-    update.appendAscii( "DROP COLUMN" );
+    update.append( "DROP COLUMN" );
     bufferQuoteIdentifier( update, name, m_pSettings );
     Reference< XStatement > stmt = m_origin->createStatement( );
     DisposeGuard disposeIt( stmt );

@@ -143,9 +143,9 @@ namespace connectivity
         OUString lcl_getPermittedJavaMethods_nothrow( const Reference< XComponentContext >& _rxContext )
         {
             OUStringBuffer aConfigPath;
-            aConfigPath.appendAscii( "/org.openoffice.Office.DataAccess/DriverSettings/" );
+            aConfigPath.append( "/org.openoffice.Office.DataAccess/DriverSettings/" );
             aConfigPath.append     ( ODriverDelegator::getImplementationName_Static() );
-            aConfigPath.appendAscii( "/PermittedJavaMethods" );
+            aConfigPath.append( "/PermittedJavaMethods" );
             ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithComponentContext(
                 _rxContext, aConfigPath.makeStringAndClear() ) );
 
@@ -882,9 +882,9 @@ namespace connectivity
             if ( xStatement.is() )
             {
                 OUStringBuffer aStatement;
-                aStatement.appendAscii( "SET DATABASE COLLATION \"" );
+                aStatement.append( "SET DATABASE COLLATION \"" );
                 aStatement.appendAscii( lcl_getCollationForLocale( lcl_getSystemLocale( m_xContext ) ) );
-                aStatement.appendAscii( "\"" );
+                aStatement.append( "\"" );
 
                 xStatement->execute( aStatement.makeStringAndClear() );
             }

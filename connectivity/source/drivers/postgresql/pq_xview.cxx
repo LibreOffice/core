@@ -162,9 +162,9 @@ void View::rename( const OUString& newName )
     if( ! oldName.equals( newTableName ) )
     {
         OUStringBuffer buf(128);
-        buf.appendAscii( "ALTER TABLE" );
+        buf.append( "ALTER TABLE" );
         bufferQuoteQualifiedIdentifier( buf, schema, oldName, m_pSettings );
-        buf.appendAscii( "RENAME TO" );
+        buf.append( "RENAME TO" );
         bufferQuoteIdentifier( buf, newTableName, m_pSettings );
         Reference< XStatement > statement = m_conn->createStatement();
         statement->executeUpdate( buf.makeStringAndClear() );

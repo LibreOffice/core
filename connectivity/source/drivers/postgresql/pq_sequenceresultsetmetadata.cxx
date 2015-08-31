@@ -202,9 +202,9 @@ void SequenceResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
     {
         OUStringBuffer buf(128);
 
-        buf.appendAscii( "pq_sequenceresultsetmetadata: index out of range (expected 1 to " );
+        buf.append( "pq_sequenceresultsetmetadata: index out of range (expected 1 to " );
         buf.append( m_colCount );
-        buf.appendAscii( ", got " );
+        buf.append( ", got " );
         buf.append( columnIndex );
         throw SQLException(
             buf.makeStringAndClear(), *this, OUString(), 1, Any() );

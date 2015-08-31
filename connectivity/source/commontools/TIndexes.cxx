@@ -141,8 +141,8 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
         OUString aDot( "." );
 
         if(comphelper::getBOOL(descriptor->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISUNIQUE))))
-            aSql.appendAscii("UNIQUE ");
-        aSql.appendAscii("INDEX ");
+            aSql.append("UNIQUE ");
+        aSql.append("INDEX ");
 
 
         OUString aCatalog,aSchema,aTable;
@@ -153,9 +153,9 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
         if (!_rForName.isEmpty() )
         {
             aSql.append( ::dbtools::quoteName( aQuote, _rForName ) );
-            aSql.appendAscii(" ON ");
+            aSql.append(" ON ");
             aSql.append(aComposedName);
-            aSql.appendAscii(" ( ");
+            aSql.append(" ( ");
 
             Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
             Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
@@ -176,7 +176,7 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
                                                 :
                                     " DESC");
                 }
-                aSql.appendAscii(",");
+                aSql.append(",");
             }
             aSql[aSql.getLength() - 1] = ')';
         }

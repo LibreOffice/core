@@ -398,7 +398,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
     {
         bSimple=false;
         if(!rString.isEmpty())
-            rString.appendAscii(" ");
+            rString.append(" ");
         if (nCount == 1)    // ?
             m_aChildren[0]->impl_parseNodeToString_throw( rString, rParam, false );
         else if (nCount == 2)   // :Name
@@ -484,7 +484,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
 
                     // In the comma lists, put commas in-between all subtrees
                     if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i < (nCount - 1)))
-                        aStringPara.appendAscii(",");
+                        aStringPara.append(",");
                 }
                 else
                     i++;
@@ -562,7 +562,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
 
                     // In the comma lists, put commas in-between all subtrees
                     if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChildren.end()))
-                        rString.appendAscii(",");
+                        rString.append(",");
                 }
             }
             else
@@ -574,9 +574,9 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
                 if ((m_eNodeType == SQL_NODE_COMMALISTRULE)     && (i != m_aChildren.end()))
                 {
                     if (SQL_ISRULE(this,value_exp_commalist) && rParam.bPredicate)
-                        rString.appendAscii(";");
+                        rString.append(";");
                     else
-                        rString.appendAscii(",");
+                        rString.append(",");
                 }
             }
             // The right hand-side of these operators is not simple
@@ -677,15 +677,15 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( OUStringBuffer& rStri
             }
         }
 
-        rString.appendAscii( " ( " );
+        rString.append( " ( " );
         rString.append(sCommand);
-        rString.appendAscii( " )" );
+        rString.append( " )" );
 
         // append the query name as table alias, since it might be referenced in other
         // parts of the statement - but only if there's no other alias name present
         if ( !lcl_isAliasNamePresent( *this ) )
         {
-            rString.appendAscii( " AS " );
+            rString.append( " AS " );
             if ( rParam.bQuote )
                 rString.append(SetQuotation( sTableOrQueryName,
                     rParam.aMetaData.getIdentifierQuoteString(), rParam.aMetaData.getIdentifierQuoteString() ));
@@ -743,7 +743,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
     if (pParaNode->isToken())
     {
         OUString aStr = ConvertLikeToken(pParaNode, pEscNode, rParam.bInternational);
-        rString.appendAscii(" ");
+        rString.append(" ");
         rString.append(SetQuotation(aStr,OUString("\'"),OUString("\'\'")));
     }
     else
@@ -1732,7 +1732,7 @@ bool OSQLParseNode::addDateValue(OUStringBuffer& rString, const SQLParseNodePara
             }
 
             if (!rString.isEmpty())
-                rString.appendAscii(" ");
+                rString.append(" ");
             rString.append(suQuote);
             const OUString sTokenValue = pODBCNode->m_aChildren[1]->getTokenValue();
             if (SQL_ISTOKEN(pODBCNodeChild, D))
@@ -2432,14 +2432,14 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
         case SQL_NODE_KEYWORD:
         {
             if (!rString.isEmpty())
-                rString.appendAscii(" ");
+                rString.append(" ");
 
             const OString sT = OSQLParser::TokenIDToStr(m_nNodeID, rParam.bInternational ? &rParam.m_rContext :  NULL);
             rString.append(OStringToOUString(sT,RTL_TEXTENCODING_UTF8));
         }   break;
         case SQL_NODE_STRING:
             if (!rString.isEmpty())
-                rString.appendAscii(" ");
+                rString.append(" ");
             rString.append(SetQuotation(m_aNodeValue,OUString("\'"),OUString("\'\'")));
             break;
         case SQL_NODE_NAME:
@@ -2453,16 +2453,16 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
                         if  (   rParam.aMetaData.getCatalogSeparator().isEmpty()
                                 || rString[rString.getLength() - 1] != rParam.aMetaData.getCatalogSeparator().toChar()
                             )
-                            rString.appendAscii(" "); break;
+                            rString.append(" "); break;
                 }
             }
             if (rParam.bQuote)
             {
                 if (rParam.bPredicate)
                 {
-                    rString.appendAscii("[");
+                    rString.append("[");
                     rString.append(m_aNodeValue);
-                    rString.appendAscii("]");
+                    rString.append("]");
                 }
                 else
                     rString.append(SetQuotation(m_aNodeValue,
@@ -2473,10 +2473,10 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
             break;
         case SQL_NODE_ACCESS_DATE:
             if (!rString.isEmpty())
-                rString.appendAscii(" ");
-            rString.appendAscii("#");
+                rString.append(" ");
+            rString.append("#");
             rString.append(m_aNodeValue);
-            rString.appendAscii("#");
+            rString.append("#");
             break;
 
         case SQL_NODE_INTNUM:
@@ -2487,7 +2487,7 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
                     aTmp = aTmp.replace('.', rParam.cDecSep);
 
                 if (!rString.isEmpty())
-                    rString.appendAscii(" ");
+                    rString.append(" ");
                 rString.append(aTmp);
 
             }   break;
@@ -2509,7 +2509,7 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
                         if  (   rParam.aMetaData.getCatalogSeparator().isEmpty()
                             ||  rString[rString.getLength() - 1] != rParam.aMetaData.getCatalogSeparator().toChar()
                             )
-                            rString.appendAscii(" "); break;
+                            rString.append(" "); break;
                 }
             }
             rString.append(m_aNodeValue);
