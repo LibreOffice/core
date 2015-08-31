@@ -37,7 +37,7 @@ SaxAttrList::SaxAttrList( const std::unordered_map< OUString, OUString, OUString
 }
 
 SaxAttrList::SaxAttrList( const SaxAttrList& rClone ) :
-    cppu::WeakImplHelper2<com::sun::star::xml::sax::XAttributeList, com::sun::star::util::XCloneable>(rClone),
+    cppu::WeakImplHelper<com::sun::star::xml::sax::XAttributeList, com::sun::star::util::XCloneable>(rClone),
     m_aAttributes( rClone.m_aAttributes ),
     m_aIndexMap( rClone.m_aIndexMap )
 {

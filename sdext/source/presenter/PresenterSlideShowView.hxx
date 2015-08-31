@@ -36,7 +36,7 @@
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Color.hpp>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <boost/noncopyable.hpp>
@@ -44,7 +44,7 @@
 namespace sdext { namespace presenter {
 
 namespace {
-    typedef cppu::WeakComponentImplHelper7<
+    typedef cppu::WeakComponentImplHelper<
         css::presentation::XSlideShowView,
         css::awt::XPaintListener,
         css::awt::XMouseListener,

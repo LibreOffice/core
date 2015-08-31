@@ -24,7 +24,7 @@
 #include "PresenterToolBar.hxx"
 #include "PresenterViewFactory.hxx"
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/ActionEvent.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/awt/XButton.hpp>
@@ -40,7 +40,7 @@
 #include <boost/shared_ptr.hpp>
 
 namespace {
-    typedef cppu::WeakComponentImplHelper5<
+    typedef cppu::WeakComponentImplHelper<
         css::awt::XWindowListener,
         css::awt::XPaintListener,
         css::drawing::framework::XView,

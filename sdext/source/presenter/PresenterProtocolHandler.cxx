@@ -35,7 +35,7 @@
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
@@ -165,7 +165,7 @@ namespace {
 } // end of anonymous namespace
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper2 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::frame::XDispatch,
         css::document::XEventListener
         > PresenterDispatchInterfaceBase;

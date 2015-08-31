@@ -22,7 +22,7 @@
 
 #include "PresenterTheme.hxx"
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
@@ -44,7 +44,7 @@ namespace sdext { namespace presenter {
 class PresenterController;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper4 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::drawing::framework::XPane,
         css::lang::XInitialization,
         css::awt::XWindowListener,

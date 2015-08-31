@@ -23,7 +23,7 @@
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <boost/noncopyable.hpp>
 
@@ -31,7 +31,7 @@
 
 namespace sdext { namespace presenter {
 
-typedef ::cppu::WeakComponentImplHelper1 <
+typedef ::cppu::WeakComponentImplHelper <
     css::drawing::framework::XConfigurationChangeListener
     > PresenterFrameworkObserverInterfaceBase;
 

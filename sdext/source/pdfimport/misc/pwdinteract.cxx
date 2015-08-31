@@ -31,8 +31,7 @@
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
@@ -44,7 +43,7 @@ namespace
 {
 
 class PDFPasswordRequest:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         task::XInteractionRequest, task::XInteractionPassword >,
     private boost::noncopyable
 {
@@ -121,7 +120,7 @@ void PDFPasswordRequest::select() throw (uno::RuntimeException, std::exception)
 }
 
 class UnsupportedEncryptionFormatRequest:
-    public cppu::WeakImplHelper1< task::XInteractionRequest >,
+    public cppu::WeakImplHelper< task::XInteractionRequest >,
     private boost::noncopyable
 {
 public:

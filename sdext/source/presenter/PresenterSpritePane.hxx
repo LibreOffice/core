@@ -35,7 +35,6 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
 #include <rtl/ref.hxx>
 #include <boost/shared_ptr.hpp>
 

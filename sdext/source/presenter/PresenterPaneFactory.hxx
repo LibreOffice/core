@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEFACTORY_HXX
 #define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERPANEFACTORY_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -38,7 +38,7 @@ namespace sdext { namespace presenter {
 class PresenterController;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::drawing::framework::XResourceFactory
     > PresenterPaneFactoryInterfaceBase;
 }

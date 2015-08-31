@@ -30,7 +30,6 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <cppuhelper/implbase1.hxx>
 #include <comphelper/stl_types.hxx>
 
 #include <boost/bind.hpp>

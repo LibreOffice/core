@@ -31,7 +31,6 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <functional>

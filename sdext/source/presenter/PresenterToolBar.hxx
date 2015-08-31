@@ -24,8 +24,7 @@
 #include "PresenterViewFactory.hxx"
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/ActionEvent.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/awt/XButton.hpp>
@@ -49,7 +48,7 @@
 #include <functional>
 
 namespace {
-    typedef cppu::WeakComponentImplHelper5<
+    typedef cppu::WeakComponentImplHelper<
         css::awt::XWindowListener,
         css::awt::XPaintListener,
         css::awt::XMouseListener,
@@ -57,7 +56,7 @@ namespace {
         css::drawing::XDrawView
         > PresenterToolBarInterfaceBase;
 
-    typedef cppu::WeakComponentImplHelper3<
+    typedef cppu::WeakComponentImplHelper<
         css::awt::XPaintListener,
         css::drawing::framework::XView,
         css::drawing::XDrawView

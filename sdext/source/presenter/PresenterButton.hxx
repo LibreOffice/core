@@ -31,7 +31,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <boost/noncopyable.hpp>
 #include <rtl/ref.hxx>
 
@@ -40,7 +40,7 @@ namespace sdext { namespace presenter {
 class PresenterController;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper4 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::awt::XWindowListener,
         css::awt::XPaintListener,
         css::awt::XMouseListener,

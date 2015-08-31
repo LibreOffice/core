@@ -34,7 +34,7 @@
 #include <com/sun/star/drawing/framework/XPane2.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 #include <boost/shared_ptr.hpp>
@@ -46,7 +46,7 @@ class PresenterController;
 class PresenterTextView;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper3 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::accessibility::XAccessible,
         css::lang::XInitialization,
         css::awt::XFocusListener

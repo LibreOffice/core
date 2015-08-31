@@ -30,7 +30,7 @@
 #include "PresenterTimer.hxx"
 #include "PresenterWindowManager.hxx"
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
@@ -121,7 +121,7 @@ public:
 //===== PresenterToolBar::Element =============================================
 
 namespace {
-    typedef cppu::WeakComponentImplHelper2<
+    typedef cppu::WeakComponentImplHelper<
         css::document::XEventListener,
         css::frame::XStatusListener
         > ElementInterfaceBase;

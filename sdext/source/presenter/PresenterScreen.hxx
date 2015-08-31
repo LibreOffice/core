@@ -22,7 +22,7 @@
 
 #include "PresenterConfigurationAccess.hxx"
 #include "PresenterPaneContainer.hxx"
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -41,10 +41,10 @@ namespace sdext { namespace presenter {
 class PresenterController;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::task::XJob
         > PresenterScreenJobInterfaceBase;
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::lang::XEventListener
         > PresenterScreenInterfaceBase;
 }

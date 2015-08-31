@@ -24,7 +24,7 @@
 #include "PresenterPaneContainer.hxx"
 #include "PresenterViewFactory.hxx"
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -39,7 +39,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
 namespace {
-    typedef cppu::WeakComponentImplHelper8<
+    typedef cppu::WeakComponentImplHelper<
         css::drawing::framework::XView,
         css::awt::XWindowListener,
         css::awt::XPaintListener,
