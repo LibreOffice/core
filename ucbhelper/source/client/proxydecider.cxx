@@ -425,9 +425,9 @@ bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
          ( rHost[ 0 ] != '[' ) )
     {
         // host is given as numeric IPv6 address
-        aBuffer.appendAscii( "[" );
+        aBuffer.append( "[" );
         aBuffer.append( rHost );
-        aBuffer.appendAscii( "]" );
+        aBuffer.append( "]" );
     }
     else
     {
@@ -746,15 +746,15 @@ void InternetProxyDecider_Impl::setNoProxyList(
                     {
                         if ( bIPv6Address )
                         {
-                            aFullyQualifiedHost.appendAscii( "[" );
+                            aFullyQualifiedHost.append( "[" );
                             aFullyQualifiedHost.append( aTmp );
-                            aFullyQualifiedHost.appendAscii( "]" );
+                            aFullyQualifiedHost.append( "]" );
                         }
                         else
                         {
                             aFullyQualifiedHost.append( aTmp );
                         }
-                        aFullyQualifiedHost.appendAscii( ":" );
+                        aFullyQualifiedHost.append( ":" );
                         aFullyQualifiedHost.append( aPort );
                     }
                 }
