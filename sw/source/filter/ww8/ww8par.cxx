@@ -678,16 +678,22 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                                              SEEK_FROM_CURRENT_AND_RESTART )
             && maShapeRecords.Current()->nRecLen )
         {
-            sal_uInt32  nBytesLeft = maShapeRecords.Current()->nRecLen;
-            sal_uInt32  nUDData;
-            sal_uInt16  nPID;
+            sal_uInt32 nBytesLeft = maShapeRecords.Current()->nRecLen;
+            auto nAvailableBytes = rSt.remainingSize();
+            if (nBytesLeft > nAvailableBytes)
+            {
+                SAL_WARN("sw.ww8", "Document claimed to have shape record of " << nBytesLeft << " bytes, but only " << nAvailableBytes << " available");
+                nBytesLeft = nAvailableBytes;
+            }
             while( 5 < nBytesLeft )
             {
-                rSt.ReadUInt16( nPID );
-                if ( rSt.GetError() != 0 )
+                sal_uInt16 nPID(0);
+                rSt.ReadUInt16(nPID);
+                sal_uInt32 nUDData(0);
+                rSt.ReadUInt32(nUDData);
+                if (!rSt.good())
                     break;
-                rSt.ReadUInt32( nUDData );
-                switch( nPID )
+                switch (nPID)
                 {
                     case 0x038F: pImpRec->nXAlign = nUDData; break;
                     case 0x0390:
@@ -715,8 +721,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         pImpRec->isHorizontalRule = true;
                         break;
                 }
-                if ( rSt.GetError() != 0 )
-                    break;
                 nBytesLeft  -= 6;
             }
         }
