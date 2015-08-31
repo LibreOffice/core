@@ -26,7 +26,7 @@
 #ifdef ENABLE_PANE_RESIZING
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
@@ -48,7 +48,7 @@ namespace sdext { namespace presenter {
 class PresenterController;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper3 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::lang::XInitialization,
         css::awt::XMouseListener,
         css::awt::XMouseMotionListener

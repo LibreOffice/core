@@ -22,7 +22,7 @@
 
 #include "PresenterController.hxx"
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
@@ -32,7 +32,7 @@
 #include <boost/scoped_ptr.hpp>
 
 namespace {
-    typedef cppu::WeakComponentImplHelper3<
+    typedef cppu::WeakComponentImplHelper<
         css::drawing::framework::XView,
         css::awt::XWindowListener,
         css::awt::XPaintListener

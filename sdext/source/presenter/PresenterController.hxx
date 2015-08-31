@@ -24,7 +24,7 @@
 #include "PresenterPaneContainer.hxx"
 #include "PresenterTheme.hxx"
 #include "PresenterSprite.hxx"
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
@@ -58,7 +58,7 @@ class PresenterTheme;
 class PresenterWindowManager;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper6 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::drawing::framework::XConfigurationChangeListener,
         css::frame::XFrameActionListener,
         css::awt::XKeyListener,

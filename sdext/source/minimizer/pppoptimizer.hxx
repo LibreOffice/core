@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZER_HXX
 #define INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZER_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -31,7 +31,7 @@
 // - PPPOptimizer -
 
 
-class PPPOptimizer : public cppu::WeakImplHelper2<
+class PPPOptimizer : public cppu::WeakImplHelper<
                                     css::frame::XDispatchProvider,
                                     css::frame::XDispatch >
 {

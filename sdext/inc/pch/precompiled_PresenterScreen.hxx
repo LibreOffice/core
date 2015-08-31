@@ -129,10 +129,8 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/compbase5.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <iterator>
 #include <map>
 #include <math.h>

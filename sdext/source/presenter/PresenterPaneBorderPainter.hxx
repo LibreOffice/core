@@ -28,7 +28,7 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -39,7 +39,7 @@ class PresenterPane;
 class PresenterTheme;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1<
+    typedef ::cppu::WeakComponentImplHelper<
         css::drawing::framework::XPaneBorderPainter
     > PresenterPaneBorderPainterInterfaceBase;
 }

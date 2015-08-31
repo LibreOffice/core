@@ -33,7 +33,6 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <cppuhelper/compbase1.hxx>
 #include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;

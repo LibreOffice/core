@@ -38,6 +38,7 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <vcl/svapp.hxx>
@@ -51,7 +52,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sdext { namespace presenter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::document::XEventListener
         > PresenterScreenListenerInterfaceBase;
 

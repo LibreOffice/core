@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <cppuhelper/implbase.hxx>
 
 
 // - InformationDialog -
@@ -69,7 +70,7 @@ private:
     const OUString& maSaveAsURL;
 };
 
-class OKActionListener : public ::cppu::WeakImplHelper1< css::awt::XActionListener >
+class OKActionListener : public ::cppu::WeakImplHelper< css::awt::XActionListener >
 {
 public:
     OKActionListener( InformationDialog& rInformationDialog ) : mrInformationDialog( rInformationDialog ){};

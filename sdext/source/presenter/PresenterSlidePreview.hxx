@@ -35,13 +35,13 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
 namespace sdext { namespace presenter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper4 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::drawing::framework::XView,
         css::drawing::XDrawView,
         css::awt::XPaintListener,

@@ -27,7 +27,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -41,7 +41,7 @@ class PresenterCanvasHelper;
 class PresenterPaintManager;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper4 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::awt::XWindowListener,
         css::awt::XPaintListener,
         css::awt::XMouseListener,

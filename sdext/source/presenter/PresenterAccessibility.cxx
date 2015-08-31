@@ -37,9 +37,8 @@
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/compbase5.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
@@ -52,7 +51,7 @@ using namespace ::com::sun::star::drawing::framework;
 namespace sdext { namespace presenter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper5 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::accessibility::XAccessible,
         css::accessibility::XAccessibleContext,
         css::accessibility::XAccessibleComponent,
@@ -226,7 +225,7 @@ protected:
 //===== AccessibleStateSet ====================================================
 
 namespace {
-typedef ::cppu::WeakComponentImplHelper1 <
+typedef ::cppu::WeakComponentImplHelper <
     css::accessibility::XAccessibleStateSet
     > AccessibleStateSetInterfaceBase;
 }
@@ -262,7 +261,7 @@ private:
 //===== AccessibleRelationSet =================================================
 
 namespace {
-typedef ::cppu::WeakComponentImplHelper1 <
+typedef ::cppu::WeakComponentImplHelper <
     css::accessibility::XAccessibleRelationSet
     > AccessibleRelationSetInterfaceBase;
 }
@@ -300,7 +299,7 @@ private:
 //===== PresenterAccessibleParagraph ==========================================
 
 namespace {
-typedef ::cppu::ImplInheritanceHelper1 <
+typedef ::cppu::ImplInheritanceHelper <
     PresenterAccessible::AccessibleObject,
     css::accessibility::XAccessibleText
     > PresenterAccessibleParagraphInterfaceBase;

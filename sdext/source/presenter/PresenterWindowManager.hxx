@@ -37,7 +37,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -49,7 +49,7 @@ class PresenterPaneBorderPainter;
 class PresenterTheme;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper4<
+    typedef ::cppu::WeakComponentImplHelper<
         css::awt::XWindowListener,
         css::awt::XPaintListener,
         css::awt::XMouseListener,

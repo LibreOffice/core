@@ -41,6 +41,7 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
+#include <cppuhelper/implbase.hxx>
 
 #define MAX_STEP        4
 #define OD_DIALOG_WIDTH 330
@@ -127,7 +128,7 @@ public:
 
 
 
-class ItemListener : public ::cppu::WeakImplHelper1< css::awt::XItemListener >
+class ItemListener : public ::cppu::WeakImplHelper< css::awt::XItemListener >
 {
 public:
     ItemListener( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
@@ -141,7 +142,7 @@ private:
 
 
 
-class ActionListener : public ::cppu::WeakImplHelper1< css::awt::XActionListener >
+class ActionListener : public ::cppu::WeakImplHelper< css::awt::XActionListener >
 {
 public:
     ActionListener( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
@@ -155,7 +156,7 @@ private:
 
 
 
-class ActionListenerListBox0Pg0 : public ::cppu::WeakImplHelper1< css::awt::XActionListener >
+class ActionListenerListBox0Pg0 : public ::cppu::WeakImplHelper< css::awt::XActionListener >
 {
 public:
     ActionListenerListBox0Pg0( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
@@ -169,7 +170,7 @@ private:
 
 
 
-class TextListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< css::awt::XTextListener >
+class TextListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper< css::awt::XTextListener >
 {
 public:
     TextListenerFormattedField0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
@@ -183,7 +184,7 @@ private:
 
 
 
-class TextListenerComboBox0Pg1 : public ::cppu::WeakImplHelper1< css::awt::XTextListener >
+class TextListenerComboBox0Pg1 : public ::cppu::WeakImplHelper< css::awt::XTextListener >
 {
 public:
     TextListenerComboBox0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};
@@ -197,7 +198,7 @@ private:
 
 
 
-class SpinListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper1< css::awt::XSpinListener >
+class SpinListenerFormattedField0Pg1 : public ::cppu::WeakImplHelper< css::awt::XSpinListener >
 {
 public:
     SpinListenerFormattedField0Pg1( OptimizerDialog& rOptimizerDialog ) : mrOptimizerDialog( rOptimizerDialog ){};

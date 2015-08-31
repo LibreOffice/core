@@ -24,7 +24,7 @@
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/timer.hxx>
@@ -32,7 +32,7 @@
 namespace sdext { namespace presenter {
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::presentation::XSlideShowListener
     > PresenterCurrentSlideObserverInterfaceBase;
 }

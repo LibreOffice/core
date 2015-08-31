@@ -23,14 +23,14 @@
 #include <rtl/ustring.hxx>
 #include <unordered_map>
 #include <vector>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 namespace pdfi
 {
-    class SaxAttrList : public ::cppu::WeakImplHelper2<
+    class SaxAttrList : public ::cppu::WeakImplHelper<
             css::xml::sax::XAttributeList,
             css::util::XCloneable
             >

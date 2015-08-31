@@ -32,14 +32,14 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 // - PPPOptimizerDialog -
 
 
 class OptimizerDialog;
-class PPPOptimizerDialog : public   ::cppu::WeakImplHelper4<
+class PPPOptimizerDialog : public   ::cppu::WeakImplHelper<
                                     css::lang::XInitialization,
                                     css::lang::XServiceInfo,
                                     css::frame::XDispatchProvider,

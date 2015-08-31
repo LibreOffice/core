@@ -35,7 +35,6 @@
 #include <com/sun/star/drawing/XSlideSorterBase.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
-#include <cppuhelper/compbase1.hxx>
 #include <boost/bind.hpp>
 
 using namespace ::com::sun::star;

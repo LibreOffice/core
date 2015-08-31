@@ -23,7 +23,7 @@
 #include <com/sun/star/awt/XCallback.hpp>
 #include <com/sun/star/awt/XRequestCallback.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <osl/time.h>
 #include <rtl/ref.hxx>
@@ -65,7 +65,7 @@ public:
     static void CancelTask (const sal_Int32 nTaskId);
 };
 
-typedef cppu::WeakComponentImplHelper1<
+typedef cppu::WeakComponentImplHelper<
     css::awt::XCallback
     > PresenterClockTimerInterfaceBase;
 

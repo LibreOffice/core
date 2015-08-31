@@ -22,14 +22,14 @@
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TEST_OUTPUTWRAP_HXX
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <osl/file.hxx>
 
 namespace pdfi
 {
 
-typedef ::cppu::WeakComponentImplHelper1<
+typedef ::cppu::WeakComponentImplHelper<
         css::io::XOutputStream > OutputWrapBase;
 
     class OutputWrap : private cppu::BaseMutex, public OutputWrapBase

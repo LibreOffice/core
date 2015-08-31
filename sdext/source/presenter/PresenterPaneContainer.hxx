@@ -31,7 +31,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
 #include <boost/noncopyable.hpp>
@@ -46,7 +46,7 @@ class PresenterPaneBase;
 class PresenterSprite;
 
 namespace {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::lang::XEventListener
     > PresenterPaneContainerInterfaceBase;
 }
