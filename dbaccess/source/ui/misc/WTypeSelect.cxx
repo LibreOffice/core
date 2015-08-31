@@ -372,15 +372,14 @@ void OWizTypeSelectList::dispose()
 bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 {
     const sal_Int32 nCount = GetSelectEntryCount();
-    sal_Int32 j;
 
-    for( j = 0; m_bPKey && j < nCount; ++j )
+    for( sal_Int32 j = 0; m_bPKey && j < nCount; ++j )
     {
         OFieldDescription* pField = static_cast<OFieldDescription*>(GetEntryData(GetSelectEntryPos(j)));
         if(!pField || pField->getTypeInfo()->nSearchType == ColumnSearch::NONE)
-            break;
+            return true;
     }
-    return j == nCount;
+    return false;
 }
 
 void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr, sal_uInt16 _nPos, bool _bSet)
