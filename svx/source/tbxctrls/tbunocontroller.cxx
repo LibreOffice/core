@@ -212,6 +212,7 @@ void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescripto
     }
     SetValue( nOldVal ); // alten Wert wiederherstellen
     m_aCurText = GetText(); // zum R"ucksetzen bei ESC merken
+    aHold->dispose();
 }
 
 

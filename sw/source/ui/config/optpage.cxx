@@ -610,6 +610,8 @@ SwStdFontTabPage::~SwStdFontTabPage()
 
 void SwStdFontTabPage::dispose()
 {
+    if ( pFontList )
+        pFontList->dispose();
     delete pFontList;
     if (bDeletePrinter)
         pPrt.disposeAndClear();
@@ -785,6 +787,8 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                     0 );
         pPrt = VclPtr<SfxPrinter>::Create(pPrinterSet);
     }
+    if ( pFontList )
+        pFontList->dispose();
     delete pFontList;
     pFontList = new FontList( pPrt );
     // #i94536# prevent duplication of font entries when 'reset' button is pressed

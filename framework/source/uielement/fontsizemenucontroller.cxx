@@ -146,7 +146,11 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         {
             pInfoPrinter.reset(VclPtr<Printer>::Create( aPrinterName ));
             if ( pInfoPrinter && pInfoPrinter->GetDevFontCount() > 0 )
+            {
+                if ( pFontList )
+                    pFontList->dispose();
                 pFontList.reset(new FontList( pInfoPrinter.get() ));
+            }
         }
 
         if ( !pFontList )
@@ -233,6 +237,8 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         }
 
         setCurHeight( long( m_aFontHeight.Height * 10), rPopupMenu );
+        if ( pFontList )
+            pFontList->dispose();
     }
 }
 

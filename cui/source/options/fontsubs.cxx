@@ -255,6 +255,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
             get()));
     m_pNonPropFontsOnlyCB->SaveValue();
     m_pFontHeightLB->SaveValue();
+    aFntLst.dispose();
 }
 
 IMPL_LINK_TYPED(SvxFontSubstTabPage, ClickHdl, Button*, pButton, void)
@@ -354,6 +355,7 @@ IMPL_LINK_TYPED(SvxFontSubstTabPage, NonPropFontsHdl, Button*, pBox, void)
             m_pFontNameLB->InsertEntry(rInfo.GetName());
     }
     m_pFontNameLB->SelectEntry(sFontName);
+    aFntLst.dispose();
 }
 
 void SvxFontSubstTabPage::CheckEnable()

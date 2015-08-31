@@ -54,6 +54,7 @@ ViewElementListProvider::ViewElementListProvider( DrawModelWrapper* pDrawModelWr
 
 ViewElementListProvider::~ViewElementListProvider()
 {
+    m_pFontList->dispose();
     delete m_pFontList;
 }
 

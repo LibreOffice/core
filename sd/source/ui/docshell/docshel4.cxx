@@ -156,6 +156,8 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
 
 void DrawDocShell::UpdateFontList()
 {
+    if ( mpFontList )
+        mpFontList->dispose();
     delete mpFontList;
     OutputDevice* pRefDevice = NULL;
     if ( mpDoc->GetPrinterIndependentLayout() == ::com::sun::star::document::PrinterIndependentLayout::DISABLED )

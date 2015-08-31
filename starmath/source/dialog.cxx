@@ -368,6 +368,7 @@ SmFontDialog::SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, 
 
         // preview like controls should have a 2D look
         m_pShowFont->SetBorderStyle( WindowBorderStyle::MONO );
+        aFontList.dispose();
     }
 
     m_pFontBox->SetSelectHdl(LINK(this, SmFontDialog, FontSelectHdl));
@@ -2127,6 +2128,11 @@ void SmSymDefineDialog::dispose()
     pAddBtn.clear();
     pChangeBtn.clear();
     pDeleteBtn.clear();
+    if ( pFontList )
+    {
+        pFontList->dispose();
+        delete pFontList;
+    }
     ModalDialog::dispose();
 }
 

@@ -944,6 +944,9 @@ SvxFontNameBox_Impl::~SvxFontNameBox_Impl()
 void SvxFontNameBox_Impl::dispose()
 {
     GetSubEdit()->RemoveEventListener( LINK( this, SvxFontNameBox_Impl, CheckAndMarkUnknownFont ));
+    if ( m_aOwnFontList )
+        m_aOwnFontList->dispose();
+    m_aOwnFontList.reset();
     FontNameBox::dispose();
 }
 

@@ -436,6 +436,8 @@ SfxPrinter* ScDocShell::GetPrinter(bool bCreateIfNotExist)
 
 void ScDocShell::UpdateFontList()
 {
+    if ( pImpl->pFontList )
+        pImpl->pFontList->dispose();
     delete pImpl->pFontList;
     // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
     pImpl->pFontList = new FontList( GetRefDevice(), NULL, false ); // sal_False or sal_True???

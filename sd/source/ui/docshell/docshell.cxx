@@ -178,6 +178,8 @@ DrawDocShell::~DrawDocShell()
 
     SetDocShellFunction(0);
 
+    if ( mpFontList )
+        mpFontList->dispose();
     delete mpFontList;
 
     if( mpDoc )

@@ -390,6 +390,8 @@ SwDocShell::~SwDocShell()
     }
 
     RemoveLink();
+    if ( m_pFontList )
+        m_pFontList->dispose();
     delete m_pFontList;
 
     // we, as BroadCaster also become our own Listener
@@ -443,6 +445,8 @@ void SwDocShell::UpdateFontList()
         OSL_ENSURE(m_pDoc, "No Doc no FontList");
         if (m_pDoc)
         {
+            if ( m_pFontList )
+                m_pFontList->dispose();
             delete m_pFontList;
             m_pFontList = new FontList( m_pDoc->getIDocumentDeviceAccess().getReferenceDevice(true) );
             PutItem( SvxFontListItem( m_pFontList, SID_ATTR_CHAR_FONTLIST ) );

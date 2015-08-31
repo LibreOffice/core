@@ -72,6 +72,7 @@ const sal_IntPtr FontList::aStdSizeAry[] =
 class ImplFontListFontInfo : public vcl::FontInfo
 {
     friend class FontList;
+    friend class ImplFontListNameInfo;
 
 private:
     VclPtr<OutputDevice>    mpDevice;
@@ -86,6 +87,7 @@ public:
                             }
 
     OutputDevice*           GetDevice() const { return mpDevice; }
+    void                    dispose() { mpDevice.clear(); };
 };
 
 enum class FontListFontNameType
@@ -114,7 +116,19 @@ private:
         , mnType(FontListFontNameType::NONE)
     {
     }
+
+    void                    dispose();
 };
+
+void ImplFontListNameInfo::dispose()
+{
+    ImplFontListFontInfo* pTmp = mpFirst;
+    while( pTmp )
+    {
+        pTmp->dispose();
+        pTmp = pTmp->mpNext;
+    }
+}
 
 //sort normal to the start
 static int sortWeightValue(FontWeight eWeight)
@@ -770,6 +784,16 @@ const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const
 
     pDevice->SetMapMode( aOldMapMode );
     return mpSizeAry;
+}
+
+void FontList::dispose()
+{
+    for (auto aItr = m_Entries.begin() ; aItr != m_Entries.end(); ++aItr )
+        if ( aItr->get() )
+            aItr->get()->dispose();
+
+    mpDev.clear();
+    mpDev2.clear();
 }
 
 struct ImplFSNameItem

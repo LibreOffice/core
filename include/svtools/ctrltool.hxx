@@ -162,7 +162,7 @@ public:
                             FontList( OutputDevice* pDevice,
                                       OutputDevice* pDevice2 = NULL,
                                       bool bAll = true );
-                            ~FontList();
+    virtual                 ~FontList();
 
     FontList*               Clone() const;
 
@@ -193,6 +193,7 @@ public:
 
     const sal_IntPtr*       GetSizeAry( const vcl::FontInfo& rInfo ) const;
     static const sal_IntPtr* GetStdSizeAry() { return aStdSizeAry; }
+    virtual void            dispose();
 
 private:
                             FontList( const FontList& ) SAL_DELETED_FUNCTION;
