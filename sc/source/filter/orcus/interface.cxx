@@ -974,6 +974,7 @@ size_t ScOrcusStyles::commit_font()
 {
     SAL_INFO("sc.orcus.style", "commit font");
     maFonts.push_back(maCurrentFont);
+    maCurrentFont = ScOrcusStyles::font();
     return maFonts.size() - 1;
 }
 
@@ -1003,6 +1004,7 @@ size_t ScOrcusStyles::commit_fill()
 {
     SAL_INFO("sc.orcus.style", "commit fill");
     maFills.push_back(maCurrentFill);
+    maCurrentFill = ScOrcusStyles::fill();
     return maFills.size() - 1;
 }
 
@@ -1051,6 +1053,7 @@ size_t ScOrcusStyles::commit_cell_protection()
 {
     SAL_INFO("sc.orcus.style", "commit cell protection");
     maProtections.push_back(maCurrentProtection);
+    maCurrentProtection = ScOrcusStyles::protection();
     return maProtections.size() - 1;
 }
 
@@ -1072,6 +1075,7 @@ size_t ScOrcusStyles::commit_number_format()
 {
     SAL_INFO("sc.orcus.style", "commit number format");
     maNumberFormats.push_back(maCurrentNumberFormat);
+    maCurrentNumberFormat = ScOrcusStyles::number_format();
     return maNumberFormats.size() - 1;
 }
 
