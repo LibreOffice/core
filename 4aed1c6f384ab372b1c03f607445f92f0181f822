@@ -22,6 +22,30 @@
       "revId": "4aed1c6f384ab372b1c03f607445f92f0181f822",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_23099832",
+        "filename": "sc/source/core/data/colorscale.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-31T10:29:18Z",
+      "side": 1,
+      "message": "because the vector now contains a unique_ptr\u003cT\u003e instead of a T\u0026",
+      "parentUuid": "fa0719c6_43776cd4",
+      "range": {
+        "startLine": 313,
+        "startChar": 96,
+        "endLine": 313,
+        "endChar": 102
+      },
+      "revId": "4aed1c6f384ab372b1c03f607445f92f0181f822",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
