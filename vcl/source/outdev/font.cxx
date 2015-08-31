@@ -1316,8 +1316,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     if( pEntry ) // cache hit => use existing font instance
     {
         // increase the font instance's reference count
-        if( !pEntry->mnRefCount++ )
-            --mnRef0Count;
+        Acquire(pEntry);
     }
 
     if (!pEntry && pFontData)// still no cache hit => create a new font instance
@@ -1390,7 +1389,15 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( PhysicalFontCollection* pFon
     return pFallbackFont;
 }
 
-void ImplFontCache::Release( ImplFontEntry* pEntry )
+void ImplFontCache::Acquire(ImplFontEntry* pEntry)
+{
+    assert(pEntry->m_pFontCache == this);
+
+    if (0 == pEntry->mnRefCount++)
+        --mnRef0Count;
+}
+
+void ImplFontCache::Release(ImplFontEntry* pEntry)
 {
     static const int FONTCACHE_MAX = 50;
 
@@ -1400,6 +1407,8 @@ void ImplFontCache::Release( ImplFontEntry* pEntry )
 
     if (++mnRef0Count < FONTCACHE_MAX)
         return;
+
+    assert(CountUnreferencedEntries() == mnRef0Count);
 
     // remove unused entries from font instance cache
     FontInstanceList::iterator it_next = maFontInstanceList.begin();
