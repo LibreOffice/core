@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_ae3bcf9b",
+        "filename": "vcl/win/source/gdi/winlayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-08-31T14:25:45Z",
+      "side": 1,
+      "message": "0 mnRefCount here would be somewhat suspicious - why didn\u0027t the caller acquire the FontEntry already?",
+      "revId": "7c8e25042318f5c1c88439d39c82e439e79e4314",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
