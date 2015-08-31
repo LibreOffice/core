@@ -582,6 +582,25 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
     return pRet;
 }
 
+bool SwRootFrm::IsBetweenPages(const Point& rPt) const
+{
+    if (!Frm().IsInside(rPt))
+        return false;
+
+    // top visible page
+    const SwFrm* pPage = Lower();
+    if (pPage == nullptr)
+        return false;
+
+    // skip pages above point:
+    while (pPage && rPt.Y() > pPage->Frm().Bottom())
+        pPage = pPage->GetNext();
+
+    return (pPage && !pPage->Frm().IsInside(rPt) &&
+        rPt.X() >= pPage->Frm().Left() &&
+        rPt.X() <= pPage->Frm().Right());
+}
+
 const SwAttrSet* SwFrm::GetAttrSet() const
 {
     if ( IsContentFrm() )

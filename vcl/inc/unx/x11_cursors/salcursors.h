@@ -152,5 +152,9 @@
 #include "unx/x11_cursors/tblselsw_mask.h"
 #include "unx/x11_cursors/paintbrush_curs.h"
 #include "unx/x11_cursors/paintbrush_mask.h"
+#include "unx/x11_cursors/wshide_curs.h"
+#include "unx/x11_cursors/wshide_mask.h"
+#include "unx/x11_cursors/wsshow_curs.h"
+#include "unx/x11_cursors/wsshow_mask.h"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
