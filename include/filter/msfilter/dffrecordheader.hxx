@@ -56,7 +56,7 @@ public:
         return nFilePos == rIn.Seek(nFilePos);
     }
 
-    MSFILTER_DLLPUBLIC friend SvStream& ReadDffRecordHeader(SvStream& rIn, DffRecordHeader& rRec);
+    MSFILTER_DLLPUBLIC friend bool ReadDffRecordHeader(SvStream& rIn, DffRecordHeader& rRec);
 };
 
 #endif

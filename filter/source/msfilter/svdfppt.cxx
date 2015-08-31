@@ -189,7 +189,8 @@ void PptSlidePersistAtom::Clear()
 SvStream& ReadPptSlidePersistAtom( SvStream& rIn, PptSlidePersistAtom& rAtom )
 {
     DffRecordHeader aHd;
-    ReadDffRecordHeader( rIn, aHd )
+    ReadDffRecordHeader( rIn, aHd );
+    rIn
        .ReadUInt32( rAtom.nPsrReference )
        .ReadUInt32( rAtom.nFlags )
        .ReadUInt32( rAtom.nNumberTexts )
@@ -266,7 +267,8 @@ SvStream& ReadPptDocumentAtom(SvStream& rIn, PptDocumentAtom& rAtom)
     sal_uInt16  nSlidePageFormat;
     sal_Int8    nEmbeddedTrueType, nTitlePlaceHoldersOmitted, nRightToLeft, nShowComments;
 
-    ReadDffRecordHeader( rIn, aHd )
+    ReadDffRecordHeader( rIn, aHd );
+    rIn
        .ReadInt32( nSlideX ).ReadInt32( nSlideY )
        .ReadInt32( nNoticeX ).ReadInt32( nNoticeY )
        .ReadInt32( nDummy ).ReadInt32( nDummy )             // skip ZoomRation
@@ -328,7 +330,8 @@ void PptSlideAtom::Clear()
 SvStream& ReadPptNotesAtom( SvStream& rIn, PptNotesAtom& rAtom )
 {
     DffRecordHeader aHd;
-    ReadDffRecordHeader( rIn, aHd )
+    ReadDffRecordHeader( rIn, aHd );
+    rIn
        .ReadUInt32( rAtom.nSlideId )
        .ReadUInt16( rAtom.nFlags );
     aHd.SeekToEndOfRecord( rIn );
@@ -456,7 +459,8 @@ class PptFontCollection : public std::vector<std::unique_ptr<PptFontEntityAtom>>
 
 SvStream& ReadPptUserEditAtom( SvStream& rIn, PptUserEditAtom& rAtom )
 {
-    ReadDffRecordHeader( rIn, rAtom.aHd )
+    ReadDffRecordHeader( rIn, rAtom.aHd );
+    rIn
        .ReadInt32( rAtom.nLastSlideID )
        .ReadUInt32( rAtom.nVersion )
        .ReadUInt32( rAtom.nOffsetLastEdit )

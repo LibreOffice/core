@@ -19,7 +19,7 @@
 
 #include <filter/msfilter/dffrecordheader.hxx>
 
-SvStream& ReadDffRecordHeader( SvStream& rIn, DffRecordHeader& rRec )
+bool ReadDffRecordHeader( SvStream& rIn, DffRecordHeader& rRec )
 {
     rRec.nFilePos = rIn.Tell();
     sal_uInt16 nTmp(0);
@@ -35,7 +35,7 @@ SvStream& ReadDffRecordHeader( SvStream& rIn, DffRecordHeader& rRec )
     if ( rRec.nRecLen > ( SAL_MAX_UINT32 - rRec.nFilePos ) )
       rIn.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
-    return rIn;
+    return rIn.good();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
