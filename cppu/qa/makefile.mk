@@ -65,6 +65,9 @@ APP4TEST = enabled
 .INCLUDE: target.mk
 
 $(APP1OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+$(APP2OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+$(APP3OBJS): $(MISC)$/$(TARGET).cppumaker.flag
+$(APP4OBJS): $(MISC)$/$(TARGET).cppumaker.flag
 
 $(MISC)$/$(TARGET).cppumaker.flag: $(MISC)$/$(TARGET).rdb
     - $(MKDIRHIER) $(MISC)$/$(TARGET)$/inc
