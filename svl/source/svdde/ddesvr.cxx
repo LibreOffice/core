@@ -170,7 +170,6 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
                 pTopic = FindTopic( *pService, hText1 );
                 if ( pTopic )
                 {
-                    pTopic->Connect( (sal_IntPtr) hConv );
                     pC = new Conversation;
                     pC->hConv = hConv;
                     pC->pTopic = pTopic;
@@ -678,21 +677,11 @@ void DdeTopic::NotifyClient( const OUString& rItem )
     }
 }
 
-void DdeTopic::Connect( sal_IntPtr /*nId*/ )
-{
-}
-
-void DdeTopic::Disconnect( sal_IntPtr /*nId*/ )
-{
-}
-
 void DdeTopic::_Disconnect( sal_IntPtr nId )
 {
     std::vector<DdeItem*>::iterator iter;
     for (iter = aItems.begin(); iter != aItems.end(); ++iter)
         (*iter)->DecMonitor( nId );
-
-    Disconnect( nId );
 }
 
 DdeData* DdeTopic::Get(SotClipboardFormatId /*nFmt*/)

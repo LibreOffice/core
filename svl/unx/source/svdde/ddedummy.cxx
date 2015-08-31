@@ -145,14 +145,6 @@ DdeTopic::~DdeTopic()
 {
 }
 
-void DdeTopic::Connect( SAL_UNUSED_PARAMETER long )
-{
-}
-
-void DdeTopic::Disconnect( SAL_UNUSED_PARAMETER long )
-{
-}
-
 void DdeTopic::InsertItem( SAL_UNUSED_PARAMETER DdeItem* )
 {
 }
