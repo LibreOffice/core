@@ -4854,16 +4854,16 @@ RTLFUNC(Partition)
         // appending the leading spaces for the lowervalue
         for ( sal_Int32 i= (nLen - nLen1) ; i > 0; --i )
         {
-            aRetStr.appendAscii(" ");
+            aRetStr.append(" ");
         }
     }
-    aRetStr.append( aLowerValue ).appendAscii(":");
+    aRetStr.append( aLowerValue ).append(":");
     if( nLen > nLen2 )
     {
         // appending the leading spaces for the uppervalue
         for ( sal_Int32 i= (nLen - nLen2) ; i > 0; --i )
         {
-            aRetStr.appendAscii(" ");
+            aRetStr.append(" ");
         }
     }
     aRetStr.append( aUpperValue );

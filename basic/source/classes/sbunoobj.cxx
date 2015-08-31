@@ -292,25 +292,25 @@ namespace
     {
         while ( _nLevel-- > 0 )
         {
-            _inout_rBuffer.appendAscii( "  " );
+            _inout_rBuffer.append( "  " );
         }
     }
 }
 
 void implAppendExceptionMsg( OUStringBuffer& _inout_rBuffer, const Exception& _e, const OUString& _rExceptionType, sal_Int32 _nLevel )
 {
-    _inout_rBuffer.appendAscii( "\n" );
+    _inout_rBuffer.append( "\n" );
     lcl_indent( _inout_rBuffer, _nLevel );
-    _inout_rBuffer.appendAscii( "Type: " );
+    _inout_rBuffer.append( "Type: " );
 
     if ( _rExceptionType.isEmpty() )
-        _inout_rBuffer.appendAscii( "Unknown" );
+        _inout_rBuffer.append( "Unknown" );
     else
         _inout_rBuffer.append( _rExceptionType );
 
-    _inout_rBuffer.appendAscii( "\n" );
+    _inout_rBuffer.append( "\n" );
     lcl_indent( _inout_rBuffer, _nLevel );
-    _inout_rBuffer.appendAscii( "Message: " );
+    _inout_rBuffer.append( "Message: " );
     _inout_rBuffer.append( _e.Message );
 
 }
@@ -414,7 +414,7 @@ void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
         implAppendExceptionMsg( aMessageBuf, aWrapped, aExamine.getValueTypeName(), nLevel );
         if ( aWrapped.TargetException.getValueTypeClass() == TypeClass_EXCEPTION )
             // there is a next chain element
-            aMessageBuf.appendAscii( "\nTargetException:" );
+            aMessageBuf.append( "\nTargetException:" );
 
         // next round
         aExamine = aWrapped.TargetException;
@@ -1579,7 +1579,7 @@ OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Referenc
 
     OUStringBuffer aRetStr;
     for( sal_uInt16 i = 0 ; i < nRekLevel ; i++ )
-        aRetStr.appendAscii( "    " );
+        aRetStr.append( "    " );
     aRetStr.append( xClass->getName() );
     OUString aClassName = xClass->getName();
     Type aClassType( xClass->getTypeClass(), aClassName.getStr() );
@@ -1587,12 +1587,12 @@ OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Referenc
     // checking if the interface is really supported
     if( !x->queryInterface( aClassType ).hasValue() )
     {
-        aRetStr.appendAscii( " (ERROR: Not really supported!)\n" );
+        aRetStr.append( " (ERROR: Not really supported!)\n" );
     }
     // Are there super interfaces?
     else
     {
-        aRetStr.appendAscii( "\n" );
+        aRetStr.append( "\n" );
 
         // get the super interfaces
         Sequence< Reference< XIdlClass > > aSuperClassSeq = xClass->getSuperclasses();
@@ -1641,11 +1641,11 @@ OUString getDbgObjectName( SbUnoObject* pUnoObj )
     OUStringBuffer aRet;
     if( aName.getLength() > 20 )
     {
-        aRet.appendAscii( "\n" );
+        aRet.append( "\n" );
     }
-    aRet.appendAscii( "\"" );
+    aRet.append( "\"" );
     aRet.append( aName );
-    aRet.appendAscii( "\":" );
+    aRet.append( "\":" );
     return aRet.makeStringAndClear();
 }
 
@@ -1770,7 +1770,7 @@ OUString Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
     if( eType != TypeClass_INTERFACE )
     {
         aRet.appendAscii( ID_DBG_SUPPORTEDINTERFACES );
-        aRet.appendAscii( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
+        aRet.append( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
     }
     else
     {
@@ -1779,9 +1779,9 @@ OUString Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
 
         Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
 
-        aRet.appendAscii( "Supported interfaces by object " );
+        aRet.append( "Supported interfaces by object " );
         aRet.append( getDbgObjectName( pUnoObj ) );
-        aRet.appendAscii( "\n" );
+        aRet.append( "\n" );
         if( xTypeProvider.is() )
         {
             // get the interfaces of the implementation
@@ -1802,9 +1802,9 @@ OUString Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
                     typelib_TypeDescription * pTD = 0;
                     rType.getDescription( &pTD );
 
-                    aRet.appendAscii( "*** ERROR: No IdlClass for type \"" );
+                    aRet.append( "*** ERROR: No IdlClass for type \"" );
                     aRet.append( pTD->pTypeName );
-                    aRet.appendAscii( "\"\n*** Please check type library\n" );
+                    aRet.append( "\"\n*** Please check type library\n" );
                 }
             }
         }
@@ -1820,40 +1820,40 @@ OUString Dbg_SbxDataType2String( SbxDataType eType )
     OUStringBuffer aRet;
     switch( +eType )
     {
-        case SbxEMPTY:      aRet.appendAscii("SbxEMPTY"); break;
-        case SbxNULL:       aRet.appendAscii("SbxNULL"); break;
-        case SbxINTEGER:    aRet.appendAscii("SbxINTEGER"); break;
-        case SbxLONG:       aRet.appendAscii("SbxLONG"); break;
-        case SbxSINGLE:     aRet.appendAscii("SbxSINGLE"); break;
-        case SbxDOUBLE:     aRet.appendAscii("SbxDOUBLE"); break;
-        case SbxCURRENCY:   aRet.appendAscii("SbxCURRENCY"); break;
-        case SbxDECIMAL:    aRet.appendAscii("SbxDECIMAL"); break;
-        case SbxDATE:       aRet.appendAscii("SbxDATE"); break;
-        case SbxSTRING:     aRet.appendAscii("SbxSTRING"); break;
-        case SbxOBJECT:     aRet.appendAscii("SbxOBJECT"); break;
-        case SbxERROR:      aRet.appendAscii("SbxERROR"); break;
-        case SbxBOOL:       aRet.appendAscii("SbxBOOL"); break;
-        case SbxVARIANT:    aRet.appendAscii("SbxVARIANT"); break;
-        case SbxDATAOBJECT: aRet.appendAscii("SbxDATAOBJECT"); break;
-        case SbxCHAR:       aRet.appendAscii("SbxCHAR"); break;
-        case SbxBYTE:       aRet.appendAscii("SbxBYTE"); break;
-        case SbxUSHORT:     aRet.appendAscii("SbxUSHORT"); break;
-        case SbxULONG:      aRet.appendAscii("SbxULONG"); break;
-        case SbxSALINT64:   aRet.appendAscii("SbxINT64"); break;
-        case SbxSALUINT64:  aRet.appendAscii("SbxUINT64"); break;
-        case SbxINT:        aRet.appendAscii("SbxINT"); break;
-        case SbxUINT:       aRet.appendAscii("SbxUINT"); break;
-        case SbxVOID:       aRet.appendAscii("SbxVOID"); break;
-        case SbxHRESULT:    aRet.appendAscii("SbxHRESULT"); break;
-        case SbxPOINTER:    aRet.appendAscii("SbxPOINTER"); break;
-        case SbxDIMARRAY:   aRet.appendAscii("SbxDIMARRAY"); break;
-        case SbxCARRAY:     aRet.appendAscii("SbxCARRAY"); break;
-        case SbxUSERDEF:    aRet.appendAscii("SbxUSERDEF"); break;
-        case SbxLPSTR:      aRet.appendAscii("SbxLPSTR"); break;
-        case SbxLPWSTR:     aRet.appendAscii("SbxLPWSTR"); break;
-        case SbxCoreSTRING: aRet.appendAscii("SbxCoreSTRING"); break;
-        case SbxOBJECT | SbxARRAY: aRet.appendAscii("SbxARRAY"); break;
-        default: aRet.appendAscii("Unknown Sbx-Type!");break;
+        case SbxEMPTY:      aRet.append("SbxEMPTY"); break;
+        case SbxNULL:       aRet.append("SbxNULL"); break;
+        case SbxINTEGER:    aRet.append("SbxINTEGER"); break;
+        case SbxLONG:       aRet.append("SbxLONG"); break;
+        case SbxSINGLE:     aRet.append("SbxSINGLE"); break;
+        case SbxDOUBLE:     aRet.append("SbxDOUBLE"); break;
+        case SbxCURRENCY:   aRet.append("SbxCURRENCY"); break;
+        case SbxDECIMAL:    aRet.append("SbxDECIMAL"); break;
+        case SbxDATE:       aRet.append("SbxDATE"); break;
+        case SbxSTRING:     aRet.append("SbxSTRING"); break;
+        case SbxOBJECT:     aRet.append("SbxOBJECT"); break;
+        case SbxERROR:      aRet.append("SbxERROR"); break;
+        case SbxBOOL:       aRet.append("SbxBOOL"); break;
+        case SbxVARIANT:    aRet.append("SbxVARIANT"); break;
+        case SbxDATAOBJECT: aRet.append("SbxDATAOBJECT"); break;
+        case SbxCHAR:       aRet.append("SbxCHAR"); break;
+        case SbxBYTE:       aRet.append("SbxBYTE"); break;
+        case SbxUSHORT:     aRet.append("SbxUSHORT"); break;
+        case SbxULONG:      aRet.append("SbxULONG"); break;
+        case SbxSALINT64:   aRet.append("SbxINT64"); break;
+        case SbxSALUINT64:  aRet.append("SbxUINT64"); break;
+        case SbxINT:        aRet.append("SbxINT"); break;
+        case SbxUINT:       aRet.append("SbxUINT"); break;
+        case SbxVOID:       aRet.append("SbxVOID"); break;
+        case SbxHRESULT:    aRet.append("SbxHRESULT"); break;
+        case SbxPOINTER:    aRet.append("SbxPOINTER"); break;
+        case SbxDIMARRAY:   aRet.append("SbxDIMARRAY"); break;
+        case SbxCARRAY:     aRet.append("SbxCARRAY"); break;
+        case SbxUSERDEF:    aRet.append("SbxUSERDEF"); break;
+        case SbxLPSTR:      aRet.append("SbxLPSTR"); break;
+        case SbxLPWSTR:     aRet.append("SbxLPWSTR"); break;
+        case SbxCoreSTRING: aRet.append("SbxCoreSTRING"); break;
+        case SbxOBJECT | SbxARRAY: aRet.append("SbxARRAY"); break;
+        default: aRet.append("Unknown Sbx-Type!");break;
     }
     return aRet.makeStringAndClear();
 }
@@ -1862,7 +1862,7 @@ OUString Dbg_SbxDataType2String( SbxDataType eType )
 OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
 {
     OUStringBuffer aRet;
-    aRet.appendAscii("Properties of object ");
+    aRet.append("Properties of object ");
     aRet.append( getDbgObjectName( pUnoObj ) );
 
     // analyse the Uno-Infos to recognise the arrays
@@ -1875,7 +1875,7 @@ OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
     }
     if( !xAccess.is() )
     {
-        aRet.appendAscii( "\nUnknown, no introspection available\n" );
+        aRet.append( "\nUnknown, no introspection available\n" );
         return aRet.makeStringAndClear();
     }
 
@@ -1893,7 +1893,7 @@ OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
         {
             OUStringBuffer aPropStr;
             if( (i % nPropsPerLine) == 0 )
-                aPropStr.appendAscii( "\n" );
+                aPropStr.append( "\n" );
 
             // output the type and name
             // Is it in Uno a sequence?
@@ -1920,14 +1920,14 @@ OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
             }
             aPropStr.append( Dbg_SbxDataType2String( eType ) );
             if( bMaybeVoid )
-                aPropStr.appendAscii( "/void" );
-            aPropStr.appendAscii( " " );
+                aPropStr.append( "/void" );
+            aPropStr.append( " " );
             aPropStr.append( pVar->GetName() );
 
             if( i == nPropCount - 1 )
-                aPropStr.appendAscii( "\n" );
+                aPropStr.append( "\n" );
             else
-                aPropStr.appendAscii( "; " );
+                aPropStr.append( "; " );
 
             aRet.append( aPropStr.makeStringAndClear() );
         }
@@ -1939,7 +1939,7 @@ OUString Impl_DumpProperties( SbUnoObject* pUnoObj )
 OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
 {
     OUStringBuffer aRet;
-    aRet.appendAscii("Methods of object ");
+    aRet.append("Methods of object ");
     aRet.append( getDbgObjectName( pUnoObj ) );
 
     // XIntrospectionAccess, so that the types of the parameter could be outputed
@@ -1952,7 +1952,7 @@ OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
     }
     if( !xAccess.is() )
     {
-        aRet.appendAscii( "\nUnknown, no introspection available\n" );
+        aRet.append( "\nUnknown, no introspection available\n" );
         return aRet.makeStringAndClear();
     }
     Sequence< Reference< XIdlMethod > > methods = xAccess->getMethods
@@ -1963,7 +1963,7 @@ OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
     sal_uInt16 nMethodCount = pMethods->Count();
     if( !nMethodCount )
     {
-        aRet.appendAscii( "\nNo methods found\n" );
+        aRet.append( "\nNo methods found\n" );
         return aRet.makeStringAndClear();
     }
     sal_uInt16 nPropsPerLine = 1 + nMethodCount / 30;
@@ -1973,7 +1973,7 @@ OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
         if( pVar )
         {
             if( (i % nPropsPerLine) == 0 )
-                aRet.appendAscii( "\n" );
+                aRet.append( "\n" );
 
             // address the method
             const Reference< XIdlMethod >& rxMethod = pUnoMethods[i];
@@ -1988,9 +1988,9 @@ OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
             }
             // output the name and the type
             aRet.append( Dbg_SbxDataType2String( eType ) );
-            aRet.appendAscii( " " );
+            aRet.append( " " );
             aRet.append ( pVar->GetName() );
-            aRet.appendAscii( " ( " );
+            aRet.append( " ( " );
 
             // the get-method mustn't have a parameter
             Sequence< Reference< XIdlClass > > aParamsSeq = rxMethod->getParameterTypes();
@@ -2003,18 +2003,18 @@ OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
                 {
                     aRet.append ( Dbg_SbxDataType2String( unoToSbxType( pParams[ j ] ) ) );
                     if( j < nParamCount - 1 )
-                        aRet.appendAscii( ", " );
+                        aRet.append( ", " );
                 }
             }
             else
-                aRet.appendAscii( "void" );
+                aRet.append( "void" );
 
-            aRet.appendAscii( " ) " );
+            aRet.append( " ) " );
 
             if( i == nMethodCount - 1 )
-                aRet.appendAscii( "\n" );
+                aRet.append( "\n" );
             else
-                aRet.appendAscii( "; " );
+                aRet.append( "; " );
         }
     }
     return aRet.makeStringAndClear();
@@ -4942,7 +4942,7 @@ Any SbUnoStructRefObject::getUnoAny()
 OUString SbUnoStructRefObject::Impl_DumpProperties()
 {
     OUStringBuffer aRet;
-    aRet.appendAscii("Properties of object ");
+    aRet.append("Properties of object ");
     aRet.append( getDbgObjectName() );
 
     sal_uInt16 nPropCount = pProps->Count();
@@ -4955,7 +4955,7 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
             OUStringBuffer aPropStr;
             if( (i % nPropsPerLine) == 0 )
             {
-                aPropStr.appendAscii( "\n" );
+                aPropStr.append( "\n" );
             }
             // output the type and name
             // Is it in Uno a sequence?
@@ -4978,16 +4978,16 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
             }
             aPropStr.append( Dbg_SbxDataType2String( eType ) );
 
-            aPropStr.appendAscii( " " );
+            aPropStr.append( " " );
             aPropStr.append( pVar->GetName() );
 
             if( i == nPropCount - 1 )
             {
-                aPropStr.appendAscii( "\n" );
+                aPropStr.append( "\n" );
             }
             else
             {
-                aPropStr.appendAscii( "; " );
+                aPropStr.append( "; " );
             }
             aRet.append( aPropStr.makeStringAndClear() );
         }
@@ -5019,7 +5019,7 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         OUStringBuffer aRet;
                         aRet.appendAscii( ID_DBG_SUPPORTEDINTERFACES );
-                        aRet.appendAscii( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
+                        aRet.append( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
 
                         pVar->PutString( aRet.makeStringAndClear() );
                     }
@@ -5037,9 +5037,9 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         // by now all properties must be established
                         implCreateAll();
                         OUStringBuffer aRet;
-                        aRet.appendAscii("Methods of object ");
+                        aRet.append("Methods of object ");
                         aRet.append( getDbgObjectName() );
-                        aRet.appendAscii( "\nNo methods found\n" );
+                        aRet.append( "\nNo methods found\n" );
                         pVar->PutString( aRet.makeStringAndClear() );
                     }
                     return;
@@ -5100,11 +5100,11 @@ OUString SbUnoStructRefObject::getDbgObjectName()
     OUStringBuffer aRet;
     if( aName.getLength() > 20 )
     {
-        aRet.appendAscii( "\n" );
+        aRet.append( "\n" );
     }
-    aRet.appendAscii( "\"" );
+    aRet.append( "\"" );
     aRet.append( aName );
-    aRet.appendAscii( "\":" );
+    aRet.append( "\":" );
     return aRet.makeStringAndClear();
 }
 
