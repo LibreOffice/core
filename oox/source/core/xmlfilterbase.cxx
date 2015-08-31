@@ -493,7 +493,7 @@ namespace {
 
 OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal_Int32 nId, const OUString& rType, const OUString& rTarget, bool bExternal )
 {
-    OUString sId = OUStringBuffer().appendAscii( "rId" ).append( nId ).makeStringAndClear();
+    OUString sId = OUStringBuffer().append( "rId" ).append( nId ).makeStringAndClear();
 
     Sequence< StringPair > aEntry( bExternal ? 3 : 2 );
     aEntry[0].First = "Type";
@@ -588,7 +588,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const Sequence< OUString 
 
     for( sal_Int32 i = 1, end = aItems.getLength(); i < end; ++i )
     {
-        sRep.appendAscii( " " ).append( aItems[ i ] );
+        sRep.append( " " ).append( aItems[ i ] );
     }
 
     writeElement( pDoc, nXmlElement, sRep.makeStringAndClear() );

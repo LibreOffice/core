@@ -908,7 +908,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
 
     Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
                                                                       .appendAscii( GetComponentDir() )
-                                                                      .appendAscii( "/media/image" )
+                                                                      .append( "/media/image" )
                                                                       .append( (sal_Int32) mnImageCounter )
                                                                       .appendAscii( pExtension )
                                                                       .makeStringAndClear(),

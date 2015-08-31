@@ -590,12 +590,12 @@ ChartExport& ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_
     OUString sFullStream = OUStringBuffer()
                             .appendAscii(sFullPath)
                             .append(nChartCount)
-                            .appendAscii( ".xml" )
+                            .append( ".xml" )
                             .makeStringAndClear();
     OUString sRelativeStream = OUStringBuffer()
                             .appendAscii(sRelativePath)
                             .append(nChartCount)
-                            .appendAscii( ".xml" )
+                            .append( ".xml" )
                             .makeStringAndClear();
     FSHelperPtr pChart = CreateOutputStream(
             sFullStream,

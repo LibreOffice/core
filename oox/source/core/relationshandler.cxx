@@ -41,9 +41,9 @@ OUString lclGetRelationsPath( const OUString& rFragmentPath )
     sal_Int32 nPathLen = ::std::max< sal_Int32 >( rFragmentPath.lastIndexOf( '/' ) + 1, 0 );
     return
         OUStringBuffer( rFragmentPath.copy( 0, nPathLen ) ).    // file path including slash
-        appendAscii( "_rels/" ).                                // additional '_rels/' path
+        append( "_rels/" ).                                // additional '_rels/' path
         append( rFragmentPath.copy( nPathLen ) ).               // file name after path
-        appendAscii( ".rels" ).                                 // '.rels' suffix
+        append( ".rels" ).                                 // '.rels' suffix
         makeStringAndClear();
 }
 

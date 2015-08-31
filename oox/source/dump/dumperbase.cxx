@@ -265,7 +265,7 @@ void StringHelper::appendHex( OUStringBuffer& rStr, sal_uInt8 nData, bool bPrefi
 {
     static const sal_Unicode spcHexDigits[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
     if( bPrefix )
-        rStr.appendAscii( "0x" );
+        rStr.append( "0x" );
     rStr.append( spcHexDigits[ (nData >> 4) & 0x0F ] ).append( spcHexDigits[ nData & 0x0F ] );
 }
 
@@ -454,13 +454,13 @@ void StringHelper::appendCChar( OUStringBuffer& rStr, sal_Unicode cChar, bool bP
     if( cChar > 0x00FF )
     {
         if( bPrefix )
-            rStr.appendAscii( "\\u" );
+            rStr.append( "\\u" );
         appendHex( rStr, static_cast< sal_uInt16 >( cChar ), false );
     }
     else
     {
         if( bPrefix )
-            rStr.appendAscii( "\\x" );
+            rStr.append( "\\x" );
         appendHex( rStr, static_cast< sal_uInt8 >( cChar ), false );
     }
 }

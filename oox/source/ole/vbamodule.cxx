@@ -245,7 +245,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                     }
                     // normal source code line
                     if( !mbExecutable )
-                        aSourceCode.appendAscii( "Rem " );
+                        aSourceCode.append( "Rem " );
                     aSourceCode.append( aCodeLine ).append( '\n' );
                 }
             }
@@ -265,22 +265,22 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     script::ModuleInfo aModuleInfo;
     aModuleInfo.ModuleType = mnType;
     OUStringBuffer aSourceCode;
-    aSourceCode.appendAscii( "Rem Attribute VBA_ModuleType=" );
+    aSourceCode.append( "Rem Attribute VBA_ModuleType=" );
     switch( mnType )
     {
         case script::ModuleType::NORMAL:
-            aSourceCode.appendAscii( "VBAModule" );
+            aSourceCode.append( "VBAModule" );
         break;
         case script::ModuleType::CLASS:
-            aSourceCode.appendAscii( "VBAClassModule" );
+            aSourceCode.append( "VBAClassModule" );
         break;
         case script::ModuleType::FORM:
-            aSourceCode.appendAscii( "VBAFormModule" );
+            aSourceCode.append( "VBAFormModule" );
             // hack from old filter, document Basic should know the XModel, but it doesn't
             aModuleInfo.ModuleObject.set( mxDocModel, UNO_QUERY );
         break;
         case script::ModuleType::DOCUMENT:
-            aSourceCode.appendAscii( "VBADocumentModule" );
+            aSourceCode.append( "VBADocumentModule" );
             // get the VBA implementation object associated to the document module
             if( rxDocObjectNA.is() ) try
             {
@@ -291,19 +291,19 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
             }
         break;
         default:
-            aSourceCode.appendAscii( "VBAUnknown" );
+            aSourceCode.append( "VBAUnknown" );
     }
     aSourceCode.append( '\n' );
     if( mbExecutable )
     {
-        aSourceCode.appendAscii( "Option VBASupport 1\n" );
+        aSourceCode.append( "Option VBASupport 1\n" );
         if( mnType == script::ModuleType::CLASS )
-            aSourceCode.appendAscii( "Option ClassModule\n" );
+            aSourceCode.append( "Option ClassModule\n" );
     }
     else
     {
         // add a subroutine named after the module itself
-        aSourceCode.appendAscii( "Sub " ).
+        aSourceCode.append( "Sub " ).
             append( maName.replace( ' ', '_' ) ).append( '\n' );
     }
 
@@ -312,7 +312,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
 
     // close the subroutine named after the module
     if( !mbExecutable )
-        aSourceCode.appendAscii( "End Sub\n" );
+        aSourceCode.append( "End Sub\n" );
 
     // insert extended module info
     try

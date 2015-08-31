@@ -1382,9 +1382,9 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                         {
                             xOutStream = mpFB->openFragmentStream( OUStringBuffer()
                                                                    .appendAscii( GetComponentDir() )
-                                                                   .appendAscii( "/embeddings/spreadsheet" )
+                                                                   .append( "/embeddings/spreadsheet" )
                                                                    .append( static_cast<sal_Int32>(mnEmbeddeDocumentCounter) )
-                                                                   .appendAscii( ".xlsx" )
+                                                                   .append( ".xlsx" )
                                                                    .makeStringAndClear(),
                                                                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" );
                         }
@@ -1392,9 +1392,9 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                         {
                             xOutStream = mpFB->openFragmentStream( OUStringBuffer()
                                                                    .appendAscii( GetComponentDir() )
-                                                                   .appendAscii( "/embeddings/textdocument" )
+                                                                   .append( "/embeddings/textdocument" )
                                                                    .append( static_cast<sal_Int32>(mnEmbeddeDocumentCounter) )
-                                                                   .appendAscii( ".docx" )
+                                                                   .append( ".docx" )
                                                                    .makeStringAndClear(),
                                                                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document" );
                         }
@@ -1438,9 +1438,9 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                                                         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package",
                                                         OUStringBuffer()
                                                         .appendAscii( GetRelationCompPrefix() )
-                                                        .appendAscii( "embeddings/spreadsheet" )
+                                                        .append( "embeddings/spreadsheet" )
                                                         .append( static_cast<sal_Int32>(mnEmbeddeDocumentCounter++) )
-                                                        .appendAscii( ".xlsx" )
+                                                        .append( ".xlsx" )
                                                         .makeStringAndClear() );
                         }
                         else
@@ -1449,9 +1449,9 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                                                         "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package",
                                                         OUStringBuffer()
                                                         .appendAscii( GetRelationCompPrefix() )
-                                                        .appendAscii( "embeddings/textdocument" )
+                                                        .append( "embeddings/textdocument" )
                                                         .append( static_cast<sal_Int32>(mnEmbeddeDocumentCounter++) )
-                                                        .appendAscii( ".docx" )
+                                                        .append( ".docx" )
                                                         .makeStringAndClear() );
                         }
 

@@ -77,7 +77,7 @@ static OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
             else if( *aIt >>= aString )
                 aBuffer.append( lclGenerateApiString( aString ) );
             else
-                aBuffer.appendAscii( "\"\"" );
+                aBuffer.append( "\"\"" );
         }
     }
     aBuffer.append( API_TOKEN_ARRAY_CLOSE );

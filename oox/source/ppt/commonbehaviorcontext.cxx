@@ -68,7 +68,7 @@ namespace oox { namespace ppt {
                 {
                     if( !sAttributes.isEmpty() )
                     {
-                        sAttributes.appendAscii( ";" );
+                        sAttributes.append( ";" );
                     }
                     sAttributes.append( iter->name );
                 }
