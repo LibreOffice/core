@@ -1089,7 +1089,7 @@ void SwTextFrm::FormatAdjust( SwTextFormatter &rLine,
 
     const SwTwips nDocPrtTop = Frm().Top() + Prt().Top();
     const SwTwips nOldHeight = Prt().SSize().Height();
-    SwTwips nChg = rLine.CalcBottomLine() - nDocPrtTop - nOldHeight;
+    const SwTwips nChg = rLine.CalcBottomLine() - nDocPrtTop - nOldHeight;
 
     // Vertical Formatting:
     // The (rotated) repaint rectangle's x coordinate referes to the frame.
