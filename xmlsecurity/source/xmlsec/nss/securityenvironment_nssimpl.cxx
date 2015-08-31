@@ -211,7 +211,7 @@ OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation() throw(
     for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
     {
         buff.append(OUString::createFromAscii(PK11_GetTokenName(*is)));
-        buff.appendAscii("\n");
+        buff.append("\n");
     }
     return buff.makeStringAndClear();
 }
