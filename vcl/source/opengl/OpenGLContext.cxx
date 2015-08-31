@@ -1625,6 +1625,26 @@ OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rText
     return pFramebuffer;
 }
 
+// FIXME: this method is rather grim from a perf. perspective.
+// We should instead (eventually) use pointers to associate the
+// framebuffer and texture cleanly.
+void OpenGLContext::UnbindTextureFromFramebuffers( GLuint nTexture )
+{
+    OpenGLFramebuffer* pFramebuffer;
+
+    // see if there is a framebuffer attached to that texture
+    pFramebuffer = mpLastFramebuffer;
+    while( pFramebuffer )
+    {
+        if (pFramebuffer->IsAttached(nTexture))
+        {
+            BindFramebuffer(pFramebuffer);
+            pFramebuffer->DetachTexture();
+        }
+        pFramebuffer = pFramebuffer->mpPrevFramebuffer;
+    }
+}
+
 void OpenGLContext::ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer )
 {
     if( pFramebuffer )

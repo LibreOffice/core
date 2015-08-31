@@ -193,6 +193,7 @@ public:
     bool               AcquireDefaultFramebuffer();
     OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
     static void        ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
+    void UnbindTextureFromFramebuffers( GLuint nTexture );
 #ifdef DBG_UTIL
     void AddRef(SalGraphicsImpl*);
     void DeRef(SalGraphicsImpl*);
