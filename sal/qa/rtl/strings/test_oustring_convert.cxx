@@ -24,26 +24,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "testshl/simpleheader.hxx"
+#include "gtest/gtest.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 
-namespace test { namespace oustring {
-
-class Convert: public CppUnit::TestFixture
-{
-private:
-    void convertToString();
-
-    CPPUNIT_TEST_SUITE(Convert);
-    CPPUNIT_TEST(convertToString);
-    CPPUNIT_TEST_SUITE_END();
-};
-
-} }
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustring::Convert, "alltest");
 
 namespace {
 
@@ -89,7 +74,7 @@ void testConvertToString(TestConvertToString const & rTest)
             aMessage.append(RTL_CONSTASCII_STRINGPARAM("strict = \""));
             aMessage.append(aStrict);
             aMessage.append(RTL_CONSTASCII_STRINGPARAM("\""));
-            CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
+            FAIL() << aMessage.getStr();
         }
     }
     else
@@ -98,13 +83,13 @@ void testConvertToString(TestConvertToString const & rTest)
         {
             rtl::OStringBuffer aMessage(aPrefix);
             aMessage.append(RTL_CONSTASCII_STRINGPARAM("modified output"));
-            CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
+            FAIL() << aMessage.getStr();
         }
         if (rTest.pStrict != 0)
         {
             rtl::OStringBuffer aMessage(aPrefix);
             aMessage.append(RTL_CONSTASCII_STRINGPARAM("failed"));
-            CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
+            FAIL() << aMessage.getStr();
         }
     }
     if (!aRelaxed.equals(rTest.pRelaxed))
@@ -113,13 +98,20 @@ void testConvertToString(TestConvertToString const & rTest)
         aMessage.append(RTL_CONSTASCII_STRINGPARAM("relaxed = \""));
         aMessage.append(aRelaxed);
         aMessage.append(RTL_CONSTASCII_STRINGPARAM("\""));
-        CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), false);
+        FAIL() << aMessage.getStr();
     }
 }
 
 }
 
-void test::oustring::Convert::convertToString()
+
+namespace test { namespace oustring {
+
+class Convert: public ::testing::Test
+{
+};
+
+TEST_F(Convert, convertToString)
 {
     TestConvertToString const aTests[]
         = { { { 0 },
@@ -178,3 +170,6 @@ void test::oustring::Convert::convertToString()
     for (unsigned int i = 0; i < sizeof aTests / sizeof aTests[0]; ++i)
         testConvertToString(aTests[i]);
 }
+
+} }
+

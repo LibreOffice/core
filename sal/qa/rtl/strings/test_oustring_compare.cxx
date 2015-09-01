@@ -24,40 +24,34 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "testshl/simpleheader.hxx"
+#include "gtest/gtest.h"
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
 
 namespace test { namespace oustring {
 
-class Compare: public CppUnit::TestFixture
+class Compare: public ::testing::Test
 {
-private:
-    void equalsIgnoreAsciiCaseAscii();
-
-    CPPUNIT_TEST_SUITE(Compare);
-    CPPUNIT_TEST(equalsIgnoreAsciiCaseAscii);
-    CPPUNIT_TEST_SUITE_END();
 };
+
+TEST_F(Compare, equalsIgnoreAsciiCaseAscii)
+{
+    ASSERT_TRUE(!rtl::OUString().equalsIgnoreAsciiCaseAscii("abc"));
+    ASSERT_TRUE(!rtl::OUString().equalsIgnoreAsciiCaseAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM("abc")));
+    ASSERT_TRUE(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
+                   equalsIgnoreAsciiCaseAscii(""));
+    ASSERT_TRUE(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
+                   equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
+
+    ASSERT_TRUE(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
+                   equalsIgnoreAsciiCaseAscii("abc"));
+    ASSERT_TRUE(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abcd")).
+                   equalsIgnoreAsciiCaseAscii("abc"));
+    ASSERT_TRUE(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
+                   equalsIgnoreAsciiCaseAscii("abcd"));
+}
 
 } }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustring::Compare, "alltest");
 
-void test::oustring::Compare::equalsIgnoreAsciiCaseAscii()
-{
-    CPPUNIT_ASSERT(!rtl::OUString().equalsIgnoreAsciiCaseAscii("abc"));
-    CPPUNIT_ASSERT(!rtl::OUString().equalsIgnoreAsciiCaseAsciiL(
-                       RTL_CONSTASCII_STRINGPARAM("abc")));
-    CPPUNIT_ASSERT(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
-                   equalsIgnoreAsciiCaseAscii(""));
-    CPPUNIT_ASSERT(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
-                   equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
-
-    CPPUNIT_ASSERT(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
-                   equalsIgnoreAsciiCaseAscii("abc"));
-    CPPUNIT_ASSERT(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abcd")).
-                   equalsIgnoreAsciiCaseAscii("abc"));
-    CPPUNIT_ASSERT(!rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")).
-                   equalsIgnoreAsciiCaseAscii("abcd"));
-}

@@ -24,28 +24,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "testshl/simpleheader.hxx"
+#include "gtest/gtest.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
-
-namespace test { namespace oustringbuffer {
-
-class Utf32: public CppUnit::TestFixture {
-private:
-    void appendUtf32();
-
-    void insertUtf32();
-
-    CPPUNIT_TEST_SUITE(Utf32);
-    CPPUNIT_TEST(appendUtf32);
-    CPPUNIT_TEST(insertUtf32);
-    CPPUNIT_TEST_SUITE_END();
-};
-
-} }
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustringbuffer::Utf32, "alltest");
 
 namespace {
 
@@ -81,7 +63,13 @@ void createMessage(
 
 }
 
-void test::oustringbuffer::Utf32::appendUtf32() {
+
+namespace test { namespace oustringbuffer {
+
+class Utf32: public ::testing::Test {
+};
+
+TEST_F(Utf32, appendUtf32) {
     int const str1Len = 3;
     sal_Unicode const str1[str1Len] = { 'a', 'b', 'c' };
     int const str2Len = 4;
@@ -93,17 +81,17 @@ void test::oustringbuffer::Utf32::appendUtf32() {
     buf1.appendUtf32('d');
     rtl::OUString res1(buf1.makeStringAndClear());
     createMessage(message, res1, rtl::OUString(str2, str2Len));
-    CPPUNIT_ASSERT_MESSAGE(
-        message.getStr(), res1 == rtl::OUString(str2, str2Len));
+    ASSERT_TRUE(
+        res1 == rtl::OUString(str2, str2Len)) << message.getStr();
     rtl::OUStringBuffer buf2(rtl::OUString(str2, str2Len));
     buf2.appendUtf32(0x10000);
     rtl::OUString res2(buf2.makeStringAndClear());
     createMessage(message, res2, rtl::OUString(str3, str3Len));
-    CPPUNIT_ASSERT_MESSAGE(
-        message.getStr(), res2 == rtl::OUString(str3, str3Len));
+    ASSERT_TRUE(
+        res2 == rtl::OUString(str3, str3Len)) << message.getStr();
 }
 
-void test::oustringbuffer::Utf32::insertUtf32() {
+TEST_F(Utf32, insertUtf32) {
     int const str1Len = 3;
     sal_Unicode const str1[str1Len] = { 'a', 'b', 'c' };
     int const str2Len = 4;
@@ -115,12 +103,17 @@ void test::oustringbuffer::Utf32::insertUtf32() {
     buf1.insertUtf32(2, 'd');
     rtl::OUString res1(buf1.makeStringAndClear());
     createMessage(message, res1, rtl::OUString(str2, str2Len));
-    CPPUNIT_ASSERT_MESSAGE(
-        message.getStr(), res1 == rtl::OUString(str2, str2Len));
+    ASSERT_TRUE(
+        res1 == rtl::OUString(str2, str2Len)) << message.getStr();
     rtl::OUStringBuffer buf2(rtl::OUString(str2, str2Len));
     buf2.insertUtf32(2, 0x10FFFF);
     rtl::OUString res2(buf2.makeStringAndClear());
     createMessage(message, res2, rtl::OUString(str3, str3Len));
-    CPPUNIT_ASSERT_MESSAGE(
-        message.getStr(), res2 == rtl::OUString(str3, str3Len));
+    ASSERT_TRUE(
+        res2 == rtl::OUString(str3, str3Len)) << message.getStr();
 }
+
+} }
+
+
+

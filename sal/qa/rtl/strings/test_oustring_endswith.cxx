@@ -24,7 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "testshl/simpleheader.hxx"
+#include "gtest/gtest.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -32,21 +32,7 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-namespace test { namespace oustring {
 
-class EndsWith: public CppUnit::TestFixture
-{
-private:
-    void endsWith();
-
-    CPPUNIT_TEST_SUITE(EndsWith);
-    CPPUNIT_TEST(endsWith);
-    CPPUNIT_TEST_SUITE_END();
-};
-
-} }
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustring::EndsWith, "alltest");
 
 namespace {
 
@@ -72,7 +58,15 @@ void appendString(rtl::OStringBuffer & buffer, rtl::OString const & string)
 
 }
 
-void test::oustring::EndsWith::endsWith()
+
+
+namespace test { namespace oustring {
+
+class EndsWith: public ::testing::Test
+{
+};
+
+TEST_F(EndsWith, endsWith)
 {
     struct Data {
         char const * str1;
@@ -106,12 +100,13 @@ void test::oustring::EndsWith::endsWith()
         appendString(msg, rtl::OString(data[i].str2, data[i].str2Len));
         msg.append(RTL_CONSTASCII_STRINGPARAM(") == "));
         msg.append(static_cast< sal_Bool >(data[i].endsWith));
-        CPPUNIT_ASSERT_MESSAGE(
-            msg.getStr(),
+        ASSERT_TRUE(
             rtl::OUString(
                 data[i].str1, data[i].str1Len,
                 RTL_TEXTENCODING_ASCII_US).endsWithIgnoreAsciiCaseAsciiL(
                     data[i].str2, data[i].str2Len)
-            == data[i].endsWith);
+            == data[i].endsWith) << msg.getStr();
     }
 }
+
+} }
