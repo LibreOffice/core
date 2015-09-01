@@ -1472,7 +1472,7 @@ void DffPropertyReader::ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const
         eTHA = SDRTEXTHORZADJUST_BLOCK;
 
         // read text anchor
-        MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+        sal_uInt32 eTextAnchor = GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
 
         switch( eTextAnchor )
         {

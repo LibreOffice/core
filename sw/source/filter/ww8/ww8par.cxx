@@ -896,8 +896,8 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             pImpRec->nDyTextBottom  = nTextBottom;
 
             // Taking the correct default (which is mso_anchorTop)
-            MSO_Anchor eTextAnchor =
-                (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+            sal_uInt32 eTextAnchor =
+                GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
 
             SdrTextVertAdjust eTVA = bVerticalText
                                      ? SDRTEXTVERTADJUST_BLOCK
