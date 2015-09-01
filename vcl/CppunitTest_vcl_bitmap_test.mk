@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_bitmap_test, \
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_bitmap_test,\
 	boost_headers \
+	glew \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,vcl_bitmap_test,\
