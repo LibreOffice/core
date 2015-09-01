@@ -32,7 +32,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <svtools/miscopt.hxx>
@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 
 namespace {
 
-class IFrameObject : public ::cppu::WeakImplHelper6 <
+class IFrameObject : public ::cppu::WeakImplHelper <
         css::util::XCloseable,
         css::lang::XEventListener,
         css::frame::XSynchronousFrameLoader,

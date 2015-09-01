@@ -42,7 +42,7 @@
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/settings.hxx>
 
 #include <sfx2/viewfrm.hxx>
@@ -93,7 +93,7 @@ Size impl_Size_Struct2Object( const awt::Size& aSize )
     return aReturnValue ;
 }
 
-class SfxPrintJob_Impl : public cppu::WeakImplHelper1
+class SfxPrintJob_Impl : public cppu::WeakImplHelper
 <
     com::sun::star::view::XPrintJob
 >

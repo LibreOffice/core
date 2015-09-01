@@ -22,7 +22,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/graph.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -40,7 +40,7 @@ namespace sfx2
     typedef ::com::sun::star::beans::StringPair FilterPair;
 
     class FileDialogHelper_Impl :
-        public ::cppu::WeakImplHelper2<
+        public ::cppu::WeakImplHelper<
             ::com::sun::star::ui::dialogs::XFilePickerListener,
             ::com::sun::star::ui::dialogs::XDialogClosedListener >
     {

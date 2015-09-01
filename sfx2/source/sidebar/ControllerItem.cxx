@@ -30,13 +30,14 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
+#include <cppuhelper/compbase.hxx>
 
 using namespace css;
 using namespace css::uno;
 
 namespace
 {
-    typedef ::cppu::WeakComponentImplHelper1 <
+    typedef ::cppu::WeakComponentImplHelper <
         css::frame::XFrameActionListener
         > FrameActionListenerInterfaceBase;
 

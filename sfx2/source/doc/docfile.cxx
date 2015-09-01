@@ -60,7 +60,6 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/logging/DocumentIOLogRing.hpp>
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>

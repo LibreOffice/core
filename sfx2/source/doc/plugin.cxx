@@ -32,7 +32,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -81,7 +81,7 @@ const SfxItemPropertyMapEntry* lcl_GetPluginPropertyMap_Impl()
     return aPluginPropertyMap_Impl;
 }
 
-class PluginObject : public ::cppu::WeakImplHelper5 <
+class PluginObject : public ::cppu::WeakImplHelper <
         css::util::XCloseable,
         css::lang::XEventListener,
         css::frame::XSynchronousFrameLoader,
