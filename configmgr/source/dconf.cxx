@@ -954,6 +954,10 @@ void readDir(
 
 void readLayer(Data & data, int layer) {
     GObjectHolder<DConfClient> client(dconf_client_new());
+    if (client.get() == nullptr) {
+        SAL_WARN("configmgr.dconf", "dconf_client_new failed");
+        return;
+    }
     readDir(
         data, layer, rtl::Reference<Node>(), data.getComponents(), client,
         "/org/libreoffice/registry/");
