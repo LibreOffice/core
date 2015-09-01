@@ -1419,30 +1419,25 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     const double fHalfWidth = 0.5 * rLineWidth.getX();
 
     // shortcut for hairline drawing to improve performance
-    if( bIsHairline )
+    if (bIsHairline)
     {
-        basegfx::B2DTrapezoidVector aTrapezVector;
-        basegfx::tools::createLineTrapezoidFromB2DPolygon(aTrapezVector, aPolygon, rLineWidth.getX());
-        if (aTrapezVector.size())
+        PreDraw();
+        if (UseSolidAA(mnLineColor, fTransparency))
         {
-            PreDraw();
-            if (UseSolidAA(mnLineColor, fTransparency))
+            Polygon aToolsPolygon(aPolygon);
+            sal_uInt32 nPoints = aToolsPolygon.GetSize();
+            if (aToolsPolygon.HasFlags())
             {
-                for (size_t i = 0; i < aTrapezVector.size(); ++i)
-                {
-                    const basegfx::B2DPolygon& rTrapezPolygon = aTrapezVector[i].getB2DPolygon();
-                    sal_uInt32 nPoints = rTrapezPolygon.count();
-                    for (sal_uInt32 j = 0; j < nPoints - 1; ++j)
-                    {
-                        const basegfx::B2DPoint& rPoint1 = rTrapezPolygon.getB2DPoint(j);
-                        const basegfx::B2DPoint& rPoint2 = rTrapezPolygon.getB2DPoint(j + 1);
-                        DrawLineAA(rPoint1.getX(), rPoint1.getY(),
-                                   rPoint2.getX(), rPoint2.getY());
-                    }
-                }
+                aToolsPolygon = Polygon::SubdivideBezier(aToolsPolygon);
+                nPoints = aToolsPolygon.GetSize();
             }
-            PostDraw();
+            for (sal_uInt32 i = 0; i < nPoints - 1; ++i)
+            {
+                DrawLineAA(aToolsPolygon[i].X(),     aToolsPolygon[i].Y(),
+                           aToolsPolygon[i + 1].X(), aToolsPolygon[i + 1].Y());
+            }
         }
+        PostDraw();
         return true;
     }
 
