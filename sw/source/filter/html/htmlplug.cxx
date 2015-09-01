@@ -655,6 +655,8 @@ void SwHTMLParser::EndObject()
         delete pAppletImpl;
         pAppletImpl = 0;
     }
+#else
+    (void) this;                // Silence loplugin:staticmethods
 #endif
 }
 
@@ -786,6 +788,8 @@ void SwHTMLParser::EndApplet()
 
     delete pAppletImpl;
     pAppletImpl = 0;
+#else
+    (void) this;
 #endif
 }
 
@@ -816,6 +820,8 @@ void SwHTMLParser::InsertParam()
         return;
 
     pAppletImpl->AppendParam( aName, aValue );
+#else
+    (void) this;
 #endif
 }
 
