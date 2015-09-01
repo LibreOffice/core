@@ -915,9 +915,8 @@ bool OpenGLContext::ImplInit()
         0, 0, 0                         // Layer Masks Ignored
     };
 
-    // interestingly we need this flag being set even if we use single buffer
-    // rendering - otherwise we get errors with virtual devices
-    PixelFormatFront.dwFlags |= PFD_DOUBLEBUFFER;
+    if (mbUseDoubleBufferedRendering)
+        PixelFormatFront.dwFlags |= PFD_DOUBLEBUFFER;
 
     if (mbRequestVirtualDevice)
         PixelFormatFront.dwFlags |= PFD_DRAW_TO_BITMAP;
