@@ -21,6 +21,7 @@
 #include <sdr/properties/itemsettools.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
+#include <vcl/outdev.hxx>
 
 #include <vector>
 #include <svx/svdobj.hxx>

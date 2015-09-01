@@ -21,6 +21,7 @@
 #define INCLUDED_CONFIGMGR_SOURCE_WRITEMODFILE_HXX
 
 #include <sal/config.h>
+#include <rtl/strbuf.hxx>
 
 namespace configmgr {
 

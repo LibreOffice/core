@@ -25,6 +25,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>
 #include <vcl/region.hxx>
+#include <vcl/outdev.hxx>
 #include <boost/scoped_ptr.hpp>
 
 // class to remember broadcast start positions
