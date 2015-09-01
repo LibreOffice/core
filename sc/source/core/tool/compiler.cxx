@@ -4705,9 +4705,9 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         if (aStr.isEmpty())
         {
             // Hope that there's still the original column name available.
-            const ScDBData* pData = pDoc->GetDBAtCursor( aPos.Col(), aPos.Row(), aPos.Tab(), true);
+            const ScDBData* pData = pDoc->GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab(), true);
             if (pData)
-                aStr = pData->GetTableColumnName( aPos.Col());
+                aStr = pData->GetTableColumnName( aAbs.Col());
         }
         escapeTableRefColumnSpecifier( aStr);
         rBuffer.append(aStr);
