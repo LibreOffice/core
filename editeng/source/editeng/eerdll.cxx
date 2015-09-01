@@ -101,8 +101,9 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems = new SfxPoolItem*[EDITITEMCOUNT];
 
         // Paragraph attributes:
-        SvxNumRule aDefaultNumRule( SvxNumRuleFlags::BULLET_REL_SIZE | SvxNumRuleFlags::BULLET_COLOR | SvxNumRuleFlags::CHAR_TEXT_DISTANCE,
-                                    SVX_MAX_NUM, false );
+        SvxNumRule aDefaultNumRule( SvxNumRuleFlags::NONE, 0, false );
+
+       // SvxNumRule aDefaultNumRule(SvxNumRuleFlags::NONE, SVX_MAX_NUM, false);
 
         ppDefItems[0]  = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
         ppDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
