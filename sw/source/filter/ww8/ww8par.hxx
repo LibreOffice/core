@@ -1522,7 +1522,7 @@ private:
     SwFrameFormat* ImportOle( const Graphic* = 0, const SfxItemSet* pFlySet = 0,
         const SfxItemSet* pGrfSet = 0, const Rectangle& aVisArea = Rectangle() );
     SwFlyFrameFormat* InsertOle(SdrOle2Obj &rObject, const SfxItemSet &rFlySet,
-        const SfxItemSet &rGrfSet);
+        const SfxItemSet *rGrfSet);
 
     bool ImportFormulaControl(WW8FormulaControl &rBox,WW8_CP nStart,
         SwWw8ControlType nWhich);

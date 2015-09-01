@@ -198,7 +198,7 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, tools::SvRef<SotStorage>& rS
 }
 
 SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
-    const SfxItemSet &rFlySet, const SfxItemSet &rGrfSet)
+    const SfxItemSet &rFlySet, const SfxItemSet *rGrfSet)
 {
     SfxObjectShell *pPersist = m_rDoc.GetPersist();
     OSL_ENSURE(pPersist, "No persist, cannot insert objects correctly");
@@ -238,7 +238,7 @@ SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
     if (bSuccess)
     {
         const SfxItemSet *pFlySet = pMathFlySet ? pMathFlySet : &rFlySet;
-        pRet = m_rDoc.getIDocumentContentOperations().InsertOLE(*m_pPaM, sNewName, rObject.GetAspect(), pFlySet, &rGrfSet, 0);
+        pRet = m_rDoc.getIDocumentContentOperations().InsertOLE(*m_pPaM, sNewName, rObject.GetAspect(), pFlySet, rGrfSet, 0);
     }
     delete pMathFlySet;
     return pRet;
@@ -291,7 +291,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     {
         if (pRet->ISA(SdrOle2Obj))
         {
-            pFormat = InsertOle(*static_cast<SdrOle2Obj*>(pRet), *pFlySet, *pGrfSet);
+            pFormat = InsertOle(*static_cast<SdrOle2Obj*>(pRet), *pFlySet, pGrfSet);
             SdrObject::Free( pRet );        // das brauchen wir nicht mehr
         }
         else
