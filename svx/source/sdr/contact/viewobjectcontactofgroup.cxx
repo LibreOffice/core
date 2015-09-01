@@ -26,7 +26,7 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdobj.hxx>
-
+#include <vcl/outdev.hxx>
 
 
 using namespace com::sun::star;

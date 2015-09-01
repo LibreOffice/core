@@ -23,7 +23,7 @@
 #include <svx/svddef.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
-
+#include <vcl/outdev.hxx>
 
 
 namespace sdr

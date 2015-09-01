@@ -10,11 +10,13 @@
 #include "opengl/win/WinDeviceInfo.hxx"
 
 #include "blocklist_parser.hxx"
+#include <config_folders.h>
 
 #include <windows.h>
 #include <setupapi.h>
 #include <algorithm>
 #include <cstdint>
+#include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>
 
 OUString* WinOpenGLDeviceInfo::mpDeviceVendors[wgl::DeviceVendorMax];

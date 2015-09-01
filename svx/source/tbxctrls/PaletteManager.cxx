@@ -24,6 +24,7 @@
 #include <svx/drawitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
+#include <vcl/toolbox.hxx>
 #include <svtools/colrdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

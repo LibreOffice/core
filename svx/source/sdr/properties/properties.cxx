@@ -23,6 +23,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>
 #include <svx/xfillit0.hxx>
+#include <vcl/outdev.hxx>
 
 using namespace com::sun::star;
 

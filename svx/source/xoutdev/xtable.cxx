@@ -25,6 +25,7 @@
 #include <svx/xpool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>
+#include <vcl/outdev.hxx>
 #include <stack>
 
 using namespace com::sun::star;

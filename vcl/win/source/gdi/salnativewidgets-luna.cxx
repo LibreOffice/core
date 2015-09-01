@@ -48,6 +48,7 @@
 
 #include <map>
 #include <string>
+#include <boost/optional.hpp>
 
 using namespace std;
 
