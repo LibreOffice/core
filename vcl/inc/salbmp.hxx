@@ -70,8 +70,10 @@ public:
     virtual bool GetChecksum(ChecksumType& rChecksum) const
     {
         updateChecksum();
-        assert(mbChecksumValid);
-        rChecksum = mnChecksum;
+        if (!mbChecksumValid)
+            rChecksum = 0; // back-compat
+        else
+            rChecksum = mnChecksum;
         return mbChecksumValid;
     }
 
