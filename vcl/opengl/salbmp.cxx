@@ -514,7 +514,7 @@ bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType&
     OUString FragShader("areaHashCRC64TFragmentShader");
 
     static const OpenGLTexture aCRCTableTexture(512, 1, GL_RGBA, GL_UNSIGNED_BYTE,
-            const_cast<sal_uInt8*>(reinterpret_cast<const sal_uInt8*>(vcl_get_crc64_table())));
+            vcl_get_crc64_table());
 
     // First Pass
 

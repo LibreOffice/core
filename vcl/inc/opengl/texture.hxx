@@ -42,7 +42,7 @@ public:
     int mnFreeSlots;
 
     ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate );
-    ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData );
+    ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );
     ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight );
     ~ImplOpenGLTexture();
 
@@ -93,7 +93,7 @@ public:
                     OpenGLTexture(ImplOpenGLTexture* pImpl, Rectangle aRectangle, int nSlotNumber = 0);
 
                     OpenGLTexture( int nWidth, int nHeight, bool bAllocate = true );
-                    OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData );
+                    OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );
                     OpenGLTexture( int nX, int nY, int nWidth, int nHeight );
                     OpenGLTexture( const OpenGLTexture& rTexture );
                     OpenGLTexture( const OpenGLTexture& rTexture, int nX, int nY, int nWidth, int nHeight );
