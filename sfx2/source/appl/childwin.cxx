@@ -28,7 +28,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sfx2/childwin.hxx>
 #include <sfx2/app.hxx>
@@ -69,7 +69,7 @@ struct SfxChildWindow_Impl
 
 
 
-class DisposeListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
+class DisposeListener : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XEventListener >
 {
     public:
         DisposeListener( SfxChildWindow*      pOwner ,

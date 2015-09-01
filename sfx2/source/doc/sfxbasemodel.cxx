@@ -53,6 +53,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <comphelper/enumhelper.hxx>
 
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
@@ -141,7 +142,7 @@ using ::com::sun::star::frame::XModel;
 /** This Listener is used to get notified when the XDocumentProperties of the
     XModel change.
  */
-class SfxDocInfoListener_Impl : public ::cppu::WeakImplHelper1<
+class SfxDocInfoListener_Impl : public ::cppu::WeakImplHelper<
     util::XModifyListener >
 {
 
@@ -315,7 +316,7 @@ sal_Int64 IMPL_SfxBaseModel_DataContainer::g_nInstanceCounter = 0;
 
 
 // Listener that forwards notifications from the PrintHelper to the "real" listeners
-class SfxPrintHelperListener_Impl : public ::cppu::WeakImplHelper1< view::XPrintJobListener >
+class SfxPrintHelperListener_Impl : public ::cppu::WeakImplHelper< view::XPrintJobListener >
 {
 public:
     IMPL_SfxBaseModel_DataContainer* m_pData;
@@ -1126,7 +1127,7 @@ void SAL_CALL SfxBaseModel::disconnectController( const Reference< frame::XContr
 
 namespace
 {
-    typedef ::cppu::WeakImplHelper1< XUndoAction > ControllerLockUndoAction_Base;
+    typedef ::cppu::WeakImplHelper< XUndoAction > ControllerLockUndoAction_Base;
     class ControllerLockUndoAction : public ControllerLockUndoAction_Base
     {
     public:

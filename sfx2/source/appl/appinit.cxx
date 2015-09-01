@@ -43,7 +43,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <vcl/edit.hxx>
@@ -76,7 +76,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
-class SfxTerminateListener_Impl : public ::cppu::WeakImplHelper2< XTerminateListener, XServiceInfo >
+class SfxTerminateListener_Impl : public ::cppu::WeakImplHelper< XTerminateListener, XServiceInfo >
 {
 public:
 

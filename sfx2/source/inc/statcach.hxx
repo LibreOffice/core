@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sfx2/bindings.hxx>
 
@@ -36,7 +36,7 @@
 
 class SfxControllerItem;
 class SfxDispatcher;
-class BindDispatch_Impl :   public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
+class BindDispatch_Impl :   public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
 friend class SfxStateCache;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          xDisp;

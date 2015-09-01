@@ -19,13 +19,12 @@
 #ifndef INCLUDED_SFX2_SOURCE_APPL_HELPINTERCEPTOR_HXX
 #define INCLUDED_SFX2_SOURCE_APPL_HELPINTERCEPTOR_HXX
 
-#include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
@@ -43,7 +42,7 @@ struct HelpHistoryEntry_Impl
 typedef ::std::vector< HelpHistoryEntry_Impl* > HelpHistoryList_Impl;
 
 class SfxHelpWindow_Impl;
-class HelpInterceptor_Impl : public ::cppu::WeakImplHelper3<
+class HelpInterceptor_Impl : public ::cppu::WeakImplHelper<
 
         ::com::sun::star::frame::XDispatchProviderInterceptor,
         ::com::sun::star::frame::XInterceptorInfo,
@@ -116,7 +115,7 @@ public:
 
 // HelpListener_Impl -----------------------------------------------------
 
-class HelpListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
+class HelpListener_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XStatusListener >
 {
 private:
     HelpInterceptor_Impl*   pInterceptor;
@@ -137,7 +136,7 @@ public:
 // HelpStatusListener_Impl -----------------------------------------------------
 
 class HelpStatusListener_Impl : public
-::cppu::WeakImplHelper1< ::com::sun::star::frame::XStatusListener >
+::cppu::WeakImplHelper< ::com::sun::star::frame::XStatusListener >
 {
 private:
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDispatch;

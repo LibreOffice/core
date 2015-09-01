@@ -24,10 +24,10 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
-class DocTemplLocaleHelper : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::XDocumentHandler >
+class DocTemplLocaleHelper : public cppu::WeakImplHelper < com::sun::star::xml::sax::XDocumentHandler >
 {
     // Relations info related strings
     OUString m_aGroupListElement;

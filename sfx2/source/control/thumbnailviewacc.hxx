@@ -21,8 +21,8 @@
 #define INCLUDED_SFX2_SOURCE_CONTROL_THUMBNAILVIEWACC_HXX
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -39,7 +39,7 @@
 class ThumbnailView;
 class ThumbnailViewItem;
 
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -158,7 +158,7 @@ private:
         throw (::com::sun::star::lang::DisposedException);
 };
 
-class ThumbnailViewItemAcc : public ::cppu::WeakImplHelper5< ::com::sun::star::accessibility::XAccessible,
+class ThumbnailViewItemAcc : public ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessible,
                                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                                                      ::com::sun::star::accessibility::XAccessibleContext,
                                                      ::com::sun::star::accessibility::XAccessibleComponent,

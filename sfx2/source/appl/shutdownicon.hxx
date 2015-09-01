@@ -30,7 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <sfx2/dllapi.h>
 #include <tools/link.hxx>
 
@@ -40,7 +40,7 @@ namespace sfx2
     class FileDialogHelper;
 }
 
-typedef ::cppu::WeakComponentImplHelper4<
+typedef ::cppu::WeakComponentImplHelper<
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::frame::XTerminateListener,
     ::com::sun::star::lang::XServiceInfo,

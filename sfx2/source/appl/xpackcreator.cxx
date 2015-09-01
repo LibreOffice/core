@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <sot/stg.hxx>
@@ -38,7 +38,7 @@ using namespace css;
 
 namespace {
 
-class OPackageStructureCreator : public ::cppu::WeakImplHelper2< embed::XPackageStructureCreator,
+class OPackageStructureCreator : public ::cppu::WeakImplHelper< embed::XPackageStructureCreator,
                                                                 lang::XServiceInfo >
 {
 public:

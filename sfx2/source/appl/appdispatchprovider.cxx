@@ -32,7 +32,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
 #include <comphelper/sequence.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/app.hxx>
@@ -59,7 +59,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-class SfxAppDispatchProvider : public ::cppu::WeakImplHelper3< css::frame::XAppDispatchProvider,
+class SfxAppDispatchProvider : public ::cppu::WeakImplHelper< css::frame::XAppDispatchProvider,
                                                                css::lang::XServiceInfo,
                                                                css::lang::XInitialization >
 {

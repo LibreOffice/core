@@ -34,7 +34,7 @@
 
 #include <com/sun/star/util/XStringWidth.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <set>
 #include <vector>
@@ -137,7 +137,7 @@ struct RecentMenuEntry
     rtl::OUString aPassword;
 };
 
-class RecentFilesStringLength : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
+class RecentFilesStringLength : public ::cppu::WeakImplHelper< ::com::sun::star::util::XStringWidth >
 {
     public:
         RecentFilesStringLength() {}

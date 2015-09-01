@@ -20,11 +20,11 @@
 #define INCLUDED_SFX2_SOURCE_APPL_HELPDISPATCH_HXX
 
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "helpinterceptor.hxx"
 
-class HelpDispatch_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XDispatch >
+class HelpDispatch_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XDispatch >
 {
 private:
     HelpInterceptor_Impl&       m_rInterceptor;

@@ -30,7 +30,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -156,7 +156,7 @@ class GroupData_Impl;
 typedef vector< GroupData_Impl* > GroupList_Impl;
 
 
-class TplTaskEnvironment : public ::cppu::WeakImplHelper1< ucb::XCommandEnvironment >
+class TplTaskEnvironment : public ::cppu::WeakImplHelper< ucb::XCommandEnvironment >
 {
     uno::Reference< task::XInteractionHandler >               m_xInteractionHandler;
     uno::Reference< ucb::XProgressHandler >                   m_xProgressHandler;
@@ -2205,7 +2205,7 @@ bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
 }
 
 
-class SfxDocTplService: public ::cppu::WeakImplHelper3< css::lang::XLocalizable, css::frame::XDocumentTemplates, css::lang::XServiceInfo >
+class SfxDocTplService: public ::cppu::WeakImplHelper< css::lang::XLocalizable, css::frame::XDocumentTemplates, css::lang::XServiceInfo >
 {
     SfxDocTplService_Impl       *pImp;
 

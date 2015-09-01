@@ -26,7 +26,6 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
-#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <framework/documentundoguard.hxx>
 #include <rtl/ref.hxx>
