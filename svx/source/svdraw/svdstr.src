@@ -2778,6 +2778,11 @@ String STR_TABLE_DISTRIBUTE_COLUMNS
     Text [ en-US ] = "Distribute columns" ;
 };
 
+String STR_TABLE_DELETE_CELL_CONTENTS
+{
+    Text [ en-US ] = "Delete cell contents" ;
+};
+
 String STR_TABLE_STYLE
 {
     Text [ en-US ] = "Table style" ;

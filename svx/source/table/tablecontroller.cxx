@@ -1331,6 +1331,10 @@ bool SvxTableController::DeleteMarked()
     {
         if( mxTable.is() )
         {
+            const bool bUndo = mpModel && mpModel->IsUndoEnabled();
+            if (bUndo)
+                mpModel->BegUndo(ImpGetResStr(STR_TABLE_DELETE_CELL_CONTENTS));
+
             CellPos aStart, aEnd;
             getSelectedCells( aStart, aEnd );
             for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
@@ -1338,10 +1342,17 @@ bool SvxTableController::DeleteMarked()
                 for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
                 {
                     CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
-                    if( xCell.is() )
-                        xCell->SetOutlinerParaObject( 0 );
+                    if (xCell.is() && xCell->hasText())
+                    {
+                        if (bUndo)
+                            xCell->AddUndo();
+                        xCell->SetOutlinerParaObject(0);
+                    }
                 }
             }
+
+            if (bUndo)
+                mpModel->EndUndo();
 
             UpdateTableShape();
             return true;
