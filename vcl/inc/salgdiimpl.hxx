@@ -46,6 +46,8 @@ public:
 
     virtual void Init() = 0;
 
+    virtual void DeInit() {}
+
     virtual void freeResources() = 0;
 
     virtual bool setClipRegion( const vcl::Region& ) = 0;
