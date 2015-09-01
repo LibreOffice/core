@@ -716,7 +716,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
                         break;  // do while
                     }
                     ++nCount;
-                } while(1);
+                } while(true);
             }
         }
     }
