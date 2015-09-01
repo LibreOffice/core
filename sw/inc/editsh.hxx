@@ -36,11 +36,11 @@
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
 
+#include <memory>
 #include <vector>
 #include <set>
 #include <swundo.hxx>
 #include <svtools/embedhlp.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace tools { class PolyPolygon; }
 class SwDoc;
@@ -125,7 +125,7 @@ struct SwGetINetAttr
         : sText( rText ), rINetAttr( rAttr )
     {}
 };
-typedef boost::ptr_vector<SwGetINetAttr> SwGetINetAttrs;
+typedef std::vector<SwGetINetAttr> SwGetINetAttrs;
 
 // Types of forms of content.
 #define CNT_TXT 0x0001
