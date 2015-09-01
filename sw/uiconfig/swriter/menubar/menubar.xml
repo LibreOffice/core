@@ -423,7 +423,10 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:MergeCells"/>
       <menu:menuitem menu:id=".uno:SplitCell"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Protect"/>
+      <menu:menuitem menu:id=".uno:UnsetCellsReadOnly"/>
+      <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:MergeTable"/>
       <menu:menuitem menu:id=".uno:SplitTable"/>
       <menu:menuseparator/>
