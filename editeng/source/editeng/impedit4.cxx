@@ -461,14 +461,17 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 SFX_STYLE_FAMILY_ALL);
         // fill aStyleSheetToIdMap
         sal_uInt32 nId = 1;
+        bool bHasParaStyle = false;
         for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
                                  pStyle = aSSSIterator->Next() )
         {
             aStyleSheetToIdMap[pStyle] = nId;
             nId++;
+            if (!bHasParaStyle && pStyle->GetFamily() == SFX_STYLE_FAMILY_PARA)
+                bHasParaStyle = true;
         }
 
-        if ( aSSSIterator->Count() )
+        if ( aSSSIterator->Count() && bHasParaStyle )
         {
 
             sal_uInt32 nStyle = 0;
@@ -477,10 +480,12 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             for ( SfxStyleSheetBase* pStyle = aSSSIterator->First(); pStyle;
                                      pStyle = aSSSIterator->Next() )
             {
+                if (pStyle->GetFamily() != SFX_STYLE_FAMILY_PARA)
+                    continue;
 
                 rOutput << endl;
                 rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_S );
-                sal_uInt32 nNumber = nStyle + 1;
+                sal_uInt32 nNumber = aStyleSheetToIdMap[pStyle] ;
                 rOutput.WriteUInt32AsString( nNumber );
 
                 // Attribute, also from Parent!
@@ -515,7 +520,8 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 rOutput.WriteUInt32AsString( nNumber );
 
                 // Name of the template ...
-                rOutput.WriteCharPtr( " " ).WriteCharPtr( OUStringToOString(pStyle->GetName(), eDestEnc).getStr() );
+                rOutput.WriteCharPtr( " " );
+                RTFOutFuncs::Out_String( rOutput, pStyle->GetName(), eDestEnc );
                 rOutput.WriteCharPtr( ";}" );
                 nStyle++;
             }
