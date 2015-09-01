@@ -30,8 +30,13 @@
 namespace comphelper
 {
 
-class COMPHELPER_DLLPUBLIC OSeekableInputWrapper : public ::cppu::WeakImplHelper< ::com::sun::star::io::XInputStream,
-                                                                ::com::sun::star::io::XSeekable >
+class SAL_DLLPUBLIC_TEMPLATE OSeekableInputWrapper_BASE
+    : public ::cppu::WeakImplHelper< ::com::sun::star::io::XInputStream,
+                                     ::com::sun::star::io::XSeekable >
+{};
+
+class COMPHELPER_DLLPUBLIC OSeekableInputWrapper
+    : public OSeekableInputWrapper_BASE
 {
     ::osl::Mutex    m_aMutex;
 
