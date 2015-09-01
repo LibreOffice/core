@@ -34,9 +34,8 @@
 //   "org.openoffice.Setup") maps to dconf paths underneath
 //   "/org/libreoffice/registry/".
 //
-// * Component, group, set, and localized property nodes map to dconf dirs
-//   (except for removal of set elements, see below), while property and
-//   localized value nodes map to dconf keys.
+// * Component, group, set, and localized property nodes map to dconf dirs,
+//   while property and localized value nodes map to dconf keys.
 //
 // * The names of nodes that are not set elements are used directly as dconf
 //   path segments.  (The syntax for node names is any non-empty sequences of
@@ -45,31 +44,30 @@
 //   it'd be nice if you used path separators instead of dots though, they have
 //   meaning in dconf/gvdb world :-)"?)
 //
-// * Set element "fuse" and "replace" operations are encoded as dconf path
-//   segments as concatenations
-//
-//     N ; T ; O
-//
-//   where ";" represents U+003B SEMICOLON; N is an encoding of the node name,
-//   where each occurrence of U+0000 NULL is replace by the three characters
+// * The names of set element nodes are encoded as dconf path segments as
+//   follows: each occurrence of U+0000 NULL is replace by the three characters
 //   "\00", each occurrence of U+002F SOLIDUS is replaced by the three
-//   characters "\2F", each occurrence of U+003B SEMICOLON is replaced by the
-//   three characters "\3B", and each ocurrence of U+005C REVERSE SOLIDUS is
-//   replaced by the three characters "\5C"; T is an encoding of the full
-//   template name, where each occurrence of U+002F SOLIDUS is replaced by the
-//   three characters "\2F", each occurrence of U+003B SEMICOLON is replaced by
-//   the three characters "\3B", and each ocurrence of U+005C REVERSE SOLIDUS is
-//   replaced by the three characters "\5C"; and O is "fuse" or "replace",
-//   respectively.
+//   characters "\2F", and each ocurrence of U+005C REVERSE SOLIDUS is replaced
+//   by the three characters "\5C".
 //
-// * Set element and property "remove" operations are encoded as dconf key path
-//   segments as follows, and the associated value being a GVariant of empty
-//   tuple type.  For set elements, the dconf key path segment consists of an
-//   encoding of the node name, where each occurrence of U+0000 NULL is replace
-//   by the three characters "\00", each occurrence of U+002F SOLIDUS is
-//   replaced by the three characters "\2F", and each ocurrence of U+005C
-//   REVERSE SOLIDUS is replaced by the three characters "\5C".  For properties,
-//   the dconf key path segment directly uses the node name.
+// * Set elements (which must themselves be either sets or groups) map to
+//   "indirection" dconf dirs as follows:
+//
+// ** The dir must contain a key named "op" of string type, with a value of
+//    "fuse", "replace", or "remove".
+//
+// ** If "op" is "fuse" or "replace", the dir must contain exactly the following
+//    further keys and dirs:
+//
+// *** The dir must contain a key named "template" of string type, containing
+//     the full template name, encoded as follows: each occurrence of U+0000
+//     NULL is replace by the three characters "\00" and each occurrence of
+//     U+005C REVERSE SOLIDUS is replaced by the three characters "\5C".
+//
+// *** The dir must contain a dir named "content" that contains the set
+//     element's (i.e., set or group node's) real content.
+//
+// ** If "op" is "remove", the dir must contain no further keys or dirs.
 //
 // * Property and localized property value "fuse" operations map to GVariant
 //   instances as follows:
@@ -94,6 +92,8 @@
 // ** Non-nillable list values recursively map to GVariant array instances.
 //
 // ** Nillable values recursively map to GVariant maybe instances.
+//
+// * Property "remove" operations map to GVariant instances of empty tuple type.
 //
 // Finalization:  The component-update.dtd allows for finalization of
 // oor:component-data, node, and prop elements, while dconf allows for locking
@@ -167,18 +167,16 @@ private:
     gchar ** array_;
 };
 
-bool decode(OUString * string, bool nul, bool slash, bool semicolon) {
+bool decode(OUString * string, bool slash) {
     for (sal_Int32 i = 0;; ++i) {
         i = string->indexOf('\\', i);
         if (i == -1) {
             return true;
         }
-        if (nul && string->match("00", i + 1)) {
+        if (string->match("00", i + 1)) {
             *string = string->replaceAt(i, 3, OUString(sal_Unicode(0)));
         } else if (slash && string->match("2F", i + 1)) {
             *string = string->replaceAt(i, 3, "/");
-        } else if (semicolon && string->match("3B", i + 1)) {
-            *string = string->replaceAt(i, 3, ";");
         } else if (string->match("5C", i + 1)) {
             *string = string->replaceAt(i + 1, 2, "");
         } else {
@@ -285,7 +283,7 @@ bool getStringValue(
         SAL_WARN("configmgr.dconf", "non--UTF-8 string value for key " << key);
         return false;
     }
-    return decode(value, true, false, false);
+    return decode(value, false);
 }
 
 bool getString(
@@ -721,9 +719,9 @@ void readDir(
         }
         OString s(*p, static_cast<sal_Int32>(n));
         OString path(dir + s);
-        OUString seg;
+        OUString name;
         if (!rtl_convertStringToUString(
-                &seg.pData, s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8,
+                &name.pData, s.getStr(), s.getLength(), RTL_TEXTENCODING_UTF8,
                 (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
                  | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
                  | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)))
@@ -731,87 +729,129 @@ void readDir(
             SAL_WARN("configmgr.dconf", "non--UTF-8 dir/key in dir " << dir);
             continue;
         }
-        bool isDir = seg.endsWith("/", &seg);
-        bool remove;
-        OUString name;
+        bool isDir = name.endsWith("/", &name);
         OUString templ;
+        bool remove;
         bool replace;
         if (node.is() && node->kind() == Node::KIND_SET) {
-            if (isDir) {
-                remove = false;
-                sal_Int32 i1 = seg.indexOf(';');
-                if (i1 == -1) {
-                    SAL_WARN(
-                        "configmgr.dconf", "bad set element syntax " << path);
-                    continue;
-                }
-                name = seg.copy(0, i1);
-                if (!decode(&name, true, true, true)) {
-                    continue;
-                }
-                ++i1;
-                sal_Int32 i2 = seg.indexOf(';', i1);
-                if (i2 == -1) {
-                    SAL_WARN(
-                        "configmgr.dconf", "bad set element syntax " << path);
-                    continue;
-                }
-                templ = seg.copy(i1, i2 - i1);
-                if (!decode(&templ, false, true, true)) {
-                    continue;
-                }
-                ++i2;
-                if (rtl_ustr_asciil_reverseCompare_WithLength(
-                        seg.getStr() + i2, seg.getLength() - i2, "fuse",
-                        std::strlen("fuse"))
-                    == 0)
-                {
-                    replace = false;
-                } else if (rtl_ustr_asciil_reverseCompare_WithLength(
-                               seg.getStr() + i2, seg.getLength() - i2,
-                               "replace", std::strlen("replace"))
-                           == 0)
-                {
-                    replace = true;
+            if (!isDir) {
+                SAL_WARN(
+                    "configmgr.dconf",
+                    "bad key " << path << " does not match set element");
+                continue;
+            }
+            if (!decode(&name, true)) {
+                continue;
+            }
+            enum class Op { None, Fuse, Replace, Remove };
+            Op op = Op::None;
+            bool content = false;
+            bool bad = false;
+            StringArrayHolder a2(
+                dconf_client_list(client.get(), path.getStr(), nullptr));
+            for (char const * const * p2 = a2.get(); *p2 != nullptr; ++p2) {
+                if (std::strcmp(*p2, "op") == 0) {
+                    OString path2(path + "op");
+                    GVariantHolder v(
+                        dconf_client_read(client.get(), path2.getStr()));
+                    if (v.get() == nullptr) {
+                        SAL_WARN(
+                            "configmgr.dconf", "cannot read key " << path2);
+                        bad = true;
+                        break;
+                    }
+                    OUString ops;
+                    if (!getStringValue(path2, v, &ops)) {
+                        bad = true;
+                        break;
+                    }
+                    if (ops == "fuse") {
+                        op = Op::Fuse;
+                    } else if (ops == "replace") {
+                        op = Op::Replace;
+                    } else if (ops == "remove") {
+                        op = Op::Remove;
+                    } else {
+                        SAL_WARN(
+                            "configmgr.dconf",
+                            "bad key " << path2 << " value " << ops);
+                        bad = true;
+                        break;
+                    }
+                } else if (std::strcmp(*p2, "template") == 0) {
+                    OString path2(path + "template");
+                    GVariantHolder v(
+                        dconf_client_read(client.get(), path2.getStr()));
+                    if (v.get() == nullptr) {
+                        SAL_WARN(
+                            "configmgr.dconf", "cannot read key " << path2);
+                        bad = true;
+                        break;
+                    }
+                    if (!getStringValue(path2, v, &templ)) {
+                        bad = true;
+                        break;
+                    }
+                    if (!static_cast<SetNode *>(node.get())->
+                        isValidTemplate(templ))
+                    {
+                        SAL_WARN(
+                            "configmgr.dconf",
+                            "bad key " << path2 << " value " << templ
+                                << " denotes unsupported set element template");
+                        bad = true;
+                        break;
+                    }
+                } else if (std::strcmp(*p2, "content/") == 0) {
+                    content = true;
                 } else {
                     SAL_WARN(
-                        "configmgr.dconf", "bad set element syntax " << path);
-                    continue;
+                        "configmgr.dconf",
+                        "bad dir/key " << p2
+                            << " in set element indirection dir " << path);
+                    bad = true;
+                    break;
                 }
-                rtl::Reference<SetNode> set(static_cast<SetNode *>(node.get()));
-                if (!set->isValidTemplate(templ)) {
+            }
+            if (bad) {
+                continue;
+            }
+            switch (op) {
+            case Op::None:
+                SAL_WARN(
+                    "configmgr.dconf",
+                    "bad set element indirection dir " << path
+                        << " missing \"op\" key");
+                continue;
+            case Op::Fuse:
+            case Op::Replace:
+                if (templ.isEmpty() || !content) {
                     SAL_WARN(
                         "configmgr.dconf",
-                        "bad " << path
-                            << " denotes unsupported set element template");
+                        "missing \"content\" and/or \"template\" dir/key in "
+                            "\"op\" = \"fuse\"/\"remove\" set element"
+                            " indirection dir " << path);
                     continue;
                 }
-            } else {
+                path += "content/";
+                remove = false;
+                replace = op == Op::Replace;
+                break;
+            case Op::Remove:
+                if (!templ.isEmpty() || content) {
+                    SAL_WARN(
+                        "configmgr.dconf",
+                        "bad \"content\" and/or \"template\" dir/key in \"op\" "
+                            "= \"remove\" set element indirection dir "
+                            << path);
+                    continue;
+                }
                 remove = true;
-                name = seg;
-                if (!decode(&name, true, true, false)) {
-                    continue;
-                }
                 replace = false;
-                assert(!path.endsWith("/"));
-                GVariantHolder v(
-                    dconf_client_read(client.get(), path.getStr()));
-                if (v.get() == nullptr) {
-                    SAL_WARN("configmgr.dconf", "cannot read key " << path);
-                    continue;
-                }
-                if (std::strcmp(g_variant_get_type_string(v.get()), "()") != 0)
-                {
-                    SAL_WARN(
-                        "configmgr.dconf",
-                        "bad " << path
-                            << " does not denote set element removal");
-                    continue;
-                }
+                break;
             }
         } else {
             remove = false;
-            name = seg;
             replace = false;
         }
         rtl::Reference<Node> member(members.findNode(layer, name));
