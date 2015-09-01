@@ -33,19 +33,21 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
 
-SHL1IMPLIB = i$(SHL1TARGET)
-SHL1OBJS = $(SLO)/test-rtl-math.obj
-SHL1RPATH = NONE
-SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB)
-SHL1TARGET = test-rtl-math
-SHL1VERSIONMAP = $(PRJ)/qa/export.map
-DEF1NAME = $(SHL1TARGET)
+.ELSE
 
-SLOFILES = $(SHL1OBJS)
+
+APP1OBJS = $(SLO)/test-rtl-math.obj
+APP1RPATH = NONE
+APP1STDLIBS = $(GTESTLIB) $(SALLIB)
+APP1TARGET = test-rtl-math
+APP1TEST = enabled
 
 .INCLUDE: target.mk
-.INCLUDE: _cppunit.mk
 
-.END
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
+
+.END # "$(OOO_SUBSEQUENT_TESTS)" == ""
