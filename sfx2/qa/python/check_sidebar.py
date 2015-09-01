@@ -96,7 +96,7 @@ class CheckSidebar(unittest.TestCase):
         panelsCount = xPanels.getCount()
         self.assertEqual ( panelsCount, 5 )
 
-        firstPanelName = "StylesPropertyPanel"
+        firstPanelName = self.getFirstPanel(xPanels)
 
         panelElementNames = xPanels.getElementNames()
         assert ( firstPanelName in panelElementNames )
@@ -110,10 +110,7 @@ class CheckSidebar(unittest.TestCase):
         xPanel.setTitle(newTitle)
         assert ( xPanel.getTitle() == newTitle )
 
-        xPanel.moveFirst()
         initialIndex = xPanel.getOrderIndex()
-        assert ( initialIndex == 100 )
-
         xPanel.moveLast()
         assert ( xPanel.getOrderIndex() > initialIndex )
 
@@ -132,7 +129,9 @@ class CheckSidebar(unittest.TestCase):
         xPanel.collapse()
         assert( not xPanel.isExpanded() )
 
-        otherPanel = xPanels.getByName("NumberFormatPropertyPanel")
+        lastPanelName = self.getLastPanel(xPanels)
+
+        otherPanel = xPanels.getByName(lastPanelName)
         otherPanel.expand(False)
         assert( otherPanel.isExpanded() )
 
@@ -142,6 +141,30 @@ class CheckSidebar(unittest.TestCase):
 
     # close the document
         xDoc.dispose()
+
+    def getFirstPanel(self, xPanels):
+
+        panelName = ""
+        curIndex = 10000
+
+        for panel in xPanels:
+            if panel.getOrderIndex() < curIndex:
+                panelName = panel.getId()
+                curIndex = panel.getOrderIndex()
+
+        return panelName
+
+    def getLastPanel(self, xPanels):
+
+        panelName = ""
+        curIndex = 0
+
+        for panel in xPanels:
+            if panel.getOrderIndex() > curIndex:
+                panelName = panel.getId()
+                curIndex = panel.getOrderIndex()
+
+        return panelName
 
 if __name__ == "__main__":
     unittest.main()
