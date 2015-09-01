@@ -998,7 +998,6 @@ bool OpenGLContext::ImplInit()
     }
 
     wglMakeCurrent(NULL, NULL);
-    InitGLEWDebugging();
     wglDeleteContext(hTempRC);
 
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
@@ -1007,6 +1006,8 @@ bool OpenGLContext::ImplInit()
         SAL_WARN("vcl.opengl", "wglMakeCurrent failed");
         return false;
     }
+
+    InitGLEWDebugging();
 
     g_vShareList.push_back(m_aGLWin.hRC);
 
