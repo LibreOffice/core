@@ -22,9 +22,9 @@
 #define INCLUDED_VCL_INC_CHECKSUM_HXX
 
 #include <sal/config.h>
-#include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <tools/solar.h>
+#include <vcl/dllapi.h>
 
 #include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/preprocessor/arithmetic/mul.hpp>
@@ -158,7 +158,7 @@ extern "C" {
     @param  DatLen [in] data buffer length.
     @return new CRC64 value.
  */
-SAL_DLLPUBLIC sal_uInt64 SAL_CALL vcl_crc64 (
+VCL_DLLPUBLIC sal_uInt64 SAL_CALL vcl_crc64 (
     sal_uInt64  Crc,
     const void *Data, sal_uInt32 DatLen
 )   SAL_THROW_EXTERN_C();
