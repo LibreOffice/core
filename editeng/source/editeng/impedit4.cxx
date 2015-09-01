@@ -515,7 +515,8 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 rOutput.WriteUInt32AsString( nNumber );
 
                 // Name of the template ...
-                rOutput.WriteCharPtr( " " ).WriteCharPtr( OUStringToOString(pStyle->GetName(), eDestEnc).getStr() );
+                rOutput.WriteCharPtr( " " );
+                RTFOutFuncs::Out_String( rOutput, pStyle->GetName(), eDestEnc );
                 rOutput.WriteCharPtr( ";}" );
                 nStyle++;
             }
