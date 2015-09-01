@@ -19,28 +19,32 @@
 #ifndef INCLUDED_SW_INC_EDITSH_HXX
 #define INCLUDED_SW_INC_EDITSH_HXX
 
-#include <com/sun/star/text/HoriOrientation.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <vcl/font.hxx>
-#include <editeng/swafopt.hxx>
-#include "swdllapi.h"
 #include <crsrsh.hxx>
+
+#include <IMark.hxx>
+#include <charfmt.hxx>
+#include <fldupde.hxx>
+#include <frmfmt.hxx>
 #include <itabenum.hxx>
 #include <swdbdata.hxx>
-#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
-#include <com/sun/star/linguistic2/ProofreadingResult.hpp>
-#include <fldupde.hxx>
+#include <swdllapi.h>
+#include <swundo.hxx>
 #include <tblenum.hxx>
-#include <IMark.hxx>
 #include <tox.hxx>
-#include <frmfmt.hxx>
-#include <charfmt.hxx>
+#include <svtools/embedhlp.hxx>
+
+#include <editeng/swafopt.hxx>
+
+#include <vcl/font.hxx>
+
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/linguistic2/ProofreadingResult.hpp>
+#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
 
 #include <memory>
 #include <vector>
 #include <set>
-#include <swundo.hxx>
-#include <svtools/embedhlp.hxx>
 
 namespace tools { class PolyPolygon; }
 class SwDoc;
