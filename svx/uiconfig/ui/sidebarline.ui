@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <requires lib="LibreOffice" version="1.0"/>
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
-    <property name="step_increment">5</property>
+    <property name="step_increment">10</property>
     <property name="page_increment">20</property>
   </object>
   <object class="GtkGrid" id="LinePropertyPanel">
@@ -29,21 +29,27 @@
               <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="spacing">3</property>
                 <child>
-                  <object class="GtkLabel" id="stylelabel">
+                  <object class="GtkComboBoxText" id="beginarrowstyle">
+                    <property name="width_request">65</property>
+                    <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Style:</property>
-                    <property name="use_underline">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Select the style of the beginning arrowhead.</property>
+                    <property name="tooltip_text" translatable="yes">Select the style of the beginning arrowhead.</property>
+                    <property name="hexpand">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="linestyle">
+                    <property name="width_request">105</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
@@ -54,7 +60,24 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="endarrowstyle">
+                    <property name="width_request">65</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Select the style of the ending arrowhead.</property>
+                    <property name="tooltip_text" translatable="yes">Select the style of the ending arrowhead.</property>
+                    <property name="margin_right">6</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
@@ -82,6 +105,8 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -109,6 +134,8 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -122,6 +149,8 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -152,6 +181,8 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -165,6 +196,8 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -174,7 +207,7 @@
                     <property name="has_tooltip">True</property>
                     <property name="tooltip_markup" translatable="yes">Specify the transparency of the line.</property>
                     <property name="tooltip_text" translatable="yes">Specify the transparency of the line.</property>
-                    <property name="hexpand">True</property>
+                    <property name="halign">start</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="climb_rate">5</property>
@@ -182,6 +215,8 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -195,48 +230,6 @@
               <object class="GtkBox" id="arrowproperties">
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkLabel" id="arrowlabel">
-                    <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Arrow:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">beginarrowstyle</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="beginarrowstyle">
-                    <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the style of the beginning arrowhead.</property>
-                    <property name="tooltip_text" translatable="yes">Select the style of the beginning arrowhead.</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="endarrowstyle">
-                    <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the style of the ending arrowhead.</property>
-                    <property name="tooltip_text" translatable="yes">Select the style of the ending arrowhead.</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkGrid" id="grid5">
                     <property name="can_focus">False</property>
@@ -255,6 +248,8 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -280,6 +275,8 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -294,6 +291,8 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -317,6 +316,8 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -337,12 +338,16 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
       </packing>
     </child>
   </object>
