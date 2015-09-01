@@ -1,111 +1,327 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk+" version="3.6"/>
   <requires lib="LibreOffice" version="1.0"/>
-  <object class="GtkWindow" id="TemplateDialog">
+  <object class="GtkDialog" id="TemplateDialog">
     <property name="width_request">800</property>
-    <property name="height_request">560</property>
+    <property name="height_request">600</property>
     <property name="can_focus">False</property>
-    <property name="modal">True</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Template Manager</property>
-    <child>
-      <object class="GtkBox" id="box1">
-        <property name="visible">True</property>
+    <property name="modal">True</property>
+    <property name="type_hint">normal</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
-        <property name="border_width">6</property>
         <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkNotebook" id="tab_control">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
             <child>
-              <object class="GtkBox" id="box2">
+              <object class="GtkButton" id="button1">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkNotebook" id="tab_control">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkBox" id="box3">
+                  <object class="GtkBox" id="box2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkToolbar" id="action_view">
+                      <object class="GtkBox" id="box3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <property name="spacing">6</property>
                         <child>
-                          <object class="GtkToolButton" id="repository">
+                          <object class="GtkToolbar" id="action_view">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="action_name">repository</property>
-                            <property name="label" translatable="yes">Repository</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionview026.png</property>
+                            <property name="hexpand">True</property>
+                            <child>
+                              <object class="GtkToolButton" id="repository">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">repository</property>
+                                <property name="label" translatable="yes">Repository</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actionview026.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="import">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">import</property>
+                                <property name="label" translatable="yes">Import</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actionview010.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="delete">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">delete</property>
+                                <property name="label" translatable="yes">Delete</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actionview025.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="save">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">save</property>
+                                <property name="label" translatable="yes">Save</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actionview028.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="new_folder">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">new_folder</property>
+                                <property name="label" translatable="yes">New Folder</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actionview029.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkToolButton" id="import">
+                          <object class="GtkToolbar" id="action_templates">
                             <property name="can_focus">False</property>
-                            <property name="action_name">import</property>
-                            <property name="label" translatable="yes">Import</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionview010.png</property>
+                            <property name="hexpand">True</property>
+                            <child>
+                              <object class="GtkToolButton" id="template_save">
+                                <property name="can_focus">False</property>
+                                <property name="action_name">template_save</property>
+                                <property name="label" translatable="yes">Save</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actionview028.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="open">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">open</property>
+                                <property name="label" translatable="yes">Open</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actionview030.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="edit">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">edit</property>
+                                <property name="label" translatable="yes">Edit</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actiontemplates019.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="properties">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">properties</property>
+                                <property name="label" translatable="yes">Properties</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actiontemplates016.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="default">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">default</property>
+                                <property name="label" translatable="yes">Set as Default</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actiontemplates015.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="move">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">move</property>
+                                <property name="label" translatable="yes">Move to Folder</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actiontemplates017.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="export">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">export</property>
+                                <property name="label" translatable="yes">Export</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actiontemplates020.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="template_delete">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">template_delete</property>
+                                <property name="label" translatable="yes">Delete</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actiontemplates018.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkToolButton" id="delete">
-                            <property name="can_focus">False</property>
-                            <property name="action_name">delete</property>
-                            <property name="label" translatable="yes">Delete</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionview025.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="save">
-                            <property name="can_focus">False</property>
-                            <property name="action_name">save</property>
-                            <property name="label" translatable="yes">Save</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionview028.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="new_folder">
+                          <object class="GtkToolbar" id="action_action">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="action_name">new_folder</property>
-                            <property name="label" translatable="yes">New Folder</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionview029.png</property>
+                            <property name="halign">end</property>
+                            <property name="hexpand">True</property>
+                            <child>
+                              <object class="GtkToolButton" id="search">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">search</property>
+                                <property name="label" translatable="yes">Search</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actionaction012.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="action_menu">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">action_menu</property>
+                                <property name="label" translatable="yes">Action Menu</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actionaction013.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolButton" id="template_link">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">template_link</property>
+                                <property name="label" translatable="yes">Get more templates for %PRODUCTNAME</property>
+                                <property name="use_underline">True</property>
+                                <property name="icon_name">sfx2/imglst/actionview010.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
@@ -116,120 +332,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToolbar" id="action_templates">
-                        <property name="can_focus">False</property>
+                      <object class="GtkEntry" id="search_edit">
+                        <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
-                        <child>
-                          <object class="GtkToolButton" id="template_save">
-                            <property name="can_focus">False</property>
-                            <property name="action_name">template_save</property>
-                            <property name="label" translatable="yes">Save</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionview028.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="open">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">open</property>
-                            <property name="label" translatable="yes">Open</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionview030.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="edit">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">edit</property>
-                            <property name="label" translatable="yes">Edit</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actiontemplates019.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="properties">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">properties</property>
-                            <property name="label" translatable="yes">Properties</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actiontemplates016.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="default">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">default</property>
-                            <property name="label" translatable="yes">Set as Default</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actiontemplates015.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="move">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">move</property>
-                            <property name="label" translatable="yes">Move to Folder</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actiontemplates017.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="export">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">export</property>
-                            <property name="label" translatable="yes">Export</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actiontemplates020.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="template_delete">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">template_delete</property>
-                            <property name="label" translatable="yes">Delete</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actiontemplates018.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
+                        <property name="invisible_char">●</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -238,53 +344,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkToolbar" id="action_action">
+                      <object class="sfxlo-TemplateLocalView" id="template_view">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="halign">end</property>
                         <property name="hexpand">True</property>
-                        <child>
-                          <object class="GtkToolButton" id="search">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">search</property>
-                            <property name="label" translatable="yes">Search</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionaction012.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="action_menu">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">action_menu</property>
-                            <property name="label" translatable="yes">Action Menu</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionaction013.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkToolButton" id="template_link">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="action_name">template_link</property>
-                            <property name="label" translatable="yes">Get more templates for %PRODUCTNAME</property>
-                            <property name="use_underline">True</property>
-                            <property name="icon_name">sfx2/imglst/actionview010.png</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="homogeneous">True</property>
-                          </packing>
-                        </child>
+                        <property name="vexpand">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -292,123 +356,98 @@
                         <property name="position">2</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="sfxlo-TemplateSearchView" id="search_view">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="margin">0</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-TemplateRemoteView" id="remote_view">
+                        <property name="can_focus">True</property>
+                        <property name="no_show_all">True</property>
+                        <property name="margin">0</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
-                <child>
-                  <object class="GtkEntry" id="search_edit">
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="invisible_char">●</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-TemplateLocalView" id="template_view">
+                <child type="tab">
+                  <object class="GtkLabel" id="filter_docs">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Documents</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
+                    <property name="tab_fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel" id="filter_sheets">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Spreadsheets</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                    <property name="tab_fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel" id="filter_presentations">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Presentations</property>
+                  </object>
+                  <packing>
                     <property name="position">2</property>
+                    <property name="tab_fill">False</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-TemplateSearchView" id="search_view">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="margin">0</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
+                  <placeholder/>
+                </child>
+                <child type="tab">
+                  <object class="GtkLabel" id="filter_draws">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Drawings</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="sfxlo-TemplateRemoteView" id="remote_view">
-                    <property name="can_focus">True</property>
-                    <property name="no_show_all">True</property>
-                    <property name="margin">0</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="tab_fill">False</property>
                   </packing>
                 </child>
               </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="filter_docs">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Documents</property>
-              </object>
               <packing>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="filter_sheets">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Spreadsheets</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="filter_presentations">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Presentations</property>
-              </object>
-              <packing>
-                <property name="position">2</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="filter_draws">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Drawings</property>
-              </object>
-              <packing>
-                <property name="position">3</property>
-                <property name="tab_fill">False</property>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
