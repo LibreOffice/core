@@ -181,7 +181,7 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
     // destroy saved DC
     if( mpGraphics->getDefPal() )
         SelectPalette( mpGraphics->getHDC(), mpGraphics->getDefPal(), TRUE );
-    mpGraphics->InitGraphics();
+    mpGraphics->DeInitGraphics();
     if( mhDefBmp )
         SelectBitmap( mpGraphics->getHDC(), mhDefBmp );
     if( !mbForeignDC )

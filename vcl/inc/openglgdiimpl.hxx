@@ -154,6 +154,8 @@ public:
 
     virtual void Init() SAL_OVERRIDE;
 
+    virtual void DeInit() SAL_OVERRIDE;
+
     virtual void freeResources() SAL_OVERRIDE;
 
     const vcl::Region& getClipRegion() const;
