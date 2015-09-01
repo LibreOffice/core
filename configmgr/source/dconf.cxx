@@ -51,17 +51,25 @@
 //     N ; T ; O
 //
 //   where ";" represents U+003B SEMICOLON; N is an encoding of the node name,
-//   where each occurrence of U+003B SEMICOLON is replaced by the three
-//   characters "\3B" and each ocurrence of U+005C REVERSE SOLIDUS is replaced
-//   by the three characters "\5C"; T is an encoding of the full template name,
-//   where each occurrence of U+002F SOLIDUS is replaced by the three characters
-//   "\2F", each occurrence of U+003B SEMICOLON is replaced by the three
-//   characters "\3B", and each ocurrence of U+005C REVERSE SOLIDUS is replaced
-//   by the three characters "\5C"; and O is "fuse" or "replace", respectively.
+//   where each occurrence of U+0000 NULL is replace by the three characters
+//   "\00", each occurrence of U+002F SOLIDUS is replaced by the three
+//   characters "\2F", each occurrence of U+003B SEMICOLON is replaced by the
+//   three characters "\3B", and each ocurrence of U+005C REVERSE SOLIDUS is
+//   replaced by the three characters "\5C"; T is an encoding of the full
+//   template name, where each occurrence of U+002F SOLIDUS is replaced by the
+//   three characters "\2F", each occurrence of U+003B SEMICOLON is replaced by
+//   the three characters "\3B", and each ocurrence of U+005C REVERSE SOLIDUS is
+//   replaced by the three characters "\5C"; and O is "fuse" or "replace",
+//   respectively.
 //
 // * Set element and property "remove" operations are encoded as dconf key path
-//   segments directly using the node name, and the associated value being a
-//   GVariant of empty tuple type.
+//   segments as follows, and the associated value being a GVariant of empty
+//   tuple type.  For set elements, the dconf key path segment consists of an
+//   encoding of the node name, where each occurrence of U+0000 NULL is replace
+//   by the three characters "\00", each occurrence of U+002F SOLIDUS is
+//   replaced by the three characters "\2F", and each ocurrence of U+005C
+//   REVERSE SOLIDUS is replaced by the three characters "\5C".  For properties,
+//   the dconf key path segment directly uses the node name.
 //
 // * Property and localized property value "fuse" operations map to GVariant
 //   instances as follows:
@@ -738,7 +746,7 @@ void readDir(
                     continue;
                 }
                 name = seg.copy(0, i1);
-                if (!decode(&name, false, false, true)) {
+                if (!decode(&name, true, true, true)) {
                     continue;
                 }
                 ++i1;
@@ -781,6 +789,9 @@ void readDir(
             } else {
                 remove = true;
                 name = seg;
+                if (!decode(&name, true, true, false)) {
+                    continue;
+                }
                 replace = false;
                 assert(!path.endsWith("/"));
                 GVariantHolder v(
