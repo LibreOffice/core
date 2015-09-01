@@ -162,16 +162,15 @@ struct BogusRefCountPolicy
         {
             --rCount;
             --s_nEndOfScope;
-            return true;
         }
-        if(s_bShouldDecrement)
+        else if(s_bShouldDecrement)
         {
             --rCount;
             s_bShouldDecrement = false;
         }
         else
             CPPUNIT_FAIL("Ref-counting policy decremented when it should not have.");
-        return true;
+        return rCount != 0;
     }
 };
 
