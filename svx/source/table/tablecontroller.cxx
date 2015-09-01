@@ -1081,14 +1081,19 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
                     {
                         SfxItemSet aSet( xCell->GetItemSet() );
                         bool bChanges = false;
-                        const SfxItemSet& rStyleAttribs = xCell->GetStyleSheet()->GetItemSet();
-
-                        for ( sal_uInt16 nWhich = SDRATTR_START; nWhich <= SDRATTR_TABLE_LAST; nWhich++ )
+                        SfxStyleSheet *pStyleSheet = xCell->GetStyleSheet();
+                        SAL_WARN_IF(!pStyleSheet, "svx", "no stylesheet for table cell?");
+                        if (pStyleSheet)
                         {
-                            if( (rStyleAttribs.GetItemState( nWhich ) == SfxItemState::SET) && (aSet.GetItemState( nWhich ) == SfxItemState::SET) )
+                            const SfxItemSet& rStyleAttribs = pStyleSheet->GetItemSet();
+
+                            for ( sal_uInt16 nWhich = SDRATTR_START; nWhich <= SDRATTR_TABLE_LAST; nWhich++ )
                             {
-                                aSet.ClearItem( nWhich );
-                                bChanges = true;
+                                if( (rStyleAttribs.GetItemState( nWhich ) == SfxItemState::SET) && (aSet.GetItemState( nWhich ) == SfxItemState::SET) )
+                                {
+                                    aSet.ClearItem( nWhich );
+                                    bChanges = true;
+                                }
                             }
                         }
 
