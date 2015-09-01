@@ -1932,7 +1932,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
         {
             // Could the table be splitted behind the current row?
             bool bSplit = true;
-            SwXMLTableRow_Impl *pRow = (*m_pRows)[(sal_uInt16)i].get();
+            SwXMLTableRow_Impl *pRow = (*m_pRows)[i].get();
             for( sal_uInt32 j=nLeftCol; j<nRightCol; j++ )
             {
                 bSplit = ( 1UL == pRow->GetCell(j)->GetRowSpan() );
@@ -1990,7 +1990,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                     }
                 }
             }
-            // und jetzt nochmal von vorne ...
+            // and now start over again...
         }
     }
 
