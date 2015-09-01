@@ -20,56 +20,24 @@
 #ifndef INCLUDED_COMPHELPER_OFOPXMLHELPER_HXX
 #define INCLUDED_COMPHELPER_OFOPXMLHELPER_HXX
 
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 #include <comphelper/comphelperdllapi.h>
 
 
 namespace comphelper
 {
 
-// this helper class is designed to allow to parse ContentType- and Relationship-related information from OfficeOpenXML format
-class COMPHELPER_DLLPUBLIC OFOPXMLHelper : public cppu::WeakImplHelper< com::sun::star::xml::sax::XDocumentHandler >
-{
-    sal_uInt16 m_nFormat; // which format to parse
-
-    // Relations info related strings
-    OUString m_aRelListElement;
-    OUString m_aRelElement;
-    OUString m_aIDAttr;
-    OUString m_aTypeAttr;
-    OUString m_aTargetModeAttr;
-    OUString m_aTargetAttr;
-
-    // ContentType related strings
-    OUString m_aTypesElement;
-    OUString m_aDefaultElement;
-    OUString m_aOverrideElement;
-    OUString m_aExtensionAttr;
-    OUString m_aPartNameAttr;
-    OUString m_aContentTypeAttr;
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > m_aResultSeq;
-    ::com::sun::star::uno::Sequence< OUString > m_aElementsSeq; // stack of elements being parsed
-
-    OFOPXMLHelper( sal_uInt16 nFormat ); // must not be created directly
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > GetParsingResult();
-
-    static COMPHELPER_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > SAL_CALL ReadSequence_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream, const OUString& aStringID, sal_uInt16 nFormat, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
-    throw( ::com::sun::star::uno::Exception );
-
-public:
-    virtual ~OFOPXMLHelper();
+namespace OFOPXMLHelper {
 
     // returns sequence of elements, where each element is described by sequence of tags,
     // where each tag is described by StringPair ( First - name, Second - value )
     // the first tag of each element sequence must be "Id"
-    static
+    COMPHELPER_DLLPUBLIC
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >
-    SAL_CALL
     ReadRelationsInfoSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
         const OUString & aStreamName,
@@ -81,9 +49,8 @@ public:
     // by StringPair object ( First - Extension, Second - ContentType )
     // the second sequence describes "Override" elements, where each element is described
     // by StringPair object ( First - PartName, Second - ContentType )
-    static
+    COMPHELPER_DLLPUBLIC
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >
-    SAL_CALL
     ReadContentTypeSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
@@ -92,8 +59,8 @@ public:
     // writes sequence of elements, where each element is described by sequence of tags,
     // where each tag is described by StringPair ( First - name, Second - value )
     // the first tag of each element sequence must be "Id"
-    static
-    void SAL_CALL WriteRelationsInfoSequence(
+    COMPHELPER_DLLPUBLIC
+    void WriteRelationsInfoSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > >& aSequence,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
@@ -104,24 +71,15 @@ public:
     // by StringPair object ( First - Extension, Second - ContentType )
     // the second sequence describes "Override" elements, where each element is described
     // by StringPair object ( First - PartName, Second - ContentType )
-    static
-    void SAL_CALL WriteContentSequence(
+    COMPHELPER_DLLPUBLIC
+    void WriteContentSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aDefaultsSequence,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aOverridesSequence,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext )
             throw( ::com::sun::star::uno::Exception );
 
-    // XDocumentHandler
-    virtual void SAL_CALL startDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL startElement( const OUString& aName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL endElement( const OUString& aName ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL characters( const OUString& aChars ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-};
+} // namespace OFOPXMLHelper
 
 } // namespace comphelper
 

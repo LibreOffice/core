@@ -45,6 +45,7 @@
 #include <com/sun/star/logging/XSimpleLogRing.hpp>
 
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/sequenceashashmap.hxx>
 
