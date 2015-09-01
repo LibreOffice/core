@@ -78,9 +78,9 @@ bool WinOpenGLSalGraphicsImpl::TryRenderCachedNativeControl(ControlCacheKey& rCo
                        nX, nY, rTexture.GetWidth(), rTexture.GetHeight());
 
     if (pCombo->mpMask)
-        DrawTextureDiff(rTexture, *pCombo->mpMask, aPosAry, true);
+        DrawTextureDiff(rTexture, *pCombo->mpMask, aPosAry);
     else
-        DrawTexture(rTexture, aPosAry, true);
+        DrawTexture(rTexture, aPosAry);
 
     PostDraw();
 
