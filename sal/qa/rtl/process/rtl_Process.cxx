@@ -29,7 +29,7 @@
 #include <string.h>
 #include <sal/types.h>
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <rtl/process.h>
@@ -47,11 +47,11 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = NU
 {
     if ( msg != NULL )
     {
-        t_print("#%s #printUString_u# ", msg );
+        printf("#%s #printUString_u# ", msg );
     }
     rtl::OString aString;
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", (char *)aString.getStr( ) );
+    printf("%s\n", (char *)aString.getStr( ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -72,90 +72,76 @@ inline ::rtl::OUString getModulePath( void )
 
 namespace rtl_Process
 {
-class getAppCommandArg : public CppUnit::TestFixture
+class getAppCommandArg : public ::testing::Test
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void SetUp()
     {
     }
 
-    void tearDown()
+    void TearDown()
     {
     }
+}; // class getAppCommandArg
 
-    void getAppCommandArg_001()
-    {
+TEST_F(getAppCommandArg, getAppCommandArg_001)
+{
 #if defined(WNT) || defined(OS2)
     const rtl::OUString EXECUTABLE_NAME = rtl::OUString::createFromAscii("child_process.exe");
 #else
     const rtl::OUString EXECUTABLE_NAME = rtl::OUString::createFromAscii("child_process");
 #endif
-        rtl::OUString suCWD = getModulePath();
-        // rtl::OUString suCWD2 = getExecutableDirectory();
+    rtl::OUString suCWD = getModulePath();
+    // rtl::OUString suCWD2 = getExecutableDirectory();
 
-        printUString(suCWD, "path to the current module");
-        // printUString(suCWD2, "suCWD2");
+    printUString(suCWD, "path to the current module");
+    // printUString(suCWD2, "suCWD2");
 
-        oslProcess hProcess = NULL;
+    oslProcess hProcess = NULL;
 
-        const int nParameterCount = 4;
-        rtl_uString* pParameters[ nParameterCount ];
+    const int nParameterCount = 4;
+    rtl_uString* pParameters[ nParameterCount ];
 
-        pParameters[0] = suParam0.pData;
-        pParameters[1] = suParam1.pData;
-        pParameters[2] = suParam2.pData;
-        pParameters[3] = suParam3.pData;
+    pParameters[0] = suParam0.pData;
+    pParameters[1] = suParam1.pData;
+    pParameters[2] = suParam2.pData;
+    pParameters[3] = suParam3.pData;
 
-        rtl::OUString suFileURL = suCWD;
-        suFileURL += rtl::OUString::createFromAscii("/");
-        suFileURL += EXECUTABLE_NAME;
+    rtl::OUString suFileURL = suCWD;
+    suFileURL += rtl::OUString::createFromAscii("/");
+    suFileURL += EXECUTABLE_NAME;
 
-        oslProcessError osl_error = osl_executeProcess(
-            suFileURL.pData,
-            pParameters,
-            nParameterCount,
-            osl_Process_WAIT,
-            0, /* osl_getCurrentSecurity() */
-            suCWD.pData,
-            NULL,
-            0,
-            &hProcess );
+    oslProcessError osl_error = osl_executeProcess(
+        suFileURL.pData,
+        pParameters,
+        nParameterCount,
+        osl_Process_WAIT,
+        0, /* osl_getCurrentSecurity() */
+        suCWD.pData,
+        NULL,
+        0,
+        &hProcess );
 
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_error == osl_Process_E_None
-        );
+    ASSERT_TRUE(osl_error == osl_Process_E_None) <<
+        "osl_createProcess failed";
     //we could get return value only after the process terminated
-        osl_joinProcess(hProcess);
-        // CPPUNIT_ASSERT_MESSAGE
-        // (
-        //     "osl_joinProcess returned with failure",
-        //     osl_Process_E_None == osl_error
-        // );
+    osl_joinProcess(hProcess);
+    // ASSERT_TRUE(osl_Process_E_None == osl_error)
+    //     << "osl_joinProcess returned with failure";
     oslProcessInfo* pInfo = new oslProcessInfo;
     //please pay attention to initial the Size to sizeof(oslProcessInfo), or else
     //you will get unknow error when call osl_getProcessInfo
     pInfo->Size = sizeof(oslProcessInfo);
     osl_error = osl_getProcessInfo( hProcess, osl_Process_EXITCODE, pInfo );
-    CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_getProcessInfo returned with failure",
-            osl_Process_E_None == osl_error
-        );
+    ASSERT_TRUE(osl_Process_E_None == osl_error)
+        << "osl_getProcessInfo returned with failure";
 
-    t_print("the exit code is %d.\n", pInfo->Code );
-    CPPUNIT_ASSERT_MESSAGE("rtl_getAppCommandArg or rtl_getAppCommandArgCount error.", pInfo->Code == 2);
+    printf("the exit code is %d.\n", pInfo->Code );
+    ASSERT_TRUE(pInfo->Code == 2) << "rtl_getAppCommandArg or rtl_getAppCommandArgCount error.";
     delete pInfo;
-    }
+}
 
-
-    CPPUNIT_TEST_SUITE(getAppCommandArg);
-    CPPUNIT_TEST(getAppCommandArg_001);
-  //  CPPUNIT_TEST(getAppCommandArg_002);
-    CPPUNIT_TEST_SUITE_END();
-}; // class getAppCommandArg
 
 /************************************************************************
  * For diagnostics( from sal/test/testuuid.cxx )
@@ -200,93 +186,83 @@ void printUuidtoBuffer( sal_uInt8 *pNode, sal_Char * pBuffer )
     }
 }
 
-class getGlobalProcessId : public CppUnit::TestFixture
+class getGlobalProcessId : public ::testing::Test
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void SetUp()
     {
     }
 
-    void tearDown()
+    void TearDown()
     {
     }
-    //gets a 16-byte fixed size identifier which is guaranteed not to change    during the current process.
-    void getGlobalProcessId_001()
-    {
-        sal_uInt8 pTargetUUID1[16];
-        sal_uInt8 pTargetUUID2[16];
-        rtl_getGlobalProcessId( pTargetUUID1 );
-        rtl_getGlobalProcessId( pTargetUUID2 );
-    CPPUNIT_ASSERT_MESSAGE("getGlobalProcessId: got two same ProcessIds.", !memcmp( pTargetUUID1 , pTargetUUID2 , 16 ) );
-    }
-    //different processes different pids
-    void getGlobalProcessId_002()
-    {
+}; // class getGlobalProcessId
+
+//gets a 16-byte fixed size identifier which is guaranteed not to change    during the current process.
+TEST_F(getGlobalProcessId, getGlobalProcessId_001)
+{
+    sal_uInt8 pTargetUUID1[16];
+    sal_uInt8 pTargetUUID2[16];
+    rtl_getGlobalProcessId( pTargetUUID1 );
+    rtl_getGlobalProcessId( pTargetUUID2 );
+    ASSERT_TRUE( !memcmp( pTargetUUID1 , pTargetUUID2 , 16 ) )
+        << "getGlobalProcessId: got two same ProcessIds.";
+}
+
+//different processes different pids
+TEST_F(getGlobalProcessId, getGlobalProcessId_002)
+{
 #if defined(WNT) || defined(OS2)
     const rtl::OUString EXEC_NAME = rtl::OUString::createFromAscii("child_process_id.exe");
 #else
     const rtl::OUString EXEC_NAME = rtl::OUString::createFromAscii("child_process_id");
 #endif
-        sal_uInt8 pTargetUUID1[16];
-        rtl_getGlobalProcessId( pTargetUUID1 );
-        printUuid( pTargetUUID1 );
-        sal_Char pUUID1[32];
-          printUuidtoBuffer( pTargetUUID1, pUUID1 );
+    sal_uInt8 pTargetUUID1[16];
+    rtl_getGlobalProcessId( pTargetUUID1 );
+    printUuid( pTargetUUID1 );
+    sal_Char pUUID1[32];
+    printUuidtoBuffer( pTargetUUID1, pUUID1 );
     printf("# UUID to String is %s\n", pUUID1);
 
     rtl::OUString suCWD = getModulePath();
-        oslProcess hProcess = NULL;
-       rtl::OUString suFileURL = suCWD;
-        suFileURL += rtl::OUString::createFromAscii("/");
-        suFileURL += EXEC_NAME;
+    oslProcess hProcess = NULL;
+    rtl::OUString suFileURL = suCWD;
+    suFileURL += rtl::OUString::createFromAscii("/");
+    suFileURL += EXEC_NAME;
     oslFileHandle* pChildOutputRead = new oslFileHandle();
-        oslProcessError osl_error = osl_executeProcess_WithRedirectedIO(
-            suFileURL.pData,
-            NULL,
-            0,
-            osl_Process_WAIT,
-            0,
-            suCWD.pData,
-            NULL,
-            0,
-            &hProcess,
+    oslProcessError osl_error = osl_executeProcess_WithRedirectedIO(
+        suFileURL.pData,
+        NULL,
+        0,
+        osl_Process_WAIT,
+        0,
+        suCWD.pData,
+        NULL,
+        0,
+        &hProcess,
         NULL,
         pChildOutputRead,
         NULL);
 
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_error == osl_Process_E_None
-        );
+    ASSERT_TRUE(osl_error == osl_Process_E_None)
+        << "osl_createProcess failed";
     //we could get return value only after the process terminated
-        osl_joinProcess(hProcess);
+    osl_joinProcess(hProcess);
 
-        sal_Char pUUID2[33];
-        pUUID2[32] = '\0';
+    sal_Char pUUID2[33];
+    pUUID2[32] = '\0';
     sal_uInt64 nRead = 0;
     osl_readFile( *pChildOutputRead, pUUID2, 32, &nRead );
-    t_print("read buffer is %s, nRead is %d \n", pUUID2, nRead );
+    printf("read buffer is %s, nRead is %lu \n", pUUID2, nRead );
     OUString suUUID2 = OUString::createFromAscii( pUUID2 );
-    CPPUNIT_ASSERT_MESSAGE("getGlobalProcessId: got two same ProcessIds.", suUUID2.equalsAsciiL( pUUID1, 32) == sal_False );
-    }
-
-    CPPUNIT_TEST_SUITE(getGlobalProcessId);
-    CPPUNIT_TEST(getGlobalProcessId_001);
-    CPPUNIT_TEST(getGlobalProcessId_002);
-    CPPUNIT_TEST_SUITE_END();
-
-}; // class getGlobalProcessId
+    ASSERT_TRUE( suUUID2.equalsAsciiL( pUUID1, 32) == sal_False ) << "getGlobalProcessId: got two same ProcessIds.";
+}
 
 } // namespace rtl_Process
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getAppCommandArg, "rtl_Process");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getGlobalProcessId, "rtl_Process");
-
-
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
