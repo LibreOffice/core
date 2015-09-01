@@ -37,7 +37,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -96,7 +96,7 @@ using namespace ::cppu;
 
 
 
-class SfxClipboardChangeListener : public ::cppu::WeakImplHelper1<
+class SfxClipboardChangeListener : public ::cppu::WeakImplHelper<
     datatransfer::clipboard::XClipboardListener >
 {
 public:

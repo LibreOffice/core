@@ -22,7 +22,7 @@
 #include "arrdecl.hxx"
 #include <map>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -148,7 +148,7 @@ OString lclGetVBAGlobalConstName( const Reference< XInterface >& rxComponent )
 
 
 
-class SfxModelListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
+class SfxModelListener_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::util::XCloseListener >
 {
     SfxObjectShell* mpDoc;
 public:

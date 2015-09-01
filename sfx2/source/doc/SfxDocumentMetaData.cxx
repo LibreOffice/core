@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -79,7 +79,7 @@
 #include <limits>
 
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/document/XCompatWriterDocProperties.hpp>
 #include <com/sun/star/beans/PropertyBag.hpp>
@@ -115,7 +115,7 @@ namespace {
 typedef std::vector<std::vector<std::pair<const char*, OUString> > >
         AttrVector;
 
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper<
             css::lang::XServiceInfo,
             css::document::XDocumentProperties,
             css::lang::XInitialization,
@@ -353,7 +353,7 @@ protected:
     void createUserDefined();
 };
 
-typedef ::cppu::ImplInheritanceHelper1< SfxDocumentMetaData, css::document::XCompatWriterDocProperties > CompatWriterDocPropsImpl_BASE;
+typedef ::cppu::ImplInheritanceHelper< SfxDocumentMetaData, css::document::XCompatWriterDocProperties > CompatWriterDocPropsImpl_BASE;
 
 class CompatWriterDocPropsImpl : public CompatWriterDocPropsImpl_BASE
 {

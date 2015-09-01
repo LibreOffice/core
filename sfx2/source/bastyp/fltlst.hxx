@@ -21,7 +21,6 @@
 #define INCLUDED_SFX2_SOURCE_BASTYP_FLTLST_HXX
 
 #include <sfx2/fcontnr.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XRefreshable.hpp>

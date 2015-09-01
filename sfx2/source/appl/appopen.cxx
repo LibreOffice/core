@@ -42,7 +42,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <rtl/ustring.hxx>
 
 #include <comphelper/processfactory.hxx>

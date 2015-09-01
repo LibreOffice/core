@@ -24,7 +24,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XStream.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/objsh.hxx>
@@ -33,7 +33,7 @@ using namespace css;
 
 namespace {
 
-class OwnSubFilterService : public cppu::WeakImplHelper2 < document::XFilter
+class OwnSubFilterService : public cppu::WeakImplHelper < document::XFilter
                                                         ,lang::XServiceInfo >
 {
     uno::Reference< frame::XModel > m_xModel;

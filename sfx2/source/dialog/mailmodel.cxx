@@ -71,7 +71,7 @@
 #include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 using namespace ::com::sun::star;
@@ -85,7 +85,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 
 // - class PrepareListener_Impl ------------------------------------------
-class PrepareListener_Impl : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
+class PrepareListener_Impl : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
     bool m_bState;
 public:

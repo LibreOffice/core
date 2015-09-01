@@ -24,7 +24,7 @@
 
 #include <com/sun/star/document/XUndoManager.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
@@ -100,7 +100,7 @@ namespace sfx2
 {
     //= DocumentUndoManager
 
-    typedef ::cppu::WeakImplHelper1 <css::document::XUndoManager> DocumentUndoManager_Base;
+    typedef ::cppu::WeakImplHelper <css::document::XUndoManager> DocumentUndoManager_Base;
     struct DocumentUndoManager_Impl;
     class DocumentUndoManager   :public DocumentUndoManager_Base
                                 ,public SfxModelSubComponent

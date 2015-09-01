@@ -30,8 +30,7 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
@@ -190,7 +189,7 @@ void reschedule()
     }
 }
 
-class SfxStatusIndicator : public ::cppu::WeakImplHelper2< task::XStatusIndicator, lang::XEventListener >
+class SfxStatusIndicator : public ::cppu::WeakImplHelper< task::XStatusIndicator, lang::XEventListener >
 {
 friend class SfxBaseController;
     Reference < XController > xOwner;
@@ -318,7 +317,7 @@ void SAL_CALL SfxStatusIndicator::disposing( const lang::EventObject& /*Source*/
 //  declaration IMPL_SfxBaseController_ListenerHelper
 
 
-class IMPL_SfxBaseController_ListenerHelper : public ::cppu::WeakImplHelper1< frame::XFrameActionListener >
+class IMPL_SfxBaseController_ListenerHelper : public ::cppu::WeakImplHelper< frame::XFrameActionListener >
 {
 public:
     explicit IMPL_SfxBaseController_ListenerHelper(  SfxBaseController*  pController ) ;
@@ -332,7 +331,7 @@ private:
 
 } ; // class IMPL_SfxBaseController_ListenerContainer
 
-class IMPL_SfxBaseController_CloseListenerHelper : public ::cppu::WeakImplHelper1< util::XCloseListener >
+class IMPL_SfxBaseController_CloseListenerHelper : public ::cppu::WeakImplHelper< util::XCloseListener >
 {
 public:
     explicit IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController ) ;

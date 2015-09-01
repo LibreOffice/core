@@ -28,7 +28,7 @@
 #include <svl/itemset.hxx>
 #include "itemdel.hxx"
 #include <svl/visitem.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
 class SfxQueryStatus_Impl:
-    public cppu::WeakImplHelper1<css::frame::XStatusListener>,
+    public cppu::WeakImplHelper<css::frame::XStatusListener>,
     private boost::noncopyable
 {
     public:

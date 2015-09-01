@@ -55,7 +55,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <framework/interaction.hxx>
 #include <rtl/ref.hxx>
@@ -103,7 +103,7 @@ using ::com::sun::star::frame::XModel2;
 
 namespace {
 
-class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper2< css::frame::XSynchronousFrameLoader, css::lang::XServiceInfo >
+class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper< css::frame::XSynchronousFrameLoader, css::lang::XServiceInfo >
 {
     css::uno::Reference < css::uno::XComponentContext >  m_aContext;
 

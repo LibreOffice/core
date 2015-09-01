@@ -29,8 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Type.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
@@ -57,7 +56,7 @@ public:
 typedef ::std::vector< css::uno::Reference< css::frame::XModel > > TModelList;
 
 class ModelCollectionEnumeration : public ModelCollectionMutexBase
-                                 , public ::cppu::WeakImplHelper1< css::container::XEnumeration >
+                                 , public ::cppu::WeakImplHelper< css::container::XEnumeration >
 {
 private:
     TModelList m_lModels;
@@ -81,7 +80,7 @@ public:
 
 //TODO: remove support of obsolete document::XEventBroadcaster/Listener
 class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
-                           , public ::cppu::WeakImplHelper3< css::lang::XServiceInfo
+                           , public ::cppu::WeakImplHelper< css::lang::XServiceInfo
                                                            , css::frame::XGlobalEventBroadcaster
                                                            , css::document::XEventListener
                                                             >

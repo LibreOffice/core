@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <osl/diagnose.h>
@@ -57,7 +57,7 @@ namespace sfx2
 
     //= SfxModelFactory - declaration
 
-    typedef ::cppu::WeakImplHelper2 <   XSingleServiceFactory
+    typedef ::cppu::WeakImplHelper <   XSingleServiceFactory
                                     ,   XServiceInfo
                                     >   SfxModelFactory_Base;
     /** implements a XSingleServiceFactory which can be used to created instances
