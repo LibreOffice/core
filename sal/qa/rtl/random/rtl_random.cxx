@@ -28,154 +28,120 @@
 
 #include <algorithm> // STL
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 #include <rtl/random.h>
 
 namespace rtl_random
 {
 
-class createPool : public CppUnit::TestFixture
+class createPool : public ::testing::Test
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void SetUp()
     {
     }
 
-    void tearDown()
+    void TearDown()
     {
     }
-
-    // insert your test code here.
-    // this is only demonstration code
-    void createPool_001()
-    {
-        // this is demonstration code
-
-        rtlRandomPool aPool = rtl_random_createPool();
-
-        // LLA: seems to be that an other test is not possible for createPool()
-        CPPUNIT_ASSERT_MESSAGE("create failed", aPool != NULL);
-
-        rtl_random_destroyPool(aPool);
-    }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(createPool);
-    CPPUNIT_TEST(createPool_001);
-    CPPUNIT_TEST_SUITE_END();
 }; // class createPool
 
+TEST_F(createPool, createPool_001)
+{
+    // this is demonstration code
 
-class destroyPool : public CppUnit::TestFixture
+    rtlRandomPool aPool = rtl_random_createPool();
+
+    // LLA: seems to be that an other test is not possible for createPool()
+    ASSERT_TRUE(aPool != NULL) << "create failed";
+    rtl_random_destroyPool(aPool);
+}
+
+class destroyPool : public ::testing::Test
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void SetUp()
     {
     }
 
-    void tearDown()
+    void TearDown()
     {
     }
-
-    // insert your test code here.
-    void destroyPool_000()
-    {
-        // GPF, if failed
-        rtl_random_destroyPool(NULL);
-    }
-
-    void destroyPool_001()
-    {
-        rtlRandomPool aPool = rtl_random_createPool();
-
-        // LLA: seems to be that an other test is not possible for createPool()
-        CPPUNIT_ASSERT_MESSAGE("create failed", aPool != NULL);
-
-        rtl_random_destroyPool(aPool);
-    }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(destroyPool);
-    CPPUNIT_TEST(destroyPool_000);
-    CPPUNIT_TEST(destroyPool_001);
-    CPPUNIT_TEST_SUITE_END();
 }; // class destroyPool
 
+TEST_F(destroyPool, destroyPool_000)
+{
+    // GPF, if failed
+    rtl_random_destroyPool(NULL);
+}
 
-class addBytes : public CppUnit::TestFixture
+TEST_F(destroyPool, destroyPool_001)
+{
+    rtlRandomPool aPool = rtl_random_createPool();
+
+    // LLA: seems to be that an other test is not possible for createPool()
+    ASSERT_TRUE(aPool != NULL) << "create failed";
+
+    rtl_random_destroyPool(aPool);
+}
+
+class addBytes : public ::testing::Test
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void SetUp()
     {
     }
 
-    void tearDown()
+    void TearDown()
     {
     }
-
-    // insert your test code here.
-    // this is only demonstration code
-    void addBytes_000()
-    {
-        rtlRandomPool aPool = rtl_random_createPool();
-
-        sal_uInt32  nBufLen = 4;
-        sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
-        memset(pBuffer, 0, nBufLen);
-
-        rtlRandomError aError = rtl_random_addBytes(NULL, NULL, 0);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_Argument);
-
-        /* rtlRandomError */ aError = rtl_random_addBytes(aPool, NULL, 0);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_Argument);
-
-        /* rtlRandomError */ aError = rtl_random_addBytes(aPool, pBuffer, nBufLen);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
-
-        rtl_random_destroyPool(aPool);
-        delete [] pBuffer;
-
-    }
-
-    void addBytes_001()
-        {
-            rtlRandomPool aPool = rtl_random_createPool();
-
-            sal_uInt32  nBufLen = 4;
-            sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
-
-            memset(pBuffer, 0, nBufLen);
-
-            rtl_random_addBytes(aPool, pBuffer, nBufLen);
-
-            t_print("%2x %2x %2x %2x\n", pBuffer[0], pBuffer[1], pBuffer[2], pBuffer[3]);
-
-            rtl_random_destroyPool(aPool);
-            delete [] pBuffer;
-        }
-
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(addBytes);
-    CPPUNIT_TEST(addBytes_000);
-    CPPUNIT_TEST(addBytes_001);
-    CPPUNIT_TEST_SUITE_END();
 }; // class addBytes
 
+TEST_F(addBytes, addBytes_000)
+{
+    rtlRandomPool aPool = rtl_random_createPool();
+
+    sal_uInt32  nBufLen = 4;
+    sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
+    memset(pBuffer, 0, nBufLen);
+
+    rtlRandomError aError = rtl_random_addBytes(NULL, NULL, 0);
+    ASSERT_TRUE(aError == rtl_Random_E_Argument) << "wrong parameter";
+
+    /* rtlRandomError */ aError = rtl_random_addBytes(aPool, NULL, 0);
+    ASSERT_TRUE(aError == rtl_Random_E_Argument) << "wrong parameter";
+
+    /* rtlRandomError */ aError = rtl_random_addBytes(aPool, pBuffer, nBufLen);
+    ASSERT_TRUE(aError == rtl_Random_E_None) << "wrong parameter";
+
+    rtl_random_destroyPool(aPool);
+    delete [] pBuffer;
+
+}
+
+TEST_F(addBytes, addBytes_001)
+{
+    rtlRandomPool aPool = rtl_random_createPool();
+
+    sal_uInt32  nBufLen = 4;
+    sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
+
+    memset(pBuffer, 0, nBufLen);
+
+    rtl_random_addBytes(aPool, pBuffer, nBufLen);
+
+    printf("%2x %2x %2x %2x\n", pBuffer[0], pBuffer[1], pBuffer[2], pBuffer[3]);
+
+    rtl_random_destroyPool(aPool);
+    delete [] pBuffer;
+}
 
 class Statistics
 {
+protected:
     int m_nDispensation[256];
 
     int m_nMin;
@@ -200,7 +166,7 @@ public:
 
     void addValue(sal_Int16 _nIndex, sal_Int32 _nValue)
         {
-            OSL_ASSERT(_nIndex >= 0 && _nIndex < 256);
+            ASSERT_TRUE(_nIndex >= 0 && _nIndex < 256);
             m_nDispensation[_nIndex] += _nValue;
         }
 
@@ -227,12 +193,12 @@ public:
     void print()
         {
             // LLA: these are only info values
-            t_print("\nSome statistics\n");
-            t_print("Min: %d\n", m_nMin);
-            t_print("Max: %d\n", m_nMax);
-            t_print("Average: %d\n", m_nAverage);
-            t_print("Min abs deviation: %d\n", m_nMinDeviation);
-            t_print("Max abs deviation: %d\n", m_nMaxDeviation);
+            printf("\nSome statistics\n");
+            printf("Min: %d\n", m_nMin);
+            printf("Max: %d\n", m_nMax);
+            printf("Average: %d\n", m_nAverage);
+            printf("Min abs deviation: %d\n", m_nMinDeviation);
+            printf("Max abs deviation: %d\n", m_nMaxDeviation);
         }
 
     sal_Int32 getAverage() {return m_nAverage;}
@@ -240,169 +206,150 @@ public:
 
 };
 
-class getBytes : public CppUnit::TestFixture
+class getBytes : public ::testing::Test
 {
 public:
     // initialise your test code values here.
-    void setUp()
+    void SetUp()
     {
     }
 
-    void tearDown()
+    void TearDown()
     {
     }
-
-    // insert your test code here.
-    void getBytes_000()
-    {
-        rtlRandomPool aPool = rtl_random_createPool();
-
-        sal_uInt32  nBufLen = 4;
-        sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
-        memset(pBuffer, 0, nBufLen);
-
-        rtlRandomError aError = rtl_random_getBytes(NULL, NULL, 0);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_Argument);
-
-        /* rtlRandomError */ aError = rtl_random_getBytes(aPool, NULL, 0);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_Argument);
-
-        /* rtlRandomError */ aError = rtl_random_getBytes(aPool, pBuffer, nBufLen);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
-
-        rtl_random_destroyPool(aPool);
-        delete [] pBuffer;
-    }
-
-    void getBytes_001()
-    {
-        rtlRandomPool aPool = rtl_random_createPool();
-
-        sal_uInt32  nBufLen = 4;
-        sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
-        memset(pBuffer, 0, nBufLen);
-
-        rtlRandomError aError = rtl_random_getBytes(aPool, pBuffer, nBufLen);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
-
-        t_print("%2x %2x %2x %2x\n", pBuffer[0], pBuffer[1], pBuffer[2], pBuffer[3]);
-
-        rtl_random_destroyPool(aPool);
-        delete [] pBuffer;
-    }
-
-    void getBytes_002()
-    {
-        rtlRandomPool aPool = rtl_random_createPool();
-
-        sal_uInt32  nBufLen = 4;
-        sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen << 1 ];
-        memset(pBuffer, 0, nBufLen << 1);
-
-        CPPUNIT_ASSERT_MESSAGE("memset failed", pBuffer[4] == 0 && pBuffer[5] == 0 && pBuffer[6] == 0 && pBuffer[7] == 0);
-
-        rtlRandomError aError = rtl_random_getBytes(aPool, pBuffer, nBufLen);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
-
-        t_print("%2x %2x %2x %2x %2x %2x %2x %2x\n", pBuffer[0], pBuffer[1], pBuffer[2], pBuffer[3], pBuffer[4], pBuffer[5], pBuffer[6], pBuffer[7]);
-
-        CPPUNIT_ASSERT_MESSAGE("internal memory overwrite", pBuffer[4] == 0 && pBuffer[5] == 0 && pBuffer[6] == 0 && pBuffer[7] == 0);
-
-        rtl_random_destroyPool(aPool);
-        delete [] pBuffer;
-    }
-
-    void getBytes_003()
-    {
-        rtlRandomPool aPool = rtl_random_createPool();
-
-        sal_uInt32  nBufLen = 1;
-        sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
-        memset(pBuffer, 0, nBufLen);
-
-        Statistics aStat;
-
-        CPPUNIT_ASSERT_MESSAGE("memset failed", pBuffer[0] == 0);
-
-        int nCount = 0;
-
-        int nCountMax = 1000000;
-        for(nCount = 0;nCount < nCountMax; nCount ++)                  // run 100000000 through getBytes(...)
-        {
-            /* rtlRandomError aError = */ rtl_random_getBytes(aPool, pBuffer, nBufLen);
-            /* CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None); */
-
-            aStat.addValue(pBuffer[0], 1);
-        }
-
-        aStat.build(nCountMax);
-        aStat.print();
-
-        CPPUNIT_ASSERT_MESSAGE("deviation should be less average", aStat.getMaxDeviation() < aStat.getAverage());
-
-        rtl_random_destroyPool(aPool);
-        delete [] pBuffer;
-    }
-
-    void getBytes_003_1()
-    {
-        rtlRandomPool aPool = rtl_random_createPool();
-
-        sal_uInt32  nBufLen = 256;
-        sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
-        memset(pBuffer, 0, nBufLen);
-
-        Statistics aStat;
-
-        CPPUNIT_ASSERT_MESSAGE("memset failed", pBuffer[0] == 0);
-
-        int nCount = 0;
-
-        int nCountMax = 10000;
-        for(nCount = 0;nCount < nCountMax; nCount ++)                  // run 100000000 through getBytes(...)
-        {
-            /* rtlRandomError aError = */ rtl_random_getBytes(aPool, pBuffer, nBufLen);
-            // CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
-
-            for (sal_uInt32 i=0;i<nBufLen;i++)
-            {
-                aStat.addValue(pBuffer[i], 1);
-            }
-        }
-
-        aStat.build(nCountMax * nBufLen);
-        aStat.print();
-
-        CPPUNIT_ASSERT_MESSAGE("deviation should be less average", aStat.getMaxDeviation() < aStat.getAverage());
-
-        rtl_random_destroyPool(aPool);
-        delete [] pBuffer;
-    }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(getBytes);
-    CPPUNIT_TEST(getBytes_000);
-    CPPUNIT_TEST(getBytes_001);
-    CPPUNIT_TEST(getBytes_002);
-    CPPUNIT_TEST(getBytes_003);
-    CPPUNIT_TEST(getBytes_003_1);
-    CPPUNIT_TEST_SUITE_END();
 }; // class getBytes
 
+TEST_F(getBytes, getBytes_000)
+{
+    rtlRandomPool aPool = rtl_random_createPool();
+
+    sal_uInt32  nBufLen = 4;
+    sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
+    memset(pBuffer, 0, nBufLen);
+
+    rtlRandomError aError = rtl_random_getBytes(NULL, NULL, 0);
+    ASSERT_TRUE(aError == rtl_Random_E_Argument) << "wrong parameter";
+
+    /* rtlRandomError */ aError = rtl_random_getBytes(aPool, NULL, 0);
+    ASSERT_TRUE(aError == rtl_Random_E_Argument) << "wrong parameter";
+
+    /* rtlRandomError */ aError = rtl_random_getBytes(aPool, pBuffer, nBufLen);
+    ASSERT_TRUE(aError == rtl_Random_E_None) << "wrong parameter";
+
+    rtl_random_destroyPool(aPool);
+    delete [] pBuffer;
+}
+
+TEST_F(getBytes, getBytes_001)
+{
+    rtlRandomPool aPool = rtl_random_createPool();
+
+    sal_uInt32  nBufLen = 4;
+    sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
+    memset(pBuffer, 0, nBufLen);
+
+    rtlRandomError aError = rtl_random_getBytes(aPool, pBuffer, nBufLen);
+    ASSERT_TRUE(aError == rtl_Random_E_None) << "wrong parameter";
+
+    printf("%2x %2x %2x %2x\n", pBuffer[0], pBuffer[1], pBuffer[2], pBuffer[3]);
+
+    rtl_random_destroyPool(aPool);
+    delete [] pBuffer;
+}
+
+TEST_F(getBytes, getBytes_002)
+{
+    rtlRandomPool aPool = rtl_random_createPool();
+
+    sal_uInt32  nBufLen = 4;
+    sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen << 1 ];
+    memset(pBuffer, 0, nBufLen << 1);
+
+    ASSERT_TRUE(pBuffer[4] == 0 && pBuffer[5] == 0 && pBuffer[6] == 0 && pBuffer[7] == 0) << "memset failed";
+
+    rtlRandomError aError = rtl_random_getBytes(aPool, pBuffer, nBufLen);
+    ASSERT_TRUE(aError == rtl_Random_E_None) << "wrong parameter";
+
+    printf("%2x %2x %2x %2x %2x %2x %2x %2x\n", pBuffer[0], pBuffer[1], pBuffer[2], pBuffer[3], pBuffer[4], pBuffer[5], pBuffer[6], pBuffer[7]);
+
+    ASSERT_TRUE(pBuffer[4] == 0 && pBuffer[5] == 0 && pBuffer[6] == 0 && pBuffer[7] == 0) << "internal memory overwrite";
+
+    rtl_random_destroyPool(aPool);
+    delete [] pBuffer;
+}
+
+TEST_F(getBytes, getBytes_003)
+{
+    rtlRandomPool aPool = rtl_random_createPool();
+
+    sal_uInt32  nBufLen = 1;
+    sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
+    memset(pBuffer, 0, nBufLen);
+
+    Statistics aStat;
+
+    ASSERT_TRUE(pBuffer[0] == 0) << "memset failed";
+
+    int nCount = 0;
+
+    int nCountMax = 1000000;
+    for(nCount = 0;nCount < nCountMax; nCount ++)                  // run 100000000 through getBytes(...)
+    {
+        /* rtlRandomError aError = */ rtl_random_getBytes(aPool, pBuffer, nBufLen);
+        /* ASSERT_TRUE(aError == rtl_Random_E_None); << "wrong parameter" */
+
+        aStat.addValue(pBuffer[0], 1);
+    }
+
+    aStat.build(nCountMax);
+    aStat.print();
+
+    ASSERT_TRUE(aStat.getMaxDeviation() < aStat.getAverage()) << "deviation should be less average";
+
+    rtl_random_destroyPool(aPool);
+    delete [] pBuffer;
+}
+
+TEST_F(getBytes, getBytes_003_1)
+{
+    rtlRandomPool aPool = rtl_random_createPool();
+
+    sal_uInt32  nBufLen = 256;
+    sal_uInt8   *pBuffer = new sal_uInt8[ nBufLen ];
+    memset(pBuffer, 0, nBufLen);
+
+    Statistics aStat;
+
+    ASSERT_TRUE(pBuffer[0] == 0) << "memset failed";
+
+    int nCount = 0;
+
+    int nCountMax = 10000;
+    for(nCount = 0;nCount < nCountMax; nCount ++)                  // run 100000000 through getBytes(...)
+    {
+        /* rtlRandomError aError = */ rtl_random_getBytes(aPool, pBuffer, nBufLen);
+        // ASSERT_TRUE(aError == rtl_Random_E_None) << "wrong parameter"";
+
+        for (sal_uInt32 i=0;i<nBufLen;i++)
+        {
+            aStat.addValue(pBuffer[i], 1);
+        }
+    }
+
+    aStat.build(nCountMax * nBufLen);
+    aStat.print();
+
+    ASSERT_TRUE(aStat.getMaxDeviation() < aStat.getAverage()) << "deviation should be less average";
+
+    rtl_random_destroyPool(aPool);
+    delete [] pBuffer;
+}
+
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_random::createPool, "rtl_random");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_random::destroyPool, "rtl_random");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_random::addBytes, "rtl_random");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_random::getBytes, "rtl_random");
 } // namespace rtl_random
 
-
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
-
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
