@@ -622,6 +622,25 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
     aNewNames.swap( maTableColumnNames);
 }
 
+namespace {
+class TableColumnNameSearch : public unary_function<ScDBData, bool>
+{
+public:
+    explicit TableColumnNameSearch( const OUString& rSearchName ) :
+        maSearchName( rSearchName )
+    {
+    }
+
+    bool operator()( const OUString& rName ) const
+    {
+        return ScGlobal::GetpTransliteration()->isEqual( maSearchName, rName);
+    }
+
+private:
+    OUString maSearchName;
+};
+}
+
 void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
 {
     if (!HasHeader())
@@ -659,42 +678,15 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
         {
             if (aNewNames[i].isEmpty())
             {
-                bool bCopy = true;
                 const OUString& rStr = maTableColumnNames[i];
-                for (size_t j=0; j < n; ++j)
-                {
-                    if (ScGlobal::GetpTransliteration()->isEqual( aNewNames[j], rStr))
-                    {
-                        bCopy = false;
-                        break;  // for
-                    }
-                }
-                if (bCopy)
+                auto it( ::std::find_if( aNewNames.begin(), aNewNames.end(), TableColumnNameSearch( rStr)));
+                if (it == aNewNames.end())
                     aNewNames[i] = rStr;
             }
         }
     }
 
     aNewNames.swap( maTableColumnNames);
-}
-
-namespace {
-class TableColumnNameSearch : public unary_function<ScDBData, bool>
-{
-public:
-    explicit TableColumnNameSearch( const OUString& rSearchName ) :
-        maSearchName( rSearchName )
-    {
-    }
-
-    bool operator()( const OUString& rName ) const
-    {
-        return ScGlobal::GetpTransliteration()->isEqual( maSearchName, rName);
-    }
-
-private:
-    OUString maSearchName;
-};
 }
 
 sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
