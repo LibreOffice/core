@@ -419,7 +419,10 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                             if ( bPaintsFromSystem )
                                 PaintDesktop(*GetOut(), aRect);
-                            pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
+                            if (!isTiledRendering())
+                                pCurrentLayout->Paint( *mpOut, aRect );
+                            else
+                                pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
 
                             // #i75172# end DrawingLayer paint
                             DLPostPaint2(true);
