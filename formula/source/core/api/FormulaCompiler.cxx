@@ -1994,14 +1994,11 @@ void FormulaCompiler::AppendString( OUStringBuffer& rBuffer, const OUString & rS
 
 bool FormulaCompiler::NeedsTableRefTransformation() const
 {
-    /* TODO: currently only UI representations use Table structured
-     * references. Not defined in ODFF, and not implemented yet for OOXML
-     * export. Change this once OOXML export is implemented, until then write
-     * A1 style references also for OOXML to not lose functionality. */
+    // Currently only UI representations and OOXML export use Table structured
+    // references. Not defined in ODFF.
     // Unnecessary to explicitly check for ODFF grammar as the ocTableRefOpen
     // symbol is not defined there.
-    return mxSymbols->getSymbol( ocTableRefOpen).isEmpty() || FormulaGrammar::isPODF( meGrammar)
-        || FormulaGrammar::isOOXML( meGrammar);
+    return mxSymbols->getSymbol( ocTableRefOpen).isEmpty() || FormulaGrammar::isPODF( meGrammar);
 }
 
 void FormulaCompiler::UpdateSeparatorsNative(
