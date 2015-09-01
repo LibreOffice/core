@@ -2560,6 +2560,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         RubyInfo    aInfo ;
         m_pImpl->SetRubyInfo(aInfo);
     }
+    break;
     case NS_ooxml::LN_CT_RubyPr:
     case NS_ooxml::LN_CT_Ruby_rt:
     case NS_ooxml::LN_CT_Ruby_rubyBase:
