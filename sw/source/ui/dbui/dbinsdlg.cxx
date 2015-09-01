@@ -91,7 +91,7 @@
 #include <IDocumentMarkAccess.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <swuiexp.hxx>
 
 using namespace ::dbtools;
@@ -762,7 +762,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void 
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(pButton, rSh.GetAttrPool(), pTableSet, &rSh));
+    std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTableTabDlg(pButton, rSh.GetAttrPool(), pTableSet, &rSh));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute() )
         pTableSet->Put( *pDlg->GetOutputItemSet() );
@@ -778,7 +778,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, AutoFormatHdl, Button*, pButton, void )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(), false, pTAutoFormat));
+    std::unique_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton, pView->GetWrtShellPtr(), false, pTAutoFormat));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFormatOfIndex( pTAutoFormat );
@@ -986,7 +986,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     if( rSh.HasSelection() )
         rSh.DelRight();
 
-    boost::scoped_ptr<SwWait> pWait;
+    std::unique_ptr<SwWait> pWait;
 
     Reference< XColumnsSupplier > xColsSupp( xResultSet, UNO_QUERY );
     Reference <XNameAccess> xCols = xColsSupp->getColumns();
@@ -1296,7 +1296,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                     case _DB_Column::DB_COL_FIELD:
                         {
-                            boost::scoped_ptr<SwDBField> pField(static_cast<SwDBField *>(
+                            std::unique_ptr<SwDBField> pField(static_cast<SwDBField *>(
                                 pDBCol->DB_ColumnData.pField->CopyField()));
                             double nValue = DBL_MAX;
 
@@ -1660,7 +1660,7 @@ void SwInsertDBColAutoPilot::Load()
         pDataSourceProps[2] >>= nCommandType;
         if(sSource.equals(aDBData.sDataSource) && sCommand.equals(aDBData.sCommand))
         {
-            boost::scoped_ptr<_DB_ColumnConfigData> pNewData(new _DB_ColumnConfigData);
+            std::unique_ptr<_DB_ColumnConfigData> pNewData(new _DB_ColumnConfigData);
             pNewData->sSource = sSource;
             pNewData->sTable = sCommand;
 
