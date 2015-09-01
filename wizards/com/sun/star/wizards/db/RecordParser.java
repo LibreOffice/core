@@ -131,12 +131,14 @@ public class RecordParser extends QueryMetaData
             case DataType.FLOAT: // ==   6;
             case DataType.REAL: // ==   7;
             case DataType.DOUBLE: // ==   8;
-            case DataType.DATE: // ==  91;
             case DataType.TIME: // ==  92;
-            case DataType.TIMESTAMP: // ==  93;
                 oAny = getColumnDoubleValue(ColIndex, false);
                 break;
 
+            case DataType.DATE: // ==  91;
+            case DataType.TIMESTAMP: // ==  93;
+                oAny = getColumnDoubleValue(ColIndex, true);
+                break;
             case DataType.CHAR: // ==   1;
             case DataType.VARCHAR: // ==  12;
             case DataType.LONGVARCHAR: // ==  -1;
