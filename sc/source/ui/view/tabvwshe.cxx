@@ -316,7 +316,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                                 if( pWin )
                                 {
                                     pSearchDlg->SetDocWin( pWin );
-                                    pSearchDlg->SetSrchFlag();
+                                    pSearchDlg->SetSrchFlag(false);
                                 }
                             }
                         }

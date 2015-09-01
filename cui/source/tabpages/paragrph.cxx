@@ -450,7 +450,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             }
             else
             {
-                m_pLeftIndent->SetRelative();
+                m_pLeftIndent->SetRelative(false);
                 SetFieldUnit( *m_pLeftIndent, eFUnit );
                 SetMetricValue( *m_pLeftIndent, rOldItem.GetTextLeft(), eUnit );
             }
@@ -462,7 +462,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             }
             else
             {
-                m_pRightIndent->SetRelative();
+                m_pRightIndent->SetRelative(false);
                 SetFieldUnit( *m_pRightIndent, eFUnit );
                 SetMetricValue( *m_pRightIndent, rOldItem.GetRight(), eUnit );
             }
@@ -474,7 +474,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             }
             else
             {
-                m_pFLineIndent->SetRelative();
+                m_pFLineIndent->SetRelative(false);
                 m_pFLineIndent->SetMin(-9999);
                 SetFieldUnit( *m_pFLineIndent, eFUnit );
                 SetMetricValue( *m_pFLineIndent, rOldItem.GetTextFirstLineOfst(),
@@ -520,7 +520,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             }
             else
             {
-                m_pTopDist->SetRelative();
+                m_pTopDist->SetRelative(false);
                 if ( eFUnit == FUNIT_CHAR )
                     SetFieldUnit( *m_pTopDist, FUNIT_LINE );
                 else
@@ -535,7 +535,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             }
             else
             {
-                m_pBottomDist->SetRelative();
+                m_pBottomDist->SetRelative(false);
                 if ( eFUnit == FUNIT_CHAR )
                     SetFieldUnit( *m_pBottomDist, FUNIT_LINE );
                 else

@@ -800,7 +800,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
         }
         else
         {
-            pSizeBox->SetRelative();
+            pSizeBox->SetRelative(false);
             pSizeBox->SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
         }
     }

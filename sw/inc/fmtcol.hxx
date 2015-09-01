@@ -35,13 +35,13 @@ protected:
                 const sal_uInt16* pWhichRanges, SwFormatColl* pDerFrom,
                 sal_uInt16 nFormatWhich )
           : SwFormat( rPool, pFormatName, pWhichRanges, pDerFrom, nFormatWhich )
-    { SetAuto(); }
+    { SetAuto(false); }
 
     SwFormatColl( SwAttrPool& rPool, const OUString &rFormatName,
                 const sal_uInt16* pWhichRanges, SwFormatColl* pDerFrom,
                 sal_uInt16 nFormatWhich )
           : SwFormat( rPool, rFormatName, pWhichRanges, pDerFrom, nFormatWhich )
-    { SetAuto(); }
+    { SetAuto(false); }
 
 private:
     SwFormatColl(const SwFormatColl & ) SAL_DELETED_FUNCTION;

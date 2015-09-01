@@ -1164,7 +1164,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         if( !bIsModified )
             m_rDoc.getIDocumentState().ResetModified();
         pNewFormat->SetPoolFormatId( nId );
-        pNewFormat->SetAuto();      // no AutoFormat
+        pNewFormat->SetAuto(false);      // no AutoFormat
     }
 
     switch( nId )

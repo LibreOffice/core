@@ -1898,7 +1898,7 @@ void SwDocStyleSheet::Create()
             if( !pCharFormat )
                 pCharFormat = rDoc.MakeCharFormat(aName,
                                             rDoc.GetDfltCharFormat());
-            pCharFormat->SetAuto();
+            pCharFormat->SetAuto(false);
             break;
 
         case SFX_STYLE_FAMILY_PARA :

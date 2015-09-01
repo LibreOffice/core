@@ -85,9 +85,9 @@ public:
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage ) SAL_OVERRIDE;
 
-    sal_uInt16                  SetPage( SvxHyperlinkItem* pItem );
-    void                    SetReadOnlyMode( bool bReadOnly = false );
-    inline bool     IsHTMLDoc() const { return mbIsHTMLDoc; }
+    sal_uInt16              SetPage( SvxHyperlinkItem* pItem );
+    void                    SetReadOnlyMode( bool bReadOnly );
+    inline bool             IsHTMLDoc() const { return mbIsHTMLDoc; }
 
     inline SfxBindings*     GetBindings() const { return mpBindings; };
     inline SfxDispatcher*   GetDispatcher() const { return mpBindings->GetDispatcher(); }

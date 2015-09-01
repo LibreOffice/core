@@ -421,7 +421,7 @@ public:
 
     virtual bool IsStgWriter() const;
 
-    void SetShowProgress( bool bFlag = false )  { bShowProgress = bFlag; }
+    void SetShowProgress( bool bFlag )  { bShowProgress = bFlag; }
 
     const SwAsciiOptions& GetAsciiOptions() const { return aAscOpts; }
     void SetAsciiOptions( const SwAsciiOptions& rOpt ) { aAscOpts = rOpt; }

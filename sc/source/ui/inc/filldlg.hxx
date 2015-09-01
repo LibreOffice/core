@@ -54,7 +54,7 @@ public:
 
     OUString GetStartStr() const       { return m_pEdStartVal->GetText(); }
 
-    void SetEdStartValEnabled(bool bFlag = false);
+    void SetEdStartValEnabled(bool bFlag);
 
 private:
     VclPtr<FixedText> m_pFtStartVal;

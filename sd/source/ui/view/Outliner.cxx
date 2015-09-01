@@ -502,7 +502,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
             SvxSearchDialog* pSearchDlg =
                 static_cast<SvxSearchDialog*>(pChildWin->GetWindow());
             pSearchDlg->SetDocWin( pViewShell->GetActiveWindow() );
-            pSearchDlg->SetSrchFlag();
+            pSearchDlg->SetSrchFlag(false);
         }
     }
     else

@@ -160,7 +160,7 @@ public:
     bool            IsDockable() const { return mbDockable; }
     bool            IsDockingCanceled() const { return mbDockCanceled; }
 
-    void            SetFloatingMode( bool bFloatMode = false );
+    void            SetFloatingMode( bool bFloatMode );
     bool            IsFloatingMode() const;
     FloatingWindow* GetFloatingWindow() const { return mpFloatWin; }
 
@@ -322,7 +322,7 @@ public:
     bool            IsDockingCanceled() const { return mbDockCanceled; }
     bool            IsDockingPrevented() const { return mbDockPrevented; }
 
-    void            SetFloatingMode( bool bFloatMode = false );
+    void            SetFloatingMode( bool bFloatMode );
     bool            IsFloatingMode() const;
     FloatingWindow* GetFloatingWindow() const { return mpFloatWin; }
 

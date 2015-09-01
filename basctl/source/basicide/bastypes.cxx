@@ -363,7 +363,7 @@ void DockingWindow::EndDocking( const Rectangle& rRect, bool bFloatMode )
         ::DockingWindow::EndDocking( rRect, bFloatMode );
     else
     {
-        SetFloatingMode();
+        SetFloatingMode(false);
         DockThis();
     }
 }

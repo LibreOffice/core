@@ -137,7 +137,7 @@ public:
 
     void SetDocWin( vcl::Window* pDocWin ) { mpDocWin = pDocWin; }
     vcl::Window* GetDocWin() { return mpDocWin; }
-    void SetSrchFlag( bool bSuccess = false ) { mbSuccess = bSuccess; }
+    void SetSrchFlag( bool bSuccess ) { mbSuccess = bSuccess; }
     bool GetSrchFlag() { return mbSuccess; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
         GetComponentInterface( bool bCreate ) SAL_OVERRIDE;

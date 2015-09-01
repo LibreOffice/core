@@ -256,7 +256,7 @@ void SwNumRulesWithName::_SwNumFormatGlobal::ChgNumFormat( SwWrtShell& rSh,
             if( IsPoolUserFormat( nCharPoolId ) )
             {
                 pFormat = rSh.MakeCharFormat( sCharFormatName );
-                pFormat->SetAuto();
+                pFormat->SetAuto(false);
             }
             else
                 pFormat = rSh.GetCharFormatFromPool( nCharPoolId );

@@ -163,10 +163,10 @@ public:
 
     /// Query / set AutoFormat-flag.
     bool IsAuto() const                 { return m_bAutoFormat; }
-    void SetAuto( bool bNew = false )   { m_bAutoFormat = bNew; }
+    void SetAuto( bool bNew )           { m_bAutoFormat = bNew; }
 
-    bool IsHidden() const                 { return m_bHidden; }
-    void SetHidden( bool bValue = false ) { m_bHidden = bValue; }
+    bool IsHidden() const               { return m_bHidden; }
+    void SetHidden( bool bValue )       { m_bHidden = bValue; }
 
     void GetGrabBagItem(com::sun::star::uno::Any& rVal) const;
     void SetGrabBagItem(const com::sun::star::uno::Any& rVal);

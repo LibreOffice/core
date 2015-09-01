@@ -469,7 +469,7 @@ public:
     void            EnablePtRelativeMode( short nMin = -200, short nMax = 200,
                                           short nStep = 10 );
     bool            IsRelativeMode() const { return bRelativeMode; }
-    void            SetRelative( bool bRelative = false );
+    void            SetRelative( bool bRelative );
     bool            IsRelative() const { return bRelative; }
     void            SetPtRelative( bool bPtRel = true )
                         { bPtRelative = bPtRel; SetRelative( true ); }
