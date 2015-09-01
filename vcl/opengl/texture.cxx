@@ -79,7 +79,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
 }
 
 // texture from buffer data
-ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData ) :
+ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData ) :
     mnRefCount( 1 ),
     mnTexture( 0 ),
     mnWidth( nWidth ),
@@ -192,7 +192,7 @@ OpenGLTexture::OpenGLTexture( int nX, int nY, int nWidth, int nHeight )
     mpImpl = new ImplOpenGLTexture( nX, nY, nWidth, nHeight );
 }
 
-OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData )
+OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData )
     : maRect( Point( 0, 0 ), Size( nWidth, nHeight ) )
     , mnSlotNumber(-1)
 {
