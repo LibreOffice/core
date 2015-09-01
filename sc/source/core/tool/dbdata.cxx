@@ -643,45 +643,80 @@ private:
 
 void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
 {
-    if (!HasHeader())
-        return;     // sorry, but..
-
     ::std::vector<OUString> aNewNames;
     aNewNames.resize( nEndCol - nStartCol + 1);
-    ScHorizontalCellIterator aIter( pDoc, nTable, nStartCol, nStartRow, nEndCol, nStartRow);  // header row only
-    ScRefCellValue* pCell;
-    SCCOL nCol, nLastColFilled = nStartCol - 1;
-    SCROW nRow;
     bool bHaveEmpty = false;
-    for (size_t i=0; (pCell = aIter.GetNext( nCol, nRow)) != nullptr; ++i)
+    if (!HasHeader())
+        bHaveEmpty = true;  // Assume we have empty ones and fill below.
+    else
     {
-        if (pCell->hasString())
+        ScHorizontalCellIterator aIter( pDoc, nTable, nStartCol, nStartRow, nEndCol, nStartRow);  // header row only
+        ScRefCellValue* pCell;
+        SCCOL nCol, nLastColFilled = nStartCol - 1;
+        SCROW nRow;
+        for (size_t i=0; (pCell = aIter.GetNext( nCol, nRow)) != nullptr; ++i)
         {
-            const OUString& rStr = pCell->getString( pDoc);
-            aNewNames[nCol-nStartCol] = rStr;
-            if (rStr.isEmpty())
+            if (pCell->hasString())
+            {
+                const OUString& rStr = pCell->getString( pDoc);
+                aNewNames[nCol-nStartCol] = rStr;
+                if (rStr.isEmpty())
+                    bHaveEmpty = true;
+                else if (nLastColFilled < nCol-1)
+                    bHaveEmpty = true;
+                nLastColFilled = nCol;
+            }
+            else
                 bHaveEmpty = true;
-            else if (nLastColFilled < nCol-1)
-                bHaveEmpty = true;
-            nLastColFilled = nCol;
         }
-        else
-            bHaveEmpty = true;
     }
 
-    // Try to not have empty names and remember previous name that might had
-    // been used to compile formulas, but only if same number of columns and no
-    // duplicates.
+    // Never leave us with empty names, try to remember previous name that
+    // might had been used to compile formulas, but only if same number of
+    // columns and no duplicates.
     if (bHaveEmpty && aNewNames.size() == maTableColumnNames.size())
     {
+        bHaveEmpty = false;
         for (size_t i=0, n=aNewNames.size(); i < n; ++i)
         {
             if (aNewNames[i].isEmpty())
             {
                 const OUString& rStr = maTableColumnNames[i];
-                auto it( ::std::find_if( aNewNames.begin(), aNewNames.end(), TableColumnNameSearch( rStr)));
-                if (it == aNewNames.end())
-                    aNewNames[i] = rStr;
+                if (rStr.isEmpty())
+                    bHaveEmpty = true;
+                else
+                {
+                    auto it( ::std::find_if( aNewNames.begin(), aNewNames.end(), TableColumnNameSearch( rStr)));
+                    if (it == aNewNames.end())
+                        aNewNames[i] = rStr;
+                    else
+                        bHaveEmpty = true;
+                }
+            }
+        }
+    }
+
+    // If we still have empty ones then fill those with "Column#" with #
+    // starting at the column offset number. Still no duplicates of course.
+    if (bHaveEmpty)
+    {
+        OUString aColumn( ScGlobal::GetRscString(STR_COLUMN));
+        for (size_t i=0, n=aNewNames.size(); i < n; ++i)
+        {
+            if (aNewNames[i].isEmpty())
+            {
+                size_t nCount = i+1;
+                do
+                {
+                    OUString aStr( aColumn + OUString::number( nCount));
+                    auto it( ::std::find_if( aNewNames.begin(), aNewNames.end(), TableColumnNameSearch( aStr)));
+                    if (it == aNewNames.end())
+                    {
+                        aNewNames[i] = aStr;
+                        break;  // do while
+                    }
+                    ++nCount;
+                } while(1);
             }
         }
     }
