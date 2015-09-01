@@ -22,7 +22,7 @@
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -35,7 +35,7 @@ namespace sfx2 { namespace appl {
 
 // The MS compiler needs this typedef work-around to accept the using
 // declarations within ImeStatusWindow:
-typedef cppu::WeakImplHelper1< com::sun::star::beans::XPropertyChangeListener >
+typedef cppu::WeakImplHelper< com::sun::star::beans::XPropertyChangeListener >
 ImeStatusWindow_Impl;
 
 /** Control the behavior of any (platform-dependent) IME status windows.

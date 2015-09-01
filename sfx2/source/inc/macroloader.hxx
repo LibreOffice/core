@@ -35,13 +35,13 @@
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/util/URL.hpp>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <tools/errcode.hxx>
 
 class SfxObjectShell;
 
-class SfxMacroLoader : public cppu::WeakImplHelper4<
+class SfxMacroLoader : public cppu::WeakImplHelper<
                                        css::frame::XDispatchProvider,
                                        css::frame::XNotifyingDispatch,
                                        css::frame::XSynchronousDispatch,

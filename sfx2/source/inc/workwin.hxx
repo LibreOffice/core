@@ -26,7 +26,7 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include <rtl/ustring.hxx>
@@ -172,7 +172,7 @@ struct SfxObjectBarList_Impl
 
 
 
-class LayoutManagerListener : public ::cppu::WeakImplHelper2<
+class LayoutManagerListener : public ::cppu::WeakImplHelper<
                                          css::frame::XLayoutManagerListener,
                                          css::lang::XComponent >
 {

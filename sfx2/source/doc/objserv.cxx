@@ -102,6 +102,7 @@
 #include "guisaveas.hxx"
 #include <sfx2/templatedlg.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -122,7 +123,7 @@ void SfxObjectShell::InitInterface_Impl()
 {
 }
 
-class SfxClosePreventer_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
+class SfxClosePreventer_Impl : public ::cppu::WeakImplHelper< ::com::sun::star::util::XCloseListener >
 {
     bool m_bGotOwnership;
     bool m_bPreventClose;

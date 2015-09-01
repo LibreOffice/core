@@ -19,7 +19,6 @@
 
 
 #include <tools/urlobj.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>

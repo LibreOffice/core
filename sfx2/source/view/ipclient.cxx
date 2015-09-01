@@ -48,7 +48,7 @@
 #include <sfx2/dispatch.hxx>
 #include "workwin.hxx"
 #include "guisaveas.hxx"
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svtools/ehdl.hxx>
 
 #include <vcl/timer.hxx>
@@ -90,7 +90,7 @@ public:
 // SfxInPlaceClient_Impl
 
 
-class SfxInPlaceClient_Impl : public ::cppu::WeakImplHelper5< embed::XEmbeddedClient,
+class SfxInPlaceClient_Impl : public ::cppu::WeakImplHelper< embed::XEmbeddedClient,
                                                               embed::XInplaceClient,
                                                               document::XEventListener,
                                                               embed::XStateChangeListener,

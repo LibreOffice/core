@@ -49,7 +49,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/extract.hxx>
@@ -83,7 +83,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 # endif
 #endif
 
-class SfxNotificationListener_Impl : public cppu::WeakImplHelper1< XDispatchResultListener >
+class SfxNotificationListener_Impl : public cppu::WeakImplHelper< XDispatchResultListener >
 {
 public:
     virtual void SAL_CALL dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException, std::exception ) SAL_OVERRIDE;

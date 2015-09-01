@@ -30,6 +30,7 @@
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 //  namespaces
@@ -37,7 +38,7 @@
 using namespace ::com::sun::star;
 
 
-class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::XRefreshListener>
+class SfxRefreshListener : public ::cppu::WeakImplHelper<com::sun::star::util::XRefreshListener>
 {
     private:
         SfxFilterListener *m_pOwner;

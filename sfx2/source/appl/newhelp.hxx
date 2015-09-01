@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
 #define INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

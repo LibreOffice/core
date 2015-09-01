@@ -32,13 +32,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 struct  IMPL_PrintListener_DataContainer;
 class SfxViewShell;
 class SfxPrinter;
 
-class SfxPrintHelper : public cppu::WeakImplHelper3
+class SfxPrintHelper : public cppu::WeakImplHelper
         < com::sun::star::view::XPrintable
         , com::sun::star::view::XPrintJobBroadcaster
         , com::sun::star::lang::XInitialization >

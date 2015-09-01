@@ -32,7 +32,7 @@
 #include <vcl/pngwrite.hxx>
 #include <osl/file.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
@@ -63,7 +63,7 @@ using namespace ::com::sun::star::util;
 
 
 
-class StringLength : public ::cppu::WeakImplHelper1< XStringWidth >
+class StringLength : public ::cppu::WeakImplHelper< XStringWidth >
 {
     public:
         StringLength() {}
