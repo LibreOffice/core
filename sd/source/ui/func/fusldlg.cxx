@@ -120,18 +120,23 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
         pDlg->GetAttr( aDlgSet );
 
-        aPage = ITEMVALUE( aDlgSet, ATTR_PRESENT_DIANAME, SfxStringItem );
-        if( aPage != rPresentationSettings.maPresPage )
-        {
-            bValuesChanged = true;
-            rPresentationSettings.maPresPage = aPage;
-        }
-
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_ALL, SfxBoolItem );
         if ( bValue != rPresentationSettings.mbAll )
         {
             bValuesChanged = true;
             rPresentationSettings.mbAll = bValue;
+            // remove any previous existing slide
+            rPresentationSettings.maPresPage = "";
+        }
+
+        if (!rPresentationSettings.mbAll)
+        {
+            aPage = ITEMVALUE( aDlgSet, ATTR_PRESENT_DIANAME, SfxStringItem );
+            if( aPage != rPresentationSettings.maPresPage )
+            {
+                bValuesChanged = true;
+                rPresentationSettings.maPresPage = aPage;
+            }
         }
 
         bValue = ITEMVALUE( aDlgSet, ATTR_PRESENT_CUSTOMSHOW, SfxBoolItem );
