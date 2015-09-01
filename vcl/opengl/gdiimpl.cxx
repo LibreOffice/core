@@ -149,6 +149,19 @@ void OpenGLSalGraphicsImpl::Init()
     }
 }
 
+// Currently only used to get windows ordering right.
+void OpenGLSalGraphicsImpl::DeInit()
+{
+    // tdf#93839:
+    // Our window handles and resources are being free underneath us.
+    // These can be bound into a context, which relies on them. So
+    // let it know. Other eg. VirtualDevice contexts which have
+    // references on and rely on this context continuing to work will
+    // get a shiny new context in AcquireContext:: next PreDraw.
+    if( mpContext && !IsOffscreen() )
+        mpContext->reset();
+}
+
 void OpenGLSalGraphicsImpl::PreDraw()
 {
     OpenGLZone::enter();

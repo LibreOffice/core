@@ -502,6 +502,8 @@ void WinSalGraphics::DeInitGraphics()
         SelectBrush( getHDC(), mhDefBrush );
     if ( mhDefFont )
         SelectFont( getHDC(), mhDefFont );
+
+    mpImpl->DeInit();
 }
 
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
