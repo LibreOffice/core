@@ -657,6 +657,8 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
 
 bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
 {
+    SW_MOD()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(false);
+
     const OUString sStandard    = pStandardBox->GetText();
     const OUString sTitle       = pTitleBox->GetText();
     const OUString sList        = pListBox->GetText();
@@ -668,6 +670,38 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
     bool bListHeightChanged = pListHeightLB->IsValueChangedFromSaved() && (!bListHeightDefault || !bSetListHeightDefault );
     bool bLabelHeightChanged = pLabelHeightLB->IsValueChangedFromSaved() && (!bLabelHeightDefault || !bSetLabelHeightDefault );
     bool bIndexHeightChanged = pIndexHeightLB->IsValueChangedFromSaved() && (!bIndexHeightDefault || !bSetIndexHeightDefault );
+
+    pFontConfig->SetFontStandard(sStandard, nFontGroup);
+    pFontConfig->SetFontOutline(sTitle, nFontGroup);
+    pFontConfig->SetFontList(sList, nFontGroup);
+    pFontConfig->SetFontCaption(sLabel, nFontGroup);
+    pFontConfig->SetFontIndex(sIdx, nFontGroup);
+    if(bStandardHeightChanged)
+    {
+        float fSize = (float)pStandardHeightLB->GetValue() / 10;
+        pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_STANDARD, nFontGroup );
+    }
+    if(bTitleHeightChanged)
+    {
+        float fSize = (float)pTitleHeightLB->GetValue() / 10;
+        pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_OUTLINE, nFontGroup );
+    }
+    if(bListHeightChanged)
+    {
+        float fSize = (float)pListHeightLB->GetValue() / 10;
+        pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_LIST, nFontGroup );
+    }
+    if(bLabelHeightChanged)
+    {
+        float fSize = (float)pLabelHeightLB->GetValue() / 10;
+        pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_CAPTION, nFontGroup );
+    }
+    if(bIndexHeightChanged)
+    {
+        float fSize = (float)pIndexHeightLB->GetValue() / 10;
+        pFontConfig->SetFontHeight( CalcToUnit( fSize, SFX_MAPUNIT_TWIP ), FONT_INDEX, nFontGroup );
+    }
+
     if(pWrtShell)
     {
         pWrtShell->StartAllAction();
