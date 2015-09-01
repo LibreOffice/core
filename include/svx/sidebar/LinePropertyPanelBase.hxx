@@ -126,11 +126,9 @@ private:
     //ui controls
     VclPtr<FixedText>   mpFTWidth;
     VclPtr<ToolBox>     mpTBWidth;
-    VclPtr<FixedText>   mpFTStyle;
     VclPtr<ListBox>     mpLBStyle;
     VclPtr<FixedText>   mpFTTransparency;
     VclPtr<MetricField> mpMFTransparent;
-    VclPtr<FixedText>   mpFTArrow;
     VclPtr<ListBox>     mpLBStart;
     VclPtr<ListBox>     mpLBEnd;
     VclPtr<FixedText>   mpFTEdgeStyle;

@@ -166,11 +166,9 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     get(mpFTWidth, "widthlabel");
     get(mpTBWidth, "width");
     get(mpTBColor, "color");
-    get(mpFTStyle, "stylelabel");
     get(mpLBStyle, "linestyle");
     get(mpFTTransparency, "translabel");
     get(mpMFTransparent, "linetransparency");
-    get(mpFTArrow, "arrowlabel");
     get(mpLBStart, "beginarrowstyle");
     get(mpLBEnd, "endarrowstyle");
     get(mpFTEdgeStyle, "cornerlabel");
@@ -193,11 +191,9 @@ void LinePropertyPanelBase::dispose()
     mpFTWidth.clear();
     mpTBWidth.clear();
     mpTBColor.clear();
-    mpFTStyle.clear();
     mpLBStyle.clear();
     mpFTTransparency.clear();
     mpMFTransparent.clear();
-    mpFTArrow.clear();
     mpLBStart.clear();
     mpLBEnd.clear();
     mpFTEdgeStyle.clear();
@@ -253,9 +249,7 @@ void LinePropertyPanelBase::Initialize()
     mpMFTransparent->SetAccessibleName(OUString("Transparency"));  //wj acc
 
     mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth);
-    mpLBStyle->SetAccessibleRelationLabeledBy(mpFTStyle);
     mpMFTransparent->SetAccessibleRelationLabeledBy(mpFTTransparency);
-    mpLBStart->SetAccessibleRelationLabeledBy(mpFTArrow);
     mpLBEnd->SetAccessibleRelationLabeledBy(mpLBEnd);
 
     aLink = LINK( this, LinePropertyPanelBase, ChangeEdgeStyleHdl );
@@ -275,12 +269,10 @@ void LinePropertyPanelBase::updateLineStyle(bool bDisabled, bool bSetOrDefault, 
 {
     if(bDisabled)
     {
-        mpFTStyle->Disable();
         mpLBStyle->Disable();
     }
     else
     {
-        mpFTStyle->Enable();
         mpLBStyle->Enable();
     }
 
@@ -303,12 +295,10 @@ void LinePropertyPanelBase::updateLineDash(bool bDisabled, bool bSetOrDefault, c
 {
     if(bDisabled)
     {
-        mpFTStyle->Disable();
         mpLBStyle->Disable();
     }
     else
     {
-        mpFTStyle->Enable();
         mpLBStyle->Enable();
     }
 
@@ -389,12 +379,10 @@ void LinePropertyPanelBase::updateLineStart(bool bDisabled, bool bSetOrDefault,
 {
     if(bDisabled)
     {
-        mpFTArrow->Disable();
         mpLBStart->Disable();
     }
     else
     {
-        mpFTArrow->Enable();
         mpLBStart->Enable();
     }
 
@@ -417,12 +405,10 @@ void LinePropertyPanelBase::updateLineEnd(bool bDisabled, bool bSetOrDefault,
 {
     if(bDisabled)
     {
-        mpFTArrow->Disable();
         mpLBEnd->Disable();
     }
     else
     {
-        mpFTArrow->Enable();
         mpLBEnd->Enable();
     }
 
@@ -923,6 +909,8 @@ void LinePropertyPanelBase::ActivateControls()
 
     mpGridLineProps->Enable( bLineStyle );
     mpBoxArrowProps->Enable( bLineStyle );
+    mpLBStart->Enable( bLineStyle );
+    mpLBEnd->Enable( bLineStyle );
 }
 
 void LinePropertyPanelBase::setMapUnit(SfxMapUnit eMapUnit)
