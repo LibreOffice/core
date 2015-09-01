@@ -2559,24 +2559,20 @@ bool SdrPowerPointImport::GetColorFromPalette( sal_uInt16 nNum, Color& rColor ) 
                 }
                 if ( pMasterPersist )
                 {
-                    while( ( pMasterPersist && pMasterPersist->aSlideAtom.nFlags & 2 )  // it is possible that a masterpage
-                        && pMasterPersist->aSlideAtom.nMasterId )                        // itself is following a master colorscheme
+                    while( (pMasterPersist->aSlideAtom.nFlags & 2) // it is possible that a masterpage
+                        && pMasterPersist->aSlideAtom.nMasterId )  // itself is following a master colorscheme
                     {
                         auto nOrigMasterId = pMasterPersist->aSlideAtom.nMasterId;
                         sal_uInt16 nNextMaster = m_pMasterPages->FindPage(nOrigMasterId);
-                        if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
+                        if (nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND)
                             break;
-                        else
-                            pMasterPersist = &(*pPageList2)[ nNextMaster ];
+                        pMasterPersist = &(*pPageList2)[ nNextMaster ];
                         if (pMasterPersist->aSlideAtom.nMasterId == nOrigMasterId)
                         {
                             SAL_WARN("filter.ms", "loop in atom chain");
                             break;
                         }
                     }
-                }
-                if ( pMasterPersist )
-                {
                     const_cast<SdrPowerPointImport*>(this)->aPageColors = pMasterPersist->aColorScheme;
                 }
             }
