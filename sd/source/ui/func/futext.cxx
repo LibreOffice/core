@@ -124,9 +124,9 @@ static sal_uInt16 SidArray[] = {
     SID_TEXTDIRECTION_TOP_TO_BOTTOM,  //   10908
     SID_ATTR_PARA_LEFT_TO_RIGHT,      //   10950
     SID_ATTR_PARA_RIGHT_TO_LEFT,      //   10951
+    SID_PARASPACE_INCREASE,           //   11145
+    SID_PARASPACE_DECREASE,           //   11146
     FN_NUM_BULLET_ON,                 //   20138
-    SID_PARASPACE_INCREASE,           //   27346
-    SID_PARASPACE_DECREASE,           //   27347
                             0 };
 
 TYPEINIT1( FuText, FuConstruct );
