@@ -54,7 +54,6 @@
           <object class="GtkBox" id="box3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_right">6</property>
             <child>
               <object class="sfxlo-SidebarToolBox" id="styleupdate">
                 <property name="visible">True</property>
