@@ -104,6 +104,7 @@ public:
     void testBulletSuffix();
     void testBnc910045();
     void testRowHeight();
+    void testTdf93830();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -143,6 +144,7 @@ public:
     CPPUNIT_TEST(testBulletSuffix);
     CPPUNIT_TEST(testBnc910045);
     CPPUNIT_TEST(testRowHeight);
+    CPPUNIT_TEST(testTdf93830);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1198,6 +1200,29 @@ void SdImportTest::testRowHeight()
     uno::Reference< beans::XPropertySet > xRefRow( xRows->getByIndex(0), uno::UNO_QUERY_THROW );
     xRefRow->getPropertyValue( sHeight ) >>= nHeight;
     CPPUNIT_ASSERT_EQUAL( sal_Int32(508), nHeight);
+}
+
+void SdImportTest::testTdf93830()
+{
+    // Text shape offset was ignored
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf93830.pptx"), PPTX);
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+
+    // Get the first text box from group shape
+    uno::Reference< container::XIndexAccess > xShape( xPage->getByIndex(0), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape->getByIndex(2), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_MESSAGE( "no textbox shape", xPropSet.is() );
+
+    sal_Int32 nTextLeftDistance = 0;
+    xPropSet->getPropertyValue( "TextLeftDistance" ) >>= nTextLeftDistance;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4152), nTextLeftDistance);
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
