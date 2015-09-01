@@ -343,6 +343,8 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
     }
     else
         m_pParamDlg->SetParameters( aParameterList );
+#else
+    (void) this;                // Silence loplugin:staticmethods
 #endif
     return 0;
 }
@@ -388,6 +390,8 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
     }
     else
         m_pPathDlg->SetClassPath( sClassPath );
+#else
+    (void) this;
 #endif
     return 0;
 }
@@ -466,6 +470,8 @@ void SvxJavaOptionsPage::ClearJavaInfo()
         m_parJavaInfo = NULL;
         m_nInfoSize = 0;
     }
+#else
+    (void) this;
 #endif
 }
 
@@ -526,6 +532,8 @@ void SvxJavaOptionsPage::LoadJREs()
     }
 
     jfw_freeJavaInfo( pSelectedJava );
+#else
+    (void) this;
 #endif
 }
 
@@ -547,6 +555,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
     OUString* pLocation = new OUString( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
     pEntry->SetUserData( pLocation );
 #else
+    (void) this;
     (void)_pInfo;
 #endif
 }
@@ -644,6 +653,7 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
         Application::PostUserEvent( LINK( this, SvxJavaOptionsPage, StartFolderPickerHdl ) );
     }
 #else
+    (void) this;
     (void)_rFolder;
 #endif
 }
