@@ -21,6 +21,7 @@
 #include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include "BitmapSymmetryCheck.hxx"
 
@@ -51,11 +52,16 @@ void BitmapTest::testConvert()
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pReadAccess->GetBitCount());
 #if defined WNT
-        // Scanlines padded to DWORD multiples, it seems
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
-#else
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
+        if (!OpenGLHelper::isVCLOpenGLEnabled())
+        {
+            // GDI Scanlines padded to DWORD multiples, it seems
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
+        }
+        else
 #endif
+        {
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
+        }
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
         const BitmapColor& rColor = pReadAccess->GetPaletteColor(pReadAccess->GetPixelIndex(1, 1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(rColor.GetRed()));
@@ -75,10 +81,16 @@ void BitmapTest::testConvert()
 #else
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), pReadAccess->GetBitCount());
 #if defined WNT
-        CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
-#else
-        CPPUNIT_ASSERT_EQUAL(sal_uLong(30), pReadAccess->GetScanlineSize());
+        if (!OpenGLHelper::isVCLOpenGLEnabled())
+        {
+            // GDI Scanlines padded to DWORD multiples, it seems
+            CPPUNIT_ASSERT_EQUAL(sal_uLong(32), pReadAccess->GetScanlineSize());
+        }
+        else
 #endif
+        {
+            CPPUNIT_ASSERT_EQUAL(sal_uLong(30), pReadAccess->GetScanlineSize());
+        }
 #endif
         CPPUNIT_ASSERT(!pReadAccess->HasPalette());
         Color aColor = pReadAccess->GetPixel(0, 0);
