@@ -57,7 +57,6 @@
 #include <unotools/mediadescriptor.hxx>
 #include <osl/module.hxx>
 #include <comphelper/sequence.hxx>
-#include <xmlreader/xmlreader.hxx>
 
 #include <app.hxx>
 
@@ -967,128 +966,6 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
     }
 }
 
-static void loadSharedLibrary(const OUString & aUriRdb)
-{
-    int nsId;
-    int nUcNsId;
-
-    OUString sAttrUri;
-    OUString sAttrLoader;
-
-    xmlreader::Span aName;
-    xmlreader::XmlReader::Result aItem = xmlreader::XmlReader::RESULT_BEGIN;
-
-    xmlreader::XmlReader aRdbReader(aUriRdb);
-    nUcNsId = aRdbReader.registerNamespaceIri(xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("http://openoffice.org/2010/uno-components")));
-
-    while( aItem != xmlreader::XmlReader::RESULT_DONE )
-    {
-        aItem = aRdbReader.nextItem(xmlreader::XmlReader::TEXT_NONE, &aName, &nsId );
-        if (nsId == nUcNsId &&
-            aName.equals(RTL_CONSTASCII_STRINGPARAM("component")))
-        {
-            sAttrLoader = OUString();
-            sAttrUri = OUString();
-
-            while (aRdbReader.nextAttribute(&nsId, &aName))
-            {
-                if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                    aName.equals(RTL_CONSTASCII_STRINGPARAM("loader")))
-                    sAttrLoader = aRdbReader.getAttributeValue(false).convertFromUtf8();
-                else if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
-                    aName.equals(RTL_CONSTASCII_STRINGPARAM("uri")))
-                    sAttrUri = aRdbReader.getAttributeValue(false).convertFromUtf8();
-            }
-
-            try
-            {
-                sAttrUri = cppu::bootstrap_expandUri(sAttrUri);
-            }
-            catch(css::lang::IllegalArgumentException)
-            {
-                fprintf(stderr, "Cannot expand URI '%s'\n",
-                    OUStringToOString(sAttrUri, RTL_TEXTENCODING_UTF8).getStr());
-            }
-
-            if (sAttrLoader == "com.sun.star.loader.SharedLibrary")
-            {
-                oslModule aModule = osl_loadModule( sAttrUri.pData, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL );
-                SAL_INFO("lok", "loaded component library " << sAttrUri << ( aModule ? " ok" : " no"));
-
-                // leak aModule
-                // osl_unloadModule(aModule);
-                aModule = 0;
-            }
-        }
-    }
-}
-
-/// pre-load all C++ component factories and leak references to them.
-static void forceLoadAllNativeComponents(const OUString & aAppURL)
-{
-    sal_Int32 nIndex = 0;
-
-    rtl::Bootstrap bs(aAppURL + "/" + SAL_CONFIGFILE("uno"));
-    if (bs.getHandle() == 0)
-    {
-        fprintf(stderr, "Cannot open uno ini '%s'\n",
-                 OUStringToOString(aAppURL + "/" + SAL_CONFIGFILE("uno"), RTL_TEXTENCODING_UTF8).getStr());
-        return;
-    }
-
-    OUString aRdbFiles;
-    if (!bs.getFrom("UNO_SERVICES", aRdbFiles))
-    {
-        fprintf(stderr, "Cannot obtain UNO_SERVICES from uno ini\n");
-        return;
-    }
-
-    while (nIndex != -1)
-    {
-        OUString aUriRdb(aRdbFiles.getToken(0, ' ', nIndex));
-
-        if (aUriRdb.isEmpty())
-            continue;
-
-        if (aUriRdb[0] == '?')
-            aUriRdb = aUriRdb.copy(1);
-
-        if (aUriRdb.startsWith("<") && aUriRdb.endsWith(">*"))
-        {
-            aUriRdb = aUriRdb.copy(1, aUriRdb.getLength() - 3);
-            osl::Directory aDir(aUriRdb);
-
-            if ( aDir.open() == osl::FileBase::E_None )
-            {
-                while(true)
-                {
-                    osl::DirectoryItem aDirItem;
-
-                    if ( aDir.getNextItem(aDirItem, SAL_MAX_UINT32) != osl::FileBase::E_None)
-                        break;
-
-                    osl::FileStatus stat(osl_FileStatus_Mask_Type |
-                                         osl_FileStatus_Mask_FileName |
-                                         osl_FileStatus_Mask_FileURL);
-
-                    if (aDirItem.getFileStatus(stat) == osl::FileBase::E_None)
-                        loadSharedLibrary(stat.getFileURL());
-                }
-            }
-            else
-            {
-                fprintf(stderr, "Cannot open directory '%s'\n",
-                    OUStringToOString(aUriRdb, RTL_TEXTENCODING_UTF8).getStr());
-            }
-
-        }
-        else
-        {
-            loadSharedLibrary(aUriRdb);
-        }
-    }
-}
-
 /// pre-load and parse all filter XML
 static void forceLoadFilterXML()
 {
@@ -1163,12 +1040,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             desktop::Desktop::GetCommandLineArgs().setHeadless();
 
             Application::EnableHeadlessMode(true);
-        }
-
-        if (eStage == PRE_INIT)
-        {
-            forceLoadAllNativeComponents(aAppURL);
-            forceLoadFilterXML();
         }
 
         // This is horrible crack. I really would want to go back to simply just call
@@ -1254,8 +1125,34 @@ LibreOfficeKit *libreofficekit_hook(const char* install_path)
 SAL_JNI_EXPORT
 int lok_preinit(const char* install_path, const char* user_profile_path)
 {
-    SAL_INFO("lok", "Hello World");
-    return lo_initialize(NULL, install_path, user_profile_path);
+    rtl::Bootstrap::set(OUString("UserInstallation"), OUString(user_profile_path, strlen(user_profile_path), RTL_TEXTENCODING_UTF8));
+
+    OUString aAppPath;
+    if (install_path)
+    {
+        aAppPath = OUString(install_path, strlen(install_path), RTL_TEXTENCODING_UTF8);
+    }
+    else
+    {
+        // Fun conversion dance back and forth between URLs and system paths...
+        OUString aAppURL;
+        ::osl::Module::getUrlFromAddress( reinterpret_cast< oslGenericFunction >(lo_initialize),
+                                          aAppURL);
+        osl::FileBase::getSystemPathFromFileURL( aAppURL, aAppPath );
+    }
+
+    OUString aAppURL;
+    if (osl::FileBase::getFileURLFromSystemPath(aAppPath, aAppURL) != osl::FileBase::E_None)
+        return -1;
+
+
+    rtl::Bootstrap::setIniFilename(aAppURL + "/" SAL_CONFIGFILE("soffice"));
+
+    // pre-load all C++ component factories and leak references to them.
+    cppu::preInitBootstrap();
+    forceLoadFilterXML();
+
+    return 0;
 }
 
 static void lo_destroy(LibreOfficeKit* pThis)
