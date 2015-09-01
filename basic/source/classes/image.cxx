@@ -258,8 +258,16 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 {
                     OUString aTypeName = r.ReadUniOrByteString(eCharSet);
 
-                    sal_Int16 nTypeMembers;
-                    r.ReadInt16(nTypeMembers);
+                    sal_uInt16 nTypeMembers;
+                    r.ReadUInt16(nTypeMembers);
+
+                    const size_t nMaxTypeMembers = r.remainingSize() / 8;
+                    if (nTypeMembers > nMaxTypeMembers)
+                    {
+                        SAL_WARN("basic", "Parsing error: " << nMaxTypeMembers <<
+                                 " max possible entries, but " << nTypeMembers << " claimed, truncating");
+                        nTypeMembers = nMaxTypeMembers;
+                    }
 
                     SbxObject *pType = new SbxObject(aTypeName);
                     SbxArray *pTypeMembers = pType->GetProperties();
