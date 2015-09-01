@@ -22,8 +22,7 @@
 
 #include <xmloff/XMLTextTableContext.hxx>
 
-// STL include
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -36,7 +35,7 @@ class SwTableBoxFormat;
 class SwTableLineFormat;
 class SwXMLTableCell_Impl;
 class SwXMLTableRow_Impl;
-typedef boost::ptr_vector<SwXMLTableRow_Impl> SwXMLTableRows_Impl;
+typedef std::vector<std::unique_ptr<SwXMLTableRow_Impl>> SwXMLTableRows_Impl;
 class SwXMLDDETableContext_Impl;
 class TableBoxIndexHasher;
 class TableBoxIndex;
@@ -65,7 +64,7 @@ class SwXMLTableContext : public XMLTextTableContext
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextContent > xTextContent;
 
-    SwXMLTableRows_Impl *pRows;
+    SwXMLTableRows_Impl * m_pRows;
 
     SwTableNode         *pTableNode;
     SwTableBox          *pBox1;
