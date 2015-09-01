@@ -1296,7 +1296,7 @@ void OpenGLContext::reset()
         if (itr != g_vShareList.end())
             g_vShareList.erase(itr);
 
-        wglMakeCurrent( m_aGLWin.hDC, 0 );
+        wglMakeCurrent(NULL, NULL);
         wglDeleteContext( m_aGLWin.hRC );
         ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
     }
@@ -1473,7 +1473,7 @@ void OpenGLContext::resetCurrent()
     OpenGLZone aZone;
 
 #if defined( WNT )
-    wglMakeCurrent( m_aGLWin.hDC, 0 );
+    wglMakeCurrent(NULL, NULL);
 #elif defined( MACOSX )
     (void) this; // loplugin:staticmethods
     OpenGLWrapper::resetCurrent();
