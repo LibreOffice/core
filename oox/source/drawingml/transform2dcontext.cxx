@@ -66,7 +66,8 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
                     {
                         const OUString sXValue = rAttribs.getString( XML_x ).get();
                         const OUString sYValue = rAttribs.getString( XML_y ).get();
-                        if( !sXValue.isEmpty() && nType == XML_rect )
+
+                        if( !sXValue.isEmpty() )
                             mrShape.getTextBody()->getTextProperties().moTextOffLeft = GetCoordinate( sXValue.toInt32() - mrShape.getPosition().X );
                         if( !sYValue.isEmpty() )
                             mrShape.getTextBody()->getTextProperties().moTextOffUpper = GetCoordinate( sYValue.toInt32() - mrShape.getPosition().Y );
