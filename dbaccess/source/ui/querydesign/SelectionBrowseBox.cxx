@@ -574,7 +574,7 @@ void OSelectionBrowseBox::clearEntryFunctionField(const OUString& _sFieldName,OT
             // append undo action for the function field
             _pEntry->SetFunctionType(FKT_NONE);
             _pEntry->SetFunction(OUString());
-            _pEntry->SetGroupBy();
+            _pEntry->SetGroupBy(false);
             notifyFunctionFieldChanged(sOldLocalizedFunctionName,_pEntry->GetFunction(),_bListAction,_nColumnId);
         }
     }
@@ -821,7 +821,7 @@ bool OSelectionBrowseBox::saveField(OUString& _sFieldName ,OTableFieldDescRef& _
                     if ( aSelEntry->IsGroupBy() )
                     {
                         sOldLocalizedFunctionName = m_aFunctionStrings.getToken(comphelper::string::getTokenCount(m_aFunctionStrings, ';')-1, ';');
-                        aSelEntry->SetGroupBy();
+                        aSelEntry->SetGroupBy(false);
                     }
 
                     // append undo action
@@ -1659,7 +1659,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
         {
             if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
             {
-                pEntry->SetGroupBy();
+                pEntry->SetGroupBy(false);
                 aIter = rFields.end();
                 break;
             }
@@ -1681,7 +1681,7 @@ void OSelectionBrowseBox::AddGroupBy( const OTableFieldDescRef& rInfo , sal_uInt
     {
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, false, false );
         if ( (pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy()) ) // the GroupBy is inherited from rInfo
-            pTmp->SetGroupBy();
+            pTmp->SetGroupBy(false);
     }
 }
 
@@ -1737,7 +1737,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
             pEntry->IsGroupBy() == rInfo->IsGroupBy() )
         {
             if ( pEntry->isNumericOrAggreateFunction() && rInfo->IsGroupBy() )
-                pEntry->SetGroupBy();
+                pEntry->SetGroupBy(false);
             else
             {
                 if(!m_bGroupByUnRelated && pEntry->IsGroupBy())
@@ -1786,7 +1786,7 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const O
     {
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, false, false );
         if ( pTmp->isNumericOrAggreateFunction() && rInfo->IsGroupBy() ) // the GroupBy was inherited from rInfo
-            pTmp->SetGroupBy();
+            pTmp->SetGroupBy(false);
         if ( pTmp.is() )
         {
             pTmp->SetCriteria( nLevel, rValue);
@@ -2289,7 +2289,7 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
             nFunctionType &= ~FKT_AGGREGATE;
             pEntry->SetFunctionType(nFunctionType);
             if ( pEntry->IsGroupBy() && !sGroupFunctionName.equalsIgnoreAsciiCase(strNewText) )
-                pEntry->SetGroupBy();
+                pEntry->SetGroupBy(false);
 
             if ( sGroupFunctionName.equalsIgnoreAsciiCase(strNewText) )
                 pEntry->SetGroupBy(true);

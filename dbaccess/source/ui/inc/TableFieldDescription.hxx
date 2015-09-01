@@ -79,7 +79,7 @@ namespace dbaui
         bool IsGroupBy() const { return m_bGroupBy;}
 
         void SetVisible( bool bVis=true ) { m_bVisible = bVis; }
-        void SetGroupBy( bool bGb=false ) { m_bGroupBy = bGb; }
+        void SetGroupBy( bool bGb ) { m_bGroupBy = bGb; }
         void SetTabWindow( vcl::Window* pWin ){ m_pTabWindow = pWin; }
         void SetField( const OUString& rF ) { m_aFieldName = rF; }
         void SetFieldAlias( const OUString& rF ) { m_aFieldAlias = rF; }

@@ -991,7 +991,7 @@ namespace sfx2
                 break;
 
             case MID_LOCK_TASK_PANEL:
-                m_rDockingWindow.SetFloatingMode();
+                m_rDockingWindow.SetFloatingMode(false);
                 break;
 
             case MID_LAYOUT_DRAWERS:

@@ -45,8 +45,7 @@ namespace dbaui
         {
             m_sAllowedChars = _rAllowedChars;
         }
-        // default is false because it is initialized with true
-        void setCheck(bool _bCheck = false)
+        void setCheck(bool _bCheck)
         {
             m_bCheck = _bCheck;
         }

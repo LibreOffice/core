@@ -743,7 +743,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
         SwDoc* pDoc = static_cast<SwDoc*>(pObject);
         xWrt->bWriteClipboardDoc = true;
         xWrt->bWriteOnlyFirstTable = 0 != (TRNSFR_TABELLE & eBufferType);
-        xWrt->SetShowProgress();
+        xWrt->SetShowProgress(false);
 
 #if defined(DEBUGPASTE)
         SvFileStream aPasteDebug(OUString(

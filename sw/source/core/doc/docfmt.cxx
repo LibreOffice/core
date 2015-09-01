@@ -853,7 +853,7 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
 {
     SwCharFormat *pFormat = new SwCharFormat( GetAttrPool(), rFormatName, pDerivedFrom );
     mpCharFormatTable->push_back( pFormat );
-    pFormat->SetAuto();
+    pFormat->SetAuto(false);
     getIDocumentState().SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -890,7 +890,7 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
     SwTextFormatColl *pFormatColl = new SwTextFormatColl( GetAttrPool(), rFormatName,
                                                 pDerivedFrom );
     mpTextFormatCollTable->push_back(pFormatColl);
-    pFormatColl->SetAuto();
+    pFormatColl->SetAuto(false);
     getIDocumentState().SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -924,7 +924,7 @@ SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rForma
     SwConditionTextFormatColl*pFormatColl = new SwConditionTextFormatColl( GetAttrPool(),
                                                     rFormatName, pDerivedFrom );
     mpTextFormatCollTable->push_back(pFormatColl);
-    pFormatColl->SetAuto();
+    pFormatColl->SetAuto(false);
     getIDocumentState().SetModified();
 
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -949,7 +949,7 @@ SwGrfFormatColl* SwDoc::MakeGrfFormatColl( const OUString &rFormatName,
     SwGrfFormatColl *pFormatColl = new SwGrfFormatColl( GetAttrPool(), rFormatName,
                                                 pDerivedFrom );
     mpGrfFormatCollTable->push_back( pFormatColl );
-    pFormatColl->SetAuto();
+    pFormatColl->SetAuto(false);
     getIDocumentState().SetModified();
     return pFormatColl;
 }
@@ -1174,7 +1174,7 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
         pNewColl = new SwConditionTextFormatColl( GetAttrPool(), rColl.GetName(),
                                                 pParent);
         mpTextFormatCollTable->push_back( pNewColl );
-        pNewColl->SetAuto();
+        pNewColl->SetAuto(false);
         getIDocumentState().SetModified();
 
         // copy the conditions
@@ -1282,7 +1282,7 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
             continue;
 
         pDest = FindFormatByName( rDestArr, pSrc->GetName() );
-        pDest->SetAuto();
+        pDest->SetAuto(false);
         pDest->DelDiffs( *pSrc );
 
         // #i94285#: existing <SwFormatPageDesc> instance, before copying attributes

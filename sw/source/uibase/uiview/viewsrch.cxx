@@ -201,7 +201,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     {
                         m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
                         m_pSrchDlg->SetDocWin(m_pEditWin);
-                        m_pSrchDlg->SetSrchFlag();
+                        m_pSrchDlg->SetSrchFlag(false);
                     }
                 }
 #endif
@@ -232,7 +232,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     {
                         m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
                         m_pSrchDlg->SetDocWin(m_pEditWin);
-                        m_pSrchDlg->SetSrchFlag();
+                        m_pSrchDlg->SetSrchFlag(false);
                     }
                 }
 #endif
@@ -293,7 +293,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     {
                         m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
                         m_pSrchDlg->SetDocWin(m_pEditWin);
-                        m_pSrchDlg->SetSrchFlag();
+                        m_pSrchDlg->SetSrchFlag(false);
                     }
                 }
 #endif
@@ -366,7 +366,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 {
                     m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
                     m_pSrchDlg->SetDocWin(m_pEditWin);
-                    m_pSrchDlg->SetSrchFlag();
+                    m_pSrchDlg->SetSrchFlag(false);
                 }
 #endif
                 break;

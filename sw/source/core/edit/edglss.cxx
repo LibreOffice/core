@@ -295,7 +295,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
         {
             // write selected areas into a ASCII document
             SwWriter aWriter( aStream, *this);
-            xWrt->SetShowProgress();
+            xWrt->SetShowProgress(false);
 
             switch( nHndlParaBrk )
             {

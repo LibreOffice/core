@@ -1099,7 +1099,7 @@ bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             if( !pCFormat )
             {
                 pCFormat = pDoc->MakeCharFormat( aName, pParentCFormat );
-                pCFormat->SetAuto();
+                pCFormat->SetAuto(false);
             }
         }
 
@@ -1184,7 +1184,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( sal_uInt16 nToken2, const OUString& rC
         if( !pCFormat )
         {
             pCFormat = pDoc->MakeCharFormat( sCName, pDoc->GetDfltCharFormat() );
-            pCFormat->SetAuto();
+            pCFormat->SetAuto(false);
         }
     }
 
@@ -1209,7 +1209,7 @@ SwCharFormat* SwCSS1Parser::GetChrFormat( sal_uInt16 nToken2, const OUString& rC
             if( pClass )
             {
                 pCFormat = pDoc->MakeCharFormat( aTmp, pCFormat );
-                pCFormat->SetAuto();
+                pCFormat->SetAuto(false);
                 SfxItemSet aItemSet( pClass->GetItemSet() );
                 SetCharFormatAttrs( pCFormat, aItemSet );
             }
@@ -1533,7 +1533,7 @@ void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,
         if( !pCFormat )
         {
             pCFormat = pDoc->MakeCharFormat( aName, pDoc->GetDfltCharFormat() );
-            pCFormat->SetAuto();
+            pCFormat->SetAuto(false);
         }
         SetCharFormatAttrs( pCFormat, rItemSet );
 

@@ -3763,7 +3763,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
         {
             pColl->ResetAllFormatAttr(); // #i73790# - method renamed
         }
-        pColl->SetAuto();          // suggested by JP
+        pColl->SetAuto(false);          // suggested by JP
     }                                   // but changes the UI
     pIo->m_pAktColl = pColl;
     rSI.pFormat = pColl;                  // remember translation WW->SW

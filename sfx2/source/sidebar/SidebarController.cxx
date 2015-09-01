@@ -975,7 +975,7 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu)
             break;
 
         case MID_LOCK_TASK_PANEL:
-            mpParentWindow->SetFloatingMode();
+            mpParentWindow->SetFloatingMode(false);
             break;
 
         case MID_RESTORE_DEFAULT:

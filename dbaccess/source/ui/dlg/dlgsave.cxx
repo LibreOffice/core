@@ -338,7 +338,7 @@ void OSaveAsDlg::implInitOnlyTitle(const OUString& _rLabel)
     m_pImpl->m_pSchema->Hide();
 
     m_pImpl->m_pTitle->SetText(m_pImpl->m_aName);
-    m_pImpl->m_pTitle->setCheck(); // enable non valid sql chars as well
+    m_pImpl->m_pTitle->setCheck(false); // enable non valid sql chars as well
 }
 
 void OSaveAsDlg::implInit()
