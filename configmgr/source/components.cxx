@@ -291,7 +291,9 @@ void Components::writeModifications() {
             }
             break;
         case ModificationTarget::Dconf:
-            //TODO
+#if ENABLE_DCONF
+            dconf::writeModifications(*this, data_);
+#endif
             break;
         }
     }

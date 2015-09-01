@@ -12,11 +12,16 @@
 
 #include <sal/config.h>
 
-namespace configmgr { struct Data; }
+namespace configmgr {
+    class Components;
+    struct Data;
+}
 
 namespace configmgr { namespace dconf {
 
 void readLayer(Data & data, int layer);
+
+void writeModifications(Components & components, Data & data);
 
 } }
 

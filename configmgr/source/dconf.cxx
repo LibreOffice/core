@@ -12,12 +12,19 @@
 #include <cassert>
 #include <cstddef>
 #include <cstring>
+#include <forward_list>
 #include <limits>
 #include <type_traits>
+#include <vector>
 
+extern "C" {
+    // <https://bugzilla.gnome.org/show_bug.cgi?id=754245>
+    // "common/dconf-changeset.h etc. lack extern "C" wrapper for C++"
 #include <dconf/dconf.h>
+}
 
 #include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <data.hxx>
 #include <dconf.hxx>
@@ -128,7 +135,7 @@ private:
 
 class GVariantHolder {
 public:
-    explicit GVariantHolder(GVariant * variant): variant_(variant) {}
+    explicit GVariantHolder(GVariant * variant = nullptr): variant_(variant) {}
 
     ~GVariantHolder() { unref(); }
 
@@ -136,6 +143,8 @@ public:
         unref();
         variant_ = variant;
     }
+
+    void release() { variant_ = nullptr; }
 
     GVariant * get() const { return variant_; }
 
@@ -152,6 +161,25 @@ private:
     GVariant * variant_;
 };
 
+class GVariantTypeHolder {
+public:
+    explicit GVariantTypeHolder(GVariantType * type): type_(type) {}
+
+    ~GVariantTypeHolder() {
+        if (type_ != nullptr) {
+            g_variant_type_free(type_);
+        }
+    }
+
+    GVariantType * get() const { return type_; }
+
+private:
+    GVariantTypeHolder(GVariantTypeHolder &) = delete;
+    void operator =(GVariantTypeHolder) = delete;
+
+    GVariantType * type_;
+};
+
 class StringArrayHolder {
 public:
     explicit StringArrayHolder(gchar ** array): array_(array) {}
@@ -165,6 +193,27 @@ private:
     void operator =(StringArrayHolder) = delete;
 
     gchar ** array_;
+};
+
+class ChangesetHolder {
+public:
+    explicit ChangesetHolder(DConfChangeset * changeset):
+        changeset_(changeset)
+    {}
+
+    ~ChangesetHolder() {
+        if (changeset_ != nullptr) {
+            dconf_changeset_unref(changeset_);
+        }
+    }
+
+    DConfChangeset * get() const { return changeset_; }
+
+private:
+    ChangesetHolder(ChangesetHolder &) = delete;
+    void operator =(ChangesetHolder) = delete;
+
+    DConfChangeset * changeset_;
 };
 
 bool decode(OUString * string, bool slash) {
@@ -990,6 +1039,509 @@ void readDir(
     }
 }
 
+OString encodeSegment(OUString const & name, bool setElement) {
+    if (!setElement) {
+        return name.toUtf8();
+    }
+    OUStringBuffer buf;
+    for (sal_Int32 i = 0; i != name.getLength(); ++i) {
+        sal_Unicode c = name[i];
+        switch (c) {
+        case '\0':
+            buf.append("\\00");
+            break;
+        case '/':
+            buf.append("\\2F");
+            break;
+        case '\\':
+            buf.append("\\5C");
+            break;
+        default:
+            buf.append(c);
+        }
+    }
+    return buf.makeStringAndClear().toUtf8();
+}
+
+OString encodeString(OUString const & value) {
+    OUStringBuffer buf;
+    for (sal_Int32 i = 0; i != value.getLength(); ++i) {
+        sal_Unicode c = value[i];
+        switch (c) {
+        case '\0':
+            buf.append("\\00");
+            break;
+        case '\\':
+            buf.append("\\5C");
+            break;
+        default:
+            buf.append(c);
+        }
+    }
+    return buf.makeStringAndClear().toUtf8();
+}
+
+bool addProperty(
+    ChangesetHolder const & changeset, OString const & pathRepresentation,
+    Type type, bool nillable, css::uno::Any const & value)
+{
+    Type dynType = getDynamicType(value);
+    assert(dynType != TYPE_ERROR);
+    if (type == TYPE_ANY) {
+        type = dynType;
+    }
+    GVariantHolder v;
+    std::forward_list<GVariantHolder> children;
+    if (dynType == TYPE_NIL) {
+        switch (type) {
+        case TYPE_BOOLEAN:
+            v.reset(g_variant_new_maybe(G_VARIANT_TYPE_BOOLEAN, nullptr));
+            break;
+        case TYPE_SHORT:
+            v.reset(g_variant_new_maybe(G_VARIANT_TYPE_INT16, nullptr));
+            break;
+        case TYPE_INT:
+            v.reset(g_variant_new_maybe(G_VARIANT_TYPE_INT32, nullptr));
+            break;
+        case TYPE_LONG:
+            v.reset(g_variant_new_maybe(G_VARIANT_TYPE_INT64, nullptr));
+            break;
+        case TYPE_DOUBLE:
+            v.reset(g_variant_new_maybe(G_VARIANT_TYPE_DOUBLE, nullptr));
+            break;
+        case TYPE_STRING:
+            v.reset(g_variant_new_maybe(G_VARIANT_TYPE_STRING, nullptr));
+            break;
+        case TYPE_HEXBINARY:
+        case TYPE_BOOLEAN_LIST:
+        case TYPE_SHORT_LIST:
+        case TYPE_INT_LIST:
+        case TYPE_LONG_LIST:
+        case TYPE_DOUBLE_LIST:
+        case TYPE_STRING_LIST:
+        case TYPE_HEXBINARY_LIST:
+            {
+                static char const * const typeString[
+                    TYPE_HEXBINARY_LIST - TYPE_HEXBINARY + 1]
+                    = { "ay", "ab", "an", "ai", "ax", "ad", "as", "aay" };
+                GVariantTypeHolder ty(
+                    g_variant_type_new(typeString[type - TYPE_HEXBINARY]));
+                if (ty.get() == nullptr) {
+                    SAL_WARN("configmgr.dconf", "g_variant_type_new failed");
+                    return false;
+                }
+                v.reset(g_variant_new_maybe(ty.get(), nullptr));
+                break;
+            }
+        default:
+            assert(false); // this cannot happen
+            break;
+        }
+        if (v.get() == nullptr) {
+            SAL_WARN("configmgr.dconf", "g_variant_new_maybe failed");
+            return false;
+        }
+    } else {
+        switch (type) {
+        case TYPE_BOOLEAN:
+            v.reset(g_variant_new_boolean(value.get<bool>()));
+            break;
+        case TYPE_SHORT:
+            v.reset(g_variant_new_int16(value.get<sal_Int16>()));
+            break;
+        case TYPE_INT:
+            v.reset(g_variant_new_int32(value.get<sal_Int32>()));
+            break;
+        case TYPE_LONG:
+            v.reset(g_variant_new_int64(value.get<sal_Int64>()));
+            break;
+        case TYPE_DOUBLE:
+            v.reset(g_variant_new_double(value.get<double>()));
+            break;
+        case TYPE_STRING:
+            v.reset(
+                g_variant_new_string(
+                    encodeString(value.get<OUString>()).getStr()));
+            break;
+        case TYPE_HEXBINARY:
+            {
+                css::uno::Sequence<sal_Int8> seq(
+                    value.get<css::uno::Sequence<sal_Int8>>());
+                static_assert(
+                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    "G_MAXSIZE too small");
+                static_assert(
+                    sizeof (sal_Int8) == sizeof (guchar), "size mismatch");
+                v.reset(
+                    g_variant_new_fixed_array(
+                        G_VARIANT_TYPE_BYTE, seq.getConstArray(),
+                        seq.getLength(), sizeof (sal_Int8)));
+                break;
+            }
+        case TYPE_BOOLEAN_LIST:
+            {
+                css::uno::Sequence<sal_Bool> seq(
+                    value.get<css::uno::Sequence<sal_Bool>>());
+                static_assert(
+                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    "G_MAXSIZE too small");
+                static_assert(sizeof (sal_Bool) == 1, "size mismatch");
+                v.reset(
+                    g_variant_new_fixed_array(
+                        G_VARIANT_TYPE_BOOLEAN, seq.getConstArray(),
+                        seq.getLength(), sizeof (sal_Bool)));
+                break;
+            }
+        case TYPE_SHORT_LIST:
+            {
+                css::uno::Sequence<sal_Int16> seq(
+                    value.get<css::uno::Sequence<sal_Int16>>());
+                static_assert(
+                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    "G_MAXSIZE too small");
+                static_assert(
+                    sizeof (sal_Int16) == sizeof (gint16), "size mismatch");
+                v.reset(
+                    g_variant_new_fixed_array(
+                        G_VARIANT_TYPE_INT16, seq.getConstArray(),
+                        seq.getLength(), sizeof (sal_Int16)));
+                    //TODO: endian-ness?
+                break;
+            }
+        case TYPE_INT_LIST:
+            {
+                css::uno::Sequence<sal_Int32> seq(
+                    value.get<css::uno::Sequence<sal_Int32>>());
+                static_assert(
+                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    "G_MAXSIZE too small");
+                static_assert(
+                    sizeof (sal_Int32) == sizeof (gint32), "size mismatch");
+                v.reset(
+                    g_variant_new_fixed_array(
+                        G_VARIANT_TYPE_INT32, seq.getConstArray(),
+                        seq.getLength(), sizeof (sal_Int32)));
+                    //TODO: endian-ness?
+                break;
+            }
+        case TYPE_LONG_LIST:
+            {
+                css::uno::Sequence<sal_Int64> seq(
+                    value.get<css::uno::Sequence<sal_Int64>>());
+                static_assert(
+                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    "G_MAXSIZE too small");
+                static_assert(
+                    sizeof (sal_Int64) == sizeof (gint64), "size mismatch");
+                v.reset(
+                    g_variant_new_fixed_array(
+                        G_VARIANT_TYPE_INT64, seq.getConstArray(),
+                        seq.getLength(), sizeof (sal_Int64)));
+                    //TODO: endian-ness?
+                break;
+            }
+        case TYPE_DOUBLE_LIST:
+            {
+                css::uno::Sequence<double> seq(
+                    value.get<css::uno::Sequence<double>>());
+                static_assert(
+                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    "G_MAXSIZE too small");
+                static_assert(
+                    sizeof (double) == sizeof (gdouble), "size mismatch");
+                v.reset(
+                    g_variant_new_fixed_array(
+                        G_VARIANT_TYPE_DOUBLE, seq.getConstArray(),
+                        seq.getLength(), sizeof (double)));
+                    //TODO: endian-ness?
+                break;
+            }
+        case TYPE_STRING_LIST:
+            {
+                css::uno::Sequence<OUString> seq(
+                    value.get<css::uno::Sequence<OUString>>());
+                std::vector<GVariant *> vs;
+                for (sal_Int32 i = 0; i != seq.getLength(); ++i) {
+                    children.emplace_front(
+                        g_variant_new_string(encodeString(seq[i]).getStr()));
+                    if (children.front().get() == nullptr) {
+                        SAL_WARN(
+                            "configmgr.dconf", "g_variant_new_string failed");
+                        return false;
+                    }
+                    vs.push_back(children.front().get());
+                }
+                static_assert(
+                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    "G_MAXSIZE too small");
+                v.reset(
+                    g_variant_new_array(
+                        G_VARIANT_TYPE_STRING, vs.data(), seq.getLength()));
+                break;
+            }
+        case TYPE_HEXBINARY_LIST:
+            {
+                css::uno::Sequence<css::uno::Sequence<sal_Int8>> seq(
+                    value.get<
+                        css::uno::Sequence<css::uno::Sequence<sal_Int8>>>());
+                std::vector<GVariant *> vs;
+                for (sal_Int32 i = 0; i != seq.getLength(); ++i) {
+                    static_assert(
+                        std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                        "G_MAXSIZE too small");
+                    static_assert(
+                        sizeof (sal_Int8) == sizeof (guchar), "size mismatch");
+                    children.emplace_front(
+                        g_variant_new_fixed_array(
+                            G_VARIANT_TYPE_BYTE, seq[i].getConstArray(),
+                            seq[i].getLength(), sizeof (sal_Int8)));
+                    if (children.front().get() == nullptr) {
+                        SAL_WARN(
+                            "configmgr.dconf",
+                            "g_variant_new_fixed_array failed");
+                        return false;
+                    }
+                    vs.push_back(children.front().get());
+                }
+                GVariantTypeHolder ty(g_variant_type_new("aay"));
+                if (ty.get() == nullptr) {
+                    SAL_WARN("configmgr.dconf", "g_variant_type_new failed");
+                    return false;
+                }
+                static_assert(
+                    std::numeric_limits<sal_Int32>::max() <= G_MAXSIZE,
+                    "G_MAXSIZE too small");
+                v.reset(
+                    g_variant_new_array(ty.get(), vs.data(), seq.getLength()));
+                break;
+            }
+        default:
+            assert(false); // this cannot happen
+            break;
+        }
+        if (v.get() == nullptr) {
+            SAL_WARN("configmgr.dconf", "GVariant creation failed");
+            return false;
+        }
+        if (nillable) {
+            GVariantHolder v1(g_variant_new_maybe(nullptr, v.get()));
+            if (v1.get() == nullptr) {
+                SAL_WARN("configmgr.dconf", "g_variant_new_maybe failed");
+                return false;
+            }
+            v.release();
+            v.reset(v1.get());
+            v1.release();
+        }
+    }
+    dconf_changeset_set(
+        changeset.get(), pathRepresentation.getStr(), v.get());
+    for (auto & i: children) {
+        i.release();
+    }
+    v.release();
+    return true;
+}
+
+bool addNode(
+    Components & components, ChangesetHolder const & changeset,
+    rtl::Reference<Node> const & parent, OString const & pathRepresentation,
+    rtl::Reference<Node> const & node)
+{
+    switch (node->kind()) {
+    case Node::KIND_PROPERTY:
+        {
+            PropertyNode * prop = static_cast<PropertyNode *>(node.get());
+            if (!addProperty(
+                    changeset, pathRepresentation, prop->getStaticType(),
+                    prop->isNillable(), prop->getValue(components)))
+            {
+                return false;
+            }
+            break;
+        }
+    case Node::KIND_LOCALIZED_VALUE:
+        {
+            //TODO: name.isEmpty()?
+            LocalizedPropertyNode * locprop
+                = static_cast<LocalizedPropertyNode *>(parent.get());
+            if (!addProperty(
+                    changeset, pathRepresentation,
+                    locprop->getStaticType(), locprop->isNillable(),
+                    static_cast<LocalizedValueNode *>(node.get())->getValue()))
+            {
+                return false;
+            }
+            break;
+        }
+    case Node::KIND_LOCALIZED_PROPERTY:
+    case Node::KIND_GROUP:
+    case Node::KIND_SET:
+        for (auto const & i: node->getMembers()) {
+            OUString templ(i.second->getTemplateName());
+            OString path(
+                pathRepresentation + "/"
+                + encodeSegment(i.first, !templ.isEmpty()));
+            if (!templ.isEmpty()) {
+                path += "/";
+                GVariantHolder v(g_variant_new_string("replace"));
+                if (v.get() == nullptr) {
+                    SAL_WARN("configmgr.dconf", "g_variant_new_string failed");
+                    return false;
+                }
+                dconf_changeset_set(
+                    changeset.get(), OString(path + "op").getStr(), v.get());
+                v.release();
+                v.reset(g_variant_new_string(encodeString(templ).getStr()));
+                if (v.get() == nullptr) {
+                    SAL_WARN("configmgr.dconf", "g_variant_new_string failed");
+                    return false;
+                }
+                dconf_changeset_set(
+                    changeset.get(), OString(path + "template").getStr(),
+                    v.get());
+                v.release();
+                path += "content";
+            }
+            if (!addNode(components, changeset, parent, path, i.second)) {
+                return false;
+            }
+        }
+        break;
+    case Node::KIND_ROOT:
+        assert(false); // this cannot happen
+        break;
+    }
+    return true;
+}
+
+bool addModifications(
+    Components & components, ChangesetHolder const & changeset,
+    OString const & parentPathRepresentation,
+    rtl::Reference<Node> const & parent, OUString const & nodeName,
+    rtl::Reference<Node> const & node,
+    Modifications::Node const & modifications)
+{
+    // It is never necessary to write oor:finalized or oor:mandatory attributes,
+    // as they cannot be set via the UNO API.
+    if (modifications.children.empty()) {
+        assert(parent.is());
+            // components themselves have no parent but must have children
+        if (node.is()) {
+            OUString templ(node->getTemplateName());
+            OString path(
+                parentPathRepresentation + "/"
+                + encodeSegment(nodeName, !templ.isEmpty()));
+            if (!templ.isEmpty()) {
+                path += "/";
+                GVariantHolder v(g_variant_new_string("replace"));
+                if (v.get() == nullptr) {
+                    SAL_WARN("configmgr.dconf", "g_variant_new_string failed");
+                    return false;
+                }
+                dconf_changeset_set(
+                    changeset.get(), OString(path + "op").getStr(), v.get());
+                v.release();
+                v.reset(g_variant_new_string(encodeString(templ).getStr()));
+                if (v.get() == nullptr) {
+                    SAL_WARN("configmgr.dconf", "g_variant_new_string failed");
+                    return false;
+                }
+                dconf_changeset_set(
+                    changeset.get(), OString(path + "template").getStr(),
+                    v.get());
+                v.release();
+                path += "content";
+            }
+            if (!addNode(components, changeset, parent, path, node)) {
+                return false;
+            }
+        } else {
+            switch (parent->kind()) {
+            case Node::KIND_LOCALIZED_PROPERTY:
+            case Node::KIND_GROUP:
+                {
+                    GVariantHolder v(g_variant_new_tuple(nullptr, 0));
+                    if (v.get() == nullptr) {
+                        SAL_WARN(
+                            "configmgr.dconf", "g_variant_new_tuple failed");
+                        return false;
+                    }
+                    OString path(parentPathRepresentation);
+                    if (!nodeName.isEmpty()) { // KIND_LOCALIZED_PROPERTY
+                        path += "/" + encodeSegment(nodeName, false);
+                    }
+                    dconf_changeset_set(
+                        changeset.get(), path.getStr(), v.get());
+                    v.release();
+                    break;
+                }
+            case Node::KIND_SET:
+                {
+                    OString path(
+                        parentPathRepresentation + "/"
+                        + encodeSegment(nodeName, true) + "/");
+                    GVariantHolder v(g_variant_new_string("remove"));
+                    if (v.get() == nullptr) {
+                        SAL_WARN(
+                            "configmgr.dconf", "g_variant_new_string failed");
+                        return false;
+                    }
+                    dconf_changeset_set(
+                        changeset.get(), OString(path + "op").getStr(),
+                        v.get());
+                    v.release();
+                    dconf_changeset_set(
+                        changeset.get(), OString(path + "template").getStr(),
+                        nullptr);
+                    dconf_changeset_set(
+                        changeset.get(), OString(path + "content/").getStr(),
+                        nullptr);
+                    break;
+                }
+            default:
+                assert(false); // this cannot happen
+                break;
+            }
+        }
+    } else {
+        assert(node.is());
+        OUString templ(node->getTemplateName());
+        OString path(
+            parentPathRepresentation + "/"
+            + encodeSegment(nodeName, !templ.isEmpty()));
+        if (!templ.isEmpty()) {
+            path += "/";
+            GVariantHolder v(g_variant_new_string("fuse"));
+            if (v.get() == nullptr) {
+                SAL_WARN("configmgr.dconf", "g_variant_new_string failed");
+                return false;
+            }
+            dconf_changeset_set(
+                changeset.get(), OString(path + "op").getStr(), v.get());
+            v.release();
+            v.reset(g_variant_new_string(encodeString(templ).getStr()));
+            if (v.get() == nullptr) {
+                SAL_WARN("configmgr.dconf", "g_variant_new_string failed");
+                return false;
+            }
+            dconf_changeset_set(
+                changeset.get(), OString(path + "template").getStr(), v.get());
+            v.release();
+            path += "content";
+        }
+        for (auto const & i: modifications.children) {
+            if (!addModifications(
+                    components, changeset, path, node, i.first,
+                    node->getMember(i.first), i.second))
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 }
 
 void readLayer(Data & data, int layer) {
@@ -1001,6 +1553,36 @@ void readLayer(Data & data, int layer) {
     readDir(
         data, layer, rtl::Reference<Node>(), data.getComponents(), client,
         "/org/libreoffice/registry/");
+}
+
+void writeModifications(Components & components, Data & data) {
+    GObjectHolder<DConfClient> client(dconf_client_new());
+    if (client.get() == nullptr) {
+        SAL_WARN("configmgr.dconf", "dconf_client_new failed");
+    }
+    ChangesetHolder cs(dconf_changeset_new());
+    if (cs.get() == nullptr) {
+        SAL_WARN("configmgr.dconf", "dconf_changeset_new failed");
+        return;
+    }
+    for (auto const & i: data.modifications.getRoot().children) {
+        if (!addModifications(
+                components, cs, "/org/libreoffice/registry",
+                rtl::Reference<Node>(), i.first,
+                data.getComponents().findNode(Data::NO_LAYER, i.first),
+                i.second))
+        {
+            return;
+        }
+    }
+    if (!dconf_client_change_sync(
+            client.get(), cs.get(), nullptr, nullptr, nullptr))
+    {
+        //TODO: GError
+        SAL_WARN("configmgr.dconf", "dconf_client_change_sync failed");
+        return;
+    }
+    data.modifications.clear();
 }
 
 } }
