@@ -55,6 +55,11 @@ void SelectionController::Execute( SfxRequest& /*rReq*/ )
 {
 }
 
+bool SelectionController::HasMarked()
+{
+    return false;
+}
+
 bool SelectionController::DeleteMarked()
 {
     return false;

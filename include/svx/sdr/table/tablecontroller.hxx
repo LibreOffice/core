@@ -51,6 +51,7 @@ public:
     SVX_DLLPRIVATE virtual bool onMouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual bool onMouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
 
+    SVX_DLLPRIVATE virtual bool HasMarked() SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual bool DeleteMarked() SAL_OVERRIDE;
 
     SVX_DLLPRIVATE virtual void onSelectionHasChanged() SAL_OVERRIDE;
