@@ -193,7 +193,7 @@ SlideFragmentHandler::~SlideFragmentHandler() throw ()
     case PPT_TOKEN( cmLst ):
         break;
     case PPT_TOKEN( cm ):
-        if(!mpSlidePersistPtr->getCommentsList().cmLst.empty())
+        if (!mpSlidePersistPtr->getCommentsList().cmLst.empty() && !getCharVector().empty())
         {
             // set comment text for earlier comment
             mpSlidePersistPtr->getCommentsList().cmLst.back().setText( getCharVector().back() );
