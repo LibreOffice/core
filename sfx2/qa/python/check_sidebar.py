@@ -96,7 +96,7 @@ class CheckSidebar(unittest.TestCase):
         panelsCount = xPanels.getCount()
         self.assertEqual ( panelsCount, 5 )
 
-        firstPanelName = "TextPropertyPanel"
+        firstPanelName = "StylesPropertyPanel"
 
         panelElementNames = xPanels.getElementNames()
         assert ( firstPanelName in panelElementNames )
@@ -112,7 +112,7 @@ class CheckSidebar(unittest.TestCase):
 
         xPanel.moveFirst()
         initialIndex = xPanel.getOrderIndex()
-        #assert ( initialIndex == 120 )
+        assert ( initialIndex == 100 )
 
         xPanel.moveLast()
         assert ( xPanel.getOrderIndex() > initialIndex )
