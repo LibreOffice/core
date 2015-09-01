@@ -847,82 +847,87 @@ void readDir(
                     << node->getTemplateName());
             continue;
         }
-        if (member->getFinalized() < layer) {
-            continue;
-        }
-        switch (member->kind()) {
-        case Node::KIND_PROPERTY:
-            {
-                if (isDir) {
-                    SAL_WARN(
-                        "configmgr.dconf",
-                        "bad dir " << path << " does not match property");
-                    continue;
-                }
-                rtl::Reference<PropertyNode> prop(
-                    static_cast<PropertyNode *>(member.get()));
-                css::uno::Any value;
-                switch (readValue(
-                            client, path, prop->getStaticType(),
-                            prop->isNillable(), prop->isExtension(), &value))
-                {
-                case ReadValue::Error:
-                    continue;
-                case ReadValue::Value:
-                    prop->setValue(layer, value);
-                    finalize(client, path, member, layer);
-                    break;
-                case ReadValue::Remove:
-                    remove = true;
-                    break;
-                }
-                break;
-            }
-        case Node::KIND_LOCALIZED_VALUE:
-            {
-                if (isDir) {
-                    SAL_WARN(
-                        "configmgr.dconf",
-                        "bad dir " << path
-                            << " does not match localized value");
-                    continue;
-                }
-                assert(
-                    node.is() && node->kind() == Node::KIND_LOCALIZED_PROPERTY);
-                rtl::Reference<LocalizedPropertyNode> locProp(
-                    static_cast<LocalizedPropertyNode *>(node.get()));
-                css::uno::Any value;
-                if (readValue(
-                        client, path, locProp->getStaticType(),
-                        locProp->isNillable(), false, &value)
-                    == ReadValue::Error)
-                {
-                    continue;
-                }
-                static_cast<LocalizedValueNode *>(member.get())->setValue(
-                    layer, value);
-                finalize(client, path, member, layer);
-                break;
-            }
-        case Node::KIND_LOCALIZED_PROPERTY:
-        case Node::KIND_GROUP:
-        case Node::KIND_SET:
-            if (!isDir) {
-                SAL_WARN(
-                    "configmgr.dconf",
-                    "bad key " << path
-                        << " does not match localized property, group, or set,"
-                        " respectively");
+        if (member.is()) {
+            if (member->getFinalized() < layer) {
                 continue;
             }
-            assert(path.endsWith("/"));
-            readDir(data, layer, member, member->getMembers(), client, path);
-            break;
-        default:
-            assert(false); // cannot happen
+            switch (member->kind()) {
+            case Node::KIND_PROPERTY:
+                {
+                    if (isDir) {
+                        SAL_WARN(
+                            "configmgr.dconf",
+                            "bad dir " << path << " does not match property");
+                        continue;
+                    }
+                    rtl::Reference<PropertyNode> prop(
+                        static_cast<PropertyNode *>(member.get()));
+                    css::uno::Any value;
+                    switch (readValue(
+                                client, path, prop->getStaticType(),
+                                prop->isNillable(), prop->isExtension(),
+                                &value))
+                    {
+                    case ReadValue::Error:
+                        continue;
+                    case ReadValue::Value:
+                        prop->setValue(layer, value);
+                        finalize(client, path, member, layer);
+                        break;
+                    case ReadValue::Remove:
+                        remove = true;
+                        break;
+                    }
+                    break;
+                }
+            case Node::KIND_LOCALIZED_VALUE:
+                {
+                    if (isDir) {
+                        SAL_WARN(
+                            "configmgr.dconf",
+                            "bad dir " << path
+                                << " does not match localized value");
+                        continue;
+                    }
+                    assert(
+                        node.is()
+                        && node->kind() == Node::KIND_LOCALIZED_PROPERTY);
+                    rtl::Reference<LocalizedPropertyNode> locProp(
+                        static_cast<LocalizedPropertyNode *>(node.get()));
+                    css::uno::Any value;
+                    if (readValue(
+                            client, path, locProp->getStaticType(),
+                            locProp->isNillable(), false, &value)
+                        == ReadValue::Error)
+                    {
+                        continue;
+                    }
+                    static_cast<LocalizedValueNode *>(member.get())->setValue(
+                        layer, value);
+                    finalize(client, path, member, layer);
+                    break;
+                }
+            case Node::KIND_LOCALIZED_PROPERTY:
+            case Node::KIND_GROUP:
+            case Node::KIND_SET:
+                if (!isDir) {
+                    SAL_WARN(
+                        "configmgr.dconf",
+                        "bad key " << path
+                            << " does not match localized property, group, or"
+                            " set, respectively");
+                    continue;
+                }
+                assert(path.endsWith("/"));
+                readDir(
+                    data, layer, member, member->getMembers(), client, path);
+                break;
+            default:
+                assert(false); // cannot happen
+            }
         }
         if (remove) {
-            if (!member->getMandatory()) {
+            if (!(member.is() && member->getMandatory())) {
                 members.erase(name);
             }
         } else if (replace) {
