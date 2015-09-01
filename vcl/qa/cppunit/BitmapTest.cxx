@@ -173,6 +173,7 @@ void BitmapTest::testCRC()
     checkAndInsert(aCRCs, aBitmap, "white bitmap");
 
     ScopedVclPtrInstance<VirtualDevice> aVDev;
+    aVDev->SetBackground(Wallpaper(COL_WHITE));
     aVDev->SetOutputSizePixel(Size(1023, 759));
     Bitmap aWhiteCheck = getAsBitmap(aVDev);
     CPPUNIT_ASSERT(aCRCs.find(aWhiteCheck.GetChecksum()) != aCRCs.end());
