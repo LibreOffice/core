@@ -816,47 +816,47 @@ void readDir(
         }
         rtl::Reference<Node> member(members.findNode(layer, name));
         bool insert = !member.is();
-        if (!remove && (replace || insert)) {
-            if (!node.is()) {
-                SAL_WARN("configmgr.dconf", "bad unmatched " << path);
-                continue;
-            }
-            switch (node->kind()) {
-            case Node::KIND_LOCALIZED_PROPERTY:
-                member.set(new LocalizedValueNode(layer));
-                break;
-            case Node::KIND_GROUP:
-                if (!static_cast<GroupNode *>(node.get())->isExtensible()) {
+        if (!remove) {
+            if (replace || insert) {
+                if (!node.is()) {
                     SAL_WARN("configmgr.dconf", "bad unmatched " << path);
                     continue;
                 }
-                member.set(
-                    new PropertyNode(
-                        layer, TYPE_ANY, true, css::uno::Any(), true));
-                break;
-            case Node::KIND_SET:
-                assert(!templ.isEmpty());
-                member = data.getTemplate(layer, templ);
-                if (!member.is()) {
-                    SAL_WARN(
-                        "configmgr.dconf",
-                        "bad " << path << " denoting undefined template "
-                            << templ);
-                    continue;
+                switch (node->kind()) {
+                case Node::KIND_LOCALIZED_PROPERTY:
+                    member.set(new LocalizedValueNode(layer));
+                    break;
+                case Node::KIND_GROUP:
+                    if (!static_cast<GroupNode *>(node.get())->isExtensible()) {
+                        SAL_WARN("configmgr.dconf", "bad unmatched " << path);
+                        continue;
+                    }
+                    member.set(
+                        new PropertyNode(
+                            layer, TYPE_ANY, true, css::uno::Any(), true));
+                    break;
+                case Node::KIND_SET:
+                    assert(!templ.isEmpty());
+                    member = data.getTemplate(layer, templ);
+                    if (!member.is()) {
+                        SAL_WARN(
+                            "configmgr.dconf",
+                            "bad " << path << " denoting undefined template "
+                                << templ);
+                        continue;
+                    }
+                    break;
+                default:
+                    assert(false); // cannot happen
                 }
-                break;
-            default:
-                assert(false); // cannot happen
+            } else if (!templ.isEmpty() && templ != member->getTemplateName()) {
+                SAL_WARN(
+                    "configmgr.dconf",
+                    "bad " << path
+                        << " denoting set element of non-matching template "
+                        << member->getTemplateName());
+                continue;
             }
-        } else if (!(templ.isEmpty()
-                     || (node.is() && templ == node->getTemplateName())))
-        {
-            SAL_WARN(
-                "configmgr.dconf",
-                "bad " << path
-                    << " denoting set element of non-matching template "
-                    << node->getTemplateName());
-            continue;
         }
         if (member.is()) {
             if (member->getFinalized() < layer) {
