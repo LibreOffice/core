@@ -1946,8 +1946,11 @@ bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const OUString& rMenuI
     {
         try
         {
-            ui::ContextMenuInterceptorAction eAction =
-                static_cast<ui::XContextMenuInterceptor*>(aIt.next())->notifyContextMenuExecute( aEvent );
+            ui::ContextMenuInterceptorAction eAction;
+            {
+                SolarMutexReleaser rel;
+                eAction = static_cast<ui::XContextMenuInterceptor*>(aIt.next())->notifyContextMenuExecute( aEvent );
+            }
             switch ( eAction )
             {
                 case ui::ContextMenuInterceptorAction_CANCELLED :
