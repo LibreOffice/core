@@ -895,8 +895,11 @@ bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
                             Size( aCtrlRect.GetWidth()+2, aCtrlRect.GetHeight()+2) );
 
     ControlCacheKey aControlCacheKey(nType, nPart, nState, aPixmapRect.GetSize());
-    if (TryRenderCachedNativeControl(aControlCacheKey, aPixmapRect.Left(), aPixmapRect.Top()))
+    if (aControlCacheKey.canCacheControl()
+        && TryRenderCachedNativeControl(aControlCacheKey, aPixmapRect.Left(), aPixmapRect.Top()))
+    {
         return true;
+    }
 
     clipList aClip;
     int nPasses = 0;
