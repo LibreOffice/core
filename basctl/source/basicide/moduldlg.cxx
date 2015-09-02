@@ -510,7 +510,7 @@ short OrganizeDialog::Execute()
 }
 
 
-IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
+IMPL_LINK_TYPED( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 {
     sal_uInt16 nId = pTabCtrl->GetCurPageId();
 
@@ -545,7 +545,6 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         DBG_ASSERT( pNewTabPage, "Keine Page!" );
         pTabCtrl->SetTabPage( nId, pNewTabPage );
     }
-    return 0;
 }
 
 

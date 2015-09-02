@@ -89,8 +89,8 @@ friend class SfxTabDialogController;
     bool                bItemsReset;
     bool                bStandardPushed;
 
-    DECL_DLLPRIVATE_LINK(ActivatePageHdl, TabControl * );
-    DECL_DLLPRIVATE_LINK_TYPED(DeactivatePageHdl, TabControl *, bool );
+    DECL_DLLPRIVATE_LINK_TYPED(ActivatePageHdl, TabControl*, void );
+    DECL_DLLPRIVATE_LINK_TYPED(DeactivatePageHdl, TabControl*, bool );
     DECL_DLLPRIVATE_LINK_TYPED(OkHdl, Button*, void);
     DECL_DLLPRIVATE_LINK_TYPED(ResetHdl, Button*, void);
     DECL_DLLPRIVATE_LINK_TYPED(BaseFmtHdl, Button*, void);

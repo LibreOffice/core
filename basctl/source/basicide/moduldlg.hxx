@@ -178,7 +178,7 @@ public:
 
     virtual short   Execute() SAL_OVERRIDE;
 
-    DECL_LINK( ActivatePageHdl, TabControl * );
+    DECL_LINK_TYPED( ActivatePageHdl, TabControl*, void );
 };
 
 class ObjectPage: public TabPage

@@ -1799,7 +1799,7 @@ namespace svxform
         return 0;
     }
 
-    IMPL_LINK_NOARG(DataNavigatorWindow, ActivatePageHdl)
+    IMPL_LINK_NOARG_TYPED(DataNavigatorWindow, ActivatePageHdl, TabControl*, void)
     {
         sal_uInt16 nId = 0;
         XFormsPage* pPage = GetCurrentPage( nId );
@@ -1809,8 +1809,6 @@ namespace svxform
             if ( m_xDataContainer.is() && !pPage->HasModel() )
                 SetPageModel();
         }
-
-        return 0;
     }
 
     IMPL_LINK_NOARG_TYPED(DataNavigatorWindow, UpdateHdl, Timer *, void)
