@@ -1736,6 +1736,12 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
         Point aPos = GetDrawPosition( aRelPos );
 
         int nAdvance = 0;
+
+        // This has to be in sync with UniscribeLayout::FillDXArray(), so that
+        // actual and reported glyph positions (used for e.g. cursor caret
+        // positioning) match.
+        const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
+
         for (int i = nMinGlyphPos; i < nEndGlyphPos; i++)
         {
             assert(mrWinFontEntry.GlyphIsCached(mpOutGlyphs[i]));
@@ -1759,7 +1765,7 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
                                    rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight()); // ???
                 pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
             }
-            nAdvance += mpGlyphAdvances[i];
+            nAdvance += pGlyphWidths[i];
         }
     }
     pImpl->PostDraw();
