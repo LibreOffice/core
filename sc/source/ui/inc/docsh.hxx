@@ -453,7 +453,7 @@ typedef tools::SvRef<ScDocShell> ScDocShellRef;
  */
 class SC_DLLPUBLIC ScDocShellModificator
 {
-    ::std::vector<ScRange>  mvContentModified;
+            ScRangeList     maContentModified;
             ScDocShell&     rDocShell;
     boost::scoped_ptr<ScRefreshTimerProtector> mpProtector;
             bool            bAutoCalcShellDisabled;

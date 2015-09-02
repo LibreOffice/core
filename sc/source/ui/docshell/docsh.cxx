@@ -3067,10 +3067,14 @@ ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS )
 ScDocShellModificator::~ScDocShellModificator()
 {
     ScDocument& rDoc = rDocShell.GetDocument();
-    if (!mvContentModified.empty() && !rDoc.IsImportingXML())
+    if (!maContentModified.empty() && !rDoc.IsImportingXML())
     {
-        for (auto const& it : mvContentModified)
-            rDoc.RefreshTableColumnNames( it);
+        for (size_t i=0, n = maContentModified.size(); i < n; ++i)
+        {
+            const ScRange* p = maContentModified[i];
+            if (p)
+                rDoc.RefreshTableColumnNames( *p);
+        }
     }
     rDoc.SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
     if ( !bAutoCalcShellDisabled && rDocShell.IsDocumentModifiedPending() )
@@ -3100,7 +3104,7 @@ void ScDocShellModificator::SetDocumentModified()
 
 void ScDocShellModificator::AppendCellContentModified( const ScRange& rRange )
 {
-    mvContentModified.push_back( rRange);
+    maContentModified.Join( rRange);
 }
 
 bool ScDocShell::IsChangeRecording() const
