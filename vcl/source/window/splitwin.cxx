@@ -2215,7 +2215,6 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
 
 void SplitWindow::StartSplit()
 {
-    maStartSplitHdl.Call( this );
 }
 
 void SplitWindow::Split()
@@ -2225,22 +2224,18 @@ void SplitWindow::Split()
 
 void SplitWindow::SplitResize()
 {
-    maSplitResizeHdl.Call( this );
 }
 
 void SplitWindow::AutoHide()
 {
-    maAutoHideHdl.Call( this );
 }
 
 void SplitWindow::FadeIn()
 {
-    maFadeInHdl.Call( this );
 }
 
 void SplitWindow::FadeOut()
 {
-    maFadeOutHdl.Call( this );
 }
 
 void SplitWindow::MouseButtonDown( const MouseEvent& rMEvt )

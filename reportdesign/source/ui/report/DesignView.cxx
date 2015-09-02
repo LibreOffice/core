@@ -403,7 +403,7 @@ void ODesignView::ImplInitSettings()
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }
 
-IMPL_LINK_NOARG( ODesignView, SplitHdl )
+IMPL_LINK_NOARG_TYPED( ODesignView, SplitHdl, SplitWindow*, void )
 {
     const Size aOutputSize = GetOutputSizePixel();
     const long nTest = aOutputSize.Width() * m_aSplitWin->GetItemSize(TASKPANE_ID) / 100;
@@ -417,8 +417,6 @@ IMPL_LINK_NOARG( ODesignView, SplitHdl )
         (void)nOldSplitPos;
         getController().setSplitPos(nTest);
     }
-
-    return 0L;
 }
 
 void ODesignView::SelectAll(const sal_uInt16 _nObjectType)
