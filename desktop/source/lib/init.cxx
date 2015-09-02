@@ -966,6 +966,11 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
     }
 }
 
+/// pre-load all C++ component factories and leak references to them.
+static void forceLoadAllNativeComponents()
+{
+}
+
 /// pre-load and parse all filter XML
 static void forceLoadFilterXML()
 {
@@ -1040,6 +1045,12 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             desktop::Desktop::GetCommandLineArgs().setHeadless();
 
             Application::EnableHeadlessMode(true);
+        }
+
+        if (eStage == PRE_INIT)
+        {
+            forceLoadAllNativeComponents();
+            forceLoadFilterXML();
         }
 
         // This is horrible crack. I really would want to go back to simply just call
@@ -1125,34 +1136,7 @@ LibreOfficeKit *libreofficekit_hook(const char* install_path)
 SAL_JNI_EXPORT
 int lok_preinit(const char* install_path, const char* user_profile_path)
 {
-    rtl::Bootstrap::set(OUString("UserInstallation"), OUString(user_profile_path, strlen(user_profile_path), RTL_TEXTENCODING_UTF8));
-
-    OUString aAppPath;
-    if (install_path)
-    {
-        aAppPath = OUString(install_path, strlen(install_path), RTL_TEXTENCODING_UTF8);
-    }
-    else
-    {
-        // Fun conversion dance back and forth between URLs and system paths...
-        OUString aAppURL;
-        ::osl::Module::getUrlFromAddress( reinterpret_cast< oslGenericFunction >(lo_initialize),
-                                          aAppURL);
-        osl::FileBase::getSystemPathFromFileURL( aAppURL, aAppPath );
-    }
-
-    OUString aAppURL;
-    if (osl::FileBase::getFileURLFromSystemPath(aAppPath, aAppURL) != osl::FileBase::E_None)
-        return -1;
-
-
-    rtl::Bootstrap::setIniFilename(aAppURL + "/" SAL_CONFIGFILE("soffice"));
-
-    // pre-load all C++ component factories and leak references to them.
-    cppu::preInitBootstrap();
-    forceLoadFilterXML();
-
-    return 0;
+    return lo_initialize(NULL, install_path, user_profile_path);
 }
 
 static void lo_destroy(LibreOfficeKit* pThis)
