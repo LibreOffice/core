@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_346a701b",
+        "filename": "editeng/source/editeng/impedit4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2015-09-02T11:21:17Z",
+      "side": 1,
+      "message": "When changing line 461 to SFX_STYLE_FAMILY_PARA, Impress crashed. I\u0027d like to investigate this solution.",
+      "range": {
+        "startLine": 461,
+        "startChar": 16,
+        "endLine": 461,
+        "endChar": 36
+      },
+      "revId": "063203183b241cc401738a9cc8f5cae77588c657",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
