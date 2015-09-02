@@ -1660,7 +1660,7 @@ class OpenGLTests
     OpenGLContext *mpA;
     OpenGLContext *mpB;
 
-    static OpenGLSalGraphicsImpl *getImpl(const VclPtr<WorkWindow> &xOut)
+    static OpenGLSalGraphicsImpl *getImpl(const VclPtr<OutputDevice> &xOut)
     {
         SalGraphics *pGraphics = xOut->GetGraphics();
         return dynamic_cast<OpenGLSalGraphicsImpl *>(pGraphics->GetImpl());
