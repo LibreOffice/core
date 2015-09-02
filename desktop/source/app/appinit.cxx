@@ -72,33 +72,6 @@ static void configureUcb()
     // For backwards compatibility, in case some code still uses plain
     // createInstance w/o args directly to obtain an instance:
     UniversalContentBroker::create(comphelper::getProcessComponentContext());
-
-#if ENABLE_GNOME_VFS
-    try {
-        // Instantiate GNOME-VFS UCP in the thread that initialized GNOME in order
-        // to avoid a deadlock that may occur in case the UCP gets initialized from
-        // a different thread (which may happen when calling remotely via UNO); this
-        // is not a fix, just a workaround:
-        Reference< XCurrentContext > xCurrentContext(getCurrentContext());
-        Any aValue(xCurrentContext->getValueByName("system.desktop-environment"));
-        OUString aDesktopEnvironment;
-        if ((aValue >>= aDesktopEnvironment) && aDesktopEnvironment == "GNOME")
-        {
-            Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-            UniversalContentBroker::create(xContext)
-                ->registerContentProvider(
-                        Reference<XContentProvider>(
-                        xContext->getServiceManager()->createInstanceWithContext(
-                                "com.sun.star.ucb.GnomeVFSContentProvider", xContext),
-                        UNO_QUERY_THROW),
-                        ".*", false);
-        }
-    }
-    catch ( const Exception & )
-    {
-        SAL_WARN( "desktop.app", "missing gnome-vfs component to initialize thread workaround" );
-    }
-#endif // ENABLE_GNOME_VFS
 }
 
 void Desktop::InitApplicationServiceManager()
