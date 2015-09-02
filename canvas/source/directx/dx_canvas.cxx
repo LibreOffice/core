@@ -37,6 +37,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <comphelper/servicedecl.hxx>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -81,6 +82,9 @@ namespace dxcanvas
         // #i64742# Only perform initialization when not in probe mode
         if( maArguments.getLength() == 0 )
             return;
+
+        // tdf#93870 - force VCL canvas in OpenGL mode for now.
+        assert( !OpenGLWrapper::isVCLOpenGLEnabled() );
 
         VERBOSE_TRACE( "Canvas::initialize called" );
 

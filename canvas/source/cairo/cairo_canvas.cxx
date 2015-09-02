@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/NoSupportException.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -57,6 +58,9 @@ namespace cairocanvas
         // #i64742# Only perform initialization when not in probe mode
         if( maArguments.getLength() == 0 )
             return;
+
+        // tdf#93870 - force VCL canvas in OpenGL mode for now.
+        assert( !OpenGLWrapper::isVCLOpenGLEnabled() );
 
         /* maArguments:
            0: ptr to creating instance (Window or VirtualDevice)
