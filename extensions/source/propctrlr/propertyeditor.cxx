@@ -509,11 +509,10 @@ namespace pcr
     }
 
 
-    IMPL_LINK_NOARG(OPropertyEditor, OnPageActivate)
+    IMPL_LINK_NOARG_TYPED(OPropertyEditor, OnPageActivate, TabControl*, void)
     {
         if (m_aPageActivationHandler.IsSet())
             m_aPageActivationHandler.Call(NULL);
-        return 0L;
     }
 
 

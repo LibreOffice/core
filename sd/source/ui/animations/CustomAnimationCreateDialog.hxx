@@ -53,8 +53,8 @@ private:
     void setPosition();
     void storePosition();
 
-    DECL_LINK(implActivatePagekHdl, void *);
-    DECL_LINK_TYPED(implDeactivatePagekHdl, TabControl *, bool);
+    DECL_LINK_TYPED(implActivatePagekHdl, TabControl*, void);
+    DECL_LINK_TYPED(implDeactivatePagekHdl, TabControl*, bool);
 
 private:
     VclPtr<CustomAnimationPane> mpPane;

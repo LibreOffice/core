@@ -256,7 +256,7 @@ TabEntry* FwkTabWindow::FindEntry( sal_Int32 nIndex ) const
     return pEntry;
 }
 
-IMPL_LINK_NOARG(FwkTabWindow, ActivatePageHdl)
+IMPL_LINK_NOARG_TYPED(FwkTabWindow, ActivatePageHdl, TabControl*, void)
 {
     const sal_uInt16 nId = m_aTabCtrl->GetCurPageId();
     FwkTabPage* pTabPage = static_cast< FwkTabPage* >( m_aTabCtrl->GetTabPage( nId ) );
@@ -275,7 +275,6 @@ IMPL_LINK_NOARG(FwkTabWindow, ActivatePageHdl)
         pTabPage->ActivatePage();
     }
     m_aTabCtrl->BroadcastEvent( VCLEVENT_TABPAGE_ACTIVATE );
-    return 1;
 }
 
 IMPL_LINK_NOARG_TYPED(FwkTabWindow, DeactivatePageHdl, TabControl *, bool)
