@@ -31,16 +31,9 @@
 #include <rtl/tencinfo.h>
 #include <sal/macros.h>
 
-#ifdef DUMP
-
-#define ERR_SWG_READ_ERROR 1234
-#define OSL_ENSURE( a, b )
-
-#else                       // dump
 #include <swerror.h>
 #include <swtypes.hxx>
 
-#endif                      // dump
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -4344,8 +4337,6 @@ bool WW8PLCFx_AtnBook::getIsEnd() const
     return m_bIsEnd;
 }
 
-#ifndef DUMP
-
 // In the end of an paragraph in WW6 the attribute extends after the <CR>.
 // This will be reset by one character to be used with SW,
 // if we don't expect trouble thereby.
@@ -5107,8 +5098,6 @@ bool WW8PLCFMan::HasCharSprm(sal_uInt16 nId,
 {
     return static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx)->HasSprm(nId, rResult);
 }
-
-#endif // !DUMP
 
 void WW8PLCFx::Save( WW8PLCFxSave1& rSave ) const
 {

@@ -868,8 +868,6 @@ struct WW8PLCFxDesc
     void ReduceByOffset();
 };
 
-#ifndef DUMP
-
 struct WW8PLCFxSaveAll;
 class WW8PLCFMan
 {
@@ -967,8 +965,6 @@ struct WW8PLCFxSaveAll
     }
 };
 
-#endif // !DUMP
-
 class WW8ScannerBase
 {
 friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(ww::WordVersion eVersion,
@@ -976,10 +972,8 @@ friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(ww::WordVersion eVersion,
 friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
     const WW8ScannerBase&, ePLCFT );
 
-#ifndef DUMP
 friend WW8PLCFMan::WW8PLCFMan(WW8ScannerBase*, ManTypes, long, bool);
 friend class SwWW8FltControlStack;
-#endif
 
 private:
     WW8Fib* pWw8Fib;
