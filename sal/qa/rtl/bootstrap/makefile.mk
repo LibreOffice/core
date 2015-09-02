@@ -33,6 +33,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 .IF "$(GUI)"=="WNT"
 #BOOTSTRAPSCRIPT=bootstrap.bat
 BOOTSTRAPINI=testshl2.ini
@@ -46,22 +52,15 @@ MY_SCRIPTCAT=tr -d "\015" <
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:joblist by codegen.pl
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/rtl_Bootstrap.obj
 
-SHL1TARGET= rtl_Bootstrap
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
+APP1TARGET= rtl_Bootstrap
+APP1STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 # END ------------------------------------------------------------------
 
 OBJ2FILES=$(OBJ)$/bootstrap_process.obj
@@ -75,12 +74,9 @@ APP2OBJS=$(OBJ2FILES)
 # APP2STDLIBS=$(KERNEL32LIB) $(LB)$/isal.lib
 # .ENDIF
 APP2STDLIBS=$(SALLIB)
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
 
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
