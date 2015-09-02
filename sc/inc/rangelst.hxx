@@ -48,6 +48,7 @@ public:
                             sal_Unicode cDelimiter = 0 ) const;
 
     void            Join( const ScRange&, bool bIsInList = false );
+    void            Join( const ScRangeList& );
 
     bool            UpdateReference( UpdateRefMode, ScDocument*,
                                      const ScRange& rWhere,
