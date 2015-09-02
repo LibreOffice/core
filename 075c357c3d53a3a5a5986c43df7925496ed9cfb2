@@ -87,6 +87,24 @@
       "revId": "075c357c3d53a3a5a5986c43df7925496ed9cfb2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_6f48915c",
+        "filename": "sal/Library_uwinapi.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-02T16:00:12Z",
+      "side": 1,
+      "message": "so... investigation reveals that the GetShortPathNameW is presumably used by legacy Duden extension that was built by Sun in a setsolar environment.\n\nthe uwinapi.lib was never part of the SDK, so ordinary extensions cannot link against it.\n\nthe PRIVATE export of the symbol that is only possible with DEF file therefore does not matter much.\n\nwith VC2015 there is no need for LO code to use uwinapi.dll at all - so just modify the definition of gb_UWINAPI to be empty with the new compiler \u003d\u003e then it does not matter that the GetShortPathNameW is in the uwinapi.lib file because nothing uses that and the def file is unnecessary.",
+      "parentUuid": "9aed3d3a_ffe73faa",
+      "revId": "075c357c3d53a3a5a5986c43df7925496ed9cfb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
