@@ -39,6 +39,7 @@
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <o3tl/functional.hxx>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -307,6 +308,10 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     checkConfigFlag( bForceLastEntry,
                      m_bCacheHasForcedLastImpl,
                      OUString("ForceSafeServiceImpl") );
+
+    // tdf#93870 - force VCL canvas in OpenGL mode for now.
+    if( OpenGLWrapper::isVCLOpenGLEnabled() )
+        bForceLastEntry = true;
 
     // use anti-aliasing canvas, if config flag set (or not existing)
     bool bUseAAEntry(true);
