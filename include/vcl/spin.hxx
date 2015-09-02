@@ -43,8 +43,6 @@ private:
     bool            mbInitialDown    : 1;
     bool            mbHorz           : 1;
     bool            mbUpperIsFocused : 1;
-    Link<>          maUpHdlLink;
-    Link<>          maDownHdlLink;
     long            mnMinRange;
     long            mnMaxRange;
     long            mnValue;
