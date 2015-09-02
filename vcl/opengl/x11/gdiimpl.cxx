@@ -235,7 +235,7 @@ bool X11OpenGLSalGraphicsImpl::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X
     if (!bResult)
         return false;
 
-    if (aControlCacheKey.mnType == CTRL_CHECKBOX)
+    if (!aControlCacheKey.canCacheControl())
         return true;
 
     ControlCachePair pair(aControlCacheKey, std::move(pCombo));
