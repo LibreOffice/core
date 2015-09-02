@@ -279,6 +279,19 @@ public:
             && maSize.Width() == aOther.maSize.Width()
             && maSize.Height() == aOther.maSize.Height();
     }
+
+    bool canCacheControl()
+    {
+        switch(mnType)
+        {
+            case CTRL_CHECKBOX:
+            case CTRL_RADIOBUTTON:
+                return false;
+            default:
+                break;
+        }
+        return true;
+    }
 };
 
 struct ControlCacheHashFunction
