@@ -2149,37 +2149,37 @@ void SvxSearchDialog::PaintAttrText_Impl()
 
 void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
 {
-    if ( m_pSearchLB == static_cast<const ComboBox*>(pCtrl) )
+    if ( m_pSearchLB == pCtrl )
         nModifyFlag |= MODIFY_SEARCH;
-    else if ( m_pReplaceLB == static_cast<const ComboBox*>(pCtrl) )
+    else if ( m_pReplaceLB == pCtrl )
         nModifyFlag |= MODIFY_REPLACE;
-    else if ( m_pWordBtn == static_cast<const CheckBox*>(pCtrl) )
+    else if ( m_pWordBtn == pCtrl )
         nModifyFlag |= MODIFY_WORD;
-    else if ( m_pMatchCaseCB == static_cast<const CheckBox*>(pCtrl) )
+    else if ( m_pMatchCaseCB == pCtrl )
         nModifyFlag |= MODIFY_EXACT;
-    else if ( m_pBackwardsBtn == static_cast<const CheckBox*>(pCtrl) )
+    else if ( m_pBackwardsBtn == pCtrl )
         nModifyFlag |= MODIFY_BACKWARDS;
-    else if ( m_pNotesBtn == static_cast<const CheckBox*>(pCtrl) )
+    else if ( m_pNotesBtn == pCtrl )
         nModifyFlag |= MODIFY_NOTES;
-    else if ( m_pSelectionBtn == static_cast<const CheckBox*>(pCtrl) )
+    else if ( m_pSelectionBtn == pCtrl )
         nModifyFlag |= MODIFY_SELECTION;
-    else if ( m_pRegExpBtn == static_cast<const CheckBox*>(pCtrl) )
+    else if ( m_pRegExpBtn == pCtrl )
         nModifyFlag |= MODIFY_REGEXP;
-    else if ( m_pLayoutBtn == static_cast<const CheckBox*>(pCtrl) )
+    else if ( m_pLayoutBtn == pCtrl )
         nModifyFlag |= MODIFY_LAYOUT;
-    else if ( m_pSimilarityBox == static_cast<const CheckBox*>(pCtrl) )
+    else if ( m_pSimilarityBox == pCtrl )
         nModifyFlag |= MODIFY_SIMILARITY;
-    else if ( m_pCalcSearchInLB == static_cast<const ListBox*>(pCtrl) )
+    else if ( m_pCalcSearchInLB == pCtrl )
     {
         nModifyFlag |= MODIFY_FORMULAS;
         nModifyFlag |= MODIFY_VALUES;
         nModifyFlag |= MODIFY_CALC_NOTES;
     }
-    else if ( m_pRowsBtn == static_cast<const RadioButton*>(pCtrl) )
+    else if ( m_pRowsBtn == pCtrl )
         nModifyFlag |= MODIFY_ROWS;
-    else if ( m_pColumnsBtn == static_cast<const RadioButton*>(pCtrl) )
+    else if ( m_pColumnsBtn == pCtrl )
         nModifyFlag |= MODIFY_COLUMNS;
-    else if ( m_pAllSheetsCB == static_cast<const CheckBox*>(pCtrl) )
+    else if ( m_pAllSheetsCB == pCtrl )
         nModifyFlag |= MODIFY_ALLTABLES;
 }
 
