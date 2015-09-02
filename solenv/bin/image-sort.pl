@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl -w
 # -*- Mode: Perl; tab-width: 4; indent-tabs-mode: nil -*-
 #
 # This file is part of the LibreOffice project.
