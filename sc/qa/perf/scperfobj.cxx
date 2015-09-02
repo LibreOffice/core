@@ -136,7 +136,7 @@ void ScPerfObj::testSheetFindAll()
 
     uno::Reference< container::XIndexAccess > xIndex = xSearchable->findAll(xSearchDescr);
 
-    callgrindDump("testSheetFindAll-Search value");
+    callgrindDump("sc:search_all_sheets_by_value");
 
     CPPUNIT_ASSERT(xIndex.is());
 
@@ -158,7 +158,7 @@ void ScPerfObj::testSheetFindAll()
 
     uno::Reference< container::XIndexAccess > xIndex2 = xSearchableStyle->findAll(xSearchDescr);
 
-    callgrindDump("testSheetFindAll-Search style");
+    callgrindDump("sc:search_all_sheets_by_style");
 
     CPPUNIT_ASSERT(xIndex2.is());
 
@@ -194,7 +194,7 @@ void ScPerfObj::testSheetNamedRanges()
     {
         callgrindStart();
         xNamedRanges->removeByName(maNameToRemove);
-        callgrindDump("Namedranges-removeByName");
+        callgrindDump("sc:remove_named_range_by_name");
     }
 
     // test addNewByName
@@ -205,13 +205,13 @@ void ScPerfObj::testSheetNamedRanges()
     OUString aName1("single_added");
     callgrindStart();
     xNamedRanges->addNewByName(aName1, aContent1, aBaseAddress, nType);
-    callgrindDump("Namedranges-addNewByName");
+    callgrindDump("sc:add_named_range_by_name");
 
     //test AddNewFromTitles with some 1000 new named ranges
     table::CellRangeAddress aCellRangeAddress = table::CellRangeAddress(0,1,0,2,999);
     callgrindStart();
     xNamedRanges->addNewFromTitles(aCellRangeAddress, sheet::Border_LEFT);
-    callgrindDump("Namedranges-addNewFromTitles");
+    callgrindDump("sc:add_named_range_from_titles");
 
 }
 
@@ -229,20 +229,20 @@ void ScPerfObj::testSheets()
 
     callgrindStart();
     xSheets->insertNewByName(aSheetName, 80);
-    callgrindDump("Sheets-insertNewByName");
+    callgrindDump("sc:insert_new_sheet_by_name");
 
     OUString aSourceSheetName = "aSheet_2";
     OUString aTargetSheetName = "aCopiedSheet";
 
     callgrindStart();
     xSheets->copyByName(aSourceSheetName, aTargetSheetName, 70);
-    callgrindDump("Sheets-copyByName");
+    callgrindDump("sc:copy_sheet_by_name");
 
     uno::Reference< sheet::XSpreadsheets > xSheetsNameContainer (xSheets, UNO_QUERY_THROW);
 
     callgrindStart();
     xSheetsNameContainer->removeByName(aSheetName);
-    callgrindDump("Sheets-removeByName");
+    callgrindDump("sc:remove_sheet_by_name");
 
 }
 

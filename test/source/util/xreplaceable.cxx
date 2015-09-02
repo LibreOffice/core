@@ -54,7 +54,7 @@ void XReplaceable::testReplaceAll()
 
     callgrindStart();
     xReplaceable->replaceAll(uno::Reference< util::XSearchDescriptor >(xReplaceDescr, UNO_QUERY_THROW));
-    callgrindDump("replaceAll");
+    callgrindDump("test:replace_all");
 
     //check that now at least one element is found
     xElement = xReplaceable->findFirst(xSearchDescr);
