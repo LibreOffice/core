@@ -32,6 +32,7 @@
 #include "opengl/zone.hxx"
 #include "opengl/watchdog.hxx"
 #include <osl/conditn.h>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
 #include "opengl/x11/X11DeviceInfo.hxx"
@@ -690,29 +691,36 @@ void OpenGLHelper::debugMsgPrint(const char *pArea, const char *pFormat, ...)
     va_list aArgs;
     va_start (aArgs, pFormat);
 
-    char pStr[1024];
+    char pStr[1044];
 #ifdef _WIN32
 #define vsnprintf _vsnprintf
 #endif
     vsnprintf(pStr, sizeof(pStr), pFormat, aArgs);
-    pStr[sizeof(pStr)-1] = '\0';
+    pStr[sizeof(pStr)-20] = '\0';
+
+    bool bHasContext = !OpenGLContext::hasCurrent();
+    if (!bHasContext)
+        strcat(pStr, "- no GL context");
 
     SAL_INFO(pArea, pStr);
 
-    OpenGLZone aZone;
+    if (bHasContext)
+    {
+        OpenGLZone aZone;
 
-    if (GLEW_KHR_debug)
-        glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
-                             GL_DEBUG_TYPE_OTHER,
-                             1, // one[sic] id is as good as another ?
-                             // GL_DEBUG_SEVERITY_NOTIFICATION for >= GL4.3 ?
-                             GL_DEBUG_SEVERITY_LOW,
-                             strlen(pStr), pStr);
-    else if (GLEW_AMD_debug_output)
-        glDebugMessageInsertAMD(GL_DEBUG_CATEGORY_APPLICATION_AMD,
-                                GL_DEBUG_SEVERITY_LOW_AMD,
-                                1, // one[sic] id is as good as another ?
-                                strlen(pStr), pStr);
+        if (GLEW_KHR_debug)
+            glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION,
+                                 GL_DEBUG_TYPE_OTHER,
+                                 1, // one[sic] id is as good as another ?
+                                 // GL_DEBUG_SEVERITY_NOTIFICATION for >= GL4.3 ?
+                                 GL_DEBUG_SEVERITY_LOW,
+                                 strlen(pStr), pStr);
+        else if (GLEW_AMD_debug_output)
+            glDebugMessageInsertAMD(GL_DEBUG_CATEGORY_APPLICATION_AMD,
+                                    GL_DEBUG_SEVERITY_LOW_AMD,
+                                    1, // one[sic] id is as good as another ?
+                                    strlen(pStr), pStr);
+    }
 
     va_end (aArgs);
 }

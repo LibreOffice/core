@@ -1402,6 +1402,17 @@ bool OpenGLContext::isCurrent()
 #endif
 }
 
+bool OpenGLContext::hasCurrent()
+{
+#if defined( WNT )
+    return wglGetCurrentContext() != NULL;
+#elif defined( MACOSX ) || defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
+    return false;
+#elif defined( UNX )
+    return glXGetCurrentContext() != None;
+#endif
+}
+
 void OpenGLContext::clearCurrent()
 {
     ImplSVData* pSVData = ImplGetSVData();
