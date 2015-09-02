@@ -3069,6 +3069,10 @@ ScDocShellModificator::~ScDocShellModificator()
     ScDocument& rDoc = rDocShell.GetDocument();
     if (!maContentModified.empty() && !rDoc.IsImportingXML())
     {
+        /* TODO: it would be nice to join a pending list with the next
+         * instance further down in the stack so that only the last one
+         * popped actually does the work. For that we'd need a parent or keep a
+         * master list at ScDocShell. */
         for (size_t i=0, n = maContentModified.size(); i < n; ++i)
         {
             const ScRange* p = maContentModified[i];
