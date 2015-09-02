@@ -21,4 +21,4 @@
 # *************************************************************
 
 # Wrapper around the pchdelta.py script
-bash -c "unset PYTHONHOME PYTHONPATH; /usr/bin/python ../solenv/bin/pchdelta.py $*"
+sh -c "unset PYTHONHOME PYTHONPATH; /usr/bin/python ../solenv/bin/pchdelta.py $*"
