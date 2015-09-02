@@ -5632,7 +5632,7 @@
         <info>
           <desc>Combinations of (OS, OS version, OpenCL platform vendor, OpenCL device name, OpenCL driver version) that are known to be bad. Each entry is a string consisting of five parts separated by slashes. An empty part matches anything. In case a slash, percent or semicolon occurs inside a part, it is replaced by a percent followed by the corresponding number as two hex digits. The parts except OS can contain regular expressions. Inside these regular expressions the usual characters .*()[]\ are special and should be quoted with a backslash to be interpreted literally. OS should be just one of "Linux", "OS X" (including the space) or "Windows" (without quotes). Has higher priority than OpenCLWhiteList.</desc>
         </info>
-        <value oor:separator=";">Windows//Intel\(R\) Corporation//9\.17\.10\.2884</value>
+	<value oor:separator=";">Windows//Intel\(R\) Corporation//9\.17\.10\.2884;Windows//Intel\(R\) Corporation//4\.2\.0\.99</value>
       </prop>
       <prop oor:name="OpenCLWhiteList" oor:type="oor:string-list" oor:nillable="false">
         <!-- UIHints: Tools - Options General OpenCL  -->
