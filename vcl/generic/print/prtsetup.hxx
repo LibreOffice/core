@@ -58,7 +58,7 @@ class RTSDialog : public TabDialog
 
     bool mbDataModified;
 
-    DECL_LINK( ActivatePage, TabControl* );
+    DECL_LINK_TYPED( ActivatePage, TabControl*, void );
     DECL_LINK_TYPED( ClickButton, Button*, void );
 
     // helper functions

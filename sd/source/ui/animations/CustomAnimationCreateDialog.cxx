@@ -589,11 +589,10 @@ double CustomAnimationCreateDialog::getSelectedDuration() const
     return getCurrentPage()->getDuration();
 }
 
-IMPL_LINK_NOARG(CustomAnimationCreateDialog, implActivatePagekHdl)
+IMPL_LINK_NOARG_TYPED(CustomAnimationCreateDialog, implActivatePagekHdl, TabControl*, void)
 {
     getCurrentPage()->setDuration( mfDuration );
     getCurrentPage()->setIsPreview( mbIsPreview );
-    return 1;
 }
 
 IMPL_LINK_NOARG_TYPED(CustomAnimationCreateDialog, implDeactivatePagekHdl, TabControl *, bool)

@@ -226,7 +226,7 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID, con
 
 // Links
 
-IMPL_LINK( TabWindow, Activate, TabControl*, pTabControl )
+IMPL_LINK_TYPED( TabWindow, Activate, TabControl*, pTabControl, void )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aLock;
@@ -239,8 +239,6 @@ IMPL_LINK( TabWindow, Activate, TabControl*, pTabControl )
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     implts_SendNotification( NOTIFY_ACTIVATED, nPageId );
-
-    return 1;
 }
 
 IMPL_LINK_TYPED( TabWindow, Deactivate, TabControl*, pTabControl, bool )

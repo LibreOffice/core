@@ -313,7 +313,7 @@ private:
     inline SearchTabPage_Impl*      GetSearchPage();
     inline BookmarksTabPage_Impl*   GetBookmarksPage();
 
-    DECL_LINK(          ActivatePageHdl, TabControl* );
+    DECL_LINK_TYPED(ActivatePageHdl, TabControl*, void );
     DECL_LINK(SelectHdl, void *);
     DECL_LINK_TYPED(InitHdl, Idle *, void);
     DECL_LINK_TYPED(SelectFactoryHdl, Idle *, void);

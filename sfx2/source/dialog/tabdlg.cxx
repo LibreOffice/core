@@ -1094,7 +1094,7 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, BaseFmtHdl, Button*, void)
 
 
 
-IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
+IMPL_LINK_TYPED( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 
 /*  [Description]
 
@@ -1127,7 +1127,7 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     if (!pDataObject)
     {
         SAL_WARN("sfx.config", "Tab Page ID not known, this is pretty serious and needs investigation");
-        return 0;
+        return;
     }
 
     // Create TabPage if possible:
@@ -1189,9 +1189,11 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
     if ( pExampleSet )
         pTabPage->ActivatePage( *pExampleSet );
-    bool bReadOnly = pTabPage->IsReadOnly();
-    ( bReadOnly || pImpl->bHideResetBtn ) ? m_pResetBtn->Hide() : m_pResetBtn->Show();
-    return 0;
+
+    if ( pTabPage->IsReadOnly() || pImpl->bHideResetBtn )
+        m_pResetBtn->Hide();
+    else
+        m_pResetBtn->Show();
 }
 
 

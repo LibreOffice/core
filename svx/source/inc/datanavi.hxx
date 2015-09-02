@@ -350,7 +350,7 @@ namespace svxform
         DECL_LINK(                  ModelSelectHdl, ListBox * );
         DECL_LINK_TYPED(            MenuSelectHdl, MenuButton *, void );
         DECL_LINK(                  MenuActivateHdl, MenuButton * );
-        DECL_LINK(ActivatePageHdl, void *);
+        DECL_LINK_TYPED(ActivatePageHdl, TabControl*, void);
         DECL_LINK_TYPED(UpdateHdl, Timer *, void);
 
         XFormsPage*                 GetCurrentPage( sal_uInt16& rCurId );

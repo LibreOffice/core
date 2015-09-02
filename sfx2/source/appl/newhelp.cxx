@@ -1582,12 +1582,11 @@ HelpTabPage_Impl* SfxHelpIndexWindow_Impl::GetCurrentPage( sal_uInt16& rCurId )
     return pPage;
 }
 
-IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
+IMPL_LINK_TYPED( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl, void )
 {
     sal_uInt16 nId = 0;
     TabPage* pPage = GetCurrentPage( nId );
     pTabCtrl->SetTabPage( nId, pPage );
-    return 0;
 }
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl)

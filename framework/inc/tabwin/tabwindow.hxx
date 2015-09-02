@@ -109,7 +109,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
         virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
-        DECL_LINK( Activate, TabControl* );
+        DECL_LINK_TYPED( Activate, TabControl*, void );
         DECL_LINK_TYPED( Deactivate, TabControl*, bool );
 
     private:

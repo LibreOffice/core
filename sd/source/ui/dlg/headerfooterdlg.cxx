@@ -255,15 +255,13 @@ void HeaderFooterDialog::dispose()
     TabDialog::dispose();
 }
 
-IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
+IMPL_LINK_TYPED( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 {
     const sal_uInt16 nId = pTabCtrl->GetCurPageId();
     TabPage* pTabPage = pTabCtrl->GetTabPage( nId );
     pTabPage->Show();
     maPBApply->Show( nId == mnSlidesId );
     maPBApply->Enable( mpCurrentPage != NULL );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(HeaderFooterDialog, ClickApplyToAllHdl, Button*, void)
