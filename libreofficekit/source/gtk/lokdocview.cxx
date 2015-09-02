@@ -171,7 +171,7 @@ struct LOKDocView_Impl
      */
     void renderDocument(GdkRectangle* pPartial);
     /// Sets rWidth and rHeight from a "width, height" string.
-    void payloadToSize(const char* pPayload, long& rWidth, long& rHeight);
+    static void payloadToSize(const char* pPayload, long& rWidth, long& rHeight);
     /// Returns the GdkRectangle of a width,height,x,y string.
     static GdkRectangle payloadToRectangle(const char* pPayload);
     /// Returns the GdkRectangles of a w,h,x,y;w2,h2,x2,y2;... string.
