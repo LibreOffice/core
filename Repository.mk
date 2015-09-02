@@ -248,7 +248,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
 	$(if $(ENABLE_SYSTRAY_GTK),qstart_gtk) \
 	$(if $(ENABLE_GIO),losessioninstall) \
 	$(if $(ENABLE_GIO),ucpgio1) \
-	$(if $(ENABLE_GNOMEVFS),ucpgvfs1) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \

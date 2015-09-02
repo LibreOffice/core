@@ -19,13 +19,6 @@
 
 cat > /dev/null
 [[ "${PLATFORMID}" == "linux_x86_64" ]] && mark64="()(64bit)"
-if [[ "${ENABLE_GNOMEVFS}" == "TRUE" ]]; then
-  if [[ "${OS}" == "AIX" ]]; then
-    echo "libgnomevfs-2.a(libgnomevfs-2.so.0${mark64})"
-  else
-    echo "libgnomevfs-2.so.0${mark64}"
-  fi
-fi
 if [[ "${OS}" == "AIX" ]]; then
   echo "libgconf-2.a(libgconf-2.so.4${mark64})"
 else

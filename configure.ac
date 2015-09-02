@@ -1166,12 +1166,6 @@ AC_ARG_ENABLE(gconf,
         [Determines whether to use the GConf support.]),
 ,enable_gconf=yes)
 
-AC_ARG_ENABLE(gnome-vfs,
-    AS_HELP_STRING([--enable-gnome-vfs],
-        [Determines whether to use the Gnome Virtual Filing System on platforms
-         where that VFS is available.]),
-,enable_gnome_vfs=no)
-
 AC_ARG_ENABLE(gio,
     AS_HELP_STRING([--disable-gio],
         [Determines whether to use the GIO support.]),
@@ -10070,25 +10064,6 @@ AC_SUBST(GCONF_CFLAGS)
 AC_SUBST(ENABLE_GCONF)
 
 dnl ===================================================================
-dnl Gnome VFS check
-dnl ===================================================================
-
-ENABLE_GNOMEVFS=""
-AC_MSG_CHECKING([whether to enable GNOME VFS support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gnome_vfs" = "yes" -a "$enable_gconf" = "yes"; then
-    ENABLE_GNOMEVFS="TRUE"
-    AC_MSG_RESULT([yes])
-    PKG_CHECK_MODULES( GNOMEVFS, gnome-vfs-2.0 >= 2.6.0 )
-    GNOMEVFS_CFLAGS=$(printf '%s' "$GNOMEVFS_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-    AC_DEFINE(ENABLE_GNOME_VFS)
-else
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(GNOMEVFS_LIBS)
-AC_SUBST(GNOMEVFS_CFLAGS)
-AC_SUBST(ENABLE_GNOMEVFS)
-
-dnl ===================================================================
 dnl check for dbus support
 dnl ===================================================================
 ENABLE_DBUS=""
@@ -10218,9 +10193,6 @@ if test  "$test_gtk" = "yes"; then
 
         AC_MSG_CHECKING([whether to enable GIO support])
         if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_gio" = "yes"; then
-            if test "$ENABLE_GNOMEVFS" = "TRUE"; then
-                AC_MSG_ERROR([please use --enable-gio only together with --disable-gnome-vfs.])
-            fi
             dnl Need at least 2.26 for the dbus support.
             PKG_CHECK_MODULES([GIO], [gio-2.0 >= 2.26],
                               [ENABLE_GIO="TRUE"], [ENABLE_GIO=""])

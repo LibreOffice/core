@@ -30,12 +30,6 @@ $(eval $(call gb_Module_add_targets,ucb,\
 ))
 endif
 
-ifeq ($(ENABLE_GNOMEVFS),TRUE)
-$(eval $(call gb_Module_add_targets,ucb,\
-	Library_ucpgvfs1 \
-))
-endif
-
 $(eval $(call gb_Module_add_subsequentcheck_targets,ucb,\
 	JunitTest_ucb_complex \
 	JunitTest_ucb_unoapi \

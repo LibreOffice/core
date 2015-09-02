@@ -354,7 +354,6 @@ certain functionality.
 @li @c ucb.ucp.file
 @li @c ucb.ucp.ftp
 @li @c ucb.ucp.gio
-@li @c ucb.ucp.gvfs
 @li @c ucb.ucp.webdav
 
 @section unotools

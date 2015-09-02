@@ -199,9 +199,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		shell/source/sessioninstall/losessioninstall \
 		ucb/source/ucp/gio/ucpgio \
 	) \
-	$(if $(ENABLE_GNOMEVFS), \
-		ucb/source/ucp/gvfs/ucpgvfs \
-	) \
 	$(if $(ENABLE_GSTREAMER_1_0), \
 		avmedia/source/gstreamer/avmediagstreamer \
 	) \
