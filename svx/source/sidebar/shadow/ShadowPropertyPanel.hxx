@@ -85,7 +85,7 @@ private:
     DECL_LINK(ModifyShadowColorHdl, void*);
     DECL_LINK(ModifyShadowTransMetricHdl, void*);
     DECL_LINK(ModifyShadowDistanceHdl, void*);
-    DECL_LINK(ModifyShadowTransSliderHdl, void*);
+    DECL_LINK_TYPED(ModifyShadowTransSliderHdl, Slider*, void);
 };
 }
 }

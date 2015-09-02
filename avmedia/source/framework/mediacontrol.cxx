@@ -439,18 +439,16 @@ Image MediaControl::implGetImage( sal_Int32 nImageId ) const
 
 
 
-IMPL_LINK( MediaControl, implTimeHdl, Slider*, p )
+IMPL_LINK_TYPED( MediaControl, implTimeHdl, Slider*, p, void )
 {
     mbLocked = true;
     maIdle.Stop();
     implUpdateTimeField( p->GetThumbPos() * maItem.getDuration() / AVMEDIA_TIME_RANGE );
-
-    return 0;
 }
 
 
 
-IMPL_LINK( MediaControl, implTimeEndHdl, Slider*, p )
+IMPL_LINK_TYPED( MediaControl, implTimeEndHdl, Slider*, p, void )
 {
     MediaItem aExecItem;
 
@@ -459,21 +457,17 @@ IMPL_LINK( MediaControl, implTimeEndHdl, Slider*, p )
     update();
     maIdle.Start();
     mbLocked = false;
-
-    return 0;
 }
 
 
 
-IMPL_LINK( MediaControl, implVolumeHdl, Slider*, p )
+IMPL_LINK_TYPED( MediaControl, implVolumeHdl, Slider*, p, void )
 {
     MediaItem aExecItem;
 
     aExecItem.setVolumeDB( static_cast< sal_Int16 >( p->GetThumbPos() ) );
     execute( aExecItem );
     update();
-
-    return 0;
 }
 
 

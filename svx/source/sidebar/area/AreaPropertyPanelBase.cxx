@@ -1148,14 +1148,12 @@ void AreaPropertyPanelBase::Update()
     }
 }
 
-IMPL_LINK_NOARG(AreaPropertyPanelBase, ModifyTransSliderHdl)
+IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ModifyTransSliderHdl, Slider*, void)
 {
     const sal_uInt16 nVal = mpSldTransparent->GetThumbPos();
     SetTransparency(nVal);
     const XFillTransparenceItem aLinearItem(nVal);
     setFillTransparence(aLinearItem);
-
-    return 0L;
 }
 
 IMPL_LINK_TYPED( AreaPropertyPanelBase, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void )
