@@ -287,6 +287,12 @@ public:
             case CTRL_CHECKBOX:
             case CTRL_RADIOBUTTON:
                 return false;
+
+            case CTRL_MENUBAR:
+                if (mnPart == PART_ENTIRE_CONTROL)
+                    return false;
+                break;
+
             default:
                 break;
         }
