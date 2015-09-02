@@ -31,7 +31,7 @@
 
 #include <algorithm> // STL
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 #include "stringhelper.hxx"
 #include "valueequal.hxx"
 
@@ -39,59 +39,52 @@ inline void printOUString( ::rtl::OUString const & _suStr )
 {
     rtl::OString aString;
 
-    t_print( "OUString: " );
+    printf( "OUString: " );
     aString = ::rtl::OUStringToOString( _suStr, RTL_TEXTENCODING_ASCII_US );
-    t_print( "'%s'\n", aString.getStr( ) );
+    printf( "'%s'\n", aString.getStr( ) );
 }
 
 namespace rtl_OUString
 {
 
-    class ctors_rtl_uString : public CppUnit::TestFixture
+    class ctors_rtl_uString : public ::testing::Test
     {
-
     public:
-        /// test of OUString(rtl_uString*)
-        void ctors_001()
-            {
-                rtl::OUString *pStr = new rtl::OUString( rtl::OUString::createFromAscii("a String") );
-
-                rtl::OUString aStrToTest(pStr->pData);
-                delete pStr;
-
-                // maybe here should we do something with current memory
-                char* pBuffer = (char*) malloc(2 * 8);
-                memset(pBuffer, 0, 2 * 8);
-                free(pBuffer);
-
-                sal_Bool bResult = aStrToTest.equals(rtl::OUString::createFromAscii("a String"));
-                CPPUNIT_ASSERT_MESSAGE("String must not be empty",  bResult == sal_True);
-            }
-
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
-
-        CPPUNIT_TEST_SUITE(ctors_rtl_uString);
-        CPPUNIT_TEST(ctors_001);
-        CPPUNIT_TEST_SUITE_END();
     };
 
+    /// test of OUString(rtl_uString*)
+    TEST_F(ctors_rtl_uString, ctors_001)
+    {
+        rtl::OUString *pStr = new rtl::OUString( rtl::OUString::createFromAscii("a String") );
+
+        rtl::OUString aStrToTest(pStr->pData);
+        delete pStr;
+
+        // maybe here should we do something with current memory
+        char* pBuffer = (char*) malloc(2 * 8);
+        memset(pBuffer, 0, 2 * 8);
+        free(pBuffer);
+
+        sal_Bool bResult = aStrToTest.equals(rtl::OUString::createFromAscii("a String"));
+        ASSERT_TRUE(bResult == sal_True) << "String must not be empty";
+    }
+
 // -----------------------------------------------------------------------------
-class valueOf : public CppUnit::TestFixture
+class valueOf : public ::testing::Test
 {
+protected:
     void valueOf_float_test_impl(float _nValue)
         {
             rtl::OUString suValue;
             suValue = rtl::OUString::valueOf( _nValue );
             rtl::OString sValue;
             sValue <<= suValue;
-            t_print(T_VERBOSE, "nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
+            printf("nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
 
             float nValueATOF = static_cast<float>(atof( sValue.getStr() ));
 
             bool bEqualResult = is_float_equal(_nValue, nValueATOF);
-            CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
+            ASSERT_TRUE(bEqualResult == true) << "Values are not equal.";
         }
 
     void valueOf_float_test(float _nValue)
@@ -103,53 +96,7 @@ class valueOf : public CppUnit::TestFixture
             valueOf_float_test_impl(nNegativeValue);
         }
 
-public:
-    // insert your test code here.
-    void valueOf_float_test_001()
-    {
-        // this is demonstration code
-        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
-        float nValue = 3.0f;
-        valueOf_float_test(nValue);
-    }
-
-    void valueOf_float_test_002()
-    {
-        float nValue = 3.5f;
-        valueOf_float_test(nValue);
-    }
-
-    void valueOf_float_test_003()
-    {
-        float nValue = 3.0625f;
-        valueOf_float_test(nValue);
-    }
-
-    void valueOf_float_test_004()
-    {
-        float nValue = 3.502525f;
-        valueOf_float_test(nValue);
-    }
-
-    void valueOf_float_test_005()
-    {
-        float nValue = 3.141592f;
-        valueOf_float_test(nValue);
-    }
-
-    void valueOf_float_test_006()
-    {
-        float nValue = 3.5025255f;
-        valueOf_float_test(nValue);
-    }
-
-    void valueOf_float_test_007()
-    {
-        float nValue = 3.0039062f;
-        valueOf_float_test(nValue);
-    }
-
-private:
+protected:
 
     void valueOf_double_test_impl(double _nValue)
         {
@@ -157,12 +104,12 @@ private:
             suValue = rtl::OUString::valueOf( _nValue );
             rtl::OString sValue;
             sValue <<= suValue;
-            t_print(T_VERBOSE, "nDouble := %.20f  sValue := %s\n", _nValue, sValue.getStr());
+            printf("nDouble := %.20f  sValue := %s\n", _nValue, sValue.getStr());
 
             double nValueATOF = atof( sValue.getStr() );
 
             bool bEqualResult = is_double_equal(_nValue, nValueATOF);
-            CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
+            ASSERT_TRUE(bEqualResult == true) << "Values are not equal.";
         }
 
     void valueOf_double_test(double _nValue)
@@ -173,74 +120,93 @@ private:
             double nNegativeValue = -_nValue;
             valueOf_double_test_impl(nNegativeValue);
         }
-public:
+}; // class valueOf
+
+    TEST_F(valueOf, valueOf_float_test_001)
+    {
+        // this is demonstration code
+        // ASSERT_TRUE(1 == 1) << "a message";
+        float nValue = 3.0f;
+        valueOf_float_test(nValue);
+    }
+
+    TEST_F(valueOf, valueOf_float_test_002)
+    {
+        float nValue = 3.5f;
+        valueOf_float_test(nValue);
+    }
+
+    TEST_F(valueOf, valueOf_float_test_003)
+    {
+        float nValue = 3.0625f;
+        valueOf_float_test(nValue);
+    }
+
+    TEST_F(valueOf, valueOf_float_test_004)
+    {
+        float nValue = 3.502525f;
+        valueOf_float_test(nValue);
+    }
+
+    TEST_F(valueOf, valueOf_float_test_005)
+    {
+        float nValue = 3.141592f;
+        valueOf_float_test(nValue);
+    }
+
+    TEST_F(valueOf, valueOf_float_test_006)
+    {
+        float nValue = 3.5025255f;
+        valueOf_float_test(nValue);
+    }
+
+    TEST_F(valueOf, valueOf_float_test_007)
+    {
+        float nValue = 3.0039062f;
+        valueOf_float_test(nValue);
+    }
 
     // valueOf double
-    void valueOf_double_test_001()
-        {
-            double nValue = 3.0;
-            valueOf_double_test(nValue);
-        }
-    void valueOf_double_test_002()
-        {
-            double nValue = 3.5;
-            valueOf_double_test(nValue);
-        }
-    void valueOf_double_test_003()
-        {
-            double nValue = 3.0625;
-            valueOf_double_test(nValue);
-        }
-    void valueOf_double_test_004()
-        {
-            double nValue = 3.1415926535;
-            valueOf_double_test(nValue);
-        }
-    void valueOf_double_test_005()
-        {
-            double nValue = 3.141592653589793;
-            valueOf_double_test(nValue);
-        }
-    void valueOf_double_test_006()
-        {
-            double nValue = 3.1415926535897932;
-            valueOf_double_test(nValue);
-        }
-    void valueOf_double_test_007()
-        {
-            double nValue = 3.14159265358979323;
-            valueOf_double_test(nValue);
-        }
-    void valueOf_double_test_008()
-        {
-            double nValue = 3.141592653589793238462643;
-            valueOf_double_test(nValue);
-        }
-
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(valueOf);
-    CPPUNIT_TEST(valueOf_float_test_001);
-    CPPUNIT_TEST(valueOf_float_test_002);
-    CPPUNIT_TEST(valueOf_float_test_003);
-    CPPUNIT_TEST(valueOf_float_test_004);
-    CPPUNIT_TEST(valueOf_float_test_005);
-    CPPUNIT_TEST(valueOf_float_test_006);
-    CPPUNIT_TEST(valueOf_float_test_007);
-
-    CPPUNIT_TEST(valueOf_double_test_001);
-    CPPUNIT_TEST(valueOf_double_test_002);
-    CPPUNIT_TEST(valueOf_double_test_003);
-    CPPUNIT_TEST(valueOf_double_test_004);
-    CPPUNIT_TEST(valueOf_double_test_005);
-    CPPUNIT_TEST(valueOf_double_test_006);
-    CPPUNIT_TEST(valueOf_double_test_007);
-    CPPUNIT_TEST(valueOf_double_test_008);
-    CPPUNIT_TEST_SUITE_END();
-}; // class valueOf
+    TEST_F(valueOf, valueOf_double_test_001)
+    {
+        double nValue = 3.0;
+        valueOf_double_test(nValue);
+    }
+    TEST_F(valueOf, valueOf_double_test_002)
+    {
+        double nValue = 3.5;
+        valueOf_double_test(nValue);
+    }
+    TEST_F(valueOf, valueOf_double_test_003)
+    {
+        double nValue = 3.0625;
+        valueOf_double_test(nValue);
+    }
+    TEST_F(valueOf, valueOf_double_test_004)
+    {
+        double nValue = 3.1415926535;
+        valueOf_double_test(nValue);
+    }
+    TEST_F(valueOf, valueOf_double_test_005)
+    {
+        double nValue = 3.141592653589793;
+        valueOf_double_test(nValue);
+    }
+    TEST_F(valueOf, valueOf_double_test_006)
+    {
+        double nValue = 3.1415926535897932;
+        valueOf_double_test(nValue);
+    }
+    TEST_F(valueOf, valueOf_double_test_007)
+    {
+        double nValue = 3.14159265358979323;
+        valueOf_double_test(nValue);
+    }
+    TEST_F(valueOf, valueOf_double_test_008)
+    {
+        double nValue = 3.141592653589793238462643;
+        valueOf_double_test(nValue);
+    }
 
 //------------------------------------------------------------------------
 // testing the method toDouble()
@@ -308,7 +274,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
             }
             else
             {
-                t_print("warning: presision differs more than 1!\n");
+                printf("warning: presision differs more than 1!\n");
             }
         }
 
@@ -324,63 +290,60 @@ sal_Int16 SAL_CALL checkPrecisionSize()
             {
                 sal_Int16 nPrecision;
                 nPrecision = checkPrecisionSize<float>();
-                t_print("precision of float: %d sizeof()=%d \n", nPrecision, sizeof(float));
+                printf("precision of float: %d sizeof()=%lu \n", nPrecision, sizeof(float));
 
                 nPrecision = checkPrecisionSize<double>();
-                t_print("precision of double: %d sizeof()=%d \n", nPrecision, sizeof(double));
+                printf("precision of double: %d sizeof()=%lu \n", nPrecision, sizeof(double));
 
                 nPrecision = checkPrecisionSize<long double>();
-                t_print("precision of long double: %d sizeof()=%d \n", nPrecision, sizeof(long double));
+                printf("precision of long double: %d sizeof()=%lu \n", nPrecision, sizeof(long double));
 
             }
 
     };
 
-    class toInt: public CppUnit::TestFixture {
+    class toInt: public ::testing::Test {
     public:
-        void test() {
-            CPPUNIT_ASSERT_EQUAL(
-                static_cast< sal_Int32 >(-0x76543210),
-                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-76543210")).
-                 toInt32(16)));
-            CPPUNIT_ASSERT_EQUAL(
-                static_cast< sal_Int32 >(0xFEDCBA98),
-                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("+FEDCBA98")).
-                 toInt32(16)));
-            CPPUNIT_ASSERT_EQUAL(
-                static_cast< sal_Int64 >(-SAL_CONST_INT64(0x76543210FEDCBA98)),
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("-76543210FEDCBA98")).
-                 toInt64(16)));
-            CPPUNIT_ASSERT_EQUAL(
-                static_cast< sal_Int64 >(SAL_CONST_INT64(0xFEDCBA9876543210)),
-                (rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("+FEDCBA9876543210")).
-                 toInt64(16)));
-        }
-
-        CPPUNIT_TEST_SUITE(toInt);
-        CPPUNIT_TEST(test);
-        CPPUNIT_TEST_SUITE_END();
     };
+
+    TEST_F(toInt, test) {
+        ASSERT_EQ(
+            static_cast< sal_Int32 >(-0x76543210),
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-76543210")).
+            toInt32(16)));
+        ASSERT_EQ(
+            static_cast< sal_Int32 >(0xFEDCBA98),
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("+FEDCBA98")).
+            toInt32(16)));
+        ASSERT_EQ(
+            static_cast< sal_Int64 >(-SAL_CONST_INT64(0x76543210FEDCBA98)),
+            (rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("-76543210FEDCBA98")).
+            toInt64(16)));
+        ASSERT_EQ(
+            static_cast< sal_Int64 >(SAL_CONST_INT64(0xFEDCBA9876543210)),
+            (rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("+FEDCBA9876543210")).
+            toInt64(16)));
+    }
 
 // -----------------------------------------------------------------------------
 // - toDouble (tests)
 // -----------------------------------------------------------------------------
-    class toDouble : public CppUnit::TestFixture
+    class toDouble : public ::testing::Test
     {
     public:
         void toDouble_test_impl(rtl::OString const& _sValue)
             {
-                //t_print("the original str is %s\n", _sValue.getStr());
+                //printf("the original str is %s\n", _sValue.getStr());
                 double nValueATOF = atof( _sValue.getStr() );
-        //t_print("original data is %e\n", nValueATOF);
+        //printf("original data is %e\n", nValueATOF);
                 rtl::OUString suValue = rtl::OUString::createFromAscii( _sValue.getStr() );
                 double nValueToDouble = suValue.toDouble();
-                //t_print("result data is %e\n", nValueToDouble);
+                //printf("result data is %e\n", nValueToDouble);
 
                 bool bEqualResult = is_double_equal(nValueToDouble, nValueATOF);
-                CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
+                ASSERT_TRUE(bEqualResult == true) << "Values are not equal.";
             }
 
         void toDouble_test(rtl::OString const& _sValue)
@@ -392,132 +355,110 @@ sal_Int16 SAL_CALL checkPrecisionSize()
                 sNegativValue += _sValue;
                 toDouble_test_impl(sNegativValue);
             }
-
-        // insert your test code here.
-        void toDouble_selftest()
-            {
-                t_print("Start selftest:\n");
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.01) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000001) == false);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000001) == false);
-                // we check til 15 values after comma
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000000001) == true);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000000001) == true);
-                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000000001) == true);
-                t_print("Selftest done.\n");
-            }
-
-        void toDouble_test_3()
-            {
-                rtl::OString sValue("3");
-                toDouble_test(sValue);
-            }
-        void toDouble_test_3_5()
-            {
-                rtl::OString sValue("3.5");
-                toDouble_test(sValue);
-            }
-        void toDouble_test_3_0625()
-            {
-                rtl::OString sValue("3.0625");
-                toDouble_test(sValue);
-            }
-        void toDouble_test_pi()
-            {
-                // value from http://www.angio.net/pi/digits/50.txt
-                rtl::OString sValue("3.141592653589793238462643383279502884197169399375");
-                toDouble_test(sValue);
-            }
-
-        void toDouble_test_1()
-            {
-                rtl::OString sValue("1");
-                toDouble_test(sValue);
-            }
-        void toDouble_test_10()
-            {
-                rtl::OString sValue("10");
-                toDouble_test(sValue);
-            }
-        void toDouble_test_100()
-            {
-                rtl::OString sValue("100");
-                toDouble_test(sValue);
-            }
-        void toDouble_test_1000()
-            {
-                rtl::OString sValue("1000");
-                toDouble_test(sValue);
-            }
-        void toDouble_test_10000()
-            {
-                rtl::OString sValue("10000");
-                toDouble_test(sValue);
-            }
-        void toDouble_test_1e99()
-            {
-                rtl::OString sValue("1e99");
-                toDouble_test(sValue);
-            }
-        void toDouble_test_1e_n99()
-            {
-                rtl::OString sValue("1e-99");
-                toDouble_test(sValue);
-            }
-        void toDouble_test_1e308()
-            {
-                rtl::OString sValue("1e308");
-                toDouble_test(sValue);
-            }
-
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
-
-        CPPUNIT_TEST_SUITE(toDouble);
-        CPPUNIT_TEST(toDouble_selftest);
-
-        CPPUNIT_TEST(toDouble_test_3);
-        CPPUNIT_TEST(toDouble_test_3_5);
-        CPPUNIT_TEST(toDouble_test_3_0625);
-        CPPUNIT_TEST(toDouble_test_pi);
-        CPPUNIT_TEST(toDouble_test_1);
-        CPPUNIT_TEST(toDouble_test_10);
-        CPPUNIT_TEST(toDouble_test_100);
-        CPPUNIT_TEST(toDouble_test_1000);
-        CPPUNIT_TEST(toDouble_test_10000);
-        CPPUNIT_TEST(toDouble_test_1e99);
-        CPPUNIT_TEST(toDouble_test_1e_n99);
-        CPPUNIT_TEST(toDouble_test_1e308);
-        CPPUNIT_TEST_SUITE_END();
     }; // class toDouble
+
+    TEST_F(toDouble, toDouble_selftest)
+    {
+        printf("Start selftest:\n");
+        ASSERT_TRUE (is_double_equal(1.0, 1.01) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.001) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.0001) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.00001) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.000001) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.0000001) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.00000001) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.000000001) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.0000000001) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.00000000001) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.000000000001) == false);
+        ASSERT_TRUE (is_double_equal(1.0, 1.0000000000001) == false);
+        // we check til 15 values after comma
+        ASSERT_TRUE (is_double_equal(1.0, 1.00000000000001) == true);
+        ASSERT_TRUE (is_double_equal(1.0, 1.000000000000001) == true);
+        ASSERT_TRUE (is_double_equal(1.0, 1.0000000000000001) == true);
+        printf("Selftest done.\n");
+    }
+
+    TEST_F(toDouble, toDouble_test_3)
+    {
+        rtl::OString sValue("3");
+        toDouble_test(sValue);
+    }
+    TEST_F(toDouble, toDouble_test_3_5)
+    {
+        rtl::OString sValue("3.5");
+        toDouble_test(sValue);
+    }
+    TEST_F(toDouble, toDouble_test_3_0625)
+    {
+        rtl::OString sValue("3.0625");
+        toDouble_test(sValue);
+    }
+    TEST_F(toDouble, toDouble_test_pi)
+    {
+        // value from http://www.angio.net/pi/digits/50.txt
+        rtl::OString sValue("3.141592653589793238462643383279502884197169399375");
+        toDouble_test(sValue);
+    }
+
+    TEST_F(toDouble, toDouble_test_1)
+    {
+        rtl::OString sValue("1");
+        toDouble_test(sValue);
+    }
+    TEST_F(toDouble, toDouble_test_10)
+    {
+        rtl::OString sValue("10");
+        toDouble_test(sValue);
+    }
+    TEST_F(toDouble, toDouble_test_100)
+    {
+        rtl::OString sValue("100");
+        toDouble_test(sValue);
+    }
+    TEST_F(toDouble, toDouble_test_1000)
+    {
+        rtl::OString sValue("1000");
+        toDouble_test(sValue);
+    }
+    TEST_F(toDouble, toDouble_test_10000)
+    {
+        rtl::OString sValue("10000");
+        toDouble_test(sValue);
+    }
+    TEST_F(toDouble, toDouble_test_1e99)
+    {
+        rtl::OString sValue("1e99");
+        toDouble_test(sValue);
+    }
+    TEST_F(toDouble, toDouble_test_1e_n99)
+    {
+        rtl::OString sValue("1e-99");
+        toDouble_test(sValue);
+    }
+    TEST_F(toDouble, toDouble_test_1e308)
+    {
+        rtl::OString sValue("1e308");
+        toDouble_test(sValue);
+    }
 
 // -----------------------------------------------------------------------------
 // - toFloat (tests)
 // -----------------------------------------------------------------------------
-    class toFloat : public CppUnit::TestFixture
+    class toFloat : public ::testing::Test
     {
     public:
         void toFloat_test_impl(rtl::OString const& _sValue)
             {
-                //t_print("the original str is %s\n", _sValue.getStr());
+                //printf("the original str is %s\n", _sValue.getStr());
                 float nValueATOF = static_cast<float>(atof( _sValue.getStr() ));
-        //t_print("the original str is %.10f\n", nValueATOF);
+        //printf("the original str is %.10f\n", nValueATOF);
                 rtl::OUString suValue = rtl::OUString::createFromAscii( _sValue.getStr() );
                 float nValueToFloat = suValue.toFloat();
-                //t_print("the result str is %.10f\n", nValueToFloat);
+                //printf("the result str is %.10f\n", nValueToFloat);
 
                 bool bEqualResult = is_float_equal(nValueToFloat, nValueATOF);
-                CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
+                ASSERT_TRUE(bEqualResult == true) << "Values are not equal.";
             }
 
         void toFloat_test(rtl::OString const& _sValue)
@@ -529,126 +470,101 @@ sal_Int16 SAL_CALL checkPrecisionSize()
                 sNegativValue += _sValue;
                 toFloat_test_impl(sNegativValue);
             }
-
-        // insert your test code here.
-        void toFloat_selftest()
-            {
-                t_print("Start selftest:\n");
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.01f) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.001f) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.0001f) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.00001f) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.000002f) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.0000001f) == true);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.00000001f) == true);
-                CPPUNIT_ASSERT (is_float_equal(1.0f, 1.000000001f) == true);
-
-                t_print("Selftest done.\n");
-            }
-
-        void toFloat_test_3()
-            {
-                rtl::OString sValue("3");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_3_5()
-            {
-                rtl::OString sValue("3.5");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_3_0625()
-            {
-                rtl::OString sValue("3.0625");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_3_0625_e()
-            {
-                rtl::OString sValue("3.0625e-4");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_pi()
-            {
-                // value from http://www.angio.net/pi/digits/50.txt
-                rtl::OString sValue("3.141592653589793238462643383279502884197169399375");
-                toFloat_test(sValue);
-            }
-
-        void toFloat_test_1()
-            {
-                rtl::OString sValue("1");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_10()
-            {
-                rtl::OString sValue("10");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_100()
-            {
-                rtl::OString sValue("100");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_1000()
-            {
-                rtl::OString sValue("1000");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_10000()
-            {
-                rtl::OString sValue("10000");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_mix()
-            {
-                rtl::OString sValue("456789321455.123456789012");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_1e99()
-            {
-                rtl::OString sValue("1e99");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_1e_n99()
-            {
-                rtl::OString sValue("1e-9");
-                toFloat_test(sValue);
-            }
-        void toFloat_test_1e308()
-            {
-                rtl::OString sValue("1e308");
-                toFloat_test(sValue);
-            }
-
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
-
-        CPPUNIT_TEST_SUITE(toFloat);
-        CPPUNIT_TEST(toFloat_selftest);
-
-        CPPUNIT_TEST(toFloat_test_3);
-        CPPUNIT_TEST(toFloat_test_3_5);
-        CPPUNIT_TEST(toFloat_test_3_0625);
-        CPPUNIT_TEST(toFloat_test_3_0625_e);
-        CPPUNIT_TEST(toFloat_test_pi);
-        CPPUNIT_TEST(toFloat_test_1);
-        CPPUNIT_TEST(toFloat_test_10);
-        CPPUNIT_TEST(toFloat_test_100);
-        CPPUNIT_TEST(toFloat_test_1000);
-        CPPUNIT_TEST(toFloat_test_10000);
-        CPPUNIT_TEST(toFloat_test_mix);
-        CPPUNIT_TEST(toFloat_test_1e99);
-        CPPUNIT_TEST(toFloat_test_1e_n99);
-        CPPUNIT_TEST(toFloat_test_1e308);
-        CPPUNIT_TEST_SUITE_END();
     }; // class toFloat
+
+    TEST_F(toFloat, toFloat_selftest)
+    {
+        printf("Start selftest:\n");
+        ASSERT_TRUE (is_float_equal(1.0f, 1.01f) == false);
+        ASSERT_TRUE (is_float_equal(1.0f, 1.001f) == false);
+        ASSERT_TRUE (is_float_equal(1.0f, 1.0001f) == false);
+        ASSERT_TRUE (is_float_equal(1.0f, 1.00001f) == false);
+        ASSERT_TRUE (is_float_equal(1.0f, 1.000002f) == false);
+        ASSERT_TRUE (is_float_equal(1.0f, 1.0000001f) == true);
+        ASSERT_TRUE (is_float_equal(1.0f, 1.00000001f) == true);
+        ASSERT_TRUE (is_float_equal(1.0f, 1.000000001f) == true);
+
+        printf("Selftest done.\n");
+    }
+
+    TEST_F(toFloat, toFloat_test_3)
+    {
+        rtl::OString sValue("3");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_3_5)
+    {
+        rtl::OString sValue("3.5");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_3_0625)
+    {
+        rtl::OString sValue("3.0625");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_3_0625_e)
+    {
+        rtl::OString sValue("3.0625e-4");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_pi)
+    {
+        // value from http://www.angio.net/pi/digits/50.txt
+        rtl::OString sValue("3.141592653589793238462643383279502884197169399375");
+        toFloat_test(sValue);
+    }
+
+    TEST_F(toFloat, toFloat_test_1)
+    {
+        rtl::OString sValue("1");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_10)
+    {
+        rtl::OString sValue("10");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_100)
+    {
+        rtl::OString sValue("100");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_1000)
+    {
+        rtl::OString sValue("1000");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_10000)
+    {
+        rtl::OString sValue("10000");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_mix)
+    {
+        rtl::OString sValue("456789321455.123456789012");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_1e99)
+    {
+        rtl::OString sValue("1e99");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_1e_n99)
+    {
+        rtl::OString sValue("1e-9");
+        toFloat_test(sValue);
+    }
+    TEST_F(toFloat, toFloat_test_1e308)
+    {
+        rtl::OString sValue("1e308");
+        toFloat_test(sValue);
+    }
 
 // -----------------------------------------------------------------------------
 // - lastIndexOf (tests)
 // -----------------------------------------------------------------------------
-class lastIndexOf : public CppUnit::TestFixture
+class lastIndexOf : public ::testing::Test
 {
-
 public:
     void lastIndexOf_oustring(rtl::OUString const& _suStr, rtl::OUString const& _suSearchStr, sal_Int32 _nExpectedResultPos)
         {
@@ -657,7 +573,7 @@ public:
             // check if the _nExpectedResultPos occurs.
 
             sal_Int32 nPos = _suStr.lastIndexOf(_suSearchStr);
-            CPPUNIT_ASSERT_MESSAGE("expected position is wrong", nPos == _nExpectedResultPos);
+            ASSERT_TRUE(nPos == _nExpectedResultPos) << "expected position is wrong";
         }
 
     void lastIndexOf_salunicode(rtl::OUString const& _suStr, sal_Unicode _cuSearchChar, sal_Int32 _nExpectedResultPos)
@@ -667,351 +583,305 @@ public:
             // check if the _nExpectedResultPos occurs.
 
             sal_Int32 nPos = _suStr.lastIndexOf(_cuSearchChar);
-            CPPUNIT_ASSERT_MESSAGE("expected position is wrong", nPos == _nExpectedResultPos);
+            ASSERT_TRUE(nPos == _nExpectedResultPos) << "expected position is wrong";
         }
 
     void lastIndexOf_oustring_offset(rtl::OUString const& _suStr, rtl::OUString const& _suSearchStr, sal_Int32 _nExpectedResultPos, sal_Int32 _nStartOffset)
         {
             sal_Int32 nPos = _suStr.lastIndexOf(_suSearchStr, _nStartOffset);
-            CPPUNIT_ASSERT_MESSAGE("expected position is wrong", nPos == _nExpectedResultPos);
+            ASSERT_TRUE(nPos == _nExpectedResultPos) << "expected position is wrong";
         }
 
     void lastIndexOf_salunicode_offset(rtl::OUString const& _suStr, sal_Unicode _cuSearchChar, sal_Int32 _nExpectedResultPos, sal_Int32 _nStartOffset)
         {
             sal_Int32 nPos = _suStr.lastIndexOf(_cuSearchChar, _nStartOffset);
-            CPPUNIT_ASSERT_MESSAGE("expected position is wrong", nPos == _nExpectedResultPos);
+            ASSERT_TRUE(nPos == _nExpectedResultPos) << "expected position is wrong";
         }
-
-    // -----------------------------------------------------------------------------
-
-    void lastIndexOf_test_oustring_offset_001()
-        {
-            // search for sun, start at the end, found (pos==0)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
-            lastIndexOf_oustring_offset(aStr, aSearchStr, 0, aStr.getLength());
-        }
-
-    void lastIndexOf_test_oustring_offset_002()
-        {
-            // search for sun, start at pos = 3, found (pos==0)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
-            lastIndexOf_oustring_offset(aStr, aSearchStr, 0, 3);
-        }
-
-    void lastIndexOf_test_oustring_offset_003()
-        {
-            // search for sun, start at pos = 2, found (pos==-1)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
-            lastIndexOf_oustring_offset(aStr, aSearchStr, -1, 2);
-        }
-
-    void lastIndexOf_test_oustring_offset_004()
-        {
-            // search for sun, start at the end, found (pos==0)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
-            lastIndexOf_oustring_offset(aStr, aSearchStr, -1, -1);
-        }
-
-    void lastIndexOf_test_oustring_001()
-        {
-            // search for sun, found (pos==0)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, 0);
-        }
-
-    void lastIndexOf_test_oustring_002()
-        {
-            // search for sun, found (pos==4)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, 4);
-        }
-
-    void lastIndexOf_test_oustring_003()
-        {
-            // search for sun, found (pos==8)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, 8);
-        }
-
-    void lastIndexOf_test_oustring_004()
-        {
-            // search for sun, found (pos==8)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, 8);
-        }
-
-    void lastIndexOf_test_oustring_005()
-        {
-            // search for sun, found (pos==4)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun su");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, 4);
-        }
-
-    void lastIndexOf_test_oustring_006()
-        {
-            // search for sun, found (pos==-1)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the su su");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
-            lastIndexOf_oustring(aStr, aSearchStr, -1);
-        }
-
-    void lastIndexOf_test_oustring_007()
-        {
-            // search for earth, not found (-1)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the su su");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("earth");
-            lastIndexOf_oustring(aStr, aSearchStr, -1);
-        }
-
-    void lastIndexOf_test_oustring_008()
-        {
-            // search for earth, not found (-1)
-            rtl::OUString aStr = rtl::OUString();
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("earth");
-            lastIndexOf_oustring(aStr, aSearchStr, -1);
-        }
-
-    void lastIndexOf_test_oustring_009()
-        {
-            // search for earth, not found (-1)
-            rtl::OUString aStr = rtl::OUString();
-            rtl::OUString aSearchStr = rtl::OUString();
-            lastIndexOf_oustring(aStr, aSearchStr, -1);
-
-        }
-
-    void lastIndexOf_test_salunicode_001()
-        {
-            // search for 's', found (19)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
-            sal_Unicode suChar = L's';
-            lastIndexOf_salunicode(aStr, suChar, 19);
-        }
-
-    void lastIndexOf_test_salunicode_002()
-        {
-            // search for 'x', not found (-1)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
-            sal_Unicode suChar = L'x';
-            lastIndexOf_salunicode(aStr, suChar, -1);
-        }
-
-    void lastIndexOf_test_salunicode_offset_001()
-        {
-            // search for 's', start from pos last char, found (19)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
-            sal_Unicode cuChar = L's';
-            lastIndexOf_salunicode_offset(aStr, cuChar, 19, aStr.getLength());
-        }
-    void lastIndexOf_test_salunicode_offset_002()
-        {
-            // search for 's', start pos is last occur from search behind, found (17)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
-            sal_Unicode cuChar = L's';
-            lastIndexOf_salunicode_offset(aStr, cuChar, 17, 19);
-        }
-    void lastIndexOf_test_salunicode_offset_003()
-        {
-            // search for 't', start pos is 1, found (0)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
-            sal_Unicode cuChar = L't';
-            lastIndexOf_salunicode_offset(aStr, cuChar, 0, 1);
-        }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(lastIndexOf);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_001);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_002);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_003);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_004);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_005);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_006);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_007);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_008);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_009);
-
-    CPPUNIT_TEST(lastIndexOf_test_oustring_offset_001);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_offset_002);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_offset_003);
-    CPPUNIT_TEST(lastIndexOf_test_oustring_offset_004);
-
-    CPPUNIT_TEST(lastIndexOf_test_salunicode_001);
-    CPPUNIT_TEST(lastIndexOf_test_salunicode_002);
-
-    CPPUNIT_TEST(lastIndexOf_test_salunicode_offset_001);
-    CPPUNIT_TEST(lastIndexOf_test_salunicode_offset_002);
-    CPPUNIT_TEST(lastIndexOf_test_salunicode_offset_003);
-
-    CPPUNIT_TEST_SUITE_END();
 }; // class lastIndexOf
 
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_offset_001)
+    {
+        // search for sun, start at the end, found (pos==0)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+        lastIndexOf_oustring_offset(aStr, aSearchStr, 0, aStr.getLength());
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_offset_002)
+    {
+        // search for sun, start at pos = 3, found (pos==0)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+        lastIndexOf_oustring_offset(aStr, aSearchStr, 0, 3);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_offset_003)
+    {
+        // search for sun, start at pos = 2, found (pos==-1)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+        lastIndexOf_oustring_offset(aStr, aSearchStr, -1, 2);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_offset_004)
+    {
+        // search for sun, start at the end, found (pos==0)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+        lastIndexOf_oustring_offset(aStr, aSearchStr, -1, -1);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_001)
+    {
+        // search for sun, found (pos==0)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+        lastIndexOf_oustring(aStr, aSearchStr, 0);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_002)
+    {
+        // search for sun, found (pos==4)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the sun java system");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+        lastIndexOf_oustring(aStr, aSearchStr, 4);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_003)
+    {
+        // search for sun, found (pos==8)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+        lastIndexOf_oustring(aStr, aSearchStr, 8);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_004)
+    {
+        // search for sun, found (pos==8)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+        lastIndexOf_oustring(aStr, aSearchStr, 8);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_005)
+    {
+        // search for sun, found (pos==4)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the sun su");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+        lastIndexOf_oustring(aStr, aSearchStr, 4);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_006)
+    {
+        // search for sun, found (pos==-1)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the su su");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+        lastIndexOf_oustring(aStr, aSearchStr, -1);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_007)
+    {
+        // search for earth, not found (-1)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the su su");
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("earth");
+        lastIndexOf_oustring(aStr, aSearchStr, -1);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_008)
+    {
+        // search for earth, not found (-1)
+        rtl::OUString aStr = rtl::OUString();
+        rtl::OUString aSearchStr = rtl::OUString::createFromAscii("earth");
+        lastIndexOf_oustring(aStr, aSearchStr, -1);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_oustring_009)
+    {
+        // search for earth, not found (-1)
+        rtl::OUString aStr = rtl::OUString();
+        rtl::OUString aSearchStr = rtl::OUString();
+        lastIndexOf_oustring(aStr, aSearchStr, -1);
+
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_salunicode_001)
+    {
+        // search for 's', found (19)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+        sal_Unicode suChar = L's';
+        lastIndexOf_salunicode(aStr, suChar, 19);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_salunicode_002)
+    {
+        // search for 'x', not found (-1)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+        sal_Unicode suChar = L'x';
+        lastIndexOf_salunicode(aStr, suChar, -1);
+    }
+
+    TEST_F(lastIndexOf, lastIndexOf_test_salunicode_offset_001)
+    {
+        // search for 's', start from pos last char, found (19)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+        sal_Unicode cuChar = L's';
+        lastIndexOf_salunicode_offset(aStr, cuChar, 19, aStr.getLength());
+    }
+    TEST_F(lastIndexOf, lastIndexOf_test_salunicode_offset_002)
+    {
+        // search for 's', start pos is last occur from search behind, found (17)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+        sal_Unicode cuChar = L's';
+        lastIndexOf_salunicode_offset(aStr, cuChar, 17, 19);
+    }
+    TEST_F(lastIndexOf, lastIndexOf_test_salunicode_offset_003)
+    {
+        // search for 't', start pos is 1, found (0)
+        rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+        sal_Unicode cuChar = L't';
+        lastIndexOf_salunicode_offset(aStr, cuChar, 0, 1);
+    }
 
 // -----------------------------------------------------------------------------
 // - getToken (tests)
 // -----------------------------------------------------------------------------
-class getToken : public CppUnit::TestFixture
+class getToken : public ::testing::Test
 {
-
 public:
-    void getToken_000()
-        {
-            rtl::OUString suTokenStr;
-
-            sal_Int32 nIndex = 0;
-            do
-            {
-                rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            }
-            while ( nIndex >= 0 );
-            t_print("Index %d\n", nIndex);
-            // should not GPF
-        }
-
-    void getToken_001()
-        {
-            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;b");
-
-            sal_Int32 nIndex = 0;
-
-            rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True);
-
-            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True);
-            CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
-        }
-
-    void getToken_002()
-        {
-            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;b.c");
-
-            sal_Int32 nIndex = 0;
-
-            rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True);
-
-            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True);
-
-            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'c'", suToken.equals(rtl::OUString::createFromAscii("c")) == sal_True);
-            CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
-        }
-
-    void getToken_003()
-        {
-            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;;b");
-
-            sal_Int32 nIndex = 0;
-
-            rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True);
-
-            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.getLength() == 0);
-
-            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True);
-            CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
-        }
-
-    void getToken_004()
-        {
-            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("longer.then.ever.");
-
-            sal_Int32 nIndex = 0;
-
-            rtl::OUString suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'longer'", suToken.equals(rtl::OUString::createFromAscii("longer")) == sal_True);
-
-            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'then'", suToken.equals(rtl::OUString::createFromAscii("then")) == sal_True);
-
-            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'ever'", suToken.equals(rtl::OUString::createFromAscii("ever")) == sal_True);
-
-            /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.getLength() == 0);
-
-            CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
-        }
-
-    void getToken_005() {
-        rtl::OUString ab(RTL_CONSTASCII_USTRINGPARAM("ab"));
-        sal_Int32 n = 0;
-        CPPUNIT_ASSERT_MESSAGE(
-            "token should be 'ab'", ab.getToken(0, '-', n) == ab);
-        CPPUNIT_ASSERT_MESSAGE("n should be -1", n == -1);
-        CPPUNIT_ASSERT_MESSAGE(
-            "token should be empty", ab.getToken(0, '-', n).getLength() == 0);
-    }
-
-    CPPUNIT_TEST_SUITE(getToken);
-    CPPUNIT_TEST(getToken_000);
-    CPPUNIT_TEST(getToken_001);
-    CPPUNIT_TEST(getToken_002);
-    CPPUNIT_TEST(getToken_003);
-    CPPUNIT_TEST(getToken_004);
-    CPPUNIT_TEST(getToken_005);
-    CPPUNIT_TEST_SUITE_END();
 }; // class getToken
 
-class convertToString: public CppUnit::TestFixture {
-public:
-    void test();
+    TEST_F(getToken, getToken_000)
+    {
+        rtl::OUString suTokenStr;
 
-    CPPUNIT_TEST_SUITE(convertToString);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
+        sal_Int32 nIndex = 0;
+        do
+        {
+            rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
+        }
+        while ( nIndex >= 0 );
+        printf("Index %d\n", nIndex);
+        // should not GPF
+    }
+
+    TEST_F(getToken, getToken_001)
+    {
+        rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;b");
+
+        sal_Int32 nIndex = 0;
+
+        rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
+        ASSERT_TRUE(suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True) << "Token should be a 'a'";
+
+        /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
+        ASSERT_TRUE(suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True) << "Token should be a 'b'";
+        ASSERT_TRUE(nIndex == -1) << "index should be negative";
+    }
+
+    TEST_F(getToken, getToken_002)
+    {
+        rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;b.c");
+
+        sal_Int32 nIndex = 0;
+
+        rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
+        ASSERT_TRUE(suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True) << "Token should be a 'a'";
+
+        /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
+        ASSERT_TRUE(suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True) << "Token should be a 'b'";
+
+        /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
+        ASSERT_TRUE(suToken.equals(rtl::OUString::createFromAscii("c")) == sal_True) << "Token should be a 'c'";
+        ASSERT_TRUE(nIndex == -1) << "index should be negative";
+    }
+
+    TEST_F(getToken, getToken_003)
+    {
+        rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;;b");
+
+        sal_Int32 nIndex = 0;
+
+        rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
+        ASSERT_TRUE(suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True) << "Token should be a 'a'";
+
+        /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
+        ASSERT_TRUE(suToken.getLength() == 0) << "Token should be empty";
+
+        /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
+        ASSERT_TRUE(suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True) << "Token should be a 'b'";
+        ASSERT_TRUE(nIndex == -1) << "index should be negative";
+    }
+
+    TEST_F(getToken, getToken_004)
+    {
+        rtl::OUString suTokenStr = rtl::OUString::createFromAscii("longer.then.ever.");
+
+        sal_Int32 nIndex = 0;
+
+        rtl::OUString suToken = suTokenStr.getToken( 0, '.', nIndex );
+        ASSERT_TRUE(suToken.equals(rtl::OUString::createFromAscii("longer")) == sal_True) << "Token should be 'longer'";
+
+        /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
+        ASSERT_TRUE(suToken.equals(rtl::OUString::createFromAscii("then")) == sal_True) << "Token should be 'then'";
+
+        /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
+        ASSERT_TRUE(suToken.equals(rtl::OUString::createFromAscii("ever")) == sal_True) << "Token should be 'ever'";
+
+        /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
+        ASSERT_TRUE(suToken.getLength() == 0) << "Token should be empty";
+
+        ASSERT_TRUE(nIndex == -1) << "index should be negative";
+    }
+
+    TEST_F(getToken, getToken_005) {
+        rtl::OUString ab(RTL_CONSTASCII_USTRINGPARAM("ab"));
+        sal_Int32 n = 0;
+        ASSERT_TRUE(ab.getToken(0, '-', n) == ab) << "token should be 'ab'";
+        ASSERT_TRUE(n == -1) << "n should be -1";
+        ASSERT_TRUE(ab.getToken(0, '-', n).getLength() == 0) << "token should be empty";
+    }
+
+class convertToString: public ::testing::Test {
+public:
 };
 
-void convertToString::test() {
+TEST_F(convertToString, test) {
     static sal_Unicode const utf16[] = { 0x0041, 0x00E4, 0x0061 };
     rtl::OString s;
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         rtl::OUString(utf16, sizeof utf16 / sizeof utf16[0]).convertToString(
             &s, RTL_TEXTENCODING_UTF7,
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         rtl::OString(RTL_CONSTASCII_STRINGPARAM("A+AOQ-a")), s);
 }
 
 // -----------------------------------------------------------------------------
 // - string construction & interning (tests)
 // -----------------------------------------------------------------------------
-class construction : public CppUnit::TestFixture
+class construction : public ::testing::Test
 {
 public:
-    void construct()
+};
+
+    TEST_F(construction, construct)
     {
 #ifdef RTL_INLINE_STRINGS
         ::rtl::OUString aFoo( RTL_CONSTASCII_USTRINGPARAM("foo") );
-        CPPUNIT_ASSERT_MESSAGE("string contents", aFoo[0] == 'f');
-        CPPUNIT_ASSERT_MESSAGE("string contents", aFoo[1] == 'o');
-        CPPUNIT_ASSERT_MESSAGE("string contents", aFoo[2] == 'o');
-        CPPUNIT_ASSERT_MESSAGE("string length", aFoo.getLength() == 3);
+        ASSERT_TRUE(aFoo[0] == 'f') << "string contents";
+        ASSERT_TRUE(aFoo[1] == 'o') << "string contents";
+        ASSERT_TRUE(aFoo[2] == 'o') << "string contents";
+        ASSERT_TRUE(aFoo.getLength() == 3) << "string length";
 
         ::rtl::OUString aBaa( RTL_CONSTASCII_USTRINGPARAM("this is a very long string with a lot of long things inside it and it goes on and on and on forever etc.") );
-        CPPUNIT_ASSERT_MESSAGE("string length", aBaa.getLength() == 104);
+        ASSERT_TRUE(aBaa.getLength() == 104) << "string length";
         // Dig at the internals ... FIXME: should we have the bit-flag defines public ?
-        CPPUNIT_ASSERT_MESSAGE("string static flags", (aBaa.pData->refCount & 1<<30) != 0);
+        ASSERT_TRUE((aBaa.pData->refCount & 1<<30) != 0) << "string static flags";
 #endif
     }
 
-    void intern()
+    TEST_F(construction, intern)
     {
         // The empty string is 'static' a special case ...
         rtl::OUString aEmpty = rtl::OUString().intern();
@@ -1019,10 +889,10 @@ public:
 
         ::rtl::OUString aFoo( RTL_CONSTASCII_USTRINGPARAM("foo") );
         ::rtl::OUString aFooIntern = aFoo.intern();
-        CPPUNIT_ASSERT_MESSAGE("string contents", aFooIntern.equalsAscii("foo"));
-        CPPUNIT_ASSERT_MESSAGE("string length", aFooIntern.getLength() == 3);
+        ASSERT_TRUE(aFooIntern.equalsAscii("foo")) << "string contents";
+        ASSERT_TRUE(aFooIntern.getLength() == 3) << "string length";
         // We have to dup due to no atomic 'intern' bit-set operation
-        CPPUNIT_ASSERT_MESSAGE("intern dups", aFoo.pData != aFooIntern.pData);
+        ASSERT_TRUE(aFoo.pData != aFooIntern.pData) << "intern dups";
 
         // Test interning lots of things
         int i;
@@ -1040,8 +910,7 @@ public:
         for (i = 0; i < nSequence; i++)
         {
             rtl::OUString aNew = rtl::OUString::valueOf( sqrt( static_cast<double>(i) ) ).intern();
-            CPPUNIT_ASSERT_MESSAGE("double intern failed",
-                                   aNew.pData == pStrs[i].pData);
+            ASSERT_TRUE(aNew.pData == pStrs[i].pData) << "double intern failed";
         }
 
         // Free strings to check for leaks
@@ -1061,216 +930,165 @@ public:
             nValue = reinterpret_cast<sal_uIntPtr>( aIntern.pData );
             // This may not be 100% reliable: memory may
             // have been re-used, but it's worth checking.
-            CPPUNIT_ASSERT_MESSAGE("intern leaking", nValue != pValues[i]);
+            ASSERT_TRUE(nValue != pValues[i]) << "intern leaking";
         }
         delete [] pValues;
         delete [] pStrs;
     }
 
-    CPPUNIT_TEST_SUITE(construction);
-    CPPUNIT_TEST(construct);
-    CPPUNIT_TEST(intern);
-    CPPUNIT_TEST_SUITE_END();
-};
-
-class indexOfAscii: public CppUnit::TestFixture {
+class indexOfAscii: public ::testing::Test {
 public:
-    void test();
-
-    CPPUNIT_TEST_SUITE(indexOfAscii);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void indexOfAscii::test() {
-    CPPUNIT_ASSERT_EQUAL(
+TEST_F(indexOfAscii, test) {
+    ASSERT_EQ(
         sal_Int32(-1),
         rtl::OUString().indexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         sal_Int32(-1),
         rtl::OUString().lastIndexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         sal_Int32(0),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo")).indexOfAsciiL(
             RTL_CONSTASCII_STRINGPARAM("foo")));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         sal_Int32(0),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo")).lastIndexOfAsciiL(
             RTL_CONSTASCII_STRINGPARAM("foo")));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         sal_Int32(2),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fofoobar")).indexOfAsciiL(
             RTL_CONSTASCII_STRINGPARAM("foo")));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         sal_Int32(3),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foofoofob")).
         lastIndexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         sal_Int32(3),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foofoobar")).indexOfAsciiL(
             RTL_CONSTASCII_STRINGPARAM("foo"), 1));
 }
 
-class endsWith: public CppUnit::TestFixture {
+class endsWith: public ::testing::Test {
 public:
-    void test();
-
-    CPPUNIT_TEST_SUITE(endsWith);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void endsWith::test() {
-    CPPUNIT_ASSERT_EQUAL(
+TEST_F(endsWith, test) {
+    ASSERT_EQ(
         true,
         rtl::OUString().endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         false,
         rtl::OUString().endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         true,
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bar")).endsWithAsciiL(
             RTL_CONSTASCII_STRINGPARAM("bar")));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         true,
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobar")).endsWithAsciiL(
             RTL_CONSTASCII_STRINGPARAM("bar")));
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         false,
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FOOBAR")).endsWithAsciiL(
             RTL_CONSTASCII_STRINGPARAM("bar")));
 }
 
-class createFromCodePoints: public CppUnit::TestFixture {
+class createFromCodePoints: public ::testing::Test {
 public:
-    void test();
-
-    CPPUNIT_TEST_SUITE(createFromCodePoints);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void createFromCodePoints::test() {
-    CPPUNIT_ASSERT_EQUAL(
+TEST_F(createFromCodePoints, test) {
+    ASSERT_EQ(
         sal_Int32(0),
         rtl::OUString(static_cast< sal_uInt32 const * >(NULL), 0).getLength());
     static sal_uInt32 const cp[] = { 0, 0xD800, 0xFFFF, 0x10000, 0x10FFFF };
     rtl::OUString s(cp, sizeof cp / sizeof (sal_uInt32));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), s.getLength());
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0), s[0]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xD800), s[1]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xFFFF), s[2]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xD800), s[3]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xDC00), s[4]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xDBFF), s[5]);
-    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xDFFF), s[6]);
+    ASSERT_EQ(sal_Int32(7), s.getLength());
+    ASSERT_EQ(sal_Unicode(0), s[0]);
+    ASSERT_EQ(sal_Unicode(0xD800), s[1]);
+    ASSERT_EQ(sal_Unicode(0xFFFF), s[2]);
+    ASSERT_EQ(sal_Unicode(0xD800), s[3]);
+    ASSERT_EQ(sal_Unicode(0xDC00), s[4]);
+    ASSERT_EQ(sal_Unicode(0xDBFF), s[5]);
+    ASSERT_EQ(sal_Unicode(0xDFFF), s[6]);
 }
 
-class iterateCodePoints: public CppUnit::TestFixture {
+class iterateCodePoints: public ::testing::Test {
 public:
-    void testNotWellFormed();
-
-    CPPUNIT_TEST_SUITE(iterateCodePoints);
-    CPPUNIT_TEST(testNotWellFormed);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void iterateCodePoints::testNotWellFormed() {
+TEST_F(iterateCodePoints, testNotWellFormed) {
     static sal_Unicode const utf16[] =
         { 0xD800, 0xDC00, 0x0041, 0xDBFF, 0xDFFF, 0xDDEF, 0xD9AB };
     rtl::OUString s(utf16, sizeof utf16 / sizeof (sal_Unicode));
     sal_Int32 i = 0;
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), s.iterateCodePoints(&i));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), i);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x0041), s.iterateCodePoints(&i));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), i);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10FFFF), s.iterateCodePoints(&i));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), i);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xDDEF), s.iterateCodePoints(&i));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), i);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xD9AB), s.iterateCodePoints(&i));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), i);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xD9AB), s.iterateCodePoints(&i, -1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), i);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xDDEF), s.iterateCodePoints(&i, -1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), i);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10FFFF), s.iterateCodePoints(&i, -1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), i);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x0041), s.iterateCodePoints(&i, -1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), i);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), s.iterateCodePoints(&i, -1));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    ASSERT_EQ(sal_uInt32(0x10000), s.iterateCodePoints(&i));
+    ASSERT_EQ(sal_Int32(2), i);
+    ASSERT_EQ(sal_uInt32(0x0041), s.iterateCodePoints(&i));
+    ASSERT_EQ(sal_Int32(3), i);
+    ASSERT_EQ(sal_uInt32(0x10FFFF), s.iterateCodePoints(&i));
+    ASSERT_EQ(sal_Int32(5), i);
+    ASSERT_EQ(sal_uInt32(0xDDEF), s.iterateCodePoints(&i));
+    ASSERT_EQ(sal_Int32(6), i);
+    ASSERT_EQ(sal_uInt32(0xD9AB), s.iterateCodePoints(&i));
+    ASSERT_EQ(sal_Int32(7), i);
+    ASSERT_EQ(sal_uInt32(0xD9AB), s.iterateCodePoints(&i, -1));
+    ASSERT_EQ(sal_Int32(6), i);
+    ASSERT_EQ(sal_uInt32(0xDDEF), s.iterateCodePoints(&i, -1));
+    ASSERT_EQ(sal_Int32(5), i);
+    ASSERT_EQ(sal_uInt32(0x10FFFF), s.iterateCodePoints(&i, -1));
+    ASSERT_EQ(sal_Int32(3), i);
+    ASSERT_EQ(sal_uInt32(0x0041), s.iterateCodePoints(&i, -1));
+    ASSERT_EQ(sal_Int32(2), i);
+    ASSERT_EQ(sal_uInt32(0x10000), s.iterateCodePoints(&i, -1));
+    ASSERT_EQ(sal_Int32(0), i);
     i = 1;
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xDC00), s.iterateCodePoints(&i, 2));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), i);
+    ASSERT_EQ(sal_uInt32(0xDC00), s.iterateCodePoints(&i, 2));
+    ASSERT_EQ(sal_Int32(3), i);
     i = 4;
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), s.iterateCodePoints(&i, -3));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    ASSERT_EQ(sal_uInt32(0x10000), s.iterateCodePoints(&i, -3));
+    ASSERT_EQ(sal_Int32(0), i);
 }
 
-class convertFromString: public CppUnit::TestFixture {
+class convertFromString: public ::testing::Test {
 public:
-    void test();
-
-    CPPUNIT_TEST_SUITE(createFromCodePoints);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-void convertFromString::test() {
+TEST_F(convertFromString, test) {
     rtl::OUString t;
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         !rtl_convertStringToUString(
             &t.pData, RTL_CONSTASCII_STRINGPARAM("\x80"), RTL_TEXTENCODING_UTF8,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         !rtl_convertStringToUString(
             &t.pData, RTL_CONSTASCII_STRINGPARAM("\xC0"), RTL_TEXTENCODING_UTF8,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         !rtl_convertStringToUString(
             &t.pData, RTL_CONSTASCII_STRINGPARAM("\xFF"), RTL_TEXTENCODING_UTF8,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         rtl_convertStringToUString(
             &t.pData, RTL_CONSTASCII_STRINGPARAM("abc"), RTL_TEXTENCODING_UTF8,
             (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)));
-    CPPUNIT_ASSERT(t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("abc")));
+    ASSERT_TRUE(t.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("abc")));
 }
 
-// -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::valueOf, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toInt, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toDouble, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toFloat, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::lastIndexOf, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::getToken, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
-    rtl_OUString::convertToString, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::construction, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
-    rtl_OUString::indexOfAscii, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::endsWith, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
-    rtl_OUString::createFromCodePoints, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
-    rtl_OUString::iterateCodePoints, "rtl_OUString");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
-    rtl_OUString::convertFromString, "rtl_OUString");
 
 } // namespace rtl_OUString
 
-
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
