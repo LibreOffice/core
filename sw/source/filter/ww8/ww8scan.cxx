@@ -4346,7 +4346,7 @@ bool WW8PLCFx_AtnBook::getIsEnd() const
 
 #ifndef DUMP
 
-// In the end of an paragraph in WW6 the attribute extends behind the <CR>.
+// In the end of an paragraph in WW6 the attribute extends after the <CR>.
 // This will be reset by one character to be used with SW,
 // if we don't expect trouble thereby.
 void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
@@ -4370,7 +4370,7 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     {
         if ( pPap->nEndPos != WW8_CP_MAX )    // Para adjust
         {
-            nLineEnd = pPap->nEndPos;// nLineEnd points *behind* the <CR>
+            nLineEnd = pPap->nEndPos;// nLineEnd points *after* the <CR>
             pPap->nEndPos--;        // shorten paragraph end by one character
 
             // Is there already a sep end, which points to the current paragraph end?
