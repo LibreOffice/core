@@ -4383,6 +4383,19 @@ bool WW8PLCFx_AtnBook::getIsEnd() const
 // dadurch kein AErger zu erwarten ist.
 void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
 {
+    // might be necessary to do this for pChp and/or pSep as well,
+    // but its definitely the case for paragraphs that EndPos > StartPos
+    // for a well formed paragraph as those always have a paragraph
+    // <cr> in them
+    if (&rDesc == pPap && rDesc.bRealLineEnd)
+    {
+        if (rDesc.nStartPos == rDesc.nEndPos && rDesc.nEndPos != WW8_CP_MAX)
+        {
+            SAL_WARN("sw.ww8", "WW8PLCFxDesc End same as Start, abandoning to avoid looping");
+            rDesc.nEndPos = WW8_CP_MAX;
+        }
+    }
+
     //Store old end position for supercool new property finder that uses
     //cp instead of fc's as nature intended
     rDesc.nOrigEndPos = rDesc.nEndPos;
