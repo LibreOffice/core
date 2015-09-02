@@ -39,7 +39,8 @@ extern "C" {
 //
 // * The node hierarchy (starting at component nodes with names like
 //   "org.openoffice.Setup") maps to dconf paths underneath
-//   "/org/libreoffice/registry/".
+//   "/org/libreoffice/registry/system/" resp.
+//   "/org/libreoffice/registry/user/".
 //
 // * Component, group, set, and localized property nodes map to dconf dirs,
 //   while property and localized value nodes map to dconf keys.
