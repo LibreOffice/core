@@ -38,7 +38,7 @@ namespace dbaui
 
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
         void ArrangeChildren( long nSplitPos ,Rectangle& rRect);
-        DECL_LINK( SplitHdl, Splitter* );
+        DECL_LINK_TYPED( SplitHdl, Splitter*, void );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:

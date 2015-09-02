@@ -105,14 +105,13 @@ void OTableBorderWindow::Resize()
                         Size(nOutputWidth, nOutputHeight-nSplitPos-nSplitterHeight) );
 }
 
-IMPL_LINK( OTableBorderWindow, SplitHdl, Splitter*, pSplit )
+IMPL_LINK_TYPED( OTableBorderWindow, SplitHdl, Splitter*, pSplit, void )
 {
     if(pSplit == m_aHorzSplitter.get())
     {
         m_aHorzSplitter->SetPosPixel( Point( m_aHorzSplitter->GetPosPixel().X(),m_aHorzSplitter->GetSplitPosPixel() ) );
         Resize();
     }
-    return 0;
 }
 
 void OTableBorderWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )

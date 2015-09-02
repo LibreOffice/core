@@ -2527,7 +2527,7 @@ void OQueryDesignView::dispose()
     OQueryView::dispose();
 }
 
-IMPL_LINK_NOARG( OQueryDesignView, SplitHdl )
+IMPL_LINK_NOARG_TYPED( OQueryDesignView, SplitHdl, Splitter*, void )
 {
     if (!getController().isReadOnly())
     {
@@ -2538,7 +2538,6 @@ IMPL_LINK_NOARG( OQueryDesignView, SplitHdl )
         Resize();
         m_bInSplitHandler = true;
     }
-    return 0L;
 }
 
 void OQueryDesignView::Construct()

@@ -39,9 +39,9 @@ private:
     bool                mbKbdSplitting;
     long                mbInKeyEvent;
     long                mnKeyboardStepSize;
-    Link<>              maStartSplitHdl;
-    Link<>              maSplitHdl;
-    Link<>              maEndSplitHdl;
+    Link<Splitter*,void>   maStartSplitHdl;
+    Link<Splitter*,void>   maSplitHdl;
+    Link<Splitter*,void>   maEndSplitHdl;
 
     SAL_DLLPRIVATE void      ImplInitSplitterData();
     SAL_DLLPRIVATE void      ImplDrawSplitter();
@@ -97,9 +97,9 @@ public:
     // the default is 10% of the reference window's width/height
     void                SetKeyboardStepSize( long nStepSize );
 
-    void                SetStartSplitHdl( const Link<>& rLink ) { maStartSplitHdl = rLink; }
-    void                SetSplitHdl( const Link<>& rLink ) { maSplitHdl = rLink; }
-    void                SetEndSplitHdl( const Link<>& rLink ) { maEndSplitHdl = rLink; }
+    void                SetStartSplitHdl( const Link<Splitter*,void>& rLink ) { maStartSplitHdl = rLink; }
+    void                SetSplitHdl( const Link<Splitter*,void>& rLink ) { maSplitHdl = rLink; }
+    void                SetEndSplitHdl( const Link<Splitter*,void>& rLink ) { maEndSplitHdl = rLink; }
 };
 
 #endif // INCLUDED_VCL_SPLIT_HXX

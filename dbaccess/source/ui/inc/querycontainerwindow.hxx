@@ -46,7 +46,7 @@ namespace dbaui
         VclPtr<Splitter>    m_pSplitter;
         css::uno::Reference< css::frame::XFrame2 > m_xBeamer;
 
-        DECL_LINK( SplitHdl, void* );
+        DECL_LINK_TYPED( SplitHdl, Splitter*, void );
     public:
         OQueryContainerWindow(vcl::Window* pParent, OQueryController& _rController,const css::uno::Reference< css::uno::XComponentContext >&);
         virtual ~OQueryContainerWindow();

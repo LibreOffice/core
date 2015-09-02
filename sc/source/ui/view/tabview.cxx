@@ -1541,7 +1541,7 @@ bool ScTabView::UpdateVisibleRange()
 
 // ---  Splitter  --------------------------------------------------------
 
-IMPL_LINK( ScTabView, SplitHdl, Splitter*, pSplitter )
+IMPL_LINK_TYPED( ScTabView, SplitHdl, Splitter*, pSplitter, void )
 {
     if ( pSplitter == pHSplitter )
         DoHSplit( pHSplitter->GetSplitPosPixel() );
@@ -1552,8 +1552,6 @@ IMPL_LINK( ScTabView, SplitHdl, Splitter*, pSplitter )
         FreezeSplitters( true );
 
     DoResize( aBorderPos, aFrameSize );
-
-    return 0;
 }
 
 void ScTabView::DoHSplit(long nSplitPos)
