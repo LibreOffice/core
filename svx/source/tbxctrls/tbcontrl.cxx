@@ -861,7 +861,7 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
             static_cast<const SvxFontListItem*>(pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ));
     else
     {
-        ::std::unique_ptr<FontList> aFontList(new FontList( pBox ));
+        ::std::unique_ptr<FontList> aFontList(new FontList( pBox->GetParent() ));
         *ppFontList = aFontList.get();
         pBox->SetOwnFontList(std::move(aFontList));
         bChanged = true;
