@@ -3093,6 +3093,11 @@ void ScDocShellModificator::SetDocumentModified()
     }
 }
 
+void ScDocShellModificator::AppendCellContentModified( const ScRange& rRange )
+{
+    mvContentModified.push_back( rRange);
+}
+
 bool ScDocShell::IsChangeRecording() const
 {
     ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
