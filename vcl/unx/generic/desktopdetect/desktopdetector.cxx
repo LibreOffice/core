@@ -316,7 +316,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         if ( aOver.equalsIgnoreAsciiCase( "mate" ) )
             return DESKTOP_MATE;
         if ( aOver.equalsIgnoreAsciiCase( "kde" ) )
-            return DESKTOP_KDE;
+            return DESKTOP_KDE3;
         if ( aOver.equalsIgnoreAsciiCase( "none" ) )
             return DESKTOP_UNKNOWN;
     }
@@ -401,7 +401,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         else if ( is_gnome_desktop( pDisplay ) )
             ret = DESKTOP_GNOME;
         else if ( is_kde_desktop( pDisplay ) )
-            ret = DESKTOP_KDE;
+            ret = DESKTOP_KDE3;
         else if ( is_tde_desktop( pDisplay ) )
             ret = DESKTOP_TDE;
         else

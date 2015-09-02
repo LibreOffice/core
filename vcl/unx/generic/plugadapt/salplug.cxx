@@ -212,7 +212,7 @@ static SalInstance* autodetect_plugin()
         pList = pStandardFallbackList;
     else if( desktop == DESKTOP_TDE )
         pList = pTDEFallbackList;
-    else if( desktop == DESKTOP_KDE )
+    else if( desktop == DESKTOP_KDE3 )
     {
         pList = pKDEFallbackList;
         nListEntry = 1;
