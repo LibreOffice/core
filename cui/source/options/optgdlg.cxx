@@ -89,6 +89,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/IconThemeInfo.hxx>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 
 #include "optgdlg.hxx"
 #include <svx/ofaitem.hxx>
@@ -522,7 +523,10 @@ CanvasSettings::CanvasSettings() :
 
 bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
-    if( !mbHWAccelChecked )
+    if( OpenGLWrapper::isVCLOpenGLEnabled() )
+        mbHWAccelAvailable = false;
+
+    else if( !mbHWAccelChecked )
     {
         mbHWAccelChecked = true;
 
