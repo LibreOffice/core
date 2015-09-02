@@ -31,10 +31,15 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
-
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:testjob by codegen.pl
@@ -43,24 +48,19 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
     CFLAGS+=/Ob1
 .ENDIF
 
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/rtl_doublelocking.obj
 
-SHL1TARGET= rtl_doublelocking
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+APP1TARGET= rtl_doublelocking
+APP1STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 
 # END ------------------------------------------------------------------
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-
-SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
+
