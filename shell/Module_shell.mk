@@ -42,20 +42,9 @@ $(eval $(call gb_Module_add_targets,shell,\
 ))
 endif
 
-ifeq ($(ENABLE_KDE),TRUE)
-$(eval $(call gb_Module_add_targets,shell,\
-	Library_kdebe \
-))
-endif
-
 ifeq ($(ENABLE_TDE),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
 	Library_tdebe \
-))
-endif
-
-ifneq ($(filter TRUE,$(ENABLE_KDE) $(ENABLE_TDE)),)
-$(eval $(call gb_Module_add_targets,shell,\
 ))
 endif
 

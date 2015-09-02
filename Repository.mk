@@ -251,17 +251,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
-	$(if $(ENABLE_KDE),kdebe1) \
 	$(if $(ENABLE_KDE4),kde4be1) \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
-		$(if $(ENABLE_KDE),vclplug_kde) \
 		$(if $(ENABLE_KDE4),vclplug_kde4) \
-	) \
-))
-
-$(eval $(call gb_Helper_register_executables_for_install,OOO,kde, \
-	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
-		kdefilepicker \
 	) \
 ))
 
@@ -363,8 +355,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	itg \
 	iti \
 	$(if $(ENABLE_JAVA),jdbc) \
-	$(if $(ENABLE_KAB),kab1) \
-	$(if $(ENABLE_KAB),kabdrv1) \
 	ldapbe2 \
 	localebe1 \
 	log \

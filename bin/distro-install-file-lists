@@ -226,15 +226,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     mv_file_between_flists tde_list.txt common_list.txt $INSTALLDIR/program/libtdeabdrv1l..so
     add_used_directories tde_list.txt common_list.txt
 
-    # kde subpackage
-    test -f $DESTDIR/gid_Module_Optional_Kde && cp $DESTDIR/gid_Module_Optional_Kde kde_list.txt || :
-    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/kdefilepicker
-    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/fps_kdelo.so
-    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libvclplug_kdel..so
-    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libkab1l..so
-    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/libkabdrv1l..so
-    add_used_directories kde_list.txt common_list.txt
-
     # create kde4 subpackage
     mv_file_between_flists kde4_list.txt kde_list.txt    $INSTALLDIR/program/kde4be1lo.so
     mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/program/libvclplug_kde4l..so
@@ -421,7 +412,6 @@ else
     create_package_directory gid_Module_Pyuno                       pkg/python-uno
     create_package_directory gid_Module_Optional_Gnome              pkg/libreoffice-gnome
     create_package_directory gid_Module_Optional_Tde                pkg/libreoffice-tde
-    create_package_directory gid_Module_Optional_Kde                pkg/libreoffice-kde
 
     create_package_directory gid_Module_Root_Files_2                pkg/libreoffice-common
     create_package_directory gid_Module_Root_Files_3                pkg/libreoffice-common
@@ -493,7 +483,7 @@ else
       fi &&
       ( cd pkg/libreoffice-common/$d
         find -maxdepth 1 \
-           -regex '\./\(.*\.so.*\|.*\.bin\|pagein\|tdefilepicker\|kdefilepicker\|msfontextract\|.*\.rdb\|javaldx\|uri-encode\)' \
+           -regex '\./\(.*\.so.*\|.*\.bin\|pagein\|tdefilepicker\|msfontextract\|.*\.rdb\|javaldx\|uri-encode\)' \
            -exec mv {} $DESTDIR/pkg/libreoffice-core/$d \;
       ); \
     done

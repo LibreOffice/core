@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Package_Package,shell_scripts_kde,$(SRCDIR)/shell/source/unix/misc))
 
-ifeq ($(ENABLE_KDE),TRUE)
-$(eval $(call gb_Package_add_file,shell_scripts_kde,$(LIBO_BIN_FOLDER)/kde-open-url,kde-open-url.sh))
-endif
-
 ifeq ($(ENABLE_KDE4),TRUE)
 $(eval $(call gb_Package_add_file,shell_scripts_kde,$(LIBO_BIN_FOLDER)/kde4-open-url,kde4-open-url.sh))
 endif

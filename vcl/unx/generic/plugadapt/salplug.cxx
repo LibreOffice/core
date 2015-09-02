@@ -171,9 +171,6 @@ static SalInstance* autodetect_plugin()
 #if ENABLE_KDE4
         "kde4",
 #endif
-#if ENABLE_KDE
-        "kde",
-#endif
         "gtk3", "gtk", "gen", 0
     };
 
@@ -181,9 +178,6 @@ static SalInstance* autodetect_plugin()
     {
 #if ENABLE_KDE4
         "kde4",
-#endif
-#if ENABLE_KDE
-        "kde",
 #endif
         "gtk3", "gtk", "gen", 0
     };
@@ -208,15 +202,11 @@ static SalInstance* autodetect_plugin()
     else if ( desktop == DESKTOP_GNOME ||
               desktop == DESKTOP_UNITY ||
               desktop == DESKTOP_XFCE  ||
+              desktop == DESKTOP_KDE3 ||
               desktop == DESKTOP_MATE )
         pList = pStandardFallbackList;
     else if( desktop == DESKTOP_TDE )
         pList = pTDEFallbackList;
-    else if( desktop == DESKTOP_KDE3 )
-    {
-        pList = pKDEFallbackList;
-        nListEntry = 1;
-    }
     else if( desktop == DESKTOP_KDE4 || desktop == DESKTOP_KDE5 )
         pList = pKDEFallbackList;
 

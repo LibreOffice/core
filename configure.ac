@@ -586,7 +586,6 @@ solaris*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_tde=yes
-    test_kde=yes
     test_freetype=yes
     _os=SunOS
 
@@ -615,7 +614,6 @@ linux-gnu*|k*bsd*-gnu*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_tde=yes
-    test_kde=yes
     test_kde4=yes
     test_freetype=yes
     _os=Linux
@@ -712,7 +710,6 @@ freebsd*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_tde=yes
-    test_kde=yes
     test_kde4=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
@@ -742,7 +739,6 @@ freebsd*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_tde=no
-    test_kde=no
     test_kde4=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
@@ -759,7 +755,6 @@ aix*)
 openbsd*)
     test_gtk=yes
     test_tde=yes
-    test_kde=yes
     test_freetype=yes
     PTHREAD_CFLAGS="-D_THREAD_SAFE"
     PTHREAD_LIBS="-pthread"
@@ -771,7 +766,6 @@ dragonfly*)
     build_gstreamer_1_0=yes
     build_gstreamer_0_10=yes
     test_tde=yes
-    test_kde=yes
     test_kde4=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
@@ -793,7 +787,6 @@ linux-android*)
     test_freetype=no
     test_gtk=no
     test_tde=no
-    test_kde=no
     test_kde4=no
     test_randr=no
     test_xrender=no
@@ -1191,26 +1184,10 @@ AC_ARG_ENABLE(tdeab,
     fi
 )
 
-AC_ARG_ENABLE(kde,
-    AS_HELP_STRING([--enable-kde],
-        [Determines whether to use Qt3/KDE3 vclplug on platforms where Qt3 and
-         KDE3 are available.]),
-,)
-
-AC_ARG_ENABLE(kdeab,
-    AS_HELP_STRING([--disable-kdeab],
-        [Disable the KDE3 address book support.]),
-,
-    if test "$enable_kde" = "yes"; then
-        enable_kdeab=yes
-    fi
-)
-
 AC_ARG_ENABLE(kde4,
     AS_HELP_STRING([--enable-kde4],
         [Determines whether to use Qt4/KDE4 vclplug on platforms where Qt4 and
-         KDE4 are available. May be used with --enable-kde if you want to support
-         both KDE3 and KDE4.]),
+         KDE4 are available.]),
 ,)
 
 AC_ARG_ENABLE(randr,
@@ -4707,7 +4684,6 @@ if test "$with_x" = "no"; then
     build_gstreamer_1_0=no
     build_gstreamer_0_10=no
     test_tde=no
-    test_kde=no
     test_kde4=no
     enable_cairo_canvas=no
     enable_gnome_vfs=no
@@ -10004,24 +9980,11 @@ AC_SUBST(ENABLE_GTK)
 
 ENABLE_TDE=""
 if test "x$enable_tde" = "xyes"; then
-    # Libs kab and tdeab in connectivity and kdeab and tdeab in shell
-    # are built from the same sources. So we only allow one of them.
-    if test "x$enable_kde" = "xyes"; then
-        AC_MSG_ERROR([enabling both KDE and TDE is not supported])
-    fi
     ENABLE_TDE="TRUE"
     AC_DEFINE(ENABLE_TDE)
     R="$R tde"
 fi
 AC_SUBST(ENABLE_TDE)
-
-ENABLE_KDE=""
-if test "x$enable_kde" = "xyes"; then
-    ENABLE_KDE="TRUE"
-    AC_DEFINE(ENABLE_KDE)
-    R="$R kde"
-fi
-AC_SUBST(ENABLE_KDE)
 
 ENABLE_KDE4=""
 if test "x$enable_kde4" = "xyes"; then
@@ -11062,136 +11025,6 @@ AC_SUBST(TDE_LIBS)
 AC_SUBST(MOC)
 
 dnl ===================================================================
-dnl Check whether the Qt3 and KDE3 libraries are available.
-dnl ===================================================================
-
-KDE_CFLAGS=""
-KDE_LIBS=""
-if test "$_os" != "OpenBSD"; then
-    MOC="moc"
-fi
-if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE"; then
-    dnl Search paths for Qt3 and KDE3
-    if test -z "$supports_multilib"; then
-        qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib/qt3/include /usr/lib/qt/include /usr/share/qt3/include /usr/local/include/X11/qt3 $x_includes"
-        qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib /usr/local/lib/qt3 $x_libraries"
-    else
-        qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib64/qt3/include /usr/lib64/qt/include /usr/share/qt3/include /usr/lib/qt3/include /usr/lib/qt/include /usr/local/include/X11/qt3 $x_includes"
-        qt_libdirs="$QTLIB /usr/local/qt/lib64 /usr/lib64/qt /usr/lib64 /usr/X11R6/lib64/X11/qt /usr/X11R6/lib64/qt /usr/lib64/qt3/lib64 /usr/lib64/qt/lib64 /usr/share/qt3/lib64 /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib /usr/local/lib/qt3 $x_libraries"
-    fi
-    if test -n "$QTDIR"; then
-        qt_incdirs="$QTDIR/include $qt_incdirs"
-        if test -z "$supports_multilib"; then
-            qt_libdirs="$QTDIR/lib $qt_libdirs"
-        else
-            qt_libdirs="$QTDIR/lib64 $QTDIR/lib $qt_libdirs"
-        fi
-    fi
-    if test -z "$supports_multilib"; then
-        kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /opt/kde3/include /opt/kde/include $x_includes"
-        kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib /usr/lib $x_libraries"
-    else
-        kde_incdirs="/usr/lib64/kde/include /usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /opt/kde3/include /opt/kde/include $x_includes"
-        kde_libdirs="/usr/lib64/kde/lib64 /usr/local/kde/lib64 /usr/kde/lib64 /usr/lib64/kde /usr/lib64/kde3 /usr/X11R6/lib64 /usr/local/lib64 /opt/kde3/lib64 /opt/kde/lib64 /usr/X11R6/kde/lib64 /usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/lib /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib /usr/lib64 $x_libraries"
-    fi
-    if test -n "$KDEDIR"; then
-        kde_incdirs="$KDEDIR/include $kde_incdirs"
-        if test -z "$supports_multilib"; then
-            kde_libdirs="$KDEDIR/lib $kde_libdirs"
-        else
-            kde_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde_libdirs"
-        fi
-    fi
-
-    dnl What to test
-    qt_test_include="qstyle.h"
-    kde_test_include="kapp.h"
-
-    if test "$_os" != "OpenBSD"; then
-        qt_test_library="libqt-mt.so"
-        kde_test_library="libDCOP.so"
-    else
-        qt_test_library="libqt-mt.so*"
-        kde_test_library="libDCOP.so*"
-    fi
-
-    dnl Check for Qt3 headers
-    AC_MSG_CHECKING([for Qt3 headers])
-    qt_incdir="no"
-    for kde_check in $qt_incdirs; do
-        if test -r "$kde_check/$qt_test_include"; then
-            qt_incdir="$kde_check"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$qt_incdir])
-    if test "x$qt_incdir" = "xno"; then
-        AC_MSG_ERROR([Qt3 headers not found.  Please specify the root of
-your Qt3 installation by exporting QTDIR before running "configure".])
-    fi
-
-    dnl Check for Qt3 libraries
-    AC_MSG_CHECKING([for Qt3 libraries])
-    qt_libdir="no"
-    for qt_check in $qt_libdirs; do
-        if test -r "`ls $qt_check/$qt_test_library 2>/dev/null | head -1`"; then
-            qt_libdir="$qt_check"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$qt_libdir])
-    if test "x$qt_libdir" = "xno"; then
-        AC_MSG_ERROR([Qt3 libraries not found.  Please specify the root of
-your Qt3 installation by exporting QTDIR before running "configure".])
-    fi
-
-    dnl Check for Meta Object Compiler
-    AC_PATH_PROG( MOC, moc, no, [`dirname $qt_libdir`/bin:$QTDIR/bin:$PATH] )
-    if test "$MOC" = "no"; then
-        AC_MSG_ERROR([Qt3 Meta Object Compiler not found.  Please specify
-the root of your Qt3 installation by exporting QTDIR before running "configure".])
-    fi
-
-    dnl Check for KDE3 headers
-    AC_MSG_CHECKING([for KDE3 headers])
-    kde_incdir="no"
-    for kde_check in $kde_incdirs; do
-        if test -r "$kde_check/$kde_test_include"; then
-            kde_incdir="$kde_check"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$kde_incdir])
-    if test "x$kde_incdir" = "xno"; then
-        AC_MSG_ERROR([KDE3 headers not found.  Please specify the root of
-your KDE3 installation by exporting KDEDIR before running "configure".])
-    fi
-
-    dnl Check for KDE3 libraries
-    AC_MSG_CHECKING([for KDE3 libraries])
-    kde_libdir="no"
-    for kde_check in $kde_libdirs; do
-        if test -r "`ls $kde_check/$kde_test_library 2>/dev/null | head -1`"; then
-            kde_libdir="$kde_check"
-            break
-        fi
-    done
-    AC_MSG_RESULT([$kde_libdir])
-    if test "x$kde_libdir" = "xno"; then
-        AC_MSG_ERROR([KDE3 libraries not found.  Please specify the root of
-your KDE3 installation by exporting KDEDIR before running "configure".])
-    fi
-
-    dnl Set the variables
-    KDE_CFLAGS="-I$qt_incdir -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
-    KDE_LIBS="-L$kde_libdir -L$qt_libdir -lkdeui -lkdecore -lqt-mt"
-    KDE_CFLAGS=$(printf '%s' "$KDE_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-fi
-AC_SUBST(KDE_CFLAGS)
-AC_SUBST(KDE_LIBS)
-AC_SUBST(MOC)
-
-dnl ===================================================================
 dnl KDE4 Integration
 dnl ===================================================================
 
@@ -11519,33 +11352,6 @@ else
     ENABLE_TDEAB=
 fi
 AC_SUBST(ENABLE_TDEAB)
-
-dnl ===================================================================
-dnl Test whether to include KDE AB support
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable KDE address book support])
-if test "$enable_kdeab" = "yes" -a "$enable_kde" = "yes"; then
-    AC_MSG_RESULT([yes])
-    AC_LANG_PUSH([C++])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS $KDE_CFLAGS"
-    AC_MSG_CHECKING([whether KDE is between 3.2 and 3.6])
-       AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <kdeversion.h>
-
-int main(int argc, char **argv) {
-       if (KDE_VERSION_MAJOR == 3 && 2 <= KDE_VERSION_MINOR && KDE_VERSION_MINOR <= 6) return 0;
-       else return 1;
-}
-       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old or too recent, please use another version of KDE or disable KDE address book support])],[])
-    CXXFLAGS=$save_CXXFLAGS
-    AC_LANG_POP([C++])
-    ENABLE_KAB=TRUE
-else
-    AC_MSG_RESULT([no])
-    ENABLE_KAB=
-fi
-AC_SUBST(ENABLE_KAB)
 
 dnl ===================================================================
 dnl Test which themes to include
