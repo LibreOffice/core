@@ -1424,6 +1424,20 @@ void OpenGLContext::clearCurrent()
         pCurrentCtx->ReleaseFramebuffers();
 }
 
+void OpenGLContext::prepareForYield()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    SAL_INFO("vcl.opengl", "Unbinding contexts in preparation for yield");
+    // release all framebuffers from the old context so we can re-attach the
+    // texture in the new context
+    OpenGLContext* pCurrentCtx = pSVData->maGDIData.mpLastContext;
+    if( pCurrentCtx && pCurrentCtx->isCurrent() )
+        pCurrentCtx->resetCurrent();
+
+    assert (!hasCurrent());
+}
+
 void OpenGLContext::makeCurrent()
 {
     ImplSVData* pSVData = ImplGetSVData();

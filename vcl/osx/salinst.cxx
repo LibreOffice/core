@@ -271,7 +271,7 @@ void SalYieldMutex::release()
     {
         if ( mnCount == 1 )
         {
-            // TODO: add OpenGLContext::clearCurrent with vcl OpenGL support
+            // TODO: add OpenGLContext::prepareForYield with vcl OpenGL support
             mnThreadId = 0;
         }
         mnCount--;

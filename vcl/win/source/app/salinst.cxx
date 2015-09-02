@@ -153,7 +153,7 @@ void SalYieldMutex::release()
         {
             if ( mnCount == 1 )
             {
-                OpenGLContext::clearCurrent();
+                OpenGLContext::prepareForYield();
 
                 // If we don't call these message, the Output from the
                 // Java clients doesn't come in the right order
@@ -176,7 +176,10 @@ void SalYieldMutex::release()
         else
         {
             if ( mnCount == 1 )
+            {
                 mnThreadId = 0;
+                OpenGLContext::prepareForYield();
+            }
             mnCount--;
             m_mutex.release();
         }

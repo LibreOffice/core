@@ -698,7 +698,7 @@ void OpenGLHelper::debugMsgPrint(const char *pArea, const char *pFormat, ...)
     vsnprintf(pStr, sizeof(pStr), pFormat, aArgs);
     pStr[sizeof(pStr)-20] = '\0';
 
-    bool bHasContext = !OpenGLContext::hasCurrent();
+    bool bHasContext = OpenGLContext::hasCurrent();
     if (!bHasContext)
         strcat(pStr, "- no GL context");
 

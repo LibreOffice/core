@@ -212,7 +212,10 @@ public:
 
     /// Is this GL context the current context ?
     bool isCurrent();
+    /// release bound resources from the current context
     static void clearCurrent();
+    /// release contexts etc. before (potentially) allowing another thread run.
+    static void prepareForYield();
     /// Is there a current GL context ?
     static bool hasCurrent();
     /// make this GL context current - so it is implicit in subsequent GL calls
