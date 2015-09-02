@@ -1360,7 +1360,6 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         SwDoc* pDoc = GetDoc();
         const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
         std::vector<SwPosition*> aBeforeArr, aBehindArr;
-        OSL_ENSURE( this, "this is not in the array?" );
         bool bBreak = false;
         SwRedlineTable::size_type n;
 
