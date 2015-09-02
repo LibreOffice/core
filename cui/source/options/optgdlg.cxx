@@ -205,14 +205,6 @@ namespace
                 return OUString();
                 #endif
             }
-            else if ( rDesktopEnvironment.equalsIgnoreAsciiCase("kde") )
-            {
-                #if ENABLE_KDE
-                return OUString("com.sun.star.ui.dialogs.KDEFilePicker");
-                #else
-                return OUString();
-                #endif
-            }
             else if ( rDesktopEnvironment.equalsIgnoreAsciiCase("tde") )
             {
                 #if ENABLE_TDE

@@ -208,9 +208,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 	$(if $(ENABLE_VLC), \
 		avmedia/source/vlc/avmediavlc \
 	) \
-	$(if $(ENABLE_KDE), \
-		shell/source/backends/kdebe/kdebe1 \
-	) \
 	$(if $(ENABLE_KDE4), \
 		shell/source/backends/kde4be/kde4be1 \
 	) \
@@ -259,9 +256,6 @@ $(eval $(call gb_Rdb_add_components,services,\
 		connectivity/source/drivers/firebird/firebird_sdbc \
 	) \
 	connectivity/source/drivers/flat/flat \
-	$(if $(ENABLE_KAB), \
-		connectivity/source/drivers/kab/kab1 \
-	) \
 	connectivity/source/drivers/mysql/mysql \
 	$(if $(filter MACOSX,$(OS)), \
 		connectivity/source/drivers/macab/macab1 \

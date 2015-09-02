@@ -30,7 +30,6 @@ $(eval $(call gb_Pagein_add_objects,common,\
     vclplug_gen \
     $(if $(findstring TRUE,$(ENABLE_GTK)),vclplug_gtk) \
     $(if $(findstring TRUE,$(ENABLE_TDE)),vclplug_tde) \
-    $(if $(findstring TRUE,$(ENABLE_KDE)),vclplug_kde) \
     basegfx \
     sot \
     xmlscript \

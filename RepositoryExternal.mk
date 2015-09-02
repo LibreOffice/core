@@ -3010,38 +3010,6 @@ endef
 
 endif # WITH_MOZAB4WIN
 
-ifeq ($(ENABLE_KDE),TRUE)
-
-define gb_LinkTarget__use_kde
-$(call gb_LinkTarget_set_include,$(1),\
-	$(subst -isystem/,-isystem /,$(filter -I% -isystem%,$(subst -isystem /,-isystem/,$(KDE_CFLAGS)))) \
-	$$(INCLUDE) \
-)
-
-$(call gb_LinkTarget_add_defs,$(1),\
-	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(KDE_CFLAGS))) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(KDE_LIBS) \
-)
-
-ifeq ($(COM),GCC)
-$(call gb_LinkTarget_add_cxxflags,$(1),\
-	-Wno-shadow \
-)
-endif
-
-endef
-
-else # !ENABLE_KDE
-
-define gb_LinkTarget__use_kde
-
-endef
-
-endif # ENABLE_KDE
-
 
 ifeq ($(ENABLE_KDE4),TRUE)
 

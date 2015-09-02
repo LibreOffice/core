@@ -45,14 +45,6 @@ endif
 
 ifneq ($(OS),WNT)
 
-ifeq ($(ENABLE_KAB),TRUE)
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_kab \
-	Library_kab1 \
-	Library_kabdrv1 \
-))
-endif
-
 ifeq ($(ENABLE_TDEAB),TRUE)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_tdeab \

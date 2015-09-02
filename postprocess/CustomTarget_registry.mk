@@ -349,10 +349,6 @@ endif
 ifeq ($(ENABLE_TDEAB),TRUE)
 postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/tdeab)/org/openoffice/Office/DataAccess/Drivers-tdeab.xcu
 endif
-ifeq ($(ENABLE_KAB),TRUE)
-postprocess_FILES_main += $(call gb_XcuModuleTarget_get_target,connectivity/registry/kab)/org/openoffice/Office/DataAccess/Drivers-kab.xcu
-postprocess_DRIVERS += kab
-endif
 
 ifneq (,$(SYSTEM_LIBEXTTEXTCAT_DATA))
 postprocess_FILES_main += $(postprocess_MOD)/org/openoffice/Office/Paths-externallibexttextcatdata.xcu
