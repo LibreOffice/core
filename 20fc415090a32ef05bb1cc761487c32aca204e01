@@ -39,6 +39,24 @@
       "revId": "20fc415090a32ef05bb1cc761487c32aca204e01",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_8f1a4516",
+        "filename": "external/redland/rasqal/rasqal-vs2015.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-09-02T21:35:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa0719c6_547724d4",
+      "revId": "20fc415090a32ef05bb1cc761487c32aca204e01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
