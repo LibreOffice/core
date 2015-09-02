@@ -32,6 +32,7 @@
 #include "opengl/zone.hxx"
 #include "opengl/watchdog.hxx"
 #include <osl/conditn.h>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
@@ -679,6 +680,11 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     }
 
     return bRet;
+}
+
+bool OpenGLWrapper::isVCLOpenGLEnabled()
+{
+    return OpenGLHelper::isVCLOpenGLEnabled();
 }
 
 void OpenGLHelper::debugMsgStream(const char *pArea, std::ostringstream const &pStream)
