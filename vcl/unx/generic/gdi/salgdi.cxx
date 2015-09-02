@@ -101,6 +101,7 @@ X11SalGraphics::X11SalGraphics():
 
 X11SalGraphics::~X11SalGraphics()
 {
+    DeInit();
     ReleaseFonts();
     freeResources();
 }
@@ -173,6 +174,7 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
 
 void X11SalGraphics::DeInit()
 {
+    mxImpl->DeInit();
     SetDrawable( None, m_nXScreen );
 }
 
