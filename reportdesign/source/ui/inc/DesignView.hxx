@@ -79,7 +79,7 @@ namespace rptui
 
 
         DECL_LINK_TYPED(MarkTimeout, Idle *, void);
-        DECL_LINK( SplitHdl, void* );
+        DECL_LINK_TYPED( SplitHdl, SplitWindow*, void );
 
         void ImplInitSettings();
 

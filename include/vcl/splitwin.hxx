@@ -85,12 +85,7 @@ private:
                         mbFadeOutPressed:1,
                         mbFadeNoButtonMode:1,
                         mbNoAlign:1;
-    Link<>              maStartSplitHdl;
-    Link<>              maSplitHdl;
-    Link<>              maSplitResizeHdl;
-    Link<>              maAutoHideHdl;
-    Link<>              maFadeInHdl;
-    Link<>              maFadeOutHdl;
+    Link<SplitWindow*,void>  maSplitHdl;
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
@@ -200,7 +195,7 @@ public:
     bool                IsFadeNoButtonMode() const { return mbFadeNoButtonMode; }
 
     void                SetAutoHideState( bool bAutoHide );
-    void                SetSplitHdl( const Link<>& rLink ) { maSplitHdl = rLink; }
+    void                SetSplitHdl( const Link<SplitWindow*,void>& rLink ) { maSplitHdl = rLink; }
 };
 
 #endif // INCLUDED_VCL_SPLITWIN_HXX
