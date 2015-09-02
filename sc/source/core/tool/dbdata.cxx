@@ -753,7 +753,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange 
     ScRefCellValue* pCell;
     SCCOL nCol;
     SCROW nRow;
-    for (size_t i=0; (pCell = aIter.GetNext( nCol, nRow)) != nullptr; ++i)
+    while((pCell = aIter.GetNext( nCol, nRow)) != nullptr)
     {
         if (pCell->hasString())
         {
