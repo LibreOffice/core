@@ -33,57 +33,47 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:joblist by codegen.pl
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/rtl_OString2.obj
-
-SHL1TARGET= rtl_OString2
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-# DEF2EXPORTFILE= export.exp
-SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
+APP1TARGET= rtl_OString2
+APP1STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 # auto generated Target:joblist
 # END ------------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
-SHL2OBJS=  \
+APP2OBJS=  \
     $(SLO)$/rtl_str.obj
-
-SHL2TARGET= rtl_str
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL2IMPLIB= i$(SHL2TARGET)
-DEF2NAME    =$(SHL2TARGET)
-SHL2VERSIONMAP= $(PRJ)$/qa$/export.map
+APP2TARGET= rtl_str
+APP2STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP2RPATH = NONE
+APP2TEST = enabled
 # END ------------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
-SHL3OBJS=  \
+APP3OBJS=  \
     $(SLO)$/rtl_string.obj
-
-SHL3TARGET= rtl_string
-SHL3STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL3IMPLIB= i$(SHL3TARGET)
-DEF3NAME    =$(SHL3TARGET)
-SHL3VERSIONMAP= $(PRJ)$/qa$/export.map
+APP3TARGET= rtl_string
+APP3STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP3RPATH = NONE
+APP3TEST = enabled
 # END ------------------------------------------------------------------
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
 
