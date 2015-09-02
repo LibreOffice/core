@@ -229,9 +229,13 @@ endif
 gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
 
 ifeq ($(gb_DEBUGLEVEL),2)
+ifeq ($(COM),CLANG)
+gb_LinkTarget_CXXFLAGS += -ggdb3 -fno-inline
+gb_LinkTarget_CFLAGS += -ggdb3 -fno-inline
+else
 gb_LinkTarget_CXXFLAGS += -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
 gb_LinkTarget_CFLAGS += -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
-
+endif
 endif
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
