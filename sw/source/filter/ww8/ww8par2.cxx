@@ -414,6 +414,8 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
     WW8PLCFxDesc aRes;
     aRes.pMemPos = 0;
     aRes.nEndPos = rStartCp;
+    bool bReadRes(false);
+    WW8PLCFxDesc aPrevRes;
 
     while (pPap->HasFkp() && rStartCp != WW8_CP_MAX)
     {
@@ -446,6 +448,13 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
         }
         pPap->GetSprms(&aRes);
         pPap->SetDirty(false);
+        if (bReadRes && aRes.nEndPos == aPrevRes.nEndPos && aRes.nStartPos == aPrevRes.nStartPos)
+        {
+            SAL_WARN("sw.ww8", "SearchRowEnd, loop in paragraph property chain");
+            break;
+        }
+        bReadRes = true;
+        aPrevRes = aRes;
         //Update our aRes to get the new starting point of the next properties
         rStartCp = aRes.nEndPos;
     }
