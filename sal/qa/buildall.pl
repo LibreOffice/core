@@ -21,7 +21,7 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #**************************************************************
 
-# #!/usr/bin/perl -w
+# #!/usr/bin/env perl -w
 
 use strict;
 use POSIX;
