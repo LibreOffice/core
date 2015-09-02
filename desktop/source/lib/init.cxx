@@ -894,7 +894,7 @@ static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
     fprintf(stderr, "Unexpected basic error dialog '%s'\n", aBuffer.getStr());
 }
 
-static bool initialize_uno(const OUString& aAppProgramURL)
+static bool initialize_uno(const OUString& aAppProgramURL, bool bPreInit)
 {
 #ifdef IOS
     // For iOS we already hardocde the inifile as "rc" in the .app directory.
@@ -902,6 +902,13 @@ static bool initialize_uno(const OUString& aAppProgramURL)
 #else
     rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" SAL_CONFIGFILE("soffice"));
 #endif
+
+    if (bPreInit)
+    {
+        // pre-load all component libraries.
+        cppu::preInitBootstrap();
+        return true;
+    }
 
     xContext = cppu::defaultBootstrap_InitialComponentContext();
     if (!xContext.is())
@@ -966,11 +973,6 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
     }
 }
 
-/// pre-load all C++ component factories and leak references to them.
-static void forceLoadAllNativeComponents()
-{
-}
-
 /// pre-load and parse all filter XML
 static void forceLoadFilterXML()
 {
@@ -1032,9 +1034,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         {
             SAL_INFO("lok", "Attempting to initalize UNO");
 
-            if (!initialize_uno(aAppURL))
+            if (!initialize_uno(aAppURL, (eStage == PRE_INIT)))
                 return false;
-            force_c_locale();
+
+            if (eStage != PRE_INIT)
+                force_c_locale();
 
             // Force headless -- this is only for bitmap rendering.
             rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
@@ -1049,7 +1053,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
         if (eStage == PRE_INIT)
         {
-            forceLoadAllNativeComponents();
             forceLoadFilterXML();
         }
 
