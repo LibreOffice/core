@@ -537,8 +537,9 @@ Components::Components(
         } else if (type == "dconf") {
             if (url == "!") {
                 modificationTarget_ = ModificationTarget::Dconf;
+                dconf::readLayer(data_, Data::NO_LAYER, false);
             } else if (url == "*") {
-                dconf::readLayer(data_, layer);
+                dconf::readLayer(data_, layer, true);
             } else {
                 throw css::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: unknown \"dconf\" kind \"" + url

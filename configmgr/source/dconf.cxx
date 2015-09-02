@@ -216,6 +216,11 @@ private:
     DConfChangeset * changeset_;
 };
 
+OString getRoot(bool system) {
+    return "/org/libreoffice/registry/"
+        + (system ? OStringLiteral("system") : OStringLiteral("user"));
+}
+
 bool decode(OUString * string, bool slash) {
     for (sal_Int32 i = 0;; ++i) {
         i = string->indexOf('\\', i);
@@ -1544,7 +1549,7 @@ bool addModifications(
 
 }
 
-void readLayer(Data & data, int layer) {
+void readLayer(Data & data, int layer, bool system) {
     GObjectHolder<DConfClient> client(dconf_client_new());
     if (client.get() == nullptr) {
         SAL_WARN("configmgr.dconf", "dconf_client_new failed");
@@ -1552,7 +1557,7 @@ void readLayer(Data & data, int layer) {
     }
     readDir(
         data, layer, rtl::Reference<Node>(), data.getComponents(), client,
-        "/org/libreoffice/registry/");
+        getRoot(system) + "/");
 }
 
 void writeModifications(Components & components, Data & data) {
@@ -1567,8 +1572,7 @@ void writeModifications(Components & components, Data & data) {
     }
     for (auto const & i: data.modifications.getRoot().children) {
         if (!addModifications(
-                components, cs, "/org/libreoffice/registry",
-                rtl::Reference<Node>(), i.first,
+                components, cs, getRoot(false), rtl::Reference<Node>(), i.first,
                 data.getComponents().findNode(Data::NO_LAYER, i.first),
                 i.second))
         {
