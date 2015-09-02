@@ -643,6 +643,23 @@ public:
 private:
     OUString maSearchName;
 };
+
+/** Set a numbered table column name at given nIndex, preventing duplicates,
+    numbering starting at nCount. No check whether nIndex is valid. */
+void SetTableColumnName( ::std::vector<OUString>& rVec, size_t nIndex, const OUString& rName, sal_Int32 nCount )
+{
+    do
+    {
+        OUString aStr( rName + OUString::number( nCount));
+        auto it( ::std::find_if( rVec.begin(), rVec.end(), TableColumnNameSearch( aStr)));
+        if (it == rVec.end())
+        {
+            rVec[nIndex] = aStr;
+            break;  // do while
+        }
+        ++nCount;
+    } while(true);
+}
 }
 
 void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
@@ -708,20 +725,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
         for (size_t i=0, n=aNewNames.size(); i < n; ++i)
         {
             if (aNewNames[i].isEmpty())
-            {
-                size_t nCount = i+1;
-                do
-                {
-                    OUString aStr( aColumn + OUString::number( nCount));
-                    auto it( ::std::find_if( aNewNames.begin(), aNewNames.end(), TableColumnNameSearch( aStr)));
-                    if (it == aNewNames.end())
-                    {
-                        aNewNames[i] = aStr;
-                        break;  // do while
-                    }
-                    ++nCount;
-                } while(true);
-            }
+                SetTableColumnName( aNewNames, i, aColumn, i+1);
         }
     }
 
@@ -760,6 +764,13 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange 
             const OUString& rStr = pCell->getString( pDoc);
             if (!rStr.isEmpty())
                 maTableColumnNames[nCol-nStartCol] = rStr;
+            else
+            {
+                // Usually this is called for only a few positions of which
+                // most are not empty, so init from resource only if necessary.
+                OUString aColumn( ScGlobal::GetRscString(STR_COLUMN));
+                SetTableColumnName( maTableColumnNames, nCol-nStartCol, aColumn, nCol-nStartCol+1);
+            }
         }
     }
 }
