@@ -1190,7 +1190,6 @@ void OpenGLContext::reset()
     // destroy all programs
     if( !maPrograms.empty() )
     {
-
         makeCurrent();
         maPrograms.clear();
     }
@@ -1208,7 +1207,8 @@ void OpenGLContext::reset()
         if (itr != g_vShareList.end())
             g_vShareList.erase(itr);
 
-        wglMakeCurrent(NULL, NULL);
+        if (wglGetCurrentContext() != NULL)
+            wglMakeCurrent(NULL, NULL);
         wglDeleteContext( m_aGLWin.hRC );
         ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
     }
