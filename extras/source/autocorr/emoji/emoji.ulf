@@ -3549,51 +3549,51 @@ en-US = "12"
 
 [CLOCK_FACE_ONE-THIRTY]
 x-comment = "🕜 (U+1F55C), see http://wiki.documentfoundation.org/Emoji"
-en-US = "1:30"
+en-US = "1.30"
 
 [CLOCK_FACE_TWO-THIRTY]
 x-comment = "🕝 (U+1F55D), see http://wiki.documentfoundation.org/Emoji"
-en-US = "2:30"
+en-US = "2.30"
 
 [CLOCK_FACE_THREE-THIRTY]
 x-comment = "🕞 (U+1F55E), see http://wiki.documentfoundation.org/Emoji"
-en-US = "3:30"
+en-US = "3.30"
 
 [CLOCK_FACE_FOUR-THIRTY]
 x-comment = "🕟 (U+1F55F), see http://wiki.documentfoundation.org/Emoji"
-en-US = "4:30"
+en-US = "4.30"
 
 [CLOCK_FACE_FIVE-THIRTY]
 x-comment = "🕠 (U+1F560), see http://wiki.documentfoundation.org/Emoji"
-en-US = "5:30"
+en-US = "5.30"
 
 [CLOCK_FACE_SIX-THIRTY]
 x-comment = "🕡 (U+1F561), see http://wiki.documentfoundation.org/Emoji"
-en-US = "6:30"
+en-US = "6.30"
 
 [CLOCK_FACE_SEVEN-THIRTY]
 x-comment = "🕢 (U+1F562), see http://wiki.documentfoundation.org/Emoji"
-en-US = "7:30"
+en-US = "7.30"
 
 [CLOCK_FACE_EIGHT-THIRTY]
 x-comment = "🕣 (U+1F563), see http://wiki.documentfoundation.org/Emoji"
-en-US = "8:30"
+en-US = "8.30"
 
 [CLOCK_FACE_NINE-THIRTY]
 x-comment = "🕤 (U+1F564), see http://wiki.documentfoundation.org/Emoji"
-en-US = "9:30"
+en-US = "9.30"
 
 [CLOCK_FACE_TEN-THIRTY]
 x-comment = "🕥 (U+1F565), see http://wiki.documentfoundation.org/Emoji"
-en-US = "10:30"
+en-US = "10.30"
 
 [CLOCK_FACE_ELEVEN-THIRTY]
 x-comment = "🕦 (U+1F566), see http://wiki.documentfoundation.org/Emoji"
-en-US = "11:30"
+en-US = "11.30"
 
 [CLOCK_FACE_TWELVE-THIRTY]
 x-comment = "🕧 (U+1F567), see http://wiki.documentfoundation.org/Emoji"
-en-US = "12:30"
+en-US = "12.30"
 
 [MOUNT_FUJI]
 x-comment = "🗻 (U+1F5FB), see http://wiki.documentfoundation.org/Emoji"
