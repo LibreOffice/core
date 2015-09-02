@@ -82,9 +82,20 @@ bool checkTintShade(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB, OUString const & s
 {
     Color aColor(nR, nG, nB);
     if (sReference != aColor.AsRGBHexString())
+    {
+        fprintf(stderr, "FAILED: Input and reference color mismatch %s\n",
+                sReference.toUtf8().getStr());
         return false;
+    }
     aColor.ApplyTintOrShade(nTintShade);
-    return sExpected == aColor.AsRGBHexString();
+    if (sExpected != aColor.AsRGBHexString())
+    {
+        fprintf(stderr, "FAILED: Reference color is %s which differs from expect %s\n",
+                sReference.toUtf8().getStr(),
+                sExpected.toUtf8().getStr());
+        return false;
+    }
+    return true;
 }
 
 void Test::test_ApplyTintOrShade()
