@@ -453,7 +453,6 @@ typedef tools::SvRef<ScDocShell> ScDocShellRef;
  */
 class SC_DLLPUBLIC ScDocShellModificator
 {
-            ScRangeList     maContentModified;
             ScDocShell&     rDocShell;
     boost::scoped_ptr<ScRefreshTimerProtector> mpProtector;
             bool            bAutoCalcShellDisabled;
@@ -466,11 +465,6 @@ public:
                             ScDocShellModificator( ScDocShell& );
                             ~ScDocShellModificator();
             void            SetDocumentModified();
-
-            /** Append a cell position/range to the list of modified cell
-                contents. Used in dtor to call maintenance on data structures
-                that depend on cell content. */
-            void            AppendCellContentModified( const ScRange& rRange );
 };
 
 //#i97876# Spreadsheet data changes are not notified
