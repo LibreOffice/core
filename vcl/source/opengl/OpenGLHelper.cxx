@@ -28,6 +28,7 @@
 
 #include "svdata.hxx"
 
+#include "salinst.hxx"
 #include "opengl/zone.hxx"
 #include "opengl/watchdog.hxx"
 #include <osl/conditn.h>
@@ -37,6 +38,10 @@
 #elif defined (_WIN32)
 #include "opengl/win/WinDeviceInfo.hxx"
 #endif
+
+static bool volatile gbInShaderCompile = false;
+sal_uInt64 volatile OpenGLZone::gnEnterCount = 0;
+sal_uInt64 volatile OpenGLZone::gnLeaveCount = 0;
 
 namespace {
 
@@ -140,6 +145,8 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
 {
     OpenGLZone aZone;
 
+    gbInShaderCompile = true;
+
     VCL_GL_INFO("vcl.opengl", "Load shader: vertex " << rVertexShaderName << " fragment " << rFragmentShaderName);
     // Create the shaders
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -190,6 +197,11 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
         return LogCompilerError(ProgramID, "program", "<both>", false);
 
     CHECK_GL_ERROR();
+
+    // Ensure we bump our counts before we leave the shader zone.
+    { OpenGLZone aMakeProgress; }
+    gbInShaderCompile = false;
+
     return ProgramID;
 }
 
@@ -462,9 +474,6 @@ bool OpenGLHelper::supportsVCLOpenGL()
         return true;
 }
 
-sal_uInt64 volatile OpenGLZone::gnEnterCount = 0;
-sal_uInt64 volatile OpenGLZone::gnLeaveCount = 0;
-
 void OpenGLZone::enter() { gnEnterCount++; }
 void OpenGLZone::leave() { gnLeaveCount++; }
 
@@ -481,13 +490,17 @@ OpenGLWatchdogThread::OpenGLWatchdogThread()
 
 void OpenGLWatchdogThread::execute()
 {
-    static const int nDisableEntries = 4; // 2 seconds - disable GL
-    static const int nAbortAfter = 10;   // 5 seconds - not coming back; abort
+    // delays to take various actions in 1/4 of a second increments.
+    static const int nDisableEntries[2] = { 6 /* 1.5s */, 20 /* 5s */ };
+    static const int nAbortAfter[2]     = { 20 /* 10s */, 120 /* 30s */ };
+
     int nUnchanged = 0; // how many unchanged nEnters
 
     TimeValue aHalfSecond;
     aHalfSecond.Seconds = 0;
-    aHalfSecond.Nanosec = 1000*1000*1000/2;
+    aHalfSecond.Nanosec = 1000*1000*1000/4;
+
+    bool bAbortFired = false;
 
     do {
         sal_uInt64 nLastEnters = OpenGLZone::gnEnterCount;
@@ -496,28 +509,54 @@ void OpenGLWatchdogThread::execute()
 
         if (OpenGLZone::isInZone())
         {
+            int nType = 0;
+            // The shader compiler can take a long time, first time.
+            if (gbInShaderCompile)
+                nType = 1;
+
             if (nLastEnters == OpenGLZone::gnEnterCount)
                 nUnchanged++;
             else
                 nUnchanged = 0;
             SAL_INFO("vcl.opengl", "GL watchdog - unchanged " <<
                      nUnchanged << " enter count " <<
-                     OpenGLZone::gnEnterCount);
+                     OpenGLZone::gnEnterCount << " type " <<
+                     (nType ? "in shader" : "normal gl") <<
+                     "breakpoints mid: " << nDisableEntries[nType] <<
+                     " max " << nAbortAfter[nType]);
 
             // Not making progress
-            if (nUnchanged == nDisableEntries)
+            if (nUnchanged >= nDisableEntries[nType])
             {
-                gbWatchdogFiring = true;
-                SAL_WARN("vcl.opengl", "Watchdog triggered: hard disable GL");
-                OpenGLZone::hardDisable();
-                gbWatchdogFiring = false;
+                static bool bFired = false;
+                if (!bFired)
+                {
+                    gbWatchdogFiring = true;
+                    SAL_WARN("vcl.opengl", "Watchdog triggered: hard disable GL");
+                    OpenGLZone::hardDisable();
+                    gbWatchdogFiring = false;
+                }
+                bFired = true;
+
+                // we can hang using VCL in the abort handling -> be impatient
+                if (bAbortFired)
+                {
+                    SAL_WARN("vcl.opengl", "Watchdog gave up: hard exiting");
+                    _exit(1);
+                }
             }
 
-            if (nUnchanged == nAbortAfter)
+            // Not making even more progress
+            if (nUnchanged >= nAbortAfter[nType])
             {
-                SAL_WARN("vcl.opengl", "Watchdog gave up: aborting");
-                gbWatchdogFiring = true;
-                std::abort();
+                if (!bAbortFired)
+                {
+                    SAL_WARN("vcl.opengl", "Watchdog gave up: aborting");
+                    gbWatchdogFiring = true;
+                    nUnchanged = 0;
+                    std::abort();
+                }
+                bAbortFired = true;
             }
         }
         else
