@@ -210,9 +210,11 @@ public:
     OpenGLProgram*      GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
     OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
 
+    /// Is this GL context the current context ?
     bool isCurrent();
     static void clearCurrent();
-
+    /// Is there a current GL context ?
+    static bool hasCurrent();
     /// make this GL context current - so it is implicit in subsequent GL calls
     void makeCurrent();
     /// reset the GL context so this context is not implicit in subsequent GL calls.
