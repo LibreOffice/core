@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_14b64c8a",
+        "filename": "external/cppunit/ExternalProject_cppunit.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-02T13:58:58Z",
+      "side": 1,
+      "message": "did you check if this devenv /Upgrade is actually necessary ?",
+      "revId": "5227da72c73d31a9c984324ca560b0b4764a4363",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
