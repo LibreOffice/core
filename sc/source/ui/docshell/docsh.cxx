@@ -3067,6 +3067,11 @@ ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS )
 ScDocShellModificator::~ScDocShellModificator()
 {
     ScDocument& rDoc = rDocShell.GetDocument();
+    if (!mvContentModified.empty() && !rDoc.IsImportingXML())
+    {
+        for (auto const& it : mvContentModified)
+            rDoc.RefreshTableColumnNames( it);
+    }
     rDoc.SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
     if ( !bAutoCalcShellDisabled && rDocShell.IsDocumentModifiedPending() )
         rDocShell.SetDocumentModified();    // last one shuts off the lights

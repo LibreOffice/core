@@ -125,6 +125,10 @@ public:
     /** Refresh/update the column names with the header row's cell contents. */
     SC_DLLPUBLIC void RefreshTableColumnNames( ScDocument* pDoc );
 
+    /** Refresh/update the column names with the header row's cell contents
+        within the given range. */
+    void RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange );
+
     /** Finds the column named rName and returns the corresponding offset
         within the table.
         @returns -1 if not found.
@@ -282,6 +286,8 @@ public:
     const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
+
+    void RefreshTableColumnNames( const ScRange& rRange );
 
     void    DeleteOnTab( SCTAB nTab );
     void    UpdateReference(UpdateRefMode eUpdateRefMode,

@@ -728,6 +728,42 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
     aNewNames.swap( maTableColumnNames);
 }
 
+void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange )
+{
+    if (!HasHeader())
+        return;
+
+    ScRange aRange( ScAddress::UNINITIALIZED);
+    GetArea( aRange);
+    aRange.aEnd.SetRow( aRange.aStart.Row());
+    ScRange aIntersection( aRange.Intersection( rRange));
+    if (!aIntersection.IsValid())
+        return;
+
+    if (maTableColumnNames.empty())
+    {
+        RefreshTableColumnNames( pDoc);
+        return;
+    }
+
+    // Update column names from cells in intersecting header range, but don't
+    // set names to empty string.
+    ScHorizontalCellIterator aIter( pDoc, nTable,
+            aIntersection.aStart.Col(), nStartRow, aIntersection.aEnd.Col(), nStartRow);
+    ScRefCellValue* pCell;
+    SCCOL nCol;
+    SCROW nRow;
+    for (size_t i=0; (pCell = aIter.GetNext( nCol, nRow)) != nullptr; ++i)
+    {
+        if (pCell->hasString())
+        {
+            const OUString& rStr = pCell->getString( pDoc);
+            if (!rStr.isEmpty())
+                maTableColumnNames[nCol-nStartCol] = rStr;
+        }
+    }
+}
+
 sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
 {
     if (maTableColumnNames.empty())
@@ -1171,6 +1207,12 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
             return pNoNameData;
 
     return NULL;
+}
+
+void ScDBCollection::RefreshTableColumnNames( const ScRange& rRange )
+{
+    for (auto const& it : maNamedDBs)
+        it->RefreshTableColumnNames( pDoc, rRange);
 }
 
 void ScDBCollection::DeleteOnTab( SCTAB nTab )
