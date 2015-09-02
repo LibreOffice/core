@@ -668,7 +668,8 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     }
     if (bRet)
     {
-        OpenGLWatchdogThread::start();
+        if (!getenv("SAL_DISABLE_GL_WATCHDOG"))
+            OpenGLWatchdogThread::start();
         ImplGetSVData()->maWinData.mbNoSaveBackground = true;
     }
 
