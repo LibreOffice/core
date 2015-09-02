@@ -1364,7 +1364,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                     }
                     if (bNewData)
                     {
-                        pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab );
+                        pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
                         if (pDBData)
                             pDBData->GetQueryParam( *pQueryParam );
                         else
@@ -1514,7 +1514,7 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
 bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     ScDocument*     pDoc    = pViewData->GetDocument();
-    ScDBData*       pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab );
+    ScDBData*       pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
     ScQueryParam    aQueryParam;
 
     if ( pDBData )

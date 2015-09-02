@@ -37,6 +37,14 @@ struct ScQueryParam;
 struct ScSubTotalParam;
 struct ScImportParam;
 
+/** Enum used to indicate which portion of the DBArea is to be considered. */
+enum class ScDBDataPortion
+{
+    TOP_LEFT,   ///< top left cell of area
+    HEADER,     ///< header row of area, if headers are present
+    AREA        ///< entire area
+};
+
 class ScDBData : public ScRefreshTimer
 {
 private:
@@ -151,7 +159,7 @@ public:
     void        GetImportParam(ScImportParam& rImportParam) const;
     void        SetImportParam(const ScImportParam& rImportParam);
 
-    bool        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
+    bool        IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
     bool        IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
     bool        HasImportParam() const;
@@ -242,7 +250,7 @@ public:
         iterator end();
         const_iterator begin() const;
         const_iterator end() const;
-        const ScDBData* findAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
+        const ScDBData* findAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
         const ScDBData* findByRange(const ScRange& rRange) const;
         void deleteOnTab(SCTAB nTab);
         ScDBData* getByRange(const ScRange& rRange);
@@ -269,8 +277,8 @@ public:
     AnonDBs& getAnonDBs() { return maAnonDBs;}
     const AnonDBs& getAnonDBs() const { return maAnonDBs;}
 
-    const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
-    ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly);
+    const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
+    ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
     const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );

@@ -4705,7 +4705,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         if (aStr.isEmpty())
         {
             // Hope that there's still the original column name available.
-            const ScDBData* pData = pDoc->GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab());
+            const ScDBData* pData = pDoc->GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab(), ScDBDataPortion::HEADER);
             if (pData)
                 aStr = pData->GetTableColumnName( aAbs.Col());
         }

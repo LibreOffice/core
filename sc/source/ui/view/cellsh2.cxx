@@ -1159,7 +1159,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
 
                     ScDBData* pDBData = bSelected
                                 ? rDoc.GetDBAtArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow )
-                                : rDoc.GetDBAtCursor( nStartCol, nStartRow, nStartTab );
+                                : rDoc.GetDBAtCursor( nStartCol, nStartRow, nStartTab, ScDBDataPortion::AREA );
 
                     if ( pDBData )
                     {

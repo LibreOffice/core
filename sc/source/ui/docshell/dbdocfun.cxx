@@ -323,7 +323,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
             if (bQuery && !aQueryParam.bInplace)
             {
                 ScDBData* pDest = rDoc.GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
-                                                        aQueryParam.nDestTab, true );
+                                                        aQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
                 if (pDest && pDest->IsDoSize())
                 {
                     pDest->GetArea( aOldQuery );
@@ -432,7 +432,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
                 if (bQuerySize)
                 {
                     ScDBData* pDest = rDoc.GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
-                                                            aQueryParam.nDestTab, true );
+                                                            aQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
                     if (pDest)
                     {
                         pDest->GetArea( aNewQuery );
@@ -678,7 +678,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         }
 
         pDestData = rDoc.GetDBAtCursor( rQueryParam.nDestCol, rQueryParam.nDestRow,
-                                            rQueryParam.nDestTab, true );
+                                            rQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
         if (pDestData)
         {
             pDestData->GetArea( aOldDest );

@@ -2088,7 +2088,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         if (bQuery && !aQueryParam.bInplace)
         {
             ScDBData* pDest = pDoc->GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
-                                                    aQueryParam.nDestTab, true );
+                                                    aQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
             if (pDest && pDest->IsDoSize())
             {
                 pDest->GetArea( aOldQuery );
@@ -2199,7 +2199,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             if (bQuerySize)
             {
                 ScDBData* pDest = pDoc->GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
-                                                        aQueryParam.nDestTab, true );
+                                                        aQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
                 if (pDest)
                 {
                     pDest->GetArea( aNewQuery );

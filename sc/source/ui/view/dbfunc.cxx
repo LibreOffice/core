@@ -259,7 +259,7 @@ void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource
             ScDocument& rDoc = pDocSh->GetDocument();
             ScDBData* pDestData = rDoc.GetDBAtCursor(
                                             rQueryParam.nDestCol, rQueryParam.nDestRow,
-                                            rQueryParam.nDestTab, true );
+                                            rQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
             if (pDestData)
             {
                 ScRange aDestRange;

@@ -717,7 +717,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
     Rectangle aCellRect(OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
 
-    ScDBData* pDBData = pDoc->GetDBAtCursor(nCol, nRow, nTab);
+    ScDBData* pDBData = pDoc->GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
     if (!pDBData)
         return;
 
@@ -1242,7 +1242,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
 
     if (!bDataSelect)                       // AutoFilter: Select active entry
     {
-        ScDBData* pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab );
+        ScDBData* pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
         if (pDBData)
         {
             ScQueryParam aParam;
@@ -1412,7 +1412,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
     ScDocument* pDoc = pViewData->GetDocument();
     svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
 
-    ScDBData* pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab );
+    ScDBData* pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
     if (pDBData)
     {
         ScQueryParam aParam;

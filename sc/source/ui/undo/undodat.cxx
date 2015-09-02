@@ -792,7 +792,7 @@ void ScUndoQuery::Undo()
         nDestEndRow = aQueryParam.nDestRow + ( aQueryParam.nRow2-aQueryParam.nRow1 );
 
         ScDBData* pData = rDoc.GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
-                                                aQueryParam.nDestTab, true );
+                                                aQueryParam.nDestTab, ScDBDataPortion::TOP_LEFT );
         if (pData)
         {
             ScRange aNewDest;

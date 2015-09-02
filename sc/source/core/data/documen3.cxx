@@ -281,18 +281,18 @@ void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, bool bRemove
     pDBCollection = pNewDBCollection;
 }
 
-const ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
+const ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const
 {
     if (pDBCollection)
-        return pDBCollection->GetDBAtCursor(nCol, nRow, nTab, bStartOnly);
+        return pDBCollection->GetDBAtCursor(nCol, nRow, nTab, ePortion);
     else
         return NULL;
 }
 
-ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly)
+ScDBData* ScDocument::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion)
 {
     if (pDBCollection)
-        return pDBCollection->GetDBAtCursor(nCol, nRow, nTab, bStartOnly);
+        return pDBCollection->GetDBAtCursor(nCol, nRow, nTab, ePortion);
     else
         return NULL;
 }
@@ -1413,7 +1413,7 @@ bool ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 
 bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
 {
-    const ScDBData* pDBData = GetDBAtCursor( nCurCol, nCurRow, nCurTab );
+    const ScDBData* pDBData = GetDBAtCursor( nCurCol, nCurRow, nCurTab, ScDBDataPortion::AREA );
     bool bHasAutoFilter = (pDBData != NULL);
 
     if ( pDBData )
@@ -1465,7 +1465,7 @@ bool ScDocument::GetFilterEntries(
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && pDBCollection )
     {
-        ScDBData* pDBData = pDBCollection->GetDBAtCursor(nCol, nRow, nTab, false);  //!??
+        ScDBData* pDBData = pDBCollection->GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);  //!??
         if (pDBData)
         {
             pDBData->ExtendDataArea(this);

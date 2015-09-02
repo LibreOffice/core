@@ -430,15 +430,19 @@ void ScDBData::SetImportParam(const ScImportParam& rImportParam)
     mpImportParam.reset(new ScImportParam(rImportParam));
 }
 
-bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
+bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const
 {
     if (nTab == nTable)
     {
-        if ( bStartOnly )
-            return ( nCol == nStartCol && nRow == nStartRow );
-        else
-            return ( nCol >= nStartCol && nCol <= nEndCol &&
-                     nRow >= nStartRow && nRow <= nEndRow );
+        switch (ePortion)
+        {
+            case ScDBDataPortion::TOP_LEFT:
+                return nCol == nStartCol && nRow == nStartRow;
+            case ScDBDataPortion::HEADER:
+                return HasHeader() && nRow == nStartRow && nCol >= nStartCol && nCol <= nEndCol;
+            case ScDBDataPortion::AREA:
+                return nCol >= nStartCol && nCol <= nEndCol && nRow >= nStartRow && nRow <= nEndRow;
+        }
     }
 
     return false;
@@ -812,14 +816,14 @@ class FindByCursor : public unary_function<std::unique_ptr<ScDBData>, bool>
     SCCOL mnCol;
     SCROW mnRow;
     SCTAB mnTab;
-    bool mbStartOnly;
+    ScDBDataPortion mePortion;
 public:
-    FindByCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) :
-        mnCol(nCol), mnRow(nRow), mnTab(nTab), mbStartOnly(bStartOnly) {}
+    FindByCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) :
+        mnCol(nCol), mnRow(nRow), mnTab(nTab), mePortion(ePortion) {}
 
     bool operator() (std::unique_ptr<ScDBData> const& p)
     {
-        return p->IsDBAtCursor(mnCol, mnRow, mnTab, mbStartOnly);
+        return p->IsDBAtCursor(mnCol, mnRow, mnTab, mePortion);
     }
 };
 
@@ -980,10 +984,11 @@ ScDBCollection::AnonDBs::const_iterator ScDBCollection::AnonDBs::end() const
     return m_DBs.end();
 }
 
-const ScDBData* ScDBCollection::AnonDBs::findAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
+const ScDBData* ScDBCollection::AnonDBs::findAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab,
+        ScDBDataPortion ePortion) const
 {
     DBsType::const_iterator itr = find_if(
-        m_DBs.begin(), m_DBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
+        m_DBs.begin(), m_DBs.end(), FindByCursor(nCol, nRow, nTab, ePortion));
     return itr == m_DBs.end() ? nullptr : itr->get();
 }
 
@@ -1062,22 +1067,22 @@ ScDBCollection::ScDBCollection(ScDocument* pDocument) :
 ScDBCollection::ScDBCollection(const ScDBCollection& r) :
     pDoc(r.pDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs), maAnonDBs(r.maAnonDBs) {}
 
-const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
+const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const
 {
     // First, search the global named db ranges.
     NamedDBs::DBsType::const_iterator itr = find_if(
-        maNamedDBs.begin(), maNamedDBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
+        maNamedDBs.begin(), maNamedDBs.end(), FindByCursor(nCol, nRow, nTab, ePortion));
     if (itr != maNamedDBs.end())
         return itr->get();
 
     // Check for the sheet-local anonymous db range.
     const ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
     if (pNoNameData)
-        if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,bStartOnly))
+        if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,ePortion))
             return pNoNameData;
 
     // Check the global anonymous db ranges.
-    const ScDBData* pData = getAnonDBs().findAtCursor(nCol, nRow, nTab, bStartOnly);
+    const ScDBData* pData = getAnonDBs().findAtCursor(nCol, nRow, nTab, ePortion);
     if (pData)
         return pData;
 
@@ -1086,22 +1091,22 @@ const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab
     return NULL;
 }
 
-ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly)
+ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion)
 {
     // First, search the global named db ranges.
     NamedDBs::DBsType::iterator itr = find_if(
-        maNamedDBs.begin(), maNamedDBs.end(), FindByCursor(nCol, nRow, nTab, bStartOnly));
+        maNamedDBs.begin(), maNamedDBs.end(), FindByCursor(nCol, nRow, nTab, ePortion));
     if (itr != maNamedDBs.end())
         return itr->get();
 
     // Check for the sheet-local anonymous db range.
     ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
     if (pNoNameData)
-        if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,bStartOnly))
+        if (pNoNameData->IsDBAtCursor(nCol,nRow,nTab,ePortion))
             return pNoNameData;
 
     // Check the global anonymous db ranges.
-    const ScDBData* pData = getAnonDBs().findAtCursor(nCol, nRow, nTab, bStartOnly);
+    const ScDBData* pData = getAnonDBs().findAtCursor(nCol, nRow, nTab, ePortion);
     if (pData)
         return const_cast<ScDBData*>(pData);
 

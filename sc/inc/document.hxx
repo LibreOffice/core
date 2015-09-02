@@ -189,6 +189,7 @@ struct ScSubTotalParam;
 struct ScQueryParam;
 class ScHint;
 class SvtBroadcaster;
+enum class ScDBDataPortion;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -565,8 +566,8 @@ public:
     SC_DLLPUBLIC ScDBCollection*    GetDBCollection() const { return pDBCollection;}
     void            SetDBCollection( ScDBCollection* pNewDBCollection,
                                         bool bRemoveAutoFilter = false );
-    const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly = false) const;
-    ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly = false);
+    const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const;
+    ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion);
     const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
 
