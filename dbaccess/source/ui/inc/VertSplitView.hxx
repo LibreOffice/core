@@ -33,7 +33,7 @@ namespace dbaui
         bool                            m_bVertical;
 
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
-        DECL_LINK( SplitHdl, Splitter* );
+        DECL_LINK_TYPED( SplitHdl, Splitter*, void );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:

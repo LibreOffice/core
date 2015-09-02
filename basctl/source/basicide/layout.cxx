@@ -365,7 +365,7 @@ void Layout::SplittedSide::ArrangeIn (Rectangle const& rRect)
     }
 }
 
-IMPL_LINK(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter)
+IMPL_LINK_TYPED(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter, void)
 {
     // checking margins
     CheckMarginsFor(pSplitter);
@@ -394,8 +394,6 @@ IMPL_LINK(Layout::SplittedSide, SplitHdl, Splitter*, pSplitter)
     }
     // arranging windows
     rLayout.ArrangeWindows();
-
-    return 0;
 }
 
 void Layout::SplittedSide::CheckMarginsFor (Splitter* pSplitter)

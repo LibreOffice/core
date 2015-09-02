@@ -997,7 +997,7 @@ IMPL_LINK_NOARG( RemoteFilesDialog, FileNameModifyHdl )
     return 1;
 }
 
-IMPL_LINK_NOARG ( RemoteFilesDialog, SplitHdl )
+IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, SplitHdl, Splitter*, void )
 {
     sal_Int32 nSplitPos = m_pSplitter->GetSplitPosPixel();
 
@@ -1017,8 +1017,6 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SplitHdl )
     m_pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
 
     m_pSplitter->SetPosPixel( Point( placeSize.Width(), m_pSplitter->GetPosPixel().Y() ) );
-
-    return 1;
 }
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, SelectFilterHdl )

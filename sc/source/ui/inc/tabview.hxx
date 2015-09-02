@@ -173,7 +173,7 @@ private:
     DECL_LINK(      ScrollHdl, ScrollBar* );
     DECL_LINK(      EndScrollHdl, void* );
 
-    DECL_LINK(      SplitHdl, Splitter* );
+    DECL_LINK_TYPED(SplitHdl, Splitter*, void);
     void            DoHSplit(long nSplitPos);
     void            DoVSplit(long nSplitPos);
 

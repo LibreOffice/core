@@ -226,7 +226,7 @@ void GalleryControl::ThemeSelectionHasChanged()
     mpBrowser2->SelectTheme(mpBrowser1->GetSelectedTheme());
 }
 
-IMPL_LINK_NOARG( GalleryControl, SplitHdl )
+IMPL_LINK_NOARG_TYPED( GalleryControl, SplitHdl, Splitter*, void )
 {
     if(mpSplitter->IsHorizontal())
     {
@@ -238,8 +238,6 @@ IMPL_LINK_NOARG( GalleryControl, SplitHdl )
     }
 
     Resize();
-
-    return 0L;
 }
 
 

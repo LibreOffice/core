@@ -195,7 +195,7 @@ private:
     DECL_LINK( FileNameGetFocusHdl, void * );
     DECL_LINK( FileNameModifyHdl, void * );
 
-    DECL_LINK( SplitHdl, void * );
+    DECL_LINK_TYPED( SplitHdl, Splitter*, void );
 
     DECL_LINK( SelectFilterHdl, void * );
 

@@ -120,7 +120,7 @@ private:
         Point MakePoint (long, long) const;
         Size MakeSize (long, long) const;
         static bool IsDocking (DockingWindow const&);
-        DECL_LINK(SplitHdl, Splitter*);
+        DECL_LINK_TYPED(SplitHdl, Splitter*, void);
         void CheckMarginsFor (Splitter*);
         void InitSplitter (Splitter&);
     } aLeftSide, aBottomSide;

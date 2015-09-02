@@ -81,9 +81,9 @@ namespace rptui
         void ImplInitSettings();
 
         DECL_LINK(Collapsed,OColorListener*);
-        DECL_LINK(StartSplitHdl, Splitter*);
-        DECL_LINK(SplitHdl, Splitter*);
-        DECL_LINK(EndSplitHdl, Splitter*);
+        DECL_LINK_TYPED(StartSplitHdl, Splitter*, void);
+        DECL_LINK_TYPED(SplitHdl, Splitter*, void);
+        DECL_LINK_TYPED(EndSplitHdl, Splitter*, void);
 
 
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

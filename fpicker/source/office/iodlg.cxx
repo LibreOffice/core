@@ -2797,7 +2797,7 @@ void SvtFileDialog::initDefaultPlaces( )
     _pImp->_pPlaces->IsUpdated();
 }
 
-IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl )
+IMPL_LINK_NOARG_TYPED( SvtFileDialog, Split_Hdl, Splitter*, void )
 {
     sal_Int32 nSplitPos = _pSplitter->GetSplitPosPixel();
 
@@ -2817,7 +2817,6 @@ IMPL_LINK_NOARG( SvtFileDialog, Split_Hdl )
     _pFileView->SetPosSizePixel( fileViewPos, fileViewSize );
 
     _pSplitter->SetPosPixel( Point( placeSize.Width(), _pSplitter->GetPosPixel().Y() ) );
-    return 0;
 }
 
 QueryFolderNameDialog::QueryFolderNameDialog(vcl::Window* _pParent,

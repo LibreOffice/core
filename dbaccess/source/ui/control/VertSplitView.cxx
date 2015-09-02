@@ -50,7 +50,7 @@ void OSplitterView::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_LINK( OSplitterView, SplitHdl, Splitter*, /*pSplit*/ )
+IMPL_LINK_NOARG_TYPED( OSplitterView, SplitHdl, Splitter*, void )
 {
     OSL_ENSURE(m_pSplitter, "Splitter is NULL!");
     if ( m_bVertical )
@@ -62,7 +62,6 @@ IMPL_LINK( OSplitterView, SplitHdl, Splitter*, /*pSplit*/ )
         m_pSplitter->SetPosPixel( Point( m_pSplitter->GetPosPixel().X(),m_pSplitter->GetSplitPosPixel() ) );
 
     Resize();
-    return 0L;
 }
 
 void OSplitterView::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )

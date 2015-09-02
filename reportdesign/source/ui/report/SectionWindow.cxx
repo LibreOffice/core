@@ -321,24 +321,22 @@ void OSectionWindow::zoom(const Fraction& _aZoom)
     Invalidate();
 }
 
-IMPL_LINK( OSectionWindow, StartSplitHdl, Splitter*,  )
+IMPL_LINK_NOARG_TYPED( OSectionWindow, StartSplitHdl, Splitter*, void)
 {
     const OUString sUndoAction( ModuleRes( RID_STR_UNDO_CHANGE_SIZE ) );
     getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, OUString() );
-    return 0L;
 }
 
-IMPL_LINK( OSectionWindow, EndSplitHdl, Splitter*,  )
+IMPL_LINK_NOARG_TYPED( OSectionWindow, EndSplitHdl, Splitter*, void )
 {
     getViewsWindow()->getView()->getReportView()->getController().getUndoManager().LeaveListAction();
-    return 0L;
 }
 
-IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
+IMPL_LINK_TYPED( OSectionWindow, SplitHdl, Splitter*, _pSplitter, void )
 {
     if ( !getViewsWindow()->getView()->getReportView()->getController().isEditable() )
     {
-        return 0L;
+        return;
     }
 
     sal_Int32 nSplitPos = _pSplitter->GetSplitPosPixel();
@@ -361,8 +359,6 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
 
     xSection->setHeight(nSplitPos);
     m_aSplitter->SetSplitPosPixel(m_aSplitter->LogicToPixel(Size(0,nSplitPos)).Height());
-
-    return 0L;
 }
 
 void lcl_scroll(vcl::Window& _rWindow,const Point& _aDelta)

@@ -33,6 +33,7 @@ class GallerySplitter;
 class GalleryBrowser1;
 class GalleryBrowser2;
 class FmFormModel;
+class Splitter;
 
 namespace svx { namespace sidebar {
 
@@ -59,7 +60,7 @@ private:
     virtual void Resize() SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;
 
-    DECL_LINK(SplitHdl, void*);
+    DECL_LINK_TYPED(SplitHdl, Splitter*, void);
 
 protected:
     void ThemeSelectionHasChanged();

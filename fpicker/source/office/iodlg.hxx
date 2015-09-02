@@ -98,7 +98,7 @@ private:
 
     DECL_LINK_TYPED(            AddPlacePressed_Hdl, Button*, void );
     DECL_LINK_TYPED(            RemovePlacePressed_Hdl, Button*, void );
-    DECL_LINK      (            Split_Hdl, void* );
+    DECL_LINK_TYPED(            Split_Hdl, Splitter*, void );
 
     void                        OpenHdl_Impl(void* pVoid);
     void                        Init_Impl( WinBits nBits );
