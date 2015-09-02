@@ -744,7 +744,8 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange 
     if (!aIntersection.IsValid())
         return;
 
-    if (maTableColumnNames.empty())
+    if (maTableColumnNames.empty() ||
+            maTableColumnNames.size() < static_cast<size_t>(aIntersection.aEnd.Col() - nStartCol + 1))
     {
         RefreshTableColumnNames( pDoc);
         return;
