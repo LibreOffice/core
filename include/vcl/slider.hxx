@@ -55,8 +55,8 @@ private:
 
     VclPtr<NumericField> mpLinkedField;
 
-    Link<>          maSlideHdl;
-    Link<>          maEndSlideHdl;
+    Link<Slider*,void>   maSlideHdl;
+    Link<Slider*,void>   maEndSlideHdl;
 
     DECL_LINK(LinkedFieldModifyHdl, NumericField*);
 
@@ -112,8 +112,8 @@ public:
 
     void            SetLinkedField(VclPtr<NumericField> pField);
 
-    void            SetSlideHdl( const Link<>& rLink ) { maSlideHdl = rLink; }
-    void            SetEndSlideHdl( const Link<>& rLink ) { maEndSlideHdl = rLink; }
+    void            SetSlideHdl( const Link<Slider*,void>& rLink ) { maSlideHdl = rLink; }
+    void            SetEndSlideHdl( const Link<Slider*,void>& rLink ) { maEndSlideHdl = rLink; }
 };
 
 #endif // INCLUDED_VCL_SLIDER_HXX

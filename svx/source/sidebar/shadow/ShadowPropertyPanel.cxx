@@ -166,13 +166,12 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransMetricHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowTransSliderHdl)
+IMPL_LINK_NOARG_TYPED(ShadowPropertyPanel, ModifyShadowTransSliderHdl, Slider*, void)
 {
     sal_uInt16 nVal = mpShadowTransSlider->GetThumbPos();
     SetTransparencyValue(nVal);
     SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_SHADOW_TRANSPARENCE, SfxCallMode::RECORD, &aItem, 0L);
-    return 0;
 }
 
 IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowDistanceHdl)

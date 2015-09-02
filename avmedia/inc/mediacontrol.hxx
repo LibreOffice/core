@@ -79,9 +79,9 @@ private:
     void                implUpdateTimeField( double fCurTime );
     Image               implGetImage( sal_Int32 nImageId ) const;
 
-                        DECL_LINK( implTimeHdl, Slider* );
-                        DECL_LINK( implTimeEndHdl, Slider* );
-                        DECL_LINK( implVolumeHdl, Slider* );
+                        DECL_LINK_TYPED( implTimeHdl, Slider*, void );
+                        DECL_LINK_TYPED( implTimeEndHdl, Slider*, void );
+                        DECL_LINK_TYPED( implVolumeHdl, Slider*, void );
                         DECL_LINK_TYPED( implSelectHdl, ToolBox*, void );
                         DECL_LINK( implZoomSelectHdl, ListBox* );
                         DECL_LINK_TYPED(implTimeoutHdl, Idle *, void);
