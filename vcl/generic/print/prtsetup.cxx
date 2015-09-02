@@ -107,10 +107,10 @@ void RTSDialog::dispose()
     TabDialog::dispose();
 }
 
-IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
+IMPL_LINK_TYPED( RTSDialog, ActivatePage, TabControl*, pTabCtrl, void )
 {
     if( pTabCtrl != m_pTabControl )
-        return 0;
+        return;
 
     sal_uInt16 nId = m_pTabControl->GetCurPageId();
     OString sPage = m_pTabControl->GetPageName(nId);
@@ -129,8 +129,6 @@ IMPL_LINK( RTSDialog, ActivatePage, TabControl*, pTabCtrl )
         if (sPage == "paper")
             m_pPaperPage->update();
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( RTSDialog, ClickButton, Button*, pButton, void )

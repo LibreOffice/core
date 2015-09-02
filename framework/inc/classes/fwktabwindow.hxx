@@ -104,7 +104,7 @@ private:
     TabEntry*       FindEntry( sal_Int32 nIndex ) const;
     bool            RemoveEntry( sal_Int32 nIndex );
 
-    DECL_DLLPRIVATE_LINK(ActivatePageHdl, void *);
+    DECL_DLLPRIVATE_LINK_TYPED(ActivatePageHdl,   TabControl *, void);
     DECL_DLLPRIVATE_LINK_TYPED(DeactivatePageHdl, TabControl *, bool);
 
 public:

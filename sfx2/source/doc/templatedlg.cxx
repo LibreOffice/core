@@ -383,15 +383,13 @@ FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentFilter()
     return FILTER_APPLICATION::NONE;
 }
 
-IMPL_LINK_NOARG(SfxTemplateManagerDlg,ActivatePageHdl)
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ActivatePageHdl, TabControl*, void)
 {
     mpCurView->filterItems(ViewFilter_Application(getCurrentFilter()));
     mpCurView->showRootRegion(); // fdo#60586 show the root region of the applied filter
 
     if (mpSearchView->IsVisible())
         SearchUpdateHdl(NULL);
-
-    return 0;
 }
 
 void SfxTemplateManagerDlg::readSettings ()

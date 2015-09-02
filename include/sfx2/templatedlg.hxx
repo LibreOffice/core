@@ -57,7 +57,7 @@ public:
 
     void setDocumentModel (const com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel);
 
-    DECL_LINK(ActivatePageHdl, void*);
+    DECL_LINK_TYPED(ActivatePageHdl, TabControl*, void);
 
 private:
 
