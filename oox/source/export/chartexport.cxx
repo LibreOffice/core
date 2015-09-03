@@ -119,12 +119,12 @@ namespace oox { namespace drawingml {
 
 namespace {
 
-AxesType translateFromChart2AxisIndexToOox(sal_Int32 nIndex)
+bool isPrimaryAxes(sal_Int32 nIndex)
 {
     assert(nIndex == 0 || nIndex == 1);
     if (nIndex == 1)
-        return AXIS_SECONDARY_Y;
-    return AXIS_PRIMARY_Y;
+        return false;
+    return true;
 }
 
 }
@@ -1533,9 +1533,9 @@ void ChartExport::exportAreaChart( Reference< chart2::XChartType > xChartType )
             FSEND );
 
     exportGrouping( );
-    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
-    exportAllSeries( xChartType, nAttachedAxis );
-    exportAxesId( nAttachedAxis );
+    bool bPrimaryAxes = true;
+    exportAllSeries(xChartType, bPrimaryAxes);
+    exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
@@ -1566,8 +1566,8 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
             XML_val, varyColors,
             FSEND );
 
-    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
-    exportAllSeries( xChartType, nAttachedAxis );
+    bool bPrimaryAxes = true;
+    exportAllSeries(xChartType, bPrimaryAxes);
 
     Reference< XPropertySet > xTypeProp( xChartType, uno::UNO_QUERY );
 
@@ -1626,7 +1626,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
         }
     }
 
-    exportAxesId( nAttachedAxis );
+    exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
@@ -1642,14 +1642,14 @@ void ChartExport::exportBubbleChart( Reference< chart2::XChartType > xChartType 
             XML_val, varyColors,
             FSEND );
 
-    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
-    exportAllSeries( xChartType, nAttachedAxis );
+    bool bPrimaryAxes = true;
+    exportAllSeries(xChartType, bPrimaryAxes);
 
     pFS->singleElement(FSNS(XML_c, XML_bubble3D),
             XML_val, "0",
             FSEND);
 
-    exportAxesId( nAttachedAxis );
+    exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, XML_bubbleChart ) );
 }
@@ -1660,8 +1660,8 @@ void ChartExport::exportDoughnutChart( Reference< chart2::XChartType > xChartTyp
     pFS->startElement( FSNS( XML_c, XML_doughnutChart ),
             FSEND );
 
-    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
-    exportAllSeries( xChartType, nAttachedAxis );
+    bool bPrimaryAxes = true;
+    exportAllSeries(xChartType, bPrimaryAxes);
     // firstSliceAng
     exportFirstSliceAng( );
     //FIXME: holeSize
@@ -1734,8 +1734,8 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
 
         exportGrouping( );
         // TODO: show marker symbol in series?
-        AxesType nAttachedAxis = AXIS_PRIMARY_Y;
-        exportSeries( xChartType, *itr, nAttachedAxis );
+        bool bPrimaryAxes = true;
+        exportSeries(xChartType, *itr, bPrimaryAxes);
 
         // show marker?
         sal_Int32 nSymbolType = css::chart::ChartSymbolType::NONE;
@@ -1753,7 +1753,7 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
                     FSEND );
         }
 
-        exportAxesId( nAttachedAxis );
+        exportAxesId(bPrimaryAxes);
 
         pFS->endElement( FSNS( XML_c, nTypeId ) );
     }
@@ -1779,8 +1779,8 @@ void ChartExport::exportPieChart( Reference< chart2::XChartType > xChartType )
             XML_val, varyColors,
             FSEND );
 
-    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
-    exportAllSeries( xChartType, nAttachedAxis );
+    bool bPrimaryAxes = true;
+    exportAllSeries(xChartType, bPrimaryAxes);
 
     if( !mbIs3DChart )
     {
@@ -1807,9 +1807,9 @@ void ChartExport::exportRadarChart( Reference< chart2::XChartType > xChartType)
     pFS->singleElement( FSNS( XML_c, XML_radarStyle ),
             XML_val, radarStyle,
             FSEND );
-    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
-    exportAllSeries( xChartType, nAttachedAxis );
-    exportAxesId( nAttachedAxis );
+    bool bPrimaryAxes = true;
+    exportAllSeries(xChartType, bPrimaryAxes);
+    exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, XML_radarChart ) );
 }
@@ -1848,9 +1848,9 @@ void ChartExport::exportScatterChart( Reference< chart2::XChartType > xChartType
                 FSEND );
 
         // FIXME: should export xVal and yVal
-        AxesType nAttachedAxis = AXIS_PRIMARY_Y;
-        exportSeries( xChartType, *itr, nAttachedAxis );
-        exportAxesId( nAttachedAxis );
+        bool bPrimaryAxes = true;
+        exportSeries(xChartType, *itr, bPrimaryAxes);
+        exportAxesId(bPrimaryAxes);
 
         pFS->endElement( FSNS( XML_c, XML_scatterChart ) );
     }
@@ -1862,8 +1862,7 @@ void ChartExport::exportStockChart( Reference< chart2::XChartType > xChartType )
     pFS->startElement( FSNS( XML_c, XML_stockChart ),
             FSEND );
 
-    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
-
+    bool bPrimaryAxes = true;
     bool bJapaneseCandleSticks = false;
     Reference< beans::XPropertySet > xCTProp( xChartType, uno::UNO_QUERY );
     if( xCTProp.is())
@@ -1872,7 +1871,7 @@ void ChartExport::exportStockChart( Reference< chart2::XChartType > xChartType )
     Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
     if(xDSCnt.is())
         exportCandleStickSeries(
-                xDSCnt->getDataSeries(), bJapaneseCandleSticks, nAttachedAxis );
+                xDSCnt->getDataSeries(), bJapaneseCandleSticks, bPrimaryAxes );
 
     // export stock properties
     Reference< css::chart::XStatisticDisplay > xStockPropProvider( mxDiagram, uno::UNO_QUERY );
@@ -1882,7 +1881,7 @@ void ChartExport::exportStockChart( Reference< chart2::XChartType > xChartType )
         exportUpDownBars(xChartType);
     }
 
-    exportAxesId( nAttachedAxis );
+    exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, XML_stockChart ) );
 }
@@ -1961,14 +1960,14 @@ void ChartExport::exportSurfaceChart( Reference< chart2::XChartType > xChartType
         nTypeId = XML_surface3DChart;
     pFS->startElement( FSNS( XML_c, nTypeId ),
             FSEND );
-    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
-    exportAllSeries( xChartType, nAttachedAxis );
-    exportAxesId( nAttachedAxis );
+    bool bPrimaryAxes = true;
+    exportAllSeries(xChartType, bPrimaryAxes);
+    exportAxesId(bPrimaryAxes);
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
 
-void ChartExport::exportAllSeries(Reference<chart2::XChartType> xChartType, AxesType& rAttachedAxis)
+void ChartExport::exportAllSeries(Reference<chart2::XChartType> xChartType, bool& rPrimaryAxes)
 {
     Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
     if( ! xDSCnt.is())
@@ -1976,11 +1975,11 @@ void ChartExport::exportAllSeries(Reference<chart2::XChartType> xChartType, Axes
 
     // export dataseries for current chart-type
     Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xDSCnt->getDataSeries());
-    exportSeries(xChartType, aSeriesSeq, rAttachedAxis);
+    exportSeries(xChartType, aSeriesSeq, rPrimaryAxes);
 }
 
 void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
-        Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq, AxesType& rAttachedAxis )
+        Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq, bool& rPrimaryAxes )
 {
     OUString aLabelRole = xChartType->getRoleOfSequenceForSeriesLabel();
     OUString aChartType( xChartType->getChartType());
@@ -2048,7 +2047,7 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
                     {
                         sal_Int32 nLocalAttachedAxis = 0;
                         mAny >>= nLocalAttachedAxis;
-                        rAttachedAxis = translateFromChart2AxisIndexToOox(nLocalAttachedAxis);
+                        rPrimaryAxes = isPrimaryAxes(nLocalAttachedAxis);
                     }
 
                     // export shape properties
@@ -2181,12 +2180,12 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
 void ChartExport::exportCandleStickSeries(
     const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
     bool /*bJapaneseCandleSticks*/,
-    AxesType& rAttachedAxis )
+    bool& rPrimaryAxes)
 {
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
     {
         Reference< chart2::XDataSeries > xSeries( aSeriesSeq[nSeriesIdx] );
-        rAttachedAxis = lcl_isSeriesAttachedToFirstAxis( xSeries ) ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
+        rPrimaryAxes = lcl_isSeriesAttachedToFirstAxis(xSeries) ? true : false;
 
         Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
         if( xSource.is())
@@ -2570,7 +2569,18 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
         }
         case AXIS_SECONDARY_X:
         {
-            //TODO: suspicously absent
+            Reference< css::chart::XTwoAxisXSupplier > xAxisTwoXSupp( mxDiagram, uno::UNO_QUERY );
+            if( xAxisTwoXSupp.is())
+                xAxisProp = xAxisTwoXSupp->getSecondaryXAxis();
+            if( bHasSecondaryXAxisTitle )
+            {
+                Reference< css::chart::XSecondAxisTitleSupplier > xAxisSupp( mxDiagram, uno::UNO_QUERY );
+                xAxisTitle.set( xAxisSupp->getSecondXAxisTitle(), uno::UNO_QUERY );
+            }
+
+            nAxisType = XML_valAx;
+            // FIXME: axPos, need to check axis direction
+            sAxPos = "t";
             break;
         }
         case AXIS_SECONDARY_Y:
@@ -3191,12 +3201,14 @@ void ChartExport::exportDataPoints(
     }
 }
 
-void ChartExport::exportAxesId(AxesType nAttachedAxis)
+void ChartExport::exportAxesId(bool bPrimaryAxes)
 {
     sal_Int32 nAxisIdx = lcl_generateRandomValue();
     sal_Int32 nAxisIdy = lcl_generateRandomValue();
-    maAxes.push_back( AxisIdPair( AXIS_PRIMARY_X, nAxisIdx, nAxisIdy ) );
-    maAxes.push_back( AxisIdPair( nAttachedAxis, nAxisIdy, nAxisIdx ) );
+    AxesType eXAxis = bPrimaryAxes ? AXIS_PRIMARY_X : AXIS_SECONDARY_X;
+    AxesType eYAxis = bPrimaryAxes ? AXIS_PRIMARY_Y : AXIS_SECONDARY_Y;
+    maAxes.push_back( AxisIdPair( eXAxis, nAxisIdx, nAxisIdy ) );
+    maAxes.push_back( AxisIdPair( eYAxis, nAxisIdy, nAxisIdx ) );
     FSHelperPtr pFS = GetFS();
     pFS->singleElement( FSNS( XML_c, XML_axId ),
             XML_val, I32S( nAxisIdx ),
@@ -3204,7 +3216,7 @@ void ChartExport::exportAxesId(AxesType nAttachedAxis)
     pFS->singleElement( FSNS( XML_c, XML_axId ),
             XML_val, I32S( nAxisIdy ),
             FSEND );
-    if( mbHasZAxis )
+    if (bPrimaryAxes && mbHasZAxis)
     {
         sal_Int32 nAxisIdz = 0;
         if( isDeep3dChart() )
