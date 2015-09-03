@@ -219,7 +219,7 @@ using namespace connectivity;
 %type <pParseNode> position_exp extract_exp length_exp general_value_spec
 %type <pParseNode> general_set_fct set_fct_type query_exp non_join_query_exp joined_table
 %type <pParseNode> non_join_query_term non_join_query_primary simple_table
-%type <pParseNode> table_value_const_list row_value_constructor row_value_const_list row_value_constructor_elem
+%type <pParseNode> table_value_const_list row_value_constructor /*row_value_const_list*/ row_value_constructor_elem
 %type <pParseNode> qualified_join value_exp query_term join_type outer_join_type join_condition boolean_term
 %type <pParseNode> boolean_factor boolean_primary named_columns_join join_spec
 %type <pParseNode> cast_operand cast_target factor datetime_value_exp /*interval_value_exp*/ datetime_term datetime_factor
@@ -747,6 +747,7 @@ table_value_const_list:
 			{$1->append($3);
 			$$ = $1;}
 	;
+/*
 row_value_const_list:
 			row_value_constructor_elem
 			{$$ = SQL_NEW_COMMALISTRULE;
@@ -755,6 +756,7 @@ row_value_const_list:
 			{$1->append($3);
 			$$ = $1;}
 	;
+*/
 row_value_constructor:
 			row_value_constructor_elem
 /*	  |		'(' row_value_const_list ')'
