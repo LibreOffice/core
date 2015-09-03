@@ -36,34 +36,34 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/osl_Mutex.obj
 
-SHL1TARGET= osl_Mutex
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
+APP1TARGET= osl_Mutex
+APP1STDLIBS= $(SALLIB) $(GTESTLIB)
 .IF "$(GUI)" == "WNT"
-SHL1STDLIBS += $(WS2_32LIB)
+APP1STDLIBS += $(WS2_32LIB)
 .ENDIF
-
-SHL1IMPLIB= i$(SHL1TARGET)
-
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-SHL1RPATH = NONE
-
+APP1RPATH = NONE
+APP1TEST = enabled
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
 
 .END
