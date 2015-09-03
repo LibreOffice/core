@@ -22,10 +22,7 @@
 
 
 #include "preextstl.h"
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include "gtest/gtest.h"
 #include "postextstl.h"
 
 #include <rtl/ustrbuf.hxx>
@@ -44,28 +41,18 @@ using sax::Converter;
 namespace {
 
 class ConverterTest
-    : public ::CppUnit::TestFixture
+    : public ::testing::Test
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
-
-    void testDuration();
-    void testDateTime();
-
-    CPPUNIT_TEST_SUITE(ConverterTest);
-    CPPUNIT_TEST(testDuration);
-    CPPUNIT_TEST(testDateTime);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
+    virtual void SetUp();
+    virtual void TearDown();
 };
 
-void ConverterTest::setUp()
+void ConverterTest::SetUp()
 {
 }
 
-void ConverterTest::tearDown()
+void ConverterTest::TearDown()
 {
 }
 
@@ -87,13 +74,13 @@ static void doTest(util::Duration const & rid, char const*const pis,
     OSL_TRACE("%d %dY %dM %dD %dH %dM %dS %dm",
         od.Negative, od.Years, od.Months, od.Days,
         od.Hours, od.Minutes, od.Seconds, od.MilliSeconds);
-    CPPUNIT_ASSERT(bSuccess);
-    CPPUNIT_ASSERT(eqDuration(rid, od));
+    ASSERT_TRUE(bSuccess);
+    ASSERT_TRUE(eqDuration(rid, od));
     ::rtl::OUStringBuffer buf;
     Converter::convertDuration(buf, od);
     OSL_TRACE(
         ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8));
-    CPPUNIT_ASSERT(buf.makeStringAndClear().equalsAscii(pos));
+    ASSERT_TRUE(buf.makeStringAndClear().equalsAscii(pos));
 }
 
 static void doTestDurationF(char const*const pis)
@@ -104,10 +91,10 @@ static void doTestDurationF(char const*const pis)
     OSL_TRACE("%d %dY %dM %dD %dH %dM %dS %dH",
         od.Negative, od.Years, od.Months, od.Days,
         od.Hours, od.Minutes, od.Seconds, od.MilliSeconds);
-    CPPUNIT_ASSERT(!bSuccess);
+    ASSERT_TRUE(!bSuccess);
 }
 
-void ConverterTest::testDuration()
+TEST_F(ConverterTest, testDuration)
 {
     OSL_TRACE("\nSAX CONVERTER TEST BEGIN\n");
     doTest( util::Duration(false, 1, 0, 0, 0, 0, 0, 0), "P1Y" );
@@ -158,13 +145,13 @@ static void doTest(util::DateTime const & rdt, char const*const pis,
     OSL_TRACE("Y:%d M:%d D:%d  H:%d M:%d S:%d H:%d",
         odt.Year, odt.Month, odt.Day,
         odt.Hours, odt.Minutes, odt.Seconds, odt.HundredthSeconds);
-    CPPUNIT_ASSERT(bSuccess);
-    CPPUNIT_ASSERT(eqDateTime(rdt, odt));
+    ASSERT_TRUE(bSuccess);
+    ASSERT_TRUE(eqDateTime(rdt, odt));
     ::rtl::OUStringBuffer buf;
     Converter::convertDateTime(buf, odt, true);
     OSL_TRACE(
         ::rtl::OUStringToOString(buf.getStr(), RTL_TEXTENCODING_UTF8));
-    CPPUNIT_ASSERT(buf.makeStringAndClear().equalsAscii(pos));
+    ASSERT_TRUE(buf.makeStringAndClear().equalsAscii(pos));
 }
 
 static void doTestDateTimeF(char const*const pis)
@@ -175,10 +162,10 @@ static void doTestDateTimeF(char const*const pis)
     OSL_TRACE("Y:%d M:%d D:%d  H:%dH M:%d S:%d H:%d",
         odt.Year, odt.Month, odt.Day,
         odt.Hours, odt.Minutes, odt.Seconds, odt.HundredthSeconds);
-    CPPUNIT_ASSERT(!bSuccess);
+    ASSERT_TRUE(!bSuccess);
 }
 
-void ConverterTest::testDateTime()
+TEST_F(ConverterTest, testDateTime)
 {
     OSL_TRACE("\nSAX CONVERTER TEST BEGIN\n");
     doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1), "0001-01-01T00:00:00" );
@@ -234,9 +221,11 @@ void ConverterTest::testDateTime()
     OSL_TRACE("\nSAX CONVERTER TEST END\n");
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);
 
 }
 
-CPPUNIT_PLUGIN_IMPLEMENT();
-
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

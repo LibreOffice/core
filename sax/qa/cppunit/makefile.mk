@@ -31,50 +31,30 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(WITH_CPPUNIT)" != "YES"
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
 
-@all:
-    @echo "cppunit disabled. nothing do do."
-
-.ELSE # "$(WITH_CPPUNIT)" != "YES"
-
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-DLLPRE = # no leading "lib" on .so files
+.ELSE # "$(ENABLE_UNIT_TESTS)" != "YES"
 
 # --- Libs ---------------------------------------------------------
 
-SHL1OBJS=  \
-    $(SLO)/test_converter.obj \
-
-
-SHL1STDLIBS= \
-     $(SAXLIB) \
-     $(SALLIB) \
-     $(CPPUNITLIB) \
-
-
+APP1OBJS=  \
+    $(SLO)/test_converter.obj
+APP1STDLIBS= \
+    $(SAXLIB) \
+    $(SALLIB) \
+    $(GTESTLIB)
 .IF "$(GUI)" == "OS2"
-SHL1TARGET= tst_cnv
+APP1TARGET= tst_cnv
 .ELSE
-SHL1TARGET= test_converter
+APP1TARGET= test_converter
 .ENDIF
-SHL1RPATH = NONE
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF= $(MISC)/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= version.map
-
-# --- All object files ---------------------------------------------
-
-SLOFILES= \
-    $(SHL1OBJS) \
-
+APP1RPATH = NONE
+APP1TEST = enabled
 
 # --- Targets ------------------------------------------------------
 
-.ENDIF # "$(WITH_CPPUNIT)" != "YES"
-
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
 
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
