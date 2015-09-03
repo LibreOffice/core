@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "noteurl.hxx"
+
 #include "swtypes.hxx"
 #include <vcl/outdev.hxx>
 #include <svtools/imaprect.hxx>
 #include <svtools/imap.hxx>
-
-#include "noteurl.hxx"
 
 // Global variable
 SwNoteURL *pNoteURL = NULL;
@@ -30,26 +30,25 @@ SwNoteURL *pNoteURL = NULL;
 void SwNoteURL::InsertURLNote( const OUString& rURL, const OUString& rTarget,
     const SwRect& rRect )
 {
-    const size_t nCount = aList.size();
+    const size_t nCount = m_List.size();
     for( size_t i = 0; i < nCount; ++i )
-        if( rRect == aList[i].GetRect() )
+        if (rRect == m_List[i].GetRect())
             return;
 
-    SwURLNote *pNew = new SwURLNote( rURL, rTarget, rRect );
-    aList.push_back( pNew );
+    m_List.push_back(SwURLNote(rURL, rTarget, rRect));
 }
 
 void SwNoteURL::FillImageMap( ImageMap *pMap, const Point &rPos,
     const MapMode& rMap )
 {
     OSL_ENSURE( pMap, "FillImageMap: No ImageMap, no cookies!" );
-    const size_t nCount = aList.size();
+    const size_t nCount = m_List.size();
     if( nCount )
     {
         MapMode aMap( MAP_100TH_MM );
         for( size_t i = 0; i < nCount; ++i )
         {
-            const SwURLNote &rNote = aList[i];
+            const SwURLNote &rNote = m_List[i];
             SwRect aSwRect( rNote.GetRect() );
             aSwRect -= rPos;
             Rectangle aRect( OutputDevice::LogicToLogic( aSwRect.SVRect(),

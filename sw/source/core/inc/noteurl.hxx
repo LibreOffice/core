@@ -21,7 +21,10 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_NOTEURL_HXX
 
 #include "swrect.hxx"
-#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <rtl/ustring.hxx>
+
+#include <vector>
 
 class ImageMap;
 class MapMode;
@@ -44,7 +47,9 @@ public:
 
 class SwNoteURL
 {
-    boost::ptr_vector<SwURLNote>  aList;
+private:
+    std::vector<SwURLNote> m_List;
+
 public:
     SwNoteURL() {}
     void InsertURLNote( const OUString& rURL, const OUString& rTarget,
