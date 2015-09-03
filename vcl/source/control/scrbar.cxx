@@ -135,11 +135,6 @@ void ScrollBar::dispose()
 
 void ScrollBar::ImplUpdateRects( bool bUpdate )
 {
-    sal_uInt16      nOldStateFlags  = mnStateFlags;
-    Rectangle   aOldPage1Rect = maPage1Rect;
-    Rectangle   aOldPage2Rect = maPage2Rect;
-    Rectangle   aOldThumbRect = maThumbRect;
-
     mnStateFlags  &= ~SCRBAR_STATE_BTN1_DISABLE;
     mnStateFlags  &= ~SCRBAR_STATE_BTN2_DISABLE;
 
@@ -217,19 +212,6 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
 
     if ( bUpdate )
     {
-        sal_uInt16 nDraw = 0;
-        if ( (nOldStateFlags & SCRBAR_STATE_BTN1_DISABLE) !=
-             (mnStateFlags & SCRBAR_STATE_BTN1_DISABLE) )
-            nDraw |= SCRBAR_DRAW_BTN1;
-        if ( (nOldStateFlags & SCRBAR_STATE_BTN2_DISABLE) !=
-             (mnStateFlags & SCRBAR_STATE_BTN2_DISABLE) )
-            nDraw |= SCRBAR_DRAW_BTN2;
-        if ( aOldPage1Rect != maPage1Rect )
-            nDraw |= SCRBAR_DRAW_PAGE1;
-        if ( aOldPage2Rect != maPage2Rect )
-            nDraw |= SCRBAR_DRAW_PAGE2;
-        if ( aOldThumbRect != maThumbRect )
-            nDraw |= SCRBAR_DRAW_THUMB;
         Invalidate();
     }
 }
