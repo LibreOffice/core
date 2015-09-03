@@ -1600,9 +1600,10 @@ void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyP
     const SwFormatFrmSize& rSize = rFrameFormat.GetFrmSize();
 
     // Relative size of the Text Frame.
-    if (rSize.GetWidthPercent())
+    const sal_uInt8 nWidthPercent = rSize.GetWidthPercent();
+    if (nWidthPercent && nWidthPercent != 0xff)
     {
-        rFlyProperties.push_back(std::make_pair<OString, OString>("pctHoriz", OString::number(rSize.GetWidthPercent() * 10)));
+        rFlyProperties.push_back(std::make_pair<OString, OString>("pctHoriz", OString::number(nWidthPercent * 10)));
 
         OString aRelation;
         switch (rSize.GetWidthPercentRelation())
@@ -1616,9 +1617,10 @@ void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyP
         }
         rFlyProperties.push_back(std::make_pair("sizerelh", aRelation));
     }
-    if (rSize.GetHeightPercent())
+    const sal_uInt8 nHeightPercent = rSize.GetHeightPercent();
+    if (nHeightPercent && nHeightPercent != 0xff)
     {
-        rFlyProperties.push_back(std::make_pair<OString, OString>("pctVert", OString::number(rSize.GetHeightPercent() * 10)));
+        rFlyProperties.push_back(std::make_pair<OString, OString>("pctVert", OString::number(nHeightPercent * 10)));
 
         OString aRelation;
         switch (rSize.GetHeightPercentRelation())
