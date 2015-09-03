@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_UNIX_EXEC_SHELLEXEC_HXX
 #define INCLUDED_SHELL_SOURCE_UNIX_EXEC_SHELLEXEC_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -32,7 +32,7 @@
 // class declaration
 
 
-class ShellExec : public ::cppu::WeakImplHelper2< com::sun::star::system::XSystemShellExecute, com::sun::star::lang::XServiceInfo >
+class ShellExec : public ::cppu::WeakImplHelper< com::sun::star::system::XSystemShellExecute, com::sun::star::lang::XServiceInfo >
 {
     OString m_aDesktopEnvironment;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >

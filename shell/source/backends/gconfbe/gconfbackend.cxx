@@ -40,7 +40,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase2.hxx"
+#include <cppuhelper/implbase.hxx>
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
 #include "rtl/string.h"
@@ -65,7 +65,7 @@ css::uno::Sequence< OUString > SAL_CALL getServiceSupportedServiceNames() {
 }
 
 class Service:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::beans::XPropertySet >,
     private boost::noncopyable
 {

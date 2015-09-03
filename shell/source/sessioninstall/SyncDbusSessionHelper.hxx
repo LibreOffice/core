@@ -13,11 +13,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace shell { namespace sessioninstall
 {
-    class SyncDbusSessionHelper : public ::cppu::WeakImplHelper1< ::org::freedesktop::PackageKit::XSyncDbusSessionHelper >
+    class SyncDbusSessionHelper : public ::cppu::WeakImplHelper< ::org::freedesktop::PackageKit::XSyncDbusSessionHelper >
     {
         public:
             SyncDbusSessionHelper(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const&);
