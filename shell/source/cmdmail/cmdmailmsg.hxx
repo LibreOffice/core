@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILMSG_HXX
 #define INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILMSG_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
@@ -33,7 +33,7 @@
 
 
 class CmdMailMsg :
-    public  cppu::WeakImplHelper2<
+    public  cppu::WeakImplHelper<
         ::com::sun::star::system::XSimpleMailMessage2,
         ::com::sun::star::container::XNameAccess >
 {

@@ -82,7 +82,7 @@ void escapeForShell( OStringBuffer & rBuffer, const OString & rURL)
 
 
 ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
-    WeakImplHelper2< XSystemShellExecute, XServiceInfo >(),
+    WeakImplHelper< XSystemShellExecute, XServiceInfo >(),
     m_xContext(xContext)
 {
     try {

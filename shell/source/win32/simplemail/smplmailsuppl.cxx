@@ -46,7 +46,7 @@ namespace // private
 } // end private namespace
 
 CSmplMailSuppl::CSmplMailSuppl() :
-    WeakComponentImplHelper2<XSimpleMailClientSupplier, XServiceInfo>(m_aMutex)
+    WeakComponentImplHelper<XSimpleMailClientSupplier, XServiceInfo>(m_aMutex)
 {
 }
 

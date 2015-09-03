@@ -245,7 +245,7 @@ namespace // private
 
 
 CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext ) :
-    WeakComponentImplHelper2< XSystemShellExecute, XServiceInfo >( m_aMutex ),
+    WeakComponentImplHelper< XSystemShellExecute, XServiceInfo >( m_aMutex ),
     m_xContext(xContext)
 {
     /*
