@@ -318,8 +318,23 @@ bool ParseDriverVersion(const OUString& aVersion, uint64_t *aNumericVersion)
     char aStr[8], bStr[8], cStr[8], dStr[8];
     /* honestly, why do I even bother */
     OString aOVersion = OUStringToOString(aVersion, RTL_TEXTENCODING_UTF8);
+    SAL_WARN("vcl.opengl", "Parse driver ver '" << aOVersion << "'");
     if (!SplitDriverVersion(aOVersion.getStr(), aStr, bStr, cStr, dStr))
-        return false;
+    {
+#if 0
+        // Intel in their wisdom decided to have 5x digits
+        sal_Int32 nIdx = aOVersion.lastIndexOf( '.' );
+        if (nIdx > 6)
+        {
+            OString aAllButLast = aOVersion.copy(0, nIdx);
+            SAL_WARN("vcl.opengl", "Intel five digits cropped to '" << aAllButLast << "'");
+            if (!SplitDriverVersion(aAllButLast.getStr(), aStr, bStr, cStr, dStr))
+                return false;
+        }
+        else
+#endif
+            return false;
+    }
 
     PadDriverDecimal(bStr);
     PadDriverDecimal(cStr);
@@ -596,6 +611,14 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
     ParseDriverVersion(maDriverVersion, &driverVersion);
 
     wgl::OperatingSystem eOS = WindowsVersionToOperatingSystem(mnWindowsVersion);
+
+    if (eOS < wgl::DRIVER_OS_WINDOWS_7 &&
+        eOS != wgl::DRIVER_OS_UNKNOWN /* the future */)
+    {
+        SAL_WARN("vcl.opengl", "All Windows < Windows 7 black-listed for OpenGL");
+        return true;
+    }
+
     bool match = false;
     uint32_t i = 0;
     for (; i < maDriverInfo.size(); i++) {
@@ -746,7 +769,7 @@ void WinOpenGLDeviceInfo::GetData()
     maDeviceString = displayDevice.DeviceString;
 
     if (maDeviceID.isEmpty() &&
-            maDeviceString == "RDPUDD Chained DD")
+        maDeviceString == "RDPUDD Chained DD")
     {
         // TODO: moggi: we need to block RDP as it does not provide OpenGL 2.1+
         mbRDP = true;
@@ -998,9 +1021,8 @@ void WinOpenGLDeviceInfo::FillBlacklist()
     /*
      * Implement whitelist entries first as they will be used first to stop early;
      */
-
-    APPEND_TO_DRIVER_WHITELIST( wgl::DRIVER_OS_WINDOWS_7, GetDeviceVendor(wgl::VendorIntel),
-            wgl::DriverInfo::allDevices, wgl::DRIVER_EQUAL, wgl::V(10,18,10,3412));
+//    APPEND_TO_DRIVER_WHITELIST( wgl::DRIVER_OS_WINDOWS_7, GetDeviceVendor(wgl::VendorIntel),
+//            wgl::DriverInfo::allDevices, wgl::DRIVER_EQUAL, wgl::V(10,18,10,3412));
     /*
      * It should be noted here that more specialized rules on certain features
      * should be inserted -before- more generalized restriction. As the first
@@ -1008,120 +1030,53 @@ void WinOpenGLDeviceInfo::FillBlacklist()
      * blacklisting call.
      */
 
+    /* For blocking obsolete hardware by device family */
+#define IMPLEMENT_BLOCK_DEVICE(devFamily) \
+    APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL, \
+            GetDeviceVendor(wgl::VendorIntel), \
+            (wgl::DriverInfo::DeviceFamilyVector*) wgl::DriverInfo::GetDeviceFamily(devFamily), \
+            wgl::DRIVER_COMPARISON_IGNORED, wgl::V(0,0,0,0) )
+
     /*
      * NVIDIA entries
      */
-    APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_WINDOWS_XP,
-            GetDeviceVendor(wgl::VendorNVIDIA), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::V(6,14,11,8265), "182.65" );
-    APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_WINDOWS_VISTA,
-            GetDeviceVendor(wgl::VendorNVIDIA), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::V(8,17,11,8265), "182.65" );
-    APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_WINDOWS_7,
-            GetDeviceVendor(wgl::VendorNVIDIA), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::V(8,17,11,8265), "182.65" );
+    APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_ALL,
+                                GetDeviceVendor(wgl::VendorNVIDIA), wgl::DriverInfo::allDevices,
+                                wgl::DRIVER_LESS_THAN, wgl::V(10,18,13,5362), "353.62" );
+    IMPLEMENT_BLOCK_DEVICE(wgl::Geforce7300GT);
+    IMPLEMENT_BLOCK_DEVICE(wgl::Nvidia310M);
+    IMPLEMENT_BLOCK_DEVICE(wgl::NvidiaBlockD3D9Layers);
 
     /*
      * AMD/ATI entries
      */
     APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorATI), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::V(8,62,0,0), "9.6" );
+                                GetDeviceVendor(wgl::VendorATI), wgl::DriverInfo::allDevices,
+                                wgl::DRIVER_LESS_THAN, wgl::V(15,200,1062,1004), "15.200" );
     APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorAMD), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::V(8,62,0,0), "9.6" );
-
-    /*
-     * Bug 783517 - crashes in AMD driver on Windows 8
-     */
-    APPEND_TO_DRIVER_BLOCKLIST_RANGE( wgl::DRIVER_OS_WINDOWS_8,
-            GetDeviceVendor(wgl::VendorATI), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_BETWEEN_INCLUSIVE_START, wgl::V(8,982,0,0), wgl::V(8,983,0,0), "!= 8.982.*.*" );
-    APPEND_TO_DRIVER_BLOCKLIST_RANGE( wgl::DRIVER_OS_WINDOWS_8,
-            GetDeviceVendor(wgl::VendorAMD), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_BETWEEN_INCLUSIVE_START, wgl::V(8,982,0,0), wgl::V(8,983,0,0), "!= 8.982.*.*" );
-
-    /* OpenGL on any ATI/AMD hardware is discouraged
-     * See:
-     *  bug 619773 - WebGL: Crash with blue screen : "NMI: Parity Check / Memory Parity Error"
-     *  bugs 584403, 584404, 620924 - crashes in atioglxx
-     *  + many complaints about incorrect rendering
-     */
-    APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorATI), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
-    APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorATI), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
-    APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorAMD), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
-    APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorAMD), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
+                                GetDeviceVendor(wgl::VendorAMD), wgl::DriverInfo::allDevices,
+                                wgl::DRIVER_LESS_THAN, wgl::V(15,200,1062,1004), "15.200" );
+    IMPLEMENT_BLOCK_DEVICE(wgl::RadeonX1000);
 
     /*
      * Intel entries
      */
+    APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_ALL, GetDeviceVendor(wgl::VendorIntel),
+                                wgl::DriverInfo::allDevices, wgl::DRIVER_LESS_THAN,
+                                wgl::V(15,40,4,64), "15.40.4.64.4256");
 
-    /* The driver versions used here come from bug 594877. They might not
-     * be particularly relevant anymore.
-     */
-#define IMPLEMENT_INTEL_DRIVER_BLOCKLIST(winVer, devFamily, driverVer)                                                      \
-    APPEND_TO_DRIVER_BLOCKLIST2( winVer,                                                                                      \
-            GetDeviceVendor(wgl::VendorIntel), (wgl::DriverInfo::DeviceFamilyVector*) wgl::DriverInfo::GetDeviceFamily(devFamily), \
-            wgl::DRIVER_LESS_THAN, driverVer )
-
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_XP, wgl::IntelGMA500,   wgl::V(3,0,20,3200));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_XP, wgl::IntelGMA900,   wgl::V(6,14,10,4764));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_XP, wgl::IntelGMA950,   wgl::V(6,14,10,4926));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_XP, wgl::IntelGMA3150,  wgl::V(6,14,10,5134));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_XP, wgl::IntelGMAX3000, wgl::V(6,14,10,5218));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_XP, wgl::IntelGMAX4500HD, wgl::V(6,14,10,4969));
-
-    // StretchRect seems to suffer from precision issues which leads to artifacting
-    // during content drawing starting with at least version 6.14.10.5082
-    // and going until 6.14.10.5218. See bug 919454 and bug 949275 for more info.
-    APPEND_TO_DRIVER_BLOCKLIST_RANGE(wgl::DRIVER_OS_WINDOWS_XP,
-            GetDeviceVendor(wgl::VendorIntel),
-            const_cast<wgl::DriverInfo::DeviceFamilyVector*>(wgl::DriverInfo::GetDeviceFamily(wgl::IntelGMAX4500HD)),
-            wgl::DRIVER_BETWEEN_EXCLUSIVE, wgl::V(6,14,10,5076), wgl::V(6,14,10,5218), "6.14.10.5218");
-
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_VISTA, wgl::IntelGMA500,   wgl::V(3,0,20,3200));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_VISTA, wgl::IntelGMA900,   wgl::DriverInfo::allDriverVersions);
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_VISTA, wgl::IntelGMA950,   wgl::V(7,14,10,1504));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_VISTA, wgl::IntelGMA3150,  wgl::V(7,14,10,1910));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_VISTA, wgl::IntelGMAX3000, wgl::V(7,15,10,1666));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_VISTA, wgl::IntelGMAX4500HD, wgl::V(7,15,10,1666));
-
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_7, wgl::IntelGMA500,   wgl::V(5,0,0,2026));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_7, wgl::IntelGMA900,   wgl::DriverInfo::allDriverVersions);
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_7, wgl::IntelGMA950,   wgl::V(8,15,10,1930));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_7, wgl::IntelGMA3150,  wgl::V(8,14,10,1972));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_7, wgl::IntelGMAX3000, wgl::V(7,15,10,1666));
-    IMPLEMENT_INTEL_DRIVER_BLOCKLIST(wgl::DRIVER_OS_WINDOWS_7, wgl::IntelGMAX4500HD, wgl::V(7,15,10,1666));
-
-    /* OpenGL on any Intel hardware is discouraged */
-    APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorIntel), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
-    APPEND_TO_DRIVER_BLOCKLIST2( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorIntel), wgl::DriverInfo::allDevices,
-            wgl::DRIVER_LESS_THAN, wgl::DriverInfo::allDriverVersions );
-
-    /**
-     * Disable acceleration on Intel HD 3000 for graphics drivers <= 8.15.10.2321.
-     * See bug 1018278 and bug 1060736.
-     */
-    APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_ALL,
-            GetDeviceVendor(wgl::VendorIntel), (wgl::DriverInfo::DeviceFamilyVector*) wgl::DriverInfo::GetDeviceFamily(wgl::IntelHD3000),
-            wgl::DRIVER_LESS_THAN_OR_EQUAL, wgl::V(8,15,10,2321), "8.15.10.2342" );
+    IMPLEMENT_BLOCK_DEVICE(wgl::IntelGMA500);
+    IMPLEMENT_BLOCK_DEVICE(wgl::IntelGMA900);
+    IMPLEMENT_BLOCK_DEVICE(wgl::IntelGMA950);
+    IMPLEMENT_BLOCK_DEVICE(wgl::IntelGMA3150);
+    IMPLEMENT_BLOCK_DEVICE(wgl::IntelGMAX3000);
+    IMPLEMENT_BLOCK_DEVICE(wgl::IntelGMAX4500HD);
+    IMPLEMENT_BLOCK_DEVICE(wgl::IntelHD3000);
 
     /* Microsoft RemoteFX; blocked less than 6.2.0.0 */
     APPEND_TO_DRIVER_BLOCKLIST( wgl::DRIVER_OS_ALL,
             GetDeviceVendor(wgl::VendorMicrosoft), wgl::DriverInfo::allDevices,
             wgl::DRIVER_LESS_THAN, wgl::V(6,2,0,0), "< 6.2.0.0" );
-
 }
 
 
