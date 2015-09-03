@@ -141,9 +141,15 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
         // execute any pending operations on the source bitmap
         maTexture = rSourceBitmap.GetTexture();
         mbDirtyTexture = false;
+
+        // be careful here, we are share & reference-count the
+        // maUserBuffer, BUT this Create() is called from
+        // Bitmap::ImplMakeUnique().
+        // Consequently, there might be cases when this needs to be made
+        // unique later (when we don't do that right away here), like when
+        // using the BitmapWriteAccess.
         maUserBuffer = rSourceBitmap.maUserBuffer;
 
-        // TODO Copy buffer data if the bitcount and palette are the same
         return true;
     }
     return false;
@@ -647,6 +653,16 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
             if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
                 return NULL;
         }
+    }
+
+    // maUserBuffer must be unique when we are doing the write access
+    if (nMode == BITMAP_WRITE_ACCESS && maUserBuffer && !maUserBuffer.unique())
+    {
+        basebmp::RawMemorySharedArray aBuffer(maUserBuffer);
+
+        maUserBuffer.reset();
+        AllocateUserData();
+        memcpy(maUserBuffer.get(), aBuffer.get(), static_cast<sal_uInt32>(mnBytesPerRow) * mnHeight);
     }
 
     BitmapBuffer* pBuffer = new BitmapBuffer;
