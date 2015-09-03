@@ -23,7 +23,7 @@
 
 PRJ=../..
 PRJNAME=sax
-TARGET=qa_cppunit
+TARGET=qa_gtest
 
 ENABLE_EXCEPTIONS=TRUE
 
