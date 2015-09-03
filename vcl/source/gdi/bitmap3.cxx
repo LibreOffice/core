@@ -859,21 +859,19 @@ bool Bitmap::ImplConvertGhosted()
 
 bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
-    bool bRetval(false);
-
-    const sal_uInt16 nStartCount(GetBitCount());
-
     if(basegfx::fTools::equalZero(rScaleX) || basegfx::fTools::equalZero(rScaleY))
     {
         // no scale
-        bRetval = true;
+        return true;
     }
 
     if(basegfx::fTools::equal(rScaleX, 1.0) && basegfx::fTools::equal(rScaleY, 1.0))
     {
         // no scale
-        bRetval = true;
+        return true;
     }
+
+    const sal_uInt16 nStartCount(GetBitCount());
 
     if( mpImpBmp )
     {
@@ -909,6 +907,8 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
     //Bitmap::ImplMakeMono
     if (nStartCount == 1 && nScaleFlag != BMP_SCALE_NONE)
         nScaleFlag = BMP_SCALE_FAST;
+
+    bool bRetval(false);
 
     switch(nScaleFlag)
     {
