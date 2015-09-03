@@ -86,6 +86,10 @@ protected:
     /** This dummy default c'tor will never call the c'tor of the virtual base
         class BinaryStreamBase as this class cannot be instantiated directly. */
     BinaryOutputStream() : BinaryStreamBase( false ) {}
+
+private:
+    BinaryOutputStream( BinaryOutputStream const& ) = delete;
+    BinaryOutputStream& operator=( BinaryOutputStream const& ) = delete;
 };
 
 template< typename Type >

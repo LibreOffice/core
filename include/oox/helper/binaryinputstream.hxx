@@ -220,6 +220,10 @@ protected:
     /** This dummy default c'tor will never call the c'tor of the virtual base
         class BinaryStreamBase as this class cannot be instantiated directly. */
     BinaryInputStream() : BinaryStreamBase( false ) {}
+
+private:
+    BinaryInputStream( BinaryInputStream const& ) = delete;
+    BinaryInputStream& operator=( BinaryInputStream const& ) = delete;
 };
 
 typedef std::shared_ptr< BinaryInputStream > BinaryInputStreamRef;
