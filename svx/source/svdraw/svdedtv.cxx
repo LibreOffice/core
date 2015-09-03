@@ -106,15 +106,15 @@ SdrEditView::~SdrEditView()
 
 SdrLayer* SdrEditView::InsertNewLayer(const OUString& rName, sal_uInt16 nPos)
 {
-    SdrLayerAdmin& rLA=pMod->GetLayerAdmin();
+    SdrLayerAdmin& rLA=mpModel->GetLayerAdmin();
     sal_uInt16 nMax=rLA.GetLayerCount();
     if (nPos>nMax) nPos=nMax;
     SdrLayer* pNewLayer=rLA.NewLayer(rName,nPos);
 
     if( GetModel()->IsUndoEnabled() )
-        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewLayer(nPos,rLA,*pMod));
+        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewLayer(nPos,rLA,*mpModel));
 
-    pMod->SetChanged();
+    mpModel->SetChanged();
     return pNewLayer;
 }
 
@@ -199,7 +199,7 @@ void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
 
 void SdrEditView::DeleteLayer(const OUString& rName)
 {
-    SdrLayerAdmin& rLA = pMod->GetLayerAdmin();
+    SdrLayerAdmin& rLA = mpModel->GetLayerAdmin();
     SdrLayer* pLayer = rLA.GetLayer(rName, true);
     sal_uInt16 nLayerNum(rLA.GetLayerPos(pLayer));
 
@@ -217,12 +217,12 @@ void SdrEditView::DeleteLayer(const OUString& rName)
         for(sal_uInt16 nPageKind(0); nPageKind < 2; nPageKind++)
         {
             // MasterPages and DrawPages
-            sal_uInt16 nPgAnz(bMaPg ? pMod->GetMasterPageCount() : pMod->GetPageCount());
+            sal_uInt16 nPgAnz(bMaPg ? mpModel->GetMasterPageCount() : mpModel->GetPageCount());
 
             for(sal_uInt16 nPgNum(0); nPgNum < nPgAnz; nPgNum++)
             {
                 // over all pages
-                SdrPage* pPage = (bMaPg) ? pMod->GetMasterPage(nPgNum) : pMod->GetPage(nPgNum);
+                SdrPage* pPage = (bMaPg) ? mpModel->GetMasterPage(nPgNum) : mpModel->GetPage(nPgNum);
                 const size_t nObjCount(pPage->GetObjCount());
 
                 // make sure OrdNums are correct
@@ -269,7 +269,7 @@ void SdrEditView::DeleteLayer(const OUString& rName)
 
         if( bUndo )
         {
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteLayer(nLayerNum, rLA, *pMod));
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteLayer(nLayerNum, rLA, *mpModel));
             rLA.RemoveLayer(nLayerNum);
             EndUndo();
         }
@@ -278,7 +278,7 @@ void SdrEditView::DeleteLayer(const OUString& rName)
             delete rLA.RemoveLayer(nLayerNum);
         }
 
-        pMod->SetChanged();
+        mpModel->SetChanged();
     }
 }
 
@@ -289,7 +289,7 @@ void SdrEditView::EndUndo()
     // #i13033#
     // Comparison changed to 1L since EndUndo() is called later now
     // and EndUndo WILL change count to count-1
-    if(1L == pMod->GetUndoBracketLevel())
+    if(1L == mpModel->GetUndoBracketLevel())
     {
         ImpBroadcastEdgesOfMarkedNodes();
     }
@@ -297,7 +297,7 @@ void SdrEditView::EndUndo()
     // #i13033#
     // moved to bottom to still have access to UNDOs inside of
     // ImpBroadcastEdgesOfMarkedNodes()
-    pMod->EndUndo();
+    mpModel->EndUndo();
 }
 
 void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
@@ -466,9 +466,9 @@ bool SdrEditView::IsDismantlePossible(bool bMakeLines) const
 
 void SdrEditView::CheckPossibilities()
 {
-    if (bSomeObjChgdFlag) bPossibilitiesDirty=true;
+    if (mbSomeObjChgdFlag) bPossibilitiesDirty=true;
 
-    if(bSomeObjChgdFlag)
+    if(mbSomeObjChgdFlag)
     {
         // This call IS necessary to correct the MarkList, in which
         // no longer to the model belonging objects still can reside.
@@ -963,7 +963,7 @@ void SdrEditView::CopyMarkedObj()
 bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInsertFlags nOptions)
 {
     if (nOptions & SdrInsertFlags::SETDEFLAYER) {
-        SdrLayerID nLayer=rPV.GetPage()->GetLayerAdmin().GetLayerID(aAktLayer,true);
+        SdrLayerID nLayer=rPV.GetPage()->GetLayerAdmin().GetLayerID(maActualLayer,true);
         if (nLayer==SDRLAYER_NOTFOUND) nLayer=0;
         if (rPV.GetLockedLayers().IsSet(nLayer) || !rPV.GetVisibleLayers().IsSet(nLayer)) {
             SdrObject::Free( pObj ); // Layer locked or invisible
@@ -972,8 +972,8 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
         pObj->NbcSetLayer(nLayer);
     }
     if (nOptions & SdrInsertFlags::SETDEFATTR) {
-        if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, false);
-        pObj->SetMergedItemSet(aDefaultAttr);
+        if (mpDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
+        pObj->SetMergedItemSet(maDefaultAttr);
     }
     if (!pObj->IsInserted()) {
         SdrInsertReason aReason(SDRREASON_VIEWCALL);
@@ -1037,7 +1037,7 @@ void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrO
 
 bool SdrEditView::IsUndoEnabled() const
 {
-    return pMod->IsUndoEnabled();
+    return mpModel->IsUndoEnabled();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -137,11 +137,11 @@ void DrawViewWrapper::ReInit()
     if(pOutDev)
         aOutputSize = pOutDev->GetOutputSize();
 
-    bPageVisible = false;
-    bPageBorderVisible = false;
-    bBordVisible = false;
-    bGridVisible = false;
-    bHlplVisible = false;
+    mbPageVisible = false;
+    mbPageBorderVisible = false;
+    mbBordVisible = false;
+    mbGridVisible = false;
+    mbHlplVisible = false;
 
     this->SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
 
@@ -154,7 +154,7 @@ void DrawViewWrapper::ReInit()
 
 DrawViewWrapper::~DrawViewWrapper()
 {
-    aComeBackIdle.Stop();//@todo this should be done in destructor of base class
+    maComeBackIdle.Stop();//@todo this should be done in destructor of base class
     UnmarkAllObj();//necessary to avoid a paint call during the destructor hierarchy
 }
 

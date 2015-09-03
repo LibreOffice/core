@@ -100,7 +100,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, bool /*bOnly3DAttr*/) co
 {
     // Creating itemset with corresponding field
     SfxItemSet aSet(
-        pMod->GetItemPool(),
+        mpModel->GetItemPool(),
         SDRATTR_START,      SDRATTR_END,
         SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN,
         0, 0);
@@ -135,7 +135,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, bool /*bOnly3DAttr*/) co
     if(!nSelectedItems  && !pInScene)
     {
         // Get defaults and apply
-        SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
+        SfxItemSet aDefaultSet(mpModel->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
         GetAttributes(aDefaultSet);
         aSet.Put(aDefaultSet);
 
@@ -182,7 +182,7 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, bool
     if(!nSelectedItems && !pInScene)
     {
         // Set defaults
-        SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
+        SfxItemSet aDefaultSet(mpModel->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
         aDefaultSet.Put(rAttr);
         SetAttributes(aDefaultSet);
 
@@ -191,12 +191,12 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, bool
 
 double E3dView::GetDefaultCamPosZ()
 {
-    return (double) static_cast<const SfxUInt32Item&>(pMod->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+    return (double) static_cast<const SfxUInt32Item&>(mpModel->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_DISTANCE)).GetValue();
 }
 
 double E3dView::GetDefaultCamFocal()
 {
-    return (double) static_cast<const SfxUInt32Item&>(pMod->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+    return (double) static_cast<const SfxUInt32Item&>(mpModel->GetItemPool().GetDefaultItem(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

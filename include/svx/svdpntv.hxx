@@ -127,63 +127,63 @@ class SVX_DLLPUBLIC SdrPaintView : public SfxListener, public SfxRepeatTarget, p
 
     SdrPageView*                mpPageView;
 protected:
-    SdrModel*                   pMod;
+    SdrModel*                   mpModel;
 #ifdef DBG_UTIL
-    VclPtr<SdrItemBrowser>      pItemBrowser;
+    VclPtr<SdrItemBrowser>      mpItemBrowser;
 #endif
-    VclPtr<OutputDevice>        pActualOutDev; // Only for comparison
-    VclPtr<OutputDevice>        pDragWin;
-    SfxStyleSheet*              pDefaultStyleSheet;
+    VclPtr<OutputDevice>        mpActualOutDev; // Only for comparison
+    VclPtr<OutputDevice>        mpDragWin;
+    SfxStyleSheet*              mpDefaultStyleSheet;
 
-    OUString                    aAktLayer;     // Current drawing layer
-    OUString                    aMeasureLayer; // Current layer for measurements
+    OUString                    maActualLayer;     // Current drawing layer
+    OUString                    maMeasureLayer; // Current layer for measurements
 
 //  Container                   aPagV;         // List of SdrPageViews
 
     // All windows this view is displayed on
     SdrPaintWindowVector        maPaintWindows;
 
-    MapMode                     aActualMapMode;
-    Size                        aGridBig;   // FIXME: We need to get rid of this eventually
-    Size                        aGridFin;   // FIXME: We need to get rid of this eventually
-    SdrDragStat                 aDragStat;
-    Rectangle                   aMaxWorkArea;
-    SfxItemSet                  aDefaultAttr;
-    Idle                        aComeBackIdle;
+    MapMode                     maActualMapMode;
+    Size                        maGridBig;   // FIXME: We need to get rid of this eventually
+    Size                        maGridFin;   // FIXME: We need to get rid of this eventually
+    SdrDragStat                 maDragStat;
+    Rectangle                   maMaxWorkArea;
+    SfxItemSet                  maDefaultAttr;
+    Idle                        maComeBackIdle;
 
-    SdrAnimationMode            eAnimationMode;
+    SdrAnimationMode            meAnimationMode;
 
-    sal_uInt16                      nHitTolPix;
-    sal_uInt16                      nMinMovPix;
-    sal_uInt16                      nHitTolLog;
-    sal_uInt16                      nMinMovLog;
-    GraphicManagerDrawFlags         nGraphicManagerDrawMode;
+    sal_uInt16                      mnHitTolPix;
+    sal_uInt16                      mnMinMovPix;
+    sal_uInt16                      mnHitTolLog;
+    sal_uInt16                      mnMinMovLog;
+    GraphicManagerDrawFlags         mnGraphicManagerDrawMode;
 
     // Hold an incarnation of Drawinglayer configuration options
     SvtOptionsDrawinglayer      maDrawinglayerOpt;
 
-    bool                        bPageVisible : 1;
-    bool                        bPageBorderVisible : 1;
-    bool                        bBordVisible : 1;
-    bool                        bGridVisible : 1;
-    bool                        bGridFront : 1;
-    bool                        bHlplVisible : 1;
-    bool                        bHlplFront : 1;
-    bool                        bGlueVisible : 1;    // Persistent; show glue points
-    bool                        bGlueVisible2 : 1;   // Also show glue points for GluePointEdit
-    bool                        bGlueVisible3 : 1;   // Also show glue points for EdgeTool
-    bool                        bGlueVisible4 : 1;   // Show glue points, if one edge is selected
-    bool                        bRestoreColors : 1;  // Pens and Brushes are reset
-    bool                        bSomeObjChgdFlag : 1;
-    bool                        bSwapAsynchron : 1;
-    bool                        bPrintPreview : 1;
+    bool                        mbPageVisible : 1;
+    bool                        mbPageBorderVisible : 1;
+    bool                        mbBordVisible : 1;
+    bool                        mbGridVisible : 1;
+    bool                        mbGridFront : 1;
+    bool                        mbHlplVisible : 1;
+    bool                        mbHlplFront : 1;
+    bool                        mbGlueVisible : 1;    // Persistent; show glue points
+    bool                        mbGlueVisible2 : 1;   // Also show glue points for GluePointEdit
+    bool                        mbGlueVisible3 : 1;   // Also show glue points for EdgeTool
+    bool                        mbGlueVisible4 : 1;   // Show glue points, if one edge is selected
+    bool                        mbRestoreColors : 1;  // Pens and Brushes are reset
+    bool                        mbSomeObjChgdFlag : 1;
+    bool                        mbSwapAsynchron : 1;
+    bool                        mbPrintPreview : 1;
 
     // These bools manage, the status that is displayed
     //
     // Enter/Leave group: default is true, but is set to false in
     // e.g. Chart, where we'd get Ghost effects when rendering
-    bool                        bVisualizeEnteredGroup : 1;
-    bool                        bAnimationPause : 1;
+    bool                        mbVisualizeEnteredGroup : 1;
+    bool                        mbAnimationPause : 1;
 
     // #114898#
     // Flag which decides if buffered output for this view is allowed. When
@@ -250,12 +250,12 @@ protected:
     // If one does not want to wait for the IdleState of the system (cheated as const)
     void FlushComeBackTimer() const;
     void TheresNewMapMode();
-    void ImpSetGlueVisible2(bool bOn) { if (bGlueVisible2!=bOn) { bGlueVisible2=bOn; if (!bGlueVisible && !bGlueVisible3 && !bGlueVisible4) GlueInvalidate(); } }
-    void ImpSetGlueVisible3(bool bOn) { if (bGlueVisible3!=bOn) { bGlueVisible3=bOn; if (!bGlueVisible && !bGlueVisible2 && !bGlueVisible4) GlueInvalidate(); } }
-    void ImpSetGlueVisible4(bool bOn) { if (bGlueVisible4!=bOn) { bGlueVisible4=bOn; if (!bGlueVisible && !bGlueVisible2 && !bGlueVisible3) GlueInvalidate(); } }
+    void ImpSetGlueVisible2(bool bOn) { if (mbGlueVisible2!=bOn) { mbGlueVisible2=bOn; if (!mbGlueVisible && !mbGlueVisible3 && !mbGlueVisible4) GlueInvalidate(); } }
+    void ImpSetGlueVisible3(bool bOn) { if (mbGlueVisible3!=bOn) { mbGlueVisible3=bOn; if (!mbGlueVisible && !mbGlueVisible2 && !mbGlueVisible4) GlueInvalidate(); } }
+    void ImpSetGlueVisible4(bool bOn) { if (mbGlueVisible4!=bOn) { mbGlueVisible4=bOn; if (!mbGlueVisible && !mbGlueVisible2 && !mbGlueVisible3) GlueInvalidate(); } }
 
 public:
-    bool ImpIsGlueVisible() { return bGlueVisible || bGlueVisible2 || bGlueVisible3 || bGlueVisible4; }
+    bool ImpIsGlueVisible() { return mbGlueVisible || mbGlueVisible2 || mbGlueVisible3 || mbGlueVisible4; }
 protected:
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
@@ -275,7 +275,7 @@ public:
     TYPEINFO_OVERRIDE();
 
     virtual void ClearPageView();
-    SdrModel* GetModel() const { return pMod; }
+    SdrModel* GetModel() const { return mpModel; }
 
     virtual bool IsAction() const;
     virtual void MovAction(const Point& rPnt);
@@ -295,19 +295,19 @@ public:
     // using the split pane), so that I can convert my pixel values to logical
     // values.
     void SetActualWin(const OutputDevice* pWin);
-    void SetMinMoveDistancePixel(sal_uInt16 nVal) { nMinMovPix=nVal; TheresNewMapMode(); }
-    void SetHitTolerancePixel(sal_uInt16 nVal) { nHitTolPix=nVal; TheresNewMapMode(); }
-    sal_uInt16 GetHitTolerancePixel() const { return (sal_uInt16)nHitTolPix; }
+    void SetMinMoveDistancePixel(sal_uInt16 nVal) { mnMinMovPix=nVal; TheresNewMapMode(); }
+    void SetHitTolerancePixel(sal_uInt16 nVal) { mnHitTolPix=nVal; TheresNewMapMode(); }
+    sal_uInt16 GetHitTolerancePixel() const { return (sal_uInt16)mnHitTolPix; }
 
     // Data read access on logic HitTolerance and MinMoveTolerance
-    sal_uInt16 getHitTolLog() const { return nHitTolLog; }
+    sal_uInt16 getHitTolLog() const { return mnHitTolLog; }
 
     // Flag for group visualization
-    bool DoVisualizeEnteredGroup() const { return bVisualizeEnteredGroup; }
+    bool DoVisualizeEnteredGroup() const { return mbVisualizeEnteredGroup; }
 
     // Using the DragState we can tell e.g. which distance was
     // already dragged
-    const SdrDragStat& GetDragStat() const { return aDragStat; }
+    const SdrDragStat& GetDragStat() const { return maDragStat; }
 
     // Registering/de-registering a PageView at a View
     //
@@ -375,35 +375,35 @@ protected:
 
 public:
     /// Draw Page as a white area or not
-    bool IsPageVisible() const { return bPageVisible; }
+    bool IsPageVisible() const { return mbPageVisible; }
 
     /// Draw Page as a white area or not
-    bool IsPageBorderVisible() const { return bPageBorderVisible; }
+    bool IsPageBorderVisible() const { return mbPageBorderVisible; }
 
     /// Draw Border line or not
-    bool IsBordVisible() const { return bBordVisible; }
+    bool IsBordVisible() const { return mbBordVisible; }
 
     /// Draw Grid or not
-    bool IsGridVisible() const { return bGridVisible; }
+    bool IsGridVisible() const { return mbGridVisible; }
 
     /// Draw Grid in front of objects or behind them
-    bool IsGridFront() const { return bGridFront  ; }
+    bool IsGridFront() const { return mbGridFront  ; }
 
     /// Draw Help line of the Page or not
-    bool IsHlplVisible() const { return bHlplVisible; }
+    bool IsHlplVisible() const { return mbHlplVisible; }
 
     /// Draw Help line in fron of the objects or beging them
-    bool IsHlplFront() const { return bHlplFront  ; }
+    bool IsHlplFront() const { return mbHlplFront  ; }
 
     Color GetGridColor() const { return maGridColor;}
-    void SetPageVisible(bool bOn = true) { bPageVisible=bOn; InvalidateAllWin(); }
-    void SetPageBorderVisible(bool bOn = true) { bPageBorderVisible=bOn; InvalidateAllWin(); }
-    void SetBordVisible(bool bOn = true) { bBordVisible=bOn; InvalidateAllWin(); }
-    void SetGridVisible(bool bOn = true) { bGridVisible=bOn; InvalidateAllWin(); }
-    void SetGridFront(bool bOn = true) { bGridFront  =bOn; InvalidateAllWin(); }
-    void SetHlplVisible(bool bOn = true) { bHlplVisible=bOn; InvalidateAllWin(); }
-    void SetHlplFront(bool bOn = true) { bHlplFront  =bOn; InvalidateAllWin(); }
-    void SetGlueVisible(bool bOn = true) { if (bGlueVisible!=bOn) { bGlueVisible=bOn; if (!bGlueVisible2 && !bGlueVisible3 && !bGlueVisible4) GlueInvalidate(); } }
+    void SetPageVisible(bool bOn = true) { mbPageVisible=bOn; InvalidateAllWin(); }
+    void SetPageBorderVisible(bool bOn = true) { mbPageBorderVisible=bOn; InvalidateAllWin(); }
+    void SetBordVisible(bool bOn = true) { mbBordVisible=bOn; InvalidateAllWin(); }
+    void SetGridVisible(bool bOn = true) { mbGridVisible=bOn; InvalidateAllWin(); }
+    void SetGridFront(bool bOn = true) { mbGridFront  =bOn; InvalidateAllWin(); }
+    void SetHlplVisible(bool bOn = true) { mbHlplVisible=bOn; InvalidateAllWin(); }
+    void SetHlplFront(bool bOn = true) { mbHlplFront  =bOn; InvalidateAllWin(); }
+    void SetGlueVisible(bool bOn = true) { if (mbGlueVisible!=bOn) { mbGlueVisible=bOn; if (!mbGlueVisible2 && !mbGlueVisible3 && !mbGlueVisible4) GlueInvalidate(); } }
     void SetGridColor( Color aColor );
 
     bool IsPreviewRenderer() const { return mbPreviewRenderer; }
@@ -419,10 +419,10 @@ public:
     void setHideDraw(bool bNew) { if(bNew != (bool)mbHideDraw) mbHideDraw = bNew; }
     void setHideFormControl(bool bNew) { if(bNew != (bool)mbHideFormControl) mbHideFormControl = bNew; }
 
-    void SetGridCoarse(const Size& rSiz) { aGridBig=rSiz; }
-    void SetGridFine(const Size& rSiz) { aGridFin=rSiz; if (aGridFin.Height()==0) aGridFin.Height()=aGridFin.Width(); if (bGridVisible) InvalidateAllWin(); } // #40479#
-    const Size& GetGridCoarse() const { return aGridBig; }
-    const Size& GetGridFine() const { return aGridFin; }
+    void SetGridCoarse(const Size& rSiz) { maGridBig=rSiz; }
+    void SetGridFine(const Size& rSiz) { maGridFin=rSiz; if (maGridFin.Height()==0) maGridFin.Height()=maGridFin.Width(); if (mbGridVisible) InvalidateAllWin(); } // #40479#
+    const Size& GetGridCoarse() const { return maGridBig; }
+    const Size& GetGridFine() const { return maGridFin; }
 
     void InvalidateAllWin();
     void InvalidateAllWin(const Rectangle& rRect, bool bPlus1Pix=false);
@@ -432,8 +432,8 @@ public:
     virtual void InvalidateOneWin(vcl::Window& rWin);
     virtual void InvalidateOneWin(vcl::Window& rWin, const Rectangle& rRect);
 
-    void SetActiveLayer(const OUString& rName) { aAktLayer=rName; }
-    const OUString&  GetActiveLayer() const { return aAktLayer; }
+    void SetActiveLayer(const OUString& rName) { maActualLayer=rName; }
+    const OUString&  GetActiveLayer() const { return maActualLayer; }
 
     /// Leave an object group of all visible Pages (like `chdir ..` in MSDOS)
     void LeaveOneGroup();
@@ -447,9 +447,9 @@ public:
     /// Default attributes at the View
     /// Newly created objects are assigned these attributes by default when they are created.
     void SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll);
-    const SfxItemSet& GetDefaultAttr() const { return aDefaultAttr; }
+    const SfxItemSet& GetDefaultAttr() const { return maDefaultAttr; }
     void SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
-    SfxStyleSheet* GetDefaultStyleSheet() const { return pDefaultStyleSheet; }
+    SfxStyleSheet* GetDefaultStyleSheet() const { return mpDefaultStyleSheet; }
 
     void SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll);
     void MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
@@ -459,8 +459,8 @@ public:
     /// the loading there. When such an object is done loading, it is displayed.
     /// TODO: Only works at the moment, if SwapGraphics is enabled in the model.
     /// The default = false flag is non-persistent
-    bool IsSwapAsynchron() const { return bSwapAsynchron; }
-    void SetSwapAsynchron(bool bJa=true) { bSwapAsynchron=bJa; }
+    bool IsSwapAsynchron() const { return mbSwapAsynchron; }
+    void SetSwapAsynchron(bool bJa=true) { mbSwapAsynchron=bJa; }
     virtual bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
 
     virtual bool MouseButtonDown(const MouseEvent& /*rMEvt*/, vcl::Window* /*pWin*/) { return false; }
@@ -483,7 +483,7 @@ public:
     /// Enable/disable animations for ::Paint
     /// Is used by e.g. SdrGrafObj, if it contains an animation
     /// Preventing automatic animation is needed for e.g. the presentation view
-    bool IsAnimationEnabled() const { return ( SDR_ANIMATION_ANIMATE == eAnimationMode ); }
+    bool IsAnimationEnabled() const { return ( SDR_ANIMATION_ANIMATE == meAnimationMode ); }
     void SetAnimationEnabled( bool bEnable=true );
 
     /// Set/unset pause state for animations
@@ -498,7 +498,7 @@ public:
     /// The Browser is destroyed for bShow=false
 #ifdef DBG_UTIL
     void ShowItemBrowser(bool bShow=true);
-    bool IsItemBrowserVisible() const { return pItemBrowser!=nullptr && GetItemBrowser()->IsVisible(); }
+    bool IsItemBrowserVisible() const { return mpItemBrowser!=nullptr && GetItemBrowser()->IsVisible(); }
     vcl::Window* GetItemBrowser() const;
 #endif
 
@@ -507,8 +507,8 @@ public:
     void VisAreaChanged(const OutputDevice* pOut=NULL);
     void VisAreaChanged(const SdrPageWindow& rWindow);
 
-    bool IsPrintPreview() const { return bPrintPreview; }
-    void SetPrintPreview(bool bOn = true) { bPrintPreview=bOn; }
+    bool IsPrintPreview() const { return mbPrintPreview; }
+    void SetPrintPreview(bool bOn = true) { mbPrintPreview=bOn; }
 
     const svtools::ColorConfig& getColorConfig() const { return maColorConfig;}
 

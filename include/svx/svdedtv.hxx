@@ -166,7 +166,7 @@ protected:
 
     // Check possibilities of all marked objects
     virtual void CheckPossibilities();
-    void ForcePossibilities() const { if (bPossibilitiesDirty || bSomeObjChgdFlag) const_cast<SdrEditView*>(this)->CheckPossibilities(); }
+    void ForcePossibilities() const { if (bPossibilitiesDirty || mbSomeObjChgdFlag) const_cast<SdrEditView*>(this)->CheckPossibilities(); }
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -180,14 +180,14 @@ public:
     // The comment used for the UndoAction is the first BegUndo(String).
     // In this case NotifyNewUndoAction is called at the last EndUndo().
     // NotifyNewUndoAction() is not called for an empty group.
-    void BegUndo()                         { pMod->BegUndo();         } // open undo-grouping
-    void BegUndo(const OUString& rComment) { pMod->BegUndo(rComment); } // open undo-grouping
-    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE) { pMod->BegUndo(rComment,rObjDescr,eFunc); } // open undo-grouping
+    void BegUndo()                         { mpModel->BegUndo();         } // open undo-grouping
+    void BegUndo(const OUString& rComment) { mpModel->BegUndo(rComment); } // open undo-grouping
+    void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SDRREPFUNC_OBJ_NONE) { mpModel->BegUndo(rComment,rObjDescr,eFunc); } // open undo-grouping
     void EndUndo();                                                   // close undo-grouping  (incl. BroadcastEdges)
-    void AddUndo(SdrUndoAction* pUndo)   { pMod->AddUndo(pUndo);    } // add action
+    void AddUndo(SdrUndoAction* pUndo)   { mpModel->AddUndo(pUndo);    } // add action
     // only after first BegUndo or befor last EndUndo:
-    void SetUndoComment(const OUString& rComment) { pMod->SetUndoComment(rComment); }
-    void SetUndoComment(const OUString& rComment, const OUString& rObjDescr) { pMod->SetUndoComment(rComment,rObjDescr); }
+    void SetUndoComment(const OUString& rComment) { mpModel->SetUndoComment(rComment); }
+    void SetUndoComment(const OUString& rComment, const OUString& rObjDescr) { mpModel->SetUndoComment(rComment,rObjDescr); }
     bool IsUndoEnabled() const;
 
     std::vector< SdrUndoAction* > CreateConnectorUndo( SdrObject& rO );

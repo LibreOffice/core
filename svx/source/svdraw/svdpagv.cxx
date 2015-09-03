@@ -424,10 +424,10 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const Rectangle& rRect, C
     if (GetPage()==NULL)
         return;
 
-    long nx1=GetView().aGridBig.Width();
-    long nx2=GetView().aGridFin.Width();
-    long ny1=GetView().aGridBig.Height();
-    long ny2=GetView().aGridFin.Height();
+    long nx1=GetView().maGridBig.Width();
+    long nx2=GetView().maGridFin.Width();
+    long ny1=GetView().maGridBig.Height();
+    long ny2=GetView().maGridFin.Height();
 
     if (nx1==0) nx1=nx2;
     if (nx2==0) nx2=nx1;

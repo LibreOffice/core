@@ -272,7 +272,7 @@ void SdrMarkView::TakeActionRect(Rectangle& rRect) const
 {
     if(IsMarkObj() || IsMarkPoints() || IsMarkGluePoints())
     {
-        rRect = Rectangle(aDragStat.GetStart(), aDragStat.GetNow());
+        rRect = Rectangle(maDragStat.GetStart(), maDragStat.GetNow());
     }
     else
     {
@@ -321,18 +321,18 @@ bool SdrMarkView::BegMarkObj(const Point& rPnt, bool bUnmark)
     basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
     mpMarkObjOverlay = new ImplMarkingOverlay(*this, aStartPos, bUnmark);
 
-    aDragStat.Reset(rPnt);
-    aDragStat.NextPoint();
-    aDragStat.SetMinMove(nMinMovLog);
+    maDragStat.Reset(rPnt);
+    maDragStat.NextPoint();
+    maDragStat.SetMinMove(mnMinMovLog);
 
     return true;
 }
 
 void SdrMarkView::MovMarkObj(const Point& rPnt)
 {
-    if(IsMarkObj() && aDragStat.CheckMinMoved(rPnt))
+    if(IsMarkObj() && maDragStat.CheckMinMoved(rPnt))
     {
-        aDragStat.NextMove(rPnt);
+        maDragStat.NextMove(rPnt);
         DBG_ASSERT(mpMarkObjOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
         basegfx::B2DPoint aNewPos(rPnt.X(), rPnt.Y());
         mpMarkObjOverlay->SetSecondPosition(aNewPos);
@@ -345,9 +345,9 @@ bool SdrMarkView::EndMarkObj()
 
     if(IsMarkObj())
     {
-        if(aDragStat.IsMinMoved())
+        if(maDragStat.IsMinMoved())
         {
-            Rectangle aRect(aDragStat.GetStart(), aDragStat.GetNow());
+            Rectangle aRect(maDragStat.GetStart(), maDragStat.GetNow());
             aRect.Justify();
             MarkObj(aRect, mpMarkObjOverlay->IsUnmarking());
             bRetval = true;
@@ -382,9 +382,9 @@ bool SdrMarkView::BegMarkPoints(const Point& rPnt, bool bUnmark)
         basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
         mpMarkPointsOverlay = new ImplMarkingOverlay(*this, aStartPos, bUnmark);
 
-        aDragStat.Reset(rPnt);
-        aDragStat.NextPoint();
-        aDragStat.SetMinMove(nMinMovLog);
+        maDragStat.Reset(rPnt);
+        maDragStat.NextPoint();
+        maDragStat.SetMinMove(mnMinMovLog);
 
         return true;
     }
@@ -394,9 +394,9 @@ bool SdrMarkView::BegMarkPoints(const Point& rPnt, bool bUnmark)
 
 void SdrMarkView::MovMarkPoints(const Point& rPnt)
 {
-    if(IsMarkPoints() && aDragStat.CheckMinMoved(rPnt))
+    if(IsMarkPoints() && maDragStat.CheckMinMoved(rPnt))
     {
-        aDragStat.NextMove(rPnt);
+        maDragStat.NextMove(rPnt);
 
         DBG_ASSERT(mpMarkPointsOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
         basegfx::B2DPoint aNewPos(rPnt.X(), rPnt.Y());
@@ -410,9 +410,9 @@ bool SdrMarkView::EndMarkPoints()
 
     if(IsMarkPoints())
     {
-        if(aDragStat.IsMinMoved())
+        if(maDragStat.IsMinMoved())
         {
-            Rectangle aRect(aDragStat.GetStart(), aDragStat.GetNow());
+            Rectangle aRect(maDragStat.GetStart(), maDragStat.GetNow());
             aRect.Justify();
             MarkPoints(aRect, mpMarkPointsOverlay->IsUnmarking());
 
@@ -448,9 +448,9 @@ bool SdrMarkView::BegMarkGluePoints(const Point& rPnt, bool bUnmark)
 
         basegfx::B2DPoint aStartPos(rPnt.X(), rPnt.Y());
         mpMarkGluePointsOverlay = new ImplMarkingOverlay(*this, aStartPos, bUnmark);
-        aDragStat.Reset(rPnt);
-        aDragStat.NextPoint();
-        aDragStat.SetMinMove(nMinMovLog);
+        maDragStat.Reset(rPnt);
+        maDragStat.NextPoint();
+        maDragStat.SetMinMove(mnMinMovLog);
 
         return true;
     }
@@ -460,9 +460,9 @@ bool SdrMarkView::BegMarkGluePoints(const Point& rPnt, bool bUnmark)
 
 void SdrMarkView::MovMarkGluePoints(const Point& rPnt)
 {
-    if(IsMarkGluePoints() && aDragStat.CheckMinMoved(rPnt))
+    if(IsMarkGluePoints() && maDragStat.CheckMinMoved(rPnt))
     {
-        aDragStat.NextMove(rPnt);
+        maDragStat.NextMove(rPnt);
 
         DBG_ASSERT(mpMarkGluePointsOverlay, "SdrSnapView::MovSetPageOrg: no ImplPageOriginOverlay (!)");
         basegfx::B2DPoint aNewPos(rPnt.X(), rPnt.Y());
@@ -476,9 +476,9 @@ bool SdrMarkView::EndMarkGluePoints()
 
     if(IsMarkGluePoints())
     {
-        if(aDragStat.IsMinMoved())
+        if(maDragStat.IsMinMoved())
         {
-            Rectangle aRect(aDragStat.GetStart(),aDragStat.GetNow());
+            Rectangle aRect(maDragStat.GetStart(),maDragStat.GetNow());
             aRect.Justify();
             MarkGluePoints(&aRect, mpMarkGluePointsOverlay->IsUnmarking());
 
@@ -1353,7 +1353,7 @@ bool SdrMarkView::IsMarkedObjHit(const Point& rPnt, short nTol) const
 
 SdrHdl* SdrMarkView::PickHandle(const Point& rPnt, SdrSearchOptions nOptions, SdrHdl* pHdl0) const
 {
-    if (bSomeObjChgdFlag) { // recalculate handles, if necessary
+    if (mbSomeObjChgdFlag) { // recalculate handles, if necessary
         FlushComeBackTimer();
     }
     bool bBack(nOptions & SdrSearchOptions::BACKWARD);
@@ -1865,7 +1865,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
     rpObj=NULL;
     rpPV=NULL;
     Point aPt(rPnt);
-    sal_uInt16 nTol=(sal_uInt16)nHitTolLog;
+    sal_uInt16 nTol=(sal_uInt16)mnHitTolLog;
     bool bFnd=false;
     const size_t nMarkCount=GetMarkedObjectCount();
     for (size_t nMarkNum=nMarkCount; nMarkNum>0 && !bFnd;) {
@@ -2091,7 +2091,7 @@ void SdrMarkView::MarkListHasChanged()
     mbMarkedObjRectDirty=true;
     mbMarkedPointsRectsDirty=true;
 #ifdef DBG_UTIL
-    if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
+    if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
 #endif
     bool bOneEdgeMarked=false;
     if (GetMarkedObjectCount()==1) {

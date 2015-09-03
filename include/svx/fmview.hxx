@@ -147,7 +147,7 @@ public:
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut) SAL_OVERRIDE;
     virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer) SAL_OVERRIDE;
 
-    SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return pActualOutDev;}
+    SVX_DLLPRIVATE const OutputDevice* GetActualOutDev() const {return mpActualOutDev;}
     SVX_DLLPRIVATE bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);
 
 private:

@@ -475,7 +475,7 @@ bool SdrMarkView::PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16
     if (!IsGluePointEditMode()) return false;
     bool bBack(nOptions & SdrSearchOptions::BACKWARD);
     bool bNext(nOptions & SdrSearchOptions::NEXT);
-    OutputDevice* pOut=pActualOutDev.get();
+    OutputDevice* pOut=mpActualOutDev.get();
     if (pOut==NULL) pOut=GetFirstOutputDevice();
     if (pOut==NULL) return false;
     SortMarkedObjects();

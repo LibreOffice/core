@@ -246,8 +246,8 @@ public:
     // errors,...
     // Default=EmptyRect=no limitation
     // only partially implemented
-    void SetWorkArea(const Rectangle& rRect) { aMaxWorkArea=rRect; }
-    const Rectangle& GetWorkArea() const { return aMaxWorkArea; }
+    void SetWorkArea(const Rectangle& rRect) { maMaxWorkArea=rRect; }
+    const Rectangle& GetWorkArea() const { return maMaxWorkArea; }
 
 
     // The DragLimit refers to the Page of the object.

@@ -66,29 +66,29 @@ bool SdrExchangeView::ImpLimitToWorkArea(Point& rPt) const
 {
     bool bRet(false);
 
-    if(!aMaxWorkArea.IsEmpty())
+    if(!maMaxWorkArea.IsEmpty())
     {
-        if(rPt.X()<aMaxWorkArea.Left())
+        if(rPt.X()<maMaxWorkArea.Left())
         {
-            rPt.X() = aMaxWorkArea.Left();
+            rPt.X() = maMaxWorkArea.Left();
             bRet = true;
         }
 
-        if(rPt.X()>aMaxWorkArea.Right())
+        if(rPt.X()>maMaxWorkArea.Right())
         {
-            rPt.X() = aMaxWorkArea.Right();
+            rPt.X() = maMaxWorkArea.Right();
             bRet = true;
         }
 
-        if(rPt.Y()<aMaxWorkArea.Top())
+        if(rPt.Y()<maMaxWorkArea.Top())
         {
-            rPt.Y() = aMaxWorkArea.Top();
+            rPt.Y() = maMaxWorkArea.Top();
             bRet = true;
         }
 
-        if(rPt.Y()>aMaxWorkArea.Bottom())
+        if(rPt.Y()>maMaxWorkArea.Bottom())
         {
-            rPt.Y() = aMaxWorkArea.Bottom();
+            rPt.Y() = maMaxWorkArea.Bottom();
             bRet = true;
         }
     }
@@ -114,7 +114,7 @@ bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& r
     if (pObjList!=NULL) {
         const SdrPage* pPg=pObjList->GetPage();
         if (pPg!=NULL) {
-            rLayer=pPg->GetLayerAdmin().GetLayerID(aAktLayer,true);
+            rLayer=pPg->GetLayerAdmin().GetLayerID(maActualLayer,true);
             if (rLayer==SDRLAYER_NOTFOUND) rLayer=0;
             SdrPageView* pPV = GetSdrPageView();
             if (pPV!=NULL) {
@@ -144,14 +144,14 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
         aTextRect.SetSize(pPage->GetSize());
     }
     SdrRectObj* pObj=new SdrRectObj(OBJ_TEXT,aTextRect);
-    pObj->SetModel(pMod);
+    pObj->SetModel(mpModel);
     pObj->SetLayer(nLayer);
     pObj->NbcSetText(rStr); // SetText before SetAttr, else SetAttr doesn't work!
-    if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, false);
+    if (mpDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
 
-    pObj->SetMergedItemSet(aDefaultAttr);
+    pObj->SetMergedItemSet(maDefaultAttr);
 
-    SfxItemSet aTempAttr(pMod->GetItemPool());  // no fill, no line
+    SfxItemSet aTempAttr(mpModel->GetItemPool());  // no fill, no line
     aTempAttr.Put(XLineStyleItem(drawing::LineStyle_NONE));
     aTempAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
@@ -159,8 +159,8 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
 
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
-    MapUnit eMap=pMod->GetScaleUnit();
-    Fraction aMap=pMod->GetScaleFraction();
+    MapUnit eMap=mpModel->GetScaleUnit();
+    Fraction aMap=mpModel->GetScaleFraction();
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
     return true;
 }
@@ -181,13 +181,13 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
         aTextRect.SetSize(pPage->GetSize());
     }
     SdrRectObj* pObj=new SdrRectObj(OBJ_TEXT,aTextRect);
-    pObj->SetModel(pMod);
+    pObj->SetModel(mpModel);
     pObj->SetLayer(nLayer);
-    if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, false);
+    if (mpDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(mpDefaultStyleSheet, false);
 
-    pObj->SetMergedItemSet(aDefaultAttr);
+    pObj->SetMergedItemSet(maDefaultAttr);
 
-    SfxItemSet aTempAttr(pMod->GetItemPool());  // no fill, no line
+    SfxItemSet aTempAttr(mpModel->GetItemPool());  // no fill, no line
     aTempAttr.Put(XLineStyleItem(drawing::LineStyle_NONE));
     aTempAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
@@ -196,8 +196,8 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     pObj->NbcSetText(rInput,rBaseURL,eFormat);
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
-    MapUnit eMap=pMod->GetScaleUnit();
-    Fraction aMap=pMod->GetScaleFraction();
+    MapUnit eMap=mpModel->GetScaleUnit();
+    Fraction aMap=mpModel->GetScaleFraction();
     ImpPasteObject(pObj,*pLst,aPos,aSiz,MapMode(eMap,Point(0,0),aMap,aMap),nOptions);
 
     // b4967543
@@ -228,7 +228,7 @@ bool SdrExchangeView::Paste(
     const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     const SdrModel* pSrcMod=&rMod;
-    if (pSrcMod==pMod)
+    if (pSrcMod==mpModel)
         return false; // this can't work, right?
 
     const bool bUndo = IsUndoEnabled();
@@ -265,7 +265,7 @@ bool SdrExchangeView::Paste(
     // Rescale, if the Model uses a different MapUnit.
     // Calculate the necessary factors first.
     MapUnit eSrcUnit=pSrcMod->GetScaleUnit();
-    MapUnit eDstUnit=pMod->GetScaleUnit();
+    MapUnit eDstUnit=mpModel->GetScaleUnit();
     bool bResize=eSrcUnit!=eDstUnit;
     Fraction xResize,yResize;
     Point aPt0;
@@ -332,7 +332,7 @@ bool SdrExchangeView::Paste(
                     }
                     else
                     {
-                        nLayer = rAd.GetLayerID(aAktLayer, true);
+                        nLayer = rAd.GetLayerID(maActualLayer, true);
                     }
 
                     if(SDRLAYER_NOTFOUND == nLayer)
@@ -401,9 +401,9 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     BigInt nSizX(rSiz.Width());
     BigInt nSizY(rSiz.Height());
     MapUnit eSrcMU=rMap.GetMapUnit();
-    MapUnit eDstMU=pMod->GetScaleUnit();
+    MapUnit eDstMU=mpModel->GetScaleUnit();
     FrPair aMapFact(GetMapFactor(eSrcMU,eDstMU));
-    Fraction aDstFr(pMod->GetScaleFraction());
+    Fraction aDstFr(mpModel->GetScaleFraction());
     nSizX*=aMapFact.X().GetNumerator();
     nSizX*=rMap.GetScaleX().GetNumerator();
     nSizX*=aDstFr.GetDenominator();
@@ -534,7 +534,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
     {
         Rectangle   aBound( GetMarkedObjBoundRect() );
         Size        aBoundSize( aBound.GetWidth(), aBound.GetHeight() );
-        MapMode     aMap( pMod->GetScaleUnit(), Point(), pMod->GetScaleFraction(), pMod->GetScaleFraction() );
+        MapMode     aMap( mpModel->GetScaleUnit(), Point(), mpModel->GetScaleFraction(), mpModel->GetScaleFraction() );
 
         if( bNoVDevIfOneMtfMarked )
         {
@@ -595,7 +595,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
     if( AreObjectsMarked() )
     {
         if( ( 1 == GetMarkedObjectCount() ) && GetSdrMarkByIndex( 0 ) )
-            aRet = SdrExchangeView::GetObjGraphic( pMod, GetMarkedObjectByIndex( 0 ) );
+            aRet = SdrExchangeView::GetObjGraphic( mpModel, GetMarkedObjectByIndex( 0 ) );
         else
             aRet = GetMarkedObjMetaFile();
     }
@@ -681,7 +681,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
     ::std::vector< ::std::vector< SdrMark* > >  aObjVectors( 2 );
     ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
     ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
-    const SdrLayerAdmin&                        rLayerAdmin = pMod->GetLayerAdmin();
+    const SdrLayerAdmin&                        rLayerAdmin = mpModel->GetLayerAdmin();
     const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), false );
 
     for( size_t n = 0, nCount = GetMarkedObjectCount(); n < nCount; ++n )
@@ -732,7 +732,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
     // Sorting the MarkList here might be problematic in the future, so
     // use a copy.
     SortMarkedObjects();
-    SdrModel* pNeuMod=pMod->AllocModel();
+    SdrModel* pNeuMod=mpModel->AllocModel();
     SdrPage* pNeuPag=pNeuMod->AllocPage(false);
     pNeuMod->InsertPage(pNeuPag);
 
@@ -753,7 +753,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
             {
                 // convert SdrPageObj's to a graphic representation, because
                 // virtual connection to referenced page gets lost in new model
-                pNeuObj = new SdrGrafObj( GetObjGraphic( pMod, pObj ), pObj->GetLogicRect() );
+                pNeuObj = new SdrGrafObj( GetObjGraphic( mpModel, pObj ), pObj->GetLogicRect() );
                 pNeuObj->SetPage( pNeuPag );
                 pNeuObj->SetModel( pNeuMod );
             }

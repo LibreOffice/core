@@ -81,7 +81,7 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, bool bConst, co
             }
         }
     }
-    if (!bConst && nMarkCount!=0) pMod->SetChanged();
+    if (!bConst && nMarkCount!=0) mpModel->SetChanged();
 }
 
 
@@ -262,7 +262,7 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
         EndUndo();
     UnmarkAllGluePoints();
     if (nMarkCount!=0)
-        pMod->SetChanged();
+        mpModel->SetChanged();
 }
 
 
@@ -312,7 +312,7 @@ void SdrGlueEditView::ImpCopyMarkedGluePoints()
         EndUndo();
 
     if (nMarkCount!=0)
-        pMod->SetChanged();
+        mpModel->SetChanged();
 }
 
 
@@ -348,7 +348,7 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
             }
         }
     }
-    if (nMarkCount!=0) pMod->SetChanged();
+    if (nMarkCount!=0) mpModel->SetChanged();
 }
 
 
