@@ -414,14 +414,14 @@ static void addFileError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiStr
 
     _rBuf.append("The configuration file");
     _rBuf.append(" '").append(sSimpleFileName).append("' ");
-    _rBuf.appendAscii(_sWhat).appendAscii(PERIOD);
+    _rBuf.appendAscii(_sWhat).append(PERIOD);
 }
 
 static void addMissingDirectoryError(OUStringBuffer& _rBuf, OUString const& _aPath)
 {
     _rBuf.append("The configuration directory");
     _rBuf.append(" '").append(_aPath).append("' ");
-    _rBuf.appendAscii(IS_MISSING).appendAscii(PERIOD);
+    _rBuf.append(IS_MISSING).append(PERIOD);
 }
 
 static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo = NULL)
@@ -429,7 +429,7 @@ static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo = 
     if (NULL == _sExtraInfo)
         _sExtraInfo = "An internal failure occurred";
 
-    _rBuf.appendAscii(_sExtraInfo).appendAscii(PERIOD);
+    _rBuf.appendAscii(_sExtraInfo).append(PERIOD);
 }
 
 static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)

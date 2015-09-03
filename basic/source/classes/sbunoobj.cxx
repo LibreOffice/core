@@ -966,7 +966,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                 OUStringBuffer aSeqTypeName;
                 for( short iDim = 0 ; iDim < nDims ; iDim++ )
                 {
-                    aSeqTypeName.appendAscii(aSeqLevelStr);
+                    aSeqTypeName.append(aSeqLevelStr);
                 }
                 aSeqTypeName.append(aElementType.getTypeName());
                 aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName.makeStringAndClear() );
@@ -1104,7 +1104,7 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
     sal_Int32 i;
     for( i = 0 ; i < nSeqLevel ; i++ )
     {
-        aSeqTypeName.appendAscii(aSeqLevelStr);
+        aSeqTypeName.append(aSeqLevelStr);
     }
     aSeqTypeName.append(aElemType.getTypeName());
     Type aSeqType( TypeClass_SEQUENCE, aSeqTypeName.makeStringAndClear() );
@@ -1769,7 +1769,7 @@ OUString Impl_GetSupportedInterfaces( SbUnoObject* pUnoObj )
     OUStringBuffer aRet;
     if( eType != TypeClass_INTERFACE )
     {
-        aRet.appendAscii( ID_DBG_SUPPORTEDINTERFACES );
+        aRet.append( ID_DBG_SUPPORTEDINTERFACES );
         aRet.append( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
     }
     else
@@ -5018,7 +5018,7 @@ void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if( nId == -1 )     // Property ID_DBG_SUPPORTEDINTERFACES"
                     {
                         OUStringBuffer aRet;
-                        aRet.appendAscii( ID_DBG_SUPPORTEDINTERFACES );
+                        aRet.append( ID_DBG_SUPPORTEDINTERFACES );
                         aRet.append( " not available.\n(TypeClass is not TypeClass_INTERFACE)\n" );
 
                         pVar->PutString( aRet.makeStringAndClear() );

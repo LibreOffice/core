@@ -1352,7 +1352,7 @@ bool SVGFilter::implExportTextEmbeddedBitmaps()
 
 
 #define SVGFILTER_EXPORT_SVGSCRIPT( z, n, aFragment ) \
-        xExtDocHandler->unknown( OUString::createFromAscii( aFragment ## n ) );
+        xExtDocHandler->unknown( aFragment ## n );
 
 bool SVGFilter::implGenerateScript()
 {

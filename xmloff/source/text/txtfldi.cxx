@@ -3098,8 +3098,8 @@ void XMLDdeFieldDeclImportContext::StartElement(
     {
         // make service name
         OUStringBuffer sBuf;
-        sBuf.appendAscii(sAPI_fieldmaster_prefix);
-        sBuf.appendAscii(sAPI_dde);
+        sBuf.append(sAPI_fieldmaster_prefix);
+        sBuf.append(sAPI_dde);
 
         // create DDE TextFieldMaster
         Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
@@ -3192,8 +3192,8 @@ void XMLDdeFieldImportContext::EndElement()
     {
         // find master
         OUStringBuffer sBuf;
-        sBuf.appendAscii(sAPI_fieldmaster_prefix);
-        sBuf.appendAscii(sAPI_dde);
+        sBuf.append(sAPI_fieldmaster_prefix);
+        sBuf.append(sAPI_dde);
         sBuf.append('.');
         sBuf.append(sName);
         OUString sMasterName = sBuf.makeStringAndClear();
@@ -3212,8 +3212,8 @@ void XMLDdeFieldImportContext::EndElement()
             xMaster->setPropertyValue( sPropertyContent, uno::makeAny( GetContent()));
             // master exists: create text field and attach
             Reference<XPropertySet> xField;
-            sBuf.appendAscii(sAPI_textfield_prefix);
-            sBuf.appendAscii(sAPI_dde);
+            sBuf.append(sAPI_textfield_prefix);
+            sBuf.append(sAPI_dde);
             if (CreateField(xField, sBuf.makeStringAndClear()))
             {
                 Reference<XDependentTextField> xDepTextField(xField,UNO_QUERY);

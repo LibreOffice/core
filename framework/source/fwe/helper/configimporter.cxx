@@ -44,7 +44,7 @@ bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
             for ( sal_uInt16 i = 1; i <= 4; i++ )
             {
                 OUStringBuffer aCustomTbxName( 20 );
-                aCustomTbxName.appendAscii( USERDEFTOOLBOX );
+                aCustomTbxName.append( USERDEFTOOLBOX );
                 aCustomTbxName[14] = aCustomTbxName[14] + i;
 
                 OUString aTbxStreamName( aCustomTbxName.makeStringAndClear() );

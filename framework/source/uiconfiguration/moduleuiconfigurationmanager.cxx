@@ -366,7 +366,7 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
         if ( xElementTypeStorage.is() )
         {
             OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
-            aBuf.appendAscii( RESOURCEURL_PREFIX );
+            aBuf.append( RESOURCEURL_PREFIX );
             aBuf.appendAscii( UIELEMENTTYPENAMES[ nElementType ] );
             aBuf.append( "/" );
             OUString aResURLPrefix( aBuf.makeStringAndClear() );

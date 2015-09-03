@@ -2154,7 +2154,7 @@ OUString getPageApiName( SdPage* pPage )
         if( aPageName.isEmpty() )
         {
             OUStringBuffer sBuffer;
-            sBuffer.appendAscii( sEmptyPageName );
+            sBuffer.append( sEmptyPageName );
             const sal_Int32 nPageNum = ( ( pPage->GetPageNum() - 1 ) >> 1 ) + 1;
             sBuffer.append( nPageNum );
             aPageName = sBuffer.makeStringAndClear();

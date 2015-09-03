@@ -135,7 +135,7 @@ OUString SvxHyperlinkDocTp::GetCurrentURL ()
 
     if( !aStrMark.isEmpty() )
     {
-        aStrURL += OUString( sHash );
+        aStrURL += sHash;
         aStrURL += aStrMark;
     }
 

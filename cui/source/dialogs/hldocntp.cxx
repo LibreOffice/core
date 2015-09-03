@@ -436,7 +436,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, Button*, void)
         OUString          aStrTmp( xFolderPicker->getDirectory() );
 
         if( aStrTmp[ aStrTmp.getLength() - 1 ] != sSlash[0] )
-            aStrTmp += OUString( sSlash );
+            aStrTmp += sSlash;
 
         // append old file name
         if( bHandleFileName )

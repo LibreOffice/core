@@ -957,14 +957,14 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
         xTextFieldsSupp->getTextFieldMasters(), UNO_QUERY);
 
     OUStringBuffer sBuffer;
-    sBuffer.appendAscii(sAPI_fieldmaster_prefix);
-    sBuffer.appendAscii(sAPI_set_expression);
+    sBuffer.append(sAPI_fieldmaster_prefix);
+    sBuffer.append(sAPI_set_expression);
     sBuffer.append(".");
     sBuffer.append(sName);
     OUString sVarServiceName = sBuffer.makeStringAndClear();
 
-    sBuffer.appendAscii(sAPI_fieldmaster_prefix);
-    sBuffer.appendAscii(sAPI_user);
+    sBuffer.append(sAPI_fieldmaster_prefix);
+    sBuffer.append(sAPI_user);
     sBuffer.append(".");
     sBuffer.append(sName);
     OUString sUserServiceName = sBuffer.makeStringAndClear();
@@ -1040,7 +1040,7 @@ bool XMLVariableDeclImportContext::FindFieldMaster(
         if( xFactory.is() ) {
 
             OUStringBuffer sService;
-            sService.appendAscii(sAPI_fieldmaster_prefix);
+            sService.append(sAPI_fieldmaster_prefix);
             sService.appendAscii((eVarType==VarTypeUserField) ?
                                  sAPI_user : sAPI_set_expression);
             Reference<XInterface> xIfc =

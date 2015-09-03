@@ -781,6 +781,16 @@ bool StringConstant::isStringConstant(
     {
         return false;
     }
+    DeclRefExpr const * dre = dyn_cast<DeclRefExpr>(expr);
+    if (dre != nullptr) {
+        VarDecl const * var = dyn_cast<VarDecl>(dre->getDecl());
+        if (var != nullptr) {
+            Expr const * init = var->getAnyInitializer();
+            if (init != nullptr) {
+                expr = init->IgnoreParenImpCasts();
+            }
+        }
+    }
     StringLiteral const * lit = dyn_cast<StringLiteral>(expr);
     if (lit != nullptr) {
         if (!lit->isAscii()) {

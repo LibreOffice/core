@@ -289,7 +289,7 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
         if ( xElementTypeStorage.is() )
         {
             OUStringBuffer aBuf( RESOURCEURL_PREFIX_SIZE );
-            aBuf.appendAscii( RESOURCEURL_PREFIX );
+            aBuf.append( RESOURCEURL_PREFIX );
             aBuf.appendAscii( UIELEMENTTYPENAMES[ nElementType ] );
             aBuf.append( "/" );
             OUString aResURLPrefix( aBuf.makeStringAndClear() );

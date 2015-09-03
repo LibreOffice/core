@@ -83,7 +83,7 @@ void SwAttrSet::GetPresentation(
                                                  ePresMetric, aStr,
                                                  &rInt );
             if( rText.getLength() && aStr.getLength() )
-                rText += OUString(sComma);
+                rText += sComma;
             rText += aStr;
             if( aIter.IsAtEnd() )
                 break;

@@ -67,7 +67,7 @@ Image Tools::GetImage (
         else if (rsURL.startsWith(sCommandImagePrefix))
         {
             ::rtl::OUStringBuffer aCommandName;
-            aCommandName.appendAscii(sUnoCommandPrefix);
+            aCommandName.append(sUnoCommandPrefix);
             aCommandName.append(rsURL.copy(nCommandImagePrefixLength));
             const ::rtl::OUString sCommandName (aCommandName.makeStringAndClear());
 

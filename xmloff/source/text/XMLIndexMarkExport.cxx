@@ -248,7 +248,7 @@ void XMLIndexMarkExport::GetID(
 
     // HACK: use address of object to form identifier
     sal_Int64 nId = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(rPropSet.get()));
-    sBuf.appendAscii(sPrefix, sizeof(sPrefix)-1);
+    sBuf.append(sPrefix);
     sBuf.append(nId);
 }
 

@@ -305,7 +305,7 @@ generateCustomURL(
     SvxEntries* entries )
 {
     OUString url = OUString(ITEM_TOOLBAR_URL );
-    url += OUString(CUSTOM_TOOLBAR_STR );
+    url += CUSTOM_TOOLBAR_STR;
 
     // use a random number to minimize possible clash with existing custom toolbars
     url += OUString::number( generateRandomValue(), 16 );
@@ -1134,7 +1134,7 @@ bool MenuSaveInData::LoadSubMenus(
 
                     if ( !subMenuTitle.isEmpty() )
                     {
-                        subMenuTitle += OUString( aMenuSeparatorStr);
+                        subMenuTitle += aMenuSeparatorStr;
                     }
                     else
                     {
@@ -1933,7 +1933,7 @@ void SvxConfigPage::AddSubMenusToUI(
         if ( pEntryData->IsPopup() )
         {
             OUString subMenuTitle( rBaseTitle );
-            subMenuTitle += OUString(aMenuSeparatorStr);
+            subMenuTitle += aMenuSeparatorStr;
             subMenuTitle += stripHotKey( pEntryData->GetName() );
 
             sal_uInt16 nPos = m_pTopLevelListBox->InsertEntry( subMenuTitle );
