@@ -31,19 +31,19 @@
 
 #include "stringhelper.hxx"
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 
 // void isJaBloed()
 // {
-//     t_print("Ist ja echt bloed.\n");
+//     printf("Ist ja echt bloed.\n");
 // }
 
 inline sal_Int64 t_abs64(sal_Int64 _nValue)
 {
     // std::abs() seems to have some ambiguity problems (so-texas)
     // return abs(_nValue);
-    t_print("t_abs64(%ld)\n", _nValue);
-    // CPPUNIT_ASSERT(_nValue < 2147483647);
+    printf("t_abs64(%ld)\n", _nValue);
+    // ASSERT_TRUE(_nValue < 2147483647);
 
     if (_nValue < 0)
     {
@@ -52,7 +52,7 @@ inline sal_Int64 t_abs64(sal_Int64 _nValue)
     return _nValue;
 }
 
-void t_print64(sal_Int64 n)
+void printf64(sal_Int64 n)
 {
     if (n < 0)
     {
@@ -79,146 +79,123 @@ void t_print64(sal_Int64 n)
 // -----------------------------------------------------------------------------
 namespace testOfHelperFunctions
 {
-    class test_t_abs64 : public CppUnit::TestFixture
+    class test_t_abs64 : public ::testing::Test
     {
-    public:
-        void test0();
-        void test1_0();
-        void test1();
-        void test1_1();
-        void test2();
-        void test3();
-        void test4();
-
-        CPPUNIT_TEST_SUITE( test_t_abs64 );
-        CPPUNIT_TEST( test0 );
-        CPPUNIT_TEST( test1_0 );
-        CPPUNIT_TEST( test1 );
-        CPPUNIT_TEST( test1_1 );
-        CPPUNIT_TEST( test2 );
-        CPPUNIT_TEST( test3 );
-        CPPUNIT_TEST( test4 );
-        CPPUNIT_TEST_SUITE_END( );
     };
 
-    void test_t_abs64::test0()
+    TEST_F(test_t_abs64, test0)
     {
         // this values has an overrun!
         sal_Int32 n32 = 2147483648;
-        t_print("n32 should be -2^31 is: %d\n", n32);
-        CPPUNIT_ASSERT_MESSAGE("n32!=2147483648", n32 == -2147483648 );
+        printf("n32 should be -2^31 is: %d\n", n32);
+        ASSERT_TRUE(n32 == -2147483648 ) << "n32!=2147483648";
     }
 
 
-    void test_t_abs64::test1_0()
+    TEST_F(test_t_abs64,test1_0)
     {
         sal_Int64 n;
         n = 1073741824;
         n <<= 9;
-        t_print("Value of n is ");
-        t_print64(n);
-        CPPUNIT_ASSERT_MESSAGE("n=2^30 << 9", t_abs64(n) > 0 );
+        printf("Value of n is ");
+        printf64(n);
+        ASSERT_TRUE(t_abs64(n) > 0) << "n=2^30 << 9";
     }
 
-    void test_t_abs64::test1()
+    TEST_F(test_t_abs64, test1)
     {
         sal_Int64 n;
         n = 2147483648 << 8;
-        t_print("Value of n is ");
-        t_print64(n);
-        CPPUNIT_ASSERT_MESSAGE("n=2^31 << 8", t_abs64(n) > 0 );
+        printf("Value of n is ");
+        printf64(n);
+        ASSERT_TRUE(t_abs64(n) > 0) << "n=2^31 << 8";
     }
-    void test_t_abs64::test1_1()
+    TEST_F(test_t_abs64, test1_1)
     {
         sal_Int64 n;
         n = sal_Int64(2147483648) << 8;
-        t_print("Value of n is ");
-        t_print64(n);
-        CPPUNIT_ASSERT_MESSAGE("n=2^31 << 8", t_abs64(n) > 0 );
+        printf("Value of n is ");
+        printf64(n);
+        ASSERT_TRUE(t_abs64(n) > 0) << "n=2^31 << 8";
     }
 
-    void test_t_abs64::test2()
+    TEST_F(test_t_abs64, test2)
     {
         sal_Int64 n;
         n = 2147483648 << 1;
-        t_print("Value of n is ");
-        t_print64(n);
+        printf("Value of n is ");
+        printf64(n);
 
-        CPPUNIT_ASSERT_MESSAGE("(2147483648 << 1) is != 0", n != 0 );
+        ASSERT_TRUE(n != 0) << "(2147483648 << 1) is != 0";
 
         sal_Int64 n2 = 2147483648 * 2;
-        CPPUNIT_ASSERT_MESSAGE("2147483648 * 2 is != 0", n2 != 0 );
+        ASSERT_TRUE(n2 != 0) << "2147483648 * 2 is != 0";
 
         sal_Int64 n3 = 4294967296LL;
-        CPPUNIT_ASSERT_MESSAGE("4294967296 is != 0", n3 != 0 );
+        ASSERT_TRUE(n3 != 0) << "4294967296 is != 0";
 
-        CPPUNIT_ASSERT_MESSAGE("n=2^31 << 1, n2 = 2^31 * 2, n3 = 2^32, all should equal!", n == n2 && n == n3 );
+        ASSERT_TRUE(n == n2 && n == n3) << "n=2^31 << 1, n2 = 2^31 * 2, n3 = 2^32, all should equal!";
     }
 
 
-    void test_t_abs64::test3()
+    TEST_F(test_t_abs64, test3)
     {
         sal_Int64 n = 0;
-        CPPUNIT_ASSERT_MESSAGE("n=0", t_abs64(n) == 0 );
+        ASSERT_TRUE(t_abs64(n) == 0) << "n=0";
 
         n = 1;
-        CPPUNIT_ASSERT_MESSAGE("n=1", t_abs64(n) > 0 );
+        ASSERT_TRUE(t_abs64(n) > 0) << "n=1";
 
         n = 2147483647;
-        CPPUNIT_ASSERT_MESSAGE("n=2^31 - 1", t_abs64(n) > 0 );
+        ASSERT_TRUE(t_abs64(n) > 0) << "n=2^31 - 1";
 
         n = 2147483648;
-        CPPUNIT_ASSERT_MESSAGE("n=2^31", t_abs64(n) > 0 );
+        ASSERT_TRUE(t_abs64(n) > 0) << "n=2^31";
     }
 
-    void test_t_abs64::test4()
+    TEST_F(test_t_abs64, test4)
     {
         sal_Int64 n = 0;
         n = -1;
-        t_print("Value of n is -1 : ");
-        t_print64(n);
-        CPPUNIT_ASSERT_MESSAGE("n=-1", t_abs64(n) > 0 );
+        printf("Value of n is -1 : ");
+        printf64(n);
+        ASSERT_TRUE(t_abs64(n) > 0) << "n=-1";
 
         n = -2147483648;
-        t_print("Value of n is -2^31 : ");
-        t_print64(n);
-        CPPUNIT_ASSERT_MESSAGE("n=-2^31", t_abs64(n) > 0 );
+        printf("Value of n is -2^31 : ");
+        printf64(n);
+        ASSERT_TRUE(t_abs64(n) > 0) << "n=-2^31";
 
         n = -8589934592LL;
-        t_print("Value of n is -2^33 : ");
-        t_print64(n);
-        CPPUNIT_ASSERT_MESSAGE("n=-2^33", t_abs64(n) > 0 );
+        printf("Value of n is -2^33 : ");
+        printf64(n);
+        ASSERT_TRUE(t_abs64(n) > 0) << "n=-2^33";
     }
 
 
 // -----------------------------------------------------------------------------
-    class test_t_print : public CppUnit::TestFixture
+    class test_printf : public ::testing::Test
     {
-    public:
-        void t_print_001();
-
-        CPPUNIT_TEST_SUITE( test_t_print );
-        CPPUNIT_TEST( t_print_001 );
-        CPPUNIT_TEST_SUITE_END( );
     };
 
-    void test_t_print::t_print_001( )
+    TEST_F(test_printf, printf_001)
     {
-        t_print("This is only a test of some helper functions\n");
+        printf("This is only a test of some helper functions\n");
         sal_Int32 nValue = 12345;
-        t_print("a value %d (should be 12345)\n", nValue);
+        printf("a value %d (should be 12345)\n", nValue);
 
         rtl::OString sValue("foo bar");
-        t_print("a String '%s' (should be 'foo bar')\n", sValue.getStr());
+        printf("a String '%s' (should be 'foo bar')\n", sValue.getStr());
 
         rtl::OUString suValue(rtl::OUString::createFromAscii("a unicode string"));
         sValue <<= suValue;
-        t_print("a String '%s'\n", sValue.getStr());
+        printf("a String '%s'\n", sValue.getStr());
     }
 
 
     class StopWatch
     {
+    protected:
         TimeValue m_aStartTime;
         TimeValue m_aEndTime;
         bool m_bStarted;
@@ -365,22 +342,11 @@ bool isBTimeGreaterATime(TimeValue const& A, TimeValue const& B)
     // -----------------------------------------------------------------------------
 
 
-    class test_TimeValues : public CppUnit::TestFixture
+    class test_TimeValues : public ::testing::Test
     {
-    public:
-
-        void t_time1();
-        void t_time2();
-        void t_time3();
-
-        CPPUNIT_TEST_SUITE( test_TimeValues );
-        CPPUNIT_TEST( t_time1 );
-        CPPUNIT_TEST( t_time2 );
-        CPPUNIT_TEST( t_time3 );
-        CPPUNIT_TEST_SUITE_END( );
     };
 
-void test_TimeValues::t_time1()
+TEST_F(test_TimeValues, t_time1)
 {
     StopWatch aWatch;
     aWatch.start();
@@ -390,9 +356,9 @@ void test_TimeValues::t_time1()
     aWatch.showTime("Wait for 3 seconds");
 }
 
-void test_TimeValues::t_time2()
+TEST_F(test_TimeValues, t_time2)
 {
-    t_print("Wait repeats 20 times.\n");
+    printf("Wait repeats 20 times.\n");
     int i=0;
     while(i++<20)
     {
@@ -405,9 +371,9 @@ void test_TimeValues::t_time2()
     }
 }
 
-void test_TimeValues::t_time3()
+TEST_F(test_TimeValues, t_time3)
 {
-    t_print("Wait repeats 100 times.\n");
+    printf("Wait repeats 100 times.\n");
     int i=0;
     while(i++<20)
     {
@@ -441,10 +407,8 @@ void test_TimeValues::t_time3()
 
 } // namespace testOfHelperFunctions
 
-// -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( testOfHelperFunctions::test_t_print, "helperFunctions" );
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( testOfHelperFunctions::test_t_abs64, "helperFunctions" );
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( testOfHelperFunctions::test_TimeValues, "helperFunctions" );
-
-// -----------------------------------------------------------------------------
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
