@@ -262,7 +262,12 @@ void SAL_CALL
 SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-
+    OUString newLabel(aLabel);
+    //new line must not occur as footnote label
+    if(newLabel.indexOf('\n') >=0 )
+    {
+       newLabel = newLabel.replace('\n', ' ');
+    }
     SwFormatFootnote const*const pFormat = m_pImpl->GetFootnoteFormat();
     if(pFormat)
     {
@@ -271,11 +276,11 @@ SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException, std:
         SwTextNode& rTextNode = (SwTextNode&)pTextFootnote->GetTextNode();
 
         SwPaM aPam(rTextNode, pTextFootnote->GetStart());
-        GetDoc()->SetCurFootnote(aPam, aLabel, pFormat->GetNumber(), pFormat->IsEndNote());
+        GetDoc()->SetCurFootnote(aPam, newLabel, pFormat->GetNumber(), pFormat->IsEndNote());
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
-        m_pImpl->m_sLabel = aLabel;
+        m_pImpl->m_sLabel = newLabel;
     }
     else
     {
