@@ -629,7 +629,7 @@ namespace svt { namespace table
         bool lcl_updateScrollbar( vcl::Window& _rParent, VclPtr<ScrollBar>& _rpBar,
             bool const i_needBar, long _nVisibleUnits,
             long _nPosition, long _nLineSize, long _nRange,
-            bool _bHorizontal, const Link<>& _rScrollHandler )
+            bool _bHorizontal, const Link<ScrollBar*,void>& _rScrollHandler )
         {
             // do we currently have the scrollbar?
             bool bHaveBar = _rpBar != nullptr;
@@ -2394,7 +2394,7 @@ namespace svt { namespace table
     }
 
 
-    IMPL_LINK( TableControl_Impl, OnScroll, ScrollBar*, _pScrollbar )
+    IMPL_LINK_TYPED( TableControl_Impl, OnScroll, ScrollBar*, _pScrollbar, void )
     {
         DBG_ASSERT( ( _pScrollbar == m_pVScroll ) || ( _pScrollbar == m_pHScroll ),
             "TableControl_Impl::OnScroll: where did this come from?" );
@@ -2403,8 +2403,6 @@ namespace svt { namespace table
             impl_ni_ScrollRows( _pScrollbar->GetDelta() );
         else
             impl_ni_ScrollColumns( _pScrollbar->GetDelta() );
-
-        return 0L;
     }
 
 

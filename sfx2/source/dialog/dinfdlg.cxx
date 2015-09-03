@@ -2096,7 +2096,7 @@ void CustomPropertiesControl::Init(VclBuilderContainer& rBuilder)
     m_pVertScroll->SetRangeMax( 0 );
     m_pVertScroll->SetVisibleSize( 0xFFFF );
 
-    Link<> aScrollLink = LINK( this, CustomPropertiesControl, ScrollHdl );
+    Link<ScrollBar*,void> aScrollLink = LINK( this, CustomPropertiesControl, ScrollHdl );
     m_pVertScroll->SetScrollHdl( aScrollLink );
 }
 
@@ -2137,13 +2137,12 @@ void CustomPropertiesControl::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_LINK( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
+IMPL_LINK_TYPED( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar, void )
 {
     sal_Int32 nOffset = m_pPropertiesWin->GetLineHeight();
     nOffset *= ( m_nThumbPos - pScrollBar->GetThumbPos() );
     m_nThumbPos = pScrollBar->GetThumbPos();
     m_pPropertiesWin->DoScroll( nOffset );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(CustomPropertiesControl, RemovedHdl, void*, void)
@@ -2601,7 +2600,7 @@ CmisPropertiesControl::CmisPropertiesControl(SfxTabPage* pParent)
     m_rVertScroll.SetRangeMin(0);
     m_rVertScroll.SetVisibleSize( 0xFFFF );
 
-    Link<> aScrollLink = LINK( this, CmisPropertiesControl, ScrollHdl );
+    Link<ScrollBar*,void> aScrollLink = LINK( this, CmisPropertiesControl, ScrollHdl );
     m_rVertScroll.SetScrollHdl( aScrollLink );
 }
 
@@ -2610,12 +2609,11 @@ void CmisPropertiesControl::ClearAllLines()
    m_pPropertiesWin.ClearAllLines();
 }
 
-IMPL_LINK( CmisPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
+IMPL_LINK_TYPED( CmisPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar, void )
 {
     sal_Int32 nOffset = m_pPropertiesWin.GetItemHeight();
     nOffset *= ( pScrollBar->GetThumbPos() );
     m_pPropertiesWin.DoScroll( -nOffset );
-    return 0;
 }
 
 void CmisPropertiesControl::checkAutoVScroll()

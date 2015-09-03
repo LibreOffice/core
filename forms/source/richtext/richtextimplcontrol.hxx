@@ -174,8 +174,8 @@ namespace frm
 
     private:
         DECL_LINK( OnInvalidateAllAttributes, void* );
-        DECL_LINK( OnHScroll, ScrollBar* );
-        DECL_LINK( OnVScroll, ScrollBar* );
+        DECL_LINK_TYPED( OnHScroll, ScrollBar*, void );
+        DECL_LINK_TYPED( OnVScroll, ScrollBar*, void );
     };
 
 

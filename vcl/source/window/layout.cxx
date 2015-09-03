@@ -1633,7 +1633,7 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)
 {
     SetType(WINDOW_SCROLLWINDOW);
 
-    Link<> aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
+    Link<ScrollBar*,void> aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
     m_pVScroll->SetScrollHdl(aLink);
     m_pHScroll->SetScrollHdl(aLink);
 }
@@ -1646,18 +1646,18 @@ void VclScrolledWindow::dispose()
     VclBin::dispose();
 }
 
-IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl)
+IMPL_LINK_NOARG_TYPED(VclScrolledWindow, ScrollBarHdl, ScrollBar*, void)
 {
     vcl::Window *pChild = get_child();
     if (!pChild)
-        return 1;
+        return;
 
     assert(dynamic_cast<VclViewport*>(pChild) && "scrolledwindow child should be a Viewport");
 
     pChild = pChild->GetWindow(GetWindowType::FirstChild);
 
     if (!pChild)
-        return 1;
+        return;
 
     Point aWinPos;
 
@@ -1672,8 +1672,6 @@ IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl)
     }
 
     pChild->SetPosPixel(aWinPos);
-
-    return 1;
 }
 
 const vcl::Window *VclScrolledWindow::get_child() const

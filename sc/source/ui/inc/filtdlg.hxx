@@ -150,7 +150,7 @@ private:
     DECL_LINK( ValModifyHdl, ComboBox* );
     DECL_LINK_TYPED( CheckBoxHdl,  Button*, void );
     DECL_LINK_TYPED( EndDlgHdl,    Button*, void );
-    DECL_LINK( ScrollHdl, void* );
+    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
     DECL_LINK( MoreExpandedHdl, void* );
 
     // Hack: RefInput control

@@ -1354,10 +1354,9 @@ void SmShowSymbolSetWindow::Resize()
     calccols();
 }
 
-IMPL_LINK( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, /*pScrollBar*/)
+IMPL_LINK_TYPED( SmShowSymbolSetWindow, ScrollHdl, ScrollBar*, /*pScrollBar*/, void)
 {
     Invalidate();
-    return 0;
 }
 
 VCL_BUILDER_DECL_FACTORY(SmShowSymbol)

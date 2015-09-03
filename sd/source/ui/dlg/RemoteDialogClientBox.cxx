@@ -719,11 +719,9 @@ void ClientBox::DoScroll( long nDelta )
     m_aScrollBar->SetPosPixel( aNewSBPt );
 }
 
-IMPL_LINK( ClientBox, ScrollHdl, ScrollBar*, pScrBar )
+IMPL_LINK_TYPED( ClientBox, ScrollHdl, ScrollBar*, pScrBar, void )
 {
     DoScroll( pScrBar->GetDelta() );
-
-    return 1;
 }
 
 IMPL_LINK_NOARG_TYPED( ClientBox, DeauthoriseHdl, Button*, void )

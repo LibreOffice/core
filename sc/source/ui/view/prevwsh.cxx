@@ -409,7 +409,7 @@ void ScPreviewShell::UpdateScrollBars()
     }
 }
 
-IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
+IMPL_LINK_TYPED( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
 {
     long nPos           = pScroll->GetThumbPos();
     long nDelta         = pScroll->GetDelta();
@@ -478,8 +478,6 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
             Help::ShowQuickHelp( pScroll->GetParent(), aRect, aHelpStr, nAlign );
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK (ScPreviewShell, CloseHdl, SystemWindow*,)

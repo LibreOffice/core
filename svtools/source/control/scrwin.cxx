@@ -118,7 +118,7 @@ Size ScrollableWindow::GetOutputSizePixel() const
 
 
 
-IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
+IMPL_LINK_TYPED( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll, void )
 {
     // notify the start of scrolling, if not already scrolling
     if ( !bScrolling )
@@ -138,12 +138,11 @@ IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
 
     // notify the end of scrolling
     bScrolling = false;
-    return 0;
 }
 
 
 
-IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
+IMPL_LINK_TYPED( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll, void )
 {
     // notify the start of scrolling, if not already scrolling
     if ( !bScrolling )
@@ -159,7 +158,6 @@ IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
         else
             Scroll( 0, aDelta.Height() );
     }
-    return 0;
 }
 
 

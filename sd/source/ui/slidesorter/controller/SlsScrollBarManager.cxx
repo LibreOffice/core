@@ -88,11 +88,11 @@ void ScrollBarManager::Disconnect()
 {
     if (mpVerticalScrollBar != nullptr)
     {
-        mpVerticalScrollBar->SetScrollHdl (Link<>());
+        mpVerticalScrollBar->SetScrollHdl( Link<ScrollBar*,void>() );
     }
     if (mpHorizontalScrollBar != nullptr)
     {
-        mpHorizontalScrollBar->SetScrollHdl (Link<>());
+        mpHorizontalScrollBar->SetScrollHdl( Link<ScrollBar*,void>() );
     }
 }
 
@@ -252,7 +252,7 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
     }
 }
 
-IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
+IMPL_LINK_TYPED(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar, void)
 {
     if (pScrollBar!=NULL
         && pScrollBar==mpVerticalScrollBar.get()
@@ -265,10 +265,9 @@ IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
         mrSlideSorter.GetContentWindow()->SetVisibleXY(-1, nRelativePosition);
         mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
-    return sal_IntPtr(true);
 }
 
-IMPL_LINK(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar)
+IMPL_LINK_TYPED(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar, void)
 {
     if (pScrollBar!=NULL
         && pScrollBar==mpHorizontalScrollBar.get()
@@ -281,7 +280,6 @@ IMPL_LINK(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar)
         mrSlideSorter.GetContentWindow()->SetVisibleXY(nRelativePosition, -1);
         mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
-    return sal_IntPtr(true);
 }
 
 void ScrollBarManager::SetWindowOrigin (

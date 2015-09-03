@@ -57,7 +57,7 @@ namespace rptui
         ::rtl::Reference<comphelper::OPropertyChangeMultiplexer >
                                     m_pReportDefinitionMultiPlexer; // listener for property changes
 
-        DECL_LINK( ScrollHdl, ScrollBar*);
+        DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void);
         Size ResizeScrollBars();
         void ImplInitSettings();
         void impl_initScrollBar( ScrollBar& _rScrollBar ) const;

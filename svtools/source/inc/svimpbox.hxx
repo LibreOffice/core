@@ -186,9 +186,9 @@ private:
     void                DrawNet(vcl::RenderContext& rRenderContext);
 
     // ScrollBar-Handler
-    DECL_LINK( ScrollUpDownHdl, ScrollBar * );
-    DECL_LINK( ScrollLeftRightHdl, ScrollBar * );
-    DECL_LINK( EndScrollHdl, void * );
+    DECL_LINK_TYPED( ScrollUpDownHdl, ScrollBar*, void );
+    DECL_LINK_TYPED( ScrollLeftRightHdl, ScrollBar*, void );
+    DECL_LINK_TYPED( EndScrollHdl, ScrollBar*, void );
 
     void                SetNodeBmpYOffset( const Image& );
     void                SetNodeBmpTabDistance();

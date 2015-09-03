@@ -64,8 +64,8 @@ private:
                     bVCenter:1;
 
     SVT_DLLPRIVATE void         ImpInitialize( ScrollableWindowFlags nFlags );
-    DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
-    DECL_DLLPRIVATE_LINK( EndScrollHdl, ScrollBar * );
+    DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl, ScrollBar *, void );
+    DECL_DLLPRIVATE_LINK_TYPED( EndScrollHdl, ScrollBar *, void );
 
 public:
                     ScrollableWindow( vcl::Window* pParent, WinBits nBits = 0,

@@ -1494,11 +1494,9 @@ namespace svx
     }
 
 
-    IMPL_LINK_NOARG( HangulHanjaEditDictDialog, ScrollHdl )
+    IMPL_LINK_NOARG_TYPED( HangulHanjaEditDictDialog, ScrollHdl, ScrollBar*, void )
     {
         UpdateScrollbar();
-
-        return 0;
     }
 
     IMPL_LINK_NOARG( HangulHanjaEditDictDialog, OriginalModifyHdl )
@@ -1781,7 +1779,7 @@ namespace svx
         #error number of suggestions should not under-run the value of 5
     #endif
 
-        Link<>  aScrLk( LINK( this, HangulHanjaEditDictDialog, ScrollHdl ) );
+        Link<ScrollBar*,void>  aScrLk( LINK( this, HangulHanjaEditDictDialog, ScrollHdl ) );
         m_aScrollSB->SetScrollHdl( aScrLk );
         m_aScrollSB->SetEndScrollHdl( aScrLk );
         m_aScrollSB->SetRangeMin( 0 );

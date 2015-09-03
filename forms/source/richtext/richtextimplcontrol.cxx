@@ -318,17 +318,15 @@ namespace frm
     }
 
 
-    IMPL_LINK( RichTextControlImpl, OnHScroll, ScrollBar*, _pScrollbar )
+    IMPL_LINK_TYPED( RichTextControlImpl, OnHScroll, ScrollBar*, _pScrollbar, void )
     {
         m_pView->Scroll( -_pScrollbar->GetDelta(), 0, ScrollRangeCheck::PaperWidthTextSize );
-        return 0L;
     }
 
 
-    IMPL_LINK( RichTextControlImpl, OnVScroll, ScrollBar*, _pScrollbar )
+    IMPL_LINK_TYPED( RichTextControlImpl, OnVScroll, ScrollBar*, _pScrollbar, void )
     {
         m_pView->Scroll( 0, -_pScrollbar->GetDelta(), ScrollRangeCheck::PaperWidthTextSize );
-        return 0L;
     }
 
 

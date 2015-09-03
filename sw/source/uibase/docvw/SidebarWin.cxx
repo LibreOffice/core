@@ -1176,11 +1176,10 @@ void SwSidebarWin::Delete()
     }
 }
 
-IMPL_LINK(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll)
+IMPL_LINK_TYPED(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll, void)
 {
     long nDiff = GetOutlinerView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
     GetOutlinerView()->Scroll( 0, nDiff );
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwSidebarWin, ModifyHdl)

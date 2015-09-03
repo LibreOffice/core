@@ -112,7 +112,7 @@ protected:
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    DECL_LINK(ScrollHdl, ScrollBar*);
+    DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
 
 public:
                     SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView );

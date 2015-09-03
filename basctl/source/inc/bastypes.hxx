@@ -153,7 +153,7 @@ private:
     VclPtr<ScrollBar>      pShellHScrollBar;
     VclPtr<ScrollBar>      pShellVScrollBar;
 
-    DECL_LINK( ScrollHdl, ScrollBar * );
+    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
     int nStatus;
 
     ScriptDocument      m_aDocument;

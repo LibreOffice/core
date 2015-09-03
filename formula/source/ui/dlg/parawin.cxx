@@ -620,11 +620,9 @@ IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput*, pPtr )
 }
 
 
-IMPL_LINK_NOARG(ParaWin, ScrollHdl)
+IMPL_LINK_NOARG_TYPED(ParaWin, ScrollHdl, ScrollBar*, void)
 {
     SliderMoved();
-
-    return 0;
 }
 
 IMPL_LINK( ParaWin, ModifyHdl, ArgInput*, pPtr )

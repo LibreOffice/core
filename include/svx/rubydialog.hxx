@@ -131,7 +131,7 @@ class SvxRubyDialog : public SfxModelessDialog
     DECL_LINK_TYPED(ApplyHdl_Impl, Button*, void);
     DECL_LINK_TYPED(CloseHdl_Impl, Button*, void);
     DECL_LINK_TYPED(StylistHdl_Impl, Button*, void);
-    DECL_LINK(ScrollHdl_Impl, ScrollBar*);
+    DECL_LINK_TYPED(ScrollHdl_Impl, ScrollBar*, void);
     DECL_LINK(PositionHdl_Impl, ListBox*);
     DECL_LINK(AdjustHdl_Impl, ListBox*);
     DECL_LINK(CharStyleHdl_Impl, void *);

@@ -231,10 +231,9 @@ void SwAddressPreview::Resize()
     positionScrollBar();
 }
 
-IMPL_LINK_NOARG(SwAddressPreview, ScrollHdl)
+IMPL_LINK_NOARG_TYPED(SwAddressPreview, ScrollHdl, ScrollBar*, void)
 {
     Invalidate();
-    return 0;
 }
 
 void SwAddressPreview::AddAddress(const OUString& rAddress)

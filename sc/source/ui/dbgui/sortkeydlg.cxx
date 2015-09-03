@@ -91,7 +91,7 @@ ScSortKeyCtrl::ScSortKeyCtrl(SfxTabPage* pParent, ScSortKeyItems& rItems)
     m_rVertScroll.SetRangeMin( 0 );
     m_rVertScroll.SetVisibleSize( 0xFFFF );
 
-    Link<> aScrollLink = LINK( this, ScSortKeyCtrl, ScrollHdl );
+    Link<ScrollBar*,void> aScrollLink = LINK( this, ScSortKeyCtrl, ScrollHdl );
     m_rVertScroll.SetScrollHdl( aScrollLink );
 }
 
@@ -123,12 +123,11 @@ void ScSortKeyCtrl::setScrollRange()
     checkAutoVScroll();
 }
 
-IMPL_LINK( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar )
+IMPL_LINK_TYPED( ScSortKeyCtrl, ScrollHdl, ScrollBar*, pScrollBar, void )
 {
     sal_Int32 nOffset = m_aSortWin.GetItemHeight();
     nOffset *= pScrollBar->GetThumbPos();
     m_aSortWin.DoScroll( -nOffset );
-    return 0;
 }
 
 void ScSortKeyCtrl::AddSortKey( sal_uInt16 nItem )

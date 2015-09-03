@@ -1331,38 +1331,34 @@ sal_uInt16 BrowseBox::FrozenColCount() const
 
 
 
-IMPL_LINK(BrowseBox,ScrollHdl,ScrollBar*,pBar)
+IMPL_LINK_TYPED(BrowseBox, ScrollHdl, ScrollBar*, pBar, void)
 {
 
     if ( pBar->GetDelta() == 0 )
-        return 0;
+        return;
 
     if ( pBar->GetDelta() < 0 && getDataWindow()->bNoScrollBack )
     {
         UpdateScrollbars();
-        return 0;
+        return;
     }
 
     if ( pBar == aHScroll.get() )
         ScrollColumns( aHScroll->GetDelta() );
     if ( pBar == pVScroll )
         ScrollRows( pVScroll->GetDelta() );
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(BrowseBox, EndScrollHdl)
+IMPL_LINK_NOARG_TYPED(BrowseBox, EndScrollHdl, ScrollBar*, void)
 {
 
     if ( getDataWindow()->bNoScrollBack )
     {
         EndScroll();
-        return 0;
+        return;
     }
-
-    return 0;
 }
 
 

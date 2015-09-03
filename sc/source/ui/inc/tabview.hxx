@@ -170,8 +170,8 @@ private:
     void            DoAddWin( ScGridWindow* pWin );
 
     void            InitScrollBar( ScrollBar& rScrollBar, long nMaxVal );
-    DECL_LINK(      ScrollHdl, ScrollBar* );
-    DECL_LINK(      EndScrollHdl, void* );
+    DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void );
+    DECL_LINK_TYPED(EndScrollHdl, ScrollBar*, void );
 
     DECL_LINK_TYPED(SplitHdl, Splitter*, void);
     void            DoHSplit(long nSplitPos);

@@ -2054,7 +2054,7 @@ void ComplexEditorWindow::Resize()
     aEWVScrollBar->SetPosSizePixel( Point( aOutSz.Width() - DWBORDER - nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 }
 
-IMPL_LINK(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
+IMPL_LINK_TYPED(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
 {
     if (aEdtWindow->GetEditView())
     {
@@ -2066,8 +2066,6 @@ IMPL_LINK(ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
         aEdtWindow->GetEditView()->ShowCursor(false);
         pCurScrollBar->SetThumbPos( aEdtWindow->GetEditView()->GetStartDocPos().Y() );
     }
-
-    return 0;
 }
 
 void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)

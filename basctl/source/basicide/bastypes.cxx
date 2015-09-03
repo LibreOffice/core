@@ -61,9 +61,9 @@ BaseWindow::~BaseWindow()
 void BaseWindow::dispose()
 {
     if ( pShellVScrollBar )
-        pShellVScrollBar->SetScrollHdl( Link<>() );
+        pShellVScrollBar->SetScrollHdl( Link<ScrollBar*,void>() );
     if ( pShellHScrollBar )
-        pShellHScrollBar->SetScrollHdl( Link<>() );
+        pShellHScrollBar->SetScrollHdl( Link<ScrollBar*,void>() );
     pShellVScrollBar.clear();
     pShellHScrollBar.clear();
     vcl::Window::dispose();
@@ -96,10 +96,9 @@ void BaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
 
 
 
-IMPL_LINK( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
+IMPL_LINK_TYPED( BaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar, void )
 {
     DoScroll( pCurScrollBar );
-    return 0;
 }
 
 void BaseWindow::ExecuteCommand (SfxRequest&)

@@ -846,7 +846,7 @@ class ColorConfigCtrl_Impl : public VclVBox
     EditableColorConfig*            pColorConfig;
     EditableExtendedColorConfig*    pExtColorConfig;
 
-    DECL_LINK(ScrollHdl, ScrollBar*);
+    DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
     DECL_LINK_TYPED(ClickHdl, Button*, void);
     DECL_LINK(ColorHdl, ColorListBox*);
     DECL_LINK(ControlFocusHdl, Control*);
@@ -897,7 +897,7 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
     m_pScrollWindow->set_expand(true);
     m_pScrollWindow->set_fill(true);
 
-    Link<> aScrollLink = LINK(this, ColorConfigCtrl_Impl, ScrollHdl);
+    Link<ScrollBar*,void> aScrollLink = LINK(this, ColorConfigCtrl_Impl, ScrollHdl);
     m_pVScroll->SetScrollHdl(aScrollLink);
     m_pVScroll->SetEndScrollHdl(aScrollLink);
 
@@ -950,10 +950,9 @@ void ColorConfigCtrl_Impl::Update ()
     m_pScrollWindow->Update(pColorConfig, pExtColorConfig);
 }
 
-IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
+IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar, void)
 {
     m_pScrollWindow->ScrollHdl(*pScrollBar);
-    return 0;
 }
 
 bool ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )

@@ -491,7 +491,7 @@ bool ThumbnailView::ImplHasAccessibleListeners()
     return( pAcc && pAcc->HasAccessibleListeners() );
 }
 
-IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
+IMPL_LINK_TYPED( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar, void )
 {
     if ( pScrollBar->GetDelta() )
     {
@@ -500,7 +500,6 @@ IMPL_LINK( ThumbnailView,ImplScrollHdl, ScrollBar*, pScrollBar )
         if ( IsReallyVisible() && IsUpdateMode() )
             Invalidate();
     }
-    return 0;
 }
 
 IMPL_LINK (ThumbnailView, OnItemSelected, ThumbnailViewItem*, pItem)

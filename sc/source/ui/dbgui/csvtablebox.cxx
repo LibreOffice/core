@@ -44,13 +44,13 @@ ScCsvTableBox::ScCsvTableBox( vcl::Window* pParent, WinBits nBits ) :
     maRuler->SetCmdHdl( aLink );
     maGrid->SetCmdHdl( aLink );
 
-    aLink = LINK( this, ScCsvTableBox, ScrollHdl );
-    maHScroll->SetScrollHdl( aLink );
-    maVScroll->SetScrollHdl( aLink );
+    Link<ScrollBar*,void> aLink2 = LINK( this, ScCsvTableBox, ScrollHdl );
+    maHScroll->SetScrollHdl( aLink2 );
+    maVScroll->SetScrollHdl( aLink2 );
 
-    aLink = LINK( this, ScCsvTableBox, ScrollEndHdl );
-    maHScroll->SetEndScrollHdl( aLink );
-    maVScroll->SetEndScrollHdl( aLink );
+    aLink2 = LINK( this, ScCsvTableBox, ScrollEndHdl );
+    maHScroll->SetEndScrollHdl( aLink2 );
+    maVScroll->SetEndScrollHdl( aLink2 );
 
     InitControls();
 }
@@ -392,7 +392,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
     return 0;
 }
 
-IMPL_LINK( ScCsvTableBox, ScrollHdl, ScrollBar*, pScrollBar )
+IMPL_LINK_TYPED( ScCsvTableBox, ScrollHdl, ScrollBar*, pScrollBar, void )
 {
     OSL_ENSURE( pScrollBar, "ScCsvTableBox::ScrollHdl - missing sender" );
 
@@ -400,11 +400,9 @@ IMPL_LINK( ScCsvTableBox, ScrollHdl, ScrollBar*, pScrollBar )
         Execute( CSVCMD_SETPOSOFFSET, pScrollBar->GetThumbPos() );
     else if( pScrollBar == maVScroll.get() )
         Execute( CSVCMD_SETLINEOFFSET, pScrollBar->GetThumbPos() );
-
-    return 0;
 }
 
-IMPL_LINK( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar )
+IMPL_LINK_TYPED( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar, void )
 {
     OSL_ENSURE( pScrollBar, "ScCsvTableBox::ScrollEndHdl - missing sender" );
 
@@ -415,8 +413,6 @@ IMPL_LINK( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar )
         if( GetGridCursorPos() != CSV_POS_INVALID )
             Execute( CSVCMD_MOVEGRIDCURSOR, maGrid->GetNoScrollCol( GetGridCursorPos() ) );
     }
-
-    return 0;
 }
 
 // accessibility --------------------------------------------------------------

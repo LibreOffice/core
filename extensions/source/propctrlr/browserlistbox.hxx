@@ -170,7 +170,7 @@ namespace pcr
 
         using Window::SetHelpText;
     private:
-        DECL_LINK( ScrollHdl, ScrollBar* );
+        DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 
         /** retrieves the index of a given control in our line list
             @param _rxControl

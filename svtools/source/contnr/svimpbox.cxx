@@ -300,7 +300,7 @@ void SvImpLBox::Clear()
 // Paint, navigate, scroll
 // *********************************************************************
 
-IMPL_LINK_NOARG(SvImpLBox, EndScrollHdl)
+IMPL_LINK_NOARG_TYPED(SvImpLBox, EndScrollHdl, ScrollBar*, void)
 {
     if( nFlags & F_ENDSCROLL_SET_VIS_SIZE )
     {
@@ -308,17 +308,16 @@ IMPL_LINK_NOARG(SvImpLBox, EndScrollHdl)
         nFlags &= ~F_ENDSCROLL_SET_VIS_SIZE;
     }
     EndScroll();
-    return 0;
 }
 
 // handler for vertical scrollbar
 
-IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar )
+IMPL_LINK_TYPED( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar, void )
 {
     DBG_ASSERT(!bInVScrollHdl,"Scroll handler out-paces itself!");
     long nDelta = pScrollBar->GetDelta();
     if( !nDelta )
-        return 0;
+        return;
 
     nFlags &= (~F_FILLING);
 
@@ -347,7 +346,6 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar )
             PageUp( (sal_uInt16) nDelta );
     }
     bInVScrollHdl = false;
-    return 0;
 }
 
 
@@ -722,7 +720,7 @@ void SvImpLBox::UpdateAll(
         pView->Invalidate( GetVisibleArea() );
 }
 
-IMPL_LINK( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar )
+IMPL_LINK_TYPED( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar, void )
 {
     long nDelta = pScrollBar->GetDelta();
     if( nDelta )
@@ -735,7 +733,6 @@ IMPL_LINK( SvImpLBox, ScrollLeftRightHdl, ScrollBar *, pScrollBar )
         pView->nFocusWidth = -1;
         KeyLeftRight( nDelta );
     }
-    return 0;
 }
 
 void SvImpLBox::KeyLeftRight( long nDelta )

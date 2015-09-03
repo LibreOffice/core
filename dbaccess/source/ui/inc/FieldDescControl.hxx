@@ -114,7 +114,7 @@ namespace dbaui
 
         OFieldDescription*      pActFieldDescr;
 
-        DECL_LINK( OnScroll, ScrollBar*);
+        DECL_LINK_TYPED( OnScroll, ScrollBar*, void);
 
         DECL_LINK_TYPED( FormatClickHdl, Button *, void );
         DECL_LINK( ChangeHdl, ListBox * );

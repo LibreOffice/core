@@ -474,7 +474,7 @@ private:
 
     sal_Int32               m_nThumbPos;
 
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
     DECL_LINK_TYPED( RemovedHdl, void*, void );
 
 public:
@@ -598,7 +598,7 @@ private:
     CmisPropertiesWindow    m_pPropertiesWin;
     VclScrolledWindow&      m_rScrolledWindow;
     ScrollBar&              m_rVertScroll;
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 
     void checkAutoVScroll();
 

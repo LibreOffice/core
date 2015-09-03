@@ -39,7 +39,7 @@ ScrollableWrapper<T>::ScrollableWrapper( vcl::Window* pParent, WinBits nStyle, D
       mbHasVertBar( false ),
       maScrollVis( None )
 {
-    Link<> aLink( LINK( this, ScrollableWrapper, ScrollBarHdl ) );
+    Link<ScrollBar*,void> aLink( LINK( this, ScrollableWrapper, ScrollBarHdl ) );
     maVScrollBar->SetScrollHdl( aLink );
     maHScrollBar->SetScrollHdl( aLink );
 
@@ -119,20 +119,19 @@ void ScrollableWrapper<T>::lcl_Scroll( long nX, long nY )
 //IMPL_LINK( ScrollableWrapper, ScrollBarHdl, ScrollBar*, pSB )
 
 template< class T>
-sal_IntPtr ScrollableWrapper<T>::LinkStubScrollBarHdl( void* pThis, void* pCaller)
+void ScrollableWrapper<T>::LinkStubScrollBarHdl( void* pThis, ScrollBar* pCaller)
 {
-    return static_cast<ScrollableWrapper<T>*>(pThis)->ScrollBarHdl( static_cast<ScrollBar*>(pCaller) );
+    static_cast<ScrollableWrapper<T>*>(pThis)->ScrollBarHdl( static_cast<ScrollBar*>(pCaller) );
 }
 
 template< class T>
-sal_IntPtr ScrollableWrapper<T>::ScrollBarHdl( ScrollBar* pSB )
+void ScrollableWrapper<T>::ScrollBarHdl( ScrollBar* pSB )
 {
     sal_uInt16 nPos = (sal_uInt16) pSB->GetThumbPos();
     if( pSB == maVScrollBar.get() )
         lcl_Scroll(mnScrollPos.X(), nPos );
     else if( pSB == maHScrollBar.get() )
         lcl_Scroll(nPos, mnScrollPos.Y() );
-    return 1;
 }
 
 template< class T>

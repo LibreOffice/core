@@ -1144,10 +1144,9 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
     return 0;
 }
 
-IMPL_LINK_NOARG(ScFilterDlg, ScrollHdl)
+IMPL_LINK_NOARG_TYPED(ScFilterDlg, ScrollHdl, ScrollBar*, void)
 {
     SliderMoved();
-    return 0;
 }
 
 void ScFilterDlg::SliderMoved()

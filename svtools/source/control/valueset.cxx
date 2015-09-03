@@ -1115,7 +1115,7 @@ bool ValueSet::ImplHasAccessibleListeners()
     return( pAcc && pAcc->HasAccessibleListeners() );
 }
 
-IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
+IMPL_LINK_TYPED( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar, void )
 {
     sal_uInt16 nNewFirstLine = (sal_uInt16)pScrollBar->GetThumbPos();
     if ( nNewFirstLine != mnFirstLine )
@@ -1124,7 +1124,6 @@ IMPL_LINK( ValueSet,ImplScrollHdl, ScrollBar*, pScrollBar )
         mbFormat = true;
         Invalidate();
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ValueSet, ImplTimerHdl, Timer *, void)

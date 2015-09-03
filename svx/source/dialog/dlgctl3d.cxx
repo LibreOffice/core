@@ -1224,7 +1224,7 @@ void SvxLightCtl3D::LoseFocus()
     maLightControl->HideFocus();
 }
 
-IMPL_LINK_NOARG(SvxLightCtl3D, ScrollBarMove)
+IMPL_LINK_NOARG_TYPED(SvxLightCtl3D, ScrollBarMove, ScrollBar*, void)
 {
     const sal_Int32 nHor(maHorScroller->GetThumbPos());
     const sal_Int32 nVer(maVerScroller->GetThumbPos());
@@ -1237,8 +1237,6 @@ IMPL_LINK_NOARG(SvxLightCtl3D, ScrollBarMove)
     {
         maUserInteractiveChangeCallback.Call(this);
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxLightCtl3D, ButtonPress, Button*, void)

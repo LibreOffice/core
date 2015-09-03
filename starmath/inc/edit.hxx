@@ -73,7 +73,7 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;
 
     DECL_LINK(EditStatusHdl ,EditStatus *);
-    DECL_LINK(ScrollHdl, ScrollBar *);
+    DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
 
     void CreateEditView();
     Rectangle AdjustScrollBars();

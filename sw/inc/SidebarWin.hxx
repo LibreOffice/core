@@ -189,7 +189,7 @@ class SwSidebarWin : public vcl::Window
         SfxItemSet  DefaultItem();
 
         DECL_LINK(ModifyHdl, void*);
-        DECL_LINK(ScrollHdl, ScrollBar*);
+        DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
         DECL_LINK_TYPED(DeleteHdl, void*, void);
 
         inline SwView& DocView() { return mrView;}

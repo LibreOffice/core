@@ -125,7 +125,7 @@ namespace svt
         // initialize the dialog from the configuration data
         void    loadConfiguration();
 
-        DECL_LINK(OnFieldScroll, ScrollBar*);
+        DECL_LINK_TYPED(OnFieldScroll, ScrollBar*, void);
         DECL_LINK(OnFieldSelect, ListBox*);
         DECL_LINK_TYPED(OnAdministrateDatasources, Button*, void);
         DECL_STATIC_LINK(AddressBookSourceDialog, OnComboGetFocus, ComboBox*);

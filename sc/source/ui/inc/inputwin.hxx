@@ -227,7 +227,7 @@ private:
     VclPtr<ScrollBar>       aScrollBar;
     long            nVertOffset;
     DECL_LINK_TYPED( ClickHdl, Button*, void );
-    DECL_LINK( Impl_ScrollHdl, void* );
+    DECL_LINK_TYPED( Impl_ScrollHdl, ScrollBar*, void );
 
 };
 

@@ -311,13 +311,13 @@ private:
 
     SVT_DLLPRIVATE long            ImpGetDataRowHeight() const;
     SVT_DLLPRIVATE Rectangle       ImplFieldRectPixel( long nRow, sal_uInt16 nColId ) const;
-    SVT_DLLPRIVATE sal_uInt16          FrozenColCount() const;
+    SVT_DLLPRIVATE sal_uInt16      FrozenColCount() const;
 
     SVT_DLLPRIVATE void            ColumnInserted( sal_uInt16 nPos );
 
-    DECL_DLLPRIVATE_LINK(       ScrollHdl, ScrollBar * );
-    DECL_DLLPRIVATE_LINK(       EndScrollHdl, void * );
-    DECL_DLLPRIVATE_LINK_TYPED(    StartDragHdl, HeaderBar *, void );
+    DECL_DLLPRIVATE_LINK_TYPED(    ScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK_TYPED(    EndScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK_TYPED(    StartDragHdl, HeaderBar*, void );
 
     SVT_DLLPRIVATE long            GetFrozenWidth() const;
 
