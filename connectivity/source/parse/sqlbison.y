@@ -225,7 +225,7 @@ using namespace connectivity;
 %type <pParseNode> cast_operand cast_target factor datetime_value_exp /*interval_value_exp*/ datetime_term datetime_factor
 %type <pParseNode> datetime_primary datetime_value_fct time_zone time_zone_specifier /*interval_term*/ interval_qualifier
 %type <pParseNode> start_field non_second_datetime_field end_field single_datetime_field extract_field datetime_field time_zone_field
-%type <pParseNode> extract_source char_length_exp octet_length_exp bit_length_exp select_sublist string_value_exp
+%type <pParseNode> char_length_exp octet_length_exp bit_length_exp select_sublist string_value_exp
 %type <pParseNode> char_value_exp concatenation char_factor char_primary string_value_fct char_substring_fct fold
 %type <pParseNode> form_conversion char_translation trim_fct trim_operands trim_spec bit_value_fct bit_substring_fct op_column_commalist
 %type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source
@@ -1763,18 +1763,6 @@ time_zone_field:
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 		}
-	;
-extract_source:
-		datetime_value_exp
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-		}
-/*      | interval_value_exp
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-		} */
 	;
 extract_exp:
 		SQL_TOKEN_EXTRACT '(' extract_field SQL_TOKEN_FROM value_exp ')'
