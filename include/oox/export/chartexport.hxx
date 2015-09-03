@@ -64,18 +64,25 @@ namespace com { namespace sun { namespace star {
 
 namespace oox { namespace drawingml {
 
-const sal_Int32  AXIS_PRIMARY_X = 1;
-const sal_Int32  AXIS_PRIMARY_Y = 2;
-const sal_Int32  AXIS_PRIMARY_Z = 3;
-const sal_Int32  AXIS_SECONDARY_X = 4;
-const sal_Int32  AXIS_SECONDARY_Y = 5;
+enum AxesType
+{
+    AXIS_PRIMARY_X = 1,
+    AXIS_PRIMARY_Y = 2,
+    AXIS_PRIMARY_Z = 3,
+    AXIS_SECONDARY_X = 4,
+    AXIS_SECONDARY_Y = 5
+};
 
 struct AxisIdPair{
-    sal_Int32 nAxisType;
+    AxesType nAxisType;
     sal_Int32 nAxisId;
     sal_Int32 nCrossAx;
 
-    AxisIdPair( sal_Int32 nType, sal_Int32 nId, sal_Int32 nAx ): nAxisType( nType ),nAxisId( nId ),nCrossAx( nAx ) {}
+    AxisIdPair(AxesType nType, sal_Int32 nId, sal_Int32 nAx)
+        : nAxisType(nType)
+        , nAxisId(nId)
+        , nCrossAx(nAx)
+    {}
 };
 
 class OOX_DLLPUBLIC ChartExport : public DrawingML {
@@ -145,14 +152,14 @@ private:
     void exportHiLowLines();
     void exportUpDownBars(css::uno::Reference< css::chart2::XChartType > xChartType );
 
-    void exportAllSeries(css::uno::Reference<css::chart2::XChartType> xChartType, sal_Int32& nAttachedAxis);
+    void exportAllSeries(css::uno::Reference<css::chart2::XChartType> xChartType, AxesType& rAttachedAxis);
     void exportSeries(css::uno::Reference< css::chart2::XChartType > xChartType,
-            css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq, sal_Int32& nAttachedAxis );
+            css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq, AxesType& rAttachedAxis );
     void exportCandleStickSeries(
         const css::uno::Sequence<
             css::uno::Reference<
                 css::chart2::XDataSeries > > & aSeriesSeq,
-        bool bJapaneseCandleSticks, sal_Int32& nAttachedAxis );
+        bool bJapaneseCandleSticks, AxesType& rAttachedAxis );
     void exportSeriesText(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq );
     void exportSeriesCategory(
@@ -186,7 +193,7 @@ private:
         sal_Int32 nAxisType,
         const char* sAxisPos,
         const AxisIdPair& rAxisIdPair );
-    void exportAxesId( sal_Int32 nAttachedAxis );
+    void exportAxesId(AxesType nAttachedAxis);
     void exportView3D();
     bool isDeep3dChart();
 

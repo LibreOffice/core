@@ -119,7 +119,7 @@ namespace oox { namespace drawingml {
 
 namespace {
 
-sal_Int32 translateFromChart2AxisIndexToOox(sal_Int32 nIndex)
+AxesType translateFromChart2AxisIndexToOox(sal_Int32 nIndex)
 {
     assert(nIndex == 0 || nIndex == 1);
     if (nIndex == 1)
@@ -1533,7 +1533,7 @@ void ChartExport::exportAreaChart( Reference< chart2::XChartType > xChartType )
             FSEND );
 
     exportGrouping( );
-    sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
     exportAllSeries( xChartType, nAttachedAxis );
     exportAxesId( nAttachedAxis );
 
@@ -1566,7 +1566,7 @@ void ChartExport::exportBarChart( Reference< chart2::XChartType > xChartType )
             XML_val, varyColors,
             FSEND );
 
-    sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
     exportAllSeries( xChartType, nAttachedAxis );
 
     Reference< XPropertySet > xTypeProp( xChartType, uno::UNO_QUERY );
@@ -1642,7 +1642,7 @@ void ChartExport::exportBubbleChart( Reference< chart2::XChartType > xChartType 
             XML_val, varyColors,
             FSEND );
 
-    sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
     exportAllSeries( xChartType, nAttachedAxis );
 
     pFS->singleElement(FSNS(XML_c, XML_bubble3D),
@@ -1660,7 +1660,7 @@ void ChartExport::exportDoughnutChart( Reference< chart2::XChartType > xChartTyp
     pFS->startElement( FSNS( XML_c, XML_doughnutChart ),
             FSEND );
 
-    sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
     exportAllSeries( xChartType, nAttachedAxis );
     // firstSliceAng
     exportFirstSliceAng( );
@@ -1734,7 +1734,7 @@ void ChartExport::exportLineChart( Reference< chart2::XChartType > xChartType )
 
         exportGrouping( );
         // TODO: show marker symbol in series?
-        sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+        AxesType nAttachedAxis = AXIS_PRIMARY_Y;
         exportSeries( xChartType, *itr, nAttachedAxis );
 
         // show marker?
@@ -1779,7 +1779,7 @@ void ChartExport::exportPieChart( Reference< chart2::XChartType > xChartType )
             XML_val, varyColors,
             FSEND );
 
-    sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
     exportAllSeries( xChartType, nAttachedAxis );
 
     if( !mbIs3DChart )
@@ -1807,7 +1807,7 @@ void ChartExport::exportRadarChart( Reference< chart2::XChartType > xChartType)
     pFS->singleElement( FSNS( XML_c, XML_radarStyle ),
             XML_val, radarStyle,
             FSEND );
-    sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
     exportAllSeries( xChartType, nAttachedAxis );
     exportAxesId( nAttachedAxis );
 
@@ -1848,7 +1848,7 @@ void ChartExport::exportScatterChart( Reference< chart2::XChartType > xChartType
                 FSEND );
 
         // FIXME: should export xVal and yVal
-        sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+        AxesType nAttachedAxis = AXIS_PRIMARY_Y;
         exportSeries( xChartType, *itr, nAttachedAxis );
         exportAxesId( nAttachedAxis );
 
@@ -1862,7 +1862,7 @@ void ChartExport::exportStockChart( Reference< chart2::XChartType > xChartType )
     pFS->startElement( FSNS( XML_c, XML_stockChart ),
             FSEND );
 
-    sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
 
     bool bJapaneseCandleSticks = false;
     Reference< beans::XPropertySet > xCTProp( xChartType, uno::UNO_QUERY );
@@ -1961,14 +1961,14 @@ void ChartExport::exportSurfaceChart( Reference< chart2::XChartType > xChartType
         nTypeId = XML_surface3DChart;
     pFS->startElement( FSNS( XML_c, nTypeId ),
             FSEND );
-    sal_Int32 nAttachedAxis = AXIS_PRIMARY_Y;
+    AxesType nAttachedAxis = AXIS_PRIMARY_Y;
     exportAllSeries( xChartType, nAttachedAxis );
     exportAxesId( nAttachedAxis );
 
     pFS->endElement( FSNS( XML_c, nTypeId ) );
 }
 
-void ChartExport::exportAllSeries(Reference<chart2::XChartType> xChartType, sal_Int32& rAttachedAxis)
+void ChartExport::exportAllSeries(Reference<chart2::XChartType> xChartType, AxesType& rAttachedAxis)
 {
     Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
     if( ! xDSCnt.is())
@@ -1980,7 +1980,7 @@ void ChartExport::exportAllSeries(Reference<chart2::XChartType> xChartType, sal_
 }
 
 void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
-        Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq, sal_Int32& rAttachedAxis )
+        Sequence<Reference<chart2::XDataSeries> >& rSeriesSeq, AxesType& rAttachedAxis )
 {
     OUString aLabelRole = xChartType->getRoleOfSequenceForSeriesLabel();
     OUString aChartType( xChartType->getChartType());
@@ -2181,7 +2181,7 @@ void ChartExport::exportSeries( Reference<chart2::XChartType> xChartType,
 void ChartExport::exportCandleStickSeries(
     const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
     bool /*bJapaneseCandleSticks*/,
-    sal_Int32& rAttachedAxis )
+    AxesType& rAttachedAxis )
 {
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
     {
@@ -2566,6 +2566,11 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
                 nAxisType = XML_dateAx;
             // FIXME: axPos, need to check axis direction
             sAxPos = "b";
+            break;
+        }
+        case AXIS_SECONDARY_X:
+        {
+            //TODO: suspicously absent
             break;
         }
         case AXIS_SECONDARY_Y:
@@ -3179,7 +3184,7 @@ void ChartExport::exportDataPoints(
     }
 }
 
-void ChartExport::exportAxesId( sal_Int32 nAttachedAxis )
+void ChartExport::exportAxesId(AxesType nAttachedAxis)
 {
     sal_Int32 nAxisIdx = lcl_generateRandomValue();
     sal_Int32 nAxisIdy = lcl_generateRandomValue();
