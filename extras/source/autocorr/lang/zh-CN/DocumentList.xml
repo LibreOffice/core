@@ -935,13 +935,17 @@
   <block-list:block block-list:abbreviated-name=":二重积分:" block-list:name="∬"/>
   <block-list:block block-list:abbreviated-name=":云:" block-list:name="☁"/>
   <block-list:block block-list:abbreviated-name=":交集:" block-list:name="∩"/>
+  <block-list:block block-list:abbreviated-name=":人马座:" block-list:name="♐"/>
   <block-list:block block-list:abbreviated-name=":体积积分:" block-list:name="∰"/>
+  <block-list:block block-list:abbreviated-name=":冥王星:" block-list:name="♇"/>
   <block-list:block block-list:abbreviated-name=":分:" block-list:name="¢"/>
   <block-list:block block-list:abbreviated-name=":包含:" block-list:name="∋"/>
   <block-list:block block-list:abbreviated-name=":包含(小):" block-list:name="∍"/>
   <block-list:block block-list:abbreviated-name=":千分号:" block-list:name="‰"/>
   <block-list:block block-list:abbreviated-name=":叉号:" block-list:name="☓"/>
   <block-list:block block-list:abbreviated-name=":双上标符:" block-list:name="″"/>
+  <block-list:block block-list:abbreviated-name=":双子座:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":双鱼座:" block-list:name="♓"/>
   <block-list:block block-list:abbreviated-name=":右3:" block-list:name="☛"/>
   <block-list:block block-list:abbreviated-name=":右:" block-list:name="☞"/>
   <block-list:block block-list:abbreviated-name=":右三角:" block-list:name="⊿"/>
@@ -951,12 +955,17 @@
   <block-list:block block-list:abbreviated-name=":四次方根:" block-list:name="∜"/>
   <block-list:block block-list:abbreviated-name=":围道积分:" block-list:name="∮"/>
   <block-list:block block-list:abbreviated-name=":圆点:" block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name=":土星:" block-list:name="♄"/>
   <block-list:block block-list:abbreviated-name=":地球:" block-list:name="♁"/>
   <block-list:block block-list:abbreviated-name=":基点:" block-list:name="‱"/>
   <block-list:block block-list:abbreviated-name=":墨丘利的节杖:" block-list:name="☤"/>
+  <block-list:block block-list:abbreviated-name=":处女座:" block-list:name="♍"/>
   <block-list:block block-list:abbreviated-name=":复选框2:" block-list:name="☑"/>
   <block-list:block block-list:abbreviated-name=":复选框3:" block-list:name="☒"/>
   <block-list:block block-list:abbreviated-name=":复选框:" block-list:name="☐"/>
+  <block-list:block block-list:abbreviated-name=":天王星:" block-list:name="♅"/>
+  <block-list:block block-list:abbreviated-name=":天秤座:" block-list:name="♎"/>
+  <block-list:block block-list:abbreviated-name=":天蝎星座:" block-list:name="♏"/>
   <block-list:block block-list:abbreviated-name=":太初之母:" block-list:name="☬"/>
   <block-list:block block-list:abbreviated-name=":太阳2:" block-list:name="☼"/>
   <block-list:block block-list:abbreviated-name=":太阳:" block-list:name="☉"/>
@@ -980,6 +989,7 @@
   <block-list:block block-list:abbreviated-name=":属于(小):" block-list:name="∊"/>
   <block-list:block block-list:abbreviated-name=":左3:" block-list:name="☚"/>
   <block-list:block block-list:abbreviated-name=":左:" block-list:name="☜"/>
+  <block-list:block block-list:abbreviated-name=":巨蟹座:" block-list:name="♋"/>
   <block-list:block block-list:abbreviated-name=":平方根:" block-list:name="√"/>
   <block-list:block block-list:abbreviated-name=":平行:" block-list:name="∥"/>
   <block-list:block block-list:abbreviated-name=":并集:" block-list:name="∪"/>
@@ -987,6 +997,7 @@
   <block-list:block block-list:abbreviated-name=":彗星:" block-list:name="☄"/>
   <block-list:block block-list:abbreviated-name=":或:" block-list:name="∨"/>
   <block-list:block block-list:abbreviated-name=":手表:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":摩羯座:" block-list:name="♑"/>
   <block-list:block block-list:abbreviated-name=":放射性:" block-list:name="☢"/>
   <block-list:block block-list:abbreviated-name=":无穷大:" block-list:name="∞"/>
   <block-list:block block-list:abbreviated-name=":日元:" block-list:name="¥"/>
@@ -999,6 +1010,7 @@
   <block-list:block block-list:abbreviated-name=":木星:" block-list:name="♃"/>
   <block-list:block block-list:abbreviated-name=":梯形:" block-list:name="⏢"/>
   <block-list:block block-list:abbreviated-name=":水星:" block-list:name="☿"/>
+  <block-list:block block-list:abbreviated-name=":水瓶座:" block-list:name="♒"/>
   <block-list:block block-list:abbreviated-name=":求和:" block-list:name="∑"/>
   <block-list:block block-list:abbreviated-name=":沙漏2:" block-list:name="⏳"/>
   <block-list:block block-list:abbreviated-name=":沙漏:" block-list:name="⌛"/>
@@ -1008,11 +1020,20 @@
   <block-list:block block-list:abbreviated-name=":泰铢:" block-list:name="฿"/>
   <block-list:block block-list:abbreviated-name=":洛林十字架:" block-list:name="☨"/>
   <block-list:block block-list:abbreviated-name=":测量角:" block-list:name="∡"/>
+  <block-list:block block-list:abbreviated-name=":海王星:" block-list:name="♆"/>
   <block-list:block block-list:abbreviated-name=":版权:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":狮子座:" block-list:name="♌"/>
   <block-list:block block-list:abbreviated-name=":生化危害:" block-list:name="☣"/>
   <block-list:block block-list:abbreviated-name=":电话2:" block-list:name="☏"/>
   <block-list:block block-list:abbreviated-name=":电话:" block-list:name="☎"/>
   <block-list:block block-list:abbreviated-name=":男:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":白方兵:" block-list:name="♙"/>
+  <block-list:block block-list:abbreviated-name=":白方国王:" block-list:name="♔"/>
+  <block-list:block block-list:abbreviated-name=":白方皇后:" block-list:name="♕"/>
+  <block-list:block block-list:abbreviated-name=":白方象:" block-list:name="♗"/>
+  <block-list:block block-list:abbreviated-name=":白方车:" block-list:name="♖"/>
+  <block-list:block block-list:abbreviated-name=":白方马:" block-list:name="♘"/>
+  <block-list:block block-list:abbreviated-name=":白羊座:" block-list:name="♈"/>
   <block-list:block block-list:abbreviated-name=":皱眉:" block-list:name="☹"/>
   <block-list:block block-list:abbreviated-name=":短剑2:" block-list:name="‡"/>
   <block-list:block block-list:abbreviated-name=":短剑:" block-list:name="†"/>
@@ -1037,6 +1058,7 @@
   <block-list:block block-list:abbreviated-name=":角:" block-list:name="∠"/>
   <block-list:block block-list:abbreviated-name=":证毕:" block-list:name="∎"/>
   <block-list:block block-list:abbreviated-name=":超集:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":金牛座:" block-list:name="♉"/>
   <block-list:block block-list:abbreviated-name=":锤子和镰刀:" block-list:name="☭"/>
   <block-list:block block-list:abbreviated-name=":键盘:" block-list:name="⌨"/>
   <block-list:block block-list:abbreviated-name=":闪电:" block-list:name="☇"/>
@@ -1050,4 +1072,11 @@
   <block-list:block block-list:abbreviated-name=":非子集:" block-list:name="⊄"/>
   <block-list:block block-list:abbreviated-name=":非超集:" block-list:name="⊅"/>
   <block-list:block block-list:abbreviated-name=":风暴:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":黑方兵:" block-list:name="♟"/>
+  <block-list:block block-list:abbreviated-name=":黑方国王:" block-list:name="♚"/>
+  <block-list:block block-list:abbreviated-name=":黑方皇后:" block-list:name="♛"/>
+  <block-list:block block-list:abbreviated-name=":黑方象:" block-list:name="♝"/>
+  <block-list:block block-list:abbreviated-name=":黑方车:" block-list:name="♜"/>
+  <block-list:block block-list:abbreviated-name=":黑方马:" block-list:name="♞"/>
+  <block-list:block block-list:abbreviated-name=":黑桃:" block-list:name="♠"/>
 </block-list:block-list>
