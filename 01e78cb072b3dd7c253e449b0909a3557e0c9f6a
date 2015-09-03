@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_0181e94a",
+        "filename": "ucb/source/ucp/webdav-neon/DAVResourceAccess.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-09-03T12:10:22Z",
+      "side": 1,
+      "message": "NeonUri::unescape must apparently only be used on individual parts of a URL (e.g., a path segment), not the whole URI, as it would erroneously decode \u003chttp://example.com/foo%2Fbar\u003e to \u003chttp://example.com/foo/bar\u003e",
+      "revId": "01e78cb072b3dd7c253e449b0909a3557e0c9f6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
