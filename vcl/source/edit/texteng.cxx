@@ -2210,8 +2210,6 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
 
     vcl::Font aFont;
 
-    bool bCalcPortion = true;
-
     while ( nIndex < pNode->GetText().getLength() )
     {
         bool bEOL = false;
@@ -2255,8 +2253,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
             else
             {
 
-                if ( bCalcPortion || !pPortion->HasValidSize() )
-                    pPortion->GetWidth() = CalcTextWidth( nPara, nTmpPos, pPortion->GetLen() );
+                pPortion->GetWidth() = CalcTextWidth( nPara, nTmpPos, pPortion->GetLen() );
                 nTmpWidth += pPortion->GetWidth();
 
                 pPortion->SetRightToLeft( ImpGetRightToLeft( nPara, nTmpPos+1 ) );
@@ -2361,9 +2358,8 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
                             ( ( nEnd-nInvalidDiff ) == aSaveLine.GetEnd() ) )
                     {
                         pLine->SetValid();
-                        if ( bCalcPortion && bQuickFormat )
+                        if ( bQuickFormat )
                         {
-                            bCalcPortion = false;
                             pTEParaPortion->CorrectValuesBehindLastFormattedLine( nLine );
                             break;
                         }
@@ -2376,7 +2372,6 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
                     // the text width does not have to be recalculated.
                     if ( nEnd == ( aSaveLine.GetEnd() + nInvalidDiff ) )
                     {
-                        bCalcPortion = false;
                         pTEParaPortion->CorrectValuesBehindLastFormattedLine( nLine );
                         break;
                     }
