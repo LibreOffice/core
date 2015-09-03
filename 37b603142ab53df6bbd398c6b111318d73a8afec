@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_01ec49c6",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2580,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-03T18:03:08Z",
+      "side": 1,
+      "message": "That is wrong. The axis type needs to be calculated similar to the primary x axis. For MSO the difference between a primary and a secondary x axis is just the position of the axis. So the only difference is the sAxPos\u003d\"b\" vs sAxPos\u003d\"t\".",
+      "revId": "37b603142ab53df6bbd398c6b111318d73a8afec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_61d1c5fb",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2684,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-03T18:03:08Z",
+      "side": 1,
+      "message": "I need to check that it works correctly with this.",
+      "revId": "37b603142ab53df6bbd398c6b111318d73a8afec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_41ce415b",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3212,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-03T18:03:08Z",
+      "side": 1,
+      "message": "I don\u0027t understand why you did this change.",
+      "revId": "37b603142ab53df6bbd398c6b111318d73a8afec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
