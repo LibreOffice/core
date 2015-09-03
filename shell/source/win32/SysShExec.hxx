@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_WIN32_SYSSHEXEC_HXX
 #define INCLUDED_SHELL_SOURCE_WIN32_SYSSHEXEC_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -39,7 +39,7 @@ protected:
 
 class CSysShExec :
     public CSysShExecBase,
-    public  cppu::WeakComponentImplHelper2<
+    public  cppu::WeakComponentImplHelper<
             com::sun::star::system::XSystemShellExecute,
             com::sun::star::lang::XServiceInfo >
 {

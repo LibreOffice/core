@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILSUPPL_HXX
 #define INCLUDED_SHELL_SOURCE_CMDMAIL_CMDMAILSUPPL_HXX
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -35,7 +35,7 @@
 
 
 class CmdMailSuppl :
-    public  cppu::WeakImplHelper3<
+    public  cppu::WeakImplHelper<
         com::sun::star::system::XSimpleMailClientSupplier,
         com::sun::star::system::XSimpleMailClient,
         com::sun::star::lang::XServiceInfo >

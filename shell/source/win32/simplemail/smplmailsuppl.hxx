@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILSUPPL_HXX
 #define INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILSUPPL_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
@@ -36,7 +36,7 @@ protected:
 
 class CSmplMailSuppl :
     public CSmplMailSupplBase,
-    public  cppu::WeakComponentImplHelper2<
+    public  cppu::WeakComponentImplHelper<
             com::sun::star::system::XSimpleMailClientSupplier,
             com::sun::star::lang::XServiceInfo >
 {

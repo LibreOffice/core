@@ -23,13 +23,13 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/string.hxx>
 
 namespace uno = css::uno ;
 namespace lang = css::lang ;
 
-class WinInetBackend : public ::cppu::WeakImplHelper2 <
+class WinInetBackend : public ::cppu::WeakImplHelper <
         css::beans::XPropertySet,
         lang::XServiceInfo > {
 
