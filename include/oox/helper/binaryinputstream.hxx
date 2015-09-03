@@ -217,6 +217,9 @@ public:
     void         copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes = SAL_MAX_INT64, sal_Int32 nAtomSize = 1 );
 
 protected:
+    BinaryInputStream( const BinaryInputStream& ) SAL_DELETED_FUNCTION;
+    BinaryInputStream& operator=( const BinaryInputStream& ) SAL_DELETED_FUNCTION;
+
     /** This dummy default c'tor will never call the c'tor of the virtual base
         class BinaryStreamBase as this class cannot be instantiated directly. */
     BinaryInputStream() : BinaryStreamBase( false ) {}

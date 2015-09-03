@@ -83,6 +83,9 @@ public:
     void writeUnicodeArray( const OUString& rString, bool bAllowNulChars = false );
 
 protected:
+    BinaryOutputStream( const BinaryOutputStream& ) SAL_DELETED_FUNCTION;
+    BinaryOutputStream& operator=( const BinaryOutputStream& ) SAL_DELETED_FUNCTION;
+
     /** This dummy default c'tor will never call the c'tor of the virtual base
         class BinaryStreamBase as this class cannot be instantiated directly. */
     BinaryOutputStream() : BinaryStreamBase( false ) {}
