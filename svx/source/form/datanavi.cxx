@@ -1375,7 +1375,7 @@ namespace svxform
         Link<MenuButton *, void> aLink1 = LINK( this, DataNavigatorWindow, MenuSelectHdl );
         m_pModelBtn->SetSelectHdl( aLink1 );
         m_pInstanceBtn->SetSelectHdl( aLink1 );
-        Link<> aLink2 = LINK( this, DataNavigatorWindow, MenuActivateHdl );
+        Link<MenuButton*,void> aLink2 = LINK( this, DataNavigatorWindow, MenuActivateHdl );
         m_pModelBtn->SetActivateHdl( aLink2 );
         m_pInstanceBtn->SetActivateHdl( aLink2 );
         m_pTabCtrl->SetActivatePageHdl( LINK( this, DataNavigatorWindow, ActivatePageHdl ) );
@@ -1774,7 +1774,7 @@ namespace svxform
         return m_pTabCtrl->GetPagePos(nId) >= 3;
     }
 
-    IMPL_LINK( DataNavigatorWindow, MenuActivateHdl, MenuButton *, pBtn )
+    IMPL_LINK_TYPED( DataNavigatorWindow, MenuActivateHdl, MenuButton *, pBtn, void )
     {
         Menu* pMenu = pBtn->GetPopupMenu();
 
@@ -1796,7 +1796,6 @@ namespace svxform
         {
             SAL_WARN( "svx.form", "DataNavigatorWindow::MenuActivateHdl(): wrong button" );
         }
-        return 0;
     }
 
     IMPL_LINK_NOARG_TYPED(DataNavigatorWindow, ActivatePageHdl, TabControl*, void)

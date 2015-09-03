@@ -41,8 +41,8 @@ private:
     PopupMenu*      mpMenu;
     sal_uInt16      mnCurItemId;
     sal_uInt16      mnMenuMode;
-    Link<>          maActivateHdl;
-    Link<MenuButton *, void> maSelectHdl;
+    Link<MenuButton*,void> maActivateHdl;
+    Link<MenuButton*,void> maSelectHdl;
 
     SAL_DLLPRIVATE void    ImplInitMenuButtonData();
     DECL_DLLPRIVATE_LINK_TYPED( ImplMenuTimeoutHdl, Timer*, void );
@@ -75,7 +75,7 @@ public:
     sal_uInt16      GetCurItemId() const { return mnCurItemId; }
     OString         GetCurItemIdent() const;
 
-    void            SetActivateHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
+    void            SetActivateHdl( const Link<MenuButton *, void>& rLink ) { maActivateHdl = rLink; }
     void            SetSelectHdl( const Link<MenuButton *, void>& rLink ) { maSelectHdl = rLink; }
 };
 

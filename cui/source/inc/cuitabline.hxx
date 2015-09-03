@@ -174,7 +174,7 @@ private:
 
     // handler for gallery popup menu button + size
     DECL_LINK_TYPED( GraphicHdl_Impl, MenuButton *, void );
-    DECL_LINK( MenuCreateHdl_Impl, MenuButton * );
+    DECL_LINK_TYPED( MenuCreateHdl_Impl, MenuButton *, void );
     DECL_LINK( SizeHdl_Impl, MetricField * );
     DECL_LINK_TYPED( RatioHdl_Impl, Button*, void );
 
