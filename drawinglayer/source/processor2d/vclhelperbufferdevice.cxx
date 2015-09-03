@@ -27,6 +27,7 @@
 #include <vcl/lazydelete.hxx>
 #include <vcl/dibtools.hxx>
 
+#include <vcl/opengl/OpenGLWrapper.hxx>
 
 // buffered VDev usage
 
@@ -188,7 +189,12 @@ namespace
         maFreeBuffers.push_back(&rDevice);
         SAL_WARN_IF(maFreeBuffers.size() > 1000, "drawinglayer", "excessive cached buffers, "
             << maFreeBuffers.size() << " entries!");
-        Start();
+
+        if (OpenGLWrapper::isVCLOpenGLEnabled())
+            Invoke();
+        else
+            Start();
+
     }
 
     void VDevBuffer::Invoke()
