@@ -86,8 +86,8 @@ class StatusBarManager : public ::cppu::WeakImplHelper<
         void MouseMove( const MouseEvent& rMEvt );
         void MouseButtonDown( const MouseEvent& rMEvt );
         void MouseButtonUp( const MouseEvent& rMEvt );
-        DECL_LINK(Click, void *);
-        DECL_LINK(DoubleClick, void *);
+        DECL_LINK_TYPED(Click, StatusBar*, void);
+        DECL_LINK_TYPED(DoubleClick, StatusBar*, void);
 
         void RemoveControllers();
         OUString RetrieveLabelFromCommand( const OUString& aCmdURL );
