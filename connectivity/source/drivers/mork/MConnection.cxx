@@ -142,7 +142,9 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     if (!m_pBook->open(strPath.getStr()))
     {
         SAL_WARN("connectivity.mork", "Can not parse abook mork file: " << strPath);
-        throwGenericSQLException( STR_COULD_NOT_LOAD_FILE, *this );
+        const OUString sError( getResources().getResourceStringWithSubstitution(
+            STR_COULD_NOT_LOAD_FILE, "$filename$", abook));
+        ::dbtools::throwGenericSQLException( sError, *this );
     }
 
     // read history only in production
@@ -152,7 +154,9 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         if (!m_pHistory->open(strPath.getStr()))
         {
             SAL_WARN("connectivity.mork", "Can not parse history mork file: " << strPath);
-            throwGenericSQLException( STR_COULD_NOT_LOAD_FILE, *this );
+            const OUString sError( getResources().getResourceStringWithSubstitution(
+                STR_COULD_NOT_LOAD_FILE, "$filename$", history));
+            ::dbtools::throwGenericSQLException( sError, *this );
         }
     }
 
