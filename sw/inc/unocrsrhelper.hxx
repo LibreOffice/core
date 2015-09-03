@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_INC_UNOCRSRHELPER_HXX
 #define INCLUDED_SW_INC_UNOCRSRHELPER_HXX
 
-#include <boost/ptr_container/ptr_map.hpp>
-
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
@@ -28,6 +26,8 @@
 #include <swtypes.hxx>
 #include <flyenum.hxx>
 #include <pam.hxx>
+
+#include <map>
 
 class SfxItemSet;
 class SfxItemPropertySet;
@@ -68,8 +68,10 @@ namespace SwUnoCursorHelper
 {
     class SwAnyMapHelper
     {
+        private:
             //  keep Any's mapped by (WhichId << 16 ) + (MemberId)
-            boost::ptr_map<sal_uInt32,com::sun::star::uno::Any> maMap;
+            std::map<sal_uInt32, com::sun::star::uno::Any> m_Map;
+
         public:
             void    SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any& rAny );
             bool    FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any*& pAny );

@@ -1402,21 +1402,21 @@ void makeTableCellRedline( SwTableBox& rTableBox,
 void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rAny )
 {
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
-    auto aIt = maMap.find( nKey );
-    if( aIt != maMap.end() )
-        *(aIt->second) = rAny;
+    auto aIt = m_Map.find( nKey );
+    if (aIt != m_Map.end())
+        aIt->second = rAny;
     else
-        maMap.insert( nKey, new uno::Any(rAny) );
+        m_Map.insert(std::make_pair(nKey, rAny));
 }
 
 bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& pAny )
 {
     bool bRet = false;
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
-    auto aIt = maMap.find( nKey );
-    if( aIt != maMap.end() )
+    auto aIt = m_Map.find( nKey );
+    if (aIt != m_Map.end())
     {
-        pAny = aIt->second;
+        pAny = & aIt->second;
         bRet = true;
     }
     return bRet;
