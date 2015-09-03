@@ -32,6 +32,8 @@ AVAILABLE TARGETS
        unitcheck        run unit tests
        slowcheck        run slow unit tests
        subsequentcheck  run system tests (requires full installation)
+       stagingcheck     run (unstable/failing) tests from staging area
+                        (requires full installation)
        perfcheck        run performance/callgrind unit tests
        check            run unit tests and if in toplevel subsequentcheck
        clean            remove all generated files

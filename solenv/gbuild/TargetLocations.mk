@@ -119,6 +119,7 @@ gb_Module_get_l10n_target = $(WORKDIR)/Module/l10n/$(1)
 gb_Module_get_check_target = $(WORKDIR)/Module/check/$(1)
 gb_Module_get_slowcheck_target = $(WORKDIR)/Module/slowcheck/$(1)
 gb_Module_get_subsequentcheck_target = $(WORKDIR)/Module/subsequentcheck/$(1)
+gb_Module_get_stagingcheck_target = $(WORKDIR)/Module/stagingcheck/$(1)
 gb_Module_get_perfcheck_target = $(WORKDIR)/Module/perfcheck/$(1)
 gb_Module_get_target = $(WORKDIR)/Module/$(1)
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
