@@ -57,9 +57,9 @@ public final class DocumentProviderFactory {
 
             // initialize document providers list
             instance.providers = new IDocumentProvider[3];
-            instance.providers[0] = new LocalDocumentsDirectoryProvider();
-            instance.providers[1] = new LocalDocumentsProvider();
-            instance.providers[2] = new OwnCloudProvider(context);
+            instance.providers[0] = new LocalDocumentsDirectoryProvider(0);
+            instance.providers[1] = new LocalDocumentsProvider(1);
+            instance.providers[2] = new OwnCloudProvider(2, context);
 
             // initialize document provider names list
             instance.providerNames = new String[instance.providers.length];
@@ -80,13 +80,14 @@ public final class DocumentProviderFactory {
     }
 
     /**
-     * Retrieve the provider associated to a certain position.
+     * Retrieve the provider associated to a certain id.
      *
-     * @param position
-     * @return document provider in that position.
+     * @param id
+     * @return document provider with that id.
      */
-    public IDocumentProvider getProvider(int position) {
-        return providers[position];
+    public IDocumentProvider getProvider(int id) {
+        // as for now, id == position in providers array
+        return providers[id];
     }
 
     /**

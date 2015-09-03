@@ -29,6 +29,8 @@ import com.owncloud.android.lib.resources.files.RemoteFile;
 public class OwnCloudProvider implements IDocumentProvider,
         OnSharedPreferenceChangeListener {
 
+    private int id;
+
     private Context context;
     private OwnCloudClient client;
     private File cacheDir;
@@ -37,7 +39,8 @@ public class OwnCloudProvider implements IDocumentProvider,
     private String userName;
     private String password;
 
-    public OwnCloudProvider(Context context) {
+    public OwnCloudProvider(int id, Context context) {
+        this.id = id;
         this.context = context;
 
         // read preferences
@@ -168,5 +171,10 @@ public class OwnCloudProvider implements IDocumentProvider,
 
         if (changed)
             setupClient();
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 }
