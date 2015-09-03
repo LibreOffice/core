@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_e162f515",
+        "filename": "sc/inc/formulacell.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-03T22:32:09Z",
+      "side": 1,
+      "message": "The implementation for this method is missing.",
+      "revId": "3811ab197115eda6756fff5bad4e4b48e4f3e90b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
