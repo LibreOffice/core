@@ -58,7 +58,8 @@ static int __cdecl _vsctprintf( const _TXCHAR *format, va_list ap )
 }
 #endif
 
-#if !defined(__MINGW32__) || defined (__NO_ISOCEXT)
+/* VS 2015 and above support ISO C snprintf */
+#if (defined(__MINGW32__) && !defined (__NO_ISOCEXT)) || (defined(_MSC_VER) && (_MSC_VER < 1900))
 
 /*  This function retrieves the pointer to the last character of a buffer.
     That is the pointer to the last character of the buffer that fits
@@ -90,8 +91,6 @@ static _TCHAR *GetLastBufferChar( _TCHAR *buffer, size_t count )
     return last;
 }
 
-/* VS 2015 and above support ISO C snprintf */
-#if _MSC_VER < 1900
 
 /* Implementation of snprintf following the ISO/IEC 9899:1999 (ISO C99) standard */
 
@@ -144,7 +143,6 @@ _SNPRINTF_DLLIMPORT int __cdecl sntprintf( _TCHAR *buffer, size_t count, const _
 
     return retval;
 }
-#endif
 
 #endif
 
