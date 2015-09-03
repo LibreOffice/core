@@ -100,7 +100,6 @@ static bool ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePo
                     if ( !pFloat )
                     {
                         pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
-                        nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
                         pLastLevelFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
                         return true;
                     }
