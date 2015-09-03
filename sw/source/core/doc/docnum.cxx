@@ -1507,7 +1507,7 @@ static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
 bool SwDoc::GotoNextNum( SwPosition& rPos, bool bOverUpper,
                             sal_uInt8* pUpper, sal_uInt8* pLower  )
 {
-   return ::lcl_GotoNextPrevNum( rPos, true, bOverUpper, pUpper, pLower );
+    return ::lcl_GotoNextPrevNum( rPos, true, bOverUpper, pUpper, pLower );
 }
 
 const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
@@ -1588,7 +1588,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
 bool SwDoc::GotoPrevNum( SwPosition& rPos, bool bOverUpper,
                             sal_uInt8* pUpper, sal_uInt8* pLower  )
 {
-   return ::lcl_GotoNextPrevNum( rPos, false, bOverUpper, pUpper, pLower );
+    return ::lcl_GotoNextPrevNum( rPos, false, bOverUpper, pUpper, pLower );
 }
 
 bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )

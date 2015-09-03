@@ -241,7 +241,7 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
         if ( !bAddSpaceChanged )
             break; // everything was OK
     }
-   return true;
+    return true;
 }
 
 // CalcNewBlock() must only be called _after_ CalcLine()!

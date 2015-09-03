@@ -417,36 +417,36 @@ void RtfAttributeOutput::RawText(const OUString& rText, rtl_TextEncoding eCharSe
 
 void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, const SwFormatRuby& rRuby)
 {
-    OUString aStr( FieldString( ww::eEQ ) );
+    OUString aStr(FieldString(ww::eEQ));
     aStr += "\\* jc";
     sal_Int32 nJC = 0;
     sal_Char cDirective = 0;
-    switch ( rRuby.GetAdjustment() )
+    switch (rRuby.GetAdjustment())
     {
-        case 0:
-            nJC = 3;
-            cDirective = 'l';
-            break;
-        case 1:
-            //defaults to 0
-            break;
-        case 2:
-            nJC = 4;
-            cDirective = 'r';
-            break;
-        case 3:
-            nJC = 1;
-            cDirective = 'd';
-            break;
-        case 4:
-            nJC = 2;
-            cDirective = 'd';
-            break;
-        default:
-            OSL_ENSURE( false,"Unhandled Ruby justication code" );
-            break;
+    case 0:
+        nJC = 3;
+        cDirective = 'l';
+        break;
+    case 1:
+        //defaults to 0
+        break;
+    case 2:
+        nJC = 4;
+        cDirective = 'r';
+        break;
+    case 3:
+        nJC = 1;
+        cDirective = 'd';
+        break;
+    case 4:
+        nJC = 2;
+        cDirective = 'd';
+        break;
+    default:
+        OSL_ENSURE(false,"Unhandled Ruby justication code");
+        break;
     }
-    aStr += OUString::number( nJC );
+    aStr += OUString::number(nJC);
 
     /*
      MS needs to know the name and size of the font used in the ruby item,
@@ -456,8 +456,8 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
      defaulting to asian.
      */
     sal_uInt16 nRubyScript;
-    if( g_pBreakIt->GetBreakIter().is() )
-        nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType( rRuby.GetText(), 0);
+    if (g_pBreakIt->GetBreakIter().is())
+        nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType(rRuby.GetText(), 0);
     else
         nRubyScript = i18n::ScriptType::ASIAN;
 
@@ -465,29 +465,29 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
     const SwCharFormat* pFormat = pRubyText ? pRubyText->GetCharFormat() : 0;
     OUString sFamilyName;
     long nHeight;
-    if ( pFormat )
+    if (pFormat)
     {
-        const SvxFontItem &rFont = ItemGet< SvxFontItem >( *pFormat,
-                GetWhichOfScript(RES_CHRATR_FONT,nRubyScript) );
+        const SvxFontItem& rFont = ItemGet< SvxFontItem >(*pFormat,
+                                   GetWhichOfScript(RES_CHRATR_FONT,nRubyScript));
         sFamilyName = rFont.GetFamilyName();
 
-        const SvxFontHeightItem &rHeight = ItemGet< SvxFontHeightItem >( *pFormat,
-                GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) );
+        const SvxFontHeightItem& rHeight = ItemGet< SvxFontHeightItem >(*pFormat,
+                                           GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
         nHeight = rHeight.GetHeight();
     }
     else
     {
         /*Get defaults if no formatting on ruby text*/
 
-        const SfxItemPool *pPool = rNode.GetSwAttrSet().GetPool();
+        const SfxItemPool* pPool = rNode.GetSwAttrSet().GetPool();
         pPool = pPool ? pPool : &m_rExport.m_pDoc->GetAttrPool();
 
-        const SvxFontItem &rFont  = DefaultItemGet< SvxFontItem >( *pPool,
-                GetWhichOfScript( RES_CHRATR_FONT,nRubyScript ) );
+        const SvxFontItem& rFont  = DefaultItemGet< SvxFontItem >(*pPool,
+                                    GetWhichOfScript(RES_CHRATR_FONT,nRubyScript));
         sFamilyName = rFont.GetFamilyName();
 
-        const SvxFontHeightItem &rHeight = DefaultItemGet< SvxFontHeightItem >
-            ( *pPool, GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) );
+        const SvxFontHeightItem& rHeight = DefaultItemGet< SvxFontHeightItem >
+                                           (*pPool, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
         nHeight = rHeight.GetHeight();
     }
     nHeight = (nHeight + 5)/10;
@@ -495,39 +495,39 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
     aStr += " \\* \"Font:";
     aStr += sFamilyName;
     aStr += "\" \\* hps";
-    aStr += OUString::number( nHeight );
+    aStr += OUString::number(nHeight);
     aStr += " \\o";
-    if ( cDirective )
+    if (cDirective)
     {
         aStr += "\\a" + OUString(cDirective);
     }
     aStr += "(\\s\\up ";
 
-    if ( g_pBreakIt->GetBreakIter().is() )
-        nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType( rNode.GetText(),
-                pRubyText->GetStart() );
+    if (g_pBreakIt->GetBreakIter().is())
+        nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType(rNode.GetText(),
+                      pRubyText->GetStart());
     else
         nRubyScript = i18n::ScriptType::ASIAN;
 
     const SwAttrSet& rSet = rNode.GetSwAttrSet();
-    const SvxFontHeightItem &rHeightItem  =
+    const SvxFontHeightItem& rHeightItem  =
         static_cast< const SvxFontHeightItem& >(rSet.Get(
-                                             GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) ));
+                    GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript)));
     nHeight = (rHeightItem.GetHeight() + 10)/20-1;
     aStr += OUString::number(nHeight);
     aStr += "(";
     EndRun();
-    m_rExport.OutputField( 0, ww::eEQ, aStr, WRITEFIELD_START | WRITEFIELD_CMD_START );
+    m_rExport.OutputField(0, ww::eEQ, aStr, WRITEFIELD_START | WRITEFIELD_CMD_START);
     aStr  = rRuby.GetText();
     aStr += ")";
     aStr += ",";
-    m_rExport.OutputField( 0, ww::eEQ, aStr, 0);
+    m_rExport.OutputField(0, ww::eEQ, aStr, 0);
 }
 
 void RtfAttributeOutput::EndRuby()
 {
-    m_rExport.OutputField( 0, ww::eEQ, OUString(")"), WRITEFIELD_END | WRITEFIELD_CLOSE );
-    EndRun( );
+    m_rExport.OutputField(0, ww::eEQ, OUString(")"), WRITEFIELD_END | WRITEFIELD_CLOSE);
+    EndRun();
 }
 
 bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
@@ -1568,7 +1568,9 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* pField, ww::eField eType
             m_aRunText->append(msfilter::rtfutil::OutString(pField->ExpandField(true), m_rExport.eDefaultEncoding));
         if (bHasInstructions)
             m_aRunText->append("}}");
-    } else if (eType == ww::eEQ) {
+    }
+    else if (eType == ww::eEQ)
+    {
         if (WRITEFIELD_START & nMode)
         {
             m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_FIELD);
