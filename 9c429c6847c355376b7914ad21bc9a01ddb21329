@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_e1031575",
+        "filename": "oox/source/export/chartexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2818,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-03T18:06:12Z",
+      "side": 1,
+      "message": "This is only allowed in valAx elements.",
+      "revId": "9c429c6847c355376b7914ad21bc9a01ddb21329",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
