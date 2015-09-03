@@ -33,21 +33,20 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
 
-DLLPRE =
+.ELSE
 
-SHL1IMPLIB = i$(SHL1TARGET)
-SHL1OBJS = $(SLO)/test-setthreadname.obj
-SHL1RPATH = NONE
-SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB)
-SHL1TARGET = test-setthreadname
-SHL1VERSIONMAP = version.map
-DEF1NAME = $(SHL1TARGET)
-
-SLOFILES = $(SHL1OBJS)
+APP1OBJS = $(SLO)/test-setthreadname.obj
+APP1RPATH = NONE
+APP1STDLIBS = $(GTESTLIB) $(SALLIB)
+APP1TARGET = test-setthreadname
+APP1TEST = enabled
 
 .INCLUDE: target.mk
-.INCLUDE: _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
 
 .END

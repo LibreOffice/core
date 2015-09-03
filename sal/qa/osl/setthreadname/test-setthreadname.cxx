@@ -29,10 +29,7 @@
 #include <limits>
 
 #include "boost/noncopyable.hpp"
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include "gtest/gtest.h"
 #include "osl/thread.hxx"
 
 namespace {
@@ -61,23 +58,20 @@ void TestThread::run() {
     }
 }
 
-class Test: public CppUnit::TestFixture {
-private:
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
-
-    void test();
+class Test: public ::testing::Test {
 };
 
-void Test::test() {
+TEST_F(Test, test) {
     TestThread t;
     t.create();
     t.join();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
