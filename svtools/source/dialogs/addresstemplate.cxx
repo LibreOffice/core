@@ -786,10 +786,9 @@ void AssignmentPersistentData::ImplCommit()
     }
 
 
-    IMPL_LINK(AddressBookSourceDialog, OnFieldScroll, ScrollBar*, _pScrollBar)
+    IMPL_LINK_TYPED(AddressBookSourceDialog, OnFieldScroll, ScrollBar*, _pScrollBar, void)
     {
         implScrollFields( _pScrollBar->GetThumbPos(), true, true );
-        return 0L;
     }
 
 

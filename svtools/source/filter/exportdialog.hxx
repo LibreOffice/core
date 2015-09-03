@@ -147,7 +147,7 @@ private:
                         DECL_LINK( UpdateHdlMtfSizeX, void* );
                         DECL_LINK( UpdateHdlMtfSizeY, void* );
                         DECL_LINK( UpdateHdlNfResolution, void* );
-                        DECL_LINK( SbCompressionUpdateHdl, void* );
+                        DECL_LINK_TYPED( SbCompressionUpdateHdl, ScrollBar*, void );
 
                         DECL_LINK_TYPED( OK, Button*, void );
 

@@ -232,22 +232,20 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
     }
 }
 
-IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar )
+IMPL_LINK_TYPED( SvxIconChoiceCtrl_Impl, ScrollUpDownHdl, ScrollBar*, pScrollBar, void )
 {
     StopEntryEditing( true );
     // arrow up: delta=-1; arrow down: delta=+1
     Scroll( 0, pScrollBar->GetDelta(), true );
     bEndScrollInvalidate = true;
-    return 0;
 }
 
-IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar )
+IMPL_LINK_TYPED( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar, void )
 {
     StopEntryEditing( true );
     // arrow left: delta=-1; arrow right: delta=+1
     Scroll( pScrollBar->GetDelta(), 0, true );
     bEndScrollInvalidate = true;
-    return 0;
 }
 
 void SvxIconChoiceCtrl_Impl::FontModified()

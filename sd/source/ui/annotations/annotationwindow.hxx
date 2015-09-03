@@ -97,7 +97,7 @@ class AnnotationWindow : public FloatingWindow
     protected:
         void            SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
 
-        DECL_LINK(ScrollHdl, ScrollBar*);
+        DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
 
     public:
         AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent );

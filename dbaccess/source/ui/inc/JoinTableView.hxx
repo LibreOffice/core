@@ -127,7 +127,7 @@ namespace dbaui
         // own methods
         ScrollBar& GetHScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetHScrollBar(); }
         ScrollBar& GetVScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetVScrollBar(); }
-        DECL_LINK( ScrollHdl, ScrollBar* );
+        DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 
         void DrawConnections(vcl::RenderContext& rRenderContext, const Rectangle& rRect);
         void InvalidateConnections();

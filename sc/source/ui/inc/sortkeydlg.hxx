@@ -66,7 +66,7 @@ private:
     VclScrolledWindow& m_rScrolledWindow;
     ScrollBar&       m_rVertScroll;
 
-    DECL_LINK(ScrollHdl, ScrollBar*);
+    DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
 
     void checkAutoVScroll();
 

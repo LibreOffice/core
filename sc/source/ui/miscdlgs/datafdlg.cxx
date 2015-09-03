@@ -347,13 +347,12 @@ IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_CloseHdl, Button*, void)
     EndDialog( );
 }
 
-IMPL_LINK_NOARG(ScDataFormDlg, Impl_ScrollHdl)
+IMPL_LINK_NOARG_TYPED(ScDataFormDlg, Impl_ScrollHdl, ScrollBar*, void)
 {
     long nOffset = m_pSlider->GetThumbPos();
     nCurrentRow = nStartRow + nOffset + 1;
     SetButtonState();
     FillCtrls(nCurrentRow);
-    return 0;
 }
 
 void ScDataFormDlg::SetButtonState()

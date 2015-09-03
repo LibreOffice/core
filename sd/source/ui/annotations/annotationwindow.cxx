@@ -504,11 +504,10 @@ long AnnotationWindow::GetPostItTextHeight()
     return mpOutliner ? LogicToPixel(mpOutliner->CalcTextSize()).Height() : 0;
 }
 
-IMPL_LINK(AnnotationWindow, ScrollHdl, ScrollBar*, pScroll)
+IMPL_LINK_TYPED(AnnotationWindow, ScrollHdl, ScrollBar*, pScroll, void)
 {
     long nDiff = getView()->GetEditView().GetVisArea().Top() - pScroll->GetThumbPos();
     getView()->Scroll( 0, nDiff );
-    return 0;
 }
 
 SvxLanguageItem AnnotationWindow::GetLanguage()

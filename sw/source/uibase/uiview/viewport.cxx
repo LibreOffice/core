@@ -661,10 +661,11 @@ bool SwView::PageDownCrsr(bool bSelect)
 
 // Handler of the scrollbars
 
-IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
+IMPL_LINK_TYPED( SwView, ScrollHdl, ScrollBar *, p, void )
 {
+    SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if ( GetWrtShell().ActionPend() )
-        return 0;
+        return;
 
     if ( pScrollbar->GetType() == SCROLL_DRAG )
         m_pWrtShell->EnableSmooth( false );
@@ -728,14 +729,13 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
 
     if ( pScrollbar->GetType() == SCROLL_DRAG )
         m_pWrtShell->EnableSmooth( true );
-
-    return 0;
 }
 
 // Handler of the scrollbars
 
-IMPL_LINK( SwView, EndScrollHdl, SwScrollbar *, pScrollbar )
+IMPL_LINK_TYPED( SwView, EndScrollHdl, ScrollBar *, p, void )
 {
+    SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if ( !GetWrtShell().ActionPend() )
     {
         if(nPgNum)
@@ -753,7 +753,6 @@ IMPL_LINK( SwView, EndScrollHdl, SwScrollbar *, pScrollbar )
 
         GetViewFrame()->GetBindings().Update(FN_STAT_PAGE);
     }
-    return 0;
 }
 
 // Calculates the size of the m_aVisArea in dependency of the size of

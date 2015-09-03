@@ -92,7 +92,7 @@ private:
     VclPtr<vcl::Window> mpFiller;
     VclPtr<ScrollBar> mpVerticalScrollBar;
 
-    DECL_LINK(HandleVerticalScrollBarChange,void*);
+    DECL_LINK_TYPED(HandleVerticalScrollBarChange, ScrollBar*, void);
     bool ProcessWheelEvent(CommandEvent* pCommandEvent);
 };
 

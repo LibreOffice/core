@@ -201,12 +201,10 @@ void OJoinTableView::dispose()
     vcl::Window::dispose();
 }
 
-IMPL_LINK( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar )
+IMPL_LINK_TYPED( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar, void )
 {
     // move all windows
     ScrollPane( pScrollBar->GetDelta(), (pScrollBar == &GetHScrollBar()), false );
-
-    return 0;
 }
 
 void OJoinTableView::Resize()

@@ -1238,7 +1238,7 @@ void ExtensionBox_Impl::checkEntries()
 }
 
 
-void ExtensionBox_Impl::SetScrollHdl( const Link<>& rLink )
+void ExtensionBox_Impl::SetScrollHdl( const Link<ScrollBar*,void>& rLink )
 {
     if ( m_pScrollBar )
         m_pScrollBar->SetScrollHdl( rLink );
@@ -1258,11 +1258,9 @@ void ExtensionBox_Impl::DoScroll( long nDelta )
 }
 
 
-IMPL_LINK( ExtensionBox_Impl, ScrollHdl, ScrollBar*, pScrBar )
+IMPL_LINK_TYPED( ExtensionBox_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
 {
     DoScroll( pScrBar->GetDelta() );
-
-    return 1;
 }
 
 } //namespace dp_gui

@@ -290,9 +290,9 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE long          PhyPageUp();
     SAL_DLLPRIVATE long          PhyPageDown();
 
-    SAL_DLLPRIVATE int               _CreateScrollbar( bool bHori );
-    DECL_DLLPRIVATE_LINK( ScrollHdl, SwScrollbar * );
-    DECL_DLLPRIVATE_LINK( EndScrollHdl, SwScrollbar * );
+    SAL_DLLPRIVATE int           _CreateScrollbar( bool bHori );
+    DECL_DLLPRIVATE_LINK_TYPED(  ScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK_TYPED(  EndScrollHdl, ScrollBar*, void );
     SAL_DLLPRIVATE bool          UpdateScrollbars();
     DECL_DLLPRIVATE_LINK( WindowChildEventListener, VclSimpleEvent* );
     SAL_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );

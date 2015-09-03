@@ -193,10 +193,9 @@ void OScrollWindowHelper::Resize()
     m_aReportWindow->SetPosSizePixel(Point( 0, 0 ),aTotalOutputSize);
 }
 
-IMPL_LINK( OScrollWindowHelper, ScrollHdl, ScrollBar*, /*pScroll*/ )
+IMPL_LINK_TYPED( OScrollWindowHelper, ScrollHdl, ScrollBar*, /*pScroll*/, void )
 {
     m_aReportWindow->ScrollChildren( getThumbPos() );
-    return 0;
 }
 
 void OScrollWindowHelper::addSection(const uno::Reference< report::XSection >& _xSection

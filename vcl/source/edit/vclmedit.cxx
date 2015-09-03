@@ -93,7 +93,7 @@ protected:
     void                ImpInitScrollBars();
     void                ImpSetScrollBarRanges();
     void                ImpSetHScrollBarThumbPos();
-    DECL_LINK(          ScrollHdl, ScrollBar* );
+    DECL_LINK_TYPED(    ScrollHdl, ScrollBar*, void );
 
 public:
                 ImpVclMEdit( VclMultiLineEdit* pVclMultiLineEdit, WinBits nWinStyle );
@@ -319,7 +319,7 @@ void ImpVclMEdit::ImpSetHScrollBarThumbPos()
 
 }
 
-IMPL_LINK( ImpVclMEdit, ScrollHdl, ScrollBar*, pCurScrollBar )
+IMPL_LINK_TYPED( ImpVclMEdit, ScrollHdl, ScrollBar*, pCurScrollBar, void )
 {
     long nDiffX = 0, nDiffY = 0;
 
@@ -330,8 +330,6 @@ IMPL_LINK( ImpVclMEdit, ScrollHdl, ScrollBar*, pCurScrollBar )
 
     mpTextWindow->GetTextView()->Scroll( nDiffX, nDiffY );
     // mpTextWindow->GetTextView()->ShowCursor( false, true );
-
-    return 0;
 }
 
 void ImpVclMEdit::SetAlign( WinBits nWinStyle )

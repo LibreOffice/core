@@ -1147,10 +1147,9 @@ void ScInputBarGroup::TriggerToolboxLayout()
     }
 }
 
-IMPL_LINK_NOARG(ScInputBarGroup, Impl_ScrollHdl)
+IMPL_LINK_NOARG_TYPED(ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, void)
 {
     aMultiTextWnd->DoScroll();
-    return 0;
 }
 
 void ScInputBarGroup::TextGrabFocus()

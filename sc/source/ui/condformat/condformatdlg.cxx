@@ -410,10 +410,9 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
     return 0;
 }
 
-IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
+IMPL_LINK_NOARG_TYPED( ScCondFormatList, ScrollHdl, ScrollBar*, void )
 {
     DoScroll(mpScrollBar->GetDelta());
-    return 0;
 }
 
 // -------------------------------------------------------------------

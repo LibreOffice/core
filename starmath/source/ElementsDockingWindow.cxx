@@ -441,10 +441,9 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
     }
 }
 
-IMPL_LINK_NOARG( SmElementsControl, ScrollHdl )
+IMPL_LINK_NOARG_TYPED( SmElementsControl, ScrollHdl, ScrollBar*, void )
 {
     DoScroll(mxScroll->GetDelta());
-    return 0;
 }
 
 void SmElementsControl::DoScroll(long nDelta)

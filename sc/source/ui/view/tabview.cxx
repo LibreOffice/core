@@ -1020,17 +1020,16 @@ bool ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     return bDone;
 }
 
-IMPL_LINK_NOARG(ScTabView, EndScrollHdl)
+IMPL_LINK_NOARG_TYPED(ScTabView, EndScrollHdl, ScrollBar*, void)
 {
     if ( bDragging )
     {
         UpdateScrollBars();
         bDragging = false;
     }
-    return 0;
 }
 
-IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
+IMPL_LINK_TYPED( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
 {
     bool bHoriz = ( pScroll == aHScrollLeft.get() || pScroll == aHScrollRight.get() );
     long nViewPos;
@@ -1173,8 +1172,6 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
         else
             ScrollY( nDelta, (pScroll == aVScrollTop.get()) ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM, bUpdate );
     }
-
-    return 0;
 }
 
 void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )

@@ -581,7 +581,7 @@ IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, /*pStat*/ )
     }
 }
 
-IMPL_LINK( SmEditWindow, ScrollHdl, ScrollBar *, /*pScrollBar*/ )
+IMPL_LINK_TYPED( SmEditWindow, ScrollHdl, ScrollBar *, /*pScrollBar*/, void )
 {
     OSL_ENSURE(pEditView, "EditView missing");
     if (pEditView)
@@ -591,7 +591,6 @@ IMPL_LINK( SmEditWindow, ScrollHdl, ScrollBar *, /*pScrollBar*/ )
                                         pEditView->GetVisArea().GetSize()));
         pEditView->Invalidate();
     }
-    return 0;
 }
 
 Rectangle SmEditWindow::AdjustScrollBars()

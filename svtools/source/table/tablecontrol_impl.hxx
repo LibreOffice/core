@@ -458,7 +458,7 @@ namespace svt { namespace table
         /// invalidates the window area occupied by the given column
         void        impl_invalidateColumn( ColPos const i_column );
 
-        DECL_LINK( OnScroll, ScrollBar* );
+        DECL_LINK_TYPED( OnScroll, ScrollBar*, void );
         DECL_LINK_TYPED( OnUpdateScrollbars, void*, void );
     };
 

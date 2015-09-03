@@ -244,7 +244,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, vcl::Windo
     m_pPositionLB->SetSelectHdl(LINK(this, SvxRubyDialog, PositionHdl_Impl));
     m_pCharStyleLB->SetSelectHdl(LINK(this, SvxRubyDialog, CharStyleHdl_Impl));
 
-    Link<> aScrLk(LINK(this, SvxRubyDialog, ScrollHdl_Impl));
+    Link<ScrollBar*,void> aScrLk(LINK(this, SvxRubyDialog, ScrollHdl_Impl));
     m_pScrollSB->SetScrollHdl(aScrLk);
     m_pScrollSB->SetEndScrollHdl(aScrLk);
 
@@ -548,7 +548,7 @@ void SvxRubyDialog::GetCurrentText(OUString& rBase, OUString& rRuby)
     rRuby = aEditArr[nCurrentEdit * 2 + 1]->GetText();
 }
 
-IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
+IMPL_LINK_TYPED(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll, void)
 {
     long nPos = pScroll->GetThumbPos();
     if (GetLastPos() != nPos)
@@ -561,7 +561,6 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
     SetRubyText(nPos, *m_pLeft4ED, *m_pRight4ED);
     SetLastPos(nPos - 3);
     m_pPreviewWin->Invalidate();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxRubyDialog, ApplyHdl_Impl, Button*, void)

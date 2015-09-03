@@ -110,7 +110,7 @@ namespace rptui
         virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
     private:
-        DECL_LINK( OnScroll, ScrollBar* );
+        DECL_LINK_TYPED( OnScroll, ScrollBar*, void );
 
     private:
         /// returns the current number of conditions

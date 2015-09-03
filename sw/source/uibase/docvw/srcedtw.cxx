@@ -574,7 +574,7 @@ void SwSrcEditWindow::InitScrollBars()
 
 }
 
-IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
+IMPL_LINK_TYPED(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll, void)
 {
     if(pScroll == pVScrollbar)
     {
@@ -591,7 +591,6 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
         pScroll->SetThumbPos( pTextView->GetStartDocPos().X() );
     }
     GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle, void )

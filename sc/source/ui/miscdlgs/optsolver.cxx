@@ -727,14 +727,13 @@ IMPL_LINK_NOARG(ScOptSolverDlg, SelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, ScrollHdl)
+IMPL_LINK_NOARG_TYPED(ScOptSolverDlg, ScrollHdl, ScrollBar*, void)
 {
     ReadConditions();
     nScrollPos = m_pScrollBar->GetThumbPos();
     ShowConditions();
     if( mpEdActive )
         mpEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
-    return 0;
 }
 
 IMPL_LINK( ScOptSolverDlg, CursorUpHdl, ScCursorRefEdit*, pEdit )

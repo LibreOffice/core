@@ -403,7 +403,7 @@ protected:
     void                ImplCheckScrollBars();
     void                ImplInitScrollBars();
 
-    DECL_LINK(          ScrollBarHdl, ScrollBar* );
+    DECL_LINK_TYPED(    ScrollBarHdl, ScrollBar*, void );
     DECL_LINK(          LBWindowScrolled, void* );
     DECL_LINK(          MRUChanged, void* );
 

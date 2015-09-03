@@ -129,7 +129,7 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     MENU_COMMAND    ShowPopupMenu( const Point &rPos, const long nPos );
 
 
-    DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
+    DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 
     DECL_DLLPRIVATE_LINK_TYPED( HandleOptionsBtn, Button*, void );
     DECL_DLLPRIVATE_LINK_TYPED( HandleEnableBtn, Button*, void );
@@ -468,7 +468,7 @@ void ExtBoxWithBtns_Impl::enableButtons( bool bEnable )
 }
 
 
-IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar )
+IMPL_LINK_TYPED( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar, void )
 {
     long nDelta = pScrBar->GetDelta();
 
@@ -481,8 +481,6 @@ IMPL_LINK( ExtBoxWithBtns_Impl, ScrollHdl, ScrollBar*, pScrBar )
     m_pOptionsBtn->SetPosPixel( aNewOptPt );
     m_pRemoveBtn->SetPosPixel( aNewRemPt );
     m_pEnableBtn->SetPosPixel( aNewEnPt );
-
-    return 1;
 }
 
 

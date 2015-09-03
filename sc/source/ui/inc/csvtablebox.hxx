@@ -124,8 +124,8 @@ protected:
 
 private:
     DECL_DLLPRIVATE_LINK( CsvCmdHdl, ScCsvControl* );
-    DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar* );
-    DECL_DLLPRIVATE_LINK( ScrollEndHdl, ScrollBar* );
+    DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl, ScrollBar*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ScrollEndHdl, ScrollBar*, void );
 
     // accessibility ----------------------------------------------------------
 public:

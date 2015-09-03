@@ -60,7 +60,7 @@ class SwAddressControl_Impl : public Control
 
     bool                            m_bNoDataSet;
 
-    DECL_LINK(ScrollHdl_Impl, ScrollBar*);
+    DECL_LINK_TYPED(ScrollHdl_Impl, ScrollBar*, void);
     DECL_LINK(GotFocusHdl_Impl, Edit*);
     DECL_LINK(EditModifyHdl_Impl, Edit*);
 
@@ -102,7 +102,7 @@ SwAddressControl_Impl::SwAddressControl_Impl(vcl::Window* pParent, WinBits nBits
     m_pWindow->Show();
     m_pScrollBar->Show();
 
-    Link<> aScrollLink = LINK(this, SwAddressControl_Impl, ScrollHdl_Impl);
+    Link<ScrollBar*,void> aScrollLink = LINK(this, SwAddressControl_Impl, ScrollHdl_Impl);
     m_pScrollBar->SetScrollHdl(aScrollLink);
     m_pScrollBar->SetEndScrollHdl(aScrollLink);
     m_pScrollBar->EnableDrag();
@@ -262,12 +262,10 @@ void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
     }
 }
 
-IMPL_LINK(SwAddressControl_Impl, ScrollHdl_Impl, ScrollBar*, pScroll)
+IMPL_LINK_TYPED(SwAddressControl_Impl, ScrollHdl_Impl, ScrollBar*, pScroll, void)
 {
     long nThumb = pScroll->GetThumbPos();
     m_pWindow->SetPosPixel(Point(0, - (m_nLineHeight * nThumb)));
-
-    return 0;
 }
 
 IMPL_LINK(SwAddressControl_Impl, GotFocusHdl_Impl, Edit*, pEdit)

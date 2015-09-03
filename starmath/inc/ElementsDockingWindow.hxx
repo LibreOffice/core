@@ -121,7 +121,7 @@ public:
 
     Size GetOptimalSize() const SAL_OVERRIDE;
 
-    DECL_LINK( ScrollHdl, void* );
+    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
     void DoScroll(long nDelta);
 
     boost::signals2::signal< void ( SmElement* ) > selectedSignal;

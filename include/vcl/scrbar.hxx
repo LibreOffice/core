@@ -59,14 +59,14 @@ private:
     long            mnLineSize;
     long            mnPageSize;
     long            mnDelta;
-    sal_uInt16          mnDragDraw;
-    sal_uInt16          mnStateFlags;
+    sal_uInt16      mnDragDraw;
+    sal_uInt16      mnStateFlags;
     ScrollType      meScrollType;
     ScrollType      meDDScrollType;
     bool            mbCalcSize;
     bool            mbFullDrag;
-    Link<>          maScrollHdl;
-    Link<>          maEndScrollHdl;
+    Link<ScrollBar*,void>       maScrollHdl;
+    Link<ScrollBar*,void>       maEndScrollHdl;
 
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
     using Window::ImplInit;
@@ -133,9 +133,9 @@ public:
     long            GetDelta() const { return mnDelta; }
     ScrollType      GetType() const { return meScrollType; }
 
-    void            SetScrollHdl( const Link<>& rLink ) { maScrollHdl = rLink; }
-    void            SetEndScrollHdl( const Link<>& rLink ) { maEndScrollHdl = rLink; }
-    const Link<>&   GetEndScrollHdl() const { return maEndScrollHdl; }
+    void            SetScrollHdl( const Link<ScrollBar*,void>& rLink ) { maScrollHdl = rLink; }
+    void            SetEndScrollHdl( const Link<ScrollBar*,void>& rLink ) { maEndScrollHdl = rLink; }
+    const Link<ScrollBar*,void>&   GetEndScrollHdl() const { return maEndScrollHdl; }
 
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };

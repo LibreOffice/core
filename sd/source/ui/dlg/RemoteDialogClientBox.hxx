@@ -130,7 +130,7 @@ class ClientBox : public Control
     bool HandleCursorKey( sal_uInt16 nKeyCode );
     void DeleteRemoved();
 
-    DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar* );
+    DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl, ScrollBar*, void );
     DECL_DLLPRIVATE_LINK_TYPED( DeauthoriseHdl, Button*, void );
     //Index starts with 1.
     //Throws an com::sun::star::lang::IllegalArgumentException, when the index is invalid.

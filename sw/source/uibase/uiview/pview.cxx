@@ -1403,10 +1403,11 @@ void SwPagePreview::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
     pViewWin->Invalidate();
 }
 
-IMPL_LINK( SwPagePreview, ScrollHdl, SwScrollbar *, pScrollbar )
+IMPL_LINK_TYPED( SwPagePreview, ScrollHdl, ScrollBar *, p, void )
 {
+    SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if(!GetViewShell())
-        return 0;
+        return;
     if( !pScrollbar->IsHoriScroll() &&
         pScrollbar->GetType() == SCROLL_DRAG &&
         Help::IsQuickHelpEnabled() &&
@@ -1433,13 +1434,13 @@ IMPL_LINK( SwPagePreview, ScrollHdl, SwScrollbar *, pScrollbar )
     }
     else
         EndScrollHdl( pScrollbar );
-    return 0;
 }
 
-IMPL_LINK( SwPagePreview, EndScrollHdl, SwScrollbar *, pScrollbar )
+IMPL_LINK_TYPED( SwPagePreview, EndScrollHdl, ScrollBar *, p, void )
 {
+    SwScrollbar* pScrollbar = static_cast<SwScrollbar*>(p);
     if(!GetViewShell())
-        return 0;
+        return;
 
     // boolean to avoid unnecessary invalidation of the window.
     bool bInvalidateWin = true;
@@ -1524,7 +1525,6 @@ IMPL_LINK( SwPagePreview, EndScrollHdl, SwScrollbar *, pScrollbar )
     {
         pViewWin->Invalidate();
     }
-    return 0;
 }
 
 Point SwPagePreview::AlignToPixel(const Point &rPt) const

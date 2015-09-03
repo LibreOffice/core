@@ -1120,11 +1120,10 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlNfResolution)
     return 0;
 }
 
-IMPL_LINK_NOARG(ExportDialog, SbCompressionUpdateHdl)
+IMPL_LINK_NOARG_TYPED(ExportDialog, SbCompressionUpdateHdl, ScrollBar*, void)
 {
     mpNfCompression->SetValue( mpSbCompression->GetThumbPos() );
     updateControls();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ExportDialog, OK, Button*, void)

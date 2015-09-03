@@ -193,7 +193,7 @@ private:
     DECL_LINK_TYPED( DelBtnHdl, Button*, void );
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, void* );
-    DECL_LINK( ScrollHdl, void *);
+    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void);
     DECL_LINK( CursorUpHdl, ScCursorRefEdit* );
     DECL_LINK( CursorDownHdl, ScCursorRefEdit* );
     DECL_LINK( CondModifyHdl, void* );

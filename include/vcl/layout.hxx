@@ -527,7 +527,7 @@ public:
 protected:
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
-    DECL_LINK(ScrollBarHdl, void *);
+    DECL_LINK_TYPED(ScrollBarHdl, ScrollBar*, void);
     void InitScrollBars(const Size &rRequest);
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 private:

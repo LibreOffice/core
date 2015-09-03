@@ -163,7 +163,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     void DeleteRemoved();
 
 
-    DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar * );
+    DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 
     //Index starts with 1.
     //Throws an com::sun::star::lang::IllegalArgumentException, when the index is invalid.
@@ -188,7 +188,7 @@ public:
     Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }
     long            PointToPos( const Point& rPos );
-    void            SetScrollHdl( const Link<>& rLink );
+    void            SetScrollHdl( const Link<ScrollBar*,void>& rLink );
     void            DoScroll( long nDelta );
     void            SetHyperlinkHdl( const Link<>& rLink ){ m_aClickHdl = rLink; }
     virtual void    RecalcAll();

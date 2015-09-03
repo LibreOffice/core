@@ -812,7 +812,7 @@ class SwAssignFieldsControl : public Control
     long                        m_nYOffset;
     long                        m_nFirstYPos;
 
-    DECL_LINK(ScrollHdl_Impl, ScrollBar*);
+    DECL_LINK_TYPED(ScrollHdl_Impl, ScrollBar*, void);
     DECL_LINK(MatchHdl_Impl, ListBox*);
     DECL_LINK(GotFocusHdl_Impl, ListBox*);
 
@@ -1082,7 +1082,7 @@ void SwAssignFieldsControl::MakeVisible( sal_Int32 nIndex )
     ScrollHdl_Impl( m_aVScroll.get() );
 }
 
-IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
+IMPL_LINK_TYPED(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll, void)
 {
     long nThumb = pScroll->GetThumbPos();
     // the scrollbar moves on a per line basis
@@ -1099,8 +1099,6 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
     for(auto aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
         lcl_Move(*aFIIter, nMove);
     SetUpdateMode(true);
-
-    return 0;
 }
 
 IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)

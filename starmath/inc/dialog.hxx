@@ -287,7 +287,7 @@ class SmShowSymbolSetWindow : public Control
     virtual void    Resize() SAL_OVERRIDE;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 public:
     SmShowSymbolSetWindow(vcl::Window *pParent, WinBits nStyle);
     virtual ~SmShowSymbolSetWindow();

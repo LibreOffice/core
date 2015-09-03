@@ -290,7 +290,7 @@ namespace svx
         bool            m_bModifiedOriginal;
 
         DECL_LINK( OriginalModifyHdl, void* );
-        DECL_LINK( ScrollHdl, void* );
+        DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
         DECL_LINK( EditModifyHdl1, Edit* );
         DECL_LINK( EditModifyHdl2, Edit* );
         DECL_LINK( EditModifyHdl3, Edit* );

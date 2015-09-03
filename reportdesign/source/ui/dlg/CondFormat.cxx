@@ -309,7 +309,7 @@ namespace rptui
         impl_ensureConditionVisible( nNewConditionIndex );
     }
 
-    IMPL_LINK( ConditionalFormattingDialog, OnScroll, ScrollBar*, /*_pNotInterestedIn*/ )
+    IMPL_LINK_TYPED( ConditionalFormattingDialog, OnScroll, ScrollBar*, /*_pNotInterestedIn*/, void )
     {
         size_t nFirstCondIndex( impl_getFirstVisibleConditionIndex() );
         size_t nFocusCondIndex = impl_getFocusedConditionIndex( nFirstCondIndex );
@@ -320,8 +320,6 @@ namespace rptui
             impl_focusCondition( nFirstCondIndex );
         else if ( nFocusCondIndex >= nFirstCondIndex + MAX_CONDITIONS )
             impl_focusCondition( nFirstCondIndex + MAX_CONDITIONS - 1 );
-
-        return 0;
     }
 
     void ConditionalFormattingDialog::impl_layoutConditions()

@@ -242,10 +242,9 @@ void OFieldDescControl::Init()
     ::dbaui::setEvalDateFormatForFormatter(xFormatter);
 }
 
-IMPL_LINK(OFieldDescControl, OnScroll, ScrollBar*, /*pBar*/)
+IMPL_LINK_TYPED(OFieldDescControl, OnScroll, ScrollBar*, /*pBar*/, void)
 {
     ScrollAllAggregates();
-    return 0;
 }
 
 namespace

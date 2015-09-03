@@ -281,7 +281,7 @@ private:
 
 protected:
     virtual void        Resize() SAL_OVERRIDE;
-    DECL_LINK( ScrollHdl, ScrollBar * );
+    DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 
 public:
     explicit ComplexEditorWindow( ModulWindow* pParent );

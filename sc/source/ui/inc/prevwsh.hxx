@@ -55,10 +55,10 @@ class ScPreviewShell: public SfxViewShell
     bool            GetPageSize( Size& aPageSize );
 private:
     void            Construct( vcl::Window* pParent );
-    DECL_LINK(ScrollHandler, ScrollBar* );
+    DECL_LINK_TYPED( ScrollHandler, ScrollBar*, void );
     DECL_LINK(CloseHdl, SystemWindow*);
     void            DoScroll( sal_uInt16 nMode );
-    void ExitPreview();
+    void            ExitPreview();
 
 protected:
     virtual void    Activate(bool bMDI) SAL_OVERRIDE;
@@ -102,17 +102,17 @@ public:
 
     TriState        GetSourceDesignMode() const { return nSourceDesignMode; }
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
     virtual sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
     virtual bool            HasPrintOptionsPage() const SAL_OVERRIDE;
     virtual VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions ) SAL_OVERRIDE;
 
-    void    AddAccessibilityObject( SfxListener& rObject );
-    void    RemoveAccessibilityObject( SfxListener& rObject );
-    void    BroadcastAccessibility( const SfxHint &rHint );
-    bool    HasAccessibilityObjects();
+    void            AddAccessibilityObject( SfxListener& rObject );
+    void            RemoveAccessibilityObject( SfxListener& rObject );
+    void            BroadcastAccessibility( const SfxHint &rHint );
+    bool            HasAccessibilityObjects();
 
     const ScPreviewLocationData& GetLocationData();
     ScDocument&     GetDocument();

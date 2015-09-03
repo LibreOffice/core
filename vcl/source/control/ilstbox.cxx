@@ -2139,7 +2139,7 @@ ImplListBox::ImplListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     mpHScrollBar    = VclPtr<ScrollBar>::Create( this, WB_HSCROLL | WB_DRAG );
     mpScrollBarBox  = VclPtr<ScrollBarBox>::Create( this );
 
-    Link<> aLink( LINK( this, ImplListBox, ScrollBarHdl ) );
+    Link<ScrollBar*,void> aLink( LINK( this, ImplListBox, ScrollBarHdl ) );
     mpVScrollBar->SetScrollHdl( aLink );
     mpHScrollBar->SetScrollHdl( aLink );
 
@@ -2268,15 +2268,13 @@ IMPL_LINK_NOARG(ImplListBox, LBWindowScrolled)
     return 1;
 }
 
-IMPL_LINK( ImplListBox, ScrollBarHdl, ScrollBar*, pSB )
+IMPL_LINK_TYPED( ImplListBox, ScrollBarHdl, ScrollBar*, pSB, void )
 {
     sal_uInt16 nPos = (sal_uInt16) pSB->GetThumbPos();
     if( pSB == mpVScrollBar )
         SetTopEntry( nPos );
     else if( pSB == mpHScrollBar )
         SetLeftIndent( nPos );
-
-    return 1;
 }
 
 void ImplListBox::ImplCheckScrollBars()
