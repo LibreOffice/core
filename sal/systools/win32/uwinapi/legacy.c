@@ -14,6 +14,10 @@
 #pragma warning(disable:4273)       // inconsistent dll linkage
 #endif
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1900)
+// older versions use uwinapi.def file for export
+SAL_DLLPUBLIC_EXPORT
+#endif
 DWORD WINAPI GetShortPathNameW(LPCWSTR lpszLongPath,LPWSTR lpszShortPath,DWORD cchBuffer)
 {
     typedef DWORD (WINAPI * GetShortPathNameW_t) (LPCWSTR,LPWSTR,DWORD);
