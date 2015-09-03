@@ -3029,7 +3029,7 @@ static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
                 bool bNotify = true;
                 // If we've a fly with more than 90% relative height...
                 if( rSz.GetHeightPercent() > 90 && pFly->GetAnchorFrm() &&
-                    rSz.GetHeightPercent() != 0xFF && nDiff )
+                    rSz.GetHeightPercent() != SwFormatFrmSize::SYNCED && nDiff )
                 {
                     const SwFrm *pRel = pFly->IsFlyLayFrm() ? pFly->GetAnchorFrm():
                                         pFly->GetAnchorFrm()->GetUpper();

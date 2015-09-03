@@ -876,10 +876,10 @@ void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
                 nRelWidth  = pRel->Prt().Width();
                 nRelHeight = pRel->Prt().Height();
             }
-            if ( aFrmSz.GetWidthPercent() && aFrmSz.GetWidthPercent() != 0xFF &&
+            if ( aFrmSz.GetWidthPercent() && aFrmSz.GetWidthPercent() != SwFormatFrmSize::SYNCED &&
                  aOldFrmSz.GetWidth() != aFrmSz.GetWidth() )
                 aFrmSz.SetWidthPercent( sal_uInt8(aSz.Width() * 100.0 / nRelWidth + 0.5) );
-            if ( aFrmSz.GetHeightPercent() && aFrmSz.GetHeightPercent() != 0xFF &&
+            if ( aFrmSz.GetHeightPercent() && aFrmSz.GetHeightPercent() != SwFormatFrmSize::SYNCED &&
                  aOldFrmSz.GetHeight() != aFrmSz.GetHeight() )
                 aFrmSz.SetHeightPercent( sal_uInt8(aSz.Height() * 100.0 / nRelHeight + 0.5) );
             pFormat->GetDoc()->SetAttr( aFrmSz, *pFormat );

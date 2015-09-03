@@ -1609,6 +1609,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
                                 XML_relativeFrom, (rSize.GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),
                                 FSEND);
             pFS->startElementNS(XML_wp14, XML_pctHeight, FSEND);
+            fprintf(stderr, "height pc is %d\n", rSize.GetHeightPercent());
             pFS->writeEscaped(OUString::number(rSize.GetHeightPercent() * oox::drawingml::PER_PERCENT));
             pFS->endElementNS(XML_wp14, XML_pctHeight);
             pFS->endElementNS(XML_wp14, XML_sizeRelV);

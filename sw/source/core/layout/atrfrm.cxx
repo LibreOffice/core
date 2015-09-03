@@ -226,22 +226,22 @@ bool SwFormatFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_FRMSIZE_REL_HEIGHT:
-            rVal <<= (sal_Int16)(GetHeightPercent() != 0xFF ? GetHeightPercent() : 0);
+            rVal <<= (sal_Int16)(GetHeightPercent() != SwFormatFrmSize::SYNCED ? GetHeightPercent() : 0);
         break;
         case MID_FRMSIZE_REL_HEIGHT_RELATION:
             rVal <<= GetHeightPercentRelation();
         break;
         case MID_FRMSIZE_REL_WIDTH:
-            rVal <<= (sal_Int16)(GetWidthPercent() != 0xFF ? GetWidthPercent() : 0);
+            rVal <<= (sal_Int16)(GetWidthPercent() != SwFormatFrmSize::SYNCED ? GetWidthPercent() : 0);
         break;
         case MID_FRMSIZE_REL_WIDTH_RELATION:
             rVal <<= GetWidthPercentRelation();
         break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
-            rVal <<= 0xFF == GetHeightPercent();
+            rVal <<= SwFormatFrmSize::SYNCED == GetHeightPercent();
         break;
         case MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT:
-            rVal <<= 0xFF == GetWidthPercent();
+            rVal <<= SwFormatFrmSize::SYNCED == GetWidthPercent();
         break;
         case MID_FRMSIZE_WIDTH :
             rVal <<= (sal_Int32)convertTwipToMm100(m_aSize.Width());
@@ -297,7 +297,7 @@ bool SwFormatFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int16 nSet = 0;
             rVal >>= nSet;
-            if(nSet >= 0 && nSet <= 0xfe)
+            if(nSet >= 0 && nSet < SwFormatFrmSize::SYNCED)
                 SetHeightPercent((sal_uInt8)nSet);
             else
                 bRet = false;
@@ -314,7 +314,7 @@ bool SwFormatFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int16 nSet = 0;
             rVal >>= nSet;
-            if(nSet >= 0 && nSet <= 0xfe)
+            if(nSet >= 0 && nSet < SwFormatFrmSize::SYNCED)
                 SetWidthPercent((sal_uInt8)nSet);
             else
                 bRet = false;
@@ -331,8 +331,8 @@ bool SwFormatFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             bool bSet = *static_cast<sal_Bool const *>(rVal.getValue());
             if(bSet)
-                SetHeightPercent(0xff);
-            else if( 0xff == GetHeightPercent() )
+                SetHeightPercent(SwFormatFrmSize::SYNCED);
+            else if( SwFormatFrmSize::SYNCED == GetHeightPercent() )
                 SetHeightPercent( 0 );
         }
         break;
@@ -340,8 +340,8 @@ bool SwFormatFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             bool bSet = *static_cast<sal_Bool const *>(rVal.getValue());
             if(bSet)
-                SetWidthPercent(0xff);
-            else if( 0xff == GetWidthPercent() )
+                SetWidthPercent(SwFormatFrmSize::SYNCED);
+            else if( SwFormatFrmSize::SYNCED == GetWidthPercent() )
                 SetWidthPercent(0);
         }
         break;

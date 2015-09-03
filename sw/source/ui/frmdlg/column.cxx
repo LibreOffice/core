@@ -1263,7 +1263,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         }
         bool bPercent;
         // only relative data in frame format
-        if ( bFormat || (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff) )
+        if ( bFormat || (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrmSize::SYNCED) )
         {
             // set value for 100%
             aEd1.SetRefValue(nTotalWish);

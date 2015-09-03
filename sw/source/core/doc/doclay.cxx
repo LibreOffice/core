@@ -825,8 +825,8 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pNewSet->Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER ) );
 
                 aFrmSize = pOldFormat->GetFrmSize();
-                aFrmSize.SetWidthPercent( 0 );
-                aFrmSize.SetHeightPercent( 255 );
+                aFrmSize.SetWidthPercent(0);
+                aFrmSize.SetHeightPercent(SwFormatFrmSize::SYNCED);
                 pNewSet->Put( aFrmSize );
 
                 // Hard-set the attributes, because they could come from the Template

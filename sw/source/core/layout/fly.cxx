@@ -2386,17 +2386,17 @@ Size SwFlyFrm::CalcRel( const SwFormatFrmSize &rSz ) const
             }
         }
 
-        if ( rSz.GetWidthPercent() && rSz.GetWidthPercent() != 0xFF )
+        if ( rSz.GetWidthPercent() && rSz.GetWidthPercent() != SwFormatFrmSize::SYNCED )
             aRet.Width() = nRelWidth * rSz.GetWidthPercent() / 100;
-        if ( rSz.GetHeightPercent() && rSz.GetHeightPercent() != 0xFF )
+        if ( rSz.GetHeightPercent() && rSz.GetHeightPercent() != SwFormatFrmSize::SYNCED )
             aRet.Height() = nRelHeight * rSz.GetHeightPercent() / 100;
 
-        if ( rSz.GetWidthPercent() == 0xFF )
+        if ( rSz.GetWidthPercent() == SwFormatFrmSize::SYNCED )
         {
             aRet.Width() *= aRet.Height();
             aRet.Width() /= rSz.GetHeight();
         }
-        else if ( rSz.GetHeightPercent() == 0xFF )
+        else if ( rSz.GetHeightPercent() == SwFormatFrmSize::SYNCED )
         {
             aRet.Height() *= aRet.Width();
             aRet.Height() /= rSz.GetWidth();

@@ -437,10 +437,10 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aVal.nVPos = rVert.GetPos();
         aVal.nVRelOrient = rVert.GetRelationOrient();
 
-        if (rFrmSize.GetWidthPercent() && rFrmSize.GetWidthPercent() != 0xff)
+        if (rFrmSize.GetWidthPercent() && rFrmSize.GetWidthPercent() != SwFormatFrmSize::SYNCED)
             aSize.Width() = aSize.Width() * rFrmSize.GetWidthPercent() / 100;
 
-        if (rFrmSize.GetHeightPercent() && rFrmSize.GetHeightPercent() != 0xff)
+        if (rFrmSize.GetHeightPercent() && rFrmSize.GetHeightPercent() != SwFormatFrmSize::SYNCED)
             aSize.Height() = aSize.Height() * rFrmSize.GetHeightPercent() / 100;
 
         aVal.nWidth  = aSize.Width();

@@ -969,7 +969,7 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
 
     m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::FRAME));
     m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::REL_PG_FRAME));
-    if (rFrmSize.GetWidthPercent() != 0xff && rFrmSize.GetWidthPercent() != 0)
+    if (rFrmSize.GetWidthPercent() != SwFormatFrmSize::SYNCED && rFrmSize.GetWidthPercent() != 0)
     {
         //calculate the rerference value from the with and relative width values
         sal_Int32 nSpace = rFrmSize.GetWidth() * 100 / rFrmSize.GetWidthPercent();
@@ -982,7 +982,7 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
 
     m_pRelHeightRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::FRAME));
     m_pRelHeightRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::REL_PG_FRAME));
-    if (rFrmSize.GetHeightPercent() != 0xff && rFrmSize.GetHeightPercent() != 0)
+    if (rFrmSize.GetHeightPercent() != SwFormatFrmSize::SYNCED && rFrmSize.GetHeightPercent() != 0)
     {
         //calculate the rerference value from the with and relative width values
         sal_Int32 nSpace = rFrmSize.GetHeight() * 100 / rFrmSize.GetHeightPercent();
@@ -1213,9 +1213,9 @@ bool SwFrmPage::FillItemSet(SfxItemSet *rSet)
         if (m_pFixedRatioCB->IsChecked() && (m_pRelWidthCB->IsChecked() != m_pRelHeightCB->IsChecked()))
         {
             if (m_pRelWidthCB->IsChecked())
-                aSz.SetHeightPercent(0xff);
+                aSz.SetHeightPercent(SwFormatFrmSize::SYNCED);
             else
-                aSz.SetWidthPercent(0xff);
+                aSz.SetWidthPercent(SwFormatFrmSize::SYNCED);
         }
     }
     if( !IsInGraficMode() )
@@ -2324,16 +2324,16 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
     // switch to percent if applicable
     RangeModifyHdl(&m_aWidthED);  // set reference values (for 100%)
 
-    if (rSize.GetWidthPercent() == 0xff || rSize.GetHeightPercent() == 0xff)
+    if (rSize.GetWidthPercent() == SwFormatFrmSize::SYNCED || rSize.GetHeightPercent() == SwFormatFrmSize::SYNCED)
         m_pFixedRatioCB->Check();
-    if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff &&
+    if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrmSize::SYNCED &&
         !m_pRelWidthCB->IsChecked())
     {
         m_pRelWidthCB->Check();
         RelSizeClickHdl(m_pRelWidthCB);
         m_aWidthED.SetPrcntValue(rSize.GetWidthPercent(), FUNIT_CUSTOM);
     }
-    if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff &&
+    if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != SwFormatFrmSize::SYNCED &&
         !m_pRelHeightCB->IsChecked())
     {
         m_pRelHeightCB->Check();

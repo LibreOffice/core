@@ -89,8 +89,11 @@ public:
     void    SetHeight( const SwTwips nNew ) { m_aSize.Height() = nNew; }
     void    SetWidth ( const SwTwips nNew ) { m_aSize.Width()  = nNew; }
 
-    sal_uInt8    GetHeightPercent() const{ return m_nHeightPercent; }
+    enum PercentFlags { SYNCED = 0xff };
+    //0xff is reserved to indicate height is synced to width
+    sal_uInt8   GetHeightPercent() const{ return m_nHeightPercent; }
     sal_Int16   GetHeightPercentRelation() const { return m_eHeightPercentRelation;  }
+    //0xff is reserved to indicate width is synced to height
     sal_uInt8   GetWidthPercent() const { return m_nWidthPercent;  }
     sal_Int16   GetWidthPercentRelation() const { return m_eWidthPercentRelation;  }
     void    SetHeightPercent( sal_uInt8 n ) { m_nHeightPercent = n; }

@@ -281,9 +281,9 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             // At percentage values initialize size
             SwFormatFrmSize aSizeCopy = static_cast<const SwFormatFrmSize&>(aSet.Get(RES_FRM_SIZE));
-            if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != 0xff)
+            if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != SwFormatFrmSize::SYNCED)
                 aSizeCopy.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
-            if (aSizeCopy.GetHeightPercent() && aSizeCopy.GetHeightPercent() != 0xff)
+            if (aSizeCopy.GetHeightPercent() && aSizeCopy.GetHeightPercent() != SwFormatFrmSize::SYNCED)
                 aSizeCopy.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
             // and now set the size for "external" tabpages
             {
@@ -291,8 +291,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 aSet.Put( aSzItm );
 
                 Size aSz( aSizeCopy.GetWidthPercent(), aSizeCopy.GetHeightPercent() );
-                if( 0xff == aSz.Width() )   aSz.Width() = 0;
-                if( 0xff == aSz.Height() )  aSz.Height() = 0;
+                if( SwFormatFrmSize::SYNCED == aSz.Width() )   aSz.Width() = 0;
+                if( SwFormatFrmSize::SYNCED == aSz.Height() )  aSz.Height() = 0;
 
                 aSzItm.SetSize( aSz );
                 aSzItm.SetWhich( SID_ATTR_GRAF_FRMSIZE_PERCENT );

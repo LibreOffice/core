@@ -443,9 +443,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 // On % values initialize size
                 SwFormatFrmSize& rSize = const_cast<SwFormatFrmSize&>(static_cast<const SwFormatFrmSize&>(aSet.Get(RES_FRM_SIZE)));
-                if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff)
+                if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrmSize::SYNCED)
                     rSize.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
-                if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff)
+                if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != SwFormatFrmSize::SYNCED)
                     rSize.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
 
                 // disable vertical positioning for Math Objects anchored 'as char' if baseline alignment is activated

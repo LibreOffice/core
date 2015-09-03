@@ -345,7 +345,7 @@ void SwFlyAtCntFrm::MakeAll(vcl::RenderContext* pRenderContext)
             {
                 SwFlyFrameFormat *pFormat = GetFormat();
                 const SwFormatFrmSize &rFrmSz = GetFormat()->GetFrmSize();
-                if( rFrmSz.GetHeightPercent() != 0xFF &&
+                if( rFrmSz.GetHeightPercent() != SwFormatFrmSize::SYNCED &&
                     rFrmSz.GetHeightPercent() >= 100 )
                 {
                     pFormat->LockModify();
@@ -465,7 +465,7 @@ void SwFlyAtCntFrm::MakeAll(vcl::RenderContext* pRenderContext)
                         SwFrameFormat* pFormat = GetFormat();
                         const SwFormatFrmSize& rFrmSz = pFormat->GetFrmSize();
                         if ( rFrmSz.GetWidthPercent() &&
-                             rFrmSz.GetHeightPercent() == 0xFF )
+                             rFrmSz.GetHeightPercent() == SwFormatFrmSize::SYNCED )
                         {
                             SwFormatSurround aSurround( pFormat->GetSurround() );
                             if ( aSurround.GetSurround() == SURROUND_NONE )
