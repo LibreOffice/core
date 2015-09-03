@@ -33,6 +33,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
+#include <comphelper/enumhelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -54,28 +55,6 @@ public:
 };
 
 typedef ::std::vector< css::uno::Reference< css::frame::XModel > > TModelList;
-
-class ModelCollectionEnumeration : public ModelCollectionMutexBase
-                                 , public ::cppu::WeakImplHelper< css::container::XEnumeration >
-{
-private:
-    TModelList m_lModels;
-    TModelList::iterator m_pEnumerationIt;
-
-public:
-    ModelCollectionEnumeration();
-    virtual ~ModelCollectionEnumeration();
-    void setModelList(const TModelList& rList);
-
-    // css.container.XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements()
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual css::uno::Any SAL_CALL nextElement()
-        throw(css::container::NoSuchElementException,
-              css::lang::WrappedTargetException     ,
-              css::uno::RuntimeException, std::exception            ) SAL_OVERRIDE;
-};
 
 
 //TODO: remove support of obsolete document::XEventBroadcaster/Listener
@@ -177,55 +156,6 @@ private:
     // not threadsafe
     TModelList::iterator impl_searchDoc(const css::uno::Reference< css::frame::XModel >& xModel);
 };
-
-ModelCollectionEnumeration::ModelCollectionEnumeration()
-    : ModelCollectionMutexBase(                 )
-    , m_pEnumerationIt        (m_lModels.begin())
-{
-}
-
-ModelCollectionEnumeration::~ModelCollectionEnumeration()
-{
-}
-
-void ModelCollectionEnumeration::setModelList(const TModelList& rList)
-{
-    // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-    m_lModels        = rList;
-    m_pEnumerationIt = m_lModels.begin();
-    aLock.clear();
-    // <- SAFE
-}
-
-sal_Bool SAL_CALL ModelCollectionEnumeration::hasMoreElements()
-    throw(uno::RuntimeException, std::exception)
-{
-    // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-    return (m_pEnumerationIt != m_lModels.end());
-    // <- SAFE
-}
-
-uno::Any SAL_CALL ModelCollectionEnumeration::nextElement()
-    throw(container::NoSuchElementException,
-          lang::WrappedTargetException     ,
-          uno::RuntimeException, std::exception            )
-{
-    // SAFE ->
-    ::osl::ResettableMutexGuard aLock(m_aLock);
-    if (m_pEnumerationIt == m_lModels.end())
-        throw container::NoSuchElementException(
-                    OUString("End of model enumeration reached."),
-                    static_cast< container::XEnumeration* >(this));
-    uno::Reference< frame::XModel > xModel(*m_pEnumerationIt, uno::UNO_QUERY);
-    ++m_pEnumerationIt;
-    aLock.clear();
-    // <- SAFE
-
-    return uno::makeAny(xModel);
-}
-
 
 SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const uno::Reference < uno::XComponentContext >& rxContext)
     : ModelCollectionMutexBase(       )
@@ -429,11 +359,14 @@ uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createE
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    ModelCollectionEnumeration* pEnum = new ModelCollectionEnumeration();
-    pEnum->setModelList(m_lModels);
+    uno::Sequence<uno::Any> models(m_lModels.size());
+    for (size_t i = 0; i < m_lModels.size(); ++i)
+    {
+        models[i] = uno::makeAny(m_lModels[i]);
+    }
     uno::Reference< container::XEnumeration > xEnum(
-        static_cast< container::XEnumeration* >(pEnum),
-        uno::UNO_QUERY);
+        static_cast<container::XEnumeration*>(
+            new ::comphelper::OAnyEnumeration(models)));
     aLock.clear();
     // <- SAFE
 
