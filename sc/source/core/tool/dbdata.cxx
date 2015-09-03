@@ -1221,12 +1221,6 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     return NULL;
 }
 
-void ScDBCollection::RefreshTableColumnNames( const ScRange& rRange )
-{
-    for (auto const& it : maNamedDBs)
-        it->RefreshTableColumnNames( pDoc, rRange);
-}
-
 void ScDBCollection::DeleteOnTab( SCTAB nTab )
 {
     FindByTable func(nTab);
