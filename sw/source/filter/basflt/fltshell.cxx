@@ -172,7 +172,7 @@ SwFltControlStack::SwFltControlStack(SwDoc* pDo, sal_uLong nFieldFl)
 
 SwFltControlStack::~SwFltControlStack()
 {
-    OSL_ENSURE(maEntries.empty(), "There are still Attributes on the stack");
+    OSL_ENSURE(m_Entries.empty(), "There are still Attributes on the stack");
 }
 
 // MoveAttrs() is meant to address the following problem:
@@ -184,13 +184,13 @@ SwFltControlStack::~SwFltControlStack()
 // same paragraph further out by one character.
 void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
 {
-    size_t nCnt = maEntries.size();
+    size_t nCnt = m_Entries.size();
     sal_uLong nPosNd = rPos.nNode.GetIndex();
     sal_uInt16 nPosCt = rPos.nContent.GetIndex() - 1;
 
     for (size_t i=0; i < nCnt; ++i)
     {
-        SwFltStackEntry& rEntry = maEntries[i];
+        SwFltStackEntry& rEntry = *m_Entries[i];
         if (
             (rEntry.m_aMkPos.m_nNode.GetIndex()+1 == nPosNd) &&
             (rEntry.m_aMkPos.m_nContent >= nPosCt)
@@ -216,9 +216,9 @@ void SwFltControlStack::MoveAttrs( const SwPosition& rPos )
 
 void SwFltControlStack::MarkAllAttrsOld()
 {
-    size_t nCnt = maEntries.size();
+    size_t nCnt = m_Entries.size();
     for (size_t i=0; i < nCnt; ++i)
-        maEntries[i].bOld = true;
+        m_Entries[i]->bOld = true;
 }
 
 namespace
@@ -256,17 +256,17 @@ void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr
     {
         SwFltStackEntry *pTmp = new SwFltStackEntry(rPos, rAttr.Clone() );
         pTmp->SetStartCP(GetCurrAttrCP());
-        maEntries.push_back(pTmp);
+        m_Entries.push_back(std::unique_ptr<SwFltStackEntry>(pTmp));
     }
 }
 
 void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
 {
-    OSL_ENSURE(nCnt < maEntries.size(), "Out of range!");
-    if (nCnt < maEntries.size())
+    OSL_ENSURE(nCnt < m_Entries.size(), "Out of range!");
+    if (nCnt < m_Entries.size())
     {
-        myEIter aElement = maEntries.begin() + nCnt;
-        maEntries.erase(aElement);
+        myEIter aElement = m_Entries.begin() + nCnt;
+        m_Entries.erase(aElement);
     }
     //Clear the para end position recorded in reader intermittently for the least impact on loading performance
     //Because the attributes handled based on the unit of para
@@ -285,12 +285,12 @@ void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
 // graphic apos -> images.
 void SwFltControlStack::StealAttr(const SwNodeIndex& rNode, sal_uInt16 nAttrId)
 {
-    size_t nCnt = maEntries.size();
+    size_t nCnt = m_Entries.size();
 
     while (nCnt)
     {
         nCnt --;
-        SwFltStackEntry& rEntry = maEntries[nCnt];
+        SwFltStackEntry& rEntry = *m_Entries[nCnt];
         if (rEntry.m_aPtPos.m_nNode.GetIndex()+1 == rNode.GetIndex() &&
             (!nAttrId || nAttrId == rEntry.pAttr->Which()))
         {
@@ -307,11 +307,11 @@ void SwFltControlStack::KillUnlockedAttrs(const SwPosition& rPos)
 {
     SwFltPosition aFltPos(rPos);
 
-    size_t nCnt = maEntries.size();
+    size_t nCnt = m_Entries.size();
     while( nCnt )
     {
         nCnt --;
-        SwFltStackEntry& rEntry = maEntries[nCnt];
+        SwFltStackEntry& rEntry = *m_Entries[nCnt];
         if(    !rEntry.bOld
             && !rEntry.bOpen
             && (rEntry.m_aMkPos == aFltPos)
@@ -338,12 +338,12 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
         (RES_FLTRATTR_BEGIN <= nAttrId && RES_FLTRATTR_END > nAttrId),
         "Wrong id for attribute");
 
-    myEIter aI = maEntries.begin();
-    while (aI != maEntries.end())
+    myEIter aI = m_Entries.begin();
+    while (aI != m_Entries.end())
     {
-        bool bLastEntry = aI == maEntries.end() - 1;
+        bool bLastEntry = aI == m_Entries.end() - 1;
 
-        SwFltStackEntry& rEntry = *aI;
+        SwFltStackEntry& rEntry = **aI;
         if (rEntry.bOpen)
         {
             // set end of attribute
@@ -413,7 +413,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
             }
         }
         SetAttrInDoc(rPos, rEntry);
-        aI = maEntries.erase(aI);
+        aI = m_Entries.erase(aI);
     }
 
     return pRet;
@@ -490,7 +490,7 @@ bool SwFltControlStack::HasSdOD()
 {
     bool bRet = false;
 
-    for (Entries::iterator it = maEntries.begin(); it != maEntries.end(); ++it)
+    for (auto const& it : m_Entries)
     {
         SwFltStackEntry& rEntry = *it;
         if ( rEntry.mnStartCP == rEntry.mnEndCP )
@@ -728,13 +728,13 @@ bool SwFltControlStack::CheckSdOD(sal_Int32 /*nStart*/, sal_Int32 /*nEnd*/)
 
 SfxPoolItem* SwFltControlStack::GetFormatStackAttr(sal_uInt16 nWhich, sal_uInt16 * pPos)
 {
-    size_t nSize = maEntries.size();
+    size_t nSize = m_Entries.size();
 
     while (nSize)
     {
         // is it the looked-for attribute ? (only applies to locked, meaning
         // currently set attributes!!)
-        SwFltStackEntry &rEntry = maEntries[--nSize];
+        SwFltStackEntry &rEntry = *m_Entries[--nSize];
         if (rEntry.bOpen && rEntry.pAttr->Which() == nWhich)
         {
             if (pPos)
@@ -749,11 +749,11 @@ const SfxPoolItem* SwFltControlStack::GetOpenStackAttr(const SwPosition& rPos, s
 {
     SwFltPosition aFltPos(rPos);
 
-    size_t nSize = maEntries.size();
+    size_t nSize = m_Entries.size();
 
     while (nSize)
     {
-        SwFltStackEntry &rEntry = maEntries[--nSize];
+        SwFltStackEntry &rEntry = *m_Entries[--nSize];
         if (rEntry.bOpen && rEntry.pAttr->Which() == nWhich && rEntry.m_aMkPos == aFltPos)
         {
             return rEntry.pAttr;
@@ -779,9 +779,9 @@ void SwFltControlStack::Delete(const SwPaM &rPam)
     if (aEndNode != aStartNode)
         return;
 
-    for (size_t nSize = maEntries.size(); nSize > 0;)
+    for (size_t nSize = m_Entries.size(); nSize > 0;)
     {
-        SwFltStackEntry& rEntry = maEntries[--nSize];
+        SwFltStackEntry& rEntry = *m_Entries[--nSize];
 
         bool bEntryStartAfterSelStart =
             (rEntry.m_aMkPos.m_nNode == aStartNode &&

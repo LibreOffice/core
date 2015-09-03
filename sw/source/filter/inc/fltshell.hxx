@@ -33,7 +33,9 @@
 #include <IDocumentRedlineAccess.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_deque.hpp>
+
+#include <memory>
+#include <deque>
 
 class SwTOXBase;
 class SwField;
@@ -131,9 +133,9 @@ public:
 
 class SW_DLLPUBLIC SwFltControlStack : private ::boost::noncopyable
 {
-    typedef boost::ptr_deque<SwFltStackEntry> Entries;
+    typedef std::deque<std::unique_ptr<SwFltStackEntry>> Entries;
     typedef Entries::iterator myEIter;
-    Entries maEntries;
+    Entries m_Entries;
 
     sal_uLong nFieldFlags;
     vcl::KeyCode aEmptyKeyCode; // fuer Bookmarks
@@ -186,10 +188,10 @@ public:
     const SfxPoolItem* GetOpenStackAttr(const SwPosition& rPos, sal_uInt16 nWhich);
     void Delete(const SwPaM &rPam);
 
-    bool empty() const { return maEntries.empty(); }
-    Entries::size_type size() const { return maEntries.size(); }
+    bool empty() const { return m_Entries.empty(); }
+    Entries::size_type size() const { return m_Entries.size(); }
     SwFltStackEntry& operator[](Entries::size_type nIndex)
-         { return maEntries[nIndex]; }
+         { return *m_Entries[nIndex]; }
     void DeleteAndDestroy(Entries::size_type nCnt);
 };
 
