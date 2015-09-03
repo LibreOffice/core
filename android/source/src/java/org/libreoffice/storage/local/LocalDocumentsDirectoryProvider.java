@@ -25,6 +25,10 @@ import android.os.Environment;
  */
 public class LocalDocumentsDirectoryProvider extends LocalDocumentsProvider {
 
+    public LocalDocumentsDirectoryProvider(int id) {
+        super(id);
+    }
+
     @Override
     public IFile getRootDirectory() {
         File documentsDirectory = new File(

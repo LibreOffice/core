@@ -23,6 +23,12 @@ import android.os.Environment;
  */
 public class LocalDocumentsProvider implements IDocumentProvider {
 
+    private int id;
+
+    public LocalDocumentsProvider(int id) {
+        this.id = id;
+    }
+
     @Override
     public IFile getRootDirectory() {
         return new LocalFile(Environment.getExternalStorageDirectory());
@@ -36,5 +42,10 @@ public class LocalDocumentsProvider implements IDocumentProvider {
     @Override
     public int getNameResource() {
         return R.string.local_file_system;
+    }
+
+    @Override
+    public int getId() {
+        return id;
     }
 }
