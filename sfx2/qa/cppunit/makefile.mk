@@ -35,24 +35,18 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-DLLPRE = # no leading "lib" on .so files
+.ELSE
 
-# --- Libs ---------------------------------------------------------
-
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)/test_metadatable.obj \
 
 
-SHL1STDLIBS= \
-     $(CPPUNITLIB) \
+APP1STDLIBS= \
+     $(GTESTLIB) \
      $(SALLIB) \
      $(CPPULIB) \
      $(CPPUHELPERLIB) \
@@ -60,23 +54,13 @@ SHL1STDLIBS= \
      $(SFXLIB) \
 
 
-SHL1TARGET= test_metadatable
-SHL1RPATH = NONE
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF= $(MISC)/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= version.map
-
-# --- All object files ---------------------------------------------
-
-SLOFILES= \
-    $(SHL1OBJS) \
-
-
+APP1TARGET= test_metadatable
+APP1RPATH = NONE
+APP1TEST = enabled
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
 
 .END

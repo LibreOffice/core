@@ -21,7 +21,7 @@
 
 
 
-#include <sal/cppunit.h>
+#include "gtest/gtest.h"
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>
@@ -38,26 +38,18 @@ using namespace ::com::sun::star;
 namespace {
 
 class MetadatableTest
-    : public ::CppUnit::TestFixture
+    : public ::testing::Test
 {
 public:
-    virtual void setUp();
-    virtual void tearDown();
-
-    void test();
-
-    CPPUNIT_TEST_SUITE(MetadatableTest);
-    CPPUNIT_TEST(test);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
+    virtual void SetUp();
+    virtual void TearDown();
 };
 
-void MetadatableTest::setUp()
+void MetadatableTest::SetUp()
 {
 }
 
-void MetadatableTest::tearDown()
+void MetadatableTest::TearDown()
 {
 }
 
@@ -89,7 +81,7 @@ static bool operator==(beans::StringPair p1, beans::StringPair p2)
     return p1.First == p2.First && p1.Second == p2.Second;
 }
 
-void MetadatableTest::test()
+TEST_F(MetadatableTest, test)
 {
     OSL_TRACE("SwMetadatable test(): start\n");
     ::std::auto_ptr< ::sfx2::IXmlIdRegistry > const pReg(
@@ -116,68 +108,54 @@ void MetadatableTest::test()
     beans::StringPair id3e(empty,  sid3);
     beans::StringPair id4e(empty,  sid4);
     m1.SetMetadataReference(id1);
-    CPPUNIT_ASSERT_MESSAGE("set failed", m1.GetMetadataReference() == id1);
+    ASSERT_TRUE(m1.GetMetadataReference() == id1) << "set failed";
     try {
         m2.SetMetadataReference(id1);
-        CPPUNIT_ASSERT_MESSAGE("set duplicate succeeded", false);
+        ASSERT_TRUE(false) << "set duplicate succeeded";
     } catch (lang::IllegalArgumentException) { }
     m1.SetMetadataReference(id1);
-    CPPUNIT_ASSERT_MESSAGE("set failed (existing)",
-            m1.GetMetadataReference() == id1);
+    ASSERT_TRUE(m1.GetMetadataReference() == id1) << "set failed (existing)";
     m1.EnsureMetadataReference();
-    CPPUNIT_ASSERT_MESSAGE("ensure failed (existing)",
-            m1.GetMetadataReference() == id1);
+    ASSERT_TRUE(m1.GetMetadataReference() == id1) << "ensure failed (existing)";
 
     m2.EnsureMetadataReference();
     beans::StringPair m2id(m2.GetMetadataReference());
-    CPPUNIT_ASSERT_MESSAGE("ensure failed", m2id.Second.getLength());
+    ASSERT_TRUE(m2id.Second.getLength()) << "ensure failed";
     m2.EnsureMetadataReference();
-    CPPUNIT_ASSERT_MESSAGE("ensure failed (idempotent)",
-            m2.GetMetadataReference() == m2id);
+    ASSERT_TRUE(m2.GetMetadataReference() == m2id) << "ensure failed (idempotent)";
 
     m1.m_bInUndo = true;
-    CPPUNIT_ASSERT_MESSAGE("move to undo failed",
-            !m1.GetMetadataReference().Second.getLength());
+    ASSERT_TRUE(!m1.GetMetadataReference().Second.getLength()) << "move to undo failed";
 
     m1.m_bInUndo = false;
-    CPPUNIT_ASSERT_MESSAGE("move from undo failed",
-            m1.GetMetadataReference() == id1);
+    ASSERT_TRUE(m1.GetMetadataReference() == id1) << "move from undo failed";
 
     m1.m_bInUndo = true;
     try {
         m2.SetMetadataReference(id1); // steal!
     } catch (lang::IllegalArgumentException &) {
-        CPPUNIT_FAIL("set duplicate to undo failed");
+        FAIL() << "set duplicate to undo failed";
     }
     m1.m_bInUndo = false;
-    CPPUNIT_ASSERT_MESSAGE("move from undo: duplicate",
-            !m1.GetMetadataReference().Second.getLength());
+    ASSERT_TRUE(!m1.GetMetadataReference().Second.getLength()) << "move from undo: duplicate";
 
     m3.RegisterAsCopyOf(m2);
-    CPPUNIT_ASSERT_MESSAGE("copy: source", m2.GetMetadataReference() == id1);
-    CPPUNIT_ASSERT_MESSAGE("copy: duplicate",
-            !m3.GetMetadataReference().Second.getLength());
+    ASSERT_TRUE(m2.GetMetadataReference() == id1) << "copy: source";
+    ASSERT_TRUE(!m3.GetMetadataReference().Second.getLength()) << "copy: duplicate";
     m4.RegisterAsCopyOf(m3);
-    CPPUNIT_ASSERT_MESSAGE("copy: source", m2.GetMetadataReference() == id1);
-    CPPUNIT_ASSERT_MESSAGE("copy: duplicate",
-            !m3.GetMetadataReference().Second.getLength());
-    CPPUNIT_ASSERT_MESSAGE("copy: duplicate",
-            !m4.GetMetadataReference().Second.getLength());
+    ASSERT_TRUE(m2.GetMetadataReference() == id1) << "copy: source";
+    ASSERT_TRUE(!m3.GetMetadataReference().Second.getLength()) << "copy: duplicate";
+    ASSERT_TRUE(!m4.GetMetadataReference().Second.getLength()) << "copy: duplicate";
     m2.m_bInUndo = true;
-    CPPUNIT_ASSERT_MESSAGE("duplicate to undo",
-            m3.GetMetadataReference() == id1);
-    CPPUNIT_ASSERT_MESSAGE("duplicate to undo",
-            !m2.GetMetadataReference().Second.getLength());
+    ASSERT_TRUE(m3.GetMetadataReference() == id1) << "duplicate to undo";
+    ASSERT_TRUE(!m2.GetMetadataReference().Second.getLength()) << "duplicate to undo";
     m2.m_bInUndo = false;
-    CPPUNIT_ASSERT_MESSAGE("duplicate from undo",
-            m2.GetMetadataReference() == id1);
-    CPPUNIT_ASSERT_MESSAGE("duplicate from undo",
-            !m3.GetMetadataReference().Second.getLength());
+    ASSERT_TRUE(m2.GetMetadataReference() == id1) << "duplicate from undo";
+    ASSERT_TRUE(!m3.GetMetadataReference().Second.getLength()) << "duplicate from undo";
 
     m4.EnsureMetadataReference(); // new!
     beans::StringPair m4id(m4.GetMetadataReference());
-    CPPUNIT_ASSERT_MESSAGE("ensure on duplicate",
-            m4id.Second.getLength() && !(m4id == id1));
+    ASSERT_TRUE(m4id.Second.getLength() && !(m4id == id1)) << "ensure on duplicate";
 
     MockMetadatable mc1(*pRegClip, true); // in clipboard
     MockMetadatable mc2(*pRegClip, true);
@@ -187,84 +165,67 @@ void MetadatableTest::test()
     MockMetadatable m3p(*pReg);
 
     mc1.SetMetadataReference(id2);
-    CPPUNIT_ASSERT_MESSAGE("set failed", mc1.GetMetadataReference() == id2);
+    ASSERT_TRUE(mc1.GetMetadataReference() == id2) << "set failed";
     try {
         mc2.SetMetadataReference(id2);
-        CPPUNIT_FAIL("set duplicate succeeded");
+        FAIL() << "set duplicate succeeded";
     } catch (lang::IllegalArgumentException) { }
     mc1.SetMetadataReference(id2);
-    CPPUNIT_ASSERT_MESSAGE("set failed (existing)",
-            mc1.GetMetadataReference() == id2);
+    ASSERT_TRUE(mc1.GetMetadataReference() == id2) << "set failed (existing)";
     mc1.EnsureMetadataReference();
-    CPPUNIT_ASSERT_MESSAGE("ensure failed (existing)",
-            mc1.GetMetadataReference() == id2);
+    ASSERT_TRUE(mc1.GetMetadataReference() == id2) << "ensure failed (existing)";
     mc2.EnsureMetadataReference();
     beans::StringPair mc2id(mc2.GetMetadataReference());
-    CPPUNIT_ASSERT_MESSAGE("ensure failed", mc2id.Second.getLength());
+    ASSERT_TRUE(mc2id.Second.getLength()) << "ensure failed";
     mc2.EnsureMetadataReference();
-    CPPUNIT_ASSERT_MESSAGE("ensure failed (idempotent)",
-            mc2.GetMetadataReference() == mc2id);
+    ASSERT_TRUE(mc2.GetMetadataReference() == mc2id) << "ensure failed (idempotent)";
     mc2.RemoveMetadataReference();
-    CPPUNIT_ASSERT_MESSAGE("remove failed",
-            !mc2.GetMetadataReference().Second.getLength());
+    ASSERT_TRUE(!mc2.GetMetadataReference().Second.getLength()) << "remove failed";
 
     // set up mc2 as copy of m2 and mc3 as copy of m3
     mc3.RegisterAsCopyOf(m3);
-    CPPUNIT_ASSERT_MESSAGE("copy to clipboard (latent)",
-            !mc3.GetMetadataReference().Second.getLength() );
+    ASSERT_TRUE(!mc3.GetMetadataReference().Second.getLength()) << "copy to clipboard (latent)";
     mc2.RegisterAsCopyOf(m2);
-    CPPUNIT_ASSERT_MESSAGE("copy to clipboard (non-latent)",
-            mc2.GetMetadataReference() == id1);
+    ASSERT_TRUE(mc2.GetMetadataReference() == id1) << "copy to clipboard (non-latent)";
     // paste mc2 to m2p and mc3 to m3p
     m2p.RegisterAsCopyOf(mc2);
-    CPPUNIT_ASSERT_MESSAGE("paste from clipboard (non-latent)",
-            !m2p.GetMetadataReference().Second.getLength() );
+    ASSERT_TRUE(!m2p.GetMetadataReference().Second.getLength()) << "paste from clipboard (non-latent)";
     m3p.RegisterAsCopyOf(mc3);
-    CPPUNIT_ASSERT_MESSAGE("paste from clipboard (latent)",
-            !m3p.GetMetadataReference().Second.getLength() );
+    ASSERT_TRUE(!m3p.GetMetadataReference().Second.getLength()) << "paste from clipboard (latent)";
     // delete m2, m2p, m3
     m2.RemoveMetadataReference();
-    CPPUNIT_ASSERT_MESSAGE("remove failed",
-            !m2.GetMetadataReference().Second.getLength());
-    CPPUNIT_ASSERT_MESSAGE("paste-remove (non-latent)",
-            m2p.GetMetadataReference() == id1);
+    ASSERT_TRUE(!m2.GetMetadataReference().Second.getLength()) << "remove failed";
+    ASSERT_TRUE(m2p.GetMetadataReference() == id1) << "paste-remove (non-latent)";
     m2p.RemoveMetadataReference();
-    CPPUNIT_ASSERT_MESSAGE("remove failed",
-            !m2p.GetMetadataReference().Second.getLength());
-    CPPUNIT_ASSERT_MESSAGE("paste-remove2 (non-latent)",
-            m3.GetMetadataReference() == id1);
+    ASSERT_TRUE(!m2p.GetMetadataReference().Second.getLength()) << "remove failed";
+    ASSERT_TRUE(m3.GetMetadataReference() == id1) << "paste-remove2 (non-latent)";
     m3.RemoveMetadataReference();
-    CPPUNIT_ASSERT_MESSAGE("remove failed",
-            !m3.GetMetadataReference().Second.getLength());
-    CPPUNIT_ASSERT_MESSAGE("paste-remove (latent)",
-            m3p.GetMetadataReference() == id1);
+    ASSERT_TRUE(!m3.GetMetadataReference().Second.getLength()) << "remove failed";
+    ASSERT_TRUE(m3p.GetMetadataReference() == id1) << "paste-remove (latent)";
     // delete mc2
     mc2.SetMetadataReference(beans::StringPair());
-    CPPUNIT_ASSERT_MESSAGE("in clipboard becomes non-latent",
-            !mc3.GetMetadataReference().Second.getLength() );
+    ASSERT_TRUE(!mc3.GetMetadataReference().Second.getLength()) << "in clipboard becomes non-latent";
     // paste mc2
     m2p.RegisterAsCopyOf(mc2);
-    CPPUNIT_ASSERT_MESSAGE("remove-paste",
-            !m2p.GetMetadataReference().Second.getLength());
-    CPPUNIT_ASSERT_MESSAGE("remove-paste (stolen)",
-            m3p.GetMetadataReference() == id1);
+    ASSERT_TRUE(!m2p.GetMetadataReference().Second.getLength()) << "remove-paste";
+    ASSERT_TRUE(m3p.GetMetadataReference() == id1) << "remove-paste (stolen)";
 
     // auto-detect stream
     m5.SetMetadataReference(id3e);
-    CPPUNIT_ASSERT_MESSAGE("auto-detect (content)",
-            m5.GetMetadataReference() == id3);
+    ASSERT_TRUE(m5.GetMetadataReference() == id3) << "auto-detect (content)";
     m5.m_bInContent = false;
     m5.SetMetadataReference(id4e);
-    CPPUNIT_ASSERT_MESSAGE("auto-detect (styles)",
-            m5.GetMetadataReference() == id4);
+    ASSERT_TRUE(m5.GetMetadataReference() == id4) << "auto-detect (styles)";
 
     OSL_TRACE("sfx2::Metadatable test(): finished\n");
 }
 
 
-CPPUNIT_TEST_SUITE_REGISTRATION(MetadatableTest);
-
 }
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
 
