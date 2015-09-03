@@ -45,13 +45,6 @@
 
 #include "srclex.hxx"
 
-#ifdef __GNUC__
-#pragma GCC diagnostic ignored "-Wunused-function"
-#pragma GCC diagnostic ignored "-Wunused-label"
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#elif defined _MSC_VER
-#pragma warning(push, 1)
-#endif
 #define YY_NO_UNISTD_H
 
 /* forwards */
