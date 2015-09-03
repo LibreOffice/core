@@ -509,8 +509,8 @@ SAL_IMPLEMENT_MAIN()
 
         if (product.getLength() != 0)
         {
-            array< ::System::Type^>^ params = gcnew array< ::System::Type^> (1);
-            array< ::System::Object^>^args = gcnew array< ::System::Object^>(1);
+            cli::array< ::System::Type^>^ params = gcnew cli::array< ::System::Type^> (1);
+            cli::array< ::System::Object^>^args = gcnew cli::array< ::System::Object^>(1);
             params[ 0 ] = ::System::String::typeid;
             args[ 0 ] = ustring_to_String( product );
             assembly_builder->SetCustomAttribute(
@@ -520,8 +520,8 @@ SAL_IMPLEMENT_MAIN()
         }
         if (description.getLength() != 0)
         {
-            array< ::System::Type^>^ params = gcnew array< ::System::Type^>(1);
-            array< ::System::Object^>^ args = gcnew array< ::System::Object^>(1);
+            cli::array< ::System::Type^>^ params = gcnew cli::array< ::System::Type^>(1);
+            cli::array< ::System::Object^>^ args = gcnew cli::array< ::System::Object^>(1);
             params[ 0 ] = ::System::String::typeid;
             args[ 0 ] = ustring_to_String( description );
             assembly_builder->SetCustomAttribute(
@@ -531,8 +531,8 @@ SAL_IMPLEMENT_MAIN()
         }
         if (company.getLength() != 0)
         {
-            array< ::System::Type^>^ params = gcnew array< ::System::Type^>(1);
-            array< ::System::Object^>^ args = gcnew array< ::System::Object^>(1);
+            cli::array< ::System::Type^>^ params = gcnew cli::array< ::System::Type^>(1);
+            cli::array< ::System::Object^>^ args = gcnew cli::array< ::System::Object^>(1);
             params[ 0 ] = ::System::String::typeid;
             args[ 0 ] = ustring_to_String( company );
             assembly_builder->SetCustomAttribute(
@@ -542,8 +542,8 @@ SAL_IMPLEMENT_MAIN()
         }
         if (copyright.getLength() != 0)
         {
-            array< ::System::Type^>^ params = gcnew array< ::System::Type^>(1);
-            array< ::System::Object^>^ args = gcnew array< ::System::Object^>(1);
+            cli::array< ::System::Type^>^ params = gcnew cli::array< ::System::Type^>(1);
+            cli::array< ::System::Object^>^ args = gcnew cli::array< ::System::Object^>(1);
             params[ 0 ] = ::System::String::typeid;
             args[ 0 ] = ustring_to_String( copyright );
             assembly_builder->SetCustomAttribute(
@@ -553,8 +553,8 @@ SAL_IMPLEMENT_MAIN()
         }
         if (trademark.getLength() != 0)
         {
-            array< ::System::Type^>^ params = gcnew array< ::System::Type^>(1);
-            array< ::System::Object^>^ args = gcnew array< ::System::Object^>(1);
+            cli::array< ::System::Type^>^ params = gcnew cli::array< ::System::Type^>(1);
+            cli::array< ::System::Object^>^ args = gcnew cli::array< ::System::Object^>(1);
             params[ 0 ] = ::System::String::typeid;
             args[ 0 ] = ustring_to_String( trademark );
             assembly_builder->SetCustomAttribute(
@@ -564,8 +564,8 @@ SAL_IMPLEMENT_MAIN()
         }
 
         // load extra assemblies
-        array<Assembly^>^ assemblies =
-            gcnew array<Assembly^>(extra_assemblies.size());
+        cli::array<Assembly^>^ assemblies =
+            gcnew cli::array<Assembly^>(extra_assemblies.size());
         for ( size_t pos = 0; pos < extra_assemblies.size(); ++pos )
         {
             assemblies[ pos ] = Assembly::LoadFrom(
