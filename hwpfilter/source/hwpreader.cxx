@@ -2871,7 +2871,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
     bool pstart = bParaStart;
     bool tstart = false;
     bool infield = false;
-    int curr = para->cshape.index;
+    int curr;
     if( d->bFirstPara && d->bInBody )
     {
         if ( !pstart ) {
