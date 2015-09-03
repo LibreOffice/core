@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILMSG_HXX
 #define INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILMSG_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/system/XSimpleMailMessage2.hpp>
@@ -30,7 +30,7 @@
 
 
 class CSmplMailMsg :
-    public  cppu::WeakImplHelper1< com::sun::star::system::XSimpleMailMessage2 >
+    public  cppu::WeakImplHelper< com::sun::star::system::XSimpleMailMessage2 >
 {
 public:
     CSmplMailMsg( );

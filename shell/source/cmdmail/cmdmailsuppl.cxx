@@ -74,7 +74,7 @@ namespace // private
 
 
 CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
-    WeakImplHelper3< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
+    WeakImplHelper< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
 {
     m_xConfigurationProvider = theDefaultProvider::get(xContext);
 }

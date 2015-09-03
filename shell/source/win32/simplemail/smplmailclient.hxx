@@ -20,12 +20,13 @@
 #ifndef INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILCLIENT_HXX
 #define INCLUDED_SHELL_SOURCE_WIN32_SIMPLEMAIL_SMPLMAILCLIENT_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <com/sun/star/system/XSimpleMailClient.hpp>
+#include <vector>
 
-class CSmplMailClient : public cppu::WeakImplHelper1<css::system::XSimpleMailClient>
+class CSmplMailClient : public cppu::WeakImplHelper<css::system::XSimpleMailClient>
 {
 public:
     virtual css::uno::Reference<css::system::XSimpleMailMessage> SAL_CALL createSimpleMailMessage()
