@@ -36,39 +36,30 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES= \
-#	  $(SLO)$/OStringBuffer.obj
-
 #----------------------------------- OStringBuffer -----------------------------------
 
-SHL1OBJS= \
+APP1OBJS= \
     $(SLO)$/rtl_OStringBuffer.obj \
     $(SLO)$/rtl_String_Utils.obj
 
-SHL1TARGET= rtl_OStringBuffer
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-SHL1RPATH = NONE
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS)
+APP1TARGET= rtl_OStringBuffer
+APP1STDLIBS= $(SALLIB) $(GTESTLIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
 
 .END
