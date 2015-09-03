@@ -126,7 +126,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
             bValuesChanged = true;
             rPresentationSettings.mbAll = bValue;
             // remove any previous existing slide
-            rPresentationSettings.maPresPage = "";
+            rPresentationSettings.maPresPage.clear();
         }
 
         if (!rPresentationSettings.mbAll)
