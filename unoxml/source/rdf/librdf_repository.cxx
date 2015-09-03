@@ -23,6 +23,7 @@
 
 #include <set>
 #include <map>
+#include <iterator>
 #include <functional>
 #include <algorithm>
 
