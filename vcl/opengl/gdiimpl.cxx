@@ -1427,32 +1427,18 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         return false;
     }
 
-    // #i11575#desc5#b adjust B2D tesselation result to raster positions
-    basegfx::B2DPolygon aPolygon = rPolygon;
-    const double fHalfWidth = 0.5 * rLineWidth.getX();
-
     // shortcut for hairline drawing to improve performance
     if (bIsHairline)
     {
-        PreDraw();
-        if (UseSolidAA(mnLineColor, fTransparency))
-        {
-            Polygon aToolsPolygon(aPolygon);
-            sal_uInt32 nPoints = aToolsPolygon.GetSize();
-            if (aToolsPolygon.HasFlags())
-            {
-                aToolsPolygon = Polygon::SubdivideBezier(aToolsPolygon);
-                nPoints = aToolsPolygon.GetSize();
-            }
-            for (sal_uInt32 i = 0; i < nPoints - 1; ++i)
-            {
-                DrawLineAA(aToolsPolygon[i].X(),     aToolsPolygon[i].Y(),
-                           aToolsPolygon[i + 1].X(), aToolsPolygon[i + 1].Y());
-            }
-        }
-        PostDraw();
-        return true;
+        // Let's just leave it to OutputDevice to do the bezier subdivision,
+        // drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry) will be
+        // called with the result.
+        return false;
     }
+
+    // #i11575#desc5#b adjust B2D tesselation result to raster positions
+    basegfx::B2DPolygon aPolygon = rPolygon;
+    const double fHalfWidth = 0.5 * rLineWidth.getX();
 
     // get the area polygon for the line polygon
     if( (rLineWidth.getX() != rLineWidth.getY())
