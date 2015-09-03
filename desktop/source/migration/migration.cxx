@@ -534,7 +534,7 @@ OUString MigrationImpl::preXDGConfigDir(const OUString& rConfigDir)
     // our user profiles, however *all* previous libreoffice and openoffice.org
     // configurations will be in the 'old' config directory and that's where we need
     // to search - we convert the returned config dir to the 'old' dir
-    if ( !pXDGCfgHome && rConfigDir.endsWit( XDG_CONFIG_PART )  )
+    if ( !pXDGCfgHome && rConfigDir.endsWith( XDG_CONFIG_PART )  )
         // remove trailing '.config/' but leave the terminating '/'
         aPreXDGConfigPath = rConfigDir.copy( 0, rConfigDir.getLength() - sizeof(  XDG_CONFIG_PART ) + 2 );
     else
