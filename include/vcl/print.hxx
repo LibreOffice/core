@@ -223,7 +223,6 @@ private:
     bool                        mbInPrintPage;
     bool                        mbNewJobSetup;
     bool                        mbIsQueuePrinter;
-    Link<>                      maErrorHdl;
 
     SAL_DLLPRIVATE void         ImplInitData();
     SAL_DLLPRIVATE void         ImplInit( SalPrinterQueueInfo* pInfo );
