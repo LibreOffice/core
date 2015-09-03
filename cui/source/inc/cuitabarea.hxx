@@ -563,24 +563,24 @@ private:
 
     SvxBitmapCtl*       m_pBitmapCtl;
 
-    const SfxItemSet&   rOutAttrs;
+    const SfxItemSet&   m_rOutAttrs;
 
-    XColorListRef         pColorList;
-    XBitmapListRef        pBitmapList;
+    XColorListRef         m_pColorList;
+    XBitmapListRef        m_pBitmapList;
 
-    ChangeType*         pnBitmapListState;
-    ChangeType*         pnColorListState;
-    sal_uInt16*         pPageType;
-    sal_uInt16          nDlgType;
-    sal_Int32*          pPos;
-    bool*               pbAreaTP;
+    ChangeType*         m_pnBitmapListState;
+    ChangeType*         m_pnColorListState;
+    sal_uInt16*         m_pPageType;
+    sal_uInt16          m_nDlgType;
+    sal_Int32*          m_pPos;
+    bool*               m_pbAreaTP;
 
-    bool                bBmpChanged;
+    bool                m_bBmpChanged;
 
-    XFillStyleItem      aXFStyleItem;
-    XFillBitmapItem     aXBitmapItem;
-    XFillAttrSetItem    aXFillAttr;
-    SfxItemSet&         rXFSet;
+    XFillStyleItem      m_aXFStyleItem;
+    XFillBitmapItem     m_aXBitmapItem;
+    XFillAttrSetItem    m_aXFillAttr;
+    SfxItemSet&         m_rXFSet;
 
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickImportHdl_Impl, Button*, void );
@@ -610,16 +610,16 @@ public:
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
-    void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
-    void    SetBitmapList( XBitmapListRef pBmpLst) { pBitmapList = pBmpLst; }
+    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
+    void    SetBitmapList( XBitmapListRef pBitmapList) { m_pBitmapList = pBitmapList; }
 
-    void    SetPageType( sal_uInt16* pInType ) { pPageType = pInType; }
-    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetPos( sal_Int32* pInPos ) { pPos = pInPos; }
-    void    SetAreaTP( bool* pIn ) { pbAreaTP = pIn; }
+    void    SetPageType( sal_uInt16* pInType ) { m_pPageType = pInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
+    void    SetPos( sal_Int32* pInPos ) { m_pPos = pInPos; }
+    void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
 
-    void    SetBmpChgd( ChangeType* pIn ) { pnBitmapListState = pIn; }
-    void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
+    void    SetBmpChgd( ChangeType* pIn ) { m_pnBitmapListState = pIn; }
+    void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 
     /** Return a label that is associated with the given control.  This
         label is used to the determine the name for the control.
