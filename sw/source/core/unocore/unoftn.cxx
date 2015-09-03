@@ -263,6 +263,13 @@ SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException, std:
 {
     SolarMutexGuard aGuard;
 
+    OUString newLabel(aLabel);
+    //new line must not occur as footnote label
+    if(newLabel.indexOf('\n') >=0 )
+    {
+       newLabel = newLabel.replace('\n', ' ');
+    }
+
     SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
     if(pFmt)
     {
@@ -271,11 +278,11 @@ SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException, std:
         SwTxtNode& rTxtNode = (SwTxtNode&)pTxtFtn->GetTxtNode();
 
         SwPaM aPam(rTxtNode, pTxtFtn->GetStart());
-        GetDoc()->SetCurFtn(aPam, aLabel, pFmt->GetNumber(), pFmt->IsEndNote());
+        GetDoc()->SetCurFtn(aPam, newLabel, pFmt->GetNumber(), pFmt->IsEndNote());
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
-        m_pImpl->m_sLabel = aLabel;
+        m_pImpl->m_sLabel = newLabel;
     }
     else
     {
