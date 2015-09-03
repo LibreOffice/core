@@ -58,6 +58,7 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_HIDDEN_CHARACTERS,
     HANDLE_VIEWSET_HIDDEN_PARAGRAPHS,
     HANDLE_VIEWSET_HIDDEN_TEXT,
+    HANDLE_VIEWSET_HIDE_WHITESPACE,
     HANDLE_VIEWSET_HRULER,
     HANDLE_VIEWSET_HSCROLL,
     HANDLE_VIEWSET_INDEX_MARK_BACKGROUND,
@@ -137,6 +138,7 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
         { OUString( "ShowHiddenCharacters"), HANDLE_VIEWSET_HIDDEN_CHARACTERS    , cppu::UnoType<bool>::get(), PROPERTY_NONE,  0},
         { OUString( "ShowHiddenParagraphs"), HANDLE_VIEWSET_HIDDEN_PARAGRAPHS    , cppu::UnoType<bool>::get(), PROPERTY_NONE,  0},
         { OUString( "ShowHiddenText"),       HANDLE_VIEWSET_HIDDEN_TEXT          , cppu::UnoType<bool>::get(), PROPERTY_NONE,  0},
+        { OUString( "HideWhitespace"),       HANDLE_VIEWSET_HIDE_WHITESPACE,       cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { OUString( "ShowHoriRuler"),        HANDLE_VIEWSET_HRULER               , cppu::UnoType<bool>::get(), PROPERTY_NONE,  0},
         { OUString( "ShowHoriScrollBar"),    HANDLE_VIEWSET_HSCROLL              , cppu::UnoType<bool>::get(), PROPERTY_NONE,  0},
         { OUString( "ShowIndexMarkBackground"),HANDLE_VIEWSET_INDEX_MARK_BACKGROUND, cppu::UnoType<bool>::get(),PROPERTY_NONE, 0},
@@ -617,6 +619,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_TABSTOPS              :   mpViewOption->SetTab(bVal);  break;
         case  HANDLE_VIEWSET_BREAKS                :   mpViewOption->SetLineBreak(bVal); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   mpViewOption->SetShowHiddenField(bVal);  break;
+        case  HANDLE_VIEWSET_HIDE_WHITESPACE:          mpViewOption->SetHideWhitespaceMode(bVal); break;
         case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   mpViewOption->SetShowHiddenChar(bVal); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   mpViewOption->SetShowHiddenPara(bVal);   break;
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   SwViewOption::SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bVal, true);    break;
@@ -847,6 +850,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_TABSTOPS              :   bBoolVal = mpConstViewOption->IsTab(true);   break;
         case  HANDLE_VIEWSET_BREAKS                :   bBoolVal = mpConstViewOption->IsLineBreak(true); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   bBoolVal = mpConstViewOption->IsShowHiddenField();   break;
+        case  HANDLE_VIEWSET_HIDE_WHITESPACE:          bBoolVal = mpConstViewOption->IsHideWhitespaceMode(); break;
         case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   bBoolVal = mpConstViewOption->IsShowHiddenChar(true); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = mpConstViewOption->IsShowHiddenPara();    break;
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = SwViewOption::IsTableBoundaries(); break;
