@@ -1735,10 +1735,9 @@ void SvxLineTabPage::FillUserData()
 // #58425# Symbols on a list (e.g. StarChart)
 // Handler for the symbol selection's popup menu (NumMenueButton)
 // The following link originates from SvxNumOptionsTabPage
-IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
+IMPL_LINK_TYPED( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton, void )
 {
     InitSymbols(pButton);
-    return 0;
 }
 
 // #58425# Symbols on a list (e.g. StarChart)
