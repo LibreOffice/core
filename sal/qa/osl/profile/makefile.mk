@@ -36,33 +36,29 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
 # BEGIN ----------------------------------------------------------------
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/osl_old_testprofile.obj
 
-SHL1TARGET= osl_old_testprofile
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-SHL1RPATH = NONE
+APP1TARGET= osl_old_testprofile
+APP1STDLIBS= $(SALLIB) $(GTESTLIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 # END ------------------------------------------------------------------
-
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-SLOFILES=\
-    $(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
 
 .END

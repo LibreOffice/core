@@ -33,26 +33,18 @@
 #include <stdio.h>
 #include <osl/profile.h>
 
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include "gtest/gtest.h"
 
 //==================================================================================================
 // -----------------------------------------------------------------------------
 namespace osl_Profile
 {
-    class oldtests : public CppUnit::TestFixture
+    class oldtests : public ::testing::Test
     {
     public:
-        void test_profile();
-
-        CPPUNIT_TEST_SUITE( oldtests );
-        CPPUNIT_TEST( test_profile );
-        CPPUNIT_TEST_SUITE_END( );
     };
 
-void oldtests::test_profile(void)
+TEST_F(oldtests, test_profile)
 {
     oslProfile hProfile;
     rtl_uString* ustrProfileName=0;
@@ -88,8 +80,8 @@ void oldtests::test_profile(void)
 
 } // namespace osl_Profile
 
-// -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_REGISTRATION( osl_Profile::oldtests );
-
-// -----------------------------------------------------------------------------
-CPPUNIT_PLUGIN_IMPLEMENT();
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
