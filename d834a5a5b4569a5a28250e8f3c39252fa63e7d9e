@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_61b0a58c",
+        "filename": "basic/source/comp/parser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2015-09-03T22:26:16Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"ch1 \u003d aSym.toAsciiUpperCase();\"?",
+      "range": {
+        "startLine": 680,
+        "startChar": 14,
+        "endLine": 680,
+        "endChar": 45
+      },
+      "revId": "d834a5a5b4569a5a28250e8f3c39252fa63e7d9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_41ada130",
+        "filename": "basic/source/comp/parser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2015-09-03T22:26:16Z",
+      "side": 1,
+      "message": "Shouldn\u0027t it be \"ch2 \u003d aSym.toAsciiUpperCase();\"?",
+      "range": {
+        "startLine": 688,
+        "startChar": 16,
+        "endLine": 688,
+        "endChar": 53
+      },
+      "revId": "d834a5a5b4569a5a28250e8f3c39252fa63e7d9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
