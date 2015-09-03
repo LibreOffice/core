@@ -654,12 +654,12 @@ void StatusBarManager::MouseButtonUp( const MouseEvent& rMEvt )
     MouseButton(rMEvt,&frame::XStatusbarController::mouseButtonUp);
 }
 
-IMPL_LINK_NOARG(StatusBarManager, Click)
+IMPL_LINK_NOARG_TYPED(StatusBarManager, Click, StatusBar*, void)
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
-        return 1;
+        return;
 
     sal_uInt16 nId = m_pStatusBar->GetCurItemId();
     StatusBarControllerMap::const_iterator it = m_aControllerMap.find( nId );
@@ -673,16 +673,14 @@ IMPL_LINK_NOARG(StatusBarManager, Click)
             xController->click( aAWTPoint );
         }
     }
-
-    return 1;
 }
 
-IMPL_LINK_NOARG(StatusBarManager, DoubleClick)
+IMPL_LINK_NOARG_TYPED(StatusBarManager, DoubleClick, StatusBar*, void)
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
-        return 1;
+        return;
 
     sal_uInt16 nId = m_pStatusBar->GetCurItemId();
     StatusBarControllerMap::const_iterator it = m_aControllerMap.find( nId );
@@ -696,8 +694,6 @@ IMPL_LINK_NOARG(StatusBarManager, DoubleClick)
             xController->doubleClick( aAWTPoint );
         }
     }
-
-    return 1;
 }
 
 }

@@ -91,8 +91,8 @@ private:
     bool                mbProgressMode;
     bool                mbInUserDraw;
     bool                mbAdjustHiDPI;
-    Link<>              maClickHdl;
-    Link<>              maDoubleClickHdl;
+    Link<StatusBar*,void>  maClickHdl;
+    Link<StatusBar*,void>  maDoubleClickHdl;
 
     using Window::ImplInit;
     SAL_DLLPRIVATE void      ImplInit( vcl::Window* pParent, WinBits nStyle );
@@ -149,21 +149,21 @@ public:
 
     void                Clear();
 
-    sal_uInt16              GetItemCount() const;
-    sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
-    sal_uInt16              GetItemId( const Point& rPos ) const;
-    sal_uInt16              GetItemPos( sal_uInt16 nItemId ) const;
+    sal_uInt16          GetItemCount() const;
+    sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
+    sal_uInt16          GetItemId( const Point& rPos ) const;
+    sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
     Point               GetItemTextPos( sal_uInt16 nItemId ) const;
-    sal_uInt16              GetCurItemId() const { return mnCurItemId; }
+    sal_uInt16          GetCurItemId() const { return mnCurItemId; }
 
-    sal_uLong               GetItemWidth( sal_uInt16 nItemId ) const;
+    sal_uLong           GetItemWidth( sal_uInt16 nItemId ) const;
     StatusBarItemBits   GetItemBits( sal_uInt16 nItemId ) const;
 
     long                GetItemOffset( sal_uInt16 nItemId ) const;
 
     void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
-    const OUString&    GetItemText( sal_uInt16 nItemId ) const;
+    const OUString&     GetItemText( sal_uInt16 nItemId ) const;
 
     void                SetItemData( sal_uInt16 nItemId, void* pNewData );
     void*               GetItemData( sal_uInt16 nItemId ) const;
@@ -172,7 +172,7 @@ public:
     const OUString      GetItemCommand( sal_uInt16 nItemId );
 
     void                SetHelpText( sal_uInt16 nItemId, const OUString& rText );
-    const OUString&    GetHelpText( sal_uInt16 nItemId ) const;
+    const OUString&     GetHelpText( sal_uInt16 nItemId ) const;
 
     using Window::SetQuickHelpText;
     void                SetQuickHelpText( sal_uInt16 nItemId, const OUString& rText );
@@ -191,8 +191,8 @@ public:
 
     Size                CalcWindowSizePixel() const;
 
-    void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
-    void                SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
+    void                SetClickHdl( const Link<StatusBar*,void>& rLink ) { maClickHdl = rLink; }
+    void                SetDoubleClickHdl( const Link<StatusBar*,void>& rLink ) { maDoubleClickHdl = rLink; }
 
     using Window::SetAccessibleName;
     void                SetAccessibleName( sal_uInt16 nItemId, const OUString& rName );
