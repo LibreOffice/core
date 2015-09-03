@@ -26,3 +26,39 @@
  
  # Optimisation and debug symbols.
  !if "$(DEBUG)" == "1"
+diff -ru xmlsec.orig/apps/cmdline.c xmlsec/apps/cmdline.c
+--- build/xmlsec.orig/apps/cmdline.c	2009-12-05 22:19:17.000000000 +0100
++++ build/xmlsec/apps/cmdline.c	2015-09-03 23:05:01.003150300 +0200
+@@ -7,7 +7,7 @@
+  * 
+  * Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
+  */
+-#if defined(_MSC_VER)
++#if defined(_MSC_VER) && _MSC_VER < 1900
+ #define snprintf _snprintf
+ #endif
+ 
+diff -ru xmlsec.orig/apps/crypto.c xmlsec/apps/crypto.c
+--- build/xmlsec.orig/apps/crypto.c	2009-12-05 22:19:17.000000000 +0100
++++ build/xmlsec/apps/crypto.c	2015-09-03 23:04:36.928472100 +0200
+@@ -7,7 +7,7 @@
+  * 
+  * Copyright (C) 2002-2003 Aleksey Sanin <aleksey@aleksey.com>
+  */
+-#if defined(_MSC_VER)
++#if defined(_MSC_VER) && _MSC_VER < 1900
+ #define snprintf _snprintf
+ #endif
+ 
+diff -ru xmlsec.orig/apps/xmlsec.c xmlsec/apps/xmlsec.c
+--- build/xmlsec.orig/apps/xmlsec.c	2009-12-05 22:19:17.000000000 +0100
++++ build/xmlsec/apps/xmlsec.c	2015-09-03 23:05:08.057636300 +0200
+@@ -9,7 +9,7 @@
+ #include <string.h>
+ #include <time.h>
+ 
+-#if defined(_MSC_VER)
++#if defined(_MSC_VER) && _MSC_VER < 1900
+ #define snprintf _snprintf
+ #endif
+ 
