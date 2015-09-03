@@ -2806,6 +2806,13 @@ void ChartExport::_exportAxis(
 
     exportTextProps(xAxisProp);
 
+    if (nAxisType == XML_valAx)
+    {
+        pFS->singleElement( FSNS( XML_c, XML_crossBetween ),
+                XML_val, "midCat",
+                FSEND );
+    }
+
     pFS->singleElement( FSNS( XML_c, XML_crossAx ),
             XML_val, I32S( rAxisIdPair.nCrossAx ),
             FSEND );
