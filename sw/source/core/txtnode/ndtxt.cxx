@@ -102,8 +102,12 @@ TYPEINIT1( SwTextNode, SwContentNode )
 #define CHECK_SWPHINTS(pNd)  { if( pNd->GetpSwpHints() && \
                                    !pNd->GetDoc()->IsInReading() ) \
                                   pNd->GetpSwpHints()->Check(true); }
+#define CHECK_SWPHINTS_IF_FRM(pNd)  { if( pNd->GetpSwpHints() && \
+                                   !pNd->GetDoc()->IsInReading() ) \
+    pNd->GetpSwpHints()->Check(getLayoutFrm(nullptr, nullptr, nullptr, false) != nullptr); }
 #else
 #define CHECK_SWPHINTS(pNd)
+#define CHECK_SWPHINTS_IF_FRM(pNd)
 #endif
 
 SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
@@ -1643,6 +1647,8 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
                       sal_Int32 nLen,
                       const bool bForceCopyOfAllAttrs )
 {
+    CHECK_SWPHINTS_IF_FRM(this);
+    CHECK_SWPHINTS(pDest);
     sal_Int32 nTextStartIdx = rStart.GetIndex();
     sal_Int32 nDestStart = rDestStart.GetIndex();      // alte Pos merken
 
@@ -1896,7 +1902,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         }
     }
 
-    CHECK_SWPHINTS(this);
+    CHECK_SWPHINTS_IF_FRM(this);
     CHECK_SWPHINTS(pDest);
 }
 
