@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_013a8936",
+        "filename": "setup_native/Library_instooofiltmsi.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-03T19:02:47Z",
+      "side": 1,
+      "message": "are these libucrt and vcruntime static libraries?\n\nfor some reason these MSI libraries are linked with static libraries.\n\n... probably because they are loaded during the installation, before the bundled MSVC runtime DLLs are installed on the system.",
+      "revId": "532204edb707607b4b07b8b46f5e796df33b9a24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
