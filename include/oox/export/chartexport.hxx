@@ -152,14 +152,14 @@ private:
     void exportHiLowLines();
     void exportUpDownBars(css::uno::Reference< css::chart2::XChartType > xChartType );
 
-    void exportAllSeries(css::uno::Reference<css::chart2::XChartType> xChartType, AxesType& rAttachedAxis);
+    void exportAllSeries(css::uno::Reference<css::chart2::XChartType> xChartType, bool& rPrimaryAxes);
     void exportSeries(css::uno::Reference< css::chart2::XChartType > xChartType,
-            css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq, AxesType& rAttachedAxis );
+            css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& rSeriesSeq, bool& rPrimaryAxes);
     void exportCandleStickSeries(
         const css::uno::Sequence<
             css::uno::Reference<
                 css::chart2::XDataSeries > > & aSeriesSeq,
-        bool bJapaneseCandleSticks, AxesType& rAttachedAxis );
+        bool bJapaneseCandleSticks, bool& rPrimaryAxes );
     void exportSeriesText(
         const css::uno::Reference< css::chart2::data::XDataSequence >& xValueSeq );
     void exportSeriesCategory(
@@ -193,7 +193,7 @@ private:
         sal_Int32 nAxisType,
         const char* sAxisPos,
         const AxisIdPair& rAxisIdPair );
-    void exportAxesId(AxesType nAttachedAxis);
+    void exportAxesId(bool bPrimaryAxes);
     void exportView3D();
     bool isDeep3dChart();
 
