@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <rtl/instance.hxx>
 
 namespace basic {
@@ -48,24 +47,12 @@ uno::Reference< frame::XModuleManager2 > lclCreateModuleManager()
     return frame::ModuleManager::create(xContext);
 }
 
+typedef ::std::vector<uno::Reference<frame::XModel>> ModelVector;
 
-
-/** Implementation of an enumeration of all open documents of the same type.
- */
-class DocumentsEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
+static ModelVector CreateDocumentsEnumeration(
+        const uno::Reference< frame::XModel >& rxModel)
 {
-public:
-    explicit DocumentsEnumeration( const uno::Reference< frame::XModel >& rxModel );
-    virtual sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
-private:
-    typedef ::std::vector< uno::Reference< frame::XModel > > ModelVector;
-    ModelVector maModels;
-    ModelVector::iterator maModelIt;
-};
-
-DocumentsEnumeration::DocumentsEnumeration( const uno::Reference< frame::XModel >& rxModel )
-{
+    ModelVector models;
     try
     {
         uno::Reference< frame::XModuleManager2 > xModuleManager( lclCreateModuleManager() );
@@ -77,28 +64,14 @@ DocumentsEnumeration::DocumentsEnumeration( const uno::Reference< frame::XModel 
         {
             uno::Reference< frame::XModel > xCurrModel( xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
             if( xModuleManager->identify( xCurrModel ) == aIdentifier )
-                maModels.push_back( xCurrModel );
+                models.push_back( xCurrModel );
         }
     }
     catch(const uno::Exception& )
     {
     }
-    maModelIt = maModels.begin();
+    return models;
 }
-
-sal_Bool SAL_CALL DocumentsEnumeration::hasMoreElements() throw (uno::RuntimeException, std::exception)
-{
-    return maModelIt != maModels.end();
-}
-
-uno::Any SAL_CALL DocumentsEnumeration::nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
-{
-    if( maModelIt == maModels.end() )
-        throw container::NoSuchElementException();
-    return uno::Any( *maModelIt++ );
-}
-
-
 
 /** Locks or unlocks the controllers of the specified document model.
  */
@@ -156,15 +129,17 @@ typedef void (*ModifyDocumentFunc)( const uno::Reference< frame::XModel >&, bool
  */
 void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Reference< frame::XModel >& rxModel, bool bModificator )
 {
-    uno::Reference< container::XEnumeration > xDocumentsEnum( new DocumentsEnumeration( rxModel ) );
+    ModelVector models(CreateDocumentsEnumeration(rxModel));
     // iterate over all open documents
-    while( xDocumentsEnum->hasMoreElements() ) try
+    for (auto const& xCurrModel : models)
     {
-        uno::Reference< frame::XModel > xCurrModel( xDocumentsEnum->nextElement(), uno::UNO_QUERY_THROW );
-        pModifyDocumentFunc( xCurrModel, bModificator );
-    }
-    catch(const uno::Exception& )
-    {
+        try
+        {
+            pModifyDocumentFunc(xCurrModel, bModificator);
+        }
+        catch (const uno::Exception&)
+        {
+        }
     }
 }
 

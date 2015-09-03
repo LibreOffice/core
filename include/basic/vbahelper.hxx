@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASIC_VBAHELPER_HXX
 #define INCLUDED_BASIC_VBAHELPER_HXX
 
-#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ustring.hxx>
 #include <basic/basicdllapi.h>
