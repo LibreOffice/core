@@ -1268,9 +1268,6 @@ bool EnhWMFReader::ReadEnhWMF()
                     Bitmap      aBitmap;
                     Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
 
-                    cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
-                    cyDest = abs( (int)cyDest );        // and also 122889
-
                     if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
                         bStatus = false;
                     else
@@ -1333,9 +1330,6 @@ bool EnhWMFReader::ReadEnhWMF()
 
                     Bitmap      aBitmap;
                     Rectangle   aRect( Point( xDest, yDest ), Size( cxDest, cyDest ) );
-
-                    cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
-                    cyDest = abs( (int)cyDest );        // and also 122889
 
                     if (  ((SAL_MAX_UINT32 - 14)             < cbBitsSrc)
                        || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc )
