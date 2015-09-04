@@ -49,6 +49,7 @@
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
+#include <ndtxt.hxx>
 #include <editeng/lrspitem.hxx>
 #include <oox/ole/olehelper.hxx>
 
@@ -451,6 +452,14 @@ namespace SwWW8
         bool operator()(const OUString &r1, const OUString &r2) const
         {
             return r1.compareToIgnoreAsciiCase(r2)<0;
+        }
+    };
+
+    struct ltnode
+    {
+        bool operator()(const SwTextNode *r1, const SwTextNode *r2) const
+        {
+            return r1->GetIndex() < r2->GetIndex();
         }
     };
 };
@@ -920,12 +929,12 @@ private:
     /*
     A vector of SwTextNodes to erase from a document after import is complete
     */
-    std::vector<SwTextNode*> m_aTextNodes;
+    std::set<SwTextNode*, SwWW8::ltnode> m_aTextNodes;
     SwDoc& m_rDoc;
 public:
     explicit wwExtraneousParas(SwDoc &rDoc) : m_rDoc(rDoc) {}
     ~wwExtraneousParas() { delete_all_from_doc(); }
-    void push_back(SwTextNode *pTextNode) { m_aTextNodes.push_back(pTextNode); }
+    void insert(SwTextNode *pTextNode) { m_aTextNodes.insert(pTextNode); }
     void delete_all_from_doc();
 };
 

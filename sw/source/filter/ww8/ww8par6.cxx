@@ -2220,7 +2220,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrameFormat *pFlyFormat,
                             //delete after import is complete rather than now
                             //to avoid the complication of managing uncommitted
                             //ctrlstack properties that refer to it.
-                            m_aExtraneousParas.push_back(pNd);
+                            m_aExtraneousParas.insert(pNd);
 
                             SwTable& rTable = pTable->GetTable();
                             SwFrameFormat* pTableFormat = rTable.GetFrameFormat();

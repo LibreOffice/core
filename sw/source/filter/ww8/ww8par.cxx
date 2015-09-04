@@ -4632,9 +4632,8 @@ void wwSectionManager::InsertSegments()
 
 void wwExtraneousParas::delete_all_from_doc()
 {
-    typedef std::vector<SwTextNode*>::iterator myParaIter;
-    myParaIter aEnd = m_aTextNodes.end();
-    for (myParaIter aI = m_aTextNodes.begin(); aI != aEnd; ++aI)
+    auto aEnd = m_aTextNodes.rend();
+    for (auto aI = m_aTextNodes.rbegin(); aI != aEnd; ++aI)
     {
         SwTextNode *pTextNode = *aI;
         SwNodeIndex aIdx(*pTextNode);
@@ -5357,6 +5356,12 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
         DELETEZ( m_pLstManager );
     }
 
+    SAL_WARN_IF(m_pTableEndPaM, "sw.ww8", "document ended without table ending");
+    m_pTableEndPaM.reset();  //ensure this is deleted before pPaM
+    mpCrsr.reset();
+    m_pPaM = nullptr;
+    m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
+
     // remove extra paragraphs after attribute ctrl
     // stacks etc. are destroyed, and before fields
     // are updated
@@ -5367,12 +5372,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     // delete the pam before the call for hide all redlines (Bug 73683)
     if (m_bNewDoc)
       m_rDoc.getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)( eMode ));
-
-    SAL_WARN_IF(m_pTableEndPaM, "sw.ww8", "document ended without table ending");
-    m_pTableEndPaM.reset();  //ensure this is deleted before pPaM
-    mpCrsr.reset();
-    m_pPaM = nullptr;
-    m_pLastAnchorPos.reset();//ensure this is deleted before UpdatePageDescs
 
     UpdatePageDescs(m_rDoc, nPageDescOffset);
 
