@@ -183,7 +183,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     if ( pReqArgs->HasItem( FN_PARAM_1, &pTabItem ) &&
                          pReqArgs->HasItem( nSlot, &pNameItem ) )
                     {
-                        //  tablenumber from basic: 1-based
+                        // sheet number from basic: 1-based
 
                         aName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
                         nTabNr = static_cast<const SfxUInt16Item*>(pTabItem)->GetValue() - 1;
@@ -312,7 +312,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 SCTAB nTabSelCount = rMark.GetSelectCount();
 
                 if ( !pDoc->IsDocEditable() )
-                    break; // evrything locked
+                    break; // everything locked
 
                 if ( nSlot != FID_TAB_APPEND &&
                         ( pDoc->IsTabProtected( nTabNr ) || nTabSelCount > 1 ) )
@@ -768,7 +768,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 break;
 
         default:
-                OSL_FAIL("Unbekannte Message bei ViewShell");
+                OSL_FAIL("unknown message for ViewShell");
                 break;
     }
 }
