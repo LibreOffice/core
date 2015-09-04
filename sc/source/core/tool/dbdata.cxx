@@ -738,12 +738,21 @@ private:
 };
 
 /** Set a numbered table column name at given nIndex, preventing duplicates,
-    numbering starting at nCount. No check whether nIndex is valid. */
-void SetTableColumnName( ::std::vector<OUString>& rVec, size_t nIndex, const OUString& rName, sal_Int32 nCount )
+    numbering starting at nCount. If nCount==0 then the first attempt is made
+    with an unnumbered name and if already present the next attempt with
+    nCount=2, so "Original" and "Original2". No check whether nIndex is valid. */
+void SetTableColumnName( ::std::vector<OUString>& rVec, size_t nIndex, const OUString& rName, size_t nCount )
 {
+    OUString aStr;
     do
     {
-        OUString aStr( rName + OUString::number( nCount));
+        if (nCount)
+            aStr = rName + OUString::number( nCount);
+        else
+        {
+            aStr = rName;
+            ++nCount;
+        }
         auto it( ::std::find_if( rVec.begin(), rVec.end(), TableColumnNameSearch( aStr)));
         if (it == rVec.end())
         {
@@ -773,11 +782,14 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
             if (pCell->hasString())
             {
                 const OUString& rStr = pCell->getString( pDoc);
-                aNewNames[nCol-nStartCol] = rStr;
                 if (rStr.isEmpty())
                     bHaveEmpty = true;
-                else if (nLastColFilled < nCol-1)
-                    bHaveEmpty = true;
+                else
+                {
+                    SetTableColumnName( aNewNames, nCol-nStartCol, rStr, 0);
+                    if (nLastColFilled < nCol-1)
+                        bHaveEmpty = true;
+                }
                 nLastColFilled = nCol;
             }
             else
@@ -799,13 +811,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
                 if (rStr.isEmpty())
                     bHaveEmpty = true;
                 else
-                {
-                    auto it( ::std::find_if( aNewNames.begin(), aNewNames.end(), TableColumnNameSearch( rStr)));
-                    if (it == aNewNames.end())
-                        aNewNames[i] = rStr;
-                    else
-                        bHaveEmpty = true;
-                }
+                    SetTableColumnName( aNewNames, i, rStr, 0);
             }
         }
     }
