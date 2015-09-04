@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWCONT_HXX
 
 #include <rtl/ustring.hxx>
+#include <vcl/lstbox.hxx>
 
 class SwContentType;
 
@@ -72,18 +73,18 @@ public:
     virtual bool            IsProtect() const;
     const SwContentType*    GetParent() const {return pParent;}
     const OUString&         GetName()   const {return sContentName;}
-    bool                    operator==(const SwContent& /*rCont*/) const
-                                {
-                                    // they're never equal, otherwise they'd fall out of the array
-                                    return false;
-                                }
-    bool                    operator<(const SwContent& rCont) const
-                                {
-                                    // at first sort by position and then by name
-                                    return nYPosition != rCont.nYPosition ?
-                                        nYPosition < rCont.nYPosition :
-                                            sContentName < rCont.sContentName;
-                                }
+    bool operator==(const SwContent& /*rCont*/) const
+    {
+        // they're never equal, otherwise they'd fall out of the array
+        return false;
+    }
+    bool operator<(const SwContent& rCont) const
+    {
+        // at first sort by position and then by name
+        if (nYPosition != rCont.nYPosition)
+            return nYPosition < rCont.nYPosition;
+        return ListBox::NaturalSortCompare(sContentName, rCont.sContentName) < 0;
+    }
 
     long        GetYPos() const {return nYPosition;}
 
