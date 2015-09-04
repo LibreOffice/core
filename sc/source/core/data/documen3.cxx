@@ -313,6 +313,12 @@ ScDBData* ScDocument::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nC
         return NULL;
 }
 
+void ScDocument::RefreshDirtyTableColumnNames()
+{
+    if (pDBCollection)
+        pDBCollection->RefreshDirtyTableColumnNames();
+}
+
 bool ScDocument::HasPivotTable() const
 {
     return pDPCollection && pDPCollection->GetCount();

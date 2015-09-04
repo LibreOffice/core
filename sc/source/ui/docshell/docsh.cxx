@@ -2800,6 +2800,7 @@ void ScDocShell::SetDocumentModified( bool bIsModified /* = true */ )
             aDocument.Broadcast(ScHint(SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS));
             if ( aDocument.IsForcedFormulaPending() && aDocument.GetAutoCalc() )
                 aDocument.CalcFormulaTree( true );
+            aDocument.RefreshDirtyTableColumnNames();
             PostDataChanged();
 
             //  Detective AutoUpdate:

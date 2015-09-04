@@ -24,6 +24,9 @@
 #include "refreshtimer.hxx"
 #include "address.hxx"
 #include "global.hxx"
+#include "rangelst.hxx"
+
+#include <svl/listener.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -45,13 +48,29 @@ enum class ScDBDataPortion
     AREA        ///< entire area
 };
 
-class ScDBData : public ScRefreshTimer
+/** Container base class to provide selected access for ScDBData. */
+class ScDBDataContainerBase
+{
+public:
+    ScDBDataContainerBase( ScDocument& rDoc ) : mrDoc(rDoc) {}
+    virtual ~ScDBDataContainerBase() {}
+    ScDocument* GetDocument() const;
+    ScRangeList& GetDirtyTableColumnNames();
+
+protected:
+    ScDocument& mrDoc;
+    ScRangeList maDirtyTableColumnNames;
+};
+
+class ScDBData : public SvtListener, public ScRefreshTimer
 {
 private:
     boost::scoped_ptr<ScSortParam> mpSortParam;
     boost::scoped_ptr<ScQueryParam> mpQueryParam;
     boost::scoped_ptr<ScSubTotalParam> mpSubTotal;
     boost::scoped_ptr<ScImportParam> mpImportParam;
+
+    ScDBDataContainerBase* mpContainer;
 
     /// DBParam
     const OUString aName;
@@ -79,6 +98,7 @@ private:
     bool            bModified;          ///< is set/cleared for/by(?) UpdateReference
 
     ::std::vector< OUString > maTableColumnNames;   ///< names of table columns
+    bool            mbTableColumnNamesDirty;
 
     using ScRefreshTimer::operator==;
 
@@ -96,7 +116,9 @@ public:
     ScDBData(const OUString& rName, const ScDBData& rData);
     virtual ~ScDBData();
 
-    ScDBData&   operator= (const ScDBData& rData);
+    virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
+
+    ScDBData&   operator= (const ScDBData& rData) ;
 
     bool        operator== (const ScDBData& rData) const;
 
@@ -119,8 +141,13 @@ public:
     void        SetKeepFmt(bool bSet)           { bKeepFmt = bSet; }
     bool        IsStripData() const             { return bStripData; }
     void        SetStripData(bool bSet)         { bStripData = bSet; }
-    void        SetTableColumnNames( const ::std::vector< OUString >& rNames ) { maTableColumnNames = rNames; }
-    const ::std::vector< OUString >&    GetTableColumnNames() const { return maTableColumnNames; }
+
+    void        SetContainer( ScDBDataContainerBase* pContainer ) { mpContainer = pContainer; }
+    void        StartTableColumnNamesListener();
+    void        EndTableColumnNamesListener();
+    SC_DLLPUBLIC void SetTableColumnNames( const ::std::vector< OUString >& rNames );
+    SC_DLLPUBLIC const ::std::vector< OUString >& GetTableColumnNames() const { return maTableColumnNames; }
+    bool        AreTableColumnNamesDirty() const { return mbTableColumnNamesDirty; }
 
     /** Refresh/update the column names with the header row's cell contents. */
     SC_DLLPUBLIC void RefreshTableColumnNames( ScDocument* pDoc );
@@ -202,16 +229,16 @@ public:
     /**
      * Stores global named database ranges.
      */
-    class SC_DLLPUBLIC NamedDBs
+    class SC_DLLPUBLIC NamedDBs : public ScDBDataContainerBase
     {
         friend class ScDBCollection;
 
         typedef ::std::set<std::unique_ptr<ScDBData>, ScDBData::less> DBsType;
         DBsType m_DBs;
         ScDBCollection& mrParent;
-        ScDocument& mrDoc;
         NamedDBs(ScDBCollection& rParent, ScDocument& rDoc);
         NamedDBs(const NamedDBs& r);
+        virtual ~NamedDBs();
         NamedDBs & operator=(NamedDBs const&) = delete;
 
     public:
@@ -286,6 +313,8 @@ public:
     const ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     ScDBData* GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     ScDBData* GetDBNearCursor(SCCOL nCol, SCROW nRow, SCTAB nTab );
+
+    void RefreshDirtyTableColumnNames();
 
     void    DeleteOnTab( SCTAB nTab );
     void    UpdateReference(UpdateRefMode eUpdateRefMode,

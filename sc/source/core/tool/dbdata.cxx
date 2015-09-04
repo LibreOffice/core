@@ -32,6 +32,7 @@
 #include "subtotalparam.hxx"
 #include "sortparam.hxx"
 #include "dociter.hxx"
+#include "brdcst.hxx"
 
 #include <memory>
 #include <utility>
@@ -52,10 +53,12 @@ ScDBData::ScDBData( const OUString& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     bool bByR, bool bHasH, bool bTotals) :
+    // Listeners are to be setup by the "parent" container.
     mpSortParam(new ScSortParam),
     mpQueryParam(new ScQueryParam),
     mpSubTotal(new ScSubTotalParam),
     mpImportParam(new ScImportParam),
+    mpContainer (nullptr),
     aName       (rName),
     aUpper      (rName),
     nTable      (nTab),
@@ -73,17 +76,21 @@ ScDBData::ScDBData( const OUString& rName,
     bDBSelection(false),
     nIndex      (0),
     bAutoFilter (false),
-    bModified   (false)
+    bModified   (false),
+    mbTableColumnNamesDirty(bHasH)
 {
     aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
+    // Listeners are to be setup by the "parent" container.
+    SvtListener         (),
     ScRefreshTimer      ( rData ),
     mpSortParam(new ScSortParam(*rData.mpSortParam)),
     mpQueryParam(new ScQueryParam(*rData.mpQueryParam)),
     mpSubTotal(new ScSubTotalParam(*rData.mpSubTotal)),
     mpImportParam(new ScImportParam(*rData.mpImportParam)),
+    mpContainer         (nullptr),
     aName               (rData.aName),
     aUpper              (rData.aUpper),
     nTable              (rData.nTable),
@@ -103,16 +110,20 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     nIndex              (rData.nIndex),
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified),
-    maTableColumnNames  (rData.maTableColumnNames)
+    maTableColumnNames  (rData.maTableColumnNames),
+    mbTableColumnNamesDirty(rData.mbTableColumnNamesDirty)
 {
 }
 
 ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
+    // Listeners are to be setup by the "parent" container.
+    SvtListener         (),
     ScRefreshTimer      ( rData ),
     mpSortParam(new ScSortParam(*rData.mpSortParam)),
     mpQueryParam(new ScQueryParam(*rData.mpQueryParam)),
     mpSubTotal(new ScSubTotalParam(*rData.mpSubTotal)),
     mpImportParam(new ScImportParam(*rData.mpImportParam)),
+    mpContainer         (nullptr),
     aName               (rName),
     aUpper              (rName),
     nTable              (rData.nTable),
@@ -132,7 +143,8 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     nIndex              (rData.nIndex),
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified),
-    maTableColumnNames  (rData.maTableColumnNames)
+    maTableColumnNames  (rData.maTableColumnNames),
+    mbTableColumnNamesDirty (rData.mbTableColumnNamesDirty)
 {
     aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
@@ -141,11 +153,20 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
 {
     // Don't modify the name.  The name is not mutable as it is used as a key
     // in the container to keep the db ranges sorted by the name.
+
+    bool bHeaderRangeDiffers = (nTable != rData.nTable || nStartCol != rData.nStartCol ||
+            nEndCol != rData.nEndCol || nStartRow != rData.nStartRow);
+    bool bNeedsListening = ((bHasHeader && bHeaderRangeDiffers) || (!bHasHeader && rData.bHasHeader));
+    if (bHasHeader && (!rData.bHasHeader || bHeaderRangeDiffers))
+    {
+        EndTableColumnNamesListener();
+    }
     ScRefreshTimer::operator=( rData );
     mpSortParam.reset(new ScSortParam(*rData.mpSortParam));
     mpQueryParam.reset(new ScQueryParam(*rData.mpQueryParam));
     mpSubTotal.reset(new ScSubTotalParam(*rData.mpSubTotal));
     mpImportParam.reset(new ScImportParam(*rData.mpImportParam));
+    // Keep mpContainer.
     nTable              = rData.nTable;
     nStartCol           = rData.nStartCol;
     nStartRow           = rData.nStartRow;
@@ -162,7 +183,35 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     bDBSelection        = rData.bDBSelection;
     nIndex              = rData.nIndex;
     bAutoFilter         = rData.bAutoFilter;
-    maTableColumnNames  = rData.maTableColumnNames;
+
+    if (bHeaderRangeDiffers)
+    {
+        if (!maTableColumnNames.empty())
+            ::std::vector<OUString>().swap( maTableColumnNames);
+        if (bHasHeader)
+        {
+            mbTableColumnNamesDirty = true;
+            if (mpContainer)
+            {
+                ScRange aHeaderRange( ScAddress::UNINITIALIZED);
+                GetArea( aHeaderRange);
+                aHeaderRange.aEnd.SetRow( aHeaderRange.aStart.Row());
+                mpContainer->GetDirtyTableColumnNames().Join( aHeaderRange);
+            }
+        }
+        else
+        {
+            mbTableColumnNamesDirty = false;
+        }
+    }
+    else
+    {
+        maTableColumnNames  = rData.maTableColumnNames;
+        mbTableColumnNamesDirty = rData.mbTableColumnNamesDirty;
+    }
+
+    if (bNeedsListening)
+        StartTableColumnNamesListener();
 
     return *this;
 }
@@ -276,12 +325,15 @@ void ScDBData::GetArea(ScRange& rRange) const
 
 void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
-    if (nCol2 - nCol1 != nEndCol - nStartCol)
+    bool bHeaderRangeChange = (nTab != nTable || nCol1 != nStartCol || nCol2 != nEndCol || nRow1 != nStartRow);
+    if (bHeaderRangeChange)
     {
+        EndTableColumnNamesListener();
         if (!maTableColumnNames.empty())
         {
             SAL_WARN("sc.core", "ScDBData::SetArea - invalidating column names/offsets");
             ::std::vector<OUString>().swap( maTableColumnNames);
+            mbTableColumnNamesDirty = true;
         }
     }
 
@@ -290,6 +342,9 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     nStartRow = nRow1;
     nEndCol   = nCol2;
     nEndRow   = nRow2;
+
+    if (bHeaderRangeChange)
+        StartTableColumnNamesListener();
 }
 
 void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
@@ -507,9 +562,16 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
         bool bChanged = ( nTab != aRange.aStart.Tab() );
         if (bChanged)
         {
-            // Same column range, SetArea() does not invalidate column names.
+            // SetArea() invalidates column names, but it is the same column range
+            // just on a different sheet; remember and set new.
+            ::std::vector<OUString> aNames( maTableColumnNames);
+            bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
+            // Same column range.
             SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(),aRange.aEnd.Row() );
+            // Do not use SetTableColumnNames() because that resets mbTableColumnNamesDirty.
+            maTableColumnNames = aNames;
+            mbTableColumnNamesDirty = bTableColumnNamesDirty;
         }
 
         //  MoveTo() is not necessary if only the sheet changed.
@@ -538,12 +600,14 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                             theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) != UR_NOTHING;
     if (bDoUpdate)
     {
-        // MoveTo() invalidates column names via SetArea(); adjust, remember
-        // and set new column offsets for names.
+        // MoveTo() invalidates column names via SetArea(); adjust, remember and set new.
         AdjustTableColumnNames( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
         ::std::vector<OUString> aNames( maTableColumnNames);
+        bool bTableColumnNamesDirty = mbTableColumnNamesDirty;
         MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
+        // Do not use SetTableColumnNames() because that resets mbTableColumnNamesDirty.
         maTableColumnNames = aNames;
+        mbTableColumnNamesDirty = bTableColumnNamesDirty;
     }
 
     ScRange aRangeAdvSource;
@@ -579,8 +643,35 @@ void ScDBData::ExtendDataArea(ScDocument* pDoc)
         {
             SAL_WARN("sc.core", "ScDBData::ExtendDataArea - invalidating column names/offsets");
             ::std::vector<OUString>().swap( maTableColumnNames);
+            mbTableColumnNamesDirty = true;
         }
     }
+}
+
+void ScDBData::StartTableColumnNamesListener()
+{
+    if (mpContainer && bHasHeader)
+    {
+        ScDocument* pDoc = mpContainer->GetDocument();
+        if (!pDoc->IsClipOrUndo())
+        {
+            ScRange aHeaderRange( ScAddress::UNINITIALIZED);
+            GetArea( aHeaderRange);
+            aHeaderRange.aEnd.SetRow( aHeaderRange.aStart.Row());
+            pDoc->StartListeningArea( aHeaderRange, false, this);
+        }
+    }
+}
+
+void ScDBData::EndTableColumnNamesListener()
+{
+    EndListeningAll();
+}
+
+void ScDBData::SetTableColumnNames( const ::std::vector< OUString >& rNames )
+{
+    maTableColumnNames = rNames;
+    mbTableColumnNamesDirty = false;
 }
 
 void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
@@ -597,6 +688,9 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
     ::std::vector<OUString> aNewNames;
     if (eUpdateRefMode == URM_INSDEL)
     {
+        if (nDx > 0)
+            mbTableColumnNamesDirty = true;     // inserted columns will have empty names
+
         // nCol1 is the first column of the block that gets shifted, determine
         // the head and tail elements that are to be copied for deletion or
         // insertion.
@@ -624,6 +718,8 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
     SAL_WARN_IF( !maTableColumnNames.empty() && aNewNames.empty(),
             "sc.core", "ScDBData::AdjustTableColumnNames - invalidating column names/offsets");
     aNewNames.swap( maTableColumnNames);
+    if (maTableColumnNames.empty())
+        mbTableColumnNamesDirty = true;
 }
 
 namespace {
@@ -730,22 +826,27 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
     }
 
     aNewNames.swap( maTableColumnNames);
+    mbTableColumnNamesDirty = false;
 }
 
 void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange )
 {
-    if (!HasHeader())
+    // Header-less tables get names generated, completely empty a full refresh.
+    if (!HasHeader() || maTableColumnNames.empty())
+    {
+        RefreshTableColumnNames( pDoc);
         return;
+    }
 
-    ScRange aRange( ScAddress::UNINITIALIZED);
-    GetArea( aRange);
-    aRange.aEnd.SetRow( aRange.aStart.Row());
-    ScRange aIntersection( aRange.Intersection( rRange));
+    ScRange aHeaderRange( ScAddress::UNINITIALIZED);
+    GetArea( aHeaderRange);
+    aHeaderRange.aEnd.SetRow( aHeaderRange.aStart.Row());
+    ScRange aIntersection( aHeaderRange.Intersection( rRange));
     if (!aIntersection.IsValid())
         return;
 
-    if (maTableColumnNames.empty() ||
-            maTableColumnNames.size() < static_cast<size_t>(aIntersection.aEnd.Col() - nStartCol + 1))
+    // Full refresh if sizes don't match.
+    if (maTableColumnNames.size() < static_cast<size_t>(aIntersection.aEnd.Col() - nStartCol + 1))
     {
         RefreshTableColumnNames( pDoc);
         return;
@@ -760,20 +861,27 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange 
     SCROW nRow;
     while((pCell = aIter.GetNext( nCol, nRow)) != nullptr)
     {
-        if (pCell->hasString())
+        size_t nOff = nCol - nStartCol;
+        bool bEmpty = maTableColumnNames[nOff].isEmpty();
+        if (!pCell->hasString())
+            bEmpty &= true;
+        else
         {
             const OUString& rStr = pCell->getString( pDoc);
-            if (!rStr.isEmpty())
-                maTableColumnNames[nCol-nStartCol] = rStr;
+            if (rStr.isEmpty())
+                bEmpty &= true;
             else
-            {
-                // Usually this is called for only a few positions of which
-                // most are not empty, so init from resource only if necessary.
-                OUString aColumn( ScGlobal::GetRscString(STR_COLUMN));
-                SetTableColumnName( maTableColumnNames, nCol-nStartCol, aColumn, nCol-nStartCol+1);
-            }
+                maTableColumnNames[nOff] = rStr;
+        }
+        if (bEmpty)
+        {
+            OUString aColumn( ScGlobal::GetRscString(STR_COLUMN));
+            SetTableColumnName( maTableColumnNames, nOff, aColumn, nOff+1);
         }
     }
+
+    if (aIntersection == aHeaderRange)
+        mbTableColumnNamesDirty = false;
 }
 
 sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
@@ -799,6 +907,24 @@ const OUString& ScDBData::GetTableColumnName( SCCOL nCol ) const
         return EMPTY_OUSTRING;
 
     return maTableColumnNames[nOffset];
+}
+
+void ScDBData::Notify( const SfxHint& rHint )
+{
+    const ScHint* pScHint = dynamic_cast<const ScHint*>(&rHint);
+    if (!pScHint)
+        return;
+
+    sal_uLong nHint = pScHint->GetId();
+    if (nHint & SC_HINT_DATACHANGED)
+    {
+        mbTableColumnNamesDirty = true;
+        if (mpContainer)
+            mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetAddress());
+    }
+
+    // Do not refresh column names here, which might trigger unwanted
+    // recalculation.
 }
 
 namespace {
@@ -923,17 +1049,37 @@ public:
 
 }
 
+ScDocument* ScDBDataContainerBase::GetDocument() const
+{
+    return &mrDoc;
+}
+
+ScRangeList& ScDBDataContainerBase::GetDirtyTableColumnNames()
+{
+    return maDirtyTableColumnNames;
+}
+
 ScDBCollection::NamedDBs::NamedDBs(ScDBCollection& rParent, ScDocument& rDoc) :
-    mrParent(rParent), mrDoc(rDoc) {}
+    ScDBDataContainerBase(rDoc), mrParent(rParent) {}
 
 ScDBCollection::NamedDBs::NamedDBs(const NamedDBs& r)
-    : mrParent(r.mrParent)
-    , mrDoc(r.mrDoc)
+    : ScDBDataContainerBase(r.mrDoc)
+    , mrParent(r.mrParent)
 {
     for (auto const& it : r.m_DBs)
     {
-        m_DBs.insert(std::unique_ptr<ScDBData>(new ScDBData(*it)));
+        ScDBData* p = new ScDBData(*it);
+        std::unique_ptr<ScDBData> pData(p);
+        if (m_DBs.insert( std::move(pData)).second)
+        {
+            p->SetContainer( this);
+            p->StartTableColumnNamesListener(); // needs the container be set already
+        }
     }
+}
+
+ScDBCollection::NamedDBs::~NamedDBs()
+{
 }
 
 ScDBCollection::NamedDBs::iterator ScDBCollection::NamedDBs::begin()
@@ -984,10 +1130,18 @@ bool ScDBCollection::NamedDBs::insert(ScDBData* p)
 
     pair<DBsType::iterator, bool> r = m_DBs.insert(std::move(pData));
 
-    if (r.second && p->HasImportParam() && !p->HasImportSelection())
+    if (r.second)
     {
-        p->SetRefreshHandler(mrParent.GetRefreshHandler());
-        p->SetRefreshControl(&mrDoc.GetRefreshTimerControlAddress());
+        p->SetContainer( this);
+        p->StartTableColumnNamesListener(); // needs the container be set already
+
+        /* TODO: shouldn't the import refresh not be setup for
+         * clipboard/undo documents? It was already like this before.. */
+        if (p->HasImportParam() && !p->HasImportSelection())
+        {
+            p->SetRefreshHandler(mrParent.GetRefreshHandler());
+            p->SetRefreshControl(&mrDoc.GetRefreshTimerControlAddress());
+        }
     }
     return r.second;
 }
@@ -1219,6 +1373,20 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
             return pNoNameData;
 
     return NULL;
+}
+
+void ScDBCollection::RefreshDirtyTableColumnNames()
+{
+    for (size_t i=0; i < maNamedDBs.maDirtyTableColumnNames.size(); ++i)
+    {
+        const ScRange* pRange = maNamedDBs.maDirtyTableColumnNames[i];
+        for (auto const& it : maNamedDBs)
+        {
+            if (it->AreTableColumnNamesDirty())
+                it->RefreshTableColumnNames( &maNamedDBs.mrDoc, *pRange);
+        }
+    }
+    maNamedDBs.maDirtyTableColumnNames.RemoveAll();
 }
 
 void ScDBCollection::DeleteOnTab( SCTAB nTab )
