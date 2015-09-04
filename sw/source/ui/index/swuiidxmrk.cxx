@@ -618,6 +618,7 @@ IMPL_LINK_NOARG_TYPED(SwIndexMarkPane, CloseHdl, Button*, void)
     }
     else
     {
+        SwViewShell::SetCareWin( 0 );
         m_rDialog.EndDialog();
     }
 }
@@ -920,7 +921,6 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
 SwIndexMarkPane::~SwIndexMarkPane()
 {
     delete pTOXMgr;
-    SwViewShell::SetCareWin( 0 );
 }
 
 void    SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)
