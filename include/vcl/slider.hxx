@@ -47,7 +47,6 @@ private:
     long            mnPageSize;
     long            mnDelta;
     sal_uInt16      mnDragDraw;
-    sal_uInt16      mnDrawFlags;
     sal_uInt16      mnStateFlags;
     ScrollType      meScrollType;
     bool            mbCalcSize;
@@ -68,7 +67,7 @@ private:
     SAL_DLLPRIVATE long ImplCalcThumbPos( long nPixPos );
     SAL_DLLPRIVATE long ImplCalcThumbPosPix( long nPos );
     SAL_DLLPRIVATE void ImplCalc( bool bUpdate = true );
-    SAL_DLLPRIVATE void ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags);
+    SAL_DLLPRIVATE void ImplDraw(vcl::RenderContext& rRenderContext);
     SAL_DLLPRIVATE bool ImplIsPageUp( const Point& rPos );
     SAL_DLLPRIVATE bool ImplIsPageDown( const Point& rPos );
     SAL_DLLPRIVATE long ImplSlide( long nNewPos, bool bCallEndSlide );

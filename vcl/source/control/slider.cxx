@@ -25,12 +25,6 @@
 
 #include "thumbpos.hxx"
 
-#define SLIDER_DRAW_THUMB           ((sal_uInt16)0x0001)
-#define SLIDER_DRAW_CHANNEL1        ((sal_uInt16)0x0002)
-#define SLIDER_DRAW_CHANNEL2        ((sal_uInt16)0x0004)
-#define SLIDER_DRAW_CHANNEL         (SLIDER_DRAW_CHANNEL1 | SLIDER_DRAW_CHANNEL2)
-#define SLIDER_DRAW_ALL             (SLIDER_DRAW_THUMB | SLIDER_DRAW_CHANNEL)
-
 #define SLIDER_STATE_CHANNEL1_DOWN  ((sal_uInt16)0x0001)
 #define SLIDER_STATE_CHANNEL2_DOWN  ((sal_uInt16)0x0002)
 #define SLIDER_STATE_THUMB_DOWN     ((sal_uInt16)0x0004)
@@ -62,7 +56,6 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnPageSize          = 1;
     mnDelta             = 0;
     mnDragDraw          = 0;
-    mnDrawFlags         = SLIDER_DRAW_ALL;
     mnStateFlags        = 0;
     meScrollType        = SCROLL_DONTKNOW;
     mbCalcSize          = true;
@@ -203,9 +196,8 @@ void Slider::ImplUpdateRects( bool bUpdate )
     {
         if ( aOldThumbRect != maThumbRect )
         {
-            mnDrawFlags = SLIDER_DRAW_ALL;
             if( bInvalidateAll )
-                Invalidate();
+                Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
             else
             {
                 vcl::Region aInvalidRegion( aOldThumbRect );
@@ -339,14 +331,13 @@ void Slider::ImplCalc( bool bUpdate )
 
     if ( bUpdate && bInvalidateAll )
     {
-        mnDrawFlags = SLIDER_DRAW_ALL;
         Invalidate();
         bUpdate = false;
     }
     ImplUpdateRects( bUpdate );
 }
 
-void Slider::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags)
+void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
 {
     DecorationView aDecoView(&rRenderContext);
     DrawButtonFlags nStyle;
@@ -378,7 +369,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags)
     if (bNativeOK)
         return;
 
-    if ((nDrawFlags & SLIDER_DRAW_CHANNEL1) && !maChannel1Rect.IsEmpty())
+    if (!maChannel1Rect.IsEmpty())
     {
         long        nRectSize;
         Rectangle   aRect = maChannel1Rect;
@@ -422,7 +413,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags)
         }
     }
 
-    if ((nDrawFlags & SLIDER_DRAW_CHANNEL2) && !maChannel2Rect.IsEmpty())
+    if (!maChannel2Rect.IsEmpty())
     {
         long nRectSize;
         Rectangle aRect = maChannel2Rect;
@@ -463,23 +454,20 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags)
         }
     }
 
-    if (nDrawFlags & SLIDER_DRAW_THUMB)
+    if (!maThumbRect.IsEmpty())
     {
-        if (!maThumbRect.IsEmpty())
+        if (bEnabled)
         {
-            if (bEnabled)
-            {
-                nStyle = DrawButtonFlags::NONE;
-                if (mnStateFlags & SLIDER_STATE_THUMB_DOWN)
-                    nStyle |= DrawButtonFlags::Pressed;
-                aDecoView.DrawButton(maThumbRect, nStyle);
-            }
-            else
-            {
-                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-                rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
-                rRenderContext.DrawRect(maThumbRect);
-            }
+            nStyle = DrawButtonFlags::NONE;
+            if (mnStateFlags & SLIDER_STATE_THUMB_DOWN)
+                nStyle |= DrawButtonFlags::Pressed;
+            aDecoView.DrawButton(maThumbRect, nStyle);
+        }
+        else
+        {
+            rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
+            rRenderContext.SetFillColor(rStyleSettings.GetCheckedColor());
+            rRenderContext.DrawRect(maThumbRect);
         }
     }
 }
@@ -614,18 +602,12 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
     {
         if ( ImplDoAction( false ) )
         {
-            // Update the channel complete
-            if ( mnDragDraw & SLIDER_DRAW_CHANNEL )
-            {
-                Update();
-                mnDrawFlags = mnDragDraw;
-                Invalidate();
-            }
+            Update();
+            Invalidate();
         }
     }
     else if ( nOldStateFlags != mnStateFlags )
     {
-        mnDrawFlags = mnDragDraw;
         Invalidate();
     }
 }
@@ -664,7 +646,6 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
         if ( maThumbRect.IsInside( rMousePos ) )
         {
             meScrollType    = SCROLL_DRAG;
-            mnDragDraw      = SLIDER_DRAW_THUMB;
 
             // calculate additional values
             Point aCenterPos = maThumbRect.Center();
@@ -682,8 +663,6 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
                 nTrackFlags = StartTrackingFlags::ButtonRepeat;
                 meScrollType = SCROLL_PAGEUP;
             }
-
-            mnDragDraw = SLIDER_DRAW_CHANNEL;
         }
         else if ( ImplIsPageDown( rMousePos ) )
         {
@@ -694,8 +673,6 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
                 nTrackFlags = StartTrackingFlags::ButtonRepeat;
                 meScrollType = SCROLL_PAGEDOWN;
             }
-
-            mnDragDraw = SLIDER_DRAW_CHANNEL;
         }
 
         // Shall we start Tracking?
@@ -723,10 +700,8 @@ void Slider::MouseButtonUp( const MouseEvent& )
 
         if ( nOldStateFlags != mnStateFlags )
         {
-            mnDrawFlags = mnDragDraw;
-            Invalidate();
+            Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
         }
-        mnDragDraw = 0;
         ImplDoAction( true );
         meScrollType = SCROLL_DONTKNOW;
     }
@@ -742,10 +717,8 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
                           SLIDER_STATE_THUMB_DOWN);
         if ( nOldStateFlags != mnStateFlags )
         {
-            mnDrawFlags = mnDragDraw;
-            Invalidate();
+            Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
         }
-        mnDragDraw = 0;
 
         // on cancel, reset the previous Thumb position
         if ( rTEvt.IsTrackingCanceled() )
@@ -863,11 +836,7 @@ void Slider::KeyInput( const KeyEvent& rKEvt )
 
 void Slider::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    if (mnDrawFlags)
-    {
-        ImplDraw(rRenderContext, mnDrawFlags);
-        mnDrawFlags = 0;
-    }
+    ImplDraw(rRenderContext);
 }
 
 void Slider::Resize()
@@ -876,8 +845,7 @@ void Slider::Resize()
     mbCalcSize = true;
     if ( IsReallyVisible() )
         ImplCalc( false );
-    mnDrawFlags = SLIDER_DRAW_ALL;
-    Invalidate();
+    Invalidate(InvalidateFlags::NoChildren | InvalidateFlags::NoErase);
 }
 
 void Slider::SetLinkedField(VclPtr<NumericField> pField)
@@ -908,7 +876,6 @@ void Slider::StateChanged( StateChangedType nType )
         if ( IsReallyVisible() && IsUpdateMode() )
         {
             ImplCalc( false );
-            mnDrawFlags = SLIDER_DRAW_ALL;
             Invalidate();
         }
     }
@@ -916,7 +883,6 @@ void Slider::StateChanged( StateChangedType nType )
     {
         if ( IsReallyVisible() && IsUpdateMode() )
         {
-            mnDrawFlags = SLIDER_DRAW_ALL;
             Invalidate();
         }
     }
@@ -929,7 +895,6 @@ void Slider::StateChanged( StateChangedType nType )
             {
                 mbCalcSize = true;
                 ImplCalc( false );
-                mnDrawFlags = SLIDER_DRAW_ALL;
                 Invalidate();
             }
         }
@@ -937,7 +902,6 @@ void Slider::StateChanged( StateChangedType nType )
     else if ( nType == StateChangedType::ControlBackground )
     {
         ImplInitSettings();
-        mnDrawFlags = SLIDER_DRAW_ALL;
         Invalidate();
     }
 }
@@ -950,7 +914,6 @@ void Slider::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         ImplInitSettings();
-        mnDrawFlags = SLIDER_DRAW_ALL;
         Invalidate();
     }
 }
