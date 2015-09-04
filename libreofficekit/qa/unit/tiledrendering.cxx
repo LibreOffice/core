@@ -69,6 +69,7 @@ public:
     void testImpressSlideNames( Office* pOffice );
     void testCalcSheetNames( Office* pOffice );
     void testGetStyles( Office* pOffice );
+    void testGetFonts( Office* pOffice );
 #if 0
     void testOverlay( Office* pOffice );
 #endif
@@ -96,6 +97,7 @@ void TiledRenderingTest::runAllTests()
     testImpressSlideNames( pOffice.get() );
     testCalcSheetNames( pOffice.get() );
     testGetStyles( pOffice.get() );
+    testGetFonts( pOffice.get() );
 #if 0
     testOverlay( pOffice.get() );
 #endif
@@ -213,6 +215,32 @@ void TiledRenderingTest::testGetStyles( Office* pOffice )
         {
             CPPUNIT_FAIL("Unknown style family: " + rPair.first);
         }
+    }
+}
+
+void TiledRenderingTest::testGetFonts( Office* pOffice )
+{
+    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/blank_text.odt";
+    const string sLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.blank_text.odt#";
+
+    // FIXME: LOK will fail when trying to open a locked file
+    remove( sLockFile.c_str() );
+
+    scoped_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+
+    boost::property_tree::ptree aTree;
+    char* pJSON = pDocument->getCommandValues(".uno:CharFontName");
+    std::stringstream aStream(pJSON);
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT( aTree.size() > 0 );
+    CPPUNIT_ASSERT( aTree.get_value<std::string>("commandName") == ".uno:CharFontName" );
+
+    boost::property_tree::ptree aValues = aTree.get_child("commandValues");
+    CPPUNIT_ASSERT( aValues.size() > 0 );
+    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aValues)
+    {
+        // check that we have font sizes available for each font
+        CPPUNIT_ASSERT( rPair.second.size() > 0);
     }
 }
 
