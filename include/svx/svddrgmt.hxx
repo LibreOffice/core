@@ -159,8 +159,8 @@ protected:
     void               ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0) const;
     SdrHdl*            GetDragHdl() const              { return getSdrDragView().mpDragHdl; }
     SdrHdlKind         GetDragHdlKind() const          { return getSdrDragView().meDragHdl; }
-    SdrDragStat&       DragStat()                      { return getSdrDragView().aDragStat; }
-    const SdrDragStat& DragStat() const                { return getSdrDragView().aDragStat; }
+    SdrDragStat&       DragStat()                      { return getSdrDragView().maDragStat; }
+    const SdrDragStat& DragStat() const                { return getSdrDragView().maDragStat; }
     Point&             Ref1() const                    { return mrSdrDragView.maRef1; }
     Point&             Ref2() const                    { return mrSdrDragView.maRef2; }
     const SdrHdlList&  GetHdlList() const              { return getSdrDragView().GetHdlList(); }

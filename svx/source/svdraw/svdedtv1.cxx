@@ -910,7 +910,7 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, bool /*bOnlyH
 
 SfxItemSet SdrEditView::GetAttrFromMarked(bool bOnlyHardAttr) const
 {
-    SfxItemSet aSet(pMod->GetItemPool());
+    SfxItemSet aSet(mpModel->GetItemPool());
     MergeAttrFromMarked(aSet,bOnlyHardAttr);
     //the EE_FEATURE items should not be set with SetAttrToMarked (see error message there)
     //so we do not set them here
@@ -1286,7 +1286,7 @@ bool SdrEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHard
 
 SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
 {
-    SfxItemSet aRetSet(pMod->GetItemPool(),   // SID_ATTR_TRANSFORM_... from s:svxids.hrc
+    SfxItemSet aRetSet(mpModel->GetItemPool(),   // SID_ATTR_TRANSFORM_... from s:svxids.hrc
         SID_ATTR_TRANSFORM_POS_X,               SID_ATTR_TRANSFORM_ANGLE,
         SID_ATTR_TRANSFORM_PROTECT_POS,         SID_ATTR_TRANSFORM_AUTOHEIGHT,
         SDRATTR_ECKENRADIUS,                    SDRATTR_ECKENRADIUS,
@@ -1514,7 +1514,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     bool bShear =false;
 
     bool bSetAttr=false;
-    SfxItemSet aSetAttr(pMod->GetItemPool());
+    SfxItemSet aSetAttr(mpModel->GetItemPool());
 
     const SfxPoolItem* pPoolItem=NULL;
 

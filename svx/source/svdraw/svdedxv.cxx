@@ -150,10 +150,10 @@ void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     if (pSdrHint!=NULL && pTextEditOutliner!=NULL) {
         SdrHintKind eKind=pSdrHint->GetKind();
         if (eKind==HINT_REFDEVICECHG) {
-            pTextEditOutliner->SetRefDevice(pMod->GetRefDevice());
+            pTextEditOutliner->SetRefDevice(mpModel->GetRefDevice());
         }
         if (eKind==HINT_DEFAULTTABCHG) {
-            pTextEditOutliner->SetDefTab(pMod->GetDefaultTabulator());
+            pTextEditOutliner->SetDefTab(mpModel->GetDefaultTabulator());
         }
         if (eKind==HINT_DEFFONTHGTCHG) {
 
@@ -512,7 +512,7 @@ IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,v
             }
         }
     }
-    Outliner& rDrawOutl=pMod->GetDrawOutliner(pTextObj);
+    Outliner& rDrawOutl=mpModel->GetDrawOutliner(pTextObj);
     Link<EditFieldInfo*,void> aDrawOutlLink=rDrawOutl.GetCalcFieldValueHdl();
     if (!bOk && aDrawOutlLink.IsSet()) {
         aDrawOutlLink.Call(pFI);
@@ -729,7 +729,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
 #ifdef DBG_UTIL
-            if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
+            if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
 #endif
             pTextEditOutliner->ClearModifyFlag();
 
@@ -1042,10 +1042,10 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             GetMarkedObjectListWriteAccess().SetNameDirty();
         }
 #ifdef DBG_UTIL
-        if (pItemBrowser)
+        if (mpItemBrowser)
         {
             GetMarkedObjectListWriteAccess().SetNameDirty();
-            pItemBrowser->SetDirty();
+            mpItemBrowser->SetDirty();
         }
 #endif
     }
@@ -1197,15 +1197,15 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
     {
         if (pTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
-            if( pMod )
+            if( mpModel )
             {
                 if( pTextEditOutliner && pTextEditOutliner->IsModified() )
-                    pMod->SetChanged();
+                    mpModel->SetChanged();
             }
 
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL
-            if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
+            if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
 #endif
             ImpMakeTextCursorAreaVisible();
             return true;
@@ -1222,7 +1222,7 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
             Point aPt(rMEvt.GetPosPixel());
             if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
             else if (pTextEditWin!=nullptr) aPt=pTextEditWin->PixelToLogic(aPt);
-            bPostIt=IsTextEditHit(aPt,nHitTolLog);
+            bPostIt=IsTextEditHit(aPt,mnHitTolLog);
         }
         if (bPostIt) {
             Point aPixPos(rMEvt.GetPosPixel());
@@ -1239,7 +1239,7 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
             if (pTextEditOutlinerView->MouseButtonDown(aMEvt)) {
                 if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL
-                if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
+                if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
@@ -1257,7 +1257,7 @@ bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
             Point aPt(rMEvt.GetPosPixel());
             if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
             else if (pTextEditWin!=nullptr) aPt=pTextEditWin->PixelToLogic(aPt);
-            bPostIt=IsTextEditHit(aPt,nHitTolLog);
+            bPostIt=IsTextEditHit(aPt,mnHitTolLog);
         }
         if (bPostIt) {
             Point aPixPos(rMEvt.GetPosPixel());
@@ -1270,7 +1270,7 @@ bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseButtonUp(aMEvt)) {
 #ifdef DBG_UTIL
-                if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
+                if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
@@ -1291,7 +1291,7 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
                 aPt=pWin->PixelToLogic(aPt);
             else if (pTextEditWin)
                 aPt=pTextEditWin->PixelToLogic(aPt);
-            bPostIt=IsTextEditHit(aPt,nHitTolLog);
+            bPostIt=IsTextEditHit(aPt,mnHitTolLog);
         }
         if (bPostIt) {
             Point aPixPos(rMEvt.GetPosPixel());
@@ -1308,7 +1308,7 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
                              rMEvt.GetButtons(),rMEvt.GetModifier());
             if (pTextEditOutlinerView->MouseMove(aMEvt) && bSelMode) {
 #ifdef DBG_UTIL
-                if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
+                if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
@@ -1329,7 +1329,7 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
                 Point aPt(rCEvt.GetMousePosPixel());
                 if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
                 else if (pTextEditWin!=nullptr) aPt=pTextEditWin->PixelToLogic(aPt);
-                bPostIt=IsTextEditHit(aPt,nHitTolLog);
+                bPostIt=IsTextEditHit(aPt,mnHitTolLog);
             }
             if (bPostIt) {
                 Point aPixPos(rCEvt.GetMousePosPixel());
@@ -1345,7 +1345,7 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
                 pTextEditOutlinerView->Command(aCEvt);
                 if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL
-                if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
+                if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
                 return true;
@@ -1569,7 +1569,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             // Now we build an ItemSet aSet that doesn't contain EE_Items from
             // *pSet (otherwise it would be a copy).
             sal_uInt16* pNewWhichTable=RemoveWhichRange(pSet->GetRanges(),EE_ITEMS_START,EE_ITEMS_END);
-            SfxItemSet aSet(pMod->GetItemPool(),pNewWhichTable);
+            SfxItemSet aSet(mpModel->GetItemPool(),pNewWhichTable);
             delete[] pNewWhichTable;
             SfxWhichIter aIter(aSet);
             sal_uInt16 nWhich=aIter.FirstWhich();
@@ -1616,8 +1616,8 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
             pTextEditOutlinerView->SetAttribs(rSet);
 
 #ifdef DBG_UTIL
-            if (pItemBrowser!=nullptr)
-                pItemBrowser->SetDirty();
+            if (mpItemBrowser!=nullptr)
+                mpItemBrowser->SetDirty();
 #endif
 
             ImpMakeTextCursorAreaVisible();

@@ -132,7 +132,7 @@ void SdrDragView::TakeActionRect(Rectangle& rRect) const
 {
     if (mpCurrentSdrDragMethod)
     {
-        rRect=aDragStat.GetActionRect();
+        rRect=maDragStat.GetActionRect();
         if (rRect.IsEmpty())
         {
             SdrPageView* pPV = GetSdrPageView();
@@ -155,7 +155,7 @@ void SdrDragView::TakeActionRect(Rectangle& rRect) const
         }
         if (rRect.IsEmpty())
         {
-            rRect=Rectangle(aDragStat.GetNow(),aDragStat.GetNow());
+            rRect=Rectangle(maDragStat.GetNow(),maDragStat.GetNow());
         }
     }
     else
@@ -236,19 +236,19 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
             || pHdl->GetKind() == HDL_TRNS
             || pHdl->GetKind() == HDL_GRAD)
         {
-            aDragStat.Reset(aPnt);
+            maDragStat.Reset(aPnt);
         }
         else
         {
-            aDragStat.Reset(pHdl->GetPos());
+            maDragStat.Reset(pHdl->GetPos());
         }
 
-        aDragStat.SetView(static_cast<SdrView*>(this));
-        aDragStat.SetPageView(mpMarkedPV);  // <<-- DragPV has to go here!!!
-        aDragStat.SetMinMove(ImpGetMinMovLogic(nMinMov,pOut));
-        aDragStat.SetHdl(pHdl);
-        aDragStat.NextPoint();
-        pDragWin=pOut;
+        maDragStat.SetView(static_cast<SdrView*>(this));
+        maDragStat.SetPageView(mpMarkedPV);  // <<-- DragPV has to go here!!!
+        maDragStat.SetMinMove(ImpGetMinMovLogic(nMinMov,pOut));
+        maDragStat.SetHdl(pHdl);
+        maDragStat.NextPoint();
+        mpDragWin=pOut;
         mpDragHdl=pHdl;
         meDragHdl= pHdl==NULL ? HDL_MOVE : pHdl->GetKind();
         mbDragHdl=meDragHdl==HDL_REF1 || meDragHdl==HDL_REF2 || meDragHdl==HDL_MIRX;
@@ -484,7 +484,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
             delete mpCurrentSdrDragMethod;
             mpCurrentSdrDragMethod = pForcedMeth;
         }
-        aDragStat.SetDragMethod(mpCurrentSdrDragMethod);
+        maDragStat.SetDragMethod(mpCurrentSdrDragMethod);
         if (mpCurrentSdrDragMethod)
         {
             bRet = mpCurrentSdrDragMethod->BeginSdrDrag();
@@ -502,7 +502,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
 
                     mbFramDrag=true;
                     mpCurrentSdrDragMethod = new SdrDragMove(*this);
-                    aDragStat.SetDragMethod(mpCurrentSdrDragMethod);
+                    maDragStat.SetDragMethod(mpCurrentSdrDragMethod);
                     bRet = mpCurrentSdrDragMethod->BeginSdrDrag();
                 }
             }
@@ -510,7 +510,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
             {
                 delete mpCurrentSdrDragMethod;
                 mpCurrentSdrDragMethod = 0;
-                aDragStat.SetDragMethod(mpCurrentSdrDragMethod);
+                maDragStat.SetDragMethod(mpCurrentSdrDragMethod);
             }
         }
     }
@@ -533,7 +533,7 @@ bool SdrDragView::EndDragObj(bool bCopy)
     bool bRet(false);
 
     // #i73341# If inserting GluePoint, do not insist on last points being different
-    if(mpCurrentSdrDragMethod && aDragStat.IsMinMoved() && (IsInsertGluePoint() || aDragStat.GetNow() != aDragStat.GetPrev()))
+    if(mpCurrentSdrDragMethod && maDragStat.IsMinMoved() && (IsInsertGluePoint() || maDragStat.GetNow() != maDragStat.GetPrev()))
     {
         sal_uIntPtr nSavedHdlCount=0;
 
@@ -580,7 +580,7 @@ bool SdrDragView::EndDragObj(bool bCopy)
         meDragHdl=HDL_MOVE;
         mpDragHdl=NULL;
 
-        if (!bSomeObjChgdFlag)
+        if (!mbSomeObjChgdFlag)
         {
             // Obj did not broadcast (e. g. Writer FlyFrames)
             if(!mbDragHdl)
@@ -685,7 +685,7 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 nIdx, const Point
 
             if (bRet)
             {
-                aDragStat.SetMinMoved();
+                maDragStat.SetMinMoved();
                 MovDragObj(rPnt);
             }
         }
@@ -704,12 +704,12 @@ bool SdrDragView::EndInsObjPoint(SdrCreateCmd eCmd)
     if(IsInsObjPoint())
     {
         sal_uInt32 nNextPnt(mnInsPointNum);
-        Point aPnt(aDragStat.GetNow());
+        Point aPnt(maDragStat.GetNow());
         bool bOk=EndDragObj();
         if (bOk && eCmd!=SDRCREATE_FORCEEND)
         {
             // Ret=True means: Action is over.
-            bOk=!(ImpBegInsObjPoint(true, nNextPnt, aPnt, eCmd == SDRCREATE_NEXTOBJECT, pDragWin));
+            bOk=!(ImpBegInsObjPoint(true, nNextPnt, aPnt, eCmd == SDRCREATE_NEXTOBJECT, mpDragWin));
         }
 
         return bOk;
@@ -772,7 +772,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
                 bRet=BegDragObj(rPnt,NULL,pHdl,0);
                 if (bRet)
                 {
-                    aDragStat.SetMinMoved();
+                    maDragStat.SetMinMoved();
                     MovDragObj(rPnt);
                 }
                 else
@@ -801,7 +801,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
 
 void SdrDragView::ShowDragObj()
 {
-    if(mpCurrentSdrDragMethod && !aDragStat.IsShown())
+    if(mpCurrentSdrDragMethod && !maDragStat.IsShown())
     {
         for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
         {
@@ -817,16 +817,16 @@ void SdrDragView::ShowDragObj()
             }
         }
 
-        aDragStat.SetShown(true);
+        maDragStat.SetShown(true);
     }
 }
 
 void SdrDragView::HideDragObj()
 {
-    if(mpCurrentSdrDragMethod && aDragStat.IsShown())
+    if(mpCurrentSdrDragMethod && maDragStat.IsShown())
     {
         mpCurrentSdrDragMethod->destroyOverlayGeometry();
-        aDragStat.SetShown(false);
+        maDragStat.SetShown(false);
     }
 }
 
@@ -837,7 +837,7 @@ void SdrDragView::SetNoDragXorPolys(bool bOn)
     if (IsNoDragXorPolys()!=bOn)
     {
         const bool bDragging(mpCurrentSdrDragMethod);
-        const bool bShown(bDragging && aDragStat.IsShown());
+        const bool bShown(bDragging && maDragStat.IsShown());
 
         if(bShown)
         {
@@ -861,7 +861,7 @@ void SdrDragView::SetNoDragXorPolys(bool bOn)
 
 void SdrDragView::SetDragStripes(bool bOn)
 {
-    if (mpCurrentSdrDragMethod && aDragStat.IsShown())
+    if (mpCurrentSdrDragMethod && maDragStat.IsShown())
     {
         HideDragObj();
         mbDragStripes=bOn;

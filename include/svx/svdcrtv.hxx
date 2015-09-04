@@ -84,7 +84,7 @@ public:
 
     virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
 
-    void SetMeasureLayer(const OUString& rName) { aMeasureLayer=rName; }
+    void SetMeasureLayer(const OUString& rName) { maMeasureLayer=rName; }
 
     // If the MeasureLayer is not set (empty string), then use the active layer for measuring.
     void SetEditMode(SdrViewEditMode eMode) { SdrDragView::SetEditMode(eMode); CheckEdgeMode(); }

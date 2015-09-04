@@ -547,7 +547,7 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
 
     if(pSource && pDest)
     {
-        SfxItemSet aSet(pMod->GetItemPool(),
+        SfxItemSet aSet(mpModel->GetItemPool(),
             SDRATTR_START,              SDRATTR_NOTPERSIST_FIRST-1,
             SDRATTR_NOTPERSIST_LAST+1,  SDRATTR_END,
             EE_ITEMS_START,             EE_ITEMS_END,
@@ -765,7 +765,7 @@ void SdrEditView::DistributeMarkedObjects()
 
     if(nMark > 2)
     {
-        SfxItemSet aNewAttr(pMod->GetItemPool());
+        SfxItemSet aNewAttr(mpModel->GetItemPool());
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
@@ -2070,14 +2070,14 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
             if(aMetaFile.GetActionSize())
             {
                 aLogicRect = pGraf->GetLogicRect();
-                ImpSdrGDIMetaFileImport aFilter(*pMod, pObj->GetLayer(), aLogicRect);
+                ImpSdrGDIMetaFileImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect);
                 nInsAnz = aFilter.DoImport(aMetaFile, *pOL, nInsPos, pProgrInfo);
             }
         }
         if ( pOle2!=NULL && pOle2->GetGraphic() )
         {
             aLogicRect = pOle2->GetLogicRect();
-            ImpSdrGDIMetaFileImport aFilter(*pMod, pObj->GetLayer(), aLogicRect);
+            ImpSdrGDIMetaFileImport aFilter(*mpModel, pObj->GetLayer(), aLogicRect);
             nInsAnz = aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(), *pOL, nInsPos, pProgrInfo);
         }
         if (nInsAnz!=0)
