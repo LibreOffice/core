@@ -102,6 +102,7 @@ public:
 #endif
     void testBnc910045();
     void testTdf93830();
+    void testTdf93097();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -140,6 +141,7 @@ public:
 #endif
     CPPUNIT_TEST(testBnc910045);
     CPPUNIT_TEST(testTdf93830);
+    CPPUNIT_TEST(testTdf93097);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1169,6 +1171,16 @@ void SdImportTest::testTdf93830()
     xPropSet->getPropertyValue( "TextLeftDistance" ) >>= nTextLeftDistance;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4152), nTextLeftDistance);
 
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf93097()
+{
+    // Throwing metadata import aborted the filter, check that metadata is now imported.
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/tdf93097.pptx"), PPTX);
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+    CPPUNIT_ASSERT_EQUAL(OUString("ss"), xDocumentProperties->getTitle());
     xDocShRef->DoClose();
 }
 
