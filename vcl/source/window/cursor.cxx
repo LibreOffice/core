@@ -44,8 +44,11 @@ struct ImplCursorData
 static void ImplCursorInvert( ImplCursorData* pData )
 {
     vcl::Window* pWindow  = pData->mpWindow;
-    PaintBufferGuard aGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow);
-    vcl::RenderContext* pRenderContext = aGuard.GetRenderContext();
+    std::unique_ptr<PaintBufferGuard> pGuard;
+    const bool bDoubleBuffering = pWindow->SupportsDoubleBuffering();
+    if (bDoubleBuffering)
+        pGuard.reset(new PaintBufferGuard(pWindow->ImplGetWindowImpl()->mpFrameData, pWindow));
+    vcl::RenderContext* pRenderContext = bDoubleBuffering ? pGuard->GetRenderContext() : pWindow;
     Rectangle aPaintRect;
     bool    bMapMode = pRenderContext->IsMapModeEnabled();
     pRenderContext->EnableMapMode( false );
@@ -111,16 +114,19 @@ static void ImplCursorInvert( ImplCursorData* pData )
             if ( pData->mnOrientation )
                 aPoly.Rotate( pData->maPixRotOff, pData->mnOrientation );
             pRenderContext->Invert( aPoly, nInvertStyle );
-            aPaintRect = aPoly.GetBoundRect();
+            if (bDoubleBuffering)
+                aPaintRect = aPoly.GetBoundRect();
         }
     }
     else
     {
         pRenderContext->Invert( aRect, nInvertStyle );
-        aPaintRect = aRect;
+        if (bDoubleBuffering)
+            aPaintRect = aRect;
     }
     pRenderContext->EnableMapMode( bMapMode );
-    aGuard.SetPaintRect(pRenderContext->PixelToLogic(aPaintRect));
+    if (bDoubleBuffering)
+        pGuard->SetPaintRect(pRenderContext->PixelToLogic(aPaintRect));
 }
 
 void vcl::Cursor::ImplDraw()
