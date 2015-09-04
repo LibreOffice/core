@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_a4b92b31",
+        "filename": "include/oox/helper/binaryinputstream.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-09-04T08:51:26Z",
+      "side": 1,
+      "message": "This line still triggers this warning:\n\n  warning C4589: Constructor of abstract class \u0027oox::BinaryInputStream\u0027 ignores initializer\n    for virtual base class \u0027oox::BinaryStreamBase\u0027\n  note: virtual base classes are only initialized by the most-derived type\n\nSee also discussion on https://code.google.com/p/chromium/issues/detail?id\u003d510497:\n\n[...] \"If virtual is still needed then the constructor invocation needs to be moved up the hierarchy to where the diamond pattern has rejoined.\"\n\nAnd this compiler bug: https://connect.microsoft.com/VisualStudio/feedback/details/1581706/false-warning-c4589-constructor-of-abstract-class-class2-ignores-initializer-for-virtual-base-class-class1",
+      "revId": "a16287d9e2fb79e04e6656eac24d3998965e8047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
