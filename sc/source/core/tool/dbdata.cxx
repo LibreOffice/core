@@ -1042,6 +1042,13 @@ ScDBCollection::NamedDBs::NamedDBs(const NamedDBs& r)
         {
             p->SetContainer( this);
             p->StartTableColumnNamesListener(); // needs the container be set already
+            if (p->AreTableColumnNamesDirty())
+            {
+                // Refresh table column names in next round.
+                ScRange aHeader( p->GetHeaderArea());
+                if (aHeader.IsValid())
+                    maDirtyTableColumnNames.Join( aHeader);
+            }
         }
     }
 }
@@ -1102,6 +1109,13 @@ bool ScDBCollection::NamedDBs::insert(ScDBData* p)
     {
         p->SetContainer( this);
         p->StartTableColumnNamesListener(); // needs the container be set already
+        if (p->AreTableColumnNamesDirty())
+        {
+            // Refresh table column names in next round.
+            ScRange aHeader( p->GetHeaderArea());
+            if (aHeader.IsValid())
+                maDirtyTableColumnNames.Join( aHeader);
+        }
 
         /* TODO: shouldn't the import refresh not be setup for
          * clipboard/undo documents? It was already like this before.. */
