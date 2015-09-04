@@ -40,8 +40,7 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriSchemeParser.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/character.hxx>
@@ -94,7 +93,7 @@ sal_Int32 parseScheme(OUString const & uriReference) {
 }
 
 class UriReference:
-    public cppu::WeakImplHelper1<css::uri::XUriReference>,
+    public cppu::WeakImplHelper<css::uri::XUriReference>,
     private boost::noncopyable
 {
 public:
@@ -258,7 +257,7 @@ void processSegments(
 }
 
 class Factory:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::uri::XUriReferenceFactory>,
     private boost::noncopyable
 {

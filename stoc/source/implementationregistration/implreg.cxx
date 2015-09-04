@@ -24,7 +24,7 @@
 #include <boost/noncopyable.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -1196,7 +1196,7 @@ static void findImplementations(    const Reference < XRegistryKey > & xSource,
 
 
 class ImplementationRegistration
-    : public WeakImplHelper3< XImplementationRegistration2, XServiceInfo, XInitialization >
+    : public WeakImplHelper< XImplementationRegistration2, XServiceInfo, XInitialization >
 {
 public:
     explicit ImplementationRegistration( const Reference < XComponentContext > & rSMgr );

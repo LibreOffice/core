@@ -34,8 +34,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -53,7 +52,7 @@
 namespace {
 
 class SimpleRegistry:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::registry::XSimpleRegistry, css::lang::XServiceInfo >
 {
 public:
@@ -112,7 +111,7 @@ private:
     Registry registry_;
 };
 
-class Key: public cppu::WeakImplHelper1< css::registry::XRegistryKey > {
+class Key: public cppu::WeakImplHelper< css::registry::XRegistryKey > {
 public:
     Key(
         rtl::Reference< SimpleRegistry > const & registry,

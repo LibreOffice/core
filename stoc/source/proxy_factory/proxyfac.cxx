@@ -30,7 +30,7 @@
 #include <uno/environment.hxx>
 #include <typelib/typedescription.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -62,7 +62,7 @@ static Sequence< OUString > proxyfac_getSupportedServiceNames()
 }
 
 
-struct FactoryImpl : public ::cppu::WeakImplHelper2< lang::XServiceInfo,
+struct FactoryImpl : public ::cppu::WeakImplHelper< lang::XServiceInfo,
                                                      reflection::XProxyFactory >
 {
     Environment m_uno_env;

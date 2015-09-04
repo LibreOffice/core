@@ -33,8 +33,7 @@
 #include <com/sun/star/uri/XUriSchemeParser.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrlReference.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/diagnose.h>
@@ -57,7 +56,7 @@ bool parseSchemeSpecificPart(OUString const & part) {
 }
 
 class UrlReference:
-    public ::cppu::WeakImplHelper1<css::uri::XVndSunStarExpandUrlReference>,
+    public ::cppu::WeakImplHelper<css::uri::XVndSunStarExpandUrlReference>,
     private boost::noncopyable
 {
 public:
@@ -152,7 +151,7 @@ OUString UrlReference::expand(
 }
 
 class Parser:
-    public ::cppu::WeakImplHelper2<
+    public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::uri::XUriSchemeParser>,
     private boost::noncopyable
 {

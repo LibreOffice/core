@@ -52,7 +52,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <jvmaccess/classpath.hxx>
@@ -118,7 +118,7 @@ class NoJavaIniException: public css::uno::Exception
 };
 
 class SingletonFactory:
-    private cppu::WeakImplHelper1< css::lang::XEventListener >,
+    private cppu::WeakImplHelper< css::lang::XEventListener >,
     private boost::noncopyable
 {
 public:

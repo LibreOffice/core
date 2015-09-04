@@ -26,7 +26,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -71,7 +71,7 @@ typedef std::unordered_map
 
 
 class NamingService_Impl
-    : public WeakImplHelper2 < XServiceInfo, XNamingService >
+    : public WeakImplHelper < XServiceInfo, XNamingService >
 {
     Mutex                               aMutex;
     HashMap_OWString_Interface          aMap;

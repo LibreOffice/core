@@ -19,8 +19,7 @@
 
 
 #include <sal/main.h>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <osl/diagnose.h>
 
@@ -172,7 +171,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
 
 // XPropertySetInfo for test class
 
-class ImplPropertySetInfo : public WeakImplHelper1< XPropertySetInfo >
+class ImplPropertySetInfo : public WeakImplHelper< XPropertySetInfo >
 {
      friend class ImplIntroTest;
 
@@ -253,7 +252,7 @@ sal_Bool ImplPropertySetInfo::hasPropertyByName(const OUString& Name)
 }
 
 
-class ImplIntroTest : public WeakImplHelper4< XIntroTest, XPropertySet, XNameAccess, XIndexAccess >
+class ImplIntroTest : public WeakImplHelper< XIntroTest, XPropertySet, XNameAccess, XIndexAccess >
 {
       Reference< XMultiServiceFactory > mxMgr;
 

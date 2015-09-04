@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/thread.h>
@@ -41,7 +41,7 @@
 namespace {
 
 class Translator:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::uri::XExternalUriReferenceTranslator>,
     private boost::noncopyable
 {
