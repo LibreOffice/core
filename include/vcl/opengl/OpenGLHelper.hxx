@@ -26,7 +26,7 @@
 /// Helper to do a SAL_INFO as well as a GL log.
 #define VCL_GL_INFO(area,stream) \
     do { \
-        if (SAL_DETAIL_ENABLE_LOG_INFO) \
+        if (SAL_DETAIL_ENABLE_LOG_INFO && OpenGLHelper::isVCLOpenGLEnabled()) \
         { \
             ::std::ostringstream detail_stream; \
             detail_stream << stream;            \
