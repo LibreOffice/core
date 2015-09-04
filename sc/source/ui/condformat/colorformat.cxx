@@ -66,6 +66,16 @@ void SetValue( ScDocument* pDoc, ScColorScaleEntry* pEntry, Edit& aEdit)
         aEdit.Disable();
 }
 
+void SelectColor(const Color& aColor, const OUString aCustomName, ColorListBox& rLstBox)
+{
+    rLstBox.SelectEntry( aColor );
+    if ( rLstBox.GetSelectEntryColor() != aColor )
+    {
+        rLstBox.InsertEntry( aColor, aCustomName );
+        rLstBox.SelectEntry( aColor );
+    }
+}
+
 }
 
 ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos):
@@ -90,13 +100,14 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     get( mpCbOnlyBar, "only_bar");
 
     maStrWarnSameValue = get<FixedText>("str_same_value")->GetText();
+    maCustomColor = get<FixedText>("custom_color")->GetText();
 
     Init();
 
-    mpLbPos->SelectEntry( rData.maPositiveColor );
+    ::SelectColor( rData.maPositiveColor, maCustomColor, *mpLbPos);
     mpLbFillType->SelectEntryPos( rData.mbGradient ? 1 : 0 );
     if(rData.mpNegativeColor)
-        mpLbNeg->SelectEntry( *rData.mpNegativeColor );
+        ::SelectColor( *rData.mpNegativeColor, maCustomColor, *mpLbNeg );
 
     switch (rData.meAxisPosition)
     {
