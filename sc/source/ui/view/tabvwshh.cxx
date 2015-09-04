@@ -58,7 +58,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
     sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-        //  Objekte aktivieren/deaktivieren immer auf der sichtbaren View
+        // Always activate/deactivate object in the visible View
 
     ScTabViewShell* pVisibleSh = this;
     if ( nSlotId == SID_OLE_SELECT || nSlotId == SID_OLE_ACTIVATE || nSlotId == SID_OLE_DEACTIVATE )
@@ -71,7 +71,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
         case SID_OLE_SELECT:
         case SID_OLE_ACTIVATE:
             {
-                //  in beiden Faellen erstmal auf der sichtbaren View selektieren
+                // In both cases, first select in the visible View
 
                 OUString aName;
                 SdrView* pDrView = GetSdrView();
@@ -83,7 +83,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 }
                 pVisibleSh->SelectObject( aName );
 
-                //  aktivieren
+                // activate
 
                 if ( nSlotId == SID_OLE_ACTIVATE )
                     pVisibleSh->DoVerb( 0 );
@@ -106,7 +106,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                     if ( nNewVal < 0 )
                         nNewVal = 0;
 
-                    //! von irgendwas in 1/100mm umrechnen ??????
+                    //! convert from something into 1/100mm ??????
 
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
@@ -135,7 +135,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                 }
 #if HAVE_FEATURE_SCRIPTING
                 if (!bDone)
-                    SbxBase::SetError( ERRCODE_SBX_BAD_PARAMETER );  // Basic-Fehler
+                    SbxBase::SetError( ERRCODE_SBX_BAD_PARAMETER );  // basic error
 #endif
             }
             break;
@@ -143,7 +143,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
     }
 }
 
-static uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )       //! Member von ScDrawView?
+static uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )       //! member of ScDrawView?
 {
     uno::Reference < embed::XEmbeddedObject > xRet;
     if (pDrView)
@@ -208,7 +208,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                             else // if ( nWhich == SID_OBJECT_HEIGHT )
                                 nVal = aRect.GetHeight();
 
-                            //! von 1/100mm in irgendwas umrechnen ??????
+                            //! convert from 1/100mm to something else ??????
 
                             rSet.Put( SfxInt32Item( nWhich, nVal ) );
                         }
@@ -244,7 +244,7 @@ void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
     }
     else
     {
-        OSL_FAIL("kein Accessibility-Broadcaster?");
+        OSL_FAIL("no accessibility broadcaster?");
     }
 }
 
