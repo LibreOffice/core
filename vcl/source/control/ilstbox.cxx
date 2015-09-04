@@ -25,6 +25,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/help.hxx>
 #include <vcl/lstbox.h>
+#include <vcl/lstbox.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/i18nhelp.hxx>
 
@@ -110,6 +111,12 @@ namespace
                 Application::GetSettings().GetLanguageTag().getLocale());
         }
     };
+}
+
+sal_Int32 ListBox::NaturalSortCompare(const OUString &rA, const OUString &rB)
+{
+    const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
+    return rSorter.compare(rA, rB);
 }
 
 sal_Int32 ImplEntryList::InsertEntry( sal_Int32 nPos, ImplEntryType* pNewEntry, bool bSort )
