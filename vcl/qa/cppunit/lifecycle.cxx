@@ -220,7 +220,7 @@ public:
         LeakTestObject *pNew = new LeakTestObject();
         pNew->mxRef = VclPtr< LeakTestClass< vcl_type > >::Create( pNew->mbDeleted,
                                                                    std::forward<Arg>(arg)...);
-        pNew->mpRef = reinterpret_cast<void *>(static_cast<vcl::Window *>(pNew->mxRef));
+        pNew->mpRef = static_cast<void *>(static_cast<vcl::Window *>(pNew->mxRef));
         return pNew;
     }
     VclPtr<vcl::Window> getRef() { return mxRef; }
@@ -233,7 +233,7 @@ public:
         if (!mbDeleted)
         {
             OUStringBuffer aMsg = "Type '";
-            vcl::Window *pWin = reinterpret_cast<vcl::Window *>(mpRef);
+            vcl::Window *pWin = static_cast<vcl::Window *>(mpRef);
             aMsg.appendAscii(typeid(*pWin).name());
             aMsg.append("' not freed after dispose");
             CPPUNIT_FAIL(OUStringToOString(aMsg.makeStringAndClear(),
