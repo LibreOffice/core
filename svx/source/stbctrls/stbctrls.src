@@ -126,11 +126,6 @@ String RID_SVXSTR_ZOOMTOOL_HINT
     Text [ en-US ] = "Zoom level. Right-click to change zoom level or click to open Zoom dialog.";
 };
 
-String RID_SVXSTR_ZOOM
-{
-    Text [ en-US ] = "Adjust zoom level";
-};
-
 String RID_SVXSTR_ZOOM_IN
 {
     Text [ en-US ] = "Zoom In";
