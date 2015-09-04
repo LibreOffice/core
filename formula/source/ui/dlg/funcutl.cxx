@@ -131,7 +131,7 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
             if ( bDoScroll )
             {
                 pSlider->SetThumbPos( nThumb );
-                ((Link<>&)pSlider->GetEndScrollHdl()).Call( pSlider );
+                pSlider->GetEndScrollHdl().Call( pSlider );
             }
             else if ( bChangeFocus )
             {
