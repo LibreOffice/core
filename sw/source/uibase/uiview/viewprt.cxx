@@ -204,12 +204,15 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 ScopedVclPtrInstance<MessageDialog> aBox(&GetEditWin(), "PrintMergeDialog",
                                    "modules/swriter/ui/printmergedialog.ui");
                 short nRet = aBox->Execute();
-                if(RET_YES == nRet)
+                if(RET_NO != nRet)
                 {
-                    SfxBoolItem aBool(FN_QRY_MERGE, true);
-                    GetViewFrame()->GetDispatcher()->Execute(
-                                FN_QRY_MERGE, SfxCallMode::ASYNCHRON, &aBool, 0L);
-                    rReq.Ignore();
+                    if(RET_YES == nRet)
+                    {
+                        SfxBoolItem aBool(FN_QRY_MERGE, true);
+                        GetViewFrame()->GetDispatcher()->Execute(
+                                    FN_QRY_MERGE, SfxCallMode::ASYNCHRON, &aBool, 0L);
+                        rReq.Ignore();
+                    }
                     return;
                 }
             }
