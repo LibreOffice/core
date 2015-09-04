@@ -43,6 +43,7 @@ private:
     VclPtr<CheckBox> mpCbOnlyBar;
 
     OUString maStrWarnSameValue;
+    OUString maCustomColor;
     SvNumberFormatter* mpNumberFormatter;
 
     ScDocument* mpDoc;
