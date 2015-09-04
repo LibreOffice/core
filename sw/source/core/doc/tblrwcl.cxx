@@ -1613,17 +1613,15 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     _InsULPara aPara( pTableNd, true, true, pLeftBox, pMergeBox, pRightBox, pInsLine );
 
     // Move the overlapping upper/lower Lines of the selected Area
-    _FndBoxes& rLineBoxes = pFndBox->GetLines().front().GetBoxes();
-    for (_FndBoxes::iterator it = rLineBoxes.begin(); it != rLineBoxes.end(); ++it)
+    for (auto & it : pFndBox->GetLines().front().GetBoxes())
     {
-        lcl_Merge_MoveBox(*it, &aPara);
+        lcl_Merge_MoveBox(it, &aPara);
     }
     aPara.SetLower( pInsLine );
     const auto nEnd = pFndBox->GetLines().size()-1;
-    rLineBoxes = pFndBox->GetLines()[nEnd].GetBoxes();
-    for (_FndBoxes::iterator it = rLineBoxes.begin(); it != rLineBoxes.end(); ++it)
+    for (auto & it : pFndBox->GetLines()[nEnd].GetBoxes())
     {
-        lcl_Merge_MoveBox(*it, &aPara);
+        lcl_Merge_MoveBox(it, &aPara);
     }
 
     // Move the Boxes extending into the selected Area from left/right
