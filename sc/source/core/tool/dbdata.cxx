@@ -845,43 +845,10 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange 
     if (!aIntersection.IsValid())
         return;
 
-    // Full refresh if sizes don't match.
-    if (maTableColumnNames.size() < static_cast<size_t>(aIntersection.aEnd.Col() - nStartCol + 1))
-    {
-        RefreshTableColumnNames( pDoc);
-        return;
-    }
-
-    // Update column names from cells in intersecting header range, but don't
-    // set names to empty string.
-    ScHorizontalCellIterator aIter( pDoc, nTable,
-            aIntersection.aStart.Col(), nStartRow, aIntersection.aEnd.Col(), nStartRow);
-    ScRefCellValue* pCell;
-    SCCOL nCol;
-    SCROW nRow;
-    while((pCell = aIter.GetNext( nCol, nRow)) != nullptr)
-    {
-        size_t nOff = nCol - nStartCol;
-        bool bEmpty = maTableColumnNames[nOff].isEmpty();
-        if (!pCell->hasString())
-            bEmpty &= true;
-        else
-        {
-            const OUString& rStr = pCell->getString( pDoc);
-            if (rStr.isEmpty())
-                bEmpty &= true;
-            else
-                maTableColumnNames[nOff] = rStr;
-        }
-        if (bEmpty)
-        {
-            OUString aColumn( ScGlobal::GetRscString(STR_COLUMN));
-            SetTableColumnName( maTableColumnNames, nOff, aColumn, nOff+1);
-        }
-    }
-
-    if (aIntersection == aHeaderRange)
-        mbTableColumnNamesDirty = false;
+    // Always fully refresh, only one cell of a range was broadcasted per area
+    // listener if multiple cells were affected. We don't know if there were
+    // more.
+    RefreshTableColumnNames( pDoc);
 }
 
 sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
