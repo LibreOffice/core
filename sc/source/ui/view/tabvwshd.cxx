@@ -32,7 +32,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-//!         Parent-Window fuer Dialoge
+//!         parent window for dialogs
 //!         Problem: OLE Server!
 
 vcl::Window* ScTabViewShell::GetDialogParent()
