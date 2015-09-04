@@ -1077,7 +1077,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes()
 
     for (sal_uInt32 i = 0; i < 2; i++) {
         if (m_rConnection.getMysqlVersion() >= requiredVersion[i]) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(table_types[i], encoding)));
             rRows.push_back(aRow);
         }
@@ -1097,7 +1097,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
     rtl_TextEncoding encoding = m_rConnection.getConnectionEncoding();
     unsigned int i = 0;
     while (mysqlc_types[i].typeName) {
-        std::vector< Any > aRow(1);
+        std::vector< Any > aRow { Any() };
 
         aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].typeName, encoding)));
         aRow.push_back(makeAny(mysqlc_types[i].dataType));
@@ -1140,7 +1140,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs()
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
             }
@@ -1172,7 +1172,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas()
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             bool informationSchema = false;
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 sql::SQLString columnStringValue = rset->getString(i);
@@ -1219,7 +1219,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
             }
@@ -1261,7 +1261,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 if (i == 5) { // ColumnType
                     sal_Int32 sdbc_type = mysqlc_sdbc_driver::mysqlToOOOType(atoi(rset->getString(i).c_str()));
@@ -1317,7 +1317,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             bool informationSchema = false;
             for (sal_uInt32 i = 1; (i <= columns) && !informationSchema; ++i) {
                 sql::SQLString columnStringValue = rset->getString(i);
@@ -1378,7 +1378,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
             }
@@ -1428,7 +1428,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
             }
@@ -1467,7 +1467,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
             }
@@ -1505,7 +1505,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
             }
@@ -1545,7 +1545,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
             }
@@ -1585,7 +1585,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
             }
@@ -1643,7 +1643,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
             sql::ResultSetMetaData * rs_meta = rset->getMetaData();
             sal_uInt32 columns = rs_meta->getColumnCount();
             while (rset->next()) {
-                std::vector< Any > aRow(1);
+                std::vector< Any > aRow { Any() };
                 for (sal_uInt32 i = 1; i <= columns; i++) {
                     aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
                 }
@@ -1688,7 +1688,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
         sql::ResultSetMetaData * rs_meta = rset->getMetaData();
         sal_uInt32 columns = rs_meta->getColumnCount();
         while (rset->next()) {
-            std::vector< Any > aRow(1);
+            std::vector< Any > aRow { Any() };
             for (sal_uInt32 i = 1; i <= columns; i++) {
                 aRow.push_back(makeAny(mysqlc_sdbc_driver::convert(rset->getString(i), encoding)));
             }

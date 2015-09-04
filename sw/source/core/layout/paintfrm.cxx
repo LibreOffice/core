@@ -4426,7 +4426,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     const long nWidth  = ::lcl_AlignWidth ( rShadow.GetWidth(), properties );
     const long nHeight = ::lcl_AlignHeight( rShadow.GetWidth(), properties );
 
-    SwRects aRegion( 2 );
+    SwRects aRegion;
     SwRect aOut( rOutRect );
 
     switch ( rShadow.GetLocation() )
