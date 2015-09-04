@@ -341,7 +341,7 @@ struct AnnotatingVisitor
             return; //easy! :-)
 
         // join similar colors
-        std::vector<sal_Size> aNewStops(1,rGradient.maStops.front());
+        std::vector<sal_Size> aNewStops { rGradient.maStops.front() };
         for( sal_Size i=1; i<rGradient.maStops.size(); ++i )
         {
             if( maGradientStopVector[rGradient.maStops[i]].maStopColor !=

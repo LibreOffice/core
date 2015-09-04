@@ -225,7 +225,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         aURL.SetSmartURL( sUrl );
         sThisContentExtension = aURL.getExtension();
 
-        ODatabaseMetaDataResultSet::ORow aRow(3);
+        ODatabaseMetaDataResultSet::ORow aRow { NULL, NULL, NULL };
         aRow.reserve(6);
         bool bNewRow = false;
 

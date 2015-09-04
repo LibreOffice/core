@@ -262,7 +262,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL XSDValidationPropertyHandler::getActuatingProperties( ) throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::std::vector< OUString > aInterestedInActuations( 2 );
+        ::std::vector< OUString > aInterestedInActuations;
         if ( m_pHelper.get() )
         {
             aInterestedInActuations.push_back(  OUString(PROPERTY_XSD_DATA_TYPE) );
