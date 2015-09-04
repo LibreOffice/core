@@ -101,7 +101,7 @@ static bool lcl_GetSelTable( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
     if( !rX )
         return false;
 
-    rY = aFndBox.GetLines().front().GetBoxes().size();
+    rY = aFndBox.GetLines().front()->GetBoxes().size();
     return true;
 }
 

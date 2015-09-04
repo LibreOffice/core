@@ -374,15 +374,15 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
 
             _FndBox* pFndBox = &aFndBox;
             while( 1 == pFndBox->GetLines().size() &&
-                    1 == pFndBox->GetLines().front().GetBoxes().size() )
+                    1 == pFndBox->GetLines().front()->GetBoxes().size())
             {
-                _FndBox* pTmp = &pFndBox->GetLines().front().GetBoxes()[0];
+                _FndBox* pTmp = &pFndBox->GetLines().front()->GetBoxes()[0];
                 if( pTmp->GetBox()->GetSttNd() )
                     break;      // otherwise too far
                 pFndBox = pTmp;
             }
 
-            SwTableLine* pDelLine = pFndBox->GetLines().back().GetLine();
+            SwTableLine* pDelLine = pFndBox->GetLines().back()->GetLine();
             SwTableBox* pDelBox = pDelLine->GetTabBoxes().back();
             while( !pDelBox->GetSttNd() )
             {
@@ -397,7 +397,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
 
             if( !pNextBox )         // no next? then the previous
             {
-                pDelLine = pFndBox->GetLines().front().GetLine();
+                pDelLine = pFndBox->GetLines().front()->GetLine();
                 pDelBox = pDelLine->GetTabBoxes()[ 0 ];
                 while( !pDelBox->GetSttNd() )
                     pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];

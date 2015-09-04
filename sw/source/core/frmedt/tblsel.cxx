@@ -1410,8 +1410,10 @@ static bool lcl_CheckCol( _FndBox const& rFndBox, bool* pPara )
         }
         else
         {
-            for( _FndLine const& rFndLine : rFndBox.GetLines() )
-                lcl_CheckRow( rFndLine, pPara );
+            for (auto const& rpFndLine : rFndBox.GetLines())
+            {
+                lcl_CheckRow( *rpFndLine, pPara );
+            }
         }
     }
     // is box protected ??
@@ -1456,7 +1458,7 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
             _FndLine* pFndLine = 0;
             while( pFndBox && 1 == pFndBox->GetLines().size() )
             {
-                pFndLine = &pFndBox->GetLines().front();
+                pFndLine = pFndBox->GetLines().front().get();
                 if( 1 == pFndLine->GetBoxes().size() )
                     pFndBox = &pFndLine->GetBoxes().front();
                 else
@@ -1464,8 +1466,7 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
             }
             if( pFndBox )
             {
-                for (_FndLines::const_iterator it = pFndBox->GetLines().begin(),
-                        end = pFndBox->GetLines().end(); it != end; ++it)
+                for (auto const& it : pFndBox->GetLines())
                 {
                     lcl_CheckRow(*it, &bMergeSelOk);
                 }
@@ -2061,17 +2062,15 @@ static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
 
 static void _FndLineCopyCol( SwTableLine* pLine, _FndPara* pFndPara )
 {
-    _FndLine* pFndLine = new _FndLine( pLine, pFndPara->pFndBox );
-    _FndPara aPara( *pFndPara, pFndLine );
+    std::unique_ptr<_FndLine> pFndLine(new _FndLine(pLine, pFndPara->pFndBox));
+    _FndPara aPara(*pFndPara, pFndLine.get());
     for( SwTableBoxes::iterator it = pFndLine->GetLine()->GetTabBoxes().begin();
              it != pFndLine->GetLine()->GetTabBoxes().end(); ++it)
         _FndBoxCopyCol(*it, &aPara );
     if( pFndLine->GetBoxes().size() )
     {
-        pFndPara->pFndBox->GetLines().push_back( pFndLine );
+        pFndPara->pFndBox->GetLines().push_back( std::move(pFndLine) );
     }
-    else
-        delete pFndLine;
 }
 
 void ForEach_FndLineCopyCol(SwTableLines& rLines, _FndPara* pFndPara )
@@ -2124,13 +2123,13 @@ void _FndBox::SetTableLines( const SwTable &rTable )
     if( GetLines().empty() )
         return;
 
-    SwTableLine* pTmpLine = GetLines().front().GetLine();
+    SwTableLine* pTmpLine = GetLines().front()->GetLine();
     sal_uInt16 nPos = rTable.GetTabLines().GetPos( pTmpLine );
     OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( nPos )
         pLineBefore = rTable.GetTabLines()[ nPos - 1 ];
 
-    pTmpLine = GetLines().back().GetLine();
+    pTmpLine = GetLines().back()->GetLine();
     nPos = rTable.GetTabLines().GetPos( pTmpLine );
     OSL_ENSURE( USHRT_MAX != nPos, "Line steht nicht in der Tabelle" );
     if( ++nPos < rTable.GetTabLines().size() )

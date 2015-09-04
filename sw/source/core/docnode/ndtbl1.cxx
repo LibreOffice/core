@@ -179,8 +179,10 @@ bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
     if (!rBox.GetLines().empty())
     {
         pPara->m_bInsertLines = true;
-        for (_FndLine & rFndLine : rBox.GetLines())
-            _FindLine(rFndLine, pPara);
+        for (auto const& rpFndLine : rBox.GetLines())
+        {
+            _FindLine(*rpFndLine, pPara);
+        }
 
         if (pPara->m_bInsertLines)
         {

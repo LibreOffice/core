@@ -1858,15 +1858,15 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
 
         _FndBox* pFndBox = &aFndBox;
         while( 1 == pFndBox->GetLines().size() &&
-                1 == pFndBox->GetLines().front().GetBoxes().size() )
+                1 == pFndBox->GetLines().front()->GetBoxes().size() )
         {
-            _FndBox *const pTmp = & pFndBox->GetLines().front().GetBoxes()[0];
+            _FndBox *const pTmp = & pFndBox->GetLines().front()->GetBoxes()[0];
             if( pTmp->GetBox()->GetSttNd() )
                 break; // Else it gets too far
             pFndBox = pTmp;
         }
 
-        SwTableLine* pDelLine = pFndBox->GetLines().back().GetLine();
+        SwTableLine* pDelLine = pFndBox->GetLines().back()->GetLine();
         SwTableBox* pDelBox = pDelLine->GetTabBoxes().back();
         while( !pDelBox->GetSttNd() )
         {
@@ -1882,7 +1882,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
 
         if( !pNextBox ) // No succeeding Boxes? Then take the preceding one
         {
-            pDelLine = pFndBox->GetLines().front().GetLine();
+            pDelLine = pFndBox->GetLines().front()->GetLine();
             pDelBox = pDelLine->GetTabBoxes()[ 0 ];
             while( !pDelBox->GetSttNd() )
                 pDelBox = pDelBox->GetTabLines()[0]->GetTabBoxes()[0];
@@ -3712,8 +3712,10 @@ static bool lcl_SetAFormatBox( _FndBox & rBox, _SetAFormatTabPara *pSetPara )
     }
     else
     {
-        for( _FndLine& rFndLine : rBox.GetLines() )
-            lcl_SetAFormatLine( rFndLine, pSetPara );
+        for (auto const& rpFndLine : rBox.GetLines())
+        {
+            lcl_SetAFormatLine( *rpFndLine, pSetPara );
+        }
     }
 
     if (!rBox.GetUpper()->GetUpper()) // a BaseLine
@@ -3745,9 +3747,9 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
 
     _FndBox* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().size() &&
-            1 == pFndBox->GetLines().front().GetBoxes().size() )
+            1 == pFndBox->GetLines().front()->GetBoxes().size())
     {
-        pFndBox = &pFndBox->GetLines().front().GetBoxes()[0];
+        pFndBox = &pFndBox->GetLines().front()->GetBoxes()[0];
     }
 
     if( pFndBox->GetLines().empty() ) // One too far? (only one sel. Box)
@@ -3766,11 +3768,11 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
     rNew.RestoreTableProperties(table);
 
     _SetAFormatTabPara aPara( rNew );
-    _FndLines& rFLns = pFndBox->GetLines();
+    FndLines_t& rFLns = pFndBox->GetLines();
 
-    for( _FndLines::size_type n = 0; n < rFLns.size(); ++n )
+    for (FndLines_t::size_type n = 0; n < rFLns.size(); ++n)
     {
-        _FndLine* pLine = &rFLns[n];
+        _FndLine* pLine = rFLns[n].get();
 
         // Set Upper to 0 (thus simulate BaseLine)
         _FndBox* pSaveBox = pLine->GetUpper();
@@ -3832,15 +3834,15 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
 
     _FndBox* pFndBox = &aFndBox;
     while( 1 == pFndBox->GetLines().size() &&
-            1 == pFndBox->GetLines().front().GetBoxes().size() )
+            1 == pFndBox->GetLines().front()->GetBoxes().size())
     {
-        pFndBox = &pFndBox->GetLines().front().GetBoxes()[0];
+        pFndBox = &pFndBox->GetLines().front()->GetBoxes()[0];
     }
 
     if( pFndBox->GetLines().empty() ) // One too far? (only one sel. Box)
         pFndBox = pFndBox->GetUpper()->GetUpper();
 
-    _FndLines& rFLns = pFndBox->GetLines();
+    FndLines_t& rFLns = pFndBox->GetLines();
 
     sal_uInt16 aLnArr[4];
     aLnArr[0] = 0;
@@ -3850,7 +3852,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
 
     for( sal_uInt8 nLine = 0; nLine < 4; ++nLine )
     {
-        _FndLine& rLine = rFLns[ aLnArr[ nLine ] ];
+        _FndLine& rLine = *rFLns[ aLnArr[ nLine ] ];
 
         sal_uInt16 aBoxArr[4];
         aBoxArr[0] = 0;

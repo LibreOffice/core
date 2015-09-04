@@ -186,14 +186,14 @@ namespace
         if( !rFndBox.GetLines().empty() )
         {
             bool bNoSelection = rSelBoxes.size() < 2;
-            _FndLines &rFndLines = rFndBox.GetLines();
+            FndLines_t &rFndLines = rFndBox.GetLines();
             maCols.push_front(0);
-            const SwTableLine* pLine = rFndLines.front().GetLine();
+            const SwTableLine* pLine = rFndLines.front()->GetLine();
             const sal_uInt16 nStartLn = rTable.GetTabLines().GetPos( pLine );
             sal_uInt16 nEndLn = nStartLn;
             if( rFndLines.size() > 1 )
             {
-                pLine = rFndLines.back().GetLine();
+                pLine = rFndLines.back()->GetLine();
                 nEndLn = rTable.GetTabLines().GetPos( pLine );
             }
             if( nStartLn < USHRT_MAX && nEndLn < USHRT_MAX )
@@ -215,7 +215,7 @@ namespace
                         _FndLine *pInsLine = new _FndLine( pLine2, &rFndBox );
                         _FndBox *pFndBox = new _FndBox( pTmpBox, pInsLine );
                         pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), pFndBox);
-                        rFndLines.push_back( pInsLine );
+                        rFndLines.push_back(std::unique_ptr<_FndLine>(pInsLine));
                     }
                 }
                 maLines.resize( nEndLn - nStartLn + 1 );
@@ -831,13 +831,13 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
     {
         _FndBox* pFndBox;
 
-        const _FndLines::size_type nFndCnt = aFndBox.GetLines().size();
+        const FndLines_t::size_type nFndCnt = aFndBox.GetLines().size();
         if( !nFndCnt )
             return false;
 
         // Check if we have enough space for all Lines and Boxes
         SwTableLines::size_type nTstLns = 0;
-        pFLine = &aFndBox.GetLines().front();
+        pFLine = aFndBox.GetLines().front().get();
         sal_uInt16 nSttLine = GetTabLines().GetPos( pFLine->GetLine() );
         // Do we have as many rows, actually?
         if( 1 == nFndCnt )
@@ -900,7 +900,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
         for( SwTableLines::size_type nLn = 0; nLn < nTstLns; ++nLn )
         {
             // We have enough rows, so check the Boxes per row
-            pFLine = &aFndBox.GetLines()[ nLn % nFndCnt ];
+            pFLine = aFndBox.GetLines()[ nLn % nFndCnt ].get();
             SwTableLine* pLine = pFLine->GetLine();
             pSttBox = pFLine->GetBoxes()[0].GetBox();
             const SwTableBoxes::size_type nSttBox = pLine->GetTabBoxes().GetPos( pSttBox );
@@ -938,7 +938,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                     pFndBox = new _FndBox( pTmpBox, pInsFLine );
                     pInsFLine->GetBoxes().insert( pInsFLine->GetBoxes().begin() + nBx, pFndBox );
                 }
-                aFndBox.GetLines().insert( aFndBox.GetLines().begin() + nLn, pInsFLine );
+                aFndBox.GetLines().insert( aFndBox.GetLines().begin() + nLn, std::unique_ptr<_FndLine>(pInsFLine));
             }
             else if( pFLine->GetBoxes().size() == 1 )
             {
@@ -1002,9 +1002,9 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
         }
     }
     else
-        for( _FndLines::size_type nLn = 0; nLn < aFndBox.GetLines().size(); ++nLn )
+        for (FndLines_t::size_type nLn = 0; nLn < aFndBox.GetLines().size(); ++nLn)
         {
-            pFLine = &aFndBox.GetLines()[ nLn ];
+            pFLine = aFndBox.GetLines()[ nLn ].get();
             SwTableLine* pCpyLn = rCpyTable.GetTabLines()[
                                 nLn % rCpyTable.GetTabLines().size() ];
             for( _FndBoxes::size_type nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )

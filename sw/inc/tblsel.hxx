@@ -23,9 +23,12 @@
 #include <swrect.hxx>
 #include "swdllapi.h"
 
-#include <deque>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/sorted_vector.hxx>
+
+#include <memory>
+#include <deque>
+#include <vector>
 
 class SwCrsrShell;
 class SwCursor;
@@ -151,23 +154,26 @@ class _FndBox;
 class _FndLine;
 
 typedef boost::ptr_vector<_FndBox> _FndBoxes;
-typedef boost::ptr_vector<_FndLine> _FndLines;
+typedef std::vector<std::unique_ptr<_FndLine>> FndLines_t;
 
 class _FndBox
 {
     SwTableBox* pBox;
-    _FndLines aLines;
+    FndLines_t m_Lines;
     _FndLine* pUpper;
 
     SwTableLine *pLineBefore;   // For deleting/restoring the layout.
     SwTableLine *pLineBehind;
 
+    _FndBox(_FndBox const&) = delete;
+    _FndBox& operator=(_FndBox const&) = delete;
+
 public:
     _FndBox( SwTableBox* pB, _FndLine* pFL ) :
         pBox(pB), pUpper(pFL), pLineBefore( 0 ), pLineBehind( 0 ) {}
 
-    const _FndLines&    GetLines() const    { return aLines; }
-        _FndLines&      GetLines()          { return aLines; }
+    const FndLines_t&   GetLines() const    { return m_Lines; }
+        FndLines_t&     GetLines()          { return m_Lines; }
     const SwTableBox*   GetBox() const      { return pBox; }
         SwTableBox*     GetBox()            { return pBox; }
     const _FndLine*     GetUpper() const    { return pUpper; }
