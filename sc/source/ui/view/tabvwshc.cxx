@@ -118,8 +118,8 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
                                 SfxChildWinInfo* pInfo,
                                 vcl::Window* pParent, sal_uInt16 nSlotId )
 {
-    //  Dialog nur aufmachen, wenn ueber ScModule::SetRefDialog gerufen, damit
-    //  z.B. nach einem Absturz offene Ref-Dialoge nicht wiederkommen (#42341#).
+    // only open dialog when called through ScModule::SetRefDialog,
+    // so that it does not re appear for instance after a crash (#42341#).
 
     if ( SC_MOD()->GetCurRefDlgId() != nSlotId )
         return NULL;
@@ -236,7 +236,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
         case SID_DEFINE_DBNAME:
         {
-            //  wenn auf einem bestehenden Bereich aufgerufen, den markieren
+            // when called for an existing range, then mark
             GetDBData( true, SC_DB_OLD );
             const ScMarkData& rMark = GetViewData().GetMarkData();
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
@@ -268,7 +268,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
             aArgSet.Put( aItem );
 
-            // aktuelle Tabelle merken (wg. RefInput im Dialog)
+            // mark current sheet (due to RefInput in dialog)
             GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
             pResult = VclPtr<ScSpecialFilterDlg>::Create( pB, pCW, pParent, aArgSet );
@@ -295,7 +295,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
                                       &GetViewData(),
                                       &aQueryParam ) );
 
-            // aktuelle Tabelle merken (wg. RefInput im Dialog)
+            // mark current sheet (due to RefInput in dialog)
             GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
             pResult = VclPtr<ScFilterDlg>::Create( pB, pCW, pParent, aArgSet );
@@ -406,7 +406,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_PIVOTTABLE:
         {
-            //  all settings must be in pDialogDPObject
+            // all settings must be in pDialogDPObject
 
             if( pDialogDPObject )
             {
@@ -427,7 +427,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_FUNCTION:
         {
-            //  Dialog schaut selber, was in der Zelle steht
+            // dialog checks, what is in the cell
 
             pResult = VclPtr<ScFormulaDlg>::Create( pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr() );
         }
@@ -443,7 +443,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
         case FID_CHG_SHOW:
         {
-            //  Dialog schaut selber, was in der Zelle steht
+            // dialog checks, what is in the cell
 
             pResult = VclPtr<ScHighlightChgDlg>::Create( pB, pCW, pParent, &GetViewData() );
         }
@@ -451,7 +451,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
         case WID_SIMPLE_REF:
         {
-            //  Dialog schaut selber, was in der Zelle steht
+            // dialog checks, what is in the cell
 
             ScViewData& rViewData = GetViewData();
             rViewData.SetRefTabNo( rViewData.GetTabNo() );
@@ -518,9 +518,9 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
 
     if (pResult)
     {
-        //  Die Dialoge gehen immer mit eingeklapptem Zusaetze-Button auf,
-        //  darum muss die Groesse ueber das Initialize gerettet werden
-        //  (oder den Zusaetze-Status mit speichern !!!)
+        // the dialogs are always displayed with the option button collapsed,
+        // the size has to be carried over initialize
+        // (or store the option status !!!)
 
         Size aSize = pResult->GetSizePixel();
         pResult->Initialize( pInfo );
