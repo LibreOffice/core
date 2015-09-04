@@ -44,7 +44,6 @@ struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
     Image                    maIncreaseButton;
     Image                    maDecreaseButton;
     bool                     mbValuesSet;
-    bool                     mbOmitPaint;
     bool                     mbDraggingStarted;
 
     SvxZoomSliderControl_Impl() :
@@ -58,7 +57,6 @@ struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
         maIncreaseButton(),
         maDecreaseButton(),
         mbValuesSet( false ),
-        mbOmitPaint( false ),
         mbDraggingStarted( false ) {}
 };
 
@@ -242,13 +240,12 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
         }
     }
 
-    if (!mxImpl->mbOmitPaint)
-        forceRepaint();
+    forceRepaint();
 }
 
 void SvxZoomSliderControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    if ( !mxImpl->mbValuesSet || mxImpl->mbOmitPaint )
+    if ( !mxImpl->mbValuesSet )
         return;
 
     const Rectangle     aControlRect = getControlRect();
@@ -408,9 +405,6 @@ void SvxZoomSliderControl::repaintAndExecute()
 {
     forceRepaint();
 
-    mxImpl->mbOmitPaint = true; // optimization: paint before executing command,
-                                // then omit painting which is triggered by the execute function
-
     // commit state change
     SvxZoomSliderItem aZoomSliderItem(mxImpl->mnCurrentZoom);
 
@@ -422,8 +416,6 @@ void SvxZoomSliderControl::repaintAndExecute()
     aArgs[0].Value = any;
 
     execute(aArgs);
-
-    mxImpl->mbOmitPaint = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
