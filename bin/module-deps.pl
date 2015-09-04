@@ -15,6 +15,7 @@ my $to_file;
 my $output_file;
 my $preserve_libs = 0;
 my $toposort = 0;
+my %merged_libs;
 
 sub logit($)
 {
@@ -46,7 +47,11 @@ sub read_deps()
         logit($line);
         print $to $line if defined $to_file;
         chomp ($line);
-        if ($line =~ m/^LibraryDep:\s+(\S+) links against (.*)$/) {
+        if ($line =~ m/^MergeLibContents:\s+(\S+.*)\s*$/) {
+        for my $dep (split / /, $1) {
+        $merged_libs{$dep} = 1 if $dep ne '';
+        }
+        } elsif ($line =~ m/^LibraryDep:\s+(\S+) links against (.*)$/) {
 #        if ($line =~ m/^LibraryDep:\s+(\S+)\s+links against/) {
             $deps{$1} = ' ' if (!defined $deps{$1});
             $deps{$1} = $deps{$1} . ' ' . $2;
@@ -95,7 +100,7 @@ sub clean_tree($)
         my %result;
         $result{type} = $type;
         $result{target} = $target;
-        $result{generation} = 0;
+        $result{merged} = 0;
         my @clean_needs;
         for my $need (@needs) {
             push @clean_needs, clean_name($need);
@@ -215,10 +220,13 @@ sub collapse_lib_to_module($)
     my %digraph;
     my $l2m = create_lib_module_map();
     my %unknown_libs;
-    for my $name (sort keys %{$tree}) {
-        my $result = $tree->{$name};
-        $unknown_libs{$name} = 1 && next if (!grep {/$name/} keys $l2m);
-        $name = $l2m->{$name};
+    for my $lib_name (sort keys %{$tree}) {
+        my $result = $tree->{$lib_name};
+        $unknown_libs{$lib_name} = 1 && next if (!grep {/$lib_name/} keys $l2m);
+
+    # new collapsed name.
+        my $name = $l2m->{$lib_name};
+
         # sal has no dependencies, take care of it
         # otherwise it doesn't have target key
         if (!@{$result->{deps}}) {
@@ -226,6 +234,7 @@ sub collapse_lib_to_module($)
                 my @empty;
                 $digraph{$name}{deps} = \@empty;
                 $digraph{$name}{target} = $result->{target};
+        $digraph{$name}{merged} = $result->{merged};
             }
         }
         for my $dep (@{$result->{deps}}) {
@@ -248,6 +257,7 @@ sub collapse_lib_to_module($)
                 push @deps, $dep;
                 $digraph{$name}{deps} = \@deps;
                 $digraph{$name}{target} = $result->{target};
+        $digraph{$name}{merged} = $result->{merged};
             }
         }
     }
@@ -282,6 +292,17 @@ sub prune_leaves($)
     return optimize_tree($tree);
 }
 
+sub annotate_mergelibs($)
+{
+    my $tree = shift;
+    print STDERR "annotating mergelibs";
+    for my $name (keys %{$tree}) {
+    if (defined $merged_libs{$name}) {
+        $tree->{$name}->{merged} = 1;
+        print STDERR "mark $name as merged\n";
+    }
+    }
+}
 
 sub dump_graphviz($)
 {
@@ -290,11 +311,27 @@ sub dump_graphviz($)
     open($to, ">$output_file") if defined($output_file);
     print $to <<END;
 digraph LibreOffice {
-node [shape="Mrecord", color="#BBBBBB"]
-node  [fontname=Verdana, color="#BBBBBB", fontsize=10, height=0.02, width=0.02]
 edge  [color="#31CEF0", len=0.4]
 edge  [fontname=Arial, fontsize=10, fontcolor="#31CEF0"]
 END
+;
+
+   my @merged_names;
+   my @normal_names;
+   for my $name (sort keys %{$tree}) {
+       if ($tree->{$name}->{merged}) {
+       push @merged_names, $name;
+       } else {
+       push @normal_names, $name;
+       }
+   }
+   print $to "node  [fontname=Verdana, fontsize=10, height=0.02, width=0.02,".
+            'shape=Mrecord,color="#BBBBBB"' .
+            "];" . join(';', @normal_names) . "\n";
+   print $to "node  [fontname=Verdana, fontsize=10, height=0.02, width=0.02,".
+            'shape=box,style=filled,color="#CCCCCC"' .
+            "];" . join(';', @merged_names) . "\n";
+
    for my $name (sort keys %{$tree}) {
        my $result = $tree->{$name};
        logit("minimising deps for $result->{target}\n");
@@ -386,6 +423,7 @@ sub main()
     my $tree = clean_tree($deps);
     filter_targets($tree);
     optimize_tree($tree);
+    annotate_mergelibs($tree);
     if (!$preserve_libs && !defined($ENV{PRESERVE_LIBS})) {
         $tree = collapse_lib_to_module($tree);
     }
