@@ -21,7 +21,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <rtl/ref.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/awt/XMouseListener.hpp>
@@ -107,7 +107,7 @@ template<typename T> inline T* get_pointer(PrioritizedHandlerEntry<T> const& han
 
 
 
-typedef cppu::WeakComponentImplHelper2<
+typedef cppu::WeakComponentImplHelper<
     awt::XMouseListener,
     awt::XMouseMotionListener > Listener_UnoBase;
 

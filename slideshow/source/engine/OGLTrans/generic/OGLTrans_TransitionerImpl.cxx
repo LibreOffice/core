@@ -48,7 +48,7 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/geometry/IntegerSize2D.hpp>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/factory.hxx>
 #include <rtl/ref.hxx>
@@ -92,7 +92,7 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 namespace
 {
 
-typedef cppu::WeakComponentImplHelper1<presentation::XTransition> OGLTransitionerImplBase;
+typedef cppu::WeakComponentImplHelper<presentation::XTransition> OGLTransitionerImplBase;
 
 #if OSL_DEBUG_LEVEL > 1
 class TimerContext
@@ -605,7 +605,7 @@ void OGLTransitionerImpl::createTexture( GLuint* texID,
 
 namespace
 {
-    class OGLColorSpace : public cppu::WeakImplHelper1< com::sun::star::rendering::XIntegerBitmapColorSpace >
+    class OGLColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerBitmapColorSpace >
     {
     private:
         uno::Sequence< sal_Int8 >  maComponentTags;
@@ -1401,7 +1401,7 @@ OGLTransitionerImpl::OGLTransitionerImpl()
 {
 }
 
-typedef cppu::WeakComponentImplHelper1<presentation::XTransitionFactory> OGLTransitionFactoryImplBase;
+typedef cppu::WeakComponentImplHelper<presentation::XTransitionFactory> OGLTransitionFactoryImplBase;
 
 class OGLTransitionFactoryImpl : private cppu::BaseMutex, public OGLTransitionFactoryImplBase
 {

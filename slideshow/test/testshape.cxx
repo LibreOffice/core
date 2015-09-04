@@ -22,7 +22,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
 
@@ -39,7 +39,7 @@ namespace target = slideshow::internal;
 using namespace ::com::sun::star;
 
 // our test shape subject
-typedef ::cppu::WeakComponentImplHelper1< drawing::XShape > ShapeBase;
+typedef ::cppu::WeakComponentImplHelper< drawing::XShape > ShapeBase;
 class ImplTestShape : public TestShape,
                       private cppu::BaseMutex,
                       public ShapeBase

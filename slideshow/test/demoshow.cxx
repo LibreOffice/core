@@ -23,8 +23,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -66,7 +65,7 @@ using namespace ::com::sun::star;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper1< presentation::XSlideShowView > ViewBase;
+typedef ::cppu::WeakComponentImplHelper< presentation::XSlideShowView > ViewBase;
 class View : public ::comphelper::OBaseMutex,
              public ViewBase
 {
@@ -201,7 +200,7 @@ private:
     Size                                       maSize;
 };
 
-typedef ::cppu::WeakComponentImplHelper2< drawing::XDrawPage,
+typedef ::cppu::WeakComponentImplHelper< drawing::XDrawPage,
                                           beans::XPropertySet > SlideBase;
 class DummySlide : public ::comphelper::OBaseMutex,
                    public SlideBase

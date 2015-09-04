@@ -22,7 +22,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
 
@@ -45,7 +45,7 @@ namespace target = slideshow::internal;
 using namespace ::com::sun::star;
 
 // our test view subject
-typedef ::cppu::WeakComponentImplHelper1< presentation::XSlideShowView > ViewBase;
+typedef ::cppu::WeakComponentImplHelper< presentation::XSlideShowView > ViewBase;
 class ImplTestView : public TestView,
                      private cppu::BaseMutex,
                      public ViewBase
