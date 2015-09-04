@@ -363,6 +363,10 @@ protected:
  *
  * @param reference_type must be a subclass of vcl::Window
  */
+#if defined _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4521) // " multiple copy constructors specified"
+#endif
 template <class reference_type>
 class ScopedVclPtrInstance : public ScopedVclPtr<reference_type>
 {
@@ -387,6 +391,9 @@ private:
     ScopedVclPtrInstance(ScopedVclPtrInstance &) = delete;
     ScopedVclPtrInstance(ScopedVclPtrInstance const &) = delete;
 };
+#if defined _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // INCLUDED_VCL_PTR_HXX
 
