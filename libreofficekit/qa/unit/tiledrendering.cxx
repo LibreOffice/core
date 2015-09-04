@@ -195,12 +195,16 @@ void TiledRenderingTest::testGetStyles( Office* pOffice )
     scoped_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
 
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->getStyles();
+    char* pJSON = pDocument->getCommandValues(".uno:StyleApply");
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( aTree.size() > 0 );
+    CPPUNIT_ASSERT( aTree.get_value<std::string>("commandName") == ".uno:StyleApply" );
 
-    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
+
+    boost::property_tree::ptree aValues = aTree.get_child("commandValues");
+    CPPUNIT_ASSERT( aValues.size() > 0 );
+    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aValues)
     {
         CPPUNIT_ASSERT( rPair.second.size() > 0);
         if (rPair.first != "CharacterStyles" &&
