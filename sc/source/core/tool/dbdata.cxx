@@ -77,7 +77,7 @@ ScDBData::ScDBData( const OUString& rName,
     nIndex      (0),
     bAutoFilter (false),
     bModified   (false),
-    mbTableColumnNamesDirty(bHasH)
+    mbTableColumnNamesDirty(true)
 {
     aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
@@ -832,12 +832,13 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
 void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange )
 {
     // Header-less tables get names generated, completely empty a full refresh.
-    if (!HasHeader() || maTableColumnNames.empty())
+    if (mbTableColumnNamesDirty && (!HasHeader() || maTableColumnNames.empty()))
     {
         RefreshTableColumnNames( pDoc);
         return;
     }
 
+    // Check if this is affected for the range requested.
     ScRange aHeaderRange( ScAddress::UNINITIALIZED);
     GetArea( aHeaderRange);
     aHeaderRange.aEnd.SetRow( aHeaderRange.aStart.Row());
