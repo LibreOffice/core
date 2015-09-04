@@ -34,9 +34,11 @@
         } \
     } while (false)
 
-class VCL_DLLPUBLIC OpenGLHelper
+// All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
+struct VCL_DLLPUBLIC OpenGLHelper
 {
-public:
+    OpenGLHelper() SAL_DELETED_FUNCTION; // Should not be instantiated
+
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OString& preamble = "" );
 
     /**

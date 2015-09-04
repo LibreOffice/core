@@ -14,9 +14,11 @@
 
 #include <vcl/dllapi.h>
 
-class VCL_DLLPUBLIC OpenGLWrapper
+// All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
+struct VCL_DLLPUBLIC OpenGLWrapper
 {
-public:
+    OpenGLWrapper() SAL_DELETED_FUNCTION; // Should not be instantiated
+
     /**
      * Returns true if VCL has OpenGL rendering enabled
      */
