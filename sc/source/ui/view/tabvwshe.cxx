@@ -59,8 +59,8 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
             ScDocument* pDoc = GetViewData().GetDocument();
             if ( bInFormatDialog && aRange.aStart.Row() != aRange.aEnd.Row() )
             {
-                // Range auf eine Datenzeile begrenzen
-                // (nur wenn der Aufruf aus einem Format-Dialog kommt)
+                // limit range to one data row
+                // (only when  the call comes from a format dialog)
                 ScHorizontalCellIterator aIter( pDoc, aRange.aStart.Tab(),
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row() );
@@ -100,10 +100,10 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
             aObj.ExportString( aExportOUString );
             aStrSelection = convertLineEnd(aExportOUString, LINEEND_CR);
 
-            //  Tab/CR durch Space ersetzen, wenn fuer Dialog oder per Basic/SelectionTextExt,
-            //  oder wenn es eine einzelne Zeile ist.
-            //  Sonst mehrzeilig mit Tabs beibehalten (z.B. Mail oder Basic/SelectionText).
-            //  Fuer Mail werden die Tabs dann spaeter in (mehrere) Spaces gewandelt.
+            // replace Tab/CR with space, if for dialog or through Basic/SelectionTextExt,
+            // or when it is a single row.
+            // Otherwise keep Tabs in multi-row (for instance mail or Basic/SelectionText).
+            // for mail the Tabs are then later changed into (multiple) spaces.
 
             if ( bInFormatDialog || bWholeWord || aRange.aEnd.Row() == aRange.aStart.Row() )
             {
@@ -121,7 +121,7 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
                                 sal_uInt16 nMode )
 {
     SvxLinkInsertMode eMode = (SvxLinkInsertMode) nMode;
-    bool bAsText = ( eMode != HLINK_BUTTON );       // Default ist jetzt Text
+    bool bAsText = ( eMode != HLINK_BUTTON );       // default is now text
 
     if ( bAsText )
     {
@@ -227,7 +227,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                 if ( pReqArgs &&
                      SfxItemState::SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem) )
                 {
-                    OSL_ENSURE( pItem->ISA(SvxSearchItem), "falsches Item" );
+                    OSL_ENSURE( pItem->ISA(SvxSearchItem), "wrong Item" );
                     const SvxSearchItem* pSearchItem = static_cast<const SvxSearchItem*>(pItem);
 
                     ScGlobal::SetSearchItem( *pSearchItem );
@@ -260,13 +260,13 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
             if (pReqArgs && SfxItemState::SET ==
                             pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem))
             {
-                //  Search-Item merken
-                OSL_ENSURE( pItem->ISA(SvxSearchItem), "falsches Item" );
+                // remember search item
+                OSL_ENSURE( pItem->ISA(SvxSearchItem), "wrong Item" );
                 ScGlobal::SetSearchItem( *static_cast<const SvxSearchItem*>(pItem ));
             }
             else
             {
-                OSL_FAIL("SID_SEARCH_ITEM ohne Parameter");
+                OSL_FAIL("SID_SEARCH_ITEM without Parameter");
             }
             break;
         case FID_SEARCH:
@@ -276,11 +276,11 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
             {
                 if (pReqArgs && SfxItemState::SET == pReqArgs->GetItemState(nSlot, false, &pItem))
                 {
-                    //  SearchItem holen
+                    // get search item
 
                     SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
 
-                    //  SearchItem fuellen
+                    // fill search item
 
                     aSearchItem.SetSearchString(static_cast<const SfxStringItem*>(pItem)->GetValue());
                     if(SfxItemState::SET == pReqArgs->GetItemState(FN_PARAM_1, false, &pItem))
@@ -295,7 +295,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     else
                         aSearchItem.SetCommand(SvxSearchCmd::FIND_ALL);
 
-                    //  Request ausfuehren (dabei wird das SearchItem gespeichert)
+                    // execute request (which stores the SearchItem)
 
                     aSearchItem.SetWhich(SID_SEARCH_ITEM);
                     GetViewData().GetDispatcher().Execute( FID_SEARCH_NOW,
@@ -331,7 +331,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
             break;
         case FID_REPEAT_SEARCH:
             {
-                //  nochmal mit ScGlobal::GetSearchItem()
+                // once more with ScGlobal::GetSearchItem()
 
                 SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
                 aSearchItem.SetWhich(SID_SEARCH_ITEM);
