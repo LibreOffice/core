@@ -8,10 +8,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifneq ($(MERGELIBS),)
-
 # we link all object files from these libraries into one, merged library
-gb_MERGEDLIBS := \
+MERGE_LIBRARY_LIST := \
 	avmedia \
 	$(if $(filter $(OS),ANDROID),,basebmp) \
 	basegfx \
@@ -61,6 +59,18 @@ gb_MERGEDLIBS := \
 	xmlscript \
 	xo \
 	xstor \
+
+
+# allow module-deps.pl to color based on this.
+ifneq ($(ENABLE_PRINT_DEPS),)
+
+$(info MergeLibContents: $(MERGE_LIBRARY_LIST))
+
+endif
+
+ifneq ($(MERGELIBS),)
+
+gb_MERGEDLIBS := $(MERGE_LIBRARY_LIST)
 
 endif
 
