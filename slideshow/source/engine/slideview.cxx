@@ -27,7 +27,7 @@
 #include "unoview.hxx"
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/make_shared_from_uno.hxx>
@@ -664,7 +664,7 @@ private:
 
 
 
-typedef cppu::WeakComponentImplHelper2<
+typedef cppu::WeakComponentImplHelper<
     ::com::sun::star::util::XModifyListener,
       ::com::sun::star::awt::XPaintListener> SlideViewBase;
 

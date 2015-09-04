@@ -22,7 +22,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <cppuhelper/compbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>

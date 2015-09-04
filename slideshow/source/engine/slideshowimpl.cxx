@@ -21,10 +21,9 @@
 #include <tools/diagnose_ex.h>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -203,7 +202,7 @@ private:
 
  ******************************************************************************/
 
-typedef cppu::WeakComponentImplHelper1<presentation::XSlideShow> SlideShowImplBase;
+typedef cppu::WeakComponentImplHelper<presentation::XSlideShow> SlideShowImplBase;
 
 typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
 

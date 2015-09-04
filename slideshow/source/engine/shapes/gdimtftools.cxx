@@ -29,10 +29,9 @@
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
@@ -104,7 +103,7 @@ bool hasUnsupportedActions( const GDIMetaFile& rMtf )
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper1< graphic::XGraphicRenderer > DummyRenderer_Base;
+typedef ::cppu::WeakComponentImplHelper< graphic::XGraphicRenderer > DummyRenderer_Base;
 
 class DummyRenderer: public cppu::BaseMutex, public DummyRenderer_Base
 {
