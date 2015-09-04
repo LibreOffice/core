@@ -143,6 +143,8 @@ public:
     void        SetStripData(bool bSet)         { bStripData = bSet; }
 
     void        SetContainer( ScDBDataContainerBase* pContainer ) { mpContainer = pContainer; }
+    /** Returns header row range if has headers, else invalid range. */
+    ScRange     GetHeaderArea() const;
     void        StartTableColumnNamesListener();
     void        EndTableColumnNamesListener();
     SC_DLLPUBLIC void SetTableColumnNames( const ::std::vector< OUString >& rNames );

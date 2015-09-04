@@ -192,12 +192,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         {
             mbTableColumnNamesDirty = true;
             if (mpContainer)
-            {
-                ScRange aHeaderRange( ScAddress::UNINITIALIZED);
-                GetArea( aHeaderRange);
-                aHeaderRange.aEnd.SetRow( aHeaderRange.aStart.Row());
-                mpContainer->GetDirtyTableColumnNames().Join( aHeaderRange);
-            }
+                mpContainer->GetDirtyTableColumnNames().Join( GetHeaderArea());
         }
         else
         {
@@ -321,6 +316,13 @@ void ScDBData::GetArea(ScRange& rRange) const
 {
     SCROW nNewEndRow = nEndRow;
     rRange = ScRange( nStartCol, nStartRow, nTable, nEndCol, nNewEndRow, nTable );
+}
+
+ScRange ScDBData::GetHeaderArea() const
+{
+    if (HasHeader())
+        return ScRange( nStartCol, nStartRow, nTable, nEndCol, nStartRow, nTable);
+    return ScRange( ScAddress::INITIALIZE_INVALID);
 }
 
 void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
@@ -654,12 +656,7 @@ void ScDBData::StartTableColumnNamesListener()
     {
         ScDocument* pDoc = mpContainer->GetDocument();
         if (!pDoc->IsClipOrUndo())
-        {
-            ScRange aHeaderRange( ScAddress::UNINITIALIZED);
-            GetArea( aHeaderRange);
-            aHeaderRange.aEnd.SetRow( aHeaderRange.aStart.Row());
-            pDoc->StartListeningArea( aHeaderRange, false, this);
-        }
+            pDoc->StartListeningArea( GetHeaderArea(), false, this);
     }
 }
 
@@ -839,10 +836,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange 
     }
 
     // Check if this is affected for the range requested.
-    ScRange aHeaderRange( ScAddress::UNINITIALIZED);
-    GetArea( aHeaderRange);
-    aHeaderRange.aEnd.SetRow( aHeaderRange.aStart.Row());
-    ScRange aIntersection( aHeaderRange.Intersection( rRange));
+    ScRange aIntersection( GetHeaderArea().Intersection( rRange));
     if (!aIntersection.IsValid())
         return;
 
