@@ -46,7 +46,7 @@
 #include <com/sun/star/java/MissingJavaRuntimeException.hpp>
 #include <com/sun/star/java/JavaDisabledException.hpp>
 #include <com/sun/star/java/JavaVMCreationFailureException.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
 
 using namespace std;
@@ -60,12 +60,12 @@ using namespace css::task;
 
 #define INTERACTION_HANDLER_NAME "java-vm.interaction-handler"
 
-class Context: public WeakImplHelper1<XCurrentContext>
+class Context: public WeakImplHelper<XCurrentContext>
 {
     virtual Any SAL_CALL getValueByName( const OUString& Name ) throw (RuntimeException);
 };
 
-class InteractionHandler: public WeakImplHelper1<XInteractionHandler>
+class InteractionHandler: public WeakImplHelper<XInteractionHandler>
 {
     virtual void SAL_CALL handle( const Reference< XInteractionRequest >& Request )
         throw (RuntimeException);

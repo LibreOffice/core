@@ -25,7 +25,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/access_control.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -52,7 +52,7 @@ struct MutexHolder
 {
     Mutex m_mutex;
 };
-typedef WeakComponentImplHelper2< security::XPolicy, lang::XServiceInfo > t_helper;
+typedef WeakComponentImplHelper< security::XPolicy, lang::XServiceInfo > t_helper;
 
 
 class FilePolicy

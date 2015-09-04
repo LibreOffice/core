@@ -43,7 +43,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.h>
@@ -57,7 +57,7 @@
 
 namespace {
 
-class Service: public cppu::WeakImplHelper1< css::lang::XMain > {
+class Service: public cppu::WeakImplHelper< css::lang::XMain > {
 public:
     virtual sal_Int32 SAL_CALL
     run(css::uno::Sequence< OUString > const & arguments)

@@ -29,7 +29,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <registry/registry.hxx>
 
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -86,7 +86,7 @@ Reference< XMultiServiceFactory > createRegistryServiceManager( const OUString& 
 *
 *************************************/
 static sal_uInt32 nInstanceCount = 0;
-class Test_Manager_Impl : public WeakImplHelper1< XServiceInfo >
+class Test_Manager_Impl : public WeakImplHelper< XServiceInfo >
 {
 public:
     Test_Manager_Impl(){ nInstanceCount++;}

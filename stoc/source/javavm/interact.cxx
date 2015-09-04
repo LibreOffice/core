@@ -26,7 +26,7 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
 using stoc_javavm::InteractionRequest;
@@ -34,7 +34,7 @@ using stoc_javavm::InteractionRequest;
 namespace {
 
 class AbortContinuation:
-    public cppu::WeakImplHelper1<css::task::XInteractionAbort>,
+    public cppu::WeakImplHelper<css::task::XInteractionAbort>,
     private boost::noncopyable
 {
 public:
@@ -49,7 +49,7 @@ private:
 }
 
 class InteractionRequest::RetryContinuation:
-    public cppu::WeakImplHelper1<css::task::XInteractionRetry>,
+    public cppu::WeakImplHelper<css::task::XInteractionRetry>,
     private boost::noncopyable
 {
 public:

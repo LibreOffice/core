@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 namespace com { namespace sun { namespace star { namespace task {
@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star { namespace task {
 namespace stoc_javavm {
 
 class InteractionRequest:
-    public cppu::WeakImplHelper1< css::task::XInteractionRequest >
+    public cppu::WeakImplHelper< css::task::XInteractionRequest >
 {
 public:
     explicit InteractionRequest(css::uno::Any const & rRequest);

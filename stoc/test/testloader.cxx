@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>
 
 #if defined ( UNX )
@@ -44,7 +44,7 @@ using namespace osl;
 using namespace cppu;
 
 
-class EmptyComponentContext : public WeakImplHelper1< XComponentContext >
+class EmptyComponentContext : public WeakImplHelper< XComponentContext >
 {
 public:
     virtual Any SAL_CALL getValueByName( const OUString& /*Name*/ )

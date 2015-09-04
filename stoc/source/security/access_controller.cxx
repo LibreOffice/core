@@ -30,8 +30,8 @@
 #include <uno/current_context.h>
 #include <uno/lbnames.h>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -71,7 +71,7 @@ const char s_acRestriction[] = "access-control.restriction";
 /** ac context intersects permissions of two ac contexts
 */
 class acc_Intersection
-    : public WeakImplHelper1< security::XAccessControlContext >
+    : public WeakImplHelper< security::XAccessControlContext >
 {
     Reference< security::XAccessControlContext > m_x1, m_x2;
 
@@ -124,7 +124,7 @@ void acc_Intersection::checkPermission(
 /** ac context unifies permissions of two ac contexts
 */
 class acc_Union
-    : public WeakImplHelper1< security::XAccessControlContext >
+    : public WeakImplHelper< security::XAccessControlContext >
 {
     Reference< security::XAccessControlContext > m_x1, m_x2;
 
@@ -183,7 +183,7 @@ void acc_Union::checkPermission(
 /** ac context doing permission checks on static permissions
 */
 class acc_Policy
-    : public WeakImplHelper1< security::XAccessControlContext >
+    : public WeakImplHelper< security::XAccessControlContext >
 {
     PermissionCollection m_permissions;
 
@@ -214,7 +214,7 @@ void acc_Policy::checkPermission(
 /** current context overriding dynamic ac restriction
 */
 class acc_CurrentContext
-    : public WeakImplHelper1< XCurrentContext >
+    : public WeakImplHelper< XCurrentContext >
 {
     Reference< XCurrentContext > m_xDelegate;
     Any m_restriction;
@@ -300,7 +300,7 @@ struct MutexHolder
 {
     Mutex m_mutex;
 };
-typedef WeakComponentImplHelper3<
+typedef WeakComponentImplHelper<
     security::XAccessController, lang::XServiceInfo, lang::XInitialization > t_helper;
 
 

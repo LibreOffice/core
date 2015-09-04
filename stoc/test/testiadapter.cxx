@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 using namespace test;
@@ -155,7 +155,7 @@ void assign( test::TestData & rData,
 }
 
 
-class Test_Impl : public WeakImplHelper1< XLanguageBindingTest >
+class Test_Impl : public WeakImplHelper< XLanguageBindingTest >
 {
     test::TestData _aData, _aStructData;
 
@@ -278,7 +278,7 @@ public:
     virtual void SAL_CALL setRuntimeException( sal_Int32 _runtimeexception ) throw(css::uno::RuntimeException);
 };
 
-class XLB_Invocation : public WeakImplHelper1< XInvocation >
+class XLB_Invocation : public WeakImplHelper< XInvocation >
 {
     Reference< XLanguageBindingTest > _xLBT;
 

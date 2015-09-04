@@ -24,8 +24,7 @@
 #include <uno/environment.hxx>
 #include <uno/lbnames.h>
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -44,7 +43,7 @@ using namespace ::com::sun::star;
 using namespace css::uno;
 
 
-typedef WeakImplHelper3< lang::XServiceInfo,
+typedef WeakImplHelper< lang::XServiceInfo,
                          XCurrentContext,
                          reflection::XProxyFactory > t_impl;
 
@@ -99,7 +98,7 @@ int TargetObject::s_obj = 0;
 
 
 
-class TestMaster : public WeakImplHelper1< lang::XServiceInfo >
+class TestMaster : public WeakImplHelper< lang::XServiceInfo >
 {
     Reference< XAggregation > m_xProxyTarget;
     Reference<lang::XServiceInfo> m_xOtherProxyTargetBeforeSetDelegator;
@@ -122,7 +121,7 @@ public:
         throw (RuntimeException)
     {
         Any aRet(
-            WeakImplHelper1< lang::XServiceInfo >::queryInterface( rType ) );
+            WeakImplHelper< lang::XServiceInfo >::queryInterface( rType ) );
         if (aRet.hasValue())
             return aRet;
         return m_xProxyTarget->queryAggregation( rType );

@@ -25,6 +25,7 @@
 #include <osl/mutex.hxx>
 #include <uno/mapping.hxx>
 #include <uno/dispatcher.h>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/component.hxx>
@@ -141,7 +142,7 @@ public:
 
 
 class IdlClassImpl
-    : public ::cppu::WeakImplHelper1< css::reflection::XIdlClass >
+    : public ::cppu::WeakImplHelper< css::reflection::XIdlClass >
 {
     IdlReflectionServiceImpl *  _pReflection;
 
@@ -324,7 +325,7 @@ public:
 
 
 class IdlMemberImpl
-    : public ::cppu::WeakImplHelper1< css::reflection::XIdlMember >
+    : public ::cppu::WeakImplHelper< css::reflection::XIdlMember >
 {
     IdlReflectionServiceImpl *  _pReflection;
     OUString                    _aName;

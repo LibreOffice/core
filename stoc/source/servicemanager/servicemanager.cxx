@@ -27,12 +27,11 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/component.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/compbase6.hxx>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -151,7 +150,7 @@ typedef std::unordered_set
 > HashSet_Ref;
 
 
-class ServiceEnumeration_Impl : public WeakImplHelper1< XEnumeration >
+class ServiceEnumeration_Impl : public WeakImplHelper< XEnumeration >
 {
 public:
     explicit ServiceEnumeration_Impl( const Sequence< Reference<XInterface > > & rFactories )
@@ -190,7 +189,7 @@ Any ServiceEnumeration_Impl::nextElement()
 }
 
 
-class PropertySetInfo_Impl : public WeakImplHelper1< beans::XPropertySetInfo >
+class PropertySetInfo_Impl : public WeakImplHelper< beans::XPropertySetInfo >
 {
     Sequence< beans::Property > m_properties;
 
@@ -243,7 +242,7 @@ sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
 /*****************************************************************************
     Enumeration by implementation
 *****************************************************************************/
-class ImplementationEnumeration_Impl : public WeakImplHelper1< XEnumeration >
+class ImplementationEnumeration_Impl : public WeakImplHelper< XEnumeration >
 {
 public:
     explicit ImplementationEnumeration_Impl( const HashSet_Ref & rImplementationMap )
@@ -314,7 +313,7 @@ typedef std::unordered_map
 /*****************************************************************************
     class OServiceManager_Listener
 *****************************************************************************/
-class OServiceManager_Listener : public WeakImplHelper1< XEventListener >
+class OServiceManager_Listener : public WeakImplHelper< XEventListener >
 {
 private:
     WeakReference<XSet > xSMgr;
@@ -358,7 +357,7 @@ struct OServiceManagerMutex
     Mutex m_mutex;
 };
 
-typedef WeakComponentImplHelper7<
+typedef WeakComponentImplHelper<
     lang::XMultiServiceFactory, lang::XMultiComponentFactory, lang::XServiceInfo,
     lang::XInitialization,
     container::XSet, container::XContentEnumerationAccess,
@@ -489,7 +488,7 @@ inline void OServiceManager::check_undisposed() const
 
 
 
-typedef WeakComponentImplHelper6<
+typedef WeakComponentImplHelper<
     lang::XMultiServiceFactory, lang::XMultiComponentFactory, lang::XServiceInfo,
     container::XSet, container::XContentEnumerationAccess,
     beans::XPropertySet > t_OServiceManagerWrapper_impl;

@@ -24,7 +24,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -1086,7 +1086,7 @@ Sequence< sal_Int8 > SAL_CALL Invocation_Impl::getImplementationId(  ) throw( Ru
 
 
 class InvocationService
-    : public WeakImplHelper2< XSingleServiceFactory, XServiceInfo >
+    : public WeakImplHelper< XSingleServiceFactory, XServiceInfo >
 {
 public:
     explicit InvocationService( const Reference<XComponentContext> & xCtx );
