@@ -248,11 +248,13 @@ public:
     }
 
     /**
-     * Returns a json map, {"familyName1" : ["list of style names in the family1"], etc.}
+     * Returns a json mapping of the possible values for the given command
+     * e.g. {commandName: "styles", commandValues: {"familyName1" : ["list of style names in the family1"], etc.}}
+     *      {commandName: "fonts", commandValues: {"fontName1" : ["list of available font sizes"], etc.}}
      */
-    inline char* getStyles()
+    inline char* getCommandValues(const char* pCommand)
     {
-        return mpDoc->pClass->getStyles(mpDoc);
+        return mpDoc->pClass->getCommandValues(mpDoc, pCommand);
     }
 #endif // LOK_USE_UNSTABLE_API
 };
