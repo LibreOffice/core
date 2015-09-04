@@ -371,6 +371,21 @@ public:
         : ScopedVclPtr<reference_type>( new reference_type(std::forward<Arg>(arg)...), SAL_NO_ACQUIRE )
     {
     }
+
+private:
+    // Prevent the above perfect forwarding ctor from hijacking (accidental)
+    // attempts at ScopedVclPtrInstance copy construction (where the hijacking
+    // would typically lead to somewhat obscure error messages); both non-const
+    // and const variants are needed here, as the ScopedVclPtr base class has a
+    // const--variant copy ctor, so the implicitly declared copy ctor for
+    // ScopedVclPtrInstance would also be the const variant, so non-const copy
+    // construction attempts would be hijacked by the perfect forwarding ctor;
+    // but if we only declared a non-const variant here, the const variant would
+    // no longer be implicitly declared (as there would already be an explicitly
+    // declared copy ctor), so const copy construction attempts would then be
+    // hijacked by the perfect forwarding ctor:
+    ScopedVclPtrInstance(ScopedVclPtrInstance &) = delete;
+    ScopedVclPtrInstance(ScopedVclPtrInstance const &) = delete;
 };
 
 #endif // INCLUDED_VCL_PTR_HXX
