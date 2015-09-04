@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_443e4fb9",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-09-04T07:34:22Z",
+      "side": 1,
+      "message": "Could we use the uno command name here instead of inventing our own names?\n\nSo if this is supposed to return the list of styles which are valid arguments for .uno:StyleApply, then I would go with \".uno:StyleApply\" here, too; and not with \"styles\".",
+      "revId": "27fa04dd85dae6b3c39dbff842bf68c4334ea3c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
