@@ -606,7 +606,7 @@ void CffSubsetterContext::readDictOp()
             int nSid2 = popInt();
             (void)nSid1; // TODO: use
             (void)nSid2; // TODO: use
-            nVal = popVal();
+            popVal();
             mbCIDFont = true;
             } break;
         case 't':   // CharstringType
