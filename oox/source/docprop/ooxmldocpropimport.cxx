@@ -80,8 +80,13 @@ Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxSto
             const StringPair& rEntry = rEntries[ nEntryIndex ];
             if ( rEntry.First == "Target" )
             {
+                // The stream path is always a relative one, ignore the leading "/" if it's there.
+                OUString aStreamPath = rEntry.Second;
+                if (aStreamPath.startsWith("/"))
+                    aStreamPath = aStreamPath.copy(1);
+
                 Reference< XExtendedStorageStream > xExtStream(
-                    xHierarchy->openStreamElementByHierarchicalName( rEntry.Second, ElementModes::READ ), UNO_QUERY_THROW );
+                    xHierarchy->openStreamElementByHierarchicalName( aStreamPath, ElementModes::READ ), UNO_QUERY_THROW );
                 Reference< XInputStream > xInStream = xExtStream->getInputStream();
                 if( xInStream.is() )
                 {
