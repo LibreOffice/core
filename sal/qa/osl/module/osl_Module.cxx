@@ -28,6 +28,7 @@
 // include files
 //------------------------------------------------------------------------
 #include <osl_Module_Const.h>
+#include "gtest/gtest.h"
 
 using namespace osl;
 using namespace rtl;
@@ -41,8 +42,8 @@ using namespace rtl;
 */
 inline void printBool( sal_Bool bOk )
 {
-    t_print("#printBool# " );
-    ( sal_True == bOk ) ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
+    printf("#printBool# " );
+    ( sal_True == bOk ) ? printf("TRUE!\n" ): printf("FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -51,9 +52,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    t_print("#printUString_u# " );
+    printf("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
+    printf("%s\n", aString.getStr( ) );
 }
 
 /** get dll file URL.
@@ -68,9 +69,17 @@ inline ::rtl::OUString getDllURL( void )
 
     ::rtl::OUString dirPath, dllPath;
     osl::Module::getUrlFromAddress( ( void* ) &getDllURL, dirPath );
+    // file:///aoo/main/sal/unx/bin/osl_Module
+    dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/'));
+    // file:///aoo/main/sal/unx/bin
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1);
+    // file:///aoo/main/sal/unx/
+    dirPath = dirPath + rtl::OUString::createFromAscii( "lib/" );
+    // file:///aoo/main/sal/unx/lib/
     osl::FileBase::getAbsoluteFileURL( dirPath, libPath, dllPath );
 
+rtl::OString aOString = ::rtl::OUStringToOString (dllPath, RTL_TEXTENCODING_UTF8);
+printf("getDllURL() returning %s\n", aOString.getStr());
     return dllPath;
 }
 
@@ -80,9 +89,9 @@ inline void printFileName( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    t_print("#printFileName_u# " );
+    printf("#printFileName_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
+    printf("%s\n", aString.getStr( ) );
 }
 
 inline sal_Bool isURL( const ::rtl::OUString pathname )
@@ -101,7 +110,7 @@ inline void createTestDirectory( const ::rtl::OUString dirname )
     if ( !isURL( dirname ) )
         ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
     nError = ::osl::Directory::create( aPathURL );
-    CPPUNIT_ASSERT_MESSAGE( "In createTestDirectory Function: creation: ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
+    ASSERT_TRUE(( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST )) << "In createTestDirectory Function: creation: ";
 }
 
 /** delete a temp test directory using OUString name of full qualified URL or system path.
@@ -120,7 +129,7 @@ inline void deleteTestDirectory( const ::rtl::OUString dirname )
         }
 
     nError = ::osl::Directory::remove( aPathURL );
-     CPPUNIT_ASSERT_MESSAGE( "In deleteTestDirectory function: remove ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT ) );
+     ASSERT_TRUE(( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT )) << "In deleteTestDirectory function: remove ";
 }
 
 //check if the file exist
@@ -153,10 +162,10 @@ inline void deleteTestFile( const ::rtl::OUString filename )
         ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); //convert if not full qualified URL
 
     nError = ::osl::File::setAttributes( aPathURL, Attribute_GrpWrite| Attribute_OwnWrite| Attribute_OthWrite ); // if readonly, make writtenable.
-    CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: set writtenable ", ( ::osl::FileBase::E_None == nError ) || ( ::osl::FileBase::E_NOENT == nError ) );
+    ASSERT_TRUE(( ::osl::FileBase::E_None == nError ) || ( ::osl::FileBase::E_NOENT == nError )) << "In deleteTestFile Function: set writtenable ";
 
     nError = ::osl::File::remove( aPathURL );
-    CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: remove ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT ) );
+    ASSERT_TRUE(( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT )) << "In deleteTestFile Function: remove ";
 }
 
 
@@ -175,7 +184,7 @@ namespace osl_Module
     public:
         static void myFunc()
         {
-            t_print("#Sun Microsystem\n");
+            printf("#Sun Microsystem\n");
         };
     };
 
@@ -184,335 +193,260 @@ namespace osl_Module
         Module();
         Module( const ::rtl::OUString& strModuleName, sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT);
     */
-    class ctors : public CppUnit::TestFixture
+    class ctors : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void ctors_none( )
-        {
-            ::osl::Module aMod;
-            bRes = aMod.is();
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor without parameter.",
-                                    sal_False == bRes  );
-        }
-
-        void ctors_name_mode( )
-        {
-            OUString aFileURL;
-            bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL );
-
-            if ( !( bRes ) )
-            {
-                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.",  sal_False  );
-            }
-
-            ::osl::Module aMod( aFileURL );
-            bRes = aMod.is( );
-            aMod.unload( );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test constructor with load action.",
-                                    sal_True == bRes  );
-        }
-
-        CPPUNIT_TEST_SUITE( ctors );
-        CPPUNIT_TEST( ctors_none );
-        CPPUNIT_TEST( ctors_name_mode );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
 
+
+    TEST_F(ctors, ctors_none)
+    {
+        ::osl::Module aMod;
+        bRes = aMod.is();
+
+        ASSERT_TRUE( sal_False == bRes ) << "#test comment#: test constructor without parameter.";
+    }
+
+    TEST_F(ctors, ctors_name_mode)
+    {
+        ::osl::Module aMod( getDllURL( ) );
+        bRes = aMod.is( );
+        aMod.unload( );
+
+        ASSERT_TRUE( sal_True == bRes ) << "#test comment#: test constructor with load action.";
+    }
 
     /** testing the methods:
         static sal_Bool getUrlFromAddress(void * addr, ::rtl::OUString & libraryUrl)
     */
-    class getUrlFromAddress : public CppUnit::TestFixture
+    class getUrlFromAddress : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void getUrlFromAddress_001( )
-        {
-            OUString aFileURL;
-            bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL ) ;
-            if ( !( bRes ) )
-            {
-                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.",  sal_False  );
-            }
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test get Module URL from address.",
-                                    sal_True == bRes && 0 < aFileURL.lastIndexOf('/')  );
-        }
-
-        void getUrlFromAddress_002( )
-        {
-            ::osl::Module aMod( getDllURL( ) );
-            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
-
-            OUString aFileURL;
-            bRes = osl::Module::getUrlFromAddress( ( void* )pFunc, aFileURL );
-            if ( !( bRes  ) )
-            {
-                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.",  sal_False  );
-            }
-            aMod.unload( );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: load an external library, get its function address and get its URL.",
-                                    sal_True == bRes && 0 < aFileURL.lastIndexOf('/') && aFileURL.equalsIgnoreAsciiCase( getDllURL( ) ) );
-        }
-
-        /* tester comments: another case is getFunctionSymbol_001*/
-
-        CPPUNIT_TEST_SUITE( getUrlFromAddress );
-        CPPUNIT_TEST( getUrlFromAddress_001 );
-        CPPUNIT_TEST( getUrlFromAddress_002 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class getUrlFromAddress
 
+    /* tester comments: another case is getFunctionSymbol_001*/
+
+    TEST_F(getUrlFromAddress, getUrlFromAddress_001 )
+    {
+        OUString aFileURL;
+        bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL ) ;
+        if ( !( bRes ) )
+        {
+            ASSERT_TRUE(sal_False) << "Cannot locate current module.";
+        }
+
+        ASSERT_TRUE(sal_True == bRes && 0 < aFileURL.lastIndexOf('/')) << "#test comment#: test get Module URL from address.";
+    }
+
+    TEST_F(getUrlFromAddress, getUrlFromAddress_002 )
+    {
+        ::osl::Module aMod( getDllURL( ) );
+        FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
+
+        OUString aFileURL;
+        bRes = osl::Module::getUrlFromAddress( ( void* )pFunc, aFileURL );
+        if ( !( bRes  ) )
+        {
+            ASSERT_TRUE(sal_False) << "Cannot locate current module.";
+        }
+        aMod.unload( );
+
+        ASSERT_TRUE( sal_True == bRes && 0 < aFileURL.lastIndexOf('/') && aFileURL.equalsIgnoreAsciiCase( getDllURL( ) ) )
+            << "#test comment#: load an external library, get its function address and get its URL.";
+    }
 
     /** testing the method:
         sal_Bool SAL_CALL load( const ::rtl::OUString& strModuleName,
                                                  sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
     */
-    class load : public CppUnit::TestFixture
+    class load : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void load_001( )
-        {
-            ::osl::Module aMod( getDllURL( ) );
-            ::osl::Module aMod1;
-
-            aMod1.load( getDllURL( ) );
-            bRes = oslModule(aMod) == oslModule(aMod1);
-            aMod.unload( );
-            aMod1.unload( );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: load function should do the same thing as constructor with library name.",
-                                    sal_True == bRes  );
-        }
-        // load lib which is under a CJK directory
-        void load_002( )
-        {
-#ifdef UNX
-            //Can not get a CJK directory already exist, so here create one. Perhaps reason is encoding problem.
-            ::rtl::OUString aPidDirURL = rtl::OUString::createFromAscii( "file:///tmp/" ) + ::rtl::OUString::valueOf( ( long )getpid( ) );
-            ::rtl::OUString aMyDirURL = aPidDirURL + aKname;
-            createTestDirectory( aPidDirURL );
-            createTestDirectory( aMyDirURL );
-
-            ::rtl::OUString aDLLURL = aMyDirURL + rtl::OUString::createFromAscii( "/libModule_DLL.so" );
-            //check if the lib exist.
-            //FIXME: if assert condition is false, the case will return, so the directory will not be clean-up
-            CPPUNIT_ASSERT_MESSAGE( "#Source file is not exist. please manually clean-up directory and file under /tmp", ifFileExist( getDllURL( ) ) == sal_True );
-            ::osl::FileBase::RC nError = ::osl::File::copy( getDllURL( ), aDLLURL );
-            CPPUNIT_ASSERT_MESSAGE( "#copy failed. please manually clean-up directory and file under /tmp", nError == ::osl::FileBase::E_None );
-            //ifFileExist returned false but the file exist
-            CPPUNIT_ASSERT_MESSAGE( "#This file is not exist, copy failed. please manually clean-up directory and file under /tmp", ifFileExist( aDLLURL ) == sal_True );
-
-            //test if can create a normal file
-            ::rtl::OUString aFileURL = aMyDirURL + rtl::OUString::createFromAscii( "/test_file" );
-            ::osl::File testFile( aFileURL );
-            nError = testFile.open( OpenFlag_Create );
-            CPPUNIT_ASSERT_MESSAGE( "#create failed. please manually clean-up directory and file under /tmp", nError == ::osl::FileBase::E_None );
-            CPPUNIT_ASSERT_MESSAGE( "#This file is not exist, create failed. please manually clean-up directory and file under /tmp", ifFileExist( aFileURL ) == sal_True );
-
-            //load the copied dll
-            ::osl::Module aMod( aDLLURL );
-            ::osl::Module aMod1;
-
-            sal_Bool bOK = aMod1.load( aDLLURL );
-            bRes = oslModule(aMod) == oslModule(aMod1);
-            aMod.unload( );
-            aMod1.unload( );
-            deleteTestFile( aFileURL );
-            deleteTestFile( aDLLURL );
-            deleteTestDirectory( aMyDirURL );
-            deleteTestDirectory( aPidDirURL );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: load lib which is under a CJK directory.",
-                                    sal_True == bRes && bOK == sal_True );
-#endif
-        }
-
-        CPPUNIT_TEST_SUITE( load );
-        CPPUNIT_TEST( load_001 );
-        CPPUNIT_TEST( load_002 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class load
 
+    TEST_F(load, load_001 )
+    {
+        ::osl::Module aMod( getDllURL( ) );
+        ::osl::Module aMod1;
+
+        aMod1.load( getDllURL( ) );
+        bRes = oslModule(aMod) == oslModule(aMod1);
+        aMod.unload( );
+        aMod1.unload( );
+
+        ASSERT_TRUE(sal_True == bRes) << "#test comment#: load function should do the same thing as constructor with library name.";
+    }
+    // load lib which is under a CJK directory
+    TEST_F(load, load_002 )
+    {
+#ifdef UNX
+        //Can not get a CJK directory already exist, so here create one. Perhaps reason is encoding problem.
+        ::rtl::OUString aPidDirURL = rtl::OUString::createFromAscii( "file:///tmp/" ) + ::rtl::OUString::valueOf( ( long )getpid( ) );
+        ::rtl::OUString aMyDirURL = aPidDirURL + aKname;
+        createTestDirectory( aPidDirURL );
+        createTestDirectory( aMyDirURL );
+
+        ::rtl::OUString aDLLURL = aMyDirURL + rtl::OUString::createFromAscii( "/libModule_DLL.so" );
+        //check if the lib exist.
+        //FIXME: if assert condition is false, the case will return, so the directory will not be clean-up
+        ASSERT_TRUE(ifFileExist( getDllURL( ) ) == sal_True) << "#Source file is not exist. please manually clean-up directory and file under /tmp";
+        ::osl::FileBase::RC nError = ::osl::File::copy( getDllURL( ), aDLLURL );
+        ASSERT_TRUE(nError == ::osl::FileBase::E_None) << "#copy failed. please manually clean-up directory and file under /tmp";
+        //ifFileExist returned false but the file exist
+        ASSERT_TRUE( ifFileExist( aDLLURL ) == sal_True )
+            << "#This file is not exist, copy failed. please manually clean-up directory and file under /tmp";
+
+        //test if can create a normal file
+        ::rtl::OUString aFileURL = aMyDirURL + rtl::OUString::createFromAscii( "/test_file" );
+        ::osl::File testFile( aFileURL );
+        nError = testFile.open( OpenFlag_Create );
+        ASSERT_TRUE(nError == ::osl::FileBase::E_None) << "#create failed. please manually clean-up directory and file under /tmp";
+        ASSERT_TRUE( ifFileExist( aFileURL ) == sal_True )
+            << "#This file is not exist, create failed. please manually clean-up directory and file under /tmp";
+
+        //load the copied dll
+        ::osl::Module aMod( aDLLURL );
+        ::osl::Module aMod1;
+
+        sal_Bool bOK = aMod1.load( aDLLURL );
+        bRes = oslModule(aMod) == oslModule(aMod1);
+        aMod.unload( );
+        aMod1.unload( );
+        deleteTestFile( aFileURL );
+        deleteTestFile( aDLLURL );
+        deleteTestDirectory( aMyDirURL );
+        deleteTestDirectory( aPidDirURL );
+
+        ASSERT_TRUE(sal_True == bRes && bOK == sal_True) << "#test comment#: load lib which is under a CJK directory.";
+#endif
+    }
 
     /** testing the method:
         void SAL_CALL unload()
     */
-    class unload : public CppUnit::TestFixture
+    class unload : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void unload_001( )
-        {
-            ::osl::Module aMod( getDllURL( ) );
-
-            aMod.unload( );
-            bRes = oslModule(aMod) ==NULL;
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: unload function should do the same thing as destructor.",
-                                    sal_True == bRes  );
-        }
-
-        CPPUNIT_TEST_SUITE( unload );
-        CPPUNIT_TEST( unload_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class unload
 
+    TEST_F(unload, unload_001)
+    {
+        ::osl::Module aMod( getDllURL( ) );
+
+        aMod.unload( );
+        bRes = oslModule(aMod) ==NULL;
+
+        ASSERT_TRUE(sal_True == bRes) << "#test comment#: unload function should do the same thing as destructor.";
+    }
 
     /** testing the methods:
         sal_Bool SAL_CALL is() const
     */
-    class is : public CppUnit::TestFixture
+    class is : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void is_001( )
-        {
-            OUString aFileURL;
-            bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL );
-            if ( !( bRes  ) )
-            {
-                CPPUNIT_ASSERT_MESSAGE("Cannot locate current module - using executable instead",  sal_False  );
-            }
-
-            ::osl::Module aMod;
-            bRes = aMod.is( );
-            aMod.load( aFileURL );
-            bRes1 = aMod.is( );
-            aMod.unload( );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test if a module is a loaded module.",
-                                     sal_False == bRes && sal_True == bRes1);
-        }
-        CPPUNIT_TEST_SUITE( is );
-        CPPUNIT_TEST( is_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class is
 
+    TEST_F(is, is_001)
+    {
+        ::osl::Module aMod;
+        bRes = aMod.is( );
+        aMod.load( getDllURL( ) );
+        bRes1 = aMod.is( );
+        aMod.unload( );
+
+        ASSERT_TRUE(sal_False == bRes && sal_True == bRes1) << "#test comment#: test if a module is a loaded module.";
+    }
 
     /** testing the methods:
         void* SAL_CALL getSymbol( const ::rtl::OUString& strSymbolName)
     */
-    class getSymbol : public CppUnit::TestFixture
+    class getSymbol : public ::testing::Test
     {
     public:
         sal_Bool bRes;
-
-        void getSymbol_001( )
-        {
-            ::osl::Module aMod( getDllURL( ) );
-            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
-            bRes = sal_False;
-            if ( pFunc )
-                bRes = pFunc( bRes );
-            aMod.unload();
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: load a dll and call one function in it.",
-                                     sal_True == bRes );
-        }
-
-        CPPUNIT_TEST_SUITE( getSymbol );
-        CPPUNIT_TEST( getSymbol_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class getSymbol
 
+    TEST_F(getSymbol, getSymbol_001)
+    {
+        ::osl::Module aMod( getDllURL( ) );
+        FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
+        bRes = sal_False;
+        if ( pFunc )
+            bRes = pFunc( bRes );
+        aMod.unload();
+
+        ASSERT_TRUE(sal_True == bRes) << "#test comment#: load a dll and call one function in it.";
+    }
 
     /** testing the methods:
         operator oslModule() const
     */
-    class optr_oslModule : public CppUnit::TestFixture
+    class optr_oslModule : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void optr_oslModule_001( )
-        {
-            ::osl::Module aMod;
-            bRes = ( (oslModule)aMod == NULL );
-
-            aMod.load( getDllURL( ) );
-            bRes1 = (oslModule)aMod != NULL;
-
-            aMod.unload( );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: the m_Module of a Module instance will be NULL when is not loaded, it will not be NULL after loaded.",
-                                     sal_True == bRes && sal_True == bRes1);
-        }
-
-        void optr_oslModule_002( )
-        {
-            ::osl::Module aMod( getDllURL( ) );
-            ::rtl::OUString funcName(::rtl::OUString::createFromAscii( "firstfunc" ) );
-
-            FuncPtr pFunc = ( FuncPtr ) osl_getSymbol( (oslModule)aMod, funcName.pData );
-            bRes = sal_False;
-            if ( pFunc )
-                bRes = pFunc( bRes );
-
-            aMod.unload();
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: use m_Module to call osl_getSymbol() function.",
-                                     sal_True == bRes  );
-        }
-
-        CPPUNIT_TEST_SUITE( optr_oslModule );
-        CPPUNIT_TEST( optr_oslModule_001 );
-        CPPUNIT_TEST( optr_oslModule_002 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class optr_oslModule
+
+    TEST_F(optr_oslModule, optr_oslModule_001 )
+    {
+        ::osl::Module aMod;
+        bRes = ( (oslModule)aMod == NULL );
+
+        aMod.load( getDllURL( ) );
+        bRes1 = (oslModule)aMod != NULL;
+
+        aMod.unload( );
+
+        ASSERT_TRUE(sal_True == bRes && sal_True == bRes1)
+            << "#test comment#: the m_Module of a Module instance will be NULL when is not loaded, it will not be NULL after loaded.";
+    }
+
+    TEST_F(optr_oslModule, optr_oslModule_002 )
+    {
+        ::osl::Module aMod( getDllURL( ) );
+        ::rtl::OUString funcName(::rtl::OUString::createFromAscii( "firstfunc" ) );
+
+        FuncPtr pFunc = ( FuncPtr ) osl_getSymbol( (oslModule)aMod, funcName.pData );
+        bRes = sal_False;
+        if ( pFunc )
+            bRes = pFunc( bRes );
+
+        aMod.unload();
+
+        ASSERT_TRUE(sal_True == bRes) << "#test comment#: use m_Module to call osl_getSymbol() function.";
+    }
 
     /** testing the methods:
         oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName )
     */
-    class getFunctionSymbol : public CppUnit::TestFixture
+    class getFunctionSymbol : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void getFunctionSymbol_001( )
-        {
-            ::osl::Module aMod( getDllURL( ) );
-            oslGenericFunction oslFunc = aMod.getFunctionSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
-            ::rtl::OUString aLibraryURL;
-            bRes = ::osl::Module::getUrlFromAddress( oslFunc, aLibraryURL);
-            aMod.unload();
-            printFileName( aLibraryURL );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: load a dll and get its function addr and get its URL.",
-                 sal_True == bRes && aLibraryURL.equalsIgnoreAsciiCase( getDllURL() ) );
-        }
-
-        CPPUNIT_TEST_SUITE( getFunctionSymbol );
-        CPPUNIT_TEST( getFunctionSymbol_001 );
-        //CPPUNIT_TEST( getFunctionSymbol_002 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class getFunctionSymbol
 
-// -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::ctors, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::getUrlFromAddress, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::load, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::unload, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::is, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::getSymbol, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::optr_oslModule, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::getFunctionSymbol, "osl_Module");
-// -----------------------------------------------------------------------------
+    TEST_F(getFunctionSymbol, getFunctionSymbol_001)
+    {
+        ::osl::Module aMod( getDllURL( ) );
+        oslGenericFunction oslFunc = aMod.getFunctionSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
+        ::rtl::OUString aLibraryURL;
+        bRes = ::osl::Module::getUrlFromAddress( oslFunc, aLibraryURL);
+        aMod.unload();
+        printFileName( aLibraryURL );
+
+        ASSERT_TRUE(sal_True == bRes && aLibraryURL.equalsIgnoreAsciiCase( getDllURL() )) << "#test comment#: load a dll and get its function addr and get its URL.";
+    }
 
 } // namespace osl_Module
 
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

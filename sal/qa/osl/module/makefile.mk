@@ -32,6 +32,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -48,28 +54,28 @@ SHL1VERSIONMAP = export_dll.map
 
 
 # --- main l ------------------------------------------------------
-SHL2OBJS=  $(SLO)$/osl_Module.obj
-
-SHL2TARGET= osl_Module
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+APP2OBJS=  $(SLO)$/osl_Module.obj
+APP2TARGET= osl_Module
+APP2STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
 
 .IF "$(GUI)" == "WNT"
-SHL2STDLIBS+=i$(SHL2TARGET).lib
+APP2STDLIBS+=i$(SHL1TARGET).lib
 .ENDIF
 .IF "$(GUI)" == "UNX"
-APP3STDLIBS+=-l$(SHL2TARGET)
+APP2STDLIBS+=-l$(SHL1TARGET)
 .ENDIF
 
-SHL2DEPN= $(SHL1OBJS)
-SHL2IMPLIB= i$(SHL2TARGET)
-SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
+APP2DEPN= $(SHL1OBJS)
+APP2TEST = enabled
+#SHL2IMPLIB= i$(SHL2TARGET)
+#SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 
-DEF2NAME    =$(SHL2TARGET)
-SHL2VERSIONMAP= $(PRJ)$/qa$/export.map
+#DEF2NAME    =$(SHL2TARGET)
+#SHL2VERSIONMAP= $(PRJ)$/qa$/export.map
 # END ------------------------------------------------------------------
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
 
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"

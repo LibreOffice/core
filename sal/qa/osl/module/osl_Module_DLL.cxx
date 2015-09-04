@@ -26,7 +26,6 @@
 
 #include <stdio.h>
 #include <sal/types.h>
-#include <testshl/simpleheader.hxx>
 
 extern "C" sal_Bool SAL_CALL firstfunc( sal_Bool bRes )
 {

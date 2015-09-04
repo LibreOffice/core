@@ -30,7 +30,6 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 
-#include <testshl/simpleheader.hxx>
 
 #if ( defined UNX ) || ( defined OS2 )  //Unix
 #   include <unistd.h>
