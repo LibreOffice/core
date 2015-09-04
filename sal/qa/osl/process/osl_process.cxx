@@ -24,7 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -75,9 +75,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    t_print("#printUString_u# " );
+    printf("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
+    printf("%s\n", aString.getStr( ) );
 }
 
 /** get binary Path.
@@ -95,8 +95,9 @@ inline ::rtl::OUString getExecutablePath( void )
 //rtl::OUString CWD = getExecutablePath();
 
 //########################################
-class Test_osl_joinProcess : public CppUnit::TestFixture
+class Test_osl_joinProcess : public ::testing::Test
 {
+protected:
     const OUString join_param_;
     const OUString wait_time_;
     OUString suCWD;
@@ -119,178 +120,136 @@ public:
         suExecutableFileURL += rtl::OUString::createFromAscii("/");
         suExecutableFileURL += EXECUTABLE_NAME;
     }
-
-    /*-------------------------------------
-        Start a process and join with this
-        process specify a timeout so that
-        osl_joinProcessWithTimeout returns
-        osl_Process_E_TimedOut
-     -------------------------------------*/
-
-    void osl_joinProcessWithTimeout_timeout_failure()
-    {
-        oslProcess process;
-        oslProcessError osl_error = osl_executeProcess(
-            suExecutableFileURL.pData,
-            parameters_,
-            parameters_count_,
-            osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_error == osl_Process_E_None
-        );
-
-        TimeValue timeout;
-        timeout.Seconds = 1;
-        timeout.Nanosec = 0;
-
-        osl_error = osl_joinProcessWithTimeout(process, &timeout);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_joinProcessWithTimeout returned without timeout failure",
-            osl_Process_E_TimedOut == osl_error
-        );
-
-        osl_error = osl_terminateProcess(process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_terminateProcess failed",
-            osl_error == osl_Process_E_None
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
-    /*-------------------------------------
-        Start a process and join with this
-        process specify a timeout so that
-        osl_joinProcessWithTimeout returns
-        osl_Process_E_None
-     -------------------------------------*/
-
-    void osl_joinProcessWithTimeout_without_timeout_failure()
-    {
-        oslProcess process;
-        oslProcessError osl_error = osl_executeProcess(
-            suExecutableFileURL.pData,
-            parameters_,
-            parameters_count_,
-            osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_error == osl_Process_E_None
-        );
-
-        TimeValue timeout;
-        timeout.Seconds = 10;
-        timeout.Nanosec = 0;
-
-        osl_error = osl_joinProcessWithTimeout(process, &timeout);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_joinProcessWithTimeout returned with failure",
-            osl_Process_E_None == osl_error
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
-     /*-------------------------------------
-        Start a process and join with this
-        process specify an infinite timeout
-     -------------------------------------*/
-
-    void osl_joinProcessWithTimeout_infinite()
-    {
-        oslProcess process;
-        oslProcessError osl_error = osl_executeProcess(
-            suExecutableFileURL.pData,
-            parameters_,
-            parameters_count_,
-            osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_error == osl_Process_E_None
-        );
-
-        osl_error = osl_joinProcessWithTimeout(process, NULL);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_joinProcessWithTimeout returned with failure",
-            osl_Process_E_None == osl_error
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
-     /*-------------------------------------
-        Start a process and join with this
-        process using osl_joinProcess
-     -------------------------------------*/
-
-     void osl_joinProcess()
-    {
-        oslProcess process;
-        oslProcessError osl_error = osl_executeProcess(
-            suExecutableFileURL.pData,
-            parameters_,
-            parameters_count_,
-            osl_Process_NORMAL,
-            osl_getCurrentSecurity(),
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_error == osl_Process_E_None
-        );
-
-        osl_error = ::osl_joinProcess(process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_joinProcess returned with failure",
-            osl_Process_E_None == osl_error
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
-    CPPUNIT_TEST_SUITE(Test_osl_joinProcess);
-    CPPUNIT_TEST(osl_joinProcessWithTimeout_timeout_failure);
-    CPPUNIT_TEST(osl_joinProcessWithTimeout_without_timeout_failure);
-    CPPUNIT_TEST(osl_joinProcessWithTimeout_infinite);
-    CPPUNIT_TEST(osl_joinProcess);
-    CPPUNIT_TEST_SUITE_END();
 };
+
+/*-------------------------------------
+    Start a process and join with this
+    process specify a timeout so that
+    osl_joinProcessWithTimeout returns
+    osl_Process_E_TimedOut
+ -------------------------------------*/
+
+TEST_F(Test_osl_joinProcess, osl_joinProcessWithTimeout_timeout_failure)
+{
+    oslProcess process;
+    oslProcessError osl_error = osl_executeProcess(
+        suExecutableFileURL.pData,
+        parameters_,
+        parameters_count_,
+        osl_Process_NORMAL,
+        osl_getCurrentSecurity(),
+        suCWD.pData,
+        NULL,
+        0,
+        &process);
+
+    ASSERT_TRUE(osl_error == osl_Process_E_None) << "osl_createProcess failed";
+
+    TimeValue timeout;
+    timeout.Seconds = 1;
+    timeout.Nanosec = 0;
+
+    osl_error = osl_joinProcessWithTimeout(process, &timeout);
+
+    ASSERT_TRUE(osl_Process_E_TimedOut == osl_error) << "osl_joinProcessWithTimeout returned without timeout failure";
+
+    osl_error = osl_terminateProcess(process);
+
+    ASSERT_TRUE(osl_error == osl_Process_E_None) << "osl_terminateProcess failed";
+
+    osl_freeProcessHandle(process);
+}
+
+/*-------------------------------------
+    Start a process and join with this
+    process specify a timeout so that
+    osl_joinProcessWithTimeout returns
+    osl_Process_E_None
+ -------------------------------------*/
+
+TEST_F(Test_osl_joinProcess, osl_joinProcessWithTimeout_without_timeout_failure)
+{
+    oslProcess process;
+    oslProcessError osl_error = osl_executeProcess(
+        suExecutableFileURL.pData,
+        parameters_,
+        parameters_count_,
+        osl_Process_NORMAL,
+        osl_getCurrentSecurity(),
+        suCWD.pData,
+        NULL,
+        0,
+        &process);
+
+    ASSERT_TRUE(osl_error == osl_Process_E_None) << "osl_createProcess failed";
+
+    TimeValue timeout;
+    timeout.Seconds = 10;
+    timeout.Nanosec = 0;
+
+    osl_error = osl_joinProcessWithTimeout(process, &timeout);
+
+    ASSERT_TRUE(osl_Process_E_None == osl_error) << "osl_joinProcessWithTimeout returned with failure";
+
+    osl_freeProcessHandle(process);
+}
+
+ /*-------------------------------------
+    Start a process and join with this
+    process specify an infinite timeout
+ -------------------------------------*/
+
+TEST_F(Test_osl_joinProcess, osl_joinProcessWithTimeout_infinite)
+{
+    oslProcess process;
+    oslProcessError osl_error = osl_executeProcess(
+        suExecutableFileURL.pData,
+        parameters_,
+        parameters_count_,
+        osl_Process_NORMAL,
+        osl_getCurrentSecurity(),
+        suCWD.pData,
+        NULL,
+        0,
+        &process);
+
+    ASSERT_TRUE(osl_error == osl_Process_E_None) << "osl_createProcess failed";
+
+    osl_error = osl_joinProcessWithTimeout(process, NULL);
+
+    ASSERT_TRUE(osl_Process_E_None == osl_error) << "osl_joinProcessWithTimeout returned with failure";
+
+    osl_freeProcessHandle(process);
+}
+
+ /*-------------------------------------
+    Start a process and join with this
+    process using osl_joinProcess
+ -------------------------------------*/
+
+TEST_F(Test_osl_joinProcess, osl_joinProcess)
+{
+    oslProcess process;
+    oslProcessError osl_error = osl_executeProcess(
+        suExecutableFileURL.pData,
+        parameters_,
+        parameters_count_,
+        osl_Process_NORMAL,
+        osl_getCurrentSecurity(),
+        suCWD.pData,
+        NULL,
+        0,
+        &process);
+
+    ASSERT_TRUE(osl_error == osl_Process_E_None) << "osl_createProcess failed";
+
+    osl_error = ::osl_joinProcess(process);
+
+    ASSERT_TRUE(osl_Process_E_None == osl_error) << "osl_joinProcess returned with failure";
+
+    osl_freeProcessHandle(process);
+}
+
 
 //#########################################################
 
@@ -363,8 +322,9 @@ private:
 #endif
 
 //#########################################################
-class Test_osl_executeProcess : public CppUnit::TestFixture
+class Test_osl_executeProcess : public ::testing::Test
 {
+protected:
     const OUString env_param_;
 
     OUString     temp_file_path_;
@@ -389,7 +349,7 @@ public:
     }
 
     //------------------------------------------------
-    virtual void setUp()
+    virtual void SetUp()
     {
         temp_file_path_ = create_temp_file();
         parameters_[1]  = temp_file_path_.pData;
@@ -400,11 +360,11 @@ public:
     {
         OUString temp_file_url;
         FileBase::RC rc = FileBase::createTempFile(0, 0, &temp_file_url);
-        CPPUNIT_ASSERT_MESSAGE("createTempFile failed", FileBase::E_None == rc);
+        EXPECT_TRUE(FileBase::E_None == rc) << "createTempFile failed";
 
         OUString temp_file_path;
         rc = FileBase::getSystemPathFromFileURL(temp_file_url, temp_file_path);
-        CPPUNIT_ASSERT_MESSAGE("getSystemPathFromFileURL failed", FileBase::E_None == rc);
+        EXPECT_TRUE(FileBase::E_None == rc) << "getSystemPathFromFileURL failed";
 
         return temp_file_path;
     }
@@ -416,11 +376,7 @@ public:
             parameters_[1]), osl_getThreadTextEncoding());
         std::ifstream file(temp_file_name.getStr());
 
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "I/O error, cannot open child environment file",
-            file.is_open()
-        );
+        ASSERT_TRUE(file.is_open()) << "I/O error, cannot open child environment file";
 
         std::string line;
         while (std::getline(file, line))
@@ -491,188 +447,139 @@ public:
         return (common_env_size_equals && common_env_content_equals &&
                 different_env_size_equals && different_env_content_equals);
     }
-
-    //------------------------------------------------
-    // test that parent and child process have the
-    // same environment when osl_executeProcess will
-    // be called with out setting new environment
-    // variables
-   void osl_execProc_parent_equals_child_environment()
-    {
-        oslProcess process;
-        oslProcessError osl_error = osl_executeProcess(
-            suExecutableFileURL.pData,
-            parameters_,
-            parameters_count_,
-            osl_Process_NORMAL,
-            NULL,
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_error == osl_Process_E_None
-        );
-
-        osl_error = ::osl_joinProcess(process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_joinProcess returned with failure",
-            osl_Process_E_None == osl_error
-        );
-
-        osl_freeProcessHandle(process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "Parent an child environment not equal",
-            compare_environments()
-        );
-    }
-
-    //------------------------------------------------
-    #define ENV1 "PAT=a:\\"
-    #define ENV2 "PATHb=b:\\"
-    #define ENV3 "Patha=c:\\"
-    #define ENV4 "Patha=d:\\"
-
-    void osl_execProc_merged_child_environment()
-    {
-        rtl_uString* child_env[4];
-        OUString env1 = OUString::createFromAscii(ENV1);
-        OUString env2 = OUString::createFromAscii(ENV2);
-        OUString env3 = OUString::createFromAscii(ENV3);
-        OUString env4 = OUString::createFromAscii(ENV4);
-
-        child_env[0] = env1.pData;
-        child_env[1] = env2.pData;
-        child_env[2] = env3.pData;
-        child_env[3] = env4.pData;
-
-        oslProcess process;
-        oslProcessError osl_error = osl_executeProcess(
-            suExecutableFileURL.pData,
-            parameters_,
-            parameters_count_,
-            osl_Process_NORMAL,
-            NULL,
-            suCWD.pData,
-            child_env,
-            sizeof(child_env)/sizeof(child_env[0]),
-            &process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_error == osl_Process_E_None
-        );
-
-        osl_error = ::osl_joinProcess(process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_joinProcess returned with failure",
-            osl_Process_E_None == osl_error
-        );
-
-        osl_freeProcessHandle(process);
-
-        string_container_t different_child_env_vars;
-        different_child_env_vars.push_back(ENV1);
-        different_child_env_vars.push_back(ENV2);
-        different_child_env_vars.push_back(ENV4);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_execProc_merged_child_environment",
-            compare_merged_environments(different_child_env_vars)
-        );
-    }
-
-    void osl_execProc_test_batch()
-    {
-        oslProcess process;
-        rtl::OUString suBatch = suCWD + rtl::OUString::createFromAscii("/") + rtl::OUString::createFromAscii("batch.bat");
-        oslProcessError osl_error = osl_executeProcess(
-            suBatch.pData,
-            NULL,
-            0,
-            osl_Process_NORMAL,
-            NULL,
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_error == osl_Process_E_None
-        );
-
-        osl_error = ::osl_joinProcess(process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_joinProcess returned with failure",
-            osl_Process_E_None == osl_error
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
-    void osl_execProc_exe_name_in_argument_list()
-    {
-        rtl_uString* params[3];
-
-        params[0] = suExecutableFileURL.pData;
-        params[1] = env_param_.pData;
-        params[2] = temp_file_path_.pData;
-        oslProcess process;
-        oslProcessError osl_error = osl_executeProcess(
-            NULL,
-            params,
-            3,
-            osl_Process_NORMAL,
-            NULL,
-            suCWD.pData,
-            NULL,
-            0,
-            &process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_createProcess failed",
-            osl_error == osl_Process_E_None
-        );
-
-        osl_error = ::osl_joinProcess(process);
-
-        CPPUNIT_ASSERT_MESSAGE
-        (
-            "osl_joinProcess returned with failure",
-            osl_Process_E_None == osl_error
-        );
-
-        osl_freeProcessHandle(process);
-    }
-
-    CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
-    CPPUNIT_TEST(osl_execProc_parent_equals_child_environment);
-    CPPUNIT_TEST(osl_execProc_merged_child_environment);
-    CPPUNIT_TEST(osl_execProc_test_batch);
-    CPPUNIT_TEST(osl_execProc_exe_name_in_argument_list);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-//#####################################
-// register test suites
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test_osl_joinProcess,    "Test_osl_joinProcess");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test_osl_executeProcess, "Test_osl_executeProcess");
+//------------------------------------------------
+// test that parent and child process have the
+// same environment when osl_executeProcess will
+// be called with out setting new environment
+// variables
+TEST_F(Test_osl_executeProcess, osl_execProc_parent_equals_child_environment)
+{
+    oslProcess process;
+    oslProcessError osl_error = osl_executeProcess(
+        suExecutableFileURL.pData,
+        parameters_,
+        parameters_count_,
+        osl_Process_NORMAL,
+        NULL,
+        suCWD.pData,
+        NULL,
+        0,
+        &process);
 
-NOADDITIONAL;
+    ASSERT_TRUE(osl_error == osl_Process_E_None) << "osl_createProcess failed";
 
+    osl_error = ::osl_joinProcess(process);
+
+    ASSERT_TRUE(osl_Process_E_None == osl_error) << "osl_joinProcess returned with failure";
+
+    osl_freeProcessHandle(process);
+
+    ASSERT_TRUE(compare_environments()) << "Parent an child environment not equal";
+}
+
+//------------------------------------------------
+#define ENV1 "PAT=a:\\"
+#define ENV2 "PATHb=b:\\"
+#define ENV3 "Patha=c:\\"
+#define ENV4 "Patha=d:\\"
+
+TEST_F(Test_osl_executeProcess, osl_execProc_merged_child_environment)
+{
+    rtl_uString* child_env[4];
+    OUString env1 = OUString::createFromAscii(ENV1);
+    OUString env2 = OUString::createFromAscii(ENV2);
+    OUString env3 = OUString::createFromAscii(ENV3);
+    OUString env4 = OUString::createFromAscii(ENV4);
+
+    child_env[0] = env1.pData;
+    child_env[1] = env2.pData;
+    child_env[2] = env3.pData;
+    child_env[3] = env4.pData;
+
+    oslProcess process;
+    oslProcessError osl_error = osl_executeProcess(
+        suExecutableFileURL.pData,
+        parameters_,
+        parameters_count_,
+        osl_Process_NORMAL,
+        NULL,
+        suCWD.pData,
+        child_env,
+        sizeof(child_env)/sizeof(child_env[0]),
+        &process);
+
+    ASSERT_TRUE(osl_error == osl_Process_E_None) << "osl_createProcess failed";
+
+    osl_error = ::osl_joinProcess(process);
+
+    ASSERT_TRUE(osl_Process_E_None == osl_error) << "osl_joinProcess returned with failure";
+
+    osl_freeProcessHandle(process);
+
+    string_container_t different_child_env_vars;
+    different_child_env_vars.push_back(ENV1);
+    different_child_env_vars.push_back(ENV2);
+    different_child_env_vars.push_back(ENV4);
+
+    ASSERT_TRUE(compare_merged_environments(different_child_env_vars)) << "osl_execProc_merged_child_environment";
+}
+
+TEST_F(Test_osl_executeProcess, osl_execProc_test_batch)
+{
+    oslProcess process;
+    rtl::OUString suBatch = suCWD + rtl::OUString::createFromAscii("/") + rtl::OUString::createFromAscii("batch.bat");
+    oslProcessError osl_error = osl_executeProcess(
+        suBatch.pData,
+        NULL,
+        0,
+        osl_Process_NORMAL,
+        NULL,
+        suCWD.pData,
+        NULL,
+        0,
+        &process);
+
+    ASSERT_TRUE(osl_error == osl_Process_E_None) << "osl_createProcess failed";
+
+    osl_error = ::osl_joinProcess(process);
+
+    ASSERT_TRUE(osl_Process_E_None == osl_error) << "osl_joinProcess returned with failure";
+
+    osl_freeProcessHandle(process);
+}
+
+TEST_F(Test_osl_executeProcess, osl_execProc_exe_name_in_argument_list)
+{
+    rtl_uString* params[3];
+
+    params[0] = suExecutableFileURL.pData;
+    params[1] = env_param_.pData;
+    params[2] = temp_file_path_.pData;
+    oslProcess process;
+    oslProcessError osl_error = osl_executeProcess(
+        NULL,
+        params,
+        3,
+        osl_Process_NORMAL,
+        NULL,
+        suCWD.pData,
+        NULL,
+        0,
+        &process);
+
+    ASSERT_TRUE(osl_error == osl_Process_E_None) << "osl_createProcess failed";
+
+    osl_error = ::osl_joinProcess(process);
+
+    ASSERT_TRUE(osl_Process_E_None == osl_error) << "osl_joinProcess returned with failure";
+
+    osl_freeProcessHandle(process);
+}
+
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

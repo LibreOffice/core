@@ -31,6 +31,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -41,33 +48,23 @@ CXXFLAGS+= $(LFS_CFLAGS)
     CFLAGS+=/Ob1
 .ENDIF
 
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/osl_Thread.obj
 
-SHL1TARGET= osl_Thread
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+APP1TARGET= osl_Thread
+APP1STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP1RPATH = NONE
+APP1TEST = enabled
 
 # END ------------------------------------------------------------------
 
 #.IF "$(GUI)" == "WNT"
 
-SHL2OBJS=$(SLO)$/osl_process.obj
-SHL2TARGET=osl_process
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL2IMPLIB=i$(SHL2TARGET)
-SHL2DEF=$(MISC)$/$(SHL2TARGET).def
-DEF2NAME=$(SHL2TARGET)
-DEF2EXPORTFILE=export.exp
+APP2OBJS=$(SLO)$/osl_process.obj
+APP2TARGET=osl_process
+APP2STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP2RPATH = NONE
+APP2TEST = enabled
 
 # END ------------------------------------------------------------------
 
@@ -85,20 +82,8 @@ APP3STDLIBS=$(SALLIB)
 
 #.ENDIF # "$(GUI)" == "WNT"
 
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-
-.IF "$(GUI)" == "OS2"
-
-SLOFILES=$(SHL2OBJS)
-
-.ELSE
-
-SLOFILES=$(SHL1OBJS) $(SHL2OBJS)
-
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
