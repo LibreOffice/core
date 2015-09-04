@@ -614,11 +614,7 @@ void CffSubsetterContext::readDictOp()
             setCharStringType( nInt );
             break;
         }
-
-        return;
-    }
-
-    if( (c >= 32) || (c == 28) ) {
+    } else if( (c >= 32) || (c == 28) ) {
 //      --mpReadPtr;
         read2push();
     } else if( c == 29 ) {      // longint
