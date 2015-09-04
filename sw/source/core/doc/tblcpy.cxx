@@ -213,8 +213,8 @@ namespace
                         SwTableLine *pLine2 = rLines[ ++nEndLn ];
                         SwTableBox *pTmpBox = pLine2->GetTabBoxes()[0];
                         _FndLine *pInsLine = new _FndLine( pLine2, &rFndBox );
-                        _FndBox *pFndBox = new _FndBox( pTmpBox, pInsLine );
-                        pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), pFndBox);
+                        std::unique_ptr<_FndBox> pFndBox(new _FndBox(pTmpBox, pInsLine));
+                        pInsLine->GetBoxes().insert(pInsLine->GetBoxes().begin(), std::move(pFndBox));
                         rFndLines.push_back(std::unique_ptr<_FndLine>(pInsLine));
                     }
                 }
@@ -858,7 +858,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                 // See if the Box count is high enough for the Lines
                 SwTableLine* pLastLn = GetTabLines().back();
 
-                pSttBox = pFLine->GetBoxes()[0].GetBox();
+                pSttBox = pFLine->GetBoxes()[0]->GetBox();
                 const SwTableBoxes::size_type nSttBox = pFLine->GetLine()->GetTabBoxes().GetPos( pSttBox );
                 for( SwTableLines::size_type n = rCpyTable.GetTabLines().size() - nNewLns;
                         n < rCpyTable.GetTabLines().size(); ++n )
@@ -902,7 +902,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
             // We have enough rows, so check the Boxes per row
             pFLine = aFndBox.GetLines()[ nLn % nFndCnt ].get();
             SwTableLine* pLine = pFLine->GetLine();
-            pSttBox = pFLine->GetBoxes()[0].GetBox();
+            pSttBox = pFLine->GetBoxes()[0]->GetBox();
             const SwTableBoxes::size_type nSttBox = pLine->GetTabBoxes().GetPos( pSttBox );
             if( nLn >= nFndCnt )
             {
@@ -926,7 +926,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                 }
 
                 // Test for nesting
-                for( _FndBoxes::size_type nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
+                for (FndBoxes_t::size_type nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx)
                 {
                     SwTableBox *pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ];
                     if( !pTmpBox->GetSttNd() )
@@ -936,7 +936,8 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                     }
                     // if Ok, insert the Box into the FndLine
                     pFndBox = new _FndBox( pTmpBox, pInsFLine );
-                    pInsFLine->GetBoxes().insert( pInsFLine->GetBoxes().begin() + nBx, pFndBox );
+                    pInsFLine->GetBoxes().insert( pInsFLine->GetBoxes().begin() + nBx,
+                            std::unique_ptr<_FndBox>(pFndBox));
                 }
                 aFndBox.GetLines().insert( aFndBox.GetLines().begin() + nLn, std::unique_ptr<_FndLine>(pInsFLine));
             }
@@ -957,7 +958,8 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                     if( nBx == pFLine->GetBoxes().size() )
                     {
                         pFndBox = new _FndBox( pTmpBox, pFLine );
-                        pFLine->GetBoxes().insert( pFLine->GetBoxes().begin() + nBx, pFndBox );
+                        pFLine->GetBoxes().insert(pFLine->GetBoxes().begin() + nBx,
+                                std::unique_ptr<_FndBox>(pFndBox));
                     }
                 }
             }
@@ -970,9 +972,11 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                     return false;
 
                 // Test for nesting
-                for( auto &rBox : pFLine->GetBoxes() )
-                    if (!rBox.GetBox()->GetSttNd())
+                for (auto &rpBox : pFLine->GetBoxes())
+                {
+                    if (!rpBox->GetBox()->GetSttNd())
                         return false;
+                }
             }
         }
 
@@ -1007,12 +1011,12 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
             pFLine = aFndBox.GetLines()[ nLn ].get();
             SwTableLine* pCpyLn = rCpyTable.GetTabLines()[
                                 nLn % rCpyTable.GetTabLines().size() ];
-            for( _FndBoxes::size_type nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
+            for (FndBoxes_t::size_type nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx)
             {
                 // Copy the pCpyBox into pMyBox
                 lcl_CpyBox( rCpyTable, pCpyLn->GetTabBoxes()[
                             nBx % pCpyLn->GetTabBoxes().size() ],
-                    *this, pFLine->GetBoxes()[nBx].GetBox(), true, pUndo );
+                    *this, pFLine->GetBoxes()[nBx]->GetBox(), true, pUndo );
             }
         }
 

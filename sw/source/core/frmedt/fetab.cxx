@@ -376,7 +376,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
             while( 1 == pFndBox->GetLines().size() &&
                     1 == pFndBox->GetLines().front()->GetBoxes().size())
             {
-                _FndBox* pTmp = &pFndBox->GetLines().front()->GetBoxes()[0];
+                _FndBox *const pTmp = pFndBox->GetLines().front()->GetBoxes()[0].get();
                 if( pTmp->GetBox()->GetSttNd() )
                     break;      // otherwise too far
                 pFndBox = pTmp;

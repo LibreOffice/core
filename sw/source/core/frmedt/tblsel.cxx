@@ -1391,8 +1391,7 @@ static bool lcl_CheckCol(_FndBox const&, bool* pPara);
 
 static bool lcl_CheckRow( const _FndLine& rFndLine, bool* pPara )
 {
-    for (_FndBoxes::const_iterator it = rFndLine.GetBoxes().begin();
-         it != rFndLine.GetBoxes().end(); ++it)
+    for (auto const& it : rFndLine.GetBoxes())
     {
         lcl_CheckCol(*it, pPara);
     }
@@ -1460,7 +1459,7 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
             {
                 pFndLine = pFndBox->GetLines().front().get();
                 if( 1 == pFndLine->GetBoxes().size() )
-                    pFndBox = &pFndLine->GetBoxes().front();
+                    pFndBox = pFndLine->GetBoxes().front().get();
                 else
                     pFndBox = 0;
             }
@@ -1473,8 +1472,7 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
             }
             else if( pFndLine )
             {
-                for (_FndBoxes::const_iterator it = pFndLine->GetBoxes().begin(),
-                        end = pFndLine->GetBoxes().end(); it != end; ++it)
+                for (auto const& it : pFndLine->GetBoxes())
                 {
                     lcl_CheckCol(*it, &bMergeSelOk);
                 }
@@ -2057,7 +2055,7 @@ static void _FndBoxCopyCol( SwTableBox* pBox, _FndPara* pFndPara )
             return;
         }
     }
-    pFndPara->pFndLine->GetBoxes().push_back( pFndBox );
+    pFndPara->pFndLine->GetBoxes().push_back(std::unique_ptr<_FndBox>(pFndBox));
 }
 
 static void _FndLineCopyCol( SwTableLine* pLine, _FndPara* pFndPara )

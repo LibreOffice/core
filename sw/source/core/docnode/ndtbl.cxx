@@ -1860,7 +1860,7 @@ bool SwDoc::DeleteRow( const SwCursor& rCursor )
         while( 1 == pFndBox->GetLines().size() &&
                 1 == pFndBox->GetLines().front()->GetBoxes().size() )
         {
-            _FndBox *const pTmp = & pFndBox->GetLines().front()->GetBoxes()[0];
+            _FndBox *const pTmp = pFndBox->GetLines().front()->GetBoxes()[0].get();
             if( pTmp->GetBox()->GetSttNd() )
                 break; // Else it gets too far
             pFndBox = pTmp;
@@ -3657,8 +3657,7 @@ static bool lcl_SetAFormatLine(_FndLine &, _SetAFormatTabPara *pPara);
 
 static bool lcl_SetAFormatLine(_FndLine & rLine, _SetAFormatTabPara *pPara)
 {
-    for (_FndBoxes::iterator it = rLine.GetBoxes().begin();
-         it != rLine.GetBoxes().end(); ++it)
+    for (auto const& it : rLine.GetBoxes())
     {
         lcl_SetAFormatBox(*it, pPara);
     }
@@ -3749,7 +3748,7 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
     while( 1 == pFndBox->GetLines().size() &&
             1 == pFndBox->GetLines().front()->GetBoxes().size())
     {
-        pFndBox = &pFndBox->GetLines().front()->GetBoxes()[0];
+        pFndBox = pFndBox->GetLines().front()->GetBoxes()[0].get();
     }
 
     if( pFndBox->GetLines().empty() ) // One too far? (only one sel. Box)
@@ -3789,8 +3788,7 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
         aPara.nCurBox = 0;
         aPara.nEndBox = pLine->GetBoxes().size()-1;
         aPara.pUndo = pUndo;
-        for (_FndBoxes::iterator it = pLine->GetBoxes().begin();
-             it != pLine->GetBoxes().end(); ++it)
+        for (auto const& it : pLine->GetBoxes())
         {
             lcl_SetAFormatBox(*it, &aPara);
         }
@@ -3836,7 +3834,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
     while( 1 == pFndBox->GetLines().size() &&
             1 == pFndBox->GetLines().front()->GetBoxes().size())
     {
-        pFndBox = &pFndBox->GetLines().front()->GetBoxes()[0];
+        pFndBox = pFndBox->GetLines().front()->GetBoxes()[0].get();
     }
 
     if( pFndBox->GetLines().empty() ) // One too far? (only one sel. Box)
@@ -3862,7 +3860,7 @@ bool SwDoc::GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGe
 
         for( sal_uInt8 nBox = 0; nBox < 4; ++nBox )
         {
-            SwTableBox* pFBox = rLine.GetBoxes()[ aBoxArr[ nBox ] ].GetBox();
+            SwTableBox* pFBox = rLine.GetBoxes()[ aBoxArr[ nBox ] ]->GetBox();
             // Always apply to the first ones
             while( !pFBox->GetSttNd() )
                 pFBox = pFBox->GetTabLines()[0]->GetTabBoxes()[0];

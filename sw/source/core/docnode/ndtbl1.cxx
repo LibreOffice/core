@@ -207,8 +207,7 @@ bool _FindBox( _FndBox & rBox, LinesAndTable* pPara )
 
 bool _FindLine( _FndLine& rLine, LinesAndTable* pPara )
 {
-    for (_FndBoxes::iterator it = rLine.GetBoxes().begin();
-         it != rLine.GetBoxes().end(); ++it)
+    for (auto const& it : rLine.GetBoxes())
     {
         _FindBox(*it, pPara);
     }

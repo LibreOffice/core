@@ -776,12 +776,12 @@ FlatFndBox::~FlatFndBox()
 bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 {
     const FndLines_t &rLines = rBox.GetLines();
-    _FndBoxes::size_type nBoxes {0};
+    FndBoxes_t::size_type nBoxes {0};
 
     for (FndLines_t::size_type i=0; i < rLines.size(); ++i)
     {
         const _FndLine* pLn = rLines[i].get();
-        const _FndBoxes& rBoxes = pLn->GetBoxes();
+        const FndBoxes_t& rBoxes = pLn->GetBoxes();
 
         // Number of Boxes of all Lines is unequal -> no symmetry
         if( i  && nBoxes != rBoxes.size())
@@ -797,12 +797,12 @@ bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 /// Check Box for symmetry (All Boxes of a Line need to have same number of Lines)
 bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 {
-    const _FndBoxes &rBoxes = rLn.GetBoxes();
+    const FndBoxes_t &rBoxes = rLn.GetBoxes();
     FndLines_t::size_type nLines {0};
 
-    for(_FndBoxes::size_type i=0; i < rBoxes.size(); ++i)
+    for (FndBoxes_t::size_type i = 0; i < rBoxes.size(); ++i)
     {
-        _FndBox const*const pBox = &rBoxes[i];
+        _FndBox const*const pBox = rBoxes[i].get();
         const FndLines_t& rLines = pBox->GetLines();
 
         // Number of Lines of all Boxes is unequal -> no symmetry
@@ -829,10 +829,11 @@ sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
     {
         // The Boxes of a Line
         sal_uInt16 nCount = 0;
-        const _FndBoxes& rBoxes = pLine->GetBoxes();
-        for( const auto &rB : rBoxes )
-            // Iterate recursively over the Lines
-            nCount += rB.GetLines().empty() ? 1 : GetColCount(rB);
+        const FndBoxes_t& rBoxes = pLine->GetBoxes();
+        for (const auto &rpB : rBoxes)
+        {   // Iterate recursively over the Lines
+            nCount += rpB->GetLines().empty() ? 1 : GetColCount(*rpB);
+        }
 
         if( nSum < nCount )
             nSum = nCount;
@@ -850,12 +851,15 @@ sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
     sal_uInt16 nLines = 0;
     for (const auto & pLine : rLines)
     {   // The Boxes of a Line
-        const _FndBoxes& rBoxes = pLine->GetBoxes();
+        const FndBoxes_t& rBoxes = pLine->GetBoxes();
         sal_uInt16 nLn = 1;
-        for(const auto &rB : rBoxes)
-            if (rB.GetLines().size())
-                // Iterate recursively over the Lines
-                nLn = std::max(GetRowCount(rB), nLn);
+        for (const auto &rpB : rBoxes)
+        {
+            if (rpB->GetLines().size())
+            {   // Iterate recursively over the Lines
+                nLn = std::max(GetRowCount(*rpB), nLn);
+            }
+        }
 
         nLines = nLines + nLn;
     }
@@ -873,12 +877,12 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, bool bLastBox)
     for (const auto & pLine : rLines)
     {
         // The Boxes of a Line
-        const _FndBoxes& rBoxes = pLine->GetBoxes();
+        const FndBoxes_t& rBoxes = pLine->GetBoxes();
         sal_uInt16 nOldCol = nCol;
-        for( _FndBoxes::size_type j = 0; j < rBoxes.size(); ++j )
+        for( FndBoxes_t::size_type j = 0; j < rBoxes.size(); ++j )
         {
             // Check the Box if it's an atomic one
-            const _FndBox *const pBox = &rBoxes[j];
+            const _FndBox *const pBox = rBoxes[j].get();
 
             if( pBox->GetLines().empty() )
             {

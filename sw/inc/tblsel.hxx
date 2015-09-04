@@ -153,7 +153,7 @@ void MakeSelUnions( SwSelUnions&, const SwLayoutFrm *pStart,
 class _FndBox;
 class _FndLine;
 
-typedef boost::ptr_vector<_FndBox> _FndBoxes;
+typedef std::vector<std::unique_ptr<_FndBox>> FndBoxes_t;
 typedef std::vector<std::unique_ptr<_FndLine>> FndLines_t;
 
 class _FndBox
@@ -194,12 +194,16 @@ public:
 class _FndLine
 {
     SwTableLine* pLine;
-    _FndBoxes aBoxes;
+    FndBoxes_t m_Boxes;
     _FndBox* pUpper;
+
+    _FndLine(_FndLine const&) = delete;
+    _FndLine& operator=(_FndLine const&) = delete;
+
 public:
     _FndLine(SwTableLine* pL, _FndBox* pFB=0) : pLine(pL), pUpper(pFB) {}
-    const _FndBoxes&    GetBoxes() const    { return aBoxes; }
-        _FndBoxes&      GetBoxes()          { return aBoxes; }
+    const FndBoxes_t&   GetBoxes() const    { return m_Boxes; }
+        FndBoxes_t&     GetBoxes()          { return m_Boxes; }
     const SwTableLine*  GetLine() const     { return pLine; }
         SwTableLine*    GetLine()           { return pLine; }
     const _FndBox*      GetUpper() const    { return pUpper; }
