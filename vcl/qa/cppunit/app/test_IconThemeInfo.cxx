@@ -36,12 +36,6 @@ class IconThemeInfoTest : public CppUnit::TestFixture
     ThemeIdIsDetectedFromFileNameWithUnderscore();
 
     void
-    DisplayNameForHicontrastIsHighContrast();
-
-    void
-    DisplayNameForTango_testingIsTangoTesting();
-
-    void
     ExceptionIsThrownWhenIdCannotBeDetermined1();
 
     void
@@ -118,24 +112,6 @@ IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined2()
         thrown = true;
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception was thrown", true, thrown);
-}
-
-void
-IconThemeInfoTest::DisplayNameForHicontrastIsHighContrast()
-{
-    OUString id("hicontrast");
-    OUString expected("High Contrast");
-    OUString displayName = vcl::IconThemeInfo::ThemeIdToDisplayName(id);
-    CPPUNIT_ASSERT_EQUAL(expected, displayName);
-}
-
-void
-IconThemeInfoTest::DisplayNameForTango_testingIsTangoTesting()
-{
-    OUString id("tango_testing");
-    OUString expected("Tango Testing");
-    OUString displayName = vcl::IconThemeInfo::ThemeIdToDisplayName(id);
-    CPPUNIT_ASSERT_EQUAL(expected, displayName);
 }
 
 // Put the test suite in the registry
