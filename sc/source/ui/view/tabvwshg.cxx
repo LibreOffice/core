@@ -41,7 +41,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
                                         const OUString& rTarget,
                                         const Point* pInsPos )
 {
-    //  Tabelle geschuetzt ?
+    // protected sheet ?
 
     ScViewData& rViewData = GetViewData();
     ScDocument* pDoc = rViewData.GetDocument();
@@ -66,7 +66,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
         return;
 
     uno::Reference<awt::XControlModel> xControlModel = pUnoCtrl->GetUnoControlModel();
-    OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
+    OSL_ENSURE( xControlModel.is(), "UNO control without model" );
     if( !xControlModel.is() )
         return;
 
@@ -102,7 +102,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     else
         aPos = GetInsertPos();
 
-    // Groesse wie in 3.1:
+    // Size as in 3.1:
     Size aSize = GetActiveWin()->PixelToLogic(Size(140, 20));
 
     if ( pDoc->IsNegativePage(nTab) )
@@ -110,10 +110,10 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
 
     pObj->SetLogicRect(Rectangle(aPos, aSize));
 
-    //  am alten VC-Button musste die Position/Groesse nochmal explizit
-    //  gesetzt werden - das scheint mit UnoControls nicht noetig zu sein
+    // for the old VC-Button the position/size had to be set explicitly once more
+    // that seems not to be needed with UnoControls
 
-    //  nicht markieren wenn Ole
+    // do not mark when Ole
     pDrView->InsertObjectSafe( pObj, *pDrView->GetSdrPageView() );
 }
 
