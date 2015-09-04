@@ -1340,11 +1340,16 @@ void OpenGLContext::prepareForYield()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    SAL_INFO("vcl.opengl", "Unbinding contexts in preparation for yield");
     // release all framebuffers from the old context so we can re-attach the
     // texture in the new context
     OpenGLContext* pCurrentCtx = pSVData->maGDIData.mpLastContext;
-    if( pCurrentCtx && pCurrentCtx->isCurrent() )
+
+    if ( !pCurrentCtx )
+        return;                 // Not using OpenGL
+
+    SAL_INFO("vcl.opengl", "Unbinding contexts in preparation for yield");
+
+    if( pCurrentCtx->isCurrent() )
         pCurrentCtx->resetCurrent();
 
     assert (!hasCurrent());
