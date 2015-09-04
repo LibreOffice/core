@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa0719c6_24b4fbf0",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-04T13:45:27Z",
+      "side": 1,
+      "message": "As mentioned in my first review. This is still wrong.",
+      "revId": "0501f2ea4f5b69954dd8c3ec9c93a6601c887657",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
