@@ -220,9 +220,7 @@ namespace pcr
             }
         }
 
-        if ( aProperties.empty() )
-            return Sequence< Property >();
-        return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
+        return comphelper::containerToSequence( aProperties );
     }
 
 
@@ -233,33 +231,31 @@ namespace pcr
         ::std::vector< OUString > aSuperfluous;
         if ( m_pHelper.get() )
         {
-            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_CONTROLSOURCE) );
-            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_EMPTY_IS_NULL) );
-            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_FILTERPROPOSAL) );
-            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_LISTSOURCETYPE) );
-            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_LISTSOURCE) );
-            aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_BOUNDCOLUMN) );
+            aSuperfluous.push_back(  OUString(PROPERTY_CONTROLSOURCE) );
+            aSuperfluous.push_back(  OUString(PROPERTY_EMPTY_IS_NULL) );
+            aSuperfluous.push_back(  OUString(PROPERTY_FILTERPROPOSAL) );
+            aSuperfluous.push_back(  OUString(PROPERTY_LISTSOURCETYPE) );
+            aSuperfluous.push_back(  OUString(PROPERTY_LISTSOURCE) );
+            aSuperfluous.push_back(  OUString(PROPERTY_BOUNDCOLUMN) );
 
             bool bAllowBinding = m_pHelper->canBindToAnyDataType();
 
             if ( bAllowBinding )
             {
-                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_MAXTEXTLEN) );
-                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_VALUEMIN) );
-                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_VALUEMAX) );
-                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_DECIMAL_ACCURACY) );
-                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_TIMEMIN) );
-                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_TIMEMAX) );
-                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_DATEMIN) );
-                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_DATEMAX) );
-                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_EFFECTIVE_MIN) );
-                aSuperfluous.push_back(  static_cast<const OUString&>(PROPERTY_EFFECTIVE_MAX) );
+                aSuperfluous.push_back(  OUString(PROPERTY_MAXTEXTLEN) );
+                aSuperfluous.push_back(  OUString(PROPERTY_VALUEMIN) );
+                aSuperfluous.push_back(  OUString(PROPERTY_VALUEMAX) );
+                aSuperfluous.push_back(  OUString(PROPERTY_DECIMAL_ACCURACY) );
+                aSuperfluous.push_back(  OUString(PROPERTY_TIMEMIN) );
+                aSuperfluous.push_back(  OUString(PROPERTY_TIMEMAX) );
+                aSuperfluous.push_back(  OUString(PROPERTY_DATEMIN) );
+                aSuperfluous.push_back(  OUString(PROPERTY_DATEMAX) );
+                aSuperfluous.push_back(  OUString(PROPERTY_EFFECTIVE_MIN) );
+                aSuperfluous.push_back(  OUString(PROPERTY_EFFECTIVE_MAX) );
             }
         }
 
-        if ( aSuperfluous.empty() )
-            return Sequence< OUString >();
-        return Sequence< OUString >( &(*aSuperfluous.begin()), aSuperfluous.size() );
+        return comphelper::containerToSequence( aSuperfluous );
     }
 
 
@@ -269,12 +265,10 @@ namespace pcr
         ::std::vector< OUString > aInterestedInActuations( 2 );
         if ( m_pHelper.get() )
         {
-            aInterestedInActuations.push_back(  static_cast<const OUString&>(PROPERTY_XSD_DATA_TYPE) );
-            aInterestedInActuations.push_back(  static_cast<const OUString&>(PROPERTY_XML_DATA_MODEL) );
+            aInterestedInActuations.push_back(  OUString(PROPERTY_XSD_DATA_TYPE) );
+            aInterestedInActuations.push_back(  OUString(PROPERTY_XML_DATA_MODEL) );
         }
-        if ( aInterestedInActuations.empty() )
-            return Sequence< OUString >();
-        return Sequence< OUString >( &(*aInterestedInActuations.begin()), aInterestedInActuations.size() );
+        return comphelper::containerToSequence( aInterestedInActuations );
     }
 
 
