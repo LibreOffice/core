@@ -21,7 +21,7 @@ size_t OutDevStateStack::size() const
 
 void OutDevStateStack::push_back( OutDevState* p )
 {
-    maData.push_back(p);
+    maData.push_back(std::unique_ptr<OutDevState>(p));
 }
 
 void OutDevStateStack::pop_back()
@@ -31,7 +31,7 @@ void OutDevStateStack::pop_back()
 
 OutDevState& OutDevStateStack::back()
 {
-    return maData.back();
+    return *maData.back();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

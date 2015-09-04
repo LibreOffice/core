@@ -11,12 +11,12 @@
 #define INCLUDED_VCL_OUTDEVSTATESTACK_HXX
 
 #include <vcl/outdevstate.hxx>
-
-#include <boost/ptr_container/ptr_deque.hpp>
+#include <memory>
+#include <deque>
 
 class OutDevStateStack
 {
-    typedef boost::ptr_deque<OutDevState> DataType;
+    typedef std::deque<std::unique_ptr<OutDevState>> DataType;
     DataType maData;
 public:
     bool empty() const;
