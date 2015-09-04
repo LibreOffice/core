@@ -16,6 +16,24 @@
       "revId": "a16287d9e2fb79e04e6656eac24d3998965e8047",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa0719c6_84bb470e",
+        "filename": "include/oox/helper/binaryinputstream.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-09-04T10:17:23Z",
+      "side": 1,
+      "message": "I would check if replacing\n\n  BinaryInputStream() : BinaryStreamBase( false ) {}\n\nwith either\n\n  BinaryInputStream() {}\n\nor\n\n  BinaryInputStream() \u003d default;\n\nkeeps all copmilers happy, and if not, just disable C4589 globally for now.",
+      "parentUuid": "fa0719c6_a4b92b31",
+      "revId": "a16287d9e2fb79e04e6656eac24d3998965e8047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
