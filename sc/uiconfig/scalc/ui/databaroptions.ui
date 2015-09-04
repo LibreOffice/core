@@ -523,6 +523,17 @@
                 <property name="position">5</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="custom_color">
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Custom</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">6</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
