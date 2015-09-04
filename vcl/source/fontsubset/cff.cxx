@@ -506,7 +506,6 @@ void CffSubsetterContext::setCharStringType( int nVal)
 
 void CffSubsetterContext::readDictOp()
 {
-    ValType nVal = 0;
     const U8 c = *mpReadPtr;
     if( c <= 21 ) {
         int nOpId = *(mpReadPtr++);
@@ -534,8 +533,8 @@ void CffSubsetterContext::readDictOp()
             default: break; // TODO: handle more boolean dictops?
             }
             break;
-        case 'n':   // dict-op number
-            nVal = popVal();
+        case 'n': { // dict-op number
+            ValType nVal = popVal();
             nInt = static_cast<int>(nVal);
             switch( nOpId) {
             case  10: mpCffLocal->maStemStdHW = nVal; break;    // "StdHW"
@@ -555,7 +554,7 @@ void CffSubsetterContext::readDictOp()
             case 937: mnFDSelectBase = nInt; break;             // "nFDSelect"
             default: break; // TODO: handle more numeric dictops?
             }
-            break;
+            } break;
         case 'a': { // array
             switch( nOpId) {
             case   5: maFontBBox.clear(); break;     // "FontBBox"
@@ -563,7 +562,7 @@ void CffSubsetterContext::readDictOp()
             default: break; // TODO: reset other arrays?
             }
             for( int i = 0; i < size(); ++i ) {
-                nVal = getVal(i);
+                ValType nVal = getVal(i);
                 switch( nOpId) {
                 case   5: maFontBBox.push_back( nVal); break;     // "FontBBox"
                 case 907: maFontMatrix.push_back( nVal); break; // "FontMatrix"
@@ -573,7 +572,7 @@ void CffSubsetterContext::readDictOp()
             clear();
             } break;
         case 'd': { // delta array
-            nVal = 0;
+            ValType nVal = 0;
             for( int i = 0; i < size(); ++i ) {
                 nVal += getVal(i);
                 switch( nOpId) {
@@ -626,13 +625,13 @@ void CffSubsetterContext::readDictOp()
         if( (sizeof(nS32) != 4) && (nS32 & (1U<<31)))
             nS32 |= (~0U) << 31;    // assuming 2s complement
         mpReadPtr += 4;
-        nVal = static_cast<ValType>(nS32);
+        ValType nVal = static_cast<ValType>(nS32);
         push( nVal );
     } else if( c == 30) {       // real number
         ++mpReadPtr; // skip 30
         const RealType fReal = readRealVal();
         // push value onto stack
-        nVal = fReal;
+        ValType nVal = fReal;
         push( nVal);
     }
 }
