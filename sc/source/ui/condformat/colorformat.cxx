@@ -66,7 +66,7 @@ void SetValue( ScDocument* pDoc, ScColorScaleEntry* pEntry, Edit& aEdit)
         aEdit.Disable();
 }
 
-void SelectColor(const Color& aColor, const OUString aCustomName, ColorListBox& rLstBox)
+void SelectColor(const Color& aColor, const OUString & aCustomName, ColorListBox& rLstBox)
 {
     rLstBox.SelectEntry( aColor );
     if ( rLstBox.GetSelectEntryColor() != aColor )
