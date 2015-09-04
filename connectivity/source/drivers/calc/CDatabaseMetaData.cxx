@@ -399,7 +399,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         OUString aName = aSheetNames[nSheet];
         if ( !lcl_IsEmptyOrHidden( xSheets, aName ) && match(tableNamePattern,aName,'\0') )
         {
-            ODatabaseMetaDataResultSet::ORow aRow(3);
+            ODatabaseMetaDataResultSet::ORow aRow { NULL, NULL, NULL };
             aRow.reserve(6);
             aRow.push_back(new ORowSetValueDecorator(aName));
             aRow.push_back(new ORowSetValueDecorator(aTable));
@@ -424,7 +424,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
                 OUString aName = aDBNames[nRange];
                 if ( !lcl_IsUnnamed( xRanges, aName ) && match(tableNamePattern,aName,'\0') )
                 {
-                    ODatabaseMetaDataResultSet::ORow aRow(3);
+                    ODatabaseMetaDataResultSet::ORow aRow { NULL, NULL, NULL };
                     aRow.reserve(6);
                     aRow.push_back(new ORowSetValueDecorator(aName));
                     aRow.push_back(new ORowSetValueDecorator(aTable));

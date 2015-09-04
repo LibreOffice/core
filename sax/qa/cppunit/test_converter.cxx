@@ -664,9 +664,7 @@ void doTestDecodeBase64(const uno::Sequence<sal_Int8>& aPass, char const*const p
 
 void ConverterTest::testBase64()
 {
-    std::vector< sal_Int8 > tempSeq(4);
-    for(sal_Int8 i = 0; i<4; ++i)
-        tempSeq.push_back(i);
+    std::vector< sal_Int8 > tempSeq { 0, 0, 0, 0, 0, 1, 2, 3 };
     uno::Sequence< sal_Int8 > tempSequence = comphelper::containerToSequence(tempSeq);
     doTestEncodeBase64("AAAAAAABAgM=", tempSequence);
     doTestDecodeBase64(tempSequence, "AAAAAAABAgM=");

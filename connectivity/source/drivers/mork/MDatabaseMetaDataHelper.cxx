@@ -106,7 +106,7 @@ bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
         return false;
 
     for ( size_t i = 0; i < tables.size(); i++ ) {
-        ODatabaseMetaDataResultSet::ORow aRow(3);
+        ODatabaseMetaDataResultSet::ORow aRow { NULL, NULL, NULL };
 
         OUString aTableName  = tables[i];
         SAL_INFO("connectivity.mork", "TableName: " << aTableName );

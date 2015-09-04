@@ -297,13 +297,15 @@ namespace
 
 void lcl_reorderSeries( ::std::vector< ::std::vector< VDataSeriesGroup > >&  rZSlots )
 {
-    ::std::vector< ::std::vector< VDataSeriesGroup > >  aRet( rZSlots.size() );
+    ::std::vector< ::std::vector< VDataSeriesGroup > >  aRet;
+    aRet.reserve( rZSlots.size() );
 
     ::std::vector< ::std::vector< VDataSeriesGroup > >::reverse_iterator aZIt( rZSlots.rbegin() );
     ::std::vector< ::std::vector< VDataSeriesGroup > >::reverse_iterator aZEnd( rZSlots.rend() );
     for( ; aZIt != aZEnd; ++aZIt )
     {
-        ::std::vector< VDataSeriesGroup > aXSlot( aZIt->size() );
+        ::std::vector< VDataSeriesGroup > aXSlot;
+        aXSlot.reserve( aZIt->size() );
 
         ::std::vector< VDataSeriesGroup >::reverse_iterator aXIt( aZIt->rbegin() );
         ::std::vector< VDataSeriesGroup >::reverse_iterator aXEnd( aZIt->rend() );
