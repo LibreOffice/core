@@ -1239,7 +1239,6 @@ ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
 ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
     FontSelectPattern& aFontSelData )
 {
-    const FontSelectPattern aFontSelDataOrig(aFontSelData);
     // check if a directly matching logical font instance is already cached,
     // the most recently used font usually has a hit rate of >50%
     ImplFontEntry *pEntry = NULL;
@@ -1326,9 +1325,8 @@ ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
         }
 #endif
 
-        // Add the new entry to the cache with the original FontSelectPattern,
-        // so that we can find it next time as a direct cache hit.
-        maFontInstanceList[ aFontSelDataOrig ] = pEntry;
+        // add the new entry to the cache
+        maFontInstanceList[ aFontSelData ] = pEntry;
     }
 
     mpFirstEntry = pEntry;
