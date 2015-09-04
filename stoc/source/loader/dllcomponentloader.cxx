@@ -31,7 +31,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/shlib.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -53,7 +53,7 @@ using namespace osl;
 namespace {
 
 class DllComponentLoader
-    : public WeakImplHelper3< XImplementationLoader,
+    : public WeakImplHelper< XImplementationLoader,
                               XInitialization,
                               XServiceInfo >
 {

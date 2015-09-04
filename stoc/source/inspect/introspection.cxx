@@ -30,7 +30,7 @@
 #include <osl/thread.h>
 #include <sal/log.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/component.hxx>
@@ -1665,7 +1665,7 @@ private:
 };
 
 typedef
-    cppu::WeakComponentImplHelper2<
+    cppu::WeakComponentImplHelper<
         css::lang::XServiceInfo, css::beans::XIntrospection>
     Implementation_Base;
 

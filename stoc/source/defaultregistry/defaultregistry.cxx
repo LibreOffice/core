@@ -21,9 +21,8 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <registry/registry.hxx>
@@ -91,7 +90,7 @@ protected:
 
 // class NestedKeyImpl the implenetation of interface XRegistryKey
 
-class NestedKeyImpl : public WeakImplHelper1< XRegistryKey >
+class NestedKeyImpl : public WeakImplHelper< XRegistryKey >
 {
 public:
     NestedKeyImpl( NestedRegistryImpl* pDefaultRegistry,
@@ -1118,7 +1117,7 @@ NestedRegistryImpl::NestedRegistryImpl( )
 
 NestedRegistryImpl::~NestedRegistryImpl() {}
 
-class RegistryEnumueration : public WeakImplHelper1< XEnumeration >
+class RegistryEnumueration : public WeakImplHelper< XEnumeration >
 {
 public:
     RegistryEnumueration(

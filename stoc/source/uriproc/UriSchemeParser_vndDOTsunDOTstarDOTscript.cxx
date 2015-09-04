@@ -30,8 +30,7 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriSchemeParser.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrlReference.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -189,7 +188,7 @@ bool parseSchemeSpecificPart(OUString const & part) {
 }
 
 class UrlReference:
-    public cppu::WeakImplHelper1<css::uri::XVndSunStarScriptUrlReference>,
+    public cppu::WeakImplHelper<css::uri::XVndSunStarScriptUrlReference>,
     private boost::noncopyable
 {
 public:
@@ -374,7 +373,7 @@ sal_Int32 UrlReference::findParameter(OUString const & key) {
 }
 
 class Parser:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::uri::XUriSchemeParser>,
     private boost::noncopyable
 {

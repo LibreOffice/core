@@ -25,7 +25,7 @@
 
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <ModuleA/XInterface1.hpp>
 #include <ModuleC/XInterfaceA.hpp>
@@ -60,7 +60,7 @@ using namespace css::container;
 
 
 
-class OInterfaceA : public WeakImplHelper1< XInterfaceA >
+class OInterfaceA : public WeakImplHelper< XInterfaceA >
 {
 public:
 

@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/thread.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -50,7 +50,7 @@ bool configureJava(const css::uno::Reference<
 // The MS compiler needs a typedef here, so the JavaVirtualMachine ctor can call
 // its base class ctor:
 typedef
-cppu::WeakComponentImplHelper5< css::lang::XInitialization,
+cppu::WeakComponentImplHelper< css::lang::XInitialization,
                                 css::lang::XServiceInfo,
                                 css::java::XJavaVM,
                                 css::java::XJavaThreadRegister_11,

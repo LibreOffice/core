@@ -29,7 +29,7 @@
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarPkgUrlReferenceFactory.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/string.h>
@@ -44,7 +44,7 @@
 namespace {
 
 class Factory:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::uri::XVndSunStarPkgUrlReferenceFactory>,
     private boost::noncopyable
 {

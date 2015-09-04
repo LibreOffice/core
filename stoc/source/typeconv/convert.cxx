@@ -21,7 +21,7 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <typelib/typedescription.hxx>
@@ -237,7 +237,7 @@ static bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
 }
 
 
-class TypeConverter_Impl : public WeakImplHelper2< XTypeConverter, XServiceInfo >
+class TypeConverter_Impl : public WeakImplHelper< XTypeConverter, XServiceInfo >
 {
     // ...misc helpers...
     static sal_Int64 toHyper(

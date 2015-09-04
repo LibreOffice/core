@@ -30,7 +30,7 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -81,7 +81,7 @@ typedef std::unordered_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_
 
 
 class FactoryImpl
-    : public ::cppu::WeakImplHelper3< lang::XServiceInfo,
+    : public ::cppu::WeakImplHelper< lang::XServiceInfo,
                                       script::XInvocationAdapterFactory,
                                       script::XInvocationAdapterFactory2 >
 {

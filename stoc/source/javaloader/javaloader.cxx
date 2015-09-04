@@ -45,7 +45,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/loader/XImplementationLoader.hpp>
@@ -83,7 +83,7 @@ static OUString loader_getImplementationName()
     return OUString( "com.sun.star.comp.stoc.JavaComponentLoader" );
 }
 
-class JavaComponentLoader : public WeakImplHelper2<XImplementationLoader, XServiceInfo>
+class JavaComponentLoader : public WeakImplHelper<XImplementationLoader, XServiceInfo>
 {
     css::uno::Reference<XComponentContext> m_xComponentContext;
     /** Do not use m_javaLoader directly. Instead use getJavaLoader.
