@@ -161,7 +161,7 @@ struct _LibreOfficeKitDocumentClass
     void (*resetSelection) (LibreOfficeKitDocument* pThis);
 
     /// @see lok::Document:getStyles
-    char* (*getCommandValues) (LibreOfficeKitDocument* pThis, const char* pCommand);
+    char* (*getStyles) (LibreOfficeKitDocument* pThis);
 #endif // LOK_USE_UNSTABLE_API
 };
 

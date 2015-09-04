@@ -248,14 +248,11 @@ public:
     }
 
     /**
-     * Returns a json mapping of the possible values for the given command
-     * e.g. {commandName: ".uno:StyleApply", commandValues: {"familyName1" : ["list of style names in the family1"], etc.}}
-     * @param pCommand a uno command for which the possible values are requested
-     * @return {commandName: unoCmd, commandValues: {possible_values}}
+     * Returns a json map, {"familyName1" : ["list of style names in the family1"], etc.}
      */
-    inline char* getCommandValues(const char* pCommand)
+    inline char* getStyles()
     {
-        return mpDoc->pClass->getCommandValues(mpDoc, pCommand);
+        return mpDoc->pClass->getStyles(mpDoc);
     }
 #endif // LOK_USE_UNSTABLE_API
 };
