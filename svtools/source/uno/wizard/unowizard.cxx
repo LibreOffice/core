@@ -28,7 +28,7 @@
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/ui/dialogs/WizardButton.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ref.hxx>
@@ -88,7 +88,7 @@ namespace {
         }
     }
 
-    typedef ::cppu::ImplInheritanceHelper1  <   ::svt::OGenericUnoDialog
+    typedef ::cppu::ImplInheritanceHelper  <   ::svt::OGenericUnoDialog
                                             ,   ui::dialogs::XWizard
                                             >   Wizard_Base;
     class Wizard;

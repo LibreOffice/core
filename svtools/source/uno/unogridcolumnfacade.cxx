@@ -32,6 +32,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <boost/noncopyable.hpp>
 
 
@@ -90,7 +91,7 @@ namespace svt { namespace table
 
     //= ColumnChangeMultiplexer
 
-    typedef ::cppu::WeakImplHelper1 <   XGridColumnListener
+    typedef ::cppu::WeakImplHelper <   XGridColumnListener
                                     >   ColumnChangeMultiplexer_Base;
     class ColumnChangeMultiplexer   :public ColumnChangeMultiplexer_Base
                                     ,public ::boost::noncopyable

@@ -34,7 +34,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 
@@ -42,7 +42,7 @@ namespace svt { namespace table {
     class TableControl;
 } }
 
-typedef ::cppu::ImplInheritanceHelper4  <   VCLXWindow
+typedef ::cppu::ImplInheritanceHelper  <   VCLXWindow
                                         ,   ::com::sun::star::awt::grid::XGridControl
                                         ,   ::com::sun::star::awt::grid::XGridRowSelection
                                         ,   ::com::sun::star::awt::grid::XGridDataListener

@@ -47,7 +47,7 @@
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <boost/scoped_ptr.hpp>
@@ -56,7 +56,7 @@ using namespace com::sun::star;
 
 namespace svt {
 
-class EmbedEventListener_Impl : public ::cppu::WeakImplHelper4 < embed::XStateChangeListener,
+class EmbedEventListener_Impl : public ::cppu::WeakImplHelper < embed::XStateChangeListener,
                                                                  document::XEventListener,
                                                                  util::XModifyListener,
                                                                  util::XCloseListener >

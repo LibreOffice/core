@@ -24,8 +24,7 @@
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 
-#include <cppuhelper/compbase4.hxx>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
@@ -104,7 +103,7 @@ public:
 // - ToolbarMenuAcc -
 
 
-typedef ::cppu::WeakComponentImplHelper5<
+typedef ::cppu::WeakComponentImplHelper<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -192,7 +191,7 @@ private:
 // - ToolbarMenuEntryAcc -
 
 
-typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::accessibility::XAccessible,
+typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::accessibility::XAccessible,
                                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                                                      ::com::sun::star::accessibility::XAccessibleContext,
                                                      ::com::sun::star::accessibility::XAccessibleComponent > ToolbarMenuEntryAccBase;

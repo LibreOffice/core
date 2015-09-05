@@ -32,7 +32,6 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
-#include <cppuhelper/implbase2.hxx>
 #include <rtl/ref.hxx>
 
 #include <boost/noncopyable.hpp>

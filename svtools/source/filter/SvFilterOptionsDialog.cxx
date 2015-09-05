@@ -44,7 +44,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/syslocale.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -52,7 +52,7 @@ using namespace ::com::sun::star;
 
 namespace {
 
-class SvFilterOptionsDialog : public cppu::WeakImplHelper5
+class SvFilterOptionsDialog : public cppu::WeakImplHelper
 <
     document::XExporter,
     ui::dialogs::XExecutableDialog,

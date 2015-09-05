@@ -29,7 +29,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 
 
@@ -47,7 +47,7 @@ namespace svt
 
     //= StreamSupplier
 
-    typedef ::cppu::WeakImplHelper2 <   XStream
+    typedef ::cppu::WeakImplHelper <   XStream
                                     ,   XSeekable
                                     >   StreamSupplier_Base;
     class StreamSupplier : public StreamSupplier_Base

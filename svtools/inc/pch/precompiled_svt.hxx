@@ -251,12 +251,11 @@
 #include <config_features.h>
 #include <config_folders.h>
 #include <config_oauth2.h>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/queryinterface.hxx>

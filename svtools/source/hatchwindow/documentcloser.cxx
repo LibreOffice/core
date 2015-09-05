@@ -27,7 +27,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
@@ -44,7 +44,7 @@ namespace {
 
 // the service is implemented as a wrapper to be able to die by refcount
 // the disposing mechanics is required for java related scenarios
-class ODocumentCloser : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XComponent,
+class ODocumentCloser : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XComponent,
                                                         ::com::sun::star::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;

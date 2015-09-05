@@ -38,7 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sot/filelist.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
@@ -1125,7 +1125,7 @@ const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
 // - TransferableClipboardNotifier -
 
 
-class TransferableClipboardNotifier : public ::cppu::WeakImplHelper1< XClipboardListener >
+class TransferableClipboardNotifier : public ::cppu::WeakImplHelper< XClipboardListener >
 {
 private:
     ::osl::Mutex&                   mrMutex;
