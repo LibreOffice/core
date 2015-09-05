@@ -25,12 +25,12 @@
 #include <com/sun/star/io/XSeekable.hpp>
 
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <osl/mutex.hxx>
 
-class OFSInputStreamContainer : public cppu::WeakImplHelper2 < ::com::sun::star::io::XInputStream
+class OFSInputStreamContainer : public cppu::WeakImplHelper < ::com::sun::star::io::XInputStream
                                                             ,::com::sun::star::embed::XExtendedStorageStream >
                             , public ::com::sun::star::io::XSeekable
 {

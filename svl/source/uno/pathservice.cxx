@@ -21,7 +21,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-class PathService : public ::cppu::WeakImplHelper2< css::frame::XConfigManager, css::lang::XServiceInfo >
+class PathService : public ::cppu::WeakImplHelper< css::frame::XConfigManager, css::lang::XServiceInfo >
 {
     SvtPathOptions m_aOptions;
 
