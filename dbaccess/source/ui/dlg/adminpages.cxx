@@ -148,16 +148,25 @@ namespace dbaui
         if ( _bSaveValue )
         {
             fillControls(aControlList);
-            ::std::for_each(aControlList.begin(),aControlList.end(),TSaveValueWrapperFunctor());
+            for( const auto& pValueWrapper : aControlList )
+            {
+                pValueWrapper->SaveValue();
+            }
         }
 
         if ( bReadonly )
         {
             fillWindows(aControlList);
-            ::std::for_each(aControlList.begin(),aControlList.end(),TDisableWrapperFunctor());
+            for( const auto& pValueWrapper : aControlList )
+            {
+                pValueWrapper->Disable();
+            }
         }
 
-        ::std::for_each(aControlList.begin(),aControlList.end(),TDeleteWrapperFunctor());
+        for( const auto& pValueWrapper : aControlList )
+        {
+            delete pValueWrapper;
+        }
         aControlList.clear();
     }
 

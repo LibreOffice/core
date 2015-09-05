@@ -131,30 +131,27 @@ namespace dbaccess
             }
         }
 
-        struct TerminateFunctor : ::std::unary_function<ODatabaseModelImpl* , void>
+        void SAL_CALL DatabaseDocumentLoader::queryTermination( const lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
         {
-            void operator()( const ODatabaseModelImpl* _pModelImpl ) const
+            ::std::list< const ODatabaseModelImpl* > aCpy(m_aDatabaseDocuments);
+            for( const auto& pCopy : aCpy )
             {
                 try
                 {
-                    const Reference< XModel2> xModel( _pModelImpl ->getModel_noCreate(),UNO_QUERY_THROW );
-                    if ( !xModel->getControllers()->hasMoreElements() )
+                    const Reference< XModel2 > xMod( pCopy->getModel_noCreate(),
+                                                     UNO_QUERY_THROW );
+                    if( !xMod->getControllers()->hasMoreElements() )
                     {
-                        Reference<util::XCloseable> xCloseable(xModel,UNO_QUERY_THROW);
-                        xCloseable->close(sal_False);
+                        Reference< util::XCloseable > xClose( xMod,
+                                                              UNO_QUERY_THROW );
+                        xClose->close( sal_False );
                     }
                 }
-                catch(const CloseVetoException&)
+                catch( const CloseVetoException& )
                 {
                     throw TerminationVetoException();
                 }
             }
-        };
-
-        void SAL_CALL DatabaseDocumentLoader::queryTermination( const lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
-        {
-            ::std::list< const ODatabaseModelImpl* > aCopy(m_aDatabaseDocuments);
-            ::std::for_each(aCopy.begin(),aCopy.end(),TerminateFunctor());
         }
 
         void SAL_CALL DatabaseDocumentLoader::notifyTermination( const lang::EventObject& /*Event*/ ) throw (RuntimeException, std::exception)

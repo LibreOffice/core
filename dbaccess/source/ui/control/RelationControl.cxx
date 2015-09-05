@@ -35,7 +35,6 @@
 #include "dbaccess_helpid.hrc"
 #include <osl/diagnose.h>
 
-#include <algorithm>
 #include <list>
 using std::list;
 #include <utility>
@@ -405,10 +404,10 @@ namespace dbaui
             {
                 // no connection found so we clear our data
                 OConnectionLineDataVec& rLines = m_pConnData->GetConnLineDataList();
-                ::std::for_each(rLines.begin(),
-                                rLines.end(),
-                                OUnaryRefFunctor<OConnectionLineData>( ::std::mem_fun(&OConnectionLineData::Reset))
-                                );
+                for( const auto& rLine : rLines )
+                {
+                    rLine.get()->Reset();
+                }
 
                 m_pConnData->setReferencingTable(_pSource->GetData());
                 m_pConnData->setReferencedTable(_pDest->GetData());

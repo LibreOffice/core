@@ -471,47 +471,22 @@ void OptimisticSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVecto
     }
 }
 
-namespace
-{
-    struct PositionFunctor : ::std::unary_function<SelectColumnsMetaData::value_type,bool>
-    {
-        sal_Int32 m_nPos;
-        explicit PositionFunctor(sal_Int32 i_nPos)
-            : m_nPos(i_nPos)
-        {
-        }
-
-        inline bool operator()(const SelectColumnsMetaData::value_type& _aType)
-        {
-            return m_nPos == _aType.second.nPosition;
-        }
-    };
-    struct TableNameFunctor : ::std::unary_function<SelectColumnsMetaData::value_type,bool>
-    {
-        OUString m_sTableName;
-        explicit TableNameFunctor(const OUString& i_sTableName)
-            : m_sTableName(i_sTableName)
-        {
-        }
-
-        inline bool operator()(const SelectColumnsMetaData::value_type& _aType)
-        {
-            return m_sTableName == _aType.second.sTableName;
-        }
-    };
-}
-
 bool OptimisticSet::updateColumnValues(const ORowSetValueVector::Vector& io_aCachedRow,ORowSetValueVector::Vector& io_aRow,const ::std::vector<sal_Int32>& i_aChangedColumns)
 {
     bool bRet = false;
-    ::std::vector<sal_Int32>::const_iterator aColIdxIter = i_aChangedColumns.begin();
-    for(;aColIdxIter != i_aChangedColumns.end();++aColIdxIter)
+    for( const auto& aColIdx : i_aChangedColumns )
     {
-        SelectColumnsMetaData::const_iterator aFind = ::std::find_if(m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),PositionFunctor(*aColIdxIter));
+        SelectColumnsMetaData::const_iterator aFind = ::std::find_if(
+            m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),
+            [&aColIdx]( const SelectColumnsMetaData::value_type& aType )
+            { return aType.second.nPosition == aColIdx; } );
         if ( aFind != m_pKeyColumnNames->end() )
         {
             const OUString sTableName = aFind->second.sTableName;
-            aFind = ::std::find_if(m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),TableNameFunctor(sTableName));
+            aFind = ::std::find_if( m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),
+                                    [&sTableName]
+                                    ( const SelectColumnsMetaData::value_type& rCurr )
+                                    { return rCurr.second.sTableName == sTableName; } );
             while( aFind != m_pKeyColumnNames->end() )
             {
                 io_aRow[aFind->second.nPosition].setSigned(io_aCachedRow[aFind->second.nPosition].isSigned());
@@ -522,14 +497,12 @@ bool OptimisticSet::updateColumnValues(const ORowSetValueVector::Vector& io_aCac
             if ( aFind == m_pKeyColumnNames->end() )
             {
                 bRet = true;
-                SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
-                SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
-                for ( ;aIter != aEnd;++aIter )
+                for( const auto& aCol : *m_pColumnNames )
                 {
-                    if ( aIter->second.sTableName == sTableName )
+                    if ( aCol.second.sTableName == sTableName )
                     {
-                        io_aRow[aIter->second.nPosition] = io_aCachedRow[aIter->second.nPosition];
-                        io_aRow[aIter->second.nPosition].setModified();
+                        io_aRow[aCol.second.nPosition] = io_aCachedRow[aCol.second.nPosition];
+                        io_aRow[aCol.second.nPosition].setModified();
                     }
                 }
             }
@@ -541,15 +514,20 @@ bool OptimisticSet::updateColumnValues(const ORowSetValueVector::Vector& io_aCac
 bool OptimisticSet::columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow,const ORowSetValueVector::Vector& i_aRow)
 {
     bool bRet = false;
-    SelectColumnsMetaData::const_iterator aIter = m_pColumnNames->begin();
-    SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
-    for(;aIter != aEnd;++aIter)
+    for( const auto& aCol : *m_pColumnNames )
     {
-        SelectColumnsMetaData::const_iterator aFind = ::std::find_if(m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),PositionFunctor(aIter->second.nPosition));
+        sal_Int32 nPos = aCol.second.nPosition;
+        SelectColumnsMetaData::const_iterator aFind = ::std::find_if(
+            m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),
+            [&nPos] ( const SelectColumnsMetaData::value_type& aType )
+            { return aType.second.nPosition == nPos; } );
         if ( aFind != m_pKeyColumnNames->end() )
         {
             const OUString sTableName = aFind->second.sTableName;
-            aFind = ::std::find_if(m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),TableNameFunctor(sTableName));
+            aFind = ::std::find_if( m_pKeyColumnNames->begin(),m_pKeyColumnNames->end(),
+                                    [&sTableName]
+                                    ( const SelectColumnsMetaData::value_type& rCurr )
+                                    { return rCurr.second.sTableName == sTableName; } );
             while( aFind != m_pKeyColumnNames->end() )
             {
                 o_aCachedRow[aFind->second.nPosition].setSigned(i_aRow[aFind->second.nPosition].isSigned());
@@ -560,14 +538,12 @@ bool OptimisticSet::columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow
             if ( aFind == m_pKeyColumnNames->end() )
             {
                 bRet = true;
-                SelectColumnsMetaData::const_iterator aIter2 = m_pColumnNames->begin();
-                SelectColumnsMetaData::const_iterator aEnd2 = m_pColumnNames->end();
-                for ( ;aIter2 != aEnd2;++aIter2 )
+                for( const auto& aCol2 : *m_pColumnNames )
                 {
-                    if ( aIter2->second.sTableName == sTableName )
+                    if ( aCol2.second.sTableName == sTableName )
                     {
-                        o_aCachedRow[aIter2->second.nPosition] = i_aRow[aIter2->second.nPosition];
-                        o_aCachedRow[aIter2->second.nPosition].setModified();
+                        o_aCachedRow[aCol2.second.nPosition] = i_aRow[aCol2.second.nPosition];
+                        o_aCachedRow[aCol2.second.nPosition].setModified();
                     }
                 }
                 fillMissingValues(o_aCachedRow);
