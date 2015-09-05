@@ -1,5 +1,5 @@
 --- misc/libtextcat-2.2/configure	Thu May 22 13:39:55 2003
-+++ misc/build/libtextcat-2.2/configure	Mon Mar 31 11:29:14 2008
++++ misc/build/libtextcat-2.2/configure	Fri Sep  4 16:42:33 2015
 @@ -3451,7 +3451,7 @@
    ;;
  
@@ -28,7 +28,31 @@
      # We need to add '_' to the symbols in $export_symbols first
      #archive_expsym_cmds="$archive_cmds"' && strip -s $export_symbols'
      hardcode_direct=yes
-@@ -6280,7 +6281,7 @@
+@@ -5793,7 +5794,7 @@
+     whole_archive_flag_spec='-all_load $convenience'
+     ;;
+ 
+-  freebsd1*)
++  freebsd1.*)
+     ld_shlibs=no
+     ;;
+ 
+@@ -5809,7 +5810,7 @@
+     ;;
+ 
+   # Unfortunately, older versions of FreeBSD 2 do not have this feature.
+-  freebsd2*)
++  freebsd2.*)
+     archive_cmds='$LD -Bshareable -o $lib $libobjs $deplibs $linker_flags'
+     hardcode_direct=yes
+     hardcode_minus_L=yes
+@@ -6275,12 +6276,12 @@
+   shlibpath_var=DYLD_LIBRARY_PATH
+   ;;
+ 
+-freebsd1*)
++freebsd1.*)
+   dynamic_linker=no
    ;;
  
  freebsd*)
@@ -37,7 +61,16 @@
    version_type=freebsd-$objformat
    case $version_type in
      freebsd-elf*)
-@@ -6365,7 +6365,7 @@
+@@ -6295,7 +6296,7 @@
+   esac
+   shlibpath_var=LD_LIBRARY_PATH
+   case $host_os in
+-  freebsd2*)
++  freebsd2.*)
+     shlibpath_overrides_runpath=yes
+     ;;
+   *)
+@@ -6364,7 +6365,7 @@
    ;;
  
  # This must be Linux ELF.

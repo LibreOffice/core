@@ -1,5 +1,5 @@
 --- misc/curl-7.19.7/configure	2009-11-04 13:26:02.000000000 +0100
-+++ misc/build/curl-7.19.7/configure	2009-11-18 14:17:25.453125000 +0100
++++ misc/build/curl-7.19.7/configure	2015-09-04 11:58:00.331210000 +0100
 @@ -2735,8 +2735,8 @@
  
  ac_ext=c
@@ -42,6 +42,51 @@
    fi
  fi
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CC option to accept ISO C89" >&5
+@@ -11276,7 +11276,7 @@
+       hardcode_shlibpath_var=no
+       ;;
+ 
+-    freebsd1*)
++    freebsd1.*)
+       ld_shlibs=no
+       ;;
+ 
+@@ -11292,7 +11292,7 @@
+       ;;
+ 
+     # Unfortunately, older versions of FreeBSD 2 do not have this feature.
+-    freebsd2*)
++    freebsd2.*)
+       archive_cmds='$LD -Bshareable -o $lib $libobjs $deplibs $linker_flags'
+       hardcode_direct=yes
+       hardcode_minus_L=yes
+@@ -12151,7 +12151,7 @@
+   shlibpath_var=LD_LIBRARY_PATH
+   ;;
+ 
+-freebsd1*)
++freebsd1.*)
+   dynamic_linker=no
+   ;;
+ 
+@@ -12162,7 +12162,7 @@
+     objformat=`/usr/bin/objformat`
+   else
+     case $host_os in
+-    freebsd[123]*) objformat=aout ;;
++    freebsd[123].*) objformat=aout ;;
+     *) objformat=elf ;;
+     esac
+   fi
+@@ -12180,7 +12180,7 @@
+   esac
+   shlibpath_var=LD_LIBRARY_PATH
+   case $host_os in
+-  freebsd2*)
++  freebsd2.*)
+     shlibpath_overrides_runpath=yes
+     ;;
+   freebsd3.[01]* | freebsdelf3.[01]*)
 --- misc/curl-7.19.7/lib/setup.h	2009-10-28 21:21:58.000000000 +0100
 +++ misc/build/curl-7.19.7/lib/setup.h	2009-11-18 13:30:42.375000000 +0100
 @@ -193,6 +193,7 @@
