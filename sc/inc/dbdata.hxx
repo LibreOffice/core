@@ -54,7 +54,7 @@ class ScDBDataContainerBase
 public:
     ScDBDataContainerBase( ScDocument& rDoc ) : mrDoc(rDoc) {}
     virtual ~ScDBDataContainerBase() {}
-    ScDocument* GetDocument() const;
+    ScDocument& GetDocument() const;
     ScRangeList& GetDirtyTableColumnNames();
 
 protected:

@@ -654,9 +654,9 @@ void ScDBData::StartTableColumnNamesListener()
 {
     if (mpContainer && bHasHeader)
     {
-        ScDocument* pDoc = mpContainer->GetDocument();
-        if (!pDoc->IsClipOrUndo())
-            pDoc->StartListeningArea( GetHeaderArea(), false, this);
+        ScDocument& pDoc = mpContainer->GetDocument();
+        if (!pDoc.IsClipOrUndo())
+            pDoc.StartListeningArea( GetHeaderArea(), false, this);
     }
 }
 
@@ -1017,9 +1017,9 @@ public:
 
 }
 
-ScDocument* ScDBDataContainerBase::GetDocument() const
+ScDocument& ScDBDataContainerBase::GetDocument() const
 {
-    return &mrDoc;
+    return mrDoc;
 }
 
 ScRangeList& ScDBDataContainerBase::GetDirtyTableColumnNames()
