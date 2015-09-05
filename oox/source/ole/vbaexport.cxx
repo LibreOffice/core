@@ -615,15 +615,17 @@ void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameC
     aCompression.write();
 }
 
-void exportModuleStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, OUString aSourceCode)
+// section 2.3.4.3 Module Stream
+void exportModuleStream(SvStream& rStrm, OUString aSourceCode, OUString aElementName)
 {
     SvMemoryStream aModuleStream(4096, 4096);
 
+    exportString(aModuleStream, "Attribute VB_Name = \"" + aElementName + "\"\r\n");
     exportString(aModuleStream, aSourceCode);
     aModuleStream.Seek(0);
 
 #if VBA_EXPORT_DEBUG
-    const OUString aModuleFileName("/tmp/vba_module_out.bin");
+    OUString aModuleFileName("/tmp/vba_" + aElementName + "_out.bin");
     SvFileStream aModuleStreamDebug(aModuleFileName, STREAM_READWRITE);
     aModuleStreamDebug.WriteStream(aModuleStream);
     aModuleStream.Seek(0);
@@ -637,6 +639,7 @@ void exportModuleStream(SvStream& rStrm, css::uno::Reference<css::container::XNa
     aCompression.write();
 }
 
+// section 2.3.4.1 _VBA_PROJECT Stream
 void exportVBAProjectStream(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x61CC); // Reserved1
@@ -670,7 +673,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         css::uno::Any aCode = xNameContainer->getByName(aElementNames[i]);
         OUString aSourceCode;
         aCode >>= aSourceCode;
-        exportModuleStream(*pModuleStream[i], xNameContainer, aSourceCode);
+        exportModuleStream(*pModuleStream[i], aSourceCode, aElementNames[i]);
     }
     exportVBAProjectStream(*pVBAProjectStream);
 
