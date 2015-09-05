@@ -615,6 +615,28 @@ void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameC
     aCompression.write();
 }
 
+void exportModuleStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, OUString aSourceCode)
+{
+    SvMemoryStream aModuleStream(4096, 4096);
+
+    exportString(aModuleStream, aSourceCode);
+    aModuleStream.Seek(0);
+
+#if VBA_EXPORT_DEBUG
+    const OUString aModuleFileName("/tmp/vba_module_out.bin");
+    SvFileStream aModuleStreamDebug(aModuleFileName, STREAM_READWRITE);
+    aModuleStreamDebug.WriteStream(aModuleStream);
+    aModuleStream.Seek(0);
+#endif
+
+    // the stream for the compression
+    SvMemoryStream aMemoryStream(4096, 4096);
+    aMemoryStream.WriteStream(aModuleStream);
+
+    VBACompression aCompression(rStrm, aModuleStream);
+    aCompression.write();
+}
+
 void exportVBAProjectStream(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x61CC); // Reserved1
@@ -627,18 +649,36 @@ void exportVBAProjectStream(SvStream& rStrm)
 
 void VbaExport::exportVBA(SotStorage* pRootStorage)
 {
+    css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
+    css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
+    sal_Int32 n = aElementNames.getLength(); // get the number of modules
+
     // start here with the VBA export
     SotStorage* pVBAStream = pRootStorage->OpenSotStorage("VBA", STREAM_READWRITE);
     SotStorageStream* pDirStream = pVBAStream->OpenSotStream("dir", STREAM_READWRITE);
+    SotStorageStream* pModuleStream[n];
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        pModuleStream[i] = pVBAStream->OpenSotStream(aElementNames[i], STREAM_READWRITE);
+    }
     SotStorageStream* pVBAProjectStream = pVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
-
-    css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
 
     // export
     exportDirStream(*pDirStream, xNameContainer);
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        css::uno::Any aCode = xNameContainer->getByName(aElementNames[i]);
+        OUString aSourceCode;
+        aCode >>= aSourceCode;
+        exportModuleStream(*pModuleStream[i], xNameContainer, aSourceCode);
+    }
     exportVBAProjectStream(*pVBAProjectStream);
 
     pVBAProjectStream->Commit();
+    for(sal_Int32 i = 0; i < n; i++)
+    {
+        pModuleStream[i]->Commit();
+    }
     pDirStream->Commit();
     pVBAStream->Commit();
     pRootStorage->Commit();
