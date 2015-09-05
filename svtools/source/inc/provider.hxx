@@ -20,14 +20,14 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_INC_PROVIDER_HXX
 #define INCLUDED_SVTOOLS_SOURCE_INC_PROVIDER_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 
 namespace {
 
-class GraphicProvider : public ::cppu::WeakImplHelper2< ::com::sun::star::graphic::XGraphicProvider,
+class GraphicProvider : public ::cppu::WeakImplHelper< ::com::sun::star::graphic::XGraphicProvider,
                                                         ::com::sun::star::lang::XServiceInfo >
 {
 public:

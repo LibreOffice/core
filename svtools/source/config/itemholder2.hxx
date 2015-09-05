@@ -21,14 +21,14 @@
 #define INCLUDED_SVTOOLS_ITEMHOLDER2_HXX_
 
 #include <unotools/itemholderbase.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 
 namespace svtools {
 
 
 class ItemHolder2 : private ItemHolderMutexBase
-                  , public  ::cppu::WeakImplHelper1< css::lang::XEventListener >
+                  , public  ::cppu::WeakImplHelper< css::lang::XEventListener >
 {
 
     // member

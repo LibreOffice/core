@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -30,7 +30,7 @@ using namespace com::sun::star;
 
 namespace {
 
-typedef ::cppu::WeakImplHelper2< graphic::XGraphicObject, css::lang::XServiceInfo > GObjectAccess_BASE;
+typedef ::cppu::WeakImplHelper< graphic::XGraphicObject, css::lang::XServiceInfo > GObjectAccess_BASE;
  // Simple uno wrapper around the GraphicObject class to allow basic
  // access. ( and solves a horrible cyclic link problem between
  // goodies/toolkit/extensions )

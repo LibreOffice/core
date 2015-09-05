@@ -29,6 +29,7 @@
 #include "treecontrolpeer.hxx"
 #include <comphelper/processfactory.hxx>
 
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
@@ -611,7 +612,7 @@ sal_Int32 SAL_CALL TreeControlPeer::getSelectionCount() throw (RuntimeException,
 
 
 
-class TreeSelectionEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
+class TreeSelectionEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
     explicit TreeSelectionEnumeration( std::list< Any >& rSelection );

@@ -34,8 +34,7 @@
 
 
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/awt/XItemEventBroadcaster.hpp>
 
 
@@ -232,7 +231,7 @@ struct RMItemData
     OUString     Label;
 };
 
-typedef ::cppu::ImplInheritanceHelper3  <   VCLXGraphicControl
+typedef ::cppu::ImplInheritanceHelper  <   VCLXGraphicControl
                                         ,   ::com::sun::star::container::XContainerListener
                                         ,   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::awt::XItemEventBroadcaster

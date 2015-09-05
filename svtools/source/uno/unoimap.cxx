@@ -30,7 +30,7 @@
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <list>
 #include <osl/mutex.hxx>
@@ -519,7 +519,7 @@ Reference< XNameReplace > SAL_CALL SvUnoImageMapObject::getEvents()
 
 
 
-class SvUnoImageMap : public WeakImplHelper3< XIndexContainer, XServiceInfo, XUnoTunnel >
+class SvUnoImageMap : public WeakImplHelper< XIndexContainer, XServiceInfo, XUnoTunnel >
 {
 public:
     explicit SvUnoImageMap( const SvEventDescription* pSupportedMacroItems );

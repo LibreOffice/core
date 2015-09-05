@@ -29,7 +29,7 @@
 
 #include <vcl/image.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <tools/contnr.hxx>
 
@@ -45,7 +45,7 @@ class UnoTreeListEntry;
 class TreeControlPeer;
 class UnoTreeListBoxImpl;
 
-class TreeControlPeer : public ::cppu::ImplInheritanceHelper2< VCLXWindow, ::com::sun::star::awt::tree::XTreeControl, ::com::sun::star::awt::tree::XTreeDataModelListener >
+class TreeControlPeer : public ::cppu::ImplInheritanceHelper< VCLXWindow, ::com::sun::star::awt::tree::XTreeControl, ::com::sun::star::awt::tree::XTreeDataModelListener >
 {
     typedef std::map<com::sun::star::uno::Reference<com::sun::star::awt::tree::XTreeNode>, UnoTreeListEntry*> TreeNodeMap;
 

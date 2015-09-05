@@ -23,8 +23,8 @@
 #include <osl/mutex.hxx>
 #include <tools/color.hxx>
 #include <vcl/image.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -68,7 +68,7 @@ struct ValueSetItem
                         GetAccessible( bool bIsTransientChildrenDisabled );
 };
 
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper<
     ::com::sun::star::accessibility::XAccessible,
     ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
     ::com::sun::star::accessibility::XAccessibleContext,
@@ -192,7 +192,7 @@ private:
     bool HasNoneField() const;
 };
 
-class ValueItemAcc : public ::cppu::WeakImplHelper5< ::com::sun::star::accessibility::XAccessible,
+class ValueItemAcc : public ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessible,
                                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                                                      ::com::sun::star::accessibility::XAccessibleContext,
                                                      ::com::sun::star::accessibility::XAccessibleComponent,
