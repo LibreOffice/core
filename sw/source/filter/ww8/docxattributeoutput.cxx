@@ -7270,11 +7270,11 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     else
     {
         FastAttributeList *pLRSpaceAttrList = FastSerializerHelper::createAttrList();
-        if((0 != rLRSpace.GetTextLeft()) || ((0 == rLRSpace.GetTextLeft()) && rLRSpace.IsExplicitZeroMarginValLeft()))
+        if((0 != rLRSpace.GetTextLeft()) || (rLRSpace.IsExplicitZeroMarginValLeft()))
         {
             pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_left : XML_start ) ), OString::number(  rLRSpace.GetTextLeft() ) );
         }
-        if((0 != rLRSpace.GetRight()) || ((0 == rLRSpace.GetRight()) && rLRSpace.IsExplicitZeroMarginValRight()))
+        if((0 != rLRSpace.GetRight()) || (rLRSpace.IsExplicitZeroMarginValRight()))
         {
             pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_right : XML_end ) ), OString::number(  rLRSpace.GetRight() ) );
         }
