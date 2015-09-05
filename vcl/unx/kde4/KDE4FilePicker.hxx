@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include <cppuhelper/compbase5.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
