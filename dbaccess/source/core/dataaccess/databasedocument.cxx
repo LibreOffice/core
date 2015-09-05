@@ -86,7 +86,6 @@
 
 #include <boost/bind.hpp>
 
-#include <algorithm>
 #include <functional>
 #include <list>
 
@@ -1497,30 +1496,25 @@ void ODatabaseDocument::impl_closeControllerFrames_nolck_throw( bool _bDeliverOw
     }
 }
 
-struct DisposeControllerFrame : public ::std::unary_function< Reference< XController >, void >
+void ODatabaseDocument::impl_disposeControllerFrames_nothrow()
 {
-    void operator()( const Reference< XController >& _rxController ) const
+    Controllers aCopy;
+    aCopy.swap( m_aControllers );   // ensure m_aControllers is empty afterwards
+    for( const auto& rController : aCopy )
     {
         try
         {
-            if ( !_rxController.is() )
-                return;
-
-            Reference< XFrame > xFrame( _rxController->getFrame() );
-            ::comphelper::disposeComponent( xFrame );
+            if( rController.is() )
+            {
+                Reference< XFrame > xFrame( rController->getFrame() );
+                ::comphelper::disposeComponent( xFrame );
+            }
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-    };
-};
-
-void ODatabaseDocument::impl_disposeControllerFrames_nothrow()
-{
-    Controllers aCopy;
-    aCopy.swap( m_aControllers );   // ensure m_aControllers is empty afterwards
-    ::std::for_each( aCopy.begin(), aCopy.end(), DisposeControllerFrame() );
+    }
 }
 
 void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (CloseVetoException, RuntimeException, std::exception)
