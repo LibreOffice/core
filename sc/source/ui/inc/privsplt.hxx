@@ -22,8 +22,6 @@
 
 #include <vcl/ctrl.hxx>
 
-enum SC_SPLIT_DIRECTION {SC_SPLIT_HORZ,SC_SPLIT_VERT };
-
 class ScPrivatSplit : public Control
 {
 private:
@@ -31,7 +29,6 @@ private:
         Link<>              aCtrModifiedLink;
         bool                aMovingFlag;
         Pointer             aWinPointer;
-        SC_SPLIT_DIRECTION  eScSplit;
         short               nOldX;
         short               nOldY;
         short               nNewX;
@@ -51,8 +48,7 @@ protected:
 
 public:
 
-        ScPrivatSplit( vcl::Window* pWindow, const ResId& rResId,
-                        SC_SPLIT_DIRECTION eScSplit);
+        ScPrivatSplit(vcl::Window* pWindow, const ResId& rResId);
 
         short           GetDeltaY();
 

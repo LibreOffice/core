@@ -34,8 +34,7 @@
 #*
 #************************************************************************/
 
-ScPrivatSplit::ScPrivatSplit(vcl::Window* pParent, const ResId& rResId,
-                             SC_SPLIT_DIRECTION eSplit)
+ScPrivatSplit::ScPrivatSplit(vcl::Window* pParent, const ResId& rResId)
     : Control(pParent, rResId)
     , nDeltaX(0)
     , nDeltaY(0)
@@ -45,7 +44,6 @@ ScPrivatSplit::ScPrivatSplit(vcl::Window* pParent, const ResId& rResId,
     nOldY=(short)aPos.Y();
     nNewX=(short)aPos.X();
     nNewY=(short)aPos.Y();
-    eScSplit=eSplit;
     aXMovingRange.Min()=nNewX;
     aXMovingRange.Max()=nNewX;
     aYMovingRange.Min()=nNewY;
@@ -54,14 +52,7 @@ ScPrivatSplit::ScPrivatSplit(vcl::Window* pParent, const ResId& rResId,
     aWinPointer=GetPointer();
 
     aMovingFlag=false;
-    if(eScSplit==SC_SPLIT_HORZ)
-    {
-        aWinPointer=Pointer(PointerStyle::HSplit);
-    }
-    else
-    {
-        aWinPointer=Pointer(PointerStyle::VSplit);
-    }
+    aWinPointer=Pointer(PointerStyle::VSplit);
     SetPointer(aWinPointer);
 }
 
@@ -114,38 +105,20 @@ void ScPrivatSplit::MouseButtonUp( const MouseEvent& rMEvt )
     Point a2Pos=GetPosPixel();
     Point a3Pos=a2Pos;
 
-    if(eScSplit==SC_SPLIT_HORZ)
+    nNewY=(short)aPos.Y();
+    nDeltaY=nNewY-nOldY;
+    a2Pos.Y()+=nDeltaY;
+    if(a2Pos.Y()<aYMovingRange.Min())
     {
-        nNewX=(short)aPos.X();
-        nDeltaX=nNewX-nOldX;
-        a2Pos.X()+=nDeltaX;
-        if(a2Pos.X()<aXMovingRange.Min())
-        {
-            nDeltaX=(short)(aXMovingRange.Min()-a3Pos.X());
-            a2Pos.X()=aXMovingRange.Min();
-        }
-        else if(a2Pos.X()>aXMovingRange.Max())
-        {
-            nDeltaX=(short)(aXMovingRange.Max()-a3Pos.X());
-            a2Pos.X()=aXMovingRange.Max();
-        }
+        nDeltaY=(short)(aYMovingRange.Min()-a3Pos.Y());
+        a2Pos.Y()=aYMovingRange.Min();
     }
-    else
+    else if(a2Pos.Y()>aYMovingRange.Max())
     {
-        nNewY=(short)aPos.Y();
-        nDeltaY=nNewY-nOldY;
-        a2Pos.Y()+=nDeltaY;
-        if(a2Pos.Y()<aYMovingRange.Min())
-        {
-            nDeltaY=(short)(aYMovingRange.Min()-a3Pos.Y());
-            a2Pos.Y()=aYMovingRange.Min();
-        }
-        else if(a2Pos.Y()>aYMovingRange.Max())
-        {
-            nDeltaY=(short)(aYMovingRange.Max()-a3Pos.Y());
-            a2Pos.Y()=aYMovingRange.Max();
-        }
+        nDeltaY=(short)(aYMovingRange.Max()-a3Pos.Y());
+        a2Pos.Y()=aYMovingRange.Max();
     }
+
     SetPosPixel(a2Pos);
     Invalidate();
     Update();
@@ -175,38 +148,18 @@ void ScPrivatSplit::MouseMove( const MouseEvent& rMEvt )
     Point a3Pos=a2Pos;
     if(rMEvt.IsLeft())
     {
-        if(eScSplit==SC_SPLIT_HORZ)
+        nNewY=(short)aPos.Y();
+        nDeltaY=nNewY-nOldY;
+        a2Pos.Y()+=nDeltaY;
+        if(a2Pos.Y()<aYMovingRange.Min())
         {
-            nNewX=(short)aPos.X();
-            nDeltaX=nNewX-nOldX;
-            a2Pos.X()+=nDeltaX;
-
-            if(a2Pos.X()<aXMovingRange.Min())
-            {
-                nDeltaX=(short)(aXMovingRange.Min()-a3Pos.X());
-                a2Pos.X()=aXMovingRange.Min();
-            }
-            else if(a2Pos.X()>aXMovingRange.Max())
-            {
-                nDeltaX=(short)(aXMovingRange.Max()-a3Pos.X());
-                a2Pos.X()=aXMovingRange.Max();
-            }
+            nDeltaY=(short)(aYMovingRange.Min()-a3Pos.Y());
+            a2Pos.Y()=aYMovingRange.Min();
         }
-        else
+        else if(a2Pos.Y()>aYMovingRange.Max())
         {
-            nNewY=(short)aPos.Y();
-            nDeltaY=nNewY-nOldY;
-            a2Pos.Y()+=nDeltaY;
-            if(a2Pos.Y()<aYMovingRange.Min())
-            {
-                nDeltaY=(short)(aYMovingRange.Min()-a3Pos.Y());
-                a2Pos.Y()=aYMovingRange.Min();
-            }
-            else if(a2Pos.Y()>aYMovingRange.Max())
-            {
-                nDeltaY=(short)(aYMovingRange.Max()-a3Pos.Y());
-                a2Pos.Y()=aYMovingRange.Max();
-            }
+            nDeltaY=(short)(aYMovingRange.Max()-a3Pos.Y());
+            a2Pos.Y()=aYMovingRange.Max();
         }
 
         SetPosPixel(a2Pos);
@@ -279,38 +232,20 @@ void ScPrivatSplit::MoveSplitTo(Point aPos)
     nOldY=(short)a2Pos.Y();
     Point a3Pos=a2Pos;
 
-    if(eScSplit==SC_SPLIT_HORZ)
+    nNewY=(short)aPos.Y();
+    nDeltaY=nNewY-nOldY;
+    a2Pos.Y()+=nDeltaY;
+    if(a2Pos.Y()<aYMovingRange.Min())
     {
-        nNewX=(short)aPos.X();
-        nDeltaX=nNewX-nOldX;
-        a2Pos.X()+=nDeltaX;
-        if(a2Pos.X()<aXMovingRange.Min())
-        {
-            nDeltaX=(short)(aXMovingRange.Min()-a3Pos.X());
-            a2Pos.X()=aXMovingRange.Min();
-        }
-        else if(a2Pos.X()>aXMovingRange.Max())
-        {
-            nDeltaX=(short)(aXMovingRange.Max()-a3Pos.X());
-            a2Pos.X()=aXMovingRange.Max();
-        }
+        nDeltaY=(short)(aYMovingRange.Min()-a3Pos.Y());
+        a2Pos.Y()=aYMovingRange.Min();
     }
-    else
+    else if(a2Pos.Y()>aYMovingRange.Max())
     {
-        nNewY=(short)aPos.Y();
-        nDeltaY=nNewY-nOldY;
-        a2Pos.Y()+=nDeltaY;
-        if(a2Pos.Y()<aYMovingRange.Min())
-        {
-            nDeltaY=(short)(aYMovingRange.Min()-a3Pos.Y());
-            a2Pos.Y()=aYMovingRange.Min();
-        }
-        else if(a2Pos.Y()>aYMovingRange.Max())
-        {
-            nDeltaY=(short)(aYMovingRange.Max()-a3Pos.Y());
-            a2Pos.Y()=aYMovingRange.Max();
-        }
+        nDeltaY=(short)(aYMovingRange.Max()-a3Pos.Y());
+        a2Pos.Y()=aYMovingRange.Max();
     }
+
     SetPosPixel(a2Pos);
     Invalidate();
     Update();
