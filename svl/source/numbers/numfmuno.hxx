@@ -26,8 +26,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/sharedmutex.hxx>
 #include <rtl/ref.hxx>
 #include <tools/solar.h>
@@ -38,7 +37,7 @@ class SvNumberFormatsSupplierObj;
 /**
  * SvNumberFormatterServiceObj is registered globally as a Service
  */
-class SvNumberFormatterServiceObj : public cppu::WeakImplHelper2<
+class SvNumberFormatterServiceObj : public cppu::WeakImplHelper<
                                         com::sun::star::util::XNumberFormatter2,
                                         com::sun::star::lang::XServiceInfo>
 {
@@ -101,7 +100,7 @@ public:
 };
 
 
-class SvNumberFormatsObj : public cppu::WeakImplHelper3<
+class SvNumberFormatsObj : public cppu::WeakImplHelper<
                                         com::sun::star::util::XNumberFormats,
                                         com::sun::star::util::XNumberFormatTypes,
                                         com::sun::star::lang::XServiceInfo>
@@ -167,7 +166,7 @@ private:
 };
 
 
-class SvNumberFormatObj : public cppu::WeakImplHelper3<
+class SvNumberFormatObj : public cppu::WeakImplHelper<
                                         com::sun::star::beans::XPropertySet,
                                         com::sun::star::beans::XPropertyAccess,
                                         com::sun::star::lang::XServiceInfo>
@@ -243,7 +242,7 @@ public:
 };
 
 
-class SvNumberFormatSettingsObj : public cppu::WeakImplHelper2<
+class SvNumberFormatSettingsObj : public cppu::WeakImplHelper<
                                         com::sun::star::beans::XPropertySet,
                                         com::sun::star::lang::XServiceInfo>
 {

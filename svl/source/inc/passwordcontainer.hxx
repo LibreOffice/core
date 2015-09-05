@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
@@ -232,7 +232,7 @@ enum PasswordState {
     cancelled
 };
 
-class PasswordContainer : public ::cppu::WeakImplHelper3<
+class PasswordContainer : public ::cppu::WeakImplHelper<
         ::com::sun::star::task::XPasswordContainer2,
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XEventListener >

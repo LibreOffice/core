@@ -38,8 +38,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "cppunit/TestCase.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/TestSuite.h"
@@ -66,7 +65,7 @@ namespace {
 // This class only implements that subset of functionality of a proper
 // css::ucb::Content that is known to be needed here:
 class Content:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::ucb::XContent, css::ucb::XCommandProcessor >
 {
 public:
@@ -169,7 +168,7 @@ css::uno::Any Content::execute(
     return css::uno::makeAny(uri.toAsciiLowerCase());
 }
 
-class Provider: public cppu::WeakImplHelper1< css::ucb::XContentProvider > {
+class Provider: public cppu::WeakImplHelper< css::ucb::XContentProvider > {
 public:
     virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
         css::uno::Reference< css::ucb::XContentIdentifier > const & identifier)
