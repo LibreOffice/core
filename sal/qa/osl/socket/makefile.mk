@@ -32,180 +32,174 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/osl_Socket.obj
 
-SHL1TARGET=osl_SocketOld
-SHL1STDLIBS= $(SALLIB) $CPPUNITLIB) $(TESTSHL2LIB)
+APP1TARGET=osl_SocketOld
+APP1STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
 
 .IF "$(GUI)" == "WNT"
-SHL1STDLIBS+= $(WS2_32LIB)
+APP1STDLIBS+= $(WS2_32LIB)
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+= -ldl -lnsl
+.IF ""$(OS)"=="SOLARIS"
+APP1STDLIBS+= -ldl -lnsl
 .ENDIF
 
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+APP1RPATH = NONE
+APP1TEST = enabled
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
 # --- BEGIN --------------------------------------------------------
-SHL2OBJS=  \
+APP2OBJS=  \
     $(SLO)$/osl_Socket_tests.obj
-SHL2TARGET= osl_Socket_tests
-SHL2STDLIBS= $(SALLIB) $CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL2IMPLIB= i$(SHL2TARGET)
-DEF2NAME=    $(SHL2TARGET)
-SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
-
+APP2TARGET= osl_Socket_tests
+APP2STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
+APP2RPATH = NONE
+APP2TEST = enabled
 # END --------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
-SHL3OBJS=  \
+APP3OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_StreamSocket.obj
 
-SHL3TARGET= osl_StreamSocket
-SHL3STDLIBS= $(SALLIB) $CPPUNITLIB) $(TESTSHL2LIB)
+APP3TARGET= osl_StreamSocket
+APP3STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
 
 .IF "$(GUI)" == "WNT"
-SHL3STDLIBS += $(WS2_32LIB)
+APP3STDLIBS += $(WS2_32LIB)
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
-SHL3STDLIBS += -ldl -lnsl
+.IF "$(OS)"=="SOLARIS"
+APP3STDLIBS += -ldl -lnsl
 .ENDIF
 
-SHL3IMPLIB= i$(SHL3TARGET)
-DEF3NAME=    $(SHL3TARGET)
-SHL3VERSIONMAP = $(PRJ)$/qa$/export.map
+APP3RPATH = NONE
+APP3TEST = enabled
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
-SHL4OBJS=  \
+APP4OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_DatagramSocket.obj
 
-SHL4TARGET= osl_DatagramSocket
-SHL4STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+APP4TARGET= osl_DatagramSocket
+APP4STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
 
 .IF "$(GUI)" == "WNT"
-SHL4STDLIBS += $(WS2_32LIB)
+APP4STDLIBS += $(WS2_32LIB)
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
-SHL4STDLIBS += -ldl -lnsl
+.IF "$(OS)"=="SOLARIS"
+APP4STDLIBS += -ldl -lnsl
 .ENDIF
 
-SHL4IMPLIB= i$(SHL4TARGET)
-DEF4NAME=    $(SHL4TARGET)
-SHL4VERSIONMAP = $(PRJ)$/qa$/export.map
+APP4RPATH = NONE
+APP4TEST = enabled
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
-SHL5OBJS=  \
+APP5OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_SocketAddr.obj
 
-SHL5TARGET= osl_SocketAddr
-SHL5STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+APP5TARGET= osl_SocketAddr
+APP5STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
 
 .IF "$(GUI)" == "WNT"
-SHL5STDLIBS += $(WS2_32LIB)
+APP5STDLIBS += $(WS2_32LIB)
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
-SHL5STDLIBS += -ldl -lnsl
+.IF "$(OS)"=="SOLARIS"
+APP5STDLIBS += -ldl -lnsl
 .ENDIF
 
-SHL5IMPLIB= i$(SHL5TARGET)
-DEF5NAME=    $(SHL5TARGET)
-SHL5VERSIONMAP = $(PRJ)$/qa$/export.map
+APP5RPATH = NONE
+APP5TEST = enabled
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
-SHL6OBJS=  \
+APP6OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_Socket2.obj
 
-SHL6TARGET= osl_Socket2
-SHL6STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+APP6TARGET= osl_Socket2
+APP6STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
 
 .IF "$(GUI)" == "WNT"
-SHL6STDLIBS += $(WS2_32LIB)
+APP6STDLIBS += $(WS2_32LIB)
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
-SHL6STDLIBS += -ldl -lnsl
+.IF "$(OS)"=="SOLARIS"
+APP6STDLIBS += -ldl -lnsl
 .ENDIF
 
-SHL6IMPLIB= i$(SHL6TARGET)
-DEF6NAME=    $(SHL6TARGET)
-SHL6VERSIONMAP = $(PRJ)$/qa$/export.map
+APP6RPATH = NONE
+APP6TEST = enabled
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
-SHL7OBJS=  \
+APP7OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_ConnectorSocket.obj
 
-SHL7TARGET= osl_ConnectorSocket
-SHL7STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+APP7TARGET= osl_ConnectorSocket
+APP7STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
 
 .IF "$(GUI)" == "WNT"
-SHL7STDLIBS += $(WS2_32LIB)
+APP7STDLIBS += $(WS2_32LIB)
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
-SHL7STDLIBS += -ldl -lnsl
+.IF "$(OS)"=="SOLARIS"
+APP7STDLIBS += -ldl -lnsl
 .ENDIF
 
-SHL7IMPLIB= i$(SHL7TARGET)
-DEF7NAME=    $(SHL7TARGET)
-SHL7VERSIONMAP = $(PRJ)$/qa$/export.map
+APP7RPATH = NONE
+APP7TEST = enabled
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
-SHL8OBJS=  \
+APP8OBJS=  \
     $(SLO)$/sockethelper.obj \
     $(SLO)$/osl_AcceptorSocket.obj
 
-SHL8TARGET= osl_AcceptorSocket
-SHL8STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+APP8TARGET= osl_AcceptorSocket
+APP8STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
 
 .IF "$(GUI)" == "WNT"
-SHL8STDLIBS += $(WS2_32LIB)
+APP8STDLIBS += $(WS2_32LIB)
 .ENDIF
 
-.IF "$(GUI)" == "UNX"
-SHL8STDLIBS += -ldl -lnsl
+.IF "$(OS)"=="SOLARIS"
+APP8STDLIBS += -ldl -lnsl
 .ENDIF
 
-SHL8IMPLIB= i$(SHL8TARGET)
-DEF8NAME=    $(SHL8TARGET)
-SHL8VERSIONMAP = $(PRJ)$/qa$/export.map
+APP8PATH = NONE
+APP8TEST = enabled
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -216,4 +210,5 @@ SHL8VERSIONMAP = $(PRJ)$/qa$/export.map
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"

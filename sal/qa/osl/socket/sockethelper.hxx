@@ -68,7 +68,9 @@ extern "C"
 #include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/statfs.h>
+#ifndef __FreeBSD__
+#   include <sys/statfs.h>
+#endif
 #include <sys/statvfs.h>
 #include <sys/types.h>
 #include <sys/socket.h>

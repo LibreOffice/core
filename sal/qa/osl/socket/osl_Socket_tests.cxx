@@ -29,7 +29,7 @@
 //------------------------------------------------------------------------
 #include <osl_Socket_Const.h>
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 #include <osl/socket.hxx>
 //------------------------------------------------------------------------
 // helper functions
@@ -42,24 +42,18 @@
 namespace osl_Socket
 {
 
-    class tests : public CppUnit::TestFixture
+    class tests : public ::testing::Test
     {
     public:
-
-        void test_001()
-            {
-                // _osl_getFullQualifiedDomainName( );
-                oslSocketResult aResult;
-                rtl::OUString suHostname = osl::SocketAddr::getLocalHostname(&aResult);
-                CPPUNIT_ASSERT_MESSAGE("getLocalHostname failed", aResult == osl_Socket_Ok);
-            }
-
-        CPPUNIT_TEST_SUITE( tests );
-        CPPUNIT_TEST( test_001 );
-        CPPUNIT_TEST_SUITE_END();
     };
 
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Socket::tests, "osl_SocketTest");
+    TEST_F(tests, test_001)
+        {
+            // _osl_getFullQualifiedDomainName( );
+            oslSocketResult aResult;
+            rtl::OUString suHostname = osl::SocketAddr::getLocalHostname(&aResult);
+            ASSERT_TRUE(aResult == osl_Socket_Ok) << "getLocalHostname failed";
+        }
 }
 
 
@@ -79,6 +73,10 @@ void RegisterAdditionalFunctions( FktRegFuncPtr _pFunc )
 
 #else*/
 
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
 
 //#endif

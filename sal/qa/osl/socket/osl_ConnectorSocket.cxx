@@ -54,7 +54,7 @@
 // include files
 //------------------------------------------------------------------------
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 
 #include "osl_Socket_Const.h"
 #include "sockethelper.hxx"
@@ -89,7 +89,7 @@ public:
     {
         if ( isRunning( ) )
         {
-            t_print("# error: CloseSocketThread not terminated.\n" );
+            printf("# error: CloseSocketThread not terminated.\n" );
         }
     }
 };
@@ -103,29 +103,25 @@ namespace osl_ConnectorSocket
                         oslSocketType   Type = osl_Socket_TypeStream);
     */
 
-    class ctors : public CppUnit::TestFixture
+    class ctors : public ::testing::Test
     {
     public:
-        void ctors_001()
-        {
-            /// Socket constructor.
-            ::osl::ConnectorSocket csSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-
-            CPPUNIT_ASSERT_MESSAGE( "test for ctors_001 constructor function: check if the connector socket was created successfully.",
-                                    osl_Socket_TypeStream ==  csSocket.getType( ) );
-        }
-
-        CPPUNIT_TEST_SUITE( ctors );
-        CPPUNIT_TEST( ctors_001 );
-        CPPUNIT_TEST_SUITE_END();
-
     }; // class ctors
+
+    TEST_F(ctors, ctors_001)
+    {
+        /// Socket constructor.
+        ::osl::ConnectorSocket csSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
+
+        ASSERT_TRUE( osl_Socket_TypeStream ==  csSocket.getType( ) )
+            << "test for ctors_001 constructor function: check if the connector socket was created successfully.";
+    }
 
     /** testing the method:
         oslSocketResult SAL_CALL connect(const SocketAddr& TargetHost, const TimeValue* pTimeout = 0);
     */
 
-    class connect : public CppUnit::TestFixture
+    class connect : public ::testing::Test
     {
     public:
         TimeValue *pTimeout;
@@ -134,7 +130,7 @@ namespace osl_ConnectorSocket
 
 
         // initialization
-        void setUp( )
+        void SetUp( )
         {
             pTimeout  = ( TimeValue* )malloc( sizeof( TimeValue ) );
             pTimeout->Seconds = 3;
@@ -142,119 +138,105 @@ namespace osl_ConnectorSocket
         //  sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
         }
 
-        void tearDown( )
+        void TearDown( )
         {
             free( pTimeout );
         //  sHandle = NULL;
             asAcceptorSocket.close( );
             csConnectorSocket.close( );
         }
-
-
-        void connect_001()
-        {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT2 );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT2 );
-            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
-            ::osl::StreamSocket ssConnection;
-
-            /// launch server socket
-            asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
-            sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
-            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
-            sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
-
-            //asAcceptorSocket.enableNonBlockingMode( sal_True );
-            //oslSocketResult eResultAccept = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
-            //CPPUNIT_ASSERT_MESSAGE( "accept failed.",  osl_Socket_Ok == eResultAccept );
-            /// launch client socket
-            oslSocketResult eResult = csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
-            CPPUNIT_ASSERT_MESSAGE( "connect failed.",  osl_Socket_Ok == eResult );
-
-            /// get peer information
-            csConnectorSocket.getPeerAddr( saPeerSocketAddr );/// connected.
-
-            CPPUNIT_ASSERT_MESSAGE( "test for connect function: try to create a connection with remote host. and check the setup address.",
-                                    ( sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr ) ) &&
-                                    ( osl_Socket_Ok == eResult ));
-        }
-        //non-blocking mode connect?
-        void connect_002()
-        {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
-            ::osl::SocketAddr saPeerSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
-
-            asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
-            asAcceptorSocket.enableNonBlockingMode( sal_True );
-            sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
-            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket bind address failed.", sal_True == bOK1 );
-            sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
-            CPPUNIT_ASSERT_MESSAGE( "AcceptorSocket listen failed.",  sal_True == bOK2 );
-
-            csConnectorSocket.enableNonBlockingMode( sal_True );
-
-            oslSocketResult eResult = csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
-            CPPUNIT_ASSERT_MESSAGE( "connect failed.",  osl_Socket_InProgress == eResult ||  osl_Socket_Ok == eResult );
-
-            /// get peer information
-            csConnectorSocket.getPeerAddr( saPeerSocketAddr );
-
-            CPPUNIT_ASSERT_MESSAGE( "test for connect function: try to create a connection with remote host. and check the setup address.",
-                sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr  )  ) ;
-        }
-        // really an error or just delayed
-        // how to design scenarios that will return osl_Socket_Interrupted, osl_Socket_TimedOut
-        void connect_003()
-        {
-            ::osl::SocketAddr saTargetSocketAddr1( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
-            ::osl::SocketAddr saTargetSocketAddr2( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT3 );
-
-            csConnectorSocket.enableNonBlockingMode( sal_False );
-
-            oslSocketResult eResult1 = csConnectorSocket.connect( saTargetSocketAddr1, pTimeout );
-            oslSocketResult eResult2 = csConnectorSocket.connect( saTargetSocketAddr2, pTimeout );
-            CloseSocketThread myCloseThread( csConnectorSocket );
-            oslSocketResult eResult3 = csConnectorSocket.connect( saTargetSocketAddr2, pTimeout );
-            myCloseThread.join();
-            CPPUNIT_ASSERT_MESSAGE( "connect should failed.",  osl_Socket_Error == eResult1 &&
-                osl_Socket_Error == eResult2 &&  osl_Socket_Error == eResult3 );
-
-        }
-
-        // really an error in non-blocking mode
-        void connect_004()
-        {
-            ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT3 );
-
-            csConnectorSocket.enableNonBlockingMode( sal_True );
-
-            oslSocketResult eResult = csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
-            CPPUNIT_ASSERT_MESSAGE( "connect should failed.",  osl_Socket_Error == eResult );
-        }
-        /** here need a case: immediate connection, say in non-blocking mode connect return osl_Socket_Ok
-        */
-
-        CPPUNIT_TEST_SUITE( connect );
-        CPPUNIT_TEST( connect_001 );
-        CPPUNIT_TEST( connect_002 );
-        CPPUNIT_TEST( connect_003 );
-        CPPUNIT_TEST( connect_004 );
-        CPPUNIT_TEST_SUITE_END();
-
     }; // class connect
 
+    TEST_F(connect, connect_001)
+    {
+        ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT2 );
+        ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT2 );
+        ::osl::SocketAddr saPeerSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
+        ::osl::StreamSocket ssConnection;
 
-// -----------------------------------------------------------------------------
+        /// launch server socket
+        asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
+        sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+        ASSERT_TRUE(sal_True == bOK1) << "AcceptorSocket bind address failed.";
+        sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
+        ASSERT_TRUE(sal_True == bOK2) << "AcceptorSocket listen failed.";
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ConnectorSocket::ctors, "osl_ConnectorSocket");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_ConnectorSocket::connect, "osl_ConnectorSocket");
+        //asAcceptorSocket.enableNonBlockingMode( sal_True );
+        //oslSocketResult eResultAccept = asAcceptorSocket.acceptConnection(ssConnection); /// waiting for incoming connection...
+        //ASSERT_TRUE(osl_Socket_Ok == eResultAccept) << "accept failed.";
+        /// launch client socket
+        oslSocketResult eResult = csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
+        ASSERT_TRUE(osl_Socket_Ok == eResult) << "connect failed.";
+
+        /// get peer information
+        csConnectorSocket.getPeerAddr( saPeerSocketAddr );/// connected.
+
+        ASSERT_TRUE(
+                                ( sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr ) ) &&
+                                ( osl_Socket_Ok == eResult ))
+            << "test for connect function: try to create a connection with remote host. and check the setup address.";
+    }
+    //non-blocking mode connect?
+    TEST_F(connect, connect_002)
+    {
+        ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
+        ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
+        ::osl::SocketAddr saPeerSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
+
+        asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
+        asAcceptorSocket.enableNonBlockingMode( sal_True );
+        sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
+        ASSERT_TRUE(sal_True == bOK1) << "AcceptorSocket bind address failed.";
+        sal_Bool bOK2 = asAcceptorSocket.listen( 1 );
+        ASSERT_TRUE(sal_True == bOK2) << "AcceptorSocket listen failed.";
+
+        csConnectorSocket.enableNonBlockingMode( sal_True );
+
+        oslSocketResult eResult = csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
+        ASSERT_TRUE(osl_Socket_InProgress == eResult ||  osl_Socket_Ok == eResult) << "connect failed.";
+
+        /// get peer information
+        csConnectorSocket.getPeerAddr( saPeerSocketAddr );
+
+        ASSERT_TRUE( sal_True == compareSocketAddr( saPeerSocketAddr, saLocalSocketAddr  )  )
+            << "test for connect function: try to create a connection with remote host. and check the setup address.";
+    }
+    // really an error or just delayed
+    // how to design scenarios that will return osl_Socket_Interrupted, osl_Socket_TimedOut
+    TEST_F(connect, connect_003)
+    {
+        ::osl::SocketAddr saTargetSocketAddr1( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT3 );
+        ::osl::SocketAddr saTargetSocketAddr2( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT3 );
+
+        csConnectorSocket.enableNonBlockingMode( sal_False );
+
+        oslSocketResult eResult1 = csConnectorSocket.connect( saTargetSocketAddr1, pTimeout );
+        oslSocketResult eResult2 = csConnectorSocket.connect( saTargetSocketAddr2, pTimeout );
+        CloseSocketThread myCloseThread( csConnectorSocket );
+        oslSocketResult eResult3 = csConnectorSocket.connect( saTargetSocketAddr2, pTimeout );
+        myCloseThread.join();
+        ASSERT_TRUE(osl_Socket_Error == eResult1 &&
+            osl_Socket_Error == eResult2 &&  osl_Socket_Error == eResult3) << "connect should failed.";
+
+    }
+
+    // really an error in non-blocking mode
+    TEST_F(connect, connect_004)
+    {
+        ::osl::SocketAddr saTargetSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT3 );
+
+        csConnectorSocket.enableNonBlockingMode( sal_True );
+
+        oslSocketResult eResult = csConnectorSocket.connect( saTargetSocketAddr, pTimeout );   /// connecting to server...
+        ASSERT_TRUE(osl_Socket_Error == eResult) << "connect should failed.";
+    }
+    /** here need a case: immediate connection, say in non-blocking mode connect return osl_Socket_Ok
+    */
 
 } // namespace osl_ConnectorSocket
 
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

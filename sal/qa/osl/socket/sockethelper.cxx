@@ -25,7 +25,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 #include "sockethelper.hxx"
-#include <testshl/simpleheader.hxx>
 
 //------------------------------------------------------------------------
 // Ip version definition
@@ -66,7 +65,7 @@ sal_Bool compareSocketAddr( const ::osl::SocketAddr & addr1 , const ::osl::Socke
 {
     rtl::OString aString;
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("oustring2char %s\n", aString.getStr( ) );
+    printf("oustring2char %s\n", aString.getStr( )  );
     sal_Char * sStr = aString.getStr( );
     return (char *)sStr;
 }*/
@@ -75,11 +74,11 @@ sal_Bool compareSocketAddr( const ::osl::SocketAddr & addr1 , const ::osl::Socke
 */
 void printUString( const ::rtl::OUString & str, const char* msg)
 {
-    t_print("#%s #printUString_u# ", msg );
+    printf("#%s #printUString_u# ", msg );
     rtl::OString aString;
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
     //char * sStr = aString.getStr( );
-    t_print("%s\n", aString.getStr( ) );
+    printf("%s\n",  aString.getStr( ) );
 }
 
 /** get the local host name.
@@ -122,7 +121,7 @@ void printUString( const ::rtl::OUString & str, const char* msg)
     strcpy( hostname, hptr->h_name );
     }
 
-    t_print("hostname is %s \n", hostname );
+    printf("hostname is %s \n", hostname );
     rtl::OString sHostname( hostname );
     aUString = ::rtl::OStringToOUString( sHostname, RTL_TEXTENCODING_ASCII_US );
     aUString.getLength();
@@ -145,7 +144,7 @@ void printUString( const ::rtl::OUString & str, const char* msg)
         //if there are more than one IPs on the same machine, we select one
         for (; *addrptr; addrptr++)
         {
-            t_print("#Local IP Address: %s\n", inet_ntoa(**addrptr));
+            printf("#Local IP Address: %s\n", inet_ntoa(**addrptr));
             aUString = ::rtl::OUString::createFromAscii( (sal_Char *) (inet_ntoa(**addrptr)) );
         }
     }
@@ -192,30 +191,30 @@ void thread_sleep( sal_Int32 _nSec )
 #if ( defined UNX ) || ( defined OS2 )   //Unix
     usleep(_nSec * 100000);
 #endif
-    // t_print("# done\n" );
+    // printf("# done\n" );
 }
 
 /** print Boolean value.
 */
 void printBool( sal_Bool bOk )
 {
-    t_print("printBool " );
-    ( sal_True == bOk ) ? t_print("YES!" ): t_print("NO!");
-    t_print("\n");
+    printf("printBool " );
+    ( sal_True == bOk ) ? printf("YES!" ): printf("NO!");
+    printf("\n");
 }
 
 /** print content of a ByteSequence.
 */
 void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int32 nLen )
 {
-    t_print("ByteSequence is: " );
+    printf("ByteSequence is: " );
     for ( int i = 0; i < nLen; i++ ){
         if ( bsByteSeq[i] < 0 )
-            t_print("%d ",  256 + bsByteSeq[i] );
+            printf("%d ",  256 + bsByteSeq[i] );
         else
-            t_print("%d ",  bsByteSeq[i] );
+            printf("%d ",  bsByteSeq[i] );
     }
-    t_print(" .\n" );
+    printf(" .\n" );
 }
 
 /** convert an IP which is stored as a UString format to a ByteSequence array for later use.
@@ -249,27 +248,27 @@ void printByteSequence_IP( const ::rtl::ByteSequence & bsByteSeq, sal_Int32 nLen
 */
 void printSocketResult( oslSocketResult eResult )
 {
-    t_print("printSocketResult: " );
+    printf("printSocketResult: " );
     if (!eResult)
     switch (eResult)
     {
         case osl_Socket_Ok:
-            t_print("client connected\n");
+            printf("client  connected\n");
             break;
         case osl_Socket_Error:
-            t_print("got an error ... exiting\r\n\r\n" );
+            printf("got an error ... exiting\r\n\r\n" );
             break;
         case osl_Socket_TimedOut:
-            t_print("timeout\n");
+            printf("timeout\n");
             break;
         case osl_Socket_Interrupted:
-            t_print("interrupted\n");
+            printf("interrupted\n");
             break;
         case osl_Socket_InProgress:
-            t_print("in progress\n");
+            printf("in progress\n");
             break;
     default:
-        t_print("unknown result\n");
+        printf("unknown result\n");
         break;
     }
 }
@@ -349,7 +348,7 @@ sal_Bool ifIpv4is( const ::rtl::ByteSequence Ipaddr, sal_Int8 seq1, sal_Int8 seq
 #endif
             if (strstr( buffer, strOK ) != NULL )
                 result = sal_True;
-            t_print("buffer is %s\n", buffer );
+            printf("buffer  is %s\n", buffer );
         }
         close (p[0]);
         waitpid (pid, &nStatus, 0);
@@ -387,9 +386,9 @@ sal_Bool ifAvailable( rtl::OUString const&  strAddrOrHostName )
     aSocket.close();
     if  ( aResult != osl_Socket_Ok )
     {
-        t_print("Error: ");
+        printf("Error: ");
         printSocketResult(aResult);
-        t_print("\n");
+        printf("\n");
 
         return sal_False;
     }

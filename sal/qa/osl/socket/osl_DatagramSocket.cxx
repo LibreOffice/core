@@ -54,7 +54,7 @@
 // include files
 //------------------------------------------------------------------------
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 
 //#include "osl_Socket_Const.h"
 #include "sockethelper.hxx"
@@ -91,7 +91,7 @@ public:
     {
         if ( isRunning( ) )
         {
-            t_print("# error: CloseSocketThread not terminated.\n" );
+            printf("# error: CloseSocketThread not terminated.\n" );
         }
     }
 };
@@ -109,25 +109,19 @@ namespace osl_DatagramSocket
                               oslSocketType Type= osl_Socket_TypeDgram);
     */
 
-    class ctors : public CppUnit::TestFixture
+    class ctors : public ::testing::Test
     {
     public:
-
-        void ctors_001()
-        {
-            /// Socket constructor.
-            ::osl::DatagramSocket dsSocket;
-
-            CPPUNIT_ASSERT_MESSAGE( "test for ctors_001 constructor function: check if the datagram socket was created successfully.",
-                                    osl_Socket_TypeDgram ==  dsSocket.getType( ) );
-        }
-
-
-        CPPUNIT_TEST_SUITE( ctors );
-        CPPUNIT_TEST( ctors_001 );
-        CPPUNIT_TEST_SUITE_END();
-
     }; // class ctors
+
+    TEST_F(ctors, ctors_001)
+    {
+        /// Socket constructor.
+        ::osl::DatagramSocket dsSocket;
+
+        ASSERT_TRUE(osl_Socket_TypeDgram ==  dsSocket.getType( ))
+            << "test for ctors_001 constructor function: check if the datagram socket was created successfully.";
+    }
 
 /**thread do sendTo, refer to http://www.coding-zone.co.uk/cpp/articles/140101networkprogrammingv.shtml
 */
@@ -156,7 +150,7 @@ public:
     ~TalkerThread( )
     {
         if ( isRunning( ) )
-            t_print("# error: TalkerThread not terminated normally.\n" );
+            printf("# error: TalkerThread not terminated normally.\n" );
     }
 };
 
@@ -174,12 +168,12 @@ protected:
         dsSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
         if ( dsSocket.bind( saLocalSocketAddr ) == sal_False )
         {
-            t_print("DatagramSocket bind failed \n");
+            printf("DatagramSocket bind failed \n");
             return;
         }
         //blocking mode: default
         sal_Int32 nRecv = dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
-        t_print("After recvFrom, nRecv is %d\n", nRecv);
+        printf("After recvFrom, nRecv is %d\n", nRecv);
     }
 
     void SAL_CALL onTerminated( )
@@ -197,7 +191,7 @@ public:
     ~ListenerThread( )
     {
         if ( isRunning( ) )
-            t_print("# error: ListenerThread not terminated normally.\n" );
+            printf("# error: ListenerThread not terminated normally.\n" );
     }
 
 };
@@ -209,104 +203,89 @@ public:
               const void* pBuffer, sal_uInt32 BufferSize, oslSocketMsgFlag Flag )
     */
 
-    class sendTo_recvFrom : public CppUnit::TestFixture
+    class sendTo_recvFrom : public ::testing::Test
     {
     public:
-
-        void sr_001()
-        {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9 );
-            ::osl::DatagramSocket dsSocket;
-            dsSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
-            dsSocket.bind( saLocalSocketAddr );
-
-            sal_Char pReadBuffer[30];
-            TalkerThread myTalkThread;
-            myTalkThread.create();
-            sal_Int32 nRecv = dsSocket.recvFrom( pReadBuffer, 30, &saLocalSocketAddr);
-            myTalkThread.join();
-            //t_print("#received buffer is %s# \n", pReadBuffer);
-
-            sal_Bool bOk = ( strcmp(pReadBuffer, pTestString1) == 0 );
-
-            CPPUNIT_ASSERT_MESSAGE( "test for sendTo/recvFrom function: create a talker thread and recvFrom in the main thread, check if the datagram socket can communicate successfully.",
-                                    nRecv > 0 && bOk == sal_True );
-        }
-
-        void sr_002()
-        {
-            ::osl::SocketAddr saListenSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT10 );
-            ::osl::DatagramSocket dsSocket;
-
-            //listener thread construct a DatagramSocket, recvFrom waiting for data, then main thread sendto data
-            ListenerThread myListenThread;
-            myListenThread.create();
-            //to grantee the recvFrom is before sendTo
-            thread_sleep( 1 );
-
-            sal_Int32 nSend = dsSocket.sendTo( saListenSocketAddr, pTestString2, strlen( pTestString2 ) + 1 );
-
-            CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo failed: nSend <= 0.", nSend > 0);
-
-            myListenThread.join();
-            //t_print("#received buffer is %s# \n", myListenThread.pRecvBuffer);
-
-            sal_Bool bOk = ( strcmp( myListenThread.pRecvBuffer, pTestString2) == 0 );
-
-            CPPUNIT_ASSERT_MESSAGE( "test for sendTo/recvFrom function: create a listener thread and sendTo in the main thread, check if the datagram socket can communicate successfully.",
-                                    bOk == sal_True );
-        }
-
-        //sendTo error, return -1; recvFrom error, return -1
-        void sr_003()
-        {
-            ::osl::SocketAddr saListenSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT10 );
-            ::osl::DatagramSocket dsSocket;
-            // Transport endpoint is not connected
-            sal_Int32 nSend = dsSocket.sendTo( saListenSocketAddr, pTestString2, strlen( pTestString2 ) + 1 );
-            CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo should fail: nSend <= 0.",
-                nSend == -1 );
-        }
-
-        void sr_004()
-        {
-            ::osl::SocketAddr saListenSocketAddr1( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT10 );
-            ::osl::SocketAddr saListenSocketAddr2( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_MYPORT10 );
-            ::osl::DatagramSocket dsSocket;
-
-            dsSocket.enableNonBlockingMode( sal_True );
-
-            sal_Char pReadBuffer[30];
-            //sal_Int32 nRecv1 = dsSocket.recvFrom( pReadBuffer, 30, &saListenSocketAddr1 );
-
-            // will block ?
-            CloseSocketThread myThread( dsSocket );
-            myThread.create();
-            sal_Int32 nRecv2 = dsSocket.recvFrom( pReadBuffer, 30, &saListenSocketAddr1 );
-            myThread.join();
-            //t_print("#nRecv1 is %d nRecv2 is %d\n", nRecv1, nRecv2 );
-            CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo should fail: nSend <= 0.",
-                 nRecv2 == -1 );
-        }
-
-        CPPUNIT_TEST_SUITE( sendTo_recvFrom );
-        CPPUNIT_TEST( sr_001 );
-        CPPUNIT_TEST( sr_002 );
-        CPPUNIT_TEST( sr_003 );
-        CPPUNIT_TEST( sr_004 );
-        CPPUNIT_TEST_SUITE_END();
-
     }; // class sendTo_recvFrom
 
-// -----------------------------------------------------------------------------
+    TEST_F(sendTo_recvFrom, sr_001)
+    {
+        ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9 );
+        ::osl::DatagramSocket dsSocket;
+        dsSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
+        dsSocket.bind( saLocalSocketAddr );
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::ctors, "osl_DatagramSocket");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom, "osl_DatagramSocket");
+        sal_Char pReadBuffer[30];
+        TalkerThread myTalkThread;
+        myTalkThread.create();
+        sal_Int32 nRecv = dsSocket.recvFrom( pReadBuffer, 30, &saLocalSocketAddr);
+        myTalkThread.join();
+        //printf("#received buffer is %s# \n", pReadBuffer);
+
+        sal_Bool bOk = ( strcmp(pReadBuffer, pTestString1) == 0 );
+
+        ASSERT_TRUE(nRecv > 0 && bOk == sal_True )
+            << "test for sendTo/recvFrom function: create a talker thread and recvFrom in the main thread, check if the datagram socket can communicate successfully.";
+    }
+
+    TEST_F(sendTo_recvFrom, sr_002)
+    {
+        ::osl::SocketAddr saListenSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT10 );
+        ::osl::DatagramSocket dsSocket;
+
+        //listener thread construct a DatagramSocket, recvFrom waiting for data, then main thread sendto data
+        ListenerThread myListenThread;
+        myListenThread.create();
+        //to grantee the recvFrom is before sendTo
+        thread_sleep( 1 );
+
+        sal_Int32 nSend = dsSocket.sendTo( saListenSocketAddr, pTestString2, strlen( pTestString2 ) + 1 );
+
+        ASSERT_TRUE(nSend > 0) << "DatagramSocket sendTo failed: nSend <= 0.";
+
+        myListenThread.join();
+        //printf("#received buffer is %s# \n", myListenThread.pRecvBuffer);
+
+        sal_Bool bOk = ( strcmp( myListenThread.pRecvBuffer, pTestString2) == 0 );
+
+        ASSERT_TRUE( bOk == sal_True )
+            << "test for sendTo/recvFrom function: create a listener thread and sendTo in the main thread, check if the datagram socket can communicate successfully.";
+    }
+
+    //sendTo error, return -1; recvFrom error, return -1
+    TEST_F(sendTo_recvFrom, sr_003)
+    {
+        ::osl::SocketAddr saListenSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT10 );
+        ::osl::DatagramSocket dsSocket;
+        // Transport endpoint is not connected
+        sal_Int32 nSend = dsSocket.sendTo( saListenSocketAddr, pTestString2, strlen( pTestString2 ) + 1 );
+        ASSERT_TRUE(nSend == -1) << "DatagramSocket sendTo should fail: nSend <= 0.";
+    }
+
+    TEST_F(sendTo_recvFrom, sr_004)
+    {
+        ::osl::SocketAddr saListenSocketAddr1( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT10 );
+        ::osl::SocketAddr saListenSocketAddr2( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_MYPORT10 );
+        ::osl::DatagramSocket dsSocket;
+
+        dsSocket.enableNonBlockingMode( sal_True );
+
+        sal_Char pReadBuffer[30];
+        //sal_Int32 nRecv1 = dsSocket.recvFrom( pReadBuffer, 30, &saListenSocketAddr1 );
+
+        // will block ?
+        CloseSocketThread myThread( dsSocket );
+        myThread.create();
+        sal_Int32 nRecv2 = dsSocket.recvFrom( pReadBuffer, 30, &saListenSocketAddr1 );
+        myThread.join();
+        //printf("#nRecv1 is %d nRecv2 is %d\n", nRecv1, nRecv2 );
+        ASSERT_TRUE(nRecv2 == -1) << "DatagramSocket sendTo should fail: nSend <= 0.";
+    }
 
 } // namespace osl_DatagramSocket
 
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
