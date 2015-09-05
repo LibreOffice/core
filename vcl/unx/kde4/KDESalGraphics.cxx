@@ -231,7 +231,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     //if no image, or resized, make a new image
     if (!m_image || m_image->size() != widgetRect.size())
     {
-        m_image = std::unique_ptr<QImage>(new QImage( widgetRect.width(), widgetRect.height(), QImage::Format_ARGB32 ) );
+        m_image.reset(new QImage( widgetRect.width(), widgetRect.height(), QImage::Format_ARGB32 ) );
     }
     m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
 

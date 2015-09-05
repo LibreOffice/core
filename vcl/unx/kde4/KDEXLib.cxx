@@ -174,7 +174,7 @@ void KDEXLib::Init()
         session_manager = strdup( getenv( "SESSION_MANAGER" ));
         unsetenv( "SESSION_MANAGER" );
     }
-    m_pApplication = std::unique_ptr<VCLKDEApplication>( new VCLKDEApplication() );
+    m_pApplication.reset( new VCLKDEApplication() );
     if( session_manager != NULL )
     {
         // coverity[tainted_string] - trusted source for setenv
