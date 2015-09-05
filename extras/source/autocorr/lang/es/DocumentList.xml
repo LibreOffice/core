@@ -501,6 +501,8 @@
   <block-list:block block-list:abbreviated-name="vozotra" block-list:name="vosotras"/>
   <block-list:block block-list:abbreviated-name="vozotro" block-list:name="vosotros"/>
   <block-list:block block-list:abbreviated-name="vrillar" block-list:name="brillar"/>
+  <block-list:block block-list:abbreviated-name=":gato sonriente:" block-list:name="😺"/>
+  <block-list:block block-list:abbreviated-name=":teleférico:" block-list:name="🚠"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
@@ -975,7 +977,7 @@
   <block-list:block block-list:abbreviated-name=":Gamma:" block-list:name="Γ"/>
   <block-list:block block-list:abbreviated-name=":gato2:" block-list:name="🐱"/>
   <block-list:block block-list:abbreviated-name=":gato:" block-list:name="🐈"/>
-  <block-list:block block-list:abbreviated-name=":gato sonriente:" block-list:name="😺"/>
+  <block-list:block block-list:abbreviated-name=":gato sonriente:" block-list:name="😸"/>
   <block-list:block block-list:abbreviated-name=":^g:" block-list:name="ᵍ"/>
   <block-list:block block-list:abbreviated-name=":^G:" block-list:name="ᴳ"/>
   <block-list:block block-list:abbreviated-name=":gema:" block-list:name="💎"/>
@@ -1444,7 +1446,7 @@
   <block-list:block block-list:abbreviated-name=":teatro:" block-list:name="🎭"/>
   <block-list:block block-list:abbreviated-name=":té:" block-list:name="🍵"/>
   <block-list:block block-list:abbreviated-name=":teclado:" block-list:name="⌨"/>
-  <block-list:block block-list:abbreviated-name=":teleférico:" block-list:name="🚠"/>
+  <block-list:block block-list:abbreviated-name=":teleférico:" block-list:name="🚞"/>
   <block-list:block block-list:abbreviated-name=":teléfono2:" block-list:name="☏"/>
   <block-list:block block-list:abbreviated-name=":teléfono apagado:" block-list:name="📴"/>
   <block-list:block block-list:abbreviated-name=":teléfono:" block-list:name="☎"/>

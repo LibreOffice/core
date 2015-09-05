@@ -739,9 +739,6 @@
   <block-list:block block-list:abbreviated-name=":fajerwerki:" block-list:name="🎆"/>
   <block-list:block block-list:abbreviated-name=":faks:" block-list:name="📠"/>
   <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
-  <block-list:block block-list:abbreviated-name=":ff:" block-list:name="ﬀ"/>
-  <block-list:block block-list:abbreviated-name=":ffi:" block-list:name="ﬃ"/>
-  <block-list:block block-list:abbreviated-name=":ffl:" block-list:name="ﬄ"/>
   <block-list:block block-list:abbreviated-name=":^fi:" block-list:name="ᵠ"/>
   <block-list:block block-list:abbreviated-name=":_fi:" block-list:name="ᵩ"/>
   <block-list:block block-list:abbreviated-name=":^Fi:" block-list:name="ᶲ"/>
@@ -752,7 +749,6 @@
   <block-list:block block-list:abbreviated-name=":flaga:" block-list:name="⚐"/>
   <block-list:block block-list:abbreviated-name=":flagi2:" block-list:name="🎏"/>
   <block-list:block block-list:abbreviated-name=":flagi:" block-list:name="🎌"/>
-  <block-list:block block-list:abbreviated-name=":fl:" block-list:name="ﬂ"/>
   <block-list:block block-list:abbreviated-name=":fleur de lis:" block-list:name="⚜"/>
   <block-list:block block-list:abbreviated-name=":folder2:" block-list:name="📂"/>
   <block-list:block block-list:abbreviated-name=":folder:" block-list:name="📁"/>
@@ -932,6 +928,7 @@
   <block-list:block block-list:abbreviated-name=":koło:" block-list:name="○"/>
   <block-list:block block-list:abbreviated-name=":kometa:" block-list:name="☄"/>
   <block-list:block block-list:abbreviated-name=":komputer:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":koń2:" block-list:name="🐴"/>
   <block-list:block block-list:abbreviated-name=":koń:" block-list:name="🐎"/>
   <block-list:block block-list:abbreviated-name=":koniczyna:" block-list:name="🍀"/>
   <block-list:block block-list:abbreviated-name=":koniec dowodu:" block-list:name="∎"/>
@@ -1019,6 +1016,11 @@
   <block-list:block block-list:abbreviated-name=":_l:" block-list:name="ₗ"/>
   <block-list:block block-list:abbreviated-name=":^L:" block-list:name="ᴸ"/>
   <block-list:block block-list:abbreviated-name=":Lew:" block-list:name="♌"/>
+  <block-list:block block-list:abbreviated-name=":ligatura ff:" block-list:name="ﬀ"/>
+  <block-list:block block-list:abbreviated-name=":ligatura ffi:" block-list:name="ﬃ"/>
+  <block-list:block block-list:abbreviated-name=":ligatura ffl:" block-list:name="ﬄ"/>
+  <block-list:block block-list:abbreviated-name=":ligatura fi:" block-list:name="ﬁ"/>
+  <block-list:block block-list:abbreviated-name=":ligatura fl:" block-list:name="ﬂ"/>
   <block-list:block block-list:abbreviated-name=":linijka2:" block-list:name="📐"/>
   <block-list:block block-list:abbreviated-name=":linijka:" block-list:name="📏"/>
   <block-list:block block-list:abbreviated-name=":lira:" block-list:name="₤"/>
@@ -1103,7 +1105,8 @@
   <block-list:block block-list:abbreviated-name=":nakrętka i śruba:" block-list:name="🔩"/>
   <block-list:block block-list:abbreviated-name=":należy do:" block-list:name="∈"/>
   <block-list:block block-list:abbreviated-name=":namiot:" block-list:name="⛺"/>
-  <block-list:block block-list:abbreviated-name=":narty:" block-list:name="⛷"/>
+  <block-list:block block-list:abbreviated-name=":narciarz:" block-list:name="⛷"/>
+  <block-list:block block-list:abbreviated-name=":narty:" block-list:name="🎿"/>
   <block-list:block block-list:abbreviated-name=":^n:" block-list:name="ⁿ"/>
   <block-list:block block-list:abbreviated-name=":_n:" block-list:name="ₙ"/>
   <block-list:block block-list:abbreviated-name=":^N:" block-list:name="ᴺ"/>
@@ -1493,6 +1496,7 @@
   <block-list:block block-list:abbreviated-name=":teatr:" block-list:name="🎭"/>
   <block-list:block block-list:abbreviated-name=":tęcza:" block-list:name="🌈"/>
   <block-list:block block-list:abbreviated-name=":telefon2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":telefon3:" block-list:name="✆"/>
   <block-list:block block-list:abbreviated-name=":telefon:" block-list:name="☎"/>
   <block-list:block block-list:abbreviated-name=":telefon komórkowy:" block-list:name="📱"/>
   <block-list:block block-list:abbreviated-name=":telefon komórkowy ze strzałką:" block-list:name="📲"/>

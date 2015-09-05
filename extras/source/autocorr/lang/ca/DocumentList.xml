@@ -353,6 +353,11 @@
   <block-list:block block-list:abbreviated-name="donat que" block-list:name="atès que"/>
   <block-list:block block-list:abbreviated-name="tals com" block-list:name="com ara"/>
   <block-list:block block-list:abbreviated-name=":clau:" block-list:name="🔑"/>
+  <block-list:block block-list:abbreviated-name=":bandera:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":bloqueig:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":coche:" block-list:name="🚗"/>
+  <block-list:block block-list:abbreviated-name=":llibre:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":marcador2:" block-list:name="🔖"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":10.30:" block-list:name="🕥"/>
@@ -464,7 +469,7 @@
   <block-list:block block-list:abbreviated-name=":banc:" block-list:name="🏦"/>
   <block-list:block block-list:abbreviated-name=":bandera2:" block-list:name="⚑"/>
   <block-list:block block-list:abbreviated-name=":bandera3:" block-list:name="🏁"/>
-  <block-list:block block-list:abbreviated-name=":bandera:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":bandera:" block-list:name="♭"/>
   <block-list:block block-list:abbreviated-name=":banderes2:" block-list:name="🎏"/>
   <block-list:block block-list:abbreviated-name=":banderes:" block-list:name="🎌"/>
   <block-list:block block-list:abbreviated-name=":bany:" block-list:name="🛀"/>
@@ -514,7 +519,7 @@
   <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
   <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
   <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
-  <block-list:block block-list:abbreviated-name=":bloqueig:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":bloqueig:" block-list:name="🔏"/>
   <block-list:block block-list:abbreviated-name=":boca:" block-list:name="👄"/>
   <block-list:block block-list:abbreviated-name=":boira:" block-list:name="🌁"/>
   <block-list:block block-list:abbreviated-name=":bola:" block-list:name="⛹"/>
@@ -591,7 +596,7 @@
   <block-list:block block-list:abbreviated-name=":coala:" block-list:name="🐨"/>
   <block-list:block block-list:abbreviated-name=":coche2:" block-list:name="🚘"/>
   <block-list:block block-list:abbreviated-name=":coche3:" block-list:name="🚙"/>
-  <block-list:block block-list:abbreviated-name=":coche:" block-list:name="🚗"/>
+  <block-list:block block-list:abbreviated-name=":coche:" block-list:name="📈"/>
   <block-list:block block-list:abbreviated-name=":cocodril:" block-list:name="🐊"/>
   <block-list:block block-list:abbreviated-name=":còctel:" block-list:name="🍸"/>
   <block-list:block block-list:abbreviated-name=":cometa:" block-list:name="☄"/>
@@ -835,7 +840,7 @@
   <block-list:block block-list:abbreviated-name=":Lleó:" block-list:name="♌"/>
   <block-list:block block-list:abbreviated-name=":lleopard:" block-list:name="🐆"/>
   <block-list:block block-list:abbreviated-name=":llibre2:" block-list:name="📖"/>
-  <block-list:block block-list:abbreviated-name=":llibre:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":llibre:" block-list:name="👢"/>
   <block-list:block block-list:abbreviated-name=":llibres:" block-list:name="📚"/>
   <block-list:block block-list:abbreviated-name=":lliga_ffi:" block-list:name="ﬃ"/>
   <block-list:block block-list:abbreviated-name=":lliga_fi:" block-list:name="ﬁ"/>
@@ -864,7 +869,7 @@
   <block-list:block block-list:abbreviated-name=":marca de verificació2:" block-list:name="✔"/>
   <block-list:block block-list:abbreviated-name=":marca de verificació3:" block-list:name="✅"/>
   <block-list:block block-list:abbreviated-name=":marca de verificació:" block-list:name="✓"/>
-  <block-list:block block-list:abbreviated-name=":marcador2:" block-list:name="🔖"/>
+  <block-list:block block-list:abbreviated-name=":marcador2:" block-list:name="📑"/>
   <block-list:block block-list:abbreviated-name=":marca registrada:" block-list:name="™"/>
   <block-list:block block-list:abbreviated-name=":marieta:" block-list:name="🐞"/>
   <block-list:block block-list:abbreviated-name=":martell:" block-list:name="🔨"/>
