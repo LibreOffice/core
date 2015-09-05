@@ -956,7 +956,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
             {
                 if( rOp.GetType() == SbxEMPTY )
                 {
-                    if ( !bVBAInterop || ( bVBAInterop && ( eOp != SbxNOT  ) ) )
+                    if ( !bVBAInterop || (  eOp != SbxNOT ) )
                         goto Lbl_OpIsEmpty;
                 }
                 if( Get( aL ) ) switch( eOp )
@@ -1185,7 +1185,7 @@ Lbl_OpIsDouble:
             {
                 if( rOp.GetType() == SbxEMPTY )
                 {
-                    if ( !bVBAInterop || ( bVBAInterop && ( eOp != SbxNEG ) ) )
+                    if ( !bVBAInterop || ( eOp != SbxNEG ) )
                         goto Lbl_OpIsEmpty;
                 }
                 if( Get( aL ) )

@@ -3684,7 +3684,7 @@ bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
             aCell1.aAreaLink.Compare( aCell2.aAreaLink ) ) ||
             !aCell1.bHasAreaLink )
         {
-            if (!aCell1.bHasAnnotation || (aCell1.bHasAnnotation && false/*IsAnnotationEqual(aCell1.xCell, aCell2.xCell)*/)) // no longer compareable
+            if (!aCell1.bHasAnnotation)
             {
                 if ((((aCell1.nStyleIndex == aCell2.nStyleIndex) && (aCell1.bIsAutoStyle == aCell2.bIsAutoStyle)) ||
                      ((aCell1.nStyleIndex == aCell2.nStyleIndex) && (aCell1.nStyleIndex == -1))) &&
