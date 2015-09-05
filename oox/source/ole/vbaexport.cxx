@@ -540,9 +540,9 @@ void writeMODULECOOKIE(SvStream& rStrm)
 }
 
 // section 2.3.4.2.3.2.8
-void writeMODULETYPE(SvStream& rStrm, const OUString type)
+void writeMODULETYPE(SvStream& rStrm, const sal_uInt16 type)
 {
-    if(type == "procedure")
+    if(type == 1)
         rStrm.WriteUInt16(0x0021); // id for a procedural module
     else
         rStrm.WriteUInt16(0x0022); // id for document, class or design module
@@ -550,7 +550,7 @@ void writeMODULETYPE(SvStream& rStrm, const OUString type)
 }
 
 // section 2.3.4.2.3.2
-void writePROJECTMODULE(SvStream& rStrm, const OUString name, const OUString streamName, sal_uInt32 offset, const OUString type)
+void writePROJECTMODULE(SvStream& rStrm, const OUString name, const OUString streamName, sal_uInt32 offset, const sal_uInt16 type)
 {
     writeMODULENAME(rStrm, name);
     writeMODULENAMEUNICODE(rStrm, name);
@@ -565,29 +565,35 @@ void writePROJECTMODULE(SvStream& rStrm, const OUString name, const OUString str
 }
 
 // section 2.3.4.2.3
-void writePROJECTMODULES(SvStream& rStrm)
+void writePROJECTMODULES(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer)
 {
+    css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
+    sal_Int32 n = aElementNames.getLength();
+    css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
+    assert(xModuleInfo.is());
+
     // TODO: this whole part is document specific
     rStrm.WriteUInt16(0x000F); // id
     rStrm.WriteUInt32(0x00000002); // size of Count
-    sal_Int16 count = 5; // Number of modules // TODO: this is dependent on the document
+    sal_Int16 count = n; // Number of modules // TODO: this is dependent on the document
     rStrm.WriteUInt16(count); // Count
     writePROJECTCOOKIE(rStrm);
-    writePROJECTMODULE(rStrm, "Module1", "Module1", 0x00000379, "procedure");
-    writePROJECTMODULE(rStrm, "ThisWorkbook", "ThisWorkbook", 0x00000325, "other");
-    writePROJECTMODULE(rStrm, "Sheet1", "Sheet1", 0x00000325, "other");
-    writePROJECTMODULE(rStrm, "Sheet2", "Sheet2", 0x00000325, "other");
-    writePROJECTMODULE(rStrm, "Sheet3", "Sheet3", 0x00000325, "other");
+
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
+        writePROJECTMODULE(rStrm, aElementNames[i], aElementNames[i], 0x00000000, aModuleInfo.ModuleType);
+    }
 }
 
 // section 2.3.4.2
-void exportDirStream(SvStream& rStrm)
+void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer)
 {
     SvMemoryStream aDirStream(4096, 4096);
 
     writePROJECTINFORMATION(aDirStream);
     writePROJECTREFERENCES(aDirStream);
-    writePROJECTMODULES(aDirStream);
+    writePROJECTMODULES(aDirStream, xNameContainer);
     aDirStream.WriteUInt16(0x0010); // terminator
     aDirStream.WriteUInt32(0x00000000); // reserved
 
@@ -626,27 +632,12 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     SotStorageStream* pDirStream = pVBAStream->OpenSotStream("dir", STREAM_READWRITE);
     SotStorageStream* pVBAProjectStream = pVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
 
+    css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
+
     // export
-    exportDirStream(*pDirStream);
+    exportDirStream(*pDirStream, xNameContainer);
     exportVBAProjectStream(*pVBAProjectStream);
 
-
-    css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
-    css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
-    sal_Int32 n = aElementNames.getLength();
-    css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
-    assert(xModuleInfo.is());
-    for (sal_Int32 i = 0; i < n; ++i)
-    {
-        SAL_DEBUG(aElementNames[i]);
-        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
-        SAL_DEBUG(aModuleInfo.ModuleType);
-
-        css::uno::Any aCode = xNameContainer->getByName(aElementNames[i]);
-        OUString aSourceCode;
-        aCode >>= aSourceCode;
-        SAL_DEBUG(aSourceCode);
-    }
     pVBAProjectStream->Commit();
     pDirStream->Commit();
     pVBAStream->Commit();
