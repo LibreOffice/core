@@ -57,7 +57,6 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <rtl/ustring.hxx>
-#include <algorithm>
 #include <o3tl/functional.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -403,23 +402,6 @@ void OGenericUnoController::attachFrame( const Reference< XFrame >& _rxFrame ) t
         getView()->attachFrame( xFrame );
 }
 
-struct CommandCollector : public ::std::unary_function< SupportedFeatures::value_type, void>
-{
-    sal_uInt16  m_nFeature;
-    StringBag&  m_rFeatureCommands;
-    CommandCollector( sal_uInt16 _nFeature, StringBag& _rFeatureCommands )
-        :m_nFeature        ( _nFeature         )
-        ,m_rFeatureCommands( _rFeatureCommands )
-    {
-    }
-
-    void operator() ( const SupportedFeatures::value_type& lhs )
-    {
-        if ( lhs.second.nFeatureId == m_nFeature )
-            m_rFeatureCommands.insert( lhs.first );
-    }
-};
-
 namespace
 {
     typedef ::std::vector< Any >    States;
@@ -495,11 +477,11 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
     else
     {   // no -> iterate through all listeners responsible for the URL
         StringBag aFeatureCommands;
-        ::std::for_each(
-            m_aSupportedFeatures.begin(),
-            m_aSupportedFeatures.end(),
-            CommandCollector( nFeat, aFeatureCommands )
-        );
+        for( const auto& rFeature : m_aSupportedFeatures )
+        {
+            if( rFeature.second.nFeatureId == nFeat )
+                aFeatureCommands.insert( rFeature.first );
+        }
 
         // it is possible that listeners are registered or revoked while
         // we are notifying them, so we must use a copy of m_arrStatusListener, not

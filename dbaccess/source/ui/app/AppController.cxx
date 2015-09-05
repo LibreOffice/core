@@ -121,7 +121,6 @@
 #include "dlgsave.hxx"
 #include "dbaccess_slotid.hrc"
 
-#include <algorithm>
 #include <functional>
 
 #include <boost/noncopyable.hpp>
@@ -184,20 +183,6 @@ Reference< XInterface > SAL_CALL OApplicationController::Create(const Reference<
 {
     return *(new OApplicationController( comphelper::getComponentContext(_rxFactory)));
 }
-
-struct XContainerFunctor : public ::std::unary_function< OApplicationController::TContainerVector::value_type , bool>
-{
-    Reference<XContainerListener> m_xContainerListener;
-    explicit XContainerFunctor( const Reference<XContainerListener>& _xContainerListener)
-        : m_xContainerListener(_xContainerListener){}
-
-    bool operator() (const OApplicationController::TContainerVector::value_type& lhs) const
-    {
-        if ( lhs.is() )
-            lhs->removeContainerListener(m_xContainerListener);
-        return true;
-    }
-};
 
 // OApplicationController
 class SelectionNotifier : public ::boost::noncopyable
@@ -339,7 +324,14 @@ void OApplicationController::disconnect()
 
 void SAL_CALL OApplicationController::disposing()
 {
-    ::std::for_each(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),XContainerFunctor(this));
+    for( const auto& rContainerListener : m_aCurrentContainers )
+    {
+        if( rContainerListener.is() )
+        {
+            rContainerListener->removeContainerListener( this );
+        }
+    }
+
     m_aCurrentContainers.clear();
     m_pSubComponentManager->disposing();
     m_pSelectionNotifier->disposing();
