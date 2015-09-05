@@ -24,7 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
@@ -41,25 +41,22 @@ using namespace rtl;
 #   define COPY_DEST_PATH "x:\\tra\\msvcr70.dll"
 #endif
 
-class test_osl_copyFile : public CppUnit::TestFixture
+class test_osl_copyFile : public ::testing::Test
 {
 public:
-    void cp_file()
-    {
-        rtl::OUString src_url;
-        FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(COPY_SOURCE_PATH), src_url);
-
-        rtl::OUString dest_url;
-        FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(COPY_DEST_PATH), dest_url);
-
-        FileBase::RC err = File::copy(src_url, dest_url);
-        CPPUNIT_ASSERT_MESSAGE("Copy didn't recognized disk full", err != FileBase::E_None);
-    }
-
-    CPPUNIT_TEST_SUITE(test_osl_copyFile);
-    CPPUNIT_TEST(cp_file);
-    CPPUNIT_TEST_SUITE_END();
 };
+
+TEST_F(test_osl_copyFile, cp_file)
+{
+    rtl::OUString src_url;
+    FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(COPY_SOURCE_PATH), src_url);
+
+    rtl::OUString dest_url;
+    FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(COPY_DEST_PATH), dest_url);
+
+    FileBase::RC err = File::copy(src_url, dest_url);
+    ASSERT_TRUE(err != FileBase::E_None) << "Copy didn't recognized disk full";
+}
 
 //########################################
 #ifdef UNX
@@ -68,40 +65,35 @@ public:
 #   define WRITE_DEST_PATH "d:\\tmp_data.tmp"
 #endif
 
-class test_osl_writeFile : public CppUnit::TestFixture
+class test_osl_writeFile : public ::testing::Test
 {
 public:
-    void wrt_file()
-    {
-        rtl::OUString dest_url;
-        FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(WRITE_DEST_PATH), dest_url);
-
-        File tmp_file(dest_url);
-        rtl::OUString suErrorMsg = rtl::OUString::createFromAscii("File creation failed: ")+ dest_url;
-        FileBase::RC err = tmp_file.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
-
-        CPPUNIT_ASSERT_MESSAGE( suErrorMsg, err == FileBase::E_None || err == FileBase::E_EXIST );
-
-        char buffer[50000];
-        sal_uInt64 written = 0;
-        err = tmp_file.write((void*)buffer, sizeof(buffer), written);
-
-        err = tmp_file.sync();
-
-        CPPUNIT_ASSERT_MESSAGE("Write didn't recognized disk full", err != FileBase::E_None);
-
-        tmp_file.close();
-    }
-
-    CPPUNIT_TEST_SUITE(test_osl_writeFile);
-    CPPUNIT_TEST(wrt_file);
-    CPPUNIT_TEST_SUITE_END();
 };
 
-//#####################################
-// register test suites
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test_osl_writeFile, "test_osl_writeFile");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test_osl_copyFile,  "test_osl_copyFile");
+TEST_F(test_osl_writeFile, wrt_file)
+{
+    rtl::OUString dest_url;
+    FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(WRITE_DEST_PATH), dest_url);
 
-NOADDITIONAL;
+    File tmp_file(dest_url);
+    rtl::OUString suErrorMsg = rtl::OUString::createFromAscii("File creation failed: ")+ dest_url;
+    FileBase::RC err = tmp_file.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
 
+    ASSERT_TRUE(err == FileBase::E_None || err == FileBase::E_EXIST) << suErrorMsg.pData;
+
+    char buffer[50000];
+    sal_uInt64 written = 0;
+    err = tmp_file.write((void*)buffer, sizeof(buffer), written);
+
+    err = tmp_file.sync();
+
+    ASSERT_TRUE(err != FileBase::E_None) << "Write didn't recognized disk full";
+
+    tmp_file.close();
+}
+
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}

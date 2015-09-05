@@ -95,7 +95,9 @@ const sal_Char pBuffer_Blank[]  = "";
 #   include <errno.h>
 #   include <fcntl.h>
 #   include <sys/stat.h>
-#   include <sys/statfs.h>
+#   ifndef __FreeBSD__
+#       include <sys/statfs.h>
+#   endif
 #   include <sys/statvfs.h>
 #   include <sys/types.h>
 #   define TEST_PLATFORM        ""

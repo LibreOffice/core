@@ -44,27 +44,16 @@
 #define TEST_VOLUME "c:/"
 #endif
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 
 namespace osl_test_file
 {
 
 // -----------------------------------------------------------------------------
 
-class oldtestfile : public CppUnit::TestFixture
+class oldtestfile : public ::testing::Test
 {
 public:
-    void test_file_001();
-    void test_file_002();
-    void test_file_003();
-    void test_file_004();
-
-    CPPUNIT_TEST_SUITE( oldtestfile );
-    CPPUNIT_TEST( test_file_001 );
-    CPPUNIT_TEST( test_file_002 );
-    CPPUNIT_TEST( test_file_003 );
-    CPPUNIT_TEST( test_file_004 );
-    CPPUNIT_TEST_SUITE_END( );
 };
 
 char *aSource1[] =
@@ -103,7 +92,7 @@ char *aSource3[ ] =
 
 using namespace rtl;
 
-void oldtestfile::test_file_001()
+TEST_F(oldtestfile, test_file_001)
 {
 #ifdef WIN32
     return;
@@ -116,10 +105,10 @@ void oldtestfile::test_file_001()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource1[i] );
         oslFileError e = osl_getAbsoluteFileURL( base1.pData, rel.pData , &target.pData );
-        CPPUNIT_ASSERT_MESSAGE("failure #1",  osl_File_E_None == e );
+        ASSERT_TRUE( osl_File_E_None == e ) << "failure #1";
         if( osl_File_E_None == e )
         {
-            CPPUNIT_ASSERT_MESSAGE("failure #1.1",  target.equalsAscii( aSource1[i+1] ) );
+            ASSERT_TRUE( target.equalsAscii( aSource1[i+1] ) ) << "failure #1.1";
         }
         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
         OString obase = OUStringToOString( base1 , RTL_TEXTENCODING_ASCII_US );
@@ -128,11 +117,11 @@ void oldtestfile::test_file_001()
 
     OUString err1( RTL_CONSTASCII_USTRINGPARAM( "../.." ) );
     OUString target;
-    CPPUNIT_ASSERT_MESSAGE("failure #11",  osl_File_E_None != osl_getAbsoluteFileURL( base1.pData , err1.pData , &target.pData ) );
+    ASSERT_TRUE( osl_File_E_None != osl_getAbsoluteFileURL( base1.pData , err1.pData , &target.pData ) ) << "failure #11";
 
 }
 
-void oldtestfile::test_file_002()
+TEST_F(oldtestfile, test_file_002)
 {
 #ifdef WIN32
     return;
@@ -145,10 +134,10 @@ void oldtestfile::test_file_002()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource2[i] );
         oslFileError e = osl_getAbsoluteFileURL( base2.pData, rel.pData , &target.pData );
-        CPPUNIT_ASSERT_MESSAGE("failure #2",  osl_File_E_None == e );
+        ASSERT_TRUE(osl_File_E_None == e) << "failure #2";
         if( osl_File_E_None == e )
         {
-            CPPUNIT_ASSERT_MESSAGE("failure #2.1",  target.equalsAscii( aSource2[i+1] ) );
+            ASSERT_TRUE(target.equalsAscii( aSource2[i+1] )) << "failure #2.1";
         }
         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
         OString obase = OUStringToOString( base2 , RTL_TEXTENCODING_ASCII_US );
@@ -156,7 +145,7 @@ void oldtestfile::test_file_002()
     }
 }
 
-void oldtestfile::test_file_003()
+TEST_F(oldtestfile, test_file_003)
 {
 #ifdef WIN32
     return;
@@ -189,17 +178,17 @@ void oldtestfile::test_file_003()
                         OUString target;
                         OUString rel = OUString::createFromAscii( aSource3[i] );
                         oslFileError e = osl_getAbsoluteFileURL( base3.pData, rel.pData , &target.pData );
-                        CPPUNIT_ASSERT_MESSAGE("failure #3",  osl_File_E_None == e );
+                        ASSERT_TRUE(osl_File_E_None == e) << "failure #3";
                         if( osl_File_E_None == e )
                         {
-                            CPPUNIT_ASSERT_MESSAGE("failure #4",  target.getLength() >= dir.getLength() );
+                            ASSERT_TRUE(target.getLength() >= dir.getLength()) << "failure #4";
                             if( target.getLength() >= dir.getLength() )
                             {
                                                             int j;
                                                             for( j = dir.getLength() ;
                                      j < target.getLength() &&
                                          aSource3[i+1][j-dir.getLength()] == target[j]   ; j++ );
-                                CPPUNIT_ASSERT_MESSAGE("failure #5",  j == target.getLength() );
+                                ASSERT_TRUE(j == target.getLength()) << "failure #5";
                             }
                         }
                         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
@@ -210,29 +199,29 @@ void oldtestfile::test_file_003()
                 }
                 else
                 {
-                    CPPUNIT_ASSERT_MESSAGE("failure #6",  0 );
+                    ASSERT_TRUE(0) << "failure #6";
                 }
                 rmdir( "a/b" );
             }
             else
             {
-                CPPUNIT_ASSERT_MESSAGE("failure #7",  0 );
+                ASSERT_TRUE(0) << "failure #7";
             }
             rmdir( "a" );
         }
         else
         {
-            CPPUNIT_ASSERT_MESSAGE("failure #8",  0 );
+            ASSERT_TRUE(0) << "failure #8";
         }
     }
     else
     {
-        CPPUNIT_ASSERT_MESSAGE("failure #9",  0 );
+        ASSERT_TRUE(0) << "failure #9";
     }
 #endif
 }
 
-void oldtestfile::test_file_004()
+TEST_F(oldtestfile, test_file_004)
 {
 #ifdef WIN32
     return;
@@ -245,10 +234,10 @@ void oldtestfile::test_file_004()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource1[i] );
         oslFileError e = osl_getAbsoluteFileURL( base4.pData, rel.pData , &target.pData );
-        CPPUNIT_ASSERT_MESSAGE("failure #10",  osl_File_E_None == e );
+        ASSERT_TRUE(osl_File_E_None == e) << "failure #10";
         if( osl_File_E_None == e )
         {
-            CPPUNIT_ASSERT_MESSAGE("failure #10.1",  target.equalsAscii( aSource1[i+1] ) );
+            ASSERT_TRUE(target.equalsAscii( aSource1[i+1] )) << "failure #10.1";
         }
         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
         OString obase = OUStringToOString( base4 , RTL_TEXTENCODING_ASCII_US );
@@ -262,8 +251,10 @@ void oldtestfile::test_file_004()
 } // namespace osl_test_file
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_test_file::oldtestfile, "osl_File" );
 
-// -----------------------------------------------------------------------------
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
 
