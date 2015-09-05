@@ -24,7 +24,6 @@
 
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-#include "RefFunctor.hxx"
 #include <rtl/ustring.hxx>
 
 namespace dbaui

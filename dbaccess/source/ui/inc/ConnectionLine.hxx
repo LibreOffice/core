@@ -21,7 +21,6 @@
 
 #include <tools/gen.hxx>
 #include "ConnectionLineData.hxx"
-#include <functional>
 #include <vcl/vclptr.hxx>
 
 class OutputDevice;
@@ -68,29 +67,6 @@ namespace dbaui
         OConnectionLineDataRef  GetData() const { return m_pData; }
 
         Point               getMidPoint() const;
-    };
-    /// unary_function Functor object for class OConnectionLine returntype is void
-    /// draws a connectionline object on outputdevice
-    struct TConnectionLineDrawFunctor : std::unary_function<OConnectionLine*, void>
-    {
-        VclPtr<OutputDevice> pDevice;
-        TConnectionLineDrawFunctor(OutputDevice* _pDevice)
-        {
-            pDevice = _pDevice;
-        }
-        inline void operator()(OConnectionLine* _pLine)
-        {
-            _pLine->Draw(pDevice);
-        }
-    };
-    /// binary_function Functor object for class OConnectionLine returntype is bool
-    /// checks if the point is on connectionline
-    struct TConnectionLineCheckHitFunctor : ::std::binary_function<OConnectionLine*,Point,bool>
-    {
-        inline bool operator()(const OConnectionLine* lhs,const Point& rhs) const
-        {
-            return lhs->CheckHit(rhs);
-        }
     };
 
 }

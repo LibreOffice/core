@@ -23,7 +23,6 @@
 #include "JoinTableView.hxx"
 #include <comphelper/stl_types.hxx>
 #include "ConnectionLineAccess.hxx"
-#include <algorithm>
 
 using namespace dbaui;
 using namespace comphelper;
@@ -112,7 +111,8 @@ namespace dbaui
     bool OTableConnection::RecalcLines()
     {
         // call RecalcLines on each line
-        ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),::std::mem_fun(&OConnectionLine::RecalcLine));
+        for( const auto& pLine : m_vConnLine )
+            pLine->RecalcLine();
         return true;
     }
     OTableWindow* OTableConnection::GetSourceWin() const
@@ -153,7 +153,9 @@ namespace dbaui
         // check if the point hit our line
         return ::std::any_of(m_vConnLine.begin(),
                              m_vConnLine.end(),
-                             ::std::bind2nd(TConnectionLineCheckHitFunctor(),rMousePos));
+                             [&rMousePos]
+                             ( const OConnectionLine* pLine )
+                             { return pLine->CheckHit( rMousePos ); } );
     }
 
     bool OTableConnection::InvalidateConnection()
@@ -196,7 +198,8 @@ namespace dbaui
     void OTableConnection::Draw(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
     {
         // Draw line
-        std::for_each(m_vConnLine.begin(), m_vConnLine.end(), TConnectionLineDrawFunctor(&rRenderContext));
+        for( const auto& pLine : m_vConnLine )
+             pLine->Draw( &rRenderContext );
     }
 }
 
