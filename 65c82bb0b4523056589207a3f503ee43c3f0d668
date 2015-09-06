@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da0c15f0_f91f5759",
+        "filename": "dbaccess/source/core/api/OptimisticSet.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-06T01:22:08Z",
+      "side": 0,
+      "message": "These functions are eerily similar. I think I well designed functor could reduce much of the duplicate code.",
+      "revId": "65c82bb0b4523056589207a3f503ee43c3f0d668",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da0c15f0_992a9b7d",
+        "filename": "dbaccess/source/ui/inc/RefFunctor.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-06T01:22:08Z",
+      "side": 0,
+      "message": "This functor is only used once, and I replaced it.",
+      "revId": "65c82bb0b4523056589207a3f503ee43c3f0d668",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
