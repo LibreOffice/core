@@ -36,6 +36,9 @@ namespace sw { namespace mark
         : virtual public SwModify // inherited as interface
         , public ::boost::totally_ordered<IMark>
     {
+        protected:
+            IMark() = default;
+
         public:
             //getters
             virtual const SwPosition& GetMarkPos() const =0;
@@ -67,21 +70,33 @@ namespace sw { namespace mark
 
             virtual OUString ToString( ) const =0;
             virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const = 0;
+        private:
+            IMark(IMark&) = delete;
+            IMark &operator =(IMark const&) = delete;
     };
 
     class SW_DLLPUBLIC IBookmark
         : virtual public IMark
     {
+        protected:
+            IBookmark() = default;
+
         public:
             virtual const OUString& GetShortName() const =0;
             virtual const vcl::KeyCode& GetKeyCode() const =0;
             virtual void SetShortName(const OUString&) =0;
             virtual void SetKeyCode(const vcl::KeyCode&) =0;
+        private:
+            IBookmark(IBookmark&) = delete;
+            IBookmark &operator =(IBookmark const&) = delete;
     };
 
     class SW_DLLPUBLIC IFieldmark
         : virtual public IMark
     {
+        protected:
+            IFieldmark() = default;
+
         public:
             typedef ::std::map< OUString, ::com::sun::star::uno::Any> parameter_map_t;
             //getters
@@ -94,14 +109,23 @@ namespace sw { namespace mark
             virtual void SetFieldname(const OUString& rFieldname) =0;
             virtual void SetFieldHelptext(const OUString& rFieldHelptext) =0;
             virtual void Invalidate() = 0;
+        private:
+            IFieldmark(IFieldmark&) = delete;
+            IFieldmark &operator =(IFieldmark const&) = delete;
     };
 
     class SW_DLLPUBLIC ICheckboxFieldmark
         : virtual public IFieldmark
     {
+        protected:
+            ICheckboxFieldmark() = default;
+
         public:
             virtual bool IsChecked() const =0;
             virtual void SetChecked(bool checked) =0;
+        private:
+            ICheckboxFieldmark(ICheckboxFieldmark&) = delete;
+            ICheckboxFieldmark &operator =(ICheckboxFieldmark const&) = delete;
     };
 
     // Apple llvm-g++ 4.2.1 with _GLIBCXX_DEBUG won't eat boost::bind for this

@@ -158,6 +158,8 @@ class SW_DLLPUBLIC SwModify: public SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE
         { NotifyClients( pOld, pNew ); };
 
+    SwModify(SwModify&) = delete;
+    SwModify &operator =(const SwModify&) = delete;
 public:
     SwModify()
         : SwClient(nullptr), m_pWriterListeners(nullptr), m_bModifyLocked(false), bLockClientList(false), m_bInDocDTOR(false), m_bInCache(false), m_bInSwFntCache(false)
