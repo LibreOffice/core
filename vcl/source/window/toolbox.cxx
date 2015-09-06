@@ -2908,45 +2908,46 @@ void ToolBox::ImplDrawSpin(vcl::RenderContext& rRenderContext, bool bUpperIn, bo
 
 void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, const Rectangle& rRect)
 {
+    if ( nPos >= mpData->m_aItems.size() - 1 )
+        // no separator if it's the last item
+        return;
+
     ImplToolItem* pItem = &mpData->m_aItems[nPos];
-    ImplToolItem* pTempItem = &mpData->m_aItems[nPos-1];
+    ImplToolItem* pPreviousItem = &mpData->m_aItems[nPos-1];
+    ImplToolItem* pNextItem = &mpData->m_aItems[nPos+1];
 
-    // no separator before or after windows or at breaks
-    if (pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size() - 1)
+    if ( ( pPreviousItem->mbShowWindow && pNextItem->mbShowWindow ) || pNextItem->mbBreak )
+        // no separator between two windows or before a break
+        return;
+
+    bool bNativeOk = false;
+    ControlPart nPart = IsHorizontal() ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ;
+    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, nPart))
     {
-        pTempItem = &mpData->m_aItems[nPos+1];
-        if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
-        {
-            bool bNativeOk = false;
-            ControlPart nPart = IsHorizontal() ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ;
-            if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, nPart))
-            {
-                ImplControlValue aControlValue;
-                ControlState     nState = ControlState::NONE;
-                bNativeOk = rRenderContext.DrawNativeControl(CTRL_TOOLBAR, nPart, rRect, nState, aControlValue, OUString());
-            }
+        ImplControlValue aControlValue;
+        ControlState     nState = ControlState::NONE;
+        bNativeOk = rRenderContext.DrawNativeControl(CTRL_TOOLBAR, nPart, rRect, nState, aControlValue, OUString());
+    }
 
-            /* Draw the widget only if it can't be drawn natively. */
-            if (!bNativeOk)
-            {
-                long nCenterPos, nSlim;
-                const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-                rRenderContext.SetLineColor(rStyleSettings.GetSeparatorColor());
-                if (IsHorizontal())
-                {
-                    nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
-                    nCenterPos = pItem->maRect.Center().X();
-                    rRenderContext.DrawLine(Point(nCenterPos, pItem->maRect.Top() + nSlim),
-                                            Point(nCenterPos, pItem->maRect.Bottom() - nSlim));
-                }
-                else
-                {
-                    nSlim = (pItem->maRect.Right() - pItem->maRect.Left ()) / 4;
-                    nCenterPos = pItem->maRect.Center().Y();
-                    rRenderContext.DrawLine(Point(pItem->maRect.Left() + nSlim, nCenterPos),
-                                            Point(pItem->maRect.Right() - nSlim, nCenterPos));
-                }
-            }
+    /* Draw the widget only if it can't be drawn natively. */
+    if (!bNativeOk)
+    {
+        long nCenterPos, nSlim;
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        rRenderContext.SetLineColor(rStyleSettings.GetSeparatorColor());
+        if (IsHorizontal())
+        {
+            nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
+            nCenterPos = pItem->maRect.Center().X();
+            rRenderContext.DrawLine(Point(nCenterPos, pItem->maRect.Top() + nSlim),
+                                    Point(nCenterPos, pItem->maRect.Bottom() - nSlim));
+        }
+        else
+        {
+            nSlim = (pItem->maRect.Right() - pItem->maRect.Left ()) / 4;
+            nCenterPos = pItem->maRect.Center().Y();
+            rRenderContext.DrawLine(Point(pItem->maRect.Left() + nSlim, nCenterPos),
+                                    Point(pItem->maRect.Right() - nSlim, nCenterPos));
         }
     }
 }
