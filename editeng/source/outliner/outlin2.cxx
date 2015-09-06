@@ -126,7 +126,11 @@ void Outliner::SetNotifyHdl( const Link<EENotify&,void>& rLink )
         pEditEngine->SetNotifyHdl( LINK( this, Outliner, EditEngineNotifyHdl ) );
     else
         pEditEngine->SetNotifyHdl( Link<EENotify&,void>() );
+}
 
+void Outliner::SetChainingEventHdl( const Link<>& rLink )
+{
+    pEditEngine->SetChainingEventHdl( rLink );
 }
 
 void Outliner::SetStatusEventHdl( const Link<EditStatus&, void>& rLink )

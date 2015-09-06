@@ -476,6 +476,11 @@ private:
 
     Timer               aOnlineSpellTimer;
 
+    // For Chaining
+    sal_Int32 mnOverflowingPara = -1;
+    sal_Int32 mnOverflowingLine = -1;
+    bool mbNeedsChainingHandling = false;
+
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
     Timer               aStatusTimer;
@@ -489,6 +494,8 @@ private:
     Link<LinkParamNone*,void>      aModifyHdl;
     Link<EditView*,void>           maBeginDropHdl;
     Link<EditView*,void>           maEndDropHdl;
+
+    Link<>              aChainingHdlLink;
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
@@ -524,6 +531,8 @@ private:
 
     EditUndoSetAttribs* CreateAttribUndo( EditSelection aSel, const SfxItemSet& rSet );
 
+    EditTextObject* GetEmptyTextObject();
+
     EditPaM             GetPaM( Point aDocPos, bool bSmart = true );
     EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, bool bSmart = true );
     long GetXPos(const ParaPortion* pParaPortion, const EditLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart = false) const;
@@ -538,6 +547,8 @@ private:
     EditTextObject*     CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
     EditSelection       InsertTextObject( const EditTextObject&, EditPaM aPaM );
     EditSelection       InsertText( css::uno::Reference< css::datatransfer::XTransferable >& rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial );
+
+    void                CheckPageOverflow();
 
     EditPaM             Clear();
     EditPaM             RemoveText();
@@ -674,6 +685,9 @@ private:
     css::uno::Reference < css::i18n::XBreakIterator > ImplGetBreakIterator() const;
     css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
 
+    void ImplUpdateOverflowingParaNum( sal_uInt32 );
+    void ImplUpdateOverflowingLineNum( sal_uInt32, sal_uInt32, sal_uInt32 );
+
     SpellInfo *     CreateSpellInfo( bool bMultipleDocs );
 
     ImpEditEngine(); // disabled
@@ -705,6 +719,8 @@ public:
 
     void                    SetVertical( bool bVertical );
     bool                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
+
+    bool IsPageOverflow( ) const;
 
     void                    SetFixedCellHeight( bool bUseFixedCellHeight );
     bool                    IsFixedCellHeight() const { return GetEditDoc().IsFixedCellHeight(); }
@@ -821,6 +837,7 @@ public:
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
     Link<LinkParamNone*,void> GetModifyHdl() const { return aModifyHdl; }
 
+    void            SetChainingEventHdl( const Link<>& rLink )  { aChainingHdlLink = rLink; }
 
     bool            IsInSelectionMode() { return bInSelection; }
 
@@ -854,6 +871,7 @@ public:
     inline ESelection     CreateESel( const EditSelection& rSel );
     inline EditSelection  CreateSel( const ESelection& rSel );
 
+    void                CallChainingEventHdl();
 
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
     SfxStyleSheetPool*  GetStyleSheetPool() const { return pStylePool; }
@@ -982,12 +1000,16 @@ public:
     EditSelection       TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
     short               ReplaceTextOnly( ContentNode* pNode, sal_Int32 nCurrentStart, sal_Int32 nLen, const OUString& rText, const css::uno::Sequence< sal_Int32 >& rOffsets );
 
-
     void                SetAsianCompressionMode( sal_uInt16 n );
     sal_uInt16          GetAsianCompressionMode() const { return nAsianCompressionMode; }
 
     void                SetKernAsianPunctuation( bool b );
     bool                IsKernAsianPunctuation() const { return bKernAsianPunctuation; }
+
+    sal_Int32 GetOverflowingParaNum() const { return mnOverflowingPara; }
+    sal_Int32 GetOverflowingLineNum() const { return mnOverflowingLine; }
+    void ClearOverflowingParaNum() { mnOverflowingPara = -1; }
+
 
     void                SetAddExtLeading( bool b );
     bool                IsAddExtLeading() const { return bAddExtLeading; }

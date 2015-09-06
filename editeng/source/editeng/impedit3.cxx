@@ -343,6 +343,12 @@ void ImpEditEngine::CheckIdleFormatter()
         FormatDoc();
 }
 
+bool ImpEditEngine::IsPageOverflow( ) const
+{
+    return mbNeedsChainingHandling;
+}
+
+
 void ImpEditEngine::FormatFullDoc()
 {
     for ( sal_Int32 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
@@ -554,6 +560,42 @@ void ImpEditEngine::CheckAutoPageSize()
             pView->pImpEditView->RecalcOutputArea();
         }
     }
+}
+
+void ImpEditEngine::CheckPageOverflow()
+{
+    // FIXME(matteocam)
+    /* fprintf( stderr, IsPageOverflow(aPaperSize, aPrevPaperSize)
+                        ? "YES Overflow!\n"  : "NO Overflow!\n" ); */
+    // setting overflow status
+
+    fprintf(stderr, "[CONTROL_STATUS] AutoPageSize is %s",  ( aStatus.GetControlWord() & EEControlBits::AUTOPAGESIZE ) ? "ON\n" : "OFF\n" );
+
+    sal_uInt32 nBoxHeight = GetMaxAutoPaperSize().Height();
+    fprintf(stderr, "[OVERFLOW-CHECK] Current MaxAutoPaperHeight is %d\n", nBoxHeight);
+
+    sal_uInt32 nTxtHeight = CalcTextHeight(NULL);
+    fprintf(stderr, "[OVERFLOW-CHECK] Current Text Height is %d\n", nTxtHeight);
+
+    sal_uInt32 nParaCount = GetParaPortions().Count();
+    sal_uInt32 nFirstLineCount = GetLineCount(0);
+    bool bOnlyOneEmptyPara = (nParaCount == 1) &&
+                            (nFirstLineCount == 1) &&
+                            (GetLineLen(0,0) == 0);
+
+    if (nTxtHeight > nBoxHeight && !bOnlyOneEmptyPara)
+    {
+        // which paragraph is the first to cause higher size of the box?
+        ImplUpdateOverflowingParaNum( nBoxHeight); // XXX: currently only for horizontal text
+        //aStatus.SetPageOverflow(true);
+        mbNeedsChainingHandling = true;
+    } else
+    {
+        // No overflow if withing box boundaries
+        //aStatus.SetPageOverflow(false);
+        mbNeedsChainingHandling = false;
+    }
+
 }
 
 static sal_Int32 ImplCalculateFontIndependentLineSpacing( const sal_Int32 nFontHeight )
@@ -4029,6 +4071,17 @@ void ImpEditEngine::CallStatusHdl()
     }
 }
 
+void ImpEditEngine::CallChainingEventHdl()
+{
+    // XXX: We don't use this method any more at the moment.
+    // only if it's the right ImpEditEngine (with right info on changes in text)
+    if ( aChainingHdlLink.IsSet() /* && aStatus.GetStatusWord() */)
+    {
+        aChainingHdlLink.Call( &mbNeedsChainingHandling );
+
+    }
+}
+
 ContentNode* ImpEditEngine::GetPrevVisNode( ContentNode* pCurNode )
 {
     const ParaPortion* pPortion = FindParaPortion( pCurNode );
@@ -4572,5 +4625,59 @@ void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* 
         }
     }
 }
+
+void ImpEditEngine::ImplUpdateOverflowingParaNum(sal_uInt32 nPaperHeight)
+{
+    sal_uInt32 nY = 0;
+    sal_uInt32 nPH;
+
+    for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ ) {
+        ParaPortion* pPara = GetParaPortions()[nPara];
+        nPH = pPara->GetHeight();
+        nY += nPH;
+        if ( nY > nPaperHeight /*nCurTextHeight*/ ) // found first paragraph overflowing
+        {
+            mnOverflowingPara = nPara;
+            fprintf(stderr, "[CHAINING] Setting first overflowing #Para#: %d\n", nPara);
+            ImplUpdateOverflowingLineNum( nPaperHeight, nPara, nY-nPH);
+            return;
+        }
+    }
+}
+
+void ImpEditEngine::ImplUpdateOverflowingLineNum(sal_uInt32 nPaperHeight,
+                                             sal_uInt32 nOverflowingPara,
+                                             sal_uInt32 nHeightBeforeOverflowingPara)
+{
+    sal_uInt32 nY = nHeightBeforeOverflowingPara;
+    sal_uInt32 nLH;
+
+    ParaPortion *pPara = GetParaPortions()[nOverflowingPara];
+
+    // Like UpdateOverflowingParaNum but for each line in the first
+    //  overflowing paragraph.
+    for ( sal_Int32 nLine = 0; nLine < pPara->GetLines().Count(); nLine++ ) {
+        // XXX: We must use a reference here because the copy constructor resets the height
+        EditLine &aLine = pPara->GetLines()[nLine];
+        nLH = aLine.GetHeight();
+        nY += nLH;
+
+        // Debugging output
+        if (nLine == 0) {
+            fprintf(stderr, "[CHAINING] First line has height %d\n", nLH);
+        }
+
+        if ( nY > nPaperHeight ) // found first line overflowing
+        {
+            mnOverflowingLine = nLine;
+            fprintf(stderr, "[CHAINING] Setting first overflowing -Line- to: %d\n", nLine);
+            return;
+        }
+    }
+
+    assert(0); // You should never get here
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
