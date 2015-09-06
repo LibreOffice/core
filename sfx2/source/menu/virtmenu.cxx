@@ -930,7 +930,7 @@ IMPL_LINK_TYPED( SfxVirtualMenu, Deactivate, Menu *, pMenu, bool )
 
 // called on activation of the SV-Menu
 
-IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
+IMPL_LINK_TYPED( SfxVirtualMenu, Select, Menu *, pMenu, bool )
 {
     sal_uInt16 nSlotId = (sal_uInt16) pMenu->GetCurItemId();
     SAL_INFO(
@@ -960,12 +960,12 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
             nTaskId++;
         }
 
-        return sal_IntPtr(true);
+        return true;
     }
     else if ( nSlotId >= START_ITEMID_PICKLIST && nSlotId <= END_ITEMID_PICKLIST )
     {
         SfxPickList::ExecuteMenuEntry( nSlotId );
-        return sal_IntPtr(true);
+        return true;
     }
 
     OUString sCommand = pMenu->GetItemCommand(nSlotId);
@@ -974,7 +974,7 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
     else
         pBindings->Execute(nSlotId);
 
-    return sal_IntPtr(true);
+    return true;
 }
 
 

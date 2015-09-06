@@ -287,7 +287,7 @@ protected:
 
     void            Clear();
 
-    DECL_LINK(      PopupHdl, Menu* );
+    DECL_LINK_TYPED( PopupHdl, Menu*, bool );
     DECL_LINK_TYPED( Timeout, Timer*, void );
     DECL_LINK(      DoubleClickHdl, void* );
 

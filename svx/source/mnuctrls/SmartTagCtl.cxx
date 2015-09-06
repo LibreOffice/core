@@ -154,10 +154,10 @@ void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const S
 
 
 
-IMPL_LINK( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
+IMPL_LINK_TYPED( SvxSmartTagsControl, MenuSelect, Menu *, pMen, bool )
 {
     if ( !mpSmartTagItem )
-        return 0;
+        return false;
 
     sal_uInt16 nMyId = pMen->GetCurItemId();
 
@@ -185,7 +185,7 @@ IMPL_LINK( SvxSmartTagsControl, MenuSelect, PopupMenu *, pMen )
     //SfxBoolItem aBool(SID_OPEN_SMARTTAGOPTIONS, sal_True);
     //GetBindings().GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON, &aBool, 0L );
 
-    return 0;
+    return false;
 }
 
 SvxSmartTagsControl::~SvxSmartTagsControl()

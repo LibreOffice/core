@@ -709,61 +709,61 @@ void IMapWindow::DoPropertyDialog()
     }
 }
 
-IMPL_LINK( IMapWindow, MenuSelectHdl, Menu*, pMenu )
+IMPL_LINK_TYPED( IMapWindow, MenuSelectHdl, Menu*, pMenu, bool )
 {
-    if (pMenu)
+    if (!pMenu)
+        return false;
+
+    sal_uInt16  nId = pMenu->GetCurItemId();
+
+    switch(nId)
     {
-        sal_uInt16  nId = pMenu->GetCurItemId();
+        case( MN_URL ):
+            DoPropertyDialog();
+        break;
 
-        switch(nId)
+        case( MN_MACRO ):
+            DoMacroAssign();
+        break;
+
+        case( MN_ACTIVATE ):
         {
-            case( MN_URL ):
-                DoPropertyDialog();
-            break;
+            const bool bNewState = !pMenu->IsItemChecked( MN_ACTIVATE );
 
-            case( MN_MACRO ):
-                DoMacroAssign();
-            break;
-
-            case( MN_ACTIVATE ):
-            {
-                const bool bNewState = !pMenu->IsItemChecked( MN_ACTIVATE );
-
-                pMenu->CheckItem( MN_ACTIVATE, bNewState );
-                SetCurrentObjState( bNewState );
-                UpdateInfo( false );
-            }
-            break;
-
-            case( MN_FRAME_TO_TOP ):
-                pView->PutMarkedToTop();
-            break;
-
-            case( MN_MOREFRONT ):
-                pView->MovMarkedToTop();
-            break;
-
-            case( MN_MOREBACK ):
-                pView->MovMarkedToBtm();
-            break;
-
-            case( MN_FRAME_TO_BOTTOM ):
-                pView->PutMarkedToBtm();
-            break;
-
-            case( MN_MARK_ALL ):
-                pView->MarkAll();
-            break;
-
-            case( MN_DELETE1 ):
-                pView->DeleteMarked();
-
-            default :
-            break;
+            pMenu->CheckItem( MN_ACTIVATE, bNewState );
+            SetCurrentObjState( bNewState );
+            UpdateInfo( false );
         }
+        break;
+
+        case( MN_FRAME_TO_TOP ):
+            pView->PutMarkedToTop();
+        break;
+
+        case( MN_MOREFRONT ):
+            pView->MovMarkedToTop();
+        break;
+
+        case( MN_MOREBACK ):
+            pView->MovMarkedToBtm();
+        break;
+
+        case( MN_FRAME_TO_BOTTOM ):
+            pView->PutMarkedToBtm();
+        break;
+
+        case( MN_MARK_ALL ):
+            pView->MarkAll();
+        break;
+
+        case( MN_DELETE1 ):
+            pView->DeleteMarked();
+
+        default :
+        break;
     }
 
-    return 0;
+    return false;
 }
 
 void IMapWindow::CreateDefaultObject()

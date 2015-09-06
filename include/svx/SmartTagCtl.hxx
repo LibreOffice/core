@@ -61,7 +61,7 @@ private:
     std::vector< InvokeAction > maInvokeActions;
 
     void            FillMenu();
-    DECL_LINK( MenuSelect, PopupMenu * );
+    DECL_LINK_TYPED( MenuSelect, Menu *, bool);
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
 

@@ -50,7 +50,7 @@ class SidebarTextControl : public Control
         virtual OUString GetSurroundingText() const SAL_OVERRIDE;
         virtual Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
 
-        DECL_LINK( Select, Menu* );
+        DECL_LINK_TYPED( Select, Menu*, bool );
 
     public:
         SidebarTextControl( SwSidebarWin& rSidebarWin,

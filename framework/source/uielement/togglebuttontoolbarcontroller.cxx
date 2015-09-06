@@ -263,7 +263,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
     }
 }
 
-IMPL_LINK( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_TYPED( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu, bool )
 {
     SolarMutexGuard aGuard;
 
@@ -274,7 +274,7 @@ IMPL_LINK( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu )
 
         execute( 0 );
     }
-    return 0;
+    return false;
 }
 
 } // namespace

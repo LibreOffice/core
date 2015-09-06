@@ -813,7 +813,7 @@ IMPL_LINK_TYPED( MenuManager, Deactivate, Menu *, pMenu, bool )
     return true;
 }
 
-IMPL_LINK( MenuManager, Select, Menu *, pMenu )
+IMPL_LINK_TYPED( MenuManager, Select, Menu *, pMenu, bool )
 {
     URL                     aTargetURL;
     Sequence<PropertyValue> aArgs;
@@ -883,7 +883,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
     if ( xDispatch.is() )
         xDispatch->dispatch( aTargetURL, aArgs );
 
-    return 1;
+    return true;
 }
 
 IMPL_LINK_NOARG_TYPED(MenuManager, Highlight, Menu *, bool)

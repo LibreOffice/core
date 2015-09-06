@@ -492,7 +492,7 @@ void SmFontSizeDialog::WriteTo(SmFormat &rFormat) const
     rFormat.RequestApplyChanges();
 }
 
-IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_TYPED( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu, bool )
 {
     SmFontPickListBox *pActiveListBox;
 
@@ -517,7 +517,7 @@ IMPL_LINK( SmFontTypeDialog, MenuSelectHdl, Menu *, pMenu )
         if (pFontDialog->Execute() == RET_OK)
             pActiveListBox->ReadFrom(*pFontDialog);
     }
-    return 0;
+    return false;
 }
 
 
@@ -710,10 +710,10 @@ IMPL_LINK( SmDistanceDialog, GetFocusHdl, Control *, pControl )
     return 0;
 }
 
-IMPL_LINK( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_TYPED( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu, bool )
 {
     SetCategory(pMenu->GetCurItemId() - 1);
-    return 0;
+    return false;
 }
 
 

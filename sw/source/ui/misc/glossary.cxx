@@ -441,7 +441,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, EnableHdl, Menu *, pMn, bool )
     return true;
 }
 
-IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
+IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
 {
     OString sItemIdent(pMn->GetCurItemIdent());
 
@@ -468,7 +468,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_DOUBLE_SHORTNAME), VCL_MESSAGE_INFO)->Execute();
             m_pShortNameEdit->SetSelection(Selection(0, SELECTION_MAX));
             m_pShortNameEdit->GrabFocus();
-            return 1;
+            return true;
         }
         if(pGlossaryHdl->NewGlossary(aStr, aShortName, false, bNoAttr ))
         {
@@ -608,9 +608,9 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     }
     else
     {
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
 // dialog manage regions

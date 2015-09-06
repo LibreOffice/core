@@ -299,7 +299,7 @@ void SwInputWindow::ShowWin()
     ToolBox::Show();
 }
 
-IMPL_LINK( SwInputWindow, MenuHdl, Menu *, pMenu )
+IMPL_LINK_TYPED( SwInputWindow, MenuHdl, Menu *, pMenu, bool )
 {
 static const char * const aStrArr[] = {
     sCalc_Phd,
@@ -336,7 +336,7 @@ static const char * const aStrArr[] = {
         aTmp += " ";
         aEdit->ReplaceSelected( aTmp );
     }
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED(SwInputWindow, DropdownClickHdl, ToolBox *, void)

@@ -1831,7 +1831,7 @@ IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
         if (pManagerMenu)
         {
             // Unlink our listeners again -- see above for why.
-            pManagerMenu->SetSelectHdl( Link<>() );
+            pManagerMenu->SetSelectHdl( Link<Menu*, bool>() );
             pManagerMenu->SetDeactivateHdl( Link<Menu *, bool>() );
         }
     }
@@ -1849,7 +1849,7 @@ IMPL_LINK_TYPED( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
     ImplClearPopupMenu( pToolBar );
  }
 
-IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
+IMPL_LINK_TYPED( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
 {
     // We have to hold a reference to ourself as it is possible that we will be disposed and
     // our refcount could be zero (destruction) otherwise.
@@ -1861,7 +1861,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
         SolarMutexGuard g;
 
         if ( m_bDisposed )
-            return 1;
+            return true;
 
         switch ( pMenu->GetCurItemId() )
         {
@@ -2026,7 +2026,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
         ImplClearPopupMenu( m_pToolBar );
     }
 
-    return 1;
+    return true;
 }
 
 IMPL_LINK_NOARG_TYPED(ToolBarManager, Select, ToolBox *, void)

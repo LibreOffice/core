@@ -88,7 +88,7 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
     if(pView && !pView->GetDocShell()->IsReadOnly() &&
        !pView->GetWrtShell().HasReadonlySel() )
     {
-        Link<> aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
+        Link<Menu*,bool> aLnk = LINK(this, SwTbxAutoTextCtrl, PopupHdl);
 
         pPopup = new PopupMenu;
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
@@ -139,7 +139,7 @@ void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
 }
 
-IMPL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
+IMPL_STATIC_LINK_TYPED(SwTbxAutoTextCtrl, PopupHdl, Menu*, pMenu, bool)
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
 
@@ -159,7 +159,7 @@ IMPL_STATIC_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
     pGlosHdl->SetCurGroup(sGroup, true);
     pGlosHdl->InsertGlossary(sShortName);
 
-    return 0;
+    return false;
 }
 
 void SwTbxAutoTextCtrl::DelPopup()

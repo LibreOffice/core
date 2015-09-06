@@ -57,7 +57,7 @@ protected:
                             ~SfxMenuManager();
 public:
 
-    DECL_LINK( Select, Menu* );
+    DECL_LINK_TYPED( Select, Menu*, bool );
 
     SfxVirtualMenu*         GetMenu() const
                             { return pMenu; }

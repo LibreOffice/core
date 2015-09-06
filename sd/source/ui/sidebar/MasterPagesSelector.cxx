@@ -252,17 +252,17 @@ void MasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
         rMenu.EnableItem(SID_TP_SHOW_LARGE_PREVIEW, false);
 }
 
-IMPL_LINK(MasterPagesSelector, OnMenuItemSelected, Menu*, pMenu)
+IMPL_LINK_TYPED(MasterPagesSelector, OnMenuItemSelected, Menu*, pMenu, bool)
 {
     if (pMenu == NULL)
     {
         OSL_ENSURE(pMenu!=NULL, "MasterPagesSelector::OnMenuItemSelected: illegal menu!");
-        return 0;
+        return false;
     }
 
     pMenu->Deactivate();
     ExecuteCommand(pMenu->GetCurItemId());
-    return 0;
+    return false;
 }
 
 void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)

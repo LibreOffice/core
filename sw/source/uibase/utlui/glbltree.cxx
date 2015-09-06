@@ -771,10 +771,10 @@ void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
     }
 }
 
-IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
+IMPL_LINK_TYPED( SwGlobalTree, PopupHdl, Menu* , pMenu, bool)
 {
     ExcecuteContextMenuAction( pMenu->GetCurItemId());
-    return sal_IntPtr(true);
+    return true;
 }
 
 void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )

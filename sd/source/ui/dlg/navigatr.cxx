@@ -473,7 +473,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
  * Set DrageType and set image accordingly to it.
  * If the handler is called with NULL, the default (URL) is set.
  */
-IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_TYPED( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu, bool )
 {
     sal_uInt16 nMenuId;
     if( pMenu )
@@ -501,10 +501,10 @@ IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
                 maTlbObjects->SetSelectionMode( MULTIPLE_SELECTION );
         }
     }
-    return 0;
+    return false;
 }
 
-IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu )
+IMPL_LINK_TYPED( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu, bool )
 {
     if (pMenu != NULL)
     {
@@ -548,7 +548,7 @@ IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu )
         }
     }
 
-    return 0;
+    return false;
 }
 
 void SdNavigatorWin::Resize()

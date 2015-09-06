@@ -457,7 +457,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
     aPop.InsertItem(ITEM_UP,   rArr.GetString(rArr.FindIndex(ST_MENU_UP )));
     aPop.InsertItem(ITEM_DOWN, rArr.GetString(rArr.FindIndex(ST_MENU_DOWN )));
 
-    Link<> aSelLk = LINK(this, SwOneExampleFrame, PopupHdl );
+    Link<Menu*,bool> aSelLk = LINK(this, SwOneExampleFrame, PopupHdl );
     aPop.SetSelectHdl(aSelLk);
     if(EX_SHOW_ONLINE_LAYOUT == nStyleFlags)
     {
@@ -486,7 +486,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
 
 }
 
-IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
+IMPL_LINK_TYPED(SwOneExampleFrame, PopupHdl, Menu*, pMenu, bool )
 {
     sal_uInt16 nId = pMenu->GetCurItemId();
     if ((nId > ITEM_ZOOM) &&
@@ -511,7 +511,7 @@ IMPL_LINK(SwOneExampleFrame, PopupHdl, Menu*, pMenu )
         else
             xScrCrsr->screenDown();
     }
-    return 0;
+    return false;
 };
 
 SwFrmCtrlWindow::SwFrmCtrlWindow(vcl::Window* pParent, SwOneExampleFrame* pFrame)

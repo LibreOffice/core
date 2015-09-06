@@ -601,12 +601,12 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
 }
 
 
-IMPL_LINK( SmGraphicWindow, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_TYPED( SmGraphicWindow, MenuSelectHdl, Menu *, pMenu, bool )
 {
     SmViewShell *pViewSh = GetView();
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute( pMenu->GetCurItemId() );
-    return 0;
+    return false;
 }
 
 void SmGraphicWindow::SetZoom(sal_uInt16 Factor)

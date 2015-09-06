@@ -193,7 +193,7 @@ private:
     DECL_LINK(StateChangeHandler, void *);
     DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*);
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
-    DECL_LINK(OnMenuItemSelected, Menu*);
+    DECL_LINK_TYPED(OnMenuItemSelected, Menu*, bool);
 };
 
 } } // end of namespace ::sd::toolpanel

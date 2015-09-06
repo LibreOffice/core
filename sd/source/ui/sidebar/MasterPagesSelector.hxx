@@ -195,7 +195,7 @@ private:
     DECL_LINK(RightClickHandler, MouseEvent*);
     DECL_LINK(ContextMenuCallback, CommandEvent*);
     DECL_LINK(ContainerChangeListener, MasterPageContainerChangeEvent*);
-    DECL_LINK(OnMenuItemSelected, Menu*);
+    DECL_LINK_TYPED(OnMenuItemSelected, Menu*, bool);
 
     void SetItem (
         sal_uInt16 nIndex,

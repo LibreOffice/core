@@ -99,7 +99,7 @@ class IMapWindow : public GraphCtrl, public DropTargetHelper
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                         mxDocumentFrame;
 
-                        DECL_LINK( MenuSelectHdl, Menu* );
+                        DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
 
 protected:
 

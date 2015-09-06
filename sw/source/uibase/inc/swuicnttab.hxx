@@ -205,7 +205,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     DECL_LINK(TOXTypeHdl,   ListBox* );
     DECL_LINK_TYPED(AddStylesHdl, Button*, void );
     DECL_LINK_TYPED(MenuEnableHdl, Menu*, bool);
-    DECL_LINK(MenuExecuteHdl, Menu*);
+    DECL_LINK_TYPED(MenuExecuteHdl, Menu*, bool);
     DECL_LINK(LanguageHdl, ListBox*);
 
     DECL_LINK_TYPED(CheckBoxHdl, Button*, void );
