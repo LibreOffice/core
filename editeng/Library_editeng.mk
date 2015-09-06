@@ -22,6 +22,7 @@ $(eval $(call gb_Library_Library,editeng))
 $(eval $(call gb_Library_set_include,editeng,\
     $$(INCLUDE) \
     -I$(SRCDIR)/editeng/inc \
+    -I$(SRCDIR)/editeng/source/editeng \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,editeng,editeng/generated))
@@ -101,6 +102,7 @@ $(eval $(call gb_Library_add_exception_objects,editeng,\
     editeng/source/outliner/outlobj \
     editeng/source/outliner/outlundo \
     editeng/source/outliner/outlvw \
+    editeng/source/outliner/overflowingtxt \
     editeng/source/outliner/paralist \
     editeng/source/rtf/rtfitem \
     editeng/source/rtf/svxrtf \
