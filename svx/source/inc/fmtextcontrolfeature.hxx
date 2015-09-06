@@ -24,14 +24,14 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "fmslotinvalidator.hxx"
 
 
 namespace svx
 {
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::frame::XStatusListener
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::frame::XStatusListener
                                     >   FmTextControlFeature_Base;
 
     class FmTextControlFeature : public FmTextControlFeature_Base

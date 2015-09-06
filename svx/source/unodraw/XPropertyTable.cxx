@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/xdef.hxx>
 
@@ -40,7 +40,7 @@
 using namespace com::sun::star;
 using namespace ::cppu;
 
-class SvxUnoXPropertyTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
+class SvxUnoXPropertyTable : public WeakImplHelper< container::XNameContainer, lang::XServiceInfo >
 {
 private:
     XPropertyList*  mpList;

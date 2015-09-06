@@ -21,7 +21,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 #include <svx/xtable.hxx>
@@ -30,7 +30,7 @@ using namespace ::com::sun::star;
 
 namespace {
 
-class SvxUnoColorTable : public cppu::WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
+class SvxUnoColorTable : public cppu::WeakImplHelper< container::XNameContainer, lang::XServiceInfo >
 {
 private:
     XColorListRef pList;

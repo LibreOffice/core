@@ -34,7 +34,7 @@
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <AccessibleTableShape.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "cell.hxx"
 
@@ -46,7 +46,7 @@ namespace accessibility
 
 class AccessibleShapeTreeInfo;
 
-typedef ::cppu::ImplInheritanceHelper1< AccessibleContextBase, ::com::sun::star::accessibility::XAccessibleExtendedComponent > AccessibleCellBase;
+typedef ::cppu::ImplInheritanceHelper< AccessibleContextBase, ::com::sun::star::accessibility::XAccessibleExtendedComponent > AccessibleCellBase;
 
 class AccessibleCell : boost::noncopyable, public AccessibleCellBase, public AccessibleComponentBase, public IAccessibleViewForwarderListener
 {

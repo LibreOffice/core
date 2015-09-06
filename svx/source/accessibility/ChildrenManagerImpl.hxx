@@ -24,7 +24,7 @@
 #include <svx/IAccessibleParent.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <editeng/AccessibleContextBase.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 #include <vector>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -73,7 +73,7 @@ typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;
 */
 class ChildrenManagerImpl
     :   public MutexOwner,
-        public cppu::WeakComponentImplHelper2<
+        public cppu::WeakComponentImplHelper<
             ::com::sun::star::document::XEventListener,
             ::com::sun::star::view::XSelectionChangeListener>,
         public IAccessibleViewForwarderListener,

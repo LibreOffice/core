@@ -32,7 +32,6 @@
 #include <framework/sfxhelperfunctions.hxx>
 #include <framework/imageproducer.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/frame/XStatusListener.hpp>

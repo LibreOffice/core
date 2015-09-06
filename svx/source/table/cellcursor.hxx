@@ -22,7 +22,7 @@
 
 #include <com/sun/star/table/XMergeableCellRange.hpp>
 #include <com/sun/star/table/XCellCursor.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "cellrange.hxx"
 
 
@@ -31,7 +31,7 @@ namespace sdr { namespace table {
 
 struct CellPos;
 
-typedef ::cppu::ImplInheritanceHelper2< CellRange, ::com::sun::star::table::XCellCursor, ::com::sun::star::table::XMergeableCellRange > CellCursorBase;
+typedef ::cppu::ImplInheritanceHelper< CellRange, ::com::sun::star::table::XCellCursor, ::com::sun::star::table::XMergeableCellRange > CellCursorBase;
 
 class CellCursor : public CellCursorBase
 {

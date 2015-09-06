@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ref.hxx>
@@ -44,7 +44,7 @@ using namespace ::osl;
 
 namespace {
 
-class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo        ,
+class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo        ,
                                                    css::frame::XSynchronousDispatch > // => XDispatch!
 {
 

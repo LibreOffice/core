@@ -39,7 +39,7 @@
 #include <comphelper/uno3.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlnode.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <fmservs.hxx>
 #include <fmshimp.hxx>
 #include <sfx2/dispatch.hxx>
@@ -281,7 +281,7 @@ public:
 
 // class FmFilterAdapter, Listener an den FilterControls
 
-class FmFilterAdapter : public ::cppu::WeakImplHelper1< XFilterControllerListener >
+class FmFilterAdapter : public ::cppu::WeakImplHelper< XFilterControllerListener >
 {
     FmFilterModel*              m_pModel;
     Reference< XIndexAccess >   m_xControllers;

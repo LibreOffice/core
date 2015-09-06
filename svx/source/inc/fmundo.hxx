@@ -35,7 +35,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 #include <svl/lstner.hxx>
@@ -121,7 +121,7 @@ public:
 
 
 class SVX_DLLPRIVATE FmXUndoEnvironment
-    : public ::cppu::WeakImplHelper3<   ::com::sun::star::beans::XPropertyChangeListener
+    : public ::cppu::WeakImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
                                     ,   ::com::sun::star::container::XContainerListener
                                     ,   ::com::sun::star::util::XModifyListener
                                     >

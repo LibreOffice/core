@@ -31,8 +31,7 @@
 #include <svtools/svmedit2.hxx>
 #include <svtools/treelistbox.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/task/StatusIndicatorFactory.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -184,7 +183,7 @@ class IRecoveryUpdateListener
 };
 
 
-class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
+class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
 
     // types, const
@@ -309,7 +308,7 @@ class PluginProgressWindow : public vcl::Window
         virtual void dispose() SAL_OVERRIDE;
 };
 
-class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicator ,
+class PluginProgress : public ::cppu::WeakImplHelper< css::task::XStatusIndicator ,
                                                        css::lang::XComponent       >
 {
     // member

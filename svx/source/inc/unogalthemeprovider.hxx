@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_UNOGALTHEMEPROVIDER_HXX
 #define INCLUDED_SVX_SOURCE_INC_UNOGALTHEMEPROVIDER_HXX
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/gallery/XGalleryThemeProvider.hpp>
@@ -29,7 +29,7 @@ class Gallery;
 
 namespace {
 
-class GalleryThemeProvider : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XInitialization,
+class GalleryThemeProvider : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XInitialization,
                                                              ::com::sun::star::gallery::XGalleryThemeProvider,
                                                              ::com::sun::star::lang::XServiceInfo >
 {

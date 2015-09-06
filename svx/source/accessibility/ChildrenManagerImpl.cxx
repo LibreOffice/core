@@ -58,7 +58,7 @@ ChildrenManagerImpl::ChildrenManagerImpl (
     const uno::Reference<drawing::XShapes>& rxShapeList,
     const AccessibleShapeTreeInfo& rShapeTreeInfo,
     AccessibleContextBase& rContext)
-    : ::cppu::WeakComponentImplHelper2<
+    : ::cppu::WeakComponentImplHelper<
           ::com::sun::star::document::XEventListener,
           ::com::sun::star::view::XSelectionChangeListener>(maMutex),
       mxShapeList (rxShapeList),

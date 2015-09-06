@@ -70,6 +70,7 @@
 #include <memory>
 #include <o3tl/enumarray.hxx>
 #include <o3tl/enumrange.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace sdr::table;
@@ -83,7 +84,7 @@ using namespace ::com::sun::star::style;
 
 namespace sdr { namespace table {
 
-class SvxTableControllerModifyListener : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XModifyListener >
+class SvxTableControllerModifyListener : public ::cppu::WeakImplHelper< ::com::sun::star::util::XModifyListener >
 {
 public:
     explicit SvxTableControllerModifyListener( SvxTableController* pController )

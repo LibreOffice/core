@@ -35,7 +35,7 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
@@ -83,7 +83,7 @@ SfxChildWinInfo SvxRubyChildWindow::GetInfo() const
     return SfxChildWindow::GetInfo();
 }
 
-class SvxRubyData_Impl : public cppu::WeakImplHelper1<css::view::XSelectionChangeListener>
+class SvxRubyData_Impl : public cppu::WeakImplHelper<css::view::XSelectionChangeListener>
 {
     Reference<XModel> xModel;
     Reference<XRubySelection> xSelection;

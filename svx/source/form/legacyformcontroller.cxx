@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -58,7 +58,7 @@ namespace svxform
 
     //= LegacyFormController
 
-    typedef ::cppu::WeakImplHelper2 <   form::XFormController
+    typedef ::cppu::WeakImplHelper <   form::XFormController
                                     ,   XServiceInfo
                                     >   LegacyFormController_Base;
     /** is an implementation of the legacy form controller service, namely css.form.FormController, supporting the

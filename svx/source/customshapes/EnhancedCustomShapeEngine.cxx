@@ -51,7 +51,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/tools/unotools.hxx>
 #include <com/sun/star/document/XActionLockable.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace css;
@@ -62,7 +62,7 @@ class SdrObjCustomShape;
 
 namespace {
 
-class EnhancedCustomShapeEngine : public cppu::WeakImplHelper3
+class EnhancedCustomShapeEngine : public cppu::WeakImplHelper
 <
     css::lang::XInitialization,
     css::lang::XServiceInfo,

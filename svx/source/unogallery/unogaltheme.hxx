@@ -22,7 +22,7 @@
 
 #include <list>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>
@@ -38,7 +38,7 @@ namespace unogallery {
 // - GalleryTheme -
 
 
-class GalleryTheme : public ::cppu::WeakImplHelper2<
+class GalleryTheme : public ::cppu::WeakImplHelper<
                                                         ::com::sun::star::gallery::XGalleryTheme,
                                                         ::com::sun::star::lang::XServiceInfo >,
                      public SfxListener

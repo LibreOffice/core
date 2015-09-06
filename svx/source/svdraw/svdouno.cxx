@@ -62,10 +62,10 @@ using namespace sdr::contact;
 
 #include <com/sun/star/lang/XEventListener.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
-class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
+class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XEventListener >
 {
 protected:
     SdrUnoObj*                  pObj;

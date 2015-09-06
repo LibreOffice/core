@@ -21,7 +21,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
@@ -35,7 +35,7 @@ using namespace ::cppu;
 
 const sal_uInt16 NON_USER_DEFINED_GLUE_POINTS = 4;
 
-class SvxUnoGluePointAccess : public WeakImplHelper2< container::XIndexContainer, container::XIdentifierContainer >
+class SvxUnoGluePointAccess : public WeakImplHelper< container::XIndexContainer, container::XIdentifierContainer >
 {
 private:
     SdrObjectWeakRef    mpObject;

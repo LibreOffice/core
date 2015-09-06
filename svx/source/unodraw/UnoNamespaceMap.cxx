@@ -24,7 +24,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
@@ -46,7 +46,7 @@ namespace svx
     /** implements a component to export namespaces of all SvXMLAttrContainerItem inside
         one or two pools with a variable count of which ids.
     */
-    class NamespaceMap : public WeakImplHelper2< XNameAccess, XServiceInfo >
+    class NamespaceMap : public WeakImplHelper< XNameAccess, XServiceInfo >
     {
     private:
         sal_uInt16* mpWhichIds;

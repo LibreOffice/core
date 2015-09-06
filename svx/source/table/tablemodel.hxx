@@ -25,7 +25,7 @@
 #include <com/sun/star/table/XTable.hpp>
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/listenernotification.hxx>
 #include "celltypes.hxx"
@@ -50,7 +50,7 @@ protected:
     ~ICellRange() {}
 };
 
-typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::table::XTable, ::com::sun::star::util::XBroadcaster > TableModelBase;
+typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::table::XTable, ::com::sun::star::util::XBroadcaster > TableModelBase;
 
 class TableModel : public ::comphelper::OBaseMutex,
                    public TableModelBase,
