@@ -22,6 +22,9 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/textchain.hxx>
+#include <svx/textchainflow.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -48,6 +51,8 @@
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace com::sun::star;
@@ -1402,6 +1407,195 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
             default : break; // SDRTEXTANI_NONE, SDRTEXTANI_BLINK
         }
     }
+}
+
+void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutliner) const
+{
+    if (GetTextChain()->GetNilChainingEvent(this))
+        return;
+
+    GetTextChain()->SetNilChainingEvent(this, true);
+
+    TextChainFlow aTxtChainFlow(const_cast<SdrTextObj*>(this));
+    bool bIsOverflow;
+
+    // Some debug output
+    size_t nObjCount = pPage->GetObjCount();
+    for (unsigned i = 0; i < nObjCount; i++) {
+        SdrTextObj *pCurObj = (SdrTextObj *) pPage->GetObj(i);
+
+        if (pCurObj == this) {
+            fprintf(stderr, "Working on TextBox %d\n", i);
+            break;
+        }
+    }
+
+    aTxtChainFlow.CheckForFlowEvents(&rOutliner);
+
+    if (aTxtChainFlow.IsUnderflow() && !IsInEditMode())
+    {
+        // underflow-induced overflow
+        aTxtChainFlow.ExecuteUnderflow(&rOutliner);
+        bIsOverflow = aTxtChainFlow.IsOverflow();
+    } else {
+        // standard overflow (no underlow before)
+        bIsOverflow = aTxtChainFlow.IsOverflow();
+    }
+
+    if (bIsOverflow && !IsInEditMode()) {
+        // Initialize Chaining Outliner
+        SdrOutliner &rChainingOutl = pModel->GetChainingOutliner(this);
+        ImpInitDrawOutliner( rChainingOutl );
+        rChainingOutl.SetUpdateMode(true);
+        // We must pass the chaining outliner otherwise we would mess up decomposition
+        aTxtChainFlow.ExecuteOverflow(&rOutliner, &rChainingOutl);
+    }
+
+    GetTextChain()->SetNilChainingEvent(this, false);
+}
+
+void SdrTextObj::impDecomposeChainedTextPrimitive(
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
+        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const
+{
+    // decompose matrix to have position and size of text
+    basegfx::B2DVector aScale, aTranslate;
+    double fRotate, fShearX;
+    rSdrChainedTextPrimitive.getTextRangeTransform().decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // use B2DRange aAnchorTextRange for calculations
+    basegfx::B2DRange aAnchorTextRange(aTranslate);
+    aAnchorTextRange.expand(aTranslate + aScale);
+
+    // prepare outliner
+    const SfxItemSet& rTextItemSet = rSdrChainedTextPrimitive.getSdrText()->GetItemSet();
+    SdrOutliner& rOutliner = ImpGetDrawOutliner();
+
+    SdrTextVertAdjust eVAdj = GetTextVerticalAdjust(rTextItemSet);
+    SdrTextHorzAdjust eHAdj = GetTextHorizontalAdjust(rTextItemSet);
+    const EEControlBits nOriginalControlWord(rOutliner.GetControlWord());
+    const Size aNullSize;
+
+    // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
+    rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
+
+    rOutliner.SetControlWord(nOriginalControlWord|EEControlBits::AUTOPAGESIZE|EEControlBits::STRETCHING);
+    rOutliner.SetMinAutoPaperSize(aNullSize);
+    rOutliner.SetMaxAutoPaperSize(Size(1000000,1000000));
+
+    // add one to rage sizes to get back to the old Rectangle and outliner measurements
+    const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
+    const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
+
+    // Text
+    const OutlinerParaObject* pOutlinerParaObject = rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject();
+    OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
+
+    const bool bVerticalWritintg(pOutlinerParaObject->IsVertical());
+    const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
+
+    if(IsTextFrame())
+    {
+        rOutliner.SetMaxAutoPaperSize(aAnchorTextSize);
+    }
+
+    if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !bVerticalWritintg)
+    {
+        rOutliner.SetMinAutoPaperSize(Size(nAnchorTextWidth, 0));
+    }
+
+    if(SDRTEXTVERTADJUST_BLOCK == eVAdj && bVerticalWritintg)
+    {
+        rOutliner.SetMinAutoPaperSize(Size(0, nAnchorTextHeight));
+    }
+
+    rOutliner.SetPaperSize(aNullSize);
+    rOutliner.SetUpdateMode(true);
+    // Sets original text
+    rOutliner.SetText(*pOutlinerParaObject);
+
+    /* Begin overflow/underflow handling */
+
+    impHandleChainingEventsDuringDecomposition(rOutliner);
+
+    /* End overflow/underflow handling */
+
+    // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
+    rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
+
+    // now get back the layouted text size from outliner
+    const Size aOutlinerTextSize(rOutliner.GetPaperSize());
+    const basegfx::B2DVector aOutlinerScale(aOutlinerTextSize.Width(), aOutlinerTextSize.Height());
+    basegfx::B2DVector aAdjustTranslate(0.0, 0.0);
+
+    // correct horizontal translation using the now known text size
+    if(SDRTEXTHORZADJUST_CENTER == eHAdj || SDRTEXTHORZADJUST_RIGHT == eHAdj)
+    {
+        const double fFree(aAnchorTextRange.getWidth() - aOutlinerScale.getX());
+
+        if(SDRTEXTHORZADJUST_CENTER == eHAdj)
+        {
+            aAdjustTranslate.setX(fFree / 2.0);
+        }
+
+        if(SDRTEXTHORZADJUST_RIGHT == eHAdj)
+        {
+            aAdjustTranslate.setX(fFree);
+        }
+    }
+
+    // correct vertical translation using the now known text size
+    if(SDRTEXTVERTADJUST_CENTER == eVAdj || SDRTEXTVERTADJUST_BOTTOM == eVAdj)
+    {
+        const double fFree(aAnchorTextRange.getHeight() - aOutlinerScale.getY());
+
+        if(SDRTEXTVERTADJUST_CENTER == eVAdj)
+        {
+            aAdjustTranslate.setY(fFree / 2.0);
+        }
+
+        if(SDRTEXTVERTADJUST_BOTTOM == eVAdj)
+        {
+            aAdjustTranslate.setY(fFree);
+        }
+    }
+
+    // prepare matrices to apply to newly created primitives. aNewTransformA
+    // will get coordinates in aOutlinerScale size and positive in X, Y.
+    basegfx::B2DHomMatrix aNewTransformA;
+    basegfx::B2DHomMatrix aNewTransformB;
+
+    // translate relative to given primitive to get same rotation and shear
+    // as the master shape we are working on. For vertical, use the top-right
+    // corner
+    const double fStartInX(bVerticalWritintg ? aAdjustTranslate.getX() + aOutlinerScale.getX() : aAdjustTranslate.getX());
+    aNewTransformA.translate(fStartInX, aAdjustTranslate.getY());
+
+    // mirroring. We are now in aAnchorTextRange sizes. When mirroring in X and Y,
+    // move the null point which was top left to bottom right.
+    const bool bMirrorX(basegfx::fTools::less(aScale.getX(), 0.0));
+    const bool bMirrorY(basegfx::fTools::less(aScale.getY(), 0.0));
+    aNewTransformB.scale(bMirrorX ? -1.0 : 1.0, bMirrorY ? -1.0 : 1.0);
+
+    // in-between the translations of the single primitives will take place. Afterwards,
+    // the object's transformations need to be applied
+    aNewTransformB.shearX(fShearX);
+    aNewTransformB.rotate(fRotate);
+    aNewTransformB.translate(aTranslate.getX(), aTranslate.getY());
+
+    basegfx::B2DRange aClipRange;
+
+    // now break up text primitives.
+    impTextBreakupHandler aConverter(rOutliner);
+    aConverter.decomposeBlockTextPrimitive(aNewTransformA, aNewTransformB, aClipRange);
+
+    // cleanup outliner
+    rOutliner.Clear();
+    rOutliner.setVisualizedPage(0);
+    rOutliner.SetControlWord(nOriginalControlWord);
+
+    rTarget = aConverter.getPrimitive2DSequence();
 }
 
 

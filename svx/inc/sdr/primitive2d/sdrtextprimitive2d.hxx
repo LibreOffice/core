@@ -331,6 +331,43 @@ namespace drawinglayer
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        class SdrChainedTextPrimitive2D : public SdrTextPrimitive2D
+        {
+        private:
+            // XXX: might have position of overflowing text
+
+            ::basegfx::B2DHomMatrix maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
+        protected:
+            // local decomposition.
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const SAL_OVERRIDE;
+
+        public:
+            SdrChainedTextPrimitive2D(
+                const SdrText* pSdrText,
+                const OutlinerParaObject& rOutlinerParaObjectPtrs,
+                const ::basegfx::B2DHomMatrix& rTextRangeTransform);
+
+            // get data
+            const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
+            //bool getWordWrap() const { return true; } // XXX: Hack! Should have a proper implementation//
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
+
+            // transformed clone operator
+            virtual SdrTextPrimitive2D* createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const SAL_OVERRIDE;
+
+            // provide unique ID
+            DeclPrimitive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+
 
 
 #endif // INCLUDED_SVX_INC_SDR_PRIMITIVE2D_SDRTEXTPRIMITIVE2D_HXX

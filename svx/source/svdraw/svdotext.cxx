@@ -38,6 +38,8 @@
 #include <editeng/editobj.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <svx/textchain.hxx>
+#include <svx/textchainflow.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/flditem.hxx>
@@ -102,6 +104,9 @@ SdrTextObj::SdrTextObj()
     mbTextAnimationAllowed = true;
     maTextEditOffset = Point(0, 0);
 
+    // chaining
+    mbToBeChained = false;
+
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
     mbInDownScale = false;
@@ -130,6 +135,9 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect)
     mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
 
+    // chaining
+    mbToBeChained = false;
+
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
 }
@@ -155,6 +163,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind)
     mbInDownScale = false;
     maTextEditOffset = Point(0, 0);
 
+    // chaining
+    mbToBeChained = false;
+
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
 }
@@ -175,6 +186,9 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
     bNoMirror=true;
     bDisableAutoWidthOnDragging=false;
     ImpJustifyRect(maRect);
+
+    // chaining
+    mbToBeChained = false;
 
     mbInEditMode = false;
     mbTextHidden = false;
@@ -1520,6 +1534,25 @@ void SdrTextObj::ForceOutlinerParaObject()
     }
 }
 
+// chaining
+bool SdrTextObj::IsToBeChained() const
+{
+    return mbToBeChained;
+}
+
+void SdrTextObj::SetToBeChained(bool bToBeChained)
+{
+    mbToBeChained = bToBeChained;
+}
+
+TextChain *SdrTextObj::GetTextChain() const
+{
+    //if (!IsChainable())
+    //    return NULL;
+
+    return pModel->GetTextChain();
+}
+
 bool SdrTextObj::IsVerticalWriting() const
 {
     if(pEdtOutl)
@@ -1947,6 +1980,179 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
         }
     }
 }
+
+/* Begin chaining code */
+
+// XXX: Make it a method somewhere?
+SdrObject *ImpGetObjByName(SdrObjList *pObjList, OUString aObjName)
+{
+    // scan the whole list
+    size_t nObjCount = pObjList->GetObjCount();
+    for (unsigned i = 0; i < nObjCount; i++) {
+        SdrObject *pCurObj = pObjList->GetObj(i);
+
+        if (pCurObj->GetName() == aObjName) {
+            return pCurObj;
+        }
+    }
+    // not found
+    return NULL;
+}
+
+// XXX: Make it a (private) method of SdrTextObj
+void ImpUpdateChainLinks(SdrTextObj *pTextObj, OUString aNextLinkName)
+{
+    // XXX: Current implementation constraints text boxes to be on the same page
+
+    // No next link
+    if (aNextLinkName == "") {
+        pTextObj->SetNextLinkInChain(NULL);
+        return;
+    }
+
+    SdrPage *pPage = pTextObj->GetPage();
+    assert(pPage);
+    SdrTextObj *pNextTextObj = dynamic_cast< SdrTextObj * >
+                                (ImpGetObjByName(pPage, aNextLinkName));
+    if (!pNextTextObj) {
+        fprintf(stderr, "[CHAINING] Can't find object as next link.\n");
+        return;
+    }
+
+    pTextObj->SetNextLinkInChain(pNextTextObj);
+}
+
+bool SdrTextObj::IsChainable() const
+{
+    // Read it as item
+    const SfxItemSet& rSet = GetObjectItemSet();
+    OUString aNextLinkName = static_cast<const SfxStringItem&>(rSet.Get(SDRATTR_TEXT_CHAINNEXTNAME)).GetValue();
+
+    // Update links if any inconsistency is found
+    bool bNextLinkUnsetYet = (aNextLinkName != "") && !mpNextInChain;
+    bool bInconsistentNextLink = mpNextInChain && mpNextInChain->GetName() != aNextLinkName;
+    // if the link is not set despite there should be one OR if it has changed
+    if (bNextLinkUnsetYet || bInconsistentNextLink) {
+        ImpUpdateChainLinks(const_cast<SdrTextObj *>(this), aNextLinkName);
+    }
+
+    return aNextLinkName != ""; // XXX: Should we also check for GetNilChainingEvent? (see old code below)
+
+/*
+    // Check that no overflow is going on
+    if (!GetTextChain() || GetTextChain()->GetNilChainingEvent(this))
+        return false;
+*/
+}
+
+void SdrTextObj::onChainingEvent()
+{
+    if (!pEdtOutl)
+        return;
+
+    // Outliner for text transfer
+    SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
+
+    EditingTextChainFlow aTxtChainFlow(this);
+    aTxtChainFlow.CheckForFlowEvents(pEdtOutl);
+
+
+    if (aTxtChainFlow.IsOverflow()) {
+        fprintf(stderr, "[CHAINING] Overflow going on\n");
+        // One outliner is for non-overflowing text, the other for overflowing text
+        // We remove text directly from the editing outliner
+        aTxtChainFlow.ExecuteOverflow(pEdtOutl, &aDrawOutliner);
+    } else if (aTxtChainFlow.IsUnderflow()) {
+        fprintf(stderr, "[CHAINING] Underflow going on\n");
+        // underflow-induced overflow
+        aTxtChainFlow.ExecuteUnderflow(&aDrawOutliner);
+        bool bIsOverflowFromUnderflow = aTxtChainFlow.IsOverflow();
+        // handle overflow
+        if (bIsOverflowFromUnderflow) {
+            fprintf(stderr, "[CHAINING] Overflow going on (underflow induced)\n");
+            // prevents infinite loops when setting text for editing outliner
+
+
+            aTxtChainFlow.ExecuteOverflow(&aDrawOutliner, &aDrawOutliner);
+
+        }
+    }
+}
+
+SdrTextObj* SdrTextObj::GetNextLinkInChain() const
+{
+    /*
+    if (GetTextChain())
+        return GetTextChain()->GetNextLink(this);
+
+    return NULL;
+    */
+
+    return mpNextInChain;
+}
+
+void SdrTextObj::SetNextLinkInChain(SdrTextObj *pNextObj)
+{
+    // Basically a doubly linked list implementation
+
+    SdrTextObj *pOldNextObj = mpNextInChain;
+
+    // Replace next link
+    mpNextInChain = pNextObj;
+    // Deal with old next link's prev link
+    if (pOldNextObj) {
+        pOldNextObj->mpPrevInChain = NULL;
+    }
+
+    // Deal with new next link's prev link
+    if (mpNextInChain) {
+        // If there is a prev already at all and this is not already the current object
+        if (mpNextInChain->mpPrevInChain &&
+            mpNextInChain->mpPrevInChain != this)
+            mpNextInChain->mpPrevInChain->mpNextInChain = NULL;
+        mpNextInChain->mpPrevInChain = this;
+    }
+
+    // TODO: Introduce check for circular chains
+
+}
+
+SdrTextObj* SdrTextObj::GetPrevLinkInChain() const
+{
+    /*
+    if (GetTextChain())
+        return GetTextChain()->GetPrevLink(this);
+
+    return NULL;
+    */
+
+    return mpPrevInChain;
+}
+
+void SdrTextObj::SetPreventChainable()
+{
+    mbIsUnchainableClone = true;
+}
+
+bool SdrTextObj::GetPreventChainable() const
+{
+    // Prevent chaining it 1) during dragging && 2) when we are editing next link
+    return mbIsUnchainableClone || (GetNextLinkInChain() && GetNextLinkInChain()->IsInEditMode());
+}
+
+ SdrObject* SdrTextObj::getFullDragClone() const
+ {
+    SdrObject *pClone = SdrAttrObj::getFullDragClone();
+    SdrTextObj *pTextObjClone = dynamic_cast<SdrTextObj *>(pClone);
+    if (pTextObjClone != NULL) {
+        // Avoid transferring of text for chainable object during dragging
+        pTextObjClone->SetPreventChainable();
+    }
+
+    return pClone;
+ }
+
+/* End chaining code */
 
 /** returns the currently active text. */
 SdrText* SdrTextObj::getActiveText() const
