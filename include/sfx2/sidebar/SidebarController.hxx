@@ -231,7 +231,7 @@ private:
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
     ::boost::shared_ptr<PopupMenu> CreatePopupMenu (
         const ::std::vector<TabBar::DeckMenuData>& rMenuData) const;
-    DECL_LINK(OnMenuItemSelected, Menu*);
+    DECL_LINK_TYPED(OnMenuItemSelected, Menu*, bool);
     void BroadcastPropertyChange();
 
     /** The close of the deck changes the width of the child window.

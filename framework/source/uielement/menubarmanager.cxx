@@ -954,7 +954,7 @@ IMPL_LINK_NOARG_TYPED( MenuBarManager, AsyncSettingsHdl, Timer*, void)
     }
 }
 
-IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
+IMPL_LINK_TYPED( MenuBarManager, Select, Menu *, pMenu, bool )
 {
     URL                     aTargetURL;
     Sequence<PropertyValue> aArgs;
@@ -1021,7 +1021,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
         xDispatch->dispatch( aTargetURL, aArgs );
     }
 
-    return 1;
+    return true;
 }
 
 IMPL_LINK_NOARG_TYPED(MenuBarManager, Highlight, Menu *, bool)

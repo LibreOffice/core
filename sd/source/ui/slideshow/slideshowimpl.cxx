@@ -2224,7 +2224,7 @@ IMPL_LINK_NOARG_TYPED(SlideshowImpl, ContextMenuHdl, void*, void)
         resume();
 }
 
-IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_TYPED( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu, bool )
 {
     if( pMenu )
     {
@@ -2375,7 +2375,7 @@ IMPL_LINK( SlideshowImpl, ContextMenuSelectHdl, Menu *, pMenu )
         }
     }
 
-    return 0;
+    return false;
 }
 
 Reference< XSlideShow > SlideshowImpl::createSlideShow()

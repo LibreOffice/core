@@ -148,8 +148,8 @@ private:
                                 DECL_LINK( ClickPageHdl, void * );
                                 DECL_LINK( ClickObjectHdl, void * );
                                 DECL_LINK( SelectDocumentHdl, void * );
-                                DECL_LINK( MenuSelectHdl, Menu * );
-                                DECL_LINK( ShapeFilterCallback, Menu * );
+                                DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
+                                DECL_LINK_TYPED( ShapeFilterCallback, Menu *, bool );
 
     virtual void                DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     void                        SetDragImage();

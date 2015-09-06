@@ -259,7 +259,7 @@ IMPL_LINK_TYPED( SwOutlineTabDialog, FormHdl, Button *, pBtn, void )
     pFormMenu->Execute(pBtn, Rectangle(Point(0,0), pBtn->GetSizePixel()), PopupMenuFlags::ExecuteDown);
 }
 
-IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_TYPED( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
 {
     sal_uInt8 nLevelNo = 0;
     OString sIdent = pMenu->GetCurItemIdent();
@@ -302,7 +302,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
                     *pNumRule, aName ), pDlg->GetCurEntryPos() );
             pMenu->SetItemText(pMenu->GetItemId(pDlg->GetCurEntryPos()), aName);
         }
-        return 0;
+        return false;
     }
 
     if( nLevelNo-- )
@@ -321,7 +321,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
     SfxTabPage* pPage = GetTabPage( nPageId );
     pPage->Reset(GetOutputItemSet());
 
-    return 0;
+    return false;
 }
 
 sal_uInt16  SwOutlineTabDialog::GetLevel(const OUString &rFormatName) const

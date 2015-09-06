@@ -72,10 +72,10 @@ private:
 
     DECL_LINK_TYPED(TVItemStateHdl, const ThumbnailViewItem*, void);
 
-    DECL_LINK(MenuSelectHdl, Menu*);
-    DECL_LINK(MoveMenuSelectHdl, Menu*);
-    DECL_LINK(RepositoryMenuSelectHdl, Menu*);
-    DECL_LINK(DefaultTemplateMenuSelectHdl, Menu*);
+    DECL_LINK_TYPED(MenuSelectHdl, Menu*, bool);
+    DECL_LINK_TYPED(MoveMenuSelectHdl, Menu*, bool);
+    DECL_LINK_TYPED(RepositoryMenuSelectHdl, Menu*, bool);
+    DECL_LINK_TYPED(DefaultTemplateMenuSelectHdl, Menu*, bool);
 
     DECL_LINK_TYPED(OpenRegionHdl, void*, void);
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);

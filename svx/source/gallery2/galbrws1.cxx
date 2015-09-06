@@ -608,10 +608,10 @@ IMPL_LINK_NOARG_TYPED(GalleryBrowser1, ShowContextMenuHdl, void*, void)
     }
 }
 
-IMPL_LINK( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu )
+IMPL_LINK_TYPED( GalleryBrowser1, PopupMenuHdl, Menu*, pMenu, bool )
 {
     ImplExecute( pMenu->GetCurItemId() );
-    return 0L;
+    return false;
 }
 
 IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl)

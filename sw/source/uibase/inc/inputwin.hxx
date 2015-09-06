@@ -73,7 +73,7 @@ friend class InputEdit;
 protected:
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    Click() SAL_OVERRIDE;
-    DECL_LINK( MenuHdl, Menu * );
+    DECL_LINK_TYPED( MenuHdl, Menu *, bool );
     DECL_LINK_TYPED( DropdownClickHdl, ToolBox*, void );
     void            ApplyFormula();
     void            CancelFormula();

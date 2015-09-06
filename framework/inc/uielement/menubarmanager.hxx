@@ -126,7 +126,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         // XSystemDependentMenuPeer
         virtual ::com::sun::star::uno::Any SAL_CALL getMenuHandle( const ::com::sun::star::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        DECL_LINK( Select, Menu * );
+        DECL_LINK_TYPED( Select, Menu *, bool );
 
         Menu*   GetMenuBar() const { return m_pVCLMenu; }
 

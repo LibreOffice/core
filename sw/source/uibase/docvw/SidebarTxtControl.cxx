@@ -326,10 +326,10 @@ IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo*, pInfo )
     return 0;
 }
 
-IMPL_LINK( SidebarTextControl, Select, Menu*, pSelMenu )
+IMPL_LINK_TYPED( SidebarTextControl, Select, Menu*, pSelMenu, bool )
 {
     mrSidebarWin.ExecuteCommand( pSelMenu->GetCurItemId() );
-    return 0;
+    return false;
 }
 
 void SidebarTextControl::Command( const CommandEvent& rCEvt )

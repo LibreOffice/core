@@ -958,12 +958,12 @@ void SidebarController::ShowPopupMenu (
     return pMenu;
 }
 
-IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu)
+IMPL_LINK_TYPED(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
 {
     if (pMenu == NULL)
     {
         OSL_ENSURE(pMenu!=NULL, "sfx2::sidebar::SidebarController::OnMenuItemSelected: illegal menu!");
-        return 0;
+        return false;
     }
 
     pMenu->Deactivate();

@@ -165,7 +165,7 @@ private:
     void            SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_uInt16 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
     static bool     AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight);
     void            SetOptimalSize();
-    DECL_LINK( MenuSelectHdl, Menu * );
+    DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
 };
 
 class SvxFontNameBox_Impl : public FontNameBox
@@ -365,7 +365,7 @@ void SvxStyleBox_Impl::ReleaseFocus()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-IMPL_LINK( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu)
+IMPL_LINK_TYPED( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu, bool)
 {
     OUString sEntry = OUString( GetSelectEntry() );
     ReleaseFocus(); // It must be after getting entry pos!
@@ -390,7 +390,7 @@ IMPL_LINK( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu)
             break;
         }
     }
-    return 0;
+    return false;
 }
 
 void SvxStyleBox_Impl::Select()

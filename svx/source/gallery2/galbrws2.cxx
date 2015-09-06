@@ -121,8 +121,8 @@ private:
     static void Execute( const CommandInfo &rCmdInfo,
                   const css::uno::Sequence< css::beans::PropertyValue > &rArguments );
 
-    DECL_LINK( MenuSelectHdl, Menu* );
-    DECL_LINK( BackgroundMenuSelectHdl, Menu* );
+    DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
+    DECL_LINK_TYPED( BackgroundMenuSelectHdl, Menu*, bool );
 public:
     GalleryThemePopup( const GalleryTheme* pTheme,
                        sal_uIntPtr nObjectPos,
@@ -340,10 +340,10 @@ void GalleryThemePopup::ExecutePopup( vcl::Window *pWindow, const ::Point &aPos 
     maPopupMenu.Execute( pWindow, aPos );
 }
 
-IMPL_LINK( GalleryThemePopup, MenuSelectHdl, Menu*, pMenu )
+IMPL_LINK_TYPED( GalleryThemePopup, MenuSelectHdl, Menu*, pMenu, bool )
 {
     if( !pMenu )
-        return 0;
+        return false;
 
     sal_uInt16 nId( pMenu->GetCurItemId() );
     switch ( nId )
@@ -362,13 +362,13 @@ IMPL_LINK( GalleryThemePopup, MenuSelectHdl, Menu*, pMenu )
             mpBrowser->Execute( nId );
     }
 
-    return 0;
+    return false;
 }
 
-IMPL_LINK( GalleryThemePopup, BackgroundMenuSelectHdl, Menu*, pMenu )
+IMPL_LINK_TYPED( GalleryThemePopup, BackgroundMenuSelectHdl, Menu*, pMenu, bool )
 {
     if( !pMenu )
-        return 0;
+        return false;
 
     sal_uInt16 nPos( pMenu->GetCurItemId() - 1 );
     OUString aURL( mpBrowser->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
@@ -392,7 +392,7 @@ IMPL_LINK( GalleryThemePopup, BackgroundMenuSelectHdl, Menu*, pMenu )
     if ( it != m_aCommandInfo.end() )
         Execute( it->second, aArgs );
 
-    return 0;
+    return false;
 }
 
 } // end anonymous namespace

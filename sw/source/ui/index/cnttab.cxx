@@ -1485,7 +1485,7 @@ IMPL_LINK_TYPED(SwTOXSelectTabPage, MenuEnableHdl, Menu*, pMenu, bool)
     return false;
 }
 
-IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
+IMPL_LINK_TYPED(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu, bool)
 {
     const OUString sSaveAutoMarkURL = sAutoMarkURL;
     OString sIdent(pMenu->GetCurItemIdent());
@@ -1503,7 +1503,7 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
             sAutoMarkURL = lcl_CreateAutoMarkFileDlg(
                                     sAutoMarkURL, sAutoMarkType, false);
             if( sAutoMarkURL.isEmpty() )
-                return 0;
+                return false;
         }
 
         VclPtrInstance<SwAutoMarkDlg_Impl> pAutoMarkDlg(
@@ -1512,7 +1512,7 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
         if( RET_OK != pAutoMarkDlg->Execute() && bNew )
             sAutoMarkURL = sSaveAutoMarkURL;
     }
-    return 0;
+    return false;
 }
 
 class SwTOXEdit : public Edit

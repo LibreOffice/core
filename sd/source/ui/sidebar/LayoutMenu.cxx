@@ -642,12 +642,12 @@ IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler)
     return 0;
 }
 
-IMPL_LINK(LayoutMenu, OnMenuItemSelected, Menu*, pMenu)
+IMPL_LINK_TYPED(LayoutMenu, OnMenuItemSelected, Menu*, pMenu, bool)
 {
     if (pMenu == NULL)
     {
         OSL_ENSURE(pMenu!=NULL, "LayoutMenu::OnMenuItemSelected: illegal menu!");
-        return 0;
+        return false;
     }
 
     pMenu->Deactivate();
@@ -664,7 +664,7 @@ IMPL_LINK(LayoutMenu, OnMenuItemSelected, Menu*, pMenu)
         InsertPageWithLayout(GetSelectedAutoLayout());
     }
 
-    return 0;
+    return false;
 }
 
 void LayoutMenu::UpdateSelection()

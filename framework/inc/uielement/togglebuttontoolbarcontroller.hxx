@@ -63,7 +63,7 @@ class ToggleButtonToolbarController : public ComplexToolbarController
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> getExecuteArgs(sal_Int16 KeyModifier) const SAL_OVERRIDE;
 
     private:
-        DECL_LINK( MenuSelectHdl, Menu *);
+        DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool);
 
         Style                        m_eStyle;
         OUString                m_aCurrentSelection;

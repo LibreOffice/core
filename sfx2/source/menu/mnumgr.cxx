@@ -206,7 +206,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 
 
 // executes the function for the selected item
-IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
+IMPL_LINK_TYPED( SfxMenuManager, Select, Menu *, pSelMenu, bool )
 {
     sal_uInt16 nId = (sal_uInt16) pSelMenu->GetCurItemId();
     OUString aCommand = pSelMenu->GetItemCommand( nId );
@@ -235,7 +235,7 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
         // special menu function
         pBindings->GetDispatcher_Impl()->Execute( nId );
 
-    return sal_IntPtr(true);
+    return true;
 }
 
 SfxPopupMenuManager::~SfxPopupMenuManager()

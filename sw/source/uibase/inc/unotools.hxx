@@ -90,7 +90,7 @@ class SW_DLLPUBLIC SwOneExampleFrame
     static  bool    bShowServiceNotAvailableMessage;
 
     DECL_DLLPRIVATE_LINK_TYPED( TimeoutHdl, Idle*, void );
-    DECL_DLLPRIVATE_LINK( PopupHdl, Menu* );
+    DECL_DLLPRIVATE_LINK_TYPED( PopupHdl, Menu*, bool );
 
     SAL_DLLPRIVATE void  CreateControl();
     SAL_DLLPRIVATE void  DisposeControl();

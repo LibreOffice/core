@@ -398,14 +398,14 @@ bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
 }
 
 
-IMPL_LINK( SmEditWindow, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_TYPED( SmEditWindow, MenuSelectHdl, Menu *, pMenu, bool )
 {
     SmViewShell *pViewSh = rCmdBox.GetView();
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERTCOMMAND, SfxCallMode::RECORD,
                 new SfxInt16Item(SID_INSERTCOMMAND, pMenu->GetCurItemId()), 0L);
-    return 0;
+    return false;
 }
 
 void SmEditWindow::KeyInput(const KeyEvent& rKEvt)

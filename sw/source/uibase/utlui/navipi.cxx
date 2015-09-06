@@ -995,7 +995,7 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK( SwNavigationPI, MenuSelectHdl, Menu *, pMenu )
+IMPL_LINK_TYPED( SwNavigationPI, MenuSelectHdl, Menu *, pMenu, bool )
 {
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
     if(nMenuId != USHRT_MAX)
@@ -1005,7 +1005,7 @@ IMPL_LINK( SwNavigationPI, MenuSelectHdl, Menu *, pMenu )
         else
             aContentTree->SetOutlineLevel( static_cast< sal_uInt8 >(nMenuId - 100) );
     }
-    return 0;
+    return false;
 }
 
 void SwNavigationPI::UpdateListBox()

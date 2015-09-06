@@ -291,7 +291,7 @@ public:
     SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl::Window*, bool );
     virtual ~SfxCommonTemplateDialog_Impl();
 
-    DECL_LINK( MenuSelectHdl, Menu * );
+    DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
     DECL_LINK_TYPED( MenuSelectAsyncHdl, void*, void );
 
     virtual void EnableEdit( bool b = true )
@@ -359,7 +359,7 @@ private:
     DECL_LINK_TYPED( ToolBoxLSelect, ToolBox*, void );
     DECL_LINK_TYPED( ToolBoxRSelect, ToolBox*, void );
     DECL_LINK_TYPED( ToolBoxRClick, ToolBox*, void );
-    DECL_LINK( MenuSelectHdl, Menu* );
+    DECL_LINK_TYPED( MenuSelectHdl, Menu*, bool );
 
 protected:
     virtual void EnableEdit( bool = true ) SAL_OVERRIDE;

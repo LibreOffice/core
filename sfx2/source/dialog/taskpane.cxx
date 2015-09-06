@@ -840,7 +840,7 @@ namespace sfx2
 
     private:
         DECL_LINK_TYPED( OnToolboxClicked, ToolBox*, void );
-        DECL_LINK( OnMenuItemSelected, Menu* );
+        DECL_LINK_TYPED( OnMenuItemSelected, Menu*, bool );
         DECL_LINK_TYPED( DockingChanged, TitledDockingWindow*, void );
         ::std::unique_ptr< PopupMenu > impl_createPopupMenu() const;
 
@@ -979,7 +979,7 @@ namespace sfx2
     }
 
 
-    IMPL_LINK( TaskPaneController_Impl, OnMenuItemSelected, Menu*, i_pMenu )
+    IMPL_LINK_TYPED( TaskPaneController_Impl, OnMenuItemSelected, Menu*, i_pMenu, bool )
     {
         ENSURE_OR_RETURN( i_pMenu, "TaskPaneController_Impl::OnMenuItemSelected: illegal menu!", 0L );
 

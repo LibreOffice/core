@@ -61,7 +61,7 @@ class MenuManager : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        DECL_LINK( Select, Menu * );
+        DECL_LINK_TYPED( Select, Menu *, bool );
 
         Menu*   GetMenu() const { return m_pVCLMenu; }
 

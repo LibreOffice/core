@@ -126,7 +126,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK( NameModify, Edit * );
     DECL_LINK( NameDoubleClick, SvTreeListBox * );
     DECL_LINK( GrpSelect, SvTreeListBox * );
-    DECL_LINK( MenuHdl, Menu * );
+    DECL_LINK_TYPED( MenuHdl, Menu *, bool );
     DECL_LINK_TYPED( EnableHdl, Menu *, bool );
     DECL_LINK_TYPED(BibHdl, Button *, void);
     DECL_LINK_TYPED(EditHdl, MenuButton *, void);

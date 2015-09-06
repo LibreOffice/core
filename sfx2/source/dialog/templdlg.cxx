@@ -2150,7 +2150,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
     return 0;
 }
 
-IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu )
+IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool )
 {
     nLastItemId = pMenu->GetCurItemId();
     Application::PostUserEvent(
@@ -2528,11 +2528,11 @@ IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
     }
 }
 
-IMPL_LINK( SfxTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu)
+IMPL_LINK_TYPED( SfxTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool)
 {
     sal_uInt16 nMenuId = pMenu->GetCurItemId();
     ActionSelect(nMenuId);
-    return 0;
+    return false;
 }
 
 void SfxCommonTemplateDialog_Impl::SetFamily( sal_uInt16 nId )

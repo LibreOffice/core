@@ -159,7 +159,7 @@ class SmFontTypeDialog : public ModalDialog
 
     VclPtr<OutputDevice> pFontListDev;
 
-    DECL_LINK(MenuSelectHdl, Menu *);
+    DECL_LINK_TYPED(MenuSelectHdl, Menu *, bool);
     DECL_LINK_TYPED(DefaultButtonClickHdl, Button *, void);
 
 public:
@@ -223,7 +223,7 @@ class SmDistanceDialog : public ModalDialog
     bool            bScaleAllBrackets;
 
     DECL_LINK(GetFocusHdl, Control *);
-    DECL_LINK(MenuSelectHdl, Menu *);
+    DECL_LINK_TYPED(MenuSelectHdl, Menu *, bool);
     DECL_LINK_TYPED(DefaultButtonClickHdl, Button *, void);
     DECL_LINK_TYPED(CheckBoxClickHdl, Button *, void);
 

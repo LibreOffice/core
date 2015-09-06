@@ -94,7 +94,7 @@ public:
     void            InitPopup(sal_uInt16 nPos, bool bOLE = true);
     void            InitializeHelp();
 
-    DECL_LINK( Select, Menu * );
+    DECL_LINK_TYPED( Select, Menu*, bool );
 };
 
 
