@@ -69,12 +69,12 @@ using namespace com::sun::star;
 
 void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 {
-    //  wird aus dem Paint gerufen
+    // is called from paint
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     vcl::Window* pWin = GetActiveWin();
 
-    //  wenn schon connected ist, nicht nochmal SetObjArea/SetSizeScale
+    // when already connected do not execute SetObjArea/SetSizeScale again
 
     SfxInPlaceClient* pClient = FindIPClient( xObj, pWin );
     if ( !pClient )
@@ -87,11 +87,11 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 
         Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-        aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+        aScaleWidth.ReduceInaccurate(10);       // compatible with SdrOle2Obj
         aScaleHeight.ReduceInaccurate(10);
         pClient->SetSizeScale(aScaleWidth,aScaleHeight);
 
-        // sichtbarer Ausschnitt wird nur inplace veraendert!
+        // visible section is only changed inplace!
         // the object area must be set after the scaling since it triggers the resizing
         aRect.SetSize( aOleSize );
         pClient->SetObjArea( aRect );
@@ -102,7 +102,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 
 bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {
-    // Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
+    // Do not leave the hint message box on top of the object
     RemoveHintWindow();
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
@@ -154,12 +154,12 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 
                 Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
                 Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-                aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+                aScaleWidth.ReduceInaccurate(10);       // compatible with SdrOle2Obj
                 aScaleHeight.ReduceInaccurate(10);
                 pClient->SetSizeScale(aScaleWidth,aScaleHeight);
             }
 
-            // sichtbarer Ausschnitt wird nur inplace veraendert!
+            // visible section is only changed inplace!
             // the object area must be set after the scaling since it triggers the resizing
             aRect.SetSize( aOleSize );
             pClient->SetObjArea( aRect );
@@ -168,7 +168,7 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 
             nErr = pClient->DoVerb( nVerb );
             bErrorShown = true;
-            // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
+            // SfxViewShell::DoVerb shows its error messages
 
             // attach listener to selection changes in chart that affect cell
             // ranges, so those can be highlighted
@@ -208,7 +208,7 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     {
         GetSdrView()->AdjustMarkHdl();
     }
-    //! SetDocumentName sollte schon im Sfx passieren ???
+    //! SetDocumentName should already happen in Sfx ???
     //TODO/LATER: how "SetDocumentName"?
     //xIPObj->SetDocumentName( GetViewData().GetDocShell()->GetTitle() );
 
@@ -219,7 +219,7 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
 {
     SdrView* pView = GetSdrView();
     if (!pView)
-        return ERRCODE_SO_NOTIMPL;          // soll nicht sein
+        return ERRCODE_SO_NOTIMPL;          // should not be
 
     SdrOle2Obj* pOle2Obj = NULL;
     ErrCode nErr = ERRCODE_NONE;
@@ -238,7 +238,7 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
     }
     else
     {
-        OSL_FAIL("kein Objekt fuer Verb gefunden");
+        OSL_FAIL("no object for Verb found");
     }
 
     return nErr;
@@ -265,7 +265,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         UpdateInputHandler();
     }
 
-    //  Rahmen fuer Chart einfuegen wird abgebrochen:
+    // inertion of border for Chart is cancelled:
     FuPoor* pPoor = GetDrawFuncPtr();
     if ( pPoor && pPoor->GetSlotID() == SID_DRAW_CHART )
         GetViewData().GetDispatcher().Execute(SID_DRAW_CHART, SfxCallMode::SLOT | SfxCallMode::RECORD);
@@ -325,7 +325,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
         case SID_OBJECTRESIZE:
             {
-                //          Der Server moechte die Clientgrosse verandern
+                //         the server would like to change the client size
 
                 SfxInPlaceClient* pClient = GetIPClient();
 
