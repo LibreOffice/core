@@ -341,6 +341,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/svdraw/svdxcgv \
     svx/source/svdraw/textchain \
     svx/source/svdraw/textchainflow \
+    svx/source/svdraw/textchaincursor \
     svx/source/styles/CommonStylePreviewRenderer \
     svx/source/styles/CommonStyleManager \
     svx/source/styles/ColorSets \
