@@ -43,7 +43,6 @@ class VCL_DLLPUBLIC FormatterBase
 private:
     VclPtr<Edit>            mpField;
     LocaleDataWrapper*      mpLocaleDataWrapper;
-    Link<>                  maErrorLink;
     bool                    mbReformat;
     bool                    mbStrictFormat;
     bool                    mbEmptyFieldValue;
@@ -82,8 +81,6 @@ public:
     const LanguageTag&      GetLanguageTag() const;
 
     const AllSettings&      GetFieldSettings() const;
-
-    const Link<>&           GetErrorHdl() const                 { return maErrorLink; }
 
     void                    SetEmptyFieldValue();
     bool                    IsEmptyFieldValue() const;

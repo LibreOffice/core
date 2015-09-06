@@ -277,20 +277,6 @@ bool ImplLongCurrencyReformat( const OUString& rStr, BigInt nMin, BigInt nMax,
         else if ( nTempVal < nMin )
             nTempVal = nMin;
 
-        if ( rFormatter.GetErrorHdl().IsSet() && (nValue != nTempVal) )
-        {
-            rFormatter.mnCorrectedValue = nTempVal;
-            if ( !rFormatter.GetErrorHdl().Call( &rFormatter ) )
-            {
-                rFormatter.mnCorrectedValue = 0;
-                return false;
-            }
-            else
-            {
-                rFormatter.mnCorrectedValue = 0;
-            }
-        }
-
         rOutStr = ImplGetCurr( rLocaleDataWrapper, nTempVal, nDecDigits, rFormatter.GetCurrencySymbol(), rFormatter.IsUseThousandSep() );
         return true;
     }
