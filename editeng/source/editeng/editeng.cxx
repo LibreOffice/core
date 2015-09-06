@@ -1485,6 +1485,12 @@ EditTextObject* EditEngine::CreateTextObject( const ESelection& rESelection )
     return pImpEditEngine->CreateTextObject( aSel );
 }
 
+EditTextObject* EditEngine::GetEmptyTextObject() const
+{
+    return pImpEditEngine->GetEmptyTextObject();
+}
+
+
 void EditEngine::SetText( const EditTextObject& rTextObject )
 {
     pImpEditEngine->EnterBlockNotifications();
@@ -1521,6 +1527,11 @@ Link<EditStatus&, void> EditEngine::GetStatusEventHdl() const
 void EditEngine::SetImportHdl( const Link<ImportInfo&,void>& rLink )
 {
     pImpEditEngine->aImportHdl = rLink;
+}
+
+void EditEngine::SetChainingEventHdl( const Link<>& rLink )
+{
+    pImpEditEngine->SetChainingEventHdl( rLink );
 }
 
 Link<ImportInfo&,void> EditEngine::GetImportHdl() const
@@ -2737,6 +2748,23 @@ EditPaM EditEngine::InsertParaBreak(
 EditPaM EditEngine::InsertLineBreak(const EditSelection& rEditSelection)
 {
     return pImpEditEngine->InsertLineBreak(rEditSelection);
+}
+
+sal_Int32 EditEngine::GetOverflowingParaNum() const {
+    return pImpEditEngine->GetOverflowingParaNum();
+}
+
+sal_Int32 EditEngine::GetOverflowingLineNum() const {
+    return pImpEditEngine->GetOverflowingLineNum();
+}
+
+void EditEngine::ClearOverflowingParaNum() {
+    pImpEditEngine->ClearOverflowingParaNum();
+}
+
+bool EditEngine::IsPageOverflow() {
+    pImpEditEngine->CheckPageOverflow();
+    return pImpEditEngine->IsPageOverflow();
 }
 
 EFieldInfo::EFieldInfo()

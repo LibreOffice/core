@@ -72,6 +72,9 @@ class SvxLRSpaceItem;
 class EditEngine;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
+class OverflowingText;
+class NonOverflowingText;
+
 
 namespace svl
 {
@@ -211,6 +214,8 @@ private:
     EDITENG_DLLPRIVATE sal_Int32    ImpInitPaste( sal_Int32& rStart );
     EDITENG_DLLPRIVATE void         ImpPasted( sal_Int32 nStart, sal_Int32 nPrevParaCount, sal_Int32 nSize);
     EDITENG_DLLPRIVATE sal_Int32    ImpCalcSelectedPages( bool bIncludeFirstSelected );
+
+    Link<> aEndCutPasteLink;
 
 public:
                 OutlinerView( Outliner* pOut, vcl::Window* pWindow );
@@ -370,6 +375,8 @@ public:
 
     OUString    GetSurroundingText() const;
     Selection   GetSurroundingTextSelection() const;
+
+    void        SetEndCutPasteLinkHdl(const Link<> &rLink) { aEndCutPasteLink = rLink; }
 };
 
 
@@ -579,6 +586,8 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     friend class OutlinerUndoCheckPara;
     friend class OutlinerUndoChangeParaFlags;
 
+    friend class TextChainingUtils;
+
     OutlinerEditEng*    pEditEngine;
 
     ParagraphList*      pParaList;
@@ -701,6 +710,8 @@ public:
     void            SetText( const OUString& rText, Paragraph* pParagraph );
     OUString        GetText( Paragraph* pPara, sal_Int32 nParaCount=1 ) const;
 
+    void            SetToEmptyText();
+
     OutlinerParaObject* CreateParaObject( sal_Int32 nStartPara = 0, sal_Int32 nParaCount = EE_PARA_ALL ) const;
 
     const SfxItemSet& GetEmptyItemSet() const;
@@ -753,6 +764,14 @@ public:
     void            SetParaRemovingHdl(const Link<Outliner*,void>& rLink){aParaRemovingHdl=rLink;}
     Link<Outliner*,void> GetParaRemovingHdl() const { return aParaRemovingHdl; }
 
+    NonOverflowingText *GetNonOverflowingText() const;
+    OverflowingText *GetOverflowingText() const;
+    void ClearOverflowingParaNum();
+    bool IsPageOverflow();
+
+    OutlinerParaObject *GetEmptyParaObject() const;
+
+
     void            DepthChangedHdl();
     void            SetDepthChangedHdl(const Link<Outliner*,void>& rLink){aDepthChangedHdl=rLink;}
     Link<Outliner*,void> GetDepthChangedHdl() const { return aDepthChangedHdl; }
@@ -782,6 +801,9 @@ public:
 
     void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink );
     Link<EditStatus&, void> GetStatusEventHdl() const;
+
+    void            SetChainingEventHdl( const Link<>& rLink );
+
 
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );

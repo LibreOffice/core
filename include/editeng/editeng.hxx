@@ -144,6 +144,8 @@ class EDITENG_DLLPUBLIC EditEngine
     friend class ImpEditView;
     friend class EditDbg;
     friend class Outliner;
+    friend class TextChainingUtils;
+
 
 public:
     typedef std::vector<EditView*> ViewsType;
@@ -296,6 +298,7 @@ public:
     void            SetText( const OUString& rStr );
 
     EditTextObject* CreateTextObject();
+    EditTextObject* GetEmptyTextObject() const;
     EditTextObject* CreateTextObject( sal_Int32 nPara, sal_Int32 nParas = 1 );
     EditTextObject* CreateTextObject( const ESelection& rESelection );
     void            SetText( const EditTextObject& rTextObject );
@@ -369,6 +372,7 @@ public:
     void            SetStatusEventHdl( const Link<EditStatus&,void>& rLink );
     Link<EditStatus&,void> GetStatusEventHdl() const;
 
+    void            SetChainingEventHdl( const Link<>& rLink );
     void            SetNotifyHdl( const Link<EENotify&,void>& rLink );
     Link<EENotify&,void>  GetNotifyHdl() const;
 
@@ -598,6 +602,11 @@ public:
 
     bool Undo(EditView* pView);
     bool Redo(EditView* pView);
+
+    sal_Int32 GetOverflowingParaNum() const;
+    sal_Int32 GetOverflowingLineNum() const;
+    void ClearOverflowingParaNum();
+    bool IsPageOverflow();
 };
 
 #endif // INCLUDED_EDITENG_EDITENG_HXX
