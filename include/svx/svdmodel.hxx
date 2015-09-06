@@ -76,6 +76,7 @@ class SvNumberFormatter;
 class SdrOutlinerCache;
 class SdrUndoFactory;
 class ImageMap;
+class TextChain;
 namespace comphelper
 {
     class IEmbeddedHelper;
@@ -172,6 +173,7 @@ protected:
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
     SdrOutliner*    pDrawOutliner;  // an Outliner for outputting text
     SdrOutliner*    pHitTestOutliner;// an Outliner for the HitTest
+    SdrOutliner*    pChainingOutliner; // an Outliner for chaining overflowing text
     sal_uIntPtr           nDefTextHgt;    // Default text height in logical units
     VclPtr<OutputDevice>  pRefOutDev;     // ReferenceDevice for the EditEngine
     /// Set if we are doing tiled rendering.
@@ -215,6 +217,7 @@ protected:
     sal_uInt16          nDefaultTabulator;
     sal_uInt32          nMaxUndoCount;
 
+    TextChain*          pTextChain;
 
 
 // sdr::Comment interface
@@ -326,6 +329,10 @@ public:
     // put the TextDefaults (Font,Height,Color) in a Set
     void                 SetTextDefaults() const;
     static void          SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt );
+
+    SdrOutliner&         GetChainingOutliner(const SdrTextObj* pObj=NULL) const;
+    TextChain *GetTextChain() const;
+    void SetNextLinkInTextChain(SdrTextObj *pPrev, SdrTextObj *pNext);
 
     // ReferenceDevice for the EditEngine
     void                 SetRefDevice(OutputDevice* pDev);

@@ -38,12 +38,16 @@
 
 
 class OutlinerParaObject;
+class OverflowingText;
 class SdrOutliner;
 class SdrTextObj;
 class SdrTextObjTest;
 class SvxFieldItem;
 class ImpSdrObjTextLink;
 class EditStatus;
+class TextChain;
+class TextChainFlow;
+
 
 namespace sdr { namespace properties {
     class TextProperties;
@@ -55,6 +59,7 @@ namespace drawinglayer { namespace primitive2d {
     class SdrBlockTextPrimitive2D;
     class SdrAutoFitTextPrimitive2D;
     class SdrStretchTextPrimitive2D;
+    class SdrChainedTextPrimitive2D;
 }}
 
 namespace drawinglayer { namespace animation {
@@ -133,6 +138,11 @@ private:
     friend class                sdr::table::SdrTableRtfExporter;
     friend class                sdr::table::SdrTableRTFParser;
 
+    friend class                TextChain;
+    friend class                TextChainFlow;
+    friend class                EditingTextChainFlow;
+
+
     // CustomShapeproperties need to access the "bTextFrame" member:
     friend class sdr::properties::CustomShapeProperties;
 
@@ -209,11 +219,24 @@ protected:
     // position of the virtual object. This offset is used when setting up
     // and maintaining the OutlinerView.
     Point                       maTextEditOffset;
+
+    virtual SdrObject* getFullDragClone() const SAL_OVERRIDE;
+
 public:
     const Point& GetTextEditOffset() const { return maTextEditOffset; }
     void SetTextEditOffset(const Point& rNew) { maTextEditOffset = rNew; }
 
 protected:
+    OverflowingText *mpOverflowingText = NULL;
+    bool mbIsUnchainableClone = false;
+
+    // the successor in a chain
+    SdrTextObj *mpNextInChain = NULL;
+    SdrTextObj *mpPrevInChain = NULL;
+
+    // indicating the for its text to be chained to another text box
+    bool mbToBeChained : 1;
+
     // Fuer beschriftete Zeichenobjekte ist bTextFrame=FALSE. Der Textblock
     // wird dann hoizontal und vertikal an aRect zentriert. Bei bTextFrame=
     // sal_True wird der Text in aRect hineinformatiert. Der eigentliche Textrahmen
@@ -343,6 +366,17 @@ public:
     bool IsAutoFit() const;
     /// returns true if the old feature for fitting shape content should into shape is enabled. implies IsAutoFit()==false!
     bool IsFitToSize() const;
+
+    // Chaining
+    bool IsToBeChained() const;
+    SdrTextObj *GetNextLinkInChain() const;
+    void SetNextLinkInChain(SdrTextObj *);
+    SdrTextObj *GetPrevLinkInChain() const;
+    bool IsChainable() const;
+    void SetPreventChainable();
+    bool GetPreventChainable() const;
+    TextChain *GetTextChain() const;
+
     SdrObjKind GetTextKind() const { return eTextKind; }
 
     // #i121917#
@@ -491,6 +525,8 @@ public:
 
     void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 
+    void SetToBeChained(bool bToBeChained);
+
     /** Setup given Outliner equivalently to SdrTextObj::Paint()
 
         To setup an arbitrary Outliner in the same way as the draw
@@ -528,6 +564,10 @@ public:
 
     /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
+
+    /** called from the SdrObjEditView during text edit when a chain of boxes is to be updated */
+    virtual void onChainingEvent();
+
 
 
 
@@ -588,6 +628,11 @@ public:
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,
         const drawinglayer::primitive2d::SdrStretchTextPrimitive2D& rSdrStretchTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
+    void impDecomposeChainedTextPrimitive(
+        drawinglayer::primitive2d::Primitive2DSequence& rTarget,
+        const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
+        const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
+    void impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutliner) const;
 
 
     // timing generators

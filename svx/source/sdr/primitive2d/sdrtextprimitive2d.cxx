@@ -480,6 +480,48 @@ namespace drawinglayer
      } // end of namespace primitive2d
  } // end of namespace drawinglayer
 
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+
+        SdrChainedTextPrimitive2D::SdrChainedTextPrimitive2D(
+            const SdrText* pSdrText,
+            const OutlinerParaObject& rOutlinerParaObject,
+            const basegfx::B2DHomMatrix& rTextRangeTransform)
+        : SdrTextPrimitive2D(pSdrText, rOutlinerParaObject),
+          maTextRangeTransform(rTextRangeTransform)
+        { }
+
+        Primitive2DSequence SdrChainedTextPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
+        {
+            Primitive2DSequence aRetval;
+            getSdrText()->GetObject().impDecomposeChainedTextPrimitive(aRetval, *this, aViewInformation);
+
+            return encapsulateWithTextHierarchyBlockPrimitive2D(aRetval);
+        }
+
+        bool SdrChainedTextPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+         {
+             if(SdrTextPrimitive2D::operator==(rPrimitive))
+             {
+                 const SdrBlockTextPrimitive2D& rCompare = (SdrBlockTextPrimitive2D&)rPrimitive;
+
+                 return (getTextRangeTransform() == rCompare.getTextRangeTransform());
+             }
+
+             return false;
+         }
+
+        SdrTextPrimitive2D* SdrChainedTextPrimitive2D::createTransformedClone(const basegfx::B2DHomMatrix& rTransform) const
+        {
+            return new SdrChainedTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform());
+        }
+
+        // provide unique ID
+        ImplPrimitive2DIDBlock(SdrChainedTextPrimitive2D, PRIMITIVE2D_ID_SDRCHAINEDTEXTPRIMITIVE2D)
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
 
 
  namespace drawinglayer
