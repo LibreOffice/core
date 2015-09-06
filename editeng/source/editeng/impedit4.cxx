@@ -1000,6 +1000,15 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
     }
 }
 
+EditTextObject* ImpEditEngine::GetEmptyTextObject()
+{
+    EditSelection aEmptySel;
+    aEmptySel.Min() = aEditDoc.GetStartPaM();
+    aEmptySel.Max() = aEditDoc.GetStartPaM();
+
+    return CreateTextObject( aEmptySel );
+}
+
 EditTextObject* ImpEditEngine::CreateTextObject()
 {
     EditSelection aCompleteSelection;
