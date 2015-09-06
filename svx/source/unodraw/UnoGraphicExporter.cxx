@@ -38,7 +38,7 @@
 #include <framework/interaction.hxx>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
 #include <vcl/metaact.hxx>
@@ -138,7 +138,7 @@ namespace {
 
         @implements com.sun.star.drawing.GraphicExportFilter
     */
-    class GraphicExporter : public WeakImplHelper2< XGraphicExportFilter, XServiceInfo >
+    class GraphicExporter : public WeakImplHelper< XGraphicExportFilter, XServiceInfo >
     {
     public:
         GraphicExporter();

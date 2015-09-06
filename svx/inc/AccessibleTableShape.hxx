@@ -27,12 +27,12 @@
 
 #include <rtl/ref.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <svx/AccessibleShape.hxx>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <boost/noncopyable.hpp>
 
@@ -45,7 +45,7 @@ namespace accessibility
     class AccessibleTableShapeImpl;
     class AccessibleCell;
 
-    typedef ::cppu::ImplInheritanceHelper2< AccessibleShape,
+    typedef ::cppu::ImplInheritanceHelper< AccessibleShape,
                                             ::com::sun::star::accessibility::XAccessibleTable,
                                             ::com::sun::star::view::XSelectionChangeListener
                                           > AccessibleTableShape_Base;
@@ -151,7 +151,7 @@ private:
     sal_Int32 GetIndexOfSelectedChild( sal_Int32 nSelectedChildIndex ) const;
 };
 
-typedef ::cppu::WeakImplHelper5<
+typedef ::cppu::WeakImplHelper<
             ::com::sun::star::accessibility::XAccessible,
             ::com::sun::star::accessibility::XAccessibleComponent,
             ::com::sun::star::accessibility::XAccessibleContext,

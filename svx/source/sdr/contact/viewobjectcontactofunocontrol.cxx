@@ -49,7 +49,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -494,7 +494,7 @@ namespace sdr { namespace contact {
 
     //= ViewObjectContactOfUnoControl_Impl
 
-    typedef     ::cppu::WeakImplHelper4 <   XWindowListener
+    typedef     ::cppu::WeakImplHelper <   XWindowListener
                                         ,   XPropertyChangeListener
                                         ,   XContainerListener
                                         ,   XModeChangeListener

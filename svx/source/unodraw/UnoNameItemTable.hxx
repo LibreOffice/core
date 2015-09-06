@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vector>
 #include <svl/lstner.hxx>
@@ -36,7 +36,7 @@ class SfxItemPool;
 class SfxItemSet;
 
 typedef std::vector< SfxItemSet* > ItemPoolVector;
-class SvxUnoNameItemTable : public cppu::WeakImplHelper2< com::sun::star::container::XNameContainer, com::sun::star::lang::XServiceInfo >,
+class SvxUnoNameItemTable : public cppu::WeakImplHelper< com::sun::star::container::XNameContainer, com::sun::star::lang::XServiceInfo >,
                             public SfxListener
 {
 private:

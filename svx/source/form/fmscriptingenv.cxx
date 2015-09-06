@@ -31,7 +31,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -75,7 +75,7 @@ namespace svxform
 
     //= FormScriptListener
 
-    typedef ::cppu::WeakImplHelper1 <   XScriptListener
+    typedef ::cppu::WeakImplHelper <   XScriptListener
                                     >   FormScriptListener_Base;
 
     /** implements the XScriptListener interface, is used by FormScriptingEnvironment

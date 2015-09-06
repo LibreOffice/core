@@ -41,8 +41,7 @@
 
 #include <comphelper/stl_types.hxx>
 #include <tools/link.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/vclptr.hxx>
@@ -82,7 +81,7 @@ namespace svx {
 
 // FormViewPageWindowAdapter
 
-typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::container::XIndexAccess
+typedef ::cppu::WeakImplHelper <   ::com::sun::star::container::XIndexAccess
                                 ,   ::com::sun::star::form::runtime::XFormControllerContext
                                 >   FormViewPageWindowAdapter_Base;
 
@@ -139,7 +138,7 @@ typedef ::std::map  <   ::com::sun::star::uno::Reference< ::com::sun::star::awt:
                     >   MapControlContainerToSetOfForms;
 class SdrModel;
 
-class FmXFormView : public ::cppu::WeakImplHelper3<
+class FmXFormView : public ::cppu::WeakImplHelper<
                             ::com::sun::star::form::XFormControllerListener,
                             ::com::sun::star::awt::XFocusListener,
                             ::com::sun::star::container::XContainerListener>

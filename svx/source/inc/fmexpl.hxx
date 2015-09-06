@@ -51,6 +51,7 @@
 #include "fmexch.hxx"
 #include <vector>
 #include <set>
+#include <cppuhelper/implbase.hxx>
 
 class SdrObjListIter;
 class FmFormShell;
@@ -296,7 +297,7 @@ namespace svxform
     class NavigatorTreeModel;
 
     class OFormComponentObserver
-        :public ::cppu::WeakImplHelper2 <   ::com::sun::star::beans::XPropertyChangeListener
+        :public ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::container::XContainerListener
                                         >
     {

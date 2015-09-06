@@ -55,6 +55,7 @@
 #include "sdbdatacolumn.hxx"
 
 #include <comphelper/property.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -87,7 +88,7 @@ using namespace com::sun::star::accessibility;
             | BrowserMode::VLINES        \
             | BrowserMode::HEADERBAR_NEW     \
 
-class RowSetEventListener : public ::cppu::WeakImplHelper1<XRowsChangeListener>
+class RowSetEventListener : public ::cppu::WeakImplHelper<XRowsChangeListener>
 {
     VclPtr<DbGridControl> m_pControl;
 public:

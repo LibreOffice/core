@@ -73,9 +73,9 @@ using namespace ::dbtools;
 
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class ScriptEventListenerWrapper : public cppu::WeakImplHelper1< XScriptListener >
+class ScriptEventListenerWrapper : public cppu::WeakImplHelper< XScriptListener >
 {
 public:
     explicit ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException )

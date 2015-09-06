@@ -58,6 +58,7 @@
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <map>
 #include <boost/scoped_ptr.hpp>
+#include <cppuhelper/implbase.hxx>
 
 #undef GALLERY_USE_CLIPBOARD
 
@@ -105,7 +106,7 @@ struct CommandInfo
     }
 };
 
-class GalleryThemePopup : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
+class GalleryThemePopup : public ::cppu::WeakImplHelper< css::frame::XStatusListener >
 {
 private:
     const GalleryTheme* mpTheme;

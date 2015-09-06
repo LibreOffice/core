@@ -22,7 +22,7 @@
 
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "propertyset.hxx"
 #include "tablemodel.hxx"
@@ -31,7 +31,7 @@
 
 namespace sdr { namespace table {
 
-typedef ::cppu::ImplInheritanceHelper2< FastPropertySet, ::com::sun::star::table::XCellRange, ::com::sun::star::container::XNamed > TableRowBase;
+typedef ::cppu::ImplInheritanceHelper< FastPropertySet, ::com::sun::star::table::XCellRange, ::com::sun::star::container::XNamed > TableRowBase;
 
 class TableRow : public TableRowBase
 {

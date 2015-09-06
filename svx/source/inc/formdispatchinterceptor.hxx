@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
 
@@ -47,7 +47,7 @@ namespace svxform
 
     //=
 
-    typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::frame::XDispatchProviderInterceptor
+    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::frame::XDispatchProviderInterceptor
                                             ,   ::com::sun::star::lang::XEventListener
                                             >   DispatchInterceptionMultiplexer_BASE;
 

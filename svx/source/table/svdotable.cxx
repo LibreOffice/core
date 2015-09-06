@@ -56,7 +56,7 @@
 #include "svx/xflhtit.hxx"
 #include "svx/xflftrit.hxx"
 #include "svx/xfltrit.hxx"
-
+#include <cppuhelper/implbase.hxx>
 
 
 using ::com::sun::star::uno::Any;
@@ -195,7 +195,7 @@ bool TableStyleSettings::operator==( const TableStyleSettings& rStyle ) const
 
 
 
-class SdrTableObjImpl : public TableDesignUser, public ::cppu::WeakImplHelper1< ::com::sun::star::util::XModifyListener >
+class SdrTableObjImpl : public TableDesignUser, public ::cppu::WeakImplHelper< ::com::sun::star::util::XModifyListener >
 {
 public:
     CellRef mxActiveCell;

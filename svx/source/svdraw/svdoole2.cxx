@@ -60,7 +60,7 @@
 #include <sot/formats.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svtools/transfer.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <svl/solar.hrc>
 #include <svl/urihelper.hxx>
@@ -102,7 +102,7 @@ static uno::Reference < beans::XPropertySet > lcl_getFrame_throw(const SdrOle2Ob
     return xFrame;
 }
 
-class SdrLightEmbeddedClient_Impl : public ::cppu::WeakImplHelper5
+class SdrLightEmbeddedClient_Impl : public ::cppu::WeakImplHelper
                                                             < embed::XStateChangeListener
                                                             , document::XEventListener
                                                             , embed::XInplaceClient

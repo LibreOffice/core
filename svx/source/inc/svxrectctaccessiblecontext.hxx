@@ -42,8 +42,6 @@
 #include <cppuhelper/compbase6.hxx>
 #include <cppuhelper/compbase7.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include <cppuhelper/implbase6.hxx>
-#include <cppuhelper/implbase7.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <svx/rectenum.hxx>
 #include <vcl/vclptr.hxx>

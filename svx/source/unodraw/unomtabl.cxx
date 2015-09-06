@@ -24,7 +24,7 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <svl/style.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -49,7 +49,7 @@ using namespace ::cppu;
 
 typedef std::vector< SfxItemSet* > ItemPoolVector;
 
-class SvxUnoMarkerTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >,
+class SvxUnoMarkerTable : public WeakImplHelper< container::XNameContainer, lang::XServiceInfo >,
                           public SfxListener
 {
 private:

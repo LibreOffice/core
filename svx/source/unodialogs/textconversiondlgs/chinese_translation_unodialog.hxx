@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/vclptr.hxx>
 
 
@@ -59,7 +59,7 @@ The dialog gets this information from the registry on execute and writes it back
 
 class ChineseTranslationDialog;
 
-class ChineseTranslation_UnoDialog : public ::cppu::WeakImplHelper5 <
+class ChineseTranslation_UnoDialog : public ::cppu::WeakImplHelper <
                               ::com::sun::star::ui::dialogs::XExecutableDialog
                             , ::com::sun::star::lang::XInitialization
                             , ::com::sun::star::beans::XPropertySet

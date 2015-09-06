@@ -42,7 +42,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -160,7 +160,7 @@ namespace svx
         0
     };
 
-    typedef ::cppu::WeakImplHelper1 <   XFocusListener
+    typedef ::cppu::WeakImplHelper <   XFocusListener
                                     >   FmFocusListenerAdapter_Base;
     class FmFocusListenerAdapter : public FmFocusListenerAdapter_Base
     {
@@ -246,7 +246,7 @@ namespace svx
         m_xWindow.clear();
     }
 
-    typedef ::cppu::WeakImplHelper1 <   XMouseListener
+    typedef ::cppu::WeakImplHelper <   XMouseListener
                                     >   FmMouseListenerAdapter_Base;
     class FmMouseListenerAdapter : public FmMouseListenerAdapter_Base
     {

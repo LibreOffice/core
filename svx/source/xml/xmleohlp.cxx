@@ -43,6 +43,7 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 
 #include <comphelper/classids.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <map>
 #include "svx/xmleohlp.hxx"
 #include <boost/scoped_ptr.hpp>
@@ -64,7 +65,7 @@ using namespace ::com::sun::star::lang;
 
 
 
-class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper1<XOutputStream>
+class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper<XOutputStream>
 {
     ::osl::Mutex    maMutex;
     Reference < XOutputStream > xOut;

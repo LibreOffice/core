@@ -24,14 +24,14 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 
 namespace svx
 {
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::frame::XDispatch
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::frame::XDispatch
                                     >   OSingleFeatureDispatcher_Base;
 
     class OSingleFeatureDispatcher : public OSingleFeatureDispatcher_Base

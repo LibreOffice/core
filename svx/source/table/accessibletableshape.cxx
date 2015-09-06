@@ -32,7 +32,7 @@
 
 #include <algorithm>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svx/svdotable.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
@@ -61,7 +61,7 @@ struct hash
 
 typedef std::unordered_map< Reference< XCell >, rtl::Reference< AccessibleCell >, hash > AccessibleCellMap;
 
-class AccessibleTableShapeImpl : public cppu::WeakImplHelper1< XModifyListener >
+class AccessibleTableShapeImpl : public cppu::WeakImplHelper< XModifyListener >
 {
 public:
     explicit AccessibleTableShapeImpl( AccessibleShapeTreeInfo& rShapeTreeInfo );

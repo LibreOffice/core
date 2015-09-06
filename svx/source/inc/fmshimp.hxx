@@ -52,8 +52,7 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/component.hxx>
 #include <comphelper/container.hxx>
-#include <cppuhelper/compbase4.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <unotools/configitem.hxx>
 #include "formcontrolling.hxx"
 #include "fmdocumentclassification.hxx"
@@ -122,7 +121,7 @@ struct FmLoadAction
 
 
 class SfxViewFrame;
-typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::beans::XPropertyChangeListener
+typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::container::XContainerListener
                                         ,   ::com::sun::star::view::XSelectionChangeListener
                                         ,   ::com::sun::star::form::XFormControllerListener

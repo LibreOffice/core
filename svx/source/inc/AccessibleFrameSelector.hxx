@@ -30,7 +30,7 @@
 #include <tools/link.hxx>
 #include <tools/resary.hxx>
 #include <tools/rc.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <svx/framebordertype.hxx>
@@ -48,7 +48,7 @@ namespace a11y {
 
 
 class AccFrameSelector :
-    public ::cppu::WeakImplHelper5<
+    public ::cppu::WeakImplHelper<
                 ::com::sun::star::accessibility::XAccessible,
                 ::com::sun::star::accessibility::XAccessibleContext,
                 ::com::sun::star::accessibility::XAccessibleComponent,

@@ -37,10 +37,8 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/compbase6.hxx>
-#include <cppuhelper/compbase7.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include <cppuhelper/implbase6.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <svx/rectenum.hxx>

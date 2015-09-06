@@ -28,7 +28,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <rtl/ref.hxx>
@@ -73,7 +74,7 @@ const MetaCommentAction* ImplCheckForEPS( GDIMetaFile& rMtf )
 }
 
 class SvXMLGraphicInputStream:
-    public cppu::WeakImplHelper1<XInputStream>, private boost::noncopyable
+    public cppu::WeakImplHelper<XInputStream>, private boost::noncopyable
 {
 private:
 
@@ -199,7 +200,7 @@ void SAL_CALL SvXMLGraphicInputStream::closeInput() throw( NotConnectedException
 }
 
 class SvXMLGraphicOutputStream:
-    public cppu::WeakImplHelper1<XOutputStream>, private boost::noncopyable
+    public cppu::WeakImplHelper<XOutputStream>, private boost::noncopyable
 {
 private:
 
@@ -895,7 +896,7 @@ namespace {
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper4<
+typedef ::cppu::WeakComponentImplHelper<
         lang::XInitialization,
         document::XGraphicObjectResolver,
         document::XBinaryStreamResolver,

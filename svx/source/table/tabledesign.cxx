@@ -32,8 +32,8 @@
 #include <vcl/svapp.hxx>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase6.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -66,7 +66,7 @@ namespace sdr { namespace table {
 
 typedef std::map< OUString, sal_Int32 > CellStyleNameMap;
 
-typedef ::cppu::WeakComponentImplHelper6< XStyle, XNameReplace, XServiceInfo, XIndexAccess, XModifyBroadcaster, XModifyListener > TableDesignStyleBase;
+typedef ::cppu::WeakComponentImplHelper< XStyle, XNameReplace, XServiceInfo, XIndexAccess, XModifyBroadcaster, XModifyListener > TableDesignStyleBase;
 
 class TableDesignStyle : private ::cppu::BaseMutex, public TableDesignStyleBase
 {
@@ -125,7 +125,7 @@ public:
 
 typedef std::vector< Reference< XStyle > > TableDesignStyleVector;
 
-class TableDesignFamily : public ::cppu::WeakImplHelper7< XNameContainer, XNamed, XIndexAccess, XSingleServiceFactory,  XServiceInfo, XComponent, XPropertySet >
+class TableDesignFamily : public ::cppu::WeakImplHelper< XNameContainer, XNamed, XIndexAccess, XSingleServiceFactory,  XServiceInfo, XComponent, XPropertySet >
 {
 public:
     // XServiceInfo

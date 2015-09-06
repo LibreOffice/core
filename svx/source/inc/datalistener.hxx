@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_DATALISTENER_HXX
 #define INCLUDED_SVX_SOURCE_INC_DATALISTENER_HXX
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
@@ -32,7 +32,7 @@ namespace svxform
 
     class DataNavigatorWindow;
 
-    typedef cppu::WeakImplHelper3<
+    typedef cppu::WeakImplHelper<
         com::sun::star::container::XContainerListener,
         com::sun::star::frame::XFrameActionListener,
         com::sun::star::xml::dom::events::XEventListener > DataListener_t;

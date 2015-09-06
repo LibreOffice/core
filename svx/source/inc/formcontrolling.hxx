@@ -26,7 +26,7 @@
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vector>
 
@@ -125,7 +125,7 @@ namespace svx
 
     //= FormControllerHelper
 
-    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::form::runtime::XFeatureInvalidation
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::form::runtime::XFeatureInvalidation
                                     ,   ::com::sun::star::sdb::XSQLErrorListener
                                     >   FormControllerHelper_Base;
     /** is a helper class which manages form controller functionality (such as moveNext etc.).
