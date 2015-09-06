@@ -1114,12 +1114,6 @@ bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr, c
     else if ( aTempDate < GetMin() )
         aTempDate = GetMin();
 
-    if ( GetErrorHdl().IsSet() && (aDate != aTempDate) )
-    {
-        if( !GetErrorHdl().Call( this ) )
-            return false;
-    }
-
     rOutStr = ImplGetDateAsText( aTempDate, rSettings );
 
     return true;
@@ -2158,12 +2152,6 @@ bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
         aTempTime = GetMax() ;
     else if ( aTempTime < GetMin() )
         aTempTime = GetMin();
-
-    if ( GetErrorHdl().IsSet() && (aTime != aTempTime) )
-    {
-        if ( !GetErrorHdl().Call( this ) )
-            return false;
-    }
 
     bool bSecond = false;
     bool b100Sec = false;

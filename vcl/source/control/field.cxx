@@ -495,18 +495,6 @@ bool NumericFormatter::ImplNumericReformat( const OUString& rStr, sal_Int64& rVa
     {
         sal_Int64 nTempVal = ClipAgainstMinMax(rValue);
 
-        if ( GetErrorHdl().IsSet() && (rValue != nTempVal) )
-        {
-            mnCorrectedValue = nTempVal;
-            if ( !GetErrorHdl().Call( this ) )
-            {
-                mnCorrectedValue = 0;
-                return false;
-            }
-            else
-                mnCorrectedValue = 0;
-        }
-
         rOutStr = CreateFieldText( nTempVal );
         return true;
     }
@@ -1396,18 +1384,6 @@ bool MetricFormatter::ImplMetricReformat( const OUString& rStr, double& rValue, 
         else if ( nTempVal < GetMin())
             nTempVal = (double)GetMin();
 
-        if ( GetErrorHdl().IsSet() && (rValue != nTempVal) )
-        {
-            mnCorrectedValue = (sal_Int64)nTempVal;
-            if ( !GetErrorHdl().Call( this ) )
-            {
-                mnCorrectedValue = 0;
-                return false;
-            }
-            else
-                mnCorrectedValue = 0;
-        }
-
         rOutStr = CreateFieldText( (sal_Int64)nTempVal );
         return true;
     }
@@ -1949,18 +1925,6 @@ bool CurrencyFormatter::ImplCurrencyReformat( const OUString& rStr, OUString& rO
             nTempVal = GetMax();
         else if ( nTempVal < GetMin())
             nTempVal = GetMin();
-
-        if ( GetErrorHdl().IsSet() && (nValue != nTempVal) )
-        {
-            mnCorrectedValue = nTempVal;
-            if ( !GetErrorHdl().Call( this ) )
-            {
-                mnCorrectedValue = 0;
-                return false;
-            }
-            else
-                mnCorrectedValue = 0;
-        }
 
         rOutStr = CreateFieldText( nTempVal );
         return true;
