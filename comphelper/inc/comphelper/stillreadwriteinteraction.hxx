@@ -22,7 +22,7 @@
 
 
 #ifndef _COMPHELPER_STILLREADWRITEINTERACTION_HXX_
-#define _COMPHELPER_STRILLREADWRITEINTERACTION_HXX_
+#define _COMPHELPER_STILLREADWRITEINTERACTION_HXX_
 
 //_______________________________________________
 // includes

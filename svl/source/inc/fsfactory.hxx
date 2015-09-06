@@ -22,7 +22,7 @@
 
 
 #ifndef __FSFACTORY_HXX_
-#define __FSACTORY_HXX_
+#define __FSFACTORY_HXX_
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

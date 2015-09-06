@@ -22,7 +22,7 @@
 
 
 #ifndef INCLUDED_WW8_PROPERTY_SET_IMPL_HXX
-#define INCLUDED_WW8_PROEPRTY_SET_IMPL_HXX
+#define INCLUDED_WW8_PROPERTY_SET_IMPL_HXX
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <doctok/WW8Document.hxx>

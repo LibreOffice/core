@@ -21,7 +21,7 @@
 
 
 #ifndef SC_VBA_AXIS_HXX
-#define SC_VBA_AXOS_HXX
+#define SC_VBA_AXIS_HXX
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
 #include <ooo/vba/excel/XChart.hpp>
