@@ -413,8 +413,6 @@ VCL_DLLPUBLIC void Invalidated();
 class VCL_DLLPUBLIC MenuBar : public Menu
 {
     Link<void*,void> maCloseHdl;
-    Link<> maFloatHdl;
-    Link<> maHideHdl;
     bool mbCloseBtnVisible : 1;
     bool mbFloatBtnVisible : 1;
     bool mbHideBtnVisible : 1;
@@ -470,8 +468,6 @@ public:
 
     void SetCloseButtonClickHdl( const Link<void*,void>& rLink ) { maCloseHdl = rLink; }
     const Link<void*,void>& GetCloseButtonClickHdl() const       { return maCloseHdl; }
-    const Link<>& GetFloatButtonClickHdl() const                 { return maFloatHdl; }
-    const Link<>& GetHideButtonClickHdl() const                  { return maHideHdl; }
 
     //  - by default a menubar is displayable
     //  - if a menubar is not displayable, its MenuBarWindow will never be shown

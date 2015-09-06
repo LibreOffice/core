@@ -153,11 +153,9 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
         aCloseBtn->AddEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
         aCloseBtn->SetQuickHelpText(IID_DOCUMENTCLOSE, ResId(SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr).toString());
 
-        aFloatBtn->SetClickHdl( LINK( this, MenuBarWindow, FloatHdl ) );
         aFloatBtn->SetSymbol( SymbolType::FLOAT );
         aFloatBtn->SetQuickHelpText( ResId(SV_HELPTEXT_RESTORE, *pResMgr).toString() );
 
-        aHideBtn->SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
         aHideBtn->SetSymbol( SymbolType::HIDE );
         aHideBtn->SetQuickHelpText( ResId(SV_HELPTEXT_MINIMIZE, *pResMgr).toString() );
     }
@@ -287,18 +285,6 @@ IMPL_LINK( MenuBarWindow, ShowHideListener, VclWindowEvent*, pEvent )
     else if( pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
         pMenu->ImplCallEventListeners( VCLEVENT_MENU_HIDE, ITEMPOS_INVALID );
     return 0;
-}
-
-IMPL_LINK_NOARG_TYPED(MenuBarWindow, FloatHdl, Button*, void)
-{
-    if (pMenu)
-        static_cast<MenuBar*>(pMenu)->GetFloatButtonClickHdl().Call( pMenu );
-}
-
-IMPL_LINK_NOARG_TYPED(MenuBarWindow, HideHdl, Button*, void)
-{
-    if (pMenu)
-        static_cast<MenuBar*>(pMenu)->GetHideButtonClickHdl().Call( pMenu );
 }
 
 void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )

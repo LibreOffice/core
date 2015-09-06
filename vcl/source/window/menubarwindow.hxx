@@ -104,8 +104,6 @@ private:
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
     DECL_LINK_TYPED(CloseHdl, ToolBox*, void);
-    DECL_LINK_TYPED(FloatHdl, Button*, void);
-    DECL_LINK_TYPED(HideHdl, Button*, void);
     DECL_LINK( ToolboxEventHdl, VclWindowEvent* );
     DECL_LINK( ShowHideListener, VclWindowEvent* );
 
