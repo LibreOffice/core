@@ -118,7 +118,7 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, sal_uInt16 nErrCode )
                 sal_uInt32 nNumFmt = 0;
                 if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 && eFunc != SUBTOTAL_FUNC_SELECTION_COUNT)
                 {
-                    //  Zahlformat aus Attributen oder Formel
+                    // number format from attributes or formula
                     pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
                 }
 
@@ -653,11 +653,10 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
                 pDoc->GetInputString( nPosX, nPosY, nTab, aString );
                 if (eType == CELLTYPE_STRING)
                 {
-                    //  Bei Bedarf ein ' vorneweg, damit der String nicht ungewollt
-                    //  als Zahl interpretiert wird, und um dem Benutzer zu zeigen,
-                    //  dass es ein String ist (#35060#).
-                    //! Auch bei Zahlformat "Text"? -> dann beim Editieren wegnehmen
-
+                    // Put a ' in front if necessary, so that the string is not
+                    // unintentionally interpreted as a number, and to show the
+                    // user that it is a string (#35060#).
+                    //! also for numberformat "Text"? -> then remove when editing
                     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                     sal_uInt32 nNumFmt;
                     pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
@@ -682,7 +681,7 @@ void ScTabViewShell::UpdateInputHandler( bool bForce /* = sal_False */, bool bSt
     }
 
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
-    rBindings.Invalidate( SID_STATUS_SUM );         // immer zusammen mit Eingabezeile
+    rBindings.Invalidate( SID_STATUS_SUM );         // always together with the input row
     rBindings.Invalidate( SID_ATTR_SIZE );
     rBindings.Invalidate( SID_TABLE_CELL );
 }
