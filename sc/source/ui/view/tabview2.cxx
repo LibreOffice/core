@@ -337,8 +337,7 @@ void ScTabView::InitOwnBlockMode()
 {
     if (!IsBlockMode())
     {
-        //  Wenn keine (alte) Markierung mehr da ist, Anker in SelectionEngine loeschen:
-
+        // when there is no (old) selection anynmore, delete anchor in SelectionEngine:
         ScMarkData& rMark = aViewData.GetMarkData();
         if (!rMark.IsMarked() && !rMark.IsMultiMarked())
             GetSelEngine()->CursorPosChanging( false, false );
@@ -351,7 +350,7 @@ void ScTabView::InitOwnBlockMode()
         nBlockEndY = 0;
         nBlockEndZ = 0;
 
-        SelectionChanged();     // Status wird mit gesetzer Markierung abgefragt
+        SelectionChanged();     // status is checked with mark set
     }
 }
 
@@ -366,7 +365,7 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         ScMarkData& rMark = aViewData.GetMarkData();
         SCTAB nTab = aViewData.GetTabNo();
 
-        //  Teil von Markierung aufheben?
+        //  unmark part?
         if (bForceNeg)
             bBlockNeg = true;
         else if (bTestNeg)
@@ -412,9 +411,9 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
 void ScTabView::DoneBlockMode( bool bContinue )
 {
-    //  Wenn zwischen Tabellen- und Header SelectionEngine gewechselt wird,
-    //  wird evtl. DeselectAll gerufen, weil die andere Engine keinen Anker hat.
-    //  Mit bMoveIsShift wird verhindert, dass dann die Selektion aufgehoben wird.
+    // When switching between sheet and header SelectionEngine DeselectAll may be called,
+    // because the other engine does not have any anchor.
+    // bMoveIsShift prevents the selection to be canceled.
 
     if (IsBlockMode() && !bMoveIsShift)
     {
@@ -429,14 +428,12 @@ void ScTabView::DoneBlockMode( bool bContinue )
             rMark.MarkToMulti();
         else
         {
-            //  Die Tabelle kann an dieser Stelle ungueltig sein, weil DoneBlockMode
-            //  aus SetTabNo aufgerufen wird
-            //  (z.B. wenn die aktuelle Tabelle von einer anderen View aus geloescht wird)
-
+            // the sheet may be invalid at this point because DoneBlockMode from SetTabNo is
+            // called (for example, when the current sheet is closed from another View)
             SCTAB nTab = aViewData.GetTabNo();
             ScDocument* pDoc = aViewData.GetDocument();
             if ( pDoc->HasTable(nTab) )
-                PaintBlock( true );                             // true -> Block loeschen
+                PaintBlock( true );                             // true -> delete block
             else
                 rMark.ResetMark();
         }
@@ -460,7 +457,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
     if (!IsBlockMode())
     {
-        OSL_FAIL( "MarkCursor nicht im BlockMode" );
+        OSL_FAIL( "MarkCursor not in BlockMode" );
         InitBlockMode( nCurX, nCurY, nCurZ, false, bCols, bRows );
     }
 
@@ -477,13 +474,12 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         ( aMarkRange.aStart.Row() != nBlockStartY && aMarkRange.aEnd.Row() != nBlockStartY ) ||
         ( meBlockMode == Own ))
     {
-        //  Markierung ist veraendert worden
-        //  (z.B. MarkToSimple, wenn per negativ alles bis auf ein Rechteck geloescht wurde)
-        //  oder nach InitOwnBlockMode wird mit Shift-Klick weitermarkiert...
-
+        //  Mark has been changed
+        // (Eg MarkToSimple if by negative everything was erased, except for a rectangle)
+        // or after InitOwnBlockMode is further marked with shift-
         bool bOldShift = bMoveIsShift;
-        bMoveIsShift = false;               //  wirklich umsetzen
-        DoneBlockMode();               //! direkt Variablen setzen? (-> kein Geflacker)
+        bMoveIsShift = false;          //  really move
+        DoneBlockMode();               //! Set variables directly? (-> no flicker)
         bMoveIsShift = bOldShift;
 
         InitBlockMode( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
@@ -683,7 +679,7 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
 
-    //  FindAreaPos kennt nur -1 oder 1 als Richtung
+    // FindAreaPos knows only -1 or 1 as direction
     ScModule* pScModule = SC_MOD();
     bool bLegacyCellSelection = pScModule->GetInputOptions().GetLegacyCellSelection();
     SCCOL nVirtualX = bLegacyCellSelection ? nNewX : nCurX;
@@ -703,7 +699,7 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
         for ( i=0; i<-nMovY; i++ )
             pDoc->FindAreaPos( nVirtualX, nNewY, nTab,  SC_MOVE_UP );
 
-    if (eMode==SC_FOLLOW_JUMP)                  // unten/rechts nicht zuviel grau anzeigen
+    if (eMode==SC_FOLLOW_JUMP)                  // bottom right do not show to much grey
     {
         if (nMovX != 0 && nNewX == MAXCOL)
             eMode = SC_FOLLOW_LINE;
@@ -996,7 +992,7 @@ void ScTabView::UpdateAllOverlays()
 }
 
 //!
-//! PaintBlock in zwei Methoden aufteilen: RepaintBlock und RemoveBlock o.ae.
+//! divide PaintBlock in to two methods: RepaintBlock and RemoveBlock or similar
 //!
 
 void ScTabView::PaintBlock( bool bReset )
@@ -1033,7 +1029,7 @@ void ScTabView::PaintBlock( bool bReset )
         {
             if ( bReset )
             {
-                // Invertieren beim Loeschen nur auf aktiver View
+                // Inverting when deleting only on active View
                 if ( aViewData.IsActive() )
                 {
                     rMark.ResetMark();
@@ -1174,11 +1170,11 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
 
     switch ( eType )
     {
-        case SvxZoomType::PERCENT: // rZoom ist kein besonderer prozentualer Wert
+        case SvxZoomType::PERCENT: // rZoom is no particular percent value
             nZoom = nOldZoom;
             break;
 
-        case SvxZoomType::OPTIMAL:  // nZoom entspricht der optimalen Gr"o\se
+        case SvxZoomType::OPTIMAL:  // nZoom corresponds to the optimal size
             {
                 ScMarkData& rMark = aViewData.GetMarkData();
                 ScDocument* pDoc = aViewData.GetDocument();
@@ -1254,7 +1250,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                             else
                                 nMax = nTest-1;
                         }
-                        OSL_ENSURE( nMin == nMax, "Schachtelung ist falsch" );
+                        OSL_ENSURE( nMin == nMax, "Nesting is wrong" );
                         nZoom = nMin;
 
                         if ( nZoom != nOldZoom )
@@ -1272,8 +1268,8 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
             }
             break;
 
-            case SvxZoomType::WHOLEPAGE:    // nZoom entspricht der ganzen Seite oder
-            case SvxZoomType::PAGEWIDTH:    // nZoom entspricht der Seitenbreite
+            case SvxZoomType::WHOLEPAGE:    // nZoom corresponds to the whole page or
+            case SvxZoomType::PAGEWIDTH:    // nZoom corresponds to the page width
                 {
                     SCTAB               nCurTab     = aViewData.GetTabNo();
                     ScDocument*         pDoc        = aViewData.GetDocument();
@@ -1357,7 +1353,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
     return nZoom;
 }
 
-//  wird z.B. gerufen, wenn sich das View-Fenster verschiebt:
+// is called for instance when the view window is shifted:
 
 void ScTabView::StopMarking()
 {
@@ -1387,8 +1383,8 @@ void ScTabView::MakeDrawLayer()
     {
         aViewData.GetDocShell()->MakeDrawLayer();
 
-        //  pDrawView wird per Notify gesetzt
-        OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer funktioniert nicht");
+        // pDrawView is set per Notify
+        OSL_ENSURE(pDrawView,"ScTabView::MakeDrawLayer does not work");
 
         // #114409#
         for(sal_uInt16 a(0); a < 4; a++)
@@ -1409,7 +1405,7 @@ void ScTabView::ErrorMessage( sal_uInt16 nGlobStrId )
         return;
     }
 
-    StopMarking();      // falls per Focus aus MouseButtonDown aufgerufen
+    StopMarking();      // if called by Focus from MouseButtonDown
 
     vcl::Window* pParent = aViewData.GetDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
@@ -1445,14 +1441,14 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
         pNewData = new ScPageBreakData(nCount);
 
         ScPrintFunc aPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab, 0,0,NULL, NULL, pNewData );
-        //  ScPrintFunc fuellt im ctor die PageBreakData
+        // ScPrintFunc fills the PageBreakData in ctor
         if ( nCount > 1 )
         {
             aPrintFunc.ResetBreaks(nTab);
             pNewData->AddPages();
         }
 
-        //  Druckbereiche veraendert?
+        // print area changed?
         if ( bForcePaint || ( pPageBreakData && !( *pPageBreakData == *pNewData ) ) )
             PaintGrid();
     }
