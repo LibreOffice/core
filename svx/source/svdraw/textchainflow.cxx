@@ -170,14 +170,14 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
         mpNextLink->NbcSetOutlinerParaObject(pOutl->GetEmptyParaObject());
 
     // We store the size since NbcSetOutlinerParaObject can change it
-    Size aOldSize = pOutl->GetMaxAutoPaperSize();
+    //Size aOldSize = pOutl->GetMaxAutoPaperSize();
 
     // This should not be done in editing mode!! //XXX
     if (!mpTargetLink->IsInEditMode())
         mpTargetLink->NbcSetOutlinerParaObject(pNewText);
 
     // Restore size and set new text
-    //pOutl->SetMaxAutoPaperSize(aOldSize); // XXX
+    //pOutl->SetMaxAutoPaperSize(aOldSize); // XXX (it seems to be working anyway without this)
     pOutl->SetText(*pNewText);
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
