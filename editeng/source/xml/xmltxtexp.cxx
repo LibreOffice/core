@@ -57,11 +57,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
 using namespace cppu;
 
-
-
 class SvxEditEngineSourceImpl;
-
-
 
 class SvxEditEngineSourceImpl
 {
@@ -74,18 +70,13 @@ private:
     ~SvxEditEngineSourceImpl();
 
 public:
-    SvxEditEngineSourceImpl( EditEngine* pEditEngine );
+    explicit SvxEditEngineSourceImpl( EditEngine* pEditEngine );
 
     void SAL_CALL acquire();
     void SAL_CALL release();
 
     SvxTextForwarder*       GetTextForwarder();
 };
-
-
-
-
-
 
 SvxEditEngineSourceImpl::SvxEditEngineSourceImpl( EditEngine* pEditEngine )
 : maRefCount(0),
@@ -94,29 +85,21 @@ SvxEditEngineSourceImpl::SvxEditEngineSourceImpl( EditEngine* pEditEngine )
 {
 }
 
-
-
 SvxEditEngineSourceImpl::~SvxEditEngineSourceImpl()
 {
     delete mpTextForwarder;
 }
-
-
 
 void SAL_CALL SvxEditEngineSourceImpl::acquire()
 {
     osl_atomic_increment( &maRefCount );
 }
 
-
-
 void SAL_CALL SvxEditEngineSourceImpl::release()
 {
     if( ! osl_atomic_decrement( &maRefCount ) )
         delete this;
 }
-
-
 
 SvxTextForwarder* SvxEditEngineSourceImpl::GetTextForwarder()
 {
@@ -126,17 +109,12 @@ SvxTextForwarder* SvxEditEngineSourceImpl::GetTextForwarder()
     return mpTextForwarder;
 }
 
-
 // SvxTextEditSource
-
-
 SvxEditEngineSource::SvxEditEngineSource( EditEngine* pEditEngine )
 {
     mpImpl = new SvxEditEngineSourceImpl( pEditEngine );
     mpImpl->acquire();
 }
-
-
 
 SvxEditEngineSource::SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl )
 {
@@ -144,21 +122,15 @@ SvxEditEngineSource::SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl )
     mpImpl->acquire();
 }
 
-
-
 SvxEditEngineSource::~SvxEditEngineSource()
 {
     mpImpl->release();
 }
 
-
-
 SvxEditSource* SvxEditEngineSource::Clone() const
 {
     return new SvxEditEngineSource( mpImpl );
 }
-
-
 
 SvxTextForwarder* SvxEditEngineSource::GetTextForwarder()
 {

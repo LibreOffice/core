@@ -31,7 +31,7 @@ class OUserSettingsDialog
 {
 
 protected:
-    OUserSettingsDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+    explicit OUserSettingsDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 public:
     // XTypeProvider

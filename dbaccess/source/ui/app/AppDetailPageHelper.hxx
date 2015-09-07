@@ -66,7 +66,7 @@ namespace dbaui
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
     public:
-        OPreviewWindow(vcl::Window* _pParent);
+        explicit OPreviewWindow(vcl::Window* _pParent);
 
         // Window overrides
         virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;

@@ -1731,8 +1731,10 @@ namespace {
 
 struct FindByPos
 {
-    FindByPos(sal_Int32 nPos):
-        mnPos(nPos) {}
+    explicit FindByPos(sal_Int32 nPos)
+        : mnPos(nPos)
+    {
+    }
 
     bool operator()(const ScriptTypePosInfos::value_type& rValue)
     {

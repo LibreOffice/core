@@ -31,7 +31,7 @@ class ODataSourcePropertyDialog
 {
 
 protected:
-    ODataSourcePropertyDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+    explicit ODataSourcePropertyDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 public:
     // XTypeProvider

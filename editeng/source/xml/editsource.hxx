@@ -28,7 +28,7 @@ class SvxEditEngineSourceImpl;
 class SvxEditEngineSource : public SvxEditSource
 {
 public:
-    SvxEditEngineSource( EditEngine* pEditEngine );
+    explicit SvxEditEngineSource( EditEngine* pEditEngine );
     virtual ~SvxEditEngineSource();
 
     virtual SvxEditSource*      Clone() const SAL_OVERRIDE;
@@ -36,7 +36,7 @@ public:
     virtual void                UpdateData() SAL_OVERRIDE;
 
 private:
-    SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl );
+    explicit SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl );
 
     SvxEditEngineSourceImpl*    mpImpl;
 };

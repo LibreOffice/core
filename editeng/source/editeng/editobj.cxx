@@ -877,7 +877,7 @@ class FindByParagraph : std::unary_function<editeng::Section, bool>
 {
     sal_Int32 mnPara;
 public:
-    FindByParagraph(sal_Int32 nPara) : mnPara(nPara) {}
+    explicit FindByParagraph(sal_Int32 nPara) : mnPara(nPara) {}
     bool operator() (const editeng::Section& rAttr) const
     {
         return rAttr.mnParagraph == mnPara;

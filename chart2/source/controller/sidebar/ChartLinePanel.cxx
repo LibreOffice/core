@@ -93,7 +93,7 @@ css::uno::Any getLineDash(
 class PreventUpdate
 {
 public:
-    PreventUpdate(bool& bUpdate):
+    explicit PreventUpdate(bool& bUpdate):
         mbUpdate(bUpdate)
     {
         mbUpdate = false;

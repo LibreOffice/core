@@ -51,7 +51,7 @@ namespace dbaui
         // </properties>
 
     protected:
-        ComposerDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+        explicit ComposerDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
         virtual ~ComposerDialog();
 
     public:
@@ -77,7 +77,7 @@ namespace dbaui
     class RowsetFilterDialog : public ComposerDialog
     {
     public:
-        RowsetFilterDialog(
+        explicit RowsetFilterDialog(
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 
@@ -102,7 +102,7 @@ namespace dbaui
     class RowsetOrderDialog : public ComposerDialog
     {
     public:
-        RowsetOrderDialog(
+        explicit RowsetOrderDialog(
             const css::uno::Reference< css::uno::XComponentContext >& _rxORB
         );
 

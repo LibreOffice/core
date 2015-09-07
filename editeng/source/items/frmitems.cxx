@@ -3317,7 +3317,7 @@ public:
                                           //copied to the GraphicObject when necessary
     SvStream*       pStream;
 
-    SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0), pStream(0) {}
+    explicit SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0), pStream(0) {}
 };
 
 

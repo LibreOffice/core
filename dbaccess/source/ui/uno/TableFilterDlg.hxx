@@ -31,7 +31,7 @@ class OTableFilterDialog
 {
 
 protected:
-    OTableFilterDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+    explicit OTableFilterDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 public:
     // XTypeProvider

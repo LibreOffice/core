@@ -125,7 +125,7 @@ namespace dbaui
     class SQLExceptionInteractionHandler : public BasicInteractionHandler
     {
     public:
-        SQLExceptionInteractionHandler(
+        explicit SQLExceptionInteractionHandler(
                 const css::uno::Reference< css::uno::XComponentContext >& rxContext
             )
             :BasicInteractionHandler( rxContext, false )
@@ -153,7 +153,7 @@ namespace dbaui
     class LegacyInteractionHandler : public BasicInteractionHandler
     {
     public:
-        LegacyInteractionHandler(
+        explicit LegacyInteractionHandler(
                 const css::uno::Reference< css::uno::XComponentContext >& rxContext
             )
             :BasicInteractionHandler( rxContext, true )

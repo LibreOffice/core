@@ -53,7 +53,7 @@ namespace
         sal_uInt32 generateStepTime(sal_uInt32 nIndex) const;
 
     public:
-        animatedBitmapExPreparator(const Graphic& rGraphic);
+        explicit animatedBitmapExPreparator(const Graphic& rGraphic);
 
         sal_uInt32 count() const { return maSteps.size(); }
         sal_uInt32 loopCount() const { return (sal_uInt32)maAnimation.GetLoopCount(); }

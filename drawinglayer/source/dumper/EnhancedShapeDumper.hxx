@@ -34,11 +34,9 @@
 class EnhancedShapeDumper
 {
 public:
-    EnhancedShapeDumper(xmlTextWriterPtr writer)
-    :
-    xmlWriter(writer)
+    explicit EnhancedShapeDumper(xmlTextWriterPtr writer)
+        : xmlWriter(writer)
     {
-
     }
 
     // auxiliary functions

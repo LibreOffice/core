@@ -82,7 +82,7 @@ class AddTableDialogContext : public IAddTableDialogContext
     OJoinController& m_rController;
 
 public:
-    AddTableDialogContext( OJoinController& _rController )
+    explicit AddTableDialogContext( OJoinController& _rController )
         :m_rController( _rController )
     {
     }

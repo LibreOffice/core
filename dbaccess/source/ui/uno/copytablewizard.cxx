@@ -189,7 +189,7 @@ namespace dbaui
         bool            isInitialized() const { return m_xSourceConnection.is() && m_pSourceObject.get() && m_xDestConnection.is(); }
 
     protected:
-        CopyTableWizard( const Reference< XComponentContext >& _rxORB );
+        explicit CopyTableWizard( const Reference< XComponentContext >& _rxORB );
         virtual ~CopyTableWizard();
 
         // OGenericUnoDialog overridables
@@ -355,7 +355,7 @@ private:
 class CopyTableAccessGuard
 {
 public:
-    CopyTableAccessGuard( CopyTableWizard& _rWizard )
+    explicit CopyTableAccessGuard( CopyTableWizard& _rWizard )
         :m_rWizard( _rWizard )
     {
         m_rWizard.getMutex().acquire();

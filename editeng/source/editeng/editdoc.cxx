@@ -470,7 +470,7 @@ class FindTextPortionByAddress : std::unary_function<TextPortion, bool>
 {
     const TextPortion* mp;
 public:
-    FindTextPortionByAddress(const TextPortion* p) : mp(p) {}
+    explicit FindTextPortionByAddress(const TextPortion* p) : mp(p) {}
     bool operator() (const TextPortion& v) const
     {
         return &v == mp;
@@ -1991,7 +1991,7 @@ class RemoveEachItemFromPool : std::unary_function<ContentNode, void>
 {
     EditDoc& mrDoc;
 public:
-    RemoveEachItemFromPool(EditDoc& rDoc) : mrDoc(rDoc) {}
+    explicit RemoveEachItemFromPool(EditDoc& rDoc) : mrDoc(rDoc) {}
     void operator() (const ContentNode& rNode)
     {
         mrDoc.RemoveItemsFromPool(rNode);
@@ -2896,7 +2896,7 @@ class FindByAddress : std::unary_function<EditCharAttrib, bool>
 {
     const EditCharAttrib* mpAttr;
 public:
-    FindByAddress(const EditCharAttrib* p) : mpAttr(p) {}
+    explicit FindByAddress(const EditCharAttrib* p) : mpAttr(p) {}
     bool operator() (const EditCharAttrib& r) const
     {
         return &r == mpAttr;
@@ -2985,7 +2985,7 @@ class FindByStartPos : std::unary_function<EditCharAttrib, bool>
 {
     sal_Int32 mnPos;
 public:
-    FindByStartPos(sal_Int32 nPos) : mnPos(nPos) {}
+    explicit FindByStartPos(sal_Int32 nPos) : mnPos(nPos) {}
     bool operator() (const EditCharAttrib& r) const
     {
         return r.GetStart() >= mnPos;
@@ -3015,7 +3015,7 @@ class RemoveEmptyAttrItem : std::unary_function<EditCharAttrib, void>
 {
     SfxItemPool& mrItemPool;
 public:
-    RemoveEmptyAttrItem(SfxItemPool& rPool) : mrItemPool(rPool) {}
+    explicit RemoveEmptyAttrItem(SfxItemPool& rPool) : mrItemPool(rPool) {}
     void operator() (const EditCharAttrib& r)
     {
         if (r.IsEmpty())

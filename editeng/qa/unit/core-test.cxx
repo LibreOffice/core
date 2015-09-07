@@ -347,7 +347,7 @@ namespace {
     class UrlEditEngine : public EditEngine
     {
     public:
-        UrlEditEngine(SfxItemPool *pPool) : EditEngine(pPool) {}
+        explicit UrlEditEngine(SfxItemPool *pPool) : EditEngine(pPool) {}
 
         virtual OUString CalcFieldValue( const SvxFieldItem&, sal_Int32, sal_Int32, Color*&, Color*& ) SAL_OVERRIDE
         {

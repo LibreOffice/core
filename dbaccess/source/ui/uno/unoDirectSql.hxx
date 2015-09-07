@@ -44,7 +44,7 @@ namespace dbaui
         OUString      m_sInitialSelection;
         css::uno::Reference< css::sdbc::XConnection > m_xActiveConnection;
     protected:
-        ODirectSQLDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+        explicit ODirectSQLDialog(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
         virtual ~ODirectSQLDialog();
 
     public:

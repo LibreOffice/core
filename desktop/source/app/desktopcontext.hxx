@@ -28,7 +28,7 @@ namespace desktop
     class DesktopContext: public cppu::WeakImplHelper< com::sun::star::uno::XCurrentContext >
     {
     public:
-    DesktopContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx);
+    explicit DesktopContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx);
 
         // XCurrentContext
         virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )

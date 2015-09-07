@@ -33,7 +33,7 @@ class ODBTypeWizDialogSetup
     bool        m_bStartTableWizard;
 
 protected:
-    ODBTypeWizDialogSetup(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+    explicit ODBTypeWizDialogSetup(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
 public:
     // XTypeProvider

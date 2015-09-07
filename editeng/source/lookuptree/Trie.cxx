@@ -26,7 +26,7 @@ struct TrieNode
     TrieNode*               mLatinArray[LATIN_ARRAY_SIZE];
 
 
-    TrieNode(sal_Unicode aCharacter = '\0');
+    explicit TrieNode(sal_Unicode aCharacter = '\0');
     virtual ~TrieNode();
 
     void      markWord();

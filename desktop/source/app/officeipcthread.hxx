@@ -45,7 +45,7 @@ oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSign
 // that was given by command line or by IPC pipe communication.
 struct ProcessDocumentsRequest
 {
-    ProcessDocumentsRequest(boost::optional< OUString > const & cwdUrl):
+    explicit ProcessDocumentsRequest(boost::optional< OUString > const & cwdUrl):
         aCwdUrl(cwdUrl), pcProcessed( NULL ), bTextCat( false ) {}
 
     boost::optional< OUString > aCwdUrl;

@@ -44,7 +44,7 @@ namespace drawinglayer
             {
             }
 
-            ImpMaterialAttribute3D(const basegfx::BColor& rColor)
+            explicit ImpMaterialAttribute3D(const basegfx::BColor& rColor)
             :   maColor(rColor),
                 maSpecular(1.0, 1.0, 1.0),
                 maEmission(),

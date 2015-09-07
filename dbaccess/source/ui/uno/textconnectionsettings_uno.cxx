@@ -70,7 +70,7 @@ namespace dbaui
         PropertyValues  m_aPropertyValues;
 
     protected:
-        OTextConnectionSettingsDialog( const Reference<XComponentContext>& _rContext );
+        explicit OTextConnectionSettingsDialog( const Reference<XComponentContext>& _rContext );
         virtual ~OTextConnectionSettingsDialog();
 
     public:

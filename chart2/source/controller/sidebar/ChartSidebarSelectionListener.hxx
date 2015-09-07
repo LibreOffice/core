@@ -35,7 +35,7 @@ class ChartSidebarSelectionListener : public cppu::WeakImplHelper1<css::view::XS
 public:
 
     // listen to all chart selection changes
-    ChartSidebarSelectionListener(ChartSidebarSelectionListenerParent* pParent);
+    explicit ChartSidebarSelectionListener(ChartSidebarSelectionListenerParent* pParent);
     // only liste to the changes of eType
     ChartSidebarSelectionListener(ChartSidebarSelectionListenerParent* pParent, ObjectType eType);
     virtual ~ChartSidebarSelectionListener();

@@ -207,7 +207,7 @@ GraphicObject getXBitmapFromName(css::uno::Reference<css::frame::XModel> xModel,
 class PreventUpdate
 {
 public:
-    PreventUpdate(bool& bUpdate):
+    explicit PreventUpdate(bool& bUpdate):
         mbUpdate(bUpdate)
     {
         mbUpdate = false;

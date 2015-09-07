@@ -505,7 +505,7 @@ struct RemoveAttribsFromPool : std::unary_function<ContentAttribsInfo, void>
 {
     SfxItemPool& mrPool;
 public:
-    RemoveAttribsFromPool(SfxItemPool& rPool) : mrPool(rPool) {}
+    explicit RemoveAttribsFromPool(SfxItemPool& rPool) : mrPool(rPool) {}
     void operator() (ContentAttribsInfo& rInfo)
     {
         rInfo.RemoveAllCharAttribsFromPool(mrPool);
