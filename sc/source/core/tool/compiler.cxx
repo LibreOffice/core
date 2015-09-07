@@ -3524,26 +3524,17 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
     sal_Int32 nOffset = pDBData->GetColumnNameOffset( aName);
     if (nOffset >= 0)
     {
-        if (pDBData->HasHeader())
-        {
-            ScSingleRefData aRef;
-            ScAddress aAdr( aRange.aStart);
-            aAdr.IncCol( nOffset);
-            aRef.InitAddress( aAdr);
-            maRawToken.SetSingleReference( aRef );
-        }
-        else
-        {
-            /* TODO: this probably needs a new token type to hold offset and
-             * name, to be handled in HandleTableRef(). We can't use a
-             * reference token here because any reference would be wrong as
-             * there are no header cells to be referenced. However, it would
-             * only work as long as the ScDBData column names are not
-             * invalidated during document structure changes, otherwise
-             * recompiling the same formula could not resolve the name again.
-             * As long as this doesn't work generate an error. */
-            return false;
-        }
+        // This is sneaky.. we always use the top row of the database range,
+        // regardless of whether it is a header row or not. Code evaluating
+        // this reference must take that into account and may have to act
+        // differently if it is a header-less table. Which are two places,
+        // HandleTableRef() (no change necessary there) and
+        // CreateStringFromSingleRef() (must not fallback to cell lookup).
+        ScSingleRefData aRef;
+        ScAddress aAdr( aRange.aStart);
+        aAdr.IncCol( nOffset);
+        aRef.InitAddress( aAdr);
+        maRawToken.SetSingleReference( aRef );
         return true;
     }
 
@@ -4706,13 +4697,25 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
     {
         OUString aStr;
         ScAddress aAbs = rRef.toAbs(aPos);
-        const ScDBData* pData = pDoc->GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab(), ScDBDataPortion::HEADER);
+        const ScDBData* pData = pDoc->GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab(), ScDBDataPortion::AREA);
+        SAL_WARN_IF( !pData, "sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef without ScDBData: " <<
+                aAbs.Format( SCA_VALID | SCA_TAB_3D, pDoc));
         if (pData)
             aStr = pData->GetTableColumnName( aAbs.Col());
         if (aStr.isEmpty())
         {
-            SAL_WARN("sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef falling back to cell");
-            aStr = pDoc->GetString(aAbs);
+            if (pData && pData->HasHeader())
+            {
+                SAL_WARN("sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef falling back to cell: " <<
+                        aAbs.Format( SCA_VALID | SCA_TAB_3D, pDoc));
+                aStr = pDoc->GetString(aAbs);
+            }
+            else
+            {
+                SAL_WARN("sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef of empty header-less: " <<
+                        aAbs.Format( SCA_VALID | SCA_TAB_3D, pDoc));
+                aStr = aErrRef;
+            }
         }
         escapeTableRefColumnSpecifier( aStr);
         rBuffer.append(aStr);
