@@ -2455,6 +2455,21 @@ void ChartExport::exportAxes( )
     }
 }
 
+namespace {
+
+sal_Int32 getXAxisType(sal_Int32 eChartType)
+{
+    if( (eChartType == chart::TYPEID_SCATTER)
+            || (eChartType == chart::TYPEID_BUBBLE) )
+        return  XML_valAx;
+    else if( eChartType == chart::TYPEID_STOCK )
+        return  XML_dateAx;
+
+    return XML_catAx;
+}
+
+}
+
 void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
 {
     // get some properties from document first
@@ -2518,12 +2533,8 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
             if( bHasXAxisMinorGrid )
                 xMinorGrid.set( xAxisXSupp->getXHelpGrid(), uno::UNO_QUERY );
 
-            sal_Int32 eChartType = getChartType( );
-            if( (eChartType == chart::TYPEID_SCATTER)
-                || (eChartType == chart::TYPEID_BUBBLE) )
-                nAxisType = XML_valAx;
-            else if( eChartType == chart::TYPEID_STOCK )
-                nAxisType = XML_dateAx;
+            sal_Int32 eChartType = getChartType();
+            nAxisType = getXAxisType(eChartType);
             // FIXME: axPos, need to check axis direction
             sAxPos = "b";
             break;
@@ -2578,7 +2589,8 @@ void ChartExport::exportAxis(const AxisIdPair& rAxisIdPair)
                 xAxisTitle.set( xAxisSupp->getSecondXAxisTitle(), uno::UNO_QUERY );
             }
 
-            nAxisType = XML_valAx;
+            sal_Int32 eChartType = getChartType();
+            nAxisType = getXAxisType(eChartType);
             // FIXME: axPos, need to check axis direction
             sAxPos = "t";
             break;
