@@ -1763,6 +1763,10 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
 
         for (int i = nMinGlyphPos; i < nEndGlyphPos; i++)
         {
+            // Ignore dropped glyphs.
+            if (mpOutGlyphs[i] == DROPPED_OUTGLYPH)
+                continue;
+
             assert(mrWinFontEntry.GlyphIsCached(mpOutGlyphs[i]));
 
             const OpenGLGlyphCacheChunk& rChunk = mrWinFontEntry.GetCachedGlyphChunkFor(mpOutGlyphs[i]);
