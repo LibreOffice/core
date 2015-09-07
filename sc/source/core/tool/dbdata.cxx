@@ -188,16 +188,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     {
         if (!maTableColumnNames.empty())
             ::std::vector<OUString>().swap( maTableColumnNames);
-        if (bHasHeader)
-        {
-            mbTableColumnNamesDirty = true;
-            if (mpContainer)
-                mpContainer->GetDirtyTableColumnNames().Join( GetHeaderArea());
-        }
-        else
-        {
-            mbTableColumnNamesDirty = false;
-        }
+        InvalidateTableColumnNames();
     }
     else
     {
@@ -335,7 +326,7 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
         {
             SAL_WARN("sc.core", "ScDBData::SetArea - invalidating column names/offsets");
             ::std::vector<OUString>().swap( maTableColumnNames);
-            mbTableColumnNamesDirty = true;
+            InvalidateTableColumnNames();
         }
     }
 
@@ -645,7 +636,7 @@ void ScDBData::ExtendDataArea(ScDocument* pDoc)
         {
             SAL_WARN("sc.core", "ScDBData::ExtendDataArea - invalidating column names/offsets");
             ::std::vector<OUString>().swap( maTableColumnNames);
-            mbTableColumnNamesDirty = true;
+            InvalidateTableColumnNames();
         }
     }
 }
@@ -717,6 +708,8 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
     aNewNames.swap( maTableColumnNames);
     if (maTableColumnNames.empty())
         mbTableColumnNamesDirty = true;
+    if (mbTableColumnNamesDirty)
+        InvalidateTableColumnNames();
 }
 
 void ScDBData::InvalidateTableColumnNames()
