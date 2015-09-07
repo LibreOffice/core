@@ -386,7 +386,7 @@ void DeInitVCL()
         delete pSVData->mpSettingsConfigItem, pSVData->mpSettingsConfigItem = nullptr;
 
     if ( pSVData->maAppData.mpIdleMgr )
-        delete pSVData->maAppData.mpIdleMgr;
+        delete pSVData->maAppData.mpIdleMgr, pSVData->maAppData.mpIdleMgr = nullptr;
     Scheduler::ImplDeInitScheduler();
 
     if ( pSVData->maWinData.mpMsgBoxImgList )
@@ -551,7 +551,11 @@ void DeInitVCL()
     pSVData->mpSalTimer = nullptr;
 
     // Deinit Sal
-    DestroySalInstance( pSVData->mpDefInst );
+    if (pSVData->mpDefInst)
+    {
+        DestroySalInstance( pSVData->mpDefInst );
+        pSVData->mpDefInst = nullptr;
+    }
 
     if( pOwnSvApp )
     {
@@ -578,7 +582,7 @@ struct WorkerThreadData
 static HANDLE hThreadID = 0;
 static unsigned __stdcall _threadmain( void *pArgs )
 {
-    OleInitialize( NULL );
+    OleInitialize( nullptr );
     ((WorkerThreadData*)pArgs)->pWorker( ((WorkerThreadData*)pArgs)->pThreadData );
     delete (WorkerThreadData*)pArgs;
     OleUninitialize();
