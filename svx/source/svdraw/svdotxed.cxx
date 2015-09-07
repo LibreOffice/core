@@ -23,10 +23,12 @@
 #include <svx/svdoutl.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/overflowingtxt.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/sdtfchim.hxx>
+#include <svx/textchain.hxx>
 
 
 bool SdrTextObj::HasTextEdit() const
@@ -124,6 +126,19 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.ClearModifyFlag();
 
     return true;
+}
+
+void ImpUpdateOutlParamsForOverflow(SdrOutliner *pOutl, SdrTextObj *pTextObj)
+{
+     // Code from ImpSetTextEditParams
+    Size aPaperMin;
+    Size aPaperMax;
+    Rectangle aEditArea;
+    pTextObj->TakeTextEditArea(&aPaperMin,&aPaperMax,&aEditArea,NULL);
+
+    pOutl->SetMinAutoPaperSize(aPaperMin);
+    pOutl->SetMaxAutoPaperSize(aPaperMax);
+    pOutl->SetPaperSize(Size());
 }
 
 void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const
@@ -263,9 +278,10 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
 
 void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 {
+    OutlinerParaObject* pNewText = NULL;
+
     if(rOutl.IsModified())
     {
-        OutlinerParaObject* pNewText = NULL;
 
         // to make the gray field background vanish again
         rOutl.UpdateFields();
@@ -277,8 +293,39 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         // uses GetCurrentBoundRect() which needs to take the text into account
         // to work correct
         mbInEditMode = false;
-        SetOutlinerParaObject(pNewText);
+
+        // We don't want broadcasting if we are merely trying to move to next box (this prevents infinite loops)
+        if (IsChainable() && GetTextChain()->GetSwitchingToNextBox(this)) {
+            GetTextChain()->SetSwitchingToNextBox(this, false);
+            if( getActiveText() )
+                getActiveText()->SetOutlinerParaObject( pNewText);
+        } else { // If we are not doing in-chaining switching just set the ParaObject
+            SetOutlinerParaObject(pNewText);
+        }
     }
+
+    /* Beginning Chaining-related code */
+    rOutl.ClearOverflowingParaNum();
+
+    /* Flush overflow for next textbox - Necessary for recursive chaining */
+    if (false &&
+        IsChainable() &&
+        GetNextLinkInChain() &&
+        GetTextChain()->GetPendingOverflowCheck(GetNextLinkInChain()) )
+    {
+        GetTextChain()->SetPendingOverflowCheck(GetNextLinkInChain(), false);
+
+        SdrOutliner rDrawOutl = GetNextLinkInChain()->ImpGetDrawOutliner();
+        // Prepare Outliner for overflow check
+        ImpUpdateOutlParamsForOverflow(&rDrawOutl, GetNextLinkInChain());
+        const OutlinerParaObject *pObj = GetNextLinkInChain()->GetOutlinerParaObject();
+        rDrawOutl.SetText(*pObj);
+
+        rDrawOutl.SetUpdateMode(true);
+        // XXX: Change name of method below to impHandleChainingEventsNonEditMode
+        GetNextLinkInChain()->impHandleChainingEventsDuringDecomposition(rDrawOutl);
+    }
+    /* End Chaining-related code */
 
     pEdtOutl = NULL;
     rOutl.Clear();
