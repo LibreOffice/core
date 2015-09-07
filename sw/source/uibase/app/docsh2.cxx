@@ -207,7 +207,7 @@ void SwDocShell::DoFlushDocInfo()
         m_pWrtShell->StartAllAction();
     }
 
-    m_pDoc->getIDocumentStatistics().DocInfoChgd();
+    m_pDoc->getIDocumentStatistics().DocInfoChgd(IsEnableSetModified());
 
     if (m_pWrtShell)
     {
@@ -296,8 +296,9 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     EnableSetModified( false );
                 // #i41679#
                 const bool bIsDocModified = m_pDoc->getIDocumentState().IsModified();
+                // TODO: is the ResetModified() below because of only the direct call from DocInfoChgd, or does UpdateFields() set it too?
 
-                m_pDoc->getIDocumentStatistics().DocInfoChgd( );
+                m_pDoc->getIDocumentStatistics().DocInfoChgd(false);
 
                 // #i41679#
                 if ( !bIsDocModified )
