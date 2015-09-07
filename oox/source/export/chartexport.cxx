@@ -3228,7 +3228,7 @@ void ChartExport::exportAxesId(bool bPrimaryAxes)
     pFS->singleElement( FSNS( XML_c, XML_axId ),
             XML_val, I32S( nAxisIdy ),
             FSEND );
-    if (bPrimaryAxes && mbHasZAxis)
+    if (mbHasZAxis)
     {
         sal_Int32 nAxisIdz = 0;
         if( isDeep3dChart() )
