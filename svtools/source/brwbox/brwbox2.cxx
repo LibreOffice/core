@@ -1785,7 +1785,6 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
 {
 
     long nRowsOnPage = pDataWin->GetSizePixel().Height() / GetDataRowHeight();
-    bool bDone = false;
 
     switch ( nId )
     {
@@ -1796,11 +1795,11 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
 
         case BROWSER_CURSORDOWN:
             if ( ( GetCurRow() + 1 ) < nRowCount )
-                bDone = GoToRow( GetCurRow() + 1, false );
+                GoToRow( GetCurRow() + 1, false );
             break;
         case BROWSER_CURSORUP:
             if ( GetCurRow() > 0 )
-                bDone = GoToRow( GetCurRow() - 1, false );
+                GoToRow( GetCurRow() - 1, false );
             break;
         case BROWSER_SELECTHOME:
             if ( GetRowCount() )
@@ -1833,12 +1832,12 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 bool bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow - 1 ) );
                 SelectRow( nRow, bLocalSelect );
-                bDone = GoToRow( GetCurRow() + 1, false );
+                bool bDone = GoToRow( GetCurRow() + 1, false );
                 if ( bDone )
                     SelectRow( GetCurRow(), true );
             }
             else
-                bDone = ScrollRows( 1 ) != 0;
+                ScrollRows( 1 );
             break;
         }
         case BROWSER_SELECTUP:
@@ -1850,26 +1849,26 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 bool bLocalSelect = ( !IsRowSelected( nRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nRow + 1 ) );
                 SelectRow( nCurRow, bLocalSelect );
-                bDone = GoToRow( nRow - 1, false );
+                bool bDone = GoToRow( nRow - 1, false );
                 if ( bDone )
                     SelectRow( GetCurRow(), true );
             }
             break;
         case BROWSER_CURSORPAGEDOWN:
-            bDone = ScrollRows( nRowsOnPage );
+            ScrollRows( nRowsOnPage );
             break;
         case BROWSER_CURSORPAGEUP:
-            bDone = ScrollRows( -nRowsOnPage );
+            ScrollRows( -nRowsOnPage );
             break;
         case BROWSER_CURSOREND:
             if ( bColumnCursor )
             {
                 sal_uInt16 nNewId = GetColumnId(ColCount() -1);
-                bDone = nNewId != HandleColumnId && GoToColumnId( nNewId );
+                nNewId != HandleColumnId && GoToColumnId( nNewId );
                 break;
             }
         case BROWSER_CURSORENDOFFILE:
-            bDone = GoToRow( nRowCount - 1, false );
+            GoToRow( nRowCount - 1, false );
             break;
         case BROWSER_CURSORRIGHT:
             if ( bColumnCursor )
@@ -1877,30 +1876,38 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 sal_uInt16 nNewPos = GetColumnPos( GetCurColumnId() ) + 1;
                 sal_uInt16 nNewId = GetColumnId( nNewPos );
                 if (nNewId != BROWSER_INVALIDID)    // At end of row ?
-                    bDone = GoToColumnId( nNewId );
+                    GoToColumnId( nNewId );
                 else
                 {
                     sal_uInt16 nColId = GetColumnId(0);
                     if ( nColId == BROWSER_INVALIDID || nColId == HandleColumnId )
                         nColId = GetColumnId(1);
                     if ( GetRowCount() )
-                        bDone = ( nCurRow < GetRowCount() - 1 ) && GoToRowColumnId( nCurRow + 1, nColId );
+                    {
+                        if ( nCurRow < GetRowCount() - 1 )
+                        {
+                            GoToRowColumnId( nCurRow + 1, nColId );
+                        }
+                    }
                     else if ( ColCount() )
                         GoToColumnId( nColId );
                 }
             }
             else
-                bDone = ScrollColumns( 1 ) != 0;
+                ScrollColumns( 1 );
             break;
         case BROWSER_CURSORHOME:
             if ( bColumnCursor )
             {
                 sal_uInt16 nNewId = GetColumnId(1);
-                bDone = (nNewId != HandleColumnId) && GoToColumnId( nNewId );
+                if (nNewId != HandleColumnId)
+                {
+                    GoToColumnId( nNewId );
+                }
                 break;
             }
         case BROWSER_CURSORTOPOFFILE:
-            bDone = GoToRow( 0, false );
+            GoToRow( 0, false );
             break;
         case BROWSER_CURSORLEFT:
             if ( bColumnCursor )
@@ -1908,27 +1915,30 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
                 sal_uInt16 nNewPos = GetColumnPos( GetCurColumnId() ) - 1;
                 sal_uInt16 nNewId = GetColumnId( nNewPos );
                 if (nNewId != HandleColumnId)
-                    bDone = GoToColumnId( nNewId );
+                    GoToColumnId( nNewId );
                 else
                 {
                     if ( GetRowCount() )
-                        bDone = (nCurRow > 0) && GoToRowColumnId(nCurRow - 1, GetColumnId(ColCount() -1));
+                    {
+                        if (nCurRow > 0)
+                        {
+                            GoToRowColumnId(nCurRow - 1, GetColumnId(ColCount() -1));
+                        }
+                    }
                     else if ( ColCount() )
                         GoToColumnId( GetColumnId(ColCount() -1) );
                 }
             }
             else
-                bDone = ScrollColumns( -1 ) != 0;
+                ScrollColumns( -1 );
             break;
         case BROWSER_ENHANCESELECTION:
             if ( GetRowCount() )
                 SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ) );
-            bDone = true;
             break;
         case BROWSER_SELECT:
             if ( GetRowCount() )
                 SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), false );
-            bDone = true;
             break;
         case BROWSER_MOVECOLUMNLEFT:
         case BROWSER_MOVECOLUMNRIGHT:
@@ -1957,8 +1967,6 @@ void BrowseBox::Dispatch( sal_uInt16 nId )
             }
             break;
     }
-
-    //! return bDone;
 }
 
 
