@@ -2376,7 +2376,6 @@ bool SmSymDefineDialog::SelectFont(const OUString &rFontName, bool bApplyFont)
         if (bApplyFont)
         {
             SetFont(pFonts->GetSelectEntry(), pStyles->GetText());
-        bRet = true;
             pSymbolDisplay->SetSymbol( pCharsetDisplay->GetSelectCharacter(), pCharsetDisplay->GetFont() );
         }
         bRet = true;
@@ -2406,7 +2405,6 @@ bool SmSymDefineDialog::SelectStyle(const OUString &rStyleName, bool bApplyFont)
         if (bApplyFont)
         {
             SetFont(pFonts->GetSelectEntry(), pStyles->GetText());
-        bRet = true;
             pSymbolDisplay->SetSymbol( pCharsetDisplay->GetSelectCharacter(), pCharsetDisplay->GetFont() );
         }
         bRet = true;
