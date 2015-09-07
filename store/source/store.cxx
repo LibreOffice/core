@@ -126,7 +126,7 @@ storeError SAL_CALL store_createMemoryFile (
 
     xManager->acquire();
 
-    *phFile = static_cast<storeFileHandle>(&(*xManager));
+    *phFile = xManager.get();
     return store_E_None;
 }
 
