@@ -648,6 +648,26 @@ void exportVBAProjectStream(SvStream& rStrm)
     rStrm.WriteUInt16(0x0000); // Undefined
 }
 
+// section 2.3.3.1 NAMEMAP
+void writeNAMEMAP(SvStream& rStrm, css::uno::Sequence<OUString> rElementNames)
+{
+    int n = rElementNames.getLength();
+    for(sal_Int32 i = 0; i < n; ++i)
+    {
+        exportString(rStrm, rElementNames[i]);
+        rStrm.WriteUInt8(0x00); // terminator
+        exportUTF16String(rStrm, rElementNames[i]);
+        rStrm.WriteUInt16(0x0000); // terminator
+    }
+}
+
+// section 2.3.3 PROJECTwm Stream
+void exportPROJECTwmStream(SvStream& rStrm, css::uno::Sequence<OUString> rElementNames)
+{
+    writeNAMEMAP(rStrm, rElementNames);
+    rStrm.WriteUInt16(0x0000); // terminator
+}
+
 }
 
 void VbaExport::exportVBA(SotStorage* pRootStorage)
@@ -665,6 +685,8 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         pModuleStream[i] = pVBAStream->OpenSotStream(aElementNames[i], STREAM_READWRITE);
     }
     SotStorageStream* pVBAProjectStream = pVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
+    SotStorageStream* pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECT", STREAM_READWRITE);
+
 
     // export
     exportDirStream(*pDirStream, xNameContainer);
@@ -676,6 +698,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         exportModuleStream(*pModuleStream[i], aSourceCode, aElementNames[i]);
     }
     exportVBAProjectStream(*pVBAProjectStream);
+    exportPROJECTwmStream(*pPROJECTwmStream, aElementNames);
 
     pVBAProjectStream->Commit();
     for(sal_Int32 i = 0; i < n; i++)
@@ -684,6 +707,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     }
     pDirStream->Commit();
     pVBAStream->Commit();
+    pPROJECTwmStream->Commit();
     pRootStorage->Commit();
 }
 
