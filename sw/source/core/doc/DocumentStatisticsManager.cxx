@@ -77,11 +77,14 @@ DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rDoc
     maStatsUpdateTimer.SetTimeoutHdl( LINK( this, DocumentStatisticsManager, DoIdleStatsUpdate ) );
 }
 
-void DocumentStatisticsManager::DocInfoChgd( )
+void DocumentStatisticsManager::DocInfoChgd(bool const isEnableSetModified)
 {
     m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_DOCINFOFLD )->UpdateFields();
     m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( RES_TEMPLNAMEFLD )->UpdateFields();
-    m_rDoc.getIDocumentState().SetModified();
+    if (isEnableSetModified)
+    {
+        m_rDoc.getIDocumentState().SetModified();
+    }
 }
 
 const SwDocStat& DocumentStatisticsManager::GetDocStat() const
