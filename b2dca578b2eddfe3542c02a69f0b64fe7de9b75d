@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_983bb59c",
+        "filename": "sc/source/ui/view/tabvwshe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T14:26:05Z",
+      "side": 1,
+      "message": "\"if\" (conditionally if called for dialog)",
+      "range": {
+        "startLine": 103,
+        "startChar": 42,
+        "endLine": 103,
+        "endChar": 46
+      },
+      "revId": "b2dca578b2eddfe3542c02a69f0b64fe7de9b75d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_f840f109",
+        "filename": "sc/source/ui/view/tabvwshe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T14:26:05Z",
+      "side": 1,
+      "message": "ditto, \"if\"",
+      "range": {
+        "startLine": 104,
+        "startChar": 18,
+        "endLine": 104,
+        "endChar": 22
+      },
+      "revId": "b2dca578b2eddfe3542c02a69f0b64fe7de9b75d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_384b892d",
+        "filename": "sc/source/ui/view/tabvwshe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T14:26:05Z",
+      "side": 1,
+      "message": "And please start full sentences with an uppercase letter, so \"Otherwise\".",
+      "range": {
+        "startLine": 105,
+        "startChar": 15,
+        "endLine": 105,
+        "endChar": 16
+      },
+      "revId": "b2dca578b2eddfe3542c02a69f0b64fe7de9b75d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_d8452d18",
+        "filename": "sc/source/ui/view/tabvwshe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T14:26:05Z",
+      "side": 1,
+      "message": "multi",
+      "range": {
+        "startLine": 105,
+        "startChar": 38,
+        "endLine": 105,
+        "endChar": 43
+      },
+      "revId": "b2dca578b2eddfe3542c02a69f0b64fe7de9b75d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_1848452d",
+        "filename": "sc/source/ui/view/tabvwshe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T14:26:05Z",
+      "side": 1,
+      "message": "rather \"remember\" than \"set\"",
+      "range": {
+        "startLine": 263,
+        "startChar": 19,
+        "endLine": 263,
+        "endChar": 22
+      },
+      "revId": "b2dca578b2eddfe3542c02a69f0b64fe7de9b75d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_785501c5",
+        "filename": "sc/source/ui/view/tabvwshe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T14:26:05Z",
+      "side": 1,
+      "message": "\"which stores the SearchItem\" (when the request is executed)",
+      "range": {
+        "startLine": 298,
+        "startChar": 40,
+        "endLine": 298,
+        "endChar": 73
+      },
+      "revId": "b2dca578b2eddfe3542c02a69f0b64fe7de9b75d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
