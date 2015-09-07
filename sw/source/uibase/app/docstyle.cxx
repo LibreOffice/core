@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <svl/smplhint.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
@@ -1169,6 +1173,61 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
     return true;
 }
 
+static
+std::unique_ptr<SfxItemSet> lcl_SwFormatToFlatItemSet(SwFormat *const pFormat)
+{
+    // note: we don't add the odd items that GetItemSet() would add
+    // because they don't seem relevant for preview
+    std::vector<SfxItemSet const*> sets;
+    sets.push_back(&pFormat->GetAttrSet());
+    while (SfxItemSet const*const pParent = sets.back()->GetParent())
+    {
+        sets.push_back(pParent);
+    }
+    // start by copying top-level parent set
+    std::unique_ptr<SfxItemSet> pRet(new SfxItemSet(*sets.back()));
+    sets.pop_back();
+    for (auto iter = sets.rbegin(); iter != sets.rend(); ++iter)
+    {   // in reverse so child overrides parent
+        pRet->Put(**iter);
+    }
+    return pRet;
+}
+
+std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
+{
+    if (SFX_STYLE_FAMILY_PAGE == nFamily || SFX_STYLE_FAMILY_PSEUDO == nFamily)
+    {
+        SAL_WARN("sw.ui", "GetItemSetForPreview not implemented for page or number style");
+        return std::unique_ptr<SfxItemSet>();
+    }
+    if (!bPhysical)
+    {
+        // because not only this style, but also any number of its parents
+        // (or follow style) may not actually exist in the document at this
+        // time, return one "flattened" item set that contains all items from
+        // all parents.
+        std::unique_ptr<SfxItemSet> pRet;
+        FillStyleSheet(FillPreview, &pRet);
+        assert(pRet);
+        return pRet;
+    }
+    else
+    {
+        switch (nFamily)
+        {
+            case SFX_STYLE_FAMILY_CHAR:
+                return lcl_SwFormatToFlatItemSet(pCharFormat);
+            case SFX_STYLE_FAMILY_PARA:
+                return lcl_SwFormatToFlatItemSet(pColl);
+            case SFX_STYLE_FAMILY_FRAME:
+                return lcl_SwFormatToFlatItemSet(pFrameFormat);
+            default:
+                std::abort();
+        }
+    }
+}
+
 // extract ItemSet to Name and Family, Mask
 
 SfxItemSet&   SwDocStyleSheet::GetItemSet()
@@ -1709,7 +1768,8 @@ static void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, 
 }
 
 // determine the format
-bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
+bool SwDocStyleSheet::FillStyleSheet(
+    FillStyleType const eFType, std::unique_ptr<SfxItemSet> *const o_ppFlatSet)
 {
     bool bRet = false;
     sal_uInt16 nPoolId = USHRT_MAX;
@@ -1717,7 +1777,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
 
     bool bCreate = FillPhysical == eFType;
     bool bDeleteInfo = false;
-    bool bFillOnlyInfo = FillAllInfo == eFType;
+    bool bFillOnlyInfo = FillAllInfo == eFType || FillPreview == eFType;
     std::vector<void*> aDelArr;
 
     switch(nFamily)
@@ -1892,6 +1952,12 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
 
             if( RES_CONDTXTFMTCOLL == pFormat->Which() )
                 _nMask |= SWSTYLEBIT_CONDCOLL;
+
+            if (FillPreview == eFType)
+            {
+                assert(o_ppFlatSet);
+                *o_ppFlatSet = lcl_SwFormatToFlatItemSet(pFormat);
+            }
         }
 
         SetMask( _nMask );

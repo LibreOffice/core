@@ -60,65 +60,67 @@ CommonStylePreviewRenderer::~CommonStylePreviewRenderer()
 
 bool CommonStylePreviewRenderer::recalculate()
 {
-    const SfxItemSet& aItemSet = mpStyle->GetItemSet();
-
     maFont = SvxFont();
+
+    std::unique_ptr<SfxItemSet> pItemSet(mpStyle->GetItemSetForPreview());
+
+    if (!pItemSet) return false;
 
     const SfxPoolItem* pItem;
 
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_WEIGHT)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_WEIGHT)) != nullptr)
     {
         maFont.SetWeight(static_cast<const SvxWeightItem*>(pItem)->GetWeight());
     }
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_POSTURE)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_POSTURE)) != nullptr)
     {
         maFont.SetItalic(static_cast<const SvxPostureItem*>(pItem)->GetPosture());
     }
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_CONTOUR)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CONTOUR)) != nullptr)
     {
         maFont.SetOutline(static_cast< const SvxContourItem*>(pItem)->GetValue());
     }
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_SHADOWED)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_SHADOWED)) != nullptr)
     {
         maFont.SetShadow(static_cast<const SvxShadowedItem*>(pItem)->GetValue());
     }
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_RELIEF)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_RELIEF)) != nullptr)
     {
         maFont.SetRelief(static_cast<FontRelief>(static_cast<const SvxCharReliefItem*>(pItem)->GetValue()));
     }
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_UNDERLINE)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_UNDERLINE)) != nullptr)
     {
         maFont.SetUnderline(static_cast< const SvxUnderlineItem*>(pItem)->GetLineStyle());
     }
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_OVERLINE)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_OVERLINE)) != nullptr)
     {
         maFont.SetOverline(static_cast<FontUnderline>(static_cast<const SvxOverlineItem*>(pItem)->GetValue()));
     }
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_STRIKEOUT)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_STRIKEOUT)) != nullptr)
     {
         maFont.SetStrikeout(static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout());
     }
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_CASEMAP)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CASEMAP)) != nullptr)
     {
         maFont.SetCaseMap(static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap());
     }
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_EMPHASISMARK)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_EMPHASISMARK)) != nullptr)
     {
         maFont.SetEmphasisMark(static_cast<const SvxEmphasisMarkItem*>(pItem)->GetEmphasisMark());
     }
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_COLOR)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_COLOR)) != nullptr)
     {
         maFontColor = Color(static_cast<const SvxColorItem*>(pItem)->GetValue());
     }
 
     if (mpStyle->GetFamily() == SFX_STYLE_FAMILY_PARA)
     {
-        if ((pItem = aItemSet.GetItem(XATTR_FILLSTYLE)) != nullptr)
+        if ((pItem = pItemSet->GetItem(XATTR_FILLSTYLE)) != nullptr)
         {
             sal_uInt16 aFillStyle = static_cast<const XFillStyleItem*>(pItem)->GetValue();
             if (aFillStyle == drawing::FillStyle_SOLID)
             {
-                if ((pItem = aItemSet.GetItem(XATTR_FILLCOLOR)) != nullptr)
+                if ((pItem = pItemSet->GetItem(XATTR_FILLCOLOR)) != nullptr)
                 {
                     maBackgroundColor = Color(static_cast<const XFillColorItem*>(pItem)->GetColorValue());
                 }
@@ -126,7 +128,7 @@ bool CommonStylePreviewRenderer::recalculate()
         }
     }
 
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_FONT)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_FONT)) != nullptr)
     {
         const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pItem);
         maFont.SetName(pFontItem->GetFamilyName());
@@ -137,7 +139,7 @@ bool CommonStylePreviewRenderer::recalculate()
         return false;
     }
 
-    if ((pItem = aItemSet.GetItem(SID_ATTR_CHAR_FONTHEIGHT)) != nullptr)
+    if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_FONTHEIGHT)) != nullptr)
     {
         const SvxFontHeightItem* pFontHeightItem = static_cast<const SvxFontHeightItem*>(pItem);
         Size aFontSize(0, pFontHeightItem->GetHeight());
