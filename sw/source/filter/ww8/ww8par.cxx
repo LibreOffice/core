@@ -4327,6 +4327,8 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
     GetPageULData(rSection, aULData);
     SetPageULSpaceItems(rFormat, aULData, rSection);
 
+    rPage.SetVerticalAdjustment( rSection.mnVerticalAdjustment );
+
     SetPage(rPage, rFormat, rSection, bIgnoreCols);
 
     if (!(rSection.maSep.pgbApplyTo & 1))

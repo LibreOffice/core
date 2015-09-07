@@ -11,6 +11,7 @@
 
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -19,6 +20,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
+#include <pagedesc.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -496,6 +498,31 @@ DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
     // After first import, there was an off-by-one during import, so this was "efore.\nA1\nB1\nAfte". (Notice the additional "e" prefix.)
     // After export and import, things got worse, this was "\nA1\nB1\nAfte".
     CPPUNIT_ASSERT_EQUAL(OUString("fore." SAL_NEWLINE_STRING "A1" SAL_NEWLINE_STRING "B1" SAL_NEWLINE_STRING "Afte"), xField->getAnchor()->getString());
+}
+
+DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.doc")
+{
+    //Preserve the page vertical alignment setting for .doc
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    SwPageDesc &Desc = pDoc->GetPageDesc( 0 );
+    drawing::TextVerticalAdjust nVA = Desc.GetVerticalAdjustment();
+    CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_CENTER, nVA );
+
+    Desc = pDoc->GetPageDesc( 1 );
+    nVA = Desc.GetVerticalAdjustment();
+    CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_TOP, nVA );
+
+    Desc = pDoc->GetPageDesc( 2 );
+    nVA = Desc.GetVerticalAdjustment();
+    CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_BOTTOM, nVA );
+
+    Desc = pTextDoc->GetDocShell()->GetDoc()->GetPageDesc( 3 );
+    nVA = Desc.GetVerticalAdjustment();
+    CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_BLOCK, nVA );
 }
 
 DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")

@@ -26,6 +26,9 @@
 #include <frmfmt.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/borderline.hxx>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+
+using namespace ::com::sun::star;
 
 class SfxPoolItem;
 class SwTextFormatColl;
@@ -143,6 +146,7 @@ class SW_DLLPUBLIC SwPageDesc : public SwModify
     SwPageDesc *m_pFollow;
     sal_uInt16  m_nRegHeight; ///< Sentence spacing and fontascent of style.
     sal_uInt16  m_nRegAscent; ///< For grid alignment (Registerhaltigkeit).
+    drawing::TextVerticalAdjust   m_nVerticalAdjustment; // doc/docx: vertically center / justify / bottom
     UseOnPage   m_eUse;
     bool        m_IsLandscape;
     bool        m_IsHidden;
@@ -215,6 +219,9 @@ public:
     sal_uInt16 GetRegAscent() const { return m_nRegAscent; }
     void SetRegHeight(sal_uInt16 const nNew) { m_nRegHeight = nNew; }
     void SetRegAscent(sal_uInt16 const nNew) { m_nRegAscent = nNew; }
+
+    drawing::TextVerticalAdjust GetVerticalAdjustment () const {return m_nVerticalAdjustment; }
+    void SetVerticalAdjustment (const drawing::TextVerticalAdjust nVA) {m_nVerticalAdjustment = nVA; }
 
     inline void SetFollow( const SwPageDesc* pNew );
     const SwPageDesc* GetFollow() const { return m_pFollow; }

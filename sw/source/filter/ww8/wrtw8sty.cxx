@@ -1440,6 +1440,30 @@ void WW8Export::SetupSectionPositions( WW8_PdAttrDesc* pA )
     }
 }
 
+void WW8AttributeOutput::TextVerticalAdjustment( const drawing::TextVerticalAdjust nVA )
+{
+    if ( drawing::TextVerticalAdjust_TOP != nVA ) // top alignment is the default
+    {
+        sal_uInt8 nMSVA = 0;
+        switch( nVA )
+        {
+            case drawing::TextVerticalAdjust_CENTER:
+                nMSVA = 1;
+                break;
+            case drawing::TextVerticalAdjust_BOTTOM:  //Writer = 2, Word = 3
+                nMSVA = 3;
+                break;
+            case drawing::TextVerticalAdjust_BLOCK:   //Writer = 3, Word = 2
+                nMSVA = 2;
+                break;
+            default:
+                break;
+        }
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SVjc );
+        m_rWW8Export.pO->push_back( nMSVA );
+    }
+}
+
 void WW8Export::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
         const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode )
 {
@@ -1665,6 +1689,10 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     }
 
     AttrOutput().SectionType( nBreakCode );
+
+    if( rSepInfo.pPageDesc ) {
+        AttrOutput().TextVerticalAdjustment( rSepInfo.pPageDesc->GetVerticalAdjustment() );
+    }
 
     // Header or Footer
     sal_uInt8 nHeadFootFlags = 0;
