@@ -47,7 +47,7 @@ CommonStylePreviewRenderer::CommonStylePreviewRenderer(
                                 const SfxObjectShell& rShell, OutputDevice& rOutputDev,
                                 SfxStyleSheetBase* pStyle, long nMaxHeight)
     : StylePreviewRenderer(rShell, rOutputDev, pStyle, nMaxHeight)
-    , maFont()
+    , m_pFont()
     , maFontColor(COL_AUTO)
     , maBackgroundColor(COL_AUTO)
     , maPixelSize()
@@ -60,53 +60,55 @@ CommonStylePreviewRenderer::~CommonStylePreviewRenderer()
 
 bool CommonStylePreviewRenderer::recalculate()
 {
-    maFont = SvxFont();
+    m_pFont.reset();
 
     std::unique_ptr<SfxItemSet> pItemSet(mpStyle->GetItemSetForPreview());
 
     if (!pItemSet) return false;
 
+    std::unique_ptr<SvxFont> pFont(new SvxFont);
+
     const SfxPoolItem* pItem;
 
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_WEIGHT)) != nullptr)
     {
-        maFont.SetWeight(static_cast<const SvxWeightItem*>(pItem)->GetWeight());
+        pFont->SetWeight(static_cast<const SvxWeightItem*>(pItem)->GetWeight());
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_POSTURE)) != nullptr)
     {
-        maFont.SetItalic(static_cast<const SvxPostureItem*>(pItem)->GetPosture());
+        pFont->SetItalic(static_cast<const SvxPostureItem*>(pItem)->GetPosture());
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CONTOUR)) != nullptr)
     {
-        maFont.SetOutline(static_cast< const SvxContourItem*>(pItem)->GetValue());
+        pFont->SetOutline(static_cast< const SvxContourItem*>(pItem)->GetValue());
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_SHADOWED)) != nullptr)
     {
-        maFont.SetShadow(static_cast<const SvxShadowedItem*>(pItem)->GetValue());
+        pFont->SetShadow(static_cast<const SvxShadowedItem*>(pItem)->GetValue());
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_RELIEF)) != nullptr)
     {
-        maFont.SetRelief(static_cast<FontRelief>(static_cast<const SvxCharReliefItem*>(pItem)->GetValue()));
+        pFont->SetRelief(static_cast<FontRelief>(static_cast<const SvxCharReliefItem*>(pItem)->GetValue()));
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_UNDERLINE)) != nullptr)
     {
-        maFont.SetUnderline(static_cast< const SvxUnderlineItem*>(pItem)->GetLineStyle());
+        pFont->SetUnderline(static_cast< const SvxUnderlineItem*>(pItem)->GetLineStyle());
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_OVERLINE)) != nullptr)
     {
-        maFont.SetOverline(static_cast<FontUnderline>(static_cast<const SvxOverlineItem*>(pItem)->GetValue()));
+        pFont->SetOverline(static_cast<FontUnderline>(static_cast<const SvxOverlineItem*>(pItem)->GetValue()));
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_STRIKEOUT)) != nullptr)
     {
-        maFont.SetStrikeout(static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout());
+        pFont->SetStrikeout(static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout());
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_CASEMAP)) != nullptr)
     {
-        maFont.SetCaseMap(static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap());
+        pFont->SetCaseMap(static_cast<const SvxCaseMapItem*>(pItem)->GetCaseMap());
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_EMPHASISMARK)) != nullptr)
     {
-        maFont.SetEmphasisMark(static_cast<const SvxEmphasisMarkItem*>(pItem)->GetEmphasisMark());
+        pFont->SetEmphasisMark(static_cast<const SvxEmphasisMarkItem*>(pItem)->GetEmphasisMark());
     }
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_COLOR)) != nullptr)
     {
@@ -131,8 +133,8 @@ bool CommonStylePreviewRenderer::recalculate()
     if ((pItem = pItemSet->GetItem(SID_ATTR_CHAR_FONT)) != nullptr)
     {
         const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(pItem);
-        maFont.SetName(pFontItem->GetFamilyName());
-        maFont.SetStyleName(pFontItem->GetStyleName());
+        pFont->SetName(pFontItem->GetFamilyName());
+        pFont->SetStyleName(pFontItem->GetStyleName());
     }
     else
     {
@@ -144,11 +146,11 @@ bool CommonStylePreviewRenderer::recalculate()
         const SvxFontHeightItem* pFontHeightItem = static_cast<const SvxFontHeightItem*>(pItem);
         Size aFontSize(0, pFontHeightItem->GetHeight());
         maPixelSize = Size(mrOutputDev.LogicToPixel(aFontSize, mrShell.GetMapUnit()));
-        maFont.SetSize(maPixelSize);
+        pFont->SetSize(maPixelSize);
 
         vcl::Font aOldFont(mrOutputDev.GetFont());
 
-        mrOutputDev.SetFont(maFont);
+        mrOutputDev.SetFont(*pFont);
         Rectangle aTextRect;
         mrOutputDev.GetTextBoundRect(aTextRect, mpStyle->GetName());
         if (aTextRect.Bottom() > mnMaxHeight)
@@ -156,7 +158,7 @@ bool CommonStylePreviewRenderer::recalculate()
             double ratio = double(mnMaxHeight) / aTextRect.Bottom();
             maPixelSize.Width() *= ratio;
             maPixelSize.Height() *= ratio;
-            maFont.SetSize(maPixelSize);
+            pFont->SetSize(maPixelSize);
         }
         mrOutputDev.SetFont(aOldFont);
     }
@@ -165,12 +167,14 @@ bool CommonStylePreviewRenderer::recalculate()
         return false;
     }
 
+    m_pFont = std::move(pFont);
     return true;
 }
 
 Size CommonStylePreviewRenderer::getRenderSize()
 {
-    maPixelSize = maFont.GetTextSize(&mrOutputDev, maStyleName);
+    assert(m_pFont);
+    maPixelSize = m_pFont->GetTextSize(&mrOutputDev, maStyleName);
     if (maPixelSize.Height() > mnMaxHeight)
         maPixelSize.Height() = mnMaxHeight;
     return maPixelSize;
@@ -189,13 +193,18 @@ bool CommonStylePreviewRenderer::render(const Rectangle& aRectangle)
         mrOutputDev.DrawRect(aRectangle);
     }
 
-    mrOutputDev.SetFont(maFont);
+    if (m_pFont)
+    {
+        mrOutputDev.SetFont(*m_pFont);
+    }
     if (maFontColor != COL_AUTO)
         mrOutputDev.SetTextColor(maFontColor);
 
+    Size aPixelSize((m_pFont) ? maPixelSize : mrOutputDev.GetFont().GetSize());
+
     Point aFontDrawPosition = aRectangle.TopLeft();
-    if (aRectangle.GetHeight() > maPixelSize.Height())
-        aFontDrawPosition.Y() += ( aRectangle.GetHeight() - maPixelSize.Height() ) / 2;
+    if (aRectangle.GetHeight() > aPixelSize.Height())
+        aFontDrawPosition.Y() += (aRectangle.GetHeight() - aPixelSize.Height()) / 2;
 
     mrOutputDev.DrawText(aFontDrawPosition, maStyleName);
 

@@ -22,7 +22,7 @@ namespace svx
 
 class SVX_DLLPUBLIC CommonStylePreviewRenderer : public sfx2::StylePreviewRenderer
 {
-    SvxFont maFont;
+    std::unique_ptr<SvxFont> m_pFont;
     Color maFontColor;
     Color maBackgroundColor;
     Size maPixelSize;
