@@ -86,7 +86,8 @@ namespace {
         PresenterTheme::SharedFontDescriptor mpFont;
         sal_Int32 mnFontXOffset;
         sal_Int32 mnFontYOffset;
-        enum Anchor { AnchorLeft, AnchorRight, AnchorCenter } meFontAnchor;
+        enum class Anchor { Left, Right, Center };
+        Anchor meFontAnchor;
         BorderSize maInnerBorderSize;
         BorderSize maOuterBorderSize;
         BorderSize maTotalBorderSize;
@@ -536,21 +537,20 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
     const double nTextHeight = aBox.Y2 - aBox.Y1;
     const double nTextWidth = aBox.X1 + aBox.X2;
-    double nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
     const sal_Int32 nTitleBarHeight = rInnerBox.Y - rOuterBox.Y - 1;
     double nY = rOuterBox.Y + (nTitleBarHeight - nTextHeight) / 2 - aBox.Y1;
     if (nY >= rInnerBox.Y)
         nY = rInnerBox.Y - 1;
+    double nX;
     switch (rpStyle->meFontAnchor)
     {
-        default:
-        case RendererPaneStyle::AnchorLeft:
+    case RendererPaneStyle::Anchor::Left:
         nX = rInnerBox.X;
         break;
-        case RendererPaneStyle::AnchorRight:
+    case RendererPaneStyle::Anchor::Right:
         nX = rInnerBox.X + rInnerBox.Width - nTextWidth;
         break;
-        case RendererPaneStyle::AnchorCenter:
+    case RendererPaneStyle::Anchor::Center:
         nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
         break;
     }
@@ -810,7 +810,7 @@ RendererPaneStyle::RendererPaneStyle (
       mpFont(),
       mnFontXOffset(0),
       mnFontYOffset(0),
-      meFontAnchor(AnchorCenter),
+      meFontAnchor(Anchor::Center),
       maInnerBorderSize(),
       maOuterBorderSize(),
       maTotalBorderSize()
@@ -840,11 +840,11 @@ RendererPaneStyle::RendererPaneStyle (
         }
 
         if ( sAnchor == "Left" )
-            meFontAnchor = AnchorLeft;
+            meFontAnchor = Anchor::Left;
         else if ( sAnchor == "Right" )
-            meFontAnchor = AnchorRight;
+            meFontAnchor = Anchor::Right;
         else
-            meFontAnchor = AnchorCenter;
+            meFontAnchor = Anchor::Center;
 
         // Get border sizes.
         try
