@@ -390,7 +390,7 @@ void DeInitVCL()
         delete pSVData->mpSettingsConfigItem, pSVData->mpSettingsConfigItem = NULL;
 
     if ( pSVData->maAppData.mpIdleMgr )
-        delete pSVData->maAppData.mpIdleMgr;
+        delete pSVData->maAppData.mpIdleMgr, pSVData->maAppData.mpIdleMgr = NULL;
     Scheduler::ImplDeInitScheduler();
 
     if ( pSVData->maWinData.mpMsgBoxImgList )
@@ -554,7 +554,11 @@ void DeInitVCL()
     pSVData->mpSalTimer = NULL;
 
     // Deinit Sal
-    DestroySalInstance( pSVData->mpDefInst );
+    if (pSVData->mpDefInst)
+    {
+        DestroySalInstance( pSVData->mpDefInst );
+        pSVData->mpDefInst = NULL;
+    }
 
     if( pOwnSvApp )
     {
