@@ -1397,7 +1397,7 @@ bool OpenGLContext::isCurrent()
     return false;
 #elif defined( UNX )
     GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
-    return (glXGetCurrentContext() == m_aGLWin.ctx &&
+    return (m_aGLWin.ctx && glXGetCurrentContext() == m_aGLWin.ctx &&
             glXGetCurrentDrawable() == nDrawable);
 #endif
 }
