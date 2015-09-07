@@ -44,7 +44,7 @@ void X11OpenGLSalGraphicsImpl::Init()
     OpenGLSalGraphicsImpl::Init();
 }
 
-OpenGLContext* X11OpenGLSalGraphicsImpl::CreateWinContext()
+rtl::Reference<OpenGLContext> X11OpenGLSalGraphicsImpl::CreateWinContext()
 {
     X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
 
@@ -52,13 +52,13 @@ OpenGLContext* X11OpenGLSalGraphicsImpl::CreateWinContext()
         return NULL;
 
     Window aWin = pProvider->GetX11Window();
-    OpenGLContext* pContext = new OpenGLContext();
+    rtl::Reference<OpenGLContext> pContext = OpenGLContext::Create();
     pContext->init( mrParent.GetXDisplay(), aWin,
                     mrParent.m_nXScreen.getXScreen() );
     return pContext;
 }
 
-bool X11OpenGLSalGraphicsImpl::UseContext( OpenGLContext* pContext )
+bool X11OpenGLSalGraphicsImpl::UseContext( const rtl::Reference<OpenGLContext> &pContext )
 {
     X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
 
@@ -66,9 +66,9 @@ bool X11OpenGLSalGraphicsImpl::UseContext( OpenGLContext* pContext )
         return false;
 
     if( !pProvider )
-        return ( pContext->getOpenGLWindow().win != None );
+        return pContext->getOpenGLWindow().win != None;
     else
-        return ( pContext->getOpenGLWindow().win == pProvider->GetX11Window() );
+        return pContext->getOpenGLWindow().win == pProvider->GetX11Window();
 }
 
 void X11OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )

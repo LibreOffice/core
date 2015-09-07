@@ -14,8 +14,7 @@
 
 #include "openglgdiimpl.hxx"
 #include "win/salgdi.h"
-
-class OpenGLContext;
+#include <vcl/opengl/OpenGLContext.hxx>
 
 class WinOpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl
 {
@@ -31,8 +30,8 @@ public:
                              SalGeometryProvider *mpProvider);
 
 protected:
-    virtual OpenGLContext* CreateWinContext() SAL_OVERRIDE;
-    virtual bool UseContext( OpenGLContext* pContext ) SAL_OVERRIDE;
+    virtual rtl::Reference<OpenGLContext> CreateWinContext() SAL_OVERRIDE;
+    virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) SAL_OVERRIDE;
 
 public:
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;

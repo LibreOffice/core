@@ -61,14 +61,14 @@ OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
     ReleaseContext();
 }
 
-OpenGLContext* OpenGLSalGraphicsImpl::GetOpenGLContext()
+rtl::Reference<OpenGLContext> OpenGLSalGraphicsImpl::GetOpenGLContext()
 {
     if( !AcquireContext() )
         return NULL;
     return mpContext;
 }
 
-OpenGLContext* OpenGLSalGraphicsImpl::GetDefaultContext()
+rtl::Reference<OpenGLContext> OpenGLSalGraphicsImpl::GetDefaultContext()
 {
     return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
 }
@@ -77,19 +77,14 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if( mpContext )
+    if( mpContext.is() )
     {
         if( mpContext->isInitialized() )
             return true;
-#ifdef DBG_UTIL
-        mpContext->DeRef(this);
-#else
-        mpContext->DeRef();
-#endif
+        mpContext.clear();
     }
 
-
-    OpenGLContext* pContext = pSVData->maGDIData.mpLastContext;
+    OpenGLContext *pContext = pSVData->maGDIData.mpLastContext;
     while( pContext )
     {
         // check if this context can be used by this SalGraphicsImpl instance
@@ -99,31 +94,17 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
     }
 
     if( pContext )
-    {
-#ifdef DBG_UTIL
-        pContext->AddRef(this);
-#else
-        pContext->AddRef();
-#endif
-    }
+        mpContext = pContext;
     else
-        pContext = mbOffscreen ? GetDefaultContext() : CreateWinContext();
+        mpContext = mbOffscreen ? GetDefaultContext() : CreateWinContext();
 
-    mpContext = pContext;
-    return (mpContext != NULL);
+    return mpContext.is();
 }
 
 bool OpenGLSalGraphicsImpl::ReleaseContext()
 {
-    if( mpContext )
-    {
-#ifdef DBG_UTIL
-        mpContext->DeRef(this);
-#else
-        mpContext->DeRef();
-#endif
-    }
-    mpContext = NULL;
+    mpContext.clear();
+
     return true;
 }
 
@@ -132,7 +113,7 @@ void OpenGLSalGraphicsImpl::Init()
     mbOffscreen = IsOffscreen();
 
     // check if we can simply re-use the same context
-    if( mpContext )
+    if( mpContext.is() )
     {
         if( !UseContext( mpContext ) )
             ReleaseContext();
@@ -143,7 +124,7 @@ void OpenGLSalGraphicsImpl::Init()
         maOffscreenTex.GetWidth()  != GetWidth() ||
         maOffscreenTex.GetHeight() != GetHeight() )
     {
-        if( mpContext ) // valid context
+        if( mpContext.is() ) // valid context
             mpContext->ReleaseFramebuffer( maOffscreenTex );
         maOffscreenTex = OpenGLTexture();
     }
@@ -158,7 +139,7 @@ void OpenGLSalGraphicsImpl::DeInit()
     // let it know. Other eg. VirtualDevice contexts which have
     // references on and rely on this context continuing to work will
     // get a shiny new context in AcquireContext:: next PreDraw.
-    if( mpContext && !IsOffscreen() )
+    if( mpContext.is() && !IsOffscreen() )
         mpContext->reset();
 }
 
@@ -216,7 +197,7 @@ void OpenGLSalGraphicsImpl::ApplyProgramMatrices(float fPixelOffset)
 void OpenGLSalGraphicsImpl::freeResources()
 {
     // TODO Delete shaders, programs and textures if not shared
-    if( mbOffscreen && mpContext && mpContext->isInitialized() )
+    if( mbOffscreen && mpContext.is() && mpContext->isInitialized() )
     {
         mpContext->makeCurrent();
         mpContext->ReleaseFramebuffer( maOffscreenTex );
