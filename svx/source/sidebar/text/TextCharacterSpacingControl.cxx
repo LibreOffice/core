@@ -146,8 +146,7 @@ void TextCharacterSpacingControl::initial()
     maVSSpacing->AddItem( maImgCus, 0, maStrCus, 0 );
 
     maVSSpacing->SetNoSelection();
-    Link<> aLink = LINK(this, TextCharacterSpacingControl,VSSelHdl );
-    maVSSpacing->SetSelectHdl(aLink);
+    maVSSpacing->SetSelectHdl(LINK(this, TextCharacterSpacingControl,VSSelHdl ));
     maVSSpacing->StartSelection();
     maVSSpacing->Show();
 }
@@ -305,7 +304,7 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
     maVSSpacing->StartSelection();
 }
 
-IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
+IMPL_LINK_TYPED(TextCharacterSpacingControl, VSSelHdl, ValueSet*, pControl, void)
 {
     mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
 
@@ -378,10 +377,6 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
         if(iPos < 6 || (iPos == 6 && mbCusEnable)) //add
             mrTextPropertyPanel.EndSpacingPopupMode();
     }
-
-
-
-    return 0;
 }
 
 IMPL_LINK(TextCharacterSpacingControl, KerningSelectHdl, ListBox*,)

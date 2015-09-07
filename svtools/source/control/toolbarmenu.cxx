@@ -426,11 +426,9 @@ ToolbarMenuEntry* ToolbarMenu_Impl::implGetEntry( int nEntry ) const
 
 
 
-IMPL_LINK( ToolbarMenu, HighlightHdl, Control *, pControl )
+IMPL_LINK_NOARG_TYPED( ToolbarMenu, HighlightHdl, ValueSet*, void )
 {
-    (void)pControl;
     mpImpl->notifyHighlightedEntry();
-    return 0;
 }
 
 ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, vcl::Window* pParentWindow, WinBits nBits )

@@ -1297,7 +1297,7 @@ SfxTabPage::sfxpg SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
     return LEAVE_PAGE;
 }
 
-IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
+IMPL_LINK_TYPED( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS, void )
 {
     const sal_uInt16 nItem = pVS->GetSelectItemId();
     if( nItem < 4 )
@@ -1330,7 +1330,6 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
         Timeout();
 
     }
-    return 0;
 }
 
 void SwColumnPage::SetFrmMode(bool bMod)

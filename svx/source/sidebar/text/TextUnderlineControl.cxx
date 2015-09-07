@@ -126,8 +126,7 @@ void TextUnderlineControl::initial()
     maVSUnderline->SetItemData(10, reinterpret_cast<void*>(UNDERLINE_WAVE));
 
     maVSUnderline->SetColCount();
-    Link<> aLink2 =  LINK( this, TextUnderlineControl, VSSelectHdl ) ;
-    maVSUnderline->SetSelectHdl(aLink2);
+    maVSUnderline->SetSelectHdl(LINK( this, TextUnderlineControl, VSSelectHdl ));
 
     maVSUnderline->StartSelection();
     maVSUnderline->Show();
@@ -210,7 +209,7 @@ void TextUnderlineControl::Rearrange(FontUnderline eLine)
     maVSUnderline->StartSelection();
 }
 
-IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
+IMPL_LINK_TYPED(TextUnderlineControl, VSSelectHdl, ValueSet*, pControl, void)
 {
     if ( pControl == maVSUnderline.get() )
     {
@@ -225,7 +224,6 @@ IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
         mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_UNDERLINE, SfxCallMode::RECORD, &aLineItem, 0L);
         mrTextPropertyPanel.EndUnderlinePopupMode();
     }
-    return 0L;
 }
 
 IMPL_LINK_TYPED(TextUnderlineControl, PBClickHdl, Button *, pPBtn, void)

@@ -83,7 +83,7 @@ private:
 
     std::vector<std::unique_ptr<TemplateEntry>> maTemplateEntries;
 
-    DECL_LINK(DoubleClickHdl, void*);
+    DECL_LINK_TYPED(DoubleClickHdl, ValueSet*, void);
 };
 
 }} // end of namespace sw::sidebar

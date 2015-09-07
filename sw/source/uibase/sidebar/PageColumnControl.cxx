@@ -88,7 +88,7 @@ void PageColumnControl::dispose()
     svx::sidebar::PopupControl::dispose();
 }
 
-IMPL_LINK(PageColumnControl, ImplColumnHdl, void *, pControl)
+IMPL_LINK_TYPED(PageColumnControl, ImplColumnHdl, ValueSet*, pControl, void)
 {
     mpColumnValueSet->SetNoSelection();
     if ( pControl == mpColumnValueSet )
@@ -102,7 +102,6 @@ IMPL_LINK(PageColumnControl, ImplColumnHdl, void *, pControl)
     }
 
     mrPagePropPanel.ClosePageColumnPopup();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(PageColumnControl, MoreButtonClickHdl_Impl, Button*, void)

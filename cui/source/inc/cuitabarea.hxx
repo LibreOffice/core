@@ -720,7 +720,7 @@ private:
     DECL_LINK_TYPED( ClickWorkOnHdl_Impl, Button*, void );
 
     DECL_LINK( SelectColorLBHdl_Impl, void * );
-    DECL_LINK( SelectValSetHdl_Impl, void * );
+    DECL_LINK_TYPED( SelectValSetHdl_Impl, ValueSet*, void );
     DECL_LINK( SelectColorModelHdl_Impl, void * );
     void ChangeColor(const Color &rNewColor);
     DECL_LINK( ModifiedHdl_Impl, void * );

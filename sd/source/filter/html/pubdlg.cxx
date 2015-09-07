@@ -1061,11 +1061,10 @@ IMPL_LINK_TYPED( SdPublishingDlg, ResolutionHdl, Button *, pButton, void )
 }
 
 // Clickhandler for the ValueSet with the bitmap-buttons
-IMPL_LINK_NOARG(SdPublishingDlg, ButtonsHdl)
+IMPL_LINK_NOARG_TYPED(SdPublishingDlg, ButtonsHdl, ValueSet*, void)
 {
     // if one bitmap-button is chosen, then disable TextOnly
     pPage5_TextOnly->Check(false);
-    return 0;
 }
 
 // Fill the SfxItemSet with the settings of the dialog

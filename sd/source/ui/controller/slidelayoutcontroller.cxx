@@ -71,6 +71,7 @@ public:
 
 protected:
     DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectValueSetHdl, ValueSet*, void );
 
 private:
     SlideLayoutController& mrController;
@@ -184,7 +185,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
 
     mpLayoutSet1 = createEmptyValueSetControl();
-    mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
+    mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
 
     const snewfoil_value_info* pInfo = 0;
     sal_Int16 nColCount = 4;
@@ -213,7 +214,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     {
         mpLayoutSet2 = VclPtr<ValueSet>::Create( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
 
-        mpLayoutSet2->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
+        mpLayoutSet2->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
         mpLayoutSet2->SetColCount( 4 );
         mpLayoutSet2->EnableFullItemMode( false );
         mpLayoutSet2->SetColor( GetControlBackground() );
@@ -267,6 +268,10 @@ void LayoutToolbarMenu::dispose()
     svtools::ToolbarMenu::dispose();
 }
 
+IMPL_LINK_TYPED( LayoutToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void )
+{
+    SelectHdl(pControl);
+}
 IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
 {
     if ( IsInPopupMode() )

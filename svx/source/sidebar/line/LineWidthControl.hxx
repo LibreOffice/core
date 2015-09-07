@@ -71,7 +71,7 @@ private:
     Image maIMGCusGray;
 
     void Initialize();
-    DECL_LINK(VSSelectHdl, void *);
+    DECL_LINK_TYPED(VSSelectHdl, ValueSet*, void);
     DECL_LINK(MFModifyHdl, void *);
 };
 

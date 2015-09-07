@@ -207,7 +207,7 @@ void StylePresetsPanel::dispose()
     PanelLayout::dispose();
 }
 
-IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(StylePresetsPanel, DoubleClickHdl, ValueSet*, void)
 {
     sal_Int32 nItemId = mpValueSet->GetSelectItemId();
     TemplateEntry* pEntry = static_cast<TemplateEntry*>(mpValueSet->GetItemData(nItemId));
@@ -220,8 +220,6 @@ IMPL_LINK_NOARG(StylePresetsPanel, DoubleClickHdl)
         aOption.SetNumRules(true);
         pDocSh->LoadStylesFromFile(pEntry->maURL, aOption, false);
     }
-
-    return 0;
 }
 
 void StylePresetsPanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,

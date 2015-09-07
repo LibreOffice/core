@@ -368,10 +368,9 @@ int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
     return nRowCount;
 }
 
-IMPL_LINK_NOARG(LayoutMenu, ClickHandler)
+IMPL_LINK_NOARG_TYPED(LayoutMenu, ClickHandler, ValueSet*, void)
 {
-    AssignLayoutToSelectedSlides (GetSelectedAutoLayout());
-    return 0;
+    AssignLayoutToSelectedSlides( GetSelectedAutoLayout() );
 }
 
 /** The specified layout is assigned to the current page of the view shell

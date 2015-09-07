@@ -86,7 +86,7 @@ private:
     void FillDesignPreviewControl();
 
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
-    DECL_LINK(implValueSetHdl, void *);
+    DECL_LINK_TYPED(implValueSetHdl, ValueSet*, void);
     DECL_LINK_TYPED(implCheckBoxHdl, Button*, void);
 
 private:

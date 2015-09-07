@@ -92,7 +92,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
 
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
     void            FillValueSet();
     void            SetSize();
     void            implInit();

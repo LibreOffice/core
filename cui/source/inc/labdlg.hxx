@@ -68,7 +68,7 @@ private:
     DECL_LINK( AnsatzSelectHdl_Impl, ListBox * );
     DECL_LINK( AnsatzRelSelectHdl_Impl, ListBox * );
     DECL_LINK_TYPED( LineOptHdl_Impl, Button *, void );
-    DECL_LINK( SelectCaptTypeHdl_Impl, void * );
+    DECL_LINK_TYPED( SelectCaptTypeHdl_Impl, ValueSet*, void );
 
     const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;

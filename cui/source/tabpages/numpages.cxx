@@ -327,7 +327,7 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 {
     if(pActNum)
     {
@@ -336,7 +336,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
         sal_uInt16 nIdx = m_pExamplesVS->GetSelectItemId() - 1;
         DBG_ASSERT(aNumSettingsArr.size() > nIdx, "wrong index");
         if(aNumSettingsArr.size() <= nIdx)
-            return 0;
+            return;
         SvxNumSettings_Impl* _pSet = &aNumSettingsArr[nIdx];
         sal_Int16 eNewType = _pSet->nNumberType;
         const sal_Unicode cLocalPrefix = !_pSet->sPrefix.isEmpty() ? _pSet->sPrefix[0] : 0;
@@ -362,18 +362,16 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
                 aFmt.SetBulletRelSize(100);
                 pActNum->SetLevel(i, aFmt);
             }
-            nMask <<= 1 ;
+            nMask <<= 1;
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 {
     NumSelectHdl_Impl(m_pExamplesVS);
     PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
-    return 0;
 }
 
 
@@ -494,7 +492,7 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 {
     if(pActNum)
     {
@@ -523,17 +521,14 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl)
             nMask <<= 1;
         }
     }
-
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 {
     NumSelectHdl_Impl(m_pExamplesVS);
     PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
-    return 0;
 }
 
 
@@ -702,7 +697,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet* rSet )
 }
 
 // all levels are changed here
-IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 {
     if(pActNum)
     {
@@ -785,15 +780,13 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
             pActNum->SetLevel(i, aFmt);
         }
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 {
     NumSelectHdl_Impl(m_pExamplesVS);
     PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
-    return 0;
 }
 
 void SvxNumPickTabPage::PageCreated(const SfxAllItemSet& aSet)
@@ -962,7 +955,7 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet* rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
 {
     if(pActNum)
     {
@@ -995,19 +988,16 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl)
                     aFmt.SetGraphic( aGrfNames[nIdx] );
                 pActNum->SetLevel(i, aFmt);
             }
-            nMask <<= 1 ;
+            nMask <<= 1;
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBitmapPickTabPage, DoubleClickHdl_Impl, ValueSet*, void)
 {
     NumSelectHdl_Impl(m_pExamplesVS);
     PushButton& rOk = GetTabDialog()->GetOKButton();
     rOk.GetClickHdl().Call(&rOk);
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)

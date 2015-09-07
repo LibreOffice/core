@@ -117,16 +117,13 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     m_pTabBgColorSet->SelectItem(nSelectedItem);
 }
 
-IMPL_LINK_NOARG(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl)
-/*
-    Handler, called when color selection is changed
-*/
+///    Handler, called when color selection is changed
+IMPL_LINK_NOARG_TYPED(ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, void)
 {
     sal_uInt16 nItemId = m_pTabBgColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pTabBgColorSet->GetItemColor( nItemId ) ) : Color( COL_AUTO );
     m_aTabBgColor = aColor;
     EndDialog( RET_OK );
-    return 0;
 }
 
 //    Handler, called when the OK button is pushed

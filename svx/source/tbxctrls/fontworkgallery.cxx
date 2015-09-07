@@ -249,11 +249,10 @@ IMPL_LINK_NOARG_TYPED(FontWorkGalleryDialog, ClickOKHdl, Button*, void)
 
 
 
-IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl)
+IMPL_LINK_NOARG_TYPED(FontWorkGalleryDialog, DoubleClickFavoriteHdl, ValueSet*, void)
 {
     insertSelectedFontwork();
     EndDialog( RET_OK );
-    return 0L;
 }
 
 

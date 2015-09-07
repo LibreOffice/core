@@ -37,6 +37,7 @@ class SvxNumRule;
 class SvxBmpNumValueSet;
 class SvxNumValueSet;
 class SvxBrushItem;
+class ValueSet;
 
 class SvxNumberingPreview : public vcl::Window
 {
@@ -96,8 +97,8 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     sal_uInt16              nNumItemId;
 
 protected:
-        DECL_LINK(NumSelectHdl_Impl, void *);
-        DECL_LINK(DoubleClickHdl_Impl, void *);
+        DECL_LINK_TYPED(NumSelectHdl_Impl, ValueSet*, void);
+        DECL_LINK_TYPED(DoubleClickHdl_Impl, ValueSet*, void);
 
 public:
         SvxSingleNumPickTabPage(vcl::Window* pParent,
@@ -125,15 +126,15 @@ class SvxBulletPickTabPage : public SfxTabPage
     VclPtr<SvxNumValueSet>     m_pExamplesVS;
     SvxNumRule*         pActNum;
     SvxNumRule*         pSaveNum;
-    sal_uInt16              nActNumLvl;
+    sal_uInt16          nActNumLvl;
     bool                bModified   : 1;
     bool                bPreset     : 1;
-    sal_uInt16              nNumItemId;
+    sal_uInt16          nNumItemId;
 
     OUString            sBulletCharFormatName;
 protected:
-        DECL_LINK(NumSelectHdl_Impl, void *);
-        DECL_LINK(DoubleClickHdl_Impl, void *);
+        DECL_LINK_TYPED(NumSelectHdl_Impl, ValueSet*, void);
+        DECL_LINK_TYPED(DoubleClickHdl_Impl, ValueSet*, void);
 public:
         SvxBulletPickTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
@@ -175,8 +176,8 @@ class SvxNumPickTabPage : public SfxTabPage
 
 
 protected:
-        DECL_LINK(NumSelectHdl_Impl, void *);
-        DECL_LINK(DoubleClickHdl_Impl, void *);
+        DECL_LINK_TYPED(NumSelectHdl_Impl, ValueSet*, void);
+        DECL_LINK_TYPED(DoubleClickHdl_Impl, ValueSet*, void);
 
 public:
     SvxNumPickTabPage(vcl::Window* pParent,
@@ -221,8 +222,8 @@ class SvxBitmapPickTabPage : public SfxTabPage
     bool                bPreset     : 1;
 
 protected:
-        DECL_LINK(NumSelectHdl_Impl, void *);
-        DECL_LINK(DoubleClickHdl_Impl, void *);
+        DECL_LINK_TYPED(NumSelectHdl_Impl, ValueSet*, void);
+        DECL_LINK_TYPED(DoubleClickHdl_Impl, ValueSet*, void);
         DECL_LINK_TYPED(ClickAddBrowseHdl_Impl, Button*, void );
 
 

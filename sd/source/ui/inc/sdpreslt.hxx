@@ -46,7 +46,7 @@ public:
 
     void                GetAttr(SfxItemSet& rOutAttrs);
 
-    DECL_LINK(ClickLayoutHdl, void *);
+    DECL_LINK_TYPED(ClickLayoutHdl, ValueSet*, void);
     DECL_LINK_TYPED(ClickLoadHdl, Button*, void);
 
 private:

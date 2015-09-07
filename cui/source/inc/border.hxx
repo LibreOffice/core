@@ -118,8 +118,8 @@ private:
     // Handler
     DECL_LINK( SelStyleHdl_Impl, ListBox* );
     DECL_LINK( SelColHdl_Impl, ListBox* );
-    DECL_LINK( SelPreHdl_Impl, void* );
-    DECL_LINK( SelSdwHdl_Impl, void* );
+    DECL_LINK_TYPED( SelPreHdl_Impl, ValueSet*, void );
+    DECL_LINK_TYPED( SelSdwHdl_Impl, ValueSet*, void );
     DECL_LINK( LinesChanged_Impl, void* );
     DECL_LINK( ModifyDistanceHdl_Impl, MetricField*);
     DECL_LINK( ModifyWidthHdl_Impl, void*);

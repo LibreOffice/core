@@ -138,6 +138,7 @@ private:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
                         DECL_LINK( SelectObjectHdl, void* );
+                        DECL_LINK_TYPED( SelectObjectValueSetHdl, ValueSet*, void );
                         DECL_LINK_TYPED( SelectTbxHdl, ToolBox*, void );
                         DECL_LINK( MiscHdl, void* );
 

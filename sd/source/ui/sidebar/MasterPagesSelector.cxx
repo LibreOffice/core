@@ -170,14 +170,12 @@ ResId MasterPagesSelector::GetContextMenuResId() const
     return SdResId(RID_TASKPANE_MASTERPAGESSELECTOR_POPUP);
 }
 
-IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler)
+IMPL_LINK_NOARG_TYPED(MasterPagesSelector, ClickHandler, ValueSet*, void)
 {
     // We use the framework to assign the clicked-on master page because we
     // so use the same mechanism as the context menu does (where we do not
     // have the option to call the assignment method directly.)
     ExecuteCommand(mnDefaultClickAction);
-
-    return 0;
 }
 
 IMPL_LINK(MasterPagesSelector, RightClickHandler, MouseEvent*, pEvent)

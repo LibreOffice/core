@@ -161,12 +161,11 @@ static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
         return 0;
 }
 
-IMPL_LINK_NOARG(TableDesignWidget, implValueSetHdl)
+IMPL_LINK_NOARG_TYPED(TableDesignWidget, implValueSetHdl, ValueSet*, void)
 {
     mbStyleSelected = true;
     if( !mbModal )
         ApplyStyle();
-    return 0;
 }
 
 void TableDesignWidget::ApplyStyle()

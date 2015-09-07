@@ -54,7 +54,7 @@ private:
 
     std::function<void(const OUString&, const Color&)> maColorSelectFunction;
 
-    DECL_LINK( SelectHdl, SvxColorValueSet* );
+    DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
     DECL_LINK( SelectPaletteHdl, void *);
     DECL_LINK_TYPED( AutoColorClickHdl, Button*, void );
     DECL_LINK_TYPED( OpenPickerClickHdl, Button*, void );

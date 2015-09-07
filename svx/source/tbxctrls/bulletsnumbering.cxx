@@ -39,6 +39,7 @@ class NumberingPopup : public svtools::ToolbarMenu
     NumberingToolBoxControl& mrController;
     VclPtr<SvxNumValueSet> mpValueSet;
     DECL_LINK( VSSelectHdl, void * );
+    DECL_LINK_TYPED( VSSelectValueSetHdl, ValueSet*, void );
 
 public:
     NumberingPopup( NumberingToolBoxControl& rController,
@@ -122,9 +123,8 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
         appendEntry( 1, SVX_RESSTR( RID_SVXSTR_MORENUMBERING ), ::GetImage( rFrame, ".uno:OutlineBullet", false ) );
 
     SetOutputSizePixel( getMenuSize() );
-    Link<> aLink =  LINK( this, NumberingPopup, VSSelectHdl );
-    mpValueSet->SetSelectHdl( aLink );
-    SetSelectHdl( aLink );
+    mpValueSet->SetSelectHdl( LINK( this, NumberingPopup, VSSelectValueSetHdl ) );
+    SetSelectHdl( LINK( this, NumberingPopup, VSSelectHdl ) );
 
     if ( mbBulletItem )
         AddStatusListener( ".uno:CurrentBulletListType" );
@@ -153,6 +153,10 @@ void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent 
         mpValueSet->SelectItem( nSelItem );
 }
 
+IMPL_LINK_TYPED( NumberingPopup, VSSelectValueSetHdl, ValueSet*, pControl, void )
+{
+    VSSelectHdl(pControl);
+}
 IMPL_LINK( NumberingPopup, VSSelectHdl, void *, pControl )
 {
     if ( IsInPopupMode() )

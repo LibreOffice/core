@@ -71,7 +71,7 @@ private:
     void initial();
 
     DECL_LINK_TYPED( PBClickHdl, Button*, void);
-    DECL_LINK(VSSelectHdl, void *);
+    DECL_LINK_TYPED(VSSelectHdl, ValueSet*, void);
 };
 }}
 

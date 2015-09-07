@@ -938,7 +938,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxColorTabPage, SelectValSetHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, void)
 {
     sal_Int32 nPos = m_pValSetColorList->GetSelectItemId();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -957,7 +957,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, SelectValSetHdl_Impl)
         XColorEntry* pEntry = pColorList->GetColor(nPos-1);
         ChangeColor(pEntry->GetColor());
     }
-    return 0;
 }
 
 

@@ -168,9 +168,9 @@ void LineWidthControl::Initialize()
     maVSWidth->SetImage(maIMGCusGray);
 
     maVSWidth->SetSelItem(0);
-    Link<> aLink =  LINK( this, LineWidthControl, VSSelectHdl ) ;
-    maVSWidth->SetSelectHdl(aLink);
-    aLink = LINK(this, LineWidthControl, MFModifyHdl);
+
+    maVSWidth->SetSelectHdl(LINK( this, LineWidthControl, VSSelectHdl ));
+    Link<> aLink = LINK(this, LineWidthControl, MFModifyHdl);
     maMFWidth->SetModifyHdl(aLink);
 
     maVSWidth->StartSelection();
@@ -256,7 +256,7 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
     maVSWidth->StartSelection();
 }
 
-IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
+IMPL_LINK_TYPED(LineWidthControl, VSSelectHdl, ValueSet*, pControl, void)
 {
     if (pControl == maVSWidth.get())
     {
@@ -298,7 +298,6 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
         if ((iPos >= 1 && iPos <= 8) || (iPos == 9 && mbCustom)) //add
             mrLinePropertyPanel.EndLineWidthPopupMode();
     }
-    return 0L;
 }
 
 IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)

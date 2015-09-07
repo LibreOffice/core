@@ -59,6 +59,7 @@ private:
     const OUString msExtrusionProjection;
 
     DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectValueSetHdl, ValueSet*, void );
 
     void implSetDirection( sal_Int32 nSkew, bool bEnabled = true );
     void implSetProjection( sal_Int32 nProjection, bool bEnabled = true );
@@ -160,6 +161,7 @@ private:
     void    implSetDirection( int nDirection, bool bEnabled );
 
     DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectValueSetHdl, ValueSet*, void );
 public:
     ExtrusionLightingWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
     virtual ~ExtrusionLightingWindow();

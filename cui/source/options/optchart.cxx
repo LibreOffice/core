@@ -261,7 +261,7 @@ IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ColorLB*, _pColorList )
     return 0L;
 }
 
-IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl)
+IMPL_LINK_NOARG_TYPED(SvxDefaultColorOptPage, BoxClickedHdl, ValueSet*, void)
 {
     sal_Int32 nIdx = m_pLbChartColors->GetSelectEntryPos();
     if( nIdx != LISTBOX_ENTRY_NOTFOUND )
@@ -273,8 +273,6 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl)
 
         m_pLbChartColors->SelectEntryPos( nIdx );  // reselect entry
     }
-
-    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

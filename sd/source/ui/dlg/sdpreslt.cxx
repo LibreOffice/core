@@ -168,10 +168,9 @@ void SdPresLayoutDlg::FillValueSet()
 /**
  * DoubleClick handler
  */
-IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl)
+IMPL_LINK_NOARG_TYPED(SdPresLayoutDlg, ClickLayoutHdl, ValueSet*, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 /**

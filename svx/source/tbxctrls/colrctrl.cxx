@@ -340,7 +340,7 @@ bool SvxColorDockingWindow::Close()
     return true;
 }
 
-IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SvxColorDockingWindow, SelectHdl, ValueSet*, void)
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
     sal_uInt16 nPos = aColorSet->GetSelectItemId();
@@ -432,8 +432,6 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
             pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aRightColorItem, 0L );
         }
     }
-
-    return 0;
 }
 
 void SvxColorDockingWindow::Resizing( Size& rNewSize )

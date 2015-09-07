@@ -459,10 +459,9 @@ IMPL_LINK_TYPED( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton, void )
 
 
 
-IMPL_LINK_NOARG(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxCaptionTabPage, SelectCaptTypeHdl_Impl, ValueSet*, void)
 {
     SetupType_Impl( m_pCT_CAPTTYPE->GetSelectItemId() );
-    return 0;
 }
 
 void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )

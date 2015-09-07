@@ -80,6 +80,7 @@ namespace svx
         virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
         DECL_LINK( SelectSuggestionHdl, Control* );
+        DECL_LINK_TYPED( SelectSuggestionValueSetHdl, ValueSet*, void );
 
         void SetHelpIds();
 

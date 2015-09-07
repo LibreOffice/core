@@ -47,7 +47,7 @@ private:
     DECL_LINK_TYPED( AddChartColor, Button *, void );
     DECL_LINK_TYPED( RemoveChartColor, Button *, void );
     DECL_LINK( ListClickedHdl, ColorLB * );
-    DECL_LINK(BoxClickedHdl, void *);
+    DECL_LINK_TYPED(BoxClickedHdl, ValueSet*, void);
 
     void FillColorBox();
     long GetColorIndex( const Color& rCol );

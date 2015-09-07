@@ -1141,13 +1141,12 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 // Handler
 
 /** Handler, called when color selection is changed */
-IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, void)
 {
     sal_uInt16 nItemId = m_pBackgroundColorSet->GetSelectItemId();
     Color aColor = nItemId ? ( m_pBackgroundColorSet->GetItemColor( nItemId ) ) : Color( COL_TRANSPARENT );
     aBgdColor = aColor;
     m_pPreviewWin1->NotifyChange( aBgdColor );
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)

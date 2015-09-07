@@ -433,9 +433,8 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
             OUString( "com.sun.star.util.URLTransformer" ), m_xContext ),
                     css::uno::UNO_QUERY );
 
-    Image       aDummyImage;
-    const Link<> aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
-    vcl::Font   aInfoFont( maInfoBar->GetControlFont() );
+    Image      aDummyImage;
+    vcl::Font  aInfoFont( maInfoBar->GetControlFont() );
 
     maMiscOptions.AddListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
@@ -459,8 +458,8 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
     maInfoBar->Show();
     maSeparator->Show();
 
-    mpIconView->SetSelectHdl( aSelectHdl );
-    mpListView->SetSelectHdl( aSelectHdl );
+    mpIconView->SetSelectHdl( LINK( this, GalleryBrowser2, SelectObjectValueSetHdl ) );
+    mpListView->SetSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
 
     InitSettings();
 
@@ -758,10 +757,8 @@ void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
     mpListView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
     mpPreview->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_PREVIEW));
 
-    const Link<> aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
-
-    mpIconView->SetSelectHdl( aSelectHdl );
-    mpListView->SetSelectHdl( aSelectHdl );
+    mpIconView->SetSelectHdl( LINK( this, GalleryBrowser2, SelectObjectValueSetHdl ) );
+    mpListView->SetSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
 
     if( GALLERYBROWSERMODE_PREVIEW == GetMode() )
         meMode = meLastMode;
@@ -1315,6 +1312,11 @@ OUString GalleryBrowser2::GetFilterName() const
 }
 
 
+
+IMPL_LINK_NOARG_TYPED(GalleryBrowser2, SelectObjectValueSetHdl, ValueSet*, void)
+{
+    ImplUpdateInfoBar();
+}
 
 IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectHdl)
 {

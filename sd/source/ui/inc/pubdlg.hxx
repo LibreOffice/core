@@ -188,7 +188,7 @@ private:
     DECL_LINK_TYPED( ContentHdl, Button*, void );
     DECL_LINK_TYPED( GfxFormatHdl, Button *, void );
     DECL_LINK_TYPED( ResolutionHdl, Button*, void );
-    DECL_LINK( ButtonsHdl, void * );
+    DECL_LINK_TYPED( ButtonsHdl, ValueSet*, void );
     DECL_LINK_TYPED( ColorHdl, Button*, void );
     DECL_LINK_TYPED( WebServerHdl, Button *, void );
     DECL_LINK_TYPED( SlideChgHdl, Button*, void );

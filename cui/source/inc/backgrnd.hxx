@@ -137,7 +137,7 @@ private:
     DECL_LINK_TYPED(BrowseHdl_Impl, Button*, void);
     DECL_LINK_TYPED( RadioClickHdl_Impl, Button*, void );
     DECL_LINK_TYPED( FileClickHdl_Impl, Button*, void );
-    DECL_LINK(BackgroundColorHdl_Impl, void *);
+    DECL_LINK_TYPED(BackgroundColorHdl_Impl, ValueSet*, void);
     DECL_LINK( TblDestinationHdl_Impl, ListBox* );
 };
 

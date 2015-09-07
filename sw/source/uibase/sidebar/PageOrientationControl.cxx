@@ -48,8 +48,7 @@ PageOrientationControl::PageOrientationControl(
                     SW_RES(STR_LANDSCAPE), 0 );
     }
 
-    Link<> aLink = LINK(this, PageOrientationControl,ImplOrientationHdl );
-    mpOrientationValueSet->SetSelectHdl(aLink);
+    mpOrientationValueSet->SetSelectHdl(LINK(this, PageOrientationControl,ImplOrientationHdl ));
     mpOrientationValueSet->SetNoSelection();
     mpOrientationValueSet->StartSelection();
     mpOrientationValueSet->Show();
@@ -73,7 +72,7 @@ void PageOrientationControl::dispose()
     svx::sidebar::PopupControl::dispose();
 }
 
-IMPL_LINK(PageOrientationControl, ImplOrientationHdl, void *, pControl)
+IMPL_LINK_TYPED(PageOrientationControl, ImplOrientationHdl, ValueSet*, pControl, void)
 {
     mpOrientationValueSet->SetNoSelection();
     if ( pControl == mpOrientationValueSet )
@@ -89,7 +88,6 @@ IMPL_LINK(PageOrientationControl, ImplOrientationHdl, void *, pControl)
     }
 
     mrPagePropPanel.ClosePageOrientationPopup();
-    return 0;
 }
 
 } } // end of namespace sw::sidebar

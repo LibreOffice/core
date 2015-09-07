@@ -39,6 +39,7 @@
 namespace svx { namespace sidebar {
     class ValueSetWithTextControl;
 } }
+class ValueSet;
 
 static const long MINBODY = 284; //0.5 cm in twips
 
@@ -100,7 +101,7 @@ private:
 
     PagePropertyPanel& mrPagePropPanel;
 
-    DECL_LINK( ImplMarginHdl, void* );
+    DECL_LINK_TYPED( ImplMarginHdl, ValueSet*, void );
     DECL_LINK( ModifyLRMarginHdl, MetricField* );
     DECL_LINK( ModifyULMarginHdl, MetricField* );
 

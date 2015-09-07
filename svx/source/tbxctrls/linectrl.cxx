@@ -331,7 +331,7 @@ void SvxLineEndWindow::dispose()
     SfxPopupWindow::dispose();
 }
 
-IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SvxLineEndWindow, SelectHdl, ValueSet*, void)
 {
     boost::scoped_ptr<XLineEndItem> pLineEndItem;
     boost::scoped_ptr<XLineStartItem> pLineStartItem;
@@ -383,8 +383,6 @@ IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                  OUString( ".uno:LineEndStyle" ),
                                  aArgs );
-
-    return 0;
 }
 
 

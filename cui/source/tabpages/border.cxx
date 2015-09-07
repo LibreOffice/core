@@ -770,7 +770,7 @@ void SvxBorderTabPage::HideShadowControls()
 
 
 
-IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
 {
     const svx::FrameBorderState SHOW = svx::FRAMESTATE_SHOW;
     const svx::FrameBorderState HIDE = svx::FRAMESTATE_HIDE;
@@ -837,19 +837,17 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl)
     m_pWndPresets->SetNoSelection();
 
     LinesChanged_Impl( 0 );
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
 {
     bool bEnable = m_pWndShadows->GetSelectItemId() > 1;
     m_pFtShadowSize->Enable(bEnable);
     m_pEdShadowSize->Enable(bEnable);
     m_pFtShadowColor->Enable(bEnable);
     m_pLbShadowColor->Enable(bEnable);
-    return 0;
 }
 
 

@@ -95,9 +95,9 @@ IMPL_LINK_TYPED( ConditionField, OnFormula, Button*, _pClickedButton, void )
 #define PALETTE_SIZE (PALETTE_X * PALETTE_Y)
 class OColorPopup : public FloatingWindow
 {
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
     VclPtr<Condition>      m_pCondition;
-    sal_uInt16      m_nSlotId;
+    sal_uInt16             m_nSlotId;
 public:
     OColorPopup(vcl::Window* _pParent,Condition* _pCondition);
     virtual ~OColorPopup();
@@ -194,7 +194,7 @@ void OColorPopup::SetSlotId(sal_uInt16 _nSlotId)
     }
 }
 
-IMPL_LINK_NOARG(OColorPopup, SelectHdl)
+IMPL_LINK_NOARG_TYPED(OColorPopup, SelectHdl, ValueSet*, void)
 {
     sal_uInt16 nItemId = m_aColorSet->GetSelectItemId();
     Color aColor( nItemId == 0 ? Color( COL_TRANSPARENT ) : m_aColorSet->GetItemColor( nItemId ) );
@@ -208,7 +208,6 @@ IMPL_LINK_NOARG(OColorPopup, SelectHdl)
         EndPopupMode();
 
     m_pCondition->ApplyCommand( m_nSlotId, aColor );
-    return 0;
 }
 
 

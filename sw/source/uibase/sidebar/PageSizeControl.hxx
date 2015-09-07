@@ -32,6 +32,7 @@
 namespace svx { namespace sidebar {
     class ValueSetWithTextControl;
 } }
+class ValueSet;
 
 namespace sw { namespace sidebar {
 
@@ -61,7 +62,7 @@ private:
 
     PagePropertyPanel& mrPagePropPanel;
 
-    DECL_LINK(ImplSizeHdl, void*);
+    DECL_LINK_TYPED(ImplSizeHdl, ::ValueSet*, void);
     DECL_LINK_TYPED(MoreButtonClickHdl_Impl, Button*, void);
 };
 

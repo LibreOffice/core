@@ -41,7 +41,7 @@ private:
     void Initialize();
     void SetAllNoSel();
 
-    DECL_LINK(VSSelectHdl, void*);
+    DECL_LINK_TYPED(VSSelectHdl, ValueSet*, void);
     DECL_LINK_TYPED(PBClickHdl, Button*, void);
 
 public:

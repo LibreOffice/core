@@ -369,7 +369,7 @@ namespace svx
         , m_aListBox( VclPtr<ListBox>::Create(this,GetStyle() | WB_BORDER) )
         , m_bInSelectionUpdate( false )
     {
-        m_aValueSet->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionHdl ) );
+        m_aValueSet->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionValueSetHdl ) );
         m_aListBox->SetSelectHdl( LINK( this, SuggestionDisplay, SelectSuggestionHdl ) );
 
         m_aValueSet->SetLineCount( LINE_CNT );
@@ -479,6 +479,10 @@ namespace svx
         }
     }
 
+    IMPL_LINK_TYPED( SuggestionDisplay, SelectSuggestionValueSetHdl, ValueSet*, pControl, void )
+    {
+        SelectSuggestionHdl(pControl);
+    }
     IMPL_LINK( SuggestionDisplay, SelectSuggestionHdl, Control*, pControl )
     {
         if( m_bInSelectionUpdate )

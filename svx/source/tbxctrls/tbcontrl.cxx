@@ -249,7 +249,7 @@ private:
     ImageList                   aImgList;
     bool                        bParagraphMode;
 
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectHdl, ValueSet*, void );
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;
@@ -1349,7 +1349,7 @@ void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
     mpColorSet->KeyInput(rKEvt);
 }
 
-IMPL_LINK(SvxColorWindow_Impl, SelectHdl, SvxColorValueSet*, pColorSet)
+IMPL_LINK_TYPED(SvxColorWindow_Impl, SelectHdl, ValueSet*, pColorSet, void)
 {
     Color aColor = pColorSet->GetItemColor( pColorSet->GetSelectItemId() );
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
@@ -1371,7 +1371,6 @@ IMPL_LINK(SvxColorWindow_Impl, SelectHdl, SvxColorValueSet*, pColorSet)
         maSelectedLink.Call(&aColor);
 
     maColorSelectFunction(maCommand, aColor);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectPaletteHdl)
@@ -1666,7 +1665,7 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 // By default unset lines remain unchanged.
 // Via Shift unset lines are reset
 
-IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
 {
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
@@ -1675,9 +1674,9 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
                         *pRight = 0,
                         *pTop = 0,
                         *pBottom = 0;
-    sal_uInt16              nSel = aFrameSet->GetSelectItemId();
-    sal_uInt16              nModifier = aFrameSet->GetModifier();
-    sal_uInt8               nValidFlags = 0;
+    sal_uInt16           nSel = aFrameSet->GetSelectItemId();
+    sal_uInt16           nModifier = aFrameSet->GetModifier();
+    sal_uInt8            nValidFlags = 0;
 
     theDefLine.GuessLinesWidths(theDefLine.GetBorderLineStyle(),
             DEF_LINE_WIDTH_0);
@@ -1775,7 +1774,6 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( GetFrame()->getController(), UNO_QUERY ),
                                  OUString( ".uno:SetBorderStyle" ),
                                  aArgs );
-    return 0;
 }
 
 void SvxFrameWindow_Impl::Resize()

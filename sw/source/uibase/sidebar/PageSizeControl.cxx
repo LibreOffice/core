@@ -155,7 +155,7 @@ void PageSizeControl::dispose()
     svx::sidebar::PopupControl::dispose();
 }
 
-IMPL_LINK(PageSizeControl, ImplSizeHdl, void *, pControl)
+IMPL_LINK_TYPED(PageSizeControl, ImplSizeHdl, ValueSet*, pControl, void)
 {
     mpSizeValueSet->SetNoSelection();
     if ( pControl == mpSizeValueSet )
@@ -170,7 +170,6 @@ IMPL_LINK(PageSizeControl, ImplSizeHdl, void *, pControl)
     }
 
     mrPagePropPanel.ClosePageSizePopup();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(PageSizeControl, MoreButtonClickHdl_Impl, Button*, void)

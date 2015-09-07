@@ -2281,7 +2281,7 @@ long ValueSet::GetScrollWidth() const
         return 0;
 }
 
-void ValueSet::SetHighlightHdl( const Link<>& rLink )
+void ValueSet::SetHighlightHdl( const Link<ValueSet*,void>& rLink )
 {
     maHighlightHdl = rLink;
 }

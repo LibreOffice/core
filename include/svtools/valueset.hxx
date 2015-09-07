@@ -222,9 +222,9 @@ private:
     sal_uInt16      mnSpacing;
     DrawFrameStyle  mnFrameStyle;
     Color           maColor;
-    Link<>          maDoubleClickHdl;
-    Link<>          maSelectHdl;
-    Link<>          maHighlightHdl;
+    Link<ValueSet*,void>  maDoubleClickHdl;
+    Link<ValueSet*,void>  maSelectHdl;
+    Link<ValueSet*,void>  maHighlightHdl;
 
     // bitfield
     bool            mbFormat : 1;
@@ -386,16 +386,16 @@ public:
     Size            CalcItemSizePixel(const Size& rSize, bool bOut = true) const;
     long            GetScrollWidth() const;
 
-    void            SetSelectHdl(const Link<>& rLink)
+    void            SetSelectHdl(const Link<ValueSet*,void>& rLink)
     {
         maSelectHdl = rLink;
     }
-    void            SetDoubleClickHdl(const Link<>& rLink)
+    void            SetDoubleClickHdl(const Link<ValueSet*,void>& rLink)
     {
         maDoubleClickHdl = rLink;
     }
 
-    void            SetHighlightHdl(const Link<>& rLink);
+    void            SetHighlightHdl(const Link<ValueSet*,void>& rLink);
 
     bool GetEdgeBlending() const
     {

@@ -882,7 +882,7 @@ ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
         pTypeController = m_aChartTypeDialogControllerList[nM];
     return pTypeController;
 }
-IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl)
+IMPL_LINK_NOARG_TYPED(ChartTypeTabPage, SelectSubTypeHdl, ValueSet*, void)
 {
     if( m_pCurrentMainType )
     {
@@ -892,7 +892,6 @@ IMPL_LINK_NOARG(ChartTypeTabPage, SelectSubTypeHdl)
         if( m_bDoLiveUpdate )
             commitToModel( aParameter );
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(ChartTypeTabPage, SelectMainTypeHdl)

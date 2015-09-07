@@ -323,7 +323,7 @@ void PageMarginControl::SelectValueSetItem()
     mpMarginValueSet->StartSelection();
 };
 
-IMPL_LINK(PageMarginControl, ImplMarginHdl, void *, pControl)
+IMPL_LINK_TYPED(PageMarginControl, ImplMarginHdl, ValueSet*, pControl, void)
 {
     if ( pControl == mpMarginValueSet )
     {
@@ -397,8 +397,6 @@ IMPL_LINK(PageMarginControl, ImplMarginHdl, void *, pControl)
             SelectValueSetItem();
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK( PageMarginControl, ModifyLRMarginHdl, MetricField *, )

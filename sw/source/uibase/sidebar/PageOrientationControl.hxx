@@ -24,6 +24,8 @@
 namespace svx { namespace sidebar {
     class ValueSetWithTextControl;
 } }
+class ValueSet;
+
 
 namespace sw { namespace sidebar {
 
@@ -47,7 +49,7 @@ private:
 
     PagePropertyPanel& mrPagePropPanel;
 
-    DECL_LINK(ImplOrientationHdl, void*);
+    DECL_LINK_TYPED(ImplOrientationHdl, ValueSet*, void);
 };
 
 } } // end of namespace sw::sidebar

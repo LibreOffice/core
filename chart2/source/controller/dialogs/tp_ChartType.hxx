@@ -75,7 +75,7 @@ protected:
     void selectMainType();
 
     DECL_LINK( SelectMainTypeHdl, void* );
-    DECL_LINK( SelectSubTypeHdl, void* );
+    DECL_LINK_TYPED( SelectSubTypeHdl, ValueSet*, void );
 
 protected:
     VclPtr<FixedText>  m_pFT_ChooseType;

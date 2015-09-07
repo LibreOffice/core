@@ -81,7 +81,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
     SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
     mpDirectionSet = createEmptyValueSetControl();
 
-    mpDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
+    mpDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectValueSetHdl ) );
     mpDirectionSet->SetColCount( 3 );
     mpDirectionSet->EnableFullItemMode( false );
 
@@ -202,6 +202,10 @@ void ExtrusionDirectionWindow::statusChanged(
 
 
 
+IMPL_LINK_TYPED( ExtrusionDirectionWindow, SelectValueSetHdl, ValueSet*, pControl, void )
+{
+    SelectHdl(pControl);
+}
 IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
 {
     if ( IsInPopupMode() )
@@ -570,7 +574,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rContro
     mpLightingSet = createEmptyValueSetControl();
     mpLightingSet->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
-    mpLightingSet->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
+    mpLightingSet->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectValueSetHdl ) );
     mpLightingSet->SetColCount( 3 );
     mpLightingSet->EnableFullItemMode( false );
 
@@ -699,6 +703,10 @@ void ExtrusionLightingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 
 
+IMPL_LINK_TYPED( ExtrusionLightingWindow, SelectValueSetHdl, ValueSet*, pControl, void )
+{
+    SelectHdl(pControl);
+}
 IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
 {
     if ( IsInPopupMode() )

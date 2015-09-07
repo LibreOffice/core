@@ -86,7 +86,7 @@ private:
     bool                mbVS;
 
     void initial();
-    DECL_LINK(VSSelHdl, void*);
+    DECL_LINK_TYPED(VSSelHdl, ValueSet*, void);
     DECL_LINK(KerningSelectHdl, ListBox*);
     DECL_LINK(KerningModifyHdl,  MetricField*);
 };
