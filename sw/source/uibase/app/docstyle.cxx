@@ -1769,7 +1769,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
     case SFX_STYLE_FAMILY_FRAME:
         pFrameFormat = lcl_FindFrameFormat(rDoc,  aName, this, bCreate);
         bPhysical = 0 != pFrameFormat;
-        if( bFillOnlyInfo && bPhysical )
+        if (bFillOnlyInfo && !bPhysical)
         {
             bDeleteInfo = true;
             ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
