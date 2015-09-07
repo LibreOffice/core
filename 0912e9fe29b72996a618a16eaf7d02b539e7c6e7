@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_f81f5159",
+        "filename": "sc/source/ui/view/tabvwshc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:17:13Z",
+      "side": 1,
+      "message": "\"dialogs are\" (plural)",
+      "range": {
+        "startLine": 521,
+        "startChar": 15,
+        "endLine": 521,
+        "endChar": 24
+      },
+      "revId": "0912e9fe29b72996a618a16eaf7d02b539e7c6e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_d8240db1",
+        "filename": "sc/source/ui/view/tabvwshc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 521,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:17:13Z",
+      "side": 1,
+      "message": "That\u0027s the Option button instead of add",
+      "range": {
+        "startLine": 521,
+        "startChar": 51,
+        "endLine": 521,
+        "endChar": 54
+      },
+      "revId": "0912e9fe29b72996a618a16eaf7d02b539e7c6e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_982a957d",
+        "filename": "sc/source/ui/view/tabvwshc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:17:13Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 523,
+        "startChar": 25,
+        "endLine": 523,
+        "endChar": 28
+      },
+      "revId": "0912e9fe29b72996a618a16eaf7d02b539e7c6e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_383a69ce",
+        "filename": "sc/source/ui/view/tabvwshd.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:17:13Z",
+      "side": 1,
+      "message": "dialogs (plural)",
+      "range": {
+        "startLine": 35,
+        "startChar": 30,
+        "endLine": 35,
+        "endChar": 36
+      },
+      "revId": "0912e9fe29b72996a618a16eaf7d02b539e7c6e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
