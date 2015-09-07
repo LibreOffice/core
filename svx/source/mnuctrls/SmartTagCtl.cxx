@@ -161,7 +161,9 @@ IMPL_LINK_TYPED( SvxSmartTagsControl, MenuSelect, Menu *, pMen, bool )
 
     sal_uInt16 nMyId = pMen->GetCurItemId();
 
-    if ( nMyId < MN_ST_INSERT_START) return 0;
+    if ( nMyId < MN_ST_INSERT_START)
+        return false;
+
     nMyId -= MN_ST_INSERT_START;
 
     // compute smarttag lib index and action index
