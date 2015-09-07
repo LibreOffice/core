@@ -1010,7 +1010,7 @@ IMPL_LINK_TYPED(SidebarController, OnMenuItemSelected, Menu*, pMenu, bool)
         break;
     }
 
-    return 1;
+    return true;
 }
 
 void SidebarController::RequestCloseDeck()
