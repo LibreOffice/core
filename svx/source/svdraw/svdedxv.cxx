@@ -51,6 +51,8 @@
 #include "svx/svdstr.hrc"
 #include "svdglob.hxx"
 #include "svx/globl3d.hxx"
+#include <svx/textchain.hxx>
+#include <svx/textchaincursor.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svtools/colorcfg.hxx>
@@ -486,6 +488,102 @@ IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerStatusEventHdl, EditStatus&, rEditStat
     }
 }
 
+void SdrObjEditView::ImpChainingEventHdl()
+{
+    if(pTextEditOutliner )
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( mxTextEditObj.get() );
+        OutlinerView* pOLV = GetTextEditOutlinerView();
+        if( pTextObj && pOLV)
+        {
+            TextChain *pTextChain = pTextObj->GetTextChain();
+
+             // XXX: IsChainable and GetNilChainingEvent are a bit mixed up atm
+            if (!pTextObj->IsChainable()) {
+                return;
+            }
+            // This is true during an underflow-caused overflow (with pEdtOutl->SetText())
+            if (pTextChain->GetNilChainingEvent(pTextObj)) {
+                return;
+            }
+
+            // We prevent to trigger further handling of overflow/underflow for pTextObj
+            pTextChain->SetNilChainingEvent(pTextObj, true); // XXX
+
+            // Save previous selection pos // NOTE: It must be done to have the right CursorEvent in KeyInput
+            pTextChain->SetPreChainingSel(pTextObj, pOLV->GetSelection());
+            //maPreChainingSel = new ESelection(pOLV->GetSelection());
+
+            // Handling Undo
+            const int nText = 0; // XXX: hardcoded index (SdrTextObj::getText handles only 0)
+
+            SdrUndoObjSetText *pTxtUndo  = dynamic_cast< SdrUndoObjSetText* >
+                ( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nText ) );
+
+            // trigger actual chaining
+            pTextObj->onChainingEvent();
+
+           if (pTxtUndo!=NULL)
+            {
+                pTxtUndo->AfterSetText();
+                if (!pTxtUndo->IsDifferent())
+                {
+                    delete pTxtUndo;
+                    pTxtUndo=NULL;
+                }
+            }
+
+            if (pTxtUndo)
+                AddUndo(pTxtUndo);
+
+            //maCursorEvent = new CursorChainingEvent(pTextChain->GetCursorEvent(pTextObj));
+            //SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
+
+            // NOTE: Must be called. Don't let the function return if you set it to true and not reset it
+            pTextChain->SetNilChainingEvent(pTextObj, false);
+        } else {
+            // XXX
+            fprintf(stderr, "[OnChaining] No Edit Outliner View\n");
+        }
+    }
+
+}
+
+IMPL_LINK_NOARG(SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl)
+{
+    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( GetTextEditObject());
+    if (!pTextObj)
+        return 0;
+    ImpChainingEventHdl();
+    TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
+    ImpMoveCursorAfterChainingEvent(pCursorManager);
+    return 0;
+}
+
+void SdrObjEditView::ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCursorManager)
+{
+    if (!mxTextEditObj.is() || !pCursorManager)
+        return;
+
+    SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
+
+    // Check if it has links to move it to
+    if (!pTextObj->IsChainable())
+        return;
+
+    TextChain *pTextChain = pTextObj->GetTextChain();
+    ESelection aNewSel = pTextChain->GetPostChainingSel(pTextObj);
+
+
+    pCursorManager->HandleCursorEventAfterChaining(
+        pTextChain->GetCursorEvent(pTextObj),
+        aNewSel);
+
+    // Reset event
+    pTextChain->SetCursorEvent(pTextObj, CursorChainingEvent::NULL_EVENT);
+}
+
+
 IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,void)
 {
     bool bOk=false;
@@ -724,6 +822,10 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
+            if (pTextObj->IsChainable()) {
+                pTextEditOutlinerView->SetEndCutPasteLinkHdl(LINK(this,SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl) );
+            }
+
 #ifdef DBG_UTIL
             if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
 #endif
@@ -912,6 +1014,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             pTEOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
             pTEOutliner->SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
             pTEOutliner->SetEndPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
+
+            pTEOutliner->SetChainingEventHdl(Link<>());
 
             const bool bUndo = IsUndoEnabled();
             if( bUndo )
@@ -1174,6 +1278,32 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
         }
     }
     return bOk;
+}
+
+TextChainCursorManager *SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(
+                                            const KeyEvent& rKEvt,
+                                            vcl::Window*,
+                                            bool *bOutHandled)
+{
+    *bOutHandled = false;
+
+    SdrTextObj* pTextObj = NULL;
+    if (mxTextEditObj.is())
+        pTextObj= dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
+    else
+        return NULL;
+
+    if (!pTextObj->GetNextLinkInChain() && !pTextObj->GetPrevLinkInChain())
+        return NULL;
+
+    TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
+    if( pCursorManager->HandleKeyEvent(rKEvt) ) {
+        // Possibly do other stuff here if necessary...
+        // XXX: Careful with the checks below (in KeyInput) for pWin and co. You should do them here I guess.
+        *bOutHandled = true;
+    }
+
+    return pCursorManager;
 }
 
 
