@@ -595,7 +595,7 @@ void OpenGLSalBitmap::updateChecksum() const
 
     OpenGLSalBitmap* pThis = const_cast<OpenGLSalBitmap*>(this);
 
-    if (!mpContext)
+    if (!mpContext.is())
     {
         pThis->CreateTexture();
     }
@@ -614,7 +614,7 @@ void OpenGLSalBitmap::updateChecksum() const
     }
 }
 
-OpenGLContext* OpenGLSalBitmap::GetBitmapContext()
+rtl::Reference<OpenGLContext> OpenGLSalBitmap::GetBitmapContext()
 {
     return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
 }
@@ -625,11 +625,11 @@ void OpenGLSalBitmap::makeCurrent()
 
     // TODO: make sure we can really use the last used context
     mpContext = pSVData->maGDIData.mpLastContext;
-    while( mpContext && !mpContext->isInitialized() )
+    while( mpContext.is() && !mpContext->isInitialized() )
         mpContext = mpContext->mpPrevContext;
-    if( !mpContext )
+    if( !mpContext.is() )
         mpContext = GetBitmapContext();
-    assert(mpContext && "Couldn't get an OpenGL context");
+    assert(mpContext.is() && "Couldn't get an OpenGL context");
     mpContext->makeCurrent();
 }
 
