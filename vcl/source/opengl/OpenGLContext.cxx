@@ -1505,7 +1505,8 @@ void OpenGLContext::resetCurrent()
 #elif defined( IOS ) || defined( ANDROID ) || defined(LIBO_HEADLESS)
     // nothing
 #elif defined( UNX )
-    glXMakeCurrent(m_aGLWin.dpy, None, NULL);
+    if (m_aGLWin.dpy)
+        glXMakeCurrent(m_aGLWin.dpy, None, NULL);
 #endif
 }
 
