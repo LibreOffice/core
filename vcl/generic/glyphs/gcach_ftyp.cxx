@@ -1316,7 +1316,7 @@ bool FtFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
         if( !nGlyphIndex )
             break;
         aCodes.push_back( cCode );  // first code inside range
-        sal_uInt32 cNext = cCode;
+        sal_uInt32 cNext;
         do cNext = FT_Get_Next_Char( maFaceFT, cCode, &nGlyphIndex ); while( cNext == ++cCode );
         aCodes.push_back( cCode );  // first code outside range
         cCode = cNext;
