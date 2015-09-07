@@ -520,6 +520,11 @@ namespace drawinglayer
         {
             const SdrTextObj& rTextObj = rText.GetObject();
 
+            // Save chaining attributes
+            bool bToBeChained = rTextObj.IsToBeChained();
+            bool bChainable = rTextObj.IsChainable();
+
+
             if(rText.GetOutlinerParaObject() && rText.GetModel())
             {
                 // added TextEdit text suppression
@@ -578,7 +583,9 @@ namespace drawinglayer
                     SDRTEXTANI_SCROLL == eAniKind || SDRTEXTANI_ALTERNATE == eAniKind || SDRTEXTANI_SLIDE == eAniKind,
                     bInEditMode,
                     static_cast<const SdrTextFixedCellHeightItem&>(rSet.Get(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue(),
-                    bWrongSpell);
+                    bWrongSpell,
+                    bToBeChained,
+                    bChainable);
             }
 
             return attribute::SdrTextAttribute();

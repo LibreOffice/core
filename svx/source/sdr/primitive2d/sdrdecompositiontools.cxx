@@ -307,7 +307,18 @@ namespace drawinglayer
                 else if(rText.isAutoFit())
                 {
                     // isotrophically scaled text in range
-                    pNew = new SdrAutoFitTextPrimitive2D(&rText.getSdrText(), rText.getOutlinerParaObject(), aAnchorTransform, bWordWrap);
+                    pNew = new SdrAutoFitTextPrimitive2D(
+                                    &rText.getSdrText(),
+                                    rText.getOutlinerParaObject(),
+                                    aAnchorTransform,
+                                    bWordWrap);
+                }
+                else if( rText.isChainable() && !rText.isInEditMode() )
+                {
+                    pNew = new SdrChainedTextPrimitive2D(
+                                    &rText.getSdrText(),
+                                    rText.getOutlinerParaObject(),
+                                    aAnchorTransform );
                 }
                 else // text in range
                 {

@@ -76,7 +76,10 @@ namespace drawinglayer
                 bool bScroll,
                 bool bInEditMode,
                 bool bFixedCellHeight,
-                bool bWrongSpell);
+                bool bWrongSpell,
+                bool bToBeChained,
+                bool bChainable);
+
             SdrTextAttribute();
             SdrTextAttribute(const SdrTextAttribute& rCandidate);
             SdrTextAttribute& operator=(const SdrTextAttribute& rCandidate);
@@ -106,6 +109,10 @@ namespace drawinglayer
             sal_Int32 getTextLowerDistance() const;
             SdrTextHorzAdjust getSdrTextHorzAdjust() const;
             SdrTextVertAdjust getSdrTextVertAdjust() const;
+
+            bool isToBeChained() const;
+            bool isChainable() const;
+
 
             // helpers: animation timing generators
             void getBlinkTextTiming(
