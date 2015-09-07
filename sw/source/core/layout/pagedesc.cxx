@@ -36,8 +36,6 @@
 #include <poolfmt.hxx>
 #include <calbck.hxx>
 
-using namespace ::com::sun::star;
-
 SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *const pDoc)
     : SwModify(nullptr)
     , m_StyleName( rName )
@@ -49,6 +47,7 @@ SwPageDesc::SwPageDesc(const OUString& rName, SwFrameFormat *pFormat, SwDoc *con
     , m_pFollow( this )
     , m_nRegHeight( 0 )
     , m_nRegAscent( 0 )
+    , m_nVerticalAdjustment( drawing::TextVerticalAdjust_TOP )
     , m_eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE | nsUseOnPage::PD_FIRSTSHARE) )
     , m_IsLandscape( false )
     , m_IsHidden( false )
@@ -67,6 +66,7 @@ SwPageDesc::SwPageDesc( const SwPageDesc &rCpy )
     , m_pFollow( rCpy.m_pFollow )
     , m_nRegHeight( rCpy.GetRegHeight() )
     , m_nRegAscent( rCpy.GetRegAscent() )
+    , m_nVerticalAdjustment( rCpy.GetVerticalAdjustment() )
     , m_eUse( rCpy.ReadUseOn() )
     , m_IsLandscape( rCpy.GetLandscape() )
     , m_IsHidden( rCpy.IsHidden() )
@@ -90,6 +90,7 @@ SwPageDesc & SwPageDesc::operator = (const SwPageDesc & rSrc)
 
     m_nRegHeight = rSrc.m_nRegHeight;
     m_nRegAscent = rSrc.m_nRegAscent;
+    m_nVerticalAdjustment = rSrc.m_nVerticalAdjustment;
     m_eUse = rSrc.m_eUse;
     m_IsLandscape = rSrc.m_IsLandscape;
     return *this;

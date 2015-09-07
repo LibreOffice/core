@@ -224,6 +224,14 @@ void wwSectionManager::SetCurrentSectionHasFootnote()
         maSegments.back().mbHasFootnote = true;
 }
 
+void wwSectionManager::SetCurrentSectionVerticalAdjustment(const drawing::TextVerticalAdjust nVA)
+{
+    OSL_ENSURE(!maSegments.empty(),
+        "should not be possible, must be at least one segment");
+    if ( !maSegments.empty() )
+        maSegments.back().mnVerticalAdjustment = nVA;
+}
+
 bool wwSectionManager::CurrentSectionIsVertical() const
 {
     OSL_ENSURE(!maSegments.empty(),

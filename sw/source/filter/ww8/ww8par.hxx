@@ -45,6 +45,7 @@
 #include <xmloff/odffields.hxx>
 #include <IMark.hxx>
 
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <swtypes.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
@@ -54,6 +55,8 @@
 #include <oox/ole/olehelper.hxx>
 
 #include <boost/noncopyable.hpp>
+
+using namespace ::com::sun::star;
 
 class SwDoc;
 class SwPaM;
@@ -810,6 +813,7 @@ public:
     sal_uInt32 nPgLeft;
     sal_uInt32 nPgRight;
 
+    drawing::TextVerticalAdjust mnVerticalAdjustment;
     sal_uInt8 mnBorders;
     bool mbHasFootnote;
     void SetDirection();
@@ -896,6 +900,7 @@ public:
     explicit wwSectionManager(SwWW8ImplReader &rReader) : mrReader(rReader), mnDesc(0)
         {}
     void SetCurrentSectionHasFootnote();
+    void SetCurrentSectionVerticalAdjustment(const drawing::TextVerticalAdjust nVA);
     bool CurrentSectionIsVertical() const;
     bool CurrentSectionIsProtected() const;
     void PrependedInlineNode(const SwPosition &rPos, const SwNode &rNode);
@@ -1817,6 +1822,7 @@ public:     // really private, but can only be done public
     void Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nLen);
     static sal_uInt32 ExtractColour(const sal_uInt8* &rpData, bool bVer67);
 
+    void Read_TextVerticalAdjustment(sal_uInt16, const sal_uInt8* pData, short nLen);
     void Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, short nLen);
     long MapBookmarkVariables(const WW8FieldDesc* pF, OUString &rOrigName,
         const OUString &rData);
