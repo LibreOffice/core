@@ -10,8 +10,6 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-
 #include <comphelper/processfactory.hxx>
 
 #include <sfx2/app.hxx>

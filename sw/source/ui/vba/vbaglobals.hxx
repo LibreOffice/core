@@ -27,11 +27,11 @@
 #include <ooo/vba/word/XSystem.hpp>
 #include <ooo/vba/word/XOptions.hpp>
 #include <ooo/vba/word/XSelection.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbaglobalbase.hxx>
 
-typedef ::cppu::ImplInheritanceHelper1< VbaGlobalsBase, ov::word::XGlobals > SwVbaGlobals_BASE;
+typedef ::cppu::ImplInheritanceHelper< VbaGlobalsBase, ov::word::XGlobals > SwVbaGlobals_BASE;
 
 class SwVbaGlobals : public SwVbaGlobals_BASE
 {

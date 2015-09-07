@@ -18,14 +18,14 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAWINDOW_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBAWINDOW_HXX
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/word/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbawindowbase.hxx>
 
-typedef cppu::ImplInheritanceHelper1< VbaWindowBase, ov::word::XWindow > WindowImpl_BASE;
+typedef cppu::ImplInheritanceHelper< VbaWindowBase, ov::word::XWindow > WindowImpl_BASE;
 
 class SwVbaWindow : public WindowImpl_BASE
 {

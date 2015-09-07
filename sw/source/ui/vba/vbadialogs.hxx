@@ -24,9 +24,9 @@
 #include <ooo/vba/XCollection.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadialogsbase.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
-typedef cppu::ImplInheritanceHelper1< VbaDialogsBase, ov::word::XDialogs > SwVbaDialogs_BASE;
+typedef cppu::ImplInheritanceHelper< VbaDialogsBase, ov::word::XDialogs > SwVbaDialogs_BASE;
 
 class SwVbaDialogs : public SwVbaDialogs_BASE
 {

@@ -471,10 +471,11 @@
 #include <config_options.h>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>

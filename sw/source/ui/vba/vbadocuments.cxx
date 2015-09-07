@@ -18,9 +18,6 @@
  */
 #include <comphelper/processfactory.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
-
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
