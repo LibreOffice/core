@@ -1251,7 +1251,7 @@ IMPL_LINK_NOARG_TYPED(SvxLightCtl3D, ButtonPress, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange)
+IMPL_LINK_NOARG_TYPED(SvxLightCtl3D, InternalInteractiveChange, Svx3DLightControl*, void)
 {
     double fHor(0.0), fVer(0.0);
 
@@ -1263,11 +1263,9 @@ IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange)
     {
         maUserInteractiveChangeCallback.Call(this);
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SvxLightCtl3D, InternalSelectionChange)
+IMPL_LINK_NOARG_TYPED(SvxLightCtl3D, InternalSelectionChange, Svx3DLightControl*, void)
 {
     CheckSelection();
 
@@ -1275,8 +1273,6 @@ IMPL_LINK_NOARG(SvxLightCtl3D, InternalSelectionChange)
     {
         maUserSelectionChangeCallback.Call(this);
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

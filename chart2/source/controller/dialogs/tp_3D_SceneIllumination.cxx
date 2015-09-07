@@ -349,7 +349,7 @@ void ThreeD_SceneIllumination_TabPage::applyLightSourcesToModel()
     m_aTimerTriggeredControllerLock.startTimer();
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl, SvxLightCtl3D*, void)
 {
     m_aTimerTriggeredControllerLock.startTimer();
 
@@ -397,11 +397,9 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl)
     pInfo->aLightSource.aDirection = B3DVectorToDirection3D(static_cast<const SvxB3DVectorItem&>(a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue());
 
     applyLightSourcesToModel();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl, SvxLightCtl3D*, void)
 {
     sal_uInt32 nLightNumber = m_pCtl_Preview->GetSvx3DLightControl().GetSelectedLight();
     if(nLightNumber<8)
@@ -412,7 +410,6 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewSelectHdl)
 
         applyLightSourcesToModel();
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton, void )

@@ -297,8 +297,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     m_pMtrSlant->SetModifyHdl( aLink2 );
 
     // Preview callback
-    aLink2 = LINK( this, Svx3DWin, ChangeSelectionCallbackHdl );
-    m_pCtlLightPreview->SetUserSelectionChangeCallback(aLink2);
+    m_pCtlLightPreview->SetUserSelectionChangeCallback(LINK( this, Svx3DWin, ChangeSelectionCallbackHdl ));
 
     aSize = GetOutputSizePixel();
     SetMinOutputSizePixel( aSize );
@@ -2633,7 +2632,7 @@ void Svx3DWin::ClickLight(PushButton& rBtn)
 
 
 
-IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl)
+IMPL_LINK_NOARG_TYPED(Svx3DWin, ChangeSelectionCallbackHdl, SvxLightCtl3D*, void)
 {
     const sal_uInt32 nLight(m_pCtlLightPreview->GetSvx3DLightControl().GetSelectedLight());
     PushButton* pBtn = 0;
@@ -2698,8 +2697,6 @@ IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl)
         }
         m_pBtnLightColor->Enable( false );
     }
-
-    return 0L;
 }
 
 

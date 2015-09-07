@@ -66,8 +66,8 @@ public:
 class SVX_DLLPUBLIC SAL_WARN_UNUSED Svx3DLightControl : public Svx3DPreviewControl
 {
     // Callback for interactive changes
-    Link<>                      maChangeCallback;
-    Link<>                      maSelectionChangeCallback;
+    Link<Svx3DLightControl*,void>  maChangeCallback;
+    Link<Svx3DLightControl*,void>  maSelectionChangeCallback;
 
     // lights
     sal_uInt32                  maSelectedLight;
@@ -110,8 +110,8 @@ public:
     virtual void SetObjectType(SvxPreviewObjectType nType) SAL_OVERRIDE;
 
     // register user callback
-    void SetChangeCallback(Link<> aNew) { maChangeCallback = aNew; }
-    void SetSelectionChangeCallback(Link<> aNew) { maSelectionChangeCallback = aNew; }
+    void SetChangeCallback(Link<Svx3DLightControl*,void> aNew) { maChangeCallback = aNew; }
+    void SetSelectionChangeCallback(Link<Svx3DLightControl*,void> aNew) { maSelectionChangeCallback = aNew; }
 
     // selection checks
     bool IsSelectionValid();
@@ -145,8 +145,8 @@ private:
     VclPtr<PushButton>         maSwitcher;
 
     // callback for interactive changes
-    Link<>                     maUserInteractiveChangeCallback;
-    Link<>                     maUserSelectionChangeCallback;
+    Link<SvxLightCtl3D*,void>  maUserInteractiveChangeCallback;
+    Link<SvxLightCtl3D*,void>  maUserSelectionChangeCallback;
 
 public:
     SvxLightCtl3D(vcl::Window* pParent);
@@ -164,8 +164,8 @@ public:
     Svx3DLightControl& GetSvx3DLightControl() { return *maLightControl.get(); }
 
     // register user callback
-    void SetUserInteractiveChangeCallback(Link<> aNew) { maUserInteractiveChangeCallback = aNew; }
-    void SetUserSelectionChangeCallback(Link<> aNew) { maUserSelectionChangeCallback = aNew; }
+    void SetUserInteractiveChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserInteractiveChangeCallback = aNew; }
+    void SetUserSelectionChangeCallback(Link<SvxLightCtl3D*,void> aNew) { maUserSelectionChangeCallback = aNew; }
 
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;
@@ -175,8 +175,8 @@ public:
 
 protected:
 
-    DECL_LINK( InternalInteractiveChange, void*);
-    DECL_LINK( InternalSelectionChange, void*);
+    DECL_LINK_TYPED( InternalInteractiveChange, Svx3DLightControl*, void);
+    DECL_LINK_TYPED( InternalSelectionChange, Svx3DLightControl*, void);
     DECL_LINK_TYPED( ScrollBarMove, ScrollBar*, void);
     DECL_LINK_TYPED( ButtonPress, Button*, void);
 
