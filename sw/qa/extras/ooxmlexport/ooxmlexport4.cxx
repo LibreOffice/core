@@ -803,6 +803,18 @@ DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")
 
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf83227, "tdf83227.docx")
+{
+    // Bug document contains a rotated image, which is handled as a draw shape (not as a Writer image) on export.
+    if (!mbExported)
+        return;
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/media/image1.png")));
+    // This was also true, image was written twice.
+    CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/image2.png")));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
