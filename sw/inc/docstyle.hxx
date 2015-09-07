@@ -61,10 +61,12 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
     enum FillStyleType {
         FillOnlyName,
         FillAllInfo,
-        FillPhysical
+        FillPhysical,
+        FillPreview,
     };
 
-    SAL_DLLPRIVATE bool FillStyleSheet( FillStyleType eFType );
+    SAL_DLLPRIVATE bool FillStyleSheet(FillStyleType eFType,
+            std::unique_ptr<SfxItemSet> * o_ppFlatSet = nullptr);
 
 protected:
     virtual ~SwDocStyleSheet();
@@ -99,6 +101,7 @@ public:
                                         const bool bResetIndentAttrsAtParagraphStyle = false );
 
     virtual SfxItemSet&     GetItemSet() SAL_OVERRIDE;
+    virtual std::unique_ptr<SfxItemSet> GetItemSetForPreview() override;
     /** new method for paragraph styles to merge indent attributes of applied list
      style into the given item set, if the list style indent attributes are applicable. */
     void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );

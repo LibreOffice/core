@@ -284,6 +284,11 @@ SfxItemSet& SfxStyleSheetBase::GetItemSet()
     return *pSet;
 }
 
+std::unique_ptr<SfxItemSet> SfxStyleSheetBase::GetItemSetForPreview()
+{
+    return std::unique_ptr<SfxItemSet>(new SfxItemSet(GetItemSet()));
+}
+
 /**
  * Set help file and ID and return it
  */
