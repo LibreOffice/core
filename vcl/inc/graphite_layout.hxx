@@ -109,8 +109,6 @@ public:
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;    // first step of layout
     // split into two stages to allow dc to be restored on the segment
-    gr_segment * CreateSegment(ImplLayoutArgs& rArgs);
-    bool LayoutGlyphs(ImplLayoutArgs& rArgs, gr_segment * pSegment);
 
     virtual void  AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;  // adjusting positions
 
@@ -145,13 +143,13 @@ public:
     static const int EXTRA_CONTEXT_LENGTH;
 private:
     void expandOrCondense(ImplLayoutArgs &rArgs);
-    void    fillFrom(gr_segment * rSeg, ImplLayoutArgs & rArgs, float fScaling);
+    void    fillFrom(gr_segment * rSeg, ImplLayoutArgs & rArgs, float fScaling, bool bRtl, int firstCharOffset);
 
     float append(gr_segment * pSeg,
                 ImplLayoutArgs & rArgs,
                 const gr_slot * pSlot, float gOrigin,
                 float nextGlyphOrigin, float fScaling,
-                long & rDXOffset, bool bIsBase, int baseChar, int baseGlyph);
+                long & rDXOffset, bool bIsBase, int baseChar, int baseGlyph, bool bRtl);
 };
 
 #endif // INCLUDED_VCL_INC_GRAPHITE_LAYOUT_HXX

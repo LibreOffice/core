@@ -89,14 +89,14 @@ namespace
         return !(b > i) && i < e;
     }
 
-    int findSameDirLimit(const sal_Unicode* buffer, int charCount, bool rtl)
+    int findSameDirLimit(const sal_Unicode* buffer, int charCount, bool rtl, unsigned char &level)
     {
         UErrorCode status = U_ZERO_ERROR;
         UBiDi *ubidi = ubidi_openSized(charCount, 0, &status);
         int limit = 0;
         ubidi_setPara(ubidi, reinterpret_cast<const UChar *>(buffer), charCount,
             (rtl)?UBIDI_DEFAULT_RTL:UBIDI_DEFAULT_LTR, NULL, &status);
-        UBiDiLevel level = 0;
+        level = rtl;
         ubidi_getLogicalRun(ubidi, 0, &limit, &level);
         ubidi_close(ubidi);
         // if ((rtl && !(level & 1)) || (!rtl && (level & 1)))
@@ -125,24 +125,6 @@ namespace
 
 const int GraphiteLayout::EXTRA_CONTEXT_LENGTH = 10;
 
-// recurse to find left most X position of this cluster. Or do we just take left of the base glyph?
-float getLeftBoundary(const gr_slot *slot)
-{
-    return gr_slot_origin_X(slot);
-#if 0
-    float res = gr_slot_origin_X(slot);
-    for (const gr_slot *s = gr_slot_first_attachment(slot); s; s = gr_slot_next_sibling_attachment(s))
-    {
-        if (gr_slot_can_insert_before(s))
-            break;
-        float temp = getLeftBoundary(s);
-        if (temp < res)
-            res = temp;
-    }
-    return res;
-#endif
-}
-
 const gr_slot *get_next_base(const gr_slot *slot, bool bRtl)
 {
     for ( ; slot; slot = bRtl ? gr_slot_prev_in_segment(slot) : gr_slot_next_in_segment(slot))
@@ -156,41 +138,36 @@ const gr_slot *get_next_base(const gr_slot *slot, bool bRtl)
 //  finds each non-attached base glyph and calls append to record them as a
 //  sequence of clusters.
 void
-GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fScaling)
+GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fScaling, bool bRtl, int lastCharPos)
 {
-    bool bRtl(rArgs.mnFlags & SalLayoutFlags::BiDiRtl);
-    int nCharRequested = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
     float fMinX = gr_seg_advance_X(pSegment);
     float fMaxX = 0.0f;
     long nDxOffset = 0; // from dropped glyphs
+    int origNumGlyphs = mvGlyphs.size();
     unsigned int nGlyphs = gr_seg_n_slots(pSegment);
-    mvGlyph2Char.assign(nGlyphs, -1);
-    mvGlyphs.reserve(nGlyphs);
+    mvGlyph2Char.resize(mvGlyph2Char.size() + nGlyphs, -1);
+    mvGlyphs.reserve(mvGlyphs.size() + nGlyphs);
     int clusterStart = -1;
     int clusterFirstChar = -1;
     const gr_slot *nextBaseSlot;
 
-    if (!nGlyphs || !nCharRequested) return;
+    if (!nGlyphs || lastCharPos - mnSegCharOffset == 0) return;
     const gr_slot* baseSlot = bRtl ? gr_seg_last_slot(pSegment) : gr_seg_first_slot(pSegment);
     // find first base
     while (baseSlot && gr_slot_attached_to(baseSlot) != NULL && !gr_slot_can_insert_before(baseSlot))
         baseSlot = bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot);
     assert(baseSlot);
-    float rightBoundary = getLeftBoundary(baseSlot);
+    float thisBoundary = 0.;
+    float nextBoundary = gr_slot_origin_X(baseSlot);
     // now loop over bases
     for ( ; baseSlot; baseSlot = nextBaseSlot)
     {
-        float leftBoundary = rightBoundary;
+        thisBoundary = nextBoundary;
         int firstChar = gr_slot_before(baseSlot) + mnSegCharOffset;
         nextBaseSlot = get_next_base(bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot), bRtl);
-        rightBoundary = nextBaseSlot ? getLeftBoundary(nextBaseSlot) : gr_seg_advance_X(pSegment);
+        nextBoundary = nextBaseSlot ? gr_slot_origin_X(nextBaseSlot) : gr_seg_advance_X(pSegment);
         if (firstChar < mnMinCharPos || firstChar >= mnEndCharPos)
-        {
-            if (bRtl && (firstChar < mnMinCharPos || (!bRtl && firstChar >= mnEndCharPos)))
-                break;
-            else
-                continue;
-        }
+            continue;
         // handle reordered clusters. Presumes reordered glyphs have monotonic opposite char index until the cluster base.
         bool isReordered = (nextBaseSlot && ((bRtl ^ (gr_slot_before(nextBaseSlot) < firstChar - mnSegCharOffset))
                                              || gr_slot_before(nextBaseSlot) == firstChar - mnSegCharOffset));
@@ -205,7 +182,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
                     if (clusterFirstChar >= mnMinCharPos && clusterFirstChar < mnEndCharPos)
                     {
                         mvChar2BaseGlyph[clusterFirstChar - mnMinCharPos] = clusterEnd;
-                        mvCharDxs[clusterFirstChar - mnMinCharPos] = static_cast<int>(leftBoundary * fScaling) + nDxOffset;
+                        mvCharDxs[clusterFirstChar - mnMinCharPos] = static_cast<int>(thisBoundary * fScaling) + mnWidth + nDxOffset;
                     }
             }
             else
@@ -214,7 +191,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
                     if (clusterFirstChar < mnEndCharPos && clusterFirstChar >= mnMinCharPos)
                     {
                         mvChar2BaseGlyph[clusterFirstChar - mnMinCharPos] = clusterEnd;
-                        mvCharDxs[clusterFirstChar - mnMinCharPos] = static_cast<int>(rightBoundary * fScaling) + nDxOffset;
+                        mvCharDxs[clusterFirstChar - mnMinCharPos] = static_cast<int>(nextBoundary * fScaling) + mnWidth + nDxOffset;
                     }
             }
             clusterStart = -1;
@@ -229,40 +206,46 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
         int baseGlyph = mvGlyphs.size();
         mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, firstChar - mnSegCharOffset));
         mvChar2BaseGlyph[firstChar - mnMinCharPos] = baseGlyph;
-        mvCharDxs[firstChar - mnMinCharPos] = static_cast<int>((bRtl ? leftBoundary : rightBoundary) * fScaling) + nDxOffset;
+        mvCharDxs[firstChar - mnMinCharPos] = static_cast<int>((bRtl ? thisBoundary : nextBoundary) * fScaling) + mnWidth + nDxOffset;
         mvGlyph2Char[baseGlyph] = firstChar;
-        append(pSegment, rArgs, baseSlot, gr_slot_origin_X(baseSlot), rightBoundary, fScaling, nDxOffset, !isReordered, firstChar, baseGlyph);
-        if (leftBoundary < fMinX) fMinX = leftBoundary;
-        if (rightBoundary > fMaxX) fMaxX = rightBoundary;
+        append(pSegment, rArgs, baseSlot, thisBoundary, nextBoundary, fScaling, nDxOffset, !isReordered, firstChar, baseGlyph, bRtl);
+        if (thisBoundary < fMinX) fMinX = thisBoundary;
+        if (nextBoundary > fMaxX) fMaxX = nextBoundary;
     }
 
     long nXOffset = round_to_long(fMinX * fScaling);
-    mnWidth = round_to_long(fMaxX * fScaling) - nXOffset + nDxOffset;
-    if (mnWidth < 0)
-    {
-        // This can happen when there was no base inside the range
-        mnWidth = 0;
-    }
+    long nXEnd = round_to_long(fMaxX * fScaling);
+    int nCharRequested = minimum<int>(lastCharPos, mnEndCharPos) - mnMinCharPos;
+    int firstCharOffset = maximum<int>(mnSegCharOffset, mnMinCharPos) - mnMinCharPos;
     // fill up non-base char dx with cluster widths from previous base glyph
     if (bRtl)
     {
         if (mvCharDxs[nCharRequested-1] == -1)
-            mvCharDxs[nCharRequested-1] = 0;
+            mvCharDxs[nCharRequested-1] = nXEnd - nXOffset + mnWidth + nDxOffset;
         else
-            mvCharDxs[nCharRequested-1] -= nXOffset;
-        for (int i = nCharRequested - 2; i >= 0; i--)
+            mvCharDxs[nCharRequested-1] = nXEnd - mvCharDxs[nCharRequested-1] + 2 * (mnWidth + nDxOffset);
+#ifdef GRLAYOUT_DEBUG
+            fprintf(grLog(),"%d,%d ", nCharRequested - 1, (int)mvCharDxs[nCharRequested-1]);
+#endif
+        for (int i = nCharRequested - 2; i >= firstCharOffset; i--)
         {
             if (mvCharDxs[i] == -1) mvCharDxs[i] = mvCharDxs[i+1];
-            else mvCharDxs[i] -= nXOffset;
+            else mvCharDxs[i] = nXEnd - mvCharDxs[i] + 2 * (mnWidth + nDxOffset);
+#ifdef GRLAYOUT_DEBUG
+            fprintf(grLog(),"%d,%d ", (int)i, (int)mvCharDxs[i]);
+#endif
         }
     }
     else
     {
-        if (mvCharDxs[0] == -1)
-            mvCharDxs[0] = 0;
+        if (mvCharDxs[firstCharOffset] == -1)
+            mvCharDxs[firstCharOffset] = 0;
         else
-            mvCharDxs[0] -= nXOffset;
-        for (int i = 1; i < nCharRequested; i++)
+            mvCharDxs[firstCharOffset] -= nXOffset;
+#ifdef GRLAYOUT_DEBUG
+            fprintf(grLog(),"%d,%d ", firstCharOffset, (int)mvCharDxs[firstCharOffset]);
+#endif
+        for (int i = firstCharOffset + 1; i < nCharRequested; i++)
         {
             if (mvCharDxs[i] == -1) mvCharDxs[i] = mvCharDxs[i-1];
             else mvCharDxs[i] -= nXOffset;
@@ -274,11 +257,17 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
     // remove offset due to context if there is one
     if (nXOffset != 0)
     {
-        for (size_t i = 0; i < mvGlyphs.size(); i++)
+        for (size_t i = origNumGlyphs; i < mvGlyphs.size(); i++)
             mvGlyphs[i].maLinearPos.X() -= nXOffset;
     }
+    mnWidth += nXEnd - nXOffset + nDxOffset;
+    if (mnWidth < 0)
+    {
+        // This can happen when there was no base inside the range
+        mnWidth = 0;
+    }
 #ifdef GRLAYOUT_DEBUG
-    fprintf(grLog(), "fillFrom %" SAL_PRI_SIZET "u glyphs offset %ld width %ld\n", mvGlyphs.size(), nXOffset, mnWidth);
+    fprintf(grLog(), "fillFrom %" SAL_PRI_SIZET "u glyphs offset %ld width %ld for %d\n", mvGlyphs.size(), nXOffset, mnWidth, nCharRequested);
 #endif
 }
 
@@ -287,9 +276,8 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
 float
 GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     const gr_slot * gi, float gOrigin, float nextGlyphOrigin, float scaling, long & rDXOffset,
-    bool bIsBase, int baseChar, int baseGlyph)
+    bool bIsBase, int baseChar, int baseGlyph, bool bRtl)
 {
-    bool bRtl(rArgs.mnFlags & SalLayoutFlags::BiDiRtl);
     assert(gi);
     assert(gr_slot_before(gi) <= gr_slot_after(gi));
     int firstChar = gr_slot_before(gi) + mnSegCharOffset;
@@ -304,12 +292,12 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     }
     long glyphId = gr_slot_gid(gi);
     long deltaOffset = 0;
-    int scaledGlyphPos = round_to_long(gr_slot_origin_X(gi) * scaling);
+    int scaledGlyphPos = round_to_long(gr_slot_origin_X(gi) * scaling) + mnWidth;
     int glyphWidth = round_to_long((nextGlyphOrigin - gOrigin) * scaling);
 
 #ifdef GRLAYOUT_DEBUG
-    fprintf(grLog(),"c%d g%ld,X%d W%d nX%f ", firstChar, glyphId,
-        (int)(gr_slot_origin_X(gi) * scaling), glyphWidth, nextGlyphOrigin * scaling);
+    fprintf(grLog(),"c%d g%ld,X%d W%d nX%f @%d ", firstChar, glyphId,
+        scaledGlyphPos, glyphWidth, nextGlyphOrigin * scaling, mvCharDxs[firstChar-mnMinCharPos]);
 #endif
     if (glyphId == 0)
     {
@@ -358,7 +346,7 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     float cOrigin = nextGlyphOrigin;
     for (const gr_slot * agi = gr_slot_first_attachment(gi); agi != NULL; agi = gr_slot_next_sibling_attachment(agi))
         if (!gr_slot_can_insert_before(agi))
-            cOrigin = append(pSeg, rArgs, agi, cOrigin, nextGlyphOrigin, scaling, rDXOffset, false, baseChar, baseGlyph);
+            cOrigin = append(pSeg, rArgs, agi, cOrigin, nextGlyphOrigin, scaling, rDXOffset, false, baseChar, baseGlyph, bRtl);
 
     return cOrigin;
 }
@@ -402,173 +390,60 @@ void GraphiteLayout::clear()
 // This method shouldn't be called on windows, since it needs the dc reset
 bool GraphiteLayout::LayoutText(ImplLayoutArgs & rArgs)
 {
+    clear();
     bool success = true;
-    if (rArgs.mnMinCharPos < rArgs.mnEndCharPos)
-    {
-        gr_segment * pSegment = CreateSegment(rArgs);
-        if (!pSegment)
-            return false;
-        success = LayoutGlyphs(rArgs, pSegment);
-        if (pSegment)
-        {
-            gr_seg_destroy(pSegment);
-            pSegment = NULL;
-        }
-    }
-    else
-    {
-        clear();
-    }
-    return success;
-}
-
-gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
-{
-    assert(rArgs.mnLength >= 0);
-
-    gr_segment * pSegment = NULL;
-
+    if (rArgs.mnMinCharPos >= rArgs.mnEndCharPos)
+        return success;
     // Set the SalLayouts values to be the initial ones.
     SalLayout::AdjustLayout(rArgs);
     // TODO check if this is needed
     if (mnUnitsPerPixel > 1)
         mfScaling = 1.0f / mnUnitsPerPixel;
-
-    // Clear out any previous buffers
-    clear();
-    bool bRtl(mnLayoutFlags & SalLayoutFlags::BiDiRtl);
-    try
-    {
-        // Don't set RTL if font doesn't support it otherwise it forces rtl on
-        // everything
-        //if (bRtl && (mrFont.getSupportedScriptDirections() & gr::kfsdcHorizRtl))
-        //    maLayout.setRightToLeft(bRtl);
-
-        // Context is often needed beyond the specified end, however, we don't
-        // want it if there has been a direction change, since it is hard
-        // to tell between reordering within one direction and multi-directional
-        // text. Extra context, can also cause problems with ligatures stradling
-        // a hyphenation point, so disable if CTL is disabled.
-        mnSegCharOffset = rArgs.mnMinCharPos;
-        int limit = rArgs.mnEndCharPos;
-        if (!(SalLayoutFlags::ComplexDisabled & rArgs.mnFlags))
-        {
-            int nSegCharMin = maximum<int>(0, mnMinCharPos - EXTRA_CONTEXT_LENGTH);
-            int nSegCharLimit = minimum(rArgs.mnLength, mnEndCharPos + EXTRA_CONTEXT_LENGTH);
-            while (nSegCharMin < mnSegCharOffset)
-            {
-                int sameDirEnd = nSegCharMin + findSameDirLimit(rArgs.mpStr + nSegCharMin,
-                    rArgs.mnEndCharPos - nSegCharMin, bRtl);
-                if (sameDirEnd >= rArgs.mnMinCharPos)
-                {
-                    mnSegCharOffset = nSegCharMin;
-                    break;
-                }
-                else
-                    nSegCharMin = sameDirEnd;
-            }
-            if (nSegCharLimit > limit)
-            {
-                limit += findSameDirLimit(rArgs.mpStr + rArgs.mnEndCharPos,
-                    nSegCharLimit - rArgs.mnEndCharPos, bRtl);
-                if (limit > rArgs.mnLength)
-                    limit = rArgs.mnLength;
-            }
-        }
-        else
-        {
-            limit = minimum(rArgs.mnLength, mnEndCharPos + EXTRA_CONTEXT_LENGTH);
-            mnSegCharOffset = maximum<int>(0, mnMinCharPos - EXTRA_CONTEXT_LENGTH);
-        }
-
-        size_t numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + mnSegCharOffset,
-                 rArgs.mpStr + limit, NULL);
-        if (mpFeatures)
-            pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures->values(), gr_utf16,
-                                        rArgs.mpStr + mnSegCharOffset, numchars, 2 | bRtl);
-        else
-            pSegment = gr_make_seg(mpFont, mpFace, 0, NULL, gr_utf16,
-                                        rArgs.mpStr + mnSegCharOffset, numchars, 2 | bRtl);
-
-        //pSegment = new gr::RangeSegment((gr::Font *)&mrFont, mpTextSrc, &maLayout, mnMinCharPos, limit);
-        if (pSegment != NULL)
-        {
-#ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(),"Gr::LayoutText %d-%d, context %d, len %d, numchars %" SAL_PRI_SIZET "u, rtl %d scaling %f:", rArgs.mnMinCharPos,
-               rArgs.mnEndCharPos, limit, rArgs.mnLength, numchars, bRtl, mfScaling);
-            for (int i = mnSegCharOffset; i < limit; ++i)
-                fprintf(grLog(), " %04X", rArgs.mpStr[i]);
-            fprintf(grLog(), "\n");
-#endif
-        }
-        else
-        {
-#ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(), "Gr::LayoutText failed: ");
-            for (int i = mnMinCharPos; i < limit; i++)
-            {
-                fprintf(grLog(), "%04x ", rArgs.mpStr[i]);
-            }
-            fprintf(grLog(), "\n");
-#endif
-            clear();
-            return NULL;
-        }
-    }
-    catch (...)
-    {
-        clear();  // destroy the text source and any partially built segments.
-        return NULL;
-    }
-    return pSegment;
-}
-
-bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr_segment * pSegment)
-{
-    // Calculate the initial character dxs.
     mvCharDxs.assign(mnEndCharPos - mnMinCharPos, -1);
     mvChar2BaseGlyph.assign(mnEndCharPos - mnMinCharPos, -1);
     mvCharBreaks.assign(mnEndCharPos - mnMinCharPos, 0);
-    mnWidth = 0;
-    if (mvCharDxs.size() > 0)
-    {
-        // Discover all the clusters.
-        try
-        {
-            bool bRtl(mnLayoutFlags & SalLayoutFlags::BiDiRtl);
-            fillFrom(pSegment, rArgs, mfScaling);
 
-            if (bRtl)
-            {
-                // not needed for adjacent differences, but for mouse clicks to char
-                std::transform(mvCharDxs.begin(), mvCharDxs.end(), mvCharDxs.begin(),
-                    std::bind1st(std::minus<long>(), mnWidth));
-                // fixup last dx to ensure it always equals the width
-                mvCharDxs[mvCharDxs.size() - 1] = mnWidth;
-            }
-        }
-        catch (const std::exception &e)
-        {
 #ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(),"LayoutGlyphs failed %s\n", e.what());
-#else
-            (void)e;
+    fprintf(grLog(), "New Graphite LayoutText\n");
 #endif
-            return false;
-        }
-        catch (...)
-        {
-#ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(),"LayoutGlyphs failed with exception");
-#endif
-            return false;
-        }
-    }
-    else
+    success = false;
+    while (true)
     {
-        mnWidth = 0;
+        int nBidiMinRunPos, nBidiEndRunPos;
+        bool bRightToLeft;
+        if (!rArgs.GetNextRun(&nBidiMinRunPos, &nBidiEndRunPos, &bRightToLeft))
+            break;
+
+        if (nBidiEndRunPos < mnMinCharPos || nBidiMinRunPos >= mnEndCharPos)
+            continue;
+
+        if (nBidiMinRunPos == mnMinCharPos)
+            nBidiMinRunPos = maximum<int>(0, nBidiMinRunPos - EXTRA_CONTEXT_LENGTH);
+        if (nBidiEndRunPos == mnEndCharPos)
+            nBidiEndRunPos = minimum<int>(rArgs.mnLength, nBidiEndRunPos + EXTRA_CONTEXT_LENGTH);
+        size_t numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + nBidiMinRunPos,
+                 rArgs.mpStr + nBidiEndRunPos, NULL);
+        gr_segment * pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures ? mpFeatures->values() : NULL,
+                                gr_utf16, rArgs.mpStr + nBidiMinRunPos, numchars, 2 | int(bRightToLeft));
+
+        if (pSegment != NULL)
+        {
+            success = true;
+            mnSegCharOffset = nBidiMinRunPos;
+#ifdef GRLAYOUT_DEBUG
+            fprintf(grLog(),"Gr::LayoutText %d-%d, context %d-%d, len %d, numchars %" SAL_PRI_SIZET "u, rtl %d scaling %f:",
+                rArgs.mnMinCharPos, rArgs.mnEndCharPos,
+                nBidiMinRunPos, nBidiEndRunPos,
+                rArgs.mnLength, numchars, bRightToLeft, mfScaling);
+            for (int i = mnSegCharOffset; i < nBidiEndRunPos; ++i)
+                fprintf(grLog(), " %04X", rArgs.mpStr[i]);
+            fprintf(grLog(), "\n");
+#endif
+            fillFrom(pSegment, rArgs, mfScaling, bRightToLeft, nBidiEndRunPos);
+            gr_seg_destroy(pSegment);
+        }
     }
-    return true;
+    return success;
 }
 
 sal_Int32 GraphiteLayout::GetTextBreak(DeviceCoordinate maxmnWidth, DeviceCoordinate char_extra, int factor) const
