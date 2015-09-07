@@ -28,6 +28,7 @@ namespace avmedia { namespace ogl {
 OGLPlayer::OGLPlayer()
     : Player_BASE(m_aMutex)
     , m_pHandle(NULL)
+    , m_xContext(OpenGLContext::Create())
     , m_pOGLWindow(NULL)
     , m_bIsRendering(false)
 {
@@ -38,7 +39,7 @@ OGLPlayer::~OGLPlayer()
     osl::MutexGuard aGuard(m_aMutex);
     if( m_pHandle )
     {
-        m_aContext.makeCurrent();
+        m_xContext->makeCurrent();
         gltf_renderer_release(m_pHandle);
     }
     releaseInputFiles();
@@ -258,13 +259,13 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
     }
     assert(pChildWindow->GetParent());
 
-    if( !m_aContext.init(pChildWindow) )
+    if( !m_xContext->init(pChildWindow) )
     {
         SAL_WARN("avmedia.opengl", "Context initialization failed");
         return uno::Reference< media::XPlayerWindow >();
     }
 
-    if( !m_aContext.supportMultiSampling() )
+    if( !m_xContext->supportMultiSampling() )
     {
         SAL_WARN("avmedia.opengl", "Context does not support multisampling!");
         return uno::Reference< media::XPlayerWindow >();
@@ -277,7 +278,7 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
     }
 
     Size aSize = pChildWindow->GetSizePixel();
-    m_aContext.setWinSize(aSize);
+    m_xContext->setWinSize(aSize);
     m_pHandle->viewport.x = 0;
     m_pHandle->viewport.y = 0;
     m_pHandle->viewport.width = aSize.Width();
@@ -294,7 +295,7 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
     // The background color is white by default, but we need to separate the
     // OpenGL window from the main window so set background color to grey
     glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
-    m_pOGLWindow = new OGLWindow(*m_pHandle, m_aContext, *pChildWindow->GetParent());
+    m_pOGLWindow = new OGLWindow(*m_pHandle, m_xContext, *pChildWindow->GetParent());
     return uno::Reference< media::XPlayerWindow >( m_pOGLWindow );
 }
 
@@ -304,13 +305,13 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
 
-    if( !m_aContext.init() )
+    if( !m_xContext->init() )
     {
         SAL_WARN("avmedia.opengl", "Offscreen context initialization failed");
         return uno::Reference< media::XFrameGrabber >();
     }
 
-    if( !m_aContext.supportMultiSampling() )
+    if( !m_xContext->supportMultiSampling() )
     {
         SAL_WARN("avmedia.opengl", "Context does not support multisampling!");
         return uno::Reference< media::XFrameGrabber >();
