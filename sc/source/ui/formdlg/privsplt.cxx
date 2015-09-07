@@ -36,7 +36,6 @@
 
 ScPrivatSplit::ScPrivatSplit(vcl::Window* pParent, const ResId& rResId)
     : Control(pParent, rResId)
-    , nDeltaX(0)
     , nDeltaY(0)
 {
     Point aPos=GetPosPixel();

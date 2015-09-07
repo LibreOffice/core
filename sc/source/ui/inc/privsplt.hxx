@@ -35,7 +35,6 @@ private:
         short               nNewY;
         Range               aXMovingRange;
         Range               aYMovingRange;
-        short               nDeltaX;
         short               nDeltaY;
 
         using Control::ImplInitSettings;
