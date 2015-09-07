@@ -848,7 +848,8 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc, const ScRange& rRange 
 
     // Always fully refresh, only one cell of a range was broadcasted per area
     // listener if multiple cells were affected. We don't know if there were
-    // more.
+    // more. Also, we need the full check anyway in case a duplicated name was
+    // entered.
     RefreshTableColumnNames( pDoc);
 }
 
