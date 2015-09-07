@@ -57,6 +57,16 @@ CPPUHELPER_DLLPUBLIC sal_Bool SAL_CALL installTypeDescriptionManager(
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext();
 
+/** preload component shared library with service manager upon
+    information from bootstrap variables.
+
+    This function tries to find its parameters via these bootstrap variables:
+
+      - UNO_SERVICES      -- a space separated list of file urls of service rdbs
+
+*/
+CPPUHELPER_DLLPUBLIC void SAL_CALL
+preInitBootstrap(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
 /** Bootstraps an initial component context with service manager upon
     information from an ini file.
@@ -72,6 +82,7 @@ defaultBootstrap_InitialComponentContext();
     @param iniFile ini filename to get bootstrap variables
     @return component context
 */
+
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
 defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile);
 
