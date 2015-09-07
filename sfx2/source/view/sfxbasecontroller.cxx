@@ -778,7 +778,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
 
                     if ( xParentFrame.is() )
                     {
-                        // TODO/LATER: in future probably SfxViewFrame hirarchy should be the same as XFrame hirarchy
+                        // TODO/LATER: in future probably SfxViewFrame hierarchy should be the same as XFrame hierarchy
                         // SfxViewFrame* pParentFrame = pAct->GetParentViewFrame();
 
                         // search the related SfxViewFrame
@@ -835,7 +835,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
 
                     if ( xParentFrame.is() )
                     {
-                        // TODO/LATER: in future probably SfxViewFrame hirarchy should be the same as XFrame hirarchy
+                        // TODO/LATER: in future probably SfxViewFrame hierarchy should be the same as XFrame hierarchy
                         // SfxViewFrame* pParentFrame = pAct->GetParentViewFrame();
 
                         // search the related SfxViewFrame
