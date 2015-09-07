@@ -140,7 +140,7 @@ namespace oglcanvas
         unsigned int                                       mnRectangularTwoColorGradientProgram;
         unsigned int                                       mnRectangularMultiColorGradientProgram;
 
-        OpenGLContext maContext;
+        rtl::Reference<OpenGLContext>                      mxContext;
     };
 }
 

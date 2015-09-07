@@ -891,8 +891,8 @@ X11SalFrame::~X11SalFrame()
     }
 
     // reset all OpenGL contexts using this window
-    OpenGLContext* pContext = ImplGetSVData()->maGDIData.mpLastContext;
-    while( pContext )
+    rtl::Reference<OpenGLContext> pContext = ImplGetSVData()->maGDIData.mpLastContext;
+    while( pContext.is() )
     {
         if( pContext->getOpenGLWindow().win == mhWindow )
             pContext->reset();

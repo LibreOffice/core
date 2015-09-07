@@ -15,9 +15,9 @@ using namespace libgltf;
 
 namespace avmedia { namespace ogl {
 
-OGLWindow::OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, vcl::Window& rEventHandlerParent )
+OGLWindow::OGLWindow( glTFHandle& rHandle, const rtl::Reference<OpenGLContext> &rContext, vcl::Window& rEventHandlerParent )
     : m_rHandle( rHandle )
-    , m_rContext( rContext )
+    , m_xContext( rContext )
     , m_rEventHandler( rEventHandlerParent )
     , m_bVisible ( false )
     , m_aLastMousePos(Point(0,0))
@@ -32,7 +32,7 @@ OGLWindow::~OGLWindow()
 
 void SAL_CALL OGLWindow::update() throw (css::uno::RuntimeException, std::exception)
 {
-    m_rContext.makeCurrent();
+    m_xContext->makeCurrent();
     int nRet = gltf_prepare_renderer(&m_rHandle);
     if( nRet != 0 )
     {
@@ -41,7 +41,7 @@ void SAL_CALL OGLWindow::update() throw (css::uno::RuntimeException, std::except
     }
     gltf_renderer(&m_rHandle);
     gltf_complete_renderer(&m_rHandle);
-    m_rContext.swapBuffers();
+    m_xContext->swapBuffers();
 }
 
 sal_Bool SAL_CALL OGLWindow::setZoomLevel( css::media::ZoomLevel /*eZoomLevel*/ ) throw (css::uno::RuntimeException, std::exception)
@@ -98,7 +98,7 @@ void SAL_CALL OGLWindow::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidt
     if( m_rHandle.viewport.x != nX || m_rHandle.viewport.x != nY ||
         m_rHandle.viewport.width != nWidth || m_rHandle.viewport.height != nHeight )
     {
-        m_rContext.setWinSize(Size(nWidth,nHeight));
+        m_xContext->setWinSize(Size(nWidth,nHeight));
         m_rHandle.viewport.x = nX;
         m_rHandle.viewport.y = nY;
         m_rHandle.viewport.width = nWidth;

@@ -30,7 +30,7 @@ public:
     virtual ~SdrOpenGLObj();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
-    OpenGLContext* getOpenGLContext() { return mpContext;}
+    rtl::Reference<OpenGLContext> getOpenGLContext() { return mpContext;}
 
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
 
@@ -41,7 +41,7 @@ public:
 
 private:
 
-    OpenGLContext* mpContext;
+    rtl::Reference<OpenGLContext> mpContext;
 
     boost::scoped_ptr<IOpenGLRenderer> mpRenderer;
 };

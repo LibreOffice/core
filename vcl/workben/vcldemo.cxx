@@ -1641,8 +1641,8 @@ class OpenGLTests
     VclPtr<WorkWindow> mxWinB;
     OpenGLSalGraphicsImpl *mpImplA;
     OpenGLSalGraphicsImpl *mpImplB;
-    OpenGLContext *mpA;
-    OpenGLContext *mpB;
+    rtl::Reference<OpenGLContext> mpA;
+    rtl::Reference<OpenGLContext> mpB;
 
     static OpenGLSalGraphicsImpl *getImpl(const VclPtr<WorkWindow> &xWin)
     {
@@ -1666,7 +1666,8 @@ public:
         mpA = mpImplA->GetOpenGLContext();
         mpB = mpImplB->GetOpenGLContext();
 
-        assert (mpA && mpB);
+        assert (mpA.is() && mpB.is());
+        assert (mpA != mpB);
     }
     ~OpenGLTests()
     {
