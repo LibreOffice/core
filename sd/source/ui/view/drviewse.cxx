@@ -950,7 +950,10 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 {
                     vcl::KeyCode aKCode(KEY_DELETE);
                     KeyEvent aKEvt( 0, aKCode);
-                    pOLV->PostKeyEvent(aKEvt);
+                    //pOLV->PostKeyEvent(aKEvt);
+                    // We use SdrObjEditView to handle DEL for underflow handling
+                    mpDrawView->KeyInput(aKEvt, NULL);
+
                 }
             }
             else
