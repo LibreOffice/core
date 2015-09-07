@@ -97,8 +97,8 @@ private:
     void            Init();
     void            InitFilter();
 
-    DECL_LINK( FilterHandle, SvxTPFilter* );
-    DECL_LINK( RefHandle, void* );
+    DECL_LINK_TYPED( FilterHandle, SvxTPFilter*, void );
+    DECL_LINK_TYPED( RefHandle, SvxTPFilter*, void );
     DECL_LINK( RejectHandle, SvxTPView*);
     DECL_LINK( AcceptHandle, SvxTPView*);
     DECL_LINK( RejectAllHandle, void*);

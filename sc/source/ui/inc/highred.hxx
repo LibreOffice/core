@@ -60,9 +60,9 @@ private:
 
     void                    Init();
 
-    DECL_LINK( RefHandle, SvxTPFilter* );
-    DECL_LINK_TYPED(HighlightHandle, Button*, void);
-    DECL_LINK_TYPED(OKBtnHdl, Button*, void);
+    DECL_LINK_TYPED( RefHandle, SvxTPFilter*, void );
+    DECL_LINK_TYPED( HighlightHandle, Button*, void );
+    DECL_LINK_TYPED( OKBtnHdl, Button*, void );
 
 protected:
 

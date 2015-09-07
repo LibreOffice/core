@@ -202,7 +202,7 @@ IMPL_LINK_TYPED( ScHighlightChgDlg, HighlightHandle, Button*, pCb, void )
     }
 }
 
-IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
+IMPL_LINK_TYPED( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef, void )
 {
     if(pRef!=NULL)
     {
@@ -213,7 +213,6 @@ IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
         m_pEdAssign->GrabFocus();
         ScAnyRefDlg::RefInputStart(m_pEdAssign, m_pRbAssign);
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScHighlightChgDlg, OKBtnHdl, Button*, pOKBtn, void )

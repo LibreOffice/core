@@ -971,30 +971,7 @@ IMPL_LINK( SvxTPFilter, ModifyHdl, void*, pCtr)
 {
     if(pCtr!=NULL)
     {
-        if (pCtr == m_pCbDate || pCtr == m_pLbDate ||
-            pCtr == m_pDfDate || pCtr == m_pTfDate ||
-            pCtr == m_pIbClock || pCtr == m_pFtDate2 ||
-            pCtr == m_pDfDate2 || pCtr == m_pTfDate2 ||
-            pCtr == m_pIbClock2)
-        {
-            aModifyDateLink.Call(this);
-        }
-        else if (pCtr == m_pCbAuthor || pCtr == m_pLbAuthor)
-        {
-            aModifyAuthorLink.Call(this);
-        }
-        else if (pCtr == m_pCbRange || pCtr == m_pLbAction || pCtr == m_pEdRange ||
-                pCtr == m_pBtnRange)
-        {
-            aModifyRefLink.Call(this);
-        }
-        else if (pCtr == m_pCbComment || pCtr == m_pEdComment)
-        {
-            aModifyComLink.Call(this);
-        }
-
         bModified=true;
-        aModifyLink.Call(this);
     }
     return 0;
 }

@@ -82,7 +82,7 @@ void SwModalRedlineAcceptDlg::AcceptAll( bool bAccept )
         pFilterTP->CheckAuthor(false);
         pFilterTP->CheckRange(false);
         pFilterTP->CheckAction(false);
-        pImplDlg->FilterChangedHdl();
+        pImplDlg->FilterChangedHdl(NULL);
     }
 
     pImplDlg->CallAcceptReject( false, bAccept );

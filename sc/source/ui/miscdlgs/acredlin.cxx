@@ -864,7 +864,7 @@ void ScAcceptChgDlg::UpdateView()
         pTheView->Select(pEntry);
 }
 
-IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
+IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, RefHandle, SvxTPFilter*, void)
 {
     sal_uInt16 nId  =ScSimpleRefDlgWrapper::GetChildWindowId();
 
@@ -888,7 +888,6 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
         pWin->SetText(GetText());
         pWnd->StartRefInput();
     }
-    return 0;
 }
 
 IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, OUString*, pResult)
@@ -925,7 +924,7 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, OUString*, pResult)
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef )
+IMPL_LINK_TYPED( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef, void )
 {
     if(pRef!=NULL)
     {
@@ -934,7 +933,6 @@ IMPL_LINK( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef )
         aRangeList.Parse(pTPFilter->GetRange(),pDoc);
         UpdateView();
     }
-    return 0;
 }
 
 IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef )

@@ -919,7 +919,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, UndoHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, FilterChangedHdl, SvxTPFilter*, void)
 {
     SvxTPFilter *pFilterTP = aTabPagesCTRL->GetFilterPage();
 
@@ -929,8 +929,6 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl)
         sFilterAction = aEmptyOUStr;
 
     Init();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, DeselectHdl, SvTreeListBox*, void)

@@ -170,13 +170,8 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxTPFilter: public TabPage
 {
 private:
 
-    Link<>          aReadyLink;
-    Link<>          aModifyLink;
-    Link<>          aModifyDateLink;
-    Link<>          aModifyAuthorLink;
-    Link<>          aModifyRefLink;
-    Link<>          aRefLink;
-    Link<>          aModifyComLink;
+    Link<SvxTPFilter*,void>  aReadyLink;
+    Link<SvxTPFilter*,void>  aRefLink;
 
     VclPtr<SvxRedlinTable> pRedlinTable;
     VclPtr<CheckBox>       m_pCbDate;
@@ -197,7 +192,7 @@ private:
     VclPtr<ListBox>        m_pLbAction;
     VclPtr<CheckBox>       m_pCbComment;
     VclPtr<Edit>           m_pEdComment;
-    bool            bModified;
+    bool                   bModified;
 
     DECL_LINK( SelDateHdl, ListBox* );
     DECL_LINK_TYPED( RowEnableHdl, Button*, void );
@@ -264,11 +259,11 @@ public:
 
     ListBox*        GetLbAction() { return m_pLbAction;}
 
-    void            SetReadyHdl( const Link<>& rLink ) { aReadyLink= rLink; }
+    void            SetReadyHdl( const Link<SvxTPFilter*,void>& rLink ) { aReadyLink= rLink; }
 
 
     // Methods for Calc {
-    void            SetRefHdl( const Link<>& rLink ) { aRefLink = rLink; }
+    void            SetRefHdl( const Link<SvxTPFilter*,void>& rLink ) { aRefLink = rLink; }
 
     void            Enable( bool bEnable = true, bool bChild = true );
     void            Disable( bool bChild = true );
