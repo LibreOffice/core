@@ -249,8 +249,8 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, vcl::Windo
     m_pScrollSB->SetEndScrollHdl(aScrLk);
 
     Link<> aEditLk(LINK(this, SvxRubyDialog, EditModifyHdl_Impl));
-    Link<> aScrollLk(LINK(this, SvxRubyDialog, EditScrollHdl_Impl));
-    Link<> aJumpLk(LINK(this, SvxRubyDialog, EditJumpHdl_Impl));
+    Link<sal_Int32,bool> aScrollLk(LINK(this, SvxRubyDialog, EditScrollHdl_Impl));
+    Link<sal_Int32,void> aJumpLk(LINK(this, SvxRubyDialog, EditJumpHdl_Impl));
     for (sal_uInt16 i = 0; i < 8; i++)
     {
         aEditArr[i]->SetModifyHdl(aEditLk);
@@ -686,19 +686,19 @@ IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
     return 0;
 }
 
-IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
+IMPL_LINK_TYPED(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32, nParam, bool)
 {
-    long nRet = 0;
+    bool nRet = false;
     if (m_pScrollSB->IsEnabled())
     {
         //scroll forward
-        if (*pParam > 0 && (aEditArr[7]->HasFocus() || aEditArr[6]->HasFocus() ))
+        if (nParam > 0 && (aEditArr[7]->HasFocus() || aEditArr[6]->HasFocus() ))
         {
             if (m_pScrollSB->GetRangeMax() > m_pScrollSB->GetThumbPos())
             {
                 m_pScrollSB->SetThumbPos(m_pScrollSB->GetThumbPos() + 1);
                 aEditArr[6]->GrabFocus();
-                nRet = 1;
+                nRet = true;
             }
         }
         //scroll backward
@@ -706,7 +706,7 @@ IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
         {
             m_pScrollSB->SetThumbPos(m_pScrollSB->GetThumbPos() - 1);
             aEditArr[1]->GrabFocus();
-            nRet = 1;
+            nRet = true;
         }
         if (nRet)
             ScrollHdl_Impl(m_pScrollSB);
@@ -714,7 +714,7 @@ IMPL_LINK(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32*, pParam)
     return nRet;
 }
 
-IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32*, pParam)
+IMPL_LINK_TYPED(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32, nParam, void)
 {
     sal_uInt16 nIndex = USHRT_MAX;
     for (sal_uInt16 i = 0; i < 8; i++)
@@ -724,22 +724,21 @@ IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32*, pParam)
     }
     if (nIndex < 8)
     {
-        if (*pParam > 0)
+        if (nParam > 0)
         {
             if (nIndex < 6)
                 aEditArr[nIndex + 2]->GrabFocus();
-            else if( EditScrollHdl_Impl(pParam))
+            else if( EditScrollHdl_Impl(nParam))
                 aEditArr[nIndex]->GrabFocus();
         }
         else
         {
             if (nIndex > 1)
                 aEditArr[nIndex - 2]->GrabFocus();
-            else if( EditScrollHdl_Impl(pParam))
+            else if( EditScrollHdl_Impl(nParam))
                 aEditArr[nIndex]->GrabFocus();
         }
     }
-    return 0;
 };
 
 void SvxRubyDialog::AssertOneEntry()
@@ -943,13 +942,13 @@ bool RubyEdit::PreNotify(NotifyEvent& rNEvt)
         if (nCode == KEY_TAB && (!nMod || KEY_SHIFT == nMod))
         {
             sal_Int32 nParam = KEY_SHIFT == nMod ? -1 : 1;
-            if(aScrollHdl.IsSet() && aScrollHdl.Call(&nParam))
+            if(aScrollHdl.IsSet() && aScrollHdl.Call(nParam))
                 nHandled = true;
         }
         else if (KEY_UP == nCode || KEY_DOWN == nCode)
         {
             sal_Int32 nParam = KEY_UP == nCode ? -1 : 1;
-            aJumpHdl.Call(&nParam);
+            aJumpHdl.Call(nParam);
         }
     }
     if (!nHandled)
