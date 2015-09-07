@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_3841c93a",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 0,
+      "message": "do not remove the comment closer",
+      "range": {
+        "startLine": 1,
+        "startChar": 78,
+        "endLine": 1,
+        "endChar": 79
+      },
+      "revId": "023115cdc60b3add4701cb53575f3a10ca135eb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

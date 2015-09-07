@@ -1,0 +1,216 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_b87319b4",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 1,
+      "message": "keep upper case Appear, seems to be a function name",
+      "range": {
+        "startLine": 157,
+        "startChar": 67,
+        "endLine": 157,
+        "endChar": 68
+      },
+      "revId": "4a1019f3cc654393bfc596b19f0af8e2385a7ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_9878d591",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 1,
+      "message": "the \"Fixier-Splitter\" is the \"Freeze splitter\" ;-)",
+      "range": {
+        "startLine": 605,
+        "startChar": 28,
+        "endLine": 605,
+        "endChar": 43
+      },
+      "revId": "4a1019f3cc654393bfc596b19f0af8e2385a7ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_f86d91cd",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 1,
+      "message": "rather \"always there\" (if it wasn\u0027t \"always exists\" ...)",
+      "range": {
+        "startLine": 700,
+        "startChar": 58,
+        "endLine": 700,
+        "endChar": 62
+      },
+      "revId": "4a1019f3cc654393bfc596b19f0af8e2385a7ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_3868a9ba",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 1,
+      "message": "rather \"do not jitter around hidden ranges\", it\u0027s not about messing up hidden ranges but the paint behavior when hidden ranges are near the scrolling region",
+      "range": {
+        "startLine": 1135,
+        "startChar": 56,
+        "endLine": 1135,
+        "endChar": 88
+      },
+      "revId": "4a1019f3cc654393bfc596b19f0af8e2385a7ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_1865e5e0",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1200,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 1,
+      "message": "the left part",
+      "range": {
+        "startLine": 1200,
+        "startChar": 72,
+        "endLine": 1200,
+        "endChar": 76
+      },
+      "revId": "4a1019f3cc654393bfc596b19f0af8e2385a7ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_786221da",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1283,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 1,
+      "message": "the upper part",
+      "range": {
+        "startLine": 1283,
+        "startChar": 79,
+        "endLine": 1283,
+        "endChar": 87
+      },
+      "revId": "4a1019f3cc654393bfc596b19f0af8e2385a7ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_585f5d0e",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1514,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 1,
+      "message": "rather register instead of add",
+      "revId": "4a1019f3cc654393bfc596b19f0af8e2385a7ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_989f35b4",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2082,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 1,
+      "message": "tothe -\u003e to the",
+      "revId": "4a1019f3cc654393bfc596b19f0af8e2385a7ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_38af09e5",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2215,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 1,
+      "message": "rather \"from here on dynamically created ones\" (the controls and gridwins)",
+      "revId": "4a1019f3cc654393bfc596b19f0af8e2385a7ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_58b63d3e",
+        "filename": "sc/source/ui/view/tabview2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:48:44Z",
+      "side": 1,
+      "message": "\"really move\" (not shift)",
+      "range": {
+        "startLine": 481,
+        "startChar": 50,
+        "endLine": 481,
+        "endChar": 59
+      },
+      "revId": "4a1019f3cc654393bfc596b19f0af8e2385a7ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
