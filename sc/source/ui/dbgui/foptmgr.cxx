@@ -234,23 +234,20 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
 
         if ( SCA_VALID == (nResult & SCA_VALID) )
         {
-            bool    bFound  = false;
-            sal_Int32 i = 0;
             const sal_Int32 nCount = pLbCopyArea->GetEntryCount();
 
-            for ( i=2; i<nCount && !bFound; i++ )
+            for ( sal_Int32 i=2; i<nCount; ++i )
             {
                 OUString* pStr = static_cast<OUString*>(pLbCopyArea->GetEntryData( i ));
-                bFound = (theCurPosStr == *pStr);
+                if (theCurPosStr == *pStr)
+                {
+                    pLbCopyArea->SelectEntryPos( i );
+                    return 0;
+                }
             }
 
-            if ( bFound )
-                pLbCopyArea->SelectEntryPos( --i );
-            else
-                pLbCopyArea->SelectEntryPos( 0 );
         }
-        else
-            pLbCopyArea->SelectEntryPos( 0 );
+        pLbCopyArea->SelectEntryPos( 0 );
     }
 
     return 0;

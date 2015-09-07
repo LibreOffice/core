@@ -452,20 +452,18 @@ IMPL_LINK( ScSpecialFilterDlg, FilterAreaModHdl, formula::RefEdit*, pEd )
 
             if ( SCA_VALID == (nResult & SCA_VALID) )
             {
-                bool    bFound  = false;
-                sal_Int32 i = 0;
                 const sal_Int32 nCount  = pLbFilterArea->GetEntryCount();
 
-                for ( i=1; i<nCount && !bFound; i++ )
+                for ( sal_Int32 i=1; i<nCount; ++i )
                 {
                     OUString* pStr = static_cast<OUString*>(pLbFilterArea->GetEntryData( i ));
-                    bFound = (theCurAreaStr == *pStr);
+                    if (theCurAreaStr == *pStr)
+                    {
+                        pLbFilterArea->SelectEntryPos( i );
+                        return 0;
+                    }
                 }
-
-                if ( bFound )
-                    pLbFilterArea->SelectEntryPos( --i );
-                else
-                    pLbFilterArea->SelectEntryPos( 0 );
+                pLbFilterArea->SelectEntryPos( 0 );
             }
         }
         else
