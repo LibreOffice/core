@@ -507,17 +507,17 @@ IMPL_LINK_TYPED(DbGridControl::NavigationBar, OnClick, Button *, pButton, void )
 
     if (pParent->m_aMasterSlotExecutor.IsSet())
     {
-        long lResult = 0;
+        bool lResult = false;
         if (pButton == m_aFirstBtn.get())
-            lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_FIRST));
+            lResult = pParent->m_aMasterSlotExecutor.Call(RECORD_FIRST);
         else if( pButton == m_aPrevBtn.get() )
-            lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_PREV));
+            lResult = pParent->m_aMasterSlotExecutor.Call(RECORD_PREV);
         else if( pButton == m_aNextBtn.get() )
-            lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_NEXT));
+            lResult = pParent->m_aMasterSlotExecutor.Call(RECORD_NEXT);
         else if( pButton == m_aLastBtn.get() )
-            lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_LAST));
+            lResult = pParent->m_aMasterSlotExecutor.Call(RECORD_LAST);
         else if( pButton == m_aNewBtn.get() )
-            lResult = pParent->m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(RECORD_NEW));
+            lResult = pParent->m_aMasterSlotExecutor.Call(RECORD_NEW);
 
         if (lResult)
             // the link already handled it
@@ -578,7 +578,7 @@ bool DbGridControl::NavigationBar::GetState(sal_uInt16 nWhich) const
         // check if we have a master state provider
         if (pParent->m_aMasterStateProvider.IsSet())
         {
-            long nState = pParent->m_aMasterStateProvider.Call(reinterpret_cast< void* >( nWhich ) );
+            long nState = pParent->m_aMasterStateProvider.Call( nWhich );
             if (nState>=0)
                 return (nState>0);
         }
@@ -2665,9 +2665,9 @@ void DbGridControl::PreExecuteRowContextMenu(sal_uInt16 /*nRow*/, PopupMenu& rMe
 
     // the undo is more difficult
     bool bCanUndo = IsModified();
-    long nState = -1;
+    int nState = -1;
     if (m_aMasterStateProvider.IsSet())
-        nState = m_aMasterStateProvider.Call(reinterpret_cast<void*>(SID_FM_RECORD_UNDO));
+        nState = m_aMasterStateProvider.Call(SID_FM_RECORD_UNDO);
     bCanUndo &= ( 0 != nState );
 
     rMenu.EnableItem(SID_FM_RECORD_UNDO, bCanUndo);
@@ -2972,13 +2972,13 @@ void DbGridControl::Undo()
     if (!IsFilterMode() && IsValid(m_xCurrentRow) && IsModified())
     {
         // check if we have somebody doin' the UNDO for us
-        long nState = -1;
+        int nState = -1;
         if (m_aMasterStateProvider.IsSet())
-            nState = m_aMasterStateProvider.Call(reinterpret_cast<void*>(SID_FM_RECORD_UNDO));
+            nState = m_aMasterStateProvider.Call(SID_FM_RECORD_UNDO);
         if (nState>0)
         {   // yes, we have, and the slot is enabled
             DBG_ASSERT(m_aMasterSlotExecutor.IsSet(), "DbGridControl::Undo : a state, but no execute link ?");
-            long lResult = m_aMasterSlotExecutor.Call(reinterpret_cast<void*>(SID_FM_RECORD_UNDO));
+            bool lResult = m_aMasterSlotExecutor.Call(SID_FM_RECORD_UNDO);
             if (lResult)
                 // handled
                 return;

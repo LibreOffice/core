@@ -2800,12 +2800,10 @@ void FmXGridPeer::DisConnectFromDispatcher()
 }
 
 
-IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
+IMPL_LINK_TYPED(FmXGridPeer, OnQueryGridSlotState, sal_uInt16, nSlot, int)
 {
     if (!m_pStateCache)
         return -1;  // unspecified
-
-    sal_uInt16 nSlot = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(pSlot);
 
     // search the given slot with our supported sequence
     Sequence<sal_uInt16>& aSupported = getSupportedGridSlots();
@@ -2825,10 +2823,10 @@ IMPL_LINK(FmXGridPeer, OnQueryGridSlotState, void*, pSlot)
 }
 
 
-IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
+IMPL_LINK_TYPED(FmXGridPeer, OnExecuteGridSlot, sal_uInt16, nSlot, bool)
 {
     if (!m_pDispatchers)
-        return 0;   // not handled
+        return false;   // not handled
 
     Sequence< ::com::sun::star::util::URL>& aUrls = getSupportedURLs();
     const ::com::sun::star::util::URL* pUrls = aUrls.getConstArray();
@@ -2838,7 +2836,6 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
 
     DBG_ASSERT(aSlots.getLength() == aUrls.getLength(), "FmXGridPeer::OnExecuteGridSlot : inconstent data returned by getSupportedURLs/getSupportedGridSlots !");
 
-    sal_uInt16 nSlot = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(pSlot);
     for (sal_Int32 i=0; i<aSlots.getLength(); ++i, ++pUrls, ++pSlots)
     {
         if (*pSlots == nSlot)
@@ -2849,12 +2846,12 @@ IMPL_LINK(FmXGridPeer, OnExecuteGridSlot, void*, pSlot)
                 if ( pUrls->Complete == FMURL_RECORD_UNDO || commit() )
                     m_pDispatchers[i]->dispatch(*pUrls, Sequence< PropertyValue>());
 
-                return 1;   // handled
+                return true;   // handled
             }
         }
     }
 
-    return 0;   // not handled
+    return false;   // not handled
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

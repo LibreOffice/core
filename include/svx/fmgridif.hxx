@@ -520,8 +520,8 @@ protected:
     void selectionChanged();
     void columnChanged();
 
-    DECL_LINK(OnQueryGridSlotState, void*);
-    DECL_LINK(OnExecuteGridSlot, void*);
+    DECL_LINK_TYPED(OnQueryGridSlotState, sal_uInt16, int);
+    DECL_LINK_TYPED(OnExecuteGridSlot, sal_uInt16, bool);
 };
 
 
