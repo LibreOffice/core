@@ -883,31 +883,27 @@ sal_uInt16 SwRedlineAcceptDlg::GetRedlinePos( const SvTreeListEntry& rEntry ) co
                                     rEntry.GetUserData())->pData)->pData );
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, AcceptHdl, SvxTPView*, void)
 {
     CallAcceptReject( true, true );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptAllHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, AcceptAllHdl, SvxTPView*, void)
 {
     CallAcceptReject( false, true );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, RejectHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, RejectHdl, SvxTPView*, void)
 {
     CallAcceptReject( true, false );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, RejectAllHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, RejectAllHdl, SvxTPView*, void)
 {
     CallAcceptReject( false, false );
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, UndoHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, UndoHdl, SvxTPView*, void)
 {
     SwView * pView = ::GetActiveView();
     pView->GetViewFrame()->GetDispatcher()->
@@ -915,8 +911,6 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, UndoHdl)
     pTPView->EnableUndo(pView->GetSlotState(SID_UNDO) != 0);
 
     Activate();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, FilterChangedHdl, SvxTPFilter*, void)

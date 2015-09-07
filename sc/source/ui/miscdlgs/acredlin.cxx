@@ -935,7 +935,7 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef, void )
     }
 }
 
-IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef )
+IMPL_LINK_TYPED( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef, void )
 {
     SetPointer(Pointer(PointerStyle::Wait));
 
@@ -971,9 +971,8 @@ IMPL_LINK( ScAcceptChgDlg, RejectHandle, SvxTPView*, pRef )
     SetPointer(Pointer(PointerStyle::Arrow));
 
     bIgnoreMsg=false;
-    return 0;
 }
-IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef )
+IMPL_LINK_TYPED( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef, void )
 {
     SetPointer(Pointer(PointerStyle::Wait));
 
@@ -1009,8 +1008,6 @@ IMPL_LINK( ScAcceptChgDlg, AcceptHandle, SvxTPView*, pRef )
         UpdateView();
     }
     bIgnoreMsg=false;
-
-    return 0;
 }
 
 void ScAcceptChgDlg::RejectFiltered()
@@ -1052,7 +1049,7 @@ void ScAcceptChgDlg::AcceptFiltered()
     }
 }
 
-IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle)
+IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, RejectAllHandle, SvxTPView*, void)
 {
     SetPointer(Pointer(PointerStyle::Wait));
     bIgnoreMsg=true;
@@ -1077,11 +1074,9 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle)
     SetPointer(Pointer(PointerStyle::Arrow));
 
     bIgnoreMsg=false;
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle)
+IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, void)
 {
     SetPointer(Pointer(PointerStyle::Wait));
 
@@ -1103,8 +1098,6 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle)
     }
     bIgnoreMsg=false;
     SetPointer(Pointer(PointerStyle::Arrow));
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, SelectHandle, SvTreeListBox*, void)

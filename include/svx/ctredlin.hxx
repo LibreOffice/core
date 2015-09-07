@@ -275,11 +275,11 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxTPView : public TabPage
 {
 private:
 
-    Link<>          AcceptClickLk;
-    Link<>          AcceptAllClickLk;
-    Link<>          RejectClickLk;
-    Link<>          RejectAllClickLk;
-    Link<>          UndoClickLk;
+    Link<SvxTPView*,void>          AcceptClickLk;
+    Link<SvxTPView*,void>          AcceptAllClickLk;
+    Link<SvxTPView*,void>          RejectClickLk;
+    Link<SvxTPView*,void>          RejectAllClickLk;
+    Link<SvxTPView*,void>          UndoClickLk;
 
     VclPtr<SvxRedlinTable> m_pViewData;
     VclPtr<PushButton>     m_pAccept;
@@ -313,15 +313,15 @@ public:
     void            DisableUndo()       {EnableUndo(false);}
     void            ShowUndo(bool nFlag=true);
 
-    void            SetAcceptClickHdl( const Link<>& rLink ) { AcceptClickLk = rLink; }
+    void            SetAcceptClickHdl( const Link<SvxTPView*,void>& rLink ) { AcceptClickLk = rLink; }
 
-    void            SetAcceptAllClickHdl( const Link<>& rLink ) { AcceptAllClickLk = rLink; }
+    void            SetAcceptAllClickHdl( const Link<SvxTPView*,void>& rLink ) { AcceptAllClickLk = rLink; }
 
-    void            SetRejectClickHdl( const Link<>& rLink ) { RejectClickLk = rLink; }
+    void            SetRejectClickHdl( const Link<SvxTPView*,void>& rLink ) { RejectClickLk = rLink; }
 
-    void            SetRejectAllClickHdl( const Link<>& rLink ) { RejectAllClickLk = rLink; }
+    void            SetRejectAllClickHdl( const Link<SvxTPView*,void>& rLink ) { RejectAllClickLk = rLink; }
 
-    void            SetUndoClickHdl( const Link<>& rLink ) { UndoClickLk = rLink; }
+    void            SetUndoClickHdl( const Link<SvxTPView*,void>& rLink ) { UndoClickLk = rLink; }
 
     virtual void    ActivatePage() SAL_OVERRIDE;
     virtual void    DeactivatePage() SAL_OVERRIDE;

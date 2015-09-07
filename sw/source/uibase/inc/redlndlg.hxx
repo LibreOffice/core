@@ -88,11 +88,11 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    bInhibitActivate;
 
-    DECL_DLLPRIVATE_LINK( AcceptHdl,     void* );
-    DECL_DLLPRIVATE_LINK( AcceptAllHdl,  void* );
-    DECL_DLLPRIVATE_LINK( RejectHdl,     void* );
-    DECL_DLLPRIVATE_LINK( RejectAllHdl,  void* );
-    DECL_DLLPRIVATE_LINK( UndoHdl,           void* );
+    DECL_DLLPRIVATE_LINK_TYPED( AcceptHdl,     SvxTPView*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( AcceptAllHdl,  SvxTPView*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( RejectHdl,     SvxTPView*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( RejectAllHdl,  SvxTPView*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( UndoHdl,       SvxTPView*, void );
     DECL_DLLPRIVATE_LINK_TYPED( DeselectHdl, SvTreeListBox*, void );
     DECL_DLLPRIVATE_LINK_TYPED( SelectHdl,   SvTreeListBox*, void );
     DECL_DLLPRIVATE_LINK_TYPED( SelectTimerHdl, Timer*, void );
