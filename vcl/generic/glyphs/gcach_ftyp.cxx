@@ -1616,7 +1616,6 @@ bool ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
     const sal_uInt16 nOfsScriptList     = GetUShort( pGsubHeader+4 );
     const sal_uInt16 nOfsFeatureTable   = GetUShort( pGsubHeader+6 );
     const sal_uInt16 nOfsLookupList     = GetUShort( pGsubHeader+8 );
-    pGsubHeader += 10;
 
     typedef std::vector<sal_uInt16> UshortList;
     UshortList aFeatureIndexList;
