@@ -1382,7 +1382,7 @@ void OTableController::assignTable()
                     {
                         for( const auto& rTableRow : m_vRowList )
                         {
-                            rTableRow->SetReadOnly( true );
+                            rTableRow->SetReadOnly();
                         }
                     }
                     m_bNew = false;
