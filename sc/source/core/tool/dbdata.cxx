@@ -654,9 +654,9 @@ void ScDBData::StartTableColumnNamesListener()
 {
     if (mpContainer && bHasHeader)
     {
-        ScDocument& pDoc = mpContainer->GetDocument();
-        if (!pDoc.IsClipOrUndo())
-            pDoc.StartListeningArea( GetHeaderArea(), false, this);
+        ScDocument& rDoc = mpContainer->GetDocument();
+        if (!rDoc.IsClipOrUndo())
+            rDoc.StartListeningArea( GetHeaderArea(), false, this);
     }
 }
 
