@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_b85dd9ee",
+        "filename": "sc/source/ui/view/tabvwshg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T14:31:12Z",
+      "side": 1,
+      "message": "\"had\" instead of \"has\" (it was the case with ...)",
+      "range": {
+        "startLine": 113,
+        "startChar": 47,
+        "endLine": 113,
+        "endChar": 50
+      },
+      "revId": "300413cee14a5a6ccc8f7533cc8759319b67de1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_986295ac",
+        "filename": "sc/source/ui/view/tabvwshh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T14:31:12Z",
+      "side": 1,
+      "message": "\"convert from something into 1/100mm\"",
+      "range": {
+        "startLine": 109,
+        "startChar": 24,
+        "endLine": 109,
+        "endChar": 62
+      },
+      "revId": "300413cee14a5a6ccc8f7533cc8759319b67de1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
