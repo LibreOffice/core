@@ -961,11 +961,10 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
             nRight = rLine.mnWidth - nLeft;
             nLeft = rLine.mnWidth - nOldRight;
         }
-        double nTop (nY + rCellBox.Y1);
-        double nBottom (nY + rCellBox.Y2);
+        double nTop = nY - mnAscent;
+        double nBottom;
         if (bCaretBox)
         {
-            nTop = nTop - rCellBox.Y1 - mnAscent;
             nBottom = nTop + mnLineHeight;
             if (nCellIndex >= rLine.maCellBoxes.getLength())
                 nLeft = nRight-2;
@@ -975,7 +974,6 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
         }
         else
         {
-            nTop = nTop - rCellBox.Y1 - mnAscent;
             nBottom = nTop + mnAscent + mnDescent;
         }
         const sal_Int32 nX1 = sal_Int32(floor(nLeft));
