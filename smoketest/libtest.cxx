@@ -16,7 +16,9 @@
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
+#define LIB_SOFFICEAPP  "lib" "sofficeapp" ".so"
 
+typedef int (LokHookPreInit)  ( const char *install_path, const char *user_profile_path );
 
 #ifdef _WIN32
 //#include <Windows.h>   // come from LibreOfficeKitInit.h
@@ -68,6 +70,30 @@ static int help()
     return 1;
 }
 
+bool lok_cpp_preInit(const char *pLOInstall)
+{
+    char pOfficePath[strlen(pLOInstall) + strlen(LIB_SOFFICEAPP)];
+    void* pHandle;
+    LokHookPreInit* pSymPreInit;
+
+    sprintf(pOfficePath, "%s/%s", pLOInstall, LIB_SOFFICEAPP);
+    pHandle = dlopen(pOfficePath, RTLD_GLOBAL | RTLD_NOW);
+    if (!pHandle)
+    {
+        fprintf(stderr, "Failed to load library :%s\n", pOfficePath);
+        return false;
+    }
+
+    pSymPreInit = (LokHookPreInit *)dlsym(pHandle, "lok_preinit");
+    if (!pSymPreInit)
+    {
+        fprintf(stderr, "Failed to find lok_preinit hook in library");
+        return false;
+    }
+
+    return pSymPreInit(pLOInstall, NULL) == 0;
+}
+
 int main (int argc, char **argv)
 {
     long start, end;
@@ -82,30 +108,17 @@ int main (int argc, char **argv)
     if( !IsAbsolutePath(argv[1]) )
         return 1;
 
-    // coverity[tainted_string] - build time test tool
-    char *install_path = argv[1];
-
-    if( argc > 4 )
+    if( !lok_cpp_preInit( argv[1] ) )
     {
-        fprintf( stderr, "testing preinit\n");
-        char *imp_lib;
-        void *dlhandle;
-        dlhandle = lok_dlopen( install_path, &imp_lib );
-        if( !dlhandle )
-        {
-            fprintf( stderr, "Failed to link '%s'\n", lok_dlerror() );
-            return -1;
-        }
-        LokHookPreInit *preinit = (LokHookPreInit *) lok_dlsym( dlhandle, "lok_preinit" );
-        if( !preinit )
-        {
-            fprintf( stderr, "Failed to find pre-init symbol: %s\n", lok_dlerror() );
-            return -1;
-        }
-        preinit( install_path, NULL );
+        fprintf( stderr, "Failed to pre-initialize\n" );
+        return -1;
     }
+    end = getTimeMS();
+    fprintf( stderr, "preInit time: %ld ms\n", (end-start) );
+    start = end;
 
-    Office *pOffice = lok_cpp_init( install_path );
+    // coverity[tainted_string] - build time test tool
+    Office *pOffice = lok_cpp_init( argv[1] );
     if( !pOffice )
     {
         fprintf( stderr, "Failed to initialize\n" );
