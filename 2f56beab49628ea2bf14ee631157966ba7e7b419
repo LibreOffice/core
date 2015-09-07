@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_18da0579",
+        "filename": "solenv/bin/unittest-failed.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-09-07T14:05:00Z",
+      "side": 1,
+      "message": "Cool idea! I added recently this variable and failed to add it here.",
+      "range": {
+        "startLine": 24,
+        "startChar": 21,
+        "endLine": 24,
+        "endChar": 30
+      },
+      "revId": "2f56beab49628ea2bf14ee631157966ba7e7b419",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
