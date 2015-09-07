@@ -17,18 +17,19 @@ class OpenGLWindowImpl
 public:
     OpenGLWindowImpl(vcl::Window* pWindow);
     ~OpenGLWindowImpl() { mxChildWindow.disposeAndClear(); }
-    OpenGLContext& getContext() { return maContext;}
+    OpenGLContext& getContext() { return *mxContext.get(); }
 private:
-    OpenGLContext maContext;
+    rtl::Reference<OpenGLContext> mxContext;
     VclPtr<SystemChildWindow> mxChildWindow;
 };
 
 OpenGLWindowImpl::OpenGLWindowImpl(vcl::Window* pWindow)
+    : mxContext(OpenGLContext::Create())
 {
     SystemWindowData aData = OpenGLContext::generateWinData(pWindow, false);
     mxChildWindow.reset(VclPtr<SystemChildWindow>::Create(pWindow, 0, &aData));
     mxChildWindow->Show();
-    maContext.init(mxChildWindow.get());
+    mxContext->init(mxChildWindow.get());
     pWindow->SetMouseTransparent(false);
 }
 

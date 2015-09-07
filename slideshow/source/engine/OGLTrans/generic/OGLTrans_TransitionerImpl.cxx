@@ -228,7 +228,7 @@ private:
     void impl_finishTransition();
 
 private:
-    boost::shared_ptr<OpenGLContext> mpContext;
+    rtl::Reference<OpenGLContext> mpContext;
 
     /** OpenGL handle to the leaving slide's texture
     */
@@ -368,7 +368,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     sal_Int64 aVal = 0;
     aDeviceParams[1] >>= aVal;
 
-    mpContext = boost::make_shared<OpenGLContext>();
+    mpContext = OpenGLContext::Create();
     mpContext->requestLegacyContext();
 
     if( !mpContext->init( reinterpret_cast< vcl::Window* >( aVal ) ) )
@@ -1323,7 +1323,7 @@ void OGLTransitionerImpl::impl_dispose()
 {
     impl_finishTransition();
     disposeTextures();
-    mpContext.reset();
+    mpContext.clear();
 }
 
 // we are about to be disposed (someone call dispose() on us)
@@ -1350,7 +1350,7 @@ void OGLTransitionerImpl::disposing()
 #endif
 
 #if defined( UNX ) && !defined( MACOSX )
-    if( mbRestoreSync && bool(mpContext) ) {
+    if( mbRestoreSync && bool(mpContext.is()) ) {
         // try to reestablish synchronize state
         char* sal_synchronize = getenv("SAL_SYNCHRONIZE");
         XSynchronize( mpContext->getOpenGLWindow().dpy, sal_synchronize && *sal_synchronize == '1' );

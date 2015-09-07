@@ -28,8 +28,8 @@ public:
     virtual ~X11OpenGLSalGraphicsImpl();
 
 protected:
-    virtual OpenGLContext* CreateWinContext() SAL_OVERRIDE;
-    virtual bool UseContext( OpenGLContext* pContext ) SAL_OVERRIDE;
+    virtual rtl::Reference<OpenGLContext> CreateWinContext() SAL_OVERRIDE;
+    virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) SAL_OVERRIDE;
 
     bool RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY, TextureCombo& rCombo);
 

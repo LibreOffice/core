@@ -69,7 +69,7 @@ private:
     libgltf::glTFHandle* m_pHandle;
     std::vector<libgltf::glTFFile> m_vInputFiles;
 
-    OpenGLContext m_aContext;
+    rtl::Reference<OpenGLContext> m_xContext;
     AutoTimer m_aTimer;
     OGLWindow* m_pOGLWindow;
     bool m_bIsRendering;
