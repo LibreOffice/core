@@ -59,6 +59,14 @@ typedef std::unordered_map<int,int> IntMap;
 
 #include <config_mingw.h>
 
+namespace
+{
+// Extra space at the top and bottom of the glyph in total = tmHeight / GLYPH_SPACE_RATIO;
+const int GLYPH_SPACE_RATIO = 8;
+// Border size at the top of the glyph = tmHeight / GLYPH_OFFSET_RATIO;
+const int GLYPH_OFFSET_RATIO = GLYPH_SPACE_RATIO * 2;
+}
+
 struct OpenGLGlyphCacheChunk
 {
     WORD mnFirstGlyph;
@@ -66,7 +74,18 @@ struct OpenGLGlyphCacheChunk
     std::vector<Rectangle> maLocation;
     std::shared_ptr<OpenGLTexture> mpTexture;
     int mnAscent;
+    int mnHeight;
     bool mbVertical;
+
+    int getExtraSpace() const
+    {
+        return std::max(mnHeight / GLYPH_SPACE_RATIO, 4);
+    }
+
+    int getExtraOffset() const
+    {
+        return std::max(mnHeight / GLYPH_OFFSET_RATIO, 2);
+    }
 };
 
 // win32 specific physical font instance
@@ -278,23 +297,6 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         sLine << aABC[i].abcA << ":" << aABC[i].abcB << ":" << aABC[i].abcC << " ";
     SAL_INFO("vcl.gdi.opengl", "ABC widths: " << sLine.str());
 
-    // Try hard to avoid overlap as we want to be able to use
-    // individual rectangles for each glyph. The ABC widths don't
-    // take anti-alising into consideration. Let's hope that leaving
-    // four pixels of "extra" space inbetween glyphs will help.
-    std::vector<int> aDX(nCount);
-    int totWidth = 0;
-    for (int i = 0; i < nCount; i++)
-    {
-        aDX[i] = aABC[i].abcB + std::abs(aABC[i].abcC);
-        if (i == 0)
-            aDX[0] += std::abs(aABC[0].abcA);
-        if (i < nCount-1)
-            aDX[i] += std::abs(aABC[i+1].abcA);
-        aDX[i] += 4;
-        totWidth += aDX[i];
-    }
-
     TEXTMETRICW aTextMetric;
     if (!GetTextMetricsW(hDC, &aTextMetric))
     {
@@ -304,6 +306,24 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
         return false;
     }
     aChunk.mnAscent = aTextMetric.tmAscent;
+    aChunk.mnHeight = aTextMetric.tmHeight;
+
+    // Try hard to avoid overlap as we want to be able to use
+    // individual rectangles for each glyph. The ABC widths don't
+    // take anti-alising into consideration. Let's hope that leaving
+    // "extra" space inbetween glyphs will help.
+    std::vector<int> aDX(nCount);
+    int totWidth = 0;
+    for (int i = 0; i < nCount; i++)
+    {
+        aDX[i] = aABC[i].abcB + std::abs(aABC[i].abcC);
+        if (i == 0)
+            aDX[0] += std::abs(aABC[0].abcA);
+        if (i < nCount-1)
+            aDX[i] += std::abs(aABC[i+1].abcA);
+        aDX[i] += aChunk.getExtraSpace();
+        totWidth += aDX[i];
+    }
 
     LOGFONTW aLogfont;
     if (!GetObjectW(rLayout.mhFont, sizeof(aLogfont), &aLogfont))
@@ -336,18 +356,18 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
     if (!DeleteDC(hDC))
         SAL_WARN("vcl.gdi", "DeleteDC failed: " << WindowsErrorString(GetLastError()));
 
-    // Leave two pixels of extra space also at top and bottom
+    // Leave extra space also at top and bottom
     int nBitmapWidth, nBitmapHeight;
     if (sFaceName[0] == '@')
     {
-        nBitmapWidth = aSize.cy + 4;
+        nBitmapWidth = aSize.cy + aChunk.getExtraSpace();
         nBitmapHeight = totWidth;
         aChunk.mbVertical = true;
     }
     else
     {
         nBitmapWidth = totWidth;
-        nBitmapHeight = aSize.cy + 4;
+        nBitmapHeight = aSize.cy + aChunk.getExtraSpace();
         aChunk.mbVertical = false;
     }
 
@@ -384,9 +404,8 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
 
     aDC.fill(MAKE_SALCOLOR(0xff, 0xff, 0xff));
 
-    // The 2,2 is for the extra space
-    int nY = 2;
-    int nX = 2;
+    int nY =  aChunk.getExtraOffset();
+    int nX =  nY;
     if (aChunk.mbVertical)
         nX += aDX[0];
     if (!ExtTextOutW(aDC.getCompatibleHDC(), nX, nY, ETO_GLYPH_INDEX, NULL, aGlyphIndices.data(), nCount, aDX.data()))
@@ -416,7 +435,7 @@ bool ImplWinFontEntry::AddChunkOfGlyphs(int nGlyphIndex, const WinLayout& rLayou
             aChunk.maLocation[i].Right() = nPos + aDX[i];
             nPos = aChunk.maLocation[i].Right();
             aChunk.maLocation[i].Top() = 0;
-            aChunk.maLocation[i].Bottom() = aSize.cy + 4;
+            aChunk.maLocation[i].Bottom() = aSize.cy + aChunk.getExtraSpace();
         }
     }
 
@@ -1761,7 +1780,7 @@ bool UniscribeLayout::DrawCachedGlyphs(SalGraphics& rGraphics) const
             {
                 SalTwoRect a2Rects(rChunk.maLocation[n].Left(), rChunk.maLocation[n].Top(),
                                    rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight(),
-                                   nAdvance + aPos.X() + mpGlyphOffsets[i].du - 2, aPos.Y() + mpGlyphOffsets[i].dv - rChunk.mnAscent - 2,
+                                   nAdvance + aPos.X() + mpGlyphOffsets[i].du - rChunk.getExtraOffset(), aPos.Y() + mpGlyphOffsets[i].dv - rChunk.mnAscent - rChunk.getExtraOffset(),
                                    rChunk.maLocation[n].getWidth(), rChunk.maLocation[n].getHeight()); // ???
                 pImpl->DrawMask(*rChunk.mpTexture, salColor, a2Rects);
             }
