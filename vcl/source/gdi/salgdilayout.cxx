@@ -77,7 +77,7 @@ SalGraphics::~SalGraphics()
 {
 }
 
-OpenGLContext* SalGraphics::GetOpenGLContext() const
+rtl::Reference<OpenGLContext> SalGraphics::GetOpenGLContext() const
 {
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(GetImpl());
     if (pImpl)

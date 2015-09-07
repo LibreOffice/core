@@ -20,13 +20,12 @@ SdrOpenGLObj::SdrOpenGLObj()
     mpContext(NULL)
 {
 #if HAVE_FEATURE_DESKTOP
-    mpContext = new OpenGLContext;
+    mpContext = OpenGLContext::Create();
 #endif
 }
 
 SdrOpenGLObj::~SdrOpenGLObj()
 {
-    delete mpContext;
 }
 
 sdr::contact::ViewContact* SdrOpenGLObj::CreateObjectSpecificViewContact()
@@ -40,7 +39,7 @@ void SdrOpenGLObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fra
     SdrObject::NbcResize(rRef, xFact, yFact);
 
     // now pass the information to the OpenGL context
-    if (mpContext)
+    if (mpContext.is())
         mpContext->setWinSize(aOutRect.GetSize());
 
     SAL_WARN("svx.opengl", "resized opengl drawinglayer object");
@@ -59,7 +58,7 @@ IOpenGLRenderer* SdrOpenGLObj::getRenderer()
 
 bool SdrOpenGLObj::isOpenGLInitialized()
 {
-    return mpContext && mpContext->isInitialized();
+    return mpContext.is() && mpContext->isInitialized();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
