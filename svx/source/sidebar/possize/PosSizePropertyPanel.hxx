@@ -32,13 +32,15 @@
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <basegfx/range/b2drange.hxx>
 
-class DialControl;
 class SdrView;
 class FixedText;
 class MetricField;
 class CheckBox;
 class MetricBox;
 
+namespace svx {
+class DialControl;
+};
 
 namespace svx { namespace sidebar {
 
@@ -155,7 +157,7 @@ private:
     DECL_LINK( ChangeHeightHdl, void * );
     DECL_LINK_TYPED( ClickAutoHdl, Button*, void );
     DECL_LINK( AngleModifiedHdl, void * );
-    DECL_LINK( RotationHdl, void * );
+    DECL_LINK_TYPED( RotationHdl, svx::DialControl*, void );
     DECL_LINK_TYPED( FlipHdl, ToolBox *, void );
 
     void Initialize();

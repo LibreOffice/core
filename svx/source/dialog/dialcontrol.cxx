@@ -410,7 +410,7 @@ bool DialControl::IsValueModified()
     return mpImpl->mnInitialAngle != mpImpl->mnAngle;
 }
 
-void DialControl::SetModifyHdl( const Link<>& rLink )
+void DialControl::SetModifyHdl( const Link<DialControl*,void>& rLink )
 {
     mpImpl->maModifyHdl = rLink;
 }

@@ -535,7 +535,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, AngleModifiedHdl )
 
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl )
+IMPL_LINK_NOARG_TYPED( PosSizePropertyPanel, RotationHdl, DialControl*, void )
 {
     sal_Int32 nTmp = mpDial->GetRotation();
 
@@ -547,8 +547,6 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl )
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_TRANSFORM, SfxCallMode::RECORD, &aAngleItem, &aRotXItem, &aRotYItem, 0L );
-
-    return 0;
 }
 
 
