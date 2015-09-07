@@ -421,7 +421,7 @@ namespace dbp
         // the (original) relative position of the entry
         sal_IntPtr nRelativeIndex = reinterpret_cast<sal_IntPtr>(bMoveRight ? m_pExistFields->GetEntryData(nSelected) : m_pSelFields->GetEntryData(nSelected));
 
-        sal_uInt16 nInsertPos = SAL_MAX_UINT16;
+        sal_Int32 nInsertPos = LISTBOX_APPEND;
         if (!bMoveRight)
         {   // need to determine an insert pos which reflects the original
             nInsertPos = 0;
