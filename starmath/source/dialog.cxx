@@ -1878,7 +1878,7 @@ IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, pComboBox )
 }
 
 
-IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl)
+IMPL_LINK_NOARG_TYPED(SmSymDefineDialog, CharHighlightHdl, SvxShowCharSet*, void)
 {
    sal_UCS4 cChar = pCharsetDisplay->GetSelectCharacter();
 
@@ -1905,8 +1905,6 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl)
     aUnicodePos += aHex;
     pSymbols->SetText( aUnicodePos );
     pSymbolName->SetText( aUnicodePos );
-
-    return 0;
 }
 
 

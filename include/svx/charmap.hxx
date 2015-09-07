@@ -50,14 +50,14 @@ public:
     void            SelectCharacter( sal_uInt32 cNew, bool bFocus = false );
     sal_UCS4        GetSelectCharacter() const;
 
-    void            SetDoubleClickHdl( const Link<>& rLink ) { aDoubleClkHdl = rLink; }
-    void            SetSelectHdl( const Link<>& rHdl ) { aSelectHdl = rHdl; }
-    void            SetHighlightHdl( const Link<>& rHdl ) { aHighHdl = rHdl; }
-    void            SetPreSelectHdl( const Link<>& rHdl ) { aPreSelectHdl = rHdl; }
+    void            SetDoubleClickHdl( const Link<SvxShowCharSet*,void>& rLink ) { aDoubleClkHdl = rLink; }
+    void            SetSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aSelectHdl = rHdl; }
+    void            SetHighlightHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aHighHdl = rHdl; }
+    void            SetPreSelectHdl( const Link<SvxShowCharSet*,void>& rHdl ) { aPreSelectHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
     void            SetFont( const vcl::Font& rFont );
 
-    svx::SvxShowCharSetItem*  ImplGetItem( int _nPos );
+    svx::SvxShowCharSetItem*    ImplGetItem( int _nPos );
     int                         FirstInView() const;
     int                         LastInView() const;
     int                         PixelToMapIndex( const Point&) const;
@@ -92,10 +92,10 @@ protected:
 private:
     typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
     ItemsMap        m_aItems;
-    Link<>          aDoubleClkHdl;
-    Link<>          aSelectHdl;
-    Link<>          aHighHdl;
-    Link<>          aPreSelectHdl;
+    Link<SvxShowCharSet*,void>     aDoubleClkHdl;
+    Link<SvxShowCharSet*,void>     aSelectHdl;
+    Link<SvxShowCharSet*,void>     aHighHdl;
+    Link<SvxShowCharSet*,void>     aPreSelectHdl;
     svx::SvxShowCharSetVirtualAcc* m_pAccessible;
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
     long            nX;

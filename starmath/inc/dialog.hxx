@@ -438,7 +438,7 @@ class SmSymDefineDialog : public ModalDialog
     DECL_LINK(FontChangeHdl, ListBox *);
     DECL_LINK(SubsetChangeHdl, ListBox*);
     DECL_LINK(StyleChangeHdl, ComboBox *);
-    DECL_LINK(CharHighlightHdl, void *);
+    DECL_LINK_TYPED(CharHighlightHdl, SvxShowCharSet*, void);
     DECL_LINK_TYPED(AddClickHdl, Button *, void);
     DECL_LINK_TYPED(ChangeClickHdl, Button *, void);
     DECL_LINK_TYPED(DeleteClickHdl, Button *, void);

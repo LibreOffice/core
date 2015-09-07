@@ -494,7 +494,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl)
 
 
 
-IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
 {
     if (bOne)
     {
@@ -502,12 +502,11 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl)
         m_pShowText->SetText(OUString(&cChar, 1));
     }
     EndDialog( RET_OK );
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
+IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
 {
     if ( !bOne )
     {
@@ -535,12 +534,11 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl)
 
     }
     m_pOKBtn->Enable();
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
+IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
 {
     OUString aText;
     sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
@@ -573,13 +571,11 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl)
         aText = OUString::createFromAscii(aBuf);
     }
     m_pCharCodeText->SetText( aText );
-
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl)
+IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
 {
     // adjust subset selection
     if( pSubsetMap )
@@ -591,7 +587,6 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl)
     }
 
     m_pOKBtn->Enable();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -84,10 +84,10 @@ private:
     DECL_LINK_TYPED(OKHdl, Button*, void);
     DECL_LINK(FontSelectHdl, void *);
     DECL_LINK(SubsetSelectHdl, void *);
-    DECL_LINK(CharDoubleClickHdl, void *);
-    DECL_LINK(CharSelectHdl, void *);
-    DECL_LINK(CharHighlightHdl, void *);
-    DECL_LINK(CharPreSelectHdl, void *);
+    DECL_LINK_TYPED(CharDoubleClickHdl, SvxShowCharSet*,void);
+    DECL_LINK_TYPED(CharSelectHdl, SvxShowCharSet*, void);
+    DECL_LINK_TYPED(CharHighlightHdl, SvxShowCharSet*, void);
+    DECL_LINK_TYPED(CharPreSelectHdl, SvxShowCharSet*, void);
 
     static void fillAllSubsets(ListBox &rListBox);
 
