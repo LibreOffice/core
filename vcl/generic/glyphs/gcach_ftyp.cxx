@@ -1041,7 +1041,6 @@ bool ServerFont::GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
 
     if( (cbox.xMax - cbox.xMin) == 0 || (cbox.yMax - cbox.yMin == 0) )
     {
-        nAngle = 0;
         memset(&rRawBitmap, 0, sizeof rRawBitmap);
         FT_Done_Glyph( pGlyphFT );
         return true;
