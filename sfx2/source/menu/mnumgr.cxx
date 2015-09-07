@@ -222,11 +222,11 @@ IMPL_LINK_TYPED( SfxMenuManager, Select, Menu *, pSelMenu, bool )
     if (!aCommand.isEmpty() && pBindings)
     {
         pBindings->ExecuteCommand_Impl( aCommand );
-        return sal_IntPtr(true);
+        return true;
     }
 
     if (!pBindings)
-        return sal_IntPtr(true);
+        return true;
 
     if ( pBindings->IsBound(nId) )
         // normal function
