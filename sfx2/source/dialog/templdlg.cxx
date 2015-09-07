@@ -2155,7 +2155,7 @@ IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool
     nLastItemId = pMenu->GetCurItemId();
     Application::PostUserEvent(
         LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectAsyncHdl ), 0 );
-    return sal_IntPtr(true);
+    return true;
 }
 
 IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectAsyncHdl, void*, void )
