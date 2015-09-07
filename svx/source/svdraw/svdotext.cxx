@@ -755,14 +755,19 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nHgt=1000000;
             }
 
-            // #i119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
-            if(IsVerticalWriting())
-            {
-                nWdt = 1000000;
-            }
-            else
-            {
-                nHgt = 1000000;
+            bool bChainedFrame = IsChainable();
+            // Might be required for overflow check working: do limit height to frame if box is chainable.
+            if (!bChainedFrame) {
+                // #i119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
+
+                if(IsVerticalWriting())
+                {
+                    nWdt = 1000000;
+                }
+                else
+                {
+                    nHgt = 1000000;
+                }
             }
 
             rOutliner.SetMaxAutoPaperSize(Size(nWdt,nHgt));
