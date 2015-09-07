@@ -55,6 +55,7 @@ class NSOpenGLView;
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
 #include <vcl/syschild.hxx>
+#include <rtl/ref.hxx>
 
 #include <map>
 #include <set>
@@ -170,7 +171,10 @@ class VCL_DLLPUBLIC OpenGLContext
     friend class OpenGLTests;
 public:
     OpenGLContext();
+    static rtl::Reference<OpenGLContext> Create();
     ~OpenGLContext();
+    void acquire() { mnRefCount++; }
+    void release() { if ( --mnRefCount == 0 ) delete this; }
 
     void requestLegacyContext();
     void requestSingleBufferedRendering();
@@ -194,13 +198,7 @@ public:
     OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
     static void        ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
     void UnbindTextureFromFramebuffers( GLuint nTexture );
-#ifdef DBG_UTIL
-    void AddRef(SalGraphicsImpl*);
-    void DeRef(SalGraphicsImpl*);
-#else
-    void AddRef();
-    void DeRef();
-#endif
+
     void               ReleaseFramebuffer( const OpenGLTexture& rTexture );
     void               ReleaseFramebuffers();
 
@@ -288,8 +286,9 @@ public:
     vcl::Region maClipRegion;
     int mnPainting;
 
-    OpenGLContext* mpPrevContext;
-    OpenGLContext* mpNextContext;
+    // Don't hold references to ourselves:
+    OpenGLContext *mpPrevContext;
+    OpenGLContext *mpNextContext;
 };
 
 #endif

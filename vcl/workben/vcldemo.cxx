@@ -1657,8 +1657,8 @@ class OpenGLTests
     VclPtr<WorkWindow> mxWinB;
     OpenGLSalGraphicsImpl *mpImplA;
     OpenGLSalGraphicsImpl *mpImplB;
-    OpenGLContext *mpA;
-    OpenGLContext *mpB;
+    rtl::Reference<OpenGLContext> mpA;
+    rtl::Reference<OpenGLContext> mpB;
 
     static OpenGLSalGraphicsImpl *getImpl(const VclPtr<OutputDevice> &xOut)
     {
@@ -1682,7 +1682,7 @@ public:
         mpA = mpImplA->GetOpenGLContext();
         mpB = mpImplB->GetOpenGLContext();
 
-        assert (mpA && mpB);
+        assert (mpA.is() && mpB.is());
         assert (mpA != mpB);
     }
     ~OpenGLTests()
@@ -1715,9 +1715,9 @@ public:
 
         // get some other guys to leach off this context
         VclPtrInstance<VirtualDevice> xVDev;
-        OpenGLContext *pContext = getImpl(xVDev)->GetOpenGLContext();
+        rtl::Reference<OpenGLContext> pContext = getImpl(xVDev)->GetOpenGLContext();
         VclPtrInstance<VirtualDevice> xVDev2;
-        OpenGLContext *pContext2 = getImpl(xVDev)->GetOpenGLContext();
+        rtl::Reference<OpenGLContext> pContext2 = getImpl(xVDev)->GetOpenGLContext();
 
         // sharing the same off-screen context.
         assert(pContext == pContext2);
