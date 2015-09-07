@@ -3547,7 +3547,6 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
         return true;
     }
 
-    SAL_WARN("sc.core", "ScCompiler::IsTableRefColumn - falling back to cell lookup");
     if (pDBData->HasHeader())
     {
         // Quite similar to IsColRowName() but limited to one row of headers.
@@ -3569,6 +3568,10 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
                 OUString aStr = aIter.getString();
                 if (ScGlobal::GetpTransliteration()->isEqual( aStr, aName))
                 {
+                    // If this is successful and the internal column name
+                    // lookup was not, it may be worth a warning.
+                    SAL_WARN("sc.core", "ScCompiler::IsTableRefColumn - falling back to cell lookup");
+
                     /* XXX NOTE: we could init the column as relative so copying a
                      * formula across columns would point to the relative column,
                      * but do it absolute because:
