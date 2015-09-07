@@ -2372,11 +2372,9 @@ bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
                 mnDragPos    = aHitTest.nPos;
                 mnDragAryPos = aHitTest.nAryPos;
             }
-            eDragType = aHitTest.eType;
 
             DoubleClick();
 
-            eDragType       = RULER_TYPE_DONTKNOW;
             mnDragPos       = 0;
             mnDragAryPos    = 0;
 
