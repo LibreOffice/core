@@ -31,7 +31,7 @@ public:
     /** DocInfo has changed (notify via DocShell):
         make required fields update.
     */
-    virtual void DocInfoChgd() = 0;
+    virtual void DocInfoChgd(bool isEnableSetModified) = 0;
 
     /** Document - Statistics
     */
