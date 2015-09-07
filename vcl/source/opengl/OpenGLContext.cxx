@@ -58,7 +58,7 @@ OpenGLContext::OpenGLContext():
     mpWindow(NULL),
     m_pChildWindow(NULL),
     mbInitialized(false),
-    mnRefCount(1),
+    mnRefCount(0),
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
     mnFramebufferCount(0),
@@ -93,6 +93,9 @@ OpenGLContext::OpenGLContext():
 OpenGLContext::~OpenGLContext()
 {
     VCL_GL_INFO("vcl.opengl", "delete context: " << this);
+    assert (mnRefCount == 0);
+
+    mnRefCount = 1; // guard the shutdown paths.
     reset();
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -106,42 +109,13 @@ OpenGLContext::~OpenGLContext()
         pSVData->maGDIData.mpLastContext = mpPrevContext;
 
     m_pChildWindow.disposeAndClear();
+    assert (mnRefCount == 1);
 }
 
-#ifdef DBG_UTIL
-void OpenGLContext::AddRef(SalGraphicsImpl* pImpl)
+rtl::Reference<OpenGLContext> OpenGLContext::Create()
 {
-    assert(mnRefCount > 0);
-    mnRefCount++;
-
-    maParents.insert(pImpl);
+    return rtl::Reference<OpenGLContext>(new OpenGLContext);
 }
-
-void OpenGLContext::DeRef(SalGraphicsImpl* pImpl)
-{
-
-    auto it = maParents.find(pImpl);
-    if(it != maParents.end())
-        maParents.erase(it);
-
-    assert(mnRefCount > 0);
-    if( --mnRefCount == 0 )
-        delete this;
-}
-#else
-void OpenGLContext::AddRef()
-{
-    assert(mnRefCount > 0);
-    mnRefCount++;
-}
-
-void OpenGLContext::DeRef()
-{
-    assert(mnRefCount > 0);
-    if( --mnRefCount == 0 )
-        delete this;
-}
-#endif
 
 void OpenGLContext::requestLegacyContext()
 {
@@ -1337,8 +1311,8 @@ void OpenGLContext::clearCurrent()
 
     // release all framebuffers from the old context so we can re-attach the
     // texture in the new context
-    OpenGLContext* pCurrentCtx = pSVData->maGDIData.mpLastContext;
-    if( pCurrentCtx && pCurrentCtx->isCurrent() )
+    rtl::Reference<OpenGLContext> pCurrentCtx = pSVData->maGDIData.mpLastContext;
+    if( pCurrentCtx.is() && pCurrentCtx->isCurrent() )
         pCurrentCtx->ReleaseFramebuffers();
 }
 
@@ -1348,9 +1322,9 @@ void OpenGLContext::prepareForYield()
 
     // release all framebuffers from the old context so we can re-attach the
     // texture in the new context
-    OpenGLContext* pCurrentCtx = pSVData->maGDIData.mpLastContext;
+    rtl::Reference<OpenGLContext> pCurrentCtx = pSVData->maGDIData.mpLastContext;
 
-    if ( !pCurrentCtx )
+    if ( !pCurrentCtx.is() )
         return;                 // Not using OpenGL
 
     SAL_INFO("vcl.opengl", "Unbinding contexts in preparation for yield");
