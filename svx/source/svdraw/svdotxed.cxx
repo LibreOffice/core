@@ -62,6 +62,14 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         rOutl.SetControlWord(nStat);
     }
 
+    // disable AUTOPAGESIZE if IsChainable (might be required for overflow check)
+    if ( IsChainable() ) {
+        EEControlBits nStat1=rOutl.GetControlWord();
+        nStat1 &=~EEControlBits::AUTOPAGESIZE;
+        rOutl.SetControlWord(nStat1);
+    }
+
+
     OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
     if(pOutlinerParaObject!=NULL)
     {
@@ -181,14 +189,18 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nMaxHgt=1000000;
             }
 
-            // #i119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
-            if(IsVerticalWriting())
-            {
-                nMaxWdt = 1000000;
-            }
-            else
-            {
-                nMaxHgt = 1000000;
+            bool bChainedFrame = IsChainable();
+            // Might be required for overflow check working: do limit height to frame if box is chainable.
+            if (!bChainedFrame) {
+                // #i119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
+                if(IsVerticalWriting())
+                {
+                    nMaxWdt = 1000000;
+                }
+                else
+                {
+                    nMaxHgt = 1000000;
+                }
             }
 
             aPaperMax.Width()=nMaxWdt;
