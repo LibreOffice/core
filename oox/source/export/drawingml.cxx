@@ -1209,7 +1209,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     PropertyState eState;
     SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
     bool bComplex = ( nScriptType == SvtScriptType::COMPLEX );
-    const char* bold = NULL;
+    const char* bold = "0";
     const char* italic = NULL;
     const char* underline = NULL;
     const char* strikeout = NULL;
