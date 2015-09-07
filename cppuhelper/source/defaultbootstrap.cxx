@@ -42,19 +42,6 @@ rtl::OUString getBootstrapVariable(
     }
     return v;
 }
-
-void default_preInitBootstrap(rtl::OUString const & aUri)
-{
-    rtl::Bootstrap bsUri(aUri);
-    if (bsUri.getHandle() == 0)
-        throw css::uno::DeploymentException("Cannot open uno ini " + aUri);
-
-    // create the service manager
-    rtl::Reference< cppuhelper::ServiceManager > aManager(new cppuhelper::ServiceManager);
-    // read rdb files
-    aManager->init(getBootstrapVariable(bsUri, "UNO_SERVICES"));
-    aManager->loadImplementations();
-}
 }
 
 css::uno::Reference< css::uno::XComponentContext >
@@ -120,8 +107,24 @@ cppu::defaultBootstrap_InitialComponentContext()
 }
 
 void
-cppu::preInitBootstrap()
+cppu::preInitBootstrap(css::uno::Reference< css::uno::XComponentContext > const & xContext)
 {
-    default_preInitBootstrap(getUnoIniUri());
+    if (!xContext.is())
+        throw css::uno::DeploymentException("preInit: XComponentContext is not created");
+
+    css::uno::Reference< css::uno::XInterface > xService;
+    xContext->getValueByName("/singletons/com.sun.star.lang.theServiceManager") >>= xService;
+    if (!xService.is())
+        throw css::uno::DeploymentException("preInit: XMultiComponentFactory is not created");
+
+    rtl::Reference<cppuhelper::ServiceManager> aService(reinterpret_cast<cppuhelper::ServiceManager*>(xService.get()));
+
+    // pre-requisites:
+    // In order to load implementations and invoke
+    // component factory it is required:
+    // 1) defaultBootstrap_InitialComponentContext()
+    // 2) comphelper::setProcessServiceFactory(xSFactory);
+    // 3) InitVCL()
+    aService->loadImplementations();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
