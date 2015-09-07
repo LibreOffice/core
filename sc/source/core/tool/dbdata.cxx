@@ -898,7 +898,9 @@ void ScDBData::Notify( const SfxHint& rHint )
     if (nHint & SC_HINT_DATACHANGED)
     {
         mbTableColumnNamesDirty = true;
-        if (mpContainer)
+        if (!mpContainer)
+            assert(!"ScDBData::Notify - how did we end up here without container?");
+        else
         {
             // Only one cell of a range is broadcasted per area listener if
             // multiple cells are affected. Expand the range to what this is
