@@ -901,6 +901,8 @@ private:
 
     /// RelId <-> Graphic* cache, so that in case of alternate content, the same graphic only gets written once.
     std::map<const Graphic*, OString> m_aRelIdCache;
+    /// RelId <-> sal_uInt32 (bitmap checksum) cache, similar to m_aRelIdCache, but used for non-Writer graphics, handled in oox.
+    std::map<sal_uInt32, OUString> m_aSdrRelIdCache;
 
     /// members to control the existence of grabbagged SDT properties in the paragraph
     sal_Int32 m_nParagraphSdtPrToken;
@@ -958,6 +960,8 @@ public:
     virtual void WriteVMLTextBox(css::uno::Reference<css::drawing::XShape> xShape) SAL_OVERRIDE;
     /// DMLTextExport
     virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) SAL_OVERRIDE;
+    virtual OUString FindRelId(sal_uInt32 nChecksum) SAL_OVERRIDE;
+    virtual void CacheRelId(sal_uInt32 nChecksum, const OUString& rRelId) SAL_OVERRIDE;
     virtual oox::drawingml::DrawingML& GetDrawingML() SAL_OVERRIDE;
 
     void BulletDefinition(int nId, const Graphic& rGraphic, Size aSize) SAL_OVERRIDE;

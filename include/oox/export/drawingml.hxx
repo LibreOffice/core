@@ -73,6 +73,10 @@ public:
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj) = 0;
     /// Write the contents of the textbox that is associated to this shape.
     virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) = 0;
+    /// Look up the RelId of a graphic based on its checksum.
+    virtual OUString FindRelId(sal_uInt32 nChecksum) = 0;
+    /// Store the RelId of a graphic based on its checksum.
+    virtual void CacheRelId(sal_uInt32 nChecksum, const OUString& rRelId) = 0;
 protected:
     DMLTextExport() {}
     virtual ~DMLTextExport() {}
