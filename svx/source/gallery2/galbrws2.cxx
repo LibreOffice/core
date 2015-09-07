@@ -1318,10 +1318,9 @@ IMPL_LINK_NOARG_TYPED(GalleryBrowser2, SelectObjectValueSetHdl, ValueSet*, void)
     ImplUpdateInfoBar();
 }
 
-IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectHdl)
+IMPL_LINK_NOARG_TYPED(GalleryBrowser2, SelectObjectHdl, GalleryListView*, void)
 {
     ImplUpdateInfoBar();
-    return 0L;
 }
 
 IMPL_LINK_TYPED( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox, void )
