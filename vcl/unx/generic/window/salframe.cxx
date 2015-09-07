@@ -1003,25 +1003,14 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
             fprintf(stderr, "X11SalFrame::SetIcon(): found %d IconSizes:\n", nSizes);
 #endif
 
-            const int ourLargestIconSize = 48;
-
             int i;
             for( i=0; i<nSizes; i++)
             {
                // select largest supported icon
-
-               // Note: olwm/olvwm reports a huge max icon size of
-               // 160x160 pixels; always choosing the max as the
-               // preferred icon size is apparently wrong under olvwm
-               // - so we keep the safe default |iconSize| when we see
-               // unreasonable large max icon sizes (> twice of our
-               // largest available icon) reported by XGetIconSizes.
-                if( pIconSize[i].max_width > iconSize
-                    && pIconSize[i].max_width <= 2*ourLargestIconSize )
+                if( pIconSize[i].max_width > iconSize )
                 {
                     iconSize = pIconSize[i].max_width;
                 }
-                iconSize = pIconSize[i].max_width;
 
 #if OSL_DEBUG_LEVEL > 1
                 fprintf(stderr, "min: %d, %d\nmax: %d, %d\ninc: %d, %d\n\n",
