@@ -524,7 +524,7 @@ public:
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;
 
-    void    SetColorList( XColorListRef pColTab ) { m_pColorList = pColTab; }
+    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
     void    SetHatchingList( XHatchListRef pHtchLst)
                 { m_pHatchingList = pHtchLst; }
 

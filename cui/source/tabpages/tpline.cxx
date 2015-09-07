@@ -85,34 +85,34 @@ SvxLineTabPage::SvxLineTabPage
                  ,"cui/ui/linetabpage.ui"
                  , rInAttrs ),
 
-    pSymbolList(NULL),
-    bNewSize(false),
-    nNumMenuGalleryItems(0),
-    nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), // unknown respectively unchanged
-    pSymbolAttr(NULL),
+    m_pSymbolList(NULL),
+    m_bNewSize(false),
+    m_nNumMenuGalleryItems(0),
+    m_nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), // unknown respectively unchanged
+    m_pSymbolAttr(NULL),
 
-    bLastWidthModified(false),
-    aSymbolLastSize(Size(0,0)),
-    bSymbols(false),
+    m_bLastWidthModified(false),
+    m_aSymbolLastSize(Size(0,0)),
+    m_bSymbols(false),
 
-    rOutAttrs           ( rInAttrs ),
-    eRP( RP_LT ),
-    bObjSelected( false ),
+    m_rOutAttrs           ( rInAttrs ),
+    m_eRP( RP_LT ),
+    m_bObjSelected( false ),
 
-    aXLStyle            ( drawing::LineStyle_DASH ),
-    aXWidth             ( 1 ),
-    aXDash              ( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ),
-    aXColor             ( OUString(), COL_LIGHTRED ),
-    aXLineAttr          ( rInAttrs.GetPool() ),
-    rXLSet              ( aXLineAttr.GetItemSet() ),
-     pnLineEndListState( 0 ),
-    pnDashListState( 0 ),
-    pnColorListState( 0 ),
-    nPageType           ( 0 ),
+    m_aXLStyle            ( drawing::LineStyle_DASH ),
+    m_aXWidth             ( 1 ),
+    m_aXDash              ( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ),
+    m_aXColor             ( OUString(), COL_LIGHTRED ),
+    m_aXLineAttr          ( rInAttrs.GetPool() ),
+    m_rXLSet              ( m_aXLineAttr.GetItemSet() ),
+     m_pnLineEndListState( 0 ),
+    m_pnDashListState( 0 ),
+    m_pnColorListState( 0 ),
+    m_nPageType           ( 0 ),
 
-    nDlgType(0),
-    pPosDashLb(NULL),
-    pPosLineEndLb(NULL)
+    m_nDlgType(0),
+    m_pPosDashLb(NULL),
+    m_pPosLineEndLb(NULL)
 {
     get(m_pLbLineStyle,"LB_LINE_STYLE");
     get(m_pBoxColor,"boxCOLOR");
@@ -179,9 +179,9 @@ SvxLineTabPage::SvxLineTabPage
     SetFieldUnit( *m_pMtrEndWidth, eFUnit );
 
     // determine PoolUnit
-    SfxItemPool* pPool = rOutAttrs.GetPool();
+    SfxItemPool* pPool = m_rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Where is the pool?" );
-    ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
+    m_ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
     m_pLbLineStyle->SetSelectHdl( LINK( this, SvxLineTabPage, ClickInvisibleHdl_Impl ) );
     m_pLbColor->SetSelectHdl( LINK( this, SvxLineTabPage, ChangePreviewHdl_Impl ) );
@@ -215,14 +215,14 @@ SvxLineTabPage::SvxLineTabPage
     m_pSymbolRatioCB->Check();
     ShowSymbolControls(false);
 
-    nActLineWidth = -1;
+    m_nActLineWidth = -1;
 }
 
 void SvxLineTabPage::ShowSymbolControls(bool bOn)
 {
     // Symbols on a line (e.g. StarCharts), symbol-enable controls
 
-    bSymbols=bOn;
+    m_bSymbols=bOn;
     m_pFlSymbol->Show(bOn);
     m_pCtlPreview->ShowSymbol(bOn);
 }
@@ -239,18 +239,18 @@ void SvxLineTabPage::dispose()
     {
         delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_GALLERY );
 
-        if(pSymbolList)
+        if(m_pSymbolList)
             delete m_pSymbolMB->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS );
         m_pSymbolMB = NULL;
     }
 
-    for ( size_t i = 0, n = aGrfBrushItems.size(); i < n; ++i )
+    for ( size_t i = 0, n = m_aGrfBrushItems.size(); i < n; ++i )
     {
-        SvxBmpItemInfo* pInfo = aGrfBrushItems[ i ];
+        SvxBmpItemInfo* pInfo = m_aGrfBrushItems[ i ];
         delete pInfo->pBrushItem;
         delete pInfo;
     }
-    aGrfBrushItems.clear();
+    m_aGrfBrushItems.clear();
 
     m_pBoxColor.clear();
     m_pLbLineStyle.clear();
@@ -287,7 +287,7 @@ void SvxLineTabPage::dispose()
 void SvxLineTabPage::Construct()
 {
     // Color chart
-    m_pLbColor->Fill( pColorList );
+    m_pLbColor->Fill( m_pColorList );
     FillListboxes();
 }
 
@@ -297,12 +297,12 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
     if(!pButton->GetPopupMenu()->GetPopupMenu( MN_GALLERY ))
     {
         // Get gallery entries
-        GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
+        GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, m_aGrfNames);
 
         PopupMenu* pPopup = new PopupMenu;
         sal_uInt32 i = 0;
-        nNumMenuGalleryItems = aGrfNames.size();
-        for(std::vector<OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
+        m_nNumMenuGalleryItems = m_aGrfNames.size();
+        for(std::vector<OUString>::iterator it = m_aGrfNames.begin(); it != m_aGrfNames.end(); ++it, ++i)
         {
             const OUString *pUIName = &(*it);
 
@@ -319,12 +319,12 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
             pInfo->pBrushItem = pBrushItem;
             pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i);
-            if ( i < aGrfBrushItems.size() )
+            if ( i < m_aGrfBrushItems.size() )
             {
-                aGrfBrushItems.insert( aGrfBrushItems.begin() + i, pInfo );
+                m_aGrfBrushItems.insert( m_aGrfBrushItems.begin() + i, pInfo );
             } else
             {
-                aGrfBrushItems.push_back( pInfo );
+                m_aGrfBrushItems.push_back( pInfo );
             }
             const Graphic* pGraphic = pBrushItem->GetGraphic();
 
@@ -352,11 +352,11 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         }
         m_pSymbolMB->GetPopupMenu()->SetPopupMenu( MN_GALLERY, pPopup );
 
-        if(aGrfNames.empty())
+        if(m_aGrfNames.empty())
             m_pSymbolMB->GetPopupMenu()->EnableItem(MN_GALLERY, false);
     }
 
-    if(!pButton->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS ) && pSymbolList)
+    if(!pButton->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS ) && m_pSymbolList)
     {
         ScopedVclPtrInstance< VirtualDevice > pVDev;
         pVDev->SetMapMode(MapMode(MAP_100TH_MM));
@@ -376,7 +376,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 
         // Generate invisible square to give all symbols a
         // bitmap size, which is independent from specific glyph
-        SdrObject *pInvisibleSquare=pSymbolList->GetObj(0);
+        SdrObject *pInvisibleSquare=m_pSymbolList->GetObj(0);
         pInvisibleSquare=pInvisibleSquare->Clone();
         pPage->NbcInsertObject(pInvisibleSquare);
         pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
@@ -384,19 +384,19 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 
         for(size_t i=0;; ++i)
         {
-            SdrObject *pObj=pSymbolList->GetObj(i);
+            SdrObject *pObj=m_pSymbolList->GetObj(i);
             if(pObj==NULL)
                 break;
             pObj=pObj->Clone();
-            aGrfNames.push_back("");
+            m_aGrfNames.push_back("");
             pPage->NbcInsertObject(pObj);
-            if(pSymbolAttr)
+            if(m_pSymbolAttr)
             {
-                pObj->SetMergedItemSet(*pSymbolAttr);
+                pObj->SetMergedItemSet(*m_pSymbolAttr);
             }
             else
             {
-                pObj->SetMergedItemSet(rOutAttrs);
+                pObj->SetMergedItemSet(m_rOutAttrs);
             }
             pView->MarkAll();
             BitmapEx aBitmapEx(pView->GetMarkedObjBitmapEx());
@@ -409,11 +409,11 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
             pInfo->pBrushItem = pBrushItem;
-            pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i + nNumMenuGalleryItems);
-            if ( (size_t)(nNumMenuGalleryItems + i) < aGrfBrushItems.size() ) {
-                aGrfBrushItems.insert( aGrfBrushItems.begin() + nNumMenuGalleryItems + i, pInfo );
+            pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i + m_nNumMenuGalleryItems);
+            if ( (size_t)(m_nNumMenuGalleryItems + i) < m_aGrfBrushItems.size() ) {
+                m_aGrfBrushItems.insert( m_aGrfBrushItems.begin() + m_nNumMenuGalleryItems + i, pInfo );
             } else {
-                aGrfBrushItems.push_back( pInfo );
+                m_aGrfBrushItems.push_back( pInfo );
             }
 
             Size aSize(aBitmapEx.GetSizePixel());
@@ -433,7 +433,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 
         m_pSymbolMB->GetPopupMenu()->SetPopupMenu( MN_SYMBOLS, pPopup );
 
-        if(aGrfNames.empty())
+        if(m_aGrfNames.empty())
             m_pSymbolMB->GetPopupMenu()->EnableItem(MN_SYMBOLS, false);
 
         }
@@ -447,35 +447,35 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
     Graphic aGraphic;
     bool bResetSize = false;
     bool bEnable = true;
-    long nPreviousSymbolType = nSymbolType;
+    long nPreviousSymbolType = m_nSymbolType;
 
     if(nItemId >= MN_GALLERY_ENTRY)
     {
-        if( (nItemId-MN_GALLERY_ENTRY) >= nNumMenuGalleryItems)
+        if( (nItemId-MN_GALLERY_ENTRY) >= m_nNumMenuGalleryItems)
         {
-            nSymbolType=nItemId-MN_GALLERY_ENTRY-nNumMenuGalleryItems; // List's index
+            m_nSymbolType=nItemId-MN_GALLERY_ENTRY-m_nNumMenuGalleryItems; // List's index
         }
         else
         {
-            nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
+            m_nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
             bResetSize = true;
         }
-        SvxBmpItemInfo* pInfo = aGrfBrushItems[ nItemId - MN_GALLERY_ENTRY ];
+        SvxBmpItemInfo* pInfo = m_aGrfBrushItems[ nItemId - MN_GALLERY_ENTRY ];
         pGraphic = pInfo->pBrushItem->GetGraphic();
     }
     else switch(nItemId)
     {
         case MN_SYMBOLS_AUTO:
         {
-            pGraphic=&aAutoSymbolGraphic;
-            aAutoSymbolGraphic.SetPrefSize( Size(253,253) );
-            nSymbolType=SVX_SYMBOLTYPE_AUTO;
+            pGraphic=&m_aAutoSymbolGraphic;
+            m_aAutoSymbolGraphic.SetPrefSize( Size(253,253) );
+            m_nSymbolType=SVX_SYMBOLTYPE_AUTO;
         }
         break;
 
         case MN_SYMBOLS_NONE:
         {
-            nSymbolType=SVX_SYMBOLTYPE_NONE;
+            m_nSymbolType=SVX_SYMBOLTYPE_NONE;
             pGraphic=NULL;
             bEnable = false;
         }
@@ -490,7 +490,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
                 // Remember selected filters
                 if( !aGrfDlg.GetGraphic(aGraphic) )
                 {
-                    nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
+                    m_nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
                     pGraphic = &aGraphic;
                     bResetSize = true;
                 }
@@ -504,32 +504,32 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
     if(pGraphic)
     {
         Size aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
-        aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)ePoolUnit);
-        aSymbolGraphic=*pGraphic;
+        aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)m_ePoolUnit);
+        m_aSymbolGraphic=*pGraphic;
         if( bResetSize )
         {
-            aSymbolSize=aSize;
+            m_aSymbolSize=aSize;
         }
         else if( nPreviousSymbolType == SVX_SYMBOLTYPE_BRUSHITEM )
         {   //#i31097# Data Point Symbol size changes when a different symbol is chosen(maoyg)
-            if( aSymbolSize.Width() != aSymbolSize.Height() )
+            if( m_aSymbolSize.Width() != m_aSymbolSize.Height() )
             {
-                aSize.setWidth( (long)( aSymbolSize.Width() + aSymbolSize.Height() )/2 );
-                aSize.setHeight( (long)( aSymbolSize.Width() + aSymbolSize.Height() )/2 );
-                aSymbolSize = aSize;
+                aSize.setWidth( (long)( m_aSymbolSize.Width() + m_aSymbolSize.Height() )/2 );
+                aSize.setHeight( (long)( m_aSymbolSize.Width() + m_aSymbolSize.Height() )/2 );
+                m_aSymbolSize = aSize;
             }
         }
-        m_pCtlPreview->SetSymbol(&aSymbolGraphic,aSymbolSize);
+        m_pCtlPreview->SetSymbol(&m_aSymbolGraphic,m_aSymbolSize);
     }
     else
     {
-        aSymbolGraphic=Graphic();
-        m_pCtlPreview->SetSymbol(NULL,aSymbolSize);
+        m_aSymbolGraphic=Graphic();
+        m_pCtlPreview->SetSymbol(NULL,m_aSymbolSize);
         bEnable = false;
     }
-    aSymbolLastSize=aSymbolSize;
-    SetMetricValue(*m_pSymbolWidthMF,  aSymbolSize.Width(), ePoolUnit);
-    SetMetricValue(*m_pSymbolHeightMF, aSymbolSize.Height(), ePoolUnit);
+    m_aSymbolLastSize=m_aSymbolSize;
+    SetMetricValue(*m_pSymbolWidthMF,  m_aSymbolSize.Width(), m_ePoolUnit);
+    SetMetricValue(*m_pSymbolHeightMF, m_aSymbolSize.Height(), m_ePoolUnit);
 
     m_pGridIconSize->Enable(bEnable);
     m_pCtlPreview->Invalidate();
@@ -540,7 +540,7 @@ void SvxLineTabPage::FillListboxes()
     // Line styles
     sal_Int32 nOldSelect = m_pLbLineStyle->GetSelectEntryPos();
     // aLbLineStyle.FillStyles();
-    m_pLbLineStyle->Fill( pDashList );
+    m_pLbLineStyle->Fill( m_pDashList );
     m_pLbLineStyle->SelectEntryPos( nOldSelect );
 
     // Line end style
@@ -548,12 +548,12 @@ void SvxLineTabPage::FillListboxes()
     nOldSelect = m_pLbStartStyle->GetSelectEntryPos();
     m_pLbStartStyle->Clear();
     m_pLbStartStyle->InsertEntry( sNone );
-    m_pLbStartStyle->Fill( pLineEndList );
+    m_pLbStartStyle->Fill( m_pLineEndList );
     m_pLbStartStyle->SelectEntryPos( nOldSelect );
     nOldSelect = m_pLbEndStyle->GetSelectEntryPos();
     m_pLbEndStyle->Clear();
     m_pLbEndStyle->InsertEntry( sNone );
-    m_pLbEndStyle->Fill( pLineEndList, false );
+    m_pLbEndStyle->Fill( m_pLineEndList, false );
     m_pLbEndStyle->SelectEntryPos( nOldSelect );
 }
 
@@ -564,19 +564,19 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,CntUInt16Item,SID_PAGE_TYPE,false);
     if (pPageTypeItem)
         SetPageType(pPageTypeItem->GetValue());
-    if( nDlgType == 0 && pDashList.is() )
+    if( m_nDlgType == 0 && m_pDashList.is() )
     {
         sal_Int32 nPos;
         sal_Int32 nCount;
 
         // Dash list
-        if( ( *pnDashListState & ChangeType::MODIFIED ) ||
-            ( *pnDashListState & ChangeType::CHANGED ) )
+        if( ( *m_pnDashListState & ChangeType::MODIFIED ) ||
+            ( *m_pnDashListState & ChangeType::CHANGED ) )
         {
-            if( *pnDashListState & ChangeType::CHANGED )
-                pDashList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewDashList();
+            if( *m_pnDashListState & ChangeType::CHANGED )
+                m_pDashList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewDashList();
 
-            *pnDashListState = ChangeType::NONE;
+            *m_pnDashListState = ChangeType::NONE;
 
             // Style list
             nPos = m_pLbLineStyle->GetSelectEntryPos();
@@ -584,7 +584,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             m_pLbLineStyle->Clear();
             m_pLbLineStyle->InsertEntry( SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
             m_pLbLineStyle->InsertEntry( SVX_RESSTR( RID_SVXSTR_SOLID ) );
-            m_pLbLineStyle->Fill( pDashList );
+            m_pLbLineStyle->Fill( m_pDashList );
             nCount = m_pLbLineStyle->GetEntryCount();
 
             if ( nCount == 0 )
@@ -596,24 +596,24 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             // SelectStyleHdl_Impl( this );
         }
 
-        INetURLObject   aDashURL( pDashList->GetPath() );
+        INetURLObject   aDashURL( m_pDashList->GetPath() );
 
-        aDashURL.Append( pDashList->GetName() );
+        aDashURL.Append( m_pDashList->GetName() );
         DBG_ASSERT( aDashURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
         // LineEnd list
-        if( ( *pnLineEndListState & ChangeType::MODIFIED ) || ( *pnLineEndListState & ChangeType::CHANGED ) )
+        if( ( *m_pnLineEndListState & ChangeType::MODIFIED ) || ( *m_pnLineEndListState & ChangeType::CHANGED ) )
         {
-            if( *pnLineEndListState & ChangeType::CHANGED )
-                pLineEndList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewLineEndList();
+            if( *m_pnLineEndListState & ChangeType::CHANGED )
+                m_pLineEndList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewLineEndList();
 
-            *pnLineEndListState = ChangeType::NONE;
+            *m_pnLineEndListState = ChangeType::NONE;
 
             nPos = m_pLbLineStyle->GetSelectEntryPos();
             OUString sNone( SVX_RES( RID_SVXSTR_NONE ) );
             m_pLbStartStyle->Clear();
             m_pLbStartStyle->InsertEntry( sNone );
 
-            m_pLbStartStyle->Fill( pLineEndList );
+            m_pLbStartStyle->Fill( m_pLineEndList );
             nCount = m_pLbStartStyle->GetEntryCount();
             if( nCount == 0 )
                 ; // This case should never occur
@@ -625,7 +625,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             m_pLbEndStyle->Clear();
             m_pLbEndStyle->InsertEntry( sNone );
 
-            m_pLbEndStyle->Fill( pLineEndList, false );
+            m_pLbEndStyle->Fill( m_pLineEndList, false );
             nCount = m_pLbEndStyle->GetEntryCount();
 
             if( nCount == 0 )
@@ -635,35 +635,35 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             else
                 m_pLbEndStyle->SelectEntryPos( nPos );
         }
-        INetURLObject aLineURL( pLineEndList->GetPath() );
+        INetURLObject aLineURL( m_pLineEndList->GetPath() );
 
-        aLineURL.Append( pLineEndList->GetName() );
+        aLineURL.Append( m_pLineEndList->GetName() );
         DBG_ASSERT( aLineURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
         // Evaluate if another TabPage set another fill type
         if( m_pLbLineStyle->GetSelectEntryPos() != 0 )
         {
-            if( nPageType == 2 ) // 1
+            if( m_nPageType == 2 ) // 1
             {
-                m_pLbLineStyle->SelectEntryPos( *pPosDashLb + 2 ); // +2 due to SOLID and INVLISIBLE
+                m_pLbLineStyle->SelectEntryPos( *m_pPosDashLb + 2 ); // +2 due to SOLID and INVLISIBLE
                 ChangePreviewHdl_Impl( this );
             }
-            if( nPageType == 3 )
+            if( m_nPageType == 3 )
             {
-                m_pLbStartStyle->SelectEntryPos( *pPosLineEndLb + 1 );// +1 due to SOLID
-                m_pLbEndStyle->SelectEntryPos( *pPosLineEndLb + 1 );// +1 due to SOLID
+                m_pLbStartStyle->SelectEntryPos( *m_pPosLineEndLb + 1 );// +1 due to SOLID
+                m_pLbEndStyle->SelectEntryPos( *m_pPosLineEndLb + 1 );// +1 due to SOLID
                 ChangePreviewHdl_Impl( this );
             }
         }
 
             // ColorList
-            if( *pnColorListState != ChangeType::NONE )
+            if( *m_pnColorListState != ChangeType::NONE )
             {
-                if( *pnColorListState & ChangeType::CHANGED )
-                    pColorList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewColorList();
+                if( *m_pnColorListState & ChangeType::CHANGED )
+                    m_pColorList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewColorList();
                 // aLbColor
                 sal_Int32 nColorPos = m_pLbColor->GetSelectEntryPos();
                 m_pLbColor->Clear();
-                m_pLbColor->Fill( pColorList );
+                m_pLbColor->Fill( m_pColorList );
                 nCount = m_pLbColor->GetEntryCount();
                 if( nCount == 0 )
                     ; // This case should never occur
@@ -675,12 +675,12 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
                 ChangePreviewHdl_Impl( this );
             }
 
-        nPageType = 0;
+        m_nPageType = 0;
     }
     // Page does not yet exist in the ctor, that's why we do it here!
 
-    else if ( nDlgType == 1100 ||
-              nDlgType == 1101 )
+    else if ( m_nDlgType == 1100 ||
+              m_nDlgType == 1101 )
     {
         m_pFlLineEnds->Hide();
         // #116827#
@@ -692,14 +692,14 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
 SfxTabPage::sfxpg SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if( nDlgType == 0 ) // Line dialog
+    if( m_nDlgType == 0 ) // Line dialog
     {
-        nPageType = 1; // possibly for extensions
-        *pPosDashLb = m_pLbLineStyle->GetSelectEntryPos() - 2;// First entry SOLID!!!
+        m_nPageType = 1; // possibly for extensions
+        *m_pPosDashLb = m_pLbLineStyle->GetSelectEntryPos() - 2;// First entry SOLID!!!
         sal_Int32 nPos = m_pLbStartStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
             nPos--;
-        *pPosLineEndLb = nPos;
+        *m_pPosLineEndLb = nPos;
     }
 
     if( _pSet )
@@ -717,7 +717,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     bool    bModified = false;
 
     // To prevent modifications to the list, we do not set other page's items.
-    if( nDlgType != 0 || nPageType != 2 )
+    if( m_nDlgType != 0 || m_nPageType != 2 )
     {
         nPos = m_pLbLineStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
@@ -734,10 +734,10 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
                 pStyleItem.reset(new XLineStyleItem( drawing::LineStyle_DASH ));
 
                 // For added security
-                if( pDashList->Count() > (long) ( nPos - 2 ) )
+                if( m_pDashList->Count() > (long) ( nPos - 2 ) )
                 {
                     XLineDashItem aDashItem( m_pLbLineStyle->GetSelectEntry(),
-                                        pDashList->GetDash( nPos - 2 )->GetDash() );
+                                        m_pDashList->GetDash( nPos - 2 )->GetDash() );
                     pOld = GetOldItem( *rAttrs, XATTR_LINEDASH );
                     if ( !pOld || !( *static_cast<const XLineDashItem*>(pOld) == aDashItem ) )
                     {
@@ -758,7 +758,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     // GetSavedValue() returns OUString!
     if( m_pMtrLineWidth->IsValueChangedFromSaved() )
     {
-        XLineWidthItem aItem( GetCoreValue( *m_pMtrLineWidth, ePoolUnit ) );
+        XLineWidthItem aItem( GetCoreValue( *m_pMtrLineWidth, m_ePoolUnit ) );
         pOld = GetOldItem( *rAttrs, XATTR_LINEWIDTH );
         if ( !pOld || !( *static_cast<const XLineWidthItem*>(pOld) == aItem ) )
         {
@@ -769,7 +769,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     // Width line start
     if( m_pMtrStartWidth->IsValueChangedFromSaved() )
     {
-        XLineStartWidthItem aItem( GetCoreValue( *m_pMtrStartWidth, ePoolUnit ) );
+        XLineStartWidthItem aItem( GetCoreValue( *m_pMtrStartWidth, m_ePoolUnit ) );
         pOld = GetOldItem( *rAttrs, XATTR_LINESTARTWIDTH );
         if ( !pOld || !( *static_cast<const XLineStartWidthItem*>(pOld) == aItem ) )
         {
@@ -780,7 +780,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     // Width line end
     if( m_pMtrEndWidth->IsValueChangedFromSaved() )
     {
-        XLineEndWidthItem aItem( GetCoreValue( *m_pMtrEndWidth, ePoolUnit ) );
+        XLineEndWidthItem aItem( GetCoreValue( *m_pMtrEndWidth, m_ePoolUnit ) );
         pOld = GetOldItem( *rAttrs, XATTR_LINEENDWIDTH );
         if ( !pOld || !( *static_cast<const XLineEndWidthItem*>(pOld) == aItem ) )
         {
@@ -801,7 +801,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
     }
 
-    if( nDlgType != 0 || nPageType != 3 )
+    if( m_nDlgType != 0 || m_nPageType != 3 )
     {
         // Line start
         nPos = m_pLbStartStyle->GetSelectEntryPos();
@@ -810,8 +810,8 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             boost::scoped_ptr<XLineStartItem> pItem;
             if( nPos == 0 )
                 pItem.reset(new XLineStartItem());
-            else if( pLineEndList->Count() > (long) ( nPos - 1 ) )
-                pItem.reset(new XLineStartItem( m_pLbStartStyle->GetSelectEntry(), pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
+            else if( m_pLineEndList->Count() > (long) ( nPos - 1 ) )
+                pItem.reset(new XLineStartItem( m_pLbStartStyle->GetSelectEntry(), m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
             pOld = GetOldItem( *rAttrs, XATTR_LINESTART );
             if( pItem && ( !pOld || !( *static_cast<const XLineEndItem*>(pOld) == *pItem ) ) )
             {
@@ -826,8 +826,8 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             boost::scoped_ptr<XLineEndItem> pItem;
             if( nPos == 0 )
                 pItem.reset(new XLineEndItem());
-            else if( pLineEndList->Count() > (long) ( nPos - 1 ) )
-                pItem.reset(new XLineEndItem( m_pLbEndStyle->GetSelectEntry(), pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
+            else if( m_pLineEndList->Count() > (long) ( nPos - 1 ) )
+                pItem.reset(new XLineEndItem( m_pLbEndStyle->GetSelectEntry(), m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ));
             pOld = GetOldItem( *rAttrs, XATTR_LINEEND );
             if( pItem &&
                 ( !pOld || !( *static_cast<const XLineEndItem*>(pOld) == *pItem ) ) )
@@ -954,22 +954,22 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
     }
 
-    if(nSymbolType!=SVX_SYMBOLTYPE_UNKNOWN || bNewSize)
+    if(m_nSymbolType!=SVX_SYMBOLTYPE_UNKNOWN || m_bNewSize)
     {
         // Was set by selection or the size is different
-        SvxSizeItem  aSItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),aSymbolSize);
+        SvxSizeItem  aSItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),m_aSymbolSize);
         const SfxPoolItem* pSOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE) );
-        bNewSize  = pSOld ? *static_cast<const SvxSizeItem *>(pSOld) != aSItem : bNewSize ;
-        if(bNewSize)
+        m_bNewSize  = pSOld ? *static_cast<const SvxSizeItem *>(pSOld) != aSItem : m_bNewSize ;
+        if(m_bNewSize)
         {
             rAttrs->Put(aSItem);
             bModified=true;
         }
 
-        SfxInt32Item aTItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),nSymbolType);
+        SfxInt32Item aTItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),m_nSymbolType);
         const SfxPoolItem* pTOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE) );
         bool bNewType = pTOld == NULL || *static_cast<const SfxInt32Item*>(pTOld) != aTItem;
-        if(bNewType && nSymbolType==SVX_SYMBOLTYPE_UNKNOWN)
+        if(bNewType && m_nSymbolType==SVX_SYMBOLTYPE_UNKNOWN)
             bNewType=false; // a small fix, type wasn't set -> don't create a type item after all!
         if(bNewType)
         {
@@ -977,9 +977,9 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             bModified=true;
         }
 
-        if(nSymbolType!=SVX_SYMBOLTYPE_NONE)
+        if(m_nSymbolType!=SVX_SYMBOLTYPE_NONE)
         {
-            SvxBrushItem aBItem(aSymbolGraphic,GPOS_MM,rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH));
+            SvxBrushItem aBItem(m_aSymbolGraphic,GPOS_MM,rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH));
             const SfxPoolItem* pBOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH) );
             bool bNewBrush =
                 pBOld == NULL || *static_cast<const SvxBrushItem*>(pBOld) != aBItem;
@@ -990,7 +990,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             }
         }
     }
-    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
+    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,m_nPageType));
     return bModified;
 }
 
@@ -1002,21 +1002,21 @@ bool SvxLineTabPage::FillXLSet_Impl()
 
     if( m_pLbLineStyle->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
     {
-        rXLSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
+        m_rXLSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     }
     else if( m_pLbLineStyle->IsEntryPosSelected( 0 ) )
-        rXLSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
+        m_rXLSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     else if( m_pLbLineStyle->IsEntryPosSelected( 1 ) )
-        rXLSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
+        m_rXLSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
     else
     {
-        rXLSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
+        m_rXLSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
 
         nPos = m_pLbLineStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            rXLSet.Put( XLineDashItem( m_pLbLineStyle->GetSelectEntry(),
-                            pDashList->GetDash( nPos - 2 )->GetDash() ) );
+            m_rXLSet.Put( XLineDashItem( m_pLbLineStyle->GetSelectEntry(),
+                            m_pDashList->GetDash( nPos - 2 )->GetDash() ) );
         }
     }
 
@@ -1024,19 +1024,19 @@ bool SvxLineTabPage::FillXLSet_Impl()
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if( nPos == 0 )
-            rXLSet.Put( XLineStartItem() );
+            m_rXLSet.Put( XLineStartItem() );
         else
-            rXLSet.Put( XLineStartItem( m_pLbStartStyle->GetSelectEntry(),
-                        pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
+            m_rXLSet.Put( XLineStartItem( m_pLbStartStyle->GetSelectEntry(),
+                        m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
     nPos = m_pLbEndStyle->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         if( nPos == 0 )
-            rXLSet.Put( XLineEndItem() );
+            m_rXLSet.Put( XLineEndItem() );
         else
-            rXLSet.Put( XLineEndItem( m_pLbEndStyle->GetSelectEntry(),
-                        pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
+            m_rXLSet.Put( XLineEndItem( m_pLbEndStyle->GetSelectEntry(),
+                        m_pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() ) );
     }
 
     // #116827#
@@ -1047,22 +1047,22 @@ bool SvxLineTabPage::FillXLSet_Impl()
         {
             case 0: // Rounded, default
             {
-                rXLSet.Put(XLineJointItem(css::drawing::LineJoint_ROUND));
+                m_rXLSet.Put(XLineJointItem(css::drawing::LineJoint_ROUND));
                 break;
             }
             case 1: // - none -
             {
-                rXLSet.Put(XLineJointItem(css::drawing::LineJoint_NONE));
+                m_rXLSet.Put(XLineJointItem(css::drawing::LineJoint_NONE));
                 break;
             }
             case 2: // Miter
             {
-                rXLSet.Put(XLineJointItem(css::drawing::LineJoint_MITER));
+                m_rXLSet.Put(XLineJointItem(css::drawing::LineJoint_MITER));
                 break;
             }
             case 3: // Bevel
             {
-                rXLSet.Put(XLineJointItem(css::drawing::LineJoint_BEVEL));
+                m_rXLSet.Put(XLineJointItem(css::drawing::LineJoint_BEVEL));
                 break;
             }
         }
@@ -1076,45 +1076,45 @@ bool SvxLineTabPage::FillXLSet_Impl()
         {
             case 0: // Butt (=Flat), default
             {
-                rXLSet.Put(XLineCapItem(css::drawing::LineCap_BUTT));
+                m_rXLSet.Put(XLineCapItem(css::drawing::LineCap_BUTT));
                 break;
             }
             case 1: // Round
             {
-                rXLSet.Put(XLineCapItem(css::drawing::LineCap_ROUND));
+                m_rXLSet.Put(XLineCapItem(css::drawing::LineCap_ROUND));
                 break;
             }
             case 2: // Square
             {
-                rXLSet.Put(XLineCapItem(css::drawing::LineCap_SQUARE));
+                m_rXLSet.Put(XLineCapItem(css::drawing::LineCap_SQUARE));
                 break;
             }
         }
     }
 
-    rXLSet.Put( XLineStartWidthItem( GetCoreValue( *m_pMtrStartWidth, ePoolUnit ) ) );
-    rXLSet.Put( XLineEndWidthItem( GetCoreValue( *m_pMtrEndWidth, ePoolUnit ) ) );
+    m_rXLSet.Put( XLineStartWidthItem( GetCoreValue( *m_pMtrStartWidth, m_ePoolUnit ) ) );
+    m_rXLSet.Put( XLineEndWidthItem( GetCoreValue( *m_pMtrEndWidth, m_ePoolUnit ) ) );
 
-    rXLSet.Put( XLineWidthItem( GetCoreValue( *m_pMtrLineWidth, ePoolUnit ) ) );
-    rXLSet.Put( XLineColorItem( m_pLbColor->GetSelectEntry(), m_pLbColor->GetSelectEntryColor() ) );
+    m_rXLSet.Put( XLineWidthItem( GetCoreValue( *m_pMtrLineWidth, m_ePoolUnit ) ) );
+    m_rXLSet.Put( XLineColorItem( m_pLbColor->GetSelectEntry(), m_pLbColor->GetSelectEntryColor() ) );
 
     // Centered line end
     if( m_pTsbCenterStart->GetState() == TRISTATE_TRUE )
-        rXLSet.Put( XLineStartCenterItem( true ) );
+        m_rXLSet.Put( XLineStartCenterItem( true ) );
     else if( m_pTsbCenterStart->GetState() == TRISTATE_FALSE )
-        rXLSet.Put( XLineStartCenterItem( false ) );
+        m_rXLSet.Put( XLineStartCenterItem( false ) );
 
     if( m_pTsbCenterEnd->GetState() == TRISTATE_TRUE )
-        rXLSet.Put( XLineEndCenterItem( true ) );
+        m_rXLSet.Put( XLineEndCenterItem( true ) );
     else if( m_pTsbCenterEnd->GetState() == TRISTATE_FALSE )
-        rXLSet.Put( XLineEndCenterItem( false ) );
+        m_rXLSet.Put( XLineEndCenterItem( false ) );
 
     // Transparency
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
-    rXLSet.Put( XLineTransparenceItem( nVal ) );
+    m_rXLSet.Put( XLineTransparenceItem( nVal ) );
 
     // #116827#
-    m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
+    m_pCtlPreview->SetLineAttributes(m_aXLineAttr.GetItemSet());
 
     return true;
 }
@@ -1139,8 +1139,8 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
     if(nSymType == SVX_SYMBOLTYPE_AUTO)
     {
-        aSymbolGraphic=aAutoSymbolGraphic;
-        aSymbolSize=aSymbolLastSize=aAutoSymbolGraphic.GetPrefSize();
+        m_aSymbolGraphic=m_aAutoSymbolGraphic;
+        m_aSymbolSize=m_aSymbolLastSize=m_aAutoSymbolGraphic.GetPrefSize();
         bPrevSym=true;
     }
     else if(nSymType == SVX_SYMBOLTYPE_NONE)
@@ -1165,29 +1165,29 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         pView->ShowSdrPage(pPage);
         SdrObject *pObj=NULL;
         size_t nSymTmp = static_cast<size_t>(nSymType);
-        if(pSymbolList)
+        if(m_pSymbolList)
         {
-            if(pSymbolList->GetObjCount())
+            if(m_pSymbolList->GetObjCount())
             {
-                nSymTmp %= pSymbolList->GetObjCount(); // Treat list as cyclic!
-                pObj=pSymbolList->GetObj(nSymTmp);
+                nSymTmp %= m_pSymbolList->GetObjCount(); // Treat list as cyclic!
+                pObj=m_pSymbolList->GetObj(nSymTmp);
                 if(pObj)
                 {
                     pObj=pObj->Clone();
-                    if(pSymbolAttr)
+                    if(m_pSymbolAttr)
                     {
-                        pObj->SetMergedItemSet(*pSymbolAttr);
+                        pObj->SetMergedItemSet(*m_pSymbolAttr);
                     }
                     else
                     {
-                        pObj->SetMergedItemSet(rOutAttrs);
+                        pObj->SetMergedItemSet(m_rOutAttrs);
                     }
 
                     pPage->NbcInsertObject(pObj);
 
                     // Generate invisible square to give all symbol types a
                     // bitmap size, which is independent from specific glyph
-                    SdrObject *pInvisibleSquare=pSymbolList->GetObj(0);
+                    SdrObject *pInvisibleSquare=m_pSymbolList->GetObj(0);
                     pInvisibleSquare=pInvisibleSquare->Clone();
                     pPage->NbcInsertObject(pInvisibleSquare);
                     pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
@@ -1196,10 +1196,10 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
                     pView->MarkAll();
                     GDIMetaFile aMeta(pView->GetMarkedObjMetaFile());
 
-                    aSymbolGraphic=Graphic(aMeta);
-                    aSymbolSize=pObj->GetSnapRect().GetSize();
-                    aSymbolGraphic.SetPrefSize(pInvisibleSquare->GetSnapRect().GetSize());
-                    aSymbolGraphic.SetPrefMapMode(MAP_100TH_MM);
+                    m_aSymbolGraphic=Graphic(aMeta);
+                    m_aSymbolSize=pObj->GetSnapRect().GetSize();
+                    m_aSymbolGraphic.SetPrefSize(pInvisibleSquare->GetSnapRect().GetSize());
+                    m_aSymbolGraphic.SetPrefMapMode(MAP_100TH_MM);
                     bPrevSym=true;
                     bEnable=true;
                     bIgnoreGraphic=true;
@@ -1221,11 +1221,11 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         {
             if(!bIgnoreGraphic)
             {
-                aSymbolGraphic=*pGraphic;
+                m_aSymbolGraphic=*pGraphic;
             }
             if(!bIgnoreSize)
             {
-                aSymbolSize=OutputDevice::LogicToLogic( pGraphic->GetPrefSize(),
+                m_aSymbolSize=OutputDevice::LogicToLogic( pGraphic->GetPrefSize(),
                                                         pGraphic->GetPrefMapMode(),
                                                         MAP_100TH_MM );
             }
@@ -1235,17 +1235,17 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
     if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),true,&pPoolItem) == SfxItemState::SET)
     {
-        aSymbolSize = static_cast<const SvxSizeItem *>(pPoolItem)->GetSize();
+        m_aSymbolSize = static_cast<const SvxSizeItem *>(pPoolItem)->GetSize();
     }
 
     m_pGridIconSize->Enable(bEnable);
 
     if(bPrevSym)
     {
-        SetMetricValue(*m_pSymbolWidthMF,  aSymbolSize.Width(), ePoolUnit);
-        SetMetricValue(*m_pSymbolHeightMF, aSymbolSize.Height(),ePoolUnit);
-        m_pCtlPreview->SetSymbol(&aSymbolGraphic,aSymbolSize);
-        aSymbolLastSize=aSymbolSize;
+        SetMetricValue(*m_pSymbolWidthMF,  m_aSymbolSize.Width(), m_ePoolUnit);
+        SetMetricValue(*m_pSymbolHeightMF, m_aSymbolSize.Height(),m_ePoolUnit);
+        m_pCtlPreview->SetSymbol(&m_aSymbolGraphic,m_aSymbolSize);
+        m_aSymbolLastSize=m_aSymbolSize;
     }
 
     if( rAttrs->GetItemState( XATTR_LINESTYLE ) != SfxItemState::DONTCARE )
@@ -1278,7 +1278,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     // Line strength
     if( rAttrs->GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
     {
-        SetMetricValue( *m_pMtrLineWidth, static_cast<const XLineWidthItem&>( rAttrs->Get( XATTR_LINEWIDTH ) ).GetValue(), ePoolUnit );
+        SetMetricValue( *m_pMtrLineWidth, static_cast<const XLineWidthItem&>( rAttrs->Get( XATTR_LINEWIDTH ) ).GetValue(), m_ePoolUnit );
     }
     else
         m_pMtrLineWidth->SetText( "" );
@@ -1298,7 +1298,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Line start
-    if( bObjSelected && rAttrs->GetItemState( XATTR_LINESTART ) == SfxItemState::DEFAULT )
+    if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINESTART ) == SfxItemState::DEFAULT )
     {
         m_pLbStartStyle->Disable();
     }
@@ -1308,9 +1308,9 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         bool bSelected(false);
         const basegfx::B2DPolyPolygon& rItemPolygon = static_cast<const XLineStartItem&>(rAttrs->Get(XATTR_LINESTART)).GetLineStartValue();
 
-        for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
+        for(sal_Int32 a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
         {
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd(a);
+            XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
             const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
 
             if(rItemPolygon == rEntryPolygon)
@@ -1330,7 +1330,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Line end
-    if( bObjSelected && rAttrs->GetItemState( XATTR_LINEEND ) == SfxItemState::DEFAULT )
+    if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINEEND ) == SfxItemState::DEFAULT )
     {
         m_pLbEndStyle->Disable();
     }
@@ -1340,9 +1340,9 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         bool bSelected(false);
         const basegfx::B2DPolyPolygon& rItemPolygon = static_cast<const XLineEndItem&>(rAttrs->Get(XATTR_LINEEND)).GetLineEndValue();
 
-        for(sal_Int32 a(0);!bSelected &&  a < pLineEndList->Count(); a++)
+        for(sal_Int32 a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
         {
-            XLineEndEntry* pEntry = pLineEndList->GetLineEnd(a);
+            XLineEndEntry* pEntry = m_pLineEndList->GetLineEnd(a);
             const basegfx::B2DPolyPolygon& rEntryPolygon = pEntry->GetLineEnd();
 
             if(rItemPolygon == rEntryPolygon)
@@ -1362,7 +1362,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Line start strength
-    if( bObjSelected &&  rAttrs->GetItemState( XATTR_LINESTARTWIDTH ) == SfxItemState::DEFAULT )
+    if( m_bObjSelected &&  rAttrs->GetItemState( XATTR_LINESTARTWIDTH ) == SfxItemState::DEFAULT )
     {
         m_pMtrStartWidth->Disable();
     }
@@ -1370,13 +1370,13 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     {
         SetMetricValue( *m_pMtrStartWidth,
                         static_cast<const XLineStartWidthItem&>( rAttrs->Get( XATTR_LINESTARTWIDTH ) ).GetValue(),
-                        ePoolUnit );
+                        m_ePoolUnit );
     }
     else
         m_pMtrStartWidth->SetText( "" );
 
     // Line end strength
-    if( bObjSelected && rAttrs->GetItemState( XATTR_LINEENDWIDTH ) == SfxItemState::DEFAULT )
+    if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINEENDWIDTH ) == SfxItemState::DEFAULT )
     {
         m_pMtrEndWidth->Disable();
     }
@@ -1384,13 +1384,13 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     {
         SetMetricValue( *m_pMtrEndWidth,
                         static_cast<const XLineEndWidthItem&>( rAttrs->Get( XATTR_LINEENDWIDTH ) ).GetValue(),
-                        ePoolUnit );
+                        m_ePoolUnit );
     }
     else
         m_pMtrEndWidth->SetText( "" );
 
     // Centered line end (start)
-    if( bObjSelected && rAttrs->GetItemState( XATTR_LINESTARTCENTER ) == SfxItemState::DEFAULT )
+    if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINESTARTCENTER ) == SfxItemState::DEFAULT )
     {
         m_pTsbCenterStart->Disable();
     }
@@ -1409,7 +1409,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Centered line end (end)
-    if( bObjSelected && rAttrs->GetItemState( XATTR_LINEENDCENTER ) == SfxItemState::DEFAULT )
+    if( m_bObjSelected && rAttrs->GetItemState( XATTR_LINEENDCENTER ) == SfxItemState::DEFAULT )
     {
         m_pTsbCenterEnd->Disable();
     }
@@ -1454,7 +1454,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     m_pCbxSynchronize->Check( aStr.toInt32() != 0 );
 
     // #116827#
-    if(bObjSelected && SfxItemState::DEFAULT == rAttrs->GetItemState(XATTR_LINEJOINT))
+    if(m_bObjSelected && SfxItemState::DEFAULT == rAttrs->GetItemState(XATTR_LINEJOINT))
     {
 //         maFTEdgeStyle.Disable();
         m_pLBEdgeStyle->Disable();
@@ -1479,7 +1479,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // fdo#43209
-    if(bObjSelected && SfxItemState::DEFAULT == rAttrs->GetItemState(XATTR_LINECAP))
+    if(m_bObjSelected && SfxItemState::DEFAULT == rAttrs->GetItemState(XATTR_LINECAP))
     {
 //         maFTCapStyle.Disable();
         m_pLBCapStyle->Disable();
@@ -1538,35 +1538,35 @@ IMPL_LINK( SvxLineTabPage, ChangePreviewHdl_Impl, void *, pCntrl )
     if(pCntrl == m_pMtrLineWidth)
     {
         // Line width and start end width
-        sal_Int32 nNewLineWidth = GetCoreValue( *m_pMtrLineWidth, ePoolUnit );
-        if(nActLineWidth == -1)
+        sal_Int32 nNewLineWidth = GetCoreValue( *m_pMtrLineWidth, m_ePoolUnit );
+        if(m_nActLineWidth == -1)
         {
             // Don't initialize yet, get the start value
-            const SfxPoolItem* pOld = GetOldItem( rXLSet, XATTR_LINEWIDTH );
+            const SfxPoolItem* pOld = GetOldItem( m_rXLSet, XATTR_LINEWIDTH );
             sal_Int32 nStartLineWidth = 0;
             if(pOld)
                 nStartLineWidth = static_cast<const XLineWidthItem *>(pOld)->GetValue();
-            nActLineWidth = nStartLineWidth;
+            m_nActLineWidth = nStartLineWidth;
         }
 
-        if(nActLineWidth != nNewLineWidth)
+        if(m_nActLineWidth != nNewLineWidth)
         {
             // Adapt start/end width
-            sal_Int32 nValAct = GetCoreValue( *m_pMtrStartWidth, ePoolUnit );
-            sal_Int32 nValNew = nValAct + (((nNewLineWidth - nActLineWidth) * 15) / 10);
+            sal_Int32 nValAct = GetCoreValue( *m_pMtrStartWidth, m_ePoolUnit );
+            sal_Int32 nValNew = nValAct + (((nNewLineWidth - m_nActLineWidth) * 15) / 10);
             if(nValNew < 0)
                 nValNew = 0;
-            SetMetricValue( *m_pMtrStartWidth, nValNew, ePoolUnit );
+            SetMetricValue( *m_pMtrStartWidth, nValNew, m_ePoolUnit );
 
-            nValAct = GetCoreValue( *m_pMtrEndWidth, ePoolUnit );
-            nValNew = nValAct + (((nNewLineWidth - nActLineWidth) * 15) / 10);
+            nValAct = GetCoreValue( *m_pMtrEndWidth, m_ePoolUnit );
+            nValNew = nValAct + (((nNewLineWidth - m_nActLineWidth) * 15) / 10);
             if(nValNew < 0)
                 nValNew = 0;
-            SetMetricValue( *m_pMtrEndWidth, nValNew, ePoolUnit );
+            SetMetricValue( *m_pMtrEndWidth, nValNew, m_ePoolUnit );
         }
 
         // Remember current value
-        nActLineWidth = nNewLineWidth;
+        m_nActLineWidth = nNewLineWidth;
     }
 
     FillXLSet_Impl();
@@ -1642,7 +1642,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
 {
     if( m_pLbLineStyle->GetSelectEntryPos() == 0 ) // invisible
     {
-        if(!bSymbols)
+        if(!m_bSymbols)
             m_pBoxColor->Disable();
 
         m_pBoxWidth->Disable();
@@ -1704,7 +1704,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl)
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
     XLineTransparenceItem aItem( nVal );
 
-    rXLSet.Put( XLineTransparenceItem( aItem ) );
+    m_rXLSet.Put( XLineTransparenceItem( aItem ) );
 
     // #116827#
     FillXLSet_Impl();
@@ -1718,7 +1718,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl)
 
 void SvxLineTabPage::PointChanged( vcl::Window*, RECT_POINT eRcPt )
 {
-    eRP = eRcPt;
+    m_eRP = eRcPt;
 }
 
 
@@ -1749,56 +1749,56 @@ IMPL_LINK_TYPED( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
 
 IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
 {
-    bNewSize = true;
+    m_bNewSize = true;
     bool bWidth = pField == m_pSymbolWidthMF;
-    bLastWidthModified = bWidth;
+    m_bLastWidthModified = bWidth;
     bool bRatio = m_pSymbolRatioCB->IsChecked();
     long nWidthVal = static_cast<long>(m_pSymbolWidthMF->Denormalize(m_pSymbolWidthMF->GetValue(FUNIT_100TH_MM)));
     long nHeightVal= static_cast<long>(m_pSymbolHeightMF->Denormalize(m_pSymbolHeightMF->GetValue(FUNIT_100TH_MM)));
-    nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MAP_100TH_MM,(MapUnit)ePoolUnit );
-    nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MAP_100TH_MM,(MapUnit)ePoolUnit);
-    aSymbolSize = Size(nWidthVal,nHeightVal);
+    nWidthVal = OutputDevice::LogicToLogic(nWidthVal,MAP_100TH_MM,(MapUnit)m_ePoolUnit );
+    nHeightVal = OutputDevice::LogicToLogic(nHeightVal,MAP_100TH_MM,(MapUnit)m_ePoolUnit);
+    m_aSymbolSize = Size(nWidthVal,nHeightVal);
     double fSizeRatio = (double)1;
 
     if(bRatio)
     {
-        if (aSymbolLastSize.Height() && aSymbolLastSize.Width())
-            fSizeRatio = (double)aSymbolLastSize.Width() / aSymbolLastSize.Height();
+        if (m_aSymbolLastSize.Height() && m_aSymbolLastSize.Width())
+            fSizeRatio = (double)m_aSymbolLastSize.Width() / m_aSymbolLastSize.Height();
     }
 
     //Size aSymbolSize(aSymbolLastSize);
 
     if(bWidth)
     {
-        long nDelta = nWidthVal - aSymbolLastSize.Width();
-        aSymbolSize.Width() = nWidthVal;
+        long nDelta = nWidthVal - m_aSymbolLastSize.Width();
+        m_aSymbolSize.Width() = nWidthVal;
         if (bRatio)
         {
-            aSymbolSize.Height() = aSymbolLastSize.Height() + (long)((double)nDelta / fSizeRatio);
-            aSymbolSize.Height() = OutputDevice::LogicToLogic( aSymbolSize.Height(),(MapUnit)ePoolUnit, MAP_100TH_MM );
-            m_pSymbolHeightMF->SetUserValue(m_pSymbolHeightMF->Normalize(aSymbolSize.Height()), FUNIT_100TH_MM);
+            m_aSymbolSize.Height() = m_aSymbolLastSize.Height() + (long)((double)nDelta / fSizeRatio);
+            m_aSymbolSize.Height() = OutputDevice::LogicToLogic( m_aSymbolSize.Height(),(MapUnit)m_ePoolUnit, MAP_100TH_MM );
+            m_pSymbolHeightMF->SetUserValue(m_pSymbolHeightMF->Normalize(m_aSymbolSize.Height()), FUNIT_100TH_MM);
         }
     }
     else
     {
-        long nDelta = nHeightVal - aSymbolLastSize.Height();
-        aSymbolSize.Height() = nHeightVal;
+        long nDelta = nHeightVal - m_aSymbolLastSize.Height();
+        m_aSymbolSize.Height() = nHeightVal;
         if (bRatio)
         {
-            aSymbolSize.Width() = aSymbolLastSize.Width() + (long)((double)nDelta * fSizeRatio);
-            aSymbolSize.Width() = OutputDevice::LogicToLogic( aSymbolSize.Width(), (MapUnit)ePoolUnit, MAP_100TH_MM );
-            m_pSymbolWidthMF->SetUserValue(m_pSymbolWidthMF->Normalize(aSymbolSize.Width()), FUNIT_100TH_MM);
+            m_aSymbolSize.Width() = m_aSymbolLastSize.Width() + (long)((double)nDelta * fSizeRatio);
+            m_aSymbolSize.Width() = OutputDevice::LogicToLogic( m_aSymbolSize.Width(), (MapUnit)m_ePoolUnit, MAP_100TH_MM );
+            m_pSymbolWidthMF->SetUserValue(m_pSymbolWidthMF->Normalize(m_aSymbolSize.Width()), FUNIT_100TH_MM);
         }
     }
-    m_pCtlPreview->ResizeSymbol(aSymbolSize);
-    aSymbolLastSize=aSymbolSize;
+    m_pCtlPreview->ResizeSymbol(m_aSymbolSize);
+    m_aSymbolLastSize=m_aSymbolSize;
     return 0;
 }
 IMPL_LINK_TYPED( SvxLineTabPage, RatioHdl_Impl, Button*, pBox, void )
 {
     if (static_cast<CheckBox*>(pBox)->IsChecked())
     {
-        if (bLastWidthModified)
+        if (m_bLastWidthModified)
             SizeHdl_Impl(m_pSymbolWidthMF);
         else
             SizeHdl_Impl(m_pSymbolHeightMF);
@@ -1842,11 +1842,11 @@ void SvxLineTabPage::PageCreated(const SfxAllItemSet& aSet)
     if(pSdrObjListItem) //symbols
     {
         ShowSymbolControls(true);
-        pSymbolList = static_cast<SdrObjList*>(pSdrObjListItem->GetValue());
+        m_pSymbolList = static_cast<SdrObjList*>(pSdrObjListItem->GetValue());
         if (pSymbolAttrItem)
-            pSymbolAttr = new SfxItemSet(pSymbolAttrItem->GetItemSet());
+            m_pSymbolAttr = new SfxItemSet(pSymbolAttrItem->GetItemSet());
         if(pGraphicItem)
-            aAutoSymbolGraphic = pGraphicItem->GetGraphic();
+            m_aAutoSymbolGraphic = pGraphicItem->GetGraphic();
     }
 }
 

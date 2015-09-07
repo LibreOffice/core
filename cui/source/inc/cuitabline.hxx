@@ -121,56 +121,56 @@ private:
     //#58425# symbols on a line (e. g. StarChart) ->
     /** a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview.
         The list position is to be used cyclic. */
-    SdrObjList*         pSymbolList;
-    bool                bNewSize;
+    SdrObjList*         m_pSymbolList;
+    bool                m_bNewSize;
     /// a graphic to be displayed in the preview in case that an automatic symbol is chosen
-    Graphic             aAutoSymbolGraphic;
-    long                nNumMenuGalleryItems;
-    long                nSymbolType;
+    Graphic             m_aAutoSymbolGraphic;
+    long                m_nNumMenuGalleryItems;
+    long                m_nSymbolType;
     /// attributes for the shown symbols; only necessary if not equal to line properties
-    SfxItemSet*         pSymbolAttr;
+    SfxItemSet*         m_pSymbolAttr;
     VclPtr<VclFrame>           m_pFlSymbol;
     VclPtr<VclGrid>            m_pGridIconSize;
     VclPtr<MenuButton>         m_pSymbolMB;
     VclPtr<MetricField>        m_pSymbolWidthMF;
     VclPtr<MetricField>        m_pSymbolHeightMF;
     VclPtr<CheckBox>           m_pSymbolRatioCB;
-    std::vector<OUString>      aGrfNames;
+    std::vector<OUString>      m_aGrfNames;
     ::std::vector< SvxBmpItemInfo* >
-                               aGrfBrushItems;
-    bool                bLastWidthModified;
-    Size                aSymbolLastSize;
-    Graphic             aSymbolGraphic;
-    Size                aSymbolSize;
-    bool                bSymbols;
+                               m_aGrfBrushItems;
+    bool                m_bLastWidthModified;
+    Size                m_aSymbolLastSize;
+    Graphic             m_aSymbolGraphic;
+    Size                m_aSymbolSize;
+    bool                m_bSymbols;
 
-    const SfxItemSet&   rOutAttrs;
-    RECT_POINT          eRP;
-    bool                bObjSelected;
+    const SfxItemSet&   m_rOutAttrs;
+    RECT_POINT          m_eRP;
+    bool                m_bObjSelected;
 
-    XLineStyleItem      aXLStyle;
-    XLineWidthItem      aXWidth;
-    XLineDashItem       aXDash;
-    XLineColorItem      aXColor;
-    XLineAttrSetItem    aXLineAttr;
-    SfxItemSet&         rXLSet;
+    XLineStyleItem      m_aXLStyle;
+    XLineWidthItem      m_aXWidth;
+    XLineDashItem       m_aXDash;
+    XLineColorItem      m_aXColor;
+    XLineAttrSetItem    m_aXLineAttr;
+    SfxItemSet&         m_rXLSet;
 
-    XColorListRef         pColorList;
-    XDashListRef          pDashList;
-    XLineEndListRef       pLineEndList;
+    XColorListRef         m_pColorList;
+    XDashListRef          m_pDashList;
+    XLineEndListRef       m_pLineEndList;
 
-    ChangeType*         pnLineEndListState;
-    ChangeType*         pnDashListState;
-    ChangeType*         pnColorListState;
-    sal_uInt16          nPageType;
-    sal_uInt16          nDlgType;
-    sal_Int32*          pPosDashLb;
-    sal_Int32*          pPosLineEndLb;
+    ChangeType*         m_pnLineEndListState;
+    ChangeType*         m_pnDashListState;
+    ChangeType*         m_pnColorListState;
+    sal_uInt16          m_nPageType;
+    sal_uInt16          m_nDlgType;
+    sal_Int32*          m_pPosDashLb;
+    sal_Int32*          m_pPosLineEndLb;
 
-    SfxMapUnit          ePoolUnit;
+    SfxMapUnit          m_ePoolUnit;
 
     // #63083#
-    sal_Int32           nActLineWidth;
+    sal_Int32           m_nActLineWidth;
 
     // handler for gallery popup menu button + size
     DECL_LINK_TYPED( GraphicHdl_Impl, MenuButton *, void );
@@ -220,19 +220,19 @@ public:
 
     virtual void FillUserData() SAL_OVERRIDE;
 
-    void    SetColorList( XColorListRef pColTab ) { pColorList = pColTab; }
-    void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
-    void    SetLineEndList( XLineEndListRef pLneEndLst) { pLineEndList = pLneEndLst; }
-    void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
+    void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
+    void    SetDashList( XDashListRef pDshLst ) { m_pDashList = pDshLst; }
+    void    SetLineEndList( XLineEndListRef pLneEndLst) { m_pLineEndList = pLneEndLst; }
+    void    SetObjSelected( bool bHasObj ) { m_bObjSelected = bHasObj; }
 
-    void    SetPageType( sal_uInt16 nInType ) { nPageType = nInType; }
-    void    SetDlgType( sal_uInt16 nInType ) { nDlgType = nInType; }
-    void    SetPosDashLb( sal_Int32* pInPos ) { pPosDashLb = pInPos; }
-    void    SetPosLineEndLb( sal_Int32* pInPos ) { pPosLineEndLb = pInPos; }
+    void    SetPageType( sal_uInt16 nInType ) { m_nPageType = nInType; }
+    void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
+    void    SetPosDashLb( sal_Int32* pInPos ) { m_pPosDashLb = pInPos; }
+    void    SetPosLineEndLb( sal_Int32* pInPos ) { m_pPosLineEndLb = pInPos; }
 
-    void    SetLineEndChgd( ChangeType* pIn ) { pnLineEndListState = pIn; }
-    void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
-    void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
+    void    SetLineEndChgd( ChangeType* pIn ) { m_pnLineEndListState = pIn; }
+    void    SetDashChgd( ChangeType* pIn ) { m_pnDashListState = pIn; }
+    void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
 
     virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
