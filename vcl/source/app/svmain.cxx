@@ -92,6 +92,8 @@
 
 using namespace ::com::sun::star;
 
+static bool isInitVCL();
+
 oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
     static bool bIn = false;
@@ -156,7 +158,7 @@ int ImplSVMain()
 
     int nReturn = EXIT_FAILURE;
 
-    bool bInit = InitVCL();
+    bool bInit = (!isInitVCL() ? InitVCL() : true);
 
     if( bInit )
     {
@@ -237,6 +239,14 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Nam
         retVal = m_xNextContext->getValueByName( Name );
     }
     return retVal;
+}
+
+static bool isInitVCL()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    return  pExceptionHandler != NULL &&
+            pSVData->mpApp != NULL &&
+            pSVData->mpDefInst != NULL;
 }
 
 bool InitVCL()
