@@ -888,7 +888,21 @@ void ScDBData::Notify( const SfxHint& rHint )
     {
         mbTableColumnNamesDirty = true;
         if (mpContainer)
-            mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetAddress());
+        {
+            // Only one cell of a range is broadcasted per area listener if
+            // multiple cells are affected. Expand the range to what this is
+            // listening to. Broadcasted address outside should not happen,
+            // but.. let it trigger a refresh if.
+            ScRange aHeaderRange( GetHeaderArea());
+            if (aHeaderRange.IsValid())
+            {
+                mpContainer->GetDirtyTableColumnNames().Join( aHeaderRange);
+                if (!aHeaderRange.In( pScHint->GetAddress()))
+                    mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetAddress());
+            }
+            else
+                mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetAddress());
+        }
     }
 
     // Do not refresh column names here, which might trigger unwanted
