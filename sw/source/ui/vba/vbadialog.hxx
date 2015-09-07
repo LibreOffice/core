@@ -19,12 +19,12 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBADIALOG_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBADIALOG_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/word/XDialog.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbadialogbase.hxx>
 
-typedef cppu::ImplInheritanceHelper1< VbaDialogBase, ov::word::XDialog > SwVbaDialog_BASE;
+typedef cppu::ImplInheritanceHelper< VbaDialogBase, ov::word::XDialog > SwVbaDialog_BASE;
 
 class SwVbaDialog : public SwVbaDialog_BASE
 {

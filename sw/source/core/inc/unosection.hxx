@@ -29,7 +29,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sfx2/Metadatable.hxx>
 
@@ -39,7 +39,7 @@ class SwSectionFormat;
 
 struct SwTextSectionProperties_Impl;
 
-typedef ::cppu::ImplInheritanceHelper7
+typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo

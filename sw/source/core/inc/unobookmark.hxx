@@ -219,7 +219,7 @@ class SwXFieldmarkParameters
         ::sw::mark::IFieldmark::parameter_map_t* getCoreParameters() throw (::com::sun::star::uno::RuntimeException);
 };
 
-typedef cppu::ImplInheritanceHelper1< SwXBookmark,
+typedef cppu::ImplInheritanceHelper< SwXBookmark,
     ::com::sun::star::text::XFormField > SwXFieldmark_Base;
 
 class SwXFieldmark

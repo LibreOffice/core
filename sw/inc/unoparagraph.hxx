@@ -33,7 +33,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
-#include <cppuhelper/implbase10.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sfx2/Metadatable.hxx>
 
@@ -47,7 +47,7 @@ class SwTextNode;
 class SwTable;
 class SwXText;
 
-typedef ::cppu::ImplInheritanceHelper10
+typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo

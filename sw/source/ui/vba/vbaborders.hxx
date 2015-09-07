@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBABORDERS_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBABORDERS_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/word/XBorders.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
