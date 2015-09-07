@@ -4614,7 +4614,6 @@ we check in the following sequence:
                     OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
                     aLine.append("/GoToR");
                     aLine.append("/F");
-                    bFileSpec = true;
                     appendLiteralStringEncrypt( bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
                                                                                          INetURLObject::WAS_ENCODED,
                                                                                          INetURLObject::DECODE_WITH_CHARSET ) :
