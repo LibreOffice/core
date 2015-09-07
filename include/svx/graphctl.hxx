@@ -39,10 +39,9 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
 
     Graphic             aGraphic;
     Idle                aUpdateIdle;
-    Link<>              aMousePosLink;
-    Link<>              aGraphSizeLink;
-    Link<>              aMarkObjLink;
-    Link<>              aUpdateLink;
+    Link<GraphCtrl*,void>  aMousePosLink;
+    Link<GraphCtrl*,void>  aGraphSizeLink;
+    Link<GraphCtrl*,void>  aUpdateLink;
     MapMode             aMap100;
     Size                aGraphSize;
     Point               aMousePos;
@@ -104,11 +103,11 @@ public:
     SdrObject*          GetSelectedSdrObject() const;
     bool                IsChanged() const { return bSdrMode && pModel->IsChanged(); }
 
-    void                SetMousePosLink( const Link<>& rLink ) { aMousePosLink = rLink; }
+    void                SetMousePosLink( const Link<GraphCtrl*,void>& rLink ) { aMousePosLink = rLink; }
 
-    void                SetGraphSizeLink( const Link<>& rLink ) { aGraphSizeLink = rLink; }
+    void                SetGraphSizeLink( const Link<GraphCtrl*,void>& rLink ) { aGraphSizeLink = rLink; }
 
-    void                SetUpdateLink( const Link<>& rLink ) { aUpdateLink = rLink; }
+    void                SetUpdateLink( const Link<GraphCtrl*,void>& rLink ) { aUpdateLink = rLink; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };

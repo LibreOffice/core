@@ -84,11 +84,11 @@ class SvxSuperContourDlg : public SvxContourDlg
     virtual bool        Close() SAL_OVERRIDE;
 
                         DECL_LINK_TYPED( Tbx1ClickHdl, ToolBox*, void );
-                        DECL_LINK( MousePosHdl, ContourWindow* );
-                        DECL_LINK( GraphSizeHdl, ContourWindow* );
-                        DECL_LINK_TYPED(UpdateHdl, Idle *, void);
-                        DECL_LINK_TYPED(CreateHdl, Idle *, void);
-                        DECL_LINK( StateHdl, ContourWindow* );
+                        DECL_LINK_TYPED( MousePosHdl, GraphCtrl*, void );
+                        DECL_LINK_TYPED( GraphSizeHdl, GraphCtrl*, void );
+                        DECL_LINK_TYPED( UpdateHdl, Idle *, void );
+                        DECL_LINK_TYPED( CreateHdl, Idle *, void );
+                        DECL_LINK_TYPED( StateHdl, GraphCtrl*, void );
                         DECL_LINK( PipetteHdl, ContourWindow* );
                         DECL_LINK( PipetteClickHdl, ContourWindow* );
                         DECL_LINK( WorkplaceClickHdl, ContourWindow* );

@@ -297,7 +297,7 @@ SvxSuperContourDlg::~SvxSuperContourDlg()
 
 void SvxSuperContourDlg::dispose()
 {
-    m_pContourWnd->SetUpdateLink( Link<>() );
+    m_pContourWnd->SetUpdateLink( Link<GraphCtrl*,void>() );
 
     SvtMiscOptions aMiscOptions;
     aMiscOptions.RemoveListenerLink( LINK(this, SvxSuperContourDlg, MiscHdl) );
@@ -535,7 +535,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx, void )
     }
 }
 
-IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
+IMPL_LINK_TYPED( SvxSuperContourDlg, MousePosHdl, GraphCtrl*, pWnd, void )
 {
     OUString aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
@@ -548,11 +548,9 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
     aStr += GetUnitString( rMousePos.Y(), eFieldUnit, cSep );
 
     m_pStbStatus->SetItemText( 2, aStr );
-
-    return 0L;
 }
 
-IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
+IMPL_LINK_TYPED( SvxSuperContourDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
 {
     OUString aStr;
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
@@ -565,8 +563,6 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
     aStr += GetUnitString( rSize.Height(), eFieldUnit, cSep );
 
     m_pStbStatus->SetItemText( 3, aStr );
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, UpdateHdl, Idle *, void)
@@ -606,7 +602,7 @@ IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, CreateHdl, Idle *, void)
     LeaveWait();
 }
 
-IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )
+IMPL_LINK_TYPED( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
 {
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrView*      pView = pWnd->GetSdrView();
@@ -659,8 +655,6 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )
         m_pTbx1->CheckItem(mnPolyInsertId, false);
         pWnd->SetPolyEditMode( 0 );
     }
-
-    return 0L;
 }
 
 IMPL_LINK( SvxSuperContourDlg, PipetteHdl, ContourWindow*, pWnd )

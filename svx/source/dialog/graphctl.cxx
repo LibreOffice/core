@@ -291,8 +291,6 @@ void GraphCtrl::SdrObjCreated( const SdrObject& )
 
 void GraphCtrl::MarkListHasChanged()
 {
-    if ( aMarkObjLink.IsSet() )
-        aMarkObjLink.Call( this );
 }
 
 void GraphCtrl::KeyInput( const KeyEvent& rKEvt )

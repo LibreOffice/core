@@ -218,7 +218,7 @@ SvxIMapDlg::~SvxIMapDlg()
 
 void SvxIMapDlg::dispose()
 {
-    pIMapWnd->SetUpdateLink( Link<>() );
+    pIMapWnd->SetUpdateLink( Link<GraphCtrl*,void>() );
 
     // Delete URL-List
     pIMapWnd.disposeAndClear();
@@ -658,7 +658,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
     return 0;
 }
 
-IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
+IMPL_LINK_TYPED( SvxIMapDlg, MousePosHdl, GraphCtrl*, pWnd, void )
 {
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
@@ -669,11 +669,9 @@ IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
                     " / " + GetUnitString( rMousePos.Y(), eFieldUnit, cSep );
 
     m_pStbStatus->SetItemText( 2, aStr );
-
-    return 0L;
 }
 
-IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
+IMPL_LINK_TYPED( SvxIMapDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
 {
     const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
@@ -684,8 +682,6 @@ IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
                     " x " + GetUnitString( rSize.Height(), eFieldUnit, cSep );
 
     m_pStbStatus->SetItemText( 3, aStr );
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG(SvxIMapDlg, URLModifyHdl)
@@ -758,7 +754,7 @@ IMPL_LINK_NOARG_TYPED(SvxIMapDlg, UpdateHdl, Idle *, void)
     GetBindings().Invalidate( SID_IMAP_EXEC );
 }
 
-IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
+IMPL_LINK_TYPED( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
 {
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrModel*     pModel = pWnd->GetSdrModel();
@@ -806,8 +802,6 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
         m_pTbxIMapDlg1->CheckItem( mnPolyInsertId, false );
         pWnd->SetPolyEditMode( 0 );
     }
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG(SvxIMapDlg, MiscHdl)

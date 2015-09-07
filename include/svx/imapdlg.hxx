@@ -76,6 +76,7 @@ public:
 
 class IMapOwnData;
 class IMapWindow;
+class GraphCtrl;
 
 class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
 {
@@ -119,12 +120,12 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
 
     DECL_LINK_TYPED( TbxClickHdl, ToolBox*, void );
     DECL_LINK( InfoHdl, IMapWindow* );
-    DECL_LINK( MousePosHdl, IMapWindow* );
-    DECL_LINK( GraphSizeHdl, IMapWindow* );
+    DECL_LINK_TYPED( MousePosHdl, GraphCtrl*, void );
+    DECL_LINK_TYPED( GraphSizeHdl, GraphCtrl*, void );
     DECL_LINK( URLModifyHdl, void* );
     DECL_LINK( URLLoseFocusHdl, void* );
-    DECL_LINK_TYPED(UpdateHdl, Idle *, void);
-    DECL_LINK( StateHdl, IMapWindow* );
+    DECL_LINK_TYPED( UpdateHdl, Idle *, void );
+    DECL_LINK_TYPED( StateHdl, GraphCtrl*, void );
     DECL_LINK( MiscHdl, void* );
 
     void                DoOpen();
