@@ -302,10 +302,8 @@ TakeThread::~TakeThread()
 
 void TakeThread::execute()
 {
-    INetURLObject       aURL;
     sal_Int32           nEntries;
     GalleryTheme*       pThm = mpBrowser->GetXChgData()->pTheme;
-    sal_Int32           nPos;
     GalleryProgress*    pStatusProgress;
 
     {
@@ -317,10 +315,8 @@ void TakeThread::execute()
 
     for( sal_Int32 i = 0; i < nEntries && schedule(); ++i )
     {
-        if( mpBrowser->bTakeAll )
-            aURL = INetURLObject( mpBrowser->aFoundList[ nPos = i ] );
-        else
-            aURL = INetURLObject( mpBrowser->aFoundList[ nPos = mpBrowser->m_pLbxFound->GetSelectEntryPos( i ) ]);
+        const sal_Int32 nPos = mpBrowser->bTakeAll ? i : mpBrowser->m_pLbxFound->GetSelectEntryPos( i );
+        const INetURLObject aURL( mpBrowser->aFoundList[ nPos ]);
 
         mrTakenList.push_back( (sal_uLong)nPos );
 
