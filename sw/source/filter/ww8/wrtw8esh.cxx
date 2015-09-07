@@ -803,6 +803,19 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
 
             SwTwips nLeft = aRect.Left() + nThick;
             SwTwips nRight = aRect.Right() - nThick;
+            SwTwips nTop = aRect.Top() + nThick;
+            SwTwips nBottom = aRect.Bottom() - nThick;
+
+            // tdf#93675, 0 below line/paragraph and/or top line/paragraph with
+            // wrap top+bottom or other wraps is affecting the line directly
+            // above the anchor line, which seems odd, but a tiny adjustment
+            // here to bring the top down convinces msoffice to wrap like us
+            if (nTop < 8 && !rFrameFormat.IsInline() &&
+                rVOr.GetVertOrient() == text::VertOrientation::NONE &&
+                rVOr.GetRelationOrient() == text::RelOrientation::FRAME)
+            {
+                nTop = 8;
+            }
 
             //Nasty swap for bidi if necessary
             rWrt.MiserableRTLFrameFormatHack(nLeft, nRight, rFrameFormat);
@@ -811,9 +824,9 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             //(most of) the border is outside the graphic is word, so
             //change dimensions to fit
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, nLeft);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Top() + nThick);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm, nTop);
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, nRight);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Bottom() - nThick);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm, nBottom);
 
             //fHdr/bx/by/wr/wrk/fRcaSimple/fBelowText/fAnchorLock
             sal_uInt16 nFlags=0;
