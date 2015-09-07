@@ -1779,7 +1779,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
     case SFX_STYLE_FAMILY_FRAME:
         pFrameFormat = lcl_FindFrameFormat(rDoc,  aName, this, bCreate);
         bPhysical = 0 != pFrameFormat;
-        if( bFillOnlyInfo && bPhysical )
+        if (bFillOnlyInfo && !bPhysical)
         {
             ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
             bDeleteInfo = true;
