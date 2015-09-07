@@ -221,7 +221,7 @@ private:
 
     void AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
             SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 );
-    void InvalidateTableColumnNames();
+    void InvalidateTableColumnNames( bool bSwapToEmptyNames );
 };
 
 class SC_DLLPUBLIC ScDBCollection

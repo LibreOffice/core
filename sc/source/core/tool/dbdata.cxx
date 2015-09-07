@@ -185,11 +185,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     bAutoFilter         = rData.bAutoFilter;
 
     if (bHeaderRangeDiffers)
-    {
-        if (!maTableColumnNames.empty())
-            ::std::vector<OUString>().swap( maTableColumnNames);
-        InvalidateTableColumnNames();
-    }
+        InvalidateTableColumnNames( true);
     else
     {
         maTableColumnNames  = rData.maTableColumnNames;
@@ -320,15 +316,7 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
 {
     bool bHeaderRangeChange = (nTab != nTable || nCol1 != nStartCol || nCol2 != nEndCol || nRow1 != nStartRow);
     if (bHeaderRangeChange)
-    {
         EndTableColumnNamesListener();
-        if (!maTableColumnNames.empty())
-        {
-            SAL_WARN("sc.core", "ScDBData::SetArea - invalidating column names/offsets");
-            ::std::vector<OUString>().swap( maTableColumnNames);
-            InvalidateTableColumnNames();
-        }
-    }
 
     nTable  = nTab;
     nStartCol = nCol1;
@@ -337,7 +325,13 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     nEndRow   = nRow2;
 
     if (bHeaderRangeChange)
+    {
+        SAL_WARN_IF( !maTableColumnNames.empty(), "sc.core", "ScDBData::SetArea - invalidating column names/offsets");
+        // Invalidate *after* new area has been set above to add the proper
+        // header range to dirty list.
+        InvalidateTableColumnNames( true);
         StartTableColumnNamesListener();
+    }
 }
 
 void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
@@ -632,12 +626,8 @@ void ScDBData::ExtendDataArea(ScDocument* pDoc)
     pDoc->GetDataArea(nTable, nStartCol, nStartRow, nEndCol, nEndRow, false, true);
     if (nStartCol != nOldCol1 || nEndCol != nOldCol2)
     {
-        if (!maTableColumnNames.empty())
-        {
-            SAL_WARN("sc.core", "ScDBData::ExtendDataArea - invalidating column names/offsets");
-            ::std::vector<OUString>().swap( maTableColumnNames);
-            InvalidateTableColumnNames();
-        }
+        SAL_WARN_IF( !maTableColumnNames.empty(), "sc.core", "ScDBData::ExtendDataArea - invalidating column names/offsets");
+        InvalidateTableColumnNames( true);
     }
 }
 
@@ -709,12 +699,14 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
     if (maTableColumnNames.empty())
         mbTableColumnNamesDirty = true;
     if (mbTableColumnNamesDirty)
-        InvalidateTableColumnNames();
+        InvalidateTableColumnNames( false);     // preserve new column names array
 }
 
-void ScDBData::InvalidateTableColumnNames()
+void ScDBData::InvalidateTableColumnNames( bool bSwapToEmptyNames )
 {
     mbTableColumnNamesDirty = true;
+    if (bSwapToEmptyNames && !maTableColumnNames.empty())
+        ::std::vector<OUString>().swap( maTableColumnNames);
     if (mpContainer)
     {
         // Add header range to dirty list.
