@@ -675,8 +675,12 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
 
 void OutlinerView::Cut()
 {
-    if ( !ImpCalcSelectedPages( false ) || pOwner->ImpCanDeleteSelectedPages( this ) )
+    if ( !ImpCalcSelectedPages( false ) || pOwner->ImpCanDeleteSelectedPages( this ) ) {
         pEditView->Cut();
+        // Chaining handling
+        if (aEndCutPasteLink.IsSet())
+            aEndCutPasteLink.Call(NULL);
+    }
 }
 
 void OutlinerView::Paste()
@@ -705,6 +709,11 @@ void OutlinerView::PasteSpecial()
         pEditView->SetEditEngineUpdateMode( true );
         pOwner->UndoActionEnd( OLUNDO_INSERT );
         pEditView->ShowCursor( true );
+
+        // Chaining handling
+        // NOTE: We need to do this last because it pEditView may be deleted if a switch of box occurs
+        if (aEndCutPasteLink.IsSet())
+            aEndCutPasteLink.Call(NULL);
     }
 }
 
