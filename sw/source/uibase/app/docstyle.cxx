@@ -1779,6 +1779,7 @@ bool SwDocStyleSheet::FillStyleSheet(
     bool bDeleteInfo = false;
     bool bFillOnlyInfo = FillAllInfo == eFType || FillPreview == eFType;
     std::vector<void*> aDelArr;
+    bool const isModified(rDoc.getIDocumentState().IsModified());
 
     switch(nFamily)
     {
@@ -1966,6 +1967,10 @@ bool SwDocStyleSheet::FillStyleSheet(
     {
         ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
         ::lcl_DeleteInfoStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
+        if (!isModified)
+        {
+            rDoc.getIDocumentState().ResetModified();
+        }
     }
     return bRet;
 }
