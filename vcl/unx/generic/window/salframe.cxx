@@ -2559,7 +2559,6 @@ void X11SalFrame::createNewWindow( ::Window aNewParent, SalX11Screen nXScreen )
     aParentData.bXEmbedSupport = (aNewParent != None && m_bXEmbed); // caution: this is guesswork
     if( aNewParent == None )
     {
-        aNewParent = GetDisplay()->GetRootWindow(nXScreen);
         aParentData.aWindow = None;
         m_bXEmbed = false;
     }
