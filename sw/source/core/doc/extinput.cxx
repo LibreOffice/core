@@ -59,6 +59,9 @@ SwExtTextInput::~SwExtTextInput()
         sal_Int32 nEndCnt = GetMark()->nContent.GetIndex();
         if( nEndCnt != nSttCnt )
         {
+            // Prevent IME edited text being grouped with non-IME edited text.
+            bool bKeepGroupUndo = pDoc->GetIDocumentUndoRedo().DoesGroupUndo();
+            pDoc->GetIDocumentUndoRedo().DoGroupUndo(false);
             if( nEndCnt < nSttCnt )
             {
                 std::swap(nSttCnt, nEndCnt);
@@ -66,24 +69,6 @@ SwExtTextInput::~SwExtTextInput()
 
             // In order to get Undo/Redlining etc. working correctly,
             // we need to go through the Doc interface
-            if(eInputLanguage != LANGUAGE_DONTKNOW)
-            {
-                // #i41974# Only set language attribute
-                // for CJK/CTL scripts.
-                bool bLang = true;
-                sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
-                switch(SvtLanguageOptions::GetI18NScriptTypeOfLanguage(eInputLanguage))
-                {
-                    case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
-                    case  i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;
-                    default: bLang = false;
-                }
-                if ( bLang )
-                {
-                    SvxLanguageItem aLangItem( eInputLanguage, nWhich );
-                    pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
-                }
-            }
             rIdx = nSttCnt;
             const OUString sText( pTNd->GetText().copy(nSttCnt, nEndCnt - nSttCnt));
             if( bIsOverwriteCursor && !sOverwriteText.isEmpty() )
@@ -123,6 +108,28 @@ SwExtTextInput::~SwExtTextInput()
                 {
                     pDoc->getIDocumentContentOperations().InsertString( *this, sText );
                 }
+            }
+            pDoc->GetIDocumentUndoRedo().DoGroupUndo(bKeepGroupUndo);
+            if (eInputLanguage != LANGUAGE_DONTKNOW)
+            {
+                sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
+                sal_Int16 nScriptType = SvtLanguageOptions::GetI18NScriptTypeOfLanguage(eInputLanguage);
+                switch(nScriptType)
+                {
+                    case  i18n::ScriptType::ASIAN:
+                        nWhich = RES_CHRATR_CJK_LANGUAGE; break;
+                    case  i18n::ScriptType::COMPLEX:
+                        nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+                }
+                // #i41974# Only set language attribute for CJK/CTL scripts.
+                if (RES_CHRATR_LANGUAGE != nWhich && pTNd->GetLang( nSttCnt, nEndCnt-nSttCnt, nScriptType) != eInputLanguage)
+                {
+                    SvxLanguageItem aLangItem( eInputLanguage, nWhich );
+                    rIdx = nSttCnt;
+                    GetMark()->nContent = nEndCnt;
+                    pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
+                }
+
             }
         }
     }
