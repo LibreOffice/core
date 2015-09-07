@@ -58,7 +58,7 @@ OpenGLContext::OpenGLContext():
     mpWindow(NULL),
     m_pChildWindow(NULL),
     mbInitialized(false),
-    mnRefCount(1),
+    mnRefCount(0),
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
     mnFramebufferCount(0),
@@ -77,7 +77,7 @@ OpenGLContext::OpenGLContext():
 #endif
 
     ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->maGDIData.mpLastContext )
+    if( pSVData->maGDIData.mpLastContext.is() )
     {
         pSVData->maGDIData.mpLastContext->mpNextContext = this;
         mpPrevContext = pSVData->maGDIData.mpLastContext;
@@ -93,14 +93,15 @@ OpenGLContext::OpenGLContext():
 OpenGLContext::~OpenGLContext()
 {
     VCL_GL_INFO("vcl.opengl", "delete context: " << this);
+    assert (mnRefCount == 0);
     reset();
 
     ImplSVData* pSVData = ImplGetSVData();
-    if( mpPrevContext )
+    if( mpPrevContext.is() )
         mpPrevContext->mpNextContext = mpNextContext;
     else
         pSVData->maGDIData.mpFirstContext = mpNextContext;
-    if( mpNextContext )
+    if( mpNextContext.is() )
         mpNextContext->mpPrevContext = mpPrevContext;
     else
         pSVData->maGDIData.mpLastContext = mpPrevContext;
@@ -108,40 +109,10 @@ OpenGLContext::~OpenGLContext()
     m_pChildWindow.disposeAndClear();
 }
 
-#ifdef DBG_UTIL
-void OpenGLContext::AddRef(SalGraphicsImpl* pImpl)
+rtl::Reference<OpenGLContext> OpenGLContext::Create()
 {
-    assert(mnRefCount > 0);
-    mnRefCount++;
-
-    maParents.insert(pImpl);
+    return rtl::Reference<OpenGLContext>(new OpenGLContext);
 }
-
-void OpenGLContext::DeRef(SalGraphicsImpl* pImpl)
-{
-
-    auto it = maParents.find(pImpl);
-    if(it != maParents.end())
-        maParents.erase(it);
-
-    assert(mnRefCount > 0);
-    if( --mnRefCount == 0 )
-        delete this;
-}
-#else
-void OpenGLContext::AddRef()
-{
-    assert(mnRefCount > 0);
-    mnRefCount++;
-}
-
-void OpenGLContext::DeRef()
-{
-    assert(mnRefCount > 0);
-    if( --mnRefCount == 0 )
-        delete this;
-}
-#endif
 
 void OpenGLContext::requestLegacyContext()
 {
@@ -1337,8 +1308,8 @@ void OpenGLContext::clearCurrent()
 
     // release all framebuffers from the old context so we can re-attach the
     // texture in the new context
-    OpenGLContext* pCurrentCtx = pSVData->maGDIData.mpLastContext;
-    if( pCurrentCtx && pCurrentCtx->isCurrent() )
+    rtl::Reference<OpenGLContext> pCurrentCtx = pSVData->maGDIData.mpLastContext;
+    if( pCurrentCtx.is() && pCurrentCtx->isCurrent() )
         pCurrentCtx->ReleaseFramebuffers();
 }
 
@@ -1348,9 +1319,9 @@ void OpenGLContext::prepareForYield()
 
     // release all framebuffers from the old context so we can re-attach the
     // texture in the new context
-    OpenGLContext* pCurrentCtx = pSVData->maGDIData.mpLastContext;
+    rtl::Reference<OpenGLContext> pCurrentCtx = pSVData->maGDIData.mpLastContext;
 
-    if ( !pCurrentCtx )
+    if ( !pCurrentCtx.is() )
         return;                 // Not using OpenGL
 
     SAL_INFO("vcl.opengl", "Unbinding contexts in preparation for yield");
@@ -1399,9 +1370,9 @@ void OpenGLContext::makeCurrent()
     // move the context to the end of the contexts list
     static int nSwitch = 0;
     VCL_GL_INFO("vcl.opengl", "******* CONTEXT SWITCH " << ++nSwitch << " *********");
-    if( mpNextContext )
+    if( mpNextContext.is() )
     {
-        if( mpPrevContext )
+        if( mpPrevContext.is() )
             mpPrevContext->mpNextContext = mpNextContext;
         else
             pSVData->maGDIData.mpFirstContext = mpNextContext;

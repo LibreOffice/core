@@ -163,8 +163,8 @@ struct ImplSVGDIData
     VclPtr<OutputDevice>    mpLastPrnGraphics;              // Last OutputDevice with a InfoPrinter Graphics
     VclPtr<VirtualDevice>   mpFirstVirDev;                  // First VirtualDevice
     VclPtr<VirtualDevice>   mpLastVirDev;                   // Last VirtualDevice
-    OpenGLContext*          mpFirstContext;                 // First OpenGLContext
-    OpenGLContext*          mpLastContext;                  // Last OpenGLContext
+    rtl::Reference<OpenGLContext> mpFirstContext;                 // First OpenGLContext
+    rtl::Reference<OpenGLContext> mpLastContext;                  // Last OpenGLContext
     VclPtr<Printer>         mpFirstPrinter;                 // First Printer
     VclPtr<Printer>         mpLastPrinter;                  // Last Printer
     ImplPrnQueueList*       mpPrinterQueueList;             // List of all printer queue
