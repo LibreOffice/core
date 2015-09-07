@@ -35,6 +35,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/shlib.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
@@ -883,13 +885,16 @@ void cppuhelper::ServiceManager::loadImplementations()
 {
     rtl::OUString aUri;
     osl::MutexGuard g(rBHelper.rMutex);
+    css::uno::Environment aSourceEnv(css::uno::Environment::getCurrent());
 
+    // loop all implementations
     for (Data::NamedImplementations::const_iterator iterator(
             data_.namedImplementations.begin());
             iterator != data_.namedImplementations.end(); ++iterator)
     {
         try
         {
+            // expand absolute URI implementation component library
             aUri = cppu::bootstrap_expandUri(iterator->second->info->uri);
         }
         catch (css::lang::IllegalArgumentException& aError)
@@ -902,13 +907,84 @@ void cppuhelper::ServiceManager::loadImplementations()
         if (iterator->second->info->loader == "com.sun.star.loader.SharedLibrary" &&
             iterator->second->status != Data::Implementation::STATUS_LOADED)
         {
-            oslModule aModule = osl_loadModule( aUri.pData, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL );
-            SAL_INFO("lok", "loaded component library " << aUri << ( aModule ? " ok" : " no"));
+            // load component library
+            osl::Module aModule(aUri, SAL_LOADMODULE_NOW | SAL_LOADMODULE_GLOBAL);
+            SAL_INFO("lok", "loaded component library " << aUri << ( aModule.is() ? " ok" : " no"));
 
-            // leak aModule
-            // osl_unloadModule(aModule);
-            if ( aModule )
+            if (aModule.is() &&
+                !iterator->second->info->environment.isEmpty())
+            {
+                OUString aSymFactory;
+                oslGenericFunction fpFactory;
+                css::uno::Environment aTargetEnv;
+                css::uno::Reference<css::uno::XInterface> xFactory;
+
+                if(iterator->second->info->constructor.isEmpty())
+                {
+                    // expand full name component factory symbol
+                    if (iterator->second->info->prefix == "direct")
+                        aSymFactory = iterator->second->info->name.replace('.', '_') + "_" COMPONENT_GETFACTORY;
+                    else if (!iterator->second->info->prefix.isEmpty())
+                        aSymFactory = iterator->second->info->prefix + "_" COMPONENT_GETFACTORY;
+                    else
+                        aSymFactory = COMPONENT_GETFACTORY;
+
+                    // get function symbol component factory
+                    fpFactory = aModule.getFunctionSymbol(aSymFactory);
+                    if (fpFactory == 0)
+                    {
+                        throw css::loader::CannotActivateFactoryException(
+                            ("no factory symbol \"" + aSymFactory + "\" in component library :" + aUri),
+                            css::uno::Reference<css::uno::XInterface>());
+                    }
+
+                    aTargetEnv = cppuhelper::detail::getEnvironment(iterator->second->info->environment, iterator->second->info->name);
+                    component_getFactoryFunc fpComponentFactory = reinterpret_cast<component_getFactoryFunc>(fpFactory);
+
+                    if (aSourceEnv.get() == aTargetEnv.get())
+                    {
+                        // invoke function component factory
+                        OString aImpl(rtl::OUStringToOString(iterator->second->info->name, RTL_TEXTENCODING_ASCII_US));
+                        xFactory.set(css::uno::Reference<css::uno::XInterface>(static_cast<css::uno::XInterface *>(
+                            (*fpComponentFactory)(aImpl.getStr(), this, 0)), SAL_NO_ACQUIRE));
+                    }
+                }
+                else
+                {
+                    // get function symbol component factory
+                    fpFactory = aModule.getFunctionSymbol(iterator->second->info->constructor);
+                }
+
+                css::uno::Reference<css::lang::XSingleComponentFactory> xSCFactory;
+                css::uno::Reference<css::lang::XSingleServiceFactory> xSSFactory;
+
+                // query interface XSingleComponentFactory or XSingleServiceFactory
+                if (xFactory.is())
+                {
+                    xSCFactory.set(xFactory, css::uno::UNO_QUERY);
+                    if (!xSCFactory.is())
+                    {
+                        xSSFactory.set(xFactory, css::uno::UNO_QUERY);
+                        if (!xSSFactory.is())
+                        {
+                            throw css::uno::DeploymentException(
+                                ("Implementation " + iterator->second->info->name
+                                  + " does not provide a constructor or factory"),
+                                static_cast< cppu::OWeakObject * >(this));
+                        }
+                    }
+                }
+
+                if (!iterator->second->info->constructor.isEmpty() && fpFactory)
+                    iterator->second->constructor = reinterpret_cast<ImplementationConstructorFn *>(fpFactory);
+
+                iterator->second->factory1 = xSCFactory;
+                iterator->second->factory2 = xSSFactory;
                 iterator->second->status = Data::Implementation::STATUS_LOADED;
+
+            }
+            // leak aModule
+            aModule.release();
         }
     }
 }
