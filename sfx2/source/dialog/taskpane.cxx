@@ -981,7 +981,7 @@ namespace sfx2
 
     IMPL_LINK_TYPED( TaskPaneController_Impl, OnMenuItemSelected, Menu*, i_pMenu, bool )
     {
-        ENSURE_OR_RETURN( i_pMenu, "TaskPaneController_Impl::OnMenuItemSelected: illegal menu!", 0L );
+        ENSURE_OR_RETURN( i_pMenu, "TaskPaneController_Impl::OnMenuItemSelected: illegal menu!", false );
 
         i_pMenu->Deactivate();
         switch ( i_pMenu->GetCurItemId() )
@@ -1010,7 +1010,7 @@ namespace sfx2
             break;
         }
 
-        return 1L;
+        return true;
     }
 
 
