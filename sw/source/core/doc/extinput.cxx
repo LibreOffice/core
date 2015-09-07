@@ -35,6 +35,7 @@
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <swundo.hxx>
+#include <SwRewriter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -66,26 +67,28 @@ SwExtTextInput::~SwExtTextInput()
 
             // In order to get Undo/Redlining etc. working correctly,
             // we need to go through the Doc interface
+            bool bLang = true;
+            sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
             if(eInputLanguage != LANGUAGE_DONTKNOW)
             {
                 // #i41974# Only set language attribute
                 // for CJK/CTL scripts.
-                bool bLang = true;
-                sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
                 switch(SvtLanguageOptions::GetI18NScriptTypeOfLanguage(eInputLanguage))
                 {
                     case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
                     case  i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;
                     default: bLang = false;
                 }
-                if ( bLang )
-                {
-                    SvxLanguageItem aLangItem( eInputLanguage, nWhich );
-                    pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
-                }
             }
+            else
+            {
+                bLang = false;
+            }
+            SvxLanguageItem aLangItem( bLang?eInputLanguage:LANGUAGE_ENGLISH_US, nWhich );
             rIdx = nSttCnt;
             const OUString sText( pTNd->GetText().copy(nSttCnt, nEndCnt - nSttCnt));
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UndoArg1, sText);
             if( bIsOverwriteCursor && !sOverwriteText.isEmpty() )
             {
                 const sal_Int32 nLen = sText.getLength();
@@ -99,10 +102,16 @@ SwExtTextInput::~SwExtTextInput()
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
-                        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, NULL );
+                        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, &aRewriter );
                         pDoc->getIDocumentContentOperations().Overwrite( *this, sText.copy( 0, nOWLen ) );
                         pDoc->getIDocumentContentOperations().InsertString( *this, sText.copy( nOWLen ) );
-                        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, NULL );
+                        if (bLang)
+                        {
+                            GetPoint()->nContent = nSttCnt;
+                            GetMark()->nContent = nEndCnt;
+                            pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
+                        }
+                        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, &aRewriter);
                     }
                 }
                 else
@@ -111,7 +120,15 @@ SwExtTextInput::~SwExtTextInput()
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
+                        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, &aRewriter );
                         pDoc->getIDocumentContentOperations().Overwrite( *this, sText );
+                        if (bLang)
+                        {
+                            GetPoint()->nContent = nSttCnt;
+                            GetMark()->nContent = nEndCnt;
+                            pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
+                        }
+                        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, &aRewriter);
                     }
                 }
             }
@@ -121,7 +138,15 @@ SwExtTextInput::~SwExtTextInput()
 
                 if( bInsText )
                 {
+                    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSERT, &aRewriter );
                     pDoc->getIDocumentContentOperations().InsertString( *this, sText );
+                    if (bLang)
+                    {
+                        GetPoint()->nContent = nSttCnt;
+                        GetMark()->nContent = nEndCnt;
+                        pDoc->getIDocumentContentOperations().InsertPoolItem(*this, aLangItem );
+                    }
+                    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSERT, &aRewriter );
                 }
             }
         }
