@@ -84,8 +84,9 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::co
             return ::rtl::math::doubleToUString(
                 * pDouble,
                 rtl_math_StringFormat_Automatic,
-                -1, // use maximum decimal places available
-                sal_Char( '.' ) // decimal separator
+                rtl_math_DecimalPlaces_Max, // use maximum decimal places available
+                sal_Char( '.' ), // decimal separator
+                true // remove trailing zeros
                 );
         }
         else if( eClass == ::com::sun::star::uno::TypeClass_STRING )
