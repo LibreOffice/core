@@ -71,13 +71,9 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxprinter \
     toolkit/source/awt/vclxregion \
     toolkit/source/awt/vclxspinbutton \
-    toolkit/source/awt/vclxsystemdependentwindow \
     toolkit/source/awt/vclxtabpagecontainer \
     toolkit/source/awt/animatedimagespeer \
-    toolkit/source/awt/vclxtoolkit \
-    toolkit/source/awt/vclxtopwindow \
     toolkit/source/awt/vclxwindow \
-    toolkit/source/awt/vclxwindow1 \
     toolkit/source/awt/vclxwindows \
     toolkit/source/controls/accessiblecontrolcontext \
     toolkit/source/controls/controlmodelcontainerbase \
@@ -122,18 +118,17 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/helper/vclunohelper \
 ))
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_cxxflags,tk,\
-	$(gb_OBJCXXFLAGS) \
+$(eval $(call gb_Library_add_objcxxflags_exception_objects,tk,\
+    toolkit/source/awt/vclxwindow1 \
+    toolkit/source/awt/vclxsystemdependentwindow \
+    toolkit/source/awt/vclxtopwindow \
+    toolkit/source/awt/vclxtoolkit \
 ))
+
+ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_libs,tk,\
 	-lobjc \
 ))
-endif
-
-ifeq ($(OS),IOS)
-$(eval $(call gb_Library_add_cxxflags,tk,\
-    $(gb_OBJCXXFLAGS)))
 endif
 
 # vim: set noet sw=4 ts=4:

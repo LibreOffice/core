@@ -11,7 +11,7 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sw_ooxmlimport))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sw_ooxmlimport, \
+$(eval $(call gb_CppunitTest_add_objcxxflags_exception_objects,sw_ooxmlimport, \
     sw/qa/extras/ooxmlimport/ooxmlimport \
 ))
 
@@ -44,10 +44,6 @@ $(eval $(call gb_CppunitTest_set_include,sw_ooxmlimport,\
 ))
 
 ifeq ($(OS),MACOSX)
-
-$(eval $(call gb_CppunitTest_add_cxxflags,sw_ooxmlimport,\
-    $(gb_OBJCXXFLAGS) \
-))
 
 $(eval $(call gb_CppunitTest_use_system_darwin_frameworks,sw_ooxmlimport,\
 	AppKit \
