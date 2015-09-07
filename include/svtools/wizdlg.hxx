@@ -198,20 +198,19 @@ IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn )
 class SVT_DLLPUBLIC WizardDialog : public ModalDialog
 {
 private:
-    Idle               maWizardLayoutIdle;
-    Size                maPageSize;
-    ImplWizPageData*    mpFirstPage;
-    ImplWizButtonData*  mpFirstBtn;
+    Idle                    maWizardLayoutIdle;
+    Size                    maPageSize;
+    ImplWizPageData*        mpFirstPage;
+    ImplWizButtonData*      mpFirstBtn;
     VclPtr<TabPage>         mpCurTabPage;
     VclPtr<PushButton>      mpPrevBtn;
     VclPtr<PushButton>      mpNextBtn;
     VclPtr<vcl::Window>     mpViewWindow;
     sal_uInt16              mnCurLevel;
-    WindowAlign         meViewAlign;
-    Link<>              maActivateHdl;
-    Link<>              maDeactivateHdl;
-    sal_Int16           mnLeftAlignCount;
-    bool                mbEmptyViewMargin;
+    WindowAlign             meViewAlign;
+    Link<WizardDialog*,void>  maActivateHdl;
+    sal_Int16               mnLeftAlignCount;
+    bool                    mbEmptyViewMargin;
 
     DECL_DLLPRIVATE_LINK_TYPED( ImplHandleWizardLayoutTimerHdl, Idle*, void );
     bool hasWizardPendingLayout() const;
@@ -276,7 +275,7 @@ public:
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
     const Size&         GetPageSizePixel() const { return maPageSize; }
 
-    void                SetActivatePageHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
+    void                SetActivatePageHdl( const Link<WizardDialog*,void>& rLink ) { maActivateHdl = rLink; }
 };
 
 #endif // INCLUDED_SVTOOLS_WIZDLG_HXX

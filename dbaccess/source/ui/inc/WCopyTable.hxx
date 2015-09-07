@@ -282,7 +282,7 @@ namespace dbaui
         DECL_LINK_TYPED( ImplPrevHdl, Button*, void );
         DECL_LINK_TYPED( ImplNextHdl, Button*, void);
         DECL_LINK_TYPED( ImplOKHdl, Button*, void );
-        DECL_LINK( ImplActivateHdl, void* );
+        DECL_LINK_TYPED( ImplActivateHdl, WizardDialog*, void );
         bool CheckColumns(sal_Int32& _rnBreakPos);
         void loadData( const ICopyTableSourceObject& _rSourceObject,
                        ODatabaseExport::TColumns& _rColumns,

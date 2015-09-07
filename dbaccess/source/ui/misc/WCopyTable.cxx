@@ -937,7 +937,7 @@ void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rS
         pSettingsPage->setCreatePrimaryKey( _bDoCreate, _rSuggestedName );
 }
 
-IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl)
+IMPL_LINK_NOARG_TYPED(OCopyTableWizard, ImplActivateHdl, WizardDialog*, void)
 {
     OWizardPage* pCurrent = static_cast<OWizardPage*>(GetPage(GetCurLevel()));
     if(pCurrent)
@@ -952,7 +952,6 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplActivateHdl)
 
         Invalidate();
     }
-    return 0;
 }
 
 void OCopyTableWizard::CheckButtons()

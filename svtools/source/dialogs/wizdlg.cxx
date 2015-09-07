@@ -492,10 +492,7 @@ void WizardDialog::ActivatePage()
 
 bool WizardDialog::DeactivatePage()
 {
-    if ( maDeactivateHdl.IsSet() )
-        return maDeactivateHdl.Call( this );
-    else
-        return true;
+    return true;
 }
 
 
