@@ -37,7 +37,7 @@ public:
 
     DocumentStatisticsManager( SwDoc& i_rSwdoc );
 
-    void DocInfoChgd() SAL_OVERRIDE;
+    void DocInfoChgd(bool isEnableSetModified) SAL_OVERRIDE;
     const SwDocStat &GetDocStat() const SAL_OVERRIDE;
     SwDocStat & GetDocStat(); //Non const version of the above, not part of the interface.
     const SwDocStat &GetUpdatedDocStat(bool bCompleteAsync = false, bool bFields = true) SAL_OVERRIDE;
