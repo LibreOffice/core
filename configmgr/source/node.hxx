@@ -55,7 +55,7 @@ public:
 
 protected:
     explicit Node(int layer);
-    Node(const Node & other);
+    explicit Node(const Node & other);
 
     virtual ~Node();
 

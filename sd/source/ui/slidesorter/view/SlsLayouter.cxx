@@ -202,7 +202,7 @@ protected:
     Implementation (
         sd::Window *pWindow,
         const ::boost::shared_ptr<view::Theme>& rpTheme);
-    Implementation (const Implementation& rImplementation);
+    explicit Implementation (const Implementation& rImplementation);
 
     virtual void CalculateRowAndColumnCount (const Size& rWindowSize) = 0;
     virtual void CalculateMaxRowAndColumnCount (const Size& rWindowSize) = 0;
@@ -225,7 +225,7 @@ protected:
 class VerticalImplementation : public Layouter::Implementation
 {
 public:
-    VerticalImplementation (const Implementation& rImplementation);
+    explicit VerticalImplementation (const Implementation& rImplementation);
 
     virtual Layouter::Orientation GetOrientation() const SAL_OVERRIDE;
 
@@ -247,7 +247,7 @@ protected:
 class HorizontalImplementation : public Layouter::Implementation
 {
 public:
-    HorizontalImplementation (const Implementation& rImplementation);
+    explicit HorizontalImplementation(const Implementation& rImplementation);
 
     virtual Layouter::Orientation GetOrientation() const SAL_OVERRIDE;
 
@@ -273,7 +273,7 @@ public:
     GridImplementation (
         sd::Window *pWindow,
         const ::boost::shared_ptr<view::Theme>& rpTheme);
-    GridImplementation (const Implementation& rImplementation);
+    explicit GridImplementation(const Implementation& rImplementation);
 
     virtual Layouter::Orientation GetOrientation() const SAL_OVERRIDE;
 

@@ -91,7 +91,7 @@ public:
     void Override(sal_uInt16 nBits, STATE eState);
 
 protected:
-    LwpOverride(LwpOverride const& rOther);
+    explicit LwpOverride(LwpOverride const& rOther);
 
 private:
     LwpOverride& operator=(LwpOverride const& rOther) SAL_DELETED_FUNCTION;
