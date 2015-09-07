@@ -249,31 +249,18 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
             {
                 const SfxStringItem* pItem = static_cast<const SfxStringItem*>(pState);
                 OUString aCode = pItem->GetValue();
-                sal_uInt16 aLen = aCode.getLength();
-                OUString* sFormat = new OUString[4];
-                OUString  sTmpStr = "";
-                sal_uInt16 nCount = 0;
-                sal_uInt16 nStrCount = 0;
-                while( nCount < aLen )
+                sal_Int32 nIndex = 0;
+                sal_Int32 aFormat[4] = {0};
+                for (size_t i=0; i<SAL_N_ELEMENTS(aFormat); ++i)
                 {
-                    sal_Unicode cChar = aCode[nCount];
-                    if(cChar == ',')
-                    {
-                        sFormat[nStrCount] = sTmpStr;
-                        sTmpStr.clear();
-                        nStrCount++;
-                    }
-                    else
-                    {
-                        sTmpStr += OUString(cChar);
-                    }
-                    nCount++;
+                    aFormat[i] = aCode.getToken(0, ',', nIndex).toInt32();
+                    if (nIndex<0)
+                        break;
                 }
-                bThousand   =    sFormat[0].toInt32();
-                bNegRed     =    sFormat[1].toInt32();
-                nPrecision  =    (sal_uInt16)sFormat[2].toInt32();
-                nLeadZeroes =    (sal_uInt16)sFormat[3].toInt32();
-                delete[] sFormat;
+                bThousand   = static_cast<bool>(aFormat[0]);
+                bNegRed     = static_cast<bool>(aFormat[1]);
+                nPrecision  = static_cast<sal_uInt16>(aFormat[2]);
+                nLeadZeroes = static_cast<sal_uInt16>(aFormat[3]);
             }
             else
             {
