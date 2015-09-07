@@ -2114,6 +2114,12 @@ String SIP_SA_WORDWRAP
     Text[ en-US ] = "Word wrap text in shape";
 };
 
+String SIP_SA_CHAINNEXTNAME
+{
+    Text[ en-US ] = "Next link in text chain";
+};
+
+
 String SIP_SA_AUTOGROWSIZE
 {
     Text[ en-US ] = "Auto grow shape to fit text";
