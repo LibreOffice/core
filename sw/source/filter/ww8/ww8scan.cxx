@@ -6089,7 +6089,7 @@ rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale)
     OSL_ENSURE(chs <= 0x100, "overflowed winword charset set");
     if (chs == 0x0100)
         return RTL_TEXTENCODING_APPLE_ROMAN;
-    if (chs == 0 && nLidLocale != 0 && nLidLocale >= 999)
+    if (chs == 0 && nLidLocale >= 999)
     {
         /*
          nLidLocale:
