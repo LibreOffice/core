@@ -491,18 +491,24 @@ public:
     TempErrorHandler(Display* dpy, errorHandler newErrorHandler):
         mdpy(dpy)
     {
-        XLockDisplay(dpy);
-        XSync(dpy, false);
-        oldErrorHandler = XSetErrorHandler(newErrorHandler);
+        if (mdpy)
+        {
+            XLockDisplay(dpy);
+            XSync(dpy, false);
+            oldErrorHandler = XSetErrorHandler(newErrorHandler);
+        }
     }
 
     ~TempErrorHandler()
     {
-        // sync so that we possibly get an XError
-        glXWaitGL();
-        XSync(mdpy, false);
-        XSetErrorHandler(oldErrorHandler);
-        XUnlockDisplay(mdpy);
+        if (mdpy)
+        {
+            // sync so that we possibly get an XError
+            glXWaitGL();
+            XSync(mdpy, false);
+            XSetErrorHandler(oldErrorHandler);
+            XUnlockDisplay(mdpy);
+        }
     }
 };
 
