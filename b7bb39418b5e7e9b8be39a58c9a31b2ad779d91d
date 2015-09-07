@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da0c15f0_796ce79c",
+        "filename": "ucb/source/ucp/webdav-neon/DAVResourceAccess.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-09-07T07:11:58Z",
+      "side": 1,
+      "message": "const return type is more of a potential pessimization than anything else; just don\u0027t",
+      "revId": "b7bb39418b5e7e9b8be39a58c9a31b2ad779d91d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
