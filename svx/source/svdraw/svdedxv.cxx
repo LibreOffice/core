@@ -1312,6 +1312,15 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
     if(pTextEditOutlinerView)
     {
+        /* Start special handling of keys within a chain */
+        // We possibly move to another box before any handling
+        bool bHandled = false;
+        TextChainCursorManager *pCursorManager =
+            ImpHandleMotionThroughBoxesKeyInput(rKEvt, pWin, &bHandled);
+        if (bHandled)
+            return true;
+        /* End special handling of keys within a chain */
+
         if (pTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
             if( mpModel )
@@ -1319,6 +1328,11 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
                 if( pTextEditOutliner && pTextEditOutliner->IsModified() )
                     mpModel->SetChanged();
             }
+
+            /* Start chaining processing */
+            ImpChainingEventHdl();
+            ImpMoveCursorAfterChainingEvent(pCursorManager);
+            /* End chaining processing */
 
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL
