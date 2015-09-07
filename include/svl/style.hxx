@@ -143,6 +143,11 @@ public:
     virtual void   SetHelpId( const OUString& r, sal_uLong nId );
 
     virtual SfxItemSet& GetItemSet();
+    /// Due to writer's usual lack of sanity this is a separate function for
+    /// preview only; it shall not create the style in case it does not exist.
+    /// If the style has parents, it is _not_ required that the returned item
+    /// set has parents (i.e. use it for display purposes only).
+    virtual std::unique_ptr<SfxItemSet> GetItemSetForPreview();
 };
 
 /* Class to iterate and search on a SfxStyleSheetBasePool */
