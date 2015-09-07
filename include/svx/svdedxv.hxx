@@ -34,6 +34,7 @@ class EditFieldInfo;
 class ImpSdrEditPara;
 struct PasteOrDropInfos;
 class SdrUndoManager;
+class TextChainCursorManager;
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
@@ -101,6 +102,10 @@ protected:
     // provide their document UndoManager and derive it from SdrUndoManager.
     virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
 
+    void ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCursorManager);
+    TextChainCursorManager *ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin, bool *bOutHandled);
+
+
     OutlinerView* ImpFindOutlinerView(vcl::Window* pWin) const;
 
     // Create a new OutlinerView at the heap and initialize all required parameters.
@@ -108,6 +113,11 @@ protected:
     OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, bool bNoPaint, OutlinerView* pGivenView) const;
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
+
+    // Chaining
+    void ImpChainingEventHdl();
+    DECL_LINK(ImpAfterCutOrPasteChainingEventHdl,void*);
+
 
     // Check if the whole text is selected.
     // Still returns sal_True if there is no text present.
