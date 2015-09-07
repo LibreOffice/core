@@ -719,6 +719,23 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
         mbTableColumnNamesDirty = true;
 }
 
+void ScDBData::InvalidateTableColumnNames()
+{
+    mbTableColumnNamesDirty = true;
+    if (mpContainer)
+    {
+        // Add header range to dirty list.
+        if (HasHeader())
+            mpContainer->GetDirtyTableColumnNames().Join( GetHeaderArea());
+        else
+        {
+            // We need *some* range in the dirty list even without header area,
+            // otherwise the container would not attempt to call a refresh.
+            mpContainer->GetDirtyTableColumnNames().Join( ScRange( nStartCol, nStartRow, nTable));
+        }
+    }
+}
+
 namespace {
 class TableColumnNameSearch : public unary_function<ScDBData, bool>
 {
