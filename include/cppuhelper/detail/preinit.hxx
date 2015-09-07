@@ -17,8 +17,16 @@ namespace cppu
 
 #if defined LIBO_INTERNAL_ONLY
 
+/** Preload all shared library components with service manager upon
+    information from bootstrap variables.
+
+    This function tries to find its parameters via these bootstrap variables:
+
+      - UNO_SERVICES      -- a space separated list of file urls of service rdbs
+
+*/
 CPPUHELPER_DLLPUBLIC void SAL_CALL
-preInitBootstrap();
+preInitBootstrap(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
 #endif // LIBO_INTERNAL_ONLY
 
