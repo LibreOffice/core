@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_7834e1dd",
+        "filename": "sc/source/ui/view/tabvwsha.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:23:34Z",
+      "side": 1,
+      "message": "attributes",
+      "range": {
+        "startLine": 121,
+        "startChar": 41,
+        "endLine": 121,
+        "endChar": 50
+      },
+      "revId": "023115cdc60b3add4701cb53575f3a10ca135eb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_58311dec",
+        "filename": "sc/source/ui/view/tabvwsha.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:23:34Z",
+      "side": 1,
+      "message": "Do not insert blanks there, it\u0027s a notation referring to an old (and now inaccessible) bug tracker system.",
+      "range": {
+        "startLine": 658,
+        "startChar": 50,
+        "endLine": 658,
+        "endChar": 51
+      },
+      "revId": "023115cdc60b3add4701cb53575f3a10ca135eb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_b84cb977",
+        "filename": "sc/source/ui/view/tabvwshb.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:23:34Z",
+      "side": 1,
+      "message": "compatible with",
+      "range": {
+        "startLine": 90,
+        "startChar": 51,
+        "endLine": 90,
+        "endChar": 64
+      },
+      "revId": "023115cdc60b3add4701cb53575f3a10ca135eb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_f8563105",
+        "filename": "sc/source/ui/view/tabvwshb.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-07T13:23:34Z",
+      "side": 1,
+      "message": "rather \"client size\" instead of \"size of client\"",
+      "range": {
+        "startLine": 328,
+        "startChar": 63,
+        "endLine": 328,
+        "endChar": 77
+      },
+      "revId": "023115cdc60b3add4701cb53575f3a10ca135eb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
