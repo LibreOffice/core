@@ -1204,6 +1204,7 @@ void View::OnBeginPasteOrDrop( PasteOrDropInfos* /*pInfos*/ )
     get the correct style sheet. */
 void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
 {
+    /* Style Sheet handling */
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( GetTextEditObject() );
     SdrOutliner* pOutliner = GetTextEditOutliner();
     if( pOutliner && pTextObj && pTextObj->GetPage() )

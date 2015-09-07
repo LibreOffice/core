@@ -1370,6 +1370,7 @@ void OutlineView::ResetLinks() const
     mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
     mrOutliner.SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
     mrOutliner.SetEndPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
+    mrOutliner.SetChainingEventHdl(aEmptyLink);
 }
 
 sal_Int8 OutlineView::AcceptDrop( const AcceptDropEvent&, DropTargetHelper&, ::sd::Window*, sal_uInt16, sal_uInt16)
