@@ -112,8 +112,8 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
 
         // Check we have been correctly un-bound from all framebuffers.
         ImplSVData* pSVData = ImplGetSVData();
-        OpenGLContext* pContext = pSVData->maGDIData.mpLastContext;
-        if (pContext)
+        rtl::Reference<OpenGLContext> pContext = pSVData->maGDIData.mpLastContext;
+        if (pContext.is())
             pContext->UnbindTextureFromFramebuffers( mnTexture );
 
         glDeleteTextures( 1, &mnTexture );
@@ -383,7 +383,7 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
     {
         // Retrieve current context
         ImplSVData* pSVData = ImplGetSVData();
-        OpenGLContext* pContext = pSVData->maGDIData.mpLastContext;
+        rtl::Reference<OpenGLContext> pContext = pSVData->maGDIData.mpLastContext;
         OpenGLFramebuffer* pFramebuffer;
 
         pFramebuffer = pContext->AcquireFramebuffer( *this );

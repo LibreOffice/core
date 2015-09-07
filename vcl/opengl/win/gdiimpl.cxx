@@ -29,21 +29,21 @@ void WinOpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics*
     OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, *pImpl );
 }
 
-OpenGLContext* WinOpenGLSalGraphicsImpl::CreateWinContext()
+rtl::Reference<OpenGLContext> WinOpenGLSalGraphicsImpl::CreateWinContext()
 {
-    OpenGLContext* pContext = new OpenGLContext();
+    rtl::Reference<OpenGLContext> pContext = OpenGLContext::Create();
     pContext->requestSingleBufferedRendering();
     pContext->init( mrParent.mhLocalDC, mrParent.mhWnd );
     return pContext;
 }
 
-bool WinOpenGLSalGraphicsImpl::UseContext( OpenGLContext* pContext )
+bool WinOpenGLSalGraphicsImpl::UseContext( const rtl::Reference<OpenGLContext> &pContext )
 {
-    if( !pContext || !pContext->isInitialized() )
+    if( !pContext.is() || !pContext->isInitialized() )
         return false;
     if( IsOffscreen() )
         return true;
-    return ( pContext->getOpenGLWindow().hWnd == mrParent.mhWnd );
+    return pContext->getOpenGLWindow().hWnd == mrParent.mhWnd;
 }
 
 namespace

@@ -140,15 +140,9 @@ vcl::Window* ImplGetDefaultWindow()
             pSVData->mpDefaultWin->SetText( OUString( "VCL ImplGetDefaultWindow"  ) );
 
             // Add a reference to the default context so it never gets deleted
-            OpenGLContext* pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();
-            if( pContext )
-            {
-#ifdef DBG_UTIL
-                pContext->AddRef(NULL);
-#else
-                pContext->AddRef();
-#endif
-            }
+            rtl::Reference<OpenGLContext> pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();
+            if( pContext.is() )
+                pContext->acquire();
         }
         Application::GetSolarMutex().release();
     }
