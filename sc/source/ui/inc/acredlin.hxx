@@ -111,7 +111,7 @@ private:
     DECL_LINK( ChgTrackModHdl, ScChangeTrack*);
     DECL_LINK_TYPED( CommandHdl, SvSimpleTable*, void);
     DECL_LINK_TYPED( ReOpenTimerHdl, Idle*, void );
-    DECL_LINK( ColCompareHdl, SvSortData*);
+    DECL_LINK_TYPED( ColCompareHdl, const SvSortData*, sal_Int32);
 
 protected:
 

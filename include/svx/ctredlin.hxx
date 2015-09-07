@@ -104,7 +104,7 @@ private:
     Image           maEntryImage;
     OUString        maEntryString;
     utl::TextSearch* pCommentSearcher;
-    Link<>          aColCompareLink;
+    Link<const SvSortData*,sal_Int32>  aColCompareLink;
 
 protected:
 
@@ -162,7 +162,7 @@ public:
 
     virtual SvTreeListEntry* CreateEntry() const SAL_OVERRIDE;
 
-    void            SetColCompareHdl(const Link<>& rLink ) { aColCompareLink = rLink; }
+    void            SetColCompareHdl(const Link<const SvSortData*,sal_Int32>& rLink ) { aColCompareLink = rLink; }
 };
 
 /// Tabpage with the filter text entries etc.

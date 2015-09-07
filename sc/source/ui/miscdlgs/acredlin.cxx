@@ -1864,7 +1864,7 @@ void ScAcceptChgDlg::InitFilter()
 #define CALC_DATE       3
 #define CALC_POS        1
 
-IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
+IMPL_LINK_TYPED( ScAcceptChgDlg, ColCompareHdl, const SvSortData*, pSortData, sal_Int32 )
 {
     sal_Int32 nCompare = 0;
     SCCOL nSortCol= static_cast<SCCOL>(pTheView->GetSortedCol());
