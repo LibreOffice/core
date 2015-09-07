@@ -1727,6 +1727,9 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
         bPhysical = 0 != pCharFormat;
         if( bFillOnlyInfo && !bPhysical )
         {
+            // create style (plus all needed parents) and clean it up
+            // later - without affecting the undo/redo stack
+            ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
             bDeleteInfo = true;
             ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
             pCharFormat = lcl_FindCharFormat(rDoc, aName, this, true );
@@ -1754,6 +1757,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
             bPhysical = 0 != pColl;
             if( bFillOnlyInfo && !bPhysical )
             {
+                ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
                 bDeleteInfo = true;
                 ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
                 pColl = lcl_FindParaFormat(rDoc, aName, this, true );
@@ -1777,6 +1781,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
         bPhysical = 0 != pFrameFormat;
         if( bFillOnlyInfo && bPhysical )
         {
+            ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
             bDeleteInfo = true;
             ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
             pFrameFormat = lcl_FindFrameFormat(rDoc, aName, this, true );
@@ -1796,6 +1801,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
         bPhysical = 0 != pDesc;
         if( bFillOnlyInfo && !pDesc )
         {
+            ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
             bDeleteInfo = true;
             ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
             pDesc = lcl_FindPageDesc( rDoc, aName, this, true );
@@ -1824,6 +1830,7 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
         bPhysical = 0 != pNumRule;
         if( bFillOnlyInfo && !pNumRule )
         {
+            ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
             bDeleteInfo = true;
             ::lcl_SaveStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
             pNumRule = lcl_FindNumRule( rDoc, aName, this, true );
@@ -1890,7 +1897,10 @@ bool SwDocStyleSheet::FillStyleSheet( FillStyleType eFType )
         SetMask( _nMask );
     }
     if( bDeleteInfo && bFillOnlyInfo )
+    {
+        ::sw::UndoGuard const ug(rDoc.GetIDocumentUndoRedo());
         ::lcl_DeleteInfoStyles( static_cast< sal_uInt16 >(nFamily), aDelArr, rDoc );
+    }
     return bRet;
 }
 
