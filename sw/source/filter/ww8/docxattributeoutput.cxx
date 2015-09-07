@@ -4074,6 +4074,22 @@ void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
 void DocxAttributeOutput::ClearRelIdCache()
 {
     m_aRelIdCache.clear();
+    m_aSdrRelIdCache.clear();
+}
+
+OUString DocxAttributeOutput::FindRelId(BitmapChecksum nChecksum)
+{
+    OUString aRet;
+
+    if (m_aSdrRelIdCache.find(nChecksum) != m_aSdrRelIdCache.end())
+        aRet = m_aSdrRelIdCache[nChecksum];
+
+    return aRet;
+}
+
+void DocxAttributeOutput::CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId)
+{
+     m_aSdrRelIdCache[nChecksum] = rRelId;
 }
 
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj )

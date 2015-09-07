@@ -769,7 +769,7 @@ void DrawingML::WriteOutline( Reference<XPropertySet> rXPropSet )
     mpFS->endElementNS( XML_a, XML_ln );
 }
 
-OUString DrawingML::WriteImage( const OUString& rURL, bool bRelPathToMedia )
+bool lcl_URLToGraphic(const OUString& rURL, Graphic& rGraphic)
 {
     OString aURLBS(OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
 
@@ -778,9 +778,18 @@ OUString DrawingML::WriteImage( const OUString& rURL, bool bRelPathToMedia )
 
     if ( index != -1 )
     {
-        DBG(fprintf (stderr, "begin: %ld %s\n", long( sizeof( aURLBegin ) ), USS( rURL ) + RTL_CONSTASCII_LENGTH( aURLBegin ) ));
-        Graphic aGraphic = GraphicObject( aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin)) ).GetTransformedGraphic ();
+        rGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
+        return true;
+    }
 
+    return false;
+}
+
+OUString DrawingML::WriteImage( const OUString& rURL, bool bRelPathToMedia )
+{
+    Graphic aGraphic;
+    if (lcl_URLToGraphic(rURL, aGraphic))
+    {
         return WriteImage( aGraphic , bRelPathToMedia );
     }
     else
@@ -930,7 +939,23 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
 
 OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, const OUString& rURL, bool bRelPathToMedia, const Graphic *pGraphic )
 {
-    OUString sRelId = pGraphic ? WriteImage( *pGraphic, bRelPathToMedia ) : WriteImage( rURL, bRelPathToMedia );
+    OUString sRelId;
+    BitmapChecksum nChecksum = 0;
+    if (!rURL.isEmpty() && mpTextExport)
+    {
+        Graphic aGraphic;
+        if (lcl_URLToGraphic(rURL, aGraphic))
+        {
+            nChecksum = aGraphic.GetChecksum();
+            sRelId = mpTextExport->FindRelId(nChecksum);
+        }
+    }
+    if (sRelId.isEmpty())
+    {
+        sRelId = pGraphic ? WriteImage( *pGraphic, bRelPathToMedia ) : WriteImage( rURL, bRelPathToMedia );
+        if (!rURL.isEmpty() && mpTextExport)
+            mpTextExport->CacheRelId(nChecksum, sRelId);
+    }
     sal_Int16 nBright = 0;
     sal_Int32 nContrast = 0;
 

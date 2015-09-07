@@ -39,6 +39,10 @@ public:
     virtual oox::drawingml::DrawingML& GetDrawingML() = 0;
     /// Write the contents of the textbox that is associated to this shape in VML format.
     virtual void WriteVMLTextBox(css::uno::Reference<css::drawing::XShape> xShape) = 0;
+    /// Look up the RelId of a graphic based on its checksum.
+    virtual OUString FindRelId(BitmapChecksum nChecksum) = 0;
+    /// Store the RelId of a graphic based on its checksum.
+    virtual void CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId) = 0;
 protected:
     VMLTextExport() {}
     virtual ~VMLTextExport() {}

@@ -583,7 +583,14 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         aStream.Seek(0);
                         Graphic aGraphic;
                         GraphicConverter::Import(aStream, aGraphic);
-                        OUString aImageId = m_pTextExport->GetDrawingML().WriteImage( aGraphic );
+
+                        BitmapChecksum nChecksum = aGraphic.GetChecksum();
+                        OUString aImageId = m_pTextExport->FindRelId(nChecksum);
+                        if (aImageId.isEmpty())
+                        {
+                            aImageId = m_pTextExport->GetDrawingML().WriteImage( aGraphic );
+                            m_pTextExport->CacheRelId(nChecksum, aImageId);
+                        }
                         pAttrList->add(FSNS(XML_r, XML_id), OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
                         imageData = true;
                     }
