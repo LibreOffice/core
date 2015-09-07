@@ -894,7 +894,7 @@ static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
     fprintf(stderr, "Unexpected basic error dialog '%s'\n", aBuffer.getStr());
 }
 
-static bool initialize_uno(const OUString& aAppProgramURL, bool bPreInit)
+static bool initialize_uno(const OUString& aAppProgramURL)
 {
 #ifdef IOS
     // For iOS we already hardocde the inifile as "rc" in the .app directory.
@@ -903,14 +903,8 @@ static bool initialize_uno(const OUString& aAppProgramURL, bool bPreInit)
     rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" SAL_CONFIGFILE("soffice"));
 #endif
 
-    if (bPreInit)
-    {
-        // pre-load all component libraries.
-        cppu::preInitBootstrap();
-        return true;
-    }
-
     xContext = cppu::defaultBootstrap_InitialComponentContext();
+
     if (!xContext.is())
     {
         gImpl->maLastExceptionMsg = "XComponentContext could not be created";
@@ -947,6 +941,11 @@ static bool initialize_uno(const OUString& aAppProgramURL, bool bPreInit)
 
 static void lo_startmain(void*)
 {
+    osl_setThreadName("lo_startmain");
+
+    if (GetpApp())
+        Application::GetSolarMutex().tryToAcquire();
+
     soffice_main();
 }
 
@@ -971,11 +970,6 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
         pLib->mpCallback(LOK_CALLBACK_STATUS_INDICATOR_FINISH, 0, pLib->mpCallbackData);
         break;
     }
-}
-
-/// pre-load and parse all filter XML
-static void forceLoadFilterXML()
-{
 }
 
 static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char* pUserProfilePath)
@@ -1034,11 +1028,8 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         {
             SAL_INFO("lok", "Attempting to initalize UNO");
 
-            if (!initialize_uno(aAppURL, (eStage == PRE_INIT)))
+            if (!initialize_uno(aAppURL))
                 return false;
-
-            if (eStage != PRE_INIT)
-                force_c_locale();
 
             // Force headless -- this is only for bitmap rendering.
             rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
@@ -1049,11 +1040,17 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             desktop::Desktop::GetCommandLineArgs().setHeadless();
 
             Application::EnableHeadlessMode(true);
-        }
 
-        if (eStage == PRE_INIT)
-        {
-            forceLoadFilterXML();
+            if (eStage == PRE_INIT)
+            {
+                InitVCL();
+                // pre-load all component libraries.
+                cppu::preInitBootstrap(xContext);
+                // Release Solar Mutex, lo_startmain thread should acquire it.
+                Application::ReleaseSolarMutex();
+            }
+
+            force_c_locale();
         }
 
         // This is horrible crack. I really would want to go back to simply just call
