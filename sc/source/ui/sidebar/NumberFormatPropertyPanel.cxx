@@ -249,21 +249,6 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
             {
                 const SfxStringItem* pItem = static_cast<const SfxStringItem*>(pState);
                 OUString aCode = pItem->GetValue();
-            /*  if(aCode.Equals(String::CreateFromAscii("General")))
-                {
-                    mnCategorySelected = 0;
-                    mpLbCategory->SelectEntryPos(0);
-                    mpBtnThousand->Check(0);
-                    mpBtnNegRed->Check(0);
-                    mpEdDecimals->SetValue(0);
-                    mpEdLeadZeroes->SetValue(1);
-                    break;
-                }
-                else if( mpLbCategory->GetSelectEntryPos() == 0 )
-                {
-                    mnCategorySelected = 1;
-                    mpLbCategory->SelectEntryPos(1);
-                }*/
                 sal_uInt16 aLen = aCode.getLength();
                 OUString* sFormat = new OUString[4];
                 OUString  sTmpStr = "";
