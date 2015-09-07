@@ -1068,6 +1068,14 @@ DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
     CPPUNIT_ASSERT ( (followCount >= 6) && (precedeCount >= 6) );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTDF93675, "no-numlevel-but-indented.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "//w:ind", "start", "1418");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

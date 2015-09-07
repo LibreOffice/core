@@ -2627,15 +2627,19 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 aLRSpace.SetTextLeft( aLRSpace.GetLeft() + rNumFormat.GetAbsLSpace() );
-
-                // new first line indent = 0
-                // (first line indent is ignored for NO_NUMLEVEL)
-                if (!bParaRTL)
-                    aLRSpace.SetTextFirstLineOfst( 0 );
-
-                // put back the new item
-                pTmpSet->Put( aLRSpace );
             }
+            else
+            {
+                aLRSpace.SetTextLeft( aLRSpace.GetLeft() + rNumFormat.GetIndentAt() );
+            }
+
+            // new first line indent = 0
+            // (first line indent is ignored for NO_NUMLEVEL)
+            if (!bParaRTL)
+                aLRSpace.SetTextFirstLineOfst( 0 );
+
+            // put back the new item
+            pTmpSet->Put( aLRSpace );
 
             // assure that numbering rule is in <pTmpSet>
             if (SfxItemState::SET != pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
