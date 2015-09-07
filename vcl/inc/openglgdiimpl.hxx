@@ -52,7 +52,7 @@ class VCL_DLLPUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
     friend class OpenGLTests;
 protected:
 
-    OpenGLContext* mpContext;
+    rtl::Reference<OpenGLContext> mpContext;
     SalGraphics& mrParent;
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mpProvider;
@@ -138,19 +138,19 @@ protected:
     bool ReleaseContext();
 
     // retrieve the default context for offscreen rendering
-    static OpenGLContext* GetDefaultContext();
+    static rtl::Reference<OpenGLContext> GetDefaultContext();
 
     // create a new context for window rendering
-    virtual OpenGLContext* CreateWinContext() = 0;
+    virtual rtl::Reference<OpenGLContext> CreateWinContext() = 0;
 
     // check whether the given context can be used by this instance
-    virtual bool UseContext( OpenGLContext* pContext ) = 0;
+    virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) = 0;
 
 public:
     OpenGLSalGraphicsImpl(SalGraphics& pParent, SalGeometryProvider *pProvider);
     virtual ~OpenGLSalGraphicsImpl ();
 
-    OpenGLContext* GetOpenGLContext();
+    rtl::Reference<OpenGLContext> GetOpenGLContext();
 
     virtual void Init() SAL_OVERRIDE;
 
