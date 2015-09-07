@@ -232,7 +232,7 @@ protected:
     DECL_LINK_TYPED( TreeListHighlightHdl, SvTreeListBox *, void );
     DECL_LINK( BasicSelectHdl, ListBox * );
     DECL_LINK_TYPED( ButtonHdl, Button *, void );
-    DECL_LINK( CheckPasswordHdl, SvxPasswordDialog * );
+    DECL_LINK_TYPED( CheckPasswordHdl, SvxPasswordDialog *, bool );
     void                CheckButtons();
     void                DeleteCurrent();
     void                NewLib();

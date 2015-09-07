@@ -35,17 +35,17 @@ class SVX_DLLPUBLIC SvxPasswordDialog : public SfxModalDialog
 private:
     VclPtr<FixedText> m_pOldFL;
     VclPtr<FixedText> m_pOldPasswdFT;
-    VclPtr<Edit> m_pOldPasswdED;
-    VclPtr<Edit> m_pNewPasswdED;
-    VclPtr<Edit> m_pRepeatPasswdED;
-    VclPtr<OKButton> m_pOKBtn;
+    VclPtr<Edit>      m_pOldPasswdED;
+    VclPtr<Edit>      m_pNewPasswdED;
+    VclPtr<Edit>      m_pRepeatPasswdED;
+    VclPtr<OKButton>  m_pOKBtn;
 
-    OUString        aOldPasswdErrStr;
-    OUString        aRepeatPasswdErrStr;
+    OUString          aOldPasswdErrStr;
+    OUString          aRepeatPasswdErrStr;
 
-    Link<>          aCheckPasswordHdl;
+    Link<SvxPasswordDialog*,bool> aCheckPasswordHdl;
 
-    bool            bEmpty;
+    bool              bEmpty;
 
     DECL_LINK_TYPED(ButtonHdl, Button*, void);
     DECL_LINK(EditModifyHdl, void *);
@@ -58,7 +58,7 @@ public:
     OUString        GetOldPassword() const { return m_pOldPasswdED->GetText(); }
     OUString        GetNewPassword() const { return m_pNewPasswdED->GetText(); }
 
-    void            SetCheckPasswordHdl( const Link<>& rLink ) { aCheckPasswordHdl = rLink; }
+    void            SetCheckPasswordHdl( const Link<SvxPasswordDialog*,bool>& rLink ) { aCheckPasswordHdl = rLink; }
 };
 
 
