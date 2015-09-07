@@ -712,7 +712,7 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
     return 0;
 }
 
-IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
+IMPL_LINK_TYPED( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox, void )
 {
     if( pBox == mpOptionBox && Sane::IsSane() )
     {
@@ -778,7 +778,6 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
             }
         }
     }
-    return 0;
 }
 
 IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )

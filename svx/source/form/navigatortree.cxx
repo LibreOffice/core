@@ -1526,20 +1526,18 @@ namespace svxform
     }
 
 
-    IMPL_LINK(NavigatorTree, OnEntrySelDesel, NavigatorTree*, /*pThis*/)
+    IMPL_LINK_NOARG_TYPED(NavigatorTree, OnEntrySelDesel, SvTreeListBox*, void)
     {
         m_sdiState = SDI_DIRTY;
 
         if (IsSelectionHandlingLocked())
-            return 0L;
+            return;
 
         if (m_aSynchronizeTimer.IsActive())
             m_aSynchronizeTimer.Stop();
 
         m_aSynchronizeTimer.SetTimeout(EXPLORER_SYNC_DELAY);
         m_aSynchronizeTimer.Start();
-
-        return 0L;
     }
 
 

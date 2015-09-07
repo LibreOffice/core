@@ -240,7 +240,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK(OSelectLabelDialog, OnEntrySelected, SvTreeListBox*, pLB)
+    IMPL_LINK_TYPED(OSelectLabelDialog, OnEntrySelected, SvTreeListBox*, pLB, void)
     {
         DBG_ASSERT(pLB == m_pControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
         (void)pLB;
@@ -253,8 +253,6 @@ namespace pcr
         m_pNoAssignment->SetClickHdl(Link<Button*,void>());
         m_pNoAssignment->Check(pData == NULL);
         m_pNoAssignment->SetClickHdl(LINK(this, OSelectLabelDialog, OnNoAssignmentClicked));
-
-        return 0L;
     }
 
 
@@ -286,8 +284,8 @@ namespace pcr
 
         if (m_pLastSelected)
         {
-            m_pControlTree->SetSelectHdl(Link<>());
-            m_pControlTree->SetDeselectHdl(Link<>());
+            m_pControlTree->SetSelectHdl(Link<SvTreeListBox*,void>());
+            m_pControlTree->SetDeselectHdl(Link<SvTreeListBox*,void>());
             m_pControlTree->Select(m_pLastSelected, !m_pNoAssignment->IsChecked());
             m_pControlTree->SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
             m_pControlTree->SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));

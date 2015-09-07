@@ -273,11 +273,11 @@ void SwGlossaryDlg::dispose()
 }
 
 // select new group
-IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
+IMPL_LINK_TYPED( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox, void )
 {
     SvTreeListEntry* pEntry = pBox->FirstSelected();
     if(!pEntry)
-        return 0;
+        return;
     SvTreeListEntry* pParent = pBox->GetParent(pEntry) ? pBox->GetParent(pEntry) : pEntry;
     GroupUserData* pGroupData = static_cast<GroupUserData*>(pParent->GetUserData());
     ::SetCurrGlosGroup(pGroupData->sGroupName
@@ -316,7 +316,6 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, sTemp));
         aReq.Done();
     }
-    return 0;
 }
 
 void SwGlossaryDlg::Apply()

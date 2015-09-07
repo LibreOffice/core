@@ -120,7 +120,7 @@ public:
 
 private:
     DECL_LINK_TYPED( ClickHdl, Button*, void );
-    DECL_LINK( CheckHdl, SvxCheckListBox* );
+    DECL_LINK_TYPED( CheckHdl, SvTreeListBox*, void );
 
 private:
     VclPtr<RadioButton>         mpRbAutoStart;

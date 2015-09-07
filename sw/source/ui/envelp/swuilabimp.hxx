@@ -97,6 +97,7 @@ class SwVisitingCardPage : public SfxTabPage
     SwOneExampleFrame*  pExampleFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XAutoTextContainer2 > m_xAutoText;
 
+    DECL_LINK_TYPED( AutoTextSelectTreeListBoxHdl, SvTreeListBox*, void );
     DECL_LINK( AutoTextSelectHdl, void* );
     DECL_LINK( FrameControlInitializedHdl, void* );
 

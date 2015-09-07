@@ -609,10 +609,9 @@ void SvHeaderTabListBox::Clear()
     m_aAccessibleChildren.clear();
 }
 
-IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvHeaderTabListBox, ScrollHdl_Impl, SvTreeListBox*, void)
 {
     m_pImpl->m_pHeaderBar->SetOffset( -GetXOffset() );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, void)

@@ -572,21 +572,20 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
 }
 
 // select event handler on the listbox
-IMPL_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, )
+IMPL_LINK_NOARG_TYPED( _SvxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
 {
     SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
-    SvTreeListEntry*            pE = rListBox.FirstSelected();
-    sal_uLong                    nPos;
+    SvTreeListEntry*           pE = rListBox.FirstSelected();
+    sal_uLong                  nPos;
 
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
     {
         DBG_ASSERT( pE, "wo kommt der leere Eintrag her?" );
-        return 0;
+        return;
     }
 
     EnableButtons();
-    return 0;
 }
 
 IMPL_LINK_TYPED( _SvxMacroTabPage, AssignDeleteHdl_Impl, Button*, pBtn, void )

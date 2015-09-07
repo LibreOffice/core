@@ -170,7 +170,7 @@ IFormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
     return NULL;
 }
 
-IMPL_LINK( StructPage, SelectHdl, SvTreeListBox*, pTlb )
+IMPL_LINK_TYPED( StructPage, SelectHdl, SvTreeListBox*, pTlb, void )
 {
     if(m_pTlbStruct->GetActiveFlag())
     {
@@ -192,7 +192,6 @@ IMPL_LINK( StructPage, SelectHdl, SvTreeListBox*, pTlb )
 
         aSelLink.Call(this);
     }
-    return 0;
 }
 
 } // formula

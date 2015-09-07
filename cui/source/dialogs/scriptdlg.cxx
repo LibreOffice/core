@@ -508,7 +508,7 @@ SvxScriptOrgDialog::~SvxScriptOrgDialog()
 void SvxScriptOrgDialog::dispose()
 {
     // clear the SelectHdl so that it isn't called during the dtor
-    m_pScriptsBox->SetSelectHdl( Link<>() );
+    m_pScriptsBox->SetSelectHdl( Link<SvTreeListBox*,void>() );
     m_pScriptsBox.clear();
     m_pRunButton.clear();
     m_pCloseButton.clear();
@@ -624,11 +624,11 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
     }
 }
 
-IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
+IMPL_LINK_TYPED( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox, void )
 {
     if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )
     {
-        return 0;
+        return;
     }
 
     SvTreeListEntry* pEntry = pBox->GetHdlEntry();
@@ -636,7 +636,7 @@ IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
     SFEntry* userData = 0;
     if ( !pEntry )
     {
-        return 0;
+        return;
     }
     userData = static_cast<SFEntry*>(pEntry->GetUserData());
 
@@ -646,8 +646,6 @@ IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
               node = userData->GetNode();
         CheckButtons( node );
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxScriptOrgDialog, ButtonHdl, Button *, pButton, void )

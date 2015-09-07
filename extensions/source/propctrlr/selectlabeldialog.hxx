@@ -65,7 +65,7 @@ namespace pcr
     protected:
         sal_Int32 InsertEntries(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xContainer, SvTreeListEntry* pContainerEntry);
 
-        DECL_LINK(OnEntrySelected, SvTreeListBox*);
+        DECL_LINK_TYPED(OnEntrySelected, SvTreeListBox*, void);
         DECL_LINK_TYPED(OnNoAssignmentClicked, Button*, void);
     };
 

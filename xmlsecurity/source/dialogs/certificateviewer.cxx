@@ -309,7 +309,7 @@ void CertificateViewerDetailsTP::ActivatePage()
 {
 }
 
-IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
+IMPL_LINK_NOARG_TYPED(CertificateViewerDetailsTP, ElementSelectHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry*    pEntry = m_pElementsLB->FirstSelected();
     OUString        aElementText;
@@ -326,8 +326,6 @@ IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
     m_pValueDetails->SetFont( bFixedWidthFont? m_aFixedWidthFont : m_aStdFont );
     m_pValueDetails->SetControlFont( bFixedWidthFont? m_aFixedWidthFont : m_aStdFont );
     m_pValueDetails->SetText( aElementText );
-
-    return 0;
 }
 
 struct CertPath_UserData
@@ -433,7 +431,7 @@ IMPL_LINK_NOARG_TYPED(CertificateViewerCertPathTP, ViewCertHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)
+IMPL_LINK_NOARG_TYPED(CertificateViewerCertPathTP, CertSelectHdl, SvTreeListBox*, void)
 {
     OUString sStatus;
     SvTreeListEntry* pEntry = mpCertPathLB->FirstSelected();
@@ -446,7 +444,6 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)
 
     mpCertStatusML->SetText( sStatus );
     mpViewCertPB->Enable( pEntry && ( pEntry != mpCertPathLB->Last() ) );
-    return 0;
 }
 
 void CertificateViewerCertPathTP::Clear()

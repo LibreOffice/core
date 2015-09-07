@@ -434,7 +434,7 @@ void SwFieldDBPage::CheckInsert()
     EnableInsert(bInsert);
 }
 
-IMPL_LINK( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
+IMPL_LINK_TYPED( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox, void )
 {
     SvTreeListEntry* pEntry = pBox->GetCurEntry();
     if (pEntry)
@@ -472,7 +472,6 @@ IMPL_LINK( SwFieldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
             m_pFormat->Enable(bNumFormat);
         }
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwFieldDBPage, AddDBHdl, Button*, void)

@@ -85,8 +85,8 @@ private:
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     DECL_LINK_TYPED(        EnableHdl_Impl, Button*, void);
-    DECL_LINK(              CheckHdl_Impl, SvSimpleTable * );
-    DECL_LINK(              SelectHdl_Impl, void *);
+    DECL_LINK_TYPED(        CheckHdl_Impl, SvTreeListBox*, void );
+    DECL_LINK_TYPED(        SelectHdl_Impl, SvTreeListBox*, void);
     DECL_LINK_TYPED(        AddHdl_Impl, Button*, void);
     DECL_LINK_TYPED(        ParameterHdl_Impl, Button*, void);
     DECL_LINK_TYPED(        ClassPathHdl_Impl, Button*, void);

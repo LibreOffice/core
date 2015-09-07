@@ -245,18 +245,17 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, EnableHdl_Impl, Button*, void)
 
 
 
-IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvSimpleTable *, pList )
+IMPL_LINK_TYPED( SvxJavaOptionsPage, CheckHdl_Impl, SvTreeListBox*, pList, void )
 {
     SvTreeListEntry* pEntry = pList ? m_pJavaList->GetEntry( m_pJavaList->GetCurMousePoint() )
                                 : m_pJavaList->FirstSelected();
     if ( pEntry )
         m_pJavaList->HandleEntryChecked( pEntry );
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, SelectHdl_Impl, SvTreeListBox*, void)
 {
     // set installation directory info
     SvTreeListEntry* pEntry = m_pJavaList->FirstSelected();
@@ -267,7 +266,6 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, SelectHdl_Impl)
     if ( pLocation )
         sInfo += *pLocation;
     m_pJavaPathText->SetText(sInfo);
-    return 0;
 }
 
 

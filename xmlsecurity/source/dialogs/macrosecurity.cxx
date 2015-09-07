@@ -309,10 +309,9 @@ IMPL_LINK_NOARG_TYPED(MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, Button*, vo
     }
 }
 
-IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl)
+IMPL_LINK_NOARG_TYPED(MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl, SvTreeListBox*, void)
 {
     ImplCheckButtons();
-    return 0;
 }
 
 IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl)

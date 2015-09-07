@@ -423,7 +423,7 @@ public:
     inline void             EndEditing( bool _bCancel );
 
 protected:
-    DECL_LINK( SelectionMultiplexer, void* );
+    DECL_LINK_TYPED( SelectionMultiplexer, SvTreeListBox*, void );
 
 protected:
     // IEnumerationResultHandler overridables
@@ -1752,9 +1752,10 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 }
 
 
-IMPL_LINK( SvtFileView_Impl, SelectionMultiplexer, void*, _pSource )
+IMPL_LINK_TYPED( SvtFileView_Impl, SelectionMultiplexer, SvTreeListBox*, _pSource, void )
 {
-    return mnSuspendSelectCallback ? 0L : m_aSelectHandler.Call( _pSource );
+    if (!mnSuspendSelectCallback)
+        m_aSelectHandler.Call( _pSource );
 }
 
 
@@ -1762,7 +1763,7 @@ void SvtFileView_Impl::SetSelectHandler( const Link<>& _rHdl )
 {
     m_aSelectHandler = _rHdl;
 
-    Link<> aMasterHandler;
+    Link<SvTreeListBox*,void> aMasterHandler;
     if ( m_aSelectHandler.IsSet() )
         aMasterHandler = LINK( this, SvtFileView_Impl, SelectionMultiplexer );
 

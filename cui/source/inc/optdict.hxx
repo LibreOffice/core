@@ -131,7 +131,7 @@ private:
 
     DECL_LINK(SelectBookHdl_Impl, void *);
     DECL_LINK(SelectLangHdl_Impl, void *);
-    DECL_LINK(SelectHdl, SvTabListBox*);
+    DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(NewDelHdl, Button*, void);
     DECL_LINK(NewDelActionHdl, PushButton*);
     DECL_LINK(ModifyHdl, Edit*);

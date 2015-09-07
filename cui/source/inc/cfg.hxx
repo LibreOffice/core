@@ -441,7 +441,7 @@ class SvxMenuConfigPage : public SvxConfigPage
 private:
 
     DECL_LINK( SelectMenu, ListBox * );
-    DECL_LINK( SelectMenuEntry, Control * );
+    DECL_LINK_TYPED( SelectMenuEntry, SvTreeListBox *, void );
     DECL_LINK_TYPED( NewMenuHdl, Button *, void );
     DECL_LINK_TYPED( MenuSelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
@@ -484,7 +484,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
 
     DECL_LINK_TYPED( MoveHdl, Button *, void );
     DECL_LINK( ModifyHdl, Edit * );
-    DECL_LINK( SelectHdl, Control* );
+    DECL_LINK_TYPED( SelectHdl, SvTreeListBox*, void );
 
 public:
     SvxMainMenuOrganizerDialog (
@@ -533,7 +533,7 @@ class SvxToolbarConfigPage : public SvxConfigPage
 private:
 
     DECL_LINK( SelectToolbar, ListBox * );
-    DECL_LINK( SelectToolbarEntry, Control * );
+    DECL_LINK_TYPED( SelectToolbarEntry, SvTreeListBox*, void );
     DECL_LINK_TYPED( ToolbarSelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( NewToolbarHdl, Button *, void );

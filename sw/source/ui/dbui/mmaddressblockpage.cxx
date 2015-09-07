@@ -592,12 +592,11 @@ IMPL_LINK_NOARG_TYPED(SwCustomizeAddressBlockDialog, OKHdl_Impl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, DDListBox*, pBox)
+IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, SvTreeListBox*, pBox, void)
 {
     sal_Int32 nUserData = (sal_Int32)reinterpret_cast<sal_IntPtr>(pBox->FirstSelected()->GetUserData());
     // Check if the selected entry is already in the address and then forbid inserting
     m_pInsertFieldIB->Enable(nUserData >= 0 || !HasItem_Impl(nUserData));
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, EditModifyHdl_Impl)

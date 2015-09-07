@@ -175,7 +175,7 @@ Image PlacesListBox::getEntryIcon( PlacePtr pPlace )
     return theImage;
 }
 
-IMPL_LINK_NOARG( PlacesListBox, Selection )
+IMPL_LINK_NOARG_TYPED( PlacesListBox, Selection, SvTreeListBox*, void )
 {
     sal_uInt32 nSelected = mpImpl->GetCurrRow();
     PlacePtr pPlace = maPlaces[nSelected];
@@ -185,7 +185,6 @@ IMPL_LINK_NOARG( PlacesListBox, Selection )
         mpDlg->RemovablePlaceSelected();
     else
         mpDlg->RemovablePlaceSelected(false);
-    return 0;
 }
 
 IMPL_LINK_NOARG( PlacesListBox, DoubleClick )

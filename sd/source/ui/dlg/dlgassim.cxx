@@ -58,7 +58,7 @@ VCL_BUILDER_DECL_FACTORY(SdPageListControl)
     rRet = VclPtr<SdPageListControl>::Create(pParent, nWinStyle);
 }
 
-IMPL_LINK_NOARG(SdPageListControl, CheckButtonClickHdl)
+IMPL_LINK_NOARG_TYPED(SdPageListControl, CheckButtonClickHdl, SvTreeListBox*, void)
 {
     SvTreeList* pTreeModel = GetModel();
     SvTreeListEntry* pEntry = pTreeModel->First();
@@ -66,14 +66,12 @@ IMPL_LINK_NOARG(SdPageListControl, CheckButtonClickHdl)
     while( pEntry )
     {
         if(pTreeModel->IsAtRootDepth(pEntry) && GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
-            return 0;
+            return;
         pEntry = pTreeModel->Next( pEntry );
     }
 
     pEntry = pTreeModel->First();
     SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
-
-    return 0;
 }
 
 SdPageListControl::~SdPageListControl()

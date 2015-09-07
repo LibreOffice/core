@@ -85,6 +85,7 @@ private:
 
     DECL_LINK_TYPED( ClickButtonHdl, Button*, void );
     DECL_LINK( ClickButtonHdl2, void* );
+    DECL_LINK_TYPED( ClickButtonHdl3, SvTreeListBox*, void );
     DECL_LINK_TYPED( OKHdl, Button*, void );
 
 public:

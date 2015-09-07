@@ -391,10 +391,9 @@ namespace svxform
         DoToolBoxAction( m_pToolBox->GetCurItemId() );
     }
 
-    IMPL_LINK_NOARG(XFormsPage, ItemSelectHdl)
+    IMPL_LINK_NOARG_TYPED(XFormsPage, ItemSelectHdl, SvTreeListBox*, void)
     {
         EnableMenuItems( NULL );
-        return 0;
     }
 
     void XFormsPage::AddChildren(
@@ -2949,13 +2948,11 @@ namespace svxform
     }
 
 
-    IMPL_LINK( NamespaceItemDialog, SelectHdl, SvSimpleTable *, )
+    IMPL_LINK_NOARG_TYPED( NamespaceItemDialog, SelectHdl, SvTreeListBox *, void)
     {
         bool bEnable = ( m_pNamespacesList->FirstSelected() != NULL );
         m_pEditNamespaceBtn->Enable( bEnable );
         m_pDeleteNamespaceBtn->Enable( bEnable );
-
-        return 0;
     }
 
 

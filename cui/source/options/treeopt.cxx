@@ -651,10 +651,9 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const OUString& rGroupName,
     return nRet - 1;
 }
 
-IMPL_LINK_NOARG(OfaTreeOptionsDialog, ShowPageHdl_Impl)
+IMPL_LINK_NOARG_TYPED(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, void)
 {
     SelectHdl_Impl();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(OfaTreeOptionsDialog, BackHdl_Impl, Button*, void)
@@ -726,8 +725,8 @@ IMPL_LINK_NOARG_TYPED(OfaTreeOptionsDialog, OKHdl_Impl, Button*, void)
 }
 
 // an opened group shall be completely visible
-IMPL_STATIC_LINK(
-    OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
+IMPL_STATIC_LINK_TYPED(
+    OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox, void )
 {
     pBox->Update();
     pBox->InitStartEntry();
@@ -758,7 +757,6 @@ IMPL_STATIC_LINK(
             }
         }
     }
-    return 0;
 }
 
 void OfaTreeOptionsDialog::ApplyItemSets()

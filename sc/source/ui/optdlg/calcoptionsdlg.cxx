@@ -246,10 +246,9 @@ IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnAutomaticSelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScCalcOptionsDialog, DeviceSelHdl)
+IMPL_LINK_NOARG_TYPED(ScCalcOptionsDialog, DeviceSelHdl, SvTreeListBox*, void)
 {
     SelectedDeviceChanged();
-    return 0;
 }
 
 IMPL_LINK(ScCalcOptionsDialog, EditModifiedHdl, Edit*, pCtrl)

@@ -684,13 +684,12 @@ void ObjectPage::CheckButtons()
         m_pDelButton->Disable();
 }
 
-IMPL_LINK( ObjectPage, BasicBoxHighlightHdl, TreeListBox *, pBox )
+IMPL_LINK_TYPED( ObjectPage, BasicBoxHighlightHdl, SvTreeListBox*, pBox, void )
 {
     if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )
-        return 0;
+        return;
 
     CheckButtons();
-    return 0;
 }
 
 IMPL_LINK_TYPED( ObjectPage, ButtonHdl, Button *, pButton, void )

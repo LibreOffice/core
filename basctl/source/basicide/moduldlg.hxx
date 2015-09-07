@@ -190,7 +190,7 @@ protected:
     VclPtr<PushButton>         m_pNewDlgButton;
     VclPtr<PushButton>         m_pDelButton;
 
-    DECL_LINK( BasicBoxHighlightHdl, TreeListBox * );
+    DECL_LINK_TYPED( BasicBoxHighlightHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( ButtonHdl, Button *, void );
     void                CheckButtons();
     bool                GetSelection( ScriptDocument& rDocument, OUString& rLibName );
@@ -229,7 +229,7 @@ protected:
     ScriptDocument      m_aCurDocument;
     LibraryLocation     m_eCurLocation;
 
-    DECL_LINK( TreeListHighlightHdl, SvTreeListBox * );
+    DECL_LINK_TYPED( TreeListHighlightHdl, SvTreeListBox *, void );
     DECL_LINK( BasicSelectHdl, ListBox * );
     DECL_LINK_TYPED( ButtonHdl, Button *, void );
     DECL_LINK( CheckPasswordHdl, SvxPasswordDialog * );

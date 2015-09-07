@@ -67,9 +67,9 @@ private:
 
     Mode                    nMode;
 
-    DECL_LINK( MacroSelectHdl, SvTreeListBox * );
+    DECL_LINK_TYPED( MacroSelectHdl, SvTreeListBox *, void );
     DECL_LINK(MacroDoubleClickHdl, void *);
-    DECL_LINK( BasicSelectHdl, SvTreeListBox * );
+    DECL_LINK_TYPED( BasicSelectHdl, SvTreeListBox *, void );
     DECL_LINK( EditModifyHdl, Edit * );
     DECL_LINK_TYPED( ButtonHdl, Button *, void );
 

@@ -103,8 +103,8 @@ private:
     DECL_LINK( AcceptHandle, SvxTPView*);
     DECL_LINK( RejectAllHandle, void*);
     DECL_LINK( AcceptAllHandle, void*);
-    DECL_LINK( ExpandingHandle, SvxRedlinTable*);
-    DECL_LINK( SelectHandle, void*);
+    DECL_LINK_TYPED( ExpandingHandle, SvTreeListBox*, bool);
+    DECL_LINK_TYPED( SelectHandle, SvTreeListBox*, void);
     DECL_LINK( RefInfoHandle, OUString*);
 
     DECL_LINK_TYPED( UpdateSelectionHdl, Idle*, void );

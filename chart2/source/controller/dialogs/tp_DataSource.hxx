@@ -73,8 +73,8 @@ protected:
 
     virtual void        initializePage() SAL_OVERRIDE;
 
-    DECL_LINK( SeriesSelectionChangedHdl, void* );
-    DECL_LINK( RoleSelectionChangedHdl, void* );
+    DECL_LINK_TYPED( SeriesSelectionChangedHdl, SvTreeListBox*, void );
+    DECL_LINK_TYPED( RoleSelectionChangedHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( MainRangeButtonClickedHdl, Button*, void );
     DECL_LINK_TYPED( CategoriesRangeButtonClickedHdl, Button*, void );
     DECL_LINK_TYPED( AddButtonClickedHdl, Button*, void );

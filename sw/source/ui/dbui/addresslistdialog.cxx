@@ -469,12 +469,11 @@ IMPL_LINK_TYPED(SwAddressListDialog, EditHdl_Impl, Button*, pButton, void)
     }
 };
 
-IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwAddressListDialog, ListBoxSelectHdl_Impl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pSelect = m_pListLB->FirstSelected();
     Application::PostUserEvent( LINK( this, SwAddressListDialog,
                                       StaticListBoxSelectHdl_Impl ), pSelect, true );
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwAddressListDialog, StaticListBoxSelectHdl_Impl, void*, p, void)

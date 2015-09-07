@@ -66,6 +66,7 @@ namespace dbaui
 
         DECL_LINK_TYPED( OnTreeEntryCompare, const SvSortData&, sal_Int32 );
         DECL_LINK( OnTreeEntryChecked, Control* );
+        DECL_LINK_TYPED( OnTreeEntryButtonChecked, SvTreeListBox*, void );
 
     private:
 

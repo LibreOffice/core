@@ -311,7 +311,7 @@ public:
     }
 
 protected:
-    DECL_LINK(OnExceptionSelected, void*);
+    DECL_LINK_TYPED(OnExceptionSelected, SvTreeListBox*, void);
 };
 
 OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const ExceptionDisplayChain& _rExceptions)
@@ -366,7 +366,7 @@ OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const Excepti
     }
 }
 
-IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
+IMPL_LINK_NOARG_TYPED(OExceptionChainDialog, OnExceptionSelected, SvTreeListBox*, void)
 {
     SvTreeListEntry* pSelected = m_pExceptionList->FirstSelected();
     OSL_ENSURE(!pSelected || !m_pExceptionList->NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
@@ -401,8 +401,6 @@ IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
     }
 
     m_pExceptionText->SetText(sText);
-
-    return 0L;
 }
 
 // SQLMessageBox_Impl

@@ -46,17 +46,18 @@ private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
     css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
     css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > maCerts;
-    SignatureInformations maCertsToIgnore;
+    SignatureInformations   maCertsToIgnore;
 
-    VclPtr<SvSimpleTable>     m_pCertLB;
-    VclPtr<PushButton>         m_pViewBtn;
-    VclPtr<OKButton>           m_pOKBtn;
+    VclPtr<SvSimpleTable>   m_pCertLB;
+    VclPtr<PushButton>      m_pViewBtn;
+    VclPtr<OKButton>        m_pOKBtn;
 
-    bool                mbInitialized;
+    bool                    mbInitialized;
 
     sal_uInt16              GetSelectedEntryPos() const;
+
     DECL_LINK_TYPED(ViewButtonHdl, Button*, void);
-    DECL_LINK(          CertificateHighlightHdl, void* );
+    DECL_LINK_TYPED(CertificateHighlightHdl, SvTreeListBox*, void );
     DECL_LINK(          CertificateSelectHdl, void* );
 
     void ImplShowCertificateDetails();

@@ -79,8 +79,8 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     OUString                sAutoFormat;
     VclPtr<SvxTPView>       pTPView;
     VclPtr<SvxRedlinTable>  pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
-    Link<>                  aOldSelectHdl;
-    Link<>                  aOldDeselectHdl;
+    Link<SvTreeListBox*,void> aOldSelectHdl;
+    Link<SvTreeListBox*,void> aOldDeselectHdl;
     bool                    bOnlyFormatedRedlines;
     bool                    bHasReadonlySel;
     bool                    bRedlnAutoFormat;
@@ -93,8 +93,8 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     DECL_DLLPRIVATE_LINK( RejectHdl,     void* );
     DECL_DLLPRIVATE_LINK( RejectAllHdl,  void* );
     DECL_DLLPRIVATE_LINK( UndoHdl,           void* );
-    DECL_DLLPRIVATE_LINK( DeselectHdl,       void* );
-    DECL_DLLPRIVATE_LINK( SelectHdl,     void* );
+    DECL_DLLPRIVATE_LINK_TYPED( DeselectHdl, SvTreeListBox*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( SelectHdl,   SvTreeListBox*, void );
     DECL_DLLPRIVATE_LINK_TYPED( SelectTimerHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK_TYPED( GotoHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK_TYPED( CommandHdl, SvSimpleTable*, void );

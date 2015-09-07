@@ -83,6 +83,7 @@ class SvxFontSubstTabPage : public SfxTabPage
 
     DECL_LINK(SelectHdl, vcl::Window *);
     DECL_LINK_TYPED(ClickHdl, Button*, void);
+    DECL_LINK_TYPED(TreeListBoxSelectHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(NonPropFontsHdl, Button*, void);
 
     SvTreeListEntry*    CreateEntry(OUString& rFont1, OUString& rFont2);

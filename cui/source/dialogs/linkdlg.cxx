@@ -164,7 +164,7 @@ void SvBaseLinksDlg::dispose()
 /*************************************************************************
 |*    SvBaseLinksDlg::Handler()
 *************************************************************************/
-IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
+IMPL_LINK_TYPED( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox, void )
 {
     sal_uLong nSelectionCount = pSvTabListBox ?
         pSvTabListBox->GetSelectionCount() : 0;
@@ -212,7 +212,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
         sal_uLong nPos;
         SvBaseLink* pLink = GetSelEntry( &nPos );
         if( !pLink )
-            return 0;
+            return;
 
         m_pPbUpdateNow->Enable();
 
@@ -245,7 +245,6 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
         m_pFtFullSourceName->SetText( sLink );
         m_pFtFullTypeName->SetText( sType );
     }
-    return 0;
 }
 
 IMPL_LINK( SvBaseLinksDlg, LinksDoubleClickHdl, SvTabListBox *, pSvTabListBox )

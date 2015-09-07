@@ -2131,8 +2131,8 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         else
             m_pLevelFT->SetText(sLevelStr);
 
-        Link<> aLink = m_pLevelLB->GetSelectHdl();
-        m_pLevelLB->SetSelectHdl(Link<>());
+        Link<SvTreeListBox*,void> aLink = m_pLevelLB->GetSelectHdl();
+        m_pLevelLB->SetSelectHdl(Link<SvTreeListBox*,void>());
         m_pLevelLB->Select( m_pLevelLB->GetEntry( bToxIsIndex ? 1 : 0 ) );
         m_pLevelLB->SetSelectHdl(aLink);
 
@@ -2368,10 +2368,10 @@ void SwTOXEntryTabPage::WriteBackLevel()
     }
 }
 
-IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
+IMPL_LINK_TYPED(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox, void)
 {
     if(bInLevelHdl)
-        return 0;
+        return;
     bInLevelHdl = true;
     WriteBackLevel();
 
@@ -2409,7 +2409,6 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
     }
     bInLevelHdl = false;
     pBox->GrabFocus();
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwTOXEntryTabPage, SortKeyHdl, Button*, pButton, void)

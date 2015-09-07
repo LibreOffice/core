@@ -680,7 +680,7 @@ void SwCaptionOptPage::DelUserData()
     }
 }
 
-IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
+IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, ShowEntryHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pSelEntry = m_pCheckLB->FirstSelected();
 
@@ -787,18 +787,14 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
     }
 
     ModifyHdl();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwCaptionOptPage, SaveEntryHdl)
+IMPL_LINK_NOARG_TYPED(SwCaptionOptPage, SaveEntryHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_pCheckLB->GetHdlEntry();
 
     if (pEntry) // save all
         SaveEntry(pEntry);
-
-    return 0;
 }
 
 void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)

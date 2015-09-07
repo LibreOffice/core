@@ -376,7 +376,7 @@ IMPL_LINK_TYPED( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar
 }
 
 
-IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
+IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, PathSelect_Impl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_pPathBox->FirstSelected();
 
@@ -389,7 +389,6 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
 
     m_pEdit->Enable( !bReadOnly );
     m_pDelete->Enable( !bReadOnly );
-    return 0;
 }
 
 void DbRegistrationOptionsPage::insertNewEntry( const OUString& _sName,const OUString& _sLocation, const bool _bReadOnly )

@@ -601,7 +601,7 @@ SwVisitingCardPage::SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& r
     m_pAutoTextLB->SetSelectionMode( SINGLE_SELECTION );
 
     SetExchangeSupport();
-    m_pAutoTextLB->SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectHdl));
+    m_pAutoTextLB->SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectTreeListBoxHdl));
     m_pAutoTextGroupLB->SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectHdl));
 
     m_pExampleWIN->Hide();

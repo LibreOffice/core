@@ -16,6 +16,7 @@
 class ScDocument;
 class ScRangeList;
 class SvSimpleTable;
+class SvTreeListBox;
 
 namespace sc {
 
@@ -25,7 +26,7 @@ class SearchResultsDlg : public ModelessDialog
     SfxBindings* mpBindings;
     ScDocument* mpDoc;
 
-    DECL_LINK( ListSelectHdl, void * );
+    DECL_LINK_TYPED( ListSelectHdl, SvTreeListBox*, void );
 public:
     SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent, sal_uInt16 nId );
     virtual ~SearchResultsDlg();

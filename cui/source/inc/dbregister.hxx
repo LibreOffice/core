@@ -57,7 +57,7 @@ namespace svx
         DECL_LINK_TYPED( DeleteHdl, Button*, void );
         DECL_LINK(PathBoxDoubleClickHdl, void *);
 
-        DECL_LINK(PathSelect_Impl, void *);
+        DECL_LINK_TYPED(PathSelect_Impl, SvTreeListBox*, void);
 
         DECL_LINK_TYPED( HeaderSelect_Impl, HeaderBar *, void );
         DECL_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar *, void );

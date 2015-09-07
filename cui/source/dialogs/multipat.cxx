@@ -41,13 +41,12 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, SelectHdl_Impl, SvTreeListBox*, void)
 {
     sal_uLong nCount = m_pRadioLB->GetEntryCount();
     bool bIsSelected = m_pRadioLB->FirstSelected() != NULL;
     bool bEnable = nCount > 1;
     m_pDelBtn->Enable(bEnable && bIsSelected);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl)
@@ -59,13 +58,14 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, SelectHdl_Impl)
     return 0;
 }
 
-IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, svx::SvxRadioButtonListBox *, pBox )
+IMPL_LINK_TYPED( SvxMultiPathDialog, CheckHdl_Impl, SvTreeListBox*, pBox, void )
 {
     SvTreeListEntry* pEntry =
-        pBox ? pBox->GetEntry( pBox->GetCurMousePoint() ) : m_pRadioLB->FirstSelected();
+        pBox
+        ? pBox->GetEntry( static_cast<svx::SvxRadioButtonListBox*>(pBox)->GetCurMousePoint() )
+        : m_pRadioLB->FirstSelected();
     if ( pEntry )
         m_pRadioLB->HandleEntryChecked( pEntry );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxMultiPathDialog, AddHdl_Impl, Button*, void)

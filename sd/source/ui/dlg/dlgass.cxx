@@ -237,7 +237,7 @@ public:
     DECL_LINK_TYPED( EffectPreviewIdleHdl, Idle *, void );
     DECL_LINK( EffectPreviewClickHdl, void * );
     DECL_LINK( SelectLayoutHdl, void * );
-    DECL_LINK( PageSelectHdl, void * );
+    DECL_LINK_TYPED( PageSelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( PresTypeHdl, Button*, void );
     DECL_LINK( UpdateUserDataHdl, void * );
     DECL_LINK( SelectEffectHdl, void* );
@@ -1165,7 +1165,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, SelectFileHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, PageSelectHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, PageSelectHdl, SvTreeListBox*, void)
 {
     sal_uInt16 nPage = mpPage5PageListCT->GetSelectedPage();
     if( mnShowPage != nPage )
@@ -1173,8 +1173,6 @@ IMPL_LINK_NOARG(AssistentDlgImpl, PageSelectHdl)
         mnShowPage = nPage;
         UpdatePreview(false);
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, UpdatePageListHdl, Idle *, void)

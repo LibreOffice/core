@@ -299,10 +299,9 @@ IMPL_LINK_NOARG_TYPED(ScRangeManagerTable, HeaderEndDragHdl, HeaderBar*, void)
     SetTab(2, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
 }
 
-IMPL_LINK_NOARG(ScRangeManagerTable, ScrollHdl)
+IMPL_LINK_NOARG_TYPED(ScRangeManagerTable, ScrollHdl, SvTreeListBox*, void)
 {
     CheckForFormulaString();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

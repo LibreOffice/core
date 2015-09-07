@@ -477,7 +477,7 @@ namespace svxform
         DECL_LINK_TYPED( OnEdit, void*, void );
         DECL_LINK_TYPED( OnDropActionTimer, Timer*, void );
 
-        DECL_LINK(OnEntrySelDesel, NavigatorTree*);
+        DECL_LINK_TYPED(OnEntrySelDesel, SvTreeListBox*, void);
         DECL_LINK_TYPED(OnSynchronizeTimer, Timer*, void);
 
         DECL_LINK( OnClipboardAction, void* );

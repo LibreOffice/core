@@ -920,7 +920,7 @@ void CuiAboutConfigTabPage::InsertEntry( SvTreeListEntry *pEntry)
     m_pPrefBox->Expand( pParentEntry );
 }
 
-IMPL_LINK_NOARG( CuiAboutConfigTabPage, ExpandingHdl_Impl )
+IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, ExpandingHdl_Impl, SvTreeListBox*, bool )
 {
     SvTreeListEntry* pEntry = m_pPrefBox->GetHdlEntry();
 
@@ -938,7 +938,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, ExpandingHdl_Impl )
         }
     }
 
-    return 1;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

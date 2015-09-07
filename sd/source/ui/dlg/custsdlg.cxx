@@ -300,7 +300,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
     m_pBtnRemove->SetClickHdl( aLink );
     m_pEdtName->SetModifyHdl( aLink2 );
     m_pLbPages->SetSelectHdl( aLink2 ); // because of status
-    m_pLbCustomPages->SetSelectHdl( aLink2 ); // because of status
+    m_pLbCustomPages->SetSelectHdl( LINK( this, SdDefineCustomShowDlg, ClickButtonHdl3 ) ); // because of status
 
     m_pBtnOK->SetClickHdl( LINK( this, SdDefineCustomShowDlg, OKHdl ) );
 
@@ -384,6 +384,10 @@ void SdDefineCustomShowDlg::CheckState()
 }
 
 IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonHdl, Button*, p, void )
+{
+    ClickButtonHdl2(p);
+}
+IMPL_LINK_TYPED( SdDefineCustomShowDlg, ClickButtonHdl3, SvTreeListBox*, p, void )
 {
     ClickButtonHdl2(p);
 }

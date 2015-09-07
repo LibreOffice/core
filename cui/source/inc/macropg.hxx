@@ -33,6 +33,8 @@
 #include <unordered_map>
 #include <vector>
 
+class SvTreeListBox;
+
 typedef std::unordered_map< OUString, std::pair< OUString, OUString >,
                             OUStringHash, std::equal_to< OUString > > EventsHash;
 
@@ -57,7 +59,7 @@ class _SvxMacroTabPage_Impl;
 
 class _SvxMacroTabPage : public SfxTabPage
 {
-    DECL_LINK( SelectEvent_Impl, SvTabListBox * );
+    DECL_LINK_TYPED( SelectEvent_Impl, SvTreeListBox*, void );
     DECL_LINK_TYPED( AssignDeleteHdl_Impl, Button *, void );
     DECL_LINK( DoubleClickHdl_Impl, SvTabListBox * );
 

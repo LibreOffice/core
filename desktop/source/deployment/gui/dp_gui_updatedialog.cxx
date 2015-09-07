@@ -1148,7 +1148,7 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
 
 
 
-IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
+IMPL_LINK_NOARG_TYPED(UpdateDialog, selectionHandler, SvTreeListBox*, void)
 {
     OUStringBuffer b;
     UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(
@@ -1244,7 +1244,6 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
         b.append( m_noDescription );
 
     showDescription( b.makeStringAndClear() );
-    return 0;
 }
 
 IMPL_LINK_NOARG(UpdateDialog, allHandler)

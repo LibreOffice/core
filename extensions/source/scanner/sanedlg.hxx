@@ -84,7 +84,7 @@ private:
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( ModifyHdl, Edit* );
     DECL_LINK( ReloadSaneOptionsHdl, Sane* );
-    DECL_LINK( OptionsBoxSelectHdl, SvTreeListBox* );
+    DECL_LINK_TYPED( OptionsBoxSelectHdl, SvTreeListBox*, void );
 
     void SaveState();
     bool LoadState();

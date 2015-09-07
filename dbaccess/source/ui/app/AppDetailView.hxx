@@ -117,7 +117,7 @@ namespace dbaui
         VclPtr<FixedLine>                   m_aFL;
         VclPtr<OApplicationDetailView>      m_pDetailView;
 
-        DECL_LINK( OnEntrySelectHdl,        SvTreeListBox* );
+        DECL_LINK_TYPED( OnEntrySelectHdl, SvTreeListBox*, void );
         void ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;

@@ -515,10 +515,9 @@ IMPL_LINK_NOARG(ScNameDlg, AssignGetFocusHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScNameDlg, SelectionChangedHdl_Impl)
+IMPL_LINK_NOARG_TYPED(ScNameDlg, SelectionChangedHdl_Impl, SvTreeListBox*, void)
 {
     SelectionChanged();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScNameDlg, ScopeChangedHdl)

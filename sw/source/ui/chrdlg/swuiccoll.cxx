@@ -86,7 +86,7 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pStyleLB->SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
     m_pRemovePB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveClickHdl ));
     m_pAssignPB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveClickHdl ));
-    m_pTbLinks->SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
+    m_pTbLinks->SetSelectHdl(      LINK(this, SwCondCollPage, SelectTreeListBoxHdl));
     m_pStyleLB->SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
     m_pFilterLB->SetSelectHdl(     LINK(this, SwCondCollPage, SelectHdl));
 
@@ -260,12 +260,16 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
     return 0;
 }
 
-IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
+IMPL_LINK_TYPED( SwCondCollPage, SelectTreeListBoxHdl, SvTreeListBox*, pBox, void)
+{
+    SelectHdl(pBox);
+}
+IMPL_LINK( SwCondCollPage, SelectHdl, void*, pBox)
 {
     if (pBox == m_pFilterLB)
     {
         m_pStyleLB->Clear();
-        const sal_Int32 nSelPos = pBox->GetSelectEntryPos();
+        const sal_Int32 nSelPos = static_cast<ListBox*>(pBox)->GetSelectEntryPos();
         const sal_uInt16 nSearchFlags = *static_cast<sal_uInt16*>(m_pFilterLB->GetEntryData(nSelPos));
         SfxStyleSheetBasePool* pPool = m_rSh.GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PARA, nSearchFlags);

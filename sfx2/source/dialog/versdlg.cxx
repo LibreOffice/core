@@ -376,7 +376,7 @@ IMPL_LINK_NOARG(SfxVersionDialog, DClickHdl_Impl)
     return 0L;
 }
 
-IMPL_LINK_NOARG(SfxVersionDialog, SelectHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SfxVersionDialog, SelectHdl_Impl, SvTreeListBox*, void)
 {
     bool bEnable = ( m_pVersionBox->FirstSelected() != NULL );
     SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
@@ -388,8 +388,6 @@ IMPL_LINK_NOARG(SfxVersionDialog, SelectHdl_Impl)
     pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_MERGE, pDummy );
     SfxItemState eState = pViewFrame->GetDispatcher()->QueryState( SID_DOCUMENT_COMPARE, pDummy );
     m_pCompareButton->Enable(bEnable && eState >= SfxItemState::DEFAULT);
-
-    return 0L;
 }
 
 IMPL_LINK_TYPED( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton, void )

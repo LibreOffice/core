@@ -58,7 +58,7 @@ class SfxVersionDialog : public SfxModalDialog
     bool                        m_bIsSaveVersionOnClose;
 
     DECL_LINK(DClickHdl_Impl, void *);
-    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK_TYPED(            SelectHdl_Impl, SvTreeListBox*, void);
     DECL_LINK_TYPED(            ButtonHdl_Impl, Button*, void );
     void                        Init_Impl();
     void                        Open_Impl();

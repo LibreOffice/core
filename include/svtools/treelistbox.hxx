@@ -243,12 +243,12 @@ class SVT_DLLPUBLIC SvTreeListBox
 
     SvTreeListBoxImpl* mpImpl;
     SvImpLBox*      pImp;
-    Link<>          aCheckButtonHdl;
-    Link<>          aScrolledHdl;
-    Link<>          aExpandedHdl;
-    Link<>          aExpandingHdl;
-    Link<>          aSelectHdl;
-    Link<>          aDeselectHdl;
+    Link<SvTreeListBox*,void>  aCheckButtonHdl;
+    Link<SvTreeListBox*,void>  aScrolledHdl;
+    Link<SvTreeListBox*,void>  aExpandedHdl;
+    Link<SvTreeListBox*,bool>  aExpandingHdl;
+    Link<SvTreeListBox*,void>  aSelectHdl;
+    Link<SvTreeListBox*,void>  aDeselectHdl;
 
     Accelerator     aInpEditAcc;
     Image           aPrevInsertedExpBmp;
@@ -475,14 +475,14 @@ public:
     */
     bool            HandleKeyInput( const KeyEvent& rKEvt );
 
-    void            SetSelectHdl( const Link<>& rNewHdl ) {aSelectHdl=rNewHdl; }
-    void            SetDeselectHdl( const Link<>& rNewHdl ) {aDeselectHdl=rNewHdl; }
+    void            SetSelectHdl( const Link<SvTreeListBox*,void>& rNewHdl ) {aSelectHdl=rNewHdl; }
+    void            SetDeselectHdl( const Link<SvTreeListBox*,void>& rNewHdl ) {aDeselectHdl=rNewHdl; }
     void            SetDoubleClickHdl(const Link<>& rNewHdl) {aDoubleClickHdl=rNewHdl;}
-    const Link<>&   GetSelectHdl() const { return aSelectHdl; }
-    const Link<>&   GetDeselectHdl() const { return aDeselectHdl; }
+    const Link<SvTreeListBox*,void>&   GetSelectHdl() const { return aSelectHdl; }
+    const Link<SvTreeListBox*,void>&   GetDeselectHdl() const { return aDeselectHdl; }
     const Link<>&   GetDoubleClickHdl() const { return aDoubleClickHdl; }
-    void            SetExpandingHdl(const Link<>& rNewHdl){aExpandingHdl=rNewHdl;}
-    void            SetExpandedHdl(const Link<>& rNewHdl){aExpandedHdl=rNewHdl;}
+    void            SetExpandingHdl(const Link<SvTreeListBox*,bool>& rNewHdl){aExpandingHdl=rNewHdl;}
+    void            SetExpandedHdl(const Link<SvTreeListBox*,void>& rNewHdl){aExpandedHdl=rNewHdl;}
 
     virtual void    ExpandedHdl();
     virtual bool    ExpandingHdl();
@@ -493,19 +493,19 @@ public:
 
     // Is called for an Entry that gets expanded with the Flag
     // ENTRYFLAG_CHILDREN_ON_DEMAND set.
-    virtual void RequestingChildren( SvTreeListEntry* pParent );
+    virtual void             RequestingChildren( SvTreeListEntry* pParent );
 
     // Drag & Drop
     // New D'n'D API
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
-    virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
-    virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData,
+    virtual sal_Int8         AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual sal_Int8         ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
+    virtual void             StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
+    virtual DragDropMode     NotifyStartDrag( TransferDataContainer& rData,
                                          SvTreeListEntry* );
-    virtual void        DragFinished( sal_Int8 nDropAction );
-    virtual bool        NotifyAcceptDrop( SvTreeListEntry* );
+    virtual void             DragFinished( sal_Int8 nDropAction );
+    virtual bool             NotifyAcceptDrop( SvTreeListEntry* );
 
-    void            SetDragOptions( sal_Int8 nOptions ) { nDragOptions = nOptions; }
+    void                     SetDragOptions( sal_Int8 nOptions ) { nDragOptions = nOptions; }
 
     static SvTreeListBox*    GetSourceView();
 
@@ -539,10 +539,10 @@ public:
         @param pEntry
             The entry.
         @return  The bounding rectangle of an entry. */
-    Rectangle   GetBoundingRect( SvTreeListEntry* pEntry );
+    Rectangle           GetBoundingRect( SvTreeListEntry* pEntry );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
-    void EnableCellFocus();
+    void                EnableCellFocus();
 
                         // For overwriting accessible role for all entries - normally 0, so each entry can be different
     void                SetAllEntriesAccessibleRoleType( SvTreeAccRoleType n ) { nAllItemAccRoleType = n; }
@@ -576,7 +576,7 @@ protected:
 
     SVT_DLLPRIVATE void         InitTreeView();
     SVT_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, long nX, SvLBoxTab** ppTab,
-                        sal_uInt16 nEmptyWidth );
+                                              sal_uInt16 nEmptyWidth );
     SVT_DLLPRIVATE void         ImplInitStyle();
 
 protected:
@@ -590,7 +590,7 @@ protected:
     // Is called automatically when inserting/changing Bitmaps, changing the Model etc.
     virtual void    SetTabs();
     void            AddTab( long nPos, SvLBoxTabFlags nFlags=SvLBoxTabFlags::ADJUST_LEFT,
-                        void* pUserData = 0 );
+                            void* pUserData = 0 );
     sal_uInt16      TabCount() const { return aTabs.size(); }
     SvLBoxTab*      GetFirstDynamicTab() const;
     SvLBoxTab*      GetFirstDynamicTab( sal_uInt16& rTabPos ) const;
@@ -599,11 +599,11 @@ protected:
     SvLBoxTab*      GetTab( SvTreeListEntry*, SvLBoxItem* ) const;
     void            ClearTabList();
 
-    virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
+    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
 
     virtual void    NotifyEndScroll();
     virtual void    NotifyScrolled();
-    void            SetScrolledHdl( const Link<>& rLink ) { aScrolledHdl = rLink; }
+    void            SetScrolledHdl( const Link<SvTreeListBox*,void>& rLink ) { aScrolledHdl = rLink; }
     long            GetXOffset() const { return GetMapMode().GetOrigin().X(); }
 
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
@@ -614,7 +614,7 @@ protected:
 
     void            InitSettings(bool bFont, bool bForeground, bool bBackground);
 
-    virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
+    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
     bool            IsCellFocusEnabled() const;
     bool            SetCurrentTabPos( sal_uInt16 _nNewPos );
@@ -688,8 +688,8 @@ public:
     static const Image&    GetExpandedEntryBmp(const SvTreeListEntry* _pEntry );
     static const Image&    GetCollapsedEntryBmp(const SvTreeListEntry* _pEntry );
 
-    void            SetCheckButtonHdl( const Link<>& rLink )  { aCheckButtonHdl=rLink; }
-    Link<>          GetCheckButtonHdl() const { return aCheckButtonHdl; }
+    void            SetCheckButtonHdl( const Link<SvTreeListBox*,void>& rLink )  { aCheckButtonHdl=rLink; }
+    Link<SvTreeListBox*,void>          GetCheckButtonHdl() const { return aCheckButtonHdl; }
     virtual void    CheckButtonHdl();
 
     void            SetSublistOpenWithReturn( bool bMode = true );      // open/close sublist with return/enter
@@ -719,7 +719,7 @@ public:
     virtual void    ModelHasMoved(SvTreeListEntry* pSource ) SAL_OVERRIDE;
     virtual void    ModelIsRemoving( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
     virtual void    ModelHasRemoved( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
-    void ModelHasEntryInvalidated( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
+    void            ModelHasEntryInvalidated( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
 
     void            ShowTargetEmphasis( SvTreeListEntry*, bool bShow );
     void            ScrollOutputArea( short nDeltaEntries );
@@ -759,11 +759,11 @@ public:
     void            SetDragDropMode( DragDropMode );
     void            SetSelectionMode( SelectionMode );
 
-    virtual bool Expand( SvTreeListEntry* pParent );
-    virtual bool Collapse( SvTreeListEntry* pParent );
-    virtual bool Select( SvTreeListEntry* pEntry, bool bSelect=true );
-    sal_uLong SelectChildren( SvTreeListEntry* pParent, bool bSelect );
-    virtual void SelectAll( bool bSelect, bool bPaint = true ) SAL_OVERRIDE;
+    virtual bool    Expand( SvTreeListEntry* pParent );
+    virtual bool    Collapse( SvTreeListEntry* pParent );
+    virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true );
+    sal_uLong       SelectChildren( SvTreeListEntry* pParent, bool bSelect );
+    virtual void    SelectAll( bool bSelect, bool bPaint = true ) SAL_OVERRIDE;
 
     void SetCurEntry( SvTreeListEntry* _pEntry );
     SvTreeListEntry* GetCurEntry() const;
@@ -801,11 +801,11 @@ public:
 
     void            EnableList( bool _bEnable );
 
-    long getPreferredDimensions(std::vector<long> &rWidths) const;
+    long            getPreferredDimensions(std::vector<long> &rWidths) const;
 
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    void SetAlternatingRowColors( const bool bEnable );
+    void            SetAlternatingRowColors( const bool bEnable );
 };
 
 #define SV_LBOX_DD_FORMAT "SV_LBOX_DD_FORMAT"

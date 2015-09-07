@@ -294,7 +294,7 @@ IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, ChangePasswordHdl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
+IMPL_LINK_NOARG_TYPED(WebConnectionInfoDialog, EntrySelectedHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
     if ( !pEntry )
@@ -311,8 +311,6 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
         sal_Int32 nPos = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
         m_pChangeBtn->Enable( nPos < m_nPos );
     }
-
-    return 0;
 }
 
 

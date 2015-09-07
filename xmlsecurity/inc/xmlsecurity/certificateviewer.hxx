@@ -102,7 +102,7 @@ private:
     vcl::Font               m_aStdFont;
     vcl::Font               m_aFixedWidthFont;
 
-    DECL_LINK(          ElementSelectHdl, void* );
+    DECL_LINK_TYPED(    ElementSelectHdl, SvTreeListBox*, void );
     void                Clear();
     void                InsertElement( const OUString& _rField, const OUString& _rValue,
                                        const OUString& _rDetails, bool _bFixedWidthFont = false );
@@ -130,9 +130,9 @@ private:
     OUString            msCertNotValidated;
 
     DECL_LINK_TYPED(    ViewCertHdl, Button*, void );
-    DECL_LINK(          CertSelectHdl, void* );
+    DECL_LINK_TYPED(    CertSelectHdl, SvTreeListBox*, void );
     void                Clear();
-    SvTreeListEntry*        InsertCert( SvTreeListEntry* _pParent, const OUString& _rName,
+    SvTreeListEntry*    InsertCert( SvTreeListEntry* _pParent, const OUString& _rName,
                                     css::uno::Reference< css::security::XCertificate > rxCert,
                                     bool bValid);
 

@@ -1088,7 +1088,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, ChangeHdl, Button*, void)
     sal_uInt16 nCol = m_pEntriesBox->TabCount() - 1;
     m_pEntriesBox->SetEntryText(sLabel, nPos, nCol);
 
-    ((Link<> &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
+    m_pFunctionBox->GetSelectHdl().Call( m_pFunctionBox );
 }
 
 IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RemoveHdl, Button*, void)
@@ -1102,10 +1102,10 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RemoveHdl, Button*, void)
     m_pEntriesBox->SetEntryText( OUString(), nPos, nCol );
     (pEntry->m_sCommand).clear();
 
-    ((Link<> &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
+    m_pFunctionBox->GetSelectHdl().Call( m_pFunctionBox );
 }
 
-IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
+IMPL_LINK_TYPED( SfxAcceleratorConfigPage, SelectHdl, SvTreeListBox*, pListBox, void )
 {
     // disable help
     Help::ShowBalloon( this, Point(), OUString() );
@@ -1189,8 +1189,6 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
             m_pEntriesBox->MakeVisible( pE3 );
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RadioHdl, Button*, void)
@@ -1222,7 +1220,7 @@ IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, RadioHdl, Button*, void)
     if ( pEntry )
         m_pGroupLBox->Select( pEntry );
 
-    ((Link<> &) m_pFunctionBox->GetSelectHdl()).Call( m_pFunctionBox );
+    m_pFunctionBox->GetSelectHdl().Call( m_pFunctionBox );
 }
 
 

@@ -199,7 +199,7 @@ private:
 
     DECL_LINK( SelectFilterHdl, void * );
 
-    DECL_LINK( TreeSelectHdl, FolderTree * );
+    DECL_LINK_TYPED( TreeSelectHdl, SvTreeListBox*, void );
 
     DECL_LINK_TYPED( SelectBreadcrumbHdl, Breadcrumb *, void );
 

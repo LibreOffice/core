@@ -1790,13 +1790,11 @@ IMPL_LINK_TYPED( WatchWindow, ButtonHdl, Button *, pButton, void )
             pDispatcher->Execute(SID_BASICIDE_REMOVEWATCH);
 }
 
-IMPL_LINK_NOARG(WatchWindow, TreeListHdl)
+IMPL_LINK_NOARG_TYPED(WatchWindow, TreeListHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pCurEntry = aTreeListBox->GetCurEntry();
     if ( pCurEntry && pCurEntry->GetUserData() )
         aXEdit->SetText( static_cast<WatchItem*>(pCurEntry->GetUserData())->maName );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( WatchWindow, implEndDragHdl, HeaderBar *, void )

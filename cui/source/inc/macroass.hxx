@@ -29,15 +29,15 @@
 
 class _SfxMacroTabPage;
 class SvTabListBox;
-
+class SvTreeListBox;
 class _SfxMacroTabPage_Impl;
 
 class _SfxMacroTabPage : public SfxTabPage
 {
     SvxMacroTableDtor           aTbl;
-    DECL_DLLPRIVATE_LINK( SelectEvent_Impl, SvTabListBox * );
-    DECL_DLLPRIVATE_LINK( SelectGroup_Impl, ListBox * );
-    DECL_DLLPRIVATE_LINK( SelectMacro_Impl, ListBox * );
+    DECL_DLLPRIVATE_LINK_TYPED( SelectEvent_Impl, SvTreeListBox*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( SelectGroup_Impl, SvTreeListBox*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( SelectMacro_Impl, SvTreeListBox*, void );
 
     DECL_DLLPRIVATE_LINK( AssignDeleteHdl_Impl, PushButton * );
     DECL_DLLPRIVATE_LINK_TYPED( AssignDeleteClickHdl_Impl, Button *, void );

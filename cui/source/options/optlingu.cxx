@@ -1550,7 +1550,7 @@ IMPL_LINK_NOARG(SvxLinguTabPage, OpenURLHdl_Impl)
 
 
 
-IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
+IMPL_LINK_TYPED( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox, void )
 {
     if (pBox == m_pLinguModulesCLB)
     {
@@ -1576,7 +1576,6 @@ IMPL_LINK( SvxLinguTabPage, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
             }
         }
     }
-    return 0;
 }
 
 
@@ -1761,7 +1760,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
 
 
 
-IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
+IMPL_LINK_TYPED( SvxLinguTabPage, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 {
     if (m_pLinguModulesCLB == pBox)
     {
@@ -1791,8 +1790,6 @@ IMPL_LINK( SvxLinguTabPage, SelectHdl_Impl, SvxCheckListBox *, pBox )
     {
         OSL_FAIL( "pBox unexpected value" );
     }
-
-    return 0;
 }
 
 
@@ -1948,7 +1945,7 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
     return pEntry;
 }
 
-IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
+IMPL_LINK_TYPED( SvxEditModulesDlg, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 {
     if (m_pModulesCLB == pBox)
     {
@@ -1960,7 +1957,7 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
             ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
             if(!pData->IsParent() && pData->GetType() != TYPE_HYPH)
             {
-                sal_uLong  nCurPos = pBox->GetSelectEntryPos();
+                sal_uLong  nCurPos = static_cast<SvxCheckListBox*>(pBox)->GetSelectEntryPos();
                 if(nCurPos < pBox->GetEntryCount() - 1)
                 {
                     bDisableDown = static_cast<ModuleUserData_Impl*>(pBox->
@@ -1980,15 +1977,13 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
     {
         OSL_FAIL( "pBox unexpected value" );
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( SvxEditModulesDlg, BoxCheckButtonHdl_Impl2, SvLBoxButtonData*, void )
 {
     BoxCheckButtonHdl_Impl(NULL);
 }
-IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, /*pBox*/ )
+IMPL_LINK_NOARG_TYPED( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, void )
 {
     SvTreeListEntry *pCurEntry = m_pModulesCLB->GetCurEntry();
     if (pCurEntry)
@@ -2014,7 +2009,6 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, /*pBox*/ 
             }
         }
     }
-    return 0;
 }
 
 IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )

@@ -98,7 +98,7 @@ SwFieldRefPage::SwFieldRefPage(vcl::Window* pParent, const SfxItemSet& rCoreSet 
     m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFieldRefPage, InsertHdl));
 
     // #i83479#
-    m_pSelectionToolTipLB->SetSelectHdl( LINK(this, SwFieldRefPage, SubTypeHdl) );
+    m_pSelectionToolTipLB->SetSelectHdl( LINK(this, SwFieldRefPage, SubTypeTreeListBoxHdl) );
     m_pSelectionToolTipLB->SetDoubleClickHdl( LINK(this, SwFieldRefPage, InsertHdl) );
     m_pSelectionToolTipLB->SetStyle( m_pSelectionToolTipLB->GetStyle() | WB_HSCROLL );
     m_pSelectionToolTipLB->SetSpaceBetweenEntries(1);
@@ -407,13 +407,17 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl)
         bool bFormat = nSize != 0;
         m_pFormat->Enable(bFormat);
 
-        SubTypeHdl();
-        ModifyHdl();
+        SubTypeHdl(NULL);
+        ModifyHdl(NULL);
     }
 
     return 0;
 }
 
+IMPL_LINK_NOARG_TYPED(SwFieldRefPage, SubTypeTreeListBoxHdl, SvTreeListBox*, void)
+{
+    SubTypeHdl(NULL);
+}
 IMPL_LINK_NOARG(SwFieldRefPage, SubTypeHdl)
 {
     sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));

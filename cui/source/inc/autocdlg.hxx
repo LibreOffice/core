@@ -160,7 +160,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
     SvLBoxButtonData*   pCheckButtonData;
 
-        DECL_LINK(SelectHdl, OfaACorrCheckListBox*);
+        DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
         DECL_LINK_TYPED(EditHdl, Button*, void);
         DECL_LINK(DoubleClickEditHdl, void*);
         SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
@@ -252,7 +252,7 @@ private:
         bool bReplaceEditChanged:1;
         bool bSWriter:1;
 
-        DECL_LINK(SelectHdl, SvTabListBox*);
+        DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
         DECL_LINK_TYPED(NewDelHdl, Button*, void);
         DECL_LINK(NewDelActionHdl, PushButton*);
         DECL_LINK(ModifyHdl, Edit*);
@@ -506,7 +506,7 @@ private:
         Enables/disables the properties push button if selection in the
         smart tag types list box changes.
     */
-    DECL_LINK(SelectHdl, void *);
+    DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
 
 public:
     /// construction via Create()

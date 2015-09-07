@@ -216,7 +216,7 @@ protected:
     bool bBindingUpdate :1;
 
     DECL_LINK( FilterSelectHdl, ListBox* );
-    DECL_LINK( FmtSelectHdl, SvTreeListBox* );
+    DECL_LINK_TYPED( FmtSelectHdl, SvTreeListBox*, void );
     DECL_LINK( ApplyHdl, Control* );
     DECL_LINK( DropHdl, StyleTreeListBox_Impl* );
     DECL_LINK_TYPED( TimeOut, Idle*, void );

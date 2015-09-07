@@ -39,7 +39,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK( BtnAutomaticSelectHdl, void* );
-    DECL_LINK( DeviceSelHdl, void* );
+    DECL_LINK_TYPED( DeviceSelHdl, SvTreeListBox*, void );
     DECL_LINK( EditModifiedHdl, Edit * );
     DECL_STATIC_LINK_TYPED( ScCalcOptionsDialog, TestClickHdl, Button*, void );
     DECL_LINK_TYPED( AsZeroModifiedHdl, Button*, void);

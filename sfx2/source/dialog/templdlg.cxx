@@ -2105,7 +2105,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, pControl )
 }
 
 // Selection of a template during the Watercan-Status
-IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox )
+IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox, void )
 {
     // Trigger Help PI, if this is permitted of call handlers and field
     if( !pListBox || pListBox->IsSelected( pListBox->GetHdlEntry() ) )
@@ -2146,8 +2146,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
         }
 #endif
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu*, pMenu, bool )

@@ -381,7 +381,7 @@ void SvxPathTabPage::FillUserData()
 
 
 
-IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathSelect_Impl, SvTreeListBox*, void)
 {
     sal_uInt16 nSelCount = 0;
     SvTreeListEntry* pEntry = pPathBox->FirstSelected();
@@ -399,7 +399,6 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
 
     m_pPathBtn->Enable( 1 == nSelCount && bEnable);
     m_pStandardBtn->Enable( nSelCount > 0 && bEnable);
-    return 0;
 }
 
 

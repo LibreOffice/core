@@ -933,18 +933,15 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, DeselectHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, DeselectHdl, SvTreeListBox*, void)
 {
     // avoid flickering of buttons:
     aDeselectTimer.Start();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(SwRedlineAcceptDlg, SelectHdl)
+IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, SelectHdl, SvTreeListBox*, void)
 {
     SelectTimerHdl(nullptr);
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, SelectTimerHdl, Timer *, void)

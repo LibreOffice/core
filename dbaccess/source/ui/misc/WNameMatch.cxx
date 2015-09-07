@@ -254,7 +254,7 @@ IMPL_LINK_TYPED( OWizNameMatching, RightButtonClickHdl, Button *, pButton, void 
     }
 }
 
-IMPL_LINK_NOARG( OWizNameMatching, TableListClickHdl )
+IMPL_LINK_NOARG_TYPED( OWizNameMatching, TableListClickHdl, SvTreeListBox*, void )
 {
     SvTreeListEntry* pEntry = m_pCTRL_LEFT->FirstSelected();
     if(pEntry)
@@ -284,11 +284,9 @@ IMPL_LINK_NOARG( OWizNameMatching, TableListClickHdl )
             }
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG( OWizNameMatching, TableListRightSelectHdl )
+IMPL_LINK_NOARG_TYPED( OWizNameMatching, TableListRightSelectHdl, SvTreeListBox*, void )
 {
     SvTreeListEntry* pEntry = m_pCTRL_RIGHT->FirstSelected();
     if(pEntry)
@@ -318,8 +316,6 @@ IMPL_LINK_NOARG( OWizNameMatching, TableListRightSelectHdl )
             }
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( OWizNameMatching, AllNoneClickHdl, Button *, pButton, void )

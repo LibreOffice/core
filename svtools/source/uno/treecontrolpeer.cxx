@@ -96,9 +96,9 @@ public:
     virtual bool    EditingEntry( SvTreeListEntry* pEntry, Selection& ) SAL_OVERRIDE;
     virtual bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText ) SAL_OVERRIDE;
 
-    DECL_LINK(OnSelectionChangeHdl, void *);
-    DECL_LINK(OnExpandingHdl, void *);
-    DECL_LINK(OnExpandedHdl, void *);
+    DECL_LINK_TYPED(OnSelectionChangeHdl, SvTreeListBox*, void);
+    DECL_LINK_TYPED(OnExpandingHdl, SvTreeListBox*, bool);
+    DECL_LINK_TYPED(OnExpandedHdl, SvTreeListBox*, void);
 
 private:
     rtl::Reference< TreeControlPeer > mxPeer;
@@ -1507,36 +1507,34 @@ void UnoTreeListBoxImpl::dispose()
 
 
 
-IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnSelectionChangeHdl)
+IMPL_LINK_NOARG_TYPED(UnoTreeListBoxImpl, OnSelectionChangeHdl, SvTreeListBox*, void)
 {
     if( mxPeer.is() )
         mxPeer->onSelectionChanged();
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandingHdl)
+IMPL_LINK_NOARG_TYPED(UnoTreeListBoxImpl, OnExpandingHdl, SvTreeListBox*, bool)
 {
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( GetHdlEntry() );
 
     if( pEntry && mxPeer.is() )
     {
-        return mxPeer->onExpanding( pEntry->mxNode, !IsExpanded( pEntry ) ) ? 1 : 0;
+        return mxPeer->onExpanding( pEntry->mxNode, !IsExpanded( pEntry ) );
     }
-    return 0;
+    return false;
 }
 
 
 
-IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandedHdl)
+IMPL_LINK_NOARG_TYPED(UnoTreeListBoxImpl, OnExpandedHdl, SvTreeListBox*, void)
 {
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( GetHdlEntry() );
     if( pEntry && mxPeer.is() )
     {
         mxPeer->onExpanded( pEntry->mxNode, IsExpanded( pEntry ) );
     }
-    return 0;
 }
 
 

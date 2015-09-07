@@ -159,7 +159,7 @@ private:
         ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
     bool showDescription( const OUString& rDescription);
 
-    DECL_LINK(selectionHandler, void *);
+    DECL_LINK_TYPED(selectionHandler, SvTreeListBox*, void);
     DECL_LINK(allHandler, void *);
     DECL_LINK_TYPED(okHandler, Button*, void);
     DECL_LINK_TYPED(closeHandler, Button*, void);

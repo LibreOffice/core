@@ -377,7 +377,7 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
+IMPL_LINK_NOARG_TYPED(ScSolverOptionsDialog, SettingsSelHdl, SvTreeListBox*, void)
 {
     bool bCheckbox = false;
 
@@ -390,8 +390,6 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
     }
 
     m_pBtnEdit->Enable( !bCheckbox );
-
-    return 0;
 }
 
 ScSolverIntegerDialog::ScSolverIntegerDialog(vcl::Window * pParent)

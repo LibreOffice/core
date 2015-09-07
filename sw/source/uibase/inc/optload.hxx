@@ -156,8 +156,8 @@ private:
     DECL_LINK(SelectHdl, void *);
     DECL_LINK(ModifyHdl, void * = 0);
     DECL_LINK( OrderHdl, ListBox* );
-    DECL_LINK(ShowEntryHdl, void *);
-    DECL_LINK(SaveEntryHdl, void *);
+    DECL_LINK_TYPED(ShowEntryHdl, SvTreeListBox*, void);
+    DECL_LINK_TYPED(SaveEntryHdl, SvTreeListBox*, void);
 
     void DelUserData();
     void SetOptions(const sal_uLong nPos, const SwCapObjType eType, const SvGlobalName *pOleId = 0);

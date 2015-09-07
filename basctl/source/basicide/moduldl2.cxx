@@ -605,16 +605,14 @@ void LibPage::DeactivatePage()
 {
 }
 
-IMPL_LINK( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
+IMPL_LINK_TYPED( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox, void )
 {
     if ( pBox->IsSelected( pBox->GetHdlEntry() ) )
         CheckButtons();
-    return 0;
 }
 
-IMPL_LINK( LibPage, BasicSelectHdl, ListBox *, pBox )
+IMPL_LINK( LibPage, BasicSelectHdl, ListBox *, /*pBox*/ )
 {
-    (void)pBox;
     SetCurLib();
     CheckButtons();
     return 0;

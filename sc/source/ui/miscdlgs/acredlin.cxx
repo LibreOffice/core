@@ -1109,13 +1109,12 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScAcceptChgDlg, SelectHandle)
+IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, SelectHandle, SvTreeListBox*, void)
 {
     if(!bNoSelection)
         aSelectionIdle.Start();
 
     bNoSelection=false;
-    return 0;
 }
 
 void ScAcceptChgDlg::GetDependents(  const ScChangeAction* pScChangeAction,
@@ -1347,7 +1346,7 @@ bool ScAcceptChgDlg::Expand(
     return bTheTestFlag;
 }
 
-IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
+IMPL_LINK_TYPED( ScAcceptChgDlg, ExpandingHandle, SvTreeListBox*, pTable, bool )
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
     SetPointer(Pointer(PointerStyle::Wait));
@@ -1410,7 +1409,7 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
         }
     }
     SetPointer(Pointer(PointerStyle::Arrow));
-    return (sal_uLong) true;
+    return true;
 }
 
 void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction,

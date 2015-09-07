@@ -936,7 +936,7 @@ void SvxScriptSelectorDialog::dispose()
     ModelessDialog::dispose();
 }
 
-IMPL_LINK( SvxScriptSelectorDialog, SelectHdl, Control*, pCtrl )
+IMPL_LINK_TYPED( SvxScriptSelectorDialog, SelectHdl, SvTreeListBox*, pCtrl, void )
 {
     if (pCtrl == m_pCategories)
     {
@@ -947,7 +947,6 @@ IMPL_LINK( SvxScriptSelectorDialog, SelectHdl, Control*, pCtrl )
         m_pCommands->FunctionSelected();
     }
     UpdateUI();
-    return 0;
 }
 
 IMPL_LINK( SvxScriptSelectorDialog, FunctionDoubleClickHdl, Control*, pCtrl )

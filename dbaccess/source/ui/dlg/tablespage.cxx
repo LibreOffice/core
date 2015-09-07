@@ -93,7 +93,7 @@ namespace dbaui
 
         m_pTablesList->Clear();
 
-        m_pTablesList->SetCheckButtonHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
+        m_pTablesList->SetCheckButtonHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryButtonChecked));
         m_pTablesList->SetCheckHandler(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
     }
 
@@ -397,6 +397,10 @@ namespace dbaui
         catch (RuntimeException&) { }
 
         return nResult;
+    }
+    IMPL_LINK_NOARG_TYPED( OTableSubscriptionPage, OnTreeEntryButtonChecked, SvTreeListBox*, void )
+    {
+        callModifiedHdl();
     }
     IMPL_LINK( OTableSubscriptionPage, OnTreeEntryChecked, Control*, _pControl )
     {

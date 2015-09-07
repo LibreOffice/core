@@ -185,7 +185,7 @@ class SvxScriptSelectorDialog : public ModelessDialog
     Link<>                          m_aAddHdl;
 
     DECL_LINK_TYPED( ClickHdl, Button *, void );
-    DECL_LINK( SelectHdl, Control* );
+    DECL_LINK_TYPED( SelectHdl, SvTreeListBox*, void );
     DECL_LINK( FunctionDoubleClickHdl, Control* );
 
     void                            UpdateUI();

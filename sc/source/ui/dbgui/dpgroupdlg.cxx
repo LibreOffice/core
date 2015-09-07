@@ -352,12 +352,11 @@ IMPL_LINK_TYPED( ScDPDateGroupDlg, ClickHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK( ScDPDateGroupDlg, CheckHdl, SvxCheckListBox*, pListBox )
+IMPL_LINK_TYPED( ScDPDateGroupDlg, CheckHdl, SvTreeListBox*, pListBox, void )
 {
     // enable/disable OK button on modifying check list box
     if( pListBox == mpLbUnits )
         mpBtnOk->Enable( mpLbUnits->GetCheckedEntryCount() > 0 );
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -370,14 +370,12 @@ short DigitalSignaturesDialog::Execute()
     return Dialog::Execute();
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureHighlightHdl)
+IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, SignatureHighlightHdl, SvTreeListBox*, void)
 {
     bool bSel = m_pSignaturesLB->FirstSelected();
     m_pViewBtn->Enable( bSel );
     if ( m_pAddBtn->IsEnabled() ) // not read only
         m_pRemoveBtn->Enable( bSel );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, OKButtonHdl, Button*, void)

@@ -73,7 +73,7 @@ namespace dbaui
         DECL_LINK_TYPED( AddClickHdl, Button*, void );
         DECL_LINK_TYPED( CloseClickHdl, Button*, void);
         DECL_LINK( TableListDoubleClickHdl, void* );
-        DECL_LINK( TableListSelectHdl, void* );
+        DECL_LINK_TYPED( TableListSelectHdl, SvTreeListBox*, void );
         DECL_LINK_TYPED( OnTypeSelected, Button*, void );
 
     public:

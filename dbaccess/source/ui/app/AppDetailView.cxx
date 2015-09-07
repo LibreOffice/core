@@ -440,12 +440,11 @@ void OTasksWindow::setHelpText(sal_uInt16 _nId)
 
 }
 
-IMPL_LINK(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, /*_pTreeBox*/)
+IMPL_LINK_NOARG_TYPED(OTasksWindow, OnEntrySelectHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_aCreation->GetHdlEntry();
     if ( pEntry )
         m_aHelpText->SetText( ModuleRes( static_cast< TaskEntry* >( pEntry->GetUserData() )->nHelpID ) );
-    return 1L;
 }
 
 void OTasksWindow::Resize()

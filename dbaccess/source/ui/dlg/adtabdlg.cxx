@@ -435,10 +435,9 @@ IMPL_LINK_NOARG( OAddTableDlg, TableListDoubleClickHdl )
     return 0L;  // not handled
 }
 
-IMPL_LINK_NOARG( OAddTableDlg, TableListSelectHdl )
+IMPL_LINK_NOARG_TYPED( OAddTableDlg, TableListSelectHdl, SvTreeListBox*, void )
 {
     m_pAddButton->Enable( m_xCurrentList->isLeafSelected() );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( OAddTableDlg, CloseClickHdl, Button*, void )

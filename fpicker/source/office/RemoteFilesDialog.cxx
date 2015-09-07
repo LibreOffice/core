@@ -1036,7 +1036,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectFilterHdl )
     return 1;
 }
 
-IMPL_LINK ( RemoteFilesDialog, TreeSelectHdl, FolderTree *, pBox )
+IMPL_LINK_TYPED( RemoteFilesDialog, TreeSelectHdl, SvTreeListBox *, pBox, void )
 {
     OUString* sURL = static_cast< OUString* >( pBox->GetHdlEntry()->GetUserData() );
 
@@ -1045,8 +1045,6 @@ IMPL_LINK ( RemoteFilesDialog, TreeSelectHdl, FolderTree *, pBox )
         OpenURL( *sURL );
         m_pFileView->GrabFocus();
     }
-
-    return 1;
 }
 
 IMPL_LINK_TYPED ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr, void )
@@ -1323,7 +1321,7 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
 
     m_pPath->SetURL( rURL );
 
-    m_pTreeView->SetSelectHdl( Link<>() );
+    m_pTreeView->SetSelectHdl( Link<SvTreeListBox*,void>() );
 
     // read cached data for this url and fill the tree
     const ::std::vector< SvtContentEntry >& rFolders = m_pFileView->GetContent();

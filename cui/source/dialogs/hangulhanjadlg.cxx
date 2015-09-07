@@ -1015,14 +1015,12 @@ namespace svx
         EndDialog( RET_OK );
     }
 
-    IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DictsLB_SelectHdl)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaOptionsDialog, DictsLB_SelectHdl, SvTreeListBox*, void)
     {
         bool bSel = m_pDictsLB->FirstSelected() != NULL;
 
         m_pEditPB->Enable(bSel);
         m_pDeletePB->Enable(bSel);
-
-        return 0;
     }
 
     IMPL_LINK_NOARG_TYPED(HangulHanjaOptionsDialog, NewDictHdl, Button*, void)

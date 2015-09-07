@@ -234,7 +234,7 @@ protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
     DECL_LINK_TYPED( ButtonHdl, Button *, void );
-    DECL_LINK(TreeListHdl, void *);
+    DECL_LINK_TYPED(TreeListHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED( implEndDragHdl, HeaderBar *, void );
     DECL_LINK_TYPED( EditAccHdl, Accelerator *, void );
 

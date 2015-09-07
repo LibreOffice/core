@@ -200,12 +200,11 @@ uno::Reference< css::security::XCertificate > CertificateChooser::GetSelectedCer
     return xCert;
 }
 
-IMPL_LINK_NOARG(CertificateChooser, CertificateHighlightHdl)
+IMPL_LINK_NOARG_TYPED(CertificateChooser, CertificateHighlightHdl, SvTreeListBox*, void)
 {
     bool bEnable = GetSelectedCertificate().is();
     m_pViewBtn->Enable( bEnable );
     m_pOKBtn->Enable( bEnable );
-    return 0;
 }
 
 IMPL_LINK_NOARG(CertificateChooser, CertificateSelectHdl)

@@ -273,14 +273,14 @@ namespace svxform
         bool                        m_bLinkOnce;
 
         DECL_LINK_TYPED(TbxSelectHdl, ToolBox *, void);
-        DECL_LINK(ItemSelectHdl, void *);
+        DECL_LINK_TYPED(ItemSelectHdl, SvTreeListBox*, void);
 
         void                        AddChildren( SvTreeListEntry* _pParent,
                                                  const ImageList& _rImgLst,
                                                  const XNode_ref& _xNode );
         bool                        DoToolBoxAction( sal_uInt16 _nToolBoxID );
-        SvTreeListEntry*                AddEntry( ItemNode* _pNewNode, bool _bIsElement );
-        SvTreeListEntry*                AddEntry( const XPropertySet_ref& _rPropSet );
+        SvTreeListEntry*            AddEntry( ItemNode* _pNewNode, bool _bIsElement );
+        SvTreeListEntry*            AddEntry( const XPropertySet_ref& _rPropSet );
         void                        EditEntry( const XPropertySet_ref& _rPropSet );
         bool                        RemoveEntry();
 
@@ -528,7 +528,7 @@ namespace svxform
 
         XNameContainer_ref& m_rNamespaces;
 
-        DECL_LINK(          SelectHdl, SvSimpleTable * );
+        DECL_LINK_TYPED(    SelectHdl, SvTreeListBox*, void );
         DECL_LINK_TYPED(    ClickHdl, Button*, void );
         DECL_LINK_TYPED(    OKHdl, Button*, void);
 

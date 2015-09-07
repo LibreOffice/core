@@ -79,7 +79,7 @@ private:
 
     IFormulaToken*  pSelectedToken;
 
-    DECL_LINK( SelectHdl, SvTreeListBox* );
+    DECL_LINK_TYPED( SelectHdl, SvTreeListBox*, void );
 
     using Window::GetParent;
 

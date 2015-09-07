@@ -125,7 +125,7 @@ public:
 private:
     DECL_LINK_TYPED( DirectionHdl, Button*, void );
     DECL_LINK(EditFieldsHdl, void *);
-    DECL_LINK( MappingSelectHdl, void* );
+    DECL_LINK_TYPED( MappingSelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( AddHdl, Button*, void );
     DECL_LINK_TYPED( ModifyHdl, Button*, void );
     DECL_LINK_TYPED( DeleteHdl, Button*, void );

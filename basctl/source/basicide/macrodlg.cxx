@@ -482,7 +482,7 @@ IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl)
     return 0;
 }
 
-IMPL_LINK( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox )
+IMPL_LINK_TYPED( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox, void )
 {
     // Is also called if deselected!
     // Two function calls in every SelectHdl because
@@ -493,17 +493,16 @@ IMPL_LINK( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox )
         UpdateFields();
         CheckButtons();
     }
-    return 0;
 }
 
-IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
+IMPL_LINK_TYPED( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
 {
     // Is also called if deselected!
     // Two function calls in every SelectHdl because
     // there's no separate DeselectHDL.
     // So find out if select or deselect:
     if ( !pBox->IsSelected( pBox->GetHdlEntry() ) )
-        return 0;
+        return;
 
     SbModule* pModule = m_pBasicBox->FindModule( m_pBasicBox->GetCurEntry() );
 
@@ -547,7 +546,6 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 
     UpdateFields();
     CheckButtons();
-    return 0;
 }
 
 

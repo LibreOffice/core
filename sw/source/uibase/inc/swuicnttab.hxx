@@ -413,7 +413,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     DECL_LINK(StyleSelectHdl, ListBox*);
     DECL_LINK_TYPED(EditStyleHdl, Button*, void);
     DECL_LINK_TYPED(InsertTokenHdl, Button*, void);
-    DECL_LINK(LevelHdl, SvTreeListBox*);
+    DECL_LINK_TYPED(LevelHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(AutoRightHdl, Button*, void);
     DECL_LINK(TokenSelectedHdl, SwFormToken*);
     DECL_LINK(TabPosHdl, MetricField*);

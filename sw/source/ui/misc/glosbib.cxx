@@ -184,7 +184,7 @@ void SwGlossaryGroupDlg::Apply()
     }
 }
 
-IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*,  )
+IMPL_LINK_NOARG_TYPED( SwGlossaryGroupDlg, SelectHdl, SvTreeListBox*, void )
 {
     m_pNewPB->Enable(false);
     SvTreeListEntry* pFirstEntry = m_pGroupTLB->FirstSelected();
@@ -205,7 +205,6 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*,  )
         m_pRenamePB->Enable(!bExists && !sName.isEmpty());
         m_pDelPB->Enable(IsDeleteAllowed(sEntry));
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwGlossaryGroupDlg, NewHdl, Button*, void)

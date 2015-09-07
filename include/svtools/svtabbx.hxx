@@ -132,7 +132,7 @@ private:
     ::svt::IAccessibleTabListBox*   m_pAccessible;
     AccessibleChildren              m_aAccessibleChildren;
 
-    DECL_DLLPRIVATE_LINK( ScrollHdl_Impl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl_Impl, SvTreeListBox*, void );
     DECL_DLLPRIVATE_LINK_TYPED( CreateAccessibleHdl_Impl, HeaderBar*, void );
 
     void            RecalculateAccessibleChildren();

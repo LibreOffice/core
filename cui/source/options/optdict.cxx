@@ -565,7 +565,7 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
 
 
 
-IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
+IMPL_LINK_TYPED(SvxEditDictionaryDialog, SelectHdl, SvTreeListBox*, pBox, void)
 {
     if(!bDoNothing)
     {
@@ -587,7 +587,6 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
         pNewReplacePB->Enable(false);
         pDeletePB->Enable( true && !IsDicReadonly_Impl() );
     }
-    return 0;
 };
 
 

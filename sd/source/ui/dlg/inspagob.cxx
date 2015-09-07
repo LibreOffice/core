@@ -128,14 +128,12 @@ bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 /**
  * Enabled and selects end-color-LB
  */
-IMPL_LINK_NOARG(SdInsertPagesObjsDlg, SelectObjectHdl)
+IMPL_LINK_NOARG_TYPED(SdInsertPagesObjsDlg, SelectObjectHdl, SvTreeListBox*, void)
 {
     if( m_pLbTree->IsLinkableSelected() )
         m_pCbxLink->Enable();
     else
         m_pCbxLink->Disable();
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

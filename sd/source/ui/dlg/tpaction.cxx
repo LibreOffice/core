@@ -651,10 +651,9 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
     return 0L;
 }
 
-IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl)
+IMPL_LINK_NOARG_TYPED(SdTPAction, SelectTreeHdl, SvTreeListBox*, void)
 {
     m_pEdtBookmark->SetText( m_pLbTree->GetSelectEntry() );
-    return 0L;
 }
 
 IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)

@@ -26,7 +26,7 @@ private:
     OUString    m_sAddDialogText;
     OUString    m_sManual;
 
-    DECL_LINK(CheckHdl_Impl, SvSimpleTable *);
+    DECL_LINK_TYPED(CheckHdl_Impl, SvTreeListBox*, void);
     DECL_LINK_TYPED(AddHdl_Impl, Button*, void);
     DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
 

@@ -64,7 +64,7 @@ class SvBaseLinksDlg : public ModalDialog
     bool            bHtmlMode;
     Idle aUpdateIdle;
 
-    DECL_LINK( LinksSelectHdl, SvTabListBox * );
+    DECL_LINK_TYPED( LinksSelectHdl, SvTreeListBox*, void );
     DECL_LINK( LinksDoubleClickHdl, SvTabListBox * );
     DECL_LINK_TYPED( AutomaticClickHdl, Button *, void );
     DECL_LINK_TYPED( ManualClickHdl, Button *, void );

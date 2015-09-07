@@ -533,7 +533,7 @@ void DataSourceTabPage::updateControlState()
     isValid();
 }
 
-IMPL_LINK_NOARG(DataSourceTabPage, SeriesSelectionChangedHdl)
+IMPL_LINK_NOARG_TYPED(DataSourceTabPage, SeriesSelectionChangedHdl, SvTreeListBox*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     if( m_pLB_SERIES->FirstSelected())
@@ -542,11 +542,9 @@ IMPL_LINK_NOARG(DataSourceTabPage, SeriesSelectionChangedHdl)
         RoleSelectionChangedHdl( 0 );
     }
     updateControlState();
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
+IMPL_LINK_NOARG_TYPED(DataSourceTabPage, RoleSelectionChangedHdl, SvTreeListBox*, void)
 {
     m_rDialogModel.startControllerLockTimer();
     SvTreeListEntry * pEntry = m_pLB_ROLE->FirstSelected();
@@ -568,8 +566,6 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
         m_pEDT_RANGE->SetText( aSelectedRange );
         isValid();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(DataSourceTabPage, MainRangeButtonClickedHdl, Button*, void)

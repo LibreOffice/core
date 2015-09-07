@@ -338,7 +338,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     Link<> aLink = LINK( this, SvxNumberFormatTabPage, SelFormatHdl_Impl );
 
     m_pLbCategory->SetSelectHdl( aLink );
-    m_pLbFormat->SetSelectHdl( aLink );
+    m_pLbFormat->SetSelectHdl( LINK( this, SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl ) );
     m_pLbLanguage->SetSelectHdl( aLink );
     m_pLbCurrency->SetSelectHdl( aLink );
     m_pCbSourceFormat->SetClickHdl( LINK( this, SvxNumberFormatTabPage, SelFormatClickHdl_Impl ) );
@@ -1191,6 +1191,10 @@ IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvxFontListBox*, pLb )
 #************************************************************************/
 
 IMPL_LINK_TYPED( SvxNumberFormatTabPage, SelFormatClickHdl_Impl, Button*, pLb, void )
+{
+    SelFormatHdl_Impl(pLb);
+}
+IMPL_LINK_TYPED( SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl, SvTreeListBox*, pLb, void )
 {
     SelFormatHdl_Impl(pLb);
 }

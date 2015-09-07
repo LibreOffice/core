@@ -569,7 +569,7 @@ void    SwEditRegionDlg::SelectSection(const OUString& rSectionName)
 
 // selected entry in TreeListBox is showed in Edit window in case of
 // multiselection some controls are disabled
-IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
+IMPL_LINK_TYPED( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox, void )
 {
     bDontCheckPasswd = true;
     SvTreeListEntry* pEntry=pBox->FirstSelected();
@@ -669,7 +669,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
             pBox->SelectAll( false );
             pBox->Select( pEntry );
             GetFirstEntryHdl(pBox);
-            return 0;
+            return;
         }
         else
             m_pPasswdCB->Check(aCurPasswd.getLength() > 0);
@@ -727,10 +727,9 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         m_pPasswdPB->Enable(bPasswdEnabled);
     }
     bDontCheckPasswd = false;
-    return 0;
 }
 
-IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
+IMPL_LINK_TYPED( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox, void )
 {
     if( !pBox->GetSelectionCount() )
     {
@@ -750,7 +749,6 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
         UseFileHdl(m_pFileCB);
         DDEHdl(m_pDDECB);
     }
-    return 0;
 }
 
 // in OkHdl the modified settings are being applied and reversed regions are deleted

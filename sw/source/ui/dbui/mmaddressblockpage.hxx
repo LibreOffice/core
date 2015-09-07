@@ -221,7 +221,7 @@ private:
     DialogType              m_eType;
 
     DECL_LINK_TYPED(OKHdl_Impl, Button*, void);
-    DECL_LINK(ListBoxSelectHdl_Impl, DDListBox*);
+    DECL_LINK_TYPED(ListBoxSelectHdl_Impl, SvTreeListBox*, void);
     DECL_LINK(EditModifyHdl_Impl, void *);
     DECL_LINK_TYPED(ImageButtonHdl_Impl, Button*, void);
     DECL_LINK(SelectionChangedHdl_Impl, AddressMultiLineEdit*);

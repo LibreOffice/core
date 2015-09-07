@@ -1258,10 +1258,10 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
     return 0;
 }
 
-IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks )
+IMPL_LINK_TYPED( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks, void )
 {
     if (pChecks != maChecks.get())
-        return 0;
+        return;
     SvTreeListEntry* pEntry = pChecks->GetHdlEntry();
     if ( pEntry )
         maChecks->CheckEntry( pEntry,  ( pChecks->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) );
@@ -1280,7 +1280,6 @@ IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks )
         maBtnOk->Enable(nNumChecked != 0);
 
     mePrevToggleAllState = maChkToggleAll->GetState();
-    return 0;
 }
 
 void ScCheckListMenuWindow::MouseMove(const MouseEvent& rMEvt)

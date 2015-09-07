@@ -45,8 +45,8 @@ private:
 
     DECL_LINK_TYPED(AddHdl_Impl, Button*, void);
     DECL_LINK_TYPED(DelHdl_Impl, Button*, void);
-    DECL_LINK(SelectHdl_Impl, void *);
-    DECL_LINK(CheckHdl_Impl, svx::SvxRadioButtonListBox*);
+    DECL_LINK_TYPED(SelectHdl_Impl, SvTreeListBox*, void);
+    DECL_LINK_TYPED(CheckHdl_Impl, SvTreeListBox*, void);
 
 public:
     SvxMultiPathDialog(vcl::Window* pParent);

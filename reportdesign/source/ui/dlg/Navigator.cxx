@@ -184,7 +184,7 @@ public:
     virtual ~NavigatorTree();
     virtual void dispose() SAL_OVERRIDE;
 
-    DECL_LINK(OnEntrySelDesel, NavigatorTree*);
+    DECL_LINK_TYPED(OnEntrySelDesel, SvTreeListBox*, void);
     DECL_LINK_TYPED( OnDropActionTimer, Timer*, void );
 
     virtual void _selectionChanged( const lang::EventObject& aEvent ) throw (uno::RuntimeException) SAL_OVERRIDE;
@@ -455,7 +455,7 @@ IMPL_LINK_NOARG_TYPED(NavigatorTree, OnDropActionTimer, Timer *, void)
 }
 
 
-IMPL_LINK(NavigatorTree, OnEntrySelDesel, NavigatorTree*, /*pThis*/)
+IMPL_LINK_NOARG_TYPED(NavigatorTree, OnEntrySelDesel, SvTreeListBox*, void)
 {
     if ( !m_pSelectionListener->locked() )
     {
@@ -467,8 +467,6 @@ IMPL_LINK(NavigatorTree, OnEntrySelDesel, NavigatorTree*, /*pThis*/)
         m_rController.select(aSelection);
         m_pSelectionListener->unlock();
     }
-
-    return 0L;
 }
 
 void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (uno::RuntimeException)

@@ -261,7 +261,7 @@ bool _SfxMacroTabPage::IsReadOnly() const
     return mpImpl->bReadOnly;
 }
 
-IMPL_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, )
+IMPL_LINK_NOARG_TYPED( _SfxMacroTabPage, SelectEvent_Impl, SvTreeListBox*, void)
 {
     SvHeaderTabListBox&     rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry*            pE = rListBox.FirstSelected();
@@ -270,15 +270,14 @@ IMPL_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, )
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
     {
         DBG_ASSERT( pE, "wo kommt der leere Eintrag her?" );
-        return 0;
+        return;
     }
 
     ScriptChanged();
     EnableButtons();
-    return 0;
 }
 
-IMPL_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, )
+IMPL_LINK_NOARG_TYPED( _SfxMacroTabPage, SelectGroup_Impl, SvTreeListBox*, void)
 {
     mpImpl->pGroupLB->GroupSelected();
     const OUString sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
@@ -288,13 +287,11 @@ IMPL_LINK( _SfxMacroTabPage, SelectGroup_Impl, ListBox*, )
     mpImpl->pMacroFrame->set_label( aLabelText );
 
     EnableButtons();
-    return 0;
 }
 
-IMPL_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, )
+IMPL_LINK_NOARG_TYPED( _SfxMacroTabPage, SelectMacro_Impl, SvTreeListBox*, void)
 {
     EnableButtons();
-    return 0;
 }
 
 IMPL_LINK_TYPED( _SfxMacroTabPage, AssignDeleteClickHdl_Impl, Button*, pBtn, void )

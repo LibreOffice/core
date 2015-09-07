@@ -396,7 +396,7 @@ IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvxCheckListBox *, pBox )
+IMPL_LINK_TYPED( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvTreeListBox *, pBox, void )
 {
     SvTreeListEntry *pEntry = pBox ? pBox->GetCurEntry() : NULL;
     if (pEntry)
@@ -410,7 +410,6 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvxCheckListBox *, pB
         }
         m_pReplaceEdit->SetText( aStr );
     }
-    return 0;
 }
 
 IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox *, pBox )

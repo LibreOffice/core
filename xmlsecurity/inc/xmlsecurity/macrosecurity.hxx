@@ -131,7 +131,7 @@ private:
     DECL_LINK_TYPED(    RemoveCertPBHdl, Button*, void );
     DECL_LINK_TYPED(    AddLocPBHdl, Button*, void );
     DECL_LINK_TYPED(    RemoveLocPBHdl, Button*, void );
-    DECL_LINK(          TrustCertLBSelectHdl, void* );
+    DECL_LINK_TYPED(    TrustCertLBSelectHdl, SvTreeListBox*, void );
     DECL_LINK(          TrustFileLocLBSelectHdl, void* );
 
     void                FillCertLB();

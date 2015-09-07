@@ -160,10 +160,9 @@ IMPL_LINK_TYPED(XMLFilterSettingsDialog, ClickHdl_Impl, Button *, pButton, void 
     m_bIsClosable = true;
 }
 
-IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl)
+IMPL_LINK_NOARG_TYPED(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, SvTreeListBox*, void)
 {
     updateStates();
-    return 0;
 }
 
 IMPL_LINK_NOARG(XMLFilterSettingsDialog, DoubleClickHdl_Impl)
@@ -1439,10 +1438,9 @@ void XMLFilterListBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle
     SvTabListBox::Paint(rRenderContext, rRect);
 }
 
-IMPL_LINK( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTabListBox*, /* pList */ )
+IMPL_LINK_NOARG_TYPED( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTreeListBox*, void )
 {
     m_pHeaderBar->SetOffset( -GetXOffset() );
-    return 0;
 }
 
 IMPL_LINK_TYPED( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )

@@ -91,7 +91,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
     Link<> aLink(LINK(this, SvxFontSubstTabPage, SelectHdl));
     Link<Button*,void> aClickLink(LINK(this, SvxFontSubstTabPage, ClickHdl));
 
-    m_pCheckLB->SetSelectHdl(aLink);
+    m_pCheckLB->SetSelectHdl(LINK(this, SvxFontSubstTabPage, TreeListBoxSelectHdl));
     m_pUseTableCB->SetClickHdl(aClickLink);
     m_pFont1CB->SetSelectHdl(aLink);
     m_pFont1CB->SetModifyHdl(aLink);
@@ -261,7 +261,10 @@ IMPL_LINK_TYPED(SvxFontSubstTabPage, ClickHdl, Button*, pButton, void)
 {
     SelectHdl(pButton);
 }
-
+IMPL_LINK_TYPED(SvxFontSubstTabPage, TreeListBoxSelectHdl, SvTreeListBox*, pButton, void)
+{
+    SelectHdl(pButton);
+}
 IMPL_LINK(SvxFontSubstTabPage, SelectHdl, vcl::Window*, pWin)
 {
     if (pWin == m_pApply || pWin == m_pDelete)

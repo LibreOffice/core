@@ -101,8 +101,8 @@ void ScTpSubTotalGroup::Init()
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found :-(" );
 
     mpLbGroup->SetSelectHdl       ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
-    mpLbColumns->SetSelectHdl     ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
-    mpLbColumns->SetCheckButtonHdl    ( LINK( this, ScTpSubTotalGroup, CheckHdl ) );
+    mpLbColumns->SetSelectHdl     ( LINK( this, ScTpSubTotalGroup, SelectTreeListBoxHdl ) );
+    mpLbColumns->SetCheckButtonHdl( LINK( this, ScTpSubTotalGroup, CheckHdl ) );
     mpLbFunctions->SetSelectHdl   ( LINK( this, ScTpSubTotalGroup, SelectHdl ) );
 
     nFieldArr[0] = 0;
@@ -342,6 +342,10 @@ sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
 
 // Handler:
 
+IMPL_LINK_TYPED( ScTpSubTotalGroup, SelectTreeListBoxHdl, SvTreeListBox*, pLb, void )
+{
+    SelectHdl(pLb);
+}
 IMPL_LINK( ScTpSubTotalGroup, SelectHdl, void *, pLb )
 {
     if (   (mpLbColumns->GetEntryCount() > 0)
@@ -368,7 +372,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, void *, pLb )
     return 0;
 }
 
-IMPL_LINK( ScTpSubTotalGroup, CheckHdl, void *, pLb )
+IMPL_LINK_TYPED( ScTpSubTotalGroup, CheckHdl, SvTreeListBox*, pLb, void )
 {
     if ( pLb == mpLbColumns )
     {
@@ -380,7 +384,6 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, void *, pLb )
             SelectHdl( pLb );
         }
     }
-    return 0;
 }
 
 // Derived Group TabPages:

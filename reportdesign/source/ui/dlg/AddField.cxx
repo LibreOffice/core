@@ -494,11 +494,9 @@ void OAddFieldWindow::_elementReplaced( const container::ContainerEvent& /*_rEve
 {
 }
 
-IMPL_LINK_NOARG( OAddFieldWindow, OnSelectHdl )
+IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnSelectHdl, SvTreeListBox*, void )
 {
     m_aActions->EnableItem(SID_ADD_CONTROL_PAIR, ( m_pListBox.get() && m_pListBox->GetSelectionCount() > 0 ));
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnClickHdl, Button*, void )

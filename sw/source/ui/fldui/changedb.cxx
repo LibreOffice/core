@@ -75,13 +75,13 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
     m_pUsedDBTLB->SetSpaceBetweenEntries(0);
     m_pUsedDBTLB->SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE), aImageList.GetImage(IMG_EXPAND));
 
-    Link<> aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
+    Link<SvTreeListBox*,void> aLink = LINK(this, SwChangeDBDlg, TreeSelectHdl);
 
     m_pUsedDBTLB->SetSelectHdl(aLink);
     m_pUsedDBTLB->SetDeselectHdl(aLink);
     m_pAvailDBTLB->SetSelectHdl(aLink);
     m_pAvailDBTLB->SetSelectHdl(aLink);
-    TreeSelectHdl();
+    TreeSelectHdl(NULL);
 }
 
 // initialise database listboxes
@@ -231,7 +231,7 @@ IMPL_LINK_NOARG_TYPED(SwChangeDBDlg, ButtonHdl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl)
+IMPL_LINK_NOARG_TYPED(SwChangeDBDlg, TreeSelectHdl, SvTreeListBox*, void)
 {
     SvTreeListEntry* pEntry = m_pAvailDBTLB->GetCurEntry();
 
@@ -242,7 +242,6 @@ IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl)
             bEnable = true;
         m_pDefineBT->Enable( bEnable );
     }
-    return 0;
 }
 
 // convert database name for display

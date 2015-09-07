@@ -55,7 +55,8 @@ class SwCondCollPage : public SfxTabPage
     DECL_LINK_TYPED( OnOffHdl, Button*, void );
     DECL_LINK( AssignRemoveHdl, PushButton*);
     DECL_LINK_TYPED( AssignRemoveClickHdl, Button*, void);
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK_TYPED( SelectTreeListBoxHdl, SvTreeListBox*, void );
+    DECL_LINK( SelectHdl, void* );
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

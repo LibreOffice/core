@@ -717,10 +717,9 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     m_pCheckLB->SetUpdateMode(true);
 }
 
-IMPL_LINK(OfaSwAutoFmtOptionsPage, SelectHdl, OfaACorrCheckListBox*, pBox)
+IMPL_LINK_TYPED(OfaSwAutoFmtOptionsPage, SelectHdl, SvTreeListBox*, pBox, void)
 {
     m_pEditPB->Enable(0 != pBox->FirstSelected()->GetUserData());
-    return 0;
 }
 
 IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, DoubleClickEditHdl)
@@ -1150,7 +1149,7 @@ void OfaAutocorrReplacePage::SetLanguage(LanguageType eSet)
     }
 }
 
-IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
+IMPL_LINK_TYPED(OfaAutocorrReplacePage, SelectHdl, SvTreeListBox*, pBox, void)
 {
     if(!bFirstSelect || !bHasSelectionText)
     {
@@ -1180,7 +1179,6 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
 
     m_pNewReplacePB->Enable(false);
     m_pDeleteReplacePB->Enable();
-    return 0;
 };
 
 void OfaAutocorrReplacePage::NewEntry(const OUString& sShort, const OUString& sLong, bool bKeepSourceFormatting)
@@ -2622,10 +2620,10 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl)
 
 /** Handler for the list box
 */
-IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
+IMPL_LINK_NOARG_TYPED(OfaSmartTagOptionsTabPage, SelectHdl, SvTreeListBox*, void)
 {
     if ( m_pSmartTagTypesLB->GetEntryCount() < 1 )
-        return 0;
+        return;
 
     const sal_uLong nPos = m_pSmartTagTypesLB->GetSelectEntryPos();
     const SvTreeListEntry* pEntry = m_pSmartTagTypesLB->GetEntry(nPos);
@@ -2638,8 +2636,6 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
         m_pPropertiesPB->Enable( true );
     else
         m_pPropertiesPB->Enable( false );
-
-    return 0;
 }
 
 /** Propagates the current settings to the smart tag manager.

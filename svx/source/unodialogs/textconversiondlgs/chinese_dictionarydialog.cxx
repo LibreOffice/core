@@ -625,7 +625,7 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, EditFieldsHdl)
     updateButtons();
     return 0;
 }
-IMPL_LINK_NOARG(ChineseDictionaryDialog, MappingSelectHdl)
+IMPL_LINK_NOARG_TYPED(ChineseDictionaryDialog, MappingSelectHdl, SvTreeListBox*, void)
 {
     DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
     if(pE)
@@ -640,7 +640,6 @@ IMPL_LINK_NOARG(ChineseDictionaryDialog, MappingSelectHdl)
     }
 
     updateButtons();
-    return 0;
 }
 
 bool ChineseDictionaryDialog::isEditFieldsHaveContent() const

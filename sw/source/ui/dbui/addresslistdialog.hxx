@@ -77,7 +77,7 @@ class SwAddressListDialog : public SfxModalDialog
     DECL_LINK_TYPED(FilterHdl_Impl, Button*, void);
     DECL_LINK_TYPED(LoadHdl_Impl, Button*, void);
     DECL_LINK_TYPED(CreateHdl_Impl, Button*, void);
-    DECL_LINK(ListBoxSelectHdl_Impl, void *);
+    DECL_LINK_TYPED(ListBoxSelectHdl_Impl, SvTreeListBox*, void);
     DECL_LINK_TYPED(EditHdl_Impl, Button*, void);
     DECL_LINK_TYPED(TableSelectHdl_Impl, Button*, void);
     DECL_LINK_TYPED(OKHdl_Impl, Button*, void);

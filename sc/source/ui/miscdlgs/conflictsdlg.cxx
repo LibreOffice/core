@@ -537,33 +537,29 @@ void ScConflictsDlg::HandleListBoxSelection( bool bSelectHandle )
     }
 }
 
-IMPL_LINK_NOARG(ScConflictsDlg, SelectHandle)
+IMPL_LINK_NOARG_TYPED(ScConflictsDlg, SelectHandle, SvTreeListBox*, void)
 {
     if ( mbInSelectHdl || mbInDeselectHdl )
     {
-        return 0;
+        return;
     }
 
     mbInSelectHdl = true;
     HandleListBoxSelection( true );
     maSelectionIdle.Start();
     mbInSelectHdl = false;
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScConflictsDlg, DeselectHandle)
+IMPL_LINK_NOARG_TYPED(ScConflictsDlg, DeselectHandle, SvTreeListBox*, void)
 {
     if ( mbInDeselectHdl || mbInSelectHdl )
     {
-        return 0;
+        return;
     }
 
     mbInDeselectHdl = true;
     HandleListBoxSelection( false );
     mbInDeselectHdl = false;
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScConflictsDlg, UpdateSelectionHdl, Idle *, void)

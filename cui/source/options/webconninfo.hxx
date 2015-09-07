@@ -54,7 +54,7 @@ namespace svx
         DECL_LINK_TYPED( RemovePasswordHdl, Button*, void );
         DECL_LINK_TYPED( RemoveAllPasswordsHdl, Button*, void );
         DECL_LINK_TYPED( ChangePasswordHdl, Button*, void );
-        DECL_LINK( EntrySelectedHdl, void* );
+        DECL_LINK_TYPED( EntrySelectedHdl, SvTreeListBox*, void );
 
         void FillPasswordList();
 

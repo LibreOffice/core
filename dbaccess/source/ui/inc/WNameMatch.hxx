@@ -68,8 +68,8 @@ namespace dbaui
         DECL_LINK_TYPED( ButtonClickHdl, Button *, void );
         DECL_LINK_TYPED( RightButtonClickHdl, Button *, void );
         DECL_LINK_TYPED( AllNoneClickHdl, Button *, void );
-        DECL_LINK( TableListClickHdl, void* );
-        DECL_LINK( TableListRightSelectHdl, void* );
+        DECL_LINK_TYPED( TableListClickHdl, SvTreeListBox*, void );
+        DECL_LINK_TYPED( TableListRightSelectHdl, SvTreeListBox*, void );
 
     public:
         virtual void            Reset ( ) SAL_OVERRIDE;

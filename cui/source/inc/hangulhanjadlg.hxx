@@ -211,7 +211,7 @@ namespace svx
         css::uno::Reference< css::linguistic2::XConversionDictionaryList > m_xConversionDictionaryList;
 
         DECL_LINK_TYPED( OkHdl, Button*, void );
-        DECL_LINK( DictsLB_SelectHdl, void* );
+        DECL_LINK_TYPED( DictsLB_SelectHdl, SvTreeListBox*, void );
         DECL_LINK_TYPED( NewDictHdl, Button*, void );
         DECL_LINK_TYPED( EditDictHdl, Button*, void );
         DECL_LINK_TYPED( DeleteDictHdl, Button*, void );

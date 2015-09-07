@@ -81,7 +81,7 @@ private:
 
     DECL_LINK_TYPED( ClickSearchHdl, Button*, void );
     DECL_LINK( ClickActionHdl, void * );
-    DECL_LINK( SelectTreeHdl, void * );
+    DECL_LINK_TYPED( SelectTreeHdl, SvTreeListBox*, void );
     DECL_LINK( CheckFileHdl, void * );
 
     void                    UpdateTree();

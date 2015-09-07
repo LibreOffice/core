@@ -161,13 +161,12 @@ void CertPathDialog::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK( CertPathDialog, CheckHdl_Impl, SvSimpleTable *, pList )
+IMPL_LINK_TYPED( CertPathDialog, CheckHdl_Impl, SvTreeListBox*, pList, void )
 {
     SvTreeListEntry* pEntry = pList ? m_pCertPathList->GetEntry(m_pCertPathList->GetCurMousePoint())
                                 : m_pCertPathList->FirstSelected();
     if (pEntry)
         m_pCertPathList->HandleEntryChecked(pEntry);
-    return 0;
 }
 
 void CertPathDialog::HandleCheckEntry( SvTreeListEntry* _pEntry )

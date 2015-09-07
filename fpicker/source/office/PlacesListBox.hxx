@@ -74,7 +74,7 @@ class PlacesListBox : public Control
 
         Image getEntryIcon( PlacePtr pPlace );
 
-        DECL_LINK( Selection, void* );
+        DECL_LINK_TYPED( Selection, SvTreeListBox*, void );
         DECL_LINK( DoubleClick, void* );
 };
 

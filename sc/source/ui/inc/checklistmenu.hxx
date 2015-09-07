@@ -330,7 +330,7 @@ private:
 
     DECL_LINK_TYPED( ButtonHdl, Button*, void );
     DECL_LINK_TYPED( TriStateHdl, Button*, void );
-    DECL_LINK( CheckHdl, SvTreeListBox* );
+    DECL_LINK_TYPED( CheckHdl, SvTreeListBox*, void );
     DECL_LINK( EdModifyHdl, void* );
 
 private:

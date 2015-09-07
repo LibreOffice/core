@@ -149,7 +149,7 @@ private:
 
     DECL_LINK_TYPED(ChangeHdl, Button *, void);
     DECL_LINK_TYPED(RemoveHdl, Button *, void);
-    DECL_LINK(                  SelectHdl, Control * );
+    DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED(Save, Button *, void);
     DECL_LINK_TYPED(Load, Button *, void);
     DECL_LINK_TYPED(Default, Button *, void);

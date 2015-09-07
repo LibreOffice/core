@@ -133,6 +133,10 @@ IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
     return 0;
 }
 
+IMPL_LINK_TYPED( SwVisitingCardPage, AutoTextSelectTreeListBoxHdl, SvTreeListBox*, pBox, void )
+{
+    AutoTextSelectHdl(pBox);
+}
 IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
 {
     if(m_xAutoText.is())

@@ -38,7 +38,7 @@ private:
     const OUString&         rName;
 
     void                    Reset();
-    DECL_LINK( SelectObjectHdl, void * );
+    DECL_LINK_TYPED( SelectObjectHdl, SvTreeListBox*, void );
 
 public:
                 SdInsertPagesObjsDlg( vcl::Window* pParent,

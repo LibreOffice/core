@@ -2272,13 +2272,9 @@ void SvxMenuConfigPage::dispose()
     SvxConfigPage::dispose();
 }
 
-IMPL_LINK( SvxMenuConfigPage, SelectMenuEntry, Control *, pBox )
+IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, SelectMenuEntry, SvTreeListBox *, void )
 {
-    (void)pBox;
-
     UpdateButtonStates();
-
-    return 1;
 }
 
 void SvxMenuConfigPage::UpdateButtonStates()
@@ -2710,11 +2706,9 @@ IMPL_LINK(SvxMainMenuOrganizerDialog, ModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-IMPL_LINK( SvxMainMenuOrganizerDialog, SelectHdl, Control*, pCtrl )
+IMPL_LINK_NOARG_TYPED( SvxMainMenuOrganizerDialog, SelectHdl, SvTreeListBox*, void )
 {
-    (void)pCtrl;
     UpdateButtonStates();
-    return 1;
 }
 
 void SvxMainMenuOrganizerDialog::UpdateButtonStates()
@@ -4268,11 +4262,9 @@ bool ToolbarSaveInData::LoadToolbar(
     return true;
 }
 
-IMPL_LINK( SvxToolbarConfigPage, SelectToolbarEntry, Control *, pBox )
+IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, SelectToolbarEntry, SvTreeListBox *, void )
 {
-    (void)pBox;
     UpdateButtonStates();
-    return 1;
 }
 
 void SvxToolbarConfigPage::UpdateButtonStates()

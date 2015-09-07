@@ -46,7 +46,7 @@ class ScSolverOptionsDialog : public ModalDialog
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> maProperties;
 
     DECL_LINK( EngineSelectHdl, void* );
-    DECL_LINK( SettingsSelHdl, void* );
+    DECL_LINK_TYPED( SettingsSelHdl, SvTreeListBox*, void );
     DECL_LINK( SettingsDoubleClickHdl, void* );
     DECL_LINK_TYPED( ButtonHdl, Button*, void );
 

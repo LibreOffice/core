@@ -91,10 +91,10 @@ bool SearchResultsDlg::Close()
     return ModelessDialog::Close();
 }
 
-IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl )
+IMPL_LINK_NOARG_TYPED( SearchResultsDlg, ListSelectHdl, SvTreeListBox*, void )
 {
     if (!mpDoc)
-        return 0;
+        return;
 
     SvTreeListEntry *pEntry = mpList->FirstSelected();
     OUString aTabStr = SvTabListBox::GetEntryText(pEntry, 0);
@@ -103,21 +103,19 @@ IMPL_LINK_NOARG( SearchResultsDlg, ListSelectHdl )
     SCTAB nTab = -1;
     if (!mpDoc->GetTable(aTabStr, nTab))
         // No sheet with specified name.
-        return 0;
+        return;
 
     ScAddress aPos;
     sal_uInt16 nRes = aPos.Parse(aPosStr, mpDoc, mpDoc->GetAddressConvention());
     if (!(nRes & SCA_VALID))
         // Invalid address string.
-        return 0;
+        return;
 
     // Jump to the cell.
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     pScViewShell->SetTabNo(nTab);
     pScViewShell->SetCursor(aPos.Col(), aPos.Row());
     pScViewShell->AlignToCursor(aPos.Col(), aPos.Row(), SC_FOLLOW_JUMP);
-
-    return 0;
 }
 
 SearchResultsDlgWrapper::SearchResultsDlgWrapper(

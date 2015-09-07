@@ -105,8 +105,8 @@ class SwEditRegionDlg : public SfxModalDialog
     void    RecurseList( const SwSectionFormat* pFormat, SvTreeListEntry* pEntry);
     size_t  FindArrPos(const SwSectionFormat* pFormat);
 
-    DECL_LINK( GetFirstEntryHdl, SvTreeListBox * );
-    DECL_LINK( DeselectHdl, SvTreeListBox * );
+    DECL_LINK_TYPED( GetFirstEntryHdl, SvTreeListBox *, void );
+    DECL_LINK_TYPED( DeselectHdl, SvTreeListBox *, void );
 
     DECL_LINK_TYPED(OkHdl, Button*, void);
     DECL_LINK(NameEditHdl, void *);
