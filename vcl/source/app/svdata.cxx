@@ -102,10 +102,10 @@ void ImplDeInitSVData()
 
     // delete global instance data
     if( pSVData->mpSettingsConfigItem )
-        delete pSVData->mpSettingsConfigItem;
+        delete pSVData->mpSettingsConfigItem, pSVData->mpSettingsConfigItem = NULL;
 
     if( pSVData->mpDockingManager )
-        delete pSVData->mpDockingManager;
+        delete pSVData->mpDockingManager, pSVData->mpDockingManager = NULL;
 
     if( pSVData->maCtrlData.mpFieldUnitStrings )
         delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = NULL;
