@@ -22,8 +22,9 @@
 
 #include <vbahelper/vbafontbase.hxx>
 #include <ooo/vba/word/XFont.hpp>
+#include <cppuhelper/implbase.hxx>
 
-typedef cppu::ImplInheritanceHelper1< VbaFontBase, ov::word::XFont > SwVbaFont_BASE;
+typedef cppu::ImplInheritanceHelper< VbaFontBase, ov::word::XFont > SwVbaFont_BASE;
 
 class SwVbaFont : public SwVbaFont_BASE
 {

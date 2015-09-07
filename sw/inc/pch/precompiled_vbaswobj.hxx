@@ -109,6 +109,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>

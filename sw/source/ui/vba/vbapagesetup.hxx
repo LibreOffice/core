@@ -19,14 +19,14 @@
 #ifndef INCLUDED_SW_SOURCE_UI_VBA_VBAPAGESETUP_HXX
 #define INCLUDED_SW_SOURCE_UI_VBA_VBAPAGESETUP_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/word/XPageSetup.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbapagesetupbase.hxx>
 
-typedef cppu::ImplInheritanceHelper1< VbaPageSetupBase, ooo::vba::word::XPageSetup > SwVbaPageSetup_BASE;
+typedef cppu::ImplInheritanceHelper< VbaPageSetupBase, ooo::vba::word::XPageSetup > SwVbaPageSetup_BASE;
 
 class SwVbaPageSetup :  public SwVbaPageSetup_BASE
 {

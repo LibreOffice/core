@@ -30,8 +30,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sfx2/Metadatable.hxx>
 #include <boost/noncopyable.hpp>
@@ -49,7 +48,7 @@ namespace sw {
     class Meta;
 }
 
-typedef ::cppu::ImplInheritanceHelper6
+typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
 ,   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo
@@ -234,7 +233,7 @@ public:
 
 };
 
-typedef ::cppu::ImplInheritanceHelper2
+typedef ::cppu::ImplInheritanceHelper
 <   SwXMeta
 ,   ::com::sun::star::beans::XPropertySet
 ,   ::com::sun::star::text::XTextField

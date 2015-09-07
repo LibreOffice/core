@@ -23,9 +23,10 @@
 #include <ooo/vba/word/XDocuments.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <vbahelper/vbadocumentsbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "wordvbahelper.hxx"
 
-typedef cppu::ImplInheritanceHelper1< VbaDocumentsBase, ov::word::XDocuments > SwVbaDocuments_BASE;
+typedef cppu::ImplInheritanceHelper< VbaDocumentsBase, ov::word::XDocuments > SwVbaDocuments_BASE;
 
 class SwVbaDocuments : public SwVbaDocuments_BASE
 {

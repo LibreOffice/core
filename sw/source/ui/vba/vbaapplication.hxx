@@ -28,10 +28,10 @@
 #include <ooo/vba/word/XAddins.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include <vbahelper/vbaapplicationbase.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 //typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XApplication > SwVbaApplication_BASE;
-typedef cppu::ImplInheritanceHelper1< VbaApplicationBase, ooo::vba::word::XApplication > SwVbaApplication_BASE;
+typedef cppu::ImplInheritanceHelper< VbaApplicationBase, ooo::vba::word::XApplication > SwVbaApplication_BASE;
 
 class SwVbaApplication : public SwVbaApplication_BASE
 {
