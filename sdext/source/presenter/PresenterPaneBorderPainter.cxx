@@ -550,7 +550,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     case RendererPaneStyle::Anchor::Right:
         nX = rInnerBox.X + rInnerBox.Width - nTextWidth;
         break;
-    case RendererPaneStyle::Anchor::Center:
+    default: // RendererPaneStyle::Anchor::Center
         nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
         break;
     }
