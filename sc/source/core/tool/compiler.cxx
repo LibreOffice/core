@@ -3517,6 +3517,37 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
     aRange.aEnd.SetTab( aRange.aStart.Tab());
     aRange.aEnd.SetRow( aRange.aStart.Row());
 
+    // Prefer the stored internal table column name, which is also needed for
+    // named expressions during document load time when cell content isn't
+    // available yet. Also, avoiding a possible calculation step in case the
+    // header cell is a formula cell is "a good thing".
+    sal_Int32 nOffset = pDBData->GetColumnNameOffset( aName);
+    if (nOffset >= 0)
+    {
+        if (pDBData->HasHeader())
+        {
+            ScSingleRefData aRef;
+            ScAddress aAdr( aRange.aStart);
+            aAdr.IncCol( nOffset);
+            aRef.InitAddress( aAdr);
+            maRawToken.SetSingleReference( aRef );
+        }
+        else
+        {
+            /* TODO: this probably needs a new token type to hold offset and
+             * name, to be handled in HandleTableRef(). We can't use a
+             * reference token here because any reference would be wrong as
+             * there are no header cells to be referenced. However, it would
+             * only work as long as the ScDBData column names are not
+             * invalidated during document structure changes, otherwise
+             * recompiling the same formula could not resolve the name again.
+             * As long as this doesn't work generate an error. */
+            return false;
+        }
+        return true;
+    }
+
+    SAL_WARN("sc.core", "ScCompiler::IsTableRefColumn - falling back to cell lookup");
     if (pDBData->HasHeader())
     {
         // Quite similar to IsColRowName() but limited to one row of headers.
@@ -3551,36 +3582,6 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
                 }
             }
         }
-    }
-
-    // And now a fallback for named expressions during document load time when
-    // cell content isn't available yet. This could be the preferred method IF
-    // the ScDBData column names were maintained and refreshed on ALL sheet
-    // operations, including cell content changes.
-    sal_Int32 nOffset = pDBData->GetColumnNameOffset( aName);
-    if (nOffset >= 0)
-    {
-        if (pDBData->HasHeader())
-        {
-            ScSingleRefData aRef;
-            ScAddress aAdr( aRange.aStart);
-            aAdr.IncCol( nOffset);
-            aRef.InitAddress( aAdr);
-            maRawToken.SetSingleReference( aRef );
-        }
-        else
-        {
-            /* TODO: this probably needs a new token type to hold offset and
-             * name, to be handled in HandleTableRef(). We can't use a
-             * reference token here because any reference would be wrong as
-             * there are no header cells to be referenced. However, it would
-             * only work as long as the ScDBData column names are not
-             * invalidated during document structure changes, otherwise
-             * recompiling the same formula could not resolve the name again.
-             * As long as this doesn't work generate an error. */
-            return false;
-        }
-        return true;
     }
 
     return false;
@@ -4700,14 +4701,15 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
     }
     else if (pArr && (p = pArr->PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
     {
+        OUString aStr;
         ScAddress aAbs = rRef.toAbs(aPos);
-        OUString aStr = pDoc->GetString(aAbs);
+        const ScDBData* pData = pDoc->GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab(), ScDBDataPortion::HEADER);
+        if (pData)
+            aStr = pData->GetTableColumnName( aAbs.Col());
         if (aStr.isEmpty())
         {
-            // Hope that there's still the original column name available.
-            const ScDBData* pData = pDoc->GetDBAtCursor( aAbs.Col(), aAbs.Row(), aAbs.Tab(), ScDBDataPortion::HEADER);
-            if (pData)
-                aStr = pData->GetTableColumnName( aAbs.Col());
+            SAL_WARN("sc.core", "ScCompiler::CreateStringFromSingleRef - TableRef falling back to cell");
+            aStr = pDoc->GetString(aAbs);
         }
         escapeTableRefColumnSpecifier( aStr);
         rBuffer.append(aStr);
