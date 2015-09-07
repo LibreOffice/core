@@ -169,8 +169,8 @@ struct GLWindow
 class VCL_DLLPUBLIC OpenGLContext
 {
     friend class OpenGLTests;
-public:
     OpenGLContext();
+public:
     static rtl::Reference<OpenGLContext> Create();
     ~OpenGLContext();
     void acquire() { mnRefCount++; }
