@@ -233,7 +233,6 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
         {
             const SalTwoRect        aTwoRect = { 0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight };
             BitmapBuffer            aSrcBuf;
-            sal_uLong               nDstFormat = BMP_FORMAT_BOTTOM_UP;
             const BitmapPalette*    pDstPal = NULL;
 
             aSrcBuf.mnFormat = BMP_FORMAT_TOP_DOWN;
@@ -255,7 +254,6 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                                             ? BMP_FORMAT_1BIT_LSB_PAL
                                             : BMP_FORMAT_1BIT_MSB_PAL
                                         );
-                    nDstFormat |= BMP_FORMAT_1BIT_MSB_PAL;
                 }
                 break;
 
@@ -265,20 +263,17 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                                             ? BMP_FORMAT_4BIT_LSN_PAL
                                             : BMP_FORMAT_4BIT_MSN_PAL
                                         );
-                    nDstFormat |= BMP_FORMAT_4BIT_MSN_PAL;
                 }
                 break;
 
                 case( 8 ):
                 {
                     aSrcBuf.mnFormat |= BMP_FORMAT_8BIT_PAL;
-                    nDstFormat |= BMP_FORMAT_8BIT_PAL;
                 }
                 break;
 
                 case( 16 ):
                 {
-                    nDstFormat |= BMP_FORMAT_24BIT_TC_BGR;
                     aSrcBuf.maColorMask = ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask );
 
                     if( LSBFirst == pImage->byte_order )
@@ -298,8 +293,6 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                         aSrcBuf.mnFormat |= BMP_FORMAT_24BIT_TC_RGB;
                     else
                         aSrcBuf.mnFormat |= BMP_FORMAT_24BIT_TC_BGR;
-
-                    nDstFormat |= BMP_FORMAT_24BIT_TC_BGR;
                 }
                 break;
 
@@ -315,7 +308,6 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                                                 ? BMP_FORMAT_32BIT_TC_ABGR
                                                 : BMP_FORMAT_32BIT_TC_ARGB
                                             );
-                    nDstFormat |= BMP_FORMAT_24BIT_TC_BGR;
                 }
                 break;
             }
@@ -365,8 +357,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                 }
             }
 
-            nDstFormat = aSrcBuf.mnFormat;
-            pDIB = StretchAndConvert( aSrcBuf, aTwoRect, nDstFormat,
+            pDIB = StretchAndConvert( aSrcBuf, aTwoRect, aSrcBuf.mnFormat,
                 pDstPal, &aSrcBuf.maColorMask );
             XDestroyImage( pImage );
         }
