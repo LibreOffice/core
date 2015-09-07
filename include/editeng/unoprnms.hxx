@@ -113,6 +113,7 @@
 #define UNO_NAME_TEXT_WRITINGMODE               "TextWritingMode"
 #define UNO_NAME_TEXT_FONTINDEPENDENTLINESPACING "FontIndependentLineSpacing"
 #define UNO_NAME_TEXT_WORDWRAP                  "TextWordWrap"
+#define UNO_NAME_TEXT_CHAINNEXTNAME              "TextChainNextName"
 
 #define UNO_NAME_MEASUREKIND                    "MeasureKind"
 #define UNO_NAME_MEASURETEXTHPOS                "MeasureTextHorizontalPosition"

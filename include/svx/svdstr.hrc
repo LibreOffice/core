@@ -714,5 +714,7 @@
 #define STR_TABLE_STYLE_SETTINGS            (SIP_Begin + 275)
 #define SIP_SA_CROP_MARKERS                 (SIP_Begin + 276)
 #define STR_TABLE_DELETE_CELL_CONTENTS      (SIP_Begin + 277)
+#define SIP_SA_CHAINNEXTNAME                (SIP_Begin + 278)
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

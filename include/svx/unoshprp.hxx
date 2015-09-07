@@ -291,6 +291,7 @@
     { OUString(UNO_NAME_TEXT_FONTINDEPENDENTLINESPACING),SDRATTR_TEXT_USEFIXEDCELLHEIGHT,cppu::UnoType<bool>::get(),                   0,      0},               \
     { OUString(UNO_NAME_TEXT_VERTADJUST),       SDRATTR_TEXT_VERTADJUST,        cppu::UnoType<css::drawing::TextVerticalAdjust>::get(),    0,      0},\
     { OUString(UNO_NAME_TEXT_WORDWRAP),         SDRATTR_TEXT_WORDWRAP,          cppu::UnoType<bool>::get(),        0,      0}, \
+    { OUString(UNO_NAME_TEXT_CHAINNEXTNAME),    SDRATTR_TEXT_CHAINNEXTNAME,     ::cppu::UnoType<OUString>::get(),        0,      0}, \
     SVX_UNOEDIT_CHAR_PROPERTIES, \
     SVX_UNOEDIT_PARA_PROPERTIES,
 
