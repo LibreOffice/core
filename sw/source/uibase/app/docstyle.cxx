@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <svl/smplhint.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
@@ -1213,7 +1217,7 @@ std::unique_ptr<SfxItemSet> SwDocStyleSheet::GetItemSetForPreview()
             case SFX_STYLE_FAMILY_FRAME:
                 return lcl_SwFormatToFlatItemSet(pFrameFormat);
             default:
-                assert(false);
+                std::abort();
         }
     }
 }
