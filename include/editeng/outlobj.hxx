@@ -24,15 +24,38 @@
 #include <editeng/editengdllapi.h>
 #include <rtl/ustring.hxx>
 #include <rsc/rscsfx.hxx>
+#include <o3tl/cow_wrapper.hxx>
 
 class EditTextObject;
 
+/**
+ * This is the guts of OutlinerParaObject, refcounted and shared among
+ * multiple instances of OutlinerParaObject.
+ */
+struct OutlinerParaObjData
+{
+    // data members
+    EditTextObject*                 mpEditTextObject;
+    ParagraphDataVector             maParagraphDataVector;
+    bool                            mbIsEditDoc;
+
+    // constuctor
+    OutlinerParaObjData( EditTextObject* pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc );
+
+    OutlinerParaObjData( const OutlinerParaObjData& r );
+
+    // destructor
+    ~OutlinerParaObjData();
+
+    bool operator==(const OutlinerParaObjData& rCandidate) const;
+
+    // #i102062#
+    bool isWrongListEqual(const OutlinerParaObjData& rCompare) const;
+};
+
 class EDITENG_DLLPUBLIC OutlinerParaObject
 {
-    struct Impl;
-    Impl* mpImpl;
-
-    void ImplMakeUnique();
+    ::o3tl::cow_wrapper< OutlinerParaObjData > mpImpl;
 
 public:
     // constructors/destructor
