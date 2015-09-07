@@ -2534,7 +2534,7 @@ void Ruler::SetExtraType( RulerExtra eNewExtraType, sal_uInt16 nStyle )
         meExtraType  = eNewExtraType;
         mnExtraStyle = nStyle;
         if (IsReallyVisible() && IsUpdateMode())
-            Invalidate(INVALIDATE_NOERASE);
+            Invalidate();
     }
 }
 
