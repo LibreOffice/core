@@ -2185,7 +2185,7 @@ void ChartExport::exportCandleStickSeries(
     for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
     {
         Reference< chart2::XDataSeries > xSeries( aSeriesSeq[nSeriesIdx] );
-        rPrimaryAxes = lcl_isSeriesAttachedToFirstAxis(xSeries) ? true : false;
+        rPrimaryAxes = lcl_isSeriesAttachedToFirstAxis(xSeries);
 
         Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
         if( xSource.is())
