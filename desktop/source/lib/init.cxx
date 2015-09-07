@@ -1944,7 +1944,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             {
                 InitVCL();
                 // pre-load all component libraries.
-                cppu::preInitBootstrap();
+                cppu::preInitBootstrap(xContext);
                 // Release Solar Mutex, lo_startmain thread should acquire it.
                 Application::ReleaseSolarMutex();
             }
