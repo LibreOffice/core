@@ -107,9 +107,9 @@ FmRecordCountListener::FmRecordCountListener(const Reference< ::com::sun::star::
 }
 
 
-Link<> FmRecordCountListener::SetPropChangeHandler(const Link<>& lnk)
+Link<sal_Int32,void> FmRecordCountListener::SetPropChangeHandler(const Link<sal_Int32,void>& lnk)
 {
-    Link<> lnkReturn = m_lnkWhoWantsToKnow;
+    Link<sal_Int32,void> lnkReturn = m_lnkWhoWantsToKnow;
     m_lnkWhoWantsToKnow = lnk;
 
     if (m_xListening.is())
@@ -145,8 +145,8 @@ void FmRecordCountListener::NotifyCurrentCount()
     if (m_lnkWhoWantsToKnow.IsSet())
     {
         DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::NotifyCurrentCount : I have no propset ... !?");
-        void* pTheCount = reinterpret_cast<void*>(::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT)));
-        m_lnkWhoWantsToKnow.Call(pTheCount);
+        sal_Int32 theCount = ::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT));
+        m_lnkWhoWantsToKnow.Call(theCount);
     }
 }
 
@@ -1063,10 +1063,10 @@ void FmSearchEngine::SearchNextImpl()
 }
 
 
-IMPL_LINK(FmSearchEngine, OnSearchTerminated, FmSearchThread*, /*pThread*/)
+IMPL_LINK_NOARG_TYPED(FmSearchEngine, OnSearchTerminated, FmSearchThread*, void)
 {
     if (!m_aProgressHandler.IsSet())
-        return 0L;
+        return;
 
     FmSearchProgress aProgress;
     try
@@ -1101,21 +1101,18 @@ IMPL_LINK(FmSearchEngine, OnSearchTerminated, FmSearchThread*, /*pThread*/)
     m_aProgressHandler.Call(&aProgress);
 
     m_bSearchingCurrently = false;
-    return 0L;
 }
 
 
-IMPL_LINK(FmSearchEngine, OnNewRecordCount, void*, pCounterAsVoid)
+IMPL_LINK_TYPED(FmSearchEngine, OnNewRecordCount, sal_Int32, theCounter, void)
 {
     if (!m_aProgressHandler.IsSet())
-        return 0L;
+        return;
 
     FmSearchProgress aProgress;
-    aProgress.nCurrentRecord = reinterpret_cast<sal_uIntPtr>(pCounterAsVoid);
+    aProgress.nCurrentRecord = theCounter;
     aProgress.aSearchState = FmSearchProgress::STATE_PROGRESS_COUNTING;
     m_aProgressHandler.Call(&aProgress);
-
-    return 0L;
 }
 
 

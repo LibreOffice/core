@@ -705,7 +705,7 @@ void FmSearchDialog::OnFound(const css::uno::Any& aCursorPos, sal_Int16 nFieldPo
     m_pcmbSearchText->GrabFocus();
 }
 
-IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
+IMPL_LINK_TYPED(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, void)
 {
     SolarMutexGuard aGuard;
         // make this single method thread-safe (it's an overkill to block the whole application for this,
@@ -761,8 +761,6 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
     }
 
     m_pftRecord->SetText(OUString::number(1 + pProgress->nCurrentRecord));
-
-    return 0L;
 }
 
 void FmSearchDialog::LoadParams()

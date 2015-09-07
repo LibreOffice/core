@@ -44,15 +44,15 @@
 class FmSearchEngine;
 class SAL_WARN_UNUSED FmSearchThread : public ::osl::Thread
 {
-    FmSearchEngine*     m_pEngine;
-    Link<>              m_aTerminationHdl;
+    FmSearchEngine*            m_pEngine;
+    Link<FmSearchThread*,void> m_aTerminationHdl;
 
     virtual void SAL_CALL run() SAL_OVERRIDE;
     virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
 public:
     FmSearchThread(FmSearchEngine* pEngine) : m_pEngine(pEngine) { }
-    void setTerminationHandler(Link<> aHdl) { m_aTerminationHdl = aHdl; }
+    void setTerminationHandler(Link<FmSearchThread*,void> aHdl) { m_aTerminationHdl = aHdl; }
 };
 
 /**
@@ -84,12 +84,12 @@ struct FmSearchProgress
 class SAL_WARN_UNUSED FmRecordCountListener : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
 {
 // attribute
-    Link<>          m_lnkWhoWantsToKnow;
+    Link<sal_Int32,void>     m_lnkWhoWantsToKnow;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xListening;
 
 // attribute access
 public:
-    Link<> SetPropChangeHandler(const Link<>& lnk);
+    Link<sal_Int32,void> SetPropChangeHandler(const Link<sal_Int32,void>& lnk);
 
 // methods
 public:
@@ -203,7 +203,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FmSearchEngine
 
     // Data for the decision in which field a "Found" is accepted
     ::com::sun::star::uno::Any  m_aPreviousLocBookmark;     // position of the last finding
-    FieldCollection::iterator     m_iterPreviousLocField;     // field of the last finding
+    FieldCollection::iterator   m_iterPreviousLocField;     // field of the last finding
 
     // Communication with the thread that does the actual searching
     OUString            m_strSearchExpression;              // forward direction
@@ -211,7 +211,7 @@ class SVX_DLLPUBLIC SAL_WARN_UNUSED FmSearchEngine
     SEARCH_RESULT       m_srResult;                         // backward direction
 
     // The link we broadcast the progress and the result to
-    Link<>              m_aProgressHandler;
+    Link<const FmSearchProgress*,void>  m_aProgressHandler;
     bool                m_bSearchingCurrently : 1;      // is an (asynchronous) search running?
     bool                m_bCancelAsynchRequest : 1;     // should be cancelled?
     ::osl::Mutex        m_aCancelAsynchAccess;          // access to_bCancelAsynchRequest (technically only
@@ -312,7 +312,7 @@ public:
         a FmSearchProgress structure
         the handler should be in any case thread-safe
     */
-    void SetProgressHandler(Link<> aHdl) { m_aProgressHandler = aHdl; }
+    void SetProgressHandler(Link<const FmSearchProgress*,void> aHdl) { m_aProgressHandler = aHdl; }
 
     /// search for the next appearance (for nDirection values check DIRECTION_*-defines)
     void SearchNext(const OUString& strExpression);
@@ -380,9 +380,9 @@ private:
 
     SVX_DLLPRIVATE bool HasPreviousLoc() { return m_aPreviousLocBookmark.hasValue(); }
 
-    DECL_LINK(OnSearchTerminated, FmSearchThread*);
+    DECL_LINK_TYPED(OnSearchTerminated, FmSearchThread*, void);
     // is used by SearchThread, after the return from this handler the thread removes itself
-    DECL_LINK(OnNewRecordCount, void*);
+    DECL_LINK_TYPED(OnNewRecordCount, sal_Int32, void);
 };
 
 #endif // INCLUDED_SVX_FMSRCIMP_HXX

@@ -171,7 +171,7 @@ private:
 
     DECL_LINK( OnContextSelection, ListBox* );
 
-    DECL_LINK( OnSearchProgress, FmSearchProgress* );
+    DECL_LINK_TYPED( OnSearchProgress, const FmSearchProgress*, void );
 
     DECL_LINK_TYPED( OnDelayedPaint, Timer*, void ); ///< see EnableSearchUI
 
