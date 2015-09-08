@@ -91,7 +91,6 @@ private:
     sal_uInt16          mnCurButtonId;
     sal_uInt16          mnFocusButtonId;
     bool                mbFormat;
-    Link<>              maClickHdl;
 
     SAL_DLLPRIVATE void             ImplInitButtonDialogData();
     SAL_DLLPRIVATE VclPtr<PushButton> ImplCreatePushButton( ButtonDialogFlags nBtnFlags );

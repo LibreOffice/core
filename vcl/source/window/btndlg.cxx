@@ -260,13 +260,8 @@ void ButtonDialog::StateChanged( StateChangedType nType )
 
 void ButtonDialog::Click()
 {
-    if ( !maClickHdl )
-    {
-        if ( IsInExecute() )
-            EndDialog( GetCurButtonId() );
-    }
-    else
-        maClickHdl.Call( this );
+    if ( IsInExecute() )
+        EndDialog( GetCurButtonId() );
 }
 
 void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
