@@ -119,7 +119,7 @@ protected:
     DECL_LINK_TYPED(ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,void);
 
     // link for EndTextEditHdl
-    DECL_LINK(EndTextEditHdl, SdrUndoManager*);
+    DECL_LINK_TYPED(EndTextEditHdl, SdrUndoManager*, void);
 
     void ImpMacroUp(const Point& rUpPos);
     void ImpMacroDown(const Point& rDownPos);

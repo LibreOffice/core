@@ -100,7 +100,7 @@ void SdrUndoManager::Clear()
     }
 }
 
-void SdrUndoManager::SetEndTextEditHdl(const Link<>& rLink)
+void SdrUndoManager::SetEndTextEditHdl(const Link<SdrUndoManager*,void>& rLink)
 {
     maEndTextEditHdl = rLink;
 

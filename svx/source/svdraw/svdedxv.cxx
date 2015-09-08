@@ -523,10 +523,9 @@ IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,v
     }
 }
 
-IMPL_LINK(SdrObjEditView, EndTextEditHdl, SdrUndoManager*, /*pUndoManager*/)
+IMPL_LINK_NOARG_TYPED(SdrObjEditView, EndTextEditHdl, SdrUndoManager*, void)
 {
     SdrEndTextEdit();
-    return 0;
 }
 
 SdrUndoManager* SdrObjEditView::getSdrUndoManagerForEnhancedTextEdit() const
@@ -863,7 +862,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
 
                 // reset the callback link and let the undo manager cleanup all text edit
                 // undo actions to get the stack back to the form before the text edit
-                pSdrUndoManager->SetEndTextEditHdl(Link<>());
+                pSdrUndoManager->SetEndTextEditHdl(Link<SdrUndoManager*,void>());
             }
             else
             {
