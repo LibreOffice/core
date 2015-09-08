@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_fbc90bae",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 3830,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-08T13:25:40Z",
+      "side": 1,
+      "message": "this all seems to be conditional on finding a version 10 sdk, but the find_winsdk would actually succeed if you don\u0027t have a version 10 but a version 8.* sdk and then SOLARINC has \"-I\" added?",
+      "revId": "9e3f762e200634b3dee667d3bb1a7215ece39031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
