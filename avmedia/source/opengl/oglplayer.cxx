@@ -41,6 +41,7 @@ OGLPlayer::~OGLPlayer()
     {
         m_xContext->makeCurrent();
         gltf_renderer_release(m_pHandle);
+        m_xContext->dispose();
     }
     releaseInputFiles();
 }

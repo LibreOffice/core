@@ -175,6 +175,7 @@ public:
     ~OpenGLContext();
     void acquire() { mnRefCount++; }
     void release() { if ( --mnRefCount == 0 ) delete this; }
+    void dispose();
 
     void requestLegacyContext();
     void requestSingleBufferedRendering();
