@@ -1278,8 +1278,8 @@ void SAL_CALL OGLTransitionerImpl::viewChanged( const Reference< presentation::X
 
 void OGLTransitionerImpl::disposeTextures()
 {
-    CHECK_GL_ERROR();
     mpContext->makeCurrent();
+    CHECK_GL_ERROR();
 
 #if defined( GLX_EXT_texture_from_pixmap )
     const GLWindow& rGLWindow(mpContext->getOpenGLWindow());
