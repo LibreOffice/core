@@ -217,15 +217,8 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     // no keywords allowed from here on!
     if( SbiTokenizer::IsKwd( eTok ) )
     {
-        if( pParser->IsCompatible() && eTok == INPUT )
-        {
-            eTok = SYMBOL;
-        }
-        else
-        {
-            pParser->Error( ERRCODE_BASIC_SYNTAX );
-            bError = true;
-        }
+        pParser->Error( ERRCODE_BASIC_SYNTAX );
+        bError = true;
     }
 
     if( DoParametersFollow( pParser, eCurExpr, eTok = eNextTok ) )
