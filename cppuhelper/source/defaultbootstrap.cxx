@@ -125,6 +125,6 @@ cppu::preInitBootstrap(css::uno::Reference< css::uno::XComponentContext > const 
     // 1) defaultBootstrap_InitialComponentContext()
     // 2) comphelper::setProcessServiceFactory(xSFactory);
     // 3) InitVCL()
-    aService->loadImplementations();
+    aService->loadImplementations(xContext);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

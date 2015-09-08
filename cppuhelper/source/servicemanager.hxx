@@ -203,7 +203,7 @@ public:
         css::uno::Reference< css::uno::XComponentContext > const & context,
         boost::shared_ptr< Data::Implementation > & implementation);
 
-    void loadImplementations();
+    void loadImplementations(css::uno::Reference< css::uno::XComponentContext > const & context);
 
 private:
     virtual ~ServiceManager() {}
