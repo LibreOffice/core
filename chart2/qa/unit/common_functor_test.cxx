@@ -25,9 +25,11 @@ class CommonFunctorsTest : public CppUnit::TestFixture
 public:
      CPPUNIT_TEST_SUITE(CommonFunctorsTest);
      CPPUNIT_TEST(testAnyToString);
+     CPPUNIT_TEST(testDoubleToString);
      CPPUNIT_TEST_SUITE_END();
 
      void testAnyToString();
+     void testDoubleToString();
 
 private:
 };
@@ -54,6 +56,27 @@ void CommonFunctorsTest::testAnyToString()
     CPPUNIT_ASSERT_EQUAL(OUString("123.456"), aOutput[5]);
 }
 
+void CommonFunctorsTest::testDoubleToString()
+{
+    std::vector<double> aInput;
+    aInput.push_back(2.0);
+    aInput.push_back(10.0);
+    aInput.push_back(12.0);
+    aInput.push_back(15.0);
+    aInput.push_back(25.234);
+    aInput.push_back(123.456);
+
+    std::vector<OUString> aOutput;
+    std::transform(aInput.begin(), aInput.end(),
+            std::back_inserter(aOutput), chart::CommonFunctors::DoubleToOUString());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), aOutput[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("10"), aOutput[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("12"), aOutput[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("15"), aOutput[3]);
+    CPPUNIT_ASSERT_EQUAL(OUString("25.234"), aOutput[4]);
+    CPPUNIT_ASSERT_EQUAL(OUString("123.456"), aOutput[5]);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CommonFunctorsTest);
 
