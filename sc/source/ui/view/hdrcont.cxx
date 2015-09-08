@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "stdio.h"
+
 #include <sfx2/dispatch.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
@@ -68,7 +70,7 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
     EnableRTL( false );
 
     aNormFont = GetFont();
-    aNormFont.SetTransparent( true );       //! WEIGHT_NORMAL hart setzen ???
+    aNormFont.SetTransparent( true );       //! hard set WEIGHT_NORMAL ???
     aBoldFont = aNormFont;
     aBoldFont.SetWeight( WEIGHT_BOLD );
 
@@ -85,7 +87,7 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
     nWidth = nSmallWidth = aSize.Width();
     nBigWidth = LogicToPixel( Size( GetTextWidth(OUString("8888888")), 0 ) ).Width() + 5;
 
-    SetBackground();    // sonst Probleme auf OS/2 !?!?!
+    SetBackground();
 }
 
 void ScHeaderControl::SetWidth( long nNew )
@@ -111,6 +113,8 @@ void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
     bool bLayoutRTL = IsLayoutRTL();
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
+    printf("\nDoPrint\n\n");
+
     Rectangle aRect( Point(0,0), GetOutputSizePixel() );
     if ( bVertical )
     {
@@ -127,10 +131,11 @@ void ScHeaderControl::DoPaint( SCCOLROW nStart, SCCOLROW nEnd )
 
 void ScHeaderControl::SetMark( bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEnd )
 {
-    bool bEnabled = SC_MOD()->GetInputOptions().GetMarkHeader();    //! cachen?
+    bool bEnabled = SC_MOD()->GetInputOptions().GetMarkHeader();    //! cache?
     if (!bEnabled)
         bNewSet = false;
 
+    printf("\nScHeaderControl::SetMark\n");
     bool bOldSet       = bMarkRange;
     SCCOLROW nOldStart = nMarkStart;
     SCCOLROW nOldEnd   = nMarkEnd;
@@ -162,10 +167,16 @@ void ScHeaderControl::SetMark( bool bNewSet, SCCOLROW nNewStart, SCCOLROW nNewEn
                 DoPaint( std::min( nNewStart, nOldStart ), std::max( nNewEnd, nOldEnd ) );
         }
         else
+        {
             DoPaint( nNewStart, nNewEnd );      //  completely new selection
+            printf("\ncompletely new selection\n");
+        }
     }
     else if ( bOldSet )
+    {
         DoPaint( nOldStart, nOldEnd );          //  cancel selection
+        printf("\ncancel selection\n");
+    }
 }
 
 long ScHeaderControl::GetScrPos( SCCOLROW nEntryNo ) const
@@ -237,8 +248,8 @@ void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBase
 
 void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect )
 {
-    //  fuer VCL ist es wichtig, wenig Aufrufe zu haben, darum werden die aeusseren
-    //  Linien zusammengefasst
+    // It is important for VCL to have few calls, that is why the outer lines are
+    // grouped together
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     bool bHighContrast = rStyleSettings.GetHighContrastMode();
@@ -295,8 +306,8 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Recta
             nInitScrPos = GetSizePixel().Width() - 1;
     }
 
-    //  aeussere Linien komplett durchzeichnen
-    //  Zuerst Ende der letzten Zelle finden
+    // complete the painting of the outer lines
+    // first find the end of the last cell
 
     long nLineEnd = nInitScrPos - nLayoutSign;
 
@@ -550,7 +561,7 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const Recta
                             break;
                     }
 
-                    //  bei Selektion der ganzen Zeile/Spalte:
+                    // when selectiong the complete row/column:
                     //  InvertRect( Rectangle( aScrPos, aEndPos ) );
                 }
                 nScrPos += nSizePix * nLayoutSign;      // also if before the visible area
@@ -701,8 +712,8 @@ void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
 
         if (IsMouseCaptured())
         {
-            //  Tracking statt CaptureMouse, damit sauber abgebrochen werden kann
-            //! Irgendwann sollte die SelectionEngine selber StartTracking rufen!?!
+            // tracking instead of CaptureMouse, so it can be cancelled cleanly
+            //! someday SelectionEngine itself should call StartTracking!?!
             ReleaseMouse();
             StartTracking();
         }
@@ -932,7 +943,7 @@ void ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp(rHEvt);
 }
 
-//                  Dummys fuer virtuelle Methoden
+//                  dummies for virtual methods
 
 SCCOLROW ScHeaderControl::GetHiddenCount( SCCOLROW nEntryNo ) const
 {
