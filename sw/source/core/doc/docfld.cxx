@@ -323,8 +323,10 @@ sal_Int32 _SetGetExpField::GetCntPosFromContent() const
         {
         case TEXTFIELD:
         case TEXTINET:
-        case TEXTTOXMARK:
             nRet = CNTNT.pTextField->GetStart();
+            break;
+        case TEXTTOXMARK:
+            nRet = CNTNT.pTextTOX->GetStart();
             break;
         case CRSRPOS:
             nRet =  CNTNT.pPos->nContent.GetIndex();
