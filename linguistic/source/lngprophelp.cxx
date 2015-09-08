@@ -190,10 +190,6 @@ bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
                 bSCWA = bSWWA = true;
                 break;
             }
-            default:
-            {
-                bRes = false;
-            }
         }
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
