@@ -1252,12 +1252,10 @@ void Window::Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags )
 
 void Window::Validate( ValidateFlags nFlags )
 {
-
     if ( !comphelper::LibreOfficeKit::isActive() && (!IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight) )
         return;
 
     ImplValidate( NULL, nFlags );
-    LogicInvalidate(0);
 }
 
 bool Window::HasPaintEvent() const
