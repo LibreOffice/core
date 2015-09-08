@@ -3187,7 +3187,6 @@ void GtkSalFrame::createNewWindow( ::Window aNewParent, bool bXEmbed, SalX11Scre
     aParentData.bXEmbedSupport = bXEmbed;
     if( aNewParent == None )
     {
-        aNewParent = getDisplay()->GetRootWindow(nXScreen);
         aParentData.aWindow = None;
         aParentData.bXEmbedSupport = false;
     }
