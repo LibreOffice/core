@@ -1058,32 +1058,35 @@ ScDBCollection::NamedDBs::NamedDBs(const NamedDBs& r)
         ScDBData* p = new ScDBData(*it);
         std::unique_ptr<ScDBData> pData(p);
         if (m_DBs.insert( std::move(pData)).second)
-        {
-            p->SetContainer( this);
-            if (!mrDoc.IsClipOrUndo())
-            {
-                p->StartTableColumnNamesListener(); // needs the container be set already
-                if (p->AreTableColumnNamesDirty())
-                {
-                    if (p->HasHeader())
-                    {
-                        // Refresh table column names in next round.
-                        maDirtyTableColumnNames.Join( p->GetHeaderArea());
-                    }
-                    else
-                    {
-                        // Header-less table can generate its column names
-                        // already without accessing the document.
-                        p->RefreshTableColumnNames( nullptr);
-                    }
-                }
-            }
-        }
+            initInserted(p);
     }
 }
 
 ScDBCollection::NamedDBs::~NamedDBs()
 {
+}
+
+void ScDBCollection::NamedDBs::initInserted( ScDBData* p )
+{
+    p->SetContainer( this);
+    if (!mrDoc.IsClipOrUndo())
+    {
+        p->StartTableColumnNamesListener(); // needs the container be set already
+        if (p->AreTableColumnNamesDirty())
+        {
+            if (p->HasHeader())
+            {
+                // Refresh table column names in next round.
+                maDirtyTableColumnNames.Join( p->GetHeaderArea());
+            }
+            else
+            {
+                // Header-less table can generate its column names
+                // already without accessing the document.
+                p->RefreshTableColumnNames( nullptr);
+            }
+        }
+    }
 }
 
 ScDBCollection::NamedDBs::iterator ScDBCollection::NamedDBs::begin()
@@ -1136,25 +1139,7 @@ bool ScDBCollection::NamedDBs::insert(ScDBData* p)
 
     if (r.second)
     {
-        p->SetContainer( this);
-        if (!mrDoc.IsClipOrUndo())
-        {
-            p->StartTableColumnNamesListener(); // needs the container be set already
-            if (p->AreTableColumnNamesDirty())
-            {
-                if (p->HasHeader())
-                {
-                    // Refresh table column names in next round.
-                    maDirtyTableColumnNames.Join( p->GetHeaderArea());
-                }
-                else
-                {
-                    // Header-less table can generate its column names
-                    // already without accessing the document.
-                    p->RefreshTableColumnNames( nullptr);
-                }
-            }
-        }
+        initInserted(p);
 
         /* TODO: shouldn't the import refresh not be setup for
          * clipboard/undo documents? It was already like this before.. */

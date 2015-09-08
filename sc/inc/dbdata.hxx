@@ -243,6 +243,7 @@ public:
         NamedDBs(const NamedDBs& r);
         virtual ~NamedDBs();
         NamedDBs & operator=(NamedDBs const&) = delete;
+        void initInserted( ScDBData* p );
 
     public:
         typedef DBsType::iterator iterator;
