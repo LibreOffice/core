@@ -99,7 +99,6 @@ public:
     void testBarChartVaryColorsXLSX();
     void testMultipleAxisXLSX();
     void testAxisTitleRotationXLSX();
-    void testAxisCrossBetweenXSLX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(testErrorBarXLSX);
@@ -163,7 +162,6 @@ public:
     CPPUNIT_TEST(testBarChartVaryColorsXLSX);
     CPPUNIT_TEST(testMultipleAxisXLSX);
     CPPUNIT_TEST(testAxisTitleRotationXLSX);
-    CPPUNIT_TEST(testAxisCrossBetweenXSLX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -1473,13 +1471,6 @@ void Chart2ExportTest::testAxisTitleRotationXLSX()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:title/c:tx/c:rich/a:bodyPr", "rot", "0");
-}
-
-void Chart2ExportTest::testAxisCrossBetweenXSLX()
-{
-    load("/chart2/qa/extras/data/odt/", "axis-position.odt");
-    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
-    assertXPath(pXmlDoc, "(//c:crossBetween)[1]", "val", "midCat");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ExportTest);
