@@ -26,6 +26,7 @@
 #include <com/sun/star/view/SelectionType.hpp>
 #include <toolkit/helper/property.hxx>
 #include <osl/diagnose.h>
+#include <cppuhelper/implbase.hxx>
 
 #include "helper/unopropertyarrayhelper.hxx"
 
@@ -129,7 +130,7 @@ Reference< XPropertySetInfo > UnoTreeModel::getPropertySetInfo(  ) throw(Runtime
 
 namespace {
 
-typedef ::cppu::ImplInheritanceHelper1< UnoControlBase, css::awt::tree::XTreeControl > UnoTreeControl_Base;
+typedef ::cppu::ImplInheritanceHelper< UnoControlBase, css::awt::tree::XTreeControl > UnoTreeControl_Base;
 class UnoTreeControl : public UnoTreeControl_Base
 {
 public:

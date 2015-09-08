@@ -24,7 +24,7 @@
 #include "osl/mutex.hxx"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/implbase2.hxx"
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -34,7 +34,7 @@
 namespace {
 
 class AsyncCallback:
-    public ::cppu::WeakImplHelper2<
+    public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::awt::XRequestCallback>,
     private boost::noncopyable

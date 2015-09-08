@@ -30,7 +30,7 @@
 #include <com/sun/star/awt/grid/XSortableMutableGridDataModel.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/anycompare.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -52,7 +52,7 @@ namespace {
 class SortableGridDataModel;
 typedef InitGuard< SortableGridDataModel >  MethodGuard;
 
-typedef ::cppu::WeakComponentImplHelper3    <   css::awt::grid::XSortableMutableGridDataModel
+typedef ::cppu::WeakComponentImplHelper    <   css::awt::grid::XSortableMutableGridDataModel
                                             ,   css::lang::XServiceInfo
                                             ,   css::lang::XInitialization
                                             >   SortableGridDataModel_Base;

@@ -23,7 +23,7 @@
 
 #include <comphelper/componentguard.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <tools/diagnose_ex.h>
@@ -44,7 +44,7 @@ namespace {
 
 enum broadcast_type { row_added, row_removed, data_changed};
 
-typedef ::cppu::WeakComponentImplHelper2    <   XMutableGridDataModel
+typedef ::cppu::WeakComponentImplHelper    <   XMutableGridDataModel
                                             ,   XServiceInfo
                                             >   DefaultGridDataModel_Base;
 
