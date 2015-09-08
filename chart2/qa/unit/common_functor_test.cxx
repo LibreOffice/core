@@ -1,0 +1,62 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+
+#include <com/sun/star/uno/Any.h>
+#include <rtl/ustring.hxx>
+
+#include <vector>
+
+#include "CommonFunctors.hxx"
+
+
+class CommonFunctorsTest : public CppUnit::TestFixture
+{
+public:
+     CPPUNIT_TEST_SUITE(CommonFunctorsTest);
+     CPPUNIT_TEST(testAnyToString);
+     CPPUNIT_TEST_SUITE_END();
+
+     void testAnyToString();
+
+private:
+};
+
+void CommonFunctorsTest::testAnyToString()
+{
+    std::vector<css::uno::Any> aInput;
+    aInput.push_back(css::uno::makeAny(2.0));
+    aInput.push_back(css::uno::makeAny(10.0));
+    aInput.push_back(css::uno::makeAny(12.0));
+    aInput.push_back(css::uno::makeAny(15.0));
+    aInput.push_back(css::uno::makeAny(25.234));
+    aInput.push_back(css::uno::makeAny(123.456));
+
+    std::vector<OUString> aOutput;
+    std::transform(aInput.begin(), aInput.end(),
+            std::back_inserter(aOutput), chart::CommonFunctors::AnyToString());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), aOutput[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("10"), aOutput[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("12"), aOutput[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("15"), aOutput[3]);
+    CPPUNIT_ASSERT_EQUAL(OUString("25.234"), aOutput[4]);
+    CPPUNIT_ASSERT_EQUAL(OUString("123.456"), aOutput[5]);
+}
+
+
+CPPUNIT_TEST_SUITE_REGISTRATION(CommonFunctorsTest);
+
+CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
