@@ -324,7 +324,6 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
             }
         }
 
-        sal_Int32 nFlags = 0;
         if (bNumeric)
         {
             if (cDecimalDelimiter)
@@ -346,7 +345,6 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                 io_nPrecisions = 0;
                 io_nScales = 0;
             }
-            nFlags = ColumnSearch::BASIC;
         }
         else
         {
@@ -370,7 +368,6 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                     io_nScales = 0;
                     o_sTypeName = "VARCHAR";
             };
-            nFlags |= ColumnSearch::CHAR;
         }
     }
     else
