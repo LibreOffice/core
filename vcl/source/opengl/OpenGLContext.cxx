@@ -112,6 +112,13 @@ OpenGLContext::~OpenGLContext()
     assert (mnRefCount == 1);
 }
 
+// release associated child-window if we have one
+void OpenGLContext::dispose()
+{
+    reset();
+    m_pChildWindow.disposeAndClear();
+}
+
 rtl::Reference<OpenGLContext> OpenGLContext::Create()
 {
     return rtl::Reference<OpenGLContext>(new OpenGLContext);
@@ -1279,6 +1286,7 @@ void OpenGLContext::reset()
             wglMakeCurrent(NULL, NULL);
         wglDeleteContext( m_aGLWin.hRC );
         ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
+        m_aGLWin.hRC = 0;
     }
 #elif defined( MACOSX )
     OpenGLWrapper::resetCurrent();
@@ -1300,6 +1308,7 @@ void OpenGLContext::reset()
 
         if (mbPixmap && m_aGLWin.glPix != None)
             glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
+        m_aGLWin.ctx = 0;
     }
 #endif
 }
