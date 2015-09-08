@@ -26,7 +26,7 @@
 #include <osl/mutex.hxx>
 #include <osl/time.h>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/compbase_ex.hxx"
@@ -116,7 +116,7 @@ static void assign( TestData & rData,
 
 class Test_Impl :
     public osl::DebugBase<Test_Impl>,
-    public WeakImplHelper3< XBridgeTest2, XServiceInfo , XRecursiveCall >
+    public WeakImplHelper< XBridgeTest2, XServiceInfo , XRecursiveCall >
 {
     TestData _aData, _aStructData;
     sal_Int32 m_nLastCallId;

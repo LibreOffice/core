@@ -23,7 +23,7 @@
 #include "sal/config.h"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 #include "osl/diagnose.hxx"
 #include "sal/types.h"
 #include "test/testtools/bridgetest/XCurrentContextChecker.hpp"
@@ -32,7 +32,7 @@ namespace testtools { namespace bridgetest {
 
 class SAL_DLLPRIVATE CurrentContextChecker :
     public ::osl::DebugBase< CurrentContextChecker >,
-    public ::cppu::WeakImplHelper1<
+    public ::cppu::WeakImplHelper<
         ::test::testtools::bridgetest::XCurrentContextChecker >
 {
 public:
