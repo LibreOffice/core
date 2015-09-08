@@ -15,6 +15,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,chart2_common_functors, \
     chart2/qa/unit/common_functor_test \
 ))
 
+$(eval $(call gb_CppunitTest_add_defs,chart2_common_functors,\
+    -DOOO_DLLIMPLEMENTATION_CHARTTOOLS \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,chart2_common_functors, \
     cppu \
     cppuhelper \
