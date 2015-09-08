@@ -127,8 +127,9 @@ struct OOO_DLLPUBLIC_CHARTTOOLS DoubleToOUString : public ::std::unary_function<
         return ::rtl::math::doubleToUString(
             fNumber,
             rtl_math_StringFormat_Automatic,
-            -1, // use maximum number of decimal places
-            static_cast< sal_Char >( '.' )
+            rtl_math_DecimalPlaces_Max, // use maximum decimal places available
+            static_cast< sal_Char >( '.' ),
+            true
             );
     }
 };
