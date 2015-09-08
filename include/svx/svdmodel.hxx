@@ -152,11 +152,10 @@ struct SdrModelImpl;
 class SVX_DLLPUBLIC SdrModel : public SfxBroadcaster, public tools::WeakBase< SdrModel >
 {
 protected:
-    DateTime       aReadDate;  // date of the incoming stream
+    DateTime              aReadDate;  // date of the incoming stream
     std::vector<SdrPage*> maMaPag;     // master pages
     std::vector<SdrPage*> maPages;
-    Link<>         aUndoLink;  // link to a NotifyUndo-Handler
-    Link<>         aIOProgressLink;
+    Link<SdrUndoAction*,void>  aUndoLink;  // link to a NotifyUndo-Handler
     OUString       aTablePath;
     Size           aMaxObjSize; // e.g. for auto-growing text
     Fraction       aObjUnit;   // description of the coordinate units for ClipBoard, Drag&Drop, ...
@@ -332,25 +331,25 @@ public:
     void                 SetRefDevice(OutputDevice* pDev);
     OutputDevice*        GetRefDevice() const                   { return pRefOutDev.get(); }
     /// Set if we are doing tiled rendering.
-    void setTiledRendering(bool bTiledRendering);
+    void                 setTiledRendering(bool bTiledRendering);
     /// Are we doing tiled rendering?
-    bool isTiledRendering() const;
+    bool                 isTiledRendering() const;
     /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API.
-    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+    void                 registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Gets the LOK callback registered by registerLibreOfficeKitCallback().
     LibreOfficeKitCallback getLibreOfficeKitCallback() const;
     /// Gets the LOK data registered by registerLibreOfficeKitCallback().
-    void* getLibreOfficeKitData() const;
+    void*                getLibreOfficeKitData() const;
     /// Invokes the registered callback, if there are any.
-    void libreOfficeKitCallback(int nType, const char* pPayload) const;
+    void                 libreOfficeKitCallback(int nType, const char* pPayload) const;
     // If a new MapMode is set on the RefDevice (or similar)
     void                 RefDeviceChanged(); // not yet implemented
     // default font height in logical units
     void                 SetDefaultFontHeight(sal_uIntPtr nVal);
-    sal_uIntPtr                GetDefaultFontHeight() const           { return nDefTextHgt; }
+    sal_uIntPtr          GetDefaultFontHeight() const           { return nDefTextHgt; }
     // default tabulator width for the EditEngine
     void                 SetDefaultTabulator(sal_uInt16 nVal);
-    sal_uInt16               GetDefaultTabulator() const            { return nDefaultTabulator; }
+    sal_uInt16           GetDefaultTabulator() const            { return nDefaultTabulator; }
 
     // The DefaultStyleSheet will be used in every symbol object which is inserted
     // in this model and does not have a StyleSheet set.
@@ -361,7 +360,7 @@ public:
     SfxStyleSheet* GetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj() const { return mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj; }
     void SetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(SfxStyleSheet* pDefSS) { mpDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj = pDefSS; }
 
-    sfx2::LinkManager*      GetLinkManager()                         { return pLinkManager; }
+    sfx2::LinkManager*   GetLinkManager()                         { return pLinkManager; }
     void                 SetLinkManager( sfx2::LinkManager* pLinkMgr ) { pLinkManager = pLinkMgr; }
 
     ::comphelper::IEmbeddedHelper*     GetPersist() const               { return m_pEmbeddedHelper; }
@@ -406,8 +405,8 @@ public:
     static void      TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar = false);
 
     // RecalcPageNums is ordinarily only called by the Page.
-    bool         IsPagNumsDirty() const                     { return bPagNumsDirty; };
-    bool         IsMPgNumsDirty() const                     { return bMPgNumsDirty; };
+    bool             IsPagNumsDirty() const                     { return bPagNumsDirty; };
+    bool             IsMPgNumsDirty() const                     { return bMPgNumsDirty; };
     void             RecalcPageNums(bool bMaster);
     // After the Insert the Page belongs to the SdrModel.
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
@@ -415,23 +414,23 @@ public:
     // Remove means transferring ownership to the caller (opposite of Insert)
     virtual SdrPage* RemovePage(sal_uInt16 nPgNum);
     virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
-    const SdrPage* GetPage(sal_uInt16 nPgNum) const;
-    SdrPage* GetPage(sal_uInt16 nPgNum);
-    sal_uInt16 GetPageCount() const;
+    const SdrPage*   GetPage(sal_uInt16 nPgNum) const;
+    SdrPage*         GetPage(sal_uInt16 nPgNum);
+    sal_uInt16       GetPageCount() const;
     // #109538#
-    virtual void PageListChanged();
+    virtual void     PageListChanged();
 
     // Masterpages
     virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
-    void     DeleteMasterPage(sal_uInt16 nPgNum);
+    void             DeleteMasterPage(sal_uInt16 nPgNum);
     // Remove means transferring ownership to the caller (opposite of Insert)
     virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
-    void     MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
-    const SdrPage* GetMasterPage(sal_uInt16 nPgNum) const;
-    SdrPage* GetMasterPage(sal_uInt16 nPgNum);
-    sal_uInt16 GetMasterPageCount() const;
+    void             MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
+    const SdrPage*   GetMasterPage(sal_uInt16 nPgNum) const;
+    SdrPage*         GetMasterPage(sal_uInt16 nPgNum);
+    sal_uInt16       GetMasterPageCount() const;
     // #109538#
-    virtual void MasterPageListChanged();
+    virtual void     MasterPageListChanged();
 
     // modified flag. Is set automatically when something changes on the Pages
     // symbol objects. You need to reset it yourself, however, e.g. on Save().
@@ -525,7 +524,7 @@ public:
     //   void NotifyUndoActionHdl(SfxUndoAction* pUndoAction);
     // When calling the handler ownership is transferred;
     // The UndoAction belongs to the Handler, not the SdrModel.
-    void        SetNotifyUndoActionHdl(const Link<>& rLink)  { aUndoLink=rLink; }
+    void        SetNotifyUndoActionHdl(const Link<SdrUndoAction*,void>& rLink)  { aUndoLink=rLink; }
 
     /** application can set its own undo manager, BegUndo, EndUndo and AddUndoAction
         calls are routed to this interface if given */

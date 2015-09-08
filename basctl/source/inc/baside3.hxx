@@ -38,6 +38,7 @@ class Printer;
 class StarBASIC;
 class SfxItemSet;
 class SfxUndoManager;
+class SdrUndoAction;
 
 namespace basctl
 {
@@ -71,7 +72,7 @@ protected:
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void        LoseFocus() SAL_OVERRIDE;
 
-    DECL_STATIC_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction * );
+    DECL_STATIC_LINK_TYPED( DialogWindow, NotifyUndoActionHdl, SdrUndoAction *, void );
     virtual void        DoInit() SAL_OVERRIDE;
     virtual void        DoScroll( ScrollBar* pCurScrollBar ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

@@ -549,7 +549,7 @@ public:
     IDocumentState & getIDocumentState();
 
     // IDocumentDrawModelAccess
-    DECL_LINK( AddDrawUndo, SdrUndoAction * );
+    DECL_LINK_TYPED( AddDrawUndo, SdrUndoAction *, void );
     IDocumentDrawModelAccess const & getIDocumentDrawModelAccess() const;
     IDocumentDrawModelAccess & getIDocumentDrawModelAccess();
 

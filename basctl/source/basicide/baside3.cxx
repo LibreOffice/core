@@ -46,6 +46,7 @@
 #include <svl/aeitem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
+#include <svx/svdundo.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
@@ -210,17 +211,13 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
 }
 
 
-
-
-IMPL_STATIC_LINK(
-    DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
+IMPL_STATIC_LINK_TYPED(
+    DialogWindow, NotifyUndoActionHdl, SdrUndoAction *, pUndoAction, void )
 {
     // #i120515# pUndoAction needs to be deleted, this hand over is an ownership
     // change. As long as it does not get added to the undo manager, it needs at
     // least to be deleted.
     delete pUndoAction;
-
-    return 0;
 }
 
 void DialogWindow::DoInit()

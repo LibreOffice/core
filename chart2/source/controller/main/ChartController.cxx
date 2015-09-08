@@ -1459,9 +1459,9 @@ void SAL_CALL ChartController::modified(
     //todo? update menu states ?
 }
 
-IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
+IMPL_LINK_TYPED( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction, void )
 {
-    ENSURE_OR_RETURN( pUndoAction, "invalid Undo action", 1L );
+    ENSURE_OR_RETURN_VOID( pUndoAction, "invalid Undo action" );
 
     OUString aObjectCID = m_aSelection.getSelectedCID();
     if ( aObjectCID.isEmpty() )
@@ -1478,7 +1478,6 @@ IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    return 0L;
 }
 
 DrawModelWrapper* ChartController::GetDrawModelWrapper()

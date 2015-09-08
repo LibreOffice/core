@@ -55,7 +55,7 @@ struct SwUndoGroupObjImpl
 
 // Draw-Objecte
 
-IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
+IMPL_LINK_TYPED( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo, void )
 {
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("sw.core", "Id: " << pUndo->GetId() << "Comment: " << pUndo->GetComment());
@@ -73,7 +73,6 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
     }
     else
         delete pUndo;
-    return 0;
 }
 
 SwSdrUndo::SwSdrUndo( SdrUndoAction* pUndo, const SdrMarkList* pMrkLst )

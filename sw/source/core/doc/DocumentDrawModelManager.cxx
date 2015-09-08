@@ -397,7 +397,7 @@ bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rS
 
 void DocumentDrawModelManager::DrawNotifyUndoHdl()
 {
-    mpDrawModel->SetNotifyUndoActionHdl( Link<>() );
+    mpDrawModel->SetNotifyUndoActionHdl( Link<SdrUndoAction*,void>() );
 }
 
 }

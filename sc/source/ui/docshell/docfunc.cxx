@@ -101,7 +101,7 @@ using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
-IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction )
+IMPL_LINK_TYPED( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction, void )
 {
     // #i101118# if drawing layer collects the undo actions, add it there
     ScDrawLayer* pDrawLayer = rDocShell.GetDocument().GetDrawLayer();
@@ -117,8 +117,6 @@ IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction )
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         if (rDoc.IsStreamValid(nTab))
             rDoc.SetStreamValid(nTab, false);
-
-    return 0;
 }
 
 //  Zeile ueber dem Range painten (fuer Linien nach AdjustRowHeight)

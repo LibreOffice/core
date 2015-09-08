@@ -437,7 +437,7 @@ public:
     ViewElementListProvider getViewElementListProvider();
     DrawModelWrapper* GetDrawModelWrapper();
 
-    DECL_LINK( NotifyUndoActionHdl, SdrUndoAction* );
+    DECL_LINK_TYPED( NotifyUndoActionHdl, SdrUndoAction*, void );
 
 public:
     //private
