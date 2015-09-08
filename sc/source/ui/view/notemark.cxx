@@ -86,8 +86,8 @@ IMPL_LINK_NOARG_TYPED(ScNoteMarker, TimeHdl, Timer *, void)
         OutputDevice* pPrinter = pDoc->GetRefDevice();
         if (pPrinter)
         {
-            //  Am Outliner des Draw-Model ist auch der Drucker als RefDevice gesetzt,
-            //  und es soll einheitlich aussehen.
+            // On the outliner of the draw model also the printer is set as RefDevice,
+            // and it should look uniform.
             Outliner& rOutliner = pModel->GetDrawOutliner();
             rOutliner.SetRefDevice(pPrinter);
         }
@@ -101,7 +101,7 @@ IMPL_LINK_NOARG_TYPED(ScNoteMarker, TimeHdl, Timer *, void)
                 aRect = pObject->GetCurrentBoundRect();
             }
 
-            // Page einfuegen damit das Model sie kennt und auch deleted
+            // Insert page so that the model recognise it and also deleted
             pModel->InsertPage( pPage );
 
         }
