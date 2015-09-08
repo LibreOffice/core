@@ -44,7 +44,6 @@
 #include "editutil.hxx"
 #include "chgtrack.hxx"
 #include "tokenarray.hxx"
-#include "clkernelthread.hxx"
 
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
@@ -535,28 +534,6 @@ typedef boost::ptr_map<AreaListenerKey, sc::FormulaGroupAreaListener> AreaListen
 
 }
 
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-//  The mutex to synchronize access to the OpenCL compilation thread.
-static osl::Mutex& getOpenCLCompilationThreadMutex()
-{
-    static osl::Mutex* pMutex = NULL;
-    if( !pMutex )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if( !pMutex )
-        {
-            static osl::Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-
-    return *pMutex;
-}
-
-int ScFormulaCellGroup::snCount = 0;
-rtl::Reference<sc::CLBuildKernelThread> ScFormulaCellGroup::sxCompilationThread;
-#endif
-
 struct ScFormulaCellGroup::Impl
 {
     AreaListenersType maAreaListeners;
@@ -576,52 +553,15 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     meKernelState(sc::OpenCLKernelNone)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCellGroup ctor this " << this);
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-    if (officecfg::Office::Common::Misc::UseOpenCL::get())
-    {
-        osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
-        if (snCount++ == 0)
-        {
-            assert(!sxCompilationThread.is());
-            sxCompilationThread.set(new sc::CLBuildKernelThread);
-            sxCompilationThread->launch();
-        }
-    }
-#endif
 }
 
 ScFormulaCellGroup::~ScFormulaCellGroup()
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCellGroup dtor this " << this);
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-    if (officecfg::Office::Common::Misc::UseOpenCL::get())
-    {
-        osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
-        if (--snCount == 0 && sxCompilationThread.is())
-            {
-                assert(sxCompilationThread.is());
-                sxCompilationThread->finish();
-                sxCompilationThread->join();
-                SAL_INFO("sc.opencl", "OpenCL kernel compilation thread has finished");
-                sxCompilationThread.clear();
-            }
-    }
-#endif
     delete mpCode;
     delete mpCompiledFormula;
     delete mpImpl;
 }
-
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-void ScFormulaCellGroup::scheduleCompilation()
-{
-    meKernelState = sc::OpenCLKernelCompilationScheduled;
-    sc::CLBuildKernelWorkItem aWorkItem;
-    aWorkItem.meWhatToDo = sc::CLBuildKernelWorkItem::COMPILE;
-    aWorkItem.mxGroup = this;
-    sxCompilationThread->push(aWorkItem);
-}
-#endif
 
 void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )
 {
@@ -3755,10 +3695,6 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
     mxGroup->mbInvariant = bInvariant;
     mxGroup->mnLength = nLen;
     mxGroup->mpCode = pCode; // Move this to the shared location.
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-    if (mxGroup->sxCompilationThread.is())
-        mxGroup->scheduleCompilation();
-#endif
     return mxGroup;
 }
 
