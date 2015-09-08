@@ -90,7 +90,7 @@ namespace oglcanvas
     {}
 
     SpriteDeviceHelper::~SpriteDeviceHelper()
-    {}
+    { mxContext->dispose(); }
 
     void SpriteDeviceHelper::init( vcl::Window&               rWindow,
                                    SpriteCanvas&         rSpriteCanvas,
