@@ -1230,11 +1230,12 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     if (isDisposed() || !mbValidOpenGLContext || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
         return;
 
-    CHECK_GL_ERROR();
     mpContext->makeCurrent();
+    CHECK_GL_ERROR();
 
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    CHECK_GL_ERROR();
 
     if(mpTransition)
     {
@@ -1277,8 +1278,8 @@ void SAL_CALL OGLTransitionerImpl::viewChanged( const Reference< presentation::X
 
 void OGLTransitionerImpl::disposeTextures()
 {
-    CHECK_GL_ERROR();
     mpContext->makeCurrent();
+    CHECK_GL_ERROR();
 
 #if defined( GLX_EXT_texture_from_pixmap )
     const GLWindow& rGLWindow(mpContext->getOpenGLWindow());
