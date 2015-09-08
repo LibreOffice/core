@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_bb7313b4",
+        "filename": "sc/source/ui/unoobj/cellsuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3418,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-09-08T10:16:05Z",
+      "side": 1,
+      "message": "eh, no, now you\u0027ve just leaked an object.\nCode should look like:\n   aValueListeners.push_back( uno::Reference....",
+      "revId": "27c2d1e74178eadc3c3afcbf1121d2a190cf8c13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_9b78cf91",
+        "filename": "sc/source/ui/unoobj/chart2uno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3352,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-09-08T10:16:05Z",
+      "side": 1,
+      "message": "ditto here",
+      "revId": "27c2d1e74178eadc3c3afcbf1121d2a190cf8c13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_fb6d8bcd",
+        "filename": "sc/source/ui/unoobj/dapiuno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1306,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-09-08T10:16:05Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "27c2d1e74178eadc3c3afcbf1121d2a190cf8c13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
