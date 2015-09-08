@@ -281,7 +281,7 @@ en-US = "bullet2"
 
 [HORIZONTAL_ELLIPSIS]
 x-comment = "… (U+02026), see http://wiki.documentfoundation.org/Emoji"
-en-US = "…"
+en-US = "."
 
 [PER_MILLE_SIGN]
 x-comment = "‰ (U+02030), see http://wiki.documentfoundation.org/Emoji"
