@@ -205,7 +205,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
 
     InitParam(pOptions);
 
-    pPageData = NULL;       // wird nur zur Initialisierung gebraucht
+    pPageData = NULL;       // is only needed for initialisation
 }
 
 ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTab,
@@ -650,7 +650,7 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
         nStartCol = 0;
         nStartRow = 0;
         if (!pDoc->GetPrintArea( nPrintTab, nEndCol, nEndRow, bNotes ))
-            return false;   // nix
+            return false;   // nothing
     }
     else
     {
@@ -1213,13 +1213,13 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOu
     }
 }
 
-//  Rahmen wird nach innen gezeichnet
+// The frame is drawn inwards
 
 void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
                                 const SvxBoxItem* pBorderData, const SvxBrushItem* pBackground,
                                 const SvxShadowItem* pShadow )
 {
-    //!     direkte Ausgabe aus SvxBoxItem !!!
+    //!     direct output from SvxBoxItem !!!
 
     if (pBorderData)
         if ( !pBorderData->GetTop() && !pBorderData->GetBottom() && !pBorderData->GetLeft() &&
@@ -1227,7 +1227,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
             pBorderData = NULL;
 
     if (!pBorderData && !pBackground && !pShadow)
-        return;                                     // nichts zu tun
+        return;                                     // nothing to do
 
     long nLeft   = 0;
     long nRight  = 0;
@@ -2877,7 +2877,7 @@ void ScPrintFunc::CalcZoom( sal_uInt16 nRangeNo )                       // calcu
     }
     else
     {
-        OSL_ENSURE( aTableParam.bScaleNone, "kein Scale-Flag gesetzt" );
+        OSL_ENSURE( aTableParam.bScaleNone, "no scale flag is set" );
         nZoom = 100;
         CalcPages();
     }

@@ -167,8 +167,8 @@ void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
     ScModule* pScMod = SC_MOD();
     if ( !pScMod->IsModalMode() && !pScMod->IsFormulaMode() && !IsInEditMode() )
     {
-        //  View aktivieren
-        pViewData->GetViewShell()->SetActive();         // Appear und SetViewFrame
+        // activate View
+        pViewData->GetViewShell()->SetActive();         // Appear and SetViewFrame
         pViewData->GetView()->ActiveGrabFocus();
     }
 
@@ -237,9 +237,9 @@ void ScTabControl::Select()
     SCTAB nCount = pDoc->GetTableCount();
     SCTAB i;
 
-    if ( pScMod->IsTableLocked() )      // darf jetzt nicht umgeschaltet werden ?
+    if ( pScMod->IsTableLocked() )      // may not be switched now ?
     {
-        //  den alten Zustand des TabControls wiederherstellen:
+        // restore the old state of TabControls
 
         for (i=0; i<nCount; i++)
             SelectPage( static_cast<sal_uInt16>(i)+1, rMark.GetTableSelect(i) );
@@ -249,14 +249,14 @@ void ScTabControl::Select()
     }
 
     sal_uInt16 nCurId = GetCurPageId();
-    if (!nCurId) return;            // kann vorkommen, wenn bei Excel-Import alles versteckt ist
+    if (!nCurId) return;            // for Excel import it can happen that everything is hidden
     sal_uInt16 nPage = nCurId - 1;
 
-    // OLE-inplace deaktivieren
+    // OLE-inplace deactivate
     if ( nPage != static_cast<sal_uInt16>(pViewData->GetTabNo()) )
         pViewData->GetView()->DrawMarkListHasChanged();
 
-    //  InputEnterHandler nur wenn nicht Referenzeingabe
+    //  InputEnterHandler onlw when not reference input
 
     bool bRefMode = pScMod->IsFormulaMode();
     if (!bRefMode)
@@ -270,7 +270,7 @@ void ScTabControl::Select()
         pViewData->GetView()->SetTabNo( static_cast<SCTAB>(nPage) );
     else
     {
-        //  Tabelle fuer Basic ist 1-basiert
+        // sheet for basic is 1-based
         SfxUInt16Item aItem( SID_CURRENTTAB, nPage + 1 );
         rDisp.Execute( SID_CURRENTTAB, SfxCallMode::SLOT | SfxCallMode::RECORD,
                                 &aItem, nullptr );
@@ -289,9 +289,9 @@ void ScTabControl::Select()
     rBind.Invalidate( FID_TABLE_HIDE );
     rBind.Invalidate( FID_TAB_SET_TAB_BG_COLOR );
 
-        //  SetReference nur wenn der Konsolidieren-Dialog offen ist
-        //  (fuer Referenzen ueber mehrere Tabellen)
-        //  bei anderen gibt das nur unnoetiges Gezappel
+        // SetReference onlw when the consolidate dialog is open
+        // (for referenzes over multiple sheets)
+        // for others this is only uneeded fidgeting
 
     if ( bRefMode && pViewData->GetRefType() == SC_REFTYPE_REF )
         if ( pViewData->GetViewShell()->GetViewFrame()->HasChildWindow(SID_OPENDLG_CONSOLIDATE) )
@@ -300,7 +300,7 @@ void ScTabControl::Select()
                     pViewData->GetRefStartX(), pViewData->GetRefStartY(), pViewData->GetRefStartZ(),
                     pViewData->GetRefEndX(), pViewData->GetRefEndY(), pViewData->GetRefEndZ() );
             pScMod->SetReference( aRange, pDoc, &rMark );
-            pScMod->EndReference();                     // wegen Auto-Hide
+            pScMod->EndReference();                     // due to Auto-Hide
         }
 }
 
@@ -327,7 +327,7 @@ void ScTabControl::UpdateStatus()
     SCTAB nMaxCnt = std::max( nCount, static_cast<SCTAB>(GetMaxId()) );
     Color aTabBgColor;
 
-    bool bModified = false;                                     // Tabellen-Namen
+    bool bModified = false;                                     // sheet name
     for (i=0; i<nMaxCnt && !bModified; i++)
     {
         if (pDoc->IsVisible(i))
@@ -370,7 +370,7 @@ void ScTabControl::UpdateStatus()
 
     if (bActive)
     {
-        bModified = false;                                          // Selektion
+        bModified = false;                                          // selection
         for (i=0; i<nMaxCnt && !bModified; i++)
             if ( rMark.GetTableSelect(i) != (bool) IsPageSelected(static_cast<sal_uInt16>(i)+1) )
                 bModified = true;
@@ -416,7 +416,7 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
     ScTabViewShell* pViewSh  = pViewData->GetViewShell();
     bool            bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
 
-    // ViewFrame erstmal aktivieren (Bug 19493):
+    // first activate ViewFrame (Bug 19493):
     pViewSh->SetActive();
 
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu && !bDisable)
@@ -498,7 +498,7 @@ static sal_uInt16 lcl_DocShellNr( ScDocument* pDoc )
         pShell = SfxObjectShell::GetNext( *pShell );
     }
 
-    OSL_FAIL("Dokument nicht gefunden");
+    OSL_FAIL("Document not found");
     return 0;
 }
 
