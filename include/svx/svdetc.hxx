@@ -173,21 +173,22 @@ public:
 };
 
 
+class SdrObjFactory;
 
 class SdrLinkList
 {
-    std::vector<Link<>*> aList;
+    std::vector<Link<SdrObjFactory*,void> > aList;
 protected:
-    unsigned FindEntry(const Link<>& rLink) const;
+    unsigned FindEntry(const Link<SdrObjFactory*,void>& rLink) const;
 public:
     SdrLinkList(): aList()                   {}
     ~SdrLinkList()                           { Clear(); }
     SVX_DLLPUBLIC void Clear();
     unsigned GetLinkCount() const            { return (unsigned)aList.size(); }
-    Link<>& GetLink(unsigned nNum)           { return *aList[nNum]; }
-    const Link<>& GetLink(unsigned nNum) const { return *aList[nNum]; }
-    void InsertLink(const Link<>& rLink, unsigned nPos=0xFFFF);
-    void RemoveLink(const Link<>& rLink);
+    Link<SdrObjFactory*,void>& GetLink(unsigned nNum)           { return aList[nNum]; }
+    const Link<SdrObjFactory*,void>& GetLink(unsigned nNum) const { return aList[nNum]; }
+    void InsertLink(const Link<SdrObjFactory*,void>& rLink, unsigned nPos=0xFFFF);
+    void RemoveLink(const Link<SdrObjFactory*,void>& rLink);
 };
 
 SdrLinkList& ImpGetUserMakeObjHdl();

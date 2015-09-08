@@ -31,8 +31,8 @@ ScDrawObjFactory::~ScDrawObjFactory()
     SdrObjFactory::RemoveMakeUserDataHdl( LINK ( this, ScDrawObjFactory, MakeUserData ) );
 }
 
-IMPL_STATIC_LINK(
-    ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory )
+IMPL_STATIC_LINK_TYPED(
+    ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFactory, void )
 {
     if ( pObjFactory->nInventor == SC_DRAWLAYER )
     {
@@ -47,7 +47,6 @@ IMPL_STATIC_LINK(
             OSL_FAIL("MakeUserData: wrong ID");
         }
     }
-    return 0;
 }
 
 ScDrawObjData::ScDrawObjData() :

@@ -260,14 +260,10 @@ IMPL_LINK_NOARG_TYPED(OLEObjCache, UnloadCheckHdl, Timer*, void)
 
 void SdrLinkList::Clear()
 {
-    unsigned nAnz=GetLinkCount();
-    for (unsigned i=0; i<nAnz; i++) {
-        delete aList[i];
-    }
     aList.clear();
 }
 
-unsigned SdrLinkList::FindEntry(const Link<>& rLink) const
+unsigned SdrLinkList::FindEntry(const Link<SdrObjFactory*,void>& rLink) const
 {
     unsigned nAnz=GetLinkCount();
     for (unsigned i=0; i<nAnz; i++) {
@@ -276,15 +272,15 @@ unsigned SdrLinkList::FindEntry(const Link<>& rLink) const
     return 0xFFFF;
 }
 
-void SdrLinkList::InsertLink(const Link<>& rLink, unsigned nPos)
+void SdrLinkList::InsertLink(const Link<SdrObjFactory*,void>& rLink, unsigned nPos)
 {
     unsigned nFnd=FindEntry(rLink);
     if (nFnd==0xFFFF) {
         if (rLink.IsSet()) {
             if(nPos==0xFFFF)
-                aList.push_back(new Link<>(rLink));
+                aList.push_back(rLink);
             else
-                aList.insert(aList.begin() + nPos, new Link<>(rLink));
+                aList.insert(aList.begin() + nPos, rLink);
         } else {
             OSL_FAIL("SdrLinkList::InsertLink(): Tried to insert a link that was not set already.");
         }
@@ -293,13 +289,11 @@ void SdrLinkList::InsertLink(const Link<>& rLink, unsigned nPos)
     }
 }
 
-void SdrLinkList::RemoveLink(const Link<>& rLink)
+void SdrLinkList::RemoveLink(const Link<SdrObjFactory*,void>& rLink)
 {
     unsigned nFnd=FindEntry(rLink);
     if (nFnd!=0xFFFF) {
-        Link<>* pLink = aList[nFnd];
         aList.erase( aList.begin() + nFnd );
-        delete pLink;
     } else {
         OSL_FAIL("SdrLinkList::RemoveLink(): Link not found.");
     }

@@ -31,7 +31,7 @@ public:
     FmFormObjFactory();
     ~FmFormObjFactory();
 
-    DECL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*);
+    DECL_STATIC_LINK_TYPED(FmFormObjFactory, MakeObject, SdrObjFactory*, void);
 };
 
 #endif          // _FM_FMOBJFAC_HXX

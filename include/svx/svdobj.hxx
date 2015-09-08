@@ -992,8 +992,8 @@ private:
 class SVX_DLLPUBLIC SdrObjFactory
 {
 public:
-    sal_uInt32                      nInventor;
-    sal_uInt16                      nIdentifier;
+    sal_uInt32                  nInventor;
+    sal_uInt16                  nIdentifier;
 
     // for MakeNewObj():
     SdrPage*                    pPage;
@@ -1014,10 +1014,10 @@ private:
 public:
     static SdrObject* MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel=NULL);
     static SdrObject* MakeNewObject( sal_uInt32 nInventor, sal_uInt16 nIdentifier, const Rectangle& rSnapRect, SdrPage* pPage );
-    static void InsertMakeObjectHdl(const Link<>& rLink);
-    static void RemoveMakeObjectHdl(const Link<>& rLink);
-    static void InsertMakeUserDataHdl(const Link<>& rLink);
-    static void RemoveMakeUserDataHdl(const Link<>& rLink);
+    static void InsertMakeObjectHdl(const Link<SdrObjFactory*,void>& rLink);
+    static void RemoveMakeObjectHdl(const Link<SdrObjFactory*,void>& rLink);
+    static void InsertMakeUserDataHdl(const Link<SdrObjFactory*,void>& rLink);
+    static void RemoveMakeUserDataHdl(const Link<SdrObjFactory*,void>& rLink);
 };
 
 typedef tools::WeakReference< SdrObject > SdrObjectWeakRef;

@@ -43,7 +43,7 @@ DlgEdFactory::~DlgEdFactory()
 }
 
 
-IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
+IMPL_LINK_TYPED( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory, void )
 {
     static bool bNeedsInit = true;
     static uno::Reference< lang::XMultiServiceFactory > xDialogSFact;
@@ -235,8 +235,6 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  break;
         }
     }
-
-    return 0;
 }
 
 } // namespace basctl

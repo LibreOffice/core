@@ -38,7 +38,7 @@ public:
     DlgEdFactory( const css::uno::Reference< css::frame::XModel >& xModel );
     ~DlgEdFactory();
 
-    DECL_LINK( MakeObject, SdrObjFactory * );
+    DECL_LINK_TYPED( MakeObject, SdrObjFactory *, void );
 };
 
 } // namespace basctl

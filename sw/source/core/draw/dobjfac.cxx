@@ -23,8 +23,8 @@
 
 SwObjectFactory aSwObjectFactory;
 
-IMPL_STATIC_LINK(
-    SwObjectFactory, MakeObject, SdrObjFactory*, pObjFactory )
+IMPL_STATIC_LINK_TYPED(
+    SwObjectFactory, MakeObject, SdrObjFactory*, pObjFactory, void )
 {
     if ( pObjFactory->nInventor == SWGInventor )
     {
@@ -33,7 +33,6 @@ IMPL_STATIC_LINK(
                                         "Wrong inventor or identifier" );
         pObjFactory->pNewObj = new SwFlyDrawObj();
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

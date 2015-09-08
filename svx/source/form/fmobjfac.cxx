@@ -109,8 +109,8 @@ namespace
     }
 }
 
-IMPL_STATIC_LINK(
-    FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
+IMPL_STATIC_LINK_TYPED(
+    FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory, void)
 {
     if (pObjFactory->nInventor == FmFormInventor)
     {
@@ -232,8 +232,6 @@ IMPL_STATIC_LINK(
             );
         }
     }
-
-    return 0;
 }
 
 

@@ -34,7 +34,7 @@ protected:
 public:
     SdObjectFactory() {}
 
-    DECL_LINK( MakeUserData, SdrObjFactory * );
+    DECL_LINK_TYPED( MakeUserData, SdrObjFactory *, void );
 };
 
 extern SdObjectFactory aSdObjectFactory;

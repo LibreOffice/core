@@ -76,13 +76,11 @@ BitmapEx GalleryResGetBitmapEx( sal_uInt32 nId )
     return aBmpEx;
 }
 
-IMPL_STATIC_LINK(
-    SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory )
+IMPL_STATIC_LINK_TYPED(
+    SgaUserDataFactory, MakeUserData, SdrObjFactory*, pObjFactory, void )
 {
     if ( pObjFactory->nInventor == IV_IMAPINFO && pObjFactory->nIdentifier == ID_IMAPINFO )
         pObjFactory->pNewData = new SgaIMapInfo;
-
-    return 0L;
 }
 
 GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,

@@ -46,8 +46,8 @@ DlgEdFactory::~DlgEdFactory()
 
 
 
-IMPL_STATIC_LINK(
-    DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
+IMPL_STATIC_LINK_TYPED(
+    DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory, void )
 {
     if ( pObjFactory->nInventor == ReportInventor )
     {
@@ -96,8 +96,6 @@ IMPL_STATIC_LINK(
                 break;
         }
     }
-
-    return 0;
 }
 
 }

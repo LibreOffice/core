@@ -64,8 +64,6 @@ enum SgaObjKind
 #define IV_IMAPINFO             (sal_uInt32('S')*0x00000001+sal_uInt32('D')*0x00000100+sal_uInt32('U')*0x00010000+sal_uInt32('D')*0x01000000)
 #define ID_IMAPINFO             2
 
-#define USERDATA_HDL()          (LINK(this,SgaUserDataFactory,MakeUserData))
-
 #define GAL_RES(nId)            ResId(nId, *GetGalleryResMgr())
 #define GAL_RESSTR(nId)         GAL_RES(nId).toString()
 #define STREAMBUF_SIZE          16384L
@@ -129,10 +127,10 @@ public:
 class SgaUserDataFactory
 {
 public:
-        SgaUserDataFactory() { SdrObjFactory::InsertMakeUserDataHdl( USERDATA_HDL() ); }
-        ~SgaUserDataFactory() { SdrObjFactory::RemoveMakeUserDataHdl( USERDATA_HDL() ); }
+    SgaUserDataFactory() { SdrObjFactory::InsertMakeUserDataHdl( LINK(this,SgaUserDataFactory,MakeUserData) ); }
+    ~SgaUserDataFactory() { SdrObjFactory::RemoveMakeUserDataHdl( LINK(this,SgaUserDataFactory,MakeUserData) ); }
 
-        DECL_STATIC_LINK( SgaUserDataFactory, MakeUserData, SdrObjFactory* );
+    DECL_STATIC_LINK_TYPED( SgaUserDataFactory, MakeUserData, SdrObjFactory*, void );
 };
 
 class GraphicFilter;

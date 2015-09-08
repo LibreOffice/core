@@ -45,8 +45,7 @@ E3dObjFactory::~E3dObjFactory()
 
 // Generate chart internal objects
 
-IMPL_STATIC_LINK(
-    E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
+IMPL_STATIC_LINK_TYPED( E3dObjFactory, MakeObject, SdrObjFactory*, pObjFactory, void )
 {
     if ( pObjFactory->nInventor == E3dInventor )
     {
@@ -80,7 +79,6 @@ IMPL_STATIC_LINK(
                 break;
         }
     }
-    return 0;
 }
 
 

@@ -3171,7 +3171,7 @@ SdrObject* SdrObjFactory::CreateObjectFromFactory( sal_uInt32 nInventor, sal_uIn
     SdrObject* pObj = NULL;
     while (i < n && !pObj)
     {
-        rLL.GetLink(i).Call(static_cast<void*>(pFact.get()));
+        rLL.GetLink(i).Call(pFact.get());
         pObj = pFact->pNewObj;
         i++;
     }
@@ -3331,25 +3331,25 @@ SdrObject* SdrObjFactory::MakeNewObject(
     return pObj;
 }
 
-void SdrObjFactory::InsertMakeObjectHdl(const Link<>& rLink)
+void SdrObjFactory::InsertMakeObjectHdl(const Link<SdrObjFactory*,void>& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjHdl();
     rLL.InsertLink(rLink);
 }
 
-void SdrObjFactory::RemoveMakeObjectHdl(const Link<>& rLink)
+void SdrObjFactory::RemoveMakeObjectHdl(const Link<SdrObjFactory*,void>& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjHdl();
     rLL.RemoveLink(rLink);
 }
 
-void SdrObjFactory::InsertMakeUserDataHdl(const Link<>& rLink)
+void SdrObjFactory::InsertMakeUserDataHdl(const Link<SdrObjFactory*,void>& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjUserDataHdl();
     rLL.InsertLink(rLink);
 }
 
-void SdrObjFactory::RemoveMakeUserDataHdl(const Link<>& rLink)
+void SdrObjFactory::RemoveMakeUserDataHdl(const Link<SdrObjFactory*,void>& rLink)
 {
     SdrLinkList& rLL=ImpGetUserMakeObjUserDataHdl();
     rLL.RemoveLink(rLink);
