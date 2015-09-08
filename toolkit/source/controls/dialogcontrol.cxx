@@ -43,7 +43,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/image.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <algorithm>
 #include <functional>
 #include <map>
@@ -74,7 +74,7 @@ using namespace ::com::sun::star::util;
 // => use some template magic
 
 template< typename T >
-class SimpleNamedThingContainer : public ::cppu::WeakImplHelper1< container::XNameContainer >
+class SimpleNamedThingContainer : public ::cppu::WeakImplHelper< container::XNameContainer >
 {
     typedef std::unordered_map< OUString, Reference< T >, OUStringHash,
        std::equal_to< OUString > > NamedThingsHash;

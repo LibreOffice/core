@@ -22,7 +22,7 @@
 
 #include <com/sun/star/awt/XStyleSettings.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -42,7 +42,7 @@ namespace toolkit
     //= WindowStyleSettings
 
     struct WindowStyleSettings_Data;
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XStyleSettings
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::awt::XStyleSettings
                                     >   WindowStyleSettings_Base;
     class WindowStyleSettings : public WindowStyleSettings_Base
     {

@@ -23,8 +23,6 @@
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/servicenames.hxx>
-#include <cppuhelper/implbase1.hxx>
-
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 namespace toolkit {

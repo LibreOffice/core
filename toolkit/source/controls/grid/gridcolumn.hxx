@@ -27,7 +27,7 @@
 #include <com/sun/star/style/HorizontalAlignment.hpp>
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/componentguard.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
@@ -37,7 +37,7 @@
 namespace toolkit
 {
 
-typedef ::cppu::WeakComponentImplHelper3    <   ::com::sun::star::awt::grid::XGridColumn
+typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::awt::grid::XGridColumn
                                             ,   ::com::sun::star::lang::XServiceInfo
                                             ,   ::com::sun::star::lang::XUnoTunnel
                                             >   GridColumn_Base;

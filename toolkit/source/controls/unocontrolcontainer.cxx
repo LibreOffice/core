@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/uuid.h>
 
 #include <toolkit/controls/unocontrolcontainer.hxx>
@@ -355,7 +355,7 @@ void implUpdateVisibility
 
 //  class DialogStepChangedListener
 
-typedef ::cppu::WeakImplHelper1< beans::XPropertyChangeListener > PropertyChangeListenerHelper;
+typedef ::cppu::WeakImplHelper< beans::XPropertyChangeListener > PropertyChangeListenerHelper;
 
 class DialogStepChangedListener: public PropertyChangeListenerHelper
 {

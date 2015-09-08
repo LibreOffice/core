@@ -34,7 +34,6 @@
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 #include "helper/unopropertyarrayhelper.hxx"

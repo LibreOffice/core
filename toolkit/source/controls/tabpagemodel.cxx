@@ -43,7 +43,6 @@
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/implbase2.hxx>
 
 #include "helper/unopropertyarrayhelper.hxx"
 

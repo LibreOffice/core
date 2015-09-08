@@ -45,7 +45,7 @@
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -147,7 +147,7 @@ protected:
 };
 
 class VCLXToolkit : public VCLXToolkit_Impl,
-                    public cppu::WeakComponentImplHelper2<
+                    public cppu::WeakComponentImplHelper<
                     css::awt::XToolkitExperimental,
                     css::lang::XServiceInfo >
 {
@@ -648,7 +648,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 
 // constructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit():
-    cppu::WeakComponentImplHelper2<
+    cppu::WeakComponentImplHelper<
     ::com::sun::star::awt::XToolkitExperimental,
     ::com::sun::star::lang::XServiceInfo>( GetMutex() ),
     m_aTopWindowListeners(rBHelper.rMutex),

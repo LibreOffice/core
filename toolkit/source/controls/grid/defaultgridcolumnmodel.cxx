@@ -29,7 +29,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/componentguard.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
@@ -45,7 +45,7 @@ using namespace toolkit;
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2    <   css::awt::grid::XGridColumnModel
+typedef ::cppu::WeakComponentImplHelper    <   css::awt::grid::XGridColumnModel
                                             ,   css::lang::XServiceInfo
                                             >   DefaultGridColumnModel_Base;
 

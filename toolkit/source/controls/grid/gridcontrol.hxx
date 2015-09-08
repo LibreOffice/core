@@ -26,7 +26,7 @@
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/servicenames.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
@@ -83,7 +83,7 @@ public:
 
 // = UnoGridControl
 
-typedef ::cppu::ImplInheritanceHelper2  <   UnoControlBase
+typedef ::cppu::ImplInheritanceHelper  <   UnoControlBase
                                         ,   ::com::sun::star::awt::grid::XGridControl
                                         ,   ::com::sun::star::awt::grid::XGridRowSelection
                                         >   UnoGridControl_Base;
