@@ -64,7 +64,7 @@ protected:
     static const sal_uInt64 ImmediateTimeoutMs = 1;
     static const sal_uInt64 MaximumTimeoutMs = SAL_MAX_UINT64;
 
-    static void ImplStartTimer(sal_uInt64 nMS);
+    static void ImplStartTimer(sal_uInt64 nMS, bool bForce = false);
 
     friend struct ImplSchedulerData;
     virtual void SetDeletionFlags();

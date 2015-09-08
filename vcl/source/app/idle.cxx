@@ -65,7 +65,7 @@ sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 /* nTime */ 
         break;
     default:
         // FIXME: tdf#92036 workaround, I should be 1 too - wait 5ms
-        if (nMinPeriod > 5)
+        if (nMinPeriod < 5)
             nMinPeriod = 5;
         break;
     }

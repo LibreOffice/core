@@ -104,15 +104,22 @@ void Scheduler::ImplDeInitScheduler()
     pSVData->mpSalTimer = 0;
 }
 
-void Scheduler::ImplStartTimer(sal_uInt64 nMS)
+/**
+ * Start a new timer if we need to for @nMS duration.
+ *
+ * if this is longer than the existing duration we're
+ * waiting for, do nothing - unless @bForce - which means
+ * to reset the minimum period; used by the scheduled itself.
+ */
+void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce)
 {
     ImplSVData* pSVData = ImplGetSVData();
     InitSystemTimer(pSVData);
 
     // Update timeout only when not in timer handler and
     // only if smaller timeout, to avoid skipping.
-    if (!pSVData->mnUpdateStack &&
-        nMS < pSVData->mnTimerPeriod)
+    if (bForce || (!pSVData->mnUpdateStack &&
+                   nMS < pSVData->mnTimerPeriod))
     {
         pSVData->mnTimerPeriod = nMS;
         pSVData->mpSalTimer->Start(nMS);
@@ -198,7 +205,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     }
     else
     {
-        Scheduler::ImplStartTimer(nMinPeriod);
+        Scheduler::ImplStartTimer(nMinPeriod, true);
     }
     pSVData->mnUpdateStack--;
 }
