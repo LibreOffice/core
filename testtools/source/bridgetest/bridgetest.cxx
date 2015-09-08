@@ -32,8 +32,7 @@
 #include "uno/environment.hxx"
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -102,7 +101,7 @@ bool checkEmpty(OUString const & string, char const * message) {
 
 
 class TestBridgeImpl : public osl::DebugBase<TestBridgeImpl>,
-                       public WeakImplHelper2< XMain, XServiceInfo >
+                       public WeakImplHelper< XMain, XServiceInfo >
 {
     Reference< XComponentContext > m_xContext;
 
@@ -305,7 +304,7 @@ static bool performSequenceOfCallTest( const Reference < XBridgeTest > &xLBT )
     return xLBT->sequenceOfCallTestPassed();
 }
 
-class ORecursiveCall : public WeakImplHelper1< XRecursiveCall >
+class ORecursiveCall : public WeakImplHelper< XRecursiveCall >
 {
 private:
     Mutex m_mutex;

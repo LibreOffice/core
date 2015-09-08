@@ -24,14 +24,14 @@
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "test/testtools/bridgetest/XMulti.hpp"
 
 namespace testtools { namespace bridgetest {
 
-class Multi: public cppu::WeakImplHelper1< test::testtools::bridgetest::XMulti >
+class Multi: public cppu::WeakImplHelper< test::testtools::bridgetest::XMulti >
 {
 public:
     Multi(): m_attribute1(0.0), m_attribute3(0.0) {}
