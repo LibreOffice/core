@@ -544,11 +544,11 @@ void ScPreviewShell::Activate(bool bMDI)
 {
     SfxViewShell::Activate(bMDI);
 
-    //! Basic etc. -> auslagern in eigene Datei (s. tabvwsh4)
+    //! Basic etc. -> outsource to its own file (see tabvwsh4)
 
     if (bMDI)
     {
-        // InputHdl ist jetzt meistens Null, keine Assertion mehr!
+        // InputHdl is now mostly Null, no moreasssertion!
         ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
         if ( pInputHdl )
             pInputHdl->NotifyChange( NULL );
@@ -1173,7 +1173,7 @@ void ScPreviewShell::RemoveAccessibilityObject( SfxListener& rObject )
         rObject.EndListening( *pAccessibilityBroadcaster );
     else
     {
-        OSL_FAIL("kein Accessibility-Broadcaster?");
+        OSL_FAIL("no accessibility broadcaster?");
     }
 }
 
