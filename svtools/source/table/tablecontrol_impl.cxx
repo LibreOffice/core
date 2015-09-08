@@ -425,14 +425,12 @@ namespace svt { namespace table
     }
 
 
-    void TableControl_Impl::columnInserted( ColPos const i_colIndex )
+    void TableControl_Impl::columnInserted()
     {
         m_nColumnCount = m_pModel->getColumnCount();
         impl_ni_relayout();
 
         m_rAntiImpl.Invalidate();
-
-        OSL_UNUSED( i_colIndex );
    }
 
 

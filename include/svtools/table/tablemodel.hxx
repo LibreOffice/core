@@ -105,14 +105,8 @@ namespace svt { namespace table
 
         /** notifies the listener that one or more columns have been inserted into
             the table
-
-            @param first
-                the index of the first newly inserted row
-            @param last
-                the index of the last newly inserted row. Must not be smaller
-                than ->first
         */
-        virtual void    columnInserted( ColPos const i_colIndex ) = 0;
+        virtual void    columnInserted() = 0;
 
         /** notifies the listener that one or more columns have been removed from
             the table

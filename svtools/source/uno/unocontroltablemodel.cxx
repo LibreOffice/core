@@ -238,7 +238,7 @@ namespace svt { namespace table
                 ++loop
             )
         {
-            (*loop)->columnInserted( i_position );
+            (*loop)->columnInserted();
         }
     }
 
