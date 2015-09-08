@@ -30,6 +30,10 @@
 #ifdef MACOSX
 #include "osx/saldata.hxx"
 #include "osx/salinst.h"
+# if MACOSX_SDK_VERSION == 1050
+/* symbol is defined in 10.5.x dylib but not in headers */
+extern const CFStringRef kCTForegroundColorFromContextAttributeName;
+# endif
 #endif
 #include "fontinstance.hxx"
 #include "fontattributes.hxx"
