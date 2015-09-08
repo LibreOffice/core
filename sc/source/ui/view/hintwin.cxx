@@ -29,8 +29,8 @@ ScHintWindow::ScHintWindow( vcl::Window* pParent, const OUString& rTit, const OU
     aTitle( rTit ),
     aMessage( convertLineEnd(rMsg, LINEEND_CR) )
 {
-    //  Hellgelb, wie Notizen in detfunc.cxx
-    Color aYellow( 255,255,192 );           // hellgelb
+    // pale yellow, the same as for notes in detfunc.cxx
+    Color aYellow( 255,255,192 );           // pale yellow
     SetBackground( aYellow );
 
     aTextFont = GetFont();
