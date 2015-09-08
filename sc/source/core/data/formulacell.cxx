@@ -66,9 +66,7 @@
 
 using namespace formula;
 
-#ifdef USE_MEMPOOL
 IMPL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell )
-#endif
 
 #define DEBUG_CALCULATION 0
 #if DEBUG_CALCULATION
