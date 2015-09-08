@@ -32,8 +32,7 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppu/unotype.hxx"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implbase2.hxx"
+#include <cppuhelper/implbase.hxx>
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
 #include "rtl/string.h"
@@ -51,7 +50,7 @@ namespace {
 
 namespace ttb = ::test::testtools::bridgetest;
 class Impl:
-    public cppu::WeakImplHelper1<css::lang::XInitialization>,
+    public cppu::WeakImplHelper<css::lang::XInitialization>,
     private boost::noncopyable
 {
 public:
@@ -198,7 +197,7 @@ void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
 }
 
 
-class Impl2: public ::cppu::WeakImplHelper2<
+class Impl2: public ::cppu::WeakImplHelper<
     css::lang::XInitialization, ttb::XMultiBase1 >
 {
 public:

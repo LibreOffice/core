@@ -28,7 +28,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "cppu/unotype.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 #include "osl/diagnose.h"
 #include "osl/diagnose.hxx"
 #include "rtl/string.h"
@@ -44,7 +44,7 @@ static char const VALUE[] = "good";
 
 class CurrentContext:
     public ::osl::DebugBase< CurrentContext >,
-    public ::cppu::WeakImplHelper1< css::uno::XCurrentContext >,
+    public ::cppu::WeakImplHelper< css::uno::XCurrentContext >,
     private boost::noncopyable
 {
 public:

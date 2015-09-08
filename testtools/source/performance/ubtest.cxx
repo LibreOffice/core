@@ -48,7 +48,7 @@
 #include <uno/mapping.hxx>
 
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -400,7 +400,7 @@ inline static Sequence< OUString > getSupportedServiceNames()
 }
 
 
-class TestImpl : public WeakImplHelper2< XServiceInfo, XMain >
+class TestImpl : public WeakImplHelper< XServiceInfo, XMain >
 {
     Reference< XMultiServiceFactory > _xSMgr;
 
