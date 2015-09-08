@@ -50,15 +50,13 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
 
-#include <boost/bind.hpp>
-
 using namespace com::sun::star;
 
 ScDrawShell::ScDrawShell( ScViewData* pData ) :
     SfxShell(pData->GetViewShell()),
     pViewData( pData ),
     mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
-            ::boost::bind(&ScDrawShell::GetSidebarContextName, this),
+            [this] () { return this->GetSidebarContextName(); },
             GetFrame()->GetFrame().GetController(),
             sfx2::sidebar::EnumContext::Context_Cell))
 {
