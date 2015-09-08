@@ -1,0 +1,21 @@
+bundled boost 1.55 error_code.cpp breaks when compiled with BOOST_ERROR_CODE_HEADER_ONLY
+
+--- boost/libs/system/src/error_code.cpp.orig	2015-09-08 16:37:11.595528207 +0200
++++ boost/libs/system/src/error_code.cpp	2015-09-08 16:39:12.696518815 +0200
+@@ -17,6 +17,10 @@
+ #define BOOST_SYSTEM_SOURCE 
+ 
+ #include <boost/system/config.hpp>
++
++#ifndef BOOST_ERROR_CODE_CPP
++#define BOOST_ERROR_CODE_CPP
++
+ #include <boost/system/error_code.hpp>
+ #include <boost/cerrno.hpp>
+ #include <vector>
+@@ -477,3 +480,5 @@
+ 
+   } // namespace system
+ } // namespace boost
++
++#endif // BOOST_ERROR_CODE_CPP

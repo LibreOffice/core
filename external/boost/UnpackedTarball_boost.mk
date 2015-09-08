@@ -110,6 +110,9 @@ boost_patches += w4702.patch.0
 boost_patches += ubsan.patch.0
 boost_patches += rtti.patch.0
 
+# 5.0 branch fix
+boost_patches += boost.system.error_code_header_only_fix.patch.1
+
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
