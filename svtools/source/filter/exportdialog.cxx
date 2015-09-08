@@ -779,7 +779,7 @@ void ExportDialog::createFilterOptions()
             mpSbCompression->SetRangeMax( 9 );
             mpNfCompression->SetMin( 1 );
             mpNfCompression->SetMax( 9 );
-            mpNfCompression->SetValue( 9 );
+            mpNfCompression->SetValue( nCompression );
             mpNfCompression->SetStrictFormat( true );
 
             // Interlaced
