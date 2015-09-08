@@ -300,17 +300,12 @@ Accelerator::~Accelerator()
 
 void Accelerator::Activate()
 {
-    maActivateHdl.Call( this );
-}
-
-void Accelerator::Deactivate()
-{
-    maDeactivateHdl.Call( this );
+    maActivateHdl.Call( *this );
 }
 
 void Accelerator::Select()
 {
-    maSelectHdl.Call( this );
+    maSelectHdl.Call( *this );
 }
 
 void Accelerator::InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode )

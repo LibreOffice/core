@@ -69,7 +69,7 @@ class ScFormulaReferenceHelper
     bool                bHighlightRef;
     bool                bAccInserted;
 
-    DECL_LINK( AccelSelectHdl, Accelerator* );
+    DECL_LINK_TYPED( AccelSelectHdl, Accelerator&, void );
 
 public:
     ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindings* _pBindings);

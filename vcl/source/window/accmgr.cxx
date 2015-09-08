@@ -60,7 +60,7 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
             Accelerator* pSubAccel = pAccel->GetAccel( pAccel->GetItemId(i) );
             for ( size_t j = 0, n = mpSequenceList->size(); j < n; ++j ) {
                 if ( (*mpSequenceList)[ j ] == pSubAccel ) {
-                    EndSequence( true );
+                    EndSequence();
                     i = pAccel->GetItemCount();
                     break;
                 }
@@ -80,25 +80,17 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
     }
 }
 
-void ImplAccelManager::EndSequence( bool bCancel )
+void ImplAccelManager::EndSequence()
 {
     // are we in a list ?
     if ( !mpSequenceList )
         return;
 
-    // call all deactivate-handler of the accelerators in the list
     for ( size_t i = 0, n = mpSequenceList->size(); i < n; ++i )
     {
         Accelerator* pTempAccel = (*mpSequenceList)[ i ];
-        bool bDel = false;
-        pTempAccel->mbIsCancel = bCancel;
-        pTempAccel->mpDel = &bDel;
-        pTempAccel->Deactivate();
-        if ( !bDel )
-        {
-            pTempAccel->mbIsCancel = false;
-            pTempAccel->mpDel = NULL;
-        }
+        pTempAccel->mbIsCancel = false;
+        pTempAccel->mpDel = NULL;
     }
 
     // delete sequence-list
@@ -222,7 +214,6 @@ bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRep
                 {
                     // first call activate/deactivate-Handler
                     pAccel->Activate();
-                    pAccel->Deactivate();
 
                     // define accelerator of the actual item
                     // and call the handler

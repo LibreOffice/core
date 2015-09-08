@@ -65,8 +65,8 @@ class IcnViewEdit_Impl : public MultiLineEdit
 
     void            CallCallBackHdl_Impl();
                     DECL_LINK_TYPED(Timeout_Impl, Idle *, void);
-                    DECL_LINK( ReturnHdl_Impl, Accelerator * );
-                    DECL_LINK( EscapeHdl_Impl, Accelerator * );
+                    DECL_LINK_TYPED( ReturnHdl_Impl, Accelerator&, void );
+                    DECL_LINK_TYPED( EscapeHdl_Impl, Accelerator&, void );
 
 public:
 
@@ -3187,20 +3187,18 @@ IMPL_LINK_NOARG_TYPED(IcnViewEdit_Impl, Timeout_Impl, Idle *, void)
     CallCallBackHdl_Impl();
 }
 
-IMPL_LINK( IcnViewEdit_Impl, ReturnHdl_Impl, Accelerator*,  )
+IMPL_LINK_NOARG_TYPED( IcnViewEdit_Impl, ReturnHdl_Impl, Accelerator&, void )
 {
     bCanceled = false;
     bGrabFocus = true;
     CallCallBackHdl_Impl();
-    return 1;
 }
 
-IMPL_LINK( IcnViewEdit_Impl, EscapeHdl_Impl, Accelerator*,  )
+IMPL_LINK_NOARG_TYPED( IcnViewEdit_Impl, EscapeHdl_Impl, Accelerator&, void )
 {
     bCanceled = true;
     bGrabFocus = true;
     CallCallBackHdl_Impl();
-    return 1;
 }
 
 void IcnViewEdit_Impl::KeyInput( const KeyEvent& rKEvt )

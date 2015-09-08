@@ -452,10 +452,9 @@ IMPL_LINK_NOARG(ExtendedEdit, ImplLoseFocusHdl)
 }
 
 
-IMPL_LINK( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
+IMPL_LINK_TYPED( ExtendedEdit, EditAccHdl, Accelerator&, rAcc, void )
 {
-    aAccHdl.Call( pAcc );
-    return 0;
+    aAccHdl.Call( rAcc );
 }
 
 //  TabBar

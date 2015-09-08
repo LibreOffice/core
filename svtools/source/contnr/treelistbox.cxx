@@ -185,18 +185,16 @@ void SvInplaceEdit2::Hide()
 }
 
 
-IMPL_LINK_NOARG(SvInplaceEdit2, ReturnHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvInplaceEdit2, ReturnHdl_Impl, Accelerator&, void)
 {
     bCanceled = false;
     CallCallBackHdl_Impl();
-    return 1;
 }
 
-IMPL_LINK_NOARG(SvInplaceEdit2, EscapeHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvInplaceEdit2, EscapeHdl_Impl, Accelerator&, void)
 {
     bCanceled = true;
     CallCallBackHdl_Impl();
-    return 1;
 }
 
 bool SvInplaceEdit2::KeyInput( const KeyEvent& rKEvt )

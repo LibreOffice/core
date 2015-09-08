@@ -45,8 +45,8 @@ public:
     bool                InsertAccel( Accelerator* pAccel );
     void                RemoveAccel( Accelerator* pAccel );
 
-    void                EndSequence( bool bCancel = false );
-    void                FlushAccel() { EndSequence( true ); }
+    void                EndSequence();
+    void                FlushAccel() { EndSequence(); }
 
     bool                IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRepeat );
 };

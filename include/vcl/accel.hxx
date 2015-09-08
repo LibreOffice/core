@@ -36,9 +36,8 @@ class VCL_DLLPUBLIC Accelerator : public Resource
 private:
     ImplAccelData*          mpData;
     OUString                maHelpStr;
-    Link<>                  maActivateHdl;
-    Link<>                  maDeactivateHdl;
-    Link<>                  maSelectHdl;
+    Link<Accelerator&,void> maActivateHdl;
+    Link<Accelerator&,void> maSelectHdl;
 
     // Will be set by AcceleratorManager
     vcl::KeyCode            maCurKeyCode;
@@ -69,7 +68,6 @@ public:
     virtual                 ~Accelerator();
 
     void                    Activate();
-    void                    Deactivate();
     void                    Select();
 
     void                    InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode );
@@ -84,8 +82,8 @@ public:
 
     Accelerator*            GetAccel( sal_uInt16 nItemId ) const;
 
-    void                    SetActivateHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
-    void                    SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
+    void                    SetActivateHdl( const Link<Accelerator&,void>& rLink ) { maActivateHdl = rLink; }
+    void                    SetSelectHdl( const Link<Accelerator&,void>& rLink ) { maSelectHdl = rLink; }
 
     Accelerator&            operator=( const Accelerator& rAccel );
 };

@@ -29,19 +29,19 @@ namespace basctl
 class ExtendedEdit : public Edit
 {
 private:
-    Accelerator      aAcc;
-    Link<Accelerator*,void>  aAccHdl;
+    Accelerator               aAcc;
+    Link<Accelerator&,void>   aAccHdl;
     Link<ExtendedEdit*,void>  aLoseFocusHdl;
 
 protected:
-    DECL_LINK( EditAccHdl, Accelerator * );
+    DECL_LINK_TYPED( EditAccHdl, Accelerator&, void );
     DECL_LINK(ImplGetFocusHdl, void *);
     DECL_LINK(ImplLoseFocusHdl, void *);
 
 public:
                     ExtendedEdit( vcl::Window* pParent, IDEResId nRes );
 
-    void            SetAccHdl( const Link<Accelerator*,void>& rLink )         { aAccHdl = rLink; }
+    void            SetAccHdl( const Link<Accelerator&,void>& rLink )         { aAccHdl = rLink; }
     Accelerator&    GetAccelerator()                                          { return aAcc; }
 };
 

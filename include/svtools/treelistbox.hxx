@@ -822,8 +822,8 @@ class SvInplaceEdit2
 
     void        CallCallBackHdl_Impl();
     DECL_LINK_TYPED( Timeout_Impl, Idle *, void );
-    DECL_LINK( ReturnHdl_Impl, void * );
-    DECL_LINK( EscapeHdl_Impl, void * );
+    DECL_LINK_TYPED( ReturnHdl_Impl, Accelerator&, void );
+    DECL_LINK_TYPED( EscapeHdl_Impl, Accelerator&, void );
 
 public:
                 SvInplaceEdit2( vcl::Window* pParent, const Point& rPos, const Size& rSize,

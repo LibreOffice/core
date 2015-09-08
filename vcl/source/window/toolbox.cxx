@@ -129,7 +129,7 @@ public:
     void            EndDragging( bool bOK = true );
     void            HideDragRect() { if ( mbShowDragRect ) mpDragBox->HideTracking(); }
     void            UpdateDragRect();
-                    DECL_LINK( SelectHdl, Accelerator* );
+    DECL_LINK_TYPED( SelectHdl, Accelerator&, void );
 };
 
 static ImplTBDragMgr* ImplGetTBDragMgr()
@@ -1336,14 +1336,12 @@ void ImplTBDragMgr::UpdateDragRect()
     mpDragBox->ShowTracking( maRect );
 }
 
-IMPL_LINK( ImplTBDragMgr, SelectHdl, Accelerator*, pAccel )
+IMPL_LINK_TYPED( ImplTBDragMgr, SelectHdl, Accelerator&, rAccel, void )
 {
-    if ( pAccel->GetCurItemId() == KEY_ESCAPE )
+    if ( rAccel.GetCurItemId() == KEY_ESCAPE )
         EndDragging( false );
     else
         EndDragging();
-
-    return (long) true;
 }
 
 void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )

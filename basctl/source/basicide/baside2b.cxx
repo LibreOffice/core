@@ -1827,9 +1827,9 @@ IMPL_LINK_NOARG_TYPED( WatchWindow, implEndDragHdl, HeaderBar *, void )
     }
 }
 
-IMPL_LINK_TYPED( WatchWindow, EditAccHdl, Accelerator *, pAcc, void )
+IMPL_LINK_TYPED( WatchWindow, EditAccHdl, Accelerator&, rAcc, void )
 {
-    switch ( pAcc->GetCurKeyCode().GetCode() )
+    switch ( rAcc.GetCurKeyCode().GetCode() )
     {
         case KEY_RETURN:
         {

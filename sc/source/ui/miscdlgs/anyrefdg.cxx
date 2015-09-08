@@ -339,12 +339,9 @@ void ScFormulaReferenceHelper::Init()
     }
 }
 
-IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
+IMPL_LINK_TYPED( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator&, rSelAccel, void )
 {
-    if ( !pSelAccel )
-        return long(false);
-
-    switch ( pSelAccel->GetCurKeyCode().GetCode() )
+    switch ( rSelAccel.GetCurKeyCode().GetCode() )
     {
         case KEY_RETURN:
         case KEY_ESCAPE:
@@ -353,7 +350,6 @@ IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
             m_pDlg->RefInputDone( true );
         break;
     }
-    return long(true);
 }
 
 void ScFormulaReferenceHelper::RefInputDone( bool bForced )
