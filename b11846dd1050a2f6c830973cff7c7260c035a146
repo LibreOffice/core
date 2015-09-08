@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "ba0121b8_5bd8f71d",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 3138,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2015-09-08T20:50:02Z",
+      "side": 1,
+      "message": "AFAIK adding an optional property does not break the stable API, only deletion and change do.",
+      "parentUuid": "1a54edaf_b47c7721",
+      "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_34888722",
         "filename": "xmloff/source/chart/PropertyMap.hxx",
         "patchSetId": 1
@@ -64,6 +82,24 @@
       "writtenOn": "2015-07-19T16:33:02Z",
       "side": 1,
       "message": "This needs to use an extension namespace.",
+      "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_7bdb3b1c",
+        "filename": "xmloff/source/chart/PropertyMap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2015-09-08T20:50:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a54edaf_34888722",
       "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +123,24 @@
     },
     {
       "key": {
+        "uuid": "ba0121b8_3bd1c3fc",
+        "filename": "xmloff/source/chart/PropertyMaps.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2015-09-08T20:50:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a54edaf_548d0330",
+      "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_f4818ffc",
         "filename": "xmloff/source/chart/PropertyMaps.cxx",
         "patchSetId": 1
@@ -98,6 +152,24 @@
       "writtenOn": "2015-07-19T16:33:02Z",
       "side": 1,
       "message": "same here",
+      "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_1bce7f5a",
+        "filename": "xmloff/source/chart/PropertyMaps.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2015-09-08T20:50:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a54edaf_f4818ffc",
       "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
