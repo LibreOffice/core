@@ -258,7 +258,7 @@ private:
     Color                       aMarkerColor;
 
     // callback link when value changed
-    Link<>                      aColorChangeHdl;
+    Link<SdrHdlColor*,void>     aColorChangeHdl;
 
     // use luminance values only
     bool                        bUseLuminance : 1;
@@ -282,7 +282,7 @@ public:
 
     void SetSize(const Size& rNew);
 
-    void SetColorChangeHdl(const Link<>& rLink) { aColorChangeHdl = rLink; }
+    void SetColorChangeHdl(const Link<SdrHdlColor*,void>& rLink) { aColorChangeHdl = rLink; }
 };
 
 
@@ -322,7 +322,7 @@ public:
     void Set2ndPos(const Point& rPnt);
 
     // the link called by the color handles
-    DECL_LINK(ColorChangeHdl, SdrHdl*);
+    DECL_LINK_TYPED(ColorChangeHdl, SdrHdlColor*, void);
 
     // transformation call, create gradient from this handle
     void FromIAOToItem(SdrObject* pObj, bool bSetItemOnObject, bool bUndo);
