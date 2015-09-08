@@ -84,10 +84,6 @@ oglcanvas::CanvasHelper::drawPoint(com::sun::star::rendering::XCanvas const*, co
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
 oox::drawingml::TextListStyle::dump() const
 oox::xls::DefinedName::getTokens()
-sc::CLBuildKernelThread::CLBuildKernelThread()
-sc::CLBuildKernelThread::consume()
-sc::CLBuildKernelThread::finish()
-sc::CLBuildKernelThread::produce()
 sc::CellValues::transferTo(ScColumn&, int)
 sc::ColumnSpanSet::swap(sc::ColumnSpanSet&)
 sc::FormulaGroupAreaListener::getGroupLength() const

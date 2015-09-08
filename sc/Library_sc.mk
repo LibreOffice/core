@@ -214,7 +214,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/chartpos \
     sc/source/core/tool/chgtrack \
     sc/source/core/tool/chgviset \
-    sc/source/core/tool/clkernelthread \
     sc/source/core/tool/compare \
     sc/source/core/tool/compiler \
     sc/source/core/tool/consoli  \

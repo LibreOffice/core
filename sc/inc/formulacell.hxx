@@ -34,11 +34,8 @@
 
 #include "formularesult.hxx"
 
-#define ENABLE_THREADED_OPENCL_KERNEL_COMPILATION 0
-
 namespace sc {
 
-class CLBuildKernelThread;
 class CompiledFormula;
 class StartListeningContext;
 class EndListeningContext;
@@ -78,9 +75,6 @@ public:
 
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-    void scheduleCompilation();
-#endif
 
     void setCode( const ScTokenArray& rCode );
     void setCode( ScTokenArray* pCode );
@@ -92,11 +86,6 @@ public:
         ScFormulaCell** ppTopCell, const ScRange& rRange, bool bStartFixed, bool bEndFixed );
 
     void endAllGroupListening( ScDocument& rDoc );
-
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-    static int snCount;
-    static rtl::Reference<sc::CLBuildKernelThread> sxCompilationThread;
-#endif
 };
 
 inline void intrusive_ptr_add_ref(const ScFormulaCellGroup *p)
