@@ -1805,7 +1805,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                 {
                     OUString sRet;
                     sRet = m_aRow[nColumnIndex].getString();
-                    nRet = N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<sal_Unicode *>(sRet.getStr())), sizeof(sal_Unicode)*sRet.getLength());
+                    N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<sal_Unicode *>(sRet.getStr())), sizeof(sal_Unicode)*sRet.getLength());
                     break;
                 }
                 case DataType::LONGVARCHAR:
@@ -1814,7 +1814,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                     OUString sRet;
                     sRet = m_aRow[nColumnIndex].getString();
                     OString aString(OUStringToOString(sRet,m_nTextEncoding));
-                    nRet = N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<char *>(aString.getStr())), aString.getLength());
+                    N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<char *>(aString.getStr())), aString.getLength());
                     break;
                 }
                 default:
