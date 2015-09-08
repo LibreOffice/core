@@ -164,7 +164,6 @@ void OTools::bindValue( OConnection* _pConnection,
     SQLRETURN nRetcode;
     SQLSMALLINT   fSqlType;
     SQLSMALLINT   fCType;
-    SQLLEN nMaxLen = _nMaxLen;
 
     OTools::getBindTypes(   false,
                             _bUseOldTimeDate,
@@ -179,7 +178,7 @@ void OTools::bindValue( OConnection* _pConnection,
                                 (SQLUSMALLINT)columnIndex,
                                 fCType,
                                 _pData,
-                                nMaxLen,
+                                _nMaxLen,
                                 pLen
                                 );
     }
@@ -195,7 +194,6 @@ void OTools::bindValue( OConnection* _pConnection,
                     OString aString(OUStringToOString(*static_cast<OUString const *>(_pValue),_nTextEncoding));
                     *pLen = SQL_NTS;
                     *static_cast<OString*>(_pData) = aString;
-                    _nMaxLen = (SQLSMALLINT)aString.getLength();
 
                     // Pointer on Char*
                     _pData = const_cast<char *>(aString.getStr());
@@ -208,8 +206,7 @@ void OTools::bindValue( OConnection* _pConnection,
                 case SQL_NUMERIC:
                 {
                     OString aString = OString::number(*static_cast<double const *>(_pValue));
-                    _nMaxLen = (SQLSMALLINT)aString.getLength();
-                    *pLen = _nMaxLen;
+                    *pLen = (SQLSMALLINT)aString.getLength();
                     *static_cast<OString*>(_pData) = aString;
                     // Pointer on Char*
                     _pData = const_cast<char *>(static_cast<OString*>(_pData)->getStr());
@@ -280,7 +277,7 @@ void OTools::bindValue( OConnection* _pConnection,
                                 (SQLUSMALLINT)columnIndex,
                                 fCType,
                                 _pData,
-                                nMaxLen,
+                                _nMaxLen,
                                 pLen
                                 );
     }
