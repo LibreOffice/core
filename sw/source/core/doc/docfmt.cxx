@@ -79,7 +79,7 @@
 #include <docsh.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -296,7 +296,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
 
     // #i96644#
-    boost::scoped_ptr< SwDataChanged > xDataChanged;
+    std::unique_ptr< SwDataChanged > xDataChanged;
     if ( bSendDataChangedEvents )
     {
         xDataChanged.reset( new SwDataChanged( *pPam ) );
@@ -1037,7 +1037,7 @@ static bool lcl_SetTextFormatColl( const SwNodePtr& rpNode, void* pArgs )
 
             if ( bChangeOfListStyleAtParagraph )
             {
-                boost::scoped_ptr< SwRegHistory > pRegH;
+                std::unique_ptr< SwRegHistory > pRegH;
                 if ( pPara->pHistory )
                 {
                     pRegH.reset( new SwRegHistory( pTNd, *pTNd, pPara->pHistory ) );
