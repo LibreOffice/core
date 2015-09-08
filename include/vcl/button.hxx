@@ -121,7 +121,6 @@ protected:
     PushButtonDropdownStyle mnDDStyle;
     bool            mbPressed;
     bool            mbInUserDraw;
-    Link<>          maToggleHdl;
 
     SAL_DLLPRIVATE void            ImplInitPushButtonData();
     SAL_DLLPRIVATE WinBits         ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle );
