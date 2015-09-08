@@ -3935,8 +3935,6 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return InterpretInvariantFormulaGroup();
 
     ScTokenArray aCode;
-    ScAddress aTopPos = aPos;
-    aTopPos.SetRow(mxGroup->mpTopCell->aPos.Row());
     ScGroupTokenConverter aConverter(aCode, *pDocument, *this, mxGroup->mpTopCell->aPos);
     std::vector<ScTokenArray*> aLoopControl;
     if (!aConverter.convert(*pCode, aLoopControl))
