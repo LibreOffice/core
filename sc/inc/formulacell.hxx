@@ -164,6 +164,10 @@ public:
 
     enum CompareState { NotEqual = 0, EqualInvariant, EqualRelativeRef };
 
+#ifdef USE_MEMPOOL
+    DECL_FIXEDMEMPOOL_NEWDEL( ScFormulaCell )
+#endif
+
     ScAddress       aPos;
 
                     virtual ~ScFormulaCell();
