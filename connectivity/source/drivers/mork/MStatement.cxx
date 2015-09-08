@@ -38,7 +38,6 @@
 
 #include <algorithm>
 
-#include "diagnose_ex.h"
 #include "MDriver.hxx"
 #include "MStatement.hxx"
 #include "sqlbison.hxx"

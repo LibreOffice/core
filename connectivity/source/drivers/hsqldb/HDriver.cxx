@@ -40,7 +40,6 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include "HTerminateListener.hxx"
 #include "hsqldb/HCatalog.hxx"
-#include "diagnose_ex.h"
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.h>
 #include <osl/process.h>

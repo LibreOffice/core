@@ -35,7 +35,6 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
-#include "diagnose_ex.h"
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -991,7 +990,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
 
     invalidateCache();
     // first unbound all columns
-    OSL_VERIFY_EQUALS( unbind(), SQL_SUCCESS, "Could not unbind columns!" );
+    OSL_VERIFY( unbind() == SQL_SUCCESS );
     //  SQLRETURN nRet = N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE ,(SQLPOINTER)1,SQL_IS_INTEGER);
     m_bInserting = true;
 }

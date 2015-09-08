@@ -24,7 +24,6 @@
 #include <com/sun/star/io/XStream.hpp>
 #include "hsqldb/HStorageMap.hxx"
 #include "accesslog.hxx"
-#include "diagnose_ex.h"
 #include <osl/diagnose.h>
 
 #include <string.h>

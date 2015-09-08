@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/extract.hxx>
 #include "TConnection.hxx"
-#include "diagnose_ex.h"
 #include <comphelper/numbers.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
@@ -131,7 +130,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                     else
                         bOk = _rVal >>= aDateTime;
 
-                    OSL_VERIFY_RES( bOk, "DBTypeConversion::toSQLString: _rVal is not datetime!");
+                    OSL_ENSURE( bOk, "DBTypeConversion::toSQLString: _rVal is not datetime!");
                     // check if this is really a timestamp or only a date
                     if ( bOk )
                     {
@@ -164,7 +163,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                     }
                     else
                         bOk = _rVal >>= aDate;
-                    OSL_VERIFY_RES( bOk, "DBTypeConversion::toSQLString: _rVal is not date!");
+                    OSL_ENSURE( bOk, "DBTypeConversion::toSQLString: _rVal is not date!");
                     if (bQuote)
                         aRet.append("{d '");
                     aRet.append(DBTypeConversion::toDateString(aDate));
@@ -191,7 +190,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                     }
                     else
                         bOk = _rVal >>= aTime;
-                    OSL_VERIFY_RES( bOk,"DBTypeConversion::toSQLString: _rVal is not time!");
+                    OSL_ENSURE( bOk,"DBTypeConversion::toSQLString: _rVal is not time!");
                     if (bQuote)
                         aRet.append("{t '");
                     aRet.append(DBTypeConversion::toTimeString(aTime));

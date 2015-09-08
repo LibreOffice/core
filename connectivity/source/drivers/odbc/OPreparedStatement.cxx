@@ -20,7 +20,6 @@
 
 #include <string.h>
 #include <osl/diagnose.h>
-#include "diagnose_ex.h"
 #include "odbc/OPreparedStatement.hxx"
 #include "odbc/OBoundParam.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>

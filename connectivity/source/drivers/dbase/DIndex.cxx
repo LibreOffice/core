@@ -36,7 +36,6 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include "dbase/DResultSet.hxx"
-#include "diagnose_ex.h"
 #include "resource/dbase_res.hrc"
 #include <unotools/sharedunocomponent.hxx>
 
@@ -365,7 +364,7 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
 SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
-    OSL_VERIFY_EQUALS( rStream.Write(&rIndex.m_aHeader,DINDEX_PAGE_SIZE), DINDEX_PAGE_SIZE, "Write not successful: Wrong header size for dbase index!");
+    OSL_VERIFY( rStream.Write(&rIndex.m_aHeader,DINDEX_PAGE_SIZE) == DINDEX_PAGE_SIZE );
     return rStream;
 }
 
@@ -430,9 +429,8 @@ bool ODbaseIndex::DropImpl()
         m_pTable->getName() + ".inf";
 
     OUString sPhysicalPath;
-    OSL_VERIFY_RES( osl::FileBase::getSystemPathFromFileURL(sCfgFile, sPhysicalPath)
-                    == osl::FileBase::E_None,
-        "Can not convert Config Filename into Physical Name!");
+    OSL_VERIFY( osl::FileBase::getSystemPathFromFileURL(sCfgFile, sPhysicalPath)
+                    == osl::FileBase::E_None );
 
     Config aInfFile(sPhysicalPath);
     aInfFile.SetGroup(dBASE_III_GROUP);

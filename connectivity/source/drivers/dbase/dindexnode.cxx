@@ -22,7 +22,6 @@
 #include <osl/thread.h>
 #include "dbase/DIndex.hxx"
 #include <tools/debug.hxx>
-#include "diagnose_ex.h"
 
 #include <algorithm>
 #include <memory>

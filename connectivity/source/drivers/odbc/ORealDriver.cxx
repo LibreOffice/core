@@ -21,7 +21,6 @@
 #include "odbc/ODriver.hxx"
 #include "odbc/OTools.hxx"
 #include "odbc/OFunctions.hxx"
-#include "diagnose_ex.h"
 
 namespace connectivity
 {

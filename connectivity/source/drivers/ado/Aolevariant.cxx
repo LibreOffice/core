@@ -24,7 +24,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include "diagnose_ex.h"
 #include "resource/sharedresources.hxx"
 #include "resource/ado_res.hrc"
 #include <com/sun/star/bridge/oleautomation/Date.hpp>

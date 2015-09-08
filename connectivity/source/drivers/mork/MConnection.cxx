@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "diagnose_ex.h"
 #include "MNSProfileDiscover.hxx"
 #include "MConnection.hxx"
 #include "MDriver.hxx"

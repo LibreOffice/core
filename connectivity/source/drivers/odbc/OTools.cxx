@@ -22,7 +22,6 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <osl/diagnose.h>
 #include "odbc/OConnection.hxx"
-#include "diagnose_ex.h"
 #include <rtl/ustrbuf.hxx>
 
 #include <appendsqlwchars.hxx>

@@ -29,7 +29,6 @@
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include "diagnose_ex.h"
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())

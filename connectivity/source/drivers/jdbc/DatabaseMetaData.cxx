@@ -27,7 +27,6 @@
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <comphelper/types.hxx>
 #include "TPrivilegesResultSet.hxx"
-#include "diagnose_ex.h"
 #include "resource/jdbc_log.hrc"
 
 using namespace ::comphelper;
@@ -118,7 +117,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
-        OSL_VERIFY_RES( !isExceptionOccurred(t.pEnv, true),"Exception occurred!");
+        OSL_VERIFY( !isExceptionOccurred(t.pEnv, true) );
         jvalue args[4];
 
         args[3].l = 0;
@@ -126,7 +125,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         if ( typeFilterCount )
         {
             jobjectArray pObjArray = static_cast< jobjectArray >( t.pEnv->NewObjectArray( (jsize)typeFilterCount, java_lang_String::st_getMyClass(), 0 ) );
-            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
+            OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
             const OUString* typeFilter = _types.getConstArray();
             bool bIncludeAllTypes = false;
             for ( sal_Int32 i=0; i<typeFilterCount; ++i, ++typeFilter )
@@ -138,7 +137,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                 }
                 jstring aT = convertwchar_tToJavaString( t.pEnv, *typeFilter );
                 t.pEnv->SetObjectArrayElement( pObjArray, (jsize)i, aT );
-                OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
+                OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
             }
 
             if ( bIncludeAllTypes )
@@ -146,7 +145,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                 // the SDBC API allows to pass "%" as table type filter, but in JDBC, "all table types"
                 // is represented by the table type being <null/>
                 t.pEnv->DeleteLocalRef( pObjArray );
-                OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
+                OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
             }
             else
             {
@@ -174,23 +173,23 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         if ( aCatalogFilter.hasValue() )
         {
             t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
-            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
+            OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
         }
         if(args[1].l)
         {
             t.pEnv->DeleteLocalRef(static_cast<jstring>(args[1].l));
-            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
+            OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
         }
         if(!tableNamePattern.isEmpty())
         {
             t.pEnv->DeleteLocalRef(static_cast<jstring>(args[2].l));
-            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
+            OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
         }
         //for(INT16 i=0;i<len;i++)
         if ( args[3].l )
         {
             t.pEnv->DeleteLocalRef( static_cast<jobjectArray>(args[3].l) );
-            OSL_VERIFY_RES( !isExceptionOccurred( t.pEnv, true ), "Exception occurred!" );
+            OSL_VERIFY( !isExceptionOccurred( t.pEnv, true ) );
         }
 
         if ( jThrow )

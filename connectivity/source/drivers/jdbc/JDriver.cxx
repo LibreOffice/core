@@ -26,7 +26,6 @@
 #include "java/tools.hxx"
 #include <connectivity/dbexception.hxx>
 #include <jvmfwk/framework.h>
-#include "diagnose_ex.h"
 #include "resource/jdbc_log.hrc"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"

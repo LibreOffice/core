@@ -18,7 +18,6 @@
  */
 
 #include <connectivity/CommonTools.hxx>
-#include "diagnose_ex.h"
 #include "TConnection.hxx"
 #include <connectivity/ParameterCont.hxx>
 

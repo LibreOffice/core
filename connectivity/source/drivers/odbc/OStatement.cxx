@@ -34,7 +34,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
-#include "diagnose_ex.h"
 #include <algorithm>
 #include "resource/common_res.hrc"
 #include <connectivity/dbexception.hxx>

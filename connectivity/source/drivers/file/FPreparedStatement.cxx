@@ -31,7 +31,6 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/PColumn.hxx>
-#include "diagnose_ex.h"
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include "resource/file_res.hrc"

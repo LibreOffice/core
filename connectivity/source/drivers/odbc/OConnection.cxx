@@ -30,7 +30,6 @@
 #include <connectivity/dbcharset.hxx>
 #include <connectivity/FValue.hxx>
 #include <comphelper/extract.hxx>
-#include "diagnose_ex.h"
 #include <connectivity/dbexception.hxx>
 
 #include <string.h>

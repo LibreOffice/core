@@ -37,8 +37,6 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
-#include "diagnose_ex.h"
-
 
 #include <iterator>
 #include <memory>

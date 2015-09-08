@@ -40,7 +40,6 @@
 
 #include <jvmaccess/virtualmachine.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include "diagnose_ex.h"
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;

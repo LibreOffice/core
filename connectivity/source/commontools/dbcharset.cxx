@@ -18,7 +18,6 @@
  */
 
 #include <connectivity/dbcharset.hxx>
-#include "diagnose_ex.h"
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 
