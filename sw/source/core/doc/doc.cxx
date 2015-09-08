@@ -724,9 +724,54 @@ void SwDoc::CalculatePagesForPrinting(
 
     // get vector of pages to print according to PageRange and valid pages set from above
     // (result may be an empty vector, for example if the range string is not correct)
-    StringRangeEnumerator::getRangesFromString(
+    // If excluding empty pages, allow range to specify range of printable pages
+    if (bPrintEmptyPages || nContent == 0)
+    {
+        // Use range enumerator directly
+        StringRangeEnumerator::getRangesFromString(
             aPageRange, rData.GetPagesToPrint(),
             1, nDocPageCount, 0, &rData.GetValidPagesSet() );
+    }
+    else // not printing blanks and not printing all
+    {
+        // Use range enumerator to adjust for empty pages - numbers in range are
+        // essentially indexes into the valid page number set
+        StringRangeEnumerator aEnum( aPageRange, 1, nDocPageCount, 0);
+        rData.GetPagesToPrint().clear();
+        rData.GetPagesToPrint().reserve(static_cast<size_t>(aEnum.size()));
+
+        std::set<sal_Int32>::iterator valIt = rData.GetValidPagesSet().begin();
+        sal_Int32 lastRangeValue = 1;
+        for (StringRangeEnumerator::Iterator it = aEnum.begin(); it != aEnum.end(); ++it)
+        {
+            // Move valid page set iterator forward/back by diff between current
+            // and previous numbers expressed in range
+            if ((*it) - lastRangeValue > 0)
+            {
+                // Fast-forward
+                for (sal_Int32 i = 0;
+                     i < (*it) - lastRangeValue && valIt != rData.GetValidPagesSet().end();
+                     ++i, ++valIt)
+                    ;
+            }
+            else if (lastRangeValue - (*it) > 0)
+            {
+                // Rewind
+                for (sal_Int32 i = 0;
+                     i < lastRangeValue - (*it) && valIt != rData.GetValidPagesSet().begin();
+                     ++i, --valIt)
+                    ;
+            }
+
+            // Range encompasses more values than are listed as valid
+            if (valIt == rData.GetValidPagesSet().end())
+                break;
+
+            rData.GetPagesToPrint().push_back(*valIt);
+
+            lastRangeValue = *it;
+        }
+    }
 }
 
 void SwDoc::UpdatePagesForPrintingWithPostItData(
