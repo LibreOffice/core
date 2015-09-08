@@ -806,12 +806,10 @@ lcl_TableData lcl_getDataForLocalTable(
         SchXMLExportHelper_Impl::tDataSequenceCont::const_iterator aEnd( aSequencesToExport.end());
         SchXMLExportHelper_Impl::tDataSequenceCont::const_iterator aIt( aBegin );
 
-        size_t nMaxSequenceLength( lcl_getMaxSequenceLength( aSequencesToExport ));
-        size_t nCategoriesLength( aSimpleCategories.getLength() );
-        if( nCategoriesLength > nMaxSequenceLength )
+        auto nMaxSequenceLength( lcl_getMaxSequenceLength( aSequencesToExport ));
+        if( aSimpleCategories.getLength() > nMaxSequenceLength )
         {
             aSimpleCategories.realloc(nMaxSequenceLength);//#i110617#
-            nCategoriesLength = nMaxSequenceLength;
         }
         size_t nNumColumns( bSeriesFromColumns ? nNumSequences : nMaxSequenceLength );
         size_t nNumRows( bSeriesFromColumns ? nMaxSequenceLength : nNumSequences );
