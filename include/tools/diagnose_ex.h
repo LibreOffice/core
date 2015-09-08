@@ -27,10 +27,12 @@
 
 #include <boost/current_function.hpp>
 
-#define OSL_UNUSED( expression ) \
+#include <tools/toolsdllapi.h>
+
+#define OSL_UNUSED( expression )                \
     (void)(expression)
 
-
+TOOLS_DLLPUBLIC void DbgUnhandledException(const ::com::sun::star::uno::Any& caughtException, const char* currentFunction, const char* fileAndLineNo);
 
 #if OSL_DEBUG_LEVEL > 0
     #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
@@ -38,10 +40,6 @@
     #include <osl/diagnose.h>
     #include <osl/thread.h>
     #include <boost/current_function.hpp>
-    #include <typeinfo>
-    #include <tools/toolsdllapi.h>
-
-    TOOLS_DLLPUBLIC void DbgUnhandledException(const ::com::sun::star::uno::Any& caughtException, const char* currentFunction, const char* fileAndLineNo);
 
     /** reports a caught UNO exception via OSL diagnostics
 

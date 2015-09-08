@@ -28,12 +28,15 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <tools/debug.hxx>
 #include <rtl/string.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
+#include <osl/thread.h>
 
+#include <typeinfo>
 #include <vector>
 
 #include <osl/diagnose.h>
@@ -76,8 +79,6 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
 }
 
 #endif
-
-#if OSL_DEBUG_LEVEL > 0
 
 void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunction, const char* fileAndLineNo)
 {
@@ -123,9 +124,5 @@ void DbgUnhandledException(const css::uno::Any & caught, const char* currentFunc
             SAL_DETAIL_ENABLE_LOG_WARN, SAL_DETAIL_LOG_LEVEL_WARN,
             "legacy.osl", fileAndLineNo, "%s", sMessage.getStr());
 }
-
-#endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
