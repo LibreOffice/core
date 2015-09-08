@@ -154,7 +154,6 @@ void SwAccessiblePortionData::Special(
             sDisplay = OUString(sal_Unicode(0xfffc));
             break;
         case POR_GRFNUM:
-        case POR_BULLET:
             break;
         case POR_FLD:
         case POR_HIDDEN:
@@ -180,6 +179,7 @@ void SwAccessiblePortionData::Special(
             }
             break;
         case POR_NUMBER:
+        case POR_BULLET:
         {
             sDisplay = rText + " ";
             break;
