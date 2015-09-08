@@ -38,6 +38,8 @@
 #include <viewsh.hxx>
 #include <pvprtdat.hxx>
 #include <printdata.hxx>
+#include <pagefrm.hxx>
+#include <rootfrm.hxx>
 #include <svl/stritem.hxx>
 #include <unotxdoc.hxx>
 #include <svl/numuno.hxx>
@@ -200,6 +202,19 @@ static SwPrintUIOptions * lcl_GetPrintUIOptions(
         OSL_ENSURE(pPreview, "Unexpected type of the view shell");
         if (pPreview)
             nCurrentPage = pPreview->GetSelectedPage();
+    }
+
+    // If blanks are skipped, account for them in initial page range value
+    if (!rPrintData.IsPrintEmptyPages())
+    {
+        sal_uInt16 nMax = nCurrentPage;
+        SwPageFrm *pPage = dynamic_cast<SwPageFrm*>(pSh->GetLayout()->Lower());
+        for ( ; nMax-- > 0; )
+        {
+            if (pPage->Frm().Height() == 0)
+                nCurrentPage--;
+            pPage = static_cast<SwPageFrm*>(pPage->GetNext());
+        }
     }
     return new SwPrintUIOptions( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
