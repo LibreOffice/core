@@ -810,7 +810,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             // wrap top+bottom or other wraps is affecting the line directly
             // above the anchor line, which seems odd, but a tiny adjustment
             // here to bring the top down convinces msoffice to wrap like us
-            if (nTop < 8 && !rFrameFormat.IsInline() &&
+            if (nTop == 0 && !rFrameFormat.IsInline() &&
                 rVOr.GetVertOrient() == text::VertOrientation::NONE &&
                 rVOr.GetRelationOrient() == text::RelOrientation::FRAME)
             {

@@ -516,6 +516,21 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         }
         m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_positionH);
         m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_positionV, XML_relativeFrom, relativeFromV, FSEND);
+
+        sal_Int64 nTwipstoEMU = TwipsToEMU(aPos.Y);
+
+        // tdf#93675, 0 below line/paragraph and/or top line/paragraph with
+        // wrap top+bottom or other wraps is affecting the line directly
+        // above the anchor line, which seems odd, but a tiny adjustment
+        // here to bring the top down convinces msoffice to wrap like us
+        if (nTwipstoEMU == 0 &&
+            (strcmp(relativeFromV, "line") == 0 || strcmp(relativeFromV, "paragraph") == 0) &&
+            (!alignV || strcmp(alignV, "top") == 0))
+        {
+            alignV = NULL;
+            nTwipstoEMU = 635;
+        }
+
         if (alignV != NULL)
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_align, FSEND);
@@ -525,7 +540,6 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         else
         {
             m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset, FSEND);
-            sal_Int64 nTwipstoEMU = TwipsToEMU(aPos.Y);
             if (nTwipstoEMU > MAX_INTEGER_VALUE)
             {
                 nTwipstoEMU = MAX_INTEGER_VALUE;
