@@ -558,8 +558,8 @@ namespace svt { namespace table
     }
 
 
-    bool GridTableRenderer::FitsIntoCell( Any const & i_cellContent, ColPos const i_colPos, RowPos const i_rowPos,
-        bool const i_active, bool const i_selected, OutputDevice& i_targetDevice, Rectangle const & i_targetArea ) const
+    bool GridTableRenderer::FitsIntoCell( Any const & i_cellContent,
+        OutputDevice& i_targetDevice, Rectangle const & i_targetArea ) const
     {
         if ( !i_cellContent.hasValue() )
             return true;
@@ -593,20 +593,14 @@ namespace svt { namespace table
         if ( nTextWidth > aTargetArea.GetWidth() )
             return false;
 
-        OSL_UNUSED( i_active );
-        OSL_UNUSED( i_selected );
-        OSL_UNUSED( i_rowPos );
-        OSL_UNUSED( i_colPos );
         return true;
     }
 
 
-    bool GridTableRenderer::GetFormattedCellString( Any const & i_cellValue, ColPos const i_colPos, RowPos const i_rowPos, OUString & o_cellString ) const
+    bool GridTableRenderer::GetFormattedCellString( Any const & i_cellValue, OUString & o_cellString ) const
     {
         o_cellString = m_pImpl->aStringConverter.convertToString( i_cellValue );
 
-        OSL_UNUSED( i_colPos );
-        OSL_UNUSED( i_rowPos );
         return true;
     }
 

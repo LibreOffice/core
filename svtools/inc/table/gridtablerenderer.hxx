@@ -87,13 +87,10 @@ namespace svt { namespace table
         virtual void    HideCellCursor( vcl::Window& _rView, const Rectangle& _rCursorRect) SAL_OVERRIDE;
         virtual bool    FitsIntoCell(
                             ::com::sun::star::uno::Any const & i_cellContent,
-                            ColPos const i_colPos, RowPos const i_rowPos,
-                            bool const i_active, bool const i_selected,
                             OutputDevice& i_targetDevice, Rectangle const & i_targetArea
                         ) const SAL_OVERRIDE;
         virtual bool    GetFormattedCellString(
                             ::com::sun::star::uno::Any const & i_cellValue,
-                            ColPos const i_colPos, RowPos const i_rowPos,
                             OUString & o_cellString
                         ) const SAL_OVERRIDE;
 

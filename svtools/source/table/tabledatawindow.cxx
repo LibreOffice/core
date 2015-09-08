@@ -97,19 +97,16 @@ namespace svt { namespace table
                     pTableModel->getCellContent( hitCol, hitRow, aCellToolTip );
 
                     // use the cell content as tool tip only if it doesn't fit into the cell.
-                    bool const activeCell = ( hitRow == m_rTableControl.getCurrentRow() ) && ( hitCol == m_rTableControl.getCurrentColumn() );
-                    bool const selectedCell = m_rTableControl.isRowSelected( hitRow );
-
                     Rectangle const aWindowRect( Point( 0, 0 ), GetOutputSizePixel() );
                     TableCellGeometry const aCell( m_rTableControl, aWindowRect, hitCol, hitRow );
                     Rectangle const aCellRect( aCell.getRect() );
 
                     PTableRenderer const pRenderer = pTableModel->getRenderer();
-                    if ( pRenderer->FitsIntoCell( aCellToolTip, hitCol, hitRow, activeCell, selectedCell, *this, aCellRect ) )
+                    if ( pRenderer->FitsIntoCell( aCellToolTip, *this, aCellRect ) )
                         aCellToolTip.clear();
                 }
 
-                pTableModel->getRenderer()->GetFormattedCellString( aCellToolTip, hitCol, hitRow, sHelpText );
+                pTableModel->getRenderer()->GetFormattedCellString( aCellToolTip, sHelpText );
 
                 if ( sHelpText.indexOf( '\n' ) >= 0 )
                     nHelpStyle = QuickHelpFlags::TipStyleBalloon;

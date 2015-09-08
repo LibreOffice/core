@@ -2041,7 +2041,7 @@ namespace svt { namespace table
         m_pModel->getCellContent( i_col, i_row, aCellValue );
 
         OUString sCellStringContent;
-        m_pModel->getRenderer()->GetFormattedCellString( aCellValue, i_col, i_row, sCellStringContent );
+        m_pModel->getRenderer()->GetFormattedCellString( aCellValue, sCellStringContent );
 
         return sCellStringContent;
     }

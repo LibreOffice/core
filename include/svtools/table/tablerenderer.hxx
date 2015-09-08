@@ -221,22 +221,6 @@ namespace svt { namespace table
 
         /** checks whether a given cell content fits into a given target area on a given device.
 
-            @param i_colPos
-                denotes the column which the cell content would be painted into. Your renderer implementation
-                would only need this parameter if rendering is done differently for different columns.
-
-            @param i_rowPos
-                denotes the row which the cell content would be painted into. Your renderer implementation
-                would only need this parameter if rendering is done differently for different rows.
-
-            @param i_active
-                is <TRUE/> if and only if the renderer should assume the cell content would be painted for the active
-                cell.
-
-            @param i_selected
-                is <TRUE/> if and only if the renderer should assume the cell content would be painted for a selected
-                cell.
-
             @param i_targetDevice
                 denotes the target device for the assumed rendering operation
 
@@ -249,8 +233,6 @@ namespace svt { namespace table
         */
         virtual bool    FitsIntoCell(
                             ::com::sun::star::uno::Any const & i_cellContent,
-                            ColPos const i_colPos, RowPos const i_rowPos,
-                            bool const i_active, bool const i_selected,
                             OutputDevice& i_targetDevice, Rectangle const & i_targetArea
                         ) const = 0;
 
@@ -258,10 +240,6 @@ namespace svt { namespace table
 
             @param i_cellValue
                 the value for which an attempt for a string conversion should be made
-            @param  i_colPos
-                the column position of the cell in question
-            @param  i_rowPos
-                the row position of the cell in question
             @param  o_cellString
                 the cell content, formatted as string
             @return
@@ -269,7 +247,6 @@ namespace svt { namespace table
         */
         virtual bool    GetFormattedCellString(
                             ::com::sun::star::uno::Any const & i_cellValue,
-                            ColPos const i_colPos, RowPos const i_rowPos,
                             OUString & o_cellString
                         ) const = 0;
 
