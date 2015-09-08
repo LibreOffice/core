@@ -771,7 +771,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
     ::std::vector<OUString> aNewNames;
     aNewNames.resize( nEndCol - nStartCol + 1);
     bool bHaveEmpty = false;
-    if (!HasHeader())
+    if (!HasHeader() || !pDoc)
         bHaveEmpty = true;  // Assume we have empty ones and fill below.
     else
     {
@@ -1065,10 +1065,17 @@ ScDBCollection::NamedDBs::NamedDBs(const NamedDBs& r)
                 p->StartTableColumnNamesListener(); // needs the container be set already
                 if (p->AreTableColumnNamesDirty())
                 {
-                    // Refresh table column names in next round.
-                    ScRange aHeader( p->GetHeaderArea());
-                    if (aHeader.IsValid())
-                        maDirtyTableColumnNames.Join( aHeader);
+                    if (p->HasHeader())
+                    {
+                        // Refresh table column names in next round.
+                        maDirtyTableColumnNames.Join( p->GetHeaderArea());
+                    }
+                    else
+                    {
+                        // Header-less table can generate its column names
+                        // already without accessing the document.
+                        p->RefreshTableColumnNames( nullptr);
+                    }
                 }
             }
         }
@@ -1135,10 +1142,17 @@ bool ScDBCollection::NamedDBs::insert(ScDBData* p)
             p->StartTableColumnNamesListener(); // needs the container be set already
             if (p->AreTableColumnNamesDirty())
             {
-                // Refresh table column names in next round.
-                ScRange aHeader( p->GetHeaderArea());
-                if (aHeader.IsValid())
-                    maDirtyTableColumnNames.Join( aHeader);
+                if (p->HasHeader())
+                {
+                    // Refresh table column names in next round.
+                    maDirtyTableColumnNames.Join( p->GetHeaderArea());
+                }
+                else
+                {
+                    // Header-less table can generate its column names
+                    // already without accessing the document.
+                    p->RefreshTableColumnNames( nullptr);
+                }
             }
         }
 
