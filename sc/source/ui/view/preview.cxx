@@ -164,7 +164,7 @@ void ScPreview::UpdateDrawView()        // nTab must be right
         SdrPage* pPage = pModel->GetPage(nTab);
         if ( pDrawView && ( !pDrawView->GetSdrPageView() || pDrawView->GetSdrPageView()->GetPage() != pPage ) )
         {
-            //  die angezeigte Page der DrawView umzustellen (s.u.) funktioniert nicht ?!?
+            // convert the displayed Page of drawView (see below) does not work?!?
             delete pDrawView;
             pDrawView = NULL;
         }
@@ -299,7 +299,7 @@ void ScPreview::CalcPages()
     DoInvalidate();
 }
 
-void ScPreview::RecalcPages()                   // only nPageNo is changed
+void ScPreview::RecalcPages()           // only nPageNo is changed
 {
     if (!bValid)
         return;                         // then CalcPages is called
@@ -410,7 +410,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         aPage.Select( aPageRange );
 
         long nPrinted = pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, bDoPrint, pFillLocation );
-        OSL_ENSURE(nPrinted<=1, "was'n nu los?");
+        OSL_ENSURE(nPrinted<=1, "What is happening?");
 
         SetMapMode(aMMMode);
 
