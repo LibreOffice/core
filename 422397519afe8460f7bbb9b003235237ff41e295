@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_5b52b7de",
+        "filename": "editeng/source/outliner/outlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-08T14:04:31Z",
+      "side": 1,
+      "message": "I thought about it, and I think this makes more sense than what I had in patch set 1, but I\u0027m open to suggestions.",
+      "revId": "422397519afe8460f7bbb9b003235237ff41e295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_bb5dd3ee",
+        "filename": "editeng/source/outliner/outlobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-08T14:04:31Z",
+      "side": 1,
+      "message": "Same as above",
+      "revId": "422397519afe8460f7bbb9b003235237ff41e295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
