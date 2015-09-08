@@ -434,7 +434,7 @@ namespace svt { namespace table
    }
 
 
-    void TableControl_Impl::columnRemoved( ColPos const i_colIndex )
+    void TableControl_Impl::columnRemoved()
     {
         m_nColumnCount = m_pModel->getColumnCount();
 
@@ -450,8 +450,6 @@ namespace svt { namespace table
         impl_ni_relayout();
 
         m_rAntiImpl.Invalidate();
-
-        OSL_UNUSED( i_colIndex );
     }
 
 
@@ -464,12 +462,9 @@ namespace svt { namespace table
     }
 
 
-    void TableControl_Impl::cellsUpdated( ColPos const i_firstCol, ColPos i_lastCol, RowPos const i_firstRow, RowPos const i_lastRow )
+    void TableControl_Impl::cellsUpdated( RowPos const i_firstRow, RowPos const i_lastRow )
     {
         invalidateRowRange( i_firstRow, i_lastRow );
-
-        OSL_UNUSED( i_firstCol );
-        OSL_UNUSED( i_lastCol );
     }
 
 

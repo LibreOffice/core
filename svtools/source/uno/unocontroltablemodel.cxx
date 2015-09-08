@@ -261,7 +261,7 @@ namespace svt { namespace table
                 ++loop
             )
         {
-            (*loop)->columnRemoved( i_position );
+            (*loop)->columnRemoved();
         }
 
         // dispose the column
@@ -896,8 +896,6 @@ namespace svt { namespace table
 
     void UnoControlTableModel::notifyDataChanged( ::com::sun::star::awt::grid::GridDataEvent const & i_event ) const
     {
-        ColPos const firstCol = i_event.FirstColumn == -1 ? 0 : i_event.FirstColumn;
-        ColPos const lastCol = i_event.FirstColumn == -1 ? getColumnCount() - 1 : i_event.LastColumn;
         RowPos const firstRow = i_event.FirstRow == -1 ? 0 : i_event.FirstRow;
         RowPos const lastRow = i_event.FirstRow == -1 ? getRowCount() - 1 : i_event.LastRow;
 
@@ -907,7 +905,7 @@ namespace svt { namespace table
                 ++loop
             )
         {
-            (*loop)->cellsUpdated( firstCol, lastCol, firstRow, lastRow );
+            (*loop)->cellsUpdated( firstRow, lastRow );
         }
     }
 
@@ -920,7 +918,7 @@ namespace svt { namespace table
                 ++loop
             )
         {
-            (*loop)->cellsUpdated( 0, getColumnCount() - 1, 0, getRowCount() - 1 );
+            (*loop)->cellsUpdated( 0, getRowCount() - 1 );
         }
     }
 

@@ -110,11 +110,8 @@ namespace svt { namespace table
 
         /** notifies the listener that one or more columns have been removed from
             the table
-
-            @param i_colIndex
-                the old index of the removed column
         */
-        virtual void    columnRemoved( ColPos const i_colIndex ) = 0;
+        virtual void    columnRemoved() = 0;
 
         /** notifies the listener that all columns have been removed form the model
         */
@@ -127,7 +124,7 @@ namespace svt { namespace table
             they have about the cells in question, in particular any possibly
             cached cell values.
         */
-        virtual void    cellsUpdated( ColPos const i_firstCol, ColPos i_lastCol, RowPos const i_firstRow, RowPos const i_lastRow ) = 0;
+        virtual void    cellsUpdated( RowPos const i_firstRow, RowPos const i_lastRow ) = 0;
 
         /** notifies the listener that attributes of a given column changed
 

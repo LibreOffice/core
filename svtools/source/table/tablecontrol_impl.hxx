@@ -299,9 +299,9 @@ namespace svt { namespace table
         virtual void    rowsInserted( RowPos first, RowPos last ) SAL_OVERRIDE;
         virtual void    rowsRemoved( RowPos first, RowPos last ) SAL_OVERRIDE;
         virtual void    columnInserted() SAL_OVERRIDE;
-        virtual void    columnRemoved( ColPos const i_colIndex ) SAL_OVERRIDE;
+        virtual void    columnRemoved() SAL_OVERRIDE;
         virtual void    allColumnsRemoved() SAL_OVERRIDE;
-        virtual void    cellsUpdated( ColPos const i_firstCol, ColPos i_lastCol, RowPos const i_firstRow, RowPos const i_lastRow ) SAL_OVERRIDE;
+        virtual void    cellsUpdated( RowPos const i_firstRow, RowPos const i_lastRow ) SAL_OVERRIDE;
         virtual void    columnChanged( ColPos const i_column, ColumnAttributeGroup const i_attributeGroup ) SAL_OVERRIDE;
         virtual void    tableMetricsChanged() SAL_OVERRIDE;
 

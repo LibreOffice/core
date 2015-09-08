@@ -163,10 +163,8 @@ namespace svt { namespace table
     //= RowSelection
 
 
-    FunctionResult RowSelection::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
+    FunctionResult RowSelection::handleMouseMove( ITableControl&, MouseEvent const & )
     {
-        OSL_UNUSED( i_tableControl );
-        OSL_UNUSED( i_event );
         return SkipFunction;
     }
 
@@ -217,10 +215,8 @@ namespace svt { namespace table
     //= ColumnSortHandler
 
 
-    FunctionResult ColumnSortHandler::handleMouseMove( ITableControl& i_tableControl, MouseEvent const & i_event )
+    FunctionResult ColumnSortHandler::handleMouseMove( ITableControl&, MouseEvent const & )
     {
-        OSL_UNUSED( i_tableControl );
-        OSL_UNUSED( i_event );
         return SkipFunction;
     }
 
