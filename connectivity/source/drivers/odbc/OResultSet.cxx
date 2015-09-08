@@ -181,8 +181,7 @@ void OResultSet::construct()
 
 void OResultSet::disposing()
 {
-    SQLRETURN nRet = N3SQLCloseCursor(m_aStatementHandle);
-    OSL_UNUSED( nRet );
+    N3SQLCloseCursor(m_aStatementHandle);
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -1226,8 +1225,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_
     invalidateCache();
     Sequence<sal_Int8> aBookmark;
     bookmark >>= aBookmark;
-    SQLRETURN nReturn = setStmtOption<SQLLEN*, SQL_IS_POINTER>(SQL_ATTR_FETCH_BOOKMARK_PTR, reinterpret_cast<SQLLEN*>(aBookmark.getArray()));
-    OSL_UNUSED( nReturn );
+    setStmtOption<SQLLEN*, SQL_IS_POINTER>(SQL_ATTR_FETCH_BOOKMARK_PTR, reinterpret_cast<SQLLEN*>(aBookmark.getArray()));
 
     m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,SQL_FETCH_BOOKMARK,rows);
     OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);

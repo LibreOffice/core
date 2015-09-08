@@ -32,9 +32,6 @@
         (void)(expression)
 #endif
 
-#define OSL_UNUSED( expression ) \
-    (void)(expression)
-
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_DIAGNOSE_EX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

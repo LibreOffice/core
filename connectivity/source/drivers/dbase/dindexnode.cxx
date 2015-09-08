@@ -877,8 +877,7 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
         memset(aEmptyData,0x00,DINDEX_PAGE_SIZE);
         rStream.Write(aEmptyData, DINDEX_PAGE_SIZE);
     }
-    sal_Size nCurrentPos = rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
-    OSL_UNUSED( nCurrentPos );
+    rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);
 
     nValue = rPage.nCount;
     rStream.WriteUInt32( nValue );

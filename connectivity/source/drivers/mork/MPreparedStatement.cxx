@@ -392,16 +392,11 @@ ORowSetValue& x)
 
 size_t OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
-    OSL_UNUSED( pParameter );
     // Count of the newly added Parameters
     size_t nParameter = m_xParamColumns->get().size()+1;
 
     OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument is not a Parameter");
     OSL_ENSURE(pParameter->count() > 0,"OResultSet: error in parse tree");
-#if OSL_DEBUG_LEVEL > 0
-    OSQLParseNode * pMark = pParameter->getChild(0);
-    OSL_UNUSED( pMark );
-#endif
 
     OUString sParameterName;
 

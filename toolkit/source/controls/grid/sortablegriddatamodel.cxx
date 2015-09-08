@@ -490,10 +490,8 @@ private:
     }
 
 
-    void SAL_CALL SortableGridDataModel::disposing( const EventObject& i_event ) throw (RuntimeException, std::exception)
+    void SAL_CALL SortableGridDataModel::disposing( const EventObject& ) throw (RuntimeException, std::exception)
     {
-        // not interested in
-        OSL_UNUSED( i_event );
     }
 
 

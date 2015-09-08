@@ -29,9 +29,6 @@
 
 #include <tools/toolsdllapi.h>
 
-#define OSL_UNUSED( expression )                \
-    (void)(expression)
-
 TOOLS_DLLPUBLIC void DbgUnhandledException(const ::com::sun::star::uno::Any& caughtException, const char* currentFunction, const char* fileAndLineNo);
 
 #if OSL_DEBUG_LEVEL > 0

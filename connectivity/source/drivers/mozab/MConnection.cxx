@@ -375,7 +375,6 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
 
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
-    OSL_UNUSED( _sSql );
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
     OSL_TRACE("OConnection::prepareCall( %s )", OUtoCStr( _sSql ) );
     return NULL;

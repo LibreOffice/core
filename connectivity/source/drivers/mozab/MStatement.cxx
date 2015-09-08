@@ -190,8 +190,6 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
 
 #if OSL_DEBUG_LEVEL > 0
     {
-        const char* str = OUtoCStr(sql);
-        OSL_UNUSED( str );
         OSL_TRACE("ParseSQL: %s", OUtoCStr( sql ) );
     }
 #endif // OSL_DEBUG_LEVEL

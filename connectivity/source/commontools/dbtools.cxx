@@ -983,9 +983,8 @@ try
                 {
                     xNewProps->setPropertyValue(pResult->Name, xOldProps->getPropertyValue(pResult->Name));
                 }
-                catch(IllegalArgumentException& e)
+                catch(IllegalArgumentException&)
                 {
-                    OSL_UNUSED( e );
 #ifdef DBG_UTIL
                     OUString sMessage = "TransferFormComponentProperties : could not transfer the value for property \"" +
                         pResult->Name +

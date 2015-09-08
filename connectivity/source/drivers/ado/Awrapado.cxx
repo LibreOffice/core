@@ -2146,7 +2146,6 @@ void WpADOColumn::put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
     OSL_ENSURE(pInterface,"Interface is null!");
     sal_Bool bRet = SUCCEEDED(pInterface->put_ParentCatalog(ppvObject));
     OSL_ENSURE(bRet,"Could not set ParentCatalog!");
-    OSL_UNUSED(bRet);
 }
 
 void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
@@ -2154,7 +2153,6 @@ void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObjec
     OSL_ENSURE(pInterface,"Interface is null!");
     sal_Bool bRet = SUCCEEDED(pInterface->putref_ParentCatalog(ppvObject));
     OSL_ENSURE(bRet,"Could not set ParentCatalog!");
-    OSL_UNUSED(bRet);
 }
 
 void WpBase::setIDispatch(IDispatch* _pIUnknown)
@@ -2170,7 +2168,6 @@ void OTools::putValue(const WpADOProperties& _rProps,const OLEVariant &_aPositio
     {
         sal_Bool bRet = aProp.PutValue(_aValVar);
         OSL_ENSURE(bRet,"Could not put value!");
-        OSL_UNUSED(bRet);
     }
 }
 

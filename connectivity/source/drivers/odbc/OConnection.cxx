@@ -119,7 +119,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
 #endif
 
 #ifdef LINUX
-    OSL_UNUSED( bSilent );
+    (void) bSilent;
     nSQLRETURN = N3SQLDriverConnect(m_aConnectionHandle,
                       NULL,
                       szConnStrIn,
@@ -532,8 +532,7 @@ SQLHANDLE OConnection::createStatementHandle()
     }
 
     SQLHANDLE aStatementHandle = SQL_NULL_HANDLE;
-    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,pConnectionTemp->getConnection(),&aStatementHandle);
-    OSL_UNUSED( nRetcode );
+    N3SQLAllocHandle(SQL_HANDLE_STMT,pConnectionTemp->getConnection(),&aStatementHandle);
     ++m_nStatementCount;
     if(bNew)
         m_aConnections.insert(::std::map< SQLHANDLE,OConnection*>::value_type(aStatementHandle,pConnectionTemp));

@@ -631,10 +631,9 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event ) throw
 }
 
 
-void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& i_event ) throw (RuntimeException, std::exception)
+void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    OSL_UNUSED( i_event );
 
     VclPtr< TableControl > pTable = GetAsDynamic< TableControl >();
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowHeadingChanged: no control (anymore)!" );
@@ -666,11 +665,10 @@ void SAL_CALL SVTXGridControl::elementRemoved( const ContainerEvent& i_event ) t
 }
 
 
-void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& i_event ) throw (RuntimeException, std::exception)
+void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& ) throw (RuntimeException, std::exception)
 {
     OSL_ENSURE( false, "SVTXGridControl::elementReplaced: not implemented!" );
         // at the moment, the XGridColumnModel API does not allow replacing columns
-    OSL_UNUSED( i_event );
     // TODO: replace the respective column in our table model
 }
 

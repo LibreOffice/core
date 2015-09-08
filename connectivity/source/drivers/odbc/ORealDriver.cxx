@@ -343,8 +343,7 @@ SQLHANDLE ORealObdcDriver::EnvironmentHandle(OUString &_rPath)
 
         // Save in global Structure
         m_pDriverHandle = h;
-        SQLRETURN nError = N3SQLSetEnvAttr(h, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3), SQL_IS_UINTEGER);
-        OSL_UNUSED( nError );
+        N3SQLSetEnvAttr(h, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3), SQL_IS_UINTEGER);
         //N3SQLSetEnvAttr(h, SQL_ATTR_CONNECTION_POOLING,(SQLPOINTER) SQL_CP_ONE_PER_HENV, SQL_IS_INTEGER);
     }
 

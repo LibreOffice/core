@@ -147,7 +147,6 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nati
 
 jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name, jstring key, DataLogFile* logger )
 {
-    OSL_UNUSED( logger );
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XInputStream> xIn = pHelper.get() ? pHelper->getInputStream() : Reference< XInputStream>();
     OSL_ENSURE(xIn.is(),"Input stream is NULL!");
@@ -175,10 +174,12 @@ jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name,
             if (tmpInt < 0 )
                 tmpInt = 256 +tmpInt;
 
-#ifdef HSQLDB_DBG
             if ( logger )
+            {
+#ifdef HSQLDB_DBG
                 logger->write( tmpInt );
 #endif
+            }
             return tmpInt;
         }
     }
@@ -210,7 +211,6 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
 
 jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
 {
-    OSL_UNUSED( logger );
 #ifdef HSQLDB_DBG
     {
         OUString sKey = StorageContainer::jstring2ustring(env,key);
@@ -247,10 +247,12 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
             return -1;
         env->SetByteArrayRegion(buffer,off,nBytesRead,reinterpret_cast<jbyte*>(&aData[0]));
 
-#ifdef HSQLDB_DBG
         if ( logger )
+        {
+#ifdef HSQLDB_DBG
             logger->write( aData.getConstArray(), nBytesRead );
 #endif
+        }
         return nBytesRead;
     }
     ThrowException( env,
@@ -418,7 +420,6 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
 
 void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jstring name, jstring key, jbyteArray buffer, jint off, jint len, DataLogFile* logger )
 {
-    OSL_UNUSED( logger );
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XOutputStream> xOut = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
     OSL_ENSURE(xOut.is(),"Stream is NULL");
@@ -439,10 +440,12 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
                 Sequence< ::sal_Int8 > aData(reinterpret_cast<sal_Int8 *>(buf + off),len);
                 env->ReleaseByteArrayElements(buffer, buf, JNI_ABORT);
                 xOut->writeBytes(aData);
-#ifdef HSQLDB_DBG
                 if ( logger )
+                {
+#ifdef HSQLDB_DBG
                     logger->write( aData.getConstArray(), len );
 #endif
+                }
             }
         }
         else
@@ -483,8 +486,6 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
 
 void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, jstring key, jint v, DataLogFile* logger )
 {
-    OSL_UNUSED( logger );
-
     ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XOutputStream> xOut = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
     OSL_ENSURE(xOut.is(),"Stream is NULL");
@@ -499,10 +500,12 @@ void write_to_storage_stream( JNIEnv* env, jobject /*obj_this*/, jstring name, j
             oneByte[3] = (sal_Int8) ((v >>  0) & 0xFF);
 
             xOut->writeBytes(oneByte);
-#ifdef HSQLDB_DBG
             if ( logger )
+            {
+#ifdef HSQLDB_DBG
                 logger->write( oneByte.getConstArray(), 4 );
 #endif
+            }
         }
         else
         {

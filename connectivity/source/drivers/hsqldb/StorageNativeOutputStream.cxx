@@ -161,14 +161,15 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
 extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeOutputStream_flush
   (JNIEnv * env, jobject /*obj_this*/, jstring key, jstring name)
 {
-    OSL_UNUSED( env );
-    OSL_UNUSED( key );
-    OSL_UNUSED( name );
 #ifdef HSQLDB_DBG
     OperationLogFile( env, name, "output" ).logOperation( "flush" );
 
     OUString sKey = StorageContainer::jstring2ustring(env,key);
     OUString sName = StorageContainer::jstring2ustring(env,name);
+#else
+    (void) env;
+    (void) key;
+    (void) name;
 #endif
 }
 

@@ -206,7 +206,6 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
     SAL_INFO("connectivity.mork", "=> OConnection::prepareStatement()" );
     SAL_INFO("connectivity.mork", "OConnection::prepareStatement( " << _sSql << " )");
 
-    OSL_UNUSED( _sSql );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
@@ -225,7 +224,6 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUStrin
 {
     SAL_INFO("connectivity.mork", "=> OConnection::prepareCall()" );
     SAL_INFO("connectivity.mork", "sql: " << _sSql);
-    OSL_UNUSED( _sSql );
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::prepareCall", *this );
     SAL_INFO("connectivity.mork", "OConnection::prepareCall( " << _sSql << " )");
     return NULL;

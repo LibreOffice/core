@@ -660,9 +660,8 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
     ::osl::MutexGuard aGuard( m_aMutex );
     prepareStatement();
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    SQLRETURN nRet = N3SQLFreeStmt (m_aStatementHandle, SQL_RESET_PARAMS);
-    nRet = N3SQLFreeStmt (m_aStatementHandle, SQL_UNBIND);
-    OSL_UNUSED(nRet);
+    N3SQLFreeStmt (m_aStatementHandle, SQL_RESET_PARAMS);
+    N3SQLFreeStmt (m_aStatementHandle, SQL_UNBIND);
 }
 
 void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeException, std::exception)

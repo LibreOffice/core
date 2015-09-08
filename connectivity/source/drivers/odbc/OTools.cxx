@@ -330,7 +330,6 @@ void OTools::ThrowException(const OConnection* _pConnection,
                          szSqlState,
                          &pfNativeError,
                          szErrorMessage,sizeof szErrorMessage - 1,&pcbErrorMsg);
-    OSL_UNUSED( n );
     OSL_ENSURE(n != SQL_INVALID_HANDLE,"SdbODBC3_SetStatus: SQLError returned SQL_INVALID_HANDLE");
     OSL_ENSURE(n == SQL_SUCCESS || n == SQL_SUCCESS_WITH_INFO || n == SQL_NO_DATA_FOUND || n == SQL_ERROR,"SdbODBC3_SetStatus: SQLError failed");
 

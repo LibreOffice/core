@@ -166,9 +166,8 @@ namespace svt { namespace table
     }
 
 
-    void SAL_CALL ColumnChangeMultiplexer::disposing( const EventObject& i_event ) throw (RuntimeException, std::exception)
+    void SAL_CALL ColumnChangeMultiplexer::disposing( const EventObject& ) throw (RuntimeException, std::exception)
     {
-        OSL_UNUSED( i_event );
     }
 
 

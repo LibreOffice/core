@@ -424,13 +424,8 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const ORowSetVal
 
 sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
-    OSL_UNUSED( pParameter );
     OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument ist kein Parameter");
     OSL_ENSURE(pParameter->count() > 0,"OResultSet: Fehler im Parse Tree");
-#if OSL_DEBUG_LEVEL > 0
-    OSQLParseNode * pMark = pParameter->getChild(0);
-    OSL_UNUSED( pMark );
-#endif
 
     OUString sParameterName;
     // set up Parameter-Column:

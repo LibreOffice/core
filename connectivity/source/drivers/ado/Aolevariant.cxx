@@ -104,14 +104,12 @@ OLEVariant::OLEVariant(const VARIANT& varSrc)
     ::VariantInit(this);
     HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(&varSrc));
     OSL_ENSURE(eRet == S_OK,"Error while copying an ado variant!");
-    OSL_UNUSED(eRet);
 }
 OLEVariant::OLEVariant(const OLEVariant& varSrc)
 {
     ::VariantInit(this);
     HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(static_cast<const VARIANT*>(&varSrc)));
     OSL_ENSURE(eRet == S_OK,"Error while copying an ado variant!");
-    OSL_UNUSED(eRet);
 }
 
 OLEVariant::OLEVariant(bool x)              {   VariantInit(this);  vt = VT_BOOL;   boolVal     = (x ? VARIANT_TRUE : VARIANT_FALSE);}
@@ -130,7 +128,6 @@ OLEVariant::~OLEVariant()
 {
     HRESULT eRet = ::VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
 } // clears all the memory that was allocated before
 
 OLEVariant::OLEVariant(const ::com::sun::star::util::Date& x )
@@ -186,7 +183,6 @@ OLEVariant::OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
         sal_Int32 nData = *pBegin;
         HRESULT rs = SafeArrayPutElement(parray,&i,&nData);
         OSL_ENSURE(S_OK == rs,"Error while copy byte data");
-        OSL_UNUSED(rs);
     }
 }
 
@@ -194,7 +190,6 @@ OLEVariant& OLEVariant::operator=(const OLEVariant& varSrc)
 {
     HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(static_cast<const VARIANT*>(&varSrc)));
     OSL_ENSURE(eRet == S_OK,"Error while copying an ado variant!");
-    OSL_UNUSED(eRet);
     return *this;
 }
 // Assign a const VARIANT& (::VariantCopy handles everything)
@@ -203,7 +198,6 @@ OLEVariant& OLEVariant::operator=(const tagVARIANT& varSrc)
 {
     HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(&varSrc));
     OSL_ENSURE(eRet == S_OK,"Error while copying an ado variant!");
-    OSL_UNUSED(eRet);
 
     return *this;
 }
@@ -214,7 +208,6 @@ OLEVariant& OLEVariant::operator=(const VARIANT* pSrc)
 {
     HRESULT eRet = ::VariantCopy(this, const_cast<VARIANT*>(pSrc));
     OSL_ENSURE(eRet == S_OK,"Error while copying an ado variant!");
-    OSL_UNUSED(eRet);
 
     return *this;
 }
@@ -223,7 +216,6 @@ void OLEVariant::setByte(sal_uInt8 n)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt = VT_UI1;
     bVal = n;
 }
@@ -231,7 +223,6 @@ void OLEVariant::setInt16(sal_Int16 n)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt      = VT_I2;
     iVal    = n;
 }
@@ -239,14 +230,12 @@ void OLEVariant::setInt32(sal_Int32 n)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt      = VT_I4;
     lVal    = n;
 }
 void OLEVariant::setFloat(float f)
 {   HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt      = VT_R4;
     fltVal  = f;
 }
@@ -254,14 +243,12 @@ void OLEVariant::setDouble(double d)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt      = VT_R8;
     dblVal  = d;
 }
 void OLEVariant::setDate(DATE d)
 {   HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt      = VT_DATE;
     date    = d;
 }
@@ -269,7 +256,6 @@ void OLEVariant::setChar(unsigned char a)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt = VT_UI1;
     bVal        = a;
 }
@@ -277,7 +263,6 @@ void OLEVariant::setCurrency(double aCur)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt = VT_CY;
     set(aCur*10000);
 }
@@ -285,7 +270,6 @@ void OLEVariant::setBool(sal_Bool b)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt = VT_BOOL;
     boolVal     = b ? VARIANT_TRUE : VARIANT_FALSE;
 }
@@ -293,7 +277,6 @@ void OLEVariant::setString(const OUString& us)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt = VT_BSTR;
     bstrVal     = ::SysAllocString(reinterpret_cast<LPCOLESTR>(us.getStr()));
 }
@@ -301,7 +284,6 @@ void OLEVariant::setNoArg()
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt = VT_ERROR;
     scode       = DISP_E_PARAMNOTFOUND;
 }
@@ -310,14 +292,12 @@ void OLEVariant::setNull()
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt = VT_NULL;
 }
 void OLEVariant::setEmpty()
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt = VT_EMPTY;
 }
 
@@ -325,7 +305,6 @@ void OLEVariant::setUI1SAFEARRAYPtr(SAFEARRAY* pSafeAr)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt = VT_ARRAY|VT_UI1; parray = pSafeAr;
 }
 
@@ -333,7 +312,6 @@ void OLEVariant::setArray(SAFEARRAY* pSafeArray, VARTYPE vtType)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
     vt = (VARTYPE)(VT_ARRAY|vtType);
     parray = pSafeArray;
 }
@@ -342,7 +320,6 @@ void OLEVariant::setIDispatch(IDispatch* pDispInterface)
 {
     HRESULT eRet = VariantClear(this);
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
-    OSL_UNUSED(eRet);
 
     vt = VT_DISPATCH;
     pdispVal = pDispInterface;
