@@ -914,15 +914,15 @@ void ImpGraphic::ImplStopAnimation( OutputDevice* pOutDev, long nExtraData )
         mpAnimation->Stop( pOutDev, nExtraData );
 }
 
-void ImpGraphic::ImplSetAnimationNotifyHdl( const Link<>& rLink )
+void ImpGraphic::ImplSetAnimationNotifyHdl( const Link<Animation*,void>& rLink )
 {
     if( mpAnimation )
         mpAnimation->SetNotifyHdl( rLink );
 }
 
-Link<> ImpGraphic::ImplGetAnimationNotifyHdl() const
+Link<Animation*,void> ImpGraphic::ImplGetAnimationNotifyHdl() const
 {
-    Link<> aLink;
+    Link<Animation*,void> aLink;
 
     if( mpAnimation )
         aLink = mpAnimation->GetNotifyHdl();

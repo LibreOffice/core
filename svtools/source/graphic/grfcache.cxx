@@ -262,7 +262,7 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     // create substitute for graphic;
     const Size          aPrefSize( rSubstitute.GetPrefSize() );
     const MapMode       aPrefMapMode( rSubstitute.GetPrefMapMode() );
-    const Link<>        aAnimationNotifyHdl( rSubstitute.GetAnimationNotifyHdl() );
+    const Link<Animation*,void> aAnimationNotifyHdl( rSubstitute.GetAnimationNotifyHdl() );
     const GraphicType   eOldType = rSubstitute.GetType();
     const bool          bDefaultType = ( rSubstitute.GetType() == GRAPHIC_DEFAULT );
 

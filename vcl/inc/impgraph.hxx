@@ -118,10 +118,10 @@ private:
     void                ImplStopAnimation( OutputDevice* pOutputDevice = NULL,
                                            long nExtraData = 0 );
 
-    void                ImplSetAnimationNotifyHdl( const Link<>& rLink );
-    Link<>              ImplGetAnimationNotifyHdl() const;
+    void                ImplSetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
+    Link<Animation*,void>  ImplGetAnimationNotifyHdl() const;
 
-    sal_uLong               ImplGetAnimationLoopCount() const;
+    sal_uLong           ImplGetAnimationLoopCount() const;
 
 private:
 

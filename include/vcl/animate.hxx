@@ -152,8 +152,8 @@ public:
 
     CycleMode       GetCycleMode() const { return meCycleMode; }
 
-    void            SetNotifyHdl( const Link<>& rLink ) { maNotifyLink = rLink; }
-    const Link<>&   GetNotifyHdl() const { return maNotifyLink; }
+    void            SetNotifyHdl( const Link<Animation*,void>& rLink ) { maNotifyLink = rLink; }
+    const Link<Animation*,void>& GetNotifyHdl() const { return maNotifyLink; }
 
     size_t          Count() const { return maList.size(); }
     bool            Insert( const AnimationBitmap& rAnimationBitmap );
@@ -205,7 +205,7 @@ private:
     std::vector< AnimationBitmap* > maList;
     std::vector< ImplAnimView* >    maViewList;
 
-    Link<>          maNotifyLink;
+    Link<Animation*,void> maNotifyLink;
     BitmapEx        maBitmapEx;
     Timer           maTimer;
     Size            maGlobalSize;

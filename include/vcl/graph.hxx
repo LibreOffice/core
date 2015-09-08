@@ -155,8 +155,8 @@ public:
     void                StopAnimation( OutputDevice* pOutputDevice = NULL,
                                        long nExtraData = 0L );
 
-    void                SetAnimationNotifyHdl( const Link<>& rLink );
-    Link<>              GetAnimationNotifyHdl() const;
+    void                SetAnimationNotifyHdl( const Link<Animation*,void>& rLink );
+    Link<Animation*,void>  GetAnimationNotifyHdl() const;
 
     sal_uLong           GetAnimationLoopCount() const;
 
