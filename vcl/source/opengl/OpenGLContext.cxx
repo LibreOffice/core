@@ -1362,11 +1362,14 @@ void OpenGLContext::makeCurrent()
     TempErrorHandler aErrorHandler(m_aGLWin.dpy, unxErrorHandler);
 #endif
 
-    GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
-    if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
+    if (m_aGLWin.dpy)
     {
-        SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed on drawable " << nDrawable << " pixmap? " << mbPixmap);
-        return;
+        GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
+        if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
+        {
+            SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed on drawable " << nDrawable << " pixmap? " << mbPixmap);
+            return;
+        }
     }
 #endif
 

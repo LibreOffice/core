@@ -27,7 +27,7 @@ namespace avmedia { namespace ogl {
 class OGLWindow : public ::cppu::WeakImplHelper< css::media::XPlayerWindow, css::lang::XServiceInfo >
 {
 public:
-    OGLWindow( libgltf::glTFHandle& rHandle, OpenGLContext& rContext, vcl::Window& rEventHandlerParent );
+    OGLWindow( libgltf::glTFHandle& rHandle, const rtl::Reference<OpenGLContext> & rContext, vcl::Window& rEventHandlerParent );
     virtual ~OGLWindow();
 
     virtual void SAL_CALL update() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -66,7 +66,7 @@ private:
     DECL_LINK( CameraHandler, VclWindowEvent* );
 
     libgltf::glTFHandle& m_rHandle;
-    OpenGLContext& m_rContext;
+    rtl::Reference<OpenGLContext> m_xContext;
     vcl::Window& m_rEventHandler;
 
     bool m_bVisible;
