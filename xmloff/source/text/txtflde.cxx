@@ -2898,7 +2898,6 @@ bool XMLTextFieldExport::ExplodeFieldMasterName(
 
     // '.' found?
     if (nSeparator <= nLength) {
-        nSeparator = sMasterName.getLength();
         SAL_WARN("xmloff.text", "no field var name!");
         bReturn = false;
     }
