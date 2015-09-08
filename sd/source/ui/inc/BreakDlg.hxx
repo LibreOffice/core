@@ -69,11 +69,10 @@ private:
 
     Idle            aIdle;
     SvdProgressInfo *pProgrInfo;
-    Link<>          aLink;
     SfxProgress     *mpProgress;
 
     DECL_LINK_TYPED( CancelButtonHdl, Button*, void );
-    DECL_LINK( UpDate, void* );
+    DECL_LINK_TYPED( UpDate, void*, bool );
     DECL_LINK_TYPED( InitialUpdate, Idle*, void );
 };
 

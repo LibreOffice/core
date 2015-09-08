@@ -561,11 +561,9 @@ sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRange
 
 
 
-SvdProgressInfo::SvdProgressInfo( Link<> *_pLink )
+SvdProgressInfo::SvdProgressInfo( const Link<void*,bool>&_rLink )
 {
-    DBG_ASSERT(_pLink!=NULL,"SvdProgressInfo(): No Link stated!");
-
-    pLink = _pLink;
+    maLink = _rLink;
     nSumActionCount = 0;
     nSumCurAction   = 0;
 
@@ -592,7 +590,7 @@ bool SvdProgressInfo::ReportActions( sal_uIntPtr nAnzActions )
     if(nCurAction > nActionCount)
         nCurAction = nActionCount;
 
-    return pLink->Call(NULL) == 1L;
+    return maLink.Call(NULL);
 }
 
 bool SvdProgressInfo::ReportInserts( sal_uIntPtr nAnzInserts )
@@ -600,13 +598,13 @@ bool SvdProgressInfo::ReportInserts( sal_uIntPtr nAnzInserts )
     nSumCurAction += nAnzInserts;
     nCurInsert += nAnzInserts;
 
-    return pLink->Call(NULL) == 1L;
+    return maLink.Call(NULL);
 }
 
 bool SvdProgressInfo::ReportRescales( sal_uIntPtr nAnzRescales )
 {
     nSumCurAction += nAnzRescales;
-    return pLink->Call(NULL) == 1L;
+    return maLink.Call(NULL);
 }
 
 void SvdProgressInfo::SetActionCount( sal_uIntPtr _nActionCount )

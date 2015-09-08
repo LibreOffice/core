@@ -144,10 +144,10 @@ private:
     sal_uIntPtr nObjCount;      // Count of selected objects
     sal_uIntPtr nCurObj;        // Current object
 
-    Link<> *pLink;
+    Link<void*,bool>  maLink;
 
 public:
-    SvdProgressInfo( Link<> *_pLink );
+    SvdProgressInfo( const Link<void*,bool>& _pLink );
 
     void Init( sal_uIntPtr _nSumActionCount, sal_uIntPtr _nObjCount );
 

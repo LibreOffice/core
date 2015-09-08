@@ -45,7 +45,6 @@ BreakDlg::BreakDlg(
     sal_uLong nSumActionCount,
     sal_uLong nObjCount )
     : SfxModalDialog(pWindow, "BreakDialog", "modules/sdraw/ui/breakdialog.ui")
-    , aLink( LINK(this, BreakDlg, UpDate))
     , mpProgress( NULL )
 {
     get(m_pFiObjInfo, "metafiles");
@@ -57,7 +56,7 @@ BreakDlg::BreakDlg(
 
     mpProgress = new SfxProgress( pShell, SD_RESSTR(STR_BREAK_METAFILE), nSumActionCount*3 );
 
-    pProgrInfo = new SvdProgressInfo( &aLink );
+    pProgrInfo = new SvdProgressInfo( LINK(this, BreakDlg, UpDate) );
     // every action is editedt 3 times in DoImport()
     pProgrInfo->Init( nSumActionCount*3, nObjCount );
 
@@ -96,10 +95,10 @@ IMPL_LINK_NOARG_TYPED(BreakDlg, CancelButtonHdl, Button*, void)
  * Every following call should contain the finished actions since the
  * last call of UpDate.
  */
-IMPL_LINK( BreakDlg, UpDate, void*, nInit )
+IMPL_LINK_TYPED( BreakDlg, UpDate, void*, nInit, bool )
 {
     if(pProgrInfo == NULL)
-      return 1L;
+      return true;
 
     // update status bar or show a error message?
     if(nInit == reinterpret_cast<void*>(1L))
@@ -146,7 +145,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     }
 
     Application::Reschedule();
-    return( bCancel?0L:1L );
+    return bCancel;
 }
 
 /**
