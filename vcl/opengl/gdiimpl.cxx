@@ -1880,9 +1880,9 @@ void OpenGLSalGraphicsImpl::endPaint()
         mpContext->AcquireDefaultFramebuffer();
         glFlush();
         mpContext->swapBuffers();
-    }
 
-    CHECK_GL_ERROR();
+        CHECK_GL_ERROR();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
