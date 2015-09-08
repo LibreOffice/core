@@ -9,7 +9,6 @@
 
 #include "formulagroup.hxx"
 #include "formulagroupcl.hxx"
-#include "clkernelthread.hxx"
 #include "grouptokenconverter.hxx"
 #include "document.hxx"
 #include "formulacell.hxx"
@@ -4181,13 +4180,6 @@ public:
         mpKernel = pKernel;
     }
 
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-    void setUnmanagedKernel( DynamicKernel* pKernel )
-    {
-        mpKernel = pKernel;
-    }
-#endif
-
     CLInterpreterResult launchKernel()
     {
         if (!isValid())
@@ -4229,27 +4221,7 @@ CLInterpreterContext createCLInterpreterContext( const ScCalcConfig& rConfig,
 {
     CLInterpreterContext aCxt(xGroup->mnLength);
 
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-    if (rGroup.meKernelState == sc::OpenCLKernelCompilationScheduled ||
-        rGroup.meKernelState == sc::OpenCLKernelBinaryCreated)
-    {
-        if (rGroup.meKernelState == sc::OpenCLKernelCompilationScheduled)
-        {
-            ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.wait();
-            ScFormulaCellGroup::sxCompilationThread->maCompilationDoneCondition.reset();
-        }
-
-        // Kernel instance is managed by the formula group.
-        aCxt.setUnmanagedKernel(static_cast<DynamicKernel*>(xGroup->mpCompiledFormula));
-    }
-    else
-    {
-        assert(xGroup->meCalcState == sc::GroupCalcRunning);
-        aCxt.setManagedKernel(static_cast<DynamicKernel*>(DynamicKernel::create(rConfig, rCode, xGroup->mnLength)));
-    }
-#else
     aCxt.setManagedKernel(static_cast<DynamicKernel*>(DynamicKernel::create(rConfig, rCode, xGroup->mnLength)));
-#endif
 
     return aCxt;
 }
