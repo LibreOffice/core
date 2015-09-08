@@ -5434,6 +5434,9 @@ void Test::testFuncTableRef()
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
     m_pDoc->InsertTab(0, "Sheet1");
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
 
     {
         ScDBCollection* pDBs = m_pDoc->GetDBCollection();
@@ -5550,6 +5553,226 @@ void Test::testFuncTableRef()
         OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
         CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSumX),
                 aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    // Insert a column at column B to extend database range from column A,B to
+    // A,B,C. Use ScDocFunc so RefreshDirtyTableColumnNames() is called.
+    rDocFunc.InsertCells(ScRange(1,0,0,1,MAXROW,0), &aMark, INS_INSCOLS_BEFORE, false, true);
+
+    // Re-verify the named expression in SUM() formula, on row 4 that
+    // intersects, now starting at column E, still works.
+    m_pDoc->CalcAll();
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aNames); i < n; ++i)
+    {
+        OUString aFormula( "=SUM(" + OUString::createFromAscii( aNames[i].pName) + ")");
+        ScAddress aPos(4+i,3,0);
+        // For easier "debugability" have position and formula in assertion.
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aNames[i].pSum4),
+                aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    const char* pColumn2Formula = "=SUM(table[[#Data];[Column2]])";
+    {
+        // Populate "table" database range with empty header and data in newly
+        // inserted column, B1:B4 plus a table formula in B6. The empty header
+        // should result in the internal table column name "Column2" that is
+        // used in the formula.
+        const char* aData[][1] = {
+            { "" },
+            { "64" },
+            { "128" },
+            { "256" },
+            { "" },
+            { pColumn2Formula }
+        };
+        ScAddress aPos(1,0,0);
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT(aRange.aStart == aPos);
+    }
+
+    // Verify the formula result in B6 (64+128+256=448).
+    {
+        OUString aFormula( OUString::createFromAscii( pColumn2Formula));
+        ScAddress aPos(1,5,0);
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString("448"), aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    // Set header in column B. Use ScDocFunc to have table column names refreshed.
+    rDocFunc.SetStringCell(ScAddress(1,0,0), "NewHeader",true);
+    // Verify that formula adapted using the updated table column names.
+    if (!checkFormula(*m_pDoc, ScAddress(1,5,0), "SUM(table[[#Data];[NewHeader]])"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // Set header in column A to identical string. Internal table column name
+    // for B should get a "2" appended.
+    rDocFunc.SetStringCell(ScAddress(0,0,0), "NewHeader",true);
+    // Verify that formula adapted using the updated table column names.
+    if (!checkFormula(*m_pDoc, ScAddress(1,5,0), "SUM(table[[#Data];[NewHeader2]])"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // Set header in column B to empty string, effectively clearing the cell.
+    rDocFunc.SetStringCell(ScAddress(1,0,0), "",true);
+    // Verify that formula is still using the previous table column name.
+    if (!checkFormula(*m_pDoc, ScAddress(1,5,0), "SUM(table[[#Data];[NewHeader2]])"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // === header-less ===
+
+    {
+        ScDBCollection* pDBs = m_pDoc->GetDBCollection();
+        CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
+
+        // Insert "headerless" database range definition for E10:F12, without headers.
+        ScDBData* pData = new ScDBData( "hltable", 0, 4,9, 5,11, true, false);
+        bool bInserted = pDBs->getNamedDBs().insert(pData);
+        CPPUNIT_ASSERT_MESSAGE( "Failed to insert \"hltable\" database range.", bInserted);
+    }
+
+    {
+        // Populate "hltable" database range with data in E10:F12
+        const char* aData[][2] = {
+            { "1", "2" },
+            { "4", "8" },
+            { "16", "32" }
+        };
+        ScAddress aPos(4,9,0);
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT(aRange.aStart == aPos);
+    }
+
+    // Named expressions that use header-less Table structured references.
+    struct {
+        const char* pName;
+        const char* pExpr;
+        const char* pCounta; // expected result when used in row 10 (first data row) as argument to COUNTA()
+        const char* pSum3;   // expected result when used in row 11 (second data row) as argument to SUM().
+        const char* pSum4;   // expected result when used in row 12 (third data row) as argument to SUM().
+        const char* pSumX;   // expected result when used in row 13 (non-intersecting) as argument to SUM().
+    } aHlNames[] = {
+        { "hl_all",                          "hltable[[#All]]",                          "6", "63", "63", "63" },
+        { "hl_data_implicit",                "hltable[]",                                "6", "63", "63", "63" },
+        { "hl_data",                         "hltable[[#Data]]",                         "6", "63", "63", "63" },
+        { "hl_headers",                      "hltable[[#Headers]]",                      "1", "#REF!", "#REF!", "#REF!" },
+        { "hl_column1",                      "hltable[[Column1]]",                       "3", "21", "21", "21" },
+        { "hl_column2",                      "hltable[[Column2]]",                       "3", "42", "42", "42" },
+        { "hl_data_column1",                 "hltable[[#Data];[Column1]]",               "3", "21", "21", "21" },
+        { "hl_data_column2",                 "hltable[[#Data];[Column2]]",               "3", "42", "42", "42" },
+        { "hl_this_row",                     "hltable[[#This Row]]",                     "2", "12", "48", "#VALUE!" },
+        { "hl_this_row_column1",             "hltable[[#This Row];[Column1]]",           "1",  "4", "16", "#VALUE!" },
+        { "hl_this_row_column2",             "hltable[[#This Row];[Column2]]",           "1",  "8", "32", "#VALUE!" },
+        { "hl_this_row_range_column_1_to_2", "hltable[[#This Row];[Column1]:[Column2]]", "2", "12", "48", "#VALUE!" }
+    };
+
+    {
+        // Insert named expressions.
+        ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+        CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
+
+        for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+        {
+            // Choose base position that does not intersect with the database
+            // range definition to test later use of [#This Row] results in
+            // proper rows.
+            ScRangeData* pName = new ScRangeData(
+                    m_pDoc, OUString::createFromAscii(aHlNames[i].pName), OUString::createFromAscii(aHlNames[i].pExpr),
+                    ScAddress(6,12,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
+            bool bInserted = pGlobalNames->insert(pName);
+            CPPUNIT_ASSERT_MESSAGE(
+                    OString("Failed to insert named expression "+ OString(aHlNames[i].pName) +".").getStr(), bInserted);
+        }
+    }
+
+    // Use the named expressions in COUNTA() formulas, on row 10 that intersects.
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+    {
+        OUString aFormula( "=COUNTA(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
+        ScAddress aPos(7+i,9,0);
+        m_pDoc->SetString( aPos, aFormula);
+        // For easier "debugability" have position and formula in assertion.
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pCounta),
+                aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    // Use the named expressions in SUM() formulas, on row 11 that intersects.
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+    {
+        OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
+        ScAddress aPos(7+i,10,0);
+        m_pDoc->SetString( aPos, aFormula);
+        // For easier "debugability" have position and formula in assertion.
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSum3),
+                aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    // Use the named expressions in SUM() formulas, on row 12 that intersects.
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+    {
+        OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
+        ScAddress aPos(7+i,11,0);
+        m_pDoc->SetString( aPos, aFormula);
+        // For easier "debugability" have position and formula in assertion.
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSum4),
+                aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    // Use the named expressions in SUM() formulas, on row 13 that does not intersect.
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+    {
+        OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
+        ScAddress aPos(7+i,12,0);
+        m_pDoc->SetString( aPos, aFormula);
+        // For easier "debugability" have position and formula in assertion.
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSumX),
+                aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    // Insert a column at column F to extend database range from column E,F to
+    // E,F,G. Use ScDocFunc so RefreshDirtyTableColumnNames() is called.
+    rDocFunc.InsertCells(ScRange(5,0,0,5,MAXROW,0), &aMark, INS_INSCOLS_BEFORE, false, true);
+
+    // Re-verify the named expression in SUM() formula, on row 12 that
+    // intersects, now starting at column I, still works.
+    m_pDoc->CalcAll();
+    for (size_t i = 0, n = SAL_N_ELEMENTS(aHlNames); i < n; ++i)
+    {
+        OUString aFormula( "=SUM(" + OUString::createFromAscii( aHlNames[i].pName) + ")");
+        ScAddress aPos(8+i,11,0);
+        // For easier "debugability" have position and formula in assertion.
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString::createFromAscii( aHlNames[i].pSum4),
+                aPrefix + m_pDoc->GetString( aPos));
+    }
+
+    const char* pColumn3Formula = "=SUM(hltable[[#Data];[Column3]])";
+    {
+        // Populate "hltable" database range with data in newly inserted
+        // column, F10:F12 plus a table formula in F14. The new header should
+        // result in the internal table column name "Column3" that is used in
+        // the formula.
+        const char* aData[][1] = {
+            { "64" },
+            { "128" },
+            { "256" },
+            { "" },
+            { pColumn3Formula }
+        };
+        ScAddress aPos(5,9,0);
+        ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT(aRange.aStart == aPos);
+    }
+
+    // Verify the formula result in F14 (64+128+256=448).
+    {
+        OUString aFormula( OUString::createFromAscii( pColumn3Formula));
+        ScAddress aPos(5,13,0);
+        OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
+        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString("448"), aPrefix + m_pDoc->GetString( aPos));
     }
 
     m_pDoc->DeleteTab(0);
