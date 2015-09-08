@@ -43,6 +43,7 @@ void CommonFunctorsTest::testAnyToString()
     aInput.push_back(css::uno::makeAny(15.0));
     aInput.push_back(css::uno::makeAny(25.234));
     aInput.push_back(css::uno::makeAny(123.456));
+    aInput.push_back(css::uno::makeAny(0.123450));
 
     std::vector<OUString> aOutput;
     std::transform(aInput.begin(), aInput.end(),
@@ -54,6 +55,7 @@ void CommonFunctorsTest::testAnyToString()
     CPPUNIT_ASSERT_EQUAL(OUString("15"), aOutput[3]);
     CPPUNIT_ASSERT_EQUAL(OUString("25.234"), aOutput[4]);
     CPPUNIT_ASSERT_EQUAL(OUString("123.456"), aOutput[5]);
+    CPPUNIT_ASSERT_EQUAL(OUString("0.12345"), aOutput[6]);
 }
 
 void CommonFunctorsTest::testDoubleToString()
@@ -65,6 +67,7 @@ void CommonFunctorsTest::testDoubleToString()
     aInput.push_back(15.0);
     aInput.push_back(25.234);
     aInput.push_back(123.456);
+    aInput.push_back(0.123450);
 
     std::vector<OUString> aOutput;
     std::transform(aInput.begin(), aInput.end(),
@@ -76,6 +79,7 @@ void CommonFunctorsTest::testDoubleToString()
     CPPUNIT_ASSERT_EQUAL(OUString("15"), aOutput[3]);
     CPPUNIT_ASSERT_EQUAL(OUString("25.234"), aOutput[4]);
     CPPUNIT_ASSERT_EQUAL(OUString("123.456"), aOutput[5]);
+    CPPUNIT_ASSERT_EQUAL(OUString("0.12345"), aOutput[6]);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CommonFunctorsTest);
