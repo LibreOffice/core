@@ -406,7 +406,7 @@ namespace pcr
         long            FindPos(long nSinglePos);
 
     private:
-        DECL_LINK( ReturnHdl, OMultilineFloatingEdit* );
+        DECL_LINK_TYPED( ReturnHdl, FloatingWindow*, void );
         DECL_LINK_TYPED( DropDownHdl, Button*, void );
 
         bool ShowDropDown( bool bShow );

@@ -260,7 +260,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, bool bMBDow
     }
 }
 
-IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd)
+IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
 {
     // "this" will be deleted before the end of this method!
     Menu* pM = pMenu;
@@ -285,8 +285,6 @@ IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd)
 
     if ( pM )
         pM->pStartedFrom = 0;
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, AutoScroll, Timer *, void)

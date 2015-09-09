@@ -888,7 +888,7 @@ void SwNavigationPI::SetPopupWindow( SfxPopupWindow* pWindow )
     pPopupWindow->SetDeleteLink_Impl( LINK( this, SwNavigationPI, ClosePopupWindow ));
 }
 
-IMPL_LINK_NOARG(SwNavigationPI, PopupModeEndHdl)
+IMPL_LINK_NOARG_TYPED(SwNavigationPI, PopupModeEndHdl, FloatingWindow*, void)
 {
     if ( pPopupWindow->IsVisible() )
     {
@@ -904,8 +904,6 @@ IMPL_LINK_NOARG(SwNavigationPI, PopupModeEndHdl)
         // will destroy itself.
         pPopupWindow = 0;
     }
-
-    return 1;
 }
 
 IMPL_LINK_TYPED( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow, void )

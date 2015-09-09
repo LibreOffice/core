@@ -118,7 +118,7 @@ private:
                     mbStartDockingEnabled:1,
                     mbLocked:1;
 
-                    DECL_LINK( PopupModeEnd, void* );
+                    DECL_LINK_TYPED( PopupModeEnd, FloatingWindow*, void );
     void            ImplEnableStartDocking( bool bEnable = true )  { mbStartDockingEnabled = bEnable; }
     bool            ImplStartDockingEnabled()               { return mbStartDockingEnabled; }
 

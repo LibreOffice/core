@@ -110,7 +110,7 @@ class SwNavigationPI : public vcl::Window,
     DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
     DECL_LINK_TYPED( ChangePageHdl, Idle*, void );
     DECL_LINK( PageEditModifyHdl, void* );
-    DECL_LINK( PopupModeEndHdl, void * );
+    DECL_LINK_TYPED( PopupModeEndHdl, FloatingWindow*, void );
     DECL_LINK_TYPED( ClosePopupWindow, SfxPopupWindow *, void );
     void UsePage(SwWrtShell *);
 

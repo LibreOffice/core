@@ -1158,7 +1158,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     }
 }
 
-IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
+IMPL_LINK_NOARG_TYPED(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
 {
     GetWindow()->Show( false, ShowFlags::NoFocusChange );
 
@@ -1185,8 +1185,6 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
 
     // call handler - which will destroy the window and thus the wrapper as well !
     GetWindow()->CallEventListeners( VCLEVENT_WINDOW_ENDPOPUPMODE, &aData );
-
-    return 0;
 }
 
 bool ImplDockingWindowWrapper::IsInPopupMode() const

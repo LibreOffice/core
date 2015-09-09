@@ -907,10 +907,9 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
     return res;
 }
 
-IMPL_LINK_NOARG(SwView, FieldPopupModeEndHdl)
+IMPL_LINK_NOARG_TYPED(SwView, FieldPopupModeEndHdl, FloatingWindow*, void)
 {
     m_pFieldPopup.disposeAndClear();
-    return 0;
 }
 
 void SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )

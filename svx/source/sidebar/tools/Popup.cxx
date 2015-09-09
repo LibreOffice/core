@@ -120,7 +120,7 @@ void Popup::CreateContainerAndControl()
     mxControl.set(maControlCreator(mxContainer.get()));
 }
 
-IMPL_LINK_NOARG(Popup, PopupModeEndHandler)
+IMPL_LINK_NOARG_TYPED(Popup, PopupModeEndHandler, FloatingWindow*, void)
 {
     if (maPopupModeEndCallback)
         maPopupModeEndCallback();
@@ -128,8 +128,6 @@ IMPL_LINK_NOARG(Popup, PopupModeEndHandler)
     // Popup control is no longer needed and can be destroyed.
     mxControl.disposeAndClear();
     mxContainer.disposeAndClear();
-
-    return 0;
 }
 
 

@@ -318,7 +318,7 @@ void ListBox::ImplClickButtonHandler( Control* )
     }
 }
 
-IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl)
+IMPL_LINK_NOARG_TYPED(ListBox, ImplPopupModeEndHdl, FloatingWindow*, void)
 {
     if( mpFloatWin->IsPopupModeCanceled() )
     {
@@ -333,7 +333,7 @@ IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl)
             ImplAddDel( &aCheckDelete );
             Select();
             if ( aCheckDelete.IsDead() )
-                return 0;
+                return;
             ImplRemoveDel( &aCheckDelete );
 
             mpImplLB->SetTravelSelect( bTravelSelect );
@@ -348,7 +348,6 @@ IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl)
 
     mpBtn->SetPressed( false );
     CallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
-    return 0;
 }
 
 void ListBox::ToggleDropDown()
