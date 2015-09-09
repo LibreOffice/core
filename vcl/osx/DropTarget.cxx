@@ -203,8 +203,11 @@ NSDragOperation DropTarget::draggingEntered(id sender)
         NSPoint mouseLoc = [NSEvent mouseLocation];
 
         id wnd = [mView window];
+#if MACOSX_SDK_VERSION < 1070
+        NSPoint dragLocation = [mView convertPoint:[wnd convertScreenToBase:mouseLoc] fromView:nil];
+#else
         NSPoint dragLocation = [mView convertPoint:[wnd convertRectFromScreen:NSMakeRect(mouseLoc.x, mouseLoc.y, 1, 1)].origin fromView:nil];
-
+#endif
         CocoaToVCL(dragLocation, bounds);
 
         sal_Int32 posX = static_cast<sal_Int32>(dragLocation.x);
@@ -244,8 +247,11 @@ NSDragOperation DropTarget::draggingUpdated(id sender)
         NSPoint mouseLoc = [NSEvent mouseLocation];
 
         id wnd = [mView window];
+#if MACOSX_SDK_VERSION < 1070
+        NSPoint dragLocation = [mView convertPoint:[wnd convertScreenToBase:mouseLoc] fromView:nil];
+#else
         NSPoint dragLocation = [mView convertPoint:[wnd convertRectFromScreen:NSMakeRect(mouseLoc.x, mouseLoc.y, 1, 1)].origin fromView:nil];
-
+#endif
         CocoaToVCL(dragLocation, bounds);
 
         sal_Int32 posX = static_cast<sal_Int32>(dragLocation.x);
@@ -318,8 +324,11 @@ BOOL DropTarget::performDragOperation()
         NSPoint mouseLoc = [NSEvent mouseLocation];
 
         id wnd = [mView window];
+#if MACOSX_SDK_VERSION < 1070
+        NSPoint dragLocation = [mView convertPoint:[wnd convertScreenToBase:mouseLoc] fromView:nil];
+#else
         NSPoint dragLocation = [mView convertPoint:[wnd convertRectFromScreen:NSMakeRect(mouseLoc.x, mouseLoc.y, 1, 1)].origin fromView:nil];
-
+#endif
         CocoaToVCL(dragLocation, bounds);
 
         sal_Int32 posX = static_cast<sal_Int32>(dragLocation.x);
