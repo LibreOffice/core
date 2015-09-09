@@ -206,7 +206,6 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     DBG_ASSERT( pSet, "A SfxItemSet has to be provided as argument!" );
     bool bFirstToken = true;
     bool bContinue = true;
-    sal_uInt16 nStyleNo = 0;        // default
     FontUnderline eUnderline;
     FontUnderline eOverline;
     FontEmphasisMark eEmphasis;
@@ -222,7 +221,6 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
         {
         case RTF_PARD:
             RTFPardPlain( true, &pSet );
-            nStyleNo = 0;
             bPardTokenRead = true;
             break;
 
@@ -287,7 +285,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 }
                 else
                 {
-                    nStyleNo = -1 == nTokenValue ? 0 : sal_uInt16(nTokenValue);
+                    sal_uInt16 nStyleNo = -1 == nTokenValue ? 0 : sal_uInt16(nTokenValue);
                     /* setze am akt. auf dem AttrStack stehenden Style die
                        I sit on akt. which is on the immediate style AttrStack */
                     // StyleNummer
