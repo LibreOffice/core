@@ -620,11 +620,15 @@ void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameC
 }
 
 // section 2.3.4.3 Module Stream
-void exportModuleStream(SvStream& rStrm, const OUString& aSourceCode, const OUString& aElementName)
+void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUString& aElementName)
 {
     SvMemoryStream aModuleStream(4096, 4096);
 
     exportString(aModuleStream, "Attribute VB_Name = \"" + aElementName + "\"\r\n");
+    OUString aSourceCode = rSourceCode.replaceFirst("Option VBASupport 1\n", "");
+    sal_Int32 nPos = aSourceCode.indexOf("Rem Attribute VBA_ModuleType=");
+    sal_Int32 nEndPos = aSourceCode.indexOf("\n", nPos);
+    aSourceCode = aSourceCode.replaceAt(nPos, nEndPos - nPos, "");
     exportString(aModuleStream, aSourceCode);
     aModuleStream.Seek(0);
 
