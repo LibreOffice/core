@@ -132,7 +132,7 @@ public:
 
 // Implementation XActiveDataSink
 
-class OActiveDataSink : public cppu::WeakImplHelper1< XActiveDataSink >
+class OActiveDataSink : public cppu::WeakImplHelper< XActiveDataSink >
 {
     Reference< XInputStream > mxStream;
 
@@ -147,7 +147,7 @@ public:
 
 // Implementation XActiveDataStreamer
 
-class OActiveDataStreamer : public cppu::WeakImplHelper1< XActiveDataStreamer >
+class OActiveDataStreamer : public cppu::WeakImplHelper< XActiveDataStreamer >
 {
     Reference< XStream > mxStream;
 
@@ -162,7 +162,7 @@ public:
 
 // Implementation XCommandEnvironment
 
-class OCommandEnvironment : public cppu::WeakImplHelper1< XCommandEnvironment >
+class OCommandEnvironment : public cppu::WeakImplHelper< XCommandEnvironment >
 {
     Reference< XInteractionHandler > mxInteraction;
 

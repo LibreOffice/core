@@ -28,12 +28,12 @@
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace ftp {
 
-    class XInteractionApproveImpl : public cppu::WeakImplHelper1 <
+    class XInteractionApproveImpl : public cppu::WeakImplHelper <
         css::task::XInteractionApprove >
     {
     public:
@@ -54,7 +54,7 @@ namespace ftp {
 
 
 
-    class XInteractionDisapproveImpl : public cppu::WeakImplHelper1 <
+    class XInteractionDisapproveImpl : public cppu::WeakImplHelper <
         css::task::XInteractionDisapprove >
     {
     public:
@@ -71,7 +71,7 @@ namespace ftp {
 
 
 
-    class XInteractionRequestImpl : public cppu::WeakImplHelper1<
+    class XInteractionRequestImpl : public cppu::WeakImplHelper<
         css::task::XInteractionRequest >
     {
     public:

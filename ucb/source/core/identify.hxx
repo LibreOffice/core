@@ -22,10 +22,10 @@
 
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
-class ContentIdentifier : public cppu::WeakImplHelper1 <
+class ContentIdentifier : public cppu::WeakImplHelper <
     css::ucb::XContentIdentifier >
 {
 public:

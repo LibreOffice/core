@@ -27,8 +27,7 @@
 #include <com/sun/star/ucb/ListenerAlreadySetException.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "sortresult.hxx"
 
 
@@ -41,7 +40,7 @@ namespace cppu {
 
 class SortedDynamicResultSetListener;
 
-class SortedDynamicResultSet: public cppu::WeakImplHelper2 <
+class SortedDynamicResultSet: public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::ucb::XDynamicResultSet >
 {
@@ -133,7 +132,7 @@ public:
         throw( css::uno::RuntimeException );
 };
 
-class SortedDynamicResultSetListener: public cppu::WeakImplHelper1 <
+class SortedDynamicResultSetListener: public cppu::WeakImplHelper <
     css::ucb::XDynamicResultSetListener >
 {
     SortedDynamicResultSet  *mpOwner;
@@ -161,7 +160,7 @@ public:
 
 
 
-class SortedDynamicResultSetFactory: public cppu::WeakImplHelper2 <
+class SortedDynamicResultSetFactory: public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::ucb::XSortedDynamicResultSetFactory >
 {

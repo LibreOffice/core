@@ -22,13 +22,13 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace fileaccess {
 
     class shell;
 
-    class XRow_impl: public cppu::WeakImplHelper1<
+    class XRow_impl: public cppu::WeakImplHelper<
         css::sdbc::XRow >
     {
     public:

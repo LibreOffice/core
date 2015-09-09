@@ -19,7 +19,7 @@
 
 #include "webdavresponseparser.hxx"
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <comphelper/processfactory.hxx>

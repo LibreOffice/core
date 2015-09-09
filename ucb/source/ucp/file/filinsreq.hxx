@@ -26,7 +26,7 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyName.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace fileaccess {
@@ -35,7 +35,7 @@ namespace fileaccess {
     class shell;
 
 
-class XInteractionSupplyNameImpl : public cppu::WeakImplHelper1<
+class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
     css::ucb::XInteractionSupplyName >
     {
     public:
@@ -75,7 +75,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper1<
 
 
 
-    class XInteractionAbortImpl : public cppu::WeakImplHelper1<
+    class XInteractionAbortImpl : public cppu::WeakImplHelper<
         css::task::XInteractionAbort >
     {
     public:
@@ -104,7 +104,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper1<
 
 
 
-    class XInteractionRequestImpl : public cppu::WeakImplHelper1<
+    class XInteractionRequestImpl : public cppu::WeakImplHelper<
         css::task::XInteractionRequest >
     {
     public:

@@ -25,7 +25,7 @@
 #include <rtl/ref.hxx>
 #include "osl/mutex.hxx"
 
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include "com/sun/star/document/XDocumentEventListener.hpp"
 #include "com/sun/star/embed/XStorage.hpp"
@@ -83,10 +83,10 @@ namespace tdoc_ucp {
 
 
     class OfficeDocumentsManager :
-        public cppu::WeakImplHelper1< com::sun::star::document::XDocumentEventListener >
+        public cppu::WeakImplHelper< com::sun::star::document::XDocumentEventListener >
     {
         class OfficeDocumentsCloseListener :
-           public cppu::WeakImplHelper1< com::sun::star::util::XCloseListener >
+           public cppu::WeakImplHelper< com::sun::star::util::XCloseListener >
 
         {
         public:

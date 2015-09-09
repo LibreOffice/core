@@ -35,7 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ucb/XFileIdentifierConverter.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 // FileProvider
 
@@ -48,7 +48,7 @@ namespace fileaccess {
     class BaseContent;
     class shell;
 
-    class FileProvider: public cppu::WeakImplHelper6 <
+    class FileProvider: public cppu::WeakImplHelper <
         css::lang::XServiceInfo,
         css::lang::XInitialization,
         css::ucb::XContentProvider,

@@ -26,7 +26,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
@@ -38,7 +38,7 @@
 
 
 
-class UcbPropertiesManager : public cppu::WeakImplHelper2 <
+class UcbPropertiesManager : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::beans::XPropertySetInfo >
 {

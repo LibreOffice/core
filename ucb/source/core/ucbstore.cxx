@@ -37,7 +37,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "ucbstore.hxx"
 
 using namespace com::sun::star::beans;
@@ -109,7 +109,7 @@ typedef std::unordered_map
 PropertySetMap_Impl;
 
 // class PropertySetInfo_Impl
-class PropertySetInfo_Impl : public cppu::WeakImplHelper1 < XPropertySetInfo >
+class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
 {
     Reference< XComponentContext >    m_xContext;
     Sequence< Property >*             m_pProps;

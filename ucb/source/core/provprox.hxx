@@ -30,7 +30,7 @@
 #include <com/sun/star/ucb/XContentProviderSupplier.hpp>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 
@@ -39,7 +39,7 @@
 
 
 
-class UcbContentProviderProxyFactory : public cppu::WeakImplHelper2 <
+class UcbContentProviderProxyFactory : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::ucb::XContentProviderFactory >
 {

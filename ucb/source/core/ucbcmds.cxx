@@ -19,7 +19,7 @@
 
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
@@ -94,7 +94,7 @@ struct TransferCommandContext
 
 
 class InteractionHandlerProxy :
-    public cppu::WeakImplHelper1< task::XInteractionHandler >
+    public cppu::WeakImplHelper< task::XInteractionHandler >
 {
     uno::Reference< task::XInteractionHandler > m_xOrig;
 
@@ -167,7 +167,7 @@ void SAL_CALL InteractionHandlerProxy::handle(
 
 
 
-class ActiveDataSink : public cppu::WeakImplHelper1< io::XActiveDataSink >
+class ActiveDataSink : public cppu::WeakImplHelper< io::XActiveDataSink >
 {
     uno::Reference< io::XInputStream > m_xStream;
 
@@ -204,7 +204,7 @@ uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
 
 
 class CommandProcessorInfo :
-    public cppu::WeakImplHelper1< ucb::XCommandInfo >
+    public cppu::WeakImplHelper< ucb::XCommandInfo >
 {
     uno::Sequence< ucb::CommandInfo > * m_pInfo;
 

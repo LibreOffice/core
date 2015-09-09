@@ -26,7 +26,7 @@
 #include <com/sun/star/ucb/ListActionType.hpp>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
@@ -92,7 +92,7 @@ struct SortListData
 
 
 
-class SRSPropertySetInfo : public cppu::WeakImplHelper1 <
+class SRSPropertySetInfo : public cppu::WeakImplHelper <
     XPropertySetInfo >
 {
     Property    maProps[2];
