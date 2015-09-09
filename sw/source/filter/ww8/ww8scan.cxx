@@ -6740,7 +6740,7 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop )
     nIdxOffset = 0;
 
      /*
-      cmc 23/02/2000: This dop.grpfIhdt has a bit set for each special
+      This dop.grpfIhdt has a bit set for each special
       footnote *and endnote!!* separator,continuation separator, and
       continuation notice entry, the documentation does not mention the
       endnote separators, the documentation also gets the index numbers

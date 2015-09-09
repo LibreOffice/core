@@ -2713,7 +2713,7 @@ void WW8Export::WriteFkpPlcUsw()
          escher work from then on. Tricky to track down, some sort of late
          binding trickery in MS where solely for first time initialization
          the existence of an ObjectPool dir is necessary for triggering
-         some magic. cmc
+         some magic.
         */
         // avoid memory leak #i120098#, the unnamed obj will be released in destructor.
         xEscherStg = GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool),

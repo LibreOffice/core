@@ -1016,7 +1016,7 @@ void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
     // 2pages in 1sheet hackery ?
     // #i31806# but only swap if 2page in 1sheet is enabled.
     // its not clear if dmOrientPage is the correct member to
-    // decide on this but I am not about to 2nd guess cmc.
+    // decide on this.
     if(mrReader.m_pWDop->doptypography.f2on1 &&
             aNewSection.maSep.dmOrientPage == 2)
         std::swap(aNewSection.maSep.dxaLeft, aNewSection.maSep.dxaRight);
@@ -3435,7 +3435,7 @@ bool SwWW8ImplReader::GetFontParams( sal_uInt16 nFCode, FontFamily& reFamily,
     if( 77 == pF->chs )             // Mac font in Mac Charset or
         reCharSet = m_eTextCharSet;   // translated to ANSI charset
     else
-    { // patch from cmc for #i52786#
+    {
         // #i52786#, for word 67 we'll assume that ANSI is basically invalid,
         // might be true for (above) mac as well, but would need a mac example
         // that exercises this to be sure

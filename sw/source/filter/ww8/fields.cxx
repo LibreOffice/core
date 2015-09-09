@@ -132,7 +132,7 @@ namespace ww
         size_t nIndex = static_cast<size_t>(eIndex);
         if (nIndex >= sizeof(aFieldNames) / sizeof(aFieldNames[0]))
             eIndex = eNONE;
-        OSL_ENSURE(eIndex != eNONE, "Unknown WinWord Field, let cmc know");
+        OSL_ENSURE(eIndex != eNONE, "Unknown WinWord Field");
         return aFieldNames[eIndex];
     }
 }

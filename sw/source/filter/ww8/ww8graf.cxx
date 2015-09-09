@@ -1338,7 +1338,7 @@ SdrObject *SwWW8ImplReader::ReadGroup(WW8_DPHEAD* pHd, SfxAllItemSet &rSet)
 
 SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
 {
-    // cmc: This whole archaic word 6 graphic import can probably be refactored
+    // This whole archaic word 6 graphic import can probably be refactored
     // into an object hierarachy with a little effort.
     SdrObject *pRet=0;
     WW8_DPHEAD aHd;                         // Lese Draw-Primitive-Header
@@ -3112,8 +3112,8 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
         m_pMSDffManager = new SwMSDffManager(*this, m_bSkipImages);
         m_pMSDffManager->SetModel(m_pDrawModel, 1440);
         /*
-         Now the dff manager always needs a controls // converter as well, but a
-         control converter may still exist // without a dffmanager. cmc
+         Now the dff manager always needs a controls converter as well, but a
+         control converter may still exist without a dffmanager.
         */
         m_pFormImpl = new SwMSConvertControls(m_pDocShell, m_pPaM);
 

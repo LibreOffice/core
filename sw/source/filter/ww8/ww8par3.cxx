@@ -89,7 +89,7 @@ using namespace sw::mark;
 
 //            UNO-Controls
 
-//cmc, OCX i.e. word 97 form controls
+// OCX i.e. word 97 form controls
 eF_ResT SwWW8ImplReader::Read_F_OCX( WW8FieldDesc*, OUString& )
 {
     if( m_bObj && m_nPicLocFc )
@@ -2252,8 +2252,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         sal_uInt16 cbExtra = 0;
         pDataStream->ReadUInt16( cbExtra );
 
-        OSL_ENSURE(bAllOk,
-            "Unknown formfield dropdown list structure. Report to cmc");
+        OSL_ENSURE(bAllOk, "Unknown formfield dropdown list structure");
         if (!bAllOk)    //Not as expected, don't risk it at all.
             nNoStrings = 0;
         const size_t nMinRecordSize = sizeof(sal_uInt16);

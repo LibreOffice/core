@@ -554,8 +554,6 @@ sal_uInt32 SwMSDffManager::GetFilterFlags()
  * I would like to override the default OLE importing to add a test
  * and conversion of OCX controls from their native OLE type into our
  * native nonOLE Form Control Objects.
- *
- * cmc
  */
 // #i32596# - consider new parameter <_nCalledByGroup>
 SdrObject* SwMSDffManager::ImportOLE( long nOLEId,
@@ -5120,7 +5118,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     }
     else // ordinary case
     {
-        if (m_bNewDoc && m_pStg && !pGloss) /*meaningless for a glossary, cmc*/
+        if (m_bNewDoc && m_pStg && !pGloss) /*meaningless for a glossary */
         {
             m_pDocShell->SetIsTemplate( m_pWwFib->fDot ); // point at tgc record
             uno::Reference<document::XDocumentPropertiesSupplier> const

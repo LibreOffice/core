@@ -869,8 +869,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             }
             break;
         default:
-            OSL_ENSURE(false,
-           "Some inline export not implemented, remind cmc before we ship :-)");
+            OSL_ENSURE(false, "Some inline export not implemented");
             break;
     }
 
