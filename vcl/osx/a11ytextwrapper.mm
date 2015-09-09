@@ -270,7 +270,7 @@ using namespace ::com::sun::star::uno;
     NSAttributedString * attrString = (NSAttributedString *) [ AquaA11yTextWrapper attributedStringForRangeAttributeForElement: wrapper forParameter: range ];
     if ( attrString != nil ) {
         @try {
-            rtfData = [ attrString RTFFromRange: [ range rangeValue ] documentAttributes: @{NSDocumentTypeDocumentAttribute : NSRTFTextDocumentType} ];
+            rtfData = [ attrString RTFFromRange: [ range rangeValue ] documentAttributes: [ NSDictionary dictionaryWithObjectsAndKeys: NSRTFTextDocumentType, NSDocumentTypeDocumentAttribute, nil ] ];
         } @catch ( NSException * e) {
             // empty
         }

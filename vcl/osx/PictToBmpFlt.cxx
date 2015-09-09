@@ -39,7 +39,7 @@ bool ImageToPNG( css::uno::Sequence<sal_Int8>& rImgData,
     if( !pRep)
         return false;
 
-    NSData* pOut = [pRep representationUsingType: NSPNGFileType properties: @{ }];
+    NSData* pOut = [pRep representationUsingType: NSPNGFileType properties: [ NSDictionary dictionary ]];
     if( !pOut)
         return false;
 
@@ -62,7 +62,7 @@ bool PNGToImage( css::uno::Sequence<sal_Int8>& rPngData,
     if( !pRep)
         return false;
 
-    NSData* pOut = [pRep representationUsingType: eOutFormat properties: @{ }];
+    NSData* pOut = [pRep representationUsingType: eOutFormat properties: [ NSDictionary dictionary ]];
     if( !pOut)
         return false;
 
