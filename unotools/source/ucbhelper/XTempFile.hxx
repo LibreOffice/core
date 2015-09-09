@@ -27,14 +27,14 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <osl/mutex.hxx>
 
 class SvStream;
 namespace utl { class TempFile; }
 
-typedef  ::cppu::WeakImplHelper5<   ::com::sun::star::io::XTempFile
+typedef  ::cppu::WeakImplHelper<   ::com::sun::star::io::XTempFile
                                     ,   ::com::sun::star::io::XInputStream
                                                   , ::com::sun::star::io::XOutputStream
                                                   , ::com::sun::star::io::XTruncate
