@@ -78,7 +78,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         g_signal_connect( G_OBJECT(m_pSocket), "destroy", G_CALLBACK(signalDestroy), this );
 
         // #i59255# necessary due to sync effects with java child windows
-        pParent->Sync();
+        pParent->Flush();
     }
 }
 

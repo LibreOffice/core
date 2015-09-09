@@ -123,7 +123,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
         SolarMutexGuard aGuard;
 
         mpProgress->SetDirectory( rStartURL );
-        mpProgress->Sync();
+        mpProgress->Flush();
     }
 
     try
@@ -329,7 +329,7 @@ void TakeThread::execute()
 
             mpProgress->SetFile( aURL );
             pStatusProgress->Update( i, nEntries - 1 );
-            mpProgress->Sync();
+            mpProgress->Flush();
             pThm->InsertURL( aURL );
         }
     }
@@ -521,13 +521,11 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
         Application::Reschedule();
 
     Flush();
-    Sync();
 
     if( pURL )
     {
         m_pFtActualizeFile->SetText( GetReducedString( *pURL, 30 ) );
         m_pFtActualizeFile->Flush();
-        m_pFtActualizeFile->Sync();
     }
 
     return 0;

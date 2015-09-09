@@ -904,18 +904,6 @@ void AquaSalFrame::Flush( const Rectangle& rRect )
     }
 }
 
-void AquaSalFrame::Sync()
-{
-    if( mbGraphics && mpGraphics && mpNSView && mbShown )
-    {
-        // #i113170# may not be the main thread if called from UNO API
-        SalData::ensureThreadAutoreleasePool();
-
-        [mpNSView setNeedsDisplay: YES];
-        [mpNSView display];
-    }
-}
-
 void AquaSalFrame::SetInputContext( SalInputContext* pContext )
 {
     if (!pContext)

@@ -2203,11 +2203,6 @@ void WinSalFrame::Flush()
     GdiFlush();
 }
 
-void WinSalFrame::Sync()
-{
-    GdiFlush();
-}
-
 static void ImplSalFrameSetInputContext( HWND hWnd, const SalInputContext* pContext )
 {
     WinSalFrame*   pFrame = GetWindowPtr( hWnd );
