@@ -62,13 +62,11 @@
 
 #define DEBUG_XL_ENCRYPTION 0
 
-using ::com::sun::star::embed::XStorage;
 using ::com::sun::star::lang::XSingleServiceFactory;
 using ::com::sun::star::registry::InvalidRegistryException;
 using ::com::sun::star::registry::XRegistryKey;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XInterface;
-using ::utl::OStreamWrapper;
 using ::std::vector;
 
 using namespace com::sun::star;
