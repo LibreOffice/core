@@ -60,7 +60,7 @@ private:
     DECL_DLLPRIVATE_LINK(  ImplCancelHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplDoubleClickHdl, void* );
     DECL_DLLPRIVATE_LINK_TYPED( ImplPopupModeEndHdl, FloatingWindow*, void );
-    DECL_DLLPRIVATE_LINK(  ImplSelectionChangedHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED(  ImplSelectionChangedHdl, sal_Int32, void );
     DECL_DLLPRIVATE_LINK(  ImplFocusHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplListItemSelectHdl, void* );
 

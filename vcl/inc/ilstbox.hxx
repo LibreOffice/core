@@ -95,7 +95,7 @@ private:
     sal_Int32       mnMRUCount;
     sal_Int32       mnMaxMRUCount;
 
-    Link<>          maSelectionChangedHdl;
+    Link<sal_Int32,void> maSelectionChangedHdl;
     bool            mbCallSelectionChangedHdl;
     boost::ptr_vector<ImplEntryType> maEntries;
 
@@ -154,7 +154,7 @@ public:
     void            SetSelectionAnchor( sal_Int32  nPos )   { mnSelectionAnchor = nPos; }
     sal_Int32       GetSelectionAnchor() const { return mnSelectionAnchor; }
 
-    void            SetSelectionChangedHdl( const Link<>& rLnk ) { maSelectionChangedHdl = rLnk; }
+    void            SetSelectionChangedHdl( const Link<sal_Int32,void>& rLnk ) { maSelectionChangedHdl = rLnk; }
     void            SetCallSelectionChangedHdl( bool bCall )    { mbCallSelectionChangedHdl = bCall; }
 
     void            SetMRUCount( sal_Int32  n ) { mnMRUCount = n; }
@@ -474,13 +474,13 @@ public:
 
     void            SetFocusHdl( const Link<>& rLink )  { maLBWindow->SetFocusHdl( rLink ); }
     void            SetListItemSelectHdl( const Link<>& rLink ) { maLBWindow->SetListItemSelectHdl( rLink ); }
-    void            SetSelectionChangedHdl( const Link<>& rLnk ) { maLBWindow->GetEntryList()->SetSelectionChangedHdl( rLnk ); }
+    void            SetSelectionChangedHdl( const Link<sal_Int32,void>& rLnk ) { maLBWindow->GetEntryList()->SetSelectionChangedHdl( rLnk ); }
     void            SetCallSelectionChangedHdl( bool bCall )    { maLBWindow->GetEntryList()->SetCallSelectionChangedHdl( bCall ); }
     bool            IsSelectionChanged() const                  { return maLBWindow->IsSelectionChanged(); }
     sal_uInt16      GetSelectModifier() const                   { return maLBWindow->GetSelectModifier(); }
 
     void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep );
-    OUString   GetMRUEntries( sal_Unicode cSep ) const;
+    OUString        GetMRUEntries( sal_Unicode cSep ) const;
     void            SetMaxMRUCount( sal_Int32  n )                  { maLBWindow->GetEntryList()->SetMaxMRUCount( n ); }
     sal_Int32       GetMaxMRUCount() const                      { return maLBWindow->GetEntryList()->GetMaxMRUCount(); }
     sal_uInt16      GetDisplayLineCount() const

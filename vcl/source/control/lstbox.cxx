@@ -263,11 +263,10 @@ IMPL_LINK_NOARG(ListBox, ImplCancelHdl)
     return 1;
 }
 
-IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
+IMPL_LINK_TYPED( ListBox, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
 {
     if ( !mpImplLB->IsTrackingSelect() )
     {
-        sal_Int32 nChanged = (sal_Int32)reinterpret_cast<sal_uLong>(n);
         const ImplEntryList* pEntryList = mpImplLB->GetEntryList();
         if ( pEntryList->IsEntryPosSelected( nChanged ) )
         {
@@ -291,7 +290,6 @@ IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
         }
         mpImplWin->Invalidate();
     }
-    return 1;
 }
 
 IMPL_LINK_NOARG(ListBox, ImplDoubleClickHdl)

@@ -83,7 +83,7 @@ struct ComboBox::Impl
     DECL_DLLPRIVATE_LINK( ImplCancelHdl, void* );
     DECL_DLLPRIVATE_LINK( ImplDoubleClickHdl, void* );
     DECL_DLLPRIVATE_LINK_TYPED( ImplPopupModeEndHdl, FloatingWindow*, void );
-    DECL_DLLPRIVATE_LINK( ImplSelectionChangedHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplSelectionChangedHdl, sal_Int32, void );
     DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl , void* );
 
     void ImplClickButtonHandler( ImplBtn* );
@@ -514,15 +514,13 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplCancelHdl)
     return 1;
 }
 
-IMPL_LINK( ComboBox::Impl, ImplSelectionChangedHdl, void*, n )
+IMPL_LINK_TYPED( ComboBox::Impl, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
 {
     if (!m_pImplLB->IsTrackingSelect())
     {
-        sal_Int32 nChanged = (sal_Int32)reinterpret_cast<sal_uLong>(n);
         if (!m_pSubEdit->IsReadOnly() && m_pImplLB->GetEntryList()->IsEntryPosSelected(nChanged))
             m_pSubEdit->SetText(m_pImplLB->GetEntryList()->GetEntryText(nChanged));
     }
-    return 1;
 }
 
 IMPL_LINK_NOARG(ComboBox::Impl, ImplDoubleClickHdl)
