@@ -24,12 +24,12 @@
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/frame/XTransientDocumentsDocumentContentFactory.hpp"
 
-#include "cppuhelper/implbase2.hxx"
+#include <cppuhelper/implbase.hxx>
 
 namespace tdoc_ucp {
 
 class DocumentContentFactory :
-        public cppu::WeakImplHelper2<
+        public cppu::WeakImplHelper<
             com::sun::star::frame::XTransientDocumentsDocumentContentFactory,
             com::sun::star::lang::XServiceInfo >
 {

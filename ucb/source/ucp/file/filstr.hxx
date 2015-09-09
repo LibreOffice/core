@@ -29,7 +29,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "filrec.hxx"
 
@@ -38,7 +38,7 @@ namespace fileaccess {
     // forward:
     class shell;
 
-class XStream_impl :  public cppu::WeakImplHelper6<
+class XStream_impl :  public cppu::WeakImplHelper<
     css::io::XStream,
     css::io::XSeekable,
     css::io::XInputStream,

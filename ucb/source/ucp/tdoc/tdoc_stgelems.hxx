@@ -25,8 +25,7 @@
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
 
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/implbase5.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include "com/sun/star/embed/XStorage.hpp"
 #include "com/sun/star/embed/XTransactedObject.hpp"
@@ -72,7 +71,7 @@ private:
 
 
 typedef
-    cppu::WeakImplHelper2<
+    cppu::WeakImplHelper<
         com::sun::star::embed::XStorage,
         com::sun::star::embed::XTransactedObject > StorageUNOBase;
 
@@ -307,7 +306,7 @@ private:
 
 
 typedef
-    cppu::WeakImplHelper2<
+    cppu::WeakImplHelper<
         com::sun::star::io::XOutputStream,
         com::sun::star::lang::XComponent > OutputStreamUNOBase;
 
@@ -386,7 +385,7 @@ private:
 
 
 
-typedef cppu::WeakImplHelper5< com::sun::star::io::XStream,
+typedef cppu::WeakImplHelper< com::sun::star::io::XStream,
                                com::sun::star::io::XOutputStream,
                                com::sun::star::io::XTruncate,
                                com::sun::star::io::XInputStream,

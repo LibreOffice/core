@@ -20,7 +20,7 @@
 
 #include "rtl/uri.hxx"
 #include "osl/mutex.hxx"
-#include "cppuhelper/compbase2.hxx"
+#include <cppuhelper/compbase.hxx>
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include <cppuhelper/supportsservice.hxx>
@@ -47,7 +47,7 @@ struct MutexHolder
     mutable ::osl::Mutex m_mutex;
 };
 
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
     lang::XServiceInfo, ucb::XContentProvider > t_impl_helper;
 
 

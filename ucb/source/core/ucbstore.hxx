@@ -35,8 +35,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 #define STORE_SERVICE_NAME          "com.sun.star.ucb.Store"
@@ -47,7 +46,7 @@
 
 struct UcbStore_Impl;
 
-class UcbStore : public cppu::WeakImplHelper3 <
+class UcbStore : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::ucb::XPropertySetRegistryFactory,
     css::lang::XInitialization >
@@ -99,7 +98,7 @@ public:
 struct PropertySetRegistry_Impl;
 class PersistentPropertySet;
 
-class PropertySetRegistry : public cppu::WeakImplHelper3 <
+class PropertySetRegistry : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::ucb::XPropertySetRegistry,
     css::container::XNameAccess >
@@ -181,7 +180,7 @@ public:
 
 struct PersistentPropertySet_Impl;
 
-class PersistentPropertySet : public cppu::WeakImplHelper7 <
+class PersistentPropertySet : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::lang::XComponent,
     css::ucb::XPersistentPropertySet,

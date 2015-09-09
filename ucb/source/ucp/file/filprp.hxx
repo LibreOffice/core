@@ -21,14 +21,14 @@
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace fileaccess {
 
     class shell;
 
-class XPropertySetInfo_impl : public cppu::WeakImplHelper1<
+class XPropertySetInfo_impl : public cppu::WeakImplHelper<
     css::beans::XPropertySetInfo >
     {
     public:

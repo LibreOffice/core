@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UCB_SOURCE_CORE_CMDENV_HXX
 #define INCLUDED_UCB_SOURCE_CORE_CMDENV_HXX
 
-#include "cppuhelper/implbase3.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
@@ -30,7 +30,7 @@
 namespace ucb_cmdenv {
 
 class UcbCommandEnvironment :
-        public cppu::WeakImplHelper3< com::sun::star::lang::XInitialization,
+        public cppu::WeakImplHelper< com::sun::star::lang::XInitialization,
                                       com::sun::star::lang::XServiceInfo,
                                       com::sun::star::ucb::XCommandEnvironment >
 {
