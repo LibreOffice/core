@@ -31,6 +31,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/bmpacc.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
@@ -724,7 +725,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                     long nHeight = nNumb[3] - nNumb[1] + 1;
 
                     // if there is no preview -> try with gs to make one
-                    if( !bHasPreview )
+                    if (!bHasPreview && !utl::ConfigManager::IsAvoidConfig())
                     {
                         bHasPreview = RenderAsEMF(pBuf, nBytesRead, aGraphic);
                         if (!bHasPreview)
