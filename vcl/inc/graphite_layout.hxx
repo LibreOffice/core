@@ -95,10 +95,15 @@ private:
     gr_font *               mpFont; // not owned by layout
     int                     mnSegCharOffset; // relative to ImplLayoutArgs::mpStr
     long                    mnWidth;
+    long                    mnCacheWidth;
+    const short unsigned int * baseStr;
+    int                     mnLength;
     std::vector<int>        mvChar2BaseGlyph;
+    std::vector<int>        mvChar2Glyph;
     std::vector<int>        mvGlyph2Char;
     std::vector<int>        mvCharDxs;
     std::vector<int>        mvCharBreaks;
+    std::vector<int>        mvCacheDxs;
     float                   mfScaling;
     const grutils::GrFeatureParser * mpFeatures;
 
@@ -150,6 +155,7 @@ private:
                 const gr_slot * pSlot, float gOrigin,
                 float nextGlyphOrigin, float fScaling,
                 long & rDXOffset, bool bIsBase, int baseChar, int baseGlyph, bool bRtl);
+    int ScanFwdForChar(int &findChar, bool fallback) const;
 };
 
 #endif // INCLUDED_VCL_INC_GRAPHITE_LAYOUT_HXX
