@@ -1147,7 +1147,7 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeLine, "groupshape-line.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10160), xShape->getSize().Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xShape->getSize().Height);
 }
-
+#if !defined(WNT)
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation.docx")
 {
     // The problem was that (due to incorrect handling of rotation inside
@@ -1168,7 +1168,7 @@ DECLARE_OOXMLIMPORT_TEST(testGroupshapeChildRotation, "groupshape-child-rotation
     // This was com.sun.star.drawing.RectangleShape, all shape text in a single line.
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.TextShape"), xShapeDescriptor->getShapeType());
 }
-
+#endif
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeSmarttag, "groupshape-smarttag.docx")
 {
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
@@ -1953,6 +1953,7 @@ DECLARE_OOXMLIMPORT_TEST(testFdo65090, "fdo65090.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
 }
 
+#if !defined(WNT)
 DECLARE_OOXMLIMPORT_TEST(testFdo69649, "fdo69649.docx")
 {
     // The DOCX containing the Table of Contents was not imported with correct page nos
@@ -1968,7 +1969,7 @@ DECLARE_OOXMLIMPORT_TEST(testFdo69649, "fdo69649.docx")
     xTocString = xTocString.copy(256);
     CPPUNIT_ASSERT(xTocString.startsWithIgnoreAsciiCase( "Heading 15.1:\t15" ) );
 }
-
+#endif
 DECLARE_OOXMLIMPORT_TEST(testFdo73389,"fdo73389.docx")
 {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -2773,6 +2774,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf86374, "tdf86374.docx")
     CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xTableRows->getByIndex(0), "SizeType"));
 }
 
+#if !defined(WNT)
 DECLARE_OOXMLIMPORT_TEST(testTdf87924, "tdf87924.docx")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
@@ -2780,7 +2782,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf87924, "tdf87924.docx")
     // This was -270, the text rotation angle was set when it should not be rotated.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aGeometry["TextPreRotateAngle"].get<sal_Int32>());
 }
-
+#endif
 DECLARE_OOXMLIMPORT_TEST(testIndents, "indents.docx")
 {
     //expected left margin and first line indent values
