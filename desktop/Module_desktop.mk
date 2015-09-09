@@ -130,4 +130,8 @@ $(eval $(call gb_Module_add_check_targets,desktop, \
     CppunitTest_desktop_version \
 ))
 
+$(eval $(call gb_Module_add_check_targets,desktop, \
+    CppunitTest_desktop_lib \
+))
+
 # vim: set ts=4 sw=4 et:
