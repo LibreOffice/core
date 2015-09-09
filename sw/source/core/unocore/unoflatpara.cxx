@@ -199,7 +199,10 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal ) t
     if (GetTextNode())
     {
         if ( text::TextMarkupType::SPELLCHECK == nType )
-            GetTextNode()->SetWrongDirty( !bVal );
+        {
+            GetTextNode()->SetWrongDirty(
+                (bVal) ? SwTextNode::WrongState::DONE : SwTextNode::WrongState::TODO);
+        }
         else if ( text::TextMarkupType::SMARTTAG == nType )
             GetTextNode()->SetSmartTagDirty( !bVal );
         else if( text::TextMarkupType::PROOFREADING == nType )
