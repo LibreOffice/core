@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba0121b8_1eacadec",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 3558,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-09T12:56:15Z",
+      "side": 1,
+      "message": "this one was missing win10sdktest, so i should have complained about 7 not 8 :)",
+      "revId": "9e3f762e200634b3dee667d3bb1a7215ece39031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba0121b8_fbc90bae",
         "filename": "configure.ac",
         "patchSetId": 6
@@ -31,6 +48,24 @@
       "side": 1,
       "message": "Nope, it\u0027s not. UCRT@MSVC14.0 (Universal C Runtime) location is conditional on compiler version, not SDK version. I tried to be extra verbose in the commit message and explain this split:\n\n  Previously, all of the CRT headers, sources, and libraries were\n  distributed as part of the Visual C++ SDK, installed in the VC\n  subdirectory of Visual Studio installation (generally C:\\Program\n  Files (x86)\\Microsoft Visual Studio 14.0\\VC). The files for the\n  VCRuntime are still part of the Visual C++ SDK. The headers, sources,\n  and libraries are now distributed as part of a separate Universal CRT\n  SDK. This SDK is included with Visual Studio; it is installed to\n  C:\\Program Files (x86)\\Windows Kits\\10.\n\nStill it may be better to create dedicated method: find_ucrt() or some such and use it here and not vanilla find_winsdk. Note that ii haven\u0027t tested this change against other SDKs version as 10.",
       "parentUuid": "ba0121b8_fbc90bae",
+      "revId": "9e3f762e200634b3dee667d3bb1a7215ece39031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_3eaff1e4",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 3830,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-09T12:56:15Z",
+      "side": 1,
+      "message": "ah... so the win10sdktest variables are only useful if you have VS2015... yes a find_ucrt() would be better i think.",
+      "parentUuid": "ba0121b8_db48878a",
       "revId": "9e3f762e200634b3dee667d3bb1a7215ece39031",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
