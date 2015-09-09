@@ -27,8 +27,9 @@
 #include <vcl/timer.hxx>
 #include <vcl/group.hxx>
 
+#include <deque>
+#include <memory>
 #include <vector>
-#include <boost/ptr_container/ptr_deque.hpp>
 
 class CheckBox;
 class SvtFileDialog;
@@ -62,7 +63,7 @@ public:
     bool            isGroupSeparator() const    { return m_aType.isEmpty(); }
 };
 
-typedef boost::ptr_deque<SvtFileDialogFilter_Impl> SvtFileDialogFilterList_Impl;
+typedef std::deque<std::unique_ptr<SvtFileDialogFilter_Impl>> SvtFileDialogFilterList_Impl;
 
 enum SvtFileDlgMode
 {
@@ -126,7 +127,7 @@ private:
     ::com::sun::star::uno::Sequence< OUString > _aBlackList;
 
 public:
-    SvtFileDialogFilterList_Impl*   _pFilter;
+    SvtFileDialogFilterList_Impl    m_aFilter;
     SvtFileDialogFilter_Impl*       _pUserFilter;
 
     VclPtr<FixedText>                      _pFtFileName;
