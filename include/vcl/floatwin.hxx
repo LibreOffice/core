@@ -109,7 +109,7 @@ private:
     bool            mbOldSaveBackMode;
     bool            mbGrabFocus;    // act as key input window, although focus is not set
     bool            mbInCleanUp;
-    Link<>          maPopupModeEndHdl;
+    Link<FloatingWindow*,void> maPopupModeEndHdl;
 
     SAL_DLLPRIVATE void    ImplCallPopupModeEnd();
     DECL_DLLPRIVATE_LINK_TYPED(  ImplEndPopupModeHdl, void*, void );
@@ -166,7 +166,7 @@ public:
     bool            IsPopupModeCanceled() const { return mbPopupModeCanceled; }
     bool            IsPopupModeTearOff() const { return mbPopupModeTearOff; }
 
-    void            SetPopupModeEndHdl( const Link<>& rLink ) { maPopupModeEndHdl = rLink; }
+    void            SetPopupModeEndHdl( const Link<FloatingWindow*,void>& rLink ) { maPopupModeEndHdl = rLink; }
 
     bool            GrabsFocus() const { return mbGrabFocus; }
 

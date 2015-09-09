@@ -629,7 +629,7 @@ void SfxToolBoxControl::SetPopupWindow( SfxPopupWindow* pWindow )
 
 
 
-IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl)
+IMPL_LINK_NOARG_TYPED(SfxToolBoxControl, PopupModeEndHdl, FloatingWindow*, void)
 {
     if ( pImpl->mpPopupWindow->IsVisible() )
     {
@@ -648,8 +648,6 @@ IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl)
         // will destroy itself.
         pImpl->mpPopupWindow.clear();
     }
-
-    return 1;
 }
 
 

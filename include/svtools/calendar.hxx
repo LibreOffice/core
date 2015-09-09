@@ -360,7 +360,7 @@ private:
 
                         DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, Calendar*, void );
                         DECL_DLLPRIVATE_LINK_TYPED( ImplClickHdl, Button*, void );
-                        DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, void* );
+                        DECL_DLLPRIVATE_LINK_TYPED( ImplPopupModeEndHdl, FloatingWindow*, void );
 
 public:
                         CalendarField( vcl::Window* pParent, WinBits nWinStyle );

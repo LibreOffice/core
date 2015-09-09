@@ -173,7 +173,7 @@ friend struct SfxTbxCtrlFactory;
     SfxToolBoxControl_Impl*    pImpl;
 
 protected:
-    DECL_LINK( PopupModeEndHdl, void * );
+    DECL_LINK_TYPED( PopupModeEndHdl, FloatingWindow*, void );
     DECL_LINK_TYPED( ClosePopupWindow, SfxPopupWindow *, void );
 
     // old SfxToolBoxControl methods

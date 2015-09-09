@@ -270,7 +270,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     DECL_DLLPRIVATE_LINK_TYPED( TimeoutHdl, Timer*, void );
 
-    DECL_DLLPRIVATE_LINK( FieldPopupModeEndHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( FieldPopupModeEndHdl, FloatingWindow*, void );
 
     inline long     GetXScroll() const;
     inline long     GetYScroll() const;

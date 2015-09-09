@@ -162,7 +162,7 @@ void SvxListBoxControl::StateChanged(
 }
 
 
-IMPL_LINK_NOARG(SvxListBoxControl, PopupModeEndHdl)
+IMPL_LINK_NOARG_TYPED(SvxListBoxControl, PopupModeEndHdl, FloatingWindow*, void)
 {
     if( pPopupWin && FloatWinPopupFlags::NONE == pPopupWin->GetPopupModeFlags()  &&
         pPopupWin->IsUserSelected() )
@@ -176,7 +176,6 @@ IMPL_LINK_NOARG(SvxListBoxControl, PopupModeEndHdl)
         aArgs[0].Value  = makeAny( sal_Int16( nCount ));
         SfxToolBoxControl::Dispatch( m_aCommandURL, aArgs );
     }
-    return 0;
 }
 
 
@@ -279,8 +278,7 @@ VclPtr<SfxPopupWindow> SvxUndoRedoControl::CreatePopupWindow()
     ToolBox& rBox = GetToolBox();
 
     pPopupWin = VclPtr<SvxPopupWindowListBox>::Create( GetSlotId(), m_aCommandURL, GetId(), rBox );
-    pPopupWin->SetPopupModeEndHdl( LINK( this, SvxUndoRedoControl,
-                                            PopupModeEndHdl ) );
+    pPopupWin->SetPopupModeEndHdl( LINK( this, SvxUndoRedoControl, PopupModeEndHdl ) );
     ListBox &rListBox = pPopupWin->GetListBox();
     rListBox.SetSelectHdl( LINK( this, SvxUndoRedoControl, SelectHdl ) );
 

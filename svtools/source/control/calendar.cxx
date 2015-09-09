@@ -2280,12 +2280,11 @@ IMPL_LINK_TYPED( CalendarField, ImplClickHdl, Button*, pButton, void )
     }
 }
 
-IMPL_LINK_NOARG(CalendarField, ImplPopupModeEndHdl)
+IMPL_LINK_NOARG_TYPED(CalendarField, ImplPopupModeEndHdl, FloatingWindow*, void)
 {
     EndDropDown();
     GrabFocus();
     mpCalendar->EndSelection();
-    return 0;
 }
 
 bool CalendarField::ShowDropDown( bool bShow )

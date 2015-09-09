@@ -200,7 +200,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     bool                    bAutoMarkVisible:1;
     bool                    bListValButton:1;
 
-    DECL_LINK( PopupModeEndHdl, void* );
+    DECL_LINK_TYPED( PopupModeEndHdl, FloatingWindow*, void );
     DECL_LINK( PopupSpellingHdl, SpellCallbackInfo* );
 
     bool            TestMouse( const MouseEvent& rMEvt, bool bAction );
