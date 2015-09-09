@@ -75,12 +75,6 @@ const Rectangle& SdrTextObj::GetLogicRect() const
 
 void SdrTextObj::NbcSetLogicRect(const Rectangle& rRect)
 {
-    long nHDist=GetTextLeftDistance()+GetTextRightDistance();
-    long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
-    long nTWdt0=maRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
-    long nTHgt0=maRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
-    long nTWdt1=rRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
-    long nTHgt1=rRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
     maRect = rRect;
     ImpJustifyRect(maRect);
 
@@ -112,10 +106,6 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
 {
     bool bNoShearMerk=aGeo.nShearAngle==0;
     bool bRota90Merk=bNoShearMerk && aGeo.nRotationAngle % 9000 ==0;
-    long nHDist=GetTextLeftDistance()+GetTextRightDistance();
-    long nVDist=GetTextUpperDistance()+GetTextLowerDistance();
-    long nTWdt0=maRect.GetWidth ()-1-nHDist; if (nTWdt0<0) nTWdt0=0;
-    long nTHgt0=maRect.GetHeight()-1-nVDist; if (nTHgt0<0) nTHgt0=0;
     bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
     bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
     if (bXMirr || bYMirr) {
@@ -184,9 +174,6 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
     }
 
     ImpJustifyRect(maRect);
-
-    long nTWdt1=maRect.GetWidth ()-1-nHDist; if (nTWdt1<0) nTWdt1=0;
-    long nTHgt1=maRect.GetHeight()-1-nVDist; if (nTHgt1<0) nTHgt1=0;
 
     // #115391#
     AdaptTextMinSize();
