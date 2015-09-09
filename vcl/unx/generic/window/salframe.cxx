@@ -2289,11 +2289,6 @@ void X11SalFrame::Flush()
     XFlush( GetDisplay()->GetDisplay() );
 }
 
-void X11SalFrame::Sync()
-{
-    XSync( GetDisplay()->GetDisplay(), False );
-}
-
 // Keyboard
 
 void X11SalFrame::SetInputContext( SalInputContext* pContext )
