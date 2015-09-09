@@ -270,13 +270,9 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
     if ( bClip )
     {
         // Clip only if necessary...
-        if ( !rStartDocPos.X() && !rStartDocPos.Y() &&
-             ( rOutRect.GetHeight() >= (long)GetTextHeight() ) &&
-             ( rOutRect.GetWidth() >= (long)CalcTextWidth() ) )
-        {
-            bClip = false;
-        }
-        else
+        if ( rStartDocPos.X() || rStartDocPos.Y() ||
+             ( rOutRect.GetHeight() < (long)GetTextHeight() ) ||
+             ( rOutRect.GetWidth() < (long)CalcTextWidth() ) )
         {
             // Some printer drivers cause problems if characters graze the
             // ClipRegion, therefore rather add a pixel more ...
