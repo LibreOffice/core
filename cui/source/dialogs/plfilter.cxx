@@ -71,7 +71,7 @@ void fillNetscapePluginFilters( Sequence< OUString >& rPluginNames, Sequence< OU
         {
             // no default plugins anymore
             OUString aExt( aExtension.getToken( nCnt, ';' ) );
-            if ( aExt == "*.*" )
+            if ( aExt != "*.*" )
                 rTypes.insert( aExt );
         }
     }
