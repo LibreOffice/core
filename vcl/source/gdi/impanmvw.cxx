@@ -301,7 +301,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
             pDev.disposeAndClear();
 
             if( pRenderContext->GetOutDevType() == OUTDEV_WINDOW )
-                static_cast<vcl::Window*>( pRenderContext.get() )->Sync();
+                static_cast<vcl::Window*>( pRenderContext.get() )->Flush();
         }
     }
 }
