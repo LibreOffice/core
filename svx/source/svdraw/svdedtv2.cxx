@@ -1745,13 +1745,10 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
             SdrObjList* pAktLst=pPV->GetObjList();
             SdrObjList* pSrcLst=pAktLst;
             SdrObjList* pSrcLst0=pSrcLst;
-            SdrPage*    pPage=pPV->GetPage();
             // make sure OrdNums are correct
             if (pSrcLst->IsObjOrdNumsDirty())
                 pSrcLst->RecalcObjOrdNums();
             SdrObject*  pGrp=NULL;
-            SdrObject*  pRefObj=NULL; // reference for InsertReason (-> anchors in Writer)
-            SdrObject*  pRefObj1=NULL; // reference for InsertReason (-> anchors in Writer)
             SdrObjList* pDstLst=NULL;
             // if all selected objects come from foreign object lists.
             // the group object is the last one in the list.
@@ -1780,7 +1777,6 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
                             pSrcLst->RecalcObjOrdNums();
                     }
                     bool bForeignList=pSrcLst!=pAktLst;
-                    bool bGrouped=pSrcLst!=pPage;
                     if (!bForeignList && bNeedInsPos)
                     {
                         nInsPos=pObj->GetOrdNum(); // this way, all ObjOrdNum of the page are set
@@ -1793,18 +1789,9 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
                     SdrInsertReason aReason(SDRREASON_VIEWCALL);
                     pDstLst->InsertObject(pObj,0,&aReason);
                     GetMarkedObjectListWriteAccess().DeleteMark(nm);
-                    if (pRefObj1==NULL)
-                        pRefObj1=pObj; // the topmost visible object
-                    if (!bGrouped)
-                    {
-                        if (pRefObj==NULL)
-                            pRefObj=pObj; // the topmost visible non-group object
-                    }
                     pSrcLst0=pSrcLst;
                 }
             }
-            if (pRefObj==NULL)
-                pRefObj=pRefObj1;
             if (pGrp!=NULL)
             {
                 aNewMark.InsertEntry(SdrMark(pGrp,pPV));
