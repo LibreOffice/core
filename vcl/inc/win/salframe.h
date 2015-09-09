@@ -113,7 +113,6 @@ public:
     virtual void                SetPointerPos( long nX, long nY ) SAL_OVERRIDE;
     using SalFrame::Flush;
     virtual void                Flush() SAL_OVERRIDE;
-    virtual void                Sync() SAL_OVERRIDE;
     virtual void                SetInputContext( SalInputContext* pContext ) SAL_OVERRIDE;
     virtual void                EndExtTextInput( EndExtTextInputFlags nFlags ) SAL_OVERRIDE;
     virtual OUString            GetKeyName( sal_uInt16 nKeyCode ) SAL_OVERRIDE;

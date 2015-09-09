@@ -1133,7 +1133,6 @@ public:
     bool                                HasPaintEvent() const;
     void                                Update();
     void                                Flush();
-    void                                Sync();
 
     // toggles new docking support, enabled via toolkit
     void                                EnableDocking( bool bEnable = true );
