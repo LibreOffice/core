@@ -628,7 +628,8 @@ void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUSt
     OUString aSourceCode = rSourceCode.replaceFirst("Option VBASupport 1\n", "");
     sal_Int32 nPos = aSourceCode.indexOf("Rem Attribute VBA_ModuleType=");
     sal_Int32 nEndPos = aSourceCode.indexOf("\n", nPos);
-    aSourceCode = aSourceCode.replaceAt(nPos, nEndPos - nPos, "");
+    aSourceCode = aSourceCode.replaceAt(nPos, nEndPos - nPos+1, "");
+    aSourceCode = aSourceCode.replaceAll("\n", "\r\n");
     exportString(aModuleStream, aSourceCode);
     aModuleStream.Seek(0);
 
