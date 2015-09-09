@@ -1601,11 +1601,6 @@ IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, MatrixHdl, Button*, void)
 
 IMPL_LINK_NOARG(FormulaDlg_Impl, FuncSelHdl)
 {
-    sal_Int32 nCat = pFuncPage->GetCategory();
-    if ( nCat == LISTBOX_ENTRY_NOTFOUND ) nCat = 0;
-    sal_Int32 nFunc = pFuncPage->GetFunction();
-    if ( nFunc == LISTBOX_ENTRY_NOTFOUND ) nFunc = 0;
-
     if (   (pFuncPage->GetFunctionEntryCount() > 0)
         && (pFuncPage->GetFunction() != LISTBOX_ENTRY_NOTFOUND) )
     {
