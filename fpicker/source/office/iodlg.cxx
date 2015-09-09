@@ -1408,12 +1408,12 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
 
 {
     SvtFileDialogFilter_Impl* pFoundFilter = NULL;
-    SvtFileDialogFilterList_Impl* pList = _pImp->_pFilter;
-    sal_uInt16 nFilter = pList->size();
+    SvtFileDialogFilterList_Impl& rList = _pImp->m_aFilter;
+    sal_uInt16 nFilter = rList.size();
 
     while ( nFilter-- )
     {
-        SvtFileDialogFilter_Impl* pFilter = &(*pList)[ nFilter ];
+        SvtFileDialogFilter_Impl* pFilter = rList[ nFilter ].get();
         const OUString& rType = pFilter->GetType();
         OUString aSingleType = rType;
 
@@ -2056,7 +2056,7 @@ short SvtFileDialog::PrepareExecute()
                         break;
                 }
             }
-            SvtFileDialogFilter_Impl* pNewCurFilter = &(*_pImp->_pFilter)[ nPos ];
+            SvtFileDialogFilter_Impl* pNewCurFilter = _pImp->m_aFilter[ nPos ].get();
             DBG_ASSERT( pNewCurFilter, "SvtFileDialog::Execute: invalid filter pos!" );
             _pImp->SetCurFilter( pNewCurFilter, pNewCurFilter->GetName() );
         }
@@ -2231,7 +2231,7 @@ void SvtFileDialog::OpenURL_Impl( const OUString& _rURL )
 SvtFileDialogFilter_Impl* SvtFileDialog::implAddFilter( const OUString& _rFilter, const OUString& _rType )
 {
     SvtFileDialogFilter_Impl* pNewFilter = new SvtFileDialogFilter_Impl( _rFilter, _rType );
-    _pImp->_pFilter->push_front( pNewFilter );
+    _pImp->m_aFilter.push_front( std::unique_ptr<SvtFileDialogFilter_Impl>( pNewFilter ) );
 
     if ( !_pImp->GetCurFilter() )
         _pImp->SetCurFilter( pNewFilter, _rFilter );
@@ -2265,11 +2265,11 @@ void SvtFileDialog::SetCurFilter( const OUString& rFilter )
     DBG_ASSERT( !IsInExecute(), "SvtFileDialog::SetCurFilter: currently executing!" );
 
     // look for corresponding filter
-    sal_uInt16 nPos = _pImp->_pFilter->size();
+    sal_uInt16 nPos = _pImp->m_aFilter.size();
 
     while ( nPos-- )
     {
-        SvtFileDialogFilter_Impl* pFilter = &(*_pImp->_pFilter)[ nPos ];
+        SvtFileDialogFilter_Impl* pFilter = _pImp->m_aFilter[ nPos ].get();
         if ( pFilter->GetName() == rFilter )
         {
             _pImp->SetCurFilter( pFilter, rFilter );
@@ -2300,7 +2300,7 @@ OUString SvtFileDialog::getCurFilter( ) const
 
 sal_uInt16 SvtFileDialog::GetFilterCount() const
 {
-    return _pImp->_pFilter->size();
+    return _pImp->m_aFilter.size();
 }
 
 
@@ -2308,7 +2308,7 @@ sal_uInt16 SvtFileDialog::GetFilterCount() const
 const OUString& SvtFileDialog::GetFilterName( sal_uInt16 nPos ) const
 {
     DBG_ASSERT( nPos < GetFilterCount(), "invalid index" );
-    return (*_pImp->_pFilter)[ nPos ].GetName();
+    return _pImp->m_aFilter[ nPos ]->GetName();
 }
 
 

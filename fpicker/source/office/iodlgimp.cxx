@@ -212,7 +212,6 @@ Size SvtUpButton_Impl::GetOptimalSize() const
 SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
 
     _pCurFilter         ( NULL ),
-    _pFilter            ( new SvtFileDialogFilterList_Impl() ),
     _pUserFilter        ( NULL ),
     _pFtFileName        ( NULL ),
     _pEdFileName        ( NULL ),
@@ -253,7 +252,6 @@ SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
 {
     _pBtnUp.disposeAndClear();
     delete _pUserFilter;
-    delete _pFilter;
     _pPlaces.disposeAndClear();
 }
 
@@ -316,15 +314,15 @@ void SvtExpFileDlg_Impl::InitFilterList( )
     ClearFilterList( );
 
     // reinit it
-    sal_uInt16 nPos = _pFilter->size();
+    sal_uInt16 nPos = m_aFilter.size();
 
     // search for the first entry which is no group separator
-    while ( nPos-- && (*_pFilter)[ nPos ].isGroupSeparator() )
+    while ( nPos-- && m_aFilter[ nPos ]->isGroupSeparator() )
         ;
 
     // add all following entries
     while ( (sal_Int16)nPos >= 0 )
-        InsertFilterListEntry( &(*_pFilter)[ nPos-- ] );
+        InsertFilterListEntry( m_aFilter[ nPos-- ].get() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
