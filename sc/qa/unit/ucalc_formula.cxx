@@ -5596,7 +5596,7 @@ void Test::testFuncTableRef()
         OUString aFormula( OUString::createFromAscii( pColumn2Formula));
         ScAddress aPos(1,5,0);
         OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString("448"), aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + "448"), OUString(aPrefix + m_pDoc->GetString(aPos)));
     }
 
     // Set header in column B. Use ScDocFunc to have table column names refreshed.
@@ -5772,7 +5772,7 @@ void Test::testFuncTableRef()
         OUString aFormula( OUString::createFromAscii( pColumn3Formula));
         ScAddress aPos(5,13,0);
         OUString aPrefix( aPos.Format(SCA_VALID) + " " + aFormula + " : ");
-        CPPUNIT_ASSERT_EQUAL( aPrefix + OUString("448"), aPrefix + m_pDoc->GetString( aPos));
+        CPPUNIT_ASSERT_EQUAL( OUString(aPrefix + "448"), OUString(aPrefix + m_pDoc->GetString(aPos)));
     }
 
     m_pDoc->DeleteTab(0);
