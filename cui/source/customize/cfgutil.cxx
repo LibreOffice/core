@@ -1125,12 +1125,11 @@ void SfxConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
 void SfxConfigGroupListBox::SelectMacro( const OUString& rBasic,
          const OUString& rMacro )
 {
-    OUString aBasicName( rBasic );
-    aBasicName += " ";
-    aBasicName += pImp->m_sMacros;
-    OUString aLib, aModule, aMethod;
-    sal_uInt16 nCount = comphelper::string::getTokenCount(rMacro, '.');
-    aMethod = rMacro.getToken( nCount-1, '.' );
+    const OUString aBasicName( rBasic + " " + pImp->m_sMacros );
+    const sal_Int32 nCount = comphelper::string::getTokenCount(rMacro, '.');
+    const OUString aMethod( rMacro.getToken( nCount-1, '.' ) );
+    OUString aLib;
+    OUString aModule;
     if ( nCount > 2 )
     {
         aLib = rMacro.getToken( 0, '.' );
