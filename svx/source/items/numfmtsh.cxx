@@ -659,9 +659,6 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
      */
     sal_uInt16  nMyType;
 
-    DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
-
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
     OUString            aStrComment;
     OUString            aNewFormNInfo;
@@ -674,7 +671,7 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 
-        pNumEntry   = pFormatter->GetEntry(nNFEntry);
+        const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
 
         if(pNumEntry==NULL) continue;
 
@@ -700,9 +697,6 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
 {
     sal_uInt16  nMyType;
 
-    assert(pCurFmtTable && "Unknown number format!");
-
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
     OUString            aStrComment;
     OUString            aNewFormNInfo;
@@ -713,7 +707,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 
-        pNumEntry   = pFormatter->GetEntry(nNFEntry);
+        const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
         if(pNumEntry!=NULL)
         {
             nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
@@ -780,7 +774,6 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    const SvNumberformat*   pNumEntry   = pCurFmtTable->empty() ? 0 : pCurFmtTable->begin()->second;
     sal_uInt32          nNFEntry;
     OUString            aStrComment;
     OUString            aNewFormNInfo;
@@ -797,7 +790,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
     {
         nNFEntry=pFormatter->GetFormatIndex((NfIndexTableOffset)nIndex,eCurLanguage);
 
-        pNumEntry   = pFormatter->GetEntry(nNFEntry);
+        const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
 
         if(pNumEntry==NULL) continue;
 
@@ -822,7 +815,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
         while ( it != pCurFmtTable->end() )
         {
             sal_uInt32 nKey = it->first;
-            pNumEntry   = it->second;
+            const SvNumberformat* pNumEntry   = it->second;
 
             if ( !IsRemoved_Impl( nKey ))
             {
