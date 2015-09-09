@@ -320,8 +320,6 @@ IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
     SwFieldType* pType = (bCorrectFldName && !bNone)
                     ? rSh.GetFldType( RES_SETEXPFLD, sFldTypeName )
                     : 0;
-    fprintf(stderr, "pType is %p\n", pType);
-    fprintf(stderr, "bCorrectFldName is %d\n", bCorrectFldName);
     m_pOKButton->Enable( bCorrectFldName &&
                         (!pType ||
                             ((SwSetExpFieldType*)pType)->GetType() == nsSwGetSetExpType::GSE_SEQ) );
