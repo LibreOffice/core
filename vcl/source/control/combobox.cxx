@@ -82,7 +82,7 @@ struct ComboBox::Impl
     DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
     DECL_DLLPRIVATE_LINK( ImplCancelHdl, void* );
     DECL_DLLPRIVATE_LINK( ImplDoubleClickHdl, void* );
-    DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplPopupModeEndHdl, FloatingWindow*, void );
     DECL_DLLPRIVATE_LINK( ImplSelectionChangedHdl, void* );
     DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl , void* );
 
@@ -327,7 +327,7 @@ void ComboBox::Impl::ImplClickButtonHandler( ImplBtn* )
         m_pImplLB->GetMainWindow()->ImplClearLayoutData();
 }
 
-IMPL_LINK_NOARG(ComboBox::Impl, ImplPopupModeEndHdl)
+IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplPopupModeEndHdl, FloatingWindow*, void)
 {
     if (m_pFloatWin->IsPopupModeCanceled())
     {
@@ -348,7 +348,6 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplPopupModeEndHdl)
 
     m_pBtn->SetPressed( false );
     m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_CLOSE );
-    return 0;
 }
 
 void ComboBox::Impl::ImplAutocompleteHandler( Edit* pEdit )

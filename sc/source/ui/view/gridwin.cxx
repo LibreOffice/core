@@ -577,12 +577,11 @@ void ScGridWindow::ClickExtern()
     }
 }
 
-IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl)
+IMPL_LINK_NOARG_TYPED(ScGridWindow, PopupModeEndHdl, FloatingWindow*, void)
 {
     if (mpFilterBox)
         mpFilterBox->SetCancelled();     // cancel select
     GrabFocus();
-    return 0;
 }
 
 IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo*, pInfo )

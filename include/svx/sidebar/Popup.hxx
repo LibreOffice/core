@@ -97,7 +97,7 @@ private:
     const ::rtl::OUString msAccessibleName;
     VclPtr<PopupContainer> mxContainer;
 
-    DECL_LINK(PopupModeEndHandler, void*);
+    DECL_LINK_TYPED(PopupModeEndHandler, FloatingWindow*, void);
 };
 
 } } // end of namespace svx::sidebar

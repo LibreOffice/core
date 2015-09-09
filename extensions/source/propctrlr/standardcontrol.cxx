@@ -1303,9 +1303,8 @@ namespace pcr
     }
 
 
-    IMPL_LINK( DropDownEditControl, ReturnHdl, OMultilineFloatingEdit*, /*pMEd*/)
+    IMPL_LINK_NOARG_TYPED( DropDownEditControl, ReturnHdl, FloatingWindow*, void)
     {
-
         OUString aStr = m_pFloatingEdit->getEdit().GetText();
         OUString aStr2 = GetText();
         ShowDropDown(false);
@@ -1315,8 +1314,6 @@ namespace pcr
             if ( m_pHelper )
                 m_pHelper->notifyModifiedValue();
         }
-
-        return 0;
     }
 
 
