@@ -59,6 +59,7 @@
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <memory>
+#include <comphelper/storagehelper.hxx>
 
 #define DEBUG_XL_ENCRYPTION 0
 
@@ -1094,9 +1095,15 @@ bool XclExpXmlStream::exportDocument()
     if (aExport.containsVBAProject())
     {
         const OUString aVbaStreamLocation("/tmp/vba_out.bin");
-        SvFileStream aVbaStream(aVbaStreamLocation, STREAM_READWRITE);
+        SvMemoryStream aVbaStream(4096, 4096);
         tools::SvRef<SotStorage> pVBAStorage(new SotStorage(aVbaStream));
         aExport.exportVBA(pVBAStorage);
+        aVbaStream.Seek(0);
+        css::uno::Reference<css::io::XInputStream> xVBAStream(
+                new utl::OInputStreamWrapper(aVbaStream));
+        css::uno::Reference<css::io::XOutputStream> xVBAOutput =
+            openFragmentStream("xl/vbaProject.bin", "VBA");
+        comphelper::OStorageHelper::CopyInputToOutput(xVBAStream, xVBAOutput);
     }
 
     // destruct at the end of the block
