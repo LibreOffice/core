@@ -1125,26 +1125,17 @@ void SdrObjEditView::SetTextEditWin(vcl::Window* pWin)
     }
 }
 
-bool SdrObjEditView::IsTextEditHit(const Point& rHit, short nTol) const
+bool SdrObjEditView::IsTextEditHit(const Point& rHit) const
 {
     bool bOk=false;
     if(mxTextEditObj.is())
     {
-        nTol=ImpGetHitTolLogic(nTol,NULL);
-        // only a third of the tolerance here, so handles can be hit well
-        nTol=nTol/3;
-        nTol=0; // no hit tolerance here any more
-
         Rectangle aEditArea;
         OutlinerView* pOLV=pTextEditOutliner->GetView(0);
         if (pOLV!=NULL)
         {
             aEditArea.Union(pOLV->GetOutputArea());
         }
-        aEditArea.Left()-=nTol;
-        aEditArea.Top()-=nTol;
-        aEditArea.Right()+=nTol;
-        aEditArea.Bottom()+=nTol;
         bOk=aEditArea.IsInside(rHit);
         if (bOk)
         { // check if any characters were actually hit
@@ -1221,7 +1212,7 @@ bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin)
             Point aPt(rMEvt.GetPosPixel());
             if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
             else if (pTextEditWin!=nullptr) aPt=pTextEditWin->PixelToLogic(aPt);
-            bPostIt=IsTextEditHit(aPt,mnHitTolLog);
+            bPostIt=IsTextEditHit(aPt);
         }
         if (bPostIt) {
             Point aPixPos(rMEvt.GetPosPixel());
@@ -1256,7 +1247,7 @@ bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, vcl::Window* pWin)
             Point aPt(rMEvt.GetPosPixel());
             if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
             else if (pTextEditWin!=nullptr) aPt=pTextEditWin->PixelToLogic(aPt);
-            bPostIt=IsTextEditHit(aPt,mnHitTolLog);
+            bPostIt=IsTextEditHit(aPt);
         }
         if (bPostIt) {
             Point aPixPos(rMEvt.GetPosPixel());
@@ -1290,7 +1281,7 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
                 aPt=pWin->PixelToLogic(aPt);
             else if (pTextEditWin)
                 aPt=pTextEditWin->PixelToLogic(aPt);
-            bPostIt=IsTextEditHit(aPt,mnHitTolLog);
+            bPostIt=IsTextEditHit(aPt);
         }
         if (bPostIt) {
             Point aPixPos(rMEvt.GetPosPixel());
@@ -1328,7 +1319,7 @@ bool SdrObjEditView::Command(const CommandEvent& rCEvt, vcl::Window* pWin)
                 Point aPt(rCEvt.GetMousePosPixel());
                 if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
                 else if (pTextEditWin!=nullptr) aPt=pTextEditWin->PixelToLogic(aPt);
-                bPostIt=IsTextEditHit(aPt,mnHitTolLog);
+                bPostIt=IsTextEditHit(aPt);
             }
             if (bPostIt) {
                 Point aPixPos(rCEvt.GetMousePosPixel());

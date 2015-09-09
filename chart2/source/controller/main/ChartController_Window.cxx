@@ -215,8 +215,6 @@ OUString lcl_getFormatCommandForObjectCID( const OUString& rCID )
 
 } // anonymous namespace
 
-const short HITPIX=2; //hit-tolerance in pixel
-
 // awt::XWindow
 void SAL_CALL ChartController::setPosSize(
     sal_Int32 X,
@@ -581,7 +579,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     if( pDrawViewWrapper->IsTextEdit() )
     {
         SdrViewEvent aVEvt;
-        if ( pDrawViewWrapper->IsTextEditHit( aMPos, HITPIX ) ||
+        if ( pDrawViewWrapper->IsTextEditHit( aMPos ) ||
              // #i12587# support for shapes in chart
              ( rMEvt.IsRight() && pDrawViewWrapper->PickAnything( rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt ) == SDRHIT_MARKEDOBJECT ) )
         {
@@ -1836,7 +1834,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
 
     if ( m_pDrawViewWrapper->IsTextEdit() )
     {
-        if( m_pDrawViewWrapper->IsTextEditHit( aMousePos, HITPIX) )
+        if( m_pDrawViewWrapper->IsTextEditHit( aMousePos ) )
         {
             m_pChartWindow->SetPointer( m_pDrawViewWrapper->GetPreferredPointer(
                 aMousePos, m_pChartWindow, nModifier, bLeftDown ) );

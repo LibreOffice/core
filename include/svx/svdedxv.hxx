@@ -181,7 +181,7 @@ public:
 
     // This method returns sal_True, if the point rHit is inside the
     // objectspace or the OutlinerView.
-    bool IsTextEditHit(const Point& rHit, short nTol) const;
+    bool IsTextEditHit(const Point& rHit) const;
 
     // This method returns sal_True, if the point rHit is inside the
     // handle-thick frame, which surrounds the OutlinerView at TextFrames.

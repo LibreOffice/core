@@ -334,7 +334,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     bool bInsPolyPt=bPointMode && IsInsObjPointMode() && IsInsObjPointPossible();
     bool bInsGluePt=bGluePointMode && IsInsGluePointMode() && IsInsGluePointPossible();
     bool bIsTextEdit=IsTextEdit();
-    bool bTextEditHit=IsTextEditHit(aLocalLogicPosition,0/*nHitTolLog*/);
+    bool bTextEditHit=IsTextEditHit(aLocalLogicPosition);
     bool bTextEditSel=IsTextEditInSelectionMode();
     bool bShift=(rVEvt.nMouseCode & KEY_SHIFT) !=0;
     bool bCtrl=(rVEvt.nMouseCode & KEY_MOD1) !=0;
@@ -976,7 +976,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
     }
 
     // TextEdit, ObjEdit, Macro
-    if (IsTextEdit() && (IsTextEditInSelectionMode() || IsTextEditHit(rMousePos,0/*nTol*/)))
+    if (IsTextEdit() && (IsTextEditInSelectionMode() || IsTextEditHit(rMousePos)))
     {
         if(!pOut || IsTextEditInSelectionMode())
         {
