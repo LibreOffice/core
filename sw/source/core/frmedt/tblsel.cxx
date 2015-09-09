@@ -1921,8 +1921,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
 
         if( (aUnion.*fnRect->fnGetWidth)() )
         {
-            SwSelUnion *pTmp = new SwSelUnion( aUnion, const_cast<SwTabFrm*>(pTable) );
-            rUnions.push_back( pTmp );
+            rUnions.push_back(SwSelUnion(aUnion, const_cast<SwTabFrm*>(pTable)));
         }
 
         pTable = pTable->GetFollow();

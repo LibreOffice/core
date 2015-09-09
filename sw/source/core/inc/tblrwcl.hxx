@@ -18,8 +18,12 @@
  */
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_TBLRWCL_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_TBLRWCL_HXX
+
 #include <cstddef>
 #include <vector>
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <swtypes.hxx>
 #include <tblsel.hxx>
 #include <swtable.hxx>

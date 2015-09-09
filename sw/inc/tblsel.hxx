@@ -23,7 +23,6 @@
 #include <swrect.hxx>
 #include "swdllapi.h"
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/sorted_vector.hxx>
 
 #include <memory>
@@ -137,7 +136,7 @@ public:
 
 // Determines tables affected by a table selection and union rectangles
 // of the selection (also for split tables)
-typedef boost::ptr_vector<SwSelUnion> SwSelUnions;
+typedef std::vector<SwSelUnion> SwSelUnions;
 
 // Gets the tables involved in a table selection and the union-rectangles of the selections
 // - also for split tables.
