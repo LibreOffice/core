@@ -22,6 +22,10 @@
 
 #include <sot/storage.hxx>
 
+#include <rtl/uuid.h>
+
+#include <comphelper/string.hxx>
+
 #define USE_UTF8_CODEPAGE 0
 #if USE_UTF8_CODEPAGE
 #define CODEPAGE_MS 65001
@@ -648,6 +652,89 @@ void exportVBAProjectStream(SvStream& rStrm)
     rStrm.WriteUInt16(0x0000); // Undefined
 }
 
+OString createHexStringFromDigit(sal_uInt8 nDigit)
+{
+    OString aString = OString::number( nDigit, 16 );
+    if(aString.getLength() == 1)
+        aString = aString + OString::number(0);
+    return aString;
+}
+
+OString createGuidStringFromInt(sal_uInt8 nGuid[16])
+{
+    OStringBuffer aBuffer;
+    aBuffer.append('{');
+    for(size_t i = 0; i < 16; ++i)
+    {
+        aBuffer.append(createHexStringFromDigit(nGuid[i]));
+        if(i == 3|| i == 5 || i == 7 || i == 9 )
+            aBuffer.append('-');
+    }
+    aBuffer.append('}');
+    OString aString = aBuffer.makeStringAndClear();
+    return aString.toAsciiUpperCase();
+}
+
+OString generateGUIDString()
+{
+    sal_uInt8 nGuid[16];
+    rtl_createUuid(nGuid, NULL, true);
+    return createGuidStringFromInt(nGuid);
+}
+
+// section 2.3.1 PROJECT Stream
+void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, OUString projectName)
+{
+    css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
+    sal_Int32 n = aElementNames.getLength();
+    css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
+    assert(xModuleInfo.is());
+
+    // section 2.3.1.1ProjectProperties
+
+    // section 2.3.1.2 ProjectId
+    exportString(rStrm, "ID=\"");
+    rStrm.WriteOString(generateGUIDString());
+    exportString(rStrm, "\"\r\n");
+
+    // section 2.3.1.3 ProjectModule
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
+        if(aModuleInfo.ModuleType == 1)
+        {
+            exportString(rStrm, "Module=" + aElementNames[i] + "\r\n");
+        }
+        else if(aModuleInfo.ModuleType == 4)
+        {
+            exportString(rStrm, "Document=" + aElementNames[i] + "/&H00000000\r\n");
+        }
+    }
+
+    // section 2.3.1.11 ProjectName
+    exportString(rStrm, "Name=\"" + projectName + "\"\r\n");
+
+    // section 2.3.1.12 ProjectHelpId
+    exportString(rStrm, "HelpContextID=\"0\"\r\n");
+
+    // section 2.3.1.14 ProjectVersionCompat32
+    exportString(rStrm, "VersionCompatible32=\"393222000\"\r\n");
+
+    // section 2.3.1.15 ProjectProtectionState
+    exportString(rStrm, "CMG=\"BEBC9256EEAAA8AEA8AEA8AEA8AE\"\r\n");
+
+    // section 2.3.1.16 ProjectPassword
+    exportString(rStrm, "DPB=\"7C7E5014B0D3B1D3B1D3\"\r\n");
+
+    // section 2.3.1.17 ProjectVisibilityState
+    exportString(rStrm, "GC=\"3A3816DAD5DBD5DB2A\"\r\n\r\n");
+
+    // section 2.3.1.18 HostExtenders
+    exportString(rStrm, "[Host Extender Info]\r\n"
+                        "&H00000001={3832D640-CF90-11CF-8E43-00A0C911005A};VBE;&H00000000\r\n"
+    );
+}
+
 // section 2.3.3.1 NAMEMAP
 void writeNAMEMAP(SvStream& rStrm, css::uno::Sequence<OUString> rElementNames)
 {
@@ -685,6 +772,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         pModuleStream[i] = pVBAStream->OpenSotStream(aElementNames[i], STREAM_READWRITE);
     }
     SotStorageStream* pVBAProjectStream = pVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
+    SotStorageStream* pPROJECTStream = pRootStorage->OpenSotStream("PROJECT", STREAM_READWRITE);
     SotStorageStream* pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECTwm", STREAM_READWRITE);
 
 
@@ -698,6 +786,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         exportModuleStream(*pModuleStream[i], aSourceCode, aElementNames[i]);
     }
     exportVBAProjectStream(*pVBAProjectStream);
+    exportPROJECTStream(*pPROJECTStream, xNameContainer, getProjectName());
     exportPROJECTwmStream(*pPROJECTwmStream, aElementNames);
 
     pVBAProjectStream->Commit();
@@ -707,6 +796,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     }
     pDirStream->Commit();
     pVBAStream->Commit();
+    pPROJECTStream->Commit();
     pPROJECTwmStream->Commit();
     pRootStorage->Commit();
 }
