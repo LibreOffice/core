@@ -211,7 +211,8 @@ public:
     inline void Validate(){ nBeginInvalid = nEndInvalid = COMPLETE_STRING; }
     void Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );
     bool InvalidateWrong();
-    bool Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
+    enum class FreshState { FRESH, CURSOR, NOTHING };
+    FreshState Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
             sal_Int32 nLen, sal_uInt16 nIndex, sal_Int32 nCursorPos );
     sal_uInt16 GetWrongPos( sal_Int32 nValue ) const;
 

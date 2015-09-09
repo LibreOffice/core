@@ -1311,6 +1311,7 @@ SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
     }
 
     bool bFresh = nBegin < nEnd;
+    bool bPending(false);
 
     if( bFresh )
     {
@@ -1353,13 +1354,19 @@ SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
                             pNode->SetWrong( new SwWrongList( WRONGLIST_SPELL ) );
                             pNode->GetWrong()->SetInvalid( 0, nEnd );
                         }
-                        if( pNode->GetWrong()->Fresh( nChgStart, nChgEnd,
-                            nBegin, nLen, nInsertPos, nActPos ) )
-                            pNode->GetWrong()->Insert( OUString(), 0, nBegin, nLen, nInsertPos++ );
-                        else
+                        SwWrongList::FreshState const eState(pNode->GetWrong()->Fresh(
+                            nChgStart, nChgEnd, nBegin, nLen, nInsertPos, nActPos));
+                        switch (eState)
                         {
-                            nInvStart = nBegin;
-                            nInvEnd = nBegin + nLen;
+                            case SwWrongList::FreshState::FRESH:
+                                pNode->GetWrong()->Insert(OUString(), 0, nBegin, nLen, nInsertPos++);
+                                break;
+                            case SwWrongList::FreshState::CURSOR:
+                                bPending = true; // fall-through to mark as invalid
+                            case SwWrongList::FreshState::NOTHING:
+                                nInvStart = nBegin;
+                                nInvEnd = nBegin + nLen;
+                                break;
                         }
                     }
                 }
@@ -1402,12 +1409,17 @@ SwRect SwTextFrm::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos )
         }
 
         pNode->GetWrong()->SetInvalid( nInvStart, nInvEnd );
-        pNode->SetWrongDirty( COMPLETE_STRING != pNode->GetWrong()->GetBeginInv() );
+        pNode->SetWrongDirty(
+            (COMPLETE_STRING != pNode->GetWrong()->GetBeginInv())
+                ? ((bPending)
+                    ? SwTextNode::WrongState::PENDING
+                    : SwTextNode::WrongState::TODO)
+                : SwTextNode::WrongState::DONE);
         if( !pNode->GetWrong()->Count() && ! pNode->IsWrongDirty() )
             pNode->SetWrong( NULL );
     }
     else
-        pNode->SetWrongDirty( false );
+        pNode->SetWrongDirty(SwTextNode::WrongState::DONE);
 
     if( bAddAutoCmpl )
         pNode->SetAutoCompleteWordDirty( false );
@@ -2115,7 +2127,7 @@ struct SwParaIdleData_Impl
     sal_uLong nNumberOfChars;
     sal_uLong nNumberOfCharsExcludingSpaces;
     bool bWordCountDirty;
-    bool bWrongDirty;                   // Ist das Wrong-Feld auf invalid?
+    SwTextNode::WrongState eWrongDirty; ///< online spell checking needed/done?
     bool bGrammarCheckDirty;
     bool bSmartTagDirty;
     bool bAutoComplDirty;               // die ACompl-Liste muss angepasst werden
@@ -2129,7 +2141,7 @@ struct SwParaIdleData_Impl
         nNumberOfChars      ( 0 ),
         nNumberOfCharsExcludingSpaces ( 0 ),
         bWordCountDirty     ( true ),
-        bWrongDirty         ( true ),
+        eWrongDirty         ( SwTextNode::WrongState::TODO ),
         bGrammarCheckDirty  ( true ),
         bSmartTagDirty      ( true ),
         bAutoComplDirty     ( true ) {};
@@ -2276,17 +2288,22 @@ bool SwTextNode::IsWordCountDirty() const
     return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bWordCountDirty;
 }
 
-void SwTextNode::SetWrongDirty( bool bNew ) const
+void SwTextNode::SetWrongDirty(WrongState eNew) const
 {
     if ( m_pParaIdleData_Impl )
     {
-        m_pParaIdleData_Impl->bWrongDirty = bNew;
+        m_pParaIdleData_Impl->eWrongDirty = eNew;
     }
+}
+
+auto SwTextNode::GetWrongDirty() const -> WrongState
+{
+    return (m_pParaIdleData_Impl) ? m_pParaIdleData_Impl->eWrongDirty : WrongState::DONE;
 }
 
 bool SwTextNode::IsWrongDirty() const
 {
-    return m_pParaIdleData_Impl && m_pParaIdleData_Impl->bWrongDirty;
+    return m_pParaIdleData_Impl && m_pParaIdleData_Impl->eWrongDirty != WrongState::DONE;
 }
 
 void SwTextNode::SetGrammarCheckDirty( bool bNew ) const
