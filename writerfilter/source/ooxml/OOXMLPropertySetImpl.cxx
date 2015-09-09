@@ -624,7 +624,7 @@ string OOXMLHexValue::toString() const
 
 OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const char * pValue)
 {
-    mnValue = rtl_str_toUInt32(pValue, 10); // will ignore the trailing 'pt'
+    mnValue = rtl_str_toInt32(pValue, 10); // will ignore the trailing 'pt'
 
     int nLen = strlen(pValue);
     if (nLen > 2 &&
