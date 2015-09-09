@@ -64,6 +64,7 @@
 // We also need to hackily be able to start the main libreoffice thread:
 #include "../app/sofficemain.h"
 #include "../app/officeipcthread.hxx"
+#include "../../inc/lib/init.hxx"
 
 using namespace css;
 using namespace vcl;
@@ -72,7 +73,6 @@ using namespace utl;
 
 using namespace boost;
 
-struct LibLODocument_Impl;
 struct LibLibreOffice_Impl;
 
 static LibLibreOffice_Impl *gImpl = NULL;
@@ -237,51 +237,46 @@ static void doc_setGraphicSelection (LibreOfficeKitDocument* pThis,
 static void doc_resetSelection (LibreOfficeKitDocument* pThis);
 static char* doc_getStyles(LibreOfficeKitDocument* pThis);
 
-struct LibLODocument_Impl : public _LibreOfficeKitDocument
+
+LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
+    mxComponent( xComponent )
 {
-    uno::Reference<css::lang::XComponent> mxComponent;
-    shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
-
-    explicit LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
-        mxComponent( xComponent )
+    if (!(m_pDocumentClass = gDocumentClass.lock()))
     {
-        if (!(m_pDocumentClass = gDocumentClass.lock()))
-        {
-            m_pDocumentClass.reset(new LibreOfficeKitDocumentClass);
+        m_pDocumentClass.reset(new LibreOfficeKitDocumentClass);
 
-            m_pDocumentClass->nSize = sizeof(LibreOfficeKitDocument);
+        m_pDocumentClass->nSize = sizeof(LibreOfficeKitDocument);
 
-            m_pDocumentClass->destroy = doc_destroy;
-            m_pDocumentClass->saveAs = doc_saveAs;
-            m_pDocumentClass->getDocumentType = doc_getDocumentType;
-            m_pDocumentClass->getParts = doc_getParts;
-            m_pDocumentClass->getPart = doc_getPart;
-            m_pDocumentClass->setPart = doc_setPart;
-            m_pDocumentClass->getPartName = doc_getPartName;
-            m_pDocumentClass->setPartMode = doc_setPartMode;
-            m_pDocumentClass->paintTile = doc_paintTile;
-            m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
-            m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
-            m_pDocumentClass->registerCallback = doc_registerCallback;
-            m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
-            m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
-            m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
-            m_pDocumentClass->setTextSelection = doc_setTextSelection;
-            m_pDocumentClass->getTextSelection = doc_getTextSelection;
-            m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
-            m_pDocumentClass->resetSelection = doc_resetSelection;
-            m_pDocumentClass->getStyles = doc_getStyles;
+        m_pDocumentClass->destroy = doc_destroy;
+        m_pDocumentClass->saveAs = doc_saveAs;
+        m_pDocumentClass->getDocumentType = doc_getDocumentType;
+        m_pDocumentClass->getParts = doc_getParts;
+        m_pDocumentClass->getPart = doc_getPart;
+        m_pDocumentClass->setPart = doc_setPart;
+        m_pDocumentClass->getPartName = doc_getPartName;
+        m_pDocumentClass->setPartMode = doc_setPartMode;
+        m_pDocumentClass->paintTile = doc_paintTile;
+        m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
+        m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
+        m_pDocumentClass->registerCallback = doc_registerCallback;
+        m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
+        m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
+        m_pDocumentClass->postUnoCommand = doc_postUnoCommand;
+        m_pDocumentClass->setTextSelection = doc_setTextSelection;
+        m_pDocumentClass->getTextSelection = doc_getTextSelection;
+        m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
+        m_pDocumentClass->resetSelection = doc_resetSelection;
+        m_pDocumentClass->getStyles = doc_getStyles;
 
-            gDocumentClass = m_pDocumentClass;
-        }
-        pClass = m_pDocumentClass.get();
+        gDocumentClass = m_pDocumentClass;
     }
+    pClass = m_pDocumentClass.get();
+}
 
-    ~LibLODocument_Impl()
-    {
-        mxComponent->dispose();
-    }
-};
+LibLODocument_Impl::~LibLODocument_Impl()
+{
+    mxComponent->dispose();
+}
 
 static void doc_destroy(LibreOfficeKitDocument *pThis)
 {
