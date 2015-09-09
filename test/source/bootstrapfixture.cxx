@@ -85,12 +85,11 @@ void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
 }
 
 struct InitHook {
-    DECL_STATIC_LINK(InitHook, deinitHook, void*);
+    DECL_STATIC_LINK_TYPED(InitHook, deinitHook, LinkParamNone*, void);
 };
 
-IMPL_STATIC_LINK_NOARG(InitHook, deinitHook) {
+IMPL_STATIC_LINK_NOARG_TYPED(InitHook, deinitHook, LinkParamNone*, void) {
     // nothing to do for now
-    return 0;
 }
 
 // this is called from pyuno

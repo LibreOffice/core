@@ -344,7 +344,7 @@ struct ImplSVData
     std::list< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList;
     std::unordered_map< int, OUString >* mpPaperNames;
 
-    Link<> maDeInitHook;
+    Link<LinkParamNone*,void> maDeInitHook;
 };
 
 void        ImplDeInitSVData();

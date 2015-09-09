@@ -1600,7 +1600,7 @@ Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM 
     return pSVData->mpDefInst->createFolderPicker( xSM );
 }
 
-void Application::setDeInitHook(Link<> const & hook) {
+void Application::setDeInitHook(Link<LinkParamNone*,void> const & hook) {
     ImplSVData * pSVData = ImplGetSVData();
     assert(!pSVData->maDeInitHook.IsSet());
     pSVData->maDeInitHook = hook;

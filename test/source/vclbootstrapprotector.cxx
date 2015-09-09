@@ -56,14 +56,15 @@ private:
         SAL_OVERRIDE
     { return functor(); }
 
-    DECL_STATIC_LINK(Protector, deinitHook, void *);
+    DECL_STATIC_LINK_TYPED(Protector, deinitHook, LinkParamNone*, void);
 };
 
 // HACK so that defaultBootstrap_InitialComponentContext (in
 // unobootstrapprotector) is called before InitVCL (above), but component
 // context is disposed (redundantly again in unobootstrapprotector) from within
 // DeInitVCL (cf. Desktop::DeInit, desktop/source/app/app.cxx):
-IMPL_STATIC_LINK_NOARG(Protector, deinitHook) {
+IMPL_STATIC_LINK_NOARG_TYPED(Protector, deinitHook, LinkParamNone*, void)
+{
     css::uno::Reference<css::uno::XComponentContext> context;
     try {
         context = comphelper::getProcessComponentContext();
@@ -82,7 +83,6 @@ IMPL_STATIC_LINK_NOARG(Protector, deinitHook) {
             context, css::uno::UNO_QUERY_THROW)->dispose();
         comphelper::setProcessServiceFactory(0);
     }
-    return 0;
 }
 
 }
