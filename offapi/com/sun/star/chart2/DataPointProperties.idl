@@ -263,6 +263,8 @@ service DataPointProperties
     [optional, property] string LabelSeparator;
 
     /** specifies if the text of a data label (caption) must be wrapped
+
+        @since LibreOffice 5.1
      */
     [optional, property] boolean TextWordWrap;
 

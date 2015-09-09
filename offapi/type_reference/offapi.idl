@@ -3136,7 +3136,6 @@ module com {
      interface ::com::sun::star::beans::XPropertySet;
      [property] long DataCaption;
      [property, optional] string LabelSeparator;
-     [property, optional] boolean TextWordWrap;
      [property, optional] long NumberFormat;
      [property, optional] long PercentageNumberFormat;
      [property, optional] long LabelPlacement;

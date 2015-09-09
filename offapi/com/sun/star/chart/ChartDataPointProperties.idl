@@ -92,11 +92,6 @@ published service ChartDataPointProperties
     [optional, property] string LabelSeparator;
 
 
-    /** specifies if the text of a data label (caption) must be wrapped
-     */
-    [optional, property] boolean TextWordWrap;
-
-
     /** specifies a number format for the display of the value in the data label
      */
     [optional, property] long NumberFormat;
@@ -138,6 +133,12 @@ published service ChartDataPointProperties
         percent of the radius.
      */
     [optional, property] long SegmentOffset;
+
+    /** specifies if the text of a data label (caption) must be wrapped
+
+        @since LibreOffice 5.1
+     */
+    [optional, property] boolean TextWordWrap;
 };
 
 
