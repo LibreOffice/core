@@ -845,7 +845,7 @@ static void lcl_SetWrong( SwTextFrm& rFrm, sal_Int32 nPos, sal_Int32 nCnt, bool 
             pTextNode->SetSmartTags( new SwWrongList( WRONGLIST_SMARTTAG ) );
             pTextNode->GetSmartTags()->SetInvalid( nPos, nEnd );
         }
-        pTextNode->SetWrongDirty( true );
+        pTextNode->SetWrongDirty(SwTextNode::WrongState::TODO);
         pTextNode->SetGrammarCheckDirty( true );
         pTextNode->SetWordCountDirty( true );
         pTextNode->SetAutoCompleteWordDirty( true );

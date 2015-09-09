@@ -428,7 +428,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         {
             pNode->SetWrong( GetWrong()->SplitList( nSplitPos ) );
         }
-        SetWrongDirty( true );
+        SetWrongDirty(WrongState::TODO);
 
         if( GetGrammarCheck() )
         {
@@ -531,7 +531,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
     {
         SwWrongList *pList = GetWrong();
         SetWrong( 0, false );
-        SetWrongDirty( true );
+        SetWrongDirty(WrongState::TODO);
 
         SwGrammarMarkUp *pList3 = GetGrammarCheck();
         SetGrammarCheck( 0, false );
@@ -652,7 +652,7 @@ SwContentNode *SwTextNode::JoinNext()
         if( pList )
         {
             pList->JoinList( pTextNode->GetWrong(), nOldLen );
-            SetWrongDirty( true );
+            SetWrongDirty(WrongState::TODO);
             SetWrong( 0, false );
         }
         else
@@ -661,7 +661,7 @@ SwContentNode *SwTextNode::JoinNext()
             if( pList )
             {
                 pList->Move( 0, nOldLen );
-                SetWrongDirty( true );
+                SetWrongDirty(WrongState::TODO);
                 pTextNode->SetWrong( 0, false );
             }
         }
@@ -743,7 +743,7 @@ SwContentNode *SwTextNode::JoinPrev()
         if( pList )
         {
             pList->JoinList( GetWrong(), Len() );
-            SetWrongDirty( true );
+            SetWrongDirty(WrongState::TODO);
             pTextNode->SetWrong( 0, false );
             SetWrong( NULL );
         }
@@ -753,7 +753,7 @@ SwContentNode *SwTextNode::JoinPrev()
             if( pList )
             {
                 pList->Move( 0, nLen );
-                SetWrongDirty( true );
+                SetWrongDirty(WrongState::TODO);
                 SetWrong( 0, false );
             }
         }
@@ -1387,7 +1387,7 @@ const SwTextInputField* SwTextNode::GetOverlappingInputField( const SwTextAttr& 
 void SwTextNode::DelFrms_TextNodePart()
 {
     SetWrong( NULL );
-    SetWrongDirty( true );
+    SetWrongDirty(WrongState::TODO);
 
     SetGrammarCheck( NULL );
     SetGrammarCheckDirty( true );
