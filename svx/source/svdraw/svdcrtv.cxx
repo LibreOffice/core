@@ -662,7 +662,6 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                         // delete object, its content is cloned and inserted
                         SdrObject::Free( pObjMerk );
                         pObjMerk = 0L;
-                        bRet = false;
                         bSceneIntoScene = true;
                     }
                 }
