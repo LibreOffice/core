@@ -411,10 +411,6 @@ void SvpSalFrame::Flush()
 {
 }
 
-void SvpSalFrame::Sync()
-{
-}
-
 void SvpSalFrame::SetInputContext( SalInputContext* )
 {
 }

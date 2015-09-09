@@ -806,7 +806,7 @@ void grindFunc( OutputDevice&                       rTarget,
         iter->second(&rTarget);
 
     if( rTarget.GetOutDevType() == OUTDEV_WINDOW )
-        static_cast< vcl::Window & >( rTarget ).Sync();
+        static_cast< vcl::Window & >( rTarget ).Flush();
 
     fprintf( stdout,
              "Duration: %d ms (%d repetitions)\tOperation: %s\tSetup: %s\n",

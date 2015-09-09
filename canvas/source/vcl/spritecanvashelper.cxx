@@ -305,7 +305,7 @@ namespace vclcanvas
         if( pTargetWindow )
         {
             // commit to screen
-            pTargetWindow->Sync();
+            pTargetWindow->Flush();
         }
 
         return true;

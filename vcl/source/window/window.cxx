@@ -3156,12 +3156,6 @@ void Window::Flush()
     mpWindowImpl->mpFrame->Flush( aWinRect );
 }
 
-void Window::Sync()
-{
-
-    mpWindowImpl->mpFrame->Sync();
-}
-
 void Window::SetUpdateMode( bool bUpdate )
 {
     mpWindowImpl->mbNoUpdate = !bUpdate;

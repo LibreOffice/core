@@ -2936,11 +2936,6 @@ void GtkSalFrame::Flush()
 #endif
 }
 
-void GtkSalFrame::Sync()
-{
-    gdk_display_sync( getGdkDisplay() );
-}
-
 #ifndef GDK_Open
 #define GDK_Open 0x1008ff6b
 #endif
