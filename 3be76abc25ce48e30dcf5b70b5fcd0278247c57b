@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_9b644f4a",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-09T03:13:17Z",
+      "side": 1,
+      "message": "I assume this is for the unnecessary printf.",
+      "revId": "3be76abc25ce48e30dcf5b70b5fcd0278247c57b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_bb5f9374",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-09T03:13:17Z",
+      "side": 1,
+      "message": "That looks like an accident.",
+      "revId": "3be76abc25ce48e30dcf5b70b5fcd0278247c57b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_fb590b90",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-09T03:13:17Z",
+      "side": 1,
+      "message": "See above.",
+      "revId": "3be76abc25ce48e30dcf5b70b5fcd0278247c57b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_db5ec775",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-09T03:13:17Z",
+      "side": 1,
+      "message": "Again.",
+      "revId": "3be76abc25ce48e30dcf5b70b5fcd0278247c57b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_3b542353",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-09T03:13:17Z",
+      "side": 1,
+      "message": "Again.",
+      "revId": "3be76abc25ce48e30dcf5b70b5fcd0278247c57b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
