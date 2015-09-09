@@ -372,8 +372,11 @@ sal_Bool VclGtkClipboard::supportsService( const OUString& ServiceName ) throw( 
 
 Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents() throw( RuntimeException, std::exception )
 {
-    if (!m_aContents.is())
+    if (G_OBJECT(m_pOwner) != gtk_clipboard_get_owner(gtk_clipboard_get(m_nSelection)) &&
+        !m_aContents.is())
     {
+        //tdf#93887 This is the system clipboard/selection. We fetch it when we are not
+        //the owner of the clipboard and have not already fetched it.
         m_aContents = new GtkTransferable(m_nSelection);
     }
     return m_aContents;
