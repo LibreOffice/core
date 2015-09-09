@@ -432,7 +432,7 @@ void writePROJECTINFORMATION(SvStream& rStrm)
 }
 
 // section 2.3.4.2.2.2
-void writeREFERENCENAME(SvStream& rStrm, const OUString name)
+void writeREFERENCENAME(SvStream& rStrm, const OUString& name)
 {
     rStrm.WriteUInt16(0x0016); // id
     sal_Int32 size = name.getLength();
@@ -445,7 +445,7 @@ void writeREFERENCENAME(SvStream& rStrm, const OUString name)
 }
 
 // section 2.3.4.2.2.5
-void writeREFERENCEREGISTERED(SvStream& rStrm, const OUString libid)
+void writeREFERENCEREGISTERED(SvStream& rStrm, const OUString& libid)
 {
     rStrm.WriteUInt16(0x000D); // id
     sal_Int32 sizeOfLibid = libid.getLength();
@@ -458,7 +458,7 @@ void writeREFERENCEREGISTERED(SvStream& rStrm, const OUString libid)
 }
 
 // section 2.3.4.2.2.1
-void writeREFERENCE(SvStream& rStrm, const OUString name, const OUString libid)
+void writeREFERENCE(SvStream& rStrm, const OUString& name, const OUString& libid)
 {
     writeREFERENCENAME(rStrm, name);
     writeREFERENCEREGISTERED(rStrm, libid);
@@ -481,7 +481,7 @@ void writePROJECTCOOKIE(SvStream& rStrm)
 }
 
 // section 2.3.4.2.3.2.1
-void writeMODULENAME(SvStream& rStrm, const OUString name)
+void writeMODULENAME(SvStream& rStrm, const OUString& name)
 {
     rStrm.WriteUInt16(0x0019); // id
     sal_Int32 n = name.getLength(); // sizeOfModuleName
@@ -490,7 +490,7 @@ void writeMODULENAME(SvStream& rStrm, const OUString name)
 }
 
 // section 2.3.4.2.3.2.2
-void writeMODULENAMEUNICODE(SvStream& rStrm, const OUString name)
+void writeMODULENAMEUNICODE(SvStream& rStrm, const OUString& name)
 {
     rStrm.WriteUInt16(0x0047); // id
     sal_Int32 n = name.getLength() * 2; // sizeOfModuleNameUnicode // TODO: better calculation for unicode string length
@@ -499,7 +499,7 @@ void writeMODULENAMEUNICODE(SvStream& rStrm, const OUString name)
 }
 
 // section 2.3.4.2.3.2.3
-void writeMODULESTREAMNAME(SvStream& rStrm, const OUString streamName)
+void writeMODULESTREAMNAME(SvStream& rStrm, const OUString& streamName)
 {
     rStrm.WriteUInt16(0x001A); // id
     sal_Int32 n = streamName.getLength(); // sizeOfStreamName
@@ -554,7 +554,7 @@ void writeMODULETYPE(SvStream& rStrm, const sal_uInt16 type)
 }
 
 // section 2.3.4.2.3.2
-void writePROJECTMODULE(SvStream& rStrm, const OUString name, const OUString streamName, sal_uInt32 offset, const sal_uInt16 type)
+void writePROJECTMODULE(SvStream& rStrm, const OUString& name, const OUString& streamName, sal_uInt32 offset, const sal_uInt16 type)
 {
     writeMODULENAME(rStrm, name);
     writeMODULENAMEUNICODE(rStrm, name);
@@ -620,7 +620,7 @@ void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameC
 }
 
 // section 2.3.4.3 Module Stream
-void exportModuleStream(SvStream& rStrm, OUString aSourceCode, OUString aElementName)
+void exportModuleStream(SvStream& rStrm, const OUString& aSourceCode, const OUString& aElementName)
 {
     SvMemoryStream aModuleStream(4096, 4096);
 
@@ -683,7 +683,7 @@ OString generateGUIDString()
 }
 
 // section 2.3.1 PROJECT Stream
-void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, OUString projectName)
+void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, const OUString& projectName)
 {
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
@@ -736,7 +736,7 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
 }
 
 // section 2.3.3.1 NAMEMAP
-void writeNAMEMAP(SvStream& rStrm, css::uno::Sequence<OUString> rElementNames)
+void writeNAMEMAP(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementNames)
 {
     int n = rElementNames.getLength();
     for(sal_Int32 i = 0; i < n; ++i)
@@ -749,7 +749,7 @@ void writeNAMEMAP(SvStream& rStrm, css::uno::Sequence<OUString> rElementNames)
 }
 
 // section 2.3.3 PROJECTwm Stream
-void exportPROJECTwmStream(SvStream& rStrm, css::uno::Sequence<OUString> rElementNames)
+void exportPROJECTwmStream(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementNames)
 {
     writeNAMEMAP(rStrm, rElementNames);
     rStrm.WriteUInt16(0x0000); // terminator
