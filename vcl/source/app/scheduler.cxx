@@ -116,6 +116,9 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce)
     ImplSVData* pSVData = ImplGetSVData();
     InitSystemTimer(pSVData);
 
+    if ( !nMS )
+        nMS = 1;
+
     // Update timeout only when not in timer handler and
     // only if smaller timeout, to avoid skipping.
     if (bForce || (!pSVData->mnUpdateStack &&
@@ -290,3 +293,5 @@ Scheduler::~Scheduler()
         mpSchedulerData->mpScheduler = NULL;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
