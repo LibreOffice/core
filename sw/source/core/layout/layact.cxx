@@ -1931,7 +1931,8 @@ bool SwLayIdle::_DoIdleJob( const SwContentFrm *pCnt, IdleJobType eJob )
             case ONLINE_SPELLING :
             {
                 SwRect aRepaint( const_cast<SwTextFrm*>(static_cast<const SwTextFrm*>(pCnt))->_AutoSpell( pContentNode, nTextPos ) );
-                bPageValid = bPageValid && !pTextNode->IsWrongDirty();
+                // tdf#92036 PENDING should stop idle spell checking
+                bPageValid = bPageValid && (SwTextNode::WrongState::TODO != pTextNode->GetWrongDirty());
                 if( !bPageValid )
                     bAllValid = false;
                 if ( aRepaint.HasArea() )

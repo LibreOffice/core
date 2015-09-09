@@ -2562,7 +2562,7 @@ throw (uno::RuntimeException, std::exception)
 
     if ( text::TextMarkupType::SPELLCHECK == nType )
     {
-        txtNode->SetWrongDirty(true);
+        txtNode->SetWrongDirty(SwTextNode::WrongState::TODO);
         txtNode->SetWrong(0, true);
     }
     else if( text::TextMarkupType::PROOFREADING == nType )

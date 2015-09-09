@@ -356,11 +356,17 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
 
    @return <true> if ???
  */
-bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
-                             sal_Int32 nLen, sal_uInt16 nIndex, sal_Int32 nCursorPos )
+auto SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
+     sal_Int32 nLen, sal_uInt16 nIndex, sal_Int32 nCursorPos ) -> FreshState
 {
-    // length of word must be greater than 0 and cursor position must be outside the word
-    bool bRet = nLen && ( nCursorPos > nPos + nLen || nCursorPos < nPos );
+    // length of word must be greater than 0
+    // only report a spelling error if the cursor position is outside the word,
+    // so that the user is not annoyed while typing
+    FreshState eRet = (nLen)
+        ? (nCursorPos > nPos + nLen || nCursorPos < nPos)
+            ? FreshState::FRESH
+            : FreshState::CURSOR
+        : FreshState::NOTHING;
 
     sal_Int32 nWrPos = 0;
     sal_Int32 nWrEnd = rEnd;
@@ -383,11 +389,11 @@ bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
     if( nCnt < Count() && nWrPos == nPos && Len( nCnt ) == nLen )
     {
         ++nCnt;
-        bRet = true;
+        eRet = FreshState::FRESH;
     }
     else
     {
-        if( bRet )
+        if (FreshState::FRESH == eRet)
         {
             if( rStart > nPos )
                 rStart = nPos;
@@ -417,7 +423,7 @@ bool SwWrongList::Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,
 
     Remove( nIndex, nCnt - nIndex );
 
-    return bRet;
+    return eRet;
 }
 
 void SwWrongList::Invalidate( sal_Int32 nBegin, sal_Int32 nEnd )

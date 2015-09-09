@@ -184,13 +184,16 @@ class SW_DLLPUBLIC SwTextNode: public SwContentNode, public ::sfx2::Metadatable
     void DelFrms_TextNodePart();
 
 public:
+    enum class WrongState { TODO, PENDING, DONE };
+
     bool IsWordCountDirty() const;
+    WrongState GetWrongDirty() const;
     bool IsWrongDirty() const;
     bool IsGrammarCheckDirty() const;
     bool IsSmartTagDirty() const;
     bool IsAutoCompleteWordDirty() const;
     void SetWordCountDirty( bool bNew ) const;
-    void SetWrongDirty( bool bNew ) const;
+    void SetWrongDirty(WrongState eNew) const;
     void SetGrammarCheckDirty( bool bNew ) const;
     void SetSmartTagDirty( bool bNew ) const;
     void SetAutoCompleteWordDirty( bool bNew ) const;
