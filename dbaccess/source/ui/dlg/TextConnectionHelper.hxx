@@ -82,7 +82,7 @@ namespace dbaui
     protected:
         void callModifiedHdl() const { if (m_aModifiedHandler.IsSet()) m_aModifiedHandler.Call(const_cast<OTextConnectionHelper *>(this)); }
         Link<> getControlModifiedLink() { return LINK(this, OTextConnectionHelper, OnControlModified); }
-        DECL_LINK(OnSetExtensionHdl,RadioButton*);
+        DECL_LINK_TYPED(OnSetExtensionHdl,RadioButton&,void);
         DECL_LINK(OnControlModified,Control*);
         DECL_LINK(OnEditModified,Edit*);
 

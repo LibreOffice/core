@@ -680,7 +680,7 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     maOptionsPage.mpPapersizeFromSetup->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     maJobPage.mpReverseOrderBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
     maOptionsPage.mpCollateSingleJobsBox->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
-    maNUpPage.mpPagesBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
+    maNUpPage.mpPagesBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleRadioHdl ) );
     // setup modify hdl
     mpPageEdit->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maJobPage.mpCopyCountField->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
@@ -1006,7 +1006,7 @@ void PrintDialog::setupOptionalUI()
                 pVal->Value >>= bVal;
             maNUpPage.mpBrochureBtn->Check( bVal );
             maNUpPage.mpBrochureBtn->Enable( maPController->isUIOptionEnabled( aPropertyName ) && pVal != NULL );
-            maNUpPage.mpBrochureBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleHdl ) );
+            maNUpPage.mpBrochureBtn->SetToggleHdl( LINK( this, PrintDialog, ToggleRadioHdl ) );
 
             maPropertyToWindowMap[ aPropertyName ].push_back( maNUpPage.mpBrochureBtn );
             maControlToPropertyMap[maNUpPage.mpBrochureBtn] = aPropertyName;
@@ -1546,6 +1546,11 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
     return 0;
 }
 
+IMPL_LINK_TYPED( PrintDialog, ToggleRadioHdl, RadioButton&, rButton, void )
+{
+    ClickHdl(static_cast<Button*>(&rButton));
+}
+
 IMPL_LINK( PrintDialog, ToggleHdl, void*, pButton )
 {
     ClickHdl(static_cast<Button*>(pButton));
@@ -1774,18 +1779,18 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox*, i_pBox )
     return 0;
 }
 
-IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
+IMPL_LINK_TYPED( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )
 {
     // this handler gets called for all radiobuttons that get unchecked, too
     // however we only want one notificaction for the new value (that is for
     // the button that gets checked)
-    if( i_pBtn->IsChecked() )
+    if( i_rBtn.IsChecked() )
     {
-        PropertyValue* pVal = getValueForWindow( i_pBtn );
-        auto it = maControlToNumValMap.find( i_pBtn );
+        PropertyValue* pVal = getValueForWindow( &i_rBtn );
+        auto it = maControlToNumValMap.find( &i_rBtn );
         if( pVal && it != maControlToNumValMap.end() )
         {
-            makeEnabled( i_pBtn );
+            makeEnabled( &i_rBtn );
 
             sal_Int32 nVal = it->second;
             pVal->Value <<= nVal;
@@ -1800,7 +1805,6 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
             preparePreview();
         }
     }
-    return 0;
 }
 
 IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox*, i_pBox )

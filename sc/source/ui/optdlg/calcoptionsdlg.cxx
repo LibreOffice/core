@@ -240,10 +240,9 @@ IMPL_LINK(ScCalcOptionsDialog, SpinOpenCLMinSizeHdl, NumericField*, pSpin)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScCalcOptionsDialog, BtnAutomaticSelectHdl)
+IMPL_LINK_NOARG_TYPED(ScCalcOptionsDialog, BtnAutomaticSelectHdl, RadioButton&, void)
 {
     OpenCLAutomaticSelectionChanged();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScCalcOptionsDialog, DeviceSelHdl, SvTreeListBox*, void)

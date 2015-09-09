@@ -38,7 +38,8 @@ private:
     VclPtr<RadioButton>  mpTwoFactorRadio;
     VclPtr<NumericField> mpRowsPerSampleField;
 
-    DECL_LINK(FactorChanged,   void*);
+    DECL_LINK_TYPED(FactorChanged, RadioButton&, void);
+    void FactorChanged();
 
     AnovaFactor meFactor;
 

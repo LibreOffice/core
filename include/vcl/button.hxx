@@ -284,7 +284,7 @@ private:
     bool            mbSaveValue;
     bool            mbRadioCheck;
     bool            mbStateChanged;
-    Link<>          maToggleHdl;
+    Link<RadioButton&,void> maToggleHdl;
     // when mbLegacyNoTextAlign is set then the old behaviour where
     // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
     // occurs, otherwise the image ( radiobutton circle ) is placed
@@ -372,7 +372,7 @@ public:
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    void            SetToggleHdl( const Link<>& rLink ) { maToggleHdl = rLink; }
+    void            SetToggleHdl( const Link<RadioButton&,void>& rLink ) { maToggleHdl = rLink; }
 
     /** GetRadioButtonGroup returns a list of pointers to <code>RadioButton</code>s in the same group.
 

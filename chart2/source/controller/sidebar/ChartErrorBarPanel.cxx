@@ -289,16 +289,16 @@ void ChartErrorBarPanel::Initialize()
 
     updateData();
 
-    Link<> aLink = LINK(this, ChartErrorBarPanel, RadioBtnHdl);
+    Link<RadioButton&,void> aLink = LINK(this, ChartErrorBarPanel, RadioBtnHdl);
     mpRBPosAndNeg->SetToggleHdl(aLink);
     mpRBPos->SetToggleHdl(aLink);
     mpRBNeg->SetToggleHdl(aLink);
 
     mpLBType->SetSelectHdl(LINK(this, ChartErrorBarPanel, ListBoxHdl));
 
-    aLink = LINK(this, ChartErrorBarPanel, NumericFieldHdl);
-    mpMFPos->SetModifyHdl(aLink);
-    mpMFNeg->SetModifyHdl(aLink);
+    Link<> aLink2 = LINK(this, ChartErrorBarPanel, NumericFieldHdl);
+    mpMFPos->SetModifyHdl(aLink2);
+    mpMFNeg->SetModifyHdl(aLink2);
 }
 
 void ChartErrorBarPanel::updateData()
@@ -402,7 +402,7 @@ void ChartErrorBarPanel::updateModel(
     xBroadcasterNew->addModifyListener(mxListener);
 }
 
-IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl)
+IMPL_LINK_NOARG_TYPED(ChartErrorBarPanel, RadioBtnHdl, RadioButton&, void)
 {
     OUString aCID = getCID(mxModel);
     bool bPos = mpRBPosAndNeg->IsChecked() || mpRBPos->IsChecked();
@@ -410,8 +410,6 @@ IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl)
 
     setShowPositiveError(mxModel, aCID, bPos);
     setShowNegativeError(mxModel, aCID, bNeg);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ChartErrorBarPanel, ListBoxHdl)

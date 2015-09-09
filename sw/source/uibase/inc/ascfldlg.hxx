@@ -43,7 +43,7 @@ class SwAsciiFilterDlg : public SfxModalDialog
     bool                m_bSaveLineStatus;
 
     DECL_LINK( CharSetSelHdl, SvxTextEncodingBox* );
-    DECL_LINK( LineEndHdl, RadioButton* );
+    DECL_LINK_TYPED( LineEndHdl, RadioButton&, void );
     void SetCRLF( LineEnd eEnd );
     LineEnd GetCRLF() const;
 

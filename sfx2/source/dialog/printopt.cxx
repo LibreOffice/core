@@ -289,7 +289,7 @@ IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, 
     m_pReduceGradientsColorRB->Enable( bEnable );
     m_pReduceGradientsStepCountNF->Enable( bEnable );
 
-    ToggleReduceGradientsStripesRBHdl(m_pReduceGradientsStripesRB);
+    ToggleReduceGradientsStripesRBHdl(*m_pReduceGradientsStripesRB);
 }
 
 IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, Button*, void )
@@ -302,45 +302,37 @@ IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, Bu
     m_pReduceBitmapsTransparencyCB->Enable( bEnable );
     m_pReduceBitmapsResolutionLB->Enable( bEnable );
 
-    ToggleReduceBitmapsResolutionRBHdl(m_pReduceBitmapsResolutionRB);
+    ToggleReduceBitmapsResolutionRBHdl(*m_pReduceBitmapsResolutionRB);
 }
 
-IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, RadioButton*, pButton )
+IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, RadioButton&, void )
 {
-    (void)pButton; //unused
     const bool bEnable = m_pReduceGradientsCB->IsChecked() && m_pReduceGradientsStripesRB->IsChecked();
 
     m_pReduceGradientsStepCountNF->Enable( bEnable );
-
-    return 0;
 }
 
-IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, RadioButton*, pButton )
+IMPL_LINK_NOARG_TYPED( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, RadioButton&, void )
 {
-    (void)pButton; //unused
     const bool bEnable = m_pReduceBitmapsCB->IsChecked() && m_pReduceBitmapsResolutionRB->IsChecked();
 
     m_pReduceBitmapsResolutionLB->Enable( bEnable );
-
-    return 0;
 }
 
-IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton*, pButton )
+IMPL_LINK_TYPED( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton&, rButton, void )
 {
-    if( pButton->IsChecked() )
+    if( rButton.IsChecked() )
     {
         ImplUpdateControls( &maPrinterOptions );
         bOutputForPrinter = true;
     }
     else
         ImplSaveControls( &maPrinterOptions );
-
-    return 0;
 }
 
-IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton*, pButton )
+IMPL_LINK_TYPED( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton&, rButton, void )
 {
-    if( pButton->IsChecked() )
+    if( rButton.IsChecked() )
     {
         ImplUpdateControls( &maPrintFileOptions );
         bOutputForPrinter = false;
@@ -351,8 +343,6 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton
         ImplSaveControls( &maPrintFileOptions );
         m_pPDFCB->Enable();
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

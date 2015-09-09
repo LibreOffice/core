@@ -79,7 +79,7 @@ private:
     void Init();
     void GetRangeFromSelection();
 
-    DECL_LINK( GroupByChanged,   void* );
+    DECL_LINK_TYPED( GroupByChanged, RadioButton&, void );
     DECL_LINK_TYPED( OkClicked, Button*, void );
     DECL_LINK( GetFocusHandler,  Control* );
     DECL_LINK( LoseFocusHandler, void* );

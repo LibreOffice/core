@@ -73,15 +73,15 @@ private:
     PrinterOptions      maPrinterOptions;
     PrinterOptions      maPrintFileOptions;
 
-                        DECL_DLLPRIVATE_LINK( ToggleOutputPrinterRBHdl, RadioButton* pButton );
-                        DECL_DLLPRIVATE_LINK( ToggleOutputPrintFileRBHdl, RadioButton* pButton );
+                        DECL_DLLPRIVATE_LINK_TYPED( ToggleOutputPrinterRBHdl, RadioButton&, void );
+                        DECL_DLLPRIVATE_LINK_TYPED( ToggleOutputPrintFileRBHdl, RadioButton&, void);
 
                         DECL_DLLPRIVATE_LINK_TYPED( ClickReduceTransparencyCBHdl, Button*, void );
                         DECL_DLLPRIVATE_LINK_TYPED( ClickReduceGradientsCBHdl, Button*, void );
                         DECL_DLLPRIVATE_LINK_TYPED( ClickReduceBitmapsCBHdl, Button*, void );
 
-                        DECL_DLLPRIVATE_LINK( ToggleReduceGradientsStripesRBHdl, RadioButton* pButton );
-                        DECL_DLLPRIVATE_LINK( ToggleReduceBitmapsResolutionRBHdl, RadioButton* pButton );
+                        DECL_DLLPRIVATE_LINK_TYPED( ToggleReduceGradientsStripesRBHdl, RadioButton&, void );
+                        DECL_DLLPRIVATE_LINK_TYPED( ToggleReduceBitmapsResolutionRBHdl, RadioButton&, void );
 
     SAL_DLLPRIVATE void ImplUpdateControls( const PrinterOptions* pCurrentOptions );
     SAL_DLLPRIVATE void ImplSaveControls( PrinterOptions* pCurrentOptions );

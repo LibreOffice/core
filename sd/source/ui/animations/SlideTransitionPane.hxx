@@ -90,7 +90,7 @@ private:
     DECL_LINK_TYPED( AutoPreviewClicked, Button*, void );
 
     DECL_LINK( TransitionSelected, void * );
-    DECL_LINK( AdvanceSlideRadioButtonToggled, void * );
+    DECL_LINK_TYPED( AdvanceSlideRadioButtonToggled, RadioButton&, void );
     DECL_LINK( AdvanceTimeModified, void * );
     DECL_LINK( SpeedListBoxSelected, void * );
     DECL_LINK( SoundListBoxSelected, void * );

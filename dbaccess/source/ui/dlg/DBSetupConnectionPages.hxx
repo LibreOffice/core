@@ -232,7 +232,7 @@ namespace dbaui
         VclPtr<RadioButton>         m_pNATIVEDatabase;
         Link<OMySQLIntroPageSetup *, void> maClickHdl;
 
-        DECL_LINK(OnSetupModeSelected, RadioButton*);
+        DECL_LINK_TYPED(OnSetupModeSelected, RadioButton&, void);
 
     };
 

@@ -231,12 +231,13 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     VclPtr<ImpPDFTabDialog> mpaParent;
 
-    DECL_LINK( TogglePagesHdl, void* );
-    DECL_LINK( ToggleCompressionHdl, void* );
+    DECL_LINK_TYPED( TogglePagesHdl, RadioButton&, void );
+    DECL_LINK_TYPED( ToggleCompressionHdl, RadioButton&, void );
     DECL_LINK( ToggleReduceImageResolutionHdl, void* );
     DECL_LINK( ToggleWatermarkHdl, void* );
     DECL_LINK( ToggleAddStreamHdl, void* );
     DECL_LINK( ToggleExportFormFieldsHdl, void* );
+    void TogglePagesHdl();
 
 public:
     DECL_LINK( ToggleExportPDFAHdl, void* );
@@ -277,8 +278,9 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
 
     bool                    mbUseCTLFont;
 
-    DECL_LINK( ToggleRbPgLyContinueFacingHdl, void* );
-    DECL_LINK( ToggleRbMagnHdl, void* );
+    DECL_LINK_TYPED( ToggleRbPgLyContinueFacingHdl, RadioButton&, void );
+    DECL_LINK_TYPED( ToggleRbMagnHdl, RadioButton&, void );
+    void ToggleRbPgLyContinueFacingHdl();
 
 public:
     ImpPDFTabOpnFtrPage( vcl::Window* pParent,
@@ -313,7 +315,7 @@ class ImpPDFTabViewerPage : public SfxTabPage
     VclPtr<RadioButton>                m_pRbVisibleBookmarkLevels;
     VclPtr<NumericField>               m_pNumBookmarkLevels;
 
-    DECL_LINK( ToggleRbBookmarksHdl, void* );
+    DECL_LINK_TYPED( ToggleRbBookmarksHdl, RadioButton&, void );
 public:
     ImpPDFTabViewerPage( vcl::Window* pParent,
                          const SfxItemSet& rSet );

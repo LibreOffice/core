@@ -394,11 +394,10 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
     return 0;
 }
 
-IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
+IMPL_LINK_TYPED( SwAsciiFilterDlg, LineEndHdl, RadioButton&, rBtn, void )
 {
     if( m_bSaveLineStatus )
-        pBtn->SaveValue();
-    return 0;
+        rBtn.SaveValue();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

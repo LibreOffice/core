@@ -242,14 +242,12 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, LoseFocusHandler )
     return 0;
 }
 
-IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, GroupByChanged )
+IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, GroupByChanged, RadioButton&, void )
 {
     if (mpGroupByColumnsRadio->IsChecked())
         mGroupedBy = BY_COLUMN;
     else if (mpGroupByRowsRadio->IsChecked())
         mGroupedBy = BY_ROW;
-
-    return 0;
 }
 
 IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler )

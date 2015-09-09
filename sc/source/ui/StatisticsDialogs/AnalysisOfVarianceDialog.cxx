@@ -113,7 +113,7 @@ ScAnalysisOfVarianceDialog::ScAnalysisOfVarianceDialog(
     mpSingleFactorRadio->Check();
     mpTwoFactorRadio->Check(false);
 
-    FactorChanged(NULL);
+    FactorChanged();
 }
 
 ScAnalysisOfVarianceDialog::~ScAnalysisOfVarianceDialog()
@@ -140,7 +140,12 @@ sal_Int16 ScAnalysisOfVarianceDialog::GetUndoNameId()
     return STR_ANALYSIS_OF_VARIANCE_UNDO_NAME;
 }
 
-IMPL_LINK_NOARG( ScAnalysisOfVarianceDialog, FactorChanged )
+IMPL_LINK_NOARG_TYPED( ScAnalysisOfVarianceDialog, FactorChanged, RadioButton&, void )
+{
+    FactorChanged();
+}
+
+void ScAnalysisOfVarianceDialog::FactorChanged()
 {
     if (mpSingleFactorRadio->IsChecked())
     {
@@ -156,8 +161,6 @@ IMPL_LINK_NOARG( ScAnalysisOfVarianceDialog, FactorChanged )
         mpRowsPerSampleField->Enable(false); // Rows per sample not yet implemented
         meFactor = TWO_FACTOR;
     }
-
-    return 0;
 }
 
 void ScAnalysisOfVarianceDialog::RowColumn(ScRangeList& rRangeList, AddressWalkerWriter& aOutput, FormulaTemplate& aTemplate,

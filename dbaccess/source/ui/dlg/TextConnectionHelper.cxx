@@ -192,13 +192,12 @@ namespace dbaui
         return 0L;
     }
 
-    IMPL_LINK(OTextConnectionHelper, OnSetExtensionHdl, RadioButton*, /*_pRadioButton*/)
+    IMPL_LINK_NOARG_TYPED(OTextConnectionHelper, OnSetExtensionHdl, RadioButton&, void)
     {
         bool bDoEnable = m_pAccessOtherFiles->IsChecked();
         m_pOwnExtension->Enable(bDoEnable);
         m_pExtensionExample->Enable(bDoEnable);
         m_aGetExtensionHandler.Call(this);
-        return 0L;
     }
 
     void OTextConnectionHelper::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)

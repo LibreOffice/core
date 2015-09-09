@@ -1005,11 +1005,10 @@ IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected)
     return 0;
 }
 
-IMPL_LINK_NOARG(SlideTransitionPane, AdvanceSlideRadioButtonToggled)
+IMPL_LINK_NOARG_TYPED(SlideTransitionPane, AdvanceSlideRadioButtonToggled, RadioButton&, void)
 {
     updateControlState();
     applyToSelectedPages();
-    return 0;
 }
 
 IMPL_LINK_NOARG(SlideTransitionPane, AdvanceTimeModified)

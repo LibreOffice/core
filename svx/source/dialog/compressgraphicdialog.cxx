@@ -319,14 +319,13 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, ResolutionModifiedHdl )
     return 0L;
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleCompressionRB )
+IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleCompressionRB, RadioButton&, void )
 {
     bool choice = m_pLosslessRB->IsChecked();
     m_pCompressionMF->Enable(choice);
     m_pCompressionSlider->Enable(choice);
     m_pQualityMF->Enable(!choice);
     m_pQualitySlider->Enable(!choice);
-    return 0L;
 }
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleReduceResolutionRB )

@@ -255,12 +255,10 @@ void ScMoveTableDlg::InitDocListBox()
 
 // Handler:
 
-IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, void *, pBtn )
+IMPL_LINK_TYPED( ScMoveTableDlg, CheckBtnHdl, RadioButton&, rBtn, void )
 {
-    if (pBtn == pBtnCopy)
+    if (&rBtn == pBtnCopy)
         ResetRenameInput();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScMoveTableDlg, OkHdl, Button*, void)

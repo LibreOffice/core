@@ -358,7 +358,7 @@ void ChartSeriesPanel::Initialize()
     mpCBXError->SetClickHdl(aLink);
     mpCBYError->SetClickHdl(aLink);
 
-    Link<> aLink2 = LINK(this, ChartSeriesPanel, RadioBtnHdl);
+    Link<RadioButton&,void> aLink2 = LINK(this, ChartSeriesPanel, RadioBtnHdl);
     mpRBPrimaryAxis->SetToggleHdl(aLink2);
     mpRBSecondaryAxis->SetToggleHdl(aLink2);
 
@@ -474,14 +474,12 @@ IMPL_LINK_TYPED(ChartSeriesPanel, CheckBoxHdl, Button*, pButton, void)
         setErrorBarVisible(mxModel, aCID, true, bChecked);
 }
 
-IMPL_LINK_NOARG(ChartSeriesPanel, RadioBtnHdl)
+IMPL_LINK_NOARG_TYPED(ChartSeriesPanel, RadioBtnHdl, RadioButton&, void)
 {
     OUString aCID = getCID(mxModel);
     bool bChecked = mpRBPrimaryAxis->IsChecked();
 
     setAttachedAxisType(mxModel, aCID, bChecked);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ChartSeriesPanel, ListBoxHdl)

@@ -990,7 +990,7 @@ public:
     void update_color(sal_uInt16 n = UPDATE_ALL);
 
     DECL_LINK(ColorModifyHdl, void*);
-    DECL_LINK(ModeModifyHdl, void*);
+    DECL_LINK_TYPED(ModeModifyHdl, RadioButton&, void);
 
     sal_Int32 GetColor() const;
 
@@ -1089,13 +1089,13 @@ ColorPickerDialog::ColorPickerDialog( vcl::Window* pParent, sal_Int32 nColor, sa
 
     mpEDHex->SetModifyHdl( aLink );
 
-    aLink = LINK( this, ColorPickerDialog, ModeModifyHdl );
-    mpRBRed->SetToggleHdl( aLink );
-    mpRBGreen->SetToggleHdl( aLink );
-    mpRBBlue->SetToggleHdl( aLink );
-    mpRBHue->SetToggleHdl( aLink );
-    mpRBSaturation->SetToggleHdl( aLink );
-    mpRBBrightness->SetToggleHdl( aLink );
+    Link<RadioButton&,void> aLink2 = LINK( this, ColorPickerDialog, ModeModifyHdl );
+    mpRBRed->SetToggleHdl( aLink2 );
+    mpRBGreen->SetToggleHdl( aLink2 );
+    mpRBBlue->SetToggleHdl( aLink2 );
+    mpRBHue->SetToggleHdl( aLink2 );
+    mpRBSaturation->SetToggleHdl( aLink2 );
+    mpRBBrightness->SetToggleHdl( aLink2 );
 
     Image aSliderImage( maSliderImage );
 
@@ -1421,7 +1421,7 @@ IMPL_LINK(ColorPickerDialog, ColorModifyHdl, void *, p)
     return 0;
 }
 
-IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl)
+IMPL_LINK_NOARG_TYPED(ColorPickerDialog, ModeModifyHdl, RadioButton&, void)
 {
     ColorMode eMode = HUE;
 
@@ -1451,8 +1451,6 @@ IMPL_LINK_NOARG(ColorPickerDialog, ModeModifyHdl)
         meMode = eMode;
         update_color(UPDATE_COLORCHOOSER | UPDATE_COLORSLIDER);
     }
-
-    return 0;
 }
 
 void ColorPickerDialog::setColorComponent( sal_uInt16 nComp, double dValue )

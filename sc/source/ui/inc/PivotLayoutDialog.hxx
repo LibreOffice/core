@@ -92,9 +92,11 @@ private:
     DECL_LINK_TYPED(OKClicked,           Button*, void);
     DECL_LINK(GetFocusHandler,        Control*);
     DECL_LINK(LoseFocusHandler,       void*);
-    DECL_LINK(ToggleSource,           void*);
-    DECL_LINK(ToggleDestination,      void*);
+    DECL_LINK_TYPED(ToggleSource,        RadioButton&, void);
+    DECL_LINK_TYPED(ToggleDestination,   RadioButton&, void);
     DECL_LINK(SourceEditModified, void*);
+    void ToggleSource();
+    void ToggleDestination();
     virtual bool Close() SAL_OVERRIDE;
 
     ScPivotParam maPivotParameters;

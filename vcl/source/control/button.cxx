@@ -2636,7 +2636,7 @@ bool RadioButton::PreNotify( NotifyEvent& rNEvt )
 
 void RadioButton::Toggle()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_RADIOBUTTON_TOGGLE, [this] () { maToggleHdl.Call(this); } );
+    ImplCallEventListenersAndHandler( VCLEVENT_RADIOBUTTON_TOGGLE, [this] () { maToggleHdl.Call(*this); } );
 }
 
 bool RadioButton::SetModeRadioImage( const Image& rImage )

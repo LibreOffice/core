@@ -596,7 +596,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     mpRbRange->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, TogglePagesHdl ) );
 
     mpRbAll->Check();
-    TogglePagesHdl( NULL );
+    TogglePagesHdl();
 
     mpRbSelection->Enable( paParent->mbSelectionPresent );
     mbIsPresentation = paParent->mbIsPresentation;
@@ -742,12 +742,16 @@ VclPtr<SfxTabPage> ImpPDFTabGeneralPage::Create( vcl::Window* pParent,
 }
 
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePagesHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, TogglePagesHdl, RadioButton&, void)
+{
+    TogglePagesHdl();
+}
+
+void ImpPDFTabGeneralPage::TogglePagesHdl()
 {
     mpEdPages->Enable( mpRbRange->IsChecked() );
     if ( mpRbRange->IsChecked() )
         mpEdPages->GrabFocus();
-    return 0;
 }
 
 
@@ -758,10 +762,9 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl)
 }
 
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleCompressionHdl, RadioButton&, void)
 {
     mpQualityFrame->Enable(mpRbJPEGCompression->IsChecked());
-    return 0;
 }
 
 
@@ -1016,20 +1019,23 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     {
         mpRbPgLyContinueFacing->SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl ) );
         mpCbPgLyFirstOnLeft->Check( paParent->mbFirstPageLeft );
-        ToggleRbPgLyContinueFacingHdl( NULL );
+        ToggleRbPgLyContinueFacingHdl();
     }
 }
 
-IMPL_LINK_NOARG(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, RadioButton&, void)
 {
-    mpCbPgLyFirstOnLeft->Enable( mpRbPgLyContinueFacing->IsChecked() );
-    return 0;
+    ToggleRbPgLyContinueFacingHdl();
 }
 
-IMPL_LINK_NOARG( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl )
+void ImpPDFTabOpnFtrPage::ToggleRbPgLyContinueFacingHdl()
+{
+    mpCbPgLyFirstOnLeft->Enable( mpRbPgLyContinueFacing->IsChecked() );
+}
+
+IMPL_LINK_NOARG_TYPED( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, RadioButton&, void )
 {
     mpNumZoom->Enable( mpRbMagnZoom->IsChecked() );
-    return 0;
 }
 
 
@@ -1077,10 +1083,9 @@ void ImpPDFTabViewerPage::dispose()
     SfxTabPage::dispose();
 }
 
-IMPL_LINK_NOARG( ImpPDFTabViewerPage, ToggleRbBookmarksHdl )
+IMPL_LINK_NOARG_TYPED( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, RadioButton&, void )
 {
     m_pNumBookmarkLevels->Enable( m_pRbVisibleBookmarkLevels->IsChecked() );
-    return 0;
 }
 
 VclPtr<SfxTabPage> ImpPDFTabViewerPage::Create( vcl::Window* pParent,

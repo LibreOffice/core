@@ -173,7 +173,7 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK( StackingChangeHdl, RadioButton* );
+    DECL_LINK_TYPED( StackingChangeHdl, RadioButton&, void );
     DECL_LINK( StackingEnableHdl, void* );
 
 private:
@@ -251,14 +251,13 @@ void StackingResourceGroup::fillParameter( ChartTypeParameter& rParameter )
     else if(m_pRB_Stack_Z->IsChecked())
         rParameter.eStackMode = GlobalStackMode_STACK_Z;
 }
-IMPL_LINK( StackingResourceGroup, StackingChangeHdl, RadioButton*, pRadio )
+IMPL_LINK_TYPED( StackingResourceGroup, StackingChangeHdl, RadioButton&, rRadio, void )
 {
     //for each radio click there are coming two change events
     //first uncheck of previous button -> ignore that call
     //the second call gives the check of the new button
-    if( m_pChangeListener && pRadio && pRadio->IsChecked() )
+    if( m_pChangeListener && rRadio.IsChecked() )
         m_pChangeListener->stateChanged(this);
-    return 0;
 }
 IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl)
 {

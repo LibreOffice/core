@@ -110,9 +110,9 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     get(mpDestinationButton,          "destination-button");
 
     // Source UI
-    aLink = LINK(this, ScPivotLayoutDialog, ToggleSource);
-    mpSourceRadioNamedRange->SetToggleHdl(aLink);
-    mpSourceRadioSelection->SetToggleHdl(aLink);
+    Link<RadioButton&,void> aLink2 = LINK(this, ScPivotLayoutDialog, ToggleSource);
+    mpSourceRadioNamedRange->SetToggleHdl(aLink2);
+    mpSourceRadioSelection->SetToggleHdl(aLink2);
 
     mpSourceEdit->SetReferences(this, mpSourceRadioSelection);
     mpSourceButton->SetReferences(this, mpSourceEdit);
@@ -129,10 +129,10 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mpSourceListBox->SetSelectHdl(LINK(this, ScPivotLayoutDialog, SourceEditModified));
 
     // Destination UI
-    aLink = LINK(this, ScPivotLayoutDialog, ToggleDestination);
-    mpDestinationRadioNewSheet->SetToggleHdl(aLink);
-    mpDestinationRadioNamedRange->SetToggleHdl(aLink);
-    mpDestinationRadioSelection->SetToggleHdl(aLink);
+    aLink2 = LINK(this, ScPivotLayoutDialog, ToggleDestination);
+    mpDestinationRadioNewSheet->SetToggleHdl(aLink2);
+    mpDestinationRadioNamedRange->SetToggleHdl(aLink2);
+    mpDestinationRadioSelection->SetToggleHdl(aLink2);
 
     mpDestinationEdit->SetReferences(this, mpDestinationRadioNewSheet);
     mpDestinationButton->SetReferences(this, mpDestinationEdit);
@@ -237,7 +237,7 @@ void ScPivotLayoutDialog::SetupSource()
             // Source is probably a DB Range
             mpSourceRadioNamedRange->Disable();
             mpSourceRadioSelection->Disable();
-            ToggleSource(NULL);
+            ToggleSource();
             return;
         }
         else
@@ -250,7 +250,7 @@ void ScPivotLayoutDialog::SetupSource()
     {
         mpSourceRadioNamedRange->Disable();
         mpSourceRadioSelection->Disable();
-        ToggleSource(NULL);
+        ToggleSource();
         return;
     }
 
@@ -289,7 +289,7 @@ void ScPivotLayoutDialog::SetupSource()
     if (mpSourceListBox->GetEntryCount() <= 0)
         mpSourceRadioNamedRange->Disable();
 
-    ToggleSource(NULL);
+    ToggleSource();
 }
 
 void ScPivotLayoutDialog::SetupDestination()
@@ -331,7 +331,7 @@ void ScPivotLayoutDialog::SetupDestination()
         }
     }
 
-    ToggleDestination(NULL);
+    ToggleDestination();
 }
 
 void ScPivotLayoutDialog::FillValuesToListBoxes()
@@ -688,7 +688,12 @@ IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceEditModified)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleSource)
+IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, ToggleSource, RadioButton&, void)
+{
+    ToggleSource();
+}
+
+void ScPivotLayoutDialog::ToggleSource()
 {
     bool bNamedRange = mpSourceRadioNamedRange->IsChecked();
     bool bSelection = mpSourceRadioSelection->IsChecked();
@@ -696,17 +701,20 @@ IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleSource)
     mpSourceButton->Enable(bSelection);
     mpSourceEdit->Enable(bSelection);
     UpdateSourceRange();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, ToggleDestination)
+IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, ToggleDestination, RadioButton&, void)
+{
+    ToggleDestination();
+}
+
+void ScPivotLayoutDialog::ToggleDestination()
 {
     bool bNamedRange = mpDestinationRadioNamedRange->IsChecked();
     bool bSelection = mpDestinationRadioSelection->IsChecked();
     mpDestinationListBox->Enable(bNamedRange);
     mpDestinationButton->Enable(bSelection);
     mpDestinationEdit->Enable(bSelection);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

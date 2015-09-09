@@ -77,7 +77,7 @@ private:
     void    InitDocListBox  ();
     DECL_LINK_TYPED( OkHdl, Button*, void );
     DECL_LINK( SelHdl, ListBox * );
-    DECL_LINK( CheckBtnHdl, void * );
+    DECL_LINK_TYPED( CheckBtnHdl, RadioButton&, void );
     DECL_LINK( CheckNameHdl, Edit * );
 };
 

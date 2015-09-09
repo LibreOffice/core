@@ -116,7 +116,7 @@ void ScSamplingDialog::Init()
     mpOutputRangeEdit->GrabFocus();
     mpPeriodicMethodRadio->Check();
 
-    ToggleSamplingMethod(NULL);
+    ToggleSamplingMethod();
 }
 
 void ScSamplingDialog::GetRangeFromSelection()
@@ -323,7 +323,12 @@ IMPL_LINK_NOARG(ScSamplingDialog, SamplingSizeValueModified)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScSamplingDialog, ToggleSamplingMethod)
+IMPL_LINK_NOARG_TYPED(ScSamplingDialog, ToggleSamplingMethod, RadioButton&, void)
+{
+    ToggleSamplingMethod();
+}
+
+void ScSamplingDialog::ToggleSamplingMethod()
 {
     if (mpRandomMethodRadio->IsChecked())
     {
@@ -335,7 +340,6 @@ IMPL_LINK_NOARG(ScSamplingDialog, ToggleSamplingMethod)
         mpPeriod->Enable(true);
         mpSampleSize->Enable(false);
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScSamplingDialog, RefInputModifyHandler)

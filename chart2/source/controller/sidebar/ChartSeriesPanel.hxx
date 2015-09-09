@@ -109,7 +109,7 @@ private:
     void Initialize();
 
     DECL_LINK_TYPED(CheckBoxHdl, Button*, void);
-    DECL_LINK(RadioBtnHdl, void*);
+    DECL_LINK_TYPED(RadioBtnHdl, RadioButton&, void);
     DECL_LINK(ListBoxHdl, void*);
 };
 

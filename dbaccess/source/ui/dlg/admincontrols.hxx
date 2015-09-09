@@ -47,9 +47,10 @@ namespace dbaui
         VclPtr<FixedText>           m_pDefaultPort;
         VclPtr<Edit>                m_pSocket;
         VclPtr<Edit>                m_pNamedPipe;
-
+        Link<>                      m_aControlModificationLink;
         ::svt::ControlDependencyManager
                             m_aControlDependencies;
+        DECL_LINK_TYPED(RadioToggleHdl, RadioButton&, void);
 
     public:
         MySQLNativeSettings( vcl::Window& _rParent, const Link<>& _rControlModificationLink );

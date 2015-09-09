@@ -126,7 +126,8 @@ namespace dbaui
 
     // MySQLNativeSettings
     MySQLNativeSettings::MySQLNativeSettings( vcl::Window& _rParent, const Link<>& _rControlModificationLink )
-        :TabPage( &_rParent, "MysqlNativeSettings", "dbaccess/ui/mysqlnativesettings.ui" )
+        :TabPage( &_rParent, "MysqlNativeSettings", "dbaccess/ui/mysqlnativesettings.ui" ),
+        m_aControlModificationLink(_rControlModificationLink)
     {
         get(m_pDatabaseNameLabel, "dbnamelabel");
         get(m_pDatabaseName, "dbname");
@@ -147,8 +148,8 @@ namespace dbaui
         m_pPort->SetModifyHdl( _rControlModificationLink );
         m_pSocket->SetModifyHdl( _rControlModificationLink );
         m_pNamedPipe->SetModifyHdl( _rControlModificationLink );
-        m_pSocketRadio->SetToggleHdl( _rControlModificationLink );
-        m_pNamedPipeRadio->SetToggleHdl( _rControlModificationLink );
+        m_pSocketRadio->SetToggleHdl( LINK(this, MySQLNativeSettings, RadioToggleHdl) );
+        m_pNamedPipeRadio->SetToggleHdl( LINK(this, MySQLNativeSettings, RadioToggleHdl) );
 
         m_aControlDependencies.enableOnRadioCheck( *m_pHostPortRadio, *m_pHostNameLabel, *m_pHostName, *m_pPortLabel, *m_pPort, *m_pDefaultPort );
         m_aControlDependencies.enableOnRadioCheck( *m_pSocketRadio, *m_pSocket );
@@ -166,6 +167,11 @@ namespace dbaui
         m_pSocketRadio->Hide();
         m_pSocket->Hide();
 #endif
+    }
+
+    IMPL_LINK_TYPED(MySQLNativeSettings, RadioToggleHdl, RadioButton&, rRadioButton, void)
+    {
+        m_aControlModificationLink.Call(&rRadioButton);
     }
 
     MySQLNativeSettings::~MySQLNativeSettings()

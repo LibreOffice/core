@@ -271,10 +271,9 @@ using namespace ::com::sun::star;
         OGenericAdministrationPage::dispose();
     }
 
-    IMPL_LINK(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton*, /*_pBox*/)
+    IMPL_LINK_NOARG_TYPED(OMySQLIntroPageSetup, OnSetupModeSelected, RadioButton&, void)
     {
         maClickHdl.Call( this );
-        return long(true);
     }
 
     void OMySQLIntroPageSetup::implInitControls(const SfxItemSet& _rSet, bool /*_bSaveValue*/)
