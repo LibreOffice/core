@@ -573,9 +573,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             // with the category name
             Sequence< tNameSequence > aParaPropNames(3);
             aParaPropNames[1].realloc(1);
-            aParaPropNames[1][0] = OUString( "ParaAdjust" );
+            aParaPropNames[1][0] = "ParaAdjust";
             aParaPropNames[2].realloc(1);
-            aParaPropNames[2][0] = OUString( "ParaAdjust" );
+            aParaPropNames[2][0] = "ParaAdjust";
 
             Sequence< tAnySequence > aParaPropValues(3);
             aParaPropValues[1].realloc(1);
