@@ -1380,6 +1380,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
             {
                 eState = PropertyState_DEFAULT_VALUE;
             }
+            break;
         }
         case OWN_ATTR_STYLE:
         {
