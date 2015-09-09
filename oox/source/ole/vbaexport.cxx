@@ -685,7 +685,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         pModuleStream[i] = pVBAStream->OpenSotStream(aElementNames[i], STREAM_READWRITE);
     }
     SotStorageStream* pVBAProjectStream = pVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
-    SotStorageStream* pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECT", STREAM_READWRITE);
+    SotStorageStream* pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECTwm", STREAM_READWRITE);
 
 
     // export
