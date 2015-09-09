@@ -21,7 +21,6 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 		MSBuild.exe lcms2_DLL.vcxproj \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:TargetName=lcms2 \
-			$(if $(filter 110,$(VCVER)),/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) /p:VisualStudioVersion=11.0) \
 	,Projects/VC2013/lcms2_DLL)
 else
 $(call gb_ExternalProject_get_state_target,lcms2,build):

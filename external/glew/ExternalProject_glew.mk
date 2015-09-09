@@ -18,11 +18,9 @@ $(call gb_ExternalProject_get_state_target,glew,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter 140,$(VCVER)),$(DEVENV) /Upgrade glew.sln,echo up-to-date) && \
 		msbuild.exe glew_shared.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
-		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) /p:VisualStudioVersion=11.0) \
 	,build/vc12) \
 	$(call gb_ExternalProject_run,build,\
 		msbuild.exe glewinfo.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:Configuration=Release \
-		$(if $(filter 110,$(VCVER)),/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) /p:VisualStudioVersion=11.0) \
 	,build/vc12)
 
 else
