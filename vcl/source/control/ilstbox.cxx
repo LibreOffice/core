@@ -1165,7 +1165,7 @@ bool ImplListBoxWindow::SelectEntries( sal_Int32 nSelect, LB_EVENT_TYPE eLET, bo
                 ImplShowFocusRect();
             if (bSelectPosChange)
             {
-                maFocusHdl.Call(reinterpret_cast<void*>(nSelect));
+                maFocusHdl.Call(nSelect);
             }
         }
         ImplClearLayoutData();
@@ -2255,13 +2255,12 @@ void ImplListBox::Resize()
     ImplCheckScrollBars();
 }
 
-IMPL_LINK_NOARG(ImplListBox, MRUChanged)
+IMPL_LINK_NOARG_TYPED(ImplListBox, MRUChanged, LinkParamNone*, void)
 {
     CompatStateChanged( StateChangedType::Data );
-    return 1;
 }
 
-IMPL_LINK_NOARG(ImplListBox, LBWindowScrolled)
+IMPL_LINK_NOARG_TYPED(ImplListBox, LBWindowScrolled, ImplListBoxWindow*, void)
 {
     long nSet = GetTopEntry();
     if( nSet > mpVScrollBar->GetRangeMax() )
@@ -2271,8 +2270,6 @@ IMPL_LINK_NOARG(ImplListBox, LBWindowScrolled)
     mpHScrollBar->SetThumbPos( GetLeftIndent() );
 
     maScrollHdl.Call( this );
-
-    return 1;
 }
 
 IMPL_LINK_TYPED( ImplListBox, ScrollBarHdl, ScrollBar*, pSB, void )

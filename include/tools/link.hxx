@@ -146,6 +146,10 @@ private:
     void * instance_;
 };
 
+
+// nondefined class used to indicate that the Call() parameter is not in use.
+class LinkParamNone;
+
 namespace tools { namespace detail {
 
 template<typename Arg, typename Ret>

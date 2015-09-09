@@ -79,12 +79,12 @@ struct ComboBox::Impl
     ComboBoxBounds calcComboBoxDropDownComponentBounds(
         const Size &rOutSize, const Size &rBorderOutSize) const;
 
-    DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
-    DECL_DLLPRIVATE_LINK( ImplCancelHdl, void* );
-    DECL_DLLPRIVATE_LINK( ImplDoubleClickHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplCancelHdl, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplDoubleClickHdl, ImplListBoxWindow*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplPopupModeEndHdl, FloatingWindow*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplSelectionChangedHdl, sal_Int32, void );
-    DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl , void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplListItemSelectHdl , LinkParamNone*, void );
 
     void ImplClickButtonHandler( ImplBtn* );
     void ImplUserDrawHandler( UserDrawEvent* );
@@ -410,7 +410,7 @@ void ComboBox::Impl::ImplAutocompleteHandler( Edit* pEdit )
     }
 }
 
-IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl)
+IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
 {
     bool bPopup = m_rThis.IsInDropDown();
     bool bCallSelect = false;
@@ -496,22 +496,17 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl)
         m_isSyntheticModify = false;
         m_rThis.Select();
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG( ComboBox::Impl, ImplListItemSelectHdl )
+IMPL_LINK_NOARG_TYPED( ComboBox::Impl, ImplListItemSelectHdl, LinkParamNone*, void )
 {
     m_rThis.CallEventListeners( VCLEVENT_DROPDOWN_SELECT );
-    return 1;
 }
 
-IMPL_LINK_NOARG(ComboBox::Impl, ImplCancelHdl)
+IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplCancelHdl, LinkParamNone*, void)
 {
     if (m_rThis.IsInDropDown())
         m_pFloatWin->EndPopupMode();
-
-    return 1;
 }
 
 IMPL_LINK_TYPED( ComboBox::Impl, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
@@ -523,10 +518,9 @@ IMPL_LINK_TYPED( ComboBox::Impl, ImplSelectionChangedHdl, sal_Int32, nChanged, v
     }
 }
 
-IMPL_LINK_NOARG(ComboBox::Impl, ImplDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(ComboBox::Impl, ImplDoubleClickHdl, ImplListBoxWindow*, void)
 {
     m_rThis.DoubleClick();
-    return 0;
 }
 
 void ComboBox::ToggleDropDown()

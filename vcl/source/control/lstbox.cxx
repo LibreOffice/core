@@ -210,7 +210,7 @@ void ListBox::ImplLoadRes( const ResId& rResId )
         SelectEntryPos( nSelPos );
 }
 
-IMPL_LINK_NOARG(ListBox, ImplSelectHdl)
+IMPL_LINK_NOARG_TYPED(ListBox, ImplSelectHdl, LinkParamNone*, void)
 {
     bool bPopup = IsInDropDown();
     if( IsDropDownBox() )
@@ -233,34 +233,27 @@ IMPL_LINK_NOARG(ListBox, ImplSelectHdl)
 
     if ( ( !IsTravelSelect() || mpImplLB->IsSelectionChanged() ) || ( bPopup && !IsMultiSelectionEnabled() ) )
         Select();
-
-    return 1;
 }
 
-IMPL_LINK( ListBox, ImplFocusHdl, void *, nPos )
+IMPL_LINK_TYPED( ListBox, ImplFocusHdl, sal_Int32, nPos, void )
 {
-    CallEventListeners( VCLEVENT_LISTBOX_FOCUS , nPos);
-    return 1;
+    CallEventListeners( VCLEVENT_LISTBOX_FOCUS, reinterpret_cast<void*>(nPos) );
 }
 
-IMPL_LINK_NOARG( ListBox, ImplListItemSelectHdl )
+IMPL_LINK_NOARG_TYPED( ListBox, ImplListItemSelectHdl, LinkParamNone*, void )
 {
     CallEventListeners( VCLEVENT_DROPDOWN_SELECT );
-    return 1;
 }
 
-IMPL_LINK_NOARG(ListBox, ImplScrollHdl)
+IMPL_LINK_NOARG_TYPED(ListBox, ImplScrollHdl, ImplListBox*, void)
 {
     CallEventListeners( VCLEVENT_LISTBOX_SCROLLED );
-    return 1;
 }
 
-IMPL_LINK_NOARG(ListBox, ImplCancelHdl)
+IMPL_LINK_NOARG_TYPED(ListBox, ImplCancelHdl, LinkParamNone*, void)
 {
     if( IsInDropDown() )
         mpFloatWin->EndPopupMode();
-
-    return 1;
 }
 
 IMPL_LINK_TYPED( ListBox, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
@@ -292,10 +285,9 @@ IMPL_LINK_TYPED( ListBox, ImplSelectionChangedHdl, sal_Int32, nChanged, void )
     }
 }
 
-IMPL_LINK_NOARG(ListBox, ImplDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(ListBox, ImplDoubleClickHdl, ImplListBoxWindow*, void)
 {
     DoubleClick();
-    return 1;
 }
 
 void ListBox::ImplClickButtonHandler( Control* )

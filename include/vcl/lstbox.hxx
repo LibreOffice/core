@@ -29,7 +29,7 @@ class ImplListBox;
 class ImplListBoxFloatingWindow;
 class ImplBtn;
 class ImplWin;
-
+class ImplListBoxWindow;
 
 //  - ListBox -
 
@@ -55,14 +55,14 @@ private:
 private:
     SAL_DLLPRIVATE void    ImplInitListBoxData();
 
-    DECL_DLLPRIVATE_LINK(  ImplSelectHdl, void* );
-    DECL_DLLPRIVATE_LINK(  ImplScrollHdl, void* );
-    DECL_DLLPRIVATE_LINK(  ImplCancelHdl, void* );
-    DECL_DLLPRIVATE_LINK(  ImplDoubleClickHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplScrollHdl, ImplListBox*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplCancelHdl, LinkParamNone*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplDoubleClickHdl, ImplListBoxWindow*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplPopupModeEndHdl, FloatingWindow*, void );
-    DECL_DLLPRIVATE_LINK_TYPED(  ImplSelectionChangedHdl, sal_Int32, void );
-    DECL_DLLPRIVATE_LINK(  ImplFocusHdl, void* );
-    DECL_DLLPRIVATE_LINK(  ImplListItemSelectHdl, void* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplSelectionChangedHdl, sal_Int32, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplFocusHdl, sal_Int32, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplListItemSelectHdl, LinkParamNone*, void );
 
     SAL_DLLPRIVATE void ImplClickButtonHandler( Control* );
     SAL_DLLPRIVATE void ImplUserDrawHandler( UserDrawEvent* );

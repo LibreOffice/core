@@ -229,13 +229,13 @@ private:
     bool mbCenter : 1;           ///< center Text output
     bool mbEdgeBlending : 1;
 
-    Link<>          maScrollHdl;
-    Link<>          maSelectHdl;
-    Link<>          maCancelHdl;
-    Link<>          maDoubleClickHdl;
-    Link<>          maMRUChangedHdl;
-    Link<>          maFocusHdl;
-    Link<>          maListItemSelectHdl;
+    Link<ImplListBoxWindow*,void>  maScrollHdl;
+    Link<LinkParamNone*,void>      maSelectHdl;
+    Link<LinkParamNone*,void>      maCancelHdl;
+    Link<ImplListBoxWindow*,void>  maDoubleClickHdl;
+    Link<LinkParamNone*,void>      maMRUChangedHdl;
+    Link<sal_Int32,void>           maFocusHdl;
+    Link<LinkParamNone*,void>      maListItemSelectHdl;
 
     vcl::QuickSelectionEngine maQuickSelectionEngine;
 
@@ -332,21 +332,21 @@ public:
     long            GetEntryHeight() const              { return mnMaxHeight; }
     long            GetMaxEntryWidth() const            { return mnMaxWidth; }
 
-    void            SetScrollHdl( const Link<>& rLink ) { maScrollHdl = rLink; }
-    void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
-    const Link<>&   GetSelectHdl() const                { return maSelectHdl; }
-    void            SetCancelHdl( const Link<>& rLink ) { maCancelHdl = rLink; }
-    const Link<>&   GetCancelHdl() const                { return maCancelHdl; }
-    void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
-    const Link<>&   GetDoubleClickHdl() const               { return maDoubleClickHdl; }
-    void            SetMRUChangedHdl( const Link<>& rLink ) { maMRUChangedHdl = rLink; }
-    void            SetFocusHdl( const Link<>& rLink )  { maFocusHdl = rLink ; }
-    const Link<>&   GetFocusHdl() const             { return maFocusHdl; }
+    void            SetScrollHdl( const Link<ImplListBoxWindow*,void>& rLink ) { maScrollHdl = rLink; }
+    void            SetSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maSelectHdl = rLink; }
+    const Link<LinkParamNone*,void>&   GetSelectHdl() const                { return maSelectHdl; }
+    void            SetCancelHdl( const Link<LinkParamNone*,void>& rLink ) { maCancelHdl = rLink; }
+    const Link<LinkParamNone*,void>&   GetCancelHdl() const                { return maCancelHdl; }
+    void            SetDoubleClickHdl( const Link<ImplListBoxWindow*,void>& rLink ) { maDoubleClickHdl = rLink; }
+    const Link<ImplListBoxWindow*,void>&   GetDoubleClickHdl() const               { return maDoubleClickHdl; }
+    void            SetMRUChangedHdl( const Link<LinkParamNone*,void>& rLink ) { maMRUChangedHdl = rLink; }
+    void            SetFocusHdl( const Link<sal_Int32,void>& rLink )  { maFocusHdl = rLink ; }
+    const Link<sal_Int32,void>&   GetFocusHdl() const             { return maFocusHdl; }
 
     boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
-    void            SetListItemSelectHdl( const Link<>& rLink ) { maListItemSelectHdl = rLink ; }
-    const Link<>&   GetListItemSelectHdl() const                { return maListItemSelectHdl; }
+    void            SetListItemSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maListItemSelectHdl = rLink ; }
+    const Link<LinkParamNone*,void>&   GetListItemSelectHdl() const                { return maListItemSelectHdl; }
     bool            IsSelectionChanged() const { return mbSelectionChanged; }
     sal_uInt16      GetSelectModifier() const { return mnSelectModifier; }
 
@@ -389,7 +389,7 @@ private:
     bool mbAutoHScroll : 1; // AutoHScroll an oder aus
     bool mbEdgeBlending : 1;
 
-    Link<>              maScrollHdl;    // because it is needed by ImplListBoxWindow itself
+    Link<ImplListBox*,void>   maScrollHdl;    // because it is needed by ImplListBoxWindow itself
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 
 protected:
@@ -404,8 +404,8 @@ protected:
     void                ImplInitScrollBars();
 
     DECL_LINK_TYPED(    ScrollBarHdl, ScrollBar*, void );
-    DECL_LINK(          LBWindowScrolled, void* );
-    DECL_LINK(          MRUChanged, void* );
+    DECL_LINK_TYPED(    LBWindowScrolled, ImplListBoxWindow*, void );
+    DECL_LINK_TYPED(    MRUChanged, LinkParamNone*, void );
 
 public:
                     ImplListBox( vcl::Window* pParent, WinBits nWinStyle );
@@ -465,15 +465,15 @@ public:
     long            GetEntryHeight() const          { return maLBWindow->GetEntryHeight(); }
     long            GetMaxEntryWidth() const        { return maLBWindow->GetMaxEntryWidth(); }
 
-    void            SetScrollHdl( const Link<>& rLink ) { maScrollHdl = rLink; }
-    void            SetSelectHdl( const Link<>& rLink ) { maLBWindow->SetSelectHdl( rLink ); }
-    void            SetCancelHdl( const Link<>& rLink ) { maLBWindow->SetCancelHdl( rLink ); }
-    void            SetDoubleClickHdl( const Link<>& rLink ) { maLBWindow->SetDoubleClickHdl( rLink ); }
+    void            SetScrollHdl( const Link<ImplListBox*,void>& rLink ) { maScrollHdl = rLink; }
+    void            SetSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maLBWindow->SetSelectHdl( rLink ); }
+    void            SetCancelHdl( const Link<LinkParamNone*,void>& rLink ) { maLBWindow->SetCancelHdl( rLink ); }
+    void            SetDoubleClickHdl( const Link<ImplListBoxWindow*,void>& rLink ) { maLBWindow->SetDoubleClickHdl( rLink ); }
 
     boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
-    void            SetFocusHdl( const Link<>& rLink )  { maLBWindow->SetFocusHdl( rLink ); }
-    void            SetListItemSelectHdl( const Link<>& rLink ) { maLBWindow->SetListItemSelectHdl( rLink ); }
+    void            SetFocusHdl( const Link<sal_Int32,void>& rLink )  { maLBWindow->SetFocusHdl( rLink ); }
+    void            SetListItemSelectHdl( const Link<LinkParamNone*,void>& rLink ) { maLBWindow->SetListItemSelectHdl( rLink ); }
     void            SetSelectionChangedHdl( const Link<sal_Int32,void>& rLnk ) { maLBWindow->GetEntryList()->SetSelectionChangedHdl( rLnk ); }
     void            SetCallSelectionChangedHdl( bool bCall )    { maLBWindow->GetEntryList()->SetCallSelectionChangedHdl( bCall ); }
     bool            IsSelectionChanged() const                  { return maLBWindow->IsSelectionChanged(); }
