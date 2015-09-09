@@ -181,8 +181,6 @@ public:
     // flush output buffer
     virtual void            Flush() = 0;
     virtual void            Flush( const Rectangle& );
-    // flush output buffer, wait till outstanding operations are done
-    virtual void            Sync() = 0;
 
     virtual void            SetInputContext( SalInputContext* pContext ) = 0;
     virtual void            EndExtTextInput( EndExtTextInputFlags nFlags ) = 0;

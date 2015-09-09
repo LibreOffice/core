@@ -849,7 +849,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         aProgress->HideTimeLimit();
     aProgress->Show();
     aProgress->Update();
-    aProgress->Sync();
+    aProgress->Flush();
     // try to make sure the progress dialog is painted before continuing
     Application::Reschedule(true);
 

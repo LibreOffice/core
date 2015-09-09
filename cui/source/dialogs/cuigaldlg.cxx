@@ -123,7 +123,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
         SolarMutexGuard aGuard;
 
         mpProgress->SetDirectory( rStartURL );
-        mpProgress->Sync();
+        mpProgress->Flush();
     }
 
     try
@@ -325,7 +325,7 @@ void TakeThread::execute()
 
             mpProgress->SetFile( aURL );
             pStatusProgress->Update( i, nEntries - 1 );
-            mpProgress->Sync();
+            mpProgress->Flush();
             pThm->InsertURL( aURL );
         }
     }
@@ -517,11 +517,9 @@ IMPL_LINK_TYPED( ActualizeProgress, ActualizeHdl, const INetURLObject&, rURL, vo
         Application::Reschedule();
 
     Flush();
-    Sync();
 
     m_pFtActualizeFile->SetText( GetReducedString( rURL, 30 ) );
     m_pFtActualizeFile->Flush();
-    m_pFtActualizeFile->Sync();
 }
 
 TitleDialog::TitleDialog(vcl::Window* pParent, const OUString& rOldTitle)

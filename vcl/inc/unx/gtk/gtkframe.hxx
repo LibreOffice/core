@@ -410,7 +410,6 @@ public:
     using SalFrame::Flush;
     virtual void                Flush() override;
     // flush output buffer, wait till outstanding operations are done
-    virtual void                Sync() override;
 
     virtual void                SetInputContext( SalInputContext* pContext ) override;
     virtual void                EndExtTextInput( EndExtTextInputFlags nFlags ) override;
