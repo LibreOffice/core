@@ -23,7 +23,7 @@
 #include <unotools/sharedunocomponent.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/debug.hxx>
 
 namespace utl
@@ -64,7 +64,7 @@ namespace utl
         }
     }
 
-    typedef ::cppu::WeakImplHelper1 <   XCloseListener
+    typedef ::cppu::WeakImplHelper <   XCloseListener
                                     >   CloseableComponentImpl_Base;
     class CloseableComponentImpl : public CloseableComponentImpl_Base
     {

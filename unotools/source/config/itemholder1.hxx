@@ -21,11 +21,11 @@
 #define INCLUDED_UNOTOOLS_SOURCE_CONFIG_ITEMHOLDER1_HXX
 
 #include <unotools/itemholderbase.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 
 class ItemHolder1 : private ItemHolderMutexBase
-                  , public  ::cppu::WeakImplHelper1< css::lang::XEventListener >
+                  , public  ::cppu::WeakImplHelper< css::lang::XEventListener >
 {
 
     // member

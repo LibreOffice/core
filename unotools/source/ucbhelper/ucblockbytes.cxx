@@ -48,8 +48,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/inetmsg.hxx>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -70,7 +69,7 @@ namespace utl
 /**
     Helper class for getting a XInputStream when opening a content
  */
-class UcbDataSink_Impl : public ::cppu::WeakImplHelper2< XActiveDataControl, XActiveDataSink >
+class UcbDataSink_Impl : public ::cppu::WeakImplHelper< XActiveDataControl, XActiveDataSink >
 {
     UcbLockBytesRef         m_xLockBytes;
 
@@ -96,7 +95,7 @@ public:
 /**
     Helper class for getting a XStream when opening a content
  */
-class UcbStreamer_Impl : public ::cppu::WeakImplHelper2< XActiveDataStreamer, XActiveDataControl >
+class UcbStreamer_Impl : public ::cppu::WeakImplHelper< XActiveDataStreamer, XActiveDataControl >
 {
     Reference < XStream >   m_xStream;
     UcbLockBytesRef         m_xLockBytes;
@@ -123,7 +122,7 @@ public:
 /**
     Helper class for managing interactions and progress when executing UCB commands
  */
-class UcbTaskEnvironment : public ::cppu::WeakImplHelper1< XCommandEnvironment >
+class UcbTaskEnvironment : public ::cppu::WeakImplHelper< XCommandEnvironment >
 {
     Reference< XInteractionHandler >                m_xInteractionHandler;
     Reference< XProgressHandler >                   m_xProgressHandler;
@@ -145,7 +144,7 @@ public:
 /**
     Helper class for property change notifies when executing UCB commands
 */
-class UcbPropertiesChangeListener_Impl : public ::cppu::WeakImplHelper1< XPropertiesChangeListener >
+class UcbPropertiesChangeListener_Impl : public ::cppu::WeakImplHelper< XPropertiesChangeListener >
 {
 public:
     UcbLockBytesRef         m_xLockBytes;
@@ -337,7 +336,7 @@ private:
 };
 
 class ModeratorsActiveDataStreamer
-    : public ::cppu::WeakImplHelper1<XActiveDataStreamer>
+    : public ::cppu::WeakImplHelper<XActiveDataStreamer>
 {
 public:
 
@@ -373,7 +372,7 @@ private:
 };
 
 class ModeratorsActiveDataSink
-    : public ::cppu::WeakImplHelper1<XActiveDataSink>
+    : public ::cppu::WeakImplHelper<XActiveDataSink>
 {
 public:
 
@@ -456,7 +455,7 @@ ModeratorsActiveDataStreamer::setStream (
 }
 
 class ModeratorsInteractionHandler
-    : public ::cppu::WeakImplHelper1<XInteractionHandler>
+    : public ::cppu::WeakImplHelper<XInteractionHandler>
 {
 public:
 

@@ -29,6 +29,7 @@
 #include <rtl/instance.hxx>
 #include "itemholder1.hxx"
 
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -70,7 +71,7 @@ static o3tl::enumarray<UserOptToken, char const *> vOptionNames = {
 
 std::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::xSharedImpl;
 
-class SvtUserOptions::ChangeListener : public cppu::WeakImplHelper1<util::XChangesListener>
+class SvtUserOptions::ChangeListener : public cppu::WeakImplHelper<util::XChangesListener>
 {
 public:
     explicit ChangeListener (Impl& rParent): m_rParent(rParent) { }

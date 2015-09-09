@@ -23,7 +23,7 @@
 
 #include <unotools/eventlisteneradapter.hxx>
 #include <osl/diagnose.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace utl
 {
@@ -33,7 +33,7 @@ namespace utl
 
     //= OEventListenerImpl
 
-    class OEventListenerImpl : public ::cppu::WeakImplHelper1< XEventListener >
+    class OEventListenerImpl : public ::cppu::WeakImplHelper< XEventListener >
     {
     protected:
         OEventListenerAdapter*          m_pAdapter;

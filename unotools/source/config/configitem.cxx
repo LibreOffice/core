@@ -51,7 +51,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #ifdef DBG_UTIL
 static inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, const Exception& rEx)
@@ -77,7 +77,7 @@ catch(const Exception& rEx)   \
 */
 
 namespace utl{
-    class ConfigChangeListener_Impl : public cppu::WeakImplHelper1
+    class ConfigChangeListener_Impl : public cppu::WeakImplHelper
     <
         com::sun::star::util::XChangesListener
     >

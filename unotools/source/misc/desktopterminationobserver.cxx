@@ -21,7 +21,7 @@
 
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
@@ -56,7 +56,7 @@ namespace utl
 
         //= OObserverImpl
 
-        class OObserverImpl : public ::cppu::WeakImplHelper1< XTerminateListener >
+        class OObserverImpl : public ::cppu::WeakImplHelper< XTerminateListener >
         {
         public:
             static void ensureObservation();

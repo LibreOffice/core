@@ -21,7 +21,7 @@
 
 #include <com/sun/star/util/XCloseable.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -46,7 +46,7 @@ namespace utl
 
     //= CloseListener_Impl
 
-    typedef ::cppu::WeakImplHelper1 <   XCloseListener
+    typedef ::cppu::WeakImplHelper <   XCloseListener
                                     >   CloseListener_Base;
     class CloseListener_Impl : public CloseListener_Base
     {
