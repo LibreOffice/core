@@ -2895,6 +2895,17 @@ XMLPageVarSetFieldImportContext::XMLPageVarSetFieldImportContext(
     bValid = true;
 }
 
+XMLPageVarSetFieldImportContext::XMLPageVarSetFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_reference_page_set, Element ),
+    sPropertyOn(sAPI_on),
+    sPropertyOffset(sAPI_offset),
+    nAdjust(0),
+    bActive(true)
+{
+    bValid = true;
+}
+
 void XMLPageVarSetFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
