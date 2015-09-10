@@ -1094,7 +1094,6 @@ bool XclExpXmlStream::exportDocument()
     VbaExport aExport(getModel());
     if (aExport.containsVBAProject())
     {
-        const OUString aVbaStreamLocation("/tmp/vba_out.bin");
         SvMemoryStream aVbaStream(4096, 4096);
         tools::SvRef<SotStorage> pVBAStorage(new SotStorage(aVbaStream));
         aExport.exportVBA(pVBAStorage);
