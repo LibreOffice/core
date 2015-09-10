@@ -773,6 +773,12 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
         aVertices[j+1] = GLfloat(rPt.getY());
     }
 
+    if (!mpProgram)
+    {
+        SAL_WARN("vcl.opengl", "OpenGLSalGraphicsImpl::DrawTrapezoid: mpProgram is 0");
+        return;
+    }
+
     ApplyProgramMatrices();
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
