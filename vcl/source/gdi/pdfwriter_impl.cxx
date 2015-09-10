@@ -9005,22 +9005,27 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             else if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
             {
                 int nChars = 1;
-                aUnicodes.push_back( rText[ pCharPosAry[i] ] );
                 pUnicodesPerGlyph[i] = 1;
                 // try to handle ligatures and such
                 if( i < nGlyphs-1 )
                 {
                     nChars = pCharPosAry[i+1] - pCharPosAry[i];
+                    int start = pCharPosAry[i];
                     // #i115618# fix for simple RTL+CTL cases
-                    // TODO: sanitize for RTL ligatures, more complex CTL, etc.
+                    // supports RTL ligatures. TODO: more complex CTL, etc.
                     if( nChars < 0 )
+                    {
                         nChars = -nChars;
-                    else if( nChars == 0 )
+                        start = pCharPosAry[i+1] + 1;
+                    }
+                    else if (nChars == 0)
                         nChars = 1;
                     pUnicodesPerGlyph[i] = nChars;
-                    for( int n = 1; n < nChars; n++ )
-                        aUnicodes.push_back( rText[ pCharPosAry[i] + n ] );
+                    for( int n = 0; n < nChars; n++ )
+                        aUnicodes.push_back( rText[ start + n ] );
                 }
+                else
+                    aUnicodes.push_back( rText[ pCharPosAry[i] ] );
                 // #i36691# hack that is needed because currently the pGlyphs[]
                 // argument is ignored for embeddable fonts and so the layout
                 // engine's glyph work is ignored (i.e. char mirroring)
