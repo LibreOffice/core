@@ -23,8 +23,6 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/msforms/XPages.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 #include <vbahelper/vbacollectionimpl.hxx>
 typedef CollTestImplHelper<

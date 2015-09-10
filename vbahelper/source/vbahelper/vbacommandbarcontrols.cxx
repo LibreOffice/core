@@ -22,7 +22,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-class CommandBarControlEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
+class CommandBarControlEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     //uno::Reference< uno::XComponentContext > m_xContext;
     CommandBarControls_BASE* m_pCommandBarControls;
@@ -254,7 +254,7 @@ ScVbaCommandBarControls::getServiceNames()
 
 
 
-class VbaDummyIndexAccess : public ::cppu::WeakImplHelper1< container::XIndexAccess >
+class VbaDummyIndexAccess : public ::cppu::WeakImplHelper< container::XIndexAccess >
 {
 public:
     inline VbaDummyIndexAccess() {}

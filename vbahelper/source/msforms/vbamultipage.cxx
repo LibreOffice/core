@@ -20,13 +20,14 @@
 #include <ooo/vba/XCollection.hpp>
 #include "vbapages.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <cppuhelper/implbase.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
 const OUString SVALUE( "MultiPageValue" );
 
-class PagesImpl : public cppu::WeakImplHelper1< container::XIndexAccess >
+class PagesImpl : public cppu::WeakImplHelper< container::XIndexAccess >
 {
     sal_Int32 mnPages;
 public:

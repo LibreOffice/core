@@ -19,7 +19,6 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
@@ -33,8 +32,6 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include <memory>
 
-//typedef ::cppu::WeakImplHelper1< ov::msforms::XControl > ControlImpl_BASE;
-//template SAL_DLLPUBLIC_IMPORT InheritedHelperInterfaceImpl1< ov::msforms::XControl >;
 typedef InheritedHelperInterfaceImpl1< ov::msforms::XControl > ControlImpl_BASE;
 
 class ScVbaControl : public ControlImpl_BASE

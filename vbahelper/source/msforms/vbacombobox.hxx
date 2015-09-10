@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACOMBOBOX_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACOMBOBOX_HXX
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
@@ -31,7 +31,7 @@
 #include "vbalistcontrolhelper.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper2<ScVbaControl, ov::msforms::XComboBox, css::script::XDefaultProperty > ComboBoxImpl_BASE;
+typedef cppu::ImplInheritanceHelper<ScVbaControl, ov::msforms::XComboBox, css::script::XDefaultProperty > ComboBoxImpl_BASE;
 class ScVbaComboBox : public ComboBoxImpl_BASE
 {
     std::unique_ptr< ListControlHelper > mpListHelper;

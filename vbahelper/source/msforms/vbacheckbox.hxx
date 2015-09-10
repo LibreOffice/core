@@ -18,13 +18,13 @@
  */
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACHECKBOX_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACHECKBOX_HXX
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XCheckBox.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XCheckBox, css::script::XDefaultProperty > CheckBoxImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XCheckBox, css::script::XDefaultProperty > CheckBoxImpl_BASE;
 
 class ScVbaCheckbox : public CheckBoxImpl_BASE
 {

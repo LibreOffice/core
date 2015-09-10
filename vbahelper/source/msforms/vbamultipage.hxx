@@ -20,14 +20,14 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAMULTIPAGE_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAMULTIPAGE_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XMultiPage.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XMultiPage > MultiPageImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XMultiPage > MultiPageImpl_BASE;
 
 class ScVbaMultiPage : public MultiPageImpl_BASE
 {

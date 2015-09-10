@@ -19,7 +19,7 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAUSERFORM_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAUSERFORM_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XUserForm.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
@@ -29,7 +29,7 @@
 #include "vbacontrol.hxx"
 
 //typedef InheritedHelperInterfaceImpl1< ov::msforms::XUserForm > ScVbaUserForm_BASE;
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XUserForm > ScVbaUserForm_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XUserForm > ScVbaUserForm_BASE;
 
 class ScVbaUserForm : public ScVbaUserForm_BASE
 {

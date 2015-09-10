@@ -18,13 +18,13 @@
  */
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBASPINBUTTON_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBASPINBUTTON_HXX
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XSpinButton.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XSpinButton > SpinButtonImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XSpinButton > SpinButtonImpl_BASE;
 
 class ScVbaSpinButton : public SpinButtonImpl_BASE
 {

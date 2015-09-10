@@ -26,7 +26,7 @@
 #include <com/sun/star/awt/XMenu.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbacommandbarhelper.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 typedef InheritedHelperInterfaceImpl1< ov::XCommandBarControl > CommandBarControl_BASE;
 
@@ -73,7 +73,7 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 
-typedef cppu::ImplInheritanceHelper1< ScVbaCommandBarControl, ov::XCommandBarPopup > CommandBarPopup_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaCommandBarControl, ov::XCommandBarPopup > CommandBarPopup_BASE;
 class ScVbaCommandBarPopup : public CommandBarPopup_BASE
 {
 public:
@@ -88,7 +88,7 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 
-typedef cppu::ImplInheritanceHelper1< ScVbaCommandBarControl, ov::XCommandBarButton > CommandBarButton_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaCommandBarControl, ov::XCommandBarButton > CommandBarButton_BASE;
 class ScVbaCommandBarButton : public CommandBarButton_BASE
 {
 public:

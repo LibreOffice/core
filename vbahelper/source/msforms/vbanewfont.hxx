@@ -22,10 +22,10 @@
 
 #include <ooo/vba/msforms/XNewFont.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
-
-typedef cppu::WeakImplHelper1< ov::msforms::XNewFont > VbaNewFont_BASE;
+typedef cppu::WeakImplHelper< ov::msforms::XNewFont > VbaNewFont_BASE;
 
 class VbaNewFont : public VbaNewFont_BASE
 {

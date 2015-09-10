@@ -20,12 +20,12 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATEXTBOX_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATEXTBOX_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XTextBox.hpp>
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XTextBox, css::script::XDefaultProperty > TextBoxImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XTextBox, css::script::XDefaultProperty > TextBoxImpl_BASE;
 
 class ScVbaTextBox : public TextBoxImpl_BASE
 {

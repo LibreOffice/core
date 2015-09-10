@@ -20,14 +20,13 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAPROGRESSBAR_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAPROGRESSBAR_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/msforms/XProgressBar.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
-typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XProgressBar, css::script::XDefaultProperty  > ProgressBarImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XProgressBar, css::script::XDefaultProperty  > ProgressBarImpl_BASE;
 
 class ScVbaProgressBar : public ProgressBarImpl_BASE
 {

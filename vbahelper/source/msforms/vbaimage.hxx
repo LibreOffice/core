@@ -18,13 +18,13 @@
  */
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAIMAGE_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAIMAGE_HXX
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XImage.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XImage > ImageImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XImage > ImageImpl_BASE;
 
 class ScVbaImage : public ImageImpl_BASE
 {

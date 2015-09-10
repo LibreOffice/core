@@ -24,6 +24,7 @@
 #include <com/sun/star/ui/XModuleUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <ooo/vba/office/MsoBarType.hpp>
+#include <cppuhelper/implbase.hxx>
 
 #include "vbacommandbars.hxx"
 #include "vbacommandbar.hxx"
@@ -32,7 +33,7 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-class CommandBarEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
+class CommandBarEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     uno::Reference< XHelperInterface > m_xParent;
     uno::Reference< uno::XComponentContext > m_xContext;

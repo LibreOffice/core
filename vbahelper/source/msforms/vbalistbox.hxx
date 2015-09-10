@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALISTBOX_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALISTBOX_HXX
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include <ooo/vba/msforms/XListBox.hpp>
@@ -29,7 +29,7 @@
 #include "vbalistcontrolhelper.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper2<ScVbaControl, ov::msforms::XListBox, css::script::XDefaultProperty > ListBoxImpl_BASE;
+typedef cppu::ImplInheritanceHelper<ScVbaControl, ov::msforms::XListBox, css::script::XDefaultProperty > ListBoxImpl_BASE;
 class ScVbaListBox : public ListBoxImpl_BASE
     ,public PropListener
 {
