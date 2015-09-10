@@ -784,6 +784,8 @@ bool OpenGLContext::ImplInit()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+    registerAsCurrent();
+
     return bRet;
 }
 
@@ -924,6 +926,8 @@ bool OpenGLContext::ImplInit()
     m_aGLWin.Height = clientRect.bottom - clientRect.top;
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    registerAsCurrent();
 
     return true;
 }
@@ -1347,8 +1351,6 @@ void OpenGLContext::prepareForYield()
 
 void OpenGLContext::makeCurrent()
 {
-    ImplSVData* pSVData = ImplGetSVData();
-
     if (isCurrent())
         return;
 
@@ -1382,6 +1384,13 @@ void OpenGLContext::makeCurrent()
         }
     }
 #endif
+
+    registerAsCurrent();
+}
+
+void OpenGLContext::registerAsCurrent()
+{
+    ImplSVData* pSVData = ImplGetSVData();
 
     // move the context to the end of the contexts list
     static int nSwitch = 0;
