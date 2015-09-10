@@ -40,9 +40,13 @@
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
 #include <flyfrms.hxx>
+#include <pagedesc.hxx>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 
 #include <DocumentSettingManager.hxx>
 #include <IDocumentLayoutAccess.hxx>
+
+using namespace ::com::sun::star;
 
 // Move methods
 
@@ -1026,6 +1030,92 @@ inline void ValidateSz( SwFrm *pFrm )
     }
 }
 
+void lcl_PageVerticalAdjust( SwTextFrm* pTextFrm, drawing::TextVerticalAdjust nVA )
+{
+    SWRECTFN( pTextFrm );
+    SwPageFrm* pPageFrm = pTextFrm->FindPageFrm();
+    SwFrm* rFirst = pPageFrm->FindFirstBodyContent();
+    SwFrm* rLast  = pPageFrm->FindLastBodyContent();
+
+    //nothing to do if adjustment is default setting or all page content is not yet valid.
+    if( nVA == drawing::TextVerticalAdjust_TOP || !rLast || !rLast->IsValid() || !rFirst || !rFirst->IsValid() )
+        return;
+
+    int nTextSize = 0;
+    int nCumSize = 0;
+    int nTextFramesCounter = 0;
+    SwFrm* pFrmIter = rLast;
+    //get the cumulative size of the text on the page and the number of non-empty text frames.
+    while( pFrmIter )
+    {
+        nTextSize = (pFrmIter->*fnRect->fnGetPrtBottom)() - (pFrmIter->*fnRect->fnGetPrtTop)();
+        if( nTextSize && pFrmIter->IsTextFrm() )
+            nTextFramesCounter++;
+        nCumSize += nTextSize;
+        pFrmIter = pFrmIter->GetPrev();
+    }
+
+    if( nTextFramesCounter )
+    {
+        int nPageTop = (pPageFrm->FindBodyCont()->*fnRect->fnGetPrtTop)();
+        int nPageBot = (pPageFrm->FindBodyCont()->*fnRect->fnGetPrtBottom)();
+        if( (rFirst->*fnRect->fnGetPrtTop)() < nPageTop )
+            nPageTop = (rFirst->*fnRect->fnGetPrtTop)();
+        if( (rLast->*fnRect->fnGetPrtBottom)() > nPageBot )
+            nPageBot = (rLast->*fnRect->fnGetPrtBottom)();
+
+        int nPad=0;
+        int nNewStart = 0;
+        int nMaxCumSize = nCumSize;
+        int nMaxTextFrames = nTextFramesCounter;
+        int nLastFontSize = 0;
+        if ( rLast->IsTextFrm() )
+            nLastFontSize = static_cast<SwTextFrm*>(rLast)->GetHeightOfLastLine();
+        pFrmIter = rLast;
+        while( pFrmIter )
+        {
+            nTextSize = (pFrmIter->*fnRect->fnGetPrtBottom)() - (pFrmIter->*fnRect->fnGetPrtTop)();
+            nCumSize -= nTextSize;
+            if( pFrmIter->IsTextFrm() && nTextFramesCounter-- )
+            {
+                switch( nVA )
+                {
+                    case drawing::TextVerticalAdjust_CENTER:
+                        nPad = (nPageBot - nPageTop - nMaxCumSize) / 2;
+                        if( nPad < 0 )
+                            nPad = 0;
+                        nNewStart = nPageTop + nPad + nCumSize;
+                        break;
+                    case drawing::TextVerticalAdjust_BOTTOM:
+                        nPad = nPageBot - nPageTop - nMaxCumSize - nLastFontSize;
+                        if( nPad < 0 )
+                            nPad = 0;
+                        nNewStart = nPageTop + nPad + nCumSize;
+                        break;
+                    case drawing::TextVerticalAdjust_BLOCK:
+                        if( nMaxTextFrames <= 1 )
+                            nPad = 0;
+                        else
+                            nPad = (nPageBot - nPageTop - nMaxCumSize - nLastFontSize) / (nMaxTextFrames-1);
+                        if( nPad < 0 )
+                            nPad = 0;
+                        nNewStart = nPageTop + (nPad * nTextFramesCounter) + nCumSize;
+                        break;
+                    default:
+                        break;
+                }
+                if( !( (pFrmIter->Frm().*fnRect->fnGetTop)() == (nNewStart) ) )
+                {
+                    (pFrmIter->Frm().*fnRect->fnSetTop)( nNewStart );
+                    pFrmIter->InvalidatePrt();
+                }
+            }
+            pFrmIter = pFrmIter->GetPrev();
+        }
+    }
+}
+
+
 void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     OSL_ENSURE( GetUpper(), "no Upper?" );
@@ -1676,6 +1766,17 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                          static_cast<SwTextFrm&>(*this) );
 
     delete pSaveFootnote;
+
+    //If the page has imported MSWord's vertical page alignment, adjust the display accordingly.
+    //  Only adjust after all other layout and validity issues have been resolved.
+    if( IsTextFrm() && IsInDocBody() && IsValid() && !FindPageFrm()->IsEmptyPage() && !FindPageFrm()->IsInvalidLayout() && !IsHeaderFrm() && !IsFooterFrm() )
+    {
+        SwPageDesc* rPageDesc = FindPageFrm()->GetPageDesc();
+//        rPageDesc->SetVerticalAlignment(3);
+
+        if( rPageDesc && IsTextFrm() )
+            lcl_PageVerticalAdjust( static_cast<SwTextFrm*>(this), rPageDesc->GetVerticalAdjustment() );
+    }
 
     UnlockJoin();
     if (!bDeleteForbidden)
