@@ -19,7 +19,7 @@
 
 #include "hintids.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/lspcitem.hxx>
 #include <dcontact.hxx>
@@ -1501,7 +1501,7 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
     // fly positioning can make it necessary format a line several times
     // for this, we have to keep a copy of our rest portion
     SwLinePortion* pField = GetInfo().GetRest();
-    boost::scoped_ptr<SwFieldPortion> xSaveField;
+    std::unique_ptr<SwFieldPortion> xSaveField;
 
     if ( pField && pField->InFieldGrp() && !pField->IsFootnotePortion() )
         xSaveField.reset(new SwFieldPortion( *static_cast<SwFieldPortion*>(pField) ));

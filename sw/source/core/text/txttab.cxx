@@ -33,7 +33,7 @@
 #include "txtfrm.hxx"
 #include <numrule.hxx>
 #include <porfld.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 /**
  * #i24363# tab stops relative to indent
@@ -336,7 +336,7 @@ bool SwTabPortion::PreFormat( SwTextFormatInfo &rInf )
         // #i89179#
         // tab portion representing the list tab of a list label gets the
         // same font as the corresponding number portion
-        boost::scoped_ptr< SwFontSave > pSave( 0 );
+        std::unique_ptr< SwFontSave > pSave;
         if ( GetLen() == 0 &&
              rInf.GetLast() && rInf.GetLast()->InNumberGrp() &&
              static_cast<SwNumberPortion*>(rInf.GetLast())->HasFont() )
@@ -519,7 +519,7 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
     // #i89179#
     // tab portion representing the list tab of a list label gets the
     // same font as the corresponding number portion
-    boost::scoped_ptr< SwFontSave > pSave( 0 );
+    std::unique_ptr< SwFontSave > pSave;
     bool bAfterNumbering = false;
     if ( GetLen() == 0 )
     {

@@ -18,6 +18,7 @@
  */
 
 #include <deque>
+#include <memory>
 
 #include <hintids.hxx>
 
@@ -49,8 +50,6 @@
 #include <tgrditem.hxx>
 #include <swtable.hxx>
 #include <fmtfsize.hxx>
-
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -1640,7 +1639,7 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     }
 
     SeekAndChg( rInf );
-    boost::scoped_ptr<SwFontSave> xFontSave;
+    std::unique_ptr<SwFontSave> xFontSave;
     if( rMulti.IsDouble() )
     {
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
