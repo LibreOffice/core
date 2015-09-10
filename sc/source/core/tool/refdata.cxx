@@ -242,16 +242,20 @@ SCTAB ScSingleRefData::Tab() const
 // static
 void ScSingleRefData::PutInOrder( ScSingleRefData& rRef1, ScSingleRefData& rRef2, const ScAddress& rPos )
 {
+    const sal_uInt8 kCOL = 1;
+    const sal_uInt8 kROW = 2;
+    const sal_uInt8 kTAB = 4;
+
     sal_uInt8 nRelState1 = rRef1.Flags.bRelName ?
-        ((rRef1.Flags.bTabRel ? 4 : 0) |
-         (rRef1.Flags.bRowRel ? 2 : 0) |
-         (rRef1.Flags.bColRel ? 1 : 0)) :
+        ((rRef1.Flags.bTabRel ? kTAB : 0) |
+         (rRef1.Flags.bRowRel ? kROW : 0) |
+         (rRef1.Flags.bColRel ? kCOL : 0)) :
         0;
 
     sal_uInt8 nRelState2 = rRef2.Flags.bRelName ?
-        ((rRef2.Flags.bTabRel ? 4 : 0) |
-         (rRef2.Flags.bRowRel ? 2 : 0) |
-         (rRef2.Flags.bColRel ? 1 : 0)) :
+        ((rRef2.Flags.bTabRel ? kTAB : 0) |
+         (rRef2.Flags.bRowRel ? kROW : 0) |
+         (rRef2.Flags.bColRel ? kCOL : 0)) :
         0;
 
     SCCOL nCol1 = rRef1.Flags.bColRel ? rPos.Col() + rRef1.mnCol : rRef1.mnCol;
@@ -261,13 +265,13 @@ void ScSingleRefData::PutInOrder( ScSingleRefData& rRef1, ScSingleRefData& rRef2
         rRef1.mnCol = rRef2.Flags.bColRel ? nCol2 - rPos.Col() : nCol2;
         rRef2.mnCol = rRef1.Flags.bColRel ? nCol1 - rPos.Col() : nCol1;
         if (rRef1.Flags.bRelName && rRef1.Flags.bColRel)
-            nRelState2 |= 1;
+            nRelState2 |= kCOL;
         else
-            nRelState2 &= ~1;
+            nRelState2 &= ~kCOL;
         if (rRef2.Flags.bRelName && rRef2.Flags.bColRel)
-            nRelState1 |= 1;
+            nRelState1 |= kCOL;
         else
-            nRelState1 &= ~1;
+            nRelState1 &= ~kCOL;
         bool bTmp = rRef1.Flags.bColRel;
         rRef1.Flags.bColRel = rRef2.Flags.bColRel;
         rRef2.Flags.bColRel = bTmp;
@@ -283,13 +287,13 @@ void ScSingleRefData::PutInOrder( ScSingleRefData& rRef1, ScSingleRefData& rRef2
         rRef1.mnRow = rRef2.Flags.bRowRel ? nRow2 - rPos.Row() : nRow2;
         rRef2.mnRow = rRef1.Flags.bRowRel ? nRow1 - rPos.Row() : nRow1;
         if (rRef1.Flags.bRelName && rRef1.Flags.bRowRel)
-            nRelState2 |= 2;
+            nRelState2 |= kROW;
         else
-            nRelState2 &= ~2;
+            nRelState2 &= ~kROW;
         if (rRef2.Flags.bRelName && rRef2.Flags.bRowRel)
-            nRelState1 |= 2;
+            nRelState1 |= kROW;
         else
-            nRelState1 &= ~2;
+            nRelState1 &= ~kROW;
         bool bTmp = rRef1.Flags.bRowRel;
         rRef1.Flags.bRowRel = rRef2.Flags.bRowRel;
         rRef2.Flags.bRowRel = bTmp;
@@ -305,13 +309,13 @@ void ScSingleRefData::PutInOrder( ScSingleRefData& rRef1, ScSingleRefData& rRef2
         rRef1.mnTab = rRef2.Flags.bTabRel ? nTab2 - rPos.Tab() : nTab2;
         rRef2.mnTab = rRef1.Flags.bTabRel ? nTab1 - rPos.Tab() : nTab1;
         if (rRef1.Flags.bRelName && rRef1.Flags.bTabRel)
-            nRelState2 |= 4;
+            nRelState2 |= kTAB;
         else
-            nRelState2 &= ~4;
+            nRelState2 &= ~kTAB;
         if (rRef2.Flags.bRelName && rRef2.Flags.bTabRel)
-            nRelState1 |= 4;
+            nRelState1 |= kTAB;
         else
-            nRelState1 &= ~4;
+            nRelState1 &= ~kTAB;
         bool bTmp = rRef1.Flags.bTabRel;
         rRef1.Flags.bTabRel = rRef2.Flags.bTabRel;
         rRef2.Flags.bTabRel = bTmp;
