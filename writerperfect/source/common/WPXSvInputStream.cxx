@@ -60,12 +60,11 @@ PositionHolder::PositionHolder(const Reference<XSeekable> &rxSeekable)
 {
 }
 
-PositionHolder::~PositionHolder() try
+PositionHolder::~PositionHolder()
 {
-    mxSeekable->seek(mnPosition);
-}
-catch (...)
-{
+    try {
+        mxSeekable->seek(mnPosition);
+    } catch (...) {}
 }
 
 } // anonymous namespace
