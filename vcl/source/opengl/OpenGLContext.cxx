@@ -470,8 +470,9 @@ private:
     Display* mdpy;
 
 public:
-    TempErrorHandler(Display* dpy, errorHandler newErrorHandler):
-        mdpy(dpy)
+    TempErrorHandler(Display* dpy, errorHandler newErrorHandler)
+        : oldErrorHandler(0)
+        , mdpy(dpy)
     {
         if (mdpy)
         {
