@@ -48,6 +48,7 @@
 #include <ndtxt.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
+#include <UndoInsert.hxx>
 
 using namespace com::sun::star;
 
@@ -395,14 +396,18 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
     if( LTYPE_DRAW==eType || pCnt )
     {
         StartAllAction();
+        SwRewriter aRewriter(SwUndoInsertLabel::CreateRewriter(rText));
+        StartUndo(UNDO_INSERTLABEL, &aRewriter);
 
         sal_uLong nIdx = 0;
+        bool bInnerCntIsFly = false;
         SwFlyFrameFormat* pFlyFormat = 0;
         switch( eType )
         {
         case LTYPE_OBJECT:
         case LTYPE_FLY:
-            if( pCnt->IsInFly() )
+            bInnerCntIsFly = pCnt->IsInFly();
+            if (bInnerCntIsFly)
             {
                 // pass down index to the startnode for flys
                 nIdx = pCnt->FindFlyFrm()->
@@ -423,7 +428,6 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
             {
                 SwDrawView *pDView = Imp()->GetDrawView();
                 const SdrMarkList& rMrkList = pDView->GetMarkedObjectList();
-                StartUndo();
 
                 // copy marked drawing objects to
                 // local list to perform the corresponding action for each object
@@ -452,7 +456,6 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
                     aDrawObjs.pop_back();
                 }
 
-                EndUndo();
             }
             break;
         default:
@@ -460,14 +463,49 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
         }
 
         if( nIdx )
-            pFlyFormat = GetDoc()->InsertLabel( eType, rText, rSeparator, rNumberSeparator, bBefore, nId,
-                                             nIdx, rCharacterStyle, bCpyBrd );
+        {
+            pFlyFormat = GetDoc()->InsertLabel(eType, rText, rSeparator,
+                                               rNumberSeparator, bBefore, nId,
+                                               nIdx, rCharacterStyle, bCpyBrd);
 
-        SwFlyFrm* pFrm;
-        const Point aPt( GetCrsrDocPos() );
-        if( pFlyFormat && 0 != ( pFrm = pFlyFormat->GetFrm( &aPt )))
-            SelectFlyFrm( *pFrm, true );
+            //if we succeeded in putting a caption on the content, and the
+            //content was a frame/graphic, then set the contained element
+            //to as-char anchoring because that's all msword is able to
+            //do when inside a frame, and in writer for freshly captioned
+            //elements it's largely irrelevent what the anchor of the contained
+            //type is but making it as-char by default results in very
+            //good roundtripping
+            if (pFlyFormat && bInnerCntIsFly)
+            {
+                SwNodeIndex aAnchIdx(*pFlyFormat->GetContent().GetContentIdx(), 1);
+                SwTextNode *pTxtNode = aAnchIdx.GetNode().GetTextNode();
 
+                SwFormatAnchor aAnc(FLY_AS_CHAR);
+                sal_Int32 nInsertPos = bBefore ? pTxtNode->Len() : 0;
+                SwPosition aPos(*pTxtNode, nInsertPos);
+
+                aAnc.SetAnchor(&aPos);
+
+                SfxItemSet aSet(makeItemSetFromFormatAnchor(GetDoc()->GetAttrPool(), aAnc));
+
+                SwFlyFrm *pFly = GetSelectedOrCurrFlyFrm();
+                SwFlyFrameFormat* pInnerFlyFormat = pFly->GetFormat();
+                GetDoc()->SetFlyFrmAttr(*pInnerFlyFormat, aSet);
+
+                //put a hard-break after the graphic to keep it separated
+                //from the caption text if the outer frame is resized
+                SwIndex aIdx(pTxtNode, bBefore ? nInsertPos : 1);
+                pTxtNode->InsertText(OUString("\n"), aIdx);
+            }
+        }
+
+        if (pFlyFormat)
+        {
+            const Point aPt(GetCrsrDocPos());
+            if (SwFlyFrm* pFrm = pFlyFormat->GetFrm(&aPt))
+                SelectFlyFrm(*pFrm, true);
+        }
+        EndUndo();
         EndAllActionAndCall();
     }
 }

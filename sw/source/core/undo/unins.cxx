@@ -1015,14 +1015,22 @@ void SwUndoInsertLabel::RepeatImpl(::sw::RepeatContext & rContext)
 // #111827#
 SwRewriter SwUndoInsertLabel::GetRewriter() const
 {
+    return CreateRewriter(sText);
+}
+
+SwRewriter SwUndoInsertLabel::CreateRewriter(const OUString &rStr)
+{
     SwRewriter aRewriter;
 
     OUString aTmpStr;
 
-    aTmpStr += SW_RES(STR_START_QUOTE);
-    aTmpStr += ShortenString(sText, nUndoStringLength,
-                             OUString(SW_RES(STR_LDOTS)));
-    aTmpStr += SW_RES(STR_END_QUOTE);
+    if (!rStr.isEmpty())
+    {
+        aTmpStr += SW_RES(STR_START_QUOTE);
+        aTmpStr += ShortenString(rStr, nUndoStringLength,
+                                 OUString(SW_RES(STR_LDOTS)));
+        aTmpStr += SW_RES(STR_END_QUOTE);
+    }
 
     aRewriter.AddRule(UndoArg1, aTmpStr);
 

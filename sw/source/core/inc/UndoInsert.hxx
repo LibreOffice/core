@@ -205,6 +205,7 @@ public:
        @return the rewriter of this undo object
      */
     virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
+    static SwRewriter CreateRewriter(const OUString &rStr);
 
     void SetNodePos( sal_uLong nNd )
         { if( LTYPE_OBJECT != eType ) NODE.nNode = nNd; }
