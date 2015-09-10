@@ -41,7 +41,12 @@ public:
 
     typedef BitmapChecksum  ChecksumType;
 
-                            SalBitmap() : mbChecksumValid(false) {}
+    SalBitmap()
+        : mnChecksum(0)
+        , mbChecksumValid(false)
+    {
+    }
+
     virtual                 ~SalBitmap();
 
     virtual bool            Create( const Size& rSize,
