@@ -2203,7 +2203,6 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
 
     // format all lines starting here
     size_t nDelFromLine = std::numeric_limits<size_t>::max();
-    bool bLineBreak = false;
 
     sal_Int32 nIndex = pLine->GetStart();
     TextLine aSaveLine( *pLine );
@@ -2227,7 +2226,6 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         // search for Portion that does not fit anymore into line
         TETextPortion* pPortion = 0;
         bool bBrokenLine = false;
-        bLineBreak = false;
 
         while ( ( nTmpWidth <= nXWidth ) && !bEOL && ( nTmpPortion < pTEParaPortion->GetTextPortions().size() ) )
         {
@@ -2296,7 +2294,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
             pLine->SetEnd( nPortionStart );
             pLine->SetEndPortion( nTmpPortion-1 );
         }
-        else if ( bLineBreak || bBrokenLine )
+        else if ( bBrokenLine )
         {
             pLine->SetEnd( nPortionStart+1 );
             pLine->SetEndPortion( nTmpPortion-1 );
@@ -2420,9 +2418,6 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
     }
 
     DBG_ASSERT( pTEParaPortion->GetLines().size(), "CreateLines: No Line!" );
-
-    if ( bLineBreak )
-        CreateAndInsertEmptyLine( nPara );
 
     pTEParaPortion->SetValid();
 
