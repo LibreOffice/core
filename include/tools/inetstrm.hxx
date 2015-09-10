@@ -27,17 +27,6 @@ class INetMIMEMessage;
 class SvMemoryStream;
 class SvStream;
 
-enum INetStreamStatus
-{
-    INETSTREAM_STATUS_ERROR      = -1
-};
-
-enum INetMessageStreamState
-{
-    INETMSG_EOL_BEGIN,
-    INETMSG_EOL_DONE
-};
-
 class TOOLS_DLLPUBLIC INetMIMEMessageStream
 {
     INetMIMEMessage *pSourceMsg;
@@ -53,7 +42,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     sal_Char       *pMsgRead;
     sal_Char       *pMsgWrite;
 
-    int                    eState;
+    bool done;
 
     sal_uIntPtr                  nChildIndex;
     INetMIMEMessageStream *pChildStrm;
@@ -61,20 +50,15 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     INetMIMEMessageStream (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
     INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
 
-    int GetInnerMsgLine(sal_Char *pData, sal_uIntPtr nSize);
-    int GetOuterMsgLine(sal_Char *pData, sal_uIntPtr nSize);
+    int GetHeaderLine(sal_Char *pData, sal_uIntPtr nSize);
+    int GetBodyLine(sal_Char *pData, sal_uIntPtr nSize);
+    int GetMsgLine(sal_Char *pData, sal_uIntPtr nSize);
 
 public:
-    INetMIMEMessageStream (sal_uIntPtr nBufferSize = 2048);
+    explicit INetMIMEMessageStream(INetMIMEMessage *pMsg, bool headerGenerated);
     ~INetMIMEMessageStream();
 
     int Read (sal_Char *pData, sal_uIntPtr nSize);
-
-    INetMIMEMessage *GetSourceMessage() const { return pSourceMsg; }
-    void SetSourceMessage (INetMIMEMessage *pMsg) { pSourceMsg = pMsg; }
-
-    void SetHeaderGenerated() { bHeaderGenerated = true; }
-    bool IsHeaderGenerated() const { return bHeaderGenerated; }
 };
 
 #endif

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
@@ -24,147 +28,141 @@
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 
-#include <ctype.h>
-
-int INetMIMEMessageStream::GetInnerMsgLine(sal_Char* pData, sal_uIntPtr nSize)
+int INetMIMEMessageStream::GetHeaderLine(sal_Char* pData, sal_uIntPtr nSize)
 {
-    if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
-
     sal_Char* pWBuf = pData;
-    sal_Char* pWEnd = pData + nSize;
 
-    if (!bHeaderGenerated)
+    sal_uIntPtr i, n;
+
+    if (pMsgBuffer->Tell() == 0)
     {
-        sal_uIntPtr i, n;
-
-        if (pMsgBuffer->Tell() == 0)
+        // Insert formatted header into buffer.
+        n = pSourceMsg->GetHeaderCount();
+        for (i = 0; i < n; i++)
         {
-            // Insert formatted header into buffer.
-            n = pSourceMsg->GetHeaderCount();
-            for (i = 0; i < n; i++)
+            INetMessageHeader aHeader (pSourceMsg->GetHeaderField(i));
+            if (aHeader.GetValue().getLength())
             {
-                INetMessageHeader aHeader (pSourceMsg->GetHeaderField(i));
-                if (aHeader.GetValue().getLength())
-                {
-                    // NYI: Folding long lines.
-                    pMsgBuffer->WriteCharPtr( aHeader.GetName().getStr() );
-                    pMsgBuffer->WriteCharPtr( ": " );
-                    pMsgBuffer->WriteCharPtr( aHeader.GetValue().getStr() );
-                    pMsgBuffer->WriteCharPtr( "\r\n" );
-                }
+                // NYI: Folding long lines.
+                pMsgBuffer->WriteCharPtr( aHeader.GetName().getStr() );
+                pMsgBuffer->WriteCharPtr( ": " );
+                pMsgBuffer->WriteCharPtr( aHeader.GetValue().getStr() );
+                pMsgBuffer->WriteCharPtr( "\r\n" );
             }
-
-            pMsgWrite = const_cast<char *>(static_cast<sal_Char const *>(pMsgBuffer->GetData()));
-            pMsgRead  = pMsgWrite + pMsgBuffer->Tell();
         }
 
-        n = pMsgRead - pMsgWrite;
-        if (n > 0)
-        {
-            // Move to caller.
-            if (nSize < n) n = nSize;
-            for (i = 0; i < n; i++) *pWBuf++ = *pMsgWrite++;
-        }
-        else
-        {
-            // Reset buffer.
-            pMsgBuffer->Seek(STREAM_SEEK_TO_BEGIN);
-        }
+        pMsgWrite = const_cast<char *>(static_cast<sal_Char const *>(pMsgBuffer->GetData()));
+        pMsgRead  = pMsgWrite + pMsgBuffer->Tell();
+    }
+
+    n = pMsgRead - pMsgWrite;
+    if (n > 0)
+    {
+        // Move to caller.
+        if (nSize < n) n = nSize;
+        for (i = 0; i < n; i++) *pWBuf++ = *pMsgWrite++;
     }
     else
     {
-        if (pSourceMsg->GetDocumentLB())
-        {
-            if (pMsgStrm == NULL)
-                pMsgStrm = new SvStream (pSourceMsg->GetDocumentLB());
-
-            sal_uIntPtr nRead = pMsgStrm->Read(pWBuf, (pWEnd - pWBuf));
-            pWBuf += nRead;
-        }
+        // Reset buffer.
+        pMsgBuffer->Seek(STREAM_SEEK_TO_BEGIN);
     }
+
     return (pWBuf - pData);
 }
 
-int INetMIMEMessageStream::GetOuterMsgLine(sal_Char* pData, sal_uIntPtr nSize)
+int INetMIMEMessageStream::GetBodyLine(sal_Char* pData, sal_uIntPtr nSize)
 {
-    // Check for message container.
-    INetMIMEMessage* pMsg = GetSourceMessage();
-    if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
+    sal_Char* pWBuf = pData;
+    sal_Char* pWEnd = pData + nSize;
 
-    // Check for header or body.
-    if (!IsHeaderGenerated())
+    if (pSourceMsg->GetDocumentLB())
     {
-        if (eState == INETMSG_EOL_BEGIN)
+        if (pMsgStrm == NULL)
+            pMsgStrm = new SvStream (pSourceMsg->GetDocumentLB());
+
+        sal_uIntPtr nRead = pMsgStrm->Read(pWBuf, (pWEnd - pWBuf));
+        pWBuf += nRead;
+    }
+
+    return (pWBuf - pData);
+}
+
+int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
+{
+    // Check for header or body.
+    if (!bHeaderGenerated)
+    {
+        if (!done)
         {
             // Prepare special header fields.
-            if (pMsg->GetParent())
+            if (pSourceMsg->GetParent())
             {
-                OUString aPCT(pMsg->GetParent()->GetContentType());
+                OUString aPCT(pSourceMsg->GetParent()->GetContentType());
                 if (aPCT.startsWithIgnoreAsciiCase("message/rfc822"))
-                    pMsg->SetMIMEVersion("1.0");
+                    pSourceMsg->SetMIMEVersion("1.0");
                 else
-                    pMsg->SetMIMEVersion(OUString());
+                    pSourceMsg->SetMIMEVersion(OUString());
             }
             else
             {
-                pMsg->SetMIMEVersion("1.0");
+                pSourceMsg->SetMIMEVersion("1.0");
             }
 
             // Check ContentType.
-            OUString aContentType(pMsg->GetContentType());
+            OUString aContentType(pSourceMsg->GetContentType());
             if (!aContentType.isEmpty())
             {
                 // Determine default Content-Type.
-                OUString aDefaultType = pMsg->GetDefaultContentType();
+                OUString aDefaultType = pSourceMsg->GetDefaultContentType();
 
                 if (aDefaultType.equalsIgnoreAsciiCase(aContentType))
                 {
                     // No need to specify default.
-                    pMsg->SetContentType(OUString());
+                    pSourceMsg->SetContentType(OUString());
                 }
             }
 
             // No need to specify default.
-            pMsg->SetContentTransferEncoding(OUString());
+            pSourceMsg->SetContentTransferEncoding(OUString());
 
             // Mark we're done.
-            eState = INETMSG_EOL_DONE;
+            done = true;
         }
 
         // Generate the message header.
-        int nRead = GetInnerMsgLine(pData, nSize);
+        int nRead = GetHeaderLine(pData, nSize);
         if (nRead <= 0)
         {
             // Reset state.
-            eState = INETMSG_EOL_BEGIN;
+            done = false;
         }
         return nRead;
     }
     else
     {
         // Generate the message body.
-        if (pMsg->IsContainer())
+        if (pSourceMsg->IsContainer())
         {
             // Encapsulated message body.
-            while (eState == INETMSG_EOL_BEGIN)
+            while (!done)
             {
                 if (pChildStrm == NULL)
                 {
-                    INetMIMEMessage *pChild = pMsg->GetChild(nChildIndex);
+                    INetMIMEMessage *pChild = pSourceMsg->GetChild(nChildIndex);
                     if (pChild)
                     {
                         // Increment child index.
                         nChildIndex++;
 
                         // Create child stream.
-                        pChildStrm = new INetMIMEMessageStream;
-                        pChildStrm->SetSourceMessage(pChild);
+                        pChildStrm = new INetMIMEMessageStream(pChild, false);
 
-                        if (pMsg->IsMultipart())
+                        if (pSourceMsg->IsMultipart())
                         {
                             // Insert multipart delimiter.
                             OStringBuffer aDelim("--");
-                            aDelim.append(pMsg->GetMultipartBoundary());
+                            aDelim.append(pSourceMsg->GetMultipartBoundary());
                             aDelim.append("\r\n");
 
                             memcpy(pData, aDelim.getStr(),
@@ -175,14 +173,14 @@ int INetMIMEMessageStream::GetOuterMsgLine(sal_Char* pData, sal_uIntPtr nSize)
                     else
                     {
                         // No more parts. Mark we're done.
-                        eState = INETMSG_EOL_DONE;
+                        done = true;
                         nChildIndex = 0;
 
-                        if (pMsg->IsMultipart())
+                        if (pSourceMsg->IsMultipart())
                         {
                             // Insert close delimiter.
                             OStringBuffer aDelim("--");
-                            aDelim.append(pMsg->GetMultipartBoundary());
+                            aDelim.append(pSourceMsg->GetMultipartBoundary());
                             aDelim.append("--\r\n");
 
                             memcpy(pData, aDelim.getStr(),
@@ -212,30 +210,32 @@ int INetMIMEMessageStream::GetOuterMsgLine(sal_Char* pData, sal_uIntPtr nSize)
         else
         {
             // Single part message body.
-            if (pMsg->GetDocumentLB() == NULL)
+            if (pSourceMsg->GetDocumentLB() == NULL)
             {
                 // Empty message body.
                 return 0;
             }
 
             // No Encoding.
-            return GetInnerMsgLine(pData, nSize);
+            return GetBodyLine(pData, nSize);
         }
     }
 }
 
-INetMIMEMessageStream::INetMIMEMessageStream(sal_uIntPtr nBufferSize):
-    pSourceMsg(NULL),
-    bHeaderGenerated(false),
-    nBufSiz(nBufferSize),
+INetMIMEMessageStream::INetMIMEMessageStream(
+    INetMIMEMessage *pMsg, bool headerGenerated):
+    pSourceMsg(pMsg),
+    bHeaderGenerated(headerGenerated),
+    nBufSiz(2048),
     pMsgStrm(NULL),
     pMsgBuffer(new SvMemoryStream),
     pMsgRead(NULL),
     pMsgWrite(NULL),
-    eState(INETMSG_EOL_BEGIN),
+    done(false),
     nChildIndex(0),
     pChildStrm(NULL)
 {
+    assert(pMsg != nullptr);
     pMsgBuffer->SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);
     pBuffer = new sal_Char[nBufSiz];
     pRead = pWrite = pBuffer;
@@ -251,8 +251,6 @@ INetMIMEMessageStream::~INetMIMEMessageStream()
 
 int INetMIMEMessageStream::Read(sal_Char* pData, sal_uIntPtr nSize)
 {
-    if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
-
     sal_Char* pWBuf = pData;
     sal_Char* pWEnd = pData + nSize;
 
@@ -273,7 +271,7 @@ int INetMIMEMessageStream::Read(sal_Char* pData, sal_uIntPtr nSize)
             pRead = pWrite = pBuffer;
 
             // Read next message line.
-            int nRead = GetOuterMsgLine(pBuffer, nBufSiz);
+            int nRead = GetMsgLine(pBuffer, nBufSiz);
             if (nRead > 0)
             {
                 // Set read pointer.
