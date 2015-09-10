@@ -174,7 +174,7 @@ void VBACompressionChunk::compressToken(size_t index, sal_uInt8& nFlagByte)
         {
             sal_uInt16 nToken = CopyToken(nLength, nOffset);
             setUInt16(mpCompressedChunkStream, mnCompressedCurrent, nToken);
-            SetFlagBit(index, 1, nFlagByte);
+            SetFlagBit(index, true, nFlagByte);
             mnCompressedCurrent += 2;
             mnDecompressedCurrent += nLength;
         }
