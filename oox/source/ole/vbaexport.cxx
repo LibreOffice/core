@@ -271,7 +271,7 @@ void VBACompressionChunk::CopyTokenHelp(sal_uInt16& rLengthMask, sal_uInt16& rOf
         sal_uInt16& rBitCount, sal_uInt16& rMaximumLength)
 {
     sal_uInt16 nDifference = mnDecompressedCurrent;
-    sal_uInt16 nBitCount = std::ceil(std::log2(nDifference));
+    sal_uInt16 nBitCount = std::ceil(std::log(nDifference)/std::log(2));
     rBitCount = std::max<sal_uInt16>(nBitCount, 4);
     rLengthMask = 0xffff >> rBitCount;
     rOffsetMask = ~rLengthMask;
