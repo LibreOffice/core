@@ -45,10 +45,15 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
 
+#include <editeng/fontitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <sfx2/objsh.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/svpforlokit.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/fract.hxx>
+#include <svtools/ctrltool.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
@@ -864,6 +869,43 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
 
     pDoc->resetSelection();
 }
+static char* getFonts (const char* pCommand)
+{
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    const SvxFontListItem* pFonts = static_cast<const SvxFontListItem*>(
+        pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
+    const FontList* pList = pFonts ? pFonts->GetFontList() : 0;
+
+    boost::property_tree::ptree aTree;
+    aTree.put("commandName", pCommand);
+    boost::property_tree::ptree aValues;
+    if ( pList )
+    {
+        sal_uInt16 nFontCount = pList->GetFontNameCount();
+        for (sal_uInt16 i = 0; i < nFontCount; ++i)
+        {
+            boost::property_tree::ptree aChildren;
+            const vcl::FontInfo& rInfo = pList->GetFontName(i);
+            const sal_IntPtr* pAry = pList->GetSizeAry(rInfo);
+            sal_uInt16 nSizeCount = 0;
+            while (pAry[nSizeCount])
+            {
+                boost::property_tree::ptree aChild;
+                aChild.put("", (float)pAry[nSizeCount] / 10);
+                aChildren.push_back(std::make_pair("", aChild));
+                nSizeCount++;
+            }
+            aValues.add_child(rInfo.GetName().toUtf8().getStr(), aChildren);
+        }
+    }
+    aTree.add_child("commandValues", aValues);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+    strcpy(pJson, aStream.str().c_str());
+    pJson[aStream.str().size()] = '\0';
+    return pJson;
+}
 
 static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
@@ -901,7 +943,11 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
 
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
-    if (!strcmp(pCommand, ".uno:StyleApply"))
+    if (!strcmp(pCommand, ".uno:CharFontName"))
+    {
+        return getFonts(pCommand);
+    }
+    else if (!strcmp(pCommand, ".uno:StyleApply"))
     {
         return getStyles(pThis, pCommand);
     }
