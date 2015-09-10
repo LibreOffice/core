@@ -1,7 +1,7 @@
 diff -ur graphite.org/src/inc/json.h graphite/src/inc/json.h
 --- graphite.org/src/inc/json.h	2015-02-03 14:49:24.408101900 +0100
 +++ graphite/src/inc/json.h	2015-02-03 14:50:59.697552200 +0100
-@@ -78,6 +78,9 @@
+@@ -85,6 +85,9 @@
      json & operator << (string) throw();
      json & operator << (number) throw();
      json & operator << (integer) throw();
@@ -14,8 +14,7 @@ diff -ur graphite.org/src/inc/json.h graphite/src/inc/json.h
 diff -ur graphite.org/src/json.cpp graphite/src/json.cpp
 --- graphite.org/src/json.cpp	2015-02-03 14:49:24.409102000 +0100
 +++ graphite/src/json.cpp	2015-02-03 14:50:49.814986900 +0100
-@@ -119,6 +119,9 @@
- json & json::operator << (json::number f) throw()   { context(seq); fprintf(_stream, "%g", f); return *this; }
+@@ -134,5 +134,8 @@
  json & json::operator << (json::integer d) throw()  { context(seq); fprintf(_stream, "%ld", d); return *this; }
  json & json::operator << (long unsigned d) throw()  { context(seq); fprintf(_stream, "%ld", d); return *this; }
 +#ifdef _WIN64
@@ -27,17 +26,17 @@ diff -ur graphite.org/src/json.cpp graphite/src/json.cpp
 diff -ur graphite.org/src/Pass.cpp graphite/src/Pass.cpp
 --- graphite.org/src/Pass.cpp	2015-02-03 14:49:24.413102200 +0100
 +++ graphite/src/Pass.cpp	2015-02-03 14:50:37.873303900 +0100
-@@ -466,7 +466,7 @@
-     {
-         if (r->rule->preContext > fsm.slots.context())  continue;
-     *fsm.dbgout << json::flat << json::object
--                    << "id"     << r->rule - m_rules
-+                    << "id"     << static_cast<size_t>(r->rule - m_rules)
+@@ -544,7 +544,7 @@
+         if (r->rule->preContext > fsm.slots.context())
+             continue;
+         *fsm.dbgout << json::flat << json::object
+-                    << "id" << r->rule - m_rules
++                    << "id" << static_cast<size_t>(r->rule - m_rules)
                      << "failed" << true
                      << "input" << json::flat << json::object
                          << "start" << objectid(dslot(&fsm.slots.segment, input_slot(fsm.slots, -r->rule->preContext)))
-@@ -480,7 +480,7 @@
- void Pass::dumpRuleEventOutput(const FiniteStateMachine & fsm, const Rule & r, Slot * const last_slot) const
+@@ -558,7 +558,7 @@
+ void Pass::dumpRuleEventOutput(const FiniteStateMachine & fsm, Machine & m, const Rule & r, Slot * const last_slot) const
  {
      *fsm.dbgout     << json::item << json::flat << json::object
 -                        << "id"     << &r - m_rules
