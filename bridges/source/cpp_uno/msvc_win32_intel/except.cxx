@@ -33,8 +33,24 @@
 #include <unordered_map>
 #include "msci.hxx"
 
-
 #pragma pack(push, 8)
+
+// TODO(davido): Share this between 32bit and 64bit uno bridges
+#if _MSC_VER >= 1900 // VC 2015 and newer
+// extern "C" void** __cdecl __current_exception()
+// is defined in MSVS14.0/VC/crt/src/vcruntime/frame.cpp:
+// return &__vcrt_getptd()->_curexception;
+//
+// __vcrt_getptd is defined in vcruntime_internal.h:
+//typedef struct __vcrt_ptd
+//{
+//    // C++ Exception Handling (EH) state
+//    unsigned long      _NLG_dwCode;      // Required by NLG routines
+//[...]
+//void*              _curexception;    // current exception
+//[...]
+extern "C" void** __current_exception();
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::std;
@@ -493,8 +509,12 @@ int msci_filterCppException(
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
     {
+        pRecord =
+#if _MSC_VER >= 1900 // VC 2015 (and later?)
+        *reinterpret_cast< EXCEPTION_RECORD** >(__current_exception());
+#else
         // hack to get msvcrt internal _curexception field:
-        pRecord = *reinterpret_cast< EXCEPTION_RECORD ** >(
+        *reinterpret_cast< EXCEPTION_RECORD ** >(
             reinterpret_cast< char * >( __pxcptinfoptrs() ) +
             // as long as we don't demand msvcr source as build prerequisite
             // (->platform sdk), we have to code those offsets here.
@@ -504,6 +524,7 @@ int msci_filterCppException(
             // offsetof (_tiddata, _tpxcptinfoptrs):
             0x28 // msvcr80.dll (and later?)
             );
+#endif
     }
     // rethrow: handle only C++ exceptions:
     if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)

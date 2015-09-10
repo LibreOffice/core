@@ -33,6 +33,8 @@
 
 // The below is from ONTL's ntl/nt/exception.hxx, cleaned up to keep just the _M_X64 parts:
 
+#include <exception>
+
 #if 0
 
 /* This information until the corresponding '#endif // 0' is covered
@@ -252,6 +254,23 @@ void
 #include "mscx.hxx"
 
 #pragma pack(push, 8)
+
+// TODO(davido): Share this between 32bit and 64bit uno bridges
+#if _MSC_VER >= 1900 // VC 2015 and newer
+// extern "C" void** __cdecl __current_exception()
+// is defined in MSVS14.0/VC/crt/src/vcruntime/frame.cpp:
+// return &__vcrt_getptd()->_curexception;
+//
+// __vcrt_getptd is defined in vcruntime_internal.h:
+//typedef struct __vcrt_ptd
+//{
+//    // C++ Exception Handling (EH) state
+//    unsigned long      _NLG_dwCode;      // Required by NLG routines
+//[...]
+//void*              _curexception;    // current exception
+//[...]
+extern "C" void** __current_exception();
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::std;
@@ -866,27 +885,26 @@ int mscx_filterCppException(
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
     {
-        // Hack to get msvcrt internal _curexception field:
-        pRecord = *reinterpret_cast< EXCEPTION_RECORD ** >(
-            reinterpret_cast< char * >( __pxcptinfoptrs() ) +
+        pRecord =
+#if _MSC_VER >= 1900 // VC 2015 (and later?)
+        *reinterpret_cast< EXCEPTION_RECORD** >(__current_exception());
+#else
+        // Hack to get msvcrt internal _curexception field for compile older than 2015
+        *reinterpret_cast< EXCEPTION_RECORD ** >(
+            reinterpret_cast< char * >(__pxcptinfoptrs()) +
             // As long as we don't demand MSVCR source as build prerequisite,
             // we have to code those offsets here.
             //
             // MSVS9/crt/src/mtdll.h:
             // offsetof (_tiddata, _curexception) -
             // offsetof (_tiddata, _tpxcptinfoptrs):
-#if _MSC_VER <= 1900 // VC 2015
-            //
-            // See dev-tools/uno/uno_exception_offset
-            0x48 // msvcr90.dll
-#else
-            error, please find value for this compiler version
-#endif
+            0x48
             );
+#endif
     }
 
     // Rethrow: handle only C++ exceptions:
-    if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
+   if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
 
     if (pRecord->NumberParameters == 4 &&
