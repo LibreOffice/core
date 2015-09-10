@@ -921,6 +921,7 @@ SalFrame* WinSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameSty
 
 void WinSalInstance::DestroyFrame( SalFrame* pFrame )
 {
+    OpenGLContext::prepareForYield();
     SendMessageW( mhComWnd, SAL_MSG_DESTROYFRAME, 0, (LPARAM)pFrame );
 }
 
