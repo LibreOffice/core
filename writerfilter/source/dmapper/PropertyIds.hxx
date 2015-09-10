@@ -286,6 +286,7 @@ enum PropertyIds
         ,PROP_TEXT
         ,PROP_TEXT_COLUMNS
         ,PROP_TEXT_RANGE
+        ,PROP_TEXT_VERTICAL_ADJUST
         ,PROP_TITLE
         ,PROP_TOKEN_CHAPTER_INFO
         ,PROP_TOKEN_HYPERLINK_END

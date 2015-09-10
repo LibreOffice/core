@@ -277,6 +277,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_WIDTH_TYPE :    sName = "WidthType"; break;
         case PROP_TBL_LOOK : sName = "TblLook"; break;
         case PROP_TEXT_RANGE:    sName = "TextRange"; break;
+        case PROP_TEXT_VERTICAL_ADJUST     :    sName = "TextVerticalAdjust"; break;
         case PROP_SERVICE_CHAR_STYLE       :    sName = "com.sun.star.style.CharacterStyle"; break;
         case PROP_SERVICE_PARA_STYLE       :    sName = "com.sun.star.style.ParagraphStyle"; break;
         case PROP_CHARACTER_STYLES :    sName = "CharacterStyles"; break;
