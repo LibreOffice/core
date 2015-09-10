@@ -50,9 +50,6 @@ public:
         : m_aName (rHdr.m_aName), m_aValue (rHdr.m_aValue)
     {}
 
-    ~INetMessageHeader()
-    {}
-
     INetMessageHeader& operator= (const INetMessageHeader& rHdr)
     {
         m_aName  = rHdr.m_aName;
@@ -62,57 +59,15 @@ public:
 
     const OString& GetName() const { return m_aName; }
     const OString& GetValue() const { return m_aValue; }
-
-    friend SvStream& WriteINetMessageHeader(
-        SvStream& rStrm, const INetMessageHeader& rHdr)
-    {
-        write_uInt16_lenPrefixed_uInt8s_FromOString(rStrm, rHdr.m_aName);
-        write_uInt16_lenPrefixed_uInt8s_FromOString(rStrm, rHdr.m_aValue);
-        return rStrm;
-    }
-
-    friend SvStream& ReadINetMessageHeader (
-        SvStream& rStrm, INetMessageHeader& rHdr)
-    {
-        rHdr.m_aName = read_uInt16_lenPrefixed_uInt8s_ToOString(rStrm);
-        rHdr.m_aValue = read_uInt16_lenPrefixed_uInt8s_ToOString(rStrm);
-        return rStrm;
-    }
-};
-
-/**
-  RFC822 fields
-*/
-enum class InetMessageField
-{
-    BCC                =  0,
-    CC                 =  1,
-    COMMENTS           =  2,
-    DATE               =  3,
-    FROM               =  4,
-    IN_REPLY_TO        =  5,
-    KEYWORDS           =  6,
-    MESSAGE_ID         =  7,
-    REFERENCES         =  8,
-    REPLY_TO           =  9,
-    RETURN_PATH        = 10,
-    SENDER             = 11,
-    SUBJECT            = 12,
-    TO                 = 13,
-    X_MAILER           = 14,
-    RETURN_RECEIPT_TO  = 15,
-    NUMHDR             = 16,
 };
 
 enum class InetMessageMime
 {
     VERSION                    = 0,
-    CONTENT_DESCRIPTION        = 1,
-    CONTENT_DISPOSITION        = 2,
-    CONTENT_ID                 = 3,
-    CONTENT_TYPE               = 4,
-    CONTENT_TRANSFER_ENCODING  = 5,
-    NUMHDR                     = 6,
+    CONTENT_DISPOSITION        = 1,
+    CONTENT_TYPE               = 2,
+    CONTENT_TRANSFER_ENCODING  = 3,
+    NUMHDR                     = 4,
 };
 
 class TOOLS_DLLPUBLIC INetMIMEMessage
@@ -120,29 +75,12 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
     ::std::vector< INetMessageHeader* >
                     m_aHeaderList;
 
-    sal_uIntPtr     m_nDocSize;
-    OUString        m_aDocName;
     SvLockBytesRef  m_xDocLB;
-
-    void ListCleanup_Impl();
-    void ListCopy (const INetMIMEMessage& rMsg);
-
-    ::std::map<InetMessageField, sal_uIntPtr> m_nRFC822Index;
 
     ::std::map<InetMessageMime, sal_uIntPtr>  m_nMIMEIndex;
     INetMIMEMessage*                          pParent;
     ::std::vector< INetMIMEMessage* >         aChildren;
     OString                 m_aBoundary;
-    bool                    bHeaderParsed;
-
-    friend class INetMIMEMessageStream;
-
-    const OString& GetMultipartBoundary() const { return m_aBoundary; }
-    void SetMultipartBoundary (const OString& rBnd) { m_aBoundary = rBnd; }
-
-    void CleanupImp();
-    void CopyImp    (const INetMIMEMessage& rMsg);
-    void SetHeaderParsed() { bHeaderParsed = true; }
 
     OUString GetHeaderValue_Impl (
         sal_uIntPtr nIndex, INetMIME::HeaderFieldType eType) const
@@ -176,22 +114,20 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
         const OUString &rValue,
         sal_uIntPtr &rnIndex);
 
-    sal_uIntPtr SetRFC822HeaderField (
-        const INetMessageHeader &rHeader, sal_uIntPtr nNewIndex);
+    bool IsMessage() const
+    {
+        OUString aType (GetContentType());
+        return aType.matchIgnoreAsciiCase("message/");
+    }
+
+    INetMIMEMessage (const INetMIMEMessage& rMsg) = delete;
+    INetMIMEMessage& operator= (const INetMIMEMessage& rMsg) = delete;
 
 public:
     INetMIMEMessage();
-    INetMIMEMessage (const INetMIMEMessage& rMsg);
     ~INetMIMEMessage();
 
-    INetMIMEMessage& operator= (const INetMIMEMessage& rMsg);
-
     sal_uIntPtr GetHeaderCount() const { return m_aHeaderList.size(); }
-
-    OUString GetHeaderValue (sal_uIntPtr nIndex) const
-    {
-        return GetHeaderValue_Impl (nIndex, INetMIME::HEADER_FIELD_TEXT);
-    }
 
     INetMessageHeader GetHeaderField (sal_uIntPtr nIndex) const
     {
@@ -202,36 +138,23 @@ public:
         }
     }
 
-    sal_uIntPtr SetHeaderField (
-        const INetMessageHeader &rField,
-        sal_uIntPtr nIndex = ((sal_uIntPtr)-1)
-    );
-
-    sal_uIntPtr GetDocumentSize() const { return m_nDocSize; }
-    void  SetDocumentSize (sal_uIntPtr nSize) { m_nDocSize = nSize; }
-
     SvLockBytes* GetDocumentLB() const { return m_xDocLB; }
     void         SetDocumentLB (SvLockBytes *pDocLB) { m_xDocLB = pDocLB; }
 
     static bool ParseDateField (
         const OUString& rDateField, DateTime& rDateTime);
 
-    static INetMIMEMessage* CreateMessage (
-        const INetMIMEMessage& rMsg);
-
     void     SetMIMEVersion (const OUString& rVersion);
     void     SetContentDisposition (const OUString& rDisposition);
     void     SetContentType (const OUString& rType);
     OUString GetContentType() const
     {
-        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::CONTENT_TYPE));
+        return GetHeaderValue_Impl(
+            m_nMIMEIndex.at(InetMessageMime::CONTENT_TYPE),
+            INetMIME::HEADER_FIELD_TEXT);
     }
 
     void     SetContentTransferEncoding (const OUString& rEncoding);
-    OUString GetContentTransferEncoding() const
-    {
-        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::CONTENT_TRANSFER_ENCODING));
-    }
 
     OUString GetDefaultContentType ();
 
@@ -240,11 +163,6 @@ public:
     bool IsContainer() const
     {
         return (IsMessage() || IsMultipart());
-    }
-    bool IsMessage() const
-    {
-        OUString aType (GetContentType());
-        return aType.matchIgnoreAsciiCase("message/");
     }
     bool IsMultipart() const
     {
@@ -261,6 +179,8 @@ public:
     bool EnableAttachMultipartFormDataChild();
     bool AttachChild (
         INetMIMEMessage& rChildMsg, bool bOwner = true );
+
+    const OString& GetMultipartBoundary() const { return m_aBoundary; }
 };
 
 #endif
