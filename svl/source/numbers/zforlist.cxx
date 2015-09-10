@@ -3215,14 +3215,13 @@ const NfCurrencyEntry* SvNumberFormatter::GetLegacyOnlyCurrencyEntry( const OUSt
 
 
 // static
-IMPL_STATIC_LINK_NOARG( SvNumberFormatter, CurrencyChangeLink )
+IMPL_STATIC_LINK_NOARG_TYPED( SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, void )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     OUString aAbbrev;
     LanguageType eLang = LANGUAGE_SYSTEM;
     SvtSysLocaleOptions().GetCurrencyAbbrevAndLanguage( aAbbrev, eLang );
     SetDefaultSystemCurrency( aAbbrev, eLang );
-    return 0;
 }
 
 

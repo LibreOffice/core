@@ -43,7 +43,7 @@ sal_Int32                   SvtSysLocaleOptions::nRefCount = 0;
 namespace
 {
     struct CurrencyChangeLink
-        : public rtl::Static<Link<>, CurrencyChangeLink> {};
+        : public rtl::Static<Link<LinkParamNone*,void>, CurrencyChangeLink> {};
 }
 
 class SvtSysLocaleOptions_Impl : public utl::ConfigItem
@@ -679,7 +679,7 @@ OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
 }
 
 // static
-void SvtSysLocaleOptions::SetCurrencyChangeLink( const Link<>& rLink )
+void SvtSysLocaleOptions::SetCurrencyChangeLink( const Link<LinkParamNone*,void>& rLink )
 {
     MutexGuard aGuard( GetMutex() );
     DBG_ASSERT( !CurrencyChangeLink::get().IsSet(), "SvtSysLocaleOptions::SetCurrencyChangeLink: already set" );
@@ -687,7 +687,7 @@ void SvtSysLocaleOptions::SetCurrencyChangeLink( const Link<>& rLink )
 }
 
 // static
-const Link<>& SvtSysLocaleOptions::GetCurrencyChangeLink()
+const Link<LinkParamNone*,void>& SvtSysLocaleOptions::GetCurrencyChangeLink()
 {
     MutexGuard aGuard( GetMutex() );
     return CurrencyChangeLink::get();
@@ -697,7 +697,7 @@ void SvtSysLocaleOptions::ConfigurationChanged( utl::ConfigurationBroadcaster* p
 {
     if ( nHint & SYSLOCALEOPTIONS_HINT_CURRENCY )
     {
-        const Link<>& rLink = GetCurrencyChangeLink();
+        const Link<LinkParamNone*,void>& rLink = GetCurrencyChangeLink();
         if ( rLink.IsSet() )
             rLink.Call( NULL );
     }

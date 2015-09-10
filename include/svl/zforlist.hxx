@@ -891,7 +891,7 @@ private:
         sal_uInt16 nPos, const OUString& rSymbol );
 
     // link to be set at <method>SvtSysLocaleOptions::SetCurrencyChangeLink()</method>
-    DECL_DLLPRIVATE_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, void* );
+    DECL_DLLPRIVATE_STATIC_LINK_TYPED( SvNumberFormatter, CurrencyChangeLink, LinkParamNone*, void );
 
     // return position of a special character
     sal_Int32 ImpPosToken ( const OUStringBuffer & sFormat, sal_Unicode token, sal_Int32 nStartPos = 0 );
