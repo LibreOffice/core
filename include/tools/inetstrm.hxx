@@ -35,10 +35,7 @@ enum INetStreamStatus
 enum INetMessageStreamState
 {
     INETMSG_EOL_BEGIN,
-    INETMSG_EOL_DONE,
-    INETMSG_EOL_SCR,
-    INETMSG_EOL_FCR,
-    INETMSG_EOL_FSP
+    INETMSG_EOL_DONE
 };
 
 /// Message Generator Interface.
@@ -76,14 +73,6 @@ public:
     bool IsHeaderGenerated() const { return bHeaderGenerated; }
 };
 
-enum INetMessageEncoding
-{
-    INETMSG_ENCODING_7BIT,
-    INETMSG_ENCODING_BINARY,
-    INETMSG_ENCODING_QUOTED,
-    INETMSG_ENCODING_BASE64
-};
-
 class TOOLS_DLLPUBLIC INetMIMEMessageStream
     : public INetMessageIStream
 {
@@ -92,13 +81,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     sal_uIntPtr                  nChildIndex;
     INetMIMEMessageStream *pChildStrm;
 
-    INetMessageEncoding    eEncoding;
-    INetMessageIStream    *pEncodeStrm;
-
     SvMemoryStream        *pMsgBuffer;
-
-    static INetMessageEncoding GetMsgEncoding (
-        const OUString& rContentType);
 
     INetMIMEMessageStream (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
     INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
