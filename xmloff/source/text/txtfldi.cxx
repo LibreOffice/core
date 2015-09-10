@@ -2476,6 +2476,19 @@ XMLFileNameImportContext::XMLFileNameImportContext(
     bValid = true;
 }
 
+XMLFileNameImportContext::XMLFileNameImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_file_name, Element ),
+    sPropertyFixed(sAPI_is_fixed),
+    sPropertyFileFormat(sAPI_file_format),
+    sPropertyCurrentPresentation(sAPI_current_presentation),
+    nFormat(FilenameDisplayFormat::FULL),
+    bFixed(false)
+{
+    bValid = true;
+}
+
 void XMLFileNameImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
