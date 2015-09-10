@@ -1773,6 +1773,9 @@ int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, std::vector< sal
 
     const sal_uInt8* glyf = getTable(ttf, O_glyf);
     const sal_uInt8* ptr = glyf + ttf->goffsets[glyphID];
+    const sal_uInt8* nptr = glyf + ttf->goffsets[glyphID+1];
+    if (nptr <= ptr)
+        return 0;
 
     glyphlist.push_back( glyphID );
 
