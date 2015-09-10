@@ -5762,6 +5762,27 @@ void DocxAttributeOutput::SectionType( sal_uInt8 nBreakCode )
                 FSEND );
 }
 
+void DocxAttributeOutput::TextVerticalAdjustment( const drawing::TextVerticalAdjust nVA )
+{
+    switch( nVA )
+    {
+        case drawing::TextVerticalAdjust_CENTER:
+            m_pSerializer->singleElementNS( XML_w, XML_vAlign,
+                FSNS( XML_w, XML_val ), "center", FSEND );
+            break;
+        case drawing::TextVerticalAdjust_BOTTOM:
+            m_pSerializer->singleElementNS( XML_w, XML_vAlign,
+                FSNS( XML_w, XML_val ), "bottom", FSEND );
+            break;
+        case drawing::TextVerticalAdjust_BLOCK:  //justify
+            m_pSerializer->singleElementNS( XML_w, XML_vAlign,
+                FSNS( XML_w, XML_val ), "both", FSEND );
+            break;
+        default:
+            break;
+    }
+}
+
 void DocxAttributeOutput::StartFont( const OUString& rFamilyName ) const
 {
     m_pSerializer->startElementNS( XML_w, XML_font,

@@ -31,6 +31,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -2305,7 +2306,31 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         rContext->Insert(PROP_MIRROR_INDENTS, uno::makeAny( nIntValue != 0 ), true, PARA_GRAB_BAG);
     break;
     case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection, only form editing is enabled - unsupported
+    break;
     case NS_ooxml::LN_EG_SectPrContents_vAlign:
+    {
+        OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+        if( pSectionContext )
+        {
+            drawing::TextVerticalAdjust nVA = drawing::TextVerticalAdjust_TOP;
+            switch( nIntValue )
+            {
+                case NS_ooxml::LN_Value_ST_VerticalJc_center: //92367
+                    nVA = drawing::TextVerticalAdjust_CENTER;
+                    break;
+                case NS_ooxml::LN_Value_ST_VerticalJc_both:   //92368 - justify
+                    nVA = drawing::TextVerticalAdjust_BLOCK;
+                    break;
+                case NS_ooxml::LN_Value_ST_VerticalJc_bottom: //92369
+                    nVA = drawing::TextVerticalAdjust_BOTTOM;
+                    break;
+                default:
+                    break;
+            }
+            pSectionContext->Insert( PROP_TEXT_VERTICAL_ADJUST, uno::makeAny( nVA ), true, PARA_GRAB_BAG );
+        }
+    }
+    break;
     case NS_ooxml::LN_EG_RPrBase_fitText:
     break;
     case NS_ooxml::LN_ffdata:
