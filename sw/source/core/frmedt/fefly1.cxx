@@ -255,7 +255,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, bool bNew )
 }
 
 // Get selected fly
-SwFlyFrm *SwFEShell::GetSelectedFlyFrm() const
+SwFlyFrm* SwFEShell::GetSelectedFlyFrm() const
 {
     if ( Imp()->HasDrawView() )
     {
@@ -271,10 +271,19 @@ SwFlyFrm *SwFEShell::GetSelectedFlyFrm() const
 }
 
 // Get current fly in which the cursor is positioned
-SwFlyFrm *SwFEShell::GetCurrFlyFrm(const bool bCalcFrm) const
+SwFlyFrm* SwFEShell::GetCurrFlyFrm(const bool bCalcFrm) const
 {
     SwContentFrm *pContent = GetCurrFrm(bCalcFrm);
     return pContent ? pContent->FindFlyFrm() : 0;
+}
+
+// Get selected fly, but if none Get current fly in which the cursor is positioned
+SwFlyFrm* SwFEShell::GetSelectedOrCurrFlyFrm(const bool bCalcFrm) const
+{
+    SwFlyFrm *pFly = GetSelectedFlyFrm();
+    if (pFly)
+        return pFly;
+    return GetCurrFlyFrm(bCalcFrm);
 }
 
 // Returns non-null pointer, if the current Fly could be anchored to another one (so it is inside)
@@ -969,15 +978,11 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr, int n
 // wrong place or which are ambiguous (multiple selections) will be removed.
 bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
 {
-    SwFlyFrm *pFly = GetSelectedFlyFrm();
+    SwFlyFrm *pFly = GetSelectedOrCurrFlyFrm();
     if (!pFly)
     {
-        pFly = GetCurrFlyFrm();
-        if (!pFly)
-        {
-            OSL_ENSURE( false, "GetFlyFrmAttr, no Fly selected." );
-            return false;
-        }
+        OSL_ENSURE( false, "GetFlyFrmAttr, no Fly selected." );
+        return false;
     }
 
     SET_CURR_SHELL( const_cast<SwViewShell*>(static_cast<SwViewShell const *>(this)) );
@@ -1021,12 +1026,8 @@ bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
 
     if( rSet.Count() )
     {
-        SwFlyFrm *pFly = GetSelectedFlyFrm();
-        if( !pFly )
-        {
-            pFly = GetCurrFlyFrm();
-            OSL_ENSURE( pFly, "SetFlyFrmAttr, no Fly selected." );
-        }
+        SwFlyFrm *pFly = GetSelectedOrCurrFlyFrm();
+        OSL_ENSURE( pFly, "SetFlyFrmAttr, no Fly selected." );
         if( pFly )
         {
             StartAllAction();
@@ -1100,13 +1101,8 @@ bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
     {
         SET_CURR_SHELL( this );
 
-        SwFlyFrm *pFly = GetSelectedFlyFrm();
-        if( !pFly )
-        {
-            pFly = GetCurrFlyFrm();
-            OSL_ENSURE( pFly, "SetFlyFrmAttr, no Fly selected." );
-        }
-
+        SwFlyFrm *pFly = GetSelectedOrCurrFlyFrm();
+        OSL_ENSURE( pFly, "SetFlyFrmAttr, no Fly selected." );
         if( pFly )
         {
             StartAllAction();
@@ -1193,9 +1189,7 @@ void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Poi
 
 const SwFrameFormat* SwFEShell::GetFlyFrameFormat() const
 {
-    const SwFlyFrm* pFly = GetSelectedFlyFrm();
-    if (!pFly)
-        pFly = GetCurrFlyFrm();
+    const SwFlyFrm* pFly = GetSelectedOrCurrFlyFrm();
     if (pFly)
         return pFly->GetFormat();
     return 0;
@@ -1203,9 +1197,7 @@ const SwFrameFormat* SwFEShell::GetFlyFrameFormat() const
 
 SwFrameFormat* SwFEShell::GetFlyFrameFormat()
 {
-    SwFlyFrm* pFly = GetSelectedFlyFrm();
-    if (!pFly)
-        pFly = GetCurrFlyFrm();
+    SwFlyFrm* pFly = GetSelectedOrCurrFlyFrm();
     if (pFly)
         return pFly->GetFormat();
     return 0;

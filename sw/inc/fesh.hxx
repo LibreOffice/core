@@ -395,10 +395,13 @@ public:
     void SetFrameFormat( SwFrameFormat *pFormat, bool bKeepOrient = false, Point* pDocPos = 0 ); ///< If frame then set frame style.
 
     // Get selected fly
-    SwFlyFrm *GetSelectedFlyFrm() const;
+    SwFlyFrm* GetSelectedFlyFrm() const;
 
     // Get current fly in which the cursor is positioned
-    SwFlyFrm *GetCurrFlyFrm(const bool bCalcFrm = true) const;
+    SwFlyFrm* GetCurrFlyFrm(const bool bCalcFrm = true) const;
+
+    // Get selected fly, but if none Get current fly in which the cursor is positioned
+    SwFlyFrm* GetSelectedOrCurrFlyFrm(const bool bCalcFrm = true) const;
 
     /// Find/delete fly containing the cursor.
     SwFrameFormat* WizardGetFly();
