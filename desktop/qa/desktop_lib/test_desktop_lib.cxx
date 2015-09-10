@@ -87,12 +87,15 @@ void DesktopLOKTest::testGetStyles()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getStyles(pDocument);
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:StyleApply");
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT( aTree.size() > 0 );
+    CPPUNIT_ASSERT( aTree.get_child("commandName").get_value<std::string>() == ".uno:StyleApply" );
 
-    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aTree)
+    boost::property_tree::ptree aValues = aTree.get_child("commandValues");
+    CPPUNIT_ASSERT( aValues.size() > 0 );
+    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aValues)
     {
         CPPUNIT_ASSERT( rPair.second.size() > 0);
         if (rPair.first != "CharacterStyles" &&

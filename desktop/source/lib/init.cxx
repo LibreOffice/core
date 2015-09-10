@@ -235,7 +235,7 @@ static void doc_setGraphicSelection (LibreOfficeKitDocument* pThis,
                                   int nX,
                                   int nY);
 static void doc_resetSelection (LibreOfficeKitDocument* pThis);
-static char* doc_getStyles(LibreOfficeKitDocument* pThis);
+static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand);
 
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
@@ -266,7 +266,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getTextSelection = doc_getTextSelection;
         m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
         m_pDocumentClass->resetSelection = doc_resetSelection;
-        m_pDocumentClass->getStyles = doc_getStyles;
+        m_pDocumentClass->getCommandValues = doc_getCommandValues;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -865,15 +865,17 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
     pDoc->resetSelection();
 }
 
-static char* doc_getStyles(LibreOfficeKitDocument* pThis)
+static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     boost::property_tree::ptree aTree;
+    aTree.put("commandName", pCommand);
     uno::Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
     uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
 
+    boost::property_tree::ptree aValues;
     for (sal_Int32 nStyleFam = 0; nStyleFam < aStyleFamilies.getLength(); ++nStyleFam)
     {
         boost::property_tree::ptree aChildren;
@@ -886,8 +888,9 @@ static char* doc_getStyles(LibreOfficeKitDocument* pThis)
             aChild.put("", aStyles[nInd]);
             aChildren.push_back(std::make_pair("", aChild));
         }
-        aTree.add_child(sStyleFam.toUtf8().getStr(), aChildren);
+        aValues.add_child(sStyleFam.toUtf8().getStr(), aChildren);
     }
+    aTree.add_child("commandValues", aValues);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
@@ -895,6 +898,19 @@ static char* doc_getStyles(LibreOfficeKitDocument* pThis)
     pJson[aStream.str().size()] = '\0';
     return pJson;
 }
+
+static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
+{
+    if (!strcmp(pCommand, ".uno:StyleApply"))
+    {
+        return getStyles(pThis, pCommand);
+    }
+    else {
+        gImpl->maLastExceptionMsg = "Unknown command, no values returned";
+        return NULL;
+    }
+}
+
 static char* lo_getError (LibreOfficeKit *pThis)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
