@@ -163,6 +163,7 @@ public:
 
     virtual bool FillItemSet(SfxItemSet*) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet*) SAL_OVERRIDE;
+    virtual void ChangesApplied() SAL_OVERRIDE;
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual sfxpg DeactivatePage(SfxItemSet* pSet) SAL_OVERRIDE;
     virtual void PointChanged(vcl::Window* pWindow, RECT_POINT eRP) SAL_OVERRIDE;
@@ -296,6 +297,7 @@ public:
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
+    virtual void ChangesApplied() SAL_OVERRIDE;
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual sfxpg DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) SAL_OVERRIDE;

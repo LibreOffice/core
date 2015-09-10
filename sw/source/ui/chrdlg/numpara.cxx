@@ -185,7 +185,17 @@ bool SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
     return bModified;
 }
 
-void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
+void SwParagraphNumTabPage::ChangesApplied()
+{
+    m_pOutlineLvLB->SaveValue();
+    m_pNumberStyleLB->SaveValue();
+    m_pNewStartCB->SaveValue();
+    m_pNewStartNumberCB->SaveValue();
+    m_pCountParaCB->SaveValue();
+    m_pRestartParaCountCB->SaveValue();
+    m_pRestartNF->SaveValue();
+}
+void    SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
 {
     bool bHasNumberStyle = false;
 
