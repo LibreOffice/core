@@ -360,32 +360,36 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor) throw 
     if (!xInput.is())
         return OUString();
 
-    if (isStreamGZip(xInput))
-    {
-        boost::scoped_ptr<SvStream> aStream(utl::UcbStreamHelper::CreateStream(xInput, true ));
-        if(!aStream.get())
-            return OUString();
+    try {
+        if (isStreamGZip(xInput))
+        {
+            boost::scoped_ptr<SvStream> aStream(utl::UcbStreamHelper::CreateStream(xInput, true ));
+            if(!aStream.get())
+                return OUString();
 
-        SvStream* pMemoryStream = new SvMemoryStream;
-        uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
-        if (!xSeek.is())
-            return OUString();
-        xSeek->seek(0);
+            SvStream* pMemoryStream = new SvMemoryStream;
+            uno::Reference<io::XSeekable> xSeek(xInput, uno::UNO_QUERY);
+            if (!xSeek.is())
+                return OUString();
+            xSeek->seek(0);
 
-        ZCodec aCodec;
-        aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
-        aCodec.Decompress(*aStream.get(), *pMemoryStream);
-        aCodec.EndCompression();
-        pMemoryStream->Seek(STREAM_SEEK_TO_BEGIN);
-        uno::Reference<io::XInputStream> xDecompressedInput(new utl::OSeekableInputStreamWrapper(pMemoryStream, true));
+            ZCodec aCodec;
+            aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
+            aCodec.Decompress(*aStream.get(), *pMemoryStream);
+            aCodec.EndCompression();
+            pMemoryStream->Seek(STREAM_SEEK_TO_BEGIN);
+            uno::Reference<io::XInputStream> xDecompressedInput(new utl::OSeekableInputStreamWrapper(pMemoryStream, true));
 
-        if (xDecompressedInput.is() && isStreamSvg(xDecompressedInput))
-            return OUString(constFilterName);
-    }
-    else
-    {
-        if (isStreamSvg(xInput))
-            return OUString(constFilterName);
+            if (xDecompressedInput.is() && isStreamSvg(xDecompressedInput))
+                return OUString(constFilterName);
+        }
+        else
+        {
+            if (isStreamSvg(xInput))
+                return OUString(constFilterName);
+        }
+    } catch (css::io::IOException & e) {
+        SAL_WARN("filter", "caught IOException " + e.Message);
     }
     return OUString();
 }

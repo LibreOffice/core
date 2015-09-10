@@ -229,73 +229,78 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
     }
     if( xInput.is() )
     {
-        uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
-        if( xSeek.is() )
-            xSeek->seek( 0 );
-        // read the first 1024 byte (see PDF reference implementation note 12)
-        const sal_Int32 nHeaderSize = 1024;
-        uno::Sequence< sal_Int8 > aBuf( nHeaderSize );
-        sal_uInt64 nBytes = 0;
-        nBytes = xInput->readBytes( aBuf, nHeaderSize );
-        if( nBytes > 5 )
-        {
-            const sal_Int8* pBytes = aBuf.getConstArray();
-            for( unsigned int i = 0; i < nBytes-5; i++ )
-            {
-                if( pBytes[i]   == '%' &&
-                    pBytes[i+1] == 'P' &&
-                    pBytes[i+2] == 'D' &&
-                    pBytes[i+3] == 'F' &&
-                    pBytes[i+4] == '-' )
-                {
-                    bSuccess = true;
-                    break;
-                }
-            }
-        }
-
-        // check for hybrid PDF
         oslFileHandle aFile = NULL;
-        if( bSuccess &&
-            ( aURL.isEmpty() || !comphelper::isFileUrl(aURL) )
-        )
-        {
-            sal_uInt64 nWritten = 0;
-            if( osl_createTempFile( NULL, &aFile, &aURL.pData ) != osl_File_E_None )
+        try {
+            uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
+            if( xSeek.is() )
+                xSeek->seek( 0 );
+            // read the first 1024 byte (see PDF reference implementation note 12)
+            const sal_Int32 nHeaderSize = 1024;
+            uno::Sequence< sal_Int8 > aBuf( nHeaderSize );
+            sal_uInt64 nBytes = 0;
+            nBytes = xInput->readBytes( aBuf, nHeaderSize );
+            if( nBytes > 5 )
             {
-                bSuccess = false;
-            }
-            else
-            {
-#if OSL_DEBUG_LEVEL > 1
-                OSL_TRACE( "created temp file %s\n",
-                           OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
-                osl_writeFile( aFile, aBuf.getConstArray(), nBytes, &nWritten );
-
-                OSL_ENSURE( nWritten == nBytes, "writing of header bytes failed" );
-
-                if( nWritten == nBytes )
+                const sal_Int8* pBytes = aBuf.getConstArray();
+                for( unsigned int i = 0; i < nBytes-5; i++ )
                 {
-                    const sal_uInt32 nBufSize = 4096;
-                    aBuf = uno::Sequence<sal_Int8>(nBufSize);
-                    // copy the bytes
-                    do
+                    if( pBytes[i]   == '%' &&
+                        pBytes[i+1] == 'P' &&
+                        pBytes[i+2] == 'D' &&
+                        pBytes[i+3] == 'F' &&
+                        pBytes[i+4] == '-' )
                     {
-                        nBytes = xInput->readBytes( aBuf, nBufSize );
-                        if( nBytes > 0 )
-                        {
-                            osl_writeFile( aFile, aBuf.getConstArray(), nBytes, &nWritten );
-                            if( nWritten != nBytes )
-                            {
-                                bSuccess = false;
-                                break;
-                            }
-                        }
-                    } while( nBytes == nBufSize );
+                        bSuccess = true;
+                        break;
+                    }
                 }
             }
-            osl_closeFile( aFile );
+
+            // check for hybrid PDF
+            if( bSuccess &&
+                ( aURL.isEmpty() || !comphelper::isFileUrl(aURL) )
+            )
+            {
+                sal_uInt64 nWritten = 0;
+                if( osl_createTempFile( NULL, &aFile, &aURL.pData ) != osl_File_E_None )
+                {
+                    bSuccess = false;
+                }
+                else
+                {
+#if OSL_DEBUG_LEVEL > 1
+                    OSL_TRACE( "created temp file %s\n",
+                               OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+#endif
+                    osl_writeFile( aFile, aBuf.getConstArray(), nBytes, &nWritten );
+
+                    OSL_ENSURE( nWritten == nBytes, "writing of header bytes failed" );
+
+                    if( nWritten == nBytes )
+                    {
+                        const sal_uInt32 nBufSize = 4096;
+                        aBuf = uno::Sequence<sal_Int8>(nBufSize);
+                        // copy the bytes
+                        do
+                        {
+                            nBytes = xInput->readBytes( aBuf, nBufSize );
+                            if( nBytes > 0 )
+                            {
+                                osl_writeFile( aFile, aBuf.getConstArray(), nBytes, &nWritten );
+                                if( nWritten != nBytes )
+                                {
+                                    bSuccess = false;
+                                    break;
+                                }
+                            }
+                        } while( nBytes == nBufSize );
+                    }
+                }
+                osl_closeFile( aFile );
+            }
+        } catch (css::io::IOException & e) {
+            SAL_WARN("sdext.pdfimport", "caught IOException " + e.Message);
+            return OUString();
         }
         OUString aEmbedMimetype;
         xEmbedStream = getAdditionalStream( aURL, aEmbedMimetype, aPwd, m_xContext, rFilterData, false );
