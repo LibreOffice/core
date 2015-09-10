@@ -38,8 +38,7 @@ enum INetMessageStreamState
     INETMSG_EOL_DONE
 };
 
-/// Message Generator Interface.
-class INetMessageIStream
+class TOOLS_DLLPUBLIC INetMIMEMessageStream
 {
     INetMIMEMessage *pSourceMsg;
     bool            bHeaderGenerated;
@@ -54,44 +53,28 @@ class INetMessageIStream
     sal_Char       *pMsgRead;
     sal_Char       *pMsgWrite;
 
-    INetMessageIStream (const INetMessageIStream& rStrm) SAL_DELETED_FUNCTION;
-    INetMessageIStream& operator= (const INetMessageIStream& rStrm) SAL_DELETED_FUNCTION;
+    int                    eState;
 
-protected:
-    virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize);
+    sal_uIntPtr                  nChildIndex;
+    INetMIMEMessageStream *pChildStrm;
+
+    INetMIMEMessageStream (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
+    INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
+
+    int GetInnerMsgLine(sal_Char *pData, sal_uIntPtr nSize);
+    int GetOuterMsgLine(sal_Char *pData, sal_uIntPtr nSize);
 
 public:
-    INetMessageIStream (sal_uIntPtr nBufferSize = 2048);
-    virtual ~INetMessageIStream();
+    INetMIMEMessageStream (sal_uIntPtr nBufferSize = 2048);
+    ~INetMIMEMessageStream();
 
-    TOOLS_DLLPUBLIC int Read (sal_Char *pData, sal_uIntPtr nSize);
+    int Read (sal_Char *pData, sal_uIntPtr nSize);
 
     INetMIMEMessage *GetSourceMessage() const { return pSourceMsg; }
     void SetSourceMessage (INetMIMEMessage *pMsg) { pSourceMsg = pMsg; }
 
     void SetHeaderGenerated() { bHeaderGenerated = true; }
     bool IsHeaderGenerated() const { return bHeaderGenerated; }
-};
-
-class TOOLS_DLLPUBLIC INetMIMEMessageStream
-    : public INetMessageIStream
-{
-    int                    eState;
-
-    sal_uIntPtr                  nChildIndex;
-    INetMIMEMessageStream *pChildStrm;
-
-    SvMemoryStream        *pMsgBuffer;
-
-    INetMIMEMessageStream (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
-    INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
-
-protected:
-    virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
-
-public:
-    INetMIMEMessageStream (sal_uIntPtr nBufferSize = 2048);
-    virtual ~INetMIMEMessageStream();
 };
 
 #endif

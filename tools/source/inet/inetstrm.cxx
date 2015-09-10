@@ -26,80 +26,7 @@
 
 #include <ctype.h>
 
-// INetMessageIStream
-
-INetMessageIStream::INetMessageIStream(sal_uIntPtr nBufferSize)
-    : pSourceMsg(NULL)
-    , bHeaderGenerated(false)
-    , nBufSiz(nBufferSize)
-    , pMsgStrm(NULL)
-    , pMsgBuffer(new SvMemoryStream)
-    , pMsgRead(NULL)
-    , pMsgWrite(NULL)
-{
-    pMsgBuffer->SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);
-    pBuffer = new sal_Char[nBufSiz];
-    pRead = pWrite = pBuffer;
-}
-
-INetMessageIStream::~INetMessageIStream()
-{
-    delete [] pBuffer;
-    delete pMsgBuffer;
-    delete pMsgStrm;
-}
-
-int INetMessageIStream::Read(sal_Char* pData, sal_uIntPtr nSize)
-{
-    if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
-
-    sal_Char* pWBuf = pData;
-    sal_Char* pWEnd = pData + nSize;
-
-    while (pWBuf < pWEnd)
-    {
-        // Caller's buffer not yet filled.
-        sal_uIntPtr n = pRead - pWrite;
-        if (n > 0)
-        {
-            // Bytes still in buffer.
-            sal_uIntPtr m = pWEnd - pWBuf;
-            if (m < n) n = m;
-            for (sal_uIntPtr i = 0; i < n; i++) *pWBuf++ = *pWrite++;
-        }
-        else
-        {
-            // Buffer empty. Reset to <Begin-of-Buffer>.
-            pRead = pWrite = pBuffer;
-
-            // Read next message line.
-            int nRead = GetMsgLine(pBuffer, nBufSiz);
-            if (nRead > 0)
-            {
-                // Set read pointer.
-                pRead = pBuffer + nRead;
-            }
-            else
-            {
-                if (!bHeaderGenerated)
-                {
-                    // Header generated. Insert empty line.
-                    bHeaderGenerated = true;
-                    *pRead++ = '\r';
-                    *pRead++ = '\n';
-                }
-                else
-                {
-                    // Body generated.
-                    return (pWBuf - pData);
-                }
-            }
-        }
-    }
-    return (pWBuf - pData);
-}
-
-int INetMessageIStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
+int INetMIMEMessageStream::GetInnerMsgLine(sal_Char* pData, sal_uIntPtr nSize)
 {
     if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
@@ -158,25 +85,7 @@ int INetMessageIStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
     return (pWBuf - pData);
 }
 
-// INetMIMEMessageStream
-
-INetMIMEMessageStream::INetMIMEMessageStream(sal_uIntPtr nBufferSize)
-    : INetMessageIStream(nBufferSize),
-      eState      (INETMSG_EOL_BEGIN),
-      nChildIndex (0),
-      pChildStrm  (NULL),
-      pMsgBuffer  (NULL)
-{
-}
-
-INetMIMEMessageStream::~INetMIMEMessageStream()
-{
-    delete pChildStrm;
-    delete pMsgBuffer;
-}
-
-/// Message Generator
-int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
+int INetMIMEMessageStream::GetOuterMsgLine(sal_Char* pData, sal_uIntPtr nSize)
 {
     // Check for message container.
     INetMIMEMessage* pMsg = GetSourceMessage();
@@ -223,7 +132,7 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
         }
 
         // Generate the message header.
-        int nRead = INetMessageIStream::GetMsgLine(pData, nSize);
+        int nRead = GetInnerMsgLine(pData, nSize);
         if (nRead <= 0)
         {
             // Reset state.
@@ -310,9 +219,84 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
             }
 
             // No Encoding.
-            return INetMessageIStream::GetMsgLine(pData, nSize);
+            return GetInnerMsgLine(pData, nSize);
         }
     }
+}
+
+INetMIMEMessageStream::INetMIMEMessageStream(sal_uIntPtr nBufferSize):
+    pSourceMsg(NULL),
+    bHeaderGenerated(false),
+    nBufSiz(nBufferSize),
+    pMsgStrm(NULL),
+    pMsgBuffer(new SvMemoryStream),
+    pMsgRead(NULL),
+    pMsgWrite(NULL),
+    eState(INETMSG_EOL_BEGIN),
+    nChildIndex(0),
+    pChildStrm(NULL)
+{
+    pMsgBuffer->SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);
+    pBuffer = new sal_Char[nBufSiz];
+    pRead = pWrite = pBuffer;
+}
+
+INetMIMEMessageStream::~INetMIMEMessageStream()
+{
+    delete pChildStrm;
+    delete [] pBuffer;
+    delete pMsgBuffer;
+    delete pMsgStrm;
+}
+
+int INetMIMEMessageStream::Read(sal_Char* pData, sal_uIntPtr nSize)
+{
+    if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
+
+    sal_Char* pWBuf = pData;
+    sal_Char* pWEnd = pData + nSize;
+
+    while (pWBuf < pWEnd)
+    {
+        // Caller's buffer not yet filled.
+        sal_uIntPtr n = pRead - pWrite;
+        if (n > 0)
+        {
+            // Bytes still in buffer.
+            sal_uIntPtr m = pWEnd - pWBuf;
+            if (m < n) n = m;
+            for (sal_uIntPtr i = 0; i < n; i++) *pWBuf++ = *pWrite++;
+        }
+        else
+        {
+            // Buffer empty. Reset to <Begin-of-Buffer>.
+            pRead = pWrite = pBuffer;
+
+            // Read next message line.
+            int nRead = GetOuterMsgLine(pBuffer, nBufSiz);
+            if (nRead > 0)
+            {
+                // Set read pointer.
+                pRead = pBuffer + nRead;
+            }
+            else
+            {
+                if (!bHeaderGenerated)
+                {
+                    // Header generated. Insert empty line.
+                    bHeaderGenerated = true;
+                    *pRead++ = '\r';
+                    *pRead++ = '\n';
+                }
+                else
+                {
+                    // Body generated.
+                    return (pWBuf - pData);
+                }
+            }
+        }
+    }
+    return (pWBuf - pData);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
