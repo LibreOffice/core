@@ -19,7 +19,7 @@ $(eval $(call gb_StaticLibrary_set_include,graphite,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_defs,graphite,\
-	-DDISABLE_TRACING \
+	-DGRAPHITE2_NTRACING \
 	-DGR2_STATIC \
 ))
 
@@ -43,19 +43,22 @@ $(eval $(call gb_StaticLibrary_add_generated_cxxobjects,graphite,\
 	UnpackedTarball/graphite/src/gr_segment \
 	UnpackedTarball/graphite/src/gr_slot \
 	UnpackedTarball/graphite/src/json \
-	UnpackedTarball/graphite/src/Bidi \
 	UnpackedTarball/graphite/src/CachedFace \
 	UnpackedTarball/graphite/src/CmapCache \
 	UnpackedTarball/graphite/src/Code \
+	UnpackedTarball/graphite/src/Collider \
+	UnpackedTarball/graphite/src/Decompressor \
 	UnpackedTarball/graphite/src/Face \
 	UnpackedTarball/graphite/src/FeatureMap \
 	UnpackedTarball/graphite/src/FileFace \
 	UnpackedTarball/graphite/src/Font \
 	UnpackedTarball/graphite/src/GlyphCache \
 	UnpackedTarball/graphite/src/GlyphFace \
+	UnpackedTarball/graphite/src/Intervals \
 	UnpackedTarball/graphite/src/Justifier \
 	UnpackedTarball/graphite/src/NameTable \
 	UnpackedTarball/graphite/src/Pass \
+	UnpackedTarball/graphite/src/Position \
 	UnpackedTarball/graphite/src/SegCache \
 	UnpackedTarball/graphite/src/SegCacheEntry \
 	UnpackedTarball/graphite/src/SegCacheStore \
