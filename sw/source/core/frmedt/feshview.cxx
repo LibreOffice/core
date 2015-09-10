@@ -1773,7 +1773,7 @@ bool SwFEShell::ImpEndCreate()
         SwFlyFrm* pFlyFrm;
         if( NewFlyFrm( aSet, true ) &&
             ::GetHtmlMode( GetDoc()->GetDocShell() ) &&
-            0 != ( pFlyFrm = FindFlyFrm() ))
+            0 != ( pFlyFrm = GetSelectedFlyFrm() ))
         {
             SfxItemSet aHtmlSet( GetDoc()->GetAttrPool(), RES_VERT_ORIENT, RES_HORI_ORIENT );
             // horizontal orientation:
@@ -2084,7 +2084,7 @@ Point SwFEShell::GetAnchorObjDiff() const
 
     if ( IsFrmSelected() )
     {
-        SwFlyFrm *pFly = FindFlyFrm();
+        SwFlyFrm *pFly = GetSelectedFlyFrm();
         aRet -= pFly->GetAnchorFrm()->Frm().Pos();
     }
     else
@@ -2632,7 +2632,7 @@ void SwFEShell::SetChainMarker()
          bDelTo   = true;
     if ( IsFrmSelected() )
     {
-        SwFlyFrm *pFly = FindFlyFrm();
+        SwFlyFrm *pFly = GetSelectedFlyFrm();
 
         if ( pFly->GetPrevLink() )
         {

@@ -126,7 +126,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpText )
     if( IsFrmSelected() )
     {
         // get the FlyFormat
-        SwFlyFrm* pFly = FindFlyFrm();
+        SwFlyFrm* pFly = GetSelectedFlyFrm();
         SwFrameFormat* pFlyFormat = pFly->GetFormat();
         SwFormatAnchor aAnchor( pFlyFormat->GetAnchor() );
 
@@ -467,7 +467,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 
     if( IsFrmSelected() )
     {
-        SwFlyFrm* pFly = FindFlyFrm();
+        SwFlyFrm* pFly = GetSelectedFlyFrm();
         SwFrameFormat* pFlyFormat = pFly->GetFormat();
         SwFormatAnchor aAnchor( pFlyFormat->GetAnchor() );
         bRet = true;
@@ -1264,10 +1264,10 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                     }
                     else
                     {
-                        // fix(23806): not the origial size, but the current one.
+                        // Not the original size, but the current one.
                         // Otherwise it could happen that for vector graphics
                         // many MB's of memory are allocated.
-                        const Size aSz( FindFlyFrm()->Prt().SSize() );
+                        const Size aSz( GetSelectedFlyFrm()->Prt().SSize() );
                         ScopedVclPtrInstance< VirtualDevice > pVirtDev(*GetWin());
 
                         MapMode aTmp( MAP_TWIP );

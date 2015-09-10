@@ -43,7 +43,7 @@ using namespace com::sun::star;
 
 SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
 {
-    SwFlyFrm *pFly = FindFlyFrm();
+    SwFlyFrm *pFly = GetSelectedFlyFrm();
     if ( pFly && pFly->Lower() && pFly->Lower()->IsNoTextFrm() )
     {
         SwOLENode *pNd = static_cast<SwNoTextFrm*>(pFly->Lower())->GetNode()->GetOLENode();

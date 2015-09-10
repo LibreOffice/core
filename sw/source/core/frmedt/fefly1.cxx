@@ -236,7 +236,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, bool bNew )
         OSL_ENSURE( rFrm.IsFlyFrm(), "SelectFlyFrm will einen Fly" );
 
        // nothing to be done if the Fly already was selected
-        if ( FindFlyFrm() == &rFrm )
+        if (GetSelectedFlyFrm() == &rFrm)
             return;
 
         // assure the anchor is drawn
@@ -255,7 +255,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, bool bNew )
 }
 
 // returns a Fly if one is selected
-SwFlyFrm *SwFEShell::FindFlyFrm() const
+SwFlyFrm *SwFEShell::GetSelectedFlyFrm() const
 {
     if ( Imp()->HasDrawView() )
     {
@@ -968,7 +968,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr, int n
 // wrong place or which are ambiguous (multiple selections) will be removed.
 bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
 {
-    SwFlyFrm *pFly = FindFlyFrm();
+    SwFlyFrm *pFly = GetSelectedFlyFrm();
     if ( !pFly )
     {
         SwFrm* pCurrFrm( GetCurrFrm() );
@@ -1026,7 +1026,7 @@ bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
 
     if( rSet.Count() )
     {
-        SwFlyFrm *pFly = FindFlyFrm();
+        SwFlyFrm *pFly = GetSelectedFlyFrm();
         if( !pFly )
         {
             OSL_ENSURE( GetCurrFrm(), "Crsr in parking zone" );
@@ -1106,7 +1106,7 @@ bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
     {
         SET_CURR_SHELL( this );
 
-        SwFlyFrm *pFly = FindFlyFrm();
+        SwFlyFrm *pFly = GetSelectedFlyFrm();
         if( !pFly )
         {
             OSL_ENSURE( GetCurrFrm(), "Crsr in parking zone" );
@@ -1146,7 +1146,7 @@ bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
 SwFrameFormat* SwFEShell::GetCurFrameFormat() const
 {
     SwFrameFormat* pRet = 0;
-    SwLayoutFrm *pFly = FindFlyFrm();
+    SwLayoutFrm *pFly = GetSelectedFlyFrm();
     if( pFly && ( pRet = static_cast<SwFrameFormat*>(pFly->GetFormat()->DerivedFrom()) ) ==
                                             GetDoc()->GetDfltFrameFormat() )
         pRet = 0;
@@ -1164,7 +1164,7 @@ void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Poi
             pFly = static_cast<const SwFlyFrameFormat*>(pFormat)->GetFrm();
     }
     else
-        pFly = FindFlyFrm();
+        pFly = GetSelectedFlyFrm();
     OSL_ENSURE( pFly, "SetFrameFormat: no frame" );
     if( pFly )
     {
@@ -1200,7 +1200,7 @@ void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Poi
 
 const SwFrameFormat* SwFEShell::GetFlyFrameFormat() const
 {
-    const SwFlyFrm* pFly = FindFlyFrm();
+    const SwFlyFrm* pFly = GetSelectedFlyFrm();
     if ( !pFly )
     {
         SwFrm* pCurrFrm = GetCurrFrm();
@@ -1213,7 +1213,7 @@ const SwFrameFormat* SwFEShell::GetFlyFrameFormat() const
 
 SwFrameFormat* SwFEShell::GetFlyFrameFormat()
 {
-    SwFlyFrm* pFly = FindFlyFrm();
+    SwFlyFrm* pFly = GetSelectedFlyFrm();
     if ( !pFly )
     {
         SwFrm* pCurrFrm = GetCurrFrm();
@@ -1416,7 +1416,7 @@ SwFrameFormat* SwFEShell::WizardGetFly()
 
 void SwFEShell::SetFlyName( const OUString& rName )
 {
-    SwLayoutFrm *pFly = FindFlyFrm();
+    SwLayoutFrm *pFly = GetSelectedFlyFrm();
     if( pFly )
         GetDoc()->SetFlyName( *static_cast<SwFlyFrameFormat*>(pFly->GetFormat()), rName );
     else {
@@ -1426,7 +1426,7 @@ void SwFEShell::SetFlyName( const OUString& rName )
 
 OUString SwFEShell::GetFlyName() const
 {
-    SwLayoutFrm *pFly = FindFlyFrm();
+    SwLayoutFrm *pFly = GetSelectedFlyFrm();
     if( pFly )
         return pFly->GetFormat()->GetName();
 
@@ -1437,7 +1437,7 @@ OUString SwFEShell::GetFlyName() const
 const uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
 {
     uno::Reference < embed::XEmbeddedObject > xObj;
-    SwFlyFrm * pFly = FindFlyFrm();
+    SwFlyFrm * pFly = GetSelectedFlyFrm();
     if (pFly && pFly->Lower() && pFly->Lower()->IsNoTextFrm())
     {
         SwOLENode *pNd = static_cast<SwNoTextFrm*>(pFly->Lower())->GetNode()->GetOLENode();

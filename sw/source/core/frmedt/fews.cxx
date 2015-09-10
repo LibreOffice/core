@@ -649,7 +649,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     }
     else
     {
-        pFly = FindFlyFrm();
+        pFly = GetSelectedFlyFrm();
         pFrm = pFly ? pFly->GetAnchorFrm() : GetCurrFrm();
     }
 
@@ -1167,7 +1167,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
 Size SwFEShell::GetGraphicDefaultSize() const
 {
     Size aRet;
-    SwFlyFrm *pFly = FindFlyFrm();
+    SwFlyFrm *pFly = GetSelectedFlyFrm();
     if ( pFly )
     {
         // #i32951# - due to issue #i28701# no format of a
