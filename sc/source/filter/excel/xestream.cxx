@@ -1103,6 +1103,8 @@ bool XclExpXmlStream::exportDocument()
         css::uno::Reference<css::io::XOutputStream> xVBAOutput =
             openFragmentStream("xl/vbaProject.bin", "VBA");
         comphelper::OStorageHelper::CopyInputToOutput(xVBAStream, xVBAOutput);
+
+        addRelation(GetCurrentStream()->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
     }
 
     // destruct at the end of the block
