@@ -2949,7 +2949,6 @@ void ChartExport::_exportAxis(
              }
         }
     }
-    // TODO: text properties
 
     pFS->endElement( FSNS( XML_c, nAxisType ) );
 }
