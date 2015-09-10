@@ -1881,12 +1881,11 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     return xRet;
 }
 
-IMPL_LINK( OApplicationController, OnSelectContainer, void*, _pType )
+IMPL_LINK_TYPED( OApplicationController, OnSelectContainer, void*, _pType, void )
 {
     ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
     if (getContainer())
         getContainer()->selectContainer(eType);
-    return 0L;
 }
 
 IMPL_LINK_TYPED( OApplicationController, OnCreateWithPilot, void*, _pType, void )

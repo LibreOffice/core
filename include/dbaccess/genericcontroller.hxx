@@ -403,8 +403,8 @@ namespace dbaui
         void ImplBroadcastFeatureState(const OUString& _rFeature, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener, bool _bIgnoreCache);
 
         // link methods
-        DECL_LINK(OnAsyncInvalidateAll, void*);
-        DECL_LINK(OnAsyncCloseTask, void*);
+        DECL_LINK_TYPED(OnAsyncInvalidateAll, void*, void);
+        DECL_LINK_TYPED(OnAsyncCloseTask, void*, void);
 
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getORB() const { return m_xContext; }

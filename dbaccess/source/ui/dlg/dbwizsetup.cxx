@@ -902,7 +902,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         private:
-            DECL_LINK( OnOpenDocument, void* );
+            DECL_LINK_TYPED( OnOpenDocument, void*, void );
         };
 
         AsyncLoader::AsyncLoader( const Reference< XComponentContext >& _rxORB, const OUString& _rURL )
@@ -936,7 +936,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             m_aAsyncCaller.Call( NULL );
         }
 
-        IMPL_LINK_NOARG( AsyncLoader, OnOpenDocument )
+        IMPL_LINK_NOARG_TYPED( AsyncLoader, OnOpenDocument, void*, void )
         {
             try
             {
@@ -970,7 +970,6 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 
             release();
-            return 0L;
         }
 
         void SAL_CALL AsyncLoader::queryTermination( const css::lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)

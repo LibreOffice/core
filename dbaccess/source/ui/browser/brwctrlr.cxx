@@ -1267,14 +1267,13 @@ void SbaXDataBrowserController::frameAction(const css::frame::FrameActionEvent& 
         }
 }
 
-IMPL_LINK_NOARG( SbaXDataBrowserController, OnAsyncDisplayError )
+IMPL_LINK_NOARG_TYPED( SbaXDataBrowserController, OnAsyncDisplayError, void*, void )
 {
     if ( m_aCurrentError.isValid() )
     {
         ScopedVclPtrInstance< OSQLMessageBox > aDlg( getBrowserView(), m_aCurrentError );
         aDlg->Execute();
     }
-    return 0L;
 }
 
 void SbaXDataBrowserController::errorOccured(const css::sdb::SQLErrorEvent& aEvent) throw( RuntimeException, std::exception )
@@ -2439,20 +2438,12 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
     return 0L;
 }
 
-IMPL_LINK_NOARG(SbaXDataBrowserController, OnAsyncGetCellFocus)
+IMPL_LINK_NOARG_TYPED(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, void)
 {
     SbaGridControl* pVclGrid = getBrowserView() ? getBrowserView()->getVclControl() : NULL;
     // if we have a controller, but the window for the controller doesn't have the focus, we correct this
-    if(pVclGrid)
-    {
-        if (!pVclGrid->IsEditing())
-            return 0L;
-
-        if (pVclGrid->HasChildPathFocus())
-            pVclGrid->Controller()->GetWindow().GrabFocus();
-    }
-
-    return 0L;
+    if (pVclGrid && pVclGrid->IsEditing() && pVclGrid->HasChildPathFocus())
+        pVclGrid->Controller()->GetWindow().GrabFocus();
 }
 
 void SbaXDataBrowserController::criticalFail()

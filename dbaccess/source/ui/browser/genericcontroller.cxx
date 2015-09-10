@@ -252,11 +252,10 @@ bool OGenericUnoController::Construct(vcl::Window* /*pParent*/)
     return true;
 }
 
-IMPL_LINK_NOARG(OGenericUnoController, OnAsyncInvalidateAll)
+IMPL_LINK_NOARG_TYPED(OGenericUnoController, OnAsyncInvalidateAll, void*, void)
 {
     if ( !OGenericUnoController_Base::rBHelper.bInDispose && !OGenericUnoController_Base::rBHelper.bDisposed )
         InvalidateFeature_Impl();
-    return 0L;
 }
 
 void OGenericUnoController::impl_initialize()
@@ -1031,7 +1030,7 @@ void OGenericUnoController::closeTask()
     m_aAsyncCloseTask.Call();
 }
 
-IMPL_LINK_NOARG(OGenericUnoController, OnAsyncCloseTask)
+IMPL_LINK_NOARG_TYPED(OGenericUnoController, OnAsyncCloseTask, void*, void)
 {
     if ( !OGenericUnoController_Base::rBHelper.bInDispose )
     {
@@ -1045,7 +1044,6 @@ IMPL_LINK_NOARG(OGenericUnoController, OnAsyncCloseTask)
             DBG_UNHANDLED_EXCEPTION();
         }
     }
-    return 0L;
 }
 
 Any SAL_CALL OGenericUnoController::getViewData() throw( RuntimeException, std::exception )

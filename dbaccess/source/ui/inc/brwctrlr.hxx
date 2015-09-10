@@ -335,9 +335,8 @@ namespace dbaui
         DECL_LINK(OnFoundData, FmFoundRecordInformation*);
         DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
 
-        DECL_LINK(OnAsyncGetCellFocus, void*);
-
-        DECL_LINK( OnAsyncDisplayError, void* );
+        DECL_LINK_TYPED( OnAsyncGetCellFocus, void*, void );
+        DECL_LINK_TYPED( OnAsyncDisplayError, void*, void );
     };
 }
 

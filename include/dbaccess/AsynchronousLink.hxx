@@ -38,7 +38,7 @@ namespace dbaui
     */
     class OAsynchronousLink
     {
-        Link<>              m_aHandler;
+        Link<void*,void>    m_aHandler;
 
     protected:
         ::osl::Mutex        m_aEventSafety;
@@ -49,7 +49,7 @@ namespace dbaui
         /** constructs the object
             @param      _rHandler           The link to be called asynchronously
         */
-        OAsynchronousLink( const Link<>& _rHandler );
+        OAsynchronousLink( const Link<void*,void>& _rHandler );
         virtual ~OAsynchronousLink();
 
         bool    IsRunning() const { return m_nEventId != 0; }
