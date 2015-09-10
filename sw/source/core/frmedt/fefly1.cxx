@@ -254,7 +254,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, bool bNew )
     }
 }
 
-// returns a Fly if one is selected
+// Get selected fly
 SwFlyFrm *SwFEShell::GetSelectedFlyFrm() const
 {
     if ( Imp()->HasDrawView() )
@@ -270,6 +270,13 @@ SwFlyFrm *SwFEShell::GetSelectedFlyFrm() const
     return 0;
 }
 
+// Get current fly in which the cursor is positioned
+SwFlyFrm *SwFEShell::GetCurrFlyFrm(const bool bCalcFrm) const
+{
+    SwContentFrm *pContent = GetCurrFrm(bCalcFrm);
+    return pContent ? pContent->FindFlyFrm() : 0;
+}
+
 // Returns non-null pointer, if the current Fly could be anchored to another one (so it is inside)
 const SwFrameFormat* SwFEShell::IsFlyInFly()
 {
@@ -281,11 +288,8 @@ const SwFrameFormat* SwFEShell::IsFlyInFly()
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     if ( !rMrkList.GetMarkCount() )
     {
-        SwContentFrm *pContent = GetCurrFrm( false );
-        if( !pContent )
-            return NULL;
-        SwFlyFrm *pFly = pContent->FindFlyFrm();
-        if ( !pFly )
+        SwFlyFrm *pFly = GetCurrFlyFrm(false);
+        if (!pFly)
             return NULL;
         return pFly->GetFormat();
     }
@@ -332,11 +336,8 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
     SET_CURR_SHELL( this );
 
     // Determine reference point in document coordinates
-    SwContentFrm *pContent = GetCurrFrm( false );
-    if( !pContent )
-        return;
-    SwFlyFrm *pFly = pContent->FindFlyFrm();
-    if ( !pFly )
+    SwFlyFrm *pFly = GetCurrFlyFrm(false);
+    if (!pFly)
         return;
 
     //SwSaveHdl aSaveX( Imp() );
@@ -969,16 +970,10 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr, int n
 bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
 {
     SwFlyFrm *pFly = GetSelectedFlyFrm();
-    if ( !pFly )
+    if (!pFly)
     {
-        SwFrm* pCurrFrm( GetCurrFrm() );
-        if ( !pCurrFrm )
-        {
-            OSL_FAIL( "<SwFEShell::GetFlyFrmAttr(..)> - missing current frame. This is a serious defect, please inform OD." );
-            return false;
-        }
-        pFly = GetCurrFrm()->FindFlyFrm();
-        if ( !pFly )
+        pFly = GetCurrFlyFrm();
+        if (!pFly)
         {
             OSL_ENSURE( false, "GetFlyFrmAttr, no Fly selected." );
             return false;
@@ -1029,8 +1024,7 @@ bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
         SwFlyFrm *pFly = GetSelectedFlyFrm();
         if( !pFly )
         {
-            OSL_ENSURE( GetCurrFrm(), "Crsr in parking zone" );
-            pFly = GetCurrFrm()->FindFlyFrm();
+            pFly = GetCurrFlyFrm();
             OSL_ENSURE( pFly, "SetFlyFrmAttr, no Fly selected." );
         }
         if( pFly )
@@ -1109,8 +1103,7 @@ bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
         SwFlyFrm *pFly = GetSelectedFlyFrm();
         if( !pFly )
         {
-            OSL_ENSURE( GetCurrFrm(), "Crsr in parking zone" );
-            pFly = GetCurrFrm()->FindFlyFrm();
+            pFly = GetCurrFlyFrm();
             OSL_ENSURE( pFly, "SetFlyFrmAttr, no Fly selected." );
         }
 
@@ -1201,12 +1194,9 @@ void SwFEShell::SetFrameFormat( SwFrameFormat *pNewFormat, bool bKeepOrient, Poi
 const SwFrameFormat* SwFEShell::GetFlyFrameFormat() const
 {
     const SwFlyFrm* pFly = GetSelectedFlyFrm();
-    if ( !pFly )
-    {
-        SwFrm* pCurrFrm = GetCurrFrm();
-        pFly = pCurrFrm ? pCurrFrm->FindFlyFrm() : 0;
-    }
-    if( pFly )
+    if (!pFly)
+        pFly = GetCurrFlyFrm();
+    if (pFly)
         return pFly->GetFormat();
     return 0;
 }
@@ -1214,21 +1204,17 @@ const SwFrameFormat* SwFEShell::GetFlyFrameFormat() const
 SwFrameFormat* SwFEShell::GetFlyFrameFormat()
 {
     SwFlyFrm* pFly = GetSelectedFlyFrm();
-    if ( !pFly )
-    {
-        SwFrm* pCurrFrm = GetCurrFrm();
-        pFly = pCurrFrm ? pCurrFrm->FindFlyFrm() : 0;
-    }
-    if( pFly )
+    if (!pFly)
+        pFly = GetCurrFlyFrm();
+    if (pFly)
         return pFly->GetFormat();
     return 0;
 }
 
 SwRect SwFEShell::GetFlyRect() const
 {
-    SwContentFrm *pContent = GetCurrFrm( false );
-    SwFlyFrm *pFly = pContent ? pContent->FindFlyFrm() : 0;
-    if ( !pFly )
+    SwFlyFrm *pFly = GetCurrFlyFrm(false);
+    if (!pFly)
     {
         SwRect aRect;
         return aRect;
