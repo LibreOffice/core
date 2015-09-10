@@ -1239,7 +1239,14 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
     // do not undo objects and note captions, they are handled via drawing undo
     InsertDeleteFlags nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
 
-    rDoc.DeleteAreaTab( aRange, nUndoFlags );
+    // Additionally discard/forget caption ownership during deletion, as
+    // Drag&Drop is a special case in that the Undo holds captions of the
+    // transfered target range, which would get deleted and
+    // SdrGroupUndo::Undo() would attempt to access invalidated captions and
+    // crash, tdf#92995
+    InsertDeleteFlags nDelFlags = nUndoFlags | IDF_FORGETCAPTIONS;
+
+    rDoc.DeleteAreaTab( aRange, nDelFlags );
     pRefUndoDoc->CopyToDocument( aRange, nUndoFlags, false, &rDoc );
     if ( rDoc.HasAttrib( aRange, HASATTR_MERGED ) )
         rDoc.ExtendMerge( aRange, true );

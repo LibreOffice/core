@@ -204,10 +204,11 @@ const InsertDeleteFlags IDF_OUTLINE   = InsertDeleteFlags::fromInt(0x0800);   //
 const InsertDeleteFlags IDF_NOCAPTIONS  = InsertDeleteFlags::fromInt(0x0200);   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
 const InsertDeleteFlags IDF_ADDNOTES    = InsertDeleteFlags::fromInt(0x0400);   /// Internal use only (copy from clip): do not delete existing cell contents when pasting notes.
 const InsertDeleteFlags IDF_SPECIAL_BOOLEAN  = InsertDeleteFlags::fromInt(0x1000);
+const InsertDeleteFlags IDF_FORGETCAPTIONS = InsertDeleteFlags::fromInt(0x2000); /// Internal use only (d&d undo): do not delete caption objects of cell notes.
 const InsertDeleteFlags IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
 const InsertDeleteFlags IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA | IDF_OUTLINE;
 const InsertDeleteFlags IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
-const InsertDeleteFlags IDF_ALL_USED_BITS = IDF_ALL | IDF_EDITATTR | IDF_NOCAPTIONS | IDF_ADDNOTES | IDF_SPECIAL_BOOLEAN;
+const InsertDeleteFlags IDF_ALL_USED_BITS = IDF_ALL | IDF_EDITATTR | IDF_NOCAPTIONS | IDF_ADDNOTES | IDF_SPECIAL_BOOLEAN | IDF_FORGETCAPTIONS;
 
 inline InsertDeleteFlags operator~ (const InsertDeleteFlags& rhs)
 {
