@@ -49,6 +49,7 @@ public:
 
     void runAllTests();
     void testGetStyles();
+    void testGetFonts();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(runAllTests);
@@ -81,6 +82,7 @@ void DesktopLOKTest::closeDoc()
 void DesktopLOKTest::runAllTests()
 {
     testGetStyles();
+    testGetFonts();
 }
 
 void DesktopLOKTest::testGetStyles()
@@ -108,6 +110,26 @@ void DesktopLOKTest::testGetStyles()
         {
             CPPUNIT_FAIL("Unknown style family: " + rPair.first);
         }
+    }
+    closeDoc();
+}
+
+void DesktopLOKTest::testGetFonts()
+{
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    boost::property_tree::ptree aTree;
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:CharFontName");
+    std::stringstream aStream(pJSON);
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT( aTree.size() > 0 );
+    CPPUNIT_ASSERT( aTree.get_child("commandName").get_value<std::string>() == ".uno:CharFontName" );
+
+    boost::property_tree::ptree aValues = aTree.get_child("commandValues");
+    CPPUNIT_ASSERT( aValues.size() > 0 );
+    for (const std::pair<std::string, boost::property_tree::ptree>& rPair : aValues)
+    {
+        // check that we have font sizes available for each font
+        CPPUNIT_ASSERT( rPair.second.size() > 0);
     }
     closeDoc();
 }
