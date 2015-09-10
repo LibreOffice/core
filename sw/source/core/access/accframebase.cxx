@@ -53,7 +53,7 @@ bool SwAccessibleFrameBase::IsSelected()
     if( pVSh->ISA( SwFEShell ) )
     {
         const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
-        const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
+        const SwFrm *pFlyFrm = pFESh->GetSelectedFlyFrm();
         if( pFlyFrm == GetFrm() )
             bRet = true;
     }

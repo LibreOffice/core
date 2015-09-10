@@ -156,12 +156,12 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
 
     // ... and compare to the currently selected frame
     bool bRet = false;
-    SwFEShell* pFEShell = GetFEShell();
+    const SwFEShell* pFEShell = GetFEShell();
     if( pFEShell )
     {
         if ( aChild.GetSwFrm() != 0 )
         {
-            bRet = (pFEShell->GetCurrFlyFrm() == aChild.GetSwFrm());
+            bRet = (pFEShell->GetSelectedFlyFrm() == aChild.GetSwFrm());
         }
         else if ( aChild.GetDrawObject() )
         {
@@ -218,10 +218,10 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
     sal_Int32 nCount = 0;
     // Only one frame can be selected at a time, and we only frames
     // for selectable children.
-    SwFEShell* pFEShell = GetFEShell();
+    const SwFEShell* pFEShell = GetFEShell();
     if( pFEShell != 0 )
     {
-        const SwFlyFrm* pFlyFrm = pFEShell->GetCurrFlyFrm();
+        const SwFlyFrm* pFlyFrm = pFEShell->GetSelectedFlyFrm();
         if( pFlyFrm )
         {
             nCount = 1;
@@ -290,7 +290,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
         throwIndexOutOfBoundsException();
 
     SwAccessibleChild aChild;
-    const SwFlyFrm *pFlyFrm = pFEShell->GetCurrFlyFrm();
+    const SwFlyFrm *pFlyFrm = pFEShell->GetSelectedFlyFrm();
     if( pFlyFrm )
     {
         if( 0 == nSelectedChildIndex )

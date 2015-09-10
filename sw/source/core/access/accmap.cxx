@@ -2597,7 +2597,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
         else if( pVSh->ISA( SwFEShell ) )
         {
             const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
-            const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
+            const SwFrm *pFlyFrm = pFESh->GetSelectedFlyFrm();
             if( pFlyFrm )
             {
                 OSL_ENSURE( !pFrm || pFrm->FindFlyFrm() == pFlyFrm,

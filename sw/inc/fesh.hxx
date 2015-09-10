@@ -207,7 +207,6 @@ private:
     std::unique_ptr<SdrDropMarkerOverlay> m_pChainFrom;
     bool m_bCheckForOLEInCaption;
 
-    SAL_DLLPRIVATE SwFlyFrm *GetSelectedFlyFrm() const;
     SAL_DLLPRIVATE SwFlyFrm *FindFlyFrm( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  ) const;
 
     /// Terminate actions for all shells and call ChangeLink.
@@ -394,7 +393,7 @@ public:
 
     SwFrameFormat* GetCurFrameFormat() const; ///< If frame then frame style, else 0.
     void SetFrameFormat( SwFrameFormat *pFormat, bool bKeepOrient = false, Point* pDocPos = 0 ); ///< If frame then set frame style.
-    const SwFlyFrm *GetCurrFlyFrm() const { return GetSelectedFlyFrm(); }
+    SwFlyFrm *GetSelectedFlyFrm() const;
 
     /// Find/delete fly containing the cursor.
     SwFrameFormat* WizardGetFly();
