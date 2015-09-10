@@ -101,14 +101,14 @@ protected:
     virtual void setLineCap(const XLineCapItem* pItem) = 0;
 
 
-    void updateLineStyle(bool bDisabled, bool bSetOrDefault, const XLineStyleItem* pItem);
-    void updateLineDash(bool bDisabled, bool bSetOrDefault, const XLineDashItem* pItem);
-    void updateLineTransparence(bool bDisabled, bool bSetOrDefault, const XLineTransparenceItem* pItem);
-    void updateLineWidth(bool bDisabled, bool bSetOrDefault, const XLineWidthItem* pItem);
-    void updateLineStart(bool bDisabled, bool bSetOrDefault, const XLineStartItem* pItem);
-    void updateLineEnd(bool bDisabled, bool bSetOrDefault, const XLineEndItem* pItem);
-    void updateLineJoint(bool bDisabled, bool bSetOrDefault, const XLineJointItem* pItem);
-    void updateLineCap(bool bDisabled, bool bSetOrDefault, const XLineCapItem* pItem);
+    void updateLineStyle(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    void updateLineDash(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    void updateLineTransparence(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    void updateLineWidth(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    void updateLineStart(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    void updateLineEnd(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    void updateLineJoint(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
+    void updateLineCap(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem);
 
     void FillLineEndList();
     void FillLineStyleList();

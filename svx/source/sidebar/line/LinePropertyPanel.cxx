@@ -131,38 +131,32 @@ void LinePropertyPanel::NotifyItemUpdate(
     {
         case SID_ATTR_LINE_DASH:
         {
-            const XLineDashItem* pItem = dynamic_cast<const XLineDashItem*>(pState);
-            updateLineDash(bDisabled, bSetOrDefault, pItem);
+            updateLineDash(bDisabled, bSetOrDefault, pState);
+            break;
         }
-        break;
         case SID_ATTR_LINE_STYLE:
         {
-            const XLineStyleItem* pItem = dynamic_cast<const XLineStyleItem*>(pState);
-            updateLineStyle(bDisabled, bSetOrDefault, pItem);
+            updateLineStyle(bDisabled, bSetOrDefault, pState);
+            break;
         }
-        break;
         case SID_ATTR_LINE_TRANSPARENCE:
         {
-            const XLineTransparenceItem* pItem = dynamic_cast<const XLineTransparenceItem*>(pState);
-            updateLineTransparence(bDisabled, bSetOrDefault, pItem);
+            updateLineTransparence(bDisabled, bSetOrDefault, pState);
             break;
         }
         case SID_ATTR_LINE_WIDTH:
         {
-            const XLineWidthItem* pItem = dynamic_cast<const XLineWidthItem*>(pState);
-            updateLineWidth(bDisabled, bSetOrDefault, pItem);
+            updateLineWidth(bDisabled, bSetOrDefault, pState);
             break;
         }
         case SID_ATTR_LINE_START:
         {
-            const XLineStartItem* pItem = dynamic_cast<const XLineStartItem*>(pState);
-            updateLineStart(bDisabled, bSetOrDefault, pItem);
+            updateLineStart(bDisabled, bSetOrDefault, pState);
             break;
         }
         case SID_ATTR_LINE_END:
         {
-            const XLineEndItem* pItem = dynamic_cast<const XLineEndItem*>(pState);
-            updateLineEnd(bDisabled, bSetOrDefault, pItem);
+            updateLineEnd(bDisabled, bSetOrDefault, pState);
             break;
         }
         case SID_LINEEND_LIST:
@@ -180,14 +174,12 @@ void LinePropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_LINE_JOINT:
         {
-            const XLineJointItem* pItem = dynamic_cast<const XLineJointItem*>(pState);
-            updateLineJoint(bDisabled, bSetOrDefault, pItem);
+            updateLineJoint(bDisabled, bSetOrDefault, pState);
             break;
         }
         case SID_ATTR_LINE_CAP:
         {
-            const XLineCapItem* pItem = dynamic_cast<const XLineCapItem*>(pState);
-            updateLineCap(bDisabled, bSetOrDefault, pItem);
+            updateLineCap(bDisabled, bSetOrDefault, pState);
             break;
         }
     }

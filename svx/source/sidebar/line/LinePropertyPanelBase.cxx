@@ -271,7 +271,7 @@ void LinePropertyPanelBase::DataChanged(const DataChangedEvent& /*rEvent*/)
 {
 }
 
-void LinePropertyPanelBase::updateLineStyle(bool bDisabled, bool bSetOrDefault, const XLineStyleItem* pItem)
+void LinePropertyPanelBase::updateLineStyle(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem)
 {
     if(bDisabled)
     {
@@ -299,7 +299,7 @@ void LinePropertyPanelBase::updateLineStyle(bool bDisabled, bool bSetOrDefault, 
     SelectLineStyle();
 }
 
-void LinePropertyPanelBase::updateLineDash(bool bDisabled, bool bSetOrDefault, const XLineDashItem* pItem)
+void LinePropertyPanelBase::updateLineDash(bool bDisabled, bool bSetOrDefault, const SfxPoolItem* pItem)
 {
     if(bDisabled)
     {
@@ -328,7 +328,7 @@ void LinePropertyPanelBase::updateLineDash(bool bDisabled, bool bSetOrDefault, c
 }
 
 void LinePropertyPanelBase::updateLineTransparence(bool bDisabled, bool bSetOrDefault,
-        const XLineTransparenceItem* pItem)
+        const SfxPoolItem* pState)
 {
     if(bDisabled)
     {
@@ -343,7 +343,7 @@ void LinePropertyPanelBase::updateLineTransparence(bool bDisabled, bool bSetOrDe
 
     if(bSetOrDefault)
     {
-        if(pItem)
+        if (const XLineTransparenceItem* pItem = dynamic_cast<const XLineTransparenceItem*>(pState))
         {
             mnTrans = pItem->GetValue();
             mpMFTransparent->SetValue(mnTrans);
@@ -356,7 +356,7 @@ void LinePropertyPanelBase::updateLineTransparence(bool bDisabled, bool bSetOrDe
 }
 
 void LinePropertyPanelBase::updateLineWidth(bool bDisabled, bool bSetOrDefault,
-        const XLineWidthItem* pItem)
+        const SfxPoolItem* pState)
 {
     if(bDisabled)
     {
@@ -371,7 +371,7 @@ void LinePropertyPanelBase::updateLineWidth(bool bDisabled, bool bSetOrDefault,
 
     if(bSetOrDefault)
     {
-        if(pItem)
+        if (const XLineWidthItem* pItem = dynamic_cast<const XLineWidthItem*>(pState))
         {
             mnWidthCoreValue = pItem->GetValue();
             mbWidthValuable = true;
@@ -385,7 +385,7 @@ void LinePropertyPanelBase::updateLineWidth(bool bDisabled, bool bSetOrDefault,
 }
 
 void LinePropertyPanelBase::updateLineStart(bool bDisabled, bool bSetOrDefault,
-        const XLineStartItem* pItem)
+        const SfxPoolItem* pItem)
 {
     if(bDisabled)
     {
@@ -413,7 +413,7 @@ void LinePropertyPanelBase::updateLineStart(bool bDisabled, bool bSetOrDefault,
 }
 
 void LinePropertyPanelBase::updateLineEnd(bool bDisabled, bool bSetOrDefault,
-        const XLineEndItem* pItem)
+        const SfxPoolItem* pItem)
 {
     if(bDisabled)
     {
@@ -441,7 +441,7 @@ void LinePropertyPanelBase::updateLineEnd(bool bDisabled, bool bSetOrDefault,
 }
 
 void LinePropertyPanelBase::updateLineJoint(bool bDisabled, bool bSetOrDefault,
-        const XLineJointItem* pItem)
+        const SfxPoolItem* pState)
 {
     if(bDisabled)
     {
@@ -456,7 +456,7 @@ void LinePropertyPanelBase::updateLineJoint(bool bDisabled, bool bSetOrDefault,
 
     if(bSetOrDefault)
     {
-        if(pItem)
+        if (const XLineJointItem* pItem = dynamic_cast<const XLineJointItem*>(pState))
         {
             sal_Int32 nEntryPos(0);
 
@@ -500,7 +500,7 @@ void LinePropertyPanelBase::updateLineJoint(bool bDisabled, bool bSetOrDefault,
 }
 
 void LinePropertyPanelBase::updateLineCap(bool bDisabled, bool bSetOrDefault,
-        const XLineCapItem* pItem)
+        const SfxPoolItem* pState)
 {
     if(bDisabled)
     {
@@ -515,7 +515,7 @@ void LinePropertyPanelBase::updateLineCap(bool bDisabled, bool bSetOrDefault,
 
     if(bSetOrDefault)
     {
-        if(pItem)
+        if (const XLineCapItem* pItem = dynamic_cast<const XLineCapItem*>(pState))
         {
             sal_Int32 nEntryPos(0);
 
