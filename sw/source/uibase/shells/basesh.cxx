@@ -1008,16 +1008,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                                             ? FLY_AS_CHAR
                                             : FLY_AT_CHAR;
             rSh.StartUndo();
-            if( rSh.IsObjSelected() )
-                rSh.ChgAnchor( eSet );
-            else if( rSh.IsFrmSelected() )
+            if (rSh.IsObjSelected())
+                rSh.ChgAnchor(eSet);
+            else if (rSh.IsFrmSelected())
             {
-                // The set also includes VERT/HORI_ORIENT, because the align
-                // shall be changed in FEShell::SetFlyFrmAttr/SetFlyFrmAnchor,
-                // possibly as a result of the anchor change.
-                SfxItemSet aSet( GetPool(), RES_VERT_ORIENT, RES_ANCHOR );
-                SwFormatAnchor aAnc( eSet, rSh.GetPhyPageNum() );
-                aSet.Put( aAnc );
+                SwFormatAnchor aAnc(eSet, rSh.GetPhyPageNum());
+                SfxItemSet aSet(rSh.makeItemSetFromFormatAnchor(GetPool(), aAnc));
                 rSh.SetFlyFrmAttr(aSet);
             }
             // if new anchor is 'as char' and it is a Math object and the usual
