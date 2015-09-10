@@ -1100,6 +1100,17 @@ XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
 {
 }
 
+XMLPlaceholderFieldImportContext::XMLPlaceholderFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_jump_edit, Element ),
+    sPropertyPlaceholderType(sAPI_place_holder_type),
+    sPropertyPlaceholder(sAPI_place_holder),
+    sPropertyHint(sAPI_hint),
+    nPlaceholderType(PlaceholderType::TEXT)
+{
+}
+
 /// process attribute values
 void XMLPlaceholderFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken, const OUString& sAttrValue )

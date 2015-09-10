@@ -286,6 +286,9 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& sLocalName);     /// element name w/o prefix
+    XMLPlaceholderFieldImportContext( SvXMLImport& rImport,
+                                      XMLTextImportHelper& rHlp,
+                                      sal_Int32 Element );
 
 protected:
     /// process attribute values
