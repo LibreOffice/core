@@ -54,10 +54,10 @@ private:
     void        ChangeCurrentEntry( const OUString& _rFolder );
 
     DECL_LINK_TYPED( PathHdl_Impl, Button*, void);
-    DECL_LINK(DoubleClickPathHdl_Impl, void *);
+    DECL_LINK_TYPED( DoubleClickPathHdl_Impl, SvTreeListBox*, bool);
     DECL_LINK_TYPED( StandardHdl_Impl, Button*, void);
 
-    DECL_LINK_TYPED(PathSelect_Impl, SvTreeListBox*, void);
+    DECL_LINK_TYPED( PathSelect_Impl, SvTreeListBox*, void);
     DECL_LINK_TYPED( HeaderSelect_Impl, HeaderBar *, void );
     DECL_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar *, void );
 

@@ -370,10 +370,10 @@ void SfxVersionDialog::Open_Impl()
     Close();
 }
 
-IMPL_LINK_NOARG(SfxVersionDialog, DClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SfxVersionDialog, DClickHdl_Impl, SvTreeListBox*, bool)
 {
     Open_Impl();
-    return 0L;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED(SfxVersionDialog, SelectHdl_Impl, SvTreeListBox*, void)

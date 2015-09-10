@@ -47,7 +47,7 @@ namespace dbaui
         DECL_LINK_TYPED(Up_Click, Button*, void);
         DECL_LINK_TYPED(NewFolder_Click, Button*, void);
         DECL_LINK_TYPED(Save_Click, Button*, void);
-        DECL_LINK(Dbl_Click_FileView,void*);
+        DECL_LINK_TYPED(Dbl_Click_FileView, SvTreeListBox*, bool);
 
         /// sets the fixedtext to the right content
         void initCurrentPath();

@@ -207,10 +207,10 @@ IMPL_LINK_NOARG_TYPED(CertificateChooser, CertificateHighlightHdl, SvTreeListBox
     m_pOKBtn->Enable( bEnable );
 }
 
-IMPL_LINK_NOARG(CertificateChooser, CertificateSelectHdl)
+IMPL_LINK_NOARG_TYPED(CertificateChooser, CertificateSelectHdl, SvTreeListBox*, bool)
 {
     EndDialog( RET_OK );
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED(CertificateChooser, ViewButtonHdl, Button*, void)

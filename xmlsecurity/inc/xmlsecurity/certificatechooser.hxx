@@ -58,7 +58,7 @@ private:
 
     DECL_LINK_TYPED(ViewButtonHdl, Button*, void);
     DECL_LINK_TYPED(CertificateHighlightHdl, SvTreeListBox*, void );
-    DECL_LINK(          CertificateSelectHdl, void* );
+    DECL_LINK_TYPED(CertificateSelectHdl, SvTreeListBox*, bool );
 
     void ImplShowCertificateDetails();
     void ImplInitialize();

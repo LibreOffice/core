@@ -756,7 +756,7 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
     _pTreeView->SetDefaultExpandedEntryBmp( _rImage );
 
     _pTreeView->SetDoubleClickHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
-    _pTreeView->SetEnterKeyHdl(LINK(this, OAppDetailPageHelper, OnEntryDoubleClick));
+    _pTreeView->SetEnterKeyHdl(LINK(this, OAppDetailPageHelper, OnEntryEnterKey));
     _pTreeView->SetSelChangeHdl(LINK(this, OAppDetailPageHelper, OnEntrySelChange));
 
     _pTreeView->setCutHandler(LINK(this, OAppDetailPageHelper, OnCutEntry));
@@ -904,11 +904,15 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const OUString& _r
     }
 }
 
-IMPL_LINK(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree)
+IMPL_LINK(OAppDetailPageHelper, OnEntryEnterKey, void*, _pTree)
+{
+    return OnEntryDoubleClick(static_cast<SvTreeListBox*>(_pTree)) ? 0 : 1;
+}
+IMPL_LINK_TYPED(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree, bool)
 {
     OSL_ENSURE( _pTree, "OAppDetailPageHelper, OnEntryDoubleClick: invalid callback!" );
     bool bHandled = ( _pTree != NULL ) && getBorderWin().getView()->getAppController().onEntryDoubleClick( *_pTree );
-    return bHandled ? 1L : 0L;
+    return bHandled;
 }
 
 IMPL_LINK_NOARG(OAppDetailPageHelper, OnEntrySelChange)

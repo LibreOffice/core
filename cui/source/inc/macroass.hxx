@@ -39,9 +39,9 @@ class _SfxMacroTabPage : public SfxTabPage
     DECL_DLLPRIVATE_LINK_TYPED( SelectGroup_Impl, SvTreeListBox*, void );
     DECL_DLLPRIVATE_LINK_TYPED( SelectMacro_Impl, SvTreeListBox*, void );
 
-    DECL_DLLPRIVATE_LINK( AssignDeleteHdl_Impl, PushButton * );
+    DECL_DLLPRIVATE_LINK_TYPED( AssignDeleteHdl_Impl, SvTreeListBox*, bool );
     DECL_DLLPRIVATE_LINK_TYPED( AssignDeleteClickHdl_Impl, Button *, void );
-
+    bool                        AssignDeleteHdl(Control *);
     DECL_DLLPRIVATE_LINK_TYPED( TimeOut_Impl, Idle*, void );
 
 protected:

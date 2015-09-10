@@ -247,12 +247,10 @@ IMPL_LINK_TYPED( SvBaseLinksDlg, LinksSelectHdl, SvTreeListBox *, pSvTabListBox,
     }
 }
 
-IMPL_LINK( SvBaseLinksDlg, LinksDoubleClickHdl, SvTabListBox *, pSvTabListBox )
+IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, LinksDoubleClickHdl, SvTreeListBox *, bool )
 {
-    (void)pSvTabListBox;
-
     ChangeSourceClickHdl( 0 );
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, AutomaticClickHdl, Button*, void )

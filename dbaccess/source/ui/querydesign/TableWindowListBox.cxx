@@ -342,7 +342,7 @@ void OTableWindowListBox::GetFocus()
     SvTreeListBox::GetFocus();
 }
 
-IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
+IMPL_LINK_NOARG_TYPED( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, bool )
 {
     // tell my parent
     vcl::Window* pParent = Window::GetParent();
@@ -350,7 +350,7 @@ IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
 
     static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(GetHdlEntry());
 
-    return 0;
+    return false;
 }
 
 void OTableWindowListBox::Command(const CommandEvent& rEvt)

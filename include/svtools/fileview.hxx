@@ -37,6 +37,7 @@ class SvtFileView_Impl;
 class SvTreeListEntry;
 class HeaderBar;
 struct SvtContentEntry;
+class SvTreeListBox;
 
 /// the result of an action in the FileView
 enum FileViewResult
@@ -158,12 +159,12 @@ public:
     void                    SetNoSelection();
 
     void                    SetSelectHdl( const Link<>& rHdl );
-    void                    SetDoubleClickHdl( const Link<>& rHdl );
+    void                    SetDoubleClickHdl( const Link<SvTreeListBox*,bool>& rHdl );
     void                    SetOpenDoneHdl( const Link<>& rHdl );
 
-    sal_uLong                   GetSelectionCount() const;
-    SvTreeListEntry*            FirstSelected() const;
-    SvTreeListEntry*            NextSelected( SvTreeListEntry* pEntry ) const;
+    sal_uLong               GetSelectionCount() const;
+    SvTreeListEntry*        FirstSelected() const;
+    SvTreeListEntry*        NextSelected( SvTreeListEntry* pEntry ) const;
     void                    EnableAutoResize();
 
     void                    EnableDelete( bool bEnable );

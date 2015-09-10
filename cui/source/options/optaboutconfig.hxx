@@ -62,7 +62,7 @@ private:
     void InsertEntry( SvTreeListEntry *pEntry);
 
     DECL_LINK_TYPED( StandardHdl_Impl, Button*, void );
-    DECL_LINK( DoubleClickHdl_Impl, void* );
+    DECL_LINK_TYPED( DoubleClickHdl_Impl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( ResetBtnHdl_Impl, Button*, void );
     DECL_LINK_TYPED( SearchHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ExpandingHdl_Impl, SvTreeListBox*, bool );

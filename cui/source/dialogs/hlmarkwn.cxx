@@ -561,10 +561,10 @@ bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl, SvTreeListBox*, bool)
 {
     ClickApplyHdl_Impl(NULL);
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, Button*, void)

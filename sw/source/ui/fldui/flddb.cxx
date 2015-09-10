@@ -66,7 +66,7 @@ SwFieldDBPage::SwFieldDBPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
     m_pNumFormatLB->SetSelectHdl(LINK(this, SwFieldDBPage, NumSelectHdl));
     m_pDatabaseTLB->SetSelectHdl(LINK(this, SwFieldDBPage, TreeSelectHdl));
-    m_pDatabaseTLB->SetDoubleClickHdl(LINK(this, SwFieldDBPage, InsertHdl));
+    m_pDatabaseTLB->SetDoubleClickHdl(LINK(this, SwFieldDBPage, TreeListBoxInsertHdl));
 
     m_pValueED->SetModifyHdl(LINK(this, SwFieldDBPage, ModifyHdl));
     m_pAddDBPB->SetClickHdl(LINK(this, SwFieldDBPage, AddDBHdl));

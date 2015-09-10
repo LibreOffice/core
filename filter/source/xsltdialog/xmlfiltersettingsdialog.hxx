@@ -93,7 +93,7 @@ public:
 
     DECL_LINK_TYPED(ClickHdl_Impl, Button *, void );
     DECL_LINK_TYPED(SelectionChangedHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK(DoubleClickHdl_Impl, void * );
+    DECL_LINK_TYPED(DoubleClickHdl_Impl, SvTreeListBox*, bool );
 
     virtual short Execute() SAL_OVERRIDE;
 

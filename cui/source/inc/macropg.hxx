@@ -61,7 +61,7 @@ class _SvxMacroTabPage : public SfxTabPage
 {
     DECL_LINK_TYPED( SelectEvent_Impl, SvTreeListBox*, void );
     DECL_LINK_TYPED( AssignDeleteHdl_Impl, Button *, void );
-    DECL_LINK( DoubleClickHdl_Impl, SvTabListBox * );
+    DECL_LINK_TYPED( DoubleClickHdl_Impl, SvTreeListBox*, bool );
 
     static long GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton* pBtn );
 

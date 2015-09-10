@@ -1509,7 +1509,7 @@ bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 
 // Also on double click will be initially opened only.
 
-IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(SwContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
 {
     SvTreeListEntry* pEntry = GetCurEntry();
     // Is it a content type?
@@ -1532,7 +1532,7 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl)
                 pActiveShell->EnterStdMode();
         }
     }
-    return 0;
+    return false;
 }
 
 // Show the file

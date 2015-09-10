@@ -1250,7 +1250,7 @@ void SvtFileView::SetSelectHdl( const Link<>& rHdl )
 
 
 
-void SvtFileView::SetDoubleClickHdl( const Link<>& rHdl )
+void SvtFileView::SetDoubleClickHdl( const Link<SvTreeListBox*,bool>& rHdl )
 {
     mpImp->mpView->SetDoubleClickHdl( rHdl );
 }

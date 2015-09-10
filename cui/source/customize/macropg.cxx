@@ -593,7 +593,7 @@ IMPL_LINK_TYPED( _SvxMacroTabPage, AssignDeleteHdl_Impl, Button*, pBtn, void )
     GenericHandler_Impl( this, static_cast<PushButton*>(pBtn) );
 }
 
-IMPL_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox *, )
+IMPL_LINK_NOARG_TYPED( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTreeListBox*, bool)
 {
     return GenericHandler_Impl( this, NULL );
 }

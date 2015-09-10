@@ -185,7 +185,7 @@ public:
     const SwWrtShell*   GetActiveWrtShell() {return pActiveShell;}
     SwWrtShell*         GetHiddenWrtShell() {return pHiddenShell;}
 
-    DECL_LINK( ContentDoubleClickHdl, void * );
+    DECL_LINK_TYPED( ContentDoubleClickHdl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( TimerUpdate, Timer *, void );
 
     virtual sal_IntPtr GetTabPos( SvTreeListEntry*, SvLBoxTab* ) SAL_OVERRIDE;
@@ -289,7 +289,7 @@ protected:
 
     DECL_LINK_TYPED( PopupHdl, Menu*, bool );
     DECL_LINK_TYPED( Timeout, Timer*, void );
-    DECL_LINK(      DoubleClickHdl, void* );
+    DECL_LINK_TYPED( DoubleClickHdl, SvTreeListBox*, bool );
 
     SwNavigationPI* GetParentWindow();
 

@@ -25,6 +25,7 @@
 #define FIELD_COLUMN_WIDTH 76
 
 class ListBox;
+class SvTreeListBox;
 
 const int coLBCount = 3;
 
@@ -53,7 +54,8 @@ protected:
     SwField*            GetCurField()               { return m_pCurField;}
     SwWrtShell*         GetWrtShell() { return m_pWrtShell;}
 
-    DECL_LINK( InsertHdl, Button * = 0);
+    DECL_LINK( InsertHdl, void * = 0);
+    DECL_LINK_TYPED( TreeListBoxInsertHdl, SvTreeListBox*, bool);
     DECL_LINK(NumFormatHdl, void *);
 
     void                Init();

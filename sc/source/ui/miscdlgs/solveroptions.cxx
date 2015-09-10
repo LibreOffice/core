@@ -355,10 +355,10 @@ IMPL_LINK_TYPED( ScSolverOptionsDialog, ButtonHdl, Button*, pBtn, void )
         EditOption();
 }
 
-IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(ScSolverOptionsDialog, SettingsDoubleClickHdl, SvTreeListBox*, bool)
 {
     EditOption();
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl)

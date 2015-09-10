@@ -290,10 +290,10 @@ IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, NewHdl, Button*, void)
     openLinkDialog(sNewName,sNewLocation);
 }
 
-IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathBoxDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, PathBoxDoubleClickHdl, SvTreeListBox*, bool)
 {
     EditHdl(NULL);
-    return 0;
+    return false;
 }
 
 

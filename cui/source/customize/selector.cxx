@@ -949,12 +949,11 @@ IMPL_LINK_TYPED( SvxScriptSelectorDialog, SelectHdl, SvTreeListBox*, pCtrl, void
     UpdateUI();
 }
 
-IMPL_LINK( SvxScriptSelectorDialog, FunctionDoubleClickHdl, Control*, pCtrl )
+IMPL_LINK_NOARG_TYPED( SvxScriptSelectorDialog, FunctionDoubleClickHdl, SvTreeListBox*, bool )
 {
-    (void)pCtrl;
     if (m_pOKButton->IsEnabled())
         ClickHdl(m_pOKButton);
-    return 0;
+    return false;
 }
 
 // Check if command is selected and enable the OK button accordingly

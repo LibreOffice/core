@@ -162,7 +162,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
         DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
         DECL_LINK_TYPED(EditHdl, Button*, void);
-        DECL_LINK(DoubleClickEditHdl, void*);
+        DECL_LINK_TYPED(DoubleClickEditHdl, SvTreeListBox*, bool);
         SvTreeListEntry* CreateEntry(OUString& rTxt, sal_uInt16 nCol);
 
 

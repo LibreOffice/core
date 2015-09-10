@@ -722,10 +722,10 @@ IMPL_LINK_TYPED(OfaSwAutoFmtOptionsPage, SelectHdl, SvTreeListBox*, pBox, void)
     m_pEditPB->Enable(0 != pBox->FirstSelected()->GetUserData());
 }
 
-IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, DoubleClickEditHdl)
+IMPL_LINK_NOARG_TYPED(OfaSwAutoFmtOptionsPage, DoubleClickEditHdl, SvTreeListBox*, bool)
 {
     EditHdl(NULL);
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED(OfaSwAutoFmtOptionsPage, EditHdl, Button*, void)

@@ -121,12 +121,12 @@ private:
     void                        AddControls_Impl( );
 
     DECL_LINK( SelectHdl_Impl, SvTabListBox* );
-    DECL_LINK(DblClickHdl_Impl, void *);
+    DECL_LINK_TYPED( DblClickHdl_Impl, SvTreeListBox*, bool);
     DECL_LINK(EntrySelectHdl_Impl, void *);
     DECL_LINK( OpenDoneHdl_Impl, SvtFileView* );
-    DECL_LINK_TYPED(AutoExtensionHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( AutoExtensionHdl_Impl, Button*, void);
     DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(PlayButtonHdl_Impl, Button*, void);
+    DECL_LINK_TYPED( PlayButtonHdl_Impl, Button*, void);
 
 
     // removes a filter with wildcards from the path and returns it

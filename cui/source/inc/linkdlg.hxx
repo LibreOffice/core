@@ -65,10 +65,10 @@ class SvBaseLinksDlg : public ModalDialog
     Idle aUpdateIdle;
 
     DECL_LINK_TYPED( LinksSelectHdl, SvTreeListBox*, void );
-    DECL_LINK( LinksDoubleClickHdl, SvTabListBox * );
+    DECL_LINK_TYPED( LinksDoubleClickHdl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( AutomaticClickHdl, Button *, void );
     DECL_LINK_TYPED( ManualClickHdl, Button *, void );
-    DECL_LINK_TYPED(UpdateNowClickHdl, Button *, void);
+    DECL_LINK_TYPED( UpdateNowClickHdl, Button *, void);
     DECL_LINK_TYPED( ChangeSourceClickHdl, Button *, void );
     DECL_LINK_TYPED( BreakLinkClickHdl, Button *, void );
     DECL_LINK_TYPED( UpdateWaitingHdl, Idle *, void );

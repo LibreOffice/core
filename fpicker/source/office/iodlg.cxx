@@ -1596,13 +1596,13 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
 
 
 
-IMPL_LINK_NOARG(SvtFileDialog, DblClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvtFileDialog, DblClickHdl_Impl, SvTreeListBox*, bool)
 {
     _pImp->_bDoubleClick = true;
     OpenHdl_Impl( NULL );
     _pImp->_bDoubleClick = false;
 
-    return 0;
+    return false;
 }
 
 

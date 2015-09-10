@@ -422,17 +422,17 @@ IMPL_LINK_NOARG_TYPED( OAddTableDlg, AddClickHdl, Button*, void )
     TableListDoubleClickHdl(NULL);
 }
 
-IMPL_LINK_NOARG( OAddTableDlg, TableListDoubleClickHdl )
+IMPL_LINK_NOARG_TYPED( OAddTableDlg, TableListDoubleClickHdl, SvTreeListBox*, bool )
 {
     if ( impl_isAddAllowed() )
     {
         impl_addTable();
         if ( !impl_isAddAllowed() )
             Close();
-        return 1L;  // handled
+        return true;  // handled
     }
 
-    return 0L;  // not handled
+    return false;  // not handled
 }
 
 IMPL_LINK_NOARG_TYPED( OAddTableDlg, TableListSelectHdl, SvTreeListBox*, void )

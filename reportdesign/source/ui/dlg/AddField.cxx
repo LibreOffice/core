@@ -504,12 +504,12 @@ IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnClickHdl, Button*, void )
     OnDoubleClickHdl(NULL);
 }
 
-IMPL_LINK_NOARG( OAddFieldWindow, OnDoubleClickHdl )
+IMPL_LINK_NOARG_TYPED( OAddFieldWindow, OnDoubleClickHdl, SvTreeListBox*, bool )
 {
     if ( m_aCreateLink.IsSet() )
         m_aCreateLink.Call(this);
 
-    return 0L;
+    return false;
 }
 
 void OAddFieldWindow::setImageList(sal_Int16 _eBitmapSet)

@@ -916,7 +916,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
     EnableControls();
 }
 
-IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
+IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, DoubleClickHdl, SvTreeListBox*, bool )
 {
     if( m_pFileView->GetSelectionCount() )
     {
@@ -940,7 +940,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
         }
     }
 
-    return 1;
+    return true;
 }
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )

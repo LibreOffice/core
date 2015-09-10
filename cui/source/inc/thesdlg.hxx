@@ -147,7 +147,7 @@ public:
     DECL_LINK( LanguageHdl_Impl, ListBox * );
     DECL_LINK( WordSelectHdl_Impl, ComboBox * );
     DECL_LINK_TYPED( AlternativesSelectHdl_Impl, SvTreeListBox*, void );
-    DECL_LINK( AlternativesDoubleClickHdl_Impl, SvxCheckListBox * );
+    DECL_LINK_TYPED( AlternativesDoubleClickHdl_Impl, SvTreeListBox*, bool );
 
     DECL_STATIC_LINK_TYPED( SvxThesaurusDialog, SelectFirstHdl_Impl, void*, void );
 

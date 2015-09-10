@@ -307,7 +307,12 @@ void SwFieldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 }
 
 // Insert new fields
-IMPL_LINK( SwFieldPage, InsertHdl, Button *, pBtn )
+IMPL_LINK_TYPED( SwFieldPage, TreeListBoxInsertHdl, SvTreeListBox*, pBtn, bool )
+{
+    return InsertHdl(pBtn);
+}
+
+IMPL_LINK( SwFieldPage, InsertHdl, void *, pBtn )
 {
     SwFieldDlg *pDlg = static_cast<SwFieldDlg*>(GetTabDialog());
     if (pDlg)
@@ -315,7 +320,7 @@ IMPL_LINK( SwFieldPage, InsertHdl, Button *, pBtn )
         pDlg->InsertHdl();
 
         if (pBtn)
-            pBtn->GrabFocus();  // because of InputField-Dlg
+            static_cast<Button*>(pBtn)->GrabFocus();  // because of InputField-Dlg
     }
     else
     {

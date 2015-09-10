@@ -70,7 +70,7 @@ class  OAddFieldWindow  :public FloatingWindow
     ::rtl::Reference< comphelper::OContainerListenerAdapter>                    m_pContainerListener;
 
     DECL_LINK_TYPED( OnClickHdl, Button*, void );
-    DECL_LINK( OnDoubleClickHdl,      void* );
+    DECL_LINK_TYPED( OnDoubleClickHdl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( OnSelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( OnSortAction, ToolBox*, void );
 

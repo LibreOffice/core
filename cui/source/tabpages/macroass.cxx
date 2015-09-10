@@ -296,10 +296,15 @@ IMPL_LINK_NOARG_TYPED( _SfxMacroTabPage, SelectMacro_Impl, SvTreeListBox*, void)
 
 IMPL_LINK_TYPED( _SfxMacroTabPage, AssignDeleteClickHdl_Impl, Button*, pBtn, void )
 {
-    AssignDeleteHdl_Impl(static_cast<PushButton*>(pBtn));
+    AssignDeleteHdl(pBtn);
 }
 
-IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
+IMPL_LINK_TYPED( _SfxMacroTabPage, AssignDeleteHdl_Impl, SvTreeListBox*, pBtn, bool )
+{
+    return AssignDeleteHdl(pBtn);
+}
+
+bool _SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     SvTreeListEntry* pE = rListBox.FirstSelected();
@@ -308,7 +313,7 @@ IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
     {
         DBG_ASSERT( pE, "wo kommt der leere Eintrag her?" );
-        return 0;
+        return false;
     }
 
     const bool bAssEnabled = pBtn != mpImpl->pDeletePB && mpImpl->pAssignPB->IsEnabled();
@@ -342,7 +347,7 @@ IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     rListBox.SetUpdateMode( true );
 
     EnableButtons();
-    return 0;
+    return false;
 }
 
 IMPL_LINK_TYPED( _SfxMacroTabPage, TimeOut_Impl, Idle*,, void )
@@ -367,7 +372,7 @@ void _SfxMacroTabPage::InitAndSetHandler()
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
     HeaderBar&          rHeaderBar = mpImpl->pEventLB->GetHeaderBar();
-    Link<>              aLnk(LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
+    Link<SvTreeListBox*,bool> aLnk(LINK(this, _SfxMacroTabPage, AssignDeleteHdl_Impl ));
     mpImpl->pMacroLB->SetDoubleClickHdl( aLnk );
     mpImpl->pDeletePB->SetClickHdl( LINK(this, _SfxMacroTabPage, AssignDeleteClickHdl_Impl ) );
     mpImpl->pAssignPB->SetClickHdl( LINK(this, _SfxMacroTabPage, AssignDeleteClickHdl_Impl ) );

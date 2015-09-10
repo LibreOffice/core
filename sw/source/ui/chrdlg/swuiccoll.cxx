@@ -82,7 +82,7 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     // Install handlers
     m_pConditionCB->SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
-    m_pTbLinks->SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
+    m_pTbLinks->SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveTreeListBoxHdl ));
     m_pStyleLB->SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
     m_pRemovePB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveClickHdl ));
     m_pAssignPB->SetClickHdl(      LINK(this, SwCondCollPage, AssignRemoveClickHdl ));
@@ -230,9 +230,13 @@ IMPL_LINK_TYPED( SwCondCollPage, OnOffHdl, Button*, pBox, void )
 
 IMPL_LINK_TYPED( SwCondCollPage, AssignRemoveClickHdl, Button*, pBtn, void)
 {
-    AssignRemoveHdl(static_cast<PushButton*>(pBtn));
+    AssignRemoveHdl(pBtn);
 }
-IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
+IMPL_LINK_TYPED( SwCondCollPage, AssignRemoveTreeListBoxHdl, SvTreeListBox*, pBtn, bool)
+{
+    return AssignRemoveHdl(pBtn) != 0;
+}
+IMPL_LINK( SwCondCollPage, AssignRemoveHdl, void*, pBtn)
 {
     SvTreeListEntry* pE = m_pTbLinks->FirstSelected();
     sal_uLong nPos;

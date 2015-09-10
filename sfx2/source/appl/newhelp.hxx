@@ -64,7 +64,7 @@ public:
     virtual void    RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    inline void     SetOpenHdl( const Link<>& rLink ) { SetDoubleClickHdl( rLink ); }
+    inline void     SetOpenHdl( const Link<SvTreeListBox*,bool>& rLink ) { SetDoubleClickHdl( rLink ); }
     OUString        GetSelectEntry() const;
 };
 
@@ -101,7 +101,7 @@ public:
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
-    void     SetOpenHdl( const Link<>& rLink ) { m_pContentBox->SetOpenHdl( rLink ); }
+    void     SetOpenHdl( const Link<SvTreeListBox*,bool>& rLink ) { m_pContentBox->SetOpenHdl( rLink ); }
     OUString GetSelectEntry() const { return m_pContentBox->GetSelectEntry(); }
     void     SetFocusOnBox() { m_pContentBox->GrabFocus(); }
 };
@@ -317,6 +317,7 @@ private:
     DECL_LINK_TYPED(InitHdl, Idle *, void);
     DECL_LINK_TYPED(SelectFactoryHdl, Idle *, void);
     DECL_LINK(KeywordHdl, void *);
+    DECL_LINK_TYPED(ContentTabPageDoubleClickHdl, SvTreeListBox*, bool);
 
 public:
     SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
@@ -353,7 +354,7 @@ ContentTabPage_Impl* SfxHelpIndexWindow_Impl::GetContentPage()
     if ( !pCPage )
     {
         pCPage = VclPtr<ContentTabPage_Impl>::Create( m_pTabCtrl, this );
-        pCPage->SetOpenHdl( aPageDoubleClickLink );
+        pCPage->SetOpenHdl( LINK(this, SfxHelpIndexWindow_Impl, ContentTabPageDoubleClickHdl) );
     }
     return pCPage;
 }

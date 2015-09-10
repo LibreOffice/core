@@ -349,7 +349,7 @@ static OUString lcl_GetDBAreaRange( ScDocument* pDoc, const OUString& rDBName )
     return aRet;
 }
 
-IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(ScContentTree, ContentDoubleClickHdl, SvTreeListBox*, bool)
 {
     sal_uInt16 nType;
     sal_uLong nChild;
@@ -359,7 +359,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl)
     if( pEntry && (nType != SC_CONTENT_ROOT) && (nChild != SC_CONTENT_NOCHILD) )
     {
         if ( bHiddenDoc )
-            return 0;               //! spaeter...
+            return false;               //! spaeter...
 
         OUString aText( GetEntryText( pEntry ) );
 
@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl)
         ScNavigatorDlg::ReleaseFocus();     // set focus into document
     }
 
-    return 0;
+    return false;
 }
 
 void ScContentTree::MouseButtonDown( const MouseEvent& rMEvt )

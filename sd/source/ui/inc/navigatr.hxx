@@ -146,7 +146,7 @@ private:
                                 DECL_LINK_TYPED( SelectToolboxHdl, ToolBox *, void );
                                 DECL_LINK_TYPED( DropdownClickToolBoxHdl, ToolBox *, void );
                                 DECL_LINK( ClickPageHdl, void * );
-                                DECL_LINK( ClickObjectHdl, void * );
+                                DECL_LINK_TYPED( ClickObjectHdl, SvTreeListBox*, bool );
                                 DECL_LINK( SelectDocumentHdl, void * );
                                 DECL_LINK_TYPED( MenuSelectHdl, Menu *, bool );
                                 DECL_LINK_TYPED( ShapeFilterCallback, Menu *, bool );

@@ -189,7 +189,7 @@ private:
     DECL_LINK ( SelectServiceHdl, void * );
     DECL_LINK_TYPED ( EditServiceMenuHdl, MenuButton *, void );
 
-    DECL_LINK( DoubleClickHdl, void * );
+    DECL_LINK_TYPED( DoubleClickHdl, SvTreeListBox*, bool );
     DECL_LINK( SelectHdl, void * );
 
     DECL_LINK( FileNameGetFocusHdl, void * );

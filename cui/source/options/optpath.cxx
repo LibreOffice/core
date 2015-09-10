@@ -523,10 +523,10 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 
 
 
-IMPL_LINK_NOARG(SvxPathTabPage, DoubleClickPathHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPathTabPage, DoubleClickPathHdl_Impl, SvTreeListBox*, bool)
 {
     PathHdl_Impl(NULL);
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)

@@ -99,7 +99,7 @@ SwFieldRefPage::SwFieldRefPage(vcl::Window* pParent, const SfxItemSet& rCoreSet 
 
     // #i83479#
     m_pSelectionToolTipLB->SetSelectHdl( LINK(this, SwFieldRefPage, SubTypeTreeListBoxHdl) );
-    m_pSelectionToolTipLB->SetDoubleClickHdl( LINK(this, SwFieldRefPage, InsertHdl) );
+    m_pSelectionToolTipLB->SetDoubleClickHdl( LINK(this, SwFieldRefPage, TreeListBoxInsertHdl) );
     m_pSelectionToolTipLB->SetStyle( m_pSelectionToolTipLB->GetStyle() | WB_HSCROLL );
     m_pSelectionToolTipLB->SetSpaceBetweenEntries(1);
     m_pSelectionToolTipLB->SetHighlightRange();

@@ -407,10 +407,10 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, OKButtonHdl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, SignatureSelectHdl)
+IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, SignatureSelectHdl, SvTreeListBox*, bool)
 {
     ImplShowSignaturesDetails();
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, ViewButtonHdl, Button*, void)

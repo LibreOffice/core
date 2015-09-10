@@ -53,7 +53,8 @@ class SwCondCollPage : public SfxTabPage
     virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
     DECL_LINK_TYPED( OnOffHdl, Button*, void );
-    DECL_LINK( AssignRemoveHdl, PushButton*);
+    DECL_LINK( AssignRemoveHdl, void*);
+    DECL_LINK_TYPED( AssignRemoveTreeListBoxHdl, SvTreeListBox*, bool);
     DECL_LINK_TYPED( AssignRemoveClickHdl, Button*, void);
     DECL_LINK_TYPED( SelectTreeListBoxHdl, SvTreeListBox*, void );
     DECL_LINK( SelectHdl, void* );

@@ -575,10 +575,10 @@ IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, ResetBtnHdl_Impl, Button*, void )
     Reset();
 }
 
-IMPL_LINK_NOARG( CuiAboutConfigTabPage, DoubleClickHdl_Impl )
+IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, DoubleClickHdl_Impl, SvTreeListBox*, bool )
 {
     StandardHdl_Impl(NULL);
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )

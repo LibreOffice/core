@@ -1726,8 +1726,6 @@ void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link<>& rLink )
 {
     aPageDoubleClickLink = rLink;
-    if ( pCPage )
-        pCPage->SetOpenHdl( aPageDoubleClickLink );
     if ( pIPage )
         pIPage->SetDoubleClickHdl( aPageDoubleClickLink );
     if ( pSPage )
@@ -1736,7 +1734,10 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link<>& rLink )
         pBPage->SetDoubleClickHdl( aPageDoubleClickLink );
 }
 
-
+IMPL_LINK_TYPED(SfxHelpIndexWindow_Impl, ContentTabPageDoubleClickHdl, SvTreeListBox*, p, bool)
+{
+    return aPageDoubleClickLink.Call(p);
+}
 
 void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, bool bActive )
 {

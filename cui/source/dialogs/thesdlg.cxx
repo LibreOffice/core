@@ -412,7 +412,7 @@ IMPL_LINK_TYPED( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvTreeListBox *
     }
 }
 
-IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox *, pBox )
+IMPL_LINK_TYPED( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvTreeListBox*, pBox, bool )
 {
     SvTreeListEntry *pEntry = pBox ? pBox->GetCurEntry() : NULL;
     if (pEntry)
@@ -433,7 +433,7 @@ IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox 
     //! workaround to set the selection since calling SelectEntryPos within
     //! the double click handler does not work
     Application::PostUserEvent( LINK( this, SvxThesaurusDialog, SelectFirstHdl_Impl ), pBox, true );
-    return 0;
+    return false;
 }
 
 IMPL_STATIC_LINK_TYPED( SvxThesaurusDialog, SelectFirstHdl_Impl, void *, p, void )

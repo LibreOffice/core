@@ -165,16 +165,16 @@ IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, EditBtnClickHdl, Button*, void)
 {
     EditBtnHdl(nullptr);
 }
-IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
+IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, EditBtnHdl, SvTreeListBox*, bool)
 {
     ScConditionalFormat* pFormat = m_pCtrlManager->GetSelection();
 
     if(!pFormat)
-        return 0;
+        return false;
 
     EndDialog( DLG_RET_EDIT );
 
-    return 0;
+    return false;
 }
 
 IMPL_LINK_NOARG_TYPED(ScCondFormatManagerDlg, AddBtnHdl, Button*, void)

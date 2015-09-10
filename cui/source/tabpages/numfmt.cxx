@@ -1156,7 +1156,7 @@ void SvxNumberFormatTabPage::UpdateThousandEngineeringText()
 #*
 #************************************************************************/
 
-IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvxFontListBox*, pLb )
+IMPL_LINK_TYPED( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvTreeListBox*, pLb, bool )
 {
     if (pLb == m_pLbFormat)
     {
@@ -1174,7 +1174,7 @@ IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvxFontListBox*, pLb )
                 pOKButton->Click();
         }
     }
-    return 0;
+    return false;
 }
 
 

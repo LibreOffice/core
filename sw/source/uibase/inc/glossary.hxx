@@ -124,7 +124,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     void ShowPreview();
 
     DECL_LINK( NameModify, Edit * );
-    DECL_LINK( NameDoubleClick, SvTreeListBox * );
+    DECL_LINK_TYPED( NameDoubleClick, SvTreeListBox*, bool );
     DECL_LINK_TYPED( GrpSelect, SvTreeListBox *, void );
     DECL_LINK_TYPED( MenuHdl, Menu *, bool );
     DECL_LINK_TYPED( EnableHdl, Menu *, bool );

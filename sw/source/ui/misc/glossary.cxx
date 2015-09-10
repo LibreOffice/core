@@ -410,12 +410,12 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox )
+IMPL_LINK_TYPED( SwGlossaryDlg, NameDoubleClick, SvTreeListBox*, pBox, bool )
 {
     SvTreeListEntry* pEntry = pBox->FirstSelected();
     if(pBox->GetParent(pEntry) && !bIsDocReadOnly)
         EndDialog( RET_OK );
-    return 0;
+    return false;
 }
 
 IMPL_LINK_TYPED( SwGlossaryDlg, EnableHdl, Menu *, pMn, bool )

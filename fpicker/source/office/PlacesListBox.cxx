@@ -187,7 +187,7 @@ IMPL_LINK_NOARG_TYPED( PlacesListBox, Selection, SvTreeListBox*, void )
         mpDlg->RemovablePlaceSelected(false);
 }
 
-IMPL_LINK_NOARG( PlacesListBox, DoubleClick )
+IMPL_LINK_NOARG_TYPED( PlacesListBox, DoubleClick, SvTreeListBox*, bool )
 {
     sal_uInt16 nSelected = mpImpl->GetCurrRow();
     PlacePtr pPlace = maPlaces[nSelected];
@@ -212,7 +212,7 @@ IMPL_LINK_NOARG( PlacesListBox, DoubleClick )
                 break;
         };
     }
-    return 0;
+    return false;
 }
 
 void PlacesListBox::updateView( )

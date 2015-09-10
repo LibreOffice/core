@@ -165,10 +165,10 @@ IMPL_LINK_NOARG_TYPED(XMLFilterSettingsDialog, SelectionChangedHdl_Impl, SvTreeL
     updateStates();
 }
 
-IMPL_LINK_NOARG(XMLFilterSettingsDialog, DoubleClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(XMLFilterSettingsDialog, DoubleClickHdl_Impl, SvTreeListBox*, bool)
 {
     onEdit();
-    return 0;
+    return false;
 }
 
 short XMLFilterSettingsDialog::Execute()

@@ -152,7 +152,7 @@ private:
     bool    Click_Impl(PushButton* pIB);
     // Handler
     DECL_LINK( LostFocusHdl_Impl, Edit* );
-    DECL_LINK( DoubleClickHdl_Impl, SvxFontListBox* );
+    DECL_LINK_TYPED( DoubleClickHdl_Impl, SvTreeListBox*, bool );
     DECL_LINK( SelFormatHdl_Impl, void * );
     DECL_LINK_TYPED( SelFormatListBoxHdl_Impl, SvTreeListBox*, void );
     DECL_LINK_TYPED( SelFormatClickHdl_Impl, Button*, void );
@@ -160,7 +160,7 @@ private:
     DECL_LINK( EditHdl_Impl, Edit* );
     DECL_LINK( OptHdl_Impl, void * );
     DECL_LINK_TYPED( OptClickHdl_Impl, Button*, void );
-    DECL_LINK_TYPED(TimeHdl_Impl, Timer *, void);
+    DECL_LINK_TYPED( TimeHdl_Impl, Timer *, void);
 };
 
 #endif

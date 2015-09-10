@@ -866,7 +866,7 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     Update_Impl();
 
     aFilterLb->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, FilterSelectHdl ) );
-    aFmtLb->SetDoubleClickHdl( LINK( this, SfxCommonTemplateDialog_Impl, ApplyHdl ) );
+    aFmtLb->SetDoubleClickHdl( LINK( this, SfxCommonTemplateDialog_Impl, TreeListApplyHdl ) );
     aFmtLb->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, FmtSelectHdl ) );
     aFmtLb->SetSelectionMode(MULTIPLE_SELECTION);
 
@@ -2086,10 +2086,14 @@ void SfxCommonTemplateDialog_Impl::ResetFocus()
     }
 }
 
-// Double-click on a style sheet in the ListBox is applied.
-IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, pControl )
+IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, TreeListApplyHdl, SvTreeListBox *, bool )
 {
-    (void)pControl; //unused
+    return ApplyHdl(NULL) == 1;
+}
+
+// Double-click on a style sheet in the ListBox is applied.
+IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, /*pControl*/ )
+{
     // only if that region is allowed
     if ( IsInitialized() && 0 != pFamilyState[nActFamily-1] &&
          !GetSelectedEntry().isEmpty() )

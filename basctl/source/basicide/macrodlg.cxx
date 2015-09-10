@@ -468,18 +468,18 @@ void MacroChooser::CheckButtons()
 
 
 
-IMPL_LINK_NOARG(MacroChooser, MacroDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(MacroChooser, MacroDoubleClickHdl, SvTreeListBox*, bool)
 {
     StoreMacroDescription();
     if (nMode == Recording)
     {
         SbMethod* pMethod = GetMacro();
         if ( pMethod && !QueryReplaceMacro( pMethod->GetName(), this ) )
-            return 0;
+            return false;
     }
 
     EndDialog(Macro_OkRun);
-    return 0;
+    return false;
 }
 
 IMPL_LINK_TYPED( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox, void )

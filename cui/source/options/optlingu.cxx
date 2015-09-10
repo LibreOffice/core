@@ -1515,7 +1515,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
 
 
-IMPL_LINK( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox )
+IMPL_LINK_TYPED( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox, bool )
 {
     if (pBox == m_pLinguModulesCLB)
     {
@@ -1529,7 +1529,7 @@ IMPL_LINK( SvxLinguTabPage, BoxDoubleClickHdl_Impl, SvTreeListBox *, pBox )
     {
         ClickHdl_Impl(m_pLinguOptionsEditPB);
     }
-    return 0;
+    return false;
 }
 
 

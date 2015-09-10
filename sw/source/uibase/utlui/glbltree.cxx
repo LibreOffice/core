@@ -1197,7 +1197,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     }
 }
 
-IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl)
+IMPL_LINK_NOARG_TYPED( SwGlobalTree, DoubleClickHdl, SvTreeListBox*, bool)
 {
     SvTreeListEntry* pEntry = GetCurEntry();
     SwGlblDocContent* pCont = static_cast<SwGlblDocContent*>(pEntry->GetUserData());
@@ -1208,7 +1208,7 @@ IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl)
         GotoContent(pCont);
         pActiveShell->GetView().GetEditWin().GrabFocus();
     }
-    return 0;
+    return false;
 }
 
 SwNavigationPI* SwGlobalTree::GetParentWindow()

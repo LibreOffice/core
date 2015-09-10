@@ -47,7 +47,7 @@ namespace dbaui
             :public SvTreeListBox
             ,public IDragTransferableListener
     {
-        DECL_LINK( OnDoubleClick, SvTreeListBox* );
+        DECL_LINK_TYPED( OnDoubleClick, SvTreeListBox*, bool );
         DECL_LINK_TYPED( ScrollUpHdl, Timer*, void );
         DECL_LINK_TYPED( ScrollDownHdl, Timer*, void );
         DECL_LINK_TYPED( DropHdl, void*, void );

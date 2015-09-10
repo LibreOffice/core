@@ -389,7 +389,7 @@ IMPL_LINK_TYPED( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
     }
 }
 
-IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
+IMPL_LINK_NOARG_TYPED(SdNavigatorWin, ClickObjectHdl, SvTreeListBox*, bool)
 {
     if( !mbDocImported || maLbDocs->GetSelectEntryPos() != 0 )
     {
@@ -422,7 +422,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
             }
         }
     }
-    return 0L;
+    return false;
 }
 
 IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)

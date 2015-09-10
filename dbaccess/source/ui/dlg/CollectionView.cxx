@@ -236,7 +236,7 @@ IMPL_LINK_NOARG_TYPED(OCollectionView, Up_Click, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView)
+IMPL_LINK_NOARG_TYPED(OCollectionView, Dbl_Click_FileView, SvTreeListBox*, bool)
 {
     try
     {
@@ -264,7 +264,7 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    return 0;
+    return false;
 }
 
 void OCollectionView::initCurrentPath()
