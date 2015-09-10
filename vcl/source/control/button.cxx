@@ -1544,7 +1544,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
 
 void PushButton::Toggle()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_PUSHBUTTON_TOGGLE, NULL );
+    ImplCallEventListenersAndHandler( VCLEVENT_PUSHBUTTON_TOGGLE, nullptr );
 }
 
 void PushButton::SetSymbol( SymbolType eSymbol )
