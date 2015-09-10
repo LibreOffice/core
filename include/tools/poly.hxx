@@ -49,8 +49,6 @@ enum PolyStyle
     POLY_CHORD = 3
 };
 
-#ifndef ENUM_POLYFLAGS_DECLARED
-#define ENUM_POLYFLAGS_DECLARED
 enum PolyFlags
 {
     POLY_NORMAL,
@@ -58,7 +56,6 @@ enum PolyFlags
     POLY_CONTROL,
     POLY_SYMMTR
 };
-#endif
 
 class SAL_WARN_UNUSED PolyOptimizeData
 {
