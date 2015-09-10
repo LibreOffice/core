@@ -769,6 +769,9 @@ void exportPROJECTwmStream(SvStream& rStrm, const css::uno::Sequence<OUString>& 
 void VbaExport::exportVBA(SotStorage* pRootStorage)
 {
     css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
+    if (!xNameContainer.is()) {
+        return;
+    }
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength(); // get the number of modules
 
