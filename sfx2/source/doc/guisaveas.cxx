@@ -739,19 +739,6 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     return nResult;
 }
 
-bool hasMacros( const uno::Reference< frame::XModel >& xModel  )
-{
-    bool bHasMacros = false;
-    uno::Reference< script::XLibraryContainer > xContainer;
-    uno::Reference< beans::XPropertySet > xProps( xModel, uno::UNO_QUERY );
-    if ( xProps.is() )
-    {
-        xProps->getPropertyValue( "BasicLibraries" ) >>= xContainer;
-        bHasMacros = sfx2::DocumentMacroMode::containerHasBasicMacros( xContainer );
-    }
-    return bHasMacros;
-}
-
 sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
 {
     ::comphelper::SequenceAsHashMap aFiltPropsHM;
