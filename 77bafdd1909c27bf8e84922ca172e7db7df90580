@@ -16,6 +16,24 @@
       "revId": "77bafdd1909c27bf8e84922ca172e7db7df90580",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_3ef8917c",
+        "filename": "external/neon/neon_fix_resource_lock_compare.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1001050
+      },
+      "writtenOn": "2015-09-10T10:35:59Z",
+      "side": 1,
+      "message": "True, to implement it correctly it would be necessary to first extract the single segment of the patch, and then comparing them segment to segment, keeping the hierarchy intact, in your example that would be:\n\n1) \"/foo%2Fbar/\" against \n2) \"/foo/bar/\" supposing they are at the same hierarchy level in the containing path.\n\nthat divided in segment and then unescape each one, would be:\n\n\"foo/bar\" !\u003d \"foo\"\n\nUnfortunately there is no such function in neon.",
+      "parentUuid": "ba0121b8_5e73c54d",
+      "revId": "77bafdd1909c27bf8e84922ca172e7db7df90580",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
