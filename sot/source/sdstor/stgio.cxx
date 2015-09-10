@@ -336,14 +336,14 @@ sal_uLong Validator::FindUnrefedChains()
         return FAT_OK;
 }
 
-namespace { struct ErrorLink : public rtl::Static<Link<>, ErrorLink > {}; }
+namespace { struct ErrorLink : public rtl::Static<Link<StgLinkArg&,void>, ErrorLink > {}; }
 
-void StgIo::SetErrorLink( const Link<>& rLink )
+void StgIo::SetErrorLink( const Link<StgLinkArg&,void>& rLink )
 {
     ErrorLink::get() = rLink;
 }
 
-const Link<>& StgIo::GetErrorLink()
+const Link<StgLinkArg&,void>& StgIo::GetErrorLink()
 {
     return ErrorLink::get();
 }
@@ -379,7 +379,7 @@ sal_uLong StgIo::ValidateFATs()
             StgLinkArg aArg;
             aArg.aFile = pFileStrm->GetFileName();
             aArg.nErr = nErr;
-            ErrorLink::get().Call( &aArg );
+            ErrorLink::get().Call( aArg );
             bCopied = true;
         }
 //      DBG_ASSERT( nErr == FAT_OK ,"Storage kaputt");
