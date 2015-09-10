@@ -222,7 +222,7 @@ protected:
     OUString                maCurUnitText;
     sal_Int64               mnBaseValue;
     FieldUnit               meUnit;
-    Link<>                  maCustomConvertLink;
+    Link<MetricFormatter&,void> maCustomConvertLink;
 
 protected:
                             MetricFormatter();
@@ -262,7 +262,7 @@ public:
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
-    void                    SetCustomConvertHdl( const Link<>& rLink ) { maCustomConvertLink = rLink; }
+    void                    SetCustomConvertHdl( const Link<MetricFormatter&,void>& rLink ) { maCustomConvertLink = rLink; }
 };
 
 

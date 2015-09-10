@@ -1766,7 +1766,7 @@ void MetricField::Last()
 
 void MetricField::CustomConvert()
 {
-    maCustomConvertLink.Call( this );
+    maCustomConvertLink.Call( *this );
 }
 
 MetricBox::MetricBox( vcl::Window* pParent, WinBits nWinStyle ) :
@@ -1855,7 +1855,7 @@ void MetricBox::ReformatAll()
 
 void MetricBox::CustomConvert()
 {
-    maCustomConvertLink.Call( this );
+    maCustomConvertLink.Call( *this );
 }
 
 void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_Int32 nPos )

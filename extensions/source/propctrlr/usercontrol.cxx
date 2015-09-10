@@ -329,7 +329,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( OTimeDurationControl, OnCustomConvert, MetricField*, /*pField*/ )
+    IMPL_LINK_NOARG_TYPED( OTimeDurationControl, OnCustomConvert, MetricFormatter&, void )
     {
         long nMultiplier = 1;
         if ( getTypedControlWindow()->GetCurUnitText().equalsIgnoreAsciiCase( "ms" ) )
@@ -342,8 +342,6 @@ namespace pcr
             nMultiplier = 1000 * 60 * 60;
 
         getTypedControlWindow()->SetValue( getTypedControlWindow()->GetLastValue() * nMultiplier );
-
-        return 0L;
     }
 
 
