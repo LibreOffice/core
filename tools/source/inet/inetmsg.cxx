@@ -25,7 +25,6 @@
 #include <tools/inetstrm.hxx>
 #include <tools/contnr.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/strbuf.hxx>
 #include <comphelper/string.hxx>
 
 #include <stdio.h>
@@ -803,67 +802,27 @@ OUString INetMIMEMessage::GetDefaultContentType()
     return OUString("text/plain; charset=us-ascii");
 }
 
-bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
+bool INetMIMEMessage::EnableAttachMultipartFormDataChild()
 {
     // Check context.
     if (IsContainer())
         return false;
 
-    // Setup Content-Type header field.
-    OStringBuffer aContentType;
-    switch (eType)
-    {
-        case INETMSG_MESSAGE_RFC822:
-            aContentType.append("message/rfc822");
-            break;
-
-        case INETMSG_MULTIPART_ALTERNATIVE:
-            aContentType.append("multipart/alternative");
-            break;
-
-        case INETMSG_MULTIPART_DIGEST:
-            aContentType.append("multipart/digest");
-            break;
-
-        case INETMSG_MULTIPART_PARALLEL:
-            aContentType.append("multipart/parallel");
-            break;
-
-        case INETMSG_MULTIPART_RELATED:
-            aContentType.append("multipart/related");
-            break;
-
-        case INETMSG_MULTIPART_FORM_DATA:
-            aContentType.append("multipart/form-data");
-            break;
-
-        default:
-            aContentType.append("multipart/mixed");
-            break;
-    }
-
-    // Setup boundary for multipart types.
-    if (aContentType.toString().startsWithIgnoreAsciiCase("multipart/"))
-    {
-        // Generate a unique boundary from current time.
-        sal_Char sTail[16 + 1];
-        tools::Time aCurTime( tools::Time::SYSTEM );
-        sal_uInt64 nThis = reinterpret_cast< sal_uIntPtr >( this ); // we can be on a 64bit architecture
-        nThis = ( ( nThis >> 32 ) ^ nThis ) & SAL_MAX_UINT32;
-        sprintf (sTail, "%08X%08X",
-                 static_cast< unsigned int >(aCurTime.GetTime()),
-                 static_cast< unsigned int >(nThis));
-        m_aBoundary = "------------_4D48";
-        m_aBoundary += sTail;
-
-        // Append boundary as ContentType parameter.
-        aContentType.append("; boundary=");
-        aContentType.append(m_aBoundary);
-    }
+    // Generate a unique boundary from current time.
+    sal_Char sTail[16 + 1];
+    tools::Time aCurTime( tools::Time::SYSTEM );
+    sal_uInt64 nThis = reinterpret_cast< sal_uIntPtr >( this ); // we can be on a 64bit architecture
+    nThis = ( ( nThis >> 32 ) ^ nThis ) & SAL_MAX_UINT32;
+    sprintf (sTail, "%08X%08X",
+             static_cast< unsigned int >(aCurTime.GetTime()),
+             static_cast< unsigned int >(nThis));
+    m_aBoundary = "------------_4D48";
+    m_aBoundary += sTail;
 
     // Set header fields.
     SetMIMEVersion(OUString("1.0"));
-    SetContentType(OStringToOUString(aContentType.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US));
+    SetContentType(
+        OUString::fromUtf8("multipart/form-data; boundary=" + m_aBoundary));
     SetContentTransferEncoding(OUString("7bit"));
 
     // Done.

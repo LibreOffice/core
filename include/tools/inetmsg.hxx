@@ -115,19 +115,6 @@ enum class InetMessageMime
     NUMHDR                     = 6,
 };
 
-enum INetMessageContainerType
-{
-    INETMSG_MESSAGE_RFC822,
-    INETMSG_MULTIPART_MIXED,
-    INETMSG_MULTIPART_ALTERNATIVE,
-    INETMSG_MULTIPART_DIGEST,
-    INETMSG_MULTIPART_PARALLEL,
-    INETMSG_MULTIPART_RELATED,
-    INETMSG_MULTIPART_FORM_DATA
-};
-
-class INetMIMEMessage;
-
 class TOOLS_DLLPUBLIC INetMIMEMessage
 {
     ::std::vector< INetMessageHeader* >
@@ -271,8 +258,7 @@ public:
     }
     INetMIMEMessage* GetParent() const { return pParent; }
 
-    bool EnableAttachChild (
-        INetMessageContainerType eType = INETMSG_MULTIPART_MIXED);
+    bool EnableAttachMultipartFormDataChild();
     bool AttachChild (
         INetMIMEMessage& rChildMsg, bool bOwner = true );
 };

@@ -520,7 +520,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
 
     // Create Parent
     INetMIMEMessage aParent;
-    aParent.EnableAttachChild( INETMSG_MULTIPART_FORM_DATA );
+    aParent.EnableAttachMultipartFormDataChild();
 
 
     // Fill List of successful Controls
