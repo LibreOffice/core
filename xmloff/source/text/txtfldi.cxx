@@ -3825,6 +3825,14 @@ XMLSheetNameImportContext::XMLSheetNameImportContext(
     bValid = true;  // always valid!
 }
 
+XMLSheetNameImportContext::XMLSheetNameImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_sheet_name, Element )
+{
+    bValid = true;  // always valid!
+}
+
 void XMLSheetNameImportContext::ProcessAttribute(
     sal_uInt16,
     const OUString& )
