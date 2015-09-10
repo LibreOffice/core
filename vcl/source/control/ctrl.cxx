@@ -328,7 +328,10 @@ bool Control::ImplCallEventListenersAndHandler( sal_uLong nEvent, std::function<
 
     if ( !xThis->IsDisposed() )
     {
-        callHandler();
+        if (callHandler)
+        {
+            callHandler();
+        }
 
         if ( !xThis->IsDisposed() )
             return false;
