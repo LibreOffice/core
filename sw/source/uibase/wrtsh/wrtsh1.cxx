@@ -1711,7 +1711,7 @@ OUString SwWrtShell::GetSelDescr() const
         break;
     case nsSelectionType::SEL_FRM:
         {
-            const SwFrameFormat * pFrameFormat = GetCurFrameFormat();
+            const SwFrameFormat * pFrameFormat = GetSelectedFrameFormat();
 
             if (pFrameFormat)
                 aResult = pFrameFormat->GetDescription();

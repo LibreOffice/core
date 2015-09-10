@@ -2284,7 +2284,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         if((nsSelectionType::SEL_FRM & nSelType) || (nsSelectionType::SEL_GRF & nSelType))
         {
             // Template autoupdate
-            SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
+            SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
 
             if(pFormat && pFormat->IsAutoUpdateFormat())
             {

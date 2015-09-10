@@ -287,7 +287,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                     aCol.Init(m_pWin->GetFrmColCount(), aCol.GetGutterWidth(), aCol.GetWishWidth());
                     aSet.Put(aCol);
                     // Template AutoUpdate
-                    SwFrameFormat* pFormat = m_pSh->GetCurFrameFormat();
+                    SwFrameFormat* pFormat = m_pSh->GetSelectedFrameFormat();
                     if(pFormat && pFormat->IsAutoUpdateFormat())
                         m_pSh->AutoUpdateFrame(pFormat, aSet);
                     else

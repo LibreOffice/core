@@ -1132,7 +1132,7 @@ bool SwFEShell::ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet )
 }
 
 // Returns frame-format if frame, otherwise 0
-SwFrameFormat* SwFEShell::GetCurFrameFormat() const
+SwFrameFormat* SwFEShell::GetSelectedFrameFormat() const
 {
     SwFrameFormat* pRet = 0;
     SwLayoutFrm *pFly = GetSelectedFlyFrm();

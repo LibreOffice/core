@@ -129,7 +129,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
              // so that this family is being showed
                 if(pShell->IsFrmSelected())
                 {
-                    SwFrameFormat* pFormat = pShell->GetCurFrameFormat();
+                    SwFrameFormat* pFormat = pShell->GetSelectedFrameFormat();
                     if( pFormat )
                         aName = pFormat->GetName();
                 }
@@ -195,7 +195,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    SwFrameFormat* pFormat = pShell->GetCurFrameFormat();
+                    SwFrameFormat* pFormat = pShell->GetSelectedFrameFormat();
                     if(pFormat && pShell->IsFrmSelected())
                     {
                         aName = pFormat->GetName();
@@ -429,7 +429,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         break;
                         case SFX_STYLE_FAMILY_FRAME:
                         {
-                            SwFrameFormat* pFrm = m_pWrtShell->GetCurFrameFormat();
+                            SwFrameFormat* pFrm = m_pWrtShell->GetSelectedFrameFormat();
                             if( pFrm )
                                 aParam = pFrm->GetName();
                         }
@@ -1175,7 +1175,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
                 SfxItemSet aSet(GetPool(), aFrameFormatSetRange );
                 pCurrWrtShell->GetFlyFrmAttr( aSet );
 
-                SwFrameFormat* pFFormat = pCurrWrtShell->GetCurFrameFormat();
+                SwFrameFormat* pFFormat = pCurrWrtShell->GetSelectedFrameFormat();
                 pFrm->SetDerivedFrom( pFFormat );
 
                 pFrm->SetFormatAttr( aSet );

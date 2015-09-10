@@ -176,7 +176,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aCol.Init(nCols, nGutterWidth, aCol.GetWishWidth());
                 aSet.Put(aCol);
                 // Template AutoUpdate
-                SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
+                SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
                 if(pFormat && pFormat->IsAutoUpdateFormat())
                 {
                     rSh.AutoUpdateFrame(pFormat, aSet);
@@ -498,7 +498,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             rSh.SetObjTitle(static_cast<const SfxStringItem*>(pItem)->GetValue());
                         }
                         // Template AutoUpdate
-                        SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
+                        SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
                         if(pFormat && pFormat->IsAutoUpdateFormat())
                         {
                             rSh.AutoUpdateFrame(pFormat, *pOutSet);
@@ -644,7 +644,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
     }
     if ( bUpdateMgr )
     {
-        SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
+        SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
         if ( bCopyToFormat && pFormat && pFormat->IsAutoUpdateFormat() )
         {
             rSh.AutoUpdateFrame(pFormat, aMgr.GetAttrSet());
@@ -1111,7 +1111,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
     }
     aFrameSet.Put( aBoxItem );
     // Template AutoUpdate
-    SwFrameFormat* pFormat = rSh.GetCurFrameFormat();
+    SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
     if(pFormat && pFormat->IsAutoUpdateFormat())
     {
         rSh.AutoUpdateFrame(pFormat, aFrameSet);

@@ -391,7 +391,7 @@ public:
      - add output parameter <bVertL2R> */
     bool IsFrmVertical(const bool bEnvironment, bool& bRightToLeft, bool& bVertL2R) const;
 
-    SwFrameFormat* GetCurFrameFormat() const; ///< If frame then frame style, else 0.
+    SwFrameFormat* GetSelectedFrameFormat() const; ///< If frame then frame style, else 0.
     void SetFrameFormat( SwFrameFormat *pFormat, bool bKeepOrient = false, Point* pDocPos = 0 ); ///< If frame then set frame style.
 
     // Get selected fly
