@@ -300,7 +300,7 @@ void VBACompression::write()
     // section 2.4.1.1.1
     mrCompressedStream.WriteUInt8(0x01); // signature byte of a compressed container
     bool bStreamNotEnded = true;
-    const sal_uInt8* pData = (const sal_uInt8*)mrUncompressedStream.GetData();
+    const sal_uInt8* pData = static_cast<const sal_uInt8*>(mrUncompressedStream.GetData());
     sal_Size nSize = mrUncompressedStream.GetEndOfData();
     sal_Size nRemainingSize = nSize;
     while(bStreamNotEnded)
