@@ -92,8 +92,8 @@ void TestVbaCompression::testSimple1()
 
     CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
-    const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
-    const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
+    const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
+    const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
     size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
@@ -114,8 +114,8 @@ void TestVbaCompression::testSimple2()
 
     CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
-    const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
-    const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
+    const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
+    const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
     size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
@@ -136,8 +136,8 @@ void TestVbaCompression::testSimple3()
 
     CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
-    const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
-    const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
+    const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData()  );
+    const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
     size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
@@ -158,8 +158,8 @@ void TestVbaCompression::testComplex1()
 
     CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
-    const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
-    const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
+    const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
+    const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
     size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
@@ -180,8 +180,8 @@ void TestVbaCompression::testSpec321()
 
     CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
-    const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
-    const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
+    const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
+    const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
     size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
@@ -202,8 +202,8 @@ void TestVbaCompression::testSpec322()
 
     CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
-    const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
-    const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
+    const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
+    const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
     size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
@@ -224,8 +224,8 @@ void TestVbaCompression::testSpec323()
 
     CPPUNIT_ASSERT_EQUAL(aReferenceMemoryStream.GetSize(), aOutputMemoryStream.GetSize());
 
-    const sal_uInt8* pReferenceData = (const sal_uInt8*) aReferenceMemoryStream.GetData();
-    const sal_uInt8* pData = (const sal_uInt8*)aOutputMemoryStream.GetData();
+    const sal_uInt8* pReferenceData = static_cast<const sal_uInt8*>( aReferenceMemoryStream.GetData() );
+    const sal_uInt8* pData = static_cast<const sal_uInt8*>( aOutputMemoryStream.GetData() );
 
     size_t nSize = std::min(aReferenceMemoryStream.GetSize(),
             aOutputMemoryStream.GetSize());
