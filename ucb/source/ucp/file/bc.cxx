@@ -1208,19 +1208,17 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
             if( success )
                 break;
 
-            XInteractionRequestImpl *aRequestImpl =
-                new XInteractionRequestImpl(
+            XInteractionRequestImpl aRequestImpl(
                     rtl::Uri::decode(
                         getTitle(m_aUncPath),
                         rtl_UriDecodeWithCharset,
                         RTL_TEXTENCODING_UTF8),
                     static_cast<cppu::OWeakObject*>(this),
                     m_pMyShell,nMyCommandIdentifier);
-            uno::Reference< task::XInteractionRequest > aReq( aRequestImpl );
+            uno::Reference<task::XInteractionRequest> const xReq(aRequestImpl.getRequest());
 
-            m_pMyShell->handleTask( nMyCommandIdentifier,aReq );
-            if(  aRequestImpl->aborted() ||
-                 aRequestImpl->newName().isEmpty() )
+            m_pMyShell->handleTask( nMyCommandIdentifier, xReq );
+            if (aRequestImpl.aborted() || aRequestImpl.newName().isEmpty())
                 // means aborting
                 break;
 
@@ -1230,7 +1228,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
             if( !m_aUncPath.endsWith( "/" ) )
                 m_aUncPath += "/";
 
-            m_aUncPath += rtl::Uri::encode( aRequestImpl->newName(),
+            m_aUncPath += rtl::Uri::encode( aRequestImpl.newName(),
                                             rtl_UriCharClassPchar,
                                             rtl_UriEncodeIgnoreEscapes,
                                             RTL_TEXTENCODING_UTF8 );

@@ -104,8 +104,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
 
 
 
-    class XInteractionRequestImpl : public cppu::WeakImplHelper<
-        css::task::XInteractionRequest >
+    class XInteractionRequestImpl
     {
     public:
 
@@ -115,18 +114,6 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
             com::sun::star::uno::XInterface>& xOrigin,
             shell* pShell,
             sal_Int32 CommandId);
-
-        ::com::sun::star::uno::Any SAL_CALL getRequest(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > SAL_CALL
-        getContinuations(  )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-        {
-            return m_aSeq;
-        }
 
         bool aborted() const
         {
@@ -141,15 +128,18 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
                 return OUString();
         }
 
+        css::uno::Reference<css::task::XInteractionRequest> const& getRequest() const
+        {
+            return m_xRequest;
+        }
+
     private:
 
         XInteractionSupplyNameImpl* p1;
         XInteractionAbortImpl* p2;
         sal_Int32 m_nErrorCode,m_nMinorError;
 
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > m_aSeq;
+        css::uno::Reference<css::task::XInteractionRequest> m_xRequest;
 
         OUString m_aClashingName;
         com::sun::star::uno::Reference<

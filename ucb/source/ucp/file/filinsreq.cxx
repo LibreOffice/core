@@ -20,6 +20,9 @@
 #include "filinsreq.hxx"
 #include "shell.hxx"
 #include "filglob.hxx"
+
+#include <comphelper/interaction.hxx>
+
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
@@ -45,21 +48,14 @@ XInteractionRequestImpl::XInteractionRequestImpl(
       p2( new XInteractionAbortImpl ),
       m_nErrorCode(0),
       m_nMinorError(0),
-      m_aSeq( 2 ),
       m_aClashingName(aClashingName),
       m_xOrigin(xOrigin)
 {
     if( pShell )
         pShell->retrieveError(CommandId,m_nErrorCode,m_nMinorError);
-    m_aSeq[0] = Reference<XInteractionContinuation>(p1);
-    m_aSeq[1] = Reference<XInteractionContinuation>(p2);
-}
-
-
-Any SAL_CALL
-XInteractionRequestImpl::getRequest()
-    throw(RuntimeException, std::exception)
-{
+    uno::Sequence<uno::Reference<task::XInteractionContinuation>> continuations{
+        Reference<XInteractionContinuation>(p1),
+        Reference<XInteractionContinuation>(p2) };
     Any aAny;
     if(m_nErrorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR)
     {
@@ -67,7 +63,7 @@ XInteractionRequestImpl::getRequest()
         excep.Name = m_aClashingName;
         excep.Classification = InteractionClassification_ERROR;
         excep.Context = m_xOrigin;
-        excep.Message = "folder exists and overwritte forbidden";
+        excep.Message = "folder exists and overwrite forbidden";
         aAny <<= excep;
     }
     else if(m_nErrorCode == TASKHANDLING_INVALID_NAME_MKDIR)
@@ -87,7 +83,7 @@ XInteractionRequestImpl::getRequest()
         aAny <<= excep;
 
     }
-    return aAny;
+    m_xRequest.set(new ::comphelper::OInteractionRequest(aAny, continuations));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
