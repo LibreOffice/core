@@ -52,6 +52,7 @@ struct GPUEnv
     int mnCmdQueuePos;
     bool mnKhrFp64Flag;
     bool mnAmdFp64Flag;
+    cl_uint mnPreferredVectorWidthFloat;
 };
 
 extern OPENCL_DLLPUBLIC GPUEnv gpuEnv;
