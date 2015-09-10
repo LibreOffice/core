@@ -2808,6 +2808,18 @@ XMLPageVarGetFieldImportContext::XMLPageVarGetFieldImportContext(
     bValid = true;
 }
 
+XMLPageVarGetFieldImportContext::XMLPageVarGetFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_reference_page_get, Element ),
+    sPropertyNumberingType(sAPI_numbering_type),
+    sNumberFormat(),
+    sLetterSync(),
+    bNumberFormatOK(false)
+{
+    bValid = true;
+}
+
 void XMLPageVarGetFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
