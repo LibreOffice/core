@@ -1751,6 +1751,13 @@ OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const O
         return pProgram;
 
     mpCurrentProgram = pProgram;
+
+    if (!mpCurrentProgram)
+    {
+        SAL_WARN("vcl.opengl", "OpenGLContext::UseProgram: mpCurrentProgram is 0");
+        return 0;
+    }
+
     mpCurrentProgram->Use();
 
     return mpCurrentProgram;
