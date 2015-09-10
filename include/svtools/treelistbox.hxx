@@ -295,7 +295,7 @@ private:
     void SetBaseModel(SvTreeList* pNewModel);
 
     DECL_DLLPRIVATE_LINK_TYPED( CheckButtonClick, SvLBoxButtonData *, void );
-    DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, void * );
+    DECL_DLLPRIVATE_LINK_TYPED( TextEditEndedHdl_Impl, SvInplaceEdit2&, void );
     // Handler that is called by TreeList to clone an Entry
     DECL_DLLPRIVATE_LINK_TYPED( CloneHdl_Impl, SvTreeListEntry*, SvTreeListEntry* );
 
@@ -812,13 +812,13 @@ public:
 
 class SvInplaceEdit2
 {
-    Link<>      aCallBackHdl;
-    Accelerator aAccReturn;
-    Accelerator aAccEscape;
-    Idle        aIdle;
+    Link<SvInplaceEdit2&,void> aCallBackHdl;
+    Accelerator   aAccReturn;
+    Accelerator   aAccEscape;
+    Idle          aIdle;
     VclPtr<Edit>  pEdit;
-    bool        bCanceled;
-    bool        bAlreadyInCallBack;
+    bool          bCanceled;
+    bool          bAlreadyInCallBack;
 
     void        CallCallBackHdl_Impl();
     DECL_LINK_TYPED( Timeout_Impl, Idle *, void );
@@ -827,7 +827,7 @@ class SvInplaceEdit2
 
 public:
                 SvInplaceEdit2( vcl::Window* pParent, const Point& rPos, const Size& rSize,
-                   const OUString& rData, const Link<>& rNotifyEditEnd,
+                   const OUString& rData, const Link<SvInplaceEdit2&,void>& rNotifyEditEnd,
                    const Selection&, bool bMultiLine = false );
                ~SvInplaceEdit2();
     bool        KeyInput( const KeyEvent& rKEvt );

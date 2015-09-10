@@ -124,12 +124,12 @@ SvInplaceEdit2::SvInplaceEdit2
     vcl::Window* pParent, const Point& rPos,
     const Size& rSize,
     const OUString& rData,
-    const Link<>& rNotifyEditEnd,
+    const Link<SvInplaceEdit2&,void>& rNotifyEditEnd,
     const Selection& rSelection,
     bool bMulti
 ) :
 
-     aCallBackHdl       ( rNotifyEditEnd ),
+    aCallBackHdl       ( rNotifyEditEnd ),
     bCanceled           ( false ),
     bAlreadyInCallBack  ( false )
 
@@ -253,7 +253,7 @@ void SvInplaceEdit2::CallCallBackHdl_Impl()
         Application::RemoveAccel( &aAccReturn );
         Application::RemoveAccel( &aAccEscape );
         pEdit->Hide();
-        aCallBackHdl.Call( this );
+        aCallBackHdl.Call( *this );
     }
 }
 
@@ -993,10 +993,10 @@ void SvTreeListBox::EditText( const OUString& rStr, const Rectangle& rRect,
         rSel, bMulti );
 }
 
-IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvTreeListBox, TextEditEndedHdl_Impl, SvInplaceEdit2&, void)
 {
     if ( nImpFlags & SvTreeListBoxFlags::EDTEND_CALLED ) // avoid nesting
-        return 0;
+        return;
     nImpFlags |= SvTreeListBoxFlags::EDTEND_CALLED;
     OUString aStr;
     if ( !pEdCtrl->EditingCanceled() )
@@ -1011,7 +1011,6 @@ IMPL_LINK_NOARG(SvTreeListBox, TextEditEndedHdl_Impl)
     pEdCtrl->Hide();
     nImpFlags &= (~SvTreeListBoxFlags::IN_EDT);
     GrabFocus();
-    return 0;
 }
 
 void SvTreeListBox::CancelTextEditing()
