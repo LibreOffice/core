@@ -1672,6 +1672,7 @@ public:
     {
         if (!OpenGLHelper::isVCLOpenGLEnabled())
         {
+            mpImplA = mpImplB = nullptr;
             fprintf (stderr, "OpenGL is not enabled: try SAL_FORCEGL=1\n");
             return;
         }
