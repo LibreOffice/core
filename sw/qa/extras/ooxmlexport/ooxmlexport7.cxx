@@ -23,6 +23,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <pagedesc.hxx>
 
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -1004,6 +1005,32 @@ DECLARE_OOXMLEXPORT_TEST(testExportAdjustmentValue, "tdf91429.docx")
 
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd", "fmla", "val 50000");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.docx")
+{
+    //Preserve the page vertical alignment setting for .docx
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    SwPageDesc &Desc = pDoc->GetPageDesc( 0 );
+    drawing::TextVerticalAdjust nVA = Desc.GetVerticalAdjustment();
+    CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_CENTER, nVA );
+
+    Desc = pDoc->GetPageDesc( 1 );
+    nVA = Desc.GetVerticalAdjustment();
+    CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_TOP, nVA );
+
+    Desc = pDoc->GetPageDesc( 2 );
+    nVA = Desc.GetVerticalAdjustment();
+    CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_BOTTOM, nVA );
+
+    Desc = pTextDoc->GetDocShell()->GetDoc()->GetPageDesc( 3 );
+    nVA = Desc.GetVerticalAdjustment();
+    CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_BLOCK, nVA );
+}
+
 
 DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
 {

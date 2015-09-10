@@ -1033,6 +1033,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_SIZE), SID_ATTR_PAGE_SIZE,  cppu::UnoType<css::awt::Size>::get(),             PROPERTY_NONE,   MID_SIZE_SIZE|CONVERT_TWIPS},
                     { OUString(UNO_NAME_WIDTH), SID_ATTR_PAGE_SIZE,     cppu::UnoType<sal_Int32>::get()  ,         PROPERTY_NONE, MID_SIZE_WIDTH|CONVERT_TWIPS},
                     { OUString(UNO_NAME_HEIGHT), SID_ATTR_PAGE_SIZE,    cppu::UnoType<sal_Int32>::get()  ,         PROPERTY_NONE, MID_SIZE_HEIGHT|CONVERT_TWIPS            },
+                    { OUString(UNO_NAME_TEXT_VERT_ADJUST), RES_TEXT_VERT_ADJUST, cppu::UnoType<css::drawing::TextVerticalAdjust>::get(), PROPERTY_NONE, 0 },
                     { OUString(UNO_NAME_TEXT_COLUMNS), RES_COL,                cppu::UnoType<css::text::XTextColumns>::get(),    PROPERTY_NONE, MID_COLUMNS},
                     { OUString(UNO_NAME_TOP_MARGIN), RES_UL_SPACE,          cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
                     { OUString(UNO_NAME_BOTTOM_MARGIN), RES_UL_SPACE,           cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
