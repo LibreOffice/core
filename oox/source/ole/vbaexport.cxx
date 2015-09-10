@@ -778,10 +778,11 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     // start here with the VBA export
     SotStorage* pVBAStream = pRootStorage->OpenSotStorage("VBA", STREAM_READWRITE);
     SotStorageStream* pDirStream = pVBAStream->OpenSotStream("dir", STREAM_READWRITE);
-    SotStorageStream* pModuleStream[n];
+    std::vector<SotStorageStream*> aModuleStreams;
+    aModuleStreams.reserve(n);
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        pModuleStream[i] = pVBAStream->OpenSotStream(aElementNames[i], STREAM_READWRITE);
+        aModuleStreams.push_back(pVBAStream->OpenSotStream(aElementNames[i], STREAM_READWRITE));
     }
     SotStorageStream* pVBAProjectStream = pVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
     SotStorageStream* pPROJECTStream = pRootStorage->OpenSotStream("PROJECT", STREAM_READWRITE);
@@ -795,7 +796,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         css::uno::Any aCode = xNameContainer->getByName(aElementNames[i]);
         OUString aSourceCode;
         aCode >>= aSourceCode;
-        exportModuleStream(*pModuleStream[i], aSourceCode, aElementNames[i]);
+        exportModuleStream(*aModuleStreams[i], aSourceCode, aElementNames[i]);
     }
     exportVBAProjectStream(*pVBAProjectStream);
     exportPROJECTStream(*pPROJECTStream, xNameContainer, getProjectName());
@@ -804,7 +805,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     pVBAProjectStream->Commit();
     for(sal_Int32 i = 0; i < n; i++)
     {
-        pModuleStream[i]->Commit();
+        aModuleStreams[i]->Commit();
     }
     pDirStream->Commit();
     pVBAStream->Commit();
