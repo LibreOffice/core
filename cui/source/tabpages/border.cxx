@@ -599,6 +599,13 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
     m_pSynchronizeCB->Check(mbSync);
 }
 
+void SvxBorderTabPage::ChangesApplied()
+{
+    m_pLeftMF->SaveValue();
+    m_pRightMF->SaveValue();
+    m_pTopMF->SaveValue();
+    m_pBottomMF->SaveValue();
+}
 
 
 SfxTabPage::sfxpg SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )

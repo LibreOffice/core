@@ -879,8 +879,6 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     pLangBox->SaveValueLBB();
 }
 
-
-
 bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp )
 {
     bool bModified = false;
@@ -1234,8 +1232,21 @@ void SvxCharNamePage::Reset( const SfxItemSet* rSet )
     SetPrevFontWidthScale( *rSet );
     UpdatePreview_Impl();
 }
-
-
+void  SvxCharNamePage::ChangesApplied()
+{
+    m_pWestFontNameLB->SaveValue();
+    m_pWestFontStyleLB->SaveValue();
+    m_pWestFontSizeLB->SaveValue();
+    m_pWestFontLanguageLB->SaveValueLBB();
+    m_pEastFontNameLB->SaveValue();
+    m_pEastFontStyleLB->SaveValue();
+    m_pEastFontSizeLB->SaveValue();
+    m_pEastFontLanguageLB->SaveValueLBB();
+    m_pCTLFontNameLB->SaveValue();
+    m_pCTLFontStyleLB->SaveValue();
+    m_pCTLFontSizeLB->SaveValue();
+    m_pCTLFontLanguageLB->SaveValueLBB();
+}
 
 bool SvxCharNamePage::FillItemSet( SfxItemSet* rSet )
 {
@@ -2216,6 +2227,11 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     m_pPreviewWin->Invalidate();
 
     // save this settings
+    ChangesApplied();
+}
+
+void  SvxCharEffectsPage::ChangesApplied()
+{
     m_pUnderlineLB->SaveValue();
     m_pUnderlineColorLB->SaveValue();
     m_pOverlineLB->SaveValue();
@@ -2231,8 +2247,8 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
     m_pBlinkingBtn->SaveValue();
     m_pHiddenBtn->SaveValue();
     m_pFontColorLB->SaveValue();
-}
 
+}
 
 
 bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
@@ -3200,10 +3216,15 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
                                         SID_ATTR_CHAR_WIDTH_FIT_TO_LINE ) ))
             m_pFitToLineCB->Hide();
     }
+    ChangesApplied();
+}
 
+void SvxCharPositionPage::ChangesApplied()
+{
     m_pHighPosBtn->SaveValue();
     m_pNormalPosBtn->SaveValue();
     m_pLowPosBtn->SaveValue();
+    m_pHighLowRB->SaveValue();
     m_p0degRB->SaveValue();
     m_p90degRB->SaveValue();
     m_p270degRB->SaveValue();
@@ -3213,7 +3234,6 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     m_pKerningMF->SaveValue();
     m_pPairKerningBtn->SaveValue();
 }
-
 
 
 bool SvxCharPositionPage::FillItemSet( SfxItemSet* rSet )
@@ -3554,8 +3574,6 @@ void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )
 
     SetPrevFontWidthScale( *rSet );
 }
-
-
 
 bool SvxCharTwoLinesPage::FillItemSet( SfxItemSet* rSet )
 {

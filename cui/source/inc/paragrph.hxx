@@ -109,6 +109,7 @@ public:
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void            ChangesApplied() SAL_OVERRIDE;
 
 
     void                    SetPageWidth( sal_uInt16 nPageWidth );
@@ -172,6 +173,7 @@ public:
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void            ChangesApplied() SAL_OVERRIDE;
 
     void                    EnableJustifyExt();
     virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
@@ -207,6 +209,7 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void        ChangesApplied() SAL_OVERRIDE;
 
     void                DisablePageBreak();
 
@@ -288,6 +291,7 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void        ChangesApplied() SAL_OVERRIDE;
 
 };
 

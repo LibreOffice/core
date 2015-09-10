@@ -264,6 +264,7 @@ public:
     virtual void            FillUserData();
     virtual bool            IsReadOnly() const;
     virtual void PageCreated (const SfxAllItemSet& aSet);
+    virtual void ChangesApplied();
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );
 
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);

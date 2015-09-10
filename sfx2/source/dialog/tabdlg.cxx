@@ -296,7 +296,9 @@ void SfxTabPage::PageCreated( const SfxAllItemSet& /*aSet*/ )
     DBG_ASSERT(false, "SfxTabPage::PageCreated should not be called");
 }
 
-
+void SfxTabPage::ChangesApplied()
+{
+}
 
 void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
 {
@@ -924,7 +926,18 @@ bool SfxTabDialog::Apply()
 {
     bool bApplied = false;
     if (PrepareLeaveCurrentPage())
+    {
          bApplied = (Ok() == RET_OK);
+         //let the pages update their saved values
+         GetInputSetImpl()->Put(*GetOutputItemSet());
+         sal_uInt16 pageCount = m_pTabCtrl->GetPageCount();
+         for (sal_uInt16 pageIdx = 0; pageIdx < pageCount; ++pageIdx)
+         {
+             SfxTabPage* pPage = dynamic_cast<SfxTabPage*> (m_pTabCtrl->GetTabPage(m_pTabCtrl->GetPageId(pageIdx)));
+             if (pPage)
+                pPage->ChangesApplied();
+         }
+    }
     return bApplied;
 }
 

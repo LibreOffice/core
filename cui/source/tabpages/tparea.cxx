@@ -461,6 +461,13 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
     }
 
     // save values
+    ChangesApplied();
+    bool bActive = InitPreview ( *rAttrs );
+    InvalidatePreview ( bActive );
+}
+
+void SvxTransparenceTabPage::ChangesApplied()
+{
     m_pMtrTransparent->SaveValue();
     m_pLbTrgrGradientType->SaveValue();
     m_pMtrTrgrCenterX->SaveValue();
@@ -469,9 +476,6 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
     m_pMtrTrgrBorder->SaveValue();
     m_pMtrTrgrStartValue->SaveValue();
     m_pMtrTrgrEndValue->SaveValue();
-
-    bool bActive = InitPreview ( *rAttrs );
-    InvalidatePreview ( bActive );
 }
 
 void SvxTransparenceTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -1815,6 +1819,27 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
     m_pMtrFldYOffset->SaveValue();
 }
 
+void SvxAreaTabPage::ChangesApplied()
+{
+    m_pMtrFldXSize->SaveValue();
+    m_pMtrFldYSize->SaveValue();
+    m_pTypeLB->SaveValue();
+    m_pLbColor->SaveValue();
+    m_pLbGradient->SaveValue();
+    m_pLbHatching->SaveValue();
+    m_pLbHatchBckgrdColor->SaveValue();
+    m_pLbBitmap->SaveValue();
+    m_pTsbStepCount->SaveValue();
+    m_pNumFldStepCount->SaveValue();
+    m_pTsbTile->SaveValue();
+    m_pTsbStretch->SaveValue();
+    m_pTsbScale->SaveValue();
+    m_pRbtRow->SaveValue();
+    m_pRbtColumn->SaveValue();
+    m_pMtrFldOffset->SaveValue();
+    m_pMtrFldXOffset->SaveValue();
+    m_pMtrFldYOffset->SaveValue();
+}
 
 
 VclPtr<SfxTabPage> SvxAreaTabPage::Create( vcl::Window* pWindow,

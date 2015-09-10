@@ -586,6 +586,20 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
     m_pContextualCB->SaveValue();
     m_pLineDist->SaveValue();
 }
+void SvxStdParagraphTabPage::ChangesApplied()
+{
+    m_pLeftIndent->SetValue(m_pLeftIndent->GetValue());
+    m_pRightIndent->SetValue(m_pRightIndent->GetValue());
+    m_pFLineIndent->SetValue(m_pFLineIndent->GetValue());
+    m_pLineDist->SaveValue();
+    m_pLineDistAtPercentBox->SaveValue();
+    m_pLineDistAtMetricBox->SaveValue();
+    m_pRegisterCB->SaveValue();
+    m_pTopDist->SetValue(m_pTopDist->GetValue());
+    m_pBottomDist->SetValue(m_pBottomDist->GetValue());
+    m_pContextualCB->SaveValue();
+    m_pAutoCB->SaveValue();
+}
 
 void SvxStdParagraphTabPage::EnableRelativeMode()
 {
@@ -1164,7 +1178,6 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     return bModified;
 }
-
 void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 {
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_ADJUST );
@@ -1260,6 +1273,18 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     m_pExpandCB->SaveValue();
 
     UpdateExample_Impl();
+}
+void SvxParaAlignTabPage::ChangesApplied()
+{
+    m_pTextDirectionLB->SaveValue();
+    m_pSnapToGridCB->SaveValue();
+    m_pVertAlignLB->SaveValue();
+    m_pLeft->SaveValue();
+    m_pRight->SaveValue();
+    m_pCenter->SaveValue();
+    m_pJustify->SaveValue();
+    m_pLastLineLB->SaveValue();
+    m_pExpandCB->SaveValue();
 }
 
 IMPL_LINK_NOARG_TYPED(SvxParaAlignTabPage, AlignHdl_Impl, Button*, void)
@@ -1548,7 +1573,6 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     return bModified;
 }
-
 void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
 {
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_HYPHENZONE );
@@ -1810,11 +1834,14 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     KeepTogetherHdl_Impl( 0 );
     WidowHdl_Impl( 0 );
     OrphanHdl_Impl( 0 );
-
+    ChangesApplied();
+}
+void SvxExtParagraphTabPage::ChangesApplied()
+{
     m_pHyphenBox->SaveValue();
-    m_pExtHyphenBeforeBox->SaveValue();
-    m_pExtHyphenAfterBox->SaveValue();
-    m_pMaxHyphenEdit->SaveValue();
+    m_pExtHyphenBeforeBox->SetValue(m_pExtHyphenBeforeBox->GetValue());
+    m_pExtHyphenAfterBox->SetValue(m_pExtHyphenAfterBox->GetValue());
+    m_pMaxHyphenEdit->SetValue(m_pMaxHyphenEdit->GetValue());
     m_pPageBreakBox->SaveValue();
     m_pBreakPositionLB->SaveValue();
     m_pBreakTypeLB->SaveValue();
@@ -1825,6 +1852,8 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     m_pKeepParaBox->SaveValue();
     m_pWidowBox->SaveValue();
     m_pOrphanBox->SaveValue();
+    m_pOrphanRowNo->SetValue(m_pOrphanRowNo->GetValue());
+    m_pWidowRowNo->SetValue(m_pWidowRowNo->GetValue());
 }
 
 SfxTabPage::sfxpg SvxExtParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -2251,7 +2280,12 @@ void SvxAsianTabPage::Reset( const SfxItemSet* rSet )
     //character distance not yet available
     lcl_SetBox(*rSet, SID_ATTR_PARA_SCRIPTSPACE, *m_pScriptSpaceCB );
 }
-
+void SvxAsianTabPage::ChangesApplied()
+{
+    m_pForbiddenRulesCB->SaveValue();
+    m_pHangingPunctCB->SaveValue();
+    m_pScriptSpaceCB->SaveValue();
+}
 IMPL_STATIC_LINK_TYPED( SvxAsianTabPage, ClickHdl_Impl, Button*, pBox, void )
 {
     static_cast<CheckBox*>(pBox)->EnableTriState( false );

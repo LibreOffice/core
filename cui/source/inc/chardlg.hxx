@@ -151,6 +151,7 @@ public:
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void        ChangesApplied() SAL_OVERRIDE;
 
     void                SetFontList( const SvxFontListItem& rItem );
     void                EnableRelativeMode();
@@ -233,6 +234,7 @@ public:
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void        ChangesApplied() SAL_OVERRIDE;
 
     void                DisableControls( sal_uInt16 nDisable );
     void                EnableFlash();
@@ -316,6 +318,7 @@ public:
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
+    virtual void        ChangesApplied() SAL_OVERRIDE;
     virtual void        FillUserData() SAL_OVERRIDE;
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();
