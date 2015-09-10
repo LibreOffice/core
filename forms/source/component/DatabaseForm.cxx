@@ -997,12 +997,13 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rN
     aContentDisp.append(rName);
     aContentDisp.append('\"');
     pChild->SetContentDisposition(aContentDisp.makeStringAndClear());
-    pChild->SetContentType(OUString("text/plain"));
 
     rtl_TextEncoding eSystemEncoding = osl_getThreadTextEncoding();
     const sal_Char* pBestMatchingEncoding = rtl_getBestMimeCharsetFromTextEncoding( eSystemEncoding );
     OUString aBestMatchingEncoding = OUString::createFromAscii(pBestMatchingEncoding);
-    pChild->SetContentTransferEncoding(aBestMatchingEncoding);
+    pChild->SetContentType(
+        "text/plain; charset=\"" + aBestMatchingEncoding + "\"");
+    pChild->SetContentTransferEncoding("8bit");
 
     // Body
     SvMemoryStream* pStream = new SvMemoryStream;
