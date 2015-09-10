@@ -130,8 +130,10 @@ $(eval $(call gb_Module_add_check_targets,desktop, \
     CppunitTest_desktop_version \
 ))
 
+ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_check_targets,desktop, \
     CppunitTest_desktop_lib \
 ))
+endif
 
 # vim: set ts=4 sw=4 et:
