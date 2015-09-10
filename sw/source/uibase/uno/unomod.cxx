@@ -707,33 +707,39 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case HANDLE_VIEWSET_ONLINE_LAYOUT :
         {
-            SwViewOption aOpt(*pView->GetWrtShell().GetViewOptions());
-            if (pView && !bVal != !aOpt.getBrowseMode())
+            if ( pView )
             {
-                aOpt.setBrowseMode( bVal );
-                pView->GetWrtShell().ApplyViewOptions( aOpt );
+                SwViewOption aOpt(*pView->GetWrtShell().GetViewOptions());
+                if (!bVal != !aOpt.getBrowseMode())
+                {
+                    aOpt.setBrowseMode( bVal );
+                    pView->GetWrtShell().ApplyViewOptions( aOpt );
 
-                // must be set in mpViewOption as this will overwrite settings in _post!
-                if(mpViewOption)
-                    mpViewOption->setBrowseMode(bVal);
+                    // must be set in mpViewOption as this will overwrite settings in _post!
+                    if(mpViewOption)
+                        mpViewOption->setBrowseMode(bVal);
 
-                pView->GetDocShell()->ToggleLayoutMode(pView);
+                    pView->GetDocShell()->ToggleLayoutMode(pView);
+                }
             }
         }
         break;
         case HANDLE_VIEWSET_HIDE_WHITESPACE:
         {
-            SwViewOption aOpt(*pView->GetWrtShell().GetViewOptions());
-            if (pView && !bVal != !aOpt.IsHideWhitespaceMode())
+            if ( pView )
             {
-                aOpt.SetHideWhitespaceMode( bVal );
-                pView->GetWrtShell().ApplyViewOptions( aOpt );
+                SwViewOption aOpt(*pView->GetWrtShell().GetViewOptions());
+                if (!bVal != !aOpt.IsHideWhitespaceMode())
+                {
+                    aOpt.SetHideWhitespaceMode( bVal );
+                    pView->GetWrtShell().ApplyViewOptions( aOpt );
 
-                // must be set in mpViewOption as this will overwrite settings in _post!
-                if(mpViewOption)
-                    mpViewOption->SetHideWhitespaceMode(bVal);
+                    // must be set in mpViewOption as this will overwrite settings in _post!
+                    if(mpViewOption)
+                        mpViewOption->SetHideWhitespaceMode(bVal);
 
-                pView->GetDocShell()->ToggleLayoutMode(pView);
+                    pView->GetDocShell()->ToggleLayoutMode(pView);
+                }
             }
         }
         break;
