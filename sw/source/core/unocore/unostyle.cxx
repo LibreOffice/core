@@ -1994,6 +1994,21 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             bDone = true;
             break;
         }
+        case RES_TEXT_VERT_ADJUST:
+        {
+            if( pDoc )
+            {
+                SwPageDesc* pPageDesc = pDoc->FindPageDesc( rBase.GetOldPageDesc().GetName() );
+                if( pPageDesc )
+                {
+                    drawing::TextVerticalAdjust nVA;
+                    rValue >>= nVA;
+                    pPageDesc->SetVerticalAdjustment( nVA );
+                }
+            }
+            bDone = true;
+            break;
+        }
         case FN_UNO_IS_AUTO_UPDATE:
         {
             bool bAuto = *static_cast<sal_Bool const *>(aValue.getValue());
