@@ -2378,6 +2378,19 @@ XMLHiddenTextImportContext::XMLHiddenTextImportContext(
 {
 }
 
+XMLHiddenTextImportContext::XMLHiddenTextImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_hidden_text, Element ),
+    sPropertyCondition(sAPI_condition),
+    sPropertyContent(sAPI_content),
+    sPropertyIsHidden(sAPI_is_hidden),
+    bConditionOK(false),
+    bStringOK(false),
+    bIsHidden(false)
+{
+}
+
 void XMLHiddenTextImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
