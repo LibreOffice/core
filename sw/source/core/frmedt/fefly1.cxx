@@ -1385,7 +1385,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
     return aResult;
 }
 
-SwFrameFormat* SwFEShell::WizzardGetFly()
+SwFrameFormat* SwFEShell::WizardGetFly()
 {
     // do not search the Fly via the layout. Now we can delete a frame
     // without a valid layout. ( e.g. for the wizards )

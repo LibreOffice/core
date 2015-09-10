@@ -327,7 +327,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                                 // dont leave the fly!!!
                                 pSh->Push();
                                 pSh->SttDoc();
-                                bool bInFly = 0 != pSh->WizzardGetFly();
+                                bool bInFly = 0 != pSh->WizardGetFly();
                                 pSh->Pop( bInFly );
 
                                 if( bInFly )

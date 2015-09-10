@@ -397,7 +397,7 @@ public:
     const SwFlyFrm *GetCurrFlyFrm() const { return FindFlyFrm(); }
 
     /// Find/delete fly containing the cursor.
-    SwFrameFormat* WizzardGetFly();
+    SwFrameFormat* WizardGetFly();
 
     /// Independent selecting of flys.
     bool GotoNextFly( GotoObjFlags eType = GotoObjFlags::FlyAny )
