@@ -54,6 +54,7 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
+    virtual void        ChangesApplied() SAL_OVERRIDE;
 
     void                HideShadowControls();
     virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
