@@ -114,7 +114,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
         }
 
         if (nDelFlag & IDF_NOTE)
-            DeleteCellNotes(aBlockPos, nRow1, nRow2);
+            DeleteCellNotes(aBlockPos, nRow1, nRow2, false);
 
         if (nDelFlag & IDF_EDITATTR)
             RemoveEditAttribs(nRow1, nRow2);
