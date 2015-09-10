@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_be1141b2",
+        "filename": "fpicker/source/office/iodlgimp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-10T12:14:39Z",
+      "side": 1,
+      "message": "hmmm.... actually in this case, the unique_ptr looks unnecessary - the class has only 2 OUString members which are rather like a shared_ptr in behavior, so just copying the instances on vector resizes should work fine and not cause performance trouble (this filter list probably has 100 entries or so in practice).",
+      "revId": "68a3a20d10d6e450e0819260e75c4aa24855b450",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_9e16fda5",
+        "filename": "fpicker/source/office/iodlgimp.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-10T12:14:39Z",
+      "side": 1,
+      "message": "while you\u0027re renaming, please pick a better name - identifiers that start with underscore are \"reserved\" by the C++ standard.\n\nusually we use \"m_\" prefix for members.\n\n(a follow-up commit could rename the other badly named members here ;)",
+      "revId": "68a3a20d10d6e450e0819260e75c4aa24855b450",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
