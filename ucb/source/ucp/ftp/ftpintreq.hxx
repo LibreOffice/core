@@ -71,30 +71,25 @@ namespace ftp {
 
 
 
-    class XInteractionRequestImpl : public cppu::WeakImplHelper<
-        css::task::XInteractionRequest >
+    class XInteractionRequestImpl
     {
     public:
 
         XInteractionRequestImpl();
 
-        com::sun::star::uno::Any SAL_CALL getRequest(  )
-            throw (css::uno::RuntimeException,
-                   std::exception) SAL_OVERRIDE;
-
-        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL
-        getContinuations(  )
-            throw (css::uno::RuntimeException,
-                   std::exception) SAL_OVERRIDE;
-
         bool approved() const;
+
+        css::uno::Reference<css::task::XInteractionRequest> const& getRequest() const
+        {
+            return m_xRequest;
+        }
 
     private:
 
         XInteractionApproveImpl* p1;
         XInteractionDisapproveImpl* p2;
 
-        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_aSeq;
+        css::uno::Reference<css::task::XInteractionRequest> m_xRequest;
     };
 
 }

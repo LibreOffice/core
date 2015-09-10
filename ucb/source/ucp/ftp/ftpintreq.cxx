@@ -18,9 +18,12 @@
  */
 
 
+#include "ftpintreq.hxx"
+
+#include <comphelper/interaction.hxx>
+
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
-#include "ftpintreq.hxx"
 
 using namespace cppu;
 using namespace com::sun::star;
@@ -65,28 +68,15 @@ void SAL_CALL XInteractionDisapproveImpl::select()
 XInteractionRequestImpl::XInteractionRequestImpl()
     : p1( new XInteractionApproveImpl )
     , p2( new XInteractionDisapproveImpl )
-    , m_aSeq( 2 )
 {
-    m_aSeq[0] = Reference<XInteractionContinuation>(p1);
-    m_aSeq[1] = Reference<XInteractionContinuation>(p2);
-}
-
-Any SAL_CALL XInteractionRequestImpl::getRequest(  )
-    throw (RuntimeException,
-           std::exception)
-{
+    uno::Sequence<uno::Reference<task::XInteractionContinuation>> continuations{
+        Reference<XInteractionContinuation>(p1),
+        Reference<XInteractionContinuation>(p2) };
     Any aAny;
     UnsupportedNameClashException excep;
     excep.NameClash = NameClash::ERROR;
     aAny <<= excep;
-    return aAny;
-}
-
-Sequence<Reference<XInteractionContinuation > > SAL_CALL XInteractionRequestImpl::getContinuations()
-    throw (RuntimeException,
-           std::exception)
-{
-    return m_aSeq;
+    m_xRequest.set(new ::comphelper::OInteractionRequest(aAny, continuations));
 }
 
 bool XInteractionRequestImpl::approved() const
