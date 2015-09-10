@@ -56,7 +56,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>
 #include <comphelper/anytostring.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <ooo/vba/XCollection.hpp>
 #include <ooo/vba/XControlProvider.hpp>

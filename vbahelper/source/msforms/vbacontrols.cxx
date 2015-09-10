@@ -30,7 +30,7 @@
 
 #include "vbacontrols.hxx"
 #include "vbacontrol.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/XControlProvider.hpp>
 #include <unordered_map>
 
@@ -42,7 +42,7 @@ typedef  std::unordered_map< OUString, sal_Int32, OUStringHash,
                              std::equal_to< OUString >  > ControlIndexMap;
 typedef  std::vector< uno::Reference< awt::XControl > > ControlVec;
 
-class ControlArrayWrapper : public ::cppu::WeakImplHelper2< container::XNameAccess, container::XIndexAccess >
+class ControlArrayWrapper : public ::cppu::WeakImplHelper< container::XNameAccess, container::XIndexAccess >
 {
     uno::Reference< awt::XControlContainer > mxDialog;
     uno::Sequence< OUString > msNames;

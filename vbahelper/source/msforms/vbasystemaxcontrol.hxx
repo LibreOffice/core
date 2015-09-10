@@ -19,13 +19,13 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBASYSTEMAXCONTROL_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBASYSTEMAXCONTROL_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/XInvocation.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, css::script::XInvocation > SystemAXControlImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, css::script::XInvocation > SystemAXControlImpl_BASE;
 
 class VbaSystemAXControl : public SystemAXControlImpl_BASE
 {

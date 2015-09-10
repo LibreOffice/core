@@ -20,13 +20,13 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBASCROLLBAR_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBASCROLLBAR_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XScrollBar.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XScrollBar > ScrollBarImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XScrollBar > ScrollBarImpl_BASE;
 
 class ScVbaScrollBar : public ScrollBarImpl_BASE
 {

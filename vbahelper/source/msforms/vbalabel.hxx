@@ -18,14 +18,13 @@
  */
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALABEL_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALABEL_HXX
-#include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/msforms/XLabel.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
-typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XLabel, css::script::XDefaultProperty  > LabelImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XLabel, css::script::XDefaultProperty  > LabelImpl_BASE;
 
 class ScVbaLabel : public LabelImpl_BASE
 {

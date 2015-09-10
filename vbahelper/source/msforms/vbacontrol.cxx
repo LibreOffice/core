@@ -59,6 +59,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <svx/svdobj.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -94,7 +95,7 @@ ScVbaControl::getWindowPeer() throw (uno::RuntimeException)
 }
 
 //ScVbaControlListener
-class ScVbaControlListener: public cppu::WeakImplHelper1< lang::XEventListener >
+class ScVbaControlListener: public cppu::WeakImplHelper< lang::XEventListener >
 {
 private:
     ScVbaControl *pControl;
@@ -765,7 +766,7 @@ void ScVbaControl::setLocked( bool bLocked ) throw (uno::RuntimeException)
     m_xProps->setPropertyValue( "ReadOnly" , uno::makeAny( bLocked ) );
 }
 
-class ControlProviderImpl : public cppu::WeakImplHelper1< XControlProvider >
+class ControlProviderImpl : public cppu::WeakImplHelper< XControlProvider >
 {
     uno::Reference< uno::XComponentContext > m_xCtx;
 public:

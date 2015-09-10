@@ -21,9 +21,9 @@
 #include <ooo/vba/msforms/XRadioButton.hpp>
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
-typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XRadioButton, css::script::XDefaultProperty > RadioButtonImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XRadioButton, css::script::XDefaultProperty > RadioButtonImpl_BASE;
 
 class ScVbaRadioButton : public RadioButtonImpl_BASE
 {

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROLS_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROLS_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/msforms/XControls.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 

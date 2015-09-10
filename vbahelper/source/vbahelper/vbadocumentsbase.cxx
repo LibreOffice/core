@@ -21,8 +21,7 @@
 
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -67,7 +66,7 @@ typedef std::vector < uno::Reference< frame::XModel > > Documents;
 // #FIXME clearly this is a candidate for some sort of helper base class as
 // this is a copy of SelectedSheetsEnum ( vbawindow.cxx )
 
-class DocumentsEnumImpl : public ::cppu::WeakImplHelper1< container::XEnumeration >
+class DocumentsEnumImpl : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
     uno::Reference< uno::XComponentContext > m_xContext;
     Documents m_documents;
@@ -112,7 +111,7 @@ public:
 // and vector only, and the sub-class does everything else
 // => ctor, createEnumeration & factory method need be defined ( to be called
 // by getByIndex, getByName )
-typedef ::cppu::WeakImplHelper3< container::XEnumerationAccess
+typedef ::cppu::WeakImplHelper< container::XEnumerationAccess
     , com::sun::star::container::XIndexAccess
     , com::sun::star::container::XNameAccess
     > DocumentsAccessImpl_BASE;

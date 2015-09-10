@@ -20,13 +20,13 @@
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAFRAME_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAFRAME_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XFrame.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper1< ScVbaControl, ov::msforms::XFrame > FrameImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XFrame > FrameImpl_BASE;
 
 class ScVbaFrame : public FrameImpl_BASE
 {

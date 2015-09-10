@@ -18,13 +18,13 @@
  */
 #ifndef INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATOGGLEBUTTON_HXX
 #define INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBATOGGLEBUTTON_HXX
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XToggleButton.hpp>
 
 #include "vbacontrol.hxx"
 #include <vbahelper/vbahelper.hxx>
 
-typedef cppu::ImplInheritanceHelper2< ScVbaControl, ov::msforms::XToggleButton, css::script::XDefaultProperty  > ToggleButtonImpl_BASE;
+typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XToggleButton, css::script::XDefaultProperty  > ToggleButtonImpl_BASE;
 
 class ScVbaToggleButton : public ToggleButtonImpl_BASE
 {
