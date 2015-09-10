@@ -763,6 +763,55 @@ public:
     }
 
     /**
+      Check whether this string starts with a given string, ignoring the case of
+      ASCII letters.
+
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param str the substring to be compared
+
+      @param rest if non-null, and this function returns true, then assign a
+      copy of the remainder of this string to *rest.
+
+      @return true if and only if the given str appears as a substring at the
+      start of this string, ignoring the case of ASCII letters ("A"--"Z" and
+      "a"--"z")
+
+      @since LibreOffice 5.1
+    */
+    bool startsWithIgnoreAsciiCase(OString const & str, OString * rest = 0)
+        const
+    {
+        bool b = matchIgnoreAsciiCase(str);
+        if (b && rest != 0) {
+            *rest = copy(str.getLength());
+        }
+        return b;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 5.1
+    */
+    template< typename T >
+    typename libreoffice_internal::ConstCharArrayDetector< T, bool >::Type
+    startsWithIgnoreAsciiCase(T & literal, OString * rest = 0) const
+    {
+        RTL_STRING_CONST_FUNCTION
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        bool b = matchIgnoreAsciiCase(literal);
+        if (b && rest != 0) {
+            *rest = copy(
+                libreoffice_internal::ConstCharArrayDetector<T>::length);
+        }
+        return b;
+    }
+
+    /**
       Check whether this string ends with a given substring.
 
       @param str the substring to be compared
