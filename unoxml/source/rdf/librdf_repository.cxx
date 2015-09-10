@@ -54,8 +54,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -273,7 +272,7 @@ private:
 class librdf_Repository:
     private boost::noncopyable,
 //    private ::cppu::BaseMutex,
-    public ::cppu::WeakImplHelper3<
+    public ::cppu::WeakImplHelper<
         lang::XServiceInfo,
         rdf::XDocumentRepository,
         lang::XInitialization>
@@ -457,7 +456,7 @@ private:
  */
 class librdf_GraphResult:
     private boost::noncopyable,
-    public ::cppu::WeakImplHelper1<
+    public ::cppu::WeakImplHelper<
         container::XEnumeration>
 {
 public:
@@ -571,7 +570,7 @@ throw (uno::RuntimeException, container::NoSuchElementException,
  */
 class librdf_QuerySelectResult:
     private boost::noncopyable,
-    public ::cppu::WeakImplHelper1<
+    public ::cppu::WeakImplHelper<
         rdf::XQuerySelectResult>
 {
 public:
@@ -697,7 +696,7 @@ librdf_QuerySelectResult::getBindingNames() throw (uno::RuntimeException, std::e
  */
 class librdf_NamedGraph:
     private boost::noncopyable,
-    public ::cppu::WeakImplHelper1<
+    public ::cppu::WeakImplHelper<
         rdf::XNamedGraph>
 {
 public:

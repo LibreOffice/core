@@ -29,11 +29,12 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <node.hxx>
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CNode, css::xml::dom::XDocumentType >
+    typedef ::cppu::ImplInheritanceHelper< CNode, css::xml::dom::XDocumentType >
         CDocumentType_Base;
 
     class CDocumentType

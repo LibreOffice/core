@@ -21,6 +21,7 @@
 
 #include <string.h>
 
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 
 #include <element.hxx>
@@ -32,7 +33,7 @@ using namespace css::xml::dom::events;
 
 namespace
 {
-    class WeakEventListener : public ::cppu::WeakImplHelper1<css::xml::dom::events::XEventListener>
+    class WeakEventListener : public ::cppu::WeakImplHelper<css::xml::dom::events::XEventListener>
     {
     private:
         css::uno::WeakReference<css::xml::dom::events::XEventListener> mxOwner;

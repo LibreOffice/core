@@ -26,13 +26,13 @@
 #include <com/sun/star/xml/dom/events/XUIEvent.hpp>
 #include <com/sun/star/xml/dom/views/XAbstractView.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "event.hxx"
 
 namespace DOM { namespace events {
 
-typedef ::cppu::ImplInheritanceHelper1< CEvent, css::xml::dom::events::XUIEvent > CUIEvent_Base;
+typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XUIEvent > CUIEvent_Base;
 
 class CUIEvent
     : public CUIEvent_Base

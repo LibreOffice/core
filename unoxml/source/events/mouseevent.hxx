@@ -23,13 +23,13 @@
 #include <com/sun/star/xml/dom/events/PhaseType.hpp>
 #include <com/sun/star/xml/dom/events/XMouseEvent.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "uievent.hxx"
 
 namespace DOM { namespace events {
 
-typedef ::cppu::ImplInheritanceHelper1< CUIEvent, css::xml::dom::events::XMouseEvent >
+typedef ::cppu::ImplInheritanceHelper< CUIEvent, css::xml::dom::events::XMouseEvent >
     CMouseEvent_Base;
 
 class CMouseEvent

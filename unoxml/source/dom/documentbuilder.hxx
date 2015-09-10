@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -41,7 +41,7 @@
 
 namespace DOM
 {
-    typedef ::cppu::WeakImplHelper2
+    typedef ::cppu::WeakImplHelper
         < css::xml::dom::XDocumentBuilder
         , css::lang::XServiceInfo
         > CDocumentBuilder_Base;

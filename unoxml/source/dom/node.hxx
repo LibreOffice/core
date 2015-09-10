@@ -27,7 +27,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <sax/fastattribs.hxx>
 
@@ -94,7 +94,7 @@ namespace DOM
 
     class CDocument;
 
-    class CNode : public cppu::WeakImplHelper3< css::xml::dom::XNode, css::lang::XUnoTunnel, css::xml::dom::events::XEventTarget >
+    class CNode : public cppu::WeakImplHelper< css::xml::dom::XNode, css::lang::XUnoTunnel, css::xml::dom::events::XEventTarget >
     {
         friend class CDocument;
         friend class CElement;

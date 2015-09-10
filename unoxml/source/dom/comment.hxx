@@ -23,11 +23,12 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XComment.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <characterdata.hxx>
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CCharacterData, css::xml::dom::XComment >
+    typedef ::cppu::ImplInheritanceHelper< CCharacterData, css::xml::dom::XComment >
         CComment_Base;
 
     class CComment

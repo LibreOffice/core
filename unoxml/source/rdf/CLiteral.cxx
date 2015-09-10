@@ -20,7 +20,7 @@
 #include "CNodes.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -35,7 +35,7 @@
 namespace {
 
 class CLiteral:
-    public ::cppu::WeakImplHelper3<
+    public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::lang::XInitialization,
         css::rdf::XLiteral>,

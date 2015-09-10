@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -42,7 +42,7 @@ namespace DOM {
 namespace XPath
 {
 
-    class CNodeList : public cppu::WeakImplHelper1< css::xml::dom::XNodeList >
+    class CNodeList : public cppu::WeakImplHelper< css::xml::dom::XNodeList >
     {
     private:
         /// #i115995# keep document alive

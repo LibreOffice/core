@@ -36,8 +36,7 @@
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
 #include <com/sun/star/xml/dom/events/XEventListener.hpp>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace DOM
 {
@@ -46,7 +45,7 @@ namespace DOM
     typedef std::vector< xmlNodePtr > nodevector_t;
 
     class CElementListImpl
-        : public cppu::WeakImplHelper2< css::xml::dom::XNodeList,
+        : public cppu::WeakImplHelper< css::xml::dom::XNodeList,
                 css::xml::dom::events::XEventListener >
     {
     private:
@@ -89,7 +88,7 @@ namespace DOM
     };
 
     class CElementList
-        : public cppu::WeakImplHelper2< css::xml::dom::XNodeList,
+        : public cppu::WeakImplHelper< css::xml::dom::XNodeList,
                 css::xml::dom::events::XEventListener >
     {
     private:

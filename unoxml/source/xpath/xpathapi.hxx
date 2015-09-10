@@ -25,7 +25,7 @@
 
 #include <sal/types.h>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
@@ -48,7 +48,7 @@ namespace XPath
     typedef std::map<OUString, OUString> nsmap_t;
     typedef std::vector< css::uno::Reference<css::xml::xpath::XXPathExtension> > extensions_t;
 
-    typedef ::cppu::WeakImplHelper2
+    typedef ::cppu::WeakImplHelper
         <   css::xml::xpath::XXPathAPI
         ,   css::lang::XServiceInfo
         > CXPathAPI_Base;

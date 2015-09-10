@@ -27,14 +27,14 @@
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace DOM
 {
     class CNode;
 
     class CChildList
-        : public cppu::WeakImplHelper1< css::xml::dom::XNodeList >
+        : public cppu::WeakImplHelper< css::xml::dom::XNodeList >
     {
     private:
         ::rtl::Reference<CNode> const m_pNode;

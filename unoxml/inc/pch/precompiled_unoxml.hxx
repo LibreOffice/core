@@ -38,7 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <libxml/tree.h>

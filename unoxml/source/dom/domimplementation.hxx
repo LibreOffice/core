@@ -27,12 +27,12 @@
 #include <com/sun/star/xml/dom/XDocumentType.hpp>
 #include <com/sun/star/xml/dom/XDOMImplementation.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace DOM
 {
     class CDOMImplementation
-        : public cppu::WeakImplHelper1< css::xml::dom::XDOMImplementation >
+        : public cppu::WeakImplHelper< css::xml::dom::XDOMImplementation >
     {
 
     public:

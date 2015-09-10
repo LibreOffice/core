@@ -24,7 +24,7 @@
 
 #include <sal/types.h>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -34,7 +34,7 @@
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CCharacterData, css::xml::dom::XText > CText_Base;
+    typedef ::cppu::ImplInheritanceHelper< CCharacterData, css::xml::dom::XText > CText_Base;
 
     class CText
         : public CText_Base

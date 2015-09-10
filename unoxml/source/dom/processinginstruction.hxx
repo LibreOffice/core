@@ -25,11 +25,12 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XProcessingInstruction.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <node.hxx>
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CNode, css::xml::dom::XProcessingInstruction >
+    typedef ::cppu::ImplInheritanceHelper< CNode, css::xml::dom::XProcessingInstruction >
         CProcessingInstruction_Base;
 
     class CProcessingInstruction

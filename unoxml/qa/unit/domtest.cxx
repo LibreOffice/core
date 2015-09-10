@@ -24,7 +24,7 @@
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppunit/TestFixture.h>
@@ -89,7 +89,7 @@ static const char errorTestFile[] =
 static const char fatalTestFile[] = "";
 
 struct ErrorHandler
-    : public ::cppu::WeakImplHelper1< xml::sax::XErrorHandler >
+    : public ::cppu::WeakImplHelper< xml::sax::XErrorHandler >
 {
     sal_uInt32 mnErrCount;
     sal_uInt32 mnFatalCount;
@@ -117,7 +117,7 @@ struct ErrorHandler
 };
 
 struct DocumentHandler
-    : public ::cppu::WeakImplHelper1< xml::sax::XFastDocumentHandler >
+    : public ::cppu::WeakImplHelper< xml::sax::XFastDocumentHandler >
 {
     // XFastContextHandler
     virtual void SAL_CALL startFastElement( ::sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList >& ) throw (xml::sax::SAXException, uno::RuntimeException) SAL_OVERRIDE
@@ -169,7 +169,7 @@ struct DocumentHandler
 };
 
 struct TokenHandler
-    : public ::cppu::WeakImplHelper1< xml::sax::XFastTokenHandler >
+    : public ::cppu::WeakImplHelper< xml::sax::XFastTokenHandler >
 {
     virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence< ::sal_Int8 >& Identifier ) throw (uno::RuntimeException) SAL_OVERRIDE
     {

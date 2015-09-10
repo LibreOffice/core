@@ -28,11 +28,12 @@
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <node.hxx>
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1<CNode, css::xml::dom::XElement > CElement_Base;
+    typedef ::cppu::ImplInheritanceHelper<CNode, css::xml::dom::XElement > CElement_Base;
 
     class CElement
         : public CElement_Base

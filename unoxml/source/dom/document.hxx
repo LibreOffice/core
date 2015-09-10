@@ -27,7 +27,7 @@
 
 #include <sal/types.h>
 
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -56,7 +56,7 @@ namespace DOM
 
     class CElement;
 
-    typedef ::cppu::ImplInheritanceHelper6<
+    typedef ::cppu::ImplInheritanceHelper<
             CNode, css::xml::dom::XDocument, css::xml::dom::events::XDocumentEvent,
             css::io::XActiveDataControl, css::io::XActiveDataSource,
             css::xml::sax::XSAXSerializable, css::xml::sax::XFastSAXSerializable>
