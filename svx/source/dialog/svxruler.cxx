@@ -3181,68 +3181,61 @@ bool SvxRuler::StartDrag()
 
     bool bOk = true;
 
-    if(bOk)
+    lInitialDragPos = GetDragPos();
+    switch(GetDragType())
     {
-        lInitialDragPos = GetDragPos();
-        switch(GetDragType())
-        {
-            case RULER_TYPE_MARGIN1:        // left edge of the surrounding Frame
-            case RULER_TYPE_MARGIN2:        // right edge of the surrounding Frame
-                if((bHorz && mxLRSpaceItem.get()) || (!bHorz && mxULSpaceItem.get()))
-                {
-                    if(!mxColumnItem.get())
-                        EvalModifier();
-                    else
-                        nDragType = SvxRulerDragFlags::OBJECT;
-                }
-                else
-                {
-                    bOk = false;
-                }
-                break;
-            case RULER_TYPE_BORDER: // Table, column (Modifier)
-                if(mxColumnItem.get())
-                {
-                    nDragOffset = 0;
-                    if (!mxColumnItem->IsTable())
-                        nDragOffset = GetDragPos() - mpBorders[GetDragAryPos()].nPos;
-                    EvalModifier();
-                }
-                else
-                    nDragOffset = 0;
-                break;
-            case RULER_TYPE_INDENT: // Paragraph indents (Modifier)
+        case RULER_TYPE_MARGIN1:        // left edge of the surrounding Frame
+        case RULER_TYPE_MARGIN2:        // right edge of the surrounding Frame
+            if((bHorz && mxLRSpaceItem.get()) || (!bHorz && mxULSpaceItem.get()))
             {
-                if( bContentProtected )
-                    return false;
-                sal_uInt16 nIndent = INDENT_LEFT_MARGIN;
-                if((nIndent) == GetDragAryPos() + INDENT_GAP) {  // Left paragraph indent
-                    mpIndents[0] = mpIndents[INDENT_FIRST_LINE];
-                    mpIndents[0].nStyle |= RULER_STYLE_DONTKNOW;
+                if(!mxColumnItem.get())
                     EvalModifier();
-                }
                 else
-                {
                     nDragType = SvxRulerDragFlags::OBJECT;
-                }
-                mpIndents[1] = mpIndents[GetDragAryPos() + INDENT_GAP];
-                mpIndents[1].nStyle |= RULER_STYLE_DONTKNOW;
-                break;
             }
-            case RULER_TYPE_TAB: // Tabs (Modifier)
-                if( bContentProtected )
-                    return false;
+            else
+            {
+                bOk = false;
+            }
+            break;
+        case RULER_TYPE_BORDER: // Table, column (Modifier)
+            if(mxColumnItem.get())
+            {
+                nDragOffset = 0;
+                if (!mxColumnItem->IsTable())
+                    nDragOffset = GetDragPos() - mpBorders[GetDragAryPos()].nPos;
                 EvalModifier();
-                mpTabs[0] = mpTabs[GetDragAryPos() + 1];
-                mpTabs[0].nStyle |= RULER_STYLE_DONTKNOW;
-                break;
-            default:
-                nDragType = SvxRulerDragFlags::NONE;
+            }
+            else
+                nDragOffset = 0;
+            break;
+        case RULER_TYPE_INDENT: // Paragraph indents (Modifier)
+        {
+            if( bContentProtected )
+                return false;
+            sal_uInt16 nIndent = INDENT_LEFT_MARGIN;
+            if((nIndent) == GetDragAryPos() + INDENT_GAP) {  // Left paragraph indent
+                mpIndents[0] = mpIndents[INDENT_FIRST_LINE];
+                mpIndents[0].nStyle |= RULER_STYLE_DONTKNOW;
+                EvalModifier();
+            }
+            else
+            {
+                nDragType = SvxRulerDragFlags::OBJECT;
+            }
+            mpIndents[1] = mpIndents[GetDragAryPos() + INDENT_GAP];
+            mpIndents[1].nStyle |= RULER_STYLE_DONTKNOW;
+            break;
         }
-    }
-    else
-    {
-        nDragType = SvxRulerDragFlags::NONE;
+        case RULER_TYPE_TAB: // Tabs (Modifier)
+            if( bContentProtected )
+                return false;
+            EvalModifier();
+            mpTabs[0] = mpTabs[GetDragAryPos() + 1];
+            mpTabs[0].nStyle |= RULER_STYLE_DONTKNOW;
+            break;
+        default:
+            nDragType = SvxRulerDragFlags::NONE;
     }
 
     if(bOk)
