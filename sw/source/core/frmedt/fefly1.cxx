@@ -1053,7 +1053,7 @@ bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
     return bRet;
 }
 
-SfxItemSet SwFEShell::makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor) const
+SfxItemSet SwFEShell::makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor)
 {
     // The set also includes VERT/HORI_ORIENT, because the align
     // shall be changed in FEShell::SetFlyFrmAttr/SetFlyFrmAnchor,

@@ -1013,7 +1013,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             else if (rSh.IsFrmSelected())
             {
                 SwFormatAnchor aAnc(eSet, rSh.GetPhyPageNum());
-                SfxItemSet aSet(rSh.makeItemSetFromFormatAnchor(GetPool(), aAnc));
+                SfxItemSet aSet(SwFEShell::makeItemSetFromFormatAnchor(GetPool(), aAnc));
                 rSh.SetFlyFrmAttr(aSet);
             }
             // if new anchor is 'as char' and it is a Math object and the usual

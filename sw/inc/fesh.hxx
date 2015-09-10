@@ -380,7 +380,7 @@ public:
     bool IsFrmSelected() const;
     bool GetFlyFrmAttr( SfxItemSet &rSet ) const;
     bool SetFlyFrmAttr( SfxItemSet &rSet );
-    SfxItemSet makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor) const;
+    static SfxItemSet makeItemSetFromFormatAnchor(SfxItemPool& rPool, const SwFormatAnchor &rAnchor);
     bool ResetFlyFrmAttr( sal_uInt16 nWhich, const SfxItemSet* pSet = 0 );
     const SwFrameFormat *NewFlyFrm( const SfxItemSet &rSet, bool bAnchValid = false,
                          SwFrameFormat *pParent = 0 );
