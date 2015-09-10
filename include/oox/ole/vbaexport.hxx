@@ -74,17 +74,17 @@ private:
     // DecompressedEnd according to the spec
     sal_uInt64 mnDecompressedEnd;
 
-    void PackCompressedChunkSize(size_t nSize, sal_uInt16& rHeader);
+    static void PackCompressedChunkSize(size_t nSize, sal_uInt16& rHeader);
 
-    void PackCompressedChunkFlag(bool bCompressed, sal_uInt16& rHeader);
+    static void PackCompressedChunkFlag(bool bCompressed, sal_uInt16& rHeader);
 
-    void PackCompressedChunkSignature(sal_uInt16& rHeader);
+    static void PackCompressedChunkSignature(sal_uInt16& rHeader);
 
     void compressTokenSequence();
 
     void compressToken(size_t index, sal_uInt8& nFlagByte);
 
-    void SetFlagBit(size_t index, bool bVal, sal_uInt8& rFlag);
+    static void SetFlagBit(size_t index, bool bVal, sal_uInt8& rFlag);
 
     sal_uInt16 CopyToken(size_t nLength, size_t nOffset);
 
