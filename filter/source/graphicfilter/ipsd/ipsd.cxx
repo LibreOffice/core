@@ -172,9 +172,6 @@ bool PSDReader::ReadPSD(Graphic & rGraphic )
 
 bool PSDReader::ImplReadHeader()
 {
-    sal_uInt16  nCompression;
-    sal_uInt32  nColorLength, nResourceLength, nLayerMaskLength;
-
     mpFileHeader = new PSDFileHeader;
 
     m_rPSD.ReadUInt32( mpFileHeader->nSignature ).ReadUInt16( mpFileHeader->nVersion ).ReadUInt32( mpFileHeader->nPad1 ).        ReadUInt16( mpFileHeader->nPad2 ).ReadUInt16( mpFileHeader->nChannels ).ReadUInt32( mpFileHeader->nRows ).            ReadUInt32( mpFileHeader->nColumns ).ReadUInt16( mpFileHeader->nDepth ).ReadUInt16( mpFileHeader->nMode );
@@ -194,6 +191,7 @@ bool PSDReader::ImplReadHeader()
 
     mnDestBitDepth = ( nDepth == 16 ) ? 8 : nDepth;
 
+    sal_uInt32 nColorLength(0);
     m_rPSD.ReadUInt32( nColorLength );
     if ( mpFileHeader->nMode == PSD_CMYK )
     {
@@ -270,7 +268,10 @@ bool PSDReader::ImplReadHeader()
         default:
             return false;
     }
-    m_rPSD.ReadUInt32( nResourceLength );
+    sal_uInt32 nResourceLength(0);
+    m_rPSD.ReadUInt32(nResourceLength);
+    if (nResourceLength > m_rPSD.remainingSize())
+        return false;
     sal_uInt32 nLayerPos = m_rPSD.Tell() + nResourceLength;
 
     // this is a loop over the resource entries to get the resolution info
@@ -291,8 +292,8 @@ bool PSDReader::ImplReadHeader()
         if ( nResEntryLen & 1 )
             nResEntryLen++;             // the resource entries are padded
         sal_uInt32 nCurrentPos = m_rPSD.Tell();
-        if ( ( nResEntryLen + nCurrentPos ) > nLayerPos )   // check if size
-            break;                                          // is possible
+        if (nResEntryLen > (nLayerPos - nCurrentPos))   // check if size
+            break;                                      // is possible
         switch( nUniqueID )
         {
             case 0x3ed :    // UID for the resolution info
@@ -307,10 +308,12 @@ bool PSDReader::ImplReadHeader()
         m_rPSD.Seek( nCurrentPos + nResEntryLen );          // set the stream to the next
     }                                                       // resource entry
     m_rPSD.Seek( nLayerPos );
+    sal_uInt32 nLayerMaskLength(0);
     m_rPSD.ReadUInt32( nLayerMaskLength );
     m_rPSD.SeekRel( nLayerMaskLength );
 
-    m_rPSD.ReadUInt16( nCompression );
+    sal_uInt16 nCompression(0);
+    m_rPSD.ReadUInt16(nCompression);
     if ( nCompression == 0 )
     {
         mbCompression = false;
@@ -325,8 +328,6 @@ bool PSDReader::ImplReadHeader()
 
     return true;
 }
-
-
 
 bool PSDReader::ImplReadBody()
 {
