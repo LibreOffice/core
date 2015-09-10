@@ -2896,6 +2896,17 @@ void ChartExport::_exportAxis(
             FSEND );
     }
 
+    // TODO: MSO does not support random axis cross position for
+    // category axis, so we ideally need an algorithm that decides
+    // when to map the crossing to the tick mark and when to the
+    // middle of the category
+    if (nAxisType == XML_valAx)
+    {
+        pFS->singleElement( FSNS( XML_c, XML_crossBetween ),
+                XML_val, "midCat",
+                FSEND );
+    }
+
     // majorUnit
     bool bAutoStepMain = false;
     if(GetProperty( xAxisProp, "AutoStepMain" ) )
