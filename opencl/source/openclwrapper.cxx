@@ -501,6 +501,11 @@ bool initOpenCLRunEnv( GPUEnv *gpuInfo )
     gpuInfo->mnKhrFp64Flag = bKhrFp64;
     gpuInfo->mnAmdFp64Flag = bAmdFp64;
 
+    gpuInfo->mnPreferredVectorWidthFloat = 0;
+
+    clGetDeviceInfo(gpuInfo->mpArryDevsID[0], CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, sizeof(cl_uint),
+                    &gpuInfo->mnPreferredVectorWidthFloat, NULL);
+
     return false;
 }
 
