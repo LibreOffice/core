@@ -27,14 +27,14 @@
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace DOM
 {
     class CDocumentType;
 
     class CEntitiesMap
-        : public cppu::WeakImplHelper1< css::xml::dom::XNamedNodeMap >
+        : public cppu::WeakImplHelper< css::xml::dom::XNamedNodeMap >
     {
     private:
         ::rtl::Reference<CDocumentType> const m_pDocType;

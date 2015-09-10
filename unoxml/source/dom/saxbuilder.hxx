@@ -25,7 +25,7 @@
 
 #include <sal/types.h>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
@@ -50,7 +50,7 @@ namespace DOM
     typedef std::stack< NSMap > NSStack;
 
     class  CSAXDocumentBuilder
-        : public ::cppu::WeakImplHelper2< css::xml::dom::XSAXDocumentBuilder2, css::lang::XServiceInfo >
+        : public ::cppu::WeakImplHelper< css::xml::dom::XSAXDocumentBuilder2, css::lang::XServiceInfo >
     {
 
     private:

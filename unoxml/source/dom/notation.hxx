@@ -25,11 +25,12 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNotation.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <node.hxx>
 
 namespace DOM
 {
-    typedef cppu::ImplInheritanceHelper1< CNode, css::xml::dom::XNotation > CNotation_Base;
+    typedef cppu::ImplInheritanceHelper< CNode, css::xml::dom::XNotation > CNotation_Base;
 
     class CNotation
         : public CNotation_Base

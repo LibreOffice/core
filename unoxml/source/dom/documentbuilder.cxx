@@ -33,7 +33,7 @@
 #include <osl/diagnose.h>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -60,7 +60,7 @@ using css::xml::sax::InputSource;
 namespace DOM
 {
 
-    class CDefaultEntityResolver : public cppu::WeakImplHelper1< XEntityResolver >
+    class CDefaultEntityResolver : public cppu::WeakImplHelper< XEntityResolver >
     {
     public:
         virtual InputSource SAL_CALL resolveEntity( const OUString& sPublicId, const OUString& sSystemId )

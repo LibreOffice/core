@@ -27,14 +27,14 @@
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace DOM
 {
     class CElement;
 
     class CAttributesMap
-        : public cppu::WeakImplHelper1< css::xml::dom::XNamedNodeMap >
+        : public cppu::WeakImplHelper< css::xml::dom::XNamedNodeMap >
     {
     private:
         ::rtl::Reference<CElement> const m_pElement;

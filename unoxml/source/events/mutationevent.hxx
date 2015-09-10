@@ -28,13 +28,13 @@
 #include <com/sun/star/xml/dom/events/AttrChangeType.hpp>
 #include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "event.hxx"
 
 namespace DOM { namespace events {
 
-typedef ::cppu::ImplInheritanceHelper1< CEvent, css::xml::dom::events::XMutationEvent >
+typedef ::cppu::ImplInheritanceHelper< CEvent, css::xml::dom::events::XMutationEvent >
     CMutationEvent_Base;
 
 class CMutationEvent

@@ -23,11 +23,12 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XCDATASection.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <text.hxx>
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CText, css::xml::dom::XCDATASection >
+    typedef ::cppu::ImplInheritanceHelper< CText, css::xml::dom::XCDATASection >
         CCDATASection_Base;
 
     class CCDATASection

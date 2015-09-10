@@ -28,11 +28,12 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XEntity.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <node.hxx>
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CNode, css::xml::dom::XEntity > CEntity_Base;
+    typedef ::cppu::ImplInheritanceHelper< CNode, css::xml::dom::XEntity > CEntity_Base;
 
     class CEntity
         : public CEntity_Base

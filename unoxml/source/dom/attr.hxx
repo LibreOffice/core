@@ -24,7 +24,7 @@
 
 #include <libxml/tree.h>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -36,7 +36,7 @@ namespace DOM
 {
     typedef ::std::pair< OString, OString > stringpair_t;
 
-    typedef ::cppu::ImplInheritanceHelper1< CNode, css::xml::dom::XAttr > CAttr_Base;
+    typedef ::cppu::ImplInheritanceHelper< CNode, css::xml::dom::XAttr > CAttr_Base;
 
     class CAttr
         : public CAttr_Base

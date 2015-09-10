@@ -28,7 +28,7 @@
 #include <sal/types.h>
 #include <rtl/ref.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
@@ -40,7 +40,7 @@ namespace DOM {
 
 namespace XPath
 {
-    class CXPathObject : public cppu::WeakImplHelper1< css::xml::xpath::XXPathObject >
+    class CXPathObject : public cppu::WeakImplHelper< css::xml::xpath::XXPathObject >
     {
     private:
         ::rtl::Reference< DOM::CDocument > const m_pDocument;

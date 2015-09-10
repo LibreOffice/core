@@ -23,11 +23,12 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <node.hxx>
 
 namespace DOM
 {
-    typedef ::cppu::ImplInheritanceHelper1< CNode, css::xml::dom::XDocumentFragment >
+    typedef ::cppu::ImplInheritanceHelper< CNode, css::xml::dom::XDocumentFragment >
         CDocumentFragment_Base;
 
     class CDocumentFragment
