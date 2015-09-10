@@ -29,9 +29,6 @@ class SvStream;
 
 enum INetStreamStatus
 {
-    INETSTREAM_STATUS_LOADED     = -4,
-    INETSTREAM_STATUS_WOULDBLOCK = -3,
-    INETSTREAM_STATUS_OK         = -2,
     INETSTREAM_STATUS_ERROR      = -1
 };
 
@@ -41,9 +38,7 @@ enum INetMessageStreamState
     INETMSG_EOL_DONE,
     INETMSG_EOL_SCR,
     INETMSG_EOL_FCR,
-    INETMSG_EOL_FLF,
-    INETMSG_EOL_FSP,
-    INETMSG_EOL_FESC
+    INETMSG_EOL_FSP
 };
 
 /// Message Generator Interface.
@@ -81,35 +76,6 @@ public:
     bool IsHeaderGenerated() const { return bHeaderGenerated; }
 };
 
-/// Message Parser Interface.
-class INetMessageOStream
-{
-    INetMIMEMessage        *pTargetMsg;
-    bool                    bHeaderParsed;
-
-    INetMessageStreamState  eOState;
-
-    SvMemoryStream         *pMsgBuffer;
-
-    INetMessageOStream (const INetMessageOStream& rStrm) SAL_DELETED_FUNCTION;
-    INetMessageOStream& operator= (const INetMessageOStream& rStrm) SAL_DELETED_FUNCTION;
-
-protected:
-    virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize);
-
-public:
-    INetMessageOStream();
-    virtual ~INetMessageOStream();
-
-    int Write (const sal_Char *pData, sal_uIntPtr nSize);
-
-    INetMIMEMessage *GetTargetMessage() const { return pTargetMsg; }
-    void SetTargetMessage (INetMIMEMessage *pMsg) { pTargetMsg = pMsg; }
-
-    void ParseHeader (bool bParse = true) { bHeaderParsed = !bParse; }
-    bool IsHeaderParsed() const { return bHeaderParsed; }
-};
-
 enum INetMessageEncoding
 {
     INETMSG_ENCODING_7BIT,
@@ -119,8 +85,7 @@ enum INetMessageEncoding
 };
 
 class TOOLS_DLLPUBLIC INetMIMEMessageStream
-    : public INetMessageIStream,
-      public INetMessageOStream
+    : public INetMessageIStream
 {
     int                    eState;
 
@@ -129,7 +94,6 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
 
     INetMessageEncoding    eEncoding;
     INetMessageIStream    *pEncodeStrm;
-    INetMessageOStream    *pDecodeStrm;
 
     SvMemoryStream        *pMsgBuffer;
 
@@ -141,7 +105,6 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
 
 protected:
     virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
-    virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
 public:
     INetMIMEMessageStream (sal_uIntPtr nBufferSize = 2048);
