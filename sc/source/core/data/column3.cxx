@@ -684,7 +684,10 @@ void ScColumn::DeleteArea(
     }
 
     if (nDelFlag & IDF_NOTE)
-        DeleteCellNotes(aBlockPos, nStartRow, nEndRow);
+    {
+        bool bForgetCaptionOwnership = ((nDelFlag & IDF_FORGETCAPTIONS) != IDF_NONE);
+        DeleteCellNotes(aBlockPos, nStartRow, nEndRow, bForgetCaptionOwnership);
+    }
 
     if ( nDelFlag & IDF_EDITATTR )
     {
