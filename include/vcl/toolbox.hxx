@@ -226,7 +226,7 @@ private:
 
     DECL_DLLPRIVATE_LINK_TYPED(    ImplCallExecuteCustomMenu, void*, void );
     DECL_DLLPRIVATE_LINK_TYPED(    ImplUpdateHdl, Idle*, void );
-    DECL_DLLPRIVATE_LINK(          ImplCustomMenuListener, VclMenuEvent* );
+    DECL_DLLPRIVATE_LINK_TYPED(    ImplCustomMenuListener, VclMenuEvent&, void );
     DECL_DLLPRIVATE_LINK_TYPED(    ImplDropdownLongClickHdl, Timer*, void );
 
                                    ToolBox (const ToolBox &) SAL_DELETED_FUNCTION;

@@ -141,8 +141,7 @@ private:
     Link<Menu*, bool> aHighlightHdl;      // Highlight-Handler
     Link<Menu*, bool> aSelectHdl;         // Highlight-Handler
 
-    VclEventListeners   maEventListeners;
-    VclEventListeners   maChildEventListeners;
+    std::list<Link<VclMenuEvent&,void> >  maEventListeners;
 
     OUString aTitleText;         // PopupMenu text
     sal_uInt16 nTitleHeight;
@@ -357,8 +356,8 @@ public:
         return nTitleHeight;
     }
 
-    void AddEventListener( const Link<>& rEventListener );
-    void RemoveEventListener( const Link<>& rEventListener );
+    void AddEventListener( const Link<VclMenuEvent&,void>& rEventListener );
+    void RemoveEventListener( const Link<VclMenuEvent&,void>& rEventListener );
 
     Menu& operator =( const Menu& rMenu );
 

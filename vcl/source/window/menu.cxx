@@ -340,31 +340,29 @@ void Menu::ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos )
     }
 
     if ( !aDelData.isDeleted() )
-        maEventListeners.Call( &aEvent );
-
-    if( !aDelData.isDeleted() )
     {
-        Menu* pMenu = this;
-        while ( pMenu )
+        // Copy the list, because this can be destroyed when calling a Link...
+        std::list<Link<VclMenuEvent&,void>> aCopy( maEventListeners );
+        std::list<Link<VclMenuEvent&,void>>::iterator aIter( aCopy.begin() );
+        std::list<Link<VclMenuEvent&,void>>::const_iterator aEnd( aCopy.end() );
+        while ( aIter != aEnd )
         {
-            maChildEventListeners.Call( &aEvent );
-
-            if( aDelData.isDeleted() )
-                break;
-
-            pMenu = ( pMenu->pStartedFrom != pMenu ) ? pMenu->pStartedFrom : NULL;
+            Link<VclMenuEvent&,void> &rLink = *aIter;
+            if( std::find(maEventListeners.begin(), maEventListeners.end(), rLink) != maEventListeners.end() )
+                rLink.Call( aEvent );
+            ++aIter;
         }
     }
 }
 
-void Menu::AddEventListener( const Link<>& rEventListener )
+void Menu::AddEventListener( const Link<VclMenuEvent&,void>& rEventListener )
 {
-    maEventListeners.addListener( rEventListener );
+    maEventListeners.push_back( rEventListener );
 }
 
-void Menu::RemoveEventListener( const Link<>& rEventListener )
+void Menu::RemoveEventListener( const Link<VclMenuEvent&,void>& rEventListener )
 {
-    maEventListeners.removeListener( rEventListener );
+    maEventListeners.remove( rEventListener );
 }
 
 MenuItemData* Menu::NbcInsertItem(sal_uInt16 nId, MenuItemBits nBits,

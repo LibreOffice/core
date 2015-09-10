@@ -1851,15 +1851,14 @@ void ToolBox::UpdateCustomMenu()
     }
 }
 
-IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent*, pEvent )
+IMPL_LINK_TYPED( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
 {
-    if( pEvent->GetMenu() == GetMenu() && pEvent->GetId() == VCLEVENT_MENU_SELECT )
+    if( rEvent.GetMenu() == GetMenu() && rEvent.GetId() == VCLEVENT_MENU_SELECT )
     {
-        sal_uInt16 id = GetMenu()->GetItemId( pEvent->GetItemPos() );
+        sal_uInt16 id = GetMenu()->GetItemId( rEvent.GetItemPos() );
         if( id >= TOOLBOX_MENUITEM_START )
             TriggerItem( id - TOOLBOX_MENUITEM_START, false );
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ToolBox, ImplCallExecuteCustomMenu, void*, void)

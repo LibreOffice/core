@@ -79,89 +79,83 @@ void VCLXMenu::ImplCreateMenu( bool bPopup )
     mpMenu->AddEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
 }
 
-IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclMenuEvent ), "Unknown Event!" );
-    if ( pEvent && pEvent->ISA( VclMenuEvent ) )
+    DBG_ASSERT( rMenuEvent.GetMenu() && mpMenu, "Menu???" );
+
+    if ( rMenuEvent.GetMenu() == mpMenu )  // Also called for the root menu
     {
-        DBG_ASSERT( static_cast<VclMenuEvent*>(pEvent)->GetMenu() && mpMenu, "Menu???" );
-
-        VclMenuEvent* pMenuEvent = static_cast<VclMenuEvent*>(pEvent);
-        if ( pMenuEvent->GetMenu() == mpMenu )  // Also called for the root menu
+        switch ( rMenuEvent.GetId() )
         {
-            switch ( pMenuEvent->GetId() )
+            case VCLEVENT_MENU_SELECT:
             {
-                case VCLEVENT_MENU_SELECT:
+                if ( maMenuListeners.getLength() )
                 {
-                    if ( maMenuListeners.getLength() )
-                    {
-                        css::awt::MenuEvent aEvent;
-                        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                        aEvent.MenuId = mpMenu->GetCurItemId();
-                        maMenuListeners.itemSelected( aEvent );
-                    }
+                    css::awt::MenuEvent aEvent;
+                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.MenuId = mpMenu->GetCurItemId();
+                    maMenuListeners.itemSelected( aEvent );
                 }
-                break;
-                case VCLEVENT_OBJECT_DYING:
+            }
+            break;
+            case VCLEVENT_OBJECT_DYING:
+            {
+                mpMenu = NULL;
+            }
+            break;
+            case VCLEVENT_MENU_HIGHLIGHT:
+            {
+                if ( maMenuListeners.getLength() )
                 {
-                    mpMenu = NULL;
+                    css::awt::MenuEvent aEvent;
+                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.MenuId = mpMenu->GetCurItemId();
+                    maMenuListeners.itemHighlighted( aEvent );
                 }
-                break;
-                case VCLEVENT_MENU_HIGHLIGHT:
+            }
+            break;
+            case VCLEVENT_MENU_ACTIVATE:
+            {
+                if ( maMenuListeners.getLength() )
                 {
-                    if ( maMenuListeners.getLength() )
-                    {
-                        css::awt::MenuEvent aEvent;
-                        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                        aEvent.MenuId = mpMenu->GetCurItemId();
-                        maMenuListeners.itemHighlighted( aEvent );
-                    }
+                    css::awt::MenuEvent aEvent;
+                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.MenuId = mpMenu->GetCurItemId();
+                    maMenuListeners.itemActivated( aEvent );
                 }
-                break;
-                case VCLEVENT_MENU_ACTIVATE:
+            }
+            break;
+            case VCLEVENT_MENU_DEACTIVATE:
+            {
+                if ( maMenuListeners.getLength() )
                 {
-                    if ( maMenuListeners.getLength() )
-                    {
-                        css::awt::MenuEvent aEvent;
-                        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                        aEvent.MenuId = mpMenu->GetCurItemId();
-                        maMenuListeners.itemActivated( aEvent );
-                    }
+                    css::awt::MenuEvent aEvent;
+                    aEvent.Source = static_cast<cppu::OWeakObject*>(this);
+                    aEvent.MenuId = mpMenu->GetCurItemId();
+                    maMenuListeners.itemDeactivated( aEvent );
                 }
-                break;
-                case VCLEVENT_MENU_DEACTIVATE:
-                {
-                    if ( maMenuListeners.getLength() )
-                    {
-                        css::awt::MenuEvent aEvent;
-                        aEvent.Source = static_cast<cppu::OWeakObject*>(this);
-                        aEvent.MenuId = mpMenu->GetCurItemId();
-                        maMenuListeners.itemDeactivated( aEvent );
-                    }
-                }
-                break;
+            }
+            break;
 
-                // ignore accessibility events
-                case VCLEVENT_MENU_ENABLE:
-                case VCLEVENT_MENU_INSERTITEM:
-                case VCLEVENT_MENU_REMOVEITEM:
-                case VCLEVENT_MENU_SUBMENUACTIVATE:
-                case VCLEVENT_MENU_SUBMENUDEACTIVATE:
-                case VCLEVENT_MENU_SUBMENUCHANGED:
-                case VCLEVENT_MENU_DEHIGHLIGHT:
-                case VCLEVENT_MENU_DISABLE:
-                case VCLEVENT_MENU_ITEMTEXTCHANGED:
-                case VCLEVENT_MENU_ITEMCHECKED:
-                case VCLEVENT_MENU_ITEMUNCHECKED:
-                case VCLEVENT_MENU_SHOW:
-                case VCLEVENT_MENU_HIDE:
-                break;
+            // ignore accessibility events
+            case VCLEVENT_MENU_ENABLE:
+            case VCLEVENT_MENU_INSERTITEM:
+            case VCLEVENT_MENU_REMOVEITEM:
+            case VCLEVENT_MENU_SUBMENUACTIVATE:
+            case VCLEVENT_MENU_SUBMENUDEACTIVATE:
+            case VCLEVENT_MENU_SUBMENUCHANGED:
+            case VCLEVENT_MENU_DEHIGHLIGHT:
+            case VCLEVENT_MENU_DISABLE:
+            case VCLEVENT_MENU_ITEMTEXTCHANGED:
+            case VCLEVENT_MENU_ITEMCHECKED:
+            case VCLEVENT_MENU_ITEMUNCHECKED:
+            case VCLEVENT_MENU_SHOW:
+            case VCLEVENT_MENU_HIDE:
+            break;
 
-                default:    OSL_FAIL( "MenuEventListener - Unknown event!" );
-           }
+            default:    OSL_FAIL( "MenuEventListener - Unknown event!" );
        }
     }
-    return 0;
 }
 
 

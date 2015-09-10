@@ -40,6 +40,7 @@ class Menu;
 class MenuBar;
 class VclSimpleEvent;
 class PopupMenu;
+class VclMenuEvent;
 
 typedef ::std::vector<
     css::uno::Reference< css::awt::XPopupMenu >*
@@ -65,7 +66,7 @@ private:
 protected:
     ::osl::Mutex&           GetMutex() { return maMutex; }
 
-    DECL_LINK( MenuEventListener, VclSimpleEvent* );
+    DECL_LINK_TYPED( MenuEventListener, VclMenuEvent&, void );
 
     void ImplCreateMenu( bool bPopup );
 

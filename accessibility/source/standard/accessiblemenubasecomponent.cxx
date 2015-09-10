@@ -566,15 +566,10 @@ bool OAccessibleMenuBaseComponent::IsPopupMenuOpen()
 
 
 
-IMPL_LINK( OAccessibleMenuBaseComponent, MenuEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( OAccessibleMenuBaseComponent, MenuEventListener, VclMenuEvent&, rEvent, void )
 {
-    OSL_ENSURE( pEvent && pEvent->ISA( VclMenuEvent ), "OAccessibleMenuBaseComponent - Unknown MenuEvent!" );
-    if ( pEvent && pEvent->ISA( VclMenuEvent ) )
-    {
-        OSL_ENSURE( static_cast<VclMenuEvent*>(pEvent)->GetMenu(), "OAccessibleMenuBaseComponent - Menu?" );
-        ProcessMenuEvent( *static_cast<VclMenuEvent*>(pEvent) );
-    }
-    return 0;
+    OSL_ENSURE( rEvent.GetMenu(), "OAccessibleMenuBaseComponent - Menu?" );
+    ProcessMenuEvent( rEvent );
 }
 
 
