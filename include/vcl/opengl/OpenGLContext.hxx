@@ -220,6 +220,8 @@ public:
     static bool hasCurrent();
     /// make this GL context current - so it is implicit in subsequent GL calls
     void makeCurrent();
+    /// Put this GL context to the end of the context list.
+    void registerAsCurrent();
     /// reset the GL context so this context is not implicit in subsequent GL calls.
     void resetCurrent();
     void swapBuffers();
