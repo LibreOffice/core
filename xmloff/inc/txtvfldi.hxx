@@ -556,6 +556,9 @@ public:
         XMLTextImportHelper& rHlp,              /// text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
+    XMLTableFormulaImportContext( SvXMLImport& rImport,
+                                  XMLTextImportHelper& rHlp,
+                                  sal_Int32 Element );
     virtual ~XMLTableFormulaImportContext();
 
 protected:

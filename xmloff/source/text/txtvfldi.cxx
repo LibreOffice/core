@@ -710,6 +710,17 @@ XMLTableFormulaImportContext::XMLTableFormulaImportContext(
 {
 }
 
+XMLTableFormulaImportContext::XMLTableFormulaImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element )
+:   XMLTextFieldImportContext( rImport, rHlp, sAPI_table_formula, Element ),
+    sPropertyIsShowFormula("IsShowFormula"),
+    sPropertyCurrentPresentation("CurrentPresentation"),
+    aValueHelper(rImport, rHlp, false, true, false, true),
+    bIsShowFormula(false)
+{
+}
+
 XMLTableFormulaImportContext::~XMLTableFormulaImportContext()
 {
 }
