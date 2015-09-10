@@ -843,7 +843,7 @@ bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
     }
 
     // Setup boundary for multipart types.
-    if (aContentType.toString().equalsIgnoreAsciiCase("multipart/"))
+    if (aContentType.toString().startsWithIgnoreAsciiCase("multipart/"))
     {
         // Generate a unique boundary from current time.
         sal_Char sTail[16 + 1];
