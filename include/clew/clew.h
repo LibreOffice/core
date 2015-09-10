@@ -416,6 +416,7 @@ typedef struct _cl_image_format {
 
 // cl_device_info
 #define CL_DEVICE_MAX_COMPUTE_UNITS                 0x1002
+#define CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT      0x100A
 #define CL_DEVICE_MAX_CLOCK_FREQUENCY               0x100C
 #define CL_DEVICE_GLOBAL_MEM_SIZE                   0x101F
 #define CL_DEVICE_NAME                              0x102B
