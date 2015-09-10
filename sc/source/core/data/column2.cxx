@@ -1816,8 +1816,27 @@ void ScColumn::SetCellNote(SCROW nRow, ScPostIt* pNote)
     maCellNotes.set(nRow, pNote);
 }
 
-void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 )
+namespace {
+class ForgetCellNoteCaptionsHandler
 {
+
+public:
+    ForgetCellNoteCaptionsHandler() {}
+
+    void operator() ( size_t /*nRow*/, ScPostIt* p )
+    {
+        p->ForgetCaption();
+    }
+};
+}
+
+void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership )
+{
+    if (bForgetCaptionOwnership)
+    {
+        ForgetCellNoteCaptionsHandler aFunc;
+        sc::ParseNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
+    }
     rBlockPos.miCellNotePos =
         maCellNotes.set_empty(rBlockPos.miCellNotePos, nRow1, nRow2);
 }
