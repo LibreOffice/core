@@ -2695,6 +2695,18 @@ XMLCountFieldImportContext::XMLCountFieldImportContext(
     bValid = true;
 }
 
+XMLCountFieldImportContext::XMLCountFieldImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 Element, sal_uInt16 nToken )
+:   XMLTextFieldImportContext( rImport, rHlp, MapTokenToServiceName(nToken), Element ),
+    sPropertyNumberingType(sAPI_numbering_type),
+    sNumberFormat(),
+    sLetterSync(),
+    bNumberFormatOK(false)
+{
+    bValid = true;
+}
+
 void XMLCountFieldImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )

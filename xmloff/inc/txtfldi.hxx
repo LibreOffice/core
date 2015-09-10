@@ -938,6 +938,10 @@ public:
                                sal_uInt16 nPrfx,
                                const OUString& sLocalName,
                                sal_uInt16 nToken);
+    XMLCountFieldImportContext( SvXMLImport& rImport,
+                                XMLTextImportHelper& rHlp,
+                                sal_Int32 Element,
+                                sal_uInt16 nToken );
 
 protected:
     /// process attribute values
