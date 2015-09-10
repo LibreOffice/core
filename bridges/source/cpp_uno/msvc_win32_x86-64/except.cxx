@@ -250,6 +250,7 @@ void
 #include "com/sun/star/uno/Any.hxx"
 #include <unordered_map>
 #include "mscx.hxx"
+#include "bridges/cpp_uno/shared/except.hxx"
 
 #pragma pack(push, 8)
 
@@ -866,8 +867,11 @@ int mscx_filterCppException(
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
     {
-        // Hack to get msvcrt internal _curexception field:
         pRecord = *reinterpret_cast< EXCEPTION_RECORD ** >(
+#if _MSC_VER >= 1900 // VC 2015 (and later?)
+            __current_exception()
+#else
+            // Hack to get msvcrt internal _curexception field
             reinterpret_cast< char * >( __pxcptinfoptrs() ) +
             // As long as we don't demand MSVCR source as build prerequisite,
             // we have to code those offsets here.
@@ -875,18 +879,13 @@ int mscx_filterCppException(
             // MSVS9/crt/src/mtdll.h:
             // offsetof (_tiddata, _curexception) -
             // offsetof (_tiddata, _tpxcptinfoptrs):
-#if _MSC_VER <= 1900 // VC 2015
-            //
-            // See dev-tools/uno/uno_exception_offset
-            0x48 // msvcr90.dll
-#else
-            error, please find value for this compiler version
+            0x48
 #endif
             );
     }
 
     // Rethrow: handle only C++ exceptions:
-    if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
+   if (pRecord == 0 || pRecord->ExceptionCode != MSVC_ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
 
     if (pRecord->NumberParameters == 4 &&

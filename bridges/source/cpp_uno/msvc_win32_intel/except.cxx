@@ -32,6 +32,7 @@
 #include "com/sun/star/uno/Any.hxx"
 #include <unordered_map>
 #include "msci.hxx"
+#include "bridges/cpp_uno/shared/except.hxx"
 
 
 #pragma pack(push, 8)
@@ -493,8 +494,11 @@ int msci_filterCppException(
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
     {
-        // hack to get msvcrt internal _curexception field:
         pRecord = *reinterpret_cast< EXCEPTION_RECORD ** >(
+#if _MSC_VER >= 1900 // VC 2015 (and later?)
+           __current_exception()
+#else
+            // hack to get msvcrt internal _curexception field:
             reinterpret_cast< char * >( __pxcptinfoptrs() ) +
             // as long as we don't demand msvcr source as build prerequisite
             // (->platform sdk), we have to code those offsets here.
@@ -503,6 +507,7 @@ int msci_filterCppException(
             // offsetof (_tiddata, _curexception) -
             // offsetof (_tiddata, _tpxcptinfoptrs):
             0x28 // msvcr80.dll (and later?)
+#endif
             );
     }
     // rethrow: handle only C++ exceptions:
