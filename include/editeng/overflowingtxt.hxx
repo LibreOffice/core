@@ -34,7 +34,10 @@ namespace com { namespace sun { namespace star {
 typedef com::sun::star::uno::Reference<
             com::sun::star::datatransfer::XTransferable> TranferableText;
 
-class OUString;
+namespace rtl {
+    class OUString;
+};
+using ::rtl::OUString;
 
 
 class OutlinerParaObject;
