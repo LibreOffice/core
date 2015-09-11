@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <cassert>
 
 #include "helpid.hrc"
 #include "baside2.hrc"

@@ -24,6 +24,7 @@
 #include <bastypes.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <deque>
 #include <sfx2/docfac.hxx>
 #include <svtools/treelistentry.hxx>
 

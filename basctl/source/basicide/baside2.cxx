@@ -49,6 +49,7 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <cassert>
 
 namespace basctl
 {

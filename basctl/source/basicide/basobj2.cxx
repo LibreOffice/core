@@ -31,6 +31,8 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/moduleoptions.hxx>
 
+#include <vector>
+#include <algorithm>
 #include <basic/basmgr.hxx>
 namespace basctl
 {

@@ -19,7 +19,9 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE2_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASTYPE2_HXX
 
+#include <sal/config.h>
 
+#include <memory>
 
 #include "doceventnotifier.hxx"
 

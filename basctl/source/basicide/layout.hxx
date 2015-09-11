@@ -23,6 +23,7 @@
 #include <vcl/split.hxx>
 #include <vcl/vclptr.hxx>
 
+#include <vector>
 
 class DockingWindow;
 class SfxRequest;

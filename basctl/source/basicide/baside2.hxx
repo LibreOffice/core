@@ -39,6 +39,7 @@ class SvxSearchItem;
 
 #include <sfx2/progress.hxx>
 
+#include <set>
 
 #include <vcl/textdata.hxx>
 #include <basic/codecompletecache.hxx>

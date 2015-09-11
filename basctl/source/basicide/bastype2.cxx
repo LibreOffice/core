@@ -34,6 +34,7 @@
 #include <vcl/builderfactory.hxx>
 
 #include <initializer_list>
+#include <memory>
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
