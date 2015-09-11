@@ -42,6 +42,7 @@ public:
     //Regression test of fdo#70143
     //EDITING: undo search&replace corrupt text when searching backward
     void testReplaceBackward();
+    void testRedlineFrame();
     void testFdo69893();
     void testFdo70807();
     void testImportRTF();
@@ -69,6 +70,7 @@ public:
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
     CPPUNIT_TEST(testReplaceBackward);
+    CPPUNIT_TEST(testRedlineFrame);
     CPPUNIT_TEST(testFdo69893);
     CPPUNIT_TEST(testFdo70807);
     CPPUNIT_TEST(testImportRTF);
@@ -142,6 +144,31 @@ void SwUiWriterTest::testReplaceForward()
     rUndoManager.Undo();
 
     CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTxtNode->GetTxt());
+}
+
+void SwUiWriterTest::testRedlineFrame()
+{
+    SwDoc * pDoc(createDoc("redlineFrame.fodt"));
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    // there is exactly one frame
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+
+    sal_uInt16 nMode = pWrtShell->GetRedlineMode();
+    CPPUNIT_ASSERT(nMode & nsRedlineMode_t::REDLINE_SHOW_DELETE);
+
+    // hide delete redlines
+    pWrtShell->SetRedlineMode(nMode & ~nsRedlineMode_t::REDLINE_SHOW_DELETE);
+
+    // there is still exactly one frame
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
+
+    pWrtShell->SetRedlineMode(nMode); // show again
+
+    // there is still exactly one frame
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount());
 }
 
 void SwUiWriterTest::testFdo75110()
