@@ -49,27 +49,27 @@ public:
 protected:
     CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* theWinClipboard );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents(  )
-        throw( ::com::sun::star::uno::RuntimeException );
+    css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getContents(  )
+        throw( css::uno::RuntimeException );
 
     void SAL_CALL setContents(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-        throw( ::com::sun::star::uno::RuntimeException );
+        const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
+        const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+        throw( css::uno::RuntimeException );
 
-    OUString SAL_CALL getName(  ) throw( ::com::sun::star::uno::RuntimeException );
+    OUString SAL_CALL getName(  ) throw( css::uno::RuntimeException );
 
     // XClipboardEx
 
-    sal_Int8 SAL_CALL getRenderingCapabilities(  ) throw( ::com::sun::star::uno::RuntimeException );
+    sal_Int8 SAL_CALL getRenderingCapabilities(  ) throw( css::uno::RuntimeException );
 
     // XFlushableClipboard
 
-    void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException );
+    void SAL_CALL flushClipboard( ) throw( css::uno::RuntimeException );
 
     // XComponent
 
-    void SAL_CALL dispose( ) throw( ::com::sun::star::uno::RuntimeException );
+    void SAL_CALL dispose( ) throw( css::uno::RuntimeException );
 
     // member functions
 
@@ -82,7 +82,7 @@ private:
     void SAL_CALL onReleaseDataObject( CXNotifyingDataObject* theCaller );
 
 private:
-    OUString         m_itsName;
+    OUString                m_itsName;
     CMtaOleClipboard        m_MtaOleClipboard;
     CWinClipboard*          m_pWinClipboard;
     CXNotifyingDataObject*  m_pCurrentClipContent;

@@ -523,8 +523,8 @@ sal_Bool SAL_CALL CDOTransferable::cmpAllContentTypeParameter(
     return bRet;
 }
 
-::com::sun::star::uno::Any SAL_CALL CDOTransferable::getData( const Sequence< sal_Int8>& aProcessId  )
-        throw (::com::sun::star::uno::RuntimeException)
+css::uno::Any SAL_CALL CDOTransferable::getData( const Sequence< sal_Int8>& aProcessId  )
+        throw (css::uno::RuntimeException)
 {
     Any retVal;
 

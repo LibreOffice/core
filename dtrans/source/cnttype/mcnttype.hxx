@@ -29,28 +29,28 @@
 #include <map>
 
 class CMimeContentType : public
-    cppu::WeakImplHelper< com::sun::star::datatransfer::XMimeContentType >
+    cppu::WeakImplHelper< css::datatransfer::XMimeContentType >
 {
 public:
     CMimeContentType( const OUString& aCntType );
 
     // XMimeContentType
 
-    virtual OUString SAL_CALL getMediaType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getMediaSubtype(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getFullMediaType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getMediaType(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getMediaSubtype(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getFullMediaType(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getParameters(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getParameters(  )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL hasParameter( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getParameterValue( const OUString& aName )
-        throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    void SAL_CALL init( const OUString& aCntType ) throw( com::sun::star::lang::IllegalArgumentException );
+    void SAL_CALL init( const OUString& aCntType ) throw( css::lang::IllegalArgumentException );
     void SAL_CALL getSym();
     void SAL_CALL acceptSym( const OUString& pSymTlb );
     void SAL_CALL skipSpaces();

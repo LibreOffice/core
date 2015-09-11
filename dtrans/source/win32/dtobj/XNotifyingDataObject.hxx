@@ -47,8 +47,8 @@ class CXNotifyingDataObject : public IDataObject
 public:
     CXNotifyingDataObject(
         const IDataObjectPtr& aIDataObject,
-        const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& aXTransferable,
-        const com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner >& aXClipOwner,
+        const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable,
+        const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& aXClipOwner,
         CWinClipbImpl* theWinClipImpl );
 
     virtual ~CXNotifyingDataObject() {}
@@ -77,11 +77,11 @@ private:
     void SAL_CALL lostOwnership( );
 
 private:
-    sal_Int32                                                                                           m_nRefCnt;
-    IDataObjectPtr                                                                                      m_aIDataObject;
-    const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >                 m_XTransferable;
-    const com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboardOwner >    m_XClipboardOwner;
-    CWinClipbImpl*                                                                                      m_pWinClipImpl;
+    sal_Int32                                                                     m_nRefCnt;
+    IDataObjectPtr                                                                m_aIDataObject;
+    const css::uno::Reference< css::datatransfer::XTransferable >                 m_XTransferable;
+    const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >    m_XClipboardOwner;
+    CWinClipbImpl*                                                                m_pWinClipImpl;
 
     friend class CWinClipbImpl;
 };

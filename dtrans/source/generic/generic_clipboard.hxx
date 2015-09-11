@@ -34,17 +34,17 @@
 namespace dtrans
 {
 
-    class GenericClipboard : public ::cppu::WeakComponentImplHelper < \
-    ::com::sun::star::datatransfer::clipboard::XClipboardEx, \
-    ::com::sun::star::datatransfer::clipboard::XClipboardNotifier, \
-    ::com::sun::star::lang::XServiceInfo, \
-    ::com::sun::star::lang::XInitialization >
+    class GenericClipboard : public ::cppu::WeakComponentImplHelper <
+        css::datatransfer::clipboard::XClipboardEx,
+        css::datatransfer::clipboard::XClipboardNotifier,
+        css::lang::XServiceInfo,
+        css::lang::XInitialization >
     {
         ::osl::Mutex m_aMutex;
-        OUString m_aName;
+        OUString     m_aName;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > m_aContents;
-        ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner > m_aOwner;
+        css::uno::Reference< css::datatransfer::XTransferable > m_aContents;
+        css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner > m_aOwner;
 
         sal_Bool m_bInitialized;
         virtual ~GenericClipboard();
@@ -57,63 +57,63 @@ namespace dtrans
          * XInitialization
          */
 
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+            throw(css::uno::Exception, css::uno::RuntimeException);
 
         /*
          * XServiceInfo
          */
 
         virtual OUString SAL_CALL getImplementationName(  )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(css::uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(css::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw(::com::sun::star::uno::RuntimeException);
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+            throw(css::uno::RuntimeException);
 
         /*
          * XClipboard
          */
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
-            throw(::com::sun::star::uno::RuntimeException);
+        virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getContents()
+            throw(css::uno::RuntimeException);
 
         virtual void SAL_CALL setContents(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-            throw(::com::sun::star::uno::RuntimeException);
+            const css::uno::Reference< css::datatransfer::XTransferable >& xTrans,
+            const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+            throw(css::uno::RuntimeException);
 
         virtual OUString SAL_CALL getName()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(css::uno::RuntimeException);
 
         /*
          * XClipboardEx
          */
 
         virtual sal_Int8 SAL_CALL getRenderingCapabilities()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(css::uno::RuntimeException);
 
         /*
          * XClipboardNotifier
          */
 
         virtual void SAL_CALL addClipboardListener(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-            throw(::com::sun::star::uno::RuntimeException);
+            const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
+            throw(css::uno::RuntimeException);
 
         virtual void SAL_CALL removeClipboardListener(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-            throw(::com::sun::star::uno::RuntimeException);
+            const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
+            throw(css::uno::RuntimeException);
 
     };
 
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames();
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GenericClipboard_createInstance(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
+css::uno::Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames();
+css::uno::Reference< css::uno::XInterface > SAL_CALL GenericClipboard_createInstance(
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 #endif
 

@@ -48,61 +48,61 @@ struct FormatEntry
         const char* human_presentable_name,
         const char* native_format_name,
         CLIPFORMAT std_clipboard_format_id,
-        com::sun::star::uno::Type const & cppu_type
+        css::uno::Type const & cppu_type
     );
 
-    com::sun::star::datatransfer::DataFlavor aDataFlavor;
-    OUString                            aNativeFormatName;
-    sal_Int32                                aStandardFormatId;
+    css::datatransfer::DataFlavor aDataFlavor;
+    OUString                      aNativeFormatName;
+    sal_Int32                     aStandardFormatId;
 };
 
 // CDataFormatTranslator
 
 class CDataFormatTranslator : public
-    cppu::WeakImplHelper< com::sun::star::datatransfer::XDataFormatTranslator, \
-    com::sun::star::lang::XServiceInfo >
+    cppu::WeakImplHelper< css::datatransfer::XDataFormatTranslator,
+                          css::lang::XServiceInfo >
 {
 
 public:
-    CDataFormatTranslator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    CDataFormatTranslator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XDataFormatTranslator
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getSystemDataTypeFromDataFlavor( const ::com::sun::star::datatransfer::DataFlavor& aDataFlavor )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getSystemDataTypeFromDataFlavor( const css::datatransfer::DataFlavor& aDataFlavor )
+        throw(css::uno::RuntimeException);
 
-    virtual ::com::sun::star::datatransfer::DataFlavor SAL_CALL getDataFlavorFromSystemDataType( const ::com::sun::star::uno::Any& aSysDataType )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual css::datatransfer::DataFlavor SAL_CALL getDataFlavorFromSystemDataType( const css::uno::Any& aSysDataType )
+        throw(css::uno::RuntimeException);
 
     // XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(css::uno::RuntimeException);
 
 private:
     void SAL_CALL initTranslationTable( );
 
-    void SAL_CALL findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, com::sun::star::datatransfer::DataFlavor& aDataFlavor ) const;
-    void SAL_CALL findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, com::sun::star::datatransfer::DataFlavor& aDataFlavor ) const;
-    void SAL_CALL findStandardFormatIdForCharset( const OUString& aCharset, com::sun::star::uno::Any& aAny ) const;
-    void SAL_CALL setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, com::sun::star::uno::Any& aAny ) const;
+    void SAL_CALL findDataFlavorForStandardFormatId( sal_Int32 aStandardFormatId, css::datatransfer::DataFlavor& aDataFlavor ) const;
+    void SAL_CALL findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, css::datatransfer::DataFlavor& aDataFlavor ) const;
+    void SAL_CALL findStandardFormatIdForCharset( const OUString& aCharset, css::uno::Any& aAny ) const;
+    void SAL_CALL setStandardFormatIdForNativeFormatName( const OUString& aNativeFormatName, css::uno::Any& aAny ) const;
     void SAL_CALL findStdFormatIdOrNativeFormatNameForFullMediaType(
-        const com::sun::star::uno::Reference< com::sun::star::datatransfer::XMimeContentTypeFactory >& aRefXMimeFactory,
-        const OUString& aFullMediaType, com::sun::star::uno::Any& aAny ) const;
+        const css::uno::Reference< css::datatransfer::XMimeContentTypeFactory >& aRefXMimeFactory,
+        const OUString& aFullMediaType, css::uno::Any& aAny ) const;
 
     sal_Bool isTextPlainMediaType( const OUString& fullMediaType ) const;
 
-    com::sun::star::datatransfer::DataFlavor SAL_CALL mkDataFlv( const OUString& cnttype, const OUString& hpname, ::com::sun::star::uno::Type dtype );
+    css::datatransfer::DataFlavor SAL_CALL mkDataFlv( const OUString& cnttype, const OUString& hpname, css::uno::Type dtype );
 
 private:
-    std::vector< FormatEntry >  m_TranslTable;
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
+    std::vector< FormatEntry >                                m_TranslTable;
+    const css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 };
 
 #endif

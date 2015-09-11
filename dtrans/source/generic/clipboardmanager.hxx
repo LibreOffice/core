@@ -30,15 +30,15 @@
 
 #define CLIPBOARDMANAGER_IMPLEMENTATION_NAME "com.sun.star.comp.datatransfer.ClipboardManager"
 
-typedef ::std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > > ClipboardMap;
+typedef ::std::map< OUString, css::uno::Reference< css::datatransfer::clipboard::XClipboard > > ClipboardMap;
 
 namespace dtrans
 {
 
     class ClipboardManager : public ::cppu::WeakComponentImplHelper <
-      ::com::sun::star::datatransfer::clipboard::XClipboardManager,
-      ::com::sun::star::lang::XEventListener,
-      ::com::sun::star::lang::XServiceInfo >
+      css::datatransfer::clipboard::XClipboardManager,
+      css::lang::XEventListener,
+      css::lang::XServiceInfo >
     {
         ClipboardMap m_aClipboardMap;
         ::osl::Mutex m_aMutex;
@@ -57,54 +57,54 @@ namespace dtrans
          */
 
         virtual OUString SAL_CALL getImplementationName(  )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(css::uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(css::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw(::com::sun::star::uno::RuntimeException);
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+            throw(css::uno::RuntimeException);
 
         /*
          * XComponent
          */
 
         virtual void SAL_CALL dispose()
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(css::uno::RuntimeException);
 
         /*
          * XEventListener
          */
 
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+            throw(css::uno::RuntimeException);
 
         /*
          * XClipboardManager
          */
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > SAL_CALL getClipboard( const OUString& aName )
-            throw(::com::sun::star::container::NoSuchElementException,
-                  ::com::sun::star::uno::RuntimeException);
+        virtual css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL getClipboard( const OUString& aName )
+            throw(css::container::NoSuchElementException,
+                  css::uno::RuntimeException);
 
-        virtual void SAL_CALL addClipboard( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& xClipboard )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::container::ElementExistException,
-                  ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addClipboard( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard )
+            throw(css::lang::IllegalArgumentException,
+                  css::container::ElementExistException,
+                  css::uno::RuntimeException);
 
         virtual void SAL_CALL removeClipboard( const OUString& aName )
-            throw(::com::sun::star::uno::RuntimeException);
+            throw(css::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL listClipboardNames(  )
-            throw(::com::sun::star::uno::RuntimeException);
+        virtual css::uno::Sequence< OUString > SAL_CALL listClipboardNames(  )
+            throw(css::uno::RuntimeException);
 
     };
 
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL ClipboardManager_getSupportedServiceNames();
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ClipboardManager_createInstance(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xMultiServiceFactory);
+css::uno::Sequence< OUString > SAL_CALL ClipboardManager_getSupportedServiceNames();
+css::uno::Reference< css::uno::XInterface > SAL_CALL ClipboardManager_createInstance(
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & xMultiServiceFactory);
 
 #endif
 

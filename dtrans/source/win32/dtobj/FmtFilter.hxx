@@ -36,29 +36,29 @@
     input:
     aMetaFilePict - a sequence of bytes containing a METAFILEPICT struct
 ------------------------------------------------------------------------*/
-com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( com::sun::star::uno::Sequence< sal_Int8 >& aMetaFilePict );
-com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile );
+css::uno::Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( css::uno::Sequence< sal_Int8 >& aMetaFilePict );
+css::uno::Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile );
 
 /*------------------------------------------------------------------------
     input:
     aByteStream - a sequence of bytes containing a openoffice metafile
                   picture with a leading METAFILEHEADER
 ------------------------------------------------------------------------*/
-HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( com::sun::star::uno::Sequence< sal_Int8 >& aOOMetaFilePict );
-HENHMETAFILE  SAL_CALL OOMFPictToWinENHMFPict( com::sun::star::uno::Sequence< sal_Int8 >& aOOMetaFilePict );
+HMETAFILEPICT SAL_CALL OOMFPictToWinMFPict( css::uno::Sequence< sal_Int8 >& aOOMetaFilePict );
+HENHMETAFILE  SAL_CALL OOMFPictToWinENHMFPict( css::uno::Sequence< sal_Int8 >& aOOMetaFilePict );
 
 /*------------------------------------------------------------------------
     input:
     aWinDIB - sequence of bytes containing a windows device independent
               bitmap
 ------------------------------------------------------------------------*/
-com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const com::sun::star::uno::Sequence< sal_Int8 >& aWinDIB );
+css::uno::Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const css::uno::Sequence< sal_Int8 >& aWinDIB );
 
 /*------------------------------------------------------------------------
     input:
     aWinDIB - sequence of bytes containing a windows bitmap handle
 ------------------------------------------------------------------------*/
-com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP );
+css::uno::Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP );
 
 /*------------------------------------------------------------------------
     input:
@@ -66,7 +66,7 @@ com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL WinBITMAPToOOBMP( HBITMAP );
     May contain CF_DIBV5 or CF_DIB, but removing the BITMAPFILEHEADER
     is always the same size
 ------------------------------------------------------------------------*/
-com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( com::sun::star::uno::Sequence< sal_Int8 >& aOOBmp );
+css::uno::Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( css::uno::Sequence< sal_Int8 >& aOOBmp );
 
 /*------------------------------------------------------------------------
     input:
@@ -75,14 +75,14 @@ com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( com::sun::star
     the Format is described in the MSDN Library under HTML Clipboard
     Format
 ------------------------------------------------------------------------*/
-com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( com::sun::star::uno::Sequence< sal_Int8 >& aTextHtml );
+css::uno::Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( css::uno::Sequence< sal_Int8 >& aTextHtml );
 
 /**
     Return a FileList in which Windows Shell Links (lnk) are resolved.
     If for what ever reason a resolution is not possible leave the
     original lnk file.
 */
-com::sun::star::uno::Sequence< sal_Int8 > CF_HDROPToFileList(HGLOBAL hGlobal);
+css::uno::Sequence< sal_Int8 > CF_HDROPToFileList(HGLOBAL hGlobal);
 
 #endif
 

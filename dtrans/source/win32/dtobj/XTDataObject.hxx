@@ -62,8 +62,8 @@ class CStgTransferHelper;
 class CXTDataObject : public IDataObject
 {
 public:
-    CXTDataObject( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& aXTransferable );
+    CXTDataObject( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                   const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable );
     virtual ~CXTDataObject() {}
 
     // ole interface implementation
@@ -87,7 +87,7 @@ public:
     operator IDataObject*( );
 
 private:
-    com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const;
+    css::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const;
 
     void SAL_CALL renderDataAndSetupStgMedium( const sal_Int8* lpStorage,
                                                const FORMATETC& fetc,
@@ -117,11 +117,11 @@ private:
 
 private:
     LONG m_nRefCnt;
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >      m_XTransferable;
-    CFormatEtcContainer                                                                    m_FormatEtcContainer;
-    sal_Bool                                                                               m_bFormatEtcContainerInitialized;
-    CDataFormatTranslator                                                                  m_DataFormatTranslator;
-    CFormatRegistrar                                                                       m_FormatRegistrar;
+    css::uno::Reference< css::datatransfer::XTransferable >      m_XTransferable;
+    CFormatEtcContainer                                          m_FormatEtcContainer;
+    sal_Bool                                                     m_bFormatEtcContainerInitialized;
+    CDataFormatTranslator                                        m_DataFormatTranslator;
+    CFormatRegistrar                                             m_FormatRegistrar;
 };
 
 class CEnumFormatEtc : public IEnumFORMATETC

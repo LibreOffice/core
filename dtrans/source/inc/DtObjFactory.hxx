@@ -28,10 +28,10 @@
 class CDTransObjFactory
 {
 public:
-    virtual IDataObjectPtr SAL_CALL createDataObjFromTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-                                                                   const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable );
-    virtual com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > SAL_CALL createTransferableFromDataObj(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, IDataObjectPtr pIDataObject );
+    virtual IDataObjectPtr SAL_CALL createDataObjFromTransferable( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                                   const css::uno::Reference< css::datatransfer::XTransferable >& refXTransferable );
+    virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL createTransferableFromDataObj(
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext, IDataObjectPtr pIDataObject );
 };
 
 #endif

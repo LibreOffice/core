@@ -45,8 +45,8 @@
 #define EMPTY_OUSTR               OUString()
 
 const OUString Windows_FormatName ("windows_formatname");
-const com::sun::star::uno::Type CppuType_ByteSequence = cppu::UnoType<com::sun::star::uno::Sequence<sal_Int8>>::get();
-const com::sun::star::uno::Type CppuType_String       = ::cppu::UnoType<OUString>::get();
+const css::uno::Type CppuType_ByteSequence = cppu::UnoType<css::uno::Sequence<sal_Int8>>::get();
+const css::uno::Type CppuType_String       = ::cppu::UnoType<OUString>::get();
 
 // namespace directives
 
@@ -79,7 +79,7 @@ FormatEntry::FormatEntry(
     const char* human_presentable_name,
     const char* native_format_name,
     CLIPFORMAT std_clipboard_format_id,
-    ::com::sun::star::uno::Type const & cppu_type)
+    css::uno::Type const & cppu_type)
 {
     aDataFlavor.MimeType             = OUString::createFromAscii(mime_content_type);
     aDataFlavor.HumanPresentableName = OUString::createFromAscii(human_presentable_name);
