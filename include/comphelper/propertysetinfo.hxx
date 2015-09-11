@@ -44,10 +44,16 @@ typedef std::map<OUString, PropertyMapEntry const *> PropertyMap;
 
 class PropertyMapImpl;
 
+// don't export to avoid duplicate WeakImplHelper definitions with MSVC
+class SAL_DLLPUBLIC_TEMPLATE PropertySetInfo_BASE
+    : public ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertySetInfo >
+{};
+
 /** this class implements a XPropertySetInfo that is initialized with arrays of PropertyMapEntry.
     It is used by the class PropertySetHelper.
 */
-class COMPHELPER_DLLPUBLIC PropertySetInfo : public ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertySetInfo >
+class COMPHELPER_DLLPUBLIC PropertySetInfo
+    : public PropertySetInfo_BASE
 {
 private:
     PropertyMapImpl* mpMap;
