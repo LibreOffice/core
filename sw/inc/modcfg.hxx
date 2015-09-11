@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_MODCFG_HXX
 #define INCLUDED_SW_INC_MODCFG_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <tools/wintypes.hxx>
 #include <vcl/field.hxx>
 #include <unotools/configitem.hxx>
@@ -31,6 +30,9 @@
 #include <tools/globname.hxx>
 #include <editeng/svxenum.hxx>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <vector>
+#include <memory>
 
 class SwModuleOptions;
 class InsCaptionOpt;
@@ -53,8 +55,8 @@ namespace o3tl
 class InsCaptionOptArr
 {
 private:
-    typedef boost::ptr_vector<InsCaptionOpt> InsCapOptArr;
-    InsCapOptArr m_aInsCapOptArr;
+    typedef std::vector<std::unique_ptr<InsCaptionOpt>> InsCapOptArr;
+    InsCapOptArr m_InsCapOptArr;
 public:
     InsCaptionOpt* Find(const SwCapObjType eType, const SvGlobalName *pOleId = 0);
     void Insert(InsCaptionOpt* pObj);

@@ -49,9 +49,9 @@ using namespace com::sun::star::uno;
 
 InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalName *pOleId)
 {
-    for (InsCapOptArr::iterator aI = m_aInsCapOptArr.begin(); aI != m_aInsCapOptArr.end(); ++aI)
+    for (auto const& it : m_InsCapOptArr)
     {
-        InsCaptionOpt &rObj = *aI;
+        InsCaptionOpt &rObj = *it;
         if (rObj.GetObjType() == eType && (eType != OLE_CAP || (pOleId && rObj.GetOleId() == *pOleId)))
             return &rObj;
     }
@@ -61,7 +61,7 @@ InsCaptionOpt* InsCaptionOptArr::Find(const SwCapObjType eType, const SvGlobalNa
 
 void InsCaptionOptArr::Insert(InsCaptionOpt* pObj)
 {
-    m_aInsCapOptArr.push_back(pObj); //takes ownership
+    m_InsCapOptArr.push_back(std::unique_ptr<InsCaptionOpt>(pObj)); //takes ownership
 }
 
 const InsCaptionOpt* SwModuleOptions::GetCapOption(
