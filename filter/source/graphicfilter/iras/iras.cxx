@@ -222,31 +222,43 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
         case 1 :
             for (y = 0; y < mnHeight && mbStatus; ++y)
             {
-                for ( x = 0; x < mnWidth; x++ )
+                for (x = 0; x < mnWidth && mbStatus; ++x)
                 {
                     if (!(x & 7))
+                    {
                         nDat = ImplGetByte();
+                        if (!m_rRAS.good())
+                            mbStatus = false;
+                    }
                     pAcc->SetPixelIndex( y, x,
                         sal::static_int_cast< sal_uInt8 >(
                             nDat >> ( ( x & 7 ) ^ 7 )) );
                 }
-                if (!( ( x - 1 ) & 0x8 ) ) ImplGetByte();       // WORD ALIGNMENT ???
-                if (!m_rRAS.good())
-                    mbStatus = false;
+                if (!( ( x - 1 ) & 0x8 ) )
+                {
+                    ImplGetByte();       // WORD ALIGNMENT ???
+                    if (!m_rRAS.good())
+                        mbStatus = false;
+                }
             }
             break;
 
         case 8 :
             for (y = 0; y < mnHeight && mbStatus; ++y)
             {
-                for ( x = 0; x < mnWidth; x++ )
+                for (x = 0; x < mnWidth && mbStatus; ++x)
                 {
                     nDat = ImplGetByte();
                     pAcc->SetPixelIndex( y, x, nDat );
+                    if (!m_rRAS.good())
+                        mbStatus = false;
                 }
-                if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
-                if (!m_rRAS.good())
-                    mbStatus = false;
+                if ( x & 1 )
+                {
+                    ImplGetByte();                     // WORD ALIGNMENT ???
+                    if (!m_rRAS.good())
+                        mbStatus = false;
+                }
             }
             break;
 
@@ -257,7 +269,7 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                 case 24 :
                     for (y = 0; y < mnHeight && mbStatus; ++y)
                     {
-                        for ( x = 0; x < mnWidth; x++ )
+                        for (x = 0; x < mnWidth && mbStatus; ++x)
                         {
                             if ( mnType == RAS_TYPE_RGB_FORMAT )
                             {
@@ -272,17 +284,22 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                                 nRed = ImplGetByte();
                             }
                             pAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
+                            if (!m_rRAS.good())
+                                mbStatus = false;
                         }
-                        if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
-                        if (!m_rRAS.good())
-                            mbStatus = false;
+                        if ( x & 1 )
+                        {
+                            ImplGetByte();                     // WORD ALIGNMENT ???
+                            if (!m_rRAS.good())
+                                mbStatus = false;
+                        }
                     }
                     break;
 
                 case 32 :
                     for (y = 0; y < mnHeight && mbStatus; ++y)
                     {
-                        for ( x = 0; x < mnWidth; x++ )
+                        for (x = 0; x < mnWidth && mbStatus; ++x)
                         {
                             nDat = ImplGetByte();               // pad byte > nil
                             if ( mnType == RAS_TYPE_RGB_FORMAT )
@@ -298,9 +315,9 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                                 nRed = ImplGetByte();
                             }
                             pAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
+                            if (!m_rRAS.good())
+                                mbStatus = false;
                         }
-                        if (!m_rRAS.good())
-                            mbStatus = false;
                     }
                     break;
             }
