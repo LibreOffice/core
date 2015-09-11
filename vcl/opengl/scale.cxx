@@ -52,31 +52,6 @@ public:
     void GetSize( Size& rSize ) const SAL_OVERRIDE;
 };
 
-bool OpenGLSalBitmap::getFormatAndType(GLenum& nFormat, GLenum& nType)
-{
-    switch(mnBits)
-    {
-    case  8:
-        nFormat = GL_LUMINANCE;
-        nType = GL_UNSIGNED_BYTE;
-        break;
-    case 16:
-        nFormat = GL_RGB;
-        nType = GL_UNSIGNED_SHORT_5_6_5;
-        break;
-    case 24:
-        nFormat = GL_RGB;
-        nType = GL_UNSIGNED_BYTE;
-        break;
-    case 32:
-    default:
-        nFormat = GL_RGBA;
-        nType = GL_UNSIGNED_BYTE;
-        break;
-    }
-    return true;
-}
-
 bool OpenGLSalBitmap::ImplScaleFilter(
     const double& rScaleX,
     const double& rScaleY,
@@ -93,11 +68,7 @@ bool OpenGLSalBitmap::ImplScaleFilter(
     if( !pProgram )
         return false;
 
-    GLenum nFormat;
-    GLenum nType;
-    getFormatAndType(nFormat, nType);
-
-    OpenGLTexture aNewTex = OpenGLTexture(nNewWidth, nNewHeight, nFormat, nType, nullptr);
+    OpenGLTexture aNewTex(nNewWidth, nNewHeight);
     pFramebuffer = mpContext->AcquireFramebuffer( aNewTex );
 
     pProgram->SetTexture( "sampler", maTexture );
@@ -176,14 +147,10 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     if( pProgram == 0 )
         return false;
 
-    GLenum nFormat;
-    GLenum nType;
-    getFormatAndType(nFormat, nType);
-
     // horizontal scaling in scratch texture
     if( mnWidth != nNewWidth )
     {
-        OpenGLTexture aScratchTex = OpenGLTexture(nNewWidth, mnHeight, nFormat, nType, nullptr);
+        OpenGLTexture aScratchTex(nNewWidth, nNewHeight);
 
         pFramebuffer = mpContext->AcquireFramebuffer( aScratchTex );
 
@@ -206,7 +173,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     // vertical scaling in final texture
     if( mnHeight != nNewHeight )
     {
-        OpenGLTexture aScratchTex = OpenGLTexture(nNewWidth, nNewHeight, nFormat, nType, nullptr);
+        OpenGLTexture aScratchTex(nNewWidth, nNewHeight);
 
         pFramebuffer = mpContext->AcquireFramebuffer( aScratchTex );
 
@@ -267,11 +234,7 @@ bool OpenGLSalBitmap::ImplScaleArea( double rScaleX, double rScaleY )
     if( pProgram == 0 )
         return false;
 
-    GLenum nFormat;
-    GLenum nType;
-    getFormatAndType(nFormat, nType);
-
-    OpenGLTexture aScratchTex = OpenGLTexture(nNewWidth, nNewHeight, nFormat, nType, nullptr);
+    OpenGLTexture aScratchTex(nNewWidth, nNewHeight);
 
     OpenGLFramebuffer* pFramebuffer = mpContext->AcquireFramebuffer( aScratchTex );
 
