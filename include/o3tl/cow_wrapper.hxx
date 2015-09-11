@@ -22,7 +22,7 @@
 
 #include <osl/interlck.h>
 
-#include <algorithm>
+#include <memory>
 
 namespace o3tl
 {
@@ -170,37 +170,40 @@ int cow_wrapper_client::queryUnmodified() const
 }
         </pre>
      */
-    template<typename T, class MTPolicy=UnsafeRefCountingPolicy> class cow_wrapper
+    /** shared value object - gets cloned before cow_wrapper hands
+        out a non-const reference to it
+     */
+    template<typename T, typename MTPolicy=UnsafeRefCountingPolicy> struct impl_t
     {
-        /** shared value object - gets cloned before cow_wrapper hands
-            out a non-const reference to it
-         */
-        struct impl_t
+        impl_t(const impl_t&) = delete;
+        impl_t& operator=(const impl_t&) = delete;
+
+        impl_t() :
+            m_value(),
+            m_ref_count(1)
         {
-            impl_t(const impl_t&) = delete;
-            impl_t& operator=(const impl_t&) = delete;
+        }
 
-            impl_t() :
-                m_value(),
-                m_ref_count(1)
-            {
-            }
+        explicit impl_t( const T& v ) :
+            m_value(v),
+            m_ref_count(1)
+        {
+        }
 
-            explicit impl_t( const T& v ) :
-                m_value(v),
-                m_ref_count(1)
-            {
-            }
-
-            T                              m_value;
-            typename MTPolicy::ref_count_t m_ref_count;
-        };
-
+        T                              m_value;
+        typename MTPolicy::ref_count_t m_ref_count;
+    };
+    template<typename T, typename MTPolicy=UnsafeRefCountingPolicy,
+             typename Del = std::default_delete< impl_t<T, MTPolicy> > > class cow_wrapper
+    {
+    private:
         void release()
         {
             if( m_pimpl && !MTPolicy::decrementCount(m_pimpl->m_ref_count) )
             {
-                delete m_pimpl;
+                // use the templated deleter to delete
+                // the pimpled object
+                Del()( m_pimpl );
                 m_pimpl = nullptr;
             }
         }
@@ -214,14 +217,14 @@ int cow_wrapper_client::queryUnmodified() const
         /** Default-construct wrapped type instance
          */
         cow_wrapper() :
-            m_pimpl( new impl_t() )
+            m_pimpl( new impl_t<T, MTPolicy>() )
         {
         }
 
         /** Copy-construct wrapped type instance from given object
          */
         explicit cow_wrapper( const value_type& r ) :
-            m_pimpl( new impl_t(r) )
+            m_pimpl( new impl_t<T, MTPolicy>(r) )
         {
         }
 
@@ -275,7 +278,7 @@ int cow_wrapper_client::queryUnmodified() const
         {
             if( m_pimpl->m_ref_count > 1 )
             {
-                impl_t* pimpl = new impl_t(m_pimpl->m_value);
+                impl_t<T,MTPolicy>* pimpl = new impl_t<T,MTPolicy>(m_pimpl->m_value);
                 release();
                 m_pimpl = pimpl;
             }
@@ -315,7 +318,7 @@ int cow_wrapper_client::queryUnmodified() const
         }
 
     private:
-        impl_t* m_pimpl;
+        impl_t<T,MTPolicy>* m_pimpl;
     };
 
 
