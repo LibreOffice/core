@@ -41,10 +41,10 @@ class CFormatEtc;
 class CDataFormatTranslator
 {
 public:
-    CDataFormatTranslator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
+    CDataFormatTranslator( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    CFormatEtc getFormatEtcFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aDataFlavor ) const;
-    com::sun::star::datatransfer::DataFlavor getDataFlavorFromFormatEtc(
+    CFormatEtc getFormatEtcFromDataFlavor( const css::datatransfer::DataFlavor& aDataFlavor ) const;
+    css::datatransfer::DataFlavor getDataFlavorFromFormatEtc(
         const FORMATETC& aFormatEtc, LCID lcid = GetThreadLocale( ) ) const;
 
     CFormatEtc    SAL_CALL getFormatEtcForClipformat( CLIPFORMAT cf ) const;
@@ -61,7 +61,7 @@ private:
     OUString SAL_CALL getTextCharsetFromLCID( LCID lcid, CLIPFORMAT aClipformat ) const;
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::datatransfer::XDataFormatTranslator >   m_XDataFormatTranslator;
+    css::uno::Reference< css::datatransfer::XDataFormatTranslator >   m_XDataFormatTranslator;
 };
 
 #endif

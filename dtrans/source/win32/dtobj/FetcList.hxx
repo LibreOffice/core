@@ -96,26 +96,26 @@ class CDataFormatTranslator;
 class CFormatRegistrar
 {
 public:
-    CFormatRegistrar( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+    CFormatRegistrar( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                       const CDataFormatTranslator& aDataFormatTranslator );
 
-    void SAL_CALL RegisterFormats( const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& aXTransferable,
+    void SAL_CALL RegisterFormats( const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable,
                                    CFormatEtcContainer& aFormatEtcContainer );
 
     sal_Bool   SAL_CALL hasSynthesizedLocale( ) const;
     LCID       SAL_CALL getSynthesizedLocale( ) const;
     sal_uInt32 SAL_CALL getRegisteredTextCodePage( ) const;
-    com::sun::star::datatransfer::DataFlavor SAL_CALL getRegisteredTextFlavor( ) const;
+    css::datatransfer::DataFlavor SAL_CALL getRegisteredTextFlavor( ) const;
 
     sal_Bool  SAL_CALL isSynthesizeableFormat( const CFormatEtc& aFormatEtc ) const;
     sal_Bool  SAL_CALL needsToSynthesizeAccompanyFormats( const CFormatEtc& aFormatEtc ) const;
 
 private:
     sal_Bool      SAL_CALL isEqualCurrentSystemCodePage( sal_uInt32 aCodePage ) const;
-    OUString SAL_CALL getCharsetFromDataFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
+    OUString SAL_CALL getCharsetFromDataFlavor( const css::datatransfer::DataFlavor& aFlavor );
 
     sal_Bool SAL_CALL hasUnicodeFlavor(
-        const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& aXTransferable ) const;
+        const css::uno::Reference< css::datatransfer::XTransferable >& aXTransferable ) const;
 
     sal_Bool SAL_CALL findLocaleForTextCodePage( );
 
@@ -128,9 +128,9 @@ private:
 private:
     const CDataFormatTranslator&             m_DataFormatTranslator;
     sal_Bool                                 m_bHasSynthesizedLocale;
-    com::sun::star::datatransfer::DataFlavor m_RegisteredTextFlavor;
+    css::datatransfer::DataFlavor            m_RegisteredTextFlavor;
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
+    const css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
     static LCID       m_TxtLocale;
     static sal_uInt32 m_TxtCodePage;

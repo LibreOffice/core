@@ -38,7 +38,7 @@
 
 // This maps key states as occur as parameter, e.g. in IDropTarget::DragEnter,
 // IDropSource::QueryContinueDrag, to actions as are declared in
-// com::sun::star::datatransfer::dnd::DNDConstants ( ACTION_MOVE etc).
+// css::datatransfer::dnd::DNDConstants ( ACTION_MOVE etc).
 // If the grfKeyState indicates the ALt or right mousebutton then the returned
 // values combines all possible actions. This is because those key and button are
 // used when the user expect a menu to appear when he drops. The menu then
@@ -51,13 +51,13 @@
 sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 sourceActions);
 
 // The function maps a windows DROPEFFECTs to actions
-// ( com::sun::star::datatransfer::dnd::DNDConstants).
+// ( css::datatransfer::dnd::DNDConstants).
 // The argument can be a combination of different DROPEFFECTS,
 // In that case the return value is also a combination of the
 // appropriate actions.
 sal_Int8 dndOleDropEffectsToActions( DWORD dwEffect);
 
-// The function maps actions ( com::sun::star::datatransfer::dnd::DNDConstants)
+// The function maps actions ( css::datatransfer::dnd::DNDConstants)
 // to window DROPEFFECTs.
 // The argument can be a combination of different actions
 // In that case the return value is also a combination of the

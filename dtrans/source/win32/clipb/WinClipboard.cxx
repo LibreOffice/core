@@ -215,7 +215,7 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
                         }
                     }
                 }
-                catch(const ::com::sun::star::lang::DisposedException&)
+                catch(const css::lang::DisposedException&)
                 {
                     OSL_FAIL("Service Manager disposed");
 

@@ -61,44 +61,44 @@ protected:
 class CWinClipboard :
     public CWinClipboardDummy,
     public cppu::WeakComponentImplHelper<
-        ::com::sun::star::datatransfer::clipboard::XSystemClipboard,
-        ::com::sun::star::datatransfer::clipboard::XFlushableClipboard,
-        ::com::sun::star::lang::XServiceInfo >
+        css::datatransfer::clipboard::XSystemClipboard,
+        css::datatransfer::clipboard::XFlushableClipboard,
+        css::lang::XServiceInfo >
 {
 public:
-    CWinClipboard( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
+    CWinClipboard( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                    const OUString& aClipboardName );
 
     // XClipboard
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents(  )
-        throw( ::com::sun::star::uno::RuntimeException );
+    virtual css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getContents(  )
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL setContents(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-        throw( ::com::sun::star::uno::RuntimeException );
+        const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
+        const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+        throw( css::uno::RuntimeException );
 
     virtual OUString SAL_CALL getName(  )
-        throw( ::com::sun::star::uno::RuntimeException );
+        throw( css::uno::RuntimeException );
 
     // XFlushableClipboard
 
-    virtual void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL flushClipboard( ) throw( css::uno::RuntimeException );
 
     // XClipboardEx
 
-    virtual sal_Int8 SAL_CALL getRenderingCapabilities(  ) throw( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Int8 SAL_CALL getRenderingCapabilities(  ) throw( css::uno::RuntimeException );
 
     // XClipboardNotifier
 
     virtual void SAL_CALL addClipboardListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-        throw( ::com::sun::star::uno::RuntimeException );
+        const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
+        throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL removeClipboardListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
-        throw( ::com::sun::star::uno::RuntimeException );
+        const css::uno::Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
+        throw( css::uno::RuntimeException );
 
     // overwrite base class method, which is called
     // by base class dispose function
@@ -108,20 +108,20 @@ public:
     // XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(css::uno::RuntimeException);
 
 private:
     void SAL_CALL notifyAllClipboardListener( );
 
 private:
-    ::std::unique_ptr< CWinClipbImpl >                                            m_pImpl;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
+    ::std::unique_ptr< CWinClipbImpl >                  m_pImpl;
+    css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
     friend class CWinClipbImpl;
 };

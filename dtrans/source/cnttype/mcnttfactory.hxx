@@ -27,8 +27,8 @@
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 
 class CMimeContentTypeFactory : public
-    cppu::WeakImplHelper< com::sun::star::datatransfer::XMimeContentTypeFactory, \
-    com::sun::star::lang::XServiceInfo >
+    cppu::WeakImplHelper< css::datatransfer::XMimeContentTypeFactory,
+                          css::lang::XServiceInfo >
 {
 
 public:
@@ -36,19 +36,19 @@ public:
 
     // XMimeContentTypeFactory
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentType > SAL_CALL createMimeContentType( const OUString& aContentType )
-        throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::datatransfer::XMimeContentType > SAL_CALL createMimeContentType( const OUString& aContentType )
+        throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
 
     virtual OUString SAL_CALL getImplementationName(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     ::osl::Mutex                                                                           m_aMutex;
