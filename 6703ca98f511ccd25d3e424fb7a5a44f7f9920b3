@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_cc4c4f79",
+        "filename": "chart2/source/tools/LogarithmicRegressionCurveCalculator.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-09-11T21:41:51Z",
+      "side": 1,
+      "message": "Are these #defined constant useful?\nIf no, I would remove them.\nIf yes, other RegressionCurveCalculator should use it also.",
+      "range": {
+        "startLine": 160,
+        "startChar": 29,
+        "endLine": 160,
+        "endChar": 42
+      },
+      "revId": "6703ca98f511ccd25d3e424fb7a5a44f7f9920b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
