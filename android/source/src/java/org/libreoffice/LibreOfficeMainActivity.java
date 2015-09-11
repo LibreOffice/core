@@ -258,7 +258,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
     private void saveDocument() {
         final long lastModified = mInputFile.lastModified();
         final Activity activity = LibreOfficeMainActivity.this;
-        Toast.makeText(this, "Saving the document...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.message_saving, Toast.LENGTH_SHORT).show();
         // local save
         LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
 
@@ -287,8 +287,8 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
             @Override
             protected void onPostExecute(Void param) {
-                Toast.makeText(activity, "Save complete", Toast.LENGTH_SHORT)
-                        .show();
+                Toast.makeText(activity, R.string.message_saved,
+                        Toast.LENGTH_SHORT).show();
             }
         };
         // Delay the call to document provider save operation and check the
@@ -312,7 +312,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
                         // 20 seconds later, the local file has not changed,
                         // maybe there were no changes at all
                         Toast.makeText(activity,
-                                "Save incomplete. Were there any changes?",
+                                R.string.message_save_incomplete,
                                 Toast.LENGTH_LONG).show();
                     }
                 }
