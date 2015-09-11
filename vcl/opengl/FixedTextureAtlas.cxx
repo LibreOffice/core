@@ -36,15 +36,18 @@ OpenGLTexture FixedTextureAtlasManager::InsertBuffer(int nWidth, int nHeight, in
 {
     ImplOpenGLTexture* pTexture = nullptr;
 
-    for (size_t i = 0; i < mpTextures.size(); i++)
+    auto funFreeSlot = [] (std::unique_ptr<ImplOpenGLTexture>& mpTexture)
     {
-        if (mpTextures[i]->mnFreeSlots > 0)
-        {
-            pTexture = mpTextures[i].get();
-        }
-    }
+        return mpTexture->mnFreeSlots > 0;
+    };
 
-    if (!pTexture)
+    auto aIterator = std::find_if(mpTextures.begin(), mpTextures.end(), funFreeSlot);
+
+    if (aIterator != mpTextures.end())
+    {
+        pTexture = (*aIterator).get();
+    }
+    else
     {
         CreateNewTexture();
         pTexture = mpTextures.back().get();
