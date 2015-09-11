@@ -91,7 +91,7 @@ namespace canvas
             // TODO(F1): this is a heuristic, could
             // be designed as a policy.
             auto       aEnd( maFragments.cend() );
-            auto       aCurrMax( maFragments.end() );
+            auto       aCurrMax( aEnd );
             sal_uInt32 nCurrMaxArea = 0;
             for( auto aCurr = maFragments.begin(); aCurr != aEnd; ++aCurr )
             {
