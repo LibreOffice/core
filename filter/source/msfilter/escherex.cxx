@@ -2296,7 +2296,6 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                                             rShapeType = ( sal_uInt16 )( ESCHER_ShpInst_BentConnector2 + nAdjCount);
                                             for ( sal_Int32 i = 0 ; i < nAdjCount; ++ i)
                                                 AddOpt( (sal_uInt16) ( ESCHER_Prop_adjustValue+i) , lcl_GetConnectorAdjustValue( aPoly, i ) );
-                                            bRetValue = true;
                                         }
                                         sal_Int32 nAngle=0;
                                         if (lcl_GetAngle(aPoly,rShapeFlags,nAngle ))
