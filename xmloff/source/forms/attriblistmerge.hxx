@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
@@ -32,7 +32,7 @@ namespace xmloff
 {
 
     //= OAttribListMerger
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::xml::sax::XAttributeList
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::xml::sax::XAttributeList
                                     >   OAttribListMerger_Base;
     /** implements the XAttributeList list by merging different source attribute lists
 

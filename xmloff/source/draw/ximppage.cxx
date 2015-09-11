@@ -21,7 +21,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <sax/tools/converter.hxx>
 #include "XMLNumberStylesImport.hxx"
 #include <xmloff/xmlstyle.hxx>
@@ -533,7 +533,7 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
     }
 }
 
-class XoNavigationOrderAccess : public ::cppu::WeakImplHelper1< XIndexAccess >
+class XoNavigationOrderAccess : public ::cppu::WeakImplHelper< XIndexAccess >
 {
 public:
     explicit XoNavigationOrderAccess( std::vector< Reference< XShape > >& rShapes );

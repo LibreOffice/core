@@ -19,7 +19,7 @@
 #ifndef XMLOFF_COLORPROPERTYSET_HXX
 #define XMLOFF_COLORPROPERTYSET_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -29,7 +29,7 @@ namespace xmloff
 namespace chart
 {
 
-class ColorPropertySet : public ::cppu::WeakImplHelper2<
+class ColorPropertySet : public ::cppu::WeakImplHelper<
         ::com::sun::star::beans::XPropertySet,
         ::com::sun::star::beans::XPropertyState >
 {

@@ -19,7 +19,7 @@
 
 #include "ColorPropertySet.hxx"
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/diagnose.h>
 
@@ -32,7 +32,7 @@ using ::com::sun::star::uno::RuntimeException;
 
 namespace
 {
-class lcl_ColorPropertySetInfo : public ::cppu::WeakImplHelper1<
+class lcl_ColorPropertySetInfo : public ::cppu::WeakImplHelper<
         XPropertySetInfo  >
 {
 public:

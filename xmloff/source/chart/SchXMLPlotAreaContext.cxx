@@ -34,7 +34,6 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include "xexptran.hxx"
-#include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>

@@ -28,13 +28,13 @@
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace xmloff
 {
 
     //= OEventDescriptorMapper
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::container::XNameReplace
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::container::XNameReplace
                                     >   OEventDescriptorMapper_Base;
     /** helper class wrapping different script event representations
 
