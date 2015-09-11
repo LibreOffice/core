@@ -1392,7 +1392,7 @@ static void lcl_CreatePortions(
         }
     }
 
-   OSL_ENSURE((PortionStack.size() == 1) && !PortionStack.top().second,
+    OSL_ENSURE((PortionStack.size() == 1) && !PortionStack.top().second,
             "CreatePortions: stack error" );
 }
 

@@ -524,8 +524,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         // above the anchor line, which seems odd, but a tiny adjustment
         // here to bring the top down convinces msoffice to wrap like us
         if (nTwipstoEMU == 0 &&
-            (strcmp(relativeFromV, "line") == 0 || strcmp(relativeFromV, "paragraph") == 0) &&
-            (!alignV || strcmp(alignV, "top") == 0))
+                (strcmp(relativeFromV, "line") == 0 || strcmp(relativeFromV, "paragraph") == 0) &&
+                (!alignV || strcmp(alignV, "top") == 0))
         {
             alignV = NULL;
             nTwipstoEMU = 635;
