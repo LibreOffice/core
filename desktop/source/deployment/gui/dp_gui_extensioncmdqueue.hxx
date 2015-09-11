@@ -63,7 +63,7 @@ public:
     */
     ExtensionCmdQueue( DialogHelper * pDialogHelper,
                        TheExtensionManager *pManager,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rContext);
+                       const css::uno::Reference< css::uno::XComponentContext > & rContext);
 
     ~ExtensionCmdQueue();
 
@@ -72,13 +72,13 @@ public:
     void addExtension( const OUString &rExtensionURL,
                        const OUString &rRepository,
                        const bool bWarnUser );
-    void removeExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage );
-    void enableExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage,
+    void removeExtension( const css::uno::Reference< css::deployment::XPackage > &rPackage );
+    void enableExtension( const css::uno::Reference< css::deployment::XPackage > &rPackage,
                           const bool bEnable );
-    void checkForUpdates(const std::vector< ::com::sun::star::uno::Reference<
-                         ::com::sun::star::deployment::XPackage > > &vList );
-    void acceptLicense( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &rPackage );
-    static void syncRepositories( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext );
+    void checkForUpdates(const std::vector< css::uno::Reference<
+                         css::deployment::XPackage > > &vList );
+    void acceptLicense( const css::uno::Reference< css::deployment::XPackage > &rPackage );
+    static void syncRepositories( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     /**
        This call does not block. It signals the internal thread
        that it should install the remaining extensions and then terminate.
@@ -95,8 +95,8 @@ private:
     rtl::Reference< Thread > m_thread;
 };
 
-void handleInteractionRequest( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext,
-                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > & xRequest );
+void handleInteractionRequest( const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                               const css::uno::Reference< css::task::XInteractionRequest > & xRequest );
 
 }
 

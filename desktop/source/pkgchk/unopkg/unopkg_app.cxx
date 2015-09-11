@@ -350,7 +350,7 @@ extern "C" int unopkg_main()
         Reference<deployment::XExtensionManager> xExtensionManager(
             deployment::ExtensionManager::get( xComponentContext ) );
 
-        Reference< ::com::sun::star::ucb::XCommandEnvironment > xCmdEnv(
+        Reference< css::ucb::XCommandEnvironment > xCmdEnv(
             createCmdEnv( xComponentContext, logFile,
                           option_force, option_verbose, option_suppressLicense) );
 
@@ -597,7 +597,7 @@ extern "C" int unopkg_main()
             dp_misc::writeConsoleError(e.Message + "\n");
         bNoOtherErrorMsg = true;
     }
-    catch (const ::com::sun::star::uno::Exception & e ) {
+    catch (const css::uno::Exception & e ) {
         Any exc( ::cppu::getCaughtException() );
 
         dp_misc::writeConsoleError("\nERROR: " +

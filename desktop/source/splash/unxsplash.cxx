@@ -95,7 +95,7 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 
 // XInitialize
 void SAL_CALL
-UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& )
+UnxSplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& )
     throw ( RuntimeException, std::exception )
 {
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )

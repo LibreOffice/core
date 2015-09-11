@@ -35,14 +35,12 @@ namespace com { namespace sun { namespace star {
 
 namespace desktop { namespace splash {
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
-create(
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        const &);
+css::uno::Reference< css::uno::XInterface > SAL_CALL
+create( css::uno::Reference< css::uno::XComponentContext > const & );
 
 OUString SAL_CALL getImplementationName();
 
-com::sun::star::uno::Sequence< OUString > SAL_CALL
+css::uno::Sequence< OUString > SAL_CALL
 getSupportedServiceNames();
 
 } }

@@ -47,9 +47,9 @@ namespace migration
 {
 
     OUString SAL_CALL OO3ExtensionMigration_getImplementationName();
-    ::com::sun::star::uno::Sequence< OUString > SAL_CALL OO3ExtensionMigration_getSupportedServiceNames();
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL OO3ExtensionMigration_create(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext );
+    css::uno::Sequence< OUString > SAL_CALL OO3ExtensionMigration_getSupportedServiceNames();
+    css::uno::Reference< css::uno::XInterface > SAL_CALL OO3ExtensionMigration_create(
+        css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
 
 
@@ -57,19 +57,19 @@ namespace migration
 
 
     typedef ::cppu::WeakImplHelper<
-        ::com::sun::star::lang::XServiceInfo,
-        ::com::sun::star::lang::XInitialization,
-        ::com::sun::star::task::XJob > ExtensionMigration_BASE;
+        css::lang::XServiceInfo,
+        css::lang::XInitialization,
+        css::task::XJob > ExtensionMigration_BASE;
 
     class OO3ExtensionMigration : public ExtensionMigration_BASE
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_ctx;
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XDocumentBuilder >  m_xDocBuilder;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >       m_xSimpleFileAccess;
+        css::uno::Reference< css::uno::XComponentContext >      m_ctx;
+        css::uno::Reference< css::xml::dom::XDocumentBuilder >  m_xDocBuilder;
+        css::uno::Reference< css::ucb::XSimpleFileAccess3 >     m_xSimpleFileAccess;
         ::osl::Mutex            m_aMutex;
-        OUString         m_sSourceDir;
-        OUString         m_sTargetDir;
+        OUString                m_sSourceDir;
+        OUString                m_sTargetDir;
         TStringVector           m_aBlackList;
 
         enum ScanResult
@@ -86,57 +86,57 @@ namespace migration
         void                    migrateExtension( const OUString& sSourceDir );
 
     public:
-        explicit OO3ExtensionMigration(::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > const & ctx);
+        explicit OO3ExtensionMigration(css::uno::Reference<
+            css::uno::XComponentContext > const & ctx);
         virtual ~OO3ExtensionMigration();
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
-            throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XJob
-        virtual ::com::sun::star::uno::Any SAL_CALL execute(
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Arguments )
-            throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL execute(
+            const css::uno::Sequence< css::beans::NamedValue >& Arguments )
+            throw (css::lang::IllegalArgumentException, css::uno::Exception,
+                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
     class TmpRepositoryCommandEnv
-        : public ::cppu::WeakImplHelper< ::com::sun::star::ucb::XCommandEnvironment,
-                                          ::com::sun::star::task::XInteractionHandler,
-                                          ::com::sun::star::ucb::XProgressHandler >
+        : public ::cppu::WeakImplHelper< css::ucb::XCommandEnvironment,
+                                          css::task::XInteractionHandler,
+                                          css::ucb::XProgressHandler >
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler> m_forwardHandler;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
+        css::uno::Reference< css::task::XInteractionHandler> m_forwardHandler;
     public:
         virtual ~TmpRepositoryCommandEnv();
         TmpRepositoryCommandEnv();
 
         // XCommandEnvironment
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > SAL_CALL
-        getInteractionHandler() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler >
-        SAL_CALL getProgressHandler() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL
+        getInteractionHandler() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::ucb::XProgressHandler >
+        SAL_CALL getProgressHandler() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XInteractionHandler
         virtual void SAL_CALL handle(
-            ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > const & xRequest )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::task::XInteractionRequest > const & xRequest )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XProgressHandler
-        virtual void SAL_CALL push( ::com::sun::star::uno::Any const & Status )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL update( ::com::sun::star::uno::Any const & Status )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL pop() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL push( css::uno::Any const & Status )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL update( css::uno::Any const & Status )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL pop() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 

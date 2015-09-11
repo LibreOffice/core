@@ -44,22 +44,20 @@ class ExtensionCmdQueue;
 
 
 class TheExtensionManager :
-    public ::cppu::WeakImplHelper< ::com::sun::star::frame::XTerminateListener,
-                                    ::com::sun::star::util::XModifyListener >
+    public ::cppu::WeakImplHelper< css::frame::XTerminateListener,
+                                    css::util::XModifyListener >
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2 >          m_xDesktop;
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xNameAccessNodes;
-
-    css::uno::Reference<
-         css::awt::XWindow >     m_xParent;
+    css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+    css::uno::Reference< css::frame::XDesktop2 >              m_xDesktop;
+    css::uno::Reference< css::deployment::XExtensionManager > m_xExtensionManager;
+    css::uno::Reference< css::container::XNameAccess >        m_xNameAccessNodes;
+    css::uno::Reference< css::awt::XWindow >                  m_xParent;
     VclPtr<ExtMgrDialog>         m_pExtMgrDialog;
     VclPtr<UpdateRequiredDialog> m_pUpdReqDialog;
     ExtensionCmdQueue           *m_pExecuteCmdQueue;
 
-    OUString          m_sGetExtensionsURL;
+    OUString                     m_sGetExtensionsURL;
 
 public:
     static ::rtl::Reference<TheExtensionManager> s_ExtMgr;
@@ -100,31 +98,31 @@ public:
     void terminateDialog();
 
     // Tools
-    bool supportsOptions( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
-    static PackageState getPackageState( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext() const { return m_xContext; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > getExtensionManager() const { return m_xExtensionManager; }
-    bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
+    bool supportsOptions( const css::uno::Reference< css::deployment::XPackage > &xPackage ) const;
+    static PackageState getPackageState( const css::uno::Reference< css::deployment::XPackage > &xPackage );
+    css::uno::Reference< css::uno::XComponentContext > getContext() const { return m_xContext; }
+    css::uno::Reference< css::deployment::XExtensionManager > getExtensionManager() const { return m_xExtensionManager; }
+    bool isReadOnly( const css::uno::Reference< css::deployment::XPackage > &xPackage ) const;
 
 
     static ::rtl::Reference<TheExtensionManager> get(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xContext,
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> const & xParent = 0,
+        css::uno::Reference< css::uno::XComponentContext> const & xContext,
+        css::uno::Reference< css::awt::XWindow> const & xParent = 0,
         OUString const & view = OUString() );
 
     // XEventListener
-    virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL notifyTermination( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL queryTermination( css::lang::EventObject const & evt )
+        throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL notifyTermination( css::lang::EventObject const & evt )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XModifyListener
-    virtual void SAL_CALL modified( ::com::sun::star::lang::EventObject const & evt )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL modified( css::lang::EventObject const & evt )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 } // namespace dp_gui

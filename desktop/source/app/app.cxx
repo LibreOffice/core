@@ -1275,8 +1275,7 @@ int Desktop::Main()
     pExecGlobals = new ExecuteGlobals();
 
     // Remember current context object
-    com::sun::star::uno::ContextLayer layer(
-        com::sun::star::uno::getCurrentContext() );
+    css::uno::ContextLayer layer( css::uno::getCurrentContext() );
 
     if ( m_aBootstrapError != BE_OK )
     {
@@ -1290,8 +1289,7 @@ int Desktop::Main()
     }
 
     // Detect desktop environment - need to do this as early as possible
-    com::sun::star::uno::setCurrentContext(
-        new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
+    css::uno::setCurrentContext( new DesktopContext( css::uno::getCurrentContext() ) );
 
     CommandLineArgs& rCmdLineArgs = GetCommandLineArgs();
 
@@ -1500,13 +1498,13 @@ int Desktop::Main()
             }
         }
     }
-    catch ( const com::sun::star::lang::WrappedTargetException& wte )
+    catch ( const css::lang::WrappedTargetException& wte )
     {
-        com::sun::star::uno::Exception te;
+        css::uno::Exception te;
         wte.TargetException >>= te;
         FatalError( MakeStartupConfigAccessErrorMessage(wte.Message + te.Message) );
     }
-    catch ( const com::sun::star::uno::Exception& e )
+    catch ( const css::uno::Exception& e )
     {
         FatalError( MakeStartupErrorMessage(e.Message) );
     }
@@ -1549,7 +1547,7 @@ int Desktop::Main()
                 xDesktop->addTerminateListener( new OfficeIPCThreadController );
             SetSplashScreenProgress(100);
         }
-        catch ( const com::sun::star::uno::Exception& e )
+        catch ( const css::uno::Exception& e )
         {
             FatalError( MakeStartupErrorMessage(e.Message) );
         }
@@ -1575,8 +1573,8 @@ int Desktop::Main()
 #if HAVE_FEATURE_JAVA
             // The JavaContext contains an interaction handler which is used when
             // the creation of a Java Virtual Machine fails
-            com::sun::star::uno::ContextLayer layer2(
-                new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
+            css::uno::ContextLayer layer2(
+                new svt::JavaContext( css::uno::getCurrentContext() ) );
 #endif
             // check whether the shutdown is caused by restart just before entering the Execute
             pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||
@@ -1590,17 +1588,17 @@ int Desktop::Main()
                 Execute();
             }
         }
-        catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
+        catch(const css::document::CorruptedFilterConfigurationException& exFilterCfg)
         {
             OfficeIPCThread::SetDowning();
             FatalError( MakeStartupErrorMessage(exFilterCfg.Message) );
         }
-        catch(const com::sun::star::configuration::CorruptedConfigurationException& exAnyCfg)
+        catch(const css::configuration::CorruptedConfigurationException& exAnyCfg)
         {
             OfficeIPCThread::SetDowning();
             FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
         }
-        catch( const ::com::sun::star::uno::Exception& exUNO)
+        catch( const css::uno::Exception& exUNO)
         {
             OfficeIPCThread::SetDowning();
             FatalError( exUNO.Message);
@@ -1712,24 +1710,24 @@ bool Desktop::InitializeConfiguration()
             comphelper::getProcessComponentContext() );
         return true;
     }
-    catch( ::com::sun::star::lang::ServiceNotRegisteredException & e )
+    catch( css::lang::ServiceNotRegisteredException & e )
     {
         HandleBootstrapErrors(
             Desktop::BE_UNO_SERVICE_CONFIG_MISSING, e.Message );
     }
-    catch( const ::com::sun::star::configuration::MissingBootstrapFileException& e )
+    catch( const css::configuration::MissingBootstrapFileException& e )
     {
         OUString aMsg( CreateErrorMsgString( utl::Bootstrap::MISSING_BOOTSTRAP_FILE,
                                                 e.BootstrapFileURL ));
         HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_USER_INSTALL, aMsg );
     }
-    catch( const ::com::sun::star::configuration::InvalidBootstrapFileException& e )
+    catch( const css::configuration::InvalidBootstrapFileException& e )
     {
         OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY,
                                                 e.BootstrapFileURL ));
         HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
     }
-    catch( const ::com::sun::star::configuration::InstallationIncompleteException& )
+    catch( const css::configuration::InstallationIncompleteException& )
     {
         OUString aVersionFileURL;
         OUString aMsg;
@@ -1741,27 +1739,27 @@ bool Desktop::InitializeConfiguration()
 
         HandleBootstrapPathErrors( ::utl::Bootstrap::MISSING_USER_INSTALL, aMsg );
     }
-    catch ( const com::sun::star::configuration::backend::BackendAccessException& exception)
+    catch ( const css::configuration::backend::BackendAccessException& exception)
     {
         // [cm122549] It is assumed in this case that the message
         // coming from InitConfiguration (in fact CreateApplicationConf...)
         // is suitable for display directly.
         FatalError( MakeStartupErrorMessage( exception.Message ) );
     }
-    catch ( const com::sun::star::configuration::backend::BackendSetupException& exception)
+    catch ( const css::configuration::backend::BackendSetupException& exception)
     {
         // [cm122549] It is assumed in this case that the message
         // coming from InitConfiguration (in fact CreateApplicationConf...)
         // is suitable for display directly.
         FatalError( MakeStartupErrorMessage( exception.Message ) );
     }
-    catch ( const ::com::sun::star::configuration::CannotLoadConfigurationException& )
+    catch ( const css::configuration::CannotLoadConfigurationException& )
     {
         OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
                                                 OUString() ));
         HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
         OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
                                                 OUString() ));
@@ -1807,7 +1805,7 @@ bool Desktop::InitializeQuickstartMode( const Reference< XComponentContext >& rx
         }
         return true;
     }
-    catch( const ::com::sun::star::uno::Exception& )
+    catch( const css::uno::Exception& )
     {
         return false;
     }
@@ -1888,7 +1886,7 @@ IMPL_LINK_NOARG_TYPED(Desktop, OpenClients_Impl, void*, void)
         const char *pExitPostStartup = getenv ("OOO_EXIT_POST_STARTUP");
         if (pExitPostStartup && *pExitPostStartup)
             new ExitTimer();
-    } catch (const ::com::sun::star::uno::Exception &e) {
+    } catch (const css::uno::Exception &e) {
         OUString a( "UNO exception during client open:\n"  );
         Application::Abort( a + e.Message );
     }
@@ -1903,7 +1901,7 @@ IMPL_STATIC_LINK_NOARG_TYPED(Desktop, EnableAcceptors_Impl, void*, void)
 
 void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
 {
-    Sequence < com::sun::star::beans::PropertyValue > args(1);
+    Sequence < css::beans::PropertyValue > args(1);
     args[0].Name = "Hidden";
     args[0].Value <<= sal_True;
     Reference < XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
@@ -1912,11 +1910,11 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/swriter"),
+            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/swriter"),
                 OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
-        catch ( const com::sun::star::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }
@@ -1924,11 +1922,11 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/scalc"),
+            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/scalc"),
                 OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
-        catch ( const com::sun::star::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }
@@ -1936,11 +1934,11 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/sdraw"),
+            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/sdraw"),
                 OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
-        catch ( const com::sun::star::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }
@@ -1948,11 +1946,11 @@ void Desktop::PreloadModuleData( const CommandLineArgs& rArgs )
     {
         try
         {
-            Reference < ::com::sun::star::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/simpress"),
+            Reference < css::util::XCloseable > xDoc( xDesktop->loadComponentFromURL( OUString("private:factory/simpress"),
                 OUString("_blank"), 0, args ), UNO_QUERY_THROW );
             xDoc->close( sal_False );
         }
-        catch ( const com::sun::star::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }
@@ -1982,7 +1980,7 @@ void Desktop::PreloadConfigurationData()
             xCmdAccess->getByName(".uno:EditGlossary");
         }
     }
-    catch ( const ::com::sun::star::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
     }
 
@@ -1993,7 +1991,7 @@ void Desktop::PreloadConfigurationData()
         if ( xCmdAccess.is() )
             xCmdAccess->getByName(".uno:InsertObjectStarMath");
     }
-    catch ( const ::com::sun::star::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
     }
 
@@ -2005,7 +2003,7 @@ void Desktop::PreloadConfigurationData()
         if ( xCmdAccess.is() )
             xCmdAccess->getByName(".uno:Polygon");
     }
-    catch ( const ::com::sun::star::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
     }
 
@@ -2019,7 +2017,7 @@ void Desktop::PreloadConfigurationData()
         if ( xWindowAccess.is() )
             xWindowAccess->getByName("private:resource/toolbar/standardbar");
     }
-    catch ( const ::com::sun::star::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
     }
     try
@@ -2029,7 +2027,7 @@ void Desktop::PreloadConfigurationData()
         if ( xWindowAccess.is() )
             xWindowAccess->getByName("private:resource/toolbar/standardbar");
     }
-    catch ( const ::com::sun::star::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
     }
     try
@@ -2039,7 +2037,7 @@ void Desktop::PreloadConfigurationData()
         if ( xWindowAccess.is() )
             xWindowAccess->getByName("private:resource/toolbar/standardbar");
     }
-    catch ( const ::com::sun::star::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
     }
     try
@@ -2049,7 +2047,7 @@ void Desktop::PreloadConfigurationData()
         if ( xWindowAccess.is() )
             xWindowAccess->getByName("private:resource/toolbar/standardbar");
     }
-    catch ( const ::com::sun::star::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
     }
 
@@ -2059,7 +2057,7 @@ void Desktop::PreloadConfigurationData()
     {
         xUIElementFactory->getRegisteredFactories();
     }
-    catch ( const ::com::sun::star::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
     }
 
@@ -2074,7 +2072,7 @@ void Desktop::PreloadConfigurationData()
                     OUString( ".uno:CharFontName" ),
                     OUString() );
     }
-    catch ( const ::com::sun::star::uno::Exception& )
+    catch ( const css::uno::Exception& )
     {
     }
 
@@ -2088,7 +2086,7 @@ void Desktop::PreloadConfigurationData()
         {
              xNameAccess->getElementNames();
         }
-        catch ( const ::com::sun::star::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }
@@ -2103,7 +2101,7 @@ void Desktop::PreloadConfigurationData()
         {
              xNameAccess->getElementNames();
         }
-        catch ( const ::com::sun::star::uno::Exception& )
+        catch ( const css::uno::Exception& )
         {
         }
     }
@@ -2260,7 +2258,7 @@ void Desktop::OpenClients()
             xSessionListener = SessionListener::createWithOnQuitFlag(
                     ::comphelper::getProcessComponentContext(), isUIOnSessionShutdownAllowed());
         }
-        catch(const com::sun::star::uno::Exception& e)
+        catch(const css::uno::Exception& e)
         {
             SAL_WARN( "desktop.app", "Registration of session listener failed" << e.Message);
         }
@@ -2272,7 +2270,7 @@ void Desktop::OpenClients()
             {
                 xSessionListener->doRestore();
             }
-            catch(const com::sun::star::uno::Exception& e)
+            catch(const css::uno::Exception& e)
             {
                 SAL_WARN( "desktop.app", "Error in session management" << e.Message);
             }
@@ -2485,27 +2483,27 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             if ( !xTask.is() )
             {
                 // get any task if there is no active one
-                Reference< css::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+                Reference< css::container::XIndexAccess > xList( xDesktop->getFrames(), css::uno::UNO_QUERY );
                 if ( xList->getCount() > 0 )
                     xList->getByIndex(0) >>= xTask;
             }
 
             if ( xTask.is() )
             {
-                Reference< com::sun::star::awt::XTopWindow > xTop( xTask->getContainerWindow(), UNO_QUERY );
+                Reference< css::awt::XTopWindow > xTop( xTask->getContainerWindow(), UNO_QUERY );
                 xTop->toFront();
             }
             else
             {
                 // no visible task that could be activated found
-                Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
+                Reference< css::awt::XWindow > xContainerWindow;
                 Reference< XFrame > xBackingFrame = xDesktop->findFrame(OUString( "_blank" ), 0);
                 if (xBackingFrame.is())
                     xContainerWindow = xBackingFrame->getContainerWindow();
                 if (xContainerWindow.is())
                 {
                     Reference< XController > xStartModule = StartModule::createWithParentWindow(xContext, xContainerWindow);
-                    Reference< ::com::sun::star::awt::XWindow > xBackingWin(xStartModule, UNO_QUERY);
+                    Reference< css::awt::XWindow > xBackingWin(xStartModule, UNO_QUERY);
                     // Attention: You MUST(!) call setComponent() before you call attachFrame().
                     // Because the backing component set the property "IsBackingMode" of the frame
                     // to true inside attachFrame(). But setComponent() reset this state every time ...
@@ -2707,7 +2705,7 @@ void Desktop::DoFirstRunInitializations()
         Reference< XJobExecutor > xExecutor = theJobExecutor::get( ::comphelper::getProcessComponentContext() );
         xExecutor->trigger( OUString("onFirstRunInitialization") );
     }
-    catch(const ::com::sun::star::uno::Exception&)
+    catch(const css::uno::Exception&)
     {
         SAL_WARN( "desktop.app", "Desktop::DoFirstRunInitializations: caught an exception while trigger job executor ..." );
     }
@@ -2726,7 +2724,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
         progress->SetSplashScreenProgress(60);
     }
     Reference< XFrame > xBackingFrame = xDesktop->findFrame(OUString( "_blank" ), 0);
-    Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
+    Reference< css::awt::XWindow > xContainerWindow;
 
     if (xBackingFrame.is())
         xContainerWindow = xBackingFrame->getContainerWindow();

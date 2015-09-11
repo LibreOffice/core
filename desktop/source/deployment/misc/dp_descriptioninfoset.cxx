@@ -113,8 +113,8 @@ public:
         or any other error occurred. Therefore it should only be used with
         new extensions.
 
-        Throws com::sun::star::uno::RuntimeException,
-        com::sun::star::deployment::DeploymentException,
+        Throws css::uno::RuntimeException,
+        css::deployment::DeploymentException,
         dp_registry::backend::bundle::NoDescriptionException.
      */
     ExtensionDescription(
@@ -169,7 +169,7 @@ ExtensionDescription::ExtensionDescription(
     const Reference< css::ucb::XCommandEnvironment >& xCmdEnv)
 {
     try {
-        //may throw ::com::sun::star::ucb::ContentCreationException
+        //may throw css::ucb::ContentCreationException
         //If there is no description.xml then ucb will start an interaction which
         //brings up a dialog.We want to prevent this. Therefore we wrap the xCmdEnv
         //and filter the respective exception out.
@@ -179,7 +179,7 @@ ExtensionDescription::ExtensionDescription(
                 new FileDoesNotExistFilter(xCmdEnv));
         ::ucbhelper::Content descContent(sDescriptionUri, xFilter, xContext);
 
-        //throws an com::sun::star::uno::Exception if the file is not available
+        //throws an css::uno::Exception if the file is not available
         Reference<css::io::XInputStream> xIn;
         try
         {   //throws com.sun.star.ucb.InteractiveIOException
@@ -448,7 +448,7 @@ void DescriptionInfoset::checkBlacklist() const
 
 bool DescriptionInfoset::checkBlacklistVersion(
     const OUString& currentversion,
-    ::com::sun::star::uno::Sequence< OUString > const & versions) const
+    css::uno::Sequence< OUString > const & versions) const
 {
     sal_Int32 nLen = versions.getLength();
     for (sal_Int32 i=0; i<nLen; i++) {

@@ -26,7 +26,7 @@
 module com { module sun { module star { module comp { module smoketest {
         // example service, XServiceInfo is implemented here for demonstration
         // issues. XServiceInfo must be implemented by all components.
-        service TestExtension: ::com::sun::star::lang::XServiceInfo;
+        service TestExtension: css::lang::XServiceInfo;
 };};};};};
 
 #endif

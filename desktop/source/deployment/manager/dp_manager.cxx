@@ -1186,7 +1186,7 @@ void PackageManagerImpl::reinstallDeployedPackages(
 
 
 sal_Bool SAL_CALL PackageManagerImpl::isReadOnly(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return m_readOnly;
 }

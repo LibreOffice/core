@@ -54,7 +54,7 @@ private:
     osl::Mutex m_aMutex;
 
     oslThread m_thread;
-    comphelper::WeakBag< com::sun::star::bridge::XBridge > m_bridges;
+    comphelper::WeakBag< css::bridge::XBridge > m_bridges;
 
     ::osl::Condition m_cEnable;
 

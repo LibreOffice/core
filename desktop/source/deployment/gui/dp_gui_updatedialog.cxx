@@ -147,11 +147,11 @@ OUString confineToParagraph(OUString const & text) {
 }
 
 struct UpdateDialog::DisabledUpdate {
-    OUString name;
+    OUString                  name;
     uno::Sequence< OUString > unsatisfiedDependencies;
     // We also want to show release notes and publisher for disabled updates
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > aUpdateInfo;
-    sal_uInt16 m_nID;
+    css::uno::Reference< css::xml::dom::XNode > aUpdateInfo;
+    sal_uInt16                m_nID;
 };
 
 struct UpdateDialog::SpecificError {
@@ -222,7 +222,7 @@ private:
         dp_gui::UpdateData const & data, OUString const & version = OUString()) const;
 
     void prepareUpdateData(
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & updateInfo,
+        css::uno::Reference< css::xml::dom::XNode > const & updateInfo,
         UpdateDialog::DisabledUpdate & out_du,
         dp_gui::UpdateData & out_data) const;
 
@@ -1330,10 +1330,10 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, FixedHyperlink*, pHyperlink )
 
     try
     {
-        uno::Reference< com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
-            com::sun::star::system::SystemShellExecute::create(m_context) );
+        uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+            css::system::SystemShellExecute::create(m_context) );
         //throws lang::IllegalArgumentException, system::SystemShellExecuteException
-        xSystemShellExecute->execute( sURL, OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
+        xSystemShellExecute->execute( sURL, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
     }
     catch ( const uno::Exception& )
     {

@@ -74,7 +74,7 @@ public:
 
 uno::Reference< uno::XInterface > SAL_CALL UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception );
 OUString UnxSplash_getImplementationName();
-com::sun::star::uno::Sequence< OUString > SAL_CALL UnxSplash_getSupportedServiceNames() throw ();
+css::uno::Sequence< OUString > SAL_CALL UnxSplash_getSupportedServiceNames() throw ();
 
 #endif // INCLUDED_DESKTOP_SOURCE_SPLASH_UNXSPLASH_HXX
 

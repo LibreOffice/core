@@ -144,12 +144,12 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     std::vector< TEntry_Impl > m_vEntries;
     std::vector< TEntry_Impl > m_vRemovedEntries;
 
-    ::com::sun::star::lang::Locale    *m_pLocale;
-    CollatorWrapper *m_pCollator;
+    css::lang::Locale    *m_pLocale;
+    CollatorWrapper      *m_pCollator;
 
     //Holds weak references to extensions to which is we have added an XEventListener
-    std::vector< ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::deployment::XPackage> > m_vListenerAdded;
+    std::vector< css::uno::WeakReference<
+        css::deployment::XPackage> > m_vListenerAdded;
     //Removes the dead weak references from m_vListenerAdded
     void cleanVecListenerAdded();
     void addEventListenerOnce(css::uno::Reference<css::deployment::XPackage> const & extension);
@@ -166,7 +166,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     DECL_DLLPRIVATE_LINK_TYPED( ScrollHdl, ScrollBar*, void );
 
     //Index starts with 1.
-    //Throws an com::sun::star::lang::IllegalArgumentException, when the index is invalid.
+    //Throws an css::lang::IllegalArgumentException, when the index is invalid.
     void checkIndex(sal_Int32 pos) const;
 
 
@@ -218,32 +218,32 @@ public:
 
     /** @return  The item name of the entry with the given index
         The index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
+        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
     virtual OUString getItemName( sal_Int32 index ) const SAL_OVERRIDE;
 
     /** @return  The version string of the entry with the given index
         The index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
+        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
     virtual OUString getItemVersion( sal_Int32 index ) const SAL_OVERRIDE;
 
     /** @return  The description string of the entry with the given index
         The index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
+        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
     virtual OUString getItemDescription( sal_Int32 index ) const SAL_OVERRIDE;
 
     /** @return  The publisher string of the entry with the given index
         The index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
+        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
     virtual OUString getItemPublisher( sal_Int32 index ) const SAL_OVERRIDE;
 
     /** @return  The link behind the publisher text of the entry with the given index
         The index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
+        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
     virtual OUString getItemPublisherLink( sal_Int32 index ) const SAL_OVERRIDE;
 
     /** The entry at the given position will be selected
         Index starts with 0.
-        Throws an com::sun::star::lang::IllegalArgumentException, when the position is invalid. */
+        Throws an css::lang::IllegalArgumentException, when the position is invalid. */
     virtual void select( sal_Int32 pos ) SAL_OVERRIDE;
 
     /** The first found entry with the given name will be selected

@@ -882,7 +882,7 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const sal_Char* pPa
                 theConfigProvider->createInstanceWithArguments(
                 sAccessSrvc, theArgs ), uno::UNO_QUERY_THROW );
     }
-    catch (const com::sun::star::uno::Exception& e)
+    catch (const css::uno::Exception& e)
     {
         SAL_WARN(
             "desktop.migration", "ignoring Exception \"" << e.Message << "\"");

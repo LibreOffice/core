@@ -235,7 +235,7 @@ public:
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::sal_Bool SAL_CALL isReadOnly(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::sal_Bool SAL_CALL synchronize(
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
