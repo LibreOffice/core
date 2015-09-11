@@ -1584,7 +1584,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
     bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
 
     // Catch if there's no copy to do
-    if( !rPam.HasMark() || ( *pStt > *pEnd && !bColumnSel ) )
+    if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) )
         return false;
 
     // Prevent copying in Flys that are anchored in the area
@@ -3132,8 +3132,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     const SwPaM* pCopiedPaM,
     const bool bMakeNewFrms,
     const bool bDelRedlines,
-    const bool bCopyFlyAtFly,
-    const bool bMergedFirstNode ) const
+    const bool bCopyFlyAtFly ) const
 {
     SwDoc* pDest = rInsPos.GetNode().GetDoc();
 
@@ -3141,17 +3140,13 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
 
     SwNodeIndex aSavePos( rInsPos, -1 );
     bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
-    SwNodeRange aRg( rRg );
-    if ( bMergedFirstNode )
-        aRg.aStart++;
-    if ( aRg.aStart <= aRg.aEnd )
-        m_rDoc.GetNodes()._CopyNodes( aRg, rInsPos, bMakeNewFrms, true );
-    if ( !bMergedFirstNode )
-        ++aSavePos;
-    if ( bEndIsEqualEndPos )
+    m_rDoc.GetNodes()._CopyNodes( rRg, rInsPos, bMakeNewFrms, true );
+    ++aSavePos;
+    if( bEndIsEqualEndPos )
         const_cast<SwNodeIndex&>(rRg.aEnd) = aSavePos;
 
     aRedlRest.Restore();
+
 #if OSL_DEBUG_LEVEL > 0
     {
         //JP 17.06.99: Bug 66973 - check count only if the selection is in
@@ -3165,9 +3160,9 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
             !aTmpI.GetNode().IsEndNode() )
         {
             // If the range starts with a SwStartNode, it isn't copied
-            sal_uInt16 offset = (aRg.aStart.GetNode().GetNodeType() != ND_STARTNODE) ? 1 : 0;
+            sal_uInt16 offset = (rRg.aStart.GetNode().GetNodeType() != ND_STARTNODE) ? 1 : 0;
             OSL_ENSURE( rInsPos.GetIndex() - aSavePos.GetIndex() ==
-                    aRg.aEnd.GetIndex() - aRg.aStart.GetIndex() - 1 + offset,
+                    rRg.aEnd.GetIndex() - rRg.aStart.GetIndex() - 1 + offset,
                     "An insufficient number of nodes were copied!" );
         }
     }
@@ -3175,7 +3170,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
 
     {
         ::sw::UndoGuard const undoGuard(pDest->GetIDocumentUndoRedo());
-        CopyFlyInFlyImpl( rRg, nEndContentIndex, aSavePos, bCopyFlyAtFly, bMergedFirstNode );
+        CopyFlyInFlyImpl( rRg, nEndContentIndex, aSavePos, bCopyFlyAtFly );
     }
 
     SwNodeRange aCpyRange( aSavePos, rInsPos );
@@ -3201,8 +3196,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     const SwNodeRange& rRg,
     const sal_Int32 nEndContentIndex,
     const SwNodeIndex& rStartIdx,
-    const bool bCopyFlyAtFly,
-    const bool bMergedFirstNode ) const
+    const bool bCopyFlyAtFly ) const
 {
     // First collect all Flys, sort them according to their ordering number,
     // and then only copy them. This maintains the ordering numbers (which are only
@@ -3335,8 +3329,6 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
 
                 ++aIdx;
             }
-            if ( bMergedFirstNode )
-                nAnchorTextNdNumInRange--;
 
             if ( !bAnchorTextNdFound )
             {
@@ -4105,7 +4097,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     SwPosition* pEnd = rPam.End();
 
     // Catch when there's no copy to do.
-    if( !rPam.HasMark() || ( *pStt > *pEnd && !bColumnSel ) ||
+    if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) ||
         //JP 29.6.2001: 88963 - dont copy if inspos is in region of start to end
         //JP 15.11.2001: don't test inclusive the end, ever exclusive
         ( pDoc == &m_rDoc && *pStt <= rPos && rPos < *pEnd ))
@@ -4193,8 +4185,6 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pNumRuleToPropagate = 0;
     }
 
-    bool bHandledStartNode = false;
-
     // This do/while block is only there so that we can break out of it!
     do {
         if( pSttTextNd )
@@ -4202,8 +4192,6 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             // Don't copy the beginning completely?
             if( !bCopyCollFormat || bColumnSel || pStt->nContent.GetIndex() )
             {
-                bHandledStartNode = true;
-
                 SwIndex aDestIdx( rPos.nContent );
                 bool bCopyOk = false;
                 if( !pDestTextNd )
@@ -4279,11 +4267,18 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                         pEnd->nContent -= nCpyLen;
                 }
 
-                if( bCopyCollFormat && bOneNode )
+                if( bOneNode )
                 {
-                    pSttTextNd->CopyCollFormat( *pDestTextNd );
-                    POP_NUMRULE_STATE
+                    if (bCopyCollFormat)
+                    {
+                        pSttTextNd->CopyCollFormat( *pDestTextNd );
+                        POP_NUMRULE_STATE
+                    }
+
+                    break;
                 }
+
+                aRg.aStart++;
             }
         }
         else if( pDestTextNd )
@@ -4340,7 +4335,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         }
 
         pDestTextNd = aInsPos.GetNode().GetTextNode();
-        if( pEndTextNd && (!bOneNode || !bHandledStartNode) )
+        if (pEndTextNd)
         {
             SwIndex aDestIdx( rPos.nContent );
             if( !pDestTextNd )
@@ -4384,7 +4379,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         if( bCopyAll || aRg.aStart != aRg.aEnd )
         {
             SfxItemSet aBrkSet( pDoc->GetAttrPool(), aBreakSetRange );
-            if( !bOneNode && pSttTextNd && bCopyCollFormat && pDestTextNd->HasSwAttrSet() )
+            if (pSttTextNd && bCopyCollFormat && pDestTextNd->HasSwAttrSet())
             {
                 aBrkSet.Put( *pDestTextNd->GetpSwAttrSet() );
                 if( SfxItemState::SET == aBrkSet.GetItemState( RES_BREAK, false ) )
@@ -4396,15 +4391,13 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( aInsPos == pEnd->nNode )
             {
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
-                CopyWithFlyInFly( aRg, 0, aInsPos, &rPam, bMakeNewFrms,
-                                  false, false, bHandledStartNode );
+                CopyWithFlyInFly( aRg, 0,aInsPos, &rPam, bMakeNewFrms, false );
                 ++aSaveIdx;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTextNode(), 0 );
             }
             else
-                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, &rPam,
-                                  bMakeNewFrms, false, false, bHandledStartNode );
+                CopyWithFlyInFly( aRg, pEnd->nContent.GetIndex(), aInsPos, &rPam, bMakeNewFrms, false );
 
             bCopyBookmarks = false;
 
