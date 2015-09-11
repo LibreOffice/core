@@ -2338,6 +2338,12 @@ bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
         // update ruler
         if ( mbFormat )
         {
+            if (!IsReallyVisible())
+            {
+                // set mpData for ImplDocHitTest()
+                ImplFormat(*this);
+            }
+
             Invalidate(InvalidateFlags::NoErase);
         }
 
