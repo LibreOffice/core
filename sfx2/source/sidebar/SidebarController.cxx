@@ -54,7 +54,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 
-#include <boost/bind.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -96,22 +95,22 @@ SidebarController::SidebarController (
       mpTabBar(VclPtr<TabBar>::Create(
               mpParentWindow,
               rxFrame,
-              ::boost::bind(&SidebarController::OpenThenSwitchToDeck, this, _1),
-              ::boost::bind(&SidebarController::ShowPopupMenu, this, _1,_2),
+              [this](const ::rtl::OUString& rsDeckId) { return this->OpenThenSwitchToDeck(rsDeckId); },
+              [this](const Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
               this)),
       mxFrame(rxFrame),
       maCurrentContext(OUString(), OUString()),
       maRequestedContext(),
       mnRequestedForceFlags(SwitchFlag_NoForce),
       msCurrentDeckId(gsDefaultDeckId),
-      maPropertyChangeForwarder(::boost::bind(&SidebarController::BroadcastPropertyChange, this)),
-      maContextChangeUpdate(::boost::bind(&SidebarController::UpdateConfigurations, this)),
+      maPropertyChangeForwarder([this](){ return this->BroadcastPropertyChange(); }),
+      maContextChangeUpdate([this](){ return this->UpdateConfigurations(); }),
       maAsynchronousDeckSwitch(),
       mbIsDeckRequestedOpen(),
       mbIsDeckOpen(),
       mbCanDeckBeOpened(true),
       mnSavedSidebarWidth(pParentWindow->GetSizePixel().Width()),
-      maFocusManager(::boost::bind(&SidebarController::ShowPanel, this, _1)),
+      maFocusManager([this](const Panel& rPanel){ return this->ShowPanel(rPanel); }),
       mxReadOnlyModeDispatch(),
       mbIsDocumentReadOnly(false),
       mpSplitWindow(NULL),
@@ -530,7 +529,7 @@ void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId)
         VclPtr<Deck> aDeck = VclPtr<Deck>::Create(
                 *pDeckDescriptor,
                 mpParentWindow,
-                ::boost::bind(&SidebarController::RequestCloseDeck, this));
+                [this]() { return this->RequestCloseDeck(); });
 
         mpResourceManager->SetDeckToDescriptor(rDeckId, aDeck);
     }
@@ -742,8 +741,8 @@ VclPtr<Panel> SidebarController::CreatePanel (
         *pPanelDescriptor,
         pParentWindow,
         bIsInitiallyExpanded,
-        ::boost::bind(&Deck::RequestLayout, mpCurrentDeck.get()),
-        ::boost::bind(&SidebarController::GetCurrentContext, this),
+        [this]() { return mpCurrentDeck.get()->RequestLayout(); },
+        [this]() { return this->GetCurrentContext(); },
         mxFrame);
 
     // Create the XUIElement.
