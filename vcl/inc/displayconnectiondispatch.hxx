@@ -23,12 +23,12 @@
 #include <sal/config.h>
 
 #include <com/sun/star/awt/XDisplayConnection.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace vcl {
 
 class DisplayConnectionDispatch:
-    public cppu::WeakImplHelper1< com::sun::star::awt::XDisplayConnection >
+    public cppu::WeakImplHelper< com::sun::star::awt::XDisplayConnection >
 {
 public:
     virtual bool dispatchEvent(void * pData, int nBytes) = 0;

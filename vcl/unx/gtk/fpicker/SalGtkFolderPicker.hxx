@@ -23,13 +23,13 @@
 #include <list>
 #include <memory>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "gtk/fpicker/SalGtkPicker.hxx"
 
 class SalGtkFolderPicker :
         public SalGtkPicker,
-    public cppu::WeakImplHelper1<
+    public cppu::WeakImplHelper<
         ::com::sun::star::ui::dialogs::XFolderPicker2 >
 {
     public:

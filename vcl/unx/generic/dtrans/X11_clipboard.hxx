@@ -25,14 +25,14 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XSystemClipboard.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #define X11_CLIPBOARD_IMPLEMENTATION_NAME "com.sun.star.datatransfer.X11ClipboardSupport"
 
 namespace x11 {
 
     class X11Clipboard :
-        public ::cppu::WeakComponentImplHelper2 <
+        public ::cppu::WeakComponentImplHelper <
         css::datatransfer::clipboard::XSystemClipboard,
         css::lang::XServiceInfo
         >,

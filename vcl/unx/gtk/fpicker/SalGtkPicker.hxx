@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKPICKER_HXX
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
@@ -72,7 +72,7 @@ class SalGtkPicker
 //to happen while we're opened waiting for user input, e.g.
 //https://bugzilla.redhat.com/show_bug.cgi?id=441108
 class RunDialog :
-    public cppu::WeakComponentImplHelper2<
+    public cppu::WeakComponentImplHelper<
         ::com::sun::star::awt::XTopWindowListener,
         ::com::sun::star::frame::XTerminateListener >
 {

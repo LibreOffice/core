@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKFILEPICKER_HXX
 #define INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKFILEPICKER_HXX
 
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
@@ -45,7 +45,7 @@ typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // c
 
 // class declaration
 
-typedef cppu::WeakComponentImplHelper5<
+typedef cppu::WeakComponentImplHelper<
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
         ::com::sun::star::ui::dialogs::XFilePreview,
         ::com::sun::star::ui::dialogs::XFilePicker2,

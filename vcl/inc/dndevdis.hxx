@@ -24,10 +24,10 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vcl/window.hxx>
 
-class DNDEventDispatcher: public ::cppu::WeakImplHelper3<
+class DNDEventDispatcher: public ::cppu::WeakImplHelper<
     ::com::sun::star::datatransfer::dnd::XDropTargetListener,
     ::com::sun::star::datatransfer::dnd::XDropTargetDragContext,
     ::com::sun::star::datatransfer::dnd::XDragGestureListener >

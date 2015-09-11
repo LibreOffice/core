@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_OSX_OSXTRANSFERABLE_HXX
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 
@@ -35,7 +35,7 @@
 #include <boost/noncopyable.hpp>
 #include <vector>
 
-class OSXTransferable : public ::cppu::WeakImplHelper1<com::sun::star::datatransfer::XTransferable>,
+class OSXTransferable : public ::cppu::WeakImplHelper<com::sun::star::datatransfer::XTransferable>,
                         private ::boost::noncopyable
 {
 public:

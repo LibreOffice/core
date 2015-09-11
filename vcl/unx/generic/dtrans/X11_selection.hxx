@@ -20,8 +20,8 @@
 #ifndef INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_SELECTION_HXX
 #define INCLUDED_VCL_UNX_GENERIC_DTRANS_X11_SELECTION_HXX
 
-#include <cppuhelper/compbase3.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
@@ -66,7 +66,7 @@ namespace x11 {
     };
 
     class DropTarget :
-        public ::cppu::WeakComponentImplHelper3<
+        public ::cppu::WeakComponentImplHelper<
             css::datatransfer::dnd::XDropTarget,
             css::lang::XInitialization,
             css::lang::XServiceInfo
@@ -111,7 +111,7 @@ namespace x11 {
     };
 
     class SelectionManagerHolder :
-        public ::cppu::WeakComponentImplHelper3<
+        public ::cppu::WeakComponentImplHelper<
             css::datatransfer::dnd::XDragSource,
             css::lang::XInitialization,
             css::lang::XServiceInfo
@@ -146,7 +146,7 @@ namespace x11 {
     };
 
     class SelectionManager :
-        public ::cppu::WeakImplHelper4<
+        public ::cppu::WeakImplHelper<
             css::datatransfer::dnd::XDragSource,
             css::lang::XInitialization,
             css::awt::XEventHandler,

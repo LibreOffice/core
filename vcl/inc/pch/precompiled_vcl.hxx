@@ -70,9 +70,6 @@
 #include "com/sun/star/view/DuplexMode.hpp"
 #include "comphelper/processfactory.hxx"
 #include "comphelper/solarmutex.hxx"
-#include "cppuhelper/compbase1.hxx"
-#include "cppuhelper/compbase2.hxx"
-#include "cppuhelper/implbase1.hxx"
 #include "i18nlangtag/languagetag.hxx"
 #include "i18nlangtag/mslangid.hxx"
 #include "i18nutil/unicode.hxx"
@@ -279,9 +276,9 @@
 #include <config_folders.h>
 #include <config_graphite.h>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>

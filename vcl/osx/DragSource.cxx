@@ -143,7 +143,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 @end
 
 DragSource::DragSource():
-  WeakComponentImplHelper3<XDragSource, XInitialization, XServiceInfo>(m_aMutex),
+  WeakComponentImplHelper<XDragSource, XInitialization, XServiceInfo>(m_aMutex),
   mView(NULL),
   mpFrame(NULL),
   mLastMouseEventBeforeStartDrag(nil),

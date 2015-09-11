@@ -26,7 +26,6 @@
 #include <uno/dispatcher.h>
 #include <uno/mapping.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/compbase1.hxx>
 
 using namespace cppu;
 using namespace com::sun::star::uno;

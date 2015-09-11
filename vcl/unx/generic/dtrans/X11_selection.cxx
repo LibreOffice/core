@@ -3975,7 +3975,7 @@ css::uno::Reference< XInterface > SelectionManager::getReference() throw()
  */
 
 SelectionManagerHolder::SelectionManagerHolder() :
-        ::cppu::WeakComponentImplHelper3<
+        ::cppu::WeakComponentImplHelper<
     XDragSource,
     XInitialization,
     XServiceInfo > (m_aMutex)

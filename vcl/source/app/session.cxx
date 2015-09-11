@@ -20,7 +20,7 @@
 #include "sal/config.h"
 
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <tools/debug.hxx>
 
@@ -47,7 +47,7 @@ SalSession::~SalSession()
 
 class VCLSession:
     private cppu::BaseMutex,
-    public cppu::WeakComponentImplHelper1 < XSessionManagerClient >
+    public cppu::WeakComponentImplHelper < XSessionManagerClient >
 {
     struct Listener
     {
@@ -92,7 +92,7 @@ public:
 };
 
 VCLSession::VCLSession()
-        : cppu::WeakComponentImplHelper1< XSessionManagerClient >( m_aMutex ),
+        : cppu::WeakComponentImplHelper< XSessionManagerClient >( m_aMutex ),
           m_xSession( ImplGetSVData()->mpDefInst->CreateSalSession() ),
           m_bInteractionRequested( false ),
           m_bInteractionGranted( false ),

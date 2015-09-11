@@ -23,7 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <ucbhelper/content.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/fract.hxx>
@@ -88,7 +88,7 @@ static ::osl::Mutex& getListMutex()
     return s_aListProtection;
 }
 
-class ImpFilterOutputStream : public ::cppu::WeakImplHelper1< css::io::XOutputStream >
+class ImpFilterOutputStream : public ::cppu::WeakImplHelper< css::io::XOutputStream >
 {
 protected:
 

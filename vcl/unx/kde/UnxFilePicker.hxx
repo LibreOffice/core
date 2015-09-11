@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_UNX_KDE_UNXFILEPICKER_HXX
 #define INCLUDED_VCL_UNX_KDE_UNXFILEPICKER_HXX
 
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -45,7 +45,7 @@ protected:
     osl::Mutex                  m_rbHelperMtx;
 };
 
-typedef ::cppu::WeakComponentImplHelper5<
+typedef ::cppu::WeakComponentImplHelper<
         ::com::sun::star::ui::dialogs::XFilePicker2,
         ::com::sun::star::ui::dialogs::XFilePicker3,
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
