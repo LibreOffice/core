@@ -3413,9 +3413,7 @@ void SAL_CALL ScCellRangesBase::addModifyListener(const uno::Reference<util::XMo
     if ( aRanges.empty() )
         throw uno::RuntimeException();
 
-    uno::Reference<util::XModifyListener> *pObj =
-            new uno::Reference<util::XModifyListener>( aListener );
-    aValueListeners.push_back( pObj );
+    aValueListeners.push_back( uno::Reference<util::XModifyListener>( aListener ) );
 
     if ( aValueListeners.size() == 1 )
     {
