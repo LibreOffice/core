@@ -64,6 +64,11 @@
     <string name="action_keyboard">Show keyboard</string>
     <string name="action_save">Save</string>
 
+    <!-- Feedback messages -->
+    <string name="message_saved">Save complete</string>
+    <string name="message_saving">Saving the document...</string>
+    <string name="message_save_incomplete">Save incomplete. Were there any changes?</string>
+
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Storage provider settings</string>
     <string name="owncloud_settings">ownCloud settings</string>
