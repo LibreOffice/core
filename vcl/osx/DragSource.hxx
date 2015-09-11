@@ -23,7 +23,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -70,7 +70,7 @@ class AquaSalFrame;
 @end
 
 class DragSource : public ::cppu::BaseMutex,
-                   public ::cppu::WeakComponentImplHelper3< com::sun::star::datatransfer::dnd::XDragSource,
+                   public ::cppu::WeakComponentImplHelper< com::sun::star::datatransfer::dnd::XDragSource,
                                                             com::sun::star::lang::XInitialization,
                                                             com::sun::star::lang::XServiceInfo >,
                    private ::boost::noncopyable

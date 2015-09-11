@@ -24,11 +24,11 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace x11 {
 
-    class X11Transferable : public ::cppu::WeakImplHelper1 <
+    class X11Transferable : public ::cppu::WeakImplHelper <
         ::com::sun::star::datatransfer::XTransferable >
     {
         SelectionManager&               m_rManager;

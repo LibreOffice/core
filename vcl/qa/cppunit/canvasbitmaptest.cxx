@@ -28,7 +28,7 @@
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/XBitmapPalette.hpp>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ref.hxx>
 
@@ -232,7 +232,7 @@ void checkCanvasBitmap( const rtl::Reference<VclCanvasBitmap>& xBmp,
     }
 }
 
-class TestBitmap : public cppu::WeakImplHelper3< rendering::XIntegerReadOnlyBitmap,
+class TestBitmap : public cppu::WeakImplHelper< rendering::XIntegerReadOnlyBitmap,
                                                  rendering::XBitmapPalette,
                                                  rendering::XIntegerBitmapColorSpace >
 {

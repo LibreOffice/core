@@ -27,7 +27,6 @@
 #include <tools/debug.hxx>
 #include <tools/resary.hxx>
 #include <tools/gen.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <uno/current_context.hxx>
 
 #include "vcl/configsettings.hxx"

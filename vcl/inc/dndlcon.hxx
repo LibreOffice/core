@@ -25,12 +25,12 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <vcl/unohelp2.hxx>
 
 class DNDListenerContainer :    public vcl::unohelper::MutexHelper,
-                                public ::cppu::WeakComponentImplHelper4<
+                                public ::cppu::WeakComponentImplHelper<
     ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer, \
     ::com::sun::star::datatransfer::dnd::XDropTargetDragContext,
     ::com::sun::star::datatransfer::dnd::XDropTargetDropContext,

@@ -29,7 +29,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
@@ -125,7 +125,7 @@ atk_wrapper_focus_tracker_notify_when_idle( const uno::Reference< accessibility:
 /*****************************************************************************/
 
 class DocumentFocusListener :
-    public ::cppu::WeakImplHelper1< accessibility::XAccessibleEventListener >
+    public ::cppu::WeakImplHelper< accessibility::XAccessibleEventListener >
 {
 
     std::set< uno::Reference< uno::XInterface > > m_aRefList;

@@ -39,7 +39,7 @@
 #include "com/sun/star/graphic/GraphicProvider.hpp"
 #include "com/sun/star/graphic/XGraphicProvider.hpp"
 
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include <rtl/digest.h>
 #include <memory>
@@ -1068,7 +1068,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
    is not sufficient, since an rtl MD5 digest cannot be created in an arbitrary state
    which would be needed in PDFWriterImpl::computeEncryptionKey.
 */
-class EncHashTransporter : public cppu::WeakImplHelper1 < com::sun::star::beans::XMaterialHolder >
+class EncHashTransporter : public cppu::WeakImplHelper < com::sun::star::beans::XMaterialHolder >
 {
     rtlDigest                   maUDigest;
     sal_IntPtr                  maID;

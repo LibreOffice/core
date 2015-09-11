@@ -36,7 +36,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/numeric.hxx>
 #include <osl/file.hxx>
@@ -8238,7 +8238,7 @@ void PDFWriterImpl::sortWidgets()
 
 namespace vcl {
 class PDFStreamIf :
-        public cppu::WeakImplHelper1< com::sun::star::io::XOutputStream >
+        public cppu::WeakImplHelper< com::sun::star::io::XOutputStream >
 {
     PDFWriterImpl*  m_pWriter;
     bool            m_bWrite;

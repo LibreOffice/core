@@ -22,7 +22,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "osx/a11yfocustracker.hxx"
 
@@ -31,7 +31,7 @@
 // - DocumentFocusListener -
 
 class DocumentFocusListener :
-    public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleEventListener >
+    public ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessibleEventListener >
 {
 
 public:

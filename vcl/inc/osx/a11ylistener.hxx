@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_OSX_A11YLISTENER_HXX
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "a11yfocustracker.hxx"
 #include "osxvcltypes.h"
@@ -31,7 +31,7 @@
 // - AquaA11yEventListener -
 
 class AquaA11yEventListener :
-    public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleEventListener >
+    public ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessibleEventListener >
 {
 
 public:

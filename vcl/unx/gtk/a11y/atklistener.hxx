@@ -21,13 +21,13 @@
 #define INCLUDED_VCL_UNX_GTK_A11Y_ATKLISTENER_HXX
 
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vector>
 
 #include "atkwrapper.hxx"
 
-class AtkListener : public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleEventListener >
+class AtkListener : public ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessibleEventListener >
 {
 public:
     explicit AtkListener(AtkObjectWrapper * pWrapper);

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_CANVASBITMAP_HXX
 #define INCLUDED_VCL_INC_CANVASBITMAP_HXX
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/rendering/XIntegerBitmapColorSpace.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
@@ -34,7 +34,7 @@ namespace vcl
 namespace unotools
 {
     class VCL_DLLPUBLIC VclCanvasBitmap :
-        public cppu::WeakImplHelper3< com::sun::star::rendering::XIntegerReadOnlyBitmap,
+        public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerReadOnlyBitmap,
                                       com::sun::star::rendering::XBitmapPalette,
                                       com::sun::star::rendering::XIntegerBitmapColorSpace >
     {

@@ -40,8 +40,7 @@
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
 #include "com/sun/star/datatransfer/dnd/DNDConstants.hpp"
 
-#include "cppuhelper/compbase.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;

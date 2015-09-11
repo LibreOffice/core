@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_OSX_DROPTARGET_HXX
 
 #include "DataFlavorMapping.hxx"
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
@@ -73,7 +73,7 @@ class AquaSalFrame;
 @end
 
 class DropTarget: public cppu::BaseMutex,
-                  public cppu::WeakComponentImplHelper5< com::sun::star::lang::XInitialization,
+                  public cppu::WeakComponentImplHelper< com::sun::star::lang::XInitialization,
                                                          com::sun::star::datatransfer::dnd::XDropTarget,
                                                          com::sun::star::datatransfer::dnd::XDropTargetDragContext,
                                                          com::sun::star::datatransfer::dnd::XDropTargetDropContext,

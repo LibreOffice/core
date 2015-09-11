@@ -26,7 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include "cppuhelper/compbase.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
@@ -93,7 +93,7 @@ namespace
     };
 }
 
-class GtkTransferable : public ::cppu::WeakImplHelper1 <
+class GtkTransferable : public ::cppu::WeakImplHelper <
     css::datatransfer::XTransferable >
 {
 private:

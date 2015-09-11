@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -41,7 +41,7 @@ class KFileDialog;
 class QWidget;
 class QLayout;
 
-typedef ::cppu::WeakComponentImplHelper5
+typedef ::cppu::WeakComponentImplHelper
 <   ::com::sun::star::ui::dialogs::XFilePicker2
 ,   ::com::sun::star::ui::dialogs::XFilePicker3
 ,   ::com::sun::star::ui::dialogs::XFilePickerControlAccess

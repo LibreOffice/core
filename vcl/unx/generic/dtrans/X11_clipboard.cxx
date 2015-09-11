@@ -46,7 +46,7 @@ using namespace osl;
 using namespace x11;
 
 X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
-        ::cppu::WeakComponentImplHelper2<
+        ::cppu::WeakComponentImplHelper<
     ::com::sun::star::datatransfer::clipboard::XSystemClipboard,
     ::com::sun::star::lang::XServiceInfo
     >( rManager.getMutex() ),

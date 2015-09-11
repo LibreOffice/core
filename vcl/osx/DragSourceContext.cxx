@@ -27,7 +27,7 @@ using namespace com::sun::star::uno;
 using namespace cppu;
 
 DragSourceContext::DragSourceContext() :
-        WeakComponentImplHelper1<XDragSourceContext>(m_aMutex)
+        WeakComponentImplHelper<XDragSourceContext>(m_aMutex)
 {
 }
 

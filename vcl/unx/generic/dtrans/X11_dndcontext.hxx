@@ -23,7 +23,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <prex.h>
 #include <X11/Xlib.h>
@@ -34,7 +34,7 @@ namespace x11 {
     class SelectionManager;
 
     class DropTargetDropContext :
-        public ::cppu::WeakImplHelper1<
+        public ::cppu::WeakImplHelper<
     ::com::sun::star::datatransfer::dnd::XDropTargetDropContext
     >
     {
@@ -53,7 +53,7 @@ namespace x11 {
     };
 
     class DropTargetDragContext :
-        public ::cppu::WeakImplHelper1<
+        public ::cppu::WeakImplHelper<
     ::com::sun::star::datatransfer::dnd::XDropTargetDragContext
     >
     {
@@ -71,7 +71,7 @@ namespace x11 {
     };
 
     class DragSourceContext :
-        public ::cppu::WeakImplHelper1<
+        public ::cppu::WeakImplHelper<
     ::com::sun::star::datatransfer::dnd::XDragSourceContext
     >
     {

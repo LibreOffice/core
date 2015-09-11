@@ -26,8 +26,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
@@ -59,7 +58,7 @@ public:
     void        Resize();
 };
 
-class MyDragAndDropListener: public ::cppu::WeakImplHelper3 < XDropTargetListener, XDragGestureListener, XDragSourceListener >
+class MyDragAndDropListener: public ::cppu::WeakImplHelper < XDropTargetListener, XDragGestureListener, XDragSourceListener >
 {
     vcl::Window * m_pWindow;
 
@@ -97,7 +96,7 @@ public:
     explicit MyListBox( vcl::Window* pParent );
 };
 
-class StringTransferable : public ::cppu::WeakImplHelper1< XTransferable >
+class StringTransferable : public ::cppu::WeakImplHelper< XTransferable >
 {
     const OUString         m_aData;
     Sequence< DataFlavor > m_aFlavorList;

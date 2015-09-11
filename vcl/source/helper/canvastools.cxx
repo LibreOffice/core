@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
@@ -417,7 +417,7 @@ namespace vcl
 
         namespace
         {
-            class StandardColorSpace : public cppu::WeakImplHelper1< com::sun::star::rendering::XColorSpace >
+            class StandardColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XColorSpace >
             {
             private:
                 uno::Sequence< sal_Int8 > m_aComponentTags;

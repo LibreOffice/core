@@ -78,7 +78,7 @@
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/frame/Desktop.hpp"
 
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 #include "uno/current_context.hxx"
 
 #include "opengl/zone.hxx"
@@ -213,7 +213,7 @@ static Application *        pOwnSvApp = NULL;
 // Exception handler. pExceptionHandler != NULL => VCL already inited
 static oslSignalHandler pExceptionHandler = NULL;
 
-class DesktopEnvironmentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
+class DesktopEnvironmentContext: public cppu::WeakImplHelper< com::sun::star::uno::XCurrentContext >
 {
 public:
     explicit DesktopEnvironmentContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx)
@@ -312,7 +312,7 @@ namespace
   a bundled extension is registered/deregistered during startup, forcing exit
   while the app is still in splash screen.)
  */
-class VCLUnoWrapperDeleter : public cppu::WeakImplHelper1<com::sun::star::lang::XEventListener>
+class VCLUnoWrapperDeleter : public cppu::WeakImplHelper<com::sun::star::lang::XEventListener>
 {
     virtual void SAL_CALL disposing(lang::EventObject const& rSource) throw(uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };

@@ -20,9 +20,8 @@
 #ifndef INCLUDED_VCL_OSX_DRAGSOURCECONTEXT_HXX
 #define INCLUDED_VCL_OSX_DRAGSOURCECONTEXT_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <boost/noncopyable.hpp>
@@ -34,7 +33,7 @@
 // An instance of SourceContext only lives as long as the drag and drop
 // operation lasts.
 class DragSourceContext: public cppu::BaseMutex,
-                     public cppu::WeakComponentImplHelper1<com::sun::star::datatransfer::dnd::XDragSourceContext>,
+                     public cppu::WeakComponentImplHelper<com::sun::star::datatransfer::dnd::XDragSourceContext>,
                      private ::boost::noncopyable
 {
 public:

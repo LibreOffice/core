@@ -28,7 +28,7 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 
 DropTarget::DropTarget() :
-        ::cppu::WeakComponentImplHelper3<
+        ::cppu::WeakComponentImplHelper<
             XDropTarget,
             XInitialization,
             XServiceInfo
