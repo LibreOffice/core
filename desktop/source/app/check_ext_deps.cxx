@@ -379,7 +379,7 @@ static bool impl_needsCompatCheck()
         bNeedsCheck = true;
 #endif
     }
-    catch (const com::sun::star::uno::Exception&) {}
+    catch (const css::uno::Exception&) {}
 
     return bNeedsCheck;
 }

@@ -72,10 +72,8 @@ public:
        with no content)
     */
     DescriptionInfoset(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > const & context,
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::dom::XNode > const & element);
+        css::uno::Reference< css::uno::XComponentContext > const & context,
+        css::uno::Reference< css::xml::dom::XNode > const & element);
 
     ~DescriptionInfoset();
 
@@ -110,7 +108,7 @@ public:
         The value attribute can contain various platform tokens. They must be separated by
         commas.Each token will be stripped from leading and trailing white space (trim()).
     */
-    ::com::sun::star::uno::Sequence< OUString > getSupportedPlaforms() const;
+    css::uno::Sequence< OUString > getSupportedPlaforms() const;
 
     /**
         Returns the localized publisher name and the corresponding URL.
@@ -177,7 +175,7 @@ public:
        @return
        dependencies; will never be null
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNodeList >
+    css::uno::Reference< css::xml::dom::XNodeList >
     getDependencies() const;
 
     /**
@@ -186,8 +184,7 @@ public:
        @return
        update information URLs
     */
-    ::com::sun::star::uno::Sequence< OUString >
-    getUpdateInformationUrls() const;
+    css::uno::Sequence< OUString > getUpdateInformationUrls() const;
 
      /**
         Return the download URLs from the update information.
@@ -199,8 +196,7 @@ public:
         @return
         download URLs
      */
-    ::com::sun::star::uno::Sequence< OUString >
-    getUpdateDownloadUrls() const;
+    css::uno::Sequence< OUString > getUpdateDownloadUrls() const;
 
     /**
         Returns the URL for the icon image.
@@ -213,7 +209,7 @@ private:
     SAL_DLLPRIVATE ::boost::optional< OUString > getOptionalValue(
         OUString const & expression) const;
 
-    SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< OUString > getUrls(
+    SAL_DLLPRIVATE css::uno::Sequence< OUString > getUrls(
         OUString const & expression) const;
 
     /** Retrieves a child element which as lang attribute which matches the office locale.
@@ -225,11 +221,11 @@ private:
         the expression used to obtain the parent of the localized children. It can be null.
         Then a null reference is returned.
     */
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode >
+    SAL_DLLPRIVATE css::uno::Reference< css::xml::dom::XNode >
         getLocalizedChild( OUString const & sParent) const;
-    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
+    SAL_DLLPRIVATE  css::uno::Reference< css::xml::dom::XNode>
         matchLanguageTag(
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & xParent,
+        css::uno::Reference< css::xml::dom::XNode > const & xParent,
         OUString const & rTag) const;
 
     /** If there is no child element with a locale matching the office locale, then we use
@@ -239,9 +235,9 @@ private:
         However, since OOo 2.4 we use also the first child as default for the license
         unless the two attributes are present.
     */
-    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
+    SAL_DLLPRIVATE  css::uno::Reference< css::xml::dom::XNode>
         getChildWithDefaultLocale(
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & xParent) const;
+        css::uno::Reference< css::xml::dom::XNode > const & xParent) const;
     /**
         @param out_bParentExists
             indicates if the element node specified in sXPathParent exists.
@@ -266,14 +262,11 @@ private:
      */
     SAL_DLLPRIVATE bool
         checkBlacklistVersion(const OUString& currentversion,
-                              ::com::sun::star::uno::Sequence< OUString > const & versions) const;
+                              css::uno::Sequence< OUString > const & versions) const;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > m_context;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XNode > m_element;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::xpath::XXPathAPI > m_xpath;
+    css::uno::Reference< css::uno::XComponentContext > m_context;
+    css::uno::Reference< css::xml::dom::XNode >        m_element;
+    css::uno::Reference< css::xml::xpath::XXPathAPI >  m_xpath;
 };
 
 inline  bool DescriptionInfoset::hasDescription() const

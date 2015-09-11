@@ -25,17 +25,17 @@
 
 namespace desktop
 {
-    class DesktopContext: public cppu::WeakImplHelper< com::sun::star::uno::XCurrentContext >
+    class DesktopContext: public cppu::WeakImplHelper< css::uno::XCurrentContext >
     {
     public:
-    explicit DesktopContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx);
+    explicit DesktopContext( const css::uno::Reference< css::uno::XCurrentContext > & ctx);
 
         // XCurrentContext
-        virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
-            throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-            com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > m_xNextContext;
+            css::uno::Reference< css::uno::XCurrentContext > m_xNextContext;
     };
 }
 

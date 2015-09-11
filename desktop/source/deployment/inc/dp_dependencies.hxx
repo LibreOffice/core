@@ -49,8 +49,8 @@ namespace Dependencies {
        a list of the unsatisfied dependencies from <code>infoset</code> (in no
        specific order)
     */
-    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference< com::sun::star::xml::dom::XElement > >
+    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC css::uno::Sequence<
+        css::uno::Reference< css::xml::dom::XElement > >
     check(dp_misc::DescriptionInfoset const & infoset);
 
     /**
@@ -64,7 +64,7 @@ namespace Dependencies {
        &ldquo;unknown&rdquo; is substituted for an empty/missing name
     */
     DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString getErrorText(
-        com::sun::star::uno::Reference< com::sun::star::xml::dom::XElement >
+        css::uno::Reference< css::xml::dom::XElement >
             const & dependency);
 }
 

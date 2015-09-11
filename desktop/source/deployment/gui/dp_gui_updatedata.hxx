@@ -38,7 +38,7 @@ namespace dp_gui {
 
 struct UpdateData
 {
-    explicit UpdateData( ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > const & aExt):
+    explicit UpdateData( css::uno::Reference< css::deployment::XPackage > const & aExt):
         bIsShared(false), aInstalledPackage(aExt), aUpdateSource(NULL), m_nID(0), m_bIgnored(false){};
 
     //When entries added to the listbox then there can be one for the user update and one
@@ -48,7 +48,7 @@ struct UpdateData
 
     //The currently installed extension which is going to be updated. If the extension exist in
     //multiple repositories then it is the one with the highest version.
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > aInstalledPackage;
+    css::uno::Reference< css::deployment::XPackage > aInstalledPackage;
 
     //The version of the update
     OUString updateVersion;
@@ -58,7 +58,7 @@ struct UpdateData
     // The content of the update information.
     //Only if aUpdateInfo is set then there is an online update available with a better version
     //than any of the currently installed extensions with the same identifier.
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > aUpdateInfo;
+    css::uno::Reference< css::xml::dom::XNode > aUpdateInfo;
     //The URL of the locally downloaded extension. It will only be set if there were no errors
     //during the download
     OUString sLocalURL;
@@ -70,7 +70,7 @@ struct UpdateData
     //The locale extension which is used as update for the user or shared repository.
     //If set then the data for the online update (aUpdateInfo, sLocalURL, sWebsiteURL)
     //are to be ignored.
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage >
+    css::uno::Reference< css::deployment::XPackage >
     aUpdateSource;
 
     // ID to find this entry in the update listbox

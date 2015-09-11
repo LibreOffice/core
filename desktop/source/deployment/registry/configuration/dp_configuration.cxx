@@ -722,13 +722,13 @@ void BackendImpl::PackageImpl::processPackage_(
             {
                 if (m_isSchema)
                 {
-                    com::sun::star::configuration::Update::get(
+                    css::configuration::Update::get(
                         that->m_xComponentContext)->insertExtensionXcsFile(
                             that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
                 }
                 else
                 {
-                    com::sun::star::configuration::Update::get(
+                    css::configuration::Update::get(
                         that->m_xComponentContext)->insertExtensionXcuFile(
                             that->m_eContext == CONTEXT_SHARED, expandUnoRcUrl(url));
                 }
@@ -797,7 +797,7 @@ void BackendImpl::PackageImpl::processPackage_(
         //a data entry
         if (!m_isSchema && data)
         {
-            com::sun::star::configuration::Update::get(
+            css::configuration::Update::get(
                 that->m_xComponentContext)->removeExtensionXcuFile(expandUnoRcTerm(data->iniEntry));
         }
         that->revokeEntryFromDb(url);

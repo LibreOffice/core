@@ -276,11 +276,11 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             aArgs[1].Name = "InteractionHandler";
             aArgs[1].Value <<= xInteraction;
 
-            sal_Int16 nMacroExecMode = ::com::sun::star::document::MacroExecMode::USE_CONFIG;
+            sal_Int16 nMacroExecMode = css::document::MacroExecMode::USE_CONFIG;
             aArgs[2].Name = "MacroExecutionMode";
             aArgs[2].Value <<= nMacroExecMode;
 
-            sal_Int16 nUpdateDoc = ::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG;
+            sal_Int16 nUpdateDoc = css::document::UpdateDocMode::ACCORDING_TO_CONFIG;
             aArgs[3].Name = "UpdateDocMode";
             aArgs[3].Value <<= nUpdateDoc;
         }
@@ -384,7 +384,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                     else
                         xDispatcher->dispatch( aURL, aArgs2 );
                 }
-                catch (const ::com::sun::star::uno::Exception& e)
+                catch (const css::uno::Exception& e)
                 {
                     SAL_WARN(
                         "desktop.app",
@@ -457,14 +457,14 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             {
                 xDoc = Reference < XPrintable >( ::comphelper::SynchronousDispatch::dispatch( xDesktop, aName, aTarget, 0, aArgs ), UNO_QUERY );
             }
-            catch (const ::com::sun::star::lang::IllegalArgumentException& iae)
+            catch (const css::lang::IllegalArgumentException& iae)
             {
                 SAL_WARN(
                     "desktop.app",
                     "Dispatchwatcher IllegalArgumentException while calling"
                         " loadComponentFromURL: \"" << iae.Message << "\"");
             }
-            catch (const com::sun::star::io::IOException& ioe)
+            catch (const css::io::IOException& ioe)
             {
                 SAL_WARN(
                     "desktop.app",
@@ -690,7 +690,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                             xComp->dispose();
                     }
                 }
-                catch (const com::sun::star::util::CloseVetoException&)
+                catch (const css::util::CloseVetoException&)
                 {
                 }
 
@@ -749,8 +749,8 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 }
 
 
-void SAL_CALL DispatchWatcher::disposing( const ::com::sun::star::lang::EventObject& )
-throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL DispatchWatcher::disposing( const css::lang::EventObject& )
+    throw(css::uno::RuntimeException, std::exception)
 {
 }
 

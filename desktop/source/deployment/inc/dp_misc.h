@@ -48,9 +48,9 @@ protected:
 };
 
 
-inline void try_dispose( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> const & x )
+inline void try_dispose( css::uno::Reference< css::uno::XInterface> const & x )
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComp( x, ::com::sun::star::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XComponent> xComp( x, css::uno::UNO_QUERY );
     if (xComp.is())
         xComp->dispose();
 }
@@ -94,9 +94,9 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateRandomPipeId();
 class AbortChannel;
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> resolveUnoURL(
+css::uno::Reference< css::uno::XInterface> resolveUnoURL(
     OUString const & connectString,
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xLocalContext,
+    css::uno::Reference< css::uno::XComponentContext> const & xLocalContext,
     AbortChannel * abortChannel = 0 );
 
 
@@ -105,7 +105,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool office_is_running();
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 oslProcess raiseProcess( OUString const & appURL,
-                         ::com::sun::star::uno::Sequence< OUString > const & args );
+                         css::uno::Sequence< OUString > const & args );
 
 
 
@@ -146,15 +146,15 @@ void TRACE(OUString const & sText);
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void syncRepositories(
     bool force,
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv);
+    css::uno::Reference<
+        css::ucb::XCommandEnvironment> const & xCmdEnv);
 
 /** workaround: for some reason the bridge threads which communicate with the
     uno.exe process are not released on time
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 void disposeBridges(
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    css::uno::Reference< css::uno::XComponentContext >
         const & ctx);
 
 }

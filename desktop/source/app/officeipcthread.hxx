@@ -128,8 +128,8 @@ class OfficeIPCThread : public salhelper::Thread
 
 
 class OfficeIPCThreadController : public ::cppu::WeakImplHelper<
-                                            ::com::sun::star::lang::XServiceInfo,
-                                            ::com::sun::star::frame::XTerminateListener >
+                                            css::lang::XServiceInfo,
+                                            css::frame::XTerminateListener >
 {
     public:
         OfficeIPCThreadController() {}
@@ -137,21 +137,21 @@ class OfficeIPCThreadController : public ::cppu::WeakImplHelper<
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
-            throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent )
+            throw( css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 }

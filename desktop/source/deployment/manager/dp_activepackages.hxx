@@ -53,7 +53,7 @@ public:
         OUString mediaType;
         OUString version;
         /* If this string contains the value according to
-           com::sun::star::deployment::Prerequisites or "0". That is, if
+           css::deployment::Prerequisites or "0". That is, if
            the value is > 0 then
            the call to XPackage::checkPrerequisites failed.
            In this case the extension must not be registered.

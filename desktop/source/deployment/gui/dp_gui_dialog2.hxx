@@ -56,13 +56,13 @@ class TheExtensionManager;
 
 class DialogHelper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     VclPtr<Dialog>  m_pVCLWindow;
     ImplSVEvent *   m_nEventID;
     bool            m_bIsBusy;
 
 public:
-                    DialogHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &,
+                    DialogHelper( const css::uno::Reference< css::uno::XComponentContext > &,
                                   Dialog *pWindow );
     virtual        ~DialogHelper();
 
@@ -73,11 +73,11 @@ public:
 
     virtual void    showProgress( bool bStart ) = 0;
     virtual void    updateProgress( const OUString &rText,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel) = 0;
+                                    const css::uno::Reference< css::task::XAbortChannel > &xAbortChannel) = 0;
     virtual void    updateProgress( const long nProgress ) = 0;
 
-    virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) = 0;
-    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
+    virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) = 0;
+    virtual long    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &xPackage,
                                       bool bLicenseMissing = false ) = 0;
 
     virtual void    prepareChecking() = 0;
@@ -85,8 +85,8 @@ public:
 
     static ResId    getResId( sal_uInt16 nId );
     static OUString getResourceString( sal_uInt16 id );
-    static bool     IsSharedPkgMgr( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &);
-    static bool     continueOnSharedExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
+    static bool     IsSharedPkgMgr( const css::uno::Reference< css::deployment::XPackage > &);
+    static bool     continueOnSharedExtension( const css::uno::Reference< css::deployment::XPackage > &,
                                                vcl::Window *pParent,
                                                const sal_uInt16 nResID,
                                                bool &bHadWarning );
@@ -127,7 +127,7 @@ class ExtMgrDialog : public ModelessDialog,
     Idle                 m_aIdle;
     TheExtensionManager *m_pManager;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > m_xAbortChannel;
+    css::uno::Reference< css::task::XAbortChannel > m_xAbortChannel;
 
     bool removeExtensionWarn( const OUString &rExtensionTitle ) const;
 
@@ -150,26 +150,26 @@ public:
 
     virtual void    showProgress( bool bStart ) SAL_OVERRIDE;
     virtual void    updateProgress( const OUString &rText,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel) SAL_OVERRIDE;
+                                    const css::uno::Reference< css::task::XAbortChannel > &xAbortChannel) SAL_OVERRIDE;
     virtual void    updateProgress( const long nProgress ) SAL_OVERRIDE;
 
-    virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) SAL_OVERRIDE;
+    virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) SAL_OVERRIDE;
 
     void            setGetExtensionsURL( const OUString &rURL );
-    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
+    virtual long    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &,
                                       bool bLicenseMissing = false ) SAL_OVERRIDE;
-    bool enablePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
+    bool enablePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage,
                         bool bEnable );
-    bool removePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
-    bool updatePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
-    bool acceptLicense(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    bool removePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage );
+    bool updatePackage(const css::uno::Reference< css::deployment::XPackage > &xPackage );
+    bool acceptLicense(const css::uno::Reference< css::deployment::XPackage > &xPackage );
 
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }
 
     virtual void    prepareChecking() SAL_OVERRIDE;
     virtual void    checkEntries() SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Sequence< OUString > raiseAddPicker();
+    css::uno::Sequence< OUString > raiseAddPicker();
 };
 
 
@@ -195,7 +195,7 @@ class UpdateRequiredDialog : public ModalDialog,
     Idle                 m_aIdle;
     TheExtensionManager *m_pManager;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > m_xAbortChannel;
+    css::uno::Reference< css::task::XAbortChannel > m_xAbortChannel;
 
     DECL_DLLPRIVATE_LINK_TYPED( HandleUpdateBtn, Button*, void );
     DECL_DLLPRIVATE_LINK_TYPED( HandleCloseBtn, Button*, void );
@@ -204,8 +204,8 @@ class UpdateRequiredDialog : public ModalDialog,
     DECL_DLLPRIVATE_LINK_TYPED( startProgress, void *, void );
     DECL_DLLPRIVATE_LINK( HandleHyperlink, FixedHyperlink * );
 
-    static bool     isEnabled( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
-    static bool     checkDependencies( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    static bool     isEnabled( const css::uno::Reference< css::deployment::XPackage > &xPackage );
+    static bool     checkDependencies( const css::uno::Reference< css::deployment::XPackage > &xPackage );
     bool            hasActiveEntries();
     void            disableAllEntries();
 
@@ -219,14 +219,14 @@ public:
 
     virtual void    showProgress( bool bStart ) SAL_OVERRIDE;
     virtual void    updateProgress( const OUString &rText,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XAbortChannel > &xAbortChannel) SAL_OVERRIDE;
+                                    const css::uno::Reference< css::task::XAbortChannel > &xAbortChannel) SAL_OVERRIDE;
     virtual void    updateProgress( const long nProgress ) SAL_OVERRIDE;
 
-    virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) SAL_OVERRIDE;
+    virtual void    updatePackageInfo( const css::uno::Reference< css::deployment::XPackage > &xPackage ) SAL_OVERRIDE;
 
-    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
+    virtual long    addPackageToList( const css::uno::Reference< css::deployment::XPackage > &,
                                       bool bLicenseMissing = false ) SAL_OVERRIDE;
-    bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage, bool bEnable );
+    bool            enablePackage( const css::uno::Reference< css::deployment::XPackage > &xPackage, bool bEnable );
 
     virtual void    prepareChecking() SAL_OVERRIDE;
     virtual void    checkEntries() SAL_OVERRIDE;
@@ -243,17 +243,17 @@ public:
 };
 
 
-class UpdateRequiredDialogService : public ::cppu::WeakImplHelper< ::com::sun::star::ui::dialogs::XExecutableDialog >
+class UpdateRequiredDialogService : public ::cppu::WeakImplHelper< css::ui::dialogs::XExecutableDialog >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const m_xComponentContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xParent;
+    css::uno::Reference< css::uno::XComponentContext > const m_xComponentContext;
+    css::uno::Reference< css::awt::XWindow > m_xParent;
 public:
-    UpdateRequiredDialogService( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & args,
-                                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xComponentContext );
+    UpdateRequiredDialogService( css::uno::Sequence< css::uno::Any > const & args,
+                                 css::uno::Reference< css::uno::XComponentContext> const & xComponentContext );
 
     // XExecutableDialog
-    virtual void SAL_CALL         setTitle( OUString const & title ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Int16 SAL_CALL    execute() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL         setTitle( OUString const & title ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int16 SAL_CALL    execute() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 } // namespace dp_gui

@@ -115,7 +115,7 @@ public:
     virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XInitialize
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
         throw ( RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getImplementationName()
@@ -273,7 +273,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
 
 // XInitialize
 void SAL_CALL
-SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
+SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
     throw (RuntimeException, std::exception)
 {
     ::osl::ClearableMutexGuard  aGuard( _aMutex );

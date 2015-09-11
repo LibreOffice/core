@@ -154,7 +154,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
                 rAcceptor->initialize( aSeq );
                 rMap.insert(AcceptorMap::value_type(aAcceptString, rAcceptor));
             }
-            catch (const com::sun::star::uno::Exception& e)
+            catch (const css::uno::Exception& e)
             {
                 // no error handling needed...
                 // acceptor just won't come up

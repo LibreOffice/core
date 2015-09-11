@@ -57,7 +57,7 @@ public:
        the parent window, may be null
     */
     UpdateInstallDialog(vcl::Window * parent, std::vector<UpdateData> & aVecUpdateData,
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xCtx);
+        css::uno::Reference< css::uno::XComponentContext > const & xCtx);
 
     virtual ~UpdateInstallDialog();
     virtual void dispose() SAL_OVERRIDE;
@@ -86,12 +86,12 @@ private:
     };
     void setError(INSTALL_ERROR err, OUString const & sExtension, OUString const & exceptionMessage);
     void setError(OUString const & exceptionMessage);
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > getExtensionManager() const
+    css::uno::Reference< css::deployment::XExtensionManager > getExtensionManager() const
             { return m_xExtensionManager; }
 
     rtl::Reference< Thread > m_thread;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xComponentContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
+    css::uno::Reference< css::uno::XComponentContext >        m_xComponentContext;
+    css::uno::Reference< css::deployment::XExtensionManager > m_xExtensionManager;
     //Signals that an error occurred during download and installation
     bool m_bError;
     bool m_bNoEntry;

@@ -179,7 +179,7 @@ bool prepareLocale() {
     // locale this will ensure localized configuration settings to be
     // selected according to the UI language:
     css::uno::Reference<css::lang::XLocalizable>(
-        com::sun::star::configuration::theDefaultProvider::get(
+        css::configuration::theDefaultProvider::get(
             comphelper::getProcessComponentContext()),
         css::uno::UNO_QUERY_THROW)->setLocale(tag.getLocale(false));
     if (!cmdLanguage) {

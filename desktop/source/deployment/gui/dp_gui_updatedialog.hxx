@@ -78,10 +78,10 @@ public:
        information.
     */
     UpdateDialog(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context,
+        css::uno::Reference< css::uno::XComponentContext > const & context,
         vcl::Window * parent,
-        const std::vector< com::sun::star::uno::Reference<
-        com::sun::star::deployment::XPackage > > & vExtensionList,
+        const std::vector< css::uno::Reference<
+        css::deployment::XPackage > > & vExtensionList,
         std::vector< dp_gui::UpdateData > * updateData);
 
     virtual ~UpdateDialog();
@@ -93,7 +93,7 @@ public:
 
     void notifyMenubar( bool bPrepareOnly, bool bRecheckOnly );
     static void createNotifyJob( bool bPrepareOnly,
-        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > > &rItemList );
+        css::uno::Sequence< css::uno::Sequence< OUString > > &rItemList );
 
 private:
     UpdateDialog(UpdateDialog &) SAL_DELETED_FUNCTION;
@@ -151,12 +151,12 @@ private:
 
     void initDescription();
     void clearDescription();
-    bool showDescription(::com::sun::star::uno::Reference<
-                         ::com::sun::star::deployment::XPackage > const & aExtension);
+    bool showDescription(css::uno::Reference<
+                         css::deployment::XPackage > const & aExtension);
     bool showDescription(std::pair< OUString, OUString > const & pairPublisher,
                          OUString const & sReleaseNotes);
-    bool showDescription( ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
+    bool showDescription( css::uno::Reference<
+        css::xml::dom::XNode > const & aUpdateInfo);
     bool showDescription( const OUString& rDescription);
 
     DECL_LINK_TYPED(selectionHandler, SvTreeListBox*, void);
@@ -165,8 +165,7 @@ private:
     DECL_LINK_TYPED(closeHandler, Button*, void);
     DECL_LINK(hyperlink_clicked, FixedHyperlink *);
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-        m_context;
+    css::uno::Reference< css::uno::XComponentContext >  m_context;
     VclPtr<FixedText> m_pchecking;
     VclPtr<Throbber> m_pthrobber;
     VclPtr<FixedText> m_pUpdate;
@@ -200,7 +199,7 @@ private:
     std::vector< Index* > m_ListboxEntries;
     std::vector< dp_gui::UpdateData > & m_updateData;
     rtl::Reference< UpdateDialog::Thread > m_thread;
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
+    css::uno::Reference< css::deployment::XExtensionManager > m_xExtensionManager;
 
     sal_uInt16  m_nLastID;
     bool    m_bModified;

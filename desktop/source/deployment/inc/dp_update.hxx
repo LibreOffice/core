@@ -82,21 +82,21 @@ UPDATE_SOURCE isUpdateSharedExtension(
 
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage>
+css::uno::Reference< css::deployment::XPackage>
 getExtensionWithHighestVersion(
-    ::com::sun::star::uno::Sequence<
-    ::com::sun::star::uno::Reference<
-    ::com::sun::star::deployment::XPackage> > const & seqExtensionsWithSameId);
+    css::uno::Sequence<
+    css::uno::Reference<
+    css::deployment::XPackage> > const & seqExtensionsWithSameId);
 
 
 struct UpdateInfo
 {
-    UpdateInfo( ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> const & ext);
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::deployment::XPackage> extension;
-//version of the update
+    UpdateInfo( css::uno::Reference< css::deployment::XPackage> const & ext);
+
+    css::uno::Reference<  css::deployment::XPackage> extension;
+    //version of the update
     OUString version;
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > info;
+    css::uno::Reference< css::xml::dom::XNode > info;
 };
 
 typedef std::map< OUString, UpdateInfo > UpdateInfoMap;
@@ -118,12 +118,12 @@ typedef std::map< OUString, UpdateInfo > UpdateInfoMap;
  */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 UpdateInfoMap getOnlineUpdateInfos(
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const &xContext,
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager> const & xExtMgr,
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XUpdateInformationProvider > const & updateInformation,
-    std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > > const * extensionList,
-    ::std::vector< ::std::pair< ::com::sun::star::uno::Reference<
-    ::com::sun::star::deployment::XPackage>, ::com::sun::star::uno::Any> > & out_errors);
+    css::uno::Reference< css::uno::XComponentContext> const &xContext,
+    css::uno::Reference< css::deployment::XExtensionManager> const & xExtMgr,
+    css::uno::Reference< css::deployment::XUpdateInformationProvider > const & updateInformation,
+    std::vector< css::uno::Reference< css::deployment::XPackage > > const * extensionList,
+    ::std::vector< ::std::pair< css::uno::Reference<
+    css::deployment::XPackage>, css::uno::Any> > & out_errors);
 
 /* retunrs the highest version from the provided arguments.
 */

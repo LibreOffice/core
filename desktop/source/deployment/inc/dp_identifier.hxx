@@ -60,10 +60,10 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString generateIdentifier(
    the explicit identifier of the given package if present, otherwise the
    implicit legacy identifier of the given package
 
-   @throws com::sun::star::uno::RuntimeException
+   @throws css::uno::RuntimeException
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString getIdentifier(
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage >
+    css::uno::Reference< css::deployment::XPackage >
         const & package);
 
 /**

@@ -43,7 +43,7 @@ class DispatchWatcherHashMap : public std::unordered_map< OUString, sal_Int32, O
 {
 };
 
-class DispatchWatcher : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XDispatchResultListener >
+class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResultListener >
 {
     public:
         enum RequestType
@@ -78,11 +78,11 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< ::com::sun::star::frame::
         virtual ~DispatchWatcher();
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-            throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
+            throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDispachResultListener
-        virtual void SAL_CALL dispatchFinished( const com::sun::star::frame::DispatchResultEvent& aEvent ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // Access function to get a dispatcher watcher reference. There must be a global reference holder
         static DispatchWatcher* GetDispatchWatcher();

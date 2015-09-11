@@ -39,7 +39,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 
 */
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool hasValidPlatform( ::com::sun::star::uno::Sequence< OUString > const & platformStrings);
+bool hasValidPlatform( css::uno::Sequence< OUString > const & platformStrings);
 
 }
 

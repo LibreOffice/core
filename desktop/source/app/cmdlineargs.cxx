@@ -49,7 +49,7 @@ namespace {
 
 OUString translateExternalUris(OUString const & input) {
     OUString t(
-        com::sun::star::uri::ExternalUriReferenceTranslator::create(
+        css::uri::ExternalUriReferenceTranslator::create(
             comphelper::getProcessComponentContext())->
         translateToInternal(input));
     return t.isEmpty() ? input : t;
