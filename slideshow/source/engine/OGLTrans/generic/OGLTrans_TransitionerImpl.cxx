@@ -1185,6 +1185,7 @@ void OGLTransitionerImpl::GLInitSlides()
     TimerContext aTimerContext("texture creation");
 #endif
 
+    mpContext->makeCurrent();
     prepareEnvironment();
 
     const OGLFormat* pFormat = NULL;
