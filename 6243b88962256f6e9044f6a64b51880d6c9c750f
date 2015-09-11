@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "ba0121b8_de48758a",
+        "filename": "bridges/source/cpp_uno/msvc_win32_intel/except.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-09-11T05:28:56Z",
+      "side": 1,
+      "message": "This part and closed parenthesis are identical for old and new MSVC compiler versions.",
+      "range": {
+        "startLine": 514,
+        "startChar": 8,
+        "endLine": 514,
+        "endChar": 48
+      },
+      "revId": "6243b88962256f6e9044f6a64b51880d6c9c750f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba0121b8_be94a1e8",
         "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/except.cxx",
         "patchSetId": 1
