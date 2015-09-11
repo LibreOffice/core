@@ -36,13 +36,13 @@ protected:
 public:
     SvxAutocorrWordList     *pAutocorr_List;
     SvxAutoCorrect          &rAutoCorrect;
-    com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStorage;
+    css::uno::Reference < css::embed::XStorage > xStorage;
 
     SvXMLAutoCorrectImport(
         const ::css::uno::Reference< ::css::uno::XComponentContext > xContext,
         SvxAutocorrWordList *pNewAutocorr_List,
         SvxAutoCorrect &rNewAutoCorrect,
-        const ::css::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage);
+        const ::css::uno::Reference < css::embed::XStorage >& rNewStorage);
 
     virtual ~SvXMLAutoCorrectImport() throw ();
 };
@@ -55,7 +55,7 @@ public:
     SvXMLWordListContext ( SvXMLAutoCorrectImport& rImport, sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList );
 
-    virtual com::sun::star::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext( sal_Int32 Element,
+    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext( sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
@@ -100,7 +100,7 @@ public:
     SvXMLExceptionListContext ( SvXMLExceptionListImport& rImport, sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList );
 
-    virtual com::sun::star::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext( sal_Int32 Element,
+    virtual css::uno::Reference<XFastContextHandler> SAL_CALL createFastChildContext( sal_Int32 Element,
         const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList )
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 

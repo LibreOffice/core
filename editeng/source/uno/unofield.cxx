@@ -223,12 +223,12 @@ namespace
     class theSvxUnoTextFieldUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextFieldUnoTunnelId> {};
 }
 
-const ::com::sun::star::uno::Sequence< sal_Int8 > & SvxUnoTextField::getUnoTunnelId() throw()
+const css::uno::Sequence< sal_Int8 > & SvxUnoTextField::getUnoTunnelId() throw()
 {
     return theSvxUnoTextFieldUnoTunnelId::get().getSeq();
 }
 
-sal_Int64 SAL_CALL SvxUnoTextField::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL SvxUnoTextField::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
                                                          rId.getConstArray(), 16 ) )
@@ -778,10 +778,10 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
     return aValue;
 }
 
-void SAL_CALL SvxUnoTextField::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
-void SAL_CALL SvxUnoTextField::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
-void SAL_CALL SvxUnoTextField::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
-void SAL_CALL SvxUnoTextField::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
+void SAL_CALL SvxUnoTextField::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw(css::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
+void SAL_CALL SvxUnoTextField::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& ) throw(css::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
+void SAL_CALL SvxUnoTextField::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw(css::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
+void SAL_CALL SvxUnoTextField::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw(css::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
 
 // OComponentHelper
 void SvxUnoTextField::disposing()
@@ -877,7 +877,7 @@ sal_Bool SAL_CALL SvxUnoTextField::supportsService( const OUString& ServiceName 
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const OUString& ServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const OUString& ServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xRet;
 

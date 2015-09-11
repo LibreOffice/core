@@ -1057,22 +1057,22 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             case KEY_END:
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
-            case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
-            case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
-            case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
-            case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
-            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
-            case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
-            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
-            case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
-            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
-            case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
-            case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
-            case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+            case css::awt::Key::MOVE_WORD_FORWARD:
+            case css::awt::Key::SELECT_WORD_FORWARD:
+            case css::awt::Key::MOVE_WORD_BACKWARD:
+            case css::awt::Key::SELECT_WORD_BACKWARD:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+            case css::awt::Key::MOVE_TO_END_OF_LINE:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+            case css::awt::Key::SELECT_TO_END_OF_LINE:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+            case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+            case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+            case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+            case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+            case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+            case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             {
                 if ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                 {
@@ -1082,7 +1082,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     aCurSel = pImpEditEngine->MoveCursor( rKeyEvent, pEditView );
 
                     if ( aCurSel.HasRange() ) {
-                        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(pEditView->GetWindow()->GetPrimarySelection());
+                        Reference<css::datatransfer::clipboard::XClipboard> aSelection(pEditView->GetWindow()->GetPrimarySelection());
                         pEditView->pImpEditView->CutCopy( aSelection, false );
                     }
 
@@ -1100,10 +1100,10 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             break;
             case KEY_BACKSPACE:
             case KEY_DELETE:
-            case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
-            case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
-            case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
-            case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
+            case css::awt::Key::DELETE_WORD_BACKWARD:
+            case css::awt::Key::DELETE_WORD_FORWARD:
+            case css::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
+            case css::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
             {
                 if ( !bReadOnly && !rKeyEvent.GetKeyCode().IsMod2() )
                 {
@@ -1140,19 +1140,19 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     sal_uInt8 nDel = 0, nMode = 0;
                     switch( nCode )
                     {
-                    case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
+                    case css::awt::Key::DELETE_WORD_BACKWARD:
                         nMode = DELMODE_RESTOFWORD;
                         nDel = DEL_LEFT;
                         break;
-                    case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
+                    case css::awt::Key::DELETE_WORD_FORWARD:
                         nMode = DELMODE_RESTOFWORD;
                         nDel = DEL_RIGHT;
                         break;
-                    case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
+                    case css::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
                         nMode = DELMODE_RESTOFCONTENT;
                         nDel = DEL_LEFT;
                         break;
-                    case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
+                    case css::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
                         nMode = DELMODE_RESTOFCONTENT;
                         nDel = DEL_RIGHT;
                         break;
@@ -2394,7 +2394,7 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
     return aInfos;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >
+css::uno::Reference< css::datatransfer::XTransferable >
                     EditEngine::CreateTransferable( const ESelection& rSelection ) const
 {
     EditSelection aSel( pImpEditEngine->CreateSel( rSelection ) );
@@ -2407,7 +2407,7 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
 void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
                               const long*, const SvxFont&, sal_Int32, sal_Int32, sal_uInt8,
                               const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
-                              const ::com::sun::star::lang::Locale*, const Color&, const Color&)
+                              const css::lang::Locale*, const Color&, const Color&)
 
 {
 }
@@ -2671,7 +2671,7 @@ bool EditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
     return false;
 }
 
-bool EditEngine::HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable )
+bool EditEngine::HasValidData( const css::uno::Reference< css::datatransfer::XTransferable >& rTransferable )
 {
     bool bValidData = false;
 

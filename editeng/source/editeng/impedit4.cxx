@@ -1436,7 +1436,7 @@ LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos
     return pLangItem->GetLanguage();
 }
 
-::com::sun::star::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM ) const
+css::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM ) const
 {
     return LanguageTag( GetLanguage( rPaM ) ).getLocale();
 }
@@ -1820,7 +1820,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
 
         // move to next word/paragraph if necessary
         if ( aRes.isEmpty() )
-            aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+            aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
 
         pConvInfo->aConvContinue = CreateEPaM( aCurSel.Max() );
     }
@@ -1867,7 +1867,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
                 break;
         }
 
-        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aCurSel = SelectWord( aCurSel, css::i18n::WordType::DICTIONARY_WORD );
         aWord = GetSelected( aCurSel );
 
         // If afterwards a dot, this must be handed over!
@@ -1890,7 +1890,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         }
 
         if ( !xSpellAlt.is() )
-            aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+            aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
         else
             pSpellInfo->eState = EE_SPELL_ERRORFOUND;
     }
@@ -1918,7 +1918,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
                 break;
         }
 
-        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aCurSel = SelectWord( aCurSel, css::i18n::WordType::DICTIONARY_WORD );
         aWord = GetSelected( aCurSel );
 
         // If afterwards a dot, this must be handed over!
@@ -1937,7 +1937,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
             xSpellAlt = xSpeller->spell( aWord, GetLanguage( aCurSel.Max() ), aEmptySeq );
 
         if ( !xSpellAlt.is() )
-            aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+            aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
         else
         {
             pSpellInfo->eState = EE_SPELL_ERRORFOUND;
@@ -2454,7 +2454,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
             return EE_SPELL_OK;
         }
 
-        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aCurSel = SelectWord( aCurSel, css::i18n::WordType::DICTIONARY_WORD );
         aWord = GetSelected( aCurSel );
         if ( !aWord.isEmpty() )
         {
@@ -2462,7 +2462,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
             SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
             xSpellAlt = xSpeller->spell( aWord, eLang, aEmptySeq );
         }
-        aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aCurSel = WordRight( aCurSel.Max(), css::i18n::WordType::DICTIONARY_WORD );
     }
 
     return EE_SPELL_ERRORFOUND;
@@ -2477,7 +2477,7 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
 {
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     if ( !aCurSel.HasRange() )
-        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aCurSel = SelectWord( aCurSel, css::i18n::WordType::DICTIONARY_WORD );
     OUString aWord( GetSelected( aCurSel ) );
 
     Reference< XThesaurus > xThes( SvxGetThesaurus() );

@@ -1727,7 +1727,7 @@ void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_I
                             bool bEndOfLine,
                             bool bEndOfParagraph,
                             bool bEndOfBullet,
-                            const ::com::sun::star::lang::Locale* pLocale,
+                            const css::lang::Locale* pLocale,
                             const Color& rOverlineColor,
                             const Color& rTextLineColor)
 {

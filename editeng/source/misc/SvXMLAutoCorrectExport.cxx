@@ -27,10 +27,10 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
 SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    const css::uno::Reference< css::uno::XComponentContext > xContext,
     const SvxAutocorrWordList *  pNewAutocorr_List,
     const OUString &rFileName,
-    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
+    css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler)
 :   SvXMLExport( xContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     pAutocorr_List( pNewAutocorr_List )
 {
@@ -71,10 +71,10 @@ sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 }
 
 SvXMLExceptionListExport::SvXMLExceptionListExport(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+    const css::uno::Reference< css::uno::XComponentContext > xContext,
     const SvStringsISortDtor &rNewList,
     const OUString &rFileName,
-    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
+    css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler)
 :   SvXMLExport( xContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     rList( rNewList )
 {

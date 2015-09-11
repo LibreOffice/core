@@ -961,7 +961,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         {
                             sal_Int32 nVal = 0;
                             if (rAnySeq[1] >>= nVal)
-                                aSeq[n].Alignment = (com::sun::star::style::TabAlign) nVal;
+                                aSeq[n].Alignment = (css::style::TabAlign) nVal;
                             else
                                 return false;
                         }
@@ -1245,7 +1245,7 @@ SfxPoolItem* SvxPageModelItem::Clone( SfxItemPool* ) const
 
 
 
-bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
+bool SvxPageModelItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -1259,7 +1259,7 @@ bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMe
     return true;
 }
 
-bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
+bool SvxPageModelItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet;
@@ -1475,14 +1475,14 @@ bool SvxParaVertAlignItem::GetPresentation(
     return true;
 }
 
-bool SvxParaVertAlignItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxParaVertAlignItem::QueryValue( css::uno::Any& rVal,
                                            sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= (sal_Int16)GetValue();
     return true;
 }
 
-bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SvxParaVertAlignItem::PutValue( const css::uno::Any& rVal,
                                          sal_uInt8 /*nMemberId*/ )
 {
     sal_Int16 nVal = sal_Int16();

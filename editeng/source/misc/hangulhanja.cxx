@@ -593,9 +593,9 @@ namespace editeng
             {
                 // get the break iterator service
                 Reference< XBreakIterator > xBreakIter = i18n::BreakIterator::create( m_xContext );
-                sal_Int32 nNextAsianScript = xBreakIter->beginOfScript( m_sCurrentPortion, m_nCurrentStartIndex, com::sun::star::i18n::ScriptType::ASIAN );
+                sal_Int32 nNextAsianScript = xBreakIter->beginOfScript( m_sCurrentPortion, m_nCurrentStartIndex, css::i18n::ScriptType::ASIAN );
                 if ( -1 == nNextAsianScript )
-                    nNextAsianScript = xBreakIter->nextScript( m_sCurrentPortion, m_nCurrentStartIndex, com::sun::star::i18n::ScriptType::ASIAN );
+                    nNextAsianScript = xBreakIter->nextScript( m_sCurrentPortion, m_nCurrentStartIndex, css::i18n::ScriptType::ASIAN );
                 if ( ( nNextAsianScript >= m_nCurrentStartIndex ) && ( nNextAsianScript < m_sCurrentPortion.getLength() ) )
                 {   // found asian text
 

@@ -82,9 +82,9 @@ namespace accessibility
         return aDesc;
     }
 
-    uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL AccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
+    uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL AccessibleHyperlink::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
-        uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > xKeyBinding;
+        uno::Reference< css::accessibility::XAccessibleKeyBinding > xKeyBinding;
 
         if( isValid() && ( nIndex == 0 ) )
         {

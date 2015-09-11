@@ -336,7 +336,7 @@ namespace accessibility
                                     ( static_cast< XAccessible* > (this) ) );   // disambiguate hierarchy
     }
 
-    sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 SAL_CALL AccessibleImageBullet::getForeground(  ) throw (css::uno::RuntimeException, std::exception)
     {
 
         // #104444# Added to XAccessibleComponent interface
@@ -345,7 +345,7 @@ namespace accessibility
         return static_cast<sal_Int32>(nColor);
     }
 
-    sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 SAL_CALL AccessibleImageBullet::getBackground(  ) throw (css::uno::RuntimeException, std::exception)
     {
 
         // #104444# Added to XAccessibleComponent interface

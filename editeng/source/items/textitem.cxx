@@ -187,7 +187,7 @@ bool SvxFontListItem::operator==( const SfxPoolItem& rAttr ) const
     return( pFontList == static_cast<const SvxFontListItem&>(rAttr).pFontList );
 }
 
-bool SvxFontListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxFontListItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= aFontNameSeq;
     return true;
@@ -252,7 +252,7 @@ bool SvxFontItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case 0:
         {
-            com::sun::star::awt::FontDescriptor aFontDescriptor;
+            css::awt::FontDescriptor aFontDescriptor;
             aFontDescriptor.Name = aFamilyName;
             aFontDescriptor.StyleName = aStyleName;
             aFontDescriptor.Family = (sal_Int16)(eFamily);
@@ -281,7 +281,7 @@ bool SvxFontItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
     {
         case 0:
         {
-            com::sun::star::awt::FontDescriptor aFontDescriptor;
+            css::awt::FontDescriptor aFontDescriptor;
             if ( !( rVal >>= aFontDescriptor ))
                 return false;
 
@@ -828,7 +828,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case 0:
         {
-            ::com::sun::star::frame::status::FontHeight aFontHeight;
+            css::frame::status::FontHeight aFontHeight;
 
             // Point (i.e. Twips) is asked for, thus re-calculate if
             // CONVERT_TWIPS is not set.
@@ -965,7 +965,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case 0:
         {
-            ::com::sun::star::frame::status::FontHeight aFontHeight;
+            css::frame::status::FontHeight aFontHeight;
             if ( rVal >>= aFontHeight )
             {
                 // Height
@@ -2921,7 +2921,7 @@ SfxPoolItem* SvxTwoLinesItem::Clone( SfxItemPool* ) const
     return new SvxTwoLinesItem( *this );
 }
 
-bool SvxTwoLinesItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxTwoLinesItem::QueryValue( css::uno::Any& rVal,
                                 sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -2954,7 +2954,7 @@ bool SvxTwoLinesItem::QueryValue( com::sun::star::uno::Any& rVal,
     return bRet;
 }
 
-bool SvxTwoLinesItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SvxTwoLinesItem::PutValue( const css::uno::Any& rVal,
                                     sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -3081,7 +3081,7 @@ bool SvxCharRotateItem::GetPresentation(
     return true;
 }
 
-bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxCharRotateItem::QueryValue( css::uno::Any& rVal,
                                 sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -3101,7 +3101,7 @@ bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
     return bRet;
 }
 
-bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SvxCharRotateItem::PutValue( const css::uno::Any& rVal,
                                     sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -3299,7 +3299,7 @@ bool SvxCharReliefItem::GetPresentation
     return true;
 }
 
-bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SvxCharReliefItem::PutValue( const css::uno::Any& rVal,
                                         sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -3323,7 +3323,7 @@ bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,
     return bRet;
 }
 
-bool SvxCharReliefItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxCharReliefItem::QueryValue( css::uno::Any& rVal,
                                         sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;

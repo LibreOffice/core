@@ -29,8 +29,7 @@ class SfxPoolItem;
 class GlobalEditData
 {
 private:
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLanguageGuessing >  xLanguageGuesser;
+    css::uno::Reference< css::linguistic2::XLanguageGuessing >  xLanguageGuesser;
     SfxPoolItem**   ppDefItems;
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
@@ -43,7 +42,7 @@ public:
 
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable();
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing > GetLanguageGuesser();
+    css::uno::Reference< css::linguistic2::XLanguageGuessing > GetLanguageGuesser();
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EERDLL2_HXX

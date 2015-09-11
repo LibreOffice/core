@@ -25,14 +25,14 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext)
+SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( const css::uno::Reference< css::uno::XComponentContext >& rxContext)
 {
     m_xContext = rxContext;
 }
 
-const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( sal_uInt16 nLanguage, bool bGetDefault )
+const css::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( sal_uInt16 nLanguage, bool bGetDefault )
 {
-    com::sun::star::i18n::ForbiddenCharacters* pForbiddenCharacters = NULL;
+    css::i18n::ForbiddenCharacters* pForbiddenCharacters = NULL;
     Map::iterator it = maMap.find( nLanguage );
     if ( it != maMap.end() )
         pForbiddenCharacters = &(it->second);
@@ -45,7 +45,7 @@ const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::Ge
     return pForbiddenCharacters;
 }
 
-void SvxForbiddenCharactersTable::SetForbiddenCharacters( sal_uInt16 nLanguage, const com::sun::star::i18n::ForbiddenCharacters& rForbiddenChars )
+void SvxForbiddenCharactersTable::SetForbiddenCharacters( sal_uInt16 nLanguage, const css::i18n::ForbiddenCharacters& rForbiddenChars )
 {
     maMap[ nLanguage ] = rForbiddenChars;
 }

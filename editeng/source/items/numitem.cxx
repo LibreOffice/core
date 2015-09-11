@@ -60,8 +60,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::style;
 
 sal_Int32 SvxNumberType::nRefCount = 0;
-com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> SvxNumberType::xFormatter = 0;
-static void lcl_getFormatter(com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter>& _xFormatter)
+css::uno::Reference<css::text::XNumberingFormatter> SvxNumberType::xFormatter = 0;
+static void lcl_getFormatter(css::uno::Reference<css::text::XNumberingFormatter>& _xFormatter)
 {
     if(!_xFormatter.is())
        {
@@ -942,13 +942,13 @@ SvStream&   SvxNumBulletItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion
     return rStream;
 }
 
-bool SvxNumBulletItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvxNumBulletItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= SvxCreateNumRule( pNumRule );
     return true;
 }
 
-bool SvxNumBulletItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxNumBulletItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace > xRule;
     if( rVal >>= xRule )

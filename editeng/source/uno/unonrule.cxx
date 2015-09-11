@@ -478,7 +478,7 @@ const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > xRule ) throw( Illeg
     return pRule->getNumRule();
 }
 
-com::sun::star::uno::Reference< com::sun::star::container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw()
+css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw()
 {
     DBG_ASSERT( pRule, "No default SvxNumRule!" );
     if( pRule )
@@ -544,7 +544,7 @@ Reference< XAnyCompare > SvxCreateNumRuleCompare() throw()
     return new SvxUnoNumberingRulesCompare();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace > SvxCreateNumRule() throw()
+css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule() throw()
 {
     SvxNumRule aTempRule( SvxNumRuleFlags::NONE, 10, false );
     return SvxCreateNumRule( &aTempRule );
