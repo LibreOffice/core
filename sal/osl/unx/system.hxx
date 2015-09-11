@@ -73,13 +73,6 @@
 #   include <dlfcn.h>
 #   include <endian.h>
 #   include <sys/time.h>
-#   if __BYTE_ORDER == __LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   elif __BYTE_ORDER == __BIG_ENDIAN
-#               ifndef _BIG_ENDIAN
-#               define _BIG_ENDIAN
-#               endif
-#   endif
 #   define  IORESOURCE_TRANSFER_BSD
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  pthread_testcancel()
@@ -185,15 +178,6 @@
 #   include <sys/un.h>
 #   include <netinet/tcp.h>
 #   include <sys/machine.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       ifndef _LITTLE_ENDIAN
-#           define _LITTLE_ENDIAN
-#       endif
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       ifndef _BIG_ENDIAN
-#           define _BIG_ENDIAN
-#       endif
-#   endif
 #   define  SLEEP_TIMESPEC(timespec)    nsleep(&timespec, 0)
 #   define  LIBPATH "LIBPATH"
 #endif
@@ -230,15 +214,6 @@
 #   include <machine/endian.h>
 #   include <sys/time.h>
 #   include <mach-o/dyld.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       ifndef _LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#       endif
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       ifndef _BIG_ENDIAN
-#       define _BIG_ENDIAN
-#       endif
-#   endif
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  NO_PTHREAD_RTL
 /* for NSGetArgc/Argv/Environ */
@@ -259,15 +234,6 @@ int macxp_resolveAlias(char *path, int buflen);
 #   include <netinet/tcp.h>
 #   include <machine/endian.h>
 #   include <sys/time.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       ifndef _LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#       endif
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       ifndef _BIG_ENDIAN
-#       define _BIG_ENDIAN
-#       endif
-#   endif
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  NO_PTHREAD_RTL
 #endif
