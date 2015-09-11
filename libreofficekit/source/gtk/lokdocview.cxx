@@ -368,6 +368,16 @@ hyperlinkClicked(LOKDocView* pDocView, const std::string& rString)
     g_signal_emit(pDocView, doc_view_signals[HYPERLINK_CLICKED], 0, rString.c_str());
 }
 
+/// Trigger a redraw, invoked on the main thread by other functions running in a thread.
+static gboolean queueDraw(gpointer pData)
+{
+    GtkWidget* pWidget = static_cast<GtkWidget*>(pData);
+
+    gtk_widget_queue_draw(pWidget);
+
+    return G_SOURCE_REMOVE;
+}
+
 /// Implementation of the global callback handler, invoked by globalCallback();
 static gboolean
 globalCallback (gpointer pData)
@@ -1249,7 +1259,7 @@ setEditInThread(gpointer data)
     }
     priv->m_bEdit = bEdit;
     g_signal_emit(pDocView, doc_view_signals[EDIT_CHANGED], 0, bWasEdit);
-    gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+    gdk_threads_add_idle(queueDraw, GTK_WIDGET(pDocView));
 }
 
 static void
@@ -1305,7 +1315,7 @@ paintTileInThread (gpointer data)
     //create a mapping for it
     buffer.m_mTiles[index].setPixbuf(pPixBuf);
     buffer.m_mTiles[index].valid = true;
-    gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+    gdk_threads_add_idle(queueDraw, GTK_WIDGET(pDocView));
 }
 
 
