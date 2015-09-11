@@ -804,7 +804,6 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
 
     ShowOptionalControls_Impl();
 
-    bool bDraw = false;
     if ( pSearchItem->GetAppFlag() == SvxSearchApp::CALC )
     {
         m_pCalcGrid->Show();
@@ -864,7 +863,6 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
             m_pFormatBtn->Hide();
             m_pNoFormatBtn->Hide();
             m_pAttributeBtn->Hide();
-            bDraw = true;
         }
         else
         {
@@ -885,12 +883,6 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
                     InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
             }
         }
-    }
-
-    if ( false && !bDraw ) //!!!!!
-    {
-        m_pRegExpBtn->Show();
-        m_pLayoutBtn->Show();
     }
 
     // similarity search?
