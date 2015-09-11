@@ -351,7 +351,7 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         }.execute(dir);
     }
 
-    public void open(IFile document) {
+    public void open(final IFile document) {
         new AsyncTask<IFile, Void, File>() {
             @Override
             protected File doInBackground(IFile... document) {
@@ -382,6 +382,13 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
                     ComponentName componentName = new ComponentName(packageName,
                             LibreOfficeMainActivity.class.getName());
                     i.setComponent(componentName);
+
+                    // these extras allow to rebuild the IFile object in LOMainActivity
+                    i.putExtra("org.libreoffice.document_provider_id",
+                            documentProvider.getId());
+                    i.putExtra("org.libreoffice.document_uri",
+                            document.getUri());
+
                     startActivity(i);
                 }
             }

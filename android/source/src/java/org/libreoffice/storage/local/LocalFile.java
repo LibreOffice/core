@@ -93,4 +93,9 @@ public class LocalFile implements IFile {
         LocalFile file = (LocalFile) object;
         return file.getUri().equals(getUri());
     }
+
+    @Override
+    public void saveDocument(File file) {
+        // do nothing; file is local
+    }
 }
