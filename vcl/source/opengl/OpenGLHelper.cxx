@@ -554,6 +554,7 @@ void OpenGLWatchdogThread::execute()
                     nUnchanged = 0;
                     std::abort();
                 }
+                // coverity[dead_error_line] - we might have caught SIGABRT and failed to exit yet
                 bAbortFired = true;
             }
         }
