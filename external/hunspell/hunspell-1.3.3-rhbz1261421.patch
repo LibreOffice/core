@@ -1,0 +1,191 @@
+From 97e079a23d459aeb6e64435350d7710c90dbca85 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Fri, 11 Sep 2015 13:28:52 +0100
+Subject: [PATCH] Resolves: rhbz#1261421 crash on mashing hangul korean
+ keyboard
+
+---
+ src/hunspell/hunspell.cxx | 69 +++++++++++++++++++++++++++++++++++------------
+ src/hunspell/hunspell.hxx |  4 ++-
+ src/hunspell/replist.cxx  | 18 ++++++++++---
+ src/hunspell/replist.hxx  |  2 ++
+ src/tools/hunspell.cxx    |  2 +-
+ 6 files changed, 78 insertions(+), 24 deletions(-)
+
+diff --git a/src/hunspell/hunspell.cxx b/src/hunspell/hunspell.cxx
+index 7fae54b..d8ef357 100644
+--- misc/hunspell-1.3.3/src/hunspell/hunspell.cxx
++++ misc/build/hunspell-1.3.3/src/hunspell/hunspell.cxx
+@@ -12,6 +12,7 @@
+ #endif
+ #include "csutil.hxx"
+ 
++#include <limits>
+ #include <string>
+ 
+ Hunspell::Hunspell(const char * affpath, const char * dpath, const char * key)
+@@ -349,8 +350,13 @@ int Hunspell::spell(const char * word, int * info, char ** root)
+ 
+   // input conversion
+   RepList * rl = (pAMgr) ? pAMgr->get_iconvtable() : NULL;
+-  if (rl && rl->conv(word, wspace)) wl = cleanword2(cw, wspace, unicw, &nc, &captype, &abbv);
+-  else wl = cleanword2(cw, word, unicw, &nc, &captype, &abbv);
++  int convstatus = rl ? rl->conv(word, wspace, MAXWORDUTF8LEN) : 0;
++  if (convstatus < 0)
++    return 0;
++  else if (convstatus > 0)
++    wl = cleanword2(cw, wspace, unicw, &nc, &captype, &abbv);
++  else
++    wl = cleanword2(cw, word, unicw, &nc, &captype, &abbv);
+ 
+   if (wl == 0 || maxdic == 0) return 1;
+   if (root) *root = NULL;
+@@ -702,8 +708,13 @@ int Hunspell::suggest(char*** slst, const char * word)
+ 
+   // input conversion
+   RepList * rl = (pAMgr) ? pAMgr->get_iconvtable() : NULL;
+-  if (rl && rl->conv(word, wspace)) wl = cleanword2(cw, wspace, unicw, &nc, &captype, &abbv);
+-  else wl = cleanword2(cw, word, unicw, &nc, &captype, &abbv);
++  int convstatus = rl ? rl->conv(word, wspace, MAXWORDUTF8LEN) : 0;
++  if (convstatus < 0)
++    return 0;
++  else if (convstatus > 0)
++    wl = cleanword2(cw, wspace, unicw, &nc, &captype, &abbv);
++  else
++    wl = cleanword2(cw, word, unicw, &nc, &captype, &abbv);
+ 
+   if (wl == 0) return 0;
+   int ns = 0;
+@@ -1020,7 +1031,7 @@ int Hunspell::suggest(char*** slst, const char * word)
+   // output conversion
+   rl = (pAMgr) ? pAMgr->get_oconvtable() : NULL;
+   for (int j = 0; rl && j < ns; j++) {
+-    if (rl->conv((*slst)[j], wspace)) {
++    if (rl->conv((*slst)[j], wspace, MAXWORDUTF8LEN) > 0) {
+       free((*slst)[j]);
+       (*slst)[j] = mystrdup(wspace);
+     }
+@@ -1395,8 +1406,13 @@ int Hunspell::analyze(char*** slst, const char * word)
+ 
+   // input conversion
+   RepList * rl = (pAMgr) ? pAMgr->get_iconvtable() : NULL;
+-  if (rl && rl->conv(word, wspace)) wl = cleanword2(cw, wspace, unicw, &nc, &captype, &abbv);
+-  else wl = cleanword2(cw, word, unicw, &nc, &captype, &abbv);
++  int convstatus = rl ? rl->conv(word, wspace, MAXWORDUTF8LEN) : 0;
++  if (convstatus < 0)
++    return 0;
++  else if (convstatus > 0)
++    wl = cleanword2(cw, wspace, unicw, &nc, &captype, &abbv);
++  else
++    wl = cleanword2(cw, word, unicw, &nc, &captype, &abbv);
+ 
+   if (wl == 0) {
+       if (abbv) {
+@@ -1684,12 +1700,16 @@ int Hunspell::get_langnum() const
+    return langnum;
+ }
+ 
+-int Hunspell::input_conv(const char * word, char * dest)
++int Hunspell::input_conv(const char * word, char * dest, size_t destsize)
+ {
+   RepList * rl = (pAMgr) ? pAMgr->get_iconvtable() : NULL;
+-  return (rl && rl->conv(word, dest));
++  return (rl && rl->conv(word, dest, destsize) > 0);
+ }
+ 
++int Hunspell::input_conv(const char * word, char * dest)
++{
++  return input_conv(word, dest, std::numeric_limits<std::size_t>::max());
++}
+ 
+ // return the beginning of the element (attr == NULL) or the attribute
+ const char * Hunspell::get_xml_pos(const char * s, const char * attr)
+diff --git a/src/hunspell/hunspell.hxx b/src/hunspell/hunspell.hxx
+index e62f0dd..0b5ad2e 100644
+--- misc/hunspell-1.3.3/src/hunspell/hunspell.hxx
++++ misc/build/hunspell-1.3.3/src/hunspell/hunspell.hxx
+@@ -226,7 +226,9 @@ public:
+ 
+   /* need for putdic */
+   int input_conv(const char * word, char * dest);
+-  
++  // ^^-deprecated, use this-vv"
++  int input_conv(const char * word, char * dest, size_t destsize);
++ 
+   /* experimental and deprecated functions */
+ 
+ #ifdef HUNSPELL_EXPERIMENTAL
+diff --git a/src/hunspell/replist.cxx b/src/hunspell/replist.cxx
+index b9b1255..bac3e06 100644
+--- misc/hunspell-1.3.3/src/hunspell/replist.cxx
++++ misc/build/hunspell-1.3.3/src/hunspell/replist.cxx
+@@ -74,6 +74,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
++#include <limits>
+ 
+ #include "replist.hxx"
+ #include "csutil.hxx"
+@@ -139,19 +140,30 @@ int RepList::add(char * pat1, char * pat2) {
+     return 0;
+ }
+ 
+-int RepList::conv(const char * word, char * dest) {
++int RepList::conv(const char * word, char * dest, size_t destsize) {
+     int stl = 0;
+     int change = 0;
+     for (size_t i = 0; i < strlen(word); i++) {
+         int n = near(word + i);
+         int l = match(word + i, n);
+         if (l) {
++          size_t replen = strlen(dat[n]->pattern2);
++          if (stl+replen >= destsize)
++            return -1;
+           strcpy(dest + stl, dat[n]->pattern2);
+-          stl += strlen(dat[n]->pattern2);
++          stl += replen;
+           i += l - 1;
+           change = 1;
+-        } else dest[stl++] = word[i];
++        } else {
++          if (stl+1 >= destsize)
++            return -1;
++          dest[stl++] = word[i];
++        }
+     }
+     dest[stl] = '\0';
+     return change;
+ }
++
++int RepList::conv(const char * word, char * dest) {
++    return conv(word, dest, std::numeric_limits<std::size_t>::max());
++}
+diff --git a/src/hunspell/replist.hxx b/src/hunspell/replist.hxx
+index 1e3d6e4..e418298 100644
+--- misc/hunspell-1.3.3/src/hunspell/replist.hxx
++++ misc/build/hunspell-1.3.3/src/hunspell/replist.hxx
+@@ -99,5 +99,7 @@ public:
+     int near(const char * word);
+     int match(const char * word, int n);
+     int conv(const char * word, char * dest);
++    // ^^-deprecated, use this-vv"
++    int conv(const char * word, char * dest, size_t destsize);
+ };
+ #endif
+diff --git a/src/tools/hunspell.cxx b/src/tools/hunspell.cxx
+index 6124ac4..1b50fe1 100644
+--- misc/hunspell-1.3.3/src/tools/hunspell.cxx
++++ misc/build/hunspell-1.3.3/src/tools/hunspell.cxx
+@@ -524,7 +524,7 @@ int putdic(char * word, Hunspell * pMS)
+     
+     word = chenc(word, ui_enc, dic_enc[0]);
+ 
+-    if(pMS->input_conv(word, buf)) word = buf;
++    if(pMS->input_conv(word, buf, MAXLNLEN)) word = buf;
+     
+     int ret;
+     
+-- 
+2.4.0
+
