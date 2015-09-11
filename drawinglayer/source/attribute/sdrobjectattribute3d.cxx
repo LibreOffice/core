@@ -31,26 +31,26 @@ namespace drawinglayer
         {
         public:
             // 3D object attribute definitions
-            ::com::sun::star::drawing::NormalsKind              maNormalsKind;              // normals type (0..2)
-            ::com::sun::star::drawing::TextureProjectionMode    maTextureProjectionX;       // texture projection type X (0..2)
-            ::com::sun::star::drawing::TextureProjectionMode    maTextureProjectionY;       // texture projection type Y (0..2)
-            ::com::sun::star::drawing::TextureKind2             maTextureKind;              // texture kind (see uno API)
-            ::com::sun::star::drawing::TextureMode              maTextureMode;              // texture kind (see uno API)
-            MaterialAttribute3D                                 maMaterial;                 // object, specular and emissive colors, SpecularIntensity
+            css::drawing::NormalsKind              maNormalsKind;              // normals type (0..2)
+            css::drawing::TextureProjectionMode    maTextureProjectionX;       // texture projection type X (0..2)
+            css::drawing::TextureProjectionMode    maTextureProjectionY;       // texture projection type Y (0..2)
+            css::drawing::TextureKind2             maTextureKind;              // texture kind (see uno API)
+            css::drawing::TextureMode              maTextureMode;              // texture kind (see uno API)
+            MaterialAttribute3D                    maMaterial;                 // object, specular and emissive colors, SpecularIntensity
 
             // bitfield
-            bool                                                mbNormalsInvert : 1;        // invert normals
-            bool                                                mbDoubleSided : 1;          // surfaces are double sided
-            bool                                                mbShadow3D : 1;             // display shadow in 3D (if on), params for that are at scene
-            bool                                                mbTextureFilter : 1;        // filter texture to make more smooth
-            bool                                                mbReducedLineGeometry : 1;  // use reduced line geometry (object specific)
+            bool                                   mbNormalsInvert : 1;        // invert normals
+            bool                                   mbDoubleSided : 1;          // surfaces are double sided
+            bool                                   mbShadow3D : 1;             // display shadow in 3D (if on), params for that are at scene
+            bool                                   mbTextureFilter : 1;        // filter texture to make more smooth
+            bool                                   mbReducedLineGeometry : 1;  // use reduced line geometry (object specific)
 
             ImpSdr3DObjectAttribute(
-                ::com::sun::star::drawing::NormalsKind  aNormalsKind,
-                ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX,
-                ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionY,
-                ::com::sun::star::drawing::TextureKind2 aTextureKind,
-                ::com::sun::star::drawing::TextureMode aTextureMode,
+                css::drawing::NormalsKind  aNormalsKind,
+                css::drawing::TextureProjectionMode aTextureProjectionX,
+                css::drawing::TextureProjectionMode aTextureProjectionY,
+                css::drawing::TextureKind2 aTextureKind,
+                css::drawing::TextureMode aTextureMode,
                 const MaterialAttribute3D& rMaterial,
                 bool bNormalsInvert,
                 bool bDoubleSided,
@@ -72,11 +72,11 @@ namespace drawinglayer
             }
 
             // data read access
-            ::com::sun::star::drawing::NormalsKind getNormalsKind() const { return maNormalsKind; }
-            ::com::sun::star::drawing::TextureProjectionMode getTextureProjectionX() const { return maTextureProjectionX; }
-            ::com::sun::star::drawing::TextureProjectionMode getTextureProjectionY() const { return maTextureProjectionY; }
-            ::com::sun::star::drawing::TextureKind2 getTextureKind() const { return maTextureKind; }
-            ::com::sun::star::drawing::TextureMode getTextureMode() const { return maTextureMode; }
+            css::drawing::NormalsKind getNormalsKind() const { return maNormalsKind; }
+            css::drawing::TextureProjectionMode getTextureProjectionX() const { return maTextureProjectionX; }
+            css::drawing::TextureProjectionMode getTextureProjectionY() const { return maTextureProjectionY; }
+            css::drawing::TextureKind2 getTextureKind() const { return maTextureKind; }
+            css::drawing::TextureMode getTextureMode() const { return maTextureMode; }
             const MaterialAttribute3D& getMaterial() const { return maMaterial; }
             bool getNormalsInvert() const { return mbNormalsInvert; }
             bool getDoubleSided() const { return mbDoubleSided; }
@@ -107,11 +107,11 @@ namespace drawinglayer
         }
 
         Sdr3DObjectAttribute::Sdr3DObjectAttribute(
-            ::com::sun::star::drawing::NormalsKind  aNormalsKind,
-            ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX,
-            ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionY,
-            ::com::sun::star::drawing::TextureKind2 aTextureKind,
-            ::com::sun::star::drawing::TextureMode aTextureMode,
+            css::drawing::NormalsKind  aNormalsKind,
+            css::drawing::TextureProjectionMode aTextureProjectionX,
+            css::drawing::TextureProjectionMode aTextureProjectionY,
+            css::drawing::TextureKind2 aTextureKind,
+            css::drawing::TextureMode aTextureMode,
             const MaterialAttribute3D& rMaterial,
             bool bNormalsInvert,
             bool bDoubleSided,
@@ -144,27 +144,27 @@ namespace drawinglayer
             return rCandidate.mpSdr3DObjectAttribute == mpSdr3DObjectAttribute;
         }
 
-        ::com::sun::star::drawing::NormalsKind Sdr3DObjectAttribute::getNormalsKind() const
+        css::drawing::NormalsKind Sdr3DObjectAttribute::getNormalsKind() const
         {
             return mpSdr3DObjectAttribute->getNormalsKind();
         }
 
-        ::com::sun::star::drawing::TextureProjectionMode Sdr3DObjectAttribute::getTextureProjectionX() const
+        css::drawing::TextureProjectionMode Sdr3DObjectAttribute::getTextureProjectionX() const
         {
             return mpSdr3DObjectAttribute->getTextureProjectionX();
         }
 
-        ::com::sun::star::drawing::TextureProjectionMode Sdr3DObjectAttribute::getTextureProjectionY() const
+        css::drawing::TextureProjectionMode Sdr3DObjectAttribute::getTextureProjectionY() const
         {
             return mpSdr3DObjectAttribute->getTextureProjectionY();
         }
 
-        ::com::sun::star::drawing::TextureKind2 Sdr3DObjectAttribute::getTextureKind() const
+        css::drawing::TextureKind2 Sdr3DObjectAttribute::getTextureKind() const
         {
             return mpSdr3DObjectAttribute->getTextureKind();
         }
 
-        ::com::sun::star::drawing::TextureMode Sdr3DObjectAttribute::getTextureMode() const
+        css::drawing::TextureMode Sdr3DObjectAttribute::getTextureMode() const
         {
             return mpSdr3DObjectAttribute->getTextureMode();
         }

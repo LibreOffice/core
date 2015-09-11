@@ -34,13 +34,13 @@ namespace drawinglayer
             basegfx::BColor                         maColor;                // color
             double                                  mfWidth;                // absolute line width
             basegfx::B2DLineJoin                    meLineJoin;             // type of LineJoin
-            com::sun::star::drawing::LineCap        meLineCap;              // BUTT, ROUND, or SQUARE
+            css::drawing::LineCap                   meLineCap;              // BUTT, ROUND, or SQUARE
 
             ImpLineAttribute(
                 const basegfx::BColor& rColor,
                 double fWidth,
                 basegfx::B2DLineJoin aB2DLineJoin,
-                com::sun::star::drawing::LineCap aLineCap)
+                css::drawing::LineCap aLineCap)
             :   maColor(rColor),
                 mfWidth(fWidth),
                 meLineJoin(aB2DLineJoin),
@@ -52,7 +52,7 @@ namespace drawinglayer
             :   maColor(basegfx::BColor()),
                 mfWidth(0.0),
                 meLineJoin(basegfx::B2DLineJoin::Round),
-                meLineCap(com::sun::star::drawing::LineCap_BUTT)
+                meLineCap(css::drawing::LineCap_BUTT)
             {
             }
 
@@ -60,7 +60,7 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const { return maColor; }
             double getWidth() const { return mfWidth; }
             basegfx::B2DLineJoin getLineJoin() const { return meLineJoin; }
-            com::sun::star::drawing::LineCap getLineCap() const { return meLineCap; }
+            css::drawing::LineCap getLineCap() const { return meLineCap; }
 
             bool operator==(const ImpLineAttribute& rCandidate) const
             {
@@ -81,7 +81,7 @@ namespace drawinglayer
             const basegfx::BColor& rColor,
             double fWidth,
             basegfx::B2DLineJoin aB2DLineJoin,
-            com::sun::star::drawing::LineCap aLineCap)
+            css::drawing::LineCap aLineCap)
         :   mpLineAttribute(
                 ImpLineAttribute(
                     rColor,
@@ -140,7 +140,7 @@ namespace drawinglayer
             return mpLineAttribute->getLineJoin();
         }
 
-        com::sun::star::drawing::LineCap LineAttribute::getLineCap() const
+        css::drawing::LineCap LineAttribute::getLineCap() const
         {
             return mpLineAttribute->getLineCap();
         }

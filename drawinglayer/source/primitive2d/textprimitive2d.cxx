@@ -225,7 +225,7 @@ namespace drawinglayer
             sal_Int32 nTextLength,
             const ::std::vector< double >& rDXArray,
             const attribute::FontAttribute& rFontAttribute,
-            const ::com::sun::star::lang::Locale& rLocale,
+            const css::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor,
             bool bFilled,
             long nWidthToFill,
@@ -251,7 +251,7 @@ namespace drawinglayer
 #endif
         }
 
-        bool LocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB)
+        bool LocalesAreEqual(const css::lang::Locale& rA, const css::lang::Locale& rB)
         {
             return (rA.Language == rB.Language
                 && rA.Country == rB.Country

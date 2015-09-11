@@ -351,9 +351,9 @@ namespace drawinglayer
             bool bPaintIt(aFill.count());
 
             // #i98295# get ShadeMode. Correct early when only flat is possible due to missing normals
-            const ::com::sun::star::drawing::ShadeMode aShadeMode(
+            const css::drawing::ShadeMode aShadeMode(
                 aFill.areNormalsUsed() ?
-                    getSdrSceneAttribute().getShadeMode() : ::com::sun::star::drawing::ShadeMode_FLAT);
+                    getSdrSceneAttribute().getShadeMode() : css::drawing::ShadeMode_FLAT);
 
             if(bPaintIt)
             {
@@ -364,7 +364,7 @@ namespace drawinglayer
                 }
 
                 // #i98295# get rid of normals and color early when not needed
-                if(::com::sun::star::drawing::ShadeMode_FLAT == aShadeMode)
+                if(css::drawing::ShadeMode_FLAT == aShadeMode)
                 {
                     aFill.clearNormals();
                     aFill.clearBColors();
@@ -411,13 +411,13 @@ namespace drawinglayer
 
                 switch(aShadeMode)
                 {
-                    case ::com::sun::star::drawing::ShadeMode_PHONG:
+                    case css::drawing::ShadeMode_PHONG:
                     {
                         // phong shading. Transform normals to eye coor
                         aFill.transformNormals(aNormalTransform);
                         break;
                     }
-                    case ::com::sun::star::drawing::ShadeMode_SMOOTH:
+                    case css::drawing::ShadeMode_SMOOTH:
                     {
                         // gouraud shading. Transform normals to eye coor
                         aFill.transformNormals(aNormalTransform);
@@ -447,7 +447,7 @@ namespace drawinglayer
                         }
                         break;
                     }
-                    case ::com::sun::star::drawing::ShadeMode_FLAT:
+                    case css::drawing::ShadeMode_FLAT:
                     {
                         // flat shading. Get plane vector in eye coordinates
                         const basegfx::B3DVector aPlaneEyeNormal(aNormalTransform * rPrimitive.getB3DPolyPolygon().getB3DPolygon(0L).getNormal());
@@ -462,7 +462,7 @@ namespace drawinglayer
                         aObjectColor = getSdrLightingAttribute().solveColorModel(aPlaneEyeNormal, aColor, rSpecular, rEmission, nSpecularIntensity);
                         break;
                     }
-                    default: // case ::com::sun::star::drawing::ShadeMode_DRAFT:
+                    default: // case css::drawing::ShadeMode_DRAFT:
                     {
                         // draft, just use object color which is already set. Delete all other infos
                         aFill.clearNormals();

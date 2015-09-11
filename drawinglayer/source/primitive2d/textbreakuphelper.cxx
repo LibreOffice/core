@@ -190,17 +190,17 @@ namespace drawinglayer
             if(mrSource.getTextLength())
             {
                 Primitive2DVector aTempResult;
-                static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > xBreakIterator;
+                static css::uno::Reference< css::i18n::XBreakIterator > xBreakIterator;
 
                 if(!xBreakIterator.is())
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                    xBreakIterator = ::com::sun::star::i18n::BreakIterator::create(xContext);
+                    css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    xBreakIterator = css::i18n::BreakIterator::create(xContext);
                 }
 
                 const OUString& rTxt = mrSource.getText();
                 const sal_Int32 nTextLength(mrSource.getTextLength());
-                const ::com::sun::star::lang::Locale& rLocale = mrSource.getLocale();
+                const css::lang::Locale& rLocale = mrSource.getLocale();
                 const sal_Int32 nTextPosition(mrSource.getTextPosition());
                 sal_Int32 nCurrent(nTextPosition);
 
@@ -209,7 +209,7 @@ namespace drawinglayer
                     case BreakupUnit_character:
                     {
                         sal_Int32 nDone;
-                        sal_Int32 nNextCellBreak(xBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
+                        sal_Int32 nNextCellBreak(xBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
                         sal_Int32 a(nTextPosition);
 
                         for(; a < nTextPosition + nTextLength; a++)
@@ -218,7 +218,7 @@ namespace drawinglayer
                             {
                                 breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
                                 nCurrent = a;
-                                nNextCellBreak = xBreakIterator->nextCharacters(rTxt, a, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+                                nNextCellBreak = xBreakIterator->nextCharacters(rTxt, a, rLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                             }
                         }
 
@@ -227,7 +227,7 @@ namespace drawinglayer
                     }
                     case BreakupUnit_word:
                     {
-                        ::com::sun::star::i18n::Boundary nNextWordBoundary(xBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
+                        css::i18n::Boundary nNextWordBoundary(xBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, sal_True));
                         sal_Int32 a(nTextPosition);
 
                         for(; a < nTextPosition + nTextLength; a++)
@@ -243,7 +243,7 @@ namespace drawinglayer
 
                                 // skip spaces (maybe enhanced with a bool later if needed)
                                 {
-                                    const sal_Int32 nEndOfSpaces(xBreakIterator->endOfCharBlock(rTxt, a, rLocale, ::com::sun::star::i18n::CharType::SPACE_SEPARATOR));
+                                    const sal_Int32 nEndOfSpaces(xBreakIterator->endOfCharBlock(rTxt, a, rLocale, css::i18n::CharType::SPACE_SEPARATOR));
 
                                     if(nEndOfSpaces > a)
                                     {
@@ -251,7 +251,7 @@ namespace drawinglayer
                                     }
                                 }
 
-                                nNextWordBoundary = xBreakIterator->getWordBoundary(rTxt, a + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
+                                nNextWordBoundary = xBreakIterator->getWordBoundary(rTxt, a + 1, rLocale, css::i18n::WordType::ANY_WORD, sal_True);
                             }
                         }
 

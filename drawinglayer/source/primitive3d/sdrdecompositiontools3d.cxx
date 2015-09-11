@@ -87,8 +87,8 @@ namespace drawinglayer
         }
 
         void applyTextureTo3DGeometry(
-            ::com::sun::star::drawing::TextureProjectionMode eModeX,
-            ::com::sun::star::drawing::TextureProjectionMode eModeY,
+            css::drawing::TextureProjectionMode eModeX,
+            css::drawing::TextureProjectionMode eModeY,
             ::std::vector< basegfx::B3DPolyPolygon >& rFill,
             const basegfx::B3DRange& rRange,
             const basegfx::B2DVector& rTextureSize)
@@ -96,12 +96,12 @@ namespace drawinglayer
             sal_uInt32 a;
 
             // handle texture coordinates X
-            const bool bParallelX(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == eModeX);
-            const bool bSphereX(!bParallelX && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == eModeX));
+            const bool bParallelX(css::drawing::TextureProjectionMode_PARALLEL == eModeX);
+            const bool bSphereX(!bParallelX && (css::drawing::TextureProjectionMode_SPHERE == eModeX));
 
             // handle texture coordinates Y
-            const bool bParallelY(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == eModeY);
-            const bool bSphereY(!bParallelY && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == eModeY));
+            const bool bParallelY(css::drawing::TextureProjectionMode_PARALLEL == eModeY);
+            const bool bSphereY(!bParallelY && (css::drawing::TextureProjectionMode_SPHERE == eModeY));
 
             if(bParallelX || bParallelY)
             {
@@ -203,7 +203,7 @@ namespace drawinglayer
                     || !rFill.getHatch().isDefault()
                     || !rFill.getFillGraphic().isDefault())
                 {
-                    bool bModulate(::com::sun::star::drawing::TextureMode_MODULATE == aSdr3DObjectAttribute.getTextureMode());
+                    bool bModulate(css::drawing::TextureMode_MODULATE == aSdr3DObjectAttribute.getTextureMode());
                     bool bFilter(aSdr3DObjectAttribute.getTextureFilter());
                     BasePrimitive3D* pNewTexturePrimitive3D = 0;
 
@@ -244,7 +244,7 @@ namespace drawinglayer
                     const Primitive3DReference xRef(pNewTexturePrimitive3D);
                     aRetval = Primitive3DSequence(&xRef, 1L);
 
-                    if(::com::sun::star::drawing::TextureKind2_LUMINANCE == aSdr3DObjectAttribute.getTextureKind())
+                    if(css::drawing::TextureKind2_LUMINANCE == aSdr3DObjectAttribute.getTextureKind())
                     {
                         // use modified color primitive to force textures to gray
                         const basegfx::BColorModifierSharedPtr aBColorModifier(

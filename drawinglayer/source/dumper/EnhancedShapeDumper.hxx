@@ -40,16 +40,16 @@ public:
     }
 
     // auxiliary functions
-    void dumpEnhancedCustomShapeParameterPair(com::sun::star::drawing::EnhancedCustomShapeParameterPair aParameterPair);
-    void dumpDirection3D(com::sun::star::drawing::Direction3D aDirection3D);
-    void dumpPropertyValueAsElement(com::sun::star::beans::PropertyValue aPropertyValue);
-    void dumpEnhancedCustomShapeParameter(com::sun::star::drawing::EnhancedCustomShapeParameter aParameter);
+    void dumpEnhancedCustomShapeParameterPair(css::drawing::EnhancedCustomShapeParameterPair aParameterPair);
+    void dumpDirection3D(css::drawing::Direction3D aDirection3D);
+    void dumpPropertyValueAsElement(css::beans::PropertyValue aPropertyValue);
+    void dumpEnhancedCustomShapeParameter(css::drawing::EnhancedCustomShapeParameter aParameter);
 
     // EnhancedCustomShapeExtrusion.idl
-    void dumpEnhancedCustomShapeExtrusionService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
+    void dumpEnhancedCustomShapeExtrusionService(css::uno::Reference< css::beans::XPropertySet > xPropSet);
     void dumpExtrusionAsAttribute(bool bExtrusion);
     void dumpBrightnessAsAttribute(double aBrightness);
-    void dumpDepthAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepth);
+    void dumpDepthAsElement(css::drawing::EnhancedCustomShapeParameterPair aDepth);
     void dumpDiffusionAsAttribute(double aDiffusion);
     void dumpNumberOfLineSegmentsAsAttribute(sal_Int32 aNumberOfLineSegments);
     void dumpLightFaceAsAttribute(bool bLightFace);
@@ -57,69 +57,69 @@ public:
     void dumpSecondLightHarshAsAttribute(bool bSecondLightHarsh);
     void dumpFirstLightLevelAsAttribute(double aFirstLightLevel);
     void dumpSecondLightLevelAsAttribute(double aSecondLightLevel);
-    void dumpFirstLightDirectionAsElement(com::sun::star::drawing::Direction3D aFirstLightDirection);
-    void dumpSecondLightDirectionAsElement(com::sun::star::drawing::Direction3D aSecondLightDirection);
+    void dumpFirstLightDirectionAsElement(css::drawing::Direction3D aFirstLightDirection);
+    void dumpSecondLightDirectionAsElement(css::drawing::Direction3D aSecondLightDirection);
     void dumpMetalAsAttribute(bool bMetal);
-    void dumpShadeModeAsAttribute(com::sun::star::drawing::ShadeMode eShadeMode);
-    void dumpRotateAngleAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngle);
-    void dumpRotationCenterAsElement(com::sun::star::drawing::Direction3D aRotationCenter);
+    void dumpShadeModeAsAttribute(css::drawing::ShadeMode eShadeMode);
+    void dumpRotateAngleAsElement(css::drawing::EnhancedCustomShapeParameterPair aRotateAngle);
+    void dumpRotationCenterAsElement(css::drawing::Direction3D aRotationCenter);
     void dumpShininessAsAttribute(double aShininess);
-    void dumpSkewAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkew);
+    void dumpSkewAsElement(css::drawing::EnhancedCustomShapeParameterPair aSkew);
     void dumpSpecularityAsAttribute(double aSpecularity);
-    void dumpProjectionModeAsAttribute(com::sun::star::drawing::ProjectionMode eProjectionMode);
-    void dumpViewPointAsElement(com::sun::star::drawing::Position3D aViewPoint);
-    void dumpOriginAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aOrigin);
+    void dumpProjectionModeAsAttribute(css::drawing::ProjectionMode eProjectionMode);
+    void dumpViewPointAsElement(css::drawing::Position3D aViewPoint);
+    void dumpOriginAsElement(css::drawing::EnhancedCustomShapeParameterPair aOrigin);
     void dumpExtrusionColorAsAttribute(bool bExtrusionColor);
 
     // EnhancedCustomShapeGeometry.idl
-    void dumpEnhancedCustomShapeGeometryService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
+    void dumpEnhancedCustomShapeGeometryService(css::uno::Reference< css::beans::XPropertySet > xPropSet);
     void dumpTypeAsAttribute(const OUString& sType);
-    void dumpViewBoxAsElement(com::sun::star::awt::Rectangle aViewBox);
+    void dumpViewBoxAsElement(css::awt::Rectangle aViewBox);
     void dumpMirroredXAsAttribute(bool bMirroredX); // also used in EnhancedCustomShapeHandle
     void dumpMirroredYAsAttribute(bool bMirroredY); // also used in EnhancedCustomShapeHandle
     void dumpTextRotateAngleAsAttribute(double aTextRotateAngle);
-    void dumpAdjustmentValuesAsElement(const com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeAdjustmentValue>& aAdjustmentValues);
-    void dumpExtrusionAsElement(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aExtrusion);
-    void dumpPathAsElement(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aPath);
-    void dumpTextPathAsElement(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aTextPath);
-    void dumpEquationsAsElement(const com::sun::star::uno::Sequence< OUString >& aEquations);
-    void dumpHandlesAsElement(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValues >& aHandles);
+    void dumpAdjustmentValuesAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue>& aAdjustmentValues);
+    void dumpExtrusionAsElement(const css::uno::Sequence< css::beans::PropertyValue >& aExtrusion);
+    void dumpPathAsElement(const css::uno::Sequence< css::beans::PropertyValue >& aPath);
+    void dumpTextPathAsElement(const css::uno::Sequence< css::beans::PropertyValue >& aTextPath);
+    void dumpEquationsAsElement(const css::uno::Sequence< OUString >& aEquations);
+    void dumpHandlesAsElement(const css::uno::Sequence< css::beans::PropertyValues >& aHandles);
 
     // EnhancedCustomShapeHandle.idl
-    void dumpEnhancedCustomShapeHandleService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
+    void dumpEnhancedCustomShapeHandleService(css::uno::Reference< css::beans::XPropertySet > xPropSet);
     void dumpSwitchedAsAttribute(bool bSwitched);
-    void dumpPositionAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aPosition);
-    void dumpPolarAsElement(com::sun::star::drawing::EnhancedCustomShapeParameterPair aPolar);
+    void dumpPositionAsElement(css::drawing::EnhancedCustomShapeParameterPair aPosition);
+    void dumpPolarAsElement(css::drawing::EnhancedCustomShapeParameterPair aPolar);
     void dumpRefXAsAttribute(sal_Int32 aRefX);
     void dumpRefYAsAttribute(sal_Int32 aRefY);
     void dumpRefAngleAsAttribute(sal_Int32 aRefAngle);
     void dumpRefRAsAttribute(sal_Int32 aRefR);
-    void dumpRangeXMinimumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMinimum);
-    void dumpRangeXMaximumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMaximum);
-    void dumpRangeYMinimumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeYMinimum);
-    void dumpRangeYMaximumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRangeXMaximum);
-    void dumpRadiusRangeMinimumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum);
-    void dumpRadiusRangeMaximumAsElement(com::sun::star::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum);
+    void dumpRangeXMinimumAsElement(css::drawing::EnhancedCustomShapeParameter aRangeXMinimum);
+    void dumpRangeXMaximumAsElement(css::drawing::EnhancedCustomShapeParameter aRangeXMaximum);
+    void dumpRangeYMinimumAsElement(css::drawing::EnhancedCustomShapeParameter aRangeYMinimum);
+    void dumpRangeYMaximumAsElement(css::drawing::EnhancedCustomShapeParameter aRangeXMaximum);
+    void dumpRadiusRangeMinimumAsElement(css::drawing::EnhancedCustomShapeParameter aRadiusRangeMinimum);
+    void dumpRadiusRangeMaximumAsElement(css::drawing::EnhancedCustomShapeParameter aRadiusRangeMaximum);
 
     // EnhancedCustomShapePath.idl
-    void dumpEnhancedCustomShapePathService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
-    void dumpCoordinatesAsElement(const com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >& aCoordinates);
-    void dumpSegmentsAsElement(const com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >& aSegments);
+    void dumpEnhancedCustomShapePathService(css::uno::Reference< css::beans::XPropertySet > xPropSet);
+    void dumpCoordinatesAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& aCoordinates);
+    void dumpSegmentsAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeSegment >& aSegments);
     void dumpStretchXAsAttribute(sal_Int32 aStretchX);
     void dumpStretchYAsAttribute(sal_Int32 aStretchY);
-    void dumpTextFramesAsElement(const com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame >& aTextFrames);
-    void dumpGluePointsAsElement(const com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >& aGluePoints);
-    void dumpGluePointLeavingDirectionsAsElement(const com::sun::star::uno::Sequence< double >& aGluePointLeavingDirections);
+    void dumpTextFramesAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame >& aTextFrames);
+    void dumpGluePointsAsElement(const css::uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& aGluePoints);
+    void dumpGluePointLeavingDirectionsAsElement(const css::uno::Sequence< double >& aGluePointLeavingDirections);
     void dumpGluePointTypeAsAttribute(sal_Int32 aGluePointType);
     void dumpExtrusionAllowedAsAttribute(bool bExtrusionAllowed);
     void dumpConcentricGradientFillAllowedAsAttribute(bool bConcentricGradientFillAllowed);
     void dumpTextPathAllowedAsAttribute(bool bTextPathAllowed);
-    void dumpSubViewSizeAsElement(const com::sun::star::uno::Sequence< com::sun::star::awt::Size >& aSubViewSize);
+    void dumpSubViewSizeAsElement(const css::uno::Sequence< css::awt::Size >& aSubViewSize);
 
     // EnhancedCustomShapePath.idl
-    void dumpEnhancedCustomShapeTextPathService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet);
+    void dumpEnhancedCustomShapeTextPathService(css::uno::Reference< css::beans::XPropertySet > xPropSet);
     void dumpTextPathAsAttribute(bool bTextPath);
-    void dumpTextPathModeAsAttribute(com::sun::star::drawing::EnhancedCustomShapeTextPathMode eTextPathMode);
+    void dumpTextPathModeAsAttribute(css::drawing::EnhancedCustomShapeTextPathMode eTextPathMode);
     void dumpScaleXAsAttribute(bool bScaleX);
 
 private:

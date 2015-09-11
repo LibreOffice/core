@@ -565,8 +565,8 @@ namespace drawinglayer
                             const bool bFirst(!a);
                             const bool bLast(a + 1 == nLoopCount);
                             const bool bLineCapPossible(!bClosed && (bFirst || bLast));
-                            const bool bLineCapRound(bLineCapPossible && com::sun::star::drawing::LineCap_ROUND == getLineCap());
-                            const bool bLineCapSquare(bLineCapPossible && com::sun::star::drawing::LineCap_SQUARE == getLineCap());
+                            const bool bLineCapRound(bLineCapPossible && css::drawing::LineCap_ROUND == getLineCap());
+                            const bool bLineCapSquare(bLineCapPossible && css::drawing::LineCap_SQUARE == getLineCap());
 
                             // get rotation from vector, this describes rotation from (1, 0, 0) to aForw
                             basegfx::B3DHomMatrix aRotVector(getRotationFromVector(aForw));
@@ -744,7 +744,7 @@ namespace drawinglayer
             const basegfx::B3DPolygon& rPolygon,
             const basegfx::BColor& rBColor,
             double fRadius, basegfx::B2DLineJoin aLineJoin,
-            com::sun::star::drawing::LineCap aLineCap,
+            css::drawing::LineCap aLineCap,
             double fDegreeStepWidth,
             double fMiterMinimumAngle)
         :   PolygonHairlinePrimitive3D(rPolygon, rBColor),

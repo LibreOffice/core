@@ -117,7 +117,7 @@ namespace drawinglayer
             const basegfx::BColor& rFontColor,
             sal_Unicode aStrikeoutChar,
             const attribute::FontAttribute& rFontAttribute,
-            const ::com::sun::star::lang::Locale& rLocale)
+            const css::lang::Locale& rLocale)
         :   BaseTextStrikeoutPrimitive2D(rObjectTransformation, fWidth, rFontColor),
             maStrikeoutChar(aStrikeoutChar),
             maFontAttribute(rFontAttribute),

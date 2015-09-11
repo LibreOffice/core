@@ -61,7 +61,7 @@ namespace drawinglayer
             return get3DDecomposition(aViewInformation);
         }
 
-        com::sun::star::geometry::RealRectangle3D SAL_CALL BasePrimitive3D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException, std::exception )
+        css::geometry::RealRectangle3D SAL_CALL BasePrimitive3D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException, std::exception )
         {
             const geometry::ViewInformation3D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle3DFromB3DRectangle(getB3DRange(aViewInformation));

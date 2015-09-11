@@ -483,17 +483,17 @@ namespace drawinglayer
                     // get stroke
                     switch(pLineAttribute->getLineCap())
                     {
-                        default: /* com::sun::star::drawing::LineCap_BUTT */
+                        default: /* css::drawing::LineCap_BUTT */
                         {
                             eCap = SvtGraphicStroke::capButt;
                             break;
                         }
-                        case com::sun::star::drawing::LineCap_ROUND:
+                        case css::drawing::LineCap_ROUND:
                         {
                             eCap = SvtGraphicStroke::capRound;
                             break;
                         }
-                        case com::sun::star::drawing::LineCap_SQUARE:
+                        case css::drawing::LineCap_SQUARE:
                         {
                             eCap = SvtGraphicStroke::capSquare;
                             break;
@@ -556,7 +556,7 @@ namespace drawinglayer
         }
 
         // init static break iterator
-        uno::Reference< ::com::sun::star::i18n::XBreakIterator > VclMetafileProcessor2D::mxBreakIterator;
+        uno::Reference< css::i18n::XBreakIterator > VclMetafileProcessor2D::mxBreakIterator;
 
         VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
         :   VclProcessor2D(rViewInformation, rOutDev),
@@ -1119,12 +1119,12 @@ namespace drawinglayer
 
                         if(nTextLength)
                         {
-                            const ::com::sun::star::lang::Locale& rLocale = rTextCandidate.getLocale();
+                            const css::lang::Locale& rLocale = rTextCandidate.getLocale();
                             const sal_Int32 nTextPosition(rTextCandidate.getTextPosition());
 
                             sal_Int32 nDone;
-                            sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
-                            ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
+                            sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
+                            css::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, sal_True));
                             sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
                             const OString aCommentStringA("XTEXT_EOC");
                             const OString aCommentStringB("XTEXT_EOW");
@@ -1136,12 +1136,12 @@ namespace drawinglayer
                                 if(i == nNextCellBreak)
                                 {
                                     mpMetaFile->AddAction(new MetaCommentAction(aCommentStringA, i - nTextPosition));
-                                    nNextCellBreak = mxBreakIterator->nextCharacters(rTxt, i, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+                                    nNextCellBreak = mxBreakIterator->nextCharacters(rTxt, i, rLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                                 }
                                 if(i == nNextWordBoundary.endPos)
                                 {
                                     mpMetaFile->AddAction(new MetaCommentAction(aCommentStringB, i - nTextPosition));
-                                    nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
+                                    nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, css::i18n::WordType::ANY_WORD, sal_True);
                                 }
                                 if(i == nNextSentenceBreak)
                                 {
