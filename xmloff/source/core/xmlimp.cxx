@@ -48,7 +48,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
@@ -105,7 +105,7 @@ sal_Char const sXML_np__field[] = "_field";
 sal_Char const sXML_np__xhtml[] = "_xhtml";
 sal_Char const sXML_np__css3text[] = "_css3text";
 
-class SvXMLImportEventListener : public cppu::WeakImplHelper1<
+class SvXMLImportEventListener : public cppu::WeakImplHelper<
                             com::sun::star::lang::XEventListener >
 {
 private:

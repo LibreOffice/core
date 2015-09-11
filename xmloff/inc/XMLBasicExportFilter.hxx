@@ -21,11 +21,11 @@
 #define INCLUDED_XMLOFF_INC_XMLBASICEXPORTFILTER_HXX
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 // class XMLBasicExportFilter
 
-typedef ::cppu::WeakImplHelper1<
+typedef ::cppu::WeakImplHelper<
     ::com::sun::star::xml::sax::XDocumentHandler > XMLBasicExportFilter_BASE;
 
 class XMLBasicExportFilter : public XMLBasicExportFilter_BASE

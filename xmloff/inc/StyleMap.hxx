@@ -21,7 +21,7 @@
 #define INCLUDED_XMLOFF_INC_STYLEMAP_HXX
 
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <unordered_map>
 
 struct StyleNameKey_Impl
@@ -63,7 +63,7 @@ inline bool StyleNameHash_Impl::operator()(
 }
 
 class StyleMap :
-    public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XUnoTunnel>,
+    public ::cppu::WeakImplHelper< ::com::sun::star::lang::XUnoTunnel>,
     public std::unordered_map< StyleNameKey_Impl, OUString,
                             StyleNameHash_Impl, StyleNameHash_Impl >
 {

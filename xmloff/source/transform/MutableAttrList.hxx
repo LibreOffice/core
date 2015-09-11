@@ -24,11 +24,11 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SvXMLAttributeList;
 
-class XMLMutableAttributeList : public ::cppu::WeakImplHelper3<
+class XMLMutableAttributeList : public ::cppu::WeakImplHelper<
         ::com::sun::star::xml::sax::XAttributeList,
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::lang::XUnoTunnel>

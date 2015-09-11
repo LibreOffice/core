@@ -22,13 +22,13 @@
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace xmloff
 {
 
     //= OGridColumnPropertyTranslator
-    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::beans::XPropertySet
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::beans::XPropertySet
                                     ,   ::com::sun::star::beans::XMultiPropertySet
                                     >   OGridColumnPropertyTranslator_Base;
     class OGridColumnPropertyTranslator : public OGridColumnPropertyTranslator_Base

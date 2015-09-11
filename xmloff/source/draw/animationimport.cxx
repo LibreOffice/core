@@ -49,7 +49,6 @@
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 #include <sax/tools/converter.hxx>
 

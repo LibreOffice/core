@@ -70,7 +70,7 @@
 #include <xmloff/XMLEmbeddedObjectExportFilter.hxx>
 #include "XMLBasicExportFilter.hxx"
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -206,7 +206,7 @@ Reference< XComponentContext > SettingsExportFacade::GetComponentContext() const
     return m_rExport.getComponentContext();
 }
 
-class SvXMLExportEventListener : public cppu::WeakImplHelper1<
+class SvXMLExportEventListener : public cppu::WeakImplHelper<
                             com::sun::star::lang::XEventListener >
 {
 private:
