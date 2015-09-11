@@ -744,6 +744,18 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                                 case table::BorderLineStyle::DASHED:
                                     eStyle = XML_DASHED;
                                     break;
+                                case table::BorderLineStyle::FINE_DASHED:
+                                    eStyle = XML_FINE_DASHED;
+                                    break;
+                                case table::BorderLineStyle::DASH_DOT:
+                                    eStyle = XML_DASH_DOT;
+                                    break;
+                                case table::BorderLineStyle::DASH_DOT_DOT:
+                                    eStyle = XML_DASH_DOT_DOT;
+                                    break;
+                                case table::BorderLineStyle::DOUBLE_THIN:
+                                    eStyle = XML_DOUBLE_THIN;
+                                    break;
                                 case table::BorderLineStyle::DOUBLE:
                                 case table::BorderLineStyle::THINTHICK_SMALLGAP:
                                 case table::BorderLineStyle::THINTHICK_MEDIUMGAP:
