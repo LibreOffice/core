@@ -18,8 +18,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(WNT)
-
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -132,6 +130,8 @@ public:
         finish();
     }
 };
+
+#if !defined(WNT)
 
 DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", FailTest)
 {
@@ -2784,6 +2784,40 @@ DECLARE_OOXMLIMPORT_TEST(testTdf87924, "tdf87924.docx")
 }
 
 #endif
+
+DECLARE_OOXMLIMPORT_TEST(testIndents, "indents.docx")
+{
+    //expected left margin and first line indent values
+    static const sal_Int32 indents[] =
+    {
+            0,     0,
+        -2000,     0,
+        -2000,  1000,
+        -1000, -1000,
+         2000, -1000
+    };
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+    // list of paragraphs
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    size_t paraIndex = 0;
+    do
+    {
+        uno::Reference<lang::XServiceInfo> xServiceInfo;
+        if (xParaEnum->nextElement() >>= xServiceInfo)
+        {
+            uno::Reference<beans::XPropertySet> const xPropertySet(xServiceInfo, uno::UNO_QUERY_THROW);
+            sal_Int32 nIndent = 0;
+            sal_Int32 nFirstLine = 0;
+            xPropertySet->getPropertyValue("ParaLeftMargin") >>= nIndent;
+            xPropertySet->getPropertyValue("ParaFirstLineIndent") >>= nFirstLine;
+            CPPUNIT_ASSERT_EQUAL(indents[paraIndex * 2], nIndent);
+            CPPUNIT_ASSERT_EQUAL(indents[paraIndex * 2 + 1], nFirstLine);
+            ++paraIndex;
+        }
+    } while (xParaEnum->hasMoreElements());
+}
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
