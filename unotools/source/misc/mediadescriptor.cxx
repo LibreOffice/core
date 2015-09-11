@@ -748,15 +748,17 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
                 xInputStream = aContent.openStreamNoLock();
         }
         catch(const css::uno::RuntimeException&)
-            { throw; }
+        {
+            throw;
+        }
         catch(const css::uno::Exception& e)
-            {
-                SAL_WARN(
-                    "unotools.misc",
-                    "caught Exception \"" << e.Message << "\" while opening <"
-                        << sURL << ">");
-                return false;
-            }
+        {
+            SAL_INFO(
+                "unotools.misc",
+                "caught Exception \"" << e.Message << "\" while opening <"
+                    << sURL << ">");
+            return false;
+        }
     }
 
     // add streams to the descriptor
