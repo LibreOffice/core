@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_4c3affce",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-11T21:36:47Z",
+      "side": 0,
+      "message": "This definitely should be changed to ::std::default_delete even if we decide to remove the new template parameter",
+      "revId": "0a94746db12fbab5c30c1009912ee910b9f20553",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

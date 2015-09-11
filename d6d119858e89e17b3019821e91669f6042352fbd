@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_ec24b3b0",
+        "filename": "include/o3tl/cow_wrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-11T21:36:47Z",
+      "side": 1,
+      "message": "Still not sure if this is a good idea or not, but the thought crossed my mind, so I went for it :-)",
+      "revId": "d6d119858e89e17b3019821e91669f6042352fbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
