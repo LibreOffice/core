@@ -3347,9 +3347,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
 
     ScRangeList aRanges;
     ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens, ScAddress());
-    uno::Reference<util::XModifyListener> *pObj =
-            new uno::Reference<util::XModifyListener>( aListener );
-    m_aValueListeners.push_back( pObj );
+    m_aValueListeners.push_back( uno::Reference<util::XModifyListener>( aListener ) );
 
     if ( m_aValueListeners.size() == 1 )
     {
