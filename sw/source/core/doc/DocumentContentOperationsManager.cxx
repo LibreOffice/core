@@ -74,6 +74,8 @@
 #include <editeng/formatbreakitem.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 using namespace ::com::sun::star::i18n;
 
 namespace

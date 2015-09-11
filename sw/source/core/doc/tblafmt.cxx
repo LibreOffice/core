@@ -40,6 +40,8 @@
 #include <hintids.hxx>
 #include <fmtornt.hxx>
 #include <editsh.hxx>
+
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
 
 /*

@@ -22,8 +22,10 @@
 #include "swdllapi.h"
 #include <frmatr.hxx>
 #include <swtypes.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <rtl/ustring.hxx>
+
+#include <vector>
+#include <memory>
 
 class SwDoc;
 namespace sw{ class DocumentStylePoolManager; }
@@ -211,14 +213,14 @@ public:
     void RegisterToFormat( SwFormat& );
 };
 
-class SwFormatCollConditions : public boost::ptr_vector<SwCollCondition> {};
+class SwFormatCollConditions : public std::vector<std::unique_ptr<SwCollCondition>> {};
 
 class SW_DLLPUBLIC SwConditionTextFormatColl : public SwTextFormatColl
 {
     friend class SwDoc;
     friend class ::sw::DocumentStylePoolManager;
 protected:
-    SwFormatCollConditions aCondColls;
+    SwFormatCollConditions m_CondColls;
 
     SwConditionTextFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
                             SwTextFormatColl* pDerFrom = 0 )
@@ -235,7 +237,7 @@ public:
     virtual ~SwConditionTextFormatColl();
 
     const SwCollCondition* HasCondition( const SwCollCondition& rCond ) const;
-    const SwFormatCollConditions& GetCondColls() const     { return aCondColls; }
+    const SwFormatCollConditions& GetCondColls() const { return m_CondColls; }
     void InsertCondition( const SwCollCondition& rCond );
     bool RemoveCondition( const SwCollCondition& rCond );
 

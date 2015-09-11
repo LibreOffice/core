@@ -565,36 +565,42 @@ SwConditionTextFormatColl::~SwConditionTextFormatColl()
 const SwCollCondition* SwConditionTextFormatColl::HasCondition(
                         const SwCollCondition& rCond ) const
 {
-    for( const auto &rFnd : aCondColls )
-        if( rFnd == rCond )
-            return &rFnd;
+    for (const auto &rpFnd : m_CondColls)
+    {
+        if (*rpFnd == rCond)
+            return rpFnd.get();
+    }
 
     return nullptr;
 }
 
 void SwConditionTextFormatColl::InsertCondition( const SwCollCondition& rCond )
 {
-    for( SwFormatCollConditions::size_type n = 0; n < aCondColls.size(); ++n )
-        if( aCondColls[ n ] == rCond )
+    for (SwFormatCollConditions::size_type n = 0; n < m_CondColls.size(); ++n)
+    {
+        if (*m_CondColls[ n ] == rCond)
         {
-            aCondColls.erase( aCondColls.begin() + n );
+            m_CondColls.erase( m_CondColls.begin() + n );
             break;
         }
+    }
 
     // Not found -> so insert it
-    SwCollCondition* pNew = new SwCollCondition( rCond );
-    aCondColls.push_back( pNew );
+    std::unique_ptr<SwCollCondition> pNew(new SwCollCondition( rCond ));
+    m_CondColls.push_back( std::move(pNew) );
 }
 
 bool SwConditionTextFormatColl::RemoveCondition( const SwCollCondition& rCond )
 {
     bool bRet = false;
-    for( SwFormatCollConditions::size_type n = 0; n < aCondColls.size(); ++n )
-        if( aCondColls[ n ] == rCond )
+    for (SwFormatCollConditions::size_type n = 0; n < m_CondColls.size(); ++n)
+    {
+        if (*m_CondColls[ n ] == rCond)
         {
-            aCondColls.erase( aCondColls.begin() + n );
+            m_CondColls.erase( m_CondColls.begin() + n );
             bRet = true;
         }
+    }
 
     return bRet;
 }
@@ -602,21 +608,21 @@ bool SwConditionTextFormatColl::RemoveCondition( const SwCollCondition& rCond )
 void SwConditionTextFormatColl::SetConditions( const SwFormatCollConditions& rCndClls )
 {
     // Copy the Conditions, but first delete the old ones
-    aCondColls.clear();
+    m_CondColls.clear();
     SwDoc& rDoc = *GetDoc();
-    for( const auto &rFnd : rCndClls )
+    for (const auto &rpFnd : rCndClls)
     {
-        SwTextFormatColl* pTmpColl = rFnd.GetTextFormatColl()
-                                    ? rDoc.CopyTextColl( *rFnd.GetTextFormatColl() )
-                                    : 0;
-        SwCollCondition* pNew;
-        if( USRFLD_EXPRESSION & rFnd.GetCondition() )
-            pNew = new SwCollCondition( pTmpColl, rFnd.GetCondition(),
-                                        *rFnd.GetFieldExpression() );
+        SwTextFormatColl *const pTmpColl = rpFnd->GetTextFormatColl()
+                            ? rDoc.CopyTextColl( *rpFnd->GetTextFormatColl() )
+                            : 0;
+        std::unique_ptr<SwCollCondition> pNew;
+        if (USRFLD_EXPRESSION & rpFnd->GetCondition())
+            pNew.reset(new SwCollCondition( pTmpColl, rpFnd->GetCondition(),
+                                            *rpFnd->GetFieldExpression() ));
         else
-            pNew = new SwCollCondition( pTmpColl, rFnd.GetCondition(),
-                                        rFnd.GetSubCondition() );
-        aCondColls.push_back( pNew );
+            pNew.reset(new SwCollCondition( pTmpColl, rpFnd->GetCondition(),
+                                            rpFnd->GetSubCondition() ));
+        m_CondColls.push_back( std::move(pNew) );
     }
 }
 

@@ -19,7 +19,6 @@
 
 #include "hintids.hxx"
 
-#include <limits.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -58,6 +57,11 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include "ndtxt.hxx"
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <limits.h>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

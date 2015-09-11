@@ -25,6 +25,8 @@
 #include <rtl/ustring.hxx>
 #include <redline.hxx>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 class SfxItemSet;
 class SwFormatColl;
 class SwFormatAnchor;

@@ -24,10 +24,6 @@
 #include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <editeng/editdata.hxx>
-#include <boost/optional.hpp>
-
-#include <map>
-#include <vector>
 
 #include <shellio.hxx>
 #include <wrt_fn.hxx>
@@ -41,6 +37,14 @@
 #include <expfld.hxx>
 
 #include <vcl/graph.hxx>
+
+#include <boost/optional.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <map>
+#include <vector>
+
+
 class SvxBrushItem;
 
 // some forward declarations

@@ -21,6 +21,9 @@
 #define INCLUDED_SW_SOURCE_CORE_LAYOUT_LAYHELP_HXX
 
 #include <swrect.hxx>
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <vector>
 #include <deque>
 

@@ -102,7 +102,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
                 static_cast<const SwConditionTextFormatColl *>(pColl)->GetCondColls();
             for( size_t i=0; i < rConditions.size(); ++i )
             {
-                const SwCollCondition& rCond = rConditions[i];
+                const SwCollCondition& rCond = *rConditions[i];
 
                 enum XMLTokenEnum eFunc = XML_TOKEN_INVALID;
                 OUString sVal;

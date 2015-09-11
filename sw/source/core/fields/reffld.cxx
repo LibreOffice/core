@@ -58,11 +58,13 @@
 #include <SwNodeNum.hxx>
 #include <calbck.hxx>
 
+#include <sfx2/childwin.hxx>
+
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <set>
 #include <map>
 #include <algorithm>
-
-#include <sfx2/childwin.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

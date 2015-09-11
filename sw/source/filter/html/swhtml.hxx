@@ -31,6 +31,8 @@
 #include "calbck.hxx"
 #include "htmlvsh.hxx"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <deque>
 
 class SfxMedium;
