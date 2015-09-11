@@ -23,6 +23,7 @@
 #include <baside2.hrc>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
+#include <o3tl/make_unique.hxx>
 #include <svx/passwd.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/uri.hxx>
@@ -1555,20 +1556,20 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     sal_uInt16 nMode = pBasicBox->GetMode();
                     bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
                     sal_uInt16 nId = bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB;
-                    std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_LIBRARY));
                     SvTreeListEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,
                         Image( IDEResId( nId ) ),
-                        pRootEntry, false, &e);
+                        pRootEntry, false,
+                        o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
                     DBG_ASSERT( pNewLibEntry, "InsertEntry fehlgeschlagen!" );
 
                     if( pNewLibEntry )
                     {
-                        e.reset(new Entry(OBJ_TYPE_MODULE));
                         SvTreeListEntry* pEntry_ = pBasicBox->AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
-                            pNewLibEntry, false, &e);
+                            pNewLibEntry, false,
+                            o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
                         DBG_ASSERT( pEntry_, "InsertEntry fehlgeschlagen!" );
                         pBasicBox->SetCurEntry( pEntry_ );
                         pBasicBox->Select( pBasicBox->GetCurEntry() );      // OV-Bug?!

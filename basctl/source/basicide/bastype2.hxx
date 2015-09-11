@@ -231,7 +231,7 @@ public:
     SvTreeListEntry*    AddEntry(
         const OUString& rText, const Image& rImage,
         SvTreeListEntry* pParent, bool bChildrenOnDemand,
-        std::unique_ptr<Entry> * aUserData
+        std::unique_ptr<Entry> && aUserData
     );
     void            RemoveEntry (SvTreeListEntry*);
     void            RemoveEntry (ScriptDocument const&);

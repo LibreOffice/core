@@ -28,6 +28,7 @@
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/make_unique.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -858,11 +859,11 @@ void ObjectPage::NewDialog()
                         SvTreeListEntry* pEntry = m_pBasicBox->FindEntry( pLibEntry, aDlgName, OBJ_TYPE_DIALOG );
                         if ( !pEntry )
                         {
-                            std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_DIALOG));
                             pEntry = m_pBasicBox->AddEntry(
                                 aDlgName,
                                 Image( IDEResId( RID_IMG_DIALOG ) ),
-                                pLibEntry, false, &e);
+                                pLibEntry, false,
+                                o3tl::make_unique<Entry>(OBJ_TYPE_DIALOG));
                             DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
                         }
                         m_pBasicBox->SetCurEntry( pEntry );
@@ -1029,11 +1030,11 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     SvTreeListEntry* pEntry = rBasicBox.FindEntry( pSubRootEntry, aModName, OBJ_TYPE_MODULE );
                     if ( !pEntry )
                     {
-                        std::unique_ptr<Entry> e(new Entry(OBJ_TYPE_MODULE));
                         pEntry = rBasicBox.AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
-                            pSubRootEntry, false, &e);
+                            pSubRootEntry, false,
+                            o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
                         DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
                     }
                     rBasicBox.SetCurEntry( pEntry );
