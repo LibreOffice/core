@@ -73,7 +73,11 @@ public:
 private:
     inline sal_Int32 avail();
 };
-typedef ::cppu::WeakImplHelper< ::com::sun::star::io::XOutputStream > OSequenceOutputStream_Base;
+
+// don't export to avoid duplicate WeakImplHelper definitions with MSVC
+class SAL_DLLPUBLIC_TEMPLATE OSequenceOutputStream_Base
+    : public ::cppu::WeakImplHelper< ::com::sun::star::io::XOutputStream >
+{};
 
 class COMPHELPER_DLLPUBLIC OSequenceOutputStream : public OSequenceOutputStream_Base
 {
