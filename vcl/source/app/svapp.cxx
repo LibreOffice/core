@@ -665,12 +665,12 @@ void Application::ImplCallEventListeners( sal_uLong nEvent, vcl::Window *pWin, v
         pSVData->maAppData.mpEventListeners->Call( &aEvent );
 }
 
-void Application::ImplCallEventListeners( VclSimpleEvent* pEvent )
+void Application::ImplCallEventListeners( VclSimpleEvent& rEvent )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners->Call( pEvent );
+        pSVData->maAppData.mpEventListeners->Call( &rEvent );
 }
 
 void Application::AddEventListener( const Link<>& rEventListener )

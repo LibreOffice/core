@@ -336,7 +336,7 @@ void Menu::ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos )
     // This is needed by atk accessibility bridge
     if ( nEvent == VCLEVENT_MENU_HIGHLIGHT )
     {
-        Application::ImplCallEventListeners( &aEvent );
+        Application::ImplCallEventListeners( aEvent );
     }
 
     if ( !aDelData.isDeleted() )

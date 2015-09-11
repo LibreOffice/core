@@ -804,7 +804,7 @@ public:
 
      @see ImplCallEventListeners(sal_uLong nEvent, Windows* pWin, void* pData);
     */
-    static void                 ImplCallEventListeners( VclSimpleEvent* pEvent );
+    static void                 ImplCallEventListeners( VclSimpleEvent& rEvent );
 
     /** Handle keypress event
 

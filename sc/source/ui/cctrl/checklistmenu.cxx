@@ -779,7 +779,7 @@ void ScMenuFloatingWindow::fireMenuHighlightedEvent()
         return;
 
     VclAccessibleEvent aEvent(VCLEVENT_MENU_HIGHLIGHT, xAccMenu);
-    FireVclEvent(&aEvent);
+    FireVclEvent(aEvent);
 }
 
 void ScMenuFloatingWindow::setSubMenuFocused(ScMenuFloatingWindow* pSubMenu)

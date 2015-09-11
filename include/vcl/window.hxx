@@ -800,7 +800,7 @@ protected:
             void                        SetCompoundControl( bool bCompound );
 
             void                        CallEventListeners( sal_uLong nEvent, void* pData = NULL );
-    static  void                        FireVclEvent( VclSimpleEvent* pEvent );
+    static  void                        FireVclEvent( VclSimpleEvent& rEvent );
 
     virtual bool                        AcquireGraphics() const SAL_OVERRIDE;
     virtual void                        ReleaseGraphics( bool bRelease = true ) SAL_OVERRIDE;

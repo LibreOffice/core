@@ -206,7 +206,7 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
 
-    Application::ImplCallEventListeners( &aEvent );
+    Application::ImplCallEventListeners( aEvent );
 
     if ( aDelData.IsDead() )
         return;
@@ -237,9 +237,9 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
     }
 }
 
-void Window::FireVclEvent( VclSimpleEvent* pEvent )
+void Window::FireVclEvent( VclSimpleEvent& rEvent )
 {
-    Application::ImplCallEventListeners(pEvent);
+    Application::ImplCallEventListeners(rEvent);
 }
 
 void Window::AddEventListener( const Link<>& rEventListener )
