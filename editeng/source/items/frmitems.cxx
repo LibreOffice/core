@@ -861,7 +861,7 @@ bool    SvxULSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         // now all signed
         case 0:
         {
-            ::com::sun::star::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
+            css::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
             aUpperLowerMarginScale.Upper = (sal_Int32)(bConvert ? convertTwipToMm100(nUpper) : nUpper);
             aUpperLowerMarginScale.Lower = (sal_Int32)(bConvert ? convertTwipToMm100(nLower) : nPropUpper);
             aUpperLowerMarginScale.ScaleUpper = (sal_Int16)nPropUpper;
@@ -889,7 +889,7 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case 0:
         {
-            ::com::sun::star::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
+            css::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
             if ( !(rVal >>= aUpperLowerMarginScale ))
                 return false;
             {
@@ -1810,13 +1810,13 @@ lcl_lineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine, bool 
 }
 
 
-bool SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, bool bConvert)
+bool SvxBoxItem::LineToSvxLine(const css::table::BorderLine& rLine, SvxBorderLine& rSvxLine, bool bConvert)
 {
     return lcl_lineToSvxLine(rLine, rSvxLine, bConvert, true);
 }
 
 bool
-SvxBoxItem::LineToSvxLine(const ::com::sun::star::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, bool bConvert)
+SvxBoxItem::LineToSvxLine(const css::table::BorderLine2& rLine, SvxBorderLine& rSvxLine, bool bConvert)
 {
     SvxBorderStyle const nStyle =
         (rLine.LineStyle < 0 || BORDER_LINE_STYLE_MAX < rLine.LineStyle)
@@ -2723,19 +2723,19 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case 0:
         {
             // 2 BorderLines, flags, valid flags and distance
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 5 );
-            aSeq[0] = ::com::sun::star::uno::makeAny( SvxBoxItem::SvxLineToLine( pHori, bConvert) );
-            aSeq[1] = ::com::sun::star::uno::makeAny( SvxBoxItem::SvxLineToLine( pVert, bConvert) );
+            css::uno::Sequence< css::uno::Any > aSeq( 5 );
+            aSeq[0] = css::uno::makeAny( SvxBoxItem::SvxLineToLine( pHori, bConvert) );
+            aSeq[1] = css::uno::makeAny( SvxBoxItem::SvxLineToLine( pVert, bConvert) );
             if ( IsTable() )
                 nVal |= 0x01;
             if ( IsDist() )
                 nVal |= 0x02;
             if ( IsMinDist() )
                 nVal |= 0x04;
-            aSeq[2] = ::com::sun::star::uno::makeAny( nVal );
-            aSeq[3] = ::com::sun::star::uno::makeAny( static_cast<sal_Int16>(nValidFlags) );
-            aSeq[4] = ::com::sun::star::uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist()) );
-            rVal = ::com::sun::star::uno::makeAny( aSeq );
+            aSeq[2] = css::uno::makeAny( nVal );
+            aSeq[3] = css::uno::makeAny( static_cast<sal_Int16>(nValidFlags) );
+            aSeq[4] = css::uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist()) );
+            rVal = css::uno::makeAny( aSeq );
             return true;
         }
 
@@ -2783,7 +2783,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case 0:
         {
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
+            css::uno::Sequence< css::uno::Any > aSeq;
             if (( rVal >>= aSeq ) && ( aSeq.getLength() == 5 ))
             {
                 // 2 BorderLines, flags, valid flags and distance
@@ -2869,7 +2869,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             else if (rVal.getValueType() == cppu::UnoType<css::uno::Sequence < sal_Int16 >>::get() )
             {
                 // serialization for basic macro recording
-                ::com::sun::star::uno::Sequence < sal_Int16 > aSeq;
+                css::uno::Sequence < sal_Int16 > aSeq;
                 rVal >>= aSeq;
                 if (aSeq.getLength() >= 4 && aSeq.getLength() <= 6)
                 {
@@ -4208,7 +4208,7 @@ bool SvxFrameDirectionItem::GetPresentation(
     return true;
 }
 
-bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
+bool SvxFrameDirectionItem::PutValue( const css::uno::Any& rVal,
                                              sal_uInt8 )
 {
     sal_Int16 nVal = sal_Int16();
@@ -4242,7 +4242,7 @@ bool SvxFrameDirectionItem::PutValue( const com::sun::star::uno::Any& rVal,
     return bRet;
 }
 
-bool SvxFrameDirectionItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxFrameDirectionItem::QueryValue( css::uno::Any& rVal,
                                             sal_uInt8 ) const
 {
     // translate SvxFrameDirection into WritingDirection2

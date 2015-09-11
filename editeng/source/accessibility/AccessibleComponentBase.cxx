@@ -50,8 +50,8 @@ AccessibleComponentBase::~AccessibleComponentBase()
 // XAccessibleComponent
 
 sal_Bool SAL_CALL AccessibleComponentBase::containsPoint (
-        const ::com::sun::star::awt::Point& aPoint)
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        const css::awt::Point& aPoint)
+        throw (css::uno::RuntimeException, std::exception)
 {
     awt::Size aSize (getSize());
     return (aPoint.X >= 0)
@@ -84,7 +84,7 @@ awt::Rectangle SAL_CALL AccessibleComponentBase::getBounds()
 
 
 awt::Point SAL_CALL AccessibleComponentBase::getLocation()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     awt::Rectangle aBBox (getBounds());
     return awt::Point (aBBox.X, aBBox.Y);
@@ -94,7 +94,7 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocation()
 
 
 awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return awt::Point();
 }
@@ -102,8 +102,8 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen()
 
 
 
-::com::sun::star::awt::Size SAL_CALL AccessibleComponentBase::getSize()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::awt::Size SAL_CALL AccessibleComponentBase::getSize()
+    throw (css::uno::RuntimeException, std::exception)
 {
     awt::Rectangle aBBox (getBounds());
     return awt::Size (aBBox.Width, aBBox.Height);
@@ -113,9 +113,9 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen()
 
 
 void SAL_CALL AccessibleComponentBase::addFocusListener (
-    const ::com::sun::star::uno::Reference<
-    ::com::sun::star::awt::XFocusListener >& /*xListener*/)
-    throw (::com::sun::star::uno::RuntimeException)
+    const css::uno::Reference<
+    css::awt::XFocusListener >& /*xListener*/)
+    throw (css::uno::RuntimeException)
 {
     // Ignored
 }
@@ -123,9 +123,9 @@ void SAL_CALL AccessibleComponentBase::addFocusListener (
 
 
 
-void SAL_CALL AccessibleComponentBase::removeFocusListener (const ::com::sun::star::uno::Reference<
-    ::com::sun::star::awt::XFocusListener >& /*xListener*/ )
-    throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL AccessibleComponentBase::removeFocusListener (const css::uno::Reference<
+    css::awt::XFocusListener >& /*xListener*/ )
+    throw (css::uno::RuntimeException)
 {
     // Ignored
 }
@@ -134,7 +134,7 @@ void SAL_CALL AccessibleComponentBase::removeFocusListener (const ::com::sun::st
 
 
 void SAL_CALL AccessibleComponentBase::grabFocus()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference<XAccessibleContext> xContext (this, uno::UNO_QUERY);
     uno::Reference<XAccessibleSelection> xSelection (
@@ -151,7 +151,7 @@ void SAL_CALL AccessibleComponentBase::grabFocus()
 
 
 sal_Int32 SAL_CALL AccessibleComponentBase::getForeground()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return Color(COL_BLACK).GetColor();
 }
@@ -160,7 +160,7 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getForeground()
 
 
 sal_Int32 SAL_CALL AccessibleComponentBase::getBackground()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return Color(COL_WHITE).GetColor();
 }
@@ -170,9 +170,9 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground()
 
 // XAccessibleExtendedComponent
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL
+css::uno::Reference< css::awt::XFont > SAL_CALL
         AccessibleComponentBase::getFont()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return uno::Reference<awt::XFont>();
 }
@@ -181,14 +181,14 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground()
 
 
 OUString SAL_CALL AccessibleComponentBase::getTitledBorderText()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return OUString();
 }
 
 
 OUString SAL_CALL AccessibleComponentBase::getToolTipText()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString();
 }

@@ -228,9 +228,9 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
         {
             aCharString = rTxt.copy( nPos + nIdx, 1 );
             sal_Int32 nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
-            if ( nCharacterType & ::com::sun::star::i18n::KCharacterType::LOWER )
+            if ( nCharacterType & css::i18n::KCharacterType::LOWER )
                 break;
-            if ( ! ( nCharacterType & ::com::sun::star::i18n::KCharacterType::UPPER ) )
+            if ( ! ( nCharacterType & css::i18n::KCharacterType::UPPER ) )
                 break;
             ++nPos;
         }
@@ -257,7 +257,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
         while( nPos < nTxtLen )
         {
             sal_uInt32  nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
-            if ( ( nCharacterType & ::com::sun::star::i18n::KCharacterType::UPPER ) )
+            if ( ( nCharacterType & css::i18n::KCharacterType::UPPER ) )
                 break;
             if ( aCharString == " " )
                 break;

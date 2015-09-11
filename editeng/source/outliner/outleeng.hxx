@@ -52,7 +52,7 @@ public:
         bool bEndOfLine,
         bool bEndOfParagraph,
         bool bEndOfBullet,
-        const ::com::sun::star::lang::Locale* pLocale,
+        const css::lang::Locale* pLocale,
         const Color& rOverlineColor,
         const Color& rTextLineColor) SAL_OVERRIDE;
 

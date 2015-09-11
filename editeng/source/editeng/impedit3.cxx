@@ -1823,7 +1823,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         if ( !bHangingPunctuation && bCanHyphenate && GetHyphenator().is() )
         {
             i18n::Boundary aBoundary = _xBI->getWordBoundary(
-                pNode->GetString(), nBreakPos, GetLocale( EditPaM( pNode, nBreakPos ) ), ::com::sun::star::i18n::WordType::DICTIONARY_WORD, true);
+                pNode->GetString(), nBreakPos, GetLocale( EditPaM( pNode, nBreakPos ) ), css::i18n::WordType::DICTIONARY_WORD, true);
             sal_Int32 nWordStart = nBreakPos;
             sal_Int32 nWordEnd = aBoundary.endPos;
             DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
@@ -2105,7 +2105,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
     // the search has to be performed on a per word base
 
     EditSelection aWordSel( EditPaM( pNode, nStart ) );
-    aWordSel = SelectWord( aWordSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+    aWordSel = SelectWord( aWordSel, css::i18n::WordType::DICTIONARY_WORD );
     if ( aWordSel.Min().GetIndex() < nStart )
        aWordSel.Min().SetIndex( nStart );
 
@@ -2212,8 +2212,8 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_Int32 nStart, sal_I
         if ( nKashidaPos>=0 )
             rArray.push_back( nKashidaPos );
 
-        aWordSel = WordRight( aWordSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
-        aWordSel = SelectWord( aWordSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aWordSel = WordRight( aWordSel.Max(), css::i18n::WordType::DICTIONARY_WORD );
+        aWordSel = SelectWord( aWordSel, css::i18n::WordType::DICTIONARY_WORD );
     }
 }
 

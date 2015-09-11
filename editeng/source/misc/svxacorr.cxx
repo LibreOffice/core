@@ -104,13 +104,13 @@ static inline bool IsWordDelim( const sal_Unicode c )
 static inline bool IsLowerLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
-            0 == ( ::com::sun::star::i18n::KCharacterType::UPPER & nCharType);
+            0 == ( css::i18n::KCharacterType::UPPER & nCharType);
 }
 
 static inline bool IsUpperLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
-            0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);
+            0 == ( css::i18n::KCharacterType::LOWER & nCharType);
 }
 
 bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const OUString& rTxt,
@@ -121,19 +121,19 @@ bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const OUString& rTxt,
         short nScript = rCC.getScript( rTxt, nStt );
         switch( nScript )
         {
-            case ::com::sun::star::i18n::UnicodeScript_kCJKRadicalsSupplement:
-            case ::com::sun::star::i18n::UnicodeScript_kHangulJamo:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKSymbolPunctuation:
-            case ::com::sun::star::i18n::UnicodeScript_kHiragana:
-            case ::com::sun::star::i18n::UnicodeScript_kKatakana:
-            case ::com::sun::star::i18n::UnicodeScript_kHangulCompatibilityJamo:
-            case ::com::sun::star::i18n::UnicodeScript_kEnclosedCJKLetterMonth:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibility:
-            case ::com::sun::star::i18n::UnicodeScript_k_CJKUnifiedIdeographsExtensionA:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKUnifiedIdeograph:
-            case ::com::sun::star::i18n::UnicodeScript_kHangulSyllable:
-            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibilityIdeograph:
-            case ::com::sun::star::i18n::UnicodeScript_kHalfwidthFullwidthForm:
+            case css::i18n::UnicodeScript_kCJKRadicalsSupplement:
+            case css::i18n::UnicodeScript_kHangulJamo:
+            case css::i18n::UnicodeScript_kCJKSymbolPunctuation:
+            case css::i18n::UnicodeScript_kHiragana:
+            case css::i18n::UnicodeScript_kKatakana:
+            case css::i18n::UnicodeScript_kHangulCompatibilityJamo:
+            case css::i18n::UnicodeScript_kEnclosedCJKLetterMonth:
+            case css::i18n::UnicodeScript_kCJKCompatibility:
+            case css::i18n::UnicodeScript_k_CJKUnifiedIdeographsExtensionA:
+            case css::i18n::UnicodeScript_kCJKUnifiedIdeograph:
+            case css::i18n::UnicodeScript_kHangulSyllable:
+            case css::i18n::UnicodeScript_kCJKCompatibilityIdeograph:
+            case css::i18n::UnicodeScript_kHalfwidthFullwidthForm:
                 return true;
             default: ; //do nothing
         }
@@ -146,8 +146,7 @@ static bool lcl_IsSymbolChar( CharClass& rCC, const OUString& rTxt,
 {
     for( ; nStt < nEnd; ++nStt )
     {
-        if( ::com::sun::star::i18n::UnicodeType::PRIVATE_USE ==
-                rCC.getType( rTxt, nStt ))
+        if( css::i18n::UnicodeType::PRIVATE_USE == rCC.getType( rTxt, nStt ))
             return true;
     }
     return false;
@@ -201,8 +200,8 @@ static TransliterationWrapper& GetIgnoreTranslWrapper()
 {
     static int bIsInit = 0;
     static TransliterationWrapper aWrp( ::comphelper::getProcessComponentContext(),
-                ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA |
-                ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
+                css::i18n::TransliterationModules_IGNORE_KANA |
+                css::i18n::TransliterationModules_IGNORE_WIDTH );
     if( !bIsInit )
     {
         aWrp.loadModuleIfNeeded( GetAppLang().getLanguageType() );
@@ -403,12 +402,11 @@ bool SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
             if( !FindInWrdSttExceptList(eLang, sWord) )
             {
                 // Check that word isn't correctly spelled before correcting:
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XSpellChecker1 > xSpeller =
+                css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller =
                     SvxGetSpellChecker();
                 if( xSpeller->hasLanguage(eLang) )
                 {
-                    Sequence< ::com::sun::star::beans::PropertyValue > aEmptySeq;
+                    Sequence< css::beans::PropertyValue > aEmptySeq;
                     if (!xSpeller->spell(sWord, eLang, aEmptySeq).is())
                     {
                         return false;
@@ -1640,7 +1638,7 @@ void SvxAutoCorrect::refreshBlockList( const uno::Reference< embed::XStorage >& 
 }
 
 // Text with attribution (only the SWG - SWG format!)
-bool SvxAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
+bool SvxAutoCorrect::PutText( const css::uno::Reference < css::embed::XStorage >&,
                               const OUString&, const OUString&, SfxObjectShell&, OUString& )
 {
     return false;

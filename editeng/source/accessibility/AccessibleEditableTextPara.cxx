@@ -96,8 +96,8 @@ namespace accessibility
             SVX_UNOEDIT_CHAR_PROPERTIES,
             SVX_UNOEDIT_PARA_PROPERTIES,
             SVX_UNOEDIT_NUMBERING_PROPERTIE,
-            {OUString("TextUserDefinedAttributes"),     EE_CHAR_XMLATTRIBS,     cppu::UnoType<com::sun::star::container::XNameContainer>::get(),        0,     0},
-            {OUString("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     cppu::UnoType<com::sun::star::container::XNameContainer>::get(),        0,     0},
+            { OUString("TextUserDefinedAttributes"),     EE_CHAR_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
+            { OUString("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
         static SvxItemPropertySet aPropSet( aPropMap, EditEngine::GetGlobalItemPool() );
@@ -169,7 +169,7 @@ namespace accessibility
         return GetTextRange( 0, GetTextLen() );
     }
 
-    ::com::sun::star::lang::Locale AccessibleEditableTextPara::implGetLocale()
+    css::lang::Locale AccessibleEditableTextPara::implGetLocale()
     {
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= SAL_MAX_INT32,
                    "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
@@ -195,7 +195,7 @@ namespace accessibility
         }
     }
 
-    void AccessibleEditableTextPara::implGetParagraphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 /*nIndex*/ )
+    void AccessibleEditableTextPara::implGetParagraphBoundary( css::i18n::Boundary& rBoundary, sal_Int32 /*nIndex*/ )
     {
         DBG_WARNING( "AccessibleEditableTextPara::implGetParagraphBoundary: only a base implementation, ignoring the index" );
 
@@ -206,7 +206,7 @@ namespace accessibility
         rBoundary.endPos = nLength;
     }
 
-    void AccessibleEditableTextPara::implGetLineBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex )
+    void AccessibleEditableTextPara::implGetLineBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex )
     {
         SvxTextForwarder&   rCacheTF = GetTextForwarder();
         const sal_Int32     nParaIndex = GetParagraphIndex();
@@ -1180,7 +1180,7 @@ namespace accessibility
         setSelection(0,0);
     }
 
-    sal_Int32 SAL_CALL AccessibleEditableTextPara::getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 SAL_CALL AccessibleEditableTextPara::getForeground(  ) throw (css::uno::RuntimeException, std::exception)
     {
         // #104444# Added to XAccessibleComponent interface
         svtools::ColorConfig aColorConfig;
@@ -1188,7 +1188,7 @@ namespace accessibility
         return static_cast<sal_Int32>(nColor);
     }
 
-    sal_Int32 SAL_CALL AccessibleEditableTextPara::getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 SAL_CALL AccessibleEditableTextPara::getBackground(  ) throw (css::uno::RuntimeException, std::exception)
     {
         // #104444# Added to XAccessibleComponent interface
         Color aColor( Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor() );
@@ -1243,7 +1243,7 @@ namespace accessibility
         return OCommonAccessibleText::getCharacter( nIndex );
     }
 
-    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& rRequestedAttributes ) throw (lang::IndexOutOfBoundsException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& rRequestedAttributes ) throw (lang::IndexOutOfBoundsException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -1531,7 +1531,7 @@ namespace accessibility
                 sal_uInt32 crChar = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
                 if (COL_AUTO == crChar )
                 {
-                    uno::Reference< ::com::sun::star::accessibility::XAccessibleComponent > xComponent;
+                    uno::Reference< css::accessibility::XAccessibleComponent > xComponent;
                     if (mxParent.is())
                     {
                         xComponent.set(mxParent,uno::UNO_QUERY);
@@ -1542,7 +1542,7 @@ namespace accessibility
                     }
                     if (xComponent.is())
                     {
-                        uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xContext(xComponent,uno::UNO_QUERY);
+                        uno::Reference< css::accessibility::XAccessibleContext > xContext(xComponent,uno::UNO_QUERY);
                         if (xContext->getAccessibleRole() == AccessibleRole::SHAPE
                             || xContext->getAccessibleRole() == AccessibleRole::TABLE_CELL)
                         {
@@ -1570,7 +1570,7 @@ namespace accessibility
                 sal_uInt32 crCharUnderLine = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>( anyCharUnderLine.pReserved));
                 if (COL_AUTO == crCharUnderLine )
                 {
-                    uno::Reference< ::com::sun::star::accessibility::XAccessibleComponent > xComponent;
+                    uno::Reference< css::accessibility::XAccessibleComponent > xComponent;
                     if (mxParent.is())
                     {
                         xComponent.set(mxParent,uno::UNO_QUERY);
@@ -1581,7 +1581,7 @@ namespace accessibility
                     }
                     if (xComponent.is())
                     {
-                        uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xContext(xComponent,uno::UNO_QUERY);
+                        uno::Reference< css::accessibility::XAccessibleContext > xContext(xComponent,uno::UNO_QUERY);
                         if (xContext->getAccessibleRole() == AccessibleRole::SHAPE
                             || xContext->getAccessibleRole() == AccessibleRole::TABLE_CELL)
                         {
@@ -1683,7 +1683,7 @@ namespace accessibility
         }
         return nIndex;
     }
-    bool AccessibleEditableTextPara::ExtendByField( ::com::sun::star::accessibility::TextSegment& Segment )
+    bool AccessibleEditableTextPara::ExtendByField( css::accessibility::TextSegment& Segment )
     {
         sal_Int32 nParaIndex = GetParagraphIndex();
         SvxAccessibleTextAdapter& rCacheTF = GetTextForwarder();
@@ -1749,14 +1749,14 @@ namespace accessibility
         return bExtend;
     }
 
-    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+    css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextAtIndex: paragraph index value overflow");
 
-        ::com::sun::star::accessibility::TextSegment aResult;
+        css::accessibility::TextSegment aResult;
         aResult.SegmentStart = -1;
         aResult.SegmentEnd = -1;
 
@@ -1811,8 +1811,8 @@ namespace accessibility
                 SvxTextForwarder&   rCacheTF = GetTextForwarder();
                 sal_Int32           nParaIndex = GetParagraphIndex();
                 CheckPosition(nIndex);
-        if (nIndex != 0  && nIndex == getCharacterCount())
-            --nIndex;
+                if (nIndex != 0  && nIndex == getCharacterCount())
+                    --nIndex;
                 sal_Int32 nLine, nLineCount=rCacheTF.GetLineCount( nParaIndex );
                 sal_Int32 nCurIndex;
                 //the problem is that rCacheTF.GetLineLen() will include the bullet length. But for the bullet line,
@@ -1864,14 +1864,14 @@ namespace accessibility
         return aResult;
     }
 
-    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+    css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextBeforeIndex: paragraph index value overflow");
 
-        ::com::sun::star::accessibility::TextSegment aResult;
+        css::accessibility::TextSegment aResult;
         aResult.SegmentStart = -1;
         aResult.SegmentEnd = -1;
         i18n::Boundary aBoundary;
@@ -2029,14 +2029,14 @@ namespace accessibility
         return aResult;
     }
 
-    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+    css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextBehindIndex: paragraph index value overflow");
 
-        ::com::sun::star::accessibility::TextSegment aResult;
+        css::accessibility::TextSegment aResult;
         aResult.SegmentStart = -1;
         aResult.SegmentEnd = -1;
         i18n::Boundary aBoundary;
@@ -2649,7 +2649,7 @@ namespace accessibility
     }
 
     // XAccessibleHypertext
-    ::sal_Int32 SAL_CALL AccessibleEditableTextPara::getHyperLinkCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL AccessibleEditableTextPara::getHyperLinkCount(  ) throw (css::uno::RuntimeException, std::exception)
     {
         SvxAccessibleTextAdapter& rT = GetTextForwarder();
         const sal_Int32 nPara = GetParagraphIndex();
@@ -2665,9 +2665,9 @@ namespace accessibility
         return nHyperLinks;
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleHyperlink > SAL_CALL AccessibleEditableTextPara::getHyperLink( ::sal_Int32 nLinkIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Reference< css::accessibility::XAccessibleHyperlink > SAL_CALL AccessibleEditableTextPara::getHyperLink( ::sal_Int32 nLinkIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleHyperlink > xRef;
+        css::uno::Reference< css::accessibility::XAccessibleHyperlink > xRef;
 
         SvxAccessibleTextAdapter& rT = GetTextForwarder();
         const sal_Int32 nPara = GetParagraphIndex();
@@ -2696,7 +2696,7 @@ namespace accessibility
         return xRef;
     }
 
-    ::sal_Int32 SAL_CALL AccessibleEditableTextPara::getHyperLinkIndex( ::sal_Int32 nCharIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL AccessibleEditableTextPara::getHyperLinkIndex( ::sal_Int32 nCharIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
     {
         const sal_Int32 nPara = GetParagraphIndex();
         SvxAccessibleTextAdapter& rT = GetTextForwarder();
@@ -2744,10 +2744,10 @@ namespace accessibility
     }
 
     // XAccessibleMultiLineText
-    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtLineNumber( sal_Int32 nLineNo ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
+    css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtLineNumber( sal_Int32 nLineNo ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
 
-        ::com::sun::star::accessibility::TextSegment aResult;
+        css::accessibility::TextSegment aResult;
         sal_Int32 nPara = GetParagraphIndex();
         SvxTextForwarder &rCacheTF = GetTextForwarder();
         const bool bValidPara = 0 <= nPara && nPara < rCacheTF.GetParagraphCount();
@@ -2780,10 +2780,10 @@ namespace accessibility
     }
 
     // XAccessibleMultiLineText
-    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtLineWithCaret(  ) throw (uno::RuntimeException, std::exception)
+    css::accessibility::TextSegment SAL_CALL AccessibleEditableTextPara::getTextAtLineWithCaret(  ) throw (uno::RuntimeException, std::exception)
     {
 
-        ::com::sun::star::accessibility::TextSegment aResult;
+        css::accessibility::TextSegment aResult;
         try
         {
             aResult = getTextAtLineNumber( getNumberOfLineWithCaret() );

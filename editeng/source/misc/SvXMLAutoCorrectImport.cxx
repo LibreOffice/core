@@ -27,7 +27,7 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const uno::Reference< uno::XComponentContext > xContext,
     SvxAutocorrWordList *pNewAutocorr_List,
     SvxAutoCorrect &rNewAutoCorrect,
-    const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage)
+    const css::uno::Reference < css::embed::XStorage >& rNewStorage)
 :   SvXMLImport( xContext, "" ),
     pAutocorr_List (pNewAutocorr_List),
     rAutoCorrect ( rNewAutoCorrect ),
@@ -51,15 +51,14 @@ SvXMLImportContext *SvXMLAutoCorrectImport::CreateFastContext( sal_Int32 Element
 SvXMLWordListContext::SvXMLWordListContext(
    SvXMLAutoCorrectImport& rImport,
    sal_Int32 /*Element*/,
-   const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XFastAttributeList > & /*xAttrList*/ ) :
+   const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ ) :
    SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {
     rLocalRef.rAutoCorrect.refreshBlockList( rLocalRef.xStorage );
 }
 
-com::sun::star::uno::Reference<XFastContextHandler> SAL_CALL SvXMLWordListContext::createFastChildContext(
+css::uno::Reference<XFastContextHandler> SAL_CALL SvXMLWordListContext::createFastChildContext(
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
@@ -76,8 +75,7 @@ SvXMLWordListContext::~SvXMLWordListContext()
 SvXMLWordContext::SvXMLWordContext(
    SvXMLAutoCorrectImport& rImport,
    sal_Int32 /*Element*/,
-   const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XFastAttributeList > & xAttrList ) :
+   const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) :
    SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {
@@ -133,14 +131,13 @@ SvXMLImportContext *SvXMLExceptionListImport::CreateFastContext(sal_Int32 Elemen
 SvXMLExceptionListContext::SvXMLExceptionListContext(
    SvXMLExceptionListImport& rImport,
    sal_Int32 /*Element*/,
-   const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XFastAttributeList > & /* xAttrList */ ) :
+   const css::uno::Reference< css::xml::sax::XFastAttributeList > & /* xAttrList */ ) :
    SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {
 }
 
-com::sun::star::uno::Reference<xml::sax::XFastContextHandler> SAL_CALL SvXMLExceptionListContext::createFastChildContext(
+css::uno::Reference<xml::sax::XFastContextHandler> SAL_CALL SvXMLExceptionListContext::createFastChildContext(
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
     throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
@@ -157,8 +154,7 @@ SvXMLExceptionListContext::~SvXMLExceptionListContext()
 SvXMLExceptionContext::SvXMLExceptionContext(
    SvXMLExceptionListImport& rImport,
    sal_Int32 /*Element*/,
-   const com::sun::star::uno::Reference<
-   com::sun::star::xml::sax::XFastAttributeList > & xAttrList ) :
+   const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) :
    SvXMLImportContext ( rImport ),
    rLocalRef(rImport)
 {

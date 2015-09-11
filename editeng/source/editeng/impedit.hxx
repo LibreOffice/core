@@ -229,7 +229,7 @@ private:
     Pointer*            pPointer;
     DragAndDropInfo*    pDragAndDropInfo;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
+    css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
 
     long                nInvMore;
@@ -252,19 +252,19 @@ private:
 protected:
 
     // DragAndDropClient
-    void dragGestureRecognized(const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge)
-        throw (::com::sun::star::uno::RuntimeException,
+    void dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent& dge)
+        throw (css::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
-    void dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde )
-        throw (::com::sun::star::uno::RuntimeException,
+    void dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde )
+        throw (css::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
-    void drop(const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde)
-        throw (::com::sun::star::uno::RuntimeException,
+    void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
+        throw (css::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
-    void dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    void dragOver(const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde)
-        throw (::com::sun::star::uno::RuntimeException,
+    void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde)
+        throw (css::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
 
     void ShowDDCursor( const Rectangle& rRect );
@@ -302,8 +302,8 @@ public:
     bool            MouseMove( const MouseEvent& rMouseEvent );
     void            Command( const CommandEvent& rCEvt );
 
-    void            CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, bool bCut );
-    void            Paste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, bool bUseSpecial = false );
+    void            CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard, bool bCut );
+    void            Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard, bool bUseSpecial = false );
 
     void            SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
 
@@ -315,12 +315,12 @@ public:
 
     EditSelection&  GetEditSelection()          { return aEditSelection; }
     void            SetEditSelection( const EditSelection& rEditSelection );
-    bool        HasSelection() const { return aEditSelection.HasRange(); }
+    bool            HasSelection() const { return aEditSelection.HasRange(); }
 
     void            DrawSelection() { DrawSelection( aEditSelection ); }
     void            DrawSelection( EditSelection, vcl::Region* pRegion = NULL, OutputDevice* pTargetDevice = NULL );
 
-    vcl::Window*         GetWindow() const           { return pOutWin; }
+    vcl::Window*    GetWindow() const           { return pOutWin; }
 
     EESelectionMode GetSelectionMode() const    { return eSelectionMode; }
     void            SetSelectionMode( EESelectionMode eMode );
@@ -374,7 +374,7 @@ public:
     /// Invokes the registered callback, if there are any.
     void libreOfficeKitCallback(int nType, const char* pPayload) const;
 
-    bool        IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong );
+    bool            IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong );
     OUString        SpellIgnoreOrAddWord( bool bAdd );
 
     const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const;
@@ -448,13 +448,11 @@ private:
     EEHorizontalTextDirection eDefaultHorizontalTextDirection;
 
     sal_Int32          nBigTextObjectStart;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 > xSpeller;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >    xHyphenator;
+    css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller;
+    css::uno::Reference< css::linguistic2::XHyphenator >    xHyphenator;
     SpellInfo*          pSpellInfo;
-    mutable ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > xBI;
-    mutable ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > xISC;
+    mutable css::uno::Reference < css::i18n::XBreakIterator > xBI;
+    mutable css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > xISC;
 
     ConvInfo *          pConvInfo;
 
@@ -539,7 +537,7 @@ private:
 
     EditTextObject*     CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
     EditSelection       InsertTextObject( const EditTextObject&, EditPaM aPaM );
-    EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial );
+    EditSelection       InsertText( css::uno::Reference< css::datatransfer::XTransferable >& rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial );
 
     EditPaM             Clear();
     EditPaM             RemoveText();
@@ -584,19 +582,19 @@ private:
     EditPaM             PageDown( const EditPaM& rPaM, EditView* pView);
     EditPaM             CursorUp( const EditPaM& rPaM, EditView* pEditView );
     EditPaM             CursorDown( const EditPaM& rPaM, EditView* pEditView );
-    EditPaM             CursorLeft( const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
-    EditPaM             CursorRight( const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
+    EditPaM             CursorLeft( const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = css::i18n::CharacterIteratorMode::SKIPCELL );
+    EditPaM             CursorRight( const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = css::i18n::CharacterIteratorMode::SKIPCELL );
     EditPaM             CursorStartOfLine( const EditPaM& rPaM );
     EditPaM             CursorEndOfLine( const EditPaM& rPaM );
     static EditPaM      CursorStartOfParagraph( const EditPaM& rPaM );
     static EditPaM      CursorEndOfParagraph( const EditPaM& rPaM );
     EditPaM             CursorStartOfDoc();
     EditPaM             CursorEndOfDoc();
-    EditPaM             WordLeft( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditPaM             WordRight( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditPaM             StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditPaM             EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, bool bAcceptStartOfWord = true );
+    EditPaM             WordLeft( const EditPaM& rPaM, sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditPaM             WordRight( const EditPaM& rPaM, sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditPaM             StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditPaM             EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, bool bAcceptStartOfWord = true );
     EditSelection       SelectSentence( const EditSelection& rCurSel ) const;
     EditPaM             CursorVisualLeftRight( EditView* pEditView, const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode, bool bToLeft );
     EditPaM             CursorVisualStartEnd( EditView* pEditView, const EditPaM& rPaM, bool bStart );
@@ -669,12 +667,12 @@ private:
     inline const ParaPortion* FindParaPortion( const ContentNode* pNode ) const;
     inline ParaPortion* FindParaPortion( ContentNode* pNode );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );
+    css::uno::Reference< css::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );
 
     void                SetValidPaperSize( const Size& rSz );
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
-    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
+    css::uno::Reference < css::i18n::XBreakIterator > ImplGetBreakIterator() const;
+    css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
 
     SpellInfo *     CreateSpellInfo( bool bMultipleDocs );
 
@@ -717,7 +715,7 @@ public:
 
     void                    InitWritingDirections( sal_Int32 nPara );
     bool                    IsRightToLeft( sal_Int32 nPara ) const;
-    sal_uInt8                    GetRightToLeft( sal_Int32 nPara, sal_Int32 nChar, sal_Int32* pStart = NULL, sal_Int32* pEnd = NULL );
+    sal_uInt8               GetRightToLeft( sal_Int32 nPara, sal_Int32 nChar, sal_Int32* pStart = NULL, sal_Int32* pEnd = NULL );
     bool                    HasDifferentRTLLevels( const ContentNode* pNode );
 
     void                    SetTextRanger( TextRanger* pRanger );
@@ -776,7 +774,7 @@ public:
     EditPaM         InsertLineBreak(const EditSelection& aEditSelection);
     EditPaM         InsertTab(const EditSelection& rEditSelection);
     EditPaM         InsertField(const EditSelection& rCurSel, const SvxFieldItem& rFld);
-    bool        UpdateFields();
+    bool            UpdateFields();
 
     EditPaM         Read(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, const EditSelection& rSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL);
     void            Write(SvStream& rOutput, EETextFormat eFormat, const EditSelection& rSel);
@@ -818,19 +816,19 @@ public:
     Rectangle       PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags = 0 );
     Rectangle       GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex, sal_uInt16 nFlags = 0 );
 
-    bool        IsModified() const      { return aEditDoc.IsModified(); }
+    bool            IsModified() const      { return aEditDoc.IsModified(); }
     void            SetModifyFlag( bool b ) { aEditDoc.SetModified( b ); }
     void            SetModifyHdl( const Link<>& rLink ) { aModifyHdl = rLink; }
     Link<>          GetModifyHdl() const { return aModifyHdl; }
 
 
-    bool        IsInSelectionMode() { return bInSelection; }
+    bool            IsInSelectionMode() { return bInSelection; }
 
     void            IndentBlock( EditView* pView, bool bRight );
 
 //  For Undo/Redo
-    bool        Undo( EditView* pView );
-    bool        Redo( EditView* pView );
+    bool            Undo( EditView* pView );
+    bool            Redo( EditView* pView );
 
 //  OV-Special
     void            InvalidateFromParagraph( sal_Int32 nFirstInvPara );
@@ -889,17 +887,13 @@ public:
     EditView*           GetActiveView() const   { return pActiveView; }
     void                SetActiveView( EditView* pView );
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >
+    css::uno::Reference< css::linguistic2::XSpellChecker1 >
                         GetSpeller();
-    void                SetSpeller( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XSpellChecker1 >  &xSpl )
+    void                SetSpeller( css::uno::Reference< css::linguistic2::XSpellChecker1 >  &xSpl )
                             { xSpeller = xSpl; }
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >
+    css::uno::Reference< css::linguistic2::XHyphenator >
                         GetHyphenator() const { return xHyphenator; }
-    void                SetHyphenator( ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XHyphenator >  &xHyph )
+    void                SetHyphenator( css::uno::Reference< css::linguistic2::XHyphenator >  &xHyph )
                             { xHyphenator = xHyph; }
 
     void GetAllMisspellRanges( std::vector<editeng::MisspellRanges>& rRanges ) const;
@@ -911,15 +905,14 @@ public:
     LanguageType        GetDefaultLanguage() const { return eDefLanguage; }
 
     LanguageType        GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos = NULL ) const;
-    ::com::sun::star::lang::Locale GetLocale( const EditPaM& rPaM ) const;
+    css::lang::Locale   GetLocale( const EditPaM& rPaM ) const;
 
     void DoOnlineSpelling( ContentNode* pThisNodeOnly = 0, bool bSpellAtCursorPos = false, bool bInteruptable = true );
     EESpellState        Spell( EditView* pEditView, bool bMultipleDoc );
     EESpellState        HasSpellErrors();
     void ClearSpellErrors();
     EESpellState        StartThesaurus( EditView* pEditView );
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellAlternatives >
+    css::uno::Reference< css::linguistic2::XSpellAlternatives >
                         ImpSpell( EditView* pEditView );
 
     // text conversion functions
@@ -927,7 +920,7 @@ public:
     void                ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
                                     bool bAllowImplicitChangesForNotConvertibleText, LanguageType nTargetLang, const vcl::Font *pTargetFont );
     ConvInfo *          GetConvInfo() const { return pConvInfo; }
-    bool            HasConvertibleTextPortion( LanguageType nLang );
+    bool                HasConvertibleTextPortion( LanguageType nLang );
     void                SetLanguageAndFont( const ESelection &rESel,
                                 LanguageType nLang, sal_uInt16 nLangWhichId,
                                 const vcl::Font *pFont,  sal_uInt16 nFontWhichId );
@@ -936,9 +929,8 @@ public:
     bool            IsInputSequenceCheckingRequired( sal_Unicode nChar, const EditSelection& rCurSel ) const;
 
     //find the next error within the given selection - forward only!
-    ::com::sun::star::uno::Reference<
-                ::com::sun::star::linguistic2::XSpellAlternatives >
-                    ImpFindNextError(EditSelection& rSelection);
+    css::uno::Reference< css::linguistic2::XSpellAlternatives >
+                       ImpFindNextError(EditSelection& rSelection);
     //spell and return a sentence
     bool                SpellSentence(EditView& rView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     //put spelling back to start of current sentence - needed after switch of grammar support
@@ -946,15 +938,15 @@ public:
     //applies a changed sentence
     void                ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck );
     //adds one or more portions of text to the SpellPortions depending on language changes
-    void            AddPortionIterated(
-                        EditView& rEditView,
-                        const EditSelection &rSel,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > xAlt,
-                        svx::SpellPortions& rToFill);
+    void                AddPortionIterated(
+                          EditView& rEditView,
+                          const EditSelection &rSel,
+                          css::uno::Reference< css::linguistic2::XSpellAlternatives > xAlt,
+                          svx::SpellPortions& rToFill);
     //adds one portion to the SpellPortions
     void            AddPortion(
                         const EditSelection &rSel,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > xAlt,
+                        css::uno::Reference< css::linguistic2::XSpellAlternatives > xAlt,
                         svx::SpellPortions& rToFill,
                         bool bIsField );
 
@@ -988,7 +980,7 @@ public:
     void                SetAutoCompleteText(const OUString& rStr, bool bUpdateTipWindow);
 
     EditSelection       TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
-    short               ReplaceTextOnly( ContentNode* pNode, sal_Int32 nCurrentStart, sal_Int32 nLen, const OUString& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rOffsets );
+    short               ReplaceTextOnly( ContentNode* pNode, sal_Int32 nCurrentStart, sal_Int32 nLen, const OUString& rText, const css::uno::Sequence< sal_Int32 >& rOffsets );
 
 
     void                SetAsianCompressionMode( sal_uInt16 n );

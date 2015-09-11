@@ -152,7 +152,7 @@ bool AccessibleContextBase::GetState (sal_Int16 aState)
 
 void AccessibleContextBase::SetRelationSet (
     const uno::Reference<XAccessibleRelationSet>& rxNewRelationSet)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     OSL_TRACE ("setting relation set");
 
@@ -211,7 +211,7 @@ sal_Int32 SAL_CALL
 */
 uno::Reference<XAccessible> SAL_CALL
     AccessibleContextBase::getAccessibleChild (sal_Int32 nIndex)
-    throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     throw lang::IndexOutOfBoundsException (
@@ -224,7 +224,7 @@ uno::Reference<XAccessible> SAL_CALL
 
 uno::Reference<XAccessible> SAL_CALL
        AccessibleContextBase::getAccessibleParent()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     return mxParent;
@@ -235,7 +235,7 @@ uno::Reference<XAccessible> SAL_CALL
 
 sal_Int32 SAL_CALL
        AccessibleContextBase::getAccessibleIndexInParent()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     //  Use a simple but slow solution for now.  Optimize later.
@@ -271,7 +271,7 @@ sal_Int32 SAL_CALL
 
 sal_Int16 SAL_CALL
     AccessibleContextBase::getAccessibleRole()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     return maRole;
@@ -282,7 +282,7 @@ sal_Int16 SAL_CALL
 
 OUString SAL_CALL
        AccessibleContextBase::getAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -294,7 +294,7 @@ OUString SAL_CALL
 
 OUString SAL_CALL
        AccessibleContextBase::getAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -316,7 +316,7 @@ OUString SAL_CALL
 */
 uno::Reference<XAccessibleRelationSet> SAL_CALL
        AccessibleContextBase::getAccessibleRelationSet()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -343,7 +343,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 */
 uno::Reference<XAccessibleStateSet> SAL_CALL
     AccessibleContextBase::getAccessibleStateSet()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ::utl::AccessibleStateSetHelper* pStateSet = NULL;
 
@@ -384,7 +384,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 lang::Locale SAL_CALL
        AccessibleContextBase::getLocale()
     throw (IllegalAccessibleComponentStateException,
-        ::com::sun::star::uno::RuntimeException, std::exception)
+        css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     // Delegate request to parent.
@@ -451,21 +451,21 @@ void SAL_CALL AccessibleContextBase::removeAccessibleEventListener (
 
 // XServiceInfo
 OUString SAL_CALL AccessibleContextBase::getImplementationName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     return OUString("AccessibleContextBase");
 }
 
 sal_Bool SAL_CALL AccessibleContextBase::supportsService (const OUString& sServiceName)
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
        AccessibleContextBase::getSupportedServiceNames()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     static const OUString sServiceNames[2] = {
@@ -480,9 +480,9 @@ uno::Sequence< OUString > SAL_CALL
 
 // XTypeProvider
 
-uno::Sequence< ::com::sun::star::uno::Type>
+uno::Sequence< css::uno::Type>
     AccessibleContextBase::getTypes()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -493,7 +493,7 @@ uno::Sequence< ::com::sun::star::uno::Type>
 
 uno::Sequence<sal_Int8> SAL_CALL
     AccessibleContextBase::getImplementationId()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -568,7 +568,7 @@ void AccessibleContextBase::SetAccessibleName (
 
 
 OUString AccessibleContextBase::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("Empty Description");
 }
@@ -577,7 +577,7 @@ OUString AccessibleContextBase::CreateAccessibleDescription()
 
 
 OUString AccessibleContextBase::CreateAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("Empty Name");
 }
@@ -618,7 +618,7 @@ void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
 
 
 void AccessibleContextBase::ThrowIfDisposed()
-    throw (::com::sun::star::lang::DisposedException)
+    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
