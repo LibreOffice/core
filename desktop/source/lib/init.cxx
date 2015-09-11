@@ -71,6 +71,8 @@
 #include "../app/officeipcthread.hxx"
 #include "../../inc/lib/init.hxx"
 
+#include "lokinteractionhandler.hxx"
+
 using namespace css;
 using namespace vcl;
 using namespace desktop;
@@ -385,11 +387,26 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
     try
     {
-        uno::Sequence<css::beans::PropertyValue> aFilterOptions(1);
+        uno::Sequence<css::beans::PropertyValue> aFilterOptions(2);
         aFilterOptions[0] = css::beans::PropertyValue( OUString("FilterOptions"),
                                                        0,
                                                        uno::makeAny(OUString::createFromAscii(pOptions)),
                                                        beans::PropertyState_DIRECT_VALUE);
+
+        uno::Reference<task::XInteractionHandler2> xInteraction(new LOKInteractionHandler(::comphelper::getProcessComponentContext()));
+        aFilterOptions[1].Name = "InteractionHandler";
+        aFilterOptions[1].Value <<= xInteraction;
+
+        /* TODO
+        sal_Int16 nMacroExecMode = document::MacroExecMode::USE_CONFIG;
+        aFilterOptions[2].Name = "MacroExecutionMode";
+        aFilterOptions[2].Value <<= nMacroExecMode;
+
+        sal_Int16 nUpdateDoc = document::UpdateDocMode::ACCORDING_TO_CONFIG;
+        aFilterOptions[3].Name = "UpdateDocMode";
+        aFilterOptions[3].Value <<= nUpdateDoc;
+        */
+
         uno::Reference<lang::XComponent> xComponent;
         xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, OUString("_blank"), 0,
