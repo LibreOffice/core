@@ -256,6 +256,8 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
      * to the cloud if necessary.
      */
     private void saveDocument() {
+        final long lastModified = mInputFile.lastModified();
+        final Activity activity = LibreOfficeMainActivity.this;
         Toast.makeText(this, "Saving the document...", Toast.LENGTH_SHORT).show();
         // local save
         LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
@@ -271,7 +273,6 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
                     mStorageFile.saveDocument(mInputFile);
                 }
                 catch (final RuntimeException e) {
-                    final Activity activity = LibreOfficeMainActivity.this;
                     activity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -283,16 +284,41 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
                 }
                 return null;
             }
+
+            @Override
+            protected void onPostExecute(Void param) {
+                Toast.makeText(activity, "Save complete", Toast.LENGTH_SHORT)
+                        .show();
+            }
         };
-        // Delay the call to document provider save operation to ensure the local
-        // file has been saved.
-        // FIXME: horrible hack, ideally the save operation should have a callback
-        new Handler().postDelayed(new Runnable() {
+        // Delay the call to document provider save operation and check the
+        // modification time periodically to ensure the local file has been saved.
+        // TODO: ideally the save operation should have a callback
+        Runnable runTask = new Runnable() {
+            private int timesRun = 0;
+
             @Override
             public void run() {
-                task.execute();
+                if (lastModified < mInputFile.lastModified()) {
+                    // we are sure local save is complete, push changes to cloud
+                    task.execute();
+                }
+                else {
+                    timesRun++;
+                    if(timesRun < 4) {
+                        new Handler().postDelayed(this, 5000);
+                    }
+                    else {
+                        // 20 seconds later, the local file has not changed,
+                        // maybe there were no changes at all
+                        Toast.makeText(activity,
+                                "Save incomplete. Were there any changes?",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
             }
-        }, 5000);
+        };
+        new Handler().postDelayed(runTask, 5000);
     }
 
     @Override
