@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_a1080493",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-11T12:42:49Z",
+      "side": 1,
+      "message": "there is a typo in the file name: it\u0027s not a table, somebody was just using \"metadata\" as a verb, for inscrutable reasons.",
+      "revId": "b38b806d0c3e48437336333704052aaccbd27696",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
