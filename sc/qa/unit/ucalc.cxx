@@ -5137,6 +5137,48 @@ void Test::testNoteLifeCycle()
     CPPUNIT_ASSERT_MESSAGE("Note on the clipboard should share the same caption object from the original.",
                            pClipNote->GetCaption() == pCaption);
 
+
+    // Move B2 to B3 with note, which creates an ScUndoDragDrop, and Undo.
+
+    ScAddress aOrigPos(aPos);
+    ScAddress aMovePos(1,2,0);
+    ScPostIt* pOrigNote = m_pDoc->GetNote(aOrigPos);
+    const SdrCaptionObj* pOrigCaption = pOrigNote->GetOrCreateCaption(aOrigPos);
+    bool bCut = true;       // like Drag&Drop
+    bool bRecord = true;    // record Undo
+    bool bPaint = false;    // don't care about
+    bool bApi = true;       // API to prevent dialogs
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    bool bMoveDone = rDocFunc.MoveBlock(ScRange(aOrigPos, aOrigPos), aMovePos, bCut, bRecord, bPaint, bApi);
+    CPPUNIT_ASSERT_MESSAGE("Cells not moved", bMoveDone);
+
+    // Verify the note move.
+    ScPostIt* pGoneNote = m_pDoc->GetNote(aOrigPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to move the note from source.", !pGoneNote);
+    ScPostIt* pMoveNote = m_pDoc->GetNote(aMovePos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to move the note to destination.", pMoveNote);
+
+    // The caption object should not be identical, it was newly created upon
+    // Drop from clipboard.
+    // pOrigCaption is a dangling pointer.
+    const SdrCaptionObj* pMoveCaption = pMoveNote->GetOrCreateCaption(aMovePos);
+    CPPUNIT_ASSERT_MESSAGE("Captions identical after move.", pOrigCaption != pMoveCaption);
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();   // this should not crash ... tdf#92995
+
+    // Verify the note move Undo.
+    pMoveNote = m_pDoc->GetNote(aMovePos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to undo the note move from destination.", !pMoveNote);
+    pOrigNote = m_pDoc->GetNote(aOrigPos);
+    CPPUNIT_ASSERT_MESSAGE("Failed to undo the note move to source.", pOrigNote);
+
+    // The caption object still should not be identical.
+    // pMoveCaption is a dangling pointer.
+    pOrigCaption = pOrigNote->GetOrCreateCaption(aOrigPos);
+    CPPUNIT_ASSERT_MESSAGE("Captions identical after move undo.", pOrigCaption != pMoveCaption);
+
     m_pDoc->DeleteTab(0);
 }
 
