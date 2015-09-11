@@ -259,7 +259,7 @@ public:
     void addListener( const Link<>& rListener );
     void removeListener( const Link<>& rListener );
 private:
-    std::list<Link<>> m_aListeners;
+    std::vector<Link<>> m_aListeners;
 };
 
 class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier

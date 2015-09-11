@@ -101,7 +101,7 @@ public:
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 };
 
-typedef std::list<Link<VclWindowEvent&,bool> > SVAppKeyListeners;
+typedef std::vector<Link<VclWindowEvent&,bool> > SVAppKeyListeners;
 
 struct ImplSVAppData
 {

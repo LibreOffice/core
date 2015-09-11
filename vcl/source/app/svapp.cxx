@@ -700,7 +700,10 @@ void Application::RemoveKeyListener( const Link<VclWindowEvent&,bool>& rKeyListe
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpKeyListeners )
-        pSVData->maAppData.mpKeyListeners->remove( rKeyListener );
+    {
+        auto pVec = pSVData->maAppData.mpKeyListeners;
+        pVec->erase( std::remove(pVec->begin(), pVec->end(), rKeyListener ), pVec->end() );
+    }
 }
 
 bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
@@ -718,7 +721,7 @@ bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKey
 
     bool bProcessed = false;
     // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link<VclWindowEvent&,bool>> aCopy( *pSVData->maAppData.mpKeyListeners );
+    std::vector<Link<VclWindowEvent&,bool>> aCopy( *pSVData->maAppData.mpKeyListeners );
     for ( Link<VclWindowEvent&,bool>& rLink : aCopy )
     {
         if( rLink.Call( aEvent ) )

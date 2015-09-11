@@ -48,9 +48,9 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
         return;
 
     // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link<>> aCopy( m_aListeners );
-    std::list<Link<>>::iterator aIter( aCopy.begin() );
-    std::list<Link<>>::const_iterator aEnd( aCopy.end() );
+    std::vector<Link<>> aCopy( m_aListeners );
+    std::vector<Link<>>::iterator aIter( aCopy.begin() );
+    std::vector<Link<>>::const_iterator aEnd( aCopy.end() );
     if( pEvent->IsA( VclWindowEvent::StaticType() ) )
     {
         VclWindowEvent* pWinEvent = static_cast<VclWindowEvent*>(pEvent);
@@ -83,7 +83,7 @@ void VclEventListeners::addListener( const Link<>& rListener )
 
 void VclEventListeners::removeListener( const Link<>& rListener )
 {
-    m_aListeners.remove( rListener );
+    m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), rListener ), m_aListeners.end() );
 }
 
 VclEventListeners2::VclEventListeners2()
