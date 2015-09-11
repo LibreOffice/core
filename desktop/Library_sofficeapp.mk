@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     cppu \
     cppuhelper \
     deploymentmisc \
+    editeng \
     i18nlangtag \
     sal \
     salhelper \
