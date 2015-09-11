@@ -16,6 +16,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -705,6 +706,39 @@ DECLARE_ODFEXPORT_TEST(testFdo86963, "fdo86963.odt")
 DECLARE_ODFEXPORT_TEST(testGerrit13858, "gerrit13858.odt")
 {
     // Just make sure the output is valid.
+}
+DECLARE_ODFEXPORT_TEST(testOdtBorderTypes, "border_types.odt")
+{
+    static const sal_Int32 lineStyles[] = { 0, 1, 2, 14, 16, 17, 3, 15 };
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+    // list of paragraphs
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    do
+    {
+        uno::Reference<lang::XServiceInfo> xServiceInfo;
+        if (xParaEnum->nextElement() >>= xServiceInfo)
+        {
+            if (xServiceInfo->supportsService("com.sun.star.text.TextTable"))
+            {
+                uno::Reference<table::XCellRange> const xCellRange(xServiceInfo, uno::UNO_QUERY_THROW);
+
+                for (sal_Int32 row = 0; row < 15; row += 2)
+                {
+                    uno::Reference<table::XCell> xCell = xCellRange->getCellByPosition(1, row);
+                    uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
+
+                    uno::Any aTopBorder = xPropSet->getPropertyValue("TopBorder");
+                    table::BorderLine2 aTopBorderLine;
+                    if (aTopBorder >>= aTopBorderLine)
+                    {
+                        sal_Int32 lineStyle = aTopBorderLine.LineStyle;
+                        CPPUNIT_ASSERT_EQUAL(lineStyles[row / 2], lineStyle);
+                    }
+                }   //end of the 'for' loop
+            }
+        }
+    } while (xParaEnum->hasMoreElements());
 }
 
 #endif
