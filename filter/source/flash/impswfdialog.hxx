@@ -52,7 +52,7 @@ private:
 
     FilterConfigItem    maConfigItem;
 
-    DECL_LINK( OnToggleCheckbox, CheckBox* );
+    DECL_LINK_TYPED( OnToggleCheckbox, CheckBox&, void );
 
 public:
     ImpSWFDialog( vcl::Window* pParent,

@@ -2356,8 +2356,8 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
         m_pPBEntries->Disable();
     }
 
-    CheckHdl(m_pCBActiv);
-    CheckHdl(m_pCBCollect);
+    CheckHdl(*m_pCBActiv);
+    CheckHdl(*m_pCBCollect);
 }
 
 void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
@@ -2379,19 +2379,18 @@ IMPL_LINK_NOARG_TYPED(OfaAutoCompleteTabPage, DeleteHdl, Button*, void)
     }
 }
 
-IMPL_LINK( OfaAutoCompleteTabPage, CheckHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( OfaAutoCompleteTabPage, CheckHdl, CheckBox&, rBox, void )
 {
-    bool bEnable = pBox->IsChecked();
-    if (pBox == m_pCBActiv)
+    bool bEnable = rBox.IsChecked();
+    if (&rBox == m_pCBActiv)
     {
         m_pCBAppendSpace->Enable( bEnable );
         m_pCBAppendSpace->Enable( bEnable );
         m_pCBAsTip->Enable( bEnable );
         m_pDCBExpandKey->Enable( bEnable );
     }
-    else if (m_pCBCollect == pBox)
+    else if (m_pCBCollect == &rBox)
         m_pCBRemoveList->Enable( bEnable );
-    return 0;
 }
 
 void OfaAutoCompleteTabPage::CopyToClipboard() const
@@ -2601,7 +2600,7 @@ IMPL_LINK_NOARG_TYPED(OfaSmartTagOptionsTabPage, ClickHdl, Button*, void)
 
 /** Handler for the check box
 */
-IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl)
+IMPL_LINK_NOARG_TYPED(OfaSmartTagOptionsTabPage, CheckHdl, CheckBox&, void)
 {
     const bool bEnable = m_pMainCB->IsChecked();
     m_pSmartTagTypesLB->Enable( bEnable );
@@ -2614,8 +2613,6 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl)
     // We do this by calling SelectHdl:
     if ( bEnable )
         SelectHdl(m_pSmartTagTypesLB);
-
-    return 0;
 }
 
 /** Handler for the list box
@@ -2696,7 +2693,7 @@ void OfaSmartTagOptionsTabPage::Reset( const SfxItemSet*  )
     FillListBox( *pSmartTagMgr );
     m_pSmartTagTypesLB->SelectEntryPos( 0 );
     m_pMainCB->Check( pSmartTagMgr->IsLabelTextWithSmartTags() );
-    CheckHdl(m_pMainCB);
+    CheckHdl(*m_pMainCB);
 }
 
 void OfaSmartTagOptionsTabPage::ActivatePage( const SfxItemSet& )

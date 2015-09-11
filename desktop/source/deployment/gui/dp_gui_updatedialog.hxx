@@ -160,7 +160,7 @@ private:
     bool showDescription( const OUString& rDescription);
 
     DECL_LINK_TYPED(selectionHandler, SvTreeListBox*, void);
-    DECL_LINK(allHandler, void *);
+    DECL_LINK_TYPED(allHandler, CheckBox&, void);
     DECL_LINK_TYPED(okHandler, Button*, void);
     DECL_LINK_TYPED(closeHandler, Button*, void);
     DECL_LINK(hyperlink_clicked, FixedHyperlink *);

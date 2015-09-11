@@ -56,7 +56,7 @@ namespace dbaui
 
         DECL_LINK_TYPED( OKClickHdl, Button*, void );
         DECL_LINK( LBChangeHdl, ListBox* );
-        DECL_LINK( NaturalToggleHdl, CheckBox* );
+        DECL_LINK_TYPED( NaturalToggleHdl, CheckBox&, void );
 
         /** setJoinType enables and set the new join type
             @param  _eNewJoinType   the new jointype

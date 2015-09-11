@@ -282,9 +282,9 @@ IMPL_LINK_NOARG_TYPED(SdVectorizeDlg, ClickOKHdl, Button*, void)
     EndDialog( RET_OK );
 }
 
-IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox*, pCb )
+IMPL_LINK_TYPED( SdVectorizeDlg, ToggleHdl, CheckBox&, rCb, void )
 {
-    if( pCb->IsChecked() )
+    if( rCb.IsChecked() )
     {
         m_pFtFillHoles->Enable();
         m_pMtFillHoles->Enable();
@@ -296,8 +296,6 @@ IMPL_LINK( SdVectorizeDlg, ToggleHdl, CheckBox*, pCb )
     }
 
     ModifyHdl( NULL );
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG(SdVectorizeDlg, ModifyHdl)
@@ -334,7 +332,7 @@ void SdVectorizeDlg::LoadSettings()
     m_pMtFillHoles->SetValue( nFillHoles );
     m_pCbFillHoles->Check( bFillHoles );
 
-    ToggleHdl(m_pCbFillHoles);
+    ToggleHdl(*m_pCbFillHoles);
 }
 
 void SdVectorizeDlg::SaveSettings() const

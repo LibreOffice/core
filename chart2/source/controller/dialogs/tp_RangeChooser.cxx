@@ -119,9 +119,9 @@ RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
     m_pED_Range->SetUpdateDataHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ));
     m_pED_Range->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlEditedHdl ));
     m_pRB_Rows->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedRadioHdl ) );
-    m_pCB_FirstRowAsLabel->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
-    m_pCB_FirstColumnAsLabel->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
-    m_pCB_TimeBased->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
+    m_pCB_FirstRowAsLabel->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedCheckBoxHdl ) );
+    m_pCB_FirstColumnAsLabel->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedCheckBoxHdl ) );
+    m_pCB_TimeBased->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedCheckBoxHdl ) );
     m_pEd_TimeStart->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
     m_pEd_TimeEnd->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
 
@@ -359,6 +359,11 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ControlEditedHdl)
 }
 
 IMPL_LINK_NOARG_TYPED(RangeChooserTabPage, ControlChangedRadioHdl, RadioButton&, void)
+{
+    ControlChangedHdl(NULL);
+}
+
+IMPL_LINK_NOARG_TYPED(RangeChooserTabPage, ControlChangedCheckBoxHdl, CheckBox&, void)
 {
     ControlChangedHdl(NULL);
 }

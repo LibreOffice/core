@@ -711,14 +711,12 @@ void OfaViewTabPage::dispose()
 }
 
 #if defined( UNX )
-IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled )
+IMPL_LINK_NOARG_TYPED( OfaViewTabPage, OnAntialiasingToggled, CheckBox&, void )
 {
     bool bAAEnabled = m_pFontAntiAliasing->IsChecked();
 
     m_pAAPointLimitLabel->Enable( bAAEnabled );
     m_pAAPointLimit->Enable( bAAEnabled );
-
-    return 0L;
 }
 #endif
 
@@ -972,7 +970,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_pFontShowCB->SaveValue();
 
 #if defined( UNX )
-    LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( NULL );
+    LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( *m_pFontAntiAliasing );
 #endif
 }
 

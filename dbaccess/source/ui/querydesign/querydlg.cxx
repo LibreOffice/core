@@ -219,7 +219,7 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     if ( eJoinType != CROSS_JOIN )
     {
         m_pTableControl->NotifyCellChange();
-        NaturalToggleHdl(m_pCBNatural);
+        NaturalToggleHdl(*m_pCBNatural);
     }
 
     m_pTableControl->Invalidate();
@@ -248,7 +248,7 @@ IMPL_LINK_NOARG_TYPED( DlgQryJoin, OKClickHdl, Button*, void )
     EndDialog(RET_OK);
 }
 
-IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
+IMPL_LINK_NOARG_TYPED( DlgQryJoin, NaturalToggleHdl, CheckBox&, void )
 {
     bool bChecked = m_pCBNatural->IsChecked();
     static_cast<OQueryTableConnectionData*>(m_pConnData.get())->setNatural(bChecked);
@@ -275,8 +275,6 @@ IMPL_LINK( DlgQryJoin, NaturalToggleHdl, CheckBox*, /*pButton*/ )
         m_pTableControl->NotifyCellChange();
         m_pTableControl->Invalidate();
     }
-
-    return 1;
 }
 
 TTableConnectionData::value_type DlgQryJoin::getConnectionData() const
@@ -293,7 +291,7 @@ void DlgQryJoin::notifyConnectionChange( )
 {
     setJoinType( static_cast<OQueryTableConnectionData*>(m_pConnData.get())->GetJoinType() );
     m_pCBNatural->Check(static_cast<OQueryTableConnectionData*>(m_pConnData.get())->isNatural());
-    NaturalToggleHdl(m_pCBNatural);
+    NaturalToggleHdl(*m_pCBNatural);
 }
 
 void DlgQryJoin::setJoinType(EJoinType _eNewJoinType)

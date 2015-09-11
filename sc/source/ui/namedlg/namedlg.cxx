@@ -149,10 +149,10 @@ void ScNameDlg::Init()
     m_pEdName->SetModifyHdl ( LINK( this, ScNameDlg, EdModifyHdl ) );
     m_pLbScope->SetSelectHdl( LINK(this, ScNameDlg, ScopeChangedHdl) );
     m_pBtnDelete->SetClickHdl ( LINK( this, ScNameDlg, RemoveBtnHdl ) );
-    m_pBtnPrintArea->SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
-    m_pBtnCriteria->SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
-    m_pBtnRowHeader->SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
-    m_pBtnColHeader->SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
+    m_pBtnPrintArea->SetToggleHdl( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
+    m_pBtnCriteria->SetToggleHdl( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
+    m_pBtnRowHeader->SetToggleHdl( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
+    m_pBtnColHeader->SetToggleHdl( LINK(this, ScNameDlg, EdModifyCheckBoxHdl ) );
 
     // Initialize scope list.
     m_pLbScope->InsertEntry(maGlobalNameStr);
@@ -253,10 +253,10 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
     // handlers, triggering handlers while already processing a handler can
     // ( and does in this case ) corrupt the internal data
 
-    m_pBtnCriteria->SetToggleHdl( Link<>() );
-    m_pBtnPrintArea->SetToggleHdl( Link<>() );
-    m_pBtnColHeader->SetToggleHdl( Link<>() );
-    m_pBtnRowHeader->SetToggleHdl( Link<>() );
+    m_pBtnCriteria->SetToggleHdl( Link<CheckBox&,void>() );
+    m_pBtnPrintArea->SetToggleHdl( Link<CheckBox&,void>() );
+    m_pBtnColHeader->SetToggleHdl( Link<CheckBox&,void>() );
+    m_pBtnRowHeader->SetToggleHdl( Link<CheckBox&,void>() );
 
     m_pBtnCriteria->Check( pData->HasType( RT_CRITERIA ) );
     m_pBtnPrintArea->Check( pData->HasType( RT_PRINTAREA ) );
@@ -264,7 +264,7 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
     m_pBtnRowHeader->Check( pData->HasType( RT_ROWHEADER ) );
 
     // Restore handlers so user input is processed again
-    Link<> aToggleHandler = LINK( this, ScNameDlg, EdModifyHdl );
+    Link<CheckBox&,void> aToggleHandler = LINK( this, ScNameDlg, EdModifyCheckBoxHdl );
     m_pBtnCriteria->SetToggleHdl( aToggleHandler );
     m_pBtnPrintArea->SetToggleHdl( aToggleHandler );
     m_pBtnColHeader->SetToggleHdl( aToggleHandler );
@@ -501,6 +501,11 @@ IMPL_LINK_NOARG_TYPED(ScNameDlg, AddBtnHdl, Button*, void)
 IMPL_LINK_NOARG_TYPED(ScNameDlg, RemoveBtnHdl, Button*, void)
 {
     RemovePushed();
+}
+
+IMPL_LINK_NOARG_TYPED(ScNameDlg, EdModifyCheckBoxHdl, CheckBox&, void)
+{
+    NameModified();
 }
 
 IMPL_LINK_NOARG(ScNameDlg, EdModifyHdl)

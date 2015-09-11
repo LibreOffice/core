@@ -80,7 +80,7 @@ private:
     DECL_LINK( Parameter1ValueModified, void* );
     DECL_LINK( Parameter2ValueModified, void* );
     DECL_LINK( DistributionChanged, void* );
-    DECL_LINK( CheckChanged, void* );
+    DECL_LINK_TYPED( CheckChanged, CheckBox&, void );
 
 };
 

@@ -1551,10 +1551,9 @@ IMPL_LINK_TYPED( PrintDialog, ToggleRadioHdl, RadioButton&, rButton, void )
     ClickHdl(static_cast<Button*>(&rButton));
 }
 
-IMPL_LINK( PrintDialog, ToggleHdl, void*, pButton )
+IMPL_LINK_TYPED( PrintDialog, ToggleHdl, CheckBox&, rButton, void )
 {
-    ClickHdl(static_cast<Button*>(pButton));
-    return 0;
+    ClickHdl(&rButton);
 }
 
 IMPL_LINK_TYPED( PrintDialog, ClickHdl, Button*, pButton, void )
@@ -1761,14 +1760,14 @@ void PrintDialog::makeEnabled( vcl::Window* i_pWindow )
     }
 }
 
-IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox*, i_pBox )
+IMPL_LINK_TYPED( PrintDialog, UIOption_CheckHdl, CheckBox&, i_rBox, void )
 {
-    PropertyValue* pVal = getValueForWindow( i_pBox );
+    PropertyValue* pVal = getValueForWindow( &i_rBox );
     if( pVal )
     {
-        makeEnabled( i_pBox );
+        makeEnabled( &i_rBox );
 
-        bool bVal = i_pBox->IsChecked();
+        bool bVal = i_rBox.IsChecked();
         pVal->Value <<= bVal;
 
         checkOptionalControlDependencies();
@@ -1776,7 +1775,6 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox*, i_pBox )
         // update preview and page settings
         preparePreview();
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( PrintDialog, UIOption_RadioHdl, RadioButton&, i_rBtn, void )

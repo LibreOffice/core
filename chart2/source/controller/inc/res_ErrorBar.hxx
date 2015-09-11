@@ -124,7 +124,7 @@ private:
 
     DECL_LINK_TYPED( CategoryChosen, Button*, void );
     DECL_LINK( CategoryChosen2, void* );
-    DECL_LINK( SynchronizePosAndNeg, void * );
+    DECL_LINK_TYPED( SynchronizePosAndNeg, CheckBox&, void );
     DECL_LINK( PosValueChanged, void * );
     DECL_LINK_TYPED( IndicatorChanged, Button *, void );
     DECL_LINK_TYPED( ChooseRange, Button *, void );

@@ -1215,6 +1215,10 @@ IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, TriStateHdl, Button*, void)
     mePrevToggleAllState = maChkToggleAll->GetState();
 }
 
+IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, EdModifyCheckBoxHdl, CheckBox&, void)
+{
+    EdModifyHdl(nullptr);
+}
 IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl)
 {
     OUString aSearchText = maEdSearch->GetText();

@@ -506,7 +506,7 @@ private:
     bool m_bResizeTopLevel;
     VclPtr<DisclosureButton> m_pDisclosureButton;
     Link<> maExpandedHdl;
-    DECL_DLLPRIVATE_LINK(ClickHdl, DisclosureButton* pBtn);
+    DECL_DLLPRIVATE_LINK_TYPED(ClickHdl, CheckBox&, void);
 };
 
 class VCL_DLLPUBLIC VclScrolledWindow : public VclBin

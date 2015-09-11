@@ -79,7 +79,7 @@ private:
     // Handler:
     DECL_LINK( EdAreaModifyHdl,     Edit* );
     DECL_LINK( LbAreaSelHdl,        ListBox* );
-    DECL_LINK( BtnCopyResultHdl,    CheckBox* );
+    DECL_LINK_TYPED( BtnCopyResultHdl,    CheckBox&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FOPTMGR_HXX

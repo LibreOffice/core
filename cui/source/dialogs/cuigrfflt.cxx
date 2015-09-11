@@ -203,9 +203,14 @@ GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& r
     mpMtrHeight->SetModifyHdl( GetModifyHdl() );
 
     mpCbxEdges->Check( bEnhanceEdges );
-    mpCbxEdges->SetToggleHdl( GetModifyHdl() );
+    mpCbxEdges->SetToggleHdl( LINK(this, GraphicFilterMosaic, CheckBoxModifyHdl) );
 
     mpMtrWidth->GrabFocus();
+}
+
+IMPL_LINK_TYPED(GraphicFilterMosaic, CheckBoxModifyHdl, CheckBox&, rCheckBox, void)
+{
+    GetModifyHdl().Call(&rCheckBox);
 }
 
 GraphicFilterMosaic::~GraphicFilterMosaic()
@@ -327,7 +332,12 @@ GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphi
     mpMtrThreshold->SetModifyHdl( GetModifyHdl() );
 
     mpCbxInvert->Check( bInvert );
-    mpCbxInvert->SetToggleHdl( GetModifyHdl() );
+    mpCbxInvert->SetToggleHdl( LINK(this, GraphicFilterSolarize, CheckBoxModifyHdl) );
+}
+
+IMPL_LINK_TYPED(GraphicFilterSolarize, CheckBoxModifyHdl, CheckBox&, rCheckBox, void)
+{
+    GetModifyHdl().Call(&rCheckBox);
 }
 
 GraphicFilterSolarize::~GraphicFilterSolarize()

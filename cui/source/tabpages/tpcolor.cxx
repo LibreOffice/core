@@ -89,10 +89,9 @@ bool SvxColorTabPage::GetEmbed()
     return pList.is() && pList->IsEmbedInDocument();
 }
 
-IMPL_LINK_NOARG(SvxColorTabPage, EmbedToggleHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxColorTabPage, EmbedToggleHdl_Impl, CheckBox&, void)
 {
     SetEmbed( m_pBoxEmbed->IsChecked() );
-    return 0;
 }
 
 void SvxColorTabPage::UpdateTableName()

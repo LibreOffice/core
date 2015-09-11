@@ -52,9 +52,9 @@ TitlesAndObjectsTabPage::TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
     m_xTitleResources->SetUpdateDataHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
     m_xLegendPositionResources->SetChangeHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
 
-    m_pCB_Grid_X->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
-    m_pCB_Grid_Y->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
-    m_pCB_Grid_Z->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
+    m_pCB_Grid_X->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeCheckBoxHdl ));
+    m_pCB_Grid_Y->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeCheckBoxHdl ));
+    m_pCB_Grid_Z->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeCheckBoxHdl ));
 }
 
 TitlesAndObjectsTabPage::~TitlesAndObjectsTabPage()
@@ -145,6 +145,11 @@ void TitlesAndObjectsTabPage::commitToModel()
     }
 }
 
+
+IMPL_LINK_NOARG_TYPED(TitlesAndObjectsTabPage, ChangeCheckBoxHdl, CheckBox&, void)
+{
+    ChangeHdl(NULL);
+}
 IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeHdl)
 {
     if( m_bCommitToModel )

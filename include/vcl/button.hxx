@@ -409,7 +409,7 @@ private:
     TriState        meState;
     TriState        meSaveValue;
     bool            mbTriState;
-    Link<>          maToggleHdl;
+    Link<CheckBox&,void> maToggleHdl;
     // when mbLegacyNoTextAlign is set then the old behaviour where
     // the WB_LEFT, WB_RIGHT & WB_CENTER affect the image placement
     // occurs, otherwise the image ( checkbox box ) is placed
@@ -482,7 +482,7 @@ public:
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    void            SetToggleHdl( const Link<>& rLink ) { maToggleHdl = rLink; }
+    void            SetToggleHdl( const Link<CheckBox&,void>& rLink ) { maToggleHdl = rLink; }
     void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;

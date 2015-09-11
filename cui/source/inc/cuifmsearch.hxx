@@ -167,7 +167,7 @@ private:
     DECL_LINK( OnFieldSelected, ListBox* );
 
     DECL_LINK( OnFocusGrabbed, ComboBox* );
-    DECL_LINK( OnCheckBoxToggled, CheckBox* );
+    DECL_LINK_TYPED( OnCheckBoxToggled, CheckBox&, void );
 
     DECL_LINK( OnContextSelection, ListBox* );
 

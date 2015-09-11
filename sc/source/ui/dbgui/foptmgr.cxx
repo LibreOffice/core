@@ -253,11 +253,11 @@ IMPL_LINK( ScFilterOptionsMgr, EdAreaModifyHdl, Edit*, pEd )
     return 0;
 }
 
-IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
+IMPL_LINK_TYPED( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox&, rBox, void )
 {
-    if ( pBox == pBtnCopyResult )
+    if ( &rBox == pBtnCopyResult )
     {
-        if ( pBox->IsChecked() )
+        if ( rBox.IsChecked() )
         {
             pBtnDestPers->Enable();
             pLbCopyArea->Enable();
@@ -273,8 +273,6 @@ IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
             pRbCopyArea->Disable();
         }
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

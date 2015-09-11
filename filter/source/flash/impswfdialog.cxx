@@ -96,16 +96,14 @@ Sequence< PropertyValue > ImpSWFDialog::GetFilterData()
 }
 
 // AS: This is called whenever the user toggles one of the checkboxes
-IMPL_LINK( ImpSWFDialog, OnToggleCheckbox, CheckBox*, pBox )
+IMPL_LINK_TYPED( ImpSWFDialog, OnToggleCheckbox, CheckBox&, rBox, void )
 {
-    if (pBox == mpCheckExportAll)
+    if (&rBox == mpCheckExportAll)
     {
         mpCheckExportBackgrounds->Enable(!mpCheckExportBackgrounds->IsEnabled());
         mpCheckExportBackgroundObjects->Enable(!mpCheckExportBackgroundObjects->IsEnabled());
         mpCheckExportSlideContents->Enable(!mpCheckExportSlideContents->IsEnabled());
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -317,22 +317,21 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectShading)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneAppearance_TabPage, SelectShading, CheckBox&, void)
 {
     if( !m_bUpdateOtherControls )
-        return 0;
+        return;
 
     m_pCB_Shading->EnableTriState( false );
     applyShadeModeToModel();
     updateScheme();
-    return 0;
 }
-IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, CheckBox*, pCheckBox )
+IMPL_LINK_TYPED( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, CheckBox&, rCheckBox, void )
 {
     if( !m_bUpdateOtherControls )
-        return 0;
+        return;
 
-    if( pCheckBox == m_pCB_ObjectLines )
+    if( &rCheckBox == m_pCB_ObjectLines )
     {
         m_pCB_ObjectLines->EnableTriState( false );
         m_bUpdateOtherControls = false;
@@ -345,7 +344,6 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, Check
         m_pCB_RoundedEdge->EnableTriState( false );
     applyRoundedEdgeAndObjectLinesToModel();
     updateScheme();
-    return 0;
 }
 
 } //namespace chart

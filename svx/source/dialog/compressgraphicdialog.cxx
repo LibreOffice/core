@@ -328,15 +328,13 @@ IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleCompressionRB, RadioButton&
     m_pQualitySlider->Enable(!choice);
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, ToggleReduceResolutionRB )
+IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, ToggleReduceResolutionRB, CheckBox&, void )
 {
     bool choice = m_pReduceResolutionCB->IsChecked();
     m_pMFNewWidth->Enable(choice);
     m_pMFNewHeight->Enable(choice);
     m_pResolutionLB->Enable(choice);
     m_pInterpolationCombo->Enable(choice);
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED( CompressGraphicsDialog, CalculateClickHdl, Button*, void )

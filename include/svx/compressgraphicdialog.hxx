@@ -67,7 +67,7 @@ private:
     DECL_LINK( NewHeightModifiedHdl, void* );
     DECL_LINK( ResolutionModifiedHdl, void* );
     DECL_LINK_TYPED( ToggleCompressionRB, RadioButton&, void );
-    DECL_LINK( ToggleReduceResolutionRB, void* );
+    DECL_LINK_TYPED( ToggleReduceResolutionRB, CheckBox&, void );
 
     DECL_LINK_TYPED( CalculateClickHdl, Button*, void );
 

@@ -185,10 +185,10 @@ bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
     return bValid;
 }
 
-IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, CheckBox*, pCheckBox )
+IMPL_LINK_TYPED( DavDetailsContainer, ToggledDavsHdl, CheckBox&, rCheckBox, void )
 {
     // Change default port if needed
-    bool bCheckedDavs = pCheckBox->IsChecked();
+    bool bCheckedDavs = rCheckBox.IsChecked();
     if ( m_pEDPort->GetValue() == 80 && bCheckedDavs )
         m_pEDPort->SetValue( 443 );
     else if ( m_pEDPort->GetValue() == 443 && !bCheckedDavs )
@@ -200,8 +200,6 @@ IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, CheckBox*, pCheckBox )
     setScheme( sScheme );
 
     notifyChange( );
-
-    return 0;
 }
 
 SmbDetailsContainer::SmbDetailsContainer( VclBuilderContainer* pBuilder ) :

@@ -45,8 +45,8 @@ public:
 
 private:
     DECL_LINK( SelectSchemeHdl, void* );
-    DECL_LINK( SelectShading, void* );
-    DECL_LINK( SelectRoundedEdgeOrObjectLines, CheckBox* );
+    DECL_LINK_TYPED( SelectShading, CheckBox&, void );
+    DECL_LINK_TYPED( SelectRoundedEdgeOrObjectLines, CheckBox&, void );
 
     void initControlsFromModel();
     void applyShadeModeToModel();

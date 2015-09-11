@@ -268,7 +268,7 @@ private:
     DECL_LINK( ModifyHatchBckgrdColorHdl_Impl, void * );
     DECL_LINK( ModifyGradientHdl_Impl, void * );
     DECL_LINK( ModifyHatchingHdl_Impl, void * );
-    DECL_LINK( ToggleHatchBckgrdColorHdl_Impl, void * );
+    DECL_LINK_TYPED( ToggleHatchBckgrdColorHdl_Impl, CheckBox&, void );
     DECL_LINK( ModifyBitmapHdl_Impl, void * );
     DECL_LINK( ModifyStepCountHdl_Impl, void* );
     DECL_LINK_TYPED( ModifyStepCountClickHdl_Impl, Button*, void );
@@ -651,7 +651,7 @@ private:
     VclPtr<PushButton>         m_pBtnSave;
     VclPtr<FixedText>          m_pTableName;
 
-    DECL_LINK( EmbedToggleHdl_Impl, void * );
+    DECL_LINK_TYPED( EmbedToggleHdl_Impl, CheckBox&, void );
     DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void  );
 

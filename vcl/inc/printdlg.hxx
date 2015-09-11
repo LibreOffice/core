@@ -242,12 +242,12 @@ namespace vcl
 
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK_TYPED( ClickHdl, Button*, void );
-        DECL_LINK( ToggleHdl, void* );
+        DECL_LINK_TYPED( ToggleHdl, CheckBox&, void );
         DECL_LINK_TYPED( ToggleRadioHdl, RadioButton&, void );
         DECL_LINK( ModifyHdl, Edit* );
         DECL_LINK( UIOptionsChanged, void* );
 
-        DECL_LINK( UIOption_CheckHdl, CheckBox* );
+        DECL_LINK_TYPED( UIOption_CheckHdl, CheckBox&, void );
         DECL_LINK_TYPED( UIOption_RadioHdl, RadioButton&, void );
         DECL_LINK( UIOption_SelectHdl, ListBox* );
         DECL_LINK( UIOption_ModifyHdl, Edit* );

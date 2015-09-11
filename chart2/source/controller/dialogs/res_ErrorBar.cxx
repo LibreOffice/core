@@ -404,11 +404,10 @@ IMPL_LINK_NOARG_TYPED( ErrorBarResources, CategoryChosen, Button*, void )
     UpdateControlStates();
 }
 
-IMPL_LINK_NOARG(ErrorBarResources, SynchronizePosAndNeg)
+IMPL_LINK_NOARG_TYPED(ErrorBarResources, SynchronizePosAndNeg, CheckBox&, void)
 {
     UpdateControlStates();
     PosValueChanged( 0 );
-    return 0;
 }
 
 IMPL_LINK_NOARG(ErrorBarResources, PosValueChanged)

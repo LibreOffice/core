@@ -387,9 +387,9 @@ IMPL_LINK_TYPED(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void
             m_pSearchEngine->SetTransliterationFlags(nFlags);
 
             m_pcbCase->Check(m_pSearchEngine->GetCaseSensitive());
-            OnCheckBoxToggled( m_pcbCase );
+            OnCheckBoxToggled( *m_pcbCase );
             m_pHalfFullFormsCJK->Check( !m_pSearchEngine->GetIgnoreWidthCJK() );
-            OnCheckBoxToggled( m_pHalfFullFormsCJK );
+            OnCheckBoxToggled( *m_pHalfFullFormsCJK );
         }
     }
 }
@@ -434,28 +434,28 @@ IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
+IMPL_LINK_TYPED(FmSearchDialog, OnCheckBoxToggled, CheckBox&, rBox, void)
 {
-    bool bChecked = pBox->IsChecked();
+    bool bChecked = rBox.IsChecked();
 
     // formatter or case -> pass on to the engine
-    if (pBox == m_pcbUseFormat)
+    if (&rBox == m_pcbUseFormat)
         m_pSearchEngine->SetFormatterUsing(bChecked);
-    else if (pBox == m_pcbCase)
+    else if (&rBox == m_pcbCase)
         m_pSearchEngine->SetCaseSensitive(bChecked);
     // direction -> pass on and reset the checkbox-text for StartOver
-    else if (pBox == m_pcbBackwards)
+    else if (&rBox == m_pcbBackwards)
     {
         m_pcbStartOver->SetText( OUString( CUI_RES( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) ) );
         m_pSearchEngine->SetDirection(!bChecked);
     }
     // similarity-search or regular expression
-    else if ((pBox == m_pcbApprox) || (pBox == m_pcbRegular) || (pBox == m_pcbWildCard))
+    else if ((&rBox == m_pcbApprox) || (&rBox == m_pcbRegular) || (&rBox == m_pcbWildCard))
     {
         CheckBox* pBoxes[] = { m_pcbWildCard, m_pcbRegular, m_pcbApprox };
         for (sal_uInt32 i=0; i< SAL_N_ELEMENTS(pBoxes); ++i)
         {
-            if (pBoxes[i] != pBox)
+            if (pBoxes[i] != &rBox)
             {
                 if (bChecked)
                     pBoxes[i]->Disable();
@@ -471,7 +471,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
             // (disabled boxes have to be passed to the engine as sal_False)
 
         // adjust the Position-Listbox (which is not allowed during Wildcard-search)
-        if (pBox == m_pcbWildCard)
+        if (&rBox == m_pcbWildCard)
         {
             if (bChecked)
             {
@@ -486,7 +486,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
         }
 
         // and the button for similarity-search
-        if (pBox == m_pcbApprox)
+        if (&rBox == m_pcbApprox)
         {
             if (bChecked)
                 m_ppbApproxSettings->Enable();
@@ -494,12 +494,12 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
                 m_ppbApproxSettings->Disable();
         }
     }
-    else if (pBox == m_pHalfFullFormsCJK)
+    else if (&rBox == m_pHalfFullFormsCJK)
     {
         // forward to the search engine
         m_pSearchEngine->SetIgnoreWidthCJK( !bChecked );
     }
-    else if (pBox == m_pSoundsLikeCJK)
+    else if (&rBox == m_pSoundsLikeCJK)
     {
         m_pSoundsLikeCJKSettings->Enable(bChecked);
 
@@ -514,8 +514,6 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
         // forward to the search engine
         m_pSearchEngine->SetTransliteration( bChecked );
     }
-
-    return 0;
 }
 
 void FmSearchDialog::InitContext(sal_Int16 nContext)
@@ -803,21 +801,21 @@ void FmSearchDialog::LoadParams()
     m_pcbUseFormat->Check(aParams.bUseFormatter);
     m_pcbCase->Check( aParams.isCaseSensitive() );
     m_pcbBackwards->Check(aParams.bBackwards);
-    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(m_pcbUseFormat);
-    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(m_pcbCase);
-    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(m_pcbBackwards);
+    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*m_pcbUseFormat);
+    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*m_pcbCase);
+    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*m_pcbBackwards);
 
     m_pHalfFullFormsCJK->Check( !aParams.isIgnoreWidthCJK( ) );  // BEWARE: this checkbox has a inverse semantics!
     m_pSoundsLikeCJK->Check( aParams.bSoundsLikeCJK );
-    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(m_pHalfFullFormsCJK);
-    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(m_pSoundsLikeCJK);
+    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*m_pHalfFullFormsCJK);
+    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*m_pSoundsLikeCJK);
 
     m_pcbWildCard->Check(false);
     m_pcbRegular->Check(false);
     m_pcbApprox->Check(false);
-    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(m_pcbWildCard);
-    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(m_pcbRegular);
-    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(m_pcbApprox);
+    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*m_pcbWildCard);
+    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*m_pcbRegular);
+    LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*m_pcbApprox);
 
     CheckBox* pToCheck = NULL;
     if (aParams.bWildcard)
@@ -831,7 +829,7 @@ void FmSearchDialog::LoadParams()
     if (pToCheck)
     {
         pToCheck->Check();
-        LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(pToCheck);
+        LINK(this, FmSearchDialog, OnCheckBoxToggled).Call(*pToCheck);
     }
 
     // set Levenshtein-parameters directly at the SearchEngine

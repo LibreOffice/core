@@ -441,7 +441,7 @@ private:
     editeng::SortedAutoCompleteStrings* m_pAutoCompleteList;
     sal_uInt16      m_nAutoCmpltListCnt;
 
-    DECL_LINK( CheckHdl, CheckBox* );
+    DECL_LINK_TYPED( CheckHdl, CheckBox&, void );
 
                         OfaAutoCompleteTabPage( vcl::Window* pParent,
                                                 const SfxItemSet& rSet );
@@ -492,7 +492,7 @@ private:
         Enables/disables all controls in the tab page (except from the
         check box.
     */
-    DECL_LINK(CheckHdl, void *);
+    DECL_LINK_TYPED(CheckHdl, CheckBox&, void);
 
     /** Handler for the push button
 

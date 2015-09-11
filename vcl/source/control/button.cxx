@@ -3591,7 +3591,7 @@ bool CheckBox::PreNotify( NotifyEvent& rNEvt )
 
 void CheckBox::Toggle()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_CHECKBOX_TOGGLE, [this] () { maToggleHdl.Call(this); } );
+    ImplCallEventListenersAndHandler( VCLEVENT_CHECKBOX_TOGGLE, [this] () { maToggleHdl.Call(*this); } );
 }
 
 void CheckBox::SetState( TriState eState )

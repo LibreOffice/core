@@ -77,7 +77,7 @@ ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFi
                               Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
 
     maCBTinyProfile->SetToggleHdl( LINK( this, ImpSVGDialog, OnToggleCheckbox ) );
-    OnToggleCheckbox( maCBTinyProfile.get() );
+    OnToggleCheckbox( *maCBTinyProfile.get() );
 
     maFI->Show();
 
@@ -123,11 +123,11 @@ Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
 
 
 
-IMPL_LINK( ImpSVGDialog, OnToggleCheckbox, CheckBox*, pBox )
+IMPL_LINK_TYPED( ImpSVGDialog, OnToggleCheckbox, CheckBox&, rBox, void )
 {
-    if( pBox == maCBTinyProfile.get() )
+    if( &rBox == maCBTinyProfile.get() )
     {
-        if( pBox->IsChecked() )
+        if( rBox.IsChecked() )
         {
             mbOldNativeDecoration = maCBUseNativeDecoration->IsChecked();
 
@@ -140,8 +140,6 @@ IMPL_LINK( ImpSVGDialog, OnToggleCheckbox, CheckBox*, pBox )
             maCBUseNativeDecoration->Check( mbOldNativeDecoration );
         }
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

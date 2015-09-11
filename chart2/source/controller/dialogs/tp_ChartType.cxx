@@ -55,7 +55,7 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK( Dim3DLookCheckHdl, void* );
+    DECL_LINK_TYPED( Dim3DLookCheckHdl, CheckBox&, void );
     DECL_LINK( SelectSchemeHdl, void* );
 
 private:
@@ -104,11 +104,10 @@ void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Unknown;
 }
 
-IMPL_LINK_NOARG(Dim3DLookResourceGroup, Dim3DLookCheckHdl)
+IMPL_LINK_NOARG_TYPED(Dim3DLookResourceGroup, Dim3DLookCheckHdl, CheckBox&, void)
 {
     if(m_pChangeListener)
         m_pChangeListener->stateChanged(this);
-    return 0;
 }
 
 IMPL_LINK_NOARG(Dim3DLookResourceGroup, SelectSchemeHdl)
@@ -129,7 +128,7 @@ public:
     void fillParameter( ChartTypeParameter& rParameter );
 
 private:
-    DECL_LINK( SortByXValuesCheckHdl, void* );
+    DECL_LINK_TYPED( SortByXValuesCheckHdl, CheckBox&, void );
 
 private:
     VclPtr<CheckBox> m_pCB_XValueSorting;
@@ -157,11 +156,10 @@ void SortByXValuesResourceGroup::fillParameter( ChartTypeParameter& rParameter )
     rParameter.bSortByXValues = m_pCB_XValueSorting->IsChecked();
 }
 
-IMPL_LINK_NOARG(SortByXValuesResourceGroup, SortByXValuesCheckHdl)
+IMPL_LINK_NOARG_TYPED(SortByXValuesResourceGroup, SortByXValuesCheckHdl, CheckBox&, void)
 {
     if(m_pChangeListener)
         m_pChangeListener->stateChanged(this);
-    return 0;
 }
 
 class StackingResourceGroup : public ChangingResource
@@ -176,7 +174,7 @@ public:
 
 private:
     DECL_LINK_TYPED( StackingChangeHdl, RadioButton&, void );
-    DECL_LINK( StackingEnableHdl, void* );
+    DECL_LINK_TYPED( StackingEnableHdl, CheckBox&, void );
 
 private:
     VclPtr<CheckBox>    m_pCB_Stacked;
@@ -261,11 +259,10 @@ IMPL_LINK_TYPED( StackingResourceGroup, StackingChangeHdl, RadioButton&, rRadio,
     if( m_pChangeListener && rRadio.IsChecked() )
         m_pChangeListener->stateChanged(this);
 }
-IMPL_LINK_NOARG(StackingResourceGroup, StackingEnableHdl)
+IMPL_LINK_NOARG_TYPED(StackingResourceGroup, StackingEnableHdl, CheckBox&, void)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
-    return 0;
 }
 
 class GL3DResourceGroup : public ChangingResource
@@ -278,7 +275,7 @@ public:
     void fillParameter( ChartTypeParameter& rParam );
 
 private:
-    DECL_LINK( SettingChangedHdl, void* );
+    DECL_LINK_TYPED( SettingChangedHdl, CheckBox&, void );
 private:
     VclPtr<CheckBox> m_pCB_RoundedEdge;
 };
@@ -304,11 +301,10 @@ void GL3DResourceGroup::fillParameter( ChartTypeParameter& rParam )
     rParam.mbRoundedEdge = m_pCB_RoundedEdge->IsChecked();
 }
 
-IMPL_LINK_NOARG( GL3DResourceGroup, SettingChangedHdl )
+IMPL_LINK_NOARG_TYPED( GL3DResourceGroup, SettingChangedHdl, CheckBox&, void )
 {
     if (m_pChangeListener)
         m_pChangeListener->stateChanged(this);
-    return 0;
 }
 
 class SplinePropertiesDialog : public ModalDialog

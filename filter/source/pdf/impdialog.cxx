@@ -632,7 +632,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     case 1: mpCbPDFA1b->Check(); // PDF/A-1a
         break;
     }
-    ToggleExportPDFAHdl( NULL );
+    ToggleExportPDFAHdl( *mpCbPDFA1b );
 
     mpCbExportFormFields->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
 
@@ -678,7 +678,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
 
     mpCbAddStream->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAddStreamHdl ) );
     // init addstream dependencies
-    ToggleAddStreamHdl(NULL);
+    ToggleAddStreamHdl(*mpCbAddStream);
 }
 
 
@@ -755,10 +755,9 @@ void ImpPDFTabGeneralPage::TogglePagesHdl()
 }
 
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, CheckBox&, void)
 {
     mpFormsFrame->Enable(mpCbExportFormFields->IsChecked());
-    return 0;
 }
 
 
@@ -768,25 +767,22 @@ IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleCompressionHdl, RadioButton&, 
 }
 
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, CheckBox&, void)
 {
     mpCoReduceImageResolution->Enable( mpCbReduceImageResolution->IsChecked() );
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleWatermarkHdl, CheckBox&, void)
 {
     mpEdWatermark->Enable( mpCbWatermark->IsChecked() );
     mpFtWatermark->Enable (mpCbWatermark->IsChecked() );
     if ( mpCbWatermark->IsChecked() )
         mpEdWatermark->GrabFocus();
-
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleAddStreamHdl, CheckBox&, void)
 {
     if( mpCbAddStream->IsVisible() )
     {
@@ -805,11 +801,10 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl)
             mpRbSelection->Enable( true );
         }
     }
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
+IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, CheckBox&, void)
 {
     //set the security page status (and its controls as well)
     ImpPDFTabSecurityPage* pSecPage = mpaParent ? mpaParent->getSecurityPage() : NULL;
@@ -851,8 +846,6 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
         ScopedVclPtrInstance< MessageDialog > aBox(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VCL_MESSAGE_WARNING);
         aBox->Execute();
     }
-
-    return 0;
 }
 
 // the option features tab page

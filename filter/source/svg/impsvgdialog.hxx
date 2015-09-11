@@ -60,7 +60,7 @@ private:
     FilterConfigItem            maConfigItem;
     bool                        mbOldNativeDecoration;
 
-    DECL_LINK( OnToggleCheckbox, CheckBox* );
+    DECL_LINK_TYPED( OnToggleCheckbox, CheckBox&, void );
 
 public:
 

@@ -88,7 +88,7 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
             xProp->getPropertyValue( "Show" ) >>= bShowLegend;
             if (m_pCbxShow)
                 m_pCbxShow->Check( bShowLegend );
-            PositionEnableHdl(0);
+            PositionEnableHdl(*m_pCbxShow);
 
             //position
             chart2::LegendPosition ePos;
@@ -165,7 +165,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
     }
 }
 
-IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl)
+IMPL_LINK_NOARG_TYPED(LegendPositionResources, PositionEnableHdl, CheckBox&, void)
 {
     bool bEnable = m_pCbxShow == nullptr || m_pCbxShow->IsChecked();
 
@@ -175,8 +175,6 @@ IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl)
     m_pRbtBottom->Enable( bEnable );
 
     m_aChangeLink.Call(NULL);
-
-    return 0;
 }
 
 void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )

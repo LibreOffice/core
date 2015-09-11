@@ -105,6 +105,7 @@ private:
     DECL_LINK_TYPED( AddBtnHdl, Button*, void );
     DECL_LINK_TYPED( RemoveBtnHdl, Button*, void );
     DECL_LINK( EdModifyHdl, void * );
+    DECL_LINK_TYPED( EdModifyCheckBoxHdl, CheckBox&, void );
     DECL_LINK( AssignGetFocusHdl, void * );
     DECL_LINK_TYPED( SelectionChangedHdl_Impl, SvTreeListBox*, void );
     DECL_LINK( ScopeChangedHdl, void* );

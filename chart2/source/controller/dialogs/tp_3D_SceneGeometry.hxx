@@ -54,8 +54,8 @@ public:
     DECL_LINK( PerspectiveChanged, void* );
     // is called immediately when a field changes
     DECL_LINK( PerspectiveEdited, void* );
-    DECL_LINK( PerspectiveToggled, void* );
-    DECL_LINK( RightAngledAxesToggled, void* );
+    DECL_LINK_TYPED( PerspectiveToggled, CheckBox&, void );
+    DECL_LINK_TYPED( RightAngledAxesToggled, CheckBox&, void );
 
 private:
     void applyAnglesToModel();

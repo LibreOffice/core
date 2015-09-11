@@ -1583,7 +1583,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 
             case drawing::FillStyle_HATCH:
                 ClickHatchingHdl_Impl();
-                ToggleHatchBckgrdColorHdl_Impl( this );
+                ToggleHatchBckgrdColorHdl_Impl( *m_pCbxHatchBckgrd );
             break;
 
             case drawing::FillStyle_BITMAP:
@@ -2020,7 +2020,7 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
 
     ModifyHatchingHdl_Impl( this );
     ModifyHatchBckgrdColorHdl_Impl( this );
-    ToggleHatchBckgrdColorHdl_Impl( this );
+    ToggleHatchBckgrdColorHdl_Impl( *m_pCbxHatchBckgrd );
 }
 
 
@@ -2078,7 +2078,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl, CheckBox&, void)
 {
     // switch on/off backgroundcolor for hatches
     m_pLbHatchBckgrdColor->Enable( m_pCbxHatchBckgrd->IsChecked() );
@@ -2097,8 +2097,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl)
             m_pLbHatchBckgrdColor->SelectEntry( aColorItem.GetColorValue() );
         }
     }
-
-    return 0L;
 }
 
 

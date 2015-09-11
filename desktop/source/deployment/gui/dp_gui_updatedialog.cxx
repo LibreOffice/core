@@ -1246,7 +1246,7 @@ IMPL_LINK_NOARG_TYPED(UpdateDialog, selectionHandler, SvTreeListBox*, void)
     showDescription( b.makeStringAndClear() );
 }
 
-IMPL_LINK_NOARG(UpdateDialog, allHandler)
+IMPL_LINK_NOARG_TYPED(UpdateDialog, allHandler, CheckBox&, void)
 {
     if (m_pAll->IsChecked())
     {
@@ -1286,7 +1286,6 @@ IMPL_LINK_NOARG(UpdateDialog, allHandler)
                 showDescription(m_noInstallable);
         }
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(UpdateDialog, okHandler, Button*, void)

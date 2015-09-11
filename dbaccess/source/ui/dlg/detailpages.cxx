@@ -275,7 +275,7 @@ namespace dbaui
         :OCommonBehaviourTabPage(pParent, "ODBC", "dbaccess/ui/odbcpage.ui", _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_OPTIONS)
     {
         get(m_pUseCatalog, "useCatalogCheckbutton");
-        m_pUseCatalog->SetToggleHdl(getControlModifiedLink());
+        m_pUseCatalog->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
     }
 
     OOdbcDetailsPage::~OOdbcDetailsPage()
@@ -324,7 +324,7 @@ namespace dbaui
         get(m_pNFPortNumber, "portnumber");
         m_pNFPortNumber->SetUseThousandSep(false);
         get(m_pUseCatalog, "usecatalog");
-        m_pUseCatalog->SetToggleHdl(getControlModifiedLink());
+        m_pUseCatalog->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
     }
 
     OUserDriverDetailsPage::~OUserDriverDetailsPage()
@@ -662,7 +662,7 @@ namespace dbaui
         get(m_pNFRowCount, "LDAPRowCountspinbutton");
 
         m_pETBaseDN->SetModifyHdl(getControlModifiedLink());
-        m_pCBUseSSL->SetToggleHdl(getControlModifiedLink());
+        m_pCBUseSSL->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
         m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
         m_pNFRowCount->SetModifyHdl(getControlModifiedLink());
 

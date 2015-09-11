@@ -115,7 +115,7 @@ private:
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
 
 #if defined( UNX )
-    DECL_LINK( OnAntialiasingToggled, void* );
+    DECL_LINK_TYPED( OnAntialiasingToggled, CheckBox&, void );
 #endif
 
 public:

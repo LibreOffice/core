@@ -1609,19 +1609,18 @@ void VclExpander::StateChanged(StateChangedType nType)
     }
 }
 
-IMPL_LINK( VclExpander, ClickHdl, DisclosureButton*, pBtn )
+IMPL_LINK_TYPED( VclExpander, ClickHdl, CheckBox&, rBtn, void )
 {
     vcl::Window *pChild = get_child();
     if (pChild)
     {
-        pChild->Show(pBtn->IsChecked());
+        pChild->Show(rBtn.IsChecked());
         queue_resize();
         Dialog* pResizeDialog = m_bResizeTopLevel ? GetParentDialog() : NULL;
         if (pResizeDialog)
             pResizeDialog->setOptimalLayoutSize();
     }
     maExpandedHdl.Call(this);
-    return 0;
 }
 
 VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)

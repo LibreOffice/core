@@ -54,6 +54,7 @@ public:
 protected:
     void commitToModel();
     DECL_LINK( ChangeHdl, void* );
+    DECL_LINK_TYPED( ChangeCheckBoxHdl, CheckBox&, void );
 
 protected:
     boost::scoped_ptr< TitleResources >            m_xTitleResources;

@@ -151,7 +151,7 @@ using namespace ::com::sun::star;
         m_pETHostServer->SetModifyHdl(getControlModifiedLink());
         m_pETBaseDN->SetModifyHdl(getControlModifiedLink());
         m_pNFPortNumber->SetModifyHdl(getControlModifiedLink());
-        m_pCBUseSSL->SetToggleHdl(getControlModifiedLink());
+        m_pCBUseSSL->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
         SetRoadmapStateValue(false);
     }
 
@@ -701,7 +701,7 @@ using namespace ::com::sun::star;
         :OConnectionTabPageSetup(pParent, "DBWizSpreadsheetPage", "dbaccess/ui/dbwizspreadsheetpage.ui", _rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
     {
         get(m_pPasswordrequired, "passwordrequired");
-        m_pPasswordrequired->SetToggleHdl(getControlModifiedLink());
+        m_pPasswordrequired->SetToggleHdl( LINK(this, OGenericAdministrationPage, ControlModifiedCheckBoxHdl) );
     }
 
     OSpreadSheetConnectionPageSetup::~OSpreadSheetConnectionPageSetup()

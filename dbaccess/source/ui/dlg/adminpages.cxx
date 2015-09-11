@@ -111,6 +111,10 @@ namespace dbaui
     {
         getControlModifiedLink().Call(pCtrl);
     }
+    IMPL_LINK_TYPED(OGenericAdministrationPage, ControlModifiedCheckBoxHdl, CheckBox&, rCtrl, void)
+    {
+        getControlModifiedLink().Call(&rCtrl);
+    }
     bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn, OUString& _sCurr)
     {
         // collect all ODBC data source names

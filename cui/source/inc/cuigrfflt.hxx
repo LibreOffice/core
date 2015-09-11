@@ -112,7 +112,7 @@ private:
     VclPtr<MetricField>    mpMtrWidth;
     VclPtr<MetricField>    mpMtrHeight;
     VclPtr<CheckBox>       mpCbxEdges;
-
+    DECL_LINK_TYPED(CheckBoxModifyHdl, CheckBox&, void);
 public:
 
     GraphicFilterMosaic(vcl::Window* pParent, const Graphic& rGraphic,
@@ -123,7 +123,7 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
     long            GetTileWidth() const { return static_cast<long>(mpMtrWidth->GetValue()); }
     long            GetTileHeight() const { return static_cast<long>(mpMtrHeight->GetValue()); }
-    bool        IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
+    bool            IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
 };
 
 class GraphicFilterSolarize : public GraphicFilterDialog
@@ -131,6 +131,7 @@ class GraphicFilterSolarize : public GraphicFilterDialog
 private:
     VclPtr<MetricField>    mpMtrThreshold;
     VclPtr<CheckBox>       mpCbxInvert;
+    DECL_LINK_TYPED(CheckBoxModifyHdl, CheckBox&, void);
 
 public:
 

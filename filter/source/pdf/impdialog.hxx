@@ -233,14 +233,14 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     DECL_LINK_TYPED( TogglePagesHdl, RadioButton&, void );
     DECL_LINK_TYPED( ToggleCompressionHdl, RadioButton&, void );
-    DECL_LINK( ToggleReduceImageResolutionHdl, void* );
-    DECL_LINK( ToggleWatermarkHdl, void* );
-    DECL_LINK( ToggleAddStreamHdl, void* );
-    DECL_LINK( ToggleExportFormFieldsHdl, void* );
+    DECL_LINK_TYPED( ToggleReduceImageResolutionHdl, CheckBox&, void );
+    DECL_LINK_TYPED( ToggleWatermarkHdl, CheckBox&, void );
+    DECL_LINK_TYPED( ToggleAddStreamHdl, CheckBox&, void );
+    DECL_LINK_TYPED( ToggleExportFormFieldsHdl, CheckBox&, void );
     void TogglePagesHdl();
 
 public:
-    DECL_LINK( ToggleExportPDFAHdl, void* );
+    DECL_LINK_TYPED( ToggleExportPDFAHdl, CheckBox&, void );
 
     ImpPDFTabGeneralPage( vcl::Window* pParent,
                           const SfxItemSet& rSet );

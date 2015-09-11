@@ -245,14 +245,13 @@ IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveChanged)
     return 0;
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveToggled)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, PerspectiveToggled, CheckBox&, void)
 {
     m_pMFPerspective->Enable( m_pCbxPerspective->IsChecked() );
     applyPerspectiveToModel();
-    return 0;
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, CheckBox&, void)
 {
     ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
 
@@ -284,8 +283,6 @@ IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled)
     }
 
     ThreeDHelper::switchRightAngledAxes( m_xSceneProperties, m_pCbxRightAngledAxes->IsChecked() );
-
-    return 0;
 }
 
 } //namespace chart

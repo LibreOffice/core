@@ -130,7 +130,7 @@ void ScRandomNumberGeneratorDialog::Init()
     mpEnableRounding->SetToggleHdl( LINK( this, ScRandomNumberGeneratorDialog, CheckChanged ));
 
     DistributionChanged(NULL);
-    CheckChanged(NULL);
+    CheckChanged(*mpEnableSeed);
 }
 
 void ScRandomNumberGeneratorDialog::GetRangeFromSelection()
@@ -417,11 +417,10 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, Parameter2ValueModified)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, CheckChanged)
+IMPL_LINK_NOARG_TYPED(ScRandomNumberGeneratorDialog, CheckChanged, CheckBox&, void)
 {
     mpSeed->Enable(mpEnableSeed->IsChecked());
     mpDecimalPlaces->Enable(mpEnableRounding->IsChecked());
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged)

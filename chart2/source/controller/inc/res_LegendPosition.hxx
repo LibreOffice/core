@@ -50,7 +50,7 @@ public:
 
     void SetChangeHdl( const Link<>& rLink );
 
-    DECL_LINK( PositionEnableHdl, void* );
+    DECL_LINK_TYPED( PositionEnableHdl, CheckBox&, void );
     DECL_LINK_TYPED( PositionChangeHdl, RadioButton&, void );
 
 private:

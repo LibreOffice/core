@@ -213,6 +213,7 @@ namespace dbaui
         virtual Link<> getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
         // calls via getControlModifiedLink()
         Link<Button*,void> getControlModifiedClickLink() { return LINK(this, OGenericAdministrationPage, OnControlModifiedClick); }
+        DECL_LINK_TYPED(ControlModifiedCheckBoxHdl, CheckBox&, void);
     private:
         DECL_LINK_TYPED(OnControlModifiedClick, Button*, void);
     };
