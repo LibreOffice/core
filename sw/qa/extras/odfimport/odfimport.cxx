@@ -9,14 +9,14 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(WNT)
-
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/table/XCell.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
@@ -55,6 +55,39 @@ DECLARE_ODFIMPORT_TEST(testHideAllSections, "fdo53210.odt")
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
 }
 
+DECLARE_ODFIMPORT_TEST(testOdtBorderTypes, "border_types.odt")
+{
+    static const sal_Int32 lineStyles[] = {0, 1, 2, 14, 16, 17, 3, 15};
+    uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(), uno::UNO_QUERY);
+    // list of paragraphs
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    do
+    {
+        uno::Reference<lang::XServiceInfo> xServiceInfo;
+        if (xParaEnum->nextElement() >>= xServiceInfo)
+        {
+            if (xServiceInfo->supportsService("com.sun.star.text.TextTable"))
+            {
+                uno::Reference<table::XCellRange> const xCellRange(xServiceInfo, uno::UNO_QUERY_THROW);
+
+                for (sal_Int32 row = 0; row < 15; row += 2)
+                {
+                    uno::Reference<table::XCell> xCell = xCellRange->getCellByPosition(1, row);
+                    uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
+
+                    uno::Any aTopBorder = xPropSet->getPropertyValue("TopBorder");
+                    table::BorderLine2 aTopBorderLine;
+                    if (aTopBorder >>= aTopBorderLine)
+                    {
+                        sal_Int32 lineStyle = aTopBorderLine.LineStyle;
+                        CPPUNIT_ASSERT_EQUAL(lineStyles[row/2], lineStyle);
+                    }
+                }   //end of the 'for' loop
+            }
+        }
+    } while (xParaEnum->hasMoreElements());
+}
 DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
 {
     AllBordersMap map;
@@ -498,7 +531,7 @@ DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
         CPPUNIT_ASSERT(!pContentNode->FindTableNode());
     }
 }
-
+#if !defined(WNT)
 DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -527,7 +560,7 @@ DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
 #endif
 }
-
+#endif //WNT
 DECLARE_ODFIMPORT_TEST(testFdo69862, "fdo69862.odt")
 {
     // The test doc is special in that it starts with a table and it also has a footnote.
@@ -630,8 +663,6 @@ DECLARE_ODFIMPORT_TEST(testBnc800714, "bnc800714.fodt")
     CPPUNIT_ASSERT(getProperty< uno::Reference<text::XTextSection> >(getParagraph(2), "TextSection").is());
     CPPUNIT_ASSERT(getProperty<bool>(getParagraph(2), "ParaKeepTogether"));
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
