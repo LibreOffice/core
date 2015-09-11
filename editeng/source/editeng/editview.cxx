@@ -117,7 +117,7 @@ LanguageType EditView::CheckLanguage(
         SvtLinguConfig().GetOptions( aLinguOpt );
         // The default document language from "Tools/Options - Language Settings - Languages: Western"
         aLangList[0] = MsLangId::resolveSystemLanguageByScriptType( aLinguOpt.nDefaultLanguage,
-                ::com::sun::star::i18n::ScriptType::LATIN);
+                css::i18n::ScriptType::LATIN);
         // The one from "Tools/Options - Language Settings - Languages: User interface"
         aLangList[1] = rSettings.GetUILanguageTag().getLanguageType();
         // The one from "Tools/Options - Language Settings - Languages: Locale setting"
@@ -503,11 +503,11 @@ sal_uInt32 EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFor
 
 void EditView::Cut()
 {
-    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
     pImpEditView->CutCopy( aClipBoard, true );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > EditView::GetTransferable()
+css::uno::Reference< css::datatransfer::XTransferable > EditView::GetTransferable()
 {
     uno::Reference< datatransfer::XTransferable > xData =
         GetEditEngine()->CreateTransferable( pImpEditView->GetEditSelection() );
@@ -516,19 +516,19 @@ void EditView::Cut()
 
 void EditView::Copy()
 {
-    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
     pImpEditView->CutCopy( aClipBoard, false );
 }
 
 void EditView::Paste()
 {
-    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
     pImpEditView->Paste( aClipBoard );
 }
 
 void EditView::PasteSpecial()
 {
-    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
     pImpEditView->Paste(aClipBoard, true );
 }
 
@@ -620,7 +620,7 @@ void EditView::InsertText( const EditTextObject& rTextObject )
     pImpEditView->pEditEngine->FormatAndUpdate( this );
 }
 
-void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, bool bUseSpecial )
+void EditView::InsertText( css::uno::Reference< css::datatransfer::XTransferable > xDataObj, const OUString& rBaseURL, bool bUseSpecial )
 {
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_INSERT );
     pImpEditView->DeleteSelected();
@@ -1145,7 +1145,7 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
 
     if( !aSel.HasRange() )
     {
-        aSel = rEditEngine.GetWord( aSel, com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        aSel = rEditEngine.GetWord( aSel, css::i18n::WordType::DICTIONARY_WORD );
     }
 
     if( aSel.HasRange() )

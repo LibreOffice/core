@@ -793,23 +793,23 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             break;
         case KEY_PAGEDOWN:  aPaM = bCtrl ? CursorEndOfDoc() : PageDown( aPaM, pEditView );
                             break;
-        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
+        case css::awt::Key::MOVE_TO_BEGIN_OF_LINE:
                             aPaM = CursorStartOfLine( aPaM );
                             bKeyModifySelection = false;
                             break;
-        case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
+        case css::awt::Key::MOVE_TO_END_OF_LINE:
                             aPaM = CursorEndOfLine( aPaM );
                             bKeyModifySelection = false;
                             break;
-        case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
+        case css::awt::Key::MOVE_WORD_BACKWARD:
                             aPaM = WordLeft( aPaM );
                             bKeyModifySelection = false;
                             break;
-        case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
+        case css::awt::Key::MOVE_WORD_FORWARD:
                             aPaM = WordRight( aPaM );
                             bKeyModifySelection = false;
                             break;
-        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
+        case css::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
                             aPaM = CursorStartOfParagraph( aPaM );
                             if( aPaM == aOldPaM )
                             {
@@ -818,7 +818,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             }
                             bKeyModifySelection = false;
                             break;
-        case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
+        case css::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
                             aPaM = CursorEndOfParagraph( aPaM );
                             if( aPaM == aOldPaM )
                             {
@@ -827,39 +827,39 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             }
                             bKeyModifySelection = false;
                             break;
-        case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
+        case css::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
                             aPaM = CursorStartOfDoc();
                             bKeyModifySelection = false;
                             break;
-        case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
+        case css::awt::Key::MOVE_TO_END_OF_DOCUMENT:
                             aPaM = CursorEndOfDoc();
                             bKeyModifySelection = false;
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
+        case css::awt::Key::SELECT_TO_BEGIN_OF_LINE:
                             aPaM = CursorStartOfLine( aPaM );
                             bKeyModifySelection = true;
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
+        case css::awt::Key::SELECT_TO_END_OF_LINE:
                             aPaM = CursorEndOfLine( aPaM );
                             bKeyModifySelection = true;
                             break;
-        case com::sun::star::awt::Key::SELECT_BACKWARD:
+        case css::awt::Key::SELECT_BACKWARD:
                             aPaM = CursorLeft( aPaM );
                             bKeyModifySelection = true;
                             break;
-        case com::sun::star::awt::Key::SELECT_FORWARD:
+        case css::awt::Key::SELECT_FORWARD:
                             aPaM = CursorRight( aPaM );
                             bKeyModifySelection = true;
                             break;
-        case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
+        case css::awt::Key::SELECT_WORD_BACKWARD:
                             aPaM = WordLeft( aPaM );
                             bKeyModifySelection = true;
                             break;
-        case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
+        case css::awt::Key::SELECT_WORD_FORWARD:
                             aPaM = WordRight( aPaM );
                             bKeyModifySelection = true;
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
+        case css::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
                             aPaM = CursorStartOfParagraph( aPaM );
                             if( aPaM == aOldPaM )
                             {
@@ -868,7 +868,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             }
                             bKeyModifySelection = true;
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
+        case css::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
                             aPaM = CursorEndOfParagraph( aPaM );
                             if( aPaM == aOldPaM )
                             {
@@ -877,11 +877,11 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             }
                             bKeyModifySelection = true;
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
+        case css::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
                             aPaM = CursorStartOfDoc();
                             bKeyModifySelection = true;
                             break;
-        case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
+        case css::awt::Key::SELECT_TO_END_OF_DOCUMENT:
                             aPaM = CursorEndOfDoc();
                             bKeyModifySelection = true;
                             break;
@@ -3482,7 +3482,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                     }
                     bDone = true;
                 }
-                catch( const ::com::sun::star::uno::Exception& )
+                catch( const css::uno::Exception& )
                 {
                 }
             }
@@ -3504,7 +3504,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                         }
                         bDone = true;
                     }
-                    catch( const ::com::sun::star::uno::Exception& )
+                    catch( const css::uno::Exception& )
                     {
                     }
                 }
@@ -3752,9 +3752,9 @@ sal_Int32 ImpEditEngine::GetChar(
                         sal_Int32 nCount = 1;
                         lang::Locale aLocale = GetLocale( aPaM );
                         sal_Int32 nRight = _xBI->nextCharacters(
-                            pParaPortion->GetNode()->GetString(), nChar, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
+                            pParaPortion->GetNode()->GetString(), nChar, aLocale, css::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
                         sal_Int32 nLeft = _xBI->previousCharacters(
-                            pParaPortion->GetNode()->GetString(), nRight, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
+                            pParaPortion->GetNode()->GetString(), nRight, aLocale, css::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
                         if ( ( nLeft != nChar ) && ( nRight != nChar ) )
                         {
                             nChar = ( std::abs( nRight - nChar ) < std::abs( nLeft - nChar ) ) ? nRight : nLeft;

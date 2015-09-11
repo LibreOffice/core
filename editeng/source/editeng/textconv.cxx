@@ -330,7 +330,7 @@ void TextConvWrapper::ReplaceUnit(
         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
         const OUString& rOrigText,
         const OUString& rReplaceWith,
-        const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
+        const css::uno::Sequence< sal_Int32 > &rOffsets,
         ReplacementAction eAction,
         LanguageType *pNewUnitLanguage )
 {

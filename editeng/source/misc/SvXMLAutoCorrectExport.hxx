@@ -31,10 +31,10 @@ private:
     const SvxAutocorrWordList   *pAutocorr_List;
 public:
     SvXMLAutoCorrectExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const css::uno::Reference< css::uno::XComponentContext > xContext,
         const SvxAutocorrWordList * pNewAutocorr_List,
         const OUString &rFileName,
-        com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+        css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SvXMLAutoCorrectExport() {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) SAL_OVERRIDE;
@@ -51,10 +51,10 @@ private:
     const SvStringsISortDtor & rList;
 public:
     SvXMLExceptionListExport(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
+        const css::uno::Reference< css::uno::XComponentContext > xContext,
         const SvStringsISortDtor &rNewList,
         const OUString &rFileName,
-        com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler);
+        css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
     virtual ~SvXMLExceptionListExport() {}
     sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass) SAL_OVERRIDE;

@@ -25,7 +25,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 
 
-TYPEINIT1_FACTORY(SvxWritingModeItem, SfxUInt16Item, new SvxWritingModeItem(com::sun::star::text::WritingMode_LR_TB, 0));
+TYPEINIT1_FACTORY(SvxWritingModeItem, SfxUInt16Item, new SvxWritingModeItem(css::text::WritingMode_LR_TB, 0));
 
 SvxWritingModeItem::SvxWritingModeItem( WritingMode eValue, sal_uInt16 _nWhich )
     : SfxUInt16Item( _nWhich, (sal_uInt16)eValue )
@@ -75,7 +75,7 @@ bool SvxWritingModeItem::GetPresentation( SfxItemPresentation /*ePres*/,
     return true;
 }
 
-bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool SvxWritingModeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 {
     sal_Int32 nVal = 0;
     bool bRet = ( rVal >>= nVal );
@@ -110,7 +110,7 @@ bool SvxWritingModeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uIn
     return bRet;
 }
 
-bool SvxWritingModeItem::QueryValue( com::sun::star::uno::Any& rVal,
+bool SvxWritingModeItem::QueryValue( css::uno::Any& rVal,
                                             sal_uInt8 ) const
 {
     rVal <<= (WritingMode)GetValue();

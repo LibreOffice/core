@@ -72,7 +72,7 @@ sal_uInt16 SvXMLAttrContainerItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/
     return USHRT_MAX;
 }
 
-bool SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
+bool SvXMLAttrContainerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     Reference<XNameContainer> xContainer =
         new SvUnoAttributeContainer( new SvXMLAttrContainerData( *pImpl ) );
@@ -81,7 +81,7 @@ bool SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uIn
     return true;
 }
 
-bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     Reference<XInterface> xRef;
     SvUnoAttributeContainer* pContainer = NULL;

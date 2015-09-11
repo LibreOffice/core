@@ -25,7 +25,7 @@
 
 #include <tools/stream.hxx>
 
-class EditDataObject :  public ::com::sun::star::datatransfer::XTransferable,
+class EditDataObject :  public css::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
 
 {
@@ -46,15 +46,15 @@ public:
     OUString&       GetURL()    { return maOfficeBookmark; }
 
 
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::uno::XInterface
+    css::uno::Any                               SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void                                        SAL_CALL acquire() throw() SAL_OVERRIDE  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() SAL_OVERRIDE  { OWeakObject::release(); }
 
-    // ::com::sun::star::datatransfer::XTransferable
-    ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    // css::datatransfer::XTransferable
+    css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) throw(css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EEOBJ_HXX

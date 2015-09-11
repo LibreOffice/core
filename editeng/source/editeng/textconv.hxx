@@ -64,7 +64,7 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
 
     void        ChangeText( const OUString &rNewText,
                             const OUString& rOrigText,
-                            const ::com::sun::star::uno::Sequence< sal_Int32 > *pOffsets,
+                            const css::uno::Sequence< sal_Int32 > *pOffsets,
                             ESelection *pESelection );
     void        ChangeText_impl( const OUString &rNewText, bool bKeepAttributes );
 
@@ -81,7 +81,7 @@ protected:
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
                         const OUString& rOrigText,
                         const OUString& rReplaceWith,
-                        const ::com::sun::star::uno::Sequence< sal_Int32 > &rOffsets,
+                        const css::uno::Sequence< sal_Int32 > &rOffsets,
                         ReplacementAction eAction,
                         LanguageType *pNewUnitLanguage ) SAL_OVERRIDE;
 
@@ -94,9 +94,9 @@ protected:
 
 public:
     TextConvWrapper( vcl::Window* pWindow,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
-            const ::com::sun::star::lang::Locale& rSourceLocale,
-            const ::com::sun::star::lang::Locale& rTargetLocale,
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+            const css::lang::Locale& rSourceLocale,
+            const css::lang::Locale& rTargetLocale,
             const vcl::Font* pTargetFont,
             sal_Int32 nOptions,
             bool bIsInteractive,

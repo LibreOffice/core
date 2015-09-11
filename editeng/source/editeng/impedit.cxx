@@ -1091,7 +1091,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWi
             {
                 if ( !bReadOnly )
                 {
-                    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+                    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
                     CutCopy( aClipBoard, true );
                     bDone = true;
                 }
@@ -1099,7 +1099,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWi
             break;
             case KeyFuncType::COPY:
             {
-                Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+                Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
                 CutCopy( aClipBoard, false );
                 bDone = true;
             }
@@ -1109,7 +1109,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWi
                 if ( !bReadOnly && IsPasteEnabled() )
                 {
                     pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
-                    Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
+                    Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
                     Paste( aClipBoard, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
                     pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
                     bDone = true;
@@ -1145,12 +1145,12 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     if ( rMouseEvent.IsMiddle() && !bReadOnly &&
          ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
     {
-        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetPrimarySelection());
+        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetPrimarySelection());
         Paste( aClipBoard );
     }
     else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
     {
-        Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetPrimarySelection());
+        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetPrimarySelection());
         CutCopy( aClipBoard, false );
     }
 
@@ -1200,7 +1200,7 @@ bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong )
     bool bIsWrong = false;
     if ( rPaM.GetNode()->GetWrongList() )
     {
-        EditSelection aSel = pEditEngine->SelectWord( rPaM, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
+        EditSelection aSel = pEditEngine->SelectWord( rPaM, css::i18n::WordType::DICTIONARY_WORD );
         bIsWrong = rPaM.GetNode()->GetWrongList()->HasWrong( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
         if ( bIsWrong && bMarkIfWrong )
         {
@@ -1340,7 +1340,7 @@ bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
     return false;
 }
 
-void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, bool bCut )
+void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard, bool bCut )
 {
     if ( rxClipboard.is() && GetEditSelection().HasRange() )
     {
@@ -1358,7 +1358,7 @@ void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::d
                     if( xFlushableClipboard.is() )
                         xFlushableClipboard->flushClipboard();
                 }
-            catch( const ::com::sun::star::uno::Exception& )
+            catch( const css::uno::Exception& )
                 {
                 }
 
@@ -1374,7 +1374,7 @@ void ImpEditView::CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::d
     }
 }
 
-void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, bool bUseSpecial )
+void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard >& rxClipboard, bool bUseSpecial )
 {
     if ( rxClipboard.is() )
     {
@@ -1385,7 +1385,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
                 SolarMutexReleaser aReleaser;
                 xDataObj = rxClipboard->getContents();
             }
-        catch( const ::com::sun::star::uno::Exception& )
+        catch( const css::uno::Exception& )
             {
             }
 
@@ -1623,8 +1623,8 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
     }
 }
 
-void ImpEditView::dragGestureRecognized(const ::com::sun::star::datatransfer::dnd::DragGestureEvent& rDGE)
-     throw (::com::sun::star::uno::RuntimeException,
+void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent& rDGE)
+     throw (css::uno::RuntimeException,
             std::exception)
 {
     DBG_ASSERT( !pDragAndDropInfo, "dragGestureRecognized - DragAndDropInfo exist!" );
@@ -1707,8 +1707,8 @@ void ImpEditView::dragGestureRecognized(const ::com::sun::star::datatransfer::dn
     }
 }
 
-void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& rDSDE )
-    throw (::com::sun::star::uno::RuntimeException,
+void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE )
+    throw (css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard aVclGuard;
@@ -1802,8 +1802,8 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
     }
 }
 
-void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& rDTDE )
-    throw (::com::sun::star::uno::RuntimeException,
+void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
+    throw (css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard aVclGuard;
@@ -1877,7 +1877,7 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
     }
 }
 
-void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void ImpEditView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 
@@ -1890,7 +1890,7 @@ void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTarg
     // Only check for text, will also be there if bin or rtf
     datatransfer::DataFlavor aTextFlavor;
     SotExchange::GetFormatDataFlavor( SotClipboardFormatId::STRING, aTextFlavor );
-    const ::com::sun::star::datatransfer::DataFlavor* pFlavors = rDTDEE.SupportedDataFlavors.getConstArray();
+    const css::datatransfer::DataFlavor* pFlavors = rDTDEE.SupportedDataFlavors.getConstArray();
     int nFlavors = rDTDEE.SupportedDataFlavors.getLength();
     for ( int n = 0; n < nFlavors; n++ )
     {
@@ -1904,7 +1904,7 @@ void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTarg
     dragOver( rDTDEE );
 }
 
-void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void ImpEditView::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aVclGuard;
 
@@ -1917,8 +1917,8 @@ void ImpEditView::dragExit( const ::com::sun::star::datatransfer::dnd::DropTarge
     }
 }
 
-void ImpEditView::dragOver(const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& rDTDE)
-    throw (::com::sun::star::uno::RuntimeException,
+void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rDTDE)
+    throw (css::uno::RuntimeException,
            std::exception)
 {
     SolarMutexGuard aVclGuard;

@@ -553,7 +553,7 @@ namespace accessibility
         return mpImpl->GetParagraph( aPos.nPara ).getCharacter( aPos.nIndex );
     }
 
-    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
+    uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -770,14 +770,14 @@ namespace accessibility
         return aRes;
     }
 
-    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+    css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
         bool bLineBreak = mpImpl->RemoveLineBreakCount( nIndex );
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
-        ::com::sun::star::accessibility::TextSegment aResult;
+        css::accessibility::TextSegment aResult;
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
@@ -821,7 +821,7 @@ namespace accessibility
         return aResult;
     }
 
-    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+    css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -829,7 +829,7 @@ namespace accessibility
         bool bLineBreak =  mpImpl->RemoveLineBreakCount( nIndex );
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
-        ::com::sun::star::accessibility::TextSegment aResult;
+        css::accessibility::TextSegment aResult;
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
@@ -867,7 +867,7 @@ namespace accessibility
         return aResult;
     }
 
-    ::com::sun::star::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+    css::accessibility::TextSegment SAL_CALL AccessibleStaticTextBase::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aGuard;
 
@@ -876,7 +876,7 @@ namespace accessibility
         mpImpl->RemoveLineBreakCount( nIndex );
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
-        ::com::sun::star::accessibility::TextSegment aResult;
+        css::accessibility::TextSegment aResult;
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {

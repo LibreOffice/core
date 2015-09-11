@@ -144,10 +144,10 @@ void SvxEditEngineSource::UpdateData()
 }
 
 class SvxSimpleUnoModel : public cppu::WeakAggImplHelper4<
-                                    ::com::sun::star::frame::XModel,
-                                    ::com::sun::star::ucb::XAnyCompareFactory,
-                                    ::com::sun::star::style::XStyleFamiliesSupplier,
-                                    ::com::sun::star::lang::XMultiServiceFactory >
+                                    css::frame::XModel,
+                                    css::ucb::XAnyCompareFactory,
+                                    css::style::XStyleFamiliesSupplier,
+                                    css::lang::XMultiServiceFactory >
 {
 public:
     SvxSimpleUnoModel();
@@ -155,33 +155,33 @@ public:
 
 
     // XMultiServiceFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XStyleFamiliesSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getStyleFamilies(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getStyleFamilies(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAnyCompareFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XModel
-    virtual sal_Bool SAL_CALL attachResource( const OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getURL(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getArgs(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL connectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL disconnectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL lockControllers(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL unlockControllers(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasControllersLocked(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL getCurrentController(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setCurrentController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getCurrentSelection(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL attachResource( const OUString& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getURL(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getArgs(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL connectController( const css::uno::Reference< css::frame::XController >& xController ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disconnectController( const css::uno::Reference< css::frame::XController >& xController ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL lockControllers(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL unlockControllers(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasControllersLocked(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::frame::XController > SAL_CALL getCurrentController(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& xController ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getCurrentSelection(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent
-    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
@@ -213,19 +213,19 @@ uno::Reference< uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstance( co
 
 }
 
-uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+uno::Reference< css::uno::XInterface > SAL_CALL SvxSimpleUnoModel::createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     return createInstance( ServiceSpecifier );
 }
 
-Sequence< OUString > SAL_CALL SvxSimpleUnoModel::getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SvxSimpleUnoModel::getAvailableServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
     Sequence< OUString > aSeq;
     return aSeq;
 }
 
 // XAnyCompareFactory
-uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SvxSimpleUnoModel::createAnyCompareByName( const OUString& PropertyName )
+uno::Reference< css::ucb::XAnyCompare > SAL_CALL SvxSimpleUnoModel::createAnyCompareByName( const OUString& PropertyName )
     throw(uno::RuntimeException, std::exception)
 {
     (void)PropertyName;
@@ -241,57 +241,57 @@ uno::Reference< container::XNameAccess > SAL_CALL SvxSimpleUnoModel::getStyleFam
 }
 
 // XModel
-sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SvxSimpleUnoModel::attachResource( const OUString& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw (css::uno::RuntimeException, std::exception)
 {
     (void)aURL;
     (void)aArgs;
     return sal_False;
 }
 
-OUString SAL_CALL SvxSimpleUnoModel::getURL(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL SvxSimpleUnoModel::getURL(  ) throw (css::uno::RuntimeException, std::exception)
 {
     OUString aStr;
     return aStr;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SvxSimpleUnoModel::getArgs(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::beans::PropertyValue > SAL_CALL SvxSimpleUnoModel::getArgs(  ) throw (css::uno::RuntimeException, std::exception)
 {
     Sequence< beans::PropertyValue > aSeq;
     return aSeq;
 }
 
-void SAL_CALL SvxSimpleUnoModel::connectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxSimpleUnoModel::connectController( const css::uno::Reference< css::frame::XController >& ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::disconnectController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxSimpleUnoModel::disconnectController( const css::uno::Reference< css::frame::XController >& ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::lockControllers(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxSimpleUnoModel::lockControllers(  ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::unlockControllers(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxSimpleUnoModel::unlockControllers(  ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-sal_Bool SAL_CALL SvxSimpleUnoModel::hasControllersLocked(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SvxSimpleUnoModel::hasControllersLocked(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return sal_True;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL SvxSimpleUnoModel::getCurrentController(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::frame::XController > SAL_CALL SvxSimpleUnoModel::getCurrentController(  ) throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference< frame::XController > xRet;
     return xRet;
 }
 
-void SAL_CALL SvxSimpleUnoModel::setCurrentController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxSimpleUnoModel::setCurrentController( const css::uno::Reference< css::frame::XController >& ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
 {
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvxSimpleUnoModel::getCurrentSelection(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::uno::XInterface > SAL_CALL SvxSimpleUnoModel::getCurrentSelection(  ) throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference< XInterface > xRet;
     return xRet;
@@ -299,15 +299,15 @@ void SAL_CALL SvxSimpleUnoModel::setCurrentController( const ::com::sun::star::u
 
 
 // XComponent
-void SAL_CALL SvxSimpleUnoModel::dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxSimpleUnoModel::dispose(  ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxSimpleUnoModel::addEventListener( const css::uno::Reference< css::lang::XEventListener >& ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL SvxSimpleUnoModel::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL SvxSimpleUnoModel::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& ) throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -317,11 +317,11 @@ class SvxXMLTextExportComponent : public SvXMLExport
 {
 public:
     SvxXMLTextExportComponent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::uno::XComponentContext >& rContext,
         EditEngine* pEditEngine,
         const ESelection& rSel,
         const OUString& rFileName,
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& rHandler );
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHandler );
 
     virtual ~SvxXMLTextExportComponent();
 
@@ -331,18 +331,18 @@ public:
     virtual void _ExportContent() SAL_OVERRIDE;
 
 private:
-    com::sun::star::uno::Reference< com::sun::star::text::XText > mxText;
+    css::uno::Reference< css::text::XText > mxText;
     ESelection maSelection;
 };
 
 
 
 SvxXMLTextExportComponent::SvxXMLTextExportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
     EditEngine* pEditEngine,
     const ESelection& rSel,
     const OUString& rFileName,
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler)
+    const css::uno::Reference< css::xml::sax::XDocumentHandler > & xHandler)
 :   SvXMLExport( xContext, "", rFileName, xHandler, (static_cast<frame::XModel*>(new SvxSimpleUnoModel())), FUNIT_CM ),
     maSelection( rSel )
 {
@@ -352,10 +352,9 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
-//      SVX_UNOEDIT_OUTLINER_PROPERTIES,
-        {OUString(UNO_NAME_NUMBERING_RULES),        EE_PARA_NUMBULLET,  cppu::UnoType<com::sun::star::container::XIndexReplace>::get(), 0, 0 },
-        {OUString(UNO_NAME_NUMBERING),              EE_PARA_BULLETSTATE,cppu::UnoType<bool>::get(), 0, 0 },
-        {OUString(UNO_NAME_NUMBERING_LEVEL),        EE_PARA_OUTLLEVEL,  ::cppu::UnoType<sal_Int16>::get(), 0, 0 },
+        { OUString(UNO_NAME_NUMBERING_RULES),        EE_PARA_NUMBULLET,  cppu::UnoType<css::container::XIndexReplace>::get(), 0, 0 },
+        { OUString(UNO_NAME_NUMBERING),              EE_PARA_BULLETSTATE,cppu::UnoType<bool>::get(), 0, 0 },
+        { OUString(UNO_NAME_NUMBERING_LEVEL),        EE_PARA_OUTLLEVEL,  ::cppu::UnoType<sal_Int16>::get(), 0, 0 },
         SVX_UNOEDIT_PARA_PROPERTIES,
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };

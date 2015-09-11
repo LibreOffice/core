@@ -87,10 +87,10 @@ const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap()
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        {OUString("TextField"),                     EE_FEATURE_FIELD,   cppu::UnoType<text::XTextField>::get(),   beans::PropertyAttribute::READONLY, 0 },
-        {OUString("TextPortionType"),               WID_PORTIONTYPE,    ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
-        {OUString("TextUserDefinedAttributes"),         EE_CHAR_XMLATTRIBS,     cppu::UnoType<com::sun::star::container::XNameContainer>::get(),        0,     0},
-        {OUString("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     cppu::UnoType<com::sun::star::container::XNameContainer>::get(),        0,     0},
+        { OUString("TextField"),                     EE_FEATURE_FIELD,   cppu::UnoType<text::XTextField>::get(),   beans::PropertyAttribute::READONLY, 0 },
+        { OUString("TextPortionType"),               WID_PORTIONTYPE,    ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { OUString("TextUserDefinedAttributes"),         EE_CHAR_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
+        { OUString("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aSvxTextPortionPropertyMap;
@@ -116,8 +116,8 @@ const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        {OUString("TextUserDefinedAttributes"),         EE_CHAR_XMLATTRIBS,     cppu::UnoType<com::sun::star::container::XNameContainer>::get(),        0,     0},
-        {OUString("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     cppu::UnoType<com::sun::star::container::XNameContainer>::get(),        0,     0},
+        { OUString("TextUserDefinedAttributes"),         EE_CHAR_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
+        { OUString("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     cppu::UnoType<css::container::XNameContainer>::get(),        0,     0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
@@ -2162,7 +2162,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::insertTextPortion(
     return xRet;
 }
 
-// com::sun::star::text::XTextPortionAppend (new import API)
+// css::text::XTextPortionAppend (new import API)
 uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
         const OUString& rText,
         const uno::Sequence< beans::PropertyValue >& rCharAndParaProps )
