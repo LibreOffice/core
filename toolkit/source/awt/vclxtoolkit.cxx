@@ -161,20 +161,20 @@ class VCLXToolkit : public VCLXToolkit_Impl,
     ::cppu::OInterfaceContainerHelper m_aKeyHandlers;
     ::cppu::OInterfaceContainerHelper m_aFocusListeners;
     ::Link<> m_aEventListenerLink;
-    ::Link<> m_aKeyListenerLink;
+    ::Link<VclWindowEvent&,bool> m_aKeyListenerLink;
     bool m_bEventListener;
     bool m_bKeyListener;
 
     DECL_LINK(eventListenerHandler, ::VclSimpleEvent const *);
 
-    DECL_LINK(keyListenerHandler, ::VclSimpleEvent const *);
+    DECL_LINK_TYPED(keyListenerHandler, ::VclWindowEvent&, bool);
 
     void callTopWindowListeners(
         ::VclSimpleEvent const * pEvent,
         void (SAL_CALL css::awt::XTopWindowListener::* pFn)(
             css::lang::EventObject const &));
 
-    long callKeyHandlers(::VclSimpleEvent const * pEvent, bool bPressed);
+    bool callKeyHandlers(::VclSimpleEvent const * pEvent, bool bPressed);
 
     void callFocusListeners(::VclSimpleEvent const * pEvent, bool bGained);
 
@@ -1737,16 +1737,16 @@ IMPL_LINK(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent const *, pEvent)
     return 0;
 }
 
-IMPL_LINK(VCLXToolkit, keyListenerHandler, ::VclSimpleEvent const *, pEvent)
+IMPL_LINK_TYPED(VCLXToolkit, keyListenerHandler, ::VclWindowEvent&, rEvent, bool)
 {
-    switch (pEvent->GetId())
+    switch (rEvent.GetId())
     {
     case VCLEVENT_WINDOW_KEYINPUT:
-        return callKeyHandlers(pEvent, true);
+        return callKeyHandlers(&rEvent, true);
     case VCLEVENT_WINDOW_KEYUP:
-        return callKeyHandlers(pEvent, false);
+        return callKeyHandlers(&rEvent, false);
     }
-    return 0;
+    return false;
 }
 
 void VCLXToolkit::callTopWindowListeners(
@@ -1784,7 +1784,7 @@ void VCLXToolkit::callTopWindowListeners(
     }
 }
 
-long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
+bool VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
                                   bool bPressed)
 {
     css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
@@ -1818,7 +1818,7 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             {
                 if ((bPressed ? xHandler->keyPressed(aAwtEvent)
                       : xHandler->keyReleased(aAwtEvent)))
-                    return 1;
+                    return true;
             }
             catch (const css::uno::RuntimeException & rEx)
             {
@@ -1829,7 +1829,7 @@ long VCLXToolkit::callKeyHandlers(::VclSimpleEvent const * pEvent,
             }
         }
     }
-    return 0;
+    return false;
 }
 
 void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,

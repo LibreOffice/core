@@ -101,6 +101,8 @@ public:
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
 };
 
+typedef std::list<Link<VclWindowEvent&,bool> > SVAppKeyListeners;
+
 struct ImplSVAppData
 {
     enum ImeStatusWindowMode
@@ -113,7 +115,7 @@ struct ImplSVAppData
     AllSettings*            mpSettings;                     // Application settings
     LocaleConfigurationListener* mpCfgListener;
     VclEventListeners*      mpEventListeners;               // listeners for vcl events (eg, extended toolkit)
-    VclEventListeners*      mpKeyListeners;                 // listeners for key events only (eg, extended toolkit)
+    SVAppKeyListeners*      mpKeyListeners;                 // listeners for key events only (eg, extended toolkit)
     ImplAccelManager*       mpAccelMgr;                     // Accelerator Manager
     OUString*               mpAppName;                      // Application name
     OUString*               mpAppFileName;                  // Abs. Application FileName

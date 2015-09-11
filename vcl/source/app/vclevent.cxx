@@ -76,28 +76,6 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
     }
 }
 
-bool VclEventListeners::Process( VclSimpleEvent* pEvent ) const
-{
-    if ( m_aListeners.empty() )
-        return false;
-
-    bool bProcessed = false;
-    // Copy the list, because this can be destroyed when calling a Link...
-    std::list<Link<>> aCopy( m_aListeners );
-    std::list<Link<>>::iterator aIter( aCopy.begin() );
-    std::list<Link<>>::const_iterator aEnd( aCopy.end() );
-    while ( aIter != aEnd )
-    {
-        if( (*aIter).Call( pEvent ) != 0 )
-        {
-            bProcessed = true;
-            break;
-        }
-        ++aIter;
-    }
-    return bProcessed;
-}
-
 void VclEventListeners::addListener( const Link<>& rListener )
 {
     m_aListeners.push_back( rListener );

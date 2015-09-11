@@ -688,19 +688,19 @@ void Application::RemoveEventListener( const Link<>& rEventListener )
         pSVData->maAppData.mpEventListeners->removeListener( rEventListener );
 }
 
-void Application::AddKeyListener( const Link<>& rKeyListener )
+void Application::AddKeyListener( const Link<VclWindowEvent&,bool>& rKeyListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( !pSVData->maAppData.mpKeyListeners )
-        pSVData->maAppData.mpKeyListeners = new VclEventListeners;
-    pSVData->maAppData.mpKeyListeners->addListener( rKeyListener );
+        pSVData->maAppData.mpKeyListeners = new SVAppKeyListeners;
+    pSVData->maAppData.mpKeyListeners->push_back( rKeyListener );
 }
 
-void Application::RemoveKeyListener( const Link<>& rKeyListener )
+void Application::RemoveKeyListener( const Link<VclWindowEvent&,bool>& rKeyListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpKeyListeners )
-        pSVData->maAppData.mpKeyListeners->removeListener( rKeyListener );
+        pSVData->maAppData.mpKeyListeners->remove( rKeyListener );
 }
 
 bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKeyEvent )
@@ -709,11 +709,24 @@ bool Application::HandleKey( sal_uLong nEvent, vcl::Window *pWin, KeyEvent* pKey
     VclWindowEvent aEvent( pWin, nEvent, static_cast<void *>(pKeyEvent) );
 
     ImplSVData* pSVData = ImplGetSVData();
+
+    if ( !pSVData->maAppData.mpKeyListeners )
+        return false;
+
+    if ( pSVData->maAppData.mpKeyListeners->empty() )
+        return false;
+
     bool bProcessed = false;
-
-    if ( pSVData->maAppData.mpKeyListeners )
-        bProcessed = pSVData->maAppData.mpKeyListeners->Process( &aEvent );
-
+    // Copy the list, because this can be destroyed when calling a Link...
+    std::list<Link<VclWindowEvent&,bool>> aCopy( *pSVData->maAppData.mpKeyListeners );
+    for ( Link<VclWindowEvent&,bool>& rLink : aCopy )
+    {
+        if( rLink.Call( aEvent ) )
+        {
+            bProcessed = true;
+            break;
+        }
+    }
     return bProcessed;
 }
 

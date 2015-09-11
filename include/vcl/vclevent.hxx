@@ -256,11 +256,6 @@ class VCL_DLLPUBLIC VclEventListeners
 {
 public:
     void Call( VclSimpleEvent* pEvent ) const;
-
-    // stops notifying when any handler has processed the event
-    // and returns true in that case
-    // a handler must return true to signal that it has processed the event
-    bool Process( VclSimpleEvent* pEvent ) const;
     void addListener( const Link<>& rListener );
     void removeListener( const Link<>& rListener );
 private:
