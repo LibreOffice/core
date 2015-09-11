@@ -13,7 +13,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
 
-#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
 G_BEGIN_DECLS

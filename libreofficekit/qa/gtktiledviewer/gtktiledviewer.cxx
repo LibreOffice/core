@@ -16,6 +16,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <gdk/gdkkeysyms.h>
 
+#define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
