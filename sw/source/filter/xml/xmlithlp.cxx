@@ -49,6 +49,10 @@ using namespace ::com::sun::star;
 #define API_LINE_ENGRAVED 11
 #define API_LINE_OUTSET 12
 #define API_LINE_INSET 13
+#define API_LINE_FINE_DASHED table::BorderLineStyle::FINE_DASHED
+#define API_LINE_DASH_DOT table::BorderLineStyle::DASH_DOT
+#define API_LINE_DASH_DOT_DOT table::BorderLineStyle::DASH_DOT_DOT
+#define API_LINE_DOUBLE_THIN table::BorderLineStyle::DOUBLE_THIN
 
 #define SVX_XML_BORDER_WIDTH_THIN 0
 #define SVX_XML_BORDER_WIDTH_MIDDLE 1
@@ -60,9 +64,13 @@ const struct SvXMLEnumMapEntry psXML_BorderStyles[] =
     { XML_HIDDEN,     API_LINE_NONE },
     { XML_SOLID,      API_LINE_SOLID },
     { XML_DOUBLE,     API_LINE_DOUBLE },
+    { XML_DOUBLE_THIN, API_LINE_DOUBLE_THIN },
     { XML_DOTTED,     API_LINE_DOTTED },
     { XML_DASHED,     API_LINE_DASHED },
-    { XML_GROOVE,     API_LINE_ENGRAVED },
+    { XML_FINE_DASHED, API_LINE_FINE_DASHED },
+    { XML_DASH_DOT,     API_LINE_DASH_DOT },
+    { XML_DASH_DOT_DOT, API_LINE_DASH_DOT_DOT },
+    { XML_GROOVE, API_LINE_ENGRAVED },
     { XML_RIDGE,      API_LINE_EMBOSSED },
     { XML_INSET,      API_LINE_INSET },
     { XML_OUTSET,     API_LINE_OUTSET },
