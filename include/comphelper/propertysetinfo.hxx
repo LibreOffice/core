@@ -54,6 +54,7 @@ private:
 public:
     PropertySetInfo() throw();
     PropertySetInfo( PropertyMapEntry const * pMap ) throw();
+    PropertySetInfo(css::uno::Sequence<css::beans::Property> const &) throw();
     virtual ~PropertySetInfo() throw();
 
     /** returns a stl map with all PropertyMapEntry pointer.<p>

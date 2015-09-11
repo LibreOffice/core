@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <comphelper/servicehelper.hxx>
 
 using namespace cppu;
@@ -40,76 +41,6 @@ const char PROPNAME_UINAME[]    = "UIName";
 
 namespace framework
 {
-
-/**
- * The class which implements the PropertySetInfo interface.
- */
-extern "C"
-{
-static int SAL_CALL compare_OUString_Property_Impl( const void *arg1, const void *arg2 )
-{
-   return static_cast<OUString const *>(arg1)->compareTo( static_cast<Property const *>(arg2)->Name );
-}
-}
-
-class OPropertySetHelperInfo_Impl
-    : public WeakImplHelper< ::com::sun::star::beans::XPropertySetInfo >
-{
-    Sequence < Property > aInfos;
-
-public:
-    OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ );
-
-    // XPropertySetInfo-Methoden
-    virtual Sequence< Property > SAL_CALL getProperties() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-};
-
-/**
- * Create an object that implements XPropertySetInfo IPropertyArrayHelper.
- */
-OPropertySetHelperInfo_Impl::OPropertySetHelperInfo_Impl(
-    IPropertyArrayHelper & rHelper_ )
-    :aInfos( rHelper_.getProperties() )
-{
-}
-
-/**
- * Return the sequence of properties, which are provided through the constructor.
- */
-Sequence< Property > OPropertySetHelperInfo_Impl::getProperties() throw(::com::sun::star::uno::RuntimeException, std::exception)
-{
-    return aInfos;
-}
-
-/**
- * Return the sequence of properties, which are provided through the constructor.
- */
-Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception)
-{
-    Property * pR;
-    pR = static_cast<Property *>(bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
-                              sizeof( Property ),
-                              compare_OUString_Property_Impl ));
-    if( !pR ) {
-        throw UnknownPropertyException();
-    }
-
-    return *pR;
-}
-
-/**
- * Return the sequence of properties, which are provided through the constructor.
- */
-sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
-{
-    Property * pR;
-    pR = static_cast<Property *>(bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
-                              sizeof( Property ),
-                              compare_OUString_Property_Impl ));
-    return pR != NULL;
-}
 
 ConstItemContainer::ConstItemContainer()
 {
@@ -409,7 +340,8 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > ConstItem
 Reference < XPropertySetInfo > ConstItemContainer::createPropertySetInfo(
     IPropertyArrayHelper & rProperties )
 {
-    return static_cast< XPropertySetInfo * >( new OPropertySetHelperInfo_Impl( rProperties ) );
+    return static_cast<XPropertySetInfo *>(
+            new ::comphelper::PropertySetInfo(rProperties.getProperties()));
 }
 
 } // namespace framework

@@ -143,6 +143,24 @@ PropertySetInfo::PropertySetInfo( PropertyMapEntry const * pMap ) throw()
     mpMap->add( pMap );
 }
 
+PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) throw()
+    : mpMap(new PropertyMapImpl)
+{
+    PropertyMapEntry * pEntries(new PropertyMapEntry[rProps.getLength() + 1]);
+    PropertyMapEntry * pEntry(&pEntries[0]);
+    for (auto const& it : rProps)
+    {
+        pEntry->maName = it.Name;
+        pEntry->mnHandle = it.Handle;
+        pEntry->maType = it.Type;
+        pEntry->mnAttributes = it.Attributes;
+        pEntry->mnMemberId = 0;
+        ++pEntry;
+    }
+    pEntry->maName = OUString();
+    mpMap->add(pEntries);
+}
+
 PropertySetInfo::~PropertySetInfo() throw()
 {
     delete mpMap;
