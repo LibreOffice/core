@@ -1073,6 +1073,7 @@ void SAL_CALL Desktop::disposing()
     m_xQuickLauncher.clear();
     m_xSWThreadManager.clear();
     m_xSfxTerminator.clear();
+    m_xCommandOptions.reset();
 
     // From this point nothing will work further on this object ...
     // excepting our dtor() .-)
