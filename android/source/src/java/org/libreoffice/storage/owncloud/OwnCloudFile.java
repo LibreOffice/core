@@ -9,10 +9,14 @@ import java.util.List;
 
 import org.libreoffice.storage.IFile;
 
+import android.util.Log;
+
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.files.ChunkedUploadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
+import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
 
 /**
  * Implementation of IFile for ownCloud servers.
@@ -118,5 +122,23 @@ public class OwnCloudFile implements IFile {
             return false;
         OwnCloudFile file = (OwnCloudFile) object;
         return file.getUri().equals(getUri());
+    }
+
+    @Override
+    public void saveDocument(File newFile) {
+        UploadRemoteFileOperation uploadOperation;
+        if (newFile.length() > ChunkedUploadRemoteFileOperation.CHUNK_SIZE) {
+            uploadOperation = new ChunkedUploadRemoteFileOperation(
+                    newFile.getPath(), file.getRemotePath(), file.getMimeType());
+        } else {
+            uploadOperation = new UploadRemoteFileOperation(newFile.getPath(),
+                    file.getRemotePath(), file.getMimeType());
+        }
+
+        RemoteOperationResult result = uploadOperation.execute(provider
+                .getClient());
+        if (!result.isSuccess()) {
+            throw provider.buildRuntimeExceptionForResultCode(result.getCode());
+        }
     }
 }

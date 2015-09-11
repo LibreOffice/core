@@ -1,10 +1,12 @@
 package org.libreoffice;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -21,6 +23,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import org.libreoffice.overlay.DocumentOverlay;
+import org.libreoffice.storage.DocumentProviderFactory;
+import org.libreoffice.storage.IFile;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
@@ -31,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,13 +55,16 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
 
     private static boolean mEnableEditing;
 
+    int providerId;
+    URI documentUri;
+
     public Handler mMainHandler;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
-    private String mInputFile;
+    private File mInputFile;
     private DocumentOverlay mDocumentOverlay;
     private File mTempFile = null;
     private LOAbout mAbout;
@@ -110,8 +118,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
                 mAbout.showAbout();
                 return true;
             case R.id.action_save:
-                Toast.makeText(this, "Saving the document...", Toast.LENGTH_SHORT).show();
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
+                saveDocument();
                 return true;
             case R.id.action_parts:
                 mDrawerLayout.openDrawer(mDrawerList);
@@ -154,17 +161,23 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         if (getIntent().getData() != null) {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (copyFileToTemp() && mTempFile != null) {
-                    mInputFile = mTempFile.getPath();
+                    mInputFile = mTempFile;
                     Log.d(LOGTAG, "SCHEME_CONTENT: getPath(): " + getIntent().getData().getPath());
                 } else {
                     // TODO: can't open the file
                 }
             } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
-                mInputFile = getIntent().getData().getPath();
+                mInputFile = new File(getIntent().getData().getPath());
                 Log.d(LOGTAG, "SCHEME_FILE: getPath(): " + getIntent().getData().getPath());
+
+                // Gather data to rebuild IFile object later
+                providerId = getIntent().getIntExtra(
+                        "org.libreoffice.document_provider_id", 0);
+                documentUri = (URI) getIntent().getSerializableExtra(
+                        "org.libreoffice.document_uri");
             }
         } else {
-            mInputFile = DEFAULT_DOC_PATH;
+            mInputFile = new File(DEFAULT_DOC_PATH);
         }
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -238,6 +251,50 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
         return false;
     }
 
+    /**
+     * Save the document and invoke save on document provider to upload the file
+     * to the cloud if necessary.
+     */
+    private void saveDocument() {
+        Toast.makeText(this, "Saving the document...", Toast.LENGTH_SHORT).show();
+        // local save
+        LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Save"));
+
+        final AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    // rebuild the IFile object from the data passed in the Intent
+                    IFile mStorageFile = DocumentProviderFactory.getInstance()
+                            .getProvider(providerId).createFromUri(documentUri);
+                    // call document provider save operation
+                    mStorageFile.saveDocument(mInputFile);
+                }
+                catch (final RuntimeException e) {
+                    final Activity activity = LibreOfficeMainActivity.this;
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Log.e(LOGTAG, e.getMessage(), e.getCause());
+                }
+                return null;
+            }
+        };
+        // Delay the call to document provider save operation to ensure the local
+        // file has been saved.
+        // FIXME: horrible hack, ideally the save operation should have a callback
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                task.execute();
+            }
+        }, 5000);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -260,7 +317,7 @@ public class LibreOfficeMainActivity extends ActionBarActivity {
     protected void onStart() {
         Log.i(LOGTAG, "onStart..");
         super.onStart();
-        LOKitShell.sendLoadEvent(mInputFile);
+        LOKitShell.sendLoadEvent(mInputFile.getPath());
     }
 
     @Override

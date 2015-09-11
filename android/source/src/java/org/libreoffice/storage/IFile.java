@@ -102,4 +102,12 @@ public interface IFile {
      * @throws RuntimeException in case of error.
      */
     File getDocument();
+
+    /**
+     * Replaces the wrapped document with a new version of it.
+     *
+     * @param file
+     *            A local file pointing to the new version of the document.
+     */
+    void saveDocument(File file);
 }
