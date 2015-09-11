@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_612c2cac",
+        "filename": "sc/source/ui/view/hdrcont.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-11T19:13:32Z",
+      "side": 1,
+      "message": "Aufrufe \u003d calls and not views.",
+      "revId": "40601f6a67842761925f66fa860ecdbef966cc1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
