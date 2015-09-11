@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_1e5b0d56",
+        "filename": "sfx2/source/doc/Metadatable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-09-11T05:31:06Z",
+      "side": 1,
+      "message": "Can be const?",
+      "range": {
+        "startLine": 538,
+        "startChar": 19,
+        "endLine": 538,
+        "endChar": 36
+      },
+      "revId": "cdc7d6906a9261342bcfcd40ed0da42d16505f9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_7e584957",
+        "filename": "sfx2/source/doc/Metadatable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-09-11T05:31:06Z",
+      "side": 1,
+      "message": "Can be omitted. Same comments below.",
+      "range": {
+        "startLine": 538,
+        "startChar": 37,
+        "endLine": 538,
+        "endChar": 43
+      },
+      "revId": "cdc7d6906a9261342bcfcd40ed0da42d16505f9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
