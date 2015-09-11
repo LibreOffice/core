@@ -84,48 +84,6 @@ public:
     virtual void SAL_CALL setPropertyValues(const css::uno::Sequence< css::beans::PropertyValue >& PropertyValues_) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-
-
-// AB 20.3.2000 Help Class for XPropertySetInfo implementation
-class PropertySetInfoImpl
-{
-    friend class SbPropertySetInfo;
-
-    css::uno::Sequence< css::beans::Property > _aProps;
-
-    sal_Int32 GetIndex_Impl( const OUString &rPropName ) const;
-
-public:
-    PropertySetInfoImpl();
-    PropertySetInfoImpl( css::uno::Sequence< css::beans::Property >& rProps );
-
-    // XPropertySetInfo
-    css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() throw () { return _aProps;}
-    css::beans::Property SAL_CALL getPropertyByName(const OUString& Name)
-        throw( css::uno::RuntimeException );
-    bool SAL_CALL hasPropertyByName(const OUString& Name)
-        throw ( css::uno::RuntimeException );
-};
-
-class SbPropertySetInfo: public ::cppu::WeakImplHelper< css::beans::XPropertySetInfo >
-{
-    PropertySetInfoImpl aImpl;
-
-public:
-                            SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals );
-    virtual                 ~SbPropertySetInfo();
-
-    // XPropertySetInfo
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties()
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual css::beans::Property SAL_CALL getPropertyByName(const OUString& Name)
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& Name)
-        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-};
-
-
-
 class StarBASIC;
 class SbxArray;
 

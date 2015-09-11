@@ -23,6 +23,9 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>
 #include <sbunoobj.hxx>
+
+#include <comphelper/propertysetinfo.hxx>
+
 #include <limits.h>
 
 using com::sun::star::uno::Reference;
@@ -40,14 +43,6 @@ struct SbCompare_UString_PropertyValue_Impl
    }
 };
 
-extern "C" int SAL_CALL SbCompare_UString_Property_Impl( const void *arg1, const void *arg2 )
-{
-    const OUString *pArg1 = static_cast<OUString const *>(arg1);
-    const Property *pArg2 = static_cast<Property const *>(arg2);
-    return pArg1->compareTo( pArg2->Name );
-}
-
-
 
 SbPropertyValues::SbPropertyValues()
 {
@@ -60,15 +55,22 @@ SbPropertyValues::~SbPropertyValues()
     m_xInfo.clear();
 }
 
-
-
 Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo() throw( RuntimeException, std::exception )
 {
     // create on demand?
     if (!m_xInfo.is())
     {
-        SbPropertySetInfo *pInfo = new SbPropertySetInfo( m_aPropVals );
-        m_xInfo.set(pInfo);
+        uno::Sequence<beans::Property> props(m_aPropVals.size());
+        for (size_t n = 0; n < m_aPropVals.size(); ++n)
+        {
+            Property &rProp = props.getArray()[n];
+            const PropertyValue &rPropVal = m_aPropVals[n];
+            rProp.Name = rPropVal.Name;
+            rProp.Handle = rPropVal.Handle;
+            rProp.Type = cppu::UnoType<void>::get();
+            rProp.Attributes = 0;
+        }
+        m_xInfo.set(new ::comphelper::PropertySetInfo(props));
     }
     return m_xInfo;
 }
@@ -186,81 +188,6 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
         m_aPropVals.push_back( pPropVal );
     }
 }
-
-
-//PropertySetInfoImpl
-
-PropertySetInfoImpl::PropertySetInfoImpl()
-{
-}
-
-sal_Int32 PropertySetInfoImpl::GetIndex_Impl( const OUString &rPropName ) const
-{
-    Property *pP;
-    pP = static_cast<Property*>(
-            bsearch( &rPropName, _aProps.getConstArray(), _aProps.getLength(),
-                      sizeof( Property ),
-                      SbCompare_UString_Property_Impl ));
-    return pP ? sal::static_int_cast<sal_Int32>( pP - _aProps.getConstArray() ) : -1;
-}
-
-
-Property PropertySetInfoImpl::getPropertyByName(const OUString& Name) throw( RuntimeException )
-{
-    sal_Int32 nIndex = GetIndex_Impl( Name );
-    if( USHRT_MAX != nIndex )
-        return _aProps.getConstArray()[ nIndex ];
-    return Property();
-}
-
-bool PropertySetInfoImpl::hasPropertyByName(const OUString& Name) throw( RuntimeException )
-{
-    sal_Int32 nIndex = GetIndex_Impl( Name );
-    return USHRT_MAX != nIndex;
-}
-
-
-
-
-SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
-{
-    aImpl._aProps.realloc( rPropVals.size() );
-    for ( size_t n = 0; n < rPropVals.size(); ++n )
-    {
-        Property &rProp = aImpl._aProps.getArray()[n];
-        const PropertyValue &rPropVal = rPropVals[n];
-        rProp.Name = rPropVal.Name;
-        rProp.Handle = rPropVal.Handle;
-        rProp.Type = cppu::UnoType<void>::get();
-        rProp.Attributes = 0;
-    }
-}
-
-
-
-SbPropertySetInfo::~SbPropertySetInfo()
-{
-}
-
-
-
-Sequence< Property > SbPropertySetInfo::getProperties() throw( RuntimeException, std::exception )
-{
-    return aImpl.getProperties();
-}
-
-Property SbPropertySetInfo::getPropertyByName(const OUString& Name)
-    throw( RuntimeException, std::exception )
-{
-    return aImpl.getPropertyByName( Name );
-}
-
-sal_Bool SbPropertySetInfo::hasPropertyByName(const OUString& Name)
-    throw( RuntimeException, std::exception )
-{
-    return aImpl.hasPropertyByName( Name );
-}
-
 
 
 void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
