@@ -51,10 +51,10 @@ namespace drawinglayer
                 sal_uInt32 a;
 
                 // decide what to create
-                const ::com::sun::star::drawing::NormalsKind eNormalsKind(getSdr3DObjectAttribute().getNormalsKind());
-                const bool bCreateNormals(::com::sun::star::drawing::NormalsKind_SPECIFIC == eNormalsKind);
-                const bool bCreateTextureCoordinatesX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
-                const bool bCreateTextureCoordinatesY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
+                const css::drawing::NormalsKind eNormalsKind(getSdr3DObjectAttribute().getNormalsKind());
+                const bool bCreateNormals(css::drawing::NormalsKind_SPECIFIC == eNormalsKind);
+                const bool bCreateTextureCoordinatesX(css::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
+                const bool bCreateTextureCoordinatesY(css::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
                 basegfx::B2DHomMatrix aTexTransform;
 
                 if(!getSdrLFSAttribute().getFill().isDefault() && (bCreateTextureCoordinatesX || bCreateTextureCoordinatesY))
@@ -89,11 +89,11 @@ namespace drawinglayer
                 // normal creation
                 if(!getSdrLFSAttribute().getFill().isDefault())
                 {
-                    if(::com::sun::star::drawing::NormalsKind_SPHERE == eNormalsKind)
+                    if(css::drawing::NormalsKind_SPHERE == eNormalsKind)
                     {
                         applyNormalsKindSphereTo3DGeometry(aFill, aRange);
                     }
-                    else if(::com::sun::star::drawing::NormalsKind_FLAT == eNormalsKind)
+                    else if(css::drawing::NormalsKind_FLAT == eNormalsKind)
                     {
                         applyNormalsKindFlatTo3DGeometry(aFill);
                     }

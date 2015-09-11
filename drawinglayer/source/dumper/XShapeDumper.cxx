@@ -36,11 +36,11 @@ namespace {
 // auxiliary functions
 void dumpGradientProperty(const css::awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter);
 void dumpPolyPolygonBezierCoords(const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoords, xmlTextWriterPtr xmlWriter);
-void dumpPointSequenceSequence(const com::sun::star::drawing::PointSequenceSequence& rPointSequenceSequence, const uno::Sequence<uno::Sequence<drawing::PolygonFlags> >*, xmlTextWriterPtr xmlWriter);
+void dumpPointSequenceSequence(const css::drawing::PointSequenceSequence& rPointSequenceSequence, const uno::Sequence<uno::Sequence<drawing::PolygonFlags> >*, xmlTextWriterPtr xmlWriter);
 void dumpPropertyValueAsElement(const beans::PropertyValue& rPropertyValue, xmlTextWriterPtr xmlWriter);
 
 // FillProperties.idl
-void dumpFillStyleAsAttribute(com::sun::star::drawing::FillStyle eFillStyle, xmlTextWriterPtr xmlWriter);
+void dumpFillStyleAsAttribute(css::drawing::FillStyle eFillStyle, xmlTextWriterPtr xmlWriter);
 void dumpFillColorAsAttribute(sal_Int32 aColor, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceAsAttribute(sal_Int32 aTransparence, xmlTextWriterPtr xmlWriter);
 void dumpFillTransparenceGradientNameAsAttribute(const OUString& sTranspGradName, xmlTextWriterPtr xmlWriter);
@@ -49,28 +49,28 @@ void dumpFillGradientNameAsAttribute(const OUString& sGradName, xmlTextWriterPtr
 void dumpFillGradientAsElement(const css::awt::Gradient& rGradient, xmlTextWriterPtr xmlWriter);
 void dumpFillHatchAsElement(const css::drawing::Hatch& rHatch, xmlTextWriterPtr xmlWriter);
 void dumpFillBackgroundAsAttribute(bool bBackground, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapAsElement(com::sun::star::uno::Reference<com::sun::star::awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter);
+void dumpFillBitmapAsElement(css::uno::Reference<css::awt::XBitmap> xBitmap, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapURLAsAttribute(const OUString& sBitmapURL, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetXAsAttribute(sal_Int32 aBitmapPositionOffsetX, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapPositionOffsetYAsAttribute(sal_Int32 aBitmapPositionOffsetY, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapOffsetXAsAttribute(sal_Int32 aBitmapOffsetX, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapOffsetYAsAttribute(sal_Int32 aBitmapOffsetY, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapRectanglePointAsAttribute(com::sun::star::drawing::RectanglePoint eBitmapRectanglePoint, xmlTextWriterPtr xmlWriter);
+void dumpFillBitmapRectanglePointAsAttribute(css::drawing::RectanglePoint eBitmapRectanglePoint, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapLogicalSizeAsAttribute(bool bBitmapLogicalSize, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapSizeXAsAttribute(sal_Int32 aBitmapSizeX, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapSizeYAsAttribute(sal_Int32 aBitmapSizeY, xmlTextWriterPtr xmlWriter);
-void dumpFillBitmapModeAsAttribute(com::sun::star::drawing::BitmapMode eBitmapMode, xmlTextWriterPtr xmlWriter);
+void dumpFillBitmapModeAsAttribute(css::drawing::BitmapMode eBitmapMode, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapStretchAsAttribute(bool bBitmapStretch, xmlTextWriterPtr xmlWriter);
 void dumpFillBitmapTileAsAttribute(bool bBitmapTile, xmlTextWriterPtr xmlWriter);
 
 // LineProperties.idl
-void dumpLineStyleAsAttribute(com::sun::star::drawing::LineStyle eLineStyle, xmlTextWriterPtr xmlWriter);
+void dumpLineStyleAsAttribute(css::drawing::LineStyle eLineStyle, xmlTextWriterPtr xmlWriter);
 void dumpLineDashAsElement(const css::drawing::LineDash& rLineDash, xmlTextWriterPtr xmlWriter);
 void dumpLineDashNameAsAttribute(const OUString& sLineDashName, xmlTextWriterPtr xmlWriter);
 void dumpLineColorAsAttribute(sal_Int32 aLineColor, xmlTextWriterPtr xmlWriter);
 void dumpLineTransparenceAsAttribute(sal_Int32 aLineTransparence, xmlTextWriterPtr xmlWriter);
 void dumpLineWidthAsAttribute(sal_Int32 aLineWidth, xmlTextWriterPtr xmlWriter);
-void dumpLineJointAsAttribute(com::sun::star::drawing::LineJoint eLineJoint, xmlTextWriterPtr xmlWriter);
+void dumpLineJointAsAttribute(css::drawing::LineJoint eLineJoint, xmlTextWriterPtr xmlWriter);
 void dumpLineStartNameAsAttribute(const OUString& sLineStartName, xmlTextWriterPtr xmlWriter);
 void dumpLineEndNameAsAttribute(const OUString& sLineEndName, xmlTextWriterPtr xmlWriter);
 void dumpLineStartAsElement(const css::drawing::PolyPolygonBezierCoords& rLineStart, xmlTextWriterPtr xmlWriter);
@@ -81,9 +81,9 @@ void dumpLineEndCenterAsAttribute(bool bLineEndCenter, xmlTextWriterPtr xmlWrite
 void dumpLineEndWidthAsAttribute(sal_Int32 aLineEndWidth, xmlTextWriterPtr xmlWriter);
 
 // PolyPolygonDescriptor.idl
-void dumpPolygonKindAsAttribute(com::sun::star::drawing::PolygonKind ePolygonKind, xmlTextWriterPtr xmlWriter);
-void dumpPolyPolygonAsElement(const com::sun::star::drawing::PointSequenceSequence& rPolyPolygon, xmlTextWriterPtr xmlWriter);
-void dumpGeometryAsElement(const com::sun::star::drawing::PointSequenceSequence& rGeometry, xmlTextWriterPtr xmlWriter);
+void dumpPolygonKindAsAttribute(css::drawing::PolygonKind ePolygonKind, xmlTextWriterPtr xmlWriter);
+void dumpPolyPolygonAsElement(const css::drawing::PointSequenceSequence& rPolyPolygon, xmlTextWriterPtr xmlWriter);
+void dumpGeometryAsElement(const css::drawing::PointSequenceSequence& rGeometry, xmlTextWriterPtr xmlWriter);
 
 // CharacterProperties.idl
 void dumpCharHeightAsAttribute(float fHeight, xmlTextWriterPtr xmlWriter);
@@ -94,9 +94,9 @@ void dumpIsNumberingAsAttribute(bool bIsNumbering, xmlTextWriterPtr xmlWriter);
 void dumpTextAutoGrowHeightAsAttribute(bool bTextAutoGrowHeight, xmlTextWriterPtr xmlWriter);
 void dumpTextAutoGrowWidthAsAttribute(bool bTextAutoGrowWidth, xmlTextWriterPtr xmlWriter);
 void dumpTextContourFrameAsAttribute(bool bTextContourFrame, xmlTextWriterPtr xmlWriter);
-void dumpTextFitToSizeAsAttribute(com::sun::star::drawing::TextFitToSizeType eTextFitToSize, xmlTextWriterPtr xmlWriter);
-void dumpTextHorizontalAdjustAsAttribute(com::sun::star::drawing::TextHorizontalAdjust eTextHorizontalAdjust, xmlTextWriterPtr xmlWriter);
-void dumpTextVerticalAdjustAsAttribute(com::sun::star::drawing::TextVerticalAdjust eTextVerticalAdjust, xmlTextWriterPtr xmlWriter);
+void dumpTextFitToSizeAsAttribute(css::drawing::TextFitToSizeType eTextFitToSize, xmlTextWriterPtr xmlWriter);
+void dumpTextHorizontalAdjustAsAttribute(css::drawing::TextHorizontalAdjust eTextHorizontalAdjust, xmlTextWriterPtr xmlWriter);
+void dumpTextVerticalAdjustAsAttribute(css::drawing::TextVerticalAdjust eTextVerticalAdjust, xmlTextWriterPtr xmlWriter);
 void dumpTextLeftDistanceAsAttribute(sal_Int32 aTextLeftDistance, xmlTextWriterPtr xmlWriter);
 void dumpTextRightDistanceAsAttribute(sal_Int32 aTextRightDistance, xmlTextWriterPtr xmlWriter);
 void dumpTextUpperDistanceAsAttribute(sal_Int32 aTextUpperDistance, xmlTextWriterPtr xmlWriter);
@@ -108,11 +108,11 @@ void dumpTextMinimumFrameWidthAsAttribute(sal_Int32 aTextMinimumFrameWidth, xmlT
 void dumpTextAnimationAmountAsAttribute(sal_Int32 aTextAnimationAmount, xmlTextWriterPtr xmlWriter);
 void dumpTextAnimationCountAsAttribute(sal_Int32 aTextAnimationCount, xmlTextWriterPtr xmlWriter);
 void dumpTextAnimationDelayAsAttribute(sal_Int32 aTextAnimationDelay, xmlTextWriterPtr xmlWriter);
-void dumpTextAnimationDirectionAsAttribute(com::sun::star::drawing::TextAnimationDirection eTextAnimationDirection, xmlTextWriterPtr xmlWriter);
-void dumpTextAnimationKindAsAttribute(com::sun::star::drawing::TextAnimationKind eTextAnimationKind, xmlTextWriterPtr xmlWriter);
+void dumpTextAnimationDirectionAsAttribute(css::drawing::TextAnimationDirection eTextAnimationDirection, xmlTextWriterPtr xmlWriter);
+void dumpTextAnimationKindAsAttribute(css::drawing::TextAnimationKind eTextAnimationKind, xmlTextWriterPtr xmlWriter);
 void dumpTextAnimationStartInsideAsAttribute(bool bTextAnimationStartInside, xmlTextWriterPtr xmlWriter);
 void dumpTextAnimationStopInsideAsAttribute(bool bTextAnimationStopInside, xmlTextWriterPtr xmlWriter);
-void dumpTextWritingModeAsAttribute(com::sun::star::text::WritingMode eWritingMode, xmlTextWriterPtr xmlWriter);
+void dumpTextWritingModeAsAttribute(css::text::WritingMode eWritingMode, xmlTextWriterPtr xmlWriter);
 
 // ShadowProperties.idl
 void dumpShadowAsAttribute(bool bShadow, xmlTextWriterPtr xmlWriter);
@@ -139,25 +139,25 @@ void dumpInteropGrabBagAsElement(const uno::Sequence< beans::PropertyValue>& aIn
 // CustomShape.idl
 void dumpCustomShapeEngineAsAttribute(const OUString& sCustomShapeEngine, xmlTextWriterPtr xmlWriter);
 void dumpCustomShapeDataAsAttribute(const OUString& sCustomShapeData, xmlTextWriterPtr xmlWriter);
-void dumpCustomShapeGeometryAsElement(const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue>& aCustomShapeGeometry, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeGeometryAsElement(const css::uno::Sequence< css::beans::PropertyValue>& aCustomShapeGeometry, xmlTextWriterPtr xmlWriter);
 void dumpCustomShapeReplacementURLAsAttribute(const OUString& sCustomShapeReplacementURL, xmlTextWriterPtr xmlWriter);
 
 // XShape.idl
-void dumpPositionAsAttribute(const com::sun::star::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
-void dumpSizeAsAttribute(const com::sun::star::awt::Size& rSize, xmlTextWriterPtr xmlWriter);
+void dumpPositionAsAttribute(const css::awt::Point& rPoint, xmlTextWriterPtr xmlWriter);
+void dumpSizeAsAttribute(const css::awt::Size& rSize, xmlTextWriterPtr xmlWriter);
 
 // the rest
-void dumpShapeDescriptorAsAttribute( com::sun::star::uno::Reference< com::sun::star::drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter );
-void dumpXShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
-void dumpXShapes( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties );
-void dumpTextPropertiesService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpFillPropertiesService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpLinePropertiesService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpShadowPropertiesService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpPolyPolygonDescriptorService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpShapeService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
-void dumpPolyPolygonBezierDescriptorService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
-void dumpCustomShapeService(com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpShapeDescriptorAsAttribute( css::uno::Reference< css::drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter );
+void dumpXShape(css::uno::Reference< css::drawing::XShape > xShape, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
+void dumpXShapes( css::uno::Reference< css::drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties );
+void dumpTextPropertiesService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpFillPropertiesService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpLinePropertiesService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpShadowPropertiesService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpPolyPolygonDescriptorService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpShapeService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter, bool bDumpInteropProperties);
+void dumpPolyPolygonBezierDescriptorService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
+void dumpCustomShapeService(css::uno::Reference< css::beans::XPropertySet > xPropSet, xmlTextWriterPtr xmlWriter);
 
 
 int writeCallback(void* pContext, const char* sBuffer, int nLen)

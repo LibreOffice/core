@@ -50,11 +50,11 @@ namespace drawinglayer
                 // #i98295# normal creation
                 if(!getSdrLFSAttribute().getFill().isDefault())
                 {
-                    if(::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind())
+                    if(css::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind())
                     {
                         applyNormalsKindSphereTo3DGeometry(aFill, aRange);
                     }
-                    else if(::com::sun::star::drawing::NormalsKind_FLAT == getSdr3DObjectAttribute().getNormalsKind())
+                    else if(css::drawing::NormalsKind_FLAT == getSdr3DObjectAttribute().getNormalsKind())
                     {
                         applyNormalsKindFlatTo3DGeometry(aFill);
                     }

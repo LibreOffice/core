@@ -49,7 +49,7 @@ namespace
     class scoped_timed_RefDev : public comphelper::unique_disposing_ptr<ImpTimedRefDev>
     {
     public:
-        scoped_timed_RefDev() : comphelper::unique_disposing_ptr<ImpTimedRefDev>((::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(::comphelper::getProcessComponentContext(), ::com::sun::star::uno::UNO_QUERY_THROW)))
+        scoped_timed_RefDev() : comphelper::unique_disposing_ptr<ImpTimedRefDev>((css::uno::Reference<css::lang::XComponent>(::comphelper::getProcessComponentContext(), css::uno::UNO_QUERY_THROW)))
         {
         }
     };
@@ -168,7 +168,7 @@ namespace drawinglayer
             const attribute::FontAttribute& rFontAttribute,
             double fFontScaleX,
             double fFontScaleY,
-            const ::com::sun::star::lang::Locale& rLocale)
+            const css::lang::Locale& rLocale)
         {
             setFont(getVclFontFromFontAttribute(
                 rFontAttribute,
@@ -374,7 +374,7 @@ namespace drawinglayer
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
-            const ::com::sun::star::lang::Locale& rLocale)
+            const css::lang::Locale& rLocale)
         {
             // detect FontScaling
             const sal_uInt32 nHeight(basegfx::fround(fabs(fFontScaleY)));

@@ -119,7 +119,7 @@ namespace drawinglayer
                 constructed VclMetafileProcessor2D. It's still incarnated on demand,
                 but exists for OOo runtime now by purpose.
              */
-            static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >   mxBreakIterator;
+            static css::uno::Reference< css::i18n::XBreakIterator >   mxBreakIterator;
 
             /*  vcl::PDFExtOutDevData support
                 For the first step, some extra actions at vcl::PDFExtOutDevData need to

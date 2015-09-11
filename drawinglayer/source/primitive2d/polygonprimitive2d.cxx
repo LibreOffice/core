@@ -251,7 +251,7 @@ namespace drawinglayer
                     // create fat line data
                     const double fHalfLineWidth(getLineAttribute().getWidth() / 2.0);
                     const basegfx::B2DLineJoin aLineJoin(getLineAttribute().getLineJoin());
-                    const com::sun::star::drawing::LineCap aLineCap(getLineAttribute().getLineCap());
+                    const css::drawing::LineCap aLineCap(getLineAttribute().getLineCap());
                     basegfx::B2DPolyPolygon aAreaPolyPolygon;
 
                     for(sal_uInt32 a(0L); a < nCount; a++)
@@ -351,7 +351,7 @@ namespace drawinglayer
                     bUseDecomposition = true;
                 }
 
-                if(!bUseDecomposition && com::sun::star::drawing::LineCap_SQUARE == getLineAttribute().getLineCap())
+                if(!bUseDecomposition && css::drawing::LineCap_SQUARE == getLineAttribute().getLineCap())
                 {
                     // when drawing::LineCap_SQUARE is used the below method to grow the polygon
                     // range by half line width will not work, so use decomposition. Interestingly,

@@ -30,20 +30,20 @@ namespace drawinglayer
         {
         public:
             // 3D scene attribute definitions
-            double                                      mfDistance;
-            double                                      mfShadowSlant;
-            ::com::sun::star::drawing::ProjectionMode   maProjectionMode;
-            ::com::sun::star::drawing::ShadeMode        maShadeMode;
+            double                         mfDistance;
+            double                         mfShadowSlant;
+            css::drawing::ProjectionMode   maProjectionMode;
+            css::drawing::ShadeMode        maShadeMode;
 
             // bitfield
-            bool                                        mbTwoSidedLighting : 1;
+            bool                           mbTwoSidedLighting : 1;
 
         public:
             ImpSdrSceneAttribute(
                 double fDistance,
                 double fShadowSlant,
-                ::com::sun::star::drawing::ProjectionMode aProjectionMode,
-                ::com::sun::star::drawing::ShadeMode aShadeMode,
+                css::drawing::ProjectionMode aProjectionMode,
+                css::drawing::ShadeMode aShadeMode,
                 bool bTwoSidedLighting)
             :   mfDistance(fDistance),
                 mfShadowSlant(fShadowSlant),
@@ -56,8 +56,8 @@ namespace drawinglayer
             ImpSdrSceneAttribute()
             :   mfDistance(0.0),
                 mfShadowSlant(0.0),
-                maProjectionMode(::com::sun::star::drawing::ProjectionMode_PARALLEL),
-                maShadeMode(::com::sun::star::drawing::ShadeMode_FLAT),
+                maProjectionMode(css::drawing::ProjectionMode_PARALLEL),
+                maShadeMode(css::drawing::ShadeMode_FLAT),
                 mbTwoSidedLighting(false)
             {
             }
@@ -65,8 +65,8 @@ namespace drawinglayer
             // data read access
             double getDistance() const { return mfDistance; }
             double getShadowSlant() const { return mfShadowSlant; }
-            ::com::sun::star::drawing::ProjectionMode getProjectionMode() const { return maProjectionMode; }
-            ::com::sun::star::drawing::ShadeMode getShadeMode() const { return maShadeMode; }
+            css::drawing::ProjectionMode getProjectionMode() const { return maProjectionMode; }
+            css::drawing::ShadeMode getShadeMode() const { return maShadeMode; }
             bool getTwoSidedLighting() const { return mbTwoSidedLighting; }
 
             bool operator==(const ImpSdrSceneAttribute& rCandidate) const
@@ -88,8 +88,8 @@ namespace drawinglayer
         SdrSceneAttribute::SdrSceneAttribute(
             double fDistance,
             double fShadowSlant,
-            ::com::sun::star::drawing::ProjectionMode aProjectionMode,
-            ::com::sun::star::drawing::ShadeMode aShadeMode,
+            css::drawing::ProjectionMode aProjectionMode,
+            css::drawing::ShadeMode aShadeMode,
             bool bTwoSidedLighting)
         :   mpSdrSceneAttribute(ImpSdrSceneAttribute(
                 fDistance, fShadowSlant, aProjectionMode, aShadeMode, bTwoSidedLighting))
@@ -135,12 +135,12 @@ namespace drawinglayer
             return mpSdrSceneAttribute->getShadowSlant();
         }
 
-        ::com::sun::star::drawing::ProjectionMode SdrSceneAttribute::getProjectionMode() const
+        css::drawing::ProjectionMode SdrSceneAttribute::getProjectionMode() const
         {
             return mpSdrSceneAttribute->getProjectionMode();
         }
 
-        ::com::sun::star::drawing::ShadeMode SdrSceneAttribute::getShadeMode() const
+        css::drawing::ShadeMode SdrSceneAttribute::getShadeMode() const
         {
             return mpSdrSceneAttribute->getShadeMode();
         }

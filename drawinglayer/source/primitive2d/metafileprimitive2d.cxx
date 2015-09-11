@@ -1295,7 +1295,7 @@ namespace
             // prepare FontColor and Locale
             const basegfx::BColor aFontColor(rProperty.getTextColor());
             const Color aFillColor(rFont.GetFillColor());
-            const com::sun::star::lang::Locale aLocale(LanguageTag(rProperty.getLanguageType()).getLocale());
+            const css::lang::Locale aLocale(LanguageTag(rProperty.getLanguageType()).getLocale());
             const bool bWordLineMode(rFont.IsWordLineMode());
 
             const bool bDecoratedIsNeeded(
@@ -1536,7 +1536,7 @@ namespace
                         // strikeout with character
                         const sal_Unicode aStrikeoutChar(
                             drawinglayer::primitive2d::TEXT_STRIKEOUT_SLASH == aTextStrikeout ? '/' : 'X');
-                        const com::sun::star::lang::Locale aLocale(LanguageTag(
+                        const css::lang::Locale aLocale(LanguageTag(
                             rProperty.getLanguageType()).getLocale());
 
                         aTargetVector.push_back(

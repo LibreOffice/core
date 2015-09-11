@@ -35,7 +35,7 @@ namespace drawinglayer
             double                                  mfWidth;            // 1/100th mm, 0.0==hair
             double                                  mfTransparence;     // [0.0 .. 1.0], 0.0==no transp.
             basegfx::BColor                         maColor;            // color of line
-            com::sun::star::drawing::LineCap        meCap;              // BUTT, ROUND, or SQUARE
+            css::drawing::LineCap                   meCap;              // BUTT, ROUND, or SQUARE
             ::std::vector< double >                 maDotDashArray;     // array of double which defines the dot-dash pattern
             double                                  mfFullDotDashLen;   // sum of maDotDashArray (for convenience)
 
@@ -44,7 +44,7 @@ namespace drawinglayer
                 double fWidth,
                 double fTransparence,
                 const basegfx::BColor& rColor,
-                com::sun::star::drawing::LineCap eCap,
+                css::drawing::LineCap eCap,
                 const ::std::vector< double >& rDotDashArray,
                 double fFullDotDashLen)
             :   meJoin(eJoin),
@@ -62,7 +62,7 @@ namespace drawinglayer
                 mfWidth(0.0),
                 mfTransparence(0.0),
                 maColor(basegfx::BColor()),
-                meCap(com::sun::star::drawing::LineCap_BUTT),
+                meCap(css::drawing::LineCap_BUTT),
                 maDotDashArray(std::vector< double >()),
                 mfFullDotDashLen(0.0)
             {
@@ -73,7 +73,7 @@ namespace drawinglayer
             double getWidth() const { return mfWidth; }
             double getTransparence() const { return mfTransparence; }
             const basegfx::BColor& getColor() const { return maColor; }
-            com::sun::star::drawing::LineCap getCap() const { return meCap; }
+            css::drawing::LineCap getCap() const { return meCap; }
             const ::std::vector< double >& getDotDashArray() const { return maDotDashArray; }
             double getFullDotDashLen() const { return mfFullDotDashLen; }
 
@@ -99,7 +99,7 @@ namespace drawinglayer
             double fWidth,
             double fTransparence,
             const basegfx::BColor& rColor,
-            com::sun::star::drawing::LineCap eCap,
+            css::drawing::LineCap eCap,
             const ::std::vector< double >& rDotDashArray,
             double fFullDotDashLen)
         :   mpSdrLineAttribute(
@@ -179,7 +179,7 @@ namespace drawinglayer
             return mpSdrLineAttribute->getFullDotDashLen();
         }
 
-        com::sun::star::drawing::LineCap SdrLineAttribute::getCap() const
+        css::drawing::LineCap SdrLineAttribute::getCap() const
         {
             return mpSdrLineAttribute->getCap();
         }

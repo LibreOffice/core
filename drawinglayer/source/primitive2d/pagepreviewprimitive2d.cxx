@@ -120,7 +120,7 @@ namespace drawinglayer
         }
 
         PagePreviewPrimitive2D::PagePreviewPrimitive2D(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage,
+            const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
             const basegfx::B2DHomMatrix& rTransform,
             double fContentWidth,
             double fContentHeight,

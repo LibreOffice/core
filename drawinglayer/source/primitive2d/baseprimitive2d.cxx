@@ -62,7 +62,7 @@ namespace drawinglayer
             return get2DDecomposition(aViewInformation);
         }
 
-        com::sun::star::geometry::RealRectangle2D SAL_CALL BasePrimitive2D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException, std::exception )
+        css::geometry::RealRectangle2D SAL_CALL BasePrimitive2D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException, std::exception )
         {
             const geometry::ViewInformation2D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle2DFromB2DRectangle(getB2DRange(aViewInformation));

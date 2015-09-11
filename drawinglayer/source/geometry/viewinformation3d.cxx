@@ -140,13 +140,13 @@ namespace drawinglayer
 
                         if(rProp.Name == getNamePropertyObjectTransformation())
                         {
-                            com::sun::star::geometry::AffineMatrix3D aAffineMatrix3D;
+                            css::geometry::AffineMatrix3D aAffineMatrix3D;
                             rProp.Value >>= aAffineMatrix3D;
                             maObjectTransformation = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
                         }
                         else if(rProp.Name == getNamePropertyOrientation())
                         {
-                            com::sun::star::geometry::AffineMatrix3D aAffineMatrix3D;
+                            css::geometry::AffineMatrix3D aAffineMatrix3D;
                             rProp.Value >>= aAffineMatrix3D;
                             maOrientation = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
                         }
@@ -160,7 +160,7 @@ namespace drawinglayer
                             const double f_32(maProjection.get(3, 2));
                             const double f_33(maProjection.get(3, 3));
 
-                            com::sun::star::geometry::AffineMatrix3D aAffineMatrix3D;
+                            css::geometry::AffineMatrix3D aAffineMatrix3D;
                             rProp.Value >>= aAffineMatrix3D;
                             maProjection = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
 
@@ -195,7 +195,7 @@ namespace drawinglayer
                         }
                         else if(rProp.Name == getNamePropertyDeviceToView())
                         {
-                            com::sun::star::geometry::AffineMatrix3D aAffineMatrix3D;
+                            css::geometry::AffineMatrix3D aAffineMatrix3D;
                             rProp.Value >>= aAffineMatrix3D;
                             maDeviceToView = basegfx::unotools::homMatrixFromAffineMatrix3D(aAffineMatrix3D);
                         }
@@ -251,7 +251,7 @@ namespace drawinglayer
 
                 if(bObjectTransformationUsed)
                 {
-                    com::sun::star::geometry::AffineMatrix3D aAffineMatrix3D;
+                    css::geometry::AffineMatrix3D aAffineMatrix3D;
                     basegfx::unotools::affineMatrixFromHomMatrix3D(aAffineMatrix3D, maObjectTransformation);
                     mxViewInformation[nIndex].Name = getNamePropertyObjectTransformation();
                     mxViewInformation[nIndex].Value <<= aAffineMatrix3D;
@@ -260,7 +260,7 @@ namespace drawinglayer
 
                 if(bOrientationUsed)
                 {
-                    com::sun::star::geometry::AffineMatrix3D aAffineMatrix3D;
+                    css::geometry::AffineMatrix3D aAffineMatrix3D;
                     basegfx::unotools::affineMatrixFromHomMatrix3D(aAffineMatrix3D, maOrientation);
                     mxViewInformation[nIndex].Name = getNamePropertyOrientation();
                     mxViewInformation[nIndex].Value <<= aAffineMatrix3D;
@@ -269,7 +269,7 @@ namespace drawinglayer
 
                 if(bProjectionUsed)
                 {
-                    com::sun::star::geometry::AffineMatrix3D aAffineMatrix3D;
+                    css::geometry::AffineMatrix3D aAffineMatrix3D;
                     basegfx::unotools::affineMatrixFromHomMatrix3D(aAffineMatrix3D, maProjection);
                     mxViewInformation[nIndex].Name = getNamePropertyProjection();
                     mxViewInformation[nIndex].Value <<= aAffineMatrix3D;
@@ -306,7 +306,7 @@ namespace drawinglayer
 
                 if(bDeviceToViewUsed)
                 {
-                    com::sun::star::geometry::AffineMatrix3D aAffineMatrix3D;
+                    css::geometry::AffineMatrix3D aAffineMatrix3D;
                     basegfx::unotools::affineMatrixFromHomMatrix3D(aAffineMatrix3D, maDeviceToView);
                     mxViewInformation[nIndex].Name = getNamePropertyDeviceToView();
                     mxViewInformation[nIndex].Value <<= aAffineMatrix3D;

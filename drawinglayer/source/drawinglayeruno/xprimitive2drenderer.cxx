@@ -62,7 +62,7 @@ namespace drawinglayer
                 const uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
                 ::sal_uInt32 DPI_X,
                 ::sal_uInt32 DPI_Y,
-                const ::com::sun::star::geometry::RealRectangle2D& Range,
+                const css::geometry::RealRectangle2D& Range,
                 ::sal_uInt32 MaximumQuadraticPixels) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XServiceInfo
@@ -118,7 +118,7 @@ namespace drawinglayer
             const uno::Sequence< beans::PropertyValue >& aViewInformationSequence,
             ::sal_uInt32 DPI_X,
             ::sal_uInt32 DPI_Y,
-            const ::com::sun::star::geometry::RealRectangle2D& Range,
+            const css::geometry::RealRectangle2D& Range,
             ::sal_uInt32 MaximumQuadraticPixels) throw (uno::RuntimeException, std::exception)
         {
             uno::Reference< rendering::XBitmap > XBitmap;

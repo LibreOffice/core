@@ -135,19 +135,19 @@ namespace drawinglayer
                         }
                         else if(rProp.Name == getNamePropertyObjectTransformation())
                         {
-                            com::sun::star::geometry::AffineMatrix2D aAffineMatrix2D;
+                            css::geometry::AffineMatrix2D aAffineMatrix2D;
                             rProp.Value >>= aAffineMatrix2D;
                             basegfx::unotools::homMatrixFromAffineMatrix(maObjectTransformation, aAffineMatrix2D);
                         }
                         else if(rProp.Name == getNamePropertyViewTransformation())
                         {
-                            com::sun::star::geometry::AffineMatrix2D aAffineMatrix2D;
+                            css::geometry::AffineMatrix2D aAffineMatrix2D;
                             rProp.Value >>= aAffineMatrix2D;
                             basegfx::unotools::homMatrixFromAffineMatrix(maViewTransformation, aAffineMatrix2D);
                         }
                         else if(rProp.Name == getNamePropertyViewport())
                         {
-                            com::sun::star::geometry::RealRectangle2D aViewport;
+                            css::geometry::RealRectangle2D aViewport;
                             rProp.Value >>= aViewport;
                             maViewport = basegfx::unotools::b2DRectangleFromRealRectangle2D(aViewport);
                         }
@@ -194,7 +194,7 @@ namespace drawinglayer
 
                 if(bObjectTransformationUsed)
                 {
-                    com::sun::star::geometry::AffineMatrix2D aAffineMatrix2D;
+                    css::geometry::AffineMatrix2D aAffineMatrix2D;
                     basegfx::unotools::affineMatrixFromHomMatrix(aAffineMatrix2D, maObjectTransformation);
                     mxViewInformation[nIndex].Name = getNamePropertyObjectTransformation();
                     mxViewInformation[nIndex].Value <<= aAffineMatrix2D;
@@ -203,7 +203,7 @@ namespace drawinglayer
 
                 if(bViewTransformationUsed)
                 {
-                    com::sun::star::geometry::AffineMatrix2D aAffineMatrix2D;
+                    css::geometry::AffineMatrix2D aAffineMatrix2D;
                     basegfx::unotools::affineMatrixFromHomMatrix(aAffineMatrix2D, maViewTransformation);
                     mxViewInformation[nIndex].Name = getNamePropertyViewTransformation();
                     mxViewInformation[nIndex].Value <<= aAffineMatrix2D;
@@ -212,7 +212,7 @@ namespace drawinglayer
 
                 if(bViewportUsed)
                 {
-                    const com::sun::star::geometry::RealRectangle2D aViewport(basegfx::unotools::rectangle2DFromB2DRectangle(maViewport));
+                    const css::geometry::RealRectangle2D aViewport(basegfx::unotools::rectangle2DFromB2DRectangle(maViewport));
                     mxViewInformation[nIndex].Name = getNamePropertyViewport();
                     mxViewInformation[nIndex].Value <<= aViewport;
                     nIndex++;

@@ -47,8 +47,8 @@ namespace drawinglayer
             // normal creation
             if(!getSdrLFSAttribute().getFill().isDefault())
             {
-                if(::com::sun::star::drawing::NormalsKind_SPECIFIC == getSdr3DObjectAttribute().getNormalsKind()
-                    || ::com::sun::star::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind())
+                if(css::drawing::NormalsKind_SPECIFIC == getSdr3DObjectAttribute().getNormalsKind()
+                    || css::drawing::NormalsKind_SPHERE == getSdr3DObjectAttribute().getNormalsKind())
                 {
                     // create sphere normals
                     const basegfx::B3DPoint aCenter(basegfx::tools::getRange(aFill).getCenter());
@@ -66,14 +66,14 @@ namespace drawinglayer
             if(!getSdrLFSAttribute().getFill().isDefault())
             {
                 // handle texture coordinates X
-                const bool bParallelX(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == getSdr3DObjectAttribute().getTextureProjectionX());
-                const bool bObjectSpecificX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
-                const bool bSphereX(!bParallelX && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == getSdr3DObjectAttribute().getTextureProjectionX()));
+                const bool bParallelX(css::drawing::TextureProjectionMode_PARALLEL == getSdr3DObjectAttribute().getTextureProjectionX());
+                const bool bObjectSpecificX(css::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
+                const bool bSphereX(!bParallelX && (css::drawing::TextureProjectionMode_SPHERE == getSdr3DObjectAttribute().getTextureProjectionX()));
 
                 // handle texture coordinates Y
-                const bool bParallelY(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == getSdr3DObjectAttribute().getTextureProjectionY());
-                const bool bObjectSpecificY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
-                const bool bSphereY(!bParallelY && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == getSdr3DObjectAttribute().getTextureProjectionY()));
+                const bool bParallelY(css::drawing::TextureProjectionMode_PARALLEL == getSdr3DObjectAttribute().getTextureProjectionY());
+                const bool bObjectSpecificY(css::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
+                const bool bSphereY(!bParallelY && (css::drawing::TextureProjectionMode_SPHERE == getSdr3DObjectAttribute().getTextureProjectionY()));
 
                 if(bParallelX || bParallelY)
                 {
