@@ -377,7 +377,7 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
     if (bClear)
         pList->RemoveAll();
 
-    //TODO: for muliple selected tables enter multiple ranges !!!
+    //TODO: for multiple selected tables enter multiple ranges !!!
 
     if ( bMultiMarked )
     {

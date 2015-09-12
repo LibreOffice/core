@@ -152,7 +152,7 @@ sub sign_files      #09.07.2007 10:36
     $commandline_base .= " -t $opt_timestamp_url" if ($opt_timestamp_url ne "");
 
     # Here switch between:
-    # one command line for muliple files (all doesn't work, too much) / for each file one command line
+    # one command line for multiple files (all doesn't work, too much) / for each file one command line
     if ( $max_files > 1 ) {
         exec_multi_sign($files_to_sign, $commandline_base);
     } else

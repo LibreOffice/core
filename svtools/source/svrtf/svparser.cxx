@@ -153,7 +153,7 @@ sal_Unicode SvParser::GetNextChar()
 {
     sal_Unicode c = 0U;
 
-    // When reading muliple bytes, we don't have to care about the file
+    // When reading multiple bytes, we don't have to care about the file
     // position when we run into the pending state. The file position is
     // maintained by SaveState/RestoreState.
     bool bErr;
