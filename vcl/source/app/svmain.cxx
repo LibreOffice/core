@@ -28,6 +28,7 @@
 #include <tools/resmgr.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
 
 #include <unotools/syslocaleoptions.hxx>
 #include <vcl/svapp.hxx>
@@ -441,8 +442,6 @@ void DeInitVCL()
     }
     pSVData->mpDefaultWin.disposeAndClear();
 
-    DBGGUI_DEINIT_SOLARMUTEXCHECK();
-
     if ( pSVData->mpUnoWrapper )
     {
         try
@@ -450,6 +449,12 @@ void DeInitVCL()
             uno::Reference<frame::XDesktop2> const xDesktop = frame::Desktop::create(
                     comphelper::getProcessComponentContext() );
             xDesktop->addEventListener(new VCLUnoWrapperDeleter());
+
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                SAL_WARN_IF(!xDesktop.is(), "desktop.app", "No Desktop interface");
+                xDesktop->terminate();
+            }
         }
         catch (uno::Exception const&)
         {
@@ -564,6 +569,8 @@ void DeInitVCL()
     }
 
     EmbeddedFontsHelper::clearTemporaryFontFiles();
+
+    DBGGUI_DEINIT_SOLARMUTEXCHECK();
 }
 
 // only one call is allowed
