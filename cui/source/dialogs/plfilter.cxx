@@ -20,7 +20,6 @@
 #include <set>
 #include <map>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 
 #include <vcl/stdtext.hxx>
 
@@ -64,16 +63,22 @@ void fillNetscapePluginFilters( Sequence< OUString >& rPluginNames, Sequence< OU
     {
         const PluginDescription & rDescr = pDescriptions[nPos];
 
+        // consistency check for the do {} while loop below
+        if (rDescr.Extension.isEmpty())
+            continue;
+
         StrSet& rTypes = aMap[ rDescr.Description ];
         OUString aExtension( rDescr.Extension );
 
-        for ( sal_uInt16 nCnt = comphelper::string::getTokenCount(aExtension,  ';'); nCnt--; )
+        sal_Int32 nIndex = 0;
+        do
         {
             // no default plugins anymore
-            OUString aExt( aExtension.getToken( nCnt, ';' ) );
+            const OUString aExt( aExtension.getToken( 0, ';', nIndex ) );
             if ( aExt != "*.*" )
                 rTypes.insert( aExt );
         }
+        while ( nIndex >= 0 );
     }
 
     rPluginNames = Sequence< OUString >( aMap.size() );
