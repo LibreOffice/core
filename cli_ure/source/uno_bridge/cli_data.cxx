@@ -154,7 +154,7 @@ System::Type^ loadCliType(System::String ^ unoName)
             bIsPolymorphic = true;
         }
         System::AppDomain^  currentDomain = System::AppDomain::CurrentDomain;
-        array<sr::Assembly^>^  assems = currentDomain->GetAssemblies();
+        cli::array<sr::Assembly^>^  assems = currentDomain->GetAssemblies();
         for (int i = 0; i < assems->Length; i++)
         {
             retVal = assems[i]->GetType(loadName, false);
@@ -1228,66 +1228,66 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
                     {
                     case typelib_TypeClass_CHAR:
                         seq = seq_allocate(nElements, sizeof (sal_Unicode));
-                        sri::Marshal::Copy(safe_cast<array<System::Char>^>(cli_data), 0,
+                        sri::Marshal::Copy(safe_cast<cli::array<System::Char>^>(cli_data), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_BOOLEAN:
                         seq = seq_allocate(nElements, sizeof (sal_Bool));
-                        sri::Marshal::Copy(safe_cast<array<System::Char>^>(cli_data), 0,
+                        sri::Marshal::Copy(safe_cast<cli::array<System::Char>^>(cli_data), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_BYTE:
                         seq = seq_allocate( nElements, sizeof (sal_Int8) );
-                    sri::Marshal::Copy(safe_cast<array<System::Byte>^>(cli_data), 0,
+                        sri::Marshal::Copy(safe_cast<cli::array<System::Byte>^>(cli_data), 0,
                                        IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                     break;
                     case typelib_TypeClass_SHORT:
                         seq = seq_allocate(nElements, sizeof (sal_Int16));
-                        sri::Marshal::Copy(safe_cast<array<System::Int16>^>(cli_data), 0,
+                        sri::Marshal::Copy(safe_cast<cli::array<System::Int16>^>(cli_data), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_UNSIGNED_SHORT:
                         seq = seq_allocate( nElements, sizeof (sal_uInt16) );
-                        sri::Marshal::Copy(dynamic_cast<array<System::Int16>^>(
-                                               safe_cast<array<System::UInt16>^>(cli_data)), 0,
+                        sri::Marshal::Copy(dynamic_cast<cli::array<System::Int16>^>(
+                                           safe_cast<cli::array<System::UInt16>^>(cli_data)), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_LONG:
                         seq = seq_allocate(nElements, sizeof (sal_Int32));
-                        sri::Marshal::Copy(safe_cast<array<System::Int32>^>(cli_data), 0,
+                        sri::Marshal::Copy(safe_cast<cli::array<System::Int32>^>(cli_data), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_UNSIGNED_LONG:
                         seq = seq_allocate( nElements, sizeof (sal_uInt32) );
-                        sri::Marshal::Copy(dynamic_cast<array<System::Int32>^>(
-                                               safe_cast<array<System::UInt32>^>(cli_data)), 0,
+                        sri::Marshal::Copy(dynamic_cast<cli::array<System::Int32>^>(
+                                           safe_cast<cli::array<System::UInt32>^>(cli_data)), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_HYPER:
                         seq = seq_allocate(nElements, sizeof (sal_Int64));
-                        sri::Marshal::Copy(safe_cast<array<System::Int64>^>(cli_data), 0,
+                        sri::Marshal::Copy(safe_cast<cli::array<System::Int64>^>(cli_data), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_UNSIGNED_HYPER:
                         seq = seq_allocate(nElements, sizeof (sal_uInt64));
-                        sri::Marshal::Copy(dynamic_cast<array<System::Int64>^>(
-                                               safe_cast<array<System::UInt64>^>(cli_data)), 0,
+                        sri::Marshal::Copy(dynamic_cast<cli::array<System::Int64>^>(
+                                           safe_cast<cli::array<System::UInt64>^>(cli_data)), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_FLOAT:
                         seq = seq_allocate(nElements, sizeof (float));
-                        sri::Marshal::Copy(safe_cast<array<System::Single>^>(cli_data), 0,
+                        sri::Marshal::Copy(safe_cast<cli::array<System::Single>^>(cli_data), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_DOUBLE:
                         seq = seq_allocate(nElements, sizeof (double));
-                        sri::Marshal::Copy(safe_cast<array<System::Double>^>(cli_data), 0,
+                        sri::Marshal::Copy(safe_cast<cli::array<System::Double>^>(cli_data), 0,
                                            IntPtr(& ((uno_Sequence*) seq.get())->elements), nElements);
                         break;
                     case typelib_TypeClass_STRING:
                     {
                         seq = seq_allocate(nElements, sizeof (rtl_uString*));
-                        array<System::String^>^ arStr= safe_cast<array<System::String^>^>(cli_data);
+                        cli::array<System::String^>^ arStr= safe_cast<cli::array<System::String^>^>(cli_data);
                         for (int i= 0; i < nElements; i++)
                         {
                             pin_ptr<const wchar_t> pdata= PtrToStringChars(arStr[i]);
@@ -1573,12 +1573,12 @@ void Bridge::map_to_cli(
                                                         ((char*) uno_data + offset));
                 //We need to find a constructor for the exception that takes the message string
                 //We assume that the first argument is the message string
-                array<sr::ConstructorInfo^>^ arCtorInfo = cliType->GetConstructors();
+                cli::array<sr::ConstructorInfo^>^ arCtorInfo = cliType->GetConstructors();
                 sr::ConstructorInfo^ ctorInfo = nullptr;
                 int numCtors = arCtorInfo->Length;
                 //Constructor must at least have 2 params for the base
                 //unoidl.com.sun.star.uno.Exception (String, Object);
-                array<sr::ParameterInfo^>^ arParamInfo;
+                cli::array<sr::ParameterInfo^>^ arParamInfo;
                 for (int i = 0; i < numCtors; i++)
                 {
                     arParamInfo = arCtorInfo[i]->GetParameters();
@@ -1593,7 +1593,7 @@ void Bridge::map_to_cli(
                     && arParamInfo[1]->Position == 1);
                 //Prepare parameters for constructor
                 int numArgs = arParamInfo->Length;
-                array<System::Object^>^ args = gcnew array<System::Object^>(numArgs);
+                cli::array<System::Object^>^ args = gcnew cli::array<System::Object^>(numArgs);
                 //only initialize the first argument with the message
                 args[0] = sMessage;
                 cliObj = ctorInfo->Invoke(args);
@@ -1690,58 +1690,58 @@ void Bridge::map_to_cli(
         {
         case typelib_TypeClass_CHAR:
         {
-            array<System::Char>^ arChar= gcnew array<System::Char>(nElements);
+            cli::array<System::Char>^ arChar= gcnew cli::array<System::Char>(nElements);
             sri::Marshal::Copy( IntPtr((void*) &seq->elements), arChar, 0, nElements);
             *cli_data= arChar;
             break;
         }
         case typelib_TypeClass_BOOLEAN:
         {
-            array<System::Byte>^ arBool= gcnew array<System::Byte>(nElements);
+            cli::array<System::Byte>^ arBool= gcnew cli::array<System::Byte>(nElements);
             sri::Marshal::Copy( IntPtr((void*) &seq->elements), arBool, 0, nElements);
-            *cli_data= dynamic_cast<array<System::Boolean>^>(arBool);
+            *cli_data= dynamic_cast<cli::array<System::Boolean>^>(arBool);
             break;
         }
         case typelib_TypeClass_BYTE:
         {
-            array<System::Byte>^ arByte= gcnew array<System::Byte>(nElements);
+            cli::array<System::Byte>^ arByte= gcnew cli::array<System::Byte>(nElements);
             sri::Marshal::Copy( IntPtr((void*) &seq->elements), arByte, 0, nElements);
             *cli_data= arByte;
             break;
         }
         case typelib_TypeClass_SHORT:
         {
-            array<System::Int16>^ arShort= gcnew array<System::Int16>(nElements);
+            cli::array<System::Int16>^ arShort= gcnew cli::array<System::Int16>(nElements);
             sri::Marshal::Copy( IntPtr((void*) &seq->elements), arShort, 0, nElements);
             *cli_data= arShort;
             break;
         }
         case typelib_TypeClass_UNSIGNED_SHORT:
         {
-            array<System::UInt16>^ arUInt16= gcnew array<System::UInt16>(nElements);
-            sri::Marshal::Copy( IntPtr((void*) &seq->elements), dynamic_cast<array<System::Int16>^>(arUInt16),
+            cli::array<System::UInt16>^ arUInt16= gcnew cli::array<System::UInt16>(nElements);
+            sri::Marshal::Copy( IntPtr((void*) &seq->elements), dynamic_cast<cli::array<System::Int16>^>(arUInt16),
                                 0, nElements);
             *cli_data= arUInt16;
             break;
         }
         case typelib_TypeClass_LONG:
         {
-            array<System::Int32>^ arInt32= gcnew array<System::Int32>(nElements);
+            cli::array<System::Int32>^ arInt32= gcnew cli::array<System::Int32>(nElements);
             sri::Marshal::Copy( IntPtr((void*) &seq->elements), arInt32, 0, nElements);
             *cli_data= arInt32;
             break;
         }
         case typelib_TypeClass_UNSIGNED_LONG:
         {
-            array<System::UInt32>^ arUInt32= gcnew array<System::UInt32>(nElements);
-            sri::Marshal::Copy( IntPtr((void*) &seq->elements), dynamic_cast<array<System::Int32>^>(arUInt32),
+            cli::array<System::UInt32>^ arUInt32= gcnew cli::array<System::UInt32>(nElements);
+            sri::Marshal::Copy( IntPtr((void*) &seq->elements), dynamic_cast<cli::array<System::Int32>^>(arUInt32),
                                 0, nElements);
             *cli_data= arUInt32;
             break;
         }
         case typelib_TypeClass_HYPER:
         {
-            array<System::Int64>^ arInt64= gcnew array<System::Int64>(nElements);
+            cli::array<System::Int64>^ arInt64= gcnew cli::array<System::Int64>(nElements);
             sri::Marshal::Copy( IntPtr((void*) &seq->elements), arInt64, 0, nElements);
             *cli_data= arInt64;
             break;
@@ -1749,28 +1749,28 @@ void Bridge::map_to_cli(
         //FIXME: Marshal::Copy of UInt64?
         case typelib_TypeClass_UNSIGNED_HYPER:
         {
-            array<System::IntPtr>^ arUInt64= gcnew array<System::IntPtr>(nElements);
+            cli::array<System::IntPtr>^ arUInt64= gcnew cli::array<System::IntPtr>(nElements);
             sri::Marshal::Copy( IntPtr((void*) &seq->elements), arUInt64, 0, nElements);
-            *cli_data= dynamic_cast<array<System::UInt64>^>(arUInt64);
+            *cli_data= dynamic_cast<cli::array<System::UInt64>^>(arUInt64);
             break;
         }
         case typelib_TypeClass_FLOAT:
         {
-            array<System::Single>^ arSingle= gcnew array<System::Single>(nElements);
+            cli::array<System::Single>^ arSingle= gcnew cli::array<System::Single>(nElements);
             sri::Marshal::Copy( IntPtr((void*) &seq->elements), arSingle, 0, nElements);
             *cli_data= arSingle;
             break;
         }
         case typelib_TypeClass_DOUBLE:
         {
-            array<System::Double>^ arDouble= gcnew array<System::Double>(nElements);
+            cli::array<System::Double>^ arDouble= gcnew cli::array<System::Double>(nElements);
             sri::Marshal::Copy( IntPtr((void*) &seq->elements), arDouble, 0, nElements);
             *cli_data= arDouble;
             break;
         }
         case typelib_TypeClass_STRING:
         {
-            array<System::String^>^ arString= gcnew array<System::String^>(nElements);
+            cli::array<System::String^>^ arString= gcnew cli::array<System::String^>(nElements);
             for (int i= 0; i < nElements; i++)
             {
                 rtl_uString *aStr= ((rtl_uString**)(&seq->elements))[i];
@@ -1781,7 +1781,7 @@ void Bridge::map_to_cli(
         }
         case typelib_TypeClass_TYPE:
         {
-            array<System::Type^>^ arType= gcnew array<System::Type^>(nElements);
+            cli::array<System::Type^>^ arType= gcnew cli::array<System::Type^>(nElements);
             for (int i= 0; i < nElements; i++)
             {
                 arType[i]=
@@ -1792,7 +1792,7 @@ void Bridge::map_to_cli(
         }
         case typelib_TypeClass_ANY:
         {
-            array<uno::Any>^ arCli= gcnew array<uno::Any>(nElements);
+            cli::array<uno::Any>^ arCli= gcnew cli::array<uno::Any>(nElements);
             uno_Any const * p = (uno_Any const *)seq->elements;
             for (sal_Int32 nPos = 0; nPos < nElements; ++nPos )
             {
