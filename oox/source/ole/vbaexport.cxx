@@ -39,7 +39,7 @@
 #define CODEPAGE RTL_TEXTENCODING_MS_1252
 #endif
 
-#define VBA_EXPORT_DEBUG 1
+#define VBA_EXPORT_DEBUG 0
 
 namespace {
 
