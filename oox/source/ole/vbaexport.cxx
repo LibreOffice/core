@@ -630,9 +630,10 @@ void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUSt
 
     exportString(aModuleStream, "Attribute VB_Name = \"" + aElementName + "\"\r\n");
     OUString aSourceCode = rSourceCode.replaceFirst("Option VBASupport 1\n", "");
-    sal_Int32 nPos = aSourceCode.indexOf("Rem Attribute VBA_ModuleType=");
-    sal_Int32 nEndPos = aSourceCode.indexOf("\n", nPos);
-    aSourceCode = aSourceCode.replaceAt(nPos, nEndPos - nPos+1, "");
+    const sal_Int32 nPos = aSourceCode.indexOf("Rem Attribute VBA_ModuleType=");
+    const sal_Int32 nEndPos = nPos != -1 ? aSourceCode.indexOf("\n", nPos) : -1;
+    if (nPos != -1 && nEndPos != -1)
+        aSourceCode = aSourceCode.replaceAt(nPos, nEndPos - nPos+1, "");
     aSourceCode = aSourceCode.replaceAll("\n", "\r\n");
     exportString(aModuleStream, aSourceCode);
     aModuleStream.Seek(0);
