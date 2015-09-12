@@ -62,10 +62,15 @@ void exportUTF16String(SvStream& rStrm, const OUString& rString)
 
 }
 
-VBACompressionChunk::VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, sal_Size nChunkSize):
-    mrCompressedStream(rCompressedStream),
-    mpUncompressedData(pData),
-    mnChunkSize(nChunkSize)
+VBACompressionChunk::VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, sal_Size nChunkSize)
+    : mrCompressedStream(rCompressedStream)
+    , mpUncompressedData(pData)
+    , mpCompressedChunkStream(0)
+    , mnChunkSize(nChunkSize)
+    , mnCompressedCurrent(0)
+    , mnCompressedEnd(0)
+    , mnDecompressedCurrent(0)
+    , mnDecompressedEnd(0)
 {
 }
 
