@@ -377,9 +377,9 @@ bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
     {
         OFieldDescription* pField = static_cast<OFieldDescription*>(GetEntryData(GetSelectEntryPos(j)));
         if(!pField || pField->getTypeInfo()->nSearchType == ColumnSearch::NONE)
-            return true;
+            return false;
     }
-    return false;
+    return true;
 }
 
 void OWizTypeSelectList::setPrimaryKey(OFieldDescription* _pFieldDescr, sal_uInt16 _nPos, bool _bSet)
