@@ -1051,7 +1051,9 @@ ScDocShell* XclExpXmlStream::getDocShell()
 }
 
 bool XclExpXmlStream::exportDocument()
-    throw (css::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException,
+           css::ucb::ContentCreationException,
+           std::exception)
 {
     ScDocShell* pShell = getDocShell();
     ScDocument& rDoc = pShell->GetDocument();

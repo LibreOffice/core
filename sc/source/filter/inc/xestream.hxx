@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XESTREAM_HXX
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 
 #include <map>
 #include <stack>
@@ -320,7 +321,9 @@ public:
 
     // ignore
     virtual bool exportDocument()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException,
+               css::ucb::ContentCreationException,
+               std::exception) SAL_OVERRIDE;
 
     // only needed for import; ignore
     virtual bool importDocument() throw() SAL_OVERRIDE;
