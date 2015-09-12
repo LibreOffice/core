@@ -15,6 +15,7 @@
 #include <com/sun/star/uno/Any.h>
 #include <rtl/ustring.hxx>
 
+#include <iterator>
 #include <vector>
 
 #include "CommonFunctors.hxx"
