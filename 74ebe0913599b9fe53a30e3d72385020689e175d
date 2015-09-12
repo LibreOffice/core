@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_aced9b27",
+        "filename": "chart2/source/tools/LogarithmicRegressionCurveCalculator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-09-12T13:29:32Z",
+      "side": 1,
+      "message": "Should we use fabs or std::abs like in PolynomialRegressionCurveCalculator?",
+      "range": {
+        "startLine": 156,
+        "startChar": 38,
+        "endLine": 156,
+        "endChar": 42
+      },
+      "revId": "74ebe0913599b9fe53a30e3d72385020689e175d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_cce8cf19",
+        "filename": "chart2/source/tools/LogarithmicRegressionCurveCalculator.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2015-09-12T13:29:32Z",
+      "side": 1,
+      "message": "Are these #defined constant useful? \nIf no, I would remove them. \nIf yes, other RegressionCurveCalculator should use it also.",
+      "range": {
+        "startLine": 160,
+        "startChar": 29,
+        "endLine": 160,
+        "endChar": 42
+      },
+      "revId": "74ebe0913599b9fe53a30e3d72385020689e175d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
