@@ -1425,7 +1425,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
         return;
 
     pTabIdBuffer = new XclExpChTrTabIdBuffer( GetTabInfo().GetXclTabCount() );
-    maBuffers.push_back( pTabIdBuffer );
+    maBuffers.push_back( std::unique_ptr<XclExpChTrTabIdBuffer>(pTabIdBuffer) );
 
     // calculate final table order (tab id list)
     const ScChangeAction* pScAction;
@@ -1453,9 +1453,9 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     if (GetOutput() == EXC_OUTPUT_BINARY)
     {
         pHeader = new XclExpChTrHeader;
-        maRecList.push_back( pHeader );
-        maRecList.push_back( new XclExpChTr0x0195 );
-        maRecList.push_back( new XclExpChTr0x0194( *pTempChangeTrack ) );
+        maRecList.push_back( std::unique_ptr<ExcRecord>(pHeader) );
+        maRecList.push_back( std::unique_ptr<ExcRecord>( new XclExpChTr0x0195 ) );
+        maRecList.push_back( std::unique_ptr<ExcRecord>( new XclExpChTr0x0194( *pTempChangeTrack ) ) );
 
         OUString sLastUsername;
         DateTime aLastDateTime( DateTime::EMPTY );
@@ -1475,22 +1475,22 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
                 aLastDateTime = pAction->GetDateTime();
 
                 nLogNumber++;
-                maRecList.push_back( new XclExpChTrInfo(sLastUsername, aLastDateTime, aGUID) );
-                maRecList.push_back( new XclExpChTrTabId(pAction->GetTabIdBuffer()) );
+                maRecList.push_back( std::unique_ptr<ExcRecord>(new XclExpChTrInfo(sLastUsername, aLastDateTime, aGUID)) );
+                maRecList.push_back(  std::unique_ptr<ExcRecord>(new XclExpChTrTabId(pAction->GetTabIdBuffer())) );
                 pHeader->SetGUID( aGUID );
             }
             pAction->SetIndex( nIndex );
-            maRecList.push_back( pAction );
+            maRecList.push_back( std::unique_ptr<ExcRecord>(pAction) );
         }
 
         pHeader->SetGUID( aGUID );
         pHeader->SetCount( nIndex - 1 );
-        maRecList.push_back( new ExcEof );
+        maRecList.push_back(  std::unique_ptr<ExcRecord>(new ExcEof) );
     }
     else
     {
         XclExpXmlChTrHeaders* pHeaders = new XclExpXmlChTrHeaders;
-        maRecList.push_back(pHeaders);
+        maRecList.push_back( std::unique_ptr<ExcRecord>(pHeaders));
 
         OUString sLastUsername;
         DateTime aLastDateTime(DateTime::EMPTY);
@@ -1512,7 +1512,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
                 aLastDateTime = pAction->GetDateTime();
 
                 pCurHeader = new XclExpXmlChTrHeader(sLastUsername, aLastDateTime, aGUID, nLogNumber, pAction->GetTabIdBuffer());
-                maRecList.push_back(pCurHeader);
+                maRecList.push_back( std::unique_ptr<ExcRecord>(pCurHeader));
                 nLogNumber++;
                 pHeaders->SetGUID(aGUID);
             }
@@ -1521,7 +1521,7 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
         }
 
         pHeaders->SetGUID(aGUID);
-        maRecList.push_back(new EndXmlElement(XML_headers));
+        maRecList.push_back( std::unique_ptr<ExcRecord>(new EndXmlElement(XML_headers)));
     }
 }
 
@@ -1584,7 +1584,7 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
             pXclAction = new XclExpChTrInsertTab( rAction, GetRoot(), *pTabIdBuffer );
             XclExpChTrTabIdBuffer* pNewBuffer = new XclExpChTrTabIdBuffer( *pTabIdBuffer );
             pNewBuffer->Remove();
-            maBuffers.push_back( pNewBuffer );
+            maBuffers.push_back( std::unique_ptr<XclExpChTrTabIdBuffer>(pNewBuffer) );
             pTabIdBuffer = pNewBuffer;
         }
         break;
@@ -1630,8 +1630,8 @@ void XclExpChangeTrack::Write()
             XclExpStream aXclStrm( *xSvStrm, GetRoot(), EXC_MAXRECSIZE_BIFF8 + 8 );
 
             RecListType::iterator pIter;
-            for (pIter = maRecList.begin(); pIter != maRecList.end(); ++pIter)
-                pIter->Save(aXclStrm);
+            for(pIter = maRecList.begin(); pIter != maRecList.end(); ++pIter)
+                (*pIter)->Save(aXclStrm);
 
             xSvStrm->Commit();
         }
@@ -1677,7 +1677,7 @@ void XclExpChangeTrack::WriteXml( XclExpXmlStream& rWorkbookStrm )
 
     RecListType::iterator pIter;
     for (pIter = maRecList.begin(); pIter != maRecList.end(); ++pIter)
-        pIter->SaveXml(rWorkbookStrm);
+        (*pIter)->SaveXml(rWorkbookStrm);
 
     rWorkbookStrm.PopStream();
 }

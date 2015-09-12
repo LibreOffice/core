@@ -73,7 +73,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <memory>
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
 using namespace ::com::sun::star;
@@ -708,7 +707,7 @@ public:
 };
 
 void fillSortedColumnArray(
-    boost::ptr_vector<SortedColumn>& rSortedCols,
+    std::vector<std::unique_ptr<SortedColumn>>& rSortedCols,
     SortedRowFlags& rRowFlags,
     std::vector<SvtListener*>& rCellListeners,
     ScSortInfoArray* pArray, SCTAB nTab, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress )
@@ -717,7 +716,7 @@ void fillSortedColumnArray(
     ScSortInfoArray::RowsType* pRows = pArray->GetDataRows();
 
     size_t nColCount = nCol2 - nCol1 + 1;
-    boost::ptr_vector<SortedColumn> aSortedCols; // storage for copied cells.
+    std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
     SortedRowFlags aRowFlags;
     aSortedCols.reserve(nColCount);
     for (size_t i = 0; i < nColCount; ++i)
@@ -725,7 +724,7 @@ void fillSortedColumnArray(
         // In the sorted column container, element positions and row
         // positions must match, else formula cells may mis-behave during
         // grouping.
-        aSortedCols.push_back(new SortedColumn(nRow1));
+        aSortedCols.push_back(std::unique_ptr<SortedColumn>(new SortedColumn(nRow1)));
     }
 
     for (size_t i = 0; i < pRows->size(); ++i)
@@ -737,7 +736,7 @@ void fillSortedColumnArray(
 
             ScSortInfoArray::Cell& rCell = pRow->maCells[j];
 
-            sc::CellStoreType& rCellStore = aSortedCols.at(j).maCells;
+            sc::CellStoreType& rCellStore = aSortedCols.at(j).get()->maCells;
             switch (rCell.maCell.meType)
             {
                 case CELLTYPE_STRING:
@@ -786,7 +785,7 @@ void fillSortedColumnArray(
                     rCellStore.push_back_empty();
             }
 
-            sc::CellTextAttrStoreType& rAttrStore = aSortedCols.at(j).maCellTextAttrs;
+            sc::CellTextAttrStoreType& rAttrStore = aSortedCols.at(j).get()->maCellTextAttrs;
             if (rCell.mpAttr)
                 rAttrStore.push_back(*rCell.mpAttr);
             else
@@ -797,7 +796,7 @@ void fillSortedColumnArray(
                 // At this point each broadcaster instance is managed by 2
                 // containers. We will release those in the original storage
                 // below before transferring them to the document.
-                sc::BroadcasterStoreType& rBCStore = aSortedCols.at(j).maBroadcasters;
+                sc::BroadcasterStoreType& rBCStore = aSortedCols.at(j).get()->maBroadcasters;
                 if (rCell.mpBroadcaster)
                     // A const pointer would be implicitly converted to a bool type.
                     rBCStore.push_back(const_cast<SvtBroadcaster*>(rCell.mpBroadcaster));
@@ -806,14 +805,14 @@ void fillSortedColumnArray(
             }
 
             // The same with cell note instances ...
-            sc::CellNoteStoreType& rNoteStore = aSortedCols.at(j).maCellNotes;
+            sc::CellNoteStoreType& rNoteStore = aSortedCols.at(j).get()->maCellNotes;
             if (rCell.mpNote)
                 rNoteStore.push_back(const_cast<ScPostIt*>(rCell.mpNote));
             else
                 rNoteStore.push_back_empty();
 
             if (rCell.mpPattern)
-                aSortedCols.at(j).setPattern(aCellPos.Row(), rCell.mpPattern);
+                aSortedCols.at(j).get()->setPattern(aCellPos.Row(), rCell.mpPattern);
         }
 
         if (pArray->IsKeepQuery())
@@ -1091,7 +1090,7 @@ void ScTable::SortReorderByRow(
 
     // Cells in the data rows only reference values in the document. Make
     // a copy before updating the document.
-    boost::ptr_vector<SortedColumn> aSortedCols; // storage for copied cells.
+    std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
     SortedRowFlags aRowFlags;
     fillSortedColumnArray(aSortedCols, aRowFlags, aCellListeners, pArray, nTab, nCol1, nCol2, pProgress);
 
@@ -1101,18 +1100,18 @@ void ScTable::SortReorderByRow(
 
         {
             sc::CellStoreType& rDest = aCol[nThisCol].maCells;
-            sc::CellStoreType& rSrc = aSortedCols[i].maCells;
+            sc::CellStoreType& rSrc = aSortedCols[i].get()->maCells;
             rSrc.transfer(nRow1, nRow2, rDest, nRow1);
         }
 
         {
             sc::CellTextAttrStoreType& rDest = aCol[nThisCol].maCellTextAttrs;
-            sc::CellTextAttrStoreType& rSrc = aSortedCols[i].maCellTextAttrs;
+            sc::CellTextAttrStoreType& rSrc = aSortedCols[i].get()->maCellTextAttrs;
             rSrc.transfer(nRow1, nRow2, rDest, nRow1);
         }
 
         {
-            sc::CellNoteStoreType& rSrc = aSortedCols[i].maCellNotes;
+            sc::CellNoteStoreType& rSrc = aSortedCols[i].get()->maCellNotes;
             sc::CellNoteStoreType& rDest = aCol[nThisCol].maCellNotes;
 
             // Do the same as broadcaster storage transfer (to prevent double deletion).
@@ -1125,7 +1124,7 @@ void ScTable::SortReorderByRow(
             // Get all row spans where the pattern is not NULL.
             std::vector<PatternSpan> aSpans =
                 sc::toSpanArrayWithValue<SCROW,const ScPatternAttr*,PatternSpan>(
-                    aSortedCols[i].maPatterns);
+                    aSortedCols[i].get()->maPatterns);
 
             std::vector<PatternSpan>::iterator it = aSpans.begin(), itEnd = aSpans.end();
             for (; it != itEnd; ++it)
@@ -1276,7 +1275,7 @@ void ScTable::SortReorderByRowRefUpdate(
 
     // Cells in the data rows only reference values in the document. Make
     // a copy before updating the document.
-    boost::ptr_vector<SortedColumn> aSortedCols; // storage for copied cells.
+    std::vector<std::unique_ptr<SortedColumn>> aSortedCols; // storage for copied cells.
     SortedRowFlags aRowFlags;
     std::vector<SvtListener*> aListenersDummy;
     fillSortedColumnArray(aSortedCols, aRowFlags, aListenersDummy, pArray, nTab, nCol1, nCol2, pProgress);
@@ -1287,18 +1286,18 @@ void ScTable::SortReorderByRowRefUpdate(
 
         {
             sc::CellStoreType& rDest = aCol[nThisCol].maCells;
-            sc::CellStoreType& rSrc = aSortedCols[i].maCells;
+            sc::CellStoreType& rSrc = aSortedCols[i].get()->maCells;
             rSrc.transfer(nRow1, nRow2, rDest, nRow1);
         }
 
         {
             sc::CellTextAttrStoreType& rDest = aCol[nThisCol].maCellTextAttrs;
-            sc::CellTextAttrStoreType& rSrc = aSortedCols[i].maCellTextAttrs;
+            sc::CellTextAttrStoreType& rSrc = aSortedCols[i].get()->maCellTextAttrs;
             rSrc.transfer(nRow1, nRow2, rDest, nRow1);
         }
 
         {
-            sc::BroadcasterStoreType& rSrc = aSortedCols[i].maBroadcasters;
+            sc::BroadcasterStoreType& rSrc = aSortedCols[i].get()->maBroadcasters;
             sc::BroadcasterStoreType& rDest = aCol[nThisCol].maBroadcasters;
 
             // Release current broadcasters first, to prevent them from getting deleted.
@@ -1309,7 +1308,7 @@ void ScTable::SortReorderByRowRefUpdate(
         }
 
         {
-            sc::CellNoteStoreType& rSrc = aSortedCols[i].maCellNotes;
+            sc::CellNoteStoreType& rSrc = aSortedCols[i].get()->maCellNotes;
             sc::CellNoteStoreType& rDest = aCol[nThisCol].maCellNotes;
 
             // Do the same as broadcaster storage transfer (to prevent double deletion).
@@ -1322,7 +1321,7 @@ void ScTable::SortReorderByRowRefUpdate(
             // Get all row spans where the pattern is not NULL.
             std::vector<PatternSpan> aSpans =
                 sc::toSpanArrayWithValue<SCROW,const ScPatternAttr*,PatternSpan>(
-                    aSortedCols[i].maPatterns);
+                    aSortedCols[i].get()->maPatterns);
 
             std::vector<PatternSpan>::iterator it = aSpans.begin(), itEnd = aSpans.end();
             for (; it != itEnd; ++it)

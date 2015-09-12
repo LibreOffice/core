@@ -27,7 +27,7 @@ ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
     size_t nCount = rList.Count();
 
     for (size_t i=0; i<nCount; i++)
-        Append( new ScDetOpData(rList.aDetOpDataVector[i]) );
+        Append( new ScDetOpData( (*rList.aDetOpDataVector[i].get()) ) );
 }
 
 void ScDetOpList::DeleteOnTab( SCTAB nTab )
@@ -35,7 +35,7 @@ void ScDetOpList::DeleteOnTab( SCTAB nTab )
     for (ScDetOpDataVector::iterator it = aDetOpDataVector.begin(); it != aDetOpDataVector.end(); /*noop*/ )
     {
         // look for operations on the deleted sheet
-        if (it->GetPos().Tab() == nTab)
+        if ((*it)->GetPos().Tab() == nTab)
             it = aDetOpDataVector.erase( it);
         else
             ++it;
@@ -47,7 +47,7 @@ void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMod
 {
     for (ScDetOpDataVector::iterator it = aDetOpDataVector.begin(); it != aDetOpDataVector.end(); ++it )
     {
-        ScAddress aPos = it->GetPos();
+        ScAddress aPos = (*it)->GetPos();
         SCCOL nCol1 = aPos.Col();
         SCROW nRow1 = aPos.Row();
         SCTAB nTab1 = aPos.Tab();
@@ -61,7 +61,7 @@ void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMod
                 rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aEnd.Tab(), nDx, nDy, nDz,
                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( eRes != UR_NOTHING )
-            it->SetPos( ScAddress( nCol1, nRow1, nTab1 ) );
+            (*it)->SetPos( ScAddress( nCol1, nRow1, nTab1 ) );
     }
 }
 
@@ -70,7 +70,7 @@ void ScDetOpList::Append( ScDetOpData* pDetOpData )
     if ( pDetOpData->GetOperation() == SCDETOP_ADDERROR )
         bHasAddError = true;
 
-    aDetOpDataVector.push_back( pDetOpData );
+    aDetOpDataVector.push_back( std::unique_ptr<ScDetOpData>(pDetOpData) );
 }
 
 bool ScDetOpList::operator==( const ScDetOpList& r ) const
@@ -88,7 +88,7 @@ bool ScDetOpList::operator==( const ScDetOpList& r ) const
 
 const ScDetOpData& ScDetOpList::GetObject( size_t nPos ) const
 {
-    return aDetOpDataVector[nPos];
+    return (*aDetOpDataVector[nPos].get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

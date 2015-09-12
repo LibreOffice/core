@@ -25,7 +25,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 #include "global.hxx"
-#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XDispatchProviderInterception;
@@ -35,7 +34,7 @@ class ScTabViewShell;
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XStatusListener > XStatusListenerRef;
-typedef boost::ptr_vector<XStatusListenerRef> XStatusListenerArr_Impl;
+typedef std::vector<XStatusListenerRef> XStatusListenerArr_Impl;
 
 class ScDispatchProviderInterceptor : public cppu::WeakImplHelper<
                                         com::sun::star::frame::XDispatchProviderInterceptor,

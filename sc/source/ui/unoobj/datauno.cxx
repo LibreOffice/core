@@ -1933,9 +1933,7 @@ void SAL_CALL ScDatabaseRangeObj::addRefreshListener(
                                                 throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Reference<util::XRefreshListener>* pObj =
-            new uno::Reference<util::XRefreshListener>( xListener );
-    aRefreshListeners.push_back( pObj );
+    aRefreshListeners.push_back( uno::Reference<util::XRefreshListener>( xListener ));
 
     //  hold one additional ref to keep this object alive as long as there are listeners
     if ( aRefreshListeners.size() == 1 )
