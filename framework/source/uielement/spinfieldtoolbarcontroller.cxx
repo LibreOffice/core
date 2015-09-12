@@ -503,9 +503,9 @@ OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
 
         aBuffer[0] = 0;
         if ( m_bFloat )
-            snwprintf( reinterpret_cast<wchar_t *>(aBuffer), 128, reinterpret_cast<const wchar_t *>(m_aOutFormat.getStr()), fValue );
+            _snwprintf( reinterpret_cast<wchar_t *>(aBuffer), 128, reinterpret_cast<const wchar_t *>(m_aOutFormat.getStr()), fValue );
         else
-            snwprintf( reinterpret_cast<wchar_t *>(aBuffer), 128, reinterpret_cast<const wchar_t *>(m_aOutFormat.getStr()), sal_Int32( fValue ));
+            _snwprintf( reinterpret_cast<wchar_t *>(aBuffer), 128, reinterpret_cast<const wchar_t *>(m_aOutFormat.getStr()), sal_Int32( fValue ));
 
         sal_Int32 nSize = rtl_ustr_getLength( aBuffer );
         return OUString( aBuffer, nSize );
