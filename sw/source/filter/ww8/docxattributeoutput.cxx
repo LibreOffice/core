@@ -450,7 +450,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 {
     // write the paragraph properties + the run, already in the correct order
     m_pSerializer->mergeTopMarks(Tag_StartParagraph_2);
-    std::vector<  boost::shared_ptr <sw::Frame> > aFramePrTextbox;
+    std::vector<  std::shared_ptr <sw::Frame> > aFramePrTextbox;
     // Write the anchored frame if any
     // Word can't handle nested text boxes, so write them on the same level.
     ++m_nTextFrameLevel;
@@ -526,7 +526,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             }
             else
             {
-                ::boost::shared_ptr<sw::Frame>  pFramePr;
+                std::shared_ptr<sw::Frame>  pFramePr;
                 pFramePr.reset(new sw::Frame(aFrame));
                 aFramePrTextbox.push_back(pFramePr);
             }
@@ -585,7 +585,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // Write framePr
     if(!aFramePrTextbox.empty())
     {
-        for (std::vector< boost::shared_ptr<sw::Frame> > ::iterator it = aFramePrTextbox.begin() ; it != aFramePrTextbox.end(); ++it)
+        for (std::vector< std::shared_ptr<sw::Frame> > ::iterator it = aFramePrTextbox.begin() ; it != aFramePrTextbox.end(); ++it)
         {
             DocxTableExportContext aTableExportContext;
             pushToTableExportContext(aTableExportContext);

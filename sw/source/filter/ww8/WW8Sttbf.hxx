@@ -20,8 +20,8 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8STTBF_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WW8STTBF_HXX
 
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
@@ -55,7 +55,7 @@ typedef ::std::vector<OUString> StringVector_t;
     template <class T>
     class WW8Sttb : public WW8Struct
     {
-        typedef ::boost::shared_ptr< void > ExtraPointer_t;
+        typedef std::shared_ptr< void > ExtraPointer_t;
         typedef ::std::vector< ExtraPointer_t > ExtrasVector_t;
         bool bDoubleByteCharacters;
         StringVector_t m_Strings;

@@ -896,7 +896,7 @@ private:
 
     PageMargins m_pageMargins;
 
-    boost::shared_ptr<DocxTableStyleExport> m_pTableStyleExport;
+    std::shared_ptr<DocxTableStyleExport> m_pTableStyleExport;
     // flag to check if auto spacing was set in original file
     bool m_bParaBeforeAutoSpacing,m_bParaAfterAutoSpacing;
     // store hardcoded value which was set during import.

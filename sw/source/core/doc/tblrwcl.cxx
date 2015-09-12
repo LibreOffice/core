@@ -56,8 +56,6 @@
 #include <tblrwcl.hxx>
 #include <unochart.hxx>
 #include <o3tl/numeric.hxx>
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <calbck.hxx>
 #include <docary.hxx>
 
@@ -249,7 +247,7 @@ typedef o3tl::sorted_vector<_CpyTabFrm> _CpyTabFrms;
 
 struct _CpyPara
 {
-    boost::shared_ptr< std::vector< std::vector< sal_uLong > > > pWidths;
+    std::shared_ptr< std::vector< std::vector< sal_uLong > > > pWidths;
     SwDoc* pDoc;
     SwTableNode* pTableNd;
     _CpyTabFrms& rTabFrmArr;
@@ -1736,7 +1734,7 @@ static void lcl_CalcNewWidths(const FndLines_t& rFndLines, _CpyPara& rPara)
     const size_t nLineCount = rFndLines.size();
     if( nLineCount )
     {
-        rPara.pWidths = boost::shared_ptr< std::vector< std::vector< sal_uLong > > >
+        rPara.pWidths = std::shared_ptr< std::vector< std::vector< sal_uLong > > >
                         ( new std::vector< std::vector< sal_uLong > >( nLineCount ));
         // First we collect information about the left/right borders of all
         // selected cells
@@ -3385,7 +3383,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
     const SwFormatFrmSize& rSz = GetFrameFormat()->GetFrmSize();
     const SvxLRSpaceItem& rLR = GetFrameFormat()->GetLRSpace();
 
-    boost::scoped_ptr<_FndBox> xFndBox;                // for insertion/deletion
+    std::unique_ptr<_FndBox> xFndBox;                // for insertion/deletion
     SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
@@ -4120,7 +4118,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
     while( pBaseLine->GetUpper() )
         pBaseLine = pBaseLine->GetUpper()->GetUpper();
 
-    boost::scoped_ptr<_FndBox> xFndBox;                // for insertion/deletion
+    std::unique_ptr<_FndBox> xFndBox;                // for insertion/deletion
     SwTableSortBoxes aTmpLst;       // for Undo
     bool bBigger,
         bRet = false,
