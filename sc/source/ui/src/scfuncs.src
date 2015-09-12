@@ -2447,7 +2447,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Defines the data type of a value." ;
+            Text [ en-US ] = "Returns the data type of a value (1 = number, 2 = text, 4 = Boolean value, 8 = formula, 16 = error value, 64 = array)." ;
         };
         ExtraData =
         {
