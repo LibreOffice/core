@@ -281,9 +281,7 @@ void SAL_CALL ScDispatch::addStatusListener(
 
     if ( aURL.Complete.equalsAscii(cURLDocDataSource) )
     {
-        uno::Reference<frame::XStatusListener>* pObj =
-                new uno::Reference<frame::XStatusListener>( xListener );
-        aDataSourceListeners.push_back( pObj );
+        aDataSourceListeners.push_back( uno::Reference<frame::XStatusListener>( xListener ) );
 
         if (!bListeningToView)
         {

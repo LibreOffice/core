@@ -29,8 +29,6 @@
 #include "ftools.hxx"
 #include "excrecds.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 class ExcXmlRecord : public ExcRecord
 {
 public:
@@ -590,8 +588,8 @@ public:
 
 class XclExpChangeTrack : protected XclExpRoot
 {
-    typedef boost::ptr_vector<ExcRecord> RecListType;
-    typedef boost::ptr_vector<XclExpChTrTabIdBuffer> TabIdBufferType;
+    typedef std::vector<std::unique_ptr<ExcRecord>> RecListType;
+    typedef std::vector<std::unique_ptr<XclExpChTrTabIdBuffer>> TabIdBufferType;
     RecListType maRecList;           // list of "Revision Log" stream records
     std::stack<XclExpChTrAction*> aActionStack;
     XclExpChTrTabIdBuffer*        pTabIdBuffer;

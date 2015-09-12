@@ -59,7 +59,7 @@ struct ScSortParam;
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XRefreshListener > XDBRefreshListenerRef;
-typedef boost::ptr_vector<XDBRefreshListenerRef> XDBRefreshListenerArr_Impl;
+typedef std::vector<XDBRefreshListenerRef> XDBRefreshListenerArr_Impl;
 
 class ScDataUnoConversion
 {

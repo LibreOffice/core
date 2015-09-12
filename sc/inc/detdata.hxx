@@ -56,7 +56,7 @@ public:
 
 //  list of operators
 
-typedef boost::ptr_vector<ScDetOpData> ScDetOpDataVector;
+typedef std::vector<std::unique_ptr<ScDetOpData>> ScDetOpDataVector;
 
 class ScDetOpList
 {

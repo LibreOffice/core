@@ -922,7 +922,7 @@ void ScUndoDetective::Undo()
         {
             ScDetOpDataVector& rVec = pList->GetDataVector();
             ScDetOpDataVector::iterator it = rVec.begin() + rVec.size() - 1;
-            if ( it->GetOperation() == (ScDetOpType) nAction && it->GetPos() == aPos )
+            if ( (*it)->GetOperation() == (ScDetOpType) nAction && (*it)->GetPos() == aPos )
                 rVec.erase( it);
             else
             {
