@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_cc73afb3",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/except.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-09-12T06:42:15Z",
+      "side": 0,
+      "message": "Unintended change?",
+      "range": {
+        "startLine": 889,
+        "startChar": 3,
+        "endLine": 889,
+        "endChar": 4
+      },
+      "revId": "074d4b236266bf2934ea637da6c9bf4f18da4d0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
