@@ -65,7 +65,6 @@
 #include <swcss1.hxx>
 #include <swhtml.hxx>
 #include <numrule.hxx>
-#include <boost/shared_ptr.hpp>
 
 #include <vcl/graphicfilter.hxx>
 #include <tools/urlobj.hxx>

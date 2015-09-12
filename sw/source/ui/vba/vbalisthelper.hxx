@@ -13,10 +13,9 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <boost/shared_ptr.hpp>
 
 class SwVbaListHelper;
-typedef ::boost::shared_ptr< SwVbaListHelper > SwVbaListHelperRef;
+typedef std::shared_ptr< SwVbaListHelper > SwVbaListHelperRef;
 
 class SwVbaListHelper
 {

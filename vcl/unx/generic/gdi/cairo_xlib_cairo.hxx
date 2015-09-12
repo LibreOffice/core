@@ -64,7 +64,7 @@ namespace cairo {
         void clear() { mpDisplay=NULL; mhDrawable=0; }
     };
 
-    typedef boost::shared_ptr<X11Pixmap>       X11PixmapSharedPtr;
+    typedef std::shared_ptr<X11Pixmap>       X11PixmapSharedPtr;
 
     class X11Surface : public Surface
     {

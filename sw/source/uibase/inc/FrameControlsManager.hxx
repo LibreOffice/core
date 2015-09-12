@@ -12,16 +12,16 @@
 #include <viewsh.hxx>
 #include <FrameControl.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <tools/gen.hxx>
 
 #include <map>
+#include <memory>
 #include <vector>
 
 class SwPageFrm;
 class SwEditWin;
 
-typedef boost::shared_ptr< SwFrameControl > SwFrameControlPtr;
+typedef std::shared_ptr< SwFrameControl > SwFrameControlPtr;
 
 typedef std::map<const SwFrm*, SwFrameControlPtr> SwFrameControlPtrMap;
 

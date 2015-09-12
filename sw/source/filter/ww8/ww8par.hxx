@@ -1258,9 +1258,9 @@ private:
     SwMSDffManager* m_pMSDffManager;
 
     std::vector<OUString>* m_pAtnNames;
-    boost::shared_ptr< std::map<sal_uInt32, int> > m_pAtnIndexes;
-    boost::shared_ptr<WW8PLCFspecial> m_pAtnStarts;
-    boost::shared_ptr<WW8PLCFspecial> m_pAtnEnds;
+    std::shared_ptr< std::map<sal_uInt32, int> > m_pAtnIndexes;
+    std::shared_ptr<WW8PLCFspecial> m_pAtnStarts;
+    std::shared_ptr<WW8PLCFspecial> m_pAtnEnds;
 
     sw::util::AuthorInfos m_aAuthorInfos;
     OUString m_sBaseURL;
@@ -1363,7 +1363,7 @@ private:
     int m_nIdctHint;
     bool m_bBidi;
     bool m_bReadTable;
-    boost::shared_ptr<SwPaM> m_pTableEndPaM;
+    std::shared_ptr<SwPaM> m_pTableEndPaM;
     // Indicate that currently on loading a TOC, managed by Read_F_TOX() and End_Field()
     bool m_bLoadingTOXCache;
     int m_nEmbeddedTOXLevel;

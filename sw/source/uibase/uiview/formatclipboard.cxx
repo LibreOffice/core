@@ -35,7 +35,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
-#include <boost/scoped_ptr.hpp>
 
 namespace
 {
@@ -413,7 +412,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     rWrtShell.EndAction();
 }
 
-typedef boost::shared_ptr< SfxPoolItem > SfxPoolItemSharedPtr;
+typedef std::shared_ptr< SfxPoolItem > SfxPoolItemSharedPtr;
 typedef std::vector< SfxPoolItemSharedPtr > ItemVector;
 // collect all PoolItems from the applied styles
 static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
@@ -510,7 +509,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
         if ( m_pItemSet_ParAttr && m_pItemSet_ParAttr->Count() != 0 && !bNoParagraphFormats )
         {
             // temporary SfxItemSet
-            boost::scoped_ptr<SfxItemSet> pTemplateItemSet(lcl_CreateEmptyItemSet(
+            std::unique_ptr<SfxItemSet> pTemplateItemSet(lcl_CreateEmptyItemSet(
                     nSelectionType, *m_pItemSet_ParAttr->GetPool()));
             // no need to verify the existence of pTemplateItemSet as we
             // know that here the selection type is SEL_TXT
@@ -543,7 +542,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
         else
         {
             // temporary SfxItemSet
-            boost::scoped_ptr<SfxItemSet> pTemplateItemSet(lcl_CreateEmptyItemSet(
+            std::unique_ptr<SfxItemSet> pTemplateItemSet(lcl_CreateEmptyItemSet(
                     nSelectionType, *m_pItemSet_TextAttr->GetPool(), true ));
 
             if(pTemplateItemSet)

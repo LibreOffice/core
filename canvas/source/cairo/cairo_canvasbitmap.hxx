@@ -30,8 +30,6 @@
 
 #include <basegfx/vector/b2isize.hxx>
 
-#include <boost/shared_ptr.hpp>
-
 #include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
 
