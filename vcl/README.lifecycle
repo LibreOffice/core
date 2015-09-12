@@ -11,7 +11,7 @@ or:
 	pDialog->Execute(...);
 	delete pDialog;
 or:
-	boost::shared_ptr<Dialog> xDialog(new pDialog()); // old
+	std::shared_ptr<Dialog> xDialog(new pDialog()); // old
 	xDialog->Execute(...);
 	// depending who shared the ptr this would be freed sometime
 
@@ -118,7 +118,7 @@ or:
 -	delete pDialog;
 +	pDialog.disposeAndClear(); // done manually - replaces a delete
 or:
--	boost::shared_ptr<Dialog> xDialog(new Dialog(...));
+-	std::shared_ptr<Dialog> xDialog(new Dialog(...));
 +	ScopedVclPtrInstance<Dialog> xDialog(...);
 	xDialog->Execute(...);
 +	// depending how shared_ptr was shared perhaps

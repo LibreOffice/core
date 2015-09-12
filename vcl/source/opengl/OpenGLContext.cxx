@@ -14,7 +14,6 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <boost/make_shared.hpp>
 #include <vcl/pngwrite.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
@@ -1641,16 +1640,16 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
 
     ProgramKey aKey( rVertexShader, rFragmentShader, preamble );
 
-    std::map< ProgramKey, boost::shared_ptr<OpenGLProgram> >::iterator
+    std::map< ProgramKey, std::shared_ptr<OpenGLProgram> >::iterator
         it = maPrograms.find( aKey );
     if( it != maPrograms.end() )
         return it->second.get();
 
-    boost::shared_ptr<OpenGLProgram> pProgram = boost::make_shared<OpenGLProgram>();
+    std::shared_ptr<OpenGLProgram> pProgram = std::make_shared<OpenGLProgram>();
     if( !pProgram->Load( rVertexShader, rFragmentShader, preamble ) )
         return NULL;
 
-    maPrograms.insert(std::pair<ProgramKey, boost::shared_ptr<OpenGLProgram> >(aKey, pProgram));
+    maPrograms.insert(std::pair<ProgramKey, std::shared_ptr<OpenGLProgram> >(aKey, pProgram));
     return pProgram.get();
 }
 

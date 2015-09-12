@@ -21,8 +21,8 @@
 #define INCLUDED_VCL_CAIRO_HXX
 
 #include <sal/config.h>
-#include <boost/shared_ptr.hpp>
 #include <vcl/vclptr.hxx>
+#include <memory>
 
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo cairo_t;
@@ -31,8 +31,8 @@ class VirtualDevice;
 
 namespace cairo {
 
-    typedef boost::shared_ptr<cairo_surface_t> CairoSurfaceSharedPtr;
-    typedef boost::shared_ptr<cairo_t>         CairoSharedPtr;
+    typedef std::shared_ptr<cairo_surface_t> CairoSurfaceSharedPtr;
+    typedef std::shared_ptr<cairo_t>         CairoSharedPtr;
 
     /** Cairo surface interface
 
@@ -47,7 +47,7 @@ namespace cairo {
         // Query methods
         virtual CairoSharedPtr getCairo() const = 0;
         virtual CairoSurfaceSharedPtr getCairoSurface() const = 0;
-        virtual boost::shared_ptr<Surface> getSimilar(int cairo_content_type, int width, int height) const = 0;
+        virtual std::shared_ptr<Surface> getSimilar(int cairo_content_type, int width, int height) const = 0;
 
         /// factory for VirDev on this surface
         virtual VclPtr<VirtualDevice> createVirtualDevice() const = 0;
@@ -60,7 +60,7 @@ namespace cairo {
         virtual void flush() const = 0;
     };
 
-    typedef boost::shared_ptr<Surface> SurfaceSharedPtr;
+    typedef std::shared_ptr<Surface> SurfaceSharedPtr;
 }
 
 #endif

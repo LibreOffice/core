@@ -279,7 +279,7 @@ private:
         OUString fragmentShader;
         OString preamble;
     };
-    std::map<ProgramKey, boost::shared_ptr<OpenGLProgram> > maPrograms;
+    std::map<ProgramKey, std::shared_ptr<OpenGLProgram> > maPrograms;
     OpenGLProgram* mpCurrentProgram;
 #ifdef DBG_UTIL
     std::set<SalGraphicsImpl*> maParents;

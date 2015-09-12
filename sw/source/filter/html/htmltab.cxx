@@ -204,7 +204,7 @@ class HTMLTableCell
     HTMLTableCnts *pContents;       // cell content
     SvxBrushItem *pBGBrush;         // cell background
     // !!!ATTENTION!!!!!
-    ::boost::shared_ptr<SvxBoxItem> m_pBoxItem;
+    std::shared_ptr<SvxBoxItem> m_pBoxItem;
 
     sal_uInt32 nNumFormat;
     sal_uInt16 nRowSpan;                // cell ROWSPAN
@@ -228,7 +228,7 @@ public:
     // Fill a not empty cell
     void Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
               sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
-              ::boost::shared_ptr<SvxBoxItem> const& rBoxItem,
+              std::shared_ptr<SvxBoxItem> const& rBoxItem,
               bool bHasNumFormat, sal_uInt32 nNumFormat,
               bool bHasValue, double nValue, bool bNoWrap, bool bCovered );
 
@@ -249,7 +249,7 @@ public:
     inline void SetWidth( sal_uInt16 nWidth, bool bRelWidth );
 
     const SvxBrushItem *GetBGBrush() const { return pBGBrush; }
-    ::boost::shared_ptr<SvxBoxItem> GetBoxItem() const { return m_pBoxItem; }
+    std::shared_ptr<SvxBoxItem> GetBoxItem() const { return m_pBoxItem; }
 
     inline bool GetNumFormat( sal_uInt32& rNumFormat ) const;
     inline bool GetValue( double& rValue ) const;
@@ -548,7 +548,7 @@ public:
     void InsertCell( HTMLTableCnts *pCnts, sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                      sal_uInt16 nWidth, bool bRelWidth, sal_uInt16 nHeight,
                      sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
-                     boost::shared_ptr<SvxBoxItem> const& rBoxItem,
+                     std::shared_ptr<SvxBoxItem> const& rBoxItem,
                      bool bHasNumFormat, sal_uInt32 nNumFormat,
                      bool bHasValue, double nValue, bool bNoWrap );
 
@@ -704,7 +704,7 @@ HTMLTableCell::~HTMLTableCell()
 
 void HTMLTableCell::Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
                          sal_Int16 eVert, SvxBrushItem *pBrush,
-                         ::boost::shared_ptr<SvxBoxItem> const& rBoxItem,
+                         std::shared_ptr<SvxBoxItem> const& rBoxItem,
                          bool bHasNF, sal_uInt32 nNF, bool bHasV, double nVal,
                          bool bNWrap, bool bCovered )
 {
@@ -1333,7 +1333,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
     SwFrameFormat *pFrameFormat = 0;      // frame::Frame-Format
     sal_Int16 eVOri = text::VertOrientation::NONE;
     const SvxBrushItem *pBGBrushItem = 0;   // Hintergrund
-    boost::shared_ptr<SvxBoxItem> pBoxItem;
+    std::shared_ptr<SvxBoxItem> pBoxItem;
     bool bTopLine = false, bBottomLine = false, bLastBottomLine = false;
     bool bReUsable = false;     // Format nochmals verwendbar?
     sal_uInt16 nEmptyRows = 0;
@@ -2060,7 +2060,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
                             sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                             sal_uInt16 nCellWidth, bool bRelWidth, sal_uInt16 nCellHeight,
                             sal_Int16 eVertOrient, SvxBrushItem *pBGBrushItem,
-                            boost::shared_ptr<SvxBoxItem> const& rBoxItem,
+                            std::shared_ptr<SvxBoxItem> const& rBoxItem,
                             bool bHasNumFormat, sal_uInt32 nNumFormat,
                             bool bHasValue, double nValue, bool bNoWrap )
 {
@@ -3067,7 +3067,7 @@ class _CellSaveStruct : public _SectionSaveStruct
     OUString aStyle, aId, aClass, aLang, aDir;
     OUString aBGImage;
     Color aBGColor;
-    boost::shared_ptr<SvxBoxItem> m_pBoxItem;
+    std::shared_ptr<SvxBoxItem> m_pBoxItem;
 
     HTMLTableCnts* pCnts;           // Liste aller Inhalte
     HTMLTableCnts* pCurrCnts;   // der aktuelle Inhalt oder 0

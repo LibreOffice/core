@@ -237,7 +237,7 @@ public:
 class WW8_WrPlcSepx : public MSWordSections
 {
     std::vector<WW8_CP> aCps;
-    ::std::vector< ::boost::shared_ptr<WW8_PdAttrDesc> > m_SectionAttributes;
+    ::std::vector< std::shared_ptr<WW8_PdAttrDesc> > m_SectionAttributes;
     // hack to prevent adding sections in endnotes
     bool m_bHeaderFooterWritten;
     WW8_WrPlc0* pTextPos;        // Position of the headers/footers
@@ -462,7 +462,7 @@ public:
     std::stack< sal_Int32 > m_aCurrentCharPropStarts; ///< To remember the position in a run.
     WW8_WrtBookmarks* m_pBkmks;
     WW8_WrtRedlineAuthor* m_pRedlAuthors;
-    boost::shared_ptr<NfKeywordTable> m_pKeyMap;
+    std::shared_ptr<NfKeywordTable> m_pKeyMap;
     SvxMSExportOLEObjects* m_pOLEExp;
     SwMSConvertControls* m_pOCXExp;
     WW8OleMap m_aOleMap;    // To remember all already exported ole objects
