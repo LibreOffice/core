@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_4ccaff50",
+        "filename": "sfx2/source/sidebar/SidebarController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-09-13T06:27:23Z",
+      "side": 1,
+      "message": "forgot to remove this commented out code?",
+      "revId": "7b9629269dbc0c800ccb326f8fffaf68930f07e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
