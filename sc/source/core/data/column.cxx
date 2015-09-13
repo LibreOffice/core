@@ -3113,9 +3113,6 @@ void ScColumn::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 
 void ScColumn::SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans )
 {
-    if (getMayHaveFormula() == false)
-        return;
-
     // Set all formula cells in the range dirty, and pick up all non-formula
     // cells for later broadcasting.  We don't broadcast here.
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
@@ -3163,9 +3160,6 @@ bool ScColumn::BroadcastBroadcasters( SCROW nRow1, SCROW nRow2, ScHint& rHint )
 
 void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
 {
-    if (getMayHaveFormula() == false)
-        return;
-
     // broadcasts everything within the range, with FormulaTracking
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
 
@@ -3201,9 +3195,6 @@ void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
 
 void ScColumn::SetTableOpDirty( const ScRange& rRange )
 {
-    if (getMayHaveFormula() == false)
-        return;
-
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
 
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
@@ -3254,7 +3245,7 @@ void ScColumn::SetDirtyIfPostponed()
 
 void ScColumn::BroadcastRecalcOnRefMove()
 {
-   if (getMayHaveFormula() == false)
+    if (getMayHaveFormula() == false)
         return;
 
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
