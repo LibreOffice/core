@@ -1184,8 +1184,11 @@ void ScTable::FillFormulaVertical(
 
     SCROW nStartRow = aSpans.front().mnRow1;
     SCROW nEndRow = aSpans.back().mnRow2;
-    aCol[nCol].EndListeningFormulaCells(aEndCxt, nStartRow, nEndRow, &nStartRow, &nEndRow);
-    aCol[nCol].StartListeningFormulaCells(aStartCxt, aEndCxt, nStartRow, nEndRow);
+    if (aCol[nCol].getMayHaveFormula() == true)
+    {
+        aCol[nCol].EndListeningFormulaCells(aEndCxt, nStartRow, nEndRow, &nStartRow, &nEndRow);
+        aCol[nCol].StartListeningFormulaCells(aStartCxt, aEndCxt, nStartRow, nEndRow);
+    }
 
     std::vector<sc::RowSpan>::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
     for (; it != itEnd; ++it)
