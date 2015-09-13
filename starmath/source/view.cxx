@@ -1081,13 +1081,16 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 
 void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const OUString& rText, sal_uInt16 MaxWidth)
 {
-    sal_uInt16 nLines = comphelper::string::getTokenCount(rText, '\n');
+    if (rText.isEmpty())
+        return;
+
     Point aPoint(rPosition);
     Size aSize;
 
-    for (sal_uInt16 i = 0; i < nLines; i++)
+    sal_Int32 nPos = 0;
+    do
     {
-        OUString aLine = rText.getToken(i, '\n');
+        OUString aLine = rText.getToken(0, '\n', nPos);
         aLine = comphelper::string::remove(aLine, '\r');
         aSize = GetTextLineSize(rDevice, aLine);
         if (aSize.Width() > MaxWidth)
@@ -1135,6 +1138,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
             aPoint.Y() += aSize.Height();
         }
     }
+    while ( nPos >= 0 );
 }
 
 void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions, Rectangle aOutRect, Point aZeroPoint )
