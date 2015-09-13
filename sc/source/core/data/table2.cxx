@@ -279,8 +279,7 @@ void ScTable::InsertCol(
     const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 {
      for (SCCOL i=0; i<=MAXCOL; i++)
-        if (aCol[i].IsEmptyData() == false)
-            aCol[i].setMayHaveFormula(true);
+        aCol[i].setMayHaveFormula(true);
 
     if (nStartRow==0 && nEndRow==MAXROW)
     {
@@ -360,8 +359,7 @@ void ScTable::DeleteCol(
     const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize, bool* pUndoOutline )
 {
      for (SCCOL i=0; i<=MAXCOL; i++)
-        if (aCol[i].IsEmptyData() == false)
-            aCol[i].setMayHaveFormula(true);
+        aCol[i].setMayHaveFormula(true);
 
     if (nStartRow==0 && nEndRow==MAXROW)
     {
@@ -1044,7 +1042,7 @@ const ScColumn* ScTable::FetchColumn( SCCOL nCol ) const
 void ScTable::StartListeners( sc::StartListeningContext& rCxt, bool bAll )
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[i].IsEmptyData() == false)
             aCol[i].StartListeners(rCxt, bAll);
 }
 
@@ -1080,7 +1078,7 @@ void ScTable::StartListeningFormulaCells(
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
         for (SCCOL i = nCol1; i <= nCol2; i++)
-            if (aCol[i].getMayHaveFormula() == true)
+            if (aCol[i].IsEmptyData() == false)
                 aCol[i].StartListeningFormulaCells(rStartCxt, rEndCxt, nRow1, nRow2);
 }
 
@@ -1680,7 +1678,7 @@ bool ScTable::HasStringCells( SCCOL nStartCol, SCROW nStartRow,
 void ScTable::SetDirtyVar()
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[i].IsEmptyData() == false)
             aCol[i].SetDirtyVar();
 }
 
@@ -1689,7 +1687,7 @@ void ScTable::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
     sc::AutoCalcSwitch aACSwitch(*pDocument, false);
 
     for (SCCOL i=0; i<=MAXCOL; i++)
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[i].IsEmptyData() == false)
             aCol[i].SetAllFormulasDirty(rCxt);
 }
 
@@ -1699,7 +1697,7 @@ void ScTable::SetDirty( const ScRange& rRange, ScColumn::BroadcastMode eMode )
     pDocument->SetAutoCalc( false );    // avoid multiple recalculations
     SCCOL nCol2 = rRange.aEnd.Col();
     for (SCCOL i=rRange.aStart.Col(); i<=nCol2; i++)
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[i].IsEmptyData() == false)
             aCol[i].SetDirty(rRange.aStart.Row(), rRange.aEnd.Row(), eMode);
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
@@ -1710,7 +1708,7 @@ void ScTable::SetTableOpDirty( const ScRange& rRange )
     pDocument->SetAutoCalc( false );    // no multiple recalculation
     SCCOL nCol2 = rRange.aEnd.Col();
     for (SCCOL i=rRange.aStart.Col(); i<=nCol2; i++)
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[i].IsEmptyData() == false)
             aCol[i].SetTableOpDirty( rRange );
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
@@ -1720,7 +1718,7 @@ void ScTable::SetDirtyAfterLoad()
     bool bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( false );    // avoid multiple recalculations
     for (SCCOL i=0; i<=MAXCOL; i++)
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[i].IsEmptyData() == false)
             aCol[i].SetDirtyAfterLoad();
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
@@ -1772,14 +1770,14 @@ void ScTable::SetLoadingMedium(bool bLoading)
 void ScTable::CalcAll()
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[i].IsEmptyData() == false)
             aCol[i].CalcAll();
 }
 
 void ScTable::CompileAll( sc::CompileFormulaContext& rCxt )
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[i].IsEmptyData() == false)
             aCol[i].CompileAll(rCxt);
 
     if(mpCondFormatList)
@@ -1793,7 +1791,7 @@ void ScTable::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress
 
     for (SCCOL i=0; i <= MAXCOL; i++)
     {
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[i].IsEmptyData() == false)
             aCol[i].CompileXML(rCxt, rProgress);
     }
 
@@ -1816,7 +1814,7 @@ bool ScTable::CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nEr
 void ScTable::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening )
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[i].IsEmptyData() == false)
             aCol[i].CalcAfterLoad(rCxt, bStartListening);
 }
 
@@ -1828,7 +1826,7 @@ void ScTable::ResetChanged( const ScRange& rRange )
     SCROW nEndRow = rRange.aEnd.Row();
 
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
-        if (aCol[nCol].getMayHaveFormula() == true)
+        if (aCol[nCol].IsEmptyData() == false)
             aCol[nCol].ResetChanged(nStartRow, nEndRow);
 }
 
