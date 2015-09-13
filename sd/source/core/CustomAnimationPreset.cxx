@@ -32,7 +32,6 @@
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
-#include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
 
@@ -199,28 +198,31 @@ Reference< XAnimationNode > CustomAnimationPreset::create( const OUString& rstrS
 
 UStringList CustomAnimationPreset::getProperties() const
 {
-    OUString aProperties( maProperty );
-    sal_uInt16 nTokens = comphelper::string::getTokenCount(aProperties, ';');
-    sal_uInt16 nToken;
     UStringList aPropertyList;
-    for( nToken = 0; nToken < nTokens; nToken++ )
-        aPropertyList.push_back( aProperties.getToken( nToken, ';' ) );
-
+    if (!maProperty.isEmpty())
+    {
+        sal_Int32 nPos = 0;
+        do
+        {
+            aPropertyList.push_back(maProperty.getToken(0, ';', nPos));
+        }
+        while (nPos >= 0);
+    }
     return aPropertyList;
-
 }
 
 bool CustomAnimationPreset::hasProperty( const OUString& rProperty )const
 {
-    OUString aProperties( maProperty );
-    OUString aProperty( rProperty );
-    sal_uInt16 nTokens = comphelper::string::getTokenCount(aProperties, ';');
-    sal_uInt16 nToken;
-    for( nToken = 0; nToken < nTokens; nToken++ )
+    if (maProperty.isEmpty())
+        return false;
+
+    sal_Int32 nPos = 0;
+    do
     {
-        if( aProperties.getToken( nToken, ';' ) == aProperty )
+        if (maProperty.getToken(0, ';', nPos) == rProperty)
             return true;
     }
+    while (nPos >= 0);
 
     return false;
 }
