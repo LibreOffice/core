@@ -156,7 +156,7 @@ class SwContentType : public SwTypeNumber
     OUString            sSingleContentTypeName; // name of content type, singular
     OUString            sTypeToken;         // attachment for URL
     size_t              nMemberCount;       // content count
-    sal_uInt16          nContentType;       // content type's Id
+    ContentTypeId       nContentType;       // content type's Id
     sal_uInt8           nOutlineLevel;
     bool                bDataValid :    1;
     bool                bEdit:          1;  // can this type be edited?
@@ -164,14 +164,14 @@ class SwContentType : public SwTypeNumber
 protected:
         static OUString     RemoveNewline(const OUString&);
 public:
-        SwContentType(SwWrtShell* pParent, sal_uInt16 nType, sal_uInt8 nLevel );
+        SwContentType(SwWrtShell* pParent, ContentTypeId nType, sal_uInt8 nLevel );
         virtual ~SwContentType();
 
         void                Init(bool* pbInvalidateWindow = 0);
         void                FillMemberList(bool* pbLevelChanged = NULL);
         size_t              GetMemberCount() const
                                 {return nMemberCount;};
-        sal_uInt16          GetType() const {return nContentType;}
+        ContentTypeId       GetType() const {return nContentType;}
         const SwContent*    GetMember(size_t nIndex);
         const OUString&     GetName() {return sContentTypeName;}
         const OUString&     GetSingleName() const {return sSingleContentTypeName;}

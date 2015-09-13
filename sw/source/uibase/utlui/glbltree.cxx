@@ -681,14 +681,14 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
                 {
                     const SwTOXBase* pBase = pCont->GetTOX();
                     sEntry = pBase->GetTitle();
-                    aImage = aEntryImages.GetImage(SID_SW_START + CONTENT_TYPE_INDEX);
+                    aImage = aEntryImages.GetImage(SID_SW_START + (int)ContentTypeId::INDEX);
                 }
                 break;
                 case GLBLDOC_SECTION:
                 {
                     const SwSection* pSect = pCont->GetSection();
                     sEntry = pSect->GetSectionName();
-                    aImage = aEntryImages.GetImage(SID_SW_START + CONTENT_TYPE_REGION);
+                    aImage = aEntryImages.GetImage(SID_SW_START + (int)ContentTypeId::REGION);
                 }
                 break;
             }

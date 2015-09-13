@@ -22,16 +22,17 @@
 #include <unotools/configitem.hxx>
 
 enum class RegionMode;
+enum class ContentTypeId;
 
 class SwNavigationConfig : public utl::ConfigItem
 {
-    sal_Int32   nRootType;      //RootType
-    sal_Int32   nSelectedPos;   //SelectedPosition
-    sal_Int32   nOutlineLevel;  //OutlineLevel
-    RegionMode  nRegionMode;    //InsertMode
-    sal_Int32   nActiveBlock;   //ActiveBlock//Expand/CollapsState
-    bool    bIsSmall;       //ShowListBox
-    bool    bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
+    ContentTypeId  nRootType;      //RootType
+    sal_Int32      nSelectedPos;   //SelectedPosition
+    sal_Int32      nOutlineLevel;  //OutlineLevel
+    RegionMode     nRegionMode;    //InsertMode
+    sal_Int32      nActiveBlock;   //ActiveBlock//Expand/CollapsState
+    bool           bIsSmall;       //ShowListBox
+    bool           bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
 
     static com::sun::star::uno::Sequence<OUString> GetPropertyNames();
 
@@ -43,8 +44,8 @@ public:
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames ) SAL_OVERRIDE;
 
-    sal_Int32   GetRootType()const {return nRootType;}
-    void        SetRootType(sal_Int32 nSet){
+    ContentTypeId GetRootType()const {return nRootType;}
+    void        SetRootType(ContentTypeId nSet){
                         if(nRootType != nSet)
                         {
                             SetModified();

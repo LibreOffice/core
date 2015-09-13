@@ -53,7 +53,7 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 
 SwNavigationConfig::SwNavigationConfig() :
     utl::ConfigItem("Office.Writer/Navigator"),
-    nRootType(0xffff),
+    nRootType(ContentTypeId::UNKNOWN),
     nSelectedPos(0),
     nOutlineLevel(MAXLEVEL),
     nRegionMode(RegionMode::NONE),
@@ -73,7 +73,13 @@ SwNavigationConfig::SwNavigationConfig() :
             {
                 switch(nProp)
                 {
-                    case 0: pValues[nProp] >>= nRootType;      break;
+                    case 0:
+                    {
+                        sal_uInt32 nTmp;
+                        if (pValues[nProp] >>= nTmp)
+                            nRootType = static_cast<ContentTypeId>(nTmp);
+                        break;
+                    }
                     case 1: pValues[nProp] >>= nSelectedPos;   break;
                     case 2: pValues[nProp] >>= nOutlineLevel;  break;
                     case 3:
@@ -106,7 +112,7 @@ void SwNavigationConfig::ImplCommit()
     {
         switch(nProp)
         {
-            case 0: pValues[nProp] <<= nRootType;     break;
+            case 0: pValues[nProp] <<= static_cast<sal_uInt32>(nRootType);     break;
             case 1: pValues[nProp] <<= nSelectedPos;  break;
             case 2: pValues[nProp] <<= nOutlineLevel; break;
             case 3: pValues[nProp] <<= static_cast<sal_uInt16>(nRegionMode); break;

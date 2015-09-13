@@ -25,6 +25,7 @@
 #include "swcont.hxx"
 
 #include <map>
+#include <o3tl/enumarray.hxx>
 
 class SwWrtShell;
 class SwContentType;
@@ -52,8 +53,8 @@ class SwContentTree
     OUString            sSpace;
     AutoTimer           aUpdTimer;
 
-    SwContentType*      aActiveContentArr[CONTENT_TYPE_MAX];
-    SwContentType*      aHiddenContentArr[CONTENT_TYPE_MAX];
+    o3tl::enumarray<ContentTypeId,SwContentType*>  aActiveContentArr;
+    o3tl::enumarray<ContentTypeId,SwContentType*>  aHiddenContentArr;
     OUString            aContextStrings[CONTEXT_COUNT + 1];
     OUString            sRemoveIdx;
     OUString            sUpdateIdx;
@@ -73,9 +74,9 @@ class SwContentTree
 
     sal_Int32           nActiveBlock;
     sal_Int32           nHiddenBlock;
-    sal_uInt16              nRootType;
-    sal_uInt16              nLastSelType;
-    sal_uInt8               nOutlineLevel;
+    ContentTypeId       nRootType;
+    ContentTypeId       nLastSelType;
+    sal_uInt8           nOutlineLevel;
 
     bool                bIsActive           :1;
     bool                bIsConstant         :1;
@@ -150,7 +151,7 @@ public:
     SdrObject*      GetDrawingObjectsByContent(const SwContent *pCnt);
 
     bool            ToggleToRoot();
-    void            SetRootType(sal_uInt16 nType);
+    void            SetRootType(ContentTypeId nType);
     void            Display( bool bActiveView );
     void            Clear();
     void            SetHiddenShell(SwWrtShell* pSh);
