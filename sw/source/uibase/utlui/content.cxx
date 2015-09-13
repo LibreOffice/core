@@ -1129,7 +1129,7 @@ PopupMenu* SwContentTree::CreateContextMenu()
                 ST_HYPERLINK - ST_CONTEXT_FIRST + i]);
     }
     pSubPop2->CheckItem( 201 +
-                    GetParentWindow()->GetRegionDropMode());
+                    static_cast<int>(GetParentWindow()->GetRegionDropMode()));
     // Insert the list of the open files
     sal_uInt16 nId = 301;
     const SwView* pActiveView = ::GetActiveView();
@@ -1813,7 +1813,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
         // no break;
         case CONTENT_TYPE_OLE:
         case CONTENT_TYPE_GRAPHIC:
-            if(GetParentWindow()->GetRegionDropMode() != REGION_MODE_NONE)
+            if(GetParentWindow()->GetRegionDropMode() != RegionMode::NONE)
                 break;
             else
                 rDragMode &= ~( DND_ACTION_MOVE | DND_ACTION_LINK );
@@ -1850,7 +1850,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
             }
             else
             {
-                bRet = GetParentWindow()->GetRegionDropMode() == REGION_MODE_NONE;
+                bRet = GetParentWindow()->GetRegionDropMode() == RegionMode::NONE;
                 rDragMode = DND_ACTION_MOVE;
             }
 
@@ -2911,7 +2911,7 @@ void    SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry
         case 201:
         case 202:
         case 203:
-            GetParentWindow()->SetRegionDropMode(nSelectedPopupEntry - 201);
+            GetParentWindow()->SetRegionDropMode(static_cast<RegionMode>(nSelectedPopupEntry - 201));
         break;
         case 401:
         case 402:
@@ -3401,13 +3401,13 @@ void SwContentTree::GotoContent(SwContent* pCnt)
 NaviContentBookmark::NaviContentBookmark()
     :
     nDocSh(0),
-    nDefDrag( REGION_MODE_NONE )
+    nDefDrag( RegionMode::NONE )
 {
 }
 
 NaviContentBookmark::NaviContentBookmark( const OUString &rUrl,
                     const OUString& rDesc,
-                    sal_uInt16 nDragType,
+                    RegionMode nDragType,
                     const SwDocShell* pDocSh ) :
     aUrl( rUrl ),
     aDescr(rDesc),
@@ -3422,7 +3422,7 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
 
     OString sStrBuf(OUStringToOString(aUrl, eSysCSet) + OString(NAVI_BOOKMARK_DELIM) +
                     OUStringToOString(aDescr, eSysCSet) + OString(NAVI_BOOKMARK_DELIM) +
-                    OString::number(nDefDrag) + OString(NAVI_BOOKMARK_DELIM) +
+                    OString::number((int)nDefDrag) + OString(NAVI_BOOKMARK_DELIM) +
                     OString::number(nDocSh));
     rData.CopyByteString(SotClipboardFormatId::SONLK, sStrBuf);
 }
@@ -3436,7 +3436,7 @@ bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
         sal_Int32 nPos = 0;
         aUrl    = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
         aDescr  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
-        nDefDrag= (sal_uInt16)sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32();
+        nDefDrag= static_cast<RegionMode>( sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32() );
         nDocSh  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32();
     }
     return bRet;

@@ -21,12 +21,14 @@
 
 #include <unotools/configitem.hxx>
 
+enum class RegionMode;
+
 class SwNavigationConfig : public utl::ConfigItem
 {
     sal_Int32   nRootType;      //RootType
     sal_Int32   nSelectedPos;   //SelectedPosition
     sal_Int32   nOutlineLevel;  //OutlineLevel
-    sal_Int32   nRegionMode;    //InsertMode
+    RegionMode  nRegionMode;    //InsertMode
     sal_Int32   nActiveBlock;   //ActiveBlock//Expand/CollapsState
     bool    bIsSmall;       //ShowListBox
     bool    bIsGlobalActive; //GlobalDocMode// global view for GlobalDoc valid?
@@ -59,8 +61,8 @@ public:
                         }
                     }
 
-    sal_Int32   GetRegionMode()const {return nRegionMode;}
-    void        SetRegionMode(sal_Int32 nSet){
+    RegionMode  GetRegionMode()const {return nRegionMode;}
+    void        SetRegionMode(RegionMode nSet){
                     if(nRegionMode != nSet)
                     {
                         SetModified();

@@ -56,7 +56,7 @@ SwNavigationConfig::SwNavigationConfig() :
     nRootType(0xffff),
     nSelectedPos(0),
     nOutlineLevel(MAXLEVEL),
-    nRegionMode(REGION_MODE_NONE),
+    nRegionMode(RegionMode::NONE),
     nActiveBlock(0),
     bIsSmall(false),
     bIsGlobalActive(true)
@@ -76,7 +76,13 @@ SwNavigationConfig::SwNavigationConfig() :
                     case 0: pValues[nProp] >>= nRootType;      break;
                     case 1: pValues[nProp] >>= nSelectedPos;   break;
                     case 2: pValues[nProp] >>= nOutlineLevel;  break;
-                    case 3: pValues[nProp] >>= nRegionMode;    break;
+                    case 3:
+                    {
+                            sal_uInt16 nTmp;
+                            if (pValues[nProp] >>= nTmp)
+                                nRegionMode = static_cast<RegionMode>(nTmp);
+                            break;
+                    }
                     case 4: pValues[nProp] >>= nActiveBlock;    break;
                     case 5: bIsSmall        = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
                     case 6: bIsGlobalActive = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
@@ -103,7 +109,7 @@ void SwNavigationConfig::ImplCommit()
             case 0: pValues[nProp] <<= nRootType;     break;
             case 1: pValues[nProp] <<= nSelectedPos;  break;
             case 2: pValues[nProp] <<= nOutlineLevel; break;
-            case 3: pValues[nProp] <<= nRegionMode;   break;
+            case 3: pValues[nProp] <<= static_cast<sal_uInt16>(nRegionMode); break;
             case 4: pValues[nProp] <<= nActiveBlock;    break;
             case 5: pValues[nProp] <<= bIsSmall; break;
             case 6: pValues[nProp] <<= bIsGlobalActive; break;

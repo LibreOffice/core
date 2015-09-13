@@ -45,9 +45,12 @@ class SwContentType;
 #define GLOBAL_CONTEXT_COUNT 14
 
 // modes for Drag 'n Drop
-#define REGION_MODE_NONE        0
-#define REGION_MODE_LINK        1
-#define REGION_MODE_EMBEDDED    2
+enum class RegionMode
+{
+    NONE        = 0,
+    LINK        = 1,
+    EMBEDDED    = 2
+};
 
 //mini rtti
 class SwTypeNumber
