@@ -56,9 +56,13 @@ class NSOpenGLView;
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
 #include <vcl/syschild.hxx>
+#include <rtl/crc.h>
 #include <rtl/ref.hxx>
 
+#include <map>
+#include <memory>
 #include <set>
+#include <unordered_map>
 
 class OpenGLFramebuffer;
 class OpenGLProgram;
@@ -281,15 +285,15 @@ private:
     OpenGLFramebuffer* mpFirstFramebuffer;
     OpenGLFramebuffer* mpLastFramebuffer;
 
-    struct ProgramKey
+    struct ProgramHash
     {
-        ProgramKey( const OUString& vertexShader, const OUString& fragmentShader, const OString& preamble );
-        bool operator< ( const ProgramKey& other ) const;
-        OUString vertexShader;
-        OUString fragmentShader;
-        OString preamble;
+        size_t operator()( const rtl::OString& aDigest ) const
+        {
+            return (size_t)( rtl_crc32( 0, aDigest.getStr(), aDigest.getLength() ) );
+        }
     };
-    std::map<ProgramKey, boost::shared_ptr<OpenGLProgram> > maPrograms;
+    typedef std::unordered_map< rtl::OString, std::shared_ptr<OpenGLProgram>, ProgramHash > ProgramCollection;
+    ProgramCollection maPrograms;
     OpenGLProgram* mpCurrentProgram;
 #ifdef DBG_UTIL
     std::set<SalGraphicsImpl*> maParents;

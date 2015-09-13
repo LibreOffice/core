@@ -183,6 +183,51 @@ public:
     virtual ~WinOpenGLDeviceInfo();
 
     virtual bool isDeviceBlocked();
+
+    const OUString& GetDriverVersion() const
+    {
+        return maDriverVersion;
+    }
+
+    const OUString& GetDriverDate() const
+    {
+        return maDriverDate;
+    }
+
+    const OUString& GetDeviceID() const
+    {
+        return maDeviceID;
+    }
+
+    const OUString& GetAdapterVendorID() const
+    {
+        return maAdapterVendorID;
+    }
+
+    const OUString& GetAdapterDeviceID() const
+    {
+        return maAdapterDeviceID;
+    }
+
+    const OUString& GetAdapterSubsysID() const
+    {
+        return maAdapterSubsysID;
+    }
+    const OUString& GetDeviceKey() const
+    {
+        return maDeviceKey;
+    }
+
+    const OUString& GetDeviceString() const
+    {
+        return maDeviceString;
+    }
+
+    sal_uInt32 GetWindowsVersion() const
+    {
+        return mnWindowsVersion;
+    }
+
 };
 
 #endif
