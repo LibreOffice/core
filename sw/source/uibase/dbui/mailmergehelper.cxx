@@ -72,17 +72,15 @@ OUString CallSaveAsDialog(OUString& rFilter)
 /*
     simple address check: check for '@'
                             for at least one '.' after the '@'
-                            and for at least to characters before and after the dot
+                            and for at least two characters before and after the dot
 */
 bool CheckMailAddress( const OUString& rMailAddress )
 {
-    OUString sAddress(rMailAddress);
-    if (!(comphelper::string::getTokenCount(sAddress, '@') == 2))
+    const sal_Int32 nPosAt = rMailAddress.indexOf('@');
+    if (nPosAt<0 || rMailAddress.lastIndexOf('@')!=nPosAt)
         return false;
-    sAddress = sAddress.getToken(1, '@');
-    if (comphelper::string::getTokenCount(sAddress, '.') < 2)
-        return false;
-    if(sAddress.getToken( 0, '.').getLength() < 2 || sAddress.getToken( 1, '.').getLength() < 2)
+    const sal_Int32 nPosDot = rMailAddress.indexOf('.', nPosAt);
+    if (nPosDot<0 || nPosDot-nPosAt<3 || rMailAddress.getLength()-nPosDot<3)
         return false;
     return true;
 }
