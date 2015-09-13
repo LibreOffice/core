@@ -3972,27 +3972,29 @@ static Any lcl_GetDisplayBitmap(const OUString& _sLinkSuffix)
     OUString sLinkSuffix = _sLinkSuffix;
     if(!sLinkSuffix.isEmpty())
         sLinkSuffix = sLinkSuffix.copy(1);
-    sal_uInt16 nImgId = USHRT_MAX;
+    ContentTypeId nImgId;
+    bool bNotFound = false;
 
     if(sLinkSuffix == "outline")
-        nImgId = CONTENT_TYPE_OUTLINE;
+        nImgId = ContentTypeId::OUTLINE;
     else if(sLinkSuffix == "table")
-        nImgId = CONTENT_TYPE_TABLE;
+        nImgId = ContentTypeId::TABLE;
     else if(sLinkSuffix == "frame")
-        nImgId = CONTENT_TYPE_FRAME;
+        nImgId = ContentTypeId::FRAME;
     else if(sLinkSuffix == "graphic")
-        nImgId = CONTENT_TYPE_GRAPHIC;
+        nImgId = ContentTypeId::GRAPHIC;
     else if(sLinkSuffix == "region")
-        nImgId = CONTENT_TYPE_REGION;
+        nImgId = ContentTypeId::REGION;
     else if(sLinkSuffix == "ole")
-        nImgId = CONTENT_TYPE_OLE;
+        nImgId = ContentTypeId::OLE;
     else if(sLinkSuffix.isEmpty())
-        nImgId = CONTENT_TYPE_BOOKMARK;
-    if(USHRT_MAX != nImgId)
+        nImgId = ContentTypeId::BOOKMARK;
+    else
+        bNotFound = true;
+    if(!bNotFound)
     {
-        nImgId += 20000;
         ImageList aEntryImages( SW_RES(IMG_NAVI_ENTRYBMP) );
-        const Image& rImage = aEntryImages.GetImage( nImgId );
+        const Image& rImage = aEntryImages.GetImage( (int)nImgId + 2000 );
         Bitmap aBitmap( rImage.GetBitmapEx().GetBitmap() );
         Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( aBitmap );
         aRet.setValue( &xBmp, cppu::UnoType<awt::XBitmap>::get());
