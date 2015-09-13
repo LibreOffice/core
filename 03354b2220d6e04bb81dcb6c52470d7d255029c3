@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_2c6a2b1b",
+        "filename": "external/libfreehand/replace_transform_class_with_struct.patch",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-09-13T13:15:02Z",
+      "side": 1,
+      "message": "Trailing space. Here and below.",
+      "revId": "03354b2220d6e04bb81dcb6c52470d7d255029c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
