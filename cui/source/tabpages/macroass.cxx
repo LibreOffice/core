@@ -100,7 +100,7 @@ OUString ConvertToUIName_Impl( SvxMacro *pMacro )
     OUString aEntry;
     if ( pMacro->GetLanguage() != "JavaScript" )
     {
-        sal_uInt16 nCount = comphelper::string::getTokenCount(aName, '.');
+        const sal_Int32 nCount = comphelper::string::getTokenCount(aName, '.');
         aEntry = aName.getToken( nCount-1, '.' );
         if ( nCount > 2 )
         {
