@@ -13,6 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libfreehand,$(FREEHAND_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libfreehand,0))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libfreehand,\
+	external/libfreehand/replace_transform_class_with_struct.patch \
+))
+
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,libfreehand, \
