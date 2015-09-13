@@ -426,17 +426,19 @@ bool ImplSdPPTImport::Import()
                                             sal_uInt32 nPageNumber = 0;
                                             OUString aString( pHyperlink->aSubAdress );
                                             OString aStringAry[ 3 ];
-                                            sal_uInt16 nTokenCount = comphelper::string::getTokenCount(aString, ',');
-                                            if ( nTokenCount > 3 )
-                                                nTokenCount = 3;
-                                            sal_uInt16 nToken;
-                                            for( nToken = 0; nToken < nTokenCount; nToken++ )
-                                                aStringAry[nToken] = OUStringToOString(aString.getToken( nToken, (sal_Unicode)',' ), RTL_TEXTENCODING_UTF8);
+                                            size_t nTokenCount = 0;
+                                            sal_Int32 nPos = 0;
+                                            do
+                                            {
+                                                aStringAry[nTokenCount] =
+                                                    OUStringToOString(aString.getToken( 0, (sal_Unicode)',', nPos ), RTL_TEXTENCODING_UTF8);
+                                            }
+                                            while ( ++nTokenCount < SAL_N_ELMENTS(aStringAry) && nPos >= 0 );
 
                                             bool bDocInternalSubAddress = false;
 
                                             // first pass, searching for a SlideId
-                                            for( nToken = 0; nToken < nTokenCount; nToken++ )
+                                            for( size_t nToken = 0; nToken < nTokenCount; ++nToken )
                                             {
                                                 if (comphelper::string::isdigitAsciiString(aStringAry[nToken]))
                                                 {
@@ -459,7 +461,7 @@ bool ImplSdPPTImport::Import()
                                             }
                                             if ( !bDocInternalSubAddress )
                                             {   // second pass, searching for a SlideName
-                                                for ( nToken = 0; nToken < nTokenCount; nToken++ )
+                                                for ( size_t nToken = 0; nToken < nTokenCount; ++nToken )
                                                 {
                                                     OUString aToken(OStringToOUString(aStringAry[nToken], RTL_TEXTENCODING_UTF8));
                                                     std::vector<OUString>::const_iterator pIter =
@@ -474,7 +476,7 @@ bool ImplSdPPTImport::Import()
                                             }
                                             if ( !bDocInternalSubAddress )
                                             {   // third pass, searching for a slide number
-                                                for ( nToken = 0; nToken < nTokenCount; nToken++ )
+                                                for ( size_t nToken = 0; nToken < nTokenCount; ++nToken )
                                                 {
                                                     if (comphelper::string::isdigitAsciiString(aStringAry[nToken]))
                                                     {
