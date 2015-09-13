@@ -3088,7 +3088,7 @@ bool ScColumn::IsFormulaDirty( SCROW nRow ) const
         return false;
 
     if (getMayHaveFormula() == false)
-        return;
+        return false;
 
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
     sc::CellStoreType::const_iterator it = aPos.first;
