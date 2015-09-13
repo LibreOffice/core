@@ -39,7 +39,11 @@ struct VCL_DLLPUBLIC OpenGLHelper
 {
     OpenGLHelper() SAL_DELETED_FUNCTION; // Should not be instantiated
 
-    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OString& preamble = "" );
+public:
+
+    static rtl::OString GetDigest(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const rtl::OString& preamble = "" );
+
+    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const rtl::OString& preamble = "", const rtl::OString& rDigest = "" );
 
     /**
      * The caller is responsible for allocate the memory for the RGBA buffer, before call
