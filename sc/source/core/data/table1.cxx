@@ -1495,7 +1495,8 @@ void ScTable::UpdateReference(
         mpRangeName->UpdateReference(rCxt, nTab);
 
     for ( ; i<=iMax; i++)
-        bUpdated |= aCol[i].UpdateReference(rCxt, pUndoDoc);
+        if (aCol[i].IsEmptyData() ==false)
+            bUpdated |= aCol[i].UpdateReference(rCxt, pUndoDoc);
 
     if ( bIncludeDraw )
         UpdateDrawRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz, bUpdateNoteCaptionPos );
