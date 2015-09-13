@@ -26,19 +26,23 @@
 class SwContentType;
 
 // synchronize order and number with ResIds!!
-#define CONTENT_TYPE_OUTLINE        0
-#define CONTENT_TYPE_TABLE          1
-#define CONTENT_TYPE_FRAME          2
-#define CONTENT_TYPE_GRAPHIC        3
-#define CONTENT_TYPE_OLE            4
-#define CONTENT_TYPE_BOOKMARK       5
-#define CONTENT_TYPE_REGION         6
-#define CONTENT_TYPE_URLFIELD       7
-#define CONTENT_TYPE_REFERENCE      8
-#define CONTENT_TYPE_INDEX          9
-#define CONTENT_TYPE_POSTIT         10
-#define CONTENT_TYPE_DRAWOBJECT     11
-#define CONTENT_TYPE_MAX            CONTENT_TYPE_DRAWOBJECT +1
+enum class ContentTypeId
+{
+    OUTLINE        = 0,
+    TABLE          = 1,
+    FRAME          = 2,
+    GRAPHIC        = 3,
+    OLE            = 4,
+    BOOKMARK       = 5,
+    REGION         = 6,
+    URLFIELD       = 7,
+    REFERENCE      = 8,
+    INDEX          = 9,
+    POSTIT         = 10,
+    DRAWOBJECT     = 11,
+    LAST           = DRAWOBJECT,
+    UNKNOWN        = USHRT_MAX
+};
 
 // strings for context menus
 #define CONTEXT_COUNT   12
