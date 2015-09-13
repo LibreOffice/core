@@ -95,8 +95,6 @@ SidebarController::SidebarController (
       mpTabBar(VclPtr<TabBar>::Create(
               mpParentWindow,
               rxFrame,
-              //::boost::bind(&SidebarController::OpenThenSwitchToDeck, this, _1),
-              //::boost::bind(&SidebarController::ShowPopupMenu, this, _1,_2),
               [this](const ::rtl::OUString& rsDeckId) { return this->OpenThenSwitchToDeck(rsDeckId); },
               [this](const Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
               this)),
