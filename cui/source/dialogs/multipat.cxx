@@ -315,7 +315,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
             bool bIsSystemPath =
                 osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
 
-            const OUString sEntry( "\t" + bIsSystemPath ? sSystemPath : sPath);
+            const OUString sEntry( "\t" + (bIsSystemPath ? sSystemPath : sPath));
             SvTreeListEntry* pEntry = m_pRadioLB->InsertEntry( sEntry );
             OUString* pURL = new OUString( sPath );
             pEntry->SetUserData( pURL );
