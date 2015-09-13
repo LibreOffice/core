@@ -368,12 +368,12 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
                 HID_NAVI_DRAG_COPY,
             };
             boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
-            for (sal_uInt16 i = 0; i <= REGION_MODE_EMBEDDED; i++)
+            for (sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); i++)
             {
                 pMenu->InsertItem( i + 1, aContextArr[i] );
                 pMenu->SetHelpId(i + 1, aHIDs[i]);
             }
-            pMenu->CheckItem( nRegionMode + 1 );
+            pMenu->CheckItem( static_cast<int>(nRegionMode) + 1 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
             pBox->SetItemDown( nCurrItemId, true );
             pMenu->Execute( pBox,
@@ -664,7 +664,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
     nWishWidth(0),
     nAutoMarkIdx(1),
-    nRegionMode(REGION_MODE_NONE),
+    nRegionMode(RegionMode::NONE),
 
     bSmallMode(false),
     bIsZoomedIn(false),
@@ -706,7 +706,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aContentToolBox->SetHelpId(FN_PAGENUMBER, HID_NAVI_TBX16);
     aContentToolBox->ShowItem( FN_PAGENUMBER );
 
-    for( sal_uInt16 i = 0; i <= REGION_MODE_EMBEDDED; i++  )
+    for( sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); i++  )
     {
         aContextArr[i] = SW_RESSTR(ST_HYPERLINK + i);
         aStatusArr[i] = SW_RESSTR(ST_STATUS_FIRST + i);
@@ -999,7 +999,7 @@ IMPL_LINK_TYPED( SwNavigationPI, MenuSelectHdl, Menu *, pMenu, bool )
     if(nMenuId != USHRT_MAX)
     {
         if(nMenuId < 100)
-            SetRegionDropMode( --nMenuId);
+            SetRegionDropMode( static_cast<RegionMode>(--nMenuId));
         else
             aContentTree->SetOutlineLevel( static_cast< sal_uInt8 >(nMenuId - 100) );
     }
@@ -1185,15 +1185,15 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-void SwNavigationPI::SetRegionDropMode(sal_uInt16 nNewMode)
+void SwNavigationPI::SetRegionDropMode(RegionMode nNewMode)
 {
     nRegionMode = nNewMode;
     pConfig->SetRegionMode( nRegionMode );
 
     sal_uInt16 nDropId = FN_DROP_REGION;
-    if(nRegionMode == REGION_MODE_LINK)
+    if(nRegionMode == RegionMode::LINK)
         nDropId = FN_DROP_REGION_LINK;
-    else if(nRegionMode == REGION_MODE_EMBEDDED)
+    else if(nRegionMode == RegionMode::EMBEDDED)
         nDropId = FN_DROP_REGION_COPY;
 
     ImageList& rImgLst = aContentImageList;
@@ -1301,7 +1301,7 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
         pNavi->aContentToolBox->CheckItem(FN_SHOW_ROOT);
     }
     pNavi->aContentTree->SetOutlineLevel( static_cast< sal_uInt8 >( pNaviConfig->GetOutlineLevel() ) );
-    pNavi->SetRegionDropMode( static_cast< sal_uInt16 >( pNaviConfig->GetRegionMode() ) );
+    pNavi->SetRegionDropMode( pNaviConfig->GetRegionMode() );
 
     if(GetFloatingWindow() && pNaviConfig->IsSmall())
     {
@@ -1335,9 +1335,9 @@ void SwNavigationPI::InitImageList()
                     rImgLst.GetImage(aGlobalToolBox->GetItemId(k)));
 
     sal_uInt16 nDropId = FN_DROP_REGION;
-    if(nRegionMode == REGION_MODE_LINK)
+    if(nRegionMode == RegionMode::LINK)
         nDropId = FN_DROP_REGION_LINK;
-    else if(nRegionMode == REGION_MODE_EMBEDDED)
+    else if(nRegionMode == RegionMode::EMBEDDED)
         nDropId = FN_DROP_REGION_COPY;
     aContentToolBox->SetItemImage( FN_DROP_REGION,
                                     rImgLst.GetImage(nDropId));

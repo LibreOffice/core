@@ -39,6 +39,7 @@ class SwNavigationConfig;
 class SfxObjectShellLock;
 class SfxChildWindowContext;
 class SwNavigationPI;
+enum class RegionMode;
 
 class SwNavHelpToolBox : public SwHelpToolBox
 {
@@ -83,7 +84,7 @@ class SwNavigationPI : public vcl::Window,
     long    nDocLBIniHeight;
     long    nWishWidth;
     sal_uInt16  nAutoMarkIdx;
-    sal_uInt16  nRegionMode; // 0 - URL, 1 - region with link 2 - region without link
+    RegionMode  nRegionMode; // 0 - URL, 1 - region with link 2 - region without link
     short   nZoomIn;
     short   nZoomOutInit;
     short   nZoomOut;
@@ -149,8 +150,8 @@ public:
     static OUString CreateDropFileName( TransferableDataHelper& rData );
     static OUString CleanEntry(const OUString& rEntry);
 
-    sal_uInt16      GetRegionDropMode() const {return nRegionMode;}
-    void            SetRegionDropMode(sal_uInt16 nNewMode);
+    RegionMode      GetRegionDropMode() const {return nRegionMode;}
+    void            SetRegionDropMode(RegionMode nNewMode);
 
     sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
     sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );

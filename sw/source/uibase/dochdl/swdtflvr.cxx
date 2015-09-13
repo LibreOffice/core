@@ -1400,9 +1400,9 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                         {
                             switch(aBkmk.GetDefaultDragType())
                             {
-                                case REGION_MODE_NONE: nClearedAction = EXCHG_IN_ACTION_COPY; break;
-                                case REGION_MODE_EMBEDDED: nClearedAction = EXCHG_IN_ACTION_MOVE; break;
-                                case REGION_MODE_LINK: nClearedAction = EXCHG_IN_ACTION_LINK; break;
+                                case RegionMode::NONE: nClearedAction = EXCHG_IN_ACTION_COPY; break;
+                                case RegionMode::EMBEDDED: nClearedAction = EXCHG_IN_ACTION_MOVE; break;
+                                case RegionMode::LINK: nClearedAction = EXCHG_IN_ACTION_LINK; break;
                             }
                         }
                         rSh.NavigatorPaste( aBkmk, nClearedAction );
