@@ -584,19 +584,24 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
                 sWritable.clear();
                 OUString sFullPath;
                 OUString sNewPath = pMultiDlg->GetPath();
-                char cDelim = MULTIPATH_DELIMITER;
-                sal_uInt16 nCount = comphelper::string::getTokenCount(sNewPath, cDelim);
-                if ( nCount > 0 )
+                if ( !sNewPath.isEmpty() )
                 {
-                    sal_uInt16 i = 0;
-                    for ( ; i < nCount - 1; ++i )
+                    const sal_Unicode cDelim = MULTIPATH_DELIMITER;
+                    sal_Int32 nNextPos = 0;
+                    for (;;)
                     {
+                        const OUString sToken(sNewPath.getToken( 0, cDelim, nNextPos ));
+                        if ( nNextPos<0 )
+                        {
+                            // Last token need a different handling
+                            sWritable = sToken;
+                            break;
+                        }
                         if ( !sUser.isEmpty() )
                             sUser += OUString(cDelim);
-                        sUser += sNewPath.getToken( i, cDelim );
+                        sUser += sToken;
                     }
                     sFullPath = sUser;
-                    sWritable += sNewPath.getToken( i, cDelim );
                     if ( !sFullPath.isEmpty() )
                         sFullPath += OUString(cDelim);
                     sFullPath += sWritable;
