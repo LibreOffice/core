@@ -77,7 +77,6 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeOutputTypePage, TypeHdl_Impl, Button*, void)
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/mail/XSmtpService.hpp>
-#include <comphelper/string.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
 
@@ -505,27 +504,25 @@ void  SwSendMailDialog::IterateMails()
         //CC and BCC are tokenized by ';'
         if(!pCurrentMailDescriptor->sCC.isEmpty())
         {
-            OUString sTokens( pCurrentMailDescriptor->sCC );
-            sal_uInt16 nTokens = comphelper::string::getTokenCount(sTokens, ';');
             sal_Int32 nPos = 0;
-            for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
+            do
             {
-                OUString sTmp = sTokens.getToken( 0, ';', nPos);
+                OUString sTmp = pCurrentMailDescriptor->sCC.getToken( 0, ';', nPos );
                 if( !sTmp.isEmpty() )
                     pMessage->addCcRecipient( sTmp );
             }
+            while (nPos >= 0);
         }
         if(!pCurrentMailDescriptor->sBCC.isEmpty())
         {
-            OUString sTokens( pCurrentMailDescriptor->sBCC );
-            sal_uInt16 nTokens = comphelper::string::getTokenCount(sTokens, ';');
             sal_Int32 nPos = 0;
-            for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
+            do
             {
-                OUString sTmp = sTokens.getToken( 0, ';', nPos);
+                OUString sTmp = pCurrentMailDescriptor->sBCC.getToken( 0, ';', nPos );
                 if( !sTmp.isEmpty() )
                     pMessage->addBccRecipient( sTmp );
             }
+            while (nPos >= 0);
         }
         m_pImpl->xMailDispatcher->enqueueMailMessage( xMessage );
         pCurrentMailDescriptor = m_pImpl->GetNextDescriptor();
