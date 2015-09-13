@@ -29,7 +29,6 @@
 
 #include <cuires.hrc>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -304,25 +303,26 @@ OUString SvxPathSelectDialog::GetPath() const
 
 void SvxMultiPathDialog::SetPath( const OUString& rPath )
 {
-    sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
-    sal_uInt16 nCount = comphelper::string::getTokenCount(rPath, cDelim);
-
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    if ( !rPath.isEmpty() )
     {
-        OUString sPath = rPath.getToken( i, cDelim );
-        OUString sSystemPath;
-        bool bIsSystemPath =
-            osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
+        const sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
+        sal_uLong nCount = 0;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            const OUString sPath = rPath.getToken( 0, cDelim, nIndex );
+            OUString sSystemPath;
+            bool bIsSystemPath =
+                osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
 
-        OUString sEntry( '\t' );
-        sEntry += (bIsSystemPath ? sSystemPath : OUString(sPath));
-        SvTreeListEntry* pEntry = m_pRadioLB->InsertEntry( sEntry );
-        OUString* pURL = new OUString( sPath );
-        pEntry->SetUserData( pURL );
-    }
+            const OUString sEntry( "\t" + bIsSystemPath ? sSystemPath : sPath);
+            SvTreeListEntry* pEntry = m_pRadioLB->InsertEntry( sEntry );
+            OUString* pURL = new OUString( sPath );
+            pEntry->SetUserData( pURL );
+            ++nCount;
+        }
+        while (nIndex >= 0);
 
-    if (nCount > 0)
-    {
         SvTreeListEntry* pEntry = m_pRadioLB->GetEntry( nCount - 1 );
         if ( pEntry )
         {
@@ -337,17 +337,21 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
 void SvxPathSelectDialog::SetPath(const OUString& rPath)
 {
     sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
-    sal_uInt16 nCount = comphelper::string::getTokenCount(rPath, cDelim);
 
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
+    if ( !rPath.isEmpty() )
     {
-        OUString sPath = rPath.getToken( i, cDelim );
-        OUString sSystemPath;
-        bool bIsSystemPath =
-            osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            const OUString sPath = rPath.getToken( 0, cDelim, nIndex );
+            OUString sSystemPath;
+            bool bIsSystemPath =
+                osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
 
-        const sal_Int32 nPos = m_pPathLB->InsertEntry( bIsSystemPath ? sSystemPath : sPath );
-        m_pPathLB->SetEntryData( nPos, new OUString( sPath ) );
+            const sal_Int32 nPos = m_pPathLB->InsertEntry( bIsSystemPath ? sSystemPath : sPath );
+            m_pPathLB->SetEntryData( nPos, new OUString( sPath ) );
+        }
+        while (nIndex >= 0);
     }
 
     SelectHdl_Impl( NULL );
