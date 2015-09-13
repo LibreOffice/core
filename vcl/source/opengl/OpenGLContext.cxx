@@ -1634,22 +1634,24 @@ void OpenGLContext::ReleaseFramebuffers()
     BindFramebuffer( NULL );
 }
 
-OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
+OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const rtl::OString& preamble )
 {
     OpenGLZone aZone;
 
-    ProgramKey aKey( rVertexShader, rFragmentShader, preamble );
+    rtl::OString aKey = OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, preamble );
 
-    std::map< ProgramKey, std::shared_ptr<OpenGLProgram> >::iterator
-        it = maPrograms.find( aKey );
-    if( it != maPrograms.end() )
-        return it->second.get();
+    if( !aKey.isEmpty() )
+    {
+        ProgramCollection::iterator it = maPrograms.find( aKey );
+        if( it != maPrograms.end() )
+            return it->second.get();
+    }
 
     std::shared_ptr<OpenGLProgram> pProgram = std::make_shared<OpenGLProgram>();
-    if( !pProgram->Load( rVertexShader, rFragmentShader, preamble ) )
+    if( !pProgram->Load( rVertexShader, rFragmentShader, preamble, aKey ) )
         return NULL;
 
-    maPrograms.insert(std::pair<ProgramKey, std::shared_ptr<OpenGLProgram> >(aKey, pProgram));
+    maPrograms.insert(std::make_pair(aKey, pProgram));
     return pProgram.get();
 }
 
@@ -1673,22 +1675,6 @@ OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const O
     mpCurrentProgram->Use();
 
     return mpCurrentProgram;
-}
-
-inline
-OpenGLContext::ProgramKey::ProgramKey( const OUString& v, const OUString& f, const OString& p )
-: vertexShader( v ), fragmentShader( f ), preamble( p )
-{
-}
-
-inline
-bool OpenGLContext::ProgramKey::operator< ( const ProgramKey& other ) const
-{
-    if( vertexShader != other.vertexShader )
-        return vertexShader < other.vertexShader;
-    if( fragmentShader != other.fragmentShader )
-        return fragmentShader < other.fragmentShader;
-    return preamble < other.preamble;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
