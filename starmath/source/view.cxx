@@ -1000,11 +1000,13 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long
 {
     Size aSize;
     Size aTextSize;
-    sal_uInt16 nLines = comphelper::string::getTokenCount(rText, '\n');
+    if (rText.isEmpty())
+        return aTextSize;
 
-    for (sal_uInt16 i = 0; i < nLines; i++)
+    sal_Int32 nPos = 0;
+    do
     {
-        OUString aLine = rText.getToken(i, '\n');
+        OUString aLine = rText.getToken(0, '\n', nPos);
         aLine = comphelper::string::remove(aLine, '\r');
 
         aSize = GetTextLineSize(rDevice, aLine);
@@ -1048,6 +1050,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long
             aTextSize.Width() = std::max(aTextSize.Width(), aSize.Width());
         }
     }
+    while (nPos >= 0);
 
     return aTextSize;
 }
