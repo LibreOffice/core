@@ -696,7 +696,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
     assert(etMem + etMemOffset == pCode + totalSize);
 
     // remove array
-    delete[] excecptionTypeSizeArray;
+    delete[] exceptionTypeSizeArray;
 }
 
 RaiseInfo::~RaiseInfo() throw ()
