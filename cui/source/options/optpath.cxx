@@ -595,9 +595,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
                             sUser += OUString(cDelim);
                         sUser += sNewPath.getToken( i, cDelim );
                     }
-                    if ( !sFullPath.isEmpty() )
-                        sFullPath += OUString(cDelim);
-                    sFullPath += sUser;
+                    sFullPath = sUser;
                     sWritable += sNewPath.getToken( i, cDelim );
                     if ( !sFullPath.isEmpty() )
                         sFullPath += OUString(cDelim);
