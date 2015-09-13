@@ -1006,8 +1006,6 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long
     {
         OUString aLine = rText.getToken(i, '\n');
         aLine = comphelper::string::remove(aLine, '\r');
-        aLine = comphelper::string::stripStart(aLine, '\n');
-        aLine = comphelper::string::stripEnd(aLine, '\n');
 
         aSize = GetTextLineSize(rDevice, aLine);
 
@@ -1071,8 +1069,6 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
                 aPoint.X() = ((aPoint.X() / nTabPos) + 1) * nTabPos;
 
             OUString aText = rLine.getToken(i, '\t');
-            aText = comphelper::string::stripStart(aText, '\t');
-            aText = comphelper::string::stripEnd(aText, '\t');
             rDevice.DrawText(aPoint, aText);
             aPoint.X() += rDevice.GetTextWidth(aText);
         }
@@ -1092,8 +1088,6 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
     {
         OUString aLine = rText.getToken(i, '\n');
         aLine = comphelper::string::remove(aLine, '\r');
-        aLine = comphelper::string::stripEnd(aLine, '\n');
-        aLine = comphelper::string::stripEnd(aLine, '\n');
         aSize = GetTextLineSize(rDevice, aLine);
         if (aSize.Width() > MaxWidth)
         {
