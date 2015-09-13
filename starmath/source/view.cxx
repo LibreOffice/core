@@ -991,8 +991,6 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
                 aSize.Width() = ((aSize.Width() / nTabPos) + 1) * nTabPos;
 
             OUString aText = rLine.getToken(i, '\t');
-            aText = comphelper::string::stripStart(aText, '\t');
-            aText = comphelper::string::stripEnd(aText, '\t');
             aSize.Width() += rDevice.GetTextWidth(aText);
         }
     }
