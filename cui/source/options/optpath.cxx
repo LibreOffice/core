@@ -143,17 +143,22 @@ static OUString getCfgName_Impl( sal_uInt16 _nHandle )
 
 OUString Convert_Impl( const OUString& rValue )
 {
-    char cDelim = MULTIPATH_DELIMITER;
-    sal_uInt16 nCount = comphelper::string::getTokenCount(rValue, cDelim);
     OUString aReturn;
-    for ( sal_uInt16 i=0; i<nCount ; ++i )
+    if (rValue.isEmpty())
+        return aReturn;
+
+    const sal_Unicode cDelim = MULTIPATH_DELIMITER;
+    sal_Int32 nPos = 0;
+
+    for (;;)
     {
-        OUString aValue = rValue.getToken( i, cDelim );
+        OUString aValue = rValue.getToken( 0, cDelim, nPos );
         INetURLObject aObj( aValue );
         if ( aObj.GetProtocol() == INetProtocol::File )
             aReturn += aObj.PathToFileName();
-        if ( i+1 < nCount)
-            aReturn += OUStringLiteral1<MULTIPATH_DELIMITER>();
+        if ( nPos < 0 )
+            break;
+        aReturn += OUStringLiteral1<MULTIPATH_DELIMITER>();
     }
 
     return aReturn;
