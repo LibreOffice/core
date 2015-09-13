@@ -1,0 +1,21 @@
+This bug was already fixed upstream with:
+
+author	David Tardon <dtardon@redhat.com>	
+Thu, 11 Jun 2015 17:13:57 +0200 (17:13 +0200)
+committer	David Tardon <dtardon@redhat.com>	
+commit	d9b10697f3984e51d3870e049b99488d94ee735e
+WaE: 'FHTransform' defined as a struct here but previously declared as a class
+
+diff -ru libfreehand/src/lib/FHPath.h libfreehand.orig/src/lib/FHPath.h
+--- src/lib/FHPath.h        2015-09-13 11:25:46.523925800 +0200
++++ src/lib/FHPath.h   2015-05-18 06:50:01.000000000 +0200
+@@ -16,7 +16,7 @@
+ namespace libfreehand
+ {
+
+-class FHTransform;
++struct FHTransform;
+
+ class FHPathElement
+ {
+
