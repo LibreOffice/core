@@ -317,8 +317,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
                 if ( !sTmpPath.isEmpty() && !sWritable.isEmpty() )
                     sTmpPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
                 sTmpPath += sWritable;
-                OUString aValue( sTmpPath );
-                aValue = Convert_Impl( aValue );
+                const OUString aValue = Convert_Impl( sTmpPath );
                 nWidth2 = std::max(nWidth2, pPathBox->GetTextWidth(aValue));
                 aStr += aValue;
                 SvTreeListEntry* pEntry = pPathBox->InsertEntry( aStr );
@@ -481,12 +480,11 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     // old path is an URL?
     INetURLObject aObj( sWritable );
     bool bURL = ( aObj.GetProtocol() != INetProtocol::NotValid );
-    OUString aPathStr( _rFolder );
-    INetURLObject aNewObj( aPathStr );
+    INetURLObject aNewObj( _rFolder );
     aNewObj.removeFinalSlash();
 
     // then the new path also an URL else system path
-    OUString sNewPathStr = bURL ? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+    OUString sNewPathStr = bURL ? _rFolder : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
     bool bChanged =
 #ifdef UNX
@@ -564,9 +562,8 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
             sPath += sWritable;
             pMultiDlg->SetPath( sPath );
 
-            OUString sPathName = SvTabListBox::GetEntryText( pEntry, 0 );
-            OUString sNewTitle( pImpl->m_sMultiPathDlg );
-            sNewTitle = sNewTitle.replaceFirst( VAR_ONE, sPathName );
+            const OUString sPathName = SvTabListBox::GetEntryText( pEntry, 0 );
+            const OUString sNewTitle = pImpl->m_sMultiPathDlg.replaceFirst( VAR_ONE, sPathName );
             pMultiDlg->SetTitle( sNewTitle );
 
             if ( pMultiDlg->Execute() == RET_OK && pEntry )
@@ -799,7 +796,7 @@ void SvxPathTabPage::SetPathList(
             sCfgName + POSTFIX_USER, aValue);
 
         // then the writable path
-        aValue = makeAny( OUString( _rWritablePath ) );
+        aValue = makeAny( _rWritablePath );
         pImpl->m_xPathSettings->setPropertyValue(
             sCfgName + POSTFIX_WRITABLE, aValue);
     }
