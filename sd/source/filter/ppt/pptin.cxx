@@ -433,7 +433,7 @@ bool ImplSdPPTImport::Import()
                                                 aStringAry[nTokenCount] =
                                                     OUStringToOString(aString.getToken( 0, (sal_Unicode)',', nPos ), RTL_TEXTENCODING_UTF8);
                                             }
-                                            while ( ++nTokenCount < SAL_N_ELMENTS(aStringAry) && nPos >= 0 );
+                                            while ( ++nTokenCount < SAL_N_ELEMENTS(aStringAry) && nPos >= 0 );
 
                                             bool bDocInternalSubAddress = false;
 
