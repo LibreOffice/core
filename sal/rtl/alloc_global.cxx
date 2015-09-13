@@ -237,7 +237,7 @@ void rtl_memory_fini()
     int i, n;
 
     /* clear g_alloc_table */
-    memset (g_alloc_table, 0, sizeof(g_alloc_table));
+    memset (g_alloc_table, 0, sizeof(*g_alloc_table));
 
     /* cleanup g_alloc_caches */
     for (i = 0, n = RTL_MEMORY_CACHED_SIZES; i < n; i++)
