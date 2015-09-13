@@ -401,7 +401,7 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
 
 IMPL_LINK_TYPED( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle, void )
 {
-    // alle 50ms nachschauen, ob RefInputMode noch stimmt
+    // every 50ms check whether RefInputMode is still true
 
     if( (_pIdle == pIdle) && IsActive() )
     {
