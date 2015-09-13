@@ -34,7 +34,6 @@
 #include <com/sun/star/mail/MailServiceProvider.hpp>
 #include <com/sun/star/mail/XSmtpService.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
@@ -449,16 +448,16 @@ void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const O
         rRenderContext.DrawRect(Rectangle(rTopLeft, rSize));
     }
     sal_Int32 nHeight = GetTextHeight();
-    OUString sAddress(rAddress);
-    sal_uInt16 nTokens = comphelper::string::getTokenCount(sAddress, '\n');
     Point aStart = rTopLeft;
     //put it away from the border
     aStart.Move(2, 2);
-    for (sal_uInt16 nToken = 0; nToken < nTokens; nToken++)
+    sal_Int32 nPos = 0;
+    do
     {
-        rRenderContext.DrawText(aStart, sAddress.getToken(nToken, '\n'));
+        rRenderContext.DrawText(aStart, rAddress.getToken(0, '\n', nPos));
         aStart.Y() += nHeight;
     }
+    while (nPos >= 0);
 }
 
 OUString SwAddressPreview::FillData(
