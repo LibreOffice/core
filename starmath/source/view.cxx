@@ -976,23 +976,21 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const OUString& rLine)
 {
     Size   aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
-    sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
-    long nTabPos = 0;
-    if (nTabs > 0)
-        nTabPos = rDevice.approximate_char_width() * 8;
+    const long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_char_width() * 8;
 
     if (nTabPos)
     {
         aSize.Width() = 0;
-
-        for (sal_uInt16 i = 0; i < nTabs; i++)
+        sal_Int32 nPos = 0;
+        do
         {
-            if (i > 0)
+            if (nPos > 0)
                 aSize.Width() = ((aSize.Width() / nTabPos) + 1) * nTabPos;
 
-            OUString aText = rLine.getToken(i, '\t');
+            const OUString aText = rLine.getToken(0, '\t', nPos);
             aSize.Width() += rDevice.GetTextWidth(aText);
         }
+        while (nPos >= 0);
     }
 
     return aSize;
