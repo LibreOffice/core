@@ -18,7 +18,6 @@
  */
 
 #include "scitems.hxx"
-#include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
@@ -923,13 +922,14 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
             if ( !pPrint->isEmpty() )
             {
                 const sal_Unicode sep = ScCompiler::GetNativeSymbolChar(ocSep);
-                sal_uInt16 nTCount = comphelper::string::getTokenCount(*pPrint, sep);
-                for (sal_uInt16 i=0; i<nTCount; i++)
+                sal_Int32 nPos = 0;
+                do
                 {
-                    OUString aToken = pPrint->getToken(i, sep);
+                    const OUString aToken = pPrint->getToken(0, sep, nPos);
                     if ( aRange.ParseAny( aToken, &rDoc, aDetails ) & SCA_VALID )
                         rDoc.AddPrintRange( nTab, aRange );
                 }
+                while (nPos >= 0);
             }
         }
         else    // NULL = use selection (print range is always set), use empty string to delete all ranges
