@@ -205,7 +205,8 @@ void ScTable::EndListeningIntersectedGroup(
     if (!ValidCol(nCol))
         return;
 
-    aCol[nCol].EndListeningIntersectedGroup(rCxt, nRow, pGroupPos);
+    if (aCol[nCol].getMayHaveFormula() == true)
+        aCol[nCol].EndListeningIntersectedGroup(rCxt, nRow, pGroupPos);
 }
 
 void ScTable::EndListeningIntersectedGroups(
@@ -216,7 +217,8 @@ void ScTable::EndListeningIntersectedGroups(
         return;
 
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        aCol[nCol].EndListeningIntersectedGroups(rCxt, nRow1, nRow2, pGroupPos);
+        if (aCol[nCol].getMayHaveFormula() == true)
+            aCol[nCol].EndListeningIntersectedGroups(rCxt, nRow1, nRow2, pGroupPos);
 }
 
 void ScTable::EndListeningGroup( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow )
