@@ -2657,7 +2657,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                 static_cast<SwContent*>(pEntry->GetUserData())->GetParent()->IsDeletable() &&
                     !pActiveShell->GetView().GetDocShell()->IsReadOnly())
         {
-            EditEntry(pEntry, EDIT_MODE_DELETE);
+            EditEntry(pEntry, EditEntryMode::DELETE);
             bViewHasChanged = true;
             GetParentWindow()->UpdateListBox();
             TimerUpdate(&aUpdTimer);
@@ -2921,14 +2921,14 @@ void    SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry
         break;
         case 401:
         case 402:
-            EditEntry(pFirst, nSelectedPopupEntry == 401 ? EDIT_MODE_RMV_IDX : EDIT_MODE_UPD_IDX);
+            EditEntry(pFirst, nSelectedPopupEntry == 401 ? EditEntryMode::RMV_IDX : EditEntryMode::UPD_IDX);
         break;
         // Edit entry
         case 403:
-            EditEntry(pFirst, EDIT_MODE_EDIT);
+            EditEntry(pFirst, EditEntryMode::EDIT);
         break;
         case 404:
-            EditEntry(pFirst, EDIT_UNPROTECT_TABLE);
+            EditEntry(pFirst, EditEntryMode::UNPROTECT_TABLE);
         break;
         case 405 :
         {
@@ -2940,10 +2940,10 @@ void    SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry
         case 4:
         break;
         case 501:
-            EditEntry(pFirst, EDIT_MODE_DELETE);
+            EditEntry(pFirst, EditEntryMode::DELETE);
         break;
         case 502 :
-            EditEntry(pFirst, EDIT_MODE_RENAME);
+            EditEntry(pFirst, EditEntryMode::RENAME);
         break;
         case 600:
             pActiveShell->GetView().GetPostItMgr()->Show();
@@ -3075,7 +3075,7 @@ OUString SwContentType::RemoveNewline(const OUString& rEntry)
     return aEntry.makeStringAndClear();
 }
 
-void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
+void SwContentTree::EditEntry(SvTreeListEntry* pEntry, EditEntryMode nMode)
 {
     SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
     GotoContent(pCnt);
@@ -3086,12 +3086,12 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
     switch(nType)
     {
         case ContentTypeId::TABLE     :
-            if(nMode == EDIT_UNPROTECT_TABLE)
+            if(nMode == EditEntryMode::UNPROTECT_TABLE)
             {
                 pActiveShell->GetView().GetDocShell()->
                         GetDoc()->UnProtectCells( pCnt->GetName());
             }
-            else if(nMode == EDIT_MODE_DELETE)
+            else if(nMode == EditEntryMode::DELETE)
             {
                 pActiveShell->StartAction();
                 OUString sTable = SW_RES(STR_TABLE_NAME);
@@ -3109,7 +3109,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
                 pActiveShell->EndUndo();
                 pActiveShell->EndAction();
             }
-            else if(nMode == EDIT_MODE_RENAME)
+            else if(nMode == EditEntryMode::RENAME)
             {
                 uno::Reference< frame::XModel >  xModel = pActiveShell->GetView().GetDocShell()->GetBaseModel();
                 uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
@@ -3120,11 +3120,11 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
         break;
 
         case ContentTypeId::GRAPHIC   :
-            if(nMode == EDIT_MODE_DELETE)
+            if(nMode == EditEntryMode::DELETE)
             {
                 pActiveShell->DelRight();
             }
-            else if(nMode == EDIT_MODE_RENAME)
+            else if(nMode == EditEntryMode::RENAME)
             {
                 uno::Reference< frame::XModel >  xModel = pActiveShell->GetView().GetDocShell()->GetBaseModel();
                 uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
@@ -3140,11 +3140,11 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
 
         case ContentTypeId::FRAME     :
         case ContentTypeId::OLE       :
-            if(nMode == EDIT_MODE_DELETE)
+            if(nMode == EditEntryMode::DELETE)
             {
                 pActiveShell->DelRight();
             }
-            else if(nMode == EDIT_MODE_RENAME)
+            else if(nMode == EditEntryMode::RENAME)
             {
                 uno::Reference< frame::XModel >  xModel = pActiveShell->GetView().GetDocShell()->GetBaseModel();
                 uno::Reference< text::XTextFramesSupplier >  xFrms(xModel, uno::UNO_QUERY);
@@ -3166,12 +3166,12 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
                 nSlot = FN_FORMAT_FRAME_DLG;
         break;
         case ContentTypeId::BOOKMARK  :
-            if(nMode == EDIT_MODE_DELETE)
+            if(nMode == EditEntryMode::DELETE)
             {
                 IDocumentMarkAccess* const pMarkAccess = pActiveShell->getIDocumentMarkAccess();
                 pMarkAccess->deleteMark( pMarkAccess->findMark(pCnt->GetName()) );
             }
-            else if(nMode == EDIT_MODE_RENAME)
+            else if(nMode == EditEntryMode::RENAME)
             {
                 uno::Reference< frame::XModel >  xModel = pActiveShell->GetView().GetDocShell()->GetBaseModel();
                 uno::Reference< text::XBookmarksSupplier >  xBkms(xModel, uno::UNO_QUERY);
@@ -3182,7 +3182,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
         break;
 
         case ContentTypeId::REGION    :
-            if(nMode == EDIT_MODE_RENAME)
+            if(nMode == EditEntryMode::RENAME)
             {
                 uno::Reference< frame::XModel >  xModel = pActiveShell->GetView().GetDocShell()->GetBaseModel();
                 uno::Reference< text::XTextSectionsSupplier >  xSects(xModel, uno::UNO_QUERY);
@@ -3201,7 +3201,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
 
         case ContentTypeId::POSTIT:
             pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
-            if(nMode == EDIT_MODE_DELETE)
+            if(nMode == EditEntryMode::DELETE)
             {
                 if (static_cast<SwPostItContent*>(pCnt)->IsPostIt())
                 {
@@ -3222,7 +3222,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
             const SwTOXBase* pBase = static_cast<SwTOXBaseContent*>(pCnt)->GetTOXBase();
             switch(nMode)
             {
-                case EDIT_MODE_EDIT:
+                case EditEntryMode::EDIT:
                     if(pBase)
                     {
                         SwPtrItem aPtrItem( FN_INSERT_MULTI_TOX, const_cast<SwTOXBase *>(pBase));
@@ -3232,21 +3232,21 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
 
                     }
                 break;
-                case EDIT_MODE_RMV_IDX:
-                case EDIT_MODE_DELETE:
+                case EditEntryMode::RMV_IDX:
+                case EditEntryMode::DELETE:
                 {
                     if( pBase )
-                        pActiveShell->DeleteTOX(*pBase, EDIT_MODE_DELETE == nMode);
+                        pActiveShell->DeleteTOX(*pBase, EditEntryMode::DELETE == nMode);
                 }
                 break;
-                case EDIT_MODE_UPD_IDX:
-                case EDIT_MODE_RENAME:
+                case EditEntryMode::UPD_IDX:
+                case EditEntryMode::RENAME:
                 {
                     Reference< frame::XModel >  xModel = pActiveShell->GetView().GetDocShell()->GetBaseModel();
                     Reference< XDocumentIndexesSupplier >  xIndexes(xModel, UNO_QUERY);
                     Reference< XIndexAccess> xIdxAcc(xIndexes->getDocumentIndexes());
                     Reference< XNameAccess >xLocalNameAccess(xIdxAcc, UNO_QUERY);
-                    if(EDIT_MODE_RENAME == nMode)
+                    if(EditEntryMode::RENAME == nMode)
                         xNameAccess = xLocalNameAccess;
                     else if(xLocalNameAccess.is() && xLocalNameAccess->hasByName(pBase->GetTOXName()))
                     {
@@ -3257,11 +3257,12 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
                     }
                 }
                 break;
+                default: break;
             }
         }
         break;
         case ContentTypeId::DRAWOBJECT :
-            if(EDIT_MODE_DELETE == nMode)
+            if(EditEntryMode::DELETE == nMode)
                 nSlot = SID_DELETE;
         break;
         default: break;

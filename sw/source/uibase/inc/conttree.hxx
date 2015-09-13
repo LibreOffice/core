@@ -38,12 +38,15 @@ class SwGlblDocContent;
 class SfxObjectShell;
 class SdrObject;
 
-#define EDIT_MODE_EDIT          0
-#define EDIT_MODE_UPD_IDX       1
-#define EDIT_MODE_RMV_IDX       2
-#define EDIT_UNPROTECT_TABLE    3
-#define EDIT_MODE_DELETE        4
-#define EDIT_MODE_RENAME        5
+enum class EditEntryMode
+{
+    EDIT          = 0,
+    UPD_IDX       = 1,
+    RMV_IDX       = 2,
+    UNPROTECT_TABLE    = 3,
+    DELETE        = 4,
+    RENAME        = 5,
+};
 
 class SwContentTree
     : public SvTreeListBox
@@ -134,7 +137,7 @@ protected:
                                 ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
-    void            EditEntry( SvTreeListEntry* pEntry, sal_uInt8 nMode );
+    void            EditEntry( SvTreeListEntry* pEntry, EditEntryMode nMode );
 
     void            GotoContent(SwContent* pCnt);
     static void     SetInDrag(bool bSet) {bIsInDrag = bSet;}
