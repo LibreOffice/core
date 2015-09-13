@@ -34,7 +34,7 @@ class StatusChangeListenerContainer
     : public cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
 {
 public:
-    StatusChangeListenerContainer( ::osl::Mutex& aMutex )
+    explicit StatusChangeListenerContainer(osl::Mutex& aMutex)
         :  cppu::OMultiTypeInterfaceContainerHelperVar<OUString>(aMutex)
     {
     }

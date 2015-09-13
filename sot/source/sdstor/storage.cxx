@@ -44,11 +44,11 @@ using namespace ::com::sun::star;
 class SotStorageStreamFactory : public SotFactory
 {
 public:
-        SotStorageStreamFactory( const SvGlobalName & rName )
-            : SotFactory( rName )
-        {}
+    explicit SotStorageStreamFactory(const SvGlobalName& rName)
+        : SotFactory(rName)
+    {
+    }
 };
-
 
 SotFactory * SotStorageStream::ClassFactory()
 {
@@ -293,11 +293,11 @@ bool SotStorageStream::SetProperty( const OUString& rName, const ::com::sun::sta
 class SotStorageFactory : public SotFactory
 {
 public:
-        SotStorageFactory( const SvGlobalName & rName )
-            : SotFactory( rName )
-        {}
+    explicit SotStorageFactory(const SvGlobalName & rName)
+        : SotFactory(rName)
+    {
+    }
 };
-
 
 SotFactory * SotStorage::ClassFactory()
 {

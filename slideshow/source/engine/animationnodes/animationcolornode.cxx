@@ -41,7 +41,7 @@ namespace {
 class HSLWrapper : public HSLColorAnimation
 {
 public:
-    HSLWrapper( const ColorAnimationSharedPtr& rAnimation )
+    explicit HSLWrapper( const ColorAnimationSharedPtr& rAnimation )
         : mpAnimation( rAnimation )
     {
         ENSURE_OR_THROW(

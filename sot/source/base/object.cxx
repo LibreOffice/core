@@ -24,11 +24,11 @@
 class SotObjectFactory : public SotFactory
 {
 public:
-        SotObjectFactory( const SvGlobalName & rName )
-            : SotFactory( rName )
-        {}
+    explicit SotObjectFactory(const SvGlobalName& rName)
+        : SotFactory( rName )
+    {
+    }
 };
-
 
 SotFactory * SotObject::ClassFactory()
 {

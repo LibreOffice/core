@@ -101,7 +101,7 @@ private:
     std::map<OUString, GdkAtom> m_aMimeTypeToAtom;
 public:
 
-    GtkTransferable(GdkAtom nSelection)
+    explicit GtkTransferable(GdkAtom nSelection)
         : m_nSelection(nSelection)
     {
     }
@@ -289,7 +289,7 @@ class VclGtkClipboard :
 
 public:
 
-    VclGtkClipboard(GdkAtom nSelection);
+    explicit VclGtkClipboard(GdkAtom nSelection);
     virtual ~VclGtkClipboard();
 
     /*

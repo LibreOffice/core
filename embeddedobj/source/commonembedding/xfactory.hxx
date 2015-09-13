@@ -37,7 +37,7 @@ class OOoEmbeddedObjectFactory : public ::cppu::WeakImplHelper<
     ::comphelper::MimeConfigurationHelper m_aConfigHelper;
 
 public:
-    OOoEmbeddedObjectFactory(
+    explicit OOoEmbeddedObjectFactory(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
     : m_xContext( rxContext )
     , m_aConfigHelper( rxContext )
@@ -84,7 +84,7 @@ class OOoSpecialEmbeddedObjectFactory : public ::cppu::WeakImplHelper<
     ::comphelper::MimeConfigurationHelper m_aConfigHelper;
 
 public:
-    OOoSpecialEmbeddedObjectFactory(
+    explicit OOoSpecialEmbeddedObjectFactory(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
     : m_xContext( rxContext )
     , m_aConfigHelper( rxContext )

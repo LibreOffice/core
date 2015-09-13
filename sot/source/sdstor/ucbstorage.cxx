@@ -90,7 +90,7 @@ protected:
     SvStream*       m_pSvStream;
 
 public:
-    FileStreamWrapper_Impl( const OUString& rName );
+    explicit FileStreamWrapper_Impl(const OUString& rName);
     virtual ~FileStreamWrapper_Impl();
 
     virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw ( IllegalArgumentException, IOException, RuntimeException, std::exception) SAL_OVERRIDE;

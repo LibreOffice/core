@@ -32,7 +32,7 @@ class CMimeContentType : public
     cppu::WeakImplHelper< css::datatransfer::XMimeContentType >
 {
 public:
-    CMimeContentType( const OUString& aCntType );
+    explicit CMimeContentType(const OUString& rCntType);
 
     // XMimeContentType
 

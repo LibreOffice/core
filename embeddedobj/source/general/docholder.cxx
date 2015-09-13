@@ -78,25 +78,22 @@
 
 using namespace ::com::sun::star;
 
-
-
-class IntCounterGuard {
-    sal_Int32& m_nFlag;
+class IntCounterGuard
+{
+    sal_Int32& m_rFlag;
 public:
-    IntCounterGuard( sal_Int32& nFlag )
-    : m_nFlag( nFlag )
+    explicit IntCounterGuard(sal_Int32& rFlag)
+        : m_rFlag(rFlag)
     {
-        m_nFlag++;
+        ++m_rFlag;
     }
 
     ~IntCounterGuard()
     {
-        if ( m_nFlag )
-            m_nFlag--;
+        if (m_rFlag)
+            --m_rFlag;
     }
 };
-
-
 
 static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >& xTargetMenu,
                             sal_Int32 nTargetIndex,

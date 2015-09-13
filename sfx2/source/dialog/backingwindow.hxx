@@ -116,7 +116,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     void initializeLocalView();
 
 public:
-    BackingWindow(vcl::Window* pParent);
+    explicit BackingWindow(vcl::Window* pParent);
     virtual ~BackingWindow();
     virtual void dispose() SAL_OVERRIDE;
 

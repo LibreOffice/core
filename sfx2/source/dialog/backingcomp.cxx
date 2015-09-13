@@ -98,7 +98,7 @@ private:
 
 public:
 
-             BackingComp( const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    explicit BackingComp(const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~BackingComp(                                                                    );
 
     // XInterface

@@ -107,7 +107,7 @@ struct OutlinerParaObject::Impl
     Impl( const EditTextObject& rTextObj, const ParagraphDataVector& rParaData, bool bIsEditDoc ) :
         mxData(new OutlinerParaObjData(rTextObj.Clone(), rParaData, bIsEditDoc)) {}
 
-    Impl( const EditTextObject& rTextObj ) :
+    explicit Impl(const EditTextObject& rTextObj) :
         mxData(new OutlinerParaObjData(rTextObj.Clone(), ParagraphDataVector(), true)) {}
 
     Impl( const Impl& r ) : mxData(r.mxData) {}

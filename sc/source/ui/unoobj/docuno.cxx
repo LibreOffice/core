@@ -714,14 +714,13 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
 
     ScEditShell* pShell;
     ScDrawShell* pDrawShell;
-    ScDrawTextObjectBar* pTextShell;
     TransferableDataHelper aDataHelper;
     ScViewData* pViewData = ScDocShell::GetViewData();
     uno::Reference<datatransfer::XTransferable> xTransferable;
 
     if (( pShell = PTR_CAST( ScEditShell, pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )))
         xTransferable = pShell->GetEditView()->GetTransferable();
-    else if (( pTextShell = PTR_CAST( ScDrawTextObjectBar, pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )))
+    else if ((PTR_CAST( ScDrawTextObjectBar, pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )))
     {
         ScDrawView* pView = pViewData->GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
