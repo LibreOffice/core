@@ -1058,23 +1058,21 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const OUString& rText, long
 void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, const OUString& rLine)
 {
     Point aPoint(rPosition);
-
-    sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
-    long nTabPos = 0;
-    if (nTabs > 0)
-        nTabPos = rDevice.approximate_char_width() * 8;
+    const long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_char_width() * 8;
 
     if (nTabPos)
     {
-        for (sal_uInt16 i = 0; i < nTabs; ++i)
+        sal_Int32 nPos = 0;
+        do
         {
-            if (i > 0)
+            if (nPos > 0)
                 aPoint.X() = ((aPoint.X() / nTabPos) + 1) * nTabPos;
 
-            OUString aText = rLine.getToken(i, '\t');
+            OUString aText = rLine.getToken(0, '\t', nPos);
             rDevice.DrawText(aPoint, aText);
             aPoint.X() += rDevice.GetTextWidth(aText);
         }
+        while ( nPos >= 0 );
     }
     else
         rDevice.DrawText(aPoint, rLine);
