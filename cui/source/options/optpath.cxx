@@ -141,7 +141,7 @@ static OUString getCfgName_Impl( sal_uInt16 _nHandle )
 
 #define MULTIPATH_DELIMITER     ';'
 
-OUString Convert_Impl( const OUString& rValue )
+static OUString Convert_Impl( const OUString& rValue )
 {
     OUString aReturn;
     if (rValue.isEmpty())
