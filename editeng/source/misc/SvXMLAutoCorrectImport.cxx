@@ -20,8 +20,8 @@
 #include <SvXMLAutoCorrectImport.hxx>
 #include <SvXMLAutoCorrectTokenHandler.hxx>
 
-using namespace ::css;
-using namespace ::css::xml::sax;
+using namespace css;
+using namespace css::xml::sax;
 
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const uno::Reference< uno::XComponentContext > xContext,

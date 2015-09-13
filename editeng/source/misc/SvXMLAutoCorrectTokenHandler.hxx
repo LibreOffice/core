@@ -18,7 +18,7 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <sax/fastattribs.hxx>
 
-using namespace ::css::xml::sax;
+using namespace css::xml::sax;
 using namespace ::xmloff::token;
 
 enum SvXMLAutoCorrectToken : sal_Int32
