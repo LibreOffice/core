@@ -89,7 +89,8 @@ ScColumn::ScColumn() :
     nTab( 0 ),
     pAttrArray( NULL ),
     pDocument( NULL ),
-    mbDirtyGroups(true)
+    mbDirtyGroups(true),
+    mbMayHaveFormula(true)
 {
 }
 
@@ -956,6 +957,7 @@ public:
                         const_cast<ScFormulaCell&>(rOld).Interpret();
 
                     aCloned.push_back(new ScFormulaCell(rOld, mrDestCol.GetDoc(), aDestPos));
+                    mrDestCol.setMayHaveFormula(true);
                 }
 
                 // Group the cloned formula cells.
@@ -1129,12 +1131,18 @@ void ScColumn::CopyStaticToDocument(
                         break;
 
                     if (rFC.IsValue())
+                    {
                         aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nRow, rFC.GetValue());
+                        rDestCol.setMayHaveFormula(true);
+                    }
                     else
                     {
                         svl::SharedString aSS = rFC.GetString();
                         if (aSS.isValid())
+                        {
                             aDestPos.miCellPos = rDestCol.maCells.set(aDestPos.miCellPos, nRow, aSS);
+                            rDestCol.setMayHaveFormula(true);
+                        }
                     }
                 }
             }
@@ -1193,6 +1201,7 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
             aDestPos.SetRow(nDestRow);
             ScFormulaCell* pNew = new ScFormulaCell(*p, *rDestCol.pDocument, aDestPos);
             rDestCol.SetFormulaCell(nDestRow, pNew);
+            rDestCol.setMayHaveFormula(true);
         }
         break;
         case sc::element_type_empty:
@@ -1262,6 +1271,7 @@ class CopyAsLinkHandler
 
         ScTokenArray aArr;
         aArr.AddSingleReference(aRef);
+        mrDestCol.setMayHaveFormula(true);
         return new ScFormulaCell(&mrDestCol.GetDoc(), ScAddress(mrDestCol.GetCol(), nRow, mrDestCol.GetTab()), aArr);
     }
 
@@ -2382,8 +2392,11 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
 
     // Check the row positions at which the group must be split per relative
     // references.
-    UpdateRefGroupBoundChecker aBoundChecker(rCxt, aBounds);
-    std::for_each(maCells.begin(), maCells.end(), aBoundChecker);
+    if (getMayHaveFormula() == true)
+    {
+        UpdateRefGroupBoundChecker aBoundChecker(rCxt, aBounds);
+        std::for_each(maCells.begin(), maCells.end(), aBoundChecker);
+    }
 
     // If expand reference edges is on, splitting groups may happen anywhere
     // where a reference points to an adjacent row of the insertion.
@@ -2393,11 +2406,14 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
         std::for_each(maCells.begin(), maCells.end(), aExpandChecker);
     }
 
-    // Do the actual splitting.
-    sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
+    if (getMayHaveFormula() == true)
+        // Do the actual splitting.
+        sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
 
     // Collect all formula groups.
-    std::vector<sc::FormulaGroupEntry> aGroups = GetFormulaGroupEntries();
+    std::vector<sc::FormulaGroupEntry> aGroups;
+    if (getMayHaveFormula() == true)
+        aGroups = GetFormulaGroupEntries();
 
     // Process all collected formula groups.
     UpdateRefOnNonCopy aHandler(nCol, nTab, &rCxt, pUndoDoc);
@@ -3201,6 +3217,9 @@ public:
 
 void ScColumn::SetDirtyIfPostponed()
 {
+    if (getMayHaveFormula() == false)
+        return;
+
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     SetDirtyIfPostponedHandler aFunc;
     sc::ProcessFormula(maCells, aFunc);
@@ -3208,6 +3227,9 @@ void ScColumn::SetDirtyIfPostponed()
 
 void ScColumn::BroadcastRecalcOnRefMove()
 {
+   if (getMayHaveFormula() == false)
+        return;
+
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     RecalcOnRefMoveCollector aFunc;
     sc::ProcessFormula(maCells, aFunc);
