@@ -429,7 +429,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
                 OUString sOnePath = aOldPath.getToken( i, MULTIPATH_DELIMITER );
                 for ( sal_uInt16 j = 0; !bFound && j < nIntCount; ++j )
                 {
-                    if ( sInternal.getToken( i, MULTIPATH_DELIMITER ) == sOnePath )
+                    if ( sInternal.getToken( j, MULTIPATH_DELIMITER ) == sOnePath )
                         bFound = true;
                 }
                 if ( !bFound )
