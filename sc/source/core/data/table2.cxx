@@ -1828,7 +1828,7 @@ void ScTable::ResetChanged( const ScRange& rRange )
     SCROW nEndRow = rRange.aEnd.Row();
 
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
-        if (aCol[i].getMayHaveFormula() == true)
+        if (aCol[nCol].getMayHaveFormula() == true)
             aCol[nCol].ResetChanged(nStartRow, nEndRow);
 }
 
