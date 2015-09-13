@@ -2474,7 +2474,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     // construct the new table
     if(!pNewTable->CreateImpl())
     {
-        xHold = pNewTable = NULL;
+        xHold.clear();
         const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_COLUMN_NOT_DROP,
                 "$position$", OUString::number(_nPos)
@@ -2489,7 +2489,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
         pNewTable->renameImpl(m_Name);
         // release the temp file
 
-    xHold = pNewTable = NULL;
+    xHold.clear();
 
     FileClose();
     construct();
