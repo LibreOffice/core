@@ -18,7 +18,6 @@
  */
 
 #include <stdlib.h>
-#include <comphelper/string.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <osl/diagnose.h>
 
@@ -170,18 +169,12 @@ sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt1
         nMask |= SCA_VALID;             // falls das jemand vergessen sollte
         sal_uInt16 nResult = (sal_uInt16)~0;    // alle Bits setzen
         ScRange aRange;
-        OUString aOne;
-        SCTAB nTab = 0;
-        if ( pDoc )
+        const SCTAB nTab = pDoc ? nDefaultTab : 0;
+
+        sal_Int32 nPos = 0;
+        do
         {
-            nTab = nDefaultTab;
-        }
-        else
-            nTab = 0;
-        sal_uInt16 nTCount = comphelper::string::getTokenCount(rStr, cDelimiter);
-        for ( sal_uInt16 i=0; i<nTCount; i++ )
-        {
-            aOne = rStr.getToken( i, cDelimiter );
+            const OUString aOne = rStr.getToken( 0, cDelimiter, nPos );
             aRange.aStart.SetTab( nTab );   // Default Tab wenn nicht angegeben
             sal_uInt16 nRes = aRange.ParseAny( aOne, pDoc, eConv );
             sal_uInt16 nEndRangeBits = SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
@@ -197,6 +190,8 @@ sal_uInt16 ScRangeList::Parse( const OUString& rStr, ScDocument* pDoc, sal_uInt1
                 Append( aRange );
             nResult &= nRes;        // alle gemeinsamen Bits bleiben erhalten
         }
+        while (nPos >= 0);
+
         return nResult;             // SCA_VALID gesetzt wenn alle ok
     }
     else
