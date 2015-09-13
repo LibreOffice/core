@@ -421,15 +421,19 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
 
             sal_uInt16 i;
             sal_uInt16 nOldCount = comphelper::string::getTokenCount(aOldPath, MULTIPATH_DELIMITER);
-            sal_uInt16 nIntCount = comphelper::string::getTokenCount(sInternal, MULTIPATH_DELIMITER);
             for ( i = 0; i < nOldCount; ++i )
             {
                 bool bFound = false;
                 OUString sOnePath = aOldPath.getToken( i, MULTIPATH_DELIMITER );
-                for ( sal_uInt16 j = 0; !bFound && j < nIntCount; ++j )
+                if ( !sInternal.isEmpty() )
                 {
-                    if ( sInternal.getToken( j, MULTIPATH_DELIMITER ) == sOnePath )
-                        bFound = true;
+                    sal_Int32 nInternalPos = 0;
+                    do
+                    {
+                        if ( sInternal.getToken( 0, MULTIPATH_DELIMITER, nInternalPos ) == sOnePath )
+                            bFound = true;
+                    }
+                    while ( !bFound && nInternalPos >= 0 );
                 }
                 if ( !bFound )
                 {
