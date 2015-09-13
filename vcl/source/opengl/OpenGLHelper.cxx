@@ -12,6 +12,9 @@
 
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/digest.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <config_folders.h>
 #include <vcl/salbtype.hxx>
 #include <vcl/bmpacc.hxx>
@@ -25,6 +28,8 @@
 
 #include <stdarg.h>
 #include <vector>
+#include <deque>
+#include <unordered_map>
 
 #include "svdata.hxx"
 
@@ -46,6 +51,8 @@ sal_uInt64 volatile OpenGLZone::gnEnterCount = 0;
 sal_uInt64 volatile OpenGLZone::gnLeaveCount = 0;
 
 namespace {
+
+using namespace rtl;
 
 OUString getShaderFolder()
 {
@@ -143,11 +150,246 @@ static void addPreamble(OString& rShaderSource, const OString& rPreamble)
     }
 }
 
-GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString& rFragmentShaderName, const OString& preamble)
+namespace
+{
+    static const sal_uInt32 GLenumSize = sizeof(GLenum);
+
+    OString getHexString(const sal_uInt8* pData, sal_uInt32 nLength)
+    {
+        static const char* pHexData = "0123456789ABCDEF";
+
+        bool bIsZero = true;
+        OStringBuffer aHexStr;
+        for(size_t i = 0; i < nLength; ++i)
+        {
+            sal_uInt8 val = pData[i];
+            if( val != 0 )
+                bIsZero = false;
+            aHexStr.append( pHexData[ val & 0xf ] );
+            aHexStr.append( pHexData[ val >> 4 ] );
+        }
+        if( bIsZero )
+            return OString();
+        else
+            return aHexStr.makeStringAndClear();
+    }
+
+    OString generateMD5(const void* pData, size_t length)
+    {
+        sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_MD5];
+        rtlDigestError aError = rtl_digest_MD5(pData, length,
+                pBuffer, RTL_DIGEST_LENGTH_MD5);
+        SAL_WARN_IF(aError != rtl_Digest_E_None, "vcl.opengl", "md5 generation failed");
+
+        return getHexString(pBuffer, RTL_DIGEST_LENGTH_MD5);
+    }
+
+    OString getStringDigest( const OUString& rVertexShaderName,
+                             const OUString& rFragmentShaderName,
+                             const OString& rPreamble )
+    {
+        // read shaders source
+        OString aVertexShaderSource = loadShader( rVertexShaderName );
+        OString aFragmentShaderSource = loadShader( rFragmentShaderName );
+
+        // get info about the graphic device
+#if defined( SAL_UNX ) && !defined( MACOSX ) && !defined( IOS )&& !defined( ANDROID )
+        static const X11OpenGLDeviceInfo aInfo;
+        static const OString aDeviceInfo (
+                aInfo.GetOS() +
+                aInfo.GetOSRelease() +
+                aInfo.GetRenderer() +
+                aInfo.GetVendor() +
+                aInfo.GetVersion() );
+#elif defined( _WIN32 )
+        static const WinOpenGLDeviceInfo aInfo;
+        static const OString aDeviceInfo (
+                OUStringToOString( aInfo.GetAdapterVendorID(), RTL_TEXTENCODING_UTF8 ) +
+                OUStringToOString( aInfo.GetAdapterDeviceID(), RTL_TEXTENCODING_UTF8 ) +
+                OUStringToOString( aInfo.GetDriverVersion(), RTL_TEXTENCODING_UTF8 ) +
+                OString::number( aInfo.GetWindowsVersion() ) );
+#else
+        static const OString aDeviceInfo (
+                OString( (const char*)(glGetString(GL_VENDOR)) ) +
+                OString( (const char*)(glGetString(GL_RENDERER)) ) +
+                OString( (const char*)(glGetString(GL_VERSION)) ) );
+#endif
+
+        OString aMessage;
+        aMessage += rPreamble;
+        aMessage += aVertexShaderSource;
+        aMessage += aFragmentShaderSource;
+        aMessage += aDeviceInfo;
+
+        return generateMD5(aMessage.getStr(), aMessage.getLength());
+    }
+
+    OString getCacheFolder()
+    {
+        OUString url("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/cache/");
+        rtl::Bootstrap::expandMacros(url);
+
+        osl::Directory::create(url);
+
+        return rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8);
+    }
+
+
+    bool writeProgramBinary( const OString& rBinaryFileName,
+                             const std::vector<sal_uInt8>& rBinary )
+    {
+        osl::File aFile(rtl::OStringToOUString(rBinaryFileName, RTL_TEXTENCODING_UTF8));
+        osl::FileBase::RC eStatus = aFile.open(
+                osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
+
+        if( eStatus != osl::FileBase::E_None )
+        {
+            // when file already exists we do not have to save it:
+            // we can be sure that the binary to save is exactly equal
+            // to the already saved binary, since they have the same hash value
+            if( eStatus == osl::FileBase::E_EXIST )
+            {
+                SAL_WARN( "vcl.opengl",
+                        "No binary program saved. A file with the same hash already exists: '" << rBinaryFileName << "'" );
+                return true;
+            }
+            return false;
+        }
+
+        sal_uInt64 nBytesWritten = 0;
+        aFile.write( rBinary.data(), rBinary.size(), nBytesWritten );
+
+        assert( rBinary.size() == nBytesWritten );
+
+        return true;
+    }
+
+    bool readProgramBinary( const OString& rBinaryFileName,
+                            std::vector<sal_uInt8>& rBinary )
+    {
+        osl::File aFile( rtl::OStringToOUString( rBinaryFileName, RTL_TEXTENCODING_UTF8 ) );
+        if(aFile.open( osl_File_OpenFlag_Read ) == osl::FileBase::E_None)
+        {
+            sal_uInt64 nSize = 0;
+            aFile.getSize( nSize );
+            rBinary.resize( nSize );
+            sal_uInt64 nBytesRead = 0;
+            aFile.read( rBinary.data(), nSize, nBytesRead );
+            assert( nSize == nBytesRead );
+            SAL_WARN("vcl.opengl", "Loading file: '" << rBinaryFileName << "': success" );
+            return true;
+        }
+        else
+        {
+            SAL_WARN("vcl.opengl", "Loading file: '" << rBinaryFileName << "': FAIL");
+        }
+
+        return false;
+    }
+
+    OString createFileName( const OUString& rVertexShaderName,
+                            const OUString& rFragmentShaderName,
+                            const OString& rDigest )
+    {
+        OString aFileName;
+        aFileName += getCacheFolder();
+        aFileName += rtl::OUStringToOString( rVertexShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
+        aFileName += rtl::OUStringToOString( rFragmentShaderName, RTL_TEXTENCODING_UTF8 ) + "-";
+        aFileName += rDigest + ".bin";
+        return aFileName;
+    }
+
+    GLint loadProgramBinary( GLuint nProgramID, const OString& rBinaryFileName )
+    {
+        GLint nResult = GL_FALSE;
+        GLenum nBinaryFormat;
+        std::vector<sal_uInt8> aBinary;
+        if( readProgramBinary( rBinaryFileName, aBinary ) && aBinary.size() > GLenumSize )
+        {
+            GLint nBinaryLength = aBinary.size() - GLenumSize;
+
+            // Extract binary format
+            sal_uInt8* pBF = (sal_uInt8*)(&nBinaryFormat);
+            for( size_t i = 0; i < GLenumSize; ++i )
+            {
+                pBF[i] = aBinary[nBinaryLength + i];
+            }
+
+            // Load the program
+            glProgramBinary( nProgramID, nBinaryFormat, (void*)(aBinary.data()), nBinaryLength );
+
+            // Check the program
+            glGetProgramiv(nProgramID, GL_LINK_STATUS, &nResult);
+        }
+        return nResult;
+    }
+
+    void saveProgramBinary( GLint nProgramID, const OString& rBinaryFileName )
+    {
+        GLint nBinaryLength = 0;
+        GLenum nBinaryFormat = GL_NONE;
+
+        glGetProgramiv( nProgramID, GL_PROGRAM_BINARY_LENGTH, &nBinaryLength );
+        if( !( nBinaryLength > 0 ) )
+        {
+            SAL_WARN( "vcl.opengl", "Binary size is zero" );
+            return;
+        }
+
+        std::vector<sal_uInt8> aBinary( nBinaryLength + GLenumSize );
+
+        glGetProgramBinary( nProgramID, nBinaryLength, NULL, &nBinaryFormat, (void*)(aBinary.data()) );
+
+        const sal_uInt8* pBF = (const sal_uInt8*)(&nBinaryFormat);
+        aBinary.insert( aBinary.end(), pBF, pBF + GLenumSize );
+
+        SAL_INFO("vcl.opengl", "Program id: " << nProgramID );
+        SAL_INFO("vcl.opengl", "Binary length: " << nBinaryLength );
+        SAL_INFO("vcl.opengl", "Binary format: " << nBinaryFormat );
+
+        if( !writeProgramBinary( rBinaryFileName, aBinary ) )
+            SAL_WARN("vcl.opengl", "Writing binary file '" << rBinaryFileName << "': FAIL");
+        else
+            SAL_WARN("vcl.opengl", "Writing binary file '" << rBinaryFileName << "': success");
+    }
+}
+
+rtl::OString OpenGLHelper::GetDigest( const OUString& rVertexShaderName,
+                                      const OUString& rFragmentShaderName,
+                                      const OString& rPreamble )
+{
+    return getStringDigest(rVertexShaderName, rFragmentShaderName, rPreamble);
+}
+
+GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
+                                const OUString& rFragmentShaderName,
+                                const OString& preamble,
+                                const OString& rDigest)
 {
     OpenGLZone aZone;
 
     gbInShaderCompile = true;
+
+    // create the program object
+    GLint ProgramID = glCreateProgram();
+
+    // read shaders from file
+    OString aVertexShaderSource = loadShader(rVertexShaderName);
+    OString aFragmentShaderSource = loadShader(rFragmentShaderName);
+
+
+    GLint BinaryResult = GL_FALSE;
+    if( GLEW_ARB_get_program_binary && !rDigest.isEmpty() )
+    {
+        OString aFileName =
+                createFileName(rVertexShaderName, rFragmentShaderName, rDigest);
+        BinaryResult = loadProgramBinary(ProgramID, aFileName);
+        CHECK_GL_ERROR();
+    }
+
+    if( BinaryResult != GL_FALSE )
+        return ProgramID;
+
 
     VCL_GL_INFO("vcl.opengl", "Load shader: vertex " << rVertexShaderName << " fragment " << rFragmentShaderName);
     // Create the shaders
@@ -157,7 +399,6 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
     GLint Result = GL_FALSE;
 
     // Compile Vertex Shader
-    OString aVertexShaderSource = loadShader(rVertexShaderName);
     if( !preamble.isEmpty())
         addPreamble( aVertexShaderSource, preamble );
     char const * VertexSourcePointer = aVertexShaderSource.getStr();
@@ -171,7 +412,6 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
                                 rVertexShaderName, true);
 
     // Compile Fragment Shader
-    OString aFragmentShaderSource = loadShader(rFragmentShaderName);
     if( !preamble.isEmpty())
         addPreamble( aFragmentShaderSource, preamble );
     char const * FragmentSourcePointer = aFragmentShaderSource.getStr();
@@ -185,10 +425,27 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
                                 rFragmentShaderName, true);
 
     // Link the program
-    GLint ProgramID = glCreateProgram();
     glAttachShader(ProgramID, VertexShaderID);
     glAttachShader(ProgramID, FragmentShaderID);
-    glLinkProgram(ProgramID);
+
+    if( GLEW_ARB_get_program_binary && !rDigest.isEmpty() )
+    {
+        glProgramParameteri(ProgramID, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GL_TRUE);
+        glLinkProgram(ProgramID);
+        glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
+        if (!Result)
+        {
+            SAL_WARN("vcl.opengl", "linking failed: " << Result );
+            return LogCompilerError(ProgramID, "program", "<both>", false);
+        }
+        OString aFileName =
+                createFileName(rVertexShaderName, rFragmentShaderName, rDigest);
+        saveProgramBinary(ProgramID, aFileName);
+    }
+    else
+    {
+        glLinkProgram(ProgramID);
+    }
 
     glDeleteShader(VertexShaderID);
     glDeleteShader(FragmentShaderID);

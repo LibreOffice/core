@@ -50,7 +50,8 @@ public:
     OpenGLProgram();
     ~OpenGLProgram();
 
-    bool Load( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
+    bool Load( const OUString& rVertexShader, const OUString& rFragmentShader,
+               const rtl::OString& preamble = "", const rtl::OString& rDigest = "" );
     bool Use();
     bool Clean();
 
