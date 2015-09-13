@@ -609,8 +609,8 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
 
     // 2.Pass: Get the total needed memory for class ExceptionType
     // (with embedded type_info) and keep the sizes for each instance
-    // is stored in alloced int array
-    int *excecptionTypeSizeArray = new int[nLen];
+    // is stored in allocated int array
+    int *exceptionTypeSizeArray = new int[nLen];
 
     nLen = 0;
     for (pCompTD = (typelib_CompoundTypeDescription*)pTD;
@@ -625,14 +625,14 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
             n++;
             typeInfoLen = n*4;
         }
-        excecptionTypeSizeArray[nLen++] = typeInfoLen + sizeof(ExceptionType);
+        exceptionTypeSizeArray[nLen++] = typeInfoLen + sizeof(ExceptionType);
     }
 
     // Total ExceptionType related mem
     int excTypeAddLen = 0;
     for (int i = 0; i < nLen; i++)
     {
-        excTypeAddLen += excecptionTypeSizeArray[i];
+        excTypeAddLen += exceptionTypeSizeArray[i];
     }
 
     // Allocate mem for code and all dynamic data in one chunk to guarantee
@@ -684,7 +684,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
         // Next trampoline entry offset
         pCodeOffset += codeSnippetSize;
         // Next ExceptionType placement offset
-        etMemOffset += excecptionTypeSizeArray[nPos - 1];
+        etMemOffset += exceptionTypeSizeArray[nPos - 1];
 
         // Keep offset of addresses of ET for D-Tor call in ~RaiseInfo
         types[nPos++]
@@ -694,7 +694,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
     assert(etMem + etMemOffset == pCode + totalSize);
 
     // remove array
-    delete excecptionTypeSizeArray;
+    delete[] excecptionTypeSizeArray;
 }
 
 RaiseInfo::~RaiseInfo() throw ()
