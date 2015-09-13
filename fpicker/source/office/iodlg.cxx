@@ -2839,35 +2839,26 @@ void SvtFileDialog::appendDefaultExtension(OUString& _rFileName,
                                            const OUString& _rFilterDefaultExtension,
                                            const OUString& _rFilterExtensions)
 {
-    OUString aTemp(_rFileName);
-    aTemp = aTemp.toAsciiLowerCase();
-    OUString aType(_rFilterExtensions);
-    aType = aType.toAsciiLowerCase();
+    const OUString aType(_rFilterExtensions.toAsciiLowerCase());
 
     if ( aType != FILEDIALOG_FILTER_ALL )
     {
-        sal_uInt16 nWildCard = comphelper::string::getTokenCount(aType, FILEDIALOG_DEF_EXTSEP);
-        sal_uInt16 nIndex;
+        const OUString aTemp(_rFileName.toAsciiLowerCase());
         sal_Int32 nPos = 0;
 
-        for ( nIndex = 0; nIndex < nWildCard; nIndex++ )
+        do
         {
-            OUString aExt(aType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
-            // take care of a leading *
-            sal_Int32 nExtOffset = (aExt[0] == '*' ? 1 : 0);
-            const sal_Unicode* pExt = aExt.getStr() + nExtOffset;
-            sal_Int32 nExtLen = aExt.getLength() - nExtOffset;
-            sal_Int32 nOffset = aTemp.getLength() - nExtLen;
-            // minimize search by starting at last possible index
-            if ( aTemp.indexOf(pExt, nOffset) == nOffset )
-                break;
+            if (nPos+1<aType.getLength() && aType[nPos]=='*') // take care of a leading *
+                ++nPos;
+            const OUString aExt(aType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
+            if (aExt.isEmpty())
+                continue;
+            if (aTemp.endsWith(aExt))
+                return;
         }
+        while (nPos>=0);
 
-        if ( nIndex >= nWildCard )
-        {
-            _rFileName += ".";
-            _rFileName += _rFilterDefaultExtension;
-        }
+        _rFileName += "." + _rFilterDefaultExtension;
     }
 }
 
