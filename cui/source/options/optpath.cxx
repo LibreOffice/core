@@ -419,12 +419,11 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
             bool bReadOnly = false;
             GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
 
-            sal_uInt16 i;
-            sal_uInt16 nOldCount = comphelper::string::getTokenCount(aOldPath, MULTIPATH_DELIMITER);
-            for ( i = 0; i < nOldCount; ++i )
+            sal_Int32 nOldPos = 0;
+            do
             {
                 bool bFound = false;
-                OUString sOnePath = aOldPath.getToken( i, MULTIPATH_DELIMITER );
+                const OUString sOnePath = aOldPath.getToken( 0, MULTIPATH_DELIMITER, nOldPos );
                 if ( !sInternal.isEmpty() )
                 {
                     sal_Int32 nInternalPos = 0;
@@ -442,9 +441,11 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
                     sTemp += sOnePath;
                 }
             }
+            while ( nOldPos >= 0 );
 
             OUString sUserPath, sWritablePath;
-            nOldCount = comphelper::string::getTokenCount(sTemp, MULTIPATH_DELIMITER);
+            sal_uInt16 nOldCount = comphelper::string::getTokenCount(sTemp, MULTIPATH_DELIMITER);
+            sal_uInt16 i;
             for ( i = 0; nOldCount > 0 && i < nOldCount - 1; ++i )
             {
                 if ( !sUserPath.isEmpty() )
