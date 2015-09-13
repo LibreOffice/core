@@ -75,15 +75,8 @@ enum DeviceVendor {
 
 struct DriverInfo
 {
-    typedef std::vector<OUString> DeviceFamilyVector;
-
-    // If |ownDevices| is true, you are transferring ownership of the devices
-    // array, and it will be deleted when this GfxDriverInfo is destroyed.
-
-    DriverInfo(OperatingSystem os, const OUString& vendor, DeviceFamilyVector* devices,
-            VersionComparisonOp op,
-            uint64_t driverVersion, bool bWhiteListed = false, const char *suggestedVersion = nullptr,
-            bool ownDevices = false);
+    DriverInfo(OperatingSystem os, const OUString& vendor, VersionComparisonOp op,
+            uint64_t driverVersion, bool bWhiteListed = false, const char *suggestedVersion = nullptr);
 
     DriverInfo();
     DriverInfo(const DriverInfo&);
@@ -183,6 +176,51 @@ public:
     virtual ~WinOpenGLDeviceInfo();
 
     virtual bool isDeviceBlocked();
+
+    const OUString& GetDriverVersion() const
+    {
+        return maDriverVersion;
+    }
+
+    const OUString& GetDriverDate() const
+    {
+        return maDriverDate;
+    }
+
+    const OUString& GetDeviceID() const
+    {
+        return maDeviceID;
+    }
+
+    const OUString& GetAdapterVendorID() const
+    {
+        return maAdapterVendorID;
+    }
+
+    const OUString& GetAdapterDeviceID() const
+    {
+        return maAdapterDeviceID;
+    }
+
+    const OUString& GetAdapterSubsysID() const
+    {
+        return maAdapterSubsysID;
+    }
+    const OUString& GetDeviceKey() const
+    {
+        return maDeviceKey;
+    }
+
+    const OUString& GetDeviceString() const
+    {
+        return maDeviceString;
+    }
+
+    sal_uInt32 GetWindowsVersion() const
+    {
+        return mnWindowsVersion;
+    }
+
 };
 
 #endif
