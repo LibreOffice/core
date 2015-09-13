@@ -312,7 +312,7 @@ storeError SAL_CALL store_openDirectory (
 
     xDirectory->acquire();
 
-    *phDirectory = static_cast<storeDirectoryHandle>(&(*xDirectory));
+    *phDirectory = xDirectory.get();
     return store_E_None;
 }
 
