@@ -444,16 +444,23 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, StandardHdl_Impl, Button*, void)
             while ( nOldPos >= 0 );
 
             OUString sUserPath, sWritablePath;
-            sal_uInt16 nOldCount = comphelper::string::getTokenCount(sTemp, MULTIPATH_DELIMITER);
-            sal_uInt16 i;
-            for ( i = 0; nOldCount > 0 && i < nOldCount - 1; ++i )
+            if ( !sTemp.isEmpty() )
             {
-                if ( !sUserPath.isEmpty() )
-                    sUserPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
-                sUserPath += sTemp.getToken( i, MULTIPATH_DELIMITER );
+                sal_Int32 nNextPos = 0;
+                for (;;)
+                {
+                    const OUString sToken = sTemp.getToken( 0, MULTIPATH_DELIMITER, nNextPos );
+                    if ( nNextPos<0 )
+                    {
+                        // Last token need a different handling
+                        sWritablePath = sToken;
+                        break;
+                    }
+                    if ( !sUserPath.isEmpty() )
+                        sUserPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
+                    sUserPath += sToken;
+                }
             }
-            sWritablePath = sTemp.getToken( nOldCount - 1, MULTIPATH_DELIMITER );
-
             pPathBox->SetEntryText( Convert_Impl( sTemp ), pEntry, 1 );
             pPathImpl->eState = SfxItemState::SET;
             pPathImpl->sUserPath = sUserPath;
