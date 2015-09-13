@@ -3048,6 +3048,9 @@ void ScColumn::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo )
 
 void ScColumn::UpdateCompile( bool bForceIfNameInUse )
 {
+    if (getMayHaveFormula() == false)
+        return;
+
     UpdateCompileHandler aFunc(bForceIfNameInUse);
     sc::ProcessFormula(maCells, aFunc);
 }
@@ -3063,12 +3066,18 @@ void ScColumn::SetTabNo(SCTAB nNewTab)
 
 void ScColumn::FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<sal_uInt16>& rIndexes) const
 {
+    if (getMayHaveFormula() == false)
+        return;
+
     UsedRangeNameFinder aFunc(rIndexes);
     sc::ParseFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
 
 void ScColumn::SetDirtyVar()
 {
+    if (getMayHaveFormula() == false)
+        return;
+
     SetDirtyVarHandler aFunc;
     sc::ProcessFormula(maCells, aFunc);
 }
@@ -3077,6 +3086,9 @@ bool ScColumn::IsFormulaDirty( SCROW nRow ) const
 {
     if (!ValidRow(nRow))
         return false;
+
+    if (getMayHaveFormula() == false)
+        return;
 
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nRow);
     sc::CellStoreType::const_iterator it = aPos.first;
@@ -3090,6 +3102,9 @@ bool ScColumn::IsFormulaDirty( SCROW nRow ) const
 
 void ScColumn::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 {
+    if (getMayHaveFormula() == false)
+        return;
+
     // is only done documentwide, no FormulaTracking
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     SetDirtyHandler aFunc(*pDocument, rCxt);
@@ -3098,6 +3113,9 @@ void ScColumn::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 
 void ScColumn::SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans )
 {
+    if (getMayHaveFormula() == false)
+        return;
+
     // Set all formula cells in the range dirty, and pick up all non-formula
     // cells for later broadcasting.  We don't broadcast here.
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
@@ -3145,6 +3163,9 @@ bool ScColumn::BroadcastBroadcasters( SCROW nRow1, SCROW nRow2, ScHint& rHint )
 
 void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
 {
+    if (getMayHaveFormula() == false)
+        return;
+
     // broadcasts everything within the range, with FormulaTracking
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
 
@@ -3180,6 +3201,9 @@ void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
 
 void ScColumn::SetTableOpDirty( const ScRange& rRange )
 {
+    if (getMayHaveFormula() == false)
+        return;
+
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
 
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
@@ -3190,6 +3214,9 @@ void ScColumn::SetTableOpDirty( const ScRange& rRange )
 
 void ScColumn::SetDirtyAfterLoad()
 {
+    if (getMayHaveFormula() == false)
+        return;
+
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     SetDirtyAfterLoadHandler aFunc;
     sc::ProcessFormula(maCells, aFunc);
