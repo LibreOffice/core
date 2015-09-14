@@ -171,10 +171,13 @@ bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeFieldSeps )
 {
     OUString aFieldSeps;
-    sal_Int32 nSub = comphelper::string::getTokenCount( rSepNums, '/');
-    for (sal_Int32 i=0; i<nSub; ++i)
+    if ( rSepNums.isEmpty() )
+        return aFieldSeps;
+
+    sal_Int32 nPos = 0;
+    do
     {
-        OUString aCode = rSepNums.getToken( i, '/' );
+        const OUString aCode = rSepNums.getToken( 0, '/', nPos );
         if ( aCode == pStrMrg )
             o_bMergeFieldSeps = true;
         else
@@ -184,6 +187,8 @@ static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeF
                 aFieldSeps += OUString((sal_Unicode) nVal);
         }
     }
+    while ( nPos >= 0 );
+
     return aFieldSeps;
 }
 
