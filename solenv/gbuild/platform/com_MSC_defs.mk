@@ -120,6 +120,9 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4512: 'class' : assignment operator could not be generated
 
+# C4589: Constructor of abstract class 'Derived' ignores initializer for
+# virtual base class 'Base'  https://codereview.chromium.org/1234253003
+
 # C4611: interaction between 'function' and C++ object destruction is
 #   non-portable
 
