@@ -52,6 +52,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/svpforlokit.hxx>
@@ -246,6 +247,7 @@ static void doc_setGraphicSelection (LibreOfficeKitDocument* pThis,
 static void doc_resetSelection (LibreOfficeKitDocument* pThis);
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand);
 
+static int doc_createView(LibreOfficeKitDocument* pThis);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
     mxComponent( xComponent )
@@ -276,6 +278,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->setGraphicSelection = doc_setGraphicSelection;
         m_pDocumentClass->resetSelection = doc_resetSelection;
         m_pDocumentClass->getCommandValues = doc_getCommandValues;
+
+        m_pDocumentClass->createView = doc_createView;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -1027,6 +1031,21 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         gImpl->maLastExceptionMsg = "Unknown command, no values returned";
         return NULL;
     }
+}
+
+static int doc_createView(LibreOfficeKitDocument* pThis)
+{
+    SolarMutexGuard aGuard;
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return -1;
+    }
+
+    SfxViewShell* pViewShell = pDoc->getCurrentViewShell();
+    return SfxLokHelper::createView(pViewShell);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
