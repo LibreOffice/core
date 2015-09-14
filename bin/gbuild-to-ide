@@ -226,9 +226,9 @@ class GbuildParser:
                     self.target_by_path[path] = set()
                 self.target_by_path[path] |= set([target])
         for path in self.target_by_path:
-            if len(self.target_by_path[path]) > 1:
+            if len(set(self.target_by_path[path])) > 1:
                 print('fdo#70422: multiple target use dir %s: %s' % (
-                    path, ', '.join([target.short_name() for target in self.target_by_path[path]])))
+                    path, ', '.join([target.short_name() for target in set(self.target_by_path[path])])))
 
         return self
 
