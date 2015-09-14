@@ -452,7 +452,7 @@ private:
     bool                    isHandledKey( const vcl::KeyCode& _rKeyCode );
 
     DECL_LINK_TYPED(        SelectHdl, Idle *, void);
-    DECL_LINK(              NotifyHdl, SvtMiscOptions* );
+    DECL_LINK_TYPED(        NotifyHdl, LinkParamNone*, void );
     DECL_LINK(              FindHdl, sfx2::SearchDialog* );
     DECL_LINK(              CloseHdl, sfx2::SearchDialog* );
     DECL_LINK_TYPED(        CheckHdl, Button*, void );

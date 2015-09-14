@@ -804,12 +804,10 @@ IMPL_LINK_TYPED( SvxIMapDlg, StateHdl, GraphCtrl*, pWnd, void )
     }
 }
 
-IMPL_LINK_NOARG(SvxIMapDlg, MiscHdl)
+IMPL_LINK_NOARG_TYPED(SvxIMapDlg, MiscHdl, LinkParamNone*, void)
 {
-       SvtMiscOptions aMiscOptions;
+    SvtMiscOptions aMiscOptions;
     m_pTbxIMapDlg1->SetOutStyle( aMiscOptions.GetToolboxStyle() );
-
-    return 0L;
 }
 
 SvxIMapDlg* GetIMapDlg()

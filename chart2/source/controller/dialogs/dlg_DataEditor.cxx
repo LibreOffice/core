@@ -167,14 +167,12 @@ void DataEditor::SetReadOnly( bool bReadOnly )
     m_xBrwData->SetReadOnly( m_bReadOnly );
 }
 
-IMPL_LINK_NOARG(DataEditor, MiscHdl)
+IMPL_LINK_NOARG_TYPED(DataEditor, MiscHdl, LinkParamNone*, void)
 {
     SvtMiscOptions aMiscOptions;
     sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
 
     m_pTbxData->SetOutStyle( nStyle );
-
-    return 0L;
 }
 
 void DataEditor::UpdateData()

@@ -2099,10 +2099,9 @@ IMPL_LINK_TYPED( ToolBarManager, DataChanged, DataChangedEvent const *, pDataCha
     }
 }
 
-IMPL_LINK_NOARG(ToolBarManager, MiscOptionsChanged)
+IMPL_LINK_NOARG_TYPED(ToolBarManager, MiscOptionsChanged, LinkParamNone*, void)
 {
     CheckAndUpdateImages();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ToolBarManager, AsyncUpdateControllersHdl, Timer *, void)

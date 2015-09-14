@@ -77,7 +77,7 @@ private:
     /// is called, if the cursor of the table has moved
     DECL_LINK_TYPED( BrowserCursorMovedHdl, DataBrowser*, void);
     /// this is called if MiscOptions change, esp. High-Contrast mode
-    DECL_LINK( MiscHdl, void* );
+    DECL_LINK_TYPED( MiscHdl, LinkParamNone*, void );
 
     void UpdateData();
     /// moved and resizes the series name control etc. to fit the dimensions of the edit browsebox

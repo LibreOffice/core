@@ -63,7 +63,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK(OToolBoxHelper, ConfigOptionsChanged, SvtMiscOptions*, /*_pOptions*/)
+    IMPL_LINK_NOARG_TYPED(OToolBoxHelper, ConfigOptionsChanged, LinkParamNone*, void)
     {
         if ( m_pToolBox )
         {
@@ -73,8 +73,6 @@ namespace dbaui
             if ( aOptions.GetToolboxStyle() != m_pToolBox->GetOutStyle() )
                 m_pToolBox->SetOutStyle(aOptions.GetToolboxStyle());
         }
-
-        return 0L;
     }
     IMPL_LINK(OToolBoxHelper, SettingsChanged, VclWindowEvent*, _pEvt)
     {

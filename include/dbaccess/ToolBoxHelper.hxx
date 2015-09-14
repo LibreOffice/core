@@ -71,7 +71,7 @@ namespace dbaui
         void checkImageList();
 
     protected:
-        DECL_LINK(ConfigOptionsChanged, SvtMiscOptions*);
+        DECL_LINK_TYPED(ConfigOptionsChanged, LinkParamNone*, void);
         DECL_LINK(SettingsChanged, VclWindowEvent* );
     };
 }

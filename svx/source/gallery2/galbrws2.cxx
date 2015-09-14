@@ -1331,7 +1331,7 @@ IMPL_LINK_TYPED( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox, void )
         SetMode( GALLERYBROWSERMODE_LIST );
 }
 
-IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl)
+IMPL_LINK_NOARG_TYPED(GalleryBrowser2, MiscHdl, LinkParamNone*, void)
 {
     maViewBox->SetOutStyle( maMiscOptions.GetToolboxStyle() );
 
@@ -1351,8 +1351,6 @@ IMPL_LINK_NOARG(GalleryBrowser2, MiscHdl)
     maViewBox->SetSizePixel( maViewBox->CalcWindowSizePixel() );
 
     Resize();
-
-    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

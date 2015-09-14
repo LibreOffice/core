@@ -92,7 +92,7 @@ class SvxSuperContourDlg : public SvxContourDlg
                         DECL_LINK( PipetteHdl, ContourWindow* );
                         DECL_LINK( PipetteClickHdl, ContourWindow* );
                         DECL_LINK( WorkplaceClickHdl, ContourWindow* );
-                        DECL_LINK( MiscHdl, void* );
+                        DECL_LINK_TYPED( MiscHdl, LinkParamNone*, void );
 
 public:
 

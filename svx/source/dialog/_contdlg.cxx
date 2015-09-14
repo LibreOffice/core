@@ -737,12 +737,10 @@ IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow*, pWnd )
     return 0L;
 }
 
-IMPL_LINK_NOARG(SvxSuperContourDlg, MiscHdl)
+IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, MiscHdl, LinkParamNone*, void)
 {
-       SvtMiscOptions aMiscOptions;
+    SvtMiscOptions aMiscOptions;
     m_pTbx1->SetOutStyle( aMiscOptions.GetToolboxStyle() );
-
-    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

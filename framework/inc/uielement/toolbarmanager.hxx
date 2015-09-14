@@ -134,7 +134,7 @@ class ToolBarManager : public ToolbarManager_Base
         DECL_LINK_TYPED(Select, ToolBox *, void);
         DECL_LINK_TYPED( StateChanged, StateChangedType const *, void );
         DECL_LINK_TYPED( DataChanged, DataChangedEvent const *, void );
-        DECL_LINK( MiscOptionsChanged, void* );
+        DECL_LINK_TYPED( MiscOptionsChanged, LinkParamNone*, void );
 
         DECL_LINK_TYPED( MenuButton, ToolBox *, void );
         DECL_LINK_TYPED( MenuSelect, Menu *, bool );

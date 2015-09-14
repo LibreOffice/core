@@ -2247,13 +2247,11 @@ IMPL_LINK_NOARG_TYPED(SfxHelpTextWindow_Impl, SelectHdl, Idle *, void)
 
 
 
-IMPL_LINK( SfxHelpTextWindow_Impl, NotifyHdl, SvtMiscOptions*, pOptions )
+IMPL_LINK_NOARG_TYPED( SfxHelpTextWindow_Impl, NotifyHdl, LinkParamNone*, void )
 {
-    (void)pOptions; // unused variable
     InitToolBoxImages();
     Resize();
     aToolBox->Invalidate();
-    return 0;
 }
 
 

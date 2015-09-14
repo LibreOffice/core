@@ -69,8 +69,8 @@ using namespace ::com::sun::star;
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
-    private:
-    ::std::list<Link<>> aList;
+private:
+    ::std::list<Link<LinkParamNone*,void>> aList;
     bool        m_bUseSystemFileDialog;
     bool        m_bIsUseSystemFileDialogRO;
     bool        m_bPluginsEnabled;
@@ -92,7 +92,7 @@ class SvtMiscOptions_Impl : public ConfigItem
 
         virtual void ImplCommit() SAL_OVERRIDE;
 
-    public:
+public:
 
          SvtMiscOptions_Impl();
         virtual ~SvtMiscOptions_Impl();
@@ -201,15 +201,15 @@ class SvtMiscOptions_Impl : public ConfigItem
         bool IsShowLinkWarningDialogReadOnly() const
         { return m_bIsShowLinkWarningDialogRO; }
 
-        void AddListenerLink( const Link<>& rLink );
-        void RemoveListenerLink( const Link<>& rLink );
+        void AddListenerLink( const Link<LinkParamNone*,void>& rLink );
+        void RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
         void CallListeners();
 
 
     //  private methods
 
 
-    private:
+private:
 
         /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree
@@ -471,14 +471,14 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
     }
 }
 
-void SvtMiscOptions_Impl::AddListenerLink( const Link<>& rLink )
+void SvtMiscOptions_Impl::AddListenerLink( const Link<LinkParamNone*,void>& rLink )
 {
     aList.push_back( rLink );
 }
 
-void SvtMiscOptions_Impl::RemoveListenerLink( const Link<>& rLink )
+void SvtMiscOptions_Impl::RemoveListenerLink( const Link<LinkParamNone*,void>& rLink )
 {
-    for ( ::std::list<Link<>>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
+    for ( ::std::list<Link<LinkParamNone*,void>>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
     {
         if ( *iter == rLink )
         {
@@ -490,8 +490,8 @@ void SvtMiscOptions_Impl::RemoveListenerLink( const Link<>& rLink )
 
 void SvtMiscOptions_Impl::CallListeners()
 {
-    for ( ::std::list<Link<>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
-        iter->Call( this );
+    for ( ::std::list<Link<LinkParamNone*,void>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+        iter->Call( nullptr );
 }
 
 void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified )
@@ -862,12 +862,12 @@ Mutex & SvtMiscOptions::GetInitMutex()
     return theSvtMiscOptionsMutex::get();
 }
 
-void SvtMiscOptions::AddListenerLink( const Link<>& rLink )
+void SvtMiscOptions::AddListenerLink( const Link<LinkParamNone*,void>& rLink )
 {
     m_pDataContainer->AddListenerLink( rLink );
 }
 
-void SvtMiscOptions::RemoveListenerLink( const Link<>& rLink )
+void SvtMiscOptions::RemoveListenerLink( const Link<LinkParamNone*,void>& rLink )
 {
     m_pDataContainer->RemoveListenerLink( rLink );
 }

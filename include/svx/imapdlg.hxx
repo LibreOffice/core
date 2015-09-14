@@ -126,7 +126,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     DECL_LINK( URLLoseFocusHdl, void* );
     DECL_LINK_TYPED( UpdateHdl, Idle *, void );
     DECL_LINK_TYPED( StateHdl, GraphCtrl*, void );
-    DECL_LINK( MiscHdl, void* );
+    DECL_LINK_TYPED( MiscHdl, LinkParamNone*, void );
 
     void                DoOpen();
     bool                DoSave();

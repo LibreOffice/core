@@ -60,8 +60,8 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
          SvtMiscOptions();
         virtual ~SvtMiscOptions();
 
-        void        AddListenerLink( const Link<>& rLink );
-        void        RemoveListenerLink( const Link<>& rLink );
+        void        AddListenerLink( const Link<LinkParamNone*,void>& rLink );
+        void        RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
 
         bool        UseSystemFileDialog() const;
         void        SetUseSystemFileDialog( bool bSet );

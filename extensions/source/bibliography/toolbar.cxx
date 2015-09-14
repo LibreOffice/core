@@ -533,7 +533,7 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
     ToolBox::DataChanged( rDCEvt );
 }
 
-IMPL_LINK_NOARG( BibToolBar, OptionsChanged_Impl )
+IMPL_LINK_NOARG_TYPED( BibToolBar, OptionsChanged_Impl, LinkParamNone*, void )
 {
     bool bRebuildToolBar = false;
     sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
@@ -551,8 +551,6 @@ IMPL_LINK_NOARG( BibToolBar, OptionsChanged_Impl )
 
     if ( bRebuildToolBar )
         RebuildToolbar();
-
-    return 0L;
 }
 
 

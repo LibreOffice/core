@@ -140,7 +140,7 @@ private:
                         DECL_LINK_TYPED( SelectObjectHdl, GalleryListView*, void );
                         DECL_LINK_TYPED( SelectObjectValueSetHdl, ValueSet*, void );
                         DECL_LINK_TYPED( SelectTbxHdl, ToolBox*, void );
-                        DECL_LINK( MiscHdl, void* );
+                        DECL_LINK_TYPED( MiscHdl, LinkParamNone*, void );
 
 private:
 
