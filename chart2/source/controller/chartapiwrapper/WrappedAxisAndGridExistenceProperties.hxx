@@ -23,7 +23,7 @@
 #include "WrappedProperty.hxx"
 #include "Chart2ModelContact.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 namespace chart
@@ -35,21 +35,21 @@ class WrappedAxisAndGridExistenceProperties
 {
 public:
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList
-        , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
 class WrappedAxisTitleExistenceProperties
 {
 public:
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList
-        , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
 class WrappedAxisLabelExistenceProperties
 {
 public:
    static void addWrappedProperties( std::vector< WrappedProperty* >& rList
-       , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+       , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
 } //namespace wrapper

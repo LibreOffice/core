@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <memory>
 
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactionListener.hpp>
@@ -29,7 +30,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <jni.h>
 
 namespace connectivity
@@ -53,7 +53,7 @@ namespace connectivity
         };
 
 
-        typedef std::map< OUString, ::boost::shared_ptr<StreamHelper> > TStreamMap;
+        typedef std::map< OUString, std::shared_ptr<StreamHelper> > TStreamMap;
         typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >, OUString > TStorageURLPair;
         typedef ::std::pair< TStorageURLPair, TStreamMap> TStoragePair;
         typedef std::map<OUString, TStoragePair> TStorages;

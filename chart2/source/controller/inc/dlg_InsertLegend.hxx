@@ -22,7 +22,7 @@
 #include <vcl/dialog.hxx>
 #include <sfx2/basedlgs.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
@@ -34,7 +34,7 @@ namespace chart
 class SchLegendDlg : public ModalDialog
 {
 private:
-    boost::scoped_ptr < LegendPositionResources >    m_xLegendPositionResources;
+    std::unique_ptr < LegendPositionResources >    m_xLegendPositionResources;
 
 public:
     SchLegendDlg( vcl::Window* pParent, const ::com::sun::star::uno::Reference<

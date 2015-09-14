@@ -27,8 +27,6 @@
 #include <vcl/lstbox.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 namespace chart
 {
 

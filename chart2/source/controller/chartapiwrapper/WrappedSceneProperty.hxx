@@ -22,7 +22,7 @@
 #include "WrappedProperty.hxx"
 #include "Chart2ModelContact.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 namespace chart
@@ -34,14 +34,14 @@ class WrappedSceneProperty
 {
 public:
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList
-        , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 };
 
 class WrappedD3DTransformMatrixProperty : public WrappedProperty
 {
 public:
     explicit WrappedD3DTransformMatrixProperty(
-        ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+        std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedD3DTransformMatrixProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -54,7 +54,7 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 };
 
 } //namespace wrapper

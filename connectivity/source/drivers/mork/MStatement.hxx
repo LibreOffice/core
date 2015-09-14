@@ -39,7 +39,7 @@
 #include "MConnection.hxx"
 #include "MTable.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace connectivity
 {
@@ -84,7 +84,7 @@ namespace connectivity
             OValueRow                                   m_aRow;
 
             connectivity::OSQLParser                    m_aParser;
-            ::boost::shared_ptr< ::connectivity::OSQLParseTreeIterator >
+            std::shared_ptr< ::connectivity::OSQLParseTreeIterator >
                                                         m_pSQLIterator;
 
             connectivity::OSQLParseNode*                m_pParseTree;

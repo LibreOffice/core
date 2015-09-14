@@ -396,7 +396,7 @@ void DialogModel::setTemplate(
     m_xTemplate = xTemplate;
 }
 
-::boost::shared_ptr< RangeSelectionHelper >
+::std::shared_ptr< RangeSelectionHelper >
     DialogModel::getRangeSelectionHelper() const
 {
     if( ! m_spRangeSelectionHelper.get())

@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <boost/scoped_ptr.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

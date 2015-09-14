@@ -31,8 +31,8 @@
 #include <tools/diagnose_ex.h>
 #include <svx/svdundo.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <algorithm>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -59,7 +59,7 @@ namespace impl
     using ::com::sun::star::chart2::XChartDocument;
     using ::com::sun::star::document::UndoFailedException;
 
-UndoElement::UndoElement( const OUString& i_actionString, const Reference< XModel >& i_documentModel, const ::boost::shared_ptr< ChartModelClone >& i_modelClone )
+UndoElement::UndoElement( const OUString& i_actionString, const Reference< XModel >& i_documentModel, const std::shared_ptr< ChartModelClone >& i_modelClone )
     :UndoElement_MBase()
     ,UndoElement_TBase( m_aMutex )
     ,m_sActionString( i_actionString )
@@ -88,7 +88,7 @@ OUString SAL_CALL UndoElement::getTitle() throw (RuntimeException, std::exceptio
 void UndoElement::impl_toggleModelState()
 {
     // get a snapshot of the current state of our model
-    ::boost::shared_ptr< ChartModelClone > pNewClone( new ChartModelClone( m_xDocumentModel, m_pModelClone->getFacet() ) );
+    std::shared_ptr< ChartModelClone > pNewClone( new ChartModelClone( m_xDocumentModel, m_pModelClone->getFacet() ) );
     // apply the previous snapshot to our model
     m_pModelClone->applyToModel( m_xDocumentModel );
     // remember the new snapshot, for the next toggle

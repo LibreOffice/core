@@ -116,7 +116,7 @@
 #include <osl/conditn.hxx>
 #include <osl/time.h>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 namespace chart {
@@ -1042,14 +1042,14 @@ struct CreateShapeParam2D
 {
     css::awt::Rectangle maRemainingSpace;
 
-    boost::shared_ptr<SeriesPlotterContainer> mpSeriesPlotterContainer;
+    std::shared_ptr<SeriesPlotterContainer> mpSeriesPlotterContainer;
 
-    boost::shared_ptr<VTitle> mpVTitleX;
-    boost::shared_ptr<VTitle> mpVTitleY;
-    boost::shared_ptr<VTitle> mpVTitleZ;
+    std::shared_ptr<VTitle> mpVTitleX;
+    std::shared_ptr<VTitle> mpVTitleY;
+    std::shared_ptr<VTitle> mpVTitleZ;
 
-    boost::shared_ptr<VTitle> mpVTitleSecondX;
-    boost::shared_ptr<VTitle> mpVTitleSecondY;
+    std::shared_ptr<VTitle> mpVTitleSecondX;
+    std::shared_ptr<VTitle> mpVTitleSecondY;
 
     css::uno::Reference<css::drawing::XShape> mxMarkHandles;
     css::uno::Reference<css::drawing::XShape> mxPlotAreaWithAxes;
@@ -1209,7 +1209,7 @@ void ChartView::init()
     if( !m_pDrawModelWrapper.get() )
     {
         SolarMutexGuard aSolarGuard;
-        m_pDrawModelWrapper = ::boost::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
+        m_pDrawModelWrapper = std::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
         m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
         m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
         StartListening( m_pDrawModelWrapper->getSdrModel() );
@@ -1443,7 +1443,7 @@ bool lcl_IsPieOrDonut( const uno::Reference< XDiagram >& xDiagram )
     return DiagramHelper::isPieOrDonutChart( xDiagram );
 }
 
-void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawModelWrapper, ChartModel& rModel)
+void lcl_setDefaultWritingMode( std::shared_ptr< DrawModelWrapper > pDrawModelWrapper, ChartModel& rModel)
 {
     //get writing mode from parent document:
     if( SvtLanguageOptions().IsCTLFontEnabled() )
@@ -1568,7 +1568,7 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
     }
 }
 
-sal_Int16 lcl_getDefaultWritingModeFromPool( const boost::shared_ptr<DrawModelWrapper>& pDrawModelWrapper )
+sal_Int16 lcl_getDefaultWritingModeFromPool( const std::shared_ptr<DrawModelWrapper>& pDrawModelWrapper )
 {
     sal_Int16 nWritingMode = text::WritingMode2::LR_TB;
     if(!pDrawModelWrapper)
@@ -1998,7 +1998,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
     return aRet;
 }
 
-::boost::shared_ptr< DrawModelWrapper > ChartView::getDrawModelWrapper()
+std::shared_ptr< DrawModelWrapper > ChartView::getDrawModelWrapper()
 {
     return m_pDrawModelWrapper;
 }
@@ -2372,7 +2372,7 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
     pVTitle->changePosition( aNewPosition );
 }
 
-boost::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
+std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
                 , const uno::Reference< drawing::XShapes>& xPageShapes
                 , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
                 , ChartModel& rModel
@@ -2381,7 +2381,7 @@ boost::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
                 , TitleAlignment eAlignment
                 , bool& rbAutoPosition )
 {
-    boost::shared_ptr<VTitle> apVTitle;
+    std::shared_ptr<VTitle> apVTitle;
 
     // #i109336# Improve auto positioning in chart
     double fPercentage = lcl_getPageLayoutDistancePercentage();
@@ -3415,7 +3415,7 @@ void ChartView::createShapes3D()
         aDataSeries.push_back(new VDataSeries(xDataSeries));
     }
 
-    boost::scoped_ptr<ExplicitCategoriesProvider> pCatProvider(new ExplicitCategoriesProvider(xCooSys, mrChartModel));
+    std::unique_ptr<ExplicitCategoriesProvider> pCatProvider(new ExplicitCategoriesProvider(xCooSys, mrChartModel));
 
     m_pGL3DPlotter->create3DShapes(aDataSeries, *pCatProvider);
 

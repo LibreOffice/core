@@ -36,7 +36,7 @@
 #include <connectivity/FValue.hxx>
 #include "resource/common_res.hrc"
 #include <connectivity/sqlparse.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_same.hpp>
 
@@ -76,7 +76,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString
             OSQLParser aParser( comphelper::getComponentContext(_pConnection->getDriver()->getORB()) );
             OUString sErrorMessage;
             OUString sNewSql;
-            boost::scoped_ptr<OSQLParseNode> pNode( aParser.parseTree(sErrorMessage,sql) );
+            std::unique_ptr<OSQLParseNode> pNode( aParser.parseTree(sErrorMessage,sql) );
             if ( pNode.get() )
             {   // special handling for parameters
                 OSQLParseNode::substituteParameterNames(pNode.get());

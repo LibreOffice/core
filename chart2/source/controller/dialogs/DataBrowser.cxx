@@ -401,9 +401,9 @@ Image SeriesHeader::GetChartTypeImage(
     return aResult;
 }
 
-struct applyChangesFunctor : public ::std::unary_function< ::boost::shared_ptr< SeriesHeader >, void >
+struct applyChangesFunctor : public ::std::unary_function< std::shared_ptr< SeriesHeader >, void >
 {
-    void operator() ( ::boost::shared_ptr< SeriesHeader > spHeader )
+    void operator() ( std::shared_ptr< SeriesHeader > spHeader )
     {
         spHeader->applyChanges();
     }
@@ -420,7 +420,7 @@ namespace
     with focus is set at pIndex if pOutIndex is not 0.
 */
 bool lcl_SeriesHeaderHasFocus(
-    const ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader,
+    const ::std::vector< std::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader,
     sal_Int32 * pOutIndex = 0 )
 {
     sal_Int32 nIndex = 0;
@@ -437,7 +437,7 @@ bool lcl_SeriesHeaderHasFocus(
 }
 
 sal_Int32 lcl_getColumnInDataOrHeader(
-    sal_uInt16 nCol, const ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
+    sal_uInt16 nCol, const ::std::vector< std::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
 {
     sal_Int32 nColIdx = 0;
     bool bHeaderHasFocus( lcl_SeriesHeaderHasFocus( rSeriesHeader, &nColIdx ));
@@ -597,7 +597,7 @@ void DataBrowser::RenewTable()
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
     {
-        ::boost::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
+        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
         Reference< beans::XPropertySet > xSeriesProp( aIt->m_xDataSeries, uno::UNO_QUERY );
         sal_Int32 nColor = 0;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
@@ -1231,7 +1231,7 @@ void DataBrowser::RenewSeriesHeaders()
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
     {
-        ::boost::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
+        std::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
         Reference< beans::XPropertySet > xSeriesProp( aIt->m_xDataSeries, uno::UNO_QUERY );
         sal_Int32 nColor = 0;
         if( xSeriesProp.is() &&

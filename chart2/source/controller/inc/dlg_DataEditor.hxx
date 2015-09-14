@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_DATAEDITOR_HXX
 
-#include <boost/scoped_ptr.hpp>
 #include <svl/lstner.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/toolbox.hxx>

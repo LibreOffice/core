@@ -28,7 +28,7 @@
 #include <vcl/fixed.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "res_LegendPosition.hxx"
 #include "res_Titles.hxx"
@@ -57,8 +57,8 @@ protected:
     DECL_LINK_TYPED( ChangeCheckBoxHdl, CheckBox&, void );
 
 protected:
-    boost::scoped_ptr< TitleResources >            m_xTitleResources;
-    boost::scoped_ptr< LegendPositionResources >   m_xLegendPositionResources;
+    std::unique_ptr< TitleResources >            m_xTitleResources;
+    std::unique_ptr< LegendPositionResources >   m_xLegendPositionResources;
 
     VclPtr<CheckBox>          m_pCB_Grid_X;
     VclPtr<CheckBox>          m_pCB_Grid_Y;

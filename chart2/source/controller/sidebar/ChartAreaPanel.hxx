@@ -24,7 +24,6 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 

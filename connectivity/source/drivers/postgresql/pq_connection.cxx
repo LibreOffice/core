@@ -38,7 +38,7 @@
 #include <time.h>
 #include <string.h>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "pq_connection.hxx"
 #include "pq_statement.hxx"
@@ -547,7 +547,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         if ( o.getLength() > 0 )
         {
             char *err;
-            boost::shared_ptr<PQconninfoOption> oOpts(PQconninfoParse(o.getStr(), &err), PQconninfoFree);
+            std::shared_ptr<PQconninfoOption> oOpts(PQconninfoParse(o.getStr(), &err), PQconninfoFree);
             if ( oOpts.get() == NULL )
             {
                 OUString errorMessage;

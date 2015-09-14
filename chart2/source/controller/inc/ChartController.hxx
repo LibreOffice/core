@@ -52,7 +52,6 @@
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <set>
 
 class SdrModel;
@@ -514,7 +513,7 @@ private:
     VclPtr<ChartWindow> m_pChartWindow;
     css::uno::Reference<css::awt::XWindow> m_xViewWindow;
     css::uno::Reference<css::uno::XInterface> m_xChartView;
-    ::boost::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
+    std::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
     DrawViewWrapper* m_pDrawViewWrapper;
 
     Selection m_aSelection;
@@ -527,15 +526,15 @@ private:
     bool m_bConnectingToView;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > m_xUndoManager;
-    ::std::unique_ptr< UndoGuard > m_pTextActionUndoGuard;
+    std::unique_ptr< UndoGuard > m_pTextActionUndoGuard;
     /// needed for dispatching URLs in FeatureStateEvents
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
 
-    ::std::unique_ptr< ::svt::AcceleratorExecute > m_apAccelExecute;
+    std::unique_ptr< ::svt::AcceleratorExecute > m_apAccelExecute;
 
     CommandDispatchContainer m_aDispatchContainer;
 
-    ::std::unique_ptr< DropTargetHelper > m_apDropTargetHelper;
+    std::unique_ptr< DropTargetHelper > m_apDropTargetHelper;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XLayoutManagerEventBroadcaster > m_xLayoutManagerEventBroadcaster;
 
@@ -654,7 +653,7 @@ private:
         const OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
     bool impl_DragDataPoint( const OUString & rCID, double fOffset );
 
-    static ::std::set< OUString > impl_getAvailableCommands();
+    static std::set< OUString > impl_getAvailableCommands();
 
     /** Creates a helper accesibility class that must be initialized via XInitialization.  For
         parameters see

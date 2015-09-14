@@ -200,7 +200,7 @@ namespace wrapper
 {
 
 TitleWrapper::TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
-    ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
         m_spChart2ModelContact( spChart2ModelContact ),
         m_aEventListenerContainer( m_aMutex ),
         m_eTitleType(eTitleType)

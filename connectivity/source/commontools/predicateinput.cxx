@@ -31,8 +31,7 @@
 #include <connectivity/PColumn.hxx>
 #include <comphelper/numbers.hxx>
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace dbtools
@@ -319,7 +318,7 @@ namespace dbtools
         {
             // first try the international version
             OUString sSql = "SELECT * FROM x WHERE " + sField + _rPredicateValue;
-            boost::scoped_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, true ) );
+            std::unique_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, true ) );
             nType = DataType::DOUBLE;
             if ( pParseNode.get() )
             {
@@ -390,7 +389,7 @@ namespace dbtools
         else
         {
             OUString sReturn;
-            boost::shared_ptr<OSQLParseNode> xTakeOwnership(pParseNode);
+            std::shared_ptr<OSQLParseNode> xTakeOwnership(pParseNode);
             OSQLParseNode* pOdbcSpec = pParseNode->getByRule( OSQLParseNode::odbc_fct_spec );
             if ( pOdbcSpec )
             {

@@ -386,7 +386,7 @@ struct lcl_DateCategoriesOperator : public lcl_Operator
     const Sequence< double >& m_rDates;
 };
 
-ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
+ChartDataWrapper::ChartDataWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
         m_spChart2ModelContact( spChart2ModelContact ),
         m_aEventListenerContainer( m_aMutex )
 {
@@ -395,7 +395,7 @@ ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > sp
     osl_atomic_decrement( &m_refCount );
 }
 
-ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+ChartDataWrapper::ChartDataWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                     const Reference< XChartData >& xNewData ) :
         m_spChart2ModelContact( spChart2ModelContact ),
         m_aEventListenerContainer( m_aMutex )

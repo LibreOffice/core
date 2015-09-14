@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/scoped_ptr.hpp>
 #include "java/sql/Connection.hxx"
 #include "java/lang/Class.hxx"
 #include "java/tools.hxx"
@@ -47,6 +46,7 @@
 #include <unotools/confignode.hxx>
 
 #include <list>
+#include <memory>
 
 using namespace connectivity;
 using namespace connectivity::jdbc;
@@ -691,7 +691,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
             {
                 m_aLogger.log( LogLevel::INFO, STR_LOG_LOADING_DRIVER, _sDriverClass );
                 // the driver manager holds the class of the driver for later use
-                boost::scoped_ptr< java_lang_Class > pDrvClass;
+                std::unique_ptr< java_lang_Class > pDrvClass;
                 if ( _sDriverClassPath.isEmpty() )
                 {
                     // if forName didn't find the class it will throw an exception

@@ -28,8 +28,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "chartviewdllapi.hxx"
 
-#include <boost/scoped_ptr.hpp>
-
 namespace chart
 {
 

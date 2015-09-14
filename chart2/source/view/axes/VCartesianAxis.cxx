@@ -47,7 +47,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include <algorithm>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -1541,7 +1541,7 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
         B2DVector aCummulatedLabelsDistance(0,0);
         for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
         {
-            boost::scoped_ptr<TickIter> apTickIter(createLabelTickIterator(nTextLevel));
+            std::unique_ptr<TickIter> apTickIter(createLabelTickIterator(nTextLevel));
             if (apTickIter)
             {
                 double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
@@ -1579,7 +1579,7 @@ void VCartesianAxis::createLabels()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    boost::scoped_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    std::unique_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
@@ -1596,7 +1596,7 @@ void VCartesianAxis::createLabels()
     sal_Int32 nScreenDistanceBetweenTicks = -1;
     for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
     {
-        boost::scoped_ptr< TickIter > apTickIter(createLabelTickIterator( nTextLevel ));
+        std::unique_ptr< TickIter > apTickIter(createLabelTickIterator( nTextLevel ));
         if(apTickIter)
         {
             if(nTextLevel==0)
@@ -1633,7 +1633,7 @@ void VCartesianAxis::createMaximumLabels()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    boost::scoped_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    std::unique_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
@@ -1653,7 +1653,7 @@ void VCartesianAxis::createMaximumLabels()
     sal_Int32 nTextLevelCount = getTextLevelCount();
     for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
     {
-        boost::scoped_ptr< TickIter > apTickIter(createMaximumLabelTickIterator( nTextLevel ));
+        std::unique_ptr< TickIter > apTickIter(createMaximumLabelTickIterator( nTextLevel ));
         if(apTickIter)
         {
             while( !createTextShapes( m_xTextTarget, *apTickIter.get(), aAxisLabelProperties, pTickFactory2D, -1 ) )
@@ -1670,7 +1670,7 @@ void VCartesianAxis::updatePositions()
     if (!m_aAxisProperties.m_bDisplayLabels)
         return;
 
-    boost::scoped_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    std::unique_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
@@ -1771,7 +1771,7 @@ void VCartesianAxis::createShapes()
     if( !prepareShapeCreation() )
         return;
 
-    boost::scoped_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
+    std::unique_ptr< TickFactory2D > apTickFactory2D( this->createTickFactory2D() );
     TickFactory2D* pTickFactory2D = apTickFactory2D.get();
     if( !pTickFactory2D )
         return;
@@ -1793,7 +1793,7 @@ void VCartesianAxis::createShapes()
             sal_Int32 nTextLevelCount = getTextLevelCount();
             for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
             {
-                boost::scoped_ptr< TickIter > apTickIter(createLabelTickIterator( nTextLevel ));
+                std::unique_ptr< TickIter > apTickIter(createLabelTickIterator( nTextLevel ));
                 if( apTickIter )
                 {
                     double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;

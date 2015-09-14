@@ -30,11 +30,11 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <utility>
+#include <memory>
 #include <deque>
+#include <utility>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 
 class SdrUndoAction;
 
@@ -65,7 +65,7 @@ public:
     */
     UndoElement( const OUString & i_actionString,
                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& i_documentModel,
-                 const ::boost::shared_ptr< ChartModelClone >& i_modelClone
+                 const std::shared_ptr< ChartModelClone >& i_modelClone
                );
 
     // XUndoAction
@@ -85,7 +85,7 @@ private:
 private:
     OUString                                                     m_sActionString;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocumentModel;
-    ::boost::shared_ptr< ChartModelClone >                              m_pModelClone;
+    std::shared_ptr< ChartModelClone >                              m_pModelClone;
 };
 
 typedef ::cppu::BaseMutex                                                           ShapeUndoElement_MBase;
