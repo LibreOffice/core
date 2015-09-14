@@ -651,6 +651,8 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
         return;
     }
 
+    BeginPaint();
+
     // save paint events until resizing or initial sizing done
     if (!ImplDoTiledRendering() && mpWindowImpl->mbFrame &&
         (mpWindowImpl->mpFrameData->maResizeIdle.IsActive() ||
@@ -662,12 +664,16 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
     {
         ImplCallOverlapPaint();
     }
+
+    EndPaint();
 }
 
 IMPL_LINK_NOARG_TYPED(Window, ImplHandleResizeTimerHdl, Idle *, void)
 {
     if( mpWindowImpl->mbReallyVisible )
     {
+        BeginPaint();
+
         ImplCallResize();
         if( ImplDoTiledRendering() )
         {
@@ -678,6 +684,8 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandleResizeTimerHdl, Idle *, void)
             mpWindowImpl->mpFrameData->maPaintIdle.Stop();
             mpWindowImpl->mpFrameData->maPaintIdle.GetIdleHdl().Call( NULL );
         }
+
+        EndPaint();
     }
 }
 
