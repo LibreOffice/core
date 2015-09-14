@@ -1943,7 +1943,9 @@ bool SwLayIdle::_DoIdleJob( const SwContentFrm *pCnt, IdleJobType eJob )
             }
             case AUTOCOMPLETE_WORDS :
                 const_cast<SwTextFrm*>(static_cast<const SwTextFrm*>(pCnt))->CollectAutoCmplWrds( pContentNode, nTextPos );
-                if ( Application::AnyInput( VCL_INPUT_ANY ) )
+                // note: bPageValid remains true here even if the cursor
+                // position is skipped, so no PENDING state needed currently
+                if (Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER)))
                     return true;
                 break;
             case WORD_COUNT :
