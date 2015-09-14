@@ -23,7 +23,7 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -36,7 +36,7 @@
 
 #include <vector>
 
-class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper2<
+class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper<
     ::com::sun::star::xml::crypto::XXMLSecurityContext ,
     ::com::sun::star::lang::XServiceInfo >
 {

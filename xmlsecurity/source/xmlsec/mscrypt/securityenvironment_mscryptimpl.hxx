@@ -31,7 +31,7 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -50,7 +50,7 @@
 #include <sal/types.h>
 
 
-class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<
+class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
     ::com::sun::star::xml::crypto::XSecurityEnvironment ,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XUnoTunnel >

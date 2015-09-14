@@ -30,7 +30,7 @@
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>

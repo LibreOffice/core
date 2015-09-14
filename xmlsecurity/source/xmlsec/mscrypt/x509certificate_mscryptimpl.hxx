@@ -31,13 +31,13 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
-class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper2<
+class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
     ::com::sun::star::security::XCertificate ,
     ::com::sun::star::lang::XUnoTunnel >
 {

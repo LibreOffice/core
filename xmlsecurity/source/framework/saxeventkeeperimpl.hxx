@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "buffernode.hxx"
 #include "elementmark.hxx"
@@ -38,7 +38,7 @@
 
 #include <vector>
 
-class SAXEventKeeperImpl : public cppu::WeakImplHelper6
+class SAXEventKeeperImpl : public cppu::WeakImplHelper
 <
     com::sun::star::xml::crypto::sax::XSecuritySAXEventKeeper,
     com::sun::star::xml::crypto::sax::XReferenceResolvedBroadcaster,

@@ -24,7 +24,7 @@
 #include <com/sun/star/xml/csax/XCompressedDocumentHandler.hpp>
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "saxhelper.hxx"
 
@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-class XMLDocumentWrapper_XmlSecImpl : public cppu::WeakImplHelper4
+class XMLDocumentWrapper_XmlSecImpl : public cppu::WeakImplHelper
 <
     com::sun::star::xml::wrapper::XXMLDocumentWrapper,
     com::sun::star::xml::sax::XDocumentHandler,

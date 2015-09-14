@@ -23,8 +23,7 @@
 #include <tools/link.hxx>
 #include <rtl/ustring.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureCreationResultListener.hpp>
@@ -41,7 +40,7 @@ namespace embed {
 
 // MT: Not needed any more, remove later...
 
-class ImplXMLSignatureListener : public cppu::WeakImplHelper3
+class ImplXMLSignatureListener : public cppu::WeakImplHelper
 <
     com::sun::star::xml::crypto::sax::XSignatureCreationResultListener,
     com::sun::star::xml::crypto::sax::XSignatureVerifyResultListener,
@@ -99,7 +98,7 @@ public:
 
 // XUriBinding
 
-class UriBindingHelper : public cppu::WeakImplHelper1
+class UriBindingHelper : public cppu::WeakImplHelper
 <
     com::sun::star::xml::crypto::XUriBinding
 >

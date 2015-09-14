@@ -23,13 +23,13 @@
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <libxml/tree.h>
 
 #include "nssinitializer.hxx"
 
-class SEInitializer_NssImpl : public cppu::ImplInheritanceHelper1
+class SEInitializer_NssImpl : public cppu::ImplInheritanceHelper
 <
     ONSSInitializer,
     ::com::sun::star::xml::crypto::XSEInitializer

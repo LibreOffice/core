@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
@@ -39,7 +39,7 @@
 namespace {
 
 class Service:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::security::XSerialNumberAdapter >,
     private boost::noncopyable
 {

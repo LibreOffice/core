@@ -22,11 +22,11 @@
 
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <pk11pub.h>
 
-class OCipherContext : public cppu::WeakImplHelper1< ::com::sun::star::xml::crypto::XCipherContext >
+class OCipherContext : public cppu::WeakImplHelper< ::com::sun::star::xml::crypto::XCipherContext >
 {
 private:
     ::osl::Mutex m_aMutex;

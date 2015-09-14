@@ -27,9 +27,9 @@
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class SecurityEngine : public cppu::WeakImplHelper3
+class SecurityEngine : public cppu::WeakImplHelper
 <
     com::sun::star::xml::crypto::sax::XReferenceResolvedListener,
     com::sun::star::xml::crypto::sax::XKeyCollector,

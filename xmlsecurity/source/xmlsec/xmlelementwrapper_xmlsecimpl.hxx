@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <libxml/tree.h>
 
@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-class XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper3
+class XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper
 <
     com::sun::star::xml::wrapper::XXMLElementWrapper,
     com::sun::star::lang::XUnoTunnel,
