@@ -35,7 +35,7 @@
 #include "resource/sharedresources.hxx"
 #include "java/LocalRef.hxx"
 #include <string.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -343,7 +343,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
                     {
                         double nTemp = 0.0;
 
-                        boost::scoped_ptr<java_math_BigDecimal> pBigDecimal;
+                        std::unique_ptr<java_math_BigDecimal> pBigDecimal;
                         if ( x >>= nTemp)
                         {
                             pBigDecimal.reset(new java_math_BigDecimal(nTemp));

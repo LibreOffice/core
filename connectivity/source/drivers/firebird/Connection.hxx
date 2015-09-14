@@ -25,12 +25,12 @@
 
 #include <ibase.h>
 
-#include <boost/scoped_ptr.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/OSubComponent.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <map>
+#include <memory>
 #include <OTypeInfo.hxx>
 #include <unotools/tempfile.hxx>
 
@@ -118,7 +118,7 @@ namespace connectivity
              * The temporary folder where we extract the .fdb from a .odb.
              * It is only valid if m_bIsEmbedded is true.
              */
-            ::boost::scoped_ptr< ::utl::TempFile >  m_pExtractedFDBFile;
+            std::unique_ptr< ::utl::TempFile >  m_pExtractedFDBFile;
 
 
             /** We are using an external (local) file */

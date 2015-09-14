@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -55,7 +55,7 @@ class MinMaxLineWrapper : public MutexContainer
                         >
 {
 public:
-    explicit MinMaxLineWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit MinMaxLineWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~MinMaxLineWrapper();
 
     /// XServiceInfo declarations
@@ -114,7 +114,7 @@ private: //methods
     static ::cppu::IPropertyArrayHelper&   getInfoHelper();
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
     WrappedIgnoreProperty               m_aWrappedLineJointProperty;

@@ -37,7 +37,7 @@ namespace wrapper
 class WrappedScaleTextProperty : public WrappedProperty
 {
 public:
-    explicit WrappedScaleTextProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedScaleTextProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedScaleTextProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -48,10 +48,10 @@ public:
                                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) SAL_OVERRIDE;
 
 private:
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 };
 
-WrappedScaleTextProperty::WrappedScaleTextProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedScaleTextProperty::WrappedScaleTextProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
     : ::chart::WrappedProperty( "ScaleText" , OUString() )
     , m_spChart2ModelContact( spChart2ModelContact )
 {
@@ -137,7 +137,7 @@ void WrappedScaleTextProperties::addProperties( ::std::vector< Property > & rOut
 }
 
 void WrappedScaleTextProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
-                                 , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                 , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     rList.push_back( new WrappedScaleTextProperty( spChart2ModelContact ) );
 }

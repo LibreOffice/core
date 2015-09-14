@@ -23,7 +23,7 @@
 #include <vcl/timer.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -40,7 +40,7 @@ public:
 private:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > m_xModel;
-    boost::scoped_ptr< ControllerLockGuardUNO > m_apControllerLockGuard;
+    std::unique_ptr< ControllerLockGuardUNO > m_apControllerLockGuard;
     AutoTimer       m_aTimer;
 
     DECL_LINK_TYPED( TimerTimeout, Timer*, void );

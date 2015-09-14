@@ -54,7 +54,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace connectivity
@@ -260,7 +260,7 @@ namespace connectivity
                         Reference<XStream > xStream = xStorage->openStreamElement(sProperties,ElementModes::READ);
                         if ( xStream.is() )
                         {
-                            boost::scoped_ptr<SvStream> pStream( ::utl::UcbStreamHelper::CreateStream(xStream) );
+                            std::unique_ptr<SvStream> pStream( ::utl::UcbStreamHelper::CreateStream(xStream) );
                             if ( pStream.get() )
                             {
                                 OString sLine;

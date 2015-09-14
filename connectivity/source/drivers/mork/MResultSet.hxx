@@ -86,7 +86,7 @@ namespace connectivity
 
 
 
-            ::boost::shared_ptr< ::connectivity::OSQLParseTreeIterator >
+            std::shared_ptr< ::connectivity::OSQLParseTreeIterator >
                                                         m_pSQLIterator;
             const connectivity::OSQLParseNode*          m_pParseTree;
 
@@ -116,7 +116,7 @@ namespace connectivity
         public:
             DECLARE_SERVICE_INFO();
 
-            OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< ::connectivity::OSQLParseTreeIterator >& _pSQLIterator );
+            OResultSet(OCommonStatement* pStmt, const std::shared_ptr< ::connectivity::OSQLParseTreeIterator >& _pSQLIterator );
 
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > operator *()

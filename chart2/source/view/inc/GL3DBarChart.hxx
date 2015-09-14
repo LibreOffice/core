@@ -122,13 +122,13 @@ private:
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
-    boost::scoped_ptr<opengl3D::OpenGL3DRenderer> mpRenderer;
+    std::unique_ptr<opengl3D::OpenGL3DRenderer> mpRenderer;
     VclPtr<OpenGLWindow> mpWindow;
 
     opengl3D::Camera* mpCamera;
     bool mbValidContext;
 
-    boost::scoped_ptr<opengl3D::TextCache> mpTextCache;
+    std::unique_ptr<opengl3D::TextCache> mpTextCache;
 
     glm::vec3 maCameraPosition;
     glm::vec3 maCameraDirection;

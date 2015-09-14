@@ -32,8 +32,6 @@
 #include "chartview/ExplicitValueProvider.hxx"
 #include "DiagramHelper.hxx"
 
-#include <boost/scoped_ptr.hpp>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;

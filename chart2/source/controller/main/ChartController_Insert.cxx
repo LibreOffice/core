@@ -117,7 +117,7 @@ void ChartController::executeDispatch_InsertAxes()
 
             InsertAxisOrGridDialogData aDialogOutput;
             aDlg->getResult( aDialogOutput );
-            boost::scoped_ptr< ReferenceSizeProvider > mpRefSizeProvider(
+            std::unique_ptr< ReferenceSizeProvider > mpRefSizeProvider(
                 impl_createReferenceSizeProvider());
             bool bChanged = AxisHelper::changeVisibilityOfAxes( xDiagram
                 , aDialogInput.aExistenceList, aDialogOutput.aExistenceList, m_xCC
@@ -734,7 +734,7 @@ void ChartController::executeDispatch_InsertAxisTitle()
             else
                 eTitleType = TitleHelper::Z_AXIS_TITLE;
 
-            boost::scoped_ptr< ReferenceSizeProvider > apRefSizeProvider( impl_createReferenceSizeProvider());
+            std::unique_ptr< ReferenceSizeProvider > apRefSizeProvider( impl_createReferenceSizeProvider());
             xTitle = TitleHelper::createTitle( eTitleType, ObjectNameProvider::getTitleNameByType(eTitleType), getModel(), m_xCC, apRefSizeProvider.get() );
             aUndoGuard.commit();
         }

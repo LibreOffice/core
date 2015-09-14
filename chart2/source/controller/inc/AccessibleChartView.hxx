@@ -32,7 +32,7 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace accessibility
 {
@@ -128,7 +128,7 @@ private: // members
     ::com::sun::star::uno::WeakReference<
                        ::com::sun::star::accessibility::XAccessible > m_xParent;
 
-    ::boost::shared_ptr< ObjectHierarchy >                          m_spObjectHierarchy;
+    std::shared_ptr< ObjectHierarchy >                          m_spObjectHierarchy;
     AccessibleUniqueId                                              m_aCurrentSelectionOID;
     SdrView*                                                        m_pSdrView;
     ::accessibility::IAccessibleViewForwarder*                      m_pViewForwarder;

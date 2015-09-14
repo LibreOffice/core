@@ -52,7 +52,7 @@ public:
 private:
     const SfxItemSet & rInAttrs;
 
-    boost::scoped_ptr< ErrorBarResources >    m_apErrorBarResources;
+    std::unique_ptr< ErrorBarResources >    m_apErrorBarResources;
 };
 
 } //namespace chart

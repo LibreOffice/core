@@ -21,11 +21,10 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ROWFUNCTIONPARSER_HXX
 
 #include <sal/config.h>
-#include <boost/shared_ptr.hpp>
 #include "FDatabaseMetaDataResultSet.hxx"
-#include <vector>
 #include <connectivity/dbtoolsdllapi.hxx>
-
+#include <memory>
+#include <vector>
 
 namespace connectivity
 {
@@ -67,7 +66,7 @@ public:
 
     virtual void fill(const ODatabaseMetaDataResultSet::ORow& _aRow ) const = 0;
 };
-typedef ::boost::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
+typedef std::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
 
 /** This exception is thrown, when the arithmetic expression
     parser failed to parse a string.

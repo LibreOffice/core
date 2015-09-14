@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -36,7 +36,7 @@ struct TitleDialogData
     ::com::sun::star::uno::Sequence< sal_Bool > aPossibilityList;
     ::com::sun::star::uno::Sequence< sal_Bool > aExistenceList;
     ::com::sun::star::uno::Sequence< OUString > aTextList;
-    boost::scoped_ptr< ReferenceSizeProvider > apReferenceSizeProvider;
+    std::unique_ptr< ReferenceSizeProvider > apReferenceSizeProvider;
 
     TitleDialogData(ReferenceSizeProvider* pReferenzeSizeProvider = NULL);
 

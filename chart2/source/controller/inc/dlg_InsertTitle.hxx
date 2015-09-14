@@ -22,14 +22,14 @@
 #include "res_Titles.hxx"
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
 class SchTitleDlg : public ModalDialog
 {
 private:
-    boost::scoped_ptr< TitleResources >  m_xTitleResources;
+    std::unique_ptr< TitleResources >  m_xTitleResources;
 
 public:
     SchTitleDlg( vcl::Window* pParent, const TitleDialogData& rInput );

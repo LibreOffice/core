@@ -29,7 +29,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -74,7 +74,7 @@ private:
     bool m_bIsClosable;
     sal_Int32 m_nOnePageOnlyIndex;//if nOnePageOnlyIndex is an index of an exsisting page starting with 0, then only this page is displayed without next/previous and roadmap
     ChartTypeTemplateProvider*   m_pTemplateProvider;
-    boost::scoped_ptr<DialogModel> m_pDialogModel;
+    std::unique_ptr<DialogModel> m_pDialogModel;
 
     WizardState m_nFirstState;
     WizardState m_nLastState;

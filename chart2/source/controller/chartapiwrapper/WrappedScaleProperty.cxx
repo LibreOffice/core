@@ -38,7 +38,7 @@ namespace wrapper
 {
 
 WrappedScaleProperty::WrappedScaleProperty( tScaleProperty eScaleProperty
-                , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty(OUString(),OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_eScaleProperty( eScaleProperty )
@@ -104,7 +104,7 @@ WrappedScaleProperty::~WrappedScaleProperty()
 }
 
 void WrappedScaleProperty::addWrappedProperties( std::vector< WrappedProperty* >& rList
-            , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+            , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_MAX, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_MIN, spChart2ModelContact ) );

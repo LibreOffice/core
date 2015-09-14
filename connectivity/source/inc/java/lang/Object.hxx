@@ -27,9 +27,7 @@
 #include <osl/diagnose.h>
 #include <jvmaccess/virtualmachine.hxx>
 #include <functional>
-#include <boost/shared_ptr.hpp>
-
-
+#include <memory>
 
 #ifdef HAVE_64BIT_POINTERS
 #error "no 64 bit pointer"
@@ -42,7 +40,7 @@ namespace comphelper
 
 namespace connectivity
 {
-    typedef ::boost::shared_ptr< jvmaccess::VirtualMachine::AttachGuard> TGuard;
+    typedef std::shared_ptr< jvmaccess::VirtualMachine::AttachGuard> TGuard;
     class SDBThreadAttach
     {
         jvmaccess::VirtualMachine::AttachGuard m_aGuard;

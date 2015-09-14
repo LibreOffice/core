@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_AXES_VPOLARRADIUSAXIS_HXX
 
 #include "VPolarAxis.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -73,7 +73,7 @@ protected: //methods
     virtual bool prepareShapeCreation() SAL_OVERRIDE;
 
 private: //member
-    boost::scoped_ptr<VCartesianAxis>  m_apAxisWithLabels;
+    std::unique_ptr<VCartesianAxis>  m_apAxisWithLabels;
 };
 
 } //namespace chart

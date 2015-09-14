@@ -22,7 +22,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <svl/itemset.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include "../dialogs/res_DataLabel.hxx"
 
 class SvNumberFormatter;
@@ -36,7 +36,7 @@ private:
 //     OKButton            m_aBtnOK;
 //     CancelButton        m_aBtnCancel;
 //     HelpButton          m_aBtnHelp;
-    boost::scoped_ptr < DataLabelResources >    m_apDataLabelResources;
+    std::unique_ptr < DataLabelResources >    m_apDataLabelResources;
 
     const SfxItemSet&   m_rInAttrs;
 

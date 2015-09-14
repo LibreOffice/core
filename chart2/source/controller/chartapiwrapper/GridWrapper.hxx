@@ -29,7 +29,7 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -55,7 +55,7 @@ public:
         Z_MINOR_GRID
     };
 
-    GridWrapper( tGridType eType, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    GridWrapper( tGridType eType, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~GridWrapper();
 
     static void getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDimensionIndex, bool& rbSubGrid );
@@ -88,7 +88,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getInnerPropertySet() SAL_OVERRIDE;
 
 private:
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
     tGridType           m_eType;

@@ -33,9 +33,8 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <map>
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 
 namespace chart
 {
@@ -195,7 +194,7 @@ protected: //member
 
     ::com::sun::star::uno::Sequence< OUString > m_aSeriesNamesForZAxis;
 
-    typedef std::map< tFullAxisIndex, ::boost::shared_ptr< VAxisBase > > tVAxisMap;
+    typedef std::map< tFullAxisIndex, std::shared_ptr< VAxisBase > > tVAxisMap;
 
     tVAxisMap m_aAxisMap;
 
@@ -209,7 +208,7 @@ private:
     tFullExplicitScaleMap       m_aSecondaryExplicitScales;
     tFullExplicitIncrementMap   m_aSecondaryExplicitIncrements;
 
-    boost::scoped_ptr< ExplicitCategoriesProvider > m_apExplicitCategoriesProvider;
+    std::unique_ptr< ExplicitCategoriesProvider > m_apExplicitCategoriesProvider;
 };
 
 } //namespace chart

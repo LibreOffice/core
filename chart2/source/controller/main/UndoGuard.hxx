@@ -26,7 +26,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -57,7 +57,7 @@ private:
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >           m_xChartModel;
     const ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >  m_xUndoManager;
 
-    ::boost::shared_ptr< ChartModelClone >  m_pDocumentSnapshot;
+    std::shared_ptr< ChartModelClone >  m_pDocumentSnapshot;
     OUString                           m_aUndoString;
     bool                                    m_bActionPosted;
 };

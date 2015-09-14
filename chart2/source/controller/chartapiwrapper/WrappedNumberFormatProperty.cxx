@@ -31,7 +31,7 @@ namespace chart
 namespace wrapper
 {
 
-WrappedNumberFormatProperty::WrappedNumberFormatProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedNumberFormatProperty::WrappedNumberFormatProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : WrappedDirectStateProperty( CHART_UNONAME_NUMFMT, CHART_UNONAME_NUMFMT )
         , m_spChart2ModelContact(spChart2ModelContact)
 {
@@ -83,7 +83,7 @@ Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPr
     return uno::makeAny( sal_Int32( 0 ) );
 }
 
-WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( const boost::shared_ptr<Chart2ModelContact>& pChart2ModelContact ) :
+WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( const std::shared_ptr<Chart2ModelContact>& pChart2ModelContact ) :
     WrappedDirectStateProperty(CHART_UNONAME_LINK_TO_SRC_NUMFMT, CHART_UNONAME_LINK_TO_SRC_NUMFMT),
     m_pChart2ModelContact(pChart2ModelContact)
 {

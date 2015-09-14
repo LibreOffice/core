@@ -27,8 +27,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 class SdrModel;
 
@@ -64,7 +64,7 @@ protected:
         throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
 
 private:
-    ::boost::shared_ptr< ItemConverter >  m_spGraphicConverter;
+    std::shared_ptr< ItemConverter >  m_spGraphicConverter;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel >  m_xModel;
 };

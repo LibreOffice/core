@@ -58,7 +58,7 @@ bool VDataSequence::is() const
 }
 void VDataSequence::clear()
 {
-    Model = NULL;
+    Model = nullptr;
     Doubles.realloc(0);
 }
 
@@ -146,12 +146,12 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_fLogicMinX(0.0)
     , m_fLogicMaxX(0.0)
     , m_fLogicZPos(0.0)
-    , m_xGroupShape(NULL)
-    , m_xLabelsGroupShape(NULL)
-    , m_xErrorXBarsGroupShape(NULL)
-    , m_xErrorYBarsGroupShape(NULL)
-    , m_xFrontSubGroupShape(NULL)
-    , m_xBackSubGroupShape(NULL)
+    , m_xGroupShape(nullptr)
+    , m_xLabelsGroupShape(nullptr)
+    , m_xErrorXBarsGroupShape(nullptr)
+    , m_xErrorYBarsGroupShape(nullptr)
+    , m_xFrontSubGroupShape(nullptr)
+    , m_xBackSubGroupShape(nullptr)
     , m_xDataSeries(xDataSeries)
     , m_nPointCount(0)
 
@@ -170,20 +170,20 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
 
     , m_nGlobalSeriesIndex(0)
 
-    , m_apLabel_Series(NULL)
-    , m_apLabelPropNames_Series(NULL)
-    , m_apLabelPropValues_Series(NULL)
-    , m_apSymbolProperties_Series(NULL)
+    , m_apLabel_Series(nullptr)
+    , m_apLabelPropNames_Series(nullptr)
+    , m_apLabelPropValues_Series(nullptr)
+    , m_apSymbolProperties_Series(nullptr)
 
-    , m_apLabel_AttributedPoint(NULL)
-    , m_apLabelPropNames_AttributedPoint(NULL)
-    , m_apLabelPropValues_AttributedPoint(NULL)
-    , m_apSymbolProperties_AttributedPoint(NULL)
-    , m_apSymbolProperties_InvisibleSymbolForSelection(NULL)
+    , m_apLabel_AttributedPoint(nullptr)
+    , m_apLabelPropNames_AttributedPoint(nullptr)
+    , m_apLabelPropValues_AttributedPoint(nullptr)
+    , m_apSymbolProperties_AttributedPoint(nullptr)
+    , m_apSymbolProperties_InvisibleSymbolForSelection(nullptr)
     , m_nCurrentAttributedPoint(-1)
     , m_nMissingValueTreatment(::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
     , m_bAllowPercentValueInDataLabel(false)
-    , mpOldSeries(NULL)
+    , mpOldSeries(nullptr)
     , mnPercent(0.0)
 {
     ::rtl::math::setNan( & m_fXMeanValue );
@@ -803,7 +803,7 @@ Symbol* getSymbolPropertiesFromPropertySet( const uno::Reference< beans::XProper
 
 Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
 {
-    Symbol* pRet=NULL;
+    Symbol* pRet=nullptr;
     if( isAttributedDataPoint( index ) )
     {
         adaptPointCache( index );
@@ -954,7 +954,7 @@ void VDataSeries::adaptPointCache( sal_Int32 nNewPointIndex ) const
 
 DataPointLabel* VDataSeries::getDataPointLabel( sal_Int32 index ) const
 {
-    DataPointLabel* pRet = NULL;
+    DataPointLabel* pRet = nullptr;
     if( isAttributedDataPoint( index ) )
     {
         adaptPointCache( index );
@@ -991,7 +991,7 @@ bool VDataSeries::getTextLabelMultiPropertyLists( sal_Int32 index
     , tNameSequence*& pPropNames
     , tAnySequence*& pPropValues ) const
 {
-    pPropNames = NULL; pPropValues = NULL;
+    pPropNames = nullptr; pPropValues = nullptr;
     uno::Reference< beans::XPropertySet > xTextProp;
     bool bDoDynamicFontResize = false;
     if( isAttributedDataPoint( index ) )
@@ -1052,7 +1052,7 @@ VDataSeries::VDataSeries()
     , m_fLogicMaxX(0)
     , m_fLogicZPos(0)
     , m_nPointCount(0)
-    , m_pValueSequenceForDataLabelNumberFormatDetection(NULL)
+    , m_pValueSequenceForDataLabelNumberFormatDetection(nullptr)
     , m_fXMeanValue(0)
     , m_fYMeanValue(0)
     , m_eStackingDirection(chart2::StackingDirection_NO_STACKING)
@@ -1064,7 +1064,7 @@ VDataSeries::VDataSeries()
     , m_nCurrentAttributedPoint(0)
     , m_nMissingValueTreatment(0)
     , m_bAllowPercentValueInDataLabel(false)
-    , mpOldSeries(NULL)
+    , mpOldSeries(nullptr)
     , mnPercent(0)
 {
 }
@@ -1073,7 +1073,7 @@ void VDataSeries::setOldTimeBased( VDataSeries* pOldSeries, double nPercent )
 {
     mnPercent = nPercent;
     mpOldSeries = pOldSeries;
-    mpOldSeries->mpOldSeries = NULL;
+    mpOldSeries->mpOldSeries = nullptr;
 }
 
 VDataSeries* VDataSeries::createCopyForTimeBased() const

@@ -18,8 +18,6 @@
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/type_traits.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

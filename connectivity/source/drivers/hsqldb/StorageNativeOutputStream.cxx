@@ -117,7 +117,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
     LogFile aDataLog( env, name, "output" );
 #endif
 
-    ::boost::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
+    std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     Reference< XOutputStream> xFlush = pHelper.get() ? pHelper->getOutputStream() : Reference< XOutputStream>();
     if ( xFlush.is() )
         try
@@ -183,7 +183,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
 #ifdef HSQLDB_DBG
     OperationLogFile( env, name, "output" ).logOperation( "sync" );
 #endif
-    ::boost::shared_ptr< StreamHelper > pStream = StorageContainer::getRegisteredStream( env, name, key );
+    std::shared_ptr< StreamHelper > pStream = StorageContainer::getRegisteredStream( env, name, key );
     Reference< XOutputStream > xFlush = pStream.get() ? pStream->getOutputStream() : Reference< XOutputStream>();
     OSL_ENSURE( xFlush.is(), "StorageNativeOutputStream::sync: could not retrieve an output stream!" );
     if ( xFlush.is() )

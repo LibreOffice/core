@@ -32,7 +32,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <rtl/math.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -652,7 +652,7 @@ void PieChart::createShapes()
                 aParam.mfUnitCircleOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
 
                 ///point color:
-                boost::scoped_ptr< tPropertyNameValueMap > apOverwritePropertiesMap(NULL);
+                std::unique_ptr< tPropertyNameValueMap > apOverwritePropertiesMap(nullptr);
                 if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
                 {
                     apOverwritePropertiesMap.reset( new tPropertyNameValueMap() );

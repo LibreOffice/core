@@ -28,8 +28,8 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 namespace chart
 {
@@ -210,7 +210,7 @@ void VCartesianGrid::createShapes()
     fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
     //create all scaled tickmark values
-    boost::scoped_ptr< TickFactory > apTickFactory( this->createTickFactory() );
+    std::unique_ptr< TickFactory > apTickFactory( this->createTickFactory() );
     TickFactory& aTickFactory = *apTickFactory.get();
     TickInfoArraysType aAllTickInfos;
     aTickFactory.getAllTicks( aAllTickInfos );

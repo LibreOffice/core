@@ -63,7 +63,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <svtools/grfmgr.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class SvNumberFormatter;
 class OpenGLWindow;
@@ -154,7 +154,7 @@ private:
                                 m_xOwnNumberFormatsSupplier;
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
                                 m_xNumberFormatsSupplier;
-    boost::scoped_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
+    std::unique_ptr< SvNumberFormatter > m_apSvNumberFormatter; // #i113784# avoid memory leak
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeManager >
         m_xChartTypeManager;

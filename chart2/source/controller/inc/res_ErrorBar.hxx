@@ -117,7 +117,7 @@ private:
     double               m_fMinusValue;
 
     VclPtr<Dialog>       m_pParentDialog;
-    boost::scoped_ptr< RangeSelectionHelper >  m_apRangeSelectionHelper;
+    std::unique_ptr< RangeSelectionHelper >  m_apRangeSelectionHelper;
     VclPtr<Edit>         m_pCurrentRangeChoosingField;
     bool                 m_bHasInternalDataProvider;
     bool                 m_bEnableDataTableDialog;
