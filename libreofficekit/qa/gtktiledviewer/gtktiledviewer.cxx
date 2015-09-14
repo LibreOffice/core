@@ -147,6 +147,14 @@ static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
     }
 }
 
+/// Calls lok::Document::createView().
+static void createView(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+{
+    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
+    pDocument->pClass->createView(pDocument);
+}
+
 /// Our GtkClipboardGetFunc implementation for HTML.
 static void htmlGetFunc(GtkClipboard* /*pClipboard*/, GtkSelectionData* pSelectionData, guint /*info*/, gpointer pUserData)
 {
@@ -554,6 +562,12 @@ int main( int argc, char* argv[] )
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindButton), "edit-find-symbolic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pFindButton, -1);
     g_signal_connect(G_OBJECT(pFindButton), "clicked", G_CALLBACK(toggleFindbar), NULL);
+
+    GtkToolItem* pNewViewButton = gtk_tool_button_new( NULL, NULL);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pNewViewButton), "view-continuous-symbolic");
+    gtk_tool_item_set_tooltip_text(pNewViewButton, "New View");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pNewViewButton, -1);
+    g_signal_connect(G_OBJECT(pNewViewButton), "clicked", G_CALLBACK(createView), NULL);
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
 
