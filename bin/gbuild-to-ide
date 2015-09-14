@@ -1577,6 +1577,7 @@ if __name__ == '__main__':
         gbuildparser = GbuildParser().parse(sys.stdin)
 
     generators[args.ide](gbuildparser, args.ide).emit()
+    print("Successfully created the project files.");
 
 # Local Variables:
 # indent-tabs-mode: nil
