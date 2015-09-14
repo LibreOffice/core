@@ -309,7 +309,7 @@ class SvxIconChoiceCtrl_Impl
     void                VisRectChanged() { aVisRectChangedIdle.Start(); }
     void                SetOrigin( const Point& );
 
-                        DECL_LINK(TextEditEndedHdl, void *);
+                        DECL_LINK_TYPED(TextEditEndedHdl, LinkParamNone*, void);
 
     void                ShowFocus ( Rectangle& rRect );
     void                DrawFocusRect(vcl::RenderContext& rRenderContext);

@@ -55,7 +55,7 @@ static bool bEndScrollInvalidate = true;
 
 class IcnViewEdit_Impl : public MultiLineEdit
 {
-    Link<>          aCallBackHdl;
+    Link<LinkParamNone*,void> aCallBackHdl;
     Accelerator     aAccReturn;
     Accelerator     aAccEscape;
     Idle            aIdle;
@@ -75,7 +75,7 @@ public:
                         const Point& rPos,
                         const Size& rSize,
                         const OUString& rData,
-                        const Link<>& rNotifyEditEnd );
+                        const Link<LinkParamNone*,void>& rNotifyEditEnd );
 
     virtual         ~IcnViewEdit_Impl();
     virtual void    dispose() SAL_OVERRIDE;
@@ -3025,13 +3025,13 @@ void SvxIconChoiceCtrl_Impl::EditEntry( SvxIconChoiceCtrlEntry* pEntry )
         LINK( this, SvxIconChoiceCtrl_Impl, TextEditEndedHdl ) );
 }
 
-IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, TextEditEndedHdl)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, TextEditEndedHdl, LinkParamNone*, void)
 {
     DBG_ASSERT(pEdit,"TextEditEnded: pEdit not set");
     if( !pEdit )
     {
         pCurEditedEntry = 0;
-        return 0;
+        return;
     }
     DBG_ASSERT(pCurEditedEntry,"TextEditEnded: pCurEditedEntry not set");
 
@@ -3040,7 +3040,7 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, TextEditEndedHdl)
         pEdit->Hide();
         if( pEdit->IsGrabFocus() )
             pView->GrabFocus();
-        return 0;
+        return;
     }
 
     OUString aText;
@@ -3059,7 +3059,6 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, TextEditEndedHdl)
     // The edit can not be deleted here, because it is not within a handler. It
     // will be deleted in the dtor or in the next EditEntry.
     pCurEditedEntry = 0;
-    return 0;
 }
 
 void SvxIconChoiceCtrl_Impl::StopEntryEditing( bool bCancel )
@@ -3125,7 +3124,7 @@ void SvxIconChoiceCtrl_Impl::SelectAll( bool bSelect, bool bPaint )
 }
 
 IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPos,
-    const Size& rSize, const OUString& rData, const Link<>& rNotifyEditEnd ) :
+    const Size& rSize, const OUString& rData, const Link<LinkParamNone*,void>& rNotifyEditEnd ) :
     MultiLineEdit( pParent, (pParent->GetStyle() & WB_ICON) ? WB_CENTER : WB_LEFT),
     aCallBackHdl( rNotifyEditEnd ),
     bCanceled( false ),
@@ -3178,7 +3177,7 @@ void IcnViewEdit_Impl::CallCallBackHdl_Impl()
         Application::RemoveAccel( &aAccReturn );
         Application::RemoveAccel( &aAccEscape );
         Hide();
-        aCallBackHdl.Call( this );
+        aCallBackHdl.Call( nullptr );
     }
 }
 
