@@ -76,8 +76,8 @@ public:
     ItemId          GetCurrentRoadmapItemID() const;
     bool            SelectRoadmapItemByID( ItemId _nItemID );
 
-    void            SetItemSelectHdl( const Link<>& _rHdl );
-    Link<>          GetItemSelectHdl( ) const;
+    void            SetItemSelectHdl( const Link<LinkParamNone*,void>& _rHdl );
+    Link<LinkParamNone*,void> GetItemSelectHdl( ) const;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
 

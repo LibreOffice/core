@@ -461,16 +461,16 @@ namespace svt
     }
 
 
-    IMPL_LINK_NOARG(RoadmapWizard, OnRoadmapItemSelected)
+    IMPL_LINK_NOARG_TYPED(RoadmapWizard, OnRoadmapItemSelected, LinkParamNone*, void)
     {
 
         RoadmapTypes::ItemId nCurItemId = m_pImpl->pRoadmap->GetCurrentRoadmapItemID();
         if ( nCurItemId == getCurrentState() )
             // nothing to do
-            return 1L;
+            return;
 
         if ( isTravelingSuspended() )
-            return 0;
+            return;
 
         WizardTravelSuspension aTravelGuard( *this );
 
@@ -481,7 +481,7 @@ namespace svt
             "RoadmapWizard::OnRoadmapItemSelected: something's wrong here!" );
         if ( ( nCurrentIndex == -1 ) || ( nNewIndex == -1 ) )
         {
-            return 0L;
+            return;
         }
 
         bool bResult = true;
@@ -500,8 +500,6 @@ namespace svt
 
         if ( !bResult )
             m_pImpl->pRoadmap->SelectRoadmapItemByID( getCurrentState() );
-
-        return 1L;
     }
 
 

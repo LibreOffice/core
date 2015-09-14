@@ -89,7 +89,7 @@ class RoadmapImpl : public RoadmapTypes
 {
 protected:
     const ORoadmap&     m_rAntiImpl;
-    Link<>              m_aSelectHdl;
+    Link<LinkParamNone*,void> m_aSelectHdl;
     BitmapEx            m_aPicture;
     HL_Vector           m_aRoadmapSteps;
     ItemId              m_iCurItemID;
@@ -162,11 +162,11 @@ public:
         return m_aPicture;
     }
 
-    void setSelectHdl(const Link<>& _rHdl)
+    void setSelectHdl(const Link<LinkParamNone*,void>& _rHdl)
     {
         m_aSelectHdl = _rHdl;
     }
-    const Link<>& getSelectHdl() const
+    const Link<LinkParamNone*,void>& getSelectHdl() const
     {
         return m_aSelectHdl;
     }
@@ -515,19 +515,19 @@ void ORoadmap::DeselectOldRoadmapItems()
     }
 }
 
-void ORoadmap::SetItemSelectHdl(const Link<>& _rHdl)
+void ORoadmap::SetItemSelectHdl(const Link<LinkParamNone*,void>& _rHdl)
 {
     m_pImpl->setSelectHdl(_rHdl);
 }
 
-Link<> ORoadmap::GetItemSelectHdl() const
+Link<LinkParamNone*,void> ORoadmap::GetItemSelectHdl() const
 {
     return m_pImpl->getSelectHdl();
 }
 
 void ORoadmap::Select()
 {
-    GetItemSelectHdl().Call( this );
+    GetItemSelectHdl().Call( nullptr );
     CallEventListeners( VCLEVENT_ROADMAP_ITEMSELECTED );
 }
 
