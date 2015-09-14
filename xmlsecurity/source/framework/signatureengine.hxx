@@ -32,13 +32,13 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "securityengine.hxx"
 
 #include <vector>
 
-class SignatureEngine : public cppu::ImplInheritanceHelper2
+class SignatureEngine : public cppu::ImplInheritanceHelper
 <
     SecurityEngine,
     com::sun::star::xml::crypto::sax::XReferenceCollector,

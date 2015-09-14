@@ -27,9 +27,9 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class XSecParser: public cppu::WeakImplHelper2
+class XSecParser: public cppu::WeakImplHelper
 <
     com::sun::star::xml::sax::XDocumentHandler,
     com::sun::star::lang::XInitialization

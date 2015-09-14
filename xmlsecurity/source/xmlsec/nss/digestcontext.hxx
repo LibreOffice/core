@@ -22,10 +22,10 @@
 
 #include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
-class ODigestContext : public cppu::WeakImplHelper1< ::com::sun::star::xml::crypto::XDigestContext >
+class ODigestContext : public cppu::WeakImplHelper< ::com::sun::star::xml::crypto::XDigestContext >
 {
 private:
     ::osl::Mutex m_aMutex;

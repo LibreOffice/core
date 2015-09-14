@@ -28,7 +28,7 @@
 #include <com/sun/star/xml/crypto/sax/XSAXEventKeeper.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/xml/crypto/XXMLEncryption.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "securityengine.hxx"
 
@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-class EncryptionEngine : public cppu::ImplInheritanceHelper1
+class EncryptionEngine : public cppu::ImplInheritanceHelper
 <
     SecurityEngine,
     com::sun::star::xml::crypto::sax::XBlockerMonitor

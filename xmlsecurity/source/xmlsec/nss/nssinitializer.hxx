@@ -24,11 +24,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #define NSS_SERVICE_NAME "com.sun.star.xml.crypto.NSSInitializer"
 
-class ONSSInitializer : public cppu::WeakImplHelper2
+class ONSSInitializer : public cppu::WeakImplHelper
 <
     ::com::sun::star::xml::crypto::XNSSInitializer,
     ::com::sun::star::lang::XServiceInfo

@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/security/XCertificateContainer.hpp>
 #include <com/sun/star/security/CertificateContainerStatus.hpp>
@@ -32,7 +32,7 @@
 #include <vector>
 #include <map>
 
-class CertificateContainer : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo, css::security::XCertificateContainer >
+class CertificateContainer : public ::cppu::WeakImplHelper< css::lang::XServiceInfo, css::security::XCertificateContainer >
 {
     private:
         typedef std::map< OUString, OUString > Map;

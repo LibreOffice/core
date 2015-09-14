@@ -23,14 +23,14 @@
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/XCertificateExtension.hpp>
 #include <com/sun/star/security/XSanExtension.hpp>
 #include <com/sun/star/security/CertAltNameEntry.hpp>
 
-class SanExtensionImpl : public ::cppu::WeakImplHelper1<
+class SanExtensionImpl : public ::cppu::WeakImplHelper<
     ::com::sun::star::security::XSanExtension >
 {
     private:

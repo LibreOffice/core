@@ -43,7 +43,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vector>
 
@@ -138,7 +138,7 @@ public:
     }
 };
 
-class XSecController : public cppu::WeakImplHelper4
+class XSecController : public cppu::WeakImplHelper
 <
     com::sun::star::xml::crypto::sax::XSecurityController,
     //com::sun::star::beans::XFastPropertySet,

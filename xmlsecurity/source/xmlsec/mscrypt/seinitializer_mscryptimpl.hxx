@@ -26,11 +26,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <libxml/tree.h>
 
-class SEInitializer_MSCryptImpl : public cppu::WeakImplHelper2
+class SEInitializer_MSCryptImpl : public cppu::WeakImplHelper
 <
     com::sun::star::xml::crypto::XSEInitializer,
     com::sun::star::lang::XServiceInfo

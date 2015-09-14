@@ -27,11 +27,11 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "encryptionengine.hxx"
 
-typedef cppu::ImplInheritanceHelper4
+typedef cppu::ImplInheritanceHelper
 <
     EncryptionEngine,
     com::sun::star::xml::crypto::sax::XEncryptionResultBroadcaster,
