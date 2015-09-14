@@ -278,6 +278,9 @@ bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) cons
 void ScTable::InsertCol(
     const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 {
+     for (SCCOL i=0; i<=MAXCOL; i++)
+        aCol[i].setMayHaveFormula(true);
+
     if (nStartRow==0 && nEndRow==MAXROW)
     {
         if (pColWidth && pColFlags)
@@ -355,6 +358,9 @@ void ScTable::InsertCol(
 void ScTable::DeleteCol(
     const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize, bool* pUndoOutline )
 {
+     for (SCCOL i=0; i<=MAXCOL; i++)
+        aCol[i].setMayHaveFormula(true);
+
     if (nStartRow==0 && nEndRow==MAXROW)
     {
         if (pColWidth && pColFlags)
@@ -1036,7 +1042,8 @@ const ScColumn* ScTable::FetchColumn( SCCOL nCol ) const
 void ScTable::StartListeners( sc::StartListeningContext& rCxt, bool bAll )
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].StartListeners(rCxt, bAll);
+        if (!aCol[i].IsEmptyData())
+            aCol[i].StartListeners(rCxt, bAll);
 }
 
 void ScTable::AttachFormulaCells(
@@ -1071,7 +1078,8 @@ void ScTable::StartListeningFormulaCells(
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
         for (SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].StartListeningFormulaCells(rStartCxt, rEndCxt, nRow1, nRow2);
+            if (!aCol[i].IsEmptyData())
+                aCol[i].StartListeningFormulaCells(rStartCxt, rEndCxt, nRow1, nRow2);
 }
 
 void ScTable::CopyToTable(
@@ -1670,7 +1678,8 @@ bool ScTable::HasStringCells( SCCOL nStartCol, SCROW nStartRow,
 void ScTable::SetDirtyVar()
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].SetDirtyVar();
+        if (!aCol[i].IsEmptyData())
+            aCol[i].SetDirtyVar();
 }
 
 void ScTable::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
@@ -1678,7 +1687,8 @@ void ScTable::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
     sc::AutoCalcSwitch aACSwitch(*pDocument, false);
 
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].SetAllFormulasDirty(rCxt);
+        if (!aCol[i].IsEmptyData())
+            aCol[i].SetAllFormulasDirty(rCxt);
 }
 
 void ScTable::SetDirty( const ScRange& rRange, ScColumn::BroadcastMode eMode )
@@ -1687,7 +1697,8 @@ void ScTable::SetDirty( const ScRange& rRange, ScColumn::BroadcastMode eMode )
     pDocument->SetAutoCalc( false );    // avoid multiple recalculations
     SCCOL nCol2 = rRange.aEnd.Col();
     for (SCCOL i=rRange.aStart.Col(); i<=nCol2; i++)
-        aCol[i].SetDirty(rRange.aStart.Row(), rRange.aEnd.Row(), eMode);
+        if (!aCol[i].IsEmptyData())
+            aCol[i].SetDirty(rRange.aStart.Row(), rRange.aEnd.Row(), eMode);
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
@@ -1697,7 +1708,8 @@ void ScTable::SetTableOpDirty( const ScRange& rRange )
     pDocument->SetAutoCalc( false );    // no multiple recalculation
     SCCOL nCol2 = rRange.aEnd.Col();
     for (SCCOL i=rRange.aStart.Col(); i<=nCol2; i++)
-        aCol[i].SetTableOpDirty( rRange );
+        if (!aCol[i].IsEmptyData())
+            aCol[i].SetTableOpDirty( rRange );
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
@@ -1706,7 +1718,8 @@ void ScTable::SetDirtyAfterLoad()
     bool bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( false );    // avoid multiple recalculations
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].SetDirtyAfterLoad();
+        if (!aCol[i].IsEmptyData())
+            aCol[i].SetDirtyAfterLoad();
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
@@ -1715,7 +1728,8 @@ void ScTable::SetDirtyIfPostponed()
     bool bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( false );    // avoid multiple recalculations
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].SetDirtyIfPostponed();
+        if (!aCol[i].IsEmptyData())
+            aCol[i].SetDirtyIfPostponed();
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
@@ -1755,13 +1769,16 @@ void ScTable::SetLoadingMedium(bool bLoading)
 
 void ScTable::CalcAll()
 {
-    for (SCCOL i=0; i<=MAXCOL; i++) aCol[i].CalcAll();
+    for (SCCOL i=0; i<=MAXCOL; i++)
+        if (!aCol[i].IsEmptyData())
+            aCol[i].CalcAll();
 }
 
 void ScTable::CompileAll( sc::CompileFormulaContext& rCxt )
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        aCol[i].CompileAll(rCxt);
+        if (!aCol[i].IsEmptyData())
+            aCol[i].CompileAll(rCxt);
 
     if(mpCondFormatList)
         mpCondFormatList->CompileAll();
@@ -1774,7 +1791,8 @@ void ScTable::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress
 
     for (SCCOL i=0; i <= MAXCOL; i++)
     {
-        aCol[i].CompileXML(rCxt, rProgress);
+        if (!aCol[i].IsEmptyData())
+            aCol[i].CompileXML(rCxt, rProgress);
     }
 
     if(mpCondFormatList)
@@ -1796,7 +1814,8 @@ bool ScTable::CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nEr
 void ScTable::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening )
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        aCol[i].CalcAfterLoad(rCxt, bStartListening);
+        if (!aCol[i].IsEmptyData())
+            aCol[i].CalcAfterLoad(rCxt, bStartListening);
 }
 
 void ScTable::ResetChanged( const ScRange& rRange )
@@ -1807,7 +1826,8 @@ void ScTable::ResetChanged( const ScRange& rRange )
     SCROW nEndRow = rRange.aEnd.Row();
 
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
-        aCol[nCol].ResetChanged(nStartRow, nEndRow);
+        if (!aCol[nCol].IsEmptyData())
+            aCol[nCol].ResetChanged(nStartRow, nEndRow);
 }
 
 //  Attribute
