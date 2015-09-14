@@ -128,7 +128,10 @@
       </node>
       <node oor:name=".uno:ShadowCursor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Direct Cursor On/Off</value>
+          <value xml:lang="en-US">Toggle Direct Cursor</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Direct Cursor</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -1268,7 +1271,7 @@
       </node>
       <node oor:name=".uno:IndexEntryDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Index Entr~y...</value>
+          <value xml:lang="en-US">~Index Entry...</value>
         </prop>
       </node>
       <node oor:name=".uno:GoRight" oor:op="replace">
@@ -1667,7 +1670,7 @@
       </node>
       <node oor:name=".uno:EditFootnote" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Footnote/Endnote~...</value>
+          <value xml:lang="en-US">~Footnote or Endnote...</value>
         </prop>
       </node>
       <node oor:name=".uno:Escape" oor:op="replace">
@@ -2478,7 +2481,7 @@
       </node>
       <node oor:name=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Default</value>
+          <value xml:lang="en-US">Default ~Paragraph</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2546,6 +2549,26 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Default ~Character</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Emphasis</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Strong Emphasis</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">S~ource Text</value>
         </prop>
       </node>
     </node>

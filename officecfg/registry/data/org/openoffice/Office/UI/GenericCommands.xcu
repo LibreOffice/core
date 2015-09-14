@@ -3312,6 +3312,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:SidebarMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Sidebar</value>
+        </prop>
+      </node>
       <node oor:name=".uno:NewFrameSet" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">New FrameSet</value>
@@ -5660,7 +5665,7 @@
       </node>
       <node oor:name=".uno:EditLinksMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~References</value>
+          <value xml:lang="en-US">R~eferences</value>
         </prop>
       </node>
       <node oor:name=".uno:EditCommentsMenu" oor:op="replace">
