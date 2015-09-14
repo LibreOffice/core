@@ -154,7 +154,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
         if (firstChar < mnMinCharPos || firstChar >= mnEndCharPos)
             continue;
         // handle reordered clusters. Presumes reordered glyphs have monotonic opposite char index until the cluster base.
-        bool isReordered = (nextBaseSlot && ((bRtl ^ (gr_slot_before(nextBaseSlot) < firstChar - mnSegCharOffset))
+        bool isReordered = (nextBaseSlot && ((bRtl != (gr_slot_before(nextBaseSlot) < firstChar - mnSegCharOffset))
                                              || gr_slot_before(nextBaseSlot) == firstChar - mnSegCharOffset));
         if (clusterStart >= 0 && !isReordered)      // we hit the base (end) of a reordered cluster
         {
