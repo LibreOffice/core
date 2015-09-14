@@ -534,6 +534,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_NDEBELE_SOUTH,          "nr", "ZA", 0     },
     { LANGUAGE_TSWANA_BOTSWANA,             "tn", "BW", 0     },
     { LANGUAGE_OBSOLETE_USER_TSWANA_BOTSWANA, "tn", "BW", 0     },
+    { LANGUAGE_USER_ENGLISH_BOTSWANA,       "en", "BW", 0     },
     { LANGUAGE_USER_MOORE,                 "mos", "BF", 0     },
     { LANGUAGE_USER_BAMBARA,                "bm", "ML", 0     },
     { LANGUAGE_USER_AKAN,                   "ak", "GH", 0     },

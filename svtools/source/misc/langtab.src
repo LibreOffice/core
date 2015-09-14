@@ -396,6 +396,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Arpitan (France)" ; LANGUAGE_USER_ARPITAN_FRANCE ; > ;
         < "Arpitan (Italy)" ; LANGUAGE_USER_ARPITAN_ITALY ; > ;
         < "Arpitan (Switzerland)" ; LANGUAGE_USER_ARPITAN_SWITZERLAND ; > ;
+        < "English (Botswana)" ; LANGUAGE_USER_ENGLISH_BOTSWANA ; > ;
     };
 };
 

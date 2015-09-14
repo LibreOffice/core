@@ -701,6 +701,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_ARPITAN_FRANCE        0x0696
 #define LANGUAGE_USER_ARPITAN_ITALY         0x0A96  /* makeLangID( 0x02, getPrimaryLanguage( LANGUAGE_USER_ARPITAN_FRANCE)) */
 #define LANGUAGE_USER_ARPITAN_SWITZERLAND   0x0E96  /* makeLangID( 0x03, getPrimaryLanguage( LANGUAGE_USER_ARPITAN_FRANCE)) */
+#define LANGUAGE_USER_ENGLISH_BOTSWANA      0x9809  /* makeLangID( 0x26, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 
 
 /* Primary language ID range for on-the-fly assignment. */
