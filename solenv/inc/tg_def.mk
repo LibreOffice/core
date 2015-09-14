@@ -216,7 +216,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
 
 .IF "$(DEFLIB$(TNR)NAME)"!=""
     @+echo $(SLB)/$(DEFLIB$(TNR)NAME).lib
-    @+emxexpr $(DEF$(TNR)NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF$(TNR)NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 
 .IF "$(DEF$(TNR)EXPORT1)"!=""

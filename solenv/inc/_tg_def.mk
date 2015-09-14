@@ -211,7 +211,7 @@ $(DEF1TARGETN) .PHONY :
 
 .IF "$(DEFLIB1NAME)"!=""
     @+echo $(SLB)/$(DEFLIB1NAME).lib
-    @+emxexpr $(DEF1NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF1NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB1NAME)"!=""
 
 .IF "$(DEF1EXPORT1)"!=""
@@ -495,7 +495,7 @@ $(DEF2TARGETN) .PHONY :
 
 .IF "$(DEFLIB2NAME)"!=""
     @+echo $(SLB)/$(DEFLIB2NAME).lib
-    @+emxexpr $(DEF2NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF2NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB2NAME)"!=""
 
 .IF "$(DEF2EXPORT1)"!=""
@@ -779,7 +779,7 @@ $(DEF3TARGETN) .PHONY :
 
 .IF "$(DEFLIB3NAME)"!=""
     @+echo $(SLB)/$(DEFLIB3NAME).lib
-    @+emxexpr $(DEF3NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF3NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB3NAME)"!=""
 
 .IF "$(DEF3EXPORT1)"!=""
@@ -1063,7 +1063,7 @@ $(DEF4TARGETN) .PHONY :
 
 .IF "$(DEFLIB4NAME)"!=""
     @+echo $(SLB)/$(DEFLIB4NAME).lib
-    @+emxexpr $(DEF4NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF4NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB4NAME)"!=""
 
 .IF "$(DEF4EXPORT1)"!=""
@@ -1347,7 +1347,7 @@ $(DEF5TARGETN) .PHONY :
 
 .IF "$(DEFLIB5NAME)"!=""
     @+echo $(SLB)/$(DEFLIB5NAME).lib
-    @+emxexpr $(DEF5NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF5NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB5NAME)"!=""
 
 .IF "$(DEF5EXPORT1)"!=""
@@ -1631,7 +1631,7 @@ $(DEF6TARGETN) .PHONY :
 
 .IF "$(DEFLIB6NAME)"!=""
     @+echo $(SLB)/$(DEFLIB6NAME).lib
-    @+emxexpr $(DEF6NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF6NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB6NAME)"!=""
 
 .IF "$(DEF6EXPORT1)"!=""
@@ -1915,7 +1915,7 @@ $(DEF7TARGETN) .PHONY :
 
 .IF "$(DEFLIB7NAME)"!=""
     @+echo $(SLB)/$(DEFLIB7NAME).lib
-    @+emxexpr $(DEF7NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF7NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB7NAME)"!=""
 
 .IF "$(DEF7EXPORT1)"!=""
@@ -2199,7 +2199,7 @@ $(DEF8TARGETN) .PHONY :
 
 .IF "$(DEFLIB8NAME)"!=""
     @+echo $(SLB)/$(DEFLIB8NAME).lib
-    @+emxexpr $(DEF8NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF8NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB8NAME)"!=""
 
 .IF "$(DEF8EXPORT1)"!=""
@@ -2483,7 +2483,7 @@ $(DEF9TARGETN) .PHONY :
 
 .IF "$(DEFLIB9NAME)"!=""
     @+echo $(SLB)/$(DEFLIB9NAME).lib
-    @+emxexpr $(DEF9NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF9NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB9NAME)"!=""
 
 .IF "$(DEF9EXPORT1)"!=""
@@ -2767,7 +2767,7 @@ $(DEF10TARGETN) .PHONY :
 
 .IF "$(DEFLIB10NAME)"!=""
     @+echo $(SLB)/$(DEFLIB10NAME).lib
-    @+emxexpr $(DEF10NAMELIST) | fix_exp_file >> $@.tmp_ord
+    @+emxexp $(DEF10NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB10NAME)"!=""
 
 .IF "$(DEF10EXPORT1)"!=""
