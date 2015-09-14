@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_47f8187d",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-14T13:16:52Z",
+      "side": 1,
+      "message": "This is a rather vague check, because nGlobalError may have been set by various conditions and resetting it in other cases would be wrong. Better pass a parameter to GetSortArray() whether an empty array is allowed, and then there return early instead of setting errNoValue.\n\nBtw, the same is probably needed in ScInterpreter::GetWeekendAndHolidayMasks_MS()",
+      "revId": "7882bc7c450e2c2abfd02e37c7c324c8669f52d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
