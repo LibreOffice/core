@@ -524,6 +524,7 @@ private:
     bool m_bWaitingForMouseUp;
 
     bool m_bConnectingToView;
+    bool m_bDisposed;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > m_xUndoManager;
     std::unique_ptr< UndoGuard > m_pTextActionUndoGuard;

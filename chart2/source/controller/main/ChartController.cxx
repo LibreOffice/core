@@ -113,6 +113,7 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_bWaitingForDoubleClick(false),
     m_bWaitingForMouseUp(false),
     m_bConnectingToView(false),
+    m_bDisposed(false),
     m_xUndoManager( 0 ),
     m_aDispatchContainer( m_xCC, this ),
     m_eDrawMode( CHARTDRAW_SELECT ),
@@ -299,6 +300,9 @@ bool ChartController::TheModelRef::is() const
 
 OUString ChartController::GetContextName()
 {
+    if (m_bDisposed)
+        return OUString();
+
     uno::Any aAny = getSelection();
     if (!aAny.hasValue())
         return OUString("Chart");
@@ -425,6 +429,8 @@ void SAL_CALL ChartController::attachFrame(
         sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
         sfx2::sidebar::SidebarController::registerSidebarForFrame(pSidebar, this);
         pSidebar->updateModel(getModel());
+        css::lang::EventObject aEvent;
+        mpSelectionChangeHandler->selectionChanged(aEvent);
     }
 
     if(m_xFrame.is()) //what happens, if we do have a Frame already??
@@ -791,6 +797,8 @@ void ChartController::impl_deleteDrawViewController()
 void SAL_CALL ChartController::dispose()
     throw(uno::RuntimeException, std::exception)
 {
+    m_bDisposed = true;
+    mpSelectionChangeHandler->selectionChanged(css::lang::EventObject());
     mpSelectionChangeHandler->Disconnect();
 
     if (getModel().is())
