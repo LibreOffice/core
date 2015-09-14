@@ -2941,10 +2941,18 @@ void ScDocument::CopyMultiRangeFromClip(
     // Listener aufbauen nachdem alles inserted wurde
     StartListeningFromClip(aDestRange.aStart.Col(), aDestRange.aStart.Row(),
                            aDestRange.aEnd.Col(), aDestRange.aEnd.Row(), rMark, nInsFlag );
-    // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
-    SetDirtyFromClip(
-        aDestRange.aStart.Col(), aDestRange.aStart.Row(), aDestRange.aEnd.Col(), aDestRange.aEnd.Row(),
-        rMark, nInsFlag, aBroadcastSpans);
+
+    {
+        ScBulkBroadcast aBulkBroadcast( GetBASM());
+
+        // Set formula cells dirty and collect non-formula cells.
+        SetDirtyFromClip(
+                aDestRange.aStart.Col(), aDestRange.aStart.Row(), aDestRange.aEnd.Col(), aDestRange.aEnd.Row(),
+                rMark, nInsFlag, aBroadcastSpans);
+
+        BroadcastAction aAction(*this);
+        aBroadcastSpans.executeColumnAction(*this, aAction);
+    }
 
     if (bResetCut)
         pClipDoc->GetClipParam().mbCutMode = false;
