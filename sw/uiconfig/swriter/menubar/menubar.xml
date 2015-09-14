@@ -69,6 +69,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:PrintPreview"/>
       <menu:menuitem menu:id=".uno:Print"/>
+      <menu:menuitem menu:id=".uno:PrintDefault"/>
       <menu:menuitem menu:id=".uno:PrinterSetup"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
@@ -99,6 +100,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
       <menu:menuitem menu:id=".uno:SearchDialog"/>
+      <menu:menuitem menu:id=".uno:GotoPage"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:ChangesMenu">
         <menu:menupopup>
@@ -176,6 +178,7 @@
       <menu:menuitem menu:id=".uno:Sidebar"/>
       <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Navigator"/>
+      <menu:menuitem menu:id=".uno:DesignerDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuseparator/>
@@ -513,8 +516,14 @@
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles"/>
       <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles"/>
-      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Heading 6&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Quotations&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Preformatted Text&amp;FamilyName:string=ParagraphStyles"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Quotation&amp;FamilyName:string=CharacterStyles"/>
+      <menu:menuitem menu:id=".uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:EditStyle"/>
       <menu:menuitem menu:id=".uno:StyleUpdateByExample"/>

@@ -2600,7 +2600,7 @@
       </node>
       <node oor:name=".uno:StyleApply" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Apply Style</value>
+          <value xml:lang="en-US">Apply Paragraph Style</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2629,7 +2629,7 @@
       </node>
       <node oor:name=".uno:StyleNewByExample" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">New Style from Selection</value>
+          <value xml:lang="en-US">~New Style from Selection...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2653,7 +2653,7 @@
       </node>
       <node oor:name=".uno:StyleUpdateByExample" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Update Style</value>
+          <value xml:lang="en-US">~Update Style</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3310,6 +3310,11 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SidebarMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Sidebar</value>
         </prop>
       </node>
       <node oor:name=".uno:NewFrameSet" oor:op="replace">
@@ -5660,7 +5665,7 @@
       </node>
       <node oor:name=".uno:EditLinksMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~References</value>
+          <value xml:lang="en-US">R~eferences</value>
         </prop>
       </node>
       <node oor:name=".uno:EditCommentsMenu" oor:op="replace">
