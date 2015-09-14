@@ -39,7 +39,6 @@ class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
     HtmlOptions_Impl*pImp;
     static const com::sun::star::uno::Sequence<OUString>& GetPropertyNames();
     void Load( const com::sun::star::uno::Sequence< OUString >& rPropertyNames );
-    void CallListeners();
 
     virtual void    ImplCommit() SAL_OVERRIDE;
 

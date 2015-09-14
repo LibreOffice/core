@@ -45,7 +45,6 @@ using namespace com::sun::star::uno;
 
 struct HtmlOptions_Impl
 {
-    ::std::list<Link<>> aList;
     sal_Int32   nFlags;
     sal_Int32   nExportMode;
     sal_Int32   aFontSizeArr[HTML_FONT_COUNT];
@@ -242,17 +241,9 @@ void    SvxHtmlOptions::ImplCommit()
     PutProperties(aNames, aValues);
 }
 
-void SvxHtmlOptions::CallListeners()
-{
-    for ( ::std::list<Link<>>::const_iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
-        iter->Call( this );
-}
-
-
 void SvxHtmlOptions::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
     Load( GetPropertyNames() );
-    CallListeners();
 }
 
 
@@ -311,7 +302,6 @@ void SvxHtmlOptions::SetExportMode(sal_uInt16 nSet)
     {
         pImp->nExportMode = nSet;
         SetModified();
-        CallListeners();
     }
 }
 
