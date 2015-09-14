@@ -295,12 +295,10 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
 
         if (IsRootFrm())
         {
-            // Root frame has access to the edit shell, so dump the current selection ranges here.
-            const SwRootFrm* const pRootFrm = static_cast<const SwRootFrm* const>(this);
-            SwEditShell* pEditShell = pRootFrm->GetCurrShell()->GetDoc()->GetEditShell();
-            xmlTextWriterStartElement(writer, BAD_CAST("shellCrsr"));
-            for (SwPaM& rPaM : pEditShell->getShellCrsr(false)->GetRingContainer())
-                rPaM.dumpAsXml(writer);
+            const SwRootFrm* pRootFrm = static_cast<const SwRootFrm*>(this);
+            xmlTextWriterStartElement(writer, BAD_CAST("shells"));
+            for (SwViewShell& rViewShell : pRootFrm->GetCurrShell()->GetRingContainer())
+                rViewShell.dumpAsXml(writer);
             xmlTextWriterEndElement(writer);
         }
 
