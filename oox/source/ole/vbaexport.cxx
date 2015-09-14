@@ -40,6 +40,10 @@
 #endif
 
 #define VBA_EXPORT_DEBUG 0
+#define VBA_USE_ORIGINAL_WM_STREAM 0
+#define VBA_USE_ORIGINAL_DIR_STREAM 0
+#define VBA_USE_ORIGINAL_PROJECT_STREAM 0
+#define VBA_USE_ORIGINAL_VBA_PROJECT 0
 
 namespace {
 
@@ -772,6 +776,12 @@ void exportPROJECTwmStream(SvStream& rStrm, const css::uno::Sequence<OUString>& 
 
 }
 
+void addFileStreamToSotStream(const OUString& rPath, SotStorageStream* pStream)
+{
+    SvFileStream aFileStream(rPath, STREAM_READWRITE);
+    pStream->WriteStream(aFileStream);
+}
+
 void VbaExport::exportVBA(SotStorage* pRootStorage)
 {
     css::uno::Reference<css::container::XNameContainer> xNameContainer = getBasicLibrary();
@@ -784,35 +794,84 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     // start here with the VBA export
     SotStorage* pVBAStream = pRootStorage->OpenSotStorage("VBA", STREAM_READWRITE);
     SotStorageStream* pDirStream = pVBAStream->OpenSotStream("dir", STREAM_READWRITE);
+
+    SotStorageStream* pVBAProjectStream = pVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
+    SotStorageStream* pPROJECTStream = pRootStorage->OpenSotStream("PROJECT", STREAM_READWRITE);
+    SotStorageStream* pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECTwm", STREAM_READWRITE);
+
+#if VBA_USE_ORIGINAL_WM_STREAM
+    OUString aProjectwmPath = "/home/moggi/Documents/testfiles/vba/PROJECTwm";
+    addFileStreamToSotStream(aProjectwmPath, pPROJECTwmStream);
+#else
+    exportPROJECTwmStream(*pPROJECTwmStream, aElementNames);
+#endif
+
+#if VBA_USE_ORIGINAL_DIR_STREAM
+    OUString aDirPath = "/home/moggi/Documents/testfiles/vba/VBA/dir";
+    addFileStreamToSotStream(aDirPath, pDirStream);
+#else
     std::vector<SotStorageStream*> aModuleStreams;
+    exportDirStream(*pDirStream, xNameContainer);
     aModuleStreams.reserve(n);
     for (sal_Int32 i = 0; i < n; ++i)
     {
         aModuleStreams.push_back(pVBAStream->OpenSotStream(aElementNames[i], STREAM_READWRITE));
     }
-    SotStorageStream* pVBAProjectStream = pVBAStream->OpenSotStream("_VBA_PROJECT", STREAM_READWRITE);
-    SotStorageStream* pPROJECTStream = pRootStorage->OpenSotStream("PROJECT", STREAM_READWRITE);
-    SotStorageStream* pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECTwm", STREAM_READWRITE);
+#endif
 
+#if VBA_USE_ORIGINAL_PROJECT_STREAM
+    OUString aProjectPath = "/home/moggi/Documents/testfiles/vba/PROJECT";
+    addFileStreamToSotStream(aProjectPath, pPROJECTStream);
+#else
+    exportPROJECTStream(*pPROJECTStream, xNameContainer, getProjectName());
+#endif
 
-    // export
-    exportDirStream(*pDirStream, xNameContainer);
+#if VBA_USE_ORIGINAL_VBA_PROJECT
+    OUString a_VBA_ProjectPath = "/home/moggi/Documents/testfiles/vba/VBA/_VBA_PROJECT";
+    addFileStreamToSotStream(a_VBA_ProjectPath, pVBAProjectStream);
+#else
+    exportVBAProjectStream(*pVBAProjectStream);
+#endif
+
+#if VBA_USE_ORIGINAL_DIR_STREAM
+    OUString aModule1Path = "/home/moggi/Documents/testfiles/vba/VBA/Module1";
+    OUString aSheet1Path = "/home/moggi/Documents/testfiles/vba/VBA/Sheet1";
+    OUString aSheet2Path = "/home/moggi/Documents/testfiles/vba/VBA/Sheet2";
+    OUString aSheet3Path = "/home/moggi/Documents/testfiles/vba/VBA/Sheet3";
+    OUString aWorkbookPath = "/home/moggi/Documents/testfiles/vba/VBA/ThisWorkbook";
+    SotStorageStream* pModule1Stream = pVBAStream->OpenSotStream("Module1", STREAM_READWRITE);
+    SotStorageStream* pSheet1Stream = pVBAStream->OpenSotStream("Sheet1", STREAM_READWRITE);
+    SotStorageStream* pSheet2Stream = pVBAStream->OpenSotStream("Sheet2", STREAM_READWRITE);
+    SotStorageStream* pSheet3Stream = pVBAStream->OpenSotStream("Sheet3", STREAM_READWRITE);
+    SotStorageStream* pWorkbookStream = pVBAStream->OpenSotStream("ThisWorkbook", STREAM_READWRITE);
+    addFileStreamToSotStream(aModule1Path, pModule1Stream);
+    addFileStreamToSotStream(aSheet1Path, pSheet1Stream);
+    addFileStreamToSotStream(aSheet2Path, pSheet2Stream);
+    addFileStreamToSotStream(aSheet3Path, pSheet3Stream);
+    addFileStreamToSotStream(aWorkbookPath, pWorkbookStream);
+
+    pModule1Stream->Commit();
+    pSheet1Stream->Commit();
+    pSheet2Stream->Commit();
+    pSheet3Stream->Commit();
+    pWorkbookStream->Commit();
+#else
+
+    css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
     for (sal_Int32 i = 0; i < n; ++i)
     {
         css::uno::Any aCode = xNameContainer->getByName(aElementNames[i]);
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
         OUString aSourceCode;
         aCode >>= aSourceCode;
         exportModuleStream(*aModuleStreams[i], aSourceCode, aElementNames[i]);
-    }
-    exportVBAProjectStream(*pVBAProjectStream);
-    exportPROJECTStream(*pPROJECTStream, xNameContainer, getProjectName());
-    exportPROJECTwmStream(*pPROJECTwmStream, aElementNames);
-
-    pVBAProjectStream->Commit();
-    for(sal_Int32 i = 0; i < n; i++)
-    {
         aModuleStreams[i]->Commit();
     }
+
+#endif
+
+    pVBAProjectStream->Commit();
+
     pDirStream->Commit();
     pVBAStream->Commit();
     pPROJECTStream->Commit();
