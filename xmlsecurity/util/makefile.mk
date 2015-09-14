@@ -141,6 +141,9 @@ RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= $(SRSFILELIST)
 
 SHL4TARGET=$(TARGET)
+.IF "$(GUI)"=="OS2"
+SHL4TARGET=xmlsecur
+.ENDIF
 SHL4LIBS=\
                 $(SLB)$/helper.lib      \
                 $(SLB)$/dialogs.lib     \
