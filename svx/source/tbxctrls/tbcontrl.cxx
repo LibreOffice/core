@@ -2706,6 +2706,7 @@ void SvxColorToolBoxControl::StateChanged(
                 aColor = static_cast< const XFillColorItem* >(pState)->GetColorValue();
         }
         m_xBtnUpdater->Update( aColor );
+        mPaletteManager.SetLastColor(aColor);
     }
 }
 
