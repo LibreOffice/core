@@ -83,29 +83,7 @@ int main (int argc, char **argv)
         return 1;
 
     // coverity[tainted_string] - build time test tool
-    char *install_path = argv[1];
-
-    if( argc > 4 )
-    {
-        fprintf( stderr, "testing preinit\n");
-        char *imp_lib;
-        void *dlhandle;
-        dlhandle = lok_dlopen( install_path, &imp_lib );
-        if( !dlhandle )
-        {
-            fprintf( stderr, "Failed to link '%s'\n", lok_dlerror() );
-            return -1;
-        }
-        LokHookPreInit *preinit = (LokHookPreInit *) lok_dlsym( dlhandle, "lok_preinit" );
-        if( !preinit )
-        {
-            fprintf( stderr, "Failed to find pre-init symbol: %s\n", lok_dlerror() );
-            return -1;
-        }
-        preinit( install_path, NULL );
-    }
-
-    Office *pOffice = lok_cpp_init( install_path );
+    Office *pOffice = lok_cpp_init( argv[1] );
     if( !pOffice )
     {
         fprintf( stderr, "Failed to initialize\n" );

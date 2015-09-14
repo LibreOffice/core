@@ -423,7 +423,6 @@ global:
         # enableChangeListenerNotification
         _ZN4cppu19OPropertySetHelper232enableChangeListenerNotificationEh;
         _ZThn*_N4cppu19OPropertySetHelper232enableChangeListenerNotificationEh;
-        _ZN4cppu16preInitBootstrapEv;
 } UDK_3.7;
 
 LIBO_UDK_3.9 { # LibO 3.7

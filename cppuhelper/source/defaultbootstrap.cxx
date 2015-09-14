@@ -43,18 +43,6 @@ rtl::OUString getBootstrapVariable(
     return v;
 }
 
-void default_preInitBootstrap(rtl::OUString const & aUri)
-{
-    rtl::Bootstrap bsUri(aUri);
-    if (bsUri.getHandle() == 0)
-        throw css::uno::DeploymentException("Cannot open uno ini " + aUri);
-
-    // create the service manager
-    rtl::Reference< cppuhelper::ServiceManager > aManager(new cppuhelper::ServiceManager);
-    // read rdb files
-    aManager->init(getBootstrapVariable(bsUri, "UNO_SERVICES"));
-    aManager->loadImplementations();
-}
 }
 
 css::uno::Reference< css::uno::XComponentContext >
@@ -119,9 +107,4 @@ cppu::defaultBootstrap_InitialComponentContext()
     return defaultBootstrap_InitialComponentContext(getUnoIniUri());
 }
 
-void
-cppu::preInitBootstrap()
-{
-    default_preInitBootstrap(getUnoIniUri());
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
