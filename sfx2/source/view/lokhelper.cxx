@@ -26,4 +26,10 @@ int SfxLokHelper::createView(SfxViewShell* pViewShell)
     return rViewArr.size() - 1;
 }
 
+int SfxLokHelper::getViews()
+{
+    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    return rViewArr.size();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
