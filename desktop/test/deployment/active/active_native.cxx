@@ -59,7 +59,7 @@
 namespace {
 
 class Provider:
-    public cppu::WeakImplHelper<
+    public cppu::WeakImplHelper2<
         css::lang::XServiceInfo, css::frame::XDispatchProvider >,
     private boost::noncopyable
 {
@@ -150,7 +150,7 @@ Provider::queryDispatches(
 }
 
 class Dispatch:
-    public cppu::WeakImplHelper<
+    public cppu::WeakImplHelper2<
         css::lang::XServiceInfo, css::frame::XDispatch >,
     private boost::noncopyable
 {
