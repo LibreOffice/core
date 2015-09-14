@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
 
 #include <tools/debug.hxx>
 
@@ -332,9 +333,11 @@ XMLBackgroundImageContext::XMLBackgroundImageContext(
         sal_Int32 nPosIdx,
         sal_Int32 nFilterIdx,
         sal_Int32 nTransparencyIdx,
+        sal_Int32 nBitmapModeIdx,
         ::std::vector< XMLPropertyState > &rProps ) :
     XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps ),
     aPosProp( nPosIdx ),
+    m_nBitmapModeIdx(nBitmapModeIdx),
     aFilterProp( nFilterIdx ),
     aTransparencyProp( nTransparencyIdx ),
     nTransparency( 0 )
@@ -399,7 +402,40 @@ void XMLBackgroundImageContext::EndElement()
     XMLElementPropertyContext::EndElement();
 
     if( -1 != aPosProp.mnIndex )
-        rProperties.push_back( aPosProp );
+    {
+        // See if a FillBitmapMode property is already set, in that case
+        // BackGraphicLocation will be ignored.
+        bool bFound = false;
+        if (m_nBitmapModeIdx != -1)
+        {
+            for (XMLPropertyState& rProperty : rProperties)
+            {
+                if (rProperty.mnIndex == m_nBitmapModeIdx)
+                {
+                    bFound = true;
+
+                    // Found, so map the old property to the new one.
+                    switch (ePos)
+                    {
+                    case GraphicLocation_TILED:
+                        rProperty.maValue <<= drawing::BitmapMode_REPEAT;
+                        break;
+                    case GraphicLocation_AREA:
+                        rProperty.maValue <<= drawing::BitmapMode_STRETCH;
+                        break;
+                    case GraphicLocation_MIDDLE_MIDDLE:
+                        rProperty.maValue <<= drawing::BitmapMode_NO_REPEAT;
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
+        if (!bFound)
+            rProperties.push_back( aPosProp );
+    }
     if( -1 != aFilterProp.mnIndex )
         rProperties.push_back( aFilterProp );
     if( -1 != aTransparencyProp.mnIndex )

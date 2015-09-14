@@ -96,6 +96,7 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
                                            -1,
+                                           mxMapper->getPropertySetMapper()->FindEntryIndex(CTF_PM_FILLBITMAPMODE),
                                            rProperties );
         break;
 

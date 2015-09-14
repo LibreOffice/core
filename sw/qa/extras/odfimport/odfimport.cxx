@@ -595,6 +595,13 @@ DECLARE_ODFIMPORT_TEST(testBnc800714, "bnc800714.fodt")
     CPPUNIT_ASSERT(getProperty<bool>(getParagraph(2), "ParaKeepTogether"));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf92586, "tdf92586.odt")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    // This was BitmapMode_NO_REPEAT.
+    CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_STRETCH, getProperty<drawing::BitmapMode>(xPageStyle, "FillBitmapMode"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
