@@ -349,8 +349,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
 
         fprintf( fp, "\nCharacter attribute:" );
         bool bZeroAttr = false;
-        sal_uInt16 z;
-        for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
+        for ( sal_Int32 z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); ++z )
         {
             const EditCharAttrib& rAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs()[z];
             OStringBuffer aCharAttribs;
@@ -372,7 +371,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
         if ( bZeroAttr )
             fprintf( fp, "\nNULL-Attribute!" );
 
-        sal_uInt16 nTextPortions = pPPortion->GetTextPortions().Count();
+        const sal_Int32 nTextPortions = pPPortion->GetTextPortions().Count();
         OStringBuffer aPortionStr("\nText portions: #");
         aPortionStr.append(static_cast<sal_Int32>(nTextPortions));
         aPortionStr.append(" \nA");
@@ -383,7 +382,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
         aPortionStr.append(static_cast<sal_Int32>(nPortion));
         aPortionStr.append(": ");
         sal_Int32 n = 0;
-        for ( z = 0; z < nTextPortions; z++ )
+        for ( sal_Int32 z = 0; z < nTextPortions; ++z )
         {
             TextPortion& rPortion = pPPortion->GetTextPortions()[z];
             aPortionStr.append(' ');
