@@ -43,6 +43,8 @@ interface TableText
     SID_REDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
     SID_REPEAT          [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
 
+    SID_UNICODE_NOTATION_TOGGLE [ ExecMethod = Execute; Export = FALSE; ]
+
      // ---- Attribute:
     SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
