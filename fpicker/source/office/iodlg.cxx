@@ -1614,7 +1614,7 @@ IMPL_LINK_NOARG(SvtFileDialog, EntrySelectHdl_Impl)
 
 
 
-IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
+IMPL_LINK_TYPED( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView, void )
 {
     OUString sCurrentFolder( pView->GetViewURL() );
     // check if we can create new folders
@@ -1632,8 +1632,6 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
         aCurrentFolder.removeSegment();
     }
     EnableControl( _pImp->_pBtnUp, bCanTravelUp );
-
-    return 0;
 }
 
 

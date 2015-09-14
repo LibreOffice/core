@@ -160,7 +160,7 @@ public:
 
     void                    SetSelectHdl( const Link<SvTreeListBox*,void>& rHdl );
     void                    SetDoubleClickHdl( const Link<SvTreeListBox*,bool>& rHdl );
-    void                    SetOpenDoneHdl( const Link<>& rHdl );
+    void                    SetOpenDoneHdl( const Link<SvtFileView*,void>& rHdl );
 
     sal_uLong               GetSelectionCount() const;
     SvTreeListEntry*        FirstSelected() const;

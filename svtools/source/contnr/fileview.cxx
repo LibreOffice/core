@@ -370,7 +370,7 @@ public:
     OUString                maAllFilter;
     OUString                maCurrentFilter;
     Image                   maFolderImage;
-    Link<>                  maOpenDoneLink;
+    Link<SvtFileView*,void> maOpenDoneLink;
     Reference< XCommandEnvironment >    mxCmdEnv;
 
     SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > xEnv,
@@ -1286,7 +1286,7 @@ const OUString& SvtFileView::GetViewURL() const
     return mpImp->maViewURL;
 }
 
-void SvtFileView::SetOpenDoneHdl( const Link<>& rHdl )
+void SvtFileView::SetOpenDoneHdl( const Link<SvtFileView*,void>& rHdl )
 {
     mpImp->maOpenDoneLink = rHdl;
 }

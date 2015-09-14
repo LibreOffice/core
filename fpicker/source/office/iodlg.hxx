@@ -123,7 +123,7 @@ private:
     DECL_LINK_TYPED( SelectHdl_Impl, SvTreeListBox*, void );
     DECL_LINK_TYPED( DblClickHdl_Impl, SvTreeListBox*, bool);
     DECL_LINK(EntrySelectHdl_Impl, void *);
-    DECL_LINK( OpenDoneHdl_Impl, SvtFileView* );
+    DECL_LINK_TYPED( OpenDoneHdl_Impl, SvtFileView*, void );
     DECL_LINK_TYPED( AutoExtensionHdl_Impl, Button*, void);
     DECL_LINK_TYPED( ClickHdl_Impl, Button*, void );
     DECL_LINK_TYPED( PlayButtonHdl_Impl, Button*, void);
