@@ -557,7 +557,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_SHOWWINDOW:
         {
-            boost::scoped_ptr< ScriptDocument > pDocument;
+            std::unique_ptr< ScriptDocument > pDocument;
 
             SFX_REQUEST_ARG( rReq, pDocumentItem, SfxStringItem, SID_BASICIDE_ARG_DOCUMENT, false );
             if ( pDocumentItem )
@@ -906,7 +906,7 @@ void Shell::GetState(SfxItemSet &rSet)
                 else
                 {
                     OUString aItemStr;
-                    boost::shared_ptr<LocalizationMgr> pCurMgr(GetCurLocalizationMgr());
+                    std::shared_ptr<LocalizationMgr> pCurMgr(GetCurLocalizationMgr());
                     if ( pCurMgr->isLibraryLocalized() )
                     {
                         Sequence< lang::Locale > aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();

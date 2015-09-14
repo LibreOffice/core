@@ -21,8 +21,6 @@
 #define INCLUDED_CPPCANVAS_SOURCE_INC_IMPLRENDERER_HXX
 
 #include <sal/types.h>
-
-#include <boost/shared_ptr.hpp>
 #include <cppcanvas/renderer.hxx>
 #include <cppcanvas/canvas.hxx>
 

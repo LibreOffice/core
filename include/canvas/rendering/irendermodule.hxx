@@ -21,10 +21,8 @@
 #define INCLUDED_CANVAS_RENDERING_IRENDERMODULE_HXX
 
 #include <sal/types.h>
-
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
-
+#include <memory>
 
 namespace basegfx
 {
@@ -85,7 +83,7 @@ namespace canvas
             @return a pointer to a surface, which is an abstraction of
             a piece of (possibly hardware-accelerated) texture memory.
          */
-        virtual ::boost::shared_ptr<ISurface> createSurface( const ::basegfx::B2IVector& surfaceSize ) = 0;
+        virtual std::shared_ptr<ISurface> createSurface( const ::basegfx::B2IVector& surfaceSize ) = 0;
 
         /** Begin rendering the given primitive.
 
@@ -116,7 +114,7 @@ namespace canvas
         virtual bool      isError() = 0;
     };
 
-    typedef ::boost::shared_ptr< IRenderModule > IRenderModuleSharedPtr;
+    typedef std::shared_ptr< IRenderModule > IRenderModuleSharedPtr;
 
     /// Little RAII wrapper for guarding access to IRenderModule interface
     class RenderModuleGuard : private ::boost::noncopyable

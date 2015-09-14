@@ -34,7 +34,6 @@
 #include <svx/dialogs.hrc>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
-#include <boost/scoped_ptr.hpp>
 
 #define CM_1_TO_TWIP        567
 #define TWIP_TO_INCH        1440
@@ -304,7 +303,7 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
     {
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
-        boost::scoped_ptr<SvxGrfCrop> pNew(static_cast<SvxGrfCrop*>(rSet->Get( nW ).Clone()));
+        std::unique_ptr<SvxGrfCrop> pNew(static_cast<SvxGrfCrop*>(rSet->Get( nW ).Clone()));
 
         pNew->SetLeft( lcl_GetValue( *m_pLeftMF, eUnit ) );
         pNew->SetRight( lcl_GetValue( *m_pRightMF, eUnit ) );

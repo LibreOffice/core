@@ -36,7 +36,6 @@
 #include <comphelper/string.hxx>
 #include <svx/svxdlg.hxx>
 #include <sal/macros.h>
-#include <boost/scoped_ptr.hpp>
 
 using namespace css::uno;
 using namespace css::i18n;
@@ -356,7 +355,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void
 {
     if (m_ppbApproxSettings == pButton)
     {
-        boost::scoped_ptr<AbstractSvxSearchSimilarityDialog> pDlg;
+        std::unique_ptr<AbstractSvxSearchSimilarityDialog> pDlg;
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if ( pFact )
@@ -378,7 +377,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            boost::scoped_ptr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() ));
+            std::unique_ptr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             aDlg->Execute();
 

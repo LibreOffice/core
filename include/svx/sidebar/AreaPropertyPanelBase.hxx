@@ -41,7 +41,6 @@
 #include <vcl/vclptr.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <svx/svxdllapi.h>
 
 class XFillFloatTransparenceItem;
@@ -138,11 +137,11 @@ protected:
     VclPtr<MetricField>                                        mpMTRAngle;
     VclPtr<ListBox>                                            mpGradientStyle;
 
-    ::boost::scoped_ptr< XFillStyleItem >               mpStyleItem;
-    ::boost::scoped_ptr< XFillColorItem >               mpColorItem;
-    ::boost::scoped_ptr< XFillGradientItem >            mpFillGradientItem;
-    ::boost::scoped_ptr< XFillHatchItem >               mpHatchItem;
-    ::boost::scoped_ptr< XFillBitmapItem >              mpBitmapItem;
+    std::unique_ptr< XFillStyleItem >               mpStyleItem;
+    std::unique_ptr< XFillColorItem >               mpColorItem;
+    std::unique_ptr< XFillGradientItem >            mpFillGradientItem;
+    std::unique_ptr< XFillHatchItem >               mpHatchItem;
+    std::unique_ptr< XFillBitmapItem >              mpBitmapItem;
 
     Image                                               maImgAxial;
     Image                                               maImgElli;
@@ -153,8 +152,8 @@ protected:
 
     AreaTransparencyGradientPopup maTrGrPopup;
 
-    ::boost::scoped_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
-    ::boost::scoped_ptr< SfxUInt16Item >                mpTransparanceItem;
+    std::unique_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
+    std::unique_ptr< SfxUInt16Item >                mpTransparanceItem;
 
     css::uno::Reference<css::frame::XFrame>                 mxFrame;
 

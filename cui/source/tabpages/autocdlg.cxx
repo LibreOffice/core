@@ -55,7 +55,6 @@
 #include <editeng/unolingu.hxx>
 #include <dialmgr.hxx>
 #include <svx/svxids.hrc>
-#include <boost/scoped_ptr.hpp>
 
 static LanguageType eLastDialogLanguage = LANGUAGE_SYSTEM;
 

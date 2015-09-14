@@ -44,7 +44,7 @@ namespace slideshow
         {
         public:
             EventQueue(
-                ::boost::shared_ptr< ::canvas::tools::ElapsedTime >
+                std::shared_ptr< ::canvas::tools::ElapsedTime >
                 const & pPresTimer );
 
             ~EventQueue();
@@ -113,7 +113,7 @@ namespace slideshow
 
             /** Gets the queue's timer object.
              */
-            ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const &
+            std::shared_ptr< ::canvas::tools::ElapsedTime > const &
             getTimer() const { return mpTimer; }
 
         private:
@@ -140,7 +140,7 @@ namespace slideshow
             // perform timing of events via relative time
             // measurements. The world time starts, when the
             // EventQueue object is created
-            ::boost::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
+            std::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
         };
 
     }

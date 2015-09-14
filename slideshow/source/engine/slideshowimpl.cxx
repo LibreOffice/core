@@ -445,7 +445,7 @@ private:
     boost::optional<sal_Int32>          maEraseInk;
     //end changed
 
-    boost::shared_ptr<canvas::tools::ElapsedTime> mpPresTimer;
+    std::shared_ptr<canvas::tools::ElapsedTime> mpPresTimer;
     ScreenUpdater                           maScreenUpdater;
     EventQueue                              maEventQueue;
     EventMultiplexer                        maEventMultiplexer;
@@ -2005,7 +2005,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
             //Get a shared-ptr that outlives the scope-guard which will
             //ensure that the pointed-to-item exists in the case of a
             //::dispose clearing mpPresTimer
-            boost::shared_ptr<canvas::tools::ElapsedTime> xTimer(mpPresTimer);
+            std::shared_ptr<canvas::tools::ElapsedTime> xTimer(mpPresTimer);
             comphelper::ScopeGuard scopeGuard(
                 boost::bind( &canvas::tools::ElapsedTime::releaseTimer,
                              boost::cref(xTimer) ) );

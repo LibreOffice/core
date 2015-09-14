@@ -69,8 +69,8 @@ namespace slideshow
             virtual void setIsSoundEnabled (const bool bValue) = 0;
         };
 
-        typedef ::boost::shared_ptr< UnoView >      UnoViewSharedPtr;
-        typedef ::std::vector< UnoViewSharedPtr >   UnoViewVector;
+        typedef std::shared_ptr< UnoView >      UnoViewSharedPtr;
+        typedef std::vector< UnoViewSharedPtr >   UnoViewVector;
     }
 }
 

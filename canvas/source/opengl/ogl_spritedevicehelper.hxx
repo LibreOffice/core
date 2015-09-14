@@ -16,7 +16,6 @@
 #include <canvas/elapsedtime.hxx>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include "ogl_buffercontext.hxx"
 
@@ -131,7 +130,7 @@ namespace oglcanvas
         /// For the frame counter timings
         ::canvas::tools::ElapsedTime                       maLastUpdate;
 
-        boost::shared_ptr<TextureCache>                    mpTextureCache;
+        std::shared_ptr<TextureCache>                    mpTextureCache;
 
         unsigned int                                       mnLinearTwoColorGradientProgram;
         unsigned int                                       mnLinearMultiColorGradientProgram;

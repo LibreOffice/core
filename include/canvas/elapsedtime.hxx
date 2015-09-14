@@ -21,9 +21,8 @@
 #define INCLUDED_CANVAS_ELAPSEDTIME_HXX
 
 #include <sal/types.h>
-
-#include <boost/shared_ptr.hpp>
 #include <canvas/canvastoolsdllapi.h>
+#include <memory>
 
 namespace canvas
 {
@@ -57,7 +56,7 @@ namespace canvas
                 are not taken from the system's time base, but from
                 the provided timer.
              */
-            ElapsedTime( ::boost::shared_ptr<ElapsedTime> const & pTimeBase );
+            ElapsedTime( std::shared_ptr<ElapsedTime> const & pTimeBase );
 
             /** Reset the time
 
@@ -147,7 +146,7 @@ namespace canvas
             double getCurrentTime() const;
             double getElapsedTimeImpl() const; // does not set m_fLastQueriedTime
 
-            const ::boost::shared_ptr<ElapsedTime>  m_pTimeBase;
+            const std::shared_ptr<ElapsedTime>  m_pTimeBase;
 
             /// To validate adjustTimer() calls with bLimitToLastQueriedTime=true
             mutable double                          m_fLastQueriedTime;

@@ -15,13 +15,7 @@
 
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2dsize.hxx>
-
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include <vector>
-
 #include "ogl_canvashelper.hxx"
-
 
 namespace oglcanvas
 {

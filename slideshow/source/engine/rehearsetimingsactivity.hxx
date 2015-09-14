@@ -97,9 +97,9 @@ private:
     class MouseHandler;
     friend class MouseHandler;
 
-    typedef ::std::vector<
-        ::std::pair<UnoViewSharedPtr,
-                    boost::shared_ptr<cppcanvas::CustomSprite> > > ViewsVecT;
+    typedef std::vector<
+        std::pair<UnoViewSharedPtr,
+                    std::shared_ptr<cppcanvas::CustomSprite> > > ViewsVecT;
 
     template <typename func_type>
     void for_each_sprite( func_type const & func ) const

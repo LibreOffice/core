@@ -84,7 +84,7 @@ struct SpriteEntry
         return mnPriority < rRHS.mnPriority;
     }
 
-    boost::weak_ptr< cppcanvas::CustomSprite > mpSprite;
+    std::weak_ptr< cppcanvas::CustomSprite > mpSprite;
     double                                     mnPriority;
 };
 
@@ -570,7 +570,7 @@ private:
                   basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
     }
 
-    virtual bool isOnView(boost::shared_ptr<View> const& rView) const SAL_OVERRIDE
+    virtual bool isOnView(std::shared_ptr<View> const& rView) const SAL_OVERRIDE
     {
         return rView.get() == mpParentView;
     }
@@ -692,7 +692,7 @@ private:
     virtual void setCursorShape( sal_Int16 nPointerShape ) SAL_OVERRIDE;
 
     // ViewLayer interface
-    virtual bool isOnView(boost::shared_ptr<View> const& rView) const SAL_OVERRIDE;
+    virtual bool isOnView(std::shared_ptr<View> const& rView) const SAL_OVERRIDE;
     virtual void clear() const SAL_OVERRIDE;
     virtual void clearAll() const SAL_OVERRIDE;
     virtual cppcanvas::CanvasSharedPtr getCanvas() const SAL_OVERRIDE;
@@ -727,7 +727,7 @@ private:
     void updateClip();
 
 private:
-    typedef std::vector< boost::weak_ptr<SlideViewLayer> > ViewLayerVector;
+    typedef std::vector< std::weak_ptr<SlideViewLayer> > ViewLayerVector;
 
     /// Prune viewlayers from deceased ones, optionally update them
     void pruneLayers( bool bWithViewLayerUpdate=false ) const;
@@ -833,14 +833,14 @@ ViewLayerSharedPtr SlideView::createViewLayer( const basegfx::B2DRange& rLayerBo
     if( nNumLayers > LAYER_ULLAGE )
         pruneLayers();
 
-    boost::shared_ptr<SlideViewLayer> pViewLayer( new SlideViewLayer(mpCanvas,
+    std::shared_ptr<SlideViewLayer> xViewLayer( new SlideViewLayer(mpCanvas,
                                                                      getTransformation(),
                                                                      rLayerBounds,
                                                                      maUserSize,
                                                                      this) );
-    maViewLayers.push_back( pViewLayer );
+    maViewLayers.push_back(xViewLayer);
 
-    return pViewLayer;
+    return xViewLayer;
 }
 
 bool SlideView::updateScreen() const
@@ -915,7 +915,7 @@ void SlideView::setCursorShape( sal_Int16 nPointerShape )
         mxView->setMouseCursor( nPointerShape );
 }
 
-bool SlideView::isOnView(boost::shared_ptr<View> const& rView) const
+bool SlideView::isOnView(std::shared_ptr<View> const& rView) const
 {
     return rView.get() == this;
 }
@@ -1145,14 +1145,14 @@ void SlideView::pruneLayers( bool bWithViewLayerUpdate ) const
     // check all layers for validity, and retain only the live ones
     for( const auto& rViewLayer : maViewLayers )
     {
-        boost::shared_ptr< SlideViewLayer > pCurrLayer( rViewLayer.lock() );
+        std::shared_ptr< SlideViewLayer > xCurrLayer( rViewLayer.lock() );
 
-        if( pCurrLayer )
+        if (xCurrLayer)
         {
-            aValidLayers.push_back( pCurrLayer );
+            aValidLayers.push_back(xCurrLayer);
 
             if( bWithViewLayerUpdate )
-                pCurrLayer->updateView( rCurrTransform,
+                xCurrLayer->updateView( rCurrTransform,
                                         maUserSize );
         }
     }
@@ -1167,7 +1167,7 @@ UnoViewSharedPtr createSlideView( uno::Reference< presentation::XSlideShowView> 
                                   EventQueue&                                          rEventQueue,
                                   EventMultiplexer&                                    rEventMultiplexer )
 {
-    boost::shared_ptr<SlideView> const that(
+    std::shared_ptr<SlideView> const that(
         comphelper::make_shared_from_UNO(
             new SlideView(xView,
                           rEventQueue,

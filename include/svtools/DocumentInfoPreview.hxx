@@ -28,8 +28,6 @@
 #include <tools/wintypes.hxx>
 #include <vcl/window.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 class ExtMultiLineEdit;
 class SvtDocInfoTable_Impl;
 
@@ -58,7 +56,7 @@ public:
 
 private:
     VclPtr<ExtMultiLineEdit> m_pEditWin;
-    boost::scoped_ptr< SvtDocInfoTable_Impl > m_xInfoTable;
+    std::unique_ptr< SvtDocInfoTable_Impl > m_xInfoTable;
     LanguageTag m_aLanguageTag;
 
     void insertEntry(OUString const & title, OUString const & value);

@@ -142,7 +142,7 @@ namespace canvas
                                            const ::basegfx::B2ISize&  rSize ) const;
     };
 
-    typedef ::boost::shared_ptr< Surface > SurfaceSharedPtr;
+    typedef std::shared_ptr< Surface > SurfaceSharedPtr;
 }
 
 #endif

@@ -21,9 +21,7 @@
 #define INCLUDED_CANVAS_RENDERING_ICOLORBUFFER_HXX
 
 #include <sal/types.h>
-
-#include <boost/shared_ptr.hpp>
-
+#include <memory>
 
 namespace canvas
 {
@@ -80,7 +78,7 @@ namespace canvas
         virtual Format getFormat() const = 0;
     };
 
-    typedef ::boost::shared_ptr< IColorBuffer > IColorBufferSharedPtr;
+    typedef std::shared_ptr< IColorBuffer > IColorBufferSharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_RENDERING_ICOLORBUFFER_HXX

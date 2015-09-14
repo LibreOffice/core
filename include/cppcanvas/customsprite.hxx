@@ -21,11 +21,9 @@
 #define INCLUDED_CPPCANVAS_CUSTOMSPRITE_HXX
 
 #include <sal/types.h>
-
-#include <boost/shared_ptr.hpp>
 #include <cppcanvas/sprite.hxx>
 #include <cppcanvas/canvas.hxx>
-
+#include <memory>
 
 /* Definition of CustomSprite class */
 
@@ -39,7 +37,7 @@ namespace cppcanvas
         virtual CanvasSharedPtr getContentCanvas() const = 0;
     };
 
-    typedef ::boost::shared_ptr< ::cppcanvas::CustomSprite > CustomSpriteSharedPtr;
+    typedef std::shared_ptr< ::cppcanvas::CustomSprite > CustomSpriteSharedPtr;
 }
 
 #endif // INCLUDED_CPPCANVAS_CUSTOMSPRITE_HXX

@@ -26,7 +26,6 @@
 #include <vcl/fixed.hxx>
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 // forward ---------------------------------------------------------------
 
@@ -43,10 +42,10 @@ private:
     VclPtr<CheckBox> m_pUseDataCB;
     // rows
     struct Row;
-    std::vector<boost::shared_ptr<Row> > vRows;
+    std::vector<std::shared_ptr<Row> > vRows;
     // fields
     struct Field;
-    std::vector<boost::shared_ptr<Field> > vFields;
+    std::vector<std::shared_ptr<Field> > vFields;
     // "name" fields
     unsigned nNameRow;
     unsigned nShortNameField;

@@ -35,7 +35,6 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <svx/dialogs.hrc>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::text;
 #define SwFPos SvxSwFramePosString
@@ -891,7 +890,7 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
                 const SfxPoolItem* pItem = GetItem( rOldSet, SID_SW_FOLLOW_TEXT_FLOW);
                 if(pItem)
                 {
-                    boost::scoped_ptr<SfxBoolItem> pFollow(static_cast<SfxBoolItem*>(pItem->Clone()));
+                    std::unique_ptr<SfxBoolItem> pFollow(static_cast<SfxBoolItem*>(pItem->Clone()));
                     pFollow->SetValue(m_pFollowCB->IsChecked());
                     bModified |= 0 != rSet->Put(*pFollow);
                 }

@@ -10,9 +10,9 @@
 #include <comphelper/threadpool.hxx>
 
 #include <rtl/instance.hxx>
-#include <boost/shared_ptr.hpp>
-#include <thread>
 #include <algorithm>
+#include <memory>
+#include <thread>
 
 namespace comphelper {
 
@@ -111,12 +111,12 @@ ThreadPool::~ThreadPool()
     waitAndCleanupWorkers();
 }
 
-struct ThreadPoolStatic : public rtl::StaticWithInit< boost::shared_ptr< ThreadPool >,
+struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPool >,
                                                       ThreadPoolStatic >
 {
-    boost::shared_ptr< ThreadPool > operator () () {
+    std::shared_ptr< ThreadPool > operator () () {
         sal_Int32 nThreads = std::max( std::thread::hardware_concurrency(), 1U );
-        return boost::shared_ptr< ThreadPool >( new ThreadPool( nThreads ) );
+        return std::shared_ptr< ThreadPool >( new ThreadPool( nThreads ) );
     };
 };
 

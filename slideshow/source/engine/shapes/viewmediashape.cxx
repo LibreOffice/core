@@ -87,10 +87,10 @@ namespace slideshow
             ENSURE_OR_THROW( mpViewLayer->getCanvas(), "ViewMediaShape::ViewMediaShape(): Invalid ViewLayer canvas" );
             ENSURE_OR_THROW( mxComponentContext.is(), "ViewMediaShape::ViewMediaShape(): Invalid component context" );
 
-            UnoViewSharedPtr pUnoView (::boost::dynamic_pointer_cast<UnoView>(rViewLayer));
-            if (pUnoView)
+            UnoViewSharedPtr xUnoView(std::dynamic_pointer_cast<UnoView>(rViewLayer));
+            if (xUnoView)
             {
-                mbIsSoundEnabled = pUnoView->isSoundEnabled();
+                mbIsSoundEnabled = xUnoView->isSoundEnabled();
             }
         }
 

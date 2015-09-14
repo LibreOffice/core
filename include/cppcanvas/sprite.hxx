@@ -21,8 +21,7 @@
 #define INCLUDED_CPPCANVAS_SPRITE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace basegfx
 {
@@ -102,7 +101,7 @@ namespace cppcanvas
             ::com::sun::star::rendering::XSprite > getUNOSprite() const = 0;
     };
 
-    typedef ::boost::shared_ptr< ::cppcanvas::Sprite > SpriteSharedPtr;
+    typedef std::shared_ptr< ::cppcanvas::Sprite > SpriteSharedPtr;
 }
 
 #endif // INCLUDED_CPPCANVAS_SPRITE_HXX

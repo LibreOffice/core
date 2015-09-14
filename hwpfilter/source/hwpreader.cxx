@@ -20,8 +20,6 @@
 #include <deque>
 #include <memory>
 
-#include <boost/shared_ptr.hpp>
-
 #include "hwpreader.hxx"
 #include <math.h>
 
@@ -1746,7 +1744,7 @@ void HwpReader::makePageStyle()
              if( hwpinfo.back_info.type == 2 ){
                  rstartEl("office:binary-data", rList);
                  pList->clear();
-                 boost::shared_ptr<char> pStr(base64_encode_string(reinterpret_cast<unsigned char *>(hwpinfo.back_info.data), hwpinfo.back_info.size ), Free<char>());
+                 std::shared_ptr<char> pStr(base64_encode_string(reinterpret_cast<unsigned char *>(hwpinfo.back_info.data), hwpinfo.back_info.size ), Free<char>());
                  rchars(ascii(pStr.get()));
                  rendEl("office:binary-data");
              }
@@ -3907,7 +3905,7 @@ void HwpReader::makePicture(Picture * hbox)
                          EmPicture *emp = hwpfile.GetEmPicture(hbox);
                          if( emp )
                          {
-                             boost::shared_ptr<char> pStr(base64_encode_string( emp->data, emp->size ), Free<char>());
+                             std::shared_ptr<char> pStr(base64_encode_string( emp->data, emp->size ), Free<char>());
                              rchars(ascii(pStr.get()));
                          }
                      }
@@ -3931,7 +3929,7 @@ void HwpReader::makePicture(Picture * hbox)
                                      rchars("");
                                  }
                                  else{
-                                     boost::shared_ptr<char> pStr(base64_encode_string( (uchar *)pObj, strlen((char *)pObj)), Free<char>());
+                                     std::shared_ptr<char> pStr(base64_encode_string( (uchar *)pObj, strlen((char *)pObj)), Free<char>());
                                      rchars(ascii(pStr.get()));
                                      pObj->Release();
                                      srcsto->Release();

@@ -466,8 +466,8 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 class RasterPrimitive3D
 {
 private:
-    boost::shared_ptr< drawinglayer::texture::GeoTexSvx >     mpGeoTexSvx;
-    boost::shared_ptr< drawinglayer::texture::GeoTexSvx >     mpTransparenceGeoTexSvx;
+    std::shared_ptr< drawinglayer::texture::GeoTexSvx >     mpGeoTexSvx;
+    std::shared_ptr< drawinglayer::texture::GeoTexSvx >     mpTransparenceGeoTexSvx;
     drawinglayer::attribute::MaterialAttribute3D              maMaterial;
     basegfx::B3DPolyPolygon                                   maPolyPolygon;
     double                                                    mfCenterZ;
@@ -480,8 +480,8 @@ private:
 
 public:
     RasterPrimitive3D(
-        const boost::shared_ptr< drawinglayer::texture::GeoTexSvx >& pGeoTexSvx,
-        const boost::shared_ptr< drawinglayer::texture::GeoTexSvx >& pTransparenceGeoTexSvx,
+        const std::shared_ptr< drawinglayer::texture::GeoTexSvx >& pGeoTexSvx,
+        const std::shared_ptr< drawinglayer::texture::GeoTexSvx >& pTransparenceGeoTexSvx,
         const drawinglayer::attribute::MaterialAttribute3D& rMaterial,
         const basegfx::B3DPolyPolygon& rPolyPolygon,
         bool bModulate,
@@ -520,8 +520,8 @@ public:
         return mfCenterZ < rComp.mfCenterZ;
     }
 
-    const boost::shared_ptr< drawinglayer::texture::GeoTexSvx >& getGeoTexSvx() const { return mpGeoTexSvx; }
-    const boost::shared_ptr< drawinglayer::texture::GeoTexSvx >& getTransparenceGeoTexSvx() const { return mpTransparenceGeoTexSvx; }
+    const std::shared_ptr< drawinglayer::texture::GeoTexSvx >& getGeoTexSvx() const { return mpGeoTexSvx; }
+    const std::shared_ptr< drawinglayer::texture::GeoTexSvx >& getTransparenceGeoTexSvx() const { return mpTransparenceGeoTexSvx; }
     const drawinglayer::attribute::MaterialAttribute3D& getMaterial() const { return maMaterial; }
     const basegfx::B3DPolyPolygon& getPolyPolygon() const { return maPolyPolygon; }
     bool getModulate() const { return mbModulate; }
