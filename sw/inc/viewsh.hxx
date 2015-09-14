@@ -585,6 +585,7 @@ public:
     void setOutputToWindow(bool bOutputToWindow);
     bool isOutputToWindow() const;
 
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 // manages global ShellPointer

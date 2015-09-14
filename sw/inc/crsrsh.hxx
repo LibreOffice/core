@@ -845,6 +845,8 @@ public:
        @return the textual description of the current selection
      */
     OUString GetCrsrDescr() const;
+
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 // Cursor Inlines:
