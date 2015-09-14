@@ -150,6 +150,12 @@ bool SwViewShell::isOutputToWindow() const
     return mbOutputToWindow;
 }
 
+void SwViewShell::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swViewShell"));
+    xmlTextWriterEndElement(pWriter);
+}
+
 static void
 lcl_PaintTransparentFormControls(SwViewShell & rShell, SwRect const& rRect)
 {

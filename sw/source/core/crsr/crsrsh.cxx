@@ -3310,6 +3310,20 @@ OUString SwCrsrShell::GetCrsrDescr() const
     return aResult;
 }
 
+void SwCrsrShell::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swCrsrShell"));
+
+    SwViewShell::dumpAsXml(pWriter);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("m_pCurCrsr"));
+    for (SwPaM& rPaM : m_pCurCrsr->GetRingContainer())
+        rPaM.dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
+
 static void lcl_FillRecognizerData( uno::Sequence< OUString >& rSmartTagTypes,
                              uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                              const SwWrongList& rSmartTagList, sal_Int32 nCurrent )
