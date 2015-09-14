@@ -75,11 +75,16 @@ SwNavigationConfig::SwNavigationConfig() :
                 {
                     case 0:
                     {
-                        sal_uInt32 nTmp;
+                        sal_Int32 nTmp;
                         if (pValues[nProp] >>= nTmp)
                         {
-                            if (nTmp > sal_uInt32(ContentTypeId::LAST)) {
-                                nTmp = sal_uInt32(ContentTypeId::UNKNOWN);
+                            if (nTmp < sal_Int32(ContentTypeId::UNKNOWN)
+                                || nTmp > sal_Int32(ContentTypeId::LAST))
+                            {
+                                SAL_WARN(
+                                    "sw",
+                                    "out-of-bounds ContentTypeId " << nTmp);
+                                nTmp = sal_Int32(ContentTypeId::UNKNOWN);
                             }
                             nRootType = static_cast<ContentTypeId>(nTmp);
                         }
@@ -117,7 +122,7 @@ void SwNavigationConfig::ImplCommit()
     {
         switch(nProp)
         {
-            case 0: pValues[nProp] <<= static_cast<sal_uInt32>(nRootType);     break;
+            case 0: pValues[nProp] <<= static_cast<sal_Int32>(nRootType);     break;
             case 1: pValues[nProp] <<= nSelectedPos;  break;
             case 2: pValues[nProp] <<= nOutlineLevel; break;
             case 3: pValues[nProp] <<= static_cast<sal_uInt16>(nRegionMode); break;

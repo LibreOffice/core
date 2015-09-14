@@ -1295,7 +1295,7 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
 
     const ContentTypeId nRootType = pNaviConfig->GetRootType();
-    if( nRootType <= ContentTypeId::LAST )
+    if( nRootType != ContentTypeId::UNKNOWN )
     {
         pNavi->aContentTree->SetRootType(nRootType);
         pNavi->aContentToolBox->CheckItem(FN_SHOW_ROOT);

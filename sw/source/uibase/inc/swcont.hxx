@@ -41,7 +41,7 @@ enum class ContentTypeId
     POSTIT         = 10,
     DRAWOBJECT     = 11,
     LAST           = DRAWOBJECT,
-    UNKNOWN        = USHRT_MAX
+    UNKNOWN        = -1
 };
 
 // strings for context menus
