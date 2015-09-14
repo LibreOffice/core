@@ -257,6 +257,16 @@ public:
     {
         return mpDoc->pClass->getCommandValues(mpDoc, pCommand);
     }
+
+    /**
+     * Create a new view for an existing document.
+     * By default a loaded document has 1 view.
+     * @return the ID of the new view.
+     */
+    int createView()
+    {
+        return mpDoc->pClass->createView(mpDoc);
+    }
 #endif // LOK_USE_UNSTABLE_API
 };
 

@@ -162,6 +162,9 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document:getStyles
     char* (*getCommandValues) (LibreOfficeKitDocument* pThis, const char* pCommand);
+
+    /// @see lok::Document::createView().
+    int (*createView) (LibreOfficeKitDocument* pThis);
 #endif // LOK_USE_UNSTABLE_API
 };
 
