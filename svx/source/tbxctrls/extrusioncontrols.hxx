@@ -58,8 +58,9 @@ private:
     const OUString msExtrusionDirection;
     const OUString msExtrusionProjection;
 
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK_TYPED( SelectValueSetHdl, ValueSet*, void );
+    void SelectHdl(void*);
 
     void implSetDirection( sal_Int32 nSkew, bool bEnabled = true );
     void implSetProjection( sal_Int32 nProjection, bool bEnabled = true );
@@ -104,7 +105,7 @@ private:
     const OUString msExtrusionDepth;
     const OUString msMetricUnit;
 
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectHdl, ToolbarMenu*, void );
 
     void    implFillStrings( FieldUnit eUnit );
     void    implSetDepth( double fDepth );
@@ -160,8 +161,9 @@ private:
     void    implSetIntensity( int nLevel, bool bEnabled );
     void    implSetDirection( int nDirection, bool bEnabled );
 
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK_TYPED( SelectValueSetHdl, ValueSet*, void );
+    void SelectHdl(void*);
 public:
     ExtrusionLightingWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window* pParentWindow );
     virtual ~ExtrusionLightingWindow();
@@ -205,7 +207,7 @@ private:
 
     const OUString msExtrusionSurface;
 
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectHdl, ToolbarMenu*, void );
 
     void    implSetSurface( int nSurface, bool bEnabled );
 

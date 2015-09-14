@@ -275,7 +275,7 @@ private:
 
     const OUString msFontworkAlignment;
 
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectHdl, ToolbarMenu*, void );
 
     void    implSetAlignment( int nAlignmentMode, bool bEnabled );
 };
@@ -331,7 +331,7 @@ void FontworkAlignmentWindow::statusChanged( const frame::FeatureStateEvent& Eve
     }
 }
 
-IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl)
+IMPL_LINK_NOARG_TYPED(FontworkAlignmentWindow, SelectHdl, ToolbarMenu*, void)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -347,8 +347,6 @@ IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl)
 
         implSetAlignment( nAlignment, true );
     }
-
-    return 0;
 }
 
 class FontworkAlignmentControl : public svt::PopupWindowController
@@ -446,7 +444,7 @@ private:
     const OUString msFontworkCharacterSpacing;
     const OUString msFontworkKernCharacterPairs;
 
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectHdl, ToolbarMenu*, void );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
     void    implSetKernCharacterPairs( bool bKernOnOff, bool bEnabled );
@@ -543,7 +541,7 @@ void FontworkCharacterSpacingWindow::statusChanged( const ::com::sun::star::fram
 
 
 
-IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl)
+IMPL_LINK_NOARG_TYPED(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -587,8 +585,6 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl)
 
         implSetCharacterSpacing( nCharacterSpacing, true );
     }
-
-    return 0;
 }
 
 class FontworkCharacterSpacingControl : public svt::PopupWindowController

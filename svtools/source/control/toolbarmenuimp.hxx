@@ -267,7 +267,7 @@ struct ToolbarMenu_Impl
 
     Size maSize;
 
-    Link<>          maSelectHdl;
+    Link<ToolbarMenu*,void>          maSelectHdl;
 
     ToolbarMenu_Impl( ToolbarMenu& rMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
     ~ToolbarMenu_Impl();

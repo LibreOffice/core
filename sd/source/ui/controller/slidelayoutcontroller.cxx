@@ -70,9 +70,9 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 protected:
-    DECL_LINK( SelectHdl, void * );
+    DECL_LINK_TYPED( SelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK_TYPED( SelectValueSetHdl, ValueSet*, void );
-
+    void SelectHdl(void*);
 private:
     SlideLayoutController& mrController;
     Reference< XFrame > mxFrame;
@@ -182,7 +182,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     SvtLanguageOptions aLanguageOptions;
     const bool bVerticalEnabled = aLanguageOptions.IsVerticalTextEnabled();
 
-    SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectHdl ) );
+    SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectToolbarMenuHdl ) );
 
     mpLayoutSet1 = createEmptyValueSetControl();
     mpLayoutSet1->SetSelectHdl( LINK( this, LayoutToolbarMenu, SelectValueSetHdl ) );
@@ -272,7 +272,12 @@ IMPL_LINK_TYPED( LayoutToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void
 {
     SelectHdl(pControl);
 }
-IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
+IMPL_LINK_TYPED( LayoutToolbarMenu, SelectToolbarMenuHdl, ToolbarMenu *, pControl, void )
+{
+    SelectHdl(pControl);
+}
+
+void LayoutToolbarMenu::SelectHdl(void* pControl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -304,8 +309,6 @@ IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
     }
 
     mrController.dispatchCommand( sCommandURL, aArgs );
-
-    return 0;
 }
 
 OUString SlideLayoutController_getImplementationName() throw (css::uno::RuntimeException)

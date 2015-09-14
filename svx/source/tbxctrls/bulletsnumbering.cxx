@@ -38,9 +38,9 @@ class NumberingPopup : public svtools::ToolbarMenu
     bool mbBulletItem;
     NumberingToolBoxControl& mrController;
     VclPtr<SvxNumValueSet> mpValueSet;
-    DECL_LINK( VSSelectHdl, void * );
+    DECL_LINK_TYPED( VSSelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK_TYPED( VSSelectValueSetHdl, ValueSet*, void );
-
+    void VSSelectHdl(void *);
 public:
     NumberingPopup( NumberingToolBoxControl& rController,
                     const css::uno::Reference< css::frame::XFrame >& rFrame,
@@ -124,7 +124,7 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
 
     SetOutputSizePixel( getMenuSize() );
     mpValueSet->SetSelectHdl( LINK( this, NumberingPopup, VSSelectValueSetHdl ) );
-    SetSelectHdl( LINK( this, NumberingPopup, VSSelectHdl ) );
+    SetSelectHdl( LINK( this, NumberingPopup, VSSelectToolbarMenuHdl ) );
 
     if ( mbBulletItem )
         AddStatusListener( ".uno:CurrentBulletListType" );
@@ -157,7 +157,12 @@ IMPL_LINK_TYPED( NumberingPopup, VSSelectValueSetHdl, ValueSet*, pControl, void 
 {
     VSSelectHdl(pControl);
 }
-IMPL_LINK( NumberingPopup, VSSelectHdl, void *, pControl )
+IMPL_LINK_TYPED( NumberingPopup, VSSelectToolbarMenuHdl, ToolbarMenu*, pControl, void )
+{
+    VSSelectHdl(pControl);
+}
+
+void NumberingPopup::VSSelectHdl(void* pControl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -193,8 +198,6 @@ IMPL_LINK( NumberingPopup, VSSelectHdl, void *, pControl )
         aArgs[0].Value <<= aPageName;
         mrController.dispatchCommand( ".uno:OutlineBullet", aArgs );
     }
-
-    return 0;
 }
 
 

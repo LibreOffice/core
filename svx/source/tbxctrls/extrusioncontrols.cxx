@@ -78,7 +78,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
         maImgDirection[i] = Image( SVX_RES( RID_SVXIMG_DIRECTION + i ) );
     }
 
-    SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
+    SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectToolbarMenuHdl ) );
     mpDirectionSet = createEmptyValueSetControl();
 
     mpDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectValueSetHdl ) );
@@ -206,7 +206,11 @@ IMPL_LINK_TYPED( ExtrusionDirectionWindow, SelectValueSetHdl, ValueSet*, pContro
 {
     SelectHdl(pControl);
 }
-IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
+IMPL_LINK_TYPED( ExtrusionDirectionWindow, SelectToolbarMenuHdl, ToolbarMenu*, pControl, void )
+{
+    SelectHdl(pControl);
+}
+void ExtrusionDirectionWindow::SelectHdl(void* pControl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -232,8 +236,6 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
             implSetProjection( nProjection );
         }
     }
-
-    return 0;
 }
 
 ExtrusionDirectionControl::ExtrusionDirectionControl(
@@ -430,7 +432,7 @@ void ExtrusionDepthWindow::statusChanged(
     }
 }
 
-IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
+IMPL_LINK_NOARG_TYPED(ExtrusionDepthWindow, SelectHdl, ToolbarMenu*, void)
 {
     int nSelected = getSelectedEntryId();
     if( nSelected != -1 )
@@ -474,7 +476,6 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
                 EndPopupMode();
         }
     }
-    return 0;
 }
 
 
@@ -569,7 +570,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::ToolboxController& rContro
         maImgLightingPreview[i] = Image(SVX_RES(RID_SVXIMG_LIGHT_PREVIEW + i));
     }
 
-    SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
+    SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectToolbarMenuHdl ) );
 
     mpLightingSet = createEmptyValueSetControl();
     mpLightingSet->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
@@ -707,7 +708,11 @@ IMPL_LINK_TYPED( ExtrusionLightingWindow, SelectValueSetHdl, ValueSet*, pControl
 {
     SelectHdl(pControl);
 }
-IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
+IMPL_LINK_TYPED( ExtrusionLightingWindow, SelectToolbarMenuHdl, ToolbarMenu*, pControl, void )
+{
+    SelectHdl(pControl);
+}
+void ExtrusionLightingWindow::SelectHdl(void* pControl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -747,8 +752,6 @@ IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
         }
 
     }
-
-    return 0;
 }
 
 
@@ -875,7 +878,7 @@ void ExtrusionSurfaceWindow::statusChanged(
 
 
 
-IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl)
+IMPL_LINK_NOARG_TYPED(ExtrusionSurfaceWindow, SelectHdl, ToolbarMenu*, void)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -891,8 +894,6 @@ IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl)
 
         implSetSurface( nSurface, true );
     }
-
-    return 0;
 }
 
 
