@@ -5222,7 +5222,7 @@ find_msms()
     my_msm_file=Microsoft_VC${VCVER}_CRT_x86.msm
     AC_MSG_CHECKING([for $my_msm_file])
     msmdir=
-    for ver in 12.0; do
+    for ver in 12.0 14.0; do
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             if test -e "$regvalue/$my_msm_file"; then
