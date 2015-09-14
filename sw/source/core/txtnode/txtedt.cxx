@@ -1569,7 +1569,7 @@ void SwTextFrm::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos 
     sal_Int32  nBegin = 0;
     sal_Int32  nEnd = pNode->GetText().getLength();
     sal_Int32  nLen;
-    bool bACWDirty = false, bAnyWrd = false;
+    bool bACWDirty = false;
 
     if( nBegin < nEnd )
     {
@@ -1588,7 +1588,6 @@ void SwTextFrm::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos 
                 {
                     if( rACW.GetMinWordLen() <= rWord.getLength() )
                         rACW.InsertWord( rWord, *pDoc );
-                    bAnyWrd = true;
                 }
                 else
                     bACWDirty = true;
@@ -1602,7 +1601,7 @@ void SwTextFrm::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos 
         }
     }
 
-    if( bAnyWrd && !bACWDirty )
+    if (!bACWDirty)
         pNode->SetAutoCompleteWordDirty( false );
 }
 
