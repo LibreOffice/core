@@ -138,7 +138,7 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "FillBitmapLogicalSize",         XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_WIDTH,       XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,       0 ),
     PLMAP( "FillBitmapSizeY",               XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY,     0 ),
     PLMAP( "FillBitmapLogicalSize",         XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_HEIGHT,      XML_SW_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY,       0 ),
-    PLMAP( "FillBitmapMode",                XML_NAMESPACE_STYLE,    XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,        0 ),
+    PLMAP( "FillBitmapMode",                XML_NAMESPACE_STYLE,    XML_REPEAT,                 XML_SW_TYPE_BITMAP_MODE|MID_FLAG_MULTI_PROPERTY,        CTF_PM_FILLBITMAPMODE ),
     PLMAP( "FillBitmapPositionOffsetX",     XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT_X, XML_TYPE_PERCENT,                                       0 ),
     PLMAP( "FillBitmapPositionOffsetY",     XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT_Y, XML_TYPE_PERCENT,                                       0 ),
     PLMAP( "FillBitmapRectanglePoint",      XML_NAMESPACE_DRAW,     XML_FILL_IMAGE_REF_POINT,   XML_SW_TYPE_BITMAP_REFPOINT,                            0 ),
