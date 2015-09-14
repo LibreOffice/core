@@ -34,6 +34,7 @@ protected:
     virtual bool UseContext( const rtl::Reference<OpenGLContext> &pContext ) SAL_OVERRIDE;
 
 public:
+    virtual void Init() SAL_OVERRIDE;
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
 
 

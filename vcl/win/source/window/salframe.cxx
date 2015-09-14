@@ -1048,7 +1048,7 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
             SalData* pSalData = GetSalData();
             if ( mpGraphics2->getDefPal() )
                 SelectPalette( mpGraphics2->getHDC(), mpGraphics2->getDefPal(), TRUE );
-            mpGraphics2->InitGraphics();
+            mpGraphics2->DeInitGraphics();
             SendMessageW( pSalData->mpFirstInstance->mhComWnd,
                              SAL_MSG_RELEASEDC,
                              (WPARAM)mhWnd,
@@ -1498,7 +1498,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     {
         if ( pThis->mpGraphics->getDefPal() )
             SelectPalette( pThis->mpGraphics->getHDC(), pThis->mpGraphics->getDefPal(), TRUE );
-        pThis->mpGraphics->InitGraphics();
+        pThis->mpGraphics->DeInitGraphics();
         ReleaseDC( pThis->mhWnd, pThis->mpGraphics->getHDC() );
     }
 
