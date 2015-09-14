@@ -860,11 +860,15 @@ void getCorrectExportOrder(css::uno::Reference<css::container::XNameContainer> x
 
 }
 
+#if VBA_USE_ORIGINAL_WM_STREAM || VBA_USE_ORIGINAL_DIR_STREAM \
+    || VBA_USE_ORIGINAL_PROJECT_STREAM || VBA_USE_ORIGINAL_VBA_PROJECT \
+    || VBA_USE_ORIGINAL_DIR_STREAM
 void addFileStreamToSotStream(const OUString& rPath, SotStorageStream* pStream)
 {
     SvFileStream aFileStream(rPath, STREAM_READWRITE);
     pStream->WriteStream(aFileStream);
 }
+#endif
 
 void VbaExport::exportVBA(SotStorage* pRootStorage)
 {
