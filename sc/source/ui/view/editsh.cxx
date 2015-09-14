@@ -21,6 +21,7 @@
 #include <comphelper/string.hxx>
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
+#include <i18nutil/unicode.hxx>
 
 #include <svx/clipfmtitem.hxx>
 #include <svx/svxdlg.hxx>
@@ -331,6 +332,46 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 bSetModified = false;
             }
             return;
+        case SID_UNICODE_NOTATION_TOGGLE:
+            {
+                EditView* pActiveView = pHdl ? pHdl->GetActiveView() : pEditView;
+                if( pActiveView )
+                {
+                    OUString sInput = pEngine->GetText();
+                    ESelection aSel( pActiveView->GetSelection() );
+                    if( aSel.HasRange() )
+                        sInput = pActiveView->GetSelected();
+
+                    if( aSel.nStartPos > aSel.nEndPos )
+                        aSel.nEndPos = aSel.nStartPos;
+
+                    //calculate a valid end-position by reading logical characters
+                    sal_Int32 nUtf16Pos=0;
+                    while( (nUtf16Pos < sInput.getLength()) && (nUtf16Pos < aSel.nEndPos) )
+                    {
+                        sInput.iterateCodePoints(&nUtf16Pos);
+                        if( nUtf16Pos > aSel.nEndPos )
+                            aSel.nEndPos = nUtf16Pos;
+                   }
+
+                    ToggleUnicodeCodepoint aToggle = ToggleUnicodeCodepoint();
+                    while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
+                        --nUtf16Pos;
+                    OUString sReplacement = aToggle.ReplacementString();
+                    if( !sReplacement.isEmpty() )
+                    {
+                        aSel.nStartPos = aSel.nEndPos - aToggle.StringToReplace().getLength();
+                        pTableView->SetSelection( aSel );
+                        pTableView->InsertText(sReplacement, true);
+                        if( pTopView )
+                        {
+                            pTopView->SetSelection( aSel );
+                            pTopView->InsertText(sReplacement, true);
+                        }
+                    }
+                }
+            }
+            break;
 
         case SID_CHARMAP:
             {

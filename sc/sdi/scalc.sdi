@@ -8903,6 +8903,30 @@ SfxVoidItem ConvertFormulaToValue SID_CONVERT_FORMULA_TO_VALUE
     GroupId = GID_OPTIONS;
 ]
 
+SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
 SfxVoidItem ShowDetail SID_OUTLINE_SHOW
 ()
 [
