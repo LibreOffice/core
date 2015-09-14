@@ -28,6 +28,7 @@
 #include <svtools/javacontext.hxx>
 #include <svl/itempool.hxx>
 #include <tools/urlobj.hxx>
+#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -37,8 +38,10 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
+#include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/ItemState.hpp>
+#include <com/sun/star/frame/status/Template.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
@@ -1059,22 +1062,50 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
     if (!objSh || !objSh->isTiledRendering())
         return;
 
+    OUStringBuffer aBuffer;
+    aBuffer.append(aEvent.FeatureURL.Complete);
+    aBuffer.append("=");
+
     if (aEvent.FeatureURL.Path == "Bold" ||
         aEvent.FeatureURL.Path == "Italic" ||
         aEvent.FeatureURL.Path == "Underline" ||
-        aEvent.FeatureURL.Path == "Strikeout")
+        aEvent.FeatureURL.Path == "Strikeout" ||
+        aEvent.FeatureURL.Path == "DefaultBullet" ||
+        aEvent.FeatureURL.Path == "DefaultNumbering" ||
+        aEvent.FeatureURL.Path == "LeftPara" ||
+        aEvent.FeatureURL.Path == "CenterPara" ||
+        aEvent.FeatureURL.Path == "RightPara" ||
+        aEvent.FeatureURL.Path == "JustifyPara")
     {
-
-        OUStringBuffer aBuffer;
-        aBuffer.append(aEvent.FeatureURL.Complete);
-        aBuffer.append("=");
         bool bTemp = false;
         aEvent.State >>= bTemp;
         aBuffer.append(bTemp);
 
-        OUString payload = aBuffer.makeStringAndClear();
-        objSh->libreOfficeKitCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
     }
+    else if (aEvent.FeatureURL.Path == "CharFontName")
+    {
+        ::com::sun::star::awt::FontDescriptor aFontDesc;
+        aEvent.State >>= aFontDesc;
+        aBuffer.append(aFontDesc.Name);
+    }
+    else if (aEvent.FeatureURL.Path == "FontHeight")
+    {
+        ::com::sun::star::frame::status::FontHeight aFontHeight;
+        aEvent.State >>= aFontHeight;
+        aBuffer.append(aFontHeight.Height);
+    }
+    else if (aEvent.FeatureURL.Path == "StyleApply")
+    {
+        ::com::sun::star::frame::status::Template aTemplate;
+        aEvent.State >>= aTemplate;
+        aBuffer.append(aTemplate.StyleName);
+    }
+    else
+    {
+        return;
+    }
+    OUString payload = aBuffer.makeStringAndClear();
+    objSh->libreOfficeKitCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
