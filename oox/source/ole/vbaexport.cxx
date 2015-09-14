@@ -760,8 +760,15 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
 
     // section 2.3.1.18 HostExtenders
     exportString(rStrm, "[Host Extender Info]\r\n"
-                        "&H00000001={3832D640-CF90-11CF-8E43-00A0C911005A};VBE;&H00000000\r\n"
+                        "&H00000001={3832D640-CF90-11CF-8E43-00A0C911005A};VBE;&H00000000\r\n\r\n"
     );
+
+    // section 2.3.1.19 ProjectWorkspace
+    exportString(rStrm, "[Workspace]\r\n");
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        exportString(rStrm, aElementNames[i] + "=0, 0, 0, 0, C\r\n");
+    }
 }
 
 // section 2.3.3.1 NAMEMAP
