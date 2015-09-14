@@ -180,6 +180,7 @@ $(share_WORKDIR)/%/create_tree.sh: $(share_SRCDIR)/share/create_tree.sh $(share_
 	echo "ICON_SOURCE_DIR=$(SRCDIR)/sysui/desktop/icons" >> $@
 	echo "APPDATA_SOURCE_DIR=$(SRCDIR)/sysui/desktop/appstream-appdata" >> $@
 	echo "PRODUCTVERSION=$(PRODUCTVERSION)" >> $@
+	echo "INTROSPECTION_SCANNER=$(INTROSPECTION_SCANNER)" >> $@
 	cat $< >> $@
 	chmod 774 $@
 
