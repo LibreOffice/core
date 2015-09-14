@@ -145,7 +145,6 @@ public:
     std::vector< PropertyValue >                                maUIProperties;
     std::vector< bool >                                         maUIPropertyEnabled;
     PropertyToIndexMap                                          maPropertyToIndex;
-    Link<>                                                      maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
     ChoiceDisableMap                                            maChoiceDisableMap;
     bool                                                    mbFirstPage;
@@ -1651,11 +1650,6 @@ OUString PrinterController::makeEnabled( const OUString& i_rProperty )
     }
 
     return aDependency;
-}
-
-void PrinterController::setOptionChangeHdl( const Link<>& i_rHdl )
-{
-    mpImplData->maOptionChangeHdl = i_rHdl;
 }
 
 void PrinterController::createProgressDialog()

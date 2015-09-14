@@ -697,9 +697,6 @@ PrintDialog::PrintDialog( vcl::Window* i_pParent, const std::shared_ptr<PrinterC
     // setup optional UI options set by application
     setupOptionalUI();
 
-    // set change handler for UI options
-    maPController->setOptionChangeHdl( LINK( this, PrintDialog, UIOptionsChanged ) );
-
     // remove layout page if unwanted
     if (!mbShowLayoutPage)
         mpTabCtrl->RemovePage(mpTabCtrl->GetPageId(2));
@@ -1672,12 +1669,6 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
         maPController->setValue( OUString( "Collate"  ),
                                makeAny( isCollate() ) );
     }
-    return 0;
-}
-
-IMPL_LINK_NOARG(PrintDialog, UIOptionsChanged)
-{
-    checkOptionalControlDependencies();
     return 0;
 }
 

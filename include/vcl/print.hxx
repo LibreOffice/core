@@ -534,7 +534,6 @@ public:
     VCL_PLUGIN_PUBLIC PageSize getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
     VCL_PLUGIN_PUBLIC void printFilteredPage( int i_nPage );
     SAL_DLLPRIVATE void setPrinter( const VclPtr<Printer>& );
-    SAL_DLLPRIVATE void setOptionChangeHdl( const Link<>& );
     VCL_PLUGIN_PUBLIC void createProgressDialog();
     VCL_PLUGIN_PUBLIC bool isProgressCanceled() const;
     SAL_DLLPRIVATE void setMultipage( const MultiPageSetup& );
