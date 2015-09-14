@@ -513,16 +513,19 @@ int main( int argc, char* argv[] )
 
     GtkToolItem* pZoomIn = gtk_tool_button_new( NULL, NULL );
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoomIn), "zoom-in-symbolic");
+    gtk_tool_item_set_tooltip_text(pZoomIn, "Zoom In");
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomIn, 0);
     g_signal_connect( G_OBJECT(pZoomIn), "clicked", G_CALLBACK(changeZoom), NULL );
 
     GtkToolItem* pZoom1 = gtk_tool_button_new( NULL, NULL );
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoom1), "zoom-original-symbolic");
+    gtk_tool_item_set_tooltip_text(pZoom1, "Normal Size");
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoom1, -1);
     g_signal_connect( G_OBJECT(pZoom1), "clicked", G_CALLBACK(changeZoom), NULL );
 
     GtkToolItem* pZoomOut = gtk_tool_button_new( NULL, NULL );
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoomOut), "zoom-out-symbolic");
+    gtk_tool_item_set_tooltip_text(pZoomOut, "Zoom Out");
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomOut, -1);
     g_signal_connect( G_OBJECT(pZoomOut), "clicked", G_CALLBACK(changeZoom), NULL );
 
@@ -549,17 +552,20 @@ int main( int argc, char* argv[] )
     // Cut, copy & paste.
     GtkToolItem* pCopyButton = gtk_tool_button_new( NULL, NULL);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pCopyButton), "edit-copy-symbolic");
+    gtk_tool_item_set_tooltip_text(pCopyButton, "Copy");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pCopyButton, -1);
     g_signal_connect(G_OBJECT(pCopyButton), "clicked", G_CALLBACK(doCopy), NULL);
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
 
     pEnableEditing = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pEnableEditing), "insert-text-symbolic");
+    gtk_tool_item_set_tooltip_text(pEnableEditing, "Edit");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pEnableEditing, -1);
     g_signal_connect(G_OBJECT(pEnableEditing), "toggled", G_CALLBACK(toggleEditing), NULL);
 
     GtkToolItem* pFindButton = gtk_tool_button_new( NULL, NULL);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindButton), "edit-find-symbolic");
+    gtk_tool_item_set_tooltip_text(pFindButton, "Find");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pFindButton, -1);
     g_signal_connect(G_OBJECT(pFindButton), "clicked", G_CALLBACK(toggleFindbar), NULL);
 
@@ -573,24 +579,28 @@ int main( int argc, char* argv[] )
 
     pBold = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pBold), "format-text-bold-symbolic");
+    gtk_tool_item_set_tooltip_text(pBold, "Bold");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pBold, -1);
     g_signal_connect(G_OBJECT(pBold), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pBold, ".uno:Bold");
 
     pItalic = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pItalic), "format-text-italic-symbolic");
+    gtk_tool_item_set_tooltip_text(pItalic, "Italic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pItalic, -1);
     g_signal_connect(G_OBJECT(pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pItalic, ".uno:Italic");
 
     pUnderline = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pUnderline), "format-text-underline-symbolic");
+    gtk_tool_item_set_tooltip_text(pUnderline, "Underline");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pUnderline, -1);
     g_signal_connect(G_OBJECT(pUnderline), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pUnderline, ".uno:Underline");
 
     pStrikethrough = gtk_toggle_tool_button_new ();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pStrikethrough), "format-text-strikethrough-symbolic");
+    gtk_tool_item_set_tooltip_text(pStrikethrough, "Strikethrough");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pStrikethrough, -1);
     g_signal_connect(G_OBJECT(pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(pStrikethrough, ".uno:Strikeout");
