@@ -77,7 +77,12 @@ SwNavigationConfig::SwNavigationConfig() :
                     {
                         sal_uInt32 nTmp;
                         if (pValues[nProp] >>= nTmp)
+                        {
+                            if (nTmp > sal_uInt32(ContentTypeId::LAST)) {
+                                nTmp = sal_uInt32(ContentTypeId::UNKNOWN);
+                            }
                             nRootType = static_cast<ContentTypeId>(nTmp);
+                        }
                         break;
                     }
                     case 1: pValues[nProp] >>= nSelectedPos;   break;
