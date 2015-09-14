@@ -14,6 +14,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <test/unoapi_test.hxx>
 
 #include "../../inc/lib/init.hxx"
@@ -50,6 +51,7 @@ public:
     void runAllTests();
     void testGetStyles();
     void testGetFonts();
+    void testCreateView();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(runAllTests);
@@ -83,6 +85,7 @@ void DesktopLOKTest::runAllTests()
 {
     testGetStyles();
     testGetFonts();
+    testCreateView();
 }
 
 void DesktopLOKTest::testGetStyles()
@@ -131,6 +134,16 @@ void DesktopLOKTest::testGetFonts()
         // check that we have font sizes available for each font
         CPPUNIT_ASSERT( rPair.second.size() > 0);
     }
+    closeDoc();
+}
+
+void DesktopLOKTest::testCreateView()
+{
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    CPPUNIT_ASSERT_EQUAL(1, SfxLokHelper::getViews());
+
+    pDocument->m_pDocumentClass->createView(pDocument);
+    CPPUNIT_ASSERT_EQUAL(2, SfxLokHelper::getViews());
     closeDoc();
 }
 
