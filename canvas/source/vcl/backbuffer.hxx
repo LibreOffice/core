@@ -25,8 +25,7 @@
 #include <canvas/vclwrapper.hxx>
 #include "outdevprovider.hxx"
 
-#include <boost/shared_ptr.hpp>
-
+#include <memory>
 
 namespace vclcanvas
 {
@@ -54,7 +53,7 @@ namespace vclcanvas
         VclPtr< VirtualDevice > maVDev;
     };
 
-    typedef ::boost::shared_ptr< BackBuffer > BackBufferSharedPtr;
+    typedef std::shared_ptr< BackBuffer > BackBufferSharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_SOURCE_VCL_BACKBUFFER_HXX

@@ -22,10 +22,9 @@
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
-
-#include <boost/shared_ptr.hpp>
 #include <basegfx/vector/b2isize.hxx>
 #include <cppcanvas/canvas.hxx>
+#include <memory>
 
 
 /* Definition of BitmapCanvas */
@@ -35,7 +34,7 @@ namespace cppcanvas
     class BitmapCanvas;
 
     // forward declaration, since cloneBitmapCanvas() also references BitmapCanvas
-    typedef ::boost::shared_ptr< BitmapCanvas > BitmapCanvasSharedPtr;
+    typedef std::shared_ptr< BitmapCanvas > BitmapCanvasSharedPtr;
 
     /** BitmapCanvas interface
      */

@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <cassert>
+#include <algorithm>
 #include <unordered_map>
 
 #include <osl/diagnose.h>

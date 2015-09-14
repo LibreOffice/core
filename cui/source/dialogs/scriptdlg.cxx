@@ -62,7 +62,6 @@
 #include <tools/urlobj.hxx>
 #include <vector>
 #include <algorithm>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace css::uno;
@@ -72,7 +71,7 @@ using namespace css::document;
 
 void ShowErrorDialog( const Any& aException )
 {
-    boost::scoped_ptr<SvxScriptErrorDialog> pDlg(new SvxScriptErrorDialog( NULL, aException ));
+    std::unique_ptr<SvxScriptErrorDialog> pDlg(new SvxScriptErrorDialog( NULL, aException ));
     pDlg->Execute();
 }
 

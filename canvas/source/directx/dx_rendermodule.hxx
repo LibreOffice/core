@@ -23,7 +23,7 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 #include <canvas/rendering/irendermodule.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "dx_winstuff.hxx"
 
 namespace vcl { class Window; }
@@ -69,7 +69,7 @@ namespace dxcanvas
         virtual HWND getHWND() const = 0;
     };
 
-    typedef ::boost::shared_ptr< IDXRenderModule > IDXRenderModuleSharedPtr;
+    typedef std::shared_ptr< IDXRenderModule > IDXRenderModuleSharedPtr;
 
 
     /** Factory method, to create an IRenderModule instance for the

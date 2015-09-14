@@ -32,7 +32,6 @@
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
 #include <vcl/builderfactory.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::ucbhelper;
 
@@ -183,7 +182,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetTopFrame() : 0;
         if ( pFrame )
         {
-            boost::scoped_ptr<TargetList> pList(new TargetList);
+            std::unique_ptr<TargetList> pList(new TargetList);
             pFrame->GetTargetList(*pList);
             if( !pList->empty() )
             {

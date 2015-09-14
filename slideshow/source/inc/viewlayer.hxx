@@ -57,14 +57,14 @@ namespace slideshow
                 @return true, if this layer displays on the given
                 view.
             */
-            virtual bool isOnView(boost::shared_ptr<View> const& rView) const = 0;
+            virtual bool isOnView(std::shared_ptr<View> const& rView) const = 0;
 
             /** Get the associated canvas of this layer.
 
                 The canvas returned by this method must not change, as
                 long as this object is alive.
             */
-            virtual boost::shared_ptr< cppcanvas::Canvas > getCanvas() const = 0;
+            virtual std::shared_ptr< cppcanvas::Canvas > getCanvas() const = 0;
 
             /** Clear the clipped view layer area
 
@@ -99,7 +99,7 @@ namespace slideshow
                 @return the sprite, or NULL on failure (or if this
                 canvas does not support sprites).
             */
-            virtual boost::shared_ptr< cppcanvas::CustomSprite >
+            virtual std::shared_ptr< cppcanvas::CustomSprite >
             createSprite( const basegfx::B2DVector& rSpriteSizePixel,
                           double                    nPriority ) const = 0;
 
@@ -163,7 +163,7 @@ namespace slideshow
 
         };
 
-        typedef boost::shared_ptr< ViewLayer > ViewLayerSharedPtr;
+        typedef std::shared_ptr< ViewLayer > ViewLayerSharedPtr;
     }
 }
 

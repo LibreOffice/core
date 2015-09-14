@@ -79,8 +79,8 @@ namespace slideshow
             virtual void setCursorShape( sal_Int16 nPointerShape ) = 0;
         };
 
-        typedef ::boost::shared_ptr< View >     ViewSharedPtr;
-        typedef ::std::vector< ViewSharedPtr >  ViewVector;
+        typedef std::shared_ptr< View >     ViewSharedPtr;
+        typedef std::vector< ViewSharedPtr >  ViewVector;
     }
 }
 

@@ -21,11 +21,9 @@
 #define INCLUDED_CPPCANVAS_CANVAS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-
-#include <boost/shared_ptr.hpp>
 #include <cppcanvas/font.hxx>
 #include <cppcanvas/color.hxx>
-
+#include <memory>
 
 namespace basegfx
 {
@@ -48,10 +46,10 @@ namespace cppcanvas
     class Canvas;
 
     // forward declaration, since tools::PolyPolygon also references Canvas
-    typedef ::boost::shared_ptr< PolyPolygon > PolyPolygonSharedPtr;
+    typedef std::shared_ptr< PolyPolygon > PolyPolygonSharedPtr;
 
     // forward declaration, since cloneCanvas() also references Canvas
-    typedef ::boost::shared_ptr< Canvas > CanvasSharedPtr;
+    typedef std::shared_ptr< Canvas > CanvasSharedPtr;
 
     /** Canvas interface
      */

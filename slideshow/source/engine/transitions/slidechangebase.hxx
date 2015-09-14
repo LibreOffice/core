@@ -98,9 +98,9 @@ protected:
         /// The view this entry is for
         UnoViewSharedPtr                              mpView;
         /// outgoing slide sprite
-        boost::shared_ptr<cppcanvas::CustomSprite>    mpOutSprite;
+        std::shared_ptr<cppcanvas::CustomSprite>    mpOutSprite;
         /// incoming slide sprite
-        boost::shared_ptr<cppcanvas::CustomSprite>    mpInSprite;
+        std::shared_ptr<cppcanvas::CustomSprite>    mpInSprite;
         /// outgoing slide bitmap
         mutable SlideBitmapSharedPtr                  mpLeavingBitmap;
         /// incoming slide bitmap
@@ -124,7 +124,7 @@ protected:
     ::basegfx::B2ISize getEnteringSlideSizePixel( const UnoViewSharedPtr& pView ) const;
 
     static void renderBitmap( SlideBitmapSharedPtr const&                 pSlideBitmap,
-                       boost::shared_ptr<cppcanvas::Canvas> const& pCanvas );
+                       std::shared_ptr<cppcanvas::Canvas> const& pCanvas );
 
     /** Called on derived classes to perform actions before first run.
 
@@ -150,9 +150,9 @@ protected:
         Current parameter value
     */
     virtual void performIn(
-        const boost::shared_ptr<cppcanvas::CustomSprite>&   rSprite,
+        const std::shared_ptr<cppcanvas::CustomSprite>&   rSprite,
         const ViewEntry&                                    rViewEntry,
-        const boost::shared_ptr<cppcanvas::Canvas>&         rDestinationCanvas,
+        const std::shared_ptr<cppcanvas::Canvas>&         rDestinationCanvas,
         double                                              t );
 
     /** Called on derived classes to implement actual slide change.
@@ -167,16 +167,16 @@ protected:
         Current parameter value
     */
     virtual void performOut(
-        const boost::shared_ptr<cppcanvas::CustomSprite>& rSprite,
+        const std::shared_ptr<cppcanvas::CustomSprite>& rSprite,
         const ViewEntry&                                  rViewEntry,
-        const boost::shared_ptr<cppcanvas::Canvas>&       rDestinationCanvas,
+        const std::shared_ptr<cppcanvas::Canvas>&       rDestinationCanvas,
         double                                            t );
 
     ScreenUpdater& getScreenUpdater() const { return mrScreenUpdater; }
 
 private:
 
-    boost::shared_ptr<cppcanvas::CustomSprite> createSprite(
+    std::shared_ptr<cppcanvas::CustomSprite> createSprite(
         UnoViewSharedPtr const &   pView,
         ::basegfx::B2DSize const & rSpriteSize,
         double                     nPrio ) const;

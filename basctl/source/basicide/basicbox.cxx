@@ -396,7 +396,7 @@ void LanguageBox::FillBox()
     m_sCurrentText = GetSelectEntry();
     ClearBox();
 
-    boost::shared_ptr<LocalizationMgr> pCurMgr(GetShell()->GetCurLocalizationMgr());
+    std::shared_ptr<LocalizationMgr> pCurMgr(GetShell()->GetCurLocalizationMgr());
     if ( pCurMgr->isLibraryLocalized() )
     {
         Enable();

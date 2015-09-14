@@ -46,7 +46,6 @@
 #include <dialmgr.hxx>
 #include "sfx2/opengrf.hxx"
 #include "paragrph.hrc"
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -319,7 +318,7 @@ VclPtr<SfxTabPage> SvxBitmapTabPage::Create( vcl::Window* pWindow,
 
 IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
 {
-    boost::scoped_ptr<GraphicObject> pGraphicObject;
+    std::unique_ptr<GraphicObject> pGraphicObject;
     int nPos(m_pLbBitmaps->GetSelectEntryPos());
 
     if(LISTBOX_ENTRY_NOTFOUND != nPos)
@@ -507,7 +506,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickAddHdl_Impl, Button*, void)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialog creation failed!");
-    boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+    std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
     ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError(1);
@@ -615,7 +614,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickImportHdl_Impl, Button*, void)
             INetURLObject   aURL( aDlg.GetPath() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialog creation failed!");
-            boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aURL.GetName().getToken( 0, '.' ), aDesc ));
+            std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aURL.GetName().getToken( 0, '.' ), aDesc ));
             DBG_ASSERT(pDlg, "Dialog creation failed!");
             nError = 1;
 
@@ -686,7 +685,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickModifyHdl_Impl, Button*, void)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+        std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = m_pBitmapList->Count();

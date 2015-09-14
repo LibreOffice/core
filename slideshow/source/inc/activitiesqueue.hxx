@@ -52,7 +52,7 @@ namespace slideshow
                 adjusting and holding global presentation time.
              */
             ActivitiesQueue(
-                const ::boost::shared_ptr< ::canvas::tools::ElapsedTime >&  pPresTimer );
+                const std::shared_ptr< ::canvas::tools::ElapsedTime >&  pPresTimer );
             ~ActivitiesQueue();
 
             /** Add the given activity to the queue.
@@ -83,11 +83,11 @@ namespace slideshow
 
             /** Gets the queue's timer object.
              */
-            ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const &
+            std::shared_ptr< ::canvas::tools::ElapsedTime > const &
             getTimer() const { return mpTimer; }
 
         private:
-            ::boost::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
+            std::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
 
             typedef ::std::deque< ActivitySharedPtr > ActivityQueue;
 

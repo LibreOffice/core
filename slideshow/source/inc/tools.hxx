@@ -281,13 +281,13 @@ namespace slideshow
 
         /** Fill a plain rectangle on the given canvas with the given color
          */
-        void fillRect( const boost::shared_ptr< cppcanvas::Canvas >& rCanvas,
+        void fillRect( const std::shared_ptr< cppcanvas::Canvas >& rCanvas,
                        const basegfx::B2DRange&                      rRect,
                        cppcanvas::Color::IntSRGBA                    aFillColor );
 
         /** Init canvas with default background (white)
          */
-        void initSlideBackground( const boost::shared_ptr< cppcanvas::Canvas >& rCanvas,
+        void initSlideBackground( const std::shared_ptr< cppcanvas::Canvas >& rCanvas,
                                   const basegfx::B2IVector&                     rSize );
 
         /// Gets a random ordinal [0,n)
@@ -389,7 +389,7 @@ namespace slideshow
 */
 
         basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector&         rSize,
-                                              const boost::shared_ptr<UnoView>& pView );
+                                              const std::shared_ptr<UnoView>& pView );
     }
 
     // TODO(Q1): this could possibly be implemented with a somewhat

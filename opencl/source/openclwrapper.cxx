@@ -136,11 +136,11 @@ OString createFileName(cl_device_id deviceId, const char* clFileName)
         aHash + ".bin";
 }
 
-std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileName, cl_context context )
+std::vector<std::shared_ptr<osl::File> > binaryGenerated( const char * clFileName, cl_context context )
 {
     size_t numDevices=0;
 
-    std::vector<boost::shared_ptr<osl::File> > aGeneratedFiles;
+    std::vector<std::shared_ptr<osl::File> > aGeneratedFiles;
     cl_int clStatus = clGetContextInfo( context, CL_CONTEXT_DEVICES,
             0, NULL, &numDevices );
     numDevices /= sizeof(numDevices);
@@ -164,7 +164,7 @@ std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileN
             osl::File* pNewFile = new osl::File(rtl::OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
             if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
             {
-                aGeneratedFiles.push_back(boost::shared_ptr<osl::File>(pNewFile));
+                aGeneratedFiles.push_back(std::shared_ptr<osl::File>(pNewFile));
                 SAL_INFO("opencl.file", "Opening binary file '" << fileName << "' for reading: success");
             }
             else
@@ -397,7 +397,7 @@ bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char
     numDevices /= sizeof(numDevices);
     CHECK_OPENCL( clStatus, "clGetContextInfo" );
 
-    std::vector<boost::shared_ptr<osl::File> > aGeneratedFiles = binaryGenerated(
+    std::vector<std::shared_ptr<osl::File> > aGeneratedFiles = binaryGenerated(
             filename, gpuInfo->mpContext );
 
     if (aGeneratedFiles.size() == numDevices)

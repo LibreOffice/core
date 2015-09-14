@@ -29,8 +29,6 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 
-#include <boost/shared_ptr.hpp>
-
 #include "jobqueue.hxx"
 
 
@@ -80,7 +78,7 @@ namespace cppu_threadpool {
     typedef ::std::list < struct ::cppu_threadpool::WaitingThread * > WaitingThreadList;
 
     class DisposedCallerAdmin;
-    typedef boost::shared_ptr<DisposedCallerAdmin> DisposedCallerAdminHolder;
+    typedef std::shared_ptr<DisposedCallerAdmin> DisposedCallerAdminHolder;
 
     class DisposedCallerAdmin
     {

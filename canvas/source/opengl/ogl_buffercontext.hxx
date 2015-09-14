@@ -13,8 +13,7 @@
 #include <GL/glew.h>
 
 #include <sal/config.h>
-#include <boost/shared_ptr.hpp>
-
+#include <memory>
 
 namespace oglcanvas
 {
@@ -31,7 +30,7 @@ namespace oglcanvas
         virtual GLuint getTextureId() = 0;
     };
 
-    typedef ::boost::shared_ptr<IBufferContext> IBufferContextSharedPtr;
+    typedef std::shared_ptr<IBufferContext> IBufferContextSharedPtr;
 }
 
 #endif

@@ -25,7 +25,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 class SfxListener;
@@ -67,7 +67,7 @@ namespace basctl
     {
     private:
         class Impl;
-        boost::shared_ptr<Impl> m_pImpl;
+        std::shared_ptr<Impl> m_pImpl;
 
     private:
         /** creates a ScriptDocument instance which operates on the application-wide

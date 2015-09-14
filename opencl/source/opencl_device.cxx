@@ -21,9 +21,8 @@
 #include <float.h>
 #include <iostream>
 #include <sstream>
+#include <memory>
 #include <vector>
-
-#include <boost/scoped_ptr.hpp>
 
 #include <comphelper/random.hxx>
 #include <opencl/openclconfig.hxx>
@@ -517,7 +516,7 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
             }
 
             /* Populate input data for micro-benchmark */
-            boost::scoped_ptr<LibreOfficeDeviceEvaluationIO> testData(new LibreOfficeDeviceEvaluationIO);
+            std::unique_ptr<LibreOfficeDeviceEvaluationIO> testData(new LibreOfficeDeviceEvaluationIO);
             testData->inputSize  = INPUTSIZE;
             testData->outputSize = OUTPUTSIZE;
             testData->input0.resize(testData->inputSize);

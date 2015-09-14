@@ -20,7 +20,6 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_VLC_VLCFRAMEGRABBER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_VLC_VLCFRAMEGRABBER_HXX
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase.hxx>
 #include "vlccommon.hxx"

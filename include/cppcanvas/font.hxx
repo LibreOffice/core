@@ -21,9 +21,7 @@
 #define INCLUDED_CPPCANVAS_FONT_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-
-#include <boost/shared_ptr.hpp>
-
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
@@ -41,7 +39,7 @@ namespace cppcanvas
         virtual ~Font() {}
     };
 
-    typedef ::boost::shared_ptr< ::cppcanvas::Font > FontSharedPtr;
+    typedef std::shared_ptr< ::cppcanvas::Font > FontSharedPtr;
 }
 
 #endif // INCLUDED_CPPCANVAS_FONT_HXX

@@ -32,8 +32,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <svx/svxdlg.hxx>
 #include <helpid.hrc>
 #include <dialmgr.hxx>
@@ -253,9 +251,9 @@ private:
     };
 
     // vChapters -- groups (group headers)
-    std::vector<boost::shared_ptr<Chapter> > vChapters;
+    std::vector<std::shared_ptr<Chapter> > vChapters;
     // vEntries -- color options
-    std::vector<boost::shared_ptr<Entry> > vEntries;
+    std::vector<std::shared_ptr<Entry> > vEntries;
 
     // module options
     SvtModuleOptions aModuleOptions;
@@ -551,7 +549,7 @@ void ColorConfigWindow_Impl::CreateEntries()
     for (unsigned i = 0; i != nGroupCount; ++i)
     {
         aModulesInstalled[i] = IsGroupVisible(vGroupInfo[i].eGroup);
-        vChapters.push_back(boost::shared_ptr<Chapter>(
+        vChapters.push_back(std::shared_ptr<Chapter>(
             new Chapter(get<FixedText>(vGroupInfo[i].pGroup), aModulesInstalled[i])));
     }
 
@@ -577,7 +575,7 @@ void ColorConfigWindow_Impl::CreateEntries()
     vEntries.reserve(ColorConfigEntryCount);
     for (unsigned i = 0; i < SAL_N_ELEMENTS(vEntryInfo); ++i)
     {
-        vEntries.push_back(boost::shared_ptr<Entry>(new Entry(*this, i, nCheckBoxLabelOffset,
+        vEntries.push_back(std::shared_ptr<Entry>(new Entry(*this, i, nCheckBoxLabelOffset,
             aModulesInstalled[vEntryInfo[i].eGroup])));
     }
 
@@ -589,7 +587,7 @@ void ColorConfigWindow_Impl::CreateEntries()
         for (unsigned j = 0; j != nExtGroupCount; ++j)
         {
             OUString const sComponentName = aExtConfig.GetComponentName(j);
-            vChapters.push_back(boost::shared_ptr<Chapter>(new Chapter(
+            vChapters.push_back(std::shared_ptr<Chapter>(new Chapter(
                 m_pGrid, nLineNum,
                 aExtConfig.GetComponentDisplayName(sComponentName)
             )));
@@ -599,7 +597,7 @@ void ColorConfigWindow_Impl::CreateEntries()
             {
                 ExtendedColorConfigValue const aColorEntry =
                     aExtConfig.GetComponentColorConfigValue(sComponentName, i);
-                vEntries.push_back(boost::shared_ptr<Entry>( new Entry (
+                vEntries.push_back(std::shared_ptr<Entry>( new Entry (
                     m_pGrid, nLineNum, aColorEntry, nCheckBoxLabelOffset
                 )));
                 ++nLineNum;
@@ -1194,7 +1192,7 @@ IMPL_LINK_TYPED(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, vo
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        boost::scoped_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog( pButton,
+        std::unique_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog( pButton,
                             sName, CUI_RES(RID_SVXSTR_COLOR_CONFIG_SAVE2) ));
         DBG_ASSERT(aNameDlg, "Dialog creation failed!");
         aNameDlg->SetCheckNameHdl( LINK(this, SvxColorOptionsTabPage, CheckNameHdl_Impl));

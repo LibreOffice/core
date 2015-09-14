@@ -19,8 +19,6 @@
 #include <vcl/edit.hxx>
 
 #include <vector>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 namespace svx { class OptHeaderTabListBox; }
 class CuiAboutConfigTabPage;
@@ -50,14 +48,14 @@ private:
     VclPtr<Edit> m_pSearchEdit;
 
     SvTreeListEntries m_modifiedPrefBoxEntries;
-    std::vector< boost::shared_ptr< Prop_Impl > > m_vectorOfModified;
+    std::vector< std::shared_ptr< Prop_Impl > > m_vectorOfModified;
     VclPtr< SvSimpleTable > m_pPrefBox;
 
      //for search
     css::util::SearchOptions m_options;
     SvTreeListEntries m_prefBoxEntries;
 
-    void AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp );
+    void AddToModifiedVector( const std::shared_ptr< Prop_Impl >& rProp );
     static std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
     void InsertEntry( SvTreeListEntry *pEntry);
 

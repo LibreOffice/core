@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cstdlib>
 #include <osl/diagnose.h>
 #include <uno/threadpool.h>

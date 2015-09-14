@@ -40,7 +40,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "paragrph.hrc"
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -340,7 +339,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
     {
         // CheckChanges(); <-- duplicate inquiry ?
 
-        boost::scoped_ptr<XGradient> pXGradient;
+        std::unique_ptr<XGradient> pXGradient;
         OUString      aString;
         sal_Int32      nPos = m_pLbGradients->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -453,7 +452,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+    std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16 nError   = 1;
 
@@ -544,7 +543,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickModifyHdl_Impl, Button*, void)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+        std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = m_pGradientList->Count();
@@ -806,7 +805,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickSaveHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 {
-    boost::scoped_ptr<XGradient> pGradient;
+    std::unique_ptr<XGradient> pGradient;
     int nPos = m_pLbGradients->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )

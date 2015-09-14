@@ -59,7 +59,6 @@
 #include <svtools/langtab.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1469,7 +1468,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 //text has been added on the right and only the 'error attribute has to be corrected
                 if(pErrorAttrLeft)
                 {
-                    boost::scoped_ptr<TextAttrib> pNewError(pErrorAttrLeft->GetAttr().Clone());
+                    std::unique_ptr<TextAttrib> pNewError(pErrorAttrLeft->GetAttr().Clone());
                     const sal_Int32 nStart = pErrorAttrLeft->GetStart();
                     sal_Int32 nEnd = pErrorAttrLeft->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttrLeft );
@@ -1488,7 +1487,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     //determine the change
                     sal_Int32 nAddedChars = GetText().getLength() - nCurrentLen;
 
-                    boost::scoped_ptr<TextAttrib> pNewError(pErrorAttr->GetAttr().Clone());
+                    std::unique_ptr<TextAttrib> pNewError(pErrorAttr->GetAttr().Clone());
                     sal_Int32 nStart = pErrorAttr->GetStart();
                     sal_Int32 nEnd = pErrorAttr->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttr );
@@ -1504,7 +1503,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
                     if(pBackAttrLeft)
                     {
-                        boost::scoped_ptr<TextAttrib> pNewBack(pBackAttrLeft->GetAttr().Clone());
+                        std::unique_ptr<TextAttrib> pNewBack(pBackAttrLeft->GetAttr().Clone());
                         const sal_Int32 _nStart = pBackAttrLeft->GetStart();
                         const sal_Int32 _nEnd = pBackAttrLeft->GetEnd();
                         pTextEngine->RemoveAttrib( 0, *pBackAttrLeft );
@@ -1530,7 +1529,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     m_nErrorEnd = pFontColor->GetEnd();
                     if(pErrorAttrib->GetStart() != m_nErrorStart || pErrorAttrib->GetEnd() != m_nErrorEnd)
                     {
-                        boost::scoped_ptr<TextAttrib> pNewError(pErrorAttrib->GetAttr().Clone());
+                        std::unique_ptr<TextAttrib> pNewError(pErrorAttrib->GetAttr().Clone());
                         pTextEngine->RemoveAttrib( 0, *pErrorAttr );
                         SetAttrib( *pNewError, 0, m_nErrorStart, m_nErrorEnd );
                     }
@@ -1690,7 +1689,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Languag
     // undo expanded attributes!
     if( pBackAttrib && pBackAttrib->GetStart() < m_nErrorStart && pBackAttrib->GetEnd() == m_nErrorEnd + nDiffLen)
     {
-        boost::scoped_ptr<TextAttrib> pNewBackground(pBackAttrib->GetAttr().Clone());
+        std::unique_ptr<TextAttrib> pNewBackground(pBackAttrib->GetAttr().Clone());
         const sal_Int32 nStart = pBackAttrib->GetStart();
         pTextEngine->RemoveAttrib(0, *pBackAttrib);
         pTextEngine->SetAttrib(*pNewBackground, 0, nStart, m_nErrorStart);

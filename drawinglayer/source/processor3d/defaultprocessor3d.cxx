@@ -57,7 +57,7 @@ namespace drawinglayer
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
                 const bool bOldSimpleTextureActive(getSimpleTextureActive());
-                boost::shared_ptr< texture::GeoTexSvx > pOldTex = (bTransparence) ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
+                std::shared_ptr< texture::GeoTexSvx > pOldTex = (bTransparence) ? mpTransparenceGeoTexSvx : mpGeoTexSvx;
 
                 // create texture
                 const attribute::FillGradientAttribute& rFillGradient = rPrimitive.getGradient();
@@ -67,7 +67,7 @@ namespace drawinglayer
                 const basegfx::BColor aStart(rFillGradient.getStartColor());
                 const basegfx::BColor aEnd(rFillGradient.getEndColor());
                 const sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
-                boost::shared_ptr< texture::GeoTexSvx > pNewTex;
+                std::shared_ptr< texture::GeoTexSvx > pNewTex;
 
                 if(nMaxSteps)
                 {
@@ -219,7 +219,7 @@ namespace drawinglayer
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                boost::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
+                std::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
 
                 // calculate logic pixel size in object coordinates. Create transformation view
                 // to object by inverting ObjectToView
@@ -260,7 +260,7 @@ namespace drawinglayer
                 // rescue values
                 const bool bOldModulate(getModulate()); mbModulate = rPrimitive.getModulate();
                 const bool bOldFilter(getFilter()); mbFilter = rPrimitive.getFilter();
-                boost::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
+                std::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
 
                 // create texture
                 const attribute::FillGraphicAttribute& rFillGraphicAttribute = rPrimitive.getFillGraphicAttribute();

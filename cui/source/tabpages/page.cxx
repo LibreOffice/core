@@ -61,7 +61,6 @@
 #include <svx/unobrushitemhelper.hxx>
 
 #include <numpages.hxx>
-#include <boost/scoped_ptr.hpp>
 
 // static ----------------------------------------------------------------
 
@@ -903,7 +902,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
        (m_pRegisterCB->IsChecked() || m_pRegisterCB->IsValueChangedFromSaved()))
     {
         const SfxBoolItem& rRegItem = static_cast<const SfxBoolItem&>(rOldSet.Get(SID_SWREGISTER_MODE));
-        boost::scoped_ptr<SfxBoolItem> pRegItem(static_cast<SfxBoolItem*>(rRegItem.Clone()));
+        std::unique_ptr<SfxBoolItem> pRegItem(static_cast<SfxBoolItem*>(rRegItem.Clone()));
         bool bCheck = m_pRegisterCB->IsChecked();
         pRegItem->SetValue(bCheck);
         rSet->Put(*pRegItem);

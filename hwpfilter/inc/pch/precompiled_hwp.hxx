@@ -15,7 +15,6 @@
 */
 
 #include <assert.h>
-#include <boost/shared_ptr.hpp>
 #include <comphelper/newarray.hxx>
 #include <ctype.h>
 #include <deque>

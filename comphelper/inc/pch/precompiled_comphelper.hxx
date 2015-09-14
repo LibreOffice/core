@@ -20,7 +20,6 @@
 #include <boost/current_function.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <cassert>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

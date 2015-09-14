@@ -51,8 +51,6 @@
 #include "optHeaderTabListbox.hxx"
 #include <vcl/help.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 using namespace css::beans;
 using namespace css::lang;
 using namespace css::ui::dialogs;
@@ -551,7 +549,7 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if ( pFact )
         {
-            boost::scoped_ptr<AbstractSvxMultiPathDialog> pMultiDlg(
+            std::unique_ptr<AbstractSvxMultiPathDialog> pMultiDlg(
                 pFact->CreateSvxMultiPathDialog( this ));
             DBG_ASSERT( pMultiDlg, "Dialog creation failed!" );
 
