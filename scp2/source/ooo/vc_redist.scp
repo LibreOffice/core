@@ -59,3 +59,22 @@ End
 
 #endif
 
+#if defined(WITH_VC140_REDIST)
+
+#if defined WINDOWS_X64
+MergeModule gid_MergeModule_Microsoft_VC140_CRT_x64
+#else
+MergeModule gid_MergeModule_Microsoft_VC140_CRT_x86
+#endif
+    Feature = gm_Root;
+#if defined WINDOWS_X64
+    Name = "Microsoft_VC140_CRT_x64.msm";
+#else
+    Name = "Microsoft_VC140_CRT_x86.msm";
+#endif
+    RootDir = "TARGETDIR";
+    ComponentCondition = "VC_REDIST=1";
+End
+
+#endif
+
