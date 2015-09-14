@@ -20,6 +20,8 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
+#include <ooo/vba/excel/XWorkbook.hpp>
+
 #include <oox/helper/binaryoutputstream.hxx>
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/properties.hxx"
@@ -582,7 +584,7 @@ void writePROJECTMODULE(SvStream& rStrm, const OUString& name, const OUString& s
 }
 
 // section 2.3.4.2.3
-void writePROJECTMODULES(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer)
+void writePROJECTMODULES(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, const std::vector<sal_Int32>& rLibrayMap)
 {
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
@@ -598,19 +600,20 @@ void writePROJECTMODULES(SvStream& rStrm, css::uno::Reference<css::container::XN
 
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
-        writePROJECTMODULE(rStrm, aElementNames[i], aElementNames[i], 0x00000000, aModuleInfo.ModuleType);
+        const OUString& rModuleName = aElementNames[rLibrayMap[i]];
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
+        writePROJECTMODULE(rStrm, rModuleName, rModuleName, 0x00000000, aModuleInfo.ModuleType);
     }
 }
 
 // section 2.3.4.2
-void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer)
+void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, const std::vector<sal_Int32>& rLibraryMap)
 {
     SvMemoryStream aDirStream(4096, 4096);
 
     writePROJECTINFORMATION(aDirStream);
     writePROJECTREFERENCES(aDirStream);
-    writePROJECTMODULES(aDirStream, xNameContainer);
+    writePROJECTMODULES(aDirStream, xNameContainer, rLibraryMap);
     aDirStream.WriteUInt16(0x0010); // terminator
     aDirStream.WriteUInt32(0x00000000); // reserved
 
@@ -681,6 +684,7 @@ void exportVBAProjectStream(SvStream& rStrm)
     rStrm.WriteUInt16(0x0000); // Undefined
 }
 
+/*
 OString createHexStringFromDigit(sal_uInt8 nDigit)
 {
     OString aString = OString::number( nDigit, 16 );
@@ -711,8 +715,11 @@ OString generateGUIDString()
     return createGuidStringFromInt(nGuid);
 }
 
+*/
+
 // section 2.3.1 PROJECT Stream
-void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer, const OUString& projectName)
+void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XNameContainer> xNameContainer,
+        const OUString& projectName, const std::vector<sal_Int32>& rLibraryMap)
 {
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
@@ -723,20 +730,21 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
 
     // section 2.3.1.2 ProjectId
     exportString(rStrm, "ID=\"");
-    rStrm.WriteOString(generateGUIDString());
+    exportString(rStrm, "{9F10AB9C-89AC-4C0F-8AFB-8E9B96D5F170}");
     exportString(rStrm, "\"\r\n");
 
     // section 2.3.1.3 ProjectModule
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
+        const OUString& rModuleName = aElementNames[rLibraryMap[i]];
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         if(aModuleInfo.ModuleType == 1)
         {
-            exportString(rStrm, "Module=" + aElementNames[i] + "\r\n");
+            exportString(rStrm, "Module=" + rModuleName + "\r\n");
         }
         else if(aModuleInfo.ModuleType == 4)
         {
-            exportString(rStrm, "Document=" + aElementNames[i] + "/&H00000000\r\n");
+            exportString(rStrm, "Document=" + rModuleName + "/&H00000000\r\n");
         }
     }
 
@@ -767,28 +775,87 @@ void exportPROJECTStream(SvStream& rStrm, css::uno::Reference<css::container::XN
     exportString(rStrm, "[Workspace]\r\n");
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        exportString(rStrm, aElementNames[i] + "=0, 0, 0, 0, C\r\n");
+        const OUString& rModuleName = aElementNames[rLibraryMap[i]];
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
+        if(aModuleInfo.ModuleType == 1)
+        {
+            exportString(rStrm,  rModuleName + "=25, 25, 1439, 639, \r\n");
+        }
+        else
+        {
+            exportString(rStrm, rModuleName + "=0, 0, 0, 0, C\r\n");
+        }
     }
 }
 
 // section 2.3.3.1 NAMEMAP
-void writeNAMEMAP(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementNames)
+void writeNAMEMAP(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementNames,
+        const std::vector<sal_Int32>& rLibraryMap)
 {
     int n = rElementNames.getLength();
     for(sal_Int32 i = 0; i < n; ++i)
     {
-        exportString(rStrm, rElementNames[i]);
+        const OUString& rModuleName = rElementNames[rLibraryMap[i]];
+        exportString(rStrm, rModuleName);
         rStrm.WriteUInt8(0x00); // terminator
-        exportUTF16String(rStrm, rElementNames[i]);
+        exportUTF16String(rStrm, rModuleName);
         rStrm.WriteUInt16(0x0000); // terminator
     }
 }
 
 // section 2.3.3 PROJECTwm Stream
-void exportPROJECTwmStream(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementNames)
+void exportPROJECTwmStream(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementNames,
+        const std::vector<sal_Int32>& rLibraryMap)
 {
-    writeNAMEMAP(rStrm, rElementNames);
+    writeNAMEMAP(rStrm, rElementNames, rLibraryMap);
     rStrm.WriteUInt16(0x0000); // terminator
+}
+
+void getCorrectExportOrder(css::uno::Reference<css::container::XNameContainer> xNameContainer, std::vector<sal_Int32>& rLibraryMap)
+{
+    css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
+    sal_Int32 n = aElementNames.getLength();
+    css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
+
+    sal_Int32 nCurrentId = 0;
+    // first all the non-document modules
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
+        if (aModuleInfo.ModuleType != 4)
+        {
+            rLibraryMap[nCurrentId] = i;
+            ++nCurrentId;
+        }
+    }
+
+    sal_Int32 nWorkbookIndex = -1;
+    // then possibly the workbook module
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
+        css::uno::Reference<ooo::vba::excel::XWorkbook> xWorkbook(aModuleInfo.ModuleObject, css::uno::UNO_QUERY);
+        if (xWorkbook.is())
+        {
+            nWorkbookIndex = i;
+            rLibraryMap[nCurrentId] = i;
+            ++nCurrentId;
+        }
+    }
+
+    // then the remaining modules
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        if (i == nWorkbookIndex)
+            continue;
+
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
+        if (aModuleInfo.ModuleType == 4)
+        {
+            rLibraryMap[nCurrentId] = i;
+            ++nCurrentId;
+        }
+    }
 }
 
 }
@@ -807,6 +874,10 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     }
     css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength(); // get the number of modules
+    // export the elements in the order MSO expects them
+    // we store the index of the
+    std::vector<sal_Int32> aLibraryMap(n, 0);
+    getCorrectExportOrder(xNameContainer, aLibraryMap);
 
     // start here with the VBA export
     SotStorage* pVBAStream = pRootStorage->OpenSotStorage("VBA", STREAM_READWRITE);
@@ -820,27 +891,21 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     OUString aProjectwmPath = "/home/moggi/Documents/testfiles/vba/PROJECTwm";
     addFileStreamToSotStream(aProjectwmPath, pPROJECTwmStream);
 #else
-    exportPROJECTwmStream(*pPROJECTwmStream, aElementNames);
+    exportPROJECTwmStream(*pPROJECTwmStream, aElementNames, aLibraryMap);
 #endif
 
 #if VBA_USE_ORIGINAL_DIR_STREAM
     OUString aDirPath = "/home/moggi/Documents/testfiles/vba/VBA/dir";
     addFileStreamToSotStream(aDirPath, pDirStream);
 #else
-    std::vector<SotStorageStream*> aModuleStreams;
-    exportDirStream(*pDirStream, xNameContainer);
-    aModuleStreams.reserve(n);
-    for (sal_Int32 i = 0; i < n; ++i)
-    {
-        aModuleStreams.push_back(pVBAStream->OpenSotStream(aElementNames[i], STREAM_READWRITE));
-    }
+    exportDirStream(*pDirStream, xNameContainer, aLibraryMap);
 #endif
 
 #if VBA_USE_ORIGINAL_PROJECT_STREAM
     OUString aProjectPath = "/home/moggi/Documents/testfiles/vba/PROJECT";
     addFileStreamToSotStream(aProjectPath, pPROJECTStream);
 #else
-    exportPROJECTStream(*pPROJECTStream, xNameContainer, getProjectName());
+    exportPROJECTStream(*pPROJECTStream, xNameContainer, getProjectName(), aLibraryMap);
 #endif
 
 #if VBA_USE_ORIGINAL_VBA_PROJECT
@@ -877,12 +942,14 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     css::uno::Reference<css::script::vba::XVBAModuleInfo> xModuleInfo(xNameContainer, css::uno::UNO_QUERY);
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        css::uno::Any aCode = xNameContainer->getByName(aElementNames[i]);
-        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
+        const OUString& rModuleName = aElementNames[aLibraryMap[i]];
+        SotStorageStream* pModuleStream = pVBAStream->OpenSotStream(rModuleName, STREAM_READWRITE);
+        css::uno::Any aCode = xNameContainer->getByName(rModuleName);
+        css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         OUString aSourceCode;
         aCode >>= aSourceCode;
-        exportModuleStream(*aModuleStreams[i], aSourceCode, aElementNames[i], aModuleInfo.ModuleType);
-        aModuleStreams[i]->Commit();
+        exportModuleStream(*pModuleStream, aSourceCode, rModuleName, aModuleInfo.ModuleType);
+        pModuleStream->Commit();
     }
 
 #endif
