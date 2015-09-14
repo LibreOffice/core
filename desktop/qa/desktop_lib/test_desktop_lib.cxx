@@ -48,13 +48,14 @@ public:
     LibLODocument_Impl* loadDoc(const char* pName);
     void closeDoc();
 
-    void runAllTests();
     void testGetStyles();
     void testGetFonts();
     void testCreateView();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
-    CPPUNIT_TEST(runAllTests);
+    CPPUNIT_TEST(testGetStyles);
+    CPPUNIT_TEST(testGetFonts);
+    CPPUNIT_TEST(testCreateView);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -79,13 +80,6 @@ void DesktopLOKTest::closeDoc()
         closeDocument(mxComponent);
         mxComponent.clear();
     }
-}
-
-void DesktopLOKTest::runAllTests()
-{
-    testGetStyles();
-    testGetFonts();
-    testCreateView();
 }
 
 void DesktopLOKTest::testGetStyles()
