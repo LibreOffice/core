@@ -120,7 +120,7 @@ private:
     void                        OpenMultiSelection_Impl();
     void                        AddControls_Impl( );
 
-    DECL_LINK( SelectHdl_Impl, SvTabListBox* );
+    DECL_LINK_TYPED( SelectHdl_Impl, SvTreeListBox*, void );
     DECL_LINK_TYPED( DblClickHdl_Impl, SvTreeListBox*, bool);
     DECL_LINK(EntrySelectHdl_Impl, void *);
     DECL_LINK( OpenDoneHdl_Impl, SvtFileView* );

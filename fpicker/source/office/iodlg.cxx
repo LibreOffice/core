@@ -519,7 +519,7 @@ void SvtFileDialog::dispose()
                              makeAny( sUserData ) );
     }
 
-    _pFileView->SetSelectHdl( Link<>() );
+    _pFileView->SetSelectHdl( Link<SvTreeListBox*,void>() );
 
     // Save bookmarked places
     if(_pImp->_pPlaces->IsUpdated()) {
@@ -1542,7 +1542,7 @@ void SvtFileDialog::UpdateControls( const OUString& rURL )
 
 
 
-IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
+IMPL_LINK_TYPED( SvtFileDialog, SelectHdl_Impl, SvTreeListBox*, pBox, void )
 {
     SvTreeListEntry* pEntry = pBox->FirstSelected();
     DBG_ASSERT( pEntry, "SelectHandler without selected entry" );
@@ -1590,8 +1590,6 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
     }
 
     FileSelect();
-
-    return 0;
 }
 
 

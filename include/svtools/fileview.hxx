@@ -158,7 +158,7 @@ public:
 
     void                    SetNoSelection();
 
-    void                    SetSelectHdl( const Link<>& rHdl );
+    void                    SetSelectHdl( const Link<SvTreeListBox*,void>& rHdl );
     void                    SetDoubleClickHdl( const Link<SvTreeListBox*,bool>& rHdl );
     void                    SetOpenDoneHdl( const Link<>& rHdl );
 

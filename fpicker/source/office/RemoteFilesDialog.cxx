@@ -291,7 +291,7 @@ RemoteFilesDialog::~RemoteFilesDialog()
 
 void RemoteFilesDialog::dispose()
 {
-    m_pFileView->SetSelectHdl( Link<>() );
+    m_pFileView->SetSelectHdl( Link<SvTreeListBox*,void>() );
 
     // save window state
     if( !m_sIniKey.isEmpty() )
@@ -943,7 +943,7 @@ IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, DoubleClickHdl, SvTreeListBox*, bool )
     return true;
 }
 
-IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
+IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, SelectHdl, SvTreeListBox*, void )
 {
     SvTreeListEntry* pEntry = m_pFileView->FirstSelected();
 
@@ -978,8 +978,6 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
             EnableControls();
         }
     }
-
-    return 1;
 }
 
 IMPL_LINK_NOARG( RemoteFilesDialog, FileNameGetFocusHdl )

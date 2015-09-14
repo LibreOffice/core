@@ -337,8 +337,8 @@ class SvtFileView_Impl  :public ::svt::IEnumerationResultHandler
                         ,public ITimeoutHandler
 {
 protected:
-    VclPtr<SvtFileView>         mpAntiImpl;
-    Link<>                      m_aSelectHandler;
+    VclPtr<SvtFileView>                 mpAntiImpl;
+    Link<SvTreeListBox*,void>           m_aSelectHandler;
 
     ::rtl::Reference< ::svt::FileViewContentEnumerator >
                                         m_xContentEnumerator;
@@ -415,7 +415,7 @@ public:
 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
 
-    void                    SetSelectHandler( const Link<>& _rHdl );
+    void                    SetSelectHandler( const Link<SvTreeListBox*,void>& _rHdl );
 
     void                    InitSelection();
     void                    ResetCursor();
@@ -1243,7 +1243,7 @@ void SvtFileView::GetFocus()
 
 
 
-void SvtFileView::SetSelectHdl( const Link<>& rHdl )
+void SvtFileView::SetSelectHdl( const Link<SvTreeListBox*,void>& rHdl )
 {
     mpImp->SetSelectHandler( rHdl );
 }
@@ -1759,7 +1759,7 @@ IMPL_LINK_TYPED( SvtFileView_Impl, SelectionMultiplexer, SvTreeListBox*, _pSourc
 }
 
 
-void SvtFileView_Impl::SetSelectHandler( const Link<>& _rHdl )
+void SvtFileView_Impl::SetSelectHandler( const Link<SvTreeListBox*,void>& _rHdl )
 {
     m_aSelectHandler = _rHdl;
 
