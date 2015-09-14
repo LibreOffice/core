@@ -31,24 +31,14 @@ using namespace ::com::sun::star::uno;
 
 Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 {
-    static const char* aPropNames[] =
-    {
-        "RootType",             //0
-        "SelectedPosition",     //1
-        "OutlineLevel",         //2
-        "InsertMode",           //3
-        "ActiveBlock",          //4
-        "ShowListBox",          //5
-        "GlobalDocMode"         //6
-    };
-    const int nCount = 7;
-    Sequence<OUString> aNames(nCount);
-    OUString* pNames = aNames.getArray();
-    for(int i = 0; i < nCount; i++)
-    {
-        pNames[i] = OUString::createFromAscii(aPropNames[i]);
-    }
-    return aNames;
+    return css::uno::Sequence<OUString>{
+        OUString("RootType"),
+        OUString("SelectedPosition"),
+        OUString("OutlineLevel"),
+        OUString("InsertMode"),
+        OUString("ActiveBlock"),
+        OUString("ShowListBox"),
+        OUString("GlobalDocMode")};
 }
 
 SwNavigationConfig::SwNavigationConfig() :
