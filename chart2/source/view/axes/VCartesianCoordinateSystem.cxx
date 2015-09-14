@@ -152,7 +152,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             if(aAxisProperties.m_bDisplayLabels)
                 aAxisProperties.m_nNumberFormatKey = this->getNumberFormatKeyForAxis(xAxis, xChartDoc);
 
-            ::boost::shared_ptr< VAxisBase > apVAxis( new VCartesianAxis(aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
+            std::shared_ptr< VAxisBase > apVAxis( new VCartesianAxis(aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
             m_aAxisMap[aFullAxisIndex] = apVAxis;
             apVAxis->set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );

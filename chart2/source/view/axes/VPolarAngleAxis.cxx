@@ -27,7 +27,7 @@
 #include "PolarLabelPositionHelper.hxx"
 #include <tools/color.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -167,7 +167,7 @@ void VPolarAngleAxis::createLabels()
     if( m_aAxisProperties.m_bDisplayLabels )
     {
         //get the transformed screen values for all tickmarks in aAllTickInfos
-        boost::scoped_ptr< TickFactory > apTickFactory( this->createTickFactory() );
+        std::unique_ptr< TickFactory > apTickFactory( this->createTickFactory() );
 
         //create tick mark text shapes
         //@todo: iterate through all tick depth which should be labeled

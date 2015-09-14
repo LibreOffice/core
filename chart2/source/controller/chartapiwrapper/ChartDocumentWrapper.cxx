@@ -276,7 +276,7 @@ namespace wrapper
 class WrappedDataSourceLabelsInFirstRowProperty : public WrappedProperty
 {
 public:
-    explicit WrappedDataSourceLabelsInFirstRowProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedDataSourceLabelsInFirstRowProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedDataSourceLabelsInFirstRowProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -289,11 +289,11 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
 
-WrappedDataSourceLabelsInFirstRowProperty::WrappedDataSourceLabelsInFirstRowProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedDataSourceLabelsInFirstRowProperty::WrappedDataSourceLabelsInFirstRowProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty("DataSourceLabelsInFirstRow",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
@@ -374,7 +374,7 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( const Referen
 class WrappedDataSourceLabelsInFirstColumnProperty : public WrappedProperty
 {
 public:
-    explicit WrappedDataSourceLabelsInFirstColumnProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedDataSourceLabelsInFirstColumnProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedDataSourceLabelsInFirstColumnProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -387,11 +387,11 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable Any                                 m_aOuterValue;
 };
 
-WrappedDataSourceLabelsInFirstColumnProperty::WrappedDataSourceLabelsInFirstColumnProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedDataSourceLabelsInFirstColumnProperty::WrappedDataSourceLabelsInFirstColumnProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty("DataSourceLabelsInFirstColumn",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_aOuterValue()
@@ -472,7 +472,7 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( const Refe
 class WrappedHasLegendProperty : public WrappedProperty
 {
 public:
-    explicit WrappedHasLegendProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedHasLegendProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedHasLegendProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -485,10 +485,10 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
 };
 
-WrappedHasLegendProperty::WrappedHasLegendProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedHasLegendProperty::WrappedHasLegendProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty("HasLegend",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
 {
@@ -556,7 +556,7 @@ Any WrappedHasLegendProperty::getPropertyDefault( const Reference< beans::XPrope
 class WrappedHasMainTitleProperty : public WrappedProperty
 {
 public:
-    explicit WrappedHasMainTitleProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedHasMainTitleProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedHasMainTitleProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -569,10 +569,10 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
 };
 
-WrappedHasMainTitleProperty::WrappedHasMainTitleProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedHasMainTitleProperty::WrappedHasMainTitleProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty("HasMainTitle",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
 {
@@ -629,7 +629,7 @@ Any WrappedHasMainTitleProperty::getPropertyDefault( const Reference< beans::XPr
 class WrappedHasSubTitleProperty : public WrappedProperty
 {
 public:
-    explicit WrappedHasSubTitleProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedHasSubTitleProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedHasSubTitleProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -642,10 +642,10 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact > m_spChart2ModelContact;
 };
 
-WrappedHasSubTitleProperty::WrappedHasSubTitleProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedHasSubTitleProperty::WrappedHasSubTitleProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty("HasSubTitle",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
 {

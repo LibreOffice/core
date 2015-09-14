@@ -23,7 +23,7 @@
 #include "Tickmarks.hxx"
 #include "macros.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -153,7 +153,7 @@ void VAxisBase::setExplicitScaleAndIncrement(
 
 void VAxisBase::createAllTickInfos( TickInfoArraysType& rAllTickInfos )
 {
-    boost::scoped_ptr< TickFactory > apTickFactory( this->createTickFactory() );
+    std::unique_ptr< TickFactory > apTickFactory( this->createTickFactory() );
     if( m_aScale.ShiftedCategoryPosition )
         apTickFactory->getAllTicksShifted( rAllTickInfos );
     else

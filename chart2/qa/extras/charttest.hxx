@@ -57,12 +57,11 @@
 #include <unonames.hxx>
 
 #include <iostream>
+#include <memory>
 
 #include <libxml/xmlwriter.h>
 #include <libxml/xpath.h>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -72,7 +71,7 @@ class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     ChartTest():mbSkipValidation(false) {}
     void load( const OUString& rDir, const OUString& rFileName );
-    boost::shared_ptr<utl::TempFile> reload( const OUString& rFileName );
+    std::shared_ptr<utl::TempFile> reload( const OUString& rFileName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
     OUString getFileExtension( const OUString& rFileName );
 
@@ -118,13 +117,13 @@ void ChartTest::load( const OUString& aDir, const OUString& aName )
     CPPUNIT_ASSERT(mxComponent.is());
 }
 
-boost::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
+std::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     auto aArgs(::comphelper::InitPropertySequence({
         { "FilterName", makeAny(rFilterName) }
     }));
-    boost::shared_ptr<utl::TempFile> pTempFile = boost::make_shared<utl::TempFile>();
+    std::shared_ptr<utl::TempFile> pTempFile = std::make_shared<utl::TempFile>();
     pTempFile->EnableKillingFile();
     xStorable->storeToURL(pTempFile->GetURL(), aArgs);
     mxComponent->dispose();

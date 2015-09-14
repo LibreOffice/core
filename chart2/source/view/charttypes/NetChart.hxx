@@ -64,7 +64,7 @@ private: //methods
                 , PlottingPositionHelper* pPosHelper );
 
 private: //member
-    boost::scoped_ptr<PlottingPositionHelper> m_pMainPosHelper;
+    std::unique_ptr<PlottingPositionHelper> m_pMainPosHelper;
 
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;

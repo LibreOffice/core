@@ -85,7 +85,7 @@ sal_Bool SAL_CALL OResultSet::supportsService( const OUString& _rServiceName ) t
 }
 
 
-OResultSet::OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< connectivity::OSQLParseTreeIterator >& _pSQLIterator )
+OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectivity::OSQLParseTreeIterator >& _pSQLIterator )
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
     ,m_pStatement(pStmt)

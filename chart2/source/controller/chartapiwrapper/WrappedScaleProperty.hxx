@@ -22,7 +22,7 @@
 #include "WrappedProperty.hxx"
 #include "Chart2ModelContact.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 namespace chart
@@ -54,10 +54,10 @@ public:
     };
 
 public:
-    WrappedScaleProperty( tScaleProperty eScaleProperty, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    WrappedScaleProperty( tScaleProperty eScaleProperty, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedScaleProperty();
 
-    static void addWrappedProperties( std::vector< WrappedProperty* >& rList, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    static void addWrappedProperties( std::vector< WrappedProperty* >& rList, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
@@ -72,7 +72,7 @@ protected: //methods
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     tScaleProperty          m_eScaleProperty;
 
     mutable ::com::sun::star::uno::Any m_aOuterValue;

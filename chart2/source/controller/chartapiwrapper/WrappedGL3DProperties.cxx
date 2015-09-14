@@ -31,7 +31,7 @@ enum
 class WrappedGL3DProperty : public WrappedProperty
 {
     uno::Any maDefault;
-    boost::shared_ptr<Chart2ModelContact> mpModelContact;
+    std::shared_ptr<Chart2ModelContact> mpModelContact;
 
 private:
     uno::Reference<chart2::XChartType> getChartType() const
@@ -52,7 +52,7 @@ private:
     }
 
 public:
-    WrappedGL3DProperty( const OUString& rInName, const OUString& rOutName, const uno::Any& rDefault, const boost::shared_ptr<Chart2ModelContact>& pContact ) :
+    WrappedGL3DProperty( const OUString& rInName, const OUString& rOutName, const uno::Any& rDefault, const std::shared_ptr<Chart2ModelContact>& pContact ) :
         WrappedProperty(rInName, rOutName), maDefault(rDefault), mpModelContact(pContact) {}
 
     virtual ~WrappedGL3DProperty() {}
@@ -137,7 +137,7 @@ void WrappedGL3DProperties::addProperties( std::vector<css::beans::Property> & r
 }
 
 void WrappedGL3DProperties::addWrappedProperties(
-    std::vector<WrappedProperty*>& rList, const boost::shared_ptr<Chart2ModelContact>& pChart2ModelContact )
+    std::vector<WrappedProperty*>& rList, const std::shared_ptr<Chart2ModelContact>& pChart2ModelContact )
 {
     rList.push_back(
         new WrappedGL3DProperty(

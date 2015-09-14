@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -61,7 +61,7 @@ public:
         SECOND_Y_AXIS
     };
 
-    AxisWrapper( tAxisType eType, ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    AxisWrapper( tAxisType eType, std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~AxisWrapper();
 
     static void getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, bool& rbMainAxis );
@@ -130,7 +130,7 @@ private: //methods
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > getAxis();
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
     tAxisType           m_eType;

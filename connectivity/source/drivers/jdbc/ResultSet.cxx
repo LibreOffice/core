@@ -46,7 +46,7 @@
 #include "java/LocalRef.hxx"
 
 #include <string.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::comphelper;
 
@@ -806,7 +806,7 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
             {
                 // convert parameter
                 double nTemp = 0.0;
-                boost::scoped_ptr<java_math_BigDecimal> pBigDecimal;
+                std::unique_ptr<java_math_BigDecimal> pBigDecimal;
                 if ( x >>= nTemp)
                 {
                     pBigDecimal.reset(new java_math_BigDecimal(nTemp));

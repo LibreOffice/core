@@ -22,7 +22,7 @@
 #include "WrappedDefaultProperty.hxx"
 #include "Chart2ModelContact.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -36,7 +36,7 @@ public:
               const OUString& rOuterName
             , const OUString& rInnerSequencePropertyName
             , sal_Int32 nDefaultValue
-            , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+            , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedBarPositionProperty_Base();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -50,7 +50,7 @@ public:
 protected:
     sal_Int32 m_nDimensionIndex;
     sal_Int32 m_nAxisIndex;
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 
     sal_Int32                                   m_nDefaultValue;
     OUString                             m_InnerSequencePropertyName;
@@ -61,14 +61,14 @@ protected:
 class WrappedGapwidthProperty : public WrappedBarPositionProperty_Base
 {
 public:
-    explicit WrappedGapwidthProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedGapwidthProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedGapwidthProperty();
 };
 
 class WrappedBarOverlapProperty : public WrappedBarPositionProperty_Base
 {
 public:
-    explicit WrappedBarOverlapProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedBarOverlapProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedBarOverlapProperty();
 };
 

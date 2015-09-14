@@ -26,9 +26,9 @@
 
 #include "ChartModel.hxx"
 
-#include <vector>
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <memory>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace chart2 {
     class XDataSeriesContainer;
@@ -81,7 +81,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartTypeTemplate > & xTemplate );
 
-    ::boost::shared_ptr< RangeSelectionHelper >
+    std::shared_ptr< RangeSelectionHelper >
         getRangeSelectionHelper() const;
 
     ::com::sun::star::uno::Reference<
@@ -177,7 +177,7 @@ private:
             ::com::sun::star::uno::XComponentContext >
         m_xContext;
 
-    mutable ::boost::shared_ptr< RangeSelectionHelper >
+    mutable std::shared_ptr< RangeSelectionHelper >
         m_spRangeSelectionHelper;
 
     TimerTriggeredControllerLock   m_aTimerTriggeredControllerLock;

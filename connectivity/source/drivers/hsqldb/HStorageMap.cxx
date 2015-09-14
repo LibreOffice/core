@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
+#include <algorithm>
 
 namespace connectivity
 {

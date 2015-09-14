@@ -80,7 +80,7 @@ VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCoo
     , m_aMergedMinMaxSupplier()
     , m_aExplicitScales(3)
     , m_aExplicitIncrements(3)
-    , m_apExplicitCategoriesProvider(NULL)
+    , m_apExplicitCategoriesProvider(nullptr)
 {
     if( !m_xCooSysModel.is() || m_xCooSysModel->getDimension()<3 )
     {

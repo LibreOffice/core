@@ -70,7 +70,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/unopage.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -162,7 +162,7 @@ ReferenceSizeProvider* ChartController::impl_createReferenceSizeProvider()
 
 void ChartController::impl_adaptDataSeriesAutoResize()
 {
-    boost::scoped_ptr<ReferenceSizeProvider> pRefSizeProvider(impl_createReferenceSizeProvider());
+    std::unique_ptr<ReferenceSizeProvider> pRefSizeProvider(impl_createReferenceSizeProvider());
     if (pRefSizeProvider)
         pRefSizeProvider->setValuesAtAllDataSeries();
 }
@@ -238,7 +238,7 @@ void ChartController::executeDispatch_ScaleText()
         m_xUndoManager );
     ControllerLockGuardUNO aCtlLockGuard( getModel() );
 
-    boost::scoped_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
+    std::unique_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
     OSL_ASSERT( pRefSizeProv.get());
     if (pRefSizeProv)
         pRefSizeProv->toggleAutoResizeState();
@@ -267,7 +267,7 @@ void ChartController::executeDispatch_Paste()
                 {
                     xStm->Seek( 0 );
                     Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
-                    ::boost::scoped_ptr< SdrModel > spModel( new SdrModel() );
+                    std::unique_ptr< SdrModel > spModel( new SdrModel() );
                     if ( SvxDrawingLayerImport( spModel.get(), xInputStream ) )
                     {
                         impl_PasteShapes( spModel.get() );

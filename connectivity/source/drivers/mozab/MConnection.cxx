@@ -67,7 +67,7 @@ namespace connectivity { namespace mozab {
 
 struct ConnectionImplData
 {
-    ::boost::shared_ptr< ::comphelper::OfficeResourceBundle >   pResourceBundle;
+    std::shared_ptr< ::comphelper::OfficeResourceBundle >   pResourceBundle;
 };
 
 

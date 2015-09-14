@@ -142,7 +142,7 @@ struct ParserContext
     OperandStack                            maOperandStack;
 };
 
-typedef ::boost::shared_ptr< ParserContext > ParserContextSharedPtr;
+typedef std::shared_ptr< ParserContext > ParserContextSharedPtr;
 
 /** Generate apriori constant value
     */

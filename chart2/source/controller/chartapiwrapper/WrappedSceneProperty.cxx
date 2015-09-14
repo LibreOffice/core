@@ -34,13 +34,13 @@ namespace wrapper
 {
 
 void WrappedSceneProperty::addWrappedProperties( std::vector< WrappedProperty* >& rList
-                , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     rList.push_back( new WrappedD3DTransformMatrixProperty( spChart2ModelContact ) );
 }
 
 WrappedD3DTransformMatrixProperty::WrappedD3DTransformMatrixProperty(
-            ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+            std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty("D3DTransformMatrix","D3DTransformMatrix")
             , m_spChart2ModelContact( spChart2ModelContact )
 {

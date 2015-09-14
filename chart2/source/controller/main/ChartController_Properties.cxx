@@ -54,7 +54,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -104,7 +103,7 @@ wrapper::ItemConverter* createItemConverter(
                     break;
             case OBJECTTYPE_TITLE:
             {
-                boost::scoped_ptr<awt::Size> pRefSize;
+                std::unique_ptr<awt::Size> pRefSize;
                 if (pRefSizeProvider)
                     pRefSize.reset(new awt::Size(pRefSizeProvider->getPageSize()));
 
@@ -116,7 +115,7 @@ wrapper::ItemConverter* createItemConverter(
             break;
             case OBJECTTYPE_LEGEND:
             {
-                boost::scoped_ptr<awt::Size> pRefSize;
+                std::unique_ptr<awt::Size> pRefSize;
                 if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
@@ -139,7 +138,7 @@ wrapper::ItemConverter* createItemConverter(
                     break;
             case OBJECTTYPE_AXIS:
             {
-                boost::scoped_ptr<awt::Size> pRefSize;
+                std::unique_ptr<awt::Size> pRefSize;
                 if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
@@ -170,7 +169,7 @@ wrapper::ItemConverter* createItemConverter(
             case OBJECTTYPE_DATA_LABELS:
             case OBJECTTYPE_DATA_LABEL:
             {
-                boost::scoped_ptr<awt::Size> pRefSize;
+                std::unique_ptr<awt::Size> pRefSize;
                 if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
@@ -199,7 +198,7 @@ wrapper::ItemConverter* createItemConverter(
             case OBJECTTYPE_DATA_SERIES:
             case OBJECTTYPE_DATA_POINT:
             {
-                boost::scoped_ptr<awt::Size> pRefSize;
+                std::unique_ptr<awt::Size> pRefSize;
                 if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
@@ -276,7 +275,7 @@ wrapper::ItemConverter* createItemConverter(
                 break;
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
-                boost::scoped_ptr<awt::Size> pRefSize;
+                std::unique_ptr<awt::Size> pRefSize;
                 if (pRefSizeProvider)
                     pRefSize.reset(new awt::Size(pRefSizeProvider->getPageSize()));
 
@@ -310,7 +309,7 @@ wrapper::ItemConverter* createItemConverter(
                 break;
             case OBJECTTYPE_AXIS:
             {
-                boost::scoped_ptr<awt::Size> pRefSize;
+                std::unique_ptr<awt::Size> pRefSize;
                 if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
@@ -737,9 +736,9 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
 
         //convert properties to ItemSet
 
-        boost::scoped_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
+        std::unique_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
 
-        boost::scoped_ptr<wrapper::ItemConverter> pItemConverter(
+        std::unique_ptr<wrapper::ItemConverter> pItemConverter(
             createItemConverter( rObjectCID, getModel(), m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
                                  ExplicitValueProvider::getExplicitValueProvider(m_xChartView),

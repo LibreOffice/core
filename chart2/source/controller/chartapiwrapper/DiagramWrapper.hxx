@@ -44,7 +44,7 @@
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 
 #include <com/sun/star/chart/X3DDefaultSetter.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -71,7 +71,7 @@ class DiagramWrapper : public cppu::ImplInheritanceHelper<
                     >
 {
 public:
-    explicit DiagramWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit DiagramWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~DiagramWrapper();
 
     /// XServiceInfo declarations
@@ -240,7 +240,7 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getInnerPropertySet() SAL_OVERRIDE;
 
 private:
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
     ::com::sun::star::uno::Reference<

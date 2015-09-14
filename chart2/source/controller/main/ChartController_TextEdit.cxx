@@ -41,7 +41,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -169,7 +169,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     vcl::Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
-    boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( m_pChartWindow, aSet, getFrame(), RID_SVXDLG_CHARMAP ));
+    std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( m_pChartWindow, aSet, getFrame(), RID_SVXDLG_CHARMAP ));
     OSL_ENSURE( pDlg, "Couldn't create SvxCharacterMap dialog" );
     if( pDlg->Execute() == RET_OK )
     {

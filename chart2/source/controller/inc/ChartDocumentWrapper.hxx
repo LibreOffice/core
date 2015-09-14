@@ -33,7 +33,7 @@
 #include <unotools/eventlisteneradapter.hxx>
 #include <comphelper/uno3.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -203,7 +203,7 @@ private: //methods
     void impl_resetAddIn();
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   m_xDelegator;
 

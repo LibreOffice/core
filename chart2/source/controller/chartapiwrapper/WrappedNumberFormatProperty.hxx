@@ -22,7 +22,7 @@
 #include "WrappedDirectStateProperty.hxx"
 #include "Chart2ModelContact.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -34,7 +34,7 @@ class WrappedLinkNumberFormatProperty;
 class WrappedNumberFormatProperty : public WrappedDirectStateProperty
 {
 public:
-    explicit WrappedNumberFormatProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedNumberFormatProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedNumberFormatProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -48,13 +48,13 @@ public:
 
     friend class WrappedLinkNumberFormatProperty;
 private:
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 };
 
 class WrappedLinkNumberFormatProperty : public WrappedDirectStateProperty
 {
 public:
-    explicit WrappedLinkNumberFormatProperty( const boost::shared_ptr<Chart2ModelContact>& pChart2ModelContact );
+    explicit WrappedLinkNumberFormatProperty( const std::shared_ptr<Chart2ModelContact>& pChart2ModelContact );
     virtual ~WrappedLinkNumberFormatProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -67,7 +67,7 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
-    boost::shared_ptr<Chart2ModelContact> m_pChart2ModelContact;
+    std::shared_ptr<Chart2ModelContact> m_pChart2ModelContact;
 };
 
 } //namespace wrapper

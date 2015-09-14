@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -60,12 +60,12 @@ public:
     };
 
     //this constructor needs an initialize call afterwards
-    explicit DataSeriesPointWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit DataSeriesPointWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
 
     DataSeriesPointWrapper( eType eType
             , sal_Int32 nSeriesIndexInNewAPI
             , sal_Int32 nPointIndex //ignored for series
-            , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact  );
+            , std::shared_ptr< Chart2ModelContact > spChart2ModelContact  );
 
     virtual ~DataSeriesPointWrapper();
 
@@ -125,7 +125,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDataPointProperties();
 
 private:
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 
     eType               m_eType;

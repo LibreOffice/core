@@ -124,7 +124,7 @@ namespace chart
 namespace wrapper
 {
 
-MinMaxLineWrapper::MinMaxLineWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+MinMaxLineWrapper::MinMaxLineWrapper( std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
         , m_aWrappedLineJointProperty( "LineJoint", uno::makeAny( drawing::LineJoint_NONE ))

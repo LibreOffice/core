@@ -21,7 +21,6 @@
 
 #include "ExplicitScaleValues.hxx"
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -31,8 +30,9 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include "chartviewdllapi.hxx"
-
 #include "ChartModel.hxx"
+
+#include <memory>
 
 namespace chart
 {
@@ -64,7 +64,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         getShapeForCID( const OUString& rObjectCID )=0;
 
-    virtual ::boost::shared_ptr< DrawModelWrapper > getDrawModelWrapper() = 0;
+    virtual std::shared_ptr< DrawModelWrapper > getDrawModelWrapper() = 0;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static ExplicitValueProvider* getExplicitValueProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xChartView );

@@ -23,8 +23,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <boost/checked_delete.hpp>
 #include <boost/ref.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

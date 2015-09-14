@@ -261,7 +261,7 @@ struct StaticPointWrapperPropertyArray : public rtl::StaticAggregate< Sequence< 
 class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
 {
 public:
-    explicit WrappedAttachedAxisProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    explicit WrappedAttachedAxisProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedAttachedAxisProperty();
 
     virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -274,11 +274,11 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 protected:
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
 };
 
 WrappedAttachedAxisProperty::WrappedAttachedAxisProperty(
-                ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
                 : WrappedProperty("Axis",OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
 {
@@ -493,7 +493,7 @@ namespace wrapper
 {
 
 DataSeriesPointWrapper::DataSeriesPointWrapper(
-            ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+            std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
         , m_eType( DATA_SERIES )
@@ -534,7 +534,7 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
 DataSeriesPointWrapper::DataSeriesPointWrapper( eType _eType,
                                                 sal_Int32 nSeriesIndexInNewAPI ,
                                                 sal_Int32 nPointIndex, //ignored for series
-                                                ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                                std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
     : m_spChart2ModelContact( spChart2ModelContact )
     , m_aEventListenerContainer( m_aMutex )
     , m_eType( _eType )

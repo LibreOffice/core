@@ -40,7 +40,7 @@
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -140,7 +140,7 @@ void ChartController::executeDispatch_PositionAndSize()
         SolarMutexGuard aGuard;
         SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
         OSL_ENSURE( pFact, "No dialog factory" );
-        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSchTransformTabDialog(
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSchTransformTabDialog(
             m_pChartWindow, &aItemSet, pSdrView, RID_SCH_TransformTabDLG_SVXPAGE_ANGLE, bResizePossible ));
         OSL_ENSURE( pDlg, "Couldn't create SchTransformTabDialog" );
 

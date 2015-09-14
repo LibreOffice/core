@@ -40,8 +40,7 @@
 #include <com/sun/star/qa/XDumper.hpp>
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
 
 #include <vcl/timer.hxx>
 
@@ -141,7 +140,7 @@ public:
 
     virtual ::com::sun::star::awt::Rectangle getDiagramRectangleExcludingAxes() SAL_OVERRIDE;
 
-    ::boost::shared_ptr< DrawModelWrapper > getDrawModelWrapper() SAL_OVERRIDE;
+    std::shared_ptr< DrawModelWrapper > getDrawModelWrapper() SAL_OVERRIDE;
 
     // ___XTransferable___
     virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor )
@@ -257,7 +256,7 @@ private: //member
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xTransGradientTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xMarkerTable;
 
-    ::boost::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
+    std::shared_ptr< DrawModelWrapper > m_pDrawModelWrapper;
 
     std::vector< VCoordinateSystem* > m_aVCooSysList;
 
@@ -283,10 +282,10 @@ private: //member
 
     ::com::sun::star::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
 
-    boost::shared_ptr<GL3DPlotterBase> m_pGL3DPlotter;
+    std::shared_ptr<GL3DPlotterBase> m_pGL3DPlotter;
     TimeBasedInfo maTimeBased;
     osl::Mutex maTimeMutex;
-    boost::scoped_ptr<GL2DRenderer> mp2DRenderer;
+    std::unique_ptr<GL2DRenderer> mp2DRenderer;
 };
 
 }

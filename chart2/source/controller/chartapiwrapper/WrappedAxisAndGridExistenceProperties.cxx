@@ -37,7 +37,7 @@ class WrappedAxisAndGridExistenceProperty : public WrappedProperty
 {
 public:
     WrappedAxisAndGridExistenceProperty( bool bAxis, bool bMain, sal_Int32 nDimensionIndex
-        , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedAxisAndGridExistenceProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -50,14 +50,14 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     bool        m_bAxis;
     bool        m_bMain;
     sal_Int32   m_nDimensionIndex;
 };
 
 void WrappedAxisAndGridExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
-            , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+            , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     rList.push_back( new WrappedAxisAndGridExistenceProperty( true, true, 0, spChart2ModelContact ) );//x axis
     rList.push_back( new WrappedAxisAndGridExistenceProperty( true, false, 0, spChart2ModelContact ) );//x secondary axis
@@ -75,7 +75,7 @@ void WrappedAxisAndGridExistenceProperties::addWrappedProperties( std::vector< W
 }
 
 WrappedAxisAndGridExistenceProperty::WrappedAxisAndGridExistenceProperty( bool bAxis, bool bMain, sal_Int32 nDimensionIndex
-                , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty(OUString(),OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_bAxis( bAxis )
@@ -204,7 +204,7 @@ class WrappedAxisTitleExistenceProperty : public WrappedProperty
 {
 public:
     WrappedAxisTitleExistenceProperty( sal_Int32 nTitleIndex
-        , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedAxisTitleExistenceProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -217,12 +217,12 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     TitleHelper::eTitleType             m_eTitleType;
 };
 
 void WrappedAxisTitleExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
-            , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+            , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     rList.push_back( new WrappedAxisTitleExistenceProperty( 0, spChart2ModelContact ) );//x axis title
     rList.push_back( new WrappedAxisTitleExistenceProperty( 1, spChart2ModelContact ) );//y axis title
@@ -232,7 +232,7 @@ void WrappedAxisTitleExistenceProperties::addWrappedProperties( std::vector< Wra
 }
 
 WrappedAxisTitleExistenceProperty::WrappedAxisTitleExistenceProperty( sal_Int32 nTitleIndex
-                , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty(OUString(),OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_eTitleType( TitleHelper::Y_AXIS_TITLE )
@@ -318,7 +318,7 @@ class WrappedAxisLabelExistenceProperty : public WrappedProperty
 {
 public:
     WrappedAxisLabelExistenceProperty( bool bMain, sal_Int32 nDimensionIndex
-        , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+        , std::shared_ptr< Chart2ModelContact > spChart2ModelContact );
     virtual ~WrappedAxisLabelExistenceProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -331,13 +331,13 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private: //member
-    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     bool        m_bMain;
     sal_Int32   m_nDimensionIndex;
 };
 
 void WrappedAxisLabelExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
-            , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+            , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     rList.push_back( new WrappedAxisLabelExistenceProperty( true, 0, spChart2ModelContact ) );//x axis
     rList.push_back( new WrappedAxisLabelExistenceProperty( true, 1, spChart2ModelContact ) );//y axis
@@ -347,7 +347,7 @@ void WrappedAxisLabelExistenceProperties::addWrappedProperties( std::vector< Wra
 }
 
 WrappedAxisLabelExistenceProperty::WrappedAxisLabelExistenceProperty( bool bMain, sal_Int32 nDimensionIndex
-                , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                , std::shared_ptr< Chart2ModelContact > spChart2ModelContact )
             : WrappedProperty(OUString(),OUString())
             , m_spChart2ModelContact( spChart2ModelContact )
             , m_bMain( bMain )
