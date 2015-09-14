@@ -56,25 +56,25 @@ namespace nsTransferBufferType
 class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 {
     friend class SwView_Impl;
-    SfxObjectShellLock             aDocShellRef;
-    TransferableDataHelper          aOleData;
-    TransferableObjectDescriptor    aObjDesc;
-    ::sfx2::SvBaseLinkRef            refDdeLink;
+    SfxObjectShellLock             m_aDocShellRef;
+    TransferableDataHelper          m_aOleData;
+    TransferableObjectDescriptor    m_aObjDesc;
+    ::sfx2::SvBaseLinkRef            m_xDdeLink;
 
-    SwWrtShell      *pWrtShell;
+    SwWrtShell      *m_pWrtShell;
     /* #96392# Added pCreatorView to distinguish SwFrameShell from
        SwWrtShell. */
-    const SwFrameShell *pCreatorView;
-    SwDocFac        *pClpDocFac;
-    Graphic         *pClpGraphic, *pClpBitmap, *pOrigGrf;
-    INetBookmark    *pBkmk;     // URL and description!
-    ImageMap        *pImageMap;
-    INetImage       *pTargetURL;
+    const SwFrameShell *m_pCreatorView;
+    SwDocFac        *m_pClpDocFac;
+    Graphic         *m_pClpGraphic, *m_pClpBitmap, *m_pOrigGraphic;
+    INetBookmark    *m_pBookmark;     // URL and description!
+    ImageMap        *m_pImageMap;
+    INetImage       *m_pTargetURL;
 
-    TransferBufferType eBufferType;
+    TransferBufferType m_eBufferType;
 
-    bool bOldIdle   :1; //D&D Idle flag from the viewsettings
-    bool bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
+    bool m_bOldIdle   :1; //D&D Idle flag from the viewsettings
+    bool m_bCleanUp   :1; //D&D cleanup after Drop (not by internal Drop)
 
     // helper methods for the copy
     css::uno::Reference < css::embed::XEmbeddedObject > FindOLEObj( sal_Int64& nAspect ) const;
@@ -190,8 +190,8 @@ public:
     // Interfaces for Drag & Drop
     void StartDrag( vcl::Window* pWin, const Point& rPos );
 
-    SwWrtShell* GetShell()              { return pWrtShell; }
-    void SetCleanUp( bool bFlag )       { bCleanUp = bFlag; }
+    SwWrtShell* GetShell()              { return m_pWrtShell; }
+    void SetCleanUp( bool bFlag )       { m_bCleanUp = bFlag; }
 
     // Interfaces for Selection
     /* #96392# Added pCreator to distinguish SwFrameShell from SwWrtShell. */
@@ -201,7 +201,7 @@ public:
                                 const SwFrameShell * pCreator = NULL );
 
     // the related SwView is being closed and the SwTransferable is invalid now
-    void    Invalidate() {pWrtShell = 0;}
+    void    Invalidate() {m_pWrtShell = 0;}
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
