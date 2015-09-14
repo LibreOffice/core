@@ -30,6 +30,7 @@ namespace com { namespace sun { namespace star {
 class XMLBackgroundImageContext : public XMLElementPropertyContext
 {
     XMLPropertyState aPosProp;
+    sal_Int32 m_nBitmapModeIdx;
     XMLPropertyState aFilterProp;
     XMLPropertyState aTransparencyProp;
 
@@ -58,6 +59,7 @@ public:
         sal_Int32 nPosIdx,
         sal_Int32 nFilterIdx,
         sal_Int32 nTransparencyIdx,
+        sal_Int32 nBitmapModeIdx,
         ::std::vector< XMLPropertyState > &rProps );
 
     virtual ~XMLBackgroundImageContext();

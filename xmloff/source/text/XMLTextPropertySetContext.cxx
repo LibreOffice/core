@@ -114,6 +114,7 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
                                            nTranspIndex,
+                                           -1,
                                            rProperties );
     }
     break;
