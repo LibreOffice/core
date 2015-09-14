@@ -15,6 +15,7 @@ $(eval $(call gb_Library_use_libraries,localedata_en,\
 
 $(eval $(call gb_Library_add_generated_exception_objects,localedata_en,\
 	CustomTarget/i18npool/localedata/localedata_en_AU \
+	CustomTarget/i18npool/localedata/localedata_en_BW \
 	CustomTarget/i18npool/localedata/localedata_en_BZ \
 	CustomTarget/i18npool/localedata/localedata_en_CA \
 	CustomTarget/i18npool/localedata/localedata_en_GB \
