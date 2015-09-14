@@ -428,6 +428,8 @@ public:
     virtual void setGraphicSelection(int nType, int nX, int nY) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::resetSelection().
     virtual void resetSelection() SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::getCurrentViewShell().
+    virtual SfxViewShell* getCurrentViewShell() SAL_OVERRIDE;
 
     // ::com::sun::star::tiledrendering::XTiledRenderable
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;

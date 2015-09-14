@@ -16,6 +16,8 @@
 #include <tools/gen.hxx>
 #include <vcl/virdev.hxx>
 
+class SfxViewShell;
+
 namespace vcl
 {
 
@@ -139,8 +141,16 @@ public:
      * @see lok::Document::resetSelection().
      */
     virtual void resetSelection() = 0;
+
+    /// Get the currently active view shell of the document.
+    virtual SfxViewShell* getCurrentViewShell()
+    {
+        return 0;
+    }
 };
 
 } // namespace vcl
 
 #endif // INCLUDED_VCL_ITILEDRENDERABLE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
