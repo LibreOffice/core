@@ -1594,7 +1594,8 @@ void SwTextFrm::CollectAutoCmplWrds( SwContentNode* pActNode, sal_Int32 nActPos 
             }
             if( !--nCnt )
             {
-                if ( Application::AnyInput( VCL_INPUT_ANY ) )
+                // don't wait for TIMER here, so we can finish big paragraphs
+                if (Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER)))
                     return;
                 nCnt = 100;
             }
