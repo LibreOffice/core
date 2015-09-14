@@ -26,8 +26,7 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/input/XRoot.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -38,7 +37,7 @@ namespace xmlscript
 
     class BasicImport;
 
-    typedef ::cppu::WeakImplHelper1<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::xml::input::XElement > BasicElementBase_BASE;
 
     class BasicElementBase : public BasicElementBase_BASE
@@ -181,7 +180,7 @@ namespace xmlscript
 
     // class BasicImport
 
-    typedef ::cppu::WeakImplHelper1<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::xml::input::XRoot > BasicImport_BASE;
 
     class BasicImport : public BasicImport_BASE
@@ -221,7 +220,7 @@ namespace xmlscript
 
     // class XMLBasicImporterBase
 
-    typedef ::cppu::WeakImplHelper2<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::document::XXMLOasisBasicImporter > XMLBasicImporterBase_BASE;
 

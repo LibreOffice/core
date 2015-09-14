@@ -24,8 +24,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/xml/input/XAttributes.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -92,7 +91,7 @@ struct MGuard
 };
 
 class DocumentHandlerImpl :
-    public ::cppu::WeakImplHelper4< xml::sax::XDocumentHandler,
+    public ::cppu::WeakImplHelper< xml::sax::XDocumentHandler,
                                     xml::input::XNamespaceMapping,
                                     lang::XInitialization,
                                     com::sun::star::lang::XServiceInfo >
@@ -325,7 +324,7 @@ inline void DocumentHandlerImpl::getElementName(
 }
 
 class ExtendedAttributes :
-    public ::cppu::WeakImplHelper1< xml::input::XAttributes >
+    public ::cppu::WeakImplHelper< xml::input::XAttributes >
 {
     sal_Int32 m_nAttributes;
     sal_Int32 * m_pUids;

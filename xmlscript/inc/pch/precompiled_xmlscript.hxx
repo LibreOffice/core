@@ -66,8 +66,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>

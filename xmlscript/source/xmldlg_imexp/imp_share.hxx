@@ -25,7 +25,7 @@
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
 #include <xmlscript/xmlmod_imexp.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -111,7 +111,7 @@ inline bool getLongAttr(
 class ImportContext;
 
 struct DialogImport
-    : public ::cppu::WeakImplHelper1< css::xml::input::XRoot >
+    : public ::cppu::WeakImplHelper< css::xml::input::XRoot >
 {
     friend class ImportContext;
 
@@ -164,7 +164,7 @@ public:
         { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() &&
                       _xContext.is() ); }
     inline DialogImport( const DialogImport& rOther ) :
-        ::cppu::WeakImplHelper1< css::xml::input::XRoot >()
+        ::cppu::WeakImplHelper< css::xml::input::XRoot >()
         , _xContext( rOther._xContext )
         , _xSupplier( rOther._xSupplier )
         , _pStyleNames( rOther._pStyleNames )
@@ -200,7 +200,7 @@ public:
 };
 
 class ElementBase
-    : public ::cppu::WeakImplHelper1< css::xml::input::XElement >
+    : public ::cppu::WeakImplHelper< css::xml::input::XElement >
 {
 protected:
     DialogImport * const _pImport;
