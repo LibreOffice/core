@@ -278,9 +278,18 @@ sal_uInt16 ScInterpreter::GetWeekendAndHolidayMasks(
     if ( nParamCount >= 3 )
     {
         GetSortArray( 1, rSortArray, NULL, false );
-        size_t nMax = rSortArray.size();
-        for ( size_t i = 0; i < nMax; i++ )
-            rSortArray.at( i ) = ::rtl::math::approxFloor( rSortArray.at( i ) ) + nNullDate;
+        if ( nGlobalError == 0 )
+        {
+            size_t nMax = rSortArray.size();
+            for ( size_t i = 0; i < nMax; i++ )
+                rSortArray.at( i ) = ::rtl::math::approxFloor( rSortArray.at( i ) ) + nNullDate;
+        }
+        else
+        {
+            // tdf94079 allow empty array
+            if ( nGlobalError == errNoValue )
+                nGlobalError = 0;
+        }
     }
 
     return nGlobalError;
