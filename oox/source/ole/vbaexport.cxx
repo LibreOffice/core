@@ -633,11 +633,21 @@ void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameC
 }
 
 // section 2.3.4.3 Module Stream
-void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUString& aElementName)
+void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUString& aElementName, sal_Int32 nModuleType)
 {
     SvMemoryStream aModuleStream(4096, 4096);
 
     exportString(aModuleStream, "Attribute VB_Name = \"" + aElementName + "\"\r\n");
+    if (nModuleType == 4)
+    {
+        exportString(aModuleStream, "Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n");
+        exportString(aModuleStream, "Attribute VB_GlobalNameSpace = False\r\n");
+        exportString(aModuleStream, "Attribute VB_Creatable = False\r\n");
+        exportString(aModuleStream, "Attribute VB_PredeclaredId = True\r\n");
+        exportString(aModuleStream, "Attribute VB_Exposed = True\r\n");
+        exportString(aModuleStream, "Attribute VB_TemplateDerived = False\r\n");
+        exportString(aModuleStream, "Attribute VB_Customizable = True\r\n");
+    }
     OUString aSourceCode = rSourceCode.replaceFirst("Option VBASupport 1\n", "");
     const sal_Int32 nPos = aSourceCode.indexOf("Rem Attribute VBA_ModuleType=");
     const sal_Int32 nEndPos = nPos != -1 ? aSourceCode.indexOf("\n", nPos) : -1;
@@ -864,7 +874,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
         OUString aSourceCode;
         aCode >>= aSourceCode;
-        exportModuleStream(*aModuleStreams[i], aSourceCode, aElementNames[i]);
+        exportModuleStream(*aModuleStreams[i], aSourceCode, aElementNames[i], aModuleInfo.ModuleType);
         aModuleStreams[i]->Commit();
     }
 
