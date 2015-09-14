@@ -21,8 +21,7 @@
 #define INCLUDED_CANVAS_SOURCE_VCL_OUTDEVPROVIDER_HXX
 
 #include <sal/types.h>
-#include <boost/shared_ptr.hpp>
-
+#include <memory>
 
 class OutputDevice;
 
@@ -47,7 +46,7 @@ namespace vclcanvas
         virtual const OutputDevice& getOutDev() const = 0;
     };
 
-    typedef ::boost::shared_ptr< OutDevProvider > OutDevProviderSharedPtr;
+    typedef std::shared_ptr< OutDevProvider > OutDevProviderSharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_SOURCE_VCL_OUTDEVPROVIDER_HXX

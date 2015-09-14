@@ -26,7 +26,7 @@
 #ifdef BOOST_SP_ENABLE_DEBUG_HOOKS
 
 # include <sal/config.h>
-# include <boost/shared_ptr.hpp>
+# include <memory>
 
 ::std::size_t find_unreachable_objects( bool );
 

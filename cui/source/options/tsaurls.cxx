@@ -15,8 +15,6 @@
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include <boost/scoped_ptr.hpp>
-
 using namespace ::com::sun::star;
 
 TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
@@ -101,7 +99,7 @@ IMPL_LINK_NOARG_TYPED(TSAURLsDialog, AddHdl_Impl, Button*, void)
     OUString aDesc( get<FixedText>("enteraurl")->GetText() );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( m_pAddBtn, aURL, aDesc));
+    std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( m_pAddBtn, aURL, aDesc));
 
     if ( pDlg->Execute() == RET_OK )
     {

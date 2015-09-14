@@ -23,14 +23,11 @@
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <basegfx/vector/b2dsize.hxx>
-
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-
-
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/sprite.hxx>
 #include <cppcanvas/customsprite.hxx>
+#include <boost/noncopyable.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
@@ -45,7 +42,7 @@ namespace cppcanvas
     class SpriteCanvas;
 
     // forward declaration, since cloneSpriteCanvas() also references SpriteCanvas
-    typedef ::boost::shared_ptr< ::cppcanvas::SpriteCanvas > SpriteCanvasSharedPtr;
+    typedef std::shared_ptr< ::cppcanvas::SpriteCanvas > SpriteCanvasSharedPtr;
 
     /** SpriteCanvas interface
      */

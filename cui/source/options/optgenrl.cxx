@@ -33,9 +33,6 @@
 #include <svx/dlgutil.hxx>
 #include <svx/svxids.hrc>
 
-#include <boost/ref.hpp>
-#include <boost/make_shared.hpp>
-
 namespace
 {
 
@@ -262,7 +259,7 @@ void SvxGeneralTabPage::InitControls ()
         if (!(vRowInfo[iRow].nLangFlags & LangBit))
             continue;
         // creating row
-        vRows.push_back(boost::make_shared<Row>(
+        vRows.push_back(std::make_shared<Row>(
             get<FixedText>(vRowInfo[iRow].pTextId), eRow));
         Row& rRow = *vRows.back();
         // fields in the row
@@ -275,7 +272,7 @@ void SvxGeneralTabPage::InitControls ()
         for ( ; iField != nFieldCount && vFieldInfo[iField].eRow == eRow; ++iField)
         {
             // creating edit field
-            vFields.push_back(boost::make_shared<Field>(
+            vFields.push_back(std::make_shared<Field>(
                 get<Edit>(vFieldInfo[iField].pEditId), iField));
             // "short name" field?
             if (vFieldInfo[iField].nUserOptionsId == UserOptToken::ID)

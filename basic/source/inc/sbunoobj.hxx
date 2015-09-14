@@ -37,7 +37,6 @@
 #include <unordered_map>
 #include <vector>
 #include <map>
-#include <boost/shared_ptr.hpp>
 
 void registerComponentToBeDisposedForBasic( css::uno::Reference< css::lang::XComponent > xComponent, StarBASIC* pBasic );
 
@@ -110,7 +109,7 @@ class SbUnoObject: public SbxObject
     bool bNeedIntrospection;
     bool bNativeCOMObject;
     css::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
-    ::boost::shared_ptr< SbUnoStructRefObject > maStructInfo;
+    std::shared_ptr< SbUnoStructRefObject > maStructInfo;
     // help method to establish the dbg_-properties
     void implCreateDbgProperties();
 

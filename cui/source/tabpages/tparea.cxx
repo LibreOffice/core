@@ -43,7 +43,6 @@
 //UUUU
 #include "sfx2/opengrf.hxx"
 #include <vcl/layout.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -1300,7 +1299,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
               m_pTsbOriginal->IsEnabled() &&
               m_pTsbScale->GetSavedValue() != TRISTATE_TRUE ) )
         {
-            boost::scoped_ptr<XFillBmpSizeLogItem> pItem;
+            std::unique_ptr<XFillBmpSizeLogItem> pItem;
             if( m_pTsbScale->IsEnabled() )
                 pItem.reset(new XFillBmpSizeLogItem( eState == TRISTATE_FALSE ));
             else if( m_pTsbOriginal->IsEnabled() && m_pTsbOriginal->GetState() == TRISTATE_TRUE )
@@ -1320,7 +1319,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
         //aMtrFldXSize
         OUString aStr = m_pMtrFldXSize->GetText();
         {
-            boost::scoped_ptr<XFillBmpSizeXItem> pItem;
+            std::unique_ptr<XFillBmpSizeXItem> pItem;
             TriState eScaleState = m_pTsbScale->GetState();
 
             if( m_pMtrFldXSize->IsEnabled() &&
@@ -1355,7 +1354,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
         //aMtrFldYSize
         aStr = m_pMtrFldYSize->GetText();
         {
-            boost::scoped_ptr<XFillBmpSizeYItem> pItem;
+            std::unique_ptr<XFillBmpSizeYItem> pItem;
             TriState eScaleState = m_pTsbScale->GetState();
 
             if( m_pMtrFldYSize->IsEnabled() &&
@@ -2345,7 +2344,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
     if( m_pMtrFldXSize->IsEnabled() )
     {
-        boost::scoped_ptr<XFillBmpSizeXItem> pItem;
+        std::unique_ptr<XFillBmpSizeXItem> pItem;
         TriState eScaleState = m_pTsbScale->GetState();
 
         if( eScaleState == TRISTATE_FALSE )
@@ -2364,7 +2363,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
 
     if( m_pMtrFldYSize->IsEnabled() )
     {
-        boost::scoped_ptr<XFillBmpSizeYItem> pItem;
+        std::unique_ptr<XFillBmpSizeYItem> pItem;
         TriState eScaleState = m_pTsbScale->GetState();
 
         if( eScaleState == TRISTATE_FALSE )

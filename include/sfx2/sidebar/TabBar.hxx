@@ -28,7 +28,6 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <boost/tuple/tuple.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <functional>
 

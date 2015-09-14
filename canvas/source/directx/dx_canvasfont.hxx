@@ -29,7 +29,7 @@
 
 #include <rtl/ref.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 
 #include "dx_winstuff.hxx"
@@ -40,8 +40,8 @@
 
 namespace dxcanvas
 {
-    typedef ::boost::shared_ptr< Gdiplus::Font >        FontSharedPtr;
-    typedef ::boost::shared_ptr< Gdiplus::FontFamily >  FontFamilySharedPtr;
+    typedef std::shared_ptr< Gdiplus::Font >        FontSharedPtr;
+    typedef std::shared_ptr< Gdiplus::FontFamily >  FontFamilySharedPtr;
 
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvasFont,
                                              css::lang::XServiceInfo > CanvasFont_Base;

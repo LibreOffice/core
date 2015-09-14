@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_TEXTLAYOUT_DRAWHELPER_HXX
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_TEXTLAYOUT_DRAWHELPER_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/StringContext.hpp>
@@ -46,7 +46,7 @@ namespace dxcanvas
         ~TextLayoutDrawHelper();
 
         // draw text
-        void drawText( const boost::shared_ptr<Gdiplus::Graphics>&          rGraphics,
+        void drawText( const std::shared_ptr<Gdiplus::Graphics>&          rGraphics,
                        const css::rendering::ViewState&        rViewState,
                        const css::rendering::RenderState&      rRenderState,
                        const ::basegfx::B2ISize&               rOutputOffset,

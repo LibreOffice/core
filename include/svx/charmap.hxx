@@ -23,7 +23,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/vclptr.hxx>
-#include <boost/shared_ptr.hpp>
 #include <map>
 #include <memory>
 #include <svx/svxdllapi.h>

@@ -14,10 +14,10 @@
 
 #include <cassert>
 #include <map>
+#include <memory>
 #include <vector>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -138,7 +138,7 @@ public:
 
             enum Status { STATUS_NEW, STATUS_WRAPPER, STATUS_LOADED };
 
-            boost::shared_ptr< ImplementationInfo > info;
+            std::shared_ptr< ImplementationInfo > info;
             ImplementationConstructorFn * constructor;
             css::uno::Reference< css::lang::XSingleComponentFactory > factory1;
             css::uno::Reference< css::lang::XSingleServiceFactory > factory2;
@@ -155,19 +155,19 @@ public:
                 css::uno::Reference<css::uno::XInterface> const & instance);
         };
 
-        typedef std::map< rtl::OUString, boost::shared_ptr< Implementation > >
+        typedef std::map< rtl::OUString, std::shared_ptr< Implementation > >
             NamedImplementations;
 
         typedef
             std::map<
                 css::uno::Reference< css::lang::XServiceInfo >,
-                boost::shared_ptr< Implementation > >
+                std::shared_ptr< Implementation > >
             DynamicImplementations;
 
         typedef
             std::map<
                 rtl::OUString,
-                std::vector< boost::shared_ptr< Implementation > > >
+                std::vector< std::shared_ptr< Implementation > > >
             ImplementationMap;
 
         NamedImplementations namedImplementations;
@@ -201,7 +201,7 @@ public:
 
     void loadImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        boost::shared_ptr< Data::Implementation > & implementation);
+        std::shared_ptr< Data::Implementation > & implementation);
 
 private:
     virtual ~ServiceManager() {}
@@ -371,7 +371,7 @@ private:
 
     void removeImplementation(const rtl::OUString & name);
 
-    boost::shared_ptr< Data::Implementation > findServiceImplementation(
+    std::shared_ptr< Data::Implementation > findServiceImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
         rtl::OUString const & specifier);
 

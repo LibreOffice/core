@@ -21,7 +21,7 @@
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_BITMAPPROVIDER_HXX
 
 #include "dx_ibitmap.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace dxcanvas
 {
@@ -31,7 +31,7 @@ namespace dxcanvas
         virtual IBitmapSharedPtr getBitmap() const = 0;
     };
 
-    typedef boost::shared_ptr<BitmapProvider> BitmapProviderSharedPtr;
+    typedef std::shared_ptr<BitmapProvider> BitmapProviderSharedPtr;
 }
 
 #endif

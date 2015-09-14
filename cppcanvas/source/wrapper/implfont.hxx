@@ -21,12 +21,8 @@
 #define INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLFONT_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-
-#include <boost/shared_ptr.hpp>
-
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <cppcanvas/font.hxx>
-
 
 namespace com { namespace sun { namespace star { namespace rendering
 {

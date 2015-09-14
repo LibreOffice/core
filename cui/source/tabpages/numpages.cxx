@@ -71,7 +71,6 @@
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <sfx2/filedlghelper.hxx>
 #include "svx/gallery1.hxx"
 #include "svx/galtheme.hxx"
@@ -1030,7 +1029,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, voi
         {
             xSimpleFileAccess->copy( aUserImageURL, aUserGalleryURL );
             INetURLObject gURL( aUserGalleryURL );
-                 boost::scoped_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
+                 std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
                           gURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
             if ( pIn )
             {

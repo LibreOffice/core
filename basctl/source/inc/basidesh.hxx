@@ -28,7 +28,7 @@
 #include <svx/ifaceids.hxx>
 #include <vcl/scrbar.hxx>
 #include <map>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class SfxViewFactory;
 class SdrView;
@@ -69,7 +69,7 @@ private:
     VclPtr<BaseWindow>         pCurWin;
     ScriptDocument      m_aCurDocument;
     OUString            m_aCurLibName;
-    boost::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
+    std::shared_ptr<LocalizationMgr> m_pCurLocalizationMgr;
 
     VclPtr<ScrollBar>         aHScrollBar;
     VclPtr<ScrollBar>         aVScrollBar;
@@ -160,7 +160,7 @@ public:
     BaseWindow*      GetCurWindow() const    { return pCurWin; }
     ScriptDocument const& GetCurDocument() const { return m_aCurDocument; }
     OUString const&  GetCurLibName() const { return m_aCurLibName; }
-    boost::shared_ptr<LocalizationMgr> GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
+    std::shared_ptr<LocalizationMgr> GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 
     TabBar&             GetTabBar()             { return *pTabBar; }
     WindowTable&        GetWindowTable()        { return aWindowTable; }

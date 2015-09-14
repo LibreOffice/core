@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <boost/bind.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <boost/tuple/tuple.hpp>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -50,7 +49,7 @@ namespace dxcanvas
 {
     namespace
     {
-        typedef ::boost::shared_ptr< Gdiplus::PathGradientBrush >   PathGradientBrushSharedPtr;
+        typedef std::shared_ptr< Gdiplus::PathGradientBrush >   PathGradientBrushSharedPtr;
 
         bool fillLinearGradient( GraphicsSharedPtr&                             rGraphics,
                                  const ::canvas::ParametricPolyPolygon::Values& /*rValues*/,

@@ -21,7 +21,7 @@
 #define INCLUDED_BASEBMP_DEBUG_HXX
 
 #include <iostream>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <basebmp/basebmpdllapi.h>
 
 namespace basebmp
@@ -48,7 +48,7 @@ namespace basebmp
         debugDump( pMyDevice, output );
 </pre>
     */
-    void BASEBMP_DLLPUBLIC debugDump( const boost::shared_ptr< BitmapDevice >& rDevice,
+    void BASEBMP_DLLPUBLIC debugDump( const std::shared_ptr< BitmapDevice >& rDevice,
                                       ::std::ostream&                          rOutputStream );
 }
 

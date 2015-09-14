@@ -21,12 +21,11 @@
 #define INCLUDED_CPPU_SOURCE_THREADPOOL_JOBQUEUE_HXX
 
 #include <list>
+#include <memory>
 #include <sal/types.h>
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-
-#include <boost/shared_ptr.hpp>
 
 namespace cppu_threadpool
 {
@@ -43,7 +42,7 @@ namespace cppu_threadpool
     typedef ::std::list < sal_Int64 > CallStackList;
 
     class DisposedCallerAdmin;
-    typedef boost::shared_ptr<DisposedCallerAdmin> DisposedCallerAdminHolder;
+    typedef std::shared_ptr<DisposedCallerAdmin> DisposedCallerAdminHolder;
 
     class JobQueue
     {

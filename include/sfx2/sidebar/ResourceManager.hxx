@@ -25,7 +25,6 @@
 #include <unotools/confignode.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <set>
-#include <boost/shared_ptr.hpp>
 #include <svtools/miscopt.hxx>
 
 namespace sfx2 { namespace sidebar {

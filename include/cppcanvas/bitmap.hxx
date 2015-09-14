@@ -21,10 +21,9 @@
 #define INCLUDED_CPPCANVAS_BITMAP_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-
-#include <boost/shared_ptr.hpp>
 #include <cppcanvas/canvasgraphic.hxx>
 #include <cppcanvas/bitmapcanvas.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
@@ -66,7 +65,7 @@ namespace cppcanvas
             ::com::sun::star::rendering::XBitmap >  getUNOBitmap() const = 0;
     };
 
-    typedef ::boost::shared_ptr< ::cppcanvas::Bitmap > BitmapSharedPtr;
+    typedef std::shared_ptr< ::cppcanvas::Bitmap > BitmapSharedPtr;
 }
 
 #endif // INCLUDED_CPPCANVAS_BITMAP_HXX

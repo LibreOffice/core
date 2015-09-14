@@ -21,8 +21,7 @@
 #define INCLUDED_CPPCANVAS_SOURCE_INC_ACTION_HXX
 
 #include <sal/types.h>
-
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace basegfx
 {
@@ -146,7 +145,7 @@ namespace cppcanvas
             virtual sal_Int32 getActionCount() const = 0;
         };
 
-        typedef ::boost::shared_ptr< Action > ActionSharedPtr;
+        typedef std::shared_ptr< Action > ActionSharedPtr;
 
     }
 }

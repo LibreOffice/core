@@ -27,8 +27,8 @@
 #include <eventqueue.hxx>
 #include <slideshowexceptions.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <limits>
+#include <memory>
 
 
 using namespace ::com::sun::star;
@@ -46,7 +46,7 @@ namespace slideshow
 
 
         EventQueue::EventQueue(
-            boost::shared_ptr<canvas::tools::ElapsedTime> const & pPresTimer )
+            std::shared_ptr<canvas::tools::ElapsedTime> const & pPresTimer )
             : maMutex(),
               maEvents(),
               maNextEvents(),

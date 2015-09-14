@@ -21,12 +21,8 @@
 #define INCLUDED_CPPCANVAS_SOURCE_WRAPPER_IMPLCOLOR_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-
-#include <boost/shared_ptr.hpp>
-
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <cppcanvas/color.hxx>
-
 
 /* Definition of Color class */
 

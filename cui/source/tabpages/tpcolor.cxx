@@ -45,7 +45,6 @@
 #include <cuitabline.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -714,7 +713,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+    std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16 nError = 1;
 
@@ -798,7 +797,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickModifyHdl_Impl, Button*, void)
             aWarningBox->Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+            std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
             bool bLoop = true;
 
             while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
@@ -842,7 +841,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickModifyHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
 {
-    boost::scoped_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParentDialog() ));
+    std::unique_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParentDialog() ));
 
     pColorDlg->SetColor (aCurrentColor);
     pColorDlg->SetMode( svtools::ColorPickerMode_MODIFY );

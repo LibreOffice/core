@@ -557,7 +557,7 @@ namespace slideshow
                 {
                 }
 
-                virtual bool isOnView(boost::shared_ptr<View> const& /*rView*/) const SAL_OVERRIDE
+                virtual bool isOnView(std::shared_ptr<View> const& /*rView*/) const SAL_OVERRIDE
                 {
                     return true; // visible on all views
                 }

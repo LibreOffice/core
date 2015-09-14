@@ -21,7 +21,6 @@
 
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <sfx2/sidebar/ContextList.hxx>
-#include <boost/shared_ptr.hpp>
 
 namespace sfx2 { namespace sidebar {
 

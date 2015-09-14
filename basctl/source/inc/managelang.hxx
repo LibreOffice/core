@@ -57,7 +57,7 @@ private:
     VclPtr<PushButton>         m_pDeletePB;
     VclPtr<PushButton>         m_pMakeDefPB;
 
-    boost::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
+    std::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
 
     OUString            m_sDefLangStr;
     OUString            m_sCreateLangStr;
@@ -72,7 +72,7 @@ private:
     DECL_LINK(SelectHdl, void *);
 
 public:
-    ManageLanguageDialog( vcl::Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr );
+    ManageLanguageDialog( vcl::Window* pParent, std::shared_ptr<LocalizationMgr> _pLMgr );
     virtual ~ManageLanguageDialog();
     virtual void dispose() SAL_OVERRIDE;
 };
@@ -87,12 +87,12 @@ private:
     VclPtr<FixedText>          m_pDefinedFT;
     VclPtr<FixedText>          m_pAddedFT;
 
-    boost::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
+    std::shared_ptr<LocalizationMgr> m_xLocalizationMgr;
 
     void                FillLanguageBox();
 
 public:
-    SetDefaultLanguageDialog(vcl::Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr);
+    SetDefaultLanguageDialog(vcl::Window* pParent, std::shared_ptr<LocalizationMgr> xLMgr);
     virtual ~SetDefaultLanguageDialog();
     virtual void dispose() SAL_OVERRIDE;
 

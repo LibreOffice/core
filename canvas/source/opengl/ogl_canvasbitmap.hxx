@@ -19,8 +19,6 @@
 #include <canvas/base/basemutexhelper.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
-#include <boost/shared_ptr.hpp>
-
 #include "ogl_bitmapcanvashelper.hxx"
 #include "ogl_spritecanvas.hxx"
 

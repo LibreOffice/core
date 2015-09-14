@@ -51,7 +51,6 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/grfmgr.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace css;
 
@@ -583,7 +582,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     const SvxBrushItem* pBgdAttr = NULL;
     sal_uInt16 nSlot = SID_VIEW_FLD_PIC;
     sal_uInt16 nWhich = GetWhich( nSlot );
-    boost::scoped_ptr<SvxBrushItem> pTemp;
+    std::unique_ptr<SvxBrushItem> pTemp;
 
     if ( rSet.GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
     {
@@ -754,7 +753,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             }
             else
             {
-                boost::scoped_ptr<SvxBrushItem> pTmpBrush;
+                std::unique_ptr<SvxBrushItem> pTmpBrush;
                 if ( m_pBtnLink->IsChecked() )
                 {
                     pTmpBrush.reset(new SvxBrushItem( aBgdGraphicPath,
@@ -1328,7 +1327,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
     sal_Int32 nSelPos = pBox->GetSelectEntryPos();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
     {
-        boost::scoped_ptr<SvxBrushItem> xItemHolder;
+        std::unique_ptr<SvxBrushItem> xItemHolder;
         SvxBrushItem* pActItem = NULL;
         sal_uInt16 nWhich = 0;
         switch(pTableBck_Impl->nActPos)

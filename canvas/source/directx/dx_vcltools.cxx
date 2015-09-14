@@ -64,7 +64,7 @@ namespace dxcanvas
             }
 
             /// Draw DI bits to given Graphics
-            bool drawDIBits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+            bool drawDIBits( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
                              const void*                                     hDIB )
             {
                 bool            bRet( false );
@@ -94,7 +94,7 @@ namespace dxcanvas
                 Reference to bitmap. Might get modified, in such a way
                 that it will hold a DIB after a successful function call.
              */
-            bool drawVCLBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+            bool drawVCLBitmap( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
                                 ::Bitmap&                                       rBmp )
             {
                 BitmapSystemData aBmpSysData;
@@ -467,7 +467,7 @@ namespace dxcanvas
                 return aBmpData;
             }
 
-            bool drawVCLBitmapEx( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+            bool drawVCLBitmapEx( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
                                   const ::BitmapEx&                               rBmpEx )
             {
                 if( !rBmpEx.IsTransparent() )
@@ -483,7 +483,7 @@ namespace dxcanvas
             }
         }
 
-        bool drawVCLBitmapFromXBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
+        bool drawVCLBitmapFromXBitmap( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
                                        const uno::Reference< rendering::XBitmap >&     xBitmap )
         {
             // TODO(F2): add support for floating point bitmap formats
