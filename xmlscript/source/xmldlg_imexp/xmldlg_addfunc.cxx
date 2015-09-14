@@ -23,7 +23,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
@@ -36,7 +36,7 @@ namespace xmlscript
 {
 
 class InputStreamProvider
-    : public ::cppu::WeakImplHelper1< io::XInputStreamProvider >
+    : public ::cppu::WeakImplHelper< io::XInputStreamProvider >
 {
     ByteSequence _bytes;
 

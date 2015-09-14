@@ -29,7 +29,6 @@
 
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/implbase2.hxx>
 
 #include <comphelper/processfactory.hxx>
 

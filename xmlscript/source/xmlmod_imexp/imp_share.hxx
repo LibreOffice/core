@@ -22,7 +22,7 @@
 
 #include <xmlscript/xmlmod_imexp.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -42,7 +42,7 @@ namespace xmlscript
 // Script module import
 
 struct ModuleImport
-    : public ::cppu::WeakImplHelper1< css::xml::input::XRoot >
+    : public ::cppu::WeakImplHelper< css::xml::input::XRoot >
 {
     friend class ModuleElement;
 
@@ -82,7 +82,7 @@ public:
 };
 
 class ModuleElement
-    : public ::cppu::WeakImplHelper1< css::xml::input::XElement >
+    : public ::cppu::WeakImplHelper< css::xml::input::XElement >
 {
 protected:
     ModuleImport * _pImport;

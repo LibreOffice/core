@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <xmlscript/xml_helper.hxx>
 
 using namespace osl;
@@ -32,7 +32,7 @@ namespace xmlscript
 {
 
 class BSeqInputStream
-    : public ::cppu::WeakImplHelper1< io::XInputStream >
+    : public ::cppu::WeakImplHelper< io::XInputStream >
 {
     ByteSequence _seq;
     sal_Int32 _nPos;
@@ -98,7 +98,7 @@ void BSeqInputStream::closeInput()
 }
 
 class BSeqOutputStream
-    : public ::cppu::WeakImplHelper1< io::XOutputStream >
+    : public ::cppu::WeakImplHelper< io::XOutputStream >
 {
     ByteSequence * _seq;
 

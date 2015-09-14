@@ -22,7 +22,7 @@
 
 #include <xmlscript/xmllib_imexp.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -102,7 +102,7 @@ inline bool getLongAttr(
 // Library import
 
 struct LibraryImport
-    : public ::cppu::WeakImplHelper1< css::xml::input::XRoot >
+    : public ::cppu::WeakImplHelper< css::xml::input::XRoot >
 {
     friend class LibrariesElement;
     friend class LibraryElement;
@@ -152,7 +152,7 @@ public:
 };
 
 class LibElementBase
-    : public ::cppu::WeakImplHelper1< css::xml::input::XElement >
+    : public ::cppu::WeakImplHelper< css::xml::input::XElement >
 {
 protected:
     LibraryImport * _pImport;
