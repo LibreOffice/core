@@ -1486,7 +1486,7 @@ OUString DrawingML::GetFieldValue( ::com::sun::star::uno::Reference< ::com::sun:
                 SAL_INFO("oox.shape", "field kind: " << aFieldKind);
                 if( aFieldKind == "Page" )
                 {
-                    aFieldValue = OUString("slidenum");
+                    aFieldValue = "slidenum";
                 }
                 else if( aFieldKind == "URL" )
                 {
