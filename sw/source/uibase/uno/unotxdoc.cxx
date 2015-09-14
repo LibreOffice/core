@@ -3972,7 +3972,7 @@ static Any lcl_GetDisplayBitmap(const OUString& _sLinkSuffix)
     OUString sLinkSuffix = _sLinkSuffix;
     if(!sLinkSuffix.isEmpty())
         sLinkSuffix = sLinkSuffix.copy(1);
-    ContentTypeId nImgId;
+    ContentTypeId nImgId(ContentTypeId::UNKNOWN);
     bool bNotFound = false;
 
     if(sLinkSuffix == "outline")
