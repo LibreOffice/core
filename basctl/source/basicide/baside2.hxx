@@ -73,8 +73,8 @@ friend class CodeCompleteListBox;
 private:
     class ChangesListener;
 
-    boost::scoped_ptr<ExtTextView>   pEditView;
-    boost::scoped_ptr<ExtTextEngine> pEditEngine;
+    std::unique_ptr<ExtTextView>   pEditView;
+    std::unique_ptr<ExtTextEngine> pEditEngine;
     ModulWindow&                     rModulWindow;
 
     rtl::Reference< ChangesListener > listener_;
@@ -92,7 +92,7 @@ private:
 
     // progress bar
     class ProgressInfo;
-    boost::scoped_ptr<ProgressInfo> pProgress;
+    std::unique_ptr<ProgressInfo> pProgress;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt) SAL_OVERRIDE;
 

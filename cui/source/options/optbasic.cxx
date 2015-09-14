@@ -22,7 +22,6 @@
 #include <svtools/miscopt.hxx>
 #include <iostream>
 #include <officecfg/Office/BasicIDE.hxx>
-#include <boost/shared_ptr.hpp>
 #include <cuires.hrc>
 
 SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet )

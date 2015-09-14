@@ -67,7 +67,6 @@
 
 #include <vector>
 #include <map>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::ucbhelper;
 using namespace ::com::sun::star;
@@ -1620,7 +1619,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            boost::scoped_ptr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog( this, xSpellChecker1 ));
+            std::unique_ptr<AbstractSvxNewDictionaryDialog> aDlg(pFact->CreateSvxNewDictionaryDialog( this, xSpellChecker1 ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             uno::Reference< XDictionary >  xNewDic;
             if ( aDlg->Execute() == RET_OK )
@@ -1655,7 +1654,7 @@ IMPL_LINK_TYPED( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        boost::scoped_ptr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog( this, xDic->getName(), xSpellChecker1, RID_SFXDLG_EDITDICT ));
+                        std::unique_ptr<VclAbstractDialog> aDlg(pFact->CreateSvxEditDictionaryDialog( this, xDic->getName(), xSpellChecker1, RID_SFXDLG_EDITDICT ));
                         DBG_ASSERT(aDlg, "Dialog creation failed!");
                         aDlg->Execute();
                     }

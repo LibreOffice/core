@@ -21,8 +21,7 @@
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_GDIPLUSUSER_HXX
 
 #include <sal/config.h>
-
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 /* Definition of GDIPlusUser class */
 
@@ -31,7 +30,7 @@ namespace dxcanvas
     class GDIPlusUser
     {
     public:
-        typedef ::boost::shared_ptr< GDIPlusUser > GDIPlusUserSharedPtr;
+        typedef std::shared_ptr< GDIPlusUser > GDIPlusUserSharedPtr;
 
         static GDIPlusUserSharedPtr createInstance();
         ~GDIPlusUser();

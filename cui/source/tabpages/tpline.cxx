@@ -51,7 +51,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/settings.hxx>
-#include <boost/scoped_ptr.hpp>
 
 #define MAX_BMP_WIDTH   16
 #define MAX_BMP_HEIGHT  16
@@ -360,7 +359,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
     {
         ScopedVclPtrInstance< VirtualDevice > pVDev;
         pVDev->SetMapMode(MapMode(MAP_100TH_MM));
-        boost::scoped_ptr<SdrModel> pModel(new SdrModel);
+        std::unique_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
         // Page
         SdrPage* pPage = new SdrPage( *pModel, false );
@@ -368,7 +367,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
         pModel->InsertPage( pPage, 0 );
         {
         // 3D View
-        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
+        std::unique_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
 
@@ -723,7 +722,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
             m_pLbLineStyle->IsValueChangedFromSaved() )
         {
-            boost::scoped_ptr<XLineStyleItem> pStyleItem;
+            std::unique_ptr<XLineStyleItem> pStyleItem;
 
             if( nPos == 0 )
                 pStyleItem.reset(new XLineStyleItem( drawing::LineStyle_NONE ));
@@ -807,7 +806,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         nPos = m_pLbStartStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND && m_pLbStartStyle->IsValueChangedFromSaved() )
         {
-            boost::scoped_ptr<XLineStartItem> pItem;
+            std::unique_ptr<XLineStartItem> pItem;
             if( nPos == 0 )
                 pItem.reset(new XLineStartItem());
             else if( m_pLineEndList->Count() > (long) ( nPos - 1 ) )
@@ -823,7 +822,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         nPos = m_pLbEndStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND && m_pLbEndStyle->IsValueChangedFromSaved() )
         {
-            boost::scoped_ptr<XLineEndItem> pItem;
+            std::unique_ptr<XLineEndItem> pItem;
             if( nPos == 0 )
                 pItem.reset(new XLineEndItem());
             else if( m_pLineEndList->Count() > (long) ( nPos - 1 ) )
@@ -879,7 +878,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     nPos = m_pLBEdgeStyle->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND != nPos && m_pLBEdgeStyle->IsValueChangedFromSaved() )
     {
-        boost::scoped_ptr<XLineJointItem> pNew;
+        std::unique_ptr<XLineJointItem> pNew;
 
         switch(nPos)
         {
@@ -921,7 +920,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     nPos = m_pLBCapStyle->GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND != nPos && m_pLBCapStyle->IsValueChangedFromSaved() )
     {
-        boost::scoped_ptr<XLineCapItem> pNew;
+        std::unique_ptr<XLineCapItem> pNew;
 
         switch(nPos)
         {
@@ -1154,13 +1153,13 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         ScopedVclPtrInstance< VirtualDevice > pVDev;
         pVDev->SetMapMode(MapMode(MAP_100TH_MM));
 
-        boost::scoped_ptr<SdrModel> pModel(new SdrModel);
+        std::unique_ptr<SdrModel> pModel(new SdrModel);
         pModel->GetItemPool().FreezeIdRanges();
         SdrPage* pPage = new SdrPage( *pModel, false );
         pPage->SetSize(Size(1000,1000));
         pModel->InsertPage( pPage, 0 );
         {
-        boost::scoped_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
+        std::unique_ptr<SdrView> pView(new SdrView( pModel.get(), pVDev ));
         pView->hideMarkHandles();
         pView->ShowSdrPage(pPage);
         SdrObject *pObj=NULL;

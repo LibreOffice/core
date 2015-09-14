@@ -23,12 +23,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/rendering/XSprite.hpp>
-
-#include <boost/shared_ptr.hpp>
 #include <cppcanvas/sprite.hxx>
-
 #include <implspritecanvas.hxx>
-
 
 namespace cppcanvas
 {

@@ -221,8 +221,6 @@ private:
 
 EditorWindow::EditorWindow (vcl::Window* pParent, ModulWindow* pModulWindow) :
     Window(pParent, WB_BORDER),
-    pEditView(0),
-    pEditEngine(0),
     rModulWindow(*pModulWindow),
     nCurTextWidth(0),
     aHighlighter(HIGHLIGHT_BASIC),

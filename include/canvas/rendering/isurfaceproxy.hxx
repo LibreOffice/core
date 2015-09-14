@@ -21,8 +21,7 @@
 #define INCLUDED_CANVAS_RENDERING_ISURFACEPROXY_HXX
 
 #include <canvas/rendering/irendermodule.hxx>
-
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace basegfx
 {
@@ -99,7 +98,7 @@ namespace canvas
                            const ::basegfx::B2DHomMatrix&   rTransform ) = 0;
     };
 
-    typedef ::boost::shared_ptr< ISurfaceProxy > ISurfaceProxySharedPtr;
+    typedef std::shared_ptr< ISurfaceProxy > ISurfaceProxySharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_RENDERING_ISURFACEPROXY_HXX

@@ -26,8 +26,7 @@
 #include <canvas/vclwrapper.hxx>
 #include "outdevprovider.hxx"
 
-#include <boost/shared_ptr.hpp>
-
+#include <memory>
 
 namespace vclcanvas
 {
@@ -88,7 +87,7 @@ namespace vclcanvas
         mutable bool                            mbVDevContentIsCurrent;
     };
 
-    typedef ::boost::shared_ptr< BitmapBackBuffer > BitmapBackBufferSharedPtr;
+    typedef std::shared_ptr< BitmapBackBuffer > BitmapBackBufferSharedPtr;
 
 }
 

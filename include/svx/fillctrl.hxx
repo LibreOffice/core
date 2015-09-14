@@ -24,7 +24,6 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <boost/scoped_ptr.hpp>
 
 class XFillStyleItem;
 class XFillColorItem;
@@ -45,11 +44,11 @@ class ListBox;
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxFillToolBoxControl : public SfxToolBoxControl
 {
 private:
-    boost::scoped_ptr< XFillStyleItem >    mpStyleItem;
-    boost::scoped_ptr< XFillColorItem >    mpColorItem;
-    boost::scoped_ptr< XFillGradientItem > mpFillGradientItem;
-    boost::scoped_ptr< XFillHatchItem >    mpHatchItem;
-    boost::scoped_ptr< XFillBitmapItem >   mpBitmapItem;
+    std::unique_ptr< XFillStyleItem >    mpStyleItem;
+    std::unique_ptr< XFillColorItem >    mpColorItem;
+    std::unique_ptr< XFillGradientItem > mpFillGradientItem;
+    std::unique_ptr< XFillHatchItem >    mpHatchItem;
+    std::unique_ptr< XFillBitmapItem >   mpBitmapItem;
 
     VclPtr<FillControl>        mpFillControl;
     VclPtr<SvxFillTypeBox>     mpLbFillType;

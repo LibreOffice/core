@@ -22,12 +22,11 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-
-#include <boost/shared_ptr.hpp>
 #include <boost/optional.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <cppcanvas/canvasgraphic.hxx>
 #include <cppcanvas/color.hxx>
+#include <memory>
 
 namespace basegfx
 {
@@ -136,7 +135,7 @@ namespace cppcanvas
         };
     };
 
-    typedef ::boost::shared_ptr< ::cppcanvas::Renderer > RendererSharedPtr;
+    typedef std::shared_ptr< ::cppcanvas::Renderer > RendererSharedPtr;
 }
 
 #endif // INCLUDED_CPPCANVAS_RENDERER_HXX

@@ -30,7 +30,6 @@
 #include <unotools/textsearch.hxx>
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
 #include <iostream>
 
 using namespace svx;
@@ -239,7 +238,7 @@ bool CuiAboutConfigTabPage::FillItemSet()
 {
     bool bModified = false;
 
-    std::vector< boost::shared_ptr< Prop_Impl > >::iterator pIter;
+    std::vector< std::shared_ptr< Prop_Impl > >::iterator pIter;
     for( pIter = m_vectorOfModified.begin() ; pIter != m_vectorOfModified.end(); ++pIter )
     {
         Reference< XNameAccess > xUpdateAccess = getConfigAccess( (*pIter)->Name , true );
@@ -511,7 +510,7 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( const OUString&
     return xNameAccess;
 }
 
-void CuiAboutConfigTabPage::AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp )
+void CuiAboutConfigTabPage::AddToModifiedVector( const std::shared_ptr< Prop_Impl >& rProp )
 {
     bool isModifiedBefore = false;
     //Check if value modified before
@@ -595,7 +594,7 @@ IMPL_LINK_NOARG_TYPED( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
         OUString sPropertyType = SvTabListBox::GetEntryText( pEntry, 2 );
         OUString sPropertyValue = SvTabListBox::GetEntryText( pEntry, 3 );
 
-        boost::shared_ptr< Prop_Impl > pProperty (new Prop_Impl( pUserData->sPropertyPath, sPropertyName, makeAny( sPropertyValue ) ) );
+        std::shared_ptr< Prop_Impl > pProperty (new Prop_Impl( pUserData->sPropertyPath, sPropertyName, makeAny( sPropertyValue ) ) );
         bool bSaveChanges = false;
 
         bool bOpenDialog = true;

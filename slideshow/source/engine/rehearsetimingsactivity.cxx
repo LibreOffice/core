@@ -59,7 +59,7 @@ class RehearseTimingsActivity::WakeupEvent : public Event,
                                              private ::boost::noncopyable
 {
 public:
-    WakeupEvent( boost::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
+    WakeupEvent( std::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
                  ActivitySharedPtr const&                                 rActivity,
                  ActivitiesQueue &                                        rActivityQueue ) :
         Event("WakeupEvent"),

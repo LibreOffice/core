@@ -71,7 +71,6 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include "svx/flagsdef.hxx"
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 

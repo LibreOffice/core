@@ -72,7 +72,7 @@ namespace canvas
     // PageManagerSharedPtr
 
 
-    typedef ::boost::shared_ptr< PageManager > PageManagerSharedPtr;
+    typedef std::shared_ptr< PageManager > PageManagerSharedPtr;
 }
 
 #endif

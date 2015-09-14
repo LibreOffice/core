@@ -27,8 +27,6 @@
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <vector>
 
 namespace sfx2 { namespace sidebar {

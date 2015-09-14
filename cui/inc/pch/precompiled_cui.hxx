@@ -61,11 +61,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxmeth.hxx>
 #include <bitset>
-#include <boost/make_shared.hpp>
-#include <boost/ref.hpp>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <cassert>
 #include <cmath>
 #include <com/sun/star/awt/ContainerWindowProvider.hpp>

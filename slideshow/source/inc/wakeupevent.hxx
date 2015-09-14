@@ -42,7 +42,7 @@ class WakeupEvent : public Event,
 {
 public:
     WakeupEvent(
-        ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
+        std::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
         ActivitiesQueue & rActivityQueue );
 
     virtual void dispose() SAL_OVERRIDE;

@@ -14,8 +14,6 @@
 #include <vector>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
@@ -67,7 +65,7 @@ void insertImplementationMap(
          i != source.end(); ++i)
     {
         std::vector<
-            boost::shared_ptr<
+            std::shared_ptr<
                 cppuhelper::ServiceManager::Data::Implementation > > & impls
             = (*destination)[i->first];
         impls.insert(impls.end(), i->second.begin(), i->second.end());
@@ -77,7 +75,7 @@ void insertImplementationMap(
 void removeFromImplementationMap(
     cppuhelper::ServiceManager::Data::ImplementationMap * map,
     std::vector< rtl::OUString > const & elements,
-    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
+    std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
         const & implementation)
 {
     // The underlying data structures make this function somewhat inefficient,
@@ -90,7 +88,7 @@ void removeFromImplementationMap(
             map->find(*i));
         assert(j != map->end());
         std::vector<
-            boost::shared_ptr<
+            std::shared_ptr<
                 cppuhelper::ServiceManager::Data::Implementation > >::iterator
             k(std::find(j->second.begin(), j->second.end(), implementation));
         assert(k != j->second.end());
@@ -129,7 +127,7 @@ private:
     rtl::OUString attrUri_;
     rtl::OUString attrEnvironment_;
     rtl::OUString attrPrefix_;
-    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
+    std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
         implementation_;
 };
 
@@ -495,7 +493,7 @@ class SingletonFactory:
 public:
     SingletonFactory(
         rtl::Reference< cppuhelper::ServiceManager > const & manager,
-        boost::shared_ptr<
+        std::shared_ptr<
             cppuhelper::ServiceManager::Data::Implementation > const &
             implementation):
         manager_(manager), implementation_(implementation)
@@ -516,7 +514,7 @@ private:
         throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     rtl::Reference< cppuhelper::ServiceManager > manager_;
-    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
+    std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
         implementation_;
 };
 
@@ -549,7 +547,7 @@ class ImplementationWrapper:
 public:
     ImplementationWrapper(
         rtl::Reference< cppuhelper::ServiceManager > const & manager,
-        boost::shared_ptr<
+        std::shared_ptr<
             cppuhelper::ServiceManager::Data::Implementation > const &
             implementation):
         manager_(manager), implementation_(implementation)
@@ -587,7 +585,7 @@ private:
     getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     rtl::Reference< cppuhelper::ServiceManager > manager_;
-    boost::weak_ptr< cppuhelper::ServiceManager::Data::Implementation >
+    std::weak_ptr< cppuhelper::ServiceManager::Data::Implementation >
         implementation_;
 };
 
@@ -596,7 +594,7 @@ ImplementationWrapper::createInstanceWithContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
-    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
+    std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
     assert(impl);
     manager_->loadImplementation(Context, impl);
     return impl->createInstance(Context, false);
@@ -608,7 +606,7 @@ ImplementationWrapper::createInstanceWithArgumentsAndContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
-    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
+    std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
     assert(impl);
     manager_->loadImplementation(Context, impl);
     return impl->createInstanceWithArguments(
@@ -634,7 +632,7 @@ ImplementationWrapper::createInstanceWithArguments(
 rtl::OUString ImplementationWrapper::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
-    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
+    std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
     assert(impl);
     return impl->info->name;
 }
@@ -649,7 +647,7 @@ css::uno::Sequence< rtl::OUString >
 ImplementationWrapper::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
+    std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation > impl = implementation_.lock();
     assert(impl);
     if (impl->info->services.size()
         > static_cast< sal_uInt32 >(SAL_MAX_INT32))
@@ -773,7 +771,7 @@ void cppuhelper::ServiceManager::addSingletonContextEntries(
 
 void cppuhelper::ServiceManager::loadImplementation(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        boost::shared_ptr< Data::Implementation > & implementation)
+        std::shared_ptr< Data::Implementation > & implementation)
 {
     assert(implementation.get() != 0);
     {
@@ -1014,7 +1012,7 @@ cppuhelper::ServiceManager::createInstanceWithContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
-    boost::shared_ptr< Data::Implementation > impl(
+    std::shared_ptr< Data::Implementation > impl(
         findServiceImplementation(Context, aServiceSpecifier));
     return impl.get() == 0
         ? css::uno::Reference< css::uno::XInterface >()
@@ -1028,7 +1026,7 @@ cppuhelper::ServiceManager::createInstanceWithArgumentsAndContext(
     css::uno::Reference< css::uno::XComponentContext > const & Context)
     throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
-    boost::shared_ptr< Data::Implementation > impl(
+    std::shared_ptr< Data::Implementation > impl(
         findServiceImplementation(Context, ServiceSpecifier));
     return impl.get() == 0
         ? css::uno::Reference< css::uno::XInterface >()
@@ -1183,7 +1181,7 @@ cppuhelper::ServiceManager::createContentEnumeration(
     rtl::OUString const & aServiceName)
     throw (css::uno::RuntimeException, std::exception)
 {
-    std::vector< boost::shared_ptr< Data::Implementation > > impls;
+    std::vector< std::shared_ptr< Data::Implementation > > impls;
     {
         osl::MutexGuard g(rBHelper.rMutex);
         Data::ImplementationMap::const_iterator i(
@@ -1194,7 +1192,7 @@ cppuhelper::ServiceManager::createContentEnumeration(
     }
     std::vector< css::uno::Any > factories;
     for (std::vector<
-             boost::shared_ptr< Data::Implementation > >::const_iterator i(
+             std::shared_ptr< Data::Implementation > >::const_iterator i(
                  impls.begin());
          i != impls.end(); ++i)
     {
@@ -1496,7 +1494,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
         assert(implKey.getName().match("/IMPLEMENTATIONS/"));
         rtl::OUString name(
             implKey.getName().copy(RTL_CONSTASCII_LENGTH("/IMPLEMENTATIONS/")));
-        boost::shared_ptr< Data::Implementation > impl(
+        std::shared_ptr< Data::Implementation > impl(
             new Data::Implementation(
                 name, readLegacyRdbString(uri, implKey, "UNO/ACTIVATOR"),
                 readLegacyRdbString(uri, implKey, "UNO/LOCATION"), "", "", "",
@@ -1633,7 +1631,7 @@ void cppuhelper::ServiceManager::insertLegacyFactory(
     }
     css::uno::Reference< css::lang::XComponent > comp(
         factoryInfo, css::uno::UNO_QUERY);
-    boost::shared_ptr< Data::Implementation > impl(
+    std::shared_ptr< Data::Implementation > impl(
         new Data::Implementation(name, f1, f2, comp));
     Data extra;
     if (!name.isEmpty()) {
@@ -1739,7 +1737,7 @@ void cppuhelper::ServiceManager::removeRdbFiles(
     // The underlying data structures make this function somewhat inefficient,
     // but the assumption is that it is rarely called (and that if it is called,
     // it is called with a uris vector of size one):
-    std::vector< boost::shared_ptr< Data::Implementation > > clear;
+    std::vector< std::shared_ptr< Data::Implementation > > clear;
     {
         osl::MutexGuard g(rBHelper.rMutex);
         for (std::vector< rtl::OUString >::const_iterator i(uris.begin());
@@ -1774,7 +1772,7 @@ bool cppuhelper::ServiceManager::removeLegacyFactory(
     bool removeListener)
 {
     assert(factoryInfo.is());
-    boost::shared_ptr< Data::Implementation > clear;
+    std::shared_ptr< Data::Implementation > clear;
     css::uno::Reference< css::lang::XComponent > comp;
     {
         osl::MutexGuard g(rBHelper.rMutex);
@@ -1807,7 +1805,7 @@ bool cppuhelper::ServiceManager::removeLegacyFactory(
 void cppuhelper::ServiceManager::removeImplementation(const rtl::OUString & name) {
     // The underlying data structures make this function somewhat inefficient,
     // but the assumption is that it is rarely called:
-    boost::shared_ptr< Data::Implementation > clear;
+    std::shared_ptr< Data::Implementation > clear;
     {
         osl::MutexGuard g(rBHelper.rMutex);
         if (isDisposed()) {
@@ -1840,12 +1838,12 @@ void cppuhelper::ServiceManager::removeImplementation(const rtl::OUString & name
     }
 }
 
-boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
+std::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
 cppuhelper::ServiceManager::findServiceImplementation(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     rtl::OUString const & specifier)
 {
-    boost::shared_ptr< Data::Implementation > impl;
+    std::shared_ptr< Data::Implementation > impl;
     bool loaded;
     {
         osl::MutexGuard g(rBHelper.rMutex);
@@ -1856,7 +1854,7 @@ cppuhelper::ServiceManager::findServiceImplementation(
                 data_.namedImplementations.find(specifier));
             if (j == data_.namedImplementations.end()) {
                 SAL_INFO("cppuhelper", "No implementation for " << specifier);
-                return boost::shared_ptr< Data::Implementation >();
+                return std::shared_ptr< Data::Implementation >();
             }
             impl = j->second;
         } else {

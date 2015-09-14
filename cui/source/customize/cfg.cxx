@@ -96,7 +96,6 @@
 #include <com/sun/star/util/thePathSettings.hpp>
 
 #include "dlgname.hxx"
-#include <boost/scoped_ptr.hpp>
 
 #define PRTSTR(x) OUStringToOString(x, RTL_TEXTENCODING_ASCII_US).pData->buffer
 

@@ -42,7 +42,6 @@
 #include <svx/dialmgr.hxx>
 #include "paragrph.hrc"
 #include <svx/dialogs.hrc>
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -307,7 +306,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
         {
             // CheckChanges(); <-- duplicate inquiry ?
 
-            boost::scoped_ptr<XHatch> pXHatch;
+            std::unique_ptr<XHatch> pXHatch;
             OUString  aString;
             sal_Int32  nPos = m_pLbHatchings->GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -402,7 +401,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ChangeHatchHdl_Impl)
 {
-    boost::scoped_ptr<XHatch> pHatch;
+    std::unique_ptr<XHatch> pHatch;
     int nPos = m_pLbHatchings->GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -497,7 +496,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialog creation failed!");
-    boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+    std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
     DBG_ASSERT(pDlg, "Dialog creation failed!");
     ScopedVclPtr<MessageDialog> pWarnBox;
     sal_uInt16         nError   = 1;
@@ -581,7 +580,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialog creation failed!");
-        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+        std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = m_pHatchingList->Count();

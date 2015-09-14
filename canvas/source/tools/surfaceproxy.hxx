@@ -115,7 +115,7 @@ namespace canvas
         canvas::IColorBufferSharedPtr mpBuffer;
     };
 
-    typedef ::boost::shared_ptr< SurfaceProxy > SurfaceProxySharedPtr;
+    typedef std::shared_ptr< SurfaceProxy > SurfaceProxySharedPtr;
 }
 
 #endif

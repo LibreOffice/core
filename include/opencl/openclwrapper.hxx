@@ -15,7 +15,6 @@
 #include <cassert>
 #include <vector>
 
-#include <boost/shared_ptr.hpp>
 #include <clew/clew.h>
 
 #include <sal/detail/log.h>

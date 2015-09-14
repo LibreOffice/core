@@ -130,7 +130,7 @@ namespace dxcanvas
         bool mbAlpha;
     };
 
-    typedef ::boost::shared_ptr< DXSurfaceBitmap > DXSurfaceBitmapSharedPtr;
+    typedef std::shared_ptr< DXSurfaceBitmap > DXSurfaceBitmapSharedPtr;
 }
 
 #endif

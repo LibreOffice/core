@@ -23,14 +23,8 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
-#include <boost/shared_ptr.hpp>
-
-
 #include <cppcanvas/spritecanvas.hxx>
-
 #include <implcanvas.hxx>
-
 
 namespace cppcanvas
 {
@@ -76,7 +70,7 @@ namespace cppcanvas
                 ::basegfx::B2DHomMatrix     maTransformation;
             };
 
-            typedef ::boost::shared_ptr< TransformationArbiter > TransformationArbiterSharedPtr;
+            typedef std::shared_ptr< TransformationArbiter > TransformationArbiterSharedPtr;
 
         private:
             ImplSpriteCanvas& operator=( const ImplSpriteCanvas& ) SAL_DELETED_FUNCTION;
