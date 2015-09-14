@@ -2039,7 +2039,7 @@ if ( $platform =~ m/os2/ )
    ToFile( "LS",                "ls.exe",           "e" );
    ToFile( "GNUCOPY",           "cp.exe",           "e" );
    ToFile( "TOUCH",             "touch",            "e" );
-   ToFile( "CONFIG_SITE",       "/@unixroot/usr/share/config.site", "e" );
+   ToFile( "CONFIG_SITE",       "/@unixroot/usr/share/config.legacy", "e" );
 }
 
 # $perlpre is only used for the following three variables
