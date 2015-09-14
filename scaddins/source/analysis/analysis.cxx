@@ -805,11 +805,14 @@ double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum ) THROWDEF_RTE_IAE
     RETURN_FINITE( fRet );
 }
 
+#define SCRANDOMQ_SIZE 4
 
 double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) THROWDEF_RTE_IAE
 {
-    static sal_Int32 nScRandomIx = 0, nScRandomIy = 0, nScRandomIz = 0, nScRandomIt = 0;
+    static sal_uInt32 nScRandomSeed[SCRANDOMQ_SIZE];
+    static sal_Bool SqSeeded = sal_False;
     static rtlRandomPool aPool = rtl_random_createPool();
+    sal_uInt64 nScRandomt, nScRandoma = 698769069LL;
     double fScRandomW;
 
     fMin = ::rtl::math::round( fMin, 0, rtl_math_RoundingMode_Up );
@@ -817,43 +820,25 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) THROWD
     if( fMin > fMax )
         THROW_IAE;
 
-    // Seeding for the PRNG: should be good enough but we
-    // monitor the values to keep things under control.
-    if (nScRandomIx <= 0)
-    rtl_random_getBytes(aPool, &nScRandomIx, sizeof(nScRandomIx));
-    if (nScRandomIy <= 0)
-    rtl_random_getBytes(aPool, &nScRandomIy, sizeof(nScRandomIy));
-    if (nScRandomIz <= 0)
-    rtl_random_getBytes(aPool, &nScRandomIz, sizeof(nScRandomIz));
-    if (nScRandomIt <= 0)
-    rtl_random_getBytes(aPool, &nScRandomIt, sizeof(nScRandomIt));
+    // Seeding for the PRNG: should be pretty good.
+    if (SqSeeded == sal_False) {
+    rtl_random_getBytes(aPool, &nScRandomSeed, SCRANDOMQ_SIZE * sizeof(nScRandomSeed[0]));
+    SqSeeded = sal_True;
+    }
 
-    // Basically unmodified algorithm from
-    // Wichman and Hill, "Generating good pseudo-random numbers",
-    //      December 5, 2005.
+    // Use George Marsaglia's 1998 KISS PRNG algorithm.
+    nScRandomSeed[0] = 69069 * nScRandomSeed[0] + 12345;
+    nScRandomSeed[1] ^= (nScRandomSeed[1] << 13);
+    nScRandomSeed[1] ^= (nScRandomSeed[1] >> 17);
+    nScRandomSeed[1] ^= (nScRandomSeed[1] << 5);
+    nScRandomt = nScRandoma * nScRandomSeed[2] + nScRandomSeed[3];
+    nScRandomSeed[1] = (nScRandomt >> 32);
 
-    nScRandomIx = 11600L * (nScRandomIx % 185127L) - 10379L * (nScRandomIx / 185127L);
-    nScRandomIy = 47003L * (nScRandomIy %  45688L) - 10479L * (nScRandomIy /  45688L);
-    nScRandomIz = 23000L * (nScRandomIz %  93368L) - 19423L * (nScRandomIz /  93368L);
-    nScRandomIt = 33000L * (nScRandomIt %  65075L) -  8123L * (nScRandomIt /  65075L);
-    if (nScRandomIx < 0)
-    nScRandomIx += 2147483579L;
-    if (nScRandomIy < 0)
-    nScRandomIy += 2147483543L;
-    if (nScRandomIz < 0)
-    nScRandomIz += 2147483123L;
-    if (nScRandomIt < 0)
-    nScRandomIt += 2147483123L;
-
-    fScRandomW = (double)nScRandomIx*0.0000000004656613022670 +
-            (double)nScRandomIy*0.0000000004656613100760 +
-        (double)nScRandomIz*0.0000000004656613360968 +
-        (double)nScRandomIt*0.0000000004656614011490;
-
+    fScRandomW = (nScRandomSeed[0] + nScRandomSeed[1] + (nScRandomSeed[3] = nScRandomt));
 
     // fMax -> range
     double fRet = fMax - fMin + 1.0;
-    fRet *= fScRandomW - (sal_Int32)fScRandomW ;
+    fRet *= fScRandomW / SAL_MAX_UINT32 ;
     fRet += fMin;
     fRet = floor( fRet );   // simple floor is sufficient here
     RETURN_FINITE( fRet );
