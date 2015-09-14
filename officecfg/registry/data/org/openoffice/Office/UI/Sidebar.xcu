@@ -61,12 +61,12 @@
         </prop>
       </node>
 
-      <node oor:name="ImpressMasterPagesDeck" oor:op="replace">
+      <node oor:name="SdMasterPagesDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Master Pages</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>MasterPagesDeck</value>
+          <value>SdMasterPagesDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
           <value>private:graphicrepository/sfx2/res/symphony/sidebar-template-large.png</value>
@@ -81,12 +81,12 @@
         </prop>
       </node>
 
-      <node oor:name="ImpressAnimationEffects" oor:op="replace">
+      <node oor:name="SdCustomAnimationDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Custom Animation</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>CustomAnimationDeck</value>
+          <value>SdCustomAnimationDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
           <value>private:graphicrepository/sfx2/res/symphony/sidebar-animation-large.png</value>
@@ -101,12 +101,12 @@
         </prop>
       </node>
 
-      <node oor:name="SlideTransitionDeck" oor:op="replace">
+      <node oor:name="SdSlideTransitionDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Slide Transition</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>SlideTransitionDeck</value>
+          <value>SdSlideTransitionDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
           <value>private:graphicrepository/sfx2/res/symphony/sidebar-transition-large.png</value>
@@ -161,12 +161,12 @@
         </prop>
       </node>
 
-      <node oor:name="FunctionsDeck" oor:op="replace">
+      <node oor:name="ScFunctionsDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Functions</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>FunctionsDeck</value>
+          <value>ScFunctionsDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
           <value>private:graphicrepository/sfx2/res/symphony/sidebar-functions-large.png</value>
@@ -181,12 +181,12 @@
         </prop>
       </node>
 
-      <node oor:name="ManageChangesDeck" oor:op="replace">
+      <node oor:name="SwManageChangesDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Manage Changes</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>ManageChangesDeck</value>
+          <value>SwManageChangesDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
           <value>private:graphicrepository/cmd/lc_trackchangesbar.png</value>
@@ -208,12 +208,12 @@
         </prop>
       </node>
 
-      <node oor:name="DesignDeck" oor:op="replace">
+      <node oor:name="SwDesignDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Design</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>DesignDeck</value>
+          <value>SwDesignDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
           <value>private:graphicrepository/cmd/lc_designerdialog.png</value>
@@ -558,7 +558,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress1" oor:op="replace">
+      <node oor:name="SdLayoutsPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Layouts</value>
         </prop>
@@ -566,7 +566,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>ImpressLayoutsPanel</value>
+          <value>SdLayoutsPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
@@ -588,7 +588,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress2" oor:op="replace">
+      <node oor:name="SdUsedMasterPagesPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Used in This Presentation</value>
         </prop>
@@ -596,10 +596,10 @@
           <value>false</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>UsedMasterPagesPanel</value>
+          <value>SdUsedMasterPagesPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>MasterPagesDeck</value>
+          <value>SdMasterPagesDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -614,7 +614,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress3" oor:op="replace">
+      <node oor:name="SdRecentMasterPagesPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Recently Used</value>
         </prop>
@@ -622,10 +622,10 @@
           <value>false</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>RecentMasterPagesPanel</value>
+          <value>SdRecentMasterPagesPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>MasterPagesDeck</value>
+          <value>SdMasterPagesDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -640,7 +640,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress4" oor:op="replace">
+      <node oor:name="SdAllMasterPagesPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Available for Use</value>
         </prop>
@@ -648,10 +648,10 @@
           <value>false</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>AllMasterPagesPanel</value>
+          <value>SdAllMasterPagesPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>MasterPagesDeck</value>
+          <value>SdMasterPagesDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -666,7 +666,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress5" oor:op="replace">
+      <node oor:name="SdCustomAnimationPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Custom Animation</value>
         </prop>
@@ -674,10 +674,10 @@
           <value>true</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>CustomAnimationPanel</value>
+          <value>SdCustomAnimationPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>CustomAnimationDeck</value>
+          <value>SdCustomAnimationDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -692,7 +692,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress6" oor:op="replace">
+      <node oor:name="SdSlideTransitionPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Slide Transition</value>
         </prop>
@@ -700,10 +700,10 @@
           <value>true</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>SlideTransitionPanel</value>
+          <value>SdSlideTransitionPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>SlideTransitionDeck</value>
+          <value>SdSlideTransitionDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -718,7 +718,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress7" oor:op="replace">
+      <node oor:name="SdTableDesignPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Table Design</value>
         </prop>
@@ -726,7 +726,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>ImpressTableDesignPanel</value>
+          <value>SdTableDesignPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
@@ -770,12 +770,12 @@
         </prop>
       </node>
 
-      <node oor:name="AlignmentPropertyPanel" oor:op="replace">
+      <node oor:name="ScAlignmentPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Alignment</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>AlignmentPropertyPanel</value>
+          <value>ScAlignmentPropertyPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
@@ -800,12 +800,12 @@
         </prop>
       </node>
 
-      <node oor:name="CellAppearancePropertyPanel" oor:op="replace">
+      <node oor:name="ScCellAppearancePropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Cell Appearance</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>CellAppearancePropertyPanel</value>
+          <value>ScCellAppearancePropertyPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
@@ -830,12 +830,12 @@
         </prop>
       </node>
 
-      <node oor:name="NumberFormatPropertyPanel" oor:op="replace">
+      <node oor:name="ScNumberFormatPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Number Format</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>NumberFormatPropertyPanel</value>
+          <value>ScNumberFormatPropertyPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
@@ -897,12 +897,12 @@
         </prop>
       </node>
 
-      <node oor:name="WrapPropertyPanel" oor:op="replace">
+      <node oor:name="SwWrapPropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Wrap</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>WrapPropertyPanel</value>
+          <value>SwWrapPropertyPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>PropertyDeck</value>
@@ -1026,7 +1026,7 @@
           <value>SwManageChangesPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ManageChangesDeck</value>
+          <value>SwManageChangesDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -1067,7 +1067,7 @@
         </prop>
       </node>
 
-      <node oor:name="FunctionsPanel" oor:op="replace">
+      <node oor:name="ScFunctionsPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Functions</value>
         </prop>
@@ -1075,10 +1075,10 @@
           <value>true</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>FunctionsPanel</value>
+          <value>ScFunctionsPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>FunctionsDeck</value>
+          <value>ScFunctionsDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -1092,15 +1092,15 @@
           <value>100</value>
         </prop>
       </node>
-      <node oor:name="StylePresetsPanel" oor:op="replace">
+      <node oor:name="SwStylePresetsPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Style Presets</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>StylePresetsPanel</value>
+          <value>SwStylePresetsPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>DesignDeck</value>
+          <value>SwDesignDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -1118,15 +1118,15 @@
         </prop>
       </node>
 
-      <node oor:name="ThemePanel" oor:op="replace">
+      <node oor:name="SwThemePanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Themes</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>ThemePanel</value>
+          <value>SwThemePanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>DesignDeck</value>
+          <value>SwDesignDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -1172,7 +1172,7 @@
           <value xml:lang="en-US">Data Series</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
-          <value>SeriesPanel</value>
+          <value>ChartSeriesPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>ChartDeck</value>

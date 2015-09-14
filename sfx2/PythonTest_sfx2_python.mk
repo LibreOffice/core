@@ -15,6 +15,7 @@ $(eval $(call gb_PythonTest_set_defs,sfx2_python,\
 
 $(eval $(call gb_PythonTest_add_modules,sfx2_python,$(SRCDIR)/sfx2/qa/python,\
 	check_sidebar \
+	check_sidebar_registry \
 ))
 
 # vim: set noet sw=4 ts=4:
