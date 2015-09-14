@@ -61,7 +61,7 @@
         </prop>
       </node>
 
-      <node oor:name="ImpressMasterPagesDeck" oor:op="replace">
+      <node oor:name="MasterPagesDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Master Pages</value>
         </prop>
@@ -81,7 +81,7 @@
         </prop>
       </node>
 
-      <node oor:name="ImpressAnimationEffects" oor:op="replace">
+      <node oor:name="CustomAnimationDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Custom Animation</value>
         </prop>
@@ -558,7 +558,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress1" oor:op="replace">
+      <node oor:name="ImpressLayoutsPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Layouts</value>
         </prop>
@@ -588,7 +588,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress2" oor:op="replace">
+      <node oor:name="UsedMasterPagesPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Used in This Presentation</value>
         </prop>
@@ -614,7 +614,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress3" oor:op="replace">
+      <node oor:name="RecentMasterPagesPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Recently Used</value>
         </prop>
@@ -640,7 +640,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress4" oor:op="replace">
+      <node oor:name="AllMasterPagesPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Available for Use</value>
         </prop>
@@ -666,7 +666,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress5" oor:op="replace">
+      <node oor:name="CustomAnimationPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Custom Animation</value>
         </prop>
@@ -692,7 +692,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress6" oor:op="replace">
+      <node oor:name="SlideTransitionPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Slide Transition</value>
         </prop>
@@ -718,7 +718,7 @@
         </prop>
       </node>
 
-      <node oor:name="Impress7" oor:op="replace">
+      <node oor:name="ImpressTableDesignPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Table Design</value>
         </prop>
@@ -1167,7 +1167,7 @@
         </prop>
       </node>
 
-      <node oor:name="ChartSeriesPanel" oor:op="replace">
+      <node oor:name="SeriesPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Data Series</value>
         </prop>
