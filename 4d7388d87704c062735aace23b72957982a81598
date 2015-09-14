@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_c7ed4890",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-09-14T18:38:38Z",
+      "side": 1,
+      "message": "Is there a reason you removed the \"Impress\" prefix here, but not everywhere?",
+      "revId": "4d7388d87704c062735aace23b72957982a81598",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
