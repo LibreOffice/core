@@ -1177,6 +1177,9 @@
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>ChartDeck</value>
         </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:ChartProperties</value>
+        </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
             Chart, Series, visible ;
@@ -1245,6 +1248,9 @@
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
           <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="DefaultMenuCommand">
+          <value>.uno:ChartProperties</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
