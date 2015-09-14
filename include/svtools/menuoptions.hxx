@@ -58,8 +58,8 @@ class SVT_DLLPUBLIC SAL_WARN_UNUSED SvtMenuOptions: public utl::detail::Options
          SvtMenuOptions();
         virtual ~SvtMenuOptions();
 
-        void AddListenerLink( const Link<>& rLink );
-        void RemoveListenerLink( const Link<>& rLink );
+        void AddListenerLink( const Link<LinkParamNone*,void>& rLink );
+        void RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
 
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Menu/..."

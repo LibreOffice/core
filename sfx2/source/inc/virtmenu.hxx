@@ -72,7 +72,7 @@ protected:
     DECL_STATIC_LINK_TYPED( SfxVirtualMenu, Highlight, Menu *, bool );
     DECL_LINK_TYPED( Activate, Menu *, bool );
     DECL_LINK_TYPED( Deactivate, Menu *, bool );
-    DECL_LINK( SettingsChanged, void* );
+    DECL_LINK_TYPED( SettingsChanged, LinkParamNone*, void );
 
     // Used for runtime popup menus
     void            UpdateImages( Menu* pMenu );

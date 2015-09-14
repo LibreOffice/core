@@ -490,7 +490,7 @@ IMPL_STATIC_LINK_NOARG_TYPED(
     return true;
 }
 
-IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
+IMPL_LINK_NOARG_TYPED(SfxVirtualMenu, SettingsChanged, LinkParamNone*, void)
 {
     sal_uInt16 nItemCount = pSVMenu->GetItemCount();
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
@@ -552,8 +552,6 @@ IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
 
     if ( pImageControl )
         pImageControl->Update();
-
-    return 0;
 }
 
 
