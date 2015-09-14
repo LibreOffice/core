@@ -61,6 +61,9 @@ extern "C" {
 
 #include <os2.h>
 #include <unikbd.h>
+#ifdef VCL_OS2
+#include <pmbidi.h>
+#endif
 
 #undef BOOL
 #undef BYTE

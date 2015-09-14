@@ -27,10 +27,6 @@
 #include <vcl/sysdata.hxx>
 #include <salframe.hxx>
 
-#ifndef PM_BIDI_INCLUDED
-#include <pmbidi.h>
-#endif
-
 #ifndef __UCONV_H__
 #include <uconv.h>
 #endif

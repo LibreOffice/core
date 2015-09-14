@@ -45,6 +45,12 @@ $(eval $(call gb_Library_set_include,vcl,\
     -I$(OUTDIR)/inc \
     $$(FREETYPE_CFLAGS) \
 ))
+ifeq ($(GUIBASE),os2)
+$(eval $(call gb_Library_set_include,vcl,\
+    $$(INCLUDE) \
+    -idirafter /@unixroot/usr/dev/toolkit452/h \
+))
+endif
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(CXXFLAGS) \

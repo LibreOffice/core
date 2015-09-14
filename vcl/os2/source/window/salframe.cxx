@@ -24,6 +24,7 @@
 #define INCL_DOS
 #define INCL_PM
 #define INCL_WIN
+#define VCL_OS2
 #include <svpm.h>
 
 #include <string.h>
