@@ -307,6 +307,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThi
 static void                    lo_registerCallback (LibreOfficeKit* pThis,
                                                     LibreOfficeKitCallback pCallback,
                                                     void* pData);
+static int lo_getViews(LibreOfficeKit* pThis);
 
 struct LibLibreOffice_Impl : public _LibreOfficeKit
 {
@@ -330,6 +331,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->getError = lo_getError;
             m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
             m_pOfficeClass->registerCallback = lo_registerCallback;
+            m_pOfficeClass->getViews = lo_getViews;
 
             gOfficeClass = m_pOfficeClass;
         }
@@ -445,6 +447,11 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
 
     pLib->mpCallback = pCallback;
     pLib->mpCallbackData = pData;
+}
+
+static int lo_getViews(LibreOfficeKit* /*pThis*/)
+{
+    return SfxLokHelper::getViews();
 }
 
 static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)

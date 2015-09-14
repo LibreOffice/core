@@ -16,6 +16,9 @@ class SFX2_DLLPUBLIC SfxLokHelper
 public:
     /// Create a new view shell for pViewShell's object shell.
     static int createView(SfxViewShell* pViewShell);
+
+    /// Total number of view shells.
+    static int getViews();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
