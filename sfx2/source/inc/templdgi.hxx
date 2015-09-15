@@ -97,7 +97,7 @@ class StyleTreeListBox_Impl : public DropListBox_Impl
 {
 private:
     SvTreeListEntry* pCurEntry;
-    Link<> aDoubleClickLink;
+    Link<LinkParamNone*,void> aDoubleClickLink;
     Link<> aDropLink;
     OUString  aParent;
     OUString aStyle;
@@ -116,7 +116,7 @@ public:
 
     void Recalc();
 
-    void SetDoubleClickHdl(const Link<> &rLink)
+    void SetDoubleClickHdl(const Link<LinkParamNone*,void> &rLink)
     {
         aDoubleClickLink = rLink;
     }
@@ -217,7 +217,7 @@ protected:
 
     DECL_LINK( FilterSelectHdl, ListBox* );
     DECL_LINK_TYPED( FmtSelectHdl, SvTreeListBox*, void );
-    DECL_LINK( ApplyHdl, Control* );
+    DECL_LINK_TYPED( ApplyHdl, LinkParamNone*, void );
     DECL_LINK_TYPED( TreeListApplyHdl, SvTreeListBox*, bool );
     DECL_LINK( DropHdl, StyleTreeListBox_Impl* );
     DECL_LINK_TYPED( TimeOut, Idle*, void );

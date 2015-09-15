@@ -431,7 +431,7 @@ PopupMenu* StyleTreeListBox_Impl::CreateContextMenu()
 */
 bool StyleTreeListBox_Impl::DoubleClickHdl()
 {
-    aDoubleClickLink.Call(this);
+    aDoubleClickLink.Call(nullptr);
     return false;
 }
 
@@ -453,7 +453,7 @@ bool StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         if ( !rKeyCode.GetModifier() && KEY_RETURN == rKeyCode.GetCode() )
         {
-            aDoubleClickLink.Call( this );
+            aDoubleClickLink.Call( nullptr );
             nRet = true;
         }
     }
@@ -2088,11 +2088,12 @@ void SfxCommonTemplateDialog_Impl::ResetFocus()
 
 IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, TreeListApplyHdl, SvTreeListBox *, bool )
 {
-    return ApplyHdl(NULL) == 1;
+    ApplyHdl(nullptr);
+    return false;
 }
 
 // Double-click on a style sheet in the ListBox is applied.
-IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, /*pControl*/ )
+IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, ApplyHdl, LinkParamNone*, void )
 {
     // only if that region is allowed
     if ( IsInitialized() && 0 != pFamilyState[nActFamily-1] &&
@@ -2105,7 +2106,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, ApplyHdl, Control *, /*pControl*/ )
                      0, 0, &nModifier );
     }
     ResetFocus();
-    return 0;
 }
 
 // Selection of a template during the Watercan-Status
