@@ -58,7 +58,7 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-	$(if $(filter LINUX MACOSX,$(OS)), \
+	$(if $(filter LINUX MACOSX %BSD SOLARIS,$(OS)), \
 		curl) \
 	jpeg \
 	$(if $(filter-out IOS WNT,$(OS)), \
@@ -721,10 +721,9 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 endif
 
-ifeq ($(OS),LINUX)
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
-	-lm \
-	-ldl \
+	-lm $(DLOPEN_LIBS) \
 	-lpthread \
     -lGL \
     -lX11 \

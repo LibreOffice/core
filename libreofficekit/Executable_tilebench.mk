@@ -20,8 +20,7 @@ $(eval $(call gb_Executable_use_libraries,tilebench,\
 ))
 
 $(eval $(call gb_Executable_add_libs,tilebench,\
-    -lm \
-    -ldl \
+    -lm $(DLOPEN_LIBS) \
     -lpthread \
 ))
 

@@ -34,10 +34,9 @@ $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
     vcl/source/uipreviewer/previewer \
 ))
 
-ifeq ($(OS),LINUX)
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,ui-previewer,\
-	-lm \
-	-ldl \
+	-lm $(DLOPEN_LIBS) \
 	-lpthread \
     -lGL \
     -lX11 \
