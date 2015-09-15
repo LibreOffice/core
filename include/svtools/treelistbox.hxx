@@ -307,7 +307,7 @@ private:
     // called for a deleted object.
     SVT_DLLPRIVATE static void AddBoxToDDList_Impl( const SvTreeListBox& rB );
     SVT_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvTreeListBox& rB );
-    DECL_DLLPRIVATE_LINK( DragFinishHdl_Impl, sal_Int8* );
+    DECL_DLLPRIVATE_LINK_TYPED( DragFinishHdl_Impl, sal_Int8, void );
 
 protected:
 
@@ -347,7 +347,7 @@ protected:
     // The Remove will be called from the handler, which then calls DragFinish.
     // The Remove is also called in the DTOR of the SvTreeListBox -
     // so it can't be called for a deleted object.
-    Link<> GetDragFinishedHdl() const;
+    Link<sal_Int8,void> GetDragFinishedHdl() const;
 
     // For asynchronous D'n'D
     sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox* pSourceView );

@@ -512,7 +512,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
 
         pContainer->CopyString( SotClipboardFormatId::STRING, sDBName );
         pContainer->StartDrag( this, DND_ACTION_COPY | DND_ACTION_LINK,
-                                Link<>() );
+                                Link<sal_Int8,void>() );
     }
 }
 

@@ -358,7 +358,7 @@ typedef ::std::list< TDataCntnrEntry_Impl > TDataCntnrEntryList;
 struct TransferDataContainer_Impl
 {
     TDataCntnrEntryList aFmtList;
-    Link<> aFinshedLnk;
+    Link<sal_Int8,void> aFinshedLnk;
     INetBookmark* pBookmk;
     Graphic* pGrf;
 
@@ -579,7 +579,7 @@ bool TransferDataContainer::HasAnyData() const
 
 void TransferDataContainer::StartDrag(
         vcl::Window* pWindow, sal_Int8 nDragSourceActions,
-        const Link<>& rLnk, sal_Int32 nDragPointer, sal_Int32 nDragImage )
+        const Link<sal_Int8,void>& rLnk, sal_Int32 nDragPointer, sal_Int32 nDragImage )
 {
     pImpl->aFinshedLnk = rLnk;
     TransferableHelper::StartDrag( pWindow, nDragSourceActions,
@@ -591,7 +591,7 @@ void TransferDataContainer::StartDrag(
 void TransferDataContainer::DragFinished( sal_Int8 nDropAction )
 {
     if( pImpl->aFinshedLnk.IsSet() )
-        pImpl->aFinshedLnk.Call( &nDropAction );
+        pImpl->aFinshedLnk.Call( nDropAction );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

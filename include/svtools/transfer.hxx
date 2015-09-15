@@ -515,7 +515,7 @@ public:
 
     using TransferableHelper::StartDrag;
     void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
-                                   const Link<>& rCallbck,
+                                   const Link<sal_Int8,void>& rCallbck,
                                    sal_Int32 nDragPointer = DND_POINTER_NONE,
                                    sal_Int32 nDragImage = DND_IMAGE_NONE );
 };
