@@ -643,10 +643,9 @@ namespace svt { namespace table
     }
 
 
-    IMPL_LINK_NOARG(TableControl, ImplSelectHdl)
+    IMPL_LINK_NOARG_TYPED(TableControl, ImplSelectHdl, LinkParamNone*, void)
     {
         Select();
-        return 1;
     }
 
 

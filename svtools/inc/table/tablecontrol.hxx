@@ -171,7 +171,7 @@ namespace svt { namespace table
 
 
     private:
-        DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
+        DECL_DLLPRIVATE_LINK_TYPED( ImplSelectHdl, LinkParamNone*, void );
 
     private:
         TableControl( const TableControl& ) SAL_DELETED_FUNCTION;

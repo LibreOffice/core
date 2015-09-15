@@ -37,7 +37,7 @@ namespace svt { namespace table
         friend class TableFunctionSet;
     private:
         TableControl_Impl&  m_rTableControl;
-        Link<>              m_aSelectHdl;
+        Link<LinkParamNone*,void> m_aSelectHdl;
         sal_uLong           m_nTipWindowHandle;
 
     public:
@@ -45,7 +45,7 @@ namespace svt { namespace table
         virtual ~TableDataWindow();
         virtual void dispose() SAL_OVERRIDE;
 
-        inline void SetSelectHdl(const Link<>& rLink)
+        inline void SetSelectHdl(const Link<LinkParamNone*,void>& rLink)
         {
             m_aSelectHdl = rLink;
         }
