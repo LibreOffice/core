@@ -25,7 +25,8 @@
 #include "swdllapi.h"
 #include <hintids.hxx>
 #include <format.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <vector>
 
 /// ColumnDescriptor
 class SwColumn
@@ -56,7 +57,7 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-typedef boost::ptr_vector<SwColumn> SwColumns;
+typedef std::vector<SwColumn> SwColumns;
 
 enum SwColLineAdj
 {

@@ -821,15 +821,14 @@ SwFormatCol::SwFormatCol( const SwFormatCol& rCpy )
     m_aLineColor( rCpy.m_aLineColor),
     m_nLineHeight( rCpy.GetLineHeight() ),
     m_eAdj( rCpy.GetLineAdj() ),
-    m_aColumns( (sal_Int8)rCpy.GetNumCols() ),
     m_nWidth( rCpy.GetWishWidth() ),
     m_aWidthAdjustValue( rCpy.m_aWidthAdjustValue ),
     m_bOrtho( rCpy.IsOrtho() )
 {
+    m_aColumns.reserve(rCpy.GetNumCols());
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
-        SwColumn *pCol = new SwColumn( rCpy.GetColumns()[i] );
-        m_aColumns.push_back( pCol );
+        m_aColumns.push_back( SwColumn(rCpy.GetColumns()[i]) );
     }
 }
 
@@ -850,8 +849,7 @@ SwFormatCol& SwFormatCol::operator=( const SwFormatCol& rCpy )
         m_aColumns.clear();
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
-        SwColumn *pCol = new SwColumn( rCpy.GetColumns()[i] );
-        m_aColumns.push_back( pCol );
+        m_aColumns.push_back( SwColumn(rCpy.GetColumns()[i]) );
     }
     return *this;
 }
@@ -956,8 +954,7 @@ void SwFormatCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16
         m_aColumns.clear();
     for ( sal_uInt16 i = 0; i < nNumCols; ++i )
     {
-        SwColumn *pCol = new SwColumn;
-        m_aColumns.push_back( pCol );
+        m_aColumns.push_back( SwColumn() );
     }
     m_bOrtho = true;
     m_nWidth = USHRT_MAX;
@@ -1092,12 +1089,12 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(nCount > 1)
                 for(sal_uInt16 i = 0; i < nCount; i++)
                 {
-                    SwColumn* pCol = new SwColumn;
-                    pCol->SetWishWidth( static_cast<sal_uInt16>(pArray[i].Width) );
+                    SwColumn aCol;
+                    aCol.SetWishWidth(static_cast<sal_uInt16>(pArray[i].Width) );
                     nWidthSum = static_cast<sal_uInt16>(nWidthSum + pArray[i].Width);
-                    pCol->SetLeft ( static_cast<sal_uInt16>(convertMm100ToTwip(pArray[i].LeftMargin)) );
-                    pCol->SetRight( static_cast<sal_uInt16>(convertMm100ToTwip(pArray[i].RightMargin)) );
-                    m_aColumns.insert(m_aColumns.begin() + i, pCol);
+                    aCol.SetLeft (static_cast<sal_uInt16>(convertMm100ToTwip(pArray[i].LeftMargin)));
+                    aCol.SetRight(static_cast<sal_uInt16>(convertMm100ToTwip(pArray[i].RightMargin)));
+                    m_aColumns.insert(m_aColumns.begin() + i, aCol);
                 }
             bRet = true;
             m_nWidth = nWidthSum;
