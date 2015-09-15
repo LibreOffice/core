@@ -29,9 +29,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <list>
-#include <vector>
-
 class Menu;
 
 namespace com { namespace sun { namespace star {
@@ -250,44 +247,6 @@ public:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
-};
-
-class VCL_DLLPUBLIC VclEventListeners
-{
-public:
-    void Call( VclSimpleEvent* pEvent ) const;
-    void addListener( const Link<>& rListener );
-    void removeListener( const Link<>& rListener );
-private:
-    std::vector<Link<>> m_aListeners;
-};
-
-class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
-{
-    std::list< Link<> >                             m_aListeners;
-
-    struct ListenerIt
-    {
-        std::list< Link<> >::iterator   m_aIt;
-        bool                            m_bWasInvalidated;
-
-        ListenerIt(const std::list<Link<>>::iterator& rIt)
-            : m_aIt(rIt)
-            , m_bWasInvalidated( false )
-        {}
-    };
-
-    std::vector< ListenerIt >      m_aIterators;
-
-
-public:
-    VclEventListeners2();
-    ~VclEventListeners2();
-
-    void addListener( const Link<>& );
-    void removeListener( const Link<>& );
-
-    void callListeners( VclSimpleEvent* );
 };
 
 #endif // INCLUDED_VCL_VCLEVENT_HXX

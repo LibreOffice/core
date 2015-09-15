@@ -35,6 +35,7 @@
 #include "vcl/keycod.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/vclevent.hxx"
+#include "vcleventlisteners.hxx"
 
 #include "unotools/options.hxx"
 

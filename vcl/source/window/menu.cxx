@@ -3240,16 +3240,24 @@ ImplMenuDelData::~ImplMenuDelData()
 
 namespace vcl { namespace MenuInvalidator {
     static VclEventListeners2* pMenuInvalidateListeners = NULL;
-    VclEventListeners2* GetMenuInvalidateListeners()
+    void AddMenuInvalidateListener(const Link<>& rLink)
     {
         if(!pMenuInvalidateListeners)
             pMenuInvalidateListeners = new VclEventListeners2();
-        return pMenuInvalidateListeners;
+        pMenuInvalidateListeners->addListener(rLink);
+    }
+    void CallMenuInvalidateListeners(VclSimpleEvent* pEvent)
+    {
+        if(pMenuInvalidateListeners)
+            pMenuInvalidateListeners->callListeners(pEvent);
     }
     void Invalidated()
     {
-        VclSimpleEvent aEvent(0);
-        GetMenuInvalidateListeners()->callListeners(&aEvent);
+        if(pMenuInvalidateListeners)
+        {
+            VclSimpleEvent aEvent(0);
+            pMenuInvalidateListeners->callListeners(&aEvent);
+        }
     };
 } }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

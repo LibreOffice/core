@@ -404,7 +404,8 @@ public:
 
 namespace vcl { namespace MenuInvalidator {
 
-VCL_DLLPUBLIC VclEventListeners2* GetMenuInvalidateListeners();
+VCL_DLLPUBLIC void AddMenuInvalidateListener(const Link<>&);
+VCL_DLLPUBLIC void CallMenuInvalidateListeners(VclSimpleEvent* pEvent);
 VCL_DLLPUBLIC void Invalidated();
 
 }}

@@ -27,6 +27,7 @@
 #include "vcl/salbtype.hxx"
 #include "svdata.hxx"
 #include "salgdi.hxx"
+#include "vcleventlisteners.hxx"
 
 #include "opengl/zone.hxx"
 #include "opengl/program.hxx"

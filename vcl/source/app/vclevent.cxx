@@ -21,6 +21,7 @@
 #include "vcl/window.hxx"
 
 #include "svdata.hxx"
+#include "vcleventlisteners.hxx"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
@@ -94,47 +95,35 @@ VclEventListeners2::~VclEventListeners2()
 {
 }
 
-void VclEventListeners2::addListener( const Link<>& i_rLink )
+void VclEventListeners2::addListener( const Link<>& rListener )
 {
     // ensure uniqueness
-    for( std::list< Link<> >::const_iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
-    {
-        if( *it == i_rLink )
-            return;
-    }
-    m_aListeners.push_back( i_rLink );
+    if (std::find(m_aListeners.begin(), m_aListeners.end(), rListener) == m_aListeners.end())
+       m_aListeners.push_back( rListener );
 }
 
-void VclEventListeners2::removeListener( const Link<>& i_rLink )
+void VclEventListeners2::removeListener( const Link<>& rListener )
 {
-    size_t n = m_aIterators.size();
-    for( size_t i = 0; i < n; i++ )
-    {
-        if( m_aIterators[i].m_aIt != m_aListeners.end() && *m_aIterators[i].m_aIt == i_rLink )
-        {
-            m_aIterators[i].m_bWasInvalidated = true;
-            ++m_aIterators[i].m_aIt;
-        }
-    }
-    m_aListeners.remove( i_rLink );
+    m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), rListener ), m_aListeners.end() );
 }
 
-void VclEventListeners2::callListeners( VclSimpleEvent* i_pEvent )
+void VclEventListeners2::callListeners( VclSimpleEvent* pEvent )
 {
     vcl::DeletionListener aDel( this );
 
-    m_aIterators.push_back(ListenerIt(m_aListeners.begin()));
-    size_t nIndex = m_aIterators.size() - 1;
-    while( ! aDel.isDeleted() && m_aIterators[ nIndex ].m_aIt != m_aListeners.end() )
+    // Copy the list, because this can be destroyed when calling a Link...
+    std::vector<Link<>> aCopy( m_aListeners );
+    std::vector<Link<>>::iterator aIter( aCopy.begin() );
+    std::vector<Link<>>::const_iterator aEnd( aCopy.end() );
+
+    while ( aIter != aEnd && ! aDel.isDeleted() )
     {
-        m_aIterators[ nIndex ].m_aIt->Call( i_pEvent );
-        if( m_aIterators[ nIndex ].m_bWasInvalidated )
-            // check if the current element was removed and the iterator increased in the meantime
-            m_aIterators[ nIndex ].m_bWasInvalidated = false;
-        else
-            ++m_aIterators[ nIndex ].m_aIt;
+        Link<> &rLink = *aIter;
+        // check this hasn't been removed in some re-enterancy scenario fdo#47368
+        if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
+            rLink.Call( pEvent );
+        ++aIter;
     }
-    m_aIterators.pop_back();
 }
 
 

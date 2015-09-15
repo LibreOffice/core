@@ -37,6 +37,7 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/rendersettings.hxx>
+#include "vcleventlisteners.hxx"
 #include <vector>
 
 struct SalPaintEvent;
