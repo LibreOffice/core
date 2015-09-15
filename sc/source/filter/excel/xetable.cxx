@@ -958,7 +958,7 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
             sFmlaCellRange.append(XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), aMatScRange.aEnd ).getStr());
         }
 
-        if (aMatScRange.aStart.Col() == GetXclPos().mnCol && aMatScRange.aEnd.Row() > static_cast< SCROW >(GetXclPos().mnRow))
+        if (aMatScRange.aStart.Col() == GetXclPos().mnCol && aMatScRange.aStart.Row() == static_cast<SCROW>(GetXclPos().mnRow))
         {
             rWorksheet->startElement( XML_f,
                         XML_aca,    XclXmlUtils::ToPsz( (mxTokArr && mxTokArr->IsVolatile()) || (mxAddRec && mxAddRec->IsVolatile()) ),
