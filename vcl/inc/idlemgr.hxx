@@ -37,8 +37,8 @@ public:
                     ImplIdleMgr();
                     ~ImplIdleMgr();
 
-    bool            InsertIdleHdl( const Link<>& rLink, sal_uInt16 nPriority );
-    void            RemoveIdleHdl( const Link<>& rLink );
+    bool            InsertIdleHdl( const Link<Application*,void>& rLink, sal_uInt16 nPriority );
+    void            RemoveIdleHdl( const Link<Application*,void>& rLink );
 
     void            RestartIdler()
                         { if ( maTimer.IsActive() ) maTimer.Start(); }

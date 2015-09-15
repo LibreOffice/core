@@ -872,13 +872,13 @@ public:
 
      @return true if the handler was inserted successfully, false if it couldn't be inserted.
     */
-    static bool                 InsertIdleHdl( const Link<>& rLink, sal_uInt16 nPriority );
+    static bool                 InsertIdleHdl( const Link<Application*,void>& rLink, sal_uInt16 nPriority );
 
     /** Remove an idle handler from the application.
 
      @param     rLink           const reference to the idle handler to remove
     */
-    static void                 RemoveIdleHdl( const Link<>& rLink );
+    static void                 RemoveIdleHdl( const Link<Application*,void>& rLink );
 
     /*** Get the DisplayConnection.
 

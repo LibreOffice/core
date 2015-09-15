@@ -930,7 +930,7 @@ void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
     }
 }
 
-bool Application::InsertIdleHdl( const Link<>& rLink, sal_uInt16 nPrio )
+bool Application::InsertIdleHdl( const Link<Application*,void>& rLink, sal_uInt16 nPrio )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -941,7 +941,7 @@ bool Application::InsertIdleHdl( const Link<>& rLink, sal_uInt16 nPrio )
     return pSVData->maAppData.mpIdleMgr->InsertIdleHdl( rLink, nPrio );
 }
 
-void Application::RemoveIdleHdl( const Link<>& rLink )
+void Application::RemoveIdleHdl( const Link<Application*,void>& rLink )
 {
     ImplSVData* pSVData = ImplGetSVData();
 

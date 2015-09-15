@@ -23,9 +23,9 @@
 
 struct ImplIdleData
 {
-    Link<>      maIdleHdl;
-    sal_uInt16      mnPriority;
-    bool        mbTimeout;
+    Link<Application*,void>  maIdleHdl;
+    sal_uInt16               mnPriority;
+    bool                     mbTimeout;
 };
 
 #define IMPL_IDLETIMEOUT         350
@@ -52,7 +52,7 @@ ImplIdleMgr::~ImplIdleMgr()
     delete mpIdleList;
 }
 
-bool ImplIdleMgr::InsertIdleHdl( const Link<>& rLink, sal_uInt16 nPriority )
+bool ImplIdleMgr::InsertIdleHdl( const Link<Application*,void>& rLink, sal_uInt16 nPriority )
 {
     size_t nPos = (size_t)-1;
     size_t n = mpIdleList->size();
@@ -86,7 +86,7 @@ bool ImplIdleMgr::InsertIdleHdl( const Link<>& rLink, sal_uInt16 nPriority )
     return true;
 }
 
-void ImplIdleMgr::RemoveIdleHdl( const Link<>& rLink )
+void ImplIdleMgr::RemoveIdleHdl( const Link<Application*,void>& rLink )
 {
     if (mbInDestruction)
         return;

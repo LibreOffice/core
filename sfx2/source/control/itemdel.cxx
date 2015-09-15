@@ -30,11 +30,11 @@
 
 class SfxItemDisruptor_Impl: private boost::noncopyable
 {
-    SfxPoolItem *pItem;
-    Link<>       aLink;
+    SfxPoolItem *           pItem;
+    Link<Application*,void> aLink;
 
 private:
-    DECL_LINK( Delete, void* );
+    DECL_LINK_TYPED( Delete, Application*, void );
 
 public:
     SfxItemDisruptor_Impl( SfxPoolItem *pItemToDesrupt );
@@ -69,10 +69,9 @@ SfxItemDisruptor_Impl::~SfxItemDisruptor_Impl()
     delete pItem;
 }
 
-IMPL_LINK_NOARG(SfxItemDisruptor_Impl, Delete)
+IMPL_LINK_NOARG_TYPED(SfxItemDisruptor_Impl, Delete, Application*, void)
 {
     delete this;
-    return 0;
 }
 
 void DeleteItemOnIdle(SfxPoolItem* pItem)
