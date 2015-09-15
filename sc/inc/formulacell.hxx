@@ -222,7 +222,7 @@ public:
     void            SetDirtyAfterLoad();
     void ResetTableOpDirtyVar();
     void            SetTableOpDirty();
-    bool            IsDirtyOrInTableOpDirty() const;
+    inline bool     IsDirtyOrInTableOpDirty() const;
     bool GetDirty() const { return bDirty; }
     void ResetDirty();
     bool NeedsListening() const { return bNeedListening; }
@@ -390,7 +390,7 @@ public:
     /** Determines whether or not the result string contains more than one paragraph */
     bool            IsMultilineResult();
 
-    bool NeedsInterpret() const;
+    inline bool     NeedsInterpret() const;
 
     void            MaybeInterpret();
 
