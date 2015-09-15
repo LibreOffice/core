@@ -539,12 +539,17 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Italic"),
         OUString(".uno:Underline"),
         OUString(".uno:Strikeout"),
+        OUString(".uno:DefaultBullet"),
+        OUString(".uno:DefaultNumbering"),
         OUString(".uno:LeftPara"),
         OUString(".uno:CenterPara"),
         OUString(".uno:RightPara"),
         OUString(".uno:JustifyPara"),
         OUString(".uno:IncrementIndent"),
-        OUString(".uno:DecrementIndent")
+        OUString(".uno:DecrementIndent"),
+        OUString(".uno:CharFontName"),
+        OUString(".uno:FontHeight"),
+        OUString(".uno:StyleApply")
     };
 
     util::URL aCommandURL;
