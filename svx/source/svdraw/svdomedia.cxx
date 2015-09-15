@@ -72,7 +72,7 @@ struct MediaTempFile
 struct SdrMediaObj::Impl
 {
     ::avmedia::MediaItem                  m_MediaProperties;
-    ::boost::shared_ptr< MediaTempFile >  m_pTempFile;
+    std::shared_ptr< MediaTempFile >  m_pTempFile;
     uno::Reference< graphic::XGraphic >   m_xCachedSnapshot;
     OUString m_LastFailedPkgURL;
 };

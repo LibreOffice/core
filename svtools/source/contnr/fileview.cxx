@@ -72,8 +72,8 @@
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/urlfilter.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
@@ -1600,7 +1600,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     m_aCurrentAsyncActionHandler = Link<void*,void>();
 
     // minimum time to wait
-    boost::scoped_ptr< TimeValue > pTimeout( new TimeValue );
+    std::unique_ptr< TimeValue > pTimeout( new TimeValue );
     sal_Int32 nMinTimeout = pAsyncDescriptor->nMinTimeout;
     OSL_ENSURE( nMinTimeout > 0, "SvtFileView_Impl::GetFolderContent_Impl: invalid minimum timeout!" );
     if ( nMinTimeout <= 0 )

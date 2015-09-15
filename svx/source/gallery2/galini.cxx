@@ -23,11 +23,11 @@
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 OUString GalleryThemeEntry::ReadStrFromIni(const OUString &aKeyName )
 {
-    boost::scoped_ptr<SvStream> pStrm(::utl::UcbStreamHelper::CreateStream(
+    std::unique_ptr<SvStream> pStrm(::utl::UcbStreamHelper::CreateStream(
                                 GetStrURL().GetMainURL( INetURLObject::NO_DECODE ),
                                 StreamMode::READ ));
 

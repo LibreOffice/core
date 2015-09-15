@@ -25,7 +25,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <xmloff/xmlimp.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -50,7 +50,7 @@ PageMasterImportPropertyMapper::~PageMasterImportPropertyMapper()
 
 bool PageMasterImportPropertyMapper::handleSpecialItem(
         XMLPropertyState& rProperty,
-        ::std::vector< XMLPropertyState >& rProperties,
+        std::vector< XMLPropertyState >& rProperties,
         const OUString& rValue,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
@@ -82,7 +82,7 @@ bool PageMasterImportPropertyMapper::handleSpecialItem(
 }
 
 
-void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
+void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {
     SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
     XMLPropertyState* pAllPaddingProperty = NULL;
@@ -111,22 +111,22 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
     XMLPropertyState* pFooterBorderWidths[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pHeaderHeight = NULL;
     XMLPropertyState* pHeaderMinHeight = NULL;
-    boost::scoped_ptr<XMLPropertyState> xHeaderDynamic;
+    std::unique_ptr<XMLPropertyState> xHeaderDynamic;
     XMLPropertyState* pFooterHeight = NULL;
     XMLPropertyState* pFooterMinHeight = NULL;
-    boost::scoped_ptr<XMLPropertyState> xFooterDynamic;
+    std::unique_ptr<XMLPropertyState> xFooterDynamic;
     XMLPropertyState* pAllMarginProperty = NULL;
     XMLPropertyState* pMargins[4] = { NULL, NULL, NULL, NULL };
-    ::std::unique_ptr<XMLPropertyState> pNewMargins[4];
+    std::unique_ptr<XMLPropertyState> pNewMargins[4];
     XMLPropertyState* pAllHeaderMarginProperty = NULL;
     XMLPropertyState* pHeaderMargins[4] = { NULL, NULL, NULL, NULL };
-    ::std::unique_ptr<XMLPropertyState> pNewHeaderMargins[4];
+    std::unique_ptr<XMLPropertyState> pNewHeaderMargins[4];
     XMLPropertyState* pAllFooterMarginProperty = NULL;
     XMLPropertyState* pFooterMargins[4] = { NULL, NULL, NULL, NULL };
-    ::std::unique_ptr<XMLPropertyState> pNewFooterMargins[4];
+    std::unique_ptr<XMLPropertyState> pNewFooterMargins[4];
 
-    ::std::vector< XMLPropertyState >::iterator aEnd = rProperties.end();
-    for (::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin(); aIter != aEnd; ++aIter)
+    std::vector< XMLPropertyState >::iterator aEnd = rProperties.end();
+    for (std::vector< XMLPropertyState >::iterator aIter = rProperties.begin(); aIter != aEnd; ++aIter)
     {
         XMLPropertyState *property = &(*aIter);
         sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);

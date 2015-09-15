@@ -22,7 +22,7 @@
 
 #include <svtools/table/tablemodel.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace svt { namespace table
@@ -42,7 +42,7 @@ namespace svt { namespace table
     class GridTableRenderer : public ITableRenderer
     {
     private:
-        ::boost::scoped_ptr< GridTableRenderer_Impl >   m_pImpl;
+        ::std::unique_ptr< GridTableRenderer_Impl >   m_pImpl;
 
     public:
         /** creates a table renderer associated with the given model

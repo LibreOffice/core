@@ -25,7 +25,7 @@
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/msgbox.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace svx
 {
@@ -36,7 +36,7 @@ namespace svx
         SfxItemSet aRegistrationItems( SfxGetpApp()->GetPool(), SID_SB_DB_REGISTER, SID_SB_DB_REGISTER, 0 );
 
         SvxAbstractDialogFactory* pDialogFactory = SvxAbstractDialogFactory::Create();
-        boost::scoped_ptr< SfxAbstractDialog > pDialog;
+        std::unique_ptr< SfxAbstractDialog > pDialog;
         if ( pDialogFactory )
             pDialog.reset( pDialogFactory->CreateSfxDialog( _parentWindow, aRegistrationItems, NULL, RID_SFXPAGE_DBREGISTER ) );
         if ( pDialog.get() )

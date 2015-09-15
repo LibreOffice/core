@@ -40,12 +40,12 @@
 #include <basic/basmgr.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/assign/list_of.hpp>
-#include <utility>
-using std::pair;
+#include <memory>
 #include <set>
+#include <utility>
 
+using std::pair;
 
 namespace svxform
 {
@@ -858,7 +858,7 @@ namespace svxform
 
             virtual ~IScript() { }
         };
-        typedef ::boost::shared_ptr< IScript >  PScript;
+        typedef std::shared_ptr< IScript >  PScript;
 
         class NewStyleUNOScript : public IScript
         {

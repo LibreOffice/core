@@ -44,9 +44,9 @@
 
 #include <comphelper/classids.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <map>
 #include "svx/xmleohlp.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <map>
+#include <memory>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -405,7 +405,7 @@ bool SvXMLEmbeddedObjectHelper::ImplReadObject(
                 pTemp->Seek( 0 );
                 uno::Reference < io::XStream > xStm = xDocStor->openStreamElement( rObjName,
                         embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
-                boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xStm ));
+                std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xStm ));
                 pTemp->ReadStream( *pStream );
                 pStream.reset();
 

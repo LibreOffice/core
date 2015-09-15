@@ -35,7 +35,7 @@
 #include <unotools/syslocale.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <unordered_map>
 
 namespace svt
@@ -96,7 +96,7 @@ namespace svt
         virtual ::sal_Int32 getFormatKey() const = 0;
     };
 
-    typedef ::boost::shared_ptr< IValueNormalization > PValueNormalization;
+    typedef std::shared_ptr< IValueNormalization > PValueNormalization;
     typedef std::unordered_map< OUString, PValueNormalization, OUStringHash >    NormalizerCache;
 
 

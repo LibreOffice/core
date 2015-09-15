@@ -71,7 +71,7 @@
 #include <vcl/settings.hxx>
 
 #include <math.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
@@ -866,7 +866,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                boost::scoped_ptr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog(NULL));
+                std::unique_ptr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog(NULL));
                 DBG_ASSERT(pDlg, "Dialog creation failed!");
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();

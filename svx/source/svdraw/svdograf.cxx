@@ -61,7 +61,7 @@
 #include <osl/thread.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1315,7 +1315,7 @@ IMPL_LINK_TYPED( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
                 uno::Reference<io::XInputStream> const xStream(
                     pModel->GetDocumentStream(aUserData, proxy));
 
-                ::boost::scoped_ptr<SvStream> const pStream( (xStream.is())
+                std::unique_ptr<SvStream> const pStream( (xStream.is())
                         ? ::utl::UcbStreamHelper::CreateStream(xStream)
                         : 0 );
 
@@ -1323,7 +1323,7 @@ IMPL_LINK_TYPED( SdrGrafObj, ImpSwapHdl, const GraphicObject*, pO, SvStream* )
                 {
                     Graphic aGraphic;
 
-                    boost::scoped_ptr<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > pFilterData;
+                    std::unique_ptr<com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > pFilterData;
 
                     if(mbInsidePaint && !GetViewContact().HasViewObjectContacts(true))
                     {

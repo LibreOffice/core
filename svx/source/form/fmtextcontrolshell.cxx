@@ -63,7 +63,7 @@
 #include <vcl/outdev.hxx>
 #include <osl/mutex.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace svx
@@ -644,10 +644,10 @@ namespace svx
 
         SfxItemPool* pPool = EditEngine::CreatePool();
         pPool->FreezeIdRanges();
-        boost::scoped_ptr< SfxItemSet > xPureItems( new SfxItemSet( *pPool ) );
+        std::unique_ptr< SfxItemSet > xPureItems( new SfxItemSet( *pPool ) );
 
         // put the current states of the items into the set
-        boost::scoped_ptr<SfxAllItemSet> xCurrentItems( new SfxAllItemSet( *xPureItems ) );
+        std::unique_ptr<SfxAllItemSet> xCurrentItems( new SfxAllItemSet( *xPureItems ) );
         transferFeatureStatesToItemSet( m_aControlFeatures, *xCurrentItems );
 
         // additional items, which we are not responsible for at the SfxShell level,

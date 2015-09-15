@@ -33,7 +33,7 @@
 
 #include <string.h>
 #include <math.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 #define SCALEPOINT(aPT,aFracX,aFracY) (aPT).X()=((aPT).X()*(aFracX).GetNumerator())/(aFracX).GetDenominator();  \
@@ -81,7 +81,7 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     rOStm.WriteBool( bActive );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aTarget, eEncoding);
 
-    boost::scoped_ptr<IMapCompat> pCompat(new IMapCompat( rOStm, StreamMode::WRITE ));
+    std::unique_ptr<IMapCompat> pCompat(new IMapCompat( rOStm, StreamMode::WRITE ));
 
     WriteIMapObject( rOStm );
     aEventList.Write( rOStm );                                      // V4
@@ -110,7 +110,7 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
 
     // make URL absolute
     aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
-    boost::scoped_ptr<IMapCompat> pCompat(new IMapCompat( rIStm, StreamMode::READ ));
+    std::unique_ptr<IMapCompat> pCompat(new IMapCompat( rIStm, StreamMode::READ ));
 
     ReadIMapObject( rIStm );
 

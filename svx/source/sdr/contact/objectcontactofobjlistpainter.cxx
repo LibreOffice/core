@@ -27,7 +27,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sdr { namespace contact {
 
@@ -116,7 +116,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
             // if there is something to show, use a vclProcessor to render it
             if(xPrimitiveSequence.hasElements())
             {
-                boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+                std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     *pTargetDevice,
                     getViewInformation2D()));
 

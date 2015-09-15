@@ -48,7 +48,7 @@
 #include <svx/svxdlg.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 using ::com::sun::star::frame::XFrame;
@@ -660,7 +660,7 @@ void IMapWindow::DoMacroAssign()
         aSet.Put( aMacroItem, SID_ATTR_MACROITEM );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        boost::scoped_ptr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG ));
+        std::unique_ptr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG ));
 
         if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
         {
@@ -682,7 +682,7 @@ void IMapWindow::DoPropertyDialog()
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            boost::scoped_ptr<AbstractURLDlg> aDlg(pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
+            std::unique_ptr<AbstractURLDlg> aDlg(pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
                                             pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             if ( aDlg->Execute() == RET_OK )

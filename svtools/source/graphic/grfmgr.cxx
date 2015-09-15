@@ -37,7 +37,7 @@
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
@@ -238,7 +238,7 @@ void GraphicObject::ImplAutoSwapIn()
 
                             if( osl::FileBase::getFileURLFromSystemPath( GetLink(), aURLStr ) == osl::FileBase::E_None )
                             {
-                                boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURLStr, StreamMode::READ ));
+                                std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURLStr, StreamMode::READ ));
 
                                 if( pIStm )
                                 {
@@ -1141,7 +1141,7 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
         Graphic     aGraphic;
         if ( !aURL.isEmpty() )
         {
-            boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aURL, StreamMode::READ ));
+            std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aURL, StreamMode::READ ));
             if( pStream )
                 GraphicConverter::Import( *pStream, aGraphic );
         }

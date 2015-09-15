@@ -66,10 +66,8 @@
 #include <editeng/eeitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/flditem.hxx>
-
-#include <boost/scoped_ptr.hpp>
-
 #include <UnoGraphicExporter.hxx>
+#include <memory>
 
 #define MAX_EXT_PIX         2048
 
@@ -437,7 +435,7 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntP
 
     if(bSuccess)
     {
-        boost::scoped_ptr<SdrView> pView(new SdrView(mpDoc, pVDev));
+        std::unique_ptr<SdrView> pView(new SdrView(mpDoc, pVDev));
         pView->SetPageVisible( false );
         pView->SetBordVisible( false );
         pView->SetGridVisible( false );
@@ -699,7 +697,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     }
                 }
 
-                boost::scoped_ptr< SdrView > pLocalView;
+                std::unique_ptr< SdrView > pLocalView;
                 if( PTR_CAST( FmFormModel, mpDoc ) )
                 {
                     pLocalView.reset( new FmFormView( PTR_CAST( FmFormModel, mpDoc ), aVDev ) );
@@ -732,7 +730,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 Size aNewSize;
 
                 // create a view
-                boost::scoped_ptr< SdrView > pView;
+                std::unique_ptr< SdrView > pView;
                 if( PTR_CAST( FmFormModel, mpDoc ) )
                 {
                     pView.reset(new FmFormView( PTR_CAST( FmFormModel, mpDoc ), aVDev ));
@@ -861,7 +859,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     Rectangle aScrollRectangle;
                     Rectangle aPaintRectangle;
 
-                    const boost::scoped_ptr< GDIMetaFile > pMtf(
+                    const std::unique_ptr< GDIMetaFile > pMtf(
                         static_cast<SdrTextObj*>(pObj)->GetTextScrollMetaFileAndRectangle(
                            aScrollRectangle, aPaintRectangle ) );
 

@@ -36,7 +36,7 @@
 
 #include <limits>
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 
 using namespace ::com::sun::star;
@@ -65,7 +65,7 @@ class UnoControlHolderList
 public:
     typedef sal_Int32                                       ControlIdentifier;
 private:
-    typedef ::boost::shared_ptr< UnoControlHolder >         ControlInfo;
+    typedef std::shared_ptr< UnoControlHolder >         ControlInfo;
     typedef ::std::map< ControlIdentifier, ControlInfo >    ControlMap;
 
 private:

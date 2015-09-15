@@ -22,11 +22,9 @@
 
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/ui/dialogs/XWizard.hpp>
-
 #include <svtools/roadmapwizard.hxx>
-
-#include <boost/shared_ptr.hpp>
 #include <map>
+#include <memory>
 
 
 namespace svt { namespace uno
@@ -34,7 +32,7 @@ namespace svt { namespace uno
 
 
     class WizardPageController;
-    typedef ::boost::shared_ptr< WizardPageController > PWizardPageController;
+    typedef std::shared_ptr< WizardPageController > PWizardPageController;
 
 
     //= WizardShell

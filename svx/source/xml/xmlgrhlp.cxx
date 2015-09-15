@@ -47,7 +47,7 @@
 #include "svx/xmleohlp.hxx"
 
 #include <algorithm>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -313,7 +313,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 
                 if( sFirstBytes[0] == 0x1f && sFirstBytes[1] == 0x8b )
                 {
-                    boost::scoped_ptr<SvMemoryStream> pDest(new SvMemoryStream);
+                    std::unique_ptr<SvMemoryStream> pDest(new SvMemoryStream);
                     ZCodec aZCodec( 0x8000, 0x8000 );
                     aZCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, false, true);
                     mpOStm->Seek( 0 );
@@ -501,7 +501,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName
     SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName, false ) );
     if( aStream.xStream.is() )
     {
-        boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
+        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
         GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *pStream );
     }
 
@@ -538,7 +538,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
             aAny <<= bCompressed;
             xProps->setPropertyValue( "Compressed", aAny );
 
-            boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
+            std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
             if( bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData() )
                 pStream->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
             else

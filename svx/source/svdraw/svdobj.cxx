@@ -135,9 +135,9 @@
 #include <svdobjplusdata.hxx>
 #include <svdobjuserdatalist.hxx>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
 #include <libxml/xmlwriter.h>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -3163,7 +3163,7 @@ SdrObjFactory::SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNe
 
 SdrObject* SdrObjFactory::CreateObjectFromFactory( sal_uInt32 nInventor, sal_uInt16 nIdentifier, SdrPage* pPage, SdrModel* pModel )
 {
-    boost::scoped_ptr<SdrObjFactory> pFact(new SdrObjFactory(nInventor, nIdentifier, pPage, pModel));
+    std::unique_ptr<SdrObjFactory> pFact(new SdrObjFactory(nInventor, nIdentifier, pPage, pModel));
 
     SdrLinkList& rLL = ImpGetUserMakeObjHdl();
     unsigned n = rLL.GetLinkCount();

@@ -57,7 +57,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <map>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <cppuhelper/implbase.hxx>
 
 #undef GALLERY_USE_CLIPBOARD
@@ -1177,7 +1177,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        boost::scoped_ptr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldTitle ));
+                        std::unique_ptr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldTitle ));
                         DBG_ASSERT(aDlg, "Dialog creation failed!");
                         if( aDlg->Execute() == RET_OK )
                         {

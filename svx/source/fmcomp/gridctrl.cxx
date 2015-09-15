@@ -57,11 +57,10 @@
 #include <comphelper/property.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 #include <algorithm>
 #include <cstdlib>
 #include <map>
+#include <memory>
 
 using namespace ::dbtools;
 using namespace ::dbtools::DBTypeConversion;
@@ -3568,7 +3567,7 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const PropertyChangeEvent
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ] : NULL;
     if (pColumn)
     {
-        boost::scoped_ptr<vcl::SolarMutexTryAndBuyGuard> pGuard;
+        std::unique_ptr<vcl::SolarMutexTryAndBuyGuard> pGuard;
         while (!m_bWantDestruction && (!pGuard || !pGuard->isAcquired()))
             pGuard.reset(new vcl::SolarMutexTryAndBuyGuard);
 

@@ -61,8 +61,6 @@
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 #include <memory>
 
 
@@ -358,7 +356,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     {
         // completely reworked to use primitives; this ensures same look and functionality
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-        boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
             rTargetDevice,
             aViewInformation2D));
 

@@ -39,8 +39,8 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include <xmloff/maptype.hxx>
+#include <memory>
 #include <set>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -398,7 +398,7 @@ void XMLStyleExport::exportStyleFamily(
        // If next styles are supported and used styles should be exported only,
     // the next style may be unused but has to be exported, too. In this case
     // the names of all exported styles are remembered.
-    boost::scoped_ptr<std::set<OUString> > pExportedStyles(0);
+    std::unique_ptr<std::set<OUString> > pExportedStyles(nullptr);
     bool bFirstStyle = true;
 
     const uno::Sequence< OUString> aSeq = xStyleCont->getElementNames();

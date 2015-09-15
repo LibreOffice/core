@@ -1450,7 +1450,7 @@ extern StringTriple const * const g_pEventTranslations;
 StringTriple const * const g_pEventTranslations = s_aEventTranslations;
 
 void ImportContext::importEvents(
-    ::std::vector< Reference< xml::input::XElement > > const & rEvents )
+    std::vector< Reference< xml::input::XElement > > const & rEvents )
 {
     Reference< script::XScriptEventsSupplier > xSupplier(
         _xControlModel, UNO_QUERY );
@@ -1826,8 +1826,8 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     Reference< XModel > const & xDocument )
 {
     // single set of styles and stylenames apply to all containees
-    :: boost::shared_ptr< ::std::vector< OUString > > pStyleNames( new ::std::vector< OUString > );
-    :: boost::shared_ptr< ::std::vector< css::uno::Reference< css::xml::input::XElement > > > pStyles( new ::std::vector< css::uno::Reference< css::xml::input::XElement > > );
+    std::shared_ptr< std::vector< OUString > > pStyleNames( new std::vector< OUString > );
+    std::shared_ptr< std::vector< css::uno::Reference< css::xml::input::XElement > > > pStyles( new std::vector< css::uno::Reference< css::xml::input::XElement > > );
      return ::xmlscript::createDocumentHandler(
          static_cast< xml::input::XRoot * >(
             new DialogImport( xContext, xDialogModel, pStyleNames, pStyles, xDocument ) ) );

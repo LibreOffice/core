@@ -45,7 +45,7 @@
 #include <svtools/grfmgr.hxx>
 #include "provider.hxx"
 #include <vcl/dibtools.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -239,7 +239,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
         OString aResMgrName(OUStringToOString(
             rResourceURL.getToken(0, '/', nIndex), RTL_TEXTENCODING_ASCII_US));
 
-        boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( aResMgrName.getStr(), Application::GetSettings().GetUILanguageTag() ));
+        std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( aResMgrName.getStr(), Application::GetSettings().GetUILanguageTag() ));
 
         if( pResMgr )
         {
@@ -384,7 +384,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     OUString                                aPath;
-    boost::scoped_ptr<SvStream>             pIStm;
+    std::unique_ptr<SvStream>             pIStm;
 
     uno::Reference< io::XInputStream > xIStm;
     uno::Reference< awt::XBitmap >xBtm;
@@ -727,7 +727,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
 {
     SolarMutexGuard g;
 
-    boost::scoped_ptr<SvStream> pOStm;
+    std::unique_ptr<SvStream> pOStm;
     OUString    aPath;
     sal_Int32   i;
 

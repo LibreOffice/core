@@ -50,7 +50,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -434,7 +434,7 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
         return;
     }
 
-    boost::scoped_ptr<SvStream> pGraphicStream(GetGraphicStream( bUpdate ));
+    std::unique_ptr<SvStream> pGraphicStream(GetGraphicStream( bUpdate ));
     if ( pGraphicStream )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
@@ -532,7 +532,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
     mpImpl->aMediaType = rMediaType;
     mpImpl->mnGraphicVersion++;
 
-    boost::scoped_ptr<SvStream> pGraphicStream(::utl::UcbStreamHelper::CreateStream( xInGrStream ));
+    std::unique_ptr<SvStream> pGraphicStream(::utl::UcbStreamHelper::CreateStream( xInGrStream ));
 
     if ( pGraphicStream )
     {

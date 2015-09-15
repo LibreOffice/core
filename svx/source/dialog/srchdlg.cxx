@@ -69,7 +69,6 @@
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
@@ -1335,7 +1334,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            boost::scoped_ptr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog( this,
+            std::unique_ptr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog( this,
                                                                         pSearchItem->IsLEVRelaxed(),
                                                                         pSearchItem->GetLEVOther(),
                                                                         pSearchItem->GetLEVShorter(),
@@ -1358,7 +1357,7 @@ IMPL_LINK_TYPED( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            boost::scoped_ptr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet,
+            std::unique_ptr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet,
                     pSearchItem->GetTransliterationFlags() ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
             int nRet = aDlg->Execute();
@@ -1935,7 +1934,7 @@ IMPL_LINK_NOARG_TYPED(SvxSearchDialog, FormatHdl_Impl, Button*, void)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(this, aSet));
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(this, aSet));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
         aTxt = pDlg->GetText() + aTxt;
         pDlg->SetText( aTxt );
@@ -2019,7 +2018,7 @@ IMPL_LINK_NOARG_TYPED(SvxSearchDialog, AttributeHdl_Impl, Button*, void)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges ));
+        std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges ));
         DBG_ASSERT(pDlg, "Dialog creation failed!");
         pDlg->Execute();
     }

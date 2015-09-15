@@ -26,7 +26,7 @@
 #include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
 #include "svx/xexch.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 /// default CTOR, for Assign()
@@ -107,7 +107,7 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
 
         if( nWhich )
         {
-            boost::scoped_ptr<SfxPoolItem> pNewItem(rData.pPool->GetDefaultItem( nWhich ).Create( rIStm, nItemVersion ));
+            std::unique_ptr<SfxPoolItem> pNewItem(rData.pPool->GetDefaultItem( nWhich ).Create( rIStm, nItemVersion ));
 
             if( pNewItem )
             {

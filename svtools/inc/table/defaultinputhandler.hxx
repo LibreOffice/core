@@ -23,7 +23,7 @@
 #include <svtools/table/tableinputhandler.hxx>
 #include <svtools/table/tabletypes.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace svt { namespace table
@@ -38,7 +38,7 @@ namespace svt { namespace table
     class DefaultInputHandler : public ITableInputHandler
     {
     private:
-        ::boost::scoped_ptr< DefaultInputHandler_Impl > m_pImpl;
+        ::std::unique_ptr< DefaultInputHandler_Impl > m_pImpl;
 
     public:
         DefaultInputHandler();

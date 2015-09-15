@@ -51,7 +51,7 @@
 #include "coreservices.hxx"
 
 #include <algorithm>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "helpid.hrc"
 
@@ -201,7 +201,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 
     if( nItemId > 0 )
     {
-        boost::scoped_ptr<FmFormModel> pModel(new FmFormModel());
+        std::unique_ptr<FmFormModel> pModel(new FmFormModel());
         pModel->GetItemPool().FreezeIdRanges();
 
         if( GalleryExplorer::GetSdrObj( mnThemeId, nItemId-1, pModel.get() ) )

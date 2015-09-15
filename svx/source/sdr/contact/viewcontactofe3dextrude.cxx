@@ -24,7 +24,7 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace sdr
@@ -51,7 +51,7 @@ namespace sdr
             const basegfx::B2DPolyPolygon aPolyPolygon(GetE3dExtrudeObj().GetExtrudePolygon());
 
             // get 3D Object Attributes
-            boost::scoped_ptr<drawinglayer::attribute::Sdr3DObjectAttribute> pSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
+            std::unique_ptr<drawinglayer::attribute::Sdr3DObjectAttribute> pSdr3DObjectAttribute(drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet));
 
             // calculate texture size; use size of top/bottom cap to get a perfect mapping
             // for the caps. The in-between geometry will get a stretched size with a

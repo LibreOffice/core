@@ -34,7 +34,7 @@
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/unoapi.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -333,8 +333,8 @@ void SvxLineEndWindow::dispose()
 
 IMPL_LINK_NOARG_TYPED(SvxLineEndWindow, SelectHdl, ValueSet*, void)
 {
-    boost::scoped_ptr<XLineEndItem> pLineEndItem;
-    boost::scoped_ptr<XLineStartItem> pLineStartItem;
+    std::unique_ptr<XLineEndItem> pLineEndItem;
+    std::unique_ptr<XLineStartItem> pLineStartItem;
     sal_uInt16                  nId = aLineEndSet->GetSelectItemId();
 
     if( nId == 1 )

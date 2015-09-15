@@ -33,7 +33,7 @@
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <boost/optional.hpp>
+#include <memory>
 #include <vector>
 
 // space around an item
@@ -97,7 +97,7 @@ namespace svt
     protected:
         ~ITabBarRenderer() {}
     };
-    typedef ::boost::shared_ptr< ITabBarRenderer >  PTabBarRenderer;
+    typedef std::shared_ptr< ITabBarRenderer >  PTabBarRenderer;
 
 
     //= VCLItemRenderer - declaration

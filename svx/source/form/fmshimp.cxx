@@ -99,8 +99,8 @@
 #include <algorithm>
 #include <functional>
 #include <map>
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 // wird fuer Invalidate verwendet -> mitpflegen
 static const sal_uInt16 DatabaseSlotMap[] =
@@ -285,7 +285,7 @@ namespace
         {
             SdrObject* pCurrent = _rMarkList.GetMark( i )->GetMarkedSdrObj();
 
-            boost::scoped_ptr<SdrObjListIter> pGroupIterator;
+            std::unique_ptr<SdrObjListIter> pGroupIterator;
             if ( pCurrent->IsGroupObject() )
             {
                 pGroupIterator.reset(new SdrObjListIter( *pCurrent->GetSubList() ));
@@ -1568,7 +1568,7 @@ void FmXFormShell::ExecuteSearch()
     // ausgeraeumt sind, sollte hier ein SM_USETHREAD rein, denn die Suche in einem eigenen Thread ist doch etwas fluessiger
     // sollte allerdings irgendwie von dem unterliegenden Cursor abhaengig gemacht werden, DAO zum Beispiel ist nicht thread-sicher
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    boost::scoped_ptr<AbstractFmSearchDialog> pDialog;
+    std::unique_ptr<AbstractFmSearchDialog> pDialog;
     if ( pFact )
         pDialog.reset(pFact->CreateFmSearchDialog( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, aContextNames, nInitialContext, LINK( this, FmXFormShell, OnSearchContextRequest ) ));
     DBG_ASSERT( pDialog, "FmXFormShell::ExecuteSearch: could not create the search dialog!" );
@@ -4068,7 +4068,7 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
         {
             // We can't simply re-insert the item because we have a clear order for all the our items.
             // So first we have to determine the position of the item to insert.
-            boost::scoped_ptr<PopupMenu> pSource(FmXFormShell::GetConversionMenu());
+            std::unique_ptr<PopupMenu> pSource(FmXFormShell::GetConversionMenu());
             sal_uInt16 nSourcePos = pSource->GetItemPos(nSID);
             DBG_ASSERT(nSourcePos != MENU_ITEM_NOTFOUND, "ControlConversionMenuController::StateChanged : FmXFormShell supplied an invalid menu !");
             sal_uInt16 nPrevInSource = nSourcePos;

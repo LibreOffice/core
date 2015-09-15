@@ -113,7 +113,7 @@
 #include "xexptran.hxx"
 #include "XMLBase64Export.hxx"
 #include "XMLImageMapExport.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <config_features.h>
 
@@ -585,7 +585,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     sal_Int32 nZIndex = 0;
     uno::Reference< beans::XPropertySet > xSet( xShape, uno::UNO_QUERY );
 
-    boost::scoped_ptr< SvXMLElementExport >  mpHyperlinkElement;
+    std::unique_ptr< SvXMLElementExport >  mpHyperlinkElement;
 
     // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
     // does not support document events

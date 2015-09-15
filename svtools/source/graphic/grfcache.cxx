@@ -30,7 +30,7 @@
 #include <rtl/strbuf.hxx>
 #include "grfcache.hxx"
 #include <rtl/crc.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define MAX_BMP_EXTENT  4096
 
@@ -865,7 +865,7 @@ void GraphicCache::AddGraphicObject(
         if( !bInserted )
         {
             GraphicCacheEntryList::iterator it = maGraphicCache.begin();
-            boost::scoped_ptr< GraphicID > apID;
+            std::unique_ptr< GraphicID > apID;
 
             if( !pID )
             {

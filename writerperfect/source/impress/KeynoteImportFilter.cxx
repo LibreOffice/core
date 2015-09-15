@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -33,7 +33,7 @@
 
 #include "KeynoteImportFilter.hxx"
 
-using boost::shared_ptr;
+using std::shared_ptr;
 
 using com::sun::star::io::XInputStream;
 using com::sun::star::uno::Any;

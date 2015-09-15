@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace svt
@@ -43,7 +43,7 @@ namespace svt
         OUString convertToString( const ::com::sun::star::uno::Any& i_cellValue );
 
     private:
-        ::boost::scoped_ptr< CellValueConversion_Data > m_pData;
+        ::std::unique_ptr< CellValueConversion_Data > m_pData;
     };
 
 

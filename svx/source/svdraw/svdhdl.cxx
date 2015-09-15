@@ -66,7 +66,6 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 
 // #i15222#
@@ -1045,7 +1044,7 @@ Bitmap SdrHdlColor::CreateColorDropper(Color aCol)
     aRetval.Erase(aCol);
 
     // get write access
-    boost::scoped_ptr<BitmapWriteAccess> pWrite(aRetval.AcquireWriteAccess());
+    std::unique_ptr<BitmapWriteAccess> pWrite(aRetval.AcquireWriteAccess());
     DBG_ASSERT(pWrite, "Got NO write access to a new Bitmap!");
 
     if(pWrite)

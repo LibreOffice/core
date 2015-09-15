@@ -32,7 +32,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -190,7 +190,7 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
             : DrawModeFlags::Default);
 
         // create processor and draw primitives
-        boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
             *pVirtualDevice.get(),
             aNewViewInformation2D));
 

@@ -34,7 +34,7 @@
 
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 SvxXConnectionPreview::SvxXConnectionPreview( vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle)
@@ -269,7 +269,7 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
         MapMode aMapMode = GetMapMode();
         Fraction aXFrac = aMapMode.GetScaleX();
         Fraction aYFrac = aMapMode.GetScaleY();
-        boost::scoped_ptr<Fraction> pMultFrac;
+        std::unique_ptr<Fraction> pMultFrac;
 
         if( bZoomIn )
         {

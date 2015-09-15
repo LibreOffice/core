@@ -49,7 +49,7 @@
 #include "xmlxtexp.hxx"
 
 #include <comphelper/storagehelper.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace com::sun::star::container;
@@ -355,7 +355,7 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
 
             char const* pEleName;
             Type aExportType = mxTable->getElementType();
-            boost::scoped_ptr<SvxXMLTableEntryExporter> pExporter;
+            std::unique_ptr<SvxXMLTableEntryExporter> pExporter;
 
             if( aExportType == cppu::UnoType<sal_Int32>::get() )
             {

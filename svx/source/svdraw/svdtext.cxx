@@ -25,7 +25,7 @@
 #include "editeng/fhgtitem.hxx"
 #include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 SdrText::SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject /* = 0 */ )
 : mpOutlinerParaObject( pOutlinerParaObject )
@@ -173,7 +173,7 @@ void SdrText::ForceOutlinerParaObject( sal_uInt16 nOutlMode )
 {
     if( mpModel && !mpOutlinerParaObject )
     {
-        boost::scoped_ptr<Outliner> pOutliner(SdrMakeOutliner(nOutlMode, *mpModel));
+        std::unique_ptr<Outliner> pOutliner(SdrMakeOutliner(nOutlMode, *mpModel));
         if( pOutliner )
         {
             Outliner& aDrawOutliner = mpModel->GetDrawOutliner();

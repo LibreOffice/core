@@ -33,7 +33,7 @@
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/tenccvt.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class ImpSdrObjTextLink: public ::sfx2::SvBaseLink
 {
@@ -220,7 +220,7 @@ bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterNa
 
     DBG_ASSERT( aFileURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 
-    boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+    std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aFileURL.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
 
     if( pIStm )
     {

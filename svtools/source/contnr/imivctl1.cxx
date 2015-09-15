@@ -36,7 +36,7 @@
 #include <svtools/svmedit.hxx>
 
 #include <algorithm>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <vcl/idle.hxx>
 
 #define IMPICNVIEW_ACC_RETURN 1
@@ -302,7 +302,7 @@ void SvxIconChoiceCtrl_Impl::InsertEntry( SvxIconChoiceCtrlEntry* pEntry, size_t
 
 void SvxIconChoiceCtrl_Impl::CreateAutoMnemonics( MnemonicGenerator* _pGenerator )
 {
-    boost::scoped_ptr< MnemonicGenerator > pAutoDeleteOwnGenerator;
+    std::unique_ptr< MnemonicGenerator > pAutoDeleteOwnGenerator;
     if ( !_pGenerator )
     {
         _pGenerator = new MnemonicGenerator;
@@ -661,7 +661,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const Rec
     rRenderContext.SetClipRegion(vcl::Region(rRect));
 
     SvxIconChoiceCtrlEntryList_impl* pNewZOrderList = new SvxIconChoiceCtrlEntryList_impl();
-    boost::scoped_ptr<SvxIconChoiceCtrlEntryList_impl> pPaintedEntries(new SvxIconChoiceCtrlEntryList_impl());
+    std::unique_ptr<SvxIconChoiceCtrlEntryList_impl> pPaintedEntries(new SvxIconChoiceCtrlEntryList_impl());
 
     size_t nPos = 0;
     while(nCount)

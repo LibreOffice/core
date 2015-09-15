@@ -59,7 +59,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // - Namespaces -
 
@@ -333,7 +333,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
 
                     if( maAny >>= aSeq )
                     {
-                        boost::scoped_ptr<SvMemoryStream> pSrcStm(new SvMemoryStream( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC ));
+                        std::unique_ptr<SvMemoryStream> pSrcStm(new SvMemoryStream( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC ));
                         GDIMetaFile     aMtf;
 
                         ReadGDIMetaFile( *pSrcStm, aMtf );
@@ -363,7 +363,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
 
                     if( maAny >>= aSeq )
                     {
-                        boost::scoped_ptr<SvMemoryStream> pSrcStm(new SvMemoryStream( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC ));
+                        std::unique_ptr<SvMemoryStream> pSrcStm(new SvMemoryStream( aSeq.getArray(), aSeq.getLength(), StreamMode::WRITE | StreamMode::TRUNC ));
                         GDIMetaFile     aMtf;
 
                         ReadGDIMetaFile( *pSrcStm, aMtf );
@@ -1988,7 +1988,7 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
 
                     if( ( aDesc.getLength() > 4 ) && aDesc.copy(aDesc.getLength() - 4).equalsIgnoreAsciiCase(".URL") )
                     {
-                        boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( INetURLObject( OStringToOUString(aDesc, eTextEncoding) ).GetMainURL( INetURLObject::NO_DECODE ),
+                        std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( INetURLObject( OStringToOUString(aDesc, eTextEncoding) ).GetMainURL( INetURLObject::NO_DECODE ),
                                                                                   STREAM_STD_READ ));
 
                         if( !pStream || pStream->GetError() )

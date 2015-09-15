@@ -38,7 +38,7 @@
 #include <svx/dialmgr.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // - Namespaces -
 
@@ -358,7 +358,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                boost::scoped_ptr<VclAbstractRefreshableDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog( this, pTheme ));
+                std::unique_ptr<VclAbstractRefreshableDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog( this, pTheme ));
                 DBG_ASSERT(aActualizeProgress, "Dialog creation failed!");
 
                 aActualizeProgress->Update();
@@ -382,7 +382,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialog creation failed!");
-            boost::scoped_ptr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldName ));
+            std::unique_ptr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog( this, aOldName ));
             DBG_ASSERT(aDlg, "Dialog creation failed!");
 
             if( aDlg->Execute() == RET_OK )
@@ -418,7 +418,7 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    boost::scoped_ptr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog( this, pTheme ));
+                    std::unique_ptr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog( this, pTheme ));
                     DBG_ASSERT(aDlg, "Dialog creation failed!");
 
                     if( aDlg->Execute() == RET_OK )

@@ -36,7 +36,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -195,7 +195,7 @@ void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescripto
     // Sizes-Liste auff"ullen
     sal_Int64 nOldVal = GetValue(); // alten Wert merken
     const FontList* _pFontList = NULL;
-    boost::scoped_ptr<FontList> aHold( new FontList( this ));
+    std::unique_ptr<FontList> aHold( new FontList( this ));
     _pFontList = aHold.get();
 
     if ( !rCurrentFont.Name.isEmpty() )

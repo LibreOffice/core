@@ -39,7 +39,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/dibtools.hxx>
 #include "gallerydrawmodel.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -229,7 +229,7 @@ const OUString SgaObject::GetTitle() const
                 !aResourceName.isEmpty() && ( nResId > 0 ) && ( nResId < 0x10000 ) )
             {
                 OString aMgrName(OUStringToOString(aResourceName, RTL_TEXTENCODING_UTF8));
-                boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( aMgrName.getStr(),
+                std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( aMgrName.getStr(),
                             Application::GetSettings().GetUILanguageTag() ));
                 if ( pResMgr )
                 {

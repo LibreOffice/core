@@ -87,13 +87,13 @@
 #include "shapeimpl.hxx"
 #include <sal/log.hxx>
 
-#include <vector>
-
 #include "svx/lathe3d.hxx"
 #include "svx/extrud3d.hxx"
 
-#include <boost/scoped_ptr.hpp>
 #include <vcl/wmf.hxx>
+
+#include <memory>
+#include <vector>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -675,7 +675,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
     SdrModel* pModel = mpObj->GetModel();
     SdrPage* pPage = mpObj->GetPage();
 
-    boost::scoped_ptr<E3dView> pView(new E3dView( pModel, pVDev.get() ));
+    std::unique_ptr<E3dView> pView(new E3dView( pModel, pVDev.get() ));
     pView->hideMarkHandles();
     SdrPageView* pPageView = pView->ShowSdrPage(pPage);
 

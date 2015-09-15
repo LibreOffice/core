@@ -18,9 +18,8 @@
  */
 
 
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <com/sun/star/table/XTable.hpp>
 
@@ -58,7 +57,7 @@ struct RTFCellDefault
     explicit RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnCol(0), mnTwips(0 ), mnColSpan(1) {}
 };
 
-typedef std::vector< boost::shared_ptr< RTFCellDefault > > RTFCellDefaultVector;
+typedef std::vector< std::shared_ptr< RTFCellDefault > > RTFCellDefaultVector;
 
 struct RTFCellInfo
 {
@@ -70,10 +69,10 @@ struct RTFCellInfo
     explicit RTFCellInfo( SfxItemPool& rPool ) : maItemSet(  rPool ), mnStartPara(0), mnParaCount(0), mnColSpan(0) {}
 };
 
-typedef boost::shared_ptr< RTFCellInfo > RTFCellInfoPtr;
+typedef std::shared_ptr< RTFCellInfo > RTFCellInfoPtr;
 typedef std::vector< RTFCellInfoPtr > RTFColumnVector;
 
-typedef boost::shared_ptr< RTFColumnVector > RTFColumnVectorPtr;
+typedef std::shared_ptr< RTFColumnVector > RTFColumnVectorPtr;
 
 class SdrTableRTFParser
 {
@@ -274,7 +273,7 @@ void SdrTableRTFParser::FillTable()
                     if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,false,&pPoolItem)==SfxItemState::SET)
                         xCell->SetMergedItem( *pPoolItem );
 
-                    boost::scoped_ptr<OutlinerParaObject> pTextObject(mpOutliner->CreateParaObject( xCellInfo->mnStartPara, xCellInfo->mnParaCount ));
+                    std::unique_ptr<OutlinerParaObject> pTextObject(mpOutliner->CreateParaObject( xCellInfo->mnStartPara, xCellInfo->mnParaCount ));
                     if( pTextObject )
                     {
                         SdrOutliner& rOutliner=mrTableObj.ImpGetDrawOutliner();
@@ -361,7 +360,7 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
         {
             mbNewDef = true;
             mpInsDefault->mnCol = mnColCnt;
-            maDefaultList.push_back( boost::shared_ptr< RTFCellDefault >( mpInsDefault ) );
+            maDefaultList.push_back( std::shared_ptr< RTFCellDefault >( mpInsDefault ) );
 
             if( (sal_Int32)maColumnEdges.size() <= mnColCnt )
                 maColumnEdges.resize( mnColCnt + 1 );

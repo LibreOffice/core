@@ -37,7 +37,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
 #include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <cassert>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>

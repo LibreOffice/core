@@ -88,7 +88,7 @@
 #include <comphelper/property.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // wird fuer Invalidate verwendet -> mitpflegen
 // aufsteigend sortieren !!!!!!
@@ -753,7 +753,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT( pFact, "no dialog factory!" );
                 if ( pFact )
                 {
-                    boost::scoped_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL ) );
+                    std::unique_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL ) );
                     DBG_ASSERT( dlg.get(), "Dialog creation failed!" );
                     dlg->SetValue( rController->getCursor()->getRow() );
                     if ( dlg->Execute() == RET_OK )

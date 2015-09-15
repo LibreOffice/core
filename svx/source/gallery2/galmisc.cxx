@@ -49,7 +49,7 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -96,7 +96,7 @@ GalleryGraphicImportRet GalleryGraphicImport( const INetURLObject& rURL, Graphic
     if( pIStm )
     {
         GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
-        boost::scoped_ptr<GalleryProgress> pProgress(bShowProgress ? new GalleryProgress( &rGraphicFilter ) : NULL);
+        std::unique_ptr<GalleryProgress> pProgress(bShowProgress ? new GalleryProgress( &rGraphicFilter ) : NULL);
         sal_uInt16              nFormat;
 
         if( !rGraphicFilter.ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )

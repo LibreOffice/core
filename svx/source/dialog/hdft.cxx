@@ -44,7 +44,7 @@
 #include <editeng/boxitem.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 //UUUU
 #include <svx/xdef.hxx>
@@ -95,7 +95,7 @@ namespace svx {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, bEnableBackgroundSelector ));
+            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, bEnableBackgroundSelector ));
             DBG_ASSERT(pDlg, "Dialog creation failed!");
             if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
             {
@@ -285,7 +285,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
         aSet.Put( SfxBoolItem( nWSharedFirst,  m_pCntSharedFirstBox->IsChecked() ) );
     if(m_pDynSpacingCB->IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
     {
-        boost::scoped_ptr<SfxBoolItem> pBoolItem(static_cast<SfxBoolItem*>(pPool->GetDefaultItem(nWDynSpacing).Clone()));
+        std::unique_ptr<SfxBoolItem> pBoolItem(static_cast<SfxBoolItem*>(pPool->GetDefaultItem(nWDynSpacing).Clone()));
         pBoolItem->SetValue(m_pDynSpacingCB->IsChecked());
         aSet.Put(*pBoolItem);
     }

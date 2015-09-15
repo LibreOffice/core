@@ -38,7 +38,7 @@
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 #include "helpid.hrc"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -376,7 +376,7 @@ void SvxFillToolBoxControl::Update()
                             }
                             aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                            boost::scoped_ptr<XGradientEntry> pEntry(new XGradientEntry(mpFillGradientItem->GetGradientValue(), aTmpStr));
+                            std::unique_ptr<XGradientEntry> pEntry(new XGradientEntry(mpFillGradientItem->GetGradientValue(), aTmpStr));
                             XGradientList aGradientList( "", ""/*TODO?*/ );
                             aGradientList.Insert( pEntry.get() );
                             aGradientList.SetDirty( false );
@@ -501,7 +501,7 @@ void SvxFillToolBoxControl::Update()
                             }
                             aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                            boost::scoped_ptr<XBitmapEntry> pEntry(new XBitmapEntry(mpBitmapItem->GetGraphicObject(), aTmpStr));
+                            std::unique_ptr<XBitmapEntry> pEntry(new XBitmapEntry(mpBitmapItem->GetGraphicObject(), aTmpStr));
                             XBitmapListRef xBitmapList =
                                 XPropertyList::AsBitmapList(
                                     XPropertyList::CreatePropertyList(

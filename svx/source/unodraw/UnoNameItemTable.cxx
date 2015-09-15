@@ -30,7 +30,7 @@
 #include <vcl/svapp.hxx>
 
 #include "svx/unoapi.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::cppu;
@@ -87,7 +87,7 @@ void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, cons
     SfxItemSet* mpInSet = new SfxItemSet( *mpModelPool, mnWhich, mnWhich );
     maItemSetVector.push_back( mpInSet );
 
-    boost::scoped_ptr<NameOrIndex> pNewItem(createItem());
+    std::unique_ptr<NameOrIndex> pNewItem(createItem());
     pNewItem->SetName( aName );
     pNewItem->PutValue( aElement, mnMemberId );
     mpInSet->Put( *pNewItem, mnWhich );

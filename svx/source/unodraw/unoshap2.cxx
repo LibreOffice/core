@@ -34,7 +34,6 @@
 #include <vcl/fltcall.hxx>
 #include <vcl/graphicfilter.hxx>
 
-#include <boost/scoped_ptr.hpp>
 #include <svx/svdpool.hxx>
 
 #include <editeng/unoprnms.hxx>
@@ -57,6 +56,8 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <vcl/wmf.hxx>
+
+#include <memory>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -1866,7 +1867,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
         bool bNeedsMirrorX = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredX() != bMirroredX;
         bool bNeedsMirrorY = static_cast<SdrObjCustomShape*>(pObject)->IsMirroredY() != bMirroredY;
 
-        boost::scoped_ptr< SdrGluePointList > pListCopy;
+        std::unique_ptr< SdrGluePointList > pListCopy;
         if( bNeedsMirrorX || bNeedsMirrorY )
         {
             const SdrGluePointList* pList = pObject->GetGluePointList();

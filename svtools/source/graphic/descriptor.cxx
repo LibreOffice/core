@@ -33,7 +33,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define UNOGRAPHIC_GRAPHICTYPE  1
 #define UNOGRAPHIC_MIMETYPE     2
@@ -75,7 +75,7 @@ void GraphicDescriptor::init( const ::Graphic& rGraphic )
 
 void GraphicDescriptor::init( const OUString& rURL )
 {
-    boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ ));
+    std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rURL, StreamMode::READ ));
 
     if( pIStm )
         implCreate( *pIStm, &rURL );
@@ -83,7 +83,7 @@ void GraphicDescriptor::init( const OUString& rURL )
 
 void GraphicDescriptor::init( const uno::Reference< io::XInputStream >& rxIStm, const OUString& rURL )
 {
-    boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rxIStm ));
+    std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( rxIStm ));
 
     if( pIStm )
         implCreate( *pIStm, &rURL );

@@ -36,7 +36,7 @@
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 #include <svtools/calendar.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define DAY_OFFX                        4
 #define DAY_OFFY                        2
@@ -1056,7 +1056,7 @@ void Calendar::ImplUpdateSelection( IntDateSet* pOld )
 void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
                                 bool bMove, bool bExpand, bool bExtended )
 {
-    boost::scoped_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
+    std::unique_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
     Date    aOldDate = maCurDate;
     Date    aTempDate = rDate;
 
@@ -1307,7 +1307,7 @@ void Calendar::ImplEndTracking( bool bCancel )
 
         if ( !bSpinDown )
         {
-            boost::scoped_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
+            std::unique_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
             Date    aOldDate = maCurDate;
             maCurDate       = maOldCurDate;
             *mpSelectTable  = *mpOldSelectTable;
@@ -1519,7 +1519,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
     {
         if ( bMultiSel && bExpand )
         {
-            boost::scoped_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
+            std::unique_ptr<IntDateSet> pOldSel(new IntDateSet( *mpSelectTable ));
             Date aOldAnchorDate = maAnchorDate;
             mbSelLeft = aNewDate < maAnchorDate;
             if ( !bExtended )
@@ -1707,7 +1707,7 @@ void Calendar::SelectDate( const Date& rDate, bool bSelect )
     if ( !rDate.IsValidAndGregorian() )
         return;
 
-    boost::scoped_ptr<IntDateSet> pOldSel;
+    std::unique_ptr<IntDateSet> pOldSel;
 
     if ( !mbInSelChange )
         pOldSel.reset(new IntDateSet( *mpSelectTable ));
@@ -1720,7 +1720,7 @@ void Calendar::SelectDate( const Date& rDate, bool bSelect )
 
 void Calendar::SetNoSelection()
 {
-    boost::scoped_ptr<IntDateSet> pOldSel;
+    std::unique_ptr<IntDateSet> pOldSel;
 
     if ( !mbInSelChange )
         pOldSel.reset(new IntDateSet( *mpSelectTable ));

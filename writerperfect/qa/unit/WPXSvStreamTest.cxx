@@ -11,7 +11,7 @@
 #include <cassert>
 #include <sstream>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -32,7 +32,7 @@ namespace io = com::sun::star::io;
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
 
-using boost::shared_ptr;
+using std::shared_ptr;
 
 using librevenge::RVNGInputStream;
 using librevenge::RVNG_SEEK_CUR;

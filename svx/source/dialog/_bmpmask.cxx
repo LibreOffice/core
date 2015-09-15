@@ -31,7 +31,6 @@
 #include <bmpmask.hrc>
 #include <svx/svxids.hrc>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include "helpid.hrc"
 
 #define BMP_RESID(nId)  ResId(nId, DIALOG_MGR())
@@ -148,7 +147,7 @@ void MaskSet::KeyInput( const KeyEvent& rKEvt )
 
 void MaskSet::onEditColor()
 {
-    boost::scoped_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParent() ));
+    std::unique_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParent() ));
 
     pColorDlg->SetColor(GetItemColor(1));
 

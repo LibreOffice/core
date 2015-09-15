@@ -28,7 +28,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/sfxecode.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 static sal_uInt16 aWndFunc(
@@ -275,7 +275,7 @@ bool SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
 
 {
     bool bRet = false;
-    boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() ));
+    std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() ));
     if( pResMgr )
     {
         ResId aId(RID_ERRHDL, *pResMgr );
@@ -302,7 +302,7 @@ bool SfxErrorHandler::GetMessageString(
 
 {
     bool bRet = false;
-    boost::scoped_ptr<ResId> pResId(new ResId(nId, *pMgr));
+    std::unique_ptr<ResId> pResId(new ResId(nId, *pMgr));
 
     ErrorResource_Impl aEr(*pResId, (sal_uInt16)lErrId);
     if(aEr)

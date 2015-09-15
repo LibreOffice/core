@@ -29,8 +29,7 @@
 #include <svtools/svtools.hrc>
 #include <svtools/colorcfg.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
+#include <memory>
 #include <vector>
 
 using namespace std;
@@ -2024,7 +2023,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            boost::scoped_ptr<RulerSelection> pHitTest(new RulerSelection);
+            std::unique_ptr<RulerSelection> pHitTest(new RulerSelection);
             bool bHitTestResult = ImplHitTest(aMousePos, pHitTest.get());
 
             if ( nMouseClicks == 1 )

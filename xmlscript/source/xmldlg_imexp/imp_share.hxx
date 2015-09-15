@@ -41,8 +41,8 @@
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <osl/diagnose.h>
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 namespace xmlscript
 {
@@ -118,8 +118,8 @@ struct DialogImport
     css::uno::Reference< css::uno::XComponentContext > _xContext;
     css::uno::Reference< css::util::XNumberFormatsSupplier > _xSupplier;
 
-    ::boost::shared_ptr< ::std::vector< OUString > > _pStyleNames;
-    ::boost::shared_ptr< ::std::vector< css::uno::Reference< css::xml::input::XElement > > > _pStyles;
+    std::shared_ptr< std::vector< OUString > > _pStyleNames;
+    std::shared_ptr< std::vector< css::uno::Reference< css::xml::input::XElement > > > _pStyles;
 
     css::uno::Reference< css::container::XNameContainer > _xDialogModel;
     css::uno::Reference< css::lang::XMultiServiceFactory > _xDialogModelFactory;
@@ -151,8 +151,8 @@ public:
         css::uno::Reference<css::uno::XComponentContext> const & xContext,
         css::uno::Reference<css::container::XNameContainer>
         const & xDialogModel,
-        ::boost::shared_ptr< ::std::vector< OUString > >& pStyleNames,
-        ::boost::shared_ptr< ::std::vector< css::uno::Reference< css::xml::input::XElement > > >& pStyles,
+        std::shared_ptr< std::vector< OUString > >& pStyleNames,
+        std::shared_ptr< std::vector< css::uno::Reference< css::xml::input::XElement > > >& pStyles,
         css::uno::Reference<css::frame::XModel> const & xDoc )
         : _xContext( xContext )
         , _pStyleNames( pStyleNames )
@@ -330,8 +330,8 @@ public:
 class MenuPopupElement
     : public ElementBase
 {
-    ::std::vector< OUString > _itemValues;
-    ::std::vector< sal_Int16 > _itemSelected;
+    std::vector< OUString > _itemValues;
+    std::vector< sal_Int16 > _itemSelected;
 public:
     css::uno::Sequence< OUString > getItemValues();
     css::uno::Sequence< sal_Int16 > getSelectedItems();
@@ -359,7 +359,7 @@ class ControlElement
 protected:
     sal_Int32 _nBasePosX, _nBasePosY;
 
-    ::std::vector< css::uno::Reference< css::xml::input::XElement > > _events;
+    std::vector< css::uno::Reference< css::xml::input::XElement > > _events;
 
     OUString getControlId(
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
@@ -369,7 +369,7 @@ protected:
     css::uno::Reference< css::xml::input::XElement > getStyle(
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
 public:
-    ::std::vector<css::uno::Reference< css::xml::input::XElement> >& getEvents()
+    std::vector<css::uno::Reference< css::xml::input::XElement> >& getEvents()
          { return _events; }
 
     ControlElement(
@@ -404,7 +404,7 @@ public:
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         bool supportPrintable = true );
     void importEvents(
-        ::std::vector< css::uno::Reference< css::xml::input::XElement > >
+        std::vector< css::uno::Reference< css::xml::input::XElement > >
         const & rEvents );
 
     bool importStringProperty(
@@ -669,7 +669,7 @@ public:
 class RadioGroupElement
     : public ControlElement
 {
-    ::std::vector< css::uno::Reference< css::xml::input::XElement > > _radios;
+    std::vector< css::uno::Reference< css::xml::input::XElement > > _radios;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
     SAL_CALL startChildElement(
@@ -691,7 +691,7 @@ class TitledBoxElement
     : public BulletinBoardElement
 {
     OUString _label;
-    ::std::vector< css::uno::Reference< css::xml::input::XElement > > _radios;
+    std::vector< css::uno::Reference< css::xml::input::XElement > > _radios;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
     SAL_CALL startChildElement(
