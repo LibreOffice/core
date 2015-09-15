@@ -47,9 +47,9 @@
 
 struct TableLink_Impl
 {
-    ScDocShell*          m_pDocSh;
-    VclPtr<vcl::Window>  m_pOldParent;
-    Link<>               m_aEndEditLink;
+    ScDocShell*            m_pDocSh;
+    VclPtr<vcl::Window>    m_pOldParent;
+    Link<sfx2::SvBaseLink&,void> m_aEndEditLink;
 
     TableLink_Impl() : m_pDocSh( NULL ), m_pOldParent( NULL ) {}
 };
@@ -105,7 +105,7 @@ ScTableLink::~ScTableLink()
     delete pImpl;
 }
 
-void ScTableLink::Edit( vcl::Window* pParent, const Link<>& rEndEditHdl )
+void ScTableLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl )
 {
     //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
     //  ein Optionen-Dialog kommt...
@@ -418,13 +418,12 @@ IMPL_LINK_NOARG_TYPED(ScTableLink, RefreshHdl, Timer *, void)
     Refresh( aFileName, aFilterName, NULL, GetRefreshDelay() );
 }
 
-IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink*, pLink )
+IMPL_LINK_TYPED( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink&, rLink, void )
 {
     if ( pImpl->m_aEndEditLink.IsSet() )
-        pImpl->m_aEndEditLink.Call( pLink );
+        pImpl->m_aEndEditLink.Call( rLink );
     bInEdit = false;
     Application::SetDefDialogParent( pImpl->m_pOldParent );
-    return 0;
 }
 
 // === ScDocumentLoader ==================================================

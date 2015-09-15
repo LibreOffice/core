@@ -84,7 +84,7 @@ ScAreaLink::~ScAreaLink()
     delete pImpl;
 }
 
-void ScAreaLink::Edit(vcl::Window* pParent, const Link<>& /* rEndEditHdl */ )
+void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEndEditHdl */ )
 {
     //  use own dialog instead of SvBaseLink::Edit...
     //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom

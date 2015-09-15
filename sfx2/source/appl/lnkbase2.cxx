@@ -44,7 +44,7 @@ class  ImplDdeItem;
 
 struct BaseLink_Impl
 {
-    Link<>              m_aEndEditLink;
+    Link<SvBaseLink&,void> m_aEndEditLink;
     LinkManager*        m_pLinkMgr;
     VclPtr<vcl::Window> m_pParentWin;
     FileDialogHelper*   m_pFileDlg;
@@ -254,7 +254,7 @@ IMPL_LINK_TYPED( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )
         sNewName.clear();
     bWasLastEditOK = !sNewName.isEmpty();
     if ( pImpl->m_aEndEditLink.IsSet() )
-        pImpl->m_aEndEditLink.Call( this );
+        pImpl->m_aEndEditLink.Call( *this );
 }
 
 
@@ -472,7 +472,7 @@ SvBaseLink::UpdateResult SvBaseLink::DataChanged( const OUString &, const ::com:
     return SUCCESS;
 }
 
-void SvBaseLink::Edit( vcl::Window* pParent, const Link<>& rEndEditHdl )
+void SvBaseLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl )
 {
     pImpl->m_pParentWin = pParent;
     pImpl->m_aEndEditLink = rEndEditHdl;
@@ -506,7 +506,7 @@ void SvBaseLink::Edit( vcl::Window* pParent, const Link<>& rEndEditHdl )
         ExecuteEdit( OUString() );
         bWasLastEditOK = false;
         if ( pImpl->m_aEndEditLink.IsSet() )
-            pImpl->m_aEndEditLink.Call( this );
+            pImpl->m_aEndEditLink.Call( *this );
     }
 }
 

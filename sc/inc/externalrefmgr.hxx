@@ -70,7 +70,7 @@ public:
     virtual void Closed() SAL_OVERRIDE;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue) SAL_OVERRIDE;
-    virtual void Edit(vcl::Window* pParent, const Link<>& rEndEditHdl) SAL_OVERRIDE;
+    virtual void Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& rEndEditHdl) SAL_OVERRIDE;
 
     void SetDoReferesh(bool b);
 

@@ -52,7 +52,7 @@ public:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
 
-    virtual void    Edit( vcl::Window*, const Link<>& rEndEditHdl ) SAL_OVERRIDE;
+    virtual void    Edit( vcl::Window*, const Link<SvBaseLink&,void>& rEndEditHdl ) SAL_OVERRIDE;
 
     bool    Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                     const OUString* pNewOptions /* = NULL */, sal_uLong nNewRefresh );
@@ -66,7 +66,7 @@ public:
     bool    IsUsed() const;
 
     DECL_LINK_TYPED( RefreshHdl, Timer*, void );
-    DECL_LINK( TableEndEditHdl, ::sfx2::SvBaseLink* );
+    DECL_LINK_TYPED( TableEndEditHdl, ::sfx2::SvBaseLink&, void );
 };
 
 class ScDocument;

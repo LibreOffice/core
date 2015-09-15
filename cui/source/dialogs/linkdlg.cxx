@@ -519,12 +519,12 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, UpdateWaitingHdl, Idle*, void )
     m_pTbLinks->SetUpdateMode(true);
 }
 
-IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
+IMPL_LINK_TYPED( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink&, _rLink, void )
 {
     sal_uLong nPos;
     GetSelEntry( &nPos );
 
-    if( _pLink && _pLink->WasLastEditOK() )
+    if( _rLink.WasLastEditOK() )
     {
         // StarImpress/Draw swap the LinkObjects themselves!
         // So search for the link in the manager; if it does not exist
@@ -532,7 +532,7 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
         // edited link needs to be refreshed.
         bool bLinkFnd = false;
         for( size_t n = pLinkMgr->GetLinks().size(); n;  )
-            if( _pLink == &(*pLinkMgr->GetLinks()[ --n ]) )
+            if( &_rLink == &(*pLinkMgr->GetLinks()[ --n ]) )
             {
                 bLinkFnd = true;
                 break;
@@ -543,7 +543,7 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
             m_pTbLinks->SetUpdateMode(false);
             m_pTbLinks->GetModel()->Remove( m_pTbLinks->GetEntry( nPos ) );
             SvTreeListEntry* pToUnselect = m_pTbLinks->FirstSelected();
-            InsertEntry( *_pLink, nPos, true );
+            InsertEntry( _rLink, nPos, true );
             if(pToUnselect)
                 m_pTbLinks->Select(pToUnselect, false);
             m_pTbLinks->SetUpdateMode(true);
@@ -557,7 +557,6 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
         if (pLinkMgr && pLinkMgr->GetPersist())
             pLinkMgr->GetPersist()->SetModified();
     }
-    return 0;
 }
 
 OUString SvBaseLinksDlg::ImplGetStateStr( const SvBaseLink& rLnk )
