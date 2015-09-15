@@ -210,9 +210,9 @@ namespace
                 OString::number( aInfo.GetWindowsVersion() ) );
 #else
         static const OString aDeviceInfo (
-                OString( (const char*)(glGetString(GL_VENDOR)) ) +
-                OString( (const char*)(glGetString(GL_RENDERER)) ) +
-                OString( (const char*)(glGetString(GL_VERSION)) ) );
+                OString( reinterpret_cast<const char*>(glGetString(GL_VENDOR)) ) +
+                OString( reinterpret_cast<const char*>(glGetString(GL_RENDERER)) ) +
+                OString( reinterpret_cast<const char*>(glGetString(GL_VERSION)) ) );
 #endif
 
         OString aMessage;
