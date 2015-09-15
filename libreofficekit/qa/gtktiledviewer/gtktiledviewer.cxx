@@ -30,7 +30,6 @@ static int help()
     return 1;
 }
 
-static GtkWidget* pDocView;
 static GtkWidget* pStatusBar;
 static GtkToolItem* pEnableEditing;
 static GtkToolItem* pBold;
@@ -50,6 +49,24 @@ static GtkWidget* pFindbar;
 static GtkWidget* pFindbarEntry;
 static GtkWidget* pFindbarLabel;
 
+class TiledWindow
+{
+public:
+    GtkWidget* m_pDocView;
+
+    TiledWindow()
+        : m_pDocView(0)
+    {
+    }
+};
+
+static std::map<GtkWidget*, TiledWindow> g_aWindows;
+
+static TiledWindow& lcl_getTiledWindow(GtkWidget* pWidget)
+{
+    return g_aWindows[gtk_widget_get_toplevel(pWidget)];
+}
+
 static void lcl_registerToolItem(GtkToolItem* pItem, const std::string& rName)
 {
     g_aToolItemCommandNames[pItem] = rName;
@@ -60,7 +77,7 @@ const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
 
 
 /// Get the visible area of the scrolled window
-static void getVisibleAreaTwips(GdkRectangle* pArea)
+static void getVisibleAreaTwips(GtkWidget* pDocView, GdkRectangle* pArea)
 {
 #if GTK_CHECK_VERSION(2,14,0) // we need gtk_adjustment_get_page_size()
     GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
@@ -79,6 +96,9 @@ static void getVisibleAreaTwips(GdkRectangle* pArea)
 
 static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 {
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    GtkWidget* pDocView = rWindow.m_pDocView;
+
     const char *sName = gtk_tool_button_get_icon_name( GTK_TOOL_BUTTON(pButton) );
 
     float fZoom = 0;
@@ -125,9 +145,11 @@ static void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
 }
 
 /// User clicked on the button -> inform LOKDocView.
-static void toggleEditing(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+static void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+
+    LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
     bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing));
     if (bool(lok_doc_view_get_edit(pLOKDocView)) != bActive)
         lok_doc_view_set_edit(pLOKDocView, bActive);
@@ -148,9 +170,10 @@ static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 }
 
 /// Calls lok::Document::createView().
-static void createView(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+static void createView(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
     pDocument->pClass->createView(pDocument);
 }
@@ -185,14 +208,15 @@ static void clipboardSetHtml(GtkClipboard* pClipboard, const char* pSelection)
 }
 
 /// Handler for the copy button: write clipboard.
-static void doCopy(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+static void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
     char* pUsedFormat = 0;
     char* pSelection = pDocument->pClass->getTextSelection(pDocument, "text/html", &pUsedFormat);
 
-    GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(pDocView), GDK_SELECTION_CLIPBOARD);
+    GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(rWindow.m_pDocView), GDK_SELECTION_CLIPBOARD);
     std::string aUsedFormat(pUsedFormat);
     if (aUsedFormat == "text/plain;charset=utf-8")
         gtk_clipboard_set_text(pClipboard, pSelection, -1);
@@ -205,7 +229,7 @@ static void doCopy(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 
 
 /// Searches for the next or previous text of pFindbarEntry.
-static void doSearch(bool bBackwards)
+static void doSearch(GtkWidget* pButton, bool bBackwards)
 {
     GtkEntry* pEntry = GTK_ENTRY(pFindbarEntry);
     const char* pText = gtk_entry_get_text(pEntry);
@@ -215,9 +239,10 @@ static void doSearch(bool bBackwards)
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/type", '/'), "boolean");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/value", '/'), bBackwards);
 
-    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
     GdkRectangle aArea;
-    getVisibleAreaTwips(&aArea);
+    getVisibleAreaTwips(rWindow.m_pDocView, &aArea);
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/type", '/'), "long");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointX/value", '/'), aArea.x);
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchStartPointY/type", '/'), "long");
@@ -230,19 +255,19 @@ static void doSearch(bool bBackwards)
 }
 
 /// Click handler for the search next button.
-static void signalSearchNext(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+static void signalSearchNext(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    doSearch(/*bBackwards=*/false);
+    doSearch(pButton, /*bBackwards=*/false);
 }
 
 /// Click handler for the search previous button.
-static void signalSearchPrev(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+static void signalSearchPrev(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    doSearch(/*bBackwards=*/true);
+    doSearch(pButton, /*bBackwards=*/true);
 }
 
 /// Handles the key-press-event of the search entry widget.
-static gboolean signalFindbar(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pData*/)
+static gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData*/)
 {
     gtk_label_set_text(GTK_LABEL(pFindbarLabel), "");
     switch(pEvent->keyval)
@@ -250,7 +275,7 @@ static gboolean signalFindbar(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpoin
         case GDK_KEY_Return:
         {
             // Search forward.
-            doSearch(/*bBackwards=*/false);
+            doSearch(pWidget, /*bBackwards=*/false);
             return TRUE;
         }
         case GDK_KEY_Escape:
@@ -331,7 +356,7 @@ static void signalHyperlink(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointe
 }
 
 /// Cursor position changed
-static void cursorChanged(LOKDocView* /*pDocView*/, gint nX, gint nY,
+static void cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
                           gint /*nWidth*/, gint /*nHeight*/, gpointer /*pData*/)
 {
     GtkAdjustment* vadj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
@@ -340,7 +365,7 @@ static void cursorChanged(LOKDocView* /*pDocView*/, gint nX, gint nY,
     gdouble upper;
     gint x = -1, y = -1;
 
-    getVisibleAreaTwips(&visArea);
+    getVisibleAreaTwips(GTK_WIDGET(pDocView), &visArea);
 
     // check vertically
     if (nY < visArea.y)
@@ -382,7 +407,8 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 {
     if (g_bToolItemBroadcast)
     {
-        LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
+        TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
+        LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
         GtkToolItem* pItem = GTK_TOOL_ITEM(pWidget);
         const std::string& rString = g_aToolItemCommandNames[pItem];
         g_info("toggleToolItem: lok_doc_view_post_command('%s')", rString.c_str());
@@ -390,13 +416,13 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
     }
 }
 
-static void populatePartSelector()
+static void populatePartSelector(LOKDocView* pLOKDocView)
 {
     gtk_list_store_clear( GTK_LIST_STORE(
                               gtk_combo_box_get_model(
                                   GTK_COMBO_BOX(pPartSelector) )) );
 
-    if ( !pDocView )
+    if (!pLOKDocView)
     {
         return;
     }
@@ -404,35 +430,35 @@ static void populatePartSelector()
     const int nMaxLength = 50;
     char sText[nMaxLength];
 
-    int nParts = lok_doc_view_get_parts( LOK_DOC_VIEW(pDocView) );
+    int nParts = lok_doc_view_get_parts(pLOKDocView);
     for ( int i = 0; i < nParts; i++ )
     {
-        char* pName = lok_doc_view_get_part_name( LOK_DOC_VIEW(pDocView), i );
+        char* pName = lok_doc_view_get_part_name(pLOKDocView, i);
         assert( pName );
         snprintf( sText, nMaxLength, "%i (%s)", i+1, pName );
         free( pName );
 
         gtk_combo_box_text_append_text( pPartSelector, sText );
     }
-    gtk_combo_box_set_active( GTK_COMBO_BOX(pPartSelector),
-                              lok_doc_view_get_part( LOK_DOC_VIEW(pDocView) ) );
+    gtk_combo_box_set_active(GTK_COMBO_BOX(pPartSelector), lok_doc_view_get_part(pLOKDocView));
 }
 
-static void signalSize(LOKDocView* /*pLOKDocView*/, gpointer /*pData*/)
+static void signalSize(LOKDocView* pLOKDocView, gpointer /*pData*/)
 {
     g_bPartSelectorBroadcast = false;
-    populatePartSelector();
+    populatePartSelector(pLOKDocView);
     g_bPartSelectorBroadcast = true;
 }
 
 static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
 {
     int nPart = gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) );
+    TiledWindow& rWindow = lcl_getTiledWindow(pSelector);
 
-    if (g_bPartSelectorBroadcast && pDocView)
+    if (g_bPartSelectorBroadcast && rWindow.m_pDocView)
     {
-        lok_doc_view_set_part( LOK_DOC_VIEW(pDocView), nPart );
-        lok_doc_view_reset_view( LOK_DOC_VIEW(pDocView) );
+        lok_doc_view_set_part( LOK_DOC_VIEW(rWindow.m_pDocView), nPart );
+        lok_doc_view_reset_view( LOK_DOC_VIEW(rWindow.m_pDocView) );
     }
 }
 
@@ -454,32 +480,33 @@ static void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
     // I.e. the ordering above should match the enum member ordering.
     LibreOfficeKitPartMode ePartMode =
         LibreOfficeKitPartMode( gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) ) );
+    TiledWindow& rWindow = lcl_getTiledWindow(pSelector);
 
-    if ( pDocView )
+    if ( rWindow.m_pDocView )
     {
-        lok_doc_view_set_partmode( LOK_DOC_VIEW(pDocView), ePartMode );
+        lok_doc_view_set_partmode( LOK_DOC_VIEW(rWindow.m_pDocView), ePartMode );
     }
 }
 
 static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpointer /*userdata*/)
 {
-    LOKDocView* pDocView1 = LOK_DOC_VIEW (source_object);
+    LOKDocView* pDocView = LOK_DOC_VIEW (source_object);
     GError* error = NULL;
     GList *focusChain = NULL;
 
-    if (!lok_doc_view_open_document_finish(pDocView1, res, &error))
+    if (!lok_doc_view_open_document_finish(pDocView, res, &error))
     {
         g_warning ("Error occurred while opening the document : %s", error->message);
         g_error_free (error);
     }
 
-    populatePartSelector();
+    populatePartSelector(pDocView);
     populatePartModeSelector( GTK_COMBO_BOX_TEXT(pPartModeComboBox) );
     // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
     g_signal_connect(G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
     g_signal_connect(G_OBJECT(pPartSelector), "changed", G_CALLBACK(changePart), 0);
 
-    focusChain = g_list_append( focusChain, pDocView1 );
+    focusChain = g_list_append( focusChain, pDocView );
     gtk_container_set_focus_chain ( GTK_CONTAINER (pVBox), focusChain );
 
     gtk_widget_hide (pStatusBar);
@@ -640,7 +667,7 @@ int main( int argc, char* argv[] )
     gtk_box_pack_end(GTK_BOX(pVBox), pFindbar, FALSE, FALSE, 0);
 
     // Docview
-    pDocView = lok_doc_view_new (argv[1], NULL, NULL);
+    GtkWidget* pDocView = lok_doc_view_new (argv[1], NULL, NULL);
 #if GLIB_CHECK_VERSION(2,40,0)
     g_assert_nonnull(pDocView);
 #endif
@@ -674,6 +701,10 @@ int main( int argc, char* argv[] )
     gtk_widget_show_all( pWindow );
     // Hide the findbar by default.
     gtk_widget_hide(pFindbar);
+
+    TiledWindow aWindow;
+    aWindow.m_pDocView = pDocView;
+    g_aWindows[pWindow] = aWindow;
 
     lok_doc_view_open_document( LOK_DOC_VIEW(pDocView), argv[2], NULL, openDocumentCallback, pDocView );
 
