@@ -129,3 +129,86 @@ svx/res/zetlver2.png /sw/res/zetlver2.png
 
 # FolderTree expanded icon
 svtools/res/folderop.png formula/res/fapopen.png
+
+# avmedia Folder
+avmedia/res/av02048.png cmd/sc_avmediaplayer.png
+avmedia/res/av02049.png cmd/sc_runbasic.png
+avmedia/res/av02050.png cmd/sc_mediapause.png
+avmedia/res/av02051.png cmd/sc_basicstop.png
+avmedia/res/av02052.png cmd/sc_mediarepeat.png
+avmedia/res/av02053.png cmd/sc_ok.png
+avmedia/res/av02054.png cmd/sc_mediamute.png
+avmedia/res/avl02048.png cmd/lc_avmediaplayer.png
+avmedia/res/avl02049.png cmd/lc_runbasic.png
+avmedia/res/avl02050.png cmd/lc_mediapause.png
+avmedia/res/avl02051.png cmd/lc_basicstop.png
+avmedia/res/avl02052.png cmd/lc_mediarepeat.png
+avmedia/res/avl02053.png cmd/lc_ok.png
+avmedia/res/avl02054.png cmd/lc_mediamute.png
+
+# dbaccess
+dbaccess/res/all_left.png cmd/sc_firstrecord.png
+dbaccess/res/all_right.png cmd/sc_lastrecord.png
+dbaccess/res/db.png cmd/sc_viewdatasourcebrowser.png
+dbaccess/res/exerror.png cmd/sc_cancel.png
+dbaccess/res/exinfo.png cmd/sc_helpindex.png
+dbaccess/res/form_16.png cmd/sc_dbformedit.png
+dbaccess/res/forms_16.png dbaccess/res/form_16.png
+dbaccess/res/forms_32.png res/forms_32.png
+dbaccess/res/lc036.png cmd/lc_dbnewreport.png
+dbaccess/res/lc037.png cmd/lc_delete.png
+dbaccess/res/lc038.png cmd/lc_editdoc.png
+dbaccess/res/lc039.png cmd/lc_save.png
+dbaccess/res/lc040.png cmd/lc_reload.png
+dbaccess/res/nu07.png cmd/sc_ok.png
+dbaccess/res/nu08.png dbaccess/res/exerror.png
+dbaccess/res/one_left.png cmd/sc_prevrecord.png
+dbaccess/res/one_right.png cmd/sc_nextrecord.png
+dbaccess/res/pkey.png dbaccess/res/jo01.png
+dbaccess/res/queries_32.png res/queries_32.png
+dbaccess/res/report_16.png cmd/sc_executereport.png
+dbaccess/res/reports_16.png dbaccess/res/report_16.png
+dbaccess/res/reports_32.png res/reports_32.png
+dbaccess/res/sc036.png cmd/sc_executereport.png
+dbaccess/res/c037.png cmd/sc_delete.png
+dbaccess/res/sc038.png cmd/sc_editdoc.png
+dbaccess/res/sc039.png cmd/sc_save.png
+dbaccess/res/sc040.png cmd/sc_reload.png
+dbaccess/res/sortdown.png cmd/sc_sortascending.png
+dbaccess/res/sortup.png cmd/sc_sortdescending.png
+dbaccess/res/tables_32.png res/tables_32.png
+
+# desktop
+desktop/res/caution_16.png dbaccess/res/exwarning.png
+desktop/res/info_16.png cmd/sc_helpindex.png
+desktop/res/lock_16.png cmd/sc_protect.png
+
+# extensions
+extensions/res/arrow.png cmd/sc_nextrecord.png
+extensions/res/buttonminus.png extensions/source/scanner/minus.png
+extensions/res/buttonplus.png extensions/source/scanner/plus.png
+
+# formula
+formula/res/fapclose.png formula/res/fapopen.png
+formula/res/faperror.png cmd/sc_cancel.png
+formula/res/fapok.png cmd/sc_ok.png
+formula/res/fapopen.png cmd/sc_open.png
+formula/res/fx.png cmd/sc_dbviewfunctions.png
+
+# fpicker
+fpicker/res/fp011.png cmd/sc_firstpage.png
+fpicker/res/fp014.png cmd/sc_insertfilecontrol.png
+fpicker/res/fp015.png cmd/sc_starshapes.png
+fpicker/res/fp016.png desktop/res/shared_16.png
+
+# sd/imglst
+sd/imglst/nv010.png cmd/sc_inserthyperlink.png
+sd/imglst/nv02.png cmd/sc_freeline_unfilled.png
+sd/imglst/nv03.png cmd/sc_firstrecord.png
+sd/imglst/nv04.png cmd/lc_prevrecord.png
+sd/imglst/nv05.png cmd/sc_nextrecord.png
+sd/imglst/nv06.png cmd/sc_lastrecord.png
+sd/imglst/nv08.png cmd/sc_copy.png
+sd/imglst/nv09.png sc/res/droplink.png
+sd/imglst/sf01.png cmd/sc_showfmexplorer.png
+sd/imglst/sf02.png cmd/sc_presentation.png
