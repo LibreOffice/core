@@ -1003,8 +1003,6 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                 break;
                                 case MM_REFERENCE :     // do nothing
                                 break;
-                                default:
-                                    OSL_FAIL( "MergeDocument: unknown MatrixFlag" );
                             }
                         }
                         break;

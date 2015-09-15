@@ -1689,8 +1689,6 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
                     return SC_CACCT_MATORG;
                 case MM_REFERENCE :
                     return SC_CACCT_MATREF;
-                default:
-                    ;
             }
             return SC_CACCT_NORMAL;
         }
