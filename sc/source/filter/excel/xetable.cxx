@@ -932,60 +932,81 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_cm, XML_vm, XML_ph
             FSEND );
 
+    bool bWriteFormula = true;
     bool bTagStarted = false;
-    ScAddress aScPos( static_cast< SCCOL >( GetXclPos().mnCol ), static_cast< SCROW >( GetXclPos().mnRow ), rStrm.GetRoot().GetCurrScTab() );
+    ScAddress aScPos( static_cast< SCCOL >( GetXclPos().mnCol ),
+            static_cast< SCROW >( GetXclPos().mnRow ), rStrm.GetRoot().GetCurrScTab() );
 
-    if ( mrScFmlaCell.GetMatrixFlag() == MM_FORMULA)
+    switch (mrScFmlaCell.GetMatrixFlag())
     {
-        // origin of the matrix - find the used matrix range
-        SCCOL nMatWidth;
-        SCROW nMatHeight;
-        mrScFmlaCell.GetMatColsRows( nMatWidth, nMatHeight );
-        OSL_ENSURE( nMatWidth && nMatHeight, "XclExpFormulaCell::XclExpFormulaCell - empty matrix" );
-        ScRange aMatScRange( aScPos );
-        ScAddress& rMatEnd = aMatScRange.aEnd;
-        rMatEnd.IncCol( static_cast< SCsCOL >( nMatWidth - 1 ) );
-        rMatEnd.IncRow( static_cast< SCsROW >( nMatHeight - 1 ) );
-        // reduce to valid range (range keeps valid, because start position IS valid
-        rStrm.GetRoot().GetAddressConverter().ValidateRange( aMatScRange, true );
+        case MM_NONE:
+            break;
+        case MM_REFERENCE:
+            bWriteFormula = false;
+            break;
+        case MM_FORMULA:
+        case MM_FAKE:
+            {
+                // origin of the matrix - find the used matrix range
+                SCCOL nMatWidth;
+                SCROW nMatHeight;
+                mrScFmlaCell.GetMatColsRows( nMatWidth, nMatHeight );
+                OSL_ENSURE( nMatWidth && nMatHeight, "XclExpFormulaCell::XclExpFormulaCell - empty matrix" );
+                ScRange aMatScRange( aScPos );
+                ScAddress& rMatEnd = aMatScRange.aEnd;
+                rMatEnd.IncCol( static_cast< SCsCOL >( nMatWidth - 1 ) );
+                rMatEnd.IncRow( static_cast< SCsROW >( nMatHeight - 1 ) );
+                // reduce to valid range (range keeps valid, because start position IS valid
+                rStrm.GetRoot().GetAddressConverter().ValidateRange( aMatScRange, true );
 
-        OStringBuffer sFmlaCellRange;
-        if (ValidRange(aMatScRange))
-        {
-            // calculate the cell range.
-            sFmlaCellRange.append(XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), aMatScRange.aStart ).getStr());
-            sFmlaCellRange.append(":");
-            sFmlaCellRange.append(XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), aMatScRange.aEnd ).getStr());
-        }
+                OStringBuffer sFmlaCellRange;
+                if (ValidRange(aMatScRange))
+                {
+                    // calculate the cell range.
+                    sFmlaCellRange.append( XclXmlUtils::ToOString(
+                                rStrm.GetRoot().GetStringBuf(), aMatScRange.aStart ).getStr());
+                    sFmlaCellRange.append(":");
+                    sFmlaCellRange.append( XclXmlUtils::ToOString(
+                                rStrm.GetRoot().GetStringBuf(), aMatScRange.aEnd ).getStr());
+                }
 
-        if (aMatScRange.aStart.Col() == GetXclPos().mnCol && aMatScRange.aStart.Row() == static_cast<SCROW>(GetXclPos().mnRow))
+                if (    aMatScRange.aStart.Col() == GetXclPos().mnCol &&
+                        aMatScRange.aStart.Row() == static_cast<SCROW>(GetXclPos().mnRow))
+                {
+                    rWorksheet->startElement( XML_f,
+                            XML_aca, XclXmlUtils::ToPsz( (mxTokArr && mxTokArr->IsVolatile()) ||
+                                (mxAddRec && mxAddRec->IsVolatile())),
+                            XML_t, mxAddRec ? "array" : NULL,
+                            XML_ref, !sFmlaCellRange.isEmpty()? sFmlaCellRange.getStr() : NULL,
+                            // OOXTODO: XML_dt2D,   bool
+                            // OOXTODO: XML_dtr,    bool
+                            // OOXTODO: XML_del1,   bool
+                            // OOXTODO: XML_del2,   bool
+                            // OOXTODO: XML_r1,     ST_CellRef
+                            // OOXTODO: XML_r2,     ST_CellRef
+                            // OOXTODO: XML_ca,     bool
+                            // OOXTODO: XML_si,     uint
+                            // OOXTODO: XML_bx      bool
+                            FSEND );
+                    bTagStarted = true;
+                }
+            }
+            break;
+    }
+
+    if (bWriteFormula)
+    {
+        if (!bTagStarted)
         {
             rWorksheet->startElement( XML_f,
-                        XML_aca,    XclXmlUtils::ToPsz( (mxTokArr && mxTokArr->IsVolatile()) || (mxAddRec && mxAddRec->IsVolatile()) ),
-                        XML_t, mxAddRec ? "array" : NULL,
-                        XML_ref, !sFmlaCellRange.isEmpty()? sFmlaCellRange.getStr() : NULL,
-                        // OOXTODO: XML_dt2D,   bool
-                        // OOXTODO: XML_dtr,    bool
-                        // OOXTODO: XML_del1,   bool
-                        // OOXTODO: XML_del2,   bool
-                        // OOXTODO: XML_r1,     ST_CellRef
-                        // OOXTODO: XML_r2,     ST_CellRef
-                        // OOXTODO: XML_ca,     bool
-                        // OOXTODO: XML_si,     uint
-                        // OOXTODO: XML_bx      bool
-                        FSEND );
-            bTagStarted = true;
+                    XML_aca, XclXmlUtils::ToPsz( (mxTokArr && mxTokArr->IsVolatile()) ||
+                        (mxAddRec && mxAddRec->IsVolatile()) ),
+                    FSEND );
         }
+        rWorksheet->writeEscaped( XclXmlUtils::ToOUString(
+                    rStrm.GetRoot().GetCompileFormulaContext(), mrScFmlaCell.aPos, mrScFmlaCell.GetCode()));
+        rWorksheet->endElement( XML_f );
     }
-    if (!bTagStarted)
-    {
-        rWorksheet->startElement( XML_f,
-                                  XML_aca,    XclXmlUtils::ToPsz( (mxTokArr && mxTokArr->IsVolatile()) || (mxAddRec && mxAddRec->IsVolatile()) ),
-                                  FSEND );
-    }
-    rWorksheet->writeEscaped( XclXmlUtils::ToOUString(
-        rStrm.GetRoot().GetCompileFormulaContext(), mrScFmlaCell.aPos, mrScFmlaCell.GetCode()));
-    rWorksheet->endElement( XML_f );
 
     if( strcmp( sType, "inlineStr" ) == 0 )
     {
