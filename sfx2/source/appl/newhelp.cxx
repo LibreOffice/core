@@ -1045,7 +1045,7 @@ IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, ClickHdl, Button*, void)
     SearchHdl(NULL);
 }
 
-IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
+IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
 {
     OUString aSearchText = comphelper::string::strip(m_pSearchED->GetText(), ' ');
     if ( !aSearchText.isEmpty() )
@@ -1081,7 +1081,6 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
             aBox->Execute();
         }
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, OpenHdl, Button*, void)

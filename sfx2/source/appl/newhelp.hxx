@@ -170,7 +170,7 @@ public:
 class SearchBox_Impl : public ComboBox
 {
 private:
-    Link<>              aSearchLink;
+    Link<LinkParamNone*,void>  aSearchLink;
 
 public:
     SearchBox_Impl(vcl::Window* pParent, WinBits nStyle)
@@ -182,7 +182,7 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void        Select() SAL_OVERRIDE;
 
-    inline void         SetSearchLink( const Link<>& rLink ) { aSearchLink = rLink; }
+    inline void         SetSearchLink( const Link<LinkParamNone*,void>& rLink ) { aSearchLink = rLink; }
 };
 
 class SearchResultsBox_Impl : public ListBox
@@ -214,7 +214,7 @@ private:
     void                ClearSearchResults();
     void                RememberSearchText( const OUString& rSearchText );
 
-    DECL_LINK(SearchHdl, void *);
+    DECL_LINK_TYPED(SearchHdl, LinkParamNone*, void);
     DECL_LINK_TYPED(ClickHdl, Button*, void);
     DECL_LINK_TYPED(OpenHdl, Button*, void);
     DECL_LINK(ModifyHdl, void *);
