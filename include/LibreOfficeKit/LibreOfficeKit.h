@@ -168,6 +168,8 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document::createView().
     int (*createView) (LibreOfficeKitDocument* pThis);
+    /// @see lok::Document::destroyView().
+    void (*destroyView) (LibreOfficeKitDocument* pThis, int nId);
 #endif // LOK_USE_UNSTABLE_API
 };
 

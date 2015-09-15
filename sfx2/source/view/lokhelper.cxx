@@ -26,6 +26,18 @@ int SfxLokHelper::createView(SfxViewShell* pViewShell)
     return rViewArr.size() - 1;
 }
 
+void SfxLokHelper::destroyView(size_t nId)
+{
+    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    if (nId > rViewArr.size() - 1)
+        return;
+
+    SfxViewShell* pViewShell = rViewArr[nId];
+    SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+    SfxRequest aRequest(pViewFrame, SID_CLOSEWIN);
+    pViewFrame->Exec_Impl(aRequest);
+}
+
 int SfxLokHelper::getViews()
 {
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
