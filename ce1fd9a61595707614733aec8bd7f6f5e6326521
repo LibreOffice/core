@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_3279e030",
+        "filename": "include/vcl/checksum.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-09-15T21:30:30Z",
+      "side": 1,
+      "message": "please put that in parentheses, to avoid operator precedence disasters.\n\nor remove it if it\u0027s no longer in use.",
+      "revId": "ce1fd9a61595707614733aec8bd7f6f5e6326521",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
