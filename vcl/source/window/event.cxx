@@ -21,6 +21,7 @@
 #include <vcl/window.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 
 #include <window.h>
 #include <svdata.hxx>
@@ -453,7 +454,14 @@ void Window::ImplCallResize()
 {
     mpWindowImpl->mbCallResize = false;
 
-    if( GetBackground().IsGradient() )
+    // OpenGL has a charming feature of black clearing the whole window
+    // some legacy code eg. the app-menu has the beautiful feature of
+    // avoiding re-paints when width doesn't change => invalidate all.
+    if( OpenGLWrapper::isVCLOpenGLEnabled() )
+        Invalidate();
+
+    // Normally we avoid blanking on re-size unless people might notice:
+    else if( GetBackground().IsGradient() )
         Invalidate();
 
     Resize();
