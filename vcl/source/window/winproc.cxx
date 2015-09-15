@@ -1981,10 +1981,10 @@ void ImplHandleClose( vcl::Window* pWindow )
     if (pSysWin)
     {
         // See if the custom close handler is set.
-        const Link<>& rLink = pSysWin->GetCloseHdl();
+        const Link<SystemWindow&,void>& rLink = pSysWin->GetCloseHdl();
         if (rLink.IsSet())
         {
-            rLink.Call(pSysWin);
+            rLink.Call(*pSysWin);
             return;
         }
     }

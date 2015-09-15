@@ -55,22 +55,21 @@ IMPL_LINK_NOARG_TYPED(RemoteDialog, HandleConnectButton, Button*, void)
     OUString aPin ( m_pClientBox->getPin() );
     if ( RemoteServer::connectClient( aEntry->m_pClientInfo, aPin ) )
     {
-        CloseHdl( 0 );
+        CloseHdl( *this );
     }
 #endif
 }
 
 IMPL_LINK_NOARG_TYPED( RemoteDialog, CloseClickHdl, Button*, void )
 {
-    CloseHdl(NULL);
+    CloseHdl(*this);
 }
-IMPL_LINK_NOARG( RemoteDialog, CloseHdl )
+IMPL_LINK_NOARG_TYPED( RemoteDialog, CloseHdl, SystemWindow&, void )
 {
 #ifdef ENABLE_SDREMOTE
     RemoteServer::restoreDiscoverable();
 #endif
     Close();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

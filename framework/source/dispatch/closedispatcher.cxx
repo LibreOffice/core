@@ -186,7 +186,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     if (m_pSysWindow && m_pSysWindow->GetCloseHdl().IsSet())
     {
         // The closing frame has its own close handler.  Call it instead.
-        m_pSysWindow->GetCloseHdl().Call(m_pSysWindow);
+        m_pSysWindow->GetCloseHdl().Call(*m_pSysWindow);
         return;
     }
 

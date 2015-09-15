@@ -184,7 +184,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 ScPreviewShell::~ScPreviewShell()
 {
     if (mpFrameWindow)
-        mpFrameWindow->SetCloseHdl(Link<>()); // Remove close handler.
+        mpFrameWindow->SetCloseHdl(Link<SystemWindow&,void>()); // Remove close handler.
 
     // #108333#; notify Accessibility that Shell is dying and before destroy all
     BroadcastAccessibility( SfxSimpleHint( SFX_HINT_DYING ) );
@@ -480,10 +480,9 @@ IMPL_LINK_TYPED( ScPreviewShell, ScrollHandler, ScrollBar*, pScroll, void )
     }
 }
 
-IMPL_LINK (ScPreviewShell, CloseHdl, SystemWindow*,)
+IMPL_LINK_NOARG_TYPED(ScPreviewShell, CloseHdl, SystemWindow&, void)
 {
     ExitPreview();
-    return 0;
 }
 
 bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
