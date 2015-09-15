@@ -26,23 +26,22 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 
-#include <boost/preprocessor/arithmetic/inc.hpp>
-#include <boost/preprocessor/arithmetic/mul.hpp>
-#include <boost/preprocessor/repetition/repeat_from_to.hpp>
-
 #define BITMAP_CHECKSUM_SIZE 8
-#define BITMAP_CHECKSUM_BITS BOOST_PP_MUL(BITMAP_CHECKSUM_SIZE, 8)
 
 typedef sal_uInt64   BitmapChecksum;
 typedef sal_uInt8   BitmapChecksumOctetArray[BITMAP_CHECKSUM_SIZE];
 
-#define BITMAP_CHECKSUM_SET_OCTET(z, i, unused) \
-p[i] = (sal_uInt8)(n >> BOOST_PP_MUL(8, i));
-
-
-inline void BCToBCOA( BitmapChecksum n , BitmapChecksumOctetArray p )
+template< sal_uInt8 N = 0 >
+inline void BCToBCOA( BitmapChecksum n, BitmapChecksumOctetArray p )
 {
-    BOOST_PP_REPEAT(BITMAP_CHECKSUM_SIZE , BITMAP_CHECKSUM_SET_OCTET, unused)
+  p[N] = (sal_uInt8)(n >> ( 8 * N ));
+  return BCToBCOA< N + 1 >( n, p );
+}
+
+template<>
+inline void BCToBCOA< BITMAP_CHECKSUM_SIZE >( BitmapChecksum, BitmapChecksumOctetArray )
+{
+    return;
 }
 
 #ifdef __cplusplus
