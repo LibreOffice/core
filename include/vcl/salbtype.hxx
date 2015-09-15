@@ -194,6 +194,35 @@ struct VCL_DLLPUBLIC ColorMaskElement
         , mnOr(0)
     {
     }
+    bool CalcMaskShift(ColorMaskElement &rElem) const
+    {
+        if (rElem.mnMask == 0)
+            return true;
+
+        // from which bit starts the mask?
+        int nShift = 31;
+
+        while( nShift >= 0 && !( rElem.mnMask & ( 1 << nShift ) ) )
+            --nShift;
+
+        rElem.mnShift = nShift - 7;
+        int nLen = 0;
+
+        // XXX determine number of bits set => walk right until null
+        while( nShift >= 0 && ( rElem.mnMask & ( 1 << nShift ) ) )
+        {
+            nShift--;
+            nLen++;
+        }
+
+        if (nLen > 8) // mask length must be 8 bits or less
+            return false;
+
+        rElem.mnOrShift = 8 - nLen;
+        rElem.mnOr = static_cast<sal_uInt8>( ( 0xFF >> nLen ) << rElem.mnOrShift );
+
+        return true;
+    }
 };
 
 // - ColorMask -
@@ -203,8 +232,6 @@ class VCL_DLLPUBLIC ColorMask
     ColorMaskElement        maG;
     ColorMaskElement        maB;
     sal_uInt32              mnAlphaChannel;
-
-    SAL_DLLPRIVATE inline bool ImplCalcMaskShift(ColorMaskElement &rOut) const;
 
 public:
 
@@ -581,39 +608,9 @@ inline ColorMask::ColorMask( sal_uInt32 nRedMask,
     , maB(nBlueMask)
     , mnAlphaChannel(nAlphaChannel)
 {
-    ImplCalcMaskShift(maR);
-    ImplCalcMaskShift(maG);
-    ImplCalcMaskShift(maB);
-}
-
-inline bool ColorMask::ImplCalcMaskShift(ColorMaskElement &rElem) const
-{
-    if (rElem.mnMask == 0)
-        return true;
-
-    // from which bit starts the mask?
-    int nShift = 31;
-
-    while( nShift >= 0 && !( rElem.mnMask & ( 1 << nShift ) ) )
-        --nShift;
-
-    rElem.mnShift = nShift - 7;
-    int nLen = 0;
-
-    // XXX determine number of bits set => walk right until null
-    while( nShift >= 0 && ( rElem.mnMask & ( 1 << nShift ) ) )
-    {
-        nShift--;
-        nLen++;
-    }
-
-    if (nLen > 8) // mask length must be 8 bits or less
-        return false;
-
-    rElem.mnOrShift = 8 - nLen;
-    rElem.mnOr = static_cast<sal_uInt8>( ( 0xFF >> nLen ) << rElem.mnOrShift );
-
-    return true;
+    maR.CalcMaskShift(maR);
+    maG.CalcMaskShift(maG);
+    maB.CalcMaskShift(maB);
 }
 
 inline sal_uInt32 ColorMask::GetRedMask() const
