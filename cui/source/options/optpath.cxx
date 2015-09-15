@@ -598,12 +598,12 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
                             break;
                         }
                         if ( !sUser.isEmpty() )
-                            sUser += OUString(cDelim);
+                            sUser += OUStringLiteral1<MULTIPATH_DELIMITER>();
                         sUser += sToken;
                     }
                     sFullPath = sUser;
                     if ( !sFullPath.isEmpty() )
-                        sFullPath += OUString(cDelim);
+                        sFullPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
                     sFullPath += sWritable;
                 }
 
