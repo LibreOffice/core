@@ -3463,7 +3463,7 @@ void ScInterpreter::ScModalValue()
     if ( !MustHaveParamCountMin( nParamCount, 1 ) )
         return;
     vector<double> aSortArray;
-    GetSortArray( nParamCount, aSortArray, NULL, false );
+    GetSortArray( nParamCount, aSortArray, NULL, false, false );
     SCSIZE nSize = aSortArray.size();
     if (aSortArray.empty() || nSize == 0 || nGlobalError)
         PushNoValue();
@@ -3549,7 +3549,7 @@ void ScInterpreter::ScPercentrank( bool bInclusive )
     double fSignificance = ( nParamCount == 3 ? ::rtl::math::approxFloor( GetDouble() ) : 3.0 );
     double fNum = GetDouble();
     vector<double> aSortArray;
-    GetSortArray( 1, aSortArray, NULL, false );
+    GetSortArray( 1, aSortArray, NULL, false, false );
     SCSIZE nSize = aSortArray.size();
     if ( aSortArray.empty() || nSize == 0 || nGlobalError )
         PushNoValue();
@@ -3642,7 +3642,7 @@ void ScInterpreter::ScTrimMean()
         return;
     }
     vector<double> aSortArray;
-    GetSortArray( 1, aSortArray, NULL, false );
+    GetSortArray( 1, aSortArray, NULL, false, false );
     SCSIZE nSize = aSortArray.size();
     if (aSortArray.empty() || nSize == 0 || nGlobalError)
         PushNoValue();
@@ -3781,13 +3781,17 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
         PopError();
 }
 
-void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder, bool bConvertTextInArray )
+void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder, bool bConvertTextInArray, bool bAllowEmptyArray )
 {
     GetNumberSequenceArray( nParamCount, rSortArray, bConvertTextInArray );
     if (rSortArray.size() > MAX_ANZ_DOUBLE_FOR_SORT)
         SetError( errStackOverflow);
-    else if (rSortArray.empty())
+    else if ( rSortArray.empty() )
+    {
+        if ( bAllowEmptyArray )
+            return;
         SetError( errNoValue);
+    }
 
     if (nGlobalError == 0)
         QuickSort( rSortArray, pIndexOrder);
@@ -3883,7 +3887,7 @@ void ScInterpreter::ScRank( bool bAverage )
         bAscending = false;
 
     vector<double> aSortArray;
-    GetSortArray( 1, aSortArray, NULL, false );
+    GetSortArray( 1, aSortArray, NULL, false, false );
     double fVal = GetDouble();
     SCSIZE nSize = aSortArray.size();
     if ( aSortArray.empty() || nSize == 0 || nGlobalError )
