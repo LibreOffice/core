@@ -586,11 +586,10 @@ IMPL_LINK_NOARG_TYPED(SvxPathTabPage, PathHdl_Impl, Button*, void)
                 OUString sNewPath = pMultiDlg->GetPath();
                 if ( !sNewPath.isEmpty() )
                 {
-                    const sal_Unicode cDelim = MULTIPATH_DELIMITER;
                     sal_Int32 nNextPos = 0;
                     for (;;)
                     {
-                        const OUString sToken(sNewPath.getToken( 0, cDelim, nNextPos ));
+                        const OUString sToken(sNewPath.getToken( 0, MULTIPATH_DELIMITER, nNextPos ));
                         if ( nNextPos<0 )
                         {
                             // Last token need a different handling
