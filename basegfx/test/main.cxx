@@ -19,6 +19,8 @@
  *
  *************************************************************/
 
+#include "precompiled_basegfx.hxx"
+
 #include "gtest/gtest.h"
 
 int main(int argc, char **argv)
