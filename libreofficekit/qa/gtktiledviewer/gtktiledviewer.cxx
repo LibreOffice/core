@@ -30,10 +30,6 @@ static int help()
     return 1;
 }
 
-static GtkWidget* pScrolledWindow;
-static std::map<GtkToolItem*, std::string> g_aToolItemCommandNames;
-static std::map<std::string, GtkToolItem*> g_aCommandNameToolItems;
-static bool g_bToolItemBroadcast = true;
 static GtkWidget* pVBox;
 static GtkComboBoxText* pPartSelector;
 static GtkWidget* pPartModeComboBox;
@@ -54,6 +50,10 @@ public:
     GtkToolItem* m_pItalic;
     GtkToolItem* m_pUnderline;
     GtkToolItem* m_pStrikethrough;
+    GtkWidget* m_pScrolledWindow;
+    std::map<GtkToolItem*, std::string> m_aToolItemCommandNames;
+    std::map<std::string, GtkToolItem*> m_aCommandNameToolItems;
+    bool m_bToolItemBroadcast;
 
     TiledWindow()
         : m_pDocView(0),
@@ -62,7 +62,9 @@ public:
         m_pBold(0),
         m_pItalic(0),
         m_pUnderline(0),
-        m_pStrikethrough(0)
+        m_pStrikethrough(0),
+        m_pScrolledWindow(0),
+        m_bToolItemBroadcast(true)
     {
     }
 };
@@ -71,13 +73,15 @@ static std::map<GtkWidget*, TiledWindow> g_aWindows;
 
 static TiledWindow& lcl_getTiledWindow(GtkWidget* pWidget)
 {
-    return g_aWindows[gtk_widget_get_toplevel(pWidget)];
+    GtkWidget* pToplevel = gtk_widget_get_toplevel(pWidget);
+    assert(g_aWindows.find(pToplevel) != g_aWindows.end());
+    return g_aWindows[pToplevel];
 }
 
-static void lcl_registerToolItem(GtkToolItem* pItem, const std::string& rName)
+static void lcl_registerToolItem(TiledWindow& rWindow, GtkToolItem* pItem, const std::string& rName)
 {
-    g_aToolItemCommandNames[pItem] = rName;
-    g_aCommandNameToolItems[rName] = pItem;
+    rWindow.m_aToolItemCommandNames[pItem] = rName;
+    rWindow.m_aCommandNameToolItems[rName] = pItem;
 }
 
 const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
@@ -87,8 +91,10 @@ const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
 static void getVisibleAreaTwips(GtkWidget* pDocView, GdkRectangle* pArea)
 {
 #if GTK_CHECK_VERSION(2,14,0) // we need gtk_adjustment_get_page_size()
-    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
-    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
+    TiledWindow& rWindow = lcl_getTiledWindow(pDocView);
+
+    GtkAdjustment* pHAdjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
+    GtkAdjustment* pVAdjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
 
     pArea->x      = lok_doc_view_pixel_to_twip(LOK_DOC_VIEW(pDocView),
                                                gtk_adjustment_get_value(pHAdjustment));
@@ -307,8 +313,10 @@ static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pD
 }
 
 /// LOKDocView changed command state -> inform the tool button.
-static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer /*pData*/)
+static void signalCommand(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pData*/)
 {
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
+
     std::string aPayload(pPayload);
     size_t nPosition = aPayload.find("=");
     if (nPosition != std::string::npos)
@@ -317,16 +325,16 @@ static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer 
         std::string aValue = aPayload.substr(nPosition + 1);
         g_info("signalCommand: '%s' is '%s'", aKey.c_str(), aValue.c_str());
 
-        if (g_aCommandNameToolItems.find(aKey) != g_aCommandNameToolItems.end())
+        if (rWindow.m_aCommandNameToolItems.find(aKey) != rWindow.m_aCommandNameToolItems.end())
         {
-            GtkToolItem* pItem = g_aCommandNameToolItems[aKey];
+            GtkToolItem* pItem = rWindow.m_aCommandNameToolItems[aKey];
             gboolean bEdit = aValue == "true";
             if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem)) != bEdit)
             {
                 // Avoid invoking lok_doc_view_post_command().
-                g_bToolItemBroadcast = false;
+                rWindow.m_bToolItemBroadcast = false;
                 gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pItem), bEdit);
-                g_bToolItemBroadcast = true;
+                rWindow.m_bToolItemBroadcast = true;
             }
         }
     }
@@ -368,8 +376,10 @@ static void signalHyperlink(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointe
 static void cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
                           gint /*nWidth*/, gint /*nHeight*/, gpointer /*pData*/)
 {
-    GtkAdjustment* vadj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
-    GtkAdjustment* hadj = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(pScrolledWindow));
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pDocView));
+
+    GtkAdjustment* vadj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
+    GtkAdjustment* hadj = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(rWindow.m_pScrolledWindow));
     GdkRectangle visArea;
     gdouble upper;
     gint x = -1, y = -1;
@@ -414,12 +424,13 @@ static void cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
 
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 {
-    if (g_bToolItemBroadcast)
+    TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
+
+    if (rWindow.m_bToolItemBroadcast)
     {
-        TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
         LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
         GtkToolItem* pItem = GTK_TOOL_ITEM(pWidget);
-        const std::string& rString = g_aToolItemCommandNames[pItem];
+        const std::string& rString = rWindow.m_aToolItemCommandNames[pItem];
         g_info("toggleToolItem: lok_doc_view_post_command('%s')", rString.c_str());
         lok_doc_view_post_command(pLOKDocView, rString.c_str(), 0);
     }
@@ -623,28 +634,28 @@ int main( int argc, char* argv[] )
     gtk_tool_item_set_tooltip_text(aWindow.m_pBold, "Bold");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pBold, -1);
     g_signal_connect(G_OBJECT(aWindow.m_pBold), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(aWindow.m_pBold, ".uno:Bold");
+    lcl_registerToolItem(aWindow, aWindow.m_pBold, ".uno:Bold");
 
     aWindow.m_pItalic = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (aWindow.m_pItalic), "format-text-italic-symbolic");
     gtk_tool_item_set_tooltip_text(aWindow.m_pItalic, "Italic");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pItalic, -1);
     g_signal_connect(G_OBJECT(aWindow.m_pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(aWindow.m_pItalic, ".uno:Italic");
+    lcl_registerToolItem(aWindow, aWindow.m_pItalic, ".uno:Italic");
 
     aWindow.m_pUnderline = gtk_toggle_tool_button_new();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (aWindow.m_pUnderline), "format-text-underline-symbolic");
     gtk_tool_item_set_tooltip_text(aWindow.m_pUnderline, "Underline");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pUnderline, -1);
     g_signal_connect(G_OBJECT(aWindow.m_pUnderline), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(aWindow.m_pUnderline, ".uno:Underline");
+    lcl_registerToolItem(aWindow, aWindow.m_pUnderline, ".uno:Underline");
 
     aWindow.m_pStrikethrough = gtk_toggle_tool_button_new ();
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(aWindow.m_pStrikethrough), "format-text-strikethrough-symbolic");
     gtk_tool_item_set_tooltip_text(aWindow.m_pStrikethrough, "Strikethrough");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pStrikethrough, -1);
     g_signal_connect(G_OBJECT(aWindow.m_pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(aWindow.m_pStrikethrough, ".uno:Strikeout");
+    lcl_registerToolItem(aWindow, aWindow.m_pStrikethrough, ".uno:Strikeout");
 
     gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
@@ -697,12 +708,12 @@ int main( int argc, char* argv[] )
 
 
     // Scrolled window for DocView
-    pScrolledWindow = gtk_scrolled_window_new(0, 0);
-    gtk_widget_set_hexpand (pScrolledWindow, TRUE);
-    gtk_widget_set_vexpand (pScrolledWindow, TRUE);
-    gtk_container_add(GTK_CONTAINER(pVBox), pScrolledWindow);
+    aWindow.m_pScrolledWindow = gtk_scrolled_window_new(0, 0);
+    gtk_widget_set_hexpand (aWindow.m_pScrolledWindow, TRUE);
+    gtk_widget_set_vexpand (aWindow.m_pScrolledWindow, TRUE);
+    gtk_container_add(GTK_CONTAINER(pVBox), aWindow.m_pScrolledWindow);
 
-    gtk_container_add(GTK_CONTAINER(pScrolledWindow), pDocView);
+    gtk_container_add(GTK_CONTAINER(aWindow.m_pScrolledWindow), pDocView);
 
     GtkWidget* pProgressBar = gtk_progress_bar_new ();
     g_signal_connect(pDocView, "load-changed", G_CALLBACK(loadChanged), pProgressBar);
