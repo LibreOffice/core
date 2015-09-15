@@ -77,6 +77,9 @@ public:
 
 static std::map<GtkWidget*, TiledWindow> g_aWindows;
 
+static void setupDocView(GtkWidget* pDocView);
+static GtkWidget* createWindow(TiledWindow& rWindow);
+
 static TiledWindow& lcl_getTiledWindow(GtkWidget* pWidget)
 {
     GtkWidget* pToplevel = gtk_widget_get_toplevel(pWidget);
@@ -193,9 +196,11 @@ static void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/)
 static void createView(GtkWidget* pButton, gpointer /*pItem*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
-    LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
-    pDocument->pClass->createView(pDocument);
+    GtkWidget* pDocView = lok_doc_view_new_from_widget(LOK_DOC_VIEW(rWindow.m_pDocView));
+    setupDocView(pDocView);
+    TiledWindow aWindow;
+    aWindow.m_pDocView = pDocView;
+    createWindow(aWindow);
 }
 
 /// Our GtkClipboardGetFunc implementation for HTML.
