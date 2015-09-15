@@ -547,70 +547,58 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
     gtk_widget_hide(rWindow.m_pStatusBar);
 }
 
-int main( int argc, char* argv[] )
+/// Creates the GtkWindow that has main widget as children and registers it in the window map.
+static GtkWidget* createWindow(TiledWindow& rWindow)
 {
-    if( argc < 3 ||
-        ( argc > 1 && ( !strcmp( argv[1], "--help" ) || !strcmp( argv[1], "-h" ) ) ) )
-        return help();
-
-    if ( argv[1][0] != '/' )
-    {
-        fprintf(stderr, "Absolute path required to libreoffice install\n");
-        return 1;
-    }
-
-    gtk_init( &argc, &argv );
-
-    GtkWidget *pWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-    TiledWindow aWindow;
-    gtk_window_set_title( GTK_WINDOW(pWindow), "LibreOfficeKit GTK Tiled Viewer" );
+    GtkWidget *pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(pWindow), "LibreOfficeKit GTK Tiled Viewer");
     gtk_window_set_default_size(GTK_WINDOW(pWindow), 1024, 768);
-    g_signal_connect( pWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL );
+    g_signal_connect(pWindow, "destroy", G_CALLBACK(gtk_main_quit), 0);
 
-    aWindow.m_pVBox = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
-    gtk_container_add( GTK_CONTAINER(pWindow), aWindow.m_pVBox );
+    rWindow.m_pVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_container_add(GTK_CONTAINER(pWindow), rWindow.m_pVBox);
 
     // Toolbar
     GtkWidget* pToolbar = gtk_toolbar_new();
-    gtk_toolbar_set_style( GTK_TOOLBAR(pToolbar), GTK_TOOLBAR_ICONS );
+    gtk_toolbar_set_style(GTK_TOOLBAR(pToolbar), GTK_TOOLBAR_ICONS);
 
-    GtkToolItem* pZoomIn = gtk_tool_button_new( NULL, NULL );
+    GtkToolItem* pZoomIn = gtk_tool_button_new(NULL, NULL);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoomIn), "zoom-in-symbolic");
     gtk_tool_item_set_tooltip_text(pZoomIn, "Zoom In");
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomIn, 0);
-    g_signal_connect( G_OBJECT(pZoomIn), "clicked", G_CALLBACK(changeZoom), NULL );
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pZoomIn, 0);
+    g_signal_connect(G_OBJECT(pZoomIn), "clicked", G_CALLBACK(changeZoom), NULL);
 
-    GtkToolItem* pZoom1 = gtk_tool_button_new( NULL, NULL );
-    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoom1), "zoom-original-symbolic");
+    GtkToolItem* pZoom1 = gtk_tool_button_new(NULL, NULL);
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(pZoom1), "zoom-original-symbolic");
     gtk_tool_item_set_tooltip_text(pZoom1, "Normal Size");
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoom1, -1);
-    g_signal_connect( G_OBJECT(pZoom1), "clicked", G_CALLBACK(changeZoom), NULL );
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pZoom1, -1);
+    g_signal_connect(G_OBJECT(pZoom1), "clicked", G_CALLBACK(changeZoom), NULL);
 
-    GtkToolItem* pZoomOut = gtk_tool_button_new( NULL, NULL );
+    GtkToolItem* pZoomOut = gtk_tool_button_new(NULL, NULL);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pZoomOut), "zoom-out-symbolic");
     gtk_tool_item_set_tooltip_text(pZoomOut, "Zoom Out");
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomOut, -1);
-    g_signal_connect( G_OBJECT(pZoomOut), "clicked", G_CALLBACK(changeZoom), NULL );
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pZoomOut, -1);
+    g_signal_connect(G_OBJECT(pZoomOut), "clicked", G_CALLBACK(changeZoom), NULL);
 
     GtkToolItem* pSeparator1 = gtk_separator_tool_item_new();
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator1, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pSeparator1, -1);
 
     GtkToolItem* pPartSelectorToolItem = gtk_tool_item_new();
     GtkWidget* pComboBox = gtk_combo_box_text_new();
-    gtk_container_add( GTK_CONTAINER(pPartSelectorToolItem), pComboBox );
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartSelectorToolItem, -1 );
+    gtk_container_add(GTK_CONTAINER(pPartSelectorToolItem), pComboBox);
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pPartSelectorToolItem, -1);
 
-    aWindow.m_pPartSelector = GTK_COMBO_BOX_TEXT(pComboBox);
+    rWindow.m_pPartSelector = GTK_COMBO_BOX_TEXT(pComboBox);
 
     GtkToolItem* pSeparator2 = gtk_separator_tool_item_new();
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator2, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pSeparator2, -1);
 
     GtkToolItem* pPartModeSelectorToolItem = gtk_tool_item_new();
-    aWindow.m_pPartModeComboBox = gtk_combo_box_text_new();
-    gtk_container_add(GTK_CONTAINER(pPartModeSelectorToolItem), aWindow.m_pPartModeComboBox);
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartModeSelectorToolItem, -1 );
+    rWindow.m_pPartModeComboBox = gtk_combo_box_text_new();
+    gtk_container_add(GTK_CONTAINER(pPartModeSelectorToolItem), rWindow.m_pPartModeComboBox);
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pPartModeSelectorToolItem, -1);
 
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
 
     // Cut, copy & paste.
     GtkToolItem* pCopyButton = gtk_tool_button_new( NULL, NULL);
@@ -621,7 +609,7 @@ int main( int argc, char* argv[] )
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
 
     GtkToolItem* pEnableEditing = gtk_toggle_tool_button_new();
-    aWindow.m_pEnableEditing = pEnableEditing;
+    rWindow.m_pEnableEditing = pEnableEditing;
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pEnableEditing), "insert-text-symbolic");
     gtk_tool_item_set_tooltip_text(pEnableEditing, "Edit");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pEnableEditing, -1);
@@ -639,77 +627,115 @@ int main( int argc, char* argv[] )
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pNewViewButton, -1);
     g_signal_connect(G_OBJECT(pNewViewButton), "clicked", G_CALLBACK(createView), NULL);
 
-    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
 
-    aWindow.m_pBold = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (aWindow.m_pBold), "format-text-bold-symbolic");
-    gtk_tool_item_set_tooltip_text(aWindow.m_pBold, "Bold");
-    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pBold, -1);
-    g_signal_connect(G_OBJECT(aWindow.m_pBold), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(aWindow, aWindow.m_pBold, ".uno:Bold");
+    rWindow.m_pBold = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pBold), "format-text-bold-symbolic");
+    gtk_tool_item_set_tooltip_text(rWindow.m_pBold, "Bold");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), rWindow.m_pBold, -1);
+    g_signal_connect(G_OBJECT(rWindow.m_pBold), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(rWindow, rWindow.m_pBold, ".uno:Bold");
 
-    aWindow.m_pItalic = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (aWindow.m_pItalic), "format-text-italic-symbolic");
-    gtk_tool_item_set_tooltip_text(aWindow.m_pItalic, "Italic");
-    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pItalic, -1);
-    g_signal_connect(G_OBJECT(aWindow.m_pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(aWindow, aWindow.m_pItalic, ".uno:Italic");
+    rWindow.m_pItalic = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (rWindow.m_pItalic), "format-text-italic-symbolic");
+    gtk_tool_item_set_tooltip_text(rWindow.m_pItalic, "Italic");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), rWindow.m_pItalic, -1);
+    g_signal_connect(G_OBJECT(rWindow.m_pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(rWindow, rWindow.m_pItalic, ".uno:Italic");
 
-    aWindow.m_pUnderline = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (aWindow.m_pUnderline), "format-text-underline-symbolic");
-    gtk_tool_item_set_tooltip_text(aWindow.m_pUnderline, "Underline");
-    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pUnderline, -1);
-    g_signal_connect(G_OBJECT(aWindow.m_pUnderline), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(aWindow, aWindow.m_pUnderline, ".uno:Underline");
+    rWindow.m_pUnderline = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (rWindow.m_pUnderline), "format-text-underline-symbolic");
+    gtk_tool_item_set_tooltip_text(rWindow.m_pUnderline, "Underline");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), rWindow.m_pUnderline, -1);
+    g_signal_connect(G_OBJECT(rWindow.m_pUnderline), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(rWindow, rWindow.m_pUnderline, ".uno:Underline");
 
-    aWindow.m_pStrikethrough = gtk_toggle_tool_button_new ();
-    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(aWindow.m_pStrikethrough), "format-text-strikethrough-symbolic");
-    gtk_tool_item_set_tooltip_text(aWindow.m_pStrikethrough, "Strikethrough");
-    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pStrikethrough, -1);
-    g_signal_connect(G_OBJECT(aWindow.m_pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(aWindow, aWindow.m_pStrikethrough, ".uno:Strikeout");
+    rWindow.m_pStrikethrough = gtk_toggle_tool_button_new ();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(rWindow.m_pStrikethrough), "format-text-strikethrough-symbolic");
+    gtk_tool_item_set_tooltip_text(rWindow.m_pStrikethrough, "Strikethrough");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), rWindow.m_pStrikethrough, -1);
+    g_signal_connect(G_OBJECT(rWindow.m_pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(rWindow, rWindow.m_pStrikethrough, ".uno:Strikeout");
 
-    gtk_box_pack_start( GTK_BOX(aWindow.m_pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
+    gtk_box_pack_start(GTK_BOX(rWindow.m_pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
     // Findbar
-    aWindow.m_pFindbar = gtk_toolbar_new();
-    gtk_toolbar_set_style(GTK_TOOLBAR(aWindow.m_pFindbar), GTK_TOOLBAR_ICONS);
+    rWindow.m_pFindbar = gtk_toolbar_new();
+    gtk_toolbar_set_style(GTK_TOOLBAR(rWindow.m_pFindbar), GTK_TOOLBAR_ICONS);
 
     GtkToolItem* pFindbarClose = gtk_tool_button_new( NULL, NULL);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarClose), "window-close-symbolic");
-    gtk_toolbar_insert(GTK_TOOLBAR(aWindow.m_pFindbar), pFindbarClose, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarClose, -1);
     g_signal_connect(G_OBJECT(pFindbarClose), "clicked", G_CALLBACK(toggleFindbar), NULL);
 
     GtkToolItem* pEntryContainer = gtk_tool_item_new();
-    aWindow.m_pFindbarEntry = gtk_entry_new();
-    gtk_container_add(GTK_CONTAINER(pEntryContainer), aWindow.m_pFindbarEntry);
-    g_signal_connect(aWindow.m_pFindbarEntry, "key-press-event", G_CALLBACK(signalFindbar), 0);
-    gtk_toolbar_insert(GTK_TOOLBAR(aWindow.m_pFindbar), pEntryContainer, -1);
+    rWindow.m_pFindbarEntry = gtk_entry_new();
+    gtk_container_add(GTK_CONTAINER(pEntryContainer), rWindow.m_pFindbarEntry);
+    g_signal_connect(rWindow.m_pFindbarEntry, "key-press-event", G_CALLBACK(signalFindbar), 0);
+    gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pEntryContainer, -1);
 
     GtkToolItem* pFindbarNext = gtk_tool_button_new( NULL, NULL);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarNext), "go-down-symbolic");
-    gtk_toolbar_insert(GTK_TOOLBAR(aWindow.m_pFindbar), pFindbarNext, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarNext, -1);
     g_signal_connect(G_OBJECT(pFindbarNext), "clicked", G_CALLBACK(signalSearchNext), NULL);
 
     GtkToolItem* pFindbarPrev = gtk_tool_button_new( NULL, NULL);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarPrev), "go-up-symbolic");
-    gtk_toolbar_insert(GTK_TOOLBAR(aWindow.m_pFindbar), pFindbarPrev, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarPrev, -1);
     g_signal_connect(G_OBJECT(pFindbarPrev), "clicked", G_CALLBACK(signalSearchPrev), NULL);
 
     GtkToolItem* pFindbarLabelContainer = gtk_tool_item_new();
-    aWindow.m_pFindbarLabel = gtk_label_new("");
-    gtk_container_add(GTK_CONTAINER(pFindbarLabelContainer), aWindow.m_pFindbarLabel);
-    gtk_toolbar_insert(GTK_TOOLBAR(aWindow.m_pFindbar), pFindbarLabelContainer, -1);
+    rWindow.m_pFindbarLabel = gtk_label_new("");
+    gtk_container_add(GTK_CONTAINER(pFindbarLabelContainer), rWindow.m_pFindbarLabel);
+    gtk_toolbar_insert(GTK_TOOLBAR(rWindow.m_pFindbar), pFindbarLabelContainer, -1);
 
-    gtk_box_pack_end(GTK_BOX(aWindow.m_pVBox), aWindow.m_pFindbar, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(rWindow.m_pVBox), rWindow.m_pFindbar, FALSE, FALSE, 0);
+
+    // Scrolled window for DocView
+    rWindow.m_pScrolledWindow = gtk_scrolled_window_new(0, 0);
+    gtk_widget_set_hexpand(rWindow.m_pScrolledWindow, TRUE);
+    gtk_widget_set_vexpand(rWindow.m_pScrolledWindow, TRUE);
+    gtk_container_add(GTK_CONTAINER(rWindow.m_pVBox), rWindow.m_pScrolledWindow);
+
+    gtk_container_add(GTK_CONTAINER(rWindow.m_pScrolledWindow), rWindow.m_pDocView);
+
+    GtkWidget* pProgressBar = gtk_progress_bar_new ();
+    g_signal_connect(rWindow.m_pDocView, "load-changed", G_CALLBACK(loadChanged), pProgressBar);
+
+    GtkWidget* pStatusBar = gtk_statusbar_new();
+    rWindow.m_pStatusBar = pStatusBar;
+    gtk_container_forall(GTK_CONTAINER(pStatusBar), removeChildrenFromStatusbar, pStatusBar);
+    gtk_container_add (GTK_CONTAINER(rWindow.m_pVBox), pStatusBar);
+    gtk_container_add (GTK_CONTAINER(pStatusBar), pProgressBar);
+    gtk_widget_set_hexpand(pProgressBar, true);
+
+    gtk_widget_show_all(pWindow);
+    // Hide the findbar by default.
+    gtk_widget_hide(rWindow.m_pFindbar);
+
+    g_aWindows[pWindow] = rWindow;
+    return pWindow;
+}
+
+int main( int argc, char* argv[] )
+{
+    if( argc < 3 ||
+        ( argc > 1 && ( !strcmp( argv[1], "--help" ) || !strcmp( argv[1], "-h" ) ) ) )
+        return help();
+
+    if ( argv[1][0] != '/' )
+    {
+        fprintf(stderr, "Absolute path required to libreoffice install\n");
+        return 1;
+    }
+
+    gtk_init( &argc, &argv );
 
     // Docview
     GtkWidget* pDocView = lok_doc_view_new (argv[1], NULL, NULL);
-    aWindow.m_pDocView = pDocView;
 #if GLIB_CHECK_VERSION(2,40,0)
     g_assert_nonnull(pDocView);
 #endif
-
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
@@ -718,32 +744,10 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), NULL);
     g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), NULL);
 
-
-    // Scrolled window for DocView
-    aWindow.m_pScrolledWindow = gtk_scrolled_window_new(0, 0);
-    gtk_widget_set_hexpand (aWindow.m_pScrolledWindow, TRUE);
-    gtk_widget_set_vexpand (aWindow.m_pScrolledWindow, TRUE);
-    gtk_container_add(GTK_CONTAINER(aWindow.m_pVBox), aWindow.m_pScrolledWindow);
-
-    gtk_container_add(GTK_CONTAINER(aWindow.m_pScrolledWindow), pDocView);
-
-    GtkWidget* pProgressBar = gtk_progress_bar_new ();
-    g_signal_connect(pDocView, "load-changed", G_CALLBACK(loadChanged), pProgressBar);
-
-    GtkWidget* pStatusBar = gtk_statusbar_new ();
-    aWindow.m_pStatusBar = pStatusBar;
-    gtk_container_forall(GTK_CONTAINER(pStatusBar), removeChildrenFromStatusbar, pStatusBar);
-    gtk_container_add (GTK_CONTAINER(aWindow.m_pVBox), pStatusBar);
-    gtk_container_add (GTK_CONTAINER(pStatusBar), pProgressBar);
-    gtk_widget_set_hexpand(pProgressBar, true);
-
-    gtk_widget_show_all( pWindow );
-    // Hide the findbar by default.
-    gtk_widget_hide(aWindow.m_pFindbar);
-
-    g_aWindows[pWindow] = aWindow;
-
-    lok_doc_view_open_document( LOK_DOC_VIEW(pDocView), argv[2], NULL, openDocumentCallback, pDocView );
+    TiledWindow aWindow;
+    aWindow.m_pDocView = pDocView;
+    createWindow(aWindow);
+    lok_doc_view_open_document(LOK_DOC_VIEW(pDocView), argv[2], NULL, openDocumentCallback, pDocView);
 
     gtk_main();
 
