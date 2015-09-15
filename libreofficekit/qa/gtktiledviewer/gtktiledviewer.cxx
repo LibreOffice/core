@@ -30,10 +30,6 @@ static int help()
     return 1;
 }
 
-static GtkWidget* pFindbar;
-static GtkWidget* pFindbarEntry;
-static GtkWidget* pFindbarLabel;
-
 /// Represents all the state that is specific to one GtkWindow of this app.
 class TiledWindow
 {
@@ -54,6 +50,9 @@ public:
     GtkWidget* m_pPartModeComboBox;
     /// Should the part selector avoid calling lok::Document::setPart()?
     bool m_bPartSelectorBroadcast;
+    GtkWidget* m_pFindbar;
+    GtkWidget* m_pFindbarEntry;
+    GtkWidget* m_pFindbarLabel;
 
     TiledWindow()
         : m_pDocView(0),
@@ -68,7 +67,10 @@ public:
         m_pVBox(0),
         m_pPartSelector(0),
         m_pPartModeComboBox(0),
-        m_bPartSelectorBroadcast(true)
+        m_bPartSelectorBroadcast(true),
+        m_pFindbar(0),
+        m_pFindbarEntry(0),
+        m_pFindbarLabel(0)
     {
     }
 };
@@ -173,16 +175,17 @@ static void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
 }
 
 /// Toggle the visibility of the findbar.
-static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
+static void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/)
 {
-    if (gtk_widget_get_visible(pFindbar))
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    if (gtk_widget_get_visible(rWindow.m_pFindbar))
     {
-        gtk_widget_hide(pFindbar);
+        gtk_widget_hide(rWindow.m_pFindbar);
     }
     else
     {
-        gtk_widget_show_all(pFindbar);
-        gtk_widget_grab_focus(pFindbarEntry);
+        gtk_widget_show_all(rWindow.m_pFindbar);
+        gtk_widget_grab_focus(rWindow.m_pFindbarEntry);
     }
 }
 
@@ -245,10 +248,11 @@ static void doCopy(GtkWidget* pButton, gpointer /*pItem*/)
 }
 
 
-/// Searches for the next or previous text of pFindbarEntry.
+/// Searches for the next or previous text of TiledWindow::m_pFindbarEntry.
 static void doSearch(GtkWidget* pButton, bool bBackwards)
 {
-    GtkEntry* pEntry = GTK_ENTRY(pFindbarEntry);
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    GtkEntry* pEntry = GTK_ENTRY(rWindow.m_pFindbarEntry);
     const char* pText = gtk_entry_get_text(pEntry);
     boost::property_tree::ptree aTree;
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.SearchString/type", '/'), "string");
@@ -256,7 +260,6 @@ static void doSearch(GtkWidget* pButton, bool bBackwards)
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/type", '/'), "boolean");
     aTree.put(boost::property_tree::ptree::path_type("SearchItem.Backward/value", '/'), bBackwards);
 
-    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
     GdkRectangle aArea;
     getVisibleAreaTwips(rWindow.m_pDocView, &aArea);
@@ -286,7 +289,8 @@ static void signalSearchPrev(GtkWidget* pButton, gpointer /*pItem*/)
 /// Handles the key-press-event of the search entry widget.
 static gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData*/)
 {
-    gtk_label_set_text(GTK_LABEL(pFindbarLabel), "");
+    TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
+    gtk_label_set_text(GTK_LABEL(rWindow.m_pFindbarLabel), "");
     switch(pEvent->keyval)
     {
         case GDK_KEY_Return:
@@ -298,7 +302,7 @@ static gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer 
         case GDK_KEY_Escape:
         {
             // Hide the findbar.
-            gtk_widget_hide(pFindbar);
+            gtk_widget_hide(rWindow.m_pFindbar);
             return TRUE;
         }
     }
@@ -351,9 +355,10 @@ static void loadChanged(LOKDocView* /*pLOKDocView*/, gdouble fValue, gpointer pD
 }
 
 /// LOKDocView found no search matches -> set the search label accordingly.
-static void signalSearch(LOKDocView* /*pLOKDocView*/, char* /*pPayload*/, gpointer /*pData*/)
+static void signalSearch(LOKDocView* pLOKDocView, char* /*pPayload*/, gpointer /*pData*/)
 {
-    gtk_label_set_text(GTK_LABEL(pFindbarLabel), "Search key not found");
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
+    gtk_label_set_text(GTK_LABEL(rWindow.m_pFindbarLabel), "Search key not found");
 }
 
 
@@ -667,36 +672,36 @@ int main( int argc, char* argv[] )
     gtk_box_pack_start( GTK_BOX(aWindow.m_pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
     // Findbar
-    pFindbar = gtk_toolbar_new();
-    gtk_toolbar_set_style(GTK_TOOLBAR(pFindbar), GTK_TOOLBAR_ICONS);
+    aWindow.m_pFindbar = gtk_toolbar_new();
+    gtk_toolbar_set_style(GTK_TOOLBAR(aWindow.m_pFindbar), GTK_TOOLBAR_ICONS);
 
     GtkToolItem* pFindbarClose = gtk_tool_button_new( NULL, NULL);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarClose), "window-close-symbolic");
-    gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarClose, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(aWindow.m_pFindbar), pFindbarClose, -1);
     g_signal_connect(G_OBJECT(pFindbarClose), "clicked", G_CALLBACK(toggleFindbar), NULL);
 
     GtkToolItem* pEntryContainer = gtk_tool_item_new();
-    pFindbarEntry = gtk_entry_new();
-    gtk_container_add(GTK_CONTAINER(pEntryContainer), pFindbarEntry);
-    g_signal_connect(pFindbarEntry, "key-press-event", G_CALLBACK(signalFindbar), 0);
-    gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pEntryContainer, -1);
+    aWindow.m_pFindbarEntry = gtk_entry_new();
+    gtk_container_add(GTK_CONTAINER(pEntryContainer), aWindow.m_pFindbarEntry);
+    g_signal_connect(aWindow.m_pFindbarEntry, "key-press-event", G_CALLBACK(signalFindbar), 0);
+    gtk_toolbar_insert(GTK_TOOLBAR(aWindow.m_pFindbar), pEntryContainer, -1);
 
     GtkToolItem* pFindbarNext = gtk_tool_button_new( NULL, NULL);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarNext), "go-down-symbolic");
-    gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarNext, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(aWindow.m_pFindbar), pFindbarNext, -1);
     g_signal_connect(G_OBJECT(pFindbarNext), "clicked", G_CALLBACK(signalSearchNext), NULL);
 
     GtkToolItem* pFindbarPrev = gtk_tool_button_new( NULL, NULL);
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pFindbarPrev), "go-up-symbolic");
-    gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarPrev, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(aWindow.m_pFindbar), pFindbarPrev, -1);
     g_signal_connect(G_OBJECT(pFindbarPrev), "clicked", G_CALLBACK(signalSearchPrev), NULL);
 
     GtkToolItem* pFindbarLabelContainer = gtk_tool_item_new();
-    pFindbarLabel = gtk_label_new("");
-    gtk_container_add(GTK_CONTAINER(pFindbarLabelContainer), pFindbarLabel);
-    gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarLabelContainer, -1);
+    aWindow.m_pFindbarLabel = gtk_label_new("");
+    gtk_container_add(GTK_CONTAINER(pFindbarLabelContainer), aWindow.m_pFindbarLabel);
+    gtk_toolbar_insert(GTK_TOOLBAR(aWindow.m_pFindbar), pFindbarLabelContainer, -1);
 
-    gtk_box_pack_end(GTK_BOX(aWindow.m_pVBox), pFindbar, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(aWindow.m_pVBox), aWindow.m_pFindbar, FALSE, FALSE, 0);
 
     // Docview
     GtkWidget* pDocView = lok_doc_view_new (argv[1], NULL, NULL);
@@ -734,7 +739,7 @@ int main( int argc, char* argv[] )
 
     gtk_widget_show_all( pWindow );
     // Hide the findbar by default.
-    gtk_widget_hide(pFindbar);
+    gtk_widget_hide(aWindow.m_pFindbar);
 
     g_aWindows[pWindow] = aWindow;
 
