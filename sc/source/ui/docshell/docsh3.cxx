@@ -1003,10 +1003,6 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                 break;
                                 case MM_REFERENCE :     // do nothing
                                 break;
-                                case MM_FAKE :
-                                    OSL_FAIL( "MergeDocument: MatrixFlag MM_FAKE" );
-                                    pViewSh->EnterData( aPos.Col(), aPos.Row(), aPos.Tab(), aValue );
-                                break;
                                 default:
                                     OSL_FAIL( "MergeDocument: unknown MatrixFlag" );
                             }

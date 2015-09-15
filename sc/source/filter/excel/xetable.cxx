@@ -945,7 +945,6 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
             bWriteFormula = false;
             break;
         case MM_FORMULA:
-        case MM_FAKE:
             {
                 // origin of the matrix - find the used matrix range
                 SCCOL nMatWidth;

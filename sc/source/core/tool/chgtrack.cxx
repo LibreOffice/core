@@ -1660,7 +1660,6 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
                 case MM_NONE :
                     return SC_CACCT_NORMAL;
                 case MM_FORMULA :
-                case MM_FAKE :
                     return SC_CACCT_MATORG;
                 case MM_REFERENCE :
                     return SC_CACCT_MATREF;
@@ -1687,7 +1686,6 @@ ScChangeActionContentCellType ScChangeActionContent::GetContentCellType( const S
                 case MM_NONE :
                     return SC_CACCT_NORMAL;
                 case MM_FORMULA :
-                case MM_FAKE :
                     return SC_CACCT_MATORG;
                 case MM_REFERENCE :
                     return SC_CACCT_MATREF;

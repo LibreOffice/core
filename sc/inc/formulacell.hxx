@@ -113,8 +113,7 @@ inline void intrusive_ptr_release(const ScFormulaCellGroup *p)
 enum ScMatrixMode {
     MM_NONE      = 0,                   // No matrix formula
     MM_FORMULA   = 1,                   // Upper left matrix formula cell
-    MM_REFERENCE = 2,                   // Remaining cells, via ocMatRef reference token
-    MM_FAKE      = 3                    // Interpret "as-if" matrix formula (legacy)
+    MM_REFERENCE = 2                    // Remaining cells, via ocMatRef reference token
 };
 
 class SC_DLLPUBLIC ScFormulaCell : public SvtListener
