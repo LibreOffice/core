@@ -287,9 +287,9 @@ private:
 
     Idle                aIdle;
 
-    Link<>              aSelectFactoryLink;
+    Link<SfxHelpIndexWindow_Impl*,void> aSelectFactoryLink;
     Link<>              aPageDoubleClickLink;
-    Link<IndexTabPage_Impl&,void>  aIndexKeywordLink;
+    Link<IndexTabPage_Impl&,void>       aIndexKeywordLink;
     OUString            sKeyword;
 
     VclPtr<SfxHelpWindow_Impl>     pParentWin;
@@ -330,7 +330,7 @@ public:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     void                SetDoubleClickHdl( const Link<>& rLink );
-    inline void         SetSelectFactoryHdl( const Link<>& rLink ) { aSelectFactoryLink = rLink; }
+    inline void         SetSelectFactoryHdl( const Link<SfxHelpIndexWindow_Impl*,void>& rLink ) { aSelectFactoryLink = rLink; }
     void                SetFactory( const OUString& rFactory, bool bActive );
     inline OUString     GetFactory() const { return pIPage->GetFactory(); }
     OUString            GetSelectEntry() const;
@@ -523,7 +523,7 @@ friend class SfxHelpIndexWindow_Impl;
 
     DECL_LINK_TYPED(    SelectHdl, ToolBox*, void );
     DECL_LINK(OpenHdl, void *);
-    DECL_LINK(          SelectFactoryHdl, SfxHelpIndexWindow_Impl* );
+    DECL_LINK_TYPED(    SelectFactoryHdl, SfxHelpIndexWindow_Impl*, void );
     DECL_LINK_TYPED(    ChangeHdl, HelpListener_Impl&, void );
 
 public:

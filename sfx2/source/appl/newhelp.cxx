@@ -2929,7 +2929,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl)
 
 
 
-IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin )
+IMPL_LINK_TYPED( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin, void )
 {
     if ( sTitle.isEmpty() )
         sTitle = GetParent()->GetText();
@@ -2943,8 +2943,6 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin
     if ( pWin )
         ShowStartPage();
     pIndexWin->ClearSearchPage();
-
-    return 0;
 }
 
 
