@@ -27,7 +27,7 @@
 class BibResId : public ResId
 {
  public:
-    BibResId( sal_uInt16 nId );
+    explicit BibResId(sal_uInt16 nId);
 };
 
 #define BIB_RESSTR(i)   BibResId(i).toString()

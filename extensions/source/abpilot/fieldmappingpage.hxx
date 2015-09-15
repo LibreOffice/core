@@ -34,7 +34,7 @@ namespace abp
         VclPtr<FixedText>      m_pHint;
 
     public:
-        FieldMappingPage( OAddessBookSourcePilot* _pParent );
+        explicit FieldMappingPage(OAddessBookSourcePilot* _pParent);
         virtual ~FieldMappingPage();
         virtual void dispose() SAL_OVERRIDE;
     protected:

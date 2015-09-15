@@ -80,7 +80,7 @@ namespace dbp
         VclPtr<ListBox>         m_pSelFields;
 
     public:
-        OGridFieldsSelection( OGridWizard* _pParent );
+        explicit OGridFieldsSelection( OGridWizard* _pParent );
         virtual ~OGridFieldsSelection();
         virtual void dispose() SAL_OVERRIDE;
 

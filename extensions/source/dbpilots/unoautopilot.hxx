@@ -38,7 +38,7 @@ namespace dbp
             ,public ::comphelper::OPropertyArrayUsageHelper< OUnoAutoPilot< TYPE, SERVICEINFO > >
             ,public OModuleResourceClient
     {
-        OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB)
+        explicit OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB)
             : OUnoAutoPilot_Base(_rxORB)
         {
         }

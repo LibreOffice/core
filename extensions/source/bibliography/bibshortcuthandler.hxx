@@ -34,7 +34,7 @@ private:
     VclPtr<vcl::Window>     pBaseClass;     // in cases, where BibShortCutHandler also has to be a window
 
 protected:
-    inline                  BibShortCutHandler( vcl::Window* pBaseClass );
+    explicit                BibShortCutHandler( vcl::Window* pBaseClass );
 
 public:
     virtual                 ~BibShortCutHandler();

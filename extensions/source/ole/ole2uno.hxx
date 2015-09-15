@@ -71,9 +71,9 @@ void o2u_attachCurrentThread();
 class BridgeRuntimeError
 {
 public:
-    BridgeRuntimeError(const OUString& sMessage)
+    explicit BridgeRuntimeError(const OUString& sMessage)
+        : message(sMessage)
     {
-        message = sMessage;
     }
     OUString message;
 };

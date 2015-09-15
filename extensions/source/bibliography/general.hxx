@@ -50,7 +50,7 @@ class BibGeneralPageFocusListener : public cppu::WeakAggImplHelper1 < ::com::sun
 private:
     VclPtr<BibGeneralPage> mpBibGeneralPage;
 public:
-    BibGeneralPageFocusListener(BibGeneralPage *pBibGeneralPage);
+    explicit BibGeneralPageFocusListener(BibGeneralPage *pBibGeneralPage);
     virtual void SAL_CALL       focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL       focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

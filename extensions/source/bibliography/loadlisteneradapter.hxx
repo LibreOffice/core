@@ -40,7 +40,7 @@ namespace bib
         OComponentAdapterBase*  m_pAdapter;
         ::osl::Mutex&           m_rMutex;
     protected:
-        OComponentListener( ::osl::Mutex& _rMutex )
+        explicit OComponentListener( ::osl::Mutex& _rMutex )
             :m_pAdapter( NULL )
             ,m_rMutex( _rMutex )
         {
@@ -110,7 +110,7 @@ namespace bib
         friend class OLoadListenerAdapter;
 
     protected:
-        OLoadListener( ::osl::Mutex& _rMutex ) : OComponentListener( _rMutex ) { }
+        explicit OLoadListener( ::osl::Mutex& _rMutex ) : OComponentListener( _rMutex ) { }
 
     // XLoadListener equivalents
         virtual void _loaded( const ::com::sun::star::lang::EventObject& aEvent ) = 0;

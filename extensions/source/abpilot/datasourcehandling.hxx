@@ -48,7 +48,7 @@ namespace abp
         ODataSourceContextImpl*     m_pImpl;
 
     public:
-        ODataSourceContext(
+        explicit ODataSourceContext(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
         ~ODataSourceContext();
@@ -112,7 +112,7 @@ namespace abp
         // - ctor/dtor/assignment
 
         /// constructs an object which is initially invalid
-        ODataSource(
+        explicit ODataSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB
         );
 

@@ -120,7 +120,7 @@ namespace logging
         ImplPool                        m_aImpl;
 
     public:
-        LoggerPool( const Reference< XComponentContext >& _rxContext );
+        explicit LoggerPool( const Reference< XComponentContext >& _rxContext );
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) SAL_OVERRIDE;

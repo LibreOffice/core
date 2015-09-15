@@ -34,7 +34,7 @@ namespace abp
         bool        m_bSuccessfullyExecutedDialog;
 
     public:
-        AdminDialogInvokationPage( OAddessBookSourcePilot* _pParent );
+        explicit AdminDialogInvokationPage(OAddessBookSourcePilot* _pParent);
         virtual ~AdminDialogInvokationPage();
         virtual void dispose() SAL_OVERRIDE;
     protected:

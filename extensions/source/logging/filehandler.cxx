@@ -94,7 +94,7 @@ namespace logging
         FileValidity                    m_eFileValidity;
 
     protected:
-        FileHandler( const Reference< XComponentContext >& _rxContext );
+        explicit FileHandler( const Reference< XComponentContext >& _rxContext );
         virtual ~FileHandler();
 
         // XLogHandler

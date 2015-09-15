@@ -41,7 +41,7 @@ namespace dbp
                         m_xDSContext;
 
     public:
-        OTableSelectionPage(OControlWizard* _pParent);
+        explicit OTableSelectionPage(OControlWizard* _pParent);
         virtual ~OTableSelectionPage();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -105,7 +105,7 @@ namespace dbp
         VclPtr<ListBox>        m_pStoreWhere;
 
     public:
-        ODBFieldPage( OControlWizard* _pParent );
+        explicit ODBFieldPage( OControlWizard* _pParent );
         virtual ~ODBFieldPage();
         virtual void dispose() SAL_OVERRIDE;
 

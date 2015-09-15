@@ -101,7 +101,7 @@ namespace dbp
         VclPtr<ListBox>         m_pSelectTable;
 
     public:
-        OContentTableSelection( OListComboWizard* _pParent );
+        explicit OContentTableSelection( OListComboWizard* _pParent );
         virtual ~OContentTableSelection();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -128,7 +128,7 @@ namespace dbp
 
 
     public:
-        OContentFieldSelection( OListComboWizard* _pParent );
+        explicit OContentFieldSelection( OListComboWizard* _pParent );
         virtual ~OContentFieldSelection();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -153,7 +153,7 @@ namespace dbp
 
 
     public:
-        OLinkFieldsPage( OListComboWizard* _pParent );
+        explicit OLinkFieldsPage( OListComboWizard* _pParent );
         virtual ~OLinkFieldsPage();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -175,7 +175,7 @@ namespace dbp
     class OComboDBFieldPage : public ODBFieldPage
     {
     public:
-        OComboDBFieldPage( OControlWizard* _pParent );
+        explicit OComboDBFieldPage( OControlWizard* _pParent );
 
     protected:
         OListComboSettings& getSettings() { return static_cast<OListComboWizard*>(getDialog())->getSettings(); }

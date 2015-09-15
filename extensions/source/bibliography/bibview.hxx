@@ -50,7 +50,7 @@ namespace bib
         using FormControlContainer::connectForm;
         using FormControlContainer::disconnectForm;
         using FormControlContainer::isFormConnected;
-        BibViewFormControlContainer(BibView *pBibView);
+        explicit BibViewFormControlContainer(BibView *pBibView);
     };
 
     class BibView : public BibWindow

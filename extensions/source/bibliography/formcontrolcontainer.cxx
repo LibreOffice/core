@@ -78,7 +78,7 @@ namespace bib
     struct ControlModeSwitch : public ::std::unary_function< Reference< XControl >, void >
     {
         bool bDesign;
-        ControlModeSwitch( bool _bDesign ) : bDesign( _bDesign ) { }
+        explicit ControlModeSwitch( bool _bDesign ) : bDesign( _bDesign ) { }
 
         void operator() ( const Reference< XControl >& _rxControl ) const
         {

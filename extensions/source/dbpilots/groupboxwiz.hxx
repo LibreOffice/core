@@ -87,7 +87,7 @@ namespace dbp
         VclPtr<ListBox>         m_pExistingRadios;
 
     public:
-        ORadioSelectionPage( OControlWizard* _pParent );
+        explicit ORadioSelectionPage( OControlWizard* _pParent );
         virtual ~ORadioSelectionPage();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -115,7 +115,7 @@ namespace dbp
         VclPtr<ListBox>         m_pDefSelection;
 
     public:
-        ODefaultFieldSelectionPage( OControlWizard* _pParent );
+        explicit ODefaultFieldSelectionPage( OControlWizard* _pParent );
         virtual ~ODefaultFieldSelectionPage();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -138,7 +138,7 @@ namespace dbp
                         m_nLastSelection;
 
     public:
-        OOptionValuesPage( OControlWizard* _pParent );
+        explicit OOptionValuesPage( OControlWizard* _pParent );
         virtual ~OOptionValuesPage();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -158,7 +158,7 @@ namespace dbp
     class OOptionDBFieldPage : public ODBFieldPage
     {
     public:
-        OOptionDBFieldPage( OControlWizard* _pParent );
+        explicit OOptionDBFieldPage( OControlWizard* _pParent );
 
     protected:
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }
@@ -173,7 +173,7 @@ namespace dbp
         VclPtr<Edit>            m_pName;
 
     public:
-        OFinalizeGBWPage( OControlWizard* _pParent );
+        explicit OFinalizeGBWPage( OControlWizard* _pParent );
         virtual ~OFinalizeGBWPage();
         virtual void dispose() SAL_OVERRIDE;
 

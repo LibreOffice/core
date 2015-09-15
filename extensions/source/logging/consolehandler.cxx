@@ -73,7 +73,7 @@ namespace logging
         sal_Int32                       m_nThreshold;
 
     protected:
-        ConsoleHandler( const Reference< XComponentContext >& _rxContext );
+        explicit ConsoleHandler( const Reference< XComponentContext >& _rxContext );
         virtual ~ConsoleHandler();
 
         // XConsoleHandler

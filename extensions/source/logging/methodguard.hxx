@@ -38,7 +38,7 @@ namespace logging
         };
 
     public:
-        ComponentMethodGuard( COMPONENT& _rHandler )
+        explicit ComponentMethodGuard( COMPONENT& _rHandler )
             :m_rHandler( _rHandler )
         {
             m_rHandler.enterMethod( Access() );

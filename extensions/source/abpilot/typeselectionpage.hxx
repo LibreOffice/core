@@ -61,7 +61,7 @@ namespace abp
         ::std::vector< ButtonItem > m_aAllTypes;
 
     public:
-        TypeSelectionPage( OAddessBookSourcePilot* _pParent );
+        explicit TypeSelectionPage( OAddessBookSourcePilot* _pParent );
         virtual ~TypeSelectionPage();
         virtual void        dispose() SAL_OVERRIDE;
 

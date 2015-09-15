@@ -72,7 +72,7 @@ class BibPosListener    :public cppu::WeakImplHelper <sdbc::XRowSetListener>
 {
     VclPtr<BibGeneralPage>     pParentPage;
 public:
-    BibPosListener(BibGeneralPage* pParent);
+    explicit BibPosListener(BibGeneralPage* pParent);
 
     //XPositioningListener
     virtual void SAL_CALL cursorMoved(const lang::EventObject& event) throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;

@@ -54,7 +54,7 @@ class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
 {
     public:
 
-        LdapUserProfileBe(const uno::Reference<uno::XComponentContext>& xContext);
+        explicit LdapUserProfileBe(const uno::Reference<uno::XComponentContext>& xContext);
         virtual ~LdapUserProfileBe() ;
 
         // XServiceInfo

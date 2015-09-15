@@ -41,7 +41,7 @@ namespace dbp
                     mxContext;
 
     public:
-        OOptionGroupLayouter(
+        explicit OOptionGroupLayouter(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
             );
 

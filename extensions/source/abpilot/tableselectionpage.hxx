@@ -34,7 +34,7 @@ namespace abp
         VclPtr<ListBox>        m_pTableList;
 
     public:
-        TableSelectionPage( OAddessBookSourcePilot* _pParent );
+        explicit TableSelectionPage( OAddessBookSourcePilot* _pParent );
         virtual ~TableSelectionPage();
         virtual void dispose() SAL_OVERRIDE;
     protected:

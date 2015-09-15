@@ -187,7 +187,10 @@ namespace abp
         Reference< XNameAccess >            xContext;           /// the UNO data source context
         StringBag                           aDataSourceNames;   /// for quicker name checks (without the UNO overhead)
 
-        ODataSourceContextImpl( const Reference< XComponentContext >& _rxORB ) : xORB( _rxORB ) { }
+        explicit ODataSourceContextImpl(const Reference< XComponentContext >& _rxORB)
+            : xORB(_rxORB)
+        {
+        }
     };
 
     ODataSourceContext::ODataSourceContext(const Reference< XComponentContext >& _rxORB)
@@ -321,9 +324,9 @@ namespace abp
         OUString                         sName;
         bool                                bTablesUpToDate;    // table name cache up-to-date?
 
-        ODataSourceImpl( const Reference< XComponentContext >& _rxORB )
-            :xORB( _rxORB )
-            ,bTablesUpToDate( false )
+        explicit ODataSourceImpl(const Reference< XComponentContext >& _rxORB)
+            : xORB(_rxORB)
+            , bTablesUpToDate(false)
         {
         }
 
