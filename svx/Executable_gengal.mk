@@ -63,13 +63,13 @@ endif
 
 ifeq ($(ENABLE_HEADLESS),TRUE)
 $(eval $(call gb_Executable_add_libs,gengal,\
-	-ldl \
+	$(if $(DLOPEN_NEEDS_LIBDL), -ldl) \
 	-lpthread \
 ))
 else
-ifeq ($(OS),LINUX)
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,gengal,\
-	-ldl \
+	$(if $(DLOPEN_NEEDS_LIBDL), -ldl) \
 	-lpthread \
     -lGL \
     -lX11 \

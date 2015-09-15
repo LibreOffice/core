@@ -21,7 +21,7 @@ $(eval $(call gb_Executable_use_libraries,tilebench,\
 
 $(eval $(call gb_Executable_add_libs,tilebench,\
     -lm \
-    -ldl \
+    $(if $(DLOPEN_NEEDS_LIBDL), -ldl) \
     -lpthread \
 ))
 

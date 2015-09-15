@@ -63,10 +63,10 @@ $(eval $(call gb_Library_add_exception_objects,desktop_detector,\
     vcl/unx/generic/desktopdetect/desktopdetector \
 ))
 
-ifeq ($(OS),LINUX)
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,desktop_detector,\
 	-lm \
-	-ldl \
+	$(if $(DLOPEN_NEEDS_LIBDL), -ldl) \
 	-lpthread \
 ))
 endif

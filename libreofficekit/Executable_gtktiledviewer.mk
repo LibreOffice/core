@@ -38,10 +38,10 @@ $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
     -lICE \
 ))
 
-ifeq ($(OS),LINUX)
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
     -lm \
-    -ldl \
+    $(if $(DLOPEN_NEEDS_LIBDL), -ldl) \
     -lpthread \
 ))
 endif

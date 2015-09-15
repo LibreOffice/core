@@ -68,13 +68,13 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svptest \
         svpclient \
         pixelctl ) \
-	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
-	$(if $(filter LINUX MACOSX WNT,$(OS)),icontest \
+	$(if $(and $(ENABLE_GTK), $(filter LINUX %BSD SOLARIS,$(OS))), tilebench) \
+	$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)),icontest \
 	    outdevgrind) \
 	vcldemo \
 	tiledrendering \
     mtfdemo \
-	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
+	$(if $(and $(ENABLE_GTK), $(filter LINUX %BSD SOLARIS,$(OS))), gtktiledviewer) \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
@@ -578,7 +578,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	i18nlangtag \
 	i18nutil \
 	index_data \
-	$(if $(and $(ENABLE_GTK3), $(filter LINUX,$(OS))), libreofficekitgtk) \
+	$(if $(and $(ENABLE_GTK3), $(filter LINUX %BSD SOLARIS,$(OS))), libreofficekitgtk) \
 	localedata_en \
 	localedata_es \
 	localedata_euro \
