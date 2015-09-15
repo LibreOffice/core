@@ -1850,8 +1850,15 @@ lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pLOKDocView)
 {
     LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(pLOKDocView));
-    return GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/0, /*error=*/0,
-                                     "lopath", priv->m_aLOPath, "lopointer", priv->m_pOffice, "docpointer", priv->m_pDocument, NULL));
+    GtkWidget* pDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/0, /*error=*/0,
+                                                    "lopath", priv->m_aLOPath, "lopointer", priv->m_pOffice, "docpointer", priv->m_pDocument, NULL));
+
+    // No documentLoad(), just a createView().
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
+    pDocument->pClass->createView(pDocument);
+
+    postDocumentLoad(pDocView);
+    return pDocView;
 }
 
 /**
