@@ -30,7 +30,6 @@ static int help()
     return 1;
 }
 
-static GtkWidget* pStatusBar;
 static GtkToolItem* pEnableEditing;
 static GtkToolItem* pBold;
 static GtkToolItem* pItalic;
@@ -49,13 +48,16 @@ static GtkWidget* pFindbar;
 static GtkWidget* pFindbarEntry;
 static GtkWidget* pFindbarLabel;
 
+/// Represents all the state that is specific to one GtkWindow of this app.
 class TiledWindow
 {
 public:
     GtkWidget* m_pDocView;
+    GtkWidget* m_pStatusBar;
 
     TiledWindow()
-        : m_pDocView(0)
+        : m_pDocView(0),
+        m_pStatusBar(0)
     {
     }
 };
@@ -462,8 +464,10 @@ static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
     }
 }
 
-static void removeChildrenFromStatusbar(GtkWidget* children, gpointer)
+static void removeChildrenFromStatusbar(GtkWidget* children, gpointer pData)
 {
+    GtkWidget* pStatusBar = static_cast<GtkWidget*>(pData);
+
     gtk_container_remove(GTK_CONTAINER(pStatusBar), children);
 }
 
@@ -491,6 +495,7 @@ static void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
 static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpointer /*userdata*/)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (source_object);
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pDocView));
     GError* error = NULL;
     GList *focusChain = NULL;
 
@@ -509,7 +514,7 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
     focusChain = g_list_append( focusChain, pDocView );
     gtk_container_set_focus_chain ( GTK_CONTAINER (pVBox), focusChain );
 
-    gtk_widget_hide (pStatusBar);
+    gtk_widget_hide(rWindow.m_pStatusBar);
 }
 
 int main( int argc, char* argv[] )
@@ -692,8 +697,8 @@ int main( int argc, char* argv[] )
     GtkWidget* pProgressBar = gtk_progress_bar_new ();
     g_signal_connect(pDocView, "load-changed", G_CALLBACK(loadChanged), pProgressBar);
 
-    pStatusBar = gtk_statusbar_new ();
-    gtk_container_forall(GTK_CONTAINER(pStatusBar), removeChildrenFromStatusbar, NULL);
+    GtkWidget* pStatusBar = gtk_statusbar_new ();
+    gtk_container_forall(GTK_CONTAINER(pStatusBar), removeChildrenFromStatusbar, pStatusBar);
     gtk_container_add (GTK_CONTAINER(pVBox), pStatusBar);
     gtk_container_add (GTK_CONTAINER(pStatusBar), pProgressBar);
     gtk_widget_set_hexpand(pProgressBar, true);
@@ -704,6 +709,7 @@ int main( int argc, char* argv[] )
 
     TiledWindow aWindow;
     aWindow.m_pDocView = pDocView;
+    aWindow.m_pStatusBar = pStatusBar;
     g_aWindows[pWindow] = aWindow;
 
     lok_doc_view_open_document( LOK_DOC_VIEW(pDocView), argv[2], NULL, openDocumentCallback, pDocView );
