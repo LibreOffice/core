@@ -23,7 +23,7 @@
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -36,7 +36,7 @@ namespace dbaccess
 
     struct DocumentEventExecutor_Data;
     // DocumentEventExecutor
-    typedef ::cppu::WeakImplHelper1 <   css::document::XDocumentEventListener
+    typedef ::cppu::WeakImplHelper <   css::document::XDocumentEventListener
                                     >   DocumentEventExecutor_Base;
     class DocumentEventExecutor : public DocumentEventExecutor_Base
     {

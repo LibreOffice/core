@@ -24,7 +24,7 @@
 
 #include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
-#include "cppuhelper/compbase1.hxx"
+#include <cppuhelper/compbase.hxx>
 #include "cppuhelper/component_context.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 #include "jvmaccess/unovirtualmachine.hxx"
@@ -36,7 +36,7 @@ struct MutexHolder
 {
     ::osl::Mutex m_mutex;
 };
-typedef ::cppu::WeakComponentImplHelper1<
+typedef ::cppu::WeakComponentImplHelper<
     css::lang::XSingleComponentFactory > t_impl;
 
 class SingletonFactory : public MutexHolder, public t_impl

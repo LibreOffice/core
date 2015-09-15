@@ -11,7 +11,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTSIDEBAR_MODIFYLISTENER_HXX
 
 #include <com/sun/star/util/XModifyListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace chart {
 namespace sidebar {
@@ -26,7 +26,7 @@ public:
     virtual void modelInvalid() = 0;
 };
 
-class ChartSidebarModifyListener : public cppu::WeakImplHelper1<css::util::XModifyListener>
+class ChartSidebarModifyListener : public cppu::WeakImplHelper<css::util::XModifyListener>
 {
 public:
 

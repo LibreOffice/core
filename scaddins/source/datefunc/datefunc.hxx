@@ -32,7 +32,7 @@
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 #include <com/sun/star/sheet/addin/XDateFunctions.hpp>
 #include <com/sun/star/sheet/addin/XMiscFunctions.hpp>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>
@@ -175,7 +175,7 @@ struct FindScaFuncData
 
 // THE AddIn class for date functions
 
-class ScaDateAddIn : public ::cppu::WeakImplHelper6<
+class ScaDateAddIn : public ::cppu::WeakImplHelper<
                                 ::com::sun::star::sheet::XAddIn,
                                 ::com::sun::star::sheet::XCompatibilityNames,
                                 ::com::sun::star::sheet::addin::XDateFunctions,

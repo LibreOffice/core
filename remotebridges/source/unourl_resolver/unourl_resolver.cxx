@@ -27,7 +27,7 @@
 #include <com/sun/star/connection/XConnector.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "cppuhelper/unourl.hxx"
@@ -59,7 +59,7 @@ OUString resolver_getImplementationName()
     return OUString(IMPLNAME);
 }
 
-class ResolverImpl : public WeakImplHelper2< XServiceInfo, XUnoUrlResolver >
+class ResolverImpl : public WeakImplHelper< XServiceInfo, XUnoUrlResolver >
 {
     Reference< XMultiComponentFactory > _xSMgr;
     Reference< XComponentContext > _xCtx;

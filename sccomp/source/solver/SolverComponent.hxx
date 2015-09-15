@@ -25,7 +25,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
@@ -54,7 +54,7 @@ struct ScSolverCellEqual
 
 typedef std::unordered_map< css::table::CellAddress, std::vector<double>, ScSolverCellHash, ScSolverCellEqual > ScSolverCellHashMap;
 
-typedef cppu::WeakImplHelper3<
+typedef cppu::WeakImplHelper<
                 com::sun::star::sheet::XSolver,
                 com::sun::star::sheet::XSolverDescription,
                 com::sun::star::lang::XServiceInfo >

@@ -26,13 +26,13 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class LotusWordProImportFilter : public cppu::WeakImplHelper5
+class LotusWordProImportFilter : public cppu::WeakImplHelper
 <
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,

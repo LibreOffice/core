@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/mutex.hxx>
 
@@ -35,7 +35,7 @@ class AccObjectManagerAgent;
  * methods.
  */
 class AccEventListener
-    : public ::cppu::WeakImplHelper1<
+    : public ::cppu::WeakImplHelper<
         com::sun::star::accessibility::XAccessibleEventListener>
 {
 protected:

@@ -22,6 +22,7 @@
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <svgio/svgreader/svgdocument.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace svgio { namespace svgreader { class SvgCharacterNode; }}
 
@@ -29,7 +30,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        class SvgDocHdl : public cppu::WeakImplHelper1< com::sun::star::xml::sax::XDocumentHandler >
+        class SvgDocHdl : public cppu::WeakImplHelper< com::sun::star::xml::sax::XDocumentHandler >
         {
         private:
             // the complete SVG Document

@@ -39,7 +39,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/util/URL.hpp"
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase.hxx>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
@@ -62,7 +62,7 @@ struct Result: private boost::noncopyable {
 };
 
 class Listener:
-    public cppu::WeakImplHelper1< css::frame::XDispatchResultListener >
+    public cppu::WeakImplHelper< css::frame::XDispatchResultListener >
 {
 public:
     explicit Listener(Result * result): result_(result) { OSL_ASSERT(result != 0); }
@@ -87,7 +87,7 @@ void Listener::dispatchFinished(css::frame::DispatchResultEvent const & Result)
     result_->condition.set();
 }
 
-class Callback: public cppu::WeakImplHelper1< css::awt::XCallback > {
+class Callback: public cppu::WeakImplHelper< css::awt::XCallback > {
 public:
     Callback(
         css::uno::Reference< css::frame::XNotifyingDispatch > const & dispatch,

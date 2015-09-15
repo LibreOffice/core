@@ -27,7 +27,7 @@
 
 #include "iahndl.hxx"
 #include <comphelper/namedvaluecollection.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
@@ -35,7 +35,7 @@ using namespace com::sun::star;
 namespace {
 
 class UUIInteractionHandler:
-    public cppu::WeakImplHelper3< com::sun::star::lang::XServiceInfo,
+    public cppu::WeakImplHelper< com::sun::star::lang::XServiceInfo,
                                   com::sun::star::lang::XInitialization,
                                   com::sun::star::task::XInteractionHandler2 >,
     private boost::noncopyable

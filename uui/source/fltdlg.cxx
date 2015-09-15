@@ -22,7 +22,7 @@
 #include "ids.hrc"
 
 #include <com/sun/star/util/XStringWidth.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/urlobj.hxx>
 
 #include <vcl/button.hxx>
@@ -165,7 +165,7 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
     @seealso    method InetURLObject::getAbbreviated()
     @threadsafe no
 *//*-*************************************************************************************************************/
-class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
+class StringCalculator : public ::cppu::WeakImplHelper< ::com::sun::star::util::XStringWidth >
 {
     public:
         explicit StringCalculator( const OutputDevice* pDevice )

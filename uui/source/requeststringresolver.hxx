@@ -24,12 +24,12 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class UUIInteractionHelper;
 
 class UUIInteractionRequestStringResolver:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         com::sun::star::lang::XServiceInfo,
         com::sun::star::task::XInteractionRequestStringResolver >
 {

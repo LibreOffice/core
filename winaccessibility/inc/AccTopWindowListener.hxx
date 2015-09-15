@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include  "AccObjectManagerAgent.hxx"
 
@@ -36,7 +36,7 @@
  * cached into bridge managers, and they are monitored by listeners for later accessible event handling.
  */
 class AccTopWindowListener
-    : public ::cppu::WeakImplHelper1<com::sun::star::awt::XTopWindowListener>
+    : public ::cppu::WeakImplHelper<com::sun::star::awt::XTopWindowListener>
 {
 private:
     AccObjectManagerAgent accManagerAgent;
