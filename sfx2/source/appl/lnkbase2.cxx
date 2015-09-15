@@ -247,17 +247,14 @@ SvBaseLink::~SvBaseLink()
     delete pImpl;
 }
 
-IMPL_LINK( SvBaseLink, EndEditHdl, OUString*, _pNewName )
+IMPL_LINK_TYPED( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )
 {
-    OUString sNewName;
-    if ( _pNewName )
-        sNewName = *_pNewName;
+    OUString sNewName = _rNewName;
     if ( !ExecuteEdit( sNewName ) )
         sNewName.clear();
     bWasLastEditOK = !sNewName.isEmpty();
     if ( pImpl->m_aEndEditLink.IsSet() )
         pImpl->m_aEndEditLink.Call( this );
-    return 0;
 }
 
 
@@ -484,7 +481,7 @@ void SvBaseLink::Edit( vcl::Window* pParent, const Link<>& rEndEditHdl )
         _GetRealObject( xObj.Is() );
 
     bool bAsync = false;
-    Link<> aLink = LINK( this, SvBaseLink, EndEditHdl );
+    Link<const OUString&, void> aLink = LINK( this, SvBaseLink, EndEditHdl );
 
     if( OBJECT_CLIENT_SO & nObjType && pImplData->ClientType.bIntrnlLnk )
     {

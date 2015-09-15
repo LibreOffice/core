@@ -266,13 +266,13 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
     return true;
 }
 
-void SvDDEObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link<>& rEndEditHdl )
+void SvDDEObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link<const OUString&, void>& rEndEditHdl )
 {
     ScopedVclPtrInstance< SvDDELinkEditDialog > aDlg(pParent, pBaseLink);
     if ( RET_OK == aDlg->Execute() && rEndEditHdl.IsSet() )
     {
         OUString sCommand = aDlg->GetCmd();
-        rEndEditHdl.Call( &sCommand );
+        rEndEditHdl.Call( sCommand );
     }
 }
 

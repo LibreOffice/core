@@ -59,7 +59,7 @@ public:
                                 bool bSynchron = false ) SAL_OVERRIDE;
 
     virtual bool    Connect( SvBaseLink * ) SAL_OVERRIDE;
-    virtual void    Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link<>& rEndEditHdl ) SAL_OVERRIDE;
+    virtual void    Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link<const OUString&, void>& rEndEditHdl ) SAL_OVERRIDE;
 
     virtual bool    IsPending() const SAL_OVERRIDE;
     virtual bool    IsDataComplete() const SAL_OVERRIDE;

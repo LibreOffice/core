@@ -392,7 +392,7 @@ OUString impl_getFilter( const OUString& _rURL )
     return sFilter;
 }
 
-void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Link<>& rEndEditHdl )
+void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Link<const OUString&, void>& rEndEditHdl )
 {
     aEndEditLink = rEndEditHdl;
     OUString sFile, sRange, sTmpFilter;
@@ -419,7 +419,7 @@ void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Li
                     sFile += aDlg.GetCurrentFilter();
 
                     if ( aEndEditLink.IsSet() )
-                        aEndEditLink.Call( &sFile );
+                        aEndEditLink.Call( sFile );
                 }
                 else
                     sFile.clear();
@@ -526,7 +526,7 @@ IMPL_LINK_TYPED( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileD
     }
 
     if ( aEndEditLink.IsSet() )
-        aEndEditLink.Call( &sFile );
+        aEndEditLink.Call( sFile );
 }
 
 /*  [Description]
