@@ -20,13 +20,12 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class WordPerfectImportFilter : public cppu::WeakImplHelper5
+class WordPerfectImportFilter : public cppu::WeakImplHelper
     <
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,
@@ -91,7 +90,7 @@ SAL_CALL WordPerfectImportFilter_createInstance(const ::com::sun::star::uno::Ref
 throw (::com::sun::star::uno::Exception);
 
 
-class WordPerfectImportFilterDialog : public cppu::WeakImplHelper3 <
+class WordPerfectImportFilterDialog : public cppu::WeakImplHelper <
     com::sun::star::ui::dialogs::XExecutableDialog,
     com::sun::star::lang::XServiceInfo,
     com::sun::star::beans::XPropertyAccess

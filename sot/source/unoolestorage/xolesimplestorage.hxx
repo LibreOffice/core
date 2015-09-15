@@ -30,7 +30,7 @@
 
 
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <osl/mutex.hxx>
@@ -38,7 +38,7 @@
 #include <sot/stg.hxx>
 
 
-class OLESimpleStorage  : public ::cppu::WeakImplHelper3
+class OLESimpleStorage  : public ::cppu::WeakImplHelper
     < ::com::sun::star::embed::XOLESimpleStorage
                 , ::com::sun::star::lang::XInitialization
                 , ::com::sun::star::lang::XServiceInfo >

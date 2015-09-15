@@ -18,7 +18,7 @@
  */
 
 #include <rtl/ref.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -57,7 +57,7 @@ static OUString getImplementationName_MSAAServiceImpl()
     return OUString( "com.sun.star.accessibility.my_sc_implementation.MSAAService" );
 }
 
-class MSAAServiceImpl : public ::cppu::WeakImplHelper2<
+class MSAAServiceImpl : public ::cppu::WeakImplHelper<
             XMSAAService, lang::XServiceInfo >
 {
 private:

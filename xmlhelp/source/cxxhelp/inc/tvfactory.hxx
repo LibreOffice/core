@@ -28,12 +28,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace treeview {
 
-class TVFactory: public cppu::WeakImplHelper2 <
+class TVFactory: public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::lang::XMultiServiceFactory >
     {

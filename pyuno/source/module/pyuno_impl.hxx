@@ -61,7 +61,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <osl/module.hxx>
@@ -346,7 +346,7 @@ public:
 };
 
 
-class Adapter : public cppu::WeakImplHelper2<
+class Adapter : public cppu::WeakImplHelper<
     com::sun::star::script::XInvocation, com::sun::star::lang::XUnoTunnel >
 {
     PyRef mWrappedObject;

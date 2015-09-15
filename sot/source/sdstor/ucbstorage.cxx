@@ -55,7 +55,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 
 #include "sot/stg.hxx"
@@ -81,7 +81,7 @@ static int nOpenFiles=0;
 static int nOpenStreams=0;
 #endif
 
-typedef ::cppu::WeakImplHelper2 < XInputStream, XSeekable > FileInputStreamWrapper_Base;
+typedef ::cppu::WeakImplHelper < XInputStream, XSeekable > FileInputStreamWrapper_Base;
 class FileStreamWrapper_Impl : public FileInputStreamWrapper_Base
 {
 protected:

@@ -11,7 +11,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_SIDEBAR_CHARTSIDEBARSELECTIONLISTENER_HXX
 
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "ObjectIdentifier.hxx"
 
@@ -30,7 +30,7 @@ public:
     virtual void SelectionInvalid() = 0;
 };
 
-class ChartSidebarSelectionListener : public cppu::WeakImplHelper1<css::view::XSelectionChangeListener>
+class ChartSidebarSelectionListener : public cppu::WeakImplHelper<css::view::XSelectionChangeListener>
 {
 public:
 

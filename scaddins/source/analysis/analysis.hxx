@@ -30,7 +30,7 @@
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 #include <com/sun/star/sheet/NoConvergenceException.hpp>
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "analysisdefs.hxx"
 #include "analysishelper.hxx"
@@ -44,7 +44,7 @@ class ResMgr;
 css::uno::Reference< css::uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
 
 
-class AnalysisAddIn : public cppu::WeakImplHelper5<
+class AnalysisAddIn : public cppu::WeakImplHelper<
                             css::sheet::XAddIn,
                             css::sheet::XCompatibilityNames,
                             css::sheet::addin::XAnalysis,

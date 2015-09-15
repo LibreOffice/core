@@ -36,7 +36,7 @@
 #include <com/sun/star/sheet/XAddIn.hpp>
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
 #include <com/sun/star/sheet/addin/XPricingFunctions.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/resid.hxx>
 #include <tools/rc.hxx>
 #include <tools/resary.hxx>
@@ -191,7 +191,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL PricingFunctionAddIn_Create
 
 // AddIn class for pricing functions
 
-class ScaPricingAddIn : public ::cppu::WeakImplHelper5<
+class ScaPricingAddIn : public ::cppu::WeakImplHelper<
                                 css::sheet::XAddIn,
                                 css::sheet::XCompatibilityNames,
                                 css::sheet::addin::XPricingFunctions,

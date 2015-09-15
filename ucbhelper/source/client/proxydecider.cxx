@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "ucbhelper/proxydecider.hxx"
 
 using namespace com::sun::star;
@@ -116,7 +116,7 @@ public:
 
 
 class InternetProxyDecider_Impl :
-    public cppu::WeakImplHelper1< util::XChangesListener >
+    public cppu::WeakImplHelper< util::XChangesListener >
 {
     mutable osl::Mutex                       m_aMutex;
     InternetProxyServer                      m_aHttpProxy;

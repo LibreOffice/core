@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UUI_SOURCE_PASSWORDCONTAINER_HXX
 #define INCLUDED_UUI_SOURCE_PASSWORDCONTAINER_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -137,7 +137,7 @@ private:
 
 
 class PasswordContainerInteractionHandler :
-        public cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo,
+        public cppu::WeakImplHelper< com::sun::star::lang::XServiceInfo,
                                       com::sun::star::task::XInteractionHandler2 >
 {
 public:

@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace treeview {
 
@@ -61,7 +61,7 @@ namespace treeview {
     class TVDom;
     class TVChildTarget;
 
-    class TVBase : public cppu::WeakImplHelper4 <
+    class TVBase : public cppu::WeakImplHelper <
         css::container::XNameAccess,
         css::container::XHierarchicalNameAccess,
         css::util::XChangesNotifier,

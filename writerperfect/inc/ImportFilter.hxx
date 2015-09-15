@@ -28,8 +28,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <osl/diagnose.h>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <unotools/mediadescriptor.hxx>
 
@@ -47,7 +46,7 @@ namespace detail
 {
 
 template<class Generator>
-class ImportFilterImpl : public cppu::WeakImplHelper4
+class ImportFilterImpl : public cppu::WeakImplHelper
     <
     com::sun::star::document::XFilter,
     com::sun::star::document::XImporter,
@@ -192,10 +191,10 @@ private:
 /** A base class for import filters.
  */
 template<class Generator>
-struct ImportFilter : public cppu::ImplInheritanceHelper1<detail::ImportFilterImpl<Generator>, com::sun::star::lang::XServiceInfo>
+struct ImportFilter : public cppu::ImplInheritanceHelper<detail::ImportFilterImpl<Generator>, com::sun::star::lang::XServiceInfo>
 {
     ImportFilter(const css::uno::Reference<css::uno::XComponentContext> &rxContext)
-        : cppu::ImplInheritanceHelper1<detail::ImportFilterImpl<Generator>, com::sun::star::lang::XServiceInfo>(rxContext)
+        : cppu::ImplInheritanceHelper<detail::ImportFilterImpl<Generator>, com::sun::star::lang::XServiceInfo>(rxContext)
     {
     }
 };

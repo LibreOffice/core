@@ -27,7 +27,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 #include <cppuhelper/weak.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ucb/CheckinArgument.hpp>
 #include <com/sun/star/ucb/ContentCreationError.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -76,7 +76,7 @@ using namespace com::sun::star::uno;
 namespace ucbhelper
 {
 
-class EmptyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
+class EmptyInputStream : public ::cppu::WeakImplHelper< XInputStream >
 {
 public:
     virtual sal_Int32 SAL_CALL readBytes(
