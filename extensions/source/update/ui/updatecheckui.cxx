@@ -143,7 +143,7 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper
     sal_uInt16              mnIconID;
 
 private:
-                    DECL_LINK(ClickHdl, void *);
+                    DECL_LINK_TYPED(ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
                     DECL_LINK( HighlightHdl, MenuBar::MenuBarButtonCallbackArg* );
                     DECL_LINK_TYPED(WaitTimeOutHdl, Idle *, void);
                     DECL_LINK_TYPED(TimeOutHdl, Timer *, void);
@@ -578,7 +578,7 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 }
 
 
-IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl)
+IMPL_LINK_NOARG_TYPED(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool)
 {
     SolarMutexGuard aGuard;
 
@@ -597,7 +597,7 @@ IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl)
         }
     }
 
-    return 0;
+    return false;
 }
 
 

@@ -68,7 +68,7 @@ private:
     struct AddButtonEntry
     {
         sal_uInt16    m_nId;
-        Link<>        m_aSelectLink;
+        Link<MenuBar::MenuBarButtonCallbackArg&,bool>  m_aSelectLink;
         Link<>        m_aHighlightLink;
 
         AddButtonEntry() : m_nId( 0 ) {}
@@ -142,7 +142,7 @@ public:
     Size            MinCloseButtonSize();
 
     /// Add an arbitrary button to the menubar that will appear next to the close button.
-    sal_uInt16 AddMenuBarButton(const Image&, const Link<>&, const OUString&);
+    sal_uInt16 AddMenuBarButton(const Image&, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&, const OUString&);
     void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link<>&);
     Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId);
     void RemoveMenuBarButton(sal_uInt16 nId);

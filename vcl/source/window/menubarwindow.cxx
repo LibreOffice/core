@@ -246,7 +246,7 @@ IMPL_LINK_NOARG_TYPED(MenuBarWindow, CloseHdl, ToolBox *, void)
             aArg.nId = it->first;
             aArg.bHighlight = (aCloseBtn->GetHighlightItemId() == it->first);
             aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
-            it->second.m_aSelectLink.Call( &aArg );
+            it->second.m_aSelectLink.Call( aArg );
         }
     }
 }
@@ -1125,7 +1125,7 @@ css::uno::Reference<css::accessibility::XAccessible> MenuBarWindow::CreateAccess
     return xAcc;
 }
 
-sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<>& i_rLink, const OUString& i_rToolTip )
+sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& i_rLink, const OUString& i_rToolTip )
 {
     // find first free button id
     sal_uInt16 nId = IID_DOCUMENTCLOSE;
@@ -1203,7 +1203,7 @@ bool MenuBarWindow::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
         aArg.nId = it->first;
         aArg.bHighlight = true;
         aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
-        return it->second.m_aSelectLink.Call( &aArg );
+        return it->second.m_aSelectLink.Call( aArg );
     }
     return false;
 }
