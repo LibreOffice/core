@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/perl -w
 #
 # $Id: gcov_filter.pl,v 1.4 2005-11-02 17:23:57 kz Exp $
 #

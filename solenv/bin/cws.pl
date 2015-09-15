@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/perl -w
 #**************************************************************
 #
 #  Licensed to the Apache Software Foundation (ASF) under one

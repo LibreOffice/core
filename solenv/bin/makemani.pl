@@ -1,4 +1,4 @@
-#!/usr/bin/env perl -w
+#! /usr/bin/perl -w
     eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
         if 0; #$running_under_some_shell
 #**************************************************************
