@@ -1416,6 +1416,8 @@ private:
     sal_Int32 SearchNext( sal_Int32 nStartPos );
     void SetCharSet(const EECharAttrib& rTextAttr, bool bStart);
 
+    void SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemSet& rSet);
+
     MSWord_SdrAttrIter(const MSWord_SdrAttrIter&) SAL_DELETED_FUNCTION;
     MSWord_SdrAttrIter& operator=(const MSWord_SdrAttrIter&) SAL_DELETED_FUNCTION;
 public:

@@ -28,6 +28,7 @@
 #include <sot/storage.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
@@ -88,6 +89,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include "docsh.hxx"
+#include "IDocumentStylePoolAccess.hxx"
 #include <oox/ole/olehelper.hxx>
 #include <fstream>
 #include <unotools/streamwrap.hxx>
@@ -1308,10 +1310,43 @@ const SfxPoolItem& MSWord_SdrAttrIter::GetItem( sal_uInt16 nWhich ) const
     return *pRet;
 }
 
+//Drawing shapes properties inherit from a different pool that the document
+//styles. On export to .doc[x] they will default to style "Normal". Here explicitly
+//set any items which are not already set, but differ from "Normal".
+void MSWord_SdrAttrIter::SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemSet& rSet)
+{
+    SwTextFormatColl* pC = m_rExport.m_pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool
+        (RES_POOLCOLL_STANDARD, false);
+
+    SfxWhichIter aWhichIter(rSet);
+    for (sal_uInt16 nEEWhich = aWhichIter.FirstWhich(); nEEWhich; nEEWhich = aWhichIter.NextWhich())
+    {
+        if (SfxItemState::SET != rSet.GetItemState(nEEWhich, false))
+        {
+            sal_uInt16 nSwWhich = sw::hack::TransformWhichBetweenPools(m_rExport.m_pDoc->GetAttrPool(),
+                *pEditPool, nEEWhich);
+            if (!nSwWhich)
+                continue;
+            bool bWanted = ( bCharAttr ? ( nSwWhich >= RES_CHRATR_BEGIN && nSwWhich < RES_TXTATR_END )
+                            : ( nSwWhich >= RES_PARATR_BEGIN && nSwWhich < RES_FRMATR_END ) );
+            if (!bWanted)
+                continue;
+
+            const SfxPoolItem& rDrawItem = rSet.Get(nEEWhich);
+            const SfxPoolItem& rStandardItem = pC->GetFormatAttr(nSwWhich);
+            if (rDrawItem != rStandardItem)
+                rSet.Put(rDrawItem);
+        }
+    }
+}
+
 void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>* pWhichsToIgnore)
 {
     SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
-    if( aSet.Count() )
+
+    SetItemsThatDifferFromStandard(bCharAttr, aSet);
+
+    if (aSet.Count())
     {
         const SfxItemSet* pOldSet = m_rExport.GetCurItemSet();
         m_rExport.SetCurItemSet( &aSet );
@@ -1325,7 +1360,6 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
         do
         {
             sal_uInt16 nWhich = pItem->Which();
-
             if (pWhichsToIgnore && pWhichsToIgnore->find(nWhich) != pWhichsToIgnore->end())
                 continue;
 
@@ -1341,7 +1375,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
                 SfxPoolItem* pI = pItem->Clone();
                 pI->SetWhich( nWhich );
                 if (m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
-                    m_rExport.AttrOutput().OutputItem( *pI );
+                    m_rExport.AttrOutput().OutputItem(*pI);
                 delete pI;
             }
         } while( !aIter.IsAtEnd() && 0 != ( pItem = aIter.NextItem() ) );
