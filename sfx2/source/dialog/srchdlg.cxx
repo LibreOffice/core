@@ -140,7 +140,7 @@ IMPL_LINK_NOARG_TYPED(SearchDialog, FindHdl, Button*, void)
         m_pSearchEdit->RemoveEntryAt(nPos);
     if ( nPos > 0 )
         m_pSearchEdit->InsertEntry( sSrchTxt, 0 );
-    m_aFindHdl.Call( this );
+    m_aFindHdl.Call( *this );
 }
 
 void SearchDialog::SetFocusOnEdit()

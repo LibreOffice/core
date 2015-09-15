@@ -2256,7 +2256,11 @@ IMPL_LINK_NOARG_TYPED( SfxHelpTextWindow_Impl, NotifyHdl, LinkParamNone*, void )
 
 
 
-IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
+IMPL_LINK_TYPED( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog&, rDlg, void )
+{
+    FindHdl(&rDlg);
+}
+void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
 {
     bool bWrapAround = ( NULL == pDlg );
     if ( bWrapAround )
@@ -2334,8 +2338,6 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
     {
         OSL_FAIL( "SfxHelpTextWindow_Impl::SelectHdl(): unexpected exception" );
     }
-
-    return 0;
 }
 
 
