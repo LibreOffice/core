@@ -17,8 +17,8 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
 ))
 
 $(eval $(call gb_Library_add_libs,sofficeapp,\
-    $(if $(filter $(OS),LINUX), \
-        -ldl \
+    $(if $(filter LINUX %BSD SOLARIS, $(OS)), \
+        $(if $(DLOPEN_NEEDS_LIBDL), -ldl) \
         -lpthread \
     ) \
 ))
@@ -100,18 +100,18 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 ifeq ($(ENABLE_HEADLESS),TRUE)
 $(eval $(call gb_Library_add_libs,sofficeapp,\
 	-lm \
-	-ldl \
+       $(if $(DLOPEN_NEEDS_LIBDL), -ldl) \
 	-lpthread \
 ))
 else
-ifeq ($(OS),LINUX)
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_use_static_libraries,sofficeapp,\
     glxtest \
 ))
 
 $(eval $(call gb_Library_add_libs,sofficeapp,\
 	-lm \
-	-ldl \
+       $(if $(DLOPEN_NEEDS_LIBDL), -ldl) \
 	-lpthread \
     -lGL \
     -lX11 \
