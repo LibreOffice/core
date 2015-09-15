@@ -17,53 +17,42 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_HWPFILTER_SOURCE_HFONT_H
-#define INCLUDED_HWPFILTER_SOURCE_HFONT_H
+#ifndef INCLUDED_HWPFILTER_SOURCE_HSTREAM_H
+#define INCLUDED_HWPFILTER_SOURCE_HSTREAM_H
 
-#include <stdlib.h>
-#include <string.h>
+#include <vector>
 
-#define MAXFONTS    256
-#define FONTNAMELEN 40
-
-class HWPFile;
-
+typedef unsigned char byte;
 /**
- * The HWPFont class has the font list for the document when it's saved.
- * @short Font information
+ * Stream class
  */
-class DLLEXPORT HWPFont
+class HStream
 {
-    protected:
-/**
- * System font count for each language
- * NLanguage is 7 in common case.
- */
-        int   nFonts[NLanguage];
-/**
- * list of the font family name
- */
-        char  *fontnames[NLanguage];
-
     public:
-        HWPFont(void);
-        ~HWPFont(void);
+        HStream();
 
 /**
- * Adds a font into font list of a language
- * @param lang Language index
- * @param font Name of font family
+ *
  */
-        int       AddFont( int lang, const char *font );
+        void addData( const byte *buf, int aToAdd);
 /**
- * @param lang Language index
- * @param id Index of font
- * @returns Font name
+ * Read some byte to buf as given size
  */
-        const char    *GetFontName( int lang, int id );
+        int readBytes( byte *buf, int aToRead);
+/**
+ * Skip some byte from stream as given size
+ */
+        int skipBytes( int aToSkip );
+/**
+ * @returns Size of remained stream
+ */
+        int available() const;
 
-        bool Read( HWPFile &hwpf );
+    private:
+        int size;
+        std::vector<byte> seq;
+        int pos;
 };
-#endif                                            /* _HWPFONTS+H_ */
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

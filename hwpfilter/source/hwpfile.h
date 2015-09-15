@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//
+
 // hwpfile.h
 // (C) 1998 Mizi Research, All rights are reserved
-//
 
-#ifndef _HWPFILE_H_
-#define _HWPFILE_H_
+
+#ifndef INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
+#define INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 
 #include <list>
 #include <stdio.h>
@@ -110,13 +110,13 @@ class DLLEXPORT HWPFile
  * @returns 0 if success, otherwise error code
  * @see State()
  */
-        int Open( HStream & );
+        int Open( HStream * );
 
 /**
  * Say current state
  * @returns 0 if normal, otherwise error code. If it's  bigger than USER_ERROR_BIT, it is internally using error, otherwise it's system error which is able to get the message @ref strerror() method.
  */
-        int State( void ) const;
+        int State( void ) const { return error_code;}
 /**
  * Sets the current state
  */
@@ -124,15 +124,17 @@ class DLLEXPORT HWPFile
 /**
  * Reads one byte from HIODev
  */
-        int Read1b( void );
+        bool Read1b(char &out);
+        bool Read1b(unsigned char &out);
 /**
  * Reads two byte from HIODev
  */
-        int Read2b( void );
+        bool Read2b(unsigned short &out);
 /**
  * Reads four byte from HIODev
  */
-        long Read4b( void );
+        bool Read4b(unsigned int &out);
+        bool Read4b(int &out);
 /**
  * Reads nmemb byte array from HIODev
  */
@@ -170,7 +172,7 @@ class DLLEXPORT HWPFile
 /**
  * Reads all information of hwp file from stream
  */
-        int ReadHwpFile( HStream &);
+        int ReadHwpFile( HStream *);
 /**
  * Reads document information of hwp file from HIODev
  */
@@ -187,11 +189,11 @@ class DLLEXPORT HWPFile
  * Reads paragraph list of hwp file from HIODev
  */
         bool ParaListRead();
-/* ±◊∏≤ µÓ¿« √ﬂ∞° ¡§∫∏∏¶ ¿–¥¬¥Ÿ. */
+/* Í∑∏Î¶º Îì±Ïùò Ï∂îÍ∞Ä Ï†ïÎ≥¥Î•º ÏùΩÎäîÎã§. */
 /**
- * Reads additional information like embeded image of hwp file from HIODev
+ * Reads additional information like embedded image of hwp file from HIODev
  */
-        bool TagsRead(void);
+        void TagsRead();
 
         enum Paper
         {
@@ -222,16 +224,14 @@ class DLLEXPORT HWPFile
           int GetPageMasterNum(int page);
 
           int getCurrentPage(){ return m_nCurrentPage;}
-        HWPInfo *GetHWPInfo(void) { return &_hwpInfo; }
-        HWPFont *GetHWPFont(void) { return &_hwpFont; }
-        HWPStyle *GetHWPStyle(void) { return &_hwpStyle; }
+        HWPInfo& GetHWPInfo(void) { return _hwpInfo; }
+        HWPFont& GetHWPFont(void) { return _hwpFont; }
+        HWPStyle& GetHWPStyle(void) { return _hwpStyle; }
         HWPPara *GetFirstPara(void) { return plist.front(); }
-        HWPPara *GetLastPara(void) { return plist.back(); }
 
         EmPicture *GetEmPicture(Picture *pic);
         EmPicture *GetEmPictureByName(char * name);
         HyperText *GetHyperText();
-        FBox *GetBoxHead (void) { return blist.size()?blist.front():0; }
         ParaShape *getParaShape(int);
         CharShape *getCharShape(int);
         FBoxStyle *getFBoxStyle(int);
@@ -252,7 +252,7 @@ class DLLEXPORT HWPFile
           int getMaxSettedPage(){ return m_nMaxSettedPage; }
           void setMaxSettedPage(){ m_nMaxSettedPage = m_nCurrentPage; }
 
-    private :
+    private:
         int compareCharShape(CharShape *shape);
         int compareParaShape(ParaShape *shape);
 
@@ -266,7 +266,7 @@ class DLLEXPORT HWPFile
         OlePicture *oledata;
 
     private:
-/* hwp ∆ƒ¿œ ¿Ã∏ß */
+/* hwp ÌååÏùº Ïù¥Î¶Ñ */
           int           m_nCurrentPage;
           int m_nMaxSettedPage;
         HIODev    *hiodev;
@@ -283,7 +283,7 @@ class DLLEXPORT HWPFile
         std::list<EmPicture*> emblist;
         std::list<HyperText*> hyperlist;
         int currenthyper;
-        std::list<ParaShape*> pslist;             /* Ω∫≈∏ø¿««Ω∫¿« ±∏¡∂ªÛ « ø‰ */
+        std::list<ParaShape*> pslist;             /* Ïä§ÌÉÄÏò§ÌîºÏä§Ïùò Íµ¨Ï°∞ÏÉÅ ÌïÑÏöî */
         std::list<CharShape*> cslist;
         std::list<FBoxStyle*> fbslist;
         std::list<DateCode*> datecodes;
@@ -299,6 +299,6 @@ class DLLEXPORT HWPFile
 
 HWPFile *GetCurrentDoc(void);
 HWPFile *SetCurrentDoc(HWPFile *hwpfp);
-#endif                                            /* _HWPFILE_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _DRAWDEF_H_
-#define _DRAWDEF_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_DRAWDEF_H
+#define INCLUDED_HWPFILTER_SOURCE_DRAWDEF_H
 
 #include "hwplib.h"
 
@@ -44,21 +44,13 @@ enum objtype
 };
 
 #define HWPDO_PAT_TYPE_BITS 0xFF000000
-#define HWPDO_PAT_STYLE_BITS    0x00FFFFFF
 
 #define HWPDO_PAT_SOLID     0x00000000
-#define HWPDO_PAT_WIN_HATCHED   0x01000000
-#define HWPDO_PAT_BITMAP    0x02000000
 
 #define HWPDO_COLOR_NONE    0x10000000
 
-#define HWPDO_FLAG_ROUND_CORNER 0x00000001
 #define HWPDO_FLAG_DRAW_PIE 0x00000002
-#define HWPDO_FLAG_SEMICIRCLE   0x00000004
-#define HWPDO_FLAG_SCALE_BITMAP 0x00000008
 
-#define HWPDO_FLAG_LOCAL_BITS   0x0000ffff
-#define HWPDO_FLAG_PROPERTY_BITS 0x00ff0000
 
 #define HWPDO_FLAG_GRADATION    0x00010000
 #define HWPDO_FLAG_ROTATION 0x00020000
@@ -77,11 +69,11 @@ struct BAREHWPDOProperty
     int line_pstyle;
     int line_hstyle;
     int line_tstyle;
-    DWORD line_color;
+    unsigned int line_color;
     hunit line_width;
-    DWORD fill_color;
+    unsigned int fill_color;
     uint pattern_type;
-    DWORD pattern_color;
+    unsigned int pattern_color;
     hunit hmargin;
     hunit vmargin;
     uint flag;
@@ -127,14 +119,14 @@ struct RotationProperty
  */
 struct HWPDOProperty
 {
-    int line_pstyle; /* 선 중간 모양 */
-    int line_hstyle; /* 끝 화살표 모양 */
-    int line_tstyle; /* 시작 모양 */
-    DWORD line_color;
+    int line_pstyle; /* Style of the middle of line */
+    int line_hstyle; /* Style of the end of line */
+    int line_tstyle; /* Style of the start of line */
+    unsigned int line_color;
     hunit line_width;
-    DWORD fill_color;
+    unsigned int fill_color;
     uint pattern_type;
-    DWORD pattern_color;
+    unsigned int pattern_color;
     hunit hmargin;
     hunit vmargin;
     uint flag;
@@ -245,6 +237,6 @@ struct HWPDrawingObject
     HWPDrawingObject();
     ~HWPDrawingObject();
 };
-#endif                                            /* _DRAWDEF_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_DRAWDEF_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

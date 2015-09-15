@@ -22,10 +22,16 @@
  * (C) 1999 Mizi Research, All rights are reserved
  */
 
-#ifndef _HIODEV_H_
-#define _HIODEV_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HIODEV_H
+#define INCLUDED_HWPFILTER_SOURCE_HIODEV_H
+
+#include <sal/config.h>
 
 #include <stdio.h>
+
+#include <boost/scoped_ptr.hpp>
+#include <sal/types.h>
+
 #include "hwplib.h"
 /**
  * @short Abstract IO class
@@ -46,20 +52,22 @@ class DLLEXPORT HIODev
 /* gzip routine wrapper */
         virtual bool setCompressed( bool ) = 0;
 
-        virtual int read1b() = 0;
-        virtual int read2b() = 0;
-        virtual long read4b() = 0;
+        virtual bool read1b(unsigned char &out) = 0;
+        virtual bool read1b(char &out) = 0;
+        virtual bool read2b(unsigned short &out) = 0;
+        virtual bool read4b(unsigned int &out) = 0;
+        virtual bool read4b(int &out) = 0;
         virtual int readBlock( void *ptr, int size ) = 0;
         virtual int skipBlock( int size ) = 0;
 
-        virtual int read1b( void *ptr, int nmemb );
-        virtual int read2b( void *ptr, int nmemb );
-        virtual int read4b( void *ptr, int nmemb );
+        int read1b( void *ptr, int nmemb );
+        int read2b( void *ptr, int nmemb );
+        int read4b( void *ptr, int nmemb );
 };
 
 struct gz_stream;
 
-/* ∆ƒ¿œ ¿‘√‚∑¬ ¿Âƒ° */
+/* File input and output devices */
 
 /**
  * This controls the HStream given by constructor
@@ -68,11 +76,11 @@ struct gz_stream;
 class HStreamIODev : public HIODev
 {
     private:
-/* zlib¿∏∑Œ æ–√‡¿ª «Æ±‚ ¿ß«— ¿⁄∑· ±∏¡∂ */
+/* zlibÏúºÎ°ú ÏïïÏ∂ïÏùÑ ÌíÄÍ∏∞ ÏúÑÌïú ÏûêÎ£å Íµ¨Ï°∞ */
+        boost::scoped_ptr<HStream> _stream;
         gz_stream *_gzfp;
-        HStream& _stream;
     public:
-        HStreamIODev(HStream& stream);
+        HStreamIODev(HStream* stream);
         virtual ~HStreamIODev();
 /**
  * Check whether the stream is available
@@ -98,17 +106,19 @@ class HStreamIODev : public HIODev
  * Read one byte from stream
  */
         using HIODev::read1b;
-        virtual int read1b();
+        virtual bool read1b(unsigned char &out);
+        virtual bool read1b(char &out);
 /**
  * Read 2 bytes from stream
  */
         using HIODev::read2b;
-        virtual int read2b();
+        virtual bool read2b(unsigned short &out);
 /**
  * Read 4 bytes from stream
  */
         using HIODev::read4b;
-        virtual long read4b();
+        virtual bool read4b(unsigned int &out);
+        virtual bool read4b(int &out);
 /**
  * Read some bytes from stream to given pointer as amount of size
  */
@@ -124,7 +134,7 @@ class HStreamIODev : public HIODev
         virtual void init();
 };
 
-/* ∏ﬁ∏∏Æ ¿‘√‚∑¬ ¿Âƒ° */
+/* Memory, input and output devices */
 /**
  * The HMemIODev class controls the Input/Output device.
  * @short Memory IO device
@@ -144,16 +154,18 @@ class HMemIODev : public HIODev
 /* gzip routine wrapper */
         virtual bool setCompressed( bool );
         using HIODev::read1b;
-        virtual int read1b();
+        virtual bool read1b(unsigned char &out);
+        virtual bool read1b(char &out);
         using HIODev::read2b;
-        virtual int read2b();
+        virtual bool read2b(unsigned short &out);
         using HIODev::read4b;
-        virtual long read4b();
+        virtual bool read4b(unsigned int &out);
+        virtual bool read4b(int &out);
         virtual int readBlock( void *ptr, int size );
         virtual int skipBlock( int size );
     protected:
         virtual void init();
 };
-#endif                                            /* _HIODEV_H_*/
+#endif // INCLUDED_HWPFILTER_SOURCE_HIODEV_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

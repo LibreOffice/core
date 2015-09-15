@@ -28,7 +28,7 @@
 enum
 { MAXSTYLENAME = 20 };
 
-#define DATA ((StyleData *)style)
+#define DATA static_cast<StyleData *>(style)
 
 struct StyleData
 {
@@ -39,24 +39,20 @@ struct StyleData
 
 static char buffer[MAXSTYLENAME + 1];
 
-HWPStyle::HWPStyle(void)
+HWPStyle::HWPStyle()
 {
     nstyles = 0;
     style = 0;
 }
 
 
-HWPStyle::~HWPStyle(void)
+HWPStyle::~HWPStyle()
 {
     delete[]DATA;
     nstyles = 0;
 }
 
 
-int HWPStyle::Num(void) const
-{
-    return nstyles;
-}
 
 
 char *HWPStyle::GetName(int n) const

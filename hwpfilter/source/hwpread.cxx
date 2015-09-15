@@ -34,16 +34,16 @@ static short fboxnum = 1;
 static int zindex = 1;
 static int lnnumber = 0;
 
-int HBox::Read(HWPFile & )
+bool HBox::Read(HWPFile & )
 {
 // already read
-    return 1;
+    return true;
 }
 
 
 // skip block
 
-int SkipData::Read(HWPFile & hwpf)
+bool SkipData::Read(HWPFile & hwpf)
 {
     hwpf.Read4b(&data_block_len, 1);
     hwpf.Read2b(&dummy, 1);
@@ -59,14 +59,14 @@ int SkipData::Read(HWPFile & hwpf)
 
 
 // Field code(5)
-int FieldCode::Read(HWPFile & hwpf)
+bool FieldCode::Read(HWPFile & hwpf)
 {
-    ulong size;
+    uint size;
     hchar dummy;
-    ulong len1;       /* hchar≈∏¿‘¿« πÆ¿⁄ø≠ ≈◊¿Ã≈Õ #1¿« ±Ê¿Ã */
-    ulong len2;       /* hchar≈∏¿‘¿« πÆ¿⁄ø≠ ≈◊¿Ã≈Õ #2¿« ±Ê¿Ã */
-    ulong len3;       /* hchar≈∏¿‘¿« πÆ¿⁄ø≠ ≈◊¿Ã≈Õ #3¿« ±Ê¿Ã */
-    ulong binlen;     /* ¿”¿« «¸Ωƒ¿« πŸ¿Ã≥ ∏Æ µ•¿Ã≈∏ ±Ê¿Ã */
+    uint len1;       /* Length of hchar type string DATA #1 */
+    uint len2;       /* Length of hchar type string DATA #2 */
+    uint len3;       /* Length of hchar type string DATA #3 */
+    uint binlen;     /* Length of any binary data format */
 
     hwpf.Read4b(&size, 1);
     hwpf.Read2b(&dummy, 1);
@@ -79,9 +79,9 @@ int FieldCode::Read(HWPFile & hwpf)
     hwpf.Read4b(&len3, 1);
     hwpf.Read4b(&binlen, 1);
 
-    ulong const len1_ = ((len1 > 1024) ? 1024 : len1) / sizeof(hchar);
-    ulong const len2_ = ((len2 > 1024) ? 1024 : len2) / sizeof(hchar);
-    ulong const len3_ = ((len3 > 1024) ? 1024 : len3) / sizeof(hchar);
+    uint const len1_ = ((len1 > 1024) ? 1024 : len1) / sizeof(hchar);
+    uint const len2_ = ((len2 > 1024) ? 1024 : len2) / sizeof(hchar);
+    uint const len3_ = ((len3 > 1024) ? 1024 : len3) / sizeof(hchar);
 
     str1 = new hchar[len1_ ? len1_ : 1];
     str2 = new hchar[len2_ ? len2_ : 1];
@@ -100,7 +100,7 @@ int FieldCode::Read(HWPFile & hwpf)
 
     hwpf.ReadBlock(bin, binlen);
 
-     if( type[0] == 3 && type[1] == 2 ){ /* ∏∏µÁ≥Ø¬•∑Œº≠ ∆˜∏À¿ª ª˝º∫«ÿæﬂ «—¥Ÿ. */
+     if( type[0] == 3 && type[1] == 2 ){ /* It must create a format as created date. */
           DateCode *pDate = new DateCode;
           for (int i = 0 ; i < static_cast<int>(len3_); i++) {
                 if(str3[i] == 0 ) break;
@@ -114,14 +114,14 @@ int FieldCode::Read(HWPFile & hwpf)
     return true;
 }
 
-
 // book mark(6)
-int Bookmark::Read(HWPFile & hwpf)
+bool Bookmark::Read(HWPFile & hwpf)
 {
     long len;
 
     hwpf.Read4b(&len, 1);
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    if (!hwpf.Read2b(dummy))
+        return false;
 
     if (!(len == 34))// 2 * (BMK_COMMENT_LEN + 1) + 2
      {
@@ -133,31 +133,28 @@ int Bookmark::Read(HWPFile & hwpf)
 
     hwpf.Read2b(id, BMK_COMMENT_LEN + 1);
     hwpf.Read2b(&type, 1);
-//return hwpf.Read2b(&type, 1);
-    return 1;
+    return true;
 }
 
-
 // date format(7)
-
-int DateFormat::Read(HWPFile & hwpf)
+bool DateFormat::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(format, DATE_SIZE);
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    if (!hwpf.Read2b(dummy))
+        return false;
     if (!(hh == dummy && CH_DATE_FORM == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return true;
 }
 
-
 // date code(8)
-
-int DateCode::Read(HWPFile & hwpf)
+bool DateCode::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(format, DATE_SIZE);
     hwpf.Read2b(date, 6);
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    if (!hwpf.Read2b(dummy))
+        return false;
     if (!(hh == dummy && CH_DATE_CODE == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
@@ -165,29 +162,29 @@ int DateCode::Read(HWPFile & hwpf)
     return true;
 }
 
-
 // tab(9)
-
-int Tab::Read(HWPFile & hwpf)
+bool Tab::Read(HWPFile & hwpf)
 {
-    width = hwpf.Read2b();
-    leader = sal::static_int_cast<unsigned short>(hwpf.Read2b());
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    width = tmp16;
+    if (!hwpf.Read2b(leader))
+        return false;
+    if (!hwpf.Read2b(dummy))
+        return false;
     if (!(hh == dummy && CH_TAB == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return true;
 }
 
-
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
-
 static void UpdateBBox(FBox * fbox)
 {
     fbox->boundsy = fbox->pgy;
     fbox->boundey = fbox->pgy + fbox->ys - 1;
 }
-
 
 void Cell::Read(HWPFile & hwpf)
 {
@@ -211,7 +208,7 @@ void Cell::Read(HWPFile & hwpf)
 }
 
 
-int TxtBox::Read(HWPFile & hwpf)
+bool TxtBox::Read(HWPFile & hwpf)
 {
     int ii, ncell;
 
@@ -369,7 +366,7 @@ int TxtBox::Read(HWPFile & hwpf)
 
 
 // picture(11)
-int Picture::Read(HWPFile & hwpf)
+bool Picture::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
@@ -380,46 +377,55 @@ int Picture::Read(HWPFile & hwpf)
     hwpf.AddBox(this);
 
     hwpf.Read4b(&follow_block_size, 1);
-    hwpf.Read2b(&dummy1, 1);                      /* øπæ‡ 4πŸ¿Ã∆Æ */
+    hwpf.Read2b(&dummy1, 1);                      /* Reserved 4 bytes */
     hwpf.Read2b(&dummy2, 1);
 
     style.boxnum = fboxnum++;
      zorder = zindex++;
-    hwpf.Read1b(&style.anchor_type, 1);           /* ±‚¡ÿ¿ßƒ° */
-    hwpf.Read1b(&style.txtflow, 1);               /* ±◊∏≤«««‘. 0-2(¿⁄∏Æ¬˜¡ˆ,≈ı∏Ì,æÓøÔ∏≤) */
-    hwpf.Read2b(&style.xpos, 1);                  /* ∞°∑Œ¿ßƒ° : 1 øﬁ¬ , 2ø¿∏•¬ , 3 ∞°øÓµ•, ¿Ãø‹ = ¿”¿« */
-    hwpf.Read2b(&style.ypos, 1);                  /* ºº∑Œ¿ßƒ° : 1 ¿ß, 2 æ∆∑°, 3 ∞°øÓµ•, ¿Ãø‹ ¿”¿« */
-    hwpf.Read2b(&option, 1);                      /* ±‚≈∏ø…º« : ≈◊µŒ∏Æ,±◊∏≤π›¿¸,µÓ. bit∑Œ ¿˙¿Â. */
-    hwpf.Read2b(&ctrl_ch, 1);                     /* «◊ªÛ 11 */
-    hwpf.Read2b(style.margin, 12);                /* ø©πÈ : [0-2][] out/in/ºø,[][0-3] øﬁ/ø¿∏•/¿ß/æ∆∑° ø©πÈ */
-    hwpf.Read2b(&box_xs, 1);                      /* π⁄Ω∫≈©±‚ ∞°∑Œ */
-    hwpf.Read2b(&box_ys, 1);                      /* ºº∑Œ */
-    hwpf.Read2b(&cap_xs, 1);                      /* ƒ∏º« ≈©±‚ ∞°∑Œ */
-    hwpf.Read2b(&cap_ys, 1);                      /* ºº∑Œ */
-    hwpf.Read2b(&style.cap_len, 1);               /* ±Ê¿Ã */
-    hwpf.Read2b(&xs, 1);                          /* ¿¸√º ≈©±‚(π⁄Ω∫ ≈©±‚ + ƒ∏º« + ø©πÈ) ∞°∑Œ */
-    hwpf.Read2b(&ys, 1);                          /* ºº∑Œ */
-    hwpf.Read2b(&cap_margin, 1);                  /* ƒ∏º« ø©πÈ */
+    hwpf.Read1b(&style.anchor_type, 1);           /* Reference position */
+    hwpf.Read1b(&style.txtflow, 1);               /* Avoid painting. 0-2 (seat occupied, transparency, harmony) */
+    hwpf.Read2b(&style.xpos, 1);                  /* Horizontal position: 1=left, 2=right, 3=center, and others=any */
+    hwpf.Read2b(&style.ypos, 1);                  /* Vertical position: 1=top, 2=down, 3=middle, and others=any */
+    hwpf.Read2b(&option, 1);                      /* Other options: Borders, reverse picture, and so on. Save as bit. */
+    hwpf.Read2b(&ctrl_ch, 1);                     /* Always 11 */
+    hwpf.Read2b(style.margin, 12);                /* Margin: [0-2] [] out / in / cell, [], [0-3] left / right / top / bottom margins */
+    hwpf.Read2b(&box_xs, 1);                      /* Box Size Width */
+    hwpf.Read2b(&box_ys, 1);                      /* Vertical */
+    hwpf.Read2b(&cap_xs, 1);                      /* Caption Size Width */
+    hwpf.Read2b(&cap_ys, 1);                      /* Vertical */
+    hwpf.Read2b(&style.cap_len, 1);               /* Length */
+    hwpf.Read2b(&xs, 1);                          /* The total size (box size + caption + margin) Horizontal */
+    hwpf.Read2b(&ys, 1);                          /* Vertical */
+    hwpf.Read2b(&cap_margin, 1);                  /* Caption margins */
     hwpf.Read1b(&xpos_type, 1);
     hwpf.Read1b(&ypos_type, 1);
-    hwpf.Read1b(&smart_linesp, 1);                /* ¡Ÿ∞£∞› ∫∏»£ : 0 πÃ∫∏»£, 1 ∫∏»£ */
+    hwpf.Read1b(&smart_linesp, 1);                /* Line Spacing protection: 0 unprotected 1 protected */
     hwpf.Read1b(&reserved1, 1);
-    hwpf.Read2b(&pgx, 1);                         /* Ω«¡¶ ∞ËªÍµ» π⁄Ω∫ ∞°∑Œ */
-    hwpf.Read2b(&pgy, 1);                         /* ºº∑Œ */
-    hwpf.Read2b(&pgno, 1);                        /* ∆‰¿Ã¡ˆ º˝¿⁄ : 0∫Œ≈Õ Ω√¿€ */
-    hwpf.Read2b(&showpg, 1);                      /* π⁄Ω∫∫∏ø©¡‹ */
-    hwpf.Read2b(&cap_pos, 1);                     /* ƒ∏º«¿ßƒ° 0 - 7 ∏ﬁ¥∫º¯º≠. */
-    hwpf.Read2b(&num, 1);                         /* π⁄Ω∫π¯»£ 0∫Œ≈Õ Ω√¿€«ÿº≠ ∏≈±‰¿œ∑√π¯»£ */
+    hwpf.Read2b(&pgx, 1);                         /* Real Calculated box width */
+    hwpf.Read2b(&pgy, 1);                         /* Height */
+    hwpf.Read2b(&pgno, 1);                        /* Page number: starts from 0 */
+    hwpf.Read2b(&showpg, 1);                      /* Show the Box */
+    hwpf.Read2b(&cap_pos, 1);                     /* Caption positions 0-7 Menu Order. */
+    hwpf.Read2b(&num, 1);                         /* Box number, serial number which starts from 0 */
 
-    hwpf.Read1b(&pictype, 1);                     /* ±◊∏≤¡æ∑˘ */
+    hwpf.Read1b(&pictype, 1);                     /* Picture type */
 
-    skip[0] = (short) hwpf.Read2b();              /* ±◊∏≤ø°º≠ Ω«¡¶ «•Ω√∏¶ Ω√¿€«“ ¿ßƒ° ∞°∑Œ */
-    skip[1] = (short) hwpf.Read2b();              /* ºº∑Œ */
-    scale[0] = (short) hwpf.Read2b();             /* »Æ¥Î∫Ò¿≤ : 0 ∞Ì¡§, ¿Ãø‹ ∆€ºæ∆Æ ¥‹¿ß ∞°∑Œ */
-    scale[1] = (short) hwpf.Read2b();             /* ºº∑Œ */
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* the real horizontal starting point where shows the picture */
+        return false;
+    skip[0] = tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* Vertical */
+        return false;
+    skip[1] = tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* Zoom Ratio: 0:fixed, others are percentage for horizontal */
+        return false;
+    scale[0] = tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* Vertical */
+        return false;
+    scale[1] = tmp16;
 
-    hwpf.Read1b(picinfo.picun.path, 256);         /* ±◊∏≤∆ƒ¿œ ¿Ã∏ß : ¡æ∑˘∞° Drawing¿Ã æ∆¥“∂ß. */
-    hwpf.Read1b(reserved3, 9);                    /* π‡±‚/∏Ìæœ/±◊∏≤»ø∞˙ µÓ */
+    hwpf.Read1b(picinfo.picun.path, 256);         /* Picture File Name: when type is not a Drawing. */
+    hwpf.Read1b(reserved3, 9);                    /* Brightness / Contrast / Picture Effect, etc. */
 
     UpdateBBox(this);
     if( pictype != PICTYPE_DRAW )
@@ -432,7 +438,7 @@ int Picture::Read(HWPFile & hwpf)
         hwpf.Read1b(follow, follow_block_size);
         if (pictype == PICTYPE_DRAW)
         {
-            hmem = new HMemIODev((char *) follow, follow_block_size);
+            hmem = new HMemIODev(reinterpret_cast<char *>(follow), follow_block_size);
             LoadDrawingObjectBlock(this);
             style.cell = picinfo.picdraw.hdo;
             delete hmem;
@@ -454,21 +460,27 @@ int Picture::Read(HWPFile & hwpf)
         style.boxtype = 'D';
     hwpf.AddFBoxStyle(&style);
 
-// cation
+// caption
     hwpf.ReadParaList(caption);
 
     return !hwpf.State();
 }
 
-
 // line(15)
-
-Line::Line():FBox(CH_LINE)
+Line::Line()
+    : FBox(CH_LINE)
+    , dummy(0)
+    , sx(0)
+    , sy(0)
+    , ex(0)
+    , ey(0)
+    , width(0)
+    , shade(0)
+    , color(0)
 {
 }
 
-
-int Line::Read(HWPFile & hwpf)
+bool Line::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
@@ -521,14 +533,14 @@ int Line::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // hidden(15)
-Hidden::Hidden():HBox(CH_HIDDEN)
+Hidden::Hidden()
+    : HBox(CH_HIDDEN)
+    , dummy(0)
 {
 }
 
-
-int Hidden::Read(HWPFile & hwpf)
+bool Hidden::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
@@ -542,15 +554,18 @@ int Hidden::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // header/footer(16)
-HeaderFooter::HeaderFooter():HBox(CH_HEADER_FOOTER)
+HeaderFooter::HeaderFooter()
+    : HBox(CH_HEADER_FOOTER)
+    , dummy(0)
+    , type(0)
+    , where(0)
+    , linenumber(0)
+    , m_nPageNumber(0)
 {
-    linenumber = 0;
 }
 
-
-int HeaderFooter::Read(HWPFile & hwpf)
+bool HeaderFooter::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
@@ -573,12 +588,16 @@ int HeaderFooter::Read(HWPFile & hwpf)
 
 
 // footnote(17)
-Footnote::Footnote():HBox(CH_FOOTNOTE)
+Footnote::Footnote()
+    : HBox(CH_FOOTNOTE)
+    , dummy(0)
+    , number(0)
+    , type(0)
+    , width(0)
 {
 }
 
-
-int Footnote::Read(HWPFile & hwpf)
+bool Footnote::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
     hwpf.Read2b(&dummy, 1);
@@ -589,20 +608,25 @@ int Footnote::Read(HWPFile & hwpf)
     hwpf.Read1b(info, 8);
     hwpf.Read2b(&number, 1);
     hwpf.Read2b(&type, 1);
-    width = (short) hwpf.Read2b();
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    width = tmp16;
     hwpf.ReadParaList(plist, CH_FOOTNOTE);
 
     return !hwpf.State();
 }
 
-
 // auto number(18)
-AutoNum::AutoNum():HBox(CH_AUTO_NUM)
+AutoNum::AutoNum()
+    : HBox(CH_AUTO_NUM)
+    , type(0)
+    , number(0)
+    , dummy(0)
 {
 }
 
-
-int AutoNum::Read(HWPFile & hwpf)
+bool AutoNum::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&type, 1);
     hwpf.Read2b(&number, 1);
@@ -616,12 +640,16 @@ int AutoNum::Read(HWPFile & hwpf)
 
 
 // new number(19)
-NewNum::NewNum():HBox(CH_NEW_NUM)
+NewNum::NewNum()
+    : HBox(CH_NEW_NUM)
+    , type(0)
+    , number(0)
+    , dummy(0)
 {
 }
 
 
-int NewNum::Read(HWPFile & hwpf)
+bool NewNum::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&type, 1);
     hwpf.Read2b(&number, 1);
@@ -633,14 +661,17 @@ int NewNum::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // show page number (20)
-ShowPageNum::ShowPageNum():HBox(CH_SHOW_PAGE_NUM)
+ShowPageNum::ShowPageNum()
+    : HBox(CH_SHOW_PAGE_NUM)
+    , where(0)
+    , m_nPageNumber(0)
+    , shape(0)
+    , dummy(0)
 {
 }
 
-
-int ShowPageNum::Read(HWPFile & hwpf)
+bool ShowPageNum::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&where, 1);
     hwpf.Read2b(&shape, 1);
@@ -655,14 +686,16 @@ int ShowPageNum::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
-/* »¶ºˆ¬ Ω√¿€/∞®√ﬂ±‚ (21) */
-PageNumCtrl::PageNumCtrl():HBox(CH_PAGE_NUM_CTRL)
+/* ÌôÄÏàòÏ™ΩÏãúÏûë/Í∞êÏ∂îÍ∏∞ (21) */
+PageNumCtrl::PageNumCtrl()
+    : HBox(CH_PAGE_NUM_CTRL)
+    , kind(0)
+    , what(0)
+    , dummy(0)
 {
 }
 
-
-int PageNumCtrl::Read(HWPFile & hwpf)
+bool PageNumCtrl::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&kind, 1);
     hwpf.Read2b(&what, 1);
@@ -674,14 +707,15 @@ int PageNumCtrl::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // mail merge(22)
-MailMerge::MailMerge():HBox(CH_MAIL_MERGE)
+MailMerge::MailMerge()
+    : HBox(CH_MAIL_MERGE)
+    , dummy(0)
 {
+    memset(field_name, 0, sizeof(field_name));
 }
 
-
-int MailMerge::Read(HWPFile & hwpf)
+bool MailMerge::Read(HWPFile & hwpf)
 {
     hwpf.Read1b(field_name, 20);
     hwpf.Read2b(&dummy, 1);
@@ -692,14 +726,14 @@ int MailMerge::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // char compositon(23)
-Compose::Compose():HBox(CH_COMPOSE)
+Compose::Compose()
+    : HBox(CH_COMPOSE)
+    , dummy(0)
 {
 }
 
-
-int Compose::Read(HWPFile & hwpf)
+bool Compose::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(compose, 3);
     hwpf.Read2b(&dummy, 1);
@@ -710,14 +744,15 @@ int Compose::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // hyphen(24)
-Hyphen::Hyphen():HBox(CH_HYPHEN)
+Hyphen::Hyphen()
+    : HBox(CH_HYPHEN)
+    , width(0)
+    , dummy(0)
 {
 }
 
-
-int Hyphen::Read(HWPFile & hwpf)
+bool Hyphen::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&width, 1);
     hwpf.Read2b(&dummy, 1);
@@ -730,12 +765,15 @@ int Hyphen::Read(HWPFile & hwpf)
 
 
 // toc mark(25)
-TocMark::TocMark():HBox(CH_TOC_MARK)
+TocMark::TocMark()
+    : HBox(CH_TOC_MARK)
+    , kind(0)
+    , dummy(0)
 {
 }
 
 
-int TocMark::Read(HWPFile & hwpf)
+bool TocMark::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&kind, 1);
     hwpf.Read2b(&dummy, 1);
@@ -746,14 +784,17 @@ int TocMark::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // index mark(26)
-IndexMark::IndexMark():HBox(CH_INDEX_MARK)
+IndexMark::IndexMark()
+    : HBox(CH_INDEX_MARK)
+    , pgno(0)
+    , dummy(0)
 {
+    memset(keyword1, 0, sizeof(keyword1));
+    memset(keyword2, 0, sizeof(keyword2));
 }
 
-
-int IndexMark::Read(HWPFile & hwpf)
+bool IndexMark::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&keyword1, 60);
     hwpf.Read2b(&keyword2, 60);
@@ -766,14 +807,17 @@ int IndexMark::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-
 // outline(28)
-Outline::Outline():HBox(CH_OUTLINE)
+Outline::Outline()
+    : HBox(CH_OUTLINE)
+    , kind(0)
+    , shape(0)
+    , level(0)
+    , dummy(0)
 {
 }
 
-
-int Outline::Read(HWPFile & hwpf)
+bool Outline::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&kind, 1);
     hwpf.Read1b(&shape, 1);
@@ -790,13 +834,15 @@ int Outline::Read(HWPFile & hwpf)
 }
 
 
-/* π≠¿Ω ∫Ûƒ≠(30) */
-KeepSpace::KeepSpace():HBox(CH_KEEP_SPACE)
+/* Bundle of spaces (30)*/
+KeepSpace::KeepSpace()
+    : HBox(CH_KEEP_SPACE)
+    , dummy(0)
 {
 }
 
 
-int KeepSpace::Read(HWPFile & hwpf)
+bool KeepSpace::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&dummy, 1);
 
@@ -807,13 +853,15 @@ int KeepSpace::Read(HWPFile & hwpf)
 }
 
 
-/* ∞Ì¡§∆¯ ∫Ûƒ≠(31) */
-FixedSpace::FixedSpace():HBox(CH_FIXED_SPACE)
+/* Fixed-width spaces (31) */
+FixedSpace::FixedSpace()
+    : HBox(CH_FIXED_SPACE)
+    , dummy(0)
 {
 }
 
 
-int FixedSpace::Read(HWPFile & hwpf)
+bool FixedSpace::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(&dummy, 1);
 

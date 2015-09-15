@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CSPLINE_H_
-#define _CSPLINE_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_CSPLINE_H
+#define INCLUDED_HWPFILTER_SOURCE_CSPLINE_H
 
 void NaturalSpline (int N, double* x, double* a, double*& b, double*& c,
     double*& d);
 void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
     double*& d);
 
-#endif /* _CSPLINE_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_CSPLINE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

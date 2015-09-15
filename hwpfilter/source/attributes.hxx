@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONFIGMGR_MISC_ATTRIBUTES_HXX_
-#define _CONFIGMGR_MISC_ATTRIBUTES_HXX_
+#ifndef INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
+#define INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -31,7 +31,6 @@
 *----------------------------------------*/
 
 using namespace ::cppu;
-using namespace ::rtl;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
@@ -39,14 +38,14 @@ struct AttributeListImpl_impl;
 class AttributeListImpl : public WeakImplHelper1< XAttributeList >
 {
 protected:
-    ~AttributeListImpl();
+    virtual ~AttributeListImpl();
 
 public:
     AttributeListImpl();
     AttributeListImpl( const AttributeListImpl & );
 
 public:
-    virtual sal_Int16 SAL_CALL getLength(void) throw (RuntimeException);
+    virtual sal_Int16 SAL_CALL getLength() throw (RuntimeException);
     virtual OUString  SAL_CALL getNameByIndex(sal_Int16 i) throw (RuntimeException);
     virtual OUString  SAL_CALL getTypeByIndex(sal_Int16 i) throw (RuntimeException);
     virtual OUString  SAL_CALL getTypeByName(const OUString& aName) throw (RuntimeException);
@@ -61,7 +60,7 @@ private:
     struct AttributeListImpl_impl *m_pImpl;
 };
 
-#endif // _CONFIGMGR_MISC_ATTRIBUTES_HXX_
+#endif // INCLUDED_HWPFILTER_SOURCE_ATTRIBUTES_HXX
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

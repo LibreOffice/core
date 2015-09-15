@@ -17,10 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HBOX_H_
-#define _HBOX_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HBOX_H
+#define INCLUDED_HWPFILTER_SOURCE_HBOX_H
+
+#include <sal/config.h>
 
 #include <list>
+
+#include <sal/types.h>
 
 #include "hwplib.h"
 #include "hwpfile.h"
@@ -48,18 +52,14 @@ struct HBox
 /**
  * @returns The Size of HBox object
  */
-        virtual int   WSize();
-/**
- * @returns The Height of HBox object as hunit value.
- */
-        virtual hunit Height(CharShape *csty);
+        int           WSize();
 /**
  * Read properties from HIODevice object like stream, file, memory.
  *
  * @param hwpf HWPFile Object having all information for a hwp file.
  * @returns True if reading from stream is successful.
  */
-        virtual int   Read(HWPFile &hwpf);
+        virtual bool Read(HWPFile &hwpf);
 
         virtual hchar_string GetString();
     private:
@@ -71,20 +71,20 @@ struct HBox
  */
 struct SkipData: public HBox
 {
-    ulong data_block_len;
+    uint data_block_len;
     hchar dummy;
     char  *data_block;
 
     SkipData(hchar);
     virtual ~SkipData();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 struct DateCode;
 struct FieldCode : public HBox
 {
-    uchar type[2];                    /* 2/0 - ∞ËªÍΩƒ, 3/0-πÆº≠ø‰æ‡, 3/1-∞≥¿Œ¡§∫∏, 3/2-∏∏µÁ≥Ø¬•, 4/0-¥©∏ß∆≤ */
+    uchar type[2];                    /* 2/0 - Formula, 3/0-document summary, 3/1 Personal Information, 3/2-creation date, 4/0-pressing mold */
     char *reserved1;
-    unsigned short location_info;     /* 0 - ≥°ƒ⁄µÂ, 1 - Ω√¿€ƒ⁄µÂ */
+    unsigned short location_info;     /* 0 - End code, 1 - start code */
     char *reserved2;
     hchar *str1;
     hchar *str2;
@@ -95,7 +95,7 @@ struct FieldCode : public HBox
 
     FieldCode();
     virtual ~FieldCode();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 /**
  * Kind of BOOKMARK
@@ -120,7 +120,7 @@ struct Bookmark: public HBox
 
     Bookmark();
     virtual ~Bookmark();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // date format(7)
@@ -135,7 +135,7 @@ struct DateFormat: public HBox
     hchar dummy;
 
     DateFormat();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 /**
@@ -157,7 +157,7 @@ struct DateCode: public HBox
     unsigned char key;
 
     DateCode();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 
     virtual hchar_string GetString();
 };
@@ -172,7 +172,7 @@ struct Tab: public HBox
     hchar dummy;
 
     Tab();
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
@@ -195,21 +195,10 @@ enum
     EQU_CAP_POS
 };
 
-/**
- * Definitions for frame's common 'option' member.
- */
-#define DRAW_FRAME      1                         /* <-> no frame, bit 0 */
-#define NORMAL_PIC      2                         /* <-> reverse,  bit 1 */
-#define FIT_TO_COLUMN   4                         /* fig_xs is columnlen */
-#define UNKNOWN_FILE    8                         /* need check reverse for pcx mono */
-#define HYPERTEXT_FLAG  16
-#define UNKNOWN_SIZE    32
-#define FOPT_TEMP_BIT   0x00010000                /* temporary starts from 16th bits */
-
 struct CellLine
 {
     unsigned char key;
-    unsigned char top;                            // 0 - ∂Û¿Œæ¯¿Ω, 1-single, 2-thick, 3-double
+    unsigned char top;                            // 0-No line, 1-single, 2-thick, 3-double
     unsigned char bottom;
     unsigned char left;
     unsigned char right;
@@ -257,7 +246,7 @@ struct FBoxStyle
 /**
  * Kind of wrap
  */
-    unsigned char txtflow;                        /* ±◊∏≤«««‘. 0-2(¿⁄∏Æ¬˜¡ˆ,≈ı∏Ì,æÓøÔ∏≤) */
+    unsigned char txtflow;                        /* Avoid painting. 0-2 (seat occupied, transparency, harmony) */
 /**
  * Horizontal alignment
  */
@@ -275,15 +264,27 @@ struct FBoxStyle
 /**
  * Index of floating object
  */
-    short     boxnum;                             /* Ω∫≈∏ø¿««Ω∫ø°º≠ Ω∫≈∏¿œ ¿Ã∏ß¿∏∑Œ ªÁøÎµ… º˝¿⁄ */
+    short     boxnum;                             /* Numbers used as style-name in Libre Office */
 /**
  * Type of floating object : line, txtbox, image, table, equalizer and button
  */
     unsigned char boxtype;                        // (L)ine, t(X)tbox, Picture - (G)
-    short     cap_len; /* ƒ∏º«¿« ±Ê¿Ã */
+    short     cap_len; /* The length of the caption */
 
     void *cell;
 
+    FBoxStyle()
+        : anchor_type(0)
+        , txtflow(0)
+        , xpos(0)
+        , ypos(0)
+        , boxnum(0)
+        , boxtype(0)
+        , cap_len(0)
+        , cell(NULL)
+    {
+        memset(margin, 0, sizeof(margin));
+    }
 };
 
 /**
@@ -306,8 +307,8 @@ struct FBox: public HBox
     char      xpos_type, ypos_type;
     unsigned char smart_linesp;
 
-/*  ¿Ã ¿⁄∑·¥¬ tbox≥™ picø°º≠¥¬ ∆ƒ¿œø° ±‚∑œ«œ¡ˆ æ ∞Ì Ω««‡Ω√∏∏ ¿÷¿∏∏Á,
-    lineø°º≠¥¬ ∆ƒ¿œø° ±‚∑œ«—¥Ÿ.
+/* In tbox or pic, this data exists in memory when running, isn't written to a file.
+   But in line, it will be written to a file.
  */
     short     boundsy, boundey;
     unsigned char boundx, draw;
@@ -351,7 +352,7 @@ struct TxtBox: public FBox
  * The value of type indicates as the below: zero is table, one is
  * textbox, two is equalizer and three is button.
  */
-    short     type;                               // 0-table, 1-textbox, 2-ºˆΩƒ, 3-button
+    short     type;                               // 0-table, 1-textbox, 2-ÏàòÏãù, 3-button
 /**
  * nCell is greater than one only for table, otherwise it is 1.
  */
@@ -378,16 +379,14 @@ struct TxtBox: public FBox
 /**
  * @returns Count of cell.
  */
-    virtual int NCell()   { return nCell; }
+    int NCell()   { return nCell; }
 /**
  * This is one of table, text-box, equalizer and button
  * @returns Type of this object.
  */
-    virtual int Type()    { return type;  }
+    int Type()    { return type;  }
 
-    virtual int Read(HWPFile &hwpf);
-
-    virtual hunit  Height(CharShape *csty);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 #define ALLOWED_GAP 5
@@ -437,7 +436,7 @@ struct Columns
                      return;
                 }
           }
-          // last postion.
+          // last position.
           if( nCount == nTotal )
                 AddColumnsSize();
           data[nCount++] = pos;
@@ -498,7 +497,7 @@ struct Rows
                      return;
                 }
           }
-          // last postion.
+          // last position.
           if( nCount == nTotal )
                 AddRowsSize();
           data[nCount++] = pos;
@@ -527,19 +526,20 @@ struct TCell
 
 struct Table
 {
-     Table(){};
-     ~Table(){
+     Table() : box(NULL) {};
+     ~Table() {
           std::list<TCell*>::iterator it = cells.begin();
           for( ; it != cells.end(); ++it)
                 delete *it;
      };
+
      Columns columns;
-     Rows rows;
-    std::list<TCell*> cells;
+     Rows    rows;
+     std::list<TCell*> cells;
      TxtBox *box;
 };
 
-/* picture (11) ±◊∏≤, OLE±◊∏≤, ª¿‘±◊∏≤, ±◊∏Æ±‚ */
+/* picture (11) graphics, OLE graphics, inserted graphics, drawing */
 enum pictype
 {
     PICTYPE_FILE, PICTYPE_OLE, PICTYPE_EMBED,
@@ -556,7 +556,7 @@ struct PicDefFile
 };
 
 /**
- * @short Embeded image file
+ * @short Embedded image file
  */
 struct PicDefEmbed
 {
@@ -600,11 +600,10 @@ typedef union
     PicDefUnknown     picun;
 } PicDef;
 
-#define PIC_INFO_LEN    348
 /**
  * There are four kinds of image.
  * @li External image
- * @li Embeded image
+ * @li Embedded image
  * @li Win32 ole object
  * @li Drawing object of hwp
  *
@@ -618,7 +617,7 @@ struct Picture: public FBox
  * follow_block_size is the size information of the Drawing object of hwp.
  * It's value is greater than 0 if the pictype is PICTYPE_DRAW.
  */
-    ulong     follow_block_size;                  /* √ﬂ∞°¡§∫∏ ±Ê¿Ã. */
+    uint      follow_block_size;                  /* Additional information length. */
     short     dummy1;                             // to not change structure size */
     short     dummy2;                             // to not change structure size */
     uchar     reserved1;
@@ -633,7 +632,7 @@ struct Picture: public FBox
 
 /**
  * Type of this object
- * It is one of external/ole/embeded/drawing picture
+ * It is one of external/ole/embedded/drawing picture
  */
     uchar     pictype;
     hunit     skip[2];
@@ -648,17 +647,15 @@ struct Picture: public FBox
 /**
  * It's for the Drawing object
  */
-    unsigned char *follow;                        /* ±◊∏≤¡æ∑˘∞° drawing¿œ∂ß, √ﬂ∞°¡§∫∏. */
+    unsigned char *follow;                        /* When the type of image is drawing, gives additional information. */
 
     bool ishyper;
 
     Picture();
     virtual ~Picture();
 
-    virtual int   Type    ();
-    virtual int   Read    (HWPFile &hwpf);
-
-    virtual hunit  Height (CharShape *sty);
+    int   Type    ();
+    virtual bool Read    (HWPFile &hwpf);
 };
 
 // line (14)
@@ -677,7 +674,7 @@ struct Line: public FBox
 
     Line();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // hidden(15)
@@ -695,7 +692,7 @@ struct Hidden: public HBox
     Hidden();
     virtual ~Hidden();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 /**
@@ -724,7 +721,7 @@ struct HeaderFooter: public HBox
     HeaderFooter();
     virtual ~HeaderFooter();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 /**
@@ -757,7 +754,7 @@ struct Footnote: public HBox
     Footnote();
     virtual ~Footnote();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // auto number(18)
@@ -785,7 +782,7 @@ struct AutoNum: public HBox
 
     AutoNum();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 /**
@@ -799,10 +796,10 @@ struct NewNum: public HBox
 
     NewNum();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
-// page numger(20)
+// page number(20)
 /**
  * @short Input page index in footer or header
  */
@@ -821,14 +818,10 @@ struct ShowPageNum: public HBox
 
     ShowPageNum();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
-/* »¶ºˆ¬ Ω√¿€ (21) */
-#define HIDE_HD         1                         /* bit 0 */
-#define HIDE_FT         2                         /* bit 1 */
-#define HIDE_PGNUM      4                         /* bit 2 */
-#define HIDE_FRAME      8                         /* bit 3 */
+/* Start odd side (21) */
 /**
  * Controls the display of page number, header, footer and border.
  */
@@ -846,7 +839,7 @@ struct PageNumCtrl: public HBox
 
     PageNumCtrl();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // mail merge(22)
@@ -861,7 +854,7 @@ struct MailMerge: public HBox
 
     MailMerge();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
     virtual hchar_string GetString();
 };
 
@@ -877,7 +870,7 @@ struct Compose: public HBox
 
     Compose();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // hyphen(24)
@@ -894,7 +887,7 @@ struct Hyphen: public HBox
 
     Hyphen();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // toc mark(25)
@@ -910,7 +903,7 @@ struct TocMark: public HBox
 
     TocMark();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // index mark(26)
@@ -928,7 +921,7 @@ struct IndexMark: public HBox
 
     IndexMark();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
 // outline(28)
@@ -994,16 +987,16 @@ class Outline: public HBox
 /**
  * decoration character for the level type
  */
-        hchar     deco[MAX_OUTLINE_LEVEL][2];     /* ªÁøÎ¿⁄ ¡§¿«Ω√ æ’µ⁄ πÆ¿⁄ */
+        hchar     deco[MAX_OUTLINE_LEVEL][2];     /* Prefix/postfix for Customize */
         hchar     dummy;
 
         Outline();
 
-        virtual int   Read(HWPFile &hwpf);
+        virtual bool Read(HWPFile &hwpf);
         hchar_string GetUnicode() const;
 };
 
-/* π≠¿Ω ∫Ûƒ≠(30) */
+/* Bundle of spaces (30) */
 /**
  * The Special space to be treated non-space when a string is
  * cut at the end of line
@@ -1015,10 +1008,10 @@ struct KeepSpace: public HBox
 
     KeepSpace();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
 
-/* ∞Ì¡§∆¯ ∫Ûƒ≠(31) */
+/* Fixed-width spaces (31) */
 /**
  * @short Space with always same width not relation with fonts.
  */
@@ -1028,8 +1021,8 @@ struct FixedSpace: public HBox
 
     FixedSpace();
 
-    virtual int Read(HWPFile &hwpf);
+    virtual bool Read(HWPFile &hwpf);
 };
-#endif                                            /* _HBOX_H_ */
+#endif // INCLUDED_HWPFILTER_SOURCE_HBOX_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

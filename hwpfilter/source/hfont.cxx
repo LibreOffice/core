@@ -21,9 +21,9 @@
 #include "hwplib.h"
 #include "hwpfile.h"
 #include "hfont.h"
-/* ÀÌ ÇÔ¼ö´Â HWP ÆÄÀÏÀ» ÇØ¼®ÇÏ´Â ºÎºĞÀÌ´Ù. */
+/* ì´ í•¨ìˆ˜ëŠ” HWP íŒŒì¼ì„ í•´ì„í•˜ëŠ” ë¶€ë¶„ì´ë‹¤. */
 
-HWPFont::HWPFont(void)
+HWPFont::HWPFont()
 {
     for (int ii = 0; ii < NLanguage; ii++)
     {
@@ -33,7 +33,7 @@ HWPFont::HWPFont(void)
 }
 
 
-HWPFont::~HWPFont(void)
+HWPFont::~HWPFont()
 {
     for (int ii = 0; ii < NLanguage; ii++)
     {

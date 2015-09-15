@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _HWPLIB_H_
-#define _HWPLIB_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_HWPLIB_H
+#define INCLUDED_HWPFILTER_SOURCE_HWPLIB_H
 #include "precompile.h"
 
 #include <string>
 
-/* hwp96∫Œ≈Õ hunit∞° 4byte∞° µ«æ˙¥Ÿ. */
+/* hwp96Î∂ÄÌÑ∞ hunitÍ∞Ä 4byteÍ∞Ä ÎêòÏóàÎã§. */
 /**
  * size of hunit is 4 since hwp96 version
  */
@@ -32,25 +32,13 @@
 typedef unsigned short  hchar;
 typedef int     hunit;
 typedef unsigned char       kchar;
-typedef unsigned char       echar;
 #endif                                            // _HCHAR_
-
-#if !defined(WIN32)
-#if !defined(_BOOL_T_) && !defined(OS2)
-typedef unsigned short  BOOL;
-#endif                                            /* _BOOL_T_ */
-typedef unsigned short  WORD;
-typedef int     SIZE;
-typedef unsigned long   DWORD;
-typedef long        LONG;
-#endif                                            /* WIN32 */
 
 #ifndef _UTYPE_
 #define _UTYPE_
 typedef unsigned char   uchar;
 typedef unsigned short  ushort;
 typedef unsigned int    uint;
-typedef unsigned long   ulong;
 #endif                                            /* _UTYPE_ */
 
 typedef ::std::basic_string<hchar> hchar_string;
@@ -124,11 +112,11 @@ typedef struct
 #define ONE_MILI        (71)
 #define ONE_DOT         (19)
 
-/* HWP 3.0 πÆº≠ ¡§∫∏ */
+/* HWP 3.0 Î¨∏ÏÑú Ï†ïÎ≥¥ */
 
 #define NLanguage       7
 
-/* ¡¶æÓ πÆ¿⁄ */
+/* Ï†úÏñ¥ Î¨∏Ïûê */
 /**
  * Control character
  */
@@ -172,7 +160,6 @@ typedef struct
 #define IS_SP_SKIP_BLOCK(hch) ((hch<5) || (hch==12) || (hch==27) || (hch == 29))
 
 // file tag
-#define FILETAG_UNCOMPRESSED_BIT    0x80000000
 #define FILETAG_END_OF_COMPRESSED   0x00000000
 
 #define FILETAG_EMBEDDED_PICTURE    0x00000001
@@ -236,6 +223,6 @@ enum DebugMask
 #  include <unistd.h>
 #  define DIRSEP '/'
 #endif
-#endif                                            /* _HWPLIB_H_*/
+#endif // INCLUDED_HWPFILTER_SOURCE_HWPLIB_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

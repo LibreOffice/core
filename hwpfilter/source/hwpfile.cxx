@@ -32,7 +32,7 @@
 #include "hpara.h"
 #include "htags.h"
 #include "hcode.h"
-#include "hstream.h"
+#include "hstream.hxx"
 
 #include <osl/diagnose.h>
 
@@ -81,7 +81,7 @@ HWPFile::~HWPFile()
     }
 }
 
-int HWPFile::ReadHwpFile(HStream & stream)
+int HWPFile::ReadHwpFile(HStream * stream)
 {
     if (Open(stream) != HWP_NoError)
         return State();
@@ -108,7 +108,7 @@ int detect_hwp_version(const char *str)
 
 // HIODev wrapper
 
-int HWPFile::Open(HStream & stream)
+int HWPFile::Open(HStream * stream)
 {
     HStreamIODev *hstreamio = new HStreamIODev(stream);
 
@@ -132,43 +132,49 @@ int HWPFile::Open(HStream & stream)
     return HWP_NoError;
 }
 
-
-int HWPFile::State(void) const
-{
-    return error_code;
-}
-
-
 int HWPFile::SetState(int errcode)
 {
     error_code = errcode;
     return error_code;
 }
 
-
-int HWPFile::Read1b(void)
+bool HWPFile::Read1b(unsigned char &out)
 {
-    return hiodev ? hiodev->read1b() : -1;
+    return hiodev && hiodev->read1b(out);
 }
 
-
-int HWPFile::Read2b(void)
+bool HWPFile::Read1b(char &out)
 {
-    return hiodev ? hiodev->read2b() : -1;
+    unsigned char tmp8;
+    if (!Read1b(tmp8))
+        return false;
+    out = tmp8;
+    return true;
 }
 
-
-long HWPFile::Read4b(void)
+bool HWPFile::Read2b(unsigned short &out)
 {
-    return hiodev ? hiodev->read4b() : -1;
+    return hiodev && hiodev->read2b(out);
 }
 
+bool HWPFile::Read4b(unsigned int &out)
+{
+    return hiodev && hiodev->read4b(out);
+}
+
+bool HWPFile::Read4b(int &out)
+{
+    unsigned int tmp32;
+    if (!Read4b(tmp32))
+        return false;
+    out = tmp32;
+    return true;
+}
 
 int HWPFile::Read1b(void *ptr, size_t nmemb)
 {
     return hiodev ? hiodev->read1b(ptr, nmemb) : 0;
 }
-
 
 int HWPFile::Read2b(void *ptr, size_t nmemb)
 {
@@ -196,7 +202,7 @@ size_t HWPFile::SkipBlock(size_t size)
 
 bool HWPFile::SetCompressed(bool flag)
 {
-    return hiodev ? hiodev->setCompressed(flag) : false;
+    return hiodev && hiodev->setCompressed(flag);
 }
 
 
@@ -212,25 +218,25 @@ HIODev *HWPFile::SetIODevice(HIODev * new_hiodev)
 
 // end of HIODev wrapper
 
-bool HWPFile::InfoRead(void)
+bool HWPFile::InfoRead()
 {
     return _hwpInfo.Read(*this);
 }
 
 
-bool HWPFile::FontRead(void)
+bool HWPFile::FontRead()
 {
     return _hwpFont.Read(*this);
 }
 
 
-bool HWPFile::StyleRead(void)
+bool HWPFile::StyleRead()
 {
     return _hwpStyle.Read(*this);
 }
 
 
-bool HWPFile::ParaListRead(void)
+bool HWPFile::ParaListRead()
 {
     return ReadParaList(plist);
 }
@@ -271,38 +277,37 @@ bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
     return true;
 }
 
-
-bool HWPFile::TagsRead(void)
+void HWPFile::TagsRead()
 {
-    ulong tag;
-    long size;
-
-    while (1)
+    while (true)
     {
-        tag = Read4b();
-        size = Read4b();
+        uint tag;
+        if (!Read4b(tag))
+            return;
+        int size;
+        if (!Read4b(size))
+            return;
         if (size <= 0 && tag > 0){
             continue;
           }
 
         if (tag == FILETAG_END_OF_COMPRESSED ||
             tag == FILETAG_END_OF_UNCOMPRESSED)
-            return true;
+            return;
         switch (tag)
         {
             case FILETAG_EMBEDDED_PICTURE:
             {
                 EmPicture *emb = new EmPicture(size);
 
-                if (true == emb->Read(*this))
+                if (emb->Read(*this))
                     emblist.push_back(emb);
                 else
                     delete emb;
             }
             break;
             case FILETAG_OLE_OBJECT:
-                if (oledata)
-                    delete oledata;
+                delete oledata;
                 oledata = new OlePicture(size);
                 oledata->Read(*this);
                 break;
@@ -311,29 +316,39 @@ bool HWPFile::TagsRead(void)
                 if( (size % 617) != 0 )
                     SkipBlock( size );
                 else
-                    for( int i = 0 ; i < size/617 ; i++)
                 {
-                    HyperText *hypert = new HyperText;
-                    hypert->Read(*this);
-                    hyperlist.push_back(hypert);
+                    for( int i = 0 ; i < size/617 ; i++)
+                    {
+                        HyperText *hypert = new HyperText;
+                        hypert->Read(*this);
+                        hyperlist.push_back(hypert);
+                    }
                 }
                 break;
             }
                 case 6:
                 {
                      ReadBlock(_hwpInfo.back_info.reserved1, 8);
-                     _hwpInfo.back_info.luminance = Read4b();
-                     _hwpInfo.back_info.contrast = Read4b();
-                     _hwpInfo.back_info.effect = sal::static_int_cast<char>(Read1b());
+                     if (!Read4b(_hwpInfo.back_info.luminance))
+                        return;
+                     if (!Read4b(_hwpInfo.back_info.contrast))
+                        return;
+                     if (!Read1b(_hwpInfo.back_info.effect))
+                        return;
                      ReadBlock(_hwpInfo.back_info.reserved2, 7);
                      ReadBlock(_hwpInfo.back_info.filename, 260);
                      ReadBlock(_hwpInfo.back_info.color, 3);
-                     unsigned short nFlag = sal::static_int_cast<unsigned short>(Read2b());
+                     unsigned short nFlag;
+                     if (!Read2b(nFlag))
+                        return;
                      _hwpInfo.back_info.flag = nFlag >> 8 ;
-                     int nRange = Read4b();
+                     int nRange;
+                     if (!Read4b(nRange))
+                        return;
                      _hwpInfo.back_info.range = nRange >> 24;
                      ReadBlock(_hwpInfo.back_info.reserved3, 27);
-                     _hwpInfo.back_info.size = Read4b();
+                     if (!Read4b(_hwpInfo.back_info.size))
+                        return;
 
                      _hwpInfo.back_info.data = new char[(unsigned int)_hwpInfo.back_info.size];
                      ReadBlock(_hwpInfo.back_info.data, _hwpInfo.back_info.size);
@@ -374,15 +389,14 @@ ColumnDef *HWPFile::GetColumnDef(int num)
     else
         return 0;
 }
-/* @return 인덱스는 1부터 시작한다. */
+/* Index of @return starts from 1 */
 int HWPFile::GetPageMasterNum(int page)
 {
     std::list<ColumnInfo*>::iterator it = columnlist.begin();
-    ColumnInfo *now = 0;
     int i;
 
     for( i = 1 ; it != columnlist.end() ; ++it, i++){
-        now = *it;
+        ColumnInfo *now = *it;
         if( page < now->start_page )
             return i-1;
     }
@@ -399,7 +413,7 @@ HyperText *HWPFile::GetHyperText()
     }
 
     currenthyper++;
-    return *it;
+    return it != hyperlist.end() ? *it : NULL;
 }
 
 EmPicture *HWPFile::GetEmPicture(Picture * pic)
@@ -455,7 +469,7 @@ ParaShape *HWPFile::getParaShape(int index)
 	  break;
     }
 
-    return *it;
+    return it != pslist.end() ? *it : NULL;
 }
 
 
@@ -468,7 +482,7 @@ CharShape *HWPFile::getCharShape(int index)
 	  break;
     }
 
-    return *it;
+    return it != cslist.end() ? *it : 0;
 }
 
 
@@ -481,7 +495,7 @@ FBoxStyle *HWPFile::getFBoxStyle(int index)
 	  break;
     }
 
-    return *it;
+    return it != fbslist.end() ? *it : 0;
 }
 
 DateCode *HWPFile::getDateCode(int index)
@@ -493,7 +507,7 @@ DateCode *HWPFile::getDateCode(int index)
 	  break;
     }
 
-    return *it;
+    return it != datecodes.end() ? *it : NULL;
 }
 
 HeaderFooter *HWPFile::getHeaderFooter(int index)
@@ -505,7 +519,7 @@ HeaderFooter *HWPFile::getHeaderFooter(int index)
 	  break;
     }
 
-    return *it;
+    return it != headerfooters.end() ? *it : NULL;
 }
 
 ShowPageNum *HWPFile::getPageNumber(int index)
@@ -517,7 +531,7 @@ ShowPageNum *HWPFile::getPageNumber(int index)
 	  break;
     }
 
-    return *it;
+    return it != pagenumbers.end() ? *it : NULL;
 
 }
 
@@ -530,7 +544,7 @@ Table *HWPFile::getTable(int index)
 	  break;
     }
 
-    return *it;
+    return it != tables.end() ? *it : NULL;
 }
 
 void HWPFile::AddParaShape(ParaShape * pshape)
@@ -623,10 +637,9 @@ int HWPFile::compareCharShape(CharShape *shape)
     int count = cslist.size();
     if( count > 0 )
     {
-        CharShape *cshape=0;
         for(int i = 0; i< count; i++)
         {
-            cshape = getCharShape(i);
+            CharShape *cshape = getCharShape(i);
 
             if( shape->size == cshape->size &&
                 shape->font[0] == cshape->font[0] &&
@@ -650,10 +663,9 @@ int HWPFile::compareParaShape(ParaShape *shape)
     int count = pslist.size();
     if( count > 0 )
     {
-        ParaShape *pshape=0;
         for(int i = 0; i< count; i++)
         {
-            pshape = getParaShape(i);
+            ParaShape *pshape = getParaShape(i);
             if( shape->left_margin == pshape->left_margin &&
                 shape->right_margin == pshape->right_margin &&
                 shape->pspacing_prev == pshape->pspacing_prev &&
@@ -664,7 +676,8 @@ int HWPFile::compareParaShape(ParaShape *shape)
                 shape->outline == pshape->outline  &&
                      shape->pagebreak == pshape->pagebreak)
             {
-                    if( shape->cshape->size == pshape->cshape->size &&
+                    if( shape->cshape && pshape->cshape &&
+                         shape->cshape->size == pshape->cshape->size &&
                          shape->cshape->font[0] == pshape->cshape->font[0] &&
                          shape->cshape->ratio[0] == pshape->cshape->ratio[0] &&
                          shape->cshape->space[0] == pshape->cshape->space[0] &&
@@ -682,7 +695,7 @@ int HWPFile::compareParaShape(ParaShape *shape)
 }
 
 
-HWPFile *GetCurrentDoc(void)
+HWPFile *GetCurrentDoc()
 {
     return HWPFile::cur_doc;
 }

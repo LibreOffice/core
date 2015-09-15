@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MZSTRING_H_
-#define _MZSTRING_H_
+#ifndef INCLUDED_HWPFILTER_SOURCE_MZSTRING_H
+#define INCLUDED_HWPFILTER_SOURCE_MZSTRING_H
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
@@ -88,9 +88,9 @@ class MzString
 
         int       length() const;
         const char*   c_str() const;
-        operator  char*()         { return (char *)c_str(); }
+        operator  char*()         { return const_cast<char *>(c_str()); }
 
-// If it is not posible to use the constructor with an initial
+// If it is not possible to use the constructor with an initial
 // allocation size, use the following member to set the size.
         bool      resize(int len);
 
@@ -118,7 +118,6 @@ class MzString
 // Access to specific characters
 //char      &operator [] (int n);
         char      operator [] (int n);
-        char      last();
 
 // Comparison
 //  Return:
@@ -130,8 +129,6 @@ class MzString
 // Searching for parts
         int       find    (char c);
         int       find    (char c, int pos);
-        int       find    (char *);
-        int       find    (char *, int pos);
         int       rfind   (char c);
         int       rfind   (char c, int pos);
 
@@ -163,15 +160,15 @@ inline const char* MzString::c_str() const
     if (Data)
     {
         Data[Length] = '\0';                      // We always leave room for this.
-        return (const char *)Data;
+        return Data;
     } else
     return "";
 }
 
 
-//
+
 // Non friend, non member operators
-//
-#endif                                            /* _MZSTRING_H_ */
+
+#endif // INCLUDED_HWPFILTER_SOURCE_MZSTRING_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
