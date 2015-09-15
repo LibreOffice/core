@@ -31,6 +31,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
 #include <vcl/vclptr.hxx>
+
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
@@ -262,7 +263,7 @@ public:
     bool SmoothScroll( long lXDiff, long lYDiff, const Rectangle* );//Browser
     void EnableSmooth( bool b ) { mbEnableSmooth = b; }
 
-    const SwRect& VisArea() const { return maVisArea; }
+    const SwRect& VisArea() const;
 
     // If necessary scroll until passed Rect is situated in visible sector.
     void MakeVisible( const SwRect & );
