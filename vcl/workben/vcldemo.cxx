@@ -142,11 +142,11 @@ public:
         maIntroBW.Filter(BMP_FILTER_EMBOSS_GREY);
 
         InitRenderers();
-        mnSegmentsX = rtl::math::round(sqrt(maRenderers.size()), 0,
+        mnSegmentsX = rtl::math::round(std::sqrt(maRenderers.size()), 0,
                                        rtl_math_RoundingMode_Up);
-        mnSegmentsY = rtl::math::round(sqrt(maRenderers.size()), 0,
+        mnSegmentsY = rtl::math::round(std::sqrt(maRenderers.size()), 0,
                                        rtl_math_RoundingMode_Down);
-        mnSegmentsY = floor(sqrt(maRenderers.size()));
+        mnSegmentsY = floor(std::sqrt(maRenderers.size()));
     }
 
     OUString getRendererList();

@@ -842,6 +842,13 @@ AC_SUBST(WITH_MINGW)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
+if test "$_OS" != "WINNT"; then
+    AC_SEARCH_LIBS([dlopen], [dl], [DLOPEN_NEEDS_LIBDL='TRUE'], [DLOPEN_NEEDS_LIBDL=''])
+else
+    DLOPEN_NEEDS_LIBDL=''
+fi
+AC_SUBST(DLOPEN_NEEDS_LIBDL)
+
 ###############################################################################
 # Extensions switches --enable/--disable
 ###############################################################################
