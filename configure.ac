@@ -11318,6 +11318,7 @@ int main(int argc, char **argv) {
 
             AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #define SAL_OVERRIDE
+#include <cstdlib>
 #include "tst_exclude_socket_notifiers.moc"
 
 int main(int argc, char *argv[])
@@ -11351,6 +11352,7 @@ int main(int argc, char *argv[])
 
             AC_RUN_IFELSE([AC_LANG_SOURCE([[
 #define SAL_OVERRIDE
+#include <cstdlib>
 #include "tst_exclude_posted_events.moc"
 
 int main(int argc, char *argv[])
