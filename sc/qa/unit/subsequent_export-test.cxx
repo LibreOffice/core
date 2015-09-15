@@ -147,6 +147,8 @@ public:
     void testHiddenShape();
     void testMoveCellAnchoredShapes();
     void testHeaderImage();
+    void testMatrixMultiplication();
+
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -203,6 +205,8 @@ public:
     CPPUNIT_TEST(testHiddenShape);
     CPPUNIT_TEST(testMoveCellAnchoredShapes);
     CPPUNIT_TEST(testHeaderImage);
+    CPPUNIT_TEST(testMatrixMultiplication);
+
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2822,6 +2826,32 @@ void ScExportTest::testHeaderImage()
     OUString aURL;
     xStyle->getPropertyValue("HeaderBackGraphicURL") >>= aURL;
     CPPUNIT_ASSERT(aURL.startsWith("vnd.sun.star.GraphicObject:"));
+}
+
+void ScExportTest::testMatrixMultiplication()
+{
+    ScDocShellRef xShell = loadDoc("matrix-multiplication.", XLSX);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(&(*xDocSh), m_xSFactory, "xl/worksheets/sheet1.xml", XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    OUString CellFormulaRange = getXPath(pDoc,
+        "/x:worksheet/x:sheetData/x:row[4]/x:c/x:f","ref");
+
+    // make sure that the CellFormulaRange is G5:G6.
+    CPPUNIT_ASSERT_EQUAL(OUString("G5:G6"), CellFormulaRange);
+
+    OUString CellFormulaType = getXPath(pDoc,
+        "/x:worksheet/x:sheetData/x:row[4]/x:c/x:f","t");
+
+    // make sure that the CellFormulaType is array.
+    CPPUNIT_ASSERT_EQUAL(OUString("array"), CellFormulaType);
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
