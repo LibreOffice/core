@@ -717,6 +717,21 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     return pWindow;
 }
 
+/// Common setup for DocView (regardless if it's just a new view or a document to be loaded).
+static void setupDocView(GtkWidget* pDocView)
+{
+#if GLIB_CHECK_VERSION(2,40,0)
+    g_assert_nonnull(pDocView);
+#endif
+    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
+    g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
+    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
+    g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
+    g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), NULL);
+    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), NULL);
+    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), NULL);
+}
+
 int main( int argc, char* argv[] )
 {
     if( argc < 3 ||
@@ -731,19 +746,8 @@ int main( int argc, char* argv[] )
 
     gtk_init( &argc, &argv );
 
-    // Docview
-    GtkWidget* pDocView = lok_doc_view_new (argv[1], NULL, NULL);
-#if GLIB_CHECK_VERSION(2,40,0)
-    g_assert_nonnull(pDocView);
-#endif
-    g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
-    g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
-    g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
-    g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
-    g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), NULL);
-    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), NULL);
-    g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), NULL);
-
+    GtkWidget* pDocView = lok_doc_view_new(argv[1], NULL, NULL);
+    setupDocView(pDocView);
     TiledWindow aWindow;
     aWindow.m_pDocView = pDocView;
     createWindow(aWindow);
