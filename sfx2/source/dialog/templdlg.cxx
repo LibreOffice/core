@@ -476,7 +476,7 @@ TriState StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
         return TRISTATE_FALSE;
     aParent = GetEntryText(pTarget);
     aStyle  = GetEntryText(pEntry);
-    const bool bRet = (bool)aDropLink.Call(this);
+    const bool bRet = aDropLink.Call(*this);
     rpNewParent = pTarget;
     lPos=0;
     IntlWrapper aIntlWrapper( Application::GetSettings().GetLanguageTag() );
@@ -1864,13 +1864,13 @@ SfxObjectShell* SfxCommonTemplateDialog_Impl::SaveSelection()
     return pDocShell;
 }
 
-IMPL_LINK( SfxCommonTemplateDialog_Impl, DropHdl, StyleTreeListBox_Impl *, pBox )
+IMPL_LINK_TYPED( SfxCommonTemplateDialog_Impl, DropHdl, StyleTreeListBox_Impl&, rBox, bool )
 {
-    bDontUpdate=true;
+    bDontUpdate = true;
     const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
     const SfxStyleFamily eFam = pItem->GetFamily();
-    long ret= pStyleSheetPool->SetParent(eFam,pBox->GetStyle(), pBox->GetParent())? 1L: 0L;
-    bDontUpdate=false;
+    bool ret = pStyleSheetPool->SetParent(eFam, rBox.GetStyle(), rBox.GetParent());
+    bDontUpdate = false;
     return ret;
 }
 

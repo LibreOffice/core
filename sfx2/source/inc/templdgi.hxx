@@ -98,9 +98,9 @@ class StyleTreeListBox_Impl : public DropListBox_Impl
 private:
     SvTreeListEntry* pCurEntry;
     Link<LinkParamNone*,void> aDoubleClickLink;
-    Link<> aDropLink;
+    Link<StyleTreeListBox_Impl&,bool> aDropLink;
     OUString  aParent;
-    OUString aStyle;
+    OUString  aStyle;
 
 protected:
     virtual void Command(const CommandEvent& rMEvt) SAL_OVERRIDE;
@@ -120,7 +120,7 @@ public:
     {
         aDoubleClickLink = rLink;
     }
-    void SetDropHdl(const Link<> &rLink)
+    void SetDropHdl(const Link<StyleTreeListBox_Impl&,bool> &rLink)
     {
         aDropLink = rLink;
     }
@@ -219,7 +219,7 @@ protected:
     DECL_LINK_TYPED( FmtSelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( ApplyHdl, LinkParamNone*, void );
     DECL_LINK_TYPED( TreeListApplyHdl, SvTreeListBox*, bool );
-    DECL_LINK( DropHdl, StyleTreeListBox_Impl* );
+    DECL_LINK_TYPED( DropHdl, StyleTreeListBox_Impl&, bool );
     DECL_LINK_TYPED( TimeOut, Idle*, void );
 
     virtual void EnableItem(sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true)
