@@ -651,7 +651,7 @@ namespace svt { namespace table
 
     void TableControl::Select()
     {
-        ImplCallEventListenersAndHandler( VCLEVENT_TABLEROW_SELECT, [this] () { m_pImpl->getSelectHandler().Call(this); } );
+        ImplCallEventListenersAndHandler( VCLEVENT_TABLEROW_SELECT, nullptr );
 
         if ( m_pImpl->isAccessibleAlive() )
         {

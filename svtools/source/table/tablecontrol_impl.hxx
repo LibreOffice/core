@@ -134,8 +134,6 @@ namespace svt { namespace table
         RowPos                  m_nAnchor;
         bool                    m_bUpdatingColWidths;
 
-        Link<>                  m_aSelectHdl;
-
         AccessibleFactoryAccess     m_aFactoryAccess;
         IAccessibleTableControl*    m_pAccessibleTable;
 
@@ -245,8 +243,6 @@ namespace svt { namespace table
                 <FALSE/> if and only if all rows were selected already.
         */
         bool        markAllRowsAsSelected();
-
-        Link<> const& getSelectHandler() const { return m_aSelectHdl; }
 
         void commitAccessibleEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
         void commitCellEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );
