@@ -27,6 +27,7 @@
 #include <vcl/status.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/opengl/OpenGLWrapper.hxx>
 
 #include <svdata.hxx>
 #include <window.h>
@@ -730,6 +731,11 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         {
             // Do offscreen only when we are not recording layout..
             bool bOffscreen = !rRenderContext.ImplIsRecordLayout();
+
+            // tdf#94213 - un-necessary virtual-device in GL mode
+            // causes context switch & hence flicker during sizing.
+            if( OpenGLWrapper::isVCLOpenGLEnabled() )
+                bOffscreen = false;
 
             for (sal_uInt16 i = 0; i < nItemCount; i++)
             {
