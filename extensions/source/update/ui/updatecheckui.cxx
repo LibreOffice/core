@@ -144,7 +144,7 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper
 
 private:
                     DECL_LINK_TYPED(ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
-                    DECL_LINK( HighlightHdl, MenuBar::MenuBarButtonCallbackArg* );
+                    DECL_LINK_TYPED(HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
                     DECL_LINK_TYPED(WaitTimeOutHdl, Idle *, void);
                     DECL_LINK_TYPED(TimeOutHdl, Timer *, void);
                     DECL_LINK_TYPED(UserEventHdl, void *, void);
@@ -601,14 +601,14 @@ IMPL_LINK_NOARG_TYPED(UpdateCheckUI, ClickHdl, MenuBar::MenuBarButtonCallbackArg
 }
 
 
-IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg*, pData )
+IMPL_LINK_TYPED( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, rData, bool )
 {
-    if ( pData->bHighlight )
+    if ( rData.bHighlight )
         maWaitIdle.Start();
     else
         RemoveBubbleWindow( false );
 
-    return 0;
+    return false;
 }
 
 

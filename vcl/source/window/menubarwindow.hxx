@@ -69,7 +69,7 @@ private:
     {
         sal_uInt16    m_nId;
         Link<MenuBar::MenuBarButtonCallbackArg&,bool>  m_aSelectLink;
-        Link<>        m_aHighlightLink;
+        Link<MenuBar::MenuBarButtonCallbackArg&,bool>  m_aHighlightLink;
 
         AddButtonEntry() : m_nId( 0 ) {}
     };
@@ -143,7 +143,7 @@ public:
 
     /// Add an arbitrary button to the menubar that will appear next to the close button.
     sal_uInt16 AddMenuBarButton(const Image&, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&, const OUString&);
-    void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link<>&);
+    void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&);
     Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId);
     void RemoveMenuBarButton(sal_uInt16 nId);
     bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId);

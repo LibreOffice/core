@@ -270,7 +270,7 @@ IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent*, pEvent )
     std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( aArg.nId );
     if( it != m_aAddButtons.end() )
     {
-        it->second.m_aHighlightLink.Call( &aArg );
+        it->second.m_aHighlightLink.Call( aArg );
     }
     return 0;
 }
@@ -1150,7 +1150,7 @@ sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<Me
     return nId;
 }
 
-void MenuBarWindow::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<>& rLink )
+void MenuBarWindow::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& rLink )
 {
     std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( nId );
     if( it != m_aAddButtons.end() )

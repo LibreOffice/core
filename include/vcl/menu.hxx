@@ -488,7 +488,7 @@ public:
     // set the highlight link for additional button with ID nId
     // highlight link will be called with a MenuBarButtonHighlightArg
     // the bHighlight member of that struct shall contain the new state
-    void SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<>& );
+    void SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& );
     // returns the rectangle occupied by the additional button named nId
     // coordinates are relative to the systemwindiow the menubar is attached to
     // if the menubar is unattached an empty rectangle is returned

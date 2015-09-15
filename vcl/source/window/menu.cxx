@@ -2737,7 +2737,7 @@ sal_uInt16 MenuBar::AddMenuBarButton( const Image& i_rImage, const Link<MenuBar:
     return pMenuWin ? pMenuWin->AddMenuBarButton(i_rImage, i_rLink, i_rToolTip) : 0;
 }
 
-void MenuBar::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<>& rLink )
+void MenuBar::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& rLink )
 {
     MenuBarWindow* pMenuWin = getMenuBarWindow();
     if (!pMenuWin)
