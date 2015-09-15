@@ -80,7 +80,7 @@ void SwTextFrm::ValidateFrm()
 {
     vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     // Validate surroundings to avoid oscillation
-    SWAP_IF_SWAPPED swap( this );
+    SwSwapIfSwapped swap( this );
 
     if ( !IsInFly() && !IsInTab() )
     {   // Only validate 'this' when inside a fly, the rest should actually only be
@@ -134,7 +134,7 @@ void _ValidateBodyFrm( SwFrm *pFrm )
 
 void SwTextFrm::ValidateBodyFrm()
 {
-    SWAP_IF_SWAPPED swap( this );
+    SwSwapIfSwapped swap( this );
 
      // See comment in ValidateFrm()
     if ( !IsInFly() && !IsInTab() &&
@@ -144,7 +144,7 @@ void SwTextFrm::ValidateBodyFrm()
 
 bool SwTextFrm::_GetDropRect( SwRect &rRect ) const
 {
-    SWAP_IF_NOT_SWAPPED swap(const_cast<SwTextFrm *>(this));
+    SwSwapIfNotSwapped swap(const_cast<SwTextFrm *>(this));
 
     OSL_ENSURE( HasPara(), "SwTextFrm::_GetDropRect: try again next year." );
     SwTextSizeInfo aInf( const_cast<SwTextFrm*>(this) );
@@ -182,7 +182,7 @@ const SwBodyFrm *SwTextFrm::FindBodyFrm() const
 bool SwTextFrm::CalcFollow( const sal_Int32 nTextOfst )
 {
     vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
-    SWAP_IF_SWAPPED swap( this );
+    SwSwapIfSwapped swap( this );
 
     OSL_ENSURE( HasFollow(), "CalcFollow: missing Follow." );
 
@@ -353,7 +353,7 @@ void SwTextFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
 
     // AdjustFrm is called with a swapped frame during
     // formatting but the frame is not swapped during FormatEmpty
-    SWAP_IF_SWAPPED swap( this );
+    SwSwapIfSwapped swap( this );
     SWRECTFN ( this )
 
     // The Frame's size variable is incremented by Grow or decremented by Shrink.
@@ -665,7 +665,7 @@ SwContentFrm *SwTextFrm::JoinFrm()
 
 SwContentFrm *SwTextFrm::SplitFrm( const sal_Int32 nTextPos )
 {
-    SWAP_IF_SWAPPED swap( this );
+    SwSwapIfSwapped swap( this );
 
     // The Paste sends a Modify() to me
     // I lock myself, so that my data does not disappear
@@ -857,7 +857,7 @@ bool SwTextFrm::CalcPreps()
             }
 
             {
-                SWAP_IF_NOT_SWAPPED swap( this );
+                SwSwapIfNotSwapped swap( this );
 
                 SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this );
                 SwTextFormatter aLine( this, &aInf );
@@ -952,7 +952,7 @@ void SwTextFrm::FormatAdjust( SwTextFormatter &rLine,
                              const sal_Int32 nStrLen,
                              const bool bDummy )
 {
-    SWAP_IF_NOT_SWAPPED swap( this );
+    SwSwapIfNotSwapped swap( this );
 
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
 

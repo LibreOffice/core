@@ -270,7 +270,7 @@ SwTwips SwTextFrm::GetFootnoteLine( const SwTextFootnote *pFootnote ) const
 
     SwTwips nRet;
     {
-        SWAP_IF_NOT_SWAPPED swap(const_cast<SwTextFrm *>(this));
+        SwSwapIfNotSwapped swap(const_cast<SwTextFrm *>(this));
 
         SwTextInfo aInf( pThis );
         SwTextIter aLine( pThis, &aInf );
@@ -303,7 +303,7 @@ SwTwips SwTextFrm::_GetFootnoteFrmHeight() const
                                         GetFootnote().IsEndNote() ) )
         return 0;
 
-    SWAP_IF_SWAPPED swap(const_cast<SwTextFrm *>(this));
+    SwSwapIfSwapped swap(const_cast<SwTextFrm *>(this));
 
     SwTwips nHeight = pRef->IsInFootnoteConnect() ?
                             1 : pRef->GetFootnoteLine( pFootnoteFrm->GetAttr() );
@@ -804,7 +804,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
     if( rInf.IsTest() )
         return new SwFootnotePortion( rFootnote.GetViewNumStr( *pDoc ), pFootnote );
 
-    SWAP_IF_SWAPPED swap(pFrm);
+    SwSwapIfSwapped swap(pFrm);
 
     sal_uInt16 nReal;
     {
@@ -1105,7 +1105,7 @@ sal_Int32 SwTextFormatter::FormatQuoVadis( const sal_Int32 nOffset )
 
     sal_Int32 nRet;
     {
-        SWAP_IF_NOT_SWAPPED swap(pFrm);
+        SwSwapIfNotSwapped swap(pFrm);
 
         nRet = FormatLine( nStart );
     }

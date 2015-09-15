@@ -763,15 +763,15 @@ private:
     bool undo_;
 };
 
-class SWAP_IF_SWAPPED: private TemporarySwap {
+class SwSwapIfSwapped: private TemporarySwap {
 public:
-    explicit SWAP_IF_SWAPPED(SwTextFrm * frame):
+    explicit SwSwapIfSwapped(SwTextFrm* frame):
         TemporarySwap(frame, frame->IsSwapped()) {}
 };
 
-class SWAP_IF_NOT_SWAPPED: private TemporarySwap {
+class SwSwapIfNotSwapped: private TemporarySwap {
 public:
-    explicit SWAP_IF_NOT_SWAPPED(SwTextFrm * frame):
+    explicit SwSwapIfNotSwapped(SwTextFrm* frame):
         TemporarySwap(frame, !frame->IsSwapped()) {}
 };
 

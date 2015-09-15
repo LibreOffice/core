@@ -410,7 +410,7 @@ SwRect SwTextFly::_GetFrm( const SwRect &rRect, bool bTop ) const
 
 bool SwTextFly::IsAnyFrm() const
 {
-    SWAP_IF_SWAPPED swap(const_cast<SwTextFrm *>(pCurrFrm));
+    SwSwapIfSwapped swap(const_cast<SwTextFrm *>(pCurrFrm));
 
     OSL_ENSURE( bOn, "IsAnyFrm: Why?" );
     SwRect aRect( pCurrFrm->Frm().Pos() + pCurrFrm->Prt().Pos(),
@@ -861,7 +861,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     // #i68520#
     OSL_ENSURE( !mpAnchoredObjList, "InitFlyList: FlyList already initialized" );
 
-    SWAP_IF_SWAPPED swap(const_cast<SwTextFrm *>(pCurrFrm));
+    SwSwapIfSwapped swap(const_cast<SwTextFrm *>(pCurrFrm));
 
     const SwSortedObjs *pSorted = pPage->GetSortedObjs();
     const size_t nCount = pSorted ? pSorted->size() : 0;
@@ -1023,7 +1023,7 @@ SwTwips SwTextFly::CalcMinBottom() const
 
 bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 {
-    SWAP_IF_SWAPPED swap(const_cast<SwTextFrm *>(pCurrFrm));
+    SwSwapIfSwapped swap(const_cast<SwTextFrm *>(pCurrFrm));
 
     bool bRet = false;
     // #i68520#
@@ -1406,7 +1406,7 @@ SwSurround SwTextFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchored
 bool SwTextFly::IsAnyFrm( const SwRect &rLine ) const
 {
 
-    SWAP_IF_SWAPPED swap(const_cast<SwTextFrm *>(pCurrFrm));
+    SwSwapIfSwapped swap(const_cast<SwTextFrm *>(pCurrFrm));
 
     OSL_ENSURE( bOn, "IsAnyFrm: Why?" );
 

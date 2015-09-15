@@ -57,7 +57,7 @@ inline bool IsNastyFollow( const SwTextFrm *pFrm )
 SwTextFrmBreak::SwTextFrmBreak( SwTextFrm *pNewFrm, const SwTwips nRst )
     : nRstHeight(nRst), pFrm(pNewFrm)
 {
-    SWAP_IF_SWAPPED swap(pFrm);
+    SwSwapIfSwapped swap(pFrm);
     SWRECTFN( pFrm )
     nOrigin = (pFrm->*fnRect->fnGetPrtTop)();
     bKeep = !pFrm->IsMoveable() || IsNastyFollow( pFrm );
@@ -104,7 +104,7 @@ bool SwTextFrmBreak::IsInside( SwTextMargin &rLine ) const
 {
     bool bFit = false;
 
-    SWAP_IF_SWAPPED swap(pFrm);
+    SwSwapIfSwapped swap(pFrm);
     SWRECTFN( pFrm )
     // nOrigin is an absolut value, rLine referes to the swapped situation.
 
@@ -161,7 +161,7 @@ bool SwTextFrmBreak::IsInside( SwTextMargin &rLine ) const
 
 bool SwTextFrmBreak::IsBreakNow( SwTextMargin &rLine )
 {
-    SWAP_IF_SWAPPED swap(pFrm);
+    SwSwapIfSwapped swap(pFrm);
 
     // bKeep is stronger than IsBreakNow()
     // Is there enough space ?
@@ -220,7 +220,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrm *pNewFrm, const SwTwips nRst,
     bool bChkKeep   )
     : SwTextFrmBreak( pNewFrm, nRst ), nWidLines( 0 ), nOrphLines( 0 )
 {
-    SWAP_IF_SWAPPED swap(pFrm);
+    SwSwapIfSwapped swap(pFrm);
 
     if( bKeep )
     {
@@ -302,7 +302,7 @@ bool WidowsAndOrphans::FindBreak( SwTextFrm *pFrame, SwTextMargin &rLine,
     // Thus, assertion on situation, that these are different to figure out why.
     OSL_ENSURE( pFrm == pFrame, "<WidowsAndOrphans::FindBreak> - pFrm != pFrame" );
 
-    SWAP_IF_SWAPPED swap(pFrm);
+    SwSwapIfSwapped swap(pFrm);
 
     bool bRet = true;
     sal_uInt16 nOldOrphans = nOrphLines;

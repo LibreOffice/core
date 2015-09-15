@@ -272,7 +272,7 @@ SwFrmSwapper::~SwFrmSwapper()
 
 void SwTextFrm::SwitchLTRtoRTL( SwRect& rRect ) const
 {
-    SWAP_IF_NOT_SWAPPED swap(const_cast<SwTextFrm *>(this));
+    SwSwapIfNotSwapped swap(const_cast<SwTextFrm *>(this));
 
     long nWidth = rRect.Width();
     rRect.Left( 2 * ( Frm().Left() + Prt().Left() ) +
@@ -283,7 +283,7 @@ void SwTextFrm::SwitchLTRtoRTL( SwRect& rRect ) const
 
 void SwTextFrm::SwitchLTRtoRTL( Point& rPoint ) const
 {
-    SWAP_IF_NOT_SWAPPED swap(const_cast<SwTextFrm *>(this));
+    SwSwapIfNotSwapped swap(const_cast<SwTextFrm *>(this));
 
     rPoint.X() = 2 * ( Frm().Left() + Prt().Left() ) + Prt().Width() - rPoint.X() - 1;
 }
@@ -1382,7 +1382,7 @@ void SwTextFrm::PrepWidows( const sal_uInt16 nNeed, bool bNotify )
     sal_uInt16 nHave = nNeed;
 
     // We yield a few lines and shrink in CalcPreps()
-    SWAP_IF_NOT_SWAPPED swap( this );
+    SwSwapIfNotSwapped swap( this );
 
     SwTextSizeInfo aInf( this );
     SwTextMargin aLine( this, &aInf );
@@ -1992,7 +1992,7 @@ bool SwTextFrm::WouldFit( SwTwips &rMaxHeight, bool &bSplit, bool bTst )
         }
     }
 
-    SWAP_IF_NOT_SWAPPED swap( this );
+    SwSwapIfNotSwapped swap( this );
 
     SwTextSizeInfo aInf( this );
     SwTextMargin aLine( this, &aInf );
@@ -2063,7 +2063,7 @@ sal_uInt16 SwTextFrm::GetParHeight() const
 SwTextFrm* SwTextFrm::GetFormatted( bool bForceQuickFormat )
 {
     vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
-    SWAP_IF_SWAPPED swap( this );
+    SwSwapIfSwapped swap( this );
 
     // The IdleCollector could've removed my cached information
     // Calc() calls our format
