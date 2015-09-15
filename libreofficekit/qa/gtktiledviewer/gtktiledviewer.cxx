@@ -38,17 +38,17 @@ static GtkToolItem* pItalic;
 static GtkToolItem* pUnderline;
 static GtkToolItem* pStrikethrough;
 static GtkWidget* pScrolledWindow;
-std::map<GtkToolItem*, std::string> g_aToolItemCommandNames;
-std::map<std::string, GtkToolItem*> g_aCommandNameToolItems;
-bool g_bToolItemBroadcast = true;
+static std::map<GtkToolItem*, std::string> g_aToolItemCommandNames;
+static std::map<std::string, GtkToolItem*> g_aCommandNameToolItems;
+static bool g_bToolItemBroadcast = true;
 static GtkWidget* pVBox;
 static GtkComboBoxText* pPartSelector;
 static GtkWidget* pPartModeComboBox;
 /// Should the part selector avoid calling lok::Document::setPart()?
 static bool g_bPartSelectorBroadcast = true;
-GtkWidget* pFindbar;
-GtkWidget* pFindbarEntry;
-GtkWidget* pFindbarLabel;
+static GtkWidget* pFindbar;
+static GtkWidget* pFindbarEntry;
+static GtkWidget* pFindbarLabel;
 
 static void lcl_registerToolItem(GtkToolItem* pItem, const std::string& rName)
 {
