@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_5241f438",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3790,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:42:40Z",
+      "side": 1,
+      "message": "I\u0027d rather change this to\n\n else if (rSortArray.empty())\n {\n     if (bAllowEmptyArray)\n         return;\n     SetError( errNoValue)\n }\n\nbecause the attempt to sort an empty array below (as nGlobalError would not be set then) would be at least superfluous..",
+      "revId": "3c56e580dc3117eac2919829b9e63f9580a5ff47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_323e00b9",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:42:40Z",
+      "side": 1,
+      "message": "Please do the string changes in a follow-up change and not as part of this change. If we want to cherry-pick fixes to release branches (and we do want that in this case for 5-0) it should not have string changes, otherwise translators get angry ;-)",
+      "revId": "3c56e580dc3117eac2919829b9e63f9580a5ff47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
