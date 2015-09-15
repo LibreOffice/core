@@ -127,7 +127,7 @@ private:
 
     Idle                aFactoryIdle;
     Timer               aKeywordTimer;
-    Link<>              aKeywordLink;
+    Link<IndexTabPage_Impl&,void> aKeywordLink;
 
     OUString            sFactory;
     OUString            sKeyword;
@@ -154,12 +154,12 @@ public:
     inline OUString     GetFactory() const { return sFactory; }
     OUString            GetSelectEntry() const;
     inline void         SetFocusOnBox() { m_pIndexCB->GrabFocus(); }
-    inline bool     HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
+    inline bool         HasFocusOnEdit() const { return m_pIndexCB->HasChildPathFocus(); }
 
-    inline void         SetKeywordHdl( const Link<>& rLink ) { aKeywordLink = rLink; }
+    inline void         SetKeywordHdl( const Link<IndexTabPage_Impl&,void>& rLink ) { aKeywordLink = rLink; }
     void                SetKeyword( const OUString& rKeyword );
-    bool            HasKeyword() const;
-    bool            HasKeywordIgnoreCase();
+    bool                HasKeyword() const;
+    bool                HasKeywordIgnoreCase();
     void                OpenKeyword();
 
     inline void         SelectExecutableEntry() { m_pIndexCB->SelectExecutableEntry(); }
@@ -289,7 +289,7 @@ private:
 
     Link<>              aSelectFactoryLink;
     Link<>              aPageDoubleClickLink;
-    Link<>              aIndexKeywordLink;
+    Link<IndexTabPage_Impl&,void>  aIndexKeywordLink;
     OUString            sKeyword;
 
     VclPtr<SfxHelpWindow_Impl>     pParentWin;
@@ -316,7 +316,7 @@ private:
     DECL_LINK(SelectHdl, void *);
     DECL_LINK_TYPED(InitHdl, Idle *, void);
     DECL_LINK_TYPED(SelectFactoryHdl, Idle *, void);
-    DECL_LINK(KeywordHdl, void *);
+    DECL_LINK_TYPED(KeywordHdl, IndexTabPage_Impl&, void);
     DECL_LINK_TYPED(ContentTabPageDoubleClickHdl, SvTreeListBox*, bool);
 
 public:

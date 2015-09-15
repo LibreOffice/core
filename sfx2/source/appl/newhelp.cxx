@@ -719,7 +719,7 @@ void IndexTabPage_Impl::InitializeIndex()
     m_pIndexCB->SetUpdateMode( true );
 
     if ( !sKeyword.isEmpty() )
-        aKeywordLink.Call( this );
+        aKeywordLink.Call( *this );
 }
 
 #undef INSERT_DATA
@@ -749,7 +749,7 @@ IMPL_LINK_TYPED( IndexTabPage_Impl, IdleHdl, Idle*, pIdle, void )
 IMPL_LINK_TYPED( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer, void)
 {
     if(&aKeywordTimer == pTimer && !sKeyword.isEmpty())
-        aKeywordLink.Call(this);
+        aKeywordLink.Call(*this);
 }
 
 void IndexTabPage_Impl::ActivatePage()
@@ -1616,7 +1616,7 @@ IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, SelectFactoryHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
+IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl&, void)
 {
     // keyword found on index?
     bool bIndex = pIPage->HasKeyword();
@@ -1636,8 +1636,6 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, KeywordHdl)
         pIPage->OpenKeyword();
     else if ( !pSPage->OpenKeyword( sKeyword ) )
         pParentWin->ShowStartPage();
-
-    return 0;
 }
 
 void SfxHelpIndexWindow_Impl::Resize()
