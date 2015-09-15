@@ -147,12 +147,11 @@ static OUString Convert_Impl( const OUString& rValue )
     if (rValue.isEmpty())
         return aReturn;
 
-    const sal_Unicode cDelim = MULTIPATH_DELIMITER;
     sal_Int32 nPos = 0;
 
     for (;;)
     {
-        OUString aValue = rValue.getToken( 0, cDelim, nPos );
+        OUString aValue = rValue.getToken( 0, MULTIPATH_DELIMITER, nPos );
         INetURLObject aObj( aValue );
         if ( aObj.GetProtocol() == INetProtocol::File )
             aReturn += aObj.PathToFileName();
@@ -799,13 +798,12 @@ void SvxPathTabPage::SetPathList(
         }
 
         // save user paths
-        char cDelim = MULTIPATH_DELIMITER;
-        const sal_Int32 nCount = comphelper::string::getTokenCount(_rUserPath, cDelim);
+        const sal_Int32 nCount = comphelper::string::getTokenCount(_rUserPath, MULTIPATH_DELIMITER);
         Sequence< OUString > aPathSeq( nCount );
         OUString* pArray = aPathSeq.getArray();
         sal_Int32 nPos = 0;
         for ( sal_Int32 i = 0; i < nCount; ++i )
-            pArray[i] = _rUserPath.getToken( 0, cDelim, nPos );
+            pArray[i] = _rUserPath.getToken( 0, MULTIPATH_DELIMITER, nPos );
         Any aValue = makeAny( aPathSeq );
         pImpl->m_xPathSettings->setPropertyValue(
             sCfgName + POSTFIX_USER, aValue);
