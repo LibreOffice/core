@@ -569,6 +569,13 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
     }
 }
 
+const SwRect& SwViewShell::VisArea() const
+{
+    // when using the tiled rendering, consider the entire document as our
+    // visible area
+    return isTiledRendering()? GetLayout()->Frm(): maVisArea;
+}
+
 void SwViewShell::MakeVisible( const SwRect &rRect )
 {
     if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareWin(*this) )
