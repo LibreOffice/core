@@ -4370,10 +4370,9 @@ void ImpEditEngine::LeaveBlockNotifications()
     }
 }
 
-IMPL_LINK_NOARG(ImpEditEngine, DocModified)
+IMPL_LINK_NOARG_TYPED(ImpEditEngine, DocModified, LinkParamNone*, void)
 {
     aModifyHdl.Call( NULL /*GetEditEnginePtr()*/ ); // NULL, because also used for Outliner
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

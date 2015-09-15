@@ -747,7 +747,7 @@ private:
     boost::ptr_vector<ContentNode> maContents;
 
     SfxItemPool*    pItemPool;
-    Link<>          aModifyHdl;
+    Link<LinkParamNone*,void>      aModifyHdl;
 
     SvxFont         aDefFont;           //faster than ever from the pool!!
     sal_uInt16      nDefTab;
@@ -769,7 +769,7 @@ public:
     bool            IsModified() const      { return bModified; }
     void            SetModified( bool b );
 
-    void            SetModifyHdl( const Link<>& rLink ) { aModifyHdl = rLink; }
+    void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
 
     void            CreateDefFont( bool bUseStyles );
     const SvxFont&  GetDefFont() { return aDefFont; }
