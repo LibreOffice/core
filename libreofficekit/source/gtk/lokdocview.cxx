@@ -127,7 +127,9 @@ enum
     PROP_0,
 
     PROP_LO_PATH,
+    PROP_LO_POINTER,
     PROP_DOC_PATH,
+    PROP_DOC_POINTER,
     PROP_EDITABLE,
     PROP_LOAD_PROGRESS,
     PROP_ZOOM,
@@ -1388,8 +1390,14 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
     case PROP_LO_PATH:
         priv->m_aLOPath = g_value_dup_string (value);
         break;
+    case PROP_LO_POINTER:
+        priv->m_pOffice = static_cast<LibreOfficeKit*>(g_value_get_pointer(value));
+        break;
     case PROP_DOC_PATH:
         priv->m_aDocPath = g_value_dup_string (value);
+        break;
+    case PROP_DOC_POINTER:
+        priv->m_pDocument = static_cast<LibreOfficeKitDocument*>(g_value_get_pointer(value));
         break;
     case PROP_EDITABLE:
         lok_doc_view_set_edit (pDocView, g_value_get_boolean (value));
@@ -1418,8 +1426,14 @@ static void lok_doc_view_get_property (GObject* object, guint propId, GValue *va
     case PROP_LO_PATH:
         g_value_set_string (value, priv->m_aLOPath);
         break;
+    case PROP_LO_POINTER:
+        g_value_set_pointer(value, priv->m_pOffice);
+        break;
     case PROP_DOC_PATH:
         g_value_set_string (value, priv->m_aDocPath);
+        break;
+    case PROP_DOC_POINTER:
+        g_value_set_pointer(value, priv->m_pDocument);
         break;
     case PROP_EDITABLE:
         g_value_set_boolean (value, priv->m_bEdit);
@@ -1531,6 +1545,20 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                                                        | G_PARAM_CONSTRUCT_ONLY)));
 
     /**
+     * LOKDocView:lopointer:
+     *
+     * A LibreOfficeKit* in case lok_init() is already called
+     * previously.
+     */
+    g_object_class_install_property (pGObjectClass,
+          PROP_LO_POINTER,
+          g_param_spec_pointer("lopointer",
+                              "LO Pointer",
+                              "A LibreOfficeKit* from lok_init()",
+                              static_cast<GParamFlags>(G_PARAM_READWRITE
+                                                       | G_PARAM_CONSTRUCT_ONLY)));
+
+    /**
      * LOKDocView:docpath:
      *
      * The path of the document that is currently being viewed.
@@ -1541,6 +1569,19 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                               "Document Path",
                               "The URI of the document to open",
                               0,
+                              static_cast<GParamFlags>(G_PARAM_READWRITE)));
+
+    /**
+     * LOKDocView:docpointer:
+     *
+     * A LibreOfficeKitDocument* in case documentLoad() is already called
+     * previously.
+     */
+    g_object_class_install_property (pGObjectClass,
+          PROP_DOC_POINTER,
+          g_param_spec_pointer("docpointer",
+                              "Document Pointer",
+                              "A LibreOfficeKitDocument* from documentLoad()",
                               static_cast<GParamFlags>(G_PARAM_READWRITE)));
 
     /**
@@ -1793,6 +1834,13 @@ SAL_DLLPUBLIC_EXPORT GtkWidget*
 lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
 {
     return GTK_WIDGET (g_initable_new (LOK_TYPE_DOC_VIEW, cancellable, error, "lopath", pPath, NULL));
+}
+
+SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pLOKDocView)
+{
+    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(pLOKDocView));
+    return GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/0, /*error=*/0,
+                                     "lopath", priv->m_aLOPath, "lopointer", priv->m_pOffice, "docpointer", priv->m_pDocument, NULL));
 }
 
 /**
