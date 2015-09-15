@@ -143,6 +143,7 @@ enum
 static guint doc_view_signals[LAST_SIGNAL] = { 0 };
 
 static void lok_doc_view_initable_iface_init (GInitableIface *iface);
+static void callbackWorker (int nType, const char* pPayload, void* pData);
 
 SAL_DLLPUBLIC_EXPORT GType lok_doc_view_get_type();
 #ifdef __GNUC__
@@ -376,6 +377,37 @@ static gboolean queueDraw(gpointer pData)
     GtkWidget* pWidget = static_cast<GtkWidget*>(pData);
 
     gtk_widget_queue_draw(pWidget);
+
+    return G_SOURCE_REMOVE;
+}
+
+/// Set up LOKDocView after the document is loaded, invoked on the main thread by openDocumentInThread() running in a thread.
+static gboolean postDocumentLoad(gpointer pData)
+{
+    LOKDocView* pLOKDocView = static_cast<LOKDocView*>(pData);
+    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(pLOKDocView));
+
+    priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument);
+    priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
+    priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
+    g_timeout_add(600, handleTimeout, pLOKDocView);
+
+    float zoom = priv->m_fZoom;
+    long nDocumentWidthTwips = priv->m_nDocumentWidthTwips;
+    long nDocumentHeightTwips = priv->m_nDocumentHeightTwips;
+    long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips, zoom);
+    long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips, zoom);
+    // Total number of columns in this document.
+    guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
+
+
+    priv->m_aTileBuffer = TileBuffer(priv->m_pDocument,
+                                     nColumns);
+    gtk_widget_set_size_request(GTK_WIDGET(pLOKDocView),
+                                nDocumentWidthPixels,
+                                nDocumentHeightPixels);
+    gtk_widget_set_can_focus(GTK_WIDGET(pLOKDocView), TRUE);
+    gtk_widget_grab_focus(GTK_WIDGET(pLOKDocView));
 
     return G_SOURCE_REMOVE;
 }
@@ -617,8 +649,7 @@ callback (gpointer pData)
     return G_SOURCE_REMOVE;
 }
 
-static void
-callbackWorker (int nType, const char* pPayload, void* pData)
+static void callbackWorker (int nType, const char* pPayload, void* pData)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW (pData);
 
@@ -1193,27 +1224,7 @@ openDocumentInThread (gpointer data)
     }
     else
     {
-        priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument);
-        priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pDocView);
-        priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
-        g_timeout_add(600, handleTimeout, pDocView);
-
-        float zoom = priv->m_fZoom;
-        long nDocumentWidthTwips = priv->m_nDocumentWidthTwips;
-        long nDocumentHeightTwips = priv->m_nDocumentHeightTwips;
-        long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips, zoom);
-        long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips, zoom);
-        // Total number of columns in this document.
-        guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
-
-
-        priv->m_aTileBuffer = TileBuffer(priv->m_pDocument,
-                                         nColumns);
-        gtk_widget_set_size_request(GTK_WIDGET(pDocView),
-                                    nDocumentWidthPixels,
-                                    nDocumentHeightPixels);
-        gtk_widget_set_can_focus(GTK_WIDGET(pDocView), TRUE);
-        gtk_widget_grab_focus(GTK_WIDGET(pDocView));
+        gdk_threads_add_idle(postDocumentLoad, pDocView);
         g_task_return_boolean (task, true);
     }
 }
