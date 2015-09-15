@@ -309,14 +309,14 @@ namespace
             GLint nBinaryLength = aBinary.size() - GLenumSize;
 
             // Extract binary format
-            sal_uInt8* pBF = (sal_uInt8*)(&nBinaryFormat);
+            sal_uInt8* pBF = reinterpret_cast<sal_uInt8*>(&nBinaryFormat);
             for( size_t i = 0; i < GLenumSize; ++i )
             {
                 pBF[i] = aBinary[nBinaryLength + i];
             }
 
             // Load the program
-            glProgramBinary( nProgramID, nBinaryFormat, (void*)(aBinary.data()), nBinaryLength );
+            glProgramBinary( nProgramID, nBinaryFormat, aBinary.data(), nBinaryLength );
 
             // Check the program
             glGetProgramiv(nProgramID, GL_LINK_STATUS, &nResult);
@@ -338,9 +338,9 @@ namespace
 
         std::vector<sal_uInt8> aBinary( nBinaryLength + GLenumSize );
 
-        glGetProgramBinary( nProgramID, nBinaryLength, NULL, &nBinaryFormat, (void*)(aBinary.data()) );
+        glGetProgramBinary( nProgramID, nBinaryLength, NULL, &nBinaryFormat, aBinary.data() );
 
-        const sal_uInt8* pBF = (const sal_uInt8*)(&nBinaryFormat);
+        const sal_uInt8* pBF = reinterpret_cast<const sal_uInt8*>(&nBinaryFormat);
         aBinary.insert( aBinary.end(), pBF, pBF + GLenumSize );
 
         SAL_INFO("vcl.opengl", "Program id: " << nProgramID );
