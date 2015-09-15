@@ -310,9 +310,9 @@ public:
     size_t size() const;
     SwTableAutoFormat const& operator[](size_t i) const;
     SwTableAutoFormat      & operator[](size_t i);
-    void InsertAutoFormat(size_t i, SwTableAutoFormat * pFormat);
+    void InsertAutoFormat(size_t i, std::unique_ptr<SwTableAutoFormat> pFormat);
     void EraseAutoFormat(size_t i);
-    SwTableAutoFormat* ReleaseAutoFormat(size_t i);
+    std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(size_t i);
 
     bool Load();
     bool Save() const;

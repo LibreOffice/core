@@ -41,8 +41,10 @@
 #include <fmtornt.hxx>
 #include <editsh.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
+
+#include <memory>
+#include <vector>
 
 /*
  * XXX: BIG RED NOTICE! Changes MUST be binary file format compatible and MUST
@@ -1006,7 +1008,7 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
 
 struct SwTableAutoFormatTable::Impl
 {
-    boost::ptr_vector<SwTableAutoFormat> m_AutoFormats;
+    std::vector<std::unique_ptr<SwTableAutoFormat>> m_AutoFormats;
 };
 
 size_t SwTableAutoFormatTable::size() const
@@ -1016,17 +1018,17 @@ size_t SwTableAutoFormatTable::size() const
 
 SwTableAutoFormat const& SwTableAutoFormatTable::operator[](size_t const i) const
 {
-    return m_pImpl->m_AutoFormats[i];
+    return *m_pImpl->m_AutoFormats[i];
 }
 SwTableAutoFormat      & SwTableAutoFormatTable::operator[](size_t const i)
 {
-    return m_pImpl->m_AutoFormats[i];
+    return *m_pImpl->m_AutoFormats[i];
 }
 
 void
-SwTableAutoFormatTable::InsertAutoFormat(size_t const i, SwTableAutoFormat *const pFormat)
+SwTableAutoFormatTable::InsertAutoFormat(size_t const i, std::unique_ptr<SwTableAutoFormat> pFormat)
 {
-    m_pImpl->m_AutoFormats.insert(m_pImpl->m_AutoFormats.begin() + i, pFormat);
+    m_pImpl->m_AutoFormats.insert(m_pImpl->m_AutoFormats.begin() + i, std::move(pFormat));
 }
 
 void SwTableAutoFormatTable::EraseAutoFormat(size_t const i)
@@ -1034,9 +1036,12 @@ void SwTableAutoFormatTable::EraseAutoFormat(size_t const i)
     m_pImpl->m_AutoFormats.erase(m_pImpl->m_AutoFormats.begin() + i);
 }
 
-SwTableAutoFormat* SwTableAutoFormatTable::ReleaseAutoFormat(size_t const i)
+std::unique_ptr<SwTableAutoFormat> SwTableAutoFormatTable::ReleaseAutoFormat(size_t const i)
 {
-    return m_pImpl->m_AutoFormats.release(m_pImpl->m_AutoFormats.begin() + i).release();
+    auto const iter(m_pImpl->m_AutoFormats.begin() + i);
+    std::unique_ptr<SwTableAutoFormat> pRet(std::move(*iter));
+    m_pImpl->m_AutoFormats.erase(iter);
+    return pRet;
 }
 
 SwTableAutoFormatTable::~SwTableAutoFormatTable()
@@ -1047,8 +1052,8 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
     : m_pImpl(new Impl)
 {
     OUString sNm;
-    SwTableAutoFormat* pNew = new SwTableAutoFormat(
-                            SwStyleNameMapper::GetUIName( RES_POOLCOLL_STANDARD, sNm ) );
+    std::unique_ptr<SwTableAutoFormat> pNew(new SwTableAutoFormat(
+                SwStyleNameMapper::GetUIName(RES_POOLCOLL_STANDARD, sNm)));
 
     SwBoxAutoFormat aNew;
 
@@ -1098,7 +1103,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
         const_cast<SwBoxAutoFormat&>(pNew->GetBoxFormat( i )).SetBox( aBox );
     }
 
-    m_pImpl->m_AutoFormats.push_back(pNew);
+    m_pImpl->m_AutoFormats.push_back(std::move(pNew));
 }
 
 bool SwTableAutoFormatTable::Load()
@@ -1163,7 +1168,6 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
             {
                 aVersions.Load( rStream, nVal );        // Item versions
 
-                SwTableAutoFormat* pNew;
                 sal_uInt16 nCount = 0;
                 rStream.ReadUInt16( nCount );
 
@@ -1180,15 +1184,15 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
                     }
                     for (sal_uInt16 i = 0; i < nCount; ++i)
                     {
-                        pNew = new SwTableAutoFormat( OUString() );
+                        std::unique_ptr<SwTableAutoFormat> pNew(
+                            new SwTableAutoFormat( OUString() ));
                         bRet = pNew->Load( rStream, aVersions );
                         if( bRet )
                         {
-                            m_pImpl->m_AutoFormats.push_back(pNew);
+                            m_pImpl->m_AutoFormats.push_back(std::move(pNew));
                         }
                         else
                         {
-                            delete pNew;
                             break;
                         }
                     }
@@ -1221,7 +1225,7 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
             return false;
 
         // Write this version number for all attributes
-        m_pImpl->m_AutoFormats[0].GetBoxFormat(0).SaveVersionNo(
+        m_pImpl->m_AutoFormats[0]->GetBoxFormat(0).SaveVersionNo(
                 rStream, AUTOFORMAT_FILE_VERSION);
 
         rStream.WriteUInt16( m_pImpl->m_AutoFormats.size() - 1 );
@@ -1229,7 +1233,7 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
 
         for (sal_uInt16 i = 1; bRet && i < m_pImpl->m_AutoFormats.size(); ++i)
         {
-            SwTableAutoFormat const& rFormat = m_pImpl->m_AutoFormats[i];
+            SwTableAutoFormat const& rFormat = *m_pImpl->m_AutoFormats[i];
             bRet = rFormat.Save(rStream, AUTOFORMAT_FILE_VERSION);
         }
     }

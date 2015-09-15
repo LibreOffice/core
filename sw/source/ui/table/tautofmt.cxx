@@ -328,8 +328,8 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, AddHdl, Button*, void)
                 if( n >= pTableTable->size() )
                 {
                     // Format with the name does not already exist, so take up.
-                    SwTableAutoFormat* pNewData = new
-                                        SwTableAutoFormat( aFormatName );
+                    std::unique_ptr<SwTableAutoFormat> pNewData(
+                            new SwTableAutoFormat(aFormatName));
                     pShell->GetTableAutoFormat( *pNewData );
 
                     // Insert sorted!!
@@ -337,7 +337,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, AddHdl, Button*, void)
                         if( (*pTableTable)[ n ].GetName() > aFormatName )
                             break;
 
-                    pTableTable->InsertAutoFormat(n, pNewData);
+                    pTableTable->InsertAutoFormat(n, std::move(pNewData));
                     m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
                     m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
                     bFormatInserted = true;
@@ -423,7 +423,8 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RenameHdl, Button*, void)
                 {
                     // no format with this name exists, so rename it
                     m_pLbFormat->RemoveEntry( nDfltStylePos + nIndex );
-                    SwTableAutoFormat* p = pTableTable->ReleaseAutoFormat( nIndex );
+                    std::unique_ptr<SwTableAutoFormat> p(
+                            pTableTable->ReleaseAutoFormat(nIndex));
 
                     p->SetName( aFormatName );
 
@@ -434,7 +435,7 @@ IMPL_LINK_NOARG_TYPED(SwAutoFormatDlg, RenameHdl, Button*, void)
                             break;
                         }
 
-                    pTableTable->InsertAutoFormat( n, p );
+                    pTableTable->InsertAutoFormat( n, std::move(p) );
                     m_pLbFormat->InsertEntry( aFormatName, nDfltStylePos + n );
                     m_pLbFormat->SelectEntryPos( nDfltStylePos + n );
 
