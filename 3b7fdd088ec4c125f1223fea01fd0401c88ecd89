@@ -1,0 +1,242 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_f20da838",
+        "filename": "sc/inc/column.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "I\u0027d prefer to adapt to the style of the surrounding code, if the class\u0027 member functions start with a capital letter also do it for new functions, so SetMayHaveFormula/GetMayHaveFormula.",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_a7cbf41d",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1136,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "This does not set a formula cell at the destination, but a copy of its numeric value as value cell instead.",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_e7d5ecb9",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1144,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "This does not set a formula cell at the destination, but a copy of its text/string value as string cell instead.",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_721a3870",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2395,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "Instead of sprinkling this over various places, it could be added above to the place where IsEmptyData() is already checked and bail out early, or not?",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_b2517011",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1593,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "This could go to the very top of this function, initializing the iterators wouldn\u0027t be needed then.",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_47dbf8ed",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "Instead of allocating/deallocating a StartListenersHandler on the heap I\u0027d rather let the one existing StartListenersHandler on the stack handle the flag as well by adding an ScColumn\u0026 member, which also was better readable code.",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_d22504af",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "Why for each span?",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_27d884ef",
+        "filename": "sc/source/core/data/documentimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "This repeatedly, for every row, sets the flag at the same rBasePos column, which is unnecessary.",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_87e510aa",
+        "filename": "sc/source/core/data/documentimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "This repeatedly, for every row, sets the flag at the same column, which is unnecessary.",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_67e27ca1",
+        "filename": "sc/source/core/data/documentimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "This repeatedly, for every row, sets the flag at the same column, which is unnecessary.",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_f22488b0",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1498,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "I\u0027d prefer if all these\n\n if (!aCol[i].IsEmptyData())\n\n(here and in other places) before calling one ScColumn member function would instead be checked in the called function and there return early if empty. Yes it is one more call on the stack, but a cleaner implementation in that the caller doesn\u0027t need to know details of the implementation of the called. It could even be faster if aCol wasn\u0027t an ScColumn array (any more).",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_e7168c54",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "Umm.. really? For each column insertion set the flag for all columns?",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_67039c10",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "Ditto..",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_723198ec",
+        "filename": "sc/source/core/data/table7.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-15T09:19:42Z",
+      "side": 1,
+      "message": "Also these should be checked in the ScColumn member function instead of having the caller need to know about it.",
+      "revId": "3b7fdd088ec4c125f1223fea01fd0401c88ecd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
