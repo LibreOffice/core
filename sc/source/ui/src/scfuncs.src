@@ -719,7 +719,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 6 // Name of Parameter 3
         {
-            Text [ en-US ] = "array" ;
+            Text [ en-US ] = "list of dates" ;
         };
         String 7 // Description of Parameter 3
         {
@@ -727,7 +727,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 8 // Name of Parameter 4
         {
-            Text [ en-US ] = "list of numbers" ;
+            Text [ en-US ] = "array" ;
         };
         String 9 // Description of Parameter 4
         {
