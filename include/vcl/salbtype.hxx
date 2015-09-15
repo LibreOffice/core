@@ -71,12 +71,12 @@ typedef ConstHPBYTE       ConstScanline;
 
 
 #define MASK_TO_COLOR( d_nVal, d_RM, d_GM, d_BM, d_RS, d_GS, d_BS, d_Col )                          \
-sal_uLong _def_cR = (sal_uInt8) ( d_RS < 0L ? ( (d_nVal) & d_RM ) << -d_RS : ( (d_nVal) & d_RM ) >> d_RS ); \
-sal_uLong _def_cG = (sal_uInt8) ( d_GS < 0L ? ( (d_nVal) & d_GM ) << -d_GS : ( (d_nVal) & d_GM ) >> d_GS ); \
-sal_uLong _def_cB = (sal_uInt8) ( d_BS < 0L ? ( (d_nVal) & d_BM ) << -d_BS : ( (d_nVal) & d_BM ) >> d_BS ); \
-d_Col = BitmapColor( (sal_uInt8) ( _def_cR | ( ( _def_cR & mnROr ) >> mnROrShift ) ),                   \
-                     (sal_uInt8) ( _def_cG | ( ( _def_cG & mnGOr ) >> mnGOrShift ) ),                   \
-                     (sal_uInt8) ( _def_cB | ( ( _def_cB & mnBOr ) >> mnBOrShift ) ) );
+const sal_uInt8 _def_cR = static_cast<sal_uInt8>( d_RS < 0 ? ( (d_nVal) & d_RM ) << -d_RS : ( (d_nVal) & d_RM ) >> d_RS ); \
+const sal_uInt8 _def_cG = static_cast<sal_uInt8>( d_GS < 0 ? ( (d_nVal) & d_GM ) << -d_GS : ( (d_nVal) & d_GM ) >> d_GS ); \
+const sal_uInt8 _def_cB = static_cast<sal_uInt8>( d_BS < 0 ? ( (d_nVal) & d_BM ) << -d_BS : ( (d_nVal) & d_BM ) >> d_BS ); \
+d_Col = BitmapColor( (sal_uInt8) ( _def_cR | ( ( _def_cR & maR.mnOr ) >> maR.mnOrShift ) ),                   \
+                     (sal_uInt8) ( _def_cG | ( ( _def_cG & maG.mnOr ) >> maG.mnOrShift ) ),                   \
+                     (sal_uInt8) ( _def_cB | ( ( _def_cB & maB.mnOr ) >> maB.mnOrShift ) ) );
 
 
 
@@ -189,24 +189,31 @@ public:
     bool                        IsGreyPalette() const;
 };
 
+struct VCL_DLLPUBLIC ColorMaskElement
+{
+    int                     mnShift;
+    int                     mnOrShift;
+    sal_uInt8               mnOr;
+    ColorMaskElement()
+        : mnShift(0)
+        , mnOrShift(0)
+        , mnOr(0)
+    {
+    }
+};
+
 // - ColorMask -
 class VCL_DLLPUBLIC ColorMask
 {
-    sal_uLong               mnRMask;
-    sal_uLong               mnGMask;
-    sal_uLong               mnBMask;
-    long                    mnRShift;
-    long                    mnGShift;
-    long                    mnBShift;
-    sal_uLong               mnROrShift;
-    sal_uLong               mnGOrShift;
-    sal_uLong               mnBOrShift;
-    sal_uLong               mnROr;
-    sal_uLong               mnGOr;
-    sal_uLong               mnBOr;
-    sal_uLong               mnAlphaChannel;
+    sal_uInt32              mnRMask;
+    sal_uInt32              mnGMask;
+    sal_uInt32              mnBMask;
+    sal_uInt32              mnAlphaChannel;
+    ColorMaskElement        maR;
+    ColorMaskElement        maG;
+    ColorMaskElement        maB;
 
-    SAL_DLLPRIVATE inline long ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_uLong& rOrShift ) const;
+    SAL_DLLPRIVATE inline bool ImplCalcMaskShift(sal_uInt32 nMask, ColorMaskElement &rOut) const;
 
 public:
 
@@ -613,27 +620,24 @@ inline sal_uInt16 BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const
     return nRetIndex;
 }
 
-inline ColorMask::ColorMask( sal_uLong nRedMask,
-                             sal_uLong nGreenMask,
-                             sal_uLong nBlueMask,
-                             sal_uLong nAlphaChannel ) :
-            mnRMask( nRedMask ),
-            mnGMask( nGreenMask ),
-            mnBMask( nBlueMask ),
-            mnROrShift( 0L ),
-            mnGOrShift( 0L ),
-            mnBOrShift( 0L ),
-            mnROr( 0L ),
-            mnGOr( 0L ),
-            mnBOr( 0L ),
-            mnAlphaChannel( nAlphaChannel )
+inline ColorMask::ColorMask( sal_uInt32 nRedMask,
+                             sal_uInt32 nGreenMask,
+                             sal_uInt32 nBlueMask,
+                             sal_uInt32 nAlphaChannel )
+    : mnRMask(nRedMask)
+    , mnGMask(nGreenMask)
+    , mnBMask(nBlueMask)
+    , mnAlphaChannel(nAlphaChannel)
 {
-    mnRShift = ( mnRMask ? ImplCalcMaskShift( mnRMask, mnROr, mnROrShift ) : 0L );
-    mnGShift = ( mnGMask ? ImplCalcMaskShift( mnGMask, mnGOr, mnGOrShift ) : 0L );
-    mnBShift = ( mnBMask ? ImplCalcMaskShift( mnBMask, mnBOr, mnBOrShift ) : 0L );
+    if (mnRMask)
+        ImplCalcMaskShift(mnRMask, maR);
+    if (mnGMask)
+        ImplCalcMaskShift(mnGMask, maG);
+    if (mnBMask)
+        ImplCalcMaskShift(mnBMask, maB);
 }
 
-inline long ColorMask::ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_uLong& rOrShift ) const
+inline bool ColorMask::ImplCalcMaskShift(sal_uInt32 nMask, ColorMaskElement &rOut) const
 {
     long    nShift;
     long    nRet;
@@ -643,7 +647,8 @@ inline long ColorMask::ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_u
     for( nShift = 31L; ( nShift >= 0L ) && !( nMask & ( (sal_uLong)1 << (sal_uLong) nShift ) ); nShift-- )
     {}
 
-    nRet = nShift;
+    rOut.mnShift = nShift - 7;
+    int nLen = 0;
 
     // XXX determine number of bits set => walk right until null
     while( ( nShift >= 0L ) && ( nMask & ( (sal_uLong)1 << (sal_uLong) nShift ) ) )
@@ -652,11 +657,13 @@ inline long ColorMask::ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_u
         nLen++;
     }
 
-    assert( nLen <= 8 ); // mask length must be 8 bits or less
-    rOrShift = 8UL - nLen;
-    rOr = (sal_uInt8) ( ( 0xffUL >> nLen ) << rOrShift );
+    if (nLen > 8) // mask length must be 8 bits or less
+        return false;
 
-    return( nRet -= 7 );
+    rOut.mnOrShift = 8 - nLen;
+    rOut.mnOr = static_cast<sal_uInt8>( ( 0xFF >> nLen ) << rOut.mnOrShift );
+
+    return true;
 }
 
 inline sal_uLong ColorMask::GetRedMask() const
@@ -677,24 +684,24 @@ inline sal_uLong ColorMask::GetBlueMask() const
 inline void ColorMask::GetColorFor8Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
     const sal_uInt32 nVal = *pPixel;
-    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
+    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maR.mnShift, rColor );
 }
 
 inline void ColorMask::SetColorFor8Bit( const BitmapColor& rColor, HPBYTE pPixel ) const
 {
-    *pPixel = (sal_uInt8) COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, mnAlphaChannel );
+    *pPixel = (sal_uInt8) COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maB.mnShift, mnAlphaChannel );
 }
 
 inline void ColorMask::GetColorFor16BitMSB( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
     const sal_uInt32 nVal = pPixel[ 1 ] | ( (sal_uInt32) pPixel[ 0 ] << 8UL );
 
-    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
+    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maB.mnShift, rColor );
 }
 
 inline void ColorMask::SetColorFor16BitMSB( const BitmapColor& rColor, HPBYTE pPixel ) const
 {
-    const sal_uInt16 nVal = (sal_uInt16)COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, mnAlphaChannel );
+    const sal_uInt16 nVal = (sal_uInt16)COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maB.mnShift, mnAlphaChannel );
 
     pPixel[ 0 ] = (sal_uInt8)(nVal >> 8U);
     pPixel[ 1 ] = (sal_uInt8) nVal;
@@ -704,12 +711,12 @@ inline void ColorMask::GetColorFor16BitLSB( BitmapColor& rColor, ConstHPBYTE pPi
 {
     const sal_uInt32 nVal = pPixel[ 0 ] | ( (sal_uInt32) pPixel[ 1 ] << 8UL );
 
-    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
+    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maB.mnShift, rColor );
 }
 
 inline void ColorMask::SetColorFor16BitLSB( const BitmapColor& rColor, HPBYTE pPixel ) const
 {
-    const sal_uInt16 nVal = (sal_uInt16)COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, mnAlphaChannel );
+    const sal_uInt16 nVal = (sal_uInt16)COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maB.mnShift, mnAlphaChannel );
 
     pPixel[ 0 ] = (sal_uInt8) nVal;
     pPixel[ 1 ] = (sal_uInt8)(nVal >> 8U);
@@ -718,13 +725,15 @@ inline void ColorMask::SetColorFor16BitLSB( const BitmapColor& rColor, HPBYTE pP
 inline void ColorMask::GetColorFor24Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
     const sal_uInt32 nVal = pPixel[ 0 ] | ( (sal_uInt32) pPixel[ 1 ] << 8UL ) | ( (sal_uInt32) pPixel[ 2 ] << 16UL );
-    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
+    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maB.mnShift, rColor );
 }
 
 inline void ColorMask::SetColorFor24Bit( const BitmapColor& rColor, HPBYTE pPixel ) const
 {
-    const sal_uInt32 nVal = COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, mnAlphaChannel );
-    pPixel[ 0 ] = (sal_uInt8) nVal; pPixel[ 1 ] = (sal_uInt8) ( nVal >> 8UL ); pPixel[ 2 ] = (sal_uInt8) ( nVal >> 16UL );
+    const sal_uInt32 nVal = COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maB.mnShift, mnAlphaChannel );
+    pPixel[ 0 ] = (sal_uInt8) nVal;
+    pPixel[ 1 ] = (sal_uInt8) ( nVal >> 8UL );
+    pPixel[ 2 ] = (sal_uInt8) ( nVal >> 16UL );
 }
 
 inline void ColorMask::GetColorFor32Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const
@@ -732,7 +741,7 @@ inline void ColorMask::GetColorFor32Bit( BitmapColor& rColor, ConstHPBYTE pPixel
     const sal_uInt32 nVal = (sal_uInt32) pPixel[ 0 ] | ( (sal_uInt32) pPixel[ 1 ] << 8UL ) |
                         ( (sal_uInt32) pPixel[ 2 ] << 16UL ) | ( (sal_uInt32) pPixel[ 3 ] << 24UL );
 
-    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
+    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maB.mnShift, rColor );
 }
 
 inline void ColorMask::GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8& rAlpha, ConstHPBYTE pPixel ) const
@@ -741,14 +750,16 @@ inline void ColorMask::GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8&
                         ( (sal_uInt32) pPixel[ 2 ] << 16UL ) | ( (sal_uInt32) pPixel[ 3 ] << 24UL );
     rAlpha = (sal_uInt8)(nVal >> 24);
 
-    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
+    MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maB.mnShift, rColor );
 }
 
 inline void ColorMask::SetColorFor32Bit( const BitmapColor& rColor, HPBYTE pPixel ) const
 {
-    const sal_uInt32 nVal = COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, mnAlphaChannel );
-    pPixel[ 0 ] = (sal_uInt8) nVal; pPixel[ 1 ] = (sal_uInt8) ( nVal >> 8UL );
-    pPixel[ 2 ] = (sal_uInt8) ( nVal >> 16UL ); pPixel[ 3 ] = (sal_uInt8) ( nVal >> 24UL );
+    const sal_uInt32 nVal = COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, maR.mnShift, maG.mnShift, maB.mnShift, mnAlphaChannel );
+    pPixel[ 0 ] = (sal_uInt8) nVal;
+    pPixel[ 1 ] = (sal_uInt8) ( nVal >> 8UL );
+    pPixel[ 2 ] = (sal_uInt8) ( nVal >> 16UL );
+    pPixel[ 3 ] = (sal_uInt8) ( nVal >> 24UL );
 }
 
 #endif // INCLUDED_VCL_SALBTYPE_HXX
