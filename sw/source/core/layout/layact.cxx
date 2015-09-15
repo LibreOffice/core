@@ -1922,7 +1922,7 @@ bool SwLayIdle::_DoIdleJob( const SwContentFrm *pCnt, IdleJobType eJob )
                     bAllValid = false;
                 if ( aRepaint.HasArea() )
                     pImp->GetShell()->InvalidateWindows( aRepaint );
-                if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD|VclInputFlags::OTHER|VclInputFlags::PAINT ) )
+                if (Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER)))
                     return true;
                 break;
             }
@@ -1955,7 +1955,7 @@ bool SwLayIdle::_DoIdleJob( const SwContentFrm *pCnt, IdleJobType eJob )
                     // #i122885# handle smarttag problems gracefully and provide diagnostics
                     SAL_WARN( "sw.core", "SMART_TAGS Exception:" << e.Message);
                 }
-                if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD|VclInputFlags::OTHER|VclInputFlags::PAINT ) )
+                if (Application::AnyInput(VCL_INPUT_ANY & VclInputFlags(~VclInputFlags::TIMER)))
                     return true;
                 break;
             }
