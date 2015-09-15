@@ -30,11 +30,6 @@ static int help()
     return 1;
 }
 
-static GtkToolItem* pEnableEditing;
-static GtkToolItem* pBold;
-static GtkToolItem* pItalic;
-static GtkToolItem* pUnderline;
-static GtkToolItem* pStrikethrough;
 static GtkWidget* pScrolledWindow;
 static std::map<GtkToolItem*, std::string> g_aToolItemCommandNames;
 static std::map<std::string, GtkToolItem*> g_aCommandNameToolItems;
@@ -54,10 +49,20 @@ class TiledWindow
 public:
     GtkWidget* m_pDocView;
     GtkWidget* m_pStatusBar;
+    GtkToolItem* m_pEnableEditing;
+    GtkToolItem* m_pBold;
+    GtkToolItem* m_pItalic;
+    GtkToolItem* m_pUnderline;
+    GtkToolItem* m_pStrikethrough;
 
     TiledWindow()
         : m_pDocView(0),
-        m_pStatusBar(0)
+        m_pStatusBar(0),
+        m_pEnableEditing(0),
+        m_pBold(0),
+        m_pItalic(0),
+        m_pUnderline(0),
+        m_pStrikethrough(0)
     {
     }
 };
@@ -152,7 +157,7 @@ static void toggleEditing(GtkWidget* pButton, gpointer /*pItem*/)
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
 
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
-    bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing));
+    bool bActive = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(rWindow.m_pEnableEditing));
     if (bool(lok_doc_view_get_edit(pLOKDocView)) != bActive)
         lok_doc_view_set_edit(pLOKDocView, bActive);
 }
@@ -293,10 +298,12 @@ static gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer 
 /// LOKDocView changed edit state -> inform the tool button.
 static void signalEdit(LOKDocView* pLOKDocView, gboolean bWasEdit, gpointer /*pData*/)
 {
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
+
     gboolean bEdit = lok_doc_view_get_edit(pLOKDocView);
     g_info("signalEdit: %d -> %d", bWasEdit, lok_doc_view_get_edit(pLOKDocView));
-    if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing)) != bEdit)
-        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pEnableEditing), bEdit);
+    if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(rWindow.m_pEnableEditing)) != bEdit)
+        gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(rWindow.m_pEnableEditing), bEdit);
 }
 
 /// LOKDocView changed command state -> inform the tool button.
@@ -532,6 +539,7 @@ int main( int argc, char* argv[] )
     gtk_init( &argc, &argv );
 
     GtkWidget *pWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    TiledWindow aWindow;
     gtk_window_set_title( GTK_WINDOW(pWindow), "LibreOfficeKit GTK Tiled Viewer" );
     gtk_window_set_default_size(GTK_WINDOW(pWindow), 1024, 768);
     g_signal_connect( pWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL );
@@ -589,7 +597,8 @@ int main( int argc, char* argv[] )
     g_signal_connect(G_OBJECT(pCopyButton), "clicked", G_CALLBACK(doCopy), NULL);
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
 
-    pEnableEditing = gtk_toggle_tool_button_new();
+    GtkToolItem* pEnableEditing = gtk_toggle_tool_button_new();
+    aWindow.m_pEnableEditing = pEnableEditing;
     gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pEnableEditing), "insert-text-symbolic");
     gtk_tool_item_set_tooltip_text(pEnableEditing, "Edit");
     gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pEnableEditing, -1);
@@ -609,33 +618,33 @@ int main( int argc, char* argv[] )
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
 
-    pBold = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pBold), "format-text-bold-symbolic");
-    gtk_tool_item_set_tooltip_text(pBold, "Bold");
-    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pBold, -1);
-    g_signal_connect(G_OBJECT(pBold), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(pBold, ".uno:Bold");
+    aWindow.m_pBold = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (aWindow.m_pBold), "format-text-bold-symbolic");
+    gtk_tool_item_set_tooltip_text(aWindow.m_pBold, "Bold");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pBold, -1);
+    g_signal_connect(G_OBJECT(aWindow.m_pBold), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(aWindow.m_pBold, ".uno:Bold");
 
-    pItalic = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pItalic), "format-text-italic-symbolic");
-    gtk_tool_item_set_tooltip_text(pItalic, "Italic");
-    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pItalic, -1);
-    g_signal_connect(G_OBJECT(pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(pItalic, ".uno:Italic");
+    aWindow.m_pItalic = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (aWindow.m_pItalic), "format-text-italic-symbolic");
+    gtk_tool_item_set_tooltip_text(aWindow.m_pItalic, "Italic");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pItalic, -1);
+    g_signal_connect(G_OBJECT(aWindow.m_pItalic), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(aWindow.m_pItalic, ".uno:Italic");
 
-    pUnderline = gtk_toggle_tool_button_new();
-    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pUnderline), "format-text-underline-symbolic");
-    gtk_tool_item_set_tooltip_text(pUnderline, "Underline");
-    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pUnderline, -1);
-    g_signal_connect(G_OBJECT(pUnderline), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(pUnderline, ".uno:Underline");
+    aWindow.m_pUnderline = gtk_toggle_tool_button_new();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (aWindow.m_pUnderline), "format-text-underline-symbolic");
+    gtk_tool_item_set_tooltip_text(aWindow.m_pUnderline, "Underline");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pUnderline, -1);
+    g_signal_connect(G_OBJECT(aWindow.m_pUnderline), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(aWindow.m_pUnderline, ".uno:Underline");
 
-    pStrikethrough = gtk_toggle_tool_button_new ();
-    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON (pStrikethrough), "format-text-strikethrough-symbolic");
-    gtk_tool_item_set_tooltip_text(pStrikethrough, "Strikethrough");
-    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), pStrikethrough, -1);
-    g_signal_connect(G_OBJECT(pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
-    lcl_registerToolItem(pStrikethrough, ".uno:Strikeout");
+    aWindow.m_pStrikethrough = gtk_toggle_tool_button_new ();
+    gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(aWindow.m_pStrikethrough), "format-text-strikethrough-symbolic");
+    gtk_tool_item_set_tooltip_text(aWindow.m_pStrikethrough, "Strikethrough");
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), aWindow.m_pStrikethrough, -1);
+    g_signal_connect(G_OBJECT(aWindow.m_pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
+    lcl_registerToolItem(aWindow.m_pStrikethrough, ".uno:Strikeout");
 
     gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
@@ -673,6 +682,7 @@ int main( int argc, char* argv[] )
 
     // Docview
     GtkWidget* pDocView = lok_doc_view_new (argv[1], NULL, NULL);
+    aWindow.m_pDocView = pDocView;
 #if GLIB_CHECK_VERSION(2,40,0)
     g_assert_nonnull(pDocView);
 #endif
@@ -698,6 +708,7 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "load-changed", G_CALLBACK(loadChanged), pProgressBar);
 
     GtkWidget* pStatusBar = gtk_statusbar_new ();
+    aWindow.m_pStatusBar = pStatusBar;
     gtk_container_forall(GTK_CONTAINER(pStatusBar), removeChildrenFromStatusbar, pStatusBar);
     gtk_container_add (GTK_CONTAINER(pVBox), pStatusBar);
     gtk_container_add (GTK_CONTAINER(pStatusBar), pProgressBar);
@@ -707,9 +718,6 @@ int main( int argc, char* argv[] )
     // Hide the findbar by default.
     gtk_widget_hide(pFindbar);
 
-    TiledWindow aWindow;
-    aWindow.m_pDocView = pDocView;
-    aWindow.m_pStatusBar = pStatusBar;
     g_aWindows[pWindow] = aWindow;
 
     lok_doc_view_open_document( LOK_DOC_VIEW(pDocView), argv[2], NULL, openDocumentCallback, pDocView );
