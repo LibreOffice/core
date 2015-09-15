@@ -524,7 +524,7 @@ friend class SfxHelpIndexWindow_Impl;
     DECL_LINK_TYPED(    SelectHdl, ToolBox*, void );
     DECL_LINK(OpenHdl, void *);
     DECL_LINK(          SelectFactoryHdl, SfxHelpIndexWindow_Impl* );
-    DECL_LINK(          ChangeHdl, HelpListener_Impl* );
+    DECL_LINK_TYPED(    ChangeHdl, HelpListener_Impl&, void );
 
 public:
     SfxHelpWindow_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >& rFrame,

@@ -2952,10 +2952,9 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin
 
 
 
-IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
+IMPL_LINK_TYPED( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl&, rListener, void )
 {
-    SetFactory( pListener->GetFactory() );
-    return 0;
+    SetFactory( rListener.GetFactory() );
 }
 
 

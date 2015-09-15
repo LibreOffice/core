@@ -292,21 +292,17 @@ HelpListener_Impl::HelpListener_Impl( HelpInterceptor_Impl* pInter )
 
 
 void SAL_CALL HelpListener_Impl::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
-
     throw( ::com::sun::star::uno::RuntimeException, std::exception )
-
 {
     INetURLObject aObj( Event.FeatureURL.Complete );
     aFactory = aObj.GetHost();
-    aChangeLink.Call( this );
+    aChangeLink.Call( *this );
 }
 
 
 
 void SAL_CALL HelpListener_Impl::disposing( const ::com::sun::star::lang::EventObject& )
-
     throw( ::com::sun::star::uno::RuntimeException, std::exception )
-
 {
     pInterceptor->removeStatusListener( this, ::com::sun::star::util::URL() );
     pInterceptor = NULL;
