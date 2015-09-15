@@ -68,6 +68,9 @@ struct is_typed_flags {
 
     class Wrap {
     public:
+        typedef typename std::underlying_type<E>::type underlying_type;
+        typedef is_typed_flags Unwrapped;
+
         explicit Wrap(typename std::underlying_type<E>::type value):
             value_(value)
         {
@@ -147,14 +150,17 @@ inline typename o3tl::typed_flags<E>::Wrap operator ^(
         ^ static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline typename o3tl::typed_flags<E>::Wrap operator ^(
-    typename o3tl::typed_flags<E>::Wrap lhs,
-    typename o3tl::typed_flags<E>::Wrap rhs)
+template<typename W>
+inline typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator ^(
+    W lhs, W rhs)
 {
-    return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        static_cast<typename std::underlying_type<E>::type>(lhs)
-        ^ static_cast<typename std::underlying_type<E>::type>(rhs));
+    return static_cast<W>(
+        static_cast<
+            typename std::underlying_type<typename W::Unwrapped::Self>::type>(
+                lhs)
+        ^ static_cast<
+            typename std::underlying_type<typename W::Unwrapped::Self>::type>(
+                rhs));
 }
 
 template<typename E>
@@ -194,14 +200,17 @@ inline typename o3tl::typed_flags<E>::Wrap operator &(
         & static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline typename o3tl::typed_flags<E>::Wrap operator &(
-    typename o3tl::typed_flags<E>::Wrap lhs,
-    typename o3tl::typed_flags<E>::Wrap rhs)
+template<typename W>
+inline typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator &(
+    W lhs, W rhs)
 {
-    return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        static_cast<typename std::underlying_type<E>::type>(lhs)
-        & static_cast<typename std::underlying_type<E>::type>(rhs));
+    return static_cast<W>(
+        static_cast<
+            typename std::underlying_type<typename W::Unwrapped::Self>::type>(
+                lhs)
+        & static_cast<
+            typename std::underlying_type<typename W::Unwrapped::Self>::type>(
+                rhs));
 }
 
 template<typename E>
@@ -241,14 +250,17 @@ inline typename o3tl::typed_flags<E>::Wrap operator |(
         | static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline typename o3tl::typed_flags<E>::Wrap operator |(
-    typename o3tl::typed_flags<E>::Wrap lhs,
-    typename o3tl::typed_flags<E>::Wrap rhs)
+template<typename W>
+inline typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator |(
+    W lhs, W rhs)
 {
-    return static_cast<typename o3tl::typed_flags<E>::Wrap>(
-        static_cast<typename std::underlying_type<E>::type>(lhs)
-        | static_cast<typename std::underlying_type<E>::type>(rhs));
+    return static_cast<W>(
+        static_cast<
+            typename std::underlying_type<typename W::Unwrapped::Self>::type>(
+                lhs)
+        | static_cast<
+            typename std::underlying_type<typename W::Unwrapped::Self>::type>(
+                rhs));
 }
 
 template<typename E>
