@@ -555,7 +555,7 @@ static void doc_iniUnoCommands ()
     util::URL aCommandURL;
     const SfxSlot* pSlot = NULL;
     SfxViewShell* pViewShell = SfxViewShell::Current();
-    SfxViewFrame* pViewFrame = (pViewShell ? pViewShell->GetViewFrame() : NULL);
+    SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): NULL;
 
     // check if Frame-Controller were created.
     if (!pViewShell && !pViewFrame)
@@ -564,26 +564,21 @@ static void doc_iniUnoCommands ()
         return;
     }
 
-    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pViewFrame );
-    uno::Reference<util::XURLTransformer> xParser =
-        util::URLTransformer::create(xContext);
+    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
+    uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
 
-    for (
-        sal_uInt32 nIterator = 0;
-        nIterator < SAL_N_ELEMENTS(sUnoCommands);
-        nIterator++
-        )
+    for (sal_uInt32 nIterator = 0; nIterator < SAL_N_ELEMENTS(sUnoCommands); nIterator++)
     {
         aCommandURL.Complete = sUnoCommands[nIterator];
         xParser->parseStrict(aCommandURL);
         pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
 
-        // Initialize slot to dispatch Uno Command.
-        uno::Reference<frame::XDispatch> xDispatch =
-            pViewFrame->GetBindings().GetDispatch( pSlot, aCommandURL, false );
-        if (!xDispatch.is())
+        // when null, this command is not supported by the given component
+        // (like eg. Calc does not have ".uno:DefaultBullet" etc.)
+        if (pSlot)
         {
-            SAL_WARN("lok", "iniUnoCommands: No XDispatch interface : " + aCommandURL.Complete);
+            // Initialize slot to dispatch .uno: Command.
+            pViewFrame->GetBindings().GetDispatch(pSlot, aCommandURL, false);
         }
     }
 }
