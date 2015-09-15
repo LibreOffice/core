@@ -44,6 +44,8 @@ GtkWidget*                     lok_doc_view_new                    (const gchar*
                                                                     GCancellable *cancellable,
                                                                     GError **error);
 
+GtkWidget*                     lok_doc_view_new_from_widget        (LOKDocView* pDocView);
+
 void                           lok_doc_view_open_document          (LOKDocView* pDocView,
                                                                     const gchar* pPath,
                                                                     GCancellable* cancellable,
