@@ -454,7 +454,7 @@ private:
     DECL_LINK_TYPED(        SelectHdl, Idle *, void);
     DECL_LINK_TYPED(        NotifyHdl, LinkParamNone*, void );
     DECL_LINK_TYPED(        FindHdl, sfx2::SearchDialog&, void );
-    DECL_LINK(              CloseHdl, sfx2::SearchDialog* );
+    DECL_LINK_TYPED(        CloseHdl, sfx2::SearchDialog*, void );
     DECL_LINK_TYPED(        CheckHdl, Button*, void );
     void                    FindHdl(sfx2::SearchDialog*);
 

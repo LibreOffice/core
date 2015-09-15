@@ -2342,10 +2342,9 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
 
 
 
-IMPL_LINK( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, /*pDlg*/ )
+IMPL_LINK_NOARG_TYPED( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, void )
 {
     pSrchDlg.clear();
-    return 0;
 }
 
 
