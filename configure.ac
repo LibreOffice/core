@@ -881,6 +881,27 @@ AC_SUBST(WITH_MINGW)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
+if test $_os != "WINNT"; then
+    save_LIBS="$LIBS"
+    AC_SEARCH_LIBS([dlopen], [dl])
+    LIBS="$save_LIBS"
+
+    case "$ac_cv_search_dlopen" in
+    none*required)
+            DLOPEN_NEEDS_LIBDL=''
+            ;;
+    dl)
+            DLOPEN_NEEDS_LIBDL='TRUE'
+            ;;
+    *)
+            AC_MSG_ERROR([dlopen not found in either libc nor libdl])
+            ;;
+    esac
+else
+    DLOPEN_NEEDS_LIBDL=''
+fi
+AC_SUBST(DLOPEN_NEEDS_LIBDL)
+
 ###############################################################################
 # Extensions switches --enable/--disable
 ###############################################################################
