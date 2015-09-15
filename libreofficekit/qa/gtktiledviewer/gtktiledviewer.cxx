@@ -30,11 +30,6 @@ static int help()
     return 1;
 }
 
-static GtkWidget* pVBox;
-static GtkComboBoxText* pPartSelector;
-static GtkWidget* pPartModeComboBox;
-/// Should the part selector avoid calling lok::Document::setPart()?
-static bool g_bPartSelectorBroadcast = true;
 static GtkWidget* pFindbar;
 static GtkWidget* pFindbarEntry;
 static GtkWidget* pFindbarLabel;
@@ -54,6 +49,11 @@ public:
     std::map<GtkToolItem*, std::string> m_aToolItemCommandNames;
     std::map<std::string, GtkToolItem*> m_aCommandNameToolItems;
     bool m_bToolItemBroadcast;
+    GtkWidget* m_pVBox;
+    GtkComboBoxText* m_pPartSelector;
+    GtkWidget* m_pPartModeComboBox;
+    /// Should the part selector avoid calling lok::Document::setPart()?
+    bool m_bPartSelectorBroadcast;
 
     TiledWindow()
         : m_pDocView(0),
@@ -64,7 +64,11 @@ public:
         m_pUnderline(0),
         m_pStrikethrough(0),
         m_pScrolledWindow(0),
-        m_bToolItemBroadcast(true)
+        m_bToolItemBroadcast(true),
+        m_pVBox(0),
+        m_pPartSelector(0),
+        m_pPartModeComboBox(0),
+        m_bPartSelectorBroadcast(true)
     {
     }
 };
@@ -353,11 +357,12 @@ static void signalSearch(LOKDocView* /*pLOKDocView*/, char* /*pPayload*/, gpoint
 }
 
 
-static void signalPart(LOKDocView* /*pLOKDocView*/, int nPart, gpointer /*pData*/)
+static void signalPart(LOKDocView* pLOKDocView, int nPart, gpointer /*pData*/)
 {
-    g_bPartSelectorBroadcast = false;
-    gtk_combo_box_set_active(GTK_COMBO_BOX(pPartSelector), nPart);
-    g_bPartSelectorBroadcast = true;
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
+    rWindow.m_bPartSelectorBroadcast = false;
+    gtk_combo_box_set_active(GTK_COMBO_BOX(rWindow.m_pPartSelector), nPart);
+    rWindow.m_bPartSelectorBroadcast = true;
 }
 
 /// User clicked on a command button -> inform LOKDocView.
@@ -438,9 +443,10 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 
 static void populatePartSelector(LOKDocView* pLOKDocView)
 {
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
     gtk_list_store_clear( GTK_LIST_STORE(
                               gtk_combo_box_get_model(
-                                  GTK_COMBO_BOX(pPartSelector) )) );
+                                  GTK_COMBO_BOX(rWindow.m_pPartSelector) )) );
 
     if (!pLOKDocView)
     {
@@ -458,16 +464,17 @@ static void populatePartSelector(LOKDocView* pLOKDocView)
         snprintf( sText, nMaxLength, "%i (%s)", i+1, pName );
         free( pName );
 
-        gtk_combo_box_text_append_text( pPartSelector, sText );
+        gtk_combo_box_text_append_text( rWindow.m_pPartSelector, sText );
     }
-    gtk_combo_box_set_active(GTK_COMBO_BOX(pPartSelector), lok_doc_view_get_part(pLOKDocView));
+    gtk_combo_box_set_active(GTK_COMBO_BOX(rWindow.m_pPartSelector), lok_doc_view_get_part(pLOKDocView));
 }
 
 static void signalSize(LOKDocView* pLOKDocView, gpointer /*pData*/)
 {
-    g_bPartSelectorBroadcast = false;
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
+    rWindow.m_bPartSelectorBroadcast = false;
     populatePartSelector(pLOKDocView);
-    g_bPartSelectorBroadcast = true;
+    rWindow.m_bPartSelectorBroadcast = true;
 }
 
 static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
@@ -475,7 +482,7 @@ static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
     int nPart = gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) );
     TiledWindow& rWindow = lcl_getTiledWindow(pSelector);
 
-    if (g_bPartSelectorBroadcast && rWindow.m_pDocView)
+    if (rWindow.m_bPartSelectorBroadcast && rWindow.m_pDocView)
     {
         lok_doc_view_set_part( LOK_DOC_VIEW(rWindow.m_pDocView), nPart );
         lok_doc_view_reset_view( LOK_DOC_VIEW(rWindow.m_pDocView) );
@@ -524,13 +531,13 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
     }
 
     populatePartSelector(pDocView);
-    populatePartModeSelector( GTK_COMBO_BOX_TEXT(pPartModeComboBox) );
+    populatePartModeSelector( GTK_COMBO_BOX_TEXT(rWindow.m_pPartModeComboBox) );
     // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
-    g_signal_connect(G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
-    g_signal_connect(G_OBJECT(pPartSelector), "changed", G_CALLBACK(changePart), 0);
+    g_signal_connect(G_OBJECT(rWindow.m_pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
+    g_signal_connect(G_OBJECT(rWindow.m_pPartSelector), "changed", G_CALLBACK(changePart), 0);
 
     focusChain = g_list_append( focusChain, pDocView );
-    gtk_container_set_focus_chain ( GTK_CONTAINER (pVBox), focusChain );
+    gtk_container_set_focus_chain ( GTK_CONTAINER (rWindow.m_pVBox), focusChain );
 
     gtk_widget_hide(rWindow.m_pStatusBar);
 }
@@ -555,8 +562,8 @@ int main( int argc, char* argv[] )
     gtk_window_set_default_size(GTK_WINDOW(pWindow), 1024, 768);
     g_signal_connect( pWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL );
 
-    pVBox = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
-    gtk_container_add( GTK_CONTAINER(pWindow), pVBox );
+    aWindow.m_pVBox = gtk_box_new( GTK_ORIENTATION_VERTICAL, 0 );
+    gtk_container_add( GTK_CONTAINER(pWindow), aWindow.m_pVBox );
 
     // Toolbar
     GtkWidget* pToolbar = gtk_toolbar_new();
@@ -588,14 +595,14 @@ int main( int argc, char* argv[] )
     gtk_container_add( GTK_CONTAINER(pPartSelectorToolItem), pComboBox );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartSelectorToolItem, -1 );
 
-    pPartSelector = GTK_COMBO_BOX_TEXT(pComboBox);
+    aWindow.m_pPartSelector = GTK_COMBO_BOX_TEXT(pComboBox);
 
     GtkToolItem* pSeparator2 = gtk_separator_tool_item_new();
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator2, -1);
 
     GtkToolItem* pPartModeSelectorToolItem = gtk_tool_item_new();
-    pPartModeComboBox = gtk_combo_box_text_new();
-    gtk_container_add( GTK_CONTAINER(pPartModeSelectorToolItem), pPartModeComboBox );
+    aWindow.m_pPartModeComboBox = gtk_combo_box_text_new();
+    gtk_container_add(GTK_CONTAINER(pPartModeSelectorToolItem), aWindow.m_pPartModeComboBox);
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartModeSelectorToolItem, -1 );
 
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), gtk_separator_tool_item_new(), -1);
@@ -657,7 +664,7 @@ int main( int argc, char* argv[] )
     g_signal_connect(G_OBJECT(aWindow.m_pStrikethrough), "toggled", G_CALLBACK(toggleToolItem), NULL);
     lcl_registerToolItem(aWindow, aWindow.m_pStrikethrough, ".uno:Strikeout");
 
-    gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
+    gtk_box_pack_start( GTK_BOX(aWindow.m_pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
 
     // Findbar
     pFindbar = gtk_toolbar_new();
@@ -689,7 +696,7 @@ int main( int argc, char* argv[] )
     gtk_container_add(GTK_CONTAINER(pFindbarLabelContainer), pFindbarLabel);
     gtk_toolbar_insert(GTK_TOOLBAR(pFindbar), pFindbarLabelContainer, -1);
 
-    gtk_box_pack_end(GTK_BOX(pVBox), pFindbar, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(aWindow.m_pVBox), pFindbar, FALSE, FALSE, 0);
 
     // Docview
     GtkWidget* pDocView = lok_doc_view_new (argv[1], NULL, NULL);
@@ -711,7 +718,7 @@ int main( int argc, char* argv[] )
     aWindow.m_pScrolledWindow = gtk_scrolled_window_new(0, 0);
     gtk_widget_set_hexpand (aWindow.m_pScrolledWindow, TRUE);
     gtk_widget_set_vexpand (aWindow.m_pScrolledWindow, TRUE);
-    gtk_container_add(GTK_CONTAINER(pVBox), aWindow.m_pScrolledWindow);
+    gtk_container_add(GTK_CONTAINER(aWindow.m_pVBox), aWindow.m_pScrolledWindow);
 
     gtk_container_add(GTK_CONTAINER(aWindow.m_pScrolledWindow), pDocView);
 
@@ -721,7 +728,7 @@ int main( int argc, char* argv[] )
     GtkWidget* pStatusBar = gtk_statusbar_new ();
     aWindow.m_pStatusBar = pStatusBar;
     gtk_container_forall(GTK_CONTAINER(pStatusBar), removeChildrenFromStatusbar, pStatusBar);
-    gtk_container_add (GTK_CONTAINER(pVBox), pStatusBar);
+    gtk_container_add (GTK_CONTAINER(aWindow.m_pVBox), pStatusBar);
     gtk_container_add (GTK_CONTAINER(pStatusBar), pProgressBar);
     gtk_widget_set_hexpand(pProgressBar, true);
 
