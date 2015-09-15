@@ -307,9 +307,13 @@ public:
     bool                        Save( SvStream& rStream, sal_uInt16 fileVersion );
 };
 
+struct DefaultFirstEntry {
+    bool operator() (const OUString& left, const OUString& right) const;
+};
+
 class SC_DLLPUBLIC ScAutoFormat
 {
-    typedef boost::ptr_map<OUString, ScAutoFormatData> MapType;
+    typedef boost::ptr_map<OUString, ScAutoFormatData, DefaultFirstEntry> MapType;
     MapType maData;
     bool mbSaveLater;
     ScAfVersions m_aVersions;
