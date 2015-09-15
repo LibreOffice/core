@@ -25,10 +25,9 @@ $(eval $(call gb_Executable_use_static_libraries,icontest,\
     vclmain \
 ))
 
-ifeq ($(OS),LINUX)
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Executable_add_libs,icontest,\
-	-lm \
-	-ldl \
+	-lm $(DLOPEN_LIBS) \
 	-lpthread \
     -lGL \
     -lX11 \

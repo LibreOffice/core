@@ -28,10 +28,9 @@ $(eval $(call gb_Library_add_libs,libreofficekitgtk,\
     $(GTK3_LIBS) \
 ))
 
-ifeq ($(OS),LINUX)
+ifeq ($(OS),$(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,libreofficekitgtk,\
-    -ldl \
-    -lm \
+    $(DLOPEN_LIBS) -lm \
 ))
 endif
 
