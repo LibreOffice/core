@@ -44,10 +44,15 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/svpforlokit.hxx>
@@ -526,6 +531,58 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
     return false;
 }
 
+static void doc_iniUnoCommands ()
+{
+    OUString sUnoCommands[] =
+    {
+        OUString(".uno:Bold"),
+        OUString(".uno:Italic"),
+        OUString(".uno:Underline"),
+        OUString(".uno:Strikeout"),
+        OUString(".uno:LeftPara"),
+        OUString(".uno:CenterPara"),
+        OUString(".uno:RightPara"),
+        OUString(".uno:JustifyPara"),
+        OUString(".uno:IncrementIndent"),
+        OUString(".uno:DecrementIndent")
+    };
+
+    util::URL aCommandURL;
+    const SfxSlot* pSlot = NULL;
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SfxViewFrame* pViewFrame = (pViewShell ? pViewShell->GetViewFrame() : NULL);
+
+    // check if Frame-Controller were created.
+    if (!pViewShell && !pViewFrame)
+    {
+        SAL_WARN("lok", "iniUnoCommands: No Frame-Controller created.");
+        return;
+    }
+
+    SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pViewFrame );
+    uno::Reference<util::XURLTransformer> xParser =
+        util::URLTransformer::create(xContext);
+
+    for (
+        sal_uInt32 nIterator = 0;
+        nIterator < SAL_N_ELEMENTS(sUnoCommands);
+        nIterator++
+        )
+    {
+        aCommandURL.Complete = sUnoCommands[nIterator];
+        xParser->parseStrict(aCommandURL);
+        pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
+
+        // Initialize slot to dispatch Uno Command.
+        uno::Reference<frame::XDispatch> xDispatch =
+            pViewFrame->GetBindings().GetDispatch( pSlot, aCommandURL, false );
+        if (!xDispatch.is())
+        {
+            SAL_WARN("lok", "iniUnoCommands: No XDispatch interface : " + aCommandURL.Complete);
+        }
+    }
+}
+
 static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
@@ -739,6 +796,7 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (pDoc)
     {
+        doc_iniUnoCommands();
         pDoc->initializeForTiledRendering();
     }
 }
