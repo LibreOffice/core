@@ -19,7 +19,7 @@
  *
  *************************************************************/
 
-
+#include "precompiled_cppuhelper.hxx"
 
 #include "com/sun/star/lang/XEventListener.hpp"
 #include "cppuhelper/interfacecontainer.hxx"

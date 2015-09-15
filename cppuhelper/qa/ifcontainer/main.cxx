@@ -19,6 +19,8 @@
  *
  *************************************************************/
 
+#include "precompiled_cppuhelper.hxx"
+
 #include "gtest/gtest.h"
 
 int main(int argc, char **argv)

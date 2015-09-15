@@ -19,7 +19,7 @@
  *
  *************************************************************/
 
-
+#include "precompiled_cppuhelper.hxx"
 
 #include "cppuhelper/unourl.hxx"
 #include "rtl/malformeduriexception.hxx"
