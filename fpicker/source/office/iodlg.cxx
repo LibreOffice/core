@@ -1220,18 +1220,7 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
             OSL_FAIL("SvtFileDialog, OpenHdl_Impl: invalid mode!");
     }
 
-    // notify interested parties
-    long nRet;
-
-    if ( _aOKHdl.IsSet() )
-        nRet = _aOKHdl.Call( this );
-    else
-        nRet = 1;
-
-    if ( nRet )
-    {
-        EndDialog( RET_OK );
-    }
+    EndDialog( RET_OK );
 }
 
 
@@ -1475,16 +1464,7 @@ void SvtFileDialog::OpenMultiSelection_Impl()
     if ( nCount && pEntry )
         _aPath = SvtFileView::GetURL( pEntry );
 
-    // notify interested parties
-    long nRet;
-
-    if ( _aOKHdl.IsSet() )
-        nRet = _aOKHdl.Call( this );
-    else
-        nRet = 1;
-
-    if ( nRet )
-        EndDialog( RET_OK );
+    EndDialog( RET_OK );
 }
 
 

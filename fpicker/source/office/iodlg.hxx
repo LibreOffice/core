@@ -137,11 +137,6 @@ private:
 protected:
     virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    // originally from VclFileDialog
-    Link<>                      _aOKHdl;
-    Link<>                      _aFileSelectHdl;
-    Link<>                      _aFilterSelectHdl;
-
     OUString                    _aPath;
     OUString                    _aDefExt;
 
