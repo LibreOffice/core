@@ -115,7 +115,8 @@ void OpenGLSalGraphicsImpl::Init()
     // check if we can simply re-use the same context
     if( mpContext.is() )
     {
-        if( !UseContext( mpContext ) )
+        if( !mpContext->isInitialized() ||
+            !UseContext( mpContext ) )
             ReleaseContext();
     }
 
@@ -124,8 +125,12 @@ void OpenGLSalGraphicsImpl::Init()
         maOffscreenTex.GetWidth()  != GetWidth() ||
         maOffscreenTex.GetHeight() != GetHeight() )
     {
-        if( mpContext.is() ) // valid context
+        if( maOffscreenTex && // don't work to release empty textures
+            mpContext.is() )  // valid context
+        {
+            mpContext->makeCurrent();
             mpContext->ReleaseFramebuffer( maOffscreenTex );
+        }
         maOffscreenTex = OpenGLTexture();
     }
 }

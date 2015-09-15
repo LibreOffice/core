@@ -43,7 +43,23 @@ bool WinOpenGLSalGraphicsImpl::UseContext( const rtl::Reference<OpenGLContext> &
         return false;
     if( IsOffscreen() )
         return true;
-    return pContext->getOpenGLWindow().hWnd == mrParent.mhWnd;
+    return pContext->getOpenGLWindow().hWnd == mrParent.mhWnd &&
+           pContext->getOpenGLWindow().hDC == mrParent.mhLocalDC;
+}
+
+void WinOpenGLSalGraphicsImpl::Init()
+{
+    if ( !IsOffscreen() && mpContext.is() && mpContext->isInitialized() &&
+         ( mpContext->getOpenGLWindow().hWnd != mrParent.mhWnd ||
+           mpContext->getOpenGLWindow().hDC == mrParent.mhLocalDC ) )
+    {
+        // This can legitimiately happen, SalFrame keeps 2x
+        // SalGraphics which share the same hWnd and hDC.
+        // The shape 'Area' dialog does reparenting to trigger this.
+        SAL_WARN("vcl.opengl", "Unusual: Windows handle / DC changed without DeInit");
+    }
+
+    OpenGLSalGraphicsImpl::Init();
 }
 
 namespace

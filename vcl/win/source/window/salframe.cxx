@@ -1498,7 +1498,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     {
         if ( pThis->mpGraphics->getDefPal() )
             SelectPalette( pThis->mpGraphics->getHDC(), pThis->mpGraphics->getDefPal(), TRUE );
-        pThis->mpGraphics->InitGraphics();
+        pThis->mpGraphics->DeInitGraphics();
         ReleaseDC( pThis->mhWnd, pThis->mpGraphics->getHDC() );
     }
 

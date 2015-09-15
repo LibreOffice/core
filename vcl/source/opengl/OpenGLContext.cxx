@@ -1681,6 +1681,9 @@ void OpenGLContext::ReleaseFramebuffer( const OpenGLTexture& rTexture )
 {
     OpenGLZone aZone;
 
+    if (!rTexture) // no texture to release.
+        return;
+
     OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
 
     while( pFramebuffer )
