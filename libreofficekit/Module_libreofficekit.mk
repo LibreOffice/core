@@ -9,7 +9,7 @@
 
 $(eval $(call gb_Module_Module,libreofficekit))
 
-ifeq ($(OS),LINUX)
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,libreofficekit,\
     CppunitTest_libreofficekit_tiledrendering \
@@ -23,6 +23,6 @@ $(eval $(call gb_Module_add_targets,libreofficekit,\
 ))
 endif # ($(ENABLE_GTK3),)
 
-endif # ($(OS),LINUX)
+endif
 
 # vim: set ts=4 sw=4 et:

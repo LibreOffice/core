@@ -28,7 +28,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
         StaticLibrary_vclmain \
 		$(if $(ENABLE_HEADLESS),, \
 			Executable_ui-previewer) \
-		$(if $(filter LINUX MACOSX WNT,$(OS)), \
+		$(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
 			Executable_outdevgrind \
 			$(if $(ENABLE_HEADLESS),, \
 				Executable_vcldemo \
