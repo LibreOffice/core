@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_SFX2_LOKHELPER_HXX
+#define INCLUDED_SFX2_LOKHELPER_HXX
+
 #include <sfx2/dllapi.h>
 
 class SfxViewShell;
@@ -22,5 +25,7 @@ public:
     /// Total number of view shells.
     static int getViews();
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
