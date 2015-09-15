@@ -121,14 +121,7 @@ class SC_DLLPUBLIC ScFormulaCell : public SvtListener
 {
 private:
     ScFormulaCellGroupRef mxGroup;       // re-factoring hack - group of formulae we're part of.
-    ScFormulaResult aResult;
-    formula::FormulaGrammar::Grammar  eTempGrammar;   // used between string (creation) and (re)compilation
-    ScTokenArray*   pCode;              // The (new) token array
     ScDocument*     pDocument;
-    ScFormulaCell*  pPrevious;
-    ScFormulaCell*  pNext;
-    ScFormulaCell*  pPreviousTrack;
-    ScFormulaCell*  pNextTrack;
     sal_uInt16      nSeenInIteration;   // Iteration cycle in which the cell was last encountered
     short           nFormatType;
     sal_uInt8       cMatrixFlag    : 2; // One of ScMatrixMode
@@ -144,6 +137,13 @@ private:
     bool            mbNeedsNumberFormat : 1; // set the calculated number format as hard number format
     bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
     bool            mbIsExtRef       : 1; // has references in ScExternalRefManager; never cleared after set
+    ScFormulaResult aResult;
+    ScTokenArray*   pCode;              // The (new) token array
+    ScFormulaCell*  pPrevious;
+    ScFormulaCell*  pNext;
+    ScFormulaCell*  pPreviousTrack;
+    ScFormulaCell*  pNextTrack;
+    formula::FormulaGrammar::Grammar  eTempGrammar;   // used between string (creation) and (re)compilation
 
                     enum ScInterpretTailParameter
                     {

@@ -589,13 +589,7 @@ void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
 }
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
-    eTempGrammar(formula::FormulaGrammar::GRAM_DEFAULT),
-    pCode(new ScTokenArray),
     pDocument(pDoc),
-    pPrevious(0),
-    pNext(0),
-    pPreviousTrack(0),
-    pNextTrack(0),
     nSeenInIteration(0),
     nFormatType(css::util::NumberFormat::NUMBER),
     cMatrixFlag(MM_NONE),
@@ -611,6 +605,12 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     mbNeedsNumberFormat(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    pCode(new ScTokenArray),
+    pPrevious(0),
+    pNext(0),
+    pPreviousTrack(0),
+    pNextTrack(0),
+    eTempGrammar(formula::FormulaGrammar::GRAM_DEFAULT),
     aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
@@ -620,13 +620,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
                               const OUString& rFormula,
                               const FormulaGrammar::Grammar eGrammar,
                               sal_uInt8 cMatInd ) :
-    eTempGrammar( eGrammar),
-    pCode( NULL ),
     pDocument( pDoc ),
-    pPrevious(0),
-    pNext(0),
-    pPreviousTrack(0),
-    pNextTrack(0),
     nSeenInIteration(0),
     nFormatType ( css::util::NumberFormat::NUMBER ),
     cMatrixFlag ( cMatInd ),
@@ -642,6 +636,12 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    pCode( NULL ),
+    pPrevious(0),
+    pNext(0),
+    pPreviousTrack(0),
+    pNextTrack(0),
+    eTempGrammar( eGrammar),
     aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
@@ -655,13 +655,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 ScFormulaCell::ScFormulaCell(
     ScDocument* pDoc, const ScAddress& rPos, ScTokenArray* pArray,
     const FormulaGrammar::Grammar eGrammar, sal_uInt8 cMatInd ) :
-    eTempGrammar( eGrammar),
-    pCode(pArray),
     pDocument( pDoc ),
-    pPrevious(0),
-    pNext(0),
-    pPreviousTrack(0),
-    pNextTrack(0),
     nSeenInIteration(0),
     nFormatType ( css::util::NumberFormat::NUMBER ),
     cMatrixFlag ( cMatInd ),
@@ -677,6 +671,12 @@ ScFormulaCell::ScFormulaCell(
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    pCode(pArray),
+    pPrevious(0),
+    pNext(0),
+    pPreviousTrack(0),
+    pNextTrack(0),
+    eTempGrammar( eGrammar),
     aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
@@ -705,13 +705,7 @@ ScFormulaCell::ScFormulaCell(
 ScFormulaCell::ScFormulaCell(
     ScDocument* pDoc, const ScAddress& rPos, const ScTokenArray& rArray,
     const FormulaGrammar::Grammar eGrammar, sal_uInt8 cMatInd ) :
-    eTempGrammar( eGrammar),
-    pCode(new ScTokenArray(rArray)),
     pDocument( pDoc ),
-    pPrevious(0),
-    pNext(0),
-    pPreviousTrack(0),
-    pNextTrack(0),
     nSeenInIteration(0),
     nFormatType ( css::util::NumberFormat::NUMBER ),
     cMatrixFlag ( cMatInd ),
@@ -727,6 +721,12 @@ ScFormulaCell::ScFormulaCell(
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    pCode(new ScTokenArray(rArray)),
+    pPrevious(0),
+    pNext(0),
+    pPreviousTrack(0),
+    pNextTrack(0),
+    eTempGrammar( eGrammar),
     aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
@@ -755,13 +755,7 @@ ScFormulaCell::ScFormulaCell(
     ScDocument* pDoc, const ScAddress& rPos, const ScFormulaCellGroupRef& xGroup,
     const FormulaGrammar::Grammar eGrammar, sal_uInt8 cInd ) :
     mxGroup(xGroup),
-    eTempGrammar( eGrammar),
-    pCode(xGroup->mpCode ? xGroup->mpCode : new ScTokenArray),
     pDocument( pDoc ),
-    pPrevious(0),
-    pNext(0),
-    pPreviousTrack(0),
-    pNextTrack(0),
     nSeenInIteration(0),
     nFormatType(xGroup->mnFormatType),
     cMatrixFlag ( cInd ),
@@ -777,6 +771,12 @@ ScFormulaCell::ScFormulaCell(
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    pCode(xGroup->mpCode ? xGroup->mpCode : new ScTokenArray),
+    pPrevious(0),
+    pNext(0),
+    pPreviousTrack(0),
+    pNextTrack(0),
+    eTempGrammar( eGrammar),
     aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
@@ -787,13 +787,7 @@ ScFormulaCell::ScFormulaCell(
 
 ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags ) :
     SvtListener(),
-    aResult( rCell.aResult ),
-    eTempGrammar( rCell.eTempGrammar),
     pDocument( &rDoc ),
-    pPrevious(0),
-    pNext(0),
-    pPreviousTrack(0),
-    pNextTrack(0),
     nSeenInIteration(0),
     nFormatType( rCell.nFormatType ),
     cMatrixFlag ( rCell.cMatrixFlag ),
@@ -809,6 +803,12 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
     mbIsExtRef(false),
+    aResult( rCell.aResult ),
+    pPrevious(0),
+    pNext(0),
+    pPreviousTrack(0),
+    pNextTrack(0),
+    eTempGrammar( rCell.eTempGrammar),
     aPos(rPos)
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
