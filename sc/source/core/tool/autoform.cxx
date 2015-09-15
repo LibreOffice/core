@@ -897,6 +897,16 @@ ScAutoFormat::ScAutoFormat() :
     insert(pData);
 }
 
+bool DefaultFirstEntry::operator() (const OUString& left, const OUString& right) const
+{
+    OUString aStrStandard(ScGlobal::GetRscString(STR_STYLENAME_STANDARD));
+    if ( ScGlobal::GetpTransliteration()->isEqual( left, aStrStandard ) )
+        return true;
+    if ( ScGlobal::GetpTransliteration()->isEqual( right, aStrStandard ) )
+        return false;
+    return ScGlobal::GetCollator()->compareString( left, right) < 0;
+}
+
 ScAutoFormat::ScAutoFormat(const ScAutoFormat& r) :
     maData(r.maData),
     mbSaveLater(false) {}
