@@ -244,6 +244,7 @@ throw ( RuntimeException, std::exception )
                     aStrValue = aTmp;
                 }
                 m_pToolbar->SetItemText( m_nID, aStrValue );
+                m_pToolbar->SetQuickHelpText( m_nID, aStrValue );
             }
 
             if ( m_bMadeInvisible )
