@@ -267,6 +267,15 @@ public:
     {
         return mpDoc->pClass->createView(mpDoc);
     }
+
+    /**
+     * Destroy a view of an existring document.
+     * @param nId a view ID, returned by createView().
+     */
+    void destroyView(int nId)
+    {
+        mpDoc->pClass->destroyView(mpDoc, nId);
+    }
 #endif // LOK_USE_UNSTABLE_API
 };
 

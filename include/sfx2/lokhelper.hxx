@@ -16,6 +16,8 @@ class SFX2_DLLPUBLIC SfxLokHelper
 public:
     /// Create a new view shell for pViewShell's object shell.
     static int createView(SfxViewShell* pViewShell);
+    /// Destroy a view shell from the global shell list.
+    static void destroyView(size_t nId);
 
     /// Total number of view shells.
     static int getViews();

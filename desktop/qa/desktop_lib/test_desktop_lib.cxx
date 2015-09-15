@@ -136,8 +136,11 @@ void DesktopLOKTest::testCreateView()
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     CPPUNIT_ASSERT_EQUAL(1, SfxLokHelper::getViews());
 
-    pDocument->m_pDocumentClass->createView(pDocument);
+    int nId = pDocument->m_pDocumentClass->createView(pDocument);
     CPPUNIT_ASSERT_EQUAL(2, SfxLokHelper::getViews());
+
+    pDocument->m_pDocumentClass->destroyView(pDocument, nId);
+    CPPUNIT_ASSERT_EQUAL(1, SfxLokHelper::getViews());
     closeDoc();
 }
 
