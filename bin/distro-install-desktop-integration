@@ -94,7 +94,7 @@ add_wrapper()
 }
 
 # install desktop integration from plain packages
-sysui_temp=`mktemp -t -d distro-pack-desktop-integration-XXXXXX`
+sysui_temp=`mktemp -d -t distro-pack-desktop-integration-XXXXXX`
 cp -a workdir/CustomTarget/sysui/share/libreoffice/* "$sysui_temp"
 cp -a sysui/desktop/share/create_tree.sh "$sysui_temp"
 builddir=`pwd`
@@ -116,6 +116,7 @@ sed -i \
     export PREFIXDIR=${PREFIXDIR}
     export GNOMEDIR=$PREFIXDIR
     export GNOME_MIME_THEME=hicolor
+    export APPDATA_SOURCE_DIR=$builddir/sysui/desktop/appstream-appdata
     bash ./create_tree.sh
 )
 cd -
@@ -124,7 +125,7 @@ rm -rf $sysui_temp
 # we do not want some stuff from the plain packages
 if test -d $DESTDIR/opt ; then
     rm -f $DESTDIR/opt/$INSTALLDIRNAME
-    rmdir --ignore-fail-on-non-empty $DESTDIR/opt
+    rmdir $DESTDIR/opt 2>/dev/null || true
 fi
 
 # we want non-versioned desktop files
