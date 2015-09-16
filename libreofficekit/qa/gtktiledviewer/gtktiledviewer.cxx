@@ -79,6 +79,7 @@ static std::map<GtkWidget*, TiledWindow> g_aWindows;
 
 static void setupDocView(GtkWidget* pDocView);
 static GtkWidget* createWindow(TiledWindow& rWindow);
+static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpointer userdata);
 
 static TiledWindow& lcl_getTiledWindow(GtkWidget* pWidget)
 {
@@ -192,15 +193,32 @@ static void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/)
     }
 }
 
-/// Calls lok::Document::createView().
-static void createView(GtkWidget* pButton, gpointer /*pItem*/)
+/// Common initialization, regardless if it's just a new view or a full init.
+static void setupWidgetAndCreateWindow(GtkWidget* pDocView)
 {
-    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
-    GtkWidget* pDocView = lok_doc_view_new_from_widget(LOK_DOC_VIEW(rWindow.m_pDocView));
     setupDocView(pDocView);
     TiledWindow aWindow;
     aWindow.m_pDocView = pDocView;
     createWindow(aWindow);
+}
+
+/// Creates a new view, i.e. no LOK init or document load.
+static void createView(GtkWidget* pButton, gpointer /*pItem*/)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(pButton);
+    GtkWidget* pDocView = lok_doc_view_new_from_widget(LOK_DOC_VIEW(rWindow.m_pDocView));
+
+    setupWidgetAndCreateWindow(pDocView);
+}
+
+/// Creates a new model, i.e. LOK init and document load, one view implicitly.
+static void createModelAndView(const char* pLOPath, const char* pDocPath)
+{
+    GtkWidget* pDocView = lok_doc_view_new(pLOPath, 0, 0);
+
+    setupWidgetAndCreateWindow(pDocView);
+
+    lok_doc_view_open_document(LOK_DOC_VIEW(pDocView), pDocPath, 0, openDocumentCallback, pDocView);
 }
 
 /// Our GtkClipboardGetFunc implementation for HTML.
@@ -751,12 +769,7 @@ int main( int argc, char* argv[] )
 
     gtk_init( &argc, &argv );
 
-    GtkWidget* pDocView = lok_doc_view_new(argv[1], NULL, NULL);
-    setupDocView(pDocView);
-    TiledWindow aWindow;
-    aWindow.m_pDocView = pDocView;
-    createWindow(aWindow);
-    lok_doc_view_open_document(LOK_DOC_VIEW(pDocView), argv[2], NULL, openDocumentCallback, pDocView);
+    createModelAndView(argv[1], argv[2]);
 
     gtk_main();
 
