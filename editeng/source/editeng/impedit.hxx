@@ -486,7 +486,7 @@ private:
     Link<MoveParagraphsInfo&,void> aEndMovingParagraphsHdl;
     Link<PasteOrDropInfos&,void>   aBeginPasteOrDropHdl;
     Link<PasteOrDropInfos&,void>   aEndPasteOrDropHdl;
-    Link<>              aModifyHdl;
+    Link<LinkParamNone*,void>      aModifyHdl;
     Link<>              maBeginDropHdl;
     Link<>              maEndDropHdl;
 
@@ -818,8 +818,8 @@ public:
 
     bool            IsModified() const      { return aEditDoc.IsModified(); }
     void            SetModifyFlag( bool b ) { aEditDoc.SetModified( b ); }
-    void            SetModifyHdl( const Link<>& rLink ) { aModifyHdl = rLink; }
-    Link<>          GetModifyHdl() const { return aModifyHdl; }
+    void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
+    Link<LinkParamNone*,void> GetModifyHdl() const { return aModifyHdl; }
 
 
     bool            IsInSelectionMode() { return bInSelection; }

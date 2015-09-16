@@ -1605,12 +1605,12 @@ OUString EditEngine::GetText( sal_Int32 nPara ) const
     return aStr;
 }
 
-void EditEngine::SetModifyHdl( const Link<>& rLink )
+void EditEngine::SetModifyHdl( const Link<LinkParamNone*,void>& rLink )
 {
     pImpEditEngine->SetModifyHdl( rLink );
 }
 
-Link<> EditEngine::GetModifyHdl() const
+Link<LinkParamNone*,void> EditEngine::GetModifyHdl() const
 {
     return pImpEditEngine->GetModifyHdl();
 }

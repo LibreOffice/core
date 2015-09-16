@@ -108,12 +108,12 @@ sal_uLong Outliner::GetTextHeight() const
     return pEditEngine->GetTextHeight();
 }
 
-void Outliner::SetModifyHdl( const Link<>& rLink )
+void Outliner::SetModifyHdl( const Link<LinkParamNone*,void>& rLink )
 {
     pEditEngine->SetModifyHdl( rLink );
 }
 
-Link<> Outliner::GetModifyHdl() const
+Link<LinkParamNone*,void> Outliner::GetModifyHdl() const
 {
     return pEditEngine->GetModifyHdl();
 }

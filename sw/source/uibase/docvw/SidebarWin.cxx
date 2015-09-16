@@ -918,8 +918,8 @@ void SwSidebarWin::SetReadonly(bool bSet)
 
 void SwSidebarWin::SetLanguage(const SvxLanguageItem& rNewItem)
 {
-    Link<> pLink = Engine()->GetModifyHdl();
-    Engine()->SetModifyHdl( Link<>() );
+    Link<LinkParamNone*,void> pLink = Engine()->GetModifyHdl();
+    Engine()->SetModifyHdl( Link<LinkParamNone*,void>() );
     ESelection aOld = GetOutlinerView()->GetSelection();
 
     ESelection aNewSelection( 0, 0, Engine()->GetParagraphCount()-1, EE_TEXTPOS_ALL );
@@ -1182,10 +1182,9 @@ IMPL_LINK_TYPED(SwSidebarWin, ScrollHdl, ScrollBar*, pScroll, void)
     GetOutlinerView()->Scroll( 0, nDiff );
 }
 
-IMPL_LINK_NOARG(SwSidebarWin, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwSidebarWin, ModifyHdl, LinkParamNone*, void)
 {
     mrView.GetDocShell()->SetModified();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwSidebarWin, DeleteHdl, void*, void)

@@ -67,7 +67,7 @@ public:
     virtual void            SetTextString( const OUString& rString ) SAL_OVERRIDE;
     virtual const OUString& GetTextString() const SAL_OVERRIDE;
 
-    bool            IsInputActive() SAL_OVERRIDE;
+    bool                     IsInputActive() SAL_OVERRIDE;
     virtual EditView*       GetEditView() SAL_OVERRIDE;
 
                         // for function autopilots
@@ -78,7 +78,7 @@ public:
 
     virtual void            TextGrabFocus() SAL_OVERRIDE;
 
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    virtual void             DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual void            SetFormulaMode( bool bSet ) SAL_OVERRIDE;
 
@@ -87,7 +87,7 @@ public:
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
 
-    DECL_LINK( NotifyHdl, void* );
+    DECL_LINK_TYPED( NotifyHdl, LinkParamNone*, void );
 
 protected:
     virtual void    Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
@@ -187,7 +187,7 @@ protected:
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
-    DECL_LINK( ModifyHdl, EENotify* );
+    DECL_LINK_TYPED( ModifyHdl, LinkParamNone*, void );
 private:
     ScInputBarGroup& mrGroupBar;
     long mnLines;

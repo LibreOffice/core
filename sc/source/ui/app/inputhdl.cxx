@@ -2066,7 +2066,7 @@ void ScInputHandler::SyncViews( EditView* pSourceView )
     }
 }
 
-IMPL_LINK_NOARG(ScInputHandler, ModifyHdl)
+IMPL_LINK_NOARG_TYPED(ScInputHandler, ModifyHdl, LinkParamNone*, void)
 {
     if ( !bInOwnChange && ( eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE ) &&
          pEngine && pEngine->GetUpdateMode() && pInputWin )
@@ -2081,7 +2081,6 @@ IMPL_LINK_NOARG(ScInputHandler, ModifyHdl)
         lcl_RemoveTabs(aText);
         pInputWin->SetTextString(aText);
     }
-    return 0;
 }
 
 /**

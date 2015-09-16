@@ -552,7 +552,7 @@ namespace frm
     }
 
 
-    IMPL_LINK_NOARG( ORichTextModel, OnEngineContentModified )
+    IMPL_LINK_NOARG_TYPED( ORichTextModel, OnEngineContentModified, LinkParamNone*, void )
     {
         if ( !m_bSettingEngineText )
         {
@@ -564,8 +564,6 @@ namespace frm
                 // On the other hand, the API *requires* us to notify changes in the "Text"
                 // property immediately ...
         }
-
-        return 0L;
     }
 
 

@@ -1238,10 +1238,9 @@ void ScMultiTextWnd::Resize()
     SetScrollBarRange();
 }
 
-IMPL_LINK(ScMultiTextWnd, ModifyHdl, EENotify*, pNotify)
+IMPL_LINK_NOARG_TYPED(ScMultiTextWnd, ModifyHdl, LinkParamNone*, void)
 {
-    ScTextWnd::NotifyHdl( pNotify );
-    return 0;
+    ScTextWnd::NotifyHdl(nullptr);
 }
 
 IMPL_LINK_TYPED(ScMultiTextWnd, NotifyHdl, EENotify&, rNotify, void)
@@ -1816,7 +1815,7 @@ void ScTextWnd::StartEditEngine()
         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
 }
 
-IMPL_LINK_NOARG(ScTextWnd, NotifyHdl)
+IMPL_LINK_NOARG_TYPED(ScTextWnd, NotifyHdl, LinkParamNone*, void)
 {
     if (pEditView && !bInputMode)
     {
@@ -1828,8 +1827,6 @@ IMPL_LINK_NOARG(ScTextWnd, NotifyHdl)
         if ( pHdl && !pHdl->IsInOwnChange() )
             pHdl->InputChanged( pEditView, true );  // #i20282# InputChanged must know if called from modify handler
     }
-
-    return 0;
 }
 
 void ScTextWnd::StopEditEngine( bool bAll )
@@ -1846,7 +1843,7 @@ void ScTextWnd::StopEditEngine( bool bAll )
         aString = pEditEngine->GetText();
         bIsInsertMode = pEditView->IsInsertMode();
         bool bSelection = pEditView->HasSelection();
-        pEditEngine->SetModifyHdl(Link<>());
+        pEditEngine->SetModifyHdl(Link<LinkParamNone*,void>());
         DELETEZ(pEditView);
         DELETEZ(pEditEngine);
 

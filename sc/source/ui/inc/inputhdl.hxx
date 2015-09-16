@@ -158,7 +158,7 @@ private:
     void            SkipClosingPar();
     bool            GetFuncName( OUString& aStart, OUString& aResult );  // fdo75264
     void            ShowArgumentsTip( OUString& rSelText );
-    DECL_LINK( ModifyHdl, void* );
+    DECL_LINK_TYPED( ModifyHdl, LinkParamNone*, void );
     DECL_LINK( ShowHideTipVisibleParentListener, VclWindowEvent* );
     DECL_LINK( ShowHideTipVisibleSecParentListener, VclWindowEvent* );
 

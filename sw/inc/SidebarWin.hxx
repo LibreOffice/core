@@ -188,7 +188,7 @@ class SwSidebarWin : public vcl::Window
         void        SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
         SfxItemSet  DefaultItem();
 
-        DECL_LINK(ModifyHdl, void*);
+        DECL_LINK_TYPED(ModifyHdl, LinkParamNone*, void);
         DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
         DECL_LINK_TYPED(DeleteHdl, void*, void);
 
