@@ -16,8 +16,6 @@
 #include <tools/gen.hxx>
 #include <vcl/virdev.hxx>
 
-class SfxViewShell;
-
 namespace vcl
 {
 
@@ -141,12 +139,6 @@ public:
      * @see lok::Document::resetSelection().
      */
     virtual void resetSelection() = 0;
-
-    /// Get the currently active view shell of the document.
-    virtual SfxViewShell* getCurrentViewShell()
-    {
-        return 0;
-    }
 };
 
 } // namespace vcl
