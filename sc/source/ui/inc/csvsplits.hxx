@@ -67,12 +67,12 @@ public:
     sal_uInt32                  UpperBound( sal_Int32 nPos ) const;
 
     /** Returns the number of splits. */
-    inline sal_uInt32           Count() const
+    sal_uInt32                  Count() const
                                     { return maVec.size(); }
     /** Returns the position of the specified split. */
     sal_Int32                   GetPos( sal_uInt32 nIndex ) const;
     /** Returns the position of the specified split. */
-    inline sal_Int32            operator[]( sal_uInt32 nIndex ) const
+    sal_Int32                   operator[]( sal_uInt32 nIndex ) const
                                     { return GetPos( nIndex ); }
 
 private:
