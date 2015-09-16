@@ -139,6 +139,12 @@ void DesktopLOKTest::testCreateView()
     int nId = pDocument->m_pDocumentClass->createView(pDocument);
     CPPUNIT_ASSERT_EQUAL(2, SfxLokHelper::getViews());
 
+    // Make sure the created view is the active one, then switch to the old
+    // one.
+    CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getView(pDocument));
+    pDocument->m_pDocumentClass->setView(pDocument, 0);
+    CPPUNIT_ASSERT_EQUAL(0, pDocument->m_pDocumentClass->getView(pDocument));
+
     pDocument->m_pDocumentClass->destroyView(pDocument, nId);
     CPPUNIT_ASSERT_EQUAL(1, SfxLokHelper::getViews());
     closeDoc();

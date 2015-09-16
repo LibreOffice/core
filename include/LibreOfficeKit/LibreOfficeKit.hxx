@@ -269,12 +269,30 @@ public:
     }
 
     /**
-     * Destroy a view of an existring document.
+     * Destroy a view of an existing document.
      * @param nId a view ID, returned by createView().
      */
     void destroyView(int nId)
     {
         mpDoc->pClass->destroyView(mpDoc, nId);
+    }
+
+    /**
+     * Set an existing view of an existing document as current.
+     * @param nId a view ID, returned by createView().
+     */
+    void setView(int nId)
+    {
+        mpDoc->pClass->setView(mpDoc, nId);
+    }
+
+    /**
+     * Get the current view.
+     * @return a view ID, previously returned by createView().
+     */
+    int getView()
+    {
+        return mpDoc->pClass->getView(mpDoc);
     }
 #endif // LOK_USE_UNSTABLE_API
 };
