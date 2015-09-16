@@ -103,7 +103,13 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
     else if ( cinfo.jpeg_color_space == JCS_YCCK )
         cinfo.out_color_space = JCS_CMYK;
 
-    OSL_ASSERT(cinfo.out_color_space == JCS_CMYK || cinfo.out_color_space == JCS_GRAYSCALE || cinfo.out_color_space == JCS_RGB);
+    if (cinfo.out_color_space != JCS_CMYK &&
+        cinfo.out_color_space != JCS_GRAYSCALE &&
+        cinfo.out_color_space != JCS_RGB)
+    {
+        SAL_WARN("vcl.filter", "jpg with unknown out color space, forcing to rgb");
+        cinfo.out_color_space = JCS_RGB;
+    }
 
     /* change scale for preview import */
     long nPreviewWidth = previewSize.Width();
