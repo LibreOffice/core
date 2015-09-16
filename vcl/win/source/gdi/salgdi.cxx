@@ -1210,14 +1210,9 @@ css::uno::Any WinSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rS
     return css::uno::Any( args );
 }
 
-void WinSalGraphics::BeginPaint()
+OpenGLContext *WinSalGraphics::BeginPaint()
 {
     return mpImpl->beginPaint();
-}
-
-void WinSalGraphics::EndPaint()
-{
-    return mpImpl->endPaint();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

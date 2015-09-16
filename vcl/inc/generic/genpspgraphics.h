@@ -209,8 +209,7 @@ public:
 
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
-    virtual void BeginPaint() SAL_OVERRIDE { };
-    virtual void EndPaint() SAL_OVERRIDE { };
+#endif // ENABLE_CAIRO_CANVAS
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H

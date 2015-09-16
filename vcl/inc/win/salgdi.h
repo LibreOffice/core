@@ -445,8 +445,7 @@ public:
     virtual css::uno::Any      GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& rSize) const SAL_OVERRIDE;
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
-    virtual void               BeginPaint() SAL_OVERRIDE;
-    virtual void               EndPaint() SAL_OVERRIDE;
+    virtual OpenGLContext     *BeginPaint() SAL_OVERRIDE;
 
     /// Update settings based on the platform values
     static void updateSettingsNative( AllSettings& rSettings );

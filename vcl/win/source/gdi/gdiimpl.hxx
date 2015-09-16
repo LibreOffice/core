@@ -225,9 +225,6 @@ public:
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
             const Gradient& rGradient) SAL_OVERRIDE;
 
-    virtual void beginPaint() SAL_OVERRIDE { }
-    virtual void endPaint() SAL_OVERRIDE { }
-
     virtual bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY);
 
     virtual bool RenderAndCacheNativeControl(OpenGLCompatibleDC& rWhite, OpenGLCompatibleDC& rBlack,
