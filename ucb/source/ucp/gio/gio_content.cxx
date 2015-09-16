@@ -59,6 +59,7 @@
 #include <com/sun/star/ucb/XContentCreator.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/seekableinput.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
@@ -852,9 +853,9 @@ bool Content::feedSink( uno::Reference< uno::XInterface > xSink,
     if (!pStream)
        convertToException(pError, static_cast< cppu::OWeakObject * >(this));
 
-    uno::Reference< io::XInputStream > xIn = new ::gio::InputStream(pStream);
-    if ( !xIn.is() )
-        return false;
+    uno::Reference< io::XInputStream > xIn(
+        new comphelper::OSeekableInputWrapper(
+            new ::gio::InputStream(pStream), m_xContext));
 
     if ( xOut.is() )
         copyData( xIn, xOut );
