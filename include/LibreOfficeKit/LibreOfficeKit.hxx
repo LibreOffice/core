@@ -294,6 +294,14 @@ public:
     {
         return mpDoc->pClass->getView(mpDoc);
     }
+
+    /**
+     * Get number of views of this document.
+     */
+    inline int getViews()
+    {
+        return mpDoc->pClass->getViews(mpDoc);
+    }
 #endif // LOK_USE_UNSTABLE_API
 };
 
@@ -340,16 +348,6 @@ public:
     {
         return mpThis->pClass->getError(mpThis);
     }
-
-#ifdef LOK_USE_UNSTABLE_API
-    /**
-     * Get number of total views.
-     */
-    inline int getViews()
-    {
-        return mpThis->pClass->getViews(mpThis);
-    }
-#endif
 };
 
 /// Factory method to create a lok::Office instance.
