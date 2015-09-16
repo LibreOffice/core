@@ -154,14 +154,30 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                 case( 8 ): pDIB->mnFormat |= BMP_FORMAT_8BIT_PAL; break;
 #ifdef OSL_BIGENDIAN
                 case(16 ):
+                {
                     pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_MSB_MASK;
-                    pDIB->maColorMask = ColorMask( 0xf800, 0x07e0, 0x001f );
+                    ColorMaskElement aRedMask(0xf800);
+                    aRedMask.CalcMaskShift();
+                    ColorMaskElement aGreenMask(0x07e0);
+                    aGreenMask.CalcMaskShift();
+                    ColorMaskElement aBlueMask(0x001f);
+                    aBlueMask.CalcMaskShift();
+                    pDIB->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
                     break;
+                }
 #else
                 case(16 ):
+                {
                     pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_LSB_MASK;
-                    pDIB->maColorMask = ColorMask( 0xf800, 0x07e0, 0x001f );
+                    ColorMaskElement aRedMask(0xf800);
+                    aRedMask.CalcMaskShift();
+                    ColorMaskElement aGreenMask(0x07e0);
+                    aGreenMask.CalcMaskShift();
+                    ColorMaskElement aBlueMask(0x001f);
+                    aBlueMask.CalcMaskShift();
+                    pDIB->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
                     break;
+                }
 #endif
                 default:
                     nBitCount = 24;
@@ -274,7 +290,13 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
                 case( 16 ):
                 {
-                    aSrcBuf.maColorMask = ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask );
+                    ColorMaskElement aRedMask(pImage->red_mask);
+                    aRedMask.CalcMaskShift();
+                    ColorMaskElement aGreenMask(pImage->green_mask);
+                    aGreenMask.CalcMaskShift();
+                    ColorMaskElement aBlueMask(pImage->blue_mask);
+                    aBlueMask.CalcMaskShift();
+                    aSrcBuf.maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
 
                     if( LSBFirst == pImage->byte_order )
                     {
@@ -444,7 +466,13 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
                     #endif
 
-                    xMask.reset(new ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask ));
+                    ColorMaskElement aRedMask(pImage->red_mask);
+                    aRedMask.CalcMaskShift();
+                    ColorMaskElement aGreenMask(pImage->green_mask);
+                    aGreenMask.CalcMaskShift();
+                    ColorMaskElement aBlueMask(pImage->blue_mask);
+                    aBlueMask.CalcMaskShift();
+                    xMask.reset(new ColorMask(aRedMask, aGreenMask, aBlueMask));
                 }
                 break;
 
