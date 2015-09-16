@@ -121,7 +121,7 @@ private:
     DECL_LINK( SelColHdl_Impl, ListBox* );
     DECL_LINK_TYPED( SelPreHdl_Impl, ValueSet*, void );
     DECL_LINK_TYPED( SelSdwHdl_Impl, ValueSet*, void );
-    DECL_LINK( LinesChanged_Impl, void* );
+    DECL_LINK_TYPED( LinesChanged_Impl, LinkParamNone*, void );
     DECL_LINK( ModifyDistanceHdl_Impl, MetricField*);
     DECL_LINK( ModifyWidthHdl_Impl, void*);
     DECL_LINK_TYPED( SyncHdl_Impl, Button*, void);

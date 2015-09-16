@@ -122,7 +122,7 @@ struct FrameSelectorImpl : public Resource
     FrameSelFlags       mnFlags;        /// Flags for enabled frame borders.
     FrameBorderPtrVec   maAllBorders;   /// Pointers to all frame borders.
     FrameBorderPtrVec   maEnabBorders;  /// Pointers to enables frame borders.
-    Link<>              maSelectHdl;    /// Selection handler.
+    Link<LinkParamNone*,void> maSelectHdl;    /// Selection handler.
 
     long                mnCtrlSize;     /// Size of the control (always square).
     long                mnArrowSize;    /// Size of an arrow image.

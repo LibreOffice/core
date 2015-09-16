@@ -132,9 +132,9 @@ public:
     // frame border selection -------------------------------------------------
 
     /** Returns the current selection handler. */
-    const Link<>&       GetSelectHdl() const;
+    const Link<LinkParamNone*,void>&  GetSelectHdl() const;
     /** Sets the passed handler that is called if the selection of the control changes. */
-    void                SetSelectHdl( const Link<>& rHdl );
+    void                SetSelectHdl( const Link<LinkParamNone*,void>& rHdl );
 
     /** Returns true, if the specified frame border is selected. */
     bool                IsBorderSelected( FrameBorderType eBorder ) const;

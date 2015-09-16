@@ -921,12 +921,12 @@ bool FrameSelector::GetVisibleColor( Color& rColor ) const
 }
 
 // frame border selection
-const Link<>& FrameSelector::GetSelectHdl() const
+const Link<LinkParamNone*,void>& FrameSelector::GetSelectHdl() const
 {
     return mxImpl->maSelectHdl;
 }
 
-void FrameSelector::SetSelectHdl( const Link<>& rHdl )
+void FrameSelector::SetSelectHdl( const Link<LinkParamNone*,void>& rHdl )
 {
     mxImpl->maSelectHdl = rHdl;
 }
@@ -1130,7 +1130,7 @@ void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
                     mxImpl->ToggleBorderState( **aIt );
             }
 
-            GetSelectHdl().Call( this );
+            GetSelectHdl().Call( nullptr );
         }
     }
 }

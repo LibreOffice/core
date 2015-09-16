@@ -1106,7 +1106,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 }
 
 
-IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl)
+IMPL_LINK_NOARG_TYPED(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
 {
     if(!mbUseMarginItem && m_pLeftMF->IsVisible())
     {
@@ -1179,7 +1179,6 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl)
         m_pSynchronizeCB->Enable( m_pRightMF->IsEnabled() || m_pTopMF->IsEnabled() ||
                                m_pBottomMF->IsEnabled() || m_pLeftMF->IsEnabled() );
     }
-    return 0;
 }
 
 
