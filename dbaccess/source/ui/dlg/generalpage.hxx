@@ -148,12 +148,12 @@ namespace dbaui
         VclPtr<OpenDocumentButton>     m_pPB_OpenDatabase;
 
         // state
-        DocumentDescriptor      m_aBrowsedDocument;
-        CreationMode            m_eOriginalCreationMode;
+        DocumentDescriptor             m_aBrowsedDocument;
+        CreationMode                   m_eOriginalCreationMode;
 
-        Link<OGeneralPageWizard *, void> m_aCreationModeHandler; /// to be called if a new type is selected
-        Link<>                  m_aDocumentSelectionHandler;    /// to be called when a document in the RecentDoc list is selected
-        Link<>                  m_aChooseDocumentHandler;       /// to be called when a recent document has been definitely chosen
+        Link<OGeneralPageWizard&,void> m_aCreationModeHandler; /// to be called if a new type is selected
+        Link<OGeneralPageWizard&,void> m_aDocumentSelectionHandler;    /// to be called when a document in the RecentDoc list is selected
+        Link<OGeneralPageWizard&,void> m_aChooseDocumentHandler;       /// to be called when a recent document has been definitely chosen
 
         ::svt::ControlDependencyManager
                                 m_aControlDependencies;
@@ -162,11 +162,11 @@ namespace dbaui
         void                    insertEmbeddedDBTypeEntryData( const OUString& _sType, const OUString& sDisplayName );
 
     public:
-        void                    SetCreationModeHandler( const Link<OGeneralPageWizard *, void>& _rHandler ) { m_aCreationModeHandler = _rHandler; }
+        void                    SetCreationModeHandler( const Link<OGeneralPageWizard&,void>& _rHandler ) { m_aCreationModeHandler = _rHandler; }
         CreationMode            GetDatabaseCreationMode() const;
 
-        void                    SetDocumentSelectionHandler( const Link<>& _rHandler) { m_aDocumentSelectionHandler = _rHandler; }
-        void                    SetChooseDocumentHandler( const Link<>& _rHandler) { m_aChooseDocumentHandler = _rHandler; }
+        void                    SetDocumentSelectionHandler( const Link<OGeneralPageWizard&,void>& _rHandler) { m_aDocumentSelectionHandler = _rHandler; }
+        void                    SetChooseDocumentHandler( const Link<OGeneralPageWizard&,void>& _rHandler) { m_aChooseDocumentHandler = _rHandler; }
         DocumentDescriptor      GetSelectedDocument() const;
 
     protected:

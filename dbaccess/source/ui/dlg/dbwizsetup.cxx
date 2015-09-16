@@ -605,22 +605,20 @@ IMPL_LINK_TYPED(ODbTypeWizDialogSetup, ImplClickHdl, OMySQLIntroPageSetup*, _pMy
     activatePath( static_cast<PathId>(m_pCollection->getIndexOf(sURLPrefix) + 1), true);
 }
 
-IMPL_LINK_NOARG_TYPED(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard*, void)
+IMPL_LINK_NOARG_TYPED(ODbTypeWizDialogSetup, OnChangeCreationMode, OGeneralPageWizard&, void)
 {
     activateDatabasePath();
 }
 
-IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard*, /*_pGeneralPage*/)
+IMPL_LINK_NOARG_TYPED(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPageWizard&, void)
 {
     enableButtons( WizardButtonFlags::FINISH, !m_pGeneralPage->GetSelectedDocument().sURL.isEmpty() );
-    return 0L;
 }
 
-IMPL_LINK(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard*, /*_pGeneralPage*/)
+IMPL_LINK_NOARG_TYPED(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard&, void)
 {
     if ( prepareLeaveCurrentState( eFinish ) )
         onFinish();
-    return 0L;
 }
 
 void ODbTypeWizDialogSetup::enterState(WizardState _nState)

@@ -702,7 +702,7 @@ namespace dbaui
     IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnCreateDatabaseModeSelected, Button*, void )
     {
         if ( m_aCreationModeHandler.IsSet() )
-            m_aCreationModeHandler.Call( this );
+            m_aCreationModeHandler.Call( *this );
 
         OnEmbeddedDBTypeSelected( m_pEmbeddedDBType );
     }
@@ -710,13 +710,13 @@ namespace dbaui
     IMPL_LINK_NOARG_TYPED( OGeneralPageWizard, OnSetupModeSelected, Button*, void )
     {
         if ( m_aCreationModeHandler.IsSet() )
-            m_aCreationModeHandler.Call( this );
+            m_aCreationModeHandler.Call( *this );
         OnDatasourceTypeSelected(m_pDatasourceType);
     }
 
     IMPL_LINK( OGeneralPageWizard, OnDocumentSelected, ListBox*, /*_pBox*/ )
     {
-        m_aDocumentSelectionHandler.Call( this );
+        m_aDocumentSelectionHandler.Call( *this );
         return 0L;
     }
 
@@ -744,7 +744,7 @@ namespace dbaui
             }
             m_aBrowsedDocument.sURL = sPath;
             m_aBrowsedDocument.sFilter.clear();
-            m_aChooseDocumentHandler.Call( this );
+            m_aChooseDocumentHandler.Call( *this );
         }
     }
 
