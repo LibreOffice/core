@@ -233,13 +233,13 @@
 
       <node oor:name="ChartDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Chart</value>
+          <value xml:lang="en-US">Properties</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>ChartDeck</value>
         </prop>
         <prop oor:name="IconURL" oor:type="xs:string">
-          <value>private:graphicrepository/sfx2/res/symphony/sidebar-style-large.png</value>
+          <value>private:graphicrepository/sfx2/res/symphony/sidebar-property-large.png</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
