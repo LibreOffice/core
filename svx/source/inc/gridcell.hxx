@@ -677,13 +677,13 @@ class DbFilterField
         :public DbCellControl
         ,public ::svxform::OSQLParserClient
 {
-    ::com::sun::star::uno::Sequence< OUString >  m_aValueList;
-    OUString   m_aText;
-    Link<>  m_aCommitLink;
+    css::uno::Sequence< OUString >  m_aValueList;
+    OUString    m_aText;
+    Link<DbFilterField&,void> m_aCommitLink;
     sal_Int16   m_nControlClass;
-    bool    m_bFilterList : 1;
-    bool    m_bFilterListFilled : 1;
-    bool    m_bBound : 1;
+    bool        m_bFilterList : 1;
+    bool        m_bFilterListFilled : 1;
+    bool        m_bBound : 1;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -700,7 +700,7 @@ public:
     const OUString& GetText() const {return m_aText;}
     void SetText(const OUString& rText);
 
-    void SetCommitHdl( const Link<>& rLink ) { m_aCommitLink = rLink; }
+    void SetCommitHdl( const Link<DbFilterField&,void>& rLink ) { m_aCommitLink = rLink; }
 
 protected:
 
@@ -1126,7 +1126,7 @@ public:
     virtual sal_Int16 SAL_CALL getMaxTextLen() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    DECL_LINK( OnCommit, void* );
+    DECL_LINK_TYPED( OnCommit, DbFilterField&, void );
 };
 
 #endif // INCLUDED_SVX_SOURCE_INC_GRIDCELL_HXX

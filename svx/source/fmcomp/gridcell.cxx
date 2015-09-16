@@ -2891,7 +2891,7 @@ bool DbFilterField::commitControl()
             if (m_aText != aText)
             {
                 m_aText = aText;
-                m_aCommitLink.Call(this);
+                m_aCommitLink.Call(*this);
             }
             return true;
         default:
@@ -2943,7 +2943,7 @@ bool DbFilterField::commitControl()
             m_aText = aText;
 
         m_pWindow->SetText(m_aText);
-        m_aCommitLink.Call(this);
+        m_aCommitLink.Call(*this);
     }
     return true;
 }
@@ -3134,7 +3134,7 @@ IMPL_LINK_NOARG_TYPED(DbFilterField, OnClick, VclPtr<CheckBox>, void)
     if (m_aText != aText)
     {
         m_aText = aText;
-        m_aCommitLink.Call(this);
+        m_aCommitLink.Call(*this);
     }
 }
 
@@ -4588,7 +4588,7 @@ void FmXFilterCell::disposing()
     ::com::sun::star::lang::EventObject aEvt(*this);
     m_aTextListeners.disposeAndClear(aEvt);
 
-    static_cast<DbFilterField*>(m_pCellControl)->SetCommitHdl(Link<>());
+    static_cast<DbFilterField*>(m_pCellControl)->SetCommitHdl(Link<DbFilterField&,void>());
 
     FmXGridCell::disposing();
 }
@@ -4688,14 +4688,13 @@ void SAL_CALL FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ ) throw( RuntimeE
 }
 
 
-IMPL_LINK_NOARG(FmXFilterCell, OnCommit)
+IMPL_LINK_NOARG_TYPED(FmXFilterCell, OnCommit, DbFilterField&, void)
 {
     ::cppu::OInterfaceIteratorHelper aIt( m_aTextListeners );
     ::com::sun::star::awt::TextEvent aEvt;
     aEvt.Source = *this;
     while( aIt.hasMoreElements() )
         static_cast< ::com::sun::star::awt::XTextListener *>(aIt.next())->textChanged( aEvt );
-    return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
