@@ -11,8 +11,6 @@
 #ifndef INCLUDED_UNOIDL_DETAIL_DLLAPI_HXX
 #define INCLUDED_UNOIDL_DETAIL_DLLAPI_HXX
 
-#include <sal/config.h>
-
 #include <sal/types.h>
 
 #if defined LO_DLLIMPLEMENTATION_UNOIDL

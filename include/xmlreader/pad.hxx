@@ -20,12 +20,9 @@
 #ifndef INCLUDED_XMLREADER_PAD_HXX
 #define INCLUDED_XMLREADER_PAD_HXX
 
-#include <sal/config.h>
-
-#include <cstddef>
-
-#include <rtl/strbuf.hxx>
 #include <sal/types.h>
+#include <cstddef>
+#include <rtl/strbuf.hxx>
 #include <xmlreader/detail/xmlreaderdllapi.hxx>
 #include <xmlreader/span.hxx>
 

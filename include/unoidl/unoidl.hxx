@@ -10,15 +10,12 @@
 #ifndef INCLUDED_UNOIDL_UNOIDL_HXX
 #define INCLUDED_UNOIDL_UNOIDL_HXX
 
-#include <sal/config.h>
-
+#include <sal/types.h>
 #include <cassert>
-#include <vector>
-
+#include <debug/vector>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <unoidl/detail/dllapi.hxx>
 
