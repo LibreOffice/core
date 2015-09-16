@@ -27,8 +27,8 @@ namespace dbaui
 {
     class OScrollHelper
     {
-        Link<>  m_aUpScroll;
-        Link<>  m_aDownScroll;
+        Link<LinkParamNone*,void>  m_aUpScroll;
+        Link<LinkParamNone*,void>  m_aDownScroll;
     public:
         /** default constructor
         */
@@ -40,7 +40,7 @@ namespace dbaui
             @param  _rUpScroll
                 the method to set
         */
-        inline void setUpScrollMethod( const Link<>& _rUpScroll )
+        inline void setUpScrollMethod( const Link<LinkParamNone*,void>& _rUpScroll )
         {
             m_aUpScroll = _rUpScroll;
         }
@@ -49,7 +49,7 @@ namespace dbaui
             @param  _rDownScroll
                 the method to set
         */
-        inline void setDownScrollMethod( const Link<>& _rDownScroll )
+        inline void setDownScrollMethod( const Link<LinkParamNone*,void>& _rDownScroll )
         {
             m_aDownScroll = _rDownScroll;
         }

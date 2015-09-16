@@ -76,8 +76,8 @@ namespace dbaui
         void init();
         DECL_LINK_TYPED( OnTimeOut, Timer*, void );
         DECL_LINK_TYPED( OnResetEntry, void*, void );
-        DECL_LINK( ScrollUpHdl, SvTreeListBox* );
-        DECL_LINK( ScrollDownHdl, SvTreeListBox* );
+        DECL_LINK_TYPED( ScrollUpHdl, LinkParamNone*, void );
+        DECL_LINK_TYPED( ScrollDownHdl, LinkParamNone*, void );
 
     public:
         DBTreeListBox( vcl::Window* pParent

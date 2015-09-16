@@ -413,16 +413,14 @@ void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,bool _bUp)
     }
 }
 
-IMPL_LINK( DBTreeListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
+IMPL_LINK_NOARG_TYPED( DBTreeListBox, ScrollUpHdl, LinkParamNone*, void )
 {
     scrollWindow(this,m_aMousePos,true);
-    return 0;
 }
 
-IMPL_LINK( DBTreeListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
+IMPL_LINK_NOARG_TYPED( DBTreeListBox, ScrollDownHdl, LinkParamNone*, void )
 {
     scrollWindow(this,m_aMousePos,false);
-    return 0;
 }
 
 namespace
