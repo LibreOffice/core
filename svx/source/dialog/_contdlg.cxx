@@ -657,13 +657,13 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
     }
 }
 
-IMPL_LINK( SvxSuperContourDlg, PipetteHdl, ContourWindow*, pWnd )
+IMPL_LINK_TYPED( SvxSuperContourDlg, PipetteHdl, ContourWindow&, rWnd, void )
 {
     const Color& rOldLineColor = m_pStbStatus->GetLineColor();
     const Color& rOldFillColor = m_pStbStatus->GetFillColor();
 
     Rectangle       aRect( m_pStbStatus->GetItemRect( 4 ) );
-    const Color&    rColor = pWnd->GetPipetteColor();
+    const Color&    rColor = rWnd.GetPipetteColor();
 
     m_pStbStatus->SetLineColor( rColor );
     m_pStbStatus->SetFillColor( rColor );
@@ -677,16 +677,14 @@ IMPL_LINK( SvxSuperContourDlg, PipetteHdl, ContourWindow*, pWnd )
 
     m_pStbStatus->SetLineColor( rOldLineColor );
     m_pStbStatus->SetFillColor( rOldFillColor );
-
-    return 0L;
 }
 
-IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
+IMPL_LINK_TYPED( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
 {
-    if ( pWnd->IsClickValid() )
+    if ( rWnd.IsClickValid() )
     {
         Bitmap          aMask;
-        const Color&    rColor = pWnd->GetPipetteColor();
+        const Color&    rColor = rWnd.GetPipetteColor();
 
         EnterWait();
 
@@ -711,7 +709,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
                 nGrfChanged++;
 
                 bNewContour = ( aQBox->Execute() == RET_YES );
-                pWnd->SetGraphic( aGraphic, bNewContour );
+                rWnd.SetGraphic( aGraphic, bNewContour );
 
                 if( bNewContour )
                     aCreateIdle.Start();
@@ -722,19 +720,15 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
     }
 
     m_pTbx1->CheckItem(mnPipetteId, false);
-    pWnd->SetPipetteMode( false );
+    rWnd.SetPipetteMode( false );
     m_pStbStatus->Invalidate();
-
-    return 0L;
 }
 
-IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow*, pWnd )
+IMPL_LINK_TYPED( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow&, rWnd, void )
 {
     m_pTbx1->CheckItem(mnWorkSpaceId, false);
     m_pTbx1->CheckItem(mnSelectId);
-    pWnd->SetWorkplaceMode( false );
-
-    return 0L;
+    rWnd.SetWorkplaceMode( false );
 }
 
 IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, MiscHdl, LinkParamNone*, void)

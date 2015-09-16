@@ -89,9 +89,9 @@ class SvxSuperContourDlg : public SvxContourDlg
                         DECL_LINK_TYPED( UpdateHdl, Idle *, void );
                         DECL_LINK_TYPED( CreateHdl, Idle *, void );
                         DECL_LINK_TYPED( StateHdl, GraphCtrl*, void );
-                        DECL_LINK( PipetteHdl, ContourWindow* );
-                        DECL_LINK( PipetteClickHdl, ContourWindow* );
-                        DECL_LINK( WorkplaceClickHdl, ContourWindow* );
+                        DECL_LINK_TYPED( PipetteHdl, ContourWindow&, void );
+                        DECL_LINK_TYPED( PipetteClickHdl, ContourWindow&, void );
+                        DECL_LINK_TYPED( WorkplaceClickHdl, ContourWindow&, void );
                         DECL_LINK_TYPED( MiscHdl, LinkParamNone*, void );
 
 public:

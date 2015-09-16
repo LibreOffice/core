@@ -165,7 +165,7 @@ void ContourWindow::MouseMove( const MouseEvent& rMEvt )
         if ( aPipetteLink.IsSet() && Rectangle( Point(), GetGraphicSize() ).IsInside( aLogPt ) )
         {
             SetPointer( PointerStyle::RefHand );
-            aPipetteLink.Call( this );
+            aPipetteLink.Call( *this );
         }
     }
     else
@@ -186,7 +186,7 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
         Control::MouseButtonUp( rMEvt );
 
         if ( aPipetteClickLink.IsSet() )
-            aPipetteClickLink.Call( this );
+            aPipetteClickLink.Call( *this );
     }
     else if ( bWorkplaceMode )
     {
@@ -211,7 +211,7 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
         Invalidate( aGraphRect );
 
         if ( aWorkplaceClickLink.IsSet() )
-            aWorkplaceClickLink.Call( this );
+            aWorkplaceClickLink.Call( *this );
     }
     else
         GraphCtrl::MouseButtonUp( rMEvt );
