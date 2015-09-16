@@ -21,6 +21,10 @@ public:
     static int createView(SfxViewShell* pViewShell);
     /// Destroy a view shell from the global shell list.
     static void destroyView(size_t nId);
+    /// Set a view shell as current one.
+    static void setView(size_t nId);
+    /// Get the currently active view.
+    static size_t getView();
 
     /// Total number of view shells.
     static int getViews();

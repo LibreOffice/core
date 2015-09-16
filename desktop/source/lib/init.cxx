@@ -247,6 +247,8 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 
 static int doc_createView(LibreOfficeKitDocument* pThis);
 static void doc_destroyView(LibreOfficeKitDocument* pThis, int nId);
+static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
+static int doc_getView(LibreOfficeKitDocument* pThis);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
     mxComponent( xComponent )
@@ -280,6 +282,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         m_pDocumentClass->createView = doc_createView;
         m_pDocumentClass->destroyView = doc_destroyView;
+        m_pDocumentClass->setView = doc_setView;
+        m_pDocumentClass->getView = doc_getView;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -1007,6 +1011,20 @@ static void doc_destroyView(LibreOfficeKitDocument* /*pThis*/, int nId)
     SolarMutexGuard aGuard;
 
     SfxLokHelper::destroyView(nId);
+}
+
+static void doc_setView(LibreOfficeKitDocument* /*pThis*/, int nId)
+{
+    SolarMutexGuard aGuard;
+
+    SfxLokHelper::setView(nId);
+}
+
+static int doc_getView(LibreOfficeKitDocument* /*pThis*/)
+{
+    SolarMutexGuard aGuard;
+
+    return SfxLokHelper::getView();
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
