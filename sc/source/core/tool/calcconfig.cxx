@@ -33,46 +33,48 @@ ScCalcConfig::ScCalcConfig() :
 
 void ScCalcConfig::setOpenCLConfigToDefault()
 {
+    // Keep in order of opcode value, is that clearest? (Random order,
+    // at least, would make no sense at all.)
+    static const OpCodeSet aDefaultOpenCLSubsetOpCodes {
+        ocAdd,
+        ocSub,
+        ocMul,
+        ocDiv,
+        ocRandom,
+        ocSin,
+        ocCos,
+        ocTan,
+        ocArcTan,
+        ocExp,
+        ocLn,
+        ocSqrt,
+        ocStdNormDist,
+        ocSNormInv,
+        ocRound,
+        ocPower,
+        ocSumProduct,
+        ocMin,
+        ocMax,
+        ocSum,
+        ocProduct,
+        ocAverage,
+        ocCount,
+        ocVar,
+        ocNormDist,
+        ocVLookup,
+        ocCorrel,
+        ocCovar,
+        ocPearson,
+        ocSlope,
+        ocSumIfs};
+
     // Note that these defaults better be kept in sync with those in
     // officecfg/registry/schema/org/openoffice/Office/Calc.xcs.
     // Crazy.
     mbOpenCLSubsetOnly = true;
     mbOpenCLAutoSelect = true;
     mnOpenCLMinimumFormulaGroupSize = 100;
-
-    // Keep in order of opcode value, is that clearest? (Random order,
-    // at least, would make no sense at all.)
-    maOpenCLSubsetOpCodes.insert(ocAdd);
-    maOpenCLSubsetOpCodes.insert(ocSub);
-    maOpenCLSubsetOpCodes.insert(ocMul);
-    maOpenCLSubsetOpCodes.insert(ocDiv);
-    maOpenCLSubsetOpCodes.insert(ocRandom);
-    maOpenCLSubsetOpCodes.insert(ocSin);
-    maOpenCLSubsetOpCodes.insert(ocCos);
-    maOpenCLSubsetOpCodes.insert(ocTan);
-    maOpenCLSubsetOpCodes.insert(ocArcTan);
-    maOpenCLSubsetOpCodes.insert(ocExp);
-    maOpenCLSubsetOpCodes.insert(ocLn);
-    maOpenCLSubsetOpCodes.insert(ocSqrt);
-    maOpenCLSubsetOpCodes.insert(ocStdNormDist);
-    maOpenCLSubsetOpCodes.insert(ocSNormInv);
-    maOpenCLSubsetOpCodes.insert(ocRound);
-    maOpenCLSubsetOpCodes.insert(ocPower);
-    maOpenCLSubsetOpCodes.insert(ocSumProduct);
-    maOpenCLSubsetOpCodes.insert(ocMin);
-    maOpenCLSubsetOpCodes.insert(ocMax);
-    maOpenCLSubsetOpCodes.insert(ocSum);
-    maOpenCLSubsetOpCodes.insert(ocProduct);
-    maOpenCLSubsetOpCodes.insert(ocAverage);
-    maOpenCLSubsetOpCodes.insert(ocCount);
-    maOpenCLSubsetOpCodes.insert(ocVar);
-    maOpenCLSubsetOpCodes.insert(ocNormDist);
-    maOpenCLSubsetOpCodes.insert(ocVLookup);
-    maOpenCLSubsetOpCodes.insert(ocCorrel);
-    maOpenCLSubsetOpCodes.insert(ocCovar);
-    maOpenCLSubsetOpCodes.insert(ocPearson);
-    maOpenCLSubsetOpCodes.insert(ocSlope);
-    maOpenCLSubsetOpCodes.insert(ocSumIfs);
+    maOpenCLSubsetOpCodes = aDefaultOpenCLSubsetOpCodes;
 }
 
 void ScCalcConfig::reset()
