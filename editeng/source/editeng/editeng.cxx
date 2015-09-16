@@ -921,12 +921,12 @@ EditPaM EditEngine::DeleteSelected(const EditSelection& rSel)
 
 void EditEngine::HandleBeginPasteOrDrop(PasteOrDropInfos& rInfos)
 {
-    pImpEditEngine->aBeginPasteOrDropHdl.Call(&rInfos);
+    pImpEditEngine->aBeginPasteOrDropHdl.Call(rInfos);
 }
 
 void EditEngine::HandleEndPasteOrDrop(PasteOrDropInfos& rInfos)
 {
-    pImpEditEngine->aEndPasteOrDropHdl.Call(&rInfos);
+    pImpEditEngine->aEndPasteOrDropHdl.Call(rInfos);
 }
 
 bool EditEngine::HasText() const
@@ -1538,13 +1538,13 @@ void EditEngine::SetEndMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>
     pImpEditEngine->aEndMovingParagraphsHdl = rLink;
 }
 
-void EditEngine::SetBeginPasteOrDropHdl( const Link<>& rLink )
+void EditEngine::SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink )
 {
 
     pImpEditEngine->aBeginPasteOrDropHdl = rLink;
 }
 
-void EditEngine::SetEndPasteOrDropHdl( const Link<>& rLink )
+void EditEngine::SetEndPasteOrDropHdl( const Link<PasteOrDropInfos&,void>& rLink )
 {
     pImpEditEngine->aEndPasteOrDropHdl = rLink;
 }

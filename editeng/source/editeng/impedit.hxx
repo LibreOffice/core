@@ -484,8 +484,8 @@ private:
     Link<ImportInfo&,void>  aImportHdl;
     Link<MoveParagraphsInfo&,void> aBeginMovingParagraphsHdl;
     Link<MoveParagraphsInfo&,void> aEndMovingParagraphsHdl;
-    Link<>              aBeginPasteOrDropHdl;
-    Link<>              aEndPasteOrDropHdl;
+    Link<PasteOrDropInfos&,void>   aBeginPasteOrDropHdl;
+    Link<PasteOrDropInfos&,void>   aEndPasteOrDropHdl;
     Link<>              aModifyHdl;
     Link<>              maBeginDropHdl;
     Link<>              maEndDropHdl;

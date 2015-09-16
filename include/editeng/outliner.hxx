@@ -620,8 +620,8 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     DECL_LINK(          ParaVisibleStateChangedHdl, Paragraph* );
     DECL_LINK_TYPED(    BeginMovingParagraphsHdl, MoveParagraphsInfo&, void );
     DECL_LINK_TYPED(    EndMovingParagraphsHdl, MoveParagraphsInfo&, void );
-    DECL_LINK(          BeginPasteOrDropHdl, PasteOrDropInfos* );
-    DECL_LINK(          EndPasteOrDropHdl, PasteOrDropInfos* );
+    DECL_LINK_TYPED(    BeginPasteOrDropHdl, PasteOrDropInfos&, void );
+    DECL_LINK_TYPED(    EndPasteOrDropHdl, PasteOrDropInfos&, void );
     DECL_LINK_TYPED(    EditEngineNotifyHdl, EENotify&, void );
     void                ImplCheckParagraphs( sal_Int32 nStart, sal_Int32 nEnd );
     bool                ImplHasNumberFormat( sal_Int32 nPara ) const;

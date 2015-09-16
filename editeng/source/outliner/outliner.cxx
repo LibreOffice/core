@@ -1787,20 +1787,18 @@ IMPL_LINK_NOARG_TYPED(Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo&, v
         aBeginMovingHdl.Call( this );
 }
 
-IMPL_LINK( Outliner, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfos )
+IMPL_LINK_TYPED( Outliner, BeginPasteOrDropHdl, PasteOrDropInfos&, rInfos, void )
 {
     UndoActionStart( EDITUNDO_DRAGANDDROP );
-    maBeginPasteOrDropHdl.Call(pInfos);
-    return 0;
+    maBeginPasteOrDropHdl.Call(&rInfos);
 }
 
-IMPL_LINK( Outliner, EndPasteOrDropHdl, PasteOrDropInfos*, pInfos )
+IMPL_LINK_TYPED( Outliner, EndPasteOrDropHdl, PasteOrDropInfos&, rInfos, void )
 {
     bPasting = false;
-    ImpTextPasted( pInfos->nStartPara, pInfos->nEndPara - pInfos->nStartPara + 1 );
-    maEndPasteOrDropHdl.Call( pInfos );
+    ImpTextPasted( rInfos.nStartPara, rInfos.nEndPara - rInfos.nStartPara + 1 );
+    maEndPasteOrDropHdl.Call( &rInfos );
     UndoActionEnd( EDITUNDO_DRAGANDDROP );
-    return 0;
 }
 
 IMPL_LINK_TYPED( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo&, rInfos, void )
