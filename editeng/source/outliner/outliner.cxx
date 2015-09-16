@@ -1781,13 +1781,10 @@ IMPL_LINK( Outliner, ParaVisibleStateChangedHdl, Paragraph*, pPara )
     return 0;
 }
 
-IMPL_LINK_NOARG(Outliner, BeginMovingParagraphsHdl)
+IMPL_LINK_NOARG_TYPED(Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo&, void)
 {
-
     if( !IsInUndo() )
         aBeginMovingHdl.Call( this );
-
-    return 0;
 }
 
 IMPL_LINK( Outliner, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfos )
@@ -1806,19 +1803,16 @@ IMPL_LINK( Outliner, EndPasteOrDropHdl, PasteOrDropInfos*, pInfos )
     return 0;
 }
 
-IMPL_LINK( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo*, pInfos )
+IMPL_LINK_TYPED( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo&, rInfos, void )
 {
-
-    pParaList->MoveParagraphs( pInfos->nStartPara, pInfos->nDestPara, pInfos->nEndPara - pInfos->nStartPara + 1 );
-    sal_Int32 nChangesStart = std::min( pInfos->nStartPara, pInfos->nDestPara );
+    pParaList->MoveParagraphs( rInfos.nStartPara, rInfos.nDestPara, rInfos.nEndPara - rInfos.nStartPara + 1 );
+    sal_Int32 nChangesStart = std::min( rInfos.nStartPara, rInfos.nDestPara );
     sal_Int32 nParas = pParaList->GetParagraphCount();
     for ( sal_Int32 n = nChangesStart; n < nParas; n++ )
         ImplCalcBulletText( n, false, false );
 
     if( !IsInUndo() )
         aEndMovingHdl.Call( this );
-
-    return 0;
 }
 
 static bool isSameNumbering( const SvxNumberFormat& rN1, const SvxNumberFormat& rN2 )

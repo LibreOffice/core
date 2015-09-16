@@ -482,8 +482,8 @@ private:
     Link<EditStatus&,void>  aStatusHdlLink;
     Link<EENotify&,void>    aNotifyHdl;
     Link<ImportInfo&,void>  aImportHdl;
-    Link<>              aBeginMovingParagraphsHdl;
-    Link<>              aEndMovingParagraphsHdl;
+    Link<MoveParagraphsInfo&,void> aBeginMovingParagraphsHdl;
+    Link<MoveParagraphsInfo&,void> aEndMovingParagraphsHdl;
     Link<>              aBeginPasteOrDropHdl;
     Link<>              aEndPasteOrDropHdl;
     Link<>              aModifyHdl;

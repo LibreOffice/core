@@ -1528,12 +1528,12 @@ Link<ImportInfo&,void> EditEngine::GetImportHdl() const
     return pImpEditEngine->aImportHdl;
 }
 
-void EditEngine::SetBeginMovingParagraphsHdl( const Link<>& rLink )
+void EditEngine::SetBeginMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink )
 {
     pImpEditEngine->aBeginMovingParagraphsHdl = rLink;
 }
 
-void EditEngine::SetEndMovingParagraphsHdl( const Link<>& rLink )
+void EditEngine::SetEndMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink )
 {
     pImpEditEngine->aEndMovingParagraphsHdl = rLink;
 }

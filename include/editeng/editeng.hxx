@@ -460,8 +460,8 @@ public:
                     CreateTransferable( const ESelection& rSelection ) const;
 
     // MT: Can't create new virtual functions like for ParagraphInserted/Deleted, musst be compatible in SRC638, change later...
-    void            SetBeginMovingParagraphsHdl( const Link<>& rLink );
-    void            SetEndMovingParagraphsHdl( const Link<>& rLink );
+    void            SetBeginMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink );
+    void            SetEndMovingParagraphsHdl( const Link<MoveParagraphsInfo&,void>& rLink );
     void            SetBeginPasteOrDropHdl( const Link<>& rLink );
     void            SetEndPasteOrDropHdl( const Link<>& rLink );
 

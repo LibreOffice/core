@@ -2119,7 +2119,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     }
 
     MoveParagraphsInfo aMoveParagraphsInfo( aOldPositions.Min(), aOldPositions.Max(), nNewPos );
-    aBeginMovingParagraphsHdl.Call( &aMoveParagraphsInfo );
+    aBeginMovingParagraphsHdl.Call( aMoveParagraphsInfo );
 
     if ( IsUndoEnabled() && !IsInUndo())
         InsertUndo(new EditUndoMoveParagraphs(pEditEngine, aOldPositions, nNewPos));
@@ -2154,7 +2154,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
         GetParaPortions().Insert(nRealNewPos+i, pTmpPortion);
     }
 
-    aEndMovingParagraphsHdl.Call( &aMoveParagraphsInfo );
+    aEndMovingParagraphsHdl.Call( aMoveParagraphsInfo );
 
     if ( GetNotifyHdl().IsSet() )
     {

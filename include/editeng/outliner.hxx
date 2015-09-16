@@ -618,8 +618,8 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     sal_uLong           nDummy;
 
     DECL_LINK(          ParaVisibleStateChangedHdl, Paragraph* );
-    DECL_LINK(          BeginMovingParagraphsHdl, void* );
-    DECL_LINK(          EndMovingParagraphsHdl, MoveParagraphsInfo* );
+    DECL_LINK_TYPED(    BeginMovingParagraphsHdl, MoveParagraphsInfo&, void );
+    DECL_LINK_TYPED(    EndMovingParagraphsHdl, MoveParagraphsInfo&, void );
     DECL_LINK(          BeginPasteOrDropHdl, PasteOrDropInfos* );
     DECL_LINK(          EndPasteOrDropHdl, PasteOrDropInfos* );
     DECL_LINK_TYPED(    EditEngineNotifyHdl, EENotify&, void );
