@@ -197,49 +197,45 @@ static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeF
 
 void ScAsciiOptions::ReadFromString( const OUString& rString )
 {
-    sal_Int32 nCount = comphelper::string::getTokenCount(rString, ',');
-    OUString aToken;
+    sal_Int32 nPos = rString.isEmpty() ? -1 : 0;
 
-    // Field separator.
-    if ( nCount >= 1 )
+    // Token 0: Field separator.
+    if ( nPos >= 0 )
     {
         bFixedLen = bMergeFieldSeps = false;
 
-        aToken = rString.getToken(0,',');
+        const OUString aToken = rString.getToken(0, ',', nPos);
         if ( aToken == pStrFix )
             bFixedLen = true;
         aFieldSeps = lcl_decodeSepString( aToken, bMergeFieldSeps);
     }
 
-    // Text separator.
-    if ( nCount >= 2 )
+    // Token 1: Text separator.
+    if ( nPos >= 0 )
     {
-        aToken = rString.getToken(1,',');
-        sal_Int32 nVal = aToken.toInt32();
-        cTextSep = (sal_Unicode) nVal;
+        const sal_Int32 nVal = rString.getToken(0, ',', nPos).toInt32();
+        cTextSep = static_cast<sal_Unicode>(nVal);
     }
 
-    // Text encoding.
-    if ( nCount >= 3 )
+    // Token 2: Text encoding.
+    if ( nPos >= 0 )
     {
-        aToken = rString.getToken(2,',');
-        eCharSet = ScGlobal::GetCharsetValue( aToken );
+        eCharSet = ScGlobal::GetCharsetValue( rString.getToken(0, ',', nPos) );
     }
 
-    // Number of start row.
-    if ( nCount >= 4 )
+    // Token 3: Number of start row.
+    if ( nPos >= 0 )
     {
-        aToken = rString.getToken(3,',');
-        nStartRow = aToken.toInt32();
+        nStartRow = rString.getToken(0, ',', nPos).toInt32();
     }
 
-    // Column info.
-    if ( nCount >= 5 )
+    // Token 4: Column info.
+    if ( nPos >= 0 )
     {
         delete[] pColStart;
         delete[] pColFormat;
 
-        aToken = rString.getToken(4,',');
+        const OUString aToken = rString.getToken(0, ',', nPos);
         sal_Int32 nSub = comphelper::string::getTokenCount(aToken, '/');
         nInfoCount = nSub / 2;
         if (nInfoCount)
@@ -259,25 +255,22 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         }
     }
 
-    // Language
-    if (nCount >= 6)
+    // Token 5: Language.
+    if (nPos >= 0)
     {
-        aToken = rString.getToken(5, ',');
-        eLang = static_cast<LanguageType>(aToken.toInt32());
+        eLang = static_cast<LanguageType>(rString.getToken(0, ',', nPos).toInt32());
     }
 
-    // Import quoted field as text.
-    if (nCount >= 7)
+    // Token 6: Import quoted field as text.
+    if (nPos >= 0)
     {
-        aToken = rString.getToken(6, ',');
-        bQuotedFieldAsText = aToken == "true";
+        bQuotedFieldAsText = rString.getToken(0, ',', nPos) == "true";
     }
 
-    // Detect special numbers.
-    if (nCount >= 8)
+    // Token 7: Detect special numbers.
+    if (nPos >= 0)
     {
-        aToken = rString.getToken(7, ',');
-        bDetectSpecialNumber = aToken == "true";
+        bDetectSpecialNumber = rString.getToken(0, ',', nPos) == "true";
     }
     else
         bDetectSpecialNumber = true;    // default of versions that didn't add the parameter
