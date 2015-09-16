@@ -564,10 +564,10 @@ namespace svxform
 
         DECL_LINK_TYPED( OnActivateTabOrder, Idle*, void );
         DECL_LINK_TYPED( OnInvalidateFeatures, Timer*, void );
-        DECL_LINK( OnLoad, void* );
-        DECL_LINK( OnToggleAutoFields, void* );
-        DECL_LINK( OnActivated, void* );
-        DECL_LINK( OnDeactivated, void* );
+        DECL_LINK_TYPED( OnLoad, void*, void );
+        DECL_LINK_TYPED( OnToggleAutoFields, void*, void );
+        DECL_LINK_TYPED( OnActivated, void*, void );
+        DECL_LINK_TYPED( OnDeactivated, void*, void );
     };
 
 }

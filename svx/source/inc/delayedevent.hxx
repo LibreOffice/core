@@ -38,7 +38,7 @@ namespace svxform
     class DelayedEvent
     {
     public:
-        DelayedEvent( const Link<>& _rHandler )
+        DelayedEvent( const Link<void*,void>& _rHandler )
             :m_aHandler( _rHandler )
             ,m_nEventId( 0 )
         {
@@ -53,7 +53,7 @@ namespace svxform
 
             If there's already a call pending, this previous call is cancelled.
         */
-        void    Call( void* _pArg = NULL );
+        void    Call();
 
         /** cancels a call which is currently pending
 
@@ -62,7 +62,7 @@ namespace svxform
         void    CancelPendingCall();
 
     private:
-        Link<>  m_aHandler;
+        Link<void*,void>  m_aHandler;
         ImplSVEvent * m_nEventId;
 
     private:

@@ -1435,12 +1435,11 @@ void FormController::toggleAutoFields(bool bAutoFields)
 }
 
 
-IMPL_LINK_NOARG(FormController, OnToggleAutoFields)
+IMPL_LINK_NOARG_TYPED(FormController, OnToggleAutoFields, void*, void)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
 
     toggleAutoFields(m_bCurrentRecordNew);
-    return 1L;
 }
 
 // XTextListener
@@ -1757,23 +1756,19 @@ void FormController::focusGained(const FocusEvent& e) throw( RuntimeException, s
 }
 
 
-IMPL_LINK_NOARG( FormController, OnActivated )
+IMPL_LINK_NOARG_TYPED( FormController, OnActivated, void*, void )
 {
     EventObject aEvent;
     aEvent.Source = *this;
     m_aActivateListeners.notifyEach( &XFormControllerListener::formActivated, aEvent );
-
-    return 0L;
 }
 
 
-IMPL_LINK_NOARG( FormController, OnDeactivated )
+IMPL_LINK_NOARG_TYPED( FormController, OnDeactivated, void*, void )
 {
     EventObject aEvent;
     aEvent.Source = *this;
     m_aActivateListeners.notifyEach( &XFormControllerListener::formDeactivated, aEvent );
-
-    return 0L;
 }
 
 
@@ -2613,7 +2608,7 @@ void FormController::updateAllDispatchers() const
 }
 
 
-IMPL_LINK_NOARG(FormController, OnLoad)
+IMPL_LINK_NOARG_TYPED(FormController, OnLoad, void*, void)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     m_bLocked = determineLockState();
@@ -2626,8 +2621,6 @@ IMPL_LINK_NOARG(FormController, OnLoad)
     // just one exception toggle the auto values
     if (m_bCurrentRecordNew)
         toggleAutoFields(true);
-
-    return 1L;
 }
 
 
