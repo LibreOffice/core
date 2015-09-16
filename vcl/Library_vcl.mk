@@ -613,9 +613,13 @@ $(eval $(call gb_Library_use_libraries,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
-	fontconfig \
 	freetype \
 ))
+ifneq ($(OS),EMSCRIPTEN)
+	$(eval $(call gb_Library_use_externals,vcl,\
+		fontconfig \
+	))
+endif
 endif
 
 ifeq ($(OS),ANDROID)
