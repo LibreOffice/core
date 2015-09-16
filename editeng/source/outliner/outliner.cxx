@@ -1772,13 +1772,10 @@ SfxItemSet Outliner::GetParaAttribs( sal_Int32 nPara )
     return pEditEngine->GetParaAttribs( nPara );
 }
 
-IMPL_LINK( Outliner, ParaVisibleStateChangedHdl, Paragraph*, pPara )
+IMPL_LINK_TYPED( Outliner, ParaVisibleStateChangedHdl, Paragraph&, rPara, void )
 {
-
-    sal_Int32 nPara = pParaList->GetAbsPos( pPara );
-    pEditEngine->ShowParagraph( nPara, pPara->IsVisible() );
-
-    return 0;
+    sal_Int32 nPara = pParaList->GetAbsPos( &rPara );
+    pEditEngine->ShowParagraph( nPara, rPara.IsVisible() );
 }
 
 IMPL_LINK_NOARG_TYPED(Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo&, void)

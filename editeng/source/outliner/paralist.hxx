@@ -66,11 +66,11 @@ public:
     void            Expand( Paragraph* pParent );
     void            Collapse( Paragraph* pParent );
 
-    void            SetVisibleStateChangedHdl( const Link<>& rLink ) { aVisibleStateChangedHdl = rLink; }
+    void            SetVisibleStateChangedHdl( const Link<Paragraph&,void>& rLink ) { aVisibleStateChangedHdl = rLink; }
 
 private:
 
-    Link<> aVisibleStateChangedHdl;
+    Link<Paragraph&,void> aVisibleStateChangedHdl;
     std::vector<Paragraph*> maEntries;
 };
 

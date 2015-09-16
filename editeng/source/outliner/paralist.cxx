@@ -222,7 +222,7 @@ void ParagraphList::Expand( Paragraph* pParent )
         if ( !( pPara->IsVisible() ) )
         {
             pPara->bVisible = true;
-            aVisibleStateChangedHdl.Call( pPara );
+            aVisibleStateChangedHdl.Call( *pPara );
         }
     }
 }
@@ -238,7 +238,7 @@ void ParagraphList::Collapse( Paragraph* pParent )
         if ( pPara->IsVisible() )
         {
             pPara->bVisible = false;
-            aVisibleStateChangedHdl.Call( pPara );
+            aVisibleStateChangedHdl.Call( *pPara );
         }
     }
 }
