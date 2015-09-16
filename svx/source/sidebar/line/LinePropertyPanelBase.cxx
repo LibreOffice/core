@@ -850,6 +850,8 @@ void LinePropertyPanelBase::SelectLineStyle()
 
     if(!bSelected)
         mpLBStyle->SelectEntryPos( 0 );
+
+    ActivateControls();
 }
 
 void LinePropertyPanelBase::SelectEndStyle(bool bStart)
