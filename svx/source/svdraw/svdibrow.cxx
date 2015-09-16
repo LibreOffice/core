@@ -426,7 +426,7 @@ void _SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
 
 void _SdrItemBrowserControl::SetDirty()
 {
-    aSetDirtyHdl.Call(this);
+    aSetDirtyHdl.Call(*this);
 }
 
 Rectangle _SdrItemBrowserControl::GetFieldCharacterBounds(sal_Int32 /*_nRow*/,sal_Int32 /*_nColumnPos*/,sal_Int32 /*nIndex*/)
@@ -531,7 +531,7 @@ bool _SdrItemBrowserControl::EndChangeEntry()
 {
     bool bRet = false;
     if (pEditControl!=nullptr) {
-        aEntryChangedHdl.Call(this);
+        aEntryChangedHdl.Call(*this);
         pEditControl.disposeAndClear();
         delete pAktChangeEntry;
         pAktChangeEntry=NULL;
@@ -1145,16 +1145,16 @@ IMPL_LINK_NOARG_TYPED(SdrItemBrowser, IdleHdl, Idle *, void)
     Undirty();
 }
 
-IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
+IMPL_LINK_TYPED(SdrItemBrowser, ChangedHdl, _SdrItemBrowserControl&, rBrowse, void)
 {
-    const ImpItemListRow* pEntry=pBrowse->GetAktChangeEntry();
+    const ImpItemListRow* pEntry = rBrowse.GetAktChangeEntry();
     if (pEntry!=NULL)
     {
         SfxItemSet aSet(pView->GetModel()->GetItemPool());
         pView->GetAttributes(aSet);
 
         SfxItemSet aNewSet(*aSet.GetPool(),pEntry->nWhichId,pEntry->nWhichId);
-        OUString aNewText(pBrowse->GetNewEntryValue());
+        OUString aNewText(rBrowse.GetNewEntryValue());
         bool bDel( aNewText == "del"
             || aNewText == "Del"
             || aNewText == "DEL"
@@ -1257,13 +1257,11 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
         }
         pView->SetAttributes(aNewSet,bDel);
     }
-    return 0;
 }
 
-IMPL_LINK_NOARG(SdrItemBrowser, SetDirtyHdl)
+IMPL_LINK_NOARG_TYPED(SdrItemBrowser, SetDirtyHdl, _SdrItemBrowserControl&, void)
 {
     SetDirty();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,8 +36,8 @@ friend class ImpItemEdit;
     long nAktPaintRow;
     VclPtr<Edit> pEditControl;
     OUString aWNamMerk;
-    Link<> aEntryChangedHdl;
-    Link<> aSetDirtyHdl;
+    Link<_SdrItemBrowserControl&,void> aEntryChangedHdl;
+    Link<_SdrItemBrowserControl&,void> aSetDirtyHdl;
     ImpItemListRow* pAktChangeEntry;
     long   nLastWhichOfs;
     sal_uInt16 nLastWhich;
@@ -90,8 +90,8 @@ public:
 
     const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
     OUString GetNewEntryValue() const                 { return pEditControl->GetText(); }
-    void SetEntryChangedHdl(const Link<>& rLink)    { aEntryChangedHdl=rLink; }
-    void SetSetDirtyHdl(const Link<>& rLink)        { aSetDirtyHdl=rLink; }
+    void SetEntryChangedHdl(const Link<_SdrItemBrowserControl&,void>& rLink)    { aEntryChangedHdl=rLink; }
+    void SetSetDirtyHdl(const Link<_SdrItemBrowserControl&,void>& rLink)        { aSetDirtyHdl=rLink; }
 };
 
 #define WB_STDSIZEABLEDOCKWIN  (WB_STDDOCKWIN|WB_3DLOOK|WB_CLOSEABLE|WB_SIZEMOVE)
@@ -118,8 +118,8 @@ class SdrItemBrowser: public _SdrItemBrowserWindow {
 private:
     static vcl::Window* ImpGetViewWin(SdrView& rView);
     DECL_LINK_TYPED(IdleHdl, Idle *, void);
-    DECL_LINK(ChangedHdl,_SdrItemBrowserControl*);
-    DECL_LINK(SetDirtyHdl, void *);
+    DECL_LINK_TYPED(ChangedHdl, _SdrItemBrowserControl&, void);
+    DECL_LINK_TYPED(SetDirtyHdl, _SdrItemBrowserControl&, void);
 public:
     SdrItemBrowser(SdrView& rView);
     void ForceParent();
