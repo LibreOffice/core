@@ -30,9 +30,9 @@ $(eval $(call gb_Module_add_targets,sfx2,\
     Package_sdi \
 ))
 
-ifeq ($(WITH_CPPUNIT),YES)
+ifeq ($(ENABLE_UNIT_TESTS),YES)
 $(eval $(call gb_Module_add_check_targets,sfx2,\
-    CppunitTest_sfx2_metadatable \
+    GoogleTest_sfx2_metadatable \
 ))
 endif
 

@@ -21,46 +21,27 @@
 
 
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+$(eval $(call gb_GoogleTest_GoogleTest,sfx2_metadatable))
 
-PRJ=../..
-PRJNAME=sfx2
-TARGET=qa_cppunit
+$(eval $(call gb_GoogleTest_add_exception_objects,sfx2_metadatable, \
+	sfx2/qa/gtest/test_metadatable \
+))
 
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_GoogleTest_add_linked_libs,sfx2_metadatable, \
+    sal \
+    sfx \
+    stl \
+    $(gb_STDLIBS) \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_GoogleTest_set_include,sfx2_metadatable,\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/offuh \
+	-I$(OUTDIR)/inc \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_GoogleTest_set_ldflags,sfx2_metadatable,\
+    $$(LDFLAGS) \
+))
 
-.IF "$(ENABLE_UNIT_TESTS)" != "YES"
-all:
-    @echo unit tests are disabled. Nothing to do.
-
-.ELSE
-
-APP1OBJS=  \
-    $(SLO)/test_metadatable.obj \
-
-
-APP1STDLIBS= \
-     $(GTESTLIB) \
-     $(SALLIB) \
-     $(CPPULIB) \
-     $(CPPUHELPERLIB) \
-     $(VCLLIB) \
-     $(SFXLIB) \
-
-
-APP1TARGET= test_metadatable
-APP1RPATH = NONE
-APP1TEST = enabled
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
-
-.END
+# vim: set noet sw=4 ts=4:
