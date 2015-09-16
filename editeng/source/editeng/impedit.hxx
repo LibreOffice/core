@@ -479,8 +479,8 @@ private:
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
     Timer               aStatusTimer;
-    Link<EditStatus&, void>  aStatusHdlLink;
-    Link<>              aNotifyHdl;
+    Link<EditStatus&,void>  aStatusHdlLink;
+    Link<EENotify&,void>    aNotifyHdl;
     Link<>              aImportHdl;
     Link<>              aBeginMovingParagraphsHdl;
     Link<>              aEndMovingParagraphsHdl;
@@ -836,10 +836,10 @@ public:
     EditSelection*  SelectParagraph( sal_Int32 nPara );
 
     void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink ) { aStatusHdlLink = rLink; }
-    Link<EditStatus&, void> GetStatusEventHdl() const               { return aStatusHdlLink; }
+    Link<EditStatus&,void> GetStatusEventHdl() const               { return aStatusHdlLink; }
 
-    void            SetNotifyHdl( const Link<>& rLink )     { aNotifyHdl = rLink; }
-    Link<>          GetNotifyHdl() const            { return aNotifyHdl; }
+    void            SetNotifyHdl( const Link<EENotify&,void>& rLink )     { aNotifyHdl = rLink; }
+    Link<EENotify&,void>   GetNotifyHdl() const            { return aNotifyHdl; }
 
     void            FormatAndUpdate( EditView* pCurView = 0 );
     inline void     IdleFormatAndUpdate( EditView* pCurView = 0 );

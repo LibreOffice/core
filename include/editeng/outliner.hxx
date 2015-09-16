@@ -615,25 +615,25 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     bool                bStrippingPortions;
     bool                bPasting;
 
-    sal_uLong               nDummy;
+    sal_uLong           nDummy;
 
-    DECL_LINK(              ParaVisibleStateChangedHdl, Paragraph* );
-    DECL_LINK(              BeginMovingParagraphsHdl, void* );
-    DECL_LINK(              EndMovingParagraphsHdl, MoveParagraphsInfo* );
-    DECL_LINK(              BeginPasteOrDropHdl, PasteOrDropInfos* );
-    DECL_LINK(              EndPasteOrDropHdl, PasteOrDropInfos* );
-    DECL_LINK(              EditEngineNotifyHdl, EENotify* );
-    void                    ImplCheckParagraphs( sal_Int32 nStart, sal_Int32 nEnd );
-    bool ImplHasNumberFormat( sal_Int32 nPara ) const;
-    Size                    ImplGetBulletSize( sal_Int32 nPara );
-    sal_uInt16              ImplGetNumbering( sal_Int32 nPara, const SvxNumberFormat* pParaFmt );
-    void                    ImplCalcBulletText( sal_Int32 nPara, bool bRecalcLevel, bool bRecalcChildren );
-    OUString                ImplGetBulletText( sal_Int32 nPara );
-    void                    ImplCheckNumBulletItem( sal_Int32 nPara );
-    void                    ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUndo, bool bUndoAction = false );
-    void                    ImplSetLevelDependendStyleSheet( sal_Int32 nPara, SfxStyleSheet* pLevelStyle = NULL );
+    DECL_LINK(          ParaVisibleStateChangedHdl, Paragraph* );
+    DECL_LINK(          BeginMovingParagraphsHdl, void* );
+    DECL_LINK(          EndMovingParagraphsHdl, MoveParagraphsInfo* );
+    DECL_LINK(          BeginPasteOrDropHdl, PasteOrDropInfos* );
+    DECL_LINK(          EndPasteOrDropHdl, PasteOrDropInfos* );
+    DECL_LINK_TYPED(    EditEngineNotifyHdl, EENotify&, void );
+    void                ImplCheckParagraphs( sal_Int32 nStart, sal_Int32 nEnd );
+    bool                ImplHasNumberFormat( sal_Int32 nPara ) const;
+    Size                ImplGetBulletSize( sal_Int32 nPara );
+    sal_uInt16          ImplGetNumbering( sal_Int32 nPara, const SvxNumberFormat* pParaFmt );
+    void                ImplCalcBulletText( sal_Int32 nPara, bool bRecalcLevel, bool bRecalcChildren );
+    OUString            ImplGetBulletText( sal_Int32 nPara );
+    void                ImplCheckNumBulletItem( sal_Int32 nPara );
+    void                ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUndo, bool bUndoAction = false );
+    void                ImplSetLevelDependendStyleSheet( sal_Int32 nPara, SfxStyleSheet* pLevelStyle = NULL );
 
-    void                    ImplBlockInsertionCallbacks( bool b );
+    void                ImplBlockInsertionCallbacks( bool b );
 
     void        ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara );
     bool        ImpConvertEdtToOut( sal_Int32 nPara, EditView* pView = 0 );

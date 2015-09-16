@@ -366,11 +366,11 @@ public:
     sal_uLong       Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
     sal_uLong       Write( SvStream& rOutput, EETextFormat );
 
-    void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink );
-    Link<EditStatus&, void> GetStatusEventHdl() const;
+    void            SetStatusEventHdl( const Link<EditStatus&,void>& rLink );
+    Link<EditStatus&,void> GetStatusEventHdl() const;
 
-    void            SetNotifyHdl( const Link<>& rLink );
-    Link<>          GetNotifyHdl() const;
+    void            SetNotifyHdl( const Link<EENotify&,void>& rLink );
+    Link<EENotify&,void>  GetNotifyHdl() const;
 
     void            SetImportHdl( const Link<>& rLink );
     Link<>          GetImportHdl() const;

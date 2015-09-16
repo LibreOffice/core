@@ -713,7 +713,7 @@ ScAccessibleCellTextData::ScAccessibleCellTextData(ScTabViewShell* pViewShell,
 ScAccessibleCellTextData::~ScAccessibleCellTextData()
 {
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl(Link<>());
+        pEditEngine->SetNotifyHdl(Link<EENotify&,void>());
     if (mpViewForwarder)
         delete mpViewForwarder;
     if (mpEditViewForwarder)
@@ -932,17 +932,12 @@ SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( bool /* bC
     return NULL;
 }
 
-IMPL_LINK(ScAccessibleTextData, NotifyHdl, EENotify*, aNotify)
+IMPL_LINK_TYPED(ScAccessibleTextData, NotifyHdl, EENotify&, aNotify, void)
 {
-    if( aNotify )
-    {
-        ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify );
+    ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &aNotify );
 
-        if( aHint.get() )
-            GetBroadcaster().Broadcast( *aHint.get() );
-    }
-
-    return 0;
+    if( aHint.get() )
+        GetBroadcaster().Broadcast( *aHint.get() );
 }
 
 ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
@@ -972,7 +967,7 @@ ScAccessibleEditObjectTextData::~ScAccessibleEditObjectTextData()
 {
     // If the object is cloned, do NOT set notify hdl.
     if (mpEditEngine && !mbIsCloned)
-        mpEditEngine->SetNotifyHdl(Link<>());
+        mpEditEngine->SetNotifyHdl(Link<EENotify&,void>());
     if (mpViewForwarder)
         delete mpViewForwarder;
     if (mpEditViewForwarder)
@@ -1047,17 +1042,12 @@ SvxEditViewForwarder* ScAccessibleEditObjectTextData::GetEditViewForwarder( bool
     return mpEditViewForwarder;
 }
 
-IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify*, aNotify)
+IMPL_LINK_TYPED(ScAccessibleEditObjectTextData, NotifyHdl, EENotify&, rNotify, void)
 {
-    if( aNotify )
-    {
-        ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify );
+    ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &rNotify );
 
-        if( aHint.get() )
-            GetBroadcaster().Broadcast( *aHint.get() );
-    }
-
-    return 0;
+    if( aHint.get() )
+        GetBroadcaster().Broadcast( *aHint.get() );
 }
 
 ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, vcl::Window* pWin)
@@ -1088,7 +1078,7 @@ ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
         //  the NotifyHdl also has to be removed from the ScTextWnd's EditEngine
         //  (it's set in ScAccessibleEditLineTextData::GetTextForwarder, and mpEditEngine
         //  is reset there)
-        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<>());
+        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<EENotify&,void>());
     }
 }
 
@@ -1183,7 +1173,7 @@ void ScAccessibleEditLineTextData::ResetEditMode()
     if (mbEditEngineCreated && mpEditEngine)
         delete mpEditEngine;
     else if (pTxtWnd && pTxtWnd->GetEditView() && pTxtWnd->GetEditView()->GetEditEngine())
-        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<>());
+        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link<EENotify&,void>());
     mpEditEngine = NULL;
 
     DELETEZ(mpForwarder);
@@ -1236,7 +1226,7 @@ ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell*
 ScAccessiblePreviewCellTextData::~ScAccessiblePreviewCellTextData()
 {
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl(Link<>());
+        pEditEngine->SetNotifyHdl(Link<EENotify&,void>());
     if (mpViewForwarder)
         delete mpViewForwarder;
 }
@@ -1314,7 +1304,7 @@ ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScP
 ScAccessiblePreviewHeaderCellTextData::~ScAccessiblePreviewHeaderCellTextData()
 {
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl(Link<>());
+        pEditEngine->SetNotifyHdl(Link<EENotify&,void>());
     if (mpViewForwarder)
         delete mpViewForwarder;
 }
@@ -1432,7 +1422,7 @@ ScAccessibleHeaderTextData::~ScAccessibleHeaderTextData()
     if (mpDocSh)
         mpDocSh->GetDocument().RemoveUnoObject(*this);
     if (mpEditEngine)
-        mpEditEngine->SetNotifyHdl(Link<>());
+        mpEditEngine->SetNotifyHdl(Link<EENotify&,void>());
     delete mpEditEngine;
     delete mpForwarder;
 }
@@ -1547,7 +1537,7 @@ ScAccessibleNoteTextData::~ScAccessibleNoteTextData()
     if (mpDocSh)
         mpDocSh->GetDocument().RemoveUnoObject(*this);
     if (mpEditEngine)
-        mpEditEngine->SetNotifyHdl(Link<>());
+        mpEditEngine->SetNotifyHdl(Link<EENotify&,void>());
     delete mpEditEngine;
     delete mpForwarder;
 }

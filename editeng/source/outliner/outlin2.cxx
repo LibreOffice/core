@@ -125,7 +125,7 @@ void Outliner::SetNotifyHdl( const Link<>& rLink )
     if ( rLink.IsSet() )
         pEditEngine->SetNotifyHdl( LINK( this, Outliner, EditEngineNotifyHdl ) );
     else
-        pEditEngine->SetNotifyHdl( Link<>() );
+        pEditEngine->SetNotifyHdl( Link<EENotify&,void>() );
 
 }
 

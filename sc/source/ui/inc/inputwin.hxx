@@ -186,7 +186,7 @@ protected:
     void InitEditEngine();
 
     virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
-    DECL_LINK( NotifyHdl, EENotify* );
+    DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
     DECL_LINK( ModifyHdl, EENotify* );
 private:
     ScInputBarGroup& mrGroupBar;

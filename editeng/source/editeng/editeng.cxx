@@ -1498,12 +1498,12 @@ void EditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
     pImpEditEngine->ShowParagraph( nParagraph, bShow );
 }
 
-void EditEngine::SetNotifyHdl( const Link<>& rLink )
+void EditEngine::SetNotifyHdl( const Link<EENotify&,void>& rLink )
 {
     pImpEditEngine->SetNotifyHdl( rLink );
 }
 
-Link<> EditEngine::GetNotifyHdl() const
+Link<EENotify&,void> EditEngine::GetNotifyHdl() const
 {
     return pImpEditEngine->GetNotifyHdl();
 }

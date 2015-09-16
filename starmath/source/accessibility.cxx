@@ -941,19 +941,14 @@ SmTextForwarder::~SmTextForwarder()
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl( Link<>() );
+        pEditEngine->SetNotifyHdl( Link<EENotify&,void>() );
 }
 
-IMPL_LINK(SmTextForwarder, NotifyHdl, EENotify*, aNotify)
+IMPL_LINK_TYPED(SmTextForwarder, NotifyHdl, EENotify&, rNotify, void)
 {
-    if (aNotify)
-    {
-        ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( aNotify );
-        if (aHint.get())
-            rEditSource.GetBroadcaster().Broadcast( *aHint.get() );
-    }
-
-    return 0;
+    ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &rNotify );
+    if (aHint.get())
+        rEditSource.GetBroadcaster().Broadcast( *aHint.get() );
 }
 
 sal_Int32 SmTextForwarder::GetParagraphCount() const
@@ -1640,7 +1635,7 @@ void SmEditAccessible::ClearWin()
     // (avoid handler being called for already dead object)
     EditEngine *pEditEngine = GetEditEngine();
     if (pEditEngine)
-        pEditEngine->SetNotifyHdl( Link<>() );
+        pEditEngine->SetNotifyHdl( Link<EENotify&,void>() );
 
     pWin = 0;   // implicitly results in AccessibleStateType::DEFUNC set
 

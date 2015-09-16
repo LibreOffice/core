@@ -1244,17 +1244,16 @@ IMPL_LINK(ScMultiTextWnd, ModifyHdl, EENotify*, pNotify)
     return 0;
 }
 
-IMPL_LINK(ScMultiTextWnd, NotifyHdl, EENotify*, pNotify)
+IMPL_LINK_TYPED(ScMultiTextWnd, NotifyHdl, EENotify&, rNotify, void)
 {
     // need to process EE_NOTIFY_TEXTVIEWSCROLLED here
     // sometimes we don't seem to get EE_NOTIFY_TEXTVIEWSCROLLED e.g. when
     // we insert text at the beginning of the text so the cursor never moves
     // down to generate a scroll event
 
-    if ( pNotify && ( pNotify->eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED
-                 ||   pNotify->eNotificationType == EE_NOTIFY_TEXTHEIGHTCHANGED ) )
+    if ( rNotify.eNotificationType == EE_NOTIFY_TEXTVIEWSCROLLED
+         || rNotify.eNotificationType == EE_NOTIFY_TEXTHEIGHTCHANGED )
         SetScrollBarRange();
-    return 0;
 }
 
 long ScMultiTextWnd::GetEditEngTxtHeight()
@@ -1434,7 +1433,7 @@ void ScMultiTextWnd::InitEditEngine()
 void ScMultiTextWnd::StopEditEngine( bool bAll )
 {
     if ( pEditEngine )
-        pEditEngine->SetNotifyHdl(Link<>());
+        pEditEngine->SetNotifyHdl(Link<EENotify&,void>());
     ScTextWnd::StopEditEngine( bAll );
 }
 

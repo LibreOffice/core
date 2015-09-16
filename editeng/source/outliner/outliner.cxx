@@ -2015,14 +2015,12 @@ void Outliner::ImplBlockInsertionCallbacks( bool b )
     }
 }
 
-IMPL_LINK( Outliner, EditEngineNotifyHdl, EENotify*, pNotify )
+IMPL_LINK_TYPED( Outliner, EditEngineNotifyHdl, EENotify&, rNotify, void )
 {
     if ( !nBlockInsCallback )
-        pEditEngine->aOutlinerNotifyHdl.Call( pNotify );
+        pEditEngine->aOutlinerNotifyHdl.Call( &rNotify );
     else
-        pEditEngine->aNotifyCache.push_back(*pNotify);
-
-    return 0;
+        pEditEngine->aNotifyCache.push_back(rNotify);
 }
 
 /** sets a link that is called at the beginning of a drag operation at an edit view */
