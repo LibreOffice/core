@@ -391,6 +391,7 @@ static gboolean postDocumentLoad(gpointer pData)
     LOKDocView* pLOKDocView = static_cast<LOKDocView*>(pData);
     LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(pLOKDocView));
 
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument);
     priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pLOKDocView);
     priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
@@ -1101,6 +1102,7 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
     GdkPoint aPoint;
 
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     if (priv->m_bInDragMiddleHandle)
     {
         g_info("lcl_signalMotion: dragging the middle handle");
@@ -1183,6 +1185,7 @@ setGraphicSelectionInThread(gpointer data)
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->setGraphicSelection(priv->m_pDocument,
                                                    pLOEvent->m_nSetGraphicSelectionType,
                                                    pLOEvent->m_nSetGraphicSelectionX,
@@ -1243,6 +1246,7 @@ setPartInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPart = pLOEvent->m_nPart;
 
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->setPart( priv->m_pDocument, nPart );
 }
 
@@ -1255,6 +1259,7 @@ setPartmodeInThread(gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     int nPartMode = pLOEvent->m_nPartMode;
 
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->setPartMode( priv->m_pDocument, nPartMode );
 }
 
@@ -1273,6 +1278,7 @@ setEditInThread(gpointer data)
     else if (priv->m_bEdit && !bEdit)
     {
         g_info("lok_doc_view_set_edit: leaving edit mode");
+        priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
         priv->m_pDocument->pClass->resetSelection(priv->m_pDocument);
     }
     priv->m_bEdit = bEdit;
@@ -1288,6 +1294,7 @@ postCommandInThread (gpointer data)
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
 
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pLOEvent->m_pCommand, pLOEvent->m_pArguments);
 }
 
@@ -1316,6 +1323,7 @@ paintTileInThread (gpointer data)
     aTileRectangle.x = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileY;
     aTileRectangle.y = pixelToTwip(nTileSizePixels, pLOEvent->m_fPaintTileZoom) * pLOEvent->m_nPaintTileX;
 
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     g_test_timer_start();
     priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
                                          pBuffer,
@@ -1974,6 +1982,7 @@ SAL_DLLPUBLIC_EXPORT int
 lok_doc_view_get_parts (LOKDocView* pDocView)
 {
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getParts( priv->m_pDocument );
 }
 
@@ -1981,6 +1990,7 @@ SAL_DLLPUBLIC_EXPORT int
 lok_doc_view_get_part (LOKDocView* pDocView)
 {
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getPart( priv->m_pDocument );
 }
 
@@ -2002,6 +2012,7 @@ SAL_DLLPUBLIC_EXPORT char*
 lok_doc_view_get_part_name (LOKDocView* pDocView, int nPart)
 {
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     return priv->m_pDocument->pClass->getPartName( priv->m_pDocument, nPart );
 }
 
