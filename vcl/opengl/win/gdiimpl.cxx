@@ -39,7 +39,7 @@ rtl::Reference<OpenGLContext> WinOpenGLSalGraphicsImpl::CreateWinContext()
 
 bool WinOpenGLSalGraphicsImpl::UseContext( const rtl::Reference<OpenGLContext> &pContext )
 {
-    if( !pContext.is() || !pContext->isInitialized() )
+    if( !pContext.is() || !pContext->isInitialized() || IsForeignContext( pContext ) )
         return false;
     if( IsOffscreen() )
         return true;
