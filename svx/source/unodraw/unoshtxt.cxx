@@ -148,7 +148,7 @@ public:
     Point                   LogicToPixel( const Point&, const MapMode& rMapMode );
     Point                   PixelToLogic( const Point&, const MapMode& rMapMode );
 
-    DECL_LINK( NotifyHdl, EENotify* );
+    DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
 
     virtual void ObjectInDestruction(const SdrObject& rObject) SAL_OVERRIDE;
 
@@ -435,7 +435,7 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
                     // remove as listener - outliner might outlive ourselves
                     if( mpView && mpView->GetTextEditOutliner() )
-                        mpView->GetTextEditOutliner()->SetNotifyHdl( Link<>() );
+                        mpView->GetTextEditOutliner()->SetNotifyHdl( Link<EENotify&,void>() );
 
                     // destroy view forwarder, OutlinerView no longer
                     // valid (no need for UpdateData(), it's been
@@ -1018,17 +1018,15 @@ Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& r
     return Point();
 }
 
-IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
+IMPL_LINK_TYPED(SvxTextEditSourceImpl, NotifyHdl, EENotify&, rNotify, void)
 {
-    if( aNotify && !mbNotificationsDisabled )
+    if( !mbNotificationsDisabled )
     {
-        std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
+        std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( &rNotify) );
 
         if( aHint.get() )
             Broadcast( *aHint.get() );
     }
-
-    return 0;
 }
 
 SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, SdrText* pText )

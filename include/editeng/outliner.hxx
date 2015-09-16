@@ -778,7 +778,7 @@ public:
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink );
     Link<LinkParamNone*,void> GetModifyHdl() const;
 
-    void            SetNotifyHdl( const Link<>& rLink );
+    void            SetNotifyHdl( const Link<EENotify&,void>& rLink );
 
     void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink );
     Link<EditStatus&, void> GetStatusEventHdl() const;

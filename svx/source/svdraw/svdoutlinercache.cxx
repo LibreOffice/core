@@ -82,7 +82,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
             pOutliner->SetVertical( false );
 
             // Deregister on outliner, might be reused from outliner cache
-            pOutliner->SetNotifyHdl( Link<>() );
+            pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
         }
         else if( (OUTLINERMODE_TEXTOBJECT == nOutlMode) && (NULL == mpModeText) )
         {
@@ -91,7 +91,7 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
             pOutliner->SetVertical( false );
 
             // Deregister on outliner, might be reused from outliner cache
-            pOutliner->SetNotifyHdl( Link<>() );
+            pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
         }
         else
         {

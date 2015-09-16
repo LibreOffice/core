@@ -2001,7 +2001,7 @@ void Outliner::ImplBlockInsertionCallbacks( bool b )
                 EENotify aNotify(pEditEngine->aNotifyCache.front());
                 // Remove from list before calling, maybe we enter LeaveBlockNotifications while calling the handler...
                 pEditEngine->aNotifyCache.erase(pEditEngine->aNotifyCache.begin());
-                pEditEngine->aOutlinerNotifyHdl.Call( &aNotify );
+                pEditEngine->aOutlinerNotifyHdl.Call( aNotify );
             }
         }
     }
@@ -2010,7 +2010,7 @@ void Outliner::ImplBlockInsertionCallbacks( bool b )
 IMPL_LINK_TYPED( Outliner, EditEngineNotifyHdl, EENotify&, rNotify, void )
 {
     if ( !nBlockInsCallback )
-        pEditEngine->aOutlinerNotifyHdl.Call( &rNotify );
+        pEditEngine->aOutlinerNotifyHdl.Call( rNotify );
     else
         pEditEngine->aNotifyCache.push_back(rNotify);
 }

@@ -55,7 +55,7 @@ class SidebarTextEditSource : public SvxEditSource,
         virtual void UpdateData() SAL_OVERRIDE;
 
         virtual SfxBroadcaster& GetBroadcaster() const SAL_OVERRIDE;
-        DECL_LINK( NotifyHdl, EENotify* );
+        DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
 
     private:
         SidebarTextControl& mrSidebarTextControl;
@@ -79,7 +79,7 @@ SidebarTextEditSource::~SidebarTextEditSource()
 {
     if ( mrSidebarTextControl.GetTextView() )
     {
-        mrSidebarTextControl.GetTextView()->GetOutliner()->SetNotifyHdl( Link<>() );
+        mrSidebarTextControl.GetTextView()->GetOutliner()->SetNotifyHdl( Link<EENotify&,void>() );
     }
 }
 
@@ -113,19 +113,14 @@ SfxBroadcaster& SidebarTextEditSource::GetBroadcaster() const
     return *( const_cast< SidebarTextEditSource* > (this) );
 }
 
-IMPL_LINK(SidebarTextEditSource, NotifyHdl, EENotify*, pNotify)
+IMPL_LINK_TYPED(SidebarTextEditSource, NotifyHdl, EENotify&, rNotify, void)
 {
-    if ( pNotify )
+    std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( &rNotify ) );
+
+    if( aHint.get() )
     {
-        std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( pNotify ) );
-
-        if( aHint.get() )
-        {
-            Broadcast( *aHint.get() );
-        }
+        Broadcast( *aHint.get() );
     }
-
-    return 0;
 }
 
 // declaration and implementation of accessible context for <SidebarTextControl> instance

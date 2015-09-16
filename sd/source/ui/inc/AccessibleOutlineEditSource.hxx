@@ -76,7 +76,7 @@ namespace accessibility
         AccessibleOutlineEditSource( const AccessibleOutlineEditSource& ) SAL_DELETED_FUNCTION;
         AccessibleOutlineEditSource& operator=( const AccessibleOutlineEditSource& ) SAL_DELETED_FUNCTION;
 
-        DECL_LINK( NotifyHdl, EENotify* );
+        DECL_LINK_TYPED( NotifyHdl, EENotify&, void );
 
         SdrView&                        mrView;
         const vcl::Window& mrWindow;

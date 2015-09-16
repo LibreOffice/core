@@ -48,7 +48,7 @@ namespace accessibility
     AccessibleOutlineEditSource::~AccessibleOutlineEditSource()
     {
         if( mpOutliner )
-            mpOutliner->SetNotifyHdl( Link<>() );
+            mpOutliner->SetNotifyHdl( Link<EENotify&,void>() );
         Broadcast( TextHint( SFX_HINT_DYING ) );
     }
 
@@ -196,24 +196,21 @@ namespace accessibility
         if( bDispose )
         {
             if( mpOutliner )
-                mpOutliner->SetNotifyHdl( Link<>() );
+                mpOutliner->SetNotifyHdl( Link<EENotify&,void>() );
             mpOutliner = NULL;
             mpOutlinerView = NULL;
             Broadcast( TextHint( SFX_HINT_DYING ) );
         }
     }
 
-    IMPL_LINK(AccessibleOutlineEditSource, NotifyHdl, EENotify*, aNotify)
+    IMPL_LINK_TYPED(AccessibleOutlineEditSource, NotifyHdl, EENotify&, rNotify, void)
     {
-        if( aNotify )
-        {
-            ::std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
+        ::std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( &rNotify) );
 
-            if( aHint.get() )
-                Broadcast( *aHint.get() );
-        }
-
-        return 0;
+         if( aHint.get() )
+         {
+             Broadcast( *aHint.get() );
+         }
     }
 
 } // end of namespace accessibility

@@ -80,7 +80,7 @@ public:
        virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     // belongs into class Outliner, move there before incompatible update!
-    Link<>              aOutlinerNotifyHdl;
+    Link<EENotify&,void> aOutlinerNotifyHdl;
     NotifyList          aNotifyCache;
 };
 
