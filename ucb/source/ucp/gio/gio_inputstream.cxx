@@ -29,7 +29,7 @@ using namespace com::sun::star;
 namespace gio
 {
 
-InputStream::InputStream(GFileInputStream *pStream) : Seekable(G_SEEKABLE(pStream)), mpStream(pStream)
+InputStream::InputStream(GFileInputStream *pStream): mpStream(pStream)
 {
     if (!mpStream)
         throw io::NotConnectedException();
@@ -57,16 +57,11 @@ void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
     throw( io::NotConnectedException, io::BufferSizeExceededException,
       io::IOException, uno::RuntimeException, std::exception )
 {
-    if (!mpStream)
-        throw io::NotConnectedException();
-
-    if (!g_seekable_can_seek(G_SEEKABLE(mpStream)))
-        throw io::IOException("Seek unsupported",
-            static_cast< cppu::OWeakObject * >(this));
-
-    GError *pError=NULL;
-    if (!g_seekable_seek(G_SEEKABLE(mpStream), nBytesToSkip, G_SEEK_CUR, NULL, &pError))
-        convertToIOException(pError, static_cast< cppu::OWeakObject * >(this));
+    // Conservatively call readBytes and discard the read data, but given this
+    // InputStream will always be wrapped in comphelper::OSeekableInputWrapper,
+    // this function will never be called anyway:
+    css::uno::Sequence<sal_Int8> data;
+    readBytes(data, nBytesToSkip);
 }
 
 sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
@@ -98,14 +93,6 @@ sal_Int32 SAL_CALL InputStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
       io::IOException, uno::RuntimeException, std::exception )
 {
     return readBytes(aData, nMaxBytesToRead);
-}
-
-uno::Any InputStream::queryInterface( const uno::Type &type ) throw( uno::RuntimeException, std::exception )
-{
-    uno::Any aRet = ::cppu::queryInterface ( type,
-        static_cast< XInputStream * >( this ) );
-
-    return aRet.hasValue() ? aRet : Seekable::queryInterface( type );
 }
 
 }
