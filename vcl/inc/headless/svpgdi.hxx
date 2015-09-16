@@ -215,9 +215,6 @@ public:
     void                    clipRegion(cairo_t* cr);
 
 #endif // ENABLE_CAIRO_CANVAS
-
-    virtual void            BeginPaint() SAL_OVERRIDE { };
-    virtual void            EndPaint() SAL_OVERRIDE { };
 };
 
 #endif

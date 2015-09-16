@@ -608,9 +608,21 @@ public:
                                     const Point& rSrcPt,  const Size& rSrcSize,
                                     bool bWindowInvalidate = false );
 
-    // Call before and after a paint operation to reduce flushing
-    void                        BeginPaint();
-    void                        EndPaint();
+    /**
+     * Instantiate across a paint operation to defer flushing
+     * to the end.
+     *
+     * NB. holding a handle avoids problems with
+     * the underlying SalGraphics and it's implementation
+     * changing.
+     */
+    class PaintScope {
+        void *pHandle;
+    public:
+        PaintScope(OutputDevice *);
+        ~PaintScope();
+        void flush();
+    };
 
 protected:
 
