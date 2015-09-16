@@ -75,8 +75,15 @@ enum DeviceVendor {
 
 struct DriverInfo
 {
-    DriverInfo(OperatingSystem os, const OUString& vendor, VersionComparisonOp op,
-            uint64_t driverVersion, bool bWhiteListed = false, const char *suggestedVersion = nullptr);
+    typedef std::vector<OUString> DeviceFamilyVector;
+
+    // If |ownDevices| is true, you are transferring ownership of the devices
+    // array, and it will be deleted when this GfxDriverInfo is destroyed.
+
+    DriverInfo(OperatingSystem os, const OUString& vendor, DeviceFamilyVector* devices,
+            VersionComparisonOp op,
+            uint64_t driverVersion, bool bWhiteListed = false, const char *suggestedVersion = nullptr,
+            bool ownDevices = false);
 
     DriverInfo();
     DriverInfo(const DriverInfo&);
