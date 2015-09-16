@@ -22,20 +22,16 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
 
-#include "gio_seekable.hxx"
+#include <gio/gio.h>
 
 namespace gio
 {
 
-class InputStream :
-    public ::com::sun::star::io::XInputStream,
-    public Seekable
+class InputStream: public cppu::WeakImplHelper<css::io::XInputStream>
 {
 private:
     GFileInputStream *mpStream;
@@ -43,12 +39,6 @@ private:
 public:
     explicit InputStream ( GFileInputStream *pStream );
     virtual ~InputStream();
-
-    // XInterface
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface(const ::com::sun::star::uno::Type & type )
-            throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL acquire() throw () SAL_OVERRIDE { OWeakObject::acquire(); }
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE { OWeakObject::release(); }
 
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 > & aData,
