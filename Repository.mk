@@ -589,7 +589,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	) \
 	$(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
 	package2 \
-	$(if $(USING_X11),recentfile) \
+	recentfile \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
 	sdbc2 \
 	sofficeapp \
