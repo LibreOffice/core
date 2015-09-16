@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_326a801b",
+        "filename": "pyuno/source/module/pyuno.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1615,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-09-16T09:33:22Z",
+      "side": 1,
+      "message": "Upstream there are only 34 attributes here:\n\n  binaryfunc nb_add;\n    binaryfunc nb_subtract;\n    binaryfunc nb_multiply;\n    binaryfunc nb_remainder;\n    binaryfunc nb_divmod;\n    ternaryfunc nb_power;\n    unaryfunc nb_negative;\n    unaryfunc nb_positive;\n    unaryfunc nb_absolute;\n    inquiry nb_bool;\n    unaryfunc nb_invert;\n    binaryfunc nb_lshift;\n    binaryfunc nb_rshift;\n    binaryfunc nb_and;\n    binaryfunc nb_xor;\n    binaryfunc nb_or;\n    unaryfunc nb_int;\n    void *nb_reserved;  /* the slot formerly known as nb_long */\n    unaryfunc nb_float;\n    binaryfunc nb_inplace_add;\n    binaryfunc nb_inplace_subtract;\n    binaryfunc nb_inplace_multiply;\n    binaryfunc nb_inplace_remainder;\n    ternaryfunc nb_inplace_power;\n    binaryfunc nb_inplace_lshift;\n    binaryfunc nb_inplace_rshift;\n    binaryfunc nb_inplace_and;\n    binaryfunc nb_inplace_xor;\n    binaryfunc nb_inplace_or;\n    binaryfunc nb_true_divide;\n    binaryfunc nb_inplace_floor_divide;\n    binaryfunc nb_inplace_true_divide;\n    binaryfunc nb_matrix_multiply;\n    binaryfunc nb_inplace_matrix_multiply;\n\nSo we have a mismatch:\n\n    [...]\n    nullptr,                /* nb_floor_divide */ -- doesn\u0027t exist upstream\n    nullptr,                /* nb_inplace_floor_divide */\n    nullptr,                /* nb_inplace_true_divide */\n    nullptr,                /* nb_index */ -- doesn\u0027t exist upstream\n    [....]",
+      "revId": "f9868df563a57be56d1ebd469fe6264ab3396dcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
