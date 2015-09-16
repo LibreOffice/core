@@ -991,19 +991,11 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     }
 }
 
-static int doc_createView(LibreOfficeKitDocument* pThis)
+static int doc_createView(LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
 
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (!pDoc)
-    {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
-        return -1;
-    }
-
-    SfxViewShell* pViewShell = pDoc->getCurrentViewShell();
-    return SfxLokHelper::createView(pViewShell);
+    return SfxLokHelper::createView();
 }
 
 static void doc_destroyView(LibreOfficeKitDocument* /*pThis*/, int nId)
