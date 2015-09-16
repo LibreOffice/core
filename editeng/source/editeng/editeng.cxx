@@ -2687,23 +2687,23 @@ bool EditEngine::HasValidData( const css::uno::Reference< css::datatransfer::XTr
 }
 
 /** sets a link that is called at the beginning of a drag operation at an edit view */
-void EditEngine::SetBeginDropHdl( const Link<>& rLink )
+void EditEngine::SetBeginDropHdl( const Link<EditView*,void>& rLink )
 {
     pImpEditEngine->SetBeginDropHdl( rLink );
 }
 
-Link<> EditEngine::GetBeginDropHdl() const
+Link<EditView*,void> EditEngine::GetBeginDropHdl() const
 {
     return pImpEditEngine->GetBeginDropHdl();
 }
 
 /** sets a link that is called at the end of a drag operation at an edit view */
-void EditEngine::SetEndDropHdl( const Link<>& rLink )
+void EditEngine::SetEndDropHdl( const Link<EditView*,void>& rLink )
 {
     pImpEditEngine->SetEndDropHdl( rLink );
 }
 
-Link<> EditEngine::GetEndDropHdl() const
+Link<EditView*,void> EditEngine::GetEndDropHdl() const
 {
     return pImpEditEngine->GetEndDropHdl();
 }

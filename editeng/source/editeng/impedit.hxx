@@ -487,8 +487,8 @@ private:
     Link<PasteOrDropInfos&,void>   aBeginPasteOrDropHdl;
     Link<PasteOrDropInfos&,void>   aEndPasteOrDropHdl;
     Link<LinkParamNone*,void>      aModifyHdl;
-    Link<>              maBeginDropHdl;
-    Link<>              maEndDropHdl;
+    Link<EditView*,void>           maBeginDropHdl;
+    Link<EditView*,void>           maEndDropHdl;
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
@@ -996,12 +996,12 @@ public:
     static void         SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
-    void                SetBeginDropHdl( const Link<>& rLink ) { maBeginDropHdl = rLink; }
-    Link<>              GetBeginDropHdl() const { return maBeginDropHdl; }
+    void                SetBeginDropHdl( const Link<EditView*,void>& rLink ) { maBeginDropHdl = rLink; }
+    Link<EditView*,void>  GetBeginDropHdl() const { return maBeginDropHdl; }
 
     /** sets a link that is called at the end of a drag operation at an edit view */
-    void            SetEndDropHdl( const Link<>& rLink ) { maEndDropHdl = rLink; }
-    Link<>          GetEndDropHdl() const { return maEndDropHdl; }
+    void            SetEndDropHdl( const Link<EditView*,void>& rLink ) { maEndDropHdl = rLink; }
+    Link<EditView*,void>  GetEndDropHdl() const { return maEndDropHdl; }
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( bool bCapitalize )  { bFirstWordCapitalization = bCapitalize; }

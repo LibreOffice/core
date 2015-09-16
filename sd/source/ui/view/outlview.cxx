@@ -796,18 +796,16 @@ IMPL_LINK_NOARG_TYPED(OutlineView, StatusEventHdl, EditStatus&, void)
     }
 }
 
-IMPL_LINK_NOARG(OutlineView, BeginDropHdl)
+IMPL_LINK_NOARG_TYPED(OutlineView, BeginDropHdl, EditView*, void)
 {
     DBG_ASSERT(maDragAndDropModelGuard.get() == 0, "sd::OutlineView::BeginDropHdl(), prior drag operation not finished correctly!" );
 
     maDragAndDropModelGuard.reset( new OutlineViewModelChangeGuard( *this ) );
-    return 0;
 }
 
-IMPL_LINK_NOARG(OutlineView, EndDropHdl)
+IMPL_LINK_NOARG_TYPED(OutlineView, EndDropHdl, EditView*, void)
 {
     maDragAndDropModelGuard.reset(0);
-    return 0;
 }
 
 /**

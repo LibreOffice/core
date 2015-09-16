@@ -514,12 +514,12 @@ public:
     static bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
     static bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );
     /** sets a link that is called at the beginning of a drag operation at an edit view */
-    void            SetBeginDropHdl( const Link<>& rLink );
-    Link<>          GetBeginDropHdl() const;
+    void            SetBeginDropHdl( const Link<EditView*,void>& rLink );
+    Link<EditView*,void> GetBeginDropHdl() const;
 
     /** sets a link that is called at the end of a drag operation at an edit view */
-    void            SetEndDropHdl( const Link<>& rLink );
-    Link<>          GetEndDropHdl() const;
+    void            SetEndDropHdl( const Link<EditView*,void>& rLink );
+    Link<EditView*,void> GetEndDropHdl() const;
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( bool bCapitalize );

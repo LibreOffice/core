@@ -2016,13 +2016,13 @@ IMPL_LINK_TYPED( Outliner, EditEngineNotifyHdl, EENotify&, rNotify, void )
 }
 
 /** sets a link that is called at the beginning of a drag operation at an edit view */
-void Outliner::SetBeginDropHdl( const Link<>& rLink )
+void Outliner::SetBeginDropHdl( const Link<EditView*,void>& rLink )
 {
     pEditEngine->SetBeginDropHdl( rLink );
 }
 
 /** sets a link that is called at the end of a drag operation at an edit view */
-void Outliner::SetEndDropHdl( const Link<>& rLink )
+void Outliner::SetEndDropHdl( const Link<EditView*,void>& rLink )
 {
     pEditEngine->SetEndDropHdl( rLink );
 }

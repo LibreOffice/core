@@ -32,6 +32,7 @@ class Outliner;
 class SfxProgress;
 struct PaintFirstLineInfo;
 struct PasteOrDropInfos;
+class EditView;
 
 namespace sd { namespace tools {
 class EventMultiplexerEvent;
@@ -103,8 +104,8 @@ public:
     DECL_LINK_TYPED( EndMovingHdl, Outliner *, void );
     DECL_LINK_TYPED( RemovingPagesHdl, OutlinerView *, bool );
     DECL_LINK_TYPED( IndentingPagesHdl, OutlinerView *, bool );
-    DECL_LINK( BeginDropHdl, void * );
-    DECL_LINK( EndDropHdl, void * );
+    DECL_LINK_TYPED( BeginDropHdl, EditView*, void );
+    DECL_LINK_TYPED( EndDropHdl, EditView*, void );
     DECL_LINK_TYPED( PaintingFirstLineHdl, PaintFirstLineInfo*, void );
 
     sal_uLong         GetPaperWidth() { return mnPaperWidth;}

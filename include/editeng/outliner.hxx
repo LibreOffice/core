@@ -952,10 +952,10 @@ public:
     void            ApplyChangedSentence(EditView& rEditView, const svx::SpellPortions& rNewPortions, bool bRecheck );
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
-    void            SetBeginDropHdl( const Link<>& rLink );
+    void            SetBeginDropHdl( const Link<EditView*,void>& rLink );
 
     /** sets a link that is called at the end of a drag operation at an edit view */
-    void            SetEndDropHdl( const Link<>& rLink );
+    void            SetEndDropHdl( const Link<EditView*,void>& rLink );
 
     /** sets a link that is called before a drop or paste operation. */
     void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos*,void>& rLink );
