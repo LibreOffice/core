@@ -235,7 +235,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
     BorderColorStatus maBorderColorStatus;
     bool bSidebarType;
     ColorSelectFunction maColorSelectFunction;
-    DECL_LINK(SelectedHdl, Color*);
+    DECL_LINK_TYPED(SelectedHdl, const Color&, void);
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxColorToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rToolBox);

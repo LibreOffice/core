@@ -47,7 +47,7 @@ private:
     VclPtr<PushButton>  mpButtonPicker;
     VclPtr<FixedLine>   mpAutomaticSeparator;
     OUString            maCommand;
-    Link<>              maSelectedLink;
+    Link<const Color&, void> maSelectedLink;
 
     PaletteManager&     mrPaletteManager;
     BorderColorStatus&  mrBorderColorStatus;
@@ -79,7 +79,7 @@ public:
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 
-    void SetSelectedHdl( const Link<>& rLink ) { maSelectedLink = rLink; }
+    void SetSelectedHdl( const Link<const Color&, void>& rLink ) { maSelectedLink = rLink; }
 };
 
 #endif

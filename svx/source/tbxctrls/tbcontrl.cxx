@@ -1368,7 +1368,7 @@ IMPL_LINK_TYPED(SvxColorWindow_Impl, SelectHdl, ValueSet*, pColorSet, void)
         EndPopupMode();
 
     if ( maSelectedLink.IsSet() )
-        maSelectedLink.Call(&aColor);
+        maSelectedLink.Call(aColor);
 
     maColorSelectFunction(maCommand, aColor);
 }
@@ -1409,7 +1409,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorWindow_Impl, AutoColorClickHdl, Button*, void)
         EndPopupMode();
 
     if ( maSelectedLink.IsSet() )
-        maSelectedLink.Call(&aColor);
+        maSelectedLink.Call(aColor);
 
     maColorSelectFunction(maCommand, aColor);
 }
@@ -2673,11 +2673,10 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
     return pColorWin;
 }
 
-IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, Color*, pColor)
+IMPL_LINK_TYPED(SvxColorToolBoxControl, SelectedHdl, const Color&, rColor, void)
 {
-    m_xBtnUpdater->Update( *pColor );
-    mPaletteManager.SetLastColor( *pColor );
-    return 0;
+    m_xBtnUpdater->Update( rColor );
+    mPaletteManager.SetLastColor( rColor );
 }
 
 void SvxColorToolBoxControl::StateChanged(
