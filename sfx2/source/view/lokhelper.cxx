@@ -38,6 +38,30 @@ void SfxLokHelper::destroyView(size_t nId)
     pViewFrame->Exec_Impl(aRequest);
 }
 
+void SfxLokHelper::setView(size_t nId)
+{
+    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    if (nId > rViewArr.size() - 1)
+        return;
+
+    SfxViewShell* pViewShell = rViewArr[nId];
+    if (SfxViewFrame* pViewFrame = pViewShell->GetViewFrame())
+        pViewFrame->GetWindow().GrabFocus();
+}
+
+size_t SfxLokHelper::getView()
+{
+    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    for (size_t i = 0; i < rViewArr.size(); ++i)
+    {
+        if (rViewArr[i]->GetViewFrame() == pViewFrame)
+            return i;
+    }
+    assert(false);
+    return 0;
+}
+
 int SfxLokHelper::getViews()
 {
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
