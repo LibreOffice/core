@@ -468,8 +468,6 @@ GLuint OpenGLSalBitmap::CreateTexture()
 bool OpenGLSalBitmap::ReadTexture()
 {
     sal_uInt8* pData = maUserBuffer.get();
-    GLenum nFormat = GL_RGBA;
-    GLenum nType = GL_UNSIGNED_BYTE;
 
     SAL_INFO( "vcl.opengl", "::ReadTexture " << mnWidth << "x" << mnHeight );
 
@@ -478,8 +476,8 @@ bool OpenGLSalBitmap::ReadTexture()
 
     if (mnBits == 8 || mnBits == 16 || mnBits == 24 || mnBits == 32)
     {
-        // no conversion needed for truecolor
-        pData = maUserBuffer.get();
+        GLenum nFormat = GL_RGBA;
+        GLenum nType = GL_UNSIGNED_BYTE;
 
         switch( mnBits )
         {
@@ -496,18 +494,54 @@ bool OpenGLSalBitmap::ReadTexture()
                     nType = GL_UNSIGNED_BYTE;
                     break;
         }
+
+        makeCurrent();
+        maTexture.Read(nFormat, nType, pData);
+        mnBufWidth = mnWidth;
+        mnBufHeight = mnHeight;
+        return true;
     }
-    else
-    {
-        return false;
+    else if (mnBits == 1)
+    {   // convert buffers from 24-bit RGB to 1-bit Mask
+        std::vector<sal_uInt8> aBuffer(mnWidth * mnHeight * 3);
+        makeCurrent();
+        sal_uInt8* pBuffer = aBuffer.data();
+        maTexture.Read(GL_RGB, GL_UNSIGNED_BYTE, pBuffer);
+
+        int nShift = 7;
+        size_t nIndex = 0;
+
+        sal_uInt8* pCurrent = pBuffer;
+
+        for (size_t i = 0; i < aBuffer.size(); i += 3)
+        {
+            sal_uInt8 nR = *pCurrent++;
+            sal_uInt8 nG = *pCurrent++;
+            sal_uInt8 nB = *pCurrent++;
+
+            if (nR > 0 && nG > 0 && nB > 0)
+            {
+                pData[nIndex] |= (1 << nShift);
+            }
+            nShift--;
+            if (nShift < 0)
+            {
+                nShift = 7;
+                nIndex++;
+                pData[nIndex] = 0;
+            }
+        }
+
+        mnBufWidth = mnWidth;
+        mnBufHeight = mnHeight;
+        return true;
     }
 
-    makeCurrent();
-    maTexture.Read( nFormat, nType, pData );
-    mnBufWidth = mnWidth;
-    mnBufHeight = mnHeight;
+    SAL_WARN("vcl.opengl", "::ReadTexture - tx:" << maTexture.Id() << " @ "
+             << mnWidth << "x" << mnHeight << "- unimplemented bit depth: "
+             << mnBits);
+    return false;
 
-    return true;
 }
 
 sal_uInt16 OpenGLSalBitmap::GetBitCount() const
