@@ -1908,15 +1908,15 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
     // Split the formula grouping at the top and bottom boundaries.
     sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
-    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
     aPos = maCells.position(aPos.first, nEndRow+1);
-    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
 
     // Do the same with the destination column.
     aPos = rCol.maCells.position(nStartRow);
-    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
     aPos = rCol.maCells.position(aPos.first, nEndRow+1);
-    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
 
     // Move the broadcasters to the destination column.
     maBroadcasters.transfer(nStartRow, nEndRow, rCol.maBroadcasters, nStartRow);
