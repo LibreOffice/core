@@ -20,16 +20,15 @@
 #ifndef INCLUDED_REGISTRY_READER_HXX
 #define INCLUDED_REGISTRY_READER_HXX
 
-#include <registry/typereg_reader.hxx>
-#include <registry/refltype.hxx>
-#include <registry/types.hxx>
 #include <registry/version.h>
-
-#include <rtl/ustring.hxx>
 #include <sal/types.h>
-
 #include <algorithm>
 #include <new>
+#include <registry/refltype.hxx>
+#include <registry/typereg_reader.hxx>
+#include <registry/types.hxx>
+#include <rtl/ustring.hxx>
+#include "rtl/ustring.h"
 
 namespace typereg {
 

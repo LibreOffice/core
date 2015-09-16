@@ -22,7 +22,10 @@
 
 #include <registry/regdllapi.h>
 #include <registry/regtype.h>
+#include <stddef.h>
 #include <rtl/ustring.hxx>
+#include "rtl/ustring.h"
+#include "sal/types.h"
 
 #ifdef __cplusplus
 extern "C" {
