@@ -774,14 +774,14 @@ IMPL_LINK_TYPED( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner, void )
 /**
  * Handler for StatusEvents
  */
-IMPL_LINK_NOARG(OutlineView, StatusEventHdl)
+IMPL_LINK_NOARG_TYPED(OutlineView, StatusEventHdl, EditStatus&, void)
 {
     ::sd::Window*   pWin = mrOutlineViewShell.GetActiveWindow();
     OutlinerView*   pOutlinerView = GetViewByWindow(pWin);
-    Rectangle     aVis          = pOutlinerView->GetVisArea();
-    Rectangle aText = Rectangle(Point(0,0),
-                                Size(mnPaperWidth,
-                                     mrOutliner.GetTextHeight()));
+    Rectangle       aVis          = pOutlinerView->GetVisArea();
+    Rectangle       aText = Rectangle(Point(0,0),
+                                      Size(mnPaperWidth,
+                                      mrOutliner.GetTextHeight()));
     Rectangle aWin(Point(0,0), pWin->GetOutputSizePixel());
     aWin = pWin->PixelToLogic(aWin);
 
@@ -794,8 +794,6 @@ IMPL_LINK_NOARG(OutlineView, StatusEventHdl)
                                        Point(aVis.TopLeft()));
         mrOutlineViewShell.UpdateScrollBars();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(OutlineView, BeginDropHdl)
@@ -1363,13 +1361,12 @@ void OutlineView::SetLinks()
  */
 void OutlineView::ResetLinks() const
 {
-    Link<> aEmptyLink;
     mrOutliner.SetParaInsertedHdl(Link<::Outliner*,void>());
     mrOutliner.SetParaRemovingHdl(Link<::Outliner*,void>());
     mrOutliner.SetDepthChangedHdl(Link<::Outliner*,void>());
     mrOutliner.SetBeginMovingHdl(Link<::Outliner*,void>());
     mrOutliner.SetEndMovingHdl(Link<::Outliner*,void>());
-    mrOutliner.SetStatusEventHdl(aEmptyLink);
+    mrOutliner.SetStatusEventHdl(Link<EditStatus&,void>());
     mrOutliner.SetRemovingPagesHdl(Link<OutlinerView*,bool>());
     mrOutliner.SetIndentingPagesHdl(Link<OutlinerView*,bool>());
     mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());

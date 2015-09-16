@@ -211,8 +211,7 @@ private:
     bool                bPagebreak:1;               // Page break preview mode
     bool                bSelCtrlMouseClick:1;       // special selection handling for ctrl-mouse-click
 
-    DECL_DLLPRIVATE_STATIC_LINK (ScViewData, EmptyEditHdl, void*);
-    DECL_DLLPRIVATE_LINK (EditEngineHdl, EditStatus*);
+    DECL_DLLPRIVATE_LINK_TYPED( EditEngineHdl, EditStatus&, void );
 
     SAL_DLLPRIVATE void          CalcPPT();
     SAL_DLLPRIVATE void          CreateTabData( SCTAB nNewTab );

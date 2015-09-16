@@ -882,7 +882,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
         mbHasOnlineSpellErrors = false;
         ::sd::Outliner* pOutl = GetInternalOutliner();
         pOutl->SetUpdateMode(true);
-        Link<> aEvtHdl = pOutl->GetStatusEventHdl();
+        Link<EditStatus&,void> aEvtHdl = pOutl->GetStatusEventHdl();
         pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
 
         sal_uInt16 nOldOutlMode = pOutl->GetMode();
@@ -955,12 +955,10 @@ void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* /*pPage*/)
 }
 
 // Callback for ExecuteSpellPopup()
-IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
+IMPL_LINK_TYPED(SdDrawDocument, OnlineSpellEventHdl, EditStatus&, rEditStat, void)
 {
-    EditStatusFlags nStat = pEditStat->GetStatusWord();
+    EditStatusFlags nStat = rEditStat.GetStatusWord();
     mbHasOnlineSpellErrors = bool(nStat & EditStatusFlags::WRONGWORDCHANGED);
-
-    return 0;
 }
 
 // Callback for ExecuteSpellPopup()

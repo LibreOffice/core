@@ -98,7 +98,7 @@ public:
     DECL_LINK_TYPED( ParagraphInsertedHdl, Outliner *, void );
     DECL_LINK_TYPED( ParagraphRemovingHdl, Outliner *, void );
     DECL_LINK_TYPED( DepthChangedHdl, Outliner *, void );
-    DECL_LINK( StatusEventHdl, void * );
+    DECL_LINK_TYPED( StatusEventHdl, EditStatus&, void );
     DECL_LINK_TYPED( BeginMovingHdl, Outliner *, void );
     DECL_LINK_TYPED( EndMovingHdl, Outliner *, void );
     DECL_LINK_TYPED( RemovingPagesHdl, OutlinerView *, bool );

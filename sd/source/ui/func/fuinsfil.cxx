@@ -705,8 +705,8 @@ bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         Link<::Outliner*,void> aOldEndMovingHdl = pOutliner->GetEndMovingHdl();
         pOutliner->SetEndMovingHdl( Link<::Outliner*,void>());
 
-        Link<> aOldStatusEventHdl       = pOutliner->GetStatusEventHdl();
-        pOutliner->SetStatusEventHdl(Link<>());
+        Link<EditStatus&,void> aOldStatusEventHdl = pOutliner->GetStatusEventHdl();
+        pOutliner->SetStatusEventHdl(Link<EditStatus&,void>());
 
         pOutliner->Clear();
         pOlView->FillOutliner();

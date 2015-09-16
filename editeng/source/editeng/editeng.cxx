@@ -1508,12 +1508,12 @@ Link<> EditEngine::GetNotifyHdl() const
     return pImpEditEngine->GetNotifyHdl();
 }
 
-void EditEngine::SetStatusEventHdl( const Link<>& rLink )
+void EditEngine::SetStatusEventHdl( const Link<EditStatus&, void>& rLink )
 {
     pImpEditEngine->SetStatusEventHdl( rLink );
 }
 
-Link<> EditEngine::GetStatusEventHdl() const
+Link<EditStatus&, void> EditEngine::GetStatusEventHdl() const
 {
     return pImpEditEngine->GetStatusEventHdl();
 }

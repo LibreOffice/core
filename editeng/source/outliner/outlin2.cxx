@@ -129,12 +129,12 @@ void Outliner::SetNotifyHdl( const Link<>& rLink )
 
 }
 
-void Outliner::SetStatusEventHdl( const Link<>& rLink )
+void Outliner::SetStatusEventHdl( const Link<EditStatus&, void>& rLink )
 {
     pEditEngine->SetStatusEventHdl( rLink );
 }
 
-Link<> Outliner::GetStatusEventHdl() const
+Link<EditStatus&, void> Outliner::GetStatusEventHdl() const
 {
     return pEditEngine->GetStatusEventHdl();
 }

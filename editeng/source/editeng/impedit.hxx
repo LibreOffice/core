@@ -479,7 +479,7 @@ private:
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
     Timer               aStatusTimer;
-    Link<>              aStatusHdlLink;
+    Link<EditStatus&, void>  aStatusHdlLink;
     Link<>              aNotifyHdl;
     Link<>              aImportHdl;
     Link<>              aBeginMovingParagraphsHdl;
@@ -835,8 +835,8 @@ public:
     EditPaM         InsertParagraph( sal_Int32 nPara );
     EditSelection*  SelectParagraph( sal_Int32 nPara );
 
-    void            SetStatusEventHdl( const Link<>& rLink ) { aStatusHdlLink = rLink; }
-    Link<>          GetStatusEventHdl() const               { return aStatusHdlLink; }
+    void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink ) { aStatusHdlLink = rLink; }
+    Link<EditStatus&, void> GetStatusEventHdl() const               { return aStatusHdlLink; }
 
     void            SetNotifyHdl( const Link<>& rLink )     { aNotifyHdl = rLink; }
     Link<>          GetNotifyHdl() const            { return aNotifyHdl; }
@@ -848,11 +848,11 @@ public:
     bool            IsVisualCursorTravelingEnabled();
     bool            DoVisualCursorTraveling( const ContentNode* pNode );
 
-    EditSelection ConvertSelection( sal_Int32 nStartPara, sal_Int32 nStartPos, sal_Int32 nEndPara, sal_Int32 nEndPos );
-    inline EPaM             CreateEPaM( const EditPaM& rPaM );
-    inline EditPaM          CreateEditPaM( const EPaM& rEPaM );
-    inline ESelection       CreateESel( const EditSelection& rSel );
-    inline EditSelection    CreateSel( const ESelection& rSel );
+    EditSelection         ConvertSelection( sal_Int32 nStartPara, sal_Int32 nStartPos, sal_Int32 nEndPara, sal_Int32 nEndPos );
+    inline EPaM           CreateEPaM( const EditPaM& rPaM );
+    inline EditPaM        CreateEditPaM( const EPaM& rEPaM );
+    inline ESelection     CreateESel( const EditSelection& rSel );
+    inline EditSelection  CreateSel( const ESelection& rSel );
 
 
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
@@ -861,7 +861,7 @@ public:
     void                SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle );
     void                SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle );
     const SfxStyleSheet* GetStyleSheet( sal_Int32 nPara ) const;
-    SfxStyleSheet* GetStyleSheet( sal_Int32 nPara );
+    SfxStyleSheet*      GetStyleSheet( sal_Int32 nPara );
 
     void                UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle );
     void                RemoveStyleFromParagraphs( SfxStyleSheet* pStyle );
@@ -910,7 +910,7 @@ public:
     void DoOnlineSpelling( ContentNode* pThisNodeOnly = 0, bool bSpellAtCursorPos = false, bool bInteruptable = true );
     EESpellState        Spell( EditView* pEditView, bool bMultipleDoc );
     EESpellState        HasSpellErrors();
-    void ClearSpellErrors();
+    void                ClearSpellErrors();
     EESpellState        StartThesaurus( EditView* pEditView );
     css::uno::Reference< css::linguistic2::XSpellAlternatives >
                         ImpSpell( EditView* pEditView );
@@ -926,11 +926,11 @@ public:
                                 const vcl::Font *pFont,  sal_uInt16 nFontWhichId );
 
     // returns true if input sequence checking should be applied
-    bool            IsInputSequenceCheckingRequired( sal_Unicode nChar, const EditSelection& rCurSel ) const;
+    bool                IsInputSequenceCheckingRequired( sal_Unicode nChar, const EditSelection& rCurSel ) const;
 
     //find the next error within the given selection - forward only!
     css::uno::Reference< css::linguistic2::XSpellAlternatives >
-                       ImpFindNextError(EditSelection& rSelection);
+                        ImpFindNextError(EditSelection& rSelection);
     //spell and return a sentence
     bool                SpellSentence(EditView& rView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     //put spelling back to start of current sentence - needed after switch of grammar support
@@ -950,13 +950,13 @@ public:
                         svx::SpellPortions& rToFill,
                         bool bIsField );
 
-    bool            Search( const SvxSearchItem& rSearchItem, EditView* pView );
-    bool            ImpSearch( const SvxSearchItem& rSearchItem, const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel );
-    sal_Int32           StartSearchAndReplace( EditView* pEditView, const SvxSearchItem& rSearchItem );
-    bool            HasText( const SvxSearchItem& rSearchItem );
+    bool                    Search( const SvxSearchItem& rSearchItem, EditView* pView );
+    bool                    ImpSearch( const SvxSearchItem& rSearchItem, const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel );
+    sal_Int32               StartSearchAndReplace( EditView* pEditView, const SvxSearchItem& rSearchItem );
+    bool                    HasText( const SvxSearchItem& rSearchItem );
 
-    void                SetEditTextObjectPool( SfxItemPool* pP )    { pTextObjectPool = pP; }
-    SfxItemPool*        GetEditTextObjectPool() const               { return pTextObjectPool; }
+    void                    SetEditTextObjectPool( SfxItemPool* pP )    { pTextObjectPool = pP; }
+    SfxItemPool*            GetEditTextObjectPool() const               { return pTextObjectPool; }
 
     const SvxNumberFormat * GetNumberFormat( const ContentNode* pNode ) const;
     sal_Int32               GetSpaceBeforeAndMinLabelWidth( const ContentNode *pNode, sal_Int32 *pnSpaceBefore = 0, sal_Int32 *pnMinLabelWidth = 0 ) const;

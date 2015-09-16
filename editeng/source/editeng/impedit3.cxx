@@ -4024,7 +4024,7 @@ void ImpEditEngine::CallStatusHdl()
         // since other Flags might be set in the handler...
         EditStatus aTmpStatus( aStatus );
         aStatus.Clear();
-        aStatusHdlLink.Call( &aTmpStatus );
+        aStatusHdlLink.Call( aTmpStatus );
         aStatusTimer.Stop();    // If called by hand ...
     }
 }

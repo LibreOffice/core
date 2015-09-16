@@ -67,7 +67,7 @@ namespace frm
         RichTextEngine& operator=( const RichTextEngine& ) SAL_DELETED_FUNCTION;
 
     private:
-        DECL_LINK( EditEngineStatusChanged, EditStatus* );
+        DECL_LINK_TYPED( EditEngineStatusChanged, EditStatus&, void );
     };
 
 

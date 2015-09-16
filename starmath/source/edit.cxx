@@ -141,7 +141,7 @@ void SmEditWindow::dispose()
         EditEngine *pEditEngine = pEditView->GetEditEngine();
         if (pEditEngine)
         {
-            pEditEngine->SetStatusEventHdl( Link<>() );
+            pEditEngine->SetStatusEventHdl( Link<EditStatus&,void>() );
             pEditEngine->RemoveView( pEditView.get() );
         }
         pEditView.reset();
@@ -570,15 +570,10 @@ void SmEditWindow::CreateEditView()
 }
 
 
-IMPL_LINK( SmEditWindow, EditStatusHdl, EditStatus *, /*pStat*/ )
+IMPL_LINK_NOARG_TYPED( SmEditWindow, EditStatusHdl, EditStatus&, void )
 {
-    if (!pEditView)
-        return 1;
-    else
-    {
+    if (pEditView)
         Resize();
-        return 0;
-    }
 }
 
 IMPL_LINK_TYPED( SmEditWindow, ScrollHdl, ScrollBar *, /*pScrollBar*/, void )
@@ -718,7 +713,7 @@ void SmEditWindow::LoseFocus()
 {
     EditEngine *pEditEngine = GetEditEngine();
     if (pEditEngine)
-        pEditEngine->SetStatusEventHdl( Link<>() );
+        pEditEngine->SetStatusEventHdl( Link<EditStatus&,void>() );
 
     Window::LoseFocus();
 
@@ -1099,7 +1094,7 @@ void SmEditWindow::DeleteEditView( SmViewShell & /*rView*/ )
         std::unique_ptr<EditEngine> xEditEngine(pEditView->GetEditEngine());
         if (xEditEngine)
         {
-            xEditEngine->SetStatusEventHdl( Link<>() );
+            xEditEngine->SetStatusEventHdl( Link<EditStatus&,void>() );
             xEditEngine->RemoveView( pEditView.get() );
         }
         pEditView.reset();

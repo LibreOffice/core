@@ -5591,16 +5591,14 @@ struct SpellCheckStatus
 
     SpellCheckStatus() : mbModified(false) {};
 
-    DECL_LINK (EventHdl, EditStatus*);
+    DECL_LINK_TYPED( EventHdl, EditStatus&, void );
 };
 
-IMPL_LINK(SpellCheckStatus, EventHdl, EditStatus*, pStatus)
+IMPL_LINK_TYPED(SpellCheckStatus, EventHdl, EditStatus&, rStatus, void)
 {
-    EditStatusFlags nStatus = pStatus->GetStatusWord();
+    EditStatusFlags nStatus = rStatus.GetStatusWord();
     if (nStatus & EditStatusFlags::WRONGWORDCHANGED)
         mbModified = true;
-
-    return 0;
 }
 
 }

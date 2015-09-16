@@ -1100,14 +1100,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     //  needed, wenn position changed
 }
 
-IMPL_STATIC_LINK_NOARG(ScViewData, EmptyEditHdl)
+IMPL_LINK_TYPED( ScViewData, EditEngineHdl, EditStatus&, rStatus, void )
 {
-    return 0;
-}
-
-IMPL_LINK( ScViewData, EditEngineHdl, EditStatus *, pStatus )
-{
-    EditStatusFlags nStatus = pStatus->GetStatusWord();
+    EditStatusFlags nStatus = rStatus.GetStatusWord();
     if (nStatus & (EditStatusFlags::HSCROLL | EditStatusFlags::TEXTHEIGHTCHANGED | EditStatusFlags::TEXTWIDTHCHANGED | EditStatusFlags::CURSOROUT))
     {
         EditGrowY();
@@ -1120,7 +1115,6 @@ IMPL_LINK( ScViewData, EditEngineHdl, EditStatus *, pStatus )
                 pEditView[eWhich]->ShowCursor(false);
         }
     }
-    return 0;
 }
 
 void ScViewData::EditGrowX()
@@ -1401,7 +1395,7 @@ void ScViewData::ResetEditView()
         }
 
     if (pEngine)
-        pEngine->SetStatusEventHdl( LINK( this, ScViewData, EmptyEditHdl ) );
+        pEngine->SetStatusEventHdl( Link<EditStatus&,void>() );
 }
 
 void ScViewData::KillEditView()

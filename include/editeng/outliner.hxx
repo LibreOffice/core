@@ -780,8 +780,8 @@ public:
 
     void            SetNotifyHdl( const Link<>& rLink );
 
-    void            SetStatusEventHdl( const Link<>& rLink );
-    Link<>          GetStatusEventHdl() const;
+    void            SetStatusEventHdl( const Link<EditStatus&, void>& rLink );
+    Link<EditStatus&, void> GetStatusEventHdl() const;
 
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );

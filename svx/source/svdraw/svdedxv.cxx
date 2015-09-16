@@ -476,17 +476,16 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     return pOutlView;
 }
 
-IMPL_LINK(SdrObjEditView,ImpOutlinerStatusEventHdl,EditStatus*,pEditStat)
+IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerStatusEventHdl, EditStatus&, rEditStat, void)
 {
     if(pTextEditOutliner )
     {
         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( mxTextEditObj.get() );
         if( pTextObj )
         {
-            pTextObj->onEditOutlinerStatusEvent( pEditStat );
+            pTextObj->onEditOutlinerStatusEvent( &rEditStat );
         }
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,void)
