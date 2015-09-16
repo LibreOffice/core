@@ -245,6 +245,11 @@ public:
         return mbInitialized;
     }
 
+    bool requestedLegacy()
+    {
+        return mbRequestLegacyContext;
+    }
+
     bool supportMultiSampling() const;
 
     static SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
