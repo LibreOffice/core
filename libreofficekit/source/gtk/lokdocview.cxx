@@ -1197,6 +1197,7 @@ postMouseEventInThread(gpointer data)
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->postMouseEvent(priv->m_pDocument,
                                               pLOEvent->m_nPostMouseEventType,
                                               pLOEvent->m_nPostMouseEventX,
