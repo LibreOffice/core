@@ -870,16 +870,4 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     return bDrawn;
 }
 
-void OutputDevice::BeginPaint()
-{
-    if( mpGraphics || AcquireGraphics() )
-        mpGraphics->BeginPaint();
-}
-
-void OutputDevice::EndPaint()
-{
-    if( mpGraphics || AcquireGraphics() )
-        mpGraphics->EndPaint();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
