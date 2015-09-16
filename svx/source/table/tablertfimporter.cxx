@@ -92,7 +92,7 @@ public:
 
     void FillTable();
 
-    DECL_LINK( RTFImportHdl, ImportInfo* );
+    DECL_LINK_TYPED( RTFImportHdl, ImportInfo&, void );
 
 private:
     SdrTableObj&    mrTableObj;
@@ -154,7 +154,7 @@ void SdrTableRTFParser::Read( SvStream& rStream )
 {
     EditEngine& rEdit = const_cast< EditEngine& >( mpOutliner->GetEditEngine() );
 
-    Link<> aOldLink( rEdit.GetImportHdl() );
+    Link<ImportInfo&,void> aOldLink( rEdit.GetImportHdl() );
     rEdit.SetImportHdl( LINK( this, SdrTableRTFParser, RTFImportHdl ) );
     mpOutliner->Read( rStream, OUString(), EE_FORMAT_RTF );
     rEdit.SetImportHdl( aOldLink );
@@ -162,31 +162,31 @@ void SdrTableRTFParser::Read( SvStream& rStream )
     FillTable();
 }
 
-IMPL_LINK( SdrTableRTFParser, RTFImportHdl, ImportInfo*, pInfo )
+IMPL_LINK_TYPED( SdrTableRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
 {
-    switch ( pInfo->eState )
+    switch ( rInfo.eState )
     {
         case RTFIMP_NEXTTOKEN:
-            ProcToken( pInfo );
+            ProcToken( &rInfo );
             break;
         case RTFIMP_UNKNOWNATTR:
-            ProcToken( pInfo );
+            ProcToken( &rInfo );
             break;
         case RTFIMP_START:
         {
-            SvxRTFParser* pParser = static_cast<SvxRTFParser*>(pInfo->pParser);
+            SvxRTFParser* pParser = static_cast<SvxRTFParser*>(rInfo.pParser);
             pParser->SetAttrPool( &mrItemPool );
             RTFPardAttrMapIds& rMap = pParser->GetPardMap();
             rMap.nBox = SDRATTR_TABLE_BORDER;
         }
             break;
         case RTFIMP_END:
-            if ( pInfo->aSelection.nEndPos )
+            if ( rInfo.aSelection.nEndPos )
             {
                 mpActDefault = NULL;
-                pInfo->nToken = RTF_PAR;
-                pInfo->aSelection.nEndPara++;
-                ProcToken( pInfo );
+                rInfo.nToken = RTF_PAR;
+                rInfo.aSelection.nEndPara++;
+                ProcToken( &rInfo );
             }
             break;
         case RTFIMP_SETATTR:
@@ -198,7 +198,6 @@ IMPL_LINK( SdrTableRTFParser, RTFImportHdl, ImportInfo*, pInfo )
         default:
             SAL_WARN( "svx.table","unknown ImportInfo.eState");
     }
-    return 0;
 }
 
 void SdrTableRTFParser::NextRow()

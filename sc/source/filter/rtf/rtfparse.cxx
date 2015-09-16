@@ -58,7 +58,7 @@ ScRTFParser::~ScRTFParser()
 
 sal_uLong ScRTFParser::Read( SvStream& rStream, const OUString& rBaseURL )
 {
-    Link<> aOldLink = pEdit->GetImportHdl();
+    Link<ImportInfo&,void> aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScRTFParser, RTFImportHdl ) );
     sal_uLong nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_RTF );
     if ( nLastToken == RTF_PAR )
@@ -154,19 +154,19 @@ void ScRTFParser::ColAdjust()
     }
 }
 
-IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo*, pInfo )
+IMPL_LINK_TYPED( ScRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
 {
-    switch ( pInfo->eState )
+    switch ( rInfo.eState )
     {
         case RTFIMP_NEXTTOKEN:
-            ProcToken( pInfo );
+            ProcToken( &rInfo );
             break;
         case RTFIMP_UNKNOWNATTR:
-            ProcToken( pInfo );
+            ProcToken( &rInfo );
             break;
         case RTFIMP_START:
         {
-            SvxRTFParser* pParser = static_cast<SvxRTFParser*>(pInfo->pParser);
+            SvxRTFParser* pParser = static_cast<SvxRTFParser*>(rInfo.pParser);
             pParser->SetAttrPool( pPool );
             RTFPardAttrMapIds& rMap = pParser->GetPardMap();
             rMap.nBrush = ATTR_BACKGROUND;
@@ -175,14 +175,14 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo*, pInfo )
         }
             break;
         case RTFIMP_END:
-            if ( pInfo->aSelection.nEndPos )
+            if ( rInfo.aSelection.nEndPos )
             {   // If still text: create last paragraph
                 pActDefault = NULL;
-                pInfo->nToken = RTF_PAR;
+                rInfo.nToken = RTF_PAR;
                 // EditEngine did not attach an empty paragraph anymore
                 // which EntryEnd could strip
-                pInfo->aSelection.nEndPara++;
-                ProcToken( pInfo );
+                rInfo.aSelection.nEndPara++;
+                ProcToken( &rInfo );
             }
             break;
         case RTFIMP_SETATTR:
@@ -194,7 +194,6 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo*, pInfo )
         default:
             OSL_FAIL("unknown ImportInfo.eState");
     }
-    return 0;
 }
 
 // Bad behavior:

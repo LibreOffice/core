@@ -372,8 +372,8 @@ public:
     void            SetNotifyHdl( const Link<EENotify&,void>& rLink );
     Link<EENotify&,void>  GetNotifyHdl() const;
 
-    void            SetImportHdl( const Link<>& rLink );
-    Link<>          GetImportHdl() const;
+    void            SetImportHdl( const Link<ImportInfo&,void>& rLink );
+    Link<ImportInfo&,void> GetImportHdl() const;
 
     // Do not evaluate font formatting => For Outliner
     bool            IsFlatMode() const;

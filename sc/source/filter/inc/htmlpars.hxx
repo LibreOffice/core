@@ -178,7 +178,7 @@ private:
     bool                bInCell:1;
     bool                bInTitle:1;
 
-    DECL_LINK( HTMLImportHdl, ImportInfo* );
+    DECL_LINK_TYPED( HTMLImportHdl, ImportInfo&, void );
     void                NewActEntry( ScEEParseEntry* );
     static void         EntryEnd( ScEEParseEntry*, const ESelection& );
     void                ProcToken( ImportInfo* );
@@ -619,7 +619,7 @@ private:
 
     void                ParseStyle(const OUString& rStrm);
 
-    DECL_LINK( HTMLImportHdl, const ImportInfo* );
+    DECL_LINK_TYPED( HTMLImportHdl, ImportInfo&, void );
 
 private:
     typedef ::std::unique_ptr< ScHTMLGlobalTable >    ScHTMLGlobalTablePtr;

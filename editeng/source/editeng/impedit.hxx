@@ -481,7 +481,7 @@ private:
     Timer               aStatusTimer;
     Link<EditStatus&,void>  aStatusHdlLink;
     Link<EENotify&,void>    aNotifyHdl;
-    Link<>              aImportHdl;
+    Link<ImportInfo&,void>  aImportHdl;
     Link<>              aBeginMovingParagraphsHdl;
     Link<>              aEndMovingParagraphsHdl;
     Link<>              aBeginPasteOrDropHdl;

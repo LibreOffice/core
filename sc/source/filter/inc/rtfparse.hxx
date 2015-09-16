@@ -61,7 +61,7 @@ private:
     sal_uInt16          nLastWidth;
     bool                bNewDef;
 
-    DECL_LINK( RTFImportHdl, ImportInfo* );
+    DECL_LINK_TYPED( RTFImportHdl, ImportInfo&, void );
     inline void         NextRow();
     void                EntryEnd( ScEEParseEntry*, const ESelection& );
     void                ProcToken( ImportInfo* );

@@ -1518,12 +1518,12 @@ Link<EditStatus&, void> EditEngine::GetStatusEventHdl() const
     return pImpEditEngine->GetStatusEventHdl();
 }
 
-void EditEngine::SetImportHdl( const Link<>& rLink )
+void EditEngine::SetImportHdl( const Link<ImportInfo&,void>& rLink )
 {
     pImpEditEngine->aImportHdl = rLink;
 }
 
-Link<> EditEngine::GetImportHdl() const
+Link<ImportInfo&,void> EditEngine::GetImportHdl() const
 {
     return pImpEditEngine->aImportHdl;
 }
@@ -2725,7 +2725,7 @@ bool EditEngine::IsImportRTFStyleSheetsSet() const
 
 void EditEngine::CallImportHandler(ImportInfo& rInfo)
 {
-    pImpEditEngine->aImportHdl.Call(&rInfo);
+    pImpEditEngine->aImportHdl.Call(rInfo);
 }
 
 EditPaM EditEngine::InsertParaBreak(

@@ -264,7 +264,7 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
 
 sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
 {
-    Link<> aOldLink = pEdit->GetImportHdl();
+    Link<ImportInfo&,void> aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScHTMLLayoutParser, HTMLImportHdl ) );
 
     SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
@@ -881,32 +881,32 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
     NewActEntry( pActEntry ); // New free flying pActEntry
 }
 
-IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
+IMPL_LINK_TYPED( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo&, rInfo, void )
 {
-    switch ( pInfo->eState )
+    switch ( rInfo.eState )
     {
         case HTMLIMP_NEXTTOKEN:
-            ProcToken( pInfo );
+            ProcToken( &rInfo );
             break;
         case HTMLIMP_UNKNOWNATTR:
-            ProcToken( pInfo );
+            ProcToken( &rInfo );
             break;
         case HTMLIMP_START:
             break;
         case HTMLIMP_END:
-            if ( pInfo->aSelection.nEndPos )
+            if ( rInfo.aSelection.nEndPos )
             {
                 // If text remains: create paragraph, without calling CloseEntry().
                 if( bInCell )   // ...but only in opened table cells.
                 {
                     bInCell = false;
-                    NextRow( pInfo );
+                    NextRow( &rInfo );
                     bInCell = true;
                 }
-                CloseEntry( pInfo );
+                CloseEntry( &rInfo );
             }
             while ( nTableLevel > 0 )
-                TableOff( pInfo );      // close tables, if </TABLE> missing
+                TableOff( &rInfo );      // close tables, if </TABLE> missing
             break;
         case HTMLIMP_SETATTR:
             break;
@@ -915,8 +915,8 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
         case HTMLIMP_INSERTPARA:
             if ( nTableLevel < 1 )
             {
-                CloseEntry( pInfo );
-                NextRow( pInfo );
+                CloseEntry( &rInfo );
+                NextRow( &rInfo );
             }
             break;
         case HTMLIMP_INSERTFIELD:
@@ -924,7 +924,6 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
         default:
             OSL_FAIL("HTMLImportHdl: unknown ImportInfo.eState");
     }
-    return 0;
 }
 
 // Greatest common divisor (Euclid)
@@ -2874,7 +2873,7 @@ sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
         }
     }
 
-    Link<> aOldLink = pEdit->GetImportHdl();
+    Link<ImportInfo&,void> aOldLink = pEdit->GetImportHdl();
     pEdit->SetImportHdl( LINK( this, ScHTMLQueryParser, HTMLImportHdl ) );
     sal_uLong nErr = pEdit->Read( rStrm, rBaseURL, EE_FORMAT_HTML, pAttributes );
     pEdit->SetImportHdl( aOldLink );
@@ -3215,20 +3214,20 @@ void ScHTMLQueryParser::ParseStyle(const OUString&) {}
 
 #endif
 
-IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, const ImportInfo*, pInfo )
+IMPL_LINK_TYPED( ScHTMLQueryParser, HTMLImportHdl, ImportInfo&, rInfo, void )
 {
-    switch( pInfo->eState )
+    switch( rInfo.eState )
     {
         case HTMLIMP_START:
         break;
 
         case HTMLIMP_NEXTTOKEN:
         case HTMLIMP_UNKNOWNATTR:
-            ProcessToken( *pInfo );
+            ProcessToken( rInfo );
         break;
 
         case HTMLIMP_INSERTPARA:
-            mpCurrTable->InsertPara( *pInfo );
+            mpCurrTable->InsertPara( rInfo );
         break;
 
         case HTMLIMP_SETATTR:
@@ -3238,13 +3237,12 @@ IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, const ImportInfo*, pInfo )
 
         case HTMLIMP_END:
             while( mpCurrTable->GetTableId() != SC_HTML_GLOBAL_TABLE )
-                CloseTable( *pInfo );
+                CloseTable( rInfo );
         break;
 
         default:
             OSL_FAIL( "ScHTMLQueryParser::HTMLImportHdl - unknown ImportInfo::eState" );
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
