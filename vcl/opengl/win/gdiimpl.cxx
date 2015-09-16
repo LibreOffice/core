@@ -57,6 +57,7 @@ void WinOpenGLSalGraphicsImpl::Init()
         // SalGraphics which share the same hWnd and hDC.
         // The shape 'Area' dialog does reparenting to trigger this.
         SAL_WARN("vcl.opengl", "Unusual: Windows handle / DC changed without DeInit");
+        DeInit();
     }
 
     OpenGLSalGraphicsImpl::Init();
