@@ -420,7 +420,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(gb_LINK) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
-		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+		$(if $(filter GoogleTest Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(LDFLAGS) \
 		@$${RESPONSEFILE} \
 		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
@@ -611,6 +611,14 @@ $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest
 $(call gb_LinkTarget_get_target,$(2)) \
 $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
 
+endef
+
+# GoogleTest class
+
+gb_GoogleTest_GTESTPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+gb_GoogleTest_get_filename = $(1)$(gb_Executable_EXT)
+
+define gb_GoogleTest_GoogleTest_platform
 endef
 
 # CppunitTest class

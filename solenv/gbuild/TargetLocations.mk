@@ -52,6 +52,7 @@ gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
+gb_GoogleTest_get_target = $(WORKDIR)/GoogleTest/$(1).test
 gb_JavaClassSet_get_classdir = $(WORKDIR)/JavaClassSet/$(1)
 gb_JavaClassSet_get_repo_target = $(WORKDIR)/JavaClassSet/$(2)/$(1).done
 gb_JavaClassSet_get_target = $(WORKDIR)/JavaClassSet/$(1)/done
@@ -110,6 +111,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	SdiTarget \
 	SrsTarget \
 	CppunitTest \
+	GoogleTest \
 	CustomTarget \
 ))
 

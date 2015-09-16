@@ -300,7 +300,7 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
+$(if $(filter Library CppunitTest GoogleTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
@@ -401,6 +401,15 @@ $(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Executable_get_layer,
 
 endef
 
+
+# GoogleTest class
+
+gb_GoogleTest_GTESTPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_GoogleTest_get_filename = $(1)$(gb_Executable_EXT)
+
+define gb_GoogleTest_GoogleTest_platform
+$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
+endef
 
 # CppunitTest class
 

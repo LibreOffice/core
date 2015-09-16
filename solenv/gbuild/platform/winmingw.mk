@@ -448,7 +448,7 @@ endef
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
-$(if $(filter Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclinkexecutable,$(1),$(2)))
+$(if $(filter GoogleTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclinkexecutable,$(1),$(2)))
 $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclinklibrary,$(1),$(2)))
 $(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlinklibrary,$(1)))
 endef
@@ -594,6 +594,13 @@ gb_Executable_TARGETTYPEFLAGS :=
 gb_Executable_get_rpath :=
 gb_Executable_Executable_platform =
 
+# GoogleTest class
+
+gb_GoogleTest_GTESTPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+gb_GoogleTest_get_filename = $(1)$(gb_Executable_EXT)
+
+define gb_GoogleTest_GoogleTest_platform
+endef
 
 # CppunitTest class
 
