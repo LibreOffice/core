@@ -67,7 +67,7 @@ public:
     virtual ~JPEGReader();
 
     ReadState   Read( Graphic& rGraphic );
-    unsigned char * CreateBitmap( JPEGCreateBitmapParam* param );
+    unsigned char * CreateBitmap( JPEGCreateBitmapParam& param );
 };
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGREADER_HXX

@@ -191,8 +191,7 @@ JPEGReader::JPEGReader( SvStream& rStream, void* /*pCallData*/, bool bSetLogSize
 
 JPEGReader::~JPEGReader()
 {
-    if( mpBuffer )
-        delete[] mpBuffer;
+    delete[] mpBuffer;
 
     if( mpAcc )
         Bitmap::ReleaseAccess( mpAcc );
@@ -201,16 +200,16 @@ JPEGReader::~JPEGReader()
         Bitmap::ReleaseAccess( mpAcc1 );
 }
 
-unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
+unsigned char * JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
 {
-    if (pParam->nWidth > SAL_MAX_INT32 / 8 || pParam->nHeight > SAL_MAX_INT32 / 8)
+    if (rParam.nWidth > SAL_MAX_INT32 / 8 || rParam.nHeight > SAL_MAX_INT32 / 8)
         return NULL; // avoid overflows later
 
-    if (pParam->nWidth == 0 || pParam->nHeight == 0)
+    if (rParam.nWidth == 0 || rParam.nHeight == 0)
         return NULL;
 
-    Size        aSize( pParam->nWidth, pParam->nHeight );
-    bool        bGray = pParam->bGray != 0;
+    Size        aSize(rParam.nWidth, rParam.nHeight );
+    bool        bGray = rParam.bGray != 0;
 
     unsigned char * pBmpBuf = NULL;
 
@@ -253,13 +252,13 @@ unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
 
     if ( mbSetLogSize )
     {
-        unsigned long nUnit = pParam->density_unit;
+        unsigned long nUnit = rParam.density_unit;
 
-        if( ( ( 1 == nUnit ) || ( 2 == nUnit ) ) && pParam->X_density && pParam->Y_density )
+        if( ( ( 1 == nUnit ) || ( 2 == nUnit ) ) && rParam.X_density && rParam.Y_density )
         {
             Point       aEmptyPoint;
-            Fraction    aFractX( 1, pParam->X_density );
-            Fraction    aFractY( 1, pParam->Y_density );
+            Fraction    aFractX( 1, rParam.X_density );
+            Fraction    aFractY( 1, rParam.Y_density );
             MapMode     aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
             Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
 
@@ -280,14 +279,14 @@ unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
           )
         {
             pBmpBuf = mpAcc->GetBuffer();
-            pParam->nAlignedWidth = mpAcc->GetScanlineSize();
-            pParam->bTopDown = mpAcc->IsTopDown();
+            rParam.nAlignedWidth = mpAcc->GetScanlineSize();
+            rParam.bTopDown = mpAcc->IsTopDown();
         }
         else
         {
-            pParam->nAlignedWidth = AlignedWidth4Bytes( aSize.Width() * ( bGray ? 8 : 24 ) );
-            pParam->bTopDown = true;
-            pBmpBuf = mpBuffer = new unsigned char[pParam->nAlignedWidth * aSize.Height()];
+            rParam.nAlignedWidth = AlignedWidth4Bytes( aSize.Width() * ( bGray ? 8 : 24 ) );
+            rParam.bTopDown = true;
+            pBmpBuf = mpBuffer = new unsigned char[rParam.nAlignedWidth * aSize.Height()];
         }
     }
 
