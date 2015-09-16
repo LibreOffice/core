@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_2dcb4574",
+        "filename": "comphelper/qa/unit/makesequence.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-16T17:05:47Z",
+      "side": 1,
+      "message": "Not the most elegant unit test, but it should get the job done. If you see any holes, please let me know",
+      "revId": "b9e42caa05d544d98632e07aa68a27da27b4cdcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_cdb9e9ee",
+        "filename": "include/comphelper/makesequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-16T17:05:47Z",
+      "side": 1,
+      "message": "This is a little ugly, but this is what we will use to do consistency checks on the parameter pack with std::enable_if etc.",
+      "revId": "b9e42caa05d544d98632e07aa68a27da27b4cdcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_0db481f0",
+        "filename": "include/comphelper/makesequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-16T17:05:47Z",
+      "side": 1,
+      "message": "I\u0027m sure there is a better way to do this, but this is what I could think of :)",
+      "revId": "b9e42caa05d544d98632e07aa68a27da27b4cdcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_adbe35d2",
+        "filename": "include/comphelper/makesequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-16T17:05:47Z",
+      "side": 1,
+      "message": "An ugly type definition, but it should\n\n1) Check that all types in the parameter pack are of type T ( obviously important )\n2) Ensure that all types in the parameter pack are copy assignable, important due to line 56\n\nTheoretically this could be left out, but I prefer to check this up front. I also find the error message thrown by this to be more informative than when it fails at line 75 or 57",
+      "revId": "b9e42caa05d544d98632e07aa68a27da27b4cdcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_edb82de8",
+        "filename": "include/comphelper/makesequence.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-16T17:05:47Z",
+      "side": 1,
+      "message": "Again, I\u0027m sure there is a better way to do this, any suggestions are welcome",
+      "revId": "b9e42caa05d544d98632e07aa68a27da27b4cdcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
