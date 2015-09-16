@@ -25,9 +25,8 @@ public:
     static void setView(size_t nId);
     /// Get the currently active view.
     static size_t getView();
-
-    /// Total number of view shells.
-    static int getViews();
+    /// Get the number of views of the current object shell.
+    static size_t getViews();
 };
 
 #endif

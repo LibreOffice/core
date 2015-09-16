@@ -54,9 +54,6 @@ struct _LibreOfficeKitClass
     void (*registerCallback) (LibreOfficeKit* pThis,
                               LibreOfficeKitCallback pCallback,
                               void* pData);
-
-    /// @see lok::Office::getViews().
-    int (*getViews) (LibreOfficeKit* pThis);
 #endif
 };
 
@@ -174,6 +171,8 @@ struct _LibreOfficeKitDocumentClass
     void (*setView) (LibreOfficeKitDocument* pThis, int nId);
     /// @see lok::Document::getView().
     int (*getView) (LibreOfficeKitDocument* pThis);
+    /// @see lok::Document::getViews().
+    int (*getViews) (LibreOfficeKitDocument* pThis);
 #endif // LOK_USE_UNSTABLE_API
 };
 
