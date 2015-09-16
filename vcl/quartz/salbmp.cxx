@@ -759,16 +759,42 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
     pBuffer->mnBitCount = mnBits;
     switch( mnBits )
     {
-    case 1:     pBuffer->mnFormat = BMP_FORMAT_1BIT_MSB_PAL; break;
-    case 4:     pBuffer->mnFormat = BMP_FORMAT_4BIT_MSN_PAL; break;
-    case 8:     pBuffer->mnFormat = BMP_FORMAT_8BIT_PAL; break;
-    case 16:    pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
-                pBuffer->maColorMask  = ColorMask( k16BitRedColorMask, k16BitGreenColorMask, k16BitBlueColorMask );
-                break;
-    case 24:    pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_BGR; break;
-    case 32:    pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_ARGB;
-                pBuffer->maColorMask  = ColorMask( k32BitRedColorMask, k32BitGreenColorMask, k32BitBlueColorMask );
-                break;
+        case 1:
+            pBuffer->mnFormat = BMP_FORMAT_1BIT_MSB_PAL;
+            break;
+        case 4:
+            pBuffer->mnFormat = BMP_FORMAT_4BIT_MSN_PAL;
+            break;
+        case 8:
+            pBuffer->mnFormat = BMP_FORMAT_8BIT_PAL;
+            break;
+        case 16:
+        {
+            pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
+            ColorMaskElement aRedMask(k16BitRedColorMask);
+            aRedMask.CalcMaskShift();
+            ColorMaskElement aGreenMask(k16BitGreenColorMask);
+            aGreenMask.CalcMaskShift();
+            ColorMaskElement aBlueMask(k16BitBlueColorMask);
+            aBlueMask.CalcMaskShift();
+            pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
+            break;
+        }
+        case 24:
+            pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
+            break;
+        case 32:
+        {
+            pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_ARGB;
+            ColorMaskElement aRedMask(k32BitRedColorMask);
+            aRedMask.CalcMaskShift();
+            ColorMaskElement aGreenMask(k32BitGreenColorMask);
+            aGreenMask.CalcMaskShift();
+            ColorMaskElement aBlueMask(k32BitBlueColorMask);
+            aBlueMask.CalcMaskShift();
+            pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
+            break;
+        }
     }
     pBuffer->mnFormat |= BMP_FORMAT_BOTTOM_UP;
 
