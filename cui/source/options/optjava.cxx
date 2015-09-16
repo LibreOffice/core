@@ -869,12 +869,11 @@ IMPL_LINK_NOARG(SvxJavaParameterDlg, SelectHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxJavaParameterDlg, DblClickHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxJavaParameterDlg, DblClickHdl_Impl, ListBox&, void)
 {
     sal_Int32 nPos = m_pAssignedList->GetSelectEntryPos();
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         m_pParameterEdit->SetText( m_pAssignedList->GetEntry( nPos ) );
-    return 0;
 }
 
 

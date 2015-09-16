@@ -51,7 +51,7 @@ class SvPasteObjectDialog : public ModalDialog
 
     void            SelectObject();
     DECL_LINK( SelectHdl, ListBox * );
-    DECL_LINK( DoubleClickHdl, ListBox * );
+    DECL_LINK_TYPED( DoubleClickHdl, ListBox&, void );
 
 public:
                 SvPasteObjectDialog( vcl::Window* pParent );

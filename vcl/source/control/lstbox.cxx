@@ -966,7 +966,7 @@ void ListBox::Select()
 
 void ListBox::DoubleClick()
 {
-    ImplCallEventListenersAndHandler( VCLEVENT_LISTBOX_DOUBLECLICK, [this] () { maDoubleClickHdl.Call(this); } );
+    ImplCallEventListenersAndHandler( VCLEVENT_LISTBOX_DOUBLECLICK, [this] () { maDoubleClickHdl.Call(*this); } );
 }
 
 void ListBox::Clear()

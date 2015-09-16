@@ -309,10 +309,16 @@ void SwFieldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 // Insert new fields
 IMPL_LINK_TYPED( SwFieldPage, TreeListBoxInsertHdl, SvTreeListBox*, pBtn, bool )
 {
-    return InsertHdl(pBtn);
+    InsertHdl(pBtn);
+    return false;
 }
 
-IMPL_LINK( SwFieldPage, InsertHdl, void *, pBtn )
+IMPL_LINK_TYPED( SwFieldPage, ListBoxInsertHdl, ListBox&, rBox, void )
+{
+    InsertHdl(&rBox);
+}
+
+void SwFieldPage::InsertHdl(void* pBtn)
 {
     SwFieldDlg *pDlg = static_cast<SwFieldDlg*>(GetTabDialog());
     if (pDlg)
@@ -327,8 +333,6 @@ IMPL_LINK( SwFieldPage, InsertHdl, void *, pBtn )
         SwFieldEditDlg *pEditDlg = static_cast<SwFieldEditDlg *>(GetParentDialog());
         pEditDlg->InsertHdl();
     }
-
-    return 0;
 }
 
 // enable/disable "Insert"-Button
@@ -349,11 +353,9 @@ void SwFieldPage::EnableInsert(bool bEnable)
     m_bInsert = bEnable;
 }
 
-IMPL_LINK_NOARG(SwFieldPage, NumFormatHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldPage, NumFormatHdl, ListBox&, void)
 {
-    InsertHdl();
-
-    return 0;
+    InsertHdl(nullptr);
 }
 
 void SwFieldPage::SetWrtShell( SwWrtShell* pShell )

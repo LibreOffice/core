@@ -46,7 +46,8 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK_TYPED( FinishHdl, Button*, void );
-    DECL_LINK( FinishHdl2, void* );
+    DECL_LINK_TYPED( FinishHdl2, ListBox&, void );
+    void FinishHdl();
 
     SfxObjectShellLock GetDocument();
     OutputType GetOutputMedium() const;

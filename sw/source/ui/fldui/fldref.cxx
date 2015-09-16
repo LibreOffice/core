@@ -91,11 +91,11 @@ SwFieldRefPage::SwFieldRefPage(vcl::Window* pParent, const SfxItemSet& rCoreSet 
 
     m_pNameED->SetModifyHdl(LINK(this, SwFieldRefPage, ModifyHdl));
 
-    m_pTypeLB->SetDoubleClickHdl       (LINK(this, SwFieldRefPage, InsertHdl));
+    m_pTypeLB->SetDoubleClickHdl       (LINK(this, SwFieldRefPage, ListBoxInsertHdl));
     m_pTypeLB->SetSelectHdl            (LINK(this, SwFieldRefPage, TypeHdl));
     m_pSelectionLB->SetSelectHdl       (LINK(this, SwFieldRefPage, SubTypeHdl));
-    m_pSelectionLB->SetDoubleClickHdl  (LINK(this, SwFieldRefPage, InsertHdl));
-    m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFieldRefPage, InsertHdl));
+    m_pSelectionLB->SetDoubleClickHdl  (LINK(this, SwFieldRefPage, ListBoxInsertHdl));
+    m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFieldRefPage, ListBoxInsertHdl));
 
     // #i83479#
     m_pSelectionToolTipLB->SetSelectHdl( LINK(this, SwFieldRefPage, SubTypeTreeListBoxHdl) );

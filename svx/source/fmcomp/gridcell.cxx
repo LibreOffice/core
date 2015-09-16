@@ -4033,7 +4033,7 @@ void FmXListBoxCell::disposing()
     m_aActionListeners.disposeAndClear(aEvt);
 
     m_pBox->SetSelectHdl( Link<>() );
-    m_pBox->SetDoubleClickHdl( Link<>() );
+    m_pBox->SetDoubleClickHdl( Link<ListBox&,void>() );
     m_pBox = NULL;
 
     FmXTextCell::disposing();
@@ -4305,7 +4305,7 @@ void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Wind
         &&  ( _nEventId == VCLEVENT_LISTBOX_SELECT )
         )
     {
-        OnDoubleClick( NULL );
+        OnDoubleClick( *m_pBox );
 
         ::com::sun::star::awt::ItemEvent aEvent;
         aEvent.Source = *this;
@@ -4324,7 +4324,7 @@ void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const vcl::Wind
 
 
 
-IMPL_LINK_NOARG(FmXListBoxCell, OnDoubleClick)
+IMPL_LINK_NOARG_TYPED(FmXListBoxCell, OnDoubleClick, ListBox&, void)
 {
     if (m_pBox)
     {
@@ -4337,7 +4337,6 @@ IMPL_LINK_NOARG(FmXListBoxCell, OnDoubleClick)
         while( aIt.hasMoreElements() )
             static_cast< ::com::sun::star::awt::XActionListener *>(aIt.next())->actionPerformed( aEvent );
     }
-    return 1;
 }
 
 FmXComboBoxCell::FmXComboBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl )

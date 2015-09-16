@@ -51,7 +51,7 @@ namespace abp
 
     private:
         DECL_LINK( OnTableSelected, void* );
-        DECL_LINK( OnTableDoubleClicked, void* );
+        DECL_LINK_TYPED( OnTableDoubleClicked, ListBox&, void );
     };
 
 

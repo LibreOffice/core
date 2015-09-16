@@ -920,7 +920,7 @@ bool SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
-        GetDoubleClickHdl().Call( NULL );
+        GetDoubleClickHdl().Call( *this );
         bHandled = true;
     }
 
@@ -1085,7 +1085,7 @@ IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
 
 IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, OpenHdl, Button*, void)
 {
-    m_pResultsLB->GetDoubleClickHdl().Call(m_pResultsLB);
+    m_pResultsLB->GetDoubleClickHdl().Call(*m_pResultsLB);
 }
 
 IMPL_LINK_NOARG(SearchTabPage_Impl, ModifyHdl)
@@ -1106,7 +1106,7 @@ Control* SearchTabPage_Impl::GetLastFocusControl()
     return m_pOpenBtn;
 }
 
-void SearchTabPage_Impl::SetDoubleClickHdl( const Link<>& rLink )
+void SearchTabPage_Impl::SetDoubleClickHdl( const Link<ListBox&,void>& rLink )
 {
     m_pResultsLB->SetDoubleClickHdl( rLink );
 }
@@ -1211,7 +1211,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
     switch ( nAction )
     {
         case MID_OPEN :
-            GetDoubleClickHdl().Call( NULL );
+            GetDoubleClickHdl().Call( *this );
             break;
 
         case MID_RENAME :
@@ -1271,7 +1271,7 @@ bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
         }
         else if ( KEY_RETURN == nCode )
         {
-            GetDoubleClickHdl().Call( NULL );
+            GetDoubleClickHdl().Call( *this );
             nRet = true;
         }
     }
@@ -1335,7 +1335,7 @@ void BookmarksTabPage_Impl::dispose()
 
 IMPL_LINK_NOARG_TYPED(BookmarksTabPage_Impl, OpenHdl, Button*, void)
 {
-    m_pBookmarksBox->GetDoubleClickHdl().Call(m_pBookmarksBox);
+    m_pBookmarksBox->GetDoubleClickHdl().Call(*m_pBookmarksBox);
 }
 
 void BookmarksTabPage_Impl::ActivatePage()
@@ -1349,7 +1349,7 @@ Control* BookmarksTabPage_Impl::GetLastFocusControl()
     return m_pBookmarksPB;
 }
 
-void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link<>& rLink )
+void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link<ListBox&,void>& rLink )
 {
     m_pBookmarksBox->SetDoubleClickHdl(rLink);
 }
@@ -1725,16 +1725,18 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link<>& rLink )
     aPageDoubleClickLink = rLink;
     if ( pIPage )
         pIPage->SetDoubleClickHdl( aPageDoubleClickLink );
-    if ( pSPage )
-        pSPage->SetDoubleClickHdl( aPageDoubleClickLink );
-    if ( pBPage )
-        pBPage->SetDoubleClickHdl( aPageDoubleClickLink );
 }
 
 IMPL_LINK_TYPED(SfxHelpIndexWindow_Impl, ContentTabPageDoubleClickHdl, SvTreeListBox*, p, bool)
 {
     return aPageDoubleClickLink.Call(p);
 }
+
+IMPL_LINK_TYPED(SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl, ListBox&, r, void)
+{
+    aPageDoubleClickLink.Call(&r);
+}
+
 
 void SfxHelpIndexWindow_Impl::SetFactory( const OUString& rFactory, bool bActive )
 {

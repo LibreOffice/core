@@ -31,7 +31,7 @@ private:
     VclPtr<VclFrame> m_pFrame;
     VclPtr<ListBox> m_pLb;
 
-    DECL_LINK( DblClkHdl, void * );
+    DECL_LINK_TYPED( DblClkHdl, ListBox&, void );
 
 public:
     ScShowTabDlg( vcl::Window* pParent );

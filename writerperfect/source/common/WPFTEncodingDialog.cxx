@@ -195,13 +195,12 @@ IMPL_LINK_NOARG_TYPED(WPFTEncodingDialog, CancelHdl, Button*, void)
     Close();
 }
 
-IMPL_LINK(WPFTEncodingDialog, DoubleClickHdl, ListBox *, pLb)
+IMPL_LINK_TYPED(WPFTEncodingDialog, DoubleClickHdl, ListBox&, rLb, void)
 {
-    if (pLb == m_pLbCharset)
+    if (&rLb == m_pLbCharset)
     {
         m_pBtnOk->Click();
     }
-    return 0;
 }
 
 void WPFTEncodingDialog::dispose()

@@ -494,13 +494,17 @@ void ThemePanel::dispose()
 
 IMPL_LINK_NOARG_TYPED(ThemePanel, ClickHdl, Button*, void)
 {
-    DoubleClickHdl(NULL);
+    DoubleClickHdl();
 }
 IMPL_LINK_NOARG_TYPED(ThemePanel, DoubleClickValueSetHdl, ValueSet*, void)
 {
-    DoubleClickHdl(NULL);
+    DoubleClickHdl();
 }
-IMPL_LINK_NOARG(ThemePanel, DoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(ThemePanel, DoubleClickHdl, ListBox&, void)
+{
+    DoubleClickHdl();
+}
+void ThemePanel::DoubleClickHdl()
 {
     SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     if (pDocSh)
@@ -513,7 +517,6 @@ IMPL_LINK_NOARG(ThemePanel, DoubleClickHdl)
 
         applyTheme(pDocSh->GetStyleSheetPool(), sEntryFonts, sEntryColors, aStyleSet, maColorSets);
     }
-    return 1;
 }
 
 void ThemePanel::NotifyItemUpdate(const sal_uInt16 /*nSId*/,

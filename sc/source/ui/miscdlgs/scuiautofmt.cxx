@@ -174,13 +174,12 @@ IMPL_LINK_TYPED( ScAutoFormatDlg, CloseHdl, Button *, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG(ScAutoFormatDlg, DblClkHdl)
+IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, DblClkHdl, ListBox&, void)
 {
     if ( bCoreDataChanged )
         ScGlobal::GetOrCreateAutoFormat()->Save();
 
     EndDialog( RET_OK );
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScAutoFormatDlg, CheckHdl, Button *, pBtn, void )

@@ -230,13 +230,18 @@ IMPL_LINK_TYPED( SwCondCollPage, OnOffHdl, Button*, pBox, void )
 
 IMPL_LINK_TYPED( SwCondCollPage, AssignRemoveClickHdl, Button*, pBtn, void)
 {
-    AssignRemoveHdl(pBtn);
+    AssignRemove(pBtn);
 }
 IMPL_LINK_TYPED( SwCondCollPage, AssignRemoveTreeListBoxHdl, SvTreeListBox*, pBtn, bool)
 {
-    return AssignRemoveHdl(pBtn) != 0;
+    AssignRemove(pBtn);
+    return false;
 }
-IMPL_LINK( SwCondCollPage, AssignRemoveHdl, void*, pBtn)
+IMPL_LINK_TYPED( SwCondCollPage, AssignRemoveHdl, ListBox&, rBox, void)
+{
+    AssignRemove(&rBox);
+}
+void SwCondCollPage::AssignRemove(void* pBtn)
 {
     SvTreeListEntry* pE = m_pTbLinks->FirstSelected();
     sal_uLong nPos;
@@ -244,7 +249,7 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, void*, pBtn)
         ( nPos = m_pTbLinks->GetModel()->GetAbsPos( pE ) ) )
     {
         OSL_ENSURE( pE, "where's the empty entry from?" );
-        return 0;
+        return;
     }
 
     OUString sSel = m_aStrArr[nPos] + "\t";
@@ -261,7 +266,6 @@ IMPL_LINK( SwCondCollPage, AssignRemoveHdl, void*, pBtn)
     m_pTbLinks->Select(pE);
     m_pTbLinks->MakeVisible(pE);
     m_pTbLinks->SetUpdateMode(true);
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwCondCollPage, SelectTreeListBoxHdl, SvTreeListBox*, pBox, void)

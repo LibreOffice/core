@@ -54,9 +54,10 @@ protected:
     SwField*            GetCurField()               { return m_pCurField;}
     SwWrtShell*         GetWrtShell() { return m_pWrtShell;}
 
-    DECL_LINK( InsertHdl, void * = 0);
-    DECL_LINK_TYPED( TreeListBoxInsertHdl, SvTreeListBox*, bool);
-    DECL_LINK(NumFormatHdl, void *);
+    DECL_LINK_TYPED( ListBoxInsertHdl, ListBox&, void );
+    DECL_LINK_TYPED( TreeListBoxInsertHdl, SvTreeListBox*, bool );
+    DECL_LINK_TYPED( NumFormatHdl, ListBox&, void );
+    void                InsertHdl(void *);
 
     void                Init();
     void                SavePos( const ListBox* pLst1,

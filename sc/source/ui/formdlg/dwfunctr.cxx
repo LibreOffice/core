@@ -129,8 +129,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     aFuncList->SetSelectHdl(aLink);
     aDDFuncList->SetSelectHdl(aLink);
 
-    Link<> a2Link=LINK( this, ScFunctionDockWin, SetSelectionHdl);
-    aFuncList->SetDoubleClickHdl(a2Link);
+    aFuncList->SetDoubleClickHdl(LINK( this, ScFunctionDockWin, SetSelectionHdl));
     aDDFuncList->SetSelectHdl(aLink);
     aInsertButton->SetClickHdl(LINK( this, ScFunctionDockWin, SetSelectionClickHdl));
 
@@ -955,19 +954,13 @@ IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
 #*
 #************************************************************************/
 
-IMPL_LINK_TYPED( ScFunctionDockWin, SetSelectionClickHdl, Button*, pCtrl, void )
+IMPL_LINK_NOARG_TYPED( ScFunctionDockWin, SetSelectionClickHdl, Button*, void )
 {
-    SetSelectionHdl(pCtrl);
+    DoEnter();          // Uebernimmt die Eingabe
 }
-IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
+IMPL_LINK_NOARG_TYPED( ScFunctionDockWin, SetSelectionHdl, ListBox&, void )
 {
-    if (static_cast<ImageButton *>(pCtrl) == aInsertButton.get() ||
-        static_cast<ListBox *>(pCtrl) == aFuncList.get())
-    {
-        DoEnter();          // Uebernimmt die Eingabe
-    }
-
-    return 0;
+    DoEnter();          // Uebernimmt die Eingabe
 }
 
 /*************************************************************************

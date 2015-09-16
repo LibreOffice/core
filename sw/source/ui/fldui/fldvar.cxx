@@ -160,12 +160,12 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
     // select old Pos
     RestorePos(m_pTypeLB);
 
-    m_pTypeLB->SetDoubleClickHdl       (LINK(this, SwFieldVarPage, InsertHdl));
+    m_pTypeLB->SetDoubleClickHdl       (LINK(this, SwFieldVarPage, ListBoxInsertHdl));
     m_pTypeLB->SetSelectHdl            (LINK(this, SwFieldVarPage, TypeHdl));
     m_pSelectionLB->SetSelectHdl       (LINK(this, SwFieldVarPage, SubTypeHdl));
-    m_pSelectionLB->SetDoubleClickHdl  (LINK(this, SwFieldVarPage, InsertHdl));
-    m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFieldVarPage, InsertHdl));
-    m_pNumFormatLB->SetDoubleClickHdl  (LINK(this, SwFieldVarPage, InsertHdl));
+    m_pSelectionLB->SetDoubleClickHdl  (LINK(this, SwFieldVarPage, ListBoxInsertHdl));
+    m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFieldVarPage, ListBoxInsertHdl));
+    m_pNumFormatLB->SetDoubleClickHdl  (LINK(this, SwFieldVarPage, ListBoxInsertHdl));
     m_pNameED->SetModifyHdl            (LINK(this, SwFieldVarPage, ModifyHdl));
     m_pValueED->SetModifyHdl           (LINK(this, SwFieldVarPage, ModifyHdl));
     m_pNewDelTBX->SetClickHdl          (LINK(this, SwFieldVarPage, TBClickHdl));

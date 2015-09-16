@@ -101,10 +101,9 @@ InsertObjectDialog_Impl::InsertObjectDialog_Impl(vcl::Window * pParent, const OU
 
 
 
-IMPL_LINK_NOARG(SvInsertOleDlg, DoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, DoubleClickHdl, ListBox&, void)
 {
     EndDialog( RET_OK );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, BrowseHdl, Button*, void)

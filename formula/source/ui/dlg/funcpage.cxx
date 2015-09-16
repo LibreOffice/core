@@ -180,10 +180,9 @@ IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
     return 0;
 }
 
-IMPL_LINK_NOARG(FuncPage, DblClkHdl)
+IMPL_LINK_NOARG_TYPED(FuncPage, DblClkHdl, ListBox&, void)
 {
     aDoubleClickLink.Call(this);
-    return 0;
 }
 
 void FuncPage::SetCategory(sal_Int32 nCat)

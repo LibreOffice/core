@@ -75,7 +75,7 @@ private:
     sal_Int32 FindBaseItemPos( const OUString& rEntry, sal_Int32 nStartPos ) const;
 
     DECL_LINK( SelectHdl, ListBox* );
-    DECL_LINK( DblClickHdl, void* );
+    DECL_LINK_TYPED( DblClickHdl, ListBox&, void );
 
 private:
     VclPtr<ScDPFunctionListBox> mpLbFunc;
@@ -111,8 +111,8 @@ public:
 private:
     void                Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
-    DECL_LINK(DblClickHdl, void *);
-    DECL_LINK_TYPED( RadioClickHdl, Button* , void);
+    DECL_LINK_TYPED( DblClickHdl, ListBox&, void );
+    DECL_LINK_TYPED( RadioClickHdl, Button*, void );
     DECL_LINK_TYPED( ClickHdl, Button*, void );
 
 private:
@@ -202,7 +202,7 @@ public:
     OUString GetDimensionName() const;
 
 private:
-    DECL_LINK( DblClickHdl, ListBox* );
+    DECL_LINK_TYPED( DblClickHdl, ListBox&, void );
 
 private:
     VclPtr<ListBox>            mpLbDims;

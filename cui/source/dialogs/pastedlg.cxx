@@ -82,12 +82,9 @@ IMPL_LINK( SvPasteObjectDialog, SelectHdl, ListBox *, pListBox )
     return 0;
 }
 
-IMPL_LINK( SvPasteObjectDialog, DoubleClickHdl, ListBox *, pListBox )
+IMPL_LINK_NOARG_TYPED( SvPasteObjectDialog, DoubleClickHdl, ListBox&, void )
 {
-    (void)pListBox;
-
     EndDialog( RET_OK );
-    return 0;
 }
 
 /*************************************************************************

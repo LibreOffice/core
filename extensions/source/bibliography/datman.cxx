@@ -474,7 +474,7 @@ class DBChangeDialog_Impl : public ModalDialog
 
     BibDataManager* pDatMan;
 
-    DECL_LINK(DoubleClickHdl, SvTabListBox*);
+    DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
 public:
     DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* pMan );
     virtual ~DBChangeDialog_Impl();
@@ -513,10 +513,9 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(vcl::Window* pParent, BibDataManager* p
     }
 }
 
-IMPL_LINK(DBChangeDialog_Impl, DoubleClickHdl, SvTabListBox*, /*pLB*/)
+IMPL_LINK_NOARG_TYPED(DBChangeDialog_Impl, DoubleClickHdl, ListBox&, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 DBChangeDialog_Impl::~DBChangeDialog_Impl()

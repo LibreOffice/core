@@ -73,8 +73,9 @@ private:
     svx::ColorSets maColorSets;
 
     DECL_LINK_TYPED(ClickHdl, Button*, void);
-    DECL_LINK(DoubleClickHdl, void*);
+    DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
     DECL_LINK_TYPED(DoubleClickValueSetHdl, ValueSet*, void);
+    void DoubleClickHdl();
 
 };
 

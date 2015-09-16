@@ -46,10 +46,9 @@ void SwSelGlossaryDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK(SwSelGlossaryDlg, DoubleClickHdl, ListBox*, /*pBox*/)
+IMPL_LINK_NOARG_TYPED(SwSelGlossaryDlg, DoubleClickHdl, ListBox&, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

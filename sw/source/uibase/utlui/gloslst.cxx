@@ -54,7 +54,7 @@ class SwGlossDecideDlg : public ModalDialog
     VclPtr<OKButton> m_pOk;
     VclPtr<ListBox>  m_pListLB;
 
-    DECL_LINK(DoubleClickHdl, void*);
+    DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
     DECL_LINK(SelectHdl, void*);
 
 public:
@@ -88,10 +88,9 @@ void SwGlossDecideDlg::dispose()
     ModalDialog::dispose();
 }
 
-IMPL_LINK_NOARG(SwGlossDecideDlg, DoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(SwGlossDecideDlg, DoubleClickHdl, ListBox&, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl)

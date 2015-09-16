@@ -109,7 +109,7 @@ private:
 class AssistentDlgImpl : public SfxListener
 {
 public:
-    AssistentDlgImpl( vcl::Window* pWindow, const Link<>& rFinishLink, bool bAutoPilot  );
+    AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,void>& rFinishLink, bool bAutoPilot  );
     virtual ~AssistentDlgImpl();
 
     /// Local mutex used to serialize concurrent method calls.
@@ -319,7 +319,7 @@ public:
 
 };
 
-AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<>& rFinishLink, bool bAutoPilot ) :
+AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,void>& rFinishLink, bool bAutoPilot ) :
     mpTemplateRegion(NULL),
     mpLayoutRegion(NULL),
     mbUserDataDirty(false),
@@ -1101,11 +1101,11 @@ IMPL_LINK_NOARG(AssistentDlgImpl, SelectEffectHdl)
     return 0;
 }
 
-IMPL_LINK_TYPED( AssistentDlgImpl, OpenButtonHdl, Button*, pButton, void )
+IMPL_LINK_NOARG_TYPED( AssistentDlgImpl, OpenButtonHdl, Button*, void )
 {
     // Clear the selection and forward the call.
     mpPage1OpenLB->SetNoSelection();
-    mpPage1OpenLB->GetDoubleClickHdl().Call(pButton);
+    mpPage1OpenLB->GetDoubleClickHdl().Call(*mpPage1OpenLB);
 }
 
 IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, EffectPreviewIdleHdl, Idle *, void)
@@ -1723,15 +1723,20 @@ AssistentDlg::AssistentDlg(vcl::Window* pParent, bool bAutoPilot) :
     mpImpl = new AssistentDlgImpl( this, LINK(this,AssistentDlg, FinishHdl2), bAutoPilot );
 
     // button assignment
-    mpImpl->mpFinishButton->SetClickHdl(LINK(this,AssistentDlg,FinishHdl));
+    mpImpl->mpFinishButton->SetClickHdl( LINK(this,AssistentDlg,FinishHdl) );
 }
 
 IMPL_LINK_NOARG_TYPED(AssistentDlg, FinishHdl, Button*, void)
 {
-    FinishHdl2(NULL);
+    FinishHdl();
 }
 
-IMPL_LINK_NOARG(AssistentDlg, FinishHdl2)
+IMPL_LINK_NOARG_TYPED(AssistentDlg, FinishHdl2, ListBox&, void)
+{
+    FinishHdl();
+}
+
+void AssistentDlg::FinishHdl()
 {
     if( GetStartType() == ST_OPEN )
     {
@@ -1746,7 +1751,7 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl2)
             if ( aFileDlg.Execute() == ERRCODE_NONE )
                 aFileToOpen = aFileDlg.GetPath();
             if (aFileToOpen.isEmpty())
-                return 1;
+                return;
             else
             {
                 //add the selected file to the recent-file-listbox and select the new entry
@@ -1764,7 +1769,6 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl2)
     // end
     mpImpl->EndDialog(RET_OK);
     EndDialog(RET_OK);
-    return 0;
 }
 
 AssistentDlg::~AssistentDlg()

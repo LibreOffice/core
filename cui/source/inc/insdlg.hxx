@@ -69,7 +69,7 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     css::uno::Sequence< sal_Int8 > m_aIconMetaFile;
     OUString m_aIconMediaType;
 
-    DECL_LINK(DoubleClickHdl, void*);
+    DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
     DECL_LINK_TYPED(BrowseHdl, Button*, void);
     DECL_LINK_TYPED(RadioHdl, Button*, void);
     void SelectDefault();

@@ -307,11 +307,10 @@ namespace dbp
     }
 
 
-    IMPL_LINK( OContentTableSelection, OnTableDoubleClicked, ListBox*, _pListBox )
+    IMPL_LINK_TYPED( OContentTableSelection, OnTableDoubleClicked, ListBox&, _rListBox, void )
     {
-        if (_pListBox->GetSelectEntryCount())
+        if (_rListBox.GetSelectEntryCount())
             getDialog()->travelNext();
-        return 0L;
     }
 
 
@@ -403,11 +402,10 @@ namespace dbp
     }
 
 
-    IMPL_LINK( OContentFieldSelection, OnTableDoubleClicked, ListBox*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG_TYPED( OContentFieldSelection, OnTableDoubleClicked, ListBox&, void )
     {
         if (m_pSelectTableField->GetSelectEntryCount())
             getDialog()->travelNext();
-        return 0L;
     }
 
 

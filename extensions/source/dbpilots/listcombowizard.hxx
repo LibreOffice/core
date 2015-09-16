@@ -115,7 +115,7 @@ namespace dbp
         virtual bool        canAdvance() const SAL_OVERRIDE;
 
     protected:
-        DECL_LINK( OnTableDoubleClicked, ListBox* );
+        DECL_LINK_TYPED( OnTableDoubleClicked, ListBox&, void );
         DECL_LINK( OnTableSelected, ListBox* );
     };
 
@@ -134,7 +134,7 @@ namespace dbp
 
     protected:
         DECL_LINK( OnFieldSelected, ListBox* );
-        DECL_LINK( OnTableDoubleClicked, ListBox* );
+        DECL_LINK_TYPED( OnTableDoubleClicked, ListBox&, void );
 
         // TabPage overridables
         virtual void ActivatePage() SAL_OVERRIDE;

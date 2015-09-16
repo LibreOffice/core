@@ -67,8 +67,8 @@ SwFieldDokPage::SwFieldDokPage(vcl::Window* pParent, const SfxItemSet& rCoreSet 
     m_pSelectionLB->set_width_request(nWidth);
     m_pFormatLB->set_width_request(nWidth);
 
-    m_pSelectionLB->SetDoubleClickHdl(LINK(this, SwFieldDokPage, InsertHdl));
-    m_pFormatLB->SetDoubleClickHdl(LINK(this, SwFieldDokPage, InsertHdl));
+    m_pSelectionLB->SetDoubleClickHdl(LINK(this, SwFieldDokPage, ListBoxInsertHdl));
+    m_pFormatLB->SetDoubleClickHdl(LINK(this, SwFieldDokPage, ListBoxInsertHdl));
     m_pNumFormatLB->SetDoubleClickHdl(LINK(this, SwFieldDokPage, NumFormatHdl));
 
     m_pLevelED->SetMax(MAXLEVEL);
@@ -170,7 +170,7 @@ void SwFieldDokPage::Reset(const SfxItemSet* )
     RestorePos(m_pTypeLB);
 
     m_pTypeLB->SetUpdateMode(true);
-    m_pTypeLB->SetDoubleClickHdl(LINK(this, SwFieldDokPage, InsertHdl));
+    m_pTypeLB->SetDoubleClickHdl(LINK(this, SwFieldDokPage, ListBoxInsertHdl));
     m_pTypeLB->SetSelectHdl(LINK(this, SwFieldDokPage, TypeHdl));
     m_pFormatLB->SetSelectHdl(LINK(this, SwFieldDokPage, FormatHdl));
 

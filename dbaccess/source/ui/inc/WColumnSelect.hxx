@@ -43,7 +43,7 @@ namespace dbaui
         VclPtr<ListBox>      m_pNewColumnNames; // right side
 
         DECL_LINK_TYPED( ButtonClickHdl, Button *, void );
-        DECL_LINK( ListDoubleClickHdl, ListBox * );
+        DECL_LINK_TYPED( ListDoubleClickHdl, ListBox&, void );
 
         static void clearListBox(ListBox& _rListBox);
         static void fillColumns( ListBox* pRight,

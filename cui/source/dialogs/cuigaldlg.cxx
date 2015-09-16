@@ -1210,7 +1210,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl)
 
 
 
-IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl)
+IMPL_LINK_NOARG_TYPED(TPGalleryThemeProperties, DClickFoundHdl, ListBox&, void)
 {
     if( bInputAllowed )
     {
@@ -1219,7 +1219,6 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl)
         if (m_pLbxFound->GetSelectEntryCount() == 1 && bEntriesFound)
             ClickTakeHdl(NULL);
     }
-    return 0;
 }
 
 

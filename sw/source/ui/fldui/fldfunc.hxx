@@ -68,7 +68,7 @@ class SwFieldFuncPage : public SwFieldPage
 
     DECL_LINK(TypeHdl, void *);
     DECL_LINK(SelectHdl, void *);
-    DECL_LINK(InsertMacroHdl, void *);
+    DECL_LINK_TYPED(InsertMacroHdl, ListBox&, void);
     DECL_LINK(ModifyHdl, void *);
     DECL_LINK(ListModifyReturnActionHdl, Control *);
     DECL_LINK_TYPED( ListModifyHdl, Button*, void);

@@ -162,11 +162,11 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
     // select old Pos
     RestorePos(m_pTypeLB);
 
-    m_pTypeLB->SetDoubleClickHdl       (LINK(this, SwFieldFuncPage, InsertHdl));
+    m_pTypeLB->SetDoubleClickHdl       (LINK(this, SwFieldFuncPage, ListBoxInsertHdl));
     m_pTypeLB->SetSelectHdl            (LINK(this, SwFieldFuncPage, TypeHdl));
     m_pSelectionLB->SetSelectHdl       (LINK(this, SwFieldFuncPage, SelectHdl));
     m_pSelectionLB->SetDoubleClickHdl  (LINK(this, SwFieldFuncPage, InsertMacroHdl));
-    m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFieldFuncPage, InsertHdl));
+    m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFieldFuncPage, ListBoxInsertHdl));
     m_pMacroBT->SetClickHdl            (LINK(this, SwFieldFuncPage, MacroHdl));
     Link<Button*,void> aListModifyLk( LINK(this, SwFieldFuncPage, ListModifyHdl));
     m_pListAddPB->SetClickHdl(aListModifyLk);
@@ -415,12 +415,10 @@ IMPL_LINK_NOARG(SwFieldFuncPage, SelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwFieldFuncPage, InsertMacroHdl)
+IMPL_LINK_NOARG_TYPED(SwFieldFuncPage, InsertMacroHdl, ListBox&, void)
 {
     SelectHdl(NULL);
-    InsertHdl();
-
-    return 0;
+    InsertHdl(nullptr);
 }
 
 IMPL_LINK_TYPED( SwFieldFuncPage, ListModifyHdl, Button*, pControl, void)

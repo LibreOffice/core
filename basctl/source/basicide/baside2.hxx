@@ -495,7 +495,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
     void InsertSelectedEntry(); //insert the selected entry
 
-    DECL_LINK(ImplDoubleClickHdl, void*);
+    DECL_LINK_TYPED(ImplDoubleClickHdl, ListBox&, void);
     DECL_LINK(ImplSelectHdl, void*);
 
 protected:

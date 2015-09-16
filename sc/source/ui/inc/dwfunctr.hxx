@@ -81,7 +81,7 @@ private:
     void            SetMyHeightToBo(Size &aNewSize);
     void            UseSplitterInitPos();
 
-                    DECL_LINK( SetSelectionHdl, void* );
+                    DECL_LINK_TYPED( SetSelectionHdl, ListBox&, void );
                     DECL_LINK_TYPED( SetSelectionClickHdl, Button*, void );
                     DECL_LINK( SelHdl, ListBox* );
                     DECL_LINK(SetSplitHdl,ScPrivatSplit*);

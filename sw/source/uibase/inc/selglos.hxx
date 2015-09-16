@@ -31,7 +31,7 @@ class SwSelGlossaryDlg : public ModalDialog
 protected:
     VclPtr<ListBox>  m_pGlosBox;
 
-    DECL_LINK(DoubleClickHdl, ListBox*);
+    DECL_LINK_TYPED(DoubleClickHdl, ListBox&, void);
 public:
     SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName);
     virtual ~SwSelGlossaryDlg();

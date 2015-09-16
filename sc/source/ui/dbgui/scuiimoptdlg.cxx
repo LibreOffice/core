@@ -316,13 +316,12 @@ IMPL_LINK_TYPED( ScImportOptionsDlg, FixedWidthHdl, Button*, pCheckBox, void )
     }
 }
 
-IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox*, pLb )
+IMPL_LINK_TYPED( ScImportOptionsDlg, DoubleClickHdl, ListBox&, rLb, void )
 {
-    if (pLb == m_pLbCharset)
+    if (&rLb == m_pLbCharset)
     {
         m_pBtnOk->Click();
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

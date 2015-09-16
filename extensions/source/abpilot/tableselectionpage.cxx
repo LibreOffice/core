@@ -86,12 +86,10 @@ namespace abp
     }
 
 
-    IMPL_LINK( TableSelectionPage, OnTableDoubleClicked, void*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG_TYPED( TableSelectionPage, OnTableDoubleClicked, ListBox&, void )
     {
         if ( 1 == m_pTableList->GetSelectEntryCount() )
             getDialog()->travelNext();
-
-        return 0L;
     }
 
 

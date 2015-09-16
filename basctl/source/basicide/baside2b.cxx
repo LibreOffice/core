@@ -2642,10 +2642,9 @@ void CodeCompleteListBox::dispose()
     ListBox::dispose();
 }
 
-IMPL_LINK_NOARG(CodeCompleteListBox, ImplDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(CodeCompleteListBox, ImplDoubleClickHdl, ListBox&, void)
 {
     InsertSelectedEntry();
-    return 0;
 }
 
 IMPL_LINK_NOARG(CodeCompleteListBox, ImplSelectHdl)

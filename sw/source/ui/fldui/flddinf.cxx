@@ -208,8 +208,8 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     m_pTypeTLB->SetSelectHdl(LINK(this, SwFieldDokInfPage, TypeHdl));
     m_pTypeTLB->SetDoubleClickHdl(LINK(this, SwFieldDokInfPage, TreeListBoxInsertHdl));
     m_pSelectionLB->SetSelectHdl(LINK(this, SwFieldDokInfPage, SubTypeHdl));
-    m_pSelectionLB->SetDoubleClickHdl(LINK(this, SwFieldDokInfPage, InsertHdl));
-    m_pFormatLB->SetDoubleClickHdl(LINK(this, SwFieldDokInfPage, InsertHdl));
+    m_pSelectionLB->SetDoubleClickHdl(LINK(this, SwFieldDokInfPage, ListBoxInsertHdl));
+    m_pFormatLB->SetDoubleClickHdl(LINK(this, SwFieldDokInfPage, ListBoxInsertHdl));
 
     if (IsFieldEdit())
     {

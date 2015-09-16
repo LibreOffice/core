@@ -217,11 +217,10 @@ namespace dbp
         }
     }
 
-    IMPL_LINK( OTableSelectionPage, OnListboxDoubleClicked, ListBox*, _pBox )
+    IMPL_LINK_TYPED( OTableSelectionPage, OnListboxDoubleClicked, ListBox&, _rBox, void )
     {
-        if (_pBox->GetSelectEntryCount())
+        if (_rBox.GetSelectEntryCount())
             getDialog()->travelNext();
-        return 0L;
     }
 
 

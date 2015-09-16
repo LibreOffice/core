@@ -227,15 +227,15 @@ public:
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
-    void                SetDoubleClickHdl( const Link<>& rLink );
+    void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink );
     inline void         SetFactory( const OUString& rFactory ) { aFactory = rFactory; }
     OUString            GetSelectEntry() const;
     void                ClearPage();
     inline void         SetFocusOnBox() { m_pResultsLB->GrabFocus(); }
-    inline bool     HasFocusOnEdit() const { return m_pSearchED->HasChildPathFocus(); }
+    inline bool         HasFocusOnEdit() const { return m_pSearchED->HasChildPathFocus(); }
     inline OUString     GetSearchText() const { return m_pSearchED->GetText(); }
-    inline bool     IsFullWordSearch() const { return m_pFullWordsCB->IsChecked(); }
-    bool            OpenKeyword( const OUString& rKeyword );
+    inline bool         IsFullWordSearch() const { return m_pFullWordsCB->IsChecked(); }
+    bool                OpenKeyword( const OUString& rKeyword );
 };
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -269,7 +269,7 @@ public:
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual Control*    GetLastFocusControl() SAL_OVERRIDE;
 
-    void                SetDoubleClickHdl( const Link<>& rLink );
+    void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink );
     OUString            GetSelectEntry() const;
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
     void                SetFocusOnBox() { m_pBookmarksBox->GrabFocus(); }
@@ -318,6 +318,7 @@ private:
     DECL_LINK_TYPED(SelectFactoryHdl, Idle *, void);
     DECL_LINK_TYPED(KeywordHdl, IndexTabPage_Impl&, void);
     DECL_LINK_TYPED(ContentTabPageDoubleClickHdl, SvTreeListBox*, bool);
+    DECL_LINK_TYPED(TabPageDoubleClickHdl, ListBox&, void);
 
 public:
     SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
@@ -374,7 +375,7 @@ SearchTabPage_Impl* SfxHelpIndexWindow_Impl::GetSearchPage()
     if ( !pSPage )
     {
         pSPage = VclPtr<SearchTabPage_Impl>::Create( m_pTabCtrl, this );
-        pSPage->SetDoubleClickHdl( aPageDoubleClickLink );
+        pSPage->SetDoubleClickHdl( LINK(this, SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl) );
     }
     return pSPage;
 }
@@ -384,7 +385,7 @@ BookmarksTabPage_Impl* SfxHelpIndexWindow_Impl::GetBookmarksPage()
     if ( !pBPage )
     {
         pBPage = VclPtr<BookmarksTabPage_Impl>::Create( m_pTabCtrl, this );
-        pBPage->SetDoubleClickHdl( aPageDoubleClickLink );
+        pBPage->SetDoubleClickHdl( LINK(this, SfxHelpIndexWindow_Impl, TabPageDoubleClickHdl) );
     }
     return pBPage;
 }

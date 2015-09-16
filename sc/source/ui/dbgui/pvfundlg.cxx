@@ -420,10 +420,9 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox*, pLBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl)
+IMPL_LINK_NOARG_TYPED(ScDPFunctionDlg, DblClickHdl, ListBox&, void)
 {
     mpBtnOk->Click();
-    return 0;
 }
 
 ScDPSubtotalDlg::ScDPSubtotalDlg( vcl::Window* pParent, ScDPObject& rDPObj,
@@ -528,10 +527,9 @@ IMPL_LINK_TYPED( ScDPSubtotalDlg, RadioClickHdl, Button*, pBtn, void )
     mpLbFunc->Enable( pBtn == mpRbUser );
 }
 
-IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl)
+IMPL_LINK_NOARG_TYPED(ScDPSubtotalDlg, DblClickHdl, ListBox&, void)
 {
     mpBtnOk->Click();
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScDPSubtotalDlg, ClickHdl, Button*, pBtn, void )
@@ -892,11 +890,10 @@ OUString ScDPShowDetailDlg::GetDimensionName() const
     return mrDPObj.GetDimName(nDim, bIsDataLayout);
 }
 
-IMPL_LINK( ScDPShowDetailDlg, DblClickHdl, ListBox*, pLBox )
+IMPL_LINK_TYPED( ScDPShowDetailDlg, DblClickHdl, ListBox&, rLBox, void )
 {
-    if( pLBox == mpLbDims )
+    if( &rLBox == mpLbDims )
         mpBtnOk->Click();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

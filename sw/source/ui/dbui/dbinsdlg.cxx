@@ -640,20 +640,18 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableToFromHdl, Button*, pButton, void 
     m_pLbTableCol->SetUpdateMode( true );
 }
 
-IMPL_LINK( SwInsertDBColAutoPilot, DblClickHdl, ListBox*, pBox )
+IMPL_LINK_TYPED( SwInsertDBColAutoPilot, DblClickHdl, ListBox&, rBox, void )
 {
     Button* pButton = 0;
-    if( pBox == m_pLbTextDbColumn )
+    if( &rBox == m_pLbTextDbColumn )
         pButton = m_pIbDbcolToEdit;
-    else if( pBox == m_pLbTableDbColumn && m_pIbDbcolOneTo->IsEnabled() )
+    else if( &rBox == m_pLbTableDbColumn && m_pIbDbcolOneTo->IsEnabled() )
         pButton = m_pIbDbcolOneTo;
-    else if( pBox == m_pLbTableCol && m_pIbDbcolOneFrom->IsEnabled() )
+    else if( &rBox == m_pLbTableCol && m_pIbDbcolOneFrom->IsEnabled() )
         pButton = m_pIbDbcolOneFrom;
 
     if( pButton )
         TableToFromHdl( pButton );
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )

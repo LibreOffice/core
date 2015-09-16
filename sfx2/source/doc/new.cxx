@@ -149,7 +149,7 @@ class SfxNewFileDialog_Impl
 
     DECL_LINK(RegionSelect, ListBox*);
     DECL_LINK(TemplateSelect, void*);
-    DECL_LINK(DoubleClick, ListBox*);
+    DECL_LINK_TYPED(DoubleClick, ListBox&, void);
     DECL_LINK(Expand, void*);
     DECL_LINK_TYPED(LoadFile, Button*, void);
     sal_uInt16  GetSelectedTemplatePos() const;
@@ -283,13 +283,11 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
     return 0;
 }
 
-IMPL_LINK( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
+IMPL_LINK_NOARG_TYPED( SfxNewFileDialog_Impl, DoubleClick, ListBox&, void )
 {
-    (void)pListBox;
     // Still loadning
     if ( !xDocShell.Is() || !xDocShell->GetProgress() )
         pAntiImpl->EndDialog(RET_OK);
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, LoadFile, Button*, void)

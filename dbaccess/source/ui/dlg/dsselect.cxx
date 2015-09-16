@@ -84,11 +84,10 @@ void ODatasourceSelectDialog::dispose()
 }
 
 
-IMPL_LINK( ODatasourceSelectDialog, ListDblClickHdl, ListBox *, pListBox )
+IMPL_LINK_TYPED( ODatasourceSelectDialog, ListDblClickHdl, ListBox&, rListBox, void )
 {
-    if (pListBox->GetSelectEntryCount())
+    if (rListBox.GetSelectEntryCount())
         EndDialog(RET_OK);
-    return 0;
 }
 
 bool ODatasourceSelectDialog::Close()

@@ -75,7 +75,7 @@ private:
 
     void impl_addFunctions(const IFunctionCategory* _pCategory);
                     DECL_LINK( SelHdl, ListBox* );
-                    DECL_LINK(DblClkHdl, void *);
+                    DECL_LINK_TYPED(DblClkHdl, ListBox&, void);
 
 protected:
 

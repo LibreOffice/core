@@ -569,10 +569,9 @@ OUString SpellDialog::getReplacementString() const
 
 
 
-IMPL_LINK_NOARG(SpellDialog, DoubleClickChangeHdl)
+IMPL_LINK_NOARG_TYPED(SpellDialog, DoubleClickChangeHdl, ListBox&, void)
 {
     ChangeHdl(NULL);
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SpellDialog, ChangeHdl, Button*, void)

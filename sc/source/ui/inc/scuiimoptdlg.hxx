@@ -62,7 +62,7 @@ private:
     sal_uInt16 GetCodeFromCombo( const ComboBox& rEd ) const;
 
     DECL_LINK_TYPED( FixedWidthHdl, Button*, void );
-    DECL_LINK( DoubleClickHdl, ListBox* );
+    DECL_LINK_TYPED( DoubleClickHdl, ListBox&, void );
 };
 
 #endif

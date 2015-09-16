@@ -67,7 +67,7 @@ class SwNumNamesDlg : public ModalDialog
 
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( SelectHdl, ListBox * );
-    DECL_LINK(DoubleClickHdl, void *);
+    DECL_LINK_TYPED( DoubleClickHdl, ListBox&, void );
 
 public:
     explicit SwNumNamesDlg(vcl::Window *pParent);
@@ -129,10 +129,9 @@ IMPL_LINK( SwNumNamesDlg, ModifyHdl, Edit *, pBox )
 }
 
 // DoubleClickHdl
-IMPL_LINK_NOARG(SwNumNamesDlg, DoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(SwNumNamesDlg, DoubleClickHdl, ListBox&, void)
 {
     EndDialog(RET_OK);
-    return 0;
 }
 
 SwNumNamesDlg::SwNumNamesDlg(vcl::Window *pParent)

@@ -3792,7 +3792,7 @@ IMPL_LINK_NOARG_TYPED(SwTOXStylesTabPage, StdHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SwTOXStylesTabPage, DoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(SwTOXStylesTabPage, DoubleClickHdl, ListBox&, void)
 {
     const OUString aTmpName( m_pParaLayLB->GetSelectEntry() );
     SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();
@@ -3800,7 +3800,6 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, DoubleClickHdl)
     if(m_pParaLayLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
        (m_pLevelLB->GetSelectEntryPos() == 0 || SwMultiTOXTabDialog::IsNoNum(rSh, aTmpName)))
         AssignHdl(m_pAssignBT);
-    return 0;
 }
 
 // enable only when selected

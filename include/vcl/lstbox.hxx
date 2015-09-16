@@ -45,7 +45,7 @@ private:
     sal_Int32                   mnSaveValue;
     sal_Int32                   m_nMaxWidthChars;
     Link<>                      maSelectHdl;
-    Link<>                      maDoubleClickHdl;
+    Link<ListBox&,void>         maDoubleClickHdl;
     sal_uInt16                  mnLineCount;
 
     /// bitfield
@@ -193,8 +193,8 @@ public:
 
     void                SetSelectHdl( const Link<>& rLink )     { maSelectHdl = rLink; }
     const Link<>&       GetSelectHdl() const                    { return maSelectHdl; }
-    void                SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
-    const Link<>&       GetDoubleClickHdl() const               { return maDoubleClickHdl; }
+    void                SetDoubleClickHdl( const Link<ListBox&,void>& rLink ) { maDoubleClickHdl = rLink; }
+    const Link<ListBox&,void>& GetDoubleClickHdl() const               { return maDoubleClickHdl; }
 
     Size                CalcSubEditSize() const;    //size of area inside lstbox, i.e. no scrollbar/dropdown
     Size                CalcMinimumSize() const;    //size of lstbox area, i.e. including scrollbar/dropdown

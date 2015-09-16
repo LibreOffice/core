@@ -184,7 +184,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
 
     m_pTypeLB->SetUpdateMode(true);
     m_pTypeLB->SetSelectHdl(LINK(this, SwFieldDBPage, TypeHdl));
-    m_pTypeLB->SetDoubleClickHdl(LINK(this, SwFieldDBPage, InsertHdl));
+    m_pTypeLB->SetDoubleClickHdl(LINK(this, SwFieldDBPage, ListBoxInsertHdl));
 
     if (IsFieldEdit())
     {

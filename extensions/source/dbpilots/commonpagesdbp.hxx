@@ -55,7 +55,7 @@ namespace dbp
 
     protected:
         DECL_LINK( OnListboxSelection, ListBox* );
-        DECL_LINK( OnListboxDoubleClicked, ListBox* );
+        DECL_LINK_TYPED( OnListboxDoubleClicked, ListBox&, void );
         DECL_LINK_TYPED( OnSearchClicked, Button*, void );
 
         void implCollectDatasource();

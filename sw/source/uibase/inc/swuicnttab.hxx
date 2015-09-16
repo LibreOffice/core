@@ -465,11 +465,11 @@ class SwTOXStylesTabPage : public SfxTabPage
 
     SwForm*         m_pCurrentForm;
 
-    DECL_LINK_TYPED( EditStyleHdl, Button *, void);
-    DECL_LINK_TYPED(StdHdl, Button*, void);
+    DECL_LINK_TYPED( EditStyleHdl, Button *, void );
+    DECL_LINK_TYPED( StdHdl, Button*, void );
     DECL_LINK(EnableSelectHdl, void *);
-    DECL_LINK(DoubleClickHdl, void *);
-    DECL_LINK_TYPED(AssignHdl, Button*, void);
+    DECL_LINK_TYPED( DoubleClickHdl, ListBox&, void );
+    DECL_LINK_TYPED( AssignHdl, Button*, void );
     void Modify();
 
     SwForm&     GetForm()

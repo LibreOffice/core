@@ -75,7 +75,7 @@ public:
 
     void            SetDoubleClickLink( const Link<>& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
 
-    DECL_LINK(implDoubleClickHdl, void *);
+    DECL_LINK_TYPED(implDoubleClickHdl, ListBox&, void);
 
 private:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
@@ -137,10 +137,9 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-IMPL_LINK_NOARG(CategoryListBox, implDoubleClickHdl)
+IMPL_LINK_NOARG_TYPED(CategoryListBox, implDoubleClickHdl, ListBox&, void)
 {
     CaptureMouse();
-    return 0;
 }
 
 void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )

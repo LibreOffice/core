@@ -67,8 +67,8 @@ private:
     DECL_LINK_TYPED( RemoveHdl, Button*, void );
     DECL_LINK( SelFmtHdl, void * );
     DECL_LINK_TYPED( CloseHdl, Button *, void );
-    DECL_LINK( DblClkHdl, void * );
-    DECL_LINK_TYPED( RenameHdl, Button*, void);
+    DECL_LINK_TYPED( DblClkHdl, ListBox&, void );
+    DECL_LINK_TYPED( RenameHdl, Button*, void );
 
 };
 #endif

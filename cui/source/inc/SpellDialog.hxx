@@ -172,7 +172,7 @@ private:
         css::linguistic2::XSpellChecker1 >     xSpell;
 
     DECL_LINK_TYPED(ChangeHdl, Button*, void);
-    DECL_LINK(DoubleClickChangeHdl, void*);
+    DECL_LINK_TYPED(DoubleClickChangeHdl, ListBox&, void);
     DECL_LINK_TYPED(ChangeAllHdl, Button*, void);
     DECL_LINK_TYPED( IgnoreAllHdl, Button*, void );
     DECL_LINK_TYPED(IgnoreHdl, Button*, void);

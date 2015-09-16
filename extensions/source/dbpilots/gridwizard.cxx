@@ -391,16 +391,13 @@ namespace dbp
     }
 
 
-    IMPL_LINK(OGridFieldsSelection, OnEntryDoubleClicked, ListBox*, _pList)
+    IMPL_LINK_TYPED(OGridFieldsSelection, OnEntryDoubleClicked, ListBox&, _rList, void)
     {
-        PushButton* pSimulateButton = m_pExistFields == _pList ? m_pSelectOne : m_pDeselectOne;
+        PushButton* pSimulateButton = m_pExistFields == &_rList ? m_pSelectOne : m_pDeselectOne;
         if (pSimulateButton->IsEnabled())
         {
             OnMoveOneEntry( pSimulateButton );
-            return 0;
         }
-        else
-            return 1L;
     }
 
 

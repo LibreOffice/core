@@ -246,10 +246,10 @@ IMPL_LINK_TYPED( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
         m_pOrgColumnNames->SelectEntryPos(0);
 }
 
-IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox *, pListBox )
+IMPL_LINK_TYPED( OWizColumnSelect, ListDoubleClickHdl, ListBox&, rListBox, void )
 {
     ListBox *pLeft,*pRight;
-    if(pListBox == m_pOrgColumnNames)
+    if(&rListBox == m_pOrgColumnNames)
     {
         pLeft  = m_pOrgColumnNames;
         pRight = m_pNewColumnNames;
@@ -275,7 +275,6 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox *, pListBox )
         pLeft->RemoveEntry(pLeft->GetSelectEntry(--j));
 
     enableButtons();
-    return 0;
 }
 
 void OWizColumnSelect::clearListBox(ListBox& _rListBox)

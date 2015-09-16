@@ -1032,7 +1032,7 @@ public:
 protected:
     virtual void onWindowEvent( const sal_uLong _nEventId, const vcl::Window& _rWindow, const void* _pEventData ) SAL_OVERRIDE;
 
-    DECL_LINK( OnDoubleClick, void* );
+    DECL_LINK_TYPED( OnDoubleClick, ListBox&, void );
 };
 
 

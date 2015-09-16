@@ -61,7 +61,7 @@ public:
     virtual bool    Close() SAL_OVERRIDE;
 
 protected:
-    DECL_LINK( ListDblClickHdl, ListBox * );
+    DECL_LINK_TYPED( ListDblClickHdl, ListBox&, void );
 #ifdef HAVE_ODBC_ADMINISTRATION
     DECL_LINK_TYPED(ManageClickHdl, Button*, void);
     DECL_LINK_TYPED( ManageProcessFinished, void*, void );
