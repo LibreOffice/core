@@ -608,7 +608,17 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                 case( 16 ):
                 {
-                    ColorMask   aMask( nRMask, nGMask, nBMask );
+                    ColorMaskElement aRedMask(nRMask);
+                    if (!aRedMask.CalcMaskShift())
+                        return false;
+                    ColorMaskElement aGreenMask(nGMask);
+                    if (!aGreenMask.CalcMaskShift())
+                        return false;
+                    ColorMaskElement aBlueMask(nBMask);
+                    if (!aBlueMask.CalcMaskShift())
+                        return false;
+
+                    ColorMask   aMask(aRedMask, aGreenMask, aBlueMask);
                     BitmapColor aColor;
                     sal_uInt16*     pTmp16;
 
@@ -655,7 +665,17 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                 case( 32 ):
                 {
-                    ColorMask aMask(nRMask, nGMask, nBMask);
+                    ColorMaskElement aRedMask(nRMask);
+                    if (!aRedMask.CalcMaskShift())
+                        return false;
+                    ColorMaskElement aGreenMask(nGMask);
+                    if (!aGreenMask.CalcMaskShift())
+                        return false;
+                    ColorMaskElement aBlueMask(nBMask);
+                    if (!aBlueMask.CalcMaskShift())
+                        return false;
+                    ColorMask aMask(aRedMask, aGreenMask, aBlueMask);
+
                     BitmapColor aColor;
                     sal_uInt32* pTmp32;
 

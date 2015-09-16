@@ -729,36 +729,44 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
     pBuffer->mnScanlineSize = mnBytesPerRow;
     pBuffer->mpBits = maUserBuffer.get();
     pBuffer->mnBitCount = mnBits;
-    switch( mnBits )
+    switch (mnBits)
     {
-    case 1:     pBuffer->mnFormat = BMP_FORMAT_1BIT_MSB_PAL; break;
-    case 4:     pBuffer->mnFormat = BMP_FORMAT_4BIT_MSN_PAL; break;
-    case 8:     pBuffer->mnFormat = BMP_FORMAT_8BIT_PAL; break;
-    case 16:
-#ifdef WNT
-                pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
-                pBuffer->maColorMask = ColorMask(0x7c00, 0x03e0, 0x001f);
-#else
-                pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
-                pBuffer->maColorMask = ColorMask(0xf800, 0x07e0, 0x001f);
-#endif
-                break;
-    case 24:
-#ifdef WNT
-                pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
-#else
-                pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_RGB;
-#endif
-                break;
-    case 32:
-#ifdef WNT
-                pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_BGRA;
-                pBuffer->maColorMask = ColorMask(0x00ff0000, 0x0000ff00, 0x000000ff);
-#else
-                pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_RGBA;
-                pBuffer->maColorMask = ColorMask(0xff000000, 0x00ff0000, 0x0000ff00);
-#endif
-                break;
+        case 1:
+            pBuffer->mnFormat = BMP_FORMAT_1BIT_MSB_PAL;
+            break;
+        case 4:
+            pBuffer->mnFormat = BMP_FORMAT_4BIT_MSN_PAL;
+            break;
+        case 8:
+            pBuffer->mnFormat = BMP_FORMAT_8BIT_PAL;
+            break;
+        case 16:
+        {
+            pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
+            ColorMaskElement aRedMask(0xf800);
+            aRedMask.CalcMaskShift();
+            ColorMaskElement aGreenMask(0x07e0);
+            aGreenMask.CalcMaskShift();
+            ColorMaskElement aBlueMask(0x001f);
+            aBlueMask.CalcMaskShift();
+            pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
+            break;
+        }
+        case 24:
+            pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_RGB;
+            break;
+        case 32:
+        {
+            pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_RGBA;
+            ColorMaskElement aRedMask(0xff000000);
+            aRedMask.CalcMaskShift();
+            ColorMaskElement aGreenMask(0x00ff0000);
+            aGreenMask.CalcMaskShift();
+            ColorMaskElement aBlueMask(0x0000ff00);
+            aBlueMask.CalcMaskShift();
+            pBuffer->maColorMask  = ColorMask(aRedMask, aGreenMask, aBlueMask);
+            break;
+        }
     }
 
     return pBuffer;
