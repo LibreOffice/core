@@ -77,8 +77,17 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
+    // We always prefer to bind our VirtualDevice / offscreen graphics
+    // to the current OpenGLContext - to avoid switching contexts.
+    if (mpContext.is() && mbOffscreen)
+    {
+        if (OpenGLContext::hasCurrent() && !mpContext->isCurrent())
+            mpContext.clear();
+    }
+
     if( mpContext.is() )
     {
+        // Check whether the context was reset underneath us.
         if( mpContext->isInitialized() )
             return true;
         mpContext.clear();
