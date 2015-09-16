@@ -93,10 +93,7 @@ struct _LibreOfficeKitDocumentClass
     char* (*getPartName) (LibreOfficeKitDocument* pThis,
                           int nPart);
 
-    /** Sets mode of the current part.
-     *
-     * @param nMode - element from the LibreOfficeKitPartMode enum.
-     */
+    /// @see lok::Document::setPartMode().
     void (*setPartMode) (LibreOfficeKitDocument* pThis,
                          int nMode);
 
@@ -118,6 +115,7 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::initializeForRendering().
     void (*initializeForRendering) (LibreOfficeKitDocument* pThis);
 
+    /// @see lok::Document::registerCallback().
     void (*registerCallback) (LibreOfficeKitDocument* pThis,
                               LibreOfficeKitCallback pCallback,
                               void* pData);

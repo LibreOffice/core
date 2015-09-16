@@ -94,6 +94,11 @@ public:
         return mpDoc->pClass->getPartName(mpDoc, nPart);
     }
 
+    inline void setPartMode(int nMode)
+    {
+        mpDoc->pClass->setPartMode(mpDoc, nMode);
+    }
+
     /**
      * Renders a subset of the document to a pre-allocated buffer.
      *
