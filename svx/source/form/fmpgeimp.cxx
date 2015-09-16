@@ -316,7 +316,7 @@ const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCrea
 
         if ( m_aFormsCreationHdl.IsSet() )
         {
-            m_aFormsCreationHdl.Call( this );
+            m_aFormsCreationHdl.Call( *this );
         }
 
         FmFormModel* pFormsModel = PTR_CAST( FmFormModel, m_rPage.GetModel() );

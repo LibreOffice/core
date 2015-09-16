@@ -105,6 +105,7 @@ protected:
 };
 
 class FmFormPage;
+class FmFormPageImpl;
 
 struct FmLoadAction
 {
@@ -468,7 +469,7 @@ private:
     DECL_DLLPRIVATE_LINK(OnSearchContextRequest, FmSearchContext*);
     DECL_DLLPRIVATE_LINK_TYPED(OnTimeOut, Timer*, void);
     DECL_DLLPRIVATE_LINK_TYPED(OnFirstTimeActivation, void*, void);
-    DECL_DLLPRIVATE_LINK(OnFormsCreated, FmFormPage*);
+    DECL_DLLPRIVATE_LINK_TYPED(OnFormsCreated, FmFormPageImpl&, void);
 
     SAL_DLLPRIVATE void LoopGrids(LoopGridsSync nSync, LoopGridsFlags nWhat = LoopGridsFlags::NONE);
 

@@ -3609,7 +3609,7 @@ void FmXFormShell::viewDeactivated( FmFormView& _rCurrentView, bool _bDeactivate
     // remove callbacks at the page
     if ( pPage )
     {
-        pPage->GetImpl().SetFormsCreationHdl( Link<>() );
+        pPage->GetImpl().SetFormsCreationHdl( Link<FmFormPageImpl&,void>() );
     }
     UpdateForms( true );
 }
@@ -3635,10 +3635,9 @@ IMPL_LINK_NOARG_TYPED( FmXFormShell, OnFirstTimeActivation, void*, void )
 }
 
 
-IMPL_LINK( FmXFormShell, OnFormsCreated, FmFormPage*, /*_pPage*/ )
+IMPL_LINK_NOARG_TYPED( FmXFormShell, OnFormsCreated, FmFormPageImpl&, void )
 {
     UpdateForms( true );
-    return 0L;
 }
 
 
