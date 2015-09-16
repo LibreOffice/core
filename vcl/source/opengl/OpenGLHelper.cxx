@@ -377,19 +377,18 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
     OString aVertexShaderSource = loadShader(rVertexShaderName);
     OString aFragmentShaderSource = loadShader(rFragmentShaderName);
 
-
-    GLint BinaryResult = GL_FALSE;
+    GLint bBinaryResult = GL_FALSE;
     if( GLEW_ARB_get_program_binary && !rDigest.isEmpty() )
     {
         OString aFileName =
                 createFileName(rVertexShaderName, rFragmentShaderName, rDigest);
-        BinaryResult = loadProgramBinary(ProgramID, aFileName);
+        bBinaryResult = loadProgramBinary(ProgramID, aFileName);
+        VCL_GL_INFO("vcl.opengl", "Load binary shader from '" << aFileName << "'" << bBinaryResult);
         CHECK_GL_ERROR();
     }
 
-    if( BinaryResult != GL_FALSE )
+    if( bBinaryResult != GL_FALSE )
         return ProgramID;
-
 
     VCL_GL_INFO("vcl.opengl", "Load shader: vertex " << rVertexShaderName << " fragment " << rFragmentShaderName);
     // Create the shaders
