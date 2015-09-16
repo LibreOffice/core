@@ -36,6 +36,7 @@ class SalGraphics;
 class SalBitmap;
 class SalFrame;
 class Gradient;
+class OpenGLContext;
 class SalVirtualDevice;
 
 class VCL_PLUGIN_PUBLIC SalGraphicsImpl
@@ -211,8 +212,7 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) = 0;
 
-    virtual void beginPaint() = 0;
-    virtual void endPaint() = 0;
+    virtual OpenGLContext *beginPaint() { return NULL; }
 };
 
 #endif
