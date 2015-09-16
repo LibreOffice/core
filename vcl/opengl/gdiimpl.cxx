@@ -1862,30 +1862,12 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     return true;
 }
 
-void OpenGLSalGraphicsImpl::beginPaint()
+OpenGLContext *OpenGLSalGraphicsImpl::beginPaint()
 {
-    if( !AcquireContext() )
-        return;
-
-    mpContext->mnPainting++;
-}
-
-void OpenGLSalGraphicsImpl::endPaint()
-{
-    if( !AcquireContext() )
-        return;
-
-    mpContext->mnPainting--;
-    assert( mpContext->mnPainting >= 0 );
-    if( mpContext->mnPainting == 0 && !mbOffscreen )
-    {
-        mpContext->makeCurrent();
-        mpContext->AcquireDefaultFramebuffer();
-        glFlush();
-        mpContext->swapBuffers();
-
-        CHECK_GL_ERROR();
-    }
+    if( mbOffscreen || !AcquireContext() )
+        return NULL;
+    else
+        return mpContext.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
