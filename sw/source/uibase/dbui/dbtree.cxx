@@ -72,13 +72,13 @@ typedef boost::ptr_vector<SwConnectionData> SwConnectionArr;
 
 class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >
 {
-    Reference< XDatabaseContext > xDBContext;
-    SwConnectionArr aConnections;
-    SwWrtShell* pWrtSh;
+    Reference< XDatabaseContext > m_xDatabaseContext;
+    SwConnectionArr m_aConnections;
+    SwWrtShell* m_pWrtShell;
 
     public:
         explicit SwDBTreeList_Impl(SwWrtShell* pShell)
-            : pWrtSh(pShell)
+            : m_pWrtShell(pShell)
         {
         }
         virtual ~SwDBTreeList_Impl();
@@ -89,21 +89,21 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     bool                        HasContext();
-    SwWrtShell*                 GetWrtShell() { return pWrtSh;}
-    void                        SetWrtShell(SwWrtShell& rSh) { pWrtSh = &rSh;}
-    Reference<XDatabaseContext>    GetContext() const {return xDBContext;}
+    SwWrtShell*                 GetWrtShell() { return m_pWrtShell;}
+    void                        SetWrtShell(SwWrtShell& rSh) { m_pWrtShell = &rSh;}
+    Reference<XDatabaseContext>    GetContext() const {return m_xDatabaseContext;}
     Reference<XConnection>      GetConnection(const OUString& rSourceName);
 };
 
 SwDBTreeList_Impl::~SwDBTreeList_Impl()
 {
-    if(xDBContext.is())
+    if(m_xDatabaseContext.is())
     {
         m_refCount++;
         //block necessary due to solaris' compiler behaviour to
         //remove temporaries at the block's end
         {
-            xDBContext->removeContainerListener( this );
+            m_xDatabaseContext->removeContainerListener( this );
         }
         m_refCount--;
     }
@@ -119,11 +119,11 @@ void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (Ru
     SolarMutexGuard aGuard;
     OUString sSource;
     rEvent.Accessor >>= sSource;
-    for(SwConnectionArr::iterator i = aConnections.begin(); i != aConnections.end(); ++i)
+    for(SwConnectionArr::iterator i = m_aConnections.begin(); i != m_aConnections.end(); ++i)
     {
         if(i->sSourceName == sSource)
         {
-            aConnections.erase(i);
+            m_aConnections.erase(i);
             break;
         }
     }
@@ -131,7 +131,7 @@ void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (Ru
 
 void SwDBTreeList_Impl::disposing( const EventObject&  ) throw (RuntimeException, std::exception)
 {
-    xDBContext = 0;
+    m_xDatabaseContext = 0;
 }
 
 void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent ) throw (RuntimeException, std::exception)
@@ -141,19 +141,19 @@ void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent ) throw (R
 
 bool SwDBTreeList_Impl::HasContext()
 {
-    if(!xDBContext.is())
+    if(!m_xDatabaseContext.is())
     {
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        xDBContext = DatabaseContext::create(xContext);
-        xDBContext->addContainerListener( this );
+        m_xDatabaseContext = DatabaseContext::create(xContext);
+        m_xDatabaseContext->addContainerListener( this );
     }
-    return xDBContext.is();
+    return m_xDatabaseContext.is();
 }
 
 Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const OUString& rSourceName)
 {
     Reference<XConnection> xRet;
-    for(SwConnectionArr::const_iterator i = aConnections.begin(); i != aConnections.end(); ++i)
+    for(SwConnectionArr::const_iterator i = m_aConnections.begin(); i != m_aConnections.end(); ++i)
     {
         if(i->sSourceName == rSourceName)
         {
@@ -161,12 +161,12 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const OUString& rSource
             break;
         }
     }
-    if(!xRet.is() && xDBContext.is() && pWrtSh)
+    if(!xRet.is() && m_xDatabaseContext.is() && m_pWrtShell)
     {
         SwConnectionData* pPtr = new SwConnectionData();
         pPtr->sSourceName = rSourceName;
-        xRet = pWrtSh->GetDBManager()->RegisterConnection(pPtr->sSourceName);
-        aConnections.push_back(pPtr);
+        xRet = m_pWrtShell->GetDBManager()->RegisterConnection(pPtr->sSourceName);
+        m_aConnections.push_back(pPtr);
     }
     return xRet;
 }
