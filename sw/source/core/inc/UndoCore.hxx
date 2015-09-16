@@ -25,7 +25,8 @@
 #include <rtl/ustring.hxx>
 #include <redline.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
+#include <vector>
 
 class SfxItemSet;
 class SwFormatColl;
@@ -65,17 +66,17 @@ public:
 
 class SwRedlineSaveDatas {
 private:
-    boost::ptr_vector<SwRedlineSaveData> mvData;
+    std::vector<std::unique_ptr<SwRedlineSaveData>> m_Data;
 
 public:
-    SwRedlineSaveDatas() : mvData() {}
+    SwRedlineSaveDatas() : m_Data() {}
 
-    void clear() { mvData.clear(); }
-    bool empty() const { return mvData.empty(); }
-    size_t size() const { return mvData.size(); }
-    void push_back (SwRedlineSaveData* value) { mvData.push_back(value); }
-    const SwRedlineSaveData& operator[]( size_t nIdx ) const { return mvData[ nIdx ]; }
-    SwRedlineSaveData& operator[]( size_t nIdx ) { return mvData[ nIdx ]; }
+    void clear() { m_Data.clear(); }
+    bool empty() const { return m_Data.empty(); }
+    size_t size() const { return m_Data.size(); }
+    void push_back(std::unique_ptr<SwRedlineSaveData> pNew) { m_Data.push_back(std::move(pNew)); }
+    const SwRedlineSaveData& operator[](size_t const nIdx) const { return *m_Data[ nIdx ]; }
+    SwRedlineSaveData& operator[](size_t const nIdx) { return *m_Data[ nIdx ]; }
 };
 
 namespace sw {

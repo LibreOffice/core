@@ -979,7 +979,6 @@ bool SwUndo::FillSaveData(
 {
     rSData.clear();
 
-    SwRedlineSaveData* pNewData;
     const SwPosition* pStt = rRange.Start();
     const SwPosition* pEnd = rRange.End();
     const SwRedlineTable& rTable = rRange.GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
@@ -996,8 +995,9 @@ bool SwUndo::FillSaveData(
              && eCmpPos != POS_COLLIDE_END
              && eCmpPos != POS_COLLIDE_START )
         {
-            pNewData = new SwRedlineSaveData( eCmpPos, *pStt, *pEnd, *pRedl, bCopyNext );
-            rSData.push_back( pNewData );
+            std::unique_ptr<SwRedlineSaveData> pNewData(
+                new SwRedlineSaveData(eCmpPos, *pStt, *pEnd, *pRedl, bCopyNext));
+            rSData.push_back(std::move(pNewData));
         }
     }
     if( !rSData.empty() && bDelRange )
@@ -1013,7 +1013,6 @@ bool SwUndo::FillSaveDataForFormat(
 {
     rSData.clear();
 
-    SwRedlineSaveData* pNewData;
     const SwPosition *pStt = rRange.Start(), *pEnd = rRange.End();
     const SwRedlineTable& rTable = rRange.GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
     sal_uInt16 n = 0;
@@ -1029,8 +1028,9 @@ bool SwUndo::FillSaveDataForFormat(
                  && eCmpPos != POS_COLLIDE_END
                  && eCmpPos != POS_COLLIDE_START )
             {
-                pNewData = new SwRedlineSaveData( eCmpPos, *pStt, *pEnd, *pRedl, true );
-                rSData.push_back( pNewData );
+                std::unique_ptr<SwRedlineSaveData> pNewData(
+                    new SwRedlineSaveData(eCmpPos, *pStt, *pEnd, *pRedl, true));
+                rSData.push_back(std::move(pNewData));
             }
 
         }
