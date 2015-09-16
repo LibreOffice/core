@@ -24,6 +24,7 @@
 
 #include "sal/types.h"
 #include "sal/macros.h"
+#include "rtl/string.h"
 
 #include "store/types.h"
 #include "storbase.hxx"

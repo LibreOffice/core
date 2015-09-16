@@ -62,7 +62,7 @@ for dir in $(echo ${iwyu_INCLUDEDIRS_EXTRA} | sed -e "s/ /\n/g" | uniq) ${iwyu_I
     echo "-I${SRCDIR}/${dir} \\";
 done >> ${iwyu_LIB}
 # it fails to find stddef.h?
-echo '-I/usr/lib/clang/3.4/include \' >> ${iwyu_LIB}
+echo '-I/usr/lib/clang/3.6/include \' >> ${iwyu_LIB}
 echo "))" >> ${iwyu_LIB} >> ${iwyu_LIB}
 
 echo '$(eval $(call gb_StaticLibrary__add_iwyu_headers,iwyudummy,\' >> ${iwyu_LIB}

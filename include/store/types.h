@@ -21,7 +21,6 @@
 #define INCLUDED_STORE_TYPES_H
 
 #include <sal/types.h>
-#include <rtl/ustring.h>
 
 #ifdef __cplusplus
 extern "C" {
