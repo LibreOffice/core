@@ -59,6 +59,9 @@ protected:
     OpenGLFramebuffer* mpFramebuffer;
     OpenGLProgram* mpProgram;
 
+    /// Is it someone else's context we shouldn't be fiddling with ?
+    static bool IsForeignContext(const rtl::Reference<OpenGLContext> &xContext);
+
     // clipping
     vcl::Region maClipRegion;
     bool mbUseScissor;
