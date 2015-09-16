@@ -68,8 +68,11 @@ void OpenGLFramebuffer::AttachTexture( const OpenGLTexture& rTexture )
     mnAttachedTexture = rTexture.Id();
     mnWidth = rTexture.GetWidth();
     mnHeight = rTexture.GetHeight();
-    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                            mnAttachedTexture, 0 );
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mnAttachedTexture, 0);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        SAL_WARN("vcl.opengl", "Framebuffer incomplete");
+    }
     CHECK_GL_ERROR();
 }
 
