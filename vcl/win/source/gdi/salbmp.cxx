@@ -906,14 +906,34 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
                     if( pBIH->biCompression == BI_BITFIELDS )
                     {
                         nOffset = 3 * sizeof( RGBQUAD );
-                        pBuffer->maColorMask = ColorMask( *(UINT32*) &pBI->bmiColors[ 0 ],
-                                                          *(UINT32*) &pBI->bmiColors[ 1 ],
-                                                          *(UINT32*) &pBI->bmiColors[ 2 ] );
+                        ColorMaskElement aRedMask(*(UINT32*) &pBI->bmiColors[ 0 ]);
+                        aRedMask.CalcMaskShift();
+                        ColorMaskElement aGreenMask(*(UINT32*) &pBI->bmiColors[ 1 ]);
+                        aGreenMask.CalcMaskShift();
+                        ColorMaskElement aBlueMask(*(UINT32*) &pBI->bmiColors[ 2 ]);
+                        aBlueMask.CalcMaskShift();
+                        pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
                     }
                     else if( pBIH->biBitCount == 16 )
-                        pBuffer->maColorMask = ColorMask( 0x00007c00UL, 0x000003e0UL, 0x0000001fUL );
+                    {
+                        ColorMaskElement aRedMask(0x00007c00UL);
+                        aRedMask.CalcMaskShift();
+                        ColorMaskElement aGreenMask(0x000003e0UL);
+                        aGreenMask.CalcMaskShift();
+                        ColorMaskElement aBlueMask(0x0000001fUL);
+                        aBlueMask.CalcMaskShift();
+                        pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
+                    }
                     else
-                        pBuffer->maColorMask = ColorMask( 0x00ff0000UL, 0x0000ff00UL, 0x000000ffUL );
+                    {
+                        ColorMaskElement aRedMask(0x00ff0000UL);
+                        aRedMask.CalcMaskShift();
+                        ColorMaskElement aGreenMask(0x0000ff00UL);
+                        aGreenMask.CalcMaskShift();
+                        ColorMaskElement aBlueMask(0x000000ffUL);
+                        aBlueMask.CalcMaskShift();
+                        pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
+                    }
 
                     pBuffer->mpBits = (PBYTE) pBI + *(DWORD*) pBI + nOffset;
                 }

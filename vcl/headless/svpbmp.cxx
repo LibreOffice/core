@@ -172,65 +172,130 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
                 pBuf->mnFormat = BMP_FORMAT_8BIT_PAL;
                 break;
             case Format::SixteenBitLsbTcMask:
+            {
                 nBitCount = 16;
                 pBuf->mnFormat = BMP_FORMAT_16BIT_TC_LSB_MASK;
-                pBuf->maColorMask = ColorMask( 0xf800, 0x07e0, 0x001f );
+                ColorMaskElement aRedMask(0xf800);
+                aRedMask.CalcMaskShift();
+                ColorMaskElement aGreenMask(0x07e0);
+                aGreenMask.CalcMaskShift();
+                ColorMaskElement aBlueMask(0x001f);
+                aBlueMask.CalcMaskShift();
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
                 break;
+            }
             case Format::SixteenBitMsbTcMask:
+            {
                 nBitCount = 16;
                 pBuf->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
-                pBuf->maColorMask = ColorMask( 0xf800, 0x07e0, 0x001f );
+                ColorMaskElement aRedMask(0xf800);
+                aRedMask.CalcMaskShift();
+                ColorMaskElement aGreenMask(0x07e0);
+                aGreenMask.CalcMaskShift();
+                ColorMaskElement aBlueMask(0x001f);
+                aBlueMask.CalcMaskShift();
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
                 break;
+            }
             case Format::TwentyFourBitTcMask:
                 nBitCount = 24;
                 pBuf->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
                 break;
             case Format::ThirtyTwoBitTcMaskBGRX:
+            {
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
-                pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000 );
+                ColorMaskElement aRedMask(0x0000ff00);
+                ColorMaskElement aGreenMask(0x00ff0000);
+                ColorMaskElement aBlueMask(0xff000000);
 #else
-                pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff );
+                ColorMaskElement aRedMask(0x00ff0000);
+                ColorMaskElement aGreenMask(0x0000ff00);
+                ColorMaskElement aBlueMask(0x000000ff);
 #endif
+                aBlueMask.CalcMaskShift();
+                aRedMask.CalcMaskShift();
+                aGreenMask.CalcMaskShift();
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
                 break;
+            }
             case Format::ThirtyTwoBitTcMaskBGRA:
+            {
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
-                pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000, 0x000000ff );
+                ColorMaskElement aRedMask(0x0000ff00);
+                ColorMaskElement aGreenMask(0x00ff0000);
+                ColorMaskElement aBlueMask(0xff000000);
 #else
-                pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 );
+                ColorMaskElement aRedMask(0x00ff0000);
+                ColorMaskElement aGreenMask(0x0000ff00);
+                ColorMaskElement aBlueMask(0x000000ff);
 #endif
+                aBlueMask.CalcMaskShift();
+                aRedMask.CalcMaskShift();
+                aGreenMask.CalcMaskShift();
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, 0xff000000);
                 break;
+            }
             case Format::ThirtyTwoBitTcMaskARGB:
+            {
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
-                pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 );
+                ColorMaskElement aRedMask(0x00ff0000);
+                ColorMaskElement aGreenMask(0x0000ff00);
+                ColorMaskElement aBlueMask(0x000000ff);
 #else
-                pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000, 0x000000ff );
+                ColorMaskElement aRedMask(0x0000ff00);
+                ColorMaskElement aGreenMask(0x00ff0000);
+                ColorMaskElement aBlueMask(0xff000000);
 #endif
+                aBlueMask.CalcMaskShift();
+                aRedMask.CalcMaskShift();
+                aGreenMask.CalcMaskShift();
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, 0xff000000 );
                 break;
+            }
             case Format::ThirtyTwoBitTcMaskABGR:
+            {
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
-                pBuf->maColorMask = ColorMask( 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
+                ColorMaskElement aRedMask(0x000000ff);
+                ColorMaskElement aGreenMask(0x0000ff00);
+                ColorMaskElement aBlueMask(0x00ff0000);
 #else
-                pBuf->maColorMask = ColorMask( 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff );
+                ColorMaskElement aRedMask(0xff000000);
+                ColorMaskElement aGreenMask(0x00ff0000);
+                ColorMaskElement aBlueMask(0x0000ff00);
 #endif
+                aBlueMask.CalcMaskShift();
+                aRedMask.CalcMaskShift();
+                aGreenMask.CalcMaskShift();
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, 0xff000000);
                 break;
+            }
             case Format::ThirtyTwoBitTcMaskRGBA:
+            {
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
-                pBuf->maColorMask = ColorMask( 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff );
+                ColorMaskElement aRedMask(0xff000000);
+                ColorMaskElement aGreenMask(0x00ff0000);
+                ColorMaskElement aBlueMask(0x0000ff00);
 #else
-                pBuf->maColorMask = ColorMask( 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
+                ColorMaskElement aRedMask(0x000000ff);
+                ColorMaskElement aGreenMask(0x0000ff00);
+                ColorMaskElement aBlueMask(0x00ff0000);
 #endif
+                aBlueMask.CalcMaskShift();
+                aRedMask.CalcMaskShift();
+                aGreenMask.CalcMaskShift();
+                pBuf->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask, 0x000000ff);
                 break;
-
+            }
             default:
                 // this is an error case !!!!!
                 nBitCount = 1;
