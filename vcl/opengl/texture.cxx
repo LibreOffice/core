@@ -369,30 +369,32 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
         return;
     }
 
-    Bind();
-    glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-
     VCL_GL_INFO( "vcl.opengl", "Reading texture " << Id() << " " << GetWidth() << "x" << GetHeight() );
 
     if( GetWidth() == mpImpl->mnWidth && GetHeight() == mpImpl->mnHeight )
     {
+        Bind();
+        glPixelStorei( GL_PACK_ALIGNMENT, 1 );
         // XXX: Call not available with GLES 2.0
         glGetTexImage( GL_TEXTURE_2D, 0, nFormat, nType, pData );
+        Unbind();
     }
     else
     {
+        long nWidth = maRect.GetWidth();
+        long nHeight = maRect.GetHeight();
+        long nX = maRect.Left();
+        long nY = mpImpl->mnHeight - maRect.Top() - nHeight;
+
         // Retrieve current context
         ImplSVData* pSVData = ImplGetSVData();
         rtl::Reference<OpenGLContext> pContext = pSVData->maGDIData.mpLastContext;
-        OpenGLFramebuffer* pFramebuffer;
-
-        pFramebuffer = pContext->AcquireFramebuffer( *this );
-        glReadPixels( maRect.Left(), mpImpl->mnHeight - maRect.Top(), GetWidth(), GetHeight(), nFormat, nType, pData );
-        OpenGLContext::ReleaseFramebuffer( pFramebuffer );
-        CHECK_GL_ERROR();
+        OpenGLFramebuffer* pFramebuffer = pContext->AcquireFramebuffer(*this);
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glReadPixels(nX, nY, nWidth, nHeight, nFormat, nType, pData);
+        OpenGLContext::ReleaseFramebuffer(pFramebuffer);
     }
 
-    Unbind();
     CHECK_GL_ERROR();
 }
 
