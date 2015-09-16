@@ -237,14 +237,15 @@ typedef void *                   sal_Handle;
 
 #define SAL_MAX_ENUM 0x7fffffff
 
+
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
 #   define SAL_JNI_EXPORT          __declspec(dllexport)
-#if defined(_MSC_VER)
-#   define SAL_DLLPUBLIC_IMPORT    __declspec(dllimport)
-#else
-#   define SAL_DLLPUBLIC_IMPORT
-#endif // defined(_MSC_VER)
+#   if defined(_MSC_VER)
+#      define SAL_DLLPUBLIC_IMPORT    __declspec(dllimport)
+#   else
+#      define SAL_DLLPUBLIC_IMPORT
+#   endif // defined(_MSC_VER)
 #   define SAL_DLLPRIVATE
 #   define SAL_DLLPUBLIC_TEMPLATE
 #   define SAL_DLLPUBLIC_RTTI
