@@ -41,8 +41,6 @@ namespace dbaui
 
     class OQueryTableView : public OJoinTableView
     {
-        Link<>  m_lnkTabWinsChangeHandler;
-
     protected:
         virtual void ConnDoubleClicked(OTableConnection* pConnection) SAL_OVERRIDE;
         virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
@@ -112,9 +110,6 @@ namespace dbaui
 
         /// announce new Connection and insert it, if not existing yet
         void NotifyTabConnection(const OQueryTableConnection& rNewConn, bool _bCreateUndoAction = true);
-
-        /// @note the Handler receives a pointer to a TabWinsChangeNotification struct
-        Link<> SetTabWinsChangeHandler(const Link<>& lnk) { Link<> lnkRet = m_lnkTabWinsChangeHandler; m_lnkTabWinsChangeHandler = lnk; return lnkRet; }
 
         bool ExistsAVisitedConn(const OQueryTableWindow* pFrom) const;
 

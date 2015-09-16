@@ -574,12 +574,6 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
 
     // My parent needs to be informed about the delete
     m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
-
-    if (bSuccess && m_lnkTabWinsChangeHandler.IsSet())
-    {
-        TabWinsChangeNotification aHint(TabWinsChangeNotification::AT_ADDED_WIN, pNewTabWin->GetAliasName());
-        m_lnkTabWinsChangeHandler.Call(&aHint);
-    }
 }
 
 void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
@@ -764,12 +758,6 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 
         m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
         rUndoMgr.LeaveListAction();
-
-        if (m_lnkTabWinsChangeHandler.IsSet())
-        {
-            TabWinsChangeNotification aHint(TabWinsChangeNotification::AT_REMOVED_WIN, static_cast< OQueryTableWindow*>(pTabWin)->GetAliasName());
-            m_lnkTabWinsChangeHandler.Call(&aHint);
-        }
 
         modified();
         if ( m_pAccessible )
