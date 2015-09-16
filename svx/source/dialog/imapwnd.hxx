@@ -93,7 +93,7 @@ class IMapWindow : public GraphCtrl, public DropTargetHelper
     NotifyInfo          aInfo;
     ImageMap            aIMap;
     TargetList          aTargetList;
-    Link<>              aInfoLink;
+    Link<IMapWindow&,void> aInfoLink;
     SfxItemPool*        pIMapPool;
     SfxItemInfo*        pItemInfo;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
@@ -140,7 +140,7 @@ public:
     void                DoMacroAssign();
     void                DoPropertyDialog();
 
-    void                SetInfoLink( const Link<>& rLink ) { aInfoLink = rLink; }
+    void                SetInfoLink( const Link<IMapWindow&,void>& rLink ) { aInfoLink = rLink; }
 
     void                SetTargetList( TargetList& rTargetList );
 

@@ -590,10 +590,10 @@ void SvxIMapDlg::SetActiveTool( sal_uInt16 nId )
     m_pTbxIMapDlg1->CheckItem( mnPolyEditId, bEditMode );
 }
 
-IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
+IMPL_LINK_TYPED( SvxIMapDlg, InfoHdl, IMapWindow&, rWnd, void )
 {
     OUString            aStr;
-    const NotifyInfo&   rInfo = pWnd->GetInfo();
+    const NotifyInfo&   rInfo = rWnd.GetInfo();
 
     if ( rInfo.bNewObj )
     {
@@ -654,8 +654,6 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
         else
             m_pCbbTarget->SetText(  rInfo.aMarkTarget );
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( SvxIMapDlg, MousePosHdl, GraphCtrl*, pWnd, void )

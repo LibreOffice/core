@@ -626,7 +626,7 @@ void IMapWindow::UpdateInfo( bool bNewObj )
             aInfo.aMarkAltText = pIMapObj->GetAltText();
             aInfo.aMarkTarget = pIMapObj->GetTarget();
             aInfo.bActivated = pIMapObj->IsActive();
-            aInfoLink.Call( this );
+            aInfoLink.Call( *this );
         }
         else
         {
@@ -637,7 +637,7 @@ void IMapWindow::UpdateInfo( bool bNewObj )
             aInfo.bActivated = false;
         }
 
-        aInfoLink.Call( this );
+        aInfoLink.Call( *this );
     }
 }
 
