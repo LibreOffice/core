@@ -1038,6 +1038,30 @@ void SlideView::disposing( lang::EventObject const& evt )
     dispose();
 }
 
+// silly wrapper to check that event handlers don't touch dead SlideView
+struct WeakRefWrapper
+{
+    SlideView & m_rObj;
+    uno::WeakReference<uno::XInterface> const m_wObj;
+    std::function<void (SlideView&)> const m_func;
+
+    WeakRefWrapper(SlideView & rObj, std::function<void (SlideView&)> const& func)
+        : m_rObj(rObj)
+        , m_wObj(static_cast<::cppu::OWeakObject*>(&rObj))
+        , m_func(func)
+    {
+    }
+
+    void operator()()
+    {
+        uno::Reference<uno::XInterface> const xObj(m_wObj);
+        if (xObj.is())
+        {
+            m_func(m_rObj);
+        }
+    }
+};
+
 // XModifyListener
 void SlideView::modified( const lang::EventObject& /*aEvent*/ )
     throw (uno::RuntimeException, std::exception)
@@ -1081,7 +1105,8 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
     // notify view change. Don't call EventMultiplexer directly, this
     // might not be the main thread!
     mrEventQueue.addEvent(
-        makeEvent( [this] () { this->mrEventMultiplexer.notifyViewChanged(this->mxView); },
+        makeEvent( WeakRefWrapper(*this,
+            [] (SlideView & rThis) { rThis.mrEventMultiplexer.notifyViewChanged(rThis.mxView); }),
                    "EventMultiplexer::notifyViewChanged"));
 }
 
@@ -1096,7 +1121,8 @@ void SlideView::windowPaint( const awt::PaintEvent& /*e*/ )
     // notify view clobbering. Don't call EventMultiplexer directly,
     // this might not be the main thread!
     mrEventQueue.addEvent(
-        makeEvent( [this] () { this->mrEventMultiplexer.notifyViewClobbered(this->mxView); },
+        makeEvent( WeakRefWrapper(*this,
+            [] (SlideView & rThis) { rThis.mrEventMultiplexer.notifyViewClobbered(rThis.mxView); }),
                    "EventMultiplexer::notifyViewClobbered") );
 }
 
