@@ -13,7 +13,8 @@
 #include "fmtinfmt.hxx"
 #include "rtl/ustring.hxx"
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <memory>
+#include <vector>
 
 class SwTextNode;
 
@@ -76,9 +77,9 @@ private:
         sal_Int32 mEndTextPos;
     };
 
-    boost::ptr_vector<ClosedLink> mClosedLinks;
+    std::vector<std::unique_ptr<ClosedLink>> m_ClosedLinks;
 
-    boost::ptr_vector<StartedLink> mStartedLinks;
+    std::vector<std::unique_ptr<StartedLink>> m_StartedLinks;
 
     friend class ::ToxLinkProcessorTest;
 };

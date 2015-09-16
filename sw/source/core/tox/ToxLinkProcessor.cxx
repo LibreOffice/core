@@ -20,32 +20,34 @@ namespace sw {
 void
 ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const OUString& characterStyle)
 {
-    mStartedLinks.push_back(new StartedLink(startPosition, characterStyle));
+    m_StartedLinks.push_back(std::unique_ptr<StartedLink>(
+                new StartedLink(startPosition, characterStyle)));
 }
 
 void
 ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url)
 {
-    StartedLink const startedLink( (mStartedLinks.empty())
+    StartedLink const startedLink( (m_StartedLinks.empty())
         ? StartedLink(0, SW_RES(STR_POOLCHR_TOXJUMP))
-        : mStartedLinks.back() );
-    if (!mStartedLinks.empty())
+        : *m_StartedLinks.back() );
+    if (!m_StartedLinks.empty())
     {
-        mStartedLinks.pop_back();
+        m_StartedLinks.pop_back();
     }
 
     if (url.isEmpty()) {
         return;
     }
 
-    ClosedLink* closedLink = new ClosedLink(url, startedLink.mStartPosition, endPosition);
+    std::unique_ptr<ClosedLink> pClosedLink(
+            new ClosedLink(url, startedLink.mStartPosition, endPosition));
 
     const OUString& characterStyle = startedLink.mCharacterStyle;
     sal_uInt16 poolId = ObtainPoolId(characterStyle);
-    closedLink->mINetFormat.SetVisitedFormatAndId(characterStyle, poolId);
-    closedLink->mINetFormat.SetINetFormatAndId(characterStyle, poolId);
+    pClosedLink->mINetFormat.SetVisitedFormatAndId(characterStyle, poolId);
+    pClosedLink->mINetFormat.SetINetFormatAndId(characterStyle, poolId);
 
-    mClosedLinks.push_back(closedLink);
+    m_ClosedLinks.push_back(std::move(pClosedLink));
 }
 
 sal_uInt16
@@ -63,8 +65,9 @@ ToxLinkProcessor::ObtainPoolId(const OUString& characterStyle) const
 void
 ToxLinkProcessor::InsertLinkAttributes(SwTextNode& node)
 {
-    for (ClosedLink& clink : mClosedLinks) {
-        node.InsertItem(clink.mINetFormat, clink.mStartTextPos, clink.mEndTextPos);
+    for (auto const& clink : m_ClosedLinks)
+    {
+        node.InsertItem(clink->mINetFormat, clink->mStartTextPos, clink->mEndTextPos);
     }
 }
 
