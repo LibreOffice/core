@@ -34,7 +34,7 @@ typedef sal_uInt8   BitmapChecksumOctetArray[BITMAP_CHECKSUM_SIZE];
 template< sal_uInt8 N = 0 >
 inline void BCToBCOA( BitmapChecksum n, BitmapChecksumOctetArray p )
 {
-  p[N] = (sal_uInt8)(n >> ( 8 * N ));
+  p[N] = static_cast<sal_uInt8>(n >> ( 8 * N ));
   return BCToBCOA< N + 1 >( n, p );
 }
 
