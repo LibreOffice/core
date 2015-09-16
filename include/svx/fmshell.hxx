@@ -130,7 +130,7 @@ public:
 
     bool        IsActiveControl() const;
     void        ForgetActiveControl();
-    void        SetControlActivationHandler( const Link<>& _rHdl );
+    void        SetControlActivationHandler( const Link<LinkParamNone*,void>& _rHdl );
 
     virtual void    Activate(bool bMDI) SAL_OVERRIDE;
     virtual void    Deactivate(bool bMDI) SAL_OVERRIDE;

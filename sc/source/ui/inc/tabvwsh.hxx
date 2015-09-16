@@ -187,7 +187,7 @@ private:
     DECL_LINK( SimpleRefDone, OUString* );
     DECL_LINK( SimpleRefAborted, OUString* );
     DECL_LINK( SimpleRefChange, OUString* );
-    DECL_LINK( FormControlActivated, void* );
+    DECL_LINK_TYPED( FormControlActivated, LinkParamNone*, void );
 
 protected:
     virtual void    Activate(bool bMDI) SAL_OVERRIDE;

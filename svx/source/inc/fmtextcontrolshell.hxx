@@ -108,7 +108,7 @@ namespace svx
         SfxViewFrame*                                                               m_pViewFrame;
         // invalidating slots
         SfxBindings&                                                                m_rBindings;
-        Link<>                                                                      m_aControlActivationHandler;
+        Link<LinkParamNone*,void>                                                   m_aControlActivationHandler;
         AutoTimer                                                                   m_aClipboardInvalidation;
         bool                                                                        m_bNeedClipboardInvalidation;
 
@@ -123,7 +123,7 @@ namespace svx
         void    GetTextAttributeState( SfxItemSet& _rSet );
         bool    IsActiveControl( bool _bCountRichTextOnly = false ) const;
         void    ForgetActiveControl();
-        void    SetControlActivationHandler( const Link<>& _rHdl ) { m_aControlActivationHandler = _rHdl; }
+        void    SetControlActivationHandler( const Link<LinkParamNone*,void>& _rHdl ) { m_aControlActivationHandler = _rHdl; }
 
         /** to be called when a form in our document has been activated
         */

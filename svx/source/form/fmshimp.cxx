@@ -3925,7 +3925,7 @@ void FmXFormShell::ForgetActiveControl()
 }
 
 
-void FmXFormShell::SetControlActivationHandler( const Link<>& _rHdl )
+void FmXFormShell::SetControlActivationHandler( const Link<LinkParamNone*,void>& _rHdl )
 {
     m_pTextShell->SetControlActivationHandler( _rHdl );
 }

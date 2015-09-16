@@ -91,7 +91,7 @@ void FormShellManager::SetFormShell (FmFormShell* pFormShell)
         // Disconnect from the old form shell.
         if (mpFormShell != NULL)
         {
-            mpFormShell->SetControlActivationHandler(Link<>());
+            mpFormShell->SetControlActivationHandler(Link<LinkParamNone*,void>());
             EndListening(*mpFormShell);
             mpFormShell->SetView(NULL);
         }
@@ -183,7 +183,7 @@ void FormShellManager::UnregisterAtCenterPane()
     mpSubShellFactory.reset();
 }
 
-IMPL_LINK_NOARG(FormShellManager, FormControlActivated)
+IMPL_LINK_NOARG_TYPED(FormShellManager, FormControlActivated, LinkParamNone*, void)
 {
     // The form shell has been activated.  To give it priority in reacting to
     // slot calls the form shell is moved to the top of the object bar shell
@@ -196,8 +196,6 @@ IMPL_LINK_NOARG(FormShellManager, FormControlActivated)
         ViewShellManager::UpdateLock aLock (mrBase.GetViewShellManager());
         mrBase.GetViewShellManager()->SetFormShell(pShell,mpFormShell,mbFormShellAboveViewShell);
     }
-
-    return 0;
 }
 
 IMPL_LINK(FormShellManager, ConfigurationUpdateHandler, sd::tools::EventMultiplexerEvent*, pEvent)

@@ -544,7 +544,7 @@ public:
     DECL_LINK( AttrChangedNotify, void* );
 
     // form control has been activated
-    DECL_LINK( FormControlActivated, void* );
+    DECL_LINK_TYPED( FormControlActivated, LinkParamNone*, void );
 
     // edit links
     void            EditLinkDlg();

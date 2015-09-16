@@ -439,7 +439,7 @@ public:
     SAL_DLLPRIVATE void    GetTextAttributeState( SfxItemSet& _rSet );
     SAL_DLLPRIVATE bool    IsActiveControl( bool _bCountRichTextOnly = false ) const;
     SAL_DLLPRIVATE void    ForgetActiveControl();
-    SAL_DLLPRIVATE void    SetControlActivationHandler( const Link<>& _rHdl );
+    SAL_DLLPRIVATE void    SetControlActivationHandler( const Link<LinkParamNone*,void>& _rHdl );
 
     /// classifies our host document
     SAL_DLLPRIVATE ::svxform::DocumentType

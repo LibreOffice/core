@@ -200,7 +200,7 @@ void SwView::GotFocus() const
 // called by the FormShell when a form control is focused. This is
 // a request to put the form shell on the top of the dispatcher stack
 
-IMPL_LINK_NOARG(SwView, FormControlActivated)
+IMPL_LINK_NOARG_TYPED(SwView, FormControlActivated, LinkParamNone*, void)
 {
     // if a form control has been activated, and the form shell is not on the top
     // of the dispatcher stack, then we need to activate it
@@ -216,8 +216,6 @@ IMPL_LINK_NOARG(SwView, FormControlActivated)
 
         AttrChangedNotify( m_pWrtShell );
     }
-
-    return 0L;
 }
 
 void SwView::SelectShell()

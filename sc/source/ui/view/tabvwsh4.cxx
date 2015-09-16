@@ -975,11 +975,10 @@ void ScTabViewShell::SetFormShellAtTop( bool bSet )
     }
 }
 
-IMPL_LINK_NOARG(ScTabViewShell, FormControlActivated)
+IMPL_LINK_NOARG_TYPED(ScTabViewShell, FormControlActivated, LinkParamNone*, void)
 {
     // a form control got the focus, so the form shell has to be on top
     SetFormShellAtTop( true );
-    return 0;
 }
 
 //  GetMySubShell / SetMySubShell: altes Verhalten simulieren,

@@ -1287,7 +1287,7 @@ void FmFormShell::ForgetActiveControl()
 }
 
 
-void FmFormShell::SetControlActivationHandler( const Link<>& _rHdl )
+void FmFormShell::SetControlActivationHandler( const Link<LinkParamNone*,void>& _rHdl )
 {
     m_pImpl->SetControlActivationHandler( _rHdl );
 }
