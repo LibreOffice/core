@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ba0121b8_cde8c919",
+        "filename": "include/xmlreader/span.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-09-16T15:10:11Z",
+      "side": 1,
+      "message": "for the rtl_str_compare_WithLength usage",
+      "parentUuid": "ba0121b8_0d7c8171",
+      "revId": "faedebd305872703bad486b57a49e4e981988281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba0121b8_2d9345a5",
         "filename": "include/xmlreader/xmlreader.hxx",
         "patchSetId": 1
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "ba0121b8_aded9527",
+        "filename": "include/xmlreader/xmlreader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-09-16T15:10:11Z",
+      "side": 1,
+      "message": "iwyu says that is for size_t",
+      "parentUuid": "ba0121b8_2d9345a5",
+      "revId": "faedebd305872703bad486b57a49e4e981988281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ba0121b8_4d967995",
         "filename": "include/xmlreader/xmlreader.hxx",
         "patchSetId": 1
@@ -64,6 +100,24 @@
       "writtenOn": "2015-09-16T15:04:21Z",
       "side": 1,
       "message": "what\u0027s \u003cdebug/vector\u003e?",
+      "revId": "faedebd305872703bad486b57a49e4e981988281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_0df3e10b",
+        "filename": "include/xmlreader/xmlreader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-09-16T15:10:11Z",
+      "side": 1,
+      "message": "probably because I\u0027ve got enable-dbgutil turned on, iwyu thinks vector lives there",
+      "parentUuid": "ba0121b8_4d967995",
       "revId": "faedebd305872703bad486b57a49e4e981988281",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
