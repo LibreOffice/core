@@ -814,6 +814,27 @@ linux-android*)
     BUILD_TYPE="$BUILD_TYPE FONTCONFIG FREETYPE"
     ;;
 
+emscripten*)
+    build_gstreamer_1_0=no
+    build_gstreamer_0_10=no
+    enable_lotuswordpro=no
+    enable_mpl_subset=yes
+    enable_coinmp=yes
+    enable_lpsolve=no
+    enable_report_builder=no
+    with_theme="tango"
+    test_cups=no
+    test_dbus=no
+    test_fontconfig=no
+    test_freetype=no
+    test_gtk=no
+    test_tde=no
+    test_kde4=no
+    test_randr=no
+    test_xrender=no
+    _os=Emscripten
+    ;;
+
 *)
     AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
@@ -4310,6 +4331,17 @@ linux-android*)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
     esac
+    ;;
+
+emscripten*)
+    COM=emcc
+    GUIBASE=not-used
+    OS=EMSCRITPTEN
+    RTL_OS=Emscripten
+    P_SEP=:
+    CPUNAME=INTEL
+    RTL_ARCH=x86
+    PLATFORMID=linux_x86
     ;;
 
 mingw*)
