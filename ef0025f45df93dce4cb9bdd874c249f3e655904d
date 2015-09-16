@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_520c5442",
+        "filename": "vcl/opengl/salbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2015-09-16T12:54:40Z",
+      "side": 1,
+      "message": "Slightly worried about-row-stride here. Is there not some rounding-up to integer number of bytes per row (cf. mnBytesPerRow etc.) ? of course - vastly better than nothing ...",
+      "range": {
+        "startLine": 532,
+        "startChar": 12,
+        "endLine": 532,
+        "endChar": 13
+      },
+      "revId": "ef0025f45df93dce4cb9bdd874c249f3e655904d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
