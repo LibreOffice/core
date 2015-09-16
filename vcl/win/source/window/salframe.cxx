@@ -1046,7 +1046,7 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
             SalData* pSalData = GetSalData();
             if ( mpGraphics2->getDefPal() )
                 SelectPalette( mpGraphics2->getHDC(), mpGraphics2->getDefPal(), TRUE );
-            mpGraphics2->InitGraphics();
+            mpGraphics2->DeInitGraphics();
             SendMessageW( pSalData->mpFirstInstance->mhComWnd,
                              SAL_MSG_RELEASEDC,
                              (WPARAM)mhWnd,
