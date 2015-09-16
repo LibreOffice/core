@@ -62,9 +62,8 @@ bool X11OpenGLSalGraphicsImpl::UseContext( const rtl::Reference<OpenGLContext> &
 {
     X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
 
-    if( !pContext->isInitialized() )
+    if( !pContext->isInitialized() || IsForeignContext( pContext ) )
         return false;
-
     if( !pProvider )
         return pContext->getOpenGLWindow().win != None;
     else

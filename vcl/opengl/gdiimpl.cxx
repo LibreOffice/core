@@ -1881,4 +1881,11 @@ OpenGLContext *OpenGLSalGraphicsImpl::beginPaint()
         return mpContext.get();
 }
 
+bool OpenGLSalGraphicsImpl::IsForeignContext(const rtl::Reference<OpenGLContext> &xContext)
+{
+    // so far a blunt heuristic: vcl uses shiny new contexts.
+    return xContext->requestedLegacy();
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
