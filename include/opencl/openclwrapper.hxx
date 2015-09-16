@@ -43,7 +43,6 @@ struct GPUEnv
     cl_platform_id mpPlatformID;
     cl_device_type mDevType;
     cl_context mpContext;
-    cl_device_id *mpArryDevsID;
     cl_device_id mpDevID;
     cl_command_queue mpCmdQueue[OPENCL_CMDQUEUE_SIZE];
     cl_program mpArryPrograms[MAX_CLFILE_NUM]; //one program object maps one kernel source file

@@ -3889,7 +3889,7 @@ void DynamicKernel::CreateKernel()
             SAL_INFO("sc.opencl", "Created program " << mpProgram);
 
             err = clBuildProgram(mpProgram, 1,
-                ::opencl::gpuEnv.mpArryDevsID, "", NULL, NULL);
+                &::opencl::gpuEnv.mpDevID, "", NULL, NULL);
             if (err != CL_SUCCESS)
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -3897,7 +3897,7 @@ void DynamicKernel::CreateKernel()
                 {
                     cl_build_status stat;
                     cl_int e = clGetProgramBuildInfo(
-                        mpProgram, ::opencl::gpuEnv.mpArryDevsID[0],
+                        mpProgram, ::opencl::gpuEnv.mpDevID,
                         CL_PROGRAM_BUILD_STATUS, sizeof(cl_build_status),
                         &stat, 0);
                     SAL_WARN_IF(
@@ -3909,7 +3909,7 @@ void DynamicKernel::CreateKernel()
                     {
                         size_t n;
                         e = clGetProgramBuildInfo(
-                            mpProgram, ::opencl::gpuEnv.mpArryDevsID[0],
+                            mpProgram, ::opencl::gpuEnv.mpDevID,
                             CL_PROGRAM_BUILD_LOG, 0, 0, &n);
                         SAL_WARN_IF(
                             e != CL_SUCCESS || n == 0, "sc.opencl",
@@ -3920,7 +3920,7 @@ void DynamicKernel::CreateKernel()
                         {
                             std::vector<char> log(n);
                             e = clGetProgramBuildInfo(
-                                mpProgram, ::opencl::gpuEnv.mpArryDevsID[0],
+                                mpProgram, ::opencl::gpuEnv.mpDevID,
                                 CL_PROGRAM_BUILD_LOG, n, &log[0], 0);
                             SAL_WARN_IF(
                                 e != CL_SUCCESS || n == 0, "sc.opencl",

@@ -148,32 +148,29 @@ std::vector<std::shared_ptr<osl::File> > binaryGenerated( const char * clFileNam
     if(clStatus != CL_SUCCESS)
         return aGeneratedFiles;
 
-    // grab the handles to all of the devices in the context.
-    std::unique_ptr<cl_device_id[]> pArryDevsID(new cl_device_id[numDevices]);
+    assert(numDevices == 1);
+
+    // grab the handle to the device in the context.
+    cl_device_id pDevID;
     clStatus = clGetContextInfo( context, CL_CONTEXT_DEVICES,
-            sizeof( cl_device_id ) * numDevices, pArryDevsID.get(), NULL );
+            sizeof( cl_device_id ), &pDevID, NULL );
 
     if(clStatus != CL_SUCCESS)
         return aGeneratedFiles;
 
-    for ( size_t i = 0; i < numDevices; i++ )
+    assert(pDevID == gpuEnv.mpDevID);
+
+    OString fileName = createFileName(gpuEnv.mpDevID, clFileName);
+    osl::File* pNewFile = new osl::File(rtl::OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
+    if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
     {
-        if ( pArryDevsID[i] != 0 )
-        {
-            OString fileName = createFileName(gpuEnv.mpArryDevsID[i], clFileName);
-            osl::File* pNewFile = new osl::File(rtl::OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
-            if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
-            {
-                aGeneratedFiles.push_back(std::shared_ptr<osl::File>(pNewFile));
-                SAL_INFO("opencl.file", "Opening binary file '" << fileName << "' for reading: success");
-            }
-            else
-            {
-                SAL_INFO("opencl.file", "Opening binary file '" << fileName << "' for reading: FAIL");
-                delete pNewFile;
-                break;
-            }
-        }
+        aGeneratedFiles.push_back(std::shared_ptr<osl::File>(pNewFile));
+        SAL_INFO("opencl.file", "Opening binary file '" << fileName << "' for reading: success");
+    }
+    else
+    {
+        SAL_INFO("opencl.file", "Opening binary file '" << fileName << "' for reading: FAIL");
+        delete pNewFile;
     }
 
     return aGeneratedFiles;
@@ -206,59 +203,37 @@ bool generatBinFromKernelSource( cl_program program, const char * clFileName )
                    sizeof(numDevices), &numDevices, NULL );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
-    std::vector<cl_device_id> pArryDevsID(numDevices);
-    /* grab the handles to all of the devices in the program. */
+    assert(numDevices == 1);
+
+    cl_device_id pDevID;
+    /* grab the handle to the device in the program. */
     clStatus = clGetProgramInfo( program, CL_PROGRAM_DEVICES,
-                   sizeof(cl_device_id) * numDevices, &pArryDevsID[0], NULL );
+                   sizeof(cl_device_id), &pDevID, NULL );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
-    /* figure out the sizes of each of the binaries. */
-    std::vector<size_t> binarySizes(numDevices);
+    /* figure out the size of the binary. */
+    size_t binarySize;
 
     clStatus = clGetProgramInfo( program, CL_PROGRAM_BINARY_SIZES,
-                   sizeof(size_t) * numDevices, &binarySizes[0], NULL );
+                   sizeof(size_t), &binarySize, NULL );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
-    /* copy over all of the generated binaries. */
-    std::unique_ptr<char*[]> binaries(new char*[numDevices]);
-
-    for ( size_t i = 0; i < numDevices; i++ )
+    /* copy over the generated binary. */
+    if ( binarySize != 0 )
     {
-        if ( binarySizes[i] != 0 )
-        {
-            binaries[i] = new char[binarySizes[i]];
-        }
+        char *binary = new char[binarySize];
+        clStatus = clGetProgramInfo( program, CL_PROGRAM_BINARIES,
+                                     sizeof(char *), &binary, NULL );
+        CHECK_OPENCL(clStatus,"clGetProgramInfo");
+
+        OString fileName = createFileName(pDevID, clFileName);
+        if ( !writeBinaryToFile( fileName,
+                                 binary, binarySize ) )
+            SAL_INFO("opencl.file", "Writing binary file '" << fileName << "': FAIL");
         else
-        {
-            binaries[i] = NULL;
-        }
+            SAL_INFO("opencl.file", "Writing binary file '" << fileName << "': success");
+        delete[] binary;
     }
-
-    clStatus = clGetProgramInfo( program, CL_PROGRAM_BINARIES,
-                   sizeof(char *) * numDevices, binaries.get(), NULL );
-    CHECK_OPENCL(clStatus,"clGetProgramInfo");
-
-    /* dump out each binary into its own separate file. */
-    for ( size_t i = 0; i < numDevices; i++ )
-    {
-
-        if ( binarySizes[i] != 0 )
-        {
-            OString fileName = createFileName(pArryDevsID[i], clFileName);
-            if ( !writeBinaryToFile( fileName,
-                        binaries[i], binarySizes[i] ) )
-                SAL_INFO("opencl.file", "Writing binary file '" << fileName << "': FAIL");
-            else
-                SAL_INFO("opencl.file", "Writing binary file '" << fileName << "': success");
-        }
-    }
-
-    // Release all resources and memory
-    for ( size_t i = 0; i < numDevices; i++ )
-    {
-        delete[] binaries[i];
-    }
-
     return true;
 }
 
@@ -315,7 +290,6 @@ void releaseOpenCLEnv( GPUEnv *gpuInfo )
     }
     bIsInited = false;
     gpuInfo->mnIsUserCreated = 0;
-    free( gpuInfo->mpArryDevsID );
 
     return;
 }
@@ -325,46 +299,22 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
     cl_int clStatus;
     //char options[512];
     // create a cl program executable for all the devices specified
-    if (!gpuInfo->mnIsUserCreated)
-    {
-        clStatus = clBuildProgram(gpuInfo->mpArryPrograms[idx], 1, gpuInfo->mpArryDevsID,
-                       buildOption, NULL, NULL);
-    }
-    else
-    {
-        clStatus = clBuildProgram(gpuInfo->mpArryPrograms[idx], 1, &(gpuInfo->mpDevID),
-                       buildOption, NULL, NULL);
-    }
+    clStatus = clBuildProgram(gpuInfo->mpArryPrograms[idx], 1, &gpuInfo->mpDevID,
+                              buildOption, NULL, NULL);
 
     if ( clStatus != CL_SUCCESS )
     {
         size_t length;
-        if ( !gpuInfo->mnIsUserCreated )
-        {
-            clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpArryDevsID[0],
-                           CL_PROGRAM_BUILD_LOG, 0, NULL, &length );
-        }
-        else
-        {
-            clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpDevID,
-                           CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
-        }
+        clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpDevID,
+                                          CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
         if ( clStatus != CL_SUCCESS )
         {
             return false;
         }
 
         std::unique_ptr<char[]> buildLog(new char[length]);
-        if ( !gpuInfo->mnIsUserCreated )
-        {
-            clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpArryDevsID[0],
-                           CL_PROGRAM_BUILD_LOG, length, buildLog.get(), &length );
-        }
-        else
-        {
-            clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpDevID,
-                           CL_PROGRAM_BUILD_LOG, length, buildLog.get(), &length );
-        }
+        clStatus = clGetProgramBuildInfo( gpuInfo->mpArryPrograms[idx], gpuInfo->mpDevID,
+                                          CL_PROGRAM_BUILD_LOG, length, buildLog.get(), &length );
         if ( clStatus != CL_SUCCESS )
         {
             return false;
@@ -496,14 +446,14 @@ bool initOpenCLRunEnv( GPUEnv *gpuInfo )
     bool bKhrFp64 = false;
     bool bAmdFp64 = false;
 
-    checkDeviceForDoubleSupport(gpuInfo->mpArryDevsID[0], bKhrFp64, bAmdFp64);
+    checkDeviceForDoubleSupport(gpuInfo->mpDevID, bKhrFp64, bAmdFp64);
 
     gpuInfo->mnKhrFp64Flag = bKhrFp64;
     gpuInfo->mnAmdFp64Flag = bAmdFp64;
 
     gpuInfo->mnPreferredVectorWidthFloat = 0;
 
-    clGetDeviceInfo(gpuInfo->mpArryDevsID[0], CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, sizeof(cl_uint),
+    clGetDeviceInfo(gpuInfo->mpDevID, CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, sizeof(cl_uint),
                     &gpuInfo->mnPreferredVectorWidthFloat, NULL);
 
     return false;
@@ -829,15 +779,6 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         env.mpOclCmdQueue[i] = command_queue[i];
 
     initOpenCLAttr(&env);
-
-    // why do we need this at all?
-
-    // (Assuming the above question refers to the mpArryDevsID
-    // initialisation below.) Because otherwise the code crashes in
-    // initOpenCLRunEnv(). Confused? You should be.
-
-    gpuEnv.mpArryDevsID = static_cast<cl_device_id*>(malloc( sizeof(cl_device_id) ));
-    gpuEnv.mpArryDevsID[0] = pDeviceId;
 
     return !initOpenCLRunEnv(0);
 }
