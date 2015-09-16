@@ -16,7 +16,7 @@
 
 namespace sc {
 
-void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type& aPos)
+void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type& aPos, sc::EndListeningContext* pCxt)
 {
     SCROW nRow = aPos.first->position + aPos.second;
 
@@ -61,7 +61,14 @@ void SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
     // other listeners, all listeners of this group's top cell are to be reset.
     if (nLength2)
     {
-        rPrevTop.EndListeningTo( rPrevTop.GetDocument(), NULL, ScAddress( ScAddress::UNINITIALIZED));
+        // If a context exists it has to be used to not interfere with
+        // ScColumn::maBroadcasters iterators, which the EndListeningTo()
+        // without context would do when removing a broadcaster that had its
+        // last listener removed.
+        if (pCxt)
+            rPrevTop.EndListeningTo(*pCxt);
+        else
+            rPrevTop.EndListeningTo( rPrevTop.GetDocument(), NULL, ScAddress( ScAddress::UNINITIALIZED));
         rPrevTop.SetNeedsListening(true);
     }
 #endif
@@ -107,7 +114,7 @@ void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vecto
     if (aPos.first == rCells.end())
         return;
 
-    splitFormulaCellGroup(aPos);
+    splitFormulaCellGroup(aPos, nullptr);
     std::vector<SCROW>::iterator itEnd = rBounds.end();
     for (++it; it != itEnd; ++it)
     {
@@ -116,7 +123,7 @@ void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vecto
         if (aPos.first == rCells.end())
             return;
 
-        splitFormulaCellGroup(aPos);
+        splitFormulaCellGroup(aPos, nullptr);
     }
 }
 
