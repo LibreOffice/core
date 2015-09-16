@@ -27,7 +27,7 @@
 #include <vector>
 
 #include "svdata.hxx"
-
+#include "salgdi.hxx"
 #include "salinst.hxx"
 #include "opengl/zone.hxx"
 #include "opengl/watchdog.hxx"
@@ -815,5 +815,49 @@ GLXFBConfig OpenGLHelper::GetPixmapFBConfig( Display* pDisplay, bool& bInverted 
 }
 
 #endif
+
+OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)
+    : pHandle( NULL )
+{
+    if( pDev->mpGraphics || pDev->AcquireGraphics() )
+    {
+        OpenGLContext *pContext = pDev->mpGraphics->BeginPaint();
+        if( pContext )
+        {
+            assert( pContext->mnPainting >= 0 );
+            pContext->mnPainting++;
+            pContext->acquire();
+            pHandle = static_cast<void *>( pContext );
+        }
+    }
+}
+
+/**
+ * Flush all the queued rendering commands to the screen for this context.
+ */
+void OutputDevice::PaintScope::flush()
+{
+    if( pHandle )
+    {
+        OpenGLContext *pContext = static_cast<OpenGLContext *>( pHandle );
+        pHandle = NULL;
+        pContext->mnPainting--;
+        assert( pContext->mnPainting >= 0 );
+        if( pContext->mnPainting == 0 )
+        {
+            pContext->makeCurrent();
+            pContext->AcquireDefaultFramebuffer();
+            glFlush();
+            pContext->swapBuffers();
+            CHECK_GL_ERROR();
+        }
+        pContext->release();
+    }
+}
+
+OutputDevice::PaintScope::~PaintScope()
+{
+    flush();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

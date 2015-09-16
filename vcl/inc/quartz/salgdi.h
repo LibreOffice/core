@@ -421,9 +421,6 @@ public:
     virtual css::uno::Any   GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const ::basegfx::B2ISize& rSize) const SAL_OVERRIDE;
     virtual SystemFontData  GetSysFontData( int /* nFallbacklevel */ ) const SAL_OVERRIDE;
 
-    virtual void            BeginPaint() SAL_OVERRIDE { };
-    virtual void            EndPaint() SAL_OVERRIDE { };
-
 private:
     // differences between VCL, Quartz and kHiThemeOrientation coordinate systems
     // make some graphics seem to be vertically-mirrored from a VCL perspective

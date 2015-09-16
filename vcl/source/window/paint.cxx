@@ -276,7 +276,7 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
         VCL_GL_INFO("vcl.opengl", "PaintHelper::DoPaint on " <<
                     typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "' begin");
 
-        m_pWindow->BeginPaint();
+        OutputDevice::PaintScope aScope( m_pWindow );
 
         // double-buffering: setup the buffer if it does not exist
         if (!pFrameData->mbInBufferedPaint && m_pWindow->SupportsDoubleBuffering())
@@ -305,8 +305,6 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
             m_pWindow->PushPaintHelper(this, *m_pWindow);
             m_pWindow->Paint(*m_pWindow, m_aPaintRect);
         }
-
-        m_pWindow->EndPaint();
 
         VCL_GL_INFO("vcl.opengl", "PaintHelper::DoPaint end on " <<
                     typeid( *m_pWindow ).name() << " '" << m_pWindow->GetText() << "'");
@@ -629,10 +627,8 @@ void Window::ImplCallOverlapPaint()
     {
         // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
         //         because we were called from the Sal layer
-        OutputDevice *pOutDev = GetOutDev();
-        pOutDev->BeginPaint();
+        OutputDevice::PaintScope aScope( GetOutDev() );
         ImplCallPaint(NULL, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
-        pOutDev->EndPaint();
     }
 }
 
@@ -651,7 +647,7 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
         return;
     }
 
-    BeginPaint();
+    OutputDevice::PaintScope aScope(this);
 
     // save paint events until resizing or initial sizing done
     if (!ImplDoTiledRendering() && mpWindowImpl->mbFrame &&
@@ -664,15 +660,13 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandlePaintHdl, Idle *, void)
     {
         ImplCallOverlapPaint();
     }
-
-    EndPaint();
 }
 
 IMPL_LINK_NOARG_TYPED(Window, ImplHandleResizeTimerHdl, Idle *, void)
 {
     if( mpWindowImpl->mbReallyVisible )
     {
-        BeginPaint();
+        OutputDevice::PaintScope aScope(this);
 
         ImplCallResize();
         if( ImplDoTiledRendering() )
@@ -684,8 +678,6 @@ IMPL_LINK_NOARG_TYPED(Window, ImplHandleResizeTimerHdl, Idle *, void)
             mpWindowImpl->mpFrameData->maPaintIdle.Stop();
             mpWindowImpl->mpFrameData->maPaintIdle.GetIdleHdl().Call( NULL );
         }
-
-        EndPaint();
     }
 }
 
