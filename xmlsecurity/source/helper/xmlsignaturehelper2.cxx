@@ -32,13 +32,15 @@
 
 using namespace com::sun::star;
 
-ImplXMLSignatureListener::ImplXMLSignatureListener(const Link<>& rCreationResultListenerListener, const Link<>& rVerifyResultListenerListener, const Link<>& rStartSignatureElement)
+ImplXMLSignatureListener::ImplXMLSignatureListener(const Link<XMLSignatureCreationResult&,void>& rCreationResultListenerListener,
+                                                   const Link<XMLSignatureVerifyResult&,void>& rVerifyResultListenerListener,
+                                                   const Link<LinkParamNone*,void>& rStartSignatureElement)
 {
     maCreationResultListenerListener = rCreationResultListenerListener;
     maVerifyResultListenerListener = rVerifyResultListenerListener;
     maStartVerifySignatureElementListener = rStartSignatureElement;
-
 }
+
 ImplXMLSignatureListener::~ImplXMLSignatureListener()
 {
 }
@@ -53,14 +55,14 @@ void SAL_CALL ImplXMLSignatureListener::signatureCreated( sal_Int32 securityId, 
         throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     XMLSignatureCreationResult aResult( securityId, nResult );
-    maCreationResultListenerListener.Call( &aResult );
+    maCreationResultListenerListener.Call( aResult );
 }
 
 void SAL_CALL ImplXMLSignatureListener::signatureVerified( sal_Int32 securityId, com::sun::star::xml::crypto::SecurityOperationStatus nResult )
         throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     XMLSignatureVerifyResult aResult( securityId, nResult );
-    maVerifyResultListenerListener.Call( &aResult );
+    maVerifyResultListenerListener.Call( aResult );
 }
 
 // XDocumentHandler
@@ -82,12 +84,12 @@ void SAL_CALL ImplXMLSignatureListener::endDocument(  )
     }
 }
 
-void SAL_CALL ImplXMLSignatureListener::startElement( const OUString& aName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttribs )
+void SAL_CALL ImplXMLSignatureListener::startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
         throw (com::sun::star::xml::sax::SAXException, com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( aName == "Signature" )
     {
-            maStartVerifySignatureElementListener.Call( const_cast<css::uno::Reference<css::xml::sax::XAttributeList> *>(&xAttribs) );
+        maStartVerifySignatureElementListener.Call( nullptr );
     }
 
     if (m_xNextHandler.is())

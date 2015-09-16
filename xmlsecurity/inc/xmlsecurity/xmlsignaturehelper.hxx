@@ -105,12 +105,12 @@ private:
     XSecController*             mpXSecController;
     bool                        mbError;
     bool mbODFPre1_2;
-    Link<>                      maStartVerifySignatureHdl;
+    Link<LinkParamNone*,bool>   maStartVerifySignatureHdl;
 
 private:
-    DECL_LINK(  SignatureCreationResultListener, XMLSignatureCreationResult*);
-    DECL_LINK(  SignatureVerifyResultListener, XMLSignatureVerifyResult* );
-    DECL_LINK(  StartVerifySignatureElement, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >* );
+    DECL_LINK_TYPED( SignatureCreationResultListener, XMLSignatureCreationResult&, void );
+    DECL_LINK_TYPED( SignatureVerifyResultListener, XMLSignatureVerifyResult&, void );
+    DECL_LINK_TYPED( StartVerifySignatureElement, LinkParamNone*, void );
 
     XMLSignatureHelper(const XMLSignatureHelper&) SAL_DELETED_FUNCTION;
 
@@ -130,7 +130,7 @@ public:
                 // Argument for the Link is a uno::Reference< xml::sax::XAttributeList >*
                 // Return 1 to verify, 0 to skip.
                 // Default handler will verify all.
-    void        SetStartVerifySignatureHdl( const Link<>& rLink );
+    void        SetStartVerifySignatureHdl( const Link<LinkParamNone*,bool>& rLink );
 
                 // Get the security environment
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > GetSecurityEnvironment();

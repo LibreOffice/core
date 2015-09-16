@@ -93,7 +93,7 @@ private:
     DECL_LINK_TYPED(RemoveButtonHdl, Button*, void);
     DECL_LINK_TYPED(SignatureHighlightHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED(SignatureSelectHdl, SvTreeListBox*, bool );
-    DECL_LINK(          StartVerifySignatureHdl, void* );
+    DECL_LINK_TYPED(StartVerifySignatureHdl, LinkParamNone*, bool );
     DECL_LINK_TYPED(OKButtonHdl, Button*, void );
 
     void                ImplGetSignatureInformations(bool bUseTempStream);

@@ -85,7 +85,7 @@ void XMLSignatureHelper::SetStorage(
 }
 
 
-void XMLSignatureHelper::SetStartVerifySignatureHdl( const Link<>& rLink )
+void XMLSignatureHelper::SetStartVerifySignatureHdl( const Link<LinkParamNone*,bool>& rLink )
 {
     maStartVerifySignatureHdl = rLink;
 }
@@ -311,31 +311,27 @@ uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > XMLSignatu
     return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironment()): uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >());
 }
 
-IMPL_LINK( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult*, pResult )
+IMPL_LINK_TYPED( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult&, rResult, void )
 {
-    maCreationResults.insert( maCreationResults.begin() + maCreationResults.size(), *pResult );
-    if ( pResult->nSignatureCreationResult != com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
+    maCreationResults.insert( maCreationResults.begin() + maCreationResults.size(), rResult );
+    if ( rResult.nSignatureCreationResult != com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
         mbError = true;
-    return 0;
 }
 
-IMPL_LINK( XMLSignatureHelper, SignatureVerifyResultListener, XMLSignatureVerifyResult*, pResult )
+IMPL_LINK_TYPED( XMLSignatureHelper, SignatureVerifyResultListener, XMLSignatureVerifyResult&, rResult, void )
 {
-    maVerifyResults.insert( maVerifyResults.begin() + maVerifyResults.size(), *pResult );
-    if ( pResult->nSignatureVerifyResult != com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
+    maVerifyResults.insert( maVerifyResults.begin() + maVerifyResults.size(), rResult );
+    if ( rResult.nSignatureVerifyResult != com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED )
         mbError = true;
-    return 0;
 }
 
-IMPL_LINK( XMLSignatureHelper, StartVerifySignatureElement, const uno::Reference< com::sun::star::xml::sax::XAttributeList >*, pAttrs )
+IMPL_LINK_NOARG_TYPED( XMLSignatureHelper, StartVerifySignatureElement, LinkParamNone*, void )
 {
-    if ( !maStartVerifySignatureHdl.IsSet() || maStartVerifySignatureHdl.Call( const_cast<css::uno::Reference<css::xml::sax::XAttributeList> *>(pAttrs) ) )
+    if ( !maStartVerifySignatureHdl.IsSet() || maStartVerifySignatureHdl.Call(nullptr) )
     {
         sal_Int32 nSignatureId = mpXSecController->getNewSecurityId();
         mpXSecController->addSignature( nSignatureId );
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

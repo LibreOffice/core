@@ -565,9 +565,9 @@ IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, RemoveButtonHdl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(DigitalSignaturesDialog, StartVerifySignatureHdl)
+IMPL_LINK_NOARG_TYPED(DigitalSignaturesDialog, StartVerifySignatureHdl, LinkParamNone*, bool)
 {
-    return mbVerifySignatures ? 1 : 0;
+    return mbVerifySignatures;
 }
 
 void DigitalSignaturesDialog::ImplFillSignaturesBox()
