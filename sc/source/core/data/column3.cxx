@@ -327,13 +327,13 @@ void ScColumn::DetachFormulaCells(
     const sc::CellStoreType::position_type& aPos, size_t nLength )
 {
     // Split formula grouping at the top and bottom boundaries.
-    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, nullptr);
     size_t nRow = aPos.first->position + aPos.second;
     size_t nNextTopRow = nRow + nLength; // start row of next formula group.
     if (ValidRow(nNextTopRow))
     {
         sc::CellStoreType::position_type aPos2 = maCells.position(aPos.first, nNextTopRow);
-        sc::SharedFormulaUtil::splitFormulaCellGroup(aPos2);
+        sc::SharedFormulaUtil::splitFormulaCellGroup(aPos2, nullptr);
     }
 
     if (pDocument->IsClipOrUndo())
@@ -368,11 +368,11 @@ void ScColumn::DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, S
     sc::CellStoreType::iterator it = aPos.first;
 
     // Split formula grouping at the top and bottom boundaries.
-    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
+    sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, &rCxt);
     if (ValidRow(nRow2+1))
     {
         aPos = maCells.position(it, nRow2+1);
-        sc::SharedFormulaUtil::splitFormulaCellGroup(aPos);
+        sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, &rCxt);
     }
 
     if (pDocument->IsClipOrUndo())
