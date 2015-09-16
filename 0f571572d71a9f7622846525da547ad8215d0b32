@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_cd81e94f",
+        "filename": "include/xmlreader/pad.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-09-16T15:04:21Z",
+      "side": 0,
+      "message": "please don\u0027t remove #include \u003csal/config.h\u003e being the first thing in every file, it is there by convention (so some necessary fixups can be made there, like the notorious Solaris #undef sun)",
+      "revId": "0f571572d71a9f7622846525da547ad8215d0b32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

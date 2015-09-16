@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_ad863563",
+        "filename": "include/xmlreader/pad.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-09-16T15:04:21Z",
+      "side": 1,
+      "message": "what is the benefit of this odd reordering?  (at least I\u0027ve gotten into a consistent habit of ordering into blocks: (1) sal/config.h, (2) C++ standard headers, (3) system includes, (4) includes from LO\u0027s include/, (5) module-local includes; and each block sorted lexicographically)",
+      "revId": "faedebd305872703bad486b57a49e4e981988281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_0d7c8171",
+        "filename": "include/xmlreader/span.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-09-16T15:04:21Z",
+      "side": 1,
+      "message": "why, given the below forward decl?",
+      "revId": "faedebd305872703bad486b57a49e4e981988281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_2d9345a5",
+        "filename": "include/xmlreader/xmlreader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-09-16T15:04:21Z",
+      "side": 1,
+      "message": "stddef.h is a deprecated header you\u0027d not really want to include in a C++ file",
+      "revId": "faedebd305872703bad486b57a49e4e981988281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_4d967995",
+        "filename": "include/xmlreader/xmlreader.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-09-16T15:04:21Z",
+      "side": 1,
+      "message": "what\u0027s \u003cdebug/vector\u003e?",
+      "revId": "faedebd305872703bad486b57a49e4e981988281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
