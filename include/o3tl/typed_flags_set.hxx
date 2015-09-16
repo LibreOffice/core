@@ -68,7 +68,6 @@ struct is_typed_flags {
 
     class Wrap {
     public:
-        typedef typename std::underlying_type<E>::type underlying_type;
         typedef is_typed_flags Unwrapped;
 
         explicit Wrap(typename std::underlying_type<E>::type value):
