@@ -64,8 +64,9 @@ public:
      * specified position is not a formula cell.
      *
      * @param aPos position of cell to examine.
+     * @param pCxt context to be used, if any, may be nullptr.
      */
-    static void splitFormulaCellGroup(const CellStoreType::position_type& aPos);
+    static void splitFormulaCellGroup(const CellStoreType::position_type& aPos, sc::EndListeningContext* pCxt);
 
     /**
      * Split existing shared formula ranges at specified row positions.
