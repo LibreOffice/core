@@ -208,9 +208,6 @@ public:
     virtual css::uno::Any   GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const SAL_OVERRIDE;
 
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
-
-    virtual void BeginPaint() SAL_OVERRIDE { };
-    virtual void EndPaint() SAL_OVERRIDE { };
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H

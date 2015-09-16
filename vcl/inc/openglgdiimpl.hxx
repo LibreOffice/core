@@ -326,8 +326,7 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) SAL_OVERRIDE;
 
-    virtual void beginPaint() SAL_OVERRIDE;
-    virtual void endPaint() SAL_OVERRIDE;
+    virtual OpenGLContext *beginPaint() SAL_OVERRIDE;
 private:
 };
 
