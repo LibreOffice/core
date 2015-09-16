@@ -1548,7 +1548,7 @@ namespace svxform
 
 
 
-    IMPL_LINK_NOARG(NavigatorTree, OnClipboardAction)
+    IMPL_LINK_NOARG_TYPED(NavigatorTree, OnClipboardAction, OLocalExchange&, void)
     {
         if ( !m_aControlExchange.isClipboardOwner() )
         {
@@ -1572,7 +1572,6 @@ namespace svxform
                 m_bKeyboardCut = false;
             }
         }
-        return 0L;
     }
 
 

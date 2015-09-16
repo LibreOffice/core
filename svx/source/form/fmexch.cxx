@@ -48,7 +48,7 @@ namespace svxform
         if ( m_bClipboardOwner )
         {   // simulate a lostOwnership to notify parties interested in
             if ( m_aClipboardListener.IsSet() )
-                m_aClipboardListener.Call( this );
+                m_aClipboardListener.Call( *this );
         }
 
         m_bClipboardOwner = true;
@@ -81,7 +81,7 @@ namespace svxform
         m_bClipboardOwner = false;
 
         if ( m_aClipboardListener.IsSet() )
-            m_aClipboardListener.Call( this );
+            m_aClipboardListener.Call( *this );
     }
 
 
@@ -391,7 +391,7 @@ namespace svxform
     {
         if (m_pTransferable)
         {
-            m_pTransferable->setClipboardListener( Link<>() );
+            m_pTransferable->setClipboardListener( Link<OLocalExchange&,void>() );
             m_pTransferable->release();
             m_pTransferable = NULL;
         }

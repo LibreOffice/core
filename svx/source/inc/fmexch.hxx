@@ -49,7 +49,7 @@ namespace svxform
     class SVX_DLLPUBLIC OLocalExchange : public TransferableHelper
     {
     private:
-        Link<>              m_aClipboardListener;
+        Link<OLocalExchange&,void>  m_aClipboardListener;
         bool            m_bDragging         : 1;
         bool            m_bClipboardOwner   : 1;
 
@@ -68,7 +68,7 @@ namespace svxform
         void        startDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions, const GrantAccess& );
         void        copyToClipboard( vcl::Window* _pWindow, const GrantAccess& );
 
-        void        setClipboardListener( const Link<>& _rListener ) { m_aClipboardListener = _rListener; }
+        void        setClipboardListener( const Link<OLocalExchange&,void>& _rListener ) { m_aClipboardListener = _rListener; }
 
         void        clear();
 
@@ -113,7 +113,7 @@ namespace svxform
         inline  bool    isDataExchangeActive( ) const { return isDragSource() || isClipboardOwner(); }
         inline  void        clear() { if ( isDataExchangeActive() ) m_pTransferable->clear(); }
 
-        SVX_DLLPRIVATE void     setClipboardListener( const Link<>& _rListener ) { if ( m_pTransferable ) m_pTransferable->setClipboardListener( _rListener ); }
+        SVX_DLLPRIVATE void     setClipboardListener( const Link<OLocalExchange&,void>& _rListener ) { if ( m_pTransferable ) m_pTransferable->setClipboardListener( _rListener ); }
 
     protected:
         SVX_DLLPRIVATE virtual OLocalExchange* createExchange() const = 0;
