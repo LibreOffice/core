@@ -15,9 +15,9 @@
 
 #include <shellimpl.hxx>
 
-int SfxLokHelper::createView(SfxViewShell* pViewShell)
+int SfxLokHelper::createView()
 {
-    SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     SfxRequest aRequest(pViewFrame, SID_NEWWINDOW);
     pViewFrame->ExecView_Impl(aRequest);
 
