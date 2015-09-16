@@ -106,6 +106,9 @@ struct _LOKDocViewPrivate
     /// If we are in the middle of a drag of a graphic selection handle.
     gboolean m_bInDragGraphicHandles[8];
     ///@}
+
+    /// View ID, returned by createView() or 0 by default.
+    int m_nViewId;
 };
 
 enum
@@ -240,6 +243,7 @@ postKeyEventInThread(gpointer data)
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
     LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
 
+    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
     priv->m_pDocument->pClass->postKeyEvent(priv->m_pDocument,
                                             pLOEvent->m_nKeyEvent,
                                             pLOEvent->m_nCharCode,
@@ -1847,18 +1851,19 @@ lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
     return GTK_WIDGET (g_initable_new (LOK_TYPE_DOC_VIEW, cancellable, error, "lopath", pPath, NULL));
 }
 
-SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pLOKDocView)
+SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOKDocView)
 {
-    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(pLOKDocView));
-    GtkWidget* pDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/0, /*error=*/0,
-                                                    "lopath", priv->m_aLOPath, "lopointer", priv->m_pOffice, "docpointer", priv->m_pDocument, NULL));
+    LOKDocViewPrivate* pOldPriv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(pOldLOKDocView));
+    GtkWidget* pNewDocView = GTK_WIDGET(g_initable_new(LOK_TYPE_DOC_VIEW, /*cancellable=*/0, /*error=*/0,
+                                                       "lopath", pOldPriv->m_aLOPath, "lopointer", pOldPriv->m_pOffice, "docpointer", pOldPriv->m_pDocument, NULL));
 
     // No documentLoad(), just a createView().
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
-    pDocument->pClass->createView(pDocument);
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pNewDocView));
+    LOKDocViewPrivate* pNewPriv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private(LOK_DOC_VIEW(pNewDocView)));
+    pNewPriv->m_nViewId = pDocument->pClass->createView(pDocument);
 
-    postDocumentLoad(pDocView);
-    return pDocView;
+    postDocumentLoad(pNewDocView);
+    return pNewDocView;
 }
 
 /**

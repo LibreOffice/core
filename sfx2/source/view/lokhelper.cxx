@@ -46,7 +46,7 @@ void SfxLokHelper::setView(size_t nId)
 
     SfxViewShell* pViewShell = rViewArr[nId];
     if (SfxViewFrame* pViewFrame = pViewShell->GetViewFrame())
-        pViewFrame->GetWindow().GrabFocus();
+        pViewFrame->MakeActive_Impl(false);
 }
 
 size_t SfxLokHelper::getView()
