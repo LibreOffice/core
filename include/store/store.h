@@ -20,8 +20,10 @@
 #ifndef INCLUDED_STORE_STORE_H
 #define INCLUDED_STORE_STORE_H
 
-#include <store/types.h>
 #include <store/storedllapi.h>
+#include <store/types.h>
+#include "rtl/ustring.h"
+#include "sal/types.h"
 
 #ifdef __cplusplus
 extern "C" {
