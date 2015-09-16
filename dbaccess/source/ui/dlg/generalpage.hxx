@@ -49,7 +49,7 @@ namespace dbaui
         };
         SPECIAL_MESSAGE     m_eLastMessage;
 
-        Link<>              m_aTypeSelectHandler;   /// to be called if a new type is selected
+        Link<OGeneralPage&,void>   m_aTypeSelectHandler;   /// to be called if a new type is selected
         bool                m_bDisplayingInvalid : 1;   /// the currently displayed data source is deleted
         bool                m_bInitTypeList : 1;
         bool                approveDatasourceType( const OUString& _sURLPrefix, OUString& _inout_rDisplayName );
@@ -69,7 +69,7 @@ namespace dbaui
         virtual void dispose() SAL_OVERRIDE;
 
         /// set a handler which gets called every time the user selects a new type
-        void            SetTypeSelectHandler( const Link<>& _rHandler ) { m_aTypeSelectHandler = _rHandler; }
+        void            SetTypeSelectHandler( const Link<OGeneralPage&,void>& _rHandler ) { m_aTypeSelectHandler = _rHandler; }
 
         /// get the currently selected datasource type
         OUString     GetSelectedType() const { return m_eCurrentSelection; }

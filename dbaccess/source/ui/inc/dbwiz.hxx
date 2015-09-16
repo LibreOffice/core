@@ -119,7 +119,7 @@ protected:
     ApplyResult implApplyChanges();
 
 private:
-    DECL_LINK(OnTypeSelected, OGeneralPage*);
+    DECL_LINK_TYPED(OnTypeSelected, OGeneralPage&, void);
 };
 
 }   // namespace dbaui

@@ -111,13 +111,12 @@ void ODbTypeWizDialog::dispose()
     svt::OWizardMachine::dispose();
 }
 
-IMPL_LINK(ODbTypeWizDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
+IMPL_LINK_TYPED(ODbTypeWizDialog, OnTypeSelected, OGeneralPage&, _rTabPage, void)
 {
-    m_eType = _pTabPage->GetSelectedType();
+    m_eType = _rTabPage.GetSelectedType();
     const bool bURLRequired = m_pCollection->isConnectionUrlRequired(m_eType);
     enableButtons(WizardButtonFlags::NEXT,bURLRequired);
     enableButtons(WizardButtonFlags::FINISH,!bURLRequired);
-    return 1L;
 }
 
 WizardTypes::WizardState ODbTypeWizDialog::determineNextState( WizardState _nCurrentState ) const

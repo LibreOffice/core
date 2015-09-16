@@ -175,7 +175,7 @@ private:
     void updateTypeDependentStates();
     bool callSaveAsDialog();
     bool IsConnectionUrlRequired();
-    DECL_LINK(OnTypeSelected, OGeneralPage*);
+    DECL_LINK_TYPED(OnTypeSelected, OGeneralPage&, void);
     DECL_LINK_TYPED(OnChangeCreationMode, OGeneralPageWizard*, void);
     DECL_LINK(OnRecentDocumentSelected, OGeneralPageWizard*);
     DECL_LINK(OnSingleDocumentChosen, OGeneralPageWizard*);

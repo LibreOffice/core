@@ -278,10 +278,9 @@ void ODbTypeWizDialogSetup::dispose()
     svt::RoadmapWizard::dispose();
 }
 
-IMPL_LINK(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage*, /*_pTabPage*/)
+IMPL_LINK_NOARG_TYPED(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage&, void)
 {
     activateDatabasePath();
-    return 1L;
 }
 
 void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,const ::comphelper::NamedValueCollection& _aNew,::comphelper::NamedValueCollection& _rDSInfo)

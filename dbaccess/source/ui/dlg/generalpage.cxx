@@ -218,7 +218,7 @@ namespace dbaui
         switchMessage(_sURLPrefix);
 
         if ( m_aTypeSelectHandler.IsSet() )
-            m_aTypeSelectHandler.Call(this);
+            m_aTypeSelectHandler.Call(*this);
     }
 
     void OGeneralPage::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
