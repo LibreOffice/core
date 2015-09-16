@@ -63,6 +63,16 @@
 #define SAL_CONFIGFILE( name ) name "rc"
 #endif
 
+#ifdef EMSCRIPTEN
+#define SAL_UNX
+#define SAL_DLLEXTENSION ".bc"
+#define SAL_DLLPREFIX "lib"
+#define SAL_PATHSEPARATOR ':'
+#define SAL_PATHDELIMITER '/'
+#define SAL_NEWLINE_STRING "\n"
+#define SAL_CONFIGFILE( name ) name "rc"
+#endif
+
 #ifdef MACOSX
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".dylib"

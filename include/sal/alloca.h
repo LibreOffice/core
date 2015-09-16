@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SAL_ALLOCA_H
 #define INCLUDED_SAL_ALLOCA_H
 
-#if defined (SOLARIS) || defined (LINUX) || defined(AIX) || defined(ANDROID)
+#if defined (SOLARIS) || defined (LINUX) || defined(AIX) || defined(ANDROID) || defined(EMSCRIPTEN)
 
 #ifndef INCLUDED_ALLOCA_H
 #include <alloca.h>
