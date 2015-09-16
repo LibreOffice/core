@@ -612,10 +612,12 @@ $(eval $(call gb_Library_use_libraries,vcl,\
 	basebmp \
 ))
 
-$(eval $(call gb_Library_use_externals,vcl,\
-	fontconfig \
-	freetype \
-))
+	ifneq ($(OS),EMSCRIPTEN)
+	$(eval $(call gb_Library_use_externals,vcl,\
+		fontconfig \
+		freetype \
+	))
+	endif
 endif
 
 ifeq ($(OS),ANDROID)
