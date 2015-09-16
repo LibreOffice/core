@@ -242,10 +242,11 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         {
             pColStart = new sal_Int32[nInfoCount];
             pColFormat = new sal_uInt8[nInfoCount];
-            for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
+            sal_Int32 nP = 0;
+            for (sal_Int32 nInfo=0; nInfo<nInfoCount; ++nInfo)
             {
-                pColStart[nInfo]  = (sal_Int32) aToken.getToken( 2*nInfo, '/' ).toInt32();
-                pColFormat[nInfo] = (sal_uInt8) aToken.getToken( 2*nInfo+1, '/' ).toInt32();
+                pColStart[nInfo]  = aToken.getToken(0, '/', nP).toInt32();
+                pColFormat[nInfo] = static_cast<sal_uInt8>(aToken.getToken(0, '/', nP).toInt32());
             }
         }
         else
