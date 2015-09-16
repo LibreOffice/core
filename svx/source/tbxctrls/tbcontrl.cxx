@@ -133,7 +133,7 @@ public:
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
-    void            SetVisibilityListener( const Link<>& aVisListener ) { aVisibilityListener = aVisListener; }
+    void            SetVisibilityListener( const Link<SvxStyleBox_Impl&,void>& aVisListener ) { aVisibilityListener = aVisListener; }
 
     void            SetDefaultStyle( const OUString& rDefault ) { sDefaultStyle = rDefault; }
 
@@ -147,7 +147,7 @@ private:
     sal_Int32                       nCurSel;
     bool                            bRelease;
     Size                            aLogicalSize;
-    Link<>                          aVisibilityListener;
+    Link<SvxStyleBox_Impl&,void>    aVisibilityListener;
     bool                            bVisible;
     Reference< XDispatchProvider >  m_xDispatchProvider;
     Reference< XFrame >             m_xFrame;
@@ -557,13 +557,13 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
     {
         bVisible = IsReallyVisible();
         if ( aVisibilityListener.IsSet() )
-            aVisibilityListener.Call( this );
+            aVisibilityListener.Call( *this );
     }
     else if ( nStateChange == StateChangedType::InitShow )
     {
         bVisible = true;
         if ( aVisibilityListener.IsSet() )
-            aVisibilityListener.Call( this );
+            aVisibilityListener.Call( *this );
     }
 }
 
@@ -2397,7 +2397,7 @@ void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
     Update();
 }
 
-IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification)
+IMPL_LINK_NOARG_TYPED(SvxStyleToolBoxControl, VisibilityNotification, SvxStyleBox_Impl&, void)
 {
     // Call ReBind() && UnBind() according to visibility
     SvxStyleBox_Impl* pBox = static_cast<SvxStyleBox_Impl*>( GetToolBox().GetItemWindow( GetId() ));
@@ -2415,8 +2415,6 @@ IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification)
             pBoundItems[i]->UnBind();
         unbindListener();
     }
-
-    return 0;
 }
 
 void SvxStyleToolBoxControl::StateChanged(

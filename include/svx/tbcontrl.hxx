@@ -146,6 +146,7 @@ class SvxFontItem;
 class SfxStyleControllerItem_Impl;
 class SfxStyleSheetBasePool;
 class SfxTemplateItem;
+class SvxStyleBox_Impl;
 
 namespace svx
 {
@@ -168,7 +169,7 @@ public:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) SAL_OVERRIDE;
 
-    DECL_LINK( VisibilityNotification, void* );
+    DECL_LINK_TYPED( VisibilityNotification, SvxStyleBox_Impl&, void );
 protected:
     // XInitialization
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments)
