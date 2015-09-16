@@ -62,10 +62,19 @@ size_t SfxLokHelper::getView()
     return 0;
 }
 
-int SfxLokHelper::getViews()
+size_t SfxLokHelper::getViews()
 {
+    size_t nRet = 0;
+
+    SfxObjectShell* pObjectShell = SfxViewFrame::Current()->GetObjectShell();
     SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-    return rViewArr.size();
+    for (size_t i = 0; i < rViewArr.size(); ++i)
+    {
+        if (rViewArr[i]->GetObjectShell() == pObjectShell)
+            ++nRet;
+    }
+
+    return nRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

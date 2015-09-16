@@ -249,6 +249,7 @@ static int doc_createView(LibreOfficeKitDocument* pThis);
 static void doc_destroyView(LibreOfficeKitDocument* pThis, int nId);
 static void doc_setView(LibreOfficeKitDocument* pThis, int nId);
 static int doc_getView(LibreOfficeKitDocument* pThis);
+static int doc_getViews(LibreOfficeKitDocument* pThis);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
     mxComponent( xComponent )
@@ -284,6 +285,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->destroyView = doc_destroyView;
         m_pDocumentClass->setView = doc_setView;
         m_pDocumentClass->getView = doc_getView;
+        m_pDocumentClass->getViews = doc_getViews;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -311,8 +313,6 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThi
 static void                    lo_registerCallback (LibreOfficeKit* pThis,
                                                     LibreOfficeKitCallback pCallback,
                                                     void* pData);
-static int lo_getViews(LibreOfficeKit* pThis);
-
 struct LibLibreOffice_Impl : public _LibreOfficeKit
 {
     OUString maLastExceptionMsg;
@@ -335,7 +335,6 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->getError = lo_getError;
             m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
             m_pOfficeClass->registerCallback = lo_registerCallback;
-            m_pOfficeClass->getViews = lo_getViews;
 
             gOfficeClass = m_pOfficeClass;
         }
@@ -451,11 +450,6 @@ static void lo_registerCallback (LibreOfficeKit* pThis,
 
     pLib->mpCallback = pCallback;
     pLib->mpCallbackData = pData;
-}
-
-static int lo_getViews(LibreOfficeKit* /*pThis*/)
-{
-    return SfxLokHelper::getViews();
 }
 
 static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
@@ -1017,6 +1011,13 @@ static int doc_getView(LibreOfficeKitDocument* /*pThis*/)
     SolarMutexGuard aGuard;
 
     return SfxLokHelper::getView();
+}
+
+static int doc_getViews(LibreOfficeKitDocument* /*pThis*/)
+{
+    SolarMutexGuard aGuard;
+
+    return SfxLokHelper::getViews();
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
