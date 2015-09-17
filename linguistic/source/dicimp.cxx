@@ -40,6 +40,8 @@
 
 #include "defs.hxx"
 
+#include <algorithm>
+
 
 using namespace utl;
 using namespace osl;
