@@ -861,8 +861,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
             }
             if (pParameters)
             {
-                INetMIMEOutputSink
-                    aSink(0, INetMIMEOutputSink::NO_LINE_LENGTH_LIMIT);
+                INetMIMEOutputSink aSink;
                 while (p != pEnd)
                 {
                     sal_uInt32 nChar = INetMIME::getUTF32Character(p, pEnd);
@@ -890,8 +889,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         else if (p != pEnd && *p == '"')
             if (pParameters)
             {
-                INetMIMEOutputSink
-                    aSink(0, INetMIMEOutputSink::NO_LINE_LENGTH_LIMIT);
+                INetMIMEOutputSink aSink;
                 bool bInvalid = false;
                 for (++p;;)
                 {

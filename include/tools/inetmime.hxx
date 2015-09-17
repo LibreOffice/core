@@ -88,8 +88,6 @@ typedef std::unordered_map<OString, INetContentTypeParameter, OStringHash>
 class TOOLS_DLLPUBLIC INetMIME
 {
 public:
-    enum { SOFT_LINE_LENGTH_LIMIT = 76 };
-
     /** The various types of message header field bodies, with respect to
         encoding and decoding them.
 
@@ -666,10 +664,8 @@ private:
                                const sal_Unicode * pEnd);
 
 public:
-    INetMIMEOutputSink(
-        sal_uInt32 nTheColumn = 0,
-        sal_uInt32 nTheLineLengthLimit= INetMIME::SOFT_LINE_LENGTH_LIMIT):
-        m_nColumn(nTheColumn), m_nLineLengthLimit(nTheLineLengthLimit) {}
+    INetMIMEOutputSink():
+        m_nColumn(0), m_nLineLengthLimit(NO_LINE_LENGTH_LIMIT) {}
 
     /** Get the current column.
 

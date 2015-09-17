@@ -46,7 +46,7 @@ void INetMIMEMessage::SetHeaderField_Impl (
     const OUString &rValue,
     sal_uIntPtr &rnIndex)
 {
-    INetMIMEOutputSink aSink(0, INetMIMEOutputSink::NO_LINE_LENGTH_LIMIT);
+    INetMIMEOutputSink aSink;
     INetMIME::writeHeaderFieldBody (
         aSink, eType, rValue, osl_getThreadTextEncoding(), false);
     SetHeaderField_Impl (
