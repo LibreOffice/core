@@ -1108,17 +1108,17 @@ void SwUiWriterTest::testDeleteTableRedlines()
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInsertTableOptions TableOpt(tabopts::DEFAULT_BORDER, 0);
-    const SwTable& rTbl = pWrtShell->InsertTable(TableOpt, 1, 3);
+    const SwTable& rTable = pWrtShell->InsertTable(TableOpt, 1, 3);
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
     uno::Sequence<beans::PropertyValue> aDescriptor;
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox(OUString("A1")))), OUString("TableCellInsert"), aDescriptor);
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox(OUString("B1")))), OUString("TableCellInsert"), aDescriptor);
-    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTbl.GetTableBox(OUString("C1")))), OUString("TableCellInsert"), aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox(OUString("A1")))), OUString("TableCellInsert"), aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox(OUString("B1")))), OUString("TableCellInsert"), aDescriptor);
+    SwUnoCursorHelper::makeTableCellRedline((*const_cast<SwTableBox*>(rTable.GetTableBox(OUString("C1")))), OUString("TableCellInsert"), aDescriptor);
     IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
     SwExtraRedlineTable& rExtras = rIDRA.GetExtraRedlineTable();
-    rExtras.DeleteAllTableRedlines(pDoc, rTbl, false, sal_uInt16(USHRT_MAX));
+    rExtras.DeleteAllTableRedlines(pDoc, rTable, false, sal_uInt16(USHRT_MAX));
     CPPUNIT_ASSERT(rExtras.IsEmpty());
 }
 

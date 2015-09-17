@@ -478,11 +478,11 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
             if (pFlyFormat && bInnerCntIsFly)
             {
                 SwNodeIndex aAnchIdx(*pFlyFormat->GetContent().GetContentIdx(), 1);
-                SwTextNode *pTxtNode = aAnchIdx.GetNode().GetTextNode();
+                SwTextNode *pTextNode = aAnchIdx.GetNode().GetTextNode();
 
                 SwFormatAnchor aAnc(FLY_AS_CHAR);
-                sal_Int32 nInsertPos = bBefore ? pTxtNode->Len() : 0;
-                SwPosition aPos(*pTxtNode, nInsertPos);
+                sal_Int32 nInsertPos = bBefore ? pTextNode->Len() : 0;
+                SwPosition aPos(*pTextNode, nInsertPos);
 
                 aAnc.SetAnchor(&aPos);
 
@@ -494,8 +494,8 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
 
                 //put a hard-break after the graphic to keep it separated
                 //from the caption text if the outer frame is resized
-                SwIndex aIdx(pTxtNode, bBefore ? nInsertPos : 1);
-                pTxtNode->InsertText(OUString("\n"), aIdx);
+                SwIndex aIdx(pTextNode, bBefore ? nInsertPos : 1);
+                pTextNode->InsertText(OUString("\n"), aIdx);
             }
         }
 

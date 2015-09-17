@@ -44,7 +44,7 @@ SwUnoCrsr::~SwUnoCrsr()
     {
         assert(!static_cast<bool>(SwIterator<SwClient, SwUnoCrsr>(*this).First()));
         // remove the weak_ptr the document keeps to notify about document death
-        pDoc->mvUnoCrsrTbl.remove_if(
+        pDoc->mvUnoCrsrTable.remove_if(
             [this](const std::weak_ptr<SwUnoCrsr>& pWeakPtr) -> bool { return pWeakPtr.lock().get() == this; });
     }
 
