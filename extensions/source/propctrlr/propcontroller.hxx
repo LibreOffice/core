@@ -385,7 +385,7 @@ namespace pcr
         void    impl_startOrStopModelListening_nothrow( bool _bDoListen ) const;
 
     private:
-        DECL_LINK(OnPageActivation, void*);
+        DECL_LINK_TYPED(OnPageActivation, LinkParamNone*, void);
 
     private:
         // constructors

@@ -34,9 +34,9 @@ namespace pcr
 
     class OPropertyBrowserView : public vcl::Window
     {
-        VclPtr<OPropertyEditor>        m_pPropBox;
-        sal_uInt16              m_nActivePage;
-        Link<>                  m_aPageActivationHandler;
+        VclPtr<OPropertyEditor>     m_pPropBox;
+        sal_uInt16                  m_nActivePage;
+        Link<LinkParamNone*,void>   m_aPageActivationHandler;
 
     protected:
         virtual void Resize() SAL_OVERRIDE;
@@ -55,12 +55,12 @@ namespace pcr
         sal_uInt16  getActivaPage() const { return m_nActivePage; }
         void        activatePage(sal_uInt16 _nPage);
 
-        void    setPageActivationHandler(const Link<>& _rHdl) { m_aPageActivationHandler = _rHdl; }
+        void    setPageActivationHandler(const Link<LinkParamNone*,void>& _rHdl) { m_aPageActivationHandler = _rHdl; }
 
         ::com::sun::star::awt::Size getMinimumSize();
 
     protected:
-        DECL_LINK(OnPageActivation, void*);
+        DECL_LINK_TYPED(OnPageActivation, LinkParamNone*, void);
     };
 
 

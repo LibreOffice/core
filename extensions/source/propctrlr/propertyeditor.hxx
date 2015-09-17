@@ -57,7 +57,7 @@ namespace pcr
         IPropertyLineListener*      m_pListener;
         IPropertyControlObserver*   m_pObserver;
         sal_uInt16                  m_nNextId;
-        Link<>                      m_aPageActivationHandler;
+        Link<LinkParamNone*,void>   m_aPageActivationHandler;
         bool                        m_bHasHelpSection;
         sal_Int32                   m_nMinHelpLines;
         sal_Int32                   m_nMaxHelpLines;
@@ -106,7 +106,7 @@ namespace pcr
         void                        RemoveEntry( const OUString& _rName );
         void                        ChangeEntry( const OLineDescriptor& );
 
-        void    setPageActivationHandler(const Link<>& _rHdl) { m_aPageActivationHandler = _rHdl; }
+        void    setPageActivationHandler(const Link<LinkParamNone*,void>& _rHdl) { m_aPageActivationHandler = _rHdl; }
 
         // #95343# -------------------------------
         sal_Int32 getMinimumWidth();
