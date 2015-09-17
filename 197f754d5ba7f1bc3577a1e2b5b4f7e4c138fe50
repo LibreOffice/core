@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_cd9449ea",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-17T07:37:25Z",
+      "side": 1,
+      "message": "sal_Int32 instead of int",
+      "revId": "197f754d5ba7f1bc3577a1e2b5b4f7e4c138fe50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_ad991522",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-09-17T07:37:25Z",
+      "side": 1,
+      "message": "Why this indirection?\n\nToggleUnicodeCodepoint aToggle;\n\nshould work as well.",
+      "revId": "197f754d5ba7f1bc3577a1e2b5b4f7e4c138fe50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
