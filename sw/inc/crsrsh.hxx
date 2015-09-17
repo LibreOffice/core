@@ -168,7 +168,7 @@ private:
 
     Link<const SwFlyFrameFormat*,void> m_aFlyMacroLnk;        /**< Link will be called, if the Crsr is set
                                    into a fly. A macro can then be called */
-    Link<> m_aChgLnk;             /**< link will be called by every attribute/
+    Link<SwCrsrShell*,void> m_aChgLnk;             /**< link will be called by every attribute/
                                    format changes at cursor position.*/
     Link<> m_aGrfArrivedLnk;      ///< Link calls to UI if a graphic is arrived
 
@@ -485,8 +485,8 @@ public:
     const Link<const SwFlyFrameFormat*,void>& GetFlyMacroLnk() const           { return m_aFlyMacroLnk; }
 
     // Methods returning/altering link for changes of attributes/formates.
-    void        SetChgLnk( const Link<> &rLnk ) { m_aChgLnk = rLnk; }
-    const Link<>& GetChgLnk() const           { return m_aChgLnk; }
+    void        SetChgLnk( const Link<SwCrsrShell*,void> &rLnk ) { m_aChgLnk = rLnk; }
+    const Link<SwCrsrShell*,void>& GetChgLnk() const           { return m_aChgLnk; }
 
     // Methods returning/altering ling for "graphic completely loaded".
     void        SetGrfArrivedLnk( const Link<> &rLnk ) { m_aGrfArrivedLnk = rLnk; }

@@ -464,7 +464,7 @@ extern "C"
     }
 }
 
-IMPL_LINK_NOARG(SwView, AttrChangedNotify)
+IMPL_LINK_NOARG_TYPED(SwView, AttrChangedNotify, SwCrsrShell*, void)
 {
      if ( GetEditWin().IsChainMode() )
         GetEditWin().SetChainMode( false );
@@ -508,8 +508,6 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify)
         // actual cursor position is a post-it field
         m_pPostItMgr->SetShadowState( m_pWrtShell->GetPostItFieldAtCursor() );
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwView, TimeoutHdl, Timer *, void)

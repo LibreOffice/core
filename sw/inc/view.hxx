@@ -78,6 +78,7 @@ class Graphic;
 class GraphicFilter;
 class SwPostItMgr;
 enum class SotExchangeDest;
+class SwCrsrShell;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -541,7 +542,7 @@ public:
     void            StateTabWin(SfxItemSet&);
 
     // attributes have changed
-    DECL_LINK( AttrChangedNotify, void* );
+    DECL_LINK_TYPED( AttrChangedNotify, SwCrsrShell*, void );
 
     // form control has been activated
     DECL_LINK_TYPED( FormControlActivated, LinkParamNone*, void );
