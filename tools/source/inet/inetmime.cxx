@@ -80,8 +80,6 @@ const sal_Unicode * skipLinearWhiteSpaceComment(const sal_Unicode *
                                                        const sal_Unicode *
                                                            pEnd);
 
-inline bool needsQuotedStringEscape(sal_uInt32 nChar);
-
 const sal_Unicode * skipQuotedString(const sal_Unicode * pBegin,
                                             const sal_Unicode * pEnd);
 
@@ -158,11 +156,6 @@ inline bool startsWithLineFolding(const sal_Unicode * pBegin,
 
     return pEnd - pBegin >= 3 && pBegin[0] == 0x0D && pBegin[1] == 0x0A
            && isWhiteSpace(pBegin[2]); // CR, LF
-}
-
-inline bool needsQuotedStringEscape(sal_uInt32 nChar)
-{
-    return nChar == '"' || nChar == '\\';
 }
 
 inline rtl_TextEncoding translateToMIME(rtl_TextEncoding eEncoding)
@@ -985,8 +978,7 @@ public:
 private:
     enum { BUFFER_SIZE = 256 };
 
-    enum Coding { CODING_NONE, CODING_QUOTED, CODING_ENCODED,
-                  CODING_ENCODED_TERMINATED };
+    enum Coding { CODING_NONE, CODING_ENCODED, CODING_ENCODED_TERMINATED };
 
     enum EncodedWordState { STATE_INITIAL, STATE_FIRST_EQUALS,
                             STATE_FIRST_QUESTION, STATE_CHARSET,
@@ -1206,8 +1198,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
         // If the text is already an encoded word, copy it verbatim:
         switch (m_ePrevCoding)
         {
-            case CODING_QUOTED:
-                m_rSink << '"';
             case CODING_NONE:
                 while (m_nExtraSpaces-- > 0)
                 {
@@ -1238,10 +1228,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
             case CODING_NONE:
                 switch (m_ePrevCoding)
                 {
-                    case CODING_QUOTED:
-                        m_eCoding = CODING_QUOTED;
-                        break;
-
                     case CODING_ENCODED:
                         m_rSink << "?=";
                         break;
@@ -1254,49 +1240,7 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                     m_rSink << ' ';
                 }
                 m_rSink.write(m_pBuffer, m_pBufferEnd);
-                if (m_eCoding == CODING_QUOTED && bWriteTrailer)
-                {
-                    m_rSink << '"';
-                    m_eCoding = CODING_NONE;
-                }
                 break;
-
-            case CODING_QUOTED:
-            {
-                bool bInsertLeadingQuote = true;
-                switch (m_ePrevCoding)
-                {
-                    case CODING_QUOTED:
-                        bInsertLeadingQuote = false;
-                        break;
-
-                    case CODING_ENCODED:
-                        m_rSink << "?=";
-                        break;
-
-                    default:
-                        break;
-                }
-                while (m_nExtraSpaces-- > 0)
-                {
-                    m_rSink << ' ';
-                }
-                if (bInsertLeadingQuote)
-                    m_rSink << '"';
-                for (const sal_Unicode * p = m_pBuffer; p != m_pBufferEnd;
-                     ++p)
-                {
-                    if (needsQuotedStringEscape(*p))
-                        m_rSink << '\\';
-                    m_rSink << sal_Char(*p);
-                }
-                if (bWriteTrailer)
-                {
-                    m_rSink << '"';
-                    m_eCoding = CODING_NONE;
-                }
-                break;
-            }
 
             case CODING_ENCODED:
             {
@@ -1311,8 +1255,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
 
                 switch (m_ePrevCoding)
                 {
-                    case CODING_QUOTED:
-                        m_rSink << '"';
                     case CODING_NONE:
                         while (m_nExtraSpaces-- > 0)
                         {
