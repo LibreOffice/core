@@ -217,13 +217,13 @@ namespace
         MacroExecutionData* i_pData = static_cast<MacroExecutionData*>(p);
         ENSURE_OR_RETURN_VOID( i_pData, "wrong MacroExecutionData" );
         // take ownership of the data
-        boost::scoped_ptr< MacroExecutionData > pData( i_pData );
+        std::unique_ptr< MacroExecutionData > pData( i_pData );
 
         SAL_WARN_IF( (pData->xMethod->GetParent()->GetFlags() & SbxFlagBits::ExtSearch) == SbxFlagBits::NONE, "basctl.basicide","No EXTSEARCH!" );
 
         // in case this is a document-local macro, try to protect the document's Undo Manager from
         // flawed scripts
-        boost::scoped_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
+        std::unique_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
         if ( pData->aDocument.isDocument() )
             pUndoGuard.reset( new ::framework::DocumentUndoGuard( pData->aDocument.getDocument() ) );
 

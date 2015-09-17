@@ -123,7 +123,6 @@
 #include <rtl/strbuf.hxx>
 #include <tools/time.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 // PPT ColorScheme Slots
 #define PPT_COLSCHEME                       (0x08000000)
@@ -1846,13 +1845,13 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
 
             if ( aTmpFile.IsValid() )
             {
-                boost::scoped_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), StreamMode::TRUNC | StreamMode::WRITE ));
+                std::unique_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), StreamMode::TRUNC | StreamMode::WRITE ));
                 if ( pDest )
                     bSuccess = SdrPowerPointOLEDecompress( *pDest, rStCtrl, nLen );
             }
             if ( bSuccess )
             {
-                boost::scoped_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), StreamMode::READ ));
+                std::unique_ptr<SvStream> pDest(::utl::UcbStreamHelper::CreateStream( aTmpFile.GetURL(), StreamMode::READ ));
                 Storage* pObjStor = pDest ? new Storage( *pDest, true ) : NULL;
                 if ( pObjStor )
                 {
@@ -2099,7 +2098,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
             DffRecordHeader*    pExEmbed = NULL;
 
             pHd->SeekToBegOfRecord( rStCtrl );
-            boost::scoped_ptr<DffRecordManager> pExObjListManager(new DffRecordManager( rStCtrl ));
+            std::unique_ptr<DffRecordManager> pExObjListManager(new DffRecordManager( rStCtrl ));
             sal_uInt16 i, nRecType(PPT_PST_ExEmbed);
 
             for ( i = 0; i < 2; i++ )
@@ -2292,7 +2291,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 for ( pPortion = pPara->First(); pPortion; pPortion = pPara->Next() )
                 {
                     SfxItemSet aPortionAttribs( rOutliner.GetEmptyItemSet() );
-                    boost::scoped_ptr<SvxFieldItem> pFieldItem(pPortion->GetTextField());
+                    std::unique_ptr<SvxFieldItem> pFieldItem(pPortion->GetTextField());
                     if ( pFieldItem )
                     {
                         rOutliner.QuickInsertField( *pFieldItem, ESelection( nParaIndex, aSelection.nEndPos, nParaIndex, aSelection.nEndPos + 1 ) );
@@ -2988,7 +2987,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
 {
     SdrObject* pRet = NULL;
     bool bCreateObj = bForce;
-    boost::scoped_ptr<SfxItemSet> pSet;
+    std::unique_ptr<SfxItemSet> pSet;
     sal_uLong nFPosMerk = rStCtrl.Tell(); // remember FilePos for restoring it later
     DffRecordHeader aPageHd;
     if ( SeekToAktPage( &aPageHd ) )

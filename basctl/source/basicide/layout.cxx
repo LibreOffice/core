@@ -22,8 +22,6 @@
 #include "bastypes.hxx"
 #include <vcl/settings.hxx>
 
-#include <boost/make_shared.hpp>
-
 namespace basctl
 {
 

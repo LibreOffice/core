@@ -25,7 +25,7 @@
 #include <svx/ifaceids.hxx>
 #include <vcl/vclptr.hxx>
 #include <sfx2/printer.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace basctl
 {

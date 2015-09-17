@@ -28,7 +28,7 @@
 #include <main.hxx>
 #include <elements.hxx>
 #include <outact.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -717,12 +717,12 @@ ImportCGM( OUString const & rFileName, uno::Reference< frame::XModel > const & r
     {
         try
         {
-            boost::scoped_ptr<CGM> pCGM(new CGM( nMode, rXModel ));
+            std::unique_ptr<CGM> pCGM(new CGM( nMode, rXModel ));
             if ( pCGM && pCGM->IsValid() )
             {
                 if ( nMode & CGM_IMPORT_CGM )
                 {
-                    boost::scoped_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream( rFileName, StreamMode::READ ));
+                    std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream( rFileName, StreamMode::READ ));
                     if ( pIn )
                     {
                         pIn->SetEndian( SvStreamEndian::BIG );

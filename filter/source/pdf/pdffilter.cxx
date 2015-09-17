@@ -24,7 +24,7 @@
 #include <vcl/window.hxx>
 #include <svl/outstrm.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // - PDFFilter -
 PDFFilter::PDFFilter( const Reference< XComponentContext > &rxContext ) :
@@ -113,7 +113,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
         if( bRet )
         {
-            boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ ));
+            std::unique_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ ));
 
             if( pIStm )
             {

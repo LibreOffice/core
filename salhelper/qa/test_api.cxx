@@ -55,7 +55,7 @@ std::type_info const & getSimpleReferenceObjectTypeInfo()
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace {
 
@@ -108,7 +108,7 @@ public:
 
 void Test::testCondition() {
     osl::Mutex mutex;
-    boost::scoped_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
+    std::unique_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
     CPPUNIT_ASSERT(typeid (*p.get()) != typeid (salhelper::Condition));
     CPPUNIT_ASSERT(typeid (p.get()) == typeid (salhelper::Condition *));
     CPPUNIT_ASSERT(
@@ -221,12 +221,12 @@ void Test::testSimpleReferenceObject() {
 
 void Test::testDerivedCondition() {
     osl::Mutex mutex;
-    boost::scoped_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
+    std::unique_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
     CPPUNIT_ASSERT(dynamic_cast< DerivedCondition * >(p.get()) != 0);
 }
 
 void Test::testDerivedConditionWaiterTimedout() {
-    boost::scoped_ptr< salhelper::ConditionWaiter::timedout > p(
+    std::unique_ptr< salhelper::ConditionWaiter::timedout > p(
         new DerivedConditionWaiterTimedout);
     CPPUNIT_ASSERT(
         dynamic_cast< DerivedConditionWaiterTimedout * >(p.get()) != 0);

@@ -18,8 +18,6 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/awt/Command.hpp>
 #include <com/sun/star/awt/ContainerWindowProvider.hpp>
 #include <com/sun/star/awt/DeviceInfo.hpp>

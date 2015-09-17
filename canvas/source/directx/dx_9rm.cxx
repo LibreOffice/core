@@ -21,7 +21,6 @@
 
 #include <string.h>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 #include <basegfx/numeric/ftools.hxx>

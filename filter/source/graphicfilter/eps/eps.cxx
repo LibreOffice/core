@@ -41,7 +41,7 @@
 #include "strings.hrc"
 
 #include <math.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 
@@ -343,7 +343,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     // try to get the dialog selection
     if ( pFilterConfigItem )
     {
-        boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag() ));
+        std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag() ));
 
         if( pResMgr )
         {

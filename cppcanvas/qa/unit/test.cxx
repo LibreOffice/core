@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 
-#include <boost/scoped_ptr.hpp>
 #include <test/bootstrapfixture.hxx>
 
 #include <osl/file.hxx>

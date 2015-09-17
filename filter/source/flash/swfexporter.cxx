@@ -36,7 +36,7 @@
 #include <vcl/wmf.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/gdimetafiletools.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "swfexporter.hxx"
 #include "swfwriter.hxx"
@@ -594,7 +594,7 @@ void FlashExporter::exportShape( const Reference< XShape >& xShape, bool bMaster
             com::sun::star::awt::Rectangle aBoundRect;
             xPropSet->getPropertyValue( "BoundRect" ) >>= aBoundRect;
 
-            boost::scoped_ptr<ShapeInfo> pShapeInfo(new ShapeInfo());
+            std::unique_ptr<ShapeInfo> pShapeInfo(new ShapeInfo());
             pShapeInfo->mnX = aBoundRect.X;
             pShapeInfo->mnY = aBoundRect.Y;
             pShapeInfo->mnWidth = aBoundRect.Width;

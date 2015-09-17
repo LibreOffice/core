@@ -31,7 +31,7 @@
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -466,7 +466,7 @@ void Test::testSectionAttributes()
 {
     EditEngine aEngine(mpItemPool);
 
-    boost::scoped_ptr<SfxItemSet> pSet(new SfxItemSet(aEngine.GetEmptyItemSet()));
+    std::unique_ptr<SfxItemSet> pSet(new SfxItemSet(aEngine.GetEmptyItemSet()));
     SvxWeightItem aBold(WEIGHT_BOLD, EE_CHAR_WEIGHT);
     SvxPostureItem aItalic(ITALIC_NORMAL, EE_CHAR_ITALIC);
 
@@ -481,7 +481,7 @@ void Test::testSectionAttributes()
         CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
 
         aEngine.QuickSetAttribs(*pSet, ESelection(0,3,0,9)); // 'bbbccc'
-        boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
+        std::unique_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
         CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
         std::vector<editeng::Section> aAttrs;
         pEditText->GetAllSections(aAttrs);
@@ -531,7 +531,7 @@ void Test::testSectionAttributes()
         aEngine.QuickSetAttribs(*pSet, ESelection(2,0,2,3));
         aEngine.QuickSetAttribs(*pSet, ESelection(4,0,4,5));
 
-        boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
+        std::unique_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
         CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
         std::vector<editeng::Section> aAttrs;
         pEditText->GetAllSections(aAttrs);
@@ -593,7 +593,7 @@ void Test::testSectionAttributes()
         aEngine.QuickDelete(ESelection(0,0,1,3));
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aEngine.GetParagraphCount());
 
-        boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
+        std::unique_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
         CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
         std::vector<editeng::Section> aAttrs;
         pEditText->GetAllSections(aAttrs);

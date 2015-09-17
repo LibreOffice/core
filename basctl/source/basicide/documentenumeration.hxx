@@ -20,9 +20,8 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_DOCUMENTENUMERATION_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_DOCUMENTENUMERATION_HXX
 
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/frame/XController.hpp>
-
+#include <memory>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -85,7 +84,7 @@ namespace basctl { namespace docs {
         ) const;
 
     private:
-        boost::scoped_ptr< DocumentEnumeration_Data > m_pData;
+        std::unique_ptr< DocumentEnumeration_Data > m_pData;
     };
 
 

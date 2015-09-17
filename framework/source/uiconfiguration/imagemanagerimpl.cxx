@@ -44,7 +44,7 @@
 #include <vcl/pngwrite.hxx>
 #include <rtl/instance.hxx>
 #include <svtools/miscopt.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
@@ -458,7 +458,7 @@ bool ImageManagerImpl::implts_loadUserImages(
                 {
                     BitmapEx aUserBitmap;
                     {
-                        boost::scoped_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
+                        std::unique_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
                         vcl::PNGReader aPngReader( *pSvStream );
                         aUserBitmap = aPngReader.Read();
                     }
@@ -538,7 +538,7 @@ bool ImageManagerImpl::implts_storeUserImages(
                 if ( xBitmapStream.is() )
                 {
                     {
-                        boost::scoped_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
+                        std::unique_ptr<SvStream> pSvStream(utl::UcbStreamHelper::CreateStream( xBitmapStream ));
                         vcl::PNGWriter aPngWriter( pImageList->GetAsHorizontalStrip() );
                         aPngWriter.Write( *pSvStream );
                     }

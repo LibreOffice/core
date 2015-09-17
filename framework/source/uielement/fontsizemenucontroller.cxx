@@ -36,7 +36,7 @@
 #include <vcl/settings.hxx>
 #include <svtools/ctrltool.hxx>
 #include <osl/mutex.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 //  Defines
 
@@ -134,7 +134,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
     if ( pVCLPopupMenu )
     {
-        boost::scoped_ptr<FontList> pFontList;
+        std::unique_ptr<FontList> pFontList;
         ScopedVclPtr<Printer>  pInfoPrinter;
         OUString   aPrinterName;
 

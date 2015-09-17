@@ -33,7 +33,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/window.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class ScrollBar;
 class Printer;
@@ -110,18 +110,18 @@ private:
 private:
     VclPtr<ScrollBar>          pHScroll;
     VclPtr<ScrollBar>          pVScroll;
-    boost::scoped_ptr<DlgEdModel> pDlgEdModel; // never nullptr
+    std::unique_ptr<DlgEdModel> pDlgEdModel; // never nullptr
     DlgEdPage*          pDlgEdPage;  // never nullptr
-    boost::scoped_ptr<DlgEdView> pDlgEdView; // never nullptr
+    std::unique_ptr<DlgEdView> pDlgEdView; // never nullptr
     DlgEdForm*          pDlgEdForm; // never nullptr
     css::uno::Reference< css::container::XNameContainer >     m_xUnoControlDialogModel;
     css::uno::Reference< css::awt::XControlContainer >        m_xControlContainer;
     css::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
     css::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
     css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
-    boost::scoped_ptr<DlgEdFactory> pObjFac; // never nullptr
+    std::unique_ptr<DlgEdFactory> pObjFac; // never nullptr
     vcl::Window&                    rWindow; // DialogWindow
-    boost::scoped_ptr<DlgEdFunc>    pFunc;
+    std::unique_ptr<DlgEdFunc>    pFunc;
     DialogWindowLayout& rLayout;
     Mode                eMode;
     sal_uInt16          eActObj;

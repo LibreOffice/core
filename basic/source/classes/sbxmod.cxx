@@ -18,10 +18,6 @@
  */
 
 
-#include <list>
-
-#include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -73,6 +69,9 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <comphelper/anytostring.hxx>
 #include <ooo/vba/VbQueryClose.hpp>
+#include <list>
+#include <memory>
+#include <boost/noncopyable.hpp>
 #include "sbxmod.hxx"
 #include "parser.hxx"
 
@@ -1751,7 +1750,7 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
     ErrorHdlResetter aErrHdl;
     SbxBase::ResetError();
 
-    boost::scoped_ptr<SbiParser> pParser(new SbiParser( static_cast<StarBASIC*>(GetParent()), this ));
+    std::unique_ptr<SbiParser> pParser(new SbiParser( static_cast<StarBASIC*>(GetParent()), this ));
     pParser->SetCodeCompleting(true);
 
     while( pParser->Parse() ) {}

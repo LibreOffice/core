@@ -19,7 +19,7 @@
 
 #include "parser.hxx"
 #include "iosys.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // test if there's an I/O channel
 
@@ -52,7 +52,7 @@ void SbiParser::Print()
     {
         if( !IsEoln( Peek() ) )
         {
-            boost::scoped_ptr<SbiExpression> pExpr(new SbiExpression( this ));
+            std::unique_ptr<SbiExpression> pExpr(new SbiExpression( this ));
             pExpr->Gen();
             pExpr.reset();
             Peek();
@@ -81,7 +81,7 @@ void SbiParser::Write()
 
     while( !bAbort )
     {
-        boost::scoped_ptr<SbiExpression> pExpr(new SbiExpression( this ));
+        std::unique_ptr<SbiExpression> pExpr(new SbiExpression( this ));
         pExpr->Gen();
         pExpr.reset();
         aGen.Gen( _BWRITE );
@@ -130,7 +130,7 @@ void SbiParser::Line()
 void SbiParser::LineInput()
 {
     Channel( true );
-    boost::scoped_ptr<SbiExpression> pExpr(new SbiExpression( this, SbOPERAND ));
+    std::unique_ptr<SbiExpression> pExpr(new SbiExpression( this, SbOPERAND ));
     if( !pExpr->IsVariable() )
         Error( ERRCODE_BASIC_VAR_EXPECTED );
     if( pExpr->GetType() != SbxVARIANT && pExpr->GetType() != SbxSTRING )
@@ -147,7 +147,7 @@ void SbiParser::Input()
 {
     aGen.Gen( _RESTART );
     Channel( true );
-    boost::scoped_ptr<SbiExpression> pExpr(new SbiExpression( this, SbOPERAND ));
+    std::unique_ptr<SbiExpression> pExpr(new SbiExpression( this, SbOPERAND ));
     while( !bAbort )
     {
         if( !pExpr->IsVariable() )
@@ -240,10 +240,10 @@ void SbiParser::Open()
     }
     TestToken( AS );
     // channel number
-    boost::scoped_ptr<SbiExpression> pChan(new SbiExpression( this ));
+    std::unique_ptr<SbiExpression> pChan(new SbiExpression( this ));
     if( !pChan )
         Error( ERRCODE_BASIC_SYNTAX );
-    boost::scoped_ptr<SbiExpression> pLen;
+    std::unique_ptr<SbiExpression> pLen;
     if( Peek() == SYMBOL )
     {
         Next();

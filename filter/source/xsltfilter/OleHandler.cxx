@@ -41,7 +41,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include <OleHandler.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -128,7 +128,7 @@ namespace XSLT
             }
 
         // Decompress the bytes
-        boost::scoped_ptr< ::ZipUtils::Inflater> decompresser(new ::ZipUtils::Inflater(false));
+        std::unique_ptr< ::ZipUtils::Inflater> decompresser(new ::ZipUtils::Inflater(false));
         decompresser->setInput(content);
         Sequence<sal_Int8> result(oleLength);
         decompresser->doInflateSegment(result, 0, oleLength);
@@ -196,7 +196,7 @@ namespace XSLT
 
         // Compress the bytes
         Sequence<sal_Int8> output(oledata.getLength());
-        boost::scoped_ptr< ::ZipUtils::Deflater> compresser(new ::ZipUtils::Deflater((sal_Int32) 3, false));
+        std::unique_ptr< ::ZipUtils::Deflater> compresser(new ::ZipUtils::Deflater((sal_Int32) 3, false));
         compresser->setInputSegment(oledata);
         compresser->finish();
         int compressedDataLength = compresser->doDeflateSegment(output, 0, oledata.getLength());

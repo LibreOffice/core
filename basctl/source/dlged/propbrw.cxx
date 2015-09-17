@@ -39,7 +39,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/stdtext.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace basctl
 {
@@ -247,7 +247,7 @@ Sequence< Reference< XInterface > >
     {
         SdrObject* pCurrent = _rMarkList.GetMark(i)->GetMarkedSdrObj();
 
-        boost::scoped_ptr<SdrObjListIter> pGroupIterator;
+        std::unique_ptr<SdrObjListIter> pGroupIterator;
         if (pCurrent->IsGroupObject())
         {
             pGroupIterator.reset(new SdrObjListIter(*pCurrent->GetSubList()));

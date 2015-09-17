@@ -27,7 +27,7 @@ class SvxSearchItem;
 #include <bastypes.hxx>
 #include <bastype2.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace basctl
 {
@@ -35,7 +35,7 @@ namespace basctl
 class ExtraData
 {
 private:
-    boost::scoped_ptr<SvxSearchItem> pSearchItem;
+    std::unique_ptr<SvxSearchItem> pSearchItem;
 
     LibInfos        aLibInfos;
 

@@ -29,7 +29,7 @@
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <basic/codecompletecache.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -588,7 +588,7 @@ void SbiParser::DefType( bool bPrivate )
 
     SbxObject *pType = new SbxObject(aSym);
 
-    boost::scoped_ptr<SbiSymDef> pElem;
+    std::unique_ptr<SbiSymDef> pElem;
     SbiDimList* pDim = NULL;
     bool bDone = false;
 
@@ -960,7 +960,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                     bool bError2 = true;
                     if( bOptional && bCompatible && eTok == EQ )
                     {
-                        boost::scoped_ptr<SbiConstExpression> pDefaultExpr(new SbiConstExpression( this ));
+                        std::unique_ptr<SbiConstExpression> pDefaultExpr(new SbiConstExpression( this ));
                         SbxDataType eType2 = pDefaultExpr->GetType();
 
                         sal_uInt16 nStringId;

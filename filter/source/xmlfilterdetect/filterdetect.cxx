@@ -27,7 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::uno;
@@ -93,7 +93,7 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
             }
         }
 
-        ::boost::scoped_ptr< SvStream > pInStream( ::utl::UcbStreamHelper::CreateStream( xInStream ) );
+        std::unique_ptr< SvStream > pInStream( ::utl::UcbStreamHelper::CreateStream( xInStream ) );
         pInStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
         sal_Size nUniPos = pInStream->Tell();
 

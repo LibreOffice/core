@@ -19,7 +19,7 @@
 
 
 #include "parser.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // Single-line IF and Multiline IF
 
@@ -65,7 +65,7 @@ void SbiParser::If()
             aGen.BackChain( nEndLbl );
 
             aGen.Statement();
-            boost::scoped_ptr<SbiExpression> pCond(new SbiExpression( this ));
+            std::unique_ptr<SbiExpression> pCond(new SbiExpression( this ));
             pCond->Gen();
             nEndLbl = aGen.Gen( _JUMPF, 0 );
             pCond.reset();

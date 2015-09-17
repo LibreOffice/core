@@ -28,8 +28,6 @@
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 
-#include <map>
-
 #include <editeng/svxenum.hxx>
 #include <editeng/splwrap.hxx>
 #include <editeng/edtdlg.hxx>
@@ -37,7 +35,9 @@
 #include <editeng/editrids.hrc>
 #include <editeng/editids.hrc>
 #include <editeng/editerr.hxx>
-#include <boost/scoped_ptr.hpp>
+
+#include <map>
+#include <memory>
 
 #define WAIT_ON() if(pWin != nullptr) { pWin->EnterWait(); }
 
@@ -309,7 +309,7 @@ void SvxSpellWrapper::SpellDocument( )
         if (xHyphWord.is())
         {
             EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-            boost::scoped_ptr<AbstractHyphenWordDialog> pDlg(pFact->CreateHyphenWordDialog( pWin,
+            std::unique_ptr<AbstractHyphenWordDialog> pDlg(pFact->CreateHyphenWordDialog( pWin,
                             xHyphWord->getWord(),
                             LanguageTag( xHyphWord->getLocale() ).getLanguageType(),
                             xHyph, this ));

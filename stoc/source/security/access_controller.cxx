@@ -47,7 +47,7 @@
 #include "lru_cache.h"
 #include "permissions.h"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define SERVICE_NAME "com.sun.star.security.AccessController"
 #define USER_CREDS "access-control.user-credentials"
@@ -533,7 +533,7 @@ inline void AccessController::clearPostPoned()
 void AccessController::checkAndClearPostPoned()
 {
     // check postponed permissions
-    boost::scoped_ptr< t_rec_vec > rec( static_cast< t_rec_vec * >( m_rec.getData() ) );
+    std::unique_ptr< t_rec_vec > rec( static_cast< t_rec_vec * >( m_rec.getData() ) );
     m_rec.setData( 0 ); // takeover ownership
     OSL_ASSERT( rec.get() );
     if (rec.get())

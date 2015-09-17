@@ -43,7 +43,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <osl/mutex.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 //  Defines
 
@@ -325,7 +325,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
     if ( pVCLPopupMenu )
     {
         MenuConfiguration aMenuCfg( m_xContext );
-        boost::scoped_ptr<BmkMenu> pSubMenu;
+        std::unique_ptr<BmkMenu> pSubMenu;
 
         if ( m_bNewMenu )
             pSubMenu.reset(static_cast<BmkMenu*>(aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_NEWMENU )));

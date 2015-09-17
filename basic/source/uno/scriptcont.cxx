@@ -58,7 +58,7 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/script/XLibraryQueryExecutable.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace basic
 {
@@ -947,7 +947,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     {
                         throw uno::RuntimeException();
                     }
-                    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
+                    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
                     if ( !pStream || pStream->GetError() )
                     {
                         sal_Int32 nError = pStream ? pStream->GetError() : ERRCODE_IO_GENERAL;
@@ -1062,7 +1062,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                                                         aCodeStreamName,
                                                                         embed::ElementModes::READ );
 
-                            boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
+                            std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
                             if ( !pStream || pStream->GetError() )
                             {
                                 sal_Int32 nError = pStream ? pStream->GetError() : ERRCODE_IO_GENERAL;

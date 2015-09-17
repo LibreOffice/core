@@ -36,7 +36,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <EncryptedDataHeader.hxx>
 #include <rtl/instance.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::packages::zip::ZipConstants;

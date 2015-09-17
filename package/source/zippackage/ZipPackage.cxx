@@ -69,7 +69,7 @@
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 
 #include <cstring>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <vector>
 
 #include <comphelper/processfactory.hxx>
@@ -492,18 +492,18 @@ void ZipPackage::parseContentType()
 
 void ZipPackage::getZipFileContents()
 {
-    boost::scoped_ptr < ZipEnumeration > pEnum ( m_pZipFile->entries() );
+    std::unique_ptr < ZipEnumeration > xEnum(m_pZipFile->entries());
     ZipPackageStream *pPkgStream;
     ZipPackageFolder *pPkgFolder, *pCurrent;
     OUString sTemp, sDirName;
     sal_Int32 nOldIndex, nIndex, nStreamIndex;
     FolderHash::iterator aIter;
 
-    while ( pEnum->hasMoreElements() )
+    while (xEnum->hasMoreElements())
     {
         nIndex = nOldIndex = 0;
         pCurrent = m_pRootFolder;
-        const ZipEntry & rEntry = *pEnum->nextElement();
+        const ZipEntry & rEntry = *xEnum->nextElement();
         OUString rName = rEntry.sPath;
 
         if ( m_bForceRecovery )

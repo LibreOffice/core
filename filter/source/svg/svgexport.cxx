@@ -46,7 +46,7 @@
 #include <xmloff/animationexport.hxx>
 
 #include <boost/preprocessor/repetition/repeat.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::geometry;
@@ -530,7 +530,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 {
     Reference< XComponentContext >      xContext( ::comphelper::getProcessComponentContext() ) ;
     Reference< XOutputStream >          xOStm;
-    boost::scoped_ptr<SvStream>         pOStm;
+    std::unique_ptr<SvStream>         pOStm;
     sal_Int32                            nLength = rDescriptor.getLength();
     const PropertyValue*                pValue = rDescriptor.getConstArray();
     bool                            bRet = false;

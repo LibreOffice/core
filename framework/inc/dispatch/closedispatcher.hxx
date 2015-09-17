@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/evntpost.hxx>
 #include <vcl/vclptr.hxx>
@@ -90,7 +90,7 @@ class CloseDispatcher : public  ::cppu::WeakImplHelper<
         /** @short  used for asynchronous callbacks within the main thread.
             @descr  Internally we work asynchronous. Because our callis
                     are not aware, that her request can kill its own environment ... */
-        boost::scoped_ptr<vcl::EventPoster> m_aAsyncCallback;
+        std::unique_ptr<vcl::EventPoster> m_aAsyncCallback;
 
         /** @short  used inside asynchronous callback to decide,
                     which operation must be executed. */

@@ -38,8 +38,8 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 
-#include <boost/scoped_ptr.hpp>
 #include <limits>
+#include <memory>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;

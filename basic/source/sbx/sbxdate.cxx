@@ -27,7 +27,7 @@
 #include "sbxconv.hxx"
 #include "math.h"
 #include <comphelper/processfactory.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 double ImpGetDate( const SbxValues* p )
@@ -100,7 +100,7 @@ double ImpGetDate( const SbxValues* p )
         {
             LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
 
-            boost::scoped_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
+            std::unique_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
 
             sal_uInt32 nIndex;
             sal_Int32 nCheckPos = 0;
@@ -268,7 +268,7 @@ start:
             Color* pColor;
 
             LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
-            boost::scoped_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
+            std::unique_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
 
             sal_uInt32 nIndex;
             sal_Int32 nCheckPos = 0;

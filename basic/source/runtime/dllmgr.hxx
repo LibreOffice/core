@@ -21,11 +21,9 @@
 #define INCLUDED_BASIC_SOURCE_RUNTIME_DLLMGR_HXX
 
 #include <sal/config.h>
-
-#include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
-
 #include <basic/sberrors.hxx>
+#include <boost/noncopyable.hpp>
+#include <memory>
 
 class SbxArray;
 class SbxVariable;
@@ -45,7 +43,7 @@ public:
 private:
     struct Impl;
 
-    boost::scoped_ptr< Impl > impl_;
+    std::unique_ptr< Impl > impl_;
 };
 
 #endif

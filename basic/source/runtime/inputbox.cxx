@@ -26,7 +26,7 @@
 #include "runtime.hxx"
 #include "stdobj.hxx"
 #include "rtlproto.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class SvRTLInputBox : public ModalDialog
 {

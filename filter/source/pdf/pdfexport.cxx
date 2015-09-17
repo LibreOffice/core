@@ -74,7 +74,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/drawing/XShapes.hpp"
 #include "com/sun/star/graphic/XGraphicProvider.hpp"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -791,7 +791,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aContext.SignTSA = msSignTSA;
 
 // all context data set, time to create the printing device
-            boost::scoped_ptr<vcl::PDFWriter> pPDFWriter(new vcl::PDFWriter( aContext, xEnc ));
+            std::unique_ptr<vcl::PDFWriter> pPDFWriter(new vcl::PDFWriter( aContext, xEnc ));
             OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
 
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
@@ -811,7 +811,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             if ( pOut )
             {
                 DBG_ASSERT( pOut->GetExtOutDevData() == NULL, "PDFExport: ExtOutDevData already set!!!" );
-                boost::scoped_ptr<vcl::PDFExtOutDevData> pPDFExtOutDevData(new vcl::PDFExtOutDevData( *pOut ));
+                std::unique_ptr<vcl::PDFExtOutDevData> pPDFExtOutDevData(new vcl::PDFExtOutDevData( *pOut ));
                 pOut->SetExtOutDevData( pPDFExtOutDevData.get() );
                 pPDFExtOutDevData->SetIsExportNotes( mbExportNotes );
                 pPDFExtOutDevData->SetIsExportTaggedPDF( mbUseTaggedPDF );
@@ -894,7 +894,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 if ( mxStatusIndicator.is() )
                 {
-                    boost::scoped_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag() ));
+                    std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag() ));
                     if ( pResMgr )
                     {
                         sal_Int32 nTotalPageCount = aRangeEnum.size();

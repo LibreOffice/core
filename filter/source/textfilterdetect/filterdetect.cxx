@@ -20,7 +20,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define WRITER_TEXT_FILTER "Text"
 #define CALC_TEXT_FILTER   "Text - txt - csv (StarCalc)"
@@ -39,7 +39,7 @@ namespace {
 
 bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
 {
-    boost::scoped_ptr<SvStream> pInStream( utl::UcbStreamHelper::CreateStream( xInStream ) );
+    std::unique_ptr<SvStream> pInStream( utl::UcbStreamHelper::CreateStream( xInStream ) );
     if ( !pInStream || pInStream->GetError() )
         // No stream
         return false;

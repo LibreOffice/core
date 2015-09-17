@@ -24,7 +24,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace osl
 {
@@ -165,7 +165,7 @@ namespace toolkit
         virtual void SAL_CALL removeStyleChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XStyleChangeListener >& Listener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        ::boost::scoped_ptr< WindowStyleSettings_Data > m_pData;
+        std::unique_ptr< WindowStyleSettings_Data > m_pData;
     };
 
 
