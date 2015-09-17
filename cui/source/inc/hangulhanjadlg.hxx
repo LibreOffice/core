@@ -58,7 +58,7 @@ namespace svx
 
         void DisplayListBox( bool bDisplayListBox );
 
-        void SetSelectHdl( const Link<>& rLink );
+        void SetSelectHdl( const Link<SuggestionDisplay&,void>& rLink );
 
         void Clear();
         void InsertEntry( const OUString& rStr );
@@ -94,7 +94,7 @@ namespace svx
         VclPtr<SuggestionSet> m_aValueSet;
         VclPtr<ListBox>  m_aListBox;
 
-        Link<>        m_aSelectLink;
+        Link<SuggestionDisplay&,void> m_aSelectLink;
         bool          m_bInSelectionUpdate;
     };
 
@@ -183,7 +183,7 @@ namespace svx
     private:
         DECL_LINK_TYPED( OnOption, Button*, void );
         DECL_LINK( OnSuggestionModified, void* );
-        DECL_LINK( OnSuggestionSelected, void* );
+        DECL_LINK_TYPED( OnSuggestionSelected, SuggestionDisplay&, void );
         DECL_LINK_TYPED( OnConversionDirectionClicked, Button*, void );
         DECL_LINK_TYPED( ClickByCharacterHdl, Button*, void );
 

@@ -500,11 +500,11 @@ namespace svx
             m_aListBox->SelectEntryPos( nPos );
         }
         m_bInSelectionUpdate = false;
-        m_aSelectLink.Call( this );
+        m_aSelectLink.Call( *this );
         return 0L;
     }
 
-    void SuggestionDisplay::SetSelectHdl( const Link<>& rLink )
+    void SuggestionDisplay::SetSelectHdl( const Link<SuggestionDisplay&,void>& rLink )
     {
         m_aSelectLink = rLink;
     }
@@ -712,11 +712,10 @@ namespace svx
     }
 
 
-    IMPL_LINK_NOARG( HangulHanjaConversionDialog, OnSuggestionSelected )
+    IMPL_LINK_NOARG_TYPED( HangulHanjaConversionDialog, OnSuggestionSelected, SuggestionDisplay&, void )
     {
         m_pWordInput->SetText( m_pSuggestions->GetSelectEntry() );
         OnSuggestionModified( NULL );
-        return 0L;
     }
 
 
