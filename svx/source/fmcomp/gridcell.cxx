@@ -3254,6 +3254,7 @@ Reference< XInterface >  FmXGridCell::getContext() throw( RuntimeException, std:
 
 Reference< ::com::sun::star::awt::XControlModel >  FmXGridCell::getModel() throw( ::com::sun::star::uno::RuntimeException, std::exception )
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< ::com::sun::star::awt::XControlModel > (m_pColumn->getModel(), UNO_QUERY);
 }
 
@@ -3261,12 +3262,14 @@ Reference< ::com::sun::star::awt::XControlModel >  FmXGridCell::getModel() throw
 
 sal_Bool FmXGridCell::getLock() throw( RuntimeException, std::exception )
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return m_pColumn->isLocked();
 }
 
 
 void FmXGridCell::setLock(sal_Bool _bLock) throw( RuntimeException, std::exception )
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     if (getLock() == _bLock)
         return;
     else
@@ -3321,60 +3324,70 @@ void SAL_CALL FmXGridCell::setFocus(  ) throw (RuntimeException, std::exception)
 
 void SAL_CALL FmXGridCell::addWindowListener( const Reference< awt::XWindowListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aWindowListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::removeWindowListener( const Reference< awt::XWindowListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aWindowListeners.removeInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::addFocusListener( const Reference< awt::XFocusListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aFocusListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::removeFocusListener( const Reference< awt::XFocusListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aFocusListeners.removeInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::addKeyListener( const Reference< awt::XKeyListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aKeyListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::removeKeyListener( const Reference< awt::XKeyListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aKeyListeners.removeInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::addMouseListener( const Reference< awt::XMouseListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aMouseListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::removeMouseListener( const Reference< awt::XMouseListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aMouseListeners.removeInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::addMouseMotionListener( const Reference< awt::XMouseMotionListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aMouseMotionListeners.addInterface( _rxListener );
 }
 
 
 void SAL_CALL FmXGridCell::removeMouseMotionListener( const Reference< awt::XMouseMotionListener >& _rxListener ) throw (RuntimeException, std::exception)
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aMouseMotionListeners.removeInterface( _rxListener );
 }
 
@@ -3404,12 +3417,14 @@ IMPL_LINK( FmXGridCell, OnWindowEvent, VclWindowEvent*, _pEvent )
 
 void FmXGridCell::onFocusGained( const awt::FocusEvent& _rEvent )
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aFocusListeners.notifyEach( &awt::XFocusListener::focusGained, _rEvent );
 }
 
 
 void FmXGridCell::onFocusLost( const awt::FocusEvent& _rEvent )
 {
+    checkDisposed(OComponentHelper::rBHelper.bDisposed);
     m_aFocusListeners.notifyEach( &awt::XFocusListener::focusLost, _rEvent );
 }
 
