@@ -332,7 +332,7 @@ class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
     virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE ;
 private:
     Link<> aCheckNameHdl;
-    DECL_LINK(CheckNameHdl, void *);
+    DECL_LINK_TYPED(CheckNameHdl, SvxNameDialog&, bool);
 };
 
 class SvxObjectNameDialog;
@@ -346,7 +346,7 @@ class AbstractSvxObjectNameDialog_Impl :public AbstractSvxObjectNameDialog
 
 private:
     Link<> aCheckNameHdl;
-    DECL_LINK(CheckNameHdl, void *);
+    DECL_LINK_TYPED(CheckNameHdl, SvxObjectNameDialog&, bool);
 };
 
 class AbstractSvxObjectTitleDescDialog_Impl :public AbstractSvxObjectTitleDescDialog

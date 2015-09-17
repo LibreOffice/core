@@ -34,7 +34,7 @@ private:
     VclPtr<Edit>           pEdtName;
     VclPtr<OKButton>       pBtnOK;
 
-    Link<>          aCheckNameHdl;
+    Link<SvxNameDialog&,bool> aCheckNameHdl;
 
     DECL_LINK(ModifyHdl, void *);
 
@@ -60,11 +60,11 @@ public:
         @todo Remove the parameter bCheckImmediately and incorporate the 'true'
               behaviour as default.
      */
-    void    SetCheckNameHdl( const Link<>& rLink, bool bCheckImmediately = false )
+    void    SetCheckNameHdl( const Link<SvxNameDialog&,bool>& rLink, bool bCheckImmediately = false )
     {
         aCheckNameHdl = rLink;
         if ( bCheckImmediately )
-            pBtnOK->Enable( rLink.Call( this ) > 0 );
+            pBtnOK->Enable( rLink.Call( *this ) );
     }
 
     void    SetEditHelpId( const OString& aHelpId) {pEdtName->SetHelpId(aHelpId);}
@@ -83,7 +83,7 @@ private:
     VclPtr<OKButton>       pBtnOK;
 
     // callback link for name uniqueness
-    Link<>          aCheckNameHdl;
+    Link<SvxObjectNameDialog&,bool> aCheckNameHdl;
 
     DECL_LINK(ModifyHdl, void *);
 
@@ -97,13 +97,13 @@ public:
     void GetName(OUString& rName) {rName = pEdtName->GetText(); }
 
     // set handler
-    void SetCheckNameHdl(const Link<>& rLink, bool bCheckImmediately = false)
+    void SetCheckNameHdl(const Link<SvxObjectNameDialog&,bool>& rLink, bool bCheckImmediately = false)
     {
         aCheckNameHdl = rLink;
 
         if(bCheckImmediately)
         {
-            pBtnOK->Enable(rLink.Call(this) > 0);
+            pBtnOK->Enable(rLink.Call(*this));
         }
     }
 };

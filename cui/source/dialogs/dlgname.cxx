@@ -61,7 +61,7 @@ void SvxNameDialog::dispose()
 IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
 {
     if(aCheckNameHdl.IsSet())
-        pBtnOK->Enable(aCheckNameHdl.Call(this) > 0);
+        pBtnOK->Enable(aCheckNameHdl.Call(*this));
     return 0;
 }
 
@@ -103,7 +103,7 @@ IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl)
 {
     if(aCheckNameHdl.IsSet())
     {
-        pBtnOK->Enable(aCheckNameHdl.Call(this) > 0);
+        pBtnOK->Enable(aCheckNameHdl.Call(*this));
     }
 
     return 0;
