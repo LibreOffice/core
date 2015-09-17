@@ -56,7 +56,7 @@ public:
             The event listener to call for future events.  Call
             RemoveEventListener() before the listener is destroyed.
     */
-    void AddEventListener (const Link<>& rEventListener);
+    void AddEventListener (const Link<MasterPageObserverEvent&,void>& rEventListener);
 
     /** Remove the given listener from the list of listeners.
         @param rEventListener
@@ -64,10 +64,10 @@ public:
             from this object.  Passing a listener that has not
             been registered before is safe and is silently ignored.
     */
-    void RemoveEventListener (const Link<>& rEventListener);
+    void RemoveEventListener (const Link<MasterPageObserverEvent&,void>& rEventListener);
 
 private:
-    ::std::vector<Link<>> maListeners;
+    ::std::vector<Link<MasterPageObserverEvent&,void>> maListeners;
 
     struct DrawDocHash {
         size_t operator()(SdDrawDocument* argument) const
@@ -127,13 +127,13 @@ void MasterPageObserver::UnregisterDocument (SdDrawDocument& rDocument)
     mpImpl->UnregisterDocument (rDocument);
 }
 
-void MasterPageObserver::AddEventListener (const Link<>& rEventListener)
+void MasterPageObserver::AddEventListener (const Link<MasterPageObserverEvent&,void>& rEventListener)
 {
 
     mpImpl->AddEventListener (rEventListener);
 }
 
-void MasterPageObserver::RemoveEventListener (const Link<>& rEventListener)
+void MasterPageObserver::RemoveEventListener (const Link<MasterPageObserverEvent&,void>& rEventListener)
 {
     mpImpl->RemoveEventListener (rEventListener);
 }
@@ -176,7 +176,7 @@ void MasterPageObserver::Implementation::UnregisterDocument (
 }
 
 void MasterPageObserver::Implementation::AddEventListener (
-    const Link<>& rEventListener)
+    const Link<MasterPageObserverEvent&,void>& rEventListener)
 {
     if (::std::find (
         maListeners.begin(),
@@ -208,7 +208,7 @@ void MasterPageObserver::Implementation::AddEventListener (
 }
 
 void MasterPageObserver::Implementation::RemoveEventListener (
-    const Link<>& rEventListener)
+    const Link<MasterPageObserverEvent&,void>& rEventListener)
 {
     maListeners.erase (
         ::std::find (
@@ -334,12 +334,9 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
 void MasterPageObserver::Implementation::SendEvent (
     MasterPageObserverEvent& rEvent)
 {
-    ::std::vector<Link<>>::iterator aLink (maListeners.begin());
-    ::std::vector<Link<>>::iterator aEnd (maListeners.end());
-    while (aLink!=aEnd)
+    for (auto& aLink : maListeners)
     {
-        aLink->Call (&rEvent);
-        ++aLink;
+        aLink.Call(rEvent);
     }
 }
 

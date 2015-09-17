@@ -281,15 +281,15 @@ void RecentlyUsedMasterPages::SendEvent()
     }
 }
 
-IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
-    MasterPageObserverEvent*, pEvent)
+IMPL_LINK_TYPED(RecentlyUsedMasterPages, MasterPageChangeListener,
+    MasterPageObserverEvent&, rEvent, void)
 {
-    switch (pEvent->meType)
+    switch (rEvent.meType)
     {
         case MasterPageObserverEvent::ET_MASTER_PAGE_ADDED:
         case MasterPageObserverEvent::ET_MASTER_PAGE_EXISTS:
             AddMasterPage(
-                mpContainer->GetTokenForStyleName(pEvent->mrMasterPageName));
+                mpContainer->GetTokenForStyleName(rEvent.mrMasterPageName));
             break;
 
         case MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED:
@@ -299,7 +299,6 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
             SendEvent();
             break;
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED(RecentlyUsedMasterPages, MasterPageContainerChangeListener,

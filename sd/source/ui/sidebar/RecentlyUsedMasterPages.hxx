@@ -103,7 +103,7 @@ private:
     RecentlyUsedMasterPages& operator= (const RecentlyUsedMasterPages&) SAL_DELETED_FUNCTION;
 
     void SendEvent();
-    DECL_LINK(MasterPageChangeListener, MasterPageObserverEvent*);
+    DECL_LINK_TYPED(MasterPageChangeListener, MasterPageObserverEvent&, void);
     DECL_LINK_TYPED(MasterPageContainerChangeListener, MasterPageContainerChangeEvent&, void);
 
     /** Add a descriptor for the specified master page to the end of the

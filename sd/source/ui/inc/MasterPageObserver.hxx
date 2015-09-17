@@ -30,6 +30,8 @@ class SdDrawDocument;
 
 namespace sd {
 
+class MasterPageObserverEvent;
+
 /** This singleton observes all registered documents for changes in the used
     master pages and in turn informs its listeners about it.  One such
     listener is the master page selector control in the tool panel that
@@ -61,7 +63,7 @@ public:
             The event listener to call for future events.  Call
             RemoveEventListener() before the listener is destroyed.
     */
-    void AddEventListener (const Link<>& rEventListener);
+    void AddEventListener (const Link<MasterPageObserverEvent&,void>& rEventListener);
 
     /** Remove the given listener from the list of listeners.
         @param rEventListener
@@ -69,7 +71,7 @@ public:
             from this object.  Passing a listener that has not
             been registered before is safe and is silently ignored.
     */
-    void RemoveEventListener (const Link<>& rEventListener);
+    void RemoveEventListener (const Link<MasterPageObserverEvent&,void>& rEventListener);
 
 private:
     static ::osl::Mutex maMutex;
