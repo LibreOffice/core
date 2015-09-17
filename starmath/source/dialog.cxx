@@ -1409,7 +1409,7 @@ void SmShowSymbol::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rR
 void SmShowSymbol::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (rMEvt.GetClicks() > 1)
-        aDblClickHdlLink.Call(this);
+        aDblClickHdlLink.Call(*this);
     else
         Control::MouseButtonDown (rMEvt);
 }
@@ -1506,13 +1506,16 @@ IMPL_LINK_NOARG_TYPED(SmSymbolDialog, EditClickHdl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED( SmSymbolDialog, SymbolDblClickHdl2, SmShowSymbolSetWindow&, void )
 {
-    SymbolDblClickHdl(nullptr);
+    SymbolDblClickHdl();
 }
-IMPL_LINK_NOARG( SmSymbolDialog, SymbolDblClickHdl )
+IMPL_LINK_NOARG_TYPED( SmSymbolDialog, SymbolDblClickHdl, SmShowSymbol&, void )
+{
+    SymbolDblClickHdl();
+}
+void SmSymbolDialog::SymbolDblClickHdl()
 {
     GetClickHdl(m_pGetBtn);
     EndDialog(RET_OK);
-    return 0;
 }
 
 

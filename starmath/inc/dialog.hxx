@@ -324,7 +324,7 @@ public:
 
 class SmShowSymbol : public Control
 {
-    Link<> aDblClickHdlLink;
+    Link<SmShowSymbol&,void> aDblClickHdlLink;
 
     virtual void    Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
     virtual void    ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
@@ -340,7 +340,7 @@ public:
     }
 
     void    SetSymbol(const SmSym *pSymbol);
-    void    SetDblClickHdl(const Link<> &rLink) { aDblClickHdlLink = rLink; }
+    void    SetDblClickHdl(const Link<SmShowSymbol&,void> &rLink) { aDblClickHdlLink = rLink; }
 };
 
 
@@ -366,10 +366,11 @@ class SmSymbolDialog : public ModalDialog
 
     DECL_LINK(SymbolSetChangeHdl, void*);
     DECL_LINK_TYPED(SymbolChangeHdl, SmShowSymbolSetWindow&, void);
-    DECL_LINK(SymbolDblClickHdl, void*);
+    DECL_LINK_TYPED(SymbolDblClickHdl, SmShowSymbol&, void);
     DECL_LINK_TYPED(SymbolDblClickHdl2, SmShowSymbolSetWindow&, void);
     DECL_LINK_TYPED(EditClickHdl, Button*, void);
     DECL_LINK_TYPED(GetClickHdl, Button*, void);
+    void SymbolDblClickHdl();
 
     void            FillSymbolSets(bool bDeleteText = true);
     const SmSym    *GetSymbol() const;
