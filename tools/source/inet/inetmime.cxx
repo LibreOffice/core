@@ -343,6 +343,768 @@ bool parseParameters(ParameterList const & rInput,
     return true;
 }
 
+class INetMIMEEncodedWordOutputSink
+{
+public:
+    enum Context { CONTEXT_TEXT = 1,
+                   CONTEXT_COMMENT = 2,
+                   CONTEXT_PHRASE = 4 };
+
+    enum Space { SPACE_NO, SPACE_ENCODED, SPACE_ALWAYS };
+
+private:
+    enum { BUFFER_SIZE = 256 };
+
+    enum Coding { CODING_NONE, CODING_QUOTED, CODING_ENCODED,
+                  CODING_ENCODED_TERMINATED };
+
+    enum EncodedWordState { STATE_INITIAL, STATE_FIRST_EQUALS,
+                            STATE_FIRST_QUESTION, STATE_CHARSET,
+                            STATE_SECOND_QUESTION, STATE_ENCODING,
+                            STATE_THIRD_QUESTION, STATE_ENCODED_TEXT,
+                            STATE_FOURTH_QUESTION, STATE_SECOND_EQUALS,
+                            STATE_BAD };
+
+    INetMIMEOutputSink & m_rSink;
+    Context m_eContext;
+    Space m_eInitialSpace;
+    sal_uInt32 m_nExtraSpaces;
+    INetMIMECharsetList_Impl * m_pEncodingList;
+    sal_Unicode * m_pBuffer;
+    sal_uInt32 m_nBufferSize;
+    sal_Unicode * m_pBufferEnd;
+    Coding m_ePrevCoding;
+    rtl_TextEncoding m_ePrevMIMEEncoding;
+    Coding m_eCoding;
+    EncodedWordState m_eEncodedWordState;
+
+    inline bool needsEncodedWordEscape(sal_uInt32 nChar) const;
+
+    void finish(bool bWriteTrailer);
+
+public:
+    inline INetMIMEEncodedWordOutputSink(INetMIMEOutputSink & rTheSink,
+                                         Context eTheContext,
+                                         Space eTheInitialSpace,
+                                         rtl_TextEncoding ePreferredEncoding);
+
+    ~INetMIMEEncodedWordOutputSink();
+
+    INetMIMEEncodedWordOutputSink & WriteUInt32(sal_uInt32 nChar);
+
+    inline void write(const sal_Unicode * pBegin, const sal_Unicode * pEnd);
+
+    inline bool flush();
+};
+
+inline INetMIMEEncodedWordOutputSink::INetMIMEEncodedWordOutputSink(
+           INetMIMEOutputSink & rTheSink, Context eTheContext,
+           Space eTheInitialSpace, rtl_TextEncoding ePreferredEncoding):
+    m_rSink(rTheSink),
+    m_eContext(eTheContext),
+    m_eInitialSpace(eTheInitialSpace),
+    m_nExtraSpaces(0),
+    m_pEncodingList(INetMIME::createPreferredCharsetList(ePreferredEncoding)),
+    m_ePrevCoding(CODING_NONE),
+    m_ePrevMIMEEncoding(RTL_TEXTENCODING_DONTKNOW),
+    m_eCoding(CODING_NONE),
+    m_eEncodedWordState(STATE_INITIAL)
+{
+    m_nBufferSize = BUFFER_SIZE;
+    m_pBuffer = static_cast< sal_Unicode * >(rtl_allocateMemory(
+                                                 m_nBufferSize
+                                                     * sizeof (sal_Unicode)));
+    m_pBufferEnd = m_pBuffer;
+}
+
+
+
+inline void INetMIMEEncodedWordOutputSink::write(const sal_Unicode * pBegin,
+                                                 const sal_Unicode * pEnd)
+{
+    DBG_ASSERT(pBegin && pBegin <= pEnd,
+               "INetMIMEEncodedWordOutputSink::write(): Bad sequence");
+
+    while (pBegin != pEnd)
+        WriteUInt32(*pBegin++);
+}
+
+inline bool INetMIMEEncodedWordOutputSink::flush()
+{
+    finish(true);
+    return m_ePrevCoding != CODING_NONE;
+}
+
+static const sal_Char aEscape[128]
+    = { INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x00
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x01
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x02
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x03
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x04
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x05
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x06
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x07
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x08
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x09
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0A
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0B
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0C
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0D
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0E
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0F
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x10
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x11
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x12
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x13
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x14
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x15
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x16
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x17
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x18
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x19
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1A
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1B
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1C
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1D
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1E
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1F
+        0,   // ' '
+        0,   // '!'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '"'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '#'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '$'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '%'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '&'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '''
+        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '('
+        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ')'
+        0,   // '*'
+        0,   // '+'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ','
+        0,   // '-'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '.'
+        0,   // '/'
+        0,   // '0'
+        0,   // '1'
+        0,   // '2'
+        0,   // '3'
+        0,   // '4'
+        0,   // '5'
+        0,   // '6'
+        0,   // '7'
+        0,   // '8'
+        0,   // '9'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ':'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ';'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '<'
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '='
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '>'
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '?'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '@'
+        0,   // 'A'
+        0,   // 'B'
+        0,   // 'C'
+        0,   // 'D'
+        0,   // 'E'
+        0,   // 'F'
+        0,   // 'G'
+        0,   // 'H'
+        0,   // 'I'
+        0,   // 'J'
+        0,   // 'K'
+        0,   // 'L'
+        0,   // 'M'
+        0,   // 'N'
+        0,   // 'O'
+        0,   // 'P'
+        0,   // 'Q'
+        0,   // 'R'
+        0,   // 'S'
+        0,   // 'T'
+        0,   // 'U'
+        0,   // 'V'
+        0,   // 'W'
+        0,   // 'X'
+        0,   // 'Y'
+        0,   // 'Z'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '['
+        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '\'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ']'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '^'
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '_'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '`'
+        0,   // 'a'
+        0,   // 'b'
+        0,   // 'c'
+        0,   // 'd'
+        0,   // 'e'
+        0,   // 'f'
+        0,   // 'g'
+        0,   // 'h'
+        0,   // 'i'
+        0,   // 'j'
+        0,   // 'k'
+        0,   // 'l'
+        0,   // 'm'
+        0,   // 'n'
+        0,   // 'o'
+        0,   // 'p'
+        0,   // 'q'
+        0,   // 'r'
+        0,   // 's'
+        0,   // 't'
+        0,   // 'u'
+        0,   // 'v'
+        0,   // 'w'
+        0,   // 'x'
+        0,   // 'y'
+        0,   // 'z'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '{'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '|'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '}'
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '~'
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE }; // DEL
+
+inline bool
+INetMIMEEncodedWordOutputSink::needsEncodedWordEscape(sal_uInt32 nChar) const
+{
+    return !rtl::isAscii(nChar) || aEscape[nChar] & m_eContext;
+}
+
+void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
+{
+    if (m_eInitialSpace == SPACE_ALWAYS && m_nExtraSpaces == 0)
+        m_nExtraSpaces = 1;
+
+    if (m_eEncodedWordState == STATE_SECOND_EQUALS)
+    {
+        // If the text is already an encoded word, copy it verbatim:
+        switch (m_ePrevCoding)
+        {
+            case CODING_QUOTED:
+                m_rSink << '"';
+            case CODING_NONE:
+                if (m_eInitialSpace == SPACE_ENCODED && m_nExtraSpaces == 0)
+                    m_nExtraSpaces = 1;
+                while (m_nExtraSpaces-- > 0)
+                {
+                    m_rSink << ' ';
+                }
+                break;
+
+            case CODING_ENCODED:
+            {
+                while (m_nExtraSpaces-- > 0)
+                {
+                    m_rSink << '_';
+                }
+                m_rSink << "?=";
+            }
+            //fall-through
+            case CODING_ENCODED_TERMINATED:
+                m_rSink << ' ';
+                break;
+        }
+        m_rSink.write(m_pBuffer, m_pBufferEnd);
+        m_eCoding = CODING_ENCODED_TERMINATED;
+    }
+    else
+    {
+        switch (m_eCoding)
+        {
+            case CODING_NONE:
+                switch (m_ePrevCoding)
+                {
+                    case CODING_QUOTED:
+                        m_eCoding = CODING_QUOTED;
+                        break;
+
+                    case CODING_ENCODED:
+                        m_rSink << "?=";
+                        break;
+
+                    default:
+                        break;
+                }
+                while (m_nExtraSpaces-- > 0)
+                {
+                    m_rSink << ' ';
+                }
+                m_rSink.write(m_pBuffer, m_pBufferEnd);
+                if (m_eCoding == CODING_QUOTED && bWriteTrailer)
+                {
+                    m_rSink << '"';
+                    m_eCoding = CODING_NONE;
+                }
+                break;
+
+            case CODING_QUOTED:
+            {
+                bool bInsertLeadingQuote = true;
+                switch (m_ePrevCoding)
+                {
+                    case CODING_QUOTED:
+                        bInsertLeadingQuote = false;
+                        break;
+
+                    case CODING_ENCODED:
+                        m_rSink << "?=";
+                        break;
+
+                    default:
+                        break;
+                }
+                while (m_nExtraSpaces-- > 0)
+                {
+                    m_rSink << ' ';
+                }
+                if (bInsertLeadingQuote)
+                    m_rSink << '"';
+                for (const sal_Unicode * p = m_pBuffer; p != m_pBufferEnd;
+                     ++p)
+                {
+                    if (INetMIME::needsQuotedStringEscape(*p))
+                        m_rSink << '\\';
+                    m_rSink << sal_Char(*p);
+                }
+                if (bWriteTrailer)
+                {
+                    m_rSink << '"';
+                    m_eCoding = CODING_NONE;
+                }
+                break;
+            }
+
+            case CODING_ENCODED:
+            {
+                rtl_TextEncoding eCharsetEncoding
+                    = m_pEncodingList->
+                          getPreferredEncoding(RTL_TEXTENCODING_UTF8);
+                rtl_TextEncoding eMIMEEncoding
+                    = INetMIME::translateToMIME(eCharsetEncoding);
+
+                const sal_Char * pCharsetName
+                    = INetMIME::getCharsetName(eMIMEEncoding);
+
+                switch (m_ePrevCoding)
+                {
+                    case CODING_QUOTED:
+                        m_rSink << '"';
+                    case CODING_NONE:
+                        if (m_eInitialSpace == SPACE_ENCODED
+                            && m_nExtraSpaces == 0)
+                            m_nExtraSpaces = 1;
+                        while (m_nExtraSpaces-- > 0)
+                        {
+                            m_rSink << ' ';
+                        }
+                        m_rSink << "=?" << pCharsetName << "?Q?";
+                        break;
+
+                    case CODING_ENCODED:
+                        if (m_ePrevMIMEEncoding != eMIMEEncoding)
+                        {
+                            m_rSink << "?= =?" << pCharsetName << "?Q?";
+                        }
+                        while (m_nExtraSpaces-- > 0)
+                        {
+                            m_rSink << '_';
+                        }
+                        break;
+
+                    case CODING_ENCODED_TERMINATED:
+                        m_rSink << " =?" << pCharsetName << "?Q?";
+                        while (m_nExtraSpaces-- > 0)
+                        {
+                            m_rSink << '_';
+                        }
+                        break;
+                }
+
+                // The non UTF-8 code will only work for stateless single byte
+                // character encodings:
+                if (eMIMEEncoding == RTL_TEXTENCODING_UTF8)
+                {
+                    for (sal_Unicode const * p = m_pBuffer;
+                         p != m_pBufferEnd;)
+                    {
+                        sal_uInt32 nUTF32
+                            = INetMIME::getUTF32Character(p, m_pBufferEnd);
+                        bool bEscape = needsEncodedWordEscape(nUTF32);
+                        if (bEscape)
+                        {
+                            DBG_ASSERT(
+                                nUTF32 < 0x10FFFF,
+                                "INetMIMEEncodedWordOutputSink::finish():"
+                                    " Bad char");
+                            if (nUTF32 < 0x80)
+                                INetMIME::writeEscapeSequence(m_rSink,
+                                                              nUTF32);
+                            else if (nUTF32 < 0x800)
+                            {
+                                INetMIME::writeEscapeSequence(m_rSink,
+                                                              (nUTF32 >> 6)
+                                                                  | 0xC0);
+                                INetMIME::writeEscapeSequence(m_rSink,
+                                                              (nUTF32 & 0x3F)
+                                                                  | 0x80);
+                            }
+                            else if (nUTF32 < 0x10000)
+                            {
+                                INetMIME::writeEscapeSequence(m_rSink,
+                                                              (nUTF32 >> 12)
+                                                                  | 0xE0);
+                                INetMIME::writeEscapeSequence(m_rSink,
+                                                              ((nUTF32 >> 6)
+                                                                      & 0x3F)
+                                                                  | 0x80);
+                                INetMIME::writeEscapeSequence(m_rSink,
+                                                              (nUTF32 & 0x3F)
+                                                                  | 0x80);
+                            }
+                            else
+                            {
+                                INetMIME::writeEscapeSequence(m_rSink,
+                                                              (nUTF32 >> 18)
+                                                                  | 0xF0);
+                                INetMIME::writeEscapeSequence(m_rSink,
+                                                              ((nUTF32 >> 12)
+                                                                      & 0x3F)
+                                                                  | 0x80);
+                                INetMIME::writeEscapeSequence(m_rSink,
+                                                              ((nUTF32 >> 6)
+                                                                      & 0x3F)
+                                                                  | 0x80);
+                                INetMIME::writeEscapeSequence(m_rSink,
+                                                              (nUTF32 & 0x3F)
+                                                                  | 0x80);
+                            }
+                        }
+                        else
+                            m_rSink << sal_Char(nUTF32);
+                    }
+                }
+                else
+                {
+                    sal_Char * pTargetBuffer = NULL;
+                    sal_Size nTargetSize = 0;
+                    rtl_UnicodeToTextConverter hConverter
+                        = rtl_createUnicodeToTextConverter(eCharsetEncoding);
+                    rtl_UnicodeToTextContext hContext
+                        = rtl_createUnicodeToTextContext(hConverter);
+                    for (sal_Size nBufferSize = m_pBufferEnd - m_pBuffer;;
+                         nBufferSize += nBufferSize / 3 + 1)
+                    {
+                        pTargetBuffer = new sal_Char[nBufferSize];
+                        sal_uInt32 nInfo;
+                        sal_Size nSrcCvtBytes;
+                        nTargetSize
+                            = rtl_convertUnicodeToText(
+                                  hConverter, hContext, m_pBuffer,
+                                  m_pBufferEnd - m_pBuffer, pTargetBuffer,
+                                  nBufferSize,
+                                  RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE
+                                     | RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE,
+                                  &nInfo, &nSrcCvtBytes);
+                        if (!(nInfo
+                                  & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL))
+                            break;
+                        delete[] pTargetBuffer;
+                        pTargetBuffer = NULL;
+                        rtl_resetUnicodeToTextContext(hConverter, hContext);
+                    }
+                    rtl_destroyUnicodeToTextContext(hConverter, hContext);
+                    rtl_destroyUnicodeToTextConverter(hConverter);
+                    for (sal_Size k = 0; k < nTargetSize; ++k)
+                    {
+                        sal_uInt32 nUCS4 = static_cast<unsigned char>(pTargetBuffer[k]);
+                        bool bEscape = needsEncodedWordEscape(nUCS4);
+                        if (bEscape)
+                            INetMIME::writeEscapeSequence(m_rSink, nUCS4);
+                        else
+                            m_rSink << sal_Char(nUCS4);
+                    }
+                    delete[] pTargetBuffer;
+                }
+
+                if (bWriteTrailer)
+                {
+                    m_rSink << "?=";
+                    m_eCoding = CODING_ENCODED_TERMINATED;
+                }
+
+                m_ePrevMIMEEncoding = eMIMEEncoding;
+                break;
+            }
+
+            default:
+                OSL_ASSERT(false);
+                break;
+        }
+    }
+
+    m_eInitialSpace = SPACE_NO;
+    m_nExtraSpaces = 0;
+    m_pEncodingList->reset();
+    m_pBufferEnd = m_pBuffer;
+    m_ePrevCoding = m_eCoding;
+    m_eCoding = CODING_NONE;
+    m_eEncodedWordState = STATE_INITIAL;
+}
+
+INetMIMEEncodedWordOutputSink::~INetMIMEEncodedWordOutputSink()
+{
+    rtl_freeMemory(m_pBuffer);
+    delete m_pEncodingList;
+}
+
+INetMIMEEncodedWordOutputSink &
+INetMIMEEncodedWordOutputSink::WriteUInt32(sal_uInt32 nChar)
+{
+    if (nChar == ' ')
+    {
+        if (m_pBufferEnd != m_pBuffer)
+            finish(false);
+        ++m_nExtraSpaces;
+    }
+    else
+    {
+        // Check for an already encoded word:
+        switch (m_eEncodedWordState)
+        {
+            case STATE_INITIAL:
+                if (nChar == '=')
+                    m_eEncodedWordState = STATE_FIRST_EQUALS;
+                else
+                    m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_FIRST_EQUALS:
+                if (nChar == '?')
+                    m_eEncodedWordState = STATE_FIRST_EQUALS;
+                else
+                    m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_FIRST_QUESTION:
+                if (INetMIME::isEncodedWordTokenChar(nChar))
+                    m_eEncodedWordState = STATE_CHARSET;
+                else
+                    m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_CHARSET:
+                if (nChar == '?')
+                    m_eEncodedWordState = STATE_SECOND_QUESTION;
+                else if (!INetMIME::isEncodedWordTokenChar(nChar))
+                    m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_SECOND_QUESTION:
+                if (nChar == 'B' || nChar == 'Q'
+                    || nChar == 'b' || nChar == 'q')
+                    m_eEncodedWordState = STATE_ENCODING;
+                else
+                    m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_ENCODING:
+                if (nChar == '?')
+                    m_eEncodedWordState = STATE_THIRD_QUESTION;
+                else
+                    m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_THIRD_QUESTION:
+                if (INetMIME::isVisible(nChar) && nChar != '?')
+                    m_eEncodedWordState = STATE_ENCODED_TEXT;
+                else
+                    m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_ENCODED_TEXT:
+                if (nChar == '?')
+                    m_eEncodedWordState = STATE_FOURTH_QUESTION;
+                else if (!INetMIME::isVisible(nChar))
+                    m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_FOURTH_QUESTION:
+                if (nChar == '=')
+                    m_eEncodedWordState = STATE_SECOND_EQUALS;
+                else
+                    m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_SECOND_EQUALS:
+                m_eEncodedWordState = STATE_BAD;
+                break;
+
+            case STATE_BAD:
+                break;
+        }
+
+        // Update encoding:
+        m_pEncodingList->includes(nChar);
+
+        // Update coding:
+        enum { TENQ = 1,   // CONTEXT_TEXT, CODING_ENCODED
+               CENQ = 2,   // CONTEXT_COMMENT, CODING_ENCODED
+               PQTD = 4,   // CONTEXT_PHRASE, CODING_QUOTED
+               PENQ = 8 }; // CONTEXT_PHRASE, CODING_ENCODED
+        static const sal_Char aMinimal[128]
+            = { TENQ | CENQ        | PENQ,   // 0x00
+                TENQ | CENQ        | PENQ,   // 0x01
+                TENQ | CENQ        | PENQ,   // 0x02
+                TENQ | CENQ        | PENQ,   // 0x03
+                TENQ | CENQ        | PENQ,   // 0x04
+                TENQ | CENQ        | PENQ,   // 0x05
+                TENQ | CENQ        | PENQ,   // 0x06
+                TENQ | CENQ        | PENQ,   // 0x07
+                TENQ | CENQ        | PENQ,   // 0x08
+                TENQ | CENQ        | PENQ,   // 0x09
+                TENQ | CENQ        | PENQ,   // 0x0A
+                TENQ | CENQ        | PENQ,   // 0x0B
+                TENQ | CENQ        | PENQ,   // 0x0C
+                TENQ | CENQ        | PENQ,   // 0x0D
+                TENQ | CENQ        | PENQ,   // 0x0E
+                TENQ | CENQ        | PENQ,   // 0x0F
+                TENQ | CENQ        | PENQ,   // 0x10
+                TENQ | CENQ        | PENQ,   // 0x11
+                TENQ | CENQ        | PENQ,   // 0x12
+                TENQ | CENQ        | PENQ,   // 0x13
+                TENQ | CENQ        | PENQ,   // 0x14
+                TENQ | CENQ        | PENQ,   // 0x15
+                TENQ | CENQ        | PENQ,   // 0x16
+                TENQ | CENQ        | PENQ,   // 0x17
+                TENQ | CENQ        | PENQ,   // 0x18
+                TENQ | CENQ        | PENQ,   // 0x19
+                TENQ | CENQ        | PENQ,   // 0x1A
+                TENQ | CENQ        | PENQ,   // 0x1B
+                TENQ | CENQ        | PENQ,   // 0x1C
+                TENQ | CENQ        | PENQ,   // 0x1D
+                TENQ | CENQ        | PENQ,   // 0x1E
+                TENQ | CENQ        | PENQ,   // 0x1F
+                                        0,   // ' '
+                                        0,   // '!'
+                              PQTD       ,   // '"'
+                                        0,   // '#'
+                                        0,   // '$'
+                                        0,   // '%'
+                                        0,   // '&'
+                                        0,   // '''
+                       CENQ | PQTD       ,   // '('
+                       CENQ | PQTD       ,   // ')'
+                                        0,   // '*'
+                                        0,   // '+'
+                              PQTD       ,   // ','
+                                        0,   // '-'
+                              PQTD       ,   // '.'
+                                        0,   // '/'
+                                        0,   // '0'
+                                        0,   // '1'
+                                        0,   // '2'
+                                        0,   // '3'
+                                        0,   // '4'
+                                        0,   // '5'
+                                        0,   // '6'
+                                        0,   // '7'
+                                        0,   // '8'
+                                        0,   // '9'
+                              PQTD       ,   // ':'
+                              PQTD       ,   // ';'
+                              PQTD       ,   // '<'
+                                        0,   // '='
+                              PQTD       ,   // '>'
+                                        0,   // '?'
+                              PQTD       ,   // '@'
+                                        0,   // 'A'
+                                        0,   // 'B'
+                                        0,   // 'C'
+                                        0,   // 'D'
+                                        0,   // 'E'
+                                        0,   // 'F'
+                                        0,   // 'G'
+                                        0,   // 'H'
+                                        0,   // 'I'
+                                        0,   // 'J'
+                                        0,   // 'K'
+                                        0,   // 'L'
+                                        0,   // 'M'
+                                        0,   // 'N'
+                                        0,   // 'O'
+                                        0,   // 'P'
+                                        0,   // 'Q'
+                                        0,   // 'R'
+                                        0,   // 'S'
+                                        0,   // 'T'
+                                        0,   // 'U'
+                                        0,   // 'V'
+                                        0,   // 'W'
+                                        0,   // 'X'
+                                        0,   // 'Y'
+                                        0,   // 'Z'
+                              PQTD       ,   // '['
+                       CENQ | PQTD       ,   // '\'
+                              PQTD       ,   // ']'
+                                        0,   // '^'
+                                        0,   // '_'
+                                        0,   // '`'
+                                        0,   // 'a'
+                                        0,   // 'b'
+                                        0,   // 'c'
+                                        0,   // 'd'
+                                        0,   // 'e'
+                                        0,   // 'f'
+                                        0,   // 'g'
+                                        0,   // 'h'
+                                        0,   // 'i'
+                                        0,   // 'j'
+                                        0,   // 'k'
+                                        0,   // 'l'
+                                        0,   // 'm'
+                                        0,   // 'n'
+                                        0,   // 'o'
+                                        0,   // 'p'
+                                        0,   // 'q'
+                                        0,   // 'r'
+                                        0,   // 's'
+                                        0,   // 't'
+                                        0,   // 'u'
+                                        0,   // 'v'
+                                        0,   // 'w'
+                                        0,   // 'x'
+                                        0,   // 'y'
+                                        0,   // 'z'
+                                        0,   // '{'
+                                        0,   // '|'
+                                        0,   // '}'
+                                        0,   // '~'
+                TENQ | CENQ        | PENQ }; // DEL
+        Coding eNewCoding = !rtl::isAscii(nChar) ? CODING_ENCODED :
+                            m_eContext == CONTEXT_PHRASE ?
+                                Coding(aMinimal[nChar] >> 2) :
+                            aMinimal[nChar] & m_eContext ? CODING_ENCODED :
+                                                           CODING_NONE;
+        if (eNewCoding > m_eCoding)
+            m_eCoding = eNewCoding;
+
+        // Append to buffer:
+        if (sal_uInt32(m_pBufferEnd - m_pBuffer) == m_nBufferSize)
+        {
+            m_pBuffer
+                = static_cast< sal_Unicode * >(
+                      rtl_reallocateMemory(m_pBuffer,
+                                           (m_nBufferSize + BUFFER_SIZE)
+                                               * sizeof (sal_Unicode)));
+            m_pBufferEnd = m_pBuffer + m_nBufferSize;
+            m_nBufferSize += BUFFER_SIZE;
+        }
+        *m_pBufferEnd++ = sal_Unicode(nChar);
+    }
+    return *this;
+}
+
 }
 
 //  INetMIME
@@ -2104,678 +2866,6 @@ void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
     }
     writeSequence(pBufferBegin, pBufferEnd);
     delete[] pBufferBegin;
-}
-
-//  INetMIMEEncodedWordOutputSink
-
-static const sal_Char aEscape[128]
-    = { INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x00
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x01
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x02
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x03
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x04
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x05
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x06
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x07
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x08
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x09
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0A
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0B
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0C
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0D
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0E
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0F
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x10
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x11
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x12
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x13
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x14
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x15
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x16
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x17
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x18
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x19
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1A
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1B
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1C
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1D
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1E
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1F
-        0,   // ' '
-        0,   // '!'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '"'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '#'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '$'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '%'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '&'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '''
-        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '('
-        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ')'
-        0,   // '*'
-        0,   // '+'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ','
-        0,   // '-'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '.'
-        0,   // '/'
-        0,   // '0'
-        0,   // '1'
-        0,   // '2'
-        0,   // '3'
-        0,   // '4'
-        0,   // '5'
-        0,   // '6'
-        0,   // '7'
-        0,   // '8'
-        0,   // '9'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ':'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ';'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '<'
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '='
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '>'
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '?'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '@'
-        0,   // 'A'
-        0,   // 'B'
-        0,   // 'C'
-        0,   // 'D'
-        0,   // 'E'
-        0,   // 'F'
-        0,   // 'G'
-        0,   // 'H'
-        0,   // 'I'
-        0,   // 'J'
-        0,   // 'K'
-        0,   // 'L'
-        0,   // 'M'
-        0,   // 'N'
-        0,   // 'O'
-        0,   // 'P'
-        0,   // 'Q'
-        0,   // 'R'
-        0,   // 'S'
-        0,   // 'T'
-        0,   // 'U'
-        0,   // 'V'
-        0,   // 'W'
-        0,   // 'X'
-        0,   // 'Y'
-        0,   // 'Z'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '['
-        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '\'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ']'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '^'
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '_'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '`'
-        0,   // 'a'
-        0,   // 'b'
-        0,   // 'c'
-        0,   // 'd'
-        0,   // 'e'
-        0,   // 'f'
-        0,   // 'g'
-        0,   // 'h'
-        0,   // 'i'
-        0,   // 'j'
-        0,   // 'k'
-        0,   // 'l'
-        0,   // 'm'
-        0,   // 'n'
-        0,   // 'o'
-        0,   // 'p'
-        0,   // 'q'
-        0,   // 'r'
-        0,   // 's'
-        0,   // 't'
-        0,   // 'u'
-        0,   // 'v'
-        0,   // 'w'
-        0,   // 'x'
-        0,   // 'y'
-        0,   // 'z'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '{'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '|'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '}'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '~'
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE }; // DEL
-
-inline bool
-INetMIMEEncodedWordOutputSink::needsEncodedWordEscape(sal_uInt32 nChar) const
-{
-    return !rtl::isAscii(nChar) || aEscape[nChar] & m_eContext;
-}
-
-void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
-{
-    if (m_eInitialSpace == SPACE_ALWAYS && m_nExtraSpaces == 0)
-        m_nExtraSpaces = 1;
-
-    if (m_eEncodedWordState == STATE_SECOND_EQUALS)
-    {
-        // If the text is already an encoded word, copy it verbatim:
-        switch (m_ePrevCoding)
-        {
-            case CODING_QUOTED:
-                m_rSink << '"';
-            case CODING_NONE:
-                if (m_eInitialSpace == SPACE_ENCODED && m_nExtraSpaces == 0)
-                    m_nExtraSpaces = 1;
-                while (m_nExtraSpaces-- > 0)
-                {
-                    m_rSink << ' ';
-                }
-                break;
-
-            case CODING_ENCODED:
-            {
-                while (m_nExtraSpaces-- > 0)
-                {
-                    m_rSink << '_';
-                }
-                m_rSink << "?=";
-            }
-            //fall-through
-            case CODING_ENCODED_TERMINATED:
-                m_rSink << ' ';
-                break;
-        }
-        m_rSink.write(m_pBuffer, m_pBufferEnd);
-        m_eCoding = CODING_ENCODED_TERMINATED;
-    }
-    else
-    {
-        switch (m_eCoding)
-        {
-            case CODING_NONE:
-                switch (m_ePrevCoding)
-                {
-                    case CODING_QUOTED:
-                        m_eCoding = CODING_QUOTED;
-                        break;
-
-                    case CODING_ENCODED:
-                        m_rSink << "?=";
-                        break;
-
-                    default:
-                        break;
-                }
-                while (m_nExtraSpaces-- > 0)
-                {
-                    m_rSink << ' ';
-                }
-                m_rSink.write(m_pBuffer, m_pBufferEnd);
-                if (m_eCoding == CODING_QUOTED && bWriteTrailer)
-                {
-                    m_rSink << '"';
-                    m_eCoding = CODING_NONE;
-                }
-                break;
-
-            case CODING_QUOTED:
-            {
-                bool bInsertLeadingQuote = true;
-                switch (m_ePrevCoding)
-                {
-                    case CODING_QUOTED:
-                        bInsertLeadingQuote = false;
-                        break;
-
-                    case CODING_ENCODED:
-                        m_rSink << "?=";
-                        break;
-
-                    default:
-                        break;
-                }
-                while (m_nExtraSpaces-- > 0)
-                {
-                    m_rSink << ' ';
-                }
-                if (bInsertLeadingQuote)
-                    m_rSink << '"';
-                for (const sal_Unicode * p = m_pBuffer; p != m_pBufferEnd;
-                     ++p)
-                {
-                    if (INetMIME::needsQuotedStringEscape(*p))
-                        m_rSink << '\\';
-                    m_rSink << sal_Char(*p);
-                }
-                if (bWriteTrailer)
-                {
-                    m_rSink << '"';
-                    m_eCoding = CODING_NONE;
-                }
-                break;
-            }
-
-            case CODING_ENCODED:
-            {
-                rtl_TextEncoding eCharsetEncoding
-                    = m_pEncodingList->
-                          getPreferredEncoding(RTL_TEXTENCODING_UTF8);
-                rtl_TextEncoding eMIMEEncoding
-                    = INetMIME::translateToMIME(eCharsetEncoding);
-
-                const sal_Char * pCharsetName
-                    = INetMIME::getCharsetName(eMIMEEncoding);
-
-                switch (m_ePrevCoding)
-                {
-                    case CODING_QUOTED:
-                        m_rSink << '"';
-                    case CODING_NONE:
-                        if (m_eInitialSpace == SPACE_ENCODED
-                            && m_nExtraSpaces == 0)
-                            m_nExtraSpaces = 1;
-                        while (m_nExtraSpaces-- > 0)
-                        {
-                            m_rSink << ' ';
-                        }
-                        m_rSink << "=?" << pCharsetName << "?Q?";
-                        break;
-
-                    case CODING_ENCODED:
-                        if (m_ePrevMIMEEncoding != eMIMEEncoding)
-                        {
-                            m_rSink << "?= =?" << pCharsetName << "?Q?";
-                        }
-                        while (m_nExtraSpaces-- > 0)
-                        {
-                            m_rSink << '_';
-                        }
-                        break;
-
-                    case CODING_ENCODED_TERMINATED:
-                        m_rSink << " =?" << pCharsetName << "?Q?";
-                        while (m_nExtraSpaces-- > 0)
-                        {
-                            m_rSink << '_';
-                        }
-                        break;
-                }
-
-                // The non UTF-8 code will only work for stateless single byte
-                // character encodings:
-                if (eMIMEEncoding == RTL_TEXTENCODING_UTF8)
-                {
-                    for (sal_Unicode const * p = m_pBuffer;
-                         p != m_pBufferEnd;)
-                    {
-                        sal_uInt32 nUTF32
-                            = INetMIME::getUTF32Character(p, m_pBufferEnd);
-                        bool bEscape = needsEncodedWordEscape(nUTF32);
-                        if (bEscape)
-                        {
-                            DBG_ASSERT(
-                                nUTF32 < 0x10FFFF,
-                                "INetMIMEEncodedWordOutputSink::finish():"
-                                    " Bad char");
-                            if (nUTF32 < 0x80)
-                                INetMIME::writeEscapeSequence(m_rSink,
-                                                              nUTF32);
-                            else if (nUTF32 < 0x800)
-                            {
-                                INetMIME::writeEscapeSequence(m_rSink,
-                                                              (nUTF32 >> 6)
-                                                                  | 0xC0);
-                                INetMIME::writeEscapeSequence(m_rSink,
-                                                              (nUTF32 & 0x3F)
-                                                                  | 0x80);
-                            }
-                            else if (nUTF32 < 0x10000)
-                            {
-                                INetMIME::writeEscapeSequence(m_rSink,
-                                                              (nUTF32 >> 12)
-                                                                  | 0xE0);
-                                INetMIME::writeEscapeSequence(m_rSink,
-                                                              ((nUTF32 >> 6)
-                                                                      & 0x3F)
-                                                                  | 0x80);
-                                INetMIME::writeEscapeSequence(m_rSink,
-                                                              (nUTF32 & 0x3F)
-                                                                  | 0x80);
-                            }
-                            else
-                            {
-                                INetMIME::writeEscapeSequence(m_rSink,
-                                                              (nUTF32 >> 18)
-                                                                  | 0xF0);
-                                INetMIME::writeEscapeSequence(m_rSink,
-                                                              ((nUTF32 >> 12)
-                                                                      & 0x3F)
-                                                                  | 0x80);
-                                INetMIME::writeEscapeSequence(m_rSink,
-                                                              ((nUTF32 >> 6)
-                                                                      & 0x3F)
-                                                                  | 0x80);
-                                INetMIME::writeEscapeSequence(m_rSink,
-                                                              (nUTF32 & 0x3F)
-                                                                  | 0x80);
-                            }
-                        }
-                        else
-                            m_rSink << sal_Char(nUTF32);
-                    }
-                }
-                else
-                {
-                    sal_Char * pTargetBuffer = NULL;
-                    sal_Size nTargetSize = 0;
-                    rtl_UnicodeToTextConverter hConverter
-                        = rtl_createUnicodeToTextConverter(eCharsetEncoding);
-                    rtl_UnicodeToTextContext hContext
-                        = rtl_createUnicodeToTextContext(hConverter);
-                    for (sal_Size nBufferSize = m_pBufferEnd - m_pBuffer;;
-                         nBufferSize += nBufferSize / 3 + 1)
-                    {
-                        pTargetBuffer = new sal_Char[nBufferSize];
-                        sal_uInt32 nInfo;
-                        sal_Size nSrcCvtBytes;
-                        nTargetSize
-                            = rtl_convertUnicodeToText(
-                                  hConverter, hContext, m_pBuffer,
-                                  m_pBufferEnd - m_pBuffer, pTargetBuffer,
-                                  nBufferSize,
-                                  RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE
-                                     | RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE,
-                                  &nInfo, &nSrcCvtBytes);
-                        if (!(nInfo
-                                  & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL))
-                            break;
-                        delete[] pTargetBuffer;
-                        pTargetBuffer = NULL;
-                        rtl_resetUnicodeToTextContext(hConverter, hContext);
-                    }
-                    rtl_destroyUnicodeToTextContext(hConverter, hContext);
-                    rtl_destroyUnicodeToTextConverter(hConverter);
-                    for (sal_Size k = 0; k < nTargetSize; ++k)
-                    {
-                        sal_uInt32 nUCS4 = static_cast<unsigned char>(pTargetBuffer[k]);
-                        bool bEscape = needsEncodedWordEscape(nUCS4);
-                        if (bEscape)
-                            INetMIME::writeEscapeSequence(m_rSink, nUCS4);
-                        else
-                            m_rSink << sal_Char(nUCS4);
-                    }
-                    delete[] pTargetBuffer;
-                }
-
-                if (bWriteTrailer)
-                {
-                    m_rSink << "?=";
-                    m_eCoding = CODING_ENCODED_TERMINATED;
-                }
-
-                m_ePrevMIMEEncoding = eMIMEEncoding;
-                break;
-            }
-
-            default:
-                OSL_ASSERT(false);
-                break;
-        }
-    }
-
-    m_eInitialSpace = SPACE_NO;
-    m_nExtraSpaces = 0;
-    m_pEncodingList->reset();
-    m_pBufferEnd = m_pBuffer;
-    m_ePrevCoding = m_eCoding;
-    m_eCoding = CODING_NONE;
-    m_eEncodedWordState = STATE_INITIAL;
-}
-
-INetMIMEEncodedWordOutputSink::~INetMIMEEncodedWordOutputSink()
-{
-    rtl_freeMemory(m_pBuffer);
-    delete m_pEncodingList;
-}
-
-INetMIMEEncodedWordOutputSink &
-INetMIMEEncodedWordOutputSink::WriteUInt32(sal_uInt32 nChar)
-{
-    if (nChar == ' ')
-    {
-        if (m_pBufferEnd != m_pBuffer)
-            finish(false);
-        ++m_nExtraSpaces;
-    }
-    else
-    {
-        // Check for an already encoded word:
-        switch (m_eEncodedWordState)
-        {
-            case STATE_INITIAL:
-                if (nChar == '=')
-                    m_eEncodedWordState = STATE_FIRST_EQUALS;
-                else
-                    m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_FIRST_EQUALS:
-                if (nChar == '?')
-                    m_eEncodedWordState = STATE_FIRST_EQUALS;
-                else
-                    m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_FIRST_QUESTION:
-                if (INetMIME::isEncodedWordTokenChar(nChar))
-                    m_eEncodedWordState = STATE_CHARSET;
-                else
-                    m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_CHARSET:
-                if (nChar == '?')
-                    m_eEncodedWordState = STATE_SECOND_QUESTION;
-                else if (!INetMIME::isEncodedWordTokenChar(nChar))
-                    m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_SECOND_QUESTION:
-                if (nChar == 'B' || nChar == 'Q'
-                    || nChar == 'b' || nChar == 'q')
-                    m_eEncodedWordState = STATE_ENCODING;
-                else
-                    m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_ENCODING:
-                if (nChar == '?')
-                    m_eEncodedWordState = STATE_THIRD_QUESTION;
-                else
-                    m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_THIRD_QUESTION:
-                if (INetMIME::isVisible(nChar) && nChar != '?')
-                    m_eEncodedWordState = STATE_ENCODED_TEXT;
-                else
-                    m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_ENCODED_TEXT:
-                if (nChar == '?')
-                    m_eEncodedWordState = STATE_FOURTH_QUESTION;
-                else if (!INetMIME::isVisible(nChar))
-                    m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_FOURTH_QUESTION:
-                if (nChar == '=')
-                    m_eEncodedWordState = STATE_SECOND_EQUALS;
-                else
-                    m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_SECOND_EQUALS:
-                m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_BAD:
-                break;
-        }
-
-        // Update encoding:
-        m_pEncodingList->includes(nChar);
-
-        // Update coding:
-        enum { TENQ = 1,   // CONTEXT_TEXT, CODING_ENCODED
-               CENQ = 2,   // CONTEXT_COMMENT, CODING_ENCODED
-               PQTD = 4,   // CONTEXT_PHRASE, CODING_QUOTED
-               PENQ = 8 }; // CONTEXT_PHRASE, CODING_ENCODED
-        static const sal_Char aMinimal[128]
-            = { TENQ | CENQ        | PENQ,   // 0x00
-                TENQ | CENQ        | PENQ,   // 0x01
-                TENQ | CENQ        | PENQ,   // 0x02
-                TENQ | CENQ        | PENQ,   // 0x03
-                TENQ | CENQ        | PENQ,   // 0x04
-                TENQ | CENQ        | PENQ,   // 0x05
-                TENQ | CENQ        | PENQ,   // 0x06
-                TENQ | CENQ        | PENQ,   // 0x07
-                TENQ | CENQ        | PENQ,   // 0x08
-                TENQ | CENQ        | PENQ,   // 0x09
-                TENQ | CENQ        | PENQ,   // 0x0A
-                TENQ | CENQ        | PENQ,   // 0x0B
-                TENQ | CENQ        | PENQ,   // 0x0C
-                TENQ | CENQ        | PENQ,   // 0x0D
-                TENQ | CENQ        | PENQ,   // 0x0E
-                TENQ | CENQ        | PENQ,   // 0x0F
-                TENQ | CENQ        | PENQ,   // 0x10
-                TENQ | CENQ        | PENQ,   // 0x11
-                TENQ | CENQ        | PENQ,   // 0x12
-                TENQ | CENQ        | PENQ,   // 0x13
-                TENQ | CENQ        | PENQ,   // 0x14
-                TENQ | CENQ        | PENQ,   // 0x15
-                TENQ | CENQ        | PENQ,   // 0x16
-                TENQ | CENQ        | PENQ,   // 0x17
-                TENQ | CENQ        | PENQ,   // 0x18
-                TENQ | CENQ        | PENQ,   // 0x19
-                TENQ | CENQ        | PENQ,   // 0x1A
-                TENQ | CENQ        | PENQ,   // 0x1B
-                TENQ | CENQ        | PENQ,   // 0x1C
-                TENQ | CENQ        | PENQ,   // 0x1D
-                TENQ | CENQ        | PENQ,   // 0x1E
-                TENQ | CENQ        | PENQ,   // 0x1F
-                                        0,   // ' '
-                                        0,   // '!'
-                              PQTD       ,   // '"'
-                                        0,   // '#'
-                                        0,   // '$'
-                                        0,   // '%'
-                                        0,   // '&'
-                                        0,   // '''
-                       CENQ | PQTD       ,   // '('
-                       CENQ | PQTD       ,   // ')'
-                                        0,   // '*'
-                                        0,   // '+'
-                              PQTD       ,   // ','
-                                        0,   // '-'
-                              PQTD       ,   // '.'
-                                        0,   // '/'
-                                        0,   // '0'
-                                        0,   // '1'
-                                        0,   // '2'
-                                        0,   // '3'
-                                        0,   // '4'
-                                        0,   // '5'
-                                        0,   // '6'
-                                        0,   // '7'
-                                        0,   // '8'
-                                        0,   // '9'
-                              PQTD       ,   // ':'
-                              PQTD       ,   // ';'
-                              PQTD       ,   // '<'
-                                        0,   // '='
-                              PQTD       ,   // '>'
-                                        0,   // '?'
-                              PQTD       ,   // '@'
-                                        0,   // 'A'
-                                        0,   // 'B'
-                                        0,   // 'C'
-                                        0,   // 'D'
-                                        0,   // 'E'
-                                        0,   // 'F'
-                                        0,   // 'G'
-                                        0,   // 'H'
-                                        0,   // 'I'
-                                        0,   // 'J'
-                                        0,   // 'K'
-                                        0,   // 'L'
-                                        0,   // 'M'
-                                        0,   // 'N'
-                                        0,   // 'O'
-                                        0,   // 'P'
-                                        0,   // 'Q'
-                                        0,   // 'R'
-                                        0,   // 'S'
-                                        0,   // 'T'
-                                        0,   // 'U'
-                                        0,   // 'V'
-                                        0,   // 'W'
-                                        0,   // 'X'
-                                        0,   // 'Y'
-                                        0,   // 'Z'
-                              PQTD       ,   // '['
-                       CENQ | PQTD       ,   // '\'
-                              PQTD       ,   // ']'
-                                        0,   // '^'
-                                        0,   // '_'
-                                        0,   // '`'
-                                        0,   // 'a'
-                                        0,   // 'b'
-                                        0,   // 'c'
-                                        0,   // 'd'
-                                        0,   // 'e'
-                                        0,   // 'f'
-                                        0,   // 'g'
-                                        0,   // 'h'
-                                        0,   // 'i'
-                                        0,   // 'j'
-                                        0,   // 'k'
-                                        0,   // 'l'
-                                        0,   // 'm'
-                                        0,   // 'n'
-                                        0,   // 'o'
-                                        0,   // 'p'
-                                        0,   // 'q'
-                                        0,   // 'r'
-                                        0,   // 's'
-                                        0,   // 't'
-                                        0,   // 'u'
-                                        0,   // 'v'
-                                        0,   // 'w'
-                                        0,   // 'x'
-                                        0,   // 'y'
-                                        0,   // 'z'
-                                        0,   // '{'
-                                        0,   // '|'
-                                        0,   // '}'
-                                        0,   // '~'
-                TENQ | CENQ        | PENQ }; // DEL
-        Coding eNewCoding = !rtl::isAscii(nChar) ? CODING_ENCODED :
-                            m_eContext == CONTEXT_PHRASE ?
-                                Coding(aMinimal[nChar] >> 2) :
-                            aMinimal[nChar] & m_eContext ? CODING_ENCODED :
-                                                           CODING_NONE;
-        if (eNewCoding > m_eCoding)
-            m_eCoding = eNewCoding;
-
-        // Append to buffer:
-        if (sal_uInt32(m_pBufferEnd - m_pBuffer) == m_nBufferSize)
-        {
-            m_pBuffer
-                = static_cast< sal_Unicode * >(
-                      rtl_reallocateMemory(m_pBuffer,
-                                           (m_nBufferSize + BUFFER_SIZE)
-                                               * sizeof (sal_Unicode)));
-            m_pBufferEnd = m_pBuffer + m_nBufferSize;
-            m_nBufferSize += BUFFER_SIZE;
-        }
-        *m_pBufferEnd++ = sal_Unicode(nChar);
-    }
-    return *this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
