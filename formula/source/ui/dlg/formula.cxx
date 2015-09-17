@@ -121,8 +121,8 @@ public:
     const FormulaHelper& GetFormulaHelper() const { return m_aFormulaHelper;}
     uno::Reference< sheet::XFormulaOpCodeMapper > GetFormulaOpCodeMapper() const;
 
-    DECL_LINK( ModifyHdl, ParaWin* );
-    DECL_LINK( FxHdl, ParaWin* );
+    DECL_LINK_TYPED( ModifyHdl, ParaWin&, void );
+    DECL_LINK_TYPED( FxHdl, ParaWin&, void );
 
     DECL_LINK_TYPED( MatrixHdl, Button*, void );
     DECL_LINK(FormulaHdl, void *);
@@ -1239,16 +1239,16 @@ void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )
     }
 }
 
-IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin*, pPtr )
+IMPL_LINK_TYPED( FormulaDlg_Impl, FxHdl, ParaWin&, rPtr, void )
 {
-    if(pPtr==pParaWin)
+    if(&rPtr==pParaWin)
     {
         m_pBtnForward->Enable(true); //@ In order to be able to input another function.
         m_pTabCtrl->SetCurPageId(TP_FUNCTION);
 
         OUString aUndoStr = m_pHelper->getCurrentFormula();       // it will be added before a ";"
         FormEditData* pData = m_pHelper->getFormEditData();
-        if (!pData) return 0;
+        if (!pData) return;
 
         sal_uInt16 nArgNo = pParaWin->GetActiveLine();
         nEdFocus=nArgNo;
@@ -1271,12 +1271,11 @@ IMPL_LINK( FormulaDlg_Impl, FxHdl, ParaWin*, pPtr )
         FillDialog(false);
         pFuncPage->SetFocus(); //There Parawin is not visible anymore
     }
-    return 0;
 }
 
-IMPL_LINK( FormulaDlg_Impl, ModifyHdl, ParaWin*, pPtr )
+IMPL_LINK_TYPED( FormulaDlg_Impl, ModifyHdl, ParaWin&, rPtr, void )
 {
-    if(pPtr==pParaWin)
+    if(&rPtr==pParaWin)
     {
         SaveArg(pParaWin->GetActiveLine());
         UpdateValues();
@@ -1284,7 +1283,6 @@ IMPL_LINK( FormulaDlg_Impl, ModifyHdl, ParaWin*, pPtr )
         UpdateSelection();
         CalcStruct(pMEdit->GetText());
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl)
@@ -1508,7 +1506,7 @@ void FormulaDlg_Impl::RefInputDoneAfter( bool bForced )
 
             sal_uInt16 nPrivActiv = pParaWin->GetActiveLine();
             pParaWin->SetArgument( nPrivActiv, m_pEdRef->GetText() );
-            ModifyHdl( pParaWin );
+            ModifyHdl( *pParaWin );
             pTheRefEdit = NULL;
         }
         m_pParent->SetText( aTitle1 );

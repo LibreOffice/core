@@ -538,12 +538,12 @@ void ParaWin::SliderMoved()
 
 void ParaWin::ArgumentModified()
 {
-    aArgModifiedLink.Call(this);
+    aArgModifiedLink.Call(*this);
 }
 
 void ParaWin::FxClick()
 {
-    aFxLink.Call(this);
+    aFxLink.Call(*this);
 }
 
 
