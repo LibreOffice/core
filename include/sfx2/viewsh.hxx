@@ -318,7 +318,7 @@ public:
     SAL_DLLPRIVATE void TakeFrameOwnership_Impl();
     SAL_DLLPRIVATE bool ExecKey_Impl(const KeyEvent& aKey);
 
-    /// The actual implementation of the lok::Document::registerViewCallback() API.
+    /// The actual per-view implementation of lok::Document::registerCallback().
     void registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Invokes the registered callback, if there are any.
     void libreOfficeKitViewCallback(int nType, const char* pPayload) const;
