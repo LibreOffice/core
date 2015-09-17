@@ -88,7 +88,6 @@ class ArgInput
 {
 private:
     Link<ArgInput&,void>          aFxClickLink;
-    Link<>          aRefClickLink;
     Link<>          aFxFocusLink;
     Link<>          aRefFocusLink;
     Link<>          aEdFocusLink;
@@ -100,7 +99,6 @@ private:
     VclPtr<RefButton>      pRefBtn;
 
     DECL_LINK_TYPED( FxBtnClickHdl, Button*, void );
-    DECL_LINK_TYPED( RefBtnClickHdl,Button*, void );
     DECL_LINK(  FxBtnFocusHdl, ImageButton* );
     DECL_LINK(  RefBtnFocusHdl,RefButton* );
     DECL_LINK(  EdFocusHdl, ArgEdit* );
@@ -109,7 +107,6 @@ private:
 protected:
 
     void    FxClick();
-    void    RefClick();
     void    FxFocus();
     void    RefFocus();
     void    EdFocus();
