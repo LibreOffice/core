@@ -25,13 +25,13 @@
 #include <tools/date.hxx>
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
-#include <memory>
-#include <set>
 #include <unordered_set>
 #include <vector>
+#include <set>
 
 struct ScQueryParam;
 class ScDPObject;
@@ -67,7 +67,7 @@ public:
         /**
          * Optional items for grouped field.
          */
-        std::unique_ptr<GroupItems> mpGroup;
+        boost::scoped_ptr<GroupItems> mpGroup;
 
         /**
          * Unique values in the field, stored in ascending order.

@@ -22,7 +22,7 @@
 
 #include <vcl/timer.hxx>
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 namespace sd { namespace tools {
 
@@ -48,8 +48,8 @@ public:
         @param nMaxTimePerStep
             The maximal time for executing steps without yielding control.
     */
-    static std::shared_ptr<TimerBasedTaskExecution> Create (
-        const std::shared_ptr<AsynchronousTask>& rpTask,
+    static ::boost::shared_ptr<TimerBasedTaskExecution> Create (
+        const ::boost::shared_ptr<AsynchronousTask>& rpTask,
         sal_uInt32 nMillisecondsBetweenSteps,
         sal_uInt32 nMaxTimePerStep);
 
@@ -62,23 +62,23 @@ public:
         checks the given weak_ptr for being expired and catches bad_weak_ptr
         exceptions.
     */
-    static void ReleaseTask (const std::weak_ptr<TimerBasedTaskExecution>& rpTask);
+    static void ReleaseTask (const ::boost::weak_ptr<TimerBasedTaskExecution>& rpTask);
 
 private:
-    std::shared_ptr<AsynchronousTask> mpTask;
+    ::boost::shared_ptr<AsynchronousTask> mpTask;
     Timer maTimer;
     /** This shared_ptr to this is used to destroy a TimerBasedTaskExecution
         object when its task has been executed completely.
     */
-    std::shared_ptr<TimerBasedTaskExecution> mpSelf;
+    ::boost::shared_ptr<TimerBasedTaskExecution> mpSelf;
     sal_uInt32 mnMaxTimePerStep;
 
     TimerBasedTaskExecution (
-        const std::shared_ptr<AsynchronousTask>& rpTask,
+        const ::boost::shared_ptr<AsynchronousTask>& rpTask,
         sal_uInt32 nMillisecondsBetweenSteps,
         sal_uInt32 nMaxTimePerStep);
     ~TimerBasedTaskExecution();
-    void SetSelf (const std::shared_ptr<TimerBasedTaskExecution>& rpSelf);
+    void SetSelf (const ::boost::shared_ptr<TimerBasedTaskExecution>& rpSelf);
 
     class Deleter;
     friend class Deleter;

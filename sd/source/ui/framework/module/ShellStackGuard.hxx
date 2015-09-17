@@ -31,7 +31,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace {
 
@@ -84,7 +84,7 @@ private:
     css::uno::Reference<css::drawing::framework::XConfigurationController>
         mxConfigurationController;
     ViewShellBase* mpBase;
-    std::unique_ptr<ConfigurationController::Lock> mpUpdateLock;
+    ::boost::scoped_ptr<ConfigurationController::Lock> mpUpdateLock;
     Idle maPrinterPollingIdle;
 
     DECL_LINK_TYPED(TimeoutHandler, Idle*, void);

@@ -55,7 +55,7 @@ public:
     typedef ::std::function<bool ()> IdleDetectionCallback;
     QueueProcessor (
         RequestQueue& rQueue,
-        const std::shared_ptr<BitmapCache>& rpCache,
+        const ::boost::shared_ptr<BitmapCache>& rpCache,
         const Size& rPreviewSize,
         const bool bDoSuperSampling,
         const SharedCacheContext& rpCacheContext);
@@ -83,7 +83,7 @@ public:
         BitmapCache.  This is usually necessary after calling
         PageCacheManager::ChangeSize().
     */
-    void SetBitmapCache (const std::shared_ptr<BitmapCache>& rpCache);
+    void SetBitmapCache (const ::boost::shared_ptr<BitmapCache>& rpCache);
 
 private:
     /** This mutex is used to guard the queue processor.  Be careful not to
@@ -100,7 +100,7 @@ private:
     bool mbDoSuperSampling;
     SharedCacheContext mpCacheContext;
     RequestQueue& mrQueue;
-    std::shared_ptr<BitmapCache> mpCache;
+    ::boost::shared_ptr<BitmapCache> mpCache;
     BitmapFactory maBitmapFactory;
     bool mbIsPaused;
 

@@ -45,7 +45,7 @@
 #include "cellvalue.hxx"
 #include "editutil.hxx"
 #include <rtl/strbuf.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -243,7 +243,7 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
     {
         const ScPatternAttr* pPattern = GetPattern(nTempStartRow);
 
-        std::unique_ptr<ScPatternAttr> pNewPattern;
+        boost::scoped_ptr<ScPatternAttr> pNewPattern;
         if(pPattern)
         {
             pNewPattern.reset( new ScPatternAttr(*pPattern) );
@@ -581,7 +581,7 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
         do
         {
             const ScPatternAttr* pOldPattern = pData[nPos].pPattern;
-            std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
+            boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
             pNewPattern->SetStyleSheet(pStyle);
             SCROW nY1 = nStart;
             SCROW nY2 = pData[nPos].nRow;
@@ -680,7 +680,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
 
             if ( (SfxItemState::SET == eState) || (SfxItemState::SET == eTLBRState) || (SfxItemState::SET == eBLTRState) )
             {
-                std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
+                boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
                 SfxItemSet&     rNewSet = pNewPattern->GetItemSet();
                 SCROW           nY1 = nStart;
                 SCROW           nY2 = pData[nPos].nRow;
@@ -1449,7 +1449,7 @@ bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
             for (SCROW nThisRow = nThisStart; nThisRow <= nThisEnd; nThisRow++)
                 pDocument->ApplyAttr( nThisCol, nThisRow, nTab, *pAttr );
 
-            std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( pDocument->GetPool() ));
+            boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( pDocument->GetPool() ));
             SfxItemSet*     pSet = &pNewPattern->GetItemSet();
             pSet->Put( *pFlagAttr );
             pDocument->ApplyPatternAreaTab( nThisCol, nThisStart, nMergeEndCol, nMergeEndRow,
@@ -1506,7 +1506,7 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                 //  because it would have no cell style information.
                 //  Instead, the document's GetDefPattern is copied. Since it is passed as
                 //  pWantedPattern, no special treatment of default is needed here anymore.
-                std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pWantedPattern ));
+                boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pWantedPattern ));
                 SfxItemSet*     pSet = &pNewPattern->GetItemSet();
                 pSet->Put( *pItem );
                 SetPatternArea( nThisRow, nAttrRow, pNewPattern.get(), true );
@@ -1736,7 +1736,7 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
 
             if (bReset)
             {
-                std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pData[nPos].pPattern));
+                boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pData[nPos].pPattern));
                 pDocument->GetPool()->Remove(*pData[nPos].pPattern);
                 pNewPattern->SetStyleSheet( static_cast<ScStyleSheet*>(
                     pDocument->GetStyleSheetPool()->
@@ -2233,7 +2233,7 @@ void ScAttrArray::CopyArea(
             }
             else if ( nStripFlags )
             {
-                std::unique_ptr<ScPatternAttr> pTmpPattern(new ScPatternAttr( *pOldPattern ));
+                boost::scoped_ptr<ScPatternAttr> pTmpPattern(new ScPatternAttr( *pOldPattern ));
                 sal_Int16 nNewFlags = 0;
                 if ( nStripFlags != SC_MF_ALL )
                     nNewFlags = static_cast<const ScMergeFlagAttr&>(pTmpPattern->GetItem(ATTR_MERGE_FLAG)).

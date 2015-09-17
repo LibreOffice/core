@@ -79,7 +79,7 @@ OUString lclCreateMultiParameterFormula(
 
 void lclMakeSubRangesList(ScRangeList& rRangeList, ScRange& rInputRange, ScStatisticsInputOutputDialog::GroupedBy aGroupedBy)
 {
-    std::unique_ptr<DataRangeIterator> pIterator;
+    boost::scoped_ptr<DataRangeIterator> pIterator;
     if (aGroupedBy == ScStatisticsInputOutputDialog::BY_COLUMN)
         pIterator.reset(new DataRangeByColumnIterator(rInputRange));
     else

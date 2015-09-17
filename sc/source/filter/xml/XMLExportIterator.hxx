@@ -37,7 +37,7 @@
 #include "cellvalue.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 class   ScHorizontalCellIterator;
 struct  ScMyCell;
@@ -330,7 +330,7 @@ class ScMyNotEmptyCellsIterator : boost::noncopyable
     ScMyDetectiveOpContainer*           pDetectiveOp;
 
     ScXMLExport&                rExport;
-    std::unique_ptr<ScHorizontalCellIterator> mpCellItr;
+    boost::scoped_ptr<ScHorizontalCellIterator> mpCellItr;
 
     SCCOL                       nCellCol;
     SCROW                       nCellRow;

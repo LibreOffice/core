@@ -52,7 +52,7 @@ namespace sd { namespace framework {
 
 ChangeRequestQueueProcessor::ChangeRequestQueueProcessor (
     const ::rtl::Reference<ConfigurationController>& rpConfigurationController,
-    const std::shared_ptr<ConfigurationUpdater>& rpConfigurationUpdater)
+    const ::boost::shared_ptr<ConfigurationUpdater>& rpConfigurationUpdater)
     : maMutex(),
       maQueue(),
       mnUserEventId(0),

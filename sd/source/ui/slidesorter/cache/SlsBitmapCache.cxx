@@ -43,7 +43,7 @@ public:
     ~CacheEntry() {};
     inline void Recycle (const CacheEntry& rEntry);
     inline sal_Int32 GetMemorySize() const;
-    void Compress (const std::shared_ptr<BitmapCompressor>& rpCompressor);
+    void Compress (const ::boost::shared_ptr<BitmapCompressor>& rpCompressor);
     inline void Decompress();
 
     bool IsUpToDate() const { return mbIsUpToDate; }
@@ -67,8 +67,8 @@ public:
 private:
     Bitmap maPreview;
     Bitmap maMarkedPreview;
-    std::shared_ptr<BitmapReplacement> mpReplacement;
-    std::shared_ptr<BitmapCompressor> mpCompressor;
+    ::boost::shared_ptr<BitmapReplacement> mpReplacement;
+    ::boost::shared_ptr<BitmapCompressor> mpCompressor;
     Size maBitmapSize;
     bool mbIsUpToDate;
     sal_Int32 mnLastAccessTime;
@@ -414,7 +414,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
 
 void BitmapCache::Compress (
     const CacheKey& rKey,
-    const std::shared_ptr<BitmapCompressor>& rpCompressor)
+    const ::boost::shared_ptr<BitmapCompressor>& rpCompressor)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -504,7 +504,7 @@ inline sal_Int32 BitmapCache::CacheEntry::GetMemorySize() const
     return nSize;
 }
 
-void BitmapCache::CacheEntry::Compress (const std::shared_ptr<BitmapCompressor>& rpCompressor)
+void BitmapCache::CacheEntry::Compress (const ::boost::shared_ptr<BitmapCompressor>& rpCompressor)
 {
     if ( ! maPreview.IsEmpty())
     {

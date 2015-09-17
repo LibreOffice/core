@@ -26,13 +26,14 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 
+#include <boost/shared_ptr.hpp>
+
 #include <vcl/timer.hxx>
 
 #include <sddllapi.h>
 
 #include <list>
 #include <map>
-#include <memory>
 
 class SdrPathObj;
 
@@ -43,9 +44,9 @@ enum EValue { VALUE_FROM, VALUE_TO, VALUE_BY, VALUE_FIRST, VALUE_LAST };
 class CustomAnimationEffect;
 
 class CustomAnimationPreset;
-typedef std::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
+typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
 
-typedef std::shared_ptr< CustomAnimationEffect > CustomAnimationEffectPtr;
+typedef boost::shared_ptr< CustomAnimationEffect > CustomAnimationEffectPtr;
 
 typedef std::list< CustomAnimationEffectPtr > EffectSequence;
 
@@ -258,7 +259,7 @@ private:
     sal_Int32 mnGroupId;
 };
 
-typedef std::shared_ptr< CustomAnimationTextGroup > CustomAnimationTextGroupPtr;
+typedef boost::shared_ptr< CustomAnimationTextGroup > CustomAnimationTextGroupPtr;
 typedef std::map< sal_Int32, CustomAnimationTextGroupPtr > CustomAnimationTextGroupMap;
 
 class SD_DLLPUBLIC EffectSequenceHelper
@@ -361,7 +362,7 @@ private:
     MainSequence*   mpMainSequence;
 };
 
-typedef std::shared_ptr< InteractiveSequence > InteractiveSequencePtr;
+typedef boost::shared_ptr< InteractiveSequence > InteractiveSequencePtr;
 typedef std::list< InteractiveSequencePtr > InteractiveSequenceList;
 
 class MainSequence : public EffectSequenceHelper, public ISequenceListener
@@ -434,7 +435,7 @@ protected:
     sal_Int32 mbIgnoreChanges;
 };
 
-typedef std::shared_ptr< MainSequence > MainSequencePtr;
+typedef boost::shared_ptr< MainSequence > MainSequencePtr;
 
 class MainSequenceRebuildGuard
 {

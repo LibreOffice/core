@@ -89,7 +89,7 @@ void DragAndDropContext::UpdatePosition (
     // constant while scrolling.)
     sd::Window *pWindow (mpTargetSlideSorter->GetContentWindow());
     const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
-    std::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler (
+    ::boost::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler (
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler());
 
     bool bDoAutoScroll = bAllowAutoScroll

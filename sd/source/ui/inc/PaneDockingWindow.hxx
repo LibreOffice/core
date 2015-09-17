@@ -23,7 +23,8 @@
 #include <sfx2/titledockwin.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 class SplitWindow;
 

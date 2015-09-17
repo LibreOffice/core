@@ -36,8 +36,8 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::container;
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
-#include <memory>
 
 namespace oox { namespace xls {
 
@@ -250,7 +250,7 @@ void applyArrayFormulas(
         ScCompiler aComp(&rDoc.getDoc(), aPos);
         aComp.SetNumberFormatter(&rFormatter);
         aComp.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
-        std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(it->maTokenAndAddress.maTokenStr));
+        boost::scoped_ptr<ScTokenArray> pArray(aComp.CompileString(it->maTokenAndAddress.maTokenStr));
         if (pArray)
             rDoc.setMatrixCells(aRange, *pArray, formula::FormulaGrammar::GRAM_OOXML);
     }
@@ -318,7 +318,7 @@ class WorkerThread: public salhelper::Thread, private boost::noncopyable
 {
     ScDocumentImport& mrDoc;
     FormulaBuffer::SheetItem& mrItem;
-    std::unique_ptr<SvNumberFormatter> mpFormatter;
+    boost::scoped_ptr<SvNumberFormatter> mpFormatter;
     const uno::Sequence<sheet::ExternalLinkInfo>& mrExternalLinks;
 
 public:

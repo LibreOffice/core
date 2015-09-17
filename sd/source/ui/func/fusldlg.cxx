@@ -32,7 +32,7 @@
 #include "Window.hxx"
 #include "optsitem.hxx"
 #include "sdabstdlg.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -110,7 +110,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     aDlgSet.Put( SfxInt32Item( ATTR_PRESENT_DISPLAY, pOptions->GetDisplay() ) );
 
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSdStartPresDlg> pDlg(pFact ? pFact->CreateSdStartPresentationDlg(mpWindow, aDlgSet, aPageNameList, pCustomShowList) : 0);
+    boost::scoped_ptr<AbstractSdStartPresDlg> pDlg(pFact ? pFact->CreateSdStartPresentationDlg(mpWindow, aDlgSet, aPageNameList, pCustomShowList) : 0);
     if( pDlg && (pDlg->Execute() == RET_OK) )
     {
         OUString aPage;

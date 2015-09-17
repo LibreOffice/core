@@ -89,8 +89,8 @@
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <boost/scoped_ptr.hpp>
 
-#include <memory>
 #include <vector>
 
 class ScDocShell;
@@ -506,7 +506,7 @@ class SC_DLLPUBLIC ScCellRangesObj : public ScCellRangesBase,
 {
 private:
     struct Impl;
-    std::unique_ptr<Impl> m_pImpl;
+    ::boost::scoped_ptr<Impl> m_pImpl;
 
     ScCellRangeObj*         GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 

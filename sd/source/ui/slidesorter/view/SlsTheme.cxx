@@ -59,7 +59,7 @@ ColorData HGBAdapt (
         nNewBrightness>=0 ? nNewBrightness : nBrightness);
 }
 
-Theme::Theme (const std::shared_ptr<controller::Properties>& rpProperties)
+Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
     : maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
       maPageBackgroundColor(COL_WHITE),
       maGradients(),
@@ -82,7 +82,7 @@ Theme::Theme (const std::shared_ptr<controller::Properties>& rpProperties)
     Update(rpProperties);
 }
 
-void Theme::Update (const std::shared_ptr<controller::Properties>& rpProperties)
+void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 {
     // Set up colors.
     maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
@@ -128,11 +128,11 @@ void Theme::Update (const std::shared_ptr<controller::Properties>& rpProperties)
     }
 }
 
-std::shared_ptr<vcl::Font> Theme::GetFont (
+::boost::shared_ptr<vcl::Font> Theme::GetFont (
     const FontType eType,
     const OutputDevice& rDevice)
 {
-    std::shared_ptr<vcl::Font> pFont;
+    ::boost::shared_ptr<vcl::Font> pFont;
 
     switch (eType)
     {

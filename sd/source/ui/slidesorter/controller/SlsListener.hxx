@@ -32,7 +32,7 @@
 
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 namespace sd {
 class ViewShellBase;
@@ -151,7 +151,7 @@ private:
         events.  It is references counted in order to cope with events that
         are expected but never sent.
     */
-    std::shared_ptr<SlideSorterController::ModelChangeLock> mpModelChangeLock;
+    ::boost::shared_ptr<SlideSorterController::ModelChangeLock> mpModelChangeLock;
 
     void ReleaseListeners();
 

@@ -86,6 +86,7 @@
 #include <rowheightcontext.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 #include <memory>
 
@@ -688,7 +689,7 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
 {
     ScViewData& rViewData = GetViewData();
     ScDocument* pDoc = rViewData.GetDocument();
-    std::unique_ptr<ScTokenArray> pArray(new ScTokenArray);
+    ::boost::scoped_ptr<ScTokenArray> pArray(new ScTokenArray);
 
     pArray->AddOpCode(bSubTotal ? ocSubTotal : ocSum);
     pArray->AddOpCode(ocOpen);
@@ -773,7 +774,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
 
     ScAddress aPos( nCol, nRow, nTab );
 
-    std::unique_ptr<ScDocument> pInsDoc(new ScDocument( SCDOCMODE_CLIP ));
+    boost::scoped_ptr<ScDocument> pInsDoc(new ScDocument( SCDOCMODE_CLIP ));
     pInsDoc->ResetClip( pDoc, nTab );
 
     if (aNewStr[0] == '=')                      // Formula ?
@@ -801,7 +802,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
             // MarkData was already MarkToSimple'ed in PasteFromClip
             ScRange aRange;
             rMark.GetMarkArea( aRange );
-            std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( pDoc->GetPool() ));
+            boost::scoped_ptr<ScPatternAttr> pPattern(new ScPatternAttr( pDoc->GetPool() ));
             pPattern->GetItemSet().Put( *pItem );
             short nNewType = pDoc->GetFormatTable()->GetType( pItem->GetValue() );
             pDoc->ApplyPatternIfNumberformatIncompatible( aRange, rMark,
@@ -3043,11 +3044,11 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
         // none of the lines don't care?
         if( (eItemState != SfxItemState::DONTCARE) && (eTLBRState != SfxItemState::DONTCARE) && (eBLTRState != SfxItemState::DONTCARE) )
         {
-            std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(
+            boost::scoped_ptr<SfxItemSet> pOldSet(new SfxItemSet(
                                             *(pDoc->GetPool()),
                                             ATTR_PATTERN_START,
                                             ATTR_PATTERN_END ));
-            std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(
+            boost::scoped_ptr<SfxItemSet> pNewSet(new SfxItemSet(
                                             *(pDoc->GetPool()),
                                             ATTR_PATTERN_START,
                                             ATTR_PATTERN_END ));

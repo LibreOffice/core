@@ -21,8 +21,8 @@
 #include <dpobject.hxx>
 #include <document.hxx>
 
+#include <boost/shared_ptr.hpp>
 #include <cstring>
-#include <memory>
 
 using namespace com::sun::star;
 
@@ -46,10 +46,10 @@ void ScInterpreter::ScFilterXML()
         OString aOString = OUStringToOString( aString, RTL_TEXTENCODING_UTF8 );
         const char* pXML = aOString.getStr();
 
-        std::shared_ptr<xmlParserCtxt> pContext(
+        boost::shared_ptr<xmlParserCtxt> pContext(
                 xmlNewParserCtxt(), xmlFreeParserCtxt );
 
-        std::shared_ptr<xmlDoc> pDoc( xmlParseMemory( pXML, aOString.getLength() ),
+        boost::shared_ptr<xmlDoc> pDoc( xmlParseMemory( pXML, aOString.getLength() ),
                 xmlFreeDoc );
 
         if(!pDoc)
@@ -58,10 +58,10 @@ void ScInterpreter::ScFilterXML()
             return;
         }
 
-        std::shared_ptr<xmlXPathContext> pXPathCtx( xmlXPathNewContext(pDoc.get()),
+        boost::shared_ptr<xmlXPathContext> pXPathCtx( xmlXPathNewContext(pDoc.get()),
                 xmlXPathFreeContext );
 
-        std::shared_ptr<xmlXPathObject> pXPathObj( xmlXPathEvalExpression(BAD_CAST(pXPathExpr), pXPathCtx.get()),
+        boost::shared_ptr<xmlXPathObject> pXPathObj( xmlXPathEvalExpression(BAD_CAST(pXPathExpr), pXPathCtx.get()),
                 xmlXPathFreeObject );
 
         if(!pXPathObj)
@@ -92,13 +92,13 @@ void ScInterpreter::ScFilterXML()
                         {
                             xmlNsPtr ns = reinterpret_cast<xmlNsPtr>(pNodeSet->nodeTab[0]);
                             xmlNodePtr cur = reinterpret_cast<xmlNodePtr>(ns->next);
-                            std::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
+                            boost::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
                             aResult = OStringToOUString(OString(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
                         }
                         else
                         {
                             xmlNodePtr cur = pNodeSet->nodeTab[0];
-                            std::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
+                            boost::shared_ptr<xmlChar> pChar2(xmlNodeGetContent(cur), xmlFree);
                             aResult = OStringToOUString(OString(reinterpret_cast<char*>(pChar2.get())), RTL_TEXTENCODING_UTF8);
                         }
                     }

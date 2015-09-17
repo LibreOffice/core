@@ -81,7 +81,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     };
     ScDocument*     pDoc;
     ScDPObject*     pDPObject;
-    std::unique_ptr<ScDPSaveData> pDPSave;
+    boost::scoped_ptr<ScDPSaveData> pDPSave;
     ScDPDimensionSaveData* pDPDimSaveData;
     GrandTotalItem  maRowGrandTotal;
     GrandTotalItem  maColGrandTotal;

@@ -38,7 +38,7 @@
 #include <svx/nbdtmg.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/svdoutl.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 using namespace svx::sidebar;
 namespace sd {
 
@@ -82,7 +82,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         // create and execute dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0);
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0);
         if( pDlg )
         {
             if ( pPageItem )
@@ -97,7 +97,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
-                    std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
+                    boost::scoped_ptr< OutlineViewModelChangeGuard > aGuard;
 
                     if (mpView->ISA(OutlineView))
                     {
@@ -234,7 +234,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     }
 
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
-    std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
+    boost::scoped_ptr< OutlineViewModelChangeGuard > aGuard;
     {
         if (mpView->ISA(OutlineView))
         {

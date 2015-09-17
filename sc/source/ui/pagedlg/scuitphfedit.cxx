@@ -47,7 +47,7 @@
 #include "AccessibleEditObject.hxx"
 
 #include "scuitphfedit.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -327,9 +327,9 @@ void ScHFEditPage::SetSelectDefinedList()
     // default to customized
     ScHFEntryId eSelectEntry = eEntryCount;
 
-    std::unique_ptr< EditTextObject > pLeftObj;
-    std::unique_ptr< EditTextObject > pCenterObj;
-    std::unique_ptr< EditTextObject > pRightObj;
+    boost::scoped_ptr< EditTextObject > pLeftObj;
+    boost::scoped_ptr< EditTextObject > pCenterObj;
+    boost::scoped_ptr< EditTextObject > pRightObj;
 
     OUString aLeftEntry;
     OUString aCenterEntry;
@@ -524,7 +524,7 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
             {
                 aSel.nStartPos = aSel.nEndPos;
                 aSel.nEndPos++;
-                std::unique_ptr< EditTextObject > pPageObj;
+                boost::scoped_ptr< EditTextObject > pPageObj;
                 pPageObj.reset(pEngine->CreateTextObject(aSel));
                 if(pPageObj.get() && pPageObj->IsFieldObject() )
                 {
@@ -582,7 +582,7 @@ bool ScHFEditPage::IsExtFileNameEntry(EditTextObject* pTextObj)
 void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
 {
     SvtUserOptions aUserOpt;
-    std::unique_ptr< EditTextObject > pTextObj;
+    boost::scoped_ptr< EditTextObject > pTextObj;
 
     switch(eSel)
     {

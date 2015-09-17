@@ -63,7 +63,7 @@
 #include <svx/svditer.hxx>
 
 #include <navigatr.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -563,7 +563,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     aMPos = Point( 20, 20 );
                 aFieldPopup.Execute( pWin, aMPos );
 
-                std::unique_ptr<SvxFieldData> pField(aFieldPopup.GetField());
+                boost::scoped_ptr<SvxFieldData> pField(aFieldPopup.GetField());
                 if( pField )
                 {
                     SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
@@ -896,7 +896,7 @@ void DrawViewShell::ShowSnapLineContextMenu (
     const Point& rMouseLocation)
 {
     const SdrHelpLine& rHelpLine (rPageView.GetHelpLines()[nSnapLineIndex]);
-    std::unique_ptr<PopupMenu> pMenu (new PopupMenu ());
+    ::boost::scoped_ptr<PopupMenu> pMenu (new PopupMenu ());
 
     if (rHelpLine.GetKind() == SDRHELPLINE_POINT)
     {

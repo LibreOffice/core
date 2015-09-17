@@ -36,6 +36,7 @@
 #include <map>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScFilterOptionsMgr;
 class ScViewData;

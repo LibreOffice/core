@@ -37,7 +37,7 @@
 
 #include <editeng/unoipset.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #include "prlayout.hxx"
 
@@ -146,7 +146,7 @@ protected:
     /** broadcast helper for events */
     ::cppu::OBroadcastHelper mrBHelper;
 
-    std::unique_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;
+    boost::scoped_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;
 
 private:
     SdStyleSheet& operator=( const SdStyleSheet& ) SAL_DELETED_FUNCTION;

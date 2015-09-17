@@ -287,7 +287,7 @@ void DocumentHelper::ProvideStyles (
 void DocumentHelper::AssignMasterPageToPageList (
     SdDrawDocument& rTargetDocument,
     SdPage* pMasterPage,
-    const std::shared_ptr<std::vector<SdPage*> >& rpPageList)
+    const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
     if (pMasterPage == NULL || !pMasterPage->IsMasterPage())
         return;
@@ -467,7 +467,7 @@ void DocumentHelper::AssignMasterPageToPage (
 SdPage* DocumentHelper::ProvideMasterPage (
     SdDrawDocument& rTargetDocument,
     SdPage* pMasterPage,
-    const std::shared_ptr<std::vector<SdPage*> >& rpPageList)
+    const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
     // Make sure that both the master page and its notes master exist
     // in the source document.  If one is missing then return without

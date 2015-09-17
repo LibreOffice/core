@@ -103,7 +103,7 @@ public:
     */
     void SetInsertionPosition (const sal_Int32 nInsertionPosition);
 
-    std::shared_ptr<SelectionObserver> GetSelectionObserver() const { return mpSelectionObserver;}
+    ::boost::shared_ptr<SelectionObserver> GetSelectionObserver() const { return mpSelectionObserver;}
 
 private:
     SlideSorter& mrSlideSorter;
@@ -134,9 +134,9 @@ private:
     Animator::AnimationId mnAnimationId;
 
     class PageInsertionListener;
-    std::unique_ptr<PageInsertionListener> mpPageInsertionListener;
+    ::boost::scoped_ptr<PageInsertionListener> mpPageInsertionListener;
 
-    std::shared_ptr<SelectionObserver> mpSelectionObserver;
+    ::boost::shared_ptr<SelectionObserver> mpSelectionObserver;
 
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().

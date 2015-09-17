@@ -47,9 +47,9 @@
 #include "drwlayer.hxx"
 #include "scresid.hxx"
 
-#include <memory>
 #include <utility>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 extern bool bDrawIsInUndo; // somewhere as member!
 
@@ -57,7 +57,7 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::std::unique_ptr;
 using ::std::vector;
-using std::shared_ptr;
+using ::boost::shared_ptr;
 
 TYPEINIT1(ScUndoInsertTab,      SfxUndoAction);
 TYPEINIT1(ScUndoInsertTables,   SfxUndoAction);
@@ -514,7 +514,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
     if (bUndo)                                      // UnDo
     {
         size_t i = mpNewTabs->size();
-        std::unique_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
+        boost::scoped_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
                                                                i * rDoc.GetCodeCount()));
         for (; i > 0; --i)
         {
@@ -536,7 +536,7 @@ void ScUndoMoveTab::DoChange( bool bUndo ) const
     else
     {
         size_t n = mpNewTabs->size();
-        std::unique_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
+        boost::scoped_ptr<ScProgress> pProgress(new ScProgress(pDocShell , ScGlobal::GetRscString(STR_UNDO_MOVE_TAB),
                                                                n * rDoc.GetCodeCount()));
         for (size_t i = 0; i < n; ++i)
         {

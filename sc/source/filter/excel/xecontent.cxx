@@ -674,7 +674,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
 
     XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
 
-    std::unique_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
+    boost::scoped_ptr< ScTokenArray > xScTokArr( mrFormatEntry.CreateTokenArry( 0 ) );
     mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_CONDFMT, *xScTokArr );
 
     if( bFmla2 )
@@ -920,7 +920,7 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         // we need to write the text without quotes
         // we have to actually get the string from
         // the token array for that
-        std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateTokenArry(0));
+        boost::scoped_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateTokenArry(0));
         if(pTokenArray->GetLen())
             aText = XclXmlUtils::ToOString(pTokenArray->First()->GetString().getString());
     }
@@ -1592,7 +1592,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
 
         // formulas
         XclExpFormulaCompiler& rFmlaComp = GetFormulaCompiler();
-        std::unique_ptr< ScTokenArray > xScTokArr;
+        boost::scoped_ptr< ScTokenArray > xScTokArr;
 
         // first formula
         xScTokArr.reset( pValData->CreateTokenArry( 0 ) );

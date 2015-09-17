@@ -135,7 +135,7 @@ private:
 
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
+    ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
 
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 

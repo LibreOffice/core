@@ -10,7 +10,7 @@
 
 #include <undobase.hxx>
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 class ScDocument;
 class ScMarkData;
@@ -32,7 +32,7 @@ public:
     static void addDeleteContentsUndo(
         svl::IUndoManager* pUndoMgr, ScDocShell* pDocSh, const ScMarkData& rMark,
         const ScRange& rRange, ScDocument* pUndoDoc, InsertDeleteFlags nFlags,
-        const std::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
+        const boost::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
         bool bMulti, bool bDrawUndo );
 
     static ScSimpleUndo::DataSpansType* getNonEmptyCellSpans(

@@ -63,7 +63,7 @@
 #include <editeng/adjustitem.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace svx::sidebar;
 using namespace ::com::sun::star;
@@ -578,7 +578,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aNewAttr( GetPool(), EE_ITEMS_START, EE_ITEMS_END );
                 aNewAttr.Put( aEditAttr, false );
 
-                std::unique_ptr<SvxNumRule> pNumRule;
+                boost::scoped_ptr<SvxNumRule> pNumRule;
                 const SfxPoolItem* pTmpItem=NULL;
                 sal_uInt16 nNumItemId = SID_ATTR_NUMBERING_RULE;
                 sal_uInt16 nActNumLvl = mpDrawView->GetSelectionLevel();
@@ -676,7 +676,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    std::unique_ptr<SfxItemSet> pSet;
+    boost::scoped_ptr<SfxItemSet> pSet;
 
     if( bAttr )
     {

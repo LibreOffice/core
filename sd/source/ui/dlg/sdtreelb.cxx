@@ -1586,7 +1586,7 @@ void SdPageObjsTLB::AddShapeToTransferable (
             if (pBase->GetDocShell() != &rDocShell)
                 continue;
 
-            const std::shared_ptr<sd::ViewShell> pViewShell (pBase->GetMainViewShell());
+            const ::boost::shared_ptr<sd::ViewShell> pViewShell (pBase->GetMainViewShell());
             if (pViewShell)
                 return pViewShell.get();
         }

@@ -97,7 +97,7 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -215,12 +215,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                     {
                         ScDocument* pDoc = GetViewData()->GetDocument();
-                        bool bTheFlag=(pDoc->GetChangeTrack()!=nullptr);
+                        bool bTheFlag=(pDoc->GetChangeTrack()!=NULL);
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_INSCELL, bTheFlag));
+                        boost::scoped_ptr<AbstractScInsertCellDlg> pDlg(pFact->CreateScInsertCellDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_INSCELL, bTheFlag));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if (pDlg->Execute() == RET_OK)
                             eCmd = pDlg->GetInsCellCmd();
@@ -287,12 +287,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScDocument* pDoc = GetViewData()->GetDocument();
                         bool bTheFlag=GetViewData()->IsMultiMarked() ||
                             (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE_FILTERED) ||
-                            (pDoc->GetChangeTrack() != nullptr);
+                            (pDoc->GetChangeTrack() != NULL);
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScDeleteCellDlg> pDlg(pFact->CreateScDeleteCellDlg( pTabViewShell->GetDialogParent(), bTheFlag ));
+                        boost::scoped_ptr<AbstractScDeleteCellDlg> pDlg(pFact->CreateScDeleteCellDlg( pTabViewShell->GetDialogParent(), bTheFlag ));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if (pDlg->Execute() == RET_OK)
@@ -337,7 +337,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             {
                 InsertDeleteFlags nFlags = IDF_NONE;
 
-                if ( pReqArgs!=nullptr && pTabViewShell->SelectionEditable() )
+                if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
                     const   SfxPoolItem* pItem;
                     OUString aFlags('A');
@@ -374,7 +374,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetDialogParent()));
+                        boost::scoped_ptr<AbstractScDeleteContentsDlg> pDlg(pFact->CreateScDeleteContentsDlg(pTabViewShell->GetDialogParent()));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         ScDocument* pDoc = GetViewData()->GetDocument();
                         SCTAB nTab = GetViewData()->GetTabNo();
@@ -448,7 +448,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool bSkipEmpty = false;
                 bool bAsLink    = false;
 
-                if ( pReqArgs!=nullptr && pTabViewShell->SelectionEditable() )
+                if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
                     const   SfxPoolItem* pItem;
                     OUString aFlags('A');
@@ -481,7 +481,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    std::unique_ptr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
+                    boost::scoped_ptr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
                                                                                             IDF_NONE, /* nCheckDefaults */
                                                                                             &ScGlobal::GetRscString(STR_FILL_TAB)));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
@@ -627,7 +627,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     bDoIt   = true;
 
                 }
-                else // (pReqArgs == nullptr) => raise Dialog
+                else // (pReqArgs == NULL) => raise Dialog
                 {
                     sal_uInt32 nPrivFormat;
                     CellType eCellType;
@@ -711,7 +711,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    std::unique_ptr<AbstractScFillSeriesDlg> pDlg(pFact->CreateScFillSeriesDlg( pTabViewShell->GetDialogParent(),
+                    boost::scoped_ptr<AbstractScFillSeriesDlg> pDlg(pFact->CreateScFillSeriesDlg( pTabViewShell->GetDialogParent(),
                                                             *pDoc,
                                                             eFillDir, eFillCmd, eFillDateCmd,
                                                             aStartStr, fIncVal, fMaxVal,
@@ -814,7 +814,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SCROW nFillRow = GetViewData()->GetRefEndY();
                 ScDocument* pDoc = GetViewData()->GetDocument();
 
-                if( pReqArgs != nullptr )
+                if( pReqArgs != NULL )
                 {
                     const SfxPoolItem* pItem;
 
@@ -1028,7 +1028,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_SEARCH_RESULTS_DIALOG:
         {
-            const SfxPoolItem* pItem = nullptr;
+            const SfxPoolItem* pItem = NULL;
             if (pReqArgs && pReqArgs->HasItem(SID_SEARCH_RESULTS_DIALOG, &pItem))
             {
                 bool bVisible = static_cast<const SfxBoolItem*>(pItem)->GetValue();
@@ -1132,7 +1132,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     bOk = false;
                 }
-                else if( pReqArgs != nullptr )
+                else if( pReqArgs != NULL )
                 {
                     const SfxPoolItem* pItem;
                     bOk = false;
@@ -1160,7 +1160,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetDialogParent(), false));
+                        boost::scoped_ptr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetDialogParent(), false));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                             bColumns = pDlg->GetColsChecked();
@@ -1193,7 +1193,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pTabViewShell->UngroupDataPilot();
                     bOk = false;
                 }
-                else if( pReqArgs != nullptr )
+                else if( pReqArgs != NULL )
                 {
                     const SfxPoolItem* pItem;
                     bOk = false;
@@ -1219,7 +1219,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        std::unique_ptr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetDialogParent(), true));
+                        boost::scoped_ptr<AbstractScGroupDlg> pDlg(pFact->CreateAbstractScGroupDlg(pTabViewShell->GetDialogParent(), true));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
                         if ( pDlg->Execute() == RET_OK )
                             bColumns = pDlg->GetColsChecked();
@@ -1252,7 +1252,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_COPY:              // for graphs in DrawShell
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
-                pTabViewShell->CopyToClip( nullptr, false, false, true );
+                pTabViewShell->CopyToClip( NULL, false, false, true );
                 rReq.Done();
                 GetViewData()->SetPasteMode( (ScPasteFlags) (SC_PASTE_MODE | SC_PASTE_BORDER) );
                 pTabViewShell->ShowCursor();
@@ -1263,7 +1263,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_CUT:               // for graphs in DrawShell
             {
                 WaitObject aWait( GetViewData()->GetDialogParent() );
-                pTabViewShell->CutToClip( nullptr, true );
+                pTabViewShell->CutToClip( NULL, true );
                 rReq.Done();
                 GetViewData()->SetPasteMode( (ScPasteFlags)(SC_PASTE_MODE | SC_PASTE_BORDER));
                 pTabViewShell->ShowCursor();
@@ -1294,8 +1294,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( nFormat != SotClipboardFormatId::NONE )
                 {
                     vcl::Window* pWin = GetViewData()->GetActiveWin();
-                    bool bCells = ( ScTransferObj::GetOwnClipboard( pWin ) != nullptr );
-                    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != nullptr );
+                    bool bCells = ( ScTransferObj::GetOwnClipboard( pWin ) != NULL );
+                    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
                     bool bOle = ( nFormat == SotClipboardFormatId::EMBED_SOURCE );
 
                     if ( bCells && bOle )
@@ -1331,7 +1331,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     // keep a reference in case the clipboard is changed during dialog or PasteFromClip
                     uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
-                    if ( pReqArgs!=nullptr && pTabViewShell->SelectionEditable() )
+                    if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                     {
                         const   SfxPoolItem* pItem;
                         OUString aFlags('A');
@@ -1383,11 +1383,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                            std::unique_ptr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetDialogParent()));
+                            boost::scoped_ptr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg(pTabViewShell->GetDialogParent()));
                             OSL_ENSURE(pDlg, "Dialog create fail!");
                             pDlg->SetOtherDoc( bOtherDoc );
                             // if ChangeTrack MoveMode disable
-                            pDlg->SetChangeTrack( pDoc->GetChangeTrack() != nullptr );
+                            pDlg->SetChangeTrack( pDoc->GetChangeTrack() != NULL );
                             // fdo#56098  disable shift if necessary
                             if ( !bOtherDoc  && pOwnClip )
                             {
@@ -1538,7 +1538,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 vcl::Window* pWin = GetViewData()->GetActiveWin();
 
                 //  Clipboard-ID given as parameter? Basic "PasteSpecial(Format)"
-                const SfxPoolItem* pItem=nullptr;
+                const SfxPoolItem* pItem=NULL;
                 if ( pReqArgs &&
                      pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
@@ -1547,7 +1547,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     bool bRet=true;
                     {
                         WaitObject aWait( GetViewData()->GetDialogParent() );
-                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != nullptr );
+                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
                         if ( bDraw && nFormat == SotClipboardFormatId::EMBED_SOURCE )
                             pTabViewShell->PasteDraw();
                         else
@@ -1561,7 +1561,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else
                         // if format is not available -> fallback to request without parameters
-                        pItem = nullptr;
+                        pItem = NULL;
                 }
 
                 if ( !pItem )
@@ -1574,7 +1574,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else                                    // draw objects or external data
                     {
-                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != nullptr );
+                        bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != NULL );
 
                         SvxClipboardFormatItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
                         GetPossibleClipboardFormats( aFormats );
@@ -1583,7 +1583,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if ( nFormatCount )
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pTabViewShell->GetDialogParent() ));
+                            boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pTabViewShell->GetDialogParent() ));
                             if ( pDlg )
                             {
                             for (sal_uInt16 i=0; i<nFormatCount; i++)
@@ -1817,7 +1817,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScNameCreateDlg> pDlg(pFact->CreateScNameCreateDlg(pTabViewShell->GetDialogParent(), nFlags));
+                boost::scoped_ptr<AbstractScNameCreateDlg> pDlg(pFact->CreateScNameCreateDlg(pTabViewShell->GetDialogParent(), nFlags));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
 
                 if( pDlg->Execute() )
@@ -1865,7 +1865,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 }
                 else                            // CANCEL
                 {
-                    pScMod->ActivateInputWindow( nullptr );
+                    pScMod->ActivateInputWindow( NULL );
                 }
                 rReq.Ignore();      // only SID_ENTER_STRING is recorded
             }
@@ -1926,11 +1926,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 bool        bManaged    = false;
 
                 // Get the pool item stored it by Conditional Format Manager Dialog.
-                const SfxPoolItem* pItem = nullptr;
+                const SfxPoolItem* pItem = NULL;
                 sal_uInt32 nItems(pTabViewShell->GetPool().GetItemCount2( SCITEM_STRING ));
                 for( sal_uInt32 nIter = 0; nIter < nItems; ++nIter )
                 {
-                    if( nullptr != (pItem = pTabViewShell->GetPool().GetItem2( SCITEM_STRING, nIter ) ) )
+                    if( NULL != (pItem = pTabViewShell->GetPool().GetItem2( SCITEM_STRING, nIter ) ) )
                     {
                         if ( ScCondFormatDlg::ParseXmlString(
                                 static_cast<const SfxStringItem*>(pItem)->GetValue(),
@@ -1969,7 +1969,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     aRangeList.push_back(pRange);
                 }
 
-                const ScConditionalFormat* pCondFormat = nullptr;
+                const ScConditionalFormat* pCondFormat = NULL;
                 const ScPatternAttr* pPattern = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
                 const std::vector<sal_uInt32>& rCondFormats = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
                 bool bContainsCondFormat = !rCondFormats.empty();
@@ -2139,7 +2139,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pTabViewShell->GetDialogParent(), GetViewData()->GetDocShell() ));
+                boost::scoped_ptr<AbstractScNamePasteDlg> pDlg(pFact->CreateScNamePasteDlg( pTabViewShell->GetDialogParent(), GetViewData()->GetDocShell() ));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 switch( pDlg->Execute() )
                 {
@@ -2300,7 +2300,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_CHARMAP:
-            if( pReqArgs != nullptr )
+            if( pReqArgs != NULL )
             {
                 OUString aChars, aFontName;
                 const SfxItemSet *pArgs = rReq.GetArgs();
@@ -2312,7 +2312,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, pItem );
                     if ( pStringItem )
                         aChars = pStringItem->GetValue();
-                    const SfxPoolItem* pFtItem = nullptr;
+                    const SfxPoolItem* pFtItem = NULL;
                     pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
                     const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
                     if ( pFontItem )
@@ -2322,7 +2322,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( !aChars.isEmpty() )
                 {
                     vcl::Font aFont;
-                    pTabViewShell->GetSelectionPattern()->GetFont( aFont, SC_AUTOCOL_BLACK, nullptr, nullptr, nullptr,
+                    pTabViewShell->GetSelectionPattern()->GetFont( aFont, SC_AUTOCOL_BLACK, NULL, NULL, NULL,
                                                                 pTabViewShell->GetSelectionScriptType() );
                     if ( !aFontName.isEmpty() )
                         aFont = vcl::Font( aFontName, Size(1,1) );
@@ -2337,14 +2337,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 // font color doesn't matter here
                 vcl::Font         aCurFont;
-                pTabViewShell->GetSelectionPattern()->GetFont( aCurFont, SC_AUTOCOL_BLACK, nullptr, nullptr, nullptr,
+                pTabViewShell->GetSelectionPattern()->GetFont( aCurFont, SC_AUTOCOL_BLACK, NULL, NULL, NULL,
                                                                 pTabViewShell->GetSelectionScriptType() );
 
                 SfxAllItemSet aSet( GetPool() );
                 aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
                 aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), GetPool().GetWhich(SID_ATTR_CHAR_FONT) ) );
 
-                std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( pTabViewShell->GetDialogParent(), aSet,
+                boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( pTabViewShell->GetDialogParent(), aSet,
                     pTabViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
 
                 if ( pDlg->Execute() == RET_OK )
@@ -2384,7 +2384,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     }
                     else
                     {
-                        OSL_FAIL("nullptr");
+                        OSL_FAIL("NULL");
                     }
                 }
             }
@@ -2427,7 +2427,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
 
                 ScConditionalFormatList* pList = pDoc->GetCondFormList( aPos.Tab() );
-                std::unique_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
+                boost::scoped_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
                     pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER));
                 short nRet = pDlg->Execute();
                 if(nRet == RET_OK && pDlg->CondFormatsChanged())
@@ -2572,7 +2572,7 @@ bool isDPSourceValid(const ScDPObject& rDPObj)
             return false;
 
         const ScDPSaveData* pSaveData = rDPObj.GetSaveData();
-        const ScDPDimensionSaveData* pDimData = nullptr;
+        const ScDPDimensionSaveData* pDimData = NULL;
         if (pSaveData)
             pDimData = pSaveData->GetExistingDimensionData();
 
@@ -2593,7 +2593,7 @@ void ScCellShell::ExecuteDataPilotDialog()
     ScViewData* pData = GetViewData();
     ScDocument* pDoc = pData->GetDocument();
 
-    std::unique_ptr<ScDPObject> pNewDPObject(nullptr);
+    ::boost::scoped_ptr<ScDPObject> pNewDPObject(NULL);
 
     // ScPivot is no longer used...
     ScDPObject* pDPObj = pDoc->GetDPAtCursor(
@@ -2625,7 +2625,7 @@ void ScCellShell::ExecuteDataPilotDialog()
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-        std::unique_ptr<AbstractScDataPilotSourceTypeDlg> pTypeDlg(
+        ::boost::scoped_ptr<AbstractScDataPilotSourceTypeDlg> pTypeDlg(
             pFact->CreateScDataPilotSourceTypeDlg(
                 pTabViewShell->GetDialogParent(), bEnableExt));
 
@@ -2644,7 +2644,7 @@ void ScCellShell::ExecuteDataPilotDialog()
             if ( pTypeDlg->IsExternal() )
             {
                 uno::Sequence<OUString> aSources = ScDPObject::GetRegisteredSources();
-                std::unique_ptr<AbstractScDataPilotServiceDlg> pServDlg(
+                ::boost::scoped_ptr<AbstractScDataPilotServiceDlg> pServDlg(
                     pFact->CreateScDataPilotServiceDlg(
                         pTabViewShell->GetDialogParent(), aSources, RID_SCDLG_DAPISERVICE));
 
@@ -2665,7 +2665,7 @@ void ScCellShell::ExecuteDataPilotDialog()
             {
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScDataPilotDatabaseDlg> pDataDlg(
+                ::boost::scoped_ptr<AbstractScDataPilotDatabaseDlg> pDataDlg(
                     pFact->CreateScDataPilotDatabaseDlg(
                         pTabViewShell->GetDialogParent()));
 
@@ -2796,7 +2796,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         return;
     }
 
-    std::unique_ptr<SfxAbstractTabDialog> pDlg;
+    boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
     ScSubTotalParam aSubTotalParam;
     SfxItemSet aArgSet( GetPool(), SCITEM_SUBTDATA, SCITEM_SUBTDATA );
 
@@ -2827,7 +2827,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
 
     if ( (bResult == RET_OK) || (bResult == SCRET_REMOVE) )
     {
-        const SfxItemSet* pOutSet = nullptr;
+        const SfxItemSet* pOutSet = NULL;
 
         if ( bResult == RET_OK )
         {

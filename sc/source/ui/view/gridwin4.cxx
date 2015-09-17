@@ -983,7 +983,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     // setup the SdrPage so that drawinglayer works correctly
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    std::unique_ptr<FmFormView> pDrawView;
+    boost::scoped_ptr<FmFormView> pDrawView;
     if (pModel)
     {
         pDrawView.reset(new FmFormView(pModel, &rDevice));

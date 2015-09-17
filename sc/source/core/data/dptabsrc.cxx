@@ -98,17 +98,17 @@ static void lcl_SetBoolInAny( uno::Any& rAny, bool bValue )
 
 ScDPSource::ScDPSource( ScDPTableData* pD ) :
     pData( pD ),
-    pDimensions( nullptr ),
+    pDimensions( NULL ),
     bColumnGrand( true ),       // default is true
     bRowGrand( true ),
     bIgnoreEmptyRows( false ),
     bRepeatIfEmpty( false ),
     nDupCount( 0 ),
-    pResData( nullptr ),
-    pColResRoot( nullptr ),
-    pRowResRoot( nullptr ),
-    pColResults( nullptr ),
-    pRowResults( nullptr ),
+    pResData( NULL ),
+    pColResRoot( NULL ),
+    pRowResRoot( NULL ),
+    pColResults( NULL ),
+    pRowResults( NULL ),
     bResultOverflow( false ),
     bPageFiltered( false )
 {
@@ -160,7 +160,7 @@ long ScDPSource::GetDataDimensionCount()
 ScDPDimension* ScDPSource::GetDataDimension(long nIndex)
 {
     if (nIndex < 0 || static_cast<size_t>(nIndex) >= maDataDims.size())
-        return nullptr;
+        return NULL;
 
     long nDimIndex = maDataDims[nIndex];
     return GetDimensionsObject()->getByIndex(nDimIndex);
@@ -539,8 +539,8 @@ void ScDPSource::disposeData()
         DELETEZ(pResData);
         delete[] pColResults;
         delete[] pRowResults;
-        pColResults = nullptr;
-        pRowResults = nullptr;
+        pColResults = NULL;
+        pRowResults = NULL;
         aColLevelList.clear();
         aRowLevelList.clear();
     }
@@ -548,7 +548,7 @@ void ScDPSource::disposeData()
     if ( pDimensions )
     {
         pDimensions->release(); // ref-counted
-        pDimensions = nullptr;     //  settings have to be applied (from SaveData) again!
+        pDimensions = NULL;     //  settings have to be applied (from SaveData) again!
     }
     SetDupCount( 0 );
 
@@ -999,7 +999,7 @@ void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*>
 {
     rList.clear();
 
-    std::vector<long>* pDimIndex = nullptr;
+    std::vector<long>* pDimIndex = NULL;
     switch (nOrientation)
     {
         case sheet::DataPilotFieldOrientation_COLUMN:
@@ -1070,7 +1070,7 @@ void ScDPSource::FillMemberResults()
 
             long nPos = 0;
             pColResRoot->FillMemberResults( pColResults, nPos, pResData->GetColStartMeasure(),
-                                            true, nullptr, nullptr );
+                                            true, NULL, NULL );
         }
 
         FillLevelList( sheet::DataPilotFieldOrientation_ROW, aRowLevelList );
@@ -1084,7 +1084,7 @@ void ScDPSource::FillMemberResults()
 
             long nPos = 0;
             pRowResRoot->FillMemberResults( pRowResults, nPos, pResData->GetRowStartMeasure(),
-                                            true, nullptr, nullptr );
+                                            true, NULL, NULL );
         }
     }
 }
@@ -1108,7 +1108,7 @@ const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( ScDPLeve
         if ( pRowLevel == pLevel )
             return pRowResults+i;
     }
-    return nullptr;
+    return NULL;
 }
 
 // XPropertySet
@@ -1211,7 +1211,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPSource )
 
 ScDPDimensions::ScDPDimensions( ScDPSource* pSrc ) :
     pSource( pSrc ),
-    ppDims( nullptr )
+    ppDims( NULL )
 {
     //TODO: hold pSource
 
@@ -1245,7 +1245,7 @@ void ScDPDimensions::CountChanged()
         for (i=0; i<nCopy; i++)             // copy existing dims
             ppNew[i] = ppDims[i];
         for (i=nCopy; i<nNewCount; i++)     // clear additional pointers
-            ppNew[i] = nullptr;
+            ppNew[i] = NULL;
         for (i=nCopy; i<nDimCount; i++)     // delete old dims if count is decreased
             if ( ppDims[i] )
                 ppDims[i]->release();       // ref-counted
@@ -1322,7 +1322,7 @@ ScDPDimension* ScDPDimensions::getByIndex(long nIndex) const
         {
             const_cast<ScDPDimensions*>(this)->ppDims = new ScDPDimension*[nDimCount];
             for (long i=0; i<nDimCount; i++)
-                ppDims[i] = nullptr;
+                ppDims[i] = NULL;
         }
         if ( !ppDims[nIndex] )
         {
@@ -1333,20 +1333,20 @@ ScDPDimension* ScDPDimensions::getByIndex(long nIndex) const
         return ppDims[nIndex];
     }
 
-    return nullptr;    //TODO: exception?
+    return NULL;    //TODO: exception?
 }
 
 ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     pSource( pSrc ),
     nDim( nD ),
-    pHierarchies( nullptr ),
+    pHierarchies( NULL ),
     nUsedHier( 0 ),
     nFunction( SUBTOTAL_FUNC_SUM ),     // sum is default
-    mpLayoutName(nullptr),
-    mpSubtotalName(nullptr),
+    mpLayoutName(NULL),
+    mpSubtotalName(NULL),
     nSourceDim( -1 ),
     bHasSelectedPage( false ),
-    pSelectedData( nullptr ),
+    pSelectedData( NULL ),
     mbHasHiddenMember(false)
 {
     //TODO: hold pSource
@@ -1690,7 +1690,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPDimension )
 ScDPHierarchies::ScDPHierarchies( ScDPSource* pSrc, long nD ) :
     pSource( pSrc ),
     nDim( nD ),
-    ppHiers( nullptr )
+    ppHiers( NULL )
 {
     //TODO: hold pSource
 
@@ -1779,7 +1779,7 @@ ScDPHierarchy* ScDPHierarchies::getByIndex(long nIndex) const
         {
             const_cast<ScDPHierarchies*>(this)->ppHiers = new ScDPHierarchy*[nHierCount];
             for (long i=0; i<nHierCount; i++)
-                ppHiers[i] = nullptr;
+                ppHiers[i] = NULL;
         }
         if ( !ppHiers[nIndex] )
         {
@@ -1790,14 +1790,14 @@ ScDPHierarchy* ScDPHierarchies::getByIndex(long nIndex) const
         return ppHiers[nIndex];
     }
 
-    return nullptr;    //TODO: exception?
+    return NULL;    //TODO: exception?
 }
 
 ScDPHierarchy::ScDPHierarchy( ScDPSource* pSrc, long nD, long nH ) :
     pSource( pSrc ),
     nDim( nD ),
     nHier( nH ),
-    pLevels( nullptr )
+    pLevels( NULL )
 {
     //TODO: hold pSource
 }
@@ -1856,7 +1856,7 @@ ScDPLevels::ScDPLevels( ScDPSource* pSrc, long nD, long nH ) :
     pSource( pSrc ),
     nDim( nD ),
     nHier( nH ),
-    ppLevs( nullptr )
+    ppLevs( NULL )
 {
     //TODO: hold pSource
 
@@ -1955,7 +1955,7 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
         {
             const_cast<ScDPLevels*>(this)->ppLevs = new ScDPLevel*[nLevCount];
             for (long i=0; i<nLevCount; i++)
-                ppLevs[i] = nullptr;
+                ppLevs[i] = NULL;
         }
         if ( !ppLevs[nIndex] )
         {
@@ -1966,7 +1966,7 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
         return ppLevs[nIndex];
     }
 
-    return nullptr;    //TODO: exception?
+    return NULL;    //TODO: exception?
 }
 
 class ScDPGlobalMembersOrder
@@ -2003,7 +2003,7 @@ ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
     nDim( nD ),
     nHier( nH ),
     nLev( nL ),
-    pMembers( nullptr ),
+    pMembers( NULL ),
     aSortInfo( EMPTY_OUSTRING, sal_True, sheet::DataPilotFieldSortMode::NAME ),   // default: sort by name
     nSortMeasure( 0 ),
     nAutoMeasure( 0 ),
@@ -2291,7 +2291,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
             {
                 case SC_DAPI_LEVEL_YEAR:
                     {
-                        const ScDPItemData* pLastNumData = nullptr;
+                        const ScDPItemData* pLastNumData = NULL;
                         for ( SCROW n = 0 ;n <GetSrcItemsCount() ; n-- )
                         {
                             const ScDPItemData* pData  = GetSrcItemDataByIndex( n );
@@ -2534,7 +2534,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
         return maMembers[nIndex].get();
     }
 
-    return nullptr;    //TODO: exception?
+    return NULL;    //TODO: exception?
 }
 
 ScDPMember::ScDPMember(
@@ -2544,7 +2544,7 @@ ScDPMember::ScDPMember(
     nHier( nH ),
     nLev( nL ),
     mnDataId( nIndex ),
-    mpLayoutName(nullptr),
+    mpLayoutName(NULL),
     nPosition( -1 ),
     bVisible( true ),
     bShowDet( true )
@@ -2701,7 +2701,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPMember )
 const ScDPCache* ScDPSource::GetCache()
 {
     OSL_ENSURE( GetData() , "empty ScDPTableData pointer");
-    return ( GetData()!=nullptr ) ? &GetData()->GetCacheTable().getCache() : nullptr ;
+    return ( GetData()!=NULL ) ? &GetData()->GetCacheTable().getCache() : NULL ;
 }
 
 const ScDPItemData* ScDPMember::GetItemData() const
@@ -2725,7 +2725,7 @@ const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex(SCROW nIndex)
 {
     const std::vector< SCROW >& memberIds = pSource->GetData()->GetColumnEntries( nDim );
     if ( nIndex >= (long )(memberIds.size()) || nIndex < 0 )
-        return nullptr;
+        return NULL;
     SCROW nId =  memberIds[ nIndex ];
     return pSource->GetItemDataById( nDim, nId );
 }

@@ -91,7 +91,7 @@
 #include <memory>
 #include <utility>
 #include <basic/basmgr.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 #include <set>
 #include <vector>
 
@@ -618,7 +618,7 @@ bool ScDocFunc::DeleteContents(
     }
 
     // To keep track of all non-empty cells within the deleted area.
-    std::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
+    boost::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
 
     if ( bRecord )
     {
@@ -686,7 +686,7 @@ bool ScDocFunc::DeleteCell(
         rDoc.DeleteObjectsInArea(rPos.Col(), rPos.Row(), rPos.Col(), rPos.Row(), rMark);
 
     // To keep track of all non-empty cells within the deleted area.
-    std::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
+    boost::shared_ptr<ScSimpleUndo::DataSpansType> pDataSpans;
 
     ScDocument* pUndoDoc = NULL;
     if (bRecord)
@@ -978,7 +978,7 @@ bool ScDocFunc::SetStringOrEditCell( const ScAddress& rPos, const OUString& rStr
     {
         ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
         rEngine.SetText(rStr);
-        std::unique_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
+        boost::scoped_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
         return SetEditCell(rPos, *pEditText, bInteraction);
     }
     else
@@ -1106,7 +1106,7 @@ bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
         }
 
         // A copy of pNewData will be stored in the cell.
-        std::unique_ptr<EditTextObject> pNewData(rEngine.CreateTextObject());
+        boost::scoped_ptr<EditTextObject> pNewData(rEngine.CreateTextObject());
         bRet = SetEditCell(rPos, *pNewData, !bApi);
 
         // Set the paragraph attributes back to the EditEngine.
@@ -1177,7 +1177,7 @@ bool ScDocFunc::SetCellText(
         {
             ScDocument& rDoc = rDocShell.GetDocument();
 
-            ::std::unique_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
+            ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard;
             if (bApi)
                 pExtRefGuard.reset(new ScExternalRefManager::ApiGuard(&rDoc));
 
@@ -5320,7 +5320,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
                 IDF_ALL, false, pUndoDoc );
     }
 
-    std::unique_ptr<ScRange> pRepaintRange;
+    boost::scoped_ptr<ScRange> pRepaintRange;
     if(nOldFormat)
     {
         ScConditionalFormat* pOldFormat = rDoc.GetCondFormList(nTab)->GetFormat(nOldFormat);

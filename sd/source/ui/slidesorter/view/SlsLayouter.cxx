@@ -57,8 +57,8 @@ public:
     /// rows.
     sal_Int32 mnMaxRowCount;
     Size maPageObjectSize;
-    std::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
-    std::shared_ptr<view::Theme> mpTheme;
+    ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
+    ::boost::shared_ptr<view::Theme> mpTheme;
 
     /** Specify how the gap between two page objects is associated with the
       page objects.
@@ -201,7 +201,7 @@ public:
 protected:
     Implementation (
         sd::Window *pWindow,
-        const std::shared_ptr<view::Theme>& rpTheme);
+        const ::boost::shared_ptr<view::Theme>& rpTheme);
     explicit Implementation (const Implementation& rImplementation);
 
     virtual void CalculateRowAndColumnCount (const Size& rWindowSize) = 0;
@@ -272,7 +272,7 @@ class GridImplementation : public Layouter::Implementation
 public:
     GridImplementation (
         sd::Window *pWindow,
-        const std::shared_ptr<view::Theme>& rpTheme);
+        const ::boost::shared_ptr<view::Theme>& rpTheme);
     explicit GridImplementation(const Implementation& rImplementation);
 
     virtual Layouter::Orientation GetOrientation() const SAL_OVERRIDE;
@@ -293,7 +293,7 @@ protected:
 
 Layouter::Layouter (
     sd::Window *pWindow,
-    const std::shared_ptr<Theme>& rpTheme)
+    const ::boost::shared_ptr<Theme>& rpTheme)
     : mpImplementation(new GridImplementation(pWindow, rpTheme)),
       mpWindow(pWindow)
 {
@@ -303,7 +303,7 @@ Layouter::~Layouter()
 {
 }
 
-std::shared_ptr<PageObjectLayouter> Layouter::GetPageObjectLayouter() const
+::boost::shared_ptr<PageObjectLayouter> Layouter::GetPageObjectLayouter() const
 {
     return mpImplementation->mpPageObjectLayouter;
 }
@@ -428,7 +428,7 @@ Layouter::Implementation* Layouter::Implementation::Create (
 
 Layouter::Implementation::Implementation (
     sd::Window *pWindow,
-    const std::shared_ptr<view::Theme>& rpTheme)
+    const ::boost::shared_ptr<view::Theme>& rpTheme)
     : mpWindow(pWindow),
       mnRequestedLeftBorder(5),
       mnRequestedRightBorder(5),
@@ -1103,7 +1103,7 @@ void VerticalImplementation::CalculateLogicalInsertPosition (
 
 GridImplementation::GridImplementation (
     sd::Window *pWindow,
-    const std::shared_ptr<view::Theme>& rpTheme)
+    const ::boost::shared_ptr<view::Theme>& rpTheme)
     : Implementation(pWindow, rpTheme)
 {
 }

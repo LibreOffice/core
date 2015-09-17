@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SC_INC_POSTIT_HXX
 #define INCLUDED_SC_INC_POSTIT_HXX
 
+#include <boost/shared_ptr.hpp>
 #include <rtl/ustring.hxx>
 #include "address.hxx"
 #include "scdllapi.h"
 
 #include <map>
-#include <memory>
 
 class EditTextObject;
 class OutlinerParaObject;
@@ -39,7 +39,7 @@ struct ScCaptionInitData;
 /** Internal data for a cell annotation. */
 struct SC_DLLPUBLIC ScNoteData
 {
-    typedef std::shared_ptr< ScCaptionInitData > ScCaptionInitDataRef;
+    typedef ::boost::shared_ptr< ScCaptionInitData > ScCaptionInitDataRef;
 
     OUString     maDate;             /// Creation date of the note.
     OUString     maAuthor;           /// Author of the note.

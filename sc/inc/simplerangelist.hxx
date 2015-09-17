@@ -20,11 +20,12 @@
 #ifndef INCLUDED_SC_INC_SIMPLERANGELIST_HXX
 #define INCLUDED_SC_INC_SIMPLERANGELIST_HXX
 
+#include <boost/shared_ptr.hpp>
+
 #include "address.hxx"
 
-#include <list>
 #include <map>
-#include <memory>
+#include <list>
 
 class ScRange;
 class ScRangeList;
@@ -46,7 +47,7 @@ public:
         SCROW mnRow2;
         explicit Range(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     };
-    typedef std::shared_ptr< ::std::list<Range> > RangeListRef;
+    typedef ::boost::shared_ptr< ::std::list<Range> > RangeListRef;
     typedef ::std::map<SCTAB, RangeListRef> TabType;
 
     ScSimpleRangeList();

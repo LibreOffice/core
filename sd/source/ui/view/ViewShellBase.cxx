@@ -140,10 +140,10 @@ public:
         It does not include the ViewTabBar.
     */
     VclPtr<vcl::Window> mpViewWindow;
-    std::shared_ptr<ToolBarManager> mpToolBarManager;
-    std::shared_ptr<ViewShellManager> mpViewShellManager;
-    std::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;
-    std::shared_ptr<FormShellManager> mpFormShellManager;
+    ::boost::shared_ptr<ToolBarManager> mpToolBarManager;
+    ::boost::shared_ptr<ViewShellManager> mpViewShellManager;
+    ::boost::shared_ptr<tools::EventMultiplexer> mpEventMultiplexer;
+    ::boost::shared_ptr<FormShellManager> mpFormShellManager;
 
     Implementation (ViewShellBase& rBase);
     ~Implementation();
@@ -191,7 +191,7 @@ private:
         order to ensure that it stays alive while the ViewShellBase is
         alive.
     */
-    std::shared_ptr<slidesorter::cache::PageCacheManager> mpPageCacheManager;
+    ::boost::shared_ptr<slidesorter::cache::PageCacheManager> mpPageCacheManager;
 };
 
 namespace {
@@ -313,7 +313,7 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
             if (sView.isEmpty())
                 sView = GetInitialViewShellType();
 
-            std::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*this));
+            ::boost::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*this));
 
             // Create the resource ids for the center pane and view.
             const Reference<drawing::framework::XResourceId> xCenterPaneId (
@@ -359,14 +359,14 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
     }
 }
 
-std::shared_ptr<ViewShellManager> ViewShellBase::GetViewShellManager() const
+::boost::shared_ptr<ViewShellManager> ViewShellBase::GetViewShellManager() const
 {
     return mpImpl->mpViewShellManager;
 }
 
-std::shared_ptr<ViewShell> ViewShellBase::GetMainViewShell() const
+::boost::shared_ptr<ViewShell> ViewShellBase::GetMainViewShell() const
 {
-    std::shared_ptr<ViewShell> pMainViewShell (
+    ::boost::shared_ptr<ViewShell> pMainViewShell (
         framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))
             ->GetViewShell(framework::FrameworkHelper::msCenterPaneURL));
     if (pMainViewShell.get() == NULL)
@@ -423,7 +423,7 @@ void ViewShellBase::InitializeFramework()
 
 OUString ViewShellBase::GetSelectionText(bool bCompleteWords)
 {
-    std::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
+    ::boost::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
     DrawViewShell *const pDrawViewShell(
             dynamic_cast<DrawViewShell*>(pMainShell.get()));
     return (pDrawViewShell)
@@ -433,7 +433,7 @@ OUString ViewShellBase::GetSelectionText(bool bCompleteWords)
 
 bool ViewShellBase::HasSelection(bool bText) const
 {
-    std::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
+    ::boost::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
     DrawViewShell *const pDrawViewShell(
             dynamic_cast<DrawViewShell*>(pMainShell.get()));
     return (pDrawViewShell)
@@ -538,8 +538,8 @@ sal_uInt16 ViewShellBase::SetPrinter (
             bScaleAll = (aWarnBox->Execute() == RET_YES);
         }
 
-        std::shared_ptr<DrawViewShell> pDrawViewShell (
-            std::dynamic_pointer_cast<DrawViewShell>(GetMainViewShell()));
+        ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+            ::boost::dynamic_pointer_cast<DrawViewShell>(GetMainViewShell()));
         if (pDrawViewShell)
         {
             SdPage* pPage = GetDocument()->GetSdPage(
@@ -903,7 +903,7 @@ OUString ViewShellBase::GetInitialViewShellType()
     return sRequestedView;
 }
 
-std::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer()
+::boost::shared_ptr<tools::EventMultiplexer> ViewShellBase::GetEventMultiplexer()
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
     OSL_ASSERT(mpImpl->mpEventMultiplexer.get()!=NULL);
@@ -916,7 +916,7 @@ const Rectangle& ViewShellBase::getClientRectangle() const
     return mpImpl->maClientArea;
 }
 
-std::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager() const
+::boost::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager() const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
     OSL_ASSERT(mpImpl->mpToolBarManager.get()!=NULL);
@@ -924,7 +924,7 @@ std::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager() const
     return mpImpl->mpToolBarManager;
 }
 
-std::shared_ptr<FormShellManager> ViewShellBase::GetFormShellManager() const
+::boost::shared_ptr<FormShellManager> ViewShellBase::GetFormShellManager() const
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
     OSL_ASSERT(mpImpl->mpFormShellManager.get()!=NULL);
@@ -1041,7 +1041,7 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot()
                 pFrameView->GetPageKindOnLoad());
             pFrameView->SetPageKind(
                 pFrameView->GetPageKindOnLoad());
-            std::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(mrBase));
+            ::boost::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(mrBase));
             pHelper->RequestView(
                 FrameworkHelper::GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
                 FrameworkHelper::msCenterPaneURL);
@@ -1387,7 +1387,7 @@ void FocusForwardingWindow::dispose()
 
 void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
 {
-    std::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
+    ::boost::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
     if (pViewShell.get() != NULL)
     {
         vcl::Window* pWindow = pViewShell->GetActiveWindow();
@@ -1404,7 +1404,7 @@ void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
 
 void FocusForwardingWindow::Command (const CommandEvent& rEvent)
 {
-    std::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
+    ::boost::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
     if (pViewShell.get() != NULL)
     {
         vcl::Window* pWindow = pViewShell->GetActiveWindow();

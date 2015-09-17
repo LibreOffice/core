@@ -51,7 +51,7 @@ VclPtr<vcl::Window> CurrentMasterPagesSelector::Create (
     if (pDocument == NULL)
         return NULL;
 
-    std::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
+    ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
     VclPtrInstance<CurrentMasterPagesSelector> pSelector(
             pParent,
@@ -69,7 +69,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     vcl::Window* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
-    const std::shared_ptr<MasterPageContainer>& rpContainer,
+    const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar)
 {
@@ -154,8 +154,8 @@ void CurrentMasterPagesSelector::Fill (ItemList& rItemList)
                 pMasterPage->GetName(),
                 OUString(),
                 pMasterPage->IsPrecious(),
-                std::shared_ptr<PageObjectProvider>(new ExistingPageProvider(pMasterPage)),
-                std::shared_ptr<PreviewProvider>(new PagePreviewProvider())));
+                ::boost::shared_ptr<PageObjectProvider>(new ExistingPageProvider(pMasterPage)),
+                ::boost::shared_ptr<PreviewProvider>(new PagePreviewProvider())));
             aToken = mpContainer->PutMasterPage(pDescriptor);
         }
 
@@ -242,8 +242,8 @@ void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
             rMenu.EnableItem(SID_DELETE_MASTER_PAGE, false);
     }
 
-    std::shared_ptr<DrawViewShell> pDrawViewShell (
-        std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
+    ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+        ::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
     if (pDrawViewShell
         && pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
     {

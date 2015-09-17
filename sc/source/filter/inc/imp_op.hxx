@@ -32,8 +32,8 @@
 #include "excdefs.hxx"
 #include <rtl/ref.hxx>
 
+#include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <memory>
 #include <unordered_map>
 
 class SvStream;
@@ -68,8 +68,8 @@ public:
     void                Convert();
 
 private:
-    typedef std::shared_ptr< XclImpOutlineBuffer >  XclImpOutlineBfrRef;
-    typedef std::shared_ptr< XclImpColRowSettings > XclImpColRowSettRef;
+    typedef boost::shared_ptr< XclImpOutlineBuffer >  XclImpOutlineBfrRef;
+    typedef boost::shared_ptr< XclImpColRowSettings > XclImpColRowSettRef;
 
     XclImpOutlineBfrRef mxColOutlineBuff;
     XclImpOutlineBfrRef mxRowOutlineBuff;

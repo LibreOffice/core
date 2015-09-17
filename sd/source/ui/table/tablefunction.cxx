@@ -63,7 +63,7 @@
 #include "sdresid.hxx"
 #include "undo/undoobjects.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::sd;
 using namespace sdr::table;
@@ -128,7 +128,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         if( (nColumns == 0) || (nRows == 0) )
         {
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            std::unique_ptr<SvxAbstractNewTableDialog> pDlg( pFact ? pFact->CreateSvxNewTableDialog( NULL ) : 0);
+            boost::scoped_ptr<SvxAbstractNewTableDialog> pDlg( pFact ? pFact->CreateSvxNewTableDialog( NULL ) : 0);
 
             if( !pDlg.get() || (pDlg->Execute() != RET_OK) )
                 break;

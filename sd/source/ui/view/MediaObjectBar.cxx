@@ -39,7 +39,7 @@
 #include "drawview.hxx"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace sd;
 
@@ -86,7 +86,7 @@ void MediaObjectBar::GetState( SfxItemSet& rSet )
     {
         if( SID_AVMEDIA_TOOLBOX == nWhich )
         {
-            std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList( mpView->GetMarkedObjectList() ));
+            boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( mpView->GetMarkedObjectList() ));
             bool         bDisable = true;
 
             if( 1 == pMarkList->GetMarkCount() )
@@ -123,7 +123,7 @@ void MediaObjectBar::Execute( SfxRequest& rReq )
 
         if( pItem )
         {
-            std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList( mpView->GetMarkedObjectList() ));
+            boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( mpView->GetMarkedObjectList() ));
 
             if( 1 == pMarkList->GetMarkCount() )
             {

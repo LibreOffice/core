@@ -24,7 +24,8 @@ class SdrPage;
 
 #include <vcl/bitmapex.hxx>
 #include <osl/mutex.hxx>
-#include <memory>
+#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -169,12 +170,12 @@ public:
     */
     void Compress (
         const CacheKey& rKey,
-        const std::shared_ptr<BitmapCompressor>& rpCompressor);
+        const ::boost::shared_ptr<BitmapCompressor>& rpCompressor);
 
 private:
     mutable ::osl::Mutex maMutex;
 
-    std::unique_ptr<CacheBitmapContainer> mpBitmapContainer;
+    ::boost::scoped_ptr<CacheBitmapContainer> mpBitmapContainer;
 
     /** Total size of bytes that are occupied by bitmaps in the cache for
         whom the slides are currently not inside the visible area.

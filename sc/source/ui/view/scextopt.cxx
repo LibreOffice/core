@@ -21,9 +21,9 @@
 
 #include <osl/diagnose.h>
 
-#include <map>
-#include <memory>
 #include <vector>
+#include <map>
+#include <boost/shared_ptr.hpp>
 
 ScExtDocSettings::ScExtDocSettings() :
     mfTabBarWidth( -1.0 ),
@@ -67,7 +67,7 @@ public:
     SCTAB GetLastTab() const;
 
 private:
-    typedef std::shared_ptr< ScExtTabSettings >     ScExtTabSettingsRef;
+    typedef ::boost::shared_ptr< ScExtTabSettings >     ScExtTabSettingsRef;
     typedef ::std::map< SCTAB, ScExtTabSettingsRef >    ScExtTabSettingsMap;
 
     /** Makes a deep copy of all objects in the passed map. */

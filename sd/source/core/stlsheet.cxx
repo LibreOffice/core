@@ -54,7 +54,7 @@
 #include "../ui/inc/ViewShellBase.hxx"
 #include <editeng/boxitem.hxx>
 
-#include <memory>
+#include <boost/make_shared.hpp>
 
 using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
@@ -929,7 +929,7 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
         OUString const name(GetName());
         sal_Int32 const sep(name.indexOf(SD_LT_SEPARATOR));
         OUString const master((sep == -1) ? OUString() : name.copy(0, sep));
-        std::shared_ptr<SfxStyleSheetIterator> aSSSI = std::make_shared<SfxStyleSheetIterator>(mxPool.get(), nFamily);
+        boost::shared_ptr<SfxStyleSheetIterator> aSSSI = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), nFamily);
         for (SfxStyleSheetBase *pStyle = aSSSI->First(); pStyle; pStyle = aSSSI->Next())
         {
             // we hope that we have only sd style sheets

@@ -33,8 +33,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
+#include <boost/scoped_ptr.hpp>
 #include "CustomAnimationEffect.hxx"
-#include <memory>
 
 using namespace ::drawinglayer::primitive2d;
 
@@ -101,7 +101,7 @@ bool PageObjectPainter::UpdatePageObjectLayouter()
     return true;
 }
 
-void PageObjectPainter::SetTheme (const std::shared_ptr<view::Theme>& rpTheme)
+void PageObjectPainter::SetTheme (const ::boost::shared_ptr<view::Theme>& rpTheme)
 {
     mpTheme = rpTheme;
 }
@@ -292,7 +292,7 @@ void PageObjectPainter::PaintCustomAnimationEffect (
     const model::SharedPageDescriptor& rpDescriptor)
 {
     SdPage* pPage = rpDescriptor->GetPage();
-    std::shared_ptr< MainSequence > aMainSequence = pPage->getMainSequence();
+    boost::shared_ptr< MainSequence > aMainSequence = pPage->getMainSequence();
     EffectSequence::iterator aIter = aMainSequence->getBegin();
     EffectSequence::iterator aEnd = aMainSequence->getEnd();
     if ( aIter != aEnd )

@@ -22,7 +22,7 @@
 
 #include "tools/SdGlobalResourceContainer.hxx"
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 #include <vcl/mapmod.hxx>
 
 namespace vcl { class Font; }
@@ -36,7 +36,7 @@ class FontProvider
     : public SdGlobalResource
 {
 public:
-    typedef std::shared_ptr<vcl::Font> SharedFontPointer;
+    typedef boost::shared_ptr<vcl::Font> SharedFontPointer;
 
     /** Return the single instance of this class.  Throws a RuntimeException
         when no instance can be created.

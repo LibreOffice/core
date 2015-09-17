@@ -863,7 +863,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         SCROW nAttrRow1;
         SCROW nAttrRow2;
         const ScPatternAttr* pPattern;
-        std::unique_ptr<ScAttrIterator> pAttrIter(aCol[nCol].CreateAttrIterator( nRow1, nRow2 ));
+        boost::scoped_ptr<ScAttrIterator> pAttrIter(aCol[nCol].CreateAttrIterator( nRow1, nRow2 ));
         while ( (pPattern = pAttrIter->Next( nAttrRow1, nAttrRow2 )) != 0 )
         {
             if ( !IsDefaultItem( pPattern ) )

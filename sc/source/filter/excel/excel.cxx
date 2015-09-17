@@ -41,7 +41,7 @@
 #include "excimp8.hxx"
 #include "exp_op.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
 {
@@ -120,7 +120,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
         pBookStrm->SetBufferSize( 0x8000 );     // still needed?
 
         XclImpRootData aImpData( eBiff, rMedium, xRootStrg, *pDocument, RTL_TEXTENCODING_MS_1252 );
-        std::unique_ptr< ImportExcel > xFilter;
+        boost::scoped_ptr< ImportExcel > xFilter;
         switch( eBiff )
         {
             case EXC_BIFF2:

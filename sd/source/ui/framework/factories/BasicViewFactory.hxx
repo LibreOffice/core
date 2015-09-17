@@ -32,8 +32,9 @@
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <vcl/vclptr.hxx>
-#include <memory>
 
 namespace sd {
 class ViewShell;
@@ -99,17 +100,17 @@ private:
         mxConfigurationController;
     class ViewDescriptor;
     class ViewShellContainer;
-    std::unique_ptr<ViewShellContainer> mpViewShellContainer;
+    ::boost::scoped_ptr<ViewShellContainer> mpViewShellContainer;
     ViewShellBase* mpBase;
     FrameView* mpFrameView;
 
     class ViewCache;
     ScopedVclPtr<vcl::Window> mpWindow;
-    std::shared_ptr<ViewCache> mpViewCache;
+    ::boost::shared_ptr<ViewCache> mpViewCache;
 
     css::uno::Reference<css::drawing::framework::XPane> mxLocalPane;
 
-    std::shared_ptr<ViewDescriptor> CreateView (
+    ::boost::shared_ptr<ViewDescriptor> CreateView (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         SfxViewFrame& rFrame,
         vcl::Window& rWindow,
@@ -117,7 +118,7 @@ private:
         FrameView* pFrameView,
         const bool bIsCenterView);
 
-    std::shared_ptr<ViewShell> CreateViewShell (
+    ::boost::shared_ptr<ViewShell> CreateViewShell (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         SfxViewFrame& rFrame,
         vcl::Window& rWindow,
@@ -125,16 +126,16 @@ private:
         const bool bIsCenterView);
 
     void ActivateCenterView (
-        const std::shared_ptr<ViewDescriptor>& rpDescriptor);
+        const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor);
 
     void ReleaseView (
-        const std::shared_ptr<ViewDescriptor>& rpDescriptor,
+        const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor,
         bool bDoNotCache = false);
 
     bool IsCacheable (
-        const std::shared_ptr<ViewDescriptor>& rpDescriptor);
+        const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor);
 
-    std::shared_ptr<ViewDescriptor> GetViewFromCache (
+    ::boost::shared_ptr<ViewDescriptor> GetViewFromCache (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
 };

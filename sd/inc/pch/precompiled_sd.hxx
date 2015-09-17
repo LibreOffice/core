@@ -68,11 +68,16 @@
 #include <basic/sbstar.hxx>
 #include <basic/sbx.hxx>
 #include <boost/bind.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <boost/limits.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <canvas/canvastools.hxx>
 #include <canvas/elapsedtime.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

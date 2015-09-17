@@ -37,9 +37,9 @@
 #include <math.h>
 #include <float.h>
 #include <algorithm>
-#include <memory>
 #include <unordered_map>
 #include <boost/checked_delete.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
@@ -1505,7 +1505,7 @@ void ScDPResultMember::FillDataResults(
     ScDPResultFilterContext& rFilterCxt, uno::Sequence<uno::Sequence<sheet::DataResult> >& rSequence,
     long nMeasure) const
 {
-    std::unique_ptr<FilterStack> pFilterStack;
+    boost::scoped_ptr<FilterStack> pFilterStack;
     const ScDPMember* pDPMember = GetDPMember();
     if (pDPMember)
     {
@@ -2009,7 +2009,7 @@ void ScDPDataMember::FillDataRow(
     uno::Sequence<sheet::DataResult>& rSequence, long nMeasure, bool bIsSubTotalRow,
     const ScDPSubTotalState& rSubState) const
 {
-    std::unique_ptr<FilterStack> pFilterStack;
+    boost::scoped_ptr<FilterStack> pFilterStack;
     if (pResultMember)
     {
         // Topmost data member (pResultMember=NULL) doesn't need to be handled

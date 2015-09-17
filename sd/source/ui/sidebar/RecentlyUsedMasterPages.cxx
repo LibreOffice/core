@@ -152,9 +152,9 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
                     OUString(),
                     sName,
                     false,
-                    std::shared_ptr<PageObjectProvider>(
+                    ::boost::shared_ptr<PageObjectProvider>(
                         new TemplatePageObjectProvider(sURL)),
-                    std::shared_ptr<PreviewProvider>(
+                    ::boost::shared_ptr<PreviewProvider>(
                         new TemplatePreviewProvider(sURL))));
                 // For user supplied templates we use a different
                 // preview provider: The preview in the document shows
@@ -163,7 +163,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues()
                 // these previews are discarded and created directly
                 // from the page objects.
                 if (pDescriptor->GetURLClassification() == MasterPageDescriptor::URLCLASS_USER)
-                    pDescriptor->mpPreviewProvider = std::shared_ptr<PreviewProvider>(
+                    pDescriptor->mpPreviewProvider = ::boost::shared_ptr<PreviewProvider>(
                         new PagePreviewProvider());
                 MasterPageContainer::Token aToken (mpContainer->PutMasterPage(pDescriptor));
                 mvMasterPages.push_back(Descriptor(aToken,sURL,sName));

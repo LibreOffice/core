@@ -22,6 +22,7 @@
 
 #include "ShellFactory.hxx"
 #include <memory>
+#include <boost/shared_ptr.hpp>
 
 class FmFormShell;
 class SfxShell;
@@ -53,7 +54,7 @@ class ViewShellBase;
 class ViewShellManager
 {
 public:
-    typedef std::shared_ptr<ShellFactory<SfxShell> > SharedShellFactory;
+    typedef ::boost::shared_ptr<ShellFactory<SfxShell> > SharedShellFactory;
 
     ViewShellManager (ViewShellBase& rBase);
 
@@ -172,11 +173,11 @@ public:
     class UpdateLock
     {
     public:
-        UpdateLock (const std::shared_ptr<ViewShellManager>& rpManager)
+        UpdateLock (const ::boost::shared_ptr<ViewShellManager>& rpManager)
             : mpManager(rpManager) {mpManager->LockUpdate();}
         ~UpdateLock() {mpManager->UnlockUpdate();};
     private:
-        std::shared_ptr<ViewShellManager> mpManager;
+        ::boost::shared_ptr<ViewShellManager> mpManager;
     };
     friend class UpdateLock;
 

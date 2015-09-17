@@ -19,6 +19,7 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 #include <cmath>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>

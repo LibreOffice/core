@@ -34,8 +34,8 @@ MasterPageDescriptor::MasterPageDescriptor (
     const OUString& rsPageName,
     const OUString& rsStyleName,
     const bool bIsPrecious,
-    const std::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
-    const std::shared_ptr<PreviewProvider>& rpPreviewProvider)
+    const ::boost::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
+    const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider)
     : maToken(MasterPageContainer::NIL_TOKEN),
       meOrigin(eOrigin),
       msURL(INetURLObject(rsURL).GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS)),
@@ -196,7 +196,7 @@ int MasterPageDescriptor::UpdatePageObject (
             // will create the real one.
             maSmallPreview = Image();
             maLargePreview = Image();
-            mpPreviewProvider = std::shared_ptr<PreviewProvider>(new PagePreviewProvider());
+            mpPreviewProvider = ::boost::shared_ptr<PreviewProvider>(new PagePreviewProvider());
         }
         else
         {

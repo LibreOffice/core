@@ -28,7 +28,7 @@
 #include "rangenam.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 class ScRangeData;
 class ScTokenArray;
@@ -72,7 +72,7 @@ private:
     bool                mbVBName:1;     /// true = Visual Basic procedure or function.
     bool                mbMacro:1;      /// Whether it's a user-defined macro.
 
-    std::unique_ptr<TokenStrmData> mpTokensData;   /// For later conversion of token array.
+    boost::scoped_ptr<TokenStrmData> mpTokensData;   /// For later conversion of token array.
 };
 
 /** This buffer contains all internal defined names of the document.

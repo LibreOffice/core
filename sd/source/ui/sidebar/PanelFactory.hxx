@@ -28,9 +28,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <boost/noncopyable.hpp>
 #include <map>
-#include <memory>
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
+
 
 namespace sd {
     class ViewShellBase;

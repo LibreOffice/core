@@ -73,8 +73,8 @@
 #include "scopetools.hxx"
 
 #include "globalnames.hxx"
+#include <boost/scoped_ptr.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <memory>
 
 using namespace com::sun::star;
 
@@ -974,7 +974,7 @@ void ScDocument::UpdateReference(
     if (!ValidRange(rCxt.maRange))
         return;
 
-    std::unique_ptr<sc::ExpandRefsSwitch> pExpandRefsSwitch;
+    boost::scoped_ptr<sc::ExpandRefsSwitch> pExpandRefsSwitch;
     if (rCxt.isInserted())
         pExpandRefsSwitch.reset(new sc::ExpandRefsSwitch(*this, SC_MOD()->GetInputOptions().GetExpandRefs()));
 

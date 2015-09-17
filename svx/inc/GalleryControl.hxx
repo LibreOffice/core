@@ -24,6 +24,8 @@
 #include <tools/urlobj.hxx>
 #include "svx/svxdllapi.h"
 
+#include <boost/scoped_ptr.hpp>
+
 class SfxBindings;
 
 class Gallery;

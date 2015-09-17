@@ -27,7 +27,8 @@
 #include "glob.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
-#include <memory>
+#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class SdDrawDocument;
 class SfxRequest;
@@ -84,13 +85,13 @@ public:
     */
     void LateInit (const OUString& rsDefaultView);
 
-    std::shared_ptr<ViewShellManager> GetViewShellManager() const;
+    ::boost::shared_ptr<ViewShellManager> GetViewShellManager() const;
 
     /** Return the main view shell stacked on the called ViewShellBase
         object.  This is usually the view shell displayed in the center
         pane.
     */
-    std::shared_ptr<ViewShell> GetMainViewShell() const;
+    ::boost::shared_ptr<ViewShell> GetMainViewShell() const;
 
     /** When given a view frame this static method returns the
         corresponding sd::ViewShellBase object.
@@ -200,15 +201,15 @@ public:
         events from various sources.  This method must not be called before
         LateInit() has terminated.
     */
-    std::shared_ptr<tools::EventMultiplexer> GetEventMultiplexer();
+    ::boost::shared_ptr<tools::EventMultiplexer> GetEventMultiplexer();
 
     /** returns the complete area of the current view relative to the frame
         window
     */
     const Rectangle& getClientRectangle() const;
 
-    std::shared_ptr<ToolBarManager> GetToolBarManager() const;
-    std::shared_ptr<FormShellManager> GetFormShellManager() const;
+    ::boost::shared_ptr<ToolBarManager> GetToolBarManager() const;
+    ::boost::shared_ptr<FormShellManager> GetFormShellManager() const;
 
     DrawController& GetDrawController() const;
 
@@ -233,7 +234,7 @@ protected:
 
 private:
     class Implementation;
-    std::unique_ptr<Implementation> mpImpl;
+    ::boost::scoped_ptr<Implementation> mpImpl;
     DrawDocShell* mpDocShell;
     SdDrawDocument* mpDocument;
 

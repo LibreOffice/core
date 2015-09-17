@@ -11,8 +11,9 @@
 
 #include <iostream>
 #include <iomanip>
-#include <memory>
 #include <new>
+
+#include <boost/scoped_ptr.hpp>
 
 #include <sal/log.hxx>
 
@@ -701,7 +702,7 @@ getDBusBooleanProperty( DBusConnection *pConnection, DBusObject *pAdapter,
     *pBoolean = false;
     bool bRet = false;
 
-    std::unique_ptr< DBusObject > pProperties (
+    ::boost::scoped_ptr< DBusObject > pProperties (
             pAdapter->cloneForInterface( "org.freedesktop.DBus.Properties" ) );
 
     DBusMessage *pMsg = pProperties->getMethodCall( "Get" );
@@ -762,7 +763,7 @@ setDBusBooleanProperty( DBusConnection *pConnection, DBusObject *pAdapter,
 {
     assert( pAdapter );
 
-    std::unique_ptr< DBusObject > pProperties(
+    ::boost::scoped_ptr< DBusObject > pProperties(
             pAdapter->cloneForInterface( "org.freedesktop.DBus.Properties" ) );
 
     DBusMessage *pMsg = pProperties->getMethodCall( "Set" );

@@ -90,7 +90,7 @@ public:
     /** Add a user data object.  When it was added before (and not
         removed) then this call is ignored.
     */
-    void AddUserData (const std::shared_ptr<UserData>& rpData);
+    void AddUserData (const ::boost::shared_ptr<UserData>& rpData);
 
     /** Return the number of user data objects.
     */
@@ -100,7 +100,7 @@ public:
         valid, ie not in the range [0,count) then an empty pointer is
         returned.
     */
-    std::shared_ptr<UserData> GetUserData (const sal_Int32 nIndex) const;
+    ::boost::shared_ptr<UserData> GetUserData (const sal_Int32 nIndex) const;
 
 protected:
 
@@ -136,7 +136,7 @@ private:
     bool                            mbPageTransferable           : 1;
     bool                            mbPageTransferablePersistent : 1;
     bool                            mbIsUnoObj                  : 1;
-    ::std::vector<std::shared_ptr<UserData> > maUserData;
+    ::std::vector<boost::shared_ptr<UserData> > maUserData;
 
                                     SdTransferable( const SdTransferable& ) SAL_DELETED_FUNCTION;
     SdTransferable&                 operator=( const SdTransferable& ) SAL_DELETED_FUNCTION;

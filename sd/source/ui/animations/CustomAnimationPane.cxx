@@ -76,12 +76,12 @@
 #include "drawdoc.hxx"
 #include "app.hrc"
 
+#include <algorithm>
+
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
-
-#include <algorithm>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
@@ -741,7 +741,7 @@ void CustomAnimationPane::updateMotionPathTags()
 
     if( mxView.is() )
     {
-        std::shared_ptr<ViewShell> xViewShell( mrBase.GetMainViewShell() );
+        ::boost::shared_ptr<ViewShell> xViewShell( mrBase.GetMainViewShell() );
         if( xViewShell.get() )
             pView = xViewShell->GetView();
     }

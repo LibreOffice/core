@@ -20,11 +20,11 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLVIEW_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLVIEW_HXX
 
+#include <map>
 #include <tools/color.hxx>
 #include "ftools.hxx"
 #include "xladdress.hxx"
-#include <map>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 // Constants and enumerations =================================================
 
@@ -112,7 +112,7 @@ struct XclSelectionData
     inline explicit     XclSelectionData() : mnCursorIdx( 0 ) {}
 };
 
-typedef std::shared_ptr< XclSelectionData > XclSelectionDataRef;
+typedef boost::shared_ptr< XclSelectionData > XclSelectionDataRef;
 
 /** Contains all view settings for a single sheet. */
 struct XclTabViewData

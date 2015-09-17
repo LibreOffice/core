@@ -43,13 +43,13 @@ using ::std::vector;
 
 ScMenuFloatingWindow::MenuItemData::MenuItemData() :
     mbEnabled(true), mbSeparator(false),
-    mpAction(static_cast<ScCheckListMenuWindow::Action*>(nullptr)),
-    mpSubMenuWin(static_cast<ScMenuFloatingWindow*>(nullptr))
+    mpAction(static_cast<ScCheckListMenuWindow::Action*>(NULL)),
+    mpSubMenuWin(static_cast<ScMenuFloatingWindow*>(NULL))
 {
 }
 
 ScMenuFloatingWindow::SubMenuItemData::SubMenuItemData(ScMenuFloatingWindow* pParent) :
-    mpSubMenu(nullptr),
+    mpSubMenu(NULL),
     mnMenuPos(MENU_NOT_SELECTED),
     mpParent(pParent)
 {
@@ -59,7 +59,7 @@ ScMenuFloatingWindow::SubMenuItemData::SubMenuItemData(ScMenuFloatingWindow* pPa
 
 void ScMenuFloatingWindow::SubMenuItemData::reset()
 {
-    mpSubMenu = nullptr;
+    mpSubMenu = NULL;
     mnMenuPos = MENU_NOT_SELECTED;
     maTimer.Stop();
 }
@@ -491,7 +491,7 @@ void ScMenuFloatingWindow::handleMenuTimeout(SubMenuItemData* pTimer)
         if (maCloseTimer.mpSubMenu)
         {
             maCloseTimer.mpSubMenu->EndPopupMode();
-            maCloseTimer.mpSubMenu = nullptr;
+            maCloseTimer.mpSubMenu = NULL;
             maCloseTimer.maTimer.Stop();
         }
 
@@ -502,10 +502,10 @@ void ScMenuFloatingWindow::handleMenuTimeout(SubMenuItemData* pTimer)
         // end submenu.
         if (maCloseTimer.mpSubMenu)
         {
-            maOpenTimer.mpSubMenu = nullptr;
+            maOpenTimer.mpSubMenu = NULL;
 
             maCloseTimer.mpSubMenu->EndPopupMode();
-            maCloseTimer.mpSubMenu = nullptr;
+            maCloseTimer.mpSubMenu = NULL;
 
             Invalidate();
             maOpenTimer.mnMenuPos = MENU_NOT_SELECTED;
@@ -647,7 +647,7 @@ void ScMenuFloatingWindow::clearSelectedMenuItem()
 ScMenuFloatingWindow* ScMenuFloatingWindow::getSubMenuWindow(size_t nPos) const
 {
     if (maMenuItems.size() <= nPos)
-        return nullptr;
+        return NULL;
 
     return maMenuItems[nPos].mpSubMenuWin.get();
 }
@@ -849,7 +849,7 @@ ScCheckListMenuWindow::Member::Member()
     : mbVisible(true)
     , mbDate(false)
     , mbLeaf(false)
-    , mpParent(nullptr)
+    , mpParent(NULL)
 {
 }
 
@@ -883,9 +883,9 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
     maBtnOk(VclPtr<OKButton>::Create(this)),
     maBtnCancel(VclPtr<CancelButton>::Create(this)),
     mnCurTabStop(0),
-    mpExtendedData(nullptr),
-    mpOKAction(nullptr),
-    mpPopupEndAction(nullptr),
+    mpExtendedData(NULL),
+    mpOKAction(NULL),
+    mpPopupEndAction(NULL),
     maWndSize(),
     mePrevToggleAllState(TRISTATE_INDET)
 {
@@ -1397,17 +1397,17 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
 
     maChecks->SetUpdateMode(false);
 
-    SvTreeListEntry* pYearEntry = maChecks->FindEntry(nullptr, aYearName);
+    SvTreeListEntry* pYearEntry = maChecks->FindEntry(NULL, aYearName);
     if (!pYearEntry)
     {
-        pYearEntry = maChecks->InsertEntry(aYearName, nullptr, true);
+        pYearEntry = maChecks->InsertEntry(aYearName, NULL, true);
         Member aMemYear;
         aMemYear.maName = aYearName;
         aMemYear.maRealName = rsName;
         aMemYear.mbDate = true;
         aMemYear.mbLeaf = false;
         aMemYear.mbVisible = bVisible;
-        aMemYear.mpParent = nullptr;
+        aMemYear.mpParent = NULL;
         maMembers.push_back(aMemYear);
     }
 
@@ -1449,12 +1449,12 @@ void ScCheckListMenuWindow::addMember(const OUString& rName, bool bVisible)
     aMember.mbDate = false;
     aMember.mbLeaf = true;
     aMember.mbVisible = bVisible;
-    aMember.mpParent = nullptr;
+    aMember.mpParent = NULL;
     maMembers.push_back(aMember);
 }
 
 ScCheckListBox::ScCheckListBox( vcl::Window* pParent, WinBits nWinStyle )
-   :  SvTreeListBox( pParent, nWinStyle ), mpCheckButton( nullptr )
+   :  SvTreeListBox( pParent, nWinStyle ), mpCheckButton( NULL )
 {
     Init();
 }
@@ -1470,7 +1470,7 @@ SvTreeListEntry* ScCheckListBox::FindEntry( SvTreeListEntry* pParent, const OUSt
 
         pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
     }
-    return nullptr;
+    return NULL;
 }
 
 void ScCheckListBox::Init()
@@ -1554,7 +1554,7 @@ void ScCheckListBox::ShowCheckEntry( const OUString& sName, SvTreeListEntry* pPa
         if ( !pEntry )
         {
             pEntry = InsertEntry(
-                sName, nullptr, false, TREELIST_APPEND, nullptr,
+                sName, NULL, false, TREELIST_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox);
 
             SetCheckButtonState(
@@ -1578,13 +1578,13 @@ SvTreeListEntry* ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, 
         CountCheckedEntries( pEntry, nCount );
         pEntry = NextSibling( pEntry );
     }
-    return nullptr;
+    return NULL;
 }
 
 sal_uInt16 ScCheckListBox::GetCheckedEntryCount() const
 {
     sal_uLong nCount = 0;
-    CountCheckedEntries( nullptr,  nCount );
+    CountCheckedEntries( NULL,  nCount );
     return nCount;
 }
 
@@ -1636,7 +1636,7 @@ void ScCheckListMenuWindow::initMembers()
             // Expand first node of checked dates
             if (!maMembers[i].mpParent && maChecks->IsChecked(maMembers[i].maName,  maMembers[i].mpParent))
             {
-                SvTreeListEntry* pEntry = maChecks->FindEntry(nullptr, maMembers[i].maName);
+                SvTreeListEntry* pEntry = maChecks->FindEntry(NULL, maMembers[i].maName);
                 if (pEntry)
                     maChecks->Expand(pEntry);
             }
@@ -1647,7 +1647,7 @@ void ScCheckListMenuWindow::initMembers()
             if (aLabel.isEmpty())
                 aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
             SvTreeListEntry* pEntry = maChecks->InsertEntry(
-                aLabel, nullptr, false, TREELIST_APPEND, nullptr,
+                aLabel, NULL, false, TREELIST_APPEND, NULL,
                 SvLBoxButtonKind_enabledCheckbox);
 
             maChecks->SetCheckButtonState(

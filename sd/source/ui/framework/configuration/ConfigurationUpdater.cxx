@@ -60,8 +60,8 @@ private:
 //===== ConfigurationUpdater ==================================================
 
 ConfigurationUpdater::ConfigurationUpdater (
-    const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
-    const std::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
+    const ::boost::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
+    const ::boost::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
     const Reference<XControllerManager>& rxControllerManager)
     : mxControllerManager(),
       mpBroadcaster(rpBroadcaster),
@@ -355,9 +355,9 @@ void ConfigurationUpdater::UnlockUpdates()
     }
 }
 
-std::shared_ptr<ConfigurationUpdaterLock> ConfigurationUpdater::GetLock()
+::boost::shared_ptr<ConfigurationUpdaterLock> ConfigurationUpdater::GetLock()
 {
-    return std::shared_ptr<ConfigurationUpdaterLock>(new ConfigurationUpdaterLock(*this));
+    return ::boost::shared_ptr<ConfigurationUpdaterLock>(new ConfigurationUpdaterLock(*this));
 }
 
 void ConfigurationUpdater::SetUpdateBeingProcessed (bool bValue)

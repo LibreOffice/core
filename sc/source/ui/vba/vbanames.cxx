@@ -34,7 +34,7 @@
 #include "tokenarray.hxx"
 #include "cellsuno.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -156,7 +156,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
             ScAddress aBlank;
             ScCompiler aComp( getScDocument(), aBlank );
             aComp.SetGrammar( eGram );
-            std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString(sFormula));
+            boost::scoped_ptr<ScTokenArray> pTokens(aComp.CompileString(sFormula));
             if ( pTokens )
             {
                 ScRange aRange;

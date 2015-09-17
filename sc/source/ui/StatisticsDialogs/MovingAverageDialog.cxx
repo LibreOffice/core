@@ -63,7 +63,7 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(mDocument);
 
-    std::unique_ptr<DataRangeIterator> pIterator;
+    boost::scoped_ptr<DataRangeIterator> pIterator;
     if (mGroupedBy == BY_COLUMN)
         pIterator.reset(new DataRangeByColumnIterator(mInputRange));
     else

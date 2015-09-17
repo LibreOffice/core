@@ -25,7 +25,7 @@
 #include <com/sun/star/view/XRenderable.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -63,7 +63,7 @@ public:
 
 private:
     class Implementation;
-    std::unique_ptr<Implementation> mpImpl;
+    ::boost::scoped_ptr<Implementation> mpImpl;
 };
 
 } // end of namespace sd

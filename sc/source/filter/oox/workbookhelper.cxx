@@ -86,7 +86,7 @@
 #include <officecfg/Office/Calc.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace oox {
 namespace xls {
@@ -247,7 +247,7 @@ private:
     typedef ::std::unique_ptr< WorkbookSettings >       WorkbookSettPtr;
     typedef ::std::unique_ptr< ViewSettings >           ViewSettingsPtr;
     typedef ::std::unique_ptr< WorksheetBuffer >        WorksheetBfrPtr;
-    typedef ::std::shared_ptr< ThemeBuffer >          ThemeBfrRef;
+    typedef ::boost::shared_ptr< ThemeBuffer >          ThemeBfrRef;
     typedef ::std::unique_ptr< StylesBuffer >           StylesBfrPtr;
     typedef ::std::unique_ptr< SharedStringsBuffer >    SharedStrBfrPtr;
     typedef ::std::unique_ptr< ExternalLinkBuffer >     ExtLinkBfrPtr;
@@ -312,7 +312,7 @@ private:
     bool                mbHasCodePage;          /// True = CODEPAGE record exists in imported stream.
     ScDocument* mpDoc;
     ScDocShell* mpDocShell;
-    std::unique_ptr<ScDocumentImport> mxDocImport;
+    boost::scoped_ptr<ScDocumentImport> mxDocImport;
 };
 
 WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :

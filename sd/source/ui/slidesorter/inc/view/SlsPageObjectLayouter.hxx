@@ -135,7 +135,7 @@ private:
     Rectangle maCustomAnimationEffectBoundingBox;
     const Image maTransitionEffectIcon;
     const Image maCustomAnimationEffectIcon;
-    const std::shared_ptr<vcl::Font> mpPageNumberFont;
+    const boost::shared_ptr<vcl::Font> mpPageNumberFont;
 
     Size GetPageNumberAreaSize (const int nPageCount);
     Rectangle CalculatePreviewBoundingBox (

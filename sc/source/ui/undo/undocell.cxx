@@ -45,7 +45,7 @@
 #include "docuno.hxx"
 #include "stringutil.hxx"
 
-using std::shared_ptr;
+using ::boost::shared_ptr;
 
 namespace HelperNotifyChanges
 {

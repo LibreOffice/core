@@ -39,7 +39,7 @@ class LayerInvalidator : public ILayerInvalidator
 {
 public:
     LayerInvalidator (
-        const std::shared_ptr<LayeredDevice>& rpLayeredDevice,
+        const ::boost::shared_ptr<LayeredDevice>& rpLayeredDevice,
         sd::Window *pTargetWindow,
         const int nLayer)
         : mpLayeredDevice(rpLayeredDevice),
@@ -59,7 +59,7 @@ public:
     }
 
 private:
-    const std::shared_ptr<LayeredDevice> mpLayeredDevice;
+    const ::boost::shared_ptr<LayeredDevice> mpLayeredDevice;
     VclPtr<sd::Window> mpTargetWindow;
     const int mnLayer;
 };
@@ -129,7 +129,7 @@ private:
 
     void ValidateRectangle (const Rectangle& rBox);
 };
-typedef std::shared_ptr<Layer> SharedLayer;
+typedef ::boost::shared_ptr<Layer> SharedLayer;
 
 } // end of anonymous namespace
 

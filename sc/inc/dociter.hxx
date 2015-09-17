@@ -30,8 +30,11 @@
 #include <vcl/vclptr.hxx>
 
 #include <memory>
+
 #include <set>
 #include <vector>
+#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 class ScPatternAttr;
@@ -268,7 +271,7 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
     typedef sc::CellStoreType::const_position_type PositionType;
     PositionType maCurPos;
 
-    std::unique_ptr<ScQueryParam> mpParam;
+    boost::scoped_ptr<ScQueryParam> mpParam;
     ScDocument*     pDoc;
     const ScAttrArray*  pAttrArray;
     sal_uLong           nNumFormat;
@@ -584,7 +587,7 @@ public:
     struct TabRanges
     {
         SCTAB mnTab;
-        std::shared_ptr<ScFlatBoolRowSegments> mpRanges;
+        ::boost::shared_ptr<ScFlatBoolRowSegments> mpRanges;
 
         TabRanges(SCTAB nTab);
     };

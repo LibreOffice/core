@@ -192,7 +192,7 @@ ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource)
     , eMode(SC_UNO_COLLECT_NONE)
     , nFieldCount(0)
     , mnFieldType(text::textfield::Type::UNSPECIFIED)
-    , pFound(nullptr)
+    , pFound(NULL)
     , nFieldPar(0)
     , nFieldPos(0)
     , nFieldIndex(0)
@@ -280,7 +280,7 @@ ScCellFieldsObj::ScCellFieldsObj(
     mxContent(xContent),
     pDocShell( pDocSh ),
     aCellPos( rPos ),
-    mpRefreshListeners( nullptr )
+    mpRefreshListeners( NULL )
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 
@@ -320,7 +320,7 @@ void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
             static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = NULL;       // ungueltig geworden
     }
 
     //  EditSource hat sich selber als Listener angemeldet
@@ -467,7 +467,7 @@ void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util:
 
 ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterTextData& rData) :
     mrData(rData),
-    mpRefreshListeners( nullptr )
+    mpRefreshListeners( NULL )
 {
     mpEditSource = new ScHeaderFooterEditSource(rData);
 }
@@ -501,7 +501,7 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
 
     SvxFieldData* pData = aTempEngine.FindByIndex(static_cast<sal_uInt16>(Index));
     if (!pData)
-        return nullptr;
+        return NULL;
 
     // Get the parent text range instance.
     uno::Reference<text::XTextRange> xTextRange;
@@ -855,7 +855,7 @@ uno::Any ScEditFieldObj::getPropertyValueFile(const OUString& rName)
     if (rName == SC_UNONAME_FILEFORM)
     {
         SvxFileFormat eFormat = SVXFILEFORMAT_NAME_EXT;
-        const SvxFieldData* pField = nullptr;
+        const SvxFieldData* pField = NULL;
         if (mpEditSource)
         {
             ScEditEngineDefaulter* pEditEngine = mpEditSource->GetEditEngine();
@@ -1134,10 +1134,10 @@ ScEditFieldObj::ScEditFieldObj(
     const uno::Reference<text::XTextRange>& rContent,
     ScEditSource* pEditSrc, sal_Int32 eType, const ESelection& rSel) :
     OComponentHelper(getMutex()),
-    pPropSet(nullptr),
+    pPropSet(NULL),
     mpEditSource(pEditSrc),
     aSelection(rSel),
-    meType(eType), mpData(nullptr), mpContent(rContent), mnNumFormat(0), mbIsDate(false), mbIsFixed(false)
+    meType(eType), mpData(NULL), mpContent(rContent), mnNumFormat(0), mbIsDate(false), mbIsFixed(false)
 {
     switch (meType)
     {
@@ -1205,7 +1205,7 @@ void ScEditFieldObj::DeleteField()
 
 bool ScEditFieldObj::IsInserted() const
 {
-    return mpEditSource != nullptr;
+    return mpEditSource != NULL;
 }
 
 // XTextField
@@ -1411,7 +1411,7 @@ const uno::Sequence<sal_Int8>& ScEditFieldObj::getUnoTunnelId()
 
 ScEditFieldObj* ScEditFieldObj::getImplementation(const uno::Reference<text::XTextContent>& xObj)
 {
-    ScEditFieldObj* pRet = nullptr;
+    ScEditFieldObj* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
         pRet = reinterpret_cast<ScEditFieldObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));

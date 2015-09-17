@@ -57,6 +57,7 @@
 #include <unotools/pathoptions.hxx>
 #include "svtools/treelistentry.hxx"
 #include <officecfg/Office/Recovery.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace svx{
     namespace DocRecovery{

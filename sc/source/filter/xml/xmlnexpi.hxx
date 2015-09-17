@@ -24,7 +24,7 @@
 #include "address.hxx"
 #include "xmlimprt.hxx"
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 struct ScMyNamedExpression;
 class ScRangeName;
@@ -87,7 +87,7 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 
 private:
-    std::shared_ptr<Inserter> mpInserter;
+    ::boost::shared_ptr<Inserter> mpInserter;
 };
 
 class ScXMLNamedRangeContext : public SvXMLImportContext

@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 #include <unordered_map>
 
 class ScOutlineArray;
@@ -79,9 +79,9 @@ class ScXMLExport : public SvXMLExport
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xSourceStream;
     sal_Int32                   nSourceStreamPos;
 
-    mutable std::unique_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
-    std::unique_ptr<ScMyNotEmptyCellsIterator> mpCellsItr;
-    std::unique_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
+    mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
+    boost::scoped_ptr<ScMyNotEmptyCellsIterator> mpCellsItr;
+    boost::scoped_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
     rtl::Reference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     rtl::Reference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
     rtl::Reference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;

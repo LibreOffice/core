@@ -306,7 +306,7 @@ protected:
     virtual bool ProcessDragEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
 
 private:
-    std::unique_ptr<DragAndDropContext> mpDragAndDropContext;
+    ::boost::scoped_ptr<DragAndDropContext> mpDragAndDropContext;
 };
 
 //===== SelectionFunction =====================================================
@@ -683,7 +683,7 @@ void SelectionFunction::ProcessEvent (EventDescriptor& rDescriptor)
     // The call to ProcessEvent may switch to another mode handler.
     // Prevent the untimely destruction of the called handler  by acquiring a
     // temporary reference here.
-    std::shared_ptr<ModeHandler> pModeHandler (mpModeHandler);
+    ::boost::shared_ptr<ModeHandler> pModeHandler (mpModeHandler);
     pModeHandler->ProcessEvent(rDescriptor);
 }
 
@@ -697,7 +697,7 @@ bool Match (
 void SelectionFunction::SwitchToNormalMode()
 {
     if (mpModeHandler->GetMode() != NormalMode)
-        SwitchMode(std::shared_ptr<ModeHandler>(
+        SwitchMode(::boost::shared_ptr<ModeHandler>(
             new NormalModeHandler(mrSlideSorter, *this)));
 }
 
@@ -706,7 +706,7 @@ void SelectionFunction::SwitchToDragAndDropMode (const Point& rMousePosition)
     if (mpModeHandler->GetMode() != DragAndDropMode)
     {
 #ifndef MACOSX
-        std::shared_ptr<DragAndDropModeHandler> handler(
+        ::boost::shared_ptr<DragAndDropModeHandler> handler(
             new DragAndDropModeHandler(mrSlideSorter, *this));
         SwitchMode(handler);
         // Delayed initialization, only after mpModeHanler is set, otherwise DND initialization
@@ -714,7 +714,7 @@ void SelectionFunction::SwitchToDragAndDropMode (const Point& rMousePosition)
         // and without mpModeHandler set it would again try to set a new handler.
         handler->Initialize(rMousePosition, mpWindow);
 #else
-        SwitchMode(std::shared_ptr<ModeHandler>(
+        SwitchMode(::boost::shared_ptr<ModeHandler>(
             new DragAndDropModeHandler(mrSlideSorter, *this, rMousePosition, mpWindow)));
 #endif
     }
@@ -727,7 +727,7 @@ void SelectionFunction::SwitchToMultiSelectionMode (
     if (mpModeHandler->GetMode() != MultiSelectionMode)
 #ifndef MACOSX
     {
-        std::shared_ptr<MultiSelectionModeHandler> handler(
+        ::boost::shared_ptr<MultiSelectionModeHandler> handler(
             new MultiSelectionModeHandler(mrSlideSorter, *this, rMousePosition));
         SwitchMode(handler);
         // Delayed initialization, only after mpModeHanler is set, the handle ctor
@@ -735,12 +735,12 @@ void SelectionFunction::SwitchToMultiSelectionMode (
         handler->Initialize(nEventCode);
     }
 #else
-        SwitchMode(std::shared_ptr<ModeHandler>(
+        SwitchMode(::boost::shared_ptr<ModeHandler>(
             new MultiSelectionModeHandler(mrSlideSorter, *this, rMousePosition, nEventCode)));
 #endif
 }
 
-void SelectionFunction::SwitchMode (const std::shared_ptr<ModeHandler>& rpHandler)
+void SelectionFunction::SwitchMode (const ::boost::shared_ptr<ModeHandler>& rpHandler)
 {
     // Not all modes allow mouse over indicator.
     if (mpModeHandler->IsMouseOverIndicatorAllowed() != rpHandler->IsMouseOverIndicatorAllowed())
@@ -765,8 +765,8 @@ void SelectionFunction::ResetMouseAnchor()
 {
     if (mpModeHandler && mpModeHandler->GetMode() == NormalMode)
     {
-        std::shared_ptr<NormalModeHandler> pHandler (
-            std::dynamic_pointer_cast<NormalModeHandler>(mpModeHandler));
+        ::boost::shared_ptr<NormalModeHandler> pHandler (
+            ::boost::dynamic_pointer_cast<NormalModeHandler>(mpModeHandler));
         if (pHandler)
             pHandler->ResetButtonDownLocation();
     }
@@ -1120,7 +1120,7 @@ bool NormalModeHandler::ProcessButtonDownEvent (
             // Insert a new slide:
             // First of all we need to set the insertion indicator which sets the
             // position where the new slide will be inserted.
-            std::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler
+            ::boost::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler
                 = mrSlideSorter.GetController().GetInsertionIndicatorHandler();
 
             pInsertionIndicatorHandler->Start(false);

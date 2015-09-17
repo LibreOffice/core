@@ -24,7 +24,7 @@
 #include "ViewShellBase.hxx"
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>
-#include <memory>
+#include <boost/enable_shared_from_this.hpp>
 
 namespace sd {
 
@@ -37,7 +37,7 @@ namespace sd {
     opportunity to show or hide depending on the number of available displays.
 */
 class SlideShowRestarter
-    : public std::enable_shared_from_this<SlideShowRestarter>
+    : public boost::enable_shared_from_this<SlideShowRestarter>
 {
 public:
     /** Create a new SlideShowRestarter object.
@@ -64,7 +64,7 @@ private:
     ImplSVEvent * mnEventId;
     ::rtl::Reference<SlideShow> mpSlideShow;
     ViewShellBase* mpViewShellBase;
-    ::std::shared_ptr<SlideShowRestarter> mpSelf;
+    ::boost::shared_ptr<SlideShowRestarter> mpSelf;
     sal_Int32 mnDisplayCount;
     SfxDispatcher* mpDispatcher;
     sal_Int32 mnCurrentSlideNumber;

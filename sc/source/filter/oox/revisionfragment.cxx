@@ -27,7 +27,7 @@
 #include <chgviset.hxx>
 #include <richstringcontext.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/util/DateTime.hpp>
 
@@ -266,7 +266,7 @@ void RevisionHeadersFragment::finalizeImport()
         const RevisionMetadata& rData = it->second;
         pCT->SetUser(rData.maUserName);
         pCT->SetFixDateTimeLocal(rData.maDateTime);
-        std::unique_ptr<oox::core::FastParser> xParser(getOoxFilter().createParser());
+        boost::scoped_ptr<oox::core::FastParser> xParser(getOoxFilter().createParser());
         rtl::Reference<oox::core::FragmentHandler> xFragment(new RevisionLogFragment(*this, aPath, *pCT));
         importOoxFragment(xFragment, *xParser);
     }

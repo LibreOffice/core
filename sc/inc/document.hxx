@@ -45,6 +45,8 @@
 #include <set>
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "markdata.hxx"
 
@@ -273,7 +275,7 @@ friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;
 friend class sc::FormulaGroupAreaListener;
 
-    typedef std::vector<ScTable*> TableContainer;
+    typedef ::std::vector<ScTable*> TableContainer;
 
 public:
     enum HardRecalcState
@@ -287,9 +289,9 @@ private:
 
     rtl::Reference<ScPoolHelper> xPoolHelper;
 
-    std::shared_ptr<svl::SharedStringPool> mpCellStringPool;
-    std::unique_ptr<sc::FormulaGroupContext> mpFormulaGroupCxt;
-    mutable std::unique_ptr<sc::DocumentLinkManager> mpDocLinkMgr;
+    boost::shared_ptr<svl::SharedStringPool> mpCellStringPool;
+    boost::scoped_ptr<sc::FormulaGroupContext> mpFormulaGroupCxt;
+    mutable boost::scoped_ptr<sc::DocumentLinkManager> mpDocLinkMgr;
 
     ScCalcConfig        maCalcConfig;
 
@@ -331,14 +333,14 @@ private:
 
     ScFieldEditEngine*  pCacheFieldEditEngine;
 
-    std::unique_ptr<ScDocProtection> pDocProtection;
-    std::unique_ptr<ScClipParam>     mpClipParam;
+    ::std::unique_ptr<ScDocProtection> pDocProtection;
+    ::std::unique_ptr<ScClipParam>     mpClipParam;
 
-    std::unique_ptr<ScExternalRefManager> pExternalRefMgr;
-    std::unique_ptr<ScMacroManager> mpMacroMgr;
+    ::std::unique_ptr<ScExternalRefManager> pExternalRefMgr;
+    ::std::unique_ptr<ScMacroManager> mpMacroMgr;
 
     // mutable for lazy construction
-    mutable std::unique_ptr< ScFormulaParserPool >
+    mutable ::std::unique_ptr< ScFormulaParserPool >
                         mxFormulaParserPool;            /// Pool for all external formula parsers used by this document.
 
     OUString       aDocName;                       // optional: name of document
@@ -467,7 +469,7 @@ private:
 
     sal_Int16           mnNamedRangesLockCount;
 
-    std::set<ScFormulaCell*> maSubTotalCells;
+    ::std::set<ScFormulaCell*> maSubTotalCells;
 
     bool                mbUseEmbedFonts;
 
@@ -589,8 +591,8 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > GetChartByName( const OUString& rChartName );
 
-    SC_DLLPUBLIC void            GetChartRanges( const OUString& rChartName, std::vector< ScRangeList >& rRanges, ScDocument* pSheetNameDoc );
-    void            SetChartRanges( const OUString& rChartName, const std::vector< ScRangeList >& rRanges );
+    SC_DLLPUBLIC void            GetChartRanges( const OUString& rChartName, ::std::vector< ScRangeList >& rRanges, ScDocument* pSheetNameDoc );
+    void            SetChartRanges( const OUString& rChartName, const ::std::vector< ScRangeList >& rRanges );
 
     void            UpdateChartArea( const OUString& rChartName, const ScRange& rNewArea,
                                         bool bColHeaders, bool bRowHeaders, bool bAdd );
@@ -1601,8 +1603,8 @@ public:
     SC_DLLPUBLIC sal_uInt8          GetColFlags( SCCOL nCol, SCTAB nTab ) const;
     SC_DLLPUBLIC sal_uInt8          GetRowFlags( SCROW nRow, SCTAB nTab ) const;
 
-    SC_DLLPUBLIC void           GetAllRowBreaks(std::set<SCROW>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const;
-    SC_DLLPUBLIC void           GetAllColBreaks(std::set<SCCOL>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const;
+    SC_DLLPUBLIC void           GetAllRowBreaks(::std::set<SCROW>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const;
+    SC_DLLPUBLIC void           GetAllColBreaks(::std::set<SCCOL>& rBreaks, SCTAB nTab, bool bPage, bool bManual) const;
     SC_DLLPUBLIC ScBreakType    HasRowBreak(SCROW nRow, SCTAB nTab) const;
     SC_DLLPUBLIC ScBreakType    HasColBreak(SCCOL nCol, SCTAB nTab) const;
     SC_DLLPUBLIC void           SetRowBreak(SCROW nRow, SCTAB nTab, bool bPage, bool bManual);

@@ -26,8 +26,8 @@
 #include <osl/mutex.hxx>
 
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include <map>
-#include <memory>
 #include <vector>
 
 namespace sd { namespace framework {
@@ -58,8 +58,8 @@ public:
         resources.
     */
     ConfigurationControllerResourceManager (
-        const std::shared_ptr<ResourceFactoryManager>& rpResourceFactoryContainer,
-        const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster);
+        const ::boost::shared_ptr<ResourceFactoryManager>& rpResourceFactoryContainer,
+        const ::boost::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster);
 
     ~ConfigurationControllerResourceManager();
 
@@ -108,12 +108,12 @@ private:
         ResourceComparator> ResourceMap;
     ResourceMap maResourceMap;
 
-    std::shared_ptr<ResourceFactoryManager> mpResourceFactoryContainer;
+    ::boost::shared_ptr<ResourceFactoryManager> mpResourceFactoryContainer;
 
     /** This broadcaster is used to notify the activation and deactivation
         of resources.
     */
-    std::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
+    ::boost::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
 
     void ActivateResource (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,

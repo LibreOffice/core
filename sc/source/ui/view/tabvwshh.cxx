@@ -38,6 +38,8 @@
 #include "retypepassdlg.hxx"
 #include "tabprotection.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace com::sun::star;
 
 void ScTabViewShell::ExecuteSbx( SfxRequest& /* rReq */ )

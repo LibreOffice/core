@@ -67,7 +67,7 @@
 #include <comphelper/string.hxx>
 #include "scabstdlg.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 static sal_uInt16 lcl_ParseRange(ScRange& rScRange, const OUString& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
 {
@@ -659,7 +659,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     SfxItemSet      aSet     ( GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
                     SvxZoomItem     aZoomItem( eOldZoomType, nOldZoom, SID_ATTR_ZOOM );
-                    std::unique_ptr<AbstractSvxZoomDialog> pDlg;
+                    boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
                     ScMarkData&     rMark = GetViewData().GetMarkData();
                     SvxZoomEnableFlags nBtnFlags = SvxZoomEnableFlags::N50
                                                 | SvxZoomEnableFlags::N75
@@ -802,7 +802,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                std::unique_ptr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
+                boost::scoped_ptr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 pDlg->SetDescription(
                     OUString( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),

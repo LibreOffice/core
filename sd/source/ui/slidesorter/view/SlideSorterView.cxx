@@ -287,8 +287,8 @@ void SlideSorterView::HandleDataChangeEvent()
     GetPageObjectPainter()->SetTheme(mrSlideSorter.GetTheme());
 
     // Update the color used by the background painter.
-    std::shared_ptr<BackgroundPainter> pPainter (
-        std::dynamic_pointer_cast<BackgroundPainter>(mpBackgroundPainter));
+    ::boost::shared_ptr<BackgroundPainter> pPainter (
+        ::boost::dynamic_pointer_cast<BackgroundPainter>(mpBackgroundPainter));
     if (pPainter)
         pPainter->SetColor(mrSlideSorter.GetTheme()->GetColor(Theme::Color_Background));
 
@@ -417,7 +417,7 @@ void SlideSorterView::Layout ()
         pWindow->SetViewOrigin (aViewBox.TopLeft());
         pWindow->SetViewSize (aViewBox.GetSize());
 
-        std::shared_ptr<PageObjectLayouter> pPageObjectLayouter(
+        ::boost::shared_ptr<PageObjectLayouter> pPageObjectLayouter(
             mpLayouter->GetPageObjectLayouter());
         if (pPageObjectLayouter)
         {
@@ -509,7 +509,7 @@ void SlideSorterView::UpdatePreciousFlags()
         mbPreciousFlagUpdatePending = false;
 
         model::SharedPageDescriptor pDescriptor;
-        std::shared_ptr<cache::PageCache> pCache = GetPreviewCache();
+        ::boost::shared_ptr<cache::PageCache> pCache = GetPreviewCache();
         sal_Int32 nPageCount (mrModel.GetPageCount());
 
         for (int nIndex=0; nIndex<=nPageCount; ++nIndex)
@@ -698,7 +698,7 @@ void SlideSorterView::ConfigurationChanged (
 
 }
 
-std::shared_ptr<cache::PageCache> SlideSorterView::GetPreviewCache()
+::boost::shared_ptr<cache::PageCache> SlideSorterView::GetPreviewCache()
 {
     sd::Window *pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow && mpPreviewCache.get() == NULL)
@@ -841,7 +841,7 @@ bool SlideSorterView::SetState (
     return bModified;
 }
 
-std::shared_ptr<PageObjectPainter> SlideSorterView::GetPageObjectPainter()
+::boost::shared_ptr<PageObjectPainter> SlideSorterView::GetPageObjectPainter()
 {
     if ( ! mpPageObjectPainter)
         mpPageObjectPainter.reset(new PageObjectPainter(mrSlideSorter));

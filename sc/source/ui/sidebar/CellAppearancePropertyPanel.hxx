@@ -22,7 +22,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 class FixedText;
 namespace svx { namespace sidebar {
@@ -83,7 +83,7 @@ private:
     VclPtr<ToolBox>                                mpTBCellBorder;
     VclPtr<ToolBox>                                mpTBLineStyle;
     VclPtr<ToolBox>                                mpTBLineColor;
-    std::unique_ptr< CellBorderUpdater > mpCellBorderUpdater;
+    ::boost::scoped_ptr< CellBorderUpdater > mpCellBorderUpdater;
 
     ::sfx2::sidebar::ControllerItem         maLineStyleControl;
     ::sfx2::sidebar::ControllerItem         maBorderOuterControl;
@@ -133,8 +133,8 @@ private:
     bool                                    mbBLTR : 1;
 
     // popups
-    std::unique_ptr< CellLineStylePopup > mpCellLineStylePopup;
-    std::unique_ptr< CellBorderStylePopup > mpCellBorderStylePopup;
+    ::boost::scoped_ptr< CellLineStylePopup > mpCellLineStylePopup;
+    ::boost::scoped_ptr< CellBorderStylePopup > mpCellBorderStylePopup;
 
     css::uno::Reference<css::frame::XFrame>     mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;

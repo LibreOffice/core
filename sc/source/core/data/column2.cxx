@@ -67,8 +67,8 @@
 #include <formula/errorcodes.hxx>
 #include <formula/vectortoken.hxx>
 
+#include <boost/scoped_ptr.hpp>
 #include <algorithm>
-#include <memory>
 
 // factor from font size to optimal cell height (text width)
 #define SC_ROT_BREAK_FACTOR     6
@@ -368,7 +368,7 @@ long ScColumn::GetNeededSize(
         SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
         if ( ScStyleSheet* pPreviewStyle = pDocument->GetPreviewCellStyle( nCol, nRow, nTab ) )
         {
-            std::unique_ptr<ScPatternAttr> pPreviewPattern(new ScPatternAttr( *pPattern ));
+            boost::scoped_ptr<ScPatternAttr> pPreviewPattern(new ScPatternAttr( *pPattern ));
             pPreviewPattern->SetStyleSheet(pPreviewStyle);
             pPreviewPattern->FillEditItemSet( pSet, pCondSet );
         }
@@ -1054,7 +1054,7 @@ public:
 
 class RemoveEditAttribsHandler : public StrEntries
 {
-    std::unique_ptr<ScFieldEditEngine> mpEngine;
+    boost::scoped_ptr<ScFieldEditEngine> mpEngine;
 
 public:
     RemoveEditAttribsHandler(sc::CellStoreType& rCells, ScDocument* pDoc) : StrEntries(rCells, pDoc) {}

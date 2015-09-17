@@ -60,7 +60,7 @@
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -202,7 +202,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
     CheckLineTo (rReq);
 
     SfxBindings&    rBindings = GetViewFrame()->GetBindings();
-    std::unique_ptr<SfxItemSet> pAttr(new SfxItemSet ( GetDoc()->GetPool() ));
+    boost::scoped_ptr<SfxItemSet> pAttr(new SfxItemSet ( GetDoc()->GetPool() ));
 
     GetView()->GetAttributes( *pAttr );
     const SfxItemSet* pArgs = rReq.GetArgs();

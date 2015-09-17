@@ -78,7 +78,7 @@
 #include <rowheightcontext.hxx>
 #include <docfuncutil.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
 {
@@ -626,7 +626,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
         bool bSimple = false;
         bool bCommon = false;
-        std::unique_ptr<ScPatternAttr> pCellAttrs;
+        boost::scoped_ptr<ScPatternAttr> pCellAttrs;
         OUString aString;
 
         const ScPatternAttr* pOldPattern = rDoc.GetPattern( nCol, nRow, nTab );
@@ -1201,7 +1201,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         }
 
         aChangeRanges.Append(aPos);
-        std::unique_ptr<ScPatternAttr> pOldPat(new ScPatternAttr(*rDoc.GetPattern( nCol, nRow, nTab )));
+        boost::scoped_ptr<ScPatternAttr> pOldPat(new ScPatternAttr(*rDoc.GetPattern( nCol, nRow, nTab )));
 
         rDoc.ApplyPattern( nCol, nRow, nTab, rAttr );
 

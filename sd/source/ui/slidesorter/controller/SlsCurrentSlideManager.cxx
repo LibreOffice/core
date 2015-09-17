@@ -190,8 +190,8 @@ void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescripto
     ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
     if (pBase != NULL)
     {
-        std::shared_ptr<DrawViewShell> pDrawViewShell (
-            std::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
+        ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+            ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
         if (pDrawViewShell)
         {
             sal_uInt16 nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;

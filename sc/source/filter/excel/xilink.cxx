@@ -75,7 +75,7 @@ public:
     void                LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheTable);
 
 private:
-    typedef std::shared_ptr< XclImpCrn > XclImpCrnRef;
+    typedef boost::shared_ptr< XclImpCrn > XclImpCrnRef;
     typedef std::vector< XclImpCrnRef > XclImpCrnList;
 
     XclImpCrnList       maCrnList;      /// List of CRN records (cached cell values).

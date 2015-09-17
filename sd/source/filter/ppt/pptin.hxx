@@ -25,7 +25,7 @@
 #include <diadef.h>
 #include <svx/svdtypes.hxx>
 #include <com/sun/star/uno/Any.h>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 class SdDrawDocument;
 class SfxMedium;
@@ -41,7 +41,7 @@ class SdAnimationInfo;
 struct PptInteractiveInfoAtom;
 class Ppt97Animation;
 
-typedef std::shared_ptr< Ppt97Animation > Ppt97AnimationPtr;
+typedef boost::shared_ptr< Ppt97Animation > Ppt97AnimationPtr;
 typedef ::std::map < SdrObject*, Ppt97AnimationPtr > tAnimationMap;
 typedef std::vector< std::pair< SdrObject*, Ppt97AnimationPtr > > tAnimationVector;
 

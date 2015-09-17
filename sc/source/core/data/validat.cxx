@@ -51,7 +51,7 @@
 #include "scmatrix.hxx"
 
 #include <math.h>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace formula;
 
@@ -812,7 +812,7 @@ bool ScValidationData::FillSelectionList(std::vector<ScTypedStrData>& rStrColl, 
 
     if( HasSelectionList() )
     {
-        std::unique_ptr<ScTokenArray> pTokArr( CreateTokenArry(0) );
+        boost::scoped_ptr<ScTokenArray> pTokArr( CreateTokenArry(0) );
 
         // *** try if formula is a string list ***
 
@@ -865,7 +865,7 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
         5)  A formula resulting in a cell/range reference or matrix/array.
     */
 
-    std::unique_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
+    boost::scoped_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
 
     // *** try if formula is a string list ***
 

@@ -69,7 +69,7 @@
 #include "DrawController.hxx"
 
 #include <boost/bind.hpp>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -553,7 +553,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         }
         else
         {
-            std::unique_ptr<SvxZoomItem> pZoomItem;
+            boost::scoped_ptr<SvxZoomItem> pZoomItem;
             sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
 
             if( mbZoomOnPage )

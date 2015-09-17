@@ -89,7 +89,7 @@ private:
     typedef ::std::vector<Descriptor> MasterPageList;
     MasterPageList mvMasterPages;
     unsigned long int mnMaxListSize;
-    std::shared_ptr<MasterPageContainer> mpContainer;
+    ::boost::shared_ptr<MasterPageContainer> mpContainer;
 
     RecentlyUsedMasterPages();
     virtual ~RecentlyUsedMasterPages();

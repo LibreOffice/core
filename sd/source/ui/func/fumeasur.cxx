@@ -25,7 +25,7 @@
 #include "drawdoc.hxx"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -58,7 +58,7 @@ void FuMeasureDlg::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractDialog> pDlg( pFact ? pFact->CreateSfxDialog( NULL, aNewAttr, mpView, RID_SVXPAGE_MEASURE) : 0 );
+        boost::scoped_ptr<SfxAbstractDialog> pDlg( pFact ? pFact->CreateSfxDialog( NULL, aNewAttr, mpView, RID_SVXPAGE_MEASURE) : 0 );
 
         if( pDlg.get() && (pDlg->Execute() == RET_OK) )
         {

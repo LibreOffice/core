@@ -57,7 +57,7 @@
 #include <map>
 #include <cstdio>
 #include <boost/checked_delete.hpp>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace formula;
@@ -549,7 +549,7 @@ void ScColumn::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
 void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet& rStyle )
 {
     const ScPatternAttr* pPattern = pAttrArray->GetPattern(nRow);
-    std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pPattern));
+    boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pPattern));
     if (pNewPattern)
     {
         pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(&rStyle));
@@ -702,7 +702,7 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
     ScDocumentPool* pDocPool = pDocument->GetPool();
 
     const ScPatternAttr* pOldPattern = pAttrArray->GetPattern( nRow );
-    std::unique_ptr<ScPatternAttr> pTemp(new ScPatternAttr(*pOldPattern));
+    boost::scoped_ptr<ScPatternAttr> pTemp(new ScPatternAttr(*pOldPattern));
     pTemp->GetItemSet().Put(rAttr);
     const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pDocPool->Put( *pTemp ) );
 
@@ -1657,7 +1657,7 @@ void ScColumn::CopyToColumn(
                 const ScStyleSheet* pStyle =
                     rColumn.pAttrArray->GetPattern( nRow )->GetStyleSheet();
                 const ScPatternAttr* pPattern = pAttrArray->GetPattern( nRow );
-                std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pPattern ));
+                boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pPattern ));
                 pNewPattern->SetStyleSheet( const_cast<ScStyleSheet*>(pStyle) );
                 rColumn.pAttrArray->SetPattern( nRow, pNewPattern.get(), true );
             }
@@ -2058,7 +2058,7 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
         ScFormulaCell** ppEnd = pp + rGroup.mnLength;
         ScFormulaCell* pTop = *pp;
         ScTokenArray* pCode = pTop->GetCode();
-        std::unique_ptr<ScTokenArray> pOldCode(pCode->Clone());
+        boost::scoped_ptr<ScTokenArray> pOldCode(pCode->Clone());
         ScAddress aOldPos = pTop->aPos;
 
         // Run this before the position gets updated.
@@ -2128,7 +2128,7 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
         ScFormulaCell** ppEnd = pp + rGroup.mnLength;
         ScFormulaCell* pTop = *pp;
         ScTokenArray* pCode = pTop->GetCode();
-        std::unique_ptr<ScTokenArray> pOldCode(pCode->Clone());
+        boost::scoped_ptr<ScTokenArray> pOldCode(pCode->Clone());
 
         ScAddress aPos = pTop->aPos;
         ScAddress aOldPos = aPos;
@@ -2164,7 +2164,7 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
 
             // Make sure that the start and end listening contexts share the
             // same block position set, else an invalid iterator may ensue.
-            std::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(
+            boost::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(
                 new sc::ColumnBlockPositionSet(mpCxt->mrDoc));
 
             sc::StartListeningContext aStartCxt(mpCxt->mrDoc, pPosSet);

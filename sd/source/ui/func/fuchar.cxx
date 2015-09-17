@@ -34,7 +34,7 @@
 #include "ViewShell.hxx"
 #include "DrawDocShell.hxx"
 #include "sdabstdlg.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -71,7 +71,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
         aNewAttr.Put( aEditAttr, false );
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdTabCharDialog( NULL, &aNewAttr, mpDoc->GetDocSh() ) : 0);
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdTabCharDialog( NULL, &aNewAttr, mpDoc->GetDocSh() ) : 0);
         sal_uInt16 nResult = RET_CANCEL;
         if( pDlg )
         {

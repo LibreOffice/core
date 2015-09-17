@@ -33,7 +33,7 @@
 #include "dbdata.hxx"
 #include "xmlimprt.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 class ScDBData;
 struct ScQueryParam;
@@ -68,7 +68,7 @@ struct ScSubTotalRule
 
 class ScXMLDatabaseRangeContext : public SvXMLImportContext
 {
-    std::unique_ptr<ScQueryParam> mpQueryParam;
+    boost::scoped_ptr<ScQueryParam> mpQueryParam;
     ScRange maRange;
     OUString   sDatabaseRangeName;
     OUString   sConnectionResource;

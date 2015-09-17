@@ -24,7 +24,7 @@
 #include "xlname.hxx"
 #include "xlformula.hxx"
 #include "xeroot.hxx"
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 class ScRangeList;
 class XclExpNameManagerImpl;
@@ -68,7 +68,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    typedef std::shared_ptr< XclExpNameManagerImpl > XclExpNameMgrImplRef;
+    typedef boost::shared_ptr< XclExpNameManagerImpl > XclExpNameMgrImplRef;
     XclExpNameMgrImplRef mxImpl;
 };
 

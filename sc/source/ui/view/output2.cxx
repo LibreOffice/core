@@ -67,7 +67,7 @@
 #include <comphelper/string.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #include <math.h>
 
@@ -4442,7 +4442,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
 void ScOutputData::DrawEdit(bool bPixelToLogic)
 {
-    std::unique_ptr<ScFieldEditEngine> pEngine;
+    boost::scoped_ptr<ScFieldEditEngine> pEngine;
     bool bHyphenatorSet = false;
     const ScPatternAttr* pOldPattern = NULL;
     const SfxItemSet*    pOldCondSet = NULL;
@@ -4474,7 +4474,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
             long nPosX = 0;
             for (SCCOL nX=0; nX<=nX2; nX++)                     // due to overflow
             {
-                std::unique_ptr< ScPatternAttr > pPreviewPattr;
+                boost::scoped_ptr< ScPatternAttr > pPreviewPattr;
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
 
                 CellInfo*   pInfo = &pThisRowInfo->pCellInfo[nX+1];
@@ -4644,7 +4644,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
     bool bCellContrast = mbUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    std::unique_ptr<ScFieldEditEngine> pEngine;
+    boost::scoped_ptr<ScFieldEditEngine> pEngine;
     bool bHyphenatorSet = false;
     const ScPatternAttr* pPattern;
     const SfxItemSet*    pCondSet;

@@ -36,7 +36,7 @@
 #include "app.hrc"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -72,11 +72,11 @@ void FuLine::DoExecute( SfxRequest& rReq )
         if( rMarkList.GetMarkCount() == 1 )
             pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-        std::unique_ptr<SfxItemSet> pNewAttr(new SfxItemSet( mpDoc->GetPool() ));
+        boost::scoped_ptr<SfxItemSet> pNewAttr(new SfxItemSet( mpDoc->GetPool() ));
         mpView->GetAttributes( *pNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(NULL,pNewAttr.get(),mpDoc,pObj,bHasMarked) : 0);
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSvxLineTabDialog(NULL,pNewAttr.get(),mpDoc,pObj,bHasMarked) : 0);
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));

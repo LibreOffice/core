@@ -42,7 +42,7 @@
 #include "rangeutl.hxx"
 #include "tokenarray.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindings* _pBindings)
  : m_pDlg(_pDlg)
@@ -200,7 +200,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
             SCTAB nTab = pViewData->GetTabNo();
             ScAddress aPos( nCol, nRow, nTab );
 
-            std::unique_ptr<ScTokenArray> pScTokA(pRefComp->CompileString(rStr));
+            boost::scoped_ptr<ScTokenArray> pScTokA(pRefComp->CompileString(rStr));
 
             if (pTabViewShell && pScTokA)
             {

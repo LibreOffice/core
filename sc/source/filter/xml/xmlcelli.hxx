@@ -28,9 +28,9 @@
 #include <editeng/flditem.hxx>
 
 #include <boost/optional.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
-#include <memory>
 
 class ScXMLImport;
 class ScFormulaCell;
@@ -72,7 +72,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     ParaFormatsType maFormats;
     FieldsType maFields;
 
-    std::unique_ptr< ScXMLAnnotationData > mxAnnotationData;
+    boost::scoped_ptr< ScXMLAnnotationData > mxAnnotationData;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
     ScMyImpCellRangeSource* pCellRangeSource;
     double      fValue;

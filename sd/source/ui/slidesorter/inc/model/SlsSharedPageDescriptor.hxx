@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSSHAREDPAGEDESCRIPTOR_HXX
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_MODEL_SLSSHAREDPAGEDESCRIPTOR_HXX
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace model {
 
 class PageDescriptor;
 
-typedef std::shared_ptr<PageDescriptor> SharedPageDescriptor;
+typedef ::boost::shared_ptr<PageDescriptor> SharedPageDescriptor;
 
 } } } // end of namespace ::sd::slidesorter::model
 

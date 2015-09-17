@@ -32,24 +32,24 @@ SdTransferable* TransferableData::CreateTransferable (
     const ::std::vector<Representative>& rRepresentatives)
 {
     SdTransferable* pTransferable = new SdTransferable (pSrcDoc, pWorkView, bInitOnGetData);
-    std::shared_ptr<TransferableData> pData (new TransferableData(pViewShell, rRepresentatives));
+    ::boost::shared_ptr<TransferableData> pData (new TransferableData(pViewShell, rRepresentatives));
     pTransferable->AddUserData(pData);
     return pTransferable;
 }
 
-std::shared_ptr<TransferableData> TransferableData::GetFromTransferable (const SdTransferable* pTransferable)
+::boost::shared_ptr<TransferableData> TransferableData::GetFromTransferable (const SdTransferable* pTransferable)
 {
     if (pTransferable)
     {
         for (sal_Int32 nIndex=0,nCount=pTransferable->GetUserDataCount(); nIndex<nCount; ++nIndex)
         {
-            std::shared_ptr<TransferableData> xData =
-                std::dynamic_pointer_cast<TransferableData>(pTransferable->GetUserData(nIndex));
+            ::boost::shared_ptr<TransferableData> xData =
+                ::boost::dynamic_pointer_cast<TransferableData>(pTransferable->GetUserData(nIndex));
             if (xData)
                 return xData;
         }
     }
-    return std::shared_ptr<TransferableData>();
+    return ::boost::shared_ptr<TransferableData>();
 }
 
 TransferableData::TransferableData (

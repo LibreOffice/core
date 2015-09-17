@@ -131,7 +131,7 @@ private:
 
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpCellStringPool(new svl::SharedStringPool(ScGlobal::pCharClass)),
-        mpFormulaGroupCxt(nullptr),
+        mpFormulaGroupCxt(NULL),
         maCalcConfig( ScInterpreter::GetGlobalConfig()),
         mpUndoManager( NULL ),
         pEditEngine( NULL ),

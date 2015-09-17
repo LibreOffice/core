@@ -32,7 +32,7 @@
 #include <stdio.h>
 #endif
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 #include <list>
 
@@ -51,7 +51,7 @@ namespace ppt
                          : mxNode( xNode ), mxMaster( xMaster ) {}
     };
 
-    typedef std::shared_ptr< AfterEffectNode > AfterEffectNodePtr;
+    typedef boost::shared_ptr< AfterEffectNode > AfterEffectNodePtr;
 
 typedef sal_uInt32 TranslateMode;
 #define TRANSLATE_NONE              0

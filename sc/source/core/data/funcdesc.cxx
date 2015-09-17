@@ -34,8 +34,8 @@
 #include <tools/resid.hxx>
 #include <unotools/collatorwrapper.hxx>
 
-#include <memory>
 #include <numeric>
+#include <boost/scoped_ptr.hpp>
 
 class ScFuncRes : public Resource
 {
@@ -395,7 +395,7 @@ ScFunctionList::ScFunctionList() :
 
     for (sal_uInt16 k = 0; k < SAL_N_ELEMENTS(nDescBlock); ++k)
     {
-        std::unique_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
+        boost::scoped_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
         // Browse for all possible OpCodes. This is not the fastest method, but
         // otherwise the sub resources within the resource blocks and the
         // resource blocks themselves would had to be ordered according to
@@ -767,7 +767,7 @@ OUString ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
         return OUString();
     }
 
-    std::unique_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
+    boost::scoped_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
     return SC_RESSTR(static_cast<sal_uInt16>(_nCategoryNumber));
 }
 

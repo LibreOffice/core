@@ -66,8 +66,9 @@
 #include "pptin.hxx"
 #include "randomnode.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 #include <algorithm>
-#include <memory>
 
 using ::std::map;
 using ::com::sun::star::beans::NamedValue;
@@ -222,7 +223,7 @@ int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRec
         {
             Reference< XAnimationNode > xParent;
 
-            std::unique_ptr<Atom> pAtom(Atom::import( rProgTagContentHd, mrStCtrl ));
+            boost::scoped_ptr<Atom> pAtom(Atom::import( rProgTagContentHd, mrStCtrl ));
             if( pAtom )
             {
                 nNodes = importAnimationContainer( pAtom.get(), xParent );

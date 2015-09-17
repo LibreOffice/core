@@ -300,7 +300,7 @@ private:
 
 private:
     typedef boost::ptr_vector< XclListColor >     XclListColorList;
-    typedef std::shared_ptr< XclListColorList > XclListColorListRef;
+    typedef boost::shared_ptr< XclListColorList > XclListColorListRef;
     typedef ::std::vector< XclColorIdData >       XclColorIdDataVec;
     typedef ::std::vector< XclPaletteColor >      XclPaletteColorVec;
 

@@ -214,7 +214,7 @@ void GenericPageCache::RequestPreviewBitmap (
 bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
 {
     // Invalidate the page in all caches that reference it, not just this one.
-    std::shared_ptr<cache::PageCacheManager> pCacheManager (
+    ::boost::shared_ptr<cache::PageCacheManager> pCacheManager (
         cache::PageCacheManager::Instance());
     if (pCacheManager)
         return pCacheManager->InvalidatePreviewBitmap(

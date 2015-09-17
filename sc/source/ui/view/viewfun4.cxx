@@ -70,6 +70,8 @@
 #include <refupdatecontext.hxx>
 #include <gridwin.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
@@ -91,7 +93,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         const bool bRecord (rDoc.IsUndoEnabled());
 
         const ScPatternAttr* pPattern = rDoc.GetPattern( nStartCol, nStartRow, nTab );
-        std::unique_ptr<ScTabEditEngine> pEngine(new ScTabEditEngine( *pPattern, rDoc.GetEnginePool() ));
+        boost::scoped_ptr<ScTabEditEngine> pEngine(new ScTabEditEngine( *pPattern, rDoc.GetEnginePool() ));
         pEngine->EnableUndo( false );
 
         vcl::Window* pActWin = GetActiveWin();
@@ -129,7 +131,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             rDoc.EnableUndo( false );
             for( sal_Int32 n = 0; n < nParCnt; n++ )
             {
-                std::unique_ptr<EditTextObject> pObject(pEngine->CreateTextObject(n));
+                boost::scoped_ptr<EditTextObject> pObject(pEngine->CreateTextObject(n));
                 EnterData(nStartCol, nRow, nTab, *pObject, true);
                 if( ++nRow > MAXROW )
                     break;
@@ -257,7 +259,7 @@ void ScViewFunc::DoRefConversion( bool bRecord )
                     OUString aNew = aFinder.GetText();
                     ScCompiler aComp( pDoc, aPos);
                     aComp.SetGrammar(pDoc->GetGrammar());
-                    std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aNew));
+                    boost::scoped_ptr<ScTokenArray> pArr(aComp.CompileString(aNew));
                     ScFormulaCell* pNewCell =
                         new ScFormulaCell(
                             pDoc, aPos, *pArr, formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE);
@@ -311,8 +313,8 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     ScSplitPos eWhich = GetViewData().GetActivePart();
     EESpellState eState;
     EditView* pEditView = NULL;
-    std::unique_ptr<ESelection> pEditSel;
-    std::unique_ptr<ScEditEngineDefaulter> pThesaurusEngine;
+    boost::scoped_ptr<ESelection> pEditSel;
+    boost::scoped_ptr<ScEditEngineDefaulter> pThesaurusEngine;
     bool bIsEditMode = GetViewData().HasEditView(eWhich);
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
@@ -354,7 +356,7 @@ void ScViewFunc::DoThesaurus( bool bRecord )
     pThesaurusEngine->SetSpeller(xSpeller);
     MakeEditView(pThesaurusEngine.get(), nCol, nRow );
     const ScPatternAttr* pPattern = NULL;
-    std::unique_ptr<SfxItemSet> pEditDefaults(
+    boost::scoped_ptr<SfxItemSet> pEditDefaults(
         new SfxItemSet(pThesaurusEngine->GetEmptyItemSet()));
     pPattern = rDoc.GetPattern(nCol, nRow, nTab);
     if (pPattern)
@@ -494,7 +496,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, bool bR
 
     // *** create and init the edit engine *** --------------------------------
 
-    std::unique_ptr<ScConversionEngineBase> pEngine;
+    boost::scoped_ptr<ScConversionEngineBase> pEngine;
     switch( rConvParam.GetType() )
     {
         case SC_CONVERSION_SPELLCHECK:
@@ -737,7 +739,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
         aField.SetTargetFrame(*pTarget);
     aEngine.QuickInsertField( SvxFieldItem( aField, EE_FEATURE_FIELD ), aInsSel );
 
-    std::unique_ptr<EditTextObject> pData(aEngine.CreateTextObject());
+    boost::scoped_ptr<EditTextObject> pData(aEngine.CreateTextObject());
     EnterData(nPosX, nPosY, nTab, *pData);
 }
 

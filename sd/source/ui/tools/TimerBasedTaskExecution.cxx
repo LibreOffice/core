@@ -21,8 +21,8 @@
 #include "tools/AsynchronousTask.hxx"
 #include <tools/time.hxx>
 #include <osl/diagnose.h>
+#include <boost/weak_ptr.hpp>
 #include "sal/log.hxx"
-#include <memory>
 
 namespace sd { namespace tools {
 
@@ -37,12 +37,12 @@ public:
     }
 };
 
-std::shared_ptr<TimerBasedTaskExecution> TimerBasedTaskExecution::Create (
-    const std::shared_ptr<AsynchronousTask>& rpTask,
+::boost::shared_ptr<TimerBasedTaskExecution> TimerBasedTaskExecution::Create (
+    const ::boost::shared_ptr<AsynchronousTask>& rpTask,
     sal_uInt32 nMillisecondsBetweenSteps,
     sal_uInt32 nMaxTimePerStep)
 {
-    std::shared_ptr<TimerBasedTaskExecution> pExecution(
+    ::boost::shared_ptr<TimerBasedTaskExecution> pExecution(
         new TimerBasedTaskExecution(rpTask,nMillisecondsBetweenSteps,nMaxTimePerStep),
         Deleter());
     // Let the new object have a shared_ptr to itself, so that it can
@@ -60,16 +60,16 @@ void TimerBasedTaskExecution::Release()
 
 //static
 void TimerBasedTaskExecution::ReleaseTask (
-    const std::weak_ptr<TimerBasedTaskExecution>& rpExecution)
+    const ::boost::weak_ptr<TimerBasedTaskExecution>& rpExecution)
 {
     if ( ! rpExecution.expired())
     {
         try
         {
-            std::shared_ptr<tools::TimerBasedTaskExecution> pExecution (rpExecution);
+            ::boost::shared_ptr<tools::TimerBasedTaskExecution> pExecution (rpExecution);
             pExecution->Release();
         }
-        catch (const std::bad_weak_ptr&)
+        catch (const ::boost::bad_weak_ptr&)
         {
             // When a bad_weak_ptr has been thrown then the object pointed
             // to by rpTask has been released right after we checked that it
@@ -80,7 +80,7 @@ void TimerBasedTaskExecution::ReleaseTask (
 }
 
 TimerBasedTaskExecution::TimerBasedTaskExecution (
-    const std::shared_ptr<AsynchronousTask>& rpTask,
+    const ::boost::shared_ptr<AsynchronousTask>& rpTask,
     sal_uInt32 nMillisecondsBetweenSteps,
     sal_uInt32 nMaxTimePerStep)
     : mpTask(rpTask),
@@ -100,7 +100,7 @@ TimerBasedTaskExecution::~TimerBasedTaskExecution()
 }
 
 void TimerBasedTaskExecution::SetSelf (
-    const std::shared_ptr<TimerBasedTaskExecution>& rpSelf)
+    const ::boost::shared_ptr<TimerBasedTaskExecution>& rpSelf)
 {
     if (mpTask.get() != NULL)
         mpSelf = rpSelf;

@@ -35,8 +35,9 @@
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
-#include <memory>
 
 namespace {
 
@@ -194,7 +195,7 @@ public:
 
 private:
     class Implementation;
-    std::unique_ptr<Implementation> mpImplementation;
+    ::boost::scoped_ptr<Implementation> mpImplementation;
     bool mbIsDisposed;
 
     /** When the called object has already been disposed this method throws

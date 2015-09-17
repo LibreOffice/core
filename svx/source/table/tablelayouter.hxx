@@ -26,6 +26,7 @@
 #include <sal/types.h>
 #include <basegfx/range/b2irectangle.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
+#include <boost/shared_ptr.hpp>
 #include <vector>
 #include <map>
 

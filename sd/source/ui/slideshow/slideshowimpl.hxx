@@ -112,7 +112,7 @@ struct WrappedShapeEventImpl
     WrappedShapeEventImpl() : meClickAction( css::presentation::ClickAction_NONE ), mnVerb( 0 ) {};
 };
 
-typedef std::shared_ptr< WrappedShapeEventImpl > WrappedShapeEventImplPtr;
+typedef boost::shared_ptr< WrappedShapeEventImpl > WrappedShapeEventImplPtr;
 typedef std::map< css::uno::Reference< css::drawing::XShape >, WrappedShapeEventImplPtr > WrappedShapeEventImplMap;
 
 class SlideShowListenerProxy : private ::cppu::BaseMutex,
@@ -336,7 +336,7 @@ private:
     VclPtr<ShowWindow>     mpShowWindow;
     VclPtr<PushButton>     mpTimeButton;
 
-    std::shared_ptr< AnimationSlideController > mpSlideController;
+    boost::shared_ptr< AnimationSlideController > mpSlideController;
 
     long            mnRestoreSlide;
     Point           maSlideOrigin;

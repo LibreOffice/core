@@ -21,9 +21,9 @@
 #define INCLUDED_SC_INC_DPSAVE_HXX
 
 #include <list>
-#include <memory>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -52,7 +52,7 @@ class ScDPSaveMember
 {
 private:
     OUString aName;
-    std::unique_ptr<OUString> mpLayoutName; // custom name to be displayed in the table.
+    boost::scoped_ptr<OUString> mpLayoutName; // custom name to be displayed in the table.
     sal_uInt16 nVisibleMode;
     sal_uInt16 nShowDetailsMode;
 
@@ -98,8 +98,8 @@ class SC_DLLPUBLIC ScDPSaveDimension
 {
 private:
     OUString aName;
-    std::unique_ptr<OUString> mpLayoutName;
-    std::unique_ptr<OUString> mpSubtotalName;
+    boost::scoped_ptr<OUString> mpLayoutName;
+    boost::scoped_ptr<OUString> mpSubtotalName;
     bool bIsDataLayout;
     bool bDupFlag;
     sal_uInt16 nOrientation;
@@ -258,8 +258,8 @@ private:
      *  created. */
     bool mbDimensionMembersBuilt;
 
-    std::unique_ptr<OUString> mpGrandTotalName;
-    mutable std::unique_ptr<DimOrderType> mpDimOrder; // dimension order for row and column dimensions, to traverse result tree.
+    boost::scoped_ptr<OUString> mpGrandTotalName;
+    mutable boost::scoped_ptr<DimOrderType> mpDimOrder; // dimension order for row and column dimensions, to traverse result tree.
 
 public:
     SC_DLLPUBLIC ScDPSaveData();

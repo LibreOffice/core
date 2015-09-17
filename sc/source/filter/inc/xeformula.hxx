@@ -22,7 +22,7 @@
 
 #include "xlformula.hxx"
 #include "xeroot.hxx"
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 // External reference log =====================================================
 
@@ -83,7 +83,7 @@ public:
     bool IsRef2D( const ScComplexRefData& rRefData ) const;
 
 private:
-    typedef std::shared_ptr< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
+    typedef boost::shared_ptr< XclExpFmlaCompImpl > XclExpFmlaCompImplRef;
     XclExpFmlaCompImplRef mxImpl;
 };
 

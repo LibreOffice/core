@@ -67,7 +67,7 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/dbaexchange.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -140,7 +140,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
                     ScMarkData aSrcMark;
                     aSrcMark.SelectOneTable( nSrcTab );         // for CopyToClip
-                    std::unique_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+                    boost::scoped_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
 
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;
@@ -306,7 +306,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     // this for html pasting only, but in the future it may
                     // make sense to do it for other data types too.
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    std::unique_ptr<AbstractScTextImportOptionsDlg> pDlg(
+                    boost::scoped_ptr<AbstractScTextImportOptionsDlg> pDlg(
                         pFact->CreateScTextImportOptionsDlg(NULL));
 
                     if (pDlg->Execute() == RET_OK)
@@ -335,7 +335,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                     ScImportStringStream aStrm( aStr);
                     ScAbstractDialogFactory* pFact =
                         ScAbstractDialogFactory::Create();
-                    std::unique_ptr<AbstractScImportAsciiDlg> pDlg(
+                    boost::scoped_ptr<AbstractScImportAsciiDlg> pDlg(
                         pFact->CreateScImportAsciiDlg( NULL, OUString(), &aStrm,
                                                        SC_PASTETEXT));
 
@@ -492,7 +492,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
             ScDocShellRef aDragShellRef( new ScDocShell );
             aDragShellRef->DoInitNew(NULL);
-            std::unique_ptr<FmFormModel> pModel(new FmFormModel( aPath, NULL, aDragShellRef ));
+            boost::scoped_ptr<FmFormModel> pModel(new FmFormModel( aPath, NULL, aDragShellRef ));
 
             pModel->GetItemPool().FreezeIdRanges();
             xStm->Seek(0);

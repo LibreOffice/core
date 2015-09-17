@@ -45,7 +45,7 @@ Output stream class for Excel export
 
 class XclExpRoot;
 class XclExpBiff8Encrypter;
-typedef std::shared_ptr< XclExpBiff8Encrypter > XclExpEncrypterRef;
+typedef boost::shared_ptr< XclExpBiff8Encrypter > XclExpEncrypterRef;
 
 /** This class is used to export Excel record streams.
     @descr  An instance is constructed with an SvStream and the maximum size of Excel

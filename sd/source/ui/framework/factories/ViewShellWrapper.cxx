@@ -55,13 +55,13 @@ using ::com::sun::star::lang::DisposedException;
 namespace sd { namespace framework {
 
 ViewShellWrapper::ViewShellWrapper (
-    std::shared_ptr<ViewShell> pViewShell,
+    ::boost::shared_ptr<ViewShell> pViewShell,
     const Reference<XResourceId>& rxViewId,
     const Reference<awt::XWindow>& rxWindow)
     : ViewShellWrapperInterfaceBase(MutexOwner::maMutex),
       mpViewShell(pViewShell),
       mpSlideSorterViewShell(
-          std::dynamic_pointer_cast< ::sd::slidesorter::SlideSorterViewShell >( pViewShell )),
+          ::boost::dynamic_pointer_cast< ::sd::slidesorter::SlideSorterViewShell >( pViewShell )),
       mxViewId(rxViewId),
       mxWindow(rxWindow)
 {

@@ -34,7 +34,7 @@
 #include "drawdoc.hxx"
 #include "sdabstdlg.hxx"
 #include "sdattr.hrc"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -91,7 +91,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdParagraphTabDlg(NULL, &aNewAttr ) : 0);
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdParagraphTabDlg(NULL, &aNewAttr ) : 0);
         if (!pDlg)
             return;
 

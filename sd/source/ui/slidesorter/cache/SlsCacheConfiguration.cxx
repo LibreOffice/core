@@ -35,15 +35,15 @@ namespace sd { namespace slidesorter { namespace cache {
 
 namespace
 {
-    typedef std::shared_ptr<CacheConfiguration> CacheConfigSharedPtr;
+    typedef ::boost::shared_ptr<CacheConfiguration> CacheConfigSharedPtr;
     class theInstance :
         public rtl::Static<CacheConfigSharedPtr, theInstance> {};
 }
 
-std::weak_ptr<CacheConfiguration> CacheConfiguration::mpWeakInstance;
+::boost::weak_ptr<CacheConfiguration> CacheConfiguration::mpWeakInstance;
 Timer CacheConfiguration::maReleaseTimer;
 
-std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
+::boost::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
 {
     SolarMutexGuard aSolarGuard;
     CacheConfigSharedPtr &rInstancePtr = theInstance::get();
@@ -51,7 +51,7 @@ std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
     {
         // Maybe somebody else kept a previously created instance alive.
         if ( ! mpWeakInstance.expired())
-            rInstancePtr = std::shared_ptr<CacheConfiguration>(mpWeakInstance);
+            rInstancePtr = ::boost::shared_ptr<CacheConfiguration>(mpWeakInstance);
         if (rInstancePtr.get() == NULL)
         {
             // We have to create a new instance.

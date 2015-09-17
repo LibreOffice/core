@@ -88,7 +88,7 @@
 #include <vcl/svapp.hxx>
 
 #include <boost/bind.hpp>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -263,7 +263,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_PHOTOALBUM:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 mrSlideSorter.GetContentWindow(),
                 pDocument) : 0);
 
@@ -374,8 +374,8 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
             ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
             if (pBase != NULL)
             {
-                std::shared_ptr<DrawViewShell> pDrawViewShell (
-                    std::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
+                ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+                    ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
                 if (pDrawViewShell.get() != NULL)
                     pDrawViewShell->FuSupport(rRequest);
             }
@@ -733,8 +733,8 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
                 ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
                 if (pBase != NULL)
                 {
-                    std::shared_ptr<DrawViewShell> pDrawViewShell (
-                        std::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
+                    ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+                        ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
                     if (pDrawViewShell.get() != NULL)
                     {
                         TransferableDataHelper aDataHelper (
@@ -904,7 +904,7 @@ void SlotManager::RenameSlide()
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialog creation failed!");
-            std::unique_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
+            boost::scoped_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
                 mrSlideSorter.GetContentWindow(),
                 aPageName, aDescr));
             DBG_ASSERT(aNameDlg, "Dialog creation failed!");

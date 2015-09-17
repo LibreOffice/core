@@ -50,8 +50,8 @@ ScInputStatusItem::ScInputStatusItem(
     aStartPos   ( rStartPos ),
     aEndPos     ( rEndPos ),
     aString     ( rString ),
-    pEditData   ( pData ? pData->Clone() : nullptr ),
-    mpMisspellRanges(nullptr)
+    pEditData   ( pData ? pData->Clone() : NULL ),
+    mpMisspellRanges(NULL)
 {
 }
 
@@ -61,7 +61,7 @@ ScInputStatusItem::ScInputStatusItem( const ScInputStatusItem& rItem ) :
     aStartPos   ( rItem.aStartPos ),
     aEndPos     ( rItem.aEndPos ),
     aString     ( rItem.aString ),
-    pEditData   ( rItem.pEditData ? rItem.pEditData->Clone() : nullptr ),
+    pEditData   ( rItem.pEditData ? rItem.pEditData->Clone() : NULL ),
     mpMisspellRanges(rItem.mpMisspellRanges)
 {
 }
@@ -146,7 +146,7 @@ ScSortItem::ScSortItem( sal_uInt16              nWhichP,
 ScSortItem::ScSortItem( sal_uInt16              nWhichP,
                         const ScSortParam*  pSortData ) :
         SfxPoolItem ( nWhichP ),
-        pViewData   ( nullptr )
+        pViewData   ( NULL )
 {
     if ( pSortData ) theSortData = *pSortData;
 }
@@ -191,7 +191,7 @@ ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           ScViewData*           ptrViewData,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
-        mpQueryData(nullptr),
+        mpQueryData(NULL),
         pViewData   ( ptrViewData ),
         bIsAdvanced ( false )
 {
@@ -204,8 +204,8 @@ ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
 ScQueryItem::ScQueryItem( sal_uInt16                nWhichP,
                           const ScQueryParam*   pQueryData ) :
         SfxPoolItem ( nWhichP ),
-        mpQueryData(nullptr),
-        pViewData   ( nullptr ),
+        mpQueryData(NULL),
+        pViewData   ( NULL ),
         bIsAdvanced ( false )
 {
     if (pQueryData)
@@ -281,7 +281,7 @@ ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
 ScSubTotalItem::ScSubTotalItem( sal_uInt16                  nWhichP,
                                 const ScSubTotalParam*  pSubTotalData ) :
         SfxPoolItem ( nWhichP ),
-        pViewData   ( nullptr )
+        pViewData   ( NULL )
 {
     if ( pSubTotalData ) theSubTotalData = *pSubTotalData;
 }
@@ -324,7 +324,7 @@ bool ScSubTotalItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /* nM
  */
 ScUserListItem::ScUserListItem( sal_uInt16 nWhichP )
     :   SfxPoolItem ( nWhichP ),
-        pUserList   ( nullptr )
+        pUserList   ( NULL )
 {
 }
 
@@ -334,7 +334,7 @@ ScUserListItem::ScUserListItem( const ScUserListItem& rItem )
     if ( rItem.pUserList )
         pUserList = new ScUserList( *(rItem.pUserList) );
     else
-        pUserList = nullptr;
+        pUserList = NULL;
 }
 
 ScUserListItem::~ScUserListItem()

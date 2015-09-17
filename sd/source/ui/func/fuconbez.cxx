@@ -180,7 +180,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
         SdPage* pPage = dynamic_cast< SdPage* >( pPathObj ? pPathObj->GetPage() : 0 );
         if( pPage )
         {
-            std::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
+            boost::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
             if( pMainSequence.get() )
             {
                 Sequence< Any > aTargets;

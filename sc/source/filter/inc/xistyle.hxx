@@ -21,9 +21,9 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XISTYLE_HXX
 
 #include <list>
-#include <memory>
 #include <tools/mempool.hxx>
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "rangelst.hxx"
 #include "patattr.hxx"
@@ -649,7 +649,7 @@ private:
     void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, SvxBoxItemLine nLine );
 
 private:
-    typedef std::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
+    typedef boost::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
     typedef ::std::vector< XclImpXFRangeColumnRef >  XclImpXFRangeColumnVec;
     typedef ::std::pair< XclRange, OUString >        XclImpHyperlinkRange;
     typedef ::std::list< XclImpHyperlinkRange >      XclImpHyperlinkList;

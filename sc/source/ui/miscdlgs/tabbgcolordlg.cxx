@@ -33,6 +33,8 @@
 #include <editeng/eerdll.hxx>
 #include <vcl/builderfactory.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 
 ScTabBgColorDlg::ScTabBgColorDlg(vcl::Window* pParent, const OUString& rTitle,

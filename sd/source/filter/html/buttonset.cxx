@@ -34,7 +34,7 @@
 #include <vcl/image.hxx>
 #include <unotools/pathoptions.hxx>
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 #include "buttonset.hxx"
 
@@ -147,7 +147,7 @@ public:
 
     Reference< XGraphicProvider > getGraphicProvider();
 
-    std::vector< std::shared_ptr< ButtonsImpl > >  maButtons;
+    std::vector< boost::shared_ptr< ButtonsImpl > >  maButtons;
     Reference< XGraphicProvider > mxGraphicProvider;
 };
 
@@ -177,7 +177,7 @@ void ButtonSetImpl::scanForButtonSets( const OUString& rPath )
             {
                 OUString sFileName( aStatus.getFileName() );
                 if( sFileName.endsWithIgnoreAsciiCase( ".zip" ) )
-                    maButtons.push_back( std::shared_ptr< ButtonsImpl >( new ButtonsImpl( aStatus.getFileURL() ) ) );
+                    maButtons.push_back( boost::shared_ptr< ButtonsImpl >( new ButtonsImpl( aStatus.getFileURL() ) ) );
             }
         }
     }

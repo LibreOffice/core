@@ -22,6 +22,7 @@
 
 #include "sdmod.hxx"
 #include <memory>
+#include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
 namespace sd {
@@ -73,7 +74,7 @@ public:
         time of the destruction of SgGlobalResourceContainer no other
         references exist the resource is destroyed as well.
     */
-    void AddResource (std::shared_ptr<SdGlobalResource> pResource);
+    void AddResource (::boost::shared_ptr<SdGlobalResource> pResource);
 
     /** Add a resource that is implemented as UNO object.  Destruction
         (when the sd modules is unloaded) is done by a) calling dispose()

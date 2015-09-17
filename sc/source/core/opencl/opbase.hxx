@@ -16,8 +16,8 @@
 
 #include <formula/token.hxx>
 #include <formula/vectortoken.hxx>
+#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
-#include <memory>
 #include <set>
 
 #include "calcconfig.hxx"
@@ -62,7 +62,7 @@ public:
     int mLineNumber;
 };
 
-typedef std::shared_ptr<FormulaTreeNode> FormulaTreeNodeRef;
+typedef boost::shared_ptr<FormulaTreeNode> FormulaTreeNodeRef;
 
 class FormulaTreeNode
 {
@@ -129,7 +129,7 @@ protected:
     FormulaTreeNodeRef mFormulaTree;
 };
 
-typedef std::shared_ptr<DynamicKernelArgument> DynamicKernelArgumentRef;
+typedef boost::shared_ptr<DynamicKernelArgument> DynamicKernelArgumentRef;
 
 /// Holds an input (read-only) argument reference to a SingleVectorRef.
 /// or a DoubleVectorRef for non-sliding-window argument of complex functions

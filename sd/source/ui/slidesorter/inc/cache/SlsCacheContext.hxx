@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
 class SdrPage;
@@ -76,7 +76,7 @@ public:
             to allow rendering of previews that are not visible (ahead of
             time). When not then return an empty pointer or an empty vector.
     */
-    virtual std::shared_ptr<std::vector<CacheKey> > GetEntryList (bool bVisible) = 0;
+    virtual ::boost::shared_ptr<std::vector<CacheKey> > GetEntryList (bool bVisible) = 0;
 
     /** Return the priority that defines the order in which previews are
         created for different keys/pages.  Typically the visible pages come
@@ -92,7 +92,7 @@ public:
     virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel() = 0;
 };
 
-typedef std::shared_ptr<CacheContext> SharedCacheContext;
+typedef ::boost::shared_ptr<CacheContext> SharedCacheContext;
 
 } } } // end of namespace ::sd::slidesorter::cache
 

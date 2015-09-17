@@ -62,7 +62,7 @@
 #include "ViewShellBase.hxx"
 #include "FormShellManager.hxx"
 #include "DrawController.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 

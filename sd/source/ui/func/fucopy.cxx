@@ -38,7 +38,7 @@
 #include <svx/xfillit0.hxx>
 #include <sfx2/request.hxx>
 #include "sdabstdlg.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -102,7 +102,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             if( pFact )
             {
-                std::unique_ptr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(NULL, aSet, mpDoc->GetColorList(), mpView ));
+                boost::scoped_ptr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(NULL, aSet, mpDoc->GetColorList(), mpView ));
                 if (!pDlg)
                     return;
 
@@ -169,7 +169,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         // remove handles
         //HMHmpView->HideMarkHdl();
 
-        std::unique_ptr<SfxProgress> pProgress;
+        boost::scoped_ptr<SfxProgress> pProgress;
         bool            bWaiting = false;
 
         if( nNumber > 1 )

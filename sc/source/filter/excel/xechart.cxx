@@ -69,7 +69,7 @@
 #include "xepage.hxx"
 #include "xestyle.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
@@ -898,7 +898,7 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > x
     OUString aRangeRepr = xDataSeq->getSourceRangeRepresentation();
     ScCompiler aComp( &GetDocRef(), ScAddress() );
     aComp.SetGrammar( GetDocRef().GetGrammar() );
-    std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(aRangeRepr));
+    boost::scoped_ptr<ScTokenArray> pArray(aComp.CompileString(aRangeRepr));
     if( !pArray )
         return nDefCount;
 

@@ -55,8 +55,8 @@
 #include <gridwin.hxx>
 #include <svl/listener.hxx>
 
-#include <memory>
 #include <set>
+#include <boost/scoped_ptr.hpp>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1360,7 +1360,7 @@ void ScUndoDragDrop::Redo()
     BeginRedo();
 
     ScDocument& rDoc = pDocShell->GetDocument();
-    std::unique_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+    boost::scoped_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
 
     EnableDrawAdjust( &rDoc, false );                //! include in ScBlockUndo?
 

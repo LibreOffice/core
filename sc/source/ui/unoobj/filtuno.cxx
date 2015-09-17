@@ -39,7 +39,7 @@
 #include <optutil.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -176,11 +176,11 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
 
         INetURLObject aURL( aFileName );
         OUString aPrivDatName(aURL.getName());
-        std::unique_ptr<SvStream> pInStream;
+        boost::scoped_ptr<SvStream> pInStream;
         if ( xInputStream.is() )
             pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
 
-        std::unique_ptr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
+        boost::scoped_ptr<AbstractScImportAsciiDlg> pDlg(pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream.get(), SC_IMPORTFILE));
         OSL_ENSURE(pDlg, "Dialog create fail!");
         if ( pDlg->Execute() == RET_OK )
         {
@@ -198,7 +198,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
         else
         {
             // HTML import.
-            std::unique_ptr<AbstractScTextImportOptionsDlg> pDlg(
+            boost::scoped_ptr<AbstractScTextImportOptionsDlg> pDlg(
                 pFact->CreateScTextImportOptionsDlg(NULL));
 
             if (pDlg->Execute() == RET_OK)
@@ -281,7 +281,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
 
-        std::unique_ptr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(NULL,
+        boost::scoped_ptr<AbstractScImportOptionsDlg> pDlg(pFact->CreateScImportOptionsDlg(NULL,
                                                                             bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
                                                                             !bExport));
         OSL_ENSURE(pDlg, "Dialog create fail!");

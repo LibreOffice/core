@@ -25,8 +25,8 @@
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <vcl/timer.hxx>
-#include <memory>
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 namespace sd { namespace framework {
 
@@ -49,8 +49,8 @@ public:
         changes and the start and end of updates via the given broadcaster.
     */
     ConfigurationUpdater (
-        const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
-        const std::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
+        const ::boost::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
+        const ::boost::shared_ptr<ConfigurationControllerResourceManager>& rpResourceManager,
         const css::uno::Reference<
             css::drawing::framework::XControllerManager>& rxControllerManager);
     ~ConfigurationUpdater();
@@ -79,7 +79,7 @@ public:
         returned object exists no update of the current configuration is
         made.
     */
-    std::shared_ptr<ConfigurationUpdaterLock> GetLock();
+    ::boost::shared_ptr<ConfigurationUpdaterLock> GetLock();
 
 private:
     /** A reference to the XControllerManager is kept so that
@@ -88,7 +88,7 @@ private:
     css::uno::Reference<
         css::drawing::framework::XControllerManager> mxControllerManager;
 
-    std::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
+    ::boost::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
 
     /** The current configuration holds the resources that are currently
         active.  It is modified during an update.
@@ -139,7 +139,7 @@ private:
     */
     sal_Int32 mnFailedUpdateCount;
 
-    std::shared_ptr<ConfigurationControllerResourceManager> mpResourceManager;
+    ::boost::shared_ptr<ConfigurationControllerResourceManager> mpResourceManager;
 
     /** This method does the main work of an update.  It calls the sub
         controllers that are responsible for the various types of resources

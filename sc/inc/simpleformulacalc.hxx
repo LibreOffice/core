@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_INC_SIMPLEFORMULACALC_HXX
 #define INCLUDED_SC_INC_SIMPLEFORMULACALC_HXX
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 #include <formula/grammar.hxx>
 
 #include "address.hxx"
@@ -26,7 +26,7 @@ private:
     sal_uLong mnFormatIndex;
 
     bool mbCalculated;
-    std::unique_ptr<ScTokenArray> mpCode;
+    boost::scoped_ptr<ScTokenArray> mpCode;
     ScAddress maAddr;
     ScDocument* mpDoc;
     ScFormulaResult maResult;

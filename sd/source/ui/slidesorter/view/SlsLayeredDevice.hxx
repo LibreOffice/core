@@ -27,7 +27,9 @@
 #include <vcl/virdev.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 #include <vector>
 
 class Rectangle;
@@ -39,7 +41,7 @@ namespace sd { namespace slidesorter { namespace view {
     Each layer may contain any number of painters.
 */
 class LayeredDevice
-    : public std::enable_shared_from_this<LayeredDevice>
+    : public ::boost::enable_shared_from_this<LayeredDevice>
 
 {
 public:
@@ -72,7 +74,7 @@ public:
 private:
     VclPtr<sd::Window> mpTargetWindow;
     class LayerContainer;
-    std::unique_ptr<LayerContainer> mpLayers;
+    ::boost::scoped_ptr<LayerContainer> mpLayers;
     ScopedVclPtr<VirtualDevice> mpBackBuffer;
     MapMode maSavedMapMode;
 

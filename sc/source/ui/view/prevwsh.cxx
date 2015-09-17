@@ -81,7 +81,7 @@ using namespace com::sun::star;
 #define ScPreviewShell
 #include "scslots.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 TYPEINIT1( ScPreviewShell, SfxViewShell );
 
@@ -645,7 +645,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        std::unique_ptr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(NULL, aSet));
+                        boost::scoped_ptr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(NULL, aSet));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
                         pDlg->SetLimits( 20, 400 );
                         pDlg->HideButton( ZoomButtonId::OPTIMAL );

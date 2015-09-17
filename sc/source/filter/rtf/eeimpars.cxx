@@ -56,7 +56,7 @@
 
 #include "globstr.hrc"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
     maRange( rRange ),

@@ -65,10 +65,10 @@ public:
 
     Layouter (
         sd::Window *rpWindow,
-        const std::shared_ptr<Theme>& rpTheme);
+        const ::boost::shared_ptr<Theme>& rpTheme);
     ~Layouter();
 
-    std::shared_ptr<PageObjectLayouter> GetPageObjectLayouter() const;
+    ::boost::shared_ptr<PageObjectLayouter> GetPageObjectLayouter() const;
     /** Set the interval of valid column counts.  When nMinimalColumnCount
         <= nMaximalColumnCount is not fulfilled then the call is ignored.
         @param nMinimalColumnCount
@@ -186,7 +186,7 @@ public:
     class Implementation;
 
 private:
-    std::unique_ptr<Implementation> mpImplementation;
+    ::boost::scoped_ptr<Implementation> mpImplementation;
     VclPtr<sd::Window> mpWindow;
 };
 

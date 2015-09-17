@@ -35,8 +35,8 @@ namespace sd { namespace framework {
 //===== ConfigurationControllerResourceManager ================================
 
 ConfigurationControllerResourceManager::ConfigurationControllerResourceManager (
-    const std::shared_ptr<ResourceFactoryManager>& rpResourceFactoryContainer,
-    const std::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster)
+    const ::boost::shared_ptr<ResourceFactoryManager>& rpResourceFactoryContainer,
+    const ::boost::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster)
     : maResourceMap(ResourceComparator()),
       mpResourceFactoryContainer(rpResourceFactoryContainer),
       mpBroadcaster(rpBroadcaster)

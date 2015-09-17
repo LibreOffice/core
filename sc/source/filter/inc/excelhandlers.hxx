@@ -142,8 +142,8 @@ protected:
     bool                skipFragment();
 
 private:
-    typedef std::shared_ptr< BinaryXInputStream >   XInputStreamRef;
-    typedef std::shared_ptr< BiffInputStream >      BiffInputStreamRef;
+    typedef ::boost::shared_ptr< BinaryXInputStream >   XInputStreamRef;
+    typedef ::boost::shared_ptr< BiffInputStream >      BiffInputStreamRef;
 
     XInputStreamRef     mxXInStrm;
     BiffInputStreamRef  mxBiffStrm;

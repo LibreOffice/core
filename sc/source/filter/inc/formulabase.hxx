@@ -584,7 +584,7 @@ protected:
     const FunctionInfoVector& getFuncs() const;
 
 private:
-    typedef std::shared_ptr< FunctionProviderImpl > FunctionProviderImplRef;
+    typedef ::boost::shared_ptr< FunctionProviderImpl > FunctionProviderImplRef;
     FunctionProviderImplRef mxFuncImpl;     /// Shared implementation between all copies of the provider.
 };
 
@@ -616,7 +616,7 @@ public:
                         getOoxParserMap() const;
 
 private:
-    typedef std::shared_ptr< OpCodeProviderImpl > OpCodeProviderImplRef;
+    typedef ::boost::shared_ptr< OpCodeProviderImpl > OpCodeProviderImplRef;
     OpCodeProviderImplRef mxOpCodeImpl;     /// Shared implementation between all copies of the provider.
 };
 

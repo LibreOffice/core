@@ -26,7 +26,9 @@
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <sal/types.h>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 class SdrView;
 
@@ -61,16 +63,16 @@ class ViewShellManager;
     in a short time on a view shell switch.
 */
 class ToolBarManager
-    : public std::enable_shared_from_this<ToolBarManager>
+    : public ::boost::enable_shared_from_this<ToolBarManager>
 {
 public:
     /** Use this method instead of the constructor to create new objects of
         this class.
     */
-    static std::shared_ptr<ToolBarManager> Create (
+    static ::boost::shared_ptr<ToolBarManager> Create (
         ViewShellBase& rBase,
-        const std::shared_ptr<tools::EventMultiplexer>& rpMultiplexer,
-        const std::shared_ptr<ViewShellManager>& rpViewShellManager);
+        const ::boost::shared_ptr<tools::EventMultiplexer>& rpMultiplexer,
+        const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager);
 
     ~ToolBarManager();
 
@@ -241,11 +243,11 @@ public:
         bar operations are made in a row.
     */
     class UpdateLock { public:
-        UpdateLock(const std::shared_ptr<ToolBarManager>& rpManager)
+        UpdateLock(const ::boost::shared_ptr<ToolBarManager>& rpManager)
             : mpManager(rpManager) { mpManager->LockUpdate(); }
         ~UpdateLock() { mpManager->UnlockUpdate(); }
     private:
-        std::shared_ptr<ToolBarManager> mpManager;
+        ::boost::shared_ptr<ToolBarManager> mpManager;
     };
     friend class UpdateLock;
 
@@ -253,7 +255,7 @@ public:
 
 private:
     class Implementation;
-    std::unique_ptr<Implementation> mpImpl;
+    ::boost::scoped_ptr<Implementation> mpImpl;
 
     /** The ViewShellBase is used to get the XLayoutManager and to determine
         the plug in mode.

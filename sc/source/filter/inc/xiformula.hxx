@@ -22,7 +22,7 @@
 
 #include "xlformula.hxx"
 #include "xiroot.hxx"
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 // Formula compiler ===========================================================
 
@@ -51,7 +51,7 @@ public:
     const ScTokenArray* CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
 
 private:
-    typedef std::shared_ptr< XclImpFmlaCompImpl > XclImpFmlaCompImplRef;
+    typedef boost::shared_ptr< XclImpFmlaCompImpl > XclImpFmlaCompImplRef;
     XclImpFmlaCompImplRef mxImpl;
 };
 

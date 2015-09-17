@@ -27,7 +27,7 @@
 #include <formula/grammar.hxx>
 #include <formula/token.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace formula;
 
@@ -53,7 +53,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
 
         ScCompiler aCompiler(pDoc, ScAddress(0,0,0));
         aCompiler.SetGrammar(eGrammar);
-        std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(aToken));
+        boost::scoped_ptr<ScTokenArray> pArray(aCompiler.CompileString(aToken));
 
         // There MUST be exactly one reference per range token and nothing
         // else, and it MUST be a valid reference, not some #REF!

@@ -171,7 +171,7 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 
 #include "ViewShellBase.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace {
     const char CustomAnimationPanelId[] = "CustomAnimationPanel";
@@ -427,7 +427,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialog creation failed!");
-                std::unique_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr ));
+                boost::scoped_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr ));
                 DBG_ASSERT(aNameDlg, "Dialog creation failed!");
                 aNameDlg->SetText( aTitle );
                 aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
@@ -801,7 +801,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_SET_DEFAULT:
         {
-            std::unique_ptr<SfxItemSet> pSet;
+            boost::scoped_ptr<SfxItemSet> pSet;
 
             if (mpDrawView->IsTextEdit())
             {
@@ -876,7 +876,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         std::pair<SfxItemSet*,SdrObjUserCall*> &rAttr = aAttrList[j++];
 
-                        std::unique_ptr<SfxItemSet> pNewSet(rAttr.first);
+                        boost::scoped_ptr<SfxItemSet> pNewSet(rAttr.first);
                         SdrObjUserCall* pUserCall = rAttr.second;
 
                         if ( pNewSet && pNewSet->GetItemState( SDRATTR_TEXT_MINFRAMEHEIGHT ) == SfxItemState::SET )
@@ -1398,7 +1398,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                std::unique_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : 0);
+                boost::scoped_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : 0);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
@@ -1566,7 +1566,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                std::unique_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : 0);
+                boost::scoped_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : 0);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
@@ -1836,7 +1836,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_INSERT_FLD_FILE:
         {
             sal_uInt16 nMul = 1;
-            std::unique_ptr<SvxFieldItem> pFieldItem;
+            boost::scoped_ptr<SvxFieldItem> pFieldItem;
 
             switch( nSId )
             {
@@ -1976,12 +1976,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     // Dialog...
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                    std::unique_ptr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : 0);
+                    boost::scoped_ptr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : 0);
                     if( pDlg && pDlg->Execute() == RET_OK )
                     {
                         // To make a correct SetAttribs() call at the utlinerView
                         // it is necessary to split the actions here
-                        std::unique_ptr<SvxFieldData> pField(pDlg->GetField());
+                        boost::scoped_ptr<SvxFieldData> pField(pDlg->GetField());
                         ESelection aSel = pOLV->GetSelection();
                         bool bSelectionWasModified(false);
 
@@ -2085,7 +2085,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                std::unique_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(NULL, aName));
+                boost::scoped_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(NULL, aName));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
@@ -2118,7 +2118,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription));
+                boost::scoped_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if(RET_OK == pDlg->Execute())
@@ -2366,7 +2366,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                     if( pFact )
                     {
-                        std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, static_cast<sal_uLong>(nAnz) ));
+                        boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateBreakDlg(GetActiveWindow(), mpDrawView, GetDocSh(), nCount, static_cast<sal_uLong>(nAnz) ));
                         if( pDlg )
                         {
                             pDlg->Execute();
@@ -2880,7 +2880,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
        case SID_PHOTOALBUM:
        {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 GetActiveWindow(),
                 GetDoc()) : 0);
 

@@ -110,7 +110,7 @@ Animator::AnimationId Animator::AddAnimation (
     if (mbIsDisposed)
         return -1;
 
-    std::shared_ptr<Animation> pAnimation (
+    boost::shared_ptr<Animation> pAnimation (
         new Animation(
             rAnimation,
             nStartOffset / 1000.0,

@@ -207,7 +207,7 @@ void ScDocument::SwapNonEmpty( sc::TableValues& rValues )
     if (!rRange.IsValid())
         return;
 
-    std::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*this));
+    boost::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*this));
     sc::StartListeningContext aStartCxt(*this, pPosSet);
     sc::EndListeningContext aEndCxt(*this, pPosSet);
 
@@ -393,7 +393,7 @@ namespace {
 
 class StartNeededListenersHandler : std::unary_function<ScTable*, void>
 {
-    std::shared_ptr<sc::StartListeningContext> mpCxt;
+    boost::shared_ptr<sc::StartListeningContext> mpCxt;
 public:
     StartNeededListenersHandler( ScDocument& rDoc ) : mpCxt(new sc::StartListeningContext(rDoc)) {}
 
@@ -413,7 +413,7 @@ void ScDocument::StartNeededListeners()
 
 void ScDocument::StartAllListeners( const ScRange& rRange )
 {
-    std::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*this));
+    boost::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*this));
     sc::StartListeningContext aStartCxt(*this, pPosSet);
     sc::EndListeningContext aEndCxt(*this, pPosSet);
 

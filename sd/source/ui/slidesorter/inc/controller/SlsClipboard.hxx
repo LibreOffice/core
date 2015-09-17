@@ -66,7 +66,7 @@ public:
         transferable.  The returned transferable is set up with all
         information necessary so that it can be dropped on a slide sorter.
     */
-    static std::shared_ptr<SdTransferable::UserData> CreateTransferableUserData (SdTransferable* pTransferable);
+    static ::boost::shared_ptr<SdTransferable::UserData> CreateTransferableUserData (SdTransferable* pTransferable);
 
     void HandleSlotCall (SfxRequest& rRequest);
 

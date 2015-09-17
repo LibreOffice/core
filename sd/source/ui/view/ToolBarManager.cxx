@@ -151,8 +151,8 @@ public:
             This ViewShellManager is used to activate or deactivate shells.
     */
     void UpdateShells (
-        const std::shared_ptr<ViewShell>& rpMainViewShell,
-        const std::shared_ptr<ViewShellManager>& rpManager);
+        const ::boost::shared_ptr<ViewShell>& rpMainViewShell,
+        const ::boost::shared_ptr<ViewShellManager>& rpManager);
 
 private:
     class ShellDescriptor
@@ -184,8 +184,8 @@ class ToolBarRules
 {
 public:
     ToolBarRules (
-        const std::shared_ptr<ToolBarManager>& rpToolBarManager,
-        const std::shared_ptr<ViewShellManager>& rpViewShellManager);
+        const ::boost::shared_ptr<ToolBarManager>& rpToolBarManager,
+        const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager);
 
     /** This method calls MainViewShellChanged() and SelectionHasChanged()
         for the current main view shell and its view.
@@ -222,8 +222,8 @@ public:
         sd::ShellId nShellId);
 
 private:
-    std::shared_ptr<ToolBarManager> mpToolBarManager;
-    std::shared_ptr<ViewShellManager> mpViewShellManager;
+    ::boost::shared_ptr<ToolBarManager> mpToolBarManager;
+    ::boost::shared_ptr<ViewShellManager> mpViewShellManager;
 };
 
 } // end of anonymous namespace
@@ -243,9 +243,9 @@ public:
     */
     Implementation (
         ViewShellBase& rBase,
-        const std::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
-        const std::shared_ptr<ViewShellManager>& rpViewShellManager,
-        const std::shared_ptr<ToolBarManager>& rpToolBarManager);
+        const ::boost::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
+        const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager,
+        const ::boost::shared_ptr<ToolBarManager>& rpToolBarManager);
     ~Implementation();
 
     void SetValid (bool bValid);
@@ -300,7 +300,7 @@ private:
 
     mutable ::osl::Mutex maMutex;
     ViewShellBase& mrBase;
-    std::shared_ptr<sd::tools::EventMultiplexer> mpEventMultiplexer;
+    ::boost::shared_ptr<sd::tools::EventMultiplexer> mpEventMultiplexer;
     bool mbIsValid;
     ToolBarList maToolBarList;
     ToolBarShellList maToolBarShellList;
@@ -346,12 +346,12 @@ const OUString ToolBarManager::msGraphicObjectBar("graphicobjectbar");
 const OUString ToolBarManager::msMediaObjectBar("mediaobjectbar");
 const OUString ToolBarManager::msTableObjectBar("tableobjectbar");
 
-std::shared_ptr<ToolBarManager> ToolBarManager::Create (
+::boost::shared_ptr<ToolBarManager> ToolBarManager::Create (
     ViewShellBase& rBase,
-    const std::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
-    const std::shared_ptr<ViewShellManager>& rpViewShellManager)
+    const ::boost::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
+    const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager)
 {
-    std::shared_ptr<ToolBarManager> pManager (new ToolBarManager());
+    ::boost::shared_ptr<ToolBarManager> pManager (new ToolBarManager());
     pManager->mpImpl.reset(
         new Implementation(rBase,rpMultiplexer,rpViewShellManager,pManager));
     return pManager;
@@ -515,9 +515,9 @@ const OUString ToolBarManager::Implementation::msToolBarResourcePrefix("private:
 
 ToolBarManager::Implementation::Implementation (
     ViewShellBase& rBase,
-    const std::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
-    const std::shared_ptr<ViewShellManager>& rpViewShellManager,
-    const std::shared_ptr<ToolBarManager>& rpToolBarManager)
+    const ::boost::shared_ptr<sd::tools::EventMultiplexer>& rpMultiplexer,
+    const ::boost::shared_ptr<ViewShellManager>& rpViewShellManager,
+    const ::boost::shared_ptr<ToolBarManager>& rpToolBarManager)
     : maMutex(),
       mrBase(rBase),
       mpEventMultiplexer(rpMultiplexer),
@@ -954,8 +954,8 @@ LayouterLock::~LayouterLock()
 //===== ToolBarRules ==========================================================
 
 ToolBarRules::ToolBarRules (
-    const std::shared_ptr<sd::ToolBarManager>& rpToolBarManager,
-    const std::shared_ptr<sd::ViewShellManager>& rpViewShellManager)
+    const ::boost::shared_ptr<sd::ToolBarManager>& rpToolBarManager,
+    const ::boost::shared_ptr<sd::ViewShellManager>& rpViewShellManager)
     : mpToolBarManager(rpToolBarManager),
       mpViewShellManager(rpViewShellManager)
 {
@@ -1397,8 +1397,8 @@ void ToolBarShellList::ReleaseAllShells (ToolBarRules& rRules)
 }
 
 void ToolBarShellList::UpdateShells (
-    const std::shared_ptr<ViewShell>& rpMainViewShell,
-    const std::shared_ptr<ViewShellManager>& rpManager)
+    const ::boost::shared_ptr<ViewShell>& rpMainViewShell,
+    const ::boost::shared_ptr<ViewShellManager>& rpManager)
 {
     if (rpMainViewShell.get() != NULL)
     {

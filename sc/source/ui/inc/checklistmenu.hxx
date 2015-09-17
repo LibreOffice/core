@@ -17,7 +17,7 @@
 #include <vcl/timer.hxx>
 #include <svx/checklbx.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 #include <unordered_map>
 
 namespace com { namespace sun { namespace star {
@@ -150,13 +150,13 @@ private:
         bool     mbEnabled:1;
         bool     mbSeparator:1;
 
-        std::shared_ptr<Action> mpAction;
+        ::boost::shared_ptr<Action> mpAction;
         VclPtr<ScMenuFloatingWindow> mpSubMenuWin;
 
         MenuItemData();
     };
 
-    std::vector<MenuItemData>         maMenuItems;
+    ::std::vector<MenuItemData>         maMenuItems;
 
     struct SubMenuItemData
     {
@@ -345,13 +345,13 @@ private:
     VclPtr<OKButton>        maBtnOk;
     VclPtr<CancelButton>    maBtnCancel;
 
-    std::vector<VclPtr<vcl::Window> >          maTabStopCtrls;
+    ::std::vector<VclPtr<vcl::Window> >          maTabStopCtrls;
     size_t                          mnCurTabStop;
 
-    std::vector<Member>           maMembers;
-    std::unique_ptr<ExtendedData> mpExtendedData;
-    std::unique_ptr<Action>       mpOKAction;
-    std::unique_ptr<Action>       mpPopupEndAction;
+    ::std::vector<Member>           maMembers;
+    boost::scoped_ptr<ExtendedData> mpExtendedData;
+    boost::scoped_ptr<Action>       mpOKAction;
+    boost::scoped_ptr<Action>       mpPopupEndAction;
 
     Config maConfig;
     Size maWndSize;  /// whole window size.

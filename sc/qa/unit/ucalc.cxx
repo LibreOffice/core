@@ -3256,7 +3256,7 @@ void Test::testCopyPaste()
     aRange = ScRange(0,1,1,2,1,1);//target: Sheet2.A2:C2
     ScDocument* pUndoDoc = new ScDocument(SCDOCMODE_UNDO);
     pUndoDoc->InitUndo(m_pDoc, 1, 1, true, true);
-    std::unique_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, pUndoDoc));
+    boost::scoped_ptr<ScUndoPaste> pUndo(createUndoPaste(getDocShell(), aRange, pUndoDoc));
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
     m_pDoc->CopyFromClip(aRange, aMark, IDF_ALL, NULL, &aClipDoc);
@@ -5417,7 +5417,7 @@ void Test::testCellTextWidth()
     ScAddress aTopCell(0, 0, 0);
 
     // Sheet is empty.
-    std::unique_ptr<ScColumnTextWidthIterator> pIter(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+    boost::scoped_ptr<ScColumnTextWidthIterator> pIter(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
     CPPUNIT_ASSERT_MESSAGE("Column should have no text widths stored.", !pIter->hasCell());
 
     // Sheet only has one cell.

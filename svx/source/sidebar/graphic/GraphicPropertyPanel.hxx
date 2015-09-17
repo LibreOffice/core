@@ -24,6 +24,7 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/fixed.hxx>
+#include <boost/scoped_ptr.hpp>
 
 class FixedText;
 class MetricField;

@@ -67,8 +67,8 @@
 #include "markdata.hxx"
 #include "stringutil.hxx"
 
+#include <boost/scoped_ptr.hpp>
 #include <list>
-#include <memory>
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
@@ -1744,7 +1744,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
 
     // Update the datapilot with the newly sorted field members.
 
-    std::unique_ptr<ScDPObject> pNewObj(new ScDPObject(*pDPObj));
+    boost::scoped_ptr<ScDPObject> pNewObj(new ScDPObject(*pDPObj));
     pNewObj->SetSaveData(aNewSaveData);
     ScDBDocFunc aFunc(*GetViewData().GetDocShell());
 
@@ -1832,7 +1832,7 @@ bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
 
                 // apply changes
                 ScDBDocFunc aFunc( *GetViewData().GetDocShell() );
-                std::unique_ptr<ScDPObject> pNewObj(new ScDPObject( *pDPObj ));
+                boost::scoped_ptr<ScDPObject> pNewObj(new ScDPObject( *pDPObj ));
                 pNewObj->SetSaveData( aData );
                 aFunc.DataPilotUpdate( pDPObj, pNewObj.get(), true, false );      //! bApi for drag&drop?
                 pNewObj.reset();
@@ -1961,7 +1961,7 @@ void ScDBFunc::SetDataPilotDetails(bool bShow, const OUString* pNewDimensionName
 
                 // apply changes
                 ScDBDocFunc aFunc( *GetViewData().GetDocShell() );
-                std::unique_ptr<ScDPObject> pNewObj(new ScDPObject( *pDPObj ));
+                boost::scoped_ptr<ScDPObject> pNewObj(new ScDPObject( *pDPObj ));
                 pNewObj->SetSaveData( aData );
                 aFunc.DataPilotUpdate( pDPObj, pNewObj.get(), true, false );
                 pNewObj.reset();
@@ -1998,7 +1998,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
 
     SCTAB nNewTab = GetViewData().GetTabNo();
 
-    std::unique_ptr<ScDocument> pInsDoc(new ScDocument(SCDOCMODE_CLIP));
+    boost::scoped_ptr<ScDocument> pInsDoc(new ScDocument(SCDOCMODE_CLIP));
     pInsDoc->ResetClip( pDoc, nNewTab );
     for (SCROW nRow = 0; nRow < nRowSize; ++nRow)
     {

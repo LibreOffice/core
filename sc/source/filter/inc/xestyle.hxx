@@ -30,7 +30,8 @@
 #include "xeroot.hxx"
 #include "conditio.hxx"
 #include "fonthelper.hxx"
-#include <memory>
+#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 /* ============================================================================
@@ -118,7 +119,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    typedef std::shared_ptr< XclExpPaletteImpl > XclExpPaletteImplRef;
+    typedef boost::shared_ptr< XclExpPaletteImpl > XclExpPaletteImplRef;
     XclExpPaletteImplRef mxImpl;
 };
 
@@ -313,7 +314,7 @@ private:
 
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
     XclExpNumFmtVec     maFormatMap;    /// Maps core formats to Excel indexes.
-    std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
+    boost::scoped_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
     sal_uLong           mnStdFmt;       /// Key for standard number format.
     sal_uInt16          mnXclOffset;    /// Offset to first user defined format.
 };
@@ -717,12 +718,12 @@ public:
     virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    std::unique_ptr<XclExpCellAlign> mpAlign;
-    std::unique_ptr<XclExpCellBorder> mpBorder;
-    std::unique_ptr<XclExpDxfFont> mpFont;
-    std::unique_ptr<XclExpNumFmt> mpNumberFmt;
-    std::unique_ptr<XclExpCellProt> mpProt;
-    std::unique_ptr<XclExpColor> mpColor;
+    boost::scoped_ptr<XclExpCellAlign> mpAlign;
+    boost::scoped_ptr<XclExpCellBorder> mpBorder;
+    boost::scoped_ptr<XclExpDxfFont> mpFont;
+    boost::scoped_ptr<XclExpNumFmt> mpNumberFmt;
+    boost::scoped_ptr<XclExpCellProt> mpProt;
+    boost::scoped_ptr<XclExpColor> mpColor;
 };
 
 class XclExpDxfs : public XclExpRecordBase, protected XclExpRoot
@@ -739,7 +740,7 @@ private:
     std::map<OUString, sal_Int32> maStyleNameToDxfId;
     DxfContainer maDxf;
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
-    std::unique_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
+    boost::scoped_ptr<NfKeywordTable>   mpKeywordTable; /// Replacement table.
 };
 
 class XclExpXmlStyleSheet : public XclExpRecordBase, protected XclExpRoot

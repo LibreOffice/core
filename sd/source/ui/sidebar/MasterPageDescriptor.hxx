@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_MASTERPAGEDESCRIPTOR_HXX
 
 #include "MasterPageContainer.hxx"
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 namespace sd { namespace sidebar {
 
@@ -29,7 +29,7 @@ class PageObjectProvider;
 class PreviewProvider;
 
 class MasterPageDescriptor;
-typedef std::shared_ptr<MasterPageDescriptor> SharedMasterPageDescriptor;
+typedef ::boost::shared_ptr<MasterPageDescriptor> SharedMasterPageDescriptor;
 
 /** A collection of data that is stored for every master page in the
     MasterpageContainer.
@@ -44,8 +44,8 @@ public:
         const OUString& rPageName,
         const OUString& rStyleName,
         const bool bIsPrecious,
-        const std::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
-        const std::shared_ptr<PreviewProvider>& rpPreviewProvider);
+        const ::boost::shared_ptr<PageObjectProvider>& rpPageObjectProvider,
+        const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider);
     MasterPageDescriptor (const MasterPageDescriptor& rDescriptor);
     ~MasterPageDescriptor();
 
@@ -185,12 +185,12 @@ public:
     /** The prewview provider. May be empty.  May be replaced during the
         lifetime of a MasterPageDescriptor object.
     */
-    std::shared_ptr<PreviewProvider> mpPreviewProvider;
+    ::boost::shared_ptr<PreviewProvider> mpPreviewProvider;
 
     /** The master page provider.  May be empty.  May be replaced during
         the lifetime of a MasterPageDescriptor object.
     */
-    std::shared_ptr<PageObjectProvider> mpPageObjectProvider;
+    ::boost::shared_ptr<PageObjectProvider> mpPageObjectProvider;
 
     /** This index represents the order in which templates are provided via
         the TemplateScanner.  It defines the order in which the entries in

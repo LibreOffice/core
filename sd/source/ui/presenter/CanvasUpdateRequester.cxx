@@ -38,7 +38,7 @@ public:
 
 CanvasUpdateRequester::RequesterMap CanvasUpdateRequester::maRequesterMap;
 
-std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
+::boost::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
     const Reference<rendering::XSpriteCanvas>& rxSharedCanvas)
 {
     RequesterMap::const_iterator iRequester;
@@ -49,7 +49,7 @@ std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
     }
 
     // No requester for the given canvas found.  Create a new one.
-    std::shared_ptr<CanvasUpdateRequester> pRequester (
+    ::boost::shared_ptr<CanvasUpdateRequester> pRequester (
         new CanvasUpdateRequester(rxSharedCanvas), Deleter());
     maRequesterMap.push_back(RequesterMap::value_type(rxSharedCanvas,pRequester));
     return pRequester;

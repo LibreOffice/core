@@ -68,7 +68,7 @@ namespace {
     public:
         PrintOptions (
             const vcl::PrinterOptionsHelper& rHelper,
-            const std::vector<sal_Int32>& rSlidesPerPage)
+            const ::std::vector<sal_Int32>& rSlidesPerPage)
             : mrProperties(rHelper),
               maSlidesPerPage(rSlidesPerPage)
         {
@@ -221,7 +221,7 @@ namespace {
 
     private:
         const vcl::PrinterOptionsHelper& mrProperties;
-        const std::vector<sal_Int32> maSlidesPerPage;
+        const ::std::vector<sal_Int32> maSlidesPerPage;
 
         /** When the value of the property with name pName is a boolean then
             return its value. When the property is unknown then
@@ -353,14 +353,14 @@ namespace {
             }
         }
 
-        std::vector<sal_Int32> GetSlidesPerPage() const
+        ::std::vector<sal_Int32> GetSlidesPerPage() const
         {
             return maSlidesPerPage;
         }
 
     private:
-        std::vector<beans::PropertyValue> maProperties;
-        std::vector<sal_Int32> maSlidesPerPage;
+        ::std::vector<beans::PropertyValue> maProperties;
+        ::std::vector<sal_Int32> maSlidesPerPage;
         bool mbImpress;
         sal_Int32 mnCurPage;
 
@@ -799,9 +799,9 @@ namespace {
 
             // Print at least two rows and columns.  More if the document
             // page fits completely onto the printer page.
-            const sal_Int32 nColumnCount (std::max(sal_Int32(2),
+            const sal_Int32 nColumnCount (::std::max(sal_Int32(2),
                     sal_Int32(aPrintSize.Width() / nPageWidth)));
-            const sal_Int32 nRowCount (std::max(sal_Int32(2),
+            const sal_Int32 nRowCount (::std::max(sal_Int32(2),
                     sal_Int32(aPrintSize.Height() / nPageHeight)));
             for (sal_Int32 nRow=0; nRow<nRowCount; ++nRow)
                 for (sal_Int32 nColumn=0; nColumn<nColumnCount; ++nColumn)
@@ -913,7 +913,7 @@ namespace {
     public:
         HandoutPrinterPage (
             const sal_uInt16 nHandoutPageIndex,
-            const std::vector<sal_uInt16>& rPageIndices,
+            const ::std::vector<sal_uInt16>& rPageIndices,
             const MapMode& rMapMode,
             const OUString& rsPageString,
             const Point& rPageStringOffset,
@@ -1045,7 +1045,7 @@ namespace {
 
     private:
         const sal_uInt16 mnHandoutPageIndex;
-        const std::vector<sal_uInt16> maPageIndices;
+        const ::std::vector<sal_uInt16> maPageIndices;
     };
 
     /** The outline information (title, subtitle, outline objects) of the
@@ -1119,7 +1119,7 @@ namespace {
         }
 
     private:
-        std::unique_ptr<OutlinerParaObject> mpParaObject;
+        ::boost::scoped_ptr<OutlinerParaObject> mpParaObject;
     };
 }
 
@@ -1247,23 +1247,23 @@ public:
 
         Printer& rPrinter (*mpPrinter);
 
-        std::shared_ptr<ViewShell> pViewShell (mrBase.GetMainViewShell());
+        ::boost::shared_ptr<ViewShell> pViewShell (mrBase.GetMainViewShell());
         if ( ! pViewShell)
             return;
 
         SdDrawDocument* pDocument = pViewShell->GetDoc();
         OSL_ASSERT(pDocument!=NULL);
 
-        std::shared_ptr<DrawViewShell> pDrawViewShell(
-            std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
+        ::boost::shared_ptr<DrawViewShell> pDrawViewShell(
+            ::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
 
-        if (!mpPrintView)
+        if ( ! mpPrintView)
             mpPrintView.reset(new DrawView(mrBase.GetDocShell(), &rPrinter, NULL));
 
         if (nIndex<0 || sal::static_int_cast<sal_uInt32>(nIndex)>=maPrinterPages.size())
             return;
 
-        const std::shared_ptr<PrinterPage> pPage (maPrinterPages[nIndex]);
+        const ::boost::shared_ptr<PrinterPage> pPage (maPrinterPages[nIndex]);
         OSL_ASSERT(pPage);
         if ( ! pPage)
             return;
@@ -1322,11 +1322,11 @@ private:
     bool mbIsDisposed;
     VclPtr<Printer> mpPrinter;
     Size maPrinterPageSizePixel;
-    std::unique_ptr<PrintOptions> mpOptions;
-    std::vector< std::shared_ptr< ::sd::PrinterPage> > maPrinterPages;
-    std::unique_ptr<DrawView> mpPrintView;
+    ::boost::scoped_ptr<PrintOptions> mpOptions;
+    ::std::vector< ::boost::shared_ptr< ::sd::PrinterPage> > maPrinterPages;
+    ::boost::scoped_ptr<DrawView> mpPrintView;
     bool mbHasOrientationWarningBeenShown;
-    std::vector<sal_Int32> maSlidesPerPage;
+    ::std::vector<sal_Int32> maSlidesPerPage;
     awt::Size maPrintSize;
 
     void Dispose()
@@ -1620,7 +1620,7 @@ private:
 
         long nPageH = aOutRect.GetHeight();
 
-        std::vector< sal_Int32 > aPages;
+        ::std::vector< sal_Int32 > aPages;
         sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
         StringRangeEnumerator::getRangesFromString(
             mpOptions->GetPrinterSelection(nPageCount, GetCurrentPageIndex()),
@@ -1724,7 +1724,7 @@ private:
             }
 
             maPrinterPages.push_back(
-                std::shared_ptr<PrinterPage>(
+                ::boost::shared_ptr<PrinterPage>(
                     new OutlinerPrinterPage(
                         pOutliner->CreateParaObject(),
                         aMap,
@@ -1798,7 +1798,7 @@ private:
             aMap.SetOrigin(Point());
         }
 
-        std::shared_ptr<ViewShell> pViewShell (mrBase.GetMainViewShell());
+        ::boost::shared_ptr<ViewShell> pViewShell (mrBase.GetMainViewShell());
         pViewShell->WriteFrameViewData();
 
         // Count page shapes.
@@ -1820,7 +1820,7 @@ private:
         StringRangeEnumerator aRangeEnum(
             mpOptions->GetPrinterSelection(nPageCount, GetCurrentPageIndex()),
             0, nPageCount-1);
-        std::vector<sal_uInt16> aPageIndices;
+        ::std::vector<sal_uInt16> aPageIndices;
         sal_uInt16 nPrinterPageIndex = 0;
         StringRangeEnumerator::Iterator it = aRangeEnum.begin(), itEnd = aRangeEnum.end();
         bool bLastLoop = (it == itEnd);
@@ -1840,7 +1840,7 @@ private:
             if (!aPageIndices.empty() && (aPageIndices.size() == nShapeCount || bLastLoop))
             {
                 maPrinterPages.push_back(
-                    std::shared_ptr<PrinterPage>(
+                    ::boost::shared_ptr<PrinterPage>(
                         new HandoutPrinterPage(
                             nPrinterPageIndex++,
                             aPageIndices,
@@ -1889,7 +1889,7 @@ private:
         const PageKind ePageKind,
         PrintInfo& rInfo)
     {
-        std::shared_ptr<ViewShell> pViewShell (mrBase.GetMainViewShell());
+        ::boost::shared_ptr<ViewShell> pViewShell (mrBase.GetMainViewShell());
         pViewShell->WriteFrameViewData();
 
         sal_Int32 nPageCount = mrBase.GetDocument()->GetSdPageCount(PK_STANDARD);
@@ -2022,7 +2022,7 @@ private:
         StringRangeEnumerator aRangeEnum(
             mpOptions->GetPrinterSelection(nPageCount, GetCurrentPageIndex()),
             0, nPageCount-1);
-        std::vector< sal_uInt16 > aPageVector;
+        ::std::vector< sal_uInt16 > aPageVector;
         for (StringRangeEnumerator::Iterator
                  it = aRangeEnum.begin(),
                  itEnd = aRangeEnum.end();
@@ -2035,23 +2035,23 @@ private:
         }
 
         // create pairs of pages to print on each page
-        typedef std::vector< std::pair< sal_uInt16, sal_uInt16 > > PairVector;
+        typedef ::std::vector< ::std::pair< sal_uInt16, sal_uInt16 > > PairVector;
         PairVector aPairVector;
         if ( ! aPageVector.empty())
         {
             sal_uInt32 nFirstIndex = 0, nLastIndex = aPageVector.size() - 1;
 
             if( aPageVector.size() & 1 )
-                aPairVector.push_back( std::make_pair( (sal_uInt16) 65535, aPageVector[ nFirstIndex++ ] ) );
+                aPairVector.push_back( ::std::make_pair( (sal_uInt16) 65535, aPageVector[ nFirstIndex++ ] ) );
             else
-                aPairVector.push_back( std::make_pair( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] ) );
+                aPairVector.push_back( ::std::make_pair( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] ) );
 
             while( nFirstIndex < nLastIndex )
             {
                 if( nFirstIndex & 1 )
-                    aPairVector.push_back( std::make_pair( aPageVector[ nFirstIndex++ ], aPageVector[ nLastIndex-- ] ) );
+                    aPairVector.push_back( ::std::make_pair( aPageVector[ nFirstIndex++ ], aPageVector[ nLastIndex-- ] ) );
                 else
-                    aPairVector.push_back( std::make_pair( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] ) );
+                    aPairVector.push_back( ::std::make_pair( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] ) );
             }
         }
 
@@ -2065,14 +2065,14 @@ private:
             if ((!bIsIndexOdd && mpOptions->IsPrintFrontPage())
                 || (bIsIndexOdd && mpOptions->IsPrintBackPage()))
             {
-                const std::pair<sal_uInt16, sal_uInt16> aPair (aPairVector[nIndex]);
+                const ::std::pair<sal_uInt16, sal_uInt16> aPair (aPairVector[nIndex]);
                 Point aSecondOffset (aOffset);
                 if (rInfo.meOrientation == ORIENTATION_LANDSCAPE)
                     aSecondOffset.X() += aAdjustedPrintSize.Width() / 2;
                 else
                     aSecondOffset.Y() += aAdjustedPrintSize.Height() / 2;
                 maPrinterPages.push_back(
-                    std::shared_ptr<PrinterPage>(
+                    ::boost::shared_ptr<PrinterPage>(
                         new BookletPrinterPage(
                             aPair.first,
                             aPair.second,
@@ -2105,7 +2105,7 @@ private:
             nPaperBin = rInfo.mpPrinter->GetPaperBin();
 
         maPrinterPages.push_back(
-            std::shared_ptr<PrinterPage>(
+            ::boost::shared_ptr<PrinterPage>(
                 new TiledPrinterPage(
                     sal::static_int_cast<sal_uInt16>(nPageIndex),
                     ePageKind,
@@ -2153,7 +2153,7 @@ private:
             // if CutPage is set then do not move it, otherwise move the
             // scaled page to printable area
             maPrinterPages.push_back(
-                std::shared_ptr<PrinterPage>(
+                ::boost::shared_ptr<PrinterPage>(
                     new RegularPrinterPage(
                         sal::static_int_cast<sal_uInt16>(nPageIndex),
                         ePageKind,
@@ -2189,7 +2189,7 @@ private:
                 {
                     aMap.SetOrigin(aPageOrigin);
                     maPrinterPages.push_back(
-                        std::shared_ptr<PrinterPage>(
+                        ::boost::shared_ptr<PrinterPage>(
                             new RegularPrinterPage(
                                 sal::static_int_cast<sal_uInt16>(nPageIndex),
                                 ePageKind,

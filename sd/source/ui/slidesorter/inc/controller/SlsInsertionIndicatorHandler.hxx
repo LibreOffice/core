@@ -62,10 +62,10 @@ public:
     class ForceShowContext
     {
     public:
-        ForceShowContext (const std::shared_ptr<InsertionIndicatorHandler>& rpHandler);
+        ForceShowContext (const ::boost::shared_ptr<InsertionIndicatorHandler>& rpHandler);
         ~ForceShowContext();
     private:
-        const std::shared_ptr<InsertionIndicatorHandler> mpHandler;
+        const ::boost::shared_ptr<InsertionIndicatorHandler> mpHandler;
     };
 
     /** Update the indicator icon from the current transferable (from the
@@ -107,8 +107,8 @@ public:
 
 private:
     SlideSorter& mrSlideSorter;
-    std::shared_ptr<view::InsertAnimator> mpInsertAnimator;
-    std::shared_ptr<view::InsertionIndicatorOverlay> mpInsertionIndicatorOverlay;
+    ::boost::shared_ptr<view::InsertAnimator> mpInsertAnimator;
+    ::boost::shared_ptr<view::InsertionIndicatorOverlay> mpInsertionIndicatorOverlay;
     view::InsertPosition maInsertPosition;
     Mode meMode;
     bool mbIsInsertionTrivial;
@@ -121,7 +121,7 @@ private:
     void SetPosition (
         const Point& rPoint,
         const Mode eMode);
-    std::shared_ptr<view::InsertAnimator> GetInsertAnimator();
+    ::boost::shared_ptr<view::InsertAnimator> GetInsertAnimator();
 
     /** Make the insertion indicator visible (that is the show part) and
         keep it visible, even when the mouse leaves the window (that is the

@@ -29,7 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/lineitem.hxx>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sc { namespace sidebar {
 
@@ -291,8 +291,8 @@ IMPL_LINK_TYPED(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox, void)
 
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
     SvxBoxInfoItem      aBorderInner( SID_ATTR_BORDER_INNER );
-    std::unique_ptr<editeng::SvxBorderLine> pTop;
-    std::unique_ptr<editeng::SvxBorderLine> pBottom;
+    boost::scoped_ptr<editeng::SvxBorderLine> pTop;
+    boost::scoped_ptr<editeng::SvxBorderLine> pBottom;
     sal_uInt8               nValidFlags = 0;
     using namespace ::com::sun::star::table::BorderLineStyle;
 

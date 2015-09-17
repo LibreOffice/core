@@ -31,7 +31,7 @@
 #include <formula/vectortoken.hxx>
 #include <svl/broadcast.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace formula;
 
@@ -171,7 +171,7 @@ void Test::testFormulaCreateStringFromTokens()
     };
     (void) aTests;
 
-    std::unique_ptr<ScTokenArray> pArray;
+    boost::scoped_ptr<ScTokenArray> pArray;
 
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
 
@@ -920,7 +920,7 @@ void Test::testFormulaCompiler()
 
     for (size_t i = 0, n = SAL_N_ELEMENTS(aTests); i < n; ++i)
     {
-        std::unique_ptr<ScTokenArray> pArray;
+        boost::scoped_ptr<ScTokenArray> pArray;
         {
             pArray.reset(compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), NULL, aTests[i].eInputGram));
             CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray.get());
@@ -950,7 +950,7 @@ void Test::testFormulaCompilerJumpReordering()
         OUString aInput("=IF(B1;12;\"text\")");
 
         // Compile formula string first.
-        std::unique_ptr<ScTokenArray> pCode(compileFormula(m_pDoc, aInput));
+        boost::scoped_ptr<ScTokenArray> pCode(compileFormula(m_pDoc, aInput));
         CPPUNIT_ASSERT(pCode.get());
 
         // Then generate RPN tokens.

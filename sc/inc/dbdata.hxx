@@ -28,6 +28,8 @@
 
 #include <svl/listener.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 #include <memory>
 #include <set>
 #include <vector>
@@ -63,10 +65,10 @@ protected:
 class ScDBData : public SvtListener, public ScRefreshTimer
 {
 private:
-    std::unique_ptr<ScSortParam> mpSortParam;
-    std::unique_ptr<ScQueryParam> mpQueryParam;
-    std::unique_ptr<ScSubTotalParam> mpSubTotal;
-    std::unique_ptr<ScImportParam> mpImportParam;
+    boost::scoped_ptr<ScSortParam> mpSortParam;
+    boost::scoped_ptr<ScQueryParam> mpQueryParam;
+    boost::scoped_ptr<ScSubTotalParam> mpSubTotal;
+    boost::scoped_ptr<ScImportParam> mpImportParam;
 
     ScDBDataContainerBase* mpContainer;
 

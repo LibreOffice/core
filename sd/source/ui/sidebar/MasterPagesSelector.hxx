@@ -60,7 +60,7 @@ public:
         vcl::Window* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
-        const std::shared_ptr<MasterPageContainer>& rpContainer,
+        const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~MasterPagesSelector();
     virtual void dispose() SAL_OVERRIDE;
@@ -108,7 +108,7 @@ public:
 
 protected:
     mutable ::osl::Mutex maMutex;
-    std::shared_ptr<MasterPageContainer> mpContainer;
+    ::boost::shared_ptr<MasterPageContainer> mpContainer;
 
     SdDrawDocument& mrDocument;
     bool mbSmallPreviewSize;

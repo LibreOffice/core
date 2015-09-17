@@ -14,9 +14,9 @@
 #include "cellvalue.hxx"
 #include <celltextattr.hxx>
 
-#include <memory>
 #include <vector>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 class ScColumn;
@@ -31,7 +31,7 @@ class ColumnBlockPositionSet;
 
 class ClipContextBase : boost::noncopyable
 {
-    std::unique_ptr<ColumnBlockPositionSet> mpSet;
+    boost::scoped_ptr<ColumnBlockPositionSet> mpSet;
 
     ClipContextBase(); // disabled
 

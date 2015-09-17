@@ -67,7 +67,7 @@ ScProgress* GetProgressBar(
         // if the total number of rows is less than 1000, don't even bother
         // with the progress bar because drawing progress bar can be very
         // expensive especially in GTK.
-        return nullptr;
+        return NULL;
     }
 
     if (pOuterProgress)
@@ -77,7 +77,7 @@ ScProgress* GetProgressBar(
         return new ScProgress(
             pDoc->GetDocumentShell(), ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), nTotalCount);
 
-    return nullptr;
+    return NULL;
 }
 
 void GetOptimalHeightsInColumn(
@@ -236,32 +236,32 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     nRepeatEndX( SCCOL_REPEAT_NONE ),
     nRepeatStartY( SCROW_REPEAT_NONE ),
     nRepeatEndY( SCROW_REPEAT_NONE ),
-    pTabProtection( nullptr ),
-    pColWidth( nullptr ),
-    mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(nullptr) ),
-    pColFlags( nullptr ),
-    pRowFlags( nullptr ),
+    pTabProtection( NULL ),
+    pColWidth( NULL ),
+    mpRowHeights( static_cast<ScFlatUInt16RowSegments*>(NULL) ),
+    pColFlags( NULL ),
+    pRowFlags( NULL ),
     mpHiddenCols(new ScFlatBoolColSegments),
     mpHiddenRows(new ScFlatBoolRowSegments),
     mpFilteredCols(new ScFlatBoolColSegments),
     mpFilteredRows(new ScFlatBoolRowSegments),
-    pOutlineTable( nullptr ),
-    pSheetEvents( nullptr ),
+    pOutlineTable( NULL ),
+    pSheetEvents( NULL ),
     nTableAreaX( 0 ),
     nTableAreaY( 0 ),
     nTab( nNewTab ),
     pDocument( pDoc ),
-    pSearchText ( nullptr ),
-    pSortCollator( nullptr ),
-    pRepeatColRange( nullptr ),
-    pRepeatRowRange( nullptr ),
+    pSearchText ( NULL ),
+    pSortCollator( NULL ),
+    pRepeatColRange( NULL ),
+    pRepeatRowRange( NULL ),
     nLockCount( 0 ),
-    pScenarioRanges( nullptr ),
+    pScenarioRanges( NULL ),
     aScenarioColor( COL_LIGHTGRAY ),
     aTabBgColor( COL_AUTO ),
     nScenarioFlags( 0 ),
-    pDBDataNoName(nullptr),
-    mpRangeName(nullptr),
+    pDBDataNoName(NULL),
+    mpRangeName(NULL),
     mpCondFormatList( new ScConditionalFormatList() ),
     bScenario(false),
     bLayoutRTL(false),
@@ -455,7 +455,7 @@ long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
     aOptions.bTotalSize  = bTotalSize;
 
     return aCol[nCol].GetNeededSize
-        ( nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, aOptions, nullptr );
+        ( nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, aOptions, NULL );
 }
 
 bool ScTable::SetOptimalHeight(
@@ -1071,7 +1071,7 @@ SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight ) const
     {
         nCol++;
         SCCOL nEnd = 0;
-        bool bHidden = pDocument->ColHidden(nCol, nTab, nullptr, &nEnd);
+        bool bHidden = pDocument->ColHidden(nCol, nTab, NULL, &nEnd);
         if(bHidden)
             nCol = nEnd +1;
 
@@ -1081,7 +1081,7 @@ SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight ) const
     {
         nCol--;
         SCCOL nStart = MAXCOL;
-        bool bHidden = pDocument->ColHidden(nCol, nTab, &nStart, nullptr);
+        bool bHidden = pDocument->ColHidden(nCol, nTab, &nStart, NULL);
         if(bHidden)
             nCol = nStart - 1;
 
@@ -1100,7 +1100,7 @@ SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRo
         {
             nCol++;
             SCCOL nEndCol = 0;
-            bool bHidden = pDocument->ColHidden( nCol, nTab, nullptr, &nEndCol );
+            bool bHidden = pDocument->ColHidden( nCol, nTab, NULL, &nEndCol );
             if(bHidden)
             {
                 nCol = nEndCol +1;
@@ -1124,7 +1124,7 @@ SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRo
         {
             nCol--;
             SCCOL nStartCol = MAXCOL;
-            bool bHidden = pDocument->ColHidden( nCol, nTab, &nStartCol, nullptr );
+            bool bHidden = pDocument->ColHidden( nCol, nTab, &nStartCol, NULL );
             if(bHidden)
             {
                 nCol = nStartCol -1;
@@ -1571,7 +1571,7 @@ void ScTable::UpdateReference(
         //  updating print ranges is not necessary with multiple print ranges
         if ( bRecalcPages && GetPrintRangeCount() <= 1 )
         {
-            UpdatePageBreaks(nullptr);
+            UpdatePageBreaks(NULL);
 
             pDocument->RepaintRange( ScRange(0,0,nTab,MAXCOL,MAXROW,nTab) );
         }
@@ -1730,7 +1730,7 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
     for (SCCOL i = 0; i <= MAXCOL; ++i)
     {
         SCCOL nLastCol = i;
-        if (ColHidden(i, nullptr, &nLastCol))
+        if (ColHidden(i, NULL, &nLastCol))
         {
             // Columns are hidden in this range.
             aSkipCols.setTrue(i, nLastCol);
@@ -1813,7 +1813,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
 
         Fraction aZoom(1,1);
         nPixel = aCol[rCol].GetNeededSize(
-            nRow, pDev, nPPTX, nPPTY, aZoom, aZoom, true, aOptions, nullptr );
+            nRow, pDev, nPPTX, nPPTY, aZoom, aZoom, true, aOptions, NULL );
 
         aCol[rCol].SetTextWidth(nRow, static_cast<sal_uInt16>(nPixel));
     }
@@ -1898,7 +1898,7 @@ void ScTable::CopyPrintRange(const ScTable& rTable)
     bPrintEntireSheet = rTable.bPrintEntireSheet;
 
     delete pRepeatColRange;
-    pRepeatColRange = nullptr;
+    pRepeatColRange = NULL;
     if (rTable.pRepeatColRange)
     {
         pRepeatColRange = new ScRange(*rTable.pRepeatColRange);
@@ -1907,7 +1907,7 @@ void ScTable::CopyPrintRange(const ScTable& rTable)
     }
 
     delete pRepeatRowRange;
-    pRepeatRowRange = nullptr;
+    pRepeatRowRange = NULL;
     if (rTable.pRepeatRowRange)
     {
         pRepeatRowRange = new ScRange(*rTable.pRepeatRowRange);
@@ -1970,7 +1970,7 @@ void ScTable::SetPrintEntireSheet()
 
 const ScRange* ScTable::GetPrintRange(sal_uInt16 nPos) const
 {
-    return (nPos < GetPrintRangeCount()) ? &aPrintRanges[ nPos ] : nullptr;
+    return (nPos < GetPrintRangeCount()) ? &aPrintRanges[ nPos ] : NULL;
 }
 
 void ScTable::FillPrintSaver( ScPrintSaverTab& rSaveTab ) const
@@ -1987,7 +1987,7 @@ void ScTable::RestorePrintRanges( const ScPrintSaverTab& rSaveTab )
     SetRepeatRowRange( rSaveTab.GetRepeatRow() );
 
     InvalidatePageBreaks();     // #i117952# forget page breaks for an old print range
-    UpdatePageBreaks(nullptr);
+    UpdatePageBreaks(NULL);
 }
 
 SCROW ScTable::VisibleDataCellIterator::ROW_NOT_FOUND = -1;
@@ -2203,7 +2203,7 @@ ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
 SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow )
 {
     if (!ValidColRow(nCol, nRow))
-        return nullptr;
+        return NULL;
 
     return aCol[nCol].GetBroadcaster(nRow);
 }
@@ -2268,7 +2268,7 @@ void ScTable::DumpFormulaGroups( SCCOL nCol ) const
 const SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow ) const
 {
     if (!ValidColRow(nCol, nRow))
-        return nullptr;
+        return NULL;
 
     return aCol[nCol].GetBroadcaster(nRow);
 }

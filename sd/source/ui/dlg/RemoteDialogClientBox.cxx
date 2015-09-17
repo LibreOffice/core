@@ -41,7 +41,7 @@ namespace sd {
 
 //                          struct ClientBoxEntry
 
-ClientBoxEntry::ClientBoxEntry( std::shared_ptr<ClientInfo> pClientInfo ) :
+ClientBoxEntry::ClientBoxEntry( ::boost::shared_ptr<ClientInfo> pClientInfo ) :
     m_bActive( false ),
     m_pClientInfo( pClientInfo )
 {
@@ -632,7 +632,7 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
         return true;
 }
 
-long ClientBox::addEntry( std::shared_ptr<ClientInfo> pClientInfo )
+long ClientBox::addEntry( ::boost::shared_ptr<ClientInfo> pClientInfo )
 {
     long         nPos = 0;
 
@@ -691,11 +691,11 @@ void ClientBox::populateEntries()
 #ifdef ENABLE_SDREMOTE
     RemoteServer::ensureDiscoverable();
 
-    vector< std::shared_ptr< ClientInfo > > aClients( RemoteServer::getClients() );
+    vector< ::boost::shared_ptr< ClientInfo > > aClients( RemoteServer::getClients() );
 
-    const vector< std::shared_ptr<ClientInfo > >::const_iterator aEnd( aClients.end() );
+    const vector< ::boost::shared_ptr<ClientInfo > >::const_iterator aEnd( aClients.end() );
 
-    for ( vector< std::shared_ptr< ClientInfo > >::const_iterator aIt( aClients.begin() );
+    for ( vector< ::boost::shared_ptr< ClientInfo > >::const_iterator aIt( aClients.begin() );
         aIt != aEnd; ++aIt )
     {
         addEntry( *aIt );

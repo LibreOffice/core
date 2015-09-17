@@ -64,7 +64,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    typedef std::unique_ptr< XclExpSstImpl > XclExpSstImplPtr;
+    typedef boost::scoped_ptr< XclExpSstImpl > XclExpSstImplPtr;
     XclExpSstImplPtr    mxImpl;
 };
 
@@ -123,7 +123,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    typedef std::unique_ptr< SvStream > SvStreamPtr;
+    typedef boost::scoped_ptr< SvStream > SvStreamPtr;
 
     ScAddress           maScPos;            /// Position of the hyperlink.
     OUString            m_Repr;             /// Cell representation text.
@@ -180,7 +180,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    typedef std::unique_ptr< XclExpCFImpl > XclExpCFImplPtr;
+    typedef boost::scoped_ptr< XclExpCFImpl > XclExpCFImplPtr;
     XclExpCFImplPtr     mxImpl;
 };
 
@@ -272,9 +272,9 @@ public:
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 private:
-    std::unique_ptr<XclExpCfvo> mpCfvoLowerLimit;
-    std::unique_ptr<XclExpCfvo> mpCfvoUpperLimit;
-    std::unique_ptr<XclExpColScaleCol> mpCol;
+    boost::scoped_ptr<XclExpCfvo> mpCfvoLowerLimit;
+    boost::scoped_ptr<XclExpCfvo> mpCfvoUpperLimit;
+    boost::scoped_ptr<XclExpColScaleCol> mpCol;
 
     const ScDataBarFormat& mrFormat;
     sal_Int32 mnPriority;

@@ -23,7 +23,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <memory>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -37,7 +38,7 @@ public:
         seconds.  Subsequent calls to this function will create a new
         instance.
     */
-    static std::shared_ptr<CacheConfiguration> Instance();
+    static ::boost::shared_ptr<CacheConfiguration> Instance();
 
     /** Look up the specified value in
         MultiPaneGUI/SlideSorter/PreviewCache.   When the specified value
@@ -49,7 +50,7 @@ private:
     /** When a caller holds a reference after we have released ours we use
         this weak pointer to avoid creating a new instance.
     */
-    static std::weak_ptr<CacheConfiguration> mpWeakInstance;
+    static ::boost::weak_ptr<CacheConfiguration> mpWeakInstance;
     static Timer maReleaseTimer;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::container::XNameAccess> mxCacheNode;

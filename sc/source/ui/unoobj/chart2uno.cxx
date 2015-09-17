@@ -77,7 +77,7 @@ using ::std::vector;
 using ::std::list;
 using ::std::distance;
 using ::std::unary_function;
-using ::std::shared_ptr;
+using ::boost::shared_ptr;
 
 namespace
 {
@@ -187,9 +187,9 @@ struct TokenTable : boost::noncopyable
 vector<ScTokenRef>* TokenTable::getColRanges(SCCOL nCol) const
 {
     if (nCol >= mnColCount)
-        return nullptr;
+        return NULL;
     if( mnRowCount<=0 )
-        return nullptr;
+        return NULL;
 
     unique_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
     sal_uInt32 nLast = getIndex(nCol, mnRowCount-1);
@@ -208,9 +208,9 @@ vector<ScTokenRef>* TokenTable::getColRanges(SCCOL nCol) const
 vector<ScTokenRef>* TokenTable::getRowRanges(SCROW nRow) const
 {
     if (nRow >= mnRowCount)
-        return nullptr;
+        return NULL;
     if( mnColCount<=0 )
-        return nullptr;
+        return NULL;
 
     unique_ptr< vector<ScTokenRef> > pTokens(new vector<ScTokenRef>);
     sal_uInt32 nLast = getIndex(mnColCount-1, nRow);
@@ -367,7 +367,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
             FormulaTokenMap::const_iterator it2 = pCol->begin();
             for (SCROW nRow = 0; nRow < nAllRowCount; ++nRow)
             {
-                FormulaToken* pToken = nullptr;
+                FormulaToken* pToken = NULL;
                 if (it2 != pCol->end())
                 {
                     pToken = it2->second;
@@ -448,7 +448,7 @@ class Chart2Positioner : boost::noncopyable
 public:
     Chart2Positioner(ScDocument* pDoc, const vector<ScTokenRef>& rRefTokens) :
         mrRefTokens(rRefTokens),
-        mpPositionMap(nullptr),
+        mpPositionMap(NULL),
         meGlue(GLUETYPE_NA),
         mnStartCol(0),
         mnStartRow(0),
@@ -483,7 +483,7 @@ private:
 
 private:
     const vector<ScTokenRef>& mrRefTokens;
-    std::unique_ptr<Chart2PositionMap> mpPositionMap;
+    boost::scoped_ptr<Chart2PositionMap> mpPositionMap;
     GlueType    meGlue;
     SCCOL       mnStartCol;
     SCROW       mnStartRow;
@@ -714,7 +714,7 @@ void Chart2Positioner::createPositionMap()
 
     bool bNoGlue = (meGlue == GLUETYPE_NONE);
     unique_ptr<FormulaTokenMapMap> pCols(new FormulaTokenMapMap);
-    FormulaTokenMap* pCol = nullptr;
+    FormulaTokenMap* pCol = NULL;
     SCROW nNoGlueRow = 0;
     for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end();
           itr != itrEnd; ++itr)
@@ -791,7 +791,7 @@ void Chart2Positioner::createPositionMap()
         pCol = pCols->begin()->second;
         if (mbDummyUpperLeft)
             if (pCol->find(0) == pCol->end())
-                (*pCol)[ 0 ] = nullptr;        // Dummy fuer Beschriftung
+                (*pCol)[ 0 ] = NULL;        // Dummy fuer Beschriftung
         nAllRowCount = static_cast<SCSIZE>(pCol->size());
     }
 
@@ -807,7 +807,7 @@ void Chart2Positioner::createPositionMap()
                 {
                     pCol = it2->second;
                     if (pCol->find(nKey) == pCol->end())
-                        (*pCol)[ nKey ] = nullptr;
+                        (*pCol)[ nKey ] = NULL;
                 }
             }
         }
@@ -1020,7 +1020,7 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        m_pDocument = nullptr;
+        m_pDocument = NULL;
     }
 }
 
@@ -1521,7 +1521,7 @@ ScChart2DataProvider::createDataSource(
         // No chart position map instance.  Bail out.
         return xResult;
 
-    ScChart2DataSource* pDS = nullptr;
+    ScChart2DataSource* pDS = NULL;
     ::std::list< Reference< chart2::data::XLabeledDataSequence > > aSeqs;
 
     // Fill Categories
@@ -2415,7 +2415,7 @@ void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
-        m_pDocument = nullptr;
+        m_pDocument = NULL;
     }
 }
 
@@ -2475,12 +2475,12 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
     , m_nObjectId( 0 )
     , m_pDocument( pDoc)
     , m_pTokens(pTokens)
-    , m_pRangeIndices(nullptr)
-    , m_pExtRefListener(nullptr)
+    , m_pRangeIndices(NULL)
+    , m_pExtRefListener(NULL)
     , m_xDataProvider( xDP)
     , m_aPropSet(lcl_GetDataSequencePropertyMap())
-    , m_pHiddenListener(nullptr)
-    , m_pValueListener( nullptr )
+    , m_pHiddenListener(NULL)
+    , m_pValueListener( NULL )
     , m_bGotDataChangedHint(false)
     , m_bExtDataRebuildQueued(false)
     , mbTimeBased(false)
@@ -2535,7 +2535,7 @@ void ScChart2DataSequence::RefChanged()
 
         if( m_pDocument )
         {
-            ScChartListenerCollection* pCLC = nullptr;
+            ScChartListenerCollection* pCLC = NULL;
             if (m_pHiddenListener.get())
             {
                 pCLC = m_pDocument->GetChartListenerCollection();
@@ -2567,7 +2567,7 @@ void ScChart2DataSequence::BuildDataCache()
 
     if (!m_pTokens.get())
     {
-        OSL_FAIL("m_pTokens == nullptr!  Something is wrong.");
+        OSL_FAIL("m_pTokens == NULL!  Something is wrong.");
         return;
     }
 
@@ -2598,8 +2598,8 @@ void ScChart2DataSequence::BuildDataCache()
                 {
                     for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
                     {
-                        bool bColHidden = m_pDocument->ColHidden(nCol, nTab, nullptr, &nLastCol);
-                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, nullptr, &nLastRow);
+                        bool bColHidden = m_pDocument->ColHidden(nCol, nTab, NULL, &nLastCol);
+                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, NULL, &nLastRow);
 
                         if (bColHidden || bRowHidden)
                         {
@@ -2686,7 +2686,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
 
     sal_uInt16 nFileId = pToken->GetIndex();
     OUString aTabName = pToken->GetString().getString();
-    ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, aTabName, aRange, nullptr);
+    ScExternalRefCache::TokenArrayRef pArray = pRefMgr->getDoubleRefTokens(nFileId, aTabName, aRange, NULL);
     if (!pArray)
         // no external data exists for this range.
         return 0;
@@ -2696,7 +2696,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
     pRefMgr->addLinkListener(nFileId, pExtRefListener);
     pExtRefListener->addFileId(nFileId);
 
-    ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, aTabName, false, nullptr);
+    ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, aTabName, false, NULL);
     sal_Int32 nDataCount = 0;
     for (FormulaToken* p = pArray->First(); p; p = pArray->Next())
     {
@@ -2729,7 +2729,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
                     if (pFormatter)
                     {
                         const double fVal = aItem.mfValue;
-                        Color* pColor = nullptr;
+                        Color* pColor = NULL;
                         sal_uInt32 nFmt = 0;
                         if (pTable)
                         {
@@ -2769,7 +2769,7 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
     {
         ScTokenRef pToken;
         const ScRange* pRange = rRanges[i];
-        OSL_ENSURE(pRange, "range object is nullptr.");
+        OSL_ENSURE(pRange, "range object is NULL.");
 
         ScRefTokenHelper::getTokenFromRange(pToken, *pRange);
         sal_uInt32 nOrigPos = (*m_pRangeIndices)[i];
@@ -2809,7 +2809,7 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
 {
     if (!m_pDocument)
     {
-        OSL_FAIL("document instance is nullptr!?");
+        OSL_FAIL("document instance is NULL!?");
         return;
     }
 
@@ -2847,7 +2847,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
         sal_uLong nId = pSimpleHint->GetId();
         if ( nId ==SFX_HINT_DYING )
         {
-            m_pDocument = nullptr;
+            m_pDocument = NULL;
         }
         else if ( nId == SFX_HINT_DATACHANGED )
         {
@@ -3179,7 +3179,7 @@ public:
                     OUString aString = ScGlobal::GetRscString(STR_COLUMN);
                     aString += " ";
                     ScAddress aPos( nCol, 0, 0 );
-                    OUString aColStr(aPos.Format(SCA_VALID_COL, nullptr));
+                    OUString aColStr(aPos.Format(SCA_VALID_COL, NULL));
                     aString += aColStr;
                     pArr[mnCount] = aString;
                 }

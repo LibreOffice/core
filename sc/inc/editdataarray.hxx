@@ -23,8 +23,8 @@
 #include "address.hxx"
 #include <editeng/editobj.hxx>
 
-#include <memory>
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 class EditTextObject;
 
@@ -48,8 +48,8 @@ public:
         Item(); // disabled
 
     private:
-        std::shared_ptr<EditTextObject> mpOldData;
-        std::shared_ptr<EditTextObject> mpNewData;
+        ::boost::shared_ptr<EditTextObject> mpOldData;
+        ::boost::shared_ptr<EditTextObject> mpNewData;
         SCTAB mnTab;
         SCCOL mnCol;
         SCROW mnRow;

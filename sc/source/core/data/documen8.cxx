@@ -89,7 +89,7 @@
 #include <documentlinkmgr.hxx>
 #include <scopetools.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -571,7 +571,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = try next again
 
     // Start at specified cell position (nCol, nRow, nTab).
     ScColumn* pCol  = &pTab->aCol[aScope.Col()];
-    std::unique_ptr<ScColumnTextWidthIterator> pColIter(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MAXROW));
+    boost::scoped_ptr<ScColumnTextWidthIterator> pColIter(new ScColumnTextWidthIterator(*pCol, aScope.Row(), MAXROW));
 
     OutputDevice* pDev = NULL;
     sal_uInt16 nRestart = 0;
@@ -1205,7 +1205,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
     bool bConsiderLanguage = aTransliterationWrapper.needLanguageForTheMode();
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
 
-    std::unique_ptr<ScEditEngineDefaulter> pEngine;        // not using pEditEngine member because of defaults
+    boost::scoped_ptr<ScEditEngineDefaulter> pEngine;        // not using pEditEngine member because of defaults
 
     SCTAB nCount = GetTableCount();
     ScMarkData::const_iterator itr = rMultiMark.begin(), itrEnd = rMultiMark.end();
@@ -1240,7 +1240,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     SfxItemSet* pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
                     if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, nRow, nTab ) )
                     {
-                        std::unique_ptr<ScPatternAttr> pPreviewPattern(new ScPatternAttr( *pPattern ));
+                        boost::scoped_ptr<ScPatternAttr> pPreviewPattern(new ScPatternAttr( *pPattern ));
                         pPreviewPattern->SetStyleSheet(pPreviewStyle);
                         pPreviewPattern->FillEditItemSet( pDefaults );
                     }

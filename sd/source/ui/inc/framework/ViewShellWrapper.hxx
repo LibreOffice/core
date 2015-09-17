@@ -30,7 +30,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 namespace {
 
@@ -68,7 +68,7 @@ public:
             to the ViewShell object.
     */
     ViewShellWrapper (
-        ::std::shared_ptr<ViewShell> pViewShell,
+        ::boost::shared_ptr<ViewShell> pViewShell,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XResourceId>& rxViewId,
         const ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow>& rxWindow);
@@ -83,7 +83,7 @@ public:
         to obtain a pointer to the wrapped ViewShell object for a given
         XView object.
     */
-    ::std::shared_ptr<ViewShell> GetViewShell() { return mpViewShell;}
+    ::boost::shared_ptr<ViewShell> GetViewShell() { return mpViewShell;}
 
     // XUnoTunnel
 
@@ -140,8 +140,8 @@ public:
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ::std::shared_ptr< ViewShell >                                                            mpViewShell;
-    ::std::shared_ptr< ::sd::slidesorter::SlideSorterViewShell >                              mpSlideSorterViewShell;
+    ::boost::shared_ptr< ViewShell >                                                            mpViewShell;
+    ::boost::shared_ptr< ::sd::slidesorter::SlideSorterViewShell >                              mpSlideSorterViewShell;
     const ::com::sun::star::uno::Reference< com::sun::star::drawing::framework::XResourceId >   mxViewId;
     ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow >                             mxWindow;
 };

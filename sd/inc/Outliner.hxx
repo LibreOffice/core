@@ -26,6 +26,8 @@
 #include "OutlinerIterator.hxx"
 #include <editeng/SpellPortions.hxx>
 #include <memory>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 class Dialog;
@@ -181,7 +183,7 @@ private:
         pointer to avoid keeping it alive when the view is changed
         during searching.
     */
-    std::weak_ptr<ViewShell> mpWeakViewShell;
+    ::boost::weak_ptr<ViewShell> mpWeakViewShell;
     /// This window contains the view.
     VclPtr< ::sd::Window> mpWindow;
     /// The document on whose objects and pages this class operates.
@@ -502,7 +504,7 @@ private:
         It handles i.e. registering at the associated view as selection
         change listener.
     */
-    void SetViewShell (const std::shared_ptr<ViewShell>& rpViewShell);
+    void SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell);
 
     /** Activate or deactivate the search in the current selection.  Call
         this method whenever the selection has changed.  This method creates

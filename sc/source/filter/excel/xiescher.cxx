@@ -106,8 +106,9 @@
 #include "scextopt.hxx"
 
 #include "namebuff.hxx"
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #include <sfx2/docfile.hxx>
-#include <memory>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::makeAny;
@@ -1460,7 +1461,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
             if( maTextData.mxString->IsRich() )
             {
                 // rich text
-                std::unique_ptr< EditTextObject > xEditObj(
+                boost::scoped_ptr< EditTextObject > xEditObj(
                     XclImpStringHelper::CreateTextObject( GetRoot(), *maTextData.mxString ) );
                 OutlinerParaObject* pOutlineObj = new OutlinerParaObject( *xEditObj );
                 pOutlineObj->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
@@ -4114,7 +4115,7 @@ void XclImpSheetDrawing::ReadNote( XclImpStream& rStrm )
 void XclImpSheetDrawing::ReadTabChart( XclImpStream& rStrm )
 {
     OSL_ENSURE_BIFF( GetBiff() >= EXC_BIFF5 );
-    std::shared_ptr< XclImpChartObj > xChartObj( new XclImpChartObj( GetRoot(), true ) );
+    boost::shared_ptr< XclImpChartObj > xChartObj( new XclImpChartObj( GetRoot(), true ) );
     xChartObj->ReadChartSubStream( rStrm );
     // insert the chart as raw object without connected DFF data
     AppendRawObject( xChartObj );

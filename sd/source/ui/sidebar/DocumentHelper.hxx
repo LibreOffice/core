@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_DOCUMENTHELPER_HXX
 
 #include <rtl/ustring.hxx>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
 class SdDrawDocument;
@@ -66,7 +66,7 @@ public:
     static void AssignMasterPageToPageList (
         SdDrawDocument& rTargetDocument,
         SdPage* pMasterPage,
-        const std::shared_ptr<std::vector<SdPage*> >& rPageList);
+        const ::boost::shared_ptr<std::vector<SdPage*> >& rPageList);
 
 private:
     static SdPage* AddMasterPage (
@@ -79,7 +79,7 @@ private:
     static SdPage* ProvideMasterPage (
         SdDrawDocument& rTargetDocument,
         SdPage* pMasterPage,
-        const std::shared_ptr<std::vector<SdPage*> >& rpPageList);
+        const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList);
 
     /** Assign the given master page to the given page.
         @param pMasterPage

@@ -34,7 +34,7 @@
 #include "com/sun/star/lang/XEventListener.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 #include "sdresid.hxx"
 
@@ -52,14 +52,14 @@ namespace sd {
 struct ClientBoxEntry;
 struct ClientInfo;
 
-typedef std::shared_ptr<ClientBoxEntry> TClientBoxEntry;
+typedef boost::shared_ptr<ClientBoxEntry> TClientBoxEntry;
 
 struct ClientBoxEntry
 {
     bool m_bActive :1;
-    std::shared_ptr<ClientInfo> m_pClientInfo;
+    boost::shared_ptr<ClientInfo> m_pClientInfo;
 
-    ClientBoxEntry(std::shared_ptr<ClientInfo> pClientInfo);
+    ClientBoxEntry(boost::shared_ptr<ClientInfo> pClientInfo);
    ~ClientBoxEntry();
 
 };
@@ -159,7 +159,7 @@ public:
     void RemoveUnlocked();
 
     void selectEntry( const long nPos );
-    long addEntry(std::shared_ptr<ClientInfo> pClientInfo);
+    long addEntry(boost::shared_ptr<ClientInfo> pClientInfo);
     void clearEntries();
 
     void prepareChecking();

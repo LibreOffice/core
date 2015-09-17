@@ -22,7 +22,7 @@
 
 #include "SlideSorter.hxx"
 #include "SlsRequestQueue.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -128,11 +128,11 @@ public:
     void Resume();
 
 private:
-    std::shared_ptr<BitmapCache> mpBitmapCache;
+    ::boost::shared_ptr<BitmapCache> mpBitmapCache;
 
     RequestQueue maRequestQueue;
 
-    std::unique_ptr<QueueProcessor> mpQueueProcessor;
+    ::boost::scoped_ptr<QueueProcessor> mpQueueProcessor;
 
     SharedCacheContext mpCacheContext;
 

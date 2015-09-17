@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/compbase.hxx>
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 #include <set>
 
 namespace {
@@ -90,9 +90,9 @@ private:
         css::frame::XController> mxController;
 
     class ResourceToFactoryMap;
-    std::unique_ptr<ResourceToFactoryMap> mpResourceToFactoryMap;
+    ::boost::scoped_ptr<ResourceToFactoryMap> mpResourceToFactoryMap;
     class LoadedFactoryContainer;
-    std::unique_ptr<LoadedFactoryContainer> mpLoadedFactories;
+    ::boost::scoped_ptr<LoadedFactoryContainer> mpLoadedFactories;
 
     ModuleController (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)

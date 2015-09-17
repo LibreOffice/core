@@ -28,7 +28,7 @@
 #include "sal/types.h"
 
 #include <string.h>
-#include <memory>
+#include <boost/shared_ptr.hpp>
 #include <unordered_map>
 
 using namespace com::sun::star;
@@ -46,8 +46,8 @@ enum FactoryId
 typedef std::unordered_map<OUString, FactoryId, OUStringHash> FactoryMap;
 
 namespace {
-static std::shared_ptr<FactoryMap> spFactoryMap;
-std::shared_ptr<FactoryMap> GetFactoryMap()
+static ::boost::shared_ptr<FactoryMap> spFactoryMap;
+::boost::shared_ptr<FactoryMap> GetFactoryMap()
 {
     if (spFactoryMap.get() == NULL)
     {
@@ -76,7 +76,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sd_component_getFactory(
         uno::Reference<lang::XSingleServiceFactory> xFactory;
         uno::Reference<lang::XSingleComponentFactory> xComponentFactory;
 
-        std::shared_ptr<FactoryMap> pFactoryMap (GetFactoryMap());
+        ::boost::shared_ptr<FactoryMap> pFactoryMap (GetFactoryMap());
         OUString sImplementationName (OUString::createFromAscii(pImplName));
         FactoryMap::const_iterator iFactory (pFactoryMap->find(sImplementationName));
         if (iFactory != pFactoryMap->end())

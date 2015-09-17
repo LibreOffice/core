@@ -27,7 +27,8 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <memory>
 #include <vector>
@@ -170,10 +171,10 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 
 private:
-    std::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
-    std::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
-    std::shared_ptr< ::std::vector< OUString> > mpOldNames;
-    std::shared_ptr< ::std::vector< OUString> > mpNewNames;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
+    ::boost::shared_ptr< ::std::vector< OUString> > mpOldNames;
+    ::boost::shared_ptr< ::std::vector< OUString> > mpNewNames;
 
     void DoChange( bool bUndo ) const;
 };
@@ -198,9 +199,9 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 
 private:
-    std::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
-    std::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
-    std::shared_ptr< ::std::vector< OUString> > mpNewNames;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
+    ::boost::shared_ptr< ::std::vector< OUString> > mpNewNames;
     SdrUndoAction*  pDrawUndo;
 
     void DoChange() const;
@@ -253,7 +254,7 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 
 private:
-    std::unique_ptr<ScMarkData> mpMarkData;
+    boost::scoped_ptr<ScMarkData> mpMarkData;
     SCTAB       nSrcTab;
     SCTAB       nDestTab;
     OUString    aName;

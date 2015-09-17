@@ -32,7 +32,7 @@
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <i18nutil/unicode.hxx>

@@ -28,7 +28,7 @@
 #include "subtotalparam.hxx"
 #include "pivot.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 class ScDocShell;
 class ScDocument;
@@ -469,7 +469,7 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 
 private:
-    std::unique_ptr<ScMarkData> mpMarkData;
+    boost::scoped_ptr<ScMarkData> mpMarkData;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
     InsertDeleteFlags nFlags;

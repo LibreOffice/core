@@ -35,6 +35,7 @@
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <memory>
+#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 class Point;
@@ -144,7 +145,7 @@ public:
     */
     void InvalidatePageObjectVisibilities();
 
-    std::shared_ptr<cache::PageCache> GetPreviewCache();
+    ::boost::shared_ptr<cache::PageCache> GetPreviewCache();
 
     /** Return the range of currently visible page objects including the
         first and last one in that range.
@@ -188,8 +189,8 @@ public:
 
     void UpdateOrientation();
 
-    std::shared_ptr<PageObjectPainter> GetPageObjectPainter();
-    std::shared_ptr<LayeredDevice> GetLayeredDevice() const { return mpLayeredDevice;}
+    ::boost::shared_ptr<PageObjectPainter> GetPageObjectPainter();
+    ::boost::shared_ptr<LayeredDevice> GetLayeredDevice() const { return mpLayeredDevice;}
 
     class DrawLock
     {
@@ -218,20 +219,20 @@ private:
     bool mbIsDisposed;
     ::std::unique_ptr<Layouter> mpLayouter;
     bool mbPageObjectVisibilitiesValid;
-    std::shared_ptr<cache::PageCache> mpPreviewCache;
-    std::shared_ptr<LayeredDevice> mpLayeredDevice;
+    ::boost::shared_ptr<cache::PageCache> mpPreviewCache;
+    ::boost::shared_ptr<LayeredDevice> mpLayeredDevice;
     Range maVisiblePageRange;
     bool mbModelChangedWhileModifyEnabled;
     Size maPreviewSize;
     bool mbPreciousFlagUpdatePending;
     Layouter::Orientation meOrientation;
-    std::shared_ptr<controller::Properties> mpProperties;
+    ::boost::shared_ptr<controller::Properties> mpProperties;
     model::SharedPageDescriptor mpPageUnderMouse;
-    std::shared_ptr<PageObjectPainter> mpPageObjectPainter;
-    std::shared_ptr<SelectionPainter> mpSelectionPainter;
+    ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
+    ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
     vcl::Region maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
-    std::unique_ptr<ToolTip> mpToolTip;
+    ::boost::scoped_ptr<ToolTip> mpToolTip;
     bool mbIsRearrangePending;
     ::std::vector<Link<LinkParamNone*,void>> maVisibilityChangeListeners;
 

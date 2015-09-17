@@ -8,7 +8,7 @@
  *
  */
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #include <editeng/editobj.hxx>
 #include <editeng/wghtitem.hxx>
@@ -192,7 +192,7 @@ void AddressWalkerWriter::writeBoldString(const OUString& aString)
     SvxWeightItem aWeight(WEIGHT_BOLD, EE_CHAR_WEIGHT);
     aItemSet.Put(aWeight);
     rEngine.QuickSetAttribs(aItemSet, ESelection(0, 0, 0, aString.getLength()) );
-    std::unique_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
+    boost::scoped_ptr<EditTextObject> pEditText(rEngine.CreateTextObject());
     mpDocShell->GetDocFunc().SetEditCell(mCurrentAddress, *pEditText, true);
 }
 

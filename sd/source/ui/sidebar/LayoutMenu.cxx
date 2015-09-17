@@ -609,7 +609,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                 }
 
                 // Setup the menu.
-                std::shared_ptr<PopupMenu> pMenu (new PopupMenu(SdResId(RID_TASKPANE_LAYOUTMENU_POPUP)));
+                ::boost::shared_ptr<PopupMenu> pMenu (new PopupMenu(SdResId(RID_TASKPANE_LAYOUTMENU_POPUP)));
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
                 if (pMenuWindow != NULL)
                     pMenuWindow->SetPopupModeFlags(

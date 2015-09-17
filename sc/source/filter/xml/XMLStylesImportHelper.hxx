@@ -24,10 +24,10 @@
 #include "simplerangelist.hxx"
 #include <rtl/ustring.hxx>
 
-#include <list>
-#include <memory>
 #include <set>
 #include <vector>
+#include <list>
+#include <boost/shared_ptr.hpp>
 
 class ScXMLImport;
 
@@ -65,7 +65,7 @@ public:
 struct ScMyCurrencyStyle
 {
     OUString       sCurrency;
-    std::shared_ptr<ScSimpleRangeList> mpRanges;
+    ::boost::shared_ptr<ScSimpleRangeList> mpRanges;
 
     ScMyCurrencyStyle() :
         mpRanges(new ScSimpleRangeList)
@@ -85,13 +85,13 @@ typedef std::set<ScMyCurrencyStyle, LessCurrencyStyle>  ScMyCurrencyStylesSet;
 
 class ScMyStyleRanges : public SvRefBase
 {
-    std::shared_ptr<ScSimpleRangeList> mpTextList;
-    std::shared_ptr<ScSimpleRangeList> mpNumberList;
-    std::shared_ptr<ScSimpleRangeList> mpTimeList;
-    std::shared_ptr<ScSimpleRangeList> mpDateTimeList;
-    std::shared_ptr<ScSimpleRangeList> mpPercentList;
-    std::shared_ptr<ScSimpleRangeList> mpLogicalList;
-    std::shared_ptr<ScSimpleRangeList> mpUndefinedList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpTextList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpNumberList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpTimeList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpDateTimeList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpPercentList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpLogicalList;
+    ::boost::shared_ptr<ScSimpleRangeList> mpUndefinedList;
     ScMyCurrencyStylesSet*  pCurrencyList;
 
     static void SetStylesToRanges(const ::std::list<ScRange>& rList,

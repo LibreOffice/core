@@ -21,14 +21,14 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XIROOT_HXX
 
 #include "xlroot.hxx"
-#include <memory>
+#include <boost/shared_ptr.hpp>
 
 // Forward declarations of objects in public use ==============================
 
 class XclImpStream;
 class XclImpString;
 
-typedef std::shared_ptr< XclImpString > XclImpStringRef;
+typedef boost::shared_ptr< XclImpString > XclImpStringRef;
 
 // Global data ================================================================
 
@@ -63,28 +63,28 @@ class ScDocumentImport;
 /** Stores global buffers and data needed for Excel import filter. */
 struct XclImpRootData : public XclRootData
 {
-    typedef std::shared_ptr< XclImpAddressConverter >    XclImpAddrConvRef;
-    typedef std::shared_ptr< XclImpFormulaCompiler >     XclImpFmlaCompRef;
+    typedef boost::shared_ptr< XclImpAddressConverter >    XclImpAddrConvRef;
+    typedef boost::shared_ptr< XclImpFormulaCompiler >     XclImpFmlaCompRef;
 
-    typedef std::shared_ptr< XclImpSst >                 XclImpSstRef;
-    typedef std::shared_ptr< XclImpPalette >             XclImpPaletteRef;
-    typedef std::shared_ptr< XclImpFontBuffer >          XclImpFontBfrRef;
-    typedef std::shared_ptr< XclImpNumFmtBuffer >        XclImpNumFmtBfrRef;
-    typedef std::shared_ptr< XclImpXFBuffer >            XclImpXFBfrRef;
-    typedef std::shared_ptr< XclImpXFRangeBuffer >       XclImpXFRangeBfrRef;
-    typedef std::shared_ptr< XclImpTabInfo >             XclImpTabInfoRef;
-    typedef std::shared_ptr< XclImpNameManager >         XclImpNameMgrRef;
-    typedef std::shared_ptr< XclImpLinkManager >         XclImpLinkMgrRef;
-    typedef std::shared_ptr< XclImpObjectManager >       XclImpObjectMgrRef;
-    typedef std::shared_ptr< XclImpCondFormatManager >   XclImpCondFmtMgrRef;
-    typedef std::shared_ptr< XclImpValidationManager >   XclImpValidationMgrRef;
-    typedef std::shared_ptr< XclImpWebQueryBuffer >      XclImpWebQueryBfrRef;
-    typedef std::shared_ptr< XclImpPivotTableManager >   XclImpPTableMgrRef;
-    typedef std::shared_ptr< XclImpPageSettings >        XclImpPageSettRef;
-    typedef std::shared_ptr< XclImpDocViewSettings >     XclImpDocViewSettRef;
-    typedef std::shared_ptr< XclImpTabViewSettings >     XclImpTabViewSettRef;
-    typedef std::shared_ptr< XclImpSheetProtectBuffer >  XclImpTabProtectRef;
-    typedef std::shared_ptr< XclImpDocProtectBuffer >    XclImpDocProtectRef;
+    typedef boost::shared_ptr< XclImpSst >                 XclImpSstRef;
+    typedef boost::shared_ptr< XclImpPalette >             XclImpPaletteRef;
+    typedef boost::shared_ptr< XclImpFontBuffer >          XclImpFontBfrRef;
+    typedef boost::shared_ptr< XclImpNumFmtBuffer >        XclImpNumFmtBfrRef;
+    typedef boost::shared_ptr< XclImpXFBuffer >            XclImpXFBfrRef;
+    typedef boost::shared_ptr< XclImpXFRangeBuffer >       XclImpXFRangeBfrRef;
+    typedef boost::shared_ptr< XclImpTabInfo >             XclImpTabInfoRef;
+    typedef boost::shared_ptr< XclImpNameManager >         XclImpNameMgrRef;
+    typedef boost::shared_ptr< XclImpLinkManager >         XclImpLinkMgrRef;
+    typedef boost::shared_ptr< XclImpObjectManager >       XclImpObjectMgrRef;
+    typedef boost::shared_ptr< XclImpCondFormatManager >   XclImpCondFmtMgrRef;
+    typedef boost::shared_ptr< XclImpValidationManager >   XclImpValidationMgrRef;
+    typedef boost::shared_ptr< XclImpWebQueryBuffer >      XclImpWebQueryBfrRef;
+    typedef boost::shared_ptr< XclImpPivotTableManager >   XclImpPTableMgrRef;
+    typedef boost::shared_ptr< XclImpPageSettings >        XclImpPageSettRef;
+    typedef boost::shared_ptr< XclImpDocViewSettings >     XclImpDocViewSettRef;
+    typedef boost::shared_ptr< XclImpTabViewSettings >     XclImpTabViewSettRef;
+    typedef boost::shared_ptr< XclImpSheetProtectBuffer >  XclImpTabProtectRef;
+    typedef boost::shared_ptr< XclImpDocProtectBuffer >    XclImpDocProtectRef;
 
     XclImpAddrConvRef   mxAddrConv;         /// The address converter.
     XclImpFmlaCompRef   mxFmlaComp;         /// The formula compiler.
@@ -112,7 +112,7 @@ struct XclImpRootData : public XclRootData
     XclImpTabProtectRef mxTabProtect;       /// Sheet protection options for current sheet.
     XclImpDocProtectRef mxDocProtect;       /// Document protection options.
 
-    std::shared_ptr<ScDocumentImport> mxDocImport;
+    boost::shared_ptr<ScDocumentImport> mxDocImport;
 
     bool                mbHasCodePage;      /// true = CODEPAGE record exists.
     bool                mbHasBasic;         /// true = document contains VB project.

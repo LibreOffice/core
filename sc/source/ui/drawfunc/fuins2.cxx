@@ -80,7 +80,7 @@ using namespace ::com::sun::star;
 #include "drawview.hxx"
 #include "markdata.hxx"
 #include "gridwin.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace {
 
@@ -242,7 +242,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
             case SID_INSERT_FLOATINGFRAME :
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                std::unique_ptr<SfxAbstractInsertObjectDialog> pDlg(
+                boost::scoped_ptr<SfxAbstractInsertObjectDialog> pDlg(
                         pFact->CreateInsertObjectDialog( pViewShell->GetWindow(), SC_MOD()->GetSlotPool()->GetSlot(nSlot)->GetCommandString(),
                         xStorage, &aServerLst ));
                 if ( pDlg )

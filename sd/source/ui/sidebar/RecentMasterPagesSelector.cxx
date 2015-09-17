@@ -41,7 +41,7 @@ VclPtr<vcl::Window> RecentMasterPagesSelector::Create (
     if (pDocument == NULL)
         return NULL;
 
-    std::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
+    ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
     VclPtrInstance<RecentMasterPagesSelector> pSelector(
             pParent,
@@ -59,7 +59,7 @@ RecentMasterPagesSelector::RecentMasterPagesSelector (
     vcl::Window* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
-    const std::shared_ptr<MasterPageContainer>& rpContainer,
+    const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar)
 {
@@ -128,7 +128,7 @@ void RecentMasterPagesSelector::Fill (ItemList& rItemList)
 
 void RecentMasterPagesSelector::AssignMasterPageToPageList (
     SdPage* pMasterPage,
-    const std::shared_ptr<std::vector<SdPage*> >& rpPageList)
+    const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
     sal_uInt16 nSelectedItemId = PreviewValueSet::GetSelectItemId();
 

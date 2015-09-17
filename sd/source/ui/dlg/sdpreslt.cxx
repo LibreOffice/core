@@ -29,7 +29,7 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "DrawDocShell.hxx"
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
     vcl::Window* pWindow, const SfxItemSet& rInAttrs)

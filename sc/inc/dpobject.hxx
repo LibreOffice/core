@@ -30,13 +30,13 @@
 
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
-#include <memory>
 #include <set>
 #include <vector>
 
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
 
@@ -92,7 +92,7 @@ private:
     ScSheetSourceDesc*      pSheetDesc;     //  for sheet data
     ScImportSourceDesc*     pImpDesc;       //  for database data
     ScDPServiceDesc*        pServDesc;      //  for external service
-    std::shared_ptr<ScDPTableData>  mpTableData;
+    ::boost::shared_ptr<ScDPTableData>  mpTableData;
                                             // cached data
     com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier> xSource;
     ScDPOutput*             pOutput;

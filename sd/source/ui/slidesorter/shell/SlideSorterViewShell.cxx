@@ -90,7 +90,7 @@ void SlideSorterViewShell::InitInterface_Impl()
 
 TYPEINIT1(SlideSorterViewShell, ViewShell);
 
-std::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
+::boost::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
     vcl::Window* pParentWindow,
@@ -99,7 +99,7 @@ std::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
 {
     (void)bIsCenterPane;
 
-    std::shared_ptr<SlideSorterViewShell> pViewShell;
+    ::boost::shared_ptr<SlideSorterViewShell> pViewShell;
     try
     {
         pViewShell.reset(
@@ -216,7 +216,7 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
 
     try
     {
-        std::shared_ptr<FrameworkHelper> pFrameworkHelper (FrameworkHelper::Instance(rBase));
+        ::boost::shared_ptr<FrameworkHelper> pFrameworkHelper (FrameworkHelper::Instance(rBase));
         if (pFrameworkHelper->IsValid())
             for (int i=0; pViewShell==NULL && !aPaneURLs[i].isEmpty(); ++i)
             {
@@ -341,7 +341,7 @@ SdPage* SlideSorterViewShell::GetActualPage()
     // (if we are that not ourself).
     if ( ! IsMainViewShell())
     {
-        std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
+        ::boost::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
         if (pMainViewShell.get() != NULL)
             pCurrentPage = pMainViewShell->GetActualPage();
     }
@@ -473,7 +473,7 @@ void SlideSorterViewShell::Activate (bool bIsMDIActivate)
 
     // Determine and broadcast the context that belongs to the main view shell.
     EnumContext::Context eContext = EnumContext::Context_Unknown;
-    std::shared_ptr<ViewShell> pMainViewShell (GetViewShellBase().GetMainViewShell());
+    ::boost::shared_ptr<ViewShell> pMainViewShell (GetViewShellBase().GetMainViewShell());
     ViewShell::ShellType eMainViewShellType (
         pMainViewShell
             ? pMainViewShell->GetShellType()
@@ -545,7 +545,7 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
     // certain values.
     if ( ! IsMainViewShell())
     {
-        std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
+        ::boost::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
         if (pMainViewShell.get() != NULL)
             mpSlideSorter->GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
                 pMainViewShell->getCurrentPage());
@@ -678,7 +678,7 @@ sal_Int8 SlideSorterViewShell::ExecuteDrop (
         nLayer);
 }
 
-std::shared_ptr<SlideSorterViewShell::PageSelection>
+::boost::shared_ptr<SlideSorterViewShell::PageSelection>
     SlideSorterViewShell::GetPageSelection() const
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
@@ -686,7 +686,7 @@ std::shared_ptr<SlideSorterViewShell::PageSelection>
 }
 
 void SlideSorterViewShell::SetPageSelection (
-    const std::shared_ptr<PageSelection>& rSelection)
+    const ::boost::shared_ptr<PageSelection>& rSelection)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetPageSelector().SetPageSelection(rSelection);
@@ -710,7 +710,7 @@ void SlideSorterViewShell::ExecMovePageFirst (SfxRequest& /*rReq*/)
 {
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
+    ::boost::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
         GetDoc()->SetSelected(*it, true);
     }
@@ -725,7 +725,7 @@ void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
 {
     if ( ! IsMainViewShell())
     {
-        std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
+        ::boost::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
         if (pMainViewShell.get() != NULL && pMainViewShell->ISA(DrawViewShell))
         {
             DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
@@ -740,7 +740,7 @@ void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
 
     sal_uInt16 firstSelectedPageNo = SAL_MAX_UINT16;
     sal_uInt16 pageNo;
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
+    ::boost::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
         // Check page number
         pageNo = (*it)->GetPageNum();
@@ -762,7 +762,7 @@ void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
     sal_uInt16 pageNo;
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
+    ::boost::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
         // Check page number
         pageNo = (*it)->GetPageNum();
@@ -794,7 +794,7 @@ void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
     sal_uInt16 pageNo;
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
+    ::boost::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it )
     {
         // Check page number
@@ -826,7 +826,7 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
 {
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
+    ::boost::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
         GetDoc()->SetSelected(*it, true);
     }
@@ -842,7 +842,7 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
 
 void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
 {
-    std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
+    ::boost::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
     if (pMainViewShell.get() != NULL && pMainViewShell->ISA(DrawViewShell))
     {
        DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
@@ -858,7 +858,7 @@ void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
     sal_uInt16 pageNo;
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
+    ::boost::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it )
     {
         // Check page number
@@ -879,7 +879,7 @@ void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
     }
 }
 
-void SlideSorterViewShell::PostMoveSlidesActions(const std::shared_ptr<SlideSorterViewShell::PageSelection> &rpSelection)
+void SlideSorterViewShell::PostMoveSlidesActions(const ::boost::shared_ptr<SlideSorterViewShell::PageSelection> &rpSelection)
 {
     sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
     for (sal_uInt16 nPage = 0; nPage < nNoOfPages; nPage++)

@@ -91,7 +91,7 @@ private:
     virtual void        WriteAddData( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    typedef std::shared_ptr< XclExpCachedMatrix > XclExpCachedMatRef;
+    typedef boost::shared_ptr< XclExpCachedMatrix > XclExpCachedMatRef;
     XclExpCachedMatRef  mxMatrix;       /// Cached results of the DDE link.
 };
 
@@ -245,7 +245,7 @@ protected:
     void                WriteExtNameBufferXml( XclExpXmlStream& rStrm );
 
 protected:
-    typedef std::shared_ptr< XclExpExtNameBuffer >   XclExpExtNameBfrRef;
+    typedef boost::shared_ptr< XclExpExtNameBuffer >   XclExpExtNameBfrRef;
     XclExpExtNameBfrRef mxExtNameBfr;   /// List of EXTERNNAME records.
 };
 

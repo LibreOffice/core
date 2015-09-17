@@ -34,7 +34,7 @@
 #include "compiler.hxx"
 #include "tokenarray.hxx"
 
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -130,7 +130,7 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
             // Shorter way of doing this ?
             ScCompiler aComp( &rDoc, pOldData->GetPos() );
             aComp.SetGrammar( eGrammar );
-            std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(sContent));
+            boost::scoped_ptr<ScTokenArray> pArray(aComp.CompileString(sContent));
             pOldData->SetCode(*pArray);
         }
     }

@@ -26,9 +26,9 @@
 #include "dpitemdata.hxx"
 #include "calcmacros.hxx"
 
-#include <memory>
 #include <unordered_set>
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 #include <mdds/flat_segment_tree.hpp>
 
@@ -95,7 +95,7 @@ public:
     struct Criterion
     {
         sal_Int32 mnFieldIndex;
-        std::shared_ptr<FilterBase> mpFilter;
+        ::boost::shared_ptr<FilterBase> mpFilter;
 
         Criterion();
     };

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_OOXFORMULAPARSER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_OOXFORMULAPARSER_HXX
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -84,7 +84,7 @@ public:
                         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
-    typedef std::shared_ptr< OOXMLFormulaParserImpl >   ParserImplRef;
+    typedef ::boost::shared_ptr< OOXMLFormulaParserImpl >   ParserImplRef;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
                         mxComponent;

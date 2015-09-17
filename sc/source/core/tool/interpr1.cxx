@@ -7204,7 +7204,7 @@ void ScInterpreter::ScIndirect()
                     ScCompiler aComp( pDok, aPos);
                     aComp.SetGrammar( pDok->GetGrammar());
                     aComp.SetRefConvention( eConv);     // must be after grammar
-                    std::unique_ptr<ScTokenArray> pArr( aComp.CompileString( sRefStr));
+                    boost::scoped_ptr<ScTokenArray> pArr( aComp.CompileString( sRefStr));
 
                     // Whatever.. use only the specific case.
                     if (!pArr->HasOpCode( ocTableRef))

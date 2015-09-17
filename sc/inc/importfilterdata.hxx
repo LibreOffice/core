@@ -13,7 +13,7 @@
 #include "address.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sc {
 
@@ -39,7 +39,7 @@ struct ImportPostProcessData : boost::noncopyable
         DataStream();
     };
 
-    std::unique_ptr<DataStream> mpDataStream;
+    boost::scoped_ptr<DataStream> mpDataStream;
 };
 
 }
