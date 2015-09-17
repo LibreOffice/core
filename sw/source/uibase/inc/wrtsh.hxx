@@ -244,7 +244,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool    GotoPage( sal_uInt16 nPage, bool bRecord );
 
     // setting the cursor; remember the old position for turning back
-    DECL_LINK( ExecFlyMac, void * );
+    DECL_LINK_TYPED( ExecFlyMac, const SwFlyFrameFormat*, void );
 
     bool    PageCrsr(SwTwips lOffset, bool bSelect);
 

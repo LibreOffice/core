@@ -166,7 +166,7 @@ private:
     Point   m_aOldRBPos;          ///< Right/Bottom of last VisArea
                                 // (used in Invalidate by Cursor)
 
-    Link<> m_aFlyMacroLnk;        /**< Link will be called, if the Crsr is set
+    Link<const SwFlyFrameFormat*,void> m_aFlyMacroLnk;        /**< Link will be called, if the Crsr is set
                                    into a fly. A macro can then be called */
     Link<> m_aChgLnk;             /**< link will be called by every attribute/
                                    format changes at cursor position.*/
@@ -481,8 +481,8 @@ public:
     bool IsOverReadOnlyPos( const Point& rPt ) const;
 
     // Methods for aFlyMacroLnk.
-    void        SetFlyMacroLnk( const Link<>& rLnk ) { m_aFlyMacroLnk = rLnk; }
-    const Link<>& GetFlyMacroLnk() const           { return m_aFlyMacroLnk; }
+    void        SetFlyMacroLnk( const Link<const SwFlyFrameFormat*,void>& rLnk ) { m_aFlyMacroLnk = rLnk; }
+    const Link<const SwFlyFrameFormat*,void>& GetFlyMacroLnk() const           { return m_aFlyMacroLnk; }
 
     // Methods returning/altering link for changes of attributes/formates.
     void        SetChgLnk( const Link<> &rLnk ) { m_aChgLnk = rLnk; }

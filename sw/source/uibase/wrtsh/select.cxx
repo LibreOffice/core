@@ -705,9 +705,9 @@ void SwWrtShell::LeaveSelFrmMode()
 
 // Description: execute framebound macro
 
-IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFormat )
+IMPL_LINK_TYPED( SwWrtShell, ExecFlyMac, const SwFlyFrameFormat*, pFlyFormat, void )
 {
-    const SwFrameFormat *pFormat = pFlyFormat ? static_cast<SwFrameFormat*>(pFlyFormat) : GetFlyFrameFormat();
+    const SwFrameFormat *pFormat = pFlyFormat ? static_cast<const SwFrameFormat*>(pFlyFormat) : GetFlyFrameFormat();
     OSL_ENSURE(pFormat, "no frame format");
     const SvxMacroItem &rFormatMac = pFormat->GetMacro();
 
@@ -719,7 +719,6 @@ IMPL_LINK( SwWrtShell, ExecFlyMac, void *, pFlyFormat )
         CallChgLnk();
         ExecMacro( rMac );
     }
-    return 0;
 }
 
 long SwWrtShell::UpdateLayoutFrm(const Point *pPt, bool )

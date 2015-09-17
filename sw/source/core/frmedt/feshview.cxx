@@ -111,7 +111,7 @@ static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrm* pOldSelFly)
                         (!pOldSelFly || pOldSelFly->GetFormat() != pFlyFormat) )
     {
         // now call set macro if applicable
-        pSh->GetFlyMacroLnk().Call( const_cast<void*>(static_cast<void const *>(pFlyFormat)) );
+        pSh->GetFlyMacroLnk().Call( static_cast<const SwFlyFrameFormat*>(pFlyFormat) );
 extern bool g_bNoInterrupt;       // in swmodule.cxx
         // if a dialog was started inside a macro, then
         // MouseButtonUp arrives at macro and not to us. Therefore
