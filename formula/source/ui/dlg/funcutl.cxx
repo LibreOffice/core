@@ -378,7 +378,7 @@ void EditBox::dispose()
 // When the selection is changed this function will be called
 void EditBox::SelectionChanged()
 {
-    aSelChangedLink.Call(this);
+    aSelChangedLink.Call(*this);
 }
 
 // When the size is changed, MultiLineEdit must be adapted..

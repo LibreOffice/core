@@ -124,9 +124,9 @@ public:
     DECL_LINK( ModifyHdl, ParaWin* );
     DECL_LINK( FxHdl, ParaWin* );
 
-    DECL_LINK_TYPED(MatrixHdl, Button*, void);
+    DECL_LINK_TYPED( MatrixHdl, Button*, void);
     DECL_LINK(FormulaHdl, void *);
-    DECL_LINK(FormulaCursorHdl, void *);
+    DECL_LINK_TYPED( FormulaCursorHdl, EditBox&, void);
     DECL_LINK_TYPED( BtnHdl, Button*, void );
     DECL_LINK(DblClkHdl, void *);
     DECL_LINK(FuncSelHdl, void *);
@@ -1354,10 +1354,10 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaCursorHdl)
+IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FormulaCursorHdl, EditBox&, void)
 {
     FormEditData* pData = m_pHelper->getFormEditData();
-    if (!pData) return 0;
+    if (!pData) return;
     sal_Int32 nFStart = pData->GetFStart();
 
     bEditFlag=true;
@@ -1419,7 +1419,6 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaCursorHdl)
     m_pHelper->setSelection(aSel.Min(), aSel.Max());
 
     bEditFlag=false;
-    return 0;
 }
 
 void FormulaDlg_Impl::UpdateSelection()
@@ -1527,7 +1526,7 @@ void FormulaDlg_Impl::Update()
     const OUString sExpression = pMEdit->GetText();
     aOldFormula.clear();
     UpdateTokenArray(sExpression);
-    FormulaCursorHdl(m_pMEFormula);
+    FormulaCursorHdl(*m_pMEFormula);
     CalcStruct(sExpression);
     if(pData->GetMode() == FORMULA_FORMDLG_FORMULA)
         m_pTabCtrl->SetCurPageId(TP_FUNCTION);

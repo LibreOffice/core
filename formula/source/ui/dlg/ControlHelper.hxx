@@ -30,9 +30,9 @@ class EditBox : public Control
 private:
 
     VclPtr<MultiLineEdit>  pMEdit;
-    Link<>          aSelChangedLink;
-    Selection       aOldSel;
-    bool            bMouseFlag;
+    Link<EditBox&,void>    aSelChangedLink;
+    Selection              aOldSel;
+    bool                   bMouseFlag;
 
     DECL_LINK_TYPED(ChangedHdl, void *, void);
 
@@ -52,7 +52,7 @@ public:
 
     MultiLineEdit*  GetEdit() {return pMEdit;}
 
-    void            SetSelChangedHdl( const Link<>& rLink ) { aSelChangedLink = rLink; }
+    void            SetSelChangedHdl( const Link<EditBox&,void>& rLink ) { aSelChangedLink = rLink; }
 
     void            UpdateOldSel();
 };
