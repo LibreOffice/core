@@ -246,8 +246,6 @@ private:
     bool mbPreModelChangeDone;
     bool mbPostModelChangePending;
 
-    ::std::vector<Link<>> maSelectionChangeListeners;
-
     /** This array stores the indices of the  selected page descriptors at
         the time when the edit mode is switched to EM_MASTERPAGE.  With this
         we can restore the selection when switching back to EM_PAGE mode.
