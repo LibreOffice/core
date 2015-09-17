@@ -88,8 +88,7 @@ typedef std::unordered_map<OString, INetContentTypeParameter, OStringHash>
 class TOOLS_DLLPUBLIC INetMIME
 {
 public:
-    enum { SOFT_LINE_LENGTH_LIMIT = 76,
-           HARD_LINE_LENGTH_LIMIT = 998 };
+    enum { SOFT_LINE_LENGTH_LIMIT = 76 };
 
     /** The various types of message header field bodies, with respect to
         encoding and decoding them.
