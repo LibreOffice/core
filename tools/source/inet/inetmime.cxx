@@ -350,7 +350,7 @@ public:
                    CONTEXT_COMMENT = 2,
                    CONTEXT_PHRASE = 4 };
 
-    enum Space { SPACE_NO, SPACE_ENCODED, SPACE_ALWAYS };
+    enum Space { SPACE_NO, SPACE_ALWAYS };
 
 private:
     enum { BUFFER_SIZE = 256 };
@@ -584,8 +584,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
             case CODING_QUOTED:
                 m_rSink << '"';
             case CODING_NONE:
-                if (m_eInitialSpace == SPACE_ENCODED && m_nExtraSpaces == 0)
-                    m_nExtraSpaces = 1;
                 while (m_nExtraSpaces-- > 0)
                 {
                     m_rSink << ' ';
@@ -691,9 +689,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                     case CODING_QUOTED:
                         m_rSink << '"';
                     case CODING_NONE:
-                        if (m_eInitialSpace == SPACE_ENCODED
-                            && m_nExtraSpaces == 0)
-                            m_nExtraSpaces = 1;
                         while (m_nExtraSpaces-- > 0)
                         {
                             m_rSink << ' ';
