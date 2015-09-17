@@ -37,7 +37,7 @@ public:
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
 protected:
-    DECL_LINK(MasterPageListListener, void*);
+    DECL_LINK_TYPED(MasterPageListListener, LinkParamNone*, void);
     virtual void Fill (ItemList& rItemList) SAL_OVERRIDE;
 
     using sd::sidebar::MasterPagesSelector::Fill;

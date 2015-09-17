@@ -237,7 +237,7 @@ void RecentlyUsedMasterPages::SavePersistentValues()
     }
 }
 
-void RecentlyUsedMasterPages::AddEventListener (const Link<>& rEventListener)
+void RecentlyUsedMasterPages::AddEventListener (const Link<LinkParamNone*,void>& rEventListener)
 {
     if (::std::find (
         maListeners.begin(),
@@ -248,7 +248,7 @@ void RecentlyUsedMasterPages::AddEventListener (const Link<>& rEventListener)
     }
 }
 
-void RecentlyUsedMasterPages::RemoveEventListener (const Link<>& rEventListener)
+void RecentlyUsedMasterPages::RemoveEventListener (const Link<LinkParamNone*,void>& rEventListener)
 {
     maListeners.erase (
         ::std::find (
@@ -272,12 +272,9 @@ MasterPageContainer::Token RecentlyUsedMasterPages::GetTokenForIndex (sal_uInt32
 
 void RecentlyUsedMasterPages::SendEvent()
 {
-    ::std::vector<Link<>>::iterator aLink (maListeners.begin());
-    ::std::vector<Link<>>::iterator aEnd (maListeners.end());
-    while (aLink!=aEnd)
+    for (auto& aLink : maListeners)
     {
-        aLink->Call (NULL);
-        ++aLink;
+        aLink.Call(nullptr);
     }
 }
 

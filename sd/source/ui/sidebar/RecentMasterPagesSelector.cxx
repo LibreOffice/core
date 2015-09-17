@@ -86,10 +86,9 @@ void RecentMasterPagesSelector::LateInit()
         LINK(this,RecentMasterPagesSelector,MasterPageListListener));
 }
 
-IMPL_LINK_NOARG(RecentMasterPagesSelector, MasterPageListListener)
+IMPL_LINK_NOARG_TYPED(RecentMasterPagesSelector, MasterPageListListener, LinkParamNone*, void)
 {
     MasterPagesSelector::Fill();
-    return 0;
 }
 
 void RecentMasterPagesSelector::Fill (ItemList& rItemList)
