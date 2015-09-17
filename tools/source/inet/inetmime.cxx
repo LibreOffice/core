@@ -1657,10 +1657,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                     // Write a pending '<' if necessary:
                     if (eBrackets == BRACKETS_OPENING)
                     {
-                        if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
-                                >= rSink.getLineLengthLimit())
-                            rSink << INetMIMEOutputSink::endl << ' ';
-                        else if (bInitialSpace)
+                        if (bInitialSpace)
                             rSink << ' ';
                         rSink << '<';
                         bInitialSpace = false;
@@ -1681,11 +1678,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                         {
                             case '(':
                                 aOutput.flush();
-                                if (rSink.getColumn()
-                                            + (bInitialSpace ? 1 : 0)
-                                        >= rSink.getLineLengthLimit())
-                                    rSink << INetMIMEOutputSink::endl << ' ';
-                                else if (bInitialSpace)
+                                if (bInitialSpace)
                                     rSink << ' ';
                                 rSink << '(';
                                 bInitialSpace = false;
@@ -1695,9 +1688,6 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
 
                             case ')':
                                 aOutput.flush();
-                                if (rSink.getColumn()
-                                        >= rSink.getLineLengthLimit())
-                                    rSink << INetMIMEOutputSink::endl << ' ';
                                 rSink << ')';
                                 ++pBodyPtr;
                                 if (--nLevel == 0)
@@ -1719,10 +1709,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                     // Write an already pending '<' if necessary:
                     if (eBrackets == BRACKETS_OPENING)
                     {
-                        if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
-                                >= rSink.getLineLengthLimit())
-                            rSink << INetMIMEOutputSink::endl << ' ';
-                        else if (bInitialSpace)
+                        if (bInitialSpace)
                             rSink << ' ';
                         rSink << '<';
                         bInitialSpace = false;
@@ -1738,20 +1725,14 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                     // Write a pending '<' if necessary:
                     if (eBrackets == BRACKETS_OPENING)
                     {
-                        if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
-                                >= rSink.getLineLengthLimit())
-                            rSink << INetMIMEOutputSink::endl << ' ';
-                        else if (bInitialSpace)
+                        if (bInitialSpace)
                             rSink << ' ';
                         rSink << '<';
                         bInitialSpace = false;
                     }
 
                     // Write this '>', and close any bracketed block:
-                    if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
-                            >= rSink.getLineLengthLimit())
-                        rSink << INetMIMEOutputSink::endl << ' ';
-                    else if (bInitialSpace)
+                    if (bInitialSpace)
                         rSink << ' ';
                     rSink << '>';
                     bInitialSpace = false;
@@ -1767,10 +1748,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                     // Write a pending '<' if necessary:
                     if (eBrackets == BRACKETS_OPENING)
                     {
-                        if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
-                                >= rSink.getLineLengthLimit())
-                            rSink << INetMIMEOutputSink::endl << ' ';
-                        else if (bInitialSpace)
+                        if (bInitialSpace)
                             rSink << ' ';
                         rSink << '<';
                         bInitialSpace = false;
@@ -1778,10 +1756,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                     }
 
                     // Write this specials:
-                    if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
-                            >= rSink.getLineLengthLimit())
-                        rSink << INetMIMEOutputSink::endl << ' ';
-                    else if (bInitialSpace)
+                    if (bInitialSpace)
                         rSink << ' ';
                     rSink << sal_Char(*pBodyPtr++);
                     bInitialSpace = false;
@@ -1942,11 +1917,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                             // Write a pending '<' if necessary:
                             if (eBrackets == BRACKETS_OPENING)
                             {
-                                if (rSink.getColumn()
-                                            + (bInitialSpace ? 1 : 0)
-                                        >= rSink.getLineLengthLimit())
-                                    rSink << INetMIMEOutputSink::endl << ' ';
-                                else if (bInitialSpace)
+                                if (bInitialSpace)
                                     rSink << ' ';
                                 rSink << '<';
                                 bInitialSpace = false;
@@ -2002,11 +1973,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 }
 
                             // Write the output:
-                            if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
-                                        + nLength
-                                    > rSink.getLineLengthLimit())
-                                rSink << INetMIMEOutputSink::endl << ' ';
-                            else if (bInitialSpace)
+                            if (bInitialSpace)
                                 rSink << ' ';
                             bInitialSpace = false;
                             if (bModify)
@@ -2141,11 +2108,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                             if (eBrackets == BRACKETS_OPENING
                                 && !bBracketedBlock)
                             {
-                                if (rSink.getColumn()
-                                            + (bInitialSpace ? 1 : 0)
-                                        >= rSink.getLineLengthLimit())
-                                    rSink << INetMIMEOutputSink::endl << ' ';
-                                else if (bInitialSpace)
+                                if (bInitialSpace)
                                     rSink << ' ';
                                 rSink << '<';
                                 bInitialSpace = false;
@@ -2153,11 +2116,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                             }
 
                             // Write the output:
-                            if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
-                                        + nLength
-                                    > rSink.getLineLengthLimit())
-                                rSink << INetMIMEOutputSink::endl << ' ';
-                            else if (bInitialSpace)
+                            if (bInitialSpace)
                                 rSink << ' ';
                             bInitialSpace = false;
                             if (bBracketedBlock)
@@ -2248,11 +2207,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                             // Write a pending '<' if necessary:
                             if (eBrackets == BRACKETS_OPENING)
                             {
-                                if (rSink.getColumn()
-                                            + (bInitialSpace ? 1 : 0)
-                                        >= rSink.getLineLengthLimit())
-                                    rSink << INetMIMEOutputSink::endl << ' ';
-                                else if (bInitialSpace)
+                                if (bInitialSpace)
                                     rSink << ' ';
                                 rSink << '<';
                                 bInitialSpace = false;
@@ -2870,13 +2825,6 @@ void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
     delete[] pBufferBegin;
 }
 
-void INetMIMEOutputSink::writeLineEnd()
-{
-    static const sal_Char aCRLF[2] = { 0x0D, 0x0A };
-    writeSequence(aCRLF, aCRLF + 2);
-    m_nColumn = 0;
-}
-
 //  INetMIMEEncodedWordOutputSink
 
 static const sal_Char aEscape[128]
@@ -3023,7 +2971,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
     if (m_eEncodedWordState == STATE_SECOND_EQUALS)
     {
         // If the text is already an encoded word, copy it verbatim:
-        sal_uInt32 nSize = m_pBufferEnd - m_pBuffer;
         switch (m_ePrevCoding)
         {
             case CODING_QUOTED:
@@ -3031,40 +2978,22 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
             case CODING_NONE:
                 if (m_eInitialSpace == SPACE_ENCODED && m_nExtraSpaces == 0)
                     m_nExtraSpaces = 1;
-                for (; m_nExtraSpaces > 1; --m_nExtraSpaces)
+                while (m_nExtraSpaces-- > 0)
                 {
-                    if (m_rSink.getColumn() >= m_rSink.getLineLengthLimit())
-                        m_rSink << INetMIMEOutputSink::endl;
-                    m_rSink << ' ';
-                }
-                if (m_nExtraSpaces == 1)
-                {
-                    if (m_rSink.getColumn() + nSize
-                            >= m_rSink.getLineLengthLimit())
-                        m_rSink << INetMIMEOutputSink::endl;
                     m_rSink << ' ';
                 }
                 break;
 
             case CODING_ENCODED:
             {
-                const sal_Char * pCharsetName
-                 = INetMIME::getCharsetName(m_ePrevMIMEEncoding);
                 while (m_nExtraSpaces-- > 0)
                 {
-                    if (m_rSink.getColumn()
-                            > m_rSink.getLineLengthLimit() - 3)
-                        m_rSink << "?=" << INetMIMEOutputSink::endl << " =?"
-                                << pCharsetName << "?Q?";
                     m_rSink << '_';
                 }
                 m_rSink << "?=";
             }
             //fall-through
             case CODING_ENCODED_TERMINATED:
-                if (m_rSink.getColumn() + nSize
-                        > m_rSink.getLineLengthLimit() - 1)
-                    m_rSink << INetMIMEOutputSink::endl;
                 m_rSink << ' ';
                 break;
         }
@@ -3073,64 +3002,13 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
     }
     else
     {
-        // If the text itself is too long to fit into a single line, make it
-        // into multiple encoded words:
-        switch (m_eCoding)
-        {
-            case CODING_NONE:
-                if (m_nExtraSpaces == 0)
-                {
-                    DBG_ASSERT(m_ePrevCoding == CODING_NONE
-                               || m_pBuffer == m_pBufferEnd,
-                               "INetMIMEEncodedWordOutputSink::finish():"
-                                   " Bad state");
-                    if (m_rSink.getColumn() + (m_pBufferEnd - m_pBuffer)
-                            > m_rSink.getLineLengthLimit())
-                        m_eCoding = CODING_ENCODED;
-                }
-                else
-                {
-                    OSL_ASSERT(m_pBufferEnd >= m_pBuffer);
-                    if (static_cast< std::size_t >(m_pBufferEnd - m_pBuffer)
-                        > m_rSink.getLineLengthLimit() - 1)
-                    {
-                        m_eCoding = CODING_ENCODED;
-                    }
-                }
-                break;
-
-            case CODING_QUOTED:
-                if (m_nExtraSpaces == 0)
-                {
-                    DBG_ASSERT(m_ePrevCoding == CODING_NONE,
-                               "INetMIMEEncodedWordOutputSink::finish():"
-                                   " Bad state");
-                    if (m_rSink.getColumn() + (m_pBufferEnd - m_pBuffer)
-                                + m_nQuotedEscaped
-                            > m_rSink.getLineLengthLimit() - 2)
-                        m_eCoding = CODING_ENCODED;
-                }
-                else if ((m_pBufferEnd - m_pBuffer) + m_nQuotedEscaped
-                             > m_rSink.getLineLengthLimit() - 3)
-                    m_eCoding = CODING_ENCODED;
-                break;
-
-            default:
-                break;
-        }
-
         switch (m_eCoding)
         {
             case CODING_NONE:
                 switch (m_ePrevCoding)
                 {
                     case CODING_QUOTED:
-                        if (m_rSink.getColumn() + m_nExtraSpaces
-                                    + (m_pBufferEnd - m_pBuffer)
-                                < m_rSink.getLineLengthLimit())
-                            m_eCoding = CODING_QUOTED;
-                        else
-                            m_rSink << '"';
+                        m_eCoding = CODING_QUOTED;
                         break;
 
                     case CODING_ENCODED:
@@ -3140,17 +3018,8 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                     default:
                         break;
                 }
-                for (; m_nExtraSpaces > 1; --m_nExtraSpaces)
+                while (m_nExtraSpaces-- > 0)
                 {
-                    if (m_rSink.getColumn() >= m_rSink.getLineLengthLimit())
-                        m_rSink << INetMIMEOutputSink::endl;
-                    m_rSink << ' ';
-                }
-                if (m_nExtraSpaces == 1)
-                {
-                    if (m_rSink.getColumn() + (m_pBufferEnd - m_pBuffer)
-                            >= m_rSink.getLineLengthLimit())
-                        m_rSink << INetMIMEOutputSink::endl;
                     m_rSink << ' ';
                 }
                 m_rSink.write(m_pBuffer, m_pBufferEnd);
@@ -3164,19 +3033,10 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
             case CODING_QUOTED:
             {
                 bool bInsertLeadingQuote = true;
-                sal_uInt32 nSize = (m_pBufferEnd - m_pBuffer)
-                                       + m_nQuotedEscaped + 2;
                 switch (m_ePrevCoding)
                 {
                     case CODING_QUOTED:
-                        if (m_rSink.getColumn() + m_nExtraSpaces + nSize - 1
-                                < m_rSink.getLineLengthLimit())
-                        {
-                            bInsertLeadingQuote = false;
-                            --nSize;
-                        }
-                        else
-                            m_rSink << '"';
+                        bInsertLeadingQuote = false;
                         break;
 
                     case CODING_ENCODED:
@@ -3186,17 +3046,8 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                     default:
                         break;
                 }
-                for (; m_nExtraSpaces > 1; --m_nExtraSpaces)
+                while (m_nExtraSpaces-- > 0)
                 {
-                    if (m_rSink.getColumn() >= m_rSink.getLineLengthLimit())
-                        m_rSink << INetMIMEOutputSink::endl;
-                    m_rSink << ' ';
-                }
-                if (m_nExtraSpaces == 1)
-                {
-                    if (m_rSink.getColumn() + nSize
-                            >= m_rSink.getLineLengthLimit())
-                        m_rSink << INetMIMEOutputSink::endl;
                     m_rSink << ' ';
                 }
                 if (bInsertLeadingQuote)
@@ -3224,68 +3075,8 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                 rtl_TextEncoding eMIMEEncoding
                     = INetMIME::translateToMIME(eCharsetEncoding);
 
-                // The non UTF-8 code will only work for stateless single byte
-                // character encodings (see also below):
-                sal_Char * pTargetBuffer = NULL;
-                sal_Size nTargetSize = 0;
-                sal_uInt32 nSize;
-                if (eMIMEEncoding == RTL_TEXTENCODING_UTF8)
-                {
-                    nSize = 0;
-                    for (sal_Unicode const * p = m_pBuffer;
-                         p != m_pBufferEnd;)
-                    {
-                        sal_uInt32 nUTF32
-                            = INetMIME::getUTF32Character(p, m_pBufferEnd);
-                        nSize += needsEncodedWordEscape(nUTF32) ?
-                                     3 * INetMIME::getUTF8OctetCount(nUTF32) :
-                                     1;
-                            // only US-ASCII characters (that are converted to
-                            // a single byte by UTF-8) need no encoded word
-                            // escapes...
-                    }
-                }
-                else
-                {
-                    rtl_UnicodeToTextConverter hConverter
-                        = rtl_createUnicodeToTextConverter(eCharsetEncoding);
-                    rtl_UnicodeToTextContext hContext
-                        = rtl_createUnicodeToTextContext(hConverter);
-                    for (sal_Size nBufferSize = m_pBufferEnd - m_pBuffer;;
-                         nBufferSize += nBufferSize / 3 + 1)
-                    {
-                        pTargetBuffer = new sal_Char[nBufferSize];
-                        sal_uInt32 nInfo;
-                        sal_Size nSrcCvtBytes;
-                        nTargetSize
-                            = rtl_convertUnicodeToText(
-                                  hConverter, hContext, m_pBuffer,
-                                  m_pBufferEnd - m_pBuffer, pTargetBuffer,
-                                  nBufferSize,
-                                  RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE
-                                     | RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE,
-                                  &nInfo, &nSrcCvtBytes);
-                        if (!(nInfo
-                                  & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL))
-                            break;
-                        delete[] pTargetBuffer;
-                        pTargetBuffer = NULL;
-                        rtl_resetUnicodeToTextContext(hConverter, hContext);
-                    }
-                    rtl_destroyUnicodeToTextContext(hConverter, hContext);
-                    rtl_destroyUnicodeToTextConverter(hConverter);
-
-                    nSize = nTargetSize;
-                    for (sal_Size k = 0; k < nTargetSize; ++k)
-                        if (needsEncodedWordEscape(static_cast<unsigned char>(
-                                                       pTargetBuffer[k])))
-                            nSize += 2;
-                }
-
                 const sal_Char * pCharsetName
                     = INetMIME::getCharsetName(eMIMEEncoding);
-                sal_uInt32 nWrapperSize = rtl_str_getLength(pCharsetName) + 7;
-                    // '=?', '?Q?', '?='
 
                 switch (m_ePrevCoding)
                 {
@@ -3295,63 +3086,35 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                         if (m_eInitialSpace == SPACE_ENCODED
                             && m_nExtraSpaces == 0)
                             m_nExtraSpaces = 1;
-                        nSize += nWrapperSize;
-                        for (; m_nExtraSpaces > 1; --m_nExtraSpaces)
+                        while (m_nExtraSpaces-- > 0)
                         {
-                            if (m_rSink.getColumn() >= m_rSink.getLineLengthLimit())
-                                m_rSink << INetMIMEOutputSink::endl;
-                            m_rSink << ' ';
-                        }
-                        if (m_nExtraSpaces == 1)
-                        {
-                            if (m_rSink.getColumn() + nSize >= m_rSink.getLineLengthLimit())
-                                m_rSink << INetMIMEOutputSink::endl;
                             m_rSink << ' ';
                         }
                         m_rSink << "=?" << pCharsetName << "?Q?";
                         break;
 
                     case CODING_ENCODED:
-                        if (m_ePrevMIMEEncoding != eMIMEEncoding
-                            || m_rSink.getColumn() + m_nExtraSpaces + nSize
-                                   > m_rSink.getLineLengthLimit() - 2)
+                        if (m_ePrevMIMEEncoding != eMIMEEncoding)
                         {
-                            m_rSink << "?=";
-                            if (m_rSink.getColumn() + nWrapperSize
-                                        + m_nExtraSpaces + nSize
-                                    > m_rSink.getLineLengthLimit() - 1)
-                                m_rSink << INetMIMEOutputSink::endl;
-                            m_rSink << " =?" << pCharsetName << "?Q?";
+                            m_rSink << "?= =?" << pCharsetName << "?Q?";
                         }
                         while (m_nExtraSpaces-- > 0)
                         {
-                            if (m_rSink.getColumn()
-                                    > m_rSink.getLineLengthLimit() - 3)
-                                m_rSink << "?=" << INetMIMEOutputSink::endl
-                                        << " =?" << pCharsetName << "?Q?";
                             m_rSink << '_';
                         }
                         break;
 
                     case CODING_ENCODED_TERMINATED:
-                        if (m_rSink.getColumn() + nWrapperSize
-                                    + m_nExtraSpaces + nSize
-                                > m_rSink.getLineLengthLimit() - 1)
-                            m_rSink << INetMIMEOutputSink::endl;
                         m_rSink << " =?" << pCharsetName << "?Q?";
                         while (m_nExtraSpaces-- > 0)
                         {
-                            if (m_rSink.getColumn()
-                                    > m_rSink.getLineLengthLimit() - 3)
-                                m_rSink << "?=" << INetMIMEOutputSink::endl
-                                        << " =?" << pCharsetName << "?Q?";
                             m_rSink << '_';
                         }
                         break;
                 }
 
                 // The non UTF-8 code will only work for stateless single byte
-                // character encodings (see also above):
+                // character encodings:
                 if (eMIMEEncoding == RTL_TEXTENCODING_UTF8)
                 {
                     bool bInitial = true;
@@ -3361,17 +3124,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                         sal_uInt32 nUTF32
                             = INetMIME::getUTF32Character(p, m_pBufferEnd);
                         bool bEscape = needsEncodedWordEscape(nUTF32);
-                        sal_uInt32 nWidth
-                            = bEscape ?
-                                  3 * INetMIME::getUTF8OctetCount(nUTF32) : 1;
-                            // only US-ASCII characters (that are converted to
-                            // a single byte by UTF-8) need no encoded word
-                            // escapes...
-                        if (!bInitial
-                            && m_rSink.getColumn() + nWidth + 2
-                                   > m_rSink.getLineLengthLimit())
-                            m_rSink << "?=" << INetMIMEOutputSink::endl
-                                    << " =?" << pCharsetName << "?Q?";
                         if (bEscape)
                         {
                             DBG_ASSERT(
@@ -3428,15 +3180,39 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                 }
                 else
                 {
+                    sal_Char * pTargetBuffer = NULL;
+                    sal_Size nTargetSize = 0;
+                    rtl_UnicodeToTextConverter hConverter
+                        = rtl_createUnicodeToTextConverter(eCharsetEncoding);
+                    rtl_UnicodeToTextContext hContext
+                        = rtl_createUnicodeToTextContext(hConverter);
+                    for (sal_Size nBufferSize = m_pBufferEnd - m_pBuffer;;
+                         nBufferSize += nBufferSize / 3 + 1)
+                    {
+                        pTargetBuffer = new sal_Char[nBufferSize];
+                        sal_uInt32 nInfo;
+                        sal_Size nSrcCvtBytes;
+                        nTargetSize
+                            = rtl_convertUnicodeToText(
+                                  hConverter, hContext, m_pBuffer,
+                                  m_pBufferEnd - m_pBuffer, pTargetBuffer,
+                                  nBufferSize,
+                                  RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE
+                                     | RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE,
+                                  &nInfo, &nSrcCvtBytes);
+                        if (!(nInfo
+                                  & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL))
+                            break;
+                        delete[] pTargetBuffer;
+                        pTargetBuffer = NULL;
+                        rtl_resetUnicodeToTextContext(hConverter, hContext);
+                    }
+                    rtl_destroyUnicodeToTextContext(hConverter, hContext);
+                    rtl_destroyUnicodeToTextConverter(hConverter);
                     for (sal_Size k = 0; k < nTargetSize; ++k)
                     {
                         sal_uInt32 nUCS4 = static_cast<unsigned char>(pTargetBuffer[k]);
                         bool bEscape = needsEncodedWordEscape(nUCS4);
-                        if (k > 0
-                            && m_rSink.getColumn() + (bEscape ? 5 : 3)
-                                   > m_rSink.getLineLengthLimit())
-                            m_rSink << "?=" << INetMIMEOutputSink::endl
-                                    << " =?" << pCharsetName << "?Q?";
                         if (bEscape)
                             INetMIME::writeEscapeSequence(m_rSink, nUCS4);
                         else
@@ -3467,7 +3243,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
     m_pBufferEnd = m_pBuffer;
     m_ePrevCoding = m_eCoding;
     m_eCoding = CODING_NONE;
-    m_nQuotedEscaped = 0;
     m_eEncodedWordState = STATE_INITIAL;
 }
 
@@ -3707,9 +3482,6 @@ INetMIMEEncodedWordOutputSink::WriteUInt32(sal_uInt32 nChar)
                                                            CODING_NONE;
         if (eNewCoding > m_eCoding)
             m_eCoding = eNewCoding;
-        if (m_eCoding == CODING_QUOTED
-            && INetMIME::needsQuotedStringEscape(nChar))
-            ++m_nQuotedEscaped;
 
         // Append to buffer:
         if (sal_uInt32(m_pBufferEnd - m_pBuffer) == m_nBufferSize)

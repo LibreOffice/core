@@ -624,12 +624,7 @@ inline sal_Unicode * INetMIME::putUTF32Character(sal_Unicode * pBuffer,
 
 class INetMIMEOutputSink
 {
-public:
-    static sal_uInt32 const NO_LINE_LENGTH_LIMIT = SAL_MAX_UINT32;
-
 private:
-    sal_uInt32 m_nColumn;
-    sal_uInt32 m_nLineLengthLimit;
     OStringBuffer m_aBuffer;
 
     /** Write a sequence of octets.
@@ -664,17 +659,6 @@ private:
                                const sal_Unicode * pEnd);
 
 public:
-    INetMIMEOutputSink():
-        m_nColumn(0), m_nLineLengthLimit(NO_LINE_LENGTH_LIMIT) {}
-
-    /** Get the current column.
-
-        @return  The current column (starting from zero).
-     */
-    sal_uInt32 getColumn() const { return m_nColumn; }
-
-    sal_uInt32 getLineLengthLimit() const { return m_nLineLengthLimit; }
-
     /** Write a sequence of octets.
 
         @descr  The supplied sequence of Unicode characters is interpreted as
@@ -714,7 +698,6 @@ public:
     INetMIMEOutputSink & operator <<(const OString& rOctets)
     {
         writeSequence(rOctets.getStr(), rOctets.getStr() + rOctets.getLength());
-        m_nColumn += rOctets.getLength();
         return *this;
     }
 
@@ -728,22 +711,10 @@ public:
     operator <<(INetMIMEOutputSink & (* pManipulator)(INetMIMEOutputSink &))
     { return pManipulator(*this); }
 
-    /** Write a line end (CR LF).
-     */
-    void writeLineEnd();
-
     OString takeBuffer()
     {
         return m_aBuffer.makeStringAndClear();
     }
-
-    /** A manipulator function that writes a line end (CR LF).
-
-        @param rSink  Some sink.
-
-        @return  The sink rSink.
-     */
-    static inline INetMIMEOutputSink & endl(INetMIMEOutputSink & rSink);
 };
 
 
@@ -751,29 +722,19 @@ inline void INetMIMEOutputSink::write(const sal_Unicode * pBegin,
                                       const sal_Unicode * pEnd)
 {
     writeSequence(pBegin, pEnd);
-    m_nColumn += pEnd - pBegin;
 }
 
 inline INetMIMEOutputSink & INetMIMEOutputSink::operator <<(sal_Char nOctet)
 {
     writeSequence(&nOctet, &nOctet + 1);
-    ++m_nColumn;
     return *this;
 }
 
 inline INetMIMEOutputSink & INetMIMEOutputSink::operator <<(const sal_Char *
                                                                 pOctets)
 {
-    m_nColumn += writeSequence(pOctets);
+    writeSequence(pOctets);
     return *this;
-}
-
-// static
-inline INetMIMEOutputSink & INetMIMEOutputSink::endl(INetMIMEOutputSink &
-                                                         rSink)
-{
-    rSink.writeLineEnd();
-    return rSink;
 }
 
 // static
@@ -818,7 +779,6 @@ private:
     Coding m_ePrevCoding;
     rtl_TextEncoding m_ePrevMIMEEncoding;
     Coding m_eCoding;
-    sal_uInt32 m_nQuotedEscaped;
     EncodedWordState m_eEncodedWordState;
 
     inline bool needsEncodedWordEscape(sal_uInt32 nChar) const;
@@ -851,7 +811,6 @@ inline INetMIMEEncodedWordOutputSink::INetMIMEEncodedWordOutputSink(
     m_ePrevCoding(CODING_NONE),
     m_ePrevMIMEEncoding(RTL_TEXTENCODING_DONTKNOW),
     m_eCoding(CODING_NONE),
-    m_nQuotedEscaped(0),
     m_eEncodedWordState(STATE_INITIAL)
 {
     m_nBufferSize = BUFFER_SIZE;
