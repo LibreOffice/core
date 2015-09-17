@@ -73,14 +73,14 @@ public:
 
     sal_Int32           InsertCategory( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
 
-    void            SetDoubleClickLink( const Link<>& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
+    void                SetDoubleClickLink( const Link<CategoryListBox&,void>& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
 
     DECL_LINK_TYPED(implDoubleClickHdl, ListBox&, void);
 
 private:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
-    Link<>          maDoubleClickHdl;
+    Link<CategoryListBox&,void> maDoubleClickHdl;
 };
 
 CategoryListBox::CategoryListBox( vcl::Window* pParent )
@@ -148,7 +148,7 @@ void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
     if( rMEvt.IsLeft() && (rMEvt.GetClicks() == 2) )
     {
         if( maDoubleClickHdl.IsSet() )
-            maDoubleClickHdl.Call( this );
+            maDoubleClickHdl.Call( *this );
     }
     else
     {
@@ -177,7 +177,7 @@ public:
 
 private:
     DECL_LINK( implSelectHdl, Control* );
-    DECL_LINK( implDoubleClickHdl, Control* );
+    DECL_LINK_TYPED( implDoubleClickHdl, CategoryListBox&, void );
 
     void onSelectEffect();
 
@@ -314,14 +314,13 @@ IMPL_LINK( CustomAnimationCreateTabPage, implSelectHdl, Control*, pControl )
     return 0;
 }
 
-IMPL_LINK( CustomAnimationCreateTabPage, implDoubleClickHdl, Control*, pControl )
+IMPL_LINK_TYPED( CustomAnimationCreateTabPage, implDoubleClickHdl, CategoryListBox&, rControl, void )
 {
-    if( pControl == mpLBEffects )
+    if( &rControl == mpLBEffects )
     {
         if( mpLBEffects->GetSelectEntryCount() )
             mpParent->EndDialog( RET_OK );
     }
-    return 0;
 }
 
 void CustomAnimationCreateTabPage::onSelectEffect()
