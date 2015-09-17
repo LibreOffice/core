@@ -396,6 +396,11 @@ String STR_FRAME_DEFNAME
     Text [ en-US ] = "Frame" ;
 };
 
+String STR_SHAPE_DEFNAME
+{
+    Text [ en-US ] = "Shape" ;
+};
+
 String STR_REGION_DEFNAME
 {
     Text [ en-US ] = "Section" ;

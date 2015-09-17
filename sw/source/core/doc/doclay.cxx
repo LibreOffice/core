@@ -1263,7 +1263,7 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     return pNewFormat;
 }
 
-static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
+static OUString lcl_GetUniqueFlyName(const SwDoc* pDoc, sal_uInt16 nDefStrId, RES_FMT eType)
 {
     if( pDoc->IsInMailMerge())
     {
@@ -1284,11 +1284,23 @@ static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
     for( SwFrameFormats::size_type n = 0; n < rFormats.size(); ++n )
     {
         const SwFrameFormat* pFlyFormat = rFormats[ n ];
-        if( RES_FLYFRMFMT == pFlyFormat->Which() &&
-            pFlyFormat->GetName().startsWith( aName ) )
+        if (eType != pFlyFormat->Which())
+            continue;
+        OUString sName;
+        if (eType == RES_DRAWFRMFMT)
+        {
+            const SdrObject *pObj = pFlyFormat->FindSdrObject();
+            if (pObj)
+                sName = pObj->GetName();
+        }
+        else
+        {
+            sName = pFlyFormat->GetName();
+        }
+        if (sName.startsWith(aName))
         {
             // Only get and set the Flag
-            const sal_Int32 nNum = pFlyFormat->GetName().copy( nNmLen ).toInt32()-1;
+            const sal_Int32 nNum = sName.copy(nNmLen).toInt32()-1;
             if( nNum >= 0 && static_cast<SwFrameFormats::size_type>(nNum) < rFormats.size() )
                 aSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
@@ -1314,17 +1326,22 @@ static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 
 OUString SwDoc::GetUniqueGrfName() const
 {
-    return lcl_GetUniqueFlyName( this, STR_GRAPHIC_DEFNAME );
+    return lcl_GetUniqueFlyName(this, STR_GRAPHIC_DEFNAME, RES_FLYFRMFMT);
 }
 
 OUString SwDoc::GetUniqueOLEName() const
 {
-    return lcl_GetUniqueFlyName( this, STR_OBJECT_DEFNAME );
+    return lcl_GetUniqueFlyName(this, STR_OBJECT_DEFNAME, RES_FLYFRMFMT);
 }
 
 OUString SwDoc::GetUniqueFrameName() const
 {
-    return lcl_GetUniqueFlyName( this, STR_FRAME_DEFNAME );
+    return lcl_GetUniqueFlyName(this, STR_FRAME_DEFNAME, RES_FLYFRMFMT);
+}
+
+OUString SwDoc::GetUniqueShapeName() const
+{
+    return lcl_GetUniqueFlyName(this, STR_SHAPE_DEFNAME, RES_DRAWFRMFMT);
 }
 
 const SwFlyFrameFormat* SwDoc::FindFlyByName( const OUString& rName, sal_Int8 nNdTyp ) const
@@ -1362,12 +1379,18 @@ void SwDoc::SetFlyName( SwFlyFrameFormat& rFormat, const OUString& rName )
         sal_uInt16 nTyp = STR_FRAME_DEFNAME;
         const SwNodeIndex* pIdx = rFormat.GetContent().GetContentIdx();
         if( pIdx && pIdx->GetNode().GetNodes().IsDocNodes() )
+        {
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
-            case ND_GRFNODE:    nTyp = STR_GRAPHIC_DEFNAME; break;
-            case ND_OLENODE:    nTyp = STR_OBJECT_DEFNAME;  break;
+                case ND_GRFNODE:
+                    nTyp = STR_GRAPHIC_DEFNAME;
+                    break;
+                case ND_OLENODE:
+                    nTyp = STR_OBJECT_DEFNAME;
+                    break;
             }
-        sName = lcl_GetUniqueFlyName( this, nTyp );
+        }
+        sName = lcl_GetUniqueFlyName(this, nTyp, RES_FLYFRMFMT);
     }
     rFormat.SetName( sName, true );
     getIDocumentState().SetModified();

@@ -1858,6 +1858,9 @@ bool SwFEShell::ImpEndCreate()
             pAnch = pTmp;
         }
 
+        if (rSdrObj.GetName().isEmpty())
+            rSdrObj.SetName(GetUniqueShapeName());
+
         pContact->ConnectToLayout();
 
         // mark object at frame the object is inserted at.

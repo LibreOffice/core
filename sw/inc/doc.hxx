@@ -729,6 +729,7 @@ public:
     OUString GetUniqueGrfName() const;
     OUString GetUniqueOLEName() const;
     OUString GetUniqueFrameName() const;
+    OUString GetUniqueShapeName() const;
 
     std::set<SwRootFrm*> GetAllLayouts();
 

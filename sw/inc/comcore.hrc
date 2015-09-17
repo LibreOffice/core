@@ -39,6 +39,7 @@
 #define STR_MULT_INTERACT_SPELL_WARN        (RC_COMCORE_BEGIN + 14)
 #define STR_SPELL_TITLE                     (RC_COMCORE_BEGIN + 15)
 #define STR_HYPH_TITLE                      (RC_COMCORE_BEGIN + 16)
+#define STR_SHAPE_DEFNAME                   (RC_COMCORE_BEGIN + 17)
 
 #define STR_REDLINE_INSERT                  (RC_COMCORE_BEGIN + 19)
 #define STR_REDLINE_DELETE                  (RC_COMCORE_BEGIN + 20)
