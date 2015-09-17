@@ -220,9 +220,9 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
 
 }
 
-IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
+IMPL_LINK_TYPED( FormulaDialog, OnClickHdl, OAddFieldWindow& ,_rAddFieldDlg, void)
 {
-    const uno::Sequence< beans::PropertyValue > aArgs = _pAddFieldDlg->getSelectedFieldDescriptors();
+    const uno::Sequence< beans::PropertyValue > aArgs = _rAddFieldDlg.getSelectedFieldDescriptors();
     // we use this way to create undo actions
     if ( m_pEdit && aArgs.getLength() == 1)
     {
@@ -238,10 +238,8 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
         }
     }
     m_pEdit = NULL;
-    _pAddFieldDlg->Hide();
+    _rAddFieldDlg.Hide();
     RefInputDoneAfter( true );
-
-    return 0L;
 }
 
 uno::Reference< sheet::XFormulaParser> FormulaDialog::getFormulaParser() const

@@ -1751,16 +1751,15 @@ IMPL_LINK_NOARG_TYPED( OReportController, OnOpenHelpAgent, void*, void )
     doOpenHelpAgent();
 }
 
-IMPL_LINK( OReportController, OnCreateHdl, OAddFieldWindow* ,_pAddFieldDlg)
+IMPL_LINK_TYPED( OReportController, OnCreateHdl, OAddFieldWindow& ,_rAddFieldDlg, void)
 {
     WaitObject aObj( getDesignView() );
-    uno::Sequence< beans::PropertyValue > aArgs = _pAddFieldDlg->getSelectedFieldDescriptors();
+    uno::Sequence< beans::PropertyValue > aArgs = _rAddFieldDlg.getSelectedFieldDescriptors();
     // we use this way to create undo actions
     if ( aArgs.getLength() )
     {
         executeChecked(SID_ADD_CONTROL_PAIR,aArgs);
     }
-    return 0L;
 }
 
 
