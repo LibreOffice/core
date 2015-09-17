@@ -55,7 +55,7 @@ namespace pcr
         ::dbtools::SharedConnection                                                         m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            m_xDesigner;
         ::rtl::Reference< ISQLCommandAdapter >                                              m_xObjectAdapter;
-        Link<>                                                                              m_aCloseLink;
+        Link<SQLCommandDesigner&,void>                                                      m_aCloseLink;
 
     public:
         /** creates the instance, and immediately opens the SQL command design frame
@@ -76,7 +76,7 @@ namespace pcr
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,
             const ::dbtools::SharedConnection& _rConnection,
-            const Link<>& _rCloseLink
+            const Link<SQLCommandDesigner&,void>& _rCloseLink
         );
 
         /** determines whether the SQL Command designer is currently active, i.e.

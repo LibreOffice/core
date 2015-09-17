@@ -100,7 +100,7 @@ namespace pcr
 
     SQLCommandDesigner::SQLCommandDesigner( const Reference< XComponentContext >& _rxContext,
             const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,
-            const ::dbtools::SharedConnection& _rConnection, const Link<>& _rCloseLink )
+            const ::dbtools::SharedConnection& _rConnection, const Link<SQLCommandDesigner&,void>& _rCloseLink )
         :m_xContext( _rxContext )
         ,m_xConnection( _rConnection )
         ,m_xObjectAdapter( _rxPropertyAdapter )
@@ -310,7 +310,7 @@ namespace pcr
     void SQLCommandDesigner::impl_designerClosed_nothrow()
     {
         if ( m_aCloseLink.IsSet() )
-            m_aCloseLink.Call( this );
+            m_aCloseLink.Call( *this );
     }
 
 
