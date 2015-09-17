@@ -64,7 +64,7 @@ PluginConnector::~PluginConnector()
     }
 }
 
-IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
+IMPL_LINK_NOARG_TYPED( PluginConnector, NewMessageHdl, Mediator*, void )
 {
     osl::MutexGuard aGuard( m_aUserEventMutex );
     bool bFound = false;
@@ -75,9 +75,8 @@ IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
             bFound = true;
     }
     if( ! bFound )
-        return 0;
+        return;
     Application::PostUserEvent( LINK( this, PluginConnector, WorkOnNewMessageHdl ) );
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( PluginConnector, WorkOnNewMessageHdl, void*, void )

@@ -83,12 +83,12 @@ protected:
     MediatorListener*                   m_pListener;
     // thread to fill the queue
 
-    sal_uLong                               m_nCurrentID;
+    sal_uLong                           m_nCurrentID;
     // will be constantly increased with each message sent
     bool                                m_bValid;
 
-    Link<>                              m_aConnectionLostHdl;
-    Link<>                              m_aNewMessageHdl;
+    Link<Mediator*,void>                m_aConnectionLostHdl;
+    Link<Mediator*,void>                m_aNewMessageHdl;
 public:
     Mediator( int nSocket );
     virtual ~Mediator();
@@ -117,25 +117,21 @@ public:
     MediatorMessage* GetNextMessage( bool bWait = false );
 
 
-    Link<> SetConnectionLostHdl( const Link<>& rLink )
+    void SetConnectionLostHdl( const Link<Mediator*,void>& rLink )
         {
-            Link<> aRet = m_aConnectionLostHdl;
             m_aConnectionLostHdl = rLink;
-            return aRet;
         }
 
-    Link<> SetNewMessageHdl( const Link<>& rLink )
+    void SetNewMessageHdl( const Link<Mediator*,void>& rLink )
         {
-            Link<> aRet = m_aNewMessageHdl;
             m_aNewMessageHdl = rLink;
-            return aRet;
         }
 };
 
 class MediatorListener : public osl::Thread
 {
     friend class Mediator;
-  private:
+private:
     Mediator*       m_pMediator;
     ::osl::Mutex    m_aMutex;
 

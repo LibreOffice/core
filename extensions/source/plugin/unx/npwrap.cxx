@@ -63,13 +63,12 @@ Widget topLevel = NULL, topBox = NULL;
 int wakeup_fd[2] = { 0, 0 };
 static bool bPluginAppQuit = false;
 
-static long GlobalConnectionLostHdl( void* /*pInst*/, void* /*pArg*/ )
+static void GlobalConnectionLostHdl( void* /*pInst*/, Mediator* /*pArg*/ )
 {
     SAL_WARN("extensions.plugin", "pluginapp exiting due to connection lost");
 
     bool bSuccess = (4 == write(wakeup_fd[1], "xxxx", 4 ));
     SAL_WARN_IF(!bSuccess, "extensions.plugin", "short write");
-    return 0;
 }
 
 extern "C"
@@ -79,7 +78,7 @@ extern "C"
         return 0;
     }
 
-    #if ! ENABLE_GTK
+#if ! ENABLE_GTK
     static void ThreadEventHandler( XtPointer /*client_data*/, int* /*source*/, XtInputId* id )
     {
         char buf[256];
@@ -88,12 +87,10 @@ extern "C"
 
         while( (len = read( wakeup_fd[0], buf, sizeof( buf ) ) ) > 0 )
             nLast = len-1;
-        if( ! bPluginAppQuit )
-        {
+        if( ! bPluginAppQuit ) {
             if( ( nLast == -1  || buf[nLast] != 'x' ) && pConnector )
                 pConnector->CallWorkHandler();
-            else
-            {
+            else {
                 // it seems you can use XtRemoveInput only
                 // safely from within the callback
                 // why is that ?
@@ -107,41 +104,39 @@ extern "C"
             }
         }
     }
-    #endif
+#endif
 }
 
 
-IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
+IMPL_LINK_NOARG_TYPED( PluginConnector, NewMessageHdl, Mediator*, void )
 {
     (void) this; // loplugin:staticmethods
     SAL_INFO("extensions.plugin", "new message handler");
     bool bSuccess = (4 == write(wakeup_fd[1], "cccc", 4));
     SAL_WARN_IF(!bSuccess, "extensions.plugin", "short write");
-    return 0;
-
 }
 
 Widget createSubWidget( char* /*pPluginText*/, Widget shell, Window aParentWindow )
 {
     Widget newWidget = XtVaCreateManagedWidget(
 #if defined USE_MOTIF
-          "drawingArea",
-        xmDrawingAreaWidgetClass,
+                           "drawingArea",
+                           xmDrawingAreaWidgetClass,
 #else
-        "",
-        compositeWidgetClass,
+                           "",
+                           compositeWidgetClass,
 #endif
-          shell,
-        XtNwidth, 200,
-        XtNheight, 200,
-          nullptr );
+                           shell,
+                           XtNwidth, 200,
+                           XtNheight, 200,
+                           nullptr );
     XtRealizeWidget( shell );
     XtRealizeWidget( newWidget );
 
     SAL_INFO(
         "extensions.plugin",
         "reparenting new widget " << XtWindow( newWidget ) << " to "
-            << aParentWindow);
+        << aParentWindow);
     XReparentWindow( pXtAppDisplay,
                      XtWindow( shell ),
                      aParentWindow,
@@ -192,10 +187,9 @@ static oslModule LoadModule( const char* pPath )
 static void CheckPlugin( const char* pPath )
 {
     oslModule pLib = LoadModule( pPath );
-    if (pLib != 0)
-    {
+    if (pLib != 0) {
         char*(*pNP_GetMIMEDescription)() = reinterpret_cast<char*(*)()>(
-            osl_getAsciiFunctionSymbol( pLib, "NP_GetMIMEDescription" ));
+                                               osl_getAsciiFunctionSymbol( pLib, "NP_GetMIMEDescription" ));
         if( pNP_GetMIMEDescription )
             printf( "%s\n", pNP_GetMIMEDescription() );
         else
@@ -212,116 +206,112 @@ static void CheckPlugin( const char* pPath )
 
 extern "C" {
 
-static void signal_handler( int nSig )
-{
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "caught signal %d, exiting\n", nSig );
-#ifdef LINUX
-    void* pStack[64];
-    int nStackLevels = backtrace( pStack, SAL_N_ELEMENTS(pStack) );
-    backtrace_symbols_fd( pStack, nStackLevels, STDERR_FILENO );
-#endif
-#endif
-    if( pConnector )
+    static void signal_handler( int nSig )
     {
-        // ensure that a read on the other side will wakeup
-        delete pConnector;
-        pConnector = NULL;
-    }
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "caught signal %d, exiting\n", nSig );
+#ifdef LINUX
+        void* pStack[64];
+        int nStackLevels = backtrace( pStack, SAL_N_ELEMENTS(pStack) );
+        backtrace_symbols_fd( pStack, nStackLevels, STDERR_FILENO );
+#endif
+#endif
+        if( pConnector ) {
+            // ensure that a read on the other side will wakeup
+            delete pConnector;
+            pConnector = NULL;
+        }
 
-    _exit(nSig);
-}
+        _exit(nSig);
+    }
 
 #if ENABLE_GTK
 
-static gboolean noClosure( gpointer )
-{
-    return sal_True;
-}
+    static gboolean noClosure( gpointer )
+    {
+        return sal_True;
+    }
 
 // Xt events
-static gboolean prepareXtEvent( GSource*, gint* )
-{
-    int nMask = XtAppPending( app_context );
-    return (nMask & XtIMAll) != 0;
-}
-
-static gboolean checkXtEvent( GSource* )
-{
-    int nMask = XtAppPending( app_context );
-    return (nMask & XtIMAll) != 0;
-}
-
-static gboolean dispatchXtEvent( GSource*, GSourceFunc, gpointer )
-{
-    XtAppProcessEvent( app_context, XtIMAll );
-    return sal_True;
-}
-
-static GSourceFuncs aXtEventFuncs =
-{
-  prepareXtEvent,
-  checkXtEvent,
-  dispatchXtEvent,
-  NULL,
-  noClosure,
-  NULL
-};
-
-static gboolean pollXtTimerCallback(gpointer)
-{
-    for(int i = 0; i < 5; i++)
+    static gboolean prepareXtEvent( GSource*, gint* )
     {
-        if( (XtAppPending(app_context) & (XtIMAll & ~XtIMXEvent)) == 0 )
-            break;
-        XtAppProcessEvent(app_context, XtIMAll & ~XtIMXEvent);
-    }
-    return sal_True;
-}
-
-static gboolean prepareWakeupEvent( GSource*, gint* )
-{
-    struct pollfd aPoll = { wakeup_fd[0], POLLIN, 0 };
-    (void)poll(&aPoll, 1, 0);
-    return (aPoll.revents & POLLIN ) != 0;
-}
-
-static gboolean checkWakeupEvent( GSource* pSource )
-{
-    gint nDum = 0;
-    return prepareWakeupEvent( pSource, &nDum );
-}
-
-static gboolean dispatchWakeupEvent( GSource*, GSourceFunc, gpointer )
-{
-    char buf[256];
-    // clear pipe
-    int len, nLast = -1;
-
-    while( (len = read( wakeup_fd[0], buf, sizeof( buf ) ) ) > 0 )
-        nLast = len-1;
-    if( ( nLast == -1  || buf[nLast] != 'x' ) && pConnector )
-        pConnector->CallWorkHandler();
-    else
-    {
-        XtAppSetExitFlag( app_context );
-        bPluginAppQuit = true;
-
-        delete pConnector;
-        pConnector = NULL;
+        int nMask = XtAppPending( app_context );
+        return (nMask & XtIMAll) != 0;
     }
 
-    return sal_True;
-}
+    static gboolean checkXtEvent( GSource* )
+    {
+        int nMask = XtAppPending( app_context );
+        return (nMask & XtIMAll) != 0;
+    }
 
-static GSourceFuncs aWakeupEventFuncs = {
-  prepareWakeupEvent,
-  checkWakeupEvent,
-  dispatchWakeupEvent,
-  NULL,
-  noClosure,
-  NULL
-};
+    static gboolean dispatchXtEvent( GSource*, GSourceFunc, gpointer )
+    {
+        XtAppProcessEvent( app_context, XtIMAll );
+        return sal_True;
+    }
+
+    static GSourceFuncs aXtEventFuncs = {
+        prepareXtEvent,
+        checkXtEvent,
+        dispatchXtEvent,
+        NULL,
+        noClosure,
+        NULL
+    };
+
+    static gboolean pollXtTimerCallback(gpointer)
+    {
+        for(int i = 0; i < 5; i++) {
+            if( (XtAppPending(app_context) & (XtIMAll & ~XtIMXEvent)) == 0 )
+                break;
+            XtAppProcessEvent(app_context, XtIMAll & ~XtIMXEvent);
+        }
+        return sal_True;
+    }
+
+    static gboolean prepareWakeupEvent( GSource*, gint* )
+    {
+        struct pollfd aPoll = { wakeup_fd[0], POLLIN, 0 };
+        (void)poll(&aPoll, 1, 0);
+        return (aPoll.revents & POLLIN ) != 0;
+    }
+
+    static gboolean checkWakeupEvent( GSource* pSource )
+    {
+        gint nDum = 0;
+        return prepareWakeupEvent( pSource, &nDum );
+    }
+
+    static gboolean dispatchWakeupEvent( GSource*, GSourceFunc, gpointer )
+    {
+        char buf[256];
+        // clear pipe
+        int len, nLast = -1;
+
+        while( (len = read( wakeup_fd[0], buf, sizeof( buf ) ) ) > 0 )
+            nLast = len-1;
+        if( ( nLast == -1  || buf[nLast] != 'x' ) && pConnector )
+            pConnector->CallWorkHandler();
+        else {
+            XtAppSetExitFlag( app_context );
+            bPluginAppQuit = true;
+
+            delete pConnector;
+            pConnector = NULL;
+        }
+
+        return sal_True;
+    }
+
+    static GSourceFuncs aWakeupEventFuncs = {
+        prepareWakeupEvent,
+        checkWakeupEvent,
+        dispatchWakeupEvent,
+        NULL,
+        noClosure,
+        NULL
+    };
 
 #endif // GTK
 
@@ -345,8 +335,7 @@ int main( int argc, char **argv)
         pBaseName--;
     LoadAdditionalLibs( pBaseName );
 
-    if( argc == 2 )
-    {
+    if( argc == 2 ) {
         CheckPlugin(argv[1]);
         exit(0);
     }
@@ -355,8 +344,7 @@ int main( int argc, char **argv)
 
     XSetErrorHandler( plugin_x_error_handler );
 
-    if( pipe( wakeup_fd ) )
-    {
+    if( pipe( wakeup_fd ) ) {
         SAL_WARN("extensions.plugin", "could not pipe()");
         return 1;
     }
@@ -364,43 +352,38 @@ int main( int argc, char **argv)
     int flags;
 
     // set close-on-exec descriptor flag.
-    if ((flags = fcntl (wakeup_fd[0], F_GETFD)) != -1)
-    {
+    if ((flags = fcntl (wakeup_fd[0], F_GETFD)) != -1) {
         flags |= FD_CLOEXEC;
         (void)fcntl(wakeup_fd[0], F_SETFD, flags);
     }
-    if ((flags = fcntl (wakeup_fd[1], F_GETFD)) != -1)
-    {
+    if ((flags = fcntl (wakeup_fd[1], F_GETFD)) != -1) {
         flags |= FD_CLOEXEC;
         (void)fcntl(wakeup_fd[1], F_SETFD, flags);
     }
 
     // set non-blocking I/O flag.
-    if ((flags = fcntl (wakeup_fd[0], F_GETFL)) != -1)
-    {
+    if ((flags = fcntl (wakeup_fd[0], F_GETFL)) != -1) {
         flags |= O_NONBLOCK;
         (void)fcntl(wakeup_fd[0], F_SETFL, flags);
     }
-    if ((flags = fcntl (wakeup_fd[1], F_GETFL)) != -1)
-    {
+    if ((flags = fcntl (wakeup_fd[1], F_GETFL)) != -1) {
         flags |= O_NONBLOCK;
         (void)fcntl(wakeup_fd[1], F_SETFL, flags);
     }
 
     pPluginLib = LoadModule( argv[2] );
-    if( ! pPluginLib )
-    {
+    if( ! pPluginLib ) {
         exit(255);
     }
     int nSocket = atol( argv[1] );
 
-    #if ENABLE_GTK
+#if ENABLE_GTK
     g_thread_init(NULL);
     gtk_init(&argc, &argv);
-    #endif
+#endif
 
-     pConnector = new PluginConnector( nSocket );
-     pConnector->SetConnectionLostHdl( Link<>( NULL, GlobalConnectionLostHdl ) );
+    pConnector = new PluginConnector( nSocket );
+    pConnector->SetConnectionLostHdl( Link<Mediator*,void>( NULL, GlobalConnectionLostHdl ) );
 
     XtSetLanguageProc( NULL, NULL, NULL );
 
@@ -409,13 +392,12 @@ int main( int argc, char **argv)
     pXtAppDisplay = XtOpenDisplay( app_context, NULL, "SOPlugin", "SOPlugin", NULL, 0, &argc, argv );
 
 
-    #if ENABLE_GTK
+#if ENABLE_GTK
     // integrate Xt events into GTK event loop
     GPollFD aXtPollDesc, aWakeupPollDesc;
 
     GSource* pXTSource = g_source_new( &aXtEventFuncs, sizeof(GSource) );
-    if( !pXTSource )
-    {
+    if( !pXTSource ) {
         SAL_WARN("extensions.plugin", "could not get Xt GSource");
         return 1;
     }
@@ -431,8 +413,7 @@ int main( int argc, char **argv)
     gint xt_polling_timer_id = g_timeout_add( 25, pollXtTimerCallback, NULL);
     // Initialize wakeup events listener
     GSource *pWakeupSource = g_source_new( &aWakeupEventFuncs, sizeof(GSource) );
-    if ( pWakeupSource == NULL )
-    {
+    if ( pWakeupSource == NULL ) {
         SAL_WARN("extensions.plugin", "could not get wakeup source");
         return 1;
     }
@@ -444,15 +425,15 @@ int main( int argc, char **argv)
     g_source_add_poll( pWakeupSource, &aWakeupPollDesc );
 
     pAppDisplay = gdk_x11_display_get_xdisplay( gdk_display_get_default() );
-    #else
+#else
     pAppDisplay = pXtAppDisplay;
     XtAppAddInput( app_context,
                    wakeup_fd[0],
                    (XtPointer)XtInputReadMask,
                    ThreadEventHandler, NULL );
-    #endif
+#endif
 
-     // send that we are ready to go
+    // send that we are ready to go
     MediatorMessage* pMessage =
         pConnector->Transact( "init req", 8,
                               NULL );
@@ -461,15 +442,13 @@ int main( int argc, char **argv)
 #if OSL_DEBUG_LEVEL > 3
     int nPID = getpid();
     int nChild = fork();
-    if( nChild == 0 )
-    {
+    if( nChild == 0 ) {
         char pidbuf[16];
         char* pArgs[] = { "xterm", "-sl", "2000", "-sb", "-e", "gdb", "pluginapp.bin", pidbuf, NULL };
         sprintf( pidbuf, "%d", nPID );
         execvp( pArgs[0], pArgs );
         _exit(255);
-    }
-    else
+    } else
         sleep( 10 );
 #endif
 
@@ -480,20 +459,19 @@ int main( int argc, char **argv)
     // in ThreadEventHandler most of times; Xt will hang in select
     // (hat is in XtAppNextEvent). Have our own mainloop instead
     // of XtAppMainLoop
-    do
-    {
-        #if ENABLE_GTK
+    do {
+#if ENABLE_GTK
         g_main_context_iteration( NULL, sal_True );
-        #else
+#else
         XtAppProcessEvent( app_context, XtIMAll );
-        #endif
+#endif
     } while( ! XtAppGetExitFlag( app_context ) && ! bPluginAppQuit );
 
     SAL_INFO("extensions.plugin", "left plugin app main loop");
 
-    #if ENABLE_GTK
+#if ENABLE_GTK
     g_source_remove(xt_polling_timer_id);
-    #endif
+#endif
 
     pNP_Shutdown();
     SAL_INFO("extensions.plugin", "NP_Shutdown done");
