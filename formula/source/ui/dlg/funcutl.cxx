@@ -270,7 +270,7 @@ void ArgInput::FxClick()
 
 void ArgInput::FxFocus()
 {
-    aFxFocusLink.Call(this);
+    aFxFocusLink.Call(*this);
 }
 
 void ArgInput::RefFocus()

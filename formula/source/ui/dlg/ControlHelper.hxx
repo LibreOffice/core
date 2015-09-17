@@ -88,7 +88,7 @@ class ArgInput
 {
 private:
     Link<ArgInput&,void>          aFxClickLink;
-    Link<>          aFxFocusLink;
+    Link<ArgInput&,void>          aFxFocusLink;
     Link<>          aRefFocusLink;
     Link<>          aEdFocusLink;
     Link<>          aEdModifyLink;
@@ -137,7 +137,7 @@ public:
 
     void            SetFxClickHdl( const Link<ArgInput&,void>& rLink ) { aFxClickLink = rLink; }
 
-    void            SetFxFocusHdl( const Link<>& rLink ) { aFxFocusLink = rLink; }
+    void            SetFxFocusHdl( const Link<ArgInput&,void>& rLink ) { aFxFocusLink = rLink; }
 
     void            SetEdFocusHdl( const Link<>& rLink ) { aEdFocusLink = rLink; }
 
