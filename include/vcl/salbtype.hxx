@@ -194,7 +194,7 @@ struct VCL_DLLPUBLIC ColorMaskElement
         , mnOr(0)
     {
     }
-    bool CalcMaskShift(ColorMaskElement &rElem) const
+    static bool CalcMaskShift(ColorMaskElement &rElem)
     {
         if (rElem.mnMask == 0)
             return true;
@@ -608,9 +608,9 @@ inline ColorMask::ColorMask( sal_uInt32 nRedMask,
     , maB(nBlueMask)
     , mnAlphaChannel(nAlphaChannel)
 {
-    maR.CalcMaskShift(maR);
-    maG.CalcMaskShift(maG);
-    maB.CalcMaskShift(maB);
+    ColorMaskElement::CalcMaskShift(maR);
+    ColorMaskElement::CalcMaskShift(maG);
+    ColorMaskElement::CalcMaskShift(maB);
 }
 
 inline sal_uInt32 ColorMask::GetRedMask() const
