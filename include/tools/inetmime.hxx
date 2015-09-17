@@ -106,17 +106,9 @@ struct INetContentTypeParameter
     }
 };
 
-struct OString_equalsIgnoreAsciiCase
-{
-    bool operator()(const OString& r1, const OString& r2) const
-    {
-        return r1.equalsIgnoreAsciiCase(r2);
-    }
-};
-
-// the key is the m_sAttribute again
-typedef std::unordered_map<OString, INetContentTypeParameter, OStringHash,
-            OString_equalsIgnoreAsciiCase> INetContentTypeParameterList;
+// the key is the m_sAttribute again; all keys are lower case:
+typedef std::unordered_map<OString, INetContentTypeParameter, OStringHash>
+    INetContentTypeParameterList;
 
 
 class TOOLS_DLLPUBLIC INetMIME
