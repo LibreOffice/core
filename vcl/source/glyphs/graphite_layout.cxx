@@ -148,14 +148,14 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
     for ( ; baseSlot; baseSlot = nextBaseSlot)
     {
         thisBoundary = nextBoundary;
-        int firstChar = gr_slot_before(baseSlot) + mnSegCharOffset;
+        int firstChar = gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(baseSlot))) + mnSegCharOffset;
         nextBaseSlot = get_next_base(bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot), bRtl);
         nextBoundary = nextBaseSlot ? gr_slot_origin_X(nextBaseSlot) : gr_seg_advance_X(pSegment);
         if (firstChar < mnMinCharPos || firstChar >= mnEndCharPos)
             continue;
         // handle reordered clusters. Presumes reordered glyphs have monotonic opposite char index until the cluster base.
-        bool isReordered = (nextBaseSlot && ((bRtl != (gr_slot_before(nextBaseSlot) < firstChar - mnSegCharOffset))
-                                             || gr_slot_before(nextBaseSlot) == firstChar - mnSegCharOffset));
+        bool isReordered = (nextBaseSlot && ((bRtl != (gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(nextBaseSlot))) < firstChar - mnSegCharOffset))
+                                             || gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(nextBaseSlot))) == firstChar - mnSegCharOffset));
         if (clusterStart >= 0 && !isReordered)      // we hit the base (end) of a reordered cluster
         {
             int clusterEnd = mvGlyphs.size();
@@ -189,7 +189,7 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
         }
 
         int baseGlyph = mvGlyphs.size();
-        mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, firstChar - mnSegCharOffset));
+        mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSegment, gr_slot_before(baseSlot)));
         mvChar2BaseGlyph[firstChar - mnMinCharPos] = baseGlyph;
         mvCharDxs[firstChar - mnMinCharPos] = static_cast<int>((bRtl ? thisBoundary : nextBoundary) * fScaling) + mnWidth + nDxOffset;
         mvGlyph2Char[baseGlyph] = firstChar;
@@ -265,7 +265,7 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
 {
     assert(gi);
     // assert(gr_slot_before(gi) <= gr_slot_after(gi));
-    int firstChar = gr_slot_before(gi) + mnSegCharOffset;
+    int firstChar = gr_cinfo_base(gr_seg_cinfo(pSeg, gr_slot_before(gi))) + mnSegCharOffset;
     assert(mvGlyphs.size() < mvGlyph2Char.size());
     if (firstChar < mnMinCharPos || firstChar >= mnEndCharPos)
         return nextGlyphOrigin;
@@ -274,7 +274,7 @@ GraphiteLayout::append(gr_segment *pSeg, ImplLayoutArgs &rArgs,
     {
         mvChar2BaseGlyph[firstChar - mnMinCharPos] = baseGlyph;
         mvCharDxs[firstChar - mnMinCharPos] = mvCharDxs[baseChar - mnMinCharPos];
-        mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSeg, firstChar - mnSegCharOffset));
+        mvCharBreaks[firstChar - mnMinCharPos] = gr_cinfo_break_weight(gr_seg_cinfo(pSeg, gr_slot_before(gi)));
     }
     long glyphId = gr_slot_gid(gi);
     long deltaOffset = 0;
