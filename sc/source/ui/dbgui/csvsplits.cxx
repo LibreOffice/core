@@ -23,24 +23,26 @@
 
 bool ScCsvSplits::Insert( sal_Int32 nPos )
 {
-    bool bValid = (nPos >= 0);
-    if( bValid )
-    {
-        iterator aIter = ::std::lower_bound( maVec.begin(), maVec.end(), nPos );
-        bValid = (aIter == maVec.end()) || (*aIter != nPos);
-        if( bValid )
-            aIter = maVec.insert( aIter, nPos );
-    }
-    return bValid;
+    if (nPos < 0)
+        return false;
+
+    const iterator aIter = ::std::lower_bound( maVec.begin(), maVec.end(), nPos );
+
+    if (aIter != maVec.end() && *aIter == nPos)
+        return false;
+
+    maVec.insert( aIter, nPos );
+    return true;
 }
 
 bool ScCsvSplits::Remove( sal_Int32 nPos )
 {
     sal_uInt32 nIndex = GetIndex( nPos );
-    bool bValid = (nIndex != CSV_VEC_NOTFOUND);
-    if( bValid )
-        maVec.erase( maVec.begin() + nIndex );
-    return bValid;
+    if (nIndex == CSV_VEC_NOTFOUND)
+        return false;
+
+    maVec.erase( maVec.begin() + nIndex );
+    return true;
 }
 
 void ScCsvSplits::RemoveRange( sal_Int32 nPosStart, sal_Int32 nPosEnd )
