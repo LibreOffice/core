@@ -68,7 +68,7 @@ public:
 
     /** Returns the number of splits. */
     sal_uInt32                  Count() const
-                                    { return maVec.size(); }
+                                    { return static_cast<sal_uInt32>(maVec.size()); }
     /** Returns the position of the specified split. */
     sal_Int32                   GetPos( sal_uInt32 nIndex ) const;
     /** Returns the position of the specified split. */

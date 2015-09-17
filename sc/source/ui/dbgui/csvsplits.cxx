@@ -21,6 +21,8 @@
 
 #include <algorithm>
 
+#include <sal/log.hxx>
+
 bool ScCsvSplits::Insert( sal_Int32 nPos )
 {
     if (nPos < 0)
@@ -30,6 +32,9 @@ bool ScCsvSplits::Insert( sal_Int32 nPos )
 
     if (aIter != maVec.end() && *aIter == nPos)
         return false;
+
+    SAL_WARN_IF(maVec.size()>=static_cast<std::size_t>(SAL_MAX_UINT32-1),
+                "sc.ui", "ScCsvSplits::Insert: too many elements in vector");
 
     maVec.insert( aIter, nPos );
     return true;
