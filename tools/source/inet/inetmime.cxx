@@ -27,10 +27,7 @@
 #include <tools/inetmime.hxx>
 #include <rtl/character.hxx>
 
-namespace unnamed_tools_inetmime {} using namespace unnamed_tools_inetmime;
-    // unnamed namespaces don't work well yet
-
-namespace unnamed_tools_inetmime {
+namespace {
 
 class Charset
 {
@@ -98,7 +95,7 @@ inline INetMIMECharsetList_Impl::Node::Node(const Charset & rTheCharset,
     m_pNext(pTheNext)
 {}
 
-namespace unnamed_tools_inetmime {
+namespace {
 
 struct Parameter
 {
@@ -174,7 +171,7 @@ bool Charset::contains(sal_uInt32 nChar) const
 
 //  appendISO88591
 
-namespace unnamed_tools_inetmime {
+namespace {
 
 void appendISO88591(OUString & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd)
@@ -251,7 +248,7 @@ Parameter ** ParameterList::find(const OString& rAttribute,
 
 //  parseParameters
 
-namespace unnamed_tools_inetmime {
+namespace {
 
 bool parseParameters(ParameterList const & rInput,
                      INetContentTypeParameterList * pOutput)
@@ -1025,7 +1022,7 @@ const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
         }
 }
 
-namespace unnamed_tools_inetmime {
+namespace {
 
 struct EncodingEntry
 {

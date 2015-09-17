@@ -27,9 +27,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
-namespace unnamed_ucb_regexp {} using namespace unnamed_ucb_regexp;
-    // unnamed namespaces don't work well yet...
-
 using namespace com::sun::star;
 using namespace ucb_impl;
 
@@ -56,7 +53,7 @@ inline Regexp::Regexp(Kind eTheKind, OUString const & rThePrefix,
 }
 
 
-namespace unnamed_ucb_regexp {
+namespace {
 
 bool matchStringIgnoreCase(sal_Unicode const ** pBegin,
                            sal_Unicode const * pEnd,
@@ -174,7 +171,7 @@ bool Regexp::matches(OUString const & rString,
 }
 
 
-namespace unnamed_ucb_regexp {
+namespace {
 
 bool isScheme(OUString const & rString, bool bColon)
 {
@@ -292,7 +289,7 @@ OUString Regexp::getRegexp(bool bReverse) const
 }
 
 
-namespace unnamed_ucb_regexp {
+namespace {
 
 bool matchString(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                  sal_Char const * pString, size_t nStringLength)

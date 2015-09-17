@@ -46,9 +46,6 @@
 #include <sax/tools/converter.hxx>
 #include <rtl/uri.hxx>
 
-namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
-    // unnamed namespaces don't work well yet...
-
 using namespace css;
 
 //  INetURLObject
@@ -420,7 +417,7 @@ inline void INetURLObject::appendEscape(OUStringBuffer & rTheText,
     rTheText.append( (sal_Unicode)INetMIME::getHexDigit(int(nOctet & 15)) );
 }
 
-namespace unnamed_tools_urlobj {
+namespace {
 
 enum
 {
@@ -616,7 +613,7 @@ std::unique_ptr<SvMemoryStream> INetURLObject::getData()
     return nullptr;
 }
 
-namespace unnamed_tools_urlobj {
+namespace {
 
 INetURLObject::FSysStyle guessFSysStyleByCounting(sal_Unicode const * pBegin,
                                                   sal_Unicode const * pEnd,
