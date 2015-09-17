@@ -41,14 +41,13 @@ inline bool ascii_isLetter( sal_Unicode ch )
 }
 
 void INetMIMEMessage::SetHeaderField_Impl (
-    INetMIME::HeaderFieldType  eType,
     const OString &rName,
     const OUString &rValue,
     sal_uIntPtr &rnIndex)
 {
     INetMIMEOutputSink aSink;
     INetMIME::writeHeaderFieldBody (
-        aSink, eType, rValue, osl_getThreadTextEncoding(), false);
+        aSink, rValue, osl_getThreadTextEncoding(), false);
     SetHeaderField_Impl (
         INetMessageHeader (rName, aSink.takeBuffer()), rnIndex);
 }
@@ -233,7 +232,6 @@ INetMIMEMessage::~INetMIMEMessage()
 void INetMIMEMessage::SetMIMEVersion (const OUString& rVersion)
 {
     SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
         ImplINetMIMEMessageHeaderData.at(InetMessageMime::VERSION), rVersion,
         m_nMIMEIndex[InetMessageMime::VERSION]);
 }
@@ -241,7 +239,6 @@ void INetMIMEMessage::SetMIMEVersion (const OUString& rVersion)
 void INetMIMEMessage::SetContentDisposition (const OUString& rDisposition)
 {
     SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
         ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_DISPOSITION), rDisposition,
         m_nMIMEIndex[InetMessageMime::CONTENT_DISPOSITION]);
 }
@@ -249,7 +246,6 @@ void INetMIMEMessage::SetContentDisposition (const OUString& rDisposition)
 void INetMIMEMessage::SetContentType (const OUString& rType)
 {
     SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
         ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_TYPE), rType,
         m_nMIMEIndex[InetMessageMime::CONTENT_TYPE]);
 }
@@ -258,7 +254,6 @@ void INetMIMEMessage::SetContentTransferEncoding (
     const OUString& rEncoding)
 {
     SetHeaderField_Impl (
-        INetMIME::HEADER_FIELD_TEXT,
         ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_TRANSFER_ENCODING), rEncoding,
         m_nMIMEIndex[InetMessageMime::CONTENT_TRANSFER_ENCODING]);
 }

@@ -83,10 +83,10 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
     OString                 m_aBoundary;
 
     OUString GetHeaderValue_Impl (
-        sal_uIntPtr nIndex, INetMIME::HeaderFieldType eType) const
+        sal_uIntPtr nIndex) const
     {
         if ( nIndex < m_aHeaderList.size() ) {
-            return INetMIME::decodeHeaderFieldBody(eType, m_aHeaderList[ nIndex ]->GetValue());
+            return INetMIME::decodeHeaderFieldBody(m_aHeaderList[ nIndex ]->GetValue());
         } else {
             return OUString();
         }
@@ -109,7 +109,6 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
     }
 
     void SetHeaderField_Impl (
-        INetMIME::HeaderFieldType  eType,
         const OString &rName,
         const OUString &rValue,
         sal_uIntPtr &rnIndex);
@@ -150,8 +149,7 @@ public:
     OUString GetContentType() const
     {
         return GetHeaderValue_Impl(
-            m_nMIMEIndex.at(InetMessageMime::CONTENT_TYPE),
-            INetMIME::HEADER_FIELD_TEXT);
+            m_nMIMEIndex.at(InetMessageMime::CONTENT_TYPE));
     }
 
     void     SetContentTransferEncoding (const OUString& rEncoding);

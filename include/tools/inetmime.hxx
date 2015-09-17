@@ -88,101 +88,6 @@ typedef std::unordered_map<OString, INetContentTypeParameter, OStringHash>
 class TOOLS_DLLPUBLIC INetMIME
 {
 public:
-    /** The various types of message header field bodies, with respect to
-        encoding and decoding them.
-
-        @descr  At the moment, five different types of header fields suffice
-        to describe how to encoded and decode any known message header field
-        body, but need for more types may arise in the future as new header
-        fields are introduced.
-
-        @descr  The following is an exhaustive list of all the header fields
-        currently known to our implementation.  For every header field, it
-        includes a 'canonic' (with regard to capitalization) name, a grammar
-        rule for the body (using RFC 822 and RFC 2234 conventions), a list of
-        relevant sources of information, and the HeaderFieldType value to use
-        with that header field.  The list is based on RFC 2076 and draft-
-        palme-mailext-headers-02.txt (see also <http://www.dsv.su.se/~jpalme/
-        ietf/jp-ietf-home.html#anchor1003783>).
-
-        Approved: address  ;RFC 1036; HEADER_FIELD_ADDRESS
-        bcc: #address  ;RFCs 822, 2047; HEADER_FIELD_ADDRESS
-        cc: 1#address  ;RFCs 822, 2047; HEADER_FIELD_ADDRESS
-        Comments: *text  ;RFCs 822, RFC 2047; HEADER_FIELD_TEXT
-        Content-Base: absoluteURI  ;RFC 2110; HEADER_FIELD_TEXT
-        Content-Description: *text  ;RFC 2045, RFC 2047; HEADER_FIELD_TEXT
-        Content-Disposition: disposition-type *(";" disposition-parm)
-            ;RFC 1806; HEADER_FIELD_STRUCTURED
-        Content-ID: msg-id  ;RFC 2045, RFC 2047; HEADER_FIELD_MESSAGE_ID
-        Content-Location: absoluteURI / relativeURI  ;RFC 2110;
-            HEADER_FIELD_TEXT
-        Content-Transfer-Encoding: mechanism  ;RFC 2045, RFC 2047;
-            HEADER_FIELD_STRUCTURED
-        Content-Type: type "/" subtype *(";" parameter)  ;RFC 2045, RFC 2047;
-            HEADER_FIELD_STRUCTURED
-        Control:  *text ;RFC 1036; HEADER_FIELD_TEXT
-        Date: date-time  ;RFC 822, RFC 1123, RFC 2047; HEADER_FIELD_STRUCTURED
-        Distribution: 1#atom  ;RFC 1036; HEADER_FIELD_STRUCTURED
-        Encrypted: 1#2word  ;RFC 822, RFC 2047; HEADER_FIELD_STRUCTURED
-        Expires: date-time  ;RFC 1036; HEADER_FIELD_STRUCTURED
-        Followup-To: 1#(atom *("." atom))  ;RFC 1036; HEADER_FIELD_STRUCTURED
-        From: mailbox / 1#mailbox  ;RFC 822, RFC 2047; HEADER_FIELD_ADDRESS
-        In-Reply-To: *(phrase / msg-id)  ;RFC 822, RFC 2047;
-            HEADER_FIELD_ADDRESS
-        Keywords: #phrase  ;RFC 822, RFC 2047; HEADER_FIELD_PHRASE
-        MIME-Version: 1*DIGIT "." 1*DIGIT  ;RFC 2045, RFC 2047;
-            HEADER_FIELD_STRUCTURED
-        Message-ID: msg-id  ;RFC 822, RFC 2047; HEADER_FIELD_MESSAGE_ID
-        Newsgroups: 1#(atom *("." atom))  ;RFC 1036, RFC 2047;
-            HEADER_FIELD_STRUCTURED
-        Organization: *text  ;RFC 1036; HEADER_FIELD_TEXT
-        Received: ["from" domain] ["by" domain] ["via" atom] *("with" atom)
-            ["id" msg-id] ["for" addr-spec] ";" date-time  ;RFC 822, RFC 1123,
-            RFC 2047; HEADER_FIELD_STRUCTURED
-        References: *(phrase / msg-id)  ;RFC 822, RFC 2047;
-            HEADER_FIELD_ADDRESS
-        Reply-To: 1#address  ;RFC 822, RFC 2047; HEADER_FIELD_ADDRESS
-        Resent-Date: date-time  ;RFC 822, RFC 1123, RFC 2047;
-            HEADER_FIELD_STRUCTURED
-        Resent-From: mailbox / 1#mailbox  ;RFC 822, RFC 2047;
-            HEADER_FIELD_ADDRESS
-        Resent-Message-ID: msg-id  ;RFC 822, RFC 2047; HEADER_FIELD_MESSAGE_ID
-        Resent-Reply-To: 1#address  ;RFC 822, RFC 2047; HEADER_FIELD_ADDRESS
-        Resent-Sender: mailbox  ;RFC 822, RFC 2047; HEADER_FIELD_ADDRESS
-        Resent-To: 1#address  ;RFC 822, RFC 2047; HEADER_FIELD_ADDRESS
-        Resent-bcc: #address  ;RFC 822, RFC 2047; HEADER_FIELD_ADDRESS
-        Resent-cc: 1#address  ;RFC 822, RFC 2047; HEADER_FIELD_ADDRESS
-        Return-path: route-addr / ("<" ">")  ;RFC 822, RFC 1123, RFC 2047;
-            HEADER_FIELD_STRUCTURED
-        Return-Receipt-To: address  ;Not Internet standard;
-            HEADER_FIELD_ADDRES
-        Sender: mailbox  ;RFC 822, RFC 2047; HEADER_FIELD_ADDRESS
-        Subject: *text  ;RFC 822, RFC 2047; HEADER_FIELD_TEXT
-        Summary: *text  ;RFC 1036; HEADER_FIELD_TEXT
-        To: 1#address  ;RFC 822, RFC 2047; HEADER_FIELD_ADDRESS
-        X-CHAOS-Marked: "YES" / "NO"  ;local; HEADER_FIELD_STRUCTURED
-        X-CHAOS-Read: "YES" / "NO"  ;local; HEADER_FIELD_STRUCTURED
-        X-CHAOS-Recipients: #*("<" atom word ">")  ;local;
-            HEADER_FIELD_STRUCTURED
-        X-CHAOS-Size: 1*DIGIT  ;local; HEADER_FIELD_STRUCTURED
-        X-Mailer: *text  ;Not Internet standard; HEADER_FIELD_TEXT
-        X-Mozilla-Status: 4HEXDIG  ;Mozilla; HEADER_FIELD_STRUCTURED
-        X-Newsreader: *text  ;Not Internet standard; HEADER_FIELD_TEXT
-        X-Priority: "1" / "2" / "3" / "4" / "5"  ;Not Internet standard;
-            HEADER_FIELD_STRUCTURED
-        Xref: sub-domain
-            1*((atom / string) *("." (atom / string)) ":" msg-number)
-            ;RFCs 1036, 2047, local; HEADER_FIELD_STRUCTURED
-     */
-    enum HeaderFieldType
-    {
-        HEADER_FIELD_TEXT,
-        HEADER_FIELD_STRUCTURED,
-        HEADER_FIELD_PHRASE,
-        HEADER_FIELD_MESSAGE_ID,
-        HEADER_FIELD_ADDRESS
-    };
-
     /** Check for US-ASCII white space character.
 
         @param nChar  Some UCS-4 character.
@@ -436,7 +341,6 @@ public:
     static void writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar);
 
     static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
-                                     HeaderFieldType eType,
                                      const OUString& rBody,
                                      rtl_TextEncoding ePreferredEncoding,
                                      bool bInitialSpace = true);
@@ -446,8 +350,7 @@ public:
                                   rtl_TextEncoding eEncoding,
                                   sal_uInt32 & rCharacter);
 
-    static OUString decodeHeaderFieldBody(HeaderFieldType eType,
-                                           const OString& rBody);
+    static OUString decodeHeaderFieldBody(const OString& rBody);
 
     /** Get the UTF-32 character at the head of a UTF-16 encoded string.
 
