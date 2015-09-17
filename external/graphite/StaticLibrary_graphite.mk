@@ -20,7 +20,7 @@ $(eval $(call gb_StaticLibrary_set_include,graphite,\
 
 $(eval $(call gb_StaticLibrary_add_defs,graphite,\
 	-DGRAPHITE2_NTRACING \
-	-DGR2_STATIC \
+	-DGRAPHITE2_STATIC \
 ))
 
 ifeq ($(COM),GCC)
