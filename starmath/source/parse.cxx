@@ -2354,14 +2354,15 @@ void SmParser::Error(SmParseError eError)
 
 SmParser::SmParser()
     : m_nCurError( 0 )
+    , m_nLang( Application::GetSettings().GetUILanguageTag().getLanguageType() )
     , m_nBufferIndex( 0 )
     , m_nTokenIndex( 0 )
     , m_Row( 0 )
     , m_nColOff( 0 )
+    , bImportSymNames( false )
+    , m_bExportSymNames( false )
     , m_aDotLoc( LanguageTag::convertToLocale( LANGUAGE_ENGLISH_US ) )
 {
-    bImportSymNames = m_bExportSymNames = false;
-    m_nLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
 }
 
 SmNode *SmParser::Parse(const OUString &rBuffer)
