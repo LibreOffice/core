@@ -66,7 +66,7 @@ namespace dbaui
         Link<LinkParamNone*,void>   m_aCopyHandler;         // called when someone press CTRL+C
         Link<LinkParamNone*,void>   m_aPasteHandler;        // called when someone press CTRL+V
         Link<LinkParamNone*,void>   m_aDeleteHandler;       // called when someone press DELETE Key
-        Link<>                      m_aEnterKeyHdl;
+        Link<DBTreeListBox*,void>   m_aEnterKeyHdl;
 
         bool                        m_bHandleEnterKey;
 
@@ -117,7 +117,7 @@ namespace dbaui
         virtual PopupMenu* CreateContextMenu() SAL_OVERRIDE;
         virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) SAL_OVERRIDE;
 
-        void            SetEnterKeyHdl(const Link<>& rNewHdl) {m_aEnterKeyHdl = rNewHdl;}
+        void            SetEnterKeyHdl(const Link<DBTreeListBox*,void>& rNewHdl) {m_aEnterKeyHdl = rNewHdl;}
 
         void            clearCurrentSelection() { m_aSelectedEntries.clear(); }
 

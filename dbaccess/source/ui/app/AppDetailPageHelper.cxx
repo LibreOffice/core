@@ -904,9 +904,9 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const OUString& _r
     }
 }
 
-IMPL_LINK(OAppDetailPageHelper, OnEntryEnterKey, void*, _pTree)
+IMPL_LINK_TYPED(OAppDetailPageHelper, OnEntryEnterKey, DBTreeListBox*, _pTree, void )
 {
-    return OnEntryDoubleClick(static_cast<SvTreeListBox*>(_pTree)) ? 0 : 1;
+    OnEntryDoubleClick(_pTree);
 }
 IMPL_LINK_TYPED(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree, bool)
 {

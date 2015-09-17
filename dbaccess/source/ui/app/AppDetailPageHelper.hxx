@@ -152,7 +152,7 @@ namespace dbaui
         DBTreeListBox* createSimpleTree( const OString& _sHelpId, const Image& _rImage);
 
         DECL_LINK_TYPED( OnEntryDoubleClick,    SvTreeListBox*, bool );
-        DECL_LINK( OnEntryEnterKey,             void* );
+        DECL_LINK_TYPED( OnEntryEnterKey,       DBTreeListBox*, void );
         DECL_LINK_TYPED( OnEntrySelChange,      LinkParamNone*, void );
 
         DECL_LINK_TYPED( OnCutEntry,            LinkParamNone*, void );
