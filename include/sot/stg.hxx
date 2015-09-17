@@ -48,7 +48,7 @@ typedef struct SvGUID ClsId;
 class SOT_DLLPUBLIC StorageBase : public SvRefBase
 {
 protected:
-    sal_uLong       m_nError;                   // error code
+    mutable sal_uLong m_nError;                   // error code
     StreamMode      m_nMode;                    // open mode
     bool            m_bAutoCommit;
                     StorageBase();

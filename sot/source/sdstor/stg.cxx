@@ -65,19 +65,19 @@ StorageBase::~StorageBase()
 sal_uLong StorageBase::GetError() const
 {
     sal_uLong n = m_nError;
-    const_cast<StorageBase*>(this)->m_nError = SVSTREAM_OK;
+    m_nError = SVSTREAM_OK;
     return n;
 }
 
 void StorageBase::SetError( sal_uLong n ) const
 {
     if( !m_nError )
-        const_cast<StorageBase*>(this)->m_nError = n;
+        m_nError = n;
 }
 
 void StorageBase::ResetError() const
 {
-    const_cast<StorageBase*>(this)->m_nError = SVSTREAM_OK;
+    m_nError = SVSTREAM_OK;
 }
 
 OLEStorageBase::OLEStorageBase( StgIo* p, StgDirEntry* pe, StreamMode& nMode )
