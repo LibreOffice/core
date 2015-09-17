@@ -204,7 +204,7 @@ bool SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
             if( rNEvt.GetWindow() == this )
             {
                 if(aClickHdl.IsSet())
-                    aClickHdl.Call(this);
+                    aClickHdl.Call(*this);
             }
         }
     }

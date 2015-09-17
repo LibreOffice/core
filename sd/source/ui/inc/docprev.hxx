@@ -43,7 +43,7 @@ class SD_DLLPUBLIC SdDocPreviewWin : public Control, public SfxListener
 protected:
     GDIMetaFile*    pMetaFile;
     bool            bInEffect;
-    Link<>          aClickHdl;
+    Link<SdDocPreviewWin&,void> aClickHdl;
     SfxObjectShell* mpObj;
     sal_uInt16      mnShowPage;
     Color           maDocumentColor;
@@ -72,7 +72,7 @@ public:
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    void            SetClickHdl( const Link<>& rLink ) { aClickHdl = rLink; }
+    void            SetClickHdl( const Link<SdDocPreviewWin&,void>& rLink ) { aClickHdl = rLink; }
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 

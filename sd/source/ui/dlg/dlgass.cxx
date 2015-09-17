@@ -235,7 +235,7 @@ public:
     DECL_LINK_TYPED( LastPageHdl, Button*, void );
     DECL_LINK_TYPED( PreviewFlagHdl, Button*, void );
     DECL_LINK_TYPED( EffectPreviewIdleHdl, Idle *, void );
-    DECL_LINK( EffectPreviewClickHdl, void * );
+    DECL_LINK_TYPED( EffectPreviewClickHdl, SdDocPreviewWin&, void );
     DECL_LINK( SelectLayoutHdl, void * );
     DECL_LINK_TYPED( PageSelectHdl, SvTreeListBox*, void );
     DECL_LINK_TYPED( PresTypeHdl, Button*, void );
@@ -1128,10 +1128,9 @@ IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, EffectPreviewIdleHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG(AssistentDlgImpl, EffectPreviewClickHdl)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, EffectPreviewClickHdl, SdDocPreviewWin&, void)
 {
     EffectPreviewIdleHdl(nullptr);
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, PreviewFlagHdl, Button*, void)
