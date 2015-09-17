@@ -1134,6 +1134,10 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
         return 1;
 
     comphelper::LibreOfficeKit::setActive();
+
+    static bool bViewCallback = getenv("LOK_VIEW_CALLBACK");
+    comphelper::LibreOfficeKit::setViewCallback(bViewCallback);
+
     comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
 
     if (pUserProfilePath)
