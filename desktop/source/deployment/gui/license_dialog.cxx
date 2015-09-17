@@ -50,8 +50,8 @@ namespace dp_gui {
 class LicenseView : public MultiLineEdit, public SfxListener
 {
     bool            mbEndReached;
-    Link<>          maEndReachedHdl;
-    Link<>          maScrolledHdl;
+    Link<LicenseView&,void> maEndReachedHdl;
+    Link<LicenseView&,void> maScrolledHdl;
 
 public:
     LicenseView( vcl::Window* pParent, WinBits nStyle );
@@ -63,9 +63,9 @@ public:
     bool IsEndReached() const;
     bool EndReached() const { return mbEndReached; }
 
-    void SetEndReachedHdl( const Link<>& rHdl ) { maEndReachedHdl = rHdl; }
+    void SetEndReachedHdl( const Link<LicenseView&,void>& rHdl ) { maEndReachedHdl = rHdl; }
 
-    void SetScrolledHdl( const Link<>& rHdl ) { maScrolledHdl = rHdl; }
+    void SetScrolledHdl( const Link<LicenseView&,void>& rHdl ) { maScrolledHdl = rHdl; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
@@ -86,8 +86,8 @@ struct LicenseDialogImpl : public ModalDialog
     VclPtr<PushButton> m_pDeclineButton;
 
     DECL_LINK_TYPED(PageDownHdl, Button*, void);
-    DECL_LINK(ScrolledHdl, void *);
-    DECL_LINK(EndReachedHdl, void *);
+    DECL_LINK_TYPED(ScrolledHdl, LicenseView&, void);
+    DECL_LINK_TYPED(EndReachedHdl, LicenseView&, void);
     DECL_LINK_TYPED(CancelHdl, Button*, void);
     DECL_LINK_TYPED(AcceptHdl, Button*, void);
 
@@ -142,8 +142,8 @@ LicenseView::~LicenseView()
 
 void LicenseView::dispose()
 {
-    maEndReachedHdl = Link<>();
-    maScrolledHdl   = Link<>();
+    maEndReachedHdl = Link<LicenseView&,void>();
+    maScrolledHdl   = Link<LicenseView&,void>();
     EndListeningAll();
     MultiLineEdit::dispose();
 }
@@ -190,12 +190,12 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             if ( ! mbEndReached )
                 mbEndReached = IsEndReached();
-            maScrolledHdl.Call( this );
+            maScrolledHdl.Call( *this );
         }
 
         if ( EndReached() && !bLastVal )
         {
-            maEndReachedHdl.Call( this );
+            maEndReachedHdl.Call( *this );
         }
     }
 }
@@ -271,15 +271,12 @@ void LicenseDialogImpl::Activate()
     }
 }
 
-IMPL_LINK_NOARG(LicenseDialogImpl, ScrolledHdl)
+IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, ScrolledHdl, LicenseView&, void)
 {
-
     if (m_pLicense->IsEndReached())
         m_pDown->Disable();
     else
         m_pDown->Enable();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, PageDownHdl, Button*, void)
@@ -287,14 +284,13 @@ IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, PageDownHdl, Button*, void)
     m_pLicense->ScrollDown( SCROLL_PAGEDOWN );
 }
 
-IMPL_LINK_NOARG(LicenseDialogImpl, EndReachedHdl)
+IMPL_LINK_NOARG_TYPED(LicenseDialogImpl, EndReachedHdl, LicenseView&, void)
 {
     m_pAcceptButton->Enable();
     m_pAcceptButton->GrabFocus();
     m_pArrow1->Show(false);
     m_pArrow2->Show(true);
     m_bLicenseRead = true;
-    return 0;
 }
 
 
