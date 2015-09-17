@@ -741,7 +741,8 @@ bool ORowSetCache::afterLast(  )
 
 bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos, sal_Int32 &_nNewEndPos)
 {
-    OSL_ENSURE(_nNewStartPos != _nNewEndPos,"ORowSetCache::fillMatrix: StartPos and EndPos can not be equal!");
+    OSL_ENSURE((_nNewStartPos != _nNewEndPos) || (_nNewStartPos == 0 && _nNewEndPos == 0 && m_nRowCount == 0),
+               "ORowSetCache::fillMatrix: StartPos and EndPos can not be equal (unless the recordset is empty)!");
     // If _nNewStartPos >= 0, then fill the whole window with new data
     // Else if _nNewStartPos == -1, then fill only segment [m_nEndPos, _nNewEndPos)
     // Else, undefined (invalid argument)
