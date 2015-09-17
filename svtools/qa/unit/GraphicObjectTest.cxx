@@ -27,7 +27,6 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <ndgrf.hxx>
-#include <boost/shared_ptr.hpp>
 
 using namespace css;
 

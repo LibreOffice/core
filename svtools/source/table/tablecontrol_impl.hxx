@@ -29,8 +29,6 @@
 
 #include <vector>
 
-#include <boost/scoped_ptr.hpp>
-
 class ScrollBar;
 class ScrollBarBox;
 

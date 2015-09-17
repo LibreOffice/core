@@ -25,7 +25,6 @@
 #include <vcl/settings.hxx>
 #include <tools/color.hxx>
 #include <rtl/ustring.hxx>
-#include <boost/scoped_ptr.hpp>
 
 #define ROADMAP_INDENT_X        4
 #define ROADMAP_INDENT_Y        27
