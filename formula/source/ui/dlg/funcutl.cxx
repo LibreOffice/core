@@ -266,7 +266,7 @@ void ArgInput::UpdateAccessibleNames()
 
 void ArgInput::FxClick()
 {
-    aFxClickLink.Call(this);
+    aFxClickLink.Call(*this);
 }
 
 void ArgInput::RefClick()

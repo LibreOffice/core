@@ -97,7 +97,7 @@ private:
         DECL_LINK( ModifyHdl, ArgInput* );
         DECL_LINK( GetEdFocusHdl, ArgInput* );
         DECL_LINK( GetFxFocusHdl, ArgInput* );
-        DECL_LINK( GetFxHdl, ArgInput* );
+        DECL_LINK_TYPED( GetFxHdl, ArgInput&, void );
 
 protected:
 

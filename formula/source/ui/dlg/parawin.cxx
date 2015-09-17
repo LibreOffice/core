@@ -548,13 +548,13 @@ void ParaWin::FxClick()
 }
 
 
-IMPL_LINK( ParaWin, GetFxHdl, ArgInput*, pPtr )
+IMPL_LINK_TYPED( ParaWin, GetFxHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
     for (sal_uInt16 nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
     {
-        if(pPtr == &aArgInput[nPos])
+        if(&rPtr == &aArgInput[nPos])
         {
             nEdFocus=nPos;
             break;
@@ -567,7 +567,6 @@ IMPL_LINK( ParaWin, GetFxHdl, ArgInput*, pPtr )
         nActiveLine=nEdFocus+nOffset;
         FxClick();
     }
-    return 0;
 }
 
 IMPL_LINK( ParaWin, GetFxFocusHdl, ArgInput*, pPtr )
