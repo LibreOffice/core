@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			--disable-werror \
-			CXXFLAGS="$(CXXFLAGS_CXX11)" \
+			CXXFLAGS="$(CXXFLAGS) $(CXXFLAGS_CXX11)" \
 			$(if $(filter LINUX,$(OS)),$(if $(SYSTEM_REVENGE),, \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN')) \
