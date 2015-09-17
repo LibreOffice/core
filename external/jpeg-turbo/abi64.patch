@@ -1,0 +1,253 @@
+cf. <https://github.com/libjpeg-turbo/libjpeg-turbo/commit/
+8b2c04f774d18e05e321ee67a9a38b4d7e84f168> "Fix x86-64 ABI conformance issue in
+SIMD code":
+--- simd/jcclrss2-64.asm
++++ simd/jcclrss2-64.asm
+@@ -50,14 +50,14 @@
+ 	collect_args
+ 	push	rbx
+ 
+-	mov	rcx, r10
++	mov	ecx, r10d
+ 	test	rcx,rcx
+ 	jz	near .return
+ 
+ 	push	rcx
+ 
+ 	mov rsi, r12
+-	mov rcx, r13
++	mov ecx, r13d
+ 	mov	rdi, JSAMPARRAY [rsi+0*SIZEOF_JSAMPARRAY]
+ 	mov	rbx, JSAMPARRAY [rsi+1*SIZEOF_JSAMPARRAY]
+ 	mov	rdx, JSAMPARRAY [rsi+2*SIZEOF_JSAMPARRAY]
+--- simd/jcgryss2-64.asm
++++ simd/jcgryss2-64.asm
+@@ -50,14 +50,14 @@
+ 	collect_args
+ 	push	rbx
+ 
+-	mov	rcx, r10
++	mov	ecx, r10d
+ 	test	rcx,rcx
+ 	jz	near .return
+ 
+ 	push	rcx
+ 
+ 	mov rsi, r12
+-	mov rcx, r13
++	mov ecx, r13d
+ 	mov	rdi, JSAMPARRAY [rsi+0*SIZEOF_JSAMPARRAY]
+ 	lea	rdi, [rdi+rcx*SIZEOF_JSAMPROW]
+ 
+--- simd/jcqnts2f-64.asm
++++ simd/jcqnts2f-64.asm
+@@ -50,7 +50,7 @@
+ 	packsswb xmm7,xmm7		; xmm7 = PB_CENTERJSAMPLE (0x808080..)
+ 
+ 	mov rsi, r10
+-	mov	rax, r11
++	mov	eax, r11d
+ 	mov rdi, r12
+ 	mov	rcx, DCTSIZE/2
+ .convloop:
+--- simd/jcqnts2i-64.asm
++++ simd/jcqnts2i-64.asm
+@@ -50,7 +50,7 @@
+ 	psllw	xmm7,7			; xmm7={0xFF80 0xFF80 0xFF80 0xFF80 ..}
+ 
+ 	mov rsi, r10
+-	mov rax, r11
++	mov eax, r11d
+ 	mov rdi, r12
+ 	mov	rcx, DCTSIZE/4
+ .convloop:
+--- simd/jcsamss2-64.asm
++++ simd/jcsamss2-64.asm
+@@ -49,11 +49,11 @@
+ 	mov	rbp,rsp
+ 	collect_args
+ 
+-	mov rcx, r13
++	mov ecx, r13d
+ 	shl	rcx,3			; imul rcx,DCTSIZE (rcx = output_cols)
+ 	jz	near .return
+ 
+-	mov rdx, r10
++	mov edx, r10d
+ 
+ 	; -- expand_right_edge
+ 
+@@ -90,7 +90,7 @@
+ 
+ 	; -- h2v1_downsample
+ 
+-	mov	rax, r12	; rowctr
++	mov	eax, r12d	; rowctr
+ 	test	eax,eax
+ 	jle	near .return
+ 
+@@ -193,11 +193,11 @@
+ 	mov	rbp,rsp
+ 	collect_args
+ 
+-	mov	rcx, r13
++	mov	rcx, r13
+ 	shl	rcx,3			; imul rcx,DCTSIZE (rcx = output_cols)
+ 	jz	near .return
+ 
+-	mov	rdx, r10
++	mov	edx, r10d
+ 
+ 	; -- expand_right_edge
+ 
+@@ -234,7 +234,7 @@
+ 
+ 	; -- h2v2_downsample
+ 
+-	mov	rax, r12	; rowctr
++	mov	eax, r12d	; rowctr
+ 	test	rax,rax
+ 	jle	near .return
+ 
+--- simd/jdclrss2-64.asm
++++ simd/jdclrss2-64.asm
+@@ -52,14 +52,14 @@
+ 	collect_args
+ 	push	rbx
+ 
+-	mov	rcx, r10	; num_cols
++	mov	ecx, r10d	; num_cols
+ 	test	rcx,rcx
+ 	jz	near .return
+ 
+ 	push	rcx
+ 
+ 	mov	rdi, r11
+-	mov	rcx, r12
++	mov	ecx, r12d
+ 	mov	rsi, JSAMPARRAY [rdi+0*SIZEOF_JSAMPARRAY]
+ 	mov	rbx, JSAMPARRAY [rdi+1*SIZEOF_JSAMPARRAY]
+ 	mov	rdx, JSAMPARRAY [rdi+2*SIZEOF_JSAMPARRAY]
+--- simd/jdmrgss2-64.asm
++++ simd/jdmrgss2-64.asm
+@@ -52,14 +52,14 @@
+ 	collect_args
+ 	push	rbx
+ 
+-	mov	rcx, r10	; col
++	mov	ecx, r10d	; col
+ 	test	rcx,rcx
+ 	jz	near .return
+ 
+ 	push	rcx
+ 
+ 	mov	rdi, r11
+-	mov	rcx, r12
++	mov	ecx, r12d
+ 	mov	rsi, JSAMPARRAY [rdi+0*SIZEOF_JSAMPARRAY]
+ 	mov	rbx, JSAMPARRAY [rdi+1*SIZEOF_JSAMPARRAY]
+ 	mov	rdx, JSAMPARRAY [rdi+2*SIZEOF_JSAMPARRAY]
+@@ -455,10 +455,10 @@
+ 	collect_args
+ 	push	rbx
+ 
+-	mov	rax, r10
++	mov	eax, r10d
+ 
+ 	mov	rdi, r11
+-	mov	rcx, r12
++	mov	ecx, r12d
+ 	mov	rsi, JSAMPARRAY [rdi+0*SIZEOF_JSAMPARRAY]
+ 	mov	rbx, JSAMPARRAY [rdi+1*SIZEOF_JSAMPARRAY]
+ 	mov	rdx, JSAMPARRAY [rdi+2*SIZEOF_JSAMPARRAY]
+--- simd/jdsamss2-64.asm
++++ simd/jdsamss2-64.asm
+@@ -67,7 +67,7 @@
+ 	mov	rbp,rsp
+ 	collect_args
+ 
+-	mov	rax, r11  ; colctr
++	mov	eax, r11d  ; colctr
+ 	test	rax,rax
+ 	jz	near .return
+ 
+@@ -214,7 +214,7 @@
+ 	collect_args
+ 	push	rbx
+ 
+-	mov	rax, r11  ; colctr
++	mov	eax, r11d  ; colctr
+ 	test	rax,rax
+ 	jz	near .return
+ 
+@@ -506,7 +506,7 @@
+ 	mov	rbp,rsp
+ 	collect_args
+ 
+-	mov	rdx, r11
++	mov	edx, r11d
+ 	add	rdx, byte (2*SIZEOF_XMMWORD)-1
+ 	and	rdx, byte -(2*SIZEOF_XMMWORD)
+ 	jz	near .return
+@@ -596,7 +596,7 @@
+ 	collect_args
+ 	push	rbx
+ 
+-	mov	rdx, r11
++	mov	edx, r11d
+ 	add	rdx, byte (2*SIZEOF_XMMWORD)-1
+ 	and	rdx, byte -(2*SIZEOF_XMMWORD)
+ 	jz	near .return
+--- simd/jiss2flt-64.asm
++++ simd/jiss2flt-64.asm
+@@ -326,7 +326,7 @@
+ 	mov	rax, [original_rbp]
+ 	lea	rsi, [workspace]			; FAST_FLOAT * wsptr
+ 	mov	rdi, r12	; (JSAMPROW *)
+-	mov	rax, r13
++	mov	eax, r13d
+ 	mov	rcx, DCTSIZE/4				; ctr
+ .rowloop:
+ 
+--- simd/jiss2fst-64.asm
++++ simd/jiss2fst-64.asm
+@@ -323,7 +323,7 @@
+ 
+ 	mov	rax, [original_rbp]
+ 	mov	rdi, r12	; (JSAMPROW *)
+-	mov	rax, r13
++	mov	eax, r13d
+ 
+ 	; -- Even part
+ 
+--- simd/jiss2int-64.asm
++++ simd/jiss2int-64.asm
+@@ -515,7 +515,7 @@
+ 
+ 	mov	rax, [original_rbp]
+ 	mov	rdi, r12	; (JSAMPROW *)
+-	mov	rax, r13
++	mov	eax, r13d
+ 
+ 	; -- Even part
+ 
+--- simd/jiss2red-64.asm
++++ simd/jiss2red-64.asm
+@@ -312,7 +312,7 @@
+ 
+ 	mov	rax, [original_rbp]
+ 	mov	rdi, r12	; (JSAMPROW *)
+-	mov	rax, r13
++	mov	eax, r13d
+ 
+ 	; -- Even part
+ 
+@@ -521,7 +521,7 @@
+ 	; ---- Pass 2: process rows, store into output array.
+ 
+ 	mov	rdi, r12	; (JSAMPROW *)
+-	mov	rax, r13
++	mov	eax, r13d
+ 
+ 	; | input:| result:|
+ 	; | A0 B0 |        |
