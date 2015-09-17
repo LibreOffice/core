@@ -94,8 +94,8 @@ private:
                         aParaArray;
 
         DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void);
-        DECL_LINK( ModifyHdl, ArgInput* );
-        DECL_LINK( GetEdFocusHdl, ArgInput* );
+        DECL_LINK_TYPED( ModifyHdl, ArgInput&, void );
+        DECL_LINK_TYPED( GetEdFocusHdl, ArgInput&, void );
         DECL_LINK_TYPED( GetFxFocusHdl, ArgInput&, void );
         DECL_LINK_TYPED( GetFxHdl, ArgInput&, void );
 

@@ -592,13 +592,13 @@ IMPL_LINK_TYPED( ParaWin, GetFxFocusHdl, ArgInput&, rPtr, void )
 
 
 
-IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput*, pPtr )
+IMPL_LINK_TYPED( ParaWin, GetEdFocusHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
     for (sal_uInt16 nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
     {
-        if(pPtr == &aArgInput[nPos])
+        if(&rPtr == &aArgInput[nPos])
         {
             nEdFocus=nPos;
             break;
@@ -613,8 +613,6 @@ IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput*, pPtr )
         ArgumentModified();
         aArgInput[nEdFocus].UpdateAccessibleNames();
     }
-
-    return 0;
 }
 
 
@@ -623,13 +621,13 @@ IMPL_LINK_NOARG_TYPED(ParaWin, ScrollHdl, ScrollBar*, void)
     SliderMoved();
 }
 
-IMPL_LINK( ParaWin, ModifyHdl, ArgInput*, pPtr )
+IMPL_LINK_TYPED( ParaWin, ModifyHdl, ArgInput&, rPtr, void )
 {
     sal_uInt16 nOffset = GetSliderPos();
     nEdFocus=NOT_FOUND;
     for (sal_uInt16 nPos=0; nPos < SAL_N_ELEMENTS(aArgInput); ++nPos)
     {
-        if(pPtr == &aArgInput[nPos])
+        if(&rPtr == &aArgInput[nPos])
         {
             nEdFocus=nPos;
             break;
@@ -643,7 +641,6 @@ IMPL_LINK( ParaWin, ModifyHdl, ArgInput*, pPtr )
     }
 
     ArgumentModified();
-    return 0;
 }
 
 

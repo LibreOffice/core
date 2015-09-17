@@ -271,12 +271,12 @@ void ArgInput::FxFocus()
 
 void ArgInput::EdFocus()
 {
-    aEdFocusLink.Call(this);
+    aEdFocusLink.Call(*this);
 }
 
 void ArgInput::EdModify()
 {
-    aEdModifyLink.Call(this);
+    aEdModifyLink.Call(*this);
 }
 
 IMPL_LINK_TYPED( ArgInput, FxBtnClickHdl, Button*, pBtn, void )

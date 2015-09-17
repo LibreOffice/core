@@ -89,8 +89,8 @@ class ArgInput
 private:
     Link<ArgInput&,void>          aFxClickLink;
     Link<ArgInput&,void>          aFxFocusLink;
-    Link<>          aEdFocusLink;
-    Link<>          aEdModifyLink;
+    Link<ArgInput&,void>          aEdFocusLink;
+    Link<ArgInput&,void>          aEdModifyLink;
 
     VclPtr<FixedText>      pFtArg;
     VclPtr<PushButton>     pBtnFx;
@@ -136,9 +136,9 @@ public:
 
     void            SetFxFocusHdl( const Link<ArgInput&,void>& rLink ) { aFxFocusLink = rLink; }
 
-    void            SetEdFocusHdl( const Link<>& rLink ) { aEdFocusLink = rLink; }
+    void            SetEdFocusHdl( const Link<ArgInput&,void>& rLink ) { aEdFocusLink = rLink; }
 
-    void            SetEdModifyHdl( const Link<>& rLink ) { aEdModifyLink = rLink; }
+    void            SetEdModifyHdl( const Link<ArgInput&,void>& rLink ) { aEdModifyLink = rLink; }
 
     void Hide();
     void Show();
