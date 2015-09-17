@@ -43,18 +43,18 @@ namespace dbaui
     {
     protected:
         css::uno::Reference< css::sdbc::XConnection > m_xConnection;
-        Link<>      m_aSelectHdl;
-        Link<>      m_aEndEditHdl;
-        bool    m_bSuspendSelectHdl;
+        Link<DbaIndexList&,void>                      m_aSelectHdl;
+        Link<SvTreeListEntry*,bool>                   m_aEndEditHdl;
+        bool                                          m_bSuspendSelectHdl;
 
     public:
         DbaIndexList(vcl::Window* _pParent, WinBits nWinBits);
 
-        void SetSelectHdl(const Link<>& _rHdl) { m_aSelectHdl = _rHdl; }
-        Link<> GetSelectHdl() const { return m_aSelectHdl; }
+        void SetSelectHdl(const Link<DbaIndexList&,void>& _rHdl) { m_aSelectHdl = _rHdl; }
+        Link<DbaIndexList&,void> GetSelectHdl() const { return m_aSelectHdl; }
 
-        void SetEndEditHdl(const Link<>& _rHdl) { m_aEndEditHdl = _rHdl; }
-        Link<> GetEndEditHdl() const { return m_aEndEditHdl; }
+        void SetEndEditHdl(const Link<SvTreeListEntry*,bool>& _rHdl) { m_aEndEditHdl = _rHdl; }
+        Link<SvTreeListEntry*,bool> GetEndEditHdl() const { return m_aEndEditHdl; }
 
         virtual bool Select(SvTreeListEntry* pEntry, bool bSelect) SAL_OVERRIDE;
 
@@ -130,9 +130,9 @@ namespace dbaui
         void updateControls(const SvTreeListEntry* _pEntry);
 
     protected:
-        DECL_LINK( OnIndexSelected, DbaIndexList* );
+        DECL_LINK_TYPED( OnIndexSelected, DbaIndexList&, void );
         DECL_LINK_TYPED( OnIndexAction, ToolBox*, void );
-        DECL_LINK( OnEntryEdited, SvTreeListEntry* );
+        DECL_LINK_TYPED( OnEntryEdited, SvTreeListEntry*, bool );
         DECL_LINK_TYPED( OnModifiedClick, Button*, void );
         DECL_LINK( OnModified, void* );
         DECL_LINK_TYPED( OnCloseDialog, Button*, void );

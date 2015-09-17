@@ -120,7 +120,7 @@ namespace dbaui
 
         bool bValid = true;
         if (m_aEndEditHdl.IsSet())
-            bValid = (0 != m_aEndEditHdl.Call(_pEntry));
+            bValid = m_aEndEditHdl.Call(_pEntry);
 
         if (bValid)
             return true;
@@ -154,7 +154,7 @@ namespace dbaui
         bool bReturn = SvTreeListBox::Select(pEntry, _bSelect);
 
         if (m_aSelectHdl.IsSet() && !m_bSuspendSelectHdl && _bSelect)
-            m_aSelectHdl.Call(this);
+            m_aSelectHdl.Call(*this);
 
         return bReturn;
     }
@@ -304,7 +304,7 @@ namespace dbaui
             pNewEntry->SetUserData(reinterpret_cast< void* >(sal_Int32(aIndexLoop - m_pIndexes->begin())));
         }
 
-        OnIndexSelected(m_pIndexList);
+        OnIndexSelected(*m_pIndexList);
     }
 
     DbaIndexDialog::~DbaIndexDialog( )
@@ -403,7 +403,7 @@ namespace dbaui
 
         // select the entry and start in-place editing
         m_pIndexList->SelectNoHandlerCall(pNewEntry);
-        OnIndexSelected(m_pIndexList);
+        OnIndexSelected(*m_pIndexList);
         m_pIndexList->EditEntry(pNewEntry);
         updateToolbox();
     }
@@ -477,7 +477,7 @@ namespace dbaui
 
             // the Remove automatically selected another entry (if possible), but we disabled the calling of the handler
             // to prevent that we missed something ... call the handler directly
-            OnIndexSelected(m_pIndexList);
+            OnIndexSelected(*m_pIndexList);
         }
 
         return !aExceptionInfo.isValid();
@@ -610,7 +610,7 @@ namespace dbaui
         m_pIndexList->EditEntry(_pEntry);
     }
 
-    IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvTreeListEntry*, _pEntry )
+    IMPL_LINK_TYPED( DbaIndexDialog, OnEntryEdited, SvTreeListEntry*, _pEntry, bool )
     {
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
 
@@ -630,7 +630,7 @@ namespace dbaui
             updateToolbox();
             m_bEditAgain = true;
             PostUserEvent(LINK(this, DbaIndexDialog, OnEditIndexAgain), _pEntry, true);
-            return 0L;
+            return false;
         }
 
         aPosition->sName = sNewName;
@@ -640,7 +640,7 @@ namespace dbaui
         {
             updateToolbox();
             // no commitment needed here ....
-            return 1L;
+            return true;
         }
 
         if (aPosition->sName != aPosition->getOriginalName())
@@ -649,7 +649,7 @@ namespace dbaui
             updateToolbox();
         }
 
-        return 1L;
+        return true;
     }
 
     bool DbaIndexDialog::implSaveModified(bool _bPlausibility)
@@ -775,7 +775,7 @@ namespace dbaui
         }
     }
 
-    IMPL_LINK( DbaIndexDialog, OnIndexSelected, DbaIndexList*, /*NOTINTERESTEDIN*/ )
+    IMPL_LINK_NOARG_TYPED( DbaIndexDialog, OnIndexSelected, DbaIndexList&, void )
     {
         m_pIndexList->EndSelection();
 
@@ -788,7 +788,7 @@ namespace dbaui
             if (!implCommitPreviouslySelected())
             {
                 m_pIndexList->SelectNoHandlerCall(m_pPreviousSelection);
-                return 1L;
+                return;
             }
         }
 
@@ -809,7 +809,6 @@ namespace dbaui
         m_pPreviousSelection = pNewSelection;
 
         updateToolbox();
-        return 0L;
     }
     void DbaIndexDialog::StateChanged( StateChangedType nType )
     {
