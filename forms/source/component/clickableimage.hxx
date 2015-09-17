@@ -153,7 +153,7 @@ namespace frm
         // to be called from within the cloning-ctor of your derived class
         void implInitializeImageURL( );
 
-        DECL_LINK( OnImageImportDone, ::Graphic* );
+        DECL_LINK_TYPED( OnImageImportDone, ::Graphic*, void );
     };
 
     class ImageModelMethodGuard : public ::osl::MutexGuard

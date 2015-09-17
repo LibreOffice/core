@@ -142,7 +142,7 @@ protected:
     */
     bool    impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator );
 
-    DECL_LINK( OnImageImportDone, ::Graphic* );
+    DECL_LINK_TYPED( OnImageImportDone, ::Graphic*, void );
 };
 
 typedef ::cppu::ImplHelper2 <   ::com::sun::star::awt::XMouseListener

@@ -665,7 +665,7 @@ void SAL_CALL OImageControlModel::startProduction(  ) throw (RuntimeException, s
 }
 
 
-IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
+IMPL_LINK_TYPED( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic, void )
 {
     const Reference< XGraphic > xGraphic( i_pGraphic != NULL ? Image( i_pGraphic->GetBitmapEx() ).GetXGraphic() : NULL );
     m_bExternalGraphic = false;
@@ -678,7 +678,6 @@ IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
         DBG_UNHANDLED_EXCEPTION();
     }
     m_bExternalGraphic = true;
-    return 1L;
 }
 
 

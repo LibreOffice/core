@@ -52,15 +52,15 @@ private:
 
     typedef boost::ptr_vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > > ConsumerList_t;
 
-    OUString maURL;
+    OUString        maURL;
     ConsumerList_t  maConsList;
     Graphic*        mpGraphic;
     SvStream*       mpStm;
     sal_uInt32      mnTransIndex;
-    bool        mbConsInit;
-    Link<>          maDoneHdl;
+    bool            mbConsInit;
+    Link<Graphic*,void> maDoneHdl;
 
-    bool        ImplImportGraphic( Graphic& rGraphic );
+    bool             ImplImportGraphic( Graphic& rGraphic );
     void            ImplUpdateData( const Graphic& rGraphic );
     void            ImplInitConsumer( const Graphic& rGraphic );
     void            ImplUpdateConsumer( const Graphic& rGraphic );
@@ -75,7 +75,7 @@ public:
 
     void            NewDataAvailable();
 
-    void            SetDoneHdl( const Link<>& i_rHdl ) { maDoneHdl = i_rHdl; }
+    void            SetDoneHdl( const Link<Graphic*,void>& i_rHdl ) { maDoneHdl = i_rHdl; }
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

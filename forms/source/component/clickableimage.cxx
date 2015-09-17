@@ -856,7 +856,7 @@ namespace frm
         }
     }
 
-    IMPL_LINK( OClickableImageBaseModel, OnImageImportDone, Graphic*, i_pGraphic )
+    IMPL_LINK_TYPED( OClickableImageBaseModel, OnImageImportDone, Graphic*, i_pGraphic, void )
     {
         const Reference< XGraphic > xGraphic( i_pGraphic != NULL ? Graphic(i_pGraphic->GetBitmapEx()).GetXGraphic() : NULL );
         if ( !xGraphic.is() )
@@ -868,7 +868,6 @@ namespace frm
             m_xGraphicObject = css::graphic::GraphicObject::create( m_xContext );
             m_xGraphicObject->setGraphic( xGraphic );
         }
-        return 1L;
     }
 
 
