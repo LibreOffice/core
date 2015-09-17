@@ -41,6 +41,7 @@
 #include "editable.hxx"
 #include "markdata.hxx"
 #include "scabstdlg.hxx"
+#include <i18nutil/unicode.hxx>
 
 #include <config_telepathy.h>
 
@@ -93,6 +94,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     pTabViewShell->SetDontSwitch(false);
 
                     break;
+
+            case SID_UNICODE_NOTATION_TOGGLE:
+                    //unexpected situation. If editable, Alt-X might be activated twice, so cancel this quietly
+                    rReq.Done();
+                    return;
 
             default:
                     break;
@@ -396,6 +402,64 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
             }
+            break;
+
+        case SID_UNICODE_NOTATION_TOGGLE:
+            {
+                ScViewData* pData = GetViewData();
+                SCTAB nTab = pData->GetTabNo();
+                ScMarkData aMD = pData->GetMarkData();
+                //if selection, and more than one sheet selected, or selected sheet is somehow not the current sheet
+                if( aMD.IsMarked() && ((aMD.GetSelectCount() > 1) || (aMD.GetFirstSelected() != nTab )) )
+                {
+                    pTabViewShell->ErrorMessage(STR_INVALID_TABREF);  //Invalid sheet reference.
+                    rReq.Done();
+                    return;
+                }
+
+                ScDocument* pDoc = pData->GetDocument();
+                bool bOnlyNotBecauseOfMatrix;
+                //if any part of the selection would not be editable, cancel with error message
+                if( !pDoc->IsSelectionEditable(aMD, &bOnlyNotBecauseOfMatrix) )
+                {
+                    pTabViewShell->ErrorMessage(STR_PROTECTIONERR);
+                    rReq.Done();
+                    return;
+                }
+
+                ScRangeList aRange = aMD.GetMarkedRanges();
+                //if no selection, use the current cell
+                if( !aRange.size() )
+                    aRange = ScRangeList(ScRange(pData->GetCurPos()) );
+
+                OUString aUndo = ScGlobal::GetRscString( STR_UNDO_TABOP );  //Multiple.Operations
+                pData->GetDocShell()->GetUndoManager()->EnterListAction( aUndo, aUndo );
+
+                //iterate through multiple ranges.  For each cell in the ranges, toggle unicode codepoints
+                for( size_t nIter = 0; nIter < aRange.size(); ++nIter )
+                {
+                    for( SCROW nRow = aRange[nIter]->aStart.Row(); nRow <= aRange[nIter]->aEnd.Row(); ++nRow )
+                    {
+                        for( SCCOL nCol = aRange[nIter]->aStart.Col(); nCol <= aRange[nIter]->aEnd.Col(); ++nCol )
+                        {
+                            OUString sInput = pDoc->GetString(nCol, nRow, nTab);
+                            sal_Int32 nUtf16Pos = sInput.getLength();
+                            ToggleUnicodeCodepoint aToggle;
+                            while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
+                                --nUtf16Pos;
+
+                            OUStringBuffer sReplacement = aToggle.ReplacementString();
+                            if( !sReplacement.isEmpty() )
+                            {
+                                sReplacement.insert( 0, sInput.copy(0, sInput.getLength() - aToggle.StringToReplace().getLength()) );
+                                pTabViewShell->EnterData(nCol, nRow, nTab, sReplacement.toString());
+                            }
+                        }
+                    }
+                }
+                pData->GetDocShell()->GetUndoManager()->LeaveListAction();
+            }
+            rReq.Done();
             break;
 
         case SID_SCENARIOS:
