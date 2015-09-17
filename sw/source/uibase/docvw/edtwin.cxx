@@ -69,6 +69,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
@@ -6224,8 +6225,13 @@ void SwEditWin::LogicInvalidate(const Rectangle* pRectangle)
     else
         sRectangle = pRectangle->toString();
 
-    if ( m_rView.GetWrtShellPtr() )
-        m_rView.GetWrtShell().libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    if (comphelper::LibreOfficeKit::isViewCallback())
+        m_rView.libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    else
+    {
+        if (m_rView.GetWrtShellPtr())
+            m_rView.GetWrtShell().libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    }
 }
 
 void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
