@@ -159,7 +159,7 @@ private:
     OUString        m_sTitleSpelling;
     OUString        m_sTitleSpellingGrammar;
 
-    Link<>          aDialogUndoLink;
+    Link<SpellUndoAction_Impl&,void> aDialogUndoLink;
 
     bool            bModified;
     bool            bFocusLocked;
@@ -184,7 +184,7 @@ private:
     DECL_LINK_TYPED( AddToDictSelectHdl, MenuButton*, void );
     DECL_LINK_TYPED( AddToDictClickHdl, Button*, void );
     DECL_LINK( LanguageSelectHdl, SvxLanguageBox* );
-    DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl* );
+    DECL_LINK_TYPED( DialogUndoHdl, SpellUndoAction_Impl&, void );
     DECL_LINK( HandleHyperlink, FixedHyperlink * );
 
     DECL_LINK_TYPED( InitHdl, void*, void );

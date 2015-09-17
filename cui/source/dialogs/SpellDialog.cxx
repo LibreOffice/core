@@ -90,7 +90,7 @@ namespace svx{
 class SpellUndoAction_Impl : public SfxUndoAction
 {
     sal_uInt16          m_nId;
-    const Link<>&   m_rActionLink;
+    const Link<SpellUndoAction_Impl&,void>& m_rActionLink;
     //undo of button enabling
     bool            m_bEnableChangePB;
     bool            m_bEnableChangeAllPB;
@@ -107,7 +107,7 @@ class SpellUndoAction_Impl : public SfxUndoAction
     long            m_nOffset;
 
 public:
-    SpellUndoAction_Impl(sal_uInt16 nId, const Link<>& rActionLink) :
+    SpellUndoAction_Impl(sal_uInt16 nId, const Link<SpellUndoAction_Impl&,void>& rActionLink) :
         m_nId(nId),
         m_rActionLink( rActionLink),
         m_bEnableChangePB(false),
@@ -163,7 +163,7 @@ SpellUndoAction_Impl::~SpellUndoAction_Impl()
 
 void SpellUndoAction_Impl::Undo()
 {
-    m_rActionLink.Call(this);
+    m_rActionLink.Call(*this);
 }
 
 
@@ -680,22 +680,22 @@ IMPL_LINK_NOARG_TYPED(SpellDialog, UndoHdl, Button*, void)
 }
 
 
-IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl*, pAction )
+IMPL_LINK_TYPED( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl&, rAction, void )
 {
-    switch(pAction->GetId())
+    switch(rAction.GetId())
     {
         case SPELLUNDO_CHANGE_TEXTENGINE:
         {
-            if(pAction->IsEnableChangePB())
+            if(rAction.IsEnableChangePB())
                 m_pChangePB->Enable(false);
-            if(pAction->IsEnableChangeAllPB())
+            if(rAction.IsEnableChangeAllPB())
                 m_pChangeAllPB->Enable(false);
         }
         break;
         case SPELLUNDO_CHANGE_NEXTERROR:
         {
-            m_pSentenceED->MoveErrorMarkTo((sal_uInt16)pAction->GetOldErrorStart(), (sal_uInt16)pAction->GetOldErrorEnd(), false);
-            if(pAction->IsErrorLanguageSelected())
+            m_pSentenceED->MoveErrorMarkTo((sal_uInt16)rAction.GetOldErrorStart(), (sal_uInt16)rAction.GetOldErrorEnd(), false);
+            if(rAction.IsErrorLanguageSelected())
             {
                 UpdateBoxes_Impl();
             }
@@ -703,14 +703,14 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl*, pAction )
         break;
         case SPELLUNDO_CHANGE_ADD_TO_DICTIONARY:
         {
-            if(pAction->GetDictionary().is())
-                pAction->GetDictionary()->remove(pAction->GetAddedWord());
+            if(rAction.GetDictionary().is())
+                rAction.GetDictionary()->remove(rAction.GetAddedWord());
         }
         break;
         case SPELLUNDO_MOVE_ERROREND :
         {
-            if(pAction->GetOffset() != 0)
-                m_pSentenceED->MoveErrorEnd(pAction->GetOffset());
+            if(rAction.GetOffset() != 0)
+                m_pSentenceED->MoveErrorEnd(rAction.GetOffset());
         }
         break;
         case SPELLUNDO_UNDO_EDIT_MODE :
@@ -723,8 +723,6 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl*, pAction )
             //undo of ignored rules is not supported
         break;
     }
-
-    return 0;
 }
 
 void SpellDialog::Impl_Restore()
