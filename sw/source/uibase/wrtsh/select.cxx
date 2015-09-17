@@ -39,7 +39,7 @@
 #include <crsskip.hxx>
 #include <doc.hxx>
 #include <wordcountdialog.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
@@ -129,8 +129,8 @@ long SwWrtShell::SelAll()
             LeaveBlockMode();
         SwMvContext aMvContext(this);
         bool bMoveTable = false;
-        boost::scoped_ptr<SwPosition> pStartPos;
-        boost::scoped_ptr<SwPosition> pEndPos;
+        std::unique_ptr<SwPosition> pStartPos;
+        std::unique_ptr<SwPosition> pEndPos;
         SwShellCrsr* pTmpCrsr = 0;
 
         // Query these early, before we move the cursor.

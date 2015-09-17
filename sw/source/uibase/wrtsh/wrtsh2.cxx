@@ -64,7 +64,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <xmloff/odffields.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -81,7 +81,7 @@ void SwWrtShell::Insert(SwField &rField)
     StartUndo(UNDO_INSERT, &aRewriter);
 
     bool bDeleted = false;
-    boost::scoped_ptr<SwPaM> pAnnotationTextRange;
+    std::unique_ptr<SwPaM> pAnnotationTextRange;
     if ( HasSelection() )
     {
         if ( rField.GetTyp()->Which() == RES_POSTITFLD )
@@ -234,7 +234,7 @@ bool SwWrtShell::StartInputFieldDlg( SwField* pField, bool bNextButton,
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
-    boost::scoped_ptr<AbstractFieldInputDlg> pDlg(pFact->CreateFieldInputDlg(pParentWin, *this, pField, bNextButton));
+    std::unique_ptr<AbstractFieldInputDlg> pDlg(pFact->CreateFieldInputDlg(pParentWin, *this, pField, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
@@ -259,7 +259,7 @@ bool SwWrtShell::StartDropDownFieldDlg(SwField* pField, bool bNextButton, OStrin
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(NULL, *this, pField, bNextButton));
+    std::unique_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(NULL, *this, pField, bNextButton));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
