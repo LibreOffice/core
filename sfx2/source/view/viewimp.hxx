@@ -65,6 +65,9 @@ struct SfxViewShell_Impl
 
     mutable SfxInPlaceClientList* mpIPClientList;
 
+    LibreOfficeKitCallback m_pLibreOfficeKitViewCallback;
+    void* m_pLibreOfficeKitViewData;
+
     SfxViewShell_Impl(SfxViewShellFlags const nFlags);
     ~SfxViewShell_Impl();
 
