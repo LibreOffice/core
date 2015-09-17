@@ -166,14 +166,14 @@ public:
             the second and all following calls are ignored.  Each listener
             is added only once.
     */
-    void AddVisibilityChangeListener (const Link<>& rListener);
+    void AddVisibilityChangeListener (const Link<LinkParamNone*,void>& rListener);
 
     /** Remove a listener that is called when the set of visible slides changes.
         @param rListener
             It is save to pass a listener that was not added or has been
             removed previously.  Such calls are ignored.
     */
-    void RemoveVisibilityChangeListener (const Link<>& rListener);
+    void RemoveVisibilityChangeListener (const Link<LinkParamNone*,void>& rListener);
 
     /** The page under the mouse is not highlighted in some contexts.  Call
         this method on context changes.
@@ -234,7 +234,7 @@ private:
     SharedILayerPainter mpBackgroundPainter;
     ::boost::scoped_ptr<ToolTip> mpToolTip;
     bool mbIsRearrangePending;
-    ::std::vector<Link<>> maVisibilityChangeListeners;
+    ::std::vector<Link<LinkParamNone*,void>> maVisibilityChangeListeners;
 
     /** Determine the visibility of all page objects.
     */

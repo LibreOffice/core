@@ -84,7 +84,7 @@ public:
     DECL_LINK(SelectionChangeListener, void*);
     DECL_LINK_TYPED(BroadcastSelectionChange, void*, void);
     DECL_LINK(FocusChangeListener, void*);
-    DECL_LINK(VisibilityChangeListener, void*);
+    DECL_LINK_TYPED(VisibilityChangeListener, LinkParamNone*, void);
     DECL_LINK_TYPED(UpdateChildrenCallback, void*, void);
 
     void Activated();
@@ -986,10 +986,9 @@ IMPL_LINK_NOARG_TYPED(AccessibleSlideSorterView::Implementation, UpdateChildrenC
     UpdateChildren();
 }
 
-IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, VisibilityChangeListener)
+IMPL_LINK_NOARG_TYPED(AccessibleSlideSorterView::Implementation, VisibilityChangeListener, LinkParamNone*, void)
 {
     UpdateChildren();
-    return 1;
 }
 
 } // end of namespace ::accessibility

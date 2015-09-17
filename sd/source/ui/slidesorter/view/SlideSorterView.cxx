@@ -486,8 +486,8 @@ void SlideSorterView::DeterminePageObjectVisibilities()
 
             // Tell the listeners that the visibility of some objects has
             // changed.
-            ::std::vector<Link<>>& aChangeListeners (maVisibilityChangeListeners);
-            for (::std::vector<Link<>>::const_iterator
+            ::std::vector<Link<LinkParamNone*,void>>& aChangeListeners (maVisibilityChangeListeners);
+            for (::std::vector<Link<LinkParamNone*,void>>::const_iterator
                      iLink(aChangeListeners.begin()),
                      iEnd(aChangeListeners.end());
                  iLink!=iEnd;
@@ -720,7 +720,7 @@ Pair SlideSorterView::GetVisiblePageRange()
     return maVisiblePageRange;
 }
 
-void SlideSorterView::AddVisibilityChangeListener (const Link<>& rListener)
+void SlideSorterView::AddVisibilityChangeListener (const Link<LinkParamNone*,void>& rListener)
 {
     if (::std::find (
         maVisibilityChangeListeners.begin(),
@@ -731,7 +731,7 @@ void SlideSorterView::AddVisibilityChangeListener (const Link<>& rListener)
     }
 }
 
-void SlideSorterView::RemoveVisibilityChangeListener(const Link<>&rListener)
+void SlideSorterView::RemoveVisibilityChangeListener(const Link<LinkParamNone*,void>&rListener)
 {
     maVisibilityChangeListeners.erase (
         ::std::find (
