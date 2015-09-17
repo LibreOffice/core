@@ -59,8 +59,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 using namespace com::sun::star;
 
 static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,

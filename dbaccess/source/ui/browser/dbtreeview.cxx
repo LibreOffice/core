@@ -22,7 +22,6 @@
 #include "dbtreelistbox.hxx"
 #include "dbtreemodel.hxx"
 #include "dbaccess_helpid.hrc"
-#include <boost/scoped_ptr.hpp>
 
 namespace dbaui
 {

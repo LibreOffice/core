@@ -37,8 +37,8 @@
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/exc_hlp.hxx>
 
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 namespace dbaui
 {

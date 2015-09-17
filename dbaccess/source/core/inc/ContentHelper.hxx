@@ -38,7 +38,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <connectivity/sqlerror.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct PropertyValue;
@@ -75,7 +75,7 @@ namespace dbaccess
         ODatabaseModelImpl* m_pDataSource; // this will stay alive as long as the content exists
     };
 
-    typedef ::boost::shared_ptr<OContentHelper_Impl> TContentPtr;
+    typedef std::shared_ptr<OContentHelper_Impl> TContentPtr;
 
     typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
         PropertyChangeListenerContainer;

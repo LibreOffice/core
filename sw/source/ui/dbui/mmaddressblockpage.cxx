@@ -33,7 +33,6 @@
 #include <svtools/treelistentry.hxx>
 
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 #include <globals.hrc>
 #include <dbui.hrc>
 #include <helpid.h>

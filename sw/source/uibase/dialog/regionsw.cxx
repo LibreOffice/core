@@ -54,7 +54,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <svx/dlgutil.hxx>
 #include "swabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 {
@@ -83,7 +83,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialog creation failed!");
-        boost::scoped_ptr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
+        std::unique_ptr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
             &GetView().GetViewFrame()->GetWindow(), aSet , rSh));
         OSL_ENSURE(aTabDlg, "Dialog creation failed!");
         aTabDlg->Execute();
@@ -177,7 +177,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 IMPL_LINK_TYPED( SwWrtShell, InsertRegionDialog, void*, p, void )
 {
     SwSectionData* pSect = static_cast<SwSectionData*>(p);
-    boost::scoped_ptr<SwSectionData> xSectionData(pSect);
+    std::unique_ptr<SwSectionData> xSectionData(pSect);
     if (xSectionData.get())
     {
         SfxItemSet aSet(GetView().GetPool(),
@@ -194,7 +194,7 @@ IMPL_LINK_TYPED( SwWrtShell, InsertRegionDialog, void*, p, void )
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialog creation failed!");
-        boost::scoped_ptr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
+        std::unique_ptr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
             &GetView().GetViewFrame()->GetWindow(),aSet , *this));
         OSL_ENSURE(aTabDlg, "Dialog creation failed!");
         aTabDlg->SetSectionData(*xSectionData);
@@ -219,7 +219,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                boost::scoped_ptr<AbstractEditRegionDlg> pEditRegionDlg(pFact->CreateEditRegionDlg(pParentWin, rWrtShell));
+                std::unique_ptr<AbstractEditRegionDlg> pEditRegionDlg(pFact->CreateEditRegionDlg(pParentWin, rWrtShell));
                 OSL_ENSURE(pEditRegionDlg, "Dialog creation failed!");
                 if(pItem && pItem->ISA(SfxStringItem))
                 {

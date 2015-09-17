@@ -62,7 +62,7 @@ bool OTableFieldControl::IsReadOnly()
             bRead = true;
         else
         {
-             ::boost::shared_ptr<OTableRow>  pCurRow = GetCtrl()->GetActRow();
+             std::shared_ptr<OTableRow>  pCurRow = GetCtrl()->GetActRow();
             if( pCurRow )
                 bRead = pCurRow->IsReadOnly();
         }

@@ -26,7 +26,6 @@
 #include <labimg.hxx>
 
 #include <cmdid.h>
-#include <boost/scoped_ptr.hpp>
 
 SwLabPrtPage::SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "LabelOptionsPage",

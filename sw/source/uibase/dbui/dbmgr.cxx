@@ -136,7 +136,7 @@
 #include <calc.hxx>
 #include <dbfld.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <config_cups.h>
 #if ENABLE_CUPS && !defined(MACOSX)
 #include <vcl/printerinfomanager.hxx>
@@ -552,7 +552,7 @@ void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
             if( pSh->HasSelection() )
                 pSh->DelRight();
 
-            boost::scoped_ptr<SwWait> pWait;
+            std::unique_ptr<SwWait> pWait;
 
             {
                 sal_uLong i = 0;
@@ -1002,7 +1002,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             SfxObjectShellRef xTargetDocShell;
 
             SwView* pTargetView = 0;
-            boost::scoped_ptr< utl::TempFile > aTempFile;
+            std::unique_ptr< utl::TempFile > aTempFile;
             bool createTempFile = ( rMergeDescriptor.nMergeType == DBMGR_MERGE_EMAIL || rMergeDescriptor.nMergeType == DBMGR_MERGE_FILE );
             OUString sModifiedStartingPageDesc;
             OUString sStartingPageDesc;
@@ -1154,7 +1154,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
                     if( !bCancel )
                     {
-                        boost::scoped_ptr< INetURLObject > aTempFileURL;
+                        std::unique_ptr< INetURLObject > aTempFileURL;
                         if( createTempFile )
                             aTempFileURL.reset( new INetURLObject(aTempFile->GetURL()));
                         if (!IsMergeSilent()) {
@@ -2984,7 +2984,7 @@ void SwDBManager::InsertText(SwWrtShell& rSh,
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<AbstractSwInsertDBColAutoPilot> pDlg(pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
+    std::unique_ptr<AbstractSwInsertDBColAutoPilot> pDlg(pFact->CreateSwInsertDBColAutoPilot( rSh.GetView(),
                                                                                 xSource,
                                                                                 xColSupp,
                                                                                 aDBData ));

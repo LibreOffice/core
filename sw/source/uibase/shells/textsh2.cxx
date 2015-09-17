@@ -62,7 +62,7 @@
 
 #include <unomid.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -263,7 +263,7 @@ IMPL_LINK_TYPED( SwBaseShell, InsertDBTextHdl, void*, p, void )
             SwDBData aDBData = pDBStruct->aDBData;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-            boost::scoped_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot(GetView(),
+            std::unique_ptr<AbstractSwInsertDBColAutoPilot>pDlg (pFact->CreateSwInsertDBColAutoPilot(GetView(),
                                                                                                 xSource,
                                                                                                 xColSupp,
                                                                                                 aDBData));

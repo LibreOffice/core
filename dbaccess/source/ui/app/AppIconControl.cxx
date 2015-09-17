@@ -25,7 +25,7 @@
 #include <vcl/image.hxx>
 #include "callbacks.hxx"
 #include "AppElementType.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::dbaui;
 // class OApplicationIconControl
@@ -73,7 +73,7 @@ void OApplicationIconControl::dispose()
         SvxIconChoiceCtrlEntry* pEntry = GetEntry( i );
         if ( pEntry )
         {
-            boost::scoped_ptr<ElementType> aType(static_cast<ElementType*>(pEntry->GetUserData()));
+            std::unique_ptr<ElementType> aType(static_cast<ElementType*>(pEntry->GetUserData()));
             pEntry->SetUserData(NULL);
         }
     }

@@ -35,7 +35,6 @@
 #include "../../uibase/envelp/label.hrc"
 #include "labfmt.hrc"
 #include <unomid.h>
-#include <boost/scoped_ptr.hpp>
 
 using namespace utl;
 using namespace ::com::sun::star::uno;

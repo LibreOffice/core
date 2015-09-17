@@ -9,7 +9,7 @@
 
 #include "dbtest_base.cxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/time.h>
@@ -261,7 +261,7 @@ void EmbeddedDBPerformanceTest::performPreparedStatementInsertTest(
 
     uno::Reference< XParameters > xParameters(xPreparedStatement, UNO_QUERY_THROW);
 
-    ::boost::scoped_ptr< SvFileStream > pFile(getWordListStream());
+    std::unique_ptr< SvFileStream > pFile(getWordListStream());
 
     OUString aWord;
     sal_Int32 aID = 0;
@@ -297,7 +297,7 @@ void EmbeddedDBPerformanceTest::performStatementInsertTest(
     uno::Reference< XStatement > xStatement =
         xConnection->createStatement();
 
-    ::boost::scoped_ptr< SvFileStream > pFile(getWordListStream());
+    std::unique_ptr< SvFileStream > pFile(getWordListStream());
 
     OUString aWord;
     sal_Int32 aID = 0;

@@ -57,7 +57,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::dbaccess;
 using namespace ::dbtools;
@@ -657,7 +657,7 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
         aClauses.push_back( getSQLPart( eLoopParts, m_aSqlIterator, true ) );
 
     // overwrite the one part in question here
-    boost::scoped_ptr< TokenComposer > pComposer;
+    std::unique_ptr< TokenComposer > pComposer;
     if ( ( _ePart == Where ) || ( _ePart == Having ) )
         pComposer.reset( new FilterCreator );
     else
@@ -789,7 +789,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         OUString sSQL( aSQL.makeStringAndClear() );
         // normalize the statement so that it doesn't contain any application-level features anymore
         OUString sError;
-        const boost::scoped_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSQL ) );
+        const std::unique_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSQL ) );
         OSL_ENSURE( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
         if ( pStatementTree.get() )
             if ( !pStatementTree->parseNodeToExecutableStatement( sSQL, m_xConnection, m_aSqlParser, NULL ) )
@@ -1737,7 +1737,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
         const OSQLParseNode* pTempNode = m_aAdditiveIterator.getParseTree();
 
         OUString aErrorMsg;
-        boost::scoped_ptr<OSQLParseNode> pSqlParseNode( m_aSqlParser.parseTree(aErrorMsg,aSql));
+        std::unique_ptr<OSQLParseNode> pSqlParseNode( m_aSqlParser.parseTree(aErrorMsg,aSql));
         if ( pSqlParseNode.get() )
         {
             m_aAdditiveIterator.setParseTree(pSqlParseNode.get());

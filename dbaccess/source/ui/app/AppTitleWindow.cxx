@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
-#include <boost/scoped_ptr.hpp>
 
 namespace dbaui
 {

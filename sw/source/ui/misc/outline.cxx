@@ -55,8 +55,6 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
-#include <boost/scoped_ptr.hpp>
-
 using namespace ::com::sun::star;
 
 class SwNumNamesDlg : public ModalDialog

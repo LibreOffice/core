@@ -31,7 +31,7 @@
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <swevent.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 
@@ -99,7 +99,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
         break;
     case EXTENDED_STYPE:
         {
-            boost::scoped_ptr<Sequence<Any> > pUnoArgs;
+            std::unique_ptr<Sequence<Any> > pUnoArgs;
             if( pArgs )
             {
                 // better to rename the local function to lcl_translateBasic2Uno and
@@ -212,7 +212,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             }
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
             {
-                boost::scoped_ptr<Sequence<Any> > pUnoArgs;
+                std::unique_ptr<Sequence<Any> > pUnoArgs;
 
                 if( pArgs )
                 {

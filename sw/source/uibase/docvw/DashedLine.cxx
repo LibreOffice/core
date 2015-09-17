@@ -17,7 +17,7 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 SwDashedLine::SwDashedLine( vcl::Window* pParent, Color& ( *pColorFn )() ) :
     FixedLine( pParent, WB_DIALOGCONTROL | WB_HORZ ),
@@ -32,7 +32,7 @@ SwDashedLine::~SwDashedLine( )
 void SwDashedLine::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
     // Compute the start and end points

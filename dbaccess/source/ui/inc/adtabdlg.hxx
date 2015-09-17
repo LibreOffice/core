@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_ADTABDLG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_ADTABDLG_HXX
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
@@ -63,7 +63,7 @@ namespace dbaui
 
         VclPtr<OTableTreeListBox>  m_pTableList;
         VclPtr<SvTreeListBox>      m_pQueryList;
-        boost::scoped_ptr< TableObjectListFacade > m_xCurrentList;
+        std::unique_ptr< TableObjectListFacade > m_xCurrentList;
 
         VclPtr<PushButton>         m_pAddButton;
         VclPtr<PushButton>         m_pCloseButton;

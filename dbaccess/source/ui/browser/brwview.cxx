@@ -30,7 +30,6 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include "UITools.hxx"
 #include <osl/diagnose.h>
-#include <boost/scoped_ptr.hpp>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

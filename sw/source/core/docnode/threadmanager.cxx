@@ -56,7 +56,7 @@ ThreadManager::~ThreadManager()
     maStartedThreads.clear();
 }
 
-boost::weak_ptr< IFinishedThreadListener > ThreadManager::GetThreadListenerWeakRef()
+std::weak_ptr< IFinishedThreadListener > ThreadManager::GetThreadListenerWeakRef()
 {
     return mpThreadListener;
 }

@@ -26,7 +26,6 @@
 #include "adtabdlg.hxx"
 #include "querycontroller.hxx"
 #include "sqledit.hxx"
-#include <boost/scoped_ptr.hpp>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;

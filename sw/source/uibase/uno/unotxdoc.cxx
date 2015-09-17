@@ -149,7 +149,7 @@
 #include <svx/svdview.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -1997,7 +1997,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pEntry->nWID);
-            boost::scoped_ptr<SfxPoolItem> pNewItem(rItem.Clone());
+            std::unique_ptr<SfxPoolItem> pNewItem(rItem.Clone());
             pNewItem->PutValue(aValue, pEntry->nMemberId);
             pDocShell->GetDoc()->SetDefault(*pNewItem);
         }

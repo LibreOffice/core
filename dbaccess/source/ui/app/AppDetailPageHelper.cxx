@@ -67,7 +67,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::container;
@@ -1118,7 +1118,7 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
         }
 
         Reference< XDatabaseDocumentUI > xApplication( getBorderWin().getView()->getAppController().getXController(), UNO_QUERY );
-        boost::scoped_ptr< DatabaseObjectView > pDispatcher( new ResultSetBrowser(
+        std::unique_ptr< DatabaseObjectView > pDispatcher( new ResultSetBrowser(
             getBorderWin().getView()->getORB(),
             xApplication, NULL, _bTable
         ) );
@@ -1164,7 +1164,7 @@ IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
     m_aTBPreview->Update();
 
     // execute the menu
-    boost::scoped_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
+    std::unique_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
 
     sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
                             , SID_DB_APP_VIEW_DOC_PREVIEW

@@ -52,7 +52,7 @@
 #include <wrtsh.hxx>
 #include <shellres.hxx>
 #include <SwRewriter.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sw { namespace sidebarwindows {
 
@@ -345,7 +345,7 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
         }
         else
         {
-            boost::scoped_ptr<SfxPopupMenuManager> pMgr(SfxDispatcher::Popup(0, this,&rCEvt.GetMousePosPixel()));
+            std::unique_ptr<SfxPopupMenuManager> pMgr(SfxDispatcher::Popup(0, this,&rCEvt.GetMousePosPixel()));
             static_cast<PopupMenu*>(pMgr->GetSVMenu())->SetSelectHdl( LINK(this, SidebarTextControl, Select) );
 
             {

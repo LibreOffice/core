@@ -63,7 +63,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -780,7 +780,7 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, OkHdl, Button*, void)
         size_t nNewPos = rDocFormats.GetPos(pFormat);
         if ( SIZE_MAX != nNewPos )
         {
-            boost::scoped_ptr<SfxItemSet> pSet(pFormat->GetAttrSet().Clone( false ));
+            std::unique_ptr<SfxItemSet> pSet(pFormat->GetAttrSet().Clone( false ));
             if( pFormat->GetCol() != pRepr->GetCol() )
                 pSet->Put( pRepr->GetCol() );
 
@@ -1323,7 +1323,7 @@ IMPL_LINK_TYPED( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFile
     OUString sFileName, sFilterName, sPassword;
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
     {
-        boost::scoped_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium());
+        std::unique_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium());
         if ( pMedium )
         {
             sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
@@ -1798,7 +1798,7 @@ IMPL_LINK_TYPED( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *,
 {
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
     {
-        boost::scoped_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium());
+        std::unique_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium());
         if ( pMedium )
         {
             m_sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );

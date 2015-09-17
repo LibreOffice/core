@@ -19,7 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDLG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_RELATIONDLG_HXX
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -36,7 +36,7 @@ namespace dbaui
                             ,public IRelationControlInterface
     {
         OModuleClient                           m_aModuleClient;
-        boost::scoped_ptr<OTableListBoxControl> m_xTableControl;
+        std::unique_ptr<OTableListBoxControl> m_xTableControl;
         OJoinTableView::OTableWindowMap*        m_pTableMap;
 
         VclPtr<RadioButton> m_pRB_NoCascUpd;

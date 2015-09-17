@@ -118,7 +118,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
                 if( !pFrameFormats ||
                     pFrameFormats->end() == ( it = std::find( pFrameFormats->begin(), pFrameFormats->end(), pFormat ) ) )
                 {
-                    ::boost::shared_ptr<SwUndoInsLayFormat> const pFlyUndo(
+                    std::shared_ptr<SwUndoInsLayFormat> const pFlyUndo(
                         new SwUndoInsLayFormat(pFormat, 0, 0));
                     m_FlyUndos.push_back(pFlyUndo);
                 }

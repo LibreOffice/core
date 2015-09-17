@@ -41,7 +41,7 @@
 
 #include <globals.hrc>
 #include <misc.hrc>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -157,7 +157,7 @@ VclPtr<SfxTabPage> SwFootNotePage::Create(vcl::Window *pParent, const SfxItemSet
 void SwFootNotePage::Reset(const SfxItemSet *rSet)
 {
     // if no example exists, otherwise Init here in Activate
-    boost::scoped_ptr<SwPageFootnoteInfo> pDefFootnoteInfo;
+    std::unique_ptr<SwPageFootnoteInfo> pDefFootnoteInfo;
     const SwPageFootnoteInfo* pFootnoteInfo;
     const SfxPoolItem* pItem = SfxTabPage::GetItem(*rSet, FN_PARAM_FTN_INFO);
     if( pItem )

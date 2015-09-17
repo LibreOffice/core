@@ -33,8 +33,7 @@
 #include <cancellablejob.hxx>
 #include <threadlistener.hxx>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <ifinishedthreadlistener.hxx>
 
 
@@ -52,7 +51,7 @@ class ThreadManager
         explicit ThreadManager( ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager >& rThreadJoiner );
         virtual ~ThreadManager();
 
-        boost::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef();
+        std::weak_ptr< IFinishedThreadListener > GetThreadListenerWeakRef();
         void NotifyAboutFinishedThread( const oslInterlockedCount nThreadID );
 
         /** initialization
@@ -117,7 +116,7 @@ class ThreadManager
 
         ::com::sun::star::uno::WeakReference< ::com::sun::star::util::XJobManager > mrThreadJoiner;
 
-        boost::shared_ptr< ThreadListener > mpThreadListener;
+        std::shared_ptr< ThreadListener > mpThreadListener;
 
         oslInterlockedCount mnThreadIDCounter;
 

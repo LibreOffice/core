@@ -152,12 +152,12 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     SET_CURR_SHELL( pDestShell );
 
     // List of insert positions for smart insert of block selections
-    std::list< boost::shared_ptr<SwPosition> > aInsertList;
+    std::list< std::shared_ptr<SwPosition> > aInsertList;
 
     // Fill list of insert positions
     {
         SwPosition * pPos = 0;
-        boost::shared_ptr<SwPosition> pInsertPos;
+        std::shared_ptr<SwPosition> pInsertPos;
         sal_uInt16 nMove = 0;
         for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
         {
@@ -204,7 +204,7 @@ bool SwEditShell::Copy( SwEditShell* pDestShell )
     SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
     sal_Int32 nSttCntIdx = 0;
     // For block selection this list is filled with the insert positions
-    std::list< boost::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
+    std::list< std::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
     pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer())

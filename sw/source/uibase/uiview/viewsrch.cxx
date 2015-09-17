@@ -21,7 +21,7 @@
 
 #include <string>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <hintids.hxx>
 
@@ -490,7 +490,7 @@ bool SwView::SearchAndWrap(bool bApi)
     if (!m_pSrchItem->GetSelection())
         m_pWrtShell->KillSelection(0, false);
 
-    boost::scoped_ptr<SwWait> pWait(new SwWait( *GetDocShell(), true ));
+    std::unique_ptr<SwWait> pWait(new SwWait( *GetDocShell(), true ));
     if( FUNC_Search( aOpts ) )
     {
         m_bFound = true;

@@ -20,7 +20,7 @@
 #define INCLUDED_SW_INC_FLYPOS_HXX
 
 #include <swdllapi.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <set>
 
 class SwFrameFormat;
@@ -45,10 +45,10 @@ public:
 // SwPosFlyFrms can be handled by value (as return value), only refcounts to
 // contained SwPosFlyFrm* will be copied. When releasing the last SwPosFlyFrmPtr
 // instance the allocated instance will be freed. The array is sorted by
-// GetNdIndex by using a ::std::set container.
-typedef ::boost::shared_ptr< SwPosFlyFrm > SwPosFlyFrmPtr;
+// GetNdIndex by using a std::set container.
+typedef std::shared_ptr< SwPosFlyFrm > SwPosFlyFrmPtr;
 struct SwPosFlyFrmCmp { bool operator()(const SwPosFlyFrmPtr& rA, const SwPosFlyFrmPtr& rB) const; };
-typedef ::std::set< SwPosFlyFrmPtr, SwPosFlyFrmCmp > SwPosFlyFrms;
+typedef std::set< SwPosFlyFrmPtr, SwPosFlyFrmCmp > SwPosFlyFrms;
 
 #endif // INCLUDED_SW_INC_FLYPOS_HXX
 

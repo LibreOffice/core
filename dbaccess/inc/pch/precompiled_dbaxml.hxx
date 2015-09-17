@@ -17,7 +17,6 @@
 #include "sal/config.h"
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

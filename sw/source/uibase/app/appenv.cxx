@@ -69,7 +69,7 @@
 #include "envimg.hxx"
 #include <appenv.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define ENV_NEWDOC      RET_OK
 #define ENV_INSERT      RET_USER
@@ -207,7 +207,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     }
 
     vcl::Window *pParent = pOldSh ? pOldSh->GetWin() : 0;
-    boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
+    std::unique_ptr<SfxAbstractTabDialog> pDlg;
     short nMode = ENV_INSERT;
 
     SFX_REQUEST_ARG( rReq, pItem, SwEnvItem, FN_ENVELOP, false );

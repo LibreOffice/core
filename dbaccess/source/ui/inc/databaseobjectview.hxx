@@ -35,7 +35,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace dbaui
 {

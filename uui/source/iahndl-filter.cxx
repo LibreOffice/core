@@ -38,7 +38,6 @@
 #include "fltdlg.hxx"
 
 #include "iahndl.hxx"
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 

@@ -36,7 +36,7 @@
 #include <misc.hrc>
 #include <frmui.hrc>
 #include <SwStyleNameMapper.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 SwFootNoteOptionDlg::SwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rS)
     : SfxTabDialog(pParent, "FootEndnoteDialog", "modules/swriter/ui/footendnotedialog.ui")
@@ -145,7 +145,7 @@ void SwEndNoteOptionPage::dispose()
 
 void SwEndNoteOptionPage::Reset( const SfxItemSet* )
 {
-    boost::scoped_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo( pSh->GetEndNoteInfo() )
+    std::unique_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo( pSh->GetEndNoteInfo() )
                                           : new SwFootnoteInfo( pSh->GetFootnoteInfo() ));
     SfxObjectShell * pDocSh = SfxObjectShell::Current();
 
@@ -364,7 +364,7 @@ static SwCharFormat* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFo
 
 bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
 {
-    boost::scoped_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo() : new SwFootnoteInfo());
+    std::unique_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo() : new SwFootnoteInfo());
 
     pInf->nFootnoteOffset = static_cast< sal_uInt16 >(m_pOffsetField->GetValue() -1);
     pInf->aFormat.SetNumberingType(m_pNumViewBox->GetSelectedNumberingType() );

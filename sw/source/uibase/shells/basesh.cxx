@@ -106,7 +106,7 @@
 #include <unomid.h>
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 //UUUU
 #include <svx/unobrushitemhelper.hxx>
@@ -169,7 +169,7 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     GraphicType nGrfType = aGrf.GetType();
     void* pEditObj = GRAPHIC_NONE != nGrfType && GRAPHIC_DEFAULT != nGrfType
                         ? rSh.GetIMapInventor() : 0;
-    boost::scoped_ptr<TargetList> pList(new TargetList);
+    std::unique_ptr<TargetList> pList(new TargetList);
     rSh.GetView().GetViewFrame()->GetTopFrame().GetTargetList(*pList);
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
@@ -780,7 +780,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 bToTable = true;
             SwInsertTableOptions aInsTableOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
             SwTableAutoFormat const* pTAFormat = 0;
-            boost::scoped_ptr<SwTableAutoFormatTable> pAutoFormatTable;
+            std::unique_ptr<SwTableAutoFormatTable> pAutoFormatTable;
             bool bDeleteFormat = true;
             if(pArgs && SfxItemState::SET == pArgs->GetItemState( FN_PARAM_1, true, &pItem))
             {
@@ -830,7 +830,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                boost::scoped_ptr<AbstractSwConvertTableDlg> pDlg(pFact->CreateSwConvertTableDlg(GetView(), bToTable));
+                std::unique_ptr<AbstractSwConvertTableDlg> pDlg(pFact->CreateSwConvertTableDlg(GetView(), bToTable));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK == pDlg->Execute() )
                 {
@@ -1935,7 +1935,7 @@ void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
     if( pArgs)
     {
         SwWrtShell &rSh = GetShell();
-        boost::scoped_ptr<SvxScriptSetItem> pSSetItem;
+        std::unique_ptr<SvxScriptSetItem> pSSetItem;
         sal_uInt16 nSlot = rReq.GetSlot();
         SfxItemPool& rPool = rSh.GetAttrPool();
         sal_uInt16 nWhich = rPool.GetWhich( nSlot );
@@ -2064,7 +2064,7 @@ void SwBaseShell::GetTextFontCtrlState( SfxItemSet& rSet )
 {
     SwWrtShell &rSh = GetShell();
     bool bFirst = true;
-    boost::scoped_ptr<SfxItemSet> pFntCoreSet;
+    std::unique_ptr<SfxItemSet> pFntCoreSet;
     SvtScriptType nScriptType = SvtScriptType::LATIN;
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -2360,7 +2360,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         case FN_FORMAT_TITLEPAGE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateTitlePageDlg( pMDI ));
+            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateTitlePageDlg( pMDI ));
             pDlg->Execute();
         }
         break;
@@ -2399,7 +2399,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                                RES_BOX              , RES_SHADOW,
                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                0 );
-            boost::scoped_ptr<SfxAbstractDialog> pDlg;
+            std::unique_ptr<SfxAbstractDialog> pDlg;
             // Table cell(s) selected?
             if ( rSh.IsTableMode() )
             {
@@ -2464,7 +2464,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             SfxItemSet aSet( rSh.GetAttrPool(),
                              RES_BACKGROUND, RES_BACKGROUND );
 
-            boost::scoped_ptr<SfxAbstractDialog> pDlg;
+            std::unique_ptr<SfxAbstractDialog> pDlg;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
@@ -2620,7 +2620,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                boost::scoped_ptr<AbstractInsTableDlg> pDlg(pFact->CreateInsTableDlg(rTempView));
+                std::unique_ptr<AbstractInsTableDlg> pDlg(pFact->CreateInsTableDlg(rTempView));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if( RET_OK == pDlg->Execute() )
                 {
@@ -2834,7 +2834,7 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwChangeDBDlg(GetView()));
+            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateSwChangeDBDlg(GetView()));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
         }

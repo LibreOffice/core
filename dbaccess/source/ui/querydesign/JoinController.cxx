@@ -56,9 +56,6 @@
 #include "UITools.hxx"
 #include <osl/diagnose.h>
 
-#include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;

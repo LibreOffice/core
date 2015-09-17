@@ -41,7 +41,7 @@
 
 #include "iahndl.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define DESCRIPTION_1 1
 #define TITLE 3
@@ -153,7 +153,7 @@ executeUnknownAuthDialog(
         std::vector< OUString > aArguments;
         aArguments.push_back( getContentPart( rXCert->getSubjectName()) );
 
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if (xManager.get())
         {
             ResId aResId(RID_UUI_ERRHDL, *xManager.get());
@@ -214,7 +214,7 @@ executeSSLWarnDialog(
                 break;
         }
 
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
 
         if (xManager.get())
         {

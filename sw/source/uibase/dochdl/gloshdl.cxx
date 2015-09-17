@@ -58,7 +58,7 @@
 #include <misc.hrc>
 
 #include <IDocumentFieldsAccess.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -76,7 +76,7 @@ void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     assert(pFact && "Dialog creation failed!");
-    boost::scoped_ptr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(pViewFrame, this, pWrtShell));
+    std::unique_ptr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(pViewFrame, this, pWrtShell));
     assert(pDlg && "Dialog creation failed!");
     OUString sName;
     OUString sShortName;
@@ -444,7 +444,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "SwAbstractDialogFactory fail!");
 
-                boost::scoped_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(0, aShortName));
+                std::unique_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(0, aShortName));
                 assert(pDlg && "Dialog creation failed!");
                 for(size_t i = 0; i < aFoundArr.size(); ++i)
                 {
@@ -715,7 +715,7 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
     if( !rName.isEmpty() )
     {
         const SfxFilter* pFilter = 0;
-        boost::scoped_ptr<SfxMedium> pMed(new SfxMedium( rName, StreamMode::READ, 0, 0 ));
+        std::unique_ptr<SfxMedium> pMed(new SfxMedium( rName, StreamMode::READ, 0, 0 ));
         SfxFilterMatcher aMatcher( OUString("swriter") );
         pMed->UseInteractionHandler( true );
         if (!aMatcher.GuessFilter(*pMed, &pFilter, SfxFilterFlags::NONE))

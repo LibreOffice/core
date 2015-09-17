@@ -27,7 +27,7 @@
 #include "dsntypes.hxx"
 #include "dsitems.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace dbaui
 {
@@ -65,7 +65,7 @@ namespace dbaui
         static  AuthenticationMode  getAuthentication( const OUString& _sURL );
 
     private:
-        ::boost::shared_ptr< DataSourceMetaData_Impl >  m_pImpl;
+        std::shared_ptr< DataSourceMetaData_Impl >  m_pImpl;
     };
 
     // FeatureSet

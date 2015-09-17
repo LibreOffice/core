@@ -63,9 +63,9 @@
 #include <comphelper/string.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <set>
-#include <boost/shared_ptr.hpp>
 #include <algorithm>
+#include <memory>
+#include <set>
 #include <stack>
 
 using namespace ::com::sun::star;
@@ -107,7 +107,7 @@ namespace
             return aPosition.nContent.GetIndex();
         }
     };
-    typedef boost::shared_ptr < SwXBookmarkPortion_Impl > SwXBookmarkPortion_ImplSharedPtr;
+    typedef std::shared_ptr < SwXBookmarkPortion_Impl > SwXBookmarkPortion_ImplSharedPtr;
     struct BookmarkCompareStruct
     {
         bool operator () ( const SwXBookmarkPortion_ImplSharedPtr &r1,
@@ -250,7 +250,7 @@ namespace
             return maPosition.nContent.GetIndex();
         }
     };
-    typedef boost::shared_ptr < SwAnnotationStartPortion_Impl > SwAnnotationStartPortion_ImplSharedPtr;
+    typedef std::shared_ptr < SwAnnotationStartPortion_Impl > SwAnnotationStartPortion_ImplSharedPtr;
     struct AnnotationStartCompareStruct
     {
         bool operator () ( const SwAnnotationStartPortion_ImplSharedPtr &r1,
@@ -687,7 +687,7 @@ struct SwXRedlinePortion_Impl
     }
 };
 
-typedef boost::shared_ptr < SwXRedlinePortion_Impl >
+typedef std::shared_ptr < SwXRedlinePortion_Impl >
     SwXRedlinePortion_ImplSharedPtr;
 
 struct RedlineCompareStruct

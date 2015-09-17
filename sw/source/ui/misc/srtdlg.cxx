@@ -42,7 +42,7 @@
 #include <node.hxx>
 #include <tblsel.hxx>
 #include <sfx2/request.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 static bool bCheck1 = true;
 static bool bCheck2 = false;
@@ -399,7 +399,7 @@ IMPL_LINK_NOARG_TYPED(SwSortDlg, DelimCharHdl, Button*, void)
     {
         SfxAllItemSet aSet( rSh.GetAttrPool() );
         aSet.Put( SfxInt32Item( SID_ATTR_CHAR, GetDelimChar() ) );
-        boost::scoped_ptr<SfxAbstractDialog> pMap(pFact->CreateSfxDialog( m_pDelimPB, aSet,
+        std::unique_ptr<SfxAbstractDialog> pMap(pFact->CreateSfxDialog( m_pDelimPB, aSet,
             rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
         if( RET_OK == pMap->Execute() )
         {

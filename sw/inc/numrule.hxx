@@ -141,7 +141,7 @@ private:
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
     OUString msDefaultListId;
-    boost::shared_ptr<SfxGrabBagItem> mpGrabBagItem; ///< Style InteropGrabBag.
+    std::shared_ptr<SfxGrabBagItem> mpGrabBagItem; ///< Style InteropGrabBag.
 
 public:
     /// add parameter <eDefaultNumberFormatPositionAndSpaceMode>

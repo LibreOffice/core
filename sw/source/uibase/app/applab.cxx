@@ -74,8 +74,8 @@
 
 #include <IDocumentDeviceAccess.hxx>
 
-#include <boost/scoped_ptr.hpp>
 #include <appenv.hxx>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -159,7 +159,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DB-Manager
-    boost::scoped_ptr<SwDBManager> pDBManager(new SwDBManager(0));
+    std::unique_ptr<SwDBManager> pDBManager(new SwDBManager(0));
 #endif
 
     // Read SwLabItem from Config
@@ -172,7 +172,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     SwAbstractDialogFactory* pDialogFactory = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet,
+    std::unique_ptr<AbstractSwLabDlg> pDlg(pDialogFactory->CreateSwLabDlg(0, aSet,
 #if HAVE_FEATURE_DBCONNECTIVITY
                                                                             pDBManager.get(),
 #else
@@ -283,7 +283,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             pSh->ChgPageDesc( 0, aDesc );
 
             // Insert frame
-            boost::scoped_ptr<SwFieldMgr> pFieldMgr(new SwFieldMgr);
+            std::unique_ptr<SwFieldMgr> pFieldMgr(new SwFieldMgr);
             pFieldMgr->SetEvalExpFields(false);
 
             // Prepare border template

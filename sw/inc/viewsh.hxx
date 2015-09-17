@@ -26,7 +26,7 @@
 #include <swtypes.hxx>
 #include <ring.hxx>
 #include <swrect.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <stack>
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
@@ -90,7 +90,7 @@ namespace vcl
 // Currently the Preview flag is needed for DrawPage.
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
 #define VSHELLFLAG_SHARELAYOUT          ((long)0x2)
-typedef boost::shared_ptr<SwRootFrm> SwRootFrmPtr;
+typedef std::shared_ptr<SwRootFrm> SwRootFrmPtr;
 
 class SwViewShell;
 class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>

@@ -22,7 +22,7 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace dbaccess
 {
@@ -56,7 +56,7 @@ namespace dbaccess
         ) = 0;
     };
 
-    typedef ::boost::shared_ptr< IContainerApprove >    PContainerApprove;
+    typedef std::shared_ptr< IContainerApprove >    PContainerApprove;
 
 } // namespace dbaccess
 

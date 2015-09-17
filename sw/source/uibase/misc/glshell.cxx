@@ -52,7 +52,7 @@
 
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -105,7 +105,7 @@ static bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
                 const OUString& rShortNm, const OUString& rLongNm )
 {
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
-    boost::scoped_ptr<SwTextBlocks> pBlock(::GetGlossaries()->GetGroupDoc( rGroupName ));
+    std::unique_ptr<SwTextBlocks> pBlock(::GetGlossaries()->GetGroupDoc( rGroupName ));
 
     SvxMacro aStart(aEmptyOUStr, aEmptyOUStr);
     SvxMacro aEnd(aEmptyOUStr, aEmptyOUStr);

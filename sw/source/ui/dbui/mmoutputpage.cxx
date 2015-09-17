@@ -72,7 +72,6 @@
 #include <statstr.hrc>
 #include <unomid.h>
 #include <comphelper/string.hxx>
-#include <boost/scoped_ptr.hpp>
 
 using namespace svt;
 using namespace ::com::sun::star;

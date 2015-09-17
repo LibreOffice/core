@@ -40,7 +40,7 @@
 #include <svx/nbdtmgfact.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 {
@@ -183,7 +183,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialog creation failed!");
-        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
                                                         GetView().GetWindow(), &aSet, GetShell()));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
         SFX_REQUEST_ARG( rReq, pPageItem, SfxStringItem, FN_PARAM_1, false );

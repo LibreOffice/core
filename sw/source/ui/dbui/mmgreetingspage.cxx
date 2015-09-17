@@ -29,8 +29,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <helpid.h>
 
-#include <boost/scoped_ptr.hpp>
-
 using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -45,8 +45,7 @@ namespace svx { namespace sidebar {
 #include <vcl/field.hxx>
 #include <svl/intitem.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
+#include <memory>
 
 namespace sw { namespace sidebar {
 
@@ -163,20 +162,20 @@ namespace sw { namespace sidebar {
         // - page usage - only left, only right, both, mirrored
         // item also hold the numbering type for the page style which should
         // be kept stable.
-        ::boost::scoped_ptr<SvxPageItem> mpPageItem;
+        ::std::unique_ptr<SvxPageItem> mpPageItem;
 
         // item keeping the page style's left and right margins
-        ::boost::scoped_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
+        ::std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
         // item keeping the page style's top and bottom margins
-        ::boost::scoped_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
+        ::std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
 
         // item keeping the page style's page size
-        ::boost::scoped_ptr<SvxSizeItem> mpPageSizeItem;
+        ::std::unique_ptr<SvxSizeItem> mpPageSizeItem;
         // Paper corresponding to the page style's page size
         Paper mePaper;
 
         // item keeping the page column type
-        ::boost::scoped_ptr<SfxInt16Item> mpPageColumnTypeItem;
+        ::std::unique_ptr<SfxInt16Item> mpPageColumnTypeItem;
 
         FieldUnit           meFUnit;
         SfxMapUnit          meUnit;

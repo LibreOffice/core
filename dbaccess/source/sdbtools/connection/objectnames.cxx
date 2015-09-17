@@ -35,7 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sdbtools
 {
@@ -69,7 +69,7 @@ namespace sdbtools
 
         virtual ~INameValidation() { }
     };
-    typedef ::boost::shared_ptr< INameValidation >   PNameValidation;
+    typedef std::shared_ptr< INameValidation >   PNameValidation;
 
     // PlainExistenceCheck
     class PlainExistenceCheck : public INameValidation

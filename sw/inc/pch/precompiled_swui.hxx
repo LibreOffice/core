@@ -18,7 +18,6 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

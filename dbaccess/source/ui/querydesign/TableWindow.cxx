@@ -45,8 +45,6 @@
 #include <connectivity/dbtools.hxx>
 #include "svtools/treelistentry.hxx"
 
-#include <boost/scoped_ptr.hpp>
-
 using namespace dbaui;
 using namespace ::utl;
 using namespace ::com::sun::star;

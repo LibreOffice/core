@@ -489,8 +489,8 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const OUString& rFieldName )
 
     ::comphelper::UStringMixEqual bCase(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
 
-    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_pRowList->begin();
-    ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_pRowList->end();
+    ::std::vector< std::shared_ptr<OTableRow> >::iterator aIter = m_pRowList->begin();
+    ::std::vector< std::shared_ptr<OTableRow> >::iterator aEnd = m_pRowList->end();
     sal_Int32 nCount(0);
     for(;aIter != aEnd;++aIter)
     {
@@ -724,9 +724,9 @@ void OTableEditorCtrl::CopyRows()
         pDescrWin->SaveData( pActRow->GetActFieldDescr() );
 
     // Copy selected rows to the ClipboardList
-     ::boost::shared_ptr<OTableRow>  pClipboardRow;
-     ::boost::shared_ptr<OTableRow>  pRow;
-    ::std::vector< ::boost::shared_ptr<OTableRow> > vClipboardList;
+     std::shared_ptr<OTableRow>  pClipboardRow;
+     std::shared_ptr<OTableRow>  pRow;
+    ::std::vector< std::shared_ptr<OTableRow> > vClipboardList;
     vClipboardList.reserve(GetSelectRowCount());
 
     for( long nIndex=FirstSelectedRow(); nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()); nIndex=NextSelectedRow() )
@@ -776,7 +776,7 @@ OUString OTableEditorCtrl::GenerateName( const OUString& rName )
 void OTableEditorCtrl::InsertRows( long nRow )
 {
 
-    ::std::vector<  ::boost::shared_ptr<OTableRow> > vInsertedUndoRedoRows; // need for undo/redo handling
+    ::std::vector<  std::shared_ptr<OTableRow> > vInsertedUndoRedoRows; // need for undo/redo handling
     // get rows from clipboard
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
     if(aTransferData.HasFormat(SotClipboardFormatId::SBA_TABED))
@@ -789,7 +789,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
             aStreamRef->ResetError();
             long nInsertRow = nRow;
             OUString aFieldName;
-             ::boost::shared_ptr<OTableRow>  pRow;
+             std::shared_ptr<OTableRow>  pRow;
             sal_Int32 nSize = 0;
             (*aStreamRef).ReadInt32( nSize );
             vInsertedUndoRedoRows.reserve(nSize);
@@ -806,7 +806,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
                 pRow->GetActFieldDescr()->SetName( aFieldName );
                 pRow->SetPos(nInsertRow);
                 m_pRowList->insert( m_pRowList->begin()+nInsertRow,pRow );
-                vInsertedUndoRedoRows.push_back(::boost::shared_ptr<OTableRow>(new OTableRow(*pRow)));
+                vInsertedUndoRedoRows.push_back(std::shared_ptr<OTableRow>(new OTableRow(*pRow)));
                 nInsertRow++;
             }
         }
@@ -841,7 +841,7 @@ void OTableEditorCtrl::DeleteRows()
         RowRemoved( nIndex, 1 );
 
         // Insert the empty row at the end
-        m_pRowList->push_back( ::boost::shared_ptr<OTableRow>(new OTableRow()));
+        m_pRowList->push_back( std::shared_ptr<OTableRow>(new OTableRow()));
         RowInserted( GetRowCount()-1, 1, true );
 
         nIndex = FirstSelectedRow();
@@ -870,7 +870,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     GetUndoManager().AddUndoAction( new OTableEditorInsNewUndoAct(this, nRow, nInsertRows) );
     // Insert the number of selected rows
     for( long i=nRow; i<(nRow+nInsertRows); i++ )
-        m_pRowList->insert( m_pRowList->begin()+i ,::boost::shared_ptr<OTableRow>(new OTableRow()));
+        m_pRowList->insert( m_pRowList->begin()+i ,std::shared_ptr<OTableRow>(new OTableRow()));
     RowInserted( nRow, nInsertRows, true );
 
     GetView()->getController().setModified( sal_True );
@@ -1101,14 +1101,14 @@ sal_uInt32 OTableEditorCtrl::GetTotalCellWidth(long nRow, sal_uInt16 nColId)
 
 OFieldDescription* OTableEditorCtrl::GetFieldDescr( long nRow )
 {
-    std::vector< ::boost::shared_ptr<OTableRow> >::size_type nListCount(
+    std::vector< std::shared_ptr<OTableRow> >::size_type nListCount(
         m_pRowList->size());
     if( (nRow<0) || (sal::static_int_cast< unsigned long >(nRow)>=nListCount) )
     {
         OSL_FAIL("(nRow<0) || (nRow>=nListCount)");
         return NULL;
     }
-     ::boost::shared_ptr<OTableRow>  pRow = (*m_pRowList)[ nRow ];
+     std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[ nRow ];
     if( !pRow )
         return NULL;
     return pRow->GetActFieldDescr();
@@ -1160,7 +1160,7 @@ bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
             return false;
 
         // If one of the selected rows is empty, Copy is not possible
-         ::boost::shared_ptr<OTableRow>  pRow;
+         std::shared_ptr<OTableRow>  pRow;
         long nIndex = FirstSelectedRow();
         while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
         {
@@ -1319,7 +1319,7 @@ bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
     // - No Memo or Image entries
     // - DROP is not permitted (see above) and the column is not Required (not null flag is not set).
     long nIndex = FirstSelectedRow();
-     ::boost::shared_ptr<OTableRow>  pRow;
+     std::shared_ptr<OTableRow>  pRow;
     while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
     {
         pRow = (*m_pRowList)[nIndex];
@@ -1478,7 +1478,7 @@ IMPL_LINK_NOARG_TYPED( OTableEditorCtrl, DelayedPaste, void*, void )
     {   // Insertion is not allowed, only appending, so test if there are full cells after the PastePosition
 
         sal_Int32 nFreeFromPos; // from here on there are only empty rows
-        ::std::vector< ::boost::shared_ptr<OTableRow> >::reverse_iterator aIter = m_pRowList->rbegin();
+        ::std::vector< std::shared_ptr<OTableRow> >::reverse_iterator aIter = m_pRowList->rbegin();
         for(nFreeFromPos = m_pRowList->size();
             aIter != m_pRowList->rend() && (!(*aIter) || !(*aIter)->GetActFieldDescr() || (*aIter)->GetActFieldDescr()->GetName().isEmpty());
             --nFreeFromPos, ++aIter)
@@ -1543,8 +1543,8 @@ void OTableEditorCtrl::SetPrimaryKey( bool bSet )
     MultiSelection aDeletedPrimKeys;
     aDeletedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
 
-    ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
+    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
+    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
     for(sal_Int32 nRow = 0;aIter != aEnd;++aIter,++nRow)
     {
         OFieldDescription* pFieldDescr = (*aIter)->GetActFieldDescr();
@@ -1563,7 +1563,7 @@ void OTableEditorCtrl::SetPrimaryKey( bool bSet )
         while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
         {
             // Set the key
-             ::boost::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nIndex];
+             std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nIndex];
             OFieldDescription* pFieldDescr = pRow->GetActFieldDescr();
             if(pFieldDescr)
                 AdjustFieldDescription(pFieldDescr,aInsertedPrimKeys,nIndex,false,true);
@@ -1586,8 +1586,8 @@ bool OTableEditorCtrl::IsPrimaryKey()
 {
     // Are all marked fields part of the Primary Key ?
     long nPrimaryKeys = 0;
-    ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
+    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
+    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
     for(sal_Int32 nRow=0;aIter != aEnd;++aIter,++nRow)
     {
         if( IsRowSelected(nRow) && !(*aIter)->IsPrimaryKey() )
@@ -1612,7 +1612,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
     if ( nRow < 0 || nRow > static_cast<long>(m_pRowList->size()) )
         return;
     // Show the new description
-     ::boost::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nRow];
+     std::shared_ptr<OTableRow>  pRow = (*m_pRowList)[nRow];
     pRow->SetFieldType( _pType, true );
     if ( _pType.get() )
     {

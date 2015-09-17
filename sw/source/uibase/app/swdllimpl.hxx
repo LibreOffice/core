@@ -13,7 +13,7 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sw { class Filters; }
 
@@ -30,7 +30,7 @@ public:
     sw::Filters & getFilters();
 
 private:
-    boost::scoped_ptr< sw::Filters > filters_;
+    std::unique_ptr< sw::Filters > filters_;
 };
 
 #endif

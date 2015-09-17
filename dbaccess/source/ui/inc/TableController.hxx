@@ -39,7 +39,7 @@ namespace dbaui
     {
     private:
         OModuleClient                                   m_aModuleClient;
-        ::std::vector< ::boost::shared_ptr<OTableRow> > m_vRowList;
+        ::std::vector< std::shared_ptr<OTableRow> > m_vRowList;
         OTypeInfoMap                                    m_aTypeInfo;
         ::std::vector<OTypeInfoMap::iterator>           m_aTypeInfoIndex;
 
@@ -102,7 +102,7 @@ namespace dbaui
 
         virtual void impl_onModifyChanged() SAL_OVERRIDE;
 
-        inline ::std::vector< ::boost::shared_ptr<OTableRow> >& getRows() { return m_vRowList; }
+        inline ::std::vector< std::shared_ptr<OTableRow> >& getRows() { return m_vRowList; }
 
         /// returns the position of the first empty row
         sal_Int32                           getFirstEmptyRowPosition();

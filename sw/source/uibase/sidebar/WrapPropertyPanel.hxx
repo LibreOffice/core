@@ -26,7 +26,6 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <vcl/lstbox.hxx>
-#include <boost/scoped_ptr.hpp>
 
 namespace sw { namespace sidebar {
 

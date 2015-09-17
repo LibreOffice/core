@@ -30,7 +30,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace dbaccess
 {
@@ -179,7 +179,7 @@ void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyVal
 
 IMPL_LINK_TYPED( OInterceptor, OnDispatch, void*, _pDispatcher, void )
 {
-    boost::scoped_ptr<DispatchHelper> pHelper( static_cast< DispatchHelper* >( _pDispatcher ) );
+    std::unique_ptr<DispatchHelper> pHelper( static_cast< DispatchHelper* >( _pDispatcher ) );
     try
     {
         if ( m_pContentHolder && m_pContentHolder->prepareClose() && m_xSlaveDispatchProvider.is() )

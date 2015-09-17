@@ -125,7 +125,7 @@
 
 #include <ndtxt.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
@@ -693,7 +693,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            boost::scoped_ptr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg(0));
+            std::unique_ptr<AbstractSwInsertAbstractDlg> pDlg(pFact->CreateSwInsertAbstractDlg(0));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             if(RET_OK == pDlg->Execute())
             {
@@ -1077,7 +1077,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 //search for the view that created the call
                                 if(pViewShell->GetObjectShell() == this && pViewShell->GetDispatcher())
                                 {
-                                    boost::scoped_ptr<SfxFrameItem> pFrameItem(new SfxFrameItem( SID_DOCFRAME,
+                                    std::unique_ptr<SfxFrameItem> pFrameItem(new SfxFrameItem( SID_DOCFRAME,
                                                         pViewShell->GetViewFrame() ));
                                     SfxDispatcher* pDispatch = pViewShell->GetDispatcher();
                                     pDispatch->Execute(
@@ -1423,8 +1423,8 @@ sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
     if ( bImport )
     {
         SwRead pRead =  ReadXML;
-        boost::scoped_ptr<SwReader> pReader;
-        boost::scoped_ptr<SwPaM> pPam;
+        std::unique_ptr<SwReader> pReader;
+        std::unique_ptr<SwPaM> pPam;
         // the SW3IO - Reader need the pam/wrtshell, because only then he
         // insert the styles!
         if( bUnoCall )

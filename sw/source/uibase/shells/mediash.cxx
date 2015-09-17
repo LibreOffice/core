@@ -67,7 +67,7 @@
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include "swabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell)
 
@@ -118,7 +118,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
 
                     if( pItem )
                     {
-                        boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( pSdrView->GetMarkedObjectList() ));
+                        std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList( pSdrView->GetMarkedObjectList() ));
 
                         if( 1 == pMarkList->GetMarkCount() )
                         {
@@ -161,7 +161,7 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
             if( pView )
             {
                 bool bDisable = true;
-                boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
+                std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
 
                 if( 1 == pMarkList->GetMarkCount() )
                 {

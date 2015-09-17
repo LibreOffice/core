@@ -61,8 +61,6 @@
 #include <helpid.h>
 #include <unomid.h>
 
-#include <boost/scoped_ptr.hpp>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

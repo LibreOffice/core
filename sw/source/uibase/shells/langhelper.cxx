@@ -52,7 +52,7 @@
 #include <vcl/msgbox.hxx>
 
 #include <langhelper.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -126,7 +126,7 @@ namespace SwLangHelper
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if (pFact)
             {
-                boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( rView.GetWindow(), SID_LANGUAGE_OPTIONS ));
+                std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( rView.GetWindow(), SID_LANGUAGE_OPTIONS ));
                 pDlg->Execute();
             }
         }

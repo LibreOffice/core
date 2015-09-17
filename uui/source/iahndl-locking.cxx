@@ -43,7 +43,7 @@
 
 #include "iahndl.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define UUI_DOC_LOAD_LOCK       0
 #define UUI_DOC_OWN_LOAD_LOCK   1
@@ -74,7 +74,7 @@ handleLockedDocumentRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if (!xManager.get())
             return;
 
@@ -156,7 +156,7 @@ handleChangedByOthersRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if (!xManager.get())
             return;
 
@@ -190,7 +190,7 @@ handleLockFileIgnoreRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if (!xManager.get())
             return;
 

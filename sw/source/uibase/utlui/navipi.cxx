@@ -54,7 +54,7 @@
 #include "access.hrc"
 
 #include <unomid.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -367,7 +367,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
                 HID_NAVI_DRAG_LINK,
                 HID_NAVI_DRAG_COPY,
             };
-            boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
+            std::unique_ptr<PopupMenu> pMenu(new PopupMenu);
             for (sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); i++)
             {
                 pMenu->InsertItem( i + 1, aContextArr[i] );
@@ -387,7 +387,7 @@ IMPL_LINK_TYPED( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox, void )
         break;
         case FN_OUTLINE_LEVEL:
         {
-            boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
+            std::unique_ptr<PopupMenu> pMenu(new PopupMenu);
             for (sal_uInt16 i = 101; i <= 100 + MAXLEVEL; i++)
             {
                 pMenu->InsertItem( i, OUString::number(i - 100) );

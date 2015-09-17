@@ -146,7 +146,7 @@
 #include <vcl/GraphicNativeMetadata.hxx>
 #include <vcl/settings.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 const char sStatusDelim[] = " : ";
 const char sStatusComma[] = " , ";
@@ -298,7 +298,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     SwDocShell* pDocShell = GetDocShell();
     const sal_uInt16 nHtmlMode = ::GetHtmlMode(pDocShell);
     // when in HTML mode insert only as a link
-    boost::scoped_ptr<FileDialogHelper> pFileDlg(new FileDialogHelper(
+    std::unique_ptr<FileDialogHelper> pFileDlg(new FileDialogHelper(
         ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
         SFXWB_GRAPHIC ));
     pFileDlg->SetTitle(SW_RESSTR(STR_INSERT_GRAPHIC ));
@@ -539,7 +539,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialog creation failed!");
-            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclSwViewDialog(*this));
+            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclSwViewDialog(*this));
             OSL_ENSURE(pDlg, "Dialog creation failed!");
             pDlg->Execute();
             break;
@@ -1673,7 +1673,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             if ( ( GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ) || !GetDocShell()->IsInPlaceActive() )
             {
                 const SfxItemSet *pSet = 0;
-                boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
+                std::unique_ptr<AbstractSvxZoomDialog> pDlg;
                 if ( pArgs )
                     pSet = pArgs;
                 else
@@ -1906,7 +1906,7 @@ void SwView::EditLinkDlg()
 {
     bool bWeb = 0 != PTR_CAST(SwWebView, this);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    boost::scoped_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb ));
+    std::unique_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager(), bWeb ));
     if ( pDlg )
     {
         pDlg->Execute();
@@ -2372,7 +2372,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     if ( pFact )
                     {
-                        boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( NULL, SID_OPTIONS_DATABASES ));
+                        std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( NULL, SID_OPTIONS_DATABASES ));
                         pDlg->Execute();
                     }
                 }

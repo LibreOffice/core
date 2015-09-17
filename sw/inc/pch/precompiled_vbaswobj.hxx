@@ -15,7 +15,6 @@
 */
 
 #include <basic/sbuno.hxx>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

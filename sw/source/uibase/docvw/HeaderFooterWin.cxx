@@ -48,7 +48,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define TEXT_PADDING 5
 #define BOX_DISTANCE 10
@@ -362,7 +362,7 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
 
     // TODO Ghost it all if needed

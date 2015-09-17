@@ -91,7 +91,7 @@
 
 // text grid
 #include <tgrditem.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -181,7 +181,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         {
             sal_uInt16 nFontWhich = aFontWhich[i];
             sal_uInt16 nFontId = aFontIds[i];
-            boost::scoped_ptr<SvxFontItem> pFontItem;
+            std::unique_ptr<SvxFontItem> pFontItem;
             const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem&>(m_pDoc->GetDefault( aLangTypes[i] ));
             LanguageType eLanguage = rLang.GetLanguage();
             if(!pStdFont->IsFontDefault(nFontId))

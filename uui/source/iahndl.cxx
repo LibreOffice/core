@@ -86,7 +86,7 @@
 #include "iahndl.hxx"
 #include "nameclashdlg.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -1036,7 +1036,7 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog( vcl::Window *p
                                                                   OUString & rProposedNewName,
                                                                   bool bAllowOverwrite )
 {
-    boost::scoped_ptr< ResMgr > xManager( ResMgr::CreateResMgr( "uui" ) );
+    std::unique_ptr< ResMgr > xManager( ResMgr::CreateResMgr( "uui" ) );
     if ( !xManager.get() )
         return ABORT;
 
@@ -1142,7 +1142,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
             OUString aErrorString;
             ErrorHandler::GetErrorString( nErrorCode, aErrorString );
 
-            boost::scoped_ptr< ResMgr > xManager(
+            std::unique_ptr< ResMgr > xManager(
                 ResMgr::CreateResMgr( "uui" ) );
             OUString aTitle( utl::ConfigManager::getProductName() );
 
@@ -1184,7 +1184,7 @@ UUIInteractionHelper::handleMacroConfirmRequest(
 
     bool bApprove = false;
 
-    boost::scoped_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( "uui" ) );
+    std::unique_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( "uui" ) );
     if ( pResMgr.get() )
     {
         bool bShowSignatures = aSignInfo.getLength() > 0;
@@ -1246,7 +1246,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     OUString aMessage;
     {
         SolarMutexGuard aGuard;
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if (!xManager.get())
             return;
 

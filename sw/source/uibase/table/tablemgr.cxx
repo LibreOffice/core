@@ -44,7 +44,7 @@
 #include "docsh.hxx"
 #include "unotbl.hxx"
 #include "unochart.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -55,7 +55,7 @@ void SwTableFUNC::ColWidthDlg( vcl::Window *pParent )
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwTableWidthDlg(pParent, *this));
+    std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateSwTableWidthDlg(pParent, *this));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlg->Execute();
 }

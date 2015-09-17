@@ -2070,7 +2070,7 @@ SwXTextField::getAnchor() throw (uno::RuntimeException, std::exception)
     if (!pTextField)
         throw uno::RuntimeException();
 
-    boost::shared_ptr< SwPaM > pPamForTextField;
+    std::shared_ptr< SwPaM > pPamForTextField;
     SwTextField::GetPamForTextField(*pTextField, pPamForTextField);
     if (pPamForTextField.get() == NULL)
         return 0;

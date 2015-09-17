@@ -44,7 +44,6 @@
 #include "browserids.hxx"
 #include <unotools/pathoptions.hxx>
 #include "IApplicationController.hxx"
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;

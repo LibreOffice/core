@@ -26,7 +26,7 @@
 #include <osl/diagnose.h>
 
 #include <cassert>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace dbaui
 {
@@ -69,7 +69,7 @@ namespace dbaui
                 {
                     return false;
                 }
-                boost::scoped_ptr< ITEMTYPE > pClone( pCloneItem);
+                std::unique_ptr< ITEMTYPE > pClone( pCloneItem);
                 assert(pClone.get());
                 pClone->SetValue( aValue );
                 _rSet.Put( *pClone );

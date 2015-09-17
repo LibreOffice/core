@@ -44,8 +44,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
-#include <boost/bind.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <algorithm>
 #include <functional>
 

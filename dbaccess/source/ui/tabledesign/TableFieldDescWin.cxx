@@ -26,7 +26,6 @@
 #include <vcl/settings.hxx>
 #include "dbaccess_helpid.hrc"
 #include "moduledbu.hxx"
-#include <boost/scoped_ptr.hpp>
 
 #define STANDARD_MARGIN                  6
 #define DETAILS_HEADER_HEIGHT           25

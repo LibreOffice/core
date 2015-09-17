@@ -29,7 +29,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace dbaui
 {
@@ -40,7 +40,7 @@ class OTableTreeListBox : public OMarkableTreeListBox
 protected:
     css::uno::Reference< css::sdbc::XConnection >
                     m_xConnection;      // the connection we're working for, set in implOnNewConnection, called by UpdateTableList
-    boost::scoped_ptr< ImageProvider >
+    std::unique_ptr< ImageProvider >
                     m_xImageProvider;   // provider for our images
     bool            m_bVirtualRoot;     // should the first entry be visible
     bool            m_bNoEmptyFolders;  // should empty catalogs/schematas be prevented from being displayed?

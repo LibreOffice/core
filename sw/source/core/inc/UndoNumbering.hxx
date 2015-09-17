@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <undobj.hxx>
-#include <boost/shared_ptr.hpp>
 #include <rtl/ustring.hxx>
 #include <numrule.hxx>
 

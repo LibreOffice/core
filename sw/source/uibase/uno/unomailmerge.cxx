@@ -71,7 +71,7 @@
 #include <unomid.h>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -678,7 +678,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     SwMergeDescriptor aMergeDesc( nMergeType, rSh, aDescriptor );
 
-    boost::scoped_ptr< SwMailMergeConfigItem > pMMConfigItem;
+    std::unique_ptr< SwMailMergeConfigItem > pMMConfigItem;
     uno::Reference< mail::XMailService > xInService;
     switch (nCurOutputType)
     {

@@ -69,7 +69,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/builderfactory.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::sfx2;
@@ -2768,7 +2768,7 @@ void SwFrmURLPage::Reset( const SfxItemSet *rSet )
     const SfxPoolItem* pItem;
     if ( SfxItemState::SET == rSet->GetItemState( SID_DOCFRAME, true, &pItem))
     {
-        boost::scoped_ptr<TargetList> pList(new TargetList);
+        std::unique_ptr<TargetList> pList(new TargetList);
         static_cast<const SfxFrameItem*>(pItem)->GetFrame()->GetTargetList(*pList);
         if( !pList->empty() )
         {
@@ -2805,7 +2805,7 @@ bool SwFrmURLPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bModified = false;
     const SwFormatURL* pOldURL = static_cast<const SwFormatURL*>(GetOldItem(*rSet, RES_URL));
-    boost::scoped_ptr<SwFormatURL> pFormatURL;
+    std::unique_ptr<SwFormatURL> pFormatURL;
     if(pOldURL)
         pFormatURL.reset(static_cast<SwFormatURL*>(pOldURL->Clone()));
     else

@@ -26,9 +26,8 @@
 #include <sfx2/Metadatable.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 
+#include <memory>
 #include <vector>
 
 namespace com { namespace sun { namespace star {
@@ -91,7 +90,7 @@ private:
     friend class SwTextMeta; ///< needs SetTextAttr, DoCopy
     friend class ::sw::Meta; ///< needs m_pTextAttr
 
-    ::boost::shared_ptr< ::sw::Meta > m_pMeta;
+    std::shared_ptr< ::sw::Meta > m_pMeta;
     SwTextMeta * m_pTextAttr;
 
     SwTextMeta * GetTextAttr() { return m_pTextAttr; }
@@ -105,7 +104,7 @@ private:
 
 public:
     /// takes ownership
-    explicit SwFormatMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
+    explicit SwFormatMeta( std::shared_ptr< ::sw::Meta > const & i_pMeta,
                         const sal_uInt16 i_nWhich );
     virtual ~SwFormatMeta();
 
@@ -198,12 +197,12 @@ class MetaFieldManager
     : private ::boost::noncopyable
 {
 private:
-    typedef ::std::vector< ::boost::weak_ptr<MetaField> > MetaFieldList_t;
+    typedef ::std::vector< std::weak_ptr<MetaField> > MetaFieldList_t;
     MetaFieldList_t m_MetaFields;
 
 public:
     MetaFieldManager();
-    ::boost::shared_ptr<MetaField> makeMetaField(
+    std::shared_ptr<MetaField> makeMetaField(
                 SwFormatMeta * const i_pFormat = 0,
                 const sal_uInt32 nNumberFormat = SAL_MAX_UINT32,
                 const bool bIsFixedLanguage = false );

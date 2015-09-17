@@ -74,7 +74,7 @@ namespace dbaui
         css::uno::Reference< css::container::XNameAccess>     m_xTables;      ///< container
         SharedConnection                                      m_xConnection;  ///< dest conn
 
-        ::boost::shared_ptr<IUpdateHelper>                    m_pUpdateHelper;
+        std::shared_ptr<IUpdateHelper>                    m_pUpdateHelper;
         css::uno::Reference< css::sdbc::XResultSet >          m_xResultSet;
         css::uno::Reference< css::util::XNumberFormatter >    m_xFormatter;   ///< a number formatter working with the connection's NumberFormatsSupplier
         css::uno::Reference< css::uno::XComponentContext>     m_xContext;

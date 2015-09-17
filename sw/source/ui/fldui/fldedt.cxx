@@ -46,7 +46,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <swuiexp.hxx>
 
 void SwFieldEditDlg::EnsureSelection(SwField *pCurField, SwFieldMgr &rMgr)
@@ -329,7 +329,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldEditDlg, AddressHdl, Button*, void)
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aSet,
+    std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aSet,
         pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
         RC_DLG_ADDR ));
     OSL_ENSURE(pDlg, "Dialog creation failed!");

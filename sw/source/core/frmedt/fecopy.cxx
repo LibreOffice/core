@@ -664,8 +664,8 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 // Paste for  the interal clipboard. Copy the content of the clipboard
 // in the document
 namespace {
-    typedef boost::shared_ptr<SwPaM> PaMPtr;
-    typedef boost::shared_ptr<SwPosition> PositionPtr;
+    typedef std::shared_ptr<SwPaM> PaMPtr;
+    typedef std::shared_ptr<SwPosition> PositionPtr;
     typedef std::pair< PaMPtr, PositionPtr > Insertion;
 
     bool PamHasSelection(const SwPaM& rPaM)

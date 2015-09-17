@@ -45,7 +45,7 @@
 #include <redline.hxx>
 #include <fmtfsize.hxx>
 #include <list>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
                     SwTable& rDstTable, SwTableBox* pDstBox,
@@ -517,7 +517,7 @@ static void lcl_CpyBox( const SwTable& rCpyTable, const SwTableBox* pCpyBox,
 
     // First copy the new content and then delete the old one.
     // Do not create empty Sections, otherwise they will be deleted!
-    boost::scoped_ptr< SwNodeRange > pRg( pCpyBox ?
+    std::unique_ptr< SwNodeRange > pRg( pCpyBox ?
         new SwNodeRange ( *pCpyBox->GetSttNd(), 1,
         *pCpyBox->GetSttNd()->EndOfSectionNode() ) : 0 );
 

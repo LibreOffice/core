@@ -274,7 +274,7 @@ namespace
 {
     class RelationLoader : public ::osl::Thread
     {
-        typedef std::map<OUString, ::boost::shared_ptr<OTableWindowData>, ::comphelper::UStringMixLess> TTableDataHelper;
+        typedef std::map<OUString, ::std::shared_ptr<OTableWindowData>, ::comphelper::UStringMixLess> TTableDataHelper;
         TTableDataHelper                    m_aTableData;
         TTableConnectionData                m_vTableConnectionData;
         const Sequence< OUString>    m_aTableList;
@@ -356,7 +356,7 @@ namespace
         TTableDataHelper::iterator aFind = m_aTableData.find(sSourceName);
         if ( aFind == m_aTableData.end() )
         {
-            aFind = m_aTableData.insert(TTableDataHelper::value_type(sSourceName,::boost::shared_ptr<OTableWindowData>(new OTableWindowData(xTableProp,sSourceName, sSourceName)))).first;
+            aFind = m_aTableData.insert(TTableDataHelper::value_type(sSourceName,::std::shared_ptr<OTableWindowData>(new OTableWindowData(xTableProp,sSourceName, sSourceName)))).first;
             aFind->second->ShowAll(false);
         }
         TTableWindowData::value_type pReferencingTable = aFind->second;
@@ -389,7 +389,7 @@ namespace
                         if ( m_xTables->hasByName(sReferencedTable) )
                         {
                             Reference<XPropertySet>  xReferencedTable(m_xTables->getByName(sReferencedTable),UNO_QUERY);
-                            aRefFind = m_aTableData.insert(TTableDataHelper::value_type(sReferencedTable,::boost::shared_ptr<OTableWindowData>(new OTableWindowData(xReferencedTable,sReferencedTable, sReferencedTable)))).first;
+                            aRefFind = m_aTableData.insert(TTableDataHelper::value_type(sReferencedTable,::std::shared_ptr<OTableWindowData>(new OTableWindowData(xReferencedTable,sReferencedTable, sReferencedTable)))).first;
                             aRefFind->second->ShowAll(false);
                         }
                         else

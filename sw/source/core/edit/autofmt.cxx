@@ -67,7 +67,7 @@
 #include <comcore.hrc>
 #include <numrule.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -100,7 +100,7 @@ class SwAutoFormat
     SwTextNode* m_pCurTextNd;     // the current TextNode
     SwTextFrm* m_pCurTextFrm;     // frame of the current TextNode
     sal_uLong m_nEndNdIdx;      // for the percentage-display
-    mutable boost::scoped_ptr<CharClass> m_pCharClass; // Character classification
+    mutable std::unique_ptr<CharClass> m_pCharClass; // Character classification
     mutable LanguageType m_eCharClassLang;
 
     sal_uInt16 m_nLastHeadLvl, m_nLastCalcHeadLvl;
@@ -2515,7 +2515,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
 
 void SwEditShell::AutoFormat( const SvxSwAutoFormatFlags* pAFlags )
 {
-    boost::scoped_ptr<SwWait> pWait;
+    std::unique_ptr<SwWait> pWait;
 
     SET_CURR_SHELL( this );
     StartAllAction();

@@ -41,7 +41,7 @@
 #include <swerror.h>
 #include <globals.hrc>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -245,7 +245,7 @@ bool    SwGlossaries::RenameGroupDoc(
         m_GlosArr.push_back(rNewGroup);
     }
 
-    boost::scoped_ptr<SwTextBlocks> pNewBlock(new SwTextBlocks( sNewFileURL ));
+    std::unique_ptr<SwTextBlocks> pNewBlock(new SwTextBlocks( sNewFileURL ));
     pNewBlock->SetName(rNewTitle);
 
     return true;
@@ -610,7 +610,7 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
 {
     //standard must be created
     bool bCreate = ( rCompleteGroupName == GetDefName() );
-    boost::scoped_ptr< SwTextBlocks > pGlosGroup( GetGroupDoc( rCompleteGroupName, bCreate ) );
+    std::unique_ptr< SwTextBlocks > pGlosGroup( GetGroupDoc( rCompleteGroupName, bCreate ) );
 
     if ( pGlosGroup.get() && !pGlosGroup->GetError() )
     {

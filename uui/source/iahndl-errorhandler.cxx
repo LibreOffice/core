@@ -33,7 +33,7 @@
 #include "getcontinuations.hxx"
 
 #include "iahndl.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -169,7 +169,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             SOURCE_UUI;
 
         SolarMutexGuard aGuard;
-        boost::scoped_ptr< ResMgr > xManager;
+        std::unique_ptr< ResMgr > xManager;
         xManager.reset(ResMgr::CreateResMgr(aManager[eSource]));
         if (!xManager.get())
             return;

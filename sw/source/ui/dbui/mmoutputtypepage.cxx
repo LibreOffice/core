@@ -23,7 +23,6 @@
 #include <vcl/msgbox.hxx>
 #include <dbui.hrc>
 #include <swtypes.hxx>
-#include <boost/scoped_ptr.hpp>
 
 SwMailMergeOutputTypePage::SwMailMergeOutputTypePage(SwMailMergeWizard* pParent)
     : svt::OWizardPage(pParent, "MMOutputTypePage",

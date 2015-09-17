@@ -35,7 +35,7 @@
 
 #include <unomid.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define PSH         (&pView->GetWrtShell())
 
@@ -72,7 +72,7 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 bool SwHyphWrapper::SpellContinue()
 {
     // for automatic separation, make actions visible only at the end
-    boost::scoped_ptr<SwWait> pWait;
+    std::unique_ptr<SwWait> pWait;
     if( bAutomatic )
     {
         PSH->StartAllAction();

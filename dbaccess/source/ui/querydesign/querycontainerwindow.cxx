@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace dbaui
 {
@@ -61,7 +61,7 @@ namespace dbaui
     void OQueryContainerWindow::dispose()
     {
         {
-            boost::scoped_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
+            std::unique_ptr<OQueryViewSwitch> aTemp(m_pViewSwitch);
             m_pViewSwitch = NULL;
         }
         if ( m_pBeamer )

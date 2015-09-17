@@ -22,16 +22,16 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <svtools/transfer.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace dbaui
 {
     class OTableRow;
     class OTableRowExchange : public TransferableHelper
     {
-        ::std::vector< ::boost::shared_ptr<OTableRow> > m_vTableRow;
+        ::std::vector< std::shared_ptr<OTableRow> > m_vTableRow;
     public:
-        OTableRowExchange(const ::std::vector< ::boost::shared_ptr<OTableRow> >& _rvTableRow);
+        OTableRowExchange(const ::std::vector< std::shared_ptr<OTableRow> >& _rvTableRow);
     protected:
         virtual void        AddSupportedFormats() SAL_OVERRIDE;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;

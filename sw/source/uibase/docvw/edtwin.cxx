@@ -153,7 +153,6 @@
 
 #include <unotools/syslocaleoptions.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 using namespace sw::mark;
 using namespace ::com::sun::star;
@@ -5179,7 +5178,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
                     if ( m_rView.GetDocShell()->IsReadOnly() )
                     {
-                        boost::scoped_ptr<SwReadOnlyPopup> pROPopup(new SwReadOnlyPopup( aDocPos, m_rView ));
+                        std::unique_ptr<SwReadOnlyPopup> pROPopup(new SwReadOnlyPopup( aDocPos, m_rView ));
 
                         ui::ContextMenuExecuteEvent aEvent;
                         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );

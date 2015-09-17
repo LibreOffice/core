@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <ooo/vba/word/WdBuiltInProperty.hpp>
 #include <ooo/vba/office/MsoDocProperties.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "wordvbahelper.hxx"
 #include "fesh.hxx"
 #include "docsh.hxx"
@@ -357,9 +357,9 @@ class DocPropInfo
 public:
     OUString msMSODesc;
     OUString msOOOPropName;
-    boost::shared_ptr< PropertGetSetHelper > mpPropGetSetHelper;
+    std::shared_ptr< PropertGetSetHelper > mpPropGetSetHelper;
 
-    static DocPropInfo createDocPropInfo( const OUString& sDesc, const OUString& sPropName, boost::shared_ptr< PropertGetSetHelper >& rHelper )
+    static DocPropInfo createDocPropInfo( const OUString& sDesc, const OUString& sPropName, std::shared_ptr< PropertGetSetHelper >& rHelper )
     {
         DocPropInfo aItem;
         aItem.msMSODesc = sDesc;
@@ -368,7 +368,7 @@ public:
         return aItem;
     }
 
-    static DocPropInfo createDocPropInfo( const sal_Char* sDesc, const sal_Char* sPropName, boost::shared_ptr< PropertGetSetHelper >& rHelper )
+    static DocPropInfo createDocPropInfo( const sal_Char* sDesc, const sal_Char* sPropName, std::shared_ptr< PropertGetSetHelper >& rHelper )
     {
         return createDocPropInfo( OUString::createFromAscii( sDesc ), OUString::createFromAscii( sPropName ), rHelper );
     }
@@ -401,8 +401,8 @@ class BuiltInIndexHelper
 public:
     explicit BuiltInIndexHelper( const uno::Reference< frame::XModel >& xModel )
     {
-        boost::shared_ptr< PropertGetSetHelper > aStandardHelper( new BuiltinPropertyGetSetHelper( xModel ) );
-        boost::shared_ptr< PropertGetSetHelper > aUsingStatsHelper( new StatisticPropertyGetSetHelper( xModel ) );
+        std::shared_ptr< PropertGetSetHelper > aStandardHelper( new BuiltinPropertyGetSetHelper( xModel ) );
+        std::shared_ptr< PropertGetSetHelper > aUsingStatsHelper( new StatisticPropertyGetSetHelper( xModel ) );
 
         m_docPropInfoMap[ word::WdBuiltInProperty::wdPropertyTitle ] = DocPropInfo::createDocPropInfo( "Title", "Title", aStandardHelper );
         m_docPropInfoMap[ word::WdBuiltInProperty::wdPropertySubject ] = DocPropInfo::createDocPropInfo( "Subject", "Subject", aStandardHelper );
@@ -790,7 +790,7 @@ class CustomPropertiesImpl : public PropertiesImpl_BASE
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< frame::XModel > m_xModel;
     uno::Reference< beans::XPropertySet > mxUserDefinedProp;
-    boost::shared_ptr< PropertGetSetHelper > mpPropGetSetHelper;
+    std::shared_ptr< PropertGetSetHelper > mpPropGetSetHelper;
 public:
     CustomPropertiesImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : m_xParent( xParent ), m_xContext( xContext ), m_xModel( xModel )
     {

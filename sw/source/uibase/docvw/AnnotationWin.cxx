@@ -51,7 +51,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <SwUndoField.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sw { namespace annotation {
 
@@ -126,7 +126,7 @@ void SwAnnotationWin::UpdateData()
     {
         IDocumentUndoRedo & rUndoRedo(
             DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
-        boost::scoped_ptr<SwField> pOldField;
+        std::unique_ptr<SwField> pOldField;
         if (rUndoRedo.DoesUndo())
         {
             pOldField.reset(mpField->Copy());
@@ -268,7 +268,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     Engine()->SetModifyHdl( Link<LinkParamNone*,void>() );
     IDocumentUndoRedo & rUndoRedo(
         DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo());
-    boost::scoped_ptr<SwField> pOldField;
+    std::unique_ptr<SwField> pOldField;
     if (rUndoRedo.DoesUndo())
     {
         pOldField.reset(mpField->Copy());

@@ -21,8 +21,8 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_PROPERTYSTORAGE_HXX
 
 #include <com/sun/star/uno/Any.hxx>
-#include <boost/shared_ptr.hpp>
 #include <map>
+#include <memory>
 
 class SfxItemSet;
 
@@ -39,7 +39,7 @@ namespace dbaui
         virtual ~PropertyStorage();
     };
 
-    typedef ::boost::shared_ptr< PropertyStorage >      PPropertyStorage;
+    typedef std::shared_ptr< PropertyStorage >      PPropertyStorage;
     typedef ::std::map< sal_Int32, PPropertyStorage >   PropertyValues;
 
     // SetItemPropertyStorage

@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace dbaui
 {
@@ -40,7 +40,7 @@ namespace dbaui
     class ImageProvider
     {
     private:
-        ::boost::shared_ptr< ImageProvider_Data >   m_pData;
+        std::shared_ptr< ImageProvider_Data >   m_pData;
 
     public:
         /** creates a semi-functional ImageProvider instance

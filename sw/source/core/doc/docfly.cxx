@@ -60,7 +60,7 @@
 #include <dflyobj.hxx>
 #include <undoflystrattr.hxx>
 #include <calbck.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 //UUUU
 #include <svx/xbtmpit.hxx>
@@ -509,7 +509,7 @@ bool SwDoc::SetFlyFrmAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet )
     if( !rSet.Count() )
         return false;
 
-    boost::scoped_ptr<SwUndoFormatAttrHelper> pSaveUndo;
+    std::unique_ptr<SwUndoFormatAttrHelper> pSaveUndo;
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -726,7 +726,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
             // anchored object the complete <SwPosition> is kept, because the
             // anchor index position could be moved, if the object again is
             // anchored as character.
-            boost::scoped_ptr<const SwPosition> xOldAsCharAnchorPos;
+            std::unique_ptr<const SwPosition> xOldAsCharAnchorPos;
             const RndStdIds eOldAnchorType = pContact->GetAnchorId();
             if ( !_bSameOnly && eOldAnchorType == FLY_AS_CHAR )
             {

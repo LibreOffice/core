@@ -53,7 +53,6 @@
 #include <edimp.hxx>
 #include <tools/datetimeutils.hxx>
 
-using namespace ::boost;
 using namespace ::sw::mark;
 
 namespace
@@ -385,31 +384,31 @@ namespace sw { namespace mark
         switch(eType)
         {
             case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
-                pMark = boost::shared_ptr<IMark>(new TextFieldmark(rPaM));
+                pMark = std::shared_ptr<IMark>(new TextFieldmark(rPaM));
                 break;
             case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
-                pMark = boost::shared_ptr<IMark>(new CheckboxFieldmark(rPaM));
+                pMark = std::shared_ptr<IMark>(new CheckboxFieldmark(rPaM));
                 break;
             case IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER:
-                pMark = boost::shared_ptr<IMark>(new NavigatorReminder(rPaM));
+                pMark = std::shared_ptr<IMark>(new NavigatorReminder(rPaM));
                 break;
             case IDocumentMarkAccess::MarkType::BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new Bookmark(rPaM, vcl::KeyCode(), rName, OUString()));
+                pMark = std::shared_ptr<IMark>(new Bookmark(rPaM, vcl::KeyCode(), rName, OUString()));
                 break;
             case IDocumentMarkAccess::MarkType::DDE_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new DdeBookmark(rPaM));
+                pMark = std::shared_ptr<IMark>(new DdeBookmark(rPaM));
                 break;
             case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, vcl::KeyCode(), rName, OUString()));
+                pMark = std::shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, vcl::KeyCode(), rName, OUString()));
                 break;
             case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, vcl::KeyCode(), rName, OUString()));
+                pMark = std::shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, vcl::KeyCode(), rName, OUString()));
                 break;
             case IDocumentMarkAccess::MarkType::UNO_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new UnoMark(rPaM));
+                pMark = std::shared_ptr<IMark>(new UnoMark(rPaM));
                 break;
             case IDocumentMarkAccess::MarkType::ANNOTATIONMARK:
-                pMark = boost::shared_ptr<IMark>(new AnnotationMark( rPaM, rName ));
+                pMark = std::shared_ptr<IMark>(new AnnotationMark( rPaM, rName ));
                 break;
         }
         assert(pMark.get() &&
@@ -801,7 +800,7 @@ namespace sw { namespace mark
             // fdo#61016 delay the deletion of the fieldmark characters
             // to prevent that from deleting the marks on that position
             // which would invalidate the iterators in vMarksToDelete
-            std::vector< ::boost::shared_ptr<ILazyDeleter> > vDelay;
+            std::vector< std::shared_ptr<ILazyDeleter> > vDelay;
             vDelay.reserve(vMarksToDelete.size());
 
             // If needed, sort mark containers containing subsets of the marks
@@ -837,10 +836,10 @@ namespace sw { namespace mark
 
     struct LazyFieldmarkDeleter : public IDocumentMarkAccess::ILazyDeleter
     {
-        ::boost::shared_ptr<IMark> const m_pFieldmark;
+        std::shared_ptr<IMark> const m_pFieldmark;
         SwDoc *const m_pDoc;
         LazyFieldmarkDeleter(
-                ::boost::shared_ptr<IMark> const& pMark, SwDoc *const pDoc)
+                std::shared_ptr<IMark> const& pMark, SwDoc *const pDoc)
             : m_pFieldmark(pMark), m_pDoc(pDoc)
         { }
         virtual ~LazyFieldmarkDeleter()
@@ -852,10 +851,10 @@ namespace sw { namespace mark
         }
     };
 
-    ::boost::shared_ptr<IDocumentMarkAccess::ILazyDeleter>
+    std::shared_ptr<IDocumentMarkAccess::ILazyDeleter>
         MarkManager::deleteMark(const const_iterator_t& ppMark)
     {
-        ::boost::shared_ptr<ILazyDeleter> ret;
+        std::shared_ptr<ILazyDeleter> ret;
         if (ppMark == m_vAllMarks.end()) return ret;
 
         switch(IDocumentMarkAccess::GetType(**ppMark))
@@ -1034,7 +1033,7 @@ namespace sw { namespace mark
         for (IDocumentMarkAccess::const_iterator_t aI = m_vFieldmarks.begin(),
             aEnd = m_vFieldmarks.end(); aI != aEnd; ++aI)
         {
-            boost::shared_ptr<IMark> xI = *aI;
+            std::shared_ptr<IMark> xI = *aI;
             const SwPosition &rStart = xI->GetMarkPos();
             if (!rPaM.ContainsPosition(rStart))
                 continue;

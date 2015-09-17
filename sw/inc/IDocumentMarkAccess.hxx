@@ -22,7 +22,7 @@
 
 #include <sal/types.h>
 #include <IMark.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class SwPaM;
 struct SwPosition;
@@ -50,7 +50,7 @@ class IDocumentMarkAccess
             NAVIGATOR_REMINDER
         };
 
-        typedef ::boost::shared_ptr< ::sw::mark::IMark> pMark_t;
+        typedef std::shared_ptr< ::sw::mark::IMark> pMark_t;
         typedef ::std::vector< pMark_t > container_t;
         typedef container_t::iterator iterator_t;
         typedef container_t::const_iterator const_iterator_t;
@@ -179,7 +179,7 @@ class IDocumentMarkAccess
             @param ppMark
             [in] an iterator pointing to the Mark to be deleted.
         */
-        virtual ::boost::shared_ptr<ILazyDeleter>
+        virtual std::shared_ptr<ILazyDeleter>
             deleteMark(const IDocumentMarkAccess::const_iterator_t& ppMark) =0;
 
         /** Deletes a mark.

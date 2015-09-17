@@ -23,8 +23,8 @@
 #include <calbck.hxx>
 #include <pam.hxx>
 #include <boost/operators.hpp>
-#include <boost/shared_ptr.hpp>
 #include <map>
+#include <memory>
 #include <swdllapi.h>
 
 struct SwPosition;
@@ -133,18 +133,18 @@ namespace sw { namespace mark
     struct CompareIMarkStartsAfter
     {
         bool operator()(SwPosition const& rPos,
-                        boost::shared_ptr<sw::mark::IMark> const& pMark)
+                        std::shared_ptr<sw::mark::IMark> const& pMark)
         {
             return pMark->StartsAfter(rPos);
         }
 #ifdef DBG_UTIL
-        bool operator()(boost::shared_ptr<sw::mark::IMark> const& pMark,
+        bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark,
                         SwPosition const& rPos)
         {
             return pMark->StartsBefore(rPos);
         }
-        bool operator()(boost::shared_ptr<sw::mark::IMark> const& pMark1,
-                        boost::shared_ptr<sw::mark::IMark> const& pMark2)
+        bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark1,
+                        std::shared_ptr<sw::mark::IMark> const& pMark2)
         {
             return (*pMark1) < (*pMark2);
         }
@@ -155,19 +155,19 @@ namespace sw { namespace mark
     // so it needs 3 overloads...
     struct CompareIMarkStartsBefore
     {
-        bool operator()(boost::shared_ptr<sw::mark::IMark> const& pMark,
+        bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark,
                         SwPosition const& rPos)
         {
             return pMark->StartsBefore(rPos);
         }
 #ifdef DBG_UTIL
         bool operator()(SwPosition const& rPos,
-                        boost::shared_ptr<sw::mark::IMark> const& pMark)
+                        std::shared_ptr<sw::mark::IMark> const& pMark)
         {
             return pMark->StartsAfter(rPos);
         }
-        bool operator()(boost::shared_ptr<sw::mark::IMark> const& pMark1,
-                        boost::shared_ptr<sw::mark::IMark> const& pMark2)
+        bool operator()(std::shared_ptr<sw::mark::IMark> const& pMark1,
+                        std::shared_ptr<sw::mark::IMark> const& pMark2)
         {
             return (*pMark1) < (*pMark2);
         }

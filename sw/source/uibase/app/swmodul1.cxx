@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <hintids.hxx>
 #include <sfx2/request.hxx>
@@ -182,7 +182,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
         bReadonly = pDocSh->IsReadOnly();
     else //Use existing option if DocShell missing
         bReadonly = pSh->GetViewOptions()->IsReadonly();
-    boost::scoped_ptr<SwViewOption> xViewOpt;
+    std::unique_ptr<SwViewOption> xViewOpt;
     if (!bViewOnly)
         xViewOpt.reset(new SwViewOption(*pPref));
     else

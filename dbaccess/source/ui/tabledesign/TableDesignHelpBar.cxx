@@ -22,7 +22,7 @@
 #include <svtools/svmedit.hxx>
 #include <vcl/settings.hxx>
 #include "dbaccess_helpid.hrc"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 using namespace dbaui;
 #define STANDARD_MARGIN                 6
 // class OTableDesignHelpBar

@@ -22,10 +22,9 @@
 #include <osl/thread.hxx>
 #include <rtl/ref.hxx>
 #include <osl/interlck.h>
-
-#include <boost/weak_ptr.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 #include <ifinishedthreadlistener.hxx>
+#include <memory>
 
 /** class for an observable thread
 
@@ -44,7 +43,7 @@ class ObservableThread : public osl::Thread,
 
         virtual ~ObservableThread();
 
-        void SetListener( boost::weak_ptr< IFinishedThreadListener > pThreadListener,
+        void SetListener( std::weak_ptr< IFinishedThreadListener > pThreadListener,
                           const oslInterlockedCount nThreadID );
 
         static inline void * operator new(std::size_t size)
@@ -82,7 +81,7 @@ class ObservableThread : public osl::Thread,
 
         oslInterlockedCount mnThreadID;
 
-        boost::weak_ptr< IFinishedThreadListener > mpThreadListener;
+        std::weak_ptr< IFinishedThreadListener > mpThreadListener;
 
 };
 #endif

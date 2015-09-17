@@ -59,7 +59,6 @@
 #include <SwRewriter.hxx>
 
 #include <unomid.h>
-#include <boost/scoped_ptr.hpp>
 
 #define POS_CONTENT 0
 #define POS_INDEX   1

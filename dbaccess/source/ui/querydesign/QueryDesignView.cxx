@@ -55,7 +55,7 @@
 #include "querycontainerwindow.hxx"
 #include "sqlmessage.hxx"
 #include <unotools/syslocale.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::dbaui;
 using namespace ::utl;
@@ -791,7 +791,7 @@ namespace
                             OUString aTmp = aCriteria;
                             OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
-                            boost::scoped_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
+                            std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
                             if (pParseNode.get())
                             {
                                 if (bMulti && !(pEntryField->isOtherFunction() || (aFieldName.toChar() == '*')))
@@ -822,7 +822,7 @@ namespace
                             OUString aTmp = aCriteria;
                             OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
-                            boost::scoped_ptr< ::connectivity::OSQLParseNode> pParseNode( _pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
+                            std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode( _pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
                             if (pParseNode.get())
                             {
                                 if (bMulti && !(pEntryField->isOtherFunction() || (aFieldName.toChar() == '*')))
@@ -1165,7 +1165,7 @@ namespace
                         OUString aTmp = pEntryField->GetField();
                         OUString aErrorMsg;
                         Reference<XPropertySet> xColumn;
-                        boost::scoped_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
+                        std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(pEntryField,aTmp,aErrorMsg,xColumn));
                         if (pParseNode.get())
                         {
                             OUString sGroupBy;
@@ -2925,7 +2925,7 @@ OUString OQueryDesignView::getStatement()
     {
         ::connectivity::OSQLParser& rParser( rController.getParser() );
         OUString sErrorMessage;
-        boost::scoped_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, sSQL, true ) );
+        std::unique_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, sSQL, true ) );
         if ( pParseNode.get() )
         {
             OSQLParseNode* pNode = pParseNode->getChild(3)->getChild(1);
@@ -3037,7 +3037,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
             sSql += " FROM x WHERE ";
             sSql += pEntry->GetField();
             sSql += _sCriteria;
-            boost::scoped_ptr<OSQLParseNode> pParseNode( rParser.parseTree( _rsErrorMessage, sSql, true ) );
+            std::unique_ptr<OSQLParseNode> pParseNode( rParser.parseTree( _rsErrorMessage, sSql, true ) );
             nType = DataType::DOUBLE;
             if ( pParseNode.get() )
             {

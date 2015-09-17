@@ -27,7 +27,6 @@
 #include "uitool.hxx"
 
 #include "envprt.hrc"
-#include <boost/scoped_ptr.hpp>
 
 SwEnvPrtPage::SwEnvPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvPrinterPage",

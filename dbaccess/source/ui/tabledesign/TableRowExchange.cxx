@@ -26,7 +26,7 @@ namespace dbaui
 {
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
-    OTableRowExchange::OTableRowExchange(const ::std::vector< ::boost::shared_ptr<OTableRow> >& _rvTableRow)
+    OTableRowExchange::OTableRowExchange(const ::std::vector< std::shared_ptr<OTableRow> >& _rvTableRow)
         : m_vTableRow(_rvTableRow)
     {
     }
@@ -34,12 +34,12 @@ namespace dbaui
     {
         if(nUserObjectId == SotClipboardFormatId::SBA_TABED)
         {
-            ::std::vector< ::boost::shared_ptr<OTableRow> >* pRows = static_cast< ::std::vector< ::boost::shared_ptr<OTableRow> >* >(pUserObject);
+            ::std::vector< std::shared_ptr<OTableRow> >* pRows = static_cast< ::std::vector< std::shared_ptr<OTableRow> >* >(pUserObject);
             if(pRows)
             {
                 (*rxOStm).WriteInt32( pRows->size() ); // first stream the size
-                ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = pRows->begin();
-                ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = pRows->end();
+                ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = pRows->begin();
+                ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = pRows->end();
                 for(;aIter != aEnd;++aIter)
                     WriteOTableRow(*rxOStm, **aIter);
                 return true;

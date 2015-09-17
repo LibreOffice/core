@@ -23,8 +23,8 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <boost/shared_ptr.hpp>
 #include <map>
+#include <memory>
 
 namespace dbaui
 {
@@ -106,7 +106,7 @@ const sal_uInt16 TYPE_BIT       = 31;
 
     };
 
-    typedef ::boost::shared_ptr<OTypeInfo>          TOTypeInfoSP;
+    typedef std::shared_ptr<OTypeInfo>          TOTypeInfoSP;
     typedef ::std::multimap<sal_Int32,TOTypeInfoSP> OTypeInfoMap;
     /** return the most suitable typeinfo for a requested type
         @param  _rTypeInfo      contains a map of type to typeinfo

@@ -39,7 +39,7 @@ SwRetrievedInputStreamDataManager& SwRetrievedInputStreamDataManager::GetManager
 }
 
 SwRetrievedInputStreamDataManager::tDataKey SwRetrievedInputStreamDataManager::ReserveData(
-                        boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer )
+                        std::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer )
 {
     osl::MutexGuard aGuard(maMutex);
 
@@ -139,7 +139,7 @@ IMPL_LINK_TYPED( SwRetrievedInputStreamDataManager,
     SwRetrievedInputStreamDataManager::tData aInputStreamData;
     if ( rDataManager.PopData( *pDataKey, aInputStreamData ) )
     {
-        boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer =
+        std::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > pThreadConsumer =
                                     aInputStreamData.mpThreadConsumer.lock();
         if ( pThreadConsumer )
         {

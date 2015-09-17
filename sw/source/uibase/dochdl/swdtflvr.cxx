@@ -129,7 +129,6 @@
 #include <comphelper/lok.hxx>
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 extern bool g_bFrmDrag;
 extern bool g_bDDINetAttr;
@@ -681,7 +680,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
                 if ( xTransact.is() )
                     xTransact->commit();
 
-                boost::scoped_ptr<SvStream> pSrcStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ ));
+                std::unique_ptr<SvStream> pSrcStm(::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), StreamMode::READ ));
                 if( pSrcStm )
                 {
                     xStream->SetBufferSize( 0xff00 );
@@ -863,7 +862,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     else if ( m_pWrtShell->IsSelection() || m_pWrtShell->IsFrmSelected() ||
               m_pWrtShell->IsObjSelected() )
     {
-        boost::scoped_ptr<SwWait> pWait;
+        std::unique_ptr<SwWait> pWait;
         if( m_pWrtShell->ShouldWait() )
             pWait.reset(new SwWait( *m_pWrtShell->GetView().GetDocShell(), true ));
 
@@ -1186,7 +1185,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             bool bPasteSelection )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
-    boost::scoped_ptr<SwTrnsfrActionAndUndo> pAction;
+    std::unique_ptr<SwTrnsfrActionAndUndo> pAction;
     SwModule* pMod = SW_MOD();
 
     bool nRet = false;
@@ -2671,14 +2670,14 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
         }
         else if( nWh )
         {
-            boost::scoped_ptr<SfxUsrAnyItem> pConnectionItem;
-            boost::scoped_ptr<SfxUsrAnyItem> pCursorItem;
-            boost::scoped_ptr<SfxUsrAnyItem> pColumnItem;
-            boost::scoped_ptr<SfxUsrAnyItem> pSourceItem;
-            boost::scoped_ptr<SfxUsrAnyItem> pCommandItem;
-            boost::scoped_ptr<SfxUsrAnyItem> pCommandTypeItem;
-            boost::scoped_ptr<SfxUsrAnyItem> pColumnNameItem;
-            boost::scoped_ptr<SfxUsrAnyItem> pSelectionItem;
+            std::unique_ptr<SfxUsrAnyItem> pConnectionItem;
+            std::unique_ptr<SfxUsrAnyItem> pCursorItem;
+            std::unique_ptr<SfxUsrAnyItem> pColumnItem;
+            std::unique_ptr<SfxUsrAnyItem> pSourceItem;
+            std::unique_ptr<SfxUsrAnyItem> pCommandItem;
+            std::unique_ptr<SfxUsrAnyItem> pCommandTypeItem;
+            std::unique_ptr<SfxUsrAnyItem> pColumnNameItem;
+            std::unique_ptr<SfxUsrAnyItem> pSelectionItem;
 
             bool bDataAvailable = true;
             ODataAccessDescriptor aDesc;
@@ -2897,7 +2896,7 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
 {
     bool nRet = false;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() ));
+    std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() ));
 
     DataFlavorExVector aFormats( rData.GetDataFlavorExVector() );
     TransferableObjectDescriptor aDesc;

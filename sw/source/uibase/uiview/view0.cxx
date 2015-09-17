@@ -77,7 +77,7 @@ using namespace ::com::sun::star;
 #include <IDocumentSettingAccess.hxx>
 
 #include <unomid.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
 
@@ -361,7 +361,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
 
 void SwView::ExecViewOptions(SfxRequest &rReq)
 {
-    boost::scoped_ptr<SwViewOption> pOpt(new SwViewOption( *GetWrtShell().GetViewOptions() ));
+    std::unique_ptr<SwViewOption> pOpt(new SwViewOption( *GetWrtShell().GetViewOptions() ));
     bool bModified = GetWrtShell().IsModified();
 
     int eState = STATE_TOGGLE;
@@ -616,7 +616,7 @@ void SwView::ExecFormatFootnote()
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetWindow(), GetWrtShell()));
+    std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetWindow(), GetWrtShell()));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlg->Execute();
 }
@@ -626,7 +626,7 @@ void SwView::ExecNumberingOutline(SfxItemPool & rPool)
     SfxItemSet aTmp(rPool, FN_PARAM_1, FN_PARAM_1);
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
-    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+    std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
                                                 GetWindow(), &aTmp, GetWrtShell()));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlg->Execute();

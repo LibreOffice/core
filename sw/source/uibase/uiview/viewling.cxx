@@ -86,7 +86,7 @@
 
 #include <editeng/editerr.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace sw::mark;
 using namespace ::com::sun::star;
@@ -575,7 +575,7 @@ void SwView::StartThesaurus()
         SpellError( eLang );
     else
     {
-        boost::scoped_ptr<AbstractThesaurusDialog> pDlg;
+        std::unique_ptr<AbstractThesaurusDialog> pDlg;
         // create dialog
         {   //Scope for SwWait-Object
             SwWait aWait( *GetDocShell(), true );
@@ -702,7 +702,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
 
                 bRet = true;
                 m_pWrtShell->SttSelect();
-                boost::scoped_ptr< SwSpellPopup > pPopup;
+                std::unique_ptr< SwSpellPopup > pPopup;
                 if (bUseGrammarContext)
                 {
                     sal_Int32 nPos = aPoint.nContent.GetIndex();

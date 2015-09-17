@@ -81,7 +81,7 @@
 
 #include <docsh.hxx>
 #include <svx/drawitem.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -463,7 +463,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact);
-                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog(
+                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog(
                                                         nSel & nsSelectionType::SEL_GRF ? OUString("PictureDialog") :
                                                         nSel & nsSelectionType::SEL_OLE ? OUString("ObjectDialog"):
                                                                                         OUString("FrameDialog"),
@@ -621,7 +621,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
-                boost::scoped_ptr<AbstractSvxObjectTitleDescDialog> pDlg(
+                std::unique_ptr<AbstractSvxObjectTitleDescDialog> pDlg(
                     pFact->CreateSvxObjectTitleDescDialog( NULL,
                                                            aTitle,
                                                            aDescription ));
@@ -1254,7 +1254,7 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 assert(pFact);
-                boost::scoped_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
+                std::unique_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
                     NULL,
                     &aNewAttr,
                     pDoc,

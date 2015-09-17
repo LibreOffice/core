@@ -37,7 +37,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;

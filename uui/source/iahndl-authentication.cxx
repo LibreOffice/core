@@ -52,7 +52,7 @@
 
 #include "iahndl.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -100,7 +100,7 @@ executeLoginDialog(
 
         if (bSavePassword)
         {
-            boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+            std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
             xDialog->SetSavePasswordText(
                 ResId(rInfo.GetIsRememberPersistent()
                           ? RID_SAVE_PASSWORD
@@ -413,7 +413,7 @@ executeMasterPasswordDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
             ScopedVclPtrInstance< MasterPasswordCreateDialog > xDialog(
@@ -511,7 +511,7 @@ executePasswordDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
             if (bIsSimplePasswordRequest)
@@ -530,7 +530,7 @@ executePasswordDialog(
 
                 VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
                 AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen, bIsPasswordToModify );
-                boost::scoped_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
+                std::unique_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
 
                 rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
                 rInfo.SetPassword( pDialog->GetPasswordToOpen() );

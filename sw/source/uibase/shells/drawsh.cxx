@@ -65,7 +65,6 @@
 #include "swslots.hxx"
 #include "swabstdlg.hxx"
 #include "misc.hrc"
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

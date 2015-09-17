@@ -54,7 +54,7 @@
 #include <docsh.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 SFX_IMPL_MODELESSDIALOG_WITHID( SwRedlineAcceptChild, FN_REDLINE_ACCEPT )
 
@@ -1099,7 +1099,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                                     rRedline.GetRedlineData().GetTimeStamp() ),
                                     SID_ATTR_POSTIT_DATE ));
 
-                        boost::scoped_ptr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog( pParentDlg, aSet ));
+                        std::unique_ptr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog( pParentDlg, aSet ));
                         OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                         pDlg->HideAuthor();

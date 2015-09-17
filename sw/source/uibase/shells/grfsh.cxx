@@ -76,7 +76,7 @@
 #include "swslots.hxx"
 #include "swabstdlg.hxx"
 #include <unocrsr.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define TOOLBOX_NAME "colorbar"
 
@@ -344,7 +344,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "no dialog factory!");
-            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog("PictureDialog",
+            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog("PictureDialog",
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
                                                     aSet, false));

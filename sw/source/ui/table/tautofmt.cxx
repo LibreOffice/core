@@ -39,7 +39,6 @@
 #include "tblafmt.hxx"
 #include "tautofmt.hxx"
 #include "shellres.hxx"
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 

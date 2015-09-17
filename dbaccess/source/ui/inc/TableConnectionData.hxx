@@ -23,7 +23,7 @@
 #include "TableWindowData.hxx"
 #include <vector>
 #include <tools/rtti.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace dbaui
 {
@@ -103,7 +103,7 @@ namespace dbaui
         virtual bool Update(){ return true; }
     };
 
-    typedef ::std::vector< ::boost::shared_ptr<OTableConnectionData> >  TTableConnectionData;
+    typedef ::std::vector< ::std::shared_ptr<OTableConnectionData> >  TTableConnectionData;
 
 }
 #endif

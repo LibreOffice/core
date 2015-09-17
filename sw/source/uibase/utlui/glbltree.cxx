@@ -57,7 +57,7 @@
 #include <comcore.hrc>
 #include <globals.hrc>
 #include "swabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 
@@ -226,7 +226,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if( aData.HasFormat( SotClipboardFormatId::FILE_LIST ))
         {
             nRet = rEvt.mnAction;
-            boost::scoped_ptr<SwGlblDocContents> pTempContents(new SwGlblDocContents);
+            std::unique_ptr<SwGlblDocContents> pTempContents(new SwGlblDocContents);
             int nAbsContPos = pDropEntry ?
                                 (int) GetModel()->GetAbsPos(pDropEntry):
                                     - 1;
@@ -395,7 +395,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
     const sal_uInt16 nEnableFlags = GetEnableFlags();
     if(FN_GLOBAL_OPEN == nTbxId)
     {
-        boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
+        std::unique_ptr<PopupMenu> pMenu(new PopupMenu);
         for (sal_uInt16 i = CTX_INSERT_ANY_INDEX; i <= CTX_INSERT_TEXT; i++)
         {
             pMenu->InsertItem( i, aContextStrings[ST_INDEX  - ST_GLOBAL_CONTEXT_FIRST - CTX_INSERT_ANY_INDEX + i] );
@@ -413,7 +413,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
     }
     else if(FN_GLOBAL_UPDATE == nTbxId)
     {
-        boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
+        std::unique_ptr<PopupMenu> pMenu(new PopupMenu);
         for (sal_uInt16 i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
             pMenu->InsertItem( i, aContextStrings[ST_UPDATE_SEL - ST_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
@@ -858,7 +858,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             // must be refilled. So you do not have to remember anything,
             // deleting begins at the end.
             SvTreeListEntry* pSelEntry = LastSelected();
-            boost::scoped_ptr<SwGlblDocContents> pTempContents;
+            std::unique_ptr<SwGlblDocContents> pTempContents;
             pActiveShell->StartAction();
             while(pSelEntry)
             {
@@ -892,7 +892,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 assert(pFact && "Dialog creation failed!");
-                boost::scoped_ptr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
+                std::unique_ptr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
                                                         this, aSet,
                                                         *pActiveShell,
                                                         0,
@@ -1113,7 +1113,7 @@ bool    SwGlobalTree::Update(bool bHard)
         else
         {
             bool bCopy = false;
-            boost::scoped_ptr<SwGlblDocContents> pTempContents(new SwGlblDocContents);
+            std::unique_ptr<SwGlblDocContents> pTempContents(new SwGlblDocContents);
             pActiveShell->GetGlobalDocContent(*pTempContents);
             if(pTempContents->size() != pSwGlblDocContents->size() ||
                     pTempContents->size() != GetEntryCount())
@@ -1366,7 +1366,7 @@ IMPL_LINK_TYPED( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileD
     if ( ERRCODE_NONE != _pFileDlg->GetError() )
         return;
 
-    boost::scoped_ptr<SfxMediumList> pMedList(pDocInserter->CreateMediumList());
+    std::unique_ptr<SfxMediumList> pMedList(pDocInserter->CreateMediumList());
     if ( pMedList )
     {
         Sequence< OUString >aFileNames( pMedList->size() );

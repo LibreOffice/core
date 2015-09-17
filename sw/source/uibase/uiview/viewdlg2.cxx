@@ -41,7 +41,7 @@
 
 #include "view.hrc"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 void SwView::ExecDlgExt(SfxRequest &rReq)
 {
@@ -54,7 +54,7 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "SwAbstractDialogFactory fail!");
 
-            boost::scoped_ptr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( pMDI, *this, DLG_CAPTION ));
+            std::unique_ptr<VclAbstractDialog> pDialog(pFact->CreateSwCaptionDialog( pMDI, *this, DLG_CAPTION ));
             assert(pDialog && "Dialog creation failed!");
             if ( pDialog )
             {
@@ -66,7 +66,7 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             assert(pFact && "Dialog creation failed!");
-            boost::scoped_ptr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
+            std::unique_ptr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
                 pMDI, *m_pWrtShell, true));
             assert(pDlg && "Dialog creation failed!");
 

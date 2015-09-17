@@ -24,7 +24,7 @@
 #include "TableFieldControl.hxx"
 #include "TableDesignView.hxx"
 #include "TEditControl.hxx"
-#include <boost/scoped_ptr.hpp>
+
 using namespace dbaui;
 
 // class OFieldDescGenWin

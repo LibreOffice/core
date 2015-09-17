@@ -23,7 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class SwPaM;
 class SwTextNode;
@@ -70,7 +70,7 @@ public:
 
     // return text selection for the given field
     static void GetPamForTextField( const SwTextField& rTextField,
-                                 boost::shared_ptr< SwPaM >& rPamForTextField );
+                                 std::shared_ptr< SwPaM >& rPamForTextField );
 
 };
 

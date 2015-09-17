@@ -38,7 +38,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/layout.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 static bool bFootnote = true;
 
@@ -114,7 +114,7 @@ IMPL_LINK_NOARG_TYPED(SwInsFootNoteDlg, NumberExtCharHdl, Button*, void)
     aAllSet.Put( rFont );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aAllSet,
+    std::unique_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aAllSet,
         rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
     if (RET_OK == pDlg->Execute())
     {

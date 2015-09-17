@@ -29,8 +29,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
 
-#include <boost/scoped_ptr.hpp>
-
 namespace dbaui
 {
 

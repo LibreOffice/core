@@ -84,7 +84,6 @@ using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 #include <svtools/editbrowsebox.hxx>
-#include <boost/scoped_ptr.hpp>
 
 static const sal_Unicode aDeliStart = '['; // for the form
 static const sal_Unicode aDeliEnd    = ']'; // for the form

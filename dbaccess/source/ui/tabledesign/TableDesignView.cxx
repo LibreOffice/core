@@ -31,7 +31,7 @@
 #include <unotools/syslocale.hxx>
 #include <vcl/settings.hxx>
 #include "UITools.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::dbaui;
 using namespace ::utl;
@@ -303,7 +303,7 @@ void OTableDesignView::setReadOnly(bool _bReadOnly)
 void OTableDesignView::reSync()
 {
     GetEditorCtrl()->DeactivateCell();
-     ::boost::shared_ptr<OTableRow>  pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
+     std::shared_ptr<OTableRow>  pRow = (*GetEditorCtrl()->GetRowList())[GetEditorCtrl()->GetCurRow()];
     OFieldDescription* pFieldDescr = pRow ? pRow->GetActFieldDescr() : NULL;
     if ( pFieldDescr )
         GetDescWin()->DisplayData(pFieldDescr);

@@ -79,7 +79,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sw { namespace sidebarwindows {
 
@@ -270,7 +270,7 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, D
     mpSidebarTextControl->Draw(pDev, rPt, rSz, nInFlags);
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
             *pDev, aNewViewInfos ));
 
@@ -675,7 +675,7 @@ void SwSidebarWin::SetPosAndSize()
                     pCrsr->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
                     pTmpCrsr = pCrsr;
                 }
-                ::boost::scoped_ptr<SwShellCrsr> pTmpCrsrForAnnotationTextRange( pTmpCrsr );
+                std::unique_ptr<SwShellCrsr> pTmpCrsrForAnnotationTextRange( pTmpCrsr );
 
                 pTmpCrsrForAnnotationTextRange->FillRects();
                 SwRects* pRects(pTmpCrsrForAnnotationTextRange.get());

@@ -473,7 +473,7 @@ void SwTextField::NotifyContentChange(SwFormatField& rFormatField)
 /*static*/
 void SwTextField::GetPamForTextField(
     const SwTextField& rTextField,
-    boost::shared_ptr< SwPaM >& rPamForTextField )
+    std::shared_ptr< SwPaM >& rPamForTextField )
 {
     if (rTextField.GetpTextNode() == NULL)
     {
@@ -495,7 +495,7 @@ void SwTextField::DeleteTextField( const SwTextField& rTextField )
 {
     if (rTextField.GetpTextNode() != NULL)
     {
-        boost::shared_ptr< SwPaM > pPamForTextField;
+        std::shared_ptr< SwPaM > pPamForTextField;
         GetPamForTextField(rTextField, pPamForTextField);
         if (pPamForTextField.get() != NULL)
         {

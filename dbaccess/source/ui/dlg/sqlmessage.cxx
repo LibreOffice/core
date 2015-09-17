@@ -111,21 +111,21 @@ namespace
     class ProviderFactory
     {
     private:
-        mutable ::boost::shared_ptr< IImageProvider >   m_pErrorImage;
-        mutable ::boost::shared_ptr< IImageProvider >   m_pWarningsImage;
-        mutable ::boost::shared_ptr< IImageProvider >   m_pInfoImage;
-        mutable ::boost::shared_ptr< ILabelProvider >   m_pErrorLabel;
-        mutable ::boost::shared_ptr< ILabelProvider >   m_pWarningsLabel;
-        mutable ::boost::shared_ptr< ILabelProvider >   m_pInfoLabel;
+        mutable std::shared_ptr< IImageProvider >   m_pErrorImage;
+        mutable std::shared_ptr< IImageProvider >   m_pWarningsImage;
+        mutable std::shared_ptr< IImageProvider >   m_pInfoImage;
+        mutable std::shared_ptr< ILabelProvider >   m_pErrorLabel;
+        mutable std::shared_ptr< ILabelProvider >   m_pWarningsLabel;
+        mutable std::shared_ptr< ILabelProvider >   m_pInfoLabel;
 
     public:
         ProviderFactory()
         {
         }
 
-        ::boost::shared_ptr< IImageProvider >   getImageProvider( SQLExceptionInfo::TYPE _eType ) const
+        std::shared_ptr< IImageProvider >   getImageProvider( SQLExceptionInfo::TYPE _eType ) const
         {
-            ::boost::shared_ptr< IImageProvider >* ppProvider( &m_pErrorImage );
+            std::shared_ptr< IImageProvider >* ppProvider( &m_pErrorImage );
             sal_uInt16 nNormalImageID( BMP_EXCEPTION_ERROR );
 
             switch ( _eType )
@@ -149,9 +149,9 @@ namespace
             return *ppProvider;
         }
 
-        ::boost::shared_ptr< ILabelProvider >   getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
+        std::shared_ptr< ILabelProvider >   getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
         {
-            ::boost::shared_ptr< ILabelProvider >* ppProvider( &m_pErrorLabel );
+            std::shared_ptr< ILabelProvider >* ppProvider( &m_pErrorLabel );
             sal_uInt16 nLabelID( STR_EXCEPTION_ERROR );
 
             switch ( _eType )
@@ -181,8 +181,8 @@ namespace
     {
         SQLExceptionInfo::TYPE                  eType;
 
-        ::boost::shared_ptr< IImageProvider >   pImageProvider;
-        ::boost::shared_ptr< ILabelProvider >   pLabelProvider;
+        std::shared_ptr< IImageProvider >   pImageProvider;
+        std::shared_ptr< ILabelProvider >   pLabelProvider;
 
         bool                                    bSubEntry;
 

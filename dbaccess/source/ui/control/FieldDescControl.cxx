@@ -50,7 +50,6 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/string.hxx>
 #include "UITools.hxx"
-#include <boost/scoped_ptr.hpp>
 #include "dbu_control.hrc"
 #include "dbu_tbl.hrc"
 #include <osl/diagnose.h>

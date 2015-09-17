@@ -47,7 +47,7 @@
 #include <doctxm.hxx>
 #include <poolfmt.hxx>
 #include <calbck.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -162,7 +162,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
     sal_uInt16 nOutl = 0;
     SwOutlineNodes* pOutlNds = const_cast<SwOutlineNodes*>(&GetNodes().GetOutLineNds());
-    boost::scoped_ptr<SwOutlineNodes> xTmpOutlNds;
+    std::unique_ptr<SwOutlineNodes> xTmpOutlNds;
     SwNodePtr pStartNd;
 
     if ( !bOutline) {

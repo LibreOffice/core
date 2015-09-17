@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_IDOCUMENTEXTERNALDATA_HXX
 #define INCLUDED_SW_INC_IDOCUMENTEXTERNALDATA_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <unordered_map>
 
 namespace sw
@@ -39,7 +39,7 @@ public:
     virtual ~ExternalData() {}
 };
 
-typedef ::boost::shared_ptr<ExternalData> tExternalDataPointer;
+typedef std::shared_ptr<ExternalData> tExternalDataPointer;
 }
 
 class IDocumentExternalData
