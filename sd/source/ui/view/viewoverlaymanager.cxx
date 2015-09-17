@@ -422,7 +422,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 : mrBase( rViewShellBase )
 , mnUpdateTagsEvent( 0 )
 {
-    Link<> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener(aLink, tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
         | tools::EventMultiplexerEvent::EID_VIEW_ADDED
@@ -434,7 +434,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 
 ViewOverlayManager::~ViewOverlayManager()
 {
-    Link<> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,ViewOverlayManager,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 
     if( mnUpdateTagsEvent )
@@ -529,10 +529,10 @@ bool ViewOverlayManager::DisposeTags()
     return false;
 }
 
-IMPL_LINK(ViewOverlayManager,EventMultiplexerListener,
-    tools::EventMultiplexerEvent*,pEvent)
+IMPL_LINK_TYPED(ViewOverlayManager,EventMultiplexerListener,
+    tools::EventMultiplexerEvent&, rEvent, void)
 {
-    switch (pEvent->meEventId)
+    switch (rEvent.meEventId)
     {
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
         case tools::EventMultiplexerEvent::EID_VIEW_ADDED:
@@ -542,7 +542,6 @@ IMPL_LINK(ViewOverlayManager,EventMultiplexerListener,
             UpdateTags();
             break;
     }
-    return 0;
 }
 
 }

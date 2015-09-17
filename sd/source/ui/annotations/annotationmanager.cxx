@@ -862,7 +862,7 @@ void AnnotationManagerImpl::DisposeTags()
 
 void AnnotationManagerImpl::addListener()
 {
-    Link<> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
@@ -873,14 +873,14 @@ void AnnotationManagerImpl::addListener()
 
 void AnnotationManagerImpl::removeListener()
 {
-    Link<> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,AnnotationManagerImpl,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
-    tools::EventMultiplexerEvent*,pEvent)
+IMPL_LINK_TYPED(AnnotationManagerImpl,EventMultiplexerListener,
+    tools::EventMultiplexerEvent&, rEvent, void)
 {
-    switch (pEvent->meEventId)
+    switch (rEvent.meEventId)
     {
         case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
         case tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:
@@ -897,7 +897,6 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
             onSelectionChanged();
             break;
     }
-    return 0;
 }
 
 void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation > xAnnotation, vcl::Window* pParent, const Rectangle& rContextRect, bool bButtonMenu /* = false */ )

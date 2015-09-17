@@ -287,7 +287,7 @@ void CustomAnimationPane::KeyInput( const KeyEvent& rKEvt )
 
 void CustomAnimationPane::addListener()
 {
-    Link<> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
@@ -300,14 +300,14 @@ void CustomAnimationPane::addListener()
 
 void CustomAnimationPane::removeListener()
 {
-    Link<> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,CustomAnimationPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
-    tools::EventMultiplexerEvent*,pEvent)
+IMPL_LINK_TYPED(CustomAnimationPane,EventMultiplexerListener,
+    tools::EventMultiplexerEvent&, rEvent, void)
 {
-    switch (pEvent->meEventId)
+    switch (rEvent.meEventId)
     {
         case tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:
             onSelectionChanged();
@@ -344,11 +344,10 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             onChangeCurrentPage();
             break;
         case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
-            if( mpMainSequence.get() && pEvent->mpUserData )
+            if( mpMainSequence.get() && rEvent.mpUserData )
                 mpCustomAnimationList->update( mpMainSequence );
             break;
     }
-    return 0;
 }
 
 static sal_Int32 getPropertyType( const OUString& rProperty )

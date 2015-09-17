@@ -125,7 +125,7 @@ Listener::Listener (
             StartListening(*pMainViewShell);
         }
 
-        Link<> aLink (LINK(this, Listener, EventMultiplexerCallback));
+        Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
         mpBase->GetEventMultiplexer()->AddEventListener(
             aLink,
             tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
@@ -185,7 +185,7 @@ void Listener::ReleaseListeners()
 
     if (mpBase != NULL)
     {
-        Link<> aLink (LINK(this, Listener, EventMultiplexerCallback));
+        Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this, Listener, EventMultiplexerCallback));
         mpBase->GetEventMultiplexer()->RemoveEventListener(
             aLink,
             tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
@@ -349,9 +349,9 @@ void Listener::Notify (
     }
 }
 
-IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent*, pEvent)
+IMPL_LINK_TYPED(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
-    switch (pEvent->meEventId)
+    switch (rEvent.meEventId)
     {
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
         {
@@ -396,13 +396,13 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         case tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
         case tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
         case tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
-            HandleShapeModification(static_cast<const SdrPage*>(pEvent->mpUserData));
+            HandleShapeModification(static_cast<const SdrPage*>(rEvent.mpUserData));
             break;
 
         case tools::EventMultiplexerEvent::EID_END_TEXT_EDIT:
-            if (pEvent->mpUserData != NULL)
+            if (rEvent.mpUserData != NULL)
             {
-                const SdrObject* pObject = static_cast<const SdrObject*>(pEvent->mpUserData);
+                const SdrObject* pObject = static_cast<const SdrObject*>(rEvent.mpUserData);
                 HandleShapeModification(pObject->GetPage());
             }
             break;
@@ -410,8 +410,6 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         default:
             break;
     }
-
-    return 0;
 }
 
 //=====  lang::XEventListener  ================================================

@@ -427,7 +427,7 @@ void TableDesignWidget::updateControls()
 
 void TableDesignWidget::addListener()
 {
-    Link<> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
@@ -439,14 +439,14 @@ void TableDesignWidget::addListener()
 
 void TableDesignWidget::removeListener()
 {
-    Link<> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,TableDesignWidget,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
-    tools::EventMultiplexerEvent*,pEvent)
+IMPL_LINK_TYPED(TableDesignWidget,EventMultiplexerListener,
+    tools::EventMultiplexerEvent&, rEvent, void)
 {
-    switch (pEvent->meEventId)
+    switch (rEvent.meEventId)
     {
         case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
         case tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:
@@ -463,7 +463,6 @@ IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
             onSelectionChanged();
             break;
     }
-    return 0;
 }
 
 struct CellInfo

@@ -114,7 +114,7 @@ private:
         When this happens then we unregister at the window of the old and
         register at the window of the new shell.
     */
-    DECL_LINK(ConfigurationUpdateHandler, ::sd::tools::EventMultiplexerEvent*);
+    DECL_LINK_TYPED(ConfigurationUpdateHandler, ::sd::tools::EventMultiplexerEvent&, void);
 
     /** This call back is called by the form shell when it gets the focus.
         In this case the form shell is moved to the top of the shell stack.

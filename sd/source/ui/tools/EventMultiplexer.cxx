@@ -68,11 +68,11 @@ public:
     virtual ~Implementation();
 
     void AddEventListener (
-        Link<>& rCallback,
+        const Link<EventMultiplexerEvent&,void>& rCallback,
         EventMultiplexerEvent::EventId aEventTypes);
 
     void RemoveEventListener (
-        Link<>& rCallback,
+        const Link<EventMultiplexerEvent&,void>& rCallback,
         EventMultiplexerEvent::EventId aEventTypes);
 
     void CallListeners (EventMultiplexerEvent& rEvent);
@@ -120,7 +120,7 @@ protected:
 
 private:
     ViewShellBase& mrBase;
-    typedef ::std::pair<Link<>,EventMultiplexerEvent::EventId> ListenerDescriptor;
+    typedef ::std::pair<Link<EventMultiplexerEvent&,void>,EventMultiplexerEvent::EventId> ListenerDescriptor;
     typedef ::std::vector<ListenerDescriptor> ListenerList;
     ListenerList maListeners;
 
@@ -184,14 +184,14 @@ EventMultiplexer::~EventMultiplexer()
 }
 
 void EventMultiplexer::AddEventListener (
-    Link<>& rCallback,
+    const Link<EventMultiplexerEvent&,void>& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
 {
     mpImpl->AddEventListener (rCallback, aEventTypes);
 }
 
 void EventMultiplexer::RemoveEventListener (
-    Link<>& rCallback,
+    const Link<EventMultiplexerEvent&,void>& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
 {
     mpImpl->RemoveEventListener (rCallback, aEventTypes);
@@ -315,7 +315,7 @@ void EventMultiplexer::Implementation::ReleaseListeners()
 }
 
 void EventMultiplexer::Implementation::AddEventListener (
-    Link<>& rCallback,
+    const Link<EventMultiplexerEvent&,void>& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
 {
     ListenerList::iterator iListener (maListeners.begin());
@@ -335,7 +335,7 @@ void EventMultiplexer::Implementation::AddEventListener (
 }
 
 void EventMultiplexer::Implementation::RemoveEventListener (
-    Link<>& rCallback,
+    const Link<EventMultiplexerEvent&,void>& rCallback,
     EventMultiplexerEvent::EventId aEventTypes)
 {
     ListenerList::iterator iListener (maListeners.begin());
@@ -700,7 +700,7 @@ void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEv
     for (; iListener!=iListenerEnd; ++iListener)
     {
         if ((iListener->second && rEvent.meEventId))
-            iListener->first.Call(&rEvent);
+            iListener->first.Call(rEvent);
     }
 }
 

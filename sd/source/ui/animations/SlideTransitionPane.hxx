@@ -95,7 +95,7 @@ private:
     DECL_LINK( SpeedListBoxSelected, void * );
     DECL_LINK( SoundListBoxSelected, void * );
     DECL_LINK_TYPED( LoopSoundBoxChecked, Button*, void );
-    DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
+    DECL_LINK_TYPED(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
     DECL_LINK_TYPED(LateInitCallback, Timer *, void);
 
     ViewShellBase &   mrBase;

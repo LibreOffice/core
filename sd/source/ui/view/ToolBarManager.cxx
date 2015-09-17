@@ -324,7 +324,7 @@ private:
     bool CheckPlugInMode (const OUString& rsName) const;
 
     DECL_LINK_TYPED(UpdateCallback, void *, void);
-    DECL_LINK(EventMultiplexerCallback, sd::tools::EventMultiplexerEvent*);
+    DECL_LINK_TYPED(EventMultiplexerCallback, sd::tools::EventMultiplexerEvent&, void);
     DECL_LINK_TYPED(SetValidCallback, void*, void);
 };
 
@@ -535,7 +535,7 @@ ToolBarManager::Implementation::Implementation (
       mnPendingSetValidCall(0),
       maToolBarRules(rpToolBarManager,rpViewShellManager)
 {
-    Link<> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
+    Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
     mpEventMultiplexer->AddEventListener(
         aLink,
         tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED
@@ -550,7 +550,7 @@ ToolBarManager::Implementation::Implementation (
 ToolBarManager::Implementation::~Implementation()
 {
     // Unregister at broadcasters.
-    Link<> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
+    Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,ToolBarManager::Implementation,EventMultiplexerCallback));
     mpEventMultiplexer->RemoveEventListener(aLink);
 
     // Abort pending user calls.
@@ -861,29 +861,25 @@ IMPL_LINK_NOARG_TYPED(ToolBarManager::Implementation, UpdateCallback, void*, voi
     }
 }
 
-IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
-    sd::tools::EventMultiplexerEvent*,pEvent)
+IMPL_LINK_TYPED(ToolBarManager::Implementation,EventMultiplexerCallback,
+    sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
-    if (pEvent != NULL)
+    switch (rEvent.meEventId)
     {
-        switch (pEvent->meEventId)
-        {
-            case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
-                if (mnPendingSetValidCall == 0)
-                    mnPendingSetValidCall
-                        = Application::PostUserEvent(LINK(this,Implementation,SetValidCallback));
-                break;
+        case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
+            if (mnPendingSetValidCall == 0)
+                mnPendingSetValidCall
+                    = Application::PostUserEvent(LINK(this,Implementation,SetValidCallback));
+            break;
 
-            case tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED:
-                SetValid(false);
-                break;
+        case tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED:
+            SetValid(false);
+            break;
 
-            case tools::EventMultiplexerEvent::EID_PANE_MANAGER_DYING:
-                SetValid(false);
-                break;
-        }
+        case tools::EventMultiplexerEvent::EID_PANE_MANAGER_DYING:
+            SetValid(false);
+            break;
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ToolBarManager::Implementation, SetValidCallback, void*, void)

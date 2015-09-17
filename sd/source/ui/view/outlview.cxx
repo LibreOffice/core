@@ -131,7 +131,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
         FillOutliner();
     }
 
-    Link<> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->AddEventListener(
         aLink,
         tools::EventMultiplexerEvent::EID_CURRENT_PAGE
@@ -171,7 +171,7 @@ OutlineView::~OutlineView()
 {
     DBG_ASSERT(maDragAndDropModelGuard.get() == 0, "sd::OutlineView::~OutlineView(), prior drag operation not finished correctly!" );
 
-    Link<> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->RemoveEventListener( aLink );
     DisconnectFromApplication();
 
@@ -1430,32 +1430,28 @@ IMPL_LINK_NOARG(OutlineView, AppEventListenerHdl)
     return 0;
 }
 
-IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*, pEvent)
+IMPL_LINK_TYPED(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
-    if (pEvent != NULL)
+    switch (rEvent.meEventId)
     {
-        switch (pEvent->meEventId)
-        {
-            case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
-                SetActualPage(mrOutlineViewShell.GetActualPage());
-                break;
+        case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+            SetActualPage(mrOutlineViewShell.GetActualPage());
+            break;
 
-            case tools::EventMultiplexerEvent::EID_PAGE_ORDER:
-                if (dynamic_cast<Outliner&>(mrOutliner).GetIgnoreCurrentPageChangesLevel()==0)
+        case tools::EventMultiplexerEvent::EID_PAGE_ORDER:
+            if (dynamic_cast<Outliner&>(mrOutliner).GetIgnoreCurrentPageChangesLevel()==0)
+            {
+                if (((mrDoc.GetPageCount()-1)%2) == 0)
                 {
-                    if (((mrDoc.GetPageCount()-1)%2) == 0)
-                    {
-                        mrOutliner.Clear();
-                        FillOutliner();
-                        ::sd::Window* pWindow = mrOutlineViewShell.GetActiveWindow();
-                        if (pWindow != NULL)
-                            pWindow->Invalidate();
-                    }
+                    mrOutliner.Clear();
+                    FillOutliner();
+                    ::sd::Window* pWindow = mrOutlineViewShell.GetActiveWindow();
+                    if (pWindow != NULL)
+                        pWindow->Invalidate();
                 }
-                break;
-        }
+            }
+            break;
     }
-    return 0;
 }
 
 void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)

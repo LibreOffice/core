@@ -177,7 +177,7 @@ public:
             be informed about.
     */
     void AddEventListener (
-        Link<>& rCallback,
+        const Link<EventMultiplexerEvent&,void>& rCallback,
         EventMultiplexerEvent::EventId aEventTypeSet);
 
     /** Remove an event listener for the specified event types.
@@ -188,7 +188,7 @@ public:
             for.
     */
     void RemoveEventListener (
-        Link<>& rCallback,
+        const Link<EventMultiplexerEvent&,void>& rCallback,
         EventMultiplexerEvent::EventId aEventTypeSet = EID_FULL_SET);
 
     /** This method is used for out-of-line events.  An event of the

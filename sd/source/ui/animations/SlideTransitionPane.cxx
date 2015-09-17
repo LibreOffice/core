@@ -905,7 +905,7 @@ void SlideTransitionPane::stopEffects()
 
 void SlideTransitionPane::addListener()
 {
-    Link<> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
@@ -918,14 +918,14 @@ void SlideTransitionPane::addListener()
 
 void SlideTransitionPane::removeListener()
 {
-    Link<> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
-    tools::EventMultiplexerEvent*,pEvent)
+IMPL_LINK_TYPED(SlideTransitionPane,EventMultiplexerListener,
+    tools::EventMultiplexerEvent&, rEvent, void)
 {
-    switch (pEvent->meEventId)
+    switch (rEvent.meEventId)
     {
         case tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION:
             onSelectionChanged();
@@ -966,7 +966,6 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
         default:
             break;
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SlideTransitionPane, ApplyToAllButtonClicked, Button*, void)

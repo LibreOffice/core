@@ -202,7 +202,7 @@ private:
     */
     DECL_LINK( AppEventListenerHdl, void * );
 
-    DECL_LINK(EventMultiplexerListener, sd::tools::EventMultiplexerEvent*);
+    DECL_LINK_TYPED(EventMultiplexerListener, sd::tools::EventMultiplexerEvent&, void);
 
     /** holds a model guard during drag and drop between BeginMovingHdl and EndMovingHdl */
     std::unique_ptr< OutlineViewModelChangeGuard > maDragAndDropModelGuard;

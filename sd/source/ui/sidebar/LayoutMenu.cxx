@@ -168,7 +168,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     SetSelectHdl (LINK(this, LayoutMenu, ClickHandler));
     InvalidateContent();
 
-    Link<> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
+    Link<::sd::tools::EventMultiplexerEvent&,void> aEventListenerLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->AddEventListener(aEventListenerLink,
         ::sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | ::sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION
@@ -218,7 +218,7 @@ void LayoutMenu::Dispose()
         xComponent->dispose();
 
     Clear();
-    Link<> aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
+    Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener (aLink);
 
     Link<> aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
@@ -704,9 +704,9 @@ void LayoutMenu::UpdateSelection()
         SetNoSelection();
 }
 
-IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*, pEvent)
+IMPL_LINK_TYPED(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
-    switch (pEvent->meEventId)
+    switch (rEvent.meEventId)
     {
         case ::sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
         case ::sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION:
@@ -734,8 +734,6 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
             /* Ignored */
             break;
     }
-
-    return 0;
 }
 
 IMPL_LINK(LayoutMenu, WindowEventHandler, VclWindowEvent*, pEvent)

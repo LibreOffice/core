@@ -40,7 +40,7 @@ public:
     void onZoomChanged();
     void UpdateTags();
 
-    DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
+    DECL_LINK_TYPED(EventMultiplexerListener, tools::EventMultiplexerEvent&, void);
     DECL_LINK_TYPED(UpdateTagsHdl, void *, void);
 
     bool CreateTags();

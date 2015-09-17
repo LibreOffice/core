@@ -77,7 +77,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     // left clicks.
     mnDefaultClickAction = SID_TP_APPLY_TO_SELECTED_SLIDES;
 
-    Link<> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
+    Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     rBase.GetEventMultiplexer()->AddEventListener(aLink,
         sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
@@ -104,7 +104,7 @@ void CurrentMasterPagesSelector::dispose()
         OSL_ASSERT(mrDocument.GetDocSh() != NULL);
     }
 
-    Link<> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
+    Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 
     MasterPagesSelector::dispose();
@@ -254,41 +254,36 @@ void CurrentMasterPagesSelector::ProcessPopupMenu (Menu& rMenu)
     MasterPagesSelector::ProcessPopupMenu(rMenu);
 }
 
-IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
-    sd::tools::EventMultiplexerEvent*,pEvent)
+IMPL_LINK_TYPED(CurrentMasterPagesSelector,EventMultiplexerListener,
+    sd::tools::EventMultiplexerEvent&, rEvent, void)
 {
-    if (pEvent != NULL)
+    switch (rEvent.meEventId)
     {
-        switch (pEvent->meEventId)
-        {
-            case sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
-            case sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL:
-            case sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER:
-            case sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION:
-                UpdateSelection();
-                break;
+        case sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+        case sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL:
+        case sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER:
+        case sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION:
+            UpdateSelection();
+            break;
 
-            case sd::tools::EventMultiplexerEvent::EID_PAGE_ORDER:
-                // This is tricky.  If a master page is removed, moved, or
-                // added we have to wait until both the notes master page
-                // and the standard master page have been removed, moved,
-                // or added.  We do this by looking at the number of master
-                // pages which has to be odd in the consistent state (the
-                // handout master page is always present).  If the number is
-                // even we ignore the hint.
-                if (mrBase.GetDocument()->GetMasterPageCount()%2 == 1)
-                    MasterPagesSelector::Fill();
-                break;
+        case sd::tools::EventMultiplexerEvent::EID_PAGE_ORDER:
+            // This is tricky.  If a master page is removed, moved, or
+            // added we have to wait until both the notes master page
+            // and the standard master page have been removed, moved,
+            // or added.  We do this by looking at the number of master
+            // pages which has to be odd in the consistent state (the
+            // handout master page is always present).  If the number is
+            // even we ignore the hint.
+            if (mrBase.GetDocument()->GetMasterPageCount()%2 == 1)
+                MasterPagesSelector::Fill();
+            break;
 
-            case sd::tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
-            case sd::tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
-            case sd::tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
-                InvalidatePreview(static_cast<const SdPage*>(pEvent->mpUserData));
-                break;
-        }
+        case sd::tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
+        case sd::tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
+        case sd::tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
+           InvalidatePreview(static_cast<const SdPage*>(rEvent.mpUserData));
+            break;
     }
-
-    return 0;
 }
 
 } } // end of namespace sd::sidebar
