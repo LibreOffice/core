@@ -79,7 +79,7 @@ namespace rptui
         bool setReportSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool, OReportHelper>& _pIsSectionOn);
         void ImplInitSettings();
 
-        DECL_LINK(Collapsed,OColorListener*);
+        DECL_LINK_TYPED(Collapsed, OColorListener&, void);
         DECL_LINK_TYPED(StartSplitHdl, Splitter*, void);
         DECL_LINK_TYPED(SplitHdl, Splitter*, void);
         DECL_LINK_TYPED(EndSplitHdl, Splitter*, void);

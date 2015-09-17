@@ -78,7 +78,7 @@ void OColorListener::setCollapsed(bool _bCollapsed)
     {
         m_bCollapsed = _bCollapsed;
         if ( m_aCollapsedLink.IsSet() )
-            m_aCollapsedLink.Call(this);
+            m_aCollapsedLink.Call(*this);
     }
 }
 

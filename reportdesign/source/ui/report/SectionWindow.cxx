@@ -296,18 +296,14 @@ void OSectionWindow::setMarked(bool _bMark)
     m_aEndMarker->setMarked(_bMark);
 }
 
-IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
+IMPL_LINK_TYPED( OSectionWindow, Collapsed, OColorListener&, _rMarker, void )
 {
-    if ( _pMarker )
-    {
-        bool bShow = !_pMarker->isCollapsed();
-        m_aReportSection->Show(bShow);
-        m_aEndMarker->Show(bShow);
-        m_aSplitter->Show(bShow);
+    bool bShow = !_rMarker.isCollapsed();
+    m_aReportSection->Show(bShow);
+    m_aEndMarker->Show(bShow);
+    m_aSplitter->Show(bShow);
 
-        m_pParent->resize(*this);
-    }
-    return 0L;
+    m_pParent->resize(*this);
 }
 
 void OSectionWindow::zoom(const Fraction& _aZoom)
