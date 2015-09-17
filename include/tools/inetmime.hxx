@@ -667,9 +667,7 @@ protected:
                                const sal_Unicode * pEnd);
 
 public:
-    INetMIMEOutputSink(sal_uInt32 nTheColumn = 0,
-                       sal_uInt32 nTheLineLengthLimit
-                           = INetMIME::SOFT_LINE_LENGTH_LIMIT):
+    INetMIMEOutputSink(sal_uInt32 nTheColumn, sal_uInt32 nTheLineLengthLimit):
         m_nColumn(nTheColumn), m_nLineLengthLimit(nTheLineLengthLimit) {}
 
     virtual ~INetMIMEOutputSink() {}
