@@ -47,7 +47,7 @@ void INetMIMEMessage::SetHeaderField_Impl (
 {
     INetMIMEOutputSink aSink;
     INetMIME::writeHeaderFieldBody (
-        aSink, rValue, osl_getThreadTextEncoding(), false);
+        aSink, rValue, osl_getThreadTextEncoding());
     SetHeaderField_Impl (
         INetMessageHeader (rName, aSink.takeBuffer()), rnIndex);
 }

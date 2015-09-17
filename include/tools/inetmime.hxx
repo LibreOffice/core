@@ -205,8 +205,7 @@ public:
 
     static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                      const OUString& rBody,
-                                     rtl_TextEncoding ePreferredEncoding,
-                                     bool bInitialSpace = true);
+                                     rtl_TextEncoding ePreferredEncoding);
 
     static OUString decodeHeaderFieldBody(const OString& rBody);
 

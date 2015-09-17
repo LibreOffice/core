@@ -972,9 +972,6 @@ createPreferredCharsetList(rtl_TextEncoding eEncoding)
 
 class INetMIMEEncodedWordOutputSink
 {
-public:
-    enum Space { SPACE_NO, SPACE_ALWAYS };
-
 private:
     enum { BUFFER_SIZE = 256 };
 
@@ -988,7 +985,6 @@ private:
                             STATE_BAD };
 
     INetMIMEOutputSink & m_rSink;
-    Space m_eInitialSpace;
     sal_uInt32 m_nExtraSpaces;
     INetMIMECharsetList_Impl * m_pEncodingList;
     sal_Unicode * m_pBuffer;
@@ -1003,7 +999,6 @@ private:
 
 public:
     inline INetMIMEEncodedWordOutputSink(INetMIMEOutputSink & rTheSink,
-                                         Space eTheInitialSpace,
                                          rtl_TextEncoding ePreferredEncoding);
 
     ~INetMIMEEncodedWordOutputSink();
@@ -1016,10 +1011,8 @@ public:
 };
 
 inline INetMIMEEncodedWordOutputSink::INetMIMEEncodedWordOutputSink(
-           INetMIMEOutputSink & rTheSink,
-           Space eTheInitialSpace, rtl_TextEncoding ePreferredEncoding):
+           INetMIMEOutputSink & rTheSink, rtl_TextEncoding ePreferredEncoding):
     m_rSink(rTheSink),
-    m_eInitialSpace(eTheInitialSpace),
     m_nExtraSpaces(0),
     m_pEncodingList(createPreferredCharsetList(ePreferredEncoding)),
     m_ePrevCoding(CODING_NONE),
@@ -1190,9 +1183,6 @@ needsEncodedWordEscape(sal_uInt32 nChar)
 
 void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
 {
-    if (m_eInitialSpace == SPACE_ALWAYS && m_nExtraSpaces == 0)
-        m_nExtraSpaces = 1;
-
     if (m_eEncodedWordState == STATE_SECOND_EQUALS)
     {
         // If the text is already an encoded word, copy it verbatim:
@@ -1405,7 +1395,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
         }
     }
 
-    m_eInitialSpace = SPACE_NO;
     m_nExtraSpaces = 0;
     m_pEncodingList->reset();
     m_pBufferEnd = m_pBuffer;
@@ -2398,15 +2387,9 @@ sal_Unicode const * INetMIME::scanContentType(
 // static
 void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     const OUString& rBody,
-                                    rtl_TextEncoding ePreferredEncoding,
-                                    bool bInitialSpace)
+                                    rtl_TextEncoding ePreferredEncoding)
 {
-    INetMIMEEncodedWordOutputSink
-        aOutput(rSink,
-                bInitialSpace ?
-                    INetMIMEEncodedWordOutputSink::SPACE_ALWAYS :
-                    INetMIMEEncodedWordOutputSink::SPACE_NO,
-                ePreferredEncoding);
+    INetMIMEEncodedWordOutputSink aOutput(rSink, ePreferredEncoding);
     aOutput.write(rBody.getStr(), rBody.getStr() + rBody.getLength());
     aOutput.flush();
 }
