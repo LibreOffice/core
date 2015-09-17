@@ -243,7 +243,7 @@ void FocusManager::ShowFocusIndicator (
     }
 }
 
-void FocusManager::AddFocusChangeListener (const Link<>& rListener)
+void FocusManager::AddFocusChangeListener (const Link<LinkParamNone*,void>& rListener)
 {
     if (::std::find (maFocusChangeListeners.begin(), maFocusChangeListeners.end(), rListener)
         == maFocusChangeListeners.end())
@@ -252,7 +252,7 @@ void FocusManager::AddFocusChangeListener (const Link<>& rListener)
     }
 }
 
-void FocusManager::RemoveFocusChangeListener (const Link<>& rListener)
+void FocusManager::RemoveFocusChangeListener (const Link<LinkParamNone*,void>& rListener)
 {
     maFocusChangeListeners.erase (
         ::std::find (maFocusChangeListeners.begin(), maFocusChangeListeners.end(), rListener));
@@ -261,11 +261,11 @@ void FocusManager::RemoveFocusChangeListener (const Link<>& rListener)
 void FocusManager::NotifyFocusChangeListeners() const
 {
     // Create a copy of the listener list to be safe when that is modified.
-    ::std::vector<Link<>> aListeners (maFocusChangeListeners);
+    ::std::vector<Link<LinkParamNone*,void>> aListeners (maFocusChangeListeners);
 
     // Tell the selection change listeners that the selection has changed.
-    ::std::vector<Link<>>::iterator iListener (aListeners.begin());
-    ::std::vector<Link<>>::iterator iEnd (aListeners.end());
+    ::std::vector<Link<LinkParamNone*,void>>::iterator iListener (aListeners.begin());
+    ::std::vector<Link<LinkParamNone*,void>>::iterator iEnd (aListeners.end());
     for (; iListener!=iEnd; ++iListener)
     {
         iListener->Call(NULL);

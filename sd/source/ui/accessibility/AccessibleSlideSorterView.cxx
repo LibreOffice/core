@@ -83,7 +83,7 @@ public:
     DECL_LINK(WindowEventListener, VclWindowEvent*);
     DECL_LINK(SelectionChangeListener, void*);
     DECL_LINK_TYPED(BroadcastSelectionChange, void*, void);
-    DECL_LINK(FocusChangeListener, void*);
+    DECL_LINK_TYPED(FocusChangeListener, LinkParamNone*, void);
     DECL_LINK_TYPED(VisibilityChangeListener, LinkParamNone*, void);
     DECL_LINK_TYPED(UpdateChildrenCallback, void*, void);
 
@@ -937,7 +937,7 @@ IMPL_LINK_NOARG_TYPED(AccessibleSlideSorterView::Implementation, BroadcastSelect
         Any());
 }
 
-IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener)
+IMPL_LINK_NOARG_TYPED(AccessibleSlideSorterView::Implementation, FocusChangeListener, LinkParamNone*, void)
 {
     sal_Int32 nNewFocusedIndex (
         mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex());
@@ -977,7 +977,6 @@ IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener)
         if (bSentFocus)
             mnFocusedIndex = nNewFocusedIndex;
     }
-    return 1;
 }
 
 IMPL_LINK_NOARG_TYPED(AccessibleSlideSorterView::Implementation, UpdateChildrenCallback, void*, void)

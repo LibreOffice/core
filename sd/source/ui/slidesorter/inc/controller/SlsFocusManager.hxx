@@ -143,14 +143,14 @@ public:
             the second and all following calls are ignored.  Each listener
             is added only once.
     */
-    void AddFocusChangeListener (const Link<>& rListener);
+    void AddFocusChangeListener (const Link<LinkParamNone*,void>& rListener);
 
     /** Remove a focus change listener.
         @param rListener
             It is save to pass a listener that was not added are has been
             removed previously.  Such calls are ignored.
     */
-    void RemoveFocusChangeListener (const Link<>& rListener);
+    void RemoveFocusChangeListener (const Link<LinkParamNone*,void>& rListener);
 
     /** Create an instance of this class to temporarily hide the focus
         indicator.  It is restored to its former visibility state when the
@@ -179,7 +179,7 @@ private:
     */
     bool mbPageIsFocused;
 
-    ::std::vector<Link<>> maFocusChangeListeners;
+    ::std::vector<Link<LinkParamNone*,void>> maFocusChangeListeners;
 
     /** When vertical wrap is active then pressing UP in the top row moves
         the focus to the bottom row, DOWN in the bottom row moves the focus
