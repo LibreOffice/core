@@ -33,6 +33,7 @@
 class SwWrtShell;
 class SwView;
 class SfxItemSet;
+class SwCrsrShell;
 
 struct DBTextStruct_Impl;
 class SwBaseShell: public SfxShell
@@ -49,7 +50,7 @@ class SwBaseShell: public SfxShell
     // Update-Timer for graphic
     std::set<sal_uInt16> aGrfUpdateSlots;
 
-    DECL_LINK( GraphicArrivedHdl, void* );
+    DECL_LINK_TYPED( GraphicArrivedHdl, SwCrsrShell&, void );
 
 protected:
     SwWrtShell&         GetShell();
@@ -57,7 +58,7 @@ protected:
 
     inline SwView&      GetView()                       { return rView; }
     inline void         SetGetStateSet( SfxItemSet* p ) { pGetStateSet = p; }
-    inline bool     AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.insert( nSlot ).second; }
+    inline bool         AddGrfUpdateSlot( sal_uInt16 nSlot ){ return aGrfUpdateSlots.insert( nSlot ).second; }
 
     DECL_LINK_TYPED(    InsertDBTextHdl, void*, void );
 

@@ -2200,7 +2200,7 @@ void SwCrsrShell::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     if( m_aGrfArrivedLnk.IsSet() &&
         ( RES_GRAPHIC_ARRIVED == nWhich || RES_GRAPHIC_SWAPIN == nWhich ))
-        m_aGrfArrivedLnk.Call( this );
+        m_aGrfArrivedLnk.Call( *this );
 }
 
 /** Does the current cursor create a selection?

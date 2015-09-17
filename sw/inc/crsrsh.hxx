@@ -170,7 +170,7 @@ private:
                                    into a fly. A macro can then be called */
     Link<SwCrsrShell*,void> m_aChgLnk;             /**< link will be called by every attribute/
                                    format changes at cursor position.*/
-    Link<> m_aGrfArrivedLnk;      ///< Link calls to UI if a graphic is arrived
+    Link<SwCrsrShell&,void> m_aGrfArrivedLnk;      ///< Link calls to UI if a graphic is arrived
 
     SwShellCrsr* m_pCurCrsr;      ///< current cursor
     SwShellCrsr* m_pCrsrStk;      ///< stack for the cursor
@@ -489,8 +489,8 @@ public:
     const Link<SwCrsrShell*,void>& GetChgLnk() const           { return m_aChgLnk; }
 
     // Methods returning/altering ling for "graphic completely loaded".
-    void        SetGrfArrivedLnk( const Link<> &rLnk ) { m_aGrfArrivedLnk = rLnk; }
-    const Link<>& GetGrfArrivedLnk() const           { return m_aGrfArrivedLnk; }
+    void        SetGrfArrivedLnk( const Link<SwCrsrShell&,void> &rLnk ) { m_aGrfArrivedLnk = rLnk; }
+    const Link<SwCrsrShell&,void>& GetGrfArrivedLnk() const           { return m_aGrfArrivedLnk; }
 
     //Call ChgLink. When within an action calling will be delayed.
     void CallChgLnk();

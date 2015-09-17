@@ -1218,7 +1218,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 // Here the state fpr SID_IMAP / SID_CONTOUR will be handled
 // until the swapping of the graphic is finished.
 
-IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
+IMPL_LINK_NOARG_TYPED(SwBaseShell, GraphicArrivedHdl, SwCrsrShell&, void)
 {
     sal_uInt16 nGrfType;
     SwWrtShell &rSh = GetShell();
@@ -1310,7 +1310,6 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
         }
         aGrfUpdateSlots.clear();
     }
-    return 0;
 }
 
 void SwBaseShell::GetState( SfxItemSet &rSet )
@@ -1923,9 +1922,9 @@ SwBaseShell::~SwBaseShell()
     if( rView.GetCurShell() == this )
         rView.ResetSubShell();
 
-    Link<> aTmp( LINK( this, SwBaseShell, GraphicArrivedHdl));
+    Link<SwCrsrShell&,void> aTmp( LINK( this, SwBaseShell, GraphicArrivedHdl));
     if( aTmp == rView.GetWrtShell().GetGrfArrivedLnk() )
-        rView.GetWrtShell().SetGrfArrivedLnk( Link<>() );
+        rView.GetWrtShell().SetGrfArrivedLnk( Link<SwCrsrShell&,void>() );
 }
 
 void SwBaseShell::ExecTextCtrl( SfxRequest& rReq )
