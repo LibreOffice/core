@@ -178,7 +178,7 @@ IMPL_LINK_NOARG_TYPED(MasterPagesSelector, ClickHandler, ValueSet*, void)
     ExecuteCommand(mnDefaultClickAction);
 }
 
-IMPL_LINK(MasterPagesSelector, RightClickHandler, MouseEvent*, pEvent)
+IMPL_LINK_TYPED(MasterPagesSelector, RightClickHandler, const MouseEvent&, rEvent, void)
 {
     // Here we only prepare the display of the context menu: the item under
     // the mouse is selected.  The actual display of the context menu is
@@ -190,14 +190,13 @@ IMPL_LINK(MasterPagesSelector, RightClickHandler, MouseEvent*, pEvent)
     if (pViewFrame != NULL)
     {
         SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
-        if (pDispatcher != NULL &&  pEvent != NULL)
+        if (pDispatcher != NULL)
         {
-            sal_uInt16 nIndex = PreviewValueSet::GetItemId (pEvent->GetPosPixel());
+            sal_uInt16 nIndex = PreviewValueSet::GetItemId (rEvent.GetPosPixel());
             if (nIndex > 0)
                 PreviewValueSet::SelectItem (nIndex);
         }
     }
-    return 0;
 }
 
 void MasterPagesSelector::Command (const CommandEvent& rEvent)

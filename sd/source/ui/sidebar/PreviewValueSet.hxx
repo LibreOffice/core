@@ -33,7 +33,7 @@ public:
     explicit PreviewValueSet (vcl::Window* pParent);
     virtual ~PreviewValueSet();
 
-    void SetRightMouseClickHandler (const Link<>& rLink);
+    void SetRightMouseClickHandler (const Link<const MouseEvent&,void>& rLink);
     virtual void Resize() SAL_OVERRIDE;
 
     void SetPreviewSize (const Size& rSize);
@@ -49,7 +49,7 @@ protected:
     virtual void MouseButtonDown (const MouseEvent& rEvent) SAL_OVERRIDE;
 
 private:
-    Link<> maRightMouseClickHandler;
+    Link<const MouseEvent&,void> maRightMouseClickHandler;
     Size maPreviewSize;
     const int mnBorderWidth;
     const int mnBorderHeight;

@@ -47,7 +47,7 @@ void PreviewValueSet::SetPreviewSize (const Size& rSize)
     maPreviewSize = rSize;
 }
 
-void PreviewValueSet::SetRightMouseClickHandler (const Link<>& rLink)
+void PreviewValueSet::SetRightMouseClickHandler (const Link<const MouseEvent&,void>& rLink)
 {
     maRightMouseClickHandler = rLink;
 }
@@ -55,9 +55,9 @@ void PreviewValueSet::SetRightMouseClickHandler (const Link<>& rLink)
 void PreviewValueSet::MouseButtonDown (const MouseEvent& rEvent)
 {
     if (rEvent.IsRight())
-        maRightMouseClickHandler.Call(&const_cast<MouseEvent&>(rEvent));
+        maRightMouseClickHandler.Call(rEvent);
     else
-        ValueSet::MouseButtonDown (rEvent);
+        ValueSet::MouseButtonDown(rEvent);
 
 }
 
