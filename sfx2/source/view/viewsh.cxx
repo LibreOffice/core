@@ -309,6 +309,8 @@ SfxViewShell_Impl::SfxViewShell_Impl(SfxViewShellFlags const nFlags)
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pController(0)
 ,   mpIPClientList(NULL)
+,   m_pLibreOfficeKitViewCallback(0)
+,   m_pLibreOfficeKitViewData(0)
 {}
 
 SfxViewShell_Impl::~SfxViewShell_Impl()
@@ -1629,6 +1631,18 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     }
 
     return pImp->m_xAccExec->execute(aKey.GetKeyCode());
+}
+
+void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pData)
+{
+    pImp->m_pLibreOfficeKitViewCallback = pCallback;
+    pImp->m_pLibreOfficeKitViewData = pData;
+}
+
+void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
+{
+    if (pImp->m_pLibreOfficeKitViewCallback)
+        pImp->m_pLibreOfficeKitViewCallback(nType, pPayload, pImp->m_pLibreOfficeKitViewData);
 }
 
 bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )

@@ -39,6 +39,8 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/vclptr.hxx>
 #include <sfx2/tabdlg.hxx>
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKitTypes.h>
 
 class SfxBaseController;
 class Size;
@@ -315,6 +317,11 @@ public:
     SAL_DLLPRIVATE void TakeOwnership_Impl();
     SAL_DLLPRIVATE void TakeFrameOwnership_Impl();
     SAL_DLLPRIVATE bool ExecKey_Impl(const KeyEvent& aKey);
+
+    /// The actual implementation of the lok::Document::registerViewCallback() API.
+    void registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+    /// Invokes the registered callback, if there are any.
+    void libreOfficeKitViewCallback(int nType, const char* pPayload) const;
 };
 
 
