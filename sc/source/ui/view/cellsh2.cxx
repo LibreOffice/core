@@ -979,6 +979,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aImport.SetExtOptions( aOptions );
                         aImport.SetApi( false );
                         aImport.SetImportBroadcast( true );
+                        aImport.SetOverwriting( true );
                         aStream.Seek( 0 );
                         aImport.ImportStream( aStream, OUString(), SotClipboardFormatId::STRING );
 
