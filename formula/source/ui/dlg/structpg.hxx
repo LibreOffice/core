@@ -70,8 +70,8 @@ class StructPage : public TabPage
                     , public IStructHelper
 {
 private:
-    OModuleClient   m_aModuleClient;
-    Link<>          aSelLink;
+    OModuleClient           m_aModuleClient;
+    Link<StructPage&,void>  aSelLink;
 
     VclPtr<StructListBox>   m_pTlbStruct;
     Image           maImgEnd;
@@ -99,7 +99,7 @@ public:
 
     virtual OUString            GetEntryText(SvTreeListEntry* pEntry) const SAL_OVERRIDE;
 
-    void            SetSelectionHdl( const Link<>& rLink ) { aSelLink = rLink; }
+    void            SetSelectionHdl( const Link<StructPage&,void>& rLink ) { aSelLink = rLink; }
 
     StructListBox*  GetTlbStruct() const { return m_pTlbStruct; }
 };

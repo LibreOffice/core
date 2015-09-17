@@ -130,7 +130,7 @@ public:
     DECL_LINK_TYPED( BtnHdl, Button*, void );
     DECL_LINK_TYPED( DblClkHdl, FuncPage&, void );
     DECL_LINK_TYPED( FuncSelHdl, FuncPage&, void );
-    DECL_LINK(StructSelHdl, void *);
+    DECL_LINK_TYPED( StructSelHdl, StructPage&, void );
 public:
     mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
     uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
@@ -1580,13 +1580,12 @@ bool FormulaDlg_Impl::CheckMatrix(OUString& aFormula)
     m_pTabCtrl->SetCurPageId(TP_STRUCT);
     return bMatrix;
 }
-IMPL_LINK_NOARG(FormulaDlg_Impl, StructSelHdl)
+IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, StructSelHdl, StructPage&, void)
 {
     bStructUpdate=false;
-    if(pStructPage->IsVisible())    m_pBtnForward->Enable(false); //@New
-
+    if(pStructPage->IsVisible())
+        m_pBtnForward->Enable(false); //@New
     bStructUpdate=true;
-    return 0;
 }
 IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, MatrixHdl, Button*, void)
 {

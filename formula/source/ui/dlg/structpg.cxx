@@ -190,7 +190,7 @@ IMPL_LINK_TYPED( StructPage, SelectHdl, SvTreeListBox*, pTlb, void )
             }
         }
 
-        aSelLink.Call(this);
+        aSelLink.Call(*this);
     }
 }
 
