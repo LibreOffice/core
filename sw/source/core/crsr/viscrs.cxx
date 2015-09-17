@@ -54,6 +54,7 @@
 #include <memory>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 #include <paintfrm.hxx>
 
 // Here static members are defined. They will get changed on alteration of the
@@ -178,7 +179,7 @@ void SwVisCrsr::_SetPosAndShow()
 
     m_aTextCrsr.SetPos( aRect.Pos() );
 
-    if (m_pCrsrShell->isTiledRendering())
+    if (comphelper::LibreOfficeKit::isActive())
     {
         // notify about page number change (if that happened)
         sal_uInt16 nPage, nVirtPage;
@@ -193,7 +194,10 @@ void SwVisCrsr::_SetPosAndShow()
         // notify about the cursor position & size
         Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
         OString sRect = aSVRect.toString();
-        m_pCrsrShell->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+        if (comphelper::LibreOfficeKit::isViewCallback())
+            m_pCrsrShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+        else
+            m_pCrsrShell->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
     }
 
     if ( !m_pCrsrShell->IsCrsrReadonly()  || m_pCrsrShell->GetViewOptions()->IsSelectionInReadonly() )
