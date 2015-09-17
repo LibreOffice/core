@@ -20,9 +20,8 @@
 #include <sal/config.h>
 
 #include <map>
-
+#include <memory>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -62,7 +61,7 @@ SimpleResMgr * ResMgrMap::get(LanguageTag const & locale) {
     OUString code( locale.getBcp47());
     Map::iterator i(map_.find(code));
     if (i == map_.end()) {
-        boost::scoped_ptr< SimpleResMgr > mgr(
+        std::unique_ptr< SimpleResMgr > mgr(
             new SimpleResMgr("svl", locale));
         i = map_.insert(Map::value_type(code, mgr.get())).first;
         mgr.reset();

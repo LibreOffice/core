@@ -59,7 +59,7 @@ TableContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& r
         break;
     case A_TOKEN( tableStyle ):         // CT_TableStyle
         {
-            boost::shared_ptr< TableStyle >& rTableStyle = mrTableProperties.getTableStyle();
+            std::shared_ptr< TableStyle >& rTableStyle = mrTableProperties.getTableStyle();
             rTableStyle.reset( new TableStyle() );
             return new TableStyleContext( *this, rAttribs, *rTableStyle );
         }

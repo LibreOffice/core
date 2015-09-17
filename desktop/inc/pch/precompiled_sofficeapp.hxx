@@ -21,8 +21,6 @@
 #include <algorithm>
 #include <basic/sbstar.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <cassert>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

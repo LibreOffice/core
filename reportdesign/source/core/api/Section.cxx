@@ -198,7 +198,7 @@ void OSection::init()
 {
     SolarMutexGuard g; // lock while manipulating SdrModel
     uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
-    ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
+    std::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
     assert(pModel && "No model set at the report definition!");
     if ( pModel )
     {

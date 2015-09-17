@@ -61,8 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBULLETSTYLEMGR_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBULLETSTYLEMGR_HXX
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "lwpheader.hxx"
 #include "lwpfoundry.hxx"
@@ -90,7 +89,7 @@ public:
     inline void SetCurrentSilverBullet(const LwpObjectID& rNewID);
 
 private:
-    typedef std::pair<boost::shared_ptr<LwpBulletOverride>, LwpObjectID> OverridePair;
+    typedef std::pair<std::shared_ptr<LwpBulletOverride>, LwpObjectID> OverridePair;
     std::vector <OUString> m_vStyleNameList;
     std::vector <OverridePair> m_vIDsPairList;
     LwpFoundry* m_pFoundry;
@@ -98,7 +97,7 @@ private:
     bool m_bContinue;
     bool m_bIsBulletSkipped;
     LwpObjectID m_aCurrentNumberingID;
-    boost::scoped_ptr<LwpNumberingOverride> m_pCurrentNumOverride;
+    std::unique_ptr<LwpNumberingOverride> m_pCurrentNumOverride;
 };
 
 inline void LwpBulletStyleMgr::SetFoundry(LwpFoundry* pFoundry)

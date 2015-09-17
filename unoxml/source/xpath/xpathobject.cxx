@@ -62,7 +62,7 @@ namespace XPath
     CXPathObject::CXPathObject(
             ::rtl::Reference<DOM::CDocument> const& pDocument,
             ::osl::Mutex & rMutex,
-            ::boost::shared_ptr<xmlXPathObject> const& pXPathObj)
+            std::shared_ptr<xmlXPathObject> const& pXPathObj)
         : m_pDocument(pDocument)
         , m_rMutex(rMutex)
         , m_pXPathObj(pXPathObj)
@@ -168,7 +168,7 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        ::boost::shared_ptr<xmlChar const> str(
+        std::shared_ptr<xmlChar const> str(
             xmlXPathCastToString(m_pXPathObj.get()), xmlFree);
         sal_Char const*const pS(reinterpret_cast<sal_Char const*>(str.get()));
         return OUString(pS, strlen(pS), RTL_TEXTENCODING_UTF8);

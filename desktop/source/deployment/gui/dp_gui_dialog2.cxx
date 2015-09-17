@@ -71,9 +71,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <map>
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::system;
@@ -495,7 +494,7 @@ IMPL_LINK_NOARG_TYPED(ExtBoxWithBtns_Impl, HandleOptionsBtn, Button*, void)
         if ( pFact )
         {
             OUString sExtensionId = GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
-            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog( this, sExtensionId, OUString() ));
+            std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog( this, sExtensionId, OUString() ));
 
             pDlg->Execute();
         }

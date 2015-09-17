@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_SOURCE_SHAPE_SHAPEFILTERBASE_HXX
 #define INCLUDED_OOX_SOURCE_SHAPE_SHAPEFILTERBASE_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <rtl/ref.hxx>
 #include "oox/vml/vmldrawing.hxx"
 #include "drawingml/table/tablestylelist.hxx"
@@ -33,7 +33,7 @@ namespace shape {
 class ShapeFilterBase : public core::XmlFilterBase
 {
 public:
-    typedef boost::shared_ptr<ShapeFilterBase> Pointer_t;
+    typedef std::shared_ptr<ShapeFilterBase> Pointer_t;
 
     explicit            ShapeFilterBase(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
@@ -64,7 +64,7 @@ private:
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual GraphicHelper* implCreateGraphicHelper() const SAL_OVERRIDE;
 
-    ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
+    std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
     ::oox::drawingml::ThemePtr mpTheme;
 };
 

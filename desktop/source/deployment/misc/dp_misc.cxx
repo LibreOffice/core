@@ -42,7 +42,6 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <salhelper/linkhelper.hxx>
@@ -75,11 +74,11 @@ namespace dp_misc {
 namespace {
 
 struct UnoRc : public rtl::StaticWithInit<
-    boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
-    const boost::shared_ptr<rtl::Bootstrap> operator () () {
+    std::shared_ptr<rtl::Bootstrap>, UnoRc> {
+    const std::shared_ptr<rtl::Bootstrap> operator () () {
         OUString unorc( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("louno") );
         ::rtl::Bootstrap::expandMacros( unorc );
-        ::boost::shared_ptr< ::rtl::Bootstrap > ret(
+        std::shared_ptr< ::rtl::Bootstrap > ret(
             new ::rtl::Bootstrap( unorc ) );
         OSL_ASSERT( ret->getHandle() != 0 );
         return ret;
@@ -110,7 +109,7 @@ const OUString OfficePipeId::operator () ()
         reinterpret_cast<sal_uInt8 const *>(userPath.getStr());
     sal_Size size = (userPath.getLength() * sizeof (sal_Unicode));
     sal_uInt32 md5_key_len = rtl_digest_queryLength( digest );
-    ::std::unique_ptr<sal_uInt8[]> md5_buf( new sal_uInt8 [ md5_key_len ] );
+    std::unique_ptr<sal_uInt8[]> md5_buf( new sal_uInt8 [ md5_key_len ] );
 
     rtl_digest_init( digest, data, static_cast<sal_uInt32>(size) );
     rtl_digest_update( digest, data, static_cast<sal_uInt32>(size) );

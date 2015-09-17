@@ -68,7 +68,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
@@ -193,7 +193,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     {
         // slot is a property
         const SfxType* pType = pSlot->GetType();
-        boost::scoped_ptr<SfxPoolItem> pItem(pType->CreateItem());
+        std::unique_ptr<SfxPoolItem> pItem(pType->CreateItem());
 
         if ( !pItem )
         {
@@ -311,7 +311,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     for ( sal_uInt16 nArgs=0; nArgs<nMaxArgs; nArgs++ )
     {
         const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArgs] : pSlot->GetFormalArgument( nArgs );
-        boost::scoped_ptr<SfxPoolItem> pItem(rArg.CreateItem());
+        std::unique_ptr<SfxPoolItem> pItem(rArg.CreateItem());
         if ( !pItem )
         {
 #ifdef DBG_UTIL

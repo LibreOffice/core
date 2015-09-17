@@ -18,8 +18,6 @@
 #include <boost/bind.hpp>
 #include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>

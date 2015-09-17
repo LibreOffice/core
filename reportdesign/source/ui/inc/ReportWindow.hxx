@@ -27,7 +27,6 @@
 #include <sfx2/zoomitem.hxx>
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
 #include <comphelper/propmultiplex.hxx>
 
 #include "MarkedSection.hxx"

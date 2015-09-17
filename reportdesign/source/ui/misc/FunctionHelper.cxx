@@ -62,7 +62,7 @@ const formula::IFunctionCategory* FunctionManager::getCategory(sal_uInt32 _nPos)
     if ( _nPos >= m_aCategoryIndex.size() )
     {
         uno::Reference< report::meta::XFunctionCategory> xCategory = m_xMgr->getCategory(_nPos);
-        ::boost::shared_ptr< FunctionCategory > pCategory(new FunctionCategory(this,_nPos + 1,xCategory));
+        std::shared_ptr< FunctionCategory > pCategory(new FunctionCategory(this,_nPos + 1,xCategory));
         m_aCategoryIndex.push_back( m_aCategories.insert(TCategoriesMap::value_type(xCategory->getName(),pCategory)).first );
     }
     return m_aCategoryIndex[_nPos]->second.get();
@@ -72,9 +72,9 @@ void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula
 {
 }
 
-::boost::shared_ptr< FunctionDescription > FunctionManager::get(const uno::Reference< report::meta::XFunctionDescription>& _xFunctionDescription) const
+std::shared_ptr< FunctionDescription > FunctionManager::get(const uno::Reference< report::meta::XFunctionDescription>& _xFunctionDescription) const
 {
-    ::boost::shared_ptr< FunctionDescription > pDesc;
+    std::shared_ptr< FunctionDescription > pDesc;
     if ( _xFunctionDescription.is() )
     {
         const OUString sFunctionName = _xFunctionDescription->getName();
@@ -86,10 +86,10 @@ void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula
             TCategoriesMap::iterator aCategoryFind = m_aCategories.find(sCategoryName);
             if ( aCategoryFind == m_aCategories.end() )
             {
-                aCategoryFind = m_aCategories.insert(TCategoriesMap::value_type(sCategoryName,::boost::shared_ptr< FunctionCategory > (new FunctionCategory(this,xCategory->getNumber() + 1,xCategory)))).first;
+                aCategoryFind = m_aCategories.insert(TCategoriesMap::value_type(sCategoryName,std::shared_ptr< FunctionCategory > (new FunctionCategory(this,xCategory->getNumber() + 1,xCategory)))).first;
                 m_aCategoryIndex.push_back( aCategoryFind );
             }
-            aFunctionFind = m_aFunctions.insert(TFunctionsMap::value_type(sFunctionName,::boost::shared_ptr<FunctionDescription>(new FunctionDescription(aCategoryFind->second.get(),_xFunctionDescription)))).first;
+            aFunctionFind = m_aFunctions.insert(TFunctionsMap::value_type(sFunctionName,std::shared_ptr<FunctionDescription>(new FunctionDescription(aCategoryFind->second.get(),_xFunctionDescription)))).first;
         }
         pDesc = aFunctionFind->second;
     }
@@ -114,7 +114,7 @@ const formula::IFunctionDescription* FunctionCategory::getFunction(sal_uInt32 _n
     if ( _nPos >= m_aFunctions.size() && _nPos < m_nFunctionCount )
     {
         uno::Reference< report::meta::XFunctionDescription> xFunctionDescription = m_xCategory->getFunction(_nPos);
-        ::boost::shared_ptr< FunctionDescription > pFunction = m_pFunctionManager->get(xFunctionDescription);
+        std::shared_ptr< FunctionDescription > pFunction = m_pFunctionManager->get(xFunctionDescription);
         m_aFunctions.push_back( pFunction );
     }
     return m_aFunctions[_nPos].get();

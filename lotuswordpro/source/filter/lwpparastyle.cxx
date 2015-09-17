@@ -58,7 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "lwpparastyle.hxx"
 #include "lwpfilehdr.hxx"
@@ -174,7 +174,7 @@ void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
         {
             if (!m_pBulletOverride->IsInValid())// for remove bullet indent in named bullet style
             {
-                boost::scoped_ptr<LwpIndentOverride> pNewIndent(pIndent->clone());
+                std::unique_ptr<LwpIndentOverride> pNewIndent(pIndent->clone());
                 pNewIndent->SetMFirst(0);
                 pNewIndent->SetMRest(0);
                 ApplyIndent(NULL, pParaStyle, pNewIndent.get());

@@ -29,7 +29,7 @@ namespace XPath
     CNodeList::CNodeList(
                 ::rtl::Reference<DOM::CDocument> const& pDocument,
                 ::osl::Mutex & rMutex,
-                boost::shared_ptr<xmlXPathObject> const& rxpathObj)
+                std::shared_ptr<xmlXPathObject> const& rxpathObj)
         : m_pDocument(pDocument)
         , m_rMutex(rMutex)
         , m_pNodeSet(0)

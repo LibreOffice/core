@@ -19,7 +19,7 @@
 #ifndef INCLUDED_OOX_SOURCE_SHAPE_SHAPECONTEXTHANDLER_HXX
 #define INCLUDED_OOX_SOURCE_SHAPE_SHAPECONTEXTHANDLER_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
@@ -37,7 +37,7 @@ namespace oox { namespace shape {
 class ShapeFragmentHandler : public core::FragmentHandler2
 {
 public:
-    typedef boost::shared_ptr<ShapeFragmentHandler> Pointer_t;
+    typedef std::shared_ptr<ShapeFragmentHandler> Pointer_t;
 
     explicit ShapeFragmentHandler(core::XmlFilterBase& rFilter,
                                   const OUString& rFragmentPath )
@@ -153,9 +153,9 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     drawingml::ShapePtr mpShape;
-    ::boost::shared_ptr< vml::Drawing > mpDrawing;
+    std::shared_ptr< vml::Drawing > mpDrawing;
 
-    typedef boost::shared_ptr<drawingml::GraphicShapeContext>
+    typedef std::shared_ptr<drawingml::GraphicShapeContext>
     GraphicShapeContextPtr;
     css::uno::Reference<XFastContextHandler> mxDrawingFragmentHandler;
     css::uno::Reference<XFastContextHandler> mxGraphicShapeContext;

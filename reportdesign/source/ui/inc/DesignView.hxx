@@ -35,7 +35,6 @@
 #include <svl/SfxBroadcaster.hxx>
 #include "ReportDefines.hxx"
 #include <svtools/colorcfg.hxx>
-#include <boost/shared_ptr.hpp>
 #include <svx/svdedtv.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/splitwin.hxx>

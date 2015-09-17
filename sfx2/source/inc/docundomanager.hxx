@@ -26,7 +26,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 
 /** base class for sub components of an SfxBaseModel, which share their ref count and lifetime with the SfxBaseModel
@@ -154,7 +154,7 @@ namespace sfx2
         virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        ::boost::scoped_ptr< DocumentUndoManager_Impl > m_pImpl;
+        std::unique_ptr< DocumentUndoManager_Impl > m_pImpl;
     };
 
 

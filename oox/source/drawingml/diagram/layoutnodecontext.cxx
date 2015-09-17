@@ -249,7 +249,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     }
     case DGM_TOKEN( shape ):
     {
-        LayoutNodePtr pNode( boost::dynamic_pointer_cast< LayoutNode >( mpNode ) );
+        LayoutNodePtr pNode(std::dynamic_pointer_cast<LayoutNode>(mpNode));
         if( pNode )
         {
             ShapePtr pShape;
@@ -319,7 +319,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         break;
     case DGM_TOKEN( varLst ):
     {
-        LayoutNodePtr pNode( boost::dynamic_pointer_cast< LayoutNode >( mpNode ) );
+        LayoutNodePtr pNode(std::dynamic_pointer_cast<LayoutNode>(mpNode));
         if( pNode )
         {
             return new LayoutVariablePropertySetContext( *this, pNode->variables() );

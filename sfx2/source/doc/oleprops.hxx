@@ -21,7 +21,7 @@
 #define INCLUDED_SFX2_SOURCE_DOC_OLEPROPS_HXX
 
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
 #include <sot/storage.hxx>
@@ -126,7 +126,7 @@ public:
     void                SetCodePage( sal_uInt16 nCodePage );
 
 private:
-    typedef ::boost::shared_ptr< rtl_TextEncoding > TextEncRef;
+    typedef std::shared_ptr< rtl_TextEncoding > TextEncRef;
     TextEncRef          mxTextEnc;
 };
 
@@ -226,7 +226,7 @@ private:
     sal_Int32           mnPropType;
 };
 
-typedef ::boost::shared_ptr< SfxOlePropertyBase > SfxOlePropertyRef;
+typedef std::shared_ptr< SfxOlePropertyBase > SfxOlePropertyRef;
 
 
 /** Property representing the codepage used to encode bytestrings in the entire property set. */
@@ -353,7 +353,7 @@ private:
     bool                mbSupportsDict;         /// true = section supports dictionary.
 };
 
-typedef ::boost::shared_ptr< SfxOleSection > SfxOleSectionRef;
+typedef std::shared_ptr< SfxOleSection > SfxOleSectionRef;
 
 
 

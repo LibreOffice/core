@@ -25,8 +25,8 @@
 #include <com/sun/star/report/meta/XFunctionCategory.hpp>
 #include <com/sun/star/report/meta/XFunctionDescription.hpp>
 #include <map>
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 namespace rptui
 {
@@ -36,8 +36,8 @@ class FunctionDescription;
 
 class FunctionManager : public formula::IFunctionManager
 {
-    typedef std::map< OUString, ::boost::shared_ptr< FunctionDescription > > TFunctionsMap;
-    typedef std::map< OUString, ::boost::shared_ptr< FunctionCategory > > TCategoriesMap;
+    typedef std::map< OUString, std::shared_ptr< FunctionDescription > > TFunctionsMap;
+    typedef std::map< OUString, std::shared_ptr< FunctionCategory > > TCategoriesMap;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionManager> m_xMgr;
     mutable TCategoriesMap  m_aCategories;
     mutable ::std::vector< TCategoriesMap::iterator > m_aCategoryIndex;
@@ -50,7 +50,7 @@ public:
     virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const SAL_OVERRIDE;
     virtual sal_Unicode                             getSingleToken(const EToken _eToken) const SAL_OVERRIDE;
 
-    ::boost::shared_ptr< FunctionDescription >      get(const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionDescription>& _xFunctionDescription) const;
+    std::shared_ptr< FunctionDescription >      get(const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionDescription>& _xFunctionDescription) const;
 };
 
 class FunctionDescription : public formula::IFunctionDescription
@@ -79,7 +79,7 @@ public:
 
 class FunctionCategory : public formula::IFunctionCategory
 {
-    mutable ::std::vector< ::boost::shared_ptr< FunctionDescription > > m_aFunctions;
+    mutable ::std::vector< std::shared_ptr< FunctionDescription > > m_aFunctions;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionCategory> m_xCategory;
     sal_uInt32 m_nFunctionCount;
     sal_uInt32 m_nNumber;

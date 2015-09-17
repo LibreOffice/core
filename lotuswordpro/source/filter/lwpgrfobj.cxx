@@ -60,7 +60,7 @@
 */
 #include <stdio.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "lwp9reader.hxx"
 #include "lwpgrfobj.hxx"
@@ -342,7 +342,7 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
     // if small file, use the compressed stream for BENTO
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
-    boost::scoped_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
+    std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
     {
         OpenStormBento::LtcBenContainer* pTmp(0);
         sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pTmp);

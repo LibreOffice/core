@@ -147,7 +147,7 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
         m_xReportComponent.set( xNameCont->getByName("ReportComponent"), uno::UNO_QUERY );
         if ( m_xDataProvider.is() )
         {
-            ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+            std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
             TPropertyNamePair aPropertyMediation;
             aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_MASTERFIELDS, TPropertyConverter(PROPERTY_MASTERFIELDS,aNoConverter) ) );
             aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_DETAILFIELDS, TPropertyConverter(PROPERTY_DETAILFIELDS,aNoConverter) ) );

@@ -356,7 +356,7 @@ namespace XPath
         }
 
         /* Create xpath evaluation context */
-        ::boost::shared_ptr<xmlXPathContext> const xpathCtx(
+        std::shared_ptr<xmlXPathContext> const xpathCtx(
                 xmlXPathNewContext(pDoc), xmlXPathFreeContext);
         if (xpathCtx == 0) { throw XPathException(); }
 
@@ -373,7 +373,7 @@ namespace XPath
         /* run the query */
         OString o1 = OUStringToOString(expr, RTL_TEXTENCODING_UTF8);
         xmlChar const *xStr = reinterpret_cast<xmlChar const *>(o1.getStr());
-        ::boost::shared_ptr<xmlXPathObject> const xpathObj(
+        std::shared_ptr<xmlXPathObject> const xpathObj(
                 xmlXPathEval(xStr, xpathCtx.get()), xmlXPathFreeObject);
         xmlSetGenericErrorFunc(NULL, NULL);
         if (0 == xpathObj) {

@@ -18,7 +18,7 @@
  */
 
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <vcl/msgbox.hxx>
 #include <svl/lstner.hxx>
@@ -263,7 +263,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, const OUString& aEventName, cons
 
 void SfxEventConfiguration::ConfigureEvent( const OUString& aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
 {
-    boost::scoped_ptr<SvxMacro> pMacro;
+    std::unique_ptr<SvxMacro> pMacro;
     if ( rMacro.HasMacro() )
         pMacro.reset( new SvxMacro( rMacro.GetMacName(), rMacro.GetLibName(), rMacro.GetScriptType() ) );
     PropagateEvent_Impl( pDoc ? pDoc : 0, aName, pMacro.get() );

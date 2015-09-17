@@ -42,7 +42,6 @@
 
 #include "helpids.hrc"
 #include "dlgedfac.hxx"
-#include <boost/shared_ptr.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 
 

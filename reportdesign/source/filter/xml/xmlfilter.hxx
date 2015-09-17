@@ -39,7 +39,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <map>
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmlprmap.hxx>
 
@@ -94,7 +93,7 @@ private:
     rtl::Reference < XMLPropertySetMapper >           m_xTableStylesPropertySetMapper;
 
     Reference<XReportDefinition>                    m_xReportDefinition;
-    ::boost::shared_ptr<rptui::OReportModel>        m_pReportModel;
+    std::shared_ptr<rptui::OReportModel>        m_pReportModel;
 
     bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
 

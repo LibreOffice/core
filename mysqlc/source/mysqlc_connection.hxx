@@ -23,7 +23,6 @@
 #include "mysqlc_subcomponent.hxx"
 #include "mysqlc_types.hxx"
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

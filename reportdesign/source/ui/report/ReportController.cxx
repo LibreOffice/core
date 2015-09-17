@@ -143,7 +143,7 @@
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <unotools/confignode.hxx>
@@ -3021,7 +3021,7 @@ uno::Reference< sdbc::XRowSet > OReportController::getRowSet()
         xRowSetProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, uno::makeAny( getConnection() ) );
         xRowSetProp->setPropertyValue( PROPERTY_APPLYFILTER, uno::makeAny( sal_True ) );
 
-        ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+        std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
         TPropertyNamePair aPropertyMediation;
         aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMAND, TPropertyConverter(PROPERTY_COMMAND,aNoConverter) ) );
         aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMANDTYPE, TPropertyConverter(PROPERTY_COMMANDTYPE,aNoConverter) ) );
@@ -3796,7 +3796,7 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
         const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
         const bool bSwitchOn = !m_xReportDefinition->getReportHeaderOn();
 
-        ::boost::scoped_ptr< UndoContext > pUndoContext;
+        std::unique_ptr< UndoContext > pUndoContext;
         if ( SID_REPORTHEADERFOOTER == _nId )
         {
             const OUString sUndoAction(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
@@ -3845,7 +3845,7 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
         const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
         const bool bSwitchOn = !m_xReportDefinition->getPageHeaderOn();
 
-        ::boost::scoped_ptr< UndoContext > pUndoContext;
+        std::unique_ptr< UndoContext > pUndoContext;
         if ( SID_PAGEHEADERFOOTER == _nId )
         {
             const OUString sUndoAction(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
@@ -4374,7 +4374,7 @@ SfxUndoManager& OReportController::getUndoManager() const
     DBG_TESTSOLARMUTEX();
         // this is expected to be called during UI actions, so the SM is assumed to be locked
 
-    ::boost::shared_ptr< OReportModel > pReportModel( getSdrModel() );
+    std::shared_ptr< OReportModel > pReportModel( getSdrModel() );
     ENSURE_OR_THROW( !!pReportModel, "no access to our model" );
 
     SfxUndoManager* pUndoManager( pReportModel->GetSdrUndoManager() );

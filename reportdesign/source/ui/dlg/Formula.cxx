@@ -27,7 +27,7 @@
 #include <formula/tokenarray.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "Formula.hxx"
 #include "AddField.hxx"
@@ -45,7 +45,7 @@ namespace rptui
 
 FormulaDialog::FormulaDialog(vcl::Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
-                             , const ::boost::shared_ptr< IFunctionManager >&  _pFunctionMgr
+                             , const std::shared_ptr< IFunctionManager >&  _pFunctionMgr
                              , const OUString& _sFormula
                              , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
                              , svl::SharedStringPool& rStrPool )

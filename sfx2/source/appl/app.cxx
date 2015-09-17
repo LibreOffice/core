@@ -117,7 +117,7 @@
 #include <unotools/extendedsecurityoptions.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -564,7 +564,7 @@ SfxApplication::ChooseScript()
         const SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetFrame() : NULL;
         uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
 
-        boost::scoped_ptr<AbstractScriptSelectorDialog> pDlg(
+        std::unique_ptr<AbstractScriptSelectorDialog> pDlg(
             pFact->CreateScriptSelectorDialog( NULL, false, xFrame ));
 
         SAL_INFO( "sfx.appl", "done, now exec it");

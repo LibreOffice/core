@@ -17,7 +17,7 @@
 
 #include <cstring>
 #include <cstdlib>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sax_fastparser {
 
@@ -40,7 +40,7 @@ class CachedOutputStream
     uno_Sequence *pSeq;
     bool mbWriteToOutStream;
     /// ForMerge structure is used for sorting elements in Writer
-    boost::shared_ptr< ForMergeBase > mpForMerge;
+    std::shared_ptr< ForMergeBase > mpForMerge;
 
 public:
     CachedOutputStream() : mnCacheWrittenSize(0)
@@ -61,7 +61,7 @@ public:
         mxOutputStream = xOutputStream;
     }
 
-    void setOutput( boost::shared_ptr< ForMergeBase > pForMerge )
+    void setOutput( std::shared_ptr< ForMergeBase > pForMerge )
     {
         flush();
         mbWriteToOutStream = false;

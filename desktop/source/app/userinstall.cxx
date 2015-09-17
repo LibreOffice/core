@@ -21,7 +21,6 @@
 
 #include <cassert>
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <comphelper/configuration.hxx>
 #include "config_folders.h"

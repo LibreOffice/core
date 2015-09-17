@@ -38,8 +38,6 @@
 #include "com/sun/star/security/DocumentDigitalSignatures.hpp"
 #include "com/sun/star/security/XCertificate.hpp"
 
-#include <boost/shared_ptr.hpp>
-
 static ResMgr& getPDFFilterResMgr()
 {
     static ResMgr *pRes = ResMgr::CreateResMgr( "pdffilter", Application::GetSettings().GetUILanguageTag());

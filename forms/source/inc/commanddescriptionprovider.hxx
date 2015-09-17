@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace frm
@@ -41,7 +41,7 @@ namespace frm
         virtual ~ICommandDescriptionProvider() { }
     };
 
-    typedef ::boost::shared_ptr< const ICommandDescriptionProvider >  PCommandDescriptionProvider;
+    typedef std::shared_ptr< const ICommandDescriptionProvider >  PCommandDescriptionProvider;
 
 
     //= factory

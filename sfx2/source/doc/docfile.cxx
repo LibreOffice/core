@@ -121,7 +121,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -199,7 +199,7 @@ public:
     mutable INetURLObject* m_pURLObj;
 
     const SfxFilter* m_pFilter;
-    boost::scoped_ptr<SfxFilter> m_pCustomFilter;
+    std::unique_ptr<SfxFilter> m_pCustomFilter;
 
     SfxMedium*       pAntiImpl;
     SvStream* m_pInStream;

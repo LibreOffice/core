@@ -26,7 +26,7 @@
 #include <libxml/xmlerror.h>
 #include <libxml/tree.h>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <rtl/alloc.h>
 #include <rtl/ustrbuf.hxx>
@@ -318,7 +318,7 @@ namespace DOM
 
         ::osl::MutexGuard const g(m_Mutex);
 
-        ::boost::shared_ptr<xmlParserCtxt> const pContext(
+        std::shared_ptr<xmlParserCtxt> const pContext(
                 xmlNewParserCtxt(), xmlFreeParserCtxt);
 
         // register error functions to prevent errors being printed
@@ -351,7 +351,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        ::boost::shared_ptr<xmlParserCtxt> const pContext(
+        std::shared_ptr<xmlParserCtxt> const pContext(
                 xmlNewParserCtxt(), xmlFreeParserCtxt);
         pContext->_private = this;
         pContext->sax->error = error_func;

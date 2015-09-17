@@ -30,7 +30,6 @@
 #include <vcl/layout.hxx>
 #include <vcl/scrbar.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 #include <vector>

@@ -21,7 +21,6 @@
 #define INCLUDED_DESKTOP_INC_APP_HXX
 
 #include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
@@ -31,6 +30,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -176,7 +176,7 @@ class Desktop : public Application
         OUString                m_aBootstrapErrorMessage;
         BootstrapStatus         m_aBootstrapStatus;
 
-        boost::scoped_ptr<Lockfile> m_xLockfile;
+        std::unique_ptr<Lockfile> m_xLockfile;
         Timer                   m_firstRunTimer;
 
         static ResMgr*          pResMgr;

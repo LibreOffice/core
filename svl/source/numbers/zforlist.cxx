@@ -50,7 +50,7 @@
 
 #include <math.h>
 #include <limits>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1531,7 +1531,7 @@ bool SvNumberFormatter::GetPreviewString(const OUString& sFormatString,
     eLnge = ActLnge;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
-    boost::scoped_ptr<SvNumberformat> p_Entry(new SvNumberformat(sTmpString,
+    std::unique_ptr<SvNumberformat> p_Entry(new SvNumberformat(sTmpString,
                                                  pFormatScanner,
                                                  pStringScanner,
                                                  nCheckPos,
@@ -1592,7 +1592,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
         return true;
     }
 
-    boost::scoped_ptr<SvNumberformat> pEntry;
+    std::unique_ptr<SvNumberformat> pEntry;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString;
 
@@ -1635,7 +1635,7 @@ bool SvNumberFormatter::GetPreviewStringGuess( const OUString& sFormatString,
                 eFormatLang = eLnge;
                 pFormatScanner->SetConvertMode( eLnge, LANGUAGE_ENGLISH_US );
                 sTmpString = sFormatString;
-                boost::scoped_ptr<SvNumberformat> pEntry2(new SvNumberformat( sTmpString, pFormatScanner,
+                std::unique_ptr<SvNumberformat> pEntry2(new SvNumberformat( sTmpString, pFormatScanner,
                                                               pStringScanner, nCheckPos2, eFormatLang ));
                 pFormatScanner->SetConvertMode( false );
                 ChangeIntl( eLnge );
@@ -1679,7 +1679,7 @@ bool SvNumberFormatter::GetPreviewString( const OUString& sFormatString,
     eLnge = ActLnge;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
-    boost::scoped_ptr<SvNumberformat> p_Entry(new SvNumberformat( sTmpString,
+    std::unique_ptr<SvNumberformat> p_Entry(new SvNumberformat( sTmpString,
                                                   pFormatScanner,
                                                   pStringScanner,
                                                   nCheckPos,
@@ -1732,7 +1732,7 @@ sal_uInt32 SvNumberFormatter::TestNewString(const OUString& sFormatString,
     sal_uInt32 nRes;
     sal_Int32 nCheckPos = -1;
     OUString sTmpString = sFormatString;
-    boost::scoped_ptr<SvNumberformat> pEntry(new SvNumberformat(sTmpString,
+    std::unique_ptr<SvNumberformat> pEntry(new SvNumberformat(sTmpString,
                                                 pFormatScanner,
                                                 pStringScanner,
                                                 nCheckPos,
@@ -1945,7 +1945,7 @@ sal_uInt32 SvNumberFormatter::GetFormatSpecialInfo( const OUString& rFormatStrin
     eLnge = ActLnge;
     OUString aTmpStr( rFormatString );
     sal_Int32 nCheckPos = 0;
-    boost::scoped_ptr<SvNumberformat> pFormat(new SvNumberformat( aTmpStr, pFormatScanner,
+    std::unique_ptr<SvNumberformat> pFormat(new SvNumberformat( aTmpStr, pFormatScanner,
                                                   pStringScanner, nCheckPos, eLnge ));
     if ( nCheckPos == 0 )
     {
@@ -3646,7 +3646,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     bInitializing = true;
 
     LanguageType eSysLang = SvtSysLocale().GetLanguageTag().getLanguageType();
-    boost::scoped_ptr<LocaleDataWrapper> pLocaleData(new LocaleDataWrapper(
+    std::unique_ptr<LocaleDataWrapper> pLocaleData(new LocaleDataWrapper(
         ::comphelper::getProcessComponentContext(),
         SvtSysLocale().GetLanguageTag() ));
     // get user configured currency

@@ -36,7 +36,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -572,7 +571,7 @@ bool SotStorage::IsStorageFile( const OUString & rFileName )
         aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }
 
-    boost::scoped_ptr<SvStream> pStm(::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ ));
+    std::unique_ptr<SvStream> pStm(::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ ));
     bool bRet = SotStorage::IsStorageFile( pStm.get() );
     return bRet;
 }

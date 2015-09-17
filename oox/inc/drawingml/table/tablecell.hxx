@@ -28,8 +28,6 @@
 #include <drawingml/textliststyle.hxx>
 #include <com/sun/star/table/XCell.hpp>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/optional.hpp>
 #include <vector>
 #include <map>
 

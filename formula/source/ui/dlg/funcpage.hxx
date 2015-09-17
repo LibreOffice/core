@@ -30,7 +30,6 @@
 #include <vcl/button.hxx>
 #include <svtools/treelistbox.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <vector>
 #include "formula/omoduleclient.hxx"
 

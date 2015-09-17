@@ -21,14 +21,14 @@
 
 #include <string.h>
 
-#include <set>
 #include <map>
+#include <memory>
+#include <set>
 #include <iterator>
 #include <functional>
 #include <algorithm>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 #include <boost/bind.hpp>
 #include <boost/optional.hpp>
@@ -121,7 +121,7 @@ bool isInternalContext(librdf_node *i_pNode) throw ()
 
 
 // n.b.: librdf destructor functions dereference null pointers!
-//       so they need to be wrapped to be usable with boost::shared_ptr.
+//       so they need to be wrapped to be usable with std::shared_ptr.
 static void safe_librdf_free_world(librdf_world *const world)
 {
     if (world) { librdf_free_world(world); }
@@ -211,12 +211,12 @@ public:
     };
     struct Statement
     {
-        ::boost::shared_ptr<Resource> const pSubject;
-        ::boost::shared_ptr<URI> const pPredicate;
-        ::boost::shared_ptr<Node> const pObject;
-        Statement(::boost::shared_ptr<Resource> const& i_pSubject,
-                  ::boost::shared_ptr<URI> const& i_pPredicate,
-                  ::boost::shared_ptr<Node> const& i_pObject)
+        std::shared_ptr<Resource> const pSubject;
+        std::shared_ptr<URI> const pPredicate;
+        std::shared_ptr<Node> const pObject;
+        Statement(std::shared_ptr<Resource> const& i_pSubject,
+                  std::shared_ptr<URI> const& i_pPredicate,
+                  std::shared_ptr<Node> const& i_pObject)
             : pSubject(i_pSubject)
             , pPredicate(i_pPredicate)
             , pObject(i_pObject)
@@ -242,9 +242,9 @@ public:
         const Node * i_pNode);
     static librdf_statement* mkStatement_Lock(librdf_world* i_pWorld,
         Statement const& i_rStatement);
-    static ::boost::shared_ptr<Resource> extractResource_NoLock(
+    static std::shared_ptr<Resource> extractResource_NoLock(
         const uno::Reference< rdf::XResource > & i_xResource);
-    static ::boost::shared_ptr<Node> extractNode_NoLock(
+    static std::shared_ptr<Node> extractNode_NoLock(
         const uno::Reference< rdf::XNode > & i_xNode);
     static Statement extractStatement_NoLock(
         const uno::Reference< rdf::XResource > & i_xSubject,
@@ -426,7 +426,7 @@ private:
               And of course this is not documented anywhere that I could find.
               So we allocate a single world, and refcount that.
      */
-    static boost::shared_ptr<librdf_world> m_pWorld;
+    static std::shared_ptr<librdf_world> m_pWorld;
     /// refcount
     static sal_uInt32 m_NumInstances;
     /// mutex for m_pWorld - redland is not as threadsafe as is often claimed
@@ -434,9 +434,9 @@ private:
 
     // NB: sequence of the shared pointers is important!
     /// librdf repository storage
-    boost::shared_ptr<librdf_storage> m_pStorage;
+    std::shared_ptr<librdf_storage> m_pStorage;
     /// librdf repository model
-    boost::shared_ptr<librdf_model> m_pModel;
+    std::shared_ptr<librdf_model> m_pModel;
 
     /// all named graphs
     NamedGraphMap_t m_NamedGraphs;
@@ -463,10 +463,10 @@ public:
 
     librdf_GraphResult(librdf_Repository *i_pRepository,
             ::osl::Mutex & i_rMutex,
-            boost::shared_ptr<librdf_stream> const& i_pStream,
-            boost::shared_ptr<librdf_node> const& i_pContext,
-            boost::shared_ptr<librdf_query>  const& i_pQuery =
-                boost::shared_ptr<librdf_query>() )
+            std::shared_ptr<librdf_stream> const& i_pStream,
+            std::shared_ptr<librdf_node> const& i_pContext,
+            std::shared_ptr<librdf_query>  const& i_pQuery =
+                std::shared_ptr<librdf_query>() )
         : m_xRep(i_pRepository)
         , m_rMutex(i_rMutex)
         , m_pQuery(i_pQuery)
@@ -477,9 +477,9 @@ public:
     virtual ~librdf_GraphResult()
     {
         ::osl::MutexGuard g(m_rMutex); // lock mutex when destroying members
-        const_cast<boost::shared_ptr<librdf_stream>& >(m_pStream).reset();
-        const_cast<boost::shared_ptr<librdf_node>& >(m_pContext).reset();
-        const_cast<boost::shared_ptr<librdf_query>& >(m_pQuery).reset();
+        const_cast<std::shared_ptr<librdf_stream>& >(m_pStream).reset();
+        const_cast<std::shared_ptr<librdf_node>& >(m_pContext).reset();
+        const_cast<std::shared_ptr<librdf_query>& >(m_pQuery).reset();
     }
 
     // css::container::XEnumeration:
@@ -499,9 +499,9 @@ private:
     // the query (in case this is a result of a graph query)
     // not that the redland documentation spells this out explicity, but
     // queries must be freed only after all the results are completely read
-    boost::shared_ptr<librdf_query>  const m_pQuery;
-    boost::shared_ptr<librdf_node>   const m_pContext;
-    boost::shared_ptr<librdf_stream> const m_pStream;
+    std::shared_ptr<librdf_query>  const m_pQuery;
+    std::shared_ptr<librdf_node>   const m_pContext;
+    std::shared_ptr<librdf_stream> const m_pStream;
 
     librdf_node* getContext_Lock() const;
 };
@@ -577,8 +577,8 @@ public:
 
     librdf_QuerySelectResult(librdf_Repository *i_pRepository,
             ::osl::Mutex & i_rMutex,
-            boost::shared_ptr<librdf_query>  const& i_pQuery,
-            boost::shared_ptr<librdf_query_results> const& i_pQueryResult,
+            std::shared_ptr<librdf_query>  const& i_pQuery,
+            std::shared_ptr<librdf_query_results> const& i_pQueryResult,
             uno::Sequence< OUString > const& i_rBindingNames )
         : m_xRep(i_pRepository)
         , m_rMutex(i_rMutex)
@@ -590,9 +590,9 @@ public:
     virtual ~librdf_QuerySelectResult()
     {
         ::osl::MutexGuard g(m_rMutex); // lock mutex when destroying members
-        const_cast<boost::shared_ptr<librdf_query_results>& >(m_pQueryResult)
+        const_cast<std::shared_ptr<librdf_query_results>& >(m_pQueryResult)
             .reset();
-        const_cast<boost::shared_ptr<librdf_query>& >(m_pQuery).reset();
+        const_cast<std::shared_ptr<librdf_query>& >(m_pQuery).reset();
     }
 
     // css::container::XEnumeration:
@@ -616,8 +616,8 @@ private:
     ::osl::Mutex & m_rMutex;
     // not that the redland documentation spells this out explicity, but
     // queries must be freed only after all the results are completely read
-    boost::shared_ptr<librdf_query> const m_pQuery;
-    boost::shared_ptr<librdf_query_results> const m_pQueryResult;
+    std::shared_ptr<librdf_query> const m_pQuery;
+    std::shared_ptr<librdf_query_results> const m_pQueryResult;
     uno::Sequence< OUString > const m_BindingNames;
 };
 
@@ -849,7 +849,7 @@ throw (uno::RuntimeException,
 
 
 
-boost::shared_ptr<librdf_world> librdf_Repository::m_pWorld;
+std::shared_ptr<librdf_world> librdf_Repository::m_pWorld;
 sal_uInt32 librdf_Repository::m_NumInstances = 0;
 osl::Mutex librdf_Repository::m_aMutex;
 
@@ -913,7 +913,7 @@ uno::Reference< rdf::XBlankNode > SAL_CALL librdf_Repository::createBlankNode()
 throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard g(m_aMutex);
-    const boost::shared_ptr<librdf_node> pNode(
+    const std::shared_ptr<librdf_node> pNode(
         librdf_new_node_from_blank_identifier(m_pWorld.get(), NULL),
         safe_librdf_free_node);
     if (!pNode) {
@@ -1002,7 +1002,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const OString context(
         OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
 
-    const boost::shared_ptr<librdf_node> pContext(
+    const std::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
@@ -1013,7 +1013,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const OString baseURI(
         OUStringToOString(baseURIU, RTL_TEXTENCODING_UTF8) );
-    const boost::shared_ptr<librdf_uri> pBaseURI(
+    const std::shared_ptr<librdf_uri> pBaseURI(
         librdf_new_uri(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (baseURI.getStr())),
         safe_librdf_free_uri);
@@ -1021,7 +1021,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         throw uno::RuntimeException( "librdf_Repository::importGraph: librdf_new_uri failed", *this);
     }
 
-    const boost::shared_ptr<librdf_parser> pParser(
+    const std::shared_ptr<librdf_parser> pParser(
         librdf_new_parser(m_pWorld.get(), "rdfxml", NULL, NULL),
         safe_librdf_free_parser);
     if (!pParser) {
@@ -1030,7 +1030,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "librdf_new_parser failed", *this);
     }
 
-    const boost::shared_ptr<librdf_stream> pStream(
+    const std::shared_ptr<librdf_stream> pStream(
         librdf_parser_parse_counted_string_as_stream(pParser.get(),
             reinterpret_cast<const unsigned char*>(buf.getConstArray()),
             buf.getLength(), pBaseURI.get()),
@@ -1150,7 +1150,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const OString context(
         OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
 
-    const boost::shared_ptr<librdf_node> pContext(
+    const std::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
@@ -1161,7 +1161,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
     const OString baseURI(
         OUStringToOString(baseURIU, RTL_TEXTENCODING_UTF8) );
-    const boost::shared_ptr<librdf_uri> pBaseURI(
+    const std::shared_ptr<librdf_uri> pBaseURI(
         librdf_new_uri(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (baseURI.getStr())),
         safe_librdf_free_uri);
@@ -1171,7 +1171,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "librdf_new_uri failed", *this);
     }
 
-    const boost::shared_ptr<librdf_stream> pStream(
+    const std::shared_ptr<librdf_stream> pStream(
         librdf_model_context_as_stream(m_pModel.get(), pContext.get()),
         safe_librdf_free_stream);
     if (!pStream) {
@@ -1182,7 +1182,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const char *format("rdfxml");
     // #i116443#: abbrev breaks when certain URIs are used as data types
 //    const char *format("rdfxml-abbrev");
-    const boost::shared_ptr<librdf_serializer> pSerializer(
+    const std::shared_ptr<librdf_serializer> pSerializer(
         librdf_new_serializer(m_pWorld.get(), format, NULL, NULL),
         safe_librdf_free_serializer);
     if (!pSerializer) {
@@ -1191,19 +1191,19 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "librdf_new_serializer failed", *this);
     }
 
-    const boost::shared_ptr<librdf_uri> pRelativeURI(
+    const std::shared_ptr<librdf_uri> pRelativeURI(
         librdf_new_uri(m_pWorld.get(), reinterpret_cast<const unsigned char*>
                 ("http://feature.librdf.org/raptor-relativeURIs")),
                  safe_librdf_free_uri);
-    const boost::shared_ptr<librdf_uri> pWriteBaseURI(
+    const std::shared_ptr<librdf_uri> pWriteBaseURI(
         librdf_new_uri(m_pWorld.get(), reinterpret_cast<const unsigned char*>
             ("http://feature.librdf.org/raptor-writeBaseURI")),
              safe_librdf_free_uri);
-    const boost::shared_ptr<librdf_node> p0(
+    const std::shared_ptr<librdf_node> p0(
         librdf_new_node_from_literal(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> ("0"), NULL, 0),
         safe_librdf_free_node);
-    const boost::shared_ptr<librdf_node> p1(
+    const std::shared_ptr<librdf_node> p1(
         librdf_new_node_from_literal(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> ("1"), NULL, 0),
         safe_librdf_free_node);
@@ -1231,7 +1231,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     size_t length;
-    const boost::shared_ptr<unsigned char> pBuf(
+    const std::shared_ptr<unsigned char> pBuf(
         librdf_serializer_serialize_stream_to_counted_string(
             pSerializer.get(), pBaseURI.get(), pStream.get(), &length), free);
     if (!pBuf) {
@@ -1349,8 +1349,8 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
         isMetadatableWithoutMetadata(i_xObject))
     {
         return new librdf_GraphResult(this, m_aMutex,
-            ::boost::shared_ptr<librdf_stream>(),
-            ::boost::shared_ptr<librdf_node>());
+            std::shared_ptr<librdf_stream>(),
+            std::shared_ptr<librdf_node>());
     }
 
     librdf_TypeConverter::Statement const stmt(
@@ -1359,12 +1359,12 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
 
     ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
-    const boost::shared_ptr<librdf_statement> pStatement(
+    const std::shared_ptr<librdf_statement> pStatement(
         librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), stmt),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
-    const boost::shared_ptr<librdf_stream> pStream(
+    const std::shared_ptr<librdf_stream> pStream(
         librdf_model_find_statements(m_pModel.get(), pStatement.get()),
         safe_librdf_free_stream);
     if (!pStream) {
@@ -1374,7 +1374,7 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
     }
 
     return new librdf_GraphResult(this, m_aMutex, pStream,
-        ::boost::shared_ptr<librdf_node>());
+        std::shared_ptr<librdf_node>());
 }
 
 
@@ -1385,7 +1385,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
     ::osl::MutexGuard g(m_aMutex);
     const OString query(
         OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
-    const boost::shared_ptr<librdf_query> pQuery(
+    const std::shared_ptr<librdf_query> pQuery(
         librdf_new_query(m_pWorld.get(), s_sparql, NULL,
             reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
         safe_librdf_free_query);
@@ -1394,7 +1394,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
             "librdf_Repository::querySelect: "
             "librdf_new_query failed", *this);
     }
-    const boost::shared_ptr<librdf_query_results> pResults(
+    const std::shared_ptr<librdf_query_results> pResults(
         librdf_model_query_execute(m_pModel.get(), pQuery.get()),
         safe_librdf_free_query_results);
     if (!pResults || !librdf_query_results_is_bindings(pResults.get())) {
@@ -1434,7 +1434,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
     ::osl::MutexGuard g(m_aMutex);
     const OString query(
         OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
-    const boost::shared_ptr<librdf_query> pQuery(
+    const std::shared_ptr<librdf_query> pQuery(
         librdf_new_query(m_pWorld.get(), s_sparql, NULL,
             reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
         safe_librdf_free_query);
@@ -1443,7 +1443,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
             "librdf_Repository::queryConstruct: "
             "librdf_new_query failed", *this);
     }
-    const boost::shared_ptr<librdf_query_results> pResults(
+    const std::shared_ptr<librdf_query_results> pResults(
         librdf_model_query_execute(m_pModel.get(), pQuery.get()),
         safe_librdf_free_query_results);
     if (!pResults || !librdf_query_results_is_graph(pResults.get())) {
@@ -1451,7 +1451,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
             "librdf_Repository::queryConstruct: "
             "query result is null or not graph", *this);
     }
-    const boost::shared_ptr<librdf_stream> pStream(
+    const std::shared_ptr<librdf_stream> pStream(
         librdf_query_results_as_stream(pResults.get()),
         safe_librdf_free_stream);
     if (!pStream) {
@@ -1461,7 +1461,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
     }
 
     return new librdf_GraphResult(this, m_aMutex, pStream,
-                                  ::boost::shared_ptr<librdf_node>(), pQuery);
+                                  std::shared_ptr<librdf_node>(), pQuery);
 }
 
 sal_Bool SAL_CALL
@@ -1472,7 +1472,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
 
     const OString query(
         OUStringToOString(i_rQuery, RTL_TEXTENCODING_UTF8) );
-    const boost::shared_ptr<librdf_query> pQuery(
+    const std::shared_ptr<librdf_query> pQuery(
         librdf_new_query(m_pWorld.get(), s_sparql, NULL,
             reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
         safe_librdf_free_query);
@@ -1481,7 +1481,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
             "librdf_Repository::queryAsk: "
             "librdf_new_query failed", *this);
     }
-    const boost::shared_ptr<librdf_query_results> pResults(
+    const std::shared_ptr<librdf_query_results> pResults(
         librdf_model_query_execute(m_pModel.get(), pQuery.get()),
         safe_librdf_free_query_results);
     if (!pResults || !librdf_query_results_is_boolean(pResults.get())) {
@@ -1578,11 +1578,11 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "cannot create literal", *this, uno::makeAny(iae));
     }
 
-    ::boost::shared_ptr<librdf_TypeConverter::Resource> const pSubject(
+    std::shared_ptr<librdf_TypeConverter::Resource> const pSubject(
         librdf_TypeConverter::extractResource_NoLock(i_xSubject));
-    ::boost::shared_ptr<librdf_TypeConverter::Node> const pContent(
+    std::shared_ptr<librdf_TypeConverter::Node> const pContent(
         librdf_TypeConverter::extractNode_NoLock(xContent));
-    ::std::vector< ::boost::shared_ptr<librdf_TypeConverter::Resource> >
+    ::std::vector< std::shared_ptr<librdf_TypeConverter::Resource> >
         predicates;
     ::std::transform(i_rPredicates.begin(), i_rPredicates.end(),
         ::std::back_inserter(predicates),
@@ -1599,13 +1599,13 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
     try
     {
-        for (::std::vector< ::boost::shared_ptr<librdf_TypeConverter::Resource> >
+        for (::std::vector< std::shared_ptr<librdf_TypeConverter::Resource> >
                 ::iterator iter = predicates.begin(); iter != predicates.end();
              ++iter)
         {
             addStatementGraph_Lock(
                 librdf_TypeConverter::Statement(pSubject,
-                    ::boost::dynamic_pointer_cast<librdf_TypeConverter::URI>(*iter),
+                    std::dynamic_pointer_cast<librdf_TypeConverter::URI>(*iter),
                     pContent),
                 sContext, true);
         }
@@ -1725,8 +1725,8 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
         isMetadatableWithoutMetadata(i_xObject))
     {
         return new librdf_GraphResult(this, m_aMutex,
-            ::boost::shared_ptr<librdf_stream>(),
-            ::boost::shared_ptr<librdf_node>());
+            std::shared_ptr<librdf_stream>(),
+            std::shared_ptr<librdf_node>());
     }
 
     librdf_TypeConverter::Statement const stmt(
@@ -1735,12 +1735,12 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
 
     ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
-    const boost::shared_ptr<librdf_statement> pStatement(
+    const std::shared_ptr<librdf_statement> pStatement(
         librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), stmt),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
-    const boost::shared_ptr<librdf_stream> pStream(
+    const std::shared_ptr<librdf_stream> pStream(
         librdf_model_find_statements(m_pModel.get(), pStatement.get()),
         safe_librdf_free_stream);
     if (!pStream) {
@@ -1757,7 +1757,7 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
     }
 
     return new librdf_GraphResult(this, m_aMutex, pStream,
-                                  ::boost::shared_ptr<librdf_node>());
+                                  std::shared_ptr<librdf_node>());
 }
 
 // css::lang::XInitialization:
@@ -1799,7 +1799,7 @@ const NamedGraphMap_t::iterator librdf_Repository::clearGraph_Lock(
     const OString context(
         OUStringToOString(i_rGraphName, RTL_TEXTENCODING_UTF8) );
 
-    const boost::shared_ptr<librdf_node> pContext(
+    const std::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
@@ -1866,7 +1866,7 @@ void librdf_Repository::addStatementGraph_Lock(
     const OString context(
         OUStringToOString(i_rGraphName, RTL_TEXTENCODING_UTF8) );
 
-    const boost::shared_ptr<librdf_node> pContext(
+    const std::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
@@ -1875,7 +1875,7 @@ void librdf_Repository::addStatementGraph_Lock(
             "librdf_Repository::addStatement: "
             "librdf_new_node_from_uri_string failed", *this);
     }
-    const boost::shared_ptr<librdf_statement> pStatement(
+    const std::shared_ptr<librdf_statement> pStatement(
         librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), i_rStatement),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
@@ -1884,7 +1884,7 @@ void librdf_Repository::addStatementGraph_Lock(
     // librdf_model_add_statement disallows duplicates while
     // librdf_model_context_add_statement allows duplicates
     {
-        const boost::shared_ptr<librdf_stream> pStream(
+        const std::shared_ptr<librdf_stream> pStream(
             librdf_model_find_statements_in_context(m_pModel.get(),
                 pStatement.get(), pContext.get()),
             safe_librdf_free_stream);
@@ -1930,7 +1930,7 @@ void librdf_Repository::removeStatementsGraph_NoLock(
     const OString context(
         OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
 
-    const boost::shared_ptr<librdf_node> pContext(
+    const std::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
@@ -1939,12 +1939,12 @@ void librdf_Repository::removeStatementsGraph_NoLock(
             "librdf_Repository::removeStatements: "
             "librdf_new_node_from_uri_string failed", *this);
     }
-    const boost::shared_ptr<librdf_statement> pStatement(
+    const std::shared_ptr<librdf_statement> pStatement(
         librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), stmt),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
-    const boost::shared_ptr<librdf_stream> pStream(
+    const std::shared_ptr<librdf_stream> pStream(
         librdf_model_find_statements_in_context(m_pModel.get(),
             pStatement.get(), pContext.get()),
         safe_librdf_free_stream);
@@ -1991,8 +1991,8 @@ librdf_Repository::getStatementsGraph_NoLock(
         isMetadatableWithoutMetadata(i_xObject))
     {
         return new librdf_GraphResult(this, m_aMutex,
-            ::boost::shared_ptr<librdf_stream>(),
-            ::boost::shared_ptr<librdf_node>());
+            std::shared_ptr<librdf_stream>(),
+            std::shared_ptr<librdf_node>());
     }
 
     librdf_TypeConverter::Statement const stmt(
@@ -2010,7 +2010,7 @@ librdf_Repository::getStatementsGraph_NoLock(
     const OString context(
         OUStringToOString(contextU, RTL_TEXTENCODING_UTF8) );
 
-    const boost::shared_ptr<librdf_node> pContext(
+    const std::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
         safe_librdf_free_node);
@@ -2019,12 +2019,12 @@ librdf_Repository::getStatementsGraph_NoLock(
             "librdf_Repository::getStatements: "
             "librdf_new_node_from_uri_string failed", *this);
     }
-    const boost::shared_ptr<librdf_statement> pStatement(
+    const std::shared_ptr<librdf_statement> pStatement(
         librdf_TypeConverter::mkStatement_Lock(m_pWorld.get(), stmt),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
-    const boost::shared_ptr<librdf_stream> pStream(
+    const std::shared_ptr<librdf_stream> pStream(
         librdf_model_find_statements_in_context(m_pModel.get(),
             pStatement.get(), pContext.get()),
         safe_librdf_free_stream);
@@ -2128,24 +2128,24 @@ librdf_uri* librdf_TypeConverter::mkURI_Lock( librdf_world* i_pWorld,
 }
 
 // extract blank or URI node - call without Mutex locked
-::boost::shared_ptr<librdf_TypeConverter::Resource>
+std::shared_ptr<librdf_TypeConverter::Resource>
 librdf_TypeConverter::extractResource_NoLock(
     const uno::Reference< rdf::XResource > & i_xResource)
 {
     if (!i_xResource.is()) {
-        return ::boost::shared_ptr<Resource>();
+        return std::shared_ptr<Resource>();
     }
     uno::Reference< rdf::XBlankNode > xBlankNode(i_xResource, uno::UNO_QUERY);
     if (xBlankNode.is()) {
         const OString label(
             OUStringToOString(xBlankNode->getStringValue(),
             RTL_TEXTENCODING_UTF8) );
-        return ::boost::shared_ptr<Resource>(new BlankNode(label));
+        return std::shared_ptr<Resource>(new BlankNode(label));
     } else { // assumption: everything else is URI
         const OString uri(
             OUStringToOString(i_xResource->getStringValue(),
             RTL_TEXTENCODING_UTF8) );
-        return ::boost::shared_ptr<Resource>(new URI(uri));
+        return std::shared_ptr<Resource>(new URI(uri));
     }
 }
 
@@ -2183,12 +2183,12 @@ librdf_node* librdf_TypeConverter::mkResource_Lock( librdf_world* i_pWorld,
 }
 
 // extract blank or URI or literal node - call without Mutex locked
-::boost::shared_ptr<librdf_TypeConverter::Node>
+std::shared_ptr<librdf_TypeConverter::Node>
 librdf_TypeConverter::extractNode_NoLock(
     const uno::Reference< rdf::XNode > & i_xNode)
 {
     if (!i_xNode.is()) {
-        return ::boost::shared_ptr<Node>();
+        return std::shared_ptr<Node>();
     }
     uno::Reference< rdf::XResource > xResource(i_xNode, uno::UNO_QUERY);
     if (xResource.is()) {
@@ -2198,7 +2198,7 @@ librdf_TypeConverter::extractNode_NoLock(
     OSL_ENSURE(xLiteral.is(),
         "mkNode: someone invented a new rdf.XNode and did not tell me");
     if (!xLiteral.is()) {
-        return ::boost::shared_ptr<Node>();
+        return std::shared_ptr<Node>();
     }
     const OString val(
         OUStringToOString(xLiteral->getValue(),
@@ -2213,7 +2213,7 @@ librdf_TypeConverter::extractNode_NoLock(
         type =
             OUStringToOString(xType->getStringValue(), RTL_TEXTENCODING_UTF8);
     }
-    return ::boost::shared_ptr<Node>(new Literal(val, lang, type));
+    return std::shared_ptr<Node>(new Literal(val, lang, type));
 }
 
 // create blank or URI or literal node
@@ -2235,7 +2235,7 @@ librdf_node* librdf_TypeConverter::mkNode_Lock( librdf_world* i_pWorld,
                 reinterpret_cast<const unsigned char*>(pLiteral->value.getStr())
                 , NULL, 0);
         } else {
-            const boost::shared_ptr<librdf_uri> pDatatype(
+            const std::shared_ptr<librdf_uri> pDatatype(
                 mkURI_Lock(i_pWorld, *pLiteral->type),
                 safe_librdf_free_uri);
             ret = librdf_new_node_from_typed_literal(i_pWorld,
@@ -2265,13 +2265,13 @@ librdf_TypeConverter::Statement librdf_TypeConverter::extractStatement_NoLock(
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 {
-    ::boost::shared_ptr<Resource> const pSubject(
+    std::shared_ptr<Resource> const pSubject(
             extractResource_NoLock(i_xSubject));
     const uno::Reference<rdf::XResource> xPredicate(i_xPredicate,
         uno::UNO_QUERY);
-    ::boost::shared_ptr<URI> const pPredicate(
-        ::boost::dynamic_pointer_cast<URI>(extractResource_NoLock(xPredicate)));
-    ::boost::shared_ptr<Node> const pObject(extractNode_NoLock(i_xObject));
+    std::shared_ptr<URI> const pPredicate(
+        std::dynamic_pointer_cast<URI>(extractResource_NoLock(xPredicate)));
+    std::shared_ptr<Node> const pObject(extractNode_NoLock(i_xObject));
     return Statement(pSubject, pPredicate, pObject);
 }
 

@@ -32,8 +32,8 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <map>
+#include <memory>
 
 #include "lngopt.hxx"
 #include "linguistic/misc.hxx"
@@ -49,7 +49,7 @@ class HyphenatorDispatcher :
     >,
     public LinguDispatcher
 {
-    typedef boost::shared_ptr< LangSvcEntries_Hyph >                LangSvcEntries_Hyph_Ptr_t;
+    typedef std::shared_ptr< LangSvcEntries_Hyph >                LangSvcEntries_Hyph_Ptr_t;
     typedef std::map< LanguageType, LangSvcEntries_Hyph_Ptr_t >     HyphSvcByLangMap_t;
     HyphSvcByLangMap_t      aSvcMap;
 

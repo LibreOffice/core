@@ -350,7 +350,7 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     }
 
     LwpOverride* pBorder = pParaStyle->GetParaBorder();
-    boost::scoped_ptr<LwpParaBorderOverride> pFinalBorder(
+    std::unique_ptr<LwpParaBorderOverride> pFinalBorder(
         pBorder
             ? polymorphic_downcast<LwpParaBorderOverride*>(pBorder->clone())
             : new LwpParaBorderOverride)
@@ -360,7 +360,7 @@ void LwpPara::OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     pBorder = static_cast<LwpParaBorderProperty*>(pProps)->GetLocalParaBorder();
     if (pBorder)
     {
-        boost::scoped_ptr<LwpParaBorderOverride> pLocalBorder(
+        std::unique_ptr<LwpParaBorderOverride> pLocalBorder(
                 polymorphic_downcast<LwpParaBorderOverride*>(pBorder->clone()));
         pLocalBorder->Override(pFinalBorder.get());
     }
@@ -392,7 +392,7 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     pBreaks = static_cast<LwpParaBreaksProperty*>(pProps)->GetLocalParaBreaks();
     if (pBreaks)
     {
-        boost::scoped_ptr<LwpBreaksOverride> const pLocalBreaks(
+        std::unique_ptr<LwpBreaksOverride> const pLocalBreaks(
                 polymorphic_downcast<LwpBreaksOverride*>(pBreaks->clone()));
         pLocalBreaks->Override(pFinalBreaks.get());
     }
@@ -473,7 +473,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
                     : new LwpBulletOverride)
                 ;
 
-            boost::scoped_ptr<LwpBulletOverride> const pLocalBullet2(pLocalBullet->clone());
+            std::unique_ptr<LwpBulletOverride> const pLocalBullet2(pLocalBullet->clone());
             pLocalBullet2->Override(pFinalBullet.get());
 
             aSilverBulletID = pFinalBullet->GetSilverBullet();

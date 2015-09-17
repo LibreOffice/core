@@ -37,8 +37,8 @@
 
 #include <osl/mutex.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <map>
+#include <memory>
 
 #include "lngopt.hxx"
 
@@ -51,7 +51,7 @@ class ThesaurusDispatcher :
     >,
     public LinguDispatcher
 {
-    typedef boost::shared_ptr< LangSvcEntries_Thes >                LangSvcEntries_Thes_Ptr_t;
+    typedef std::shared_ptr< LangSvcEntries_Thes >                LangSvcEntries_Thes_Ptr_t;
     typedef std::map< LanguageType, LangSvcEntries_Thes_Ptr_t >     ThesSvcByLangMap_t;
     ThesSvcByLangMap_t      aSvcMap;
 

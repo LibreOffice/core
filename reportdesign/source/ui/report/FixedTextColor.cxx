@@ -158,29 +158,29 @@ namespace rptui
         uno::Reference<awt::XControl> xControl;
         OReportController *pController = const_cast<OReportController *>(&m_rReportController);
 
-        ::boost::shared_ptr<OReportModel> pModel = pController->getSdrModel();
+        std::shared_ptr<OReportModel> pModel = pController->getSdrModel();
 
-            uno::Reference<report::XSection> xSection(_xFixedText->getSection());
-            if ( xSection.is() )
+        uno::Reference<report::XSection> xSection(_xFixedText->getSection());
+        if ( xSection.is() )
+        {
+            OReportPage *pPage = pModel->getPage(xSection);
+            const size_t nIndex = pPage->getIndexOf(_xFixedText.get());
+            if (nIndex < pPage->GetObjCount() )
             {
-                OReportPage *pPage = pModel->getPage(xSection);
-                const size_t nIndex = pPage->getIndexOf(_xFixedText.get());
-                if (nIndex < pPage->GetObjCount() )
+                SdrObject *pObject = pPage->GetObj(nIndex);
+                OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObject);
+                if ( pUnoObj ) // this doesn't need to be done for shapes
                 {
-                    SdrObject *pObject = pPage->GetObj(nIndex);
-                    OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObject);
-                    if ( pUnoObj ) // this doesn't need to be done for shapes
+                    OSectionWindow* pSectionWindow = pController->getSectionWindow(xSection);
+                    if (pSectionWindow != 0)
                     {
-                        OSectionWindow* pSectionWindow = pController->getSectionWindow(xSection);
-                        if (pSectionWindow != 0)
-                        {
-                            OReportSection& aOutputDevice = pSectionWindow->getReportSection(); // OutputDevice
-                            OSectionView& aSdrView = aOutputDevice.getSectionView(); // SdrView
-                            xControl = pUnoObj->GetUnoControl(aSdrView, aOutputDevice);
-                        }
+                        OReportSection& aOutputDevice = pSectionWindow->getReportSection(); // OutputDevice
+                        OSectionView& aSdrView = aOutputDevice.getSectionView(); // SdrView
+                        xControl = pUnoObj->GetUnoControl(aSdrView, aOutputDevice);
                     }
                 }
             }
+        }
         return xControl;
     }
 

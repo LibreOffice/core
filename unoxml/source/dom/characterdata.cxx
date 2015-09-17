@@ -21,7 +21,7 @@
 
 #include <string.h>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <osl/diagnose.h>
 
@@ -87,7 +87,7 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             // get current data
-            ::boost::shared_ptr<xmlChar const> const pContent(
+            std::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
             OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
@@ -158,7 +158,7 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             // get current data
-            ::boost::shared_ptr<xmlChar const> const pContent(
+            std::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
             OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
@@ -193,7 +193,7 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             // get current data
-            ::boost::shared_ptr<xmlChar const> const pContent(
+            std::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
             OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));
@@ -248,7 +248,7 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             // get current data
-            ::boost::shared_ptr<xmlChar const> const pContent(
+            std::shared_ptr<xmlChar const> const pContent(
                 xmlNodeGetContent(m_aNodePtr), xmlFree);
             OString aData(reinterpret_cast<sal_Char const*>(pContent.get()));
             OUString tmp(OStringToOUString(aData, RTL_TEXTENCODING_UTF8));

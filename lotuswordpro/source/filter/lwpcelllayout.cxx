@@ -743,7 +743,7 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
             LwpCellLayout * pLeftNeighbour = GetCellByRowCol(nRow+iLoop, GetLeftColID(nCol), pTableLayout);
             if (pLeftNeighbour)
             {
-                boost::scoped_ptr<XFBorders> pNeighbourBorders(pLeftNeighbour->GetXFBorders());
+                std::unique_ptr<XFBorders> pNeighbourBorders(pLeftNeighbour->GetXFBorders());
                 if (pNeighbourBorders)
                 {
                     XFBorder& rRightBorder = pNeighbourBorders->GetRight();
@@ -770,7 +770,7 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
             LwpCellLayout * pBelowNeighbour = GetCellByRowCol(nRow + nRowSpan, nCol+iLoop, pTableLayout);
             if (pBelowNeighbour)
             {
-                boost::scoped_ptr<XFBorders> pBelowBorders(pBelowNeighbour->GetXFBorders());
+                std::unique_ptr<XFBorders> pBelowBorders(pBelowNeighbour->GetXFBorders());
                 if (pBelowBorders)
                 {
                     XFBorder& rTopBorder = pBelowBorders->GetTop();

@@ -34,7 +34,6 @@
 
 #include <list>
 #include <map>
-#include <boost/shared_ptr.hpp>
 
 namespace comphelper
 {

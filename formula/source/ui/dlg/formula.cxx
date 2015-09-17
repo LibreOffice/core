@@ -59,7 +59,6 @@
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <boost/ref.hpp>
-#include <boost/shared_ptr.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <map>

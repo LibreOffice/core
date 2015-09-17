@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace dp_gui {
 
@@ -51,7 +51,7 @@ class TheExtensionManager;
 
 struct Entry_Impl;
 
-typedef ::boost::shared_ptr< Entry_Impl > TEntry_Impl;
+typedef std::shared_ptr< Entry_Impl > TEntry_Impl;
 
 struct Entry_Impl
 {

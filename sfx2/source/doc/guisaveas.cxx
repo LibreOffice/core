@@ -87,7 +87,7 @@
 #include <svtools/sfxecode.hxx>
 #include "../appl/app.hrc"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -887,7 +887,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         aDialogFlags = SFXWB_SAVEACOPY;
     }
 
-    boost::scoped_ptr<sfx2::FileDialogHelper> pFileDlg;
+    std::unique_ptr<sfx2::FileDialogHelper> pFileDlg;
 
     OUString aDocServiceName = GetDocServiceName();
     DBG_ASSERT( !aDocServiceName.isEmpty(), "No document service for this module set!" );

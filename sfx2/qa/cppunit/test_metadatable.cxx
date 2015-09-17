@@ -32,7 +32,7 @@
 #include <sfx2/Metadatable.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 using namespace ::com::sun::star;
@@ -94,9 +94,9 @@ static bool operator==(beans::StringPair p1, beans::StringPair p2)
 
 void MetadatableTest::test()
 {
-    boost::scoped_ptr< ::sfx2::IXmlIdRegistry > const pReg(
+    std::unique_ptr< ::sfx2::IXmlIdRegistry > const pReg(
         ::sfx2::createXmlIdRegistry(false) );
-    boost::scoped_ptr< ::sfx2::IXmlIdRegistry > const pRegClip(
+    std::unique_ptr< ::sfx2::IXmlIdRegistry > const pRegClip(
         ::sfx2::createXmlIdRegistry(true) );
 
     MockMetadatable m1(*pReg);

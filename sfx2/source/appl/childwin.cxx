@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <vcl/toolbox.hxx>
 #include <tools/rcid.h>
 #include <unotools/moduleoptions.hxx>
@@ -377,7 +377,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
 {
     // load configuration
 
-    boost::scoped_ptr<SvtViewOptions> xWinOpt;
+    std::unique_ptr<SvtViewOptions> xWinOpt;
     // first see if a module specific id exists
     if (rInfo.aModule.getLength())
         xWinOpt.reset(new SvtViewOptions(E_WINDOW, rInfo.aModule + "/" + OUString::number(nId)));

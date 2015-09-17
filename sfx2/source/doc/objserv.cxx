@@ -101,7 +101,7 @@
 
 #include "guisaveas.hxx"
 #include <sfx2/templatedlg.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <cppuhelper/implbase.hxx>
 
 using namespace ::com::sun::star;

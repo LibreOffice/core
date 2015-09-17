@@ -23,7 +23,7 @@
 #include <map>
 #include <string>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/array.hpp>
 
 #include <com/sun/star/uno/Any.hxx>
@@ -35,7 +35,7 @@
 namespace oox { namespace drawingml {
 
 class DiagramLayout;
-typedef boost::shared_ptr< DiagramLayout > DiagramLayoutPtr;
+typedef std::shared_ptr< DiagramLayout > DiagramLayoutPtr;
 
 // AG_IteratorAttributes
 struct IteratorAttr
@@ -69,7 +69,7 @@ struct ConditionAttr
 struct LayoutAtomVisitor;
 class LayoutAtom;
 
-typedef boost::shared_ptr< LayoutAtom > LayoutAtomPtr;
+typedef std::shared_ptr< LayoutAtom > LayoutAtomPtr;
 
 /** abstract Atom for the layout */
 class LayoutAtom
@@ -171,7 +171,7 @@ private:
     ParamMap  maMap;
 };
 
-typedef boost::shared_ptr< AlgAtom > AlgAtomPtr;
+typedef std::shared_ptr< AlgAtom > AlgAtomPtr;
 
 class ForEachAtom
     : public LayoutAtom
@@ -189,7 +189,7 @@ private:
     IteratorAttr maIter;
 };
 
-typedef boost::shared_ptr< ForEachAtom > ForEachAtomPtr;
+typedef std::shared_ptr< ForEachAtom > ForEachAtomPtr;
 
 class ConditionAtom
     : public LayoutAtom
@@ -210,7 +210,7 @@ private:
     std::vector< LayoutAtomPtr > mpElseChildNodes;
 };
 
-typedef boost::shared_ptr< ConditionAtom > ConditionAtomPtr;
+typedef std::shared_ptr< ConditionAtom > ConditionAtomPtr;
 
 /** "choose" statements. Atoms will be tested in order. */
 class ChooseAtom
@@ -269,7 +269,7 @@ private:
     sal_Int32                    mnChildOrder;
 };
 
-typedef boost::shared_ptr< LayoutNode > LayoutNodePtr;
+typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
 
 struct LayoutAtomVisitor
 {

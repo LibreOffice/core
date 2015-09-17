@@ -125,7 +125,7 @@
 #include <objstor.hxx>
 #include <appopen.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1567,7 +1567,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
 
     if ( bCaughtException && bRaiseError )
     {
-        boost::scoped_ptr< VclAbstractDialog > pScriptErrDlg;
+        std::unique_ptr< VclAbstractDialog > pScriptErrDlg;
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
         if ( pFact )
             pScriptErrDlg.reset( pFact->CreateScriptErrorDialog( NULL, aException ) );

@@ -25,10 +25,9 @@
 #include <oox/helper/propertymap.hxx>
 #include <oox/drawingml/color.hxx>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/optional.hpp>
-#include <vector>
 #include <map>
+#include <memory>
+#include <vector>
 
 namespace oox { namespace drawingml { namespace table {
 
@@ -43,7 +42,7 @@ public:
     std::vector< TableRow >& getTableRows() { return mvTableRows; };
 
     OUString&                          getStyleId(){ return maStyleId; };
-    boost::shared_ptr< TableStyle >&    getTableStyle(){ return mpTableStyle; };
+    std::shared_ptr< TableStyle >&    getTableStyle(){ return mpTableStyle; };
     bool&                               isRtl(){ return mbRtl; };
     bool&                               isFirstRow(){ return mbFirstRow; };
     bool&                               isFirstCol(){ return mbFirstCol; };
@@ -60,7 +59,7 @@ private:
     const TableStyle&                   getUsedTableStyle(const ::oox::core::XmlFilterBase& rFilterBase, TableStyle*& rTableStyleToDelete);
 
     OUString                            maStyleId;              // either StyleId is available
-    boost::shared_ptr< TableStyle >     mpTableStyle;           // or the complete TableStyle
+    std::shared_ptr< TableStyle >     mpTableStyle;           // or the complete TableStyle
     std::vector< sal_Int32 >            mvTableGrid;
     std::vector< TableRow >             mvTableRows;
 

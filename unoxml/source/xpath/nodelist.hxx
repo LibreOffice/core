@@ -33,7 +33,7 @@
 #include "libxml/tree.h"
 #include "libxml/xpath.h"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace DOM {
     class CDocument;
@@ -49,14 +49,14 @@ namespace XPath
         ::rtl::Reference< DOM::CDocument > const m_pDocument;
         ::osl::Mutex & m_rMutex;
         /// retain the result set in case the CXPathObject is released
-        boost::shared_ptr<xmlXPathObject> m_pXPathObj;
+        std::shared_ptr<xmlXPathObject> m_pXPathObj;
         xmlNodeSetPtr m_pNodeSet;
 
     public:
         CNodeList(
                 ::rtl::Reference<DOM::CDocument> const& pDocument,
                 ::osl::Mutex & rMutex,
-                boost::shared_ptr<xmlXPathObject> const& rxpathObj);
+                std::shared_ptr<xmlXPathObject> const& rxpathObj);
         /**
         The number of nodes in the list.
         */

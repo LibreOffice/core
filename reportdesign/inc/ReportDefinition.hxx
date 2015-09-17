@@ -45,7 +45,7 @@
 #include <cppuhelper/propertysetmixin.hxx>
 #include <svx/unomod.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace rptui
@@ -87,8 +87,8 @@ namespace reportdesign
                                                     ,public ::comphelper::IEmbeddedHelper
     {
     private:
-        ::boost::shared_ptr<OReportComponentProperties>                             m_aProps;
-        ::boost::shared_ptr<OReportDefinitionImpl>                                  m_pImpl;
+        std::shared_ptr<OReportComponentProperties>                             m_aProps;
+        std::shared_ptr<OReportDefinitionImpl>                                  m_pImpl;
 
     private:
         OReportDefinition(const OReportDefinition&) SAL_DELETED_FUNCTION;
@@ -193,9 +193,9 @@ namespace reportdesign
         *
         * \return
         */
-        ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const;
+        std::shared_ptr<rptui::OReportModel> getSdrModel() const;
 
-        static ::boost::shared_ptr<rptui::OReportModel> getSdrModel(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
+        static std::shared_ptr<rptui::OReportModel> getSdrModel(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReportDefinition);
     private:
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )

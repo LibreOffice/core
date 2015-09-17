@@ -241,7 +241,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 static TPropertyNamePair s_aNameMap;
                 if ( s_aNameMap.empty() )
                 {
-                    ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+                    std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
@@ -254,7 +254,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 static TPropertyNamePair s_aNameMap;
                 if ( s_aNameMap.empty() )
                 {
-                    ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+                    std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter)));
@@ -265,7 +265,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
 
-                    ::boost::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust());
+                    std::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust());
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust)));
                 }
                 return s_aNameMap;
@@ -275,7 +275,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 static TPropertyNamePair s_aNameMap;
                 if ( s_aNameMap.empty() )
                 {
-                    ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+                    std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARCOLOR,TPropertyConverter(PROPERTY_TEXTCOLOR,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CHARUNDERLINECOLOR,TPropertyConverter(PROPERTY_TEXTLINECOLOR,aNoConverter)));
@@ -285,7 +285,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
-                    ::boost::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust());
+                    std::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust());
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust)));
                 }
                 return s_aNameMap;
@@ -296,7 +296,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                 static TPropertyNamePair s_aNameMap;
                 if ( s_aNameMap.empty() )
                 {
-                    ::boost::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+                    std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
                     s_aNameMap.insert(TPropertyNamePair::value_type(OUString("FillColor"),TPropertyConverter(PROPERTY_CONTROLBACKGROUND,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter)));
                 }

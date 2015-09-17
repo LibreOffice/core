@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/itemconnect.hxx>
-
-#include <boost/shared_ptr.hpp>
-#include <list>
 #include <svl/itempool.hxx>
-
-
+#include <sfx2/itemconnect.hxx>
+#include <list>
+#include <memory>
 
 namespace sfx {
 
@@ -292,7 +289,7 @@ public:
     bool                        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
 
 private:
-    typedef boost::shared_ptr< ItemConnectionBase > ItemConnectionRef;
+    typedef std::shared_ptr< ItemConnectionBase > ItemConnectionRef;
     typedef std::list< ItemConnectionRef >          ItemConnectionList;
     typedef ItemConnectionList::iterator            ItemConnectionListIt;
 

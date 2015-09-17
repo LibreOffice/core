@@ -129,7 +129,7 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
     }
 
     LwpObjectID aBulletID = pBullOver->GetSilverBullet();
-    boost::shared_ptr<LwpBulletOverride> pBulletOver(pBullOver->clone());
+    std::shared_ptr<LwpBulletOverride> pBulletOver(pBullOver->clone());
 
     sal_uInt16 nNameIndex = 0;
     std::vector <OverridePair>::iterator iter;

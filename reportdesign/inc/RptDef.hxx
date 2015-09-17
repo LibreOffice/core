@@ -28,7 +28,7 @@
 #include <svx/svdobj.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/fmglob.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace report {
@@ -93,7 +93,7 @@ public:
     @param  _xComponent the report component
 */
 REPORTDESIGN_DLLPUBLIC sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
-typedef ::std::pair< OUString, ::boost::shared_ptr<AnyConverter> > TPropertyConverter;
+typedef ::std::pair< OUString, std::shared_ptr<AnyConverter> > TPropertyConverter;
 typedef std::map<OUString, TPropertyConverter> TPropertyNamePair;
 /** returns the property name map for the given property id
     @param  _nObjectId  the object id

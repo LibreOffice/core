@@ -1544,7 +1544,7 @@ XFColumns* LwpLayout::GetXFColumns()
 
     XFColumns* pColumns = new XFColumns();
     //set XFColumnSep
-    boost::scoped_ptr<XFColumnSep> pColumnSep(GetColumnSep());
+    std::unique_ptr<XFColumnSep> pColumnSep(GetColumnSep());
     if(pColumnSep)
     {
         pColumns->SetSeparator(*pColumnSep);

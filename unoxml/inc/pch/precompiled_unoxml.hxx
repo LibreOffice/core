@@ -16,7 +16,6 @@
 
 #include <algorithm>
 #include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

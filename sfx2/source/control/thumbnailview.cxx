@@ -39,7 +39,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -1327,7 +1327,7 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
     BitmapEx aThumbnail;
     if (xIStream.is())
     {
-        boost::scoped_ptr<SvStream> pStream (
+        std::unique_ptr<SvStream> pStream (
             ::utl::UcbStreamHelper::CreateStream (xIStream));
         vcl::PNGReader aReader (*pStream);
         aThumbnail = aReader.Read ();

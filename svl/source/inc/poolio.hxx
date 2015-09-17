@@ -21,8 +21,8 @@
 #define INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 
 #include <svl/SfxBroadcaster.hxx>
-#include <boost/shared_ptr.hpp>
 #include <deque>
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -60,7 +60,7 @@ struct SfxPoolVersion_Impl
 
 typedef std::vector<SfxPoolItem*> SfxPoolItemArrayBase_Impl;
 
-typedef boost::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
+typedef std::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
 
 /**
  * This array contains a set of SfxPoolItems, if those items are

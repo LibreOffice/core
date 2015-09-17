@@ -66,10 +66,9 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 #include <iostream>
 #include <map>
+#include <memory>
 
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -826,7 +825,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         }
 
                         eMapUnit = GetCoreMetric( pShell->GetPool(), GetId() );
-                        boost::scoped_ptr<SfxAllItemSet> xSet(new SfxAllItemSet(pShell->GetPool()));
+                        std::unique_ptr<SfxAllItemSet> xSet(new SfxAllItemSet(pShell->GetPool()));
                         TransformParameters(GetId(), lNewArgs, *xSet, pSlot);
                         if (xSet->Count())
                         {

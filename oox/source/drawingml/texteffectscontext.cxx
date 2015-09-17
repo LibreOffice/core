@@ -109,7 +109,7 @@ TextEffectsContext::TextEffectsContext(
                         std::vector<PropertyValue>& rTextEffectsProperties)
     : ContextHandler2(rParent)
     , mrTextEffectsProperties(rTextEffectsProperties)
-    , mpGrabBagStack(NULL)
+    , mpGrabBagStack(nullptr)
     , mnCurrentElement(aElementToken)
 {
 }

@@ -743,7 +743,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
     if ( !_xShape.is() || !_rxParentWindow.is() )
         return false;
 
-    ::boost::shared_ptr<rptui::OReportModel> pModel  = ::reportdesign::OReportDefinition::getSdrModel(_xShape->getSection()->getReportDefinition());
+    std::shared_ptr<rptui::OReportModel> pModel  = ::reportdesign::OReportDefinition::getSdrModel(_xShape->getSection()->getReportDefinition());
 
     vcl::Window* pParent = VCLUnoHelper::GetWindow( _rxParentWindow );
 
@@ -1020,7 +1020,7 @@ bool openDialogFormula_nothrow( OUString& _in_out_rFormula
         uno::Reference< report::meta::XFunctionManager> xMgr(xFactory->createInstanceWithContext("org.libreoffice.report.pentaho.SOFunctionManager",_xContext),uno::UNO_QUERY);
         if ( xMgr.is() )
         {
-            ::boost::shared_ptr< formula::IFunctionManager > pFormulaManager(new FunctionManager(xMgr) );
+            std::shared_ptr< formula::IFunctionManager > pFormulaManager(new FunctionManager(xMgr) );
             ReportFormula aFormula( _in_out_rFormula );
 
             LanguageTag aLangTag(LANGUAGE_SYSTEM);

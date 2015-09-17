@@ -23,10 +23,8 @@
 #include "dllapi.h"
 
 #include <rtl/ustring.hxx>
-#include <boost/shared_ptr.hpp>
-
 #include <map>
-
+#include <memory>
 
 namespace rptui
 {
@@ -87,7 +85,7 @@ namespace rptui
         eLessOrEqual    = 7
     };
 
-    typedef ::boost::shared_ptr< ConditionalExpression >                PConditionalExpression;
+    typedef std::shared_ptr< ConditionalExpression >                PConditionalExpression;
     typedef ::std::map< ComparisonOperation, PConditionalExpression >   ConditionalExpressions;
 
 

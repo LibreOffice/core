@@ -23,7 +23,7 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/field.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace frm
@@ -55,9 +55,9 @@ namespace frm
 
     private:
         const IFeatureDispatcher*       m_pDispatcher;
-        const ::boost::shared_ptr< const ICommandImageProvider >
+        const std::shared_ptr< const ICommandImageProvider >
                                         m_pImageProvider;
-        const ::boost::shared_ptr< const ICommandDescriptionProvider >
+        const std::shared_ptr< const ICommandDescriptionProvider >
                                         m_pDescriptionProvider;
         ImageSize                       m_eImageSize;
         VclPtr<ImplNavToolBar>          m_pToolbar;
@@ -67,8 +67,8 @@ namespace frm
         NavigationToolBar(
             vcl::Window* _pParent,
             WinBits _nStyle,
-            const ::boost::shared_ptr< const ICommandImageProvider >& _pImageProvider,
-            const ::boost::shared_ptr< const ICommandDescriptionProvider >& _pDescriptionProvider
+            const std::shared_ptr< const ICommandImageProvider >& _pImageProvider,
+            const std::shared_ptr< const ICommandDescriptionProvider >& _pDescriptionProvider
         );
         virtual ~NavigationToolBar( );
         virtual void dispose() SAL_OVERRIDE;

@@ -13,8 +13,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 #include <boost/property_tree/json_parser.hpp>
 
 #define LOK_USE_UNSTABLE_API
@@ -83,13 +82,11 @@ using namespace vcl;
 using namespace desktop;
 using namespace utl;
 
-using namespace boost;
-
 struct LibLibreOffice_Impl;
 
 static LibLibreOffice_Impl *gImpl = NULL;
-static weak_ptr< LibreOfficeKitClass > gOfficeClass;
-static weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
+static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
+static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
 
 typedef struct
 {
@@ -310,7 +307,7 @@ static void                    lo_registerCallback (LibreOfficeKit* pThis,
 struct LibLibreOffice_Impl : public _LibreOfficeKit
 {
     OUString maLastExceptionMsg;
-    shared_ptr< LibreOfficeKitClass > m_pOfficeClass;
+    std::shared_ptr< LibreOfficeKitClass > m_pOfficeClass;
     oslThread maThread;
     LibreOfficeKitCallback mpCallback;
     void *mpCallbackData;

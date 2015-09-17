@@ -25,13 +25,13 @@
 #include "helper.hxx"
 #include "srclex.hxx"
 
-#include "boost/scoped_ptr.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include "common.hxx"
 #include "export.hxx"
 #include "tokens.h"
 #include <iostream>
+#include <memory>
 #include <rtl/strbuf.hxx>
 
 void yyerror( const char * );
@@ -44,7 +44,7 @@ MergeDataFile * pMergeDataFile = 0; //TODO
 namespace global {
 
 OString inputPathname;
-boost::scoped_ptr< Export > exporter;
+std::unique_ptr< Export > exporter;
 
 }
 

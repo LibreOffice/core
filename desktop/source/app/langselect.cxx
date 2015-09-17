@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>

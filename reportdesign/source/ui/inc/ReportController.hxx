@@ -55,8 +55,8 @@
 #include <sfx2/zoomitem.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <functional>
+#include <memory>
 
 class TransferableClipboardListener;
 class VclWindowEvent;
@@ -109,7 +109,7 @@ namespace rptui
         mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
         ::com::sun::star::awt::Size                                                             m_aVisualAreaSize;
 
-        ::boost::shared_ptr<rptui::OReportModel>
+        std::shared_ptr<rptui::OReportModel>
                                 m_aReportModel;
         OUString         m_sName;                /// name for the report definition
         OUString         m_sLastActivePage;      /// last active property browser page
@@ -440,7 +440,7 @@ namespace rptui
         *
         * \return
         */
-        ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const { return m_aReportModel;}
+        std::shared_ptr<rptui::OReportModel> getSdrModel() const { return m_aReportModel;}
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getContext() const { return m_xContext; }
         inline sal_Int16   getZoomValue() const     { return m_nZoomValue; }

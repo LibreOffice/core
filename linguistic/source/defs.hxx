@@ -25,13 +25,11 @@
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class SvStream;
 
-
-
-typedef boost::shared_ptr< SvStream > SvStreamPtr;
+typedef std::shared_ptr< SvStream > SvStreamPtr;
 
 struct LangSvcEntries
 {

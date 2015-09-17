@@ -64,7 +64,6 @@
 
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <unordered_map>
 
@@ -1108,7 +1107,7 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
     rDispatcher.Flush();
 
     // get SlotServer (Slot+ShellLevel) and Shell from cache
-    ::boost::scoped_ptr<SfxStateCache> xCache;
+    std::unique_ptr<SfxStateCache> xCache;
     if ( !pCache )
     {
         // Execution of non cached slots (Accelerators don't use Controllers)

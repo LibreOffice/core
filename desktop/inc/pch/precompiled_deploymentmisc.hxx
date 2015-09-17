@@ -17,7 +17,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

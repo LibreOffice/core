@@ -37,7 +37,7 @@
 #include <svl/sharedstring.hxx>
 #include <unotools/syslocale.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <unicode/calendar.h>
 
 using namespace ::com::sun::star;
@@ -81,7 +81,7 @@ private:
                             LanguageType eLang,
                             OUString& sExpected);
     void checkDateInput( SvNumberFormatter& rFormatter, const char* pTimezone, const char* pIsoDate );
-    boost::scoped_ptr<icu::TimeZone> m_pDefaultTimeZone;
+    std::unique_ptr<icu::TimeZone> m_pDefaultTimeZone;
 };
 
 Test::Test()
@@ -351,10 +351,10 @@ void Test::testSharedStringPoolPurge()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), aPool.getCountIgnoreCase());
 
     // Now, create string objects on the heap.
-    boost::scoped_ptr<OUString> pStr1(new OUString("Andy"));
-    boost::scoped_ptr<OUString> pStr2(new OUString("andy"));
-    boost::scoped_ptr<OUString> pStr3(new OUString("ANDY"));
-    boost::scoped_ptr<OUString> pStr4(new OUString("Bruce"));
+    std::unique_ptr<OUString> pStr1(new OUString("Andy"));
+    std::unique_ptr<OUString> pStr2(new OUString("andy"));
+    std::unique_ptr<OUString> pStr3(new OUString("ANDY"));
+    std::unique_ptr<OUString> pStr4(new OUString("Bruce"));
     aPool.intern(*pStr1);
     aPool.intern(*pStr2);
     aPool.intern(*pStr3);

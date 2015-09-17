@@ -21,7 +21,7 @@
 
 #include <string.h>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <osl/diagnose.h>
 
@@ -185,7 +185,7 @@ namespace DOM
         // this does not work if the attribute was created anew
         // xmlNodePtr pNode = m_aAttrPtr->parent;
         // xmlSetProp(pNode, m_aAttrPtr->name, xValue);
-        ::boost::shared_ptr<xmlChar const> const buffer(
+        std::shared_ptr<xmlChar const> const buffer(
                 xmlEncodeEntitiesReentrant(m_aAttrPtr->doc, xValue), xmlFree);
         xmlFreeNodeList(m_aAttrPtr->children);
         m_aAttrPtr->children =

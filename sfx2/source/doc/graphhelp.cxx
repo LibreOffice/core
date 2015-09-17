@@ -53,7 +53,7 @@
 #include "graphhelp.hxx"
 #include "doc.hrc"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace css;
 
@@ -184,7 +184,7 @@ bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile* pMetaFile, const
     if (!pMetaFile || !xStream.is())
         return false;
 
-    boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xStream));
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xStream));
 
     if (pStream->GetError())
         return false;

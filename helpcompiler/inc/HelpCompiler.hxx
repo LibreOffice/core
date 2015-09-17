@@ -31,8 +31,6 @@
 #include <algorithm>
 #include <ctype.h>
 
-#include <boost/shared_ptr.hpp>
-
 #include <libxml/xmlmemory.h>
 #include <libxml/debugXML.h>
 #include <libxml/HTMLtree.h>

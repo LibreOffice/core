@@ -21,10 +21,8 @@
 #define INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DIAGRAM_HXX
 
 #include <map>
+#include <memory>
 #include <vector>
-
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
 
 #include <rtl/ustring.hxx>
 
@@ -150,7 +148,7 @@ typedef std::vector< Point >        Points;
 }
 
 class LayoutNode;
-typedef boost::shared_ptr< LayoutNode > LayoutNodePtr;
+typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
 
 typedef std::map< OUString, css::uno::Reference<css::xml::dom::XDocument> > DiagramDomMap;
 typedef css::uno::Sequence< css::uno::Sequence< css::uno::Any > > DiagramRelsMap;
@@ -194,7 +192,7 @@ private:
     StringMap         maPresOfNameMap;
 };
 
-typedef boost::shared_ptr< DiagramData > DiagramDataPtr;
+typedef std::shared_ptr< DiagramData > DiagramDataPtr;
 
 class DiagramLayout
 {
@@ -237,7 +235,7 @@ private:
     // clrData
 };
 
-typedef boost::shared_ptr< DiagramLayout > DiagramLayoutPtr;
+typedef std::shared_ptr< DiagramLayout > DiagramLayoutPtr;
 
 struct DiagramStyle
 {
@@ -291,7 +289,7 @@ private:
     DiagramRelsMap                 maDataRelsMap;
 };
 
-typedef boost::shared_ptr< Diagram > DiagramPtr;
+typedef std::shared_ptr< Diagram > DiagramPtr;
 
 } }
 

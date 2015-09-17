@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>

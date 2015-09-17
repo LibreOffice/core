@@ -45,7 +45,6 @@
 #include <svl/nfsymbol.hxx>
 
 #include <cmath>
-#include <boost/scoped_ptr.hpp>
 
 using namespace svt;
 

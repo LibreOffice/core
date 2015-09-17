@@ -44,7 +44,6 @@
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include <rtl/digest.h>
 #include <osl/diagnose.h>
 #include <tools/ref.hxx>
@@ -1627,7 +1626,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, bool 
     m_aURL = aTemp;
 
     // copy data into the temporary file
-    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READWRITE, true /* bFileExists */ ));
+    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READWRITE, true /* bFileExists */ ));
     if ( pStream )
     {
         rStream.Seek(0);
@@ -1670,7 +1669,7 @@ void UCBStorage_Impl::Init()
                     aObj.Append( OUString( "manifest.xml" ) );
 
                     // create input stream
-                    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ ));
+                    std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ ));
                     // no stream means no manifest.xml
                     if ( pStream )
                     {
@@ -2114,7 +2113,7 @@ sal_Int16 UCBStorage_Impl::Commit()
             {
                 UCBStorageElement_Impl* pElement = m_aChildrenList[ i ];
                 ::ucbhelper::Content* pContent = pElement->GetContent();
-                boost::scoped_ptr< ::ucbhelper::Content > xDeleteContent;
+                std::unique_ptr< ::ucbhelper::Content > xDeleteContent;
                 if ( !pContent && pElement->IsModified() )
                 {
                     // if the element has never been opened, no content has been created until now
@@ -2247,7 +2246,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         {
                             // create a stream to write the manifest file - use a temp file
                             OUString aURL( aNewSubFolder.getURL() );
-                            boost::scoped_ptr< ::utl::TempFile> pTempFile(new ::utl::TempFile( &aURL ));
+                            std::unique_ptr< ::utl::TempFile> pTempFile(new ::utl::TempFile( &aURL ));
 
                             // get the stream from the temp file and create an output stream wrapper
                             SvStream* pStream = pTempFile->GetStream( STREAM_STD_READWRITE );
@@ -2283,7 +2282,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         m_pContent->executeCommand( OUString("flush"), aAny );
                         if ( m_pSource != 0 )
                         {
-                            boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ ));
+                            std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ ));
                             m_pSource->SetStreamSize(0);
                             // m_pSource->Seek(0);
                             pStream->ReadStream( *m_pSource );
@@ -2497,7 +2496,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
     {
         // copy the streams data
         // the destination stream must not be open
-        boost::scoped_ptr<BaseStorageStream> pOtherStream(pDest->OpenStream( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ));
+        std::unique_ptr<BaseStorageStream> pOtherStream(pDest->OpenStream( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ));
         BaseStorageStream* pStream = NULL;
         bool bDeleteStream = false;
 
@@ -2540,7 +2539,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
         UCBStorage* pUCBCopy = PTR_CAST( UCBStorage, pStorage );
 
         bool bOpenUCBStorage = pUCBDest && pUCBCopy;
-        boost::scoped_ptr<BaseStorage> pOtherStorage(bOpenUCBStorage ?
+        std::unique_ptr<BaseStorage> pOtherStorage(bOpenUCBStorage ?
                 pDest->OpenUCBStorage( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ) :
                 pDest->OpenOLEStorage( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ));
 

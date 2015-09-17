@@ -29,7 +29,7 @@
 
 #include <stack>
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sax_fastparser {
 
@@ -169,11 +169,11 @@ private:
         sal_Int32 const m_Tag;
 #ifdef DBG_UTIL
         // pending close tags, followed by pending open tags
-        ::std::deque<sal_Int32> m_DebugEndedElements;
-        ::std::deque<sal_Int32> m_DebugStartedElements;
+        std::deque<sal_Int32> m_DebugEndedElements;
+        std::deque<sal_Int32> m_DebugStartedElements;
         // ... and another buffer for maPostponed ...
-        ::std::deque<sal_Int32> m_DebugPostponedEndedElements;
-        ::std::deque<sal_Int32> m_DebugPostponedStartedElements;
+        std::deque<sal_Int32> m_DebugPostponedEndedElements;
+        std::deque<sal_Int32> m_DebugPostponedStartedElements;
 #endif
 
         ForMerge(sal_Int32 const nTag) : m_Tag(nTag) {}
@@ -222,7 +222,7 @@ private:
         void sort();
     };
 
-    ::std::stack< boost::shared_ptr< ForMerge > > maMarkStack;
+    std::stack< std::shared_ptr< ForMerge > > maMarkStack;
     bool mbMarkStackEmpty;
     // Would be better to use OStringBuffer instead of these two
     // but then we couldn't get the rtl_String* member :-(
@@ -231,7 +231,7 @@ private:
     TokenValueList maTokenValues;
 
 #ifdef DBG_UTIL
-    ::std::stack<sal_Int32> m_DebugStartedElements;
+    std::stack<sal_Int32> m_DebugStartedElements;
 #endif
 
     void writeTokenValueList();

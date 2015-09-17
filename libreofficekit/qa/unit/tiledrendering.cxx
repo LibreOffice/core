@@ -8,7 +8,6 @@
  */
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <cppunit/TestFixture.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -86,7 +85,7 @@ void TiledRenderingTest::runAllTests()
     OUString sUserInstallURL = aWorkdirRootURL + "/unittest";
     rtl::Bootstrap::set(OUString("UserInstallation"), sUserInstallURL);
 
-    scoped_ptr< Office > pOffice( lok_cpp_init(
+    std::unique_ptr< Office > pOffice( lok_cpp_init(
                                       m_sLOPath.c_str() ) );
     CPPUNIT_ASSERT( pOffice.get() );
 
@@ -102,7 +101,7 @@ void TiledRenderingTest::runAllTests()
 void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
 {
     const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/IDONOTEXIST.odt";
-    scoped_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+    std::unique_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
     CPPUNIT_ASSERT( !pDocument.get() );
     // TODO: we probably want to have some way of returning what
     // the cause of failure was. getError() will return
@@ -115,7 +114,7 @@ void TiledRenderingTest::testDocumentLoadFail( Office* pOffice )
 
 int getDocumentType( Office* pOffice, const string& rPath )
 {
-    scoped_ptr< Document> pDocument( pOffice->documentLoad( rPath.c_str() ) );
+    std::unique_ptr< Document> pDocument( pOffice->documentLoad( rPath.c_str() ) );
     CPPUNIT_ASSERT( pDocument.get() );
     return pDocument->getDocumentType();
 }
@@ -156,7 +155,7 @@ void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
     // Hence forcefully remove it here.
     remove( sLockFile.c_str() );
 
-    scoped_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+    std::unique_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
 
     CPPUNIT_ASSERT( pDocument->getParts() == 3 );
     CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 0 ), "TestText1" ) == 0 );
@@ -174,7 +173,7 @@ void TiledRenderingTest::testCalcSheetNames( Office* pOffice )
     // FIXME: LOK will fail when trying to open a locked file
     remove( sLockFile.c_str() );
 
-    scoped_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+    std::unique_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
 
     CPPUNIT_ASSERT( pDocument->getParts() == 3 );
     CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 0 ), "TestText1" ) == 0 );
@@ -207,11 +206,11 @@ void TiledRenderingTest::testOverlay( Office* /*pOffice*/ )
     // test it's entirely possible that an unwanted lock file will remain.
     // Hence forcefully remove it here.
     remove( sLockFile.c_str() );
-    scoped_ptr< Office > pOffice( lok_cpp_init(
+    std::unique_ptr< Office > pOffice( lok_cpp_init(
                                       m_sLOPath.c_str() ) );
     assert( pOffice.get() );
 
-    scoped_ptr< Document> pDocument( pOffice->documentLoad(
+    std::unique_ptr< Document> pDocument( pOffice->documentLoad(
                                          sDocPath.c_str() ) );
 
     if ( !pDocument.get() )

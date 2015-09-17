@@ -26,7 +26,7 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "boost/scoped_ptr.hpp"
+#include <memory>
 #include "rtl/strbuf.hxx"
 
 #include "helper.hxx"
@@ -41,7 +41,7 @@ namespace {
 namespace global {
 
 OString inputPathname;
-boost::scoped_ptr< CfgParser > parser;
+std::unique_ptr< CfgParser > parser;
 
 }
 }

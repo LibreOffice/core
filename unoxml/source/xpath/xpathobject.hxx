@@ -20,7 +20,7 @@
 #ifndef INCLUDED_UNOXML_SOURCE_XPATH_XPATHOBJECT_HXX
 #define INCLUDED_UNOXML_SOURCE_XPATH_XPATHOBJECT_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
@@ -45,13 +45,13 @@ namespace XPath
     private:
         ::rtl::Reference< DOM::CDocument > const m_pDocument;
         ::osl::Mutex & m_rMutex;
-        boost::shared_ptr<xmlXPathObject> const m_pXPathObj;
+        std::shared_ptr<xmlXPathObject> const m_pXPathObj;
         css::xml::xpath::XPathObjectType const m_XPathObjectType;
 
     public:
         CXPathObject( ::rtl::Reference<DOM::CDocument> const& pDocument,
             ::osl::Mutex & rMutex,
-            ::boost::shared_ptr<xmlXPathObject> const& pXPathObj);
+            std::shared_ptr<xmlXPathObject> const& pXPathObj);
 
     /**
         get object type

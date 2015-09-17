@@ -334,13 +334,13 @@ namespace sax_fastparser {
     {
         if (rOrder.hasElements())
         {
-            boost::shared_ptr< ForMerge > pSort( new ForSort(nTag, rOrder) );
+            std::shared_ptr< ForMerge > pSort( new ForSort(nTag, rOrder) );
             maMarkStack.push( pSort );
             maCachedOutputStream.setOutput( pSort );
         }
         else
         {
-            boost::shared_ptr< ForMerge > pMerge( new ForMerge(nTag) );
+            std::shared_ptr< ForMerge > pMerge( new ForMerge(nTag) );
             maMarkStack.push( pMerge );
             maCachedOutputStream.setOutput( pMerge );
         }

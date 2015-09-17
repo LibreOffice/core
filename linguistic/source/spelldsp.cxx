@@ -820,7 +820,7 @@ void SpellCheckerDispatcher::SetServiceList( const Locale &rLocale,
         }
         else
         {
-            boost::shared_ptr< LangSvcEntries_Spell > pTmpEntry( new LangSvcEntries_Spell( rSvcImplNames ) );
+            std::shared_ptr< LangSvcEntries_Spell > pTmpEntry( new LangSvcEntries_Spell( rSvcImplNames ) );
             pTmpEntry->aSvcRefs = Sequence< Reference < XSpellChecker > >( nLen );
             aSvcMap[ nLanguage ] = pTmpEntry;
         }

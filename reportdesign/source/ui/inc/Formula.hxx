@@ -22,9 +22,9 @@
 
 #include <formula/formula.hxx>
 #include <formula/IControlReferenceHandler.hxx>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/report/meta/XFormulaParser.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
@@ -45,7 +45,7 @@ class OAddFieldWindow;
 class FormulaDialog : public formula::FormulaModalDialog,
                       public formula::IControlReferenceHandler
 {
-    ::boost::shared_ptr< formula::IFunctionManager > m_aFunctionManager;
+    std::shared_ptr< formula::IFunctionManager > m_aFunctionManager;
     formula::FormEditData*             m_pFormulaData;
     VclPtr<OAddFieldWindow>            m_pAddField;
     ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >          m_xRowSet;
@@ -62,7 +62,7 @@ class FormulaDialog : public formula::FormulaModalDialog,
 public:
     FormulaDialog( vcl::Window* pParent
         , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xServiceFactory
-        , const ::boost::shared_ptr< formula::IFunctionManager >& _pFunctionMgr
+        , const std::shared_ptr< formula::IFunctionManager >& _pFunctionMgr
         , const OUString& _sFormula
         , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet
         , svl::SharedStringPool& rStrPool );

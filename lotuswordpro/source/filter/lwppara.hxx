@@ -61,7 +61,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARA_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARA_HXX
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "lwpfribheader.hxx"
 #include "lwpobj.hxx"
@@ -227,7 +227,7 @@ protected:
     LwpObjectID m_aSilverBulletID;
     LwpSilverBullet* m_pSilverBullet;
     LwpBulletOverride* m_pBullOver;
-    boost::scoped_ptr<LwpNumberingOverride> m_pParaNumbering;
+    std::unique_ptr<LwpNumberingOverride> m_pParaNumbering;
     OUString m_aBulletStyleName;
     bool m_bBullContinue;
     //end add

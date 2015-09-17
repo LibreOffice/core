@@ -79,7 +79,7 @@
 
 #include <sfx2/docfile.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
@@ -109,13 +109,13 @@ using namespace OpenStormBento;
     pCompressed->Read(buffer, 16);
     aDecompressed->Write(buffer, 16);
 
-    boost::scoped_ptr<LwpSvStream> aLwpStream(new LwpSvStream(pCompressed));
+    std::unique_ptr<LwpSvStream> aLwpStream(new LwpSvStream(pCompressed));
     LtcBenContainer* pBentoContainer;
     sal_uLong ulRet = BenOpenContainer(aLwpStream.get(), &pBentoContainer);
     if (ulRet != BenErr_OK)
         return false;
 
-    boost::scoped_ptr<LtcUtBenValueStream> aWordProData(pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
+    std::unique_ptr<LtcUtBenValueStream> aWordProData(pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
 
     if (!aWordProData.get())
         return false;
@@ -182,9 +182,9 @@ int ReadWordproFile(SvStream &rStream, uno::Reference<css::xml::sax::XDocumentHa
     try
     {
         LwpSvStream *pRawLwpSvStream = NULL;
-        boost::scoped_ptr<LwpSvStream> aLwpSvStream;
-        boost::scoped_ptr<LwpSvStream> aCompressedLwpSvStream;
-        boost::scoped_ptr<SvStream> aDecompressed;
+        std::unique_ptr<LwpSvStream> aLwpSvStream;
+        std::unique_ptr<LwpSvStream> aCompressedLwpSvStream;
+        std::unique_ptr<SvStream> aDecompressed;
         if (GetLwpSvStream(&rStream, pRawLwpSvStream) && pRawLwpSvStream)
         {
             SvStream *pDecompressed = pRawLwpSvStream->GetStream();
@@ -203,7 +203,7 @@ int ReadWordproFile(SvStream &rStream, uno::Reference<css::xml::sax::XDocumentHa
 
         aLwpSvStream.reset(pRawLwpSvStream);
 
-        boost::scoped_ptr<IXFStream> pStrm(new XFSaxStream(xHandler));
+        std::unique_ptr<IXFStream> pStrm(new XFSaxStream(xHandler));
         Lwp9Reader reader(aLwpSvStream.get(), pStrm.get());
         //Reset all static objects,because this function may be called many times.
         XFGlobalReset();

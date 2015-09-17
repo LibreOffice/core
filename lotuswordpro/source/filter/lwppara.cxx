@@ -384,7 +384,7 @@ void LwpPara::RegisterStyle()
                     OverrideAlignment(NULL,static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),pOverStyle);
                 else
                 {
-                    boost::scoped_ptr<LwpAlignmentOverride> const pAlign(
+                    std::unique_ptr<LwpAlignmentOverride> const pAlign(
                             rParaStyle.GetAlignment()->clone());
                     OverrideAlignment(pAlign.get(),
                             static_cast<LwpParaAlignProperty*>(pProps)->GetAlignment(),
@@ -411,7 +411,7 @@ void LwpPara::RegisterStyle()
                     OverrideSpacing(NULL,static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),pOverStyle);
                 else
                 {
-                    boost::scoped_ptr<LwpSpacingOverride> const
+                    std::unique_ptr<LwpSpacingOverride> const
                         pSpacing(rParaStyle.GetSpacing()->clone());
                     OverrideSpacing(pSpacing.get(),
                             static_cast<LwpParaSpacingProperty*>(pProps)->GetSpacing(),

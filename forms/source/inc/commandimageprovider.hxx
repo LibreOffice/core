@@ -25,7 +25,7 @@
 
 #include <vcl/image.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace frm
@@ -50,7 +50,7 @@ namespace frm
         virtual ~ICommandImageProvider() { }
     };
 
-    typedef ::boost::shared_ptr< const ICommandImageProvider >  PCommandImageProvider;
+    typedef std::shared_ptr< const ICommandImageProvider >  PCommandImageProvider;
 
 
     //= factory

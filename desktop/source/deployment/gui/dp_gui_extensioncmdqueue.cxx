@@ -77,8 +77,7 @@
 #include "dp_version.hxx"
 
 #include <queue>
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #ifdef WNT
 #if defined _MSC_VER
@@ -212,7 +211,7 @@ struct ExtensionCmd
           m_vExtensionList( vExtensionList ) {};
 };
 
-typedef ::boost::shared_ptr< ExtensionCmd > TExtensionCmd;
+typedef std::shared_ptr< ExtensionCmd > TExtensionCmd;
 
 
 class ExtensionCmdQueue::Thread: public salhelper::Thread

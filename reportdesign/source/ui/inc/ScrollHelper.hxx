@@ -27,7 +27,6 @@
 #include <svx/svdedtv.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
-#include <boost/shared_ptr.hpp>
 #include <vcl/dockwin.hxx>
 #include "MarkedSection.hxx"
 #include "ReportWindow.hxx"

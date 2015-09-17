@@ -23,9 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <boost/shared_ptr.hpp>
-
-
 namespace com { namespace sun { namespace star { namespace deployment {
         class XPackage;
 }}}}

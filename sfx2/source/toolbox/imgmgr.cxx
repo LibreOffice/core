@@ -18,7 +18,7 @@
  */
 
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <sfx2/imgmgr.hxx>
 #include <sfx2/sfx.hrc>
@@ -71,7 +71,7 @@ public:
 
 namespace
 {
-    typedef std::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager_Impl> > SfxImageManagerImplMap;
+    typedef std::unordered_map< SfxModule*, std::shared_ptr<SfxImageManager_Impl> > SfxImageManagerImplMap;
 
     class theImageManagerImplMap :
         public rtl::Static<SfxImageManagerImplMap, theImageManagerImplMap> {};
@@ -246,7 +246,7 @@ SfxImageManager::~SfxImageManager()
 
 namespace
 {
-    typedef std::unordered_map< SfxModule*, boost::shared_ptr<SfxImageManager> > SfxImageManagerMap;
+    typedef std::unordered_map< SfxModule*, std::shared_ptr<SfxImageManager> > SfxImageManagerMap;
 
     class theImageManagerMap :
         public rtl::Static<SfxImageManagerMap, theImageManagerMap> {};

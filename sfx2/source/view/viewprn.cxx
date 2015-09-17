@@ -46,7 +46,6 @@
 #include <sfx2/docfilt.hxx>
 
 #include <toolkit/awt/vclxdevice.hxx>
-#include <boost/scoped_ptr.hpp>
 
 #include "view.hrc"
 #include "helpid.hrc"

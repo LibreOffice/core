@@ -18,7 +18,6 @@
 #include <algorithm>
 #include <assert.h>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>

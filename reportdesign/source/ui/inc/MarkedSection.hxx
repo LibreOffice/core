@@ -20,8 +20,6 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_MARKEDSECTION_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_MARKEDSECTION_HXX
 
-#include <boost/shared_ptr.hpp>
-
 namespace rptui
 {
     class OSectionWindow;

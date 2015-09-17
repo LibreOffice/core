@@ -127,7 +127,6 @@
 #include <boost/bind.hpp>
 #include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/noncopyable.hpp>
 
 //  page styles
 #define SC_UNO_PAGE_LEFTBORDER      "LeftBorder"
@@ -196,7 +195,7 @@ namespace reportdesign
     using namespace comphelper;
     using namespace rptui;
 
-void lcl_setModelReadOnly(const uno::Reference< embed::XStorage >& _xStorage,::boost::shared_ptr<rptui::OReportModel>& _rModel)
+void lcl_setModelReadOnly(const uno::Reference< embed::XStorage >& _xStorage,std::shared_ptr<rptui::OReportModel>& _rModel)
 {
     uno::Reference<beans::XPropertySet> xProp(_xStorage,uno::UNO_QUERY);
     sal_Int32 nOpenMode = embed::ElementModes::READ;
@@ -508,9 +507,9 @@ struct OReportDefinitionImpl
     uno::Reference< frame::XUntitledNumbers >               m_xNumberedControllers;
     uno::Reference< document::XDocumentProperties >         m_xDocumentProperties;
 
-    ::boost::shared_ptr< ::comphelper::EmbeddedObjectContainer>
+    std::shared_ptr< ::comphelper::EmbeddedObjectContainer>
                                                             m_pObjectContainer;
-    ::boost::shared_ptr<rptui::OReportModel>                m_pReportModel;
+    std::shared_ptr<rptui::OReportModel>                m_pReportModel;
     ::rtl::Reference< ::dbaui::UndoManager >                m_pUndoManager;
     OUString                                         m_sCaption;
     OUString                                         m_sCommand;
@@ -2032,14 +2031,14 @@ uno::Reference< uno::XComponentContext > OReportDefinition::getContext()
     return m_aProps->m_xContext;
 }
 
-::boost::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel() const
+std::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel() const
 {
     return m_pImpl->m_pReportModel;
 }
 
-::boost::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::Reference< report::XReportDefinition >& _xReportDefinition)
+std::shared_ptr<rptui::OReportModel> OReportDefinition::getSdrModel(const uno::Reference< report::XReportDefinition >& _xReportDefinition)
 {
-    ::boost::shared_ptr<rptui::OReportModel> pReportModel;
+    std::shared_ptr<rptui::OReportModel> pReportModel;
     uno::Reference< lang::XUnoTunnel > xUT( _xReportDefinition, uno::UNO_QUERY );
     if( xUT.is() )
         pReportModel = reinterpret_cast<OReportDefinition*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( OReportDefinition::getUnoTunnelImplementationId())))->getSdrModel();

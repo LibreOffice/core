@@ -15,7 +15,7 @@
 
 #include <oox/helper/grabbagstack.hxx>
 #include <oox/core/contexthandler2.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <vector>
 
 namespace oox { namespace drawingml {
@@ -35,7 +35,7 @@ public:
 
 protected:
     std::vector<css::beans::PropertyValue>& mrTextEffectsProperties;
-    boost::scoped_ptr<oox::GrabBagStack> mpGrabBagStack;
+    std::unique_ptr<oox::GrabBagStack> mpGrabBagStack;
     sal_Int32 mnCurrentElement;
 
 private:

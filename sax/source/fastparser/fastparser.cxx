@@ -38,13 +38,11 @@
 #include <sal/log.hxx>
 #include <salhelper/thread.hxx>
 
-#include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <queue>
+#include <memory>
 #include <stack>
 #include <unordered_map>
 #include <vector>
-#include <queue>
 #include <cassert>
 #include <cstring>
 #include <libxml/parser.h>
@@ -52,7 +50,7 @@
 // Inverse of libxml's BAD_CAST.
 #define XML_CAST( str ) reinterpret_cast< const sal_Char* >( str )
 
-using namespace ::std;
+using namespace std;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
@@ -69,10 +67,10 @@ class FastLocatorImpl;
 struct NamespaceDefine;
 struct Entity;
 
-typedef ::boost::shared_ptr< NamespaceDefine > NamespaceDefineRef;
+typedef std::shared_ptr< NamespaceDefine > NamespaceDefineRef;
 
 typedef std::unordered_map< OUString, sal_Int32,
-        OUStringHash, ::std::equal_to< OUString > > NamespaceMap;
+        OUStringHash, std::equal_to< OUString > > NamespaceMap;
 
 typedef std::vector<Event> EventList;
 
@@ -176,14 +174,14 @@ struct Entity : public ParserData
     void throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
                          bool mbDuringParse );
 
-    ::std::stack< NameWithToken >           maNamespaceStack;
+    std::stack< NameWithToken >           maNamespaceStack;
     /* Context for main thread consuming events.
      * startElement() stores the data, which characters() and endElement() uses
      */
-    ::std::stack< SaxContext>               maContextStack;
+    std::stack< SaxContext>               maContextStack;
     // Determines which elements of maNamespaceDefines are valid in current context
-    ::std::stack< sal_uInt32 >              maNamespaceCount;
-    ::std::vector< NamespaceDefineRef >     maNamespaceDefines;
+    std::stack< sal_uInt32 >              maNamespaceCount;
+    std::vector< NamespaceDefineRef >     maNamespaceDefines;
 
     explicit Entity( const ParserData& rData );
     Entity( const Entity& rEntity );
@@ -260,7 +258,7 @@ private:
     ParserData maData;                      /// Cached parser configuration for next call of parseStream().
 
     Entity *mpTop;                          /// std::stack::top() is amazingly slow => cache this.
-    ::std::stack< Entity > maEntities;      /// Entity stack for each call of parseStream().
+    std::stack< Entity > maEntities;      /// Entity stack for each call of parseStream().
     OUString pendingCharacters;             /// Data from characters() callback that needs to be sent.
 };
 

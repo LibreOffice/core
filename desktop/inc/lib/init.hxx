@@ -9,7 +9,7 @@
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "../../source/inc/desktopdllapi.h"
 
 using namespace css;
@@ -19,7 +19,7 @@ namespace desktop {
     struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public _LibreOfficeKitDocument
     {
         uno::Reference<css::lang::XComponent> mxComponent;
-        shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
+        std::shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
 
         explicit LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent);
         ~LibLODocument_Impl();

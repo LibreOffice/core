@@ -27,7 +27,7 @@
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/filerec.hxx>
 #include "poolio.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 /**
  * Returns the <SfxItemPool> that is being saved.
@@ -236,7 +236,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                             {
                                 sal_uLong nMark = rStream.Tell();
                                 rStream.Seek( nItemStartPos + sizeof(sal_uInt16) );
-                                boost::scoped_ptr<SfxPoolItem> pClone(pItem->Create(rStream, nItemVersion ));
+                                std::unique_ptr<SfxPoolItem> pClone(pItem->Create(rStream, nItemVersion ));
                                 sal_uInt16 nWh = pItem->Which();
                                 SFX_ASSERT( rStream.Tell() == nMark, nWh,"asymmetric store/create" );
                                 SFX_ASSERT( *pClone == *pItem, nWh, "unequal after store/create" );

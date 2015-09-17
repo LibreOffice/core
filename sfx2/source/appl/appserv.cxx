@@ -121,7 +121,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -364,7 +364,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if ( pFrameItem )
                     xFrame = pFrameItem->GetFrame();
 
-                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabDialog(
+                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabDialog(
                     RID_SVXDLG_CUSTOMIZE,
                     NULL, &aSet, xFrame ));
 
@@ -534,7 +534,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( 0, RID_DEFAULTABOUT ));
+                std::unique_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( 0, RID_DEFAULTABOUT ));
                 pDlg->Execute();
                 bDone = true;
             }
@@ -1155,7 +1155,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             do  // artificial loop for flow control
             {
-                boost::scoped_ptr<AbstractScriptSelectorDialog> pDlg(pFact->CreateScriptSelectorDialog(
+                std::unique_ptr<AbstractScriptSelectorDialog> pDlg(pFact->CreateScriptSelectorDialog(
                     lcl_getDialogParent( xFrame, GetTopWindow() ), false, xFrame ));
                 OSL_ENSURE( pDlg, "SfxApplication::OfaExec_Impl( SID_RUNMACRO ): no dialog!" );
                 if ( !pDlg )
@@ -1247,7 +1247,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), false, &pItem ) == SfxItemState::SET )
                     aSet.Put( *pItem );
 
-                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, NULL, &aSet, NULL ));
+                std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, NULL, &aSet, NULL ));
                 pDlg->Execute();
             }
 

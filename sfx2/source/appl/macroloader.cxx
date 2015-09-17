@@ -39,7 +39,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -285,7 +285,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::An
 
                 {
                     // attempt to protect the document against the script tampering with its Undo Context
-                    boost::scoped_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
+                    std::unique_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
                     if ( bIsDocBasic )
                         pUndoGuard.reset( new ::framework::DocumentUndoGuard( pDoc->GetModel() ) );
 

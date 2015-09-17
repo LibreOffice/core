@@ -18,7 +18,7 @@
  */
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
@@ -2486,7 +2486,7 @@ IMPL_LINK_TYPED( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox, void )
             ToolBoxItemBits::DROPDOWN == (pBox->GetItemBits(nEntry)&ToolBoxItemBits::DROPDOWN))
     {
         //create a popup menu in Writer
-        boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
+        std::unique_ptr<PopupMenu> pMenu(new PopupMenu);
         uno::Reference< container::XNameAccess > xNameAccess(
                 frame::theUICommandDescription::get(
                     ::comphelper::getProcessComponentContext()) );

@@ -22,7 +22,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <unordered_map>
 /*
  * UNO III Implementation
@@ -233,7 +233,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
 {
     // get the SfxPoolItem
     const SfxPoolItem* pItem = 0;
-    boost::scoped_ptr<SfxPoolItem> pNewItem;
+    std::unique_ptr<SfxPoolItem> pNewItem;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
     if(SfxItemState::SET != eState && SFX_WHICH_MAX > rEntry.nWID )
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
