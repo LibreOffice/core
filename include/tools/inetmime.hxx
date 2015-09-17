@@ -42,26 +42,17 @@ struct INetContentTypeParameter
         will only be one item for the complete parameter, with the attribute
         name lacking any section suffix.
      */
-#ifndef _LIBCPP_VERSION
-    const
-#endif
-          OString m_sAttribute;
+    OString m_sAttribute;
 
     /** The optional character set specification (see RFC 2231), in US-ASCII
         encoding and converted to lower case.
      */
-#ifndef _LIBCPP_VERSION
-    const
-#endif
-          OString m_sCharset;
+    OString m_sCharset;
 
     /** The optional language specification (see RFC 2231), in US-ASCII
         encoding and converted to lower case.
      */
-#ifndef _LIBCPP_VERSION
-    const
-#endif
-          OString m_sLanguage;
+    OString m_sLanguage;
 
     /** The attribute value.  If the value is a quoted-string, it is
         'unpacked.'  If a character set is specified, and the value can be
@@ -80,30 +71,13 @@ struct INetContentTypeParameter
         within Unicode's Private Use Area (effectively adding 0xF800 to the
         character's numeric value).
      */
-#ifndef _LIBCPP_VERSION
-    const
-#endif
-          OUString m_sValue;
+    OUString m_sValue;
 
     /** This is true if the value is successfully converted to Unicode, and
         false if the value is a special mixture of ISO-LATIN-1 characters and
         characters from Unicode's Private Use Area.
      */
-#ifndef _LIBCPP_VERSION
-    const
-#endif
-          bool m_bConverted;
-
-    INetContentTypeParameter(const OString& rTheAttribute,
-        const OString& rTheCharset, const OString& rTheLanguage,
-        const OUString& rTheValue, bool bTheConverted)
-    : m_sAttribute(rTheAttribute)
-    , m_sCharset(rTheCharset)
-    , m_sLanguage(rTheLanguage)
-    , m_sValue(rTheValue)
-    , m_bConverted(bTheConverted)
-    {
-    }
+    bool m_bConverted;
 };
 
 // the key is the m_sAttribute again; all keys are lower case:

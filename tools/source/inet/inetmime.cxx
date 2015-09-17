@@ -332,12 +332,10 @@ bool parseParameters(ParameterList const & rInput,
                         break;
                 };
             }
-            auto const ret = pOutput->insert(std::make_pair(p->m_aAttribute,
-                                    INetContentTypeParameter(p->m_aAttribute,
-                                                             p->m_aCharset,
-                                                             p->m_aLanguage,
-                                                             aValue,
-                                                             !bBadEncoding)));
+            auto const ret = pOutput->insert(
+                {p->m_aAttribute,
+                 {p->m_aAttribute, p->m_aCharset, p->m_aLanguage, aValue,
+                  !bBadEncoding}});
             SAL_INFO_IF(!ret.second, "tools",
                 "INetMIME: dropping duplicate parameter: " << p->m_aAttribute);
             p = pNext;
