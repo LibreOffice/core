@@ -281,7 +281,7 @@ void Sane::ReloadOptions()
 
     CheckConsistency( NULL, true );
 
-    maReloadOptionsLink.Call( this );
+    maReloadOptionsLink.Call( *this );
 }
 
 bool Sane::Open( const char* name )

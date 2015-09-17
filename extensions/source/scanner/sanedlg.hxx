@@ -35,10 +35,10 @@ class ScanPreview;
 class SaneDlg : public ModalDialog
 {
 private:
-    Sane&           mrSane;
-    bool            mbScanEnabled;
+    Sane&                  mrSane;
+    bool                   mbScanEnabled;
 
-    Link<>          maOldLink;
+    Link<Sane&,void>       maOldLink;
 
     VclPtr<OKButton>       mpOKButton;
     VclPtr<CancelButton>   mpCancelButton;
@@ -83,7 +83,7 @@ private:
     DECL_LINK_TYPED( ClickBtnHdl, Button*, void );
     DECL_LINK( SelectHdl, ListBox* );
     DECL_LINK( ModifyHdl, Edit* );
-    DECL_LINK( ReloadSaneOptionsHdl, Sane* );
+    DECL_LINK_TYPED( ReloadSaneOptionsHdl, Sane&, void );
     DECL_LINK_TYPED( OptionsBoxSelectHdl, SvTreeListBox*, void );
 
     void SaveState();

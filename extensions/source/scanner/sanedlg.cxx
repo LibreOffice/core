@@ -662,7 +662,7 @@ IMPL_LINK_TYPED( SaneDlg, ClickBtnHdl, Button*, pButton, void )
         }
         else if( pButton == mpAdvancedBox )
         {
-            ReloadSaneOptionsHdl( NULL );
+            ReloadSaneOptionsHdl( mrSane );
         }
     }
     if( pButton == mpOKButton || pButton == mpScanButton )
@@ -873,14 +873,13 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
     return 0;
 }
 
-IMPL_LINK( SaneDlg, ReloadSaneOptionsHdl, Sane*, /*pSane*/ )
+IMPL_LINK_NOARG_TYPED( SaneDlg, ReloadSaneOptionsHdl, Sane&, void )
 {
     mnCurrentOption = -1;
     mnCurrentElement = 0;
     DisableOption();
     InitFields();
     mpPreview->Invalidate();
-    return 0;
 }
 
 void SaneDlg::AcquirePreview()
