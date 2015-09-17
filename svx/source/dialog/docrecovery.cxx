@@ -981,11 +981,11 @@ short RecoveryDialog::execute()
 
         case RecoveryDialog::E_RECOVERY_DONE :
              {
-                 // All documents was reovered.
+                 // All documents were recovered.
                  // User decided to step to the "next" wizard page.
                  // Do it ... but check first, if there exist some
                  // failed recovery documents. They must be saved to
-                 // a user selected directrory.
+                 // a user selected directory.
                  short                 nRet                  = DLG_RET_UNKNOWN;
                  ScopedVclPtrInstance< BrokenRecoveryDialog > pBrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted);
                  OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default dir
