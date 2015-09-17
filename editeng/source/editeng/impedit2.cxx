@@ -63,10 +63,8 @@
 #include <sot/formats.hxx>
 
 #include <unicode/ubidi.h>
-#include <memory>
-#include <boost/scoped_ptr.hpp>
-
 #include <algorithm>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -2934,7 +2932,7 @@ bool ImpEditEngine::UpdateFields()
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 EditCharAttribField& rField = static_cast<EditCharAttribField&>(rAttr);
-                boost::scoped_ptr<EditCharAttribField> pCurrent(new EditCharAttribField(rField));
+                std::unique_ptr<EditCharAttribField> pCurrent(new EditCharAttribField(rField));
                 rField.Reset();
 
                 if ( aStatus.MarkFields() )

@@ -49,7 +49,7 @@
 
 #include "editeng/unonames.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -1937,7 +1937,7 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
     if (!bAbsorb)
         aSel.Start = aSel.End;
 
-    boost::scoped_ptr<SvxFieldData> pFieldData(SvxFieldData::Create(xContent));
+    std::unique_ptr<SvxFieldData> pFieldData(SvxFieldData::Create(xContent));
     if (!pFieldData)
         throw lang::IllegalArgumentException();
 

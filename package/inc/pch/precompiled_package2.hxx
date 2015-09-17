@@ -16,7 +16,6 @@
 
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 #include <algorithm>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

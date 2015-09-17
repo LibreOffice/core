@@ -58,8 +58,6 @@
 #include <ooo/vba/XHelperInterface.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
-
 #include <random>
 
 using namespace comphelper;
@@ -4500,7 +4498,7 @@ RTLFUNC(LoadPicture)
     }
 
     OUString aFileURL = getFullPath( rPar.Get(1)->GetOUString() );
-    boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aFileURL, StreamMode::READ ));
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aFileURL, StreamMode::READ ));
     if( pStream )
     {
         Bitmap aBmp;

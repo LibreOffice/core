@@ -23,10 +23,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <boost/bind.hpp>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/make_shared.hpp>
 #include <boost/ref.hpp>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include <cassert>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>

@@ -29,7 +29,7 @@
 
 #include <stdio.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <sal/types.h>
 
 #include "hwplib.h"
@@ -77,7 +77,7 @@ class HStreamIODev : public HIODev
 {
     private:
 /* zlib으로 압축을 풀기 위한 자료 구조 */
-        boost::scoped_ptr<HStream> _stream;
+        std::unique_ptr<HStream> _stream;
         gz_stream *_gzfp;
     public:
         HStreamIODev(HStream* stream);

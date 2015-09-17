@@ -14,7 +14,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
 #include <filter/msfilter/util.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <unordered_map>
 
 namespace msfilter {
@@ -89,7 +89,7 @@ DateTime DTTM2DateTime( long lDTTM )
 sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
     rtl_TextEncoding& rChrSet, OUString& rFontName)
 {
-    boost::scoped_ptr<StarSymbolToMSMultiFont> pConvert(CreateStarSymbolToMSMultiFont());
+    std::unique_ptr<StarSymbolToMSMultiFont> pConvert(CreateStarSymbolToMSMultiFont());
     OUString sFont = pConvert->ConvertChar(cChar);
     pConvert.reset();
     if (!sFont.isEmpty())

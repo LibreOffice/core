@@ -52,7 +52,7 @@
 #include "com/sun/star/uri/UriReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarScriptUrl.hpp"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -213,7 +213,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             }
 
             // attempt to protect the document against the script tampering with its Undo Context
-            boost::scoped_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
+            std::unique_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
             if ( bIsDocumentScript )
                 pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
 
@@ -273,7 +273,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
         if ( pFact != NULL )
         {
-            boost::scoped_ptr<VclAbstractDialog> pDlg(
+            std::unique_ptr<VclAbstractDialog> pDlg(
                 pFact->CreateScriptErrorDialog( NULL, aException ));
 
             if ( pDlg )

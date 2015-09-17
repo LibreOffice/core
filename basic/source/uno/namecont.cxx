@@ -65,7 +65,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <basic/sbmod.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace basic
 {
@@ -781,7 +781,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         }
         else
         {
-            boost::scoped_ptr<INetURLObject> pLibInfoInetObj;
+            std::unique_ptr<INetURLObject> pLibInfoInetObj;
             if( meInitMode == CONTAINER_INIT_FILE )
             {
                 aFileName = aInitFileName;
@@ -838,7 +838,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             source.sSystemId    = aFileName;
 
             // start parsing
-            boost::scoped_ptr< ::xmlscript::LibDescriptorArray> pLibArray(new ::xmlscript::LibDescriptorArray());
+            std::unique_ptr< ::xmlscript::LibDescriptorArray> pLibArray(new ::xmlscript::LibDescriptorArray());
 
             try
             {
@@ -1904,7 +1904,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     int iArray = 0;
     pName = aNames.getConstArray();
     ::xmlscript::LibDescriptor aLibDescriptorForExtensionLibs;
-    boost::scoped_ptr< ::xmlscript::LibDescriptorArray > pLibArray(new ::xmlscript::LibDescriptorArray(nLibsToSave));
+    std::unique_ptr< ::xmlscript::LibDescriptorArray > pLibArray(new ::xmlscript::LibDescriptorArray(nLibsToSave));
     for( ; pName != pNamesEnd; ++pName )
     {
         SfxLibrary* pImplLib = getImplLib( *pName );

@@ -91,7 +91,6 @@
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -1290,7 +1289,7 @@ bool EscherPropertyContainer::CreateGraphicProperties( const ::com::sun::star::u
         if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect && aXPropSet.is() )
         {
             ::com::sun::star::uno::Any aAny;
-            boost::scoped_ptr< ::com::sun::star::awt::Rectangle> pVisArea;
+            std::unique_ptr< ::com::sun::star::awt::Rectangle> pVisArea;
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, OUString("VisibleArea" ) ) )
             {
                 pVisArea.reset(new ::com::sun::star::awt::Rectangle);
@@ -1423,7 +1422,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
     bool        bRetValue = false;
     bool        bCreateFillStyles = false;
 
-    boost::scoped_ptr<GraphicAttr> pGraphicAttr;
+    std::unique_ptr<GraphicAttr> pGraphicAttr;
     GraphicObject   aGraphicObject;
     OUString        aGraphicUrl;
     OString         aUniqueId;
@@ -1592,7 +1591,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                       nFormat != GraphicFileFormat::WMF &&
                       nFormat != GraphicFileFormat::EMF) )
                 {
-                    boost::scoped_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
+                    std::unique_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
                         aTmp.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
                     if ( pIn )
                     {

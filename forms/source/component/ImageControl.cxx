@@ -54,7 +54,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define ID_OPEN_GRAPHICS            1
 #define ID_CLEAR_GRAPHICS           2
@@ -403,7 +403,7 @@ void OImageControlModel::read(const Reference<XObjectInputStream>& _rxInStream) 
 bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, ValueChangeInstigator _eInstigator )
 {
     // create a stream for the image specified by the URL
-    boost::scoped_ptr< SvStream > pImageStream;
+    std::unique_ptr< SvStream > pImageStream;
     Reference< XInputStream > xImageStream;
 
     if ( ::svt::GraphicAccess::isSupportedURL( _rURL ) )

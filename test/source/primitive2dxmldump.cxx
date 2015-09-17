@@ -14,7 +14,7 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
@@ -63,7 +63,7 @@ xmlDocPtr Primitive2dXmlDump::dumpAndParse(
     const drawinglayer::primitive2d::Primitive2DSequence& rPrimitive2DSequence,
     const OUString& rTempStreamName)
 {
-    boost::scoped_ptr<SvStream> pStream;
+    std::unique_ptr<SvStream> pStream;
 
     if (rTempStreamName.isEmpty())
         pStream.reset(new SvMemoryStream());

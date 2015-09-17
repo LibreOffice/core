@@ -52,10 +52,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
-#include <boost/scoped_ptr.hpp>
-
-
-
+#include <memory>
 
 using com::sun::star::beans::UnknownPropertyException;
 using com::sun::star::beans::PropertyVetoException;
@@ -249,7 +246,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
         xResult, aMethod.equalsIgnoreAsciiCase("get"));
 
     // submit result; set encoding, etc.
-    boost::scoped_ptr<CSubmission> xSubmission;
+    std::unique_ptr<CSubmission> xSubmission;
     if (aMethod.equalsIgnoreAsciiCase("PUT"))
         xSubmission.reset(new CSubmissionPut( getAction(), aFragment));
     else if (aMethod.equalsIgnoreAsciiCase("post"))

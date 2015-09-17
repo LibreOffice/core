@@ -30,7 +30,7 @@
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace css::uno;
 using namespace css::ucb;
@@ -50,7 +50,7 @@ CSubmissionGet::CSubmissionGet(const OUString& aURL, const css::uno::Reference< 
 CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
 {
     // GET always uses application/x-www-formurlencoded
-    boost::scoped_ptr< CSerialization > apSerialization(new CSerializationURLEncoded());
+    std::unique_ptr< CSerialization > apSerialization(new CSerializationURLEncoded());
     apSerialization->setSource(m_aFragment);
     apSerialization->serialize();
 

@@ -50,7 +50,7 @@
 #include "svgfilter.hxx"
 #include "svgwriter.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -363,7 +363,7 @@ OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor) throw 
     try {
         if (isStreamGZip(xInput))
         {
-            boost::scoped_ptr<SvStream> aStream(utl::UcbStreamHelper::CreateStream(xInput, true ));
+            std::unique_ptr<SvStream> aStream(utl::UcbStreamHelper::CreateStream(xInput, true ));
             if(!aStream.get())
                 return OUString();
 

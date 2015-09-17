@@ -30,7 +30,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace editeng {
 
@@ -136,7 +136,7 @@ private:
     XEditAttributesType aAttribs;
     SfxStyleFamily      eFamily;
     SfxItemSet          aParaAttribs;
-    boost::scoped_ptr<WrongList> mpWrongs;
+    std::unique_ptr<WrongList> mpWrongs;
 
                         ContentInfo( SfxItemPool& rPool );
                         ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse  );

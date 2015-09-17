@@ -31,12 +31,12 @@
 #include <svl/languageoptions.hxx>
 #include <tools/lineend.hxx>
 
-#include <vector>
 #include <deque>
+#include <memory>
+#include <vector>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 
 class ImpEditEngine;
 class SvxTabStop;
@@ -242,7 +242,7 @@ private:
     OUString maString;
     ContentAttribs  aContentAttribs;
     CharAttribList  aCharAttribList;
-    boost::scoped_ptr<WrongList> mpWrongList;
+    std::unique_ptr<WrongList> mpWrongList;
 
     void UnExpandPosition( sal_Int32 &rStartPos, bool bBiasStart );
 

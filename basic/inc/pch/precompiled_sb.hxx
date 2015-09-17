@@ -17,7 +17,6 @@
 #include "math.h"
 #include <boost/optional.hpp>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>

@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/languagetagicu.hxx>
 #include <sal/log.hxx>
@@ -28,6 +27,7 @@
 
 #include <unicode/rbnf.h>
 #include <unicode/normlzr.h>
+#include <memory>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
@@ -79,7 +79,7 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_I
     if (!U_SUCCESS(nCode))
         return retValue;
 
-    boost::scoped_ptr<NumberFormat> xNumberFormat(icu::NumberFormat::createInstance(aIcuLocale, nCode));
+    std::unique_ptr<NumberFormat> xNumberFormat(icu::NumberFormat::createInstance(aIcuLocale, nCode));
     if (!U_SUCCESS(nCode))
         return retValue;
 

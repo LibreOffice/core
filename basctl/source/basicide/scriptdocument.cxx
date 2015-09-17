@@ -192,7 +192,7 @@ namespace basctl
         Reference< XModel >             m_xDocument;
         Reference< XModifiable >        m_xDocModify;
         Reference< XEmbeddedScripts >   m_xScriptAccess;
-        boost::scoped_ptr< DocumentEventNotifier > m_pDocListener;
+        std::unique_ptr< DocumentEventNotifier > m_pDocListener;
 
     public:
         Impl ();

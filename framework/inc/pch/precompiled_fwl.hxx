@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>

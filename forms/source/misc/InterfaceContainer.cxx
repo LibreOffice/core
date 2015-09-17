@@ -45,7 +45,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -803,7 +803,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     // SYNCHRONIZED ----->
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
 
-    boost::scoped_ptr< ElementDescription > aAutoDeleteMetaData;
+    std::unique_ptr< ElementDescription > aAutoDeleteMetaData;
     ElementDescription* pElementMetaData = _pApprovalResult;
     if ( !pElementMetaData )
     {   // not yet approved by the caller -> do ourself
@@ -951,7 +951,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     OSL_PRECOND( ( _nIndex >= 0 ) && ( _nIndex < (sal_Int32)m_aItems.size() ), "OInterfaceContainer::implReplaceByIndex: precondition not met (index)!" );
 
     // approve the new object
-    boost::scoped_ptr< ElementDescription > aElementMetaData( createElementMetaData() );
+    std::unique_ptr< ElementDescription > aElementMetaData( createElementMetaData() );
     DBG_ASSERT( aElementMetaData.get(), "OInterfaceContainer::implReplaceByIndex: createElementMetaData returned nonsense!" );
     {
         Reference< XPropertySet > xElementProps;
@@ -1099,7 +1099,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const An
 {
     Reference< XPropertySet > xElementProps;
 
-    boost::scoped_ptr< ElementDescription > aElementMetaData( createElementMetaData() );
+    std::unique_ptr< ElementDescription > aElementMetaData( createElementMetaData() );
     DBG_ASSERT( aElementMetaData.get(), "OInterfaceContainer::insertByName: createElementMetaData returned nonsense!" );
 
     // ensure the correct name of the element

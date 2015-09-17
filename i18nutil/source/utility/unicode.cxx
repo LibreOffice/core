@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -29,6 +28,7 @@
 #include "unicode_data.h"
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <rtl/character.hxx>
+#include <memory>
 
 // Workaround for glibc braindamage:
 // glibc 2.4's langinfo.h does "#define CURRENCY_SYMBOL __CURRENCY_SYMBOL"
@@ -980,7 +980,7 @@ OUString SAL_CALL unicode::formatPercent(double dNumber,
 
     icu::Locale aLocale = LanguageTagIcu::getIcuLocale(aLangTag);
 
-    boost::scoped_ptr<NumberFormat> xF(
+    std::unique_ptr<NumberFormat> xF(
         NumberFormat::createPercentInstance(aLocale, errorCode));
     if(U_FAILURE(errorCode))
     {

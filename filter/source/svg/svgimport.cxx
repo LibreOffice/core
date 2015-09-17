@@ -43,7 +43,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <tools/zcodec.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::svgi;
@@ -65,7 +65,7 @@ bool SVGFilter::implImport(const Sequence< PropertyValue >& rDescriptor)
             return false;
         xSeek->seek(0);
 
-        boost::scoped_ptr<SvStream> aStream(utl::UcbStreamHelper::CreateStream(xInputStream, true ));
+        std::unique_ptr<SvStream> aStream(utl::UcbStreamHelper::CreateStream(xInputStream, true ));
         if(!aStream.get())
             return false;
 

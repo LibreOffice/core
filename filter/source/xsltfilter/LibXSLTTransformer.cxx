@@ -45,7 +45,7 @@
 
 #include <LibXSLTTransformer.hxx>
 #include <OleHandler.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -298,7 +298,7 @@ namespace XSLT
         xsltSetGenericDebugFunc(stderr, NULL);
         xsltDebugDumpExtensions(NULL);
 #endif
-        boost::scoped_ptr<OleHandler> oh(new OleHandler(m_transformer->getComponentContext()));
+        std::unique_ptr<OleHandler> oh(new OleHandler(m_transformer->getComponentContext()));
         if (styleSheet)
             {
                 tcontext = xsltNewTransformContext(styleSheet, doc);

@@ -32,7 +32,7 @@
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class Printer;
 class StarBASIC;
@@ -57,8 +57,8 @@ class DialogWindow: public BaseWindow
 {
 private:
     DialogWindowLayout& rLayout;
-    boost::scoped_ptr<DlgEditor> pEditor; // never nullptr
-    boost::scoped_ptr<SfxUndoManager> pUndoMgr; // never nullptr
+    std::unique_ptr<DlgEditor> pEditor; // never nullptr
+    std::unique_ptr<SfxUndoManager> pUndoMgr; // never nullptr
     OUString            aCurPath;
 
 protected:

@@ -15,7 +15,7 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace
 {
@@ -232,7 +232,7 @@ void MetafileXmlDump::filterAllActionTypes()
 
 xmlDocPtr MetafileXmlDump::dumpAndParse(const GDIMetaFile& rMetaFile, const OUString& rTempStreamName)
 {
-    boost::scoped_ptr<SvStream> pStream;
+    std::unique_ptr<SvStream> pStream;
 
     if (rTempStreamName.isEmpty())
         pStream.reset(new SvMemoryStream());

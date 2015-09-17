@@ -22,7 +22,7 @@
 #include <tools/debug.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace frm
 {
@@ -172,7 +172,7 @@ void OComponentEventThread::run()
             ::cppu::OComponentHelper *pCompImpl = m_pCompImpl;
 
             ThreadEvents::iterator firstEvent( m_aEvents.begin() );
-            boost::scoped_ptr<EventObject> pEvt(*firstEvent);
+            std::unique_ptr<EventObject> pEvt(*firstEvent);
             m_aEvents.erase( firstEvent );
 
             ThreadObjects::iterator firstControl( m_aControls.begin() );

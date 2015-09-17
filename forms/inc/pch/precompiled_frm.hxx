@@ -24,7 +24,6 @@
 #include "svtools/imageresourceaccess.hxx"
 #include <algorithm>
 #include <boost/optional.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/awt/ActionEvent.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>

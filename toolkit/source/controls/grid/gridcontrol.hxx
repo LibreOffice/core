@@ -30,7 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace toolkit
 {
@@ -139,7 +139,7 @@ protected:
 
 private:
     SelectionListenerMultiplexer                m_aSelectionListeners;
-    ::boost::scoped_ptr< GridEventForwarder >   m_pEventForwarder;
+    std::unique_ptr< GridEventForwarder >   m_pEventForwarder;
 };
 
 } // toolkit

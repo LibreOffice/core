@@ -20,8 +20,8 @@
 #define INCLUDED_BASCTL_SOURCE_INC_DOCSIGNATURE_HXX
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <sfx2/signaturestate.hxx>
+#include <memory>
 
 
 namespace basctl
@@ -67,7 +67,7 @@ namespace basctl
 
     private:
         struct Impl;
-        boost::scoped_ptr<Impl> m_pImpl;
+        std::unique_ptr<Impl> m_pImpl;
     };
 
 

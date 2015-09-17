@@ -37,7 +37,7 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "helper/unopropertyarrayhelper.hxx"
 
@@ -311,7 +311,7 @@ void SAL_CALL UnoGridControl::createPeer( const uno::Reference< awt::XToolkit > 
 
 namespace
 {
-    void lcl_setEventForwarding( const Reference< XControlModel >& i_gridControlModel, const ::boost::scoped_ptr< toolkit::GridEventForwarder >& i_listener,
+    void lcl_setEventForwarding( const Reference< XControlModel >& i_gridControlModel, const std::unique_ptr< toolkit::GridEventForwarder >& i_listener,
         bool const i_add )
     {
         const Reference< XPropertySet > xModelProps( i_gridControlModel, UNO_QUERY );
