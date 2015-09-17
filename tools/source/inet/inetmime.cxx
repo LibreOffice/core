@@ -3117,7 +3117,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                 // character encodings:
                 if (eMIMEEncoding == RTL_TEXTENCODING_UTF8)
                 {
-                    bool bInitial = true;
                     for (sal_Unicode const * p = m_pBuffer;
                          p != m_pBufferEnd;)
                     {
@@ -3175,7 +3174,6 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                         }
                         else
                             m_rSink << sal_Char(nUTF32);
-                        bInitial = false;
                     }
                 }
                 else
