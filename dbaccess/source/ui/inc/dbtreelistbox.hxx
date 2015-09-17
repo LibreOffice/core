@@ -66,8 +66,6 @@ namespace dbaui
         Link<LinkParamNone*,void>   m_aCopyHandler;         // called when someone press CTRL+C
         Link<LinkParamNone*,void>   m_aPasteHandler;        // called when someone press CTRL+V
         Link<LinkParamNone*,void>   m_aDeleteHandler;       // called when someone press DELETE Key
-        Link<>                      m_aEditingHandler;      // called before someone will edit an entry
-        Link<>                      m_aEditedHandler;       // called after someone edited an entry
         Link<>                      m_aEnterKeyHdl;
 
         bool                        m_bHandleEnterKey;

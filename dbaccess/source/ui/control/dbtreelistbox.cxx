@@ -378,9 +378,9 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
-bool DBTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& /*_aSelection*/)
+bool DBTreeListBox::EditingEntry( SvTreeListEntry* /*pEntry*/, Selection& /*_aSelection*/)
 {
-    return m_aEditingHandler.Call(pEntry) != 0;
+    return false;
 }
 
 bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
@@ -388,11 +388,6 @@ bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewTe
     DBTreeEditedEntry aEntry;
     aEntry.pEntry = pEntry;
     aEntry.aNewText = rNewText;
-    if(m_aEditedHandler.Call(&aEntry) != 0)
-    {
-        implStopSelectionTimer();
-        m_aSelectedEntries.erase( pEntry );
-    }
     SetEntryText(pEntry,aEntry.aNewText);
 
     return false;  // we never want that the base change our text
