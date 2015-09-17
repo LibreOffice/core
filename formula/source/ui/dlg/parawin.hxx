@@ -44,10 +44,9 @@ class IControlReferenceHandler;
 class ParaWin : public TabPage
 {
 private:
-        OModuleClient   m_aModuleClient;
-        Link<>          aScrollLink;
-        Link<>          aFxLink;
-        Link<>          aArgModifiedLink;
+        OModuleClient        m_aModuleClient;
+        Link<>               aFxLink;
+        Link<>               aArgModifiedLink;
 
         ::std::vector<sal_uInt16>   aVisibleArgMapping;
         const IFunctionDescription* pFuncDesc;

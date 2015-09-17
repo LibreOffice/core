@@ -534,7 +534,6 @@ void ParaWin::SliderMoved()
         ArgumentModified();
         aArgInput[nEdFocus].UpdateAccessibleNames();
     }
-    aScrollLink.Call(this);
 }
 
 void ParaWin::ArgumentModified()
