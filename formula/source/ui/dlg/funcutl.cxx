@@ -165,10 +165,6 @@ void ArgInput::InitArgInput( FixedText* pftArg, PushButton* pbtnFx,
         pBtnFx->SetClickHdl   ( LINK( this, ArgInput, FxBtnClickHdl ) );
         pBtnFx->SetGetFocusHdl( LINK( this, ArgInput, FxBtnFocusHdl ) );
     }
-    if(pRefBtn!=nullptr)
-    {
-        pRefBtn->SetGetFocusHdl( LINK( this, ArgInput, RefBtnFocusHdl ) );
-    }
     if(pEdArg!=nullptr)
     {
         pEdArg->SetGetFocusHdl ( LINK( this, ArgInput, EdFocusHdl ) );
@@ -273,11 +269,6 @@ void ArgInput::FxFocus()
     aFxFocusLink.Call(*this);
 }
 
-void ArgInput::RefFocus()
-{
-    aRefFocusLink.Call(this);
-}
-
 void ArgInput::EdFocus()
 {
     aEdFocusLink.Call(this);
@@ -298,14 +289,6 @@ IMPL_LINK( ArgInput, FxBtnFocusHdl, ImageButton*, pBtn )
 {
     if(pBtn == pBtnFx)
         FxFocus();
-
-    return 0;
-}
-
-IMPL_LINK( ArgInput, RefBtnFocusHdl,RefButton*, pBtn )
-{
-    if(pRefBtn == pBtn)
-        RefFocus();
 
     return 0;
 }
