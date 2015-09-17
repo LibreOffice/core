@@ -27,14 +27,10 @@ class SdrObjFactory;
 
 class SdObjectFactory
 {
-protected:
-    Link<> aOldMakeObjLink;
-    Link<> aOldMakeUserDataLink;
-
 public:
     SdObjectFactory() {}
 
-    DECL_LINK_TYPED( MakeUserData, SdrObjFactory *, void );
+    DECL_STATIC_LINK_TYPED( SdObjectFactory, MakeUserData, SdrObjFactory *, void );
 };
 
 extern SdObjectFactory aSdObjectFactory;

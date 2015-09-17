@@ -35,7 +35,7 @@ SdObjectFactory aSdObjectFactory;
 |*
 \************************************************************************/
 
-IMPL_LINK_TYPED( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFactory, void )
+IMPL_STATIC_LINK_TYPED( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFactory, void )
 {
     if ( pObjFactory->nInventor == SdUDInventor )
     {
@@ -53,12 +53,6 @@ IMPL_LINK_TYPED( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFactory, vo
             break;
         }
     }
-
-    if ( pObjFactory->pNewData )
-        return;
-
-    if( aOldMakeUserDataLink.IsSet() )
-        aOldMakeUserDataLink.Call( this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
