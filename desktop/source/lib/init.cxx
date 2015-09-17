@@ -53,6 +53,8 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/svpforlokit.hxx>
@@ -813,14 +815,22 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                                 LibreOfficeKitCallback pCallback,
                                 void* pData)
 {
-    ITiledRenderable* pDoc = getTiledRenderable(pThis);
-    if (!pDoc)
+    if (comphelper::LibreOfficeKit::isViewCallback())
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
-        return;
+        if (SfxViewShell* pViewShell = SfxViewFrame::Current()->GetViewShell())
+            pViewShell->registerLibreOfficeKitViewCallback(pCallback, pData);
     }
+    else
+    {
+        ITiledRenderable* pDoc = getTiledRenderable(pThis);
+        if (!pDoc)
+        {
+            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            return;
+        }
 
-    pDoc->registerCallback(pCallback, pData);
+        pDoc->registerCallback(pCallback, pData);
+    }
 }
 
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
