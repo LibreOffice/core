@@ -192,7 +192,6 @@ IMPL_LINK_NOARG(OSqlEdit, ModifyHdl)
     rController.InvalidateFeature(SID_CUT);
     rController.InvalidateFeature(SID_COPY);
 
-    m_lnkTextModifyHdl.Call(NULL);
     return 0;
 }
 

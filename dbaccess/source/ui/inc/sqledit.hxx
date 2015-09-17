@@ -41,9 +41,8 @@ namespace dbaui
 
         Timer                   m_timerInvalidate;
         Timer                   m_timerUndoActionCreation;
-        Link<>                  m_lnkTextModifyHdl;
         OUString                m_strOrigText;      // is restored on undo
-        VclPtr<OQueryTextView>         m_pView;
+        VclPtr<OQueryTextView>  m_pView;
         bool                    m_bAccelAction;     // is set on cut, copy, paste
         bool                    m_bStopTimer;
         svtools::ColorConfig    m_ColorConfig;
@@ -78,10 +77,6 @@ namespace dbaui
         // corresponding slot in the View. Therefore, the action occurs twice.
        // To prevent this, SlotExec in View can call this function.
         bool IsInAccelAct() { return m_bAccelAction; }
-
-        void SetTextModifyHdl(const Link<>& lnk) { m_lnkTextModifyHdl = lnk; }
-            // please don't use SetModifyHdl, I need it for myself, this here is called from the handler set with that
-            // the link gets a pointer-to-string, which is invalid after the link
 
         void stopTimer();
         void startTimer();
