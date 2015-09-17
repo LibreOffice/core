@@ -32,7 +32,6 @@
 #include <unordered_map>
 
 class DateTime;
-class INetMIMECharsetList_Impl;
 class INetMIMEOutputSink;
 
 struct INetContentTypeParameter
@@ -312,9 +311,6 @@ public:
                                                const sal_Char * pEnd);
 
     static inline bool isMIMECharsetEncoding(rtl_TextEncoding eEncoding);
-
-    static INetMIMECharsetList_Impl *
-    createPreferredCharsetList(rtl_TextEncoding eEncoding);
 
     static sal_Unicode * convertToUnicode(const sal_Char * pBegin,
                                           const sal_Char * pEnd,

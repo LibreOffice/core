@@ -54,8 +54,6 @@ inline Charset::Charset(rtl_TextEncoding eTheEncoding,
 void appendISO88591(OUString & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd);
 
-}
-
 class INetMIMECharsetList_Impl
 {
     struct Node
@@ -94,8 +92,6 @@ inline INetMIMECharsetList_Impl::Node::Node(const Charset & rTheCharset,
     m_bDisabled(bTheDisabled),
     m_pNext(pTheNext)
 {}
-
-namespace {
 
 struct Parameter
 {
@@ -154,8 +150,6 @@ inline ParameterList::~ParameterList()
 bool parseParameters(ParameterList const & rInput,
                      INetContentTypeParameterList * pOutput);
 
-}
-
 //  Charset
 
 bool Charset::contains(sal_uInt32 nChar) const
@@ -171,8 +165,6 @@ bool Charset::contains(sal_uInt32 nChar) const
 
 //  appendISO88591
 
-namespace {
-
 void appendISO88591(OUString & rText, sal_Char const * pBegin,
                     sal_Char const * pEnd)
 {
@@ -182,8 +174,6 @@ void appendISO88591(OUString & rText, sal_Char const * pBegin,
         *p++ = static_cast<unsigned char>(*pBegin++);
     rText += OUString(pBuffer, nLength);
     delete[] pBuffer;
-}
-
 }
 
 //  INetMIMECharsetList_Impl
@@ -247,8 +237,6 @@ Parameter ** ParameterList::find(const OString& rAttribute,
 }
 
 //  parseParameters
-
-namespace {
 
 bool parseParameters(ParameterList const & rInput,
                      INetContentTypeParameterList * pOutput)
@@ -343,6 +331,278 @@ bool parseParameters(ParameterList const & rInput,
     return true;
 }
 
+INetMIMECharsetList_Impl *
+createPreferredCharsetList(rtl_TextEncoding eEncoding)
+{
+    static const sal_uInt32 aUSASCIIRanges[] = { 0, 0x7F, sal_uInt32(-1) };
+
+    static const sal_uInt32 aISO88591Ranges[] = { 0, 0xFF, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-1.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aISO88592Ranges[]
+        = { 0, 0xA0, 0xA4, 0xA4, 0xA7, 0xA8, 0xAD, 0xAD, 0xB0, 0xB0,
+            0xB4, 0xB4, 0xB8, 0xB8, 0xC1, 0xC2, 0xC4, 0xC4, 0xC7, 0xC7,
+            0xC9, 0xC9, 0xCB, 0xCB, 0xCD, 0xCE, 0xD3, 0xD4, 0xD6, 0xD7,
+            0xDA, 0xDA, 0xDC, 0xDD, 0xDF, 0xDF, 0xE1, 0xE2, 0xE4, 0xE4,
+            0xE7, 0xE7, 0xE9, 0xE9, 0xEB, 0xEB, 0xED, 0xEE, 0xF3, 0xF4,
+            0xF6, 0xF7, 0xFA, 0xFA, 0xFC, 0xFD, 0x102, 0x107, 0x10C, 0x111,
+            0x118, 0x11B, 0x139, 0x13A, 0x13D, 0x13E, 0x141, 0x144,
+            0x147, 0x148, 0x150, 0x151, 0x154, 0x155, 0x158, 0x15B,
+            0x15E, 0x165, 0x16E, 0x171, 0x179, 0x17E, 0x2C7, 0x2C7,
+            0x2D8, 0x2D9, 0x2DB, 0x2DB, 0x2DD, 0x2DD, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-2.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aISO88593Ranges[]
+        = { 0, 0xA0, 0xA3, 0xA4, 0xA7, 0xA8, 0xAD, 0xAD, 0xB0, 0xB0,
+            0xB2, 0xB5, 0xB7, 0xB8, 0xBD, 0xBD, 0xC0, 0xC2, 0xC4, 0xC4,
+            0xC7, 0xCF, 0xD1, 0xD4, 0xD6, 0xD7, 0xD9, 0xDC, 0xDF, 0xE2,
+            0xE4, 0xE4, 0xE7, 0xEF, 0xF1, 0xF4, 0xF6, 0xF7, 0xF9, 0xFC,
+            0x108, 0x10B, 0x11C, 0x121, 0x124, 0x127, 0x130, 0x131,
+            0x134, 0x135, 0x15C, 0x15F, 0x16C, 0x16D, 0x17B, 0x17C,
+            0x2D8, 0x2D9, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-3.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aISO88594Ranges[]
+        = { 0, 0xA0, 0xA4, 0xA4, 0xA7, 0xA8, 0xAD, 0xAD, 0xAF, 0xB0,
+            0xB4, 0xB4, 0xB8, 0xB8, 0xC1, 0xC6, 0xC9, 0xC9, 0xCB, 0xCB,
+            0xCD, 0xCE, 0xD4, 0xD8, 0xDA, 0xDC, 0xDF, 0xDF, 0xE1, 0xE6,
+            0xE9, 0xE9, 0xEB, 0xEB, 0xED, 0xEE, 0xF4, 0xF8, 0xFA, 0xFC,
+            0x100, 0x101, 0x104, 0x105, 0x10C, 0x10D, 0x110, 0x113,
+            0x116, 0x119, 0x122, 0x123, 0x128, 0x12B, 0x12E, 0x12F,
+            0x136, 0x138, 0x13B, 0x13C, 0x145, 0x146, 0x14A, 0x14D,
+            0x156, 0x157, 0x160, 0x161, 0x166, 0x16B, 0x172, 0x173,
+            0x17D, 0x17E, 0x2C7, 0x2C7, 0x2D9, 0x2D9, 0x2DB, 0x2DB,
+            sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-4.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aISO88595Ranges[]
+        = { 0, 0xA0, 0xA7, 0xA7, 0xAD, 0xAD, 0x401, 0x40C, 0x40E, 0x44F,
+            0x451, 0x45C, 0x45E, 0x45F, 0x2116, 0x2116, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-5.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aISO88596Ranges[]
+        = { 0, 0xA0, 0xA4, 0xA4, 0xAD, 0xAD, 0x60C, 0x60C, 0x61B, 0x61B,
+            0x61F, 0x61F, 0x621, 0x63A, 0x640, 0x652, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-6.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aISO88597Ranges[]
+        = { 0, 0xA0, 0xA3, 0xA3, 0xA6, 0xA9, 0xAB, 0xAD, 0xB0, 0xB3,
+            0xB7, 0xB7, 0xBB, 0xBB, 0xBD, 0xBD, 0x384, 0x386, 0x388, 0x38A,
+            0x38C, 0x38C, 0x38E, 0x3A1, 0x3A3, 0x3CE, 0x2015, 0x2015,
+            0x2018, 0x2019, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-7.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aISO88598Ranges[]
+        = { 0, 0xA0, 0xA2, 0xA9, 0xAB, 0xB9, 0xBB, 0xBE, 0xD7, 0xD7,
+            0xF7, 0xF7, 0x5D0, 0x5EA, 0x200E, 0x200F, 0x2017, 0x2017,
+            sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-8.TXT> version
+        // 1.1 of 2000-Jan-03
+
+    static const sal_uInt32 aISO88599Ranges[]
+        = { 0, 0xCF, 0xD1, 0xDC, 0xDF, 0xEF, 0xF1, 0xFC, 0xFF, 0xFF,
+            0x11E, 0x11F, 0x130, 0x131, 0x15E, 0x15F, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-9.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aISO885910Ranges[]
+        = { 0, 0xA0, 0xA7, 0xA7, 0xAD, 0xAD, 0xB0, 0xB0, 0xB7, 0xB7,
+            0xC1, 0xC6, 0xC9, 0xC9, 0xCB, 0xCB, 0xCD, 0xD0, 0xD3, 0xD6,
+            0xD8, 0xD8, 0xDA, 0xDF, 0xE1, 0xE6, 0xE9, 0xE9, 0xEB, 0xEB,
+            0xED, 0xF0, 0xF3, 0xF6, 0xF8, 0xF8, 0xFA, 0xFE, 0x100, 0x101,
+            0x104, 0x105, 0x10C, 0x10D, 0x110, 0x113, 0x116, 0x119,
+            0x122, 0x123, 0x128, 0x12B, 0x12E, 0x12F, 0x136, 0x138,
+            0x13B, 0x13C, 0x145, 0x146, 0x14A, 0x14D, 0x160, 0x161,
+            0x166, 0x16B, 0x172, 0x173, 0x17D, 0x17E, 0x2015, 0x2015,
+            sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-10.TXT> version
+        // 1.1 of 1999 October 11
+
+    static const sal_uInt32 aISO885913Ranges[]
+        = { 0, 0xA0, 0xA2, 0xA4, 0xA6, 0xA7, 0xA9, 0xA9, 0xAB, 0xAE,
+            0xB0, 0xB3, 0xB5, 0xB7, 0xB9, 0xB9, 0xBB, 0xBE, 0xC4, 0xC6,
+            0xC9, 0xC9, 0xD3, 0xD3, 0xD5, 0xD8, 0xDC, 0xDC, 0xDF, 0xDF,
+            0xE4, 0xE6, 0xE9, 0xE9, 0xF3, 0xF3, 0xF5, 0xF8, 0xFC, 0xFC,
+            0x100, 0x101, 0x104, 0x107, 0x10C, 0x10D, 0x112, 0x113,
+            0x116, 0x119, 0x122, 0x123, 0x12A, 0x12B, 0x12E, 0x12F,
+            0x136, 0x137, 0x13B, 0x13C, 0x141, 0x146, 0x14C, 0x14D,
+            0x156, 0x157, 0x15A, 0x15B, 0x160, 0x161, 0x16A, 0x16B,
+            0x172, 0x173, 0x179, 0x17E, 0x2019, 0x2019, 0x201C, 0x201E,
+            sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-13.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aISO885914Ranges[]
+        = { 0, 0xA0, 0xA3, 0xA3, 0xA7, 0xA7, 0xA9, 0xA9, 0xAD, 0xAE,
+            0xB6, 0xB6, 0xC0, 0xCF, 0xD1, 0xD6, 0xD8, 0xDD, 0xDF, 0xEF,
+            0xF1, 0xF6, 0xF8, 0xFD, 0xFF, 0xFF, 0x10A, 0x10B, 0x120, 0x121,
+            0x174, 0x178, 0x1E02, 0x1E03, 0x1E0A, 0x1E0B, 0x1E1E, 0x1E1F,
+            0x1E40, 0x1E41, 0x1E56, 0x1E57, 0x1E60, 0x1E61, 0x1E6A, 0x1E6B,
+            0x1E80, 0x1E85, 0x1EF2, 0x1EF3, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-14.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aISO885915Ranges[]
+        = { 0, 0xA3, 0xA5, 0xA5, 0xA7, 0xA7, 0xA9, 0xB3, 0xB5, 0xB7,
+            0xB9, 0xBB, 0xBF, 0xFF, 0x152, 0x153, 0x160, 0x161, 0x178, 0x178,
+            0x17D, 0x17E, 0x20AC, 0x20AC, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-15.TXT> version
+        // 1.0 of 1999 July 27
+
+    static const sal_uInt32 aKOI8RRanges[]
+        = { 0, 0x7F, 0xA0, 0xA0, 0xA9, 0xA9, 0xB0, 0xB0, 0xB2, 0xB2,
+            0xB7, 0xB7, 0xF7, 0xF7, 0x401, 0x401, 0x410, 0x44F, 0x451, 0x451,
+            0x2219, 0x221A, 0x2248, 0x2248, 0x2264, 0x2265, 0x2320, 0x2321,
+            0x2500, 0x2500, 0x2502, 0x2502, 0x250C, 0x250C, 0x2510, 0x2510,
+            0x2514, 0x2514, 0x2518, 0x2518, 0x251C, 0x251C, 0x2524, 0x2524,
+            0x252C, 0x252C, 0x2534, 0x2534, 0x253C, 0x253C, 0x2550, 0x256C,
+            0x2580, 0x2580, 0x2584, 0x2584, 0x2588, 0x2588, 0x258C, 0x258C,
+            0x2590, 0x2593, 0x25A0, 0x25A0, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MISC/KOI8-R.TXT>
+        // version 1.0 of 18 August 1999
+
+#if defined WNT
+    static const sal_uInt32 aWindows1252Ranges[]
+        = { 0, 0x7F, 0xA0, 0xFF, 0x152, 0x153, 0x160, 0x161, 0x178, 0x178,
+            0x17D, 0x17E, 0x192, 0x192, 0x2C6, 0x2C6, 0x2DC, 0x2DC,
+            0x2013, 0x2014, 0x2018, 0x201A, 0x201C, 0x201E, 0x2020, 0x2022,
+            0x2026, 0x2026, 0x2030, 0x2030, 0x2039, 0x203A, 0x20AC, 0x20AC,
+            0x2122, 0x2122, sal_uInt32(-1) };
+        // <ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/
+        // CP1252.TXT> version 2.01 of 04/15/98
+#endif // WNT
+
+    INetMIMECharsetList_Impl * pList = new INetMIMECharsetList_Impl;
+    switch (eEncoding)
+    {
+        case RTL_TEXTENCODING_MS_1252:
+#if defined WNT
+            pList->prepend(Charset(RTL_TEXTENCODING_MS_1252,
+                                   aWindows1252Ranges));
+#endif // WNT
+        case RTL_TEXTENCODING_ISO_8859_1:
+        case RTL_TEXTENCODING_UTF7:
+        case RTL_TEXTENCODING_UTF8:
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_2:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_2,
+                                   aISO88592Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_3:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_3,
+                                   aISO88593Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_4:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_4,
+                                   aISO88594Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_5:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_5,
+                                   aISO88595Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_6:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_6,
+                                   aISO88596Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_7:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_7,
+                                   aISO88597Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_8:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_8,
+                                   aISO88598Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_9:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_9,
+                                   aISO88599Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_10:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_10,
+                                   aISO885910Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_13:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_13,
+                                   aISO885913Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_14:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_14,
+                                   aISO885914Ranges));
+            break;
+
+        case RTL_TEXTENCODING_ISO_8859_15:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_15,
+                                   aISO885915Ranges));
+            break;
+
+        case RTL_TEXTENCODING_MS_1250:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_2,
+                                   aISO88592Ranges));
+            break;
+
+        case RTL_TEXTENCODING_MS_1251:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_5,
+                                   aISO88595Ranges));
+            break;
+
+        case RTL_TEXTENCODING_MS_1253:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_7,
+                                   aISO88597Ranges));
+            break;
+
+        case RTL_TEXTENCODING_MS_1254:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_9,
+                                   aISO88599Ranges));
+            break;
+
+        case RTL_TEXTENCODING_MS_1255:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_8,
+                                   aISO88598Ranges));
+            break;
+
+        case RTL_TEXTENCODING_MS_1256:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_6,
+                                   aISO88596Ranges));
+            break;
+
+        case RTL_TEXTENCODING_MS_1257:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_4,
+                                   aISO88594Ranges));
+            break;
+
+        case RTL_TEXTENCODING_KOI8_R:
+            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_5,
+                                   aISO88595Ranges));
+            pList->prepend(Charset(RTL_TEXTENCODING_KOI8_R, aKOI8RRanges));
+            break;
+
+        default: //@@@ more cases are missing!
+            OSL_FAIL("INetMIME::createPreferredCharsetList():"
+                          " Unsupported encoding");
+            break;
+    }
+    pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_1, aISO88591Ranges));
+    pList->prepend(Charset(RTL_TEXTENCODING_ASCII_US, aUSASCIIRanges));
+    return pList;
+}
+
 class INetMIMEEncodedWordOutputSink
 {
 public:
@@ -404,7 +664,7 @@ inline INetMIMEEncodedWordOutputSink::INetMIMEEncodedWordOutputSink(
     m_eContext(eTheContext),
     m_eInitialSpace(eTheInitialSpace),
     m_nExtraSpaces(0),
-    m_pEncodingList(INetMIME::createPreferredCharsetList(ePreferredEncoding)),
+    m_pEncodingList(createPreferredCharsetList(ePreferredEncoding)),
     m_ePrevCoding(CODING_NONE),
     m_ePrevMIMEEncoding(RTL_TEXTENCODING_DONTKNOW),
     m_eCoding(CODING_NONE),
@@ -1981,279 +2241,6 @@ rtl_TextEncoding INetMIME::getCharsetEncoding(sal_Char const * pBegin,
                                               sal_Char const * pEnd)
 {
     return getCharsetEncoding_Impl(pBegin, pEnd);
-}
-
-// static
-INetMIMECharsetList_Impl *
-INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
-{
-    static const sal_uInt32 aUSASCIIRanges[] = { 0, 0x7F, sal_uInt32(-1) };
-
-    static const sal_uInt32 aISO88591Ranges[] = { 0, 0xFF, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-1.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aISO88592Ranges[]
-        = { 0, 0xA0, 0xA4, 0xA4, 0xA7, 0xA8, 0xAD, 0xAD, 0xB0, 0xB0,
-            0xB4, 0xB4, 0xB8, 0xB8, 0xC1, 0xC2, 0xC4, 0xC4, 0xC7, 0xC7,
-            0xC9, 0xC9, 0xCB, 0xCB, 0xCD, 0xCE, 0xD3, 0xD4, 0xD6, 0xD7,
-            0xDA, 0xDA, 0xDC, 0xDD, 0xDF, 0xDF, 0xE1, 0xE2, 0xE4, 0xE4,
-            0xE7, 0xE7, 0xE9, 0xE9, 0xEB, 0xEB, 0xED, 0xEE, 0xF3, 0xF4,
-            0xF6, 0xF7, 0xFA, 0xFA, 0xFC, 0xFD, 0x102, 0x107, 0x10C, 0x111,
-            0x118, 0x11B, 0x139, 0x13A, 0x13D, 0x13E, 0x141, 0x144,
-            0x147, 0x148, 0x150, 0x151, 0x154, 0x155, 0x158, 0x15B,
-            0x15E, 0x165, 0x16E, 0x171, 0x179, 0x17E, 0x2C7, 0x2C7,
-            0x2D8, 0x2D9, 0x2DB, 0x2DB, 0x2DD, 0x2DD, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-2.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aISO88593Ranges[]
-        = { 0, 0xA0, 0xA3, 0xA4, 0xA7, 0xA8, 0xAD, 0xAD, 0xB0, 0xB0,
-            0xB2, 0xB5, 0xB7, 0xB8, 0xBD, 0xBD, 0xC0, 0xC2, 0xC4, 0xC4,
-            0xC7, 0xCF, 0xD1, 0xD4, 0xD6, 0xD7, 0xD9, 0xDC, 0xDF, 0xE2,
-            0xE4, 0xE4, 0xE7, 0xEF, 0xF1, 0xF4, 0xF6, 0xF7, 0xF9, 0xFC,
-            0x108, 0x10B, 0x11C, 0x121, 0x124, 0x127, 0x130, 0x131,
-            0x134, 0x135, 0x15C, 0x15F, 0x16C, 0x16D, 0x17B, 0x17C,
-            0x2D8, 0x2D9, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-3.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aISO88594Ranges[]
-        = { 0, 0xA0, 0xA4, 0xA4, 0xA7, 0xA8, 0xAD, 0xAD, 0xAF, 0xB0,
-            0xB4, 0xB4, 0xB8, 0xB8, 0xC1, 0xC6, 0xC9, 0xC9, 0xCB, 0xCB,
-            0xCD, 0xCE, 0xD4, 0xD8, 0xDA, 0xDC, 0xDF, 0xDF, 0xE1, 0xE6,
-            0xE9, 0xE9, 0xEB, 0xEB, 0xED, 0xEE, 0xF4, 0xF8, 0xFA, 0xFC,
-            0x100, 0x101, 0x104, 0x105, 0x10C, 0x10D, 0x110, 0x113,
-            0x116, 0x119, 0x122, 0x123, 0x128, 0x12B, 0x12E, 0x12F,
-            0x136, 0x138, 0x13B, 0x13C, 0x145, 0x146, 0x14A, 0x14D,
-            0x156, 0x157, 0x160, 0x161, 0x166, 0x16B, 0x172, 0x173,
-            0x17D, 0x17E, 0x2C7, 0x2C7, 0x2D9, 0x2D9, 0x2DB, 0x2DB,
-            sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-4.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aISO88595Ranges[]
-        = { 0, 0xA0, 0xA7, 0xA7, 0xAD, 0xAD, 0x401, 0x40C, 0x40E, 0x44F,
-            0x451, 0x45C, 0x45E, 0x45F, 0x2116, 0x2116, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-5.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aISO88596Ranges[]
-        = { 0, 0xA0, 0xA4, 0xA4, 0xAD, 0xAD, 0x60C, 0x60C, 0x61B, 0x61B,
-            0x61F, 0x61F, 0x621, 0x63A, 0x640, 0x652, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-6.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aISO88597Ranges[]
-        = { 0, 0xA0, 0xA3, 0xA3, 0xA6, 0xA9, 0xAB, 0xAD, 0xB0, 0xB3,
-            0xB7, 0xB7, 0xBB, 0xBB, 0xBD, 0xBD, 0x384, 0x386, 0x388, 0x38A,
-            0x38C, 0x38C, 0x38E, 0x3A1, 0x3A3, 0x3CE, 0x2015, 0x2015,
-            0x2018, 0x2019, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-7.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aISO88598Ranges[]
-        = { 0, 0xA0, 0xA2, 0xA9, 0xAB, 0xB9, 0xBB, 0xBE, 0xD7, 0xD7,
-            0xF7, 0xF7, 0x5D0, 0x5EA, 0x200E, 0x200F, 0x2017, 0x2017,
-            sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-8.TXT> version
-        // 1.1 of 2000-Jan-03
-
-    static const sal_uInt32 aISO88599Ranges[]
-        = { 0, 0xCF, 0xD1, 0xDC, 0xDF, 0xEF, 0xF1, 0xFC, 0xFF, 0xFF,
-            0x11E, 0x11F, 0x130, 0x131, 0x15E, 0x15F, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-9.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aISO885910Ranges[]
-        = { 0, 0xA0, 0xA7, 0xA7, 0xAD, 0xAD, 0xB0, 0xB0, 0xB7, 0xB7,
-            0xC1, 0xC6, 0xC9, 0xC9, 0xCB, 0xCB, 0xCD, 0xD0, 0xD3, 0xD6,
-            0xD8, 0xD8, 0xDA, 0xDF, 0xE1, 0xE6, 0xE9, 0xE9, 0xEB, 0xEB,
-            0xED, 0xF0, 0xF3, 0xF6, 0xF8, 0xF8, 0xFA, 0xFE, 0x100, 0x101,
-            0x104, 0x105, 0x10C, 0x10D, 0x110, 0x113, 0x116, 0x119,
-            0x122, 0x123, 0x128, 0x12B, 0x12E, 0x12F, 0x136, 0x138,
-            0x13B, 0x13C, 0x145, 0x146, 0x14A, 0x14D, 0x160, 0x161,
-            0x166, 0x16B, 0x172, 0x173, 0x17D, 0x17E, 0x2015, 0x2015,
-            sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-10.TXT> version
-        // 1.1 of 1999 October 11
-
-    static const sal_uInt32 aISO885913Ranges[]
-        = { 0, 0xA0, 0xA2, 0xA4, 0xA6, 0xA7, 0xA9, 0xA9, 0xAB, 0xAE,
-            0xB0, 0xB3, 0xB5, 0xB7, 0xB9, 0xB9, 0xBB, 0xBE, 0xC4, 0xC6,
-            0xC9, 0xC9, 0xD3, 0xD3, 0xD5, 0xD8, 0xDC, 0xDC, 0xDF, 0xDF,
-            0xE4, 0xE6, 0xE9, 0xE9, 0xF3, 0xF3, 0xF5, 0xF8, 0xFC, 0xFC,
-            0x100, 0x101, 0x104, 0x107, 0x10C, 0x10D, 0x112, 0x113,
-            0x116, 0x119, 0x122, 0x123, 0x12A, 0x12B, 0x12E, 0x12F,
-            0x136, 0x137, 0x13B, 0x13C, 0x141, 0x146, 0x14C, 0x14D,
-            0x156, 0x157, 0x15A, 0x15B, 0x160, 0x161, 0x16A, 0x16B,
-            0x172, 0x173, 0x179, 0x17E, 0x2019, 0x2019, 0x201C, 0x201E,
-            sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-13.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aISO885914Ranges[]
-        = { 0, 0xA0, 0xA3, 0xA3, 0xA7, 0xA7, 0xA9, 0xA9, 0xAD, 0xAE,
-            0xB6, 0xB6, 0xC0, 0xCF, 0xD1, 0xD6, 0xD8, 0xDD, 0xDF, 0xEF,
-            0xF1, 0xF6, 0xF8, 0xFD, 0xFF, 0xFF, 0x10A, 0x10B, 0x120, 0x121,
-            0x174, 0x178, 0x1E02, 0x1E03, 0x1E0A, 0x1E0B, 0x1E1E, 0x1E1F,
-            0x1E40, 0x1E41, 0x1E56, 0x1E57, 0x1E60, 0x1E61, 0x1E6A, 0x1E6B,
-            0x1E80, 0x1E85, 0x1EF2, 0x1EF3, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-14.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aISO885915Ranges[]
-        = { 0, 0xA3, 0xA5, 0xA5, 0xA7, 0xA7, 0xA9, 0xB3, 0xB5, 0xB7,
-            0xB9, 0xBB, 0xBF, 0xFF, 0x152, 0x153, 0x160, 0x161, 0x178, 0x178,
-            0x17D, 0x17E, 0x20AC, 0x20AC, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-15.TXT> version
-        // 1.0 of 1999 July 27
-
-    static const sal_uInt32 aKOI8RRanges[]
-        = { 0, 0x7F, 0xA0, 0xA0, 0xA9, 0xA9, 0xB0, 0xB0, 0xB2, 0xB2,
-            0xB7, 0xB7, 0xF7, 0xF7, 0x401, 0x401, 0x410, 0x44F, 0x451, 0x451,
-            0x2219, 0x221A, 0x2248, 0x2248, 0x2264, 0x2265, 0x2320, 0x2321,
-            0x2500, 0x2500, 0x2502, 0x2502, 0x250C, 0x250C, 0x2510, 0x2510,
-            0x2514, 0x2514, 0x2518, 0x2518, 0x251C, 0x251C, 0x2524, 0x2524,
-            0x252C, 0x252C, 0x2534, 0x2534, 0x253C, 0x253C, 0x2550, 0x256C,
-            0x2580, 0x2580, 0x2584, 0x2584, 0x2588, 0x2588, 0x258C, 0x258C,
-            0x2590, 0x2593, 0x25A0, 0x25A0, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MISC/KOI8-R.TXT>
-        // version 1.0 of 18 August 1999
-
-#if defined WNT
-    static const sal_uInt32 aWindows1252Ranges[]
-        = { 0, 0x7F, 0xA0, 0xFF, 0x152, 0x153, 0x160, 0x161, 0x178, 0x178,
-            0x17D, 0x17E, 0x192, 0x192, 0x2C6, 0x2C6, 0x2DC, 0x2DC,
-            0x2013, 0x2014, 0x2018, 0x201A, 0x201C, 0x201E, 0x2020, 0x2022,
-            0x2026, 0x2026, 0x2030, 0x2030, 0x2039, 0x203A, 0x20AC, 0x20AC,
-            0x2122, 0x2122, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/
-        // CP1252.TXT> version 2.01 of 04/15/98
-#endif // WNT
-
-    INetMIMECharsetList_Impl * pList = new INetMIMECharsetList_Impl;
-    switch (eEncoding)
-    {
-        case RTL_TEXTENCODING_MS_1252:
-#if defined WNT
-            pList->prepend(Charset(RTL_TEXTENCODING_MS_1252,
-                                   aWindows1252Ranges));
-#endif // WNT
-        case RTL_TEXTENCODING_ISO_8859_1:
-        case RTL_TEXTENCODING_UTF7:
-        case RTL_TEXTENCODING_UTF8:
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_2:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_2,
-                                   aISO88592Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_3:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_3,
-                                   aISO88593Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_4:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_4,
-                                   aISO88594Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_5:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_5,
-                                   aISO88595Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_6:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_6,
-                                   aISO88596Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_7:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_7,
-                                   aISO88597Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_8:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_8,
-                                   aISO88598Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_9:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_9,
-                                   aISO88599Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_10:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_10,
-                                   aISO885910Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_13:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_13,
-                                   aISO885913Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_14:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_14,
-                                   aISO885914Ranges));
-            break;
-
-        case RTL_TEXTENCODING_ISO_8859_15:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_15,
-                                   aISO885915Ranges));
-            break;
-
-        case RTL_TEXTENCODING_MS_1250:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_2,
-                                   aISO88592Ranges));
-            break;
-
-        case RTL_TEXTENCODING_MS_1251:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_5,
-                                   aISO88595Ranges));
-            break;
-
-        case RTL_TEXTENCODING_MS_1253:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_7,
-                                   aISO88597Ranges));
-            break;
-
-        case RTL_TEXTENCODING_MS_1254:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_9,
-                                   aISO88599Ranges));
-            break;
-
-        case RTL_TEXTENCODING_MS_1255:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_8,
-                                   aISO88598Ranges));
-            break;
-
-        case RTL_TEXTENCODING_MS_1256:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_6,
-                                   aISO88596Ranges));
-            break;
-
-        case RTL_TEXTENCODING_MS_1257:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_4,
-                                   aISO88594Ranges));
-            break;
-
-        case RTL_TEXTENCODING_KOI8_R:
-            pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_5,
-                                   aISO88595Ranges));
-            pList->prepend(Charset(RTL_TEXTENCODING_KOI8_R, aKOI8RRanges));
-            break;
-
-        default: //@@@ more cases are missing!
-            OSL_FAIL("INetMIME::createPreferredCharsetList():"
-                          " Unsupported encoding");
-            break;
-    }
-    pList->prepend(Charset(RTL_TEXTENCODING_ISO_8859_1, aISO88591Ranges));
-    pList->prepend(Charset(RTL_TEXTENCODING_ASCII_US, aUSASCIIRanges));
-    return pList;
 }
 
 // static
