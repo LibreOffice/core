@@ -183,7 +183,7 @@ public:
 
 class AutoCorrEdit : public Edit
 {
-    Link<>  aActionLink;
+    Link<AutoCorrEdit&,bool>  aActionLink;
     bool    bSpaces;
 
     public:
@@ -192,7 +192,7 @@ class AutoCorrEdit : public Edit
                     AutoCorrEdit(vcl::Window* pParent) :
                         Edit(pParent), bSpaces(false){}
 
-    void            SetActionHdl( const Link<>& rLink )
+    void            SetActionHdl( const Link<AutoCorrEdit&,bool>& rLink )
                                 { aActionLink = rLink;}
 
     void            SetSpaces(bool bSet)
@@ -253,9 +253,10 @@ private:
         bool bSWriter:1;
 
         DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
-        DECL_LINK_TYPED(NewDelHdl, Button*, void);
-        DECL_LINK(NewDelActionHdl, PushButton*);
+        DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
+        DECL_LINK_TYPED(NewDelActionHdl, AutoCorrEdit&, bool);
         DECL_LINK(ModifyHdl, Edit*);
+        bool NewDelHdl(void*);
 
         void RefillReplaceBox(  bool bFromReset,
                                 LanguageType eOldLanguage,
@@ -314,10 +315,11 @@ private:
     CollatorWrapper* pCompareClass;
     LanguageType    eLang;
 
-    DECL_LINK_TYPED(NewDelHdl, Button*, void);
-    DECL_LINK(NewDelActionHdl, void*);
+    DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
+    DECL_LINK_TYPED(NewDelActionHdl, AutoCorrEdit&, bool);
     DECL_LINK(SelectHdl, ListBox*);
     DECL_LINK(ModifyHdl, Edit*);
+    bool NewDelHdl(void*);
                     /// Box filled with new language
     void            RefillReplaceBoxes(bool bFromReset,
                                         LanguageType eOldLanguage,

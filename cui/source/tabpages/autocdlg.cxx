@@ -898,8 +898,8 @@ OfaAutocorrReplacePage::OfaAutocorrReplacePage( vcl::Window* pParent,
 
     m_pReplaceTLB->SetStyle( m_pReplaceTLB->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN );
     m_pReplaceTLB->SetSelectHdl( LINK(this, OfaAutocorrReplacePage, SelectHdl) );
-    m_pNewReplacePB->SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
-    m_pDeleteReplacePB->SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelHdl) );
+    m_pNewReplacePB->SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelButtonHdl) );
+    m_pDeleteReplacePB->SetClickHdl( LINK(this, OfaAutocorrReplacePage, NewDelButtonHdl) );
     m_pShortED->SetModifyHdl( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
     m_pReplaceED->SetModifyHdl( LINK(this, OfaAutocorrReplacePage, ModifyHdl) );
     m_pShortED->SetActionHdl( LINK(this, OfaAutocorrReplacePage, NewDelActionHdl) );
@@ -1238,12 +1238,16 @@ void OfaAutocorrReplacePage::DeleteEntry(const OUString& sShort, const OUString&
     rDeletedArray.push_back(aDeletedString);
 }
 
-IMPL_LINK_TYPED(OfaAutocorrReplacePage, NewDelHdl, Button*, pBtn, void)
+IMPL_LINK_TYPED(OfaAutocorrReplacePage, NewDelButtonHdl, Button*, pBtn, void)
 {
-    NewDelActionHdl(static_cast<PushButton*>(pBtn));
+    NewDelHdl(pBtn);
 }
 
-IMPL_LINK(OfaAutocorrReplacePage, NewDelActionHdl, PushButton*, pBtn)
+IMPL_LINK_TYPED(OfaAutocorrReplacePage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
+{
+    return NewDelHdl(&rEdit);
+}
+bool OfaAutocorrReplacePage::NewDelHdl(void* pBtn)
 {
     SvTreeListEntry* pEntry = m_pReplaceTLB->FirstSelected();
     if( pBtn == m_pDeleteReplacePB )
@@ -1254,7 +1258,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelActionHdl, PushButton*, pBtn)
             DeleteEntry(SvTabListBox::GetEntryText(pEntry, 0), SvTabListBox::GetEntryText(pEntry, 1));
             m_pReplaceTLB->GetModel()->Remove(pEntry);
             ModifyHdl(m_pShortED);
-            return 0;
+            return false;
         }
     }
     if(pBtn == m_pNewReplacePB || m_pNewReplacePB->IsEnabled())
@@ -1308,10 +1312,10 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelActionHdl, PushButton*, pBtn)
     {
         // this can only be an enter in one of the two edit fields
         // which means EndDialog() - has to be evaluated in KeyInput
-        return 0;
+        return false;
     }
     ModifyHdl(m_pShortED);
-    return 1;
+    return true;
 }
 
 IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
@@ -1439,10 +1443,10 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage(vcl::Window* pParent, const SfxItem
     pCompareClass = new CollatorWrapper( comphelper::getProcessComponentContext() );
     pCompareClass->loadDefaultCollator( aLcl, 0 );
 
-    m_pNewAbbrevPB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
-    m_pDelAbbrevPB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
-    m_pNewDoublePB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
-    m_pDelDoublePB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
+    m_pNewAbbrevPB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
+    m_pDelAbbrevPB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
+    m_pNewDoublePB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
+    m_pDelDoublePB->SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelButtonHdl));
 
     m_pAbbrevLB->SetSelectHdl(LINK(this, OfaAutocorrExceptPage, SelectHdl));
     m_pDoubleCapsLB->SetSelectHdl(LINK(this, OfaAutocorrExceptPage, SelectHdl));
@@ -1687,12 +1691,17 @@ void OfaAutocorrExceptPage::Reset( const SfxItemSet* )
     m_pAutoCapsCB->SaveValue();
 }
 
-IMPL_LINK_TYPED(OfaAutocorrExceptPage, NewDelHdl, Button*, pBtn, void)
+IMPL_LINK_TYPED(OfaAutocorrExceptPage, NewDelButtonHdl, Button*, pBtn, void)
 {
-    NewDelActionHdl(pBtn);
+    NewDelHdl(pBtn);
 }
 
-IMPL_LINK(OfaAutocorrExceptPage, NewDelActionHdl, void*, pBtn)
+IMPL_LINK_TYPED(OfaAutocorrExceptPage, NewDelActionHdl, AutoCorrEdit&, rEdit, bool)
+{
+    return NewDelHdl(&rEdit);
+}
+
+bool OfaAutocorrExceptPage::NewDelHdl(void* pBtn)
 {
     if((pBtn == m_pNewAbbrevPB || pBtn == m_pAbbrevED.get() )
         && !m_pAbbrevED->GetText().isEmpty())
@@ -1716,7 +1725,7 @@ IMPL_LINK(OfaAutocorrExceptPage, NewDelActionHdl, void*, pBtn)
         m_pDoubleCapsLB->RemoveEntry(m_pDoubleCapsED->GetText());
         ModifyHdl(m_pDoubleCapsED);
     }
-    return 0;
+    return false;
 }
 
 IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, ListBox*, pBox)
@@ -1770,7 +1779,7 @@ void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
     {
         // if there's nothing done on enter, call the
         // base class after all to close the dialog
-        if(!nModifier && !aActionLink.Call(this))
+        if(!nModifier && !aActionLink.Call(*this))
                  Edit::KeyInput(rKEvt);
     }
     else if(bSpaces || aKeyCode.GetCode() != KEY_SPACE)
