@@ -84,8 +84,8 @@ public:
     static ::boost::shared_ptr<Implementation> Instance();
 
     void LateInit();
-    void AddChangeListener (const Link<>& rLink);
-    void RemoveChangeListener (const Link<>& rLink);
+    void AddChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink);
+    void RemoveChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink);
     void UpdatePreviewSizePixel();
     Size GetPreviewSizePixel (PreviewSize eSize) const;
 
@@ -158,7 +158,7 @@ private:
     Image maLargePreviewNotAvailable;
     Image maSmallPreviewNotAvailable;
 
-    ::std::vector<Link<>> maChangeListeners;
+    ::std::vector<Link<MasterPageContainerChangeEvent&,void>> maChangeListeners;
 
     // We have to remember the tasks for initialization and filling in case
     // a MasterPageContainer object is destroyed before these tasks have
@@ -228,12 +228,12 @@ MasterPageContainer::~MasterPageContainer()
 {
 }
 
-void MasterPageContainer::AddChangeListener (const Link<>& rLink)
+void MasterPageContainer::AddChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink)
 {
     mpImpl->AddChangeListener(rLink);
 }
 
-void MasterPageContainer::RemoveChangeListener (const Link<>& rLink)
+void MasterPageContainer::RemoveChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink)
 {
     mpImpl->RemoveChangeListener(rLink);
 }
@@ -548,22 +548,22 @@ void MasterPageContainer::Implementation::LateInit()
     }
 }
 
-void MasterPageContainer::Implementation::AddChangeListener (const Link<>& rLink)
+void MasterPageContainer::Implementation::AddChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    ::std::vector<Link<>>::iterator iListener (
+    ::std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener (
         ::std::find(maChangeListeners.begin(),maChangeListeners.end(),rLink));
     if (iListener == maChangeListeners.end())
         maChangeListeners.push_back(rLink);
 
 }
 
-void MasterPageContainer::Implementation::RemoveChangeListener (const Link<>& rLink)
+void MasterPageContainer::Implementation::RemoveChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    ::std::vector<Link<>>::iterator iListener (
+    ::std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener (
         ::std::find(maChangeListeners.begin(),maChangeListeners.end(),rLink));
     if (iListener != maChangeListeners.end())
         maChangeListeners.erase(iListener);
@@ -957,13 +957,13 @@ void MasterPageContainer::Implementation::FireContainerChange (
     }
     else
     {
-        ::std::vector<Link<>> aCopy(maChangeListeners.begin(),maChangeListeners.end());
-        ::std::vector<Link<>>::iterator iListener;
+        ::std::vector<Link<MasterPageContainerChangeEvent&,void>> aCopy(maChangeListeners.begin(),maChangeListeners.end());
+        ::std::vector<Link<MasterPageContainerChangeEvent&,void>>::iterator iListener;
         MasterPageContainerChangeEvent aEvent;
         aEvent.meEventType = eType;
         aEvent.maChildToken = aToken;
         for (iListener=aCopy.begin(); iListener!=aCopy.end(); ++iListener)
-            iListener->Call(&aEvent);
+            iListener->Call(aEvent);
     }
 }
 

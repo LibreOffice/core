@@ -36,6 +36,7 @@ class SdPage;
 namespace sd { namespace sidebar {
 
 class MasterPageDescriptor;
+class MasterPageContainerChangeEvent;
 
 /** This container manages the master pages used by the MasterPagesSelector
     controls.  It uses internally a singleton implementation object.
@@ -61,8 +62,8 @@ public:
     MasterPageContainer();
     virtual ~MasterPageContainer();
 
-    void AddChangeListener (const Link<>& rLink);
-    void RemoveChangeListener (const Link<>& rLink);
+    void AddChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink);
+    void RemoveChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink);
 
     enum PreviewSize { SMALL, LARGE };
     /** There are two different preview sizes, a small one and a large one.

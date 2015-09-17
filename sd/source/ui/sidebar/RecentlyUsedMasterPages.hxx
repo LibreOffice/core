@@ -104,7 +104,7 @@ private:
 
     void SendEvent();
     DECL_LINK(MasterPageChangeListener, MasterPageObserverEvent*);
-    DECL_LINK(MasterPageContainerChangeListener, MasterPageContainerChangeEvent*);
+    DECL_LINK_TYPED(MasterPageContainerChangeListener, MasterPageContainerChangeEvent&, void);
 
     /** Add a descriptor for the specified master page to the end of the
         list of most recently used master pages.  When the page is already a

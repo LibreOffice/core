@@ -98,7 +98,7 @@ MasterPagesSelector::MasterPagesSelector (
     SetBackground(sfx2::sidebar::Theme::GetWallpaper(sfx2::sidebar::Theme::Paint_PanelBackground));
     SetColor(sfx2::sidebar::Theme::GetColor(sfx2::sidebar::Theme::Paint_PanelBackground));
 
-    Link<> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
+    Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->AddChangeListener(aChangeListener);
 }
 
@@ -112,7 +112,7 @@ void MasterPagesSelector::dispose()
     Clear();
     UpdateLocks(ItemList());
 
-    Link<> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
+    Link<MasterPageContainerChangeEvent&,void> aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->RemoveChangeListener(aChangeListener);
     PreviewValueSet::dispose();
 }
@@ -330,11 +330,9 @@ void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
     }
 }
 
-IMPL_LINK(MasterPagesSelector, ContainerChangeListener, MasterPageContainerChangeEvent*, pEvent)
+IMPL_LINK_TYPED(MasterPagesSelector, ContainerChangeListener, MasterPageContainerChangeEvent&, rEvent, void)
 {
-    if (pEvent)
-        NotifyContainerChangeEvent(*pEvent);
-    return 0;
+    NotifyContainerChangeEvent(rEvent);
 }
 
 SdPage* MasterPagesSelector::GetSelectedMasterPage()

@@ -96,7 +96,7 @@ RecentlyUsedMasterPages::RecentlyUsedMasterPages()
 
 RecentlyUsedMasterPages::~RecentlyUsedMasterPages()
 {
-    Link<> aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
+    Link<MasterPageContainerChangeEvent&,void> aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->RemoveChangeListener(aLink);
 
     MasterPageObserver::Instance().RemoveEventListener(
@@ -105,7 +105,7 @@ RecentlyUsedMasterPages::~RecentlyUsedMasterPages()
 
 void RecentlyUsedMasterPages::LateInit()
 {
-    Link<> aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
+    Link<MasterPageContainerChangeEvent&,void> aLink (LINK(this,RecentlyUsedMasterPages,MasterPageContainerChangeListener));
     mpContainer->AddChangeListener(aLink);
 
     LoadPersistentValues ();
@@ -302,24 +302,22 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
     return 0;
 }
 
-IMPL_LINK(RecentlyUsedMasterPages, MasterPageContainerChangeListener,
-    MasterPageContainerChangeEvent*, pEvent)
+IMPL_LINK_TYPED(RecentlyUsedMasterPages, MasterPageContainerChangeListener,
+    MasterPageContainerChangeEvent&, rEvent, void)
 {
-    if (pEvent != NULL)
-        switch (pEvent->meEventType)
-        {
-            case MasterPageContainerChangeEvent::CHILD_ADDED:
-            case MasterPageContainerChangeEvent::CHILD_REMOVED:
-            case MasterPageContainerChangeEvent::INDEX_CHANGED:
-            case MasterPageContainerChangeEvent::INDEXES_CHANGED:
-                ResolveList();
-                break;
+    switch (rEvent.meEventType)
+    {
+        case MasterPageContainerChangeEvent::CHILD_ADDED:
+        case MasterPageContainerChangeEvent::CHILD_REMOVED:
+        case MasterPageContainerChangeEvent::INDEX_CHANGED:
+        case MasterPageContainerChangeEvent::INDEXES_CHANGED:
+            ResolveList();
+            break;
 
-            default:
-                // Ignored.
-                break;
-        }
-    return 0;
+        default:
+            // Ignored.
+            break;
+    }
 }
 
 void RecentlyUsedMasterPages::AddMasterPage (
