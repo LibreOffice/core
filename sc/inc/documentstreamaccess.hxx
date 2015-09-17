@@ -11,7 +11,7 @@
 #define INCLUDED_SC_INC_DOCUMENTSTREAMACCESS_HXX
 
 #include <rtl/ustring.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class ScDocument;
 class ScAddress;
@@ -27,7 +27,7 @@ struct DocumentStreamAccessImpl;
  */
 class DocumentStreamAccess
 {
-    boost::scoped_ptr<DocumentStreamAccessImpl> mpImpl;
+    std::unique_ptr<DocumentStreamAccessImpl> mpImpl;
 
     DocumentStreamAccess();
 

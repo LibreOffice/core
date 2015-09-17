@@ -176,7 +176,7 @@ public:
     ApiFilterSettings   finalizeImport( sal_Int32 nMaxCount );
 
 private:
-    ::boost::shared_ptr< FilterSettingsBase >
+    std::shared_ptr< FilterSettingsBase >
                         mxSettings;
     sal_Int32           mnColId;
     bool                mbHiddenButton;

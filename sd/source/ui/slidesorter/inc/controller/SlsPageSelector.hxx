@@ -125,7 +125,7 @@ public:
             even if pages are exchanged a later call to SetPageSelection()
             is valid.
     */
-    ::boost::shared_ptr<PageSelection> GetPageSelection() const;
+    std::shared_ptr<PageSelection> GetPageSelection() const;
 
     /** Restore a page selection according to the given selection object.
         @param rSelection
@@ -142,7 +142,7 @@ public:
             used to prevent a recursion loop.
     */
     void SetPageSelection (
-        const ::boost::shared_ptr<PageSelection>& rSelection,
+        const std::shared_ptr<PageSelection>& rSelection,
         const bool bUpdateCurrentPage = true);
 
     /** Call this method after the model has changed to set the number

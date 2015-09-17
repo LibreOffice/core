@@ -49,7 +49,7 @@
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -205,7 +205,7 @@ void ScMyTables::DeleteTable()
         uno::Sequence<sal_Int8> aHash;
         ::sax::Converter::decodeBase64(aHash, maProtectionData.maPassword);
 
-        boost::scoped_ptr<ScTableProtection> pProtect(new ScTableProtection);
+        std::unique_ptr<ScTableProtection> pProtect(new ScTableProtection);
         pProtect->setProtected(maProtectionData.mbProtected);
         pProtect->setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
         pProtect->setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);
@@ -278,7 +278,7 @@ void ScMyTables::AddMatrixRange(
     maMatrixRangeList.Append(aScRange);
 
     ScDocumentImport& rDoc = rImport.GetDoc();
-    boost::scoped_ptr<ScTokenArray> pCode(new ScTokenArray);
+    std::unique_ptr<ScTokenArray> pCode(new ScTokenArray);
     pCode->AddStringXML( rFormula );
     if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !rFormulaNmsp.isEmpty() )
         pCode->AddStringXML( rFormulaNmsp );

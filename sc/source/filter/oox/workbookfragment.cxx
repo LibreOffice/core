@@ -64,7 +64,7 @@
 #include <algorithm>
 #include <queue>
 #include <thread>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <oox/ole/vbaproject.hxx>
 
@@ -235,7 +235,7 @@ public:
         SolarMutexGuard maGuard;
         SAL_INFO( "sc.filter",  "got solar\n" );
 
-        boost::scoped_ptr<oox::core::FastParser> xParser(
+        std::unique_ptr<oox::core::FastParser> xParser(
                 mrWorkbookHandler.getOoxFilter().createParser() );
 
         SAL_INFO( "sc.filter",  "start import\n" );
@@ -503,7 +503,7 @@ void WorkbookFragment::finalizeImport()
     OUString aRevHeadersPath = getFragmentPathFromFirstType(CREATE_OFFICEDOC_RELATION_TYPE("revisionHeaders"));
     if (!aRevHeadersPath.isEmpty())
     {
-        boost::scoped_ptr<oox::core::FastParser> xParser(getOoxFilter().createParser());
+        std::unique_ptr<oox::core::FastParser> xParser(getOoxFilter().createParser());
         rtl::Reference<oox::core::FragmentHandler> xFragment(new RevisionHeadersFragment(*this, aRevHeadersPath));
         importOoxFragment(xFragment, *xParser);
     }

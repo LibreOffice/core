@@ -2273,7 +2273,7 @@ void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRan
         }
     }
 
-    boost::scoped_ptr<ScPatternAttr> pAttr(new ScPatternAttr(rDoc.getDoc().GetPool()));
+    std::unique_ptr<ScPatternAttr> pAttr(new ScPatternAttr(rDoc.getDoc().GetPool()));
 
     {
         SvxRotateMode eRotateMode = SVX_ROTATE_MODE_STANDARD;

@@ -34,8 +34,6 @@
 #include <vector>
 #include <cassert>
 
-#include <boost/shared_ptr.hpp>
-
 bool ScColumn::IsMerged( SCROW nRow ) const
 {
     return pAttrArray->IsMerged(nRow);

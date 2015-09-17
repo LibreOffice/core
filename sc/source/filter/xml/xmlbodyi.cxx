@@ -51,7 +51,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <sal/types.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
@@ -268,7 +268,7 @@ void ScXMLBodyContext::EndElement()
         // #i37959# handle document protection after the sheet settings
         if (bProtected)
         {
-            boost::scoped_ptr<ScDocProtection> pProtection(new ScDocProtection);
+            std::unique_ptr<ScDocProtection> pProtection(new ScDocProtection);
             pProtection->setProtected(true);
 
             uno::Sequence<sal_Int8> aPass;

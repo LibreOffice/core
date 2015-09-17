@@ -30,7 +30,6 @@
 #include "drawview.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 
 namespace editeng {
     struct MisspellRanges;

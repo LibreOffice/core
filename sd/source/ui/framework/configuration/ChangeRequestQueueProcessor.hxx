@@ -29,7 +29,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <tools/link.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 struct ImplSVEvent;
 
@@ -56,7 +56,7 @@ public:
     */
     ChangeRequestQueueProcessor (
         const ::rtl::Reference<ConfigurationController>& rxController,
-        const ::boost::shared_ptr<ConfigurationUpdater>& rpUpdater);
+        const std::shared_ptr<ConfigurationUpdater>& rpUpdater);
     ~ChangeRequestQueueProcessor();
 
     /** Sets the configuration who will be changed by subsequent change
@@ -112,7 +112,7 @@ private:
 
     ::rtl::Reference<ConfigurationController> mpConfigurationController;
 
-    ::boost::shared_ptr<ConfigurationUpdater> mpConfigurationUpdater;
+    std::shared_ptr<ConfigurationUpdater> mpConfigurationUpdater;
 
     /** Initiate the processing of the entries in the queue.  The actual
         processing starts asynchronously.

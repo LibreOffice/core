@@ -163,9 +163,9 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
 
+#include <memory>
 #include <vector>
 #include <vbahelper/vbaaccesshelper.hxx>
-#include <boost/scoped_ptr.hpp>
 
 //! not found in unonames.hxx
 #define SC_LAYERID "LayerID"
@@ -2934,7 +2934,7 @@ namespace {
 void writeContent(
     ScXMLExport& rExport, const OUString& rStyleName, const OUString& rContent, const SvxFieldData* pField )
 {
-    boost::scoped_ptr<SvXMLElementExport> pElem;
+    std::unique_ptr<SvXMLElementExport> pElem;
     if (!rStyleName.isEmpty())
     {
         // Formatted section with automatic style.
@@ -3394,7 +3394,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
             // no hyperlink property
         }
 
-        boost::scoped_ptr< SvXMLElementExport > pDrawA;
+        std::unique_ptr< SvXMLElementExport > pDrawA;
         // enclose shapes with <draw:a> element only if sHlink contains something
         if ( !sHlink.isEmpty() )
         {

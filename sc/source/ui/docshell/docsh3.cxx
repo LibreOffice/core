@@ -61,7 +61,7 @@
 #include "conflictsdlg.hxx"
 #include "globstr.hrc"
 #include "markdata.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 //          Redraw - Benachrichtigungen
 
@@ -642,7 +642,7 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, vcl::Windo
     aSet.Put( SvxPostItAuthorItem( aAuthor,  SID_ATTR_POSTIT_AUTHOR ) );
     aSet.Put( SvxPostItDateItem  ( aDate,    SID_ATTR_POSTIT_DATE ) );
 
-    boost::scoped_ptr<ScRedComDialog> pDlg(new ScRedComDialog( pParent, aSet,this,pAction,bPrevNext));
+    std::unique_ptr<ScRedComDialog> pDlg(new ScRedComDialog( pParent, aSet,this,pAction,bPrevNext));
 
     pDlg->Execute();
 }

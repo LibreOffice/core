@@ -18,7 +18,7 @@
  */
 
 #include <string.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
@@ -161,7 +161,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
     if (bSetError)
         aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_NO_BREAK);
     ScTokenArray* pNewCode = aComp.CompileString( rSymbol );
-    boost::scoped_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
+    std::unique_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
     pCode = pNewCode;
     pCode->SetFromRangeName(true);
     if( !pCode->GetCodeError() )
@@ -270,7 +270,7 @@ void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const For
 void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos,
                                 const FormulaGrammar::Grammar eGrammar )
 {
-    boost::scoped_ptr<ScTokenArray> pTemp( pCode->Clone() );
+    std::unique_ptr<ScTokenArray> pTemp( pCode->Clone() );
     ScCompiler aComp( pDoc, rPos, *pTemp.get());
     aComp.SetGrammar(eGrammar);
     aComp.MoveRelWrap(GetMaxCol(), GetMaxRow());
@@ -622,7 +622,7 @@ void ScRangeData::ValidateTabRefs()
 
 void ScRangeData::SetCode( ScTokenArray& rArr )
 {
-    boost::scoped_ptr<ScTokenArray> pOldCode( pCode); // old pCode will be deleted
+    std::unique_ptr<ScTokenArray> pOldCode( pCode); // old pCode will be deleted
     pCode = new ScTokenArray( rArr );
     pCode->SetFromRangeName(true);
     InitCode();

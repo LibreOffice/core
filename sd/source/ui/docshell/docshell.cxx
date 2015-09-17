@@ -445,7 +445,7 @@ void DrawDocShell::ClearUndoBuffer()
         ViewShellBase* pViewShellBase = dynamic_cast< ViewShellBase* >( pSfxViewFrame->GetViewShell() );
         if( pViewShellBase )
         {
-            ::boost::shared_ptr<ViewShell> pViewSh( pViewShellBase->GetMainViewShell() );
+            std::shared_ptr<ViewShell> pViewSh( pViewShellBase->GetMainViewShell() );
             if( pViewSh.get() )
             {
                 ::sd::View* pView = pViewSh->GetView();

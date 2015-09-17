@@ -35,7 +35,7 @@
 #include <sfx2/itemconnect.hxx>
 #include "pivot.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <unordered_map>
 
 typedef sfx::ListBoxWrapper< sal_Int32 > ScDPListBoxWrapper;
@@ -90,7 +90,7 @@ private:
     NameMapType          maBaseFieldNameMap; // cache for base field display -> original name.
     NameMapType          maBaseItemNameMap;  // cache for base item display -> original name.
 
-    boost::scoped_ptr<ScDPListBoxWrapper>  mxLbTypeWrp;        /// Wrapper for direct usage of API constants.
+    std::unique_ptr<ScDPListBoxWrapper>  mxLbTypeWrp;        /// Wrapper for direct usage of API constants.
 
     const ScDPLabelDataVector& mrLabelVec;  /// Data of all labels.
     bool                 mbEmptyItem;        /// true = Empty base item in listbox.
@@ -176,8 +176,8 @@ private:
     VclPtr<FixedText>          m_pFtHierarchy;
     VclPtr<ListBox>            m_pLbHierarchy;
 
-    boost::scoped_ptr<ScDPListBoxWrapper> m_xLbLayoutWrp;      /// Wrapper for direct usage of API constants.
-    boost::scoped_ptr<ScDPListBoxWrapper> m_xLbShowFromWrp;    /// Wrapper for direct usage of API constants.
+    std::unique_ptr<ScDPListBoxWrapper> m_xLbLayoutWrp;      /// Wrapper for direct usage of API constants.
+    std::unique_ptr<ScDPListBoxWrapper> m_xLbShowFromWrp;    /// Wrapper for direct usage of API constants.
 
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.

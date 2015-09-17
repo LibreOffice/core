@@ -54,7 +54,7 @@
 #include "globstr.hrc"
 #include <vcl/svapp.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // We don't want to end up with 2GB read in one line just because of malformed
 // multiline fields, so chop it _somewhere_, which is twice supported columns
@@ -1266,7 +1266,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     sal_uInt64 const nOldPos = rStrm.Tell();
     sal_uInt64 const nRemaining = rStrm.remainingSize();
-    boost::scoped_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
+    std::unique_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
             ScGlobal::GetRscString( STR_LOAD_DOC ), nRemaining ));
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
 
@@ -1295,8 +1295,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     CalendarWrapper aCalendar( comphelper::getProcessComponentContext() );
     aCalendar.loadDefaultCalendar(
         LanguageTag::convertToLocale( eDocLang ) );
-    boost::scoped_ptr< ::utl::TransliterationWrapper > pEnglishTransliteration;
-    boost::scoped_ptr< CalendarWrapper > pEnglishCalendar;
+    std::unique_ptr< ::utl::TransliterationWrapper > pEnglishTransliteration;
+    std::unique_ptr< CalendarWrapper > pEnglishCalendar;
     if ( eDocLang != LANGUAGE_ENGLISH_US )
     {
         pEnglishTransliteration.reset(new ::utl::TransliterationWrapper (

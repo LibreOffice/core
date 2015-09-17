@@ -67,11 +67,10 @@
 
 #include <svl/sharedstringpool.hxx>
 
+#include <memory>
 #include <unordered_set>
 #include <vector>
 #include <boost/checked_delete.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <memory>
 #include <boost/noncopyable.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
@@ -252,7 +251,7 @@ public:
     typedef std::vector<Row*> RowsType;
 
 private:
-    boost::scoped_ptr<RowsType> mpRows; /// row-wise data table for sort by row operation.
+    std::unique_ptr<RowsType> mpRows; /// row-wise data table for sort by row operation.
 
     ScSortInfo***   pppInfo;
     SCSIZE          nCount;
@@ -869,7 +868,7 @@ class ListenerStartAction : public sc::ColumnSpanSet::ColumnAction
 {
     ScColumn* mpCol;
 
-    boost::shared_ptr<sc::ColumnBlockPositionSet> mpPosSet;
+    std::shared_ptr<sc::ColumnBlockPositionSet> mpPosSet;
     sc::StartListeningContext maStartCxt;
     sc::EndListeningContext maEndCxt;
 
@@ -1708,7 +1707,7 @@ void ScTable::Sort(
             if(pProgress)
                 pProgress->SetState( 0, nLastRow-nRow1 );
 
-            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, nLastRow, bKeepQuery, bUpdateRefs));
+            std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, nLastRow, bKeepQuery, bUpdateRefs));
 
             if ( nLastRow - nRow1 > 255 )
                 DecoladeRow(pArray.get(), nRow1, nLastRow);
@@ -1735,7 +1734,7 @@ void ScTable::Sort(
             if(pProgress)
                 pProgress->SetState( 0, nLastCol-nCol1 );
 
-            boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nCol1, nLastCol, bKeepQuery, bUpdateRefs));
+            std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nCol1, nLastCol, bKeepQuery, bUpdateRefs));
 
             QuickSort(pArray.get(), nCol1, nLastCol);
             SortReorderByColumn(pArray.get(), aSortParam.nRow1, aSortParam.nRow2, aSortParam.bIncludePattern, pProgress);
@@ -1755,7 +1754,7 @@ void ScTable::Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress )
     if (rParam.maOrderIndices.empty())
         return;
 
-    boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(rParam));
+    std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(rParam));
     if (!pArray)
         return;
 
@@ -2737,7 +2736,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                     bSortCollatorInitialized = true;
                     InitSortCollator( aLocalSortParam );
                 }
-                boost::scoped_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, rParam.nRow2, bGlobalKeepQuery, false));
+                std::unique_ptr<ScSortInfoArray> pArray(CreateSortInfoArray(aSortParam, nRow1, rParam.nRow2, bGlobalKeepQuery, false));
                 DecoladeRow( pArray.get(), nRow1, rParam.nRow2 );
                 QuickSort( pArray.get(), nRow1, rParam.nRow2 );
                 ScSortInfo** ppInfo = pArray->GetFirstArray();

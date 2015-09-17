@@ -42,7 +42,7 @@
 #include "refupdatecontext.hxx"
 #include <svl/sharedstring.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace formula;
 
@@ -653,7 +653,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     // Evaluate formulas
     bool bDirty = false; // 1 and 2 separate?
 
-    boost::scoped_ptr<ScFormulaCell> pTemp1;
+    std::unique_ptr<ScFormulaCell> pTemp1;
     ScFormulaCell* pEff1 = pFCell1;
     if ( bRelRef1 )
     {
@@ -683,7 +683,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     }
     pTemp1.reset();
 
-    boost::scoped_ptr<ScFormulaCell> pTemp2;
+    std::unique_ptr<ScFormulaCell> pTemp2;
     ScFormulaCell* pEff2 = pFCell2; //@ 1!=2
     if ( bRelRef2 )
     {

@@ -26,7 +26,7 @@
 #include "fupoor.hxx"
 #include <svtools/transfer.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -142,7 +142,7 @@ private:
     /** The selection function can be in one of several mutually
         exclusive modes.
     */
-    ::boost::shared_ptr<ModeHandler> mpModeHandler;
+    std::shared_ptr<ModeHandler> mpModeHandler;
 
     /** Make the slide nOffset slides away of the current one the new
         current slide.  When the new index is outside the range of valid
@@ -174,7 +174,7 @@ private:
 
     void StopDragAndDrop();
 
-    void SwitchMode (const ::boost::shared_ptr<ModeHandler>& rpHandler);
+    void SwitchMode (const std::shared_ptr<ModeHandler>& rpHandler);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

@@ -57,7 +57,7 @@
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -457,9 +457,9 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
 
     const ScPatternAttr*    pOldAttrs       = GetSelectionPattern();
 
-    boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
-    boost::scoped_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
-    boost::scoped_ptr<SvxNumberInfoItem> pNumberInfoItem;
+    std::unique_ptr<SfxAbstractTabDialog> pDlg;
+    std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
+    std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
 
     pOldSet->MergeRange(SID_ATTR_BORDER_STYLES, SID_ATTR_BORDER_DEFAULT_WIDTH);
 
@@ -565,7 +565,7 @@ bool ScTabViewShell::IsRefInputMode() const
                         ScCompiler aComp( pDoc, aPos );
                         aComp.SetGrammar(pDoc->GetGrammar());
                         aComp.SetCloseBrackets( false );
-                        boost::scoped_ptr<ScTokenArray> pArr(aComp.CompileString(aString));
+                        std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aString));
                         if ( pArr && pArr->MayReferenceFollow() )
                         {
                             return true;

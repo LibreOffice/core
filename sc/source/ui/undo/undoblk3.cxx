@@ -106,7 +106,7 @@ OUString ScUndoDeleteContents::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );    // "Delete"
 }
 
-void ScUndoDeleteContents::SetDataSpans( const boost::shared_ptr<DataSpansType>& pSpans )
+void ScUndoDeleteContents::SetDataSpans( const std::shared_ptr<DataSpansType>& pSpans )
 {
     mpDataSpans = pSpans;
 }

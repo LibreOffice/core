@@ -22,7 +22,6 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>

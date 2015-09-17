@@ -32,7 +32,7 @@
 #include "scerrors.hxx"
 #include "scitems.hxx"
 #include "stringutil.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 const sal_Unicode pKeyTABLE[]   = { 'T', 'A', 'B', 'L', 'E', 0 };
 const sal_Unicode pKeyVECTORS[] = { 'V', 'E', 'C', 'T', 'O', 'R', 'S', 0 };
@@ -938,7 +938,7 @@ void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
 {
     if( bPlain )
     {
-        boost::scoped_ptr<ScPatternAttr> pPatt;
+        std::unique_ptr<ScPatternAttr> pPatt;
 
         for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
         {

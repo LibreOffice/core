@@ -70,7 +70,7 @@
 
 #include <vcl/lineinfo.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #define ZOOM_MIN    10
@@ -517,7 +517,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     // #114135#
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
-    boost::scoped_ptr<FmFormView> pDrawView;
+    std::unique_ptr<FmFormView> pDrawView;
 
     if( pModel )
     {
@@ -1330,7 +1330,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
     if (pBorderData)
     {
-        boost::scoped_ptr<ScDocument> pBorderDoc(new ScDocument( SCDOCMODE_UNDO ));
+        std::unique_ptr<ScDocument> pBorderDoc(new ScDocument( SCDOCMODE_UNDO ));
         pBorderDoc->InitUndo( pDoc, 0,0, true,true );
         if (pBorderData)
             pBorderDoc->ApplyAttr( 0,0,0, *pBorderData );
@@ -3028,7 +3028,7 @@ void ScPrintFunc::CalcPages()               // calculates aPageRect and pages fr
     SCROW nPageStartRow = nStartRow;
     SCROW nLastVisibleRow = -1;
 
-    ::boost::scoped_ptr<ScRowBreakIterator> pRowBreakIter(pDoc->GetRowBreakIterator(nPrintTab));
+    std::unique_ptr<ScRowBreakIterator> pRowBreakIter(pDoc->GetRowBreakIterator(nPrintTab));
     SCROW nNextPageBreak = pRowBreakIter->first();
     while (nNextPageBreak != ScRowBreakIterator::NOT_FOUND && nNextPageBreak < nStartRow)
         // Skip until the page break position is at the start row or greater.

@@ -35,8 +35,8 @@
 #include "optutil.hxx"
 #include "docuno.hxx"
 
-#include <boost/scoped_ptr.hpp>
 #include <config_telepathy.h>
+#include <memory>
 #include <unordered_map>
 
 class ScRefreshTimerProtector;
@@ -453,7 +453,7 @@ typedef tools::SvRef<ScDocShell> ScDocShellRef;
 class SC_DLLPUBLIC ScDocShellModificator
 {
             ScDocShell&     rDocShell;
-    boost::scoped_ptr<ScRefreshTimerProtector> mpProtector;
+    std::unique_ptr<ScRefreshTimerProtector> mpProtector;
             bool            bAutoCalcShellDisabled;
             bool            bIdleEnabled;
 

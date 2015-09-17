@@ -62,7 +62,7 @@
 #include <grouparealistener.hxx>
 #include <officecfg/Office/Common.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/ptr_container/ptr_map.hpp>
 
 using namespace formula;
@@ -2985,7 +2985,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
         // on reference update. Bail out.
         return bCellStateChanged;
 
-    boost::scoped_ptr<ScTokenArray> pOldCode;
+    std::unique_ptr<ScTokenArray> pOldCode;
     if (pUndoDoc)
         pOldCode.reset(pCode->Clone());
 
@@ -3107,7 +3107,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
         return false;
 
     bool bCellStateChanged = false;
-    boost::scoped_ptr<ScTokenArray> pOldCode;
+    std::unique_ptr<ScTokenArray> pOldCode;
     if (pUndoDoc)
         pOldCode.reset(pCode->Clone());
 
@@ -3230,7 +3230,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
         // on reference update. Bail out.
         return false;
 
-    boost::scoped_ptr<ScTokenArray> pOldCode;
+    std::unique_ptr<ScTokenArray> pOldCode;
     if (pUndoDoc)
         pOldCode.reset(pCode->Clone());
 

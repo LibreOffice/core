@@ -96,10 +96,10 @@ void ScChartListener::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
 ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
         const ScRangeListRef& rRangeList ) :
     SvtListener(),
-    mpExtRefListener(NULL),
+    mpExtRefListener(nullptr),
     mpTokens(new vector<ScTokenRef>),
     maName(rName),
-    pUnoData( NULL ),
+    pUnoData( nullptr ),
     mpDoc( pDocP ),
     bUsed( false ),
     bDirty( false ),
@@ -110,10 +110,10 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
 
 ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, vector<ScTokenRef>* pTokens ) :
     SvtListener(),
-    mpExtRefListener(NULL),
+    mpExtRefListener(nullptr),
     mpTokens(pTokens),
     maName(rName),
-    pUnoData( NULL ),
+    pUnoData( nullptr ),
     mpDoc( pDocP ),
     bUsed( false ),
     bDirty( false ),
@@ -123,10 +123,10 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, vect
 
 ScChartListener::ScChartListener( const ScChartListener& r ) :
     SvtListener(),
-    mpExtRefListener(NULL),
+    mpExtRefListener(nullptr),
     mpTokens(new vector<ScTokenRef>(*r.mpTokens)),
     maName(r.maName),
-    pUnoData( NULL ),
+    pUnoData( nullptr ),
     mpDoc( r.mpDoc ),
     bUsed( false ),
     bDirty( r.bDirty ),
@@ -451,13 +451,13 @@ void ScChartListenerCollection::removeByName(const OUString& rName)
 ScChartListener* ScChartListenerCollection::findByName(const OUString& rName)
 {
     ListenersType::iterator it = maListeners.find(rName);
-    return it == maListeners.end() ? NULL : it->second;
+    return it == maListeners.end() ? nullptr : it->second;
 }
 
 const ScChartListener* ScChartListenerCollection::findByName(const OUString& rName) const
 {
     ListenersType::const_iterator it = maListeners.find(rName);
-    return it == maListeners.end() ? NULL : it->second;
+    return it == maListeners.end() ? nullptr : it->second;
 }
 
 bool ScChartListenerCollection::hasListeners() const

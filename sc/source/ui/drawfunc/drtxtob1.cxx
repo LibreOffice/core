@@ -39,7 +39,7 @@
 #include <gridwin.hxx>
 
 #include "scabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet , sal_uInt16 nSlot)
@@ -47,7 +47,7 @@ bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     assert(pFact && "ScAbstractFactory create fail!");
 
-    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
+    std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
         pViewData->GetDialogParent(), &rArgs,
         pViewData->GetSfxDocShell()));
     assert(pDlg && "Dialog create fail!");
@@ -94,7 +94,7 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScParagraphDlg(
+    std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScParagraphDlg(
         pViewData->GetDialogParent(), &aNewAttr));
     OSL_ENSURE(pDlg, "Dialog create fail!");
     bool bRet = ( pDlg->Execute() == RET_OK );
@@ -114,7 +114,7 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
     SdrView* pView = pViewData->GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pViewData->GetDialogParent() ));
+    std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pViewData->GetDialogParent() ));
 
     pDlg->Insert( SotClipboardFormatId::STRING, EMPTY_OUSTRING );
     pDlg->Insert( SotClipboardFormatId::RTF,    EMPTY_OUSTRING );

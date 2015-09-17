@@ -19,8 +19,8 @@
 #include "orcusxml.hxx"
 
 #include <set>
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 class ScRange;
@@ -47,7 +47,7 @@ class ScXMLSourceDlg : public ScAnyRefDlg
     std::set<const SvTreeListEntry*> maRangeLinks;
     std::vector<SvTreeListEntry*> maHighlightedEntries;
     SvTreeListEntry* mpCurRefEntry;
-    boost::scoped_ptr<ScOrcusXMLContext> mpXMLContext;
+    std::unique_ptr<ScOrcusXMLContext> mpXMLContext;
 
     ScDocument* mpDoc;
 

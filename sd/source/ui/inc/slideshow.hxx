@@ -32,7 +32,7 @@
 
 #include <editeng/unoipset.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
 
@@ -214,7 +214,7 @@ private:
     bool mbIsInStartup;
     SdDrawDocument* mpDoc;
 
-    boost::shared_ptr< PresentationSettingsEx > mxCurrentSettings;
+    std::shared_ptr< PresentationSettingsEx > mxCurrentSettings;
 
     ViewShellBase* mpCurrentViewShellBase;
     ViewShellBase* mpFullScreenViewShellBase;

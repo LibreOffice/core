@@ -67,7 +67,7 @@
 #include "drawview.hxx"
 #include "cliputil.hxx"
 #include <gridwin.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -1246,7 +1246,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         //  copy from clipboard
         //  save original data in case of calculation
 
-    boost::scoped_ptr<ScDocument> pMixDoc;
+    std::unique_ptr<ScDocument> pMixDoc;
     if (nFunction)
     {
         bSkipEmpty = false;
@@ -1666,7 +1666,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         }
     }
 
-    boost::scoped_ptr<ScDocument> pMixDoc;
+    std::unique_ptr<ScDocument> pMixDoc;
     if (bSkipEmpty || nFunction)
     {
         if (nFlags & IDF_CONTENTS)
@@ -1886,7 +1886,7 @@ bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, b
     //  run with paste
 
     ScDocument* pDoc = GetViewData().GetDocument();
-    boost::scoped_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+    std::unique_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
     pDoc->CopyTabToClip( rSource.aStart.Col(), rSource.aStart.Row(),
                             rSource.aEnd.Col(), rSource.aEnd.Row(),
                          rSource.aStart.Tab(), pClipDoc.get() );

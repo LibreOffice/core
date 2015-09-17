@@ -64,7 +64,7 @@
 #include <listenercontext.hxx>
 
 #include <math.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1178,7 +1178,7 @@ void ScTable::FillFormulaVertical(
     aCol[nCol].DeleteRanges(aSpans, IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_FORMULA | IDF_OUTLINE, false);
     aCol[nCol].CloneFormulaCell(rSrcCell, sc::CellTextAttr(), aSpans, NULL);
 
-    boost::shared_ptr<sc::ColumnBlockPositionSet> pSet(new sc::ColumnBlockPositionSet(*pDocument));
+    std::shared_ptr<sc::ColumnBlockPositionSet> pSet(new sc::ColumnBlockPositionSet(*pDocument));
     sc::StartListeningContext aStartCxt(*pDocument, pSet);
     sc::EndListeningContext aEndCxt(*pDocument, pSet);
 

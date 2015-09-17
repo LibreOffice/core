@@ -36,7 +36,7 @@
 #include "styledlg.hxx"
 #include "scresid.hxx"
 #include "scuitphfedit.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // class ScHFPage
 
@@ -186,7 +186,7 @@ IMPL_LINK_NOARG_TYPED(ScHFPage, HFEditHdl, void*, void)
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScHFEditDlg(
             pViewSh->GetViewFrame(), this, aDataSet, aStrPageStyle, nResId));
 
         OSL_ENSURE(pDlg, "Dialog create fail!");

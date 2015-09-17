@@ -71,7 +71,7 @@ void ScMediaShell::GetMediaState( SfxItemSet& rSet )
         {
             if( SID_AVMEDIA_TOOLBOX == nWhich )
             {
-                boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
+                std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
                 bool            bDisable = true;
 
                 if( 1 == pMarkList->GetMarkCount() )
@@ -111,7 +111,7 @@ void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
 
         if( pItem )
         {
-            boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
+            std::unique_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
 
             if( 1 == pMarkList->GetMarkCount() )
             {
