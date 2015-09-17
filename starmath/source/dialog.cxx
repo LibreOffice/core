@@ -1193,10 +1193,10 @@ void SmShowSymbolSetWindow::MouseButtonDown(const MouseEvent& rMEvt)
                       m_pVScrollBar->GetThumbPos() * nColumns;
         SelectSymbol( sal::static_int_cast< sal_uInt16 >(nPos) );
 
-        aSelectHdlLink.Call(this);
+        aSelectHdlLink.Call(*this);
 
         if (rMEvt.GetClicks() > 1)
-            aDblClickHdlLink.Call(this);
+            aDblClickHdlLink.Call(*this);
     }
 }
 
@@ -1239,7 +1239,7 @@ void SmShowSymbolSetWindow::KeyInput(const KeyEvent& rKEvt)
     }
 
     SelectSymbol(n);
-    aSelectHdlLink.Call(this);
+    aSelectHdlLink.Call(*this);
 }
 
 void SmShowSymbolSetWindow::setScrollbar(ScrollBar *pVScrollBar)
@@ -1458,10 +1458,9 @@ IMPL_LINK_NOARG( SmSymbolDialog, SymbolSetChangeHdl )
 }
 
 
-IMPL_LINK_NOARG( SmSymbolDialog, SymbolChangeHdl )
+IMPL_LINK_NOARG_TYPED( SmSymbolDialog, SymbolChangeHdl, SmShowSymbolSetWindow&, void )
 {
     SelectSymbol(m_pSymbolSetDisplay->GetSelectSymbol());
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SmSymbolDialog, EditClickHdl, Button*, void)
@@ -1505,6 +1504,10 @@ IMPL_LINK_NOARG_TYPED(SmSymbolDialog, EditClickHdl, Button*, void)
 }
 
 
+IMPL_LINK_NOARG_TYPED( SmSymbolDialog, SymbolDblClickHdl2, SmShowSymbolSetWindow&, void )
+{
+    SymbolDblClickHdl(nullptr);
+}
 IMPL_LINK_NOARG( SmSymbolDialog, SymbolDblClickHdl )
 {
     GetClickHdl(m_pGetBtn);
@@ -1558,7 +1561,7 @@ SmSymbolDialog::SmSymbolDialog(vcl::Window *pParent, OutputDevice *pFntListDevic
 
     m_pSymbolSets->SetSelectHdl(LINK(this, SmSymbolDialog, SymbolSetChangeHdl));
     m_pSymbolSetDisplay->SetSelectHdl(LINK(this, SmSymbolDialog, SymbolChangeHdl));
-    m_pSymbolSetDisplay->SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl));
+    m_pSymbolSetDisplay->SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl2));
     m_pSymbolDisplay->SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl));
     m_pEditBtn->SetClickHdl(LINK(this, SmSymbolDialog, EditClickHdl));
     m_pGetBtn->SetClickHdl(LINK(this, SmSymbolDialog, GetClickHdl));

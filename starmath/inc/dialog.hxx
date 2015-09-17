@@ -271,8 +271,8 @@ class SmShowSymbolSetWindow : public Control
 {
     VclPtr<ScrollBar>  m_pVScrollBar;
     SymbolPtrVec_t aSymbolSet;
-    Link<>      aSelectHdlLink;
-    Link<>      aDblClickHdlLink;
+    Link<SmShowSymbolSetWindow&,void> aSelectHdlLink;
+    Link<SmShowSymbolSetWindow&,void> aDblClickHdlLink;
     long        nLen;
     long        nRows, nColumns;
     long        nXOffset, nYOffset;
@@ -297,8 +297,8 @@ public:
     void    SelectSymbol(sal_uInt16 nSymbol);
     sal_uInt16  GetSelectSymbol() const { return nSelectSymbol; }
     void SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);
-    void SetSelectHdl(const Link<>& rLink) { aSelectHdlLink = rLink; }
-    void SetDblClickHdl(const Link<>& rLink) { aDblClickHdlLink = rLink; }
+    void SetSelectHdl(const Link<SmShowSymbolSetWindow&,void>& rLink) { aSelectHdlLink = rLink; }
+    void SetDblClickHdl(const Link<SmShowSymbolSetWindow&,void>& rLink) { aDblClickHdlLink = rLink; }
 };
 
 class SmShowSymbolSet : public VclHBox
@@ -316,8 +316,8 @@ public:
     void    SelectSymbol(sal_uInt16 nSymbol) { aSymbolWindow->SelectSymbol(nSymbol); }
     sal_uInt16  GetSelectSymbol() const { return aSymbolWindow->GetSelectSymbol(); }
 
-    void SetSelectHdl(const Link<>& rLink) { aSymbolWindow->SetSelectHdl(rLink); }
-    void SetDblClickHdl(const Link<>& rLink) { aSymbolWindow->SetDblClickHdl(rLink); }
+    void SetSelectHdl(const Link<SmShowSymbolSetWindow&,void>& rLink) { aSymbolWindow->SetSelectHdl(rLink); }
+    void SetDblClickHdl(const Link<SmShowSymbolSetWindow&,void>& rLink) { aSymbolWindow->SetDblClickHdl(rLink); }
 };
 
 
@@ -365,8 +365,9 @@ class SmSymbolDialog : public ModalDialog
     VclPtr<OutputDevice> pFontListDev;
 
     DECL_LINK(SymbolSetChangeHdl, void*);
-    DECL_LINK(SymbolChangeHdl, void*);
+    DECL_LINK_TYPED(SymbolChangeHdl, SmShowSymbolSetWindow&, void);
     DECL_LINK(SymbolDblClickHdl, void*);
+    DECL_LINK_TYPED(SymbolDblClickHdl2, SmShowSymbolSetWindow&, void);
     DECL_LINK_TYPED(EditClickHdl, Button*, void);
     DECL_LINK_TYPED(GetClickHdl, Button*, void);
 
