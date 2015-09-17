@@ -915,34 +915,29 @@ IMPL_LINK_TYPED(OAppDetailPageHelper, OnEntryDoubleClick, SvTreeListBox*, _pTree
     return bHandled;
 }
 
-IMPL_LINK_NOARG(OAppDetailPageHelper, OnEntrySelChange)
+IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnEntrySelChange, LinkParamNone*, void)
 {
     getBorderWin().getView()->getAppController().onSelectionChanged();
-    return 1L;
 }
 
-IMPL_LINK_NOARG( OAppDetailPageHelper, OnCutEntry )
+IMPL_LINK_NOARG_TYPED( OAppDetailPageHelper, OnCutEntry, LinkParamNone*, void )
 {
     getBorderWin().getView()->getAppController().onCutEntry();
-    return 1L;
 }
 
-IMPL_LINK_NOARG( OAppDetailPageHelper, OnCopyEntry )
+IMPL_LINK_NOARG_TYPED( OAppDetailPageHelper, OnCopyEntry, LinkParamNone*, void )
 {
     getBorderWin().getView()->getAppController().onCopyEntry();
-    return 1L;
 }
 
-IMPL_LINK_NOARG( OAppDetailPageHelper, OnPasteEntry )
+IMPL_LINK_NOARG_TYPED( OAppDetailPageHelper, OnPasteEntry, LinkParamNone*, void )
 {
     getBorderWin().getView()->getAppController().onPasteEntry();
-    return 1L;
 }
 
-IMPL_LINK_NOARG( OAppDetailPageHelper, OnDeleteEntry )
+IMPL_LINK_NOARG_TYPED( OAppDetailPageHelper, OnDeleteEntry, LinkParamNone*, void )
 {
     getBorderWin().getView()->getAppController().onDeleteEntry();
-    return 1L;
 }
 
 void OAppDetailPageHelper::Resize()

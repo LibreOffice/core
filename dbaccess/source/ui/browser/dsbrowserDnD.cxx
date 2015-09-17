@@ -193,12 +193,11 @@ namespace dbaui
 
         return NULL != pTransfer;
     }
-    IMPL_LINK_NOARG(SbaTableQueryBrowser, OnCopyEntry)
+    IMPL_LINK_NOARG_TYPED(SbaTableQueryBrowser, OnCopyEntry, LinkParamNone*, void)
     {
         SvTreeListEntry* pSelected = m_pTreeView->getListBox().FirstSelected();
         if( isEntryCopyAllowed( pSelected ) )
             copyEntry( pSelected );
-        return 0;
     }
     bool SbaTableQueryBrowser::isEntryCopyAllowed(SvTreeListEntry* _pEntry) const
     {

@@ -153,12 +153,12 @@ namespace dbaui
 
         DECL_LINK_TYPED( OnEntryDoubleClick,    SvTreeListBox*, bool );
         DECL_LINK( OnEntryEnterKey,             void* );
-        DECL_LINK( OnEntrySelChange,            void* );
+        DECL_LINK_TYPED( OnEntrySelChange,      LinkParamNone*, void );
 
-        DECL_LINK( OnCutEntry,                  void* );
-        DECL_LINK( OnCopyEntry,                 void* );
-        DECL_LINK( OnPasteEntry,                void* );
-        DECL_LINK( OnDeleteEntry,               void* );
+        DECL_LINK_TYPED( OnCutEntry,            LinkParamNone*, void );
+        DECL_LINK_TYPED( OnCopyEntry,           LinkParamNone*, void );
+        DECL_LINK_TYPED( OnPasteEntry,          LinkParamNone*, void );
+        DECL_LINK_TYPED( OnDeleteEntry,         LinkParamNone*, void );
 
         // click a TB slot
         DECL_LINK_TYPED(OnDropdownClickHdl, ToolBox*, void);

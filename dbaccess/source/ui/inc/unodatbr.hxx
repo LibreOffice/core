@@ -347,10 +347,10 @@ namespace dbaui
         OUString      GetEntryText( SvTreeListEntry* _pEntry ) const;
 
         // is called when a table or a query was selected
-        DECL_LINK( OnSelectionChange, void* );
-        DECL_LINK( OnExpandEntry, SvTreeListEntry* );
+        DECL_LINK_TYPED( OnSelectionChange, LinkParamNone*, void );
+        DECL_LINK_TYPED( OnExpandEntry, SvTreeListEntry*, bool );
 
-        DECL_LINK( OnCopyEntry, void* );
+        DECL_LINK_TYPED( OnCopyEntry, LinkParamNone*, void );
 
         DECL_LINK_TYPED( OnTreeEntryCompare, const SvSortData&, sal_Int32 );
 

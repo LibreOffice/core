@@ -54,23 +54,23 @@ namespace dbaui
         OScrollHelper               m_aScrollHelper;
         Timer                       m_aTimer; // is needed for table updates
         Point                       m_aMousePos;
-        std::set<SvTreeListEntry*>      m_aSelectedEntries;
-        SvTreeListEntry*                m_pDragedEntry;
+        std::set<SvTreeListEntry*>  m_aSelectedEntries;
+        SvTreeListEntry*            m_pDragedEntry;
         IControlActionListener*     m_pActionListener;
         IContextMenuProvider*
                                     m_pContextMenuProvider;
 
-        Link<>                      m_aPreExpandHandler;    // handler to be called before a node is expanded
-        Link<>                      m_aSelChangeHdl;        // handlet to be called (asynchronously) when the selection changes in any way
-        Link<>                      m_aCutHandler;          // called when someone press CTRL+X
-        Link<>                      m_aCopyHandler;         // called when someone press CTRL+C
-        Link<>                      m_aPasteHandler;        // called when someone press CTRL+V
-        Link<>                      m_aDeleteHandler;       // called when someone press DELETE Key
+        Link<SvTreeListEntry*,bool> m_aPreExpandHandler;    // handler to be called before a node is expanded
+        Link<LinkParamNone*,void>   m_aSelChangeHdl;        // handlet to be called (asynchronously) when the selection changes in any way
+        Link<LinkParamNone*,void>   m_aCutHandler;          // called when someone press CTRL+X
+        Link<LinkParamNone*,void>   m_aCopyHandler;         // called when someone press CTRL+C
+        Link<LinkParamNone*,void>   m_aPasteHandler;        // called when someone press CTRL+V
+        Link<LinkParamNone*,void>   m_aDeleteHandler;       // called when someone press DELETE Key
         Link<>                      m_aEditingHandler;      // called before someone will edit an entry
         Link<>                      m_aEditedHandler;       // called after someone edited an entry
         Link<>                      m_aEnterKeyHdl;
 
-        bool                    m_bHandleEnterKey;
+        bool                        m_bHandleEnterKey;
 
     private:
         void init();
@@ -89,12 +89,12 @@ namespace dbaui
         void                    setControlActionListener( IControlActionListener* _pListener ) { m_pActionListener = _pListener; }
         void                    setContextMenuProvider( IContextMenuProvider* _pContextMenuProvider ) { m_pContextMenuProvider = _pContextMenuProvider; }
 
-        void    SetPreExpandHandler(const Link<>& _rHdl)  { m_aPreExpandHandler = _rHdl; }
-        void    SetSelChangeHdl( const Link<>& _rHdl )    { m_aSelChangeHdl = _rHdl; }
-        void    setCutHandler(const Link<>& _rHdl)        { m_aCutHandler = _rHdl; }
-        void    setCopyHandler(const Link<>& _rHdl)       { m_aCopyHandler = _rHdl; }
-        void    setPasteHandler(const Link<>& _rHdl)      { m_aPasteHandler = _rHdl; }
-        void    setDeleteHandler(const Link<>& _rHdl)     { m_aDeleteHandler = _rHdl; }
+        void    SetPreExpandHandler(const Link<SvTreeListEntry*,bool>& _rHdl)  { m_aPreExpandHandler = _rHdl; }
+        void    SetSelChangeHdl( const Link<LinkParamNone*,void>& _rHdl )      { m_aSelChangeHdl = _rHdl; }
+        void    setCutHandler(const Link<LinkParamNone*,void>& _rHdl)          { m_aCutHandler = _rHdl; }
+        void    setCopyHandler(const Link<LinkParamNone*,void>& _rHdl)         { m_aCopyHandler = _rHdl; }
+        void    setPasteHandler(const Link<LinkParamNone*,void>& _rHdl)        { m_aPasteHandler = _rHdl; }
+        void    setDeleteHandler(const Link<LinkParamNone*,void>& _rHdl)       { m_aDeleteHandler = _rHdl; }
 
         // modified the given entry so that the expand handler is called whenever the entry is expanded
         // (normally, the expand handler is called only once)

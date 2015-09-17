@@ -2156,11 +2156,11 @@ SvTreeListEntry* SbaTableQueryBrowser::implAppendEntry( SvTreeListEntry* _pParen
     return pNewEntry;
 }
 
-IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent)
+IMPL_LINK_TYPED(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent, bool)
 {
     if (_pParent->HasChildren())
         // nothing to do...
-        return 1L;
+        return true;
 
     SvTreeListEntry* pFirstParent = m_pTreeView->getListBox().GetRootLevelParent(_pParent);
     OSL_ENSURE(pFirstParent,"SbaTableQueryBrowser::OnExpandEntry: No rootlevelparent!");
@@ -2249,7 +2249,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent)
                 showError(aInfo);
         }
         else
-            return 0L;
+            return false;
                 // 0 indicates that an error occurred
     }
     else
@@ -2261,7 +2261,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent)
             populateTree( xCollection, _pParent, etQuery );
         }
     }
-    return 1L;
+    return true;
 }
 
 bool SbaTableQueryBrowser::ensureEntryObject( SvTreeListEntry* _pEntry )
@@ -2489,9 +2489,9 @@ bool SbaTableQueryBrowser::implSelect(const OUString& _rDataSourceName, const OU
     return false;
 }
 
-IMPL_LINK_NOARG(SbaTableQueryBrowser, OnSelectionChange)
+IMPL_LINK_NOARG_TYPED(SbaTableQueryBrowser, OnSelectionChange, LinkParamNone*, void)
 {
-    return implSelect( m_pTreeView->getListBox().FirstSelected() ) ? 1L : 0L;
+    implSelect( m_pTreeView->getListBox().FirstSelected() );
 }
 
 SvTreeListEntry* SbaTableQueryBrowser::implGetConnectionEntry(SvTreeListEntry* _pEntry) const

@@ -23,6 +23,8 @@
 #include <vcl/window.hxx>
 
 class SvTreeList;
+class SvTreeListEntry;
+
 namespace dbaui
 {
     class DBTreeListBox;
@@ -46,17 +48,16 @@ namespace dbaui
             <p>When calling the link, the parameter is an SvTreeListEntry marking the entry to be expanded.
             </p>
         */
-        void    SetPreExpandHandler(const Link<>& _rHdl);
-        /// gets the currently set NodeExpansionHandler
+        void                SetPreExpandHandler(const Link<SvTreeListEntry*,bool>& _rHdl);
 
-        void    setCopyHandler(const Link<>& _rHdl);
+        void                setCopyHandler(const Link<LinkParamNone*,void>& _rHdl);
 
         void                setModel(SvTreeList* _pTreeModel);
-        void                setSelChangeHdl(const Link<>& _rHdl);
+        void                setSelChangeHdl(const Link<LinkParamNone*,void>& _rHdl);
 
         DBTreeListBox&      getListBox() const { return *m_pTreeListBox; }
 
-        virtual void GetFocus() SAL_OVERRIDE;
+        virtual void        GetFocus() SAL_OVERRIDE;
     };
 }
 
