@@ -861,7 +861,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
             }
             if (pParameters)
             {
-                INetMIMEStringOutputSink
+                INetMIMEOutputSink
                     aSink(0, INetMIMEOutputSink::NO_LINE_LENGTH_LIMIT);
                 while (p != pEnd)
                 {
@@ -890,7 +890,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         else if (p != pEnd && *p == '"')
             if (pParameters)
             {
-                INetMIMEStringOutputSink
+                INetMIMEOutputSink
                     aSink(0, INetMIMEOutputSink::NO_LINE_LENGTH_LIMIT);
                 bool bInvalid = false;
                 for (++p;;)
@@ -2838,9 +2838,15 @@ OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
     return sDecoded;
 }
 
-//  INetMIMEOutputSink
+void INetMIMEOutputSink::writeSequence(const sal_Char * pBegin,
+                                       const sal_Char * pEnd)
+{
+    OSL_ENSURE(pBegin && pBegin <= pEnd,
+               "INetMIMEOutputSink::writeSequence(): Bad sequence");
 
-// virtual
+    m_aBuffer.append(pBegin, pEnd - pBegin);
+}
+
 sal_Size INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
 {
     sal_Size nLength = rtl_str_getLength(pSequence);
@@ -2848,7 +2854,6 @@ sal_Size INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
     return nLength;
 }
 
-// virtual
 void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
                                        const sal_Unicode * pEnd)
 {
@@ -2872,18 +2877,6 @@ void INetMIMEOutputSink::writeLineEnd()
     static const sal_Char aCRLF[2] = { 0x0D, 0x0A };
     writeSequence(aCRLF, aCRLF + 2);
     m_nColumn = 0;
-}
-
-//  INetMIMEStringOutputSink
-
-// virtual
-void INetMIMEStringOutputSink::writeSequence(const sal_Char * pBegin,
-                                             const sal_Char * pEnd)
-{
-    OSL_ENSURE(pBegin && pBegin <= pEnd,
-               "INetMIMEStringOutputSink::writeSequence(): Bad sequence");
-
-    m_aBuffer.append(pBegin, pEnd - pBegin);
 }
 
 //  INetMIMEEncodedWordOutputSink

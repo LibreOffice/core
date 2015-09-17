@@ -46,7 +46,7 @@ void INetMIMEMessage::SetHeaderField_Impl (
     const OUString &rValue,
     sal_uIntPtr &rnIndex)
 {
-    INetMIMEStringOutputSink aSink (0, 32767); /* weird the mime standard says that aline MUST not be longeur that 998 */
+    INetMIMEOutputSink aSink (0, 32767); /* weird the mime standard says that aline MUST not be longeur that 998 */
     INetMIME::writeHeaderFieldBody (
         aSink, eType, rValue, osl_getThreadTextEncoding(), false);
     SetHeaderField_Impl (

@@ -632,16 +632,15 @@ public:
 private:
     sal_uInt32 m_nColumn;
     sal_uInt32 m_nLineLengthLimit;
+    OStringBuffer m_aBuffer;
 
-protected:
     /** Write a sequence of octets.
 
         @param pBegin  Points to the start of the sequence, must not be null.
 
         @param pEnd  Points past the end of the sequence, must be >= pBegin.
      */
-    virtual void writeSequence(const sal_Char * pBegin,
-                               const sal_Char * pEnd) = 0;
+    void writeSequence(const sal_Char * pBegin, const sal_Char * pEnd);
 
     /** Write a null terminated sequence of octets (without the terminating
         null).
@@ -667,10 +666,10 @@ protected:
                                const sal_Unicode * pEnd);
 
 public:
-    INetMIMEOutputSink(sal_uInt32 nTheColumn, sal_uInt32 nTheLineLengthLimit):
+    INetMIMEOutputSink(
+        sal_uInt32 nTheColumn = 0,
+        sal_uInt32 nTheLineLengthLimit= INetMIME::SOFT_LINE_LENGTH_LIMIT):
         m_nColumn(nTheColumn), m_nLineLengthLimit(nTheLineLengthLimit) {}
-
-    virtual ~INetMIMEOutputSink() {}
 
     /** Get the current column.
 
@@ -737,6 +736,11 @@ public:
      */
     void writeLineEnd();
 
+    OString takeBuffer()
+    {
+        return m_aBuffer.makeStringAndClear();
+    }
+
     /** A manipulator function that writes a line end (CR LF).
 
         @param rSink  Some sink.
@@ -784,27 +788,6 @@ inline void INetMIME::writeEscapeSequence(INetMIMEOutputSink & rSink,
     rSink << '=' << sal_uInt8(getHexDigit(nChar >> 4))
           << sal_uInt8(getHexDigit(nChar & 15));
 }
-
-class INetMIMEStringOutputSink: public INetMIMEOutputSink
-{
-    OStringBuffer m_aBuffer;
-
-    using INetMIMEOutputSink::writeSequence;
-
-    virtual void writeSequence(const sal_Char * pBegin,
-                               const sal_Char * pEnd) SAL_OVERRIDE;
-
-public:
-    inline INetMIMEStringOutputSink(sal_uInt32 nColumn = 0,
-                                    sal_uInt32 nLineLengthLimit
-                                        = INetMIME::SOFT_LINE_LENGTH_LIMIT):
-        INetMIMEOutputSink(nColumn, nLineLengthLimit) {}
-
-    OString takeBuffer()
-    {
-        return m_aBuffer.makeStringAndClear();
-    }
-};
 
 class INetMIMEEncodedWordOutputSink
 {
