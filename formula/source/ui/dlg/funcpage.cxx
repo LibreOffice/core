@@ -170,7 +170,7 @@ IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
             if ( !sHelpId.isEmpty() )
                 m_pLbFunction->SetHelpId(sHelpId);
         }
-        aSelectionLink.Call(this);
+        aSelectionLink.Call(*this);
     }
     else
     {
@@ -182,7 +182,7 @@ IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
 
 IMPL_LINK_NOARG_TYPED(FuncPage, DblClkHdl, ListBox&, void)
 {
-    aDoubleClickLink.Call(this);
+    aDoubleClickLink.Call(*this);
 }
 
 void FuncPage::SetCategory(sal_Int32 nCat)

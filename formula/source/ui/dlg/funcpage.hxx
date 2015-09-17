@@ -60,13 +60,12 @@ typedef const IFunctionDescription* TFunctionDesc;
 class FuncPage : public TabPage
 {
 private:
-    OModuleClient   m_aModuleClient;
-    Link<>          aDoubleClickLink;
-    Link<>          aSelectionLink;
-    VclPtr<ListBox> m_pLbCategory;
-    VclPtr<FormulaListBox> m_pLbFunction;
-    const IFunctionManager*
-                    m_pFunctionManager;
+    OModuleClient            m_aModuleClient;
+    Link<FuncPage&,void>     aDoubleClickLink;
+    Link<FuncPage&,void>     aSelectionLink;
+    VclPtr<ListBox>          m_pLbCategory;
+    VclPtr<FormulaListBox>   m_pLbFunction;
+    const IFunctionManager*  m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;
     OString    m_aHelpId;
@@ -99,9 +98,9 @@ public:
     const IFunctionDescription* GetFuncDesc( sal_Int32  nPos ) const;
     OUString        GetSelFunctionName() const;
 
-    void            SetDoubleClickHdl( const Link<>& rLink ) { aDoubleClickLink = rLink; }
+    void            SetDoubleClickHdl( const Link<FuncPage&,void>& rLink ) { aDoubleClickLink = rLink; }
 
-    void            SetSelectHdl( const Link<>& rLink ) { aSelectionLink = rLink; }
+    void            SetSelectHdl( const Link<FuncPage&,void>& rLink ) { aSelectionLink = rLink; }
 
 };
 

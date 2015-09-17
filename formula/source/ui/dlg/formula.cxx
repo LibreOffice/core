@@ -124,12 +124,12 @@ public:
     DECL_LINK( ModifyHdl, ParaWin* );
     DECL_LINK( FxHdl, ParaWin* );
 
-    DECL_LINK_TYPED( MatrixHdl, Button*, void);
+    DECL_LINK_TYPED( MatrixHdl, Button*, void );
     DECL_LINK(FormulaHdl, void *);
-    DECL_LINK_TYPED( FormulaCursorHdl, EditBox&, void);
+    DECL_LINK_TYPED( FormulaCursorHdl, EditBox&, void );
     DECL_LINK_TYPED( BtnHdl, Button*, void );
-    DECL_LINK(DblClkHdl, void *);
-    DECL_LINK(FuncSelHdl, void *);
+    DECL_LINK_TYPED( DblClkHdl, FuncPage&, void );
+    DECL_LINK_TYPED( FuncSelHdl, FuncPage&, void );
     DECL_LINK(StructSelHdl, void *);
 public:
     mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
@@ -855,7 +855,7 @@ void FormulaDlg_Impl::FillListboxes()
         pFuncPage->SetCategory( pData->GetCatSel() );
         pFuncPage->SetFunction( pData->GetFuncSel() );
     }
-    FuncSelHdl(NULL);
+    FuncSelHdl(*pFuncPage);
 
     m_pHelper->setDispatcherLock( true );// Activate Modal-Mode
 
@@ -972,7 +972,7 @@ void FormulaDlg_Impl::ClearAllParas()
     pParaWin->ClearAll();
     m_pWndResult->SetText(OUString());
     m_pFtFuncName->SetText(OUString());
-    FuncSelHdl(NULL);
+    FuncSelHdl(*pFuncPage);
 
     if (pFuncPage->IsVisible())
     {
@@ -1052,7 +1052,7 @@ IMPL_LINK_TYPED( FormulaDlg_Impl, BtnHdl, Button*, pBtn, void )
             EditNextFunc( true );
         else
         {
-            DblClkHdl(pFuncPage);      //new
+            DblClkHdl(*pFuncPage);      //new
             m_pBtnForward->Enable(false); //new
         }
     }
@@ -1076,7 +1076,7 @@ IMPL_LINK_TYPED( FormulaDlg_Impl, BtnHdl, Button*, pBtn, void )
 
 // Handler for Listboxes
 
-IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
+IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, DblClkHdl, FuncPage&, void)
 {
     sal_Int32 nFunc = pFuncPage->GetFunction();
 
@@ -1104,8 +1104,6 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
 
     pParaWin->SetEdFocus(0);
     m_pBtnForward->Enable(false); //@New
-
-    return 0;
 }
 
 
@@ -1538,7 +1536,7 @@ void FormulaDlg_Impl::Update(const OUString& _sExp)
 {
     CalcStruct(_sExp);
     FillDialog();
-    FuncSelHdl(NULL);
+    FuncSelHdl(*pFuncPage);
 }
 void FormulaDlg_Impl::SetMeText(const OUString& _sText)
 {
@@ -1597,7 +1595,7 @@ IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, MatrixHdl, Button*, void)
     bUserMatrixFlag=true;
 }
 
-IMPL_LINK_NOARG(FormulaDlg_Impl, FuncSelHdl)
+IMPL_LINK_NOARG_TYPED(FormulaDlg_Impl, FuncSelHdl, FuncPage&, void)
 {
     if (   (pFuncPage->GetFunctionEntryCount() > 0)
         && (pFuncPage->GetFunction() != LISTBOX_ENTRY_NOTFOUND) )
@@ -1622,7 +1620,6 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FuncSelHdl)
         m_pFtFuncName->SetText( OUString() );
         m_pFtFuncDesc->SetText( OUString() );
     }
-    return 0;
 }
 
 void FormulaDlg_Impl::UpdateParaWin(const Selection& _rSelection, const OUString& _sRefStr)
