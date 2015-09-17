@@ -190,7 +190,7 @@ private:
     */
     DECL_LINK_TYPED(ClickHandler, ValueSet*, void);
     DECL_LINK(RightClickHandler, MouseEvent*);
-    DECL_LINK(StateChangeHandler, void *);
+    DECL_LINK_TYPED(StateChangeHandler, const OUString&, void);
     DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*);
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
     DECL_LINK_TYPED(OnMenuItemSelected, Menu*, bool);

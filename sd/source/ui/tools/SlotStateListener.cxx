@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 namespace sd { namespace tools {
 
 SlotStateListener::SlotStateListener (
-    Link<>& rCallback,
+    Link<const OUString&,void>& rCallback,
     const uno::Reference<frame::XDispatchProvider>& rxDispatchProvider,
     const OUString& rSlotName)
     : SlotStateListenerInterfaceBase(maMutex),
@@ -49,7 +49,7 @@ SlotStateListener::~SlotStateListener()
     ReleaseListeners();
 }
 
-void SlotStateListener::SetCallback (const Link<>& rCallback)
+void SlotStateListener::SetCallback (const Link<const OUString&,void>& rCallback)
 {
     ThrowIfDisposed();
 
@@ -90,7 +90,7 @@ void SlotStateListener::disposing()
 {
     ReleaseListeners();
     mxDispatchProviderWeak = uno::WeakReference<frame::XDispatchProvider>(NULL);
-    maCallback = Link<>();
+    maCallback = Link<const OUString&,void>();
 }
 
 util::URL SlotStateListener::MakeURL (const OUString& rSlotName)
@@ -123,7 +123,7 @@ void SlotStateListener::statusChanged (
     ThrowIfDisposed();
     OUString sSlotName (rState.FeatureURL.Complete);
     if (maCallback.IsSet())
-        maCallback.Call(&sSlotName);
+        maCallback.Call(sSlotName);
 }
 
 void SlotStateListener::ReleaseListeners()

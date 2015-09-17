@@ -51,7 +51,7 @@ public:
         explanations about the parameters.
     */
     SlotStateListener (
-        Link<>& rCallback,
+        Link<const OUString&,void>& rCallback,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XDispatchProvider>& rxDispatchProvider,
         const OUString& rSlotName);
@@ -66,7 +66,7 @@ public:
         Changing the callback does not release the listeners.
         @throws DisposedException
     */
-    void SetCallback (const Link<>& rCallback);
+    void SetCallback (const Link<const OUString&,void>& rCallback);
 
     /** Set the frame whose slots shall be observed.  When an object of this
         class is already observing slots of another frame then these
@@ -111,7 +111,7 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 private:
-    Link<> maCallback;
+    Link<const OUString&,void> maCallback;
 
     /** Remember the URLs that describe slots whose state changes we are
         listening to.

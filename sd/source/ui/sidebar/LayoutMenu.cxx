@@ -181,7 +181,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
     Window::SetHelpId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS);
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
 
-    Link<> aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
+    Link<const OUString&,void> aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
     mxListener = new ::sd::tools::SlotStateListener(
         aStateChangeLink,
         Reference<frame::XDispatchProvider>(mrBase.GetController()->getFrame(), UNO_QUERY),
@@ -635,10 +635,9 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
     }
 }
 
-IMPL_LINK_NOARG(LayoutMenu, StateChangeHandler)
+IMPL_LINK_NOARG_TYPED(LayoutMenu, StateChangeHandler, const OUString&, void)
 {
     InvalidateContent();
-    return 0;
 }
 
 IMPL_LINK_TYPED(LayoutMenu, OnMenuItemSelected, Menu*, pMenu, bool)
