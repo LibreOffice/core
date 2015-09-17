@@ -1483,6 +1483,9 @@ void ScTabView::MarkDataChanged()
 {
     // has to be called after making direct changes to mark data (not via MarkCursor etc)
 
+    ScRange aRange;
+    aViewData.GetMarkData().GetMarkArea( aRange );
+    MarkRange( aRange );
     UpdateSelectionOverlay();
 }
 
