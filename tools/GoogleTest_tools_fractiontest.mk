@@ -20,24 +20,29 @@
 #**************************************************************
 
 
-
-
-$(eval $(call gb_Module_Module,tools))
-
-$(eval $(call gb_Module_add_targets,tools,\
-    Executable_mkunroll \
-    Executable_rscdep \
-    Executable_so_checksum \
-    Executable_sspretty \
-    Library_tl \
-    Package_inc \
-    StaticLibrary_ooopathutils \
+$(eval $(call gb_GoogleTest_GoogleTest,tools_fractiontest))
+ 
+$(eval $(call gb_GoogleTest_add_exception_objects,tools_fractiontest, \
+	tools/test/tests \
 ))
-
-ifeq ($(ENABLE_UNIT_TESTS),YES)
-$(eval $(call gb_Module_add_check_targets,tools,\
-    GoogleTest_tools_fractiontest \
+ 
+$(eval $(call gb_GoogleTest_add_linked_libs,tools_fractiontest, \
+    tl \
+    sal \
+    sfx \
+    stl \
+    $(gb_STDLIBS) \
 ))
-endif
+ 
+$(eval $(call gb_GoogleTest_set_include,tools_fractiontest,\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/offuh \
+	-I$(OUTDIR)/inc \
+	-I$(SRCDIR)/tools/inc/pch \
+))
+ 
+$(eval $(call gb_GoogleTest_set_ldflags,tools_fractiontest,\
+    $$(LDFLAGS) \
+))
 
 # vim: set noet sw=4 ts=4:
