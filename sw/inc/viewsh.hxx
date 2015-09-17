@@ -449,7 +449,7 @@ public:
                           { return mpCareWindow ? mpCareWindow.get() : CareChildWin(rVSh); }
     static vcl::Window*   CareChildWin(SwViewShell& rVSh);
 
-    inline SfxViewShell   *GetSfxViewShell() { return mpSfxViewShell; }
+    inline SfxViewShell   *GetSfxViewShell() const { return mpSfxViewShell; }
     inline void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }
 
     // Selection of  Draw Engine has been changed.
