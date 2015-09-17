@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_5f41fc38",
+        "filename": "sc/source/ui/view/tabview3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1488,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-09-17T13:46:44Z",
+      "side": 1,
+      "message": "I think this is wrong if you take a look at the places where MarkDataChanged() is called and inspect what MarkRange() and the functions it calls do internally. Some of the functionality would be executed twice, which is unnecessary or might even conflict.\n\nFor example, calls to DoneBlockMode() or InitOwnBlockMode()/InitBlockMode() or SelectionChanged() or UpdateSelectionOverlay().",
+      "revId": "81078fc224188914b88474ca1f768b225ef3f844",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
