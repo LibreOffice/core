@@ -198,6 +198,7 @@ interface CellSelection
     SID_INSERT_POSTIT   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
     SID_EDIT_POSTIT   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
 
+    SID_UNICODE_NOTATION_TOGGLE [ ExecMethod = Execute; ]
     SID_COLLABORATION       [ ExecMethod = Execute; ]
     SID_TABOP               [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_CONSOLIDATE         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
