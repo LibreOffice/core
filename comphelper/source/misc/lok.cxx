@@ -17,6 +17,8 @@ namespace LibreOfficeKit
 
 static bool g_bActive(false);
 
+static bool g_bViewCallback(false);
+
 void setActive(bool bActive)
 {
     g_bActive = bActive;
@@ -25,6 +27,16 @@ void setActive(bool bActive)
 bool isActive()
 {
     return g_bActive;
+}
+
+void setViewCallback(bool bViewCallback)
+{
+    g_bViewCallback = bViewCallback;
+}
+
+bool isViewCallback()
+{
+    return g_bViewCallback;
 }
 
 static void (*pStatusIndicatorCallback)(void *data, statusIndicatorCallbackType type, int percent)(nullptr);
