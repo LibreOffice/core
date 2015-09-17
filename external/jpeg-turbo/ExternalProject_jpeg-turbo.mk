@@ -32,6 +32,7 @@ $(call gb_ExternalProject_get_state_target,jpeg-turbo,configure) :
 			--with-jpeg8 \
 			--without-java \
 			--without-turbojpeg \
+			CFLAGS='$(if $(debug),$(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS))' \
 	)
 
 # vim: set noet sw=4 ts=4:
