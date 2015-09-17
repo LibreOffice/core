@@ -20,8 +20,22 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SCUIASCIIOPT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SCUIASCIIOPT_HXX
 
-#include "asciiopt.hxx"
+#include <vcl/dialog.hxx>
 #include <svx/langbox.hxx>
+
+#include "asciiopt.hxx"
+
+class Button;
+class CheckBox;
+class ComboBox;
+class Edit;
+class FixedText;
+class ListBox;
+class NumericField;
+class RadioButton;
+
+class ScCsvTableBox;
+class SvxTextEncodingBox;
 
 class ScImportAsciiDlg : public ModalDialog
 {

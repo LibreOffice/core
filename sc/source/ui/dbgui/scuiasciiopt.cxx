@@ -19,11 +19,20 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+#include <svx/txencbox.hxx>
+#include <vcl/button.hxx>
+#include <vcl/combobox.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
+
 #include "global.hxx"
 #include "scresid.hxx"
 #include "impex.hxx"
 #include "scuiasciiopt.hxx"
 #include "asciiopt.hrc"
+#include "csvtablebox.hxx"
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>

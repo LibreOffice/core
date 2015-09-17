@@ -20,16 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_ASCIIOPT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_ASCIIOPT_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/field.hxx>
-#include <tools/stream.hxx>
-#include <svx/txencbox.hxx>
-#include "csvtablebox.hxx"
+#include <rtl/ustring.hxx>
 #include <i18nlangtag/lang.h>
+
+#include "csvcontrol.hxx"
 
 class ScAsciiOptions
 {

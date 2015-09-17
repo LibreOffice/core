@@ -18,15 +18,10 @@
  */
 
 #include "global.hxx"
-#include "scresid.hxx"
-#include "impex.hxx"
 #include "asciiopt.hxx"
 #include "asciiopt.hrc"
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
-#include <rtl/tencinfo.h>
-#include <unotools/transliterationwrapper.hxx>
-#include "editutil.hxx"
 
 static const sal_Char pStrFix[] = "FIX";
 static const sal_Char pStrMrg[] = "MRG";
