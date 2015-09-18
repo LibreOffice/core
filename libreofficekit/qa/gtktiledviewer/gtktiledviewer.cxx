@@ -194,12 +194,13 @@ static void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/)
 }
 
 /// Common initialization, regardless if it's just a new view or a full init.
-static void setupWidgetAndCreateWindow(GtkWidget* pDocView)
+static TiledWindow& setupWidgetAndCreateWindow(GtkWidget* pDocView)
 {
     setupDocView(pDocView);
     TiledWindow aWindow;
     aWindow.m_pDocView = pDocView;
-    createWindow(aWindow);
+    GtkWidget* pWindow = createWindow(aWindow);
+    return lcl_getTiledWindow(pWindow);
 }
 
 /// Creates a new view, i.e. no LOK init or document load.
@@ -208,7 +209,9 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
     GtkWidget* pDocView = lok_doc_view_new_from_widget(LOK_DOC_VIEW(rWindow.m_pDocView));
 
-    setupWidgetAndCreateWindow(pDocView);
+    TiledWindow& rNewWindow = setupWidgetAndCreateWindow(pDocView);
+    // Hide status bar that contains the unused progress bar.
+    gtk_widget_hide(rNewWindow.m_pStatusBar);
 }
 
 /// Creates a new model, i.e. LOK init and document load, one view implicitly.
