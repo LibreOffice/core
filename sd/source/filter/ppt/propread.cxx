@@ -289,6 +289,8 @@ void Section::GetDictionary(Dictionary& rDict)
     {
         sal_uInt32 nId(0), nSize(0);
         aStream.ReadUInt32( nId ).ReadUInt32( nSize );
+        if (mnTextEnc == RTL_TEXTENCODING_UCS2)
+            nSize >>= 1;
         if (!nSize)
             continue;
         OUString aString;
@@ -296,7 +298,6 @@ void Section::GetDictionary(Dictionary& rDict)
         {
             if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
             {
-                nSize >>= 1;
                 sal_Unicode* pWString = new sal_Unicode[nSize];
                 for (sal_uInt32 j = 0; j < nSize; ++j)
                     aStream.ReadUInt16(pWString[j]);
