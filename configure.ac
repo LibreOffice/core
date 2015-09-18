@@ -9052,7 +9052,7 @@ dnl Graphite
 dnl ===================================================================
 
 AC_MSG_CHECKING([whether to enable graphite support])
-if test $_os != Darwin -a $_os != Android -a $_os != iOS -a \( -z "$enable_graphite" -o "$enable_graphite" != no \); then
+if test -z "$enable_graphite" -o "$enable_graphite" != no ; then
     AC_MSG_RESULT([yes])
     ENABLE_GRAPHITE="TRUE"
     AC_DEFINE(ENABLE_GRAPHITE)
