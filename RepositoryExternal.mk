@@ -1247,7 +1247,7 @@ endif # ANDROID
 endif # SYSTEM_REDLAND
 
 
-ifneq ($(filter unx,$(GUIBASE))$(ENABLE_CAIRO_CANVAS),) # or
+ifneq ($(USING_X)$(ENABLE_CAIRO_CANVAS),) # or
 
 ifneq ($(SYSTEM_CAIRO),)
 
@@ -3308,7 +3308,7 @@ endif # ENABLE_EOT
 
 ### X11 stuff ###
 
-ifeq ($(GUIBASE),unx)
+ifeq ($(USING_X), TRUE)
 
 ifeq ($(XRANDR_DLOPEN),FALSE)
 
@@ -3344,7 +3344,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 endef
 
-endif # GUIBASE=unx
+endif # USING_X
 
 
 gb_ExternalProject__use_nss3:=
