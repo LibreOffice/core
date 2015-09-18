@@ -354,7 +354,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             aSel.nEndPos = nUtf16Pos;
                    }
 
-                    ToggleUnicodeCodepoint aToggle = ToggleUnicodeCodepoint();
+                    ToggleUnicodeCodepoint aToggle;
                     while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
                         --nUtf16Pos;
                     OUString sReplacement = aToggle.ReplacementString();

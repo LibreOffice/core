@@ -290,12 +290,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         case SID_UNICODE_NOTATION_TOGGLE:
         {
-            int nMaxUnits = 256;
-            if( rWrtSh.IsSelection() && !rWrtSh.IsMultiSelection() )
-                nMaxUnits = rWrtSh.GetSelText().getLength();
+            long nMaxUnits = 256;
+            sal_Int32 nSelLength = rWrtSh.GetSelText().getLength();
+            if( rWrtSh.IsSelection() && !rWrtSh.IsMultiSelection() && (nSelLength < nMaxUnits) )
+                nMaxUnits = nSelLength;
 
-            int index = 0;
-            ToggleUnicodeCodepoint aToggle = ToggleUnicodeCodepoint();
+            long index = 0;
+            ToggleUnicodeCodepoint aToggle;
             while( nMaxUnits-- && aToggle.AllowMoreInput(rWrtSh.GetChar(true, index-1)) )
                 --index;
 

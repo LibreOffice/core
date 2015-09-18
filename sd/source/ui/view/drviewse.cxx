@@ -840,14 +840,14 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_UNICODE_NOTATION_TOGGLE:
         {
-            if ( mpDrawView->IsTextEdit() )
+            if( mpDrawView->IsTextEdit() )
             {
                 OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-                if (pOLV)
+                if( pOLV )
                 {
                     OUString sInput = pOLV->GetSurroundingText();
                     ESelection aSel( pOLV->GetSelection() );
-                    if ( aSel.nStartPos > aSel.nEndPos )
+                    if( aSel.nStartPos > aSel.nEndPos )
                         aSel.nEndPos = aSel.nStartPos;
 
                     //calculate a valid end-position by reading logical characters
@@ -861,7 +861,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                             aSel.nEndPos = nUtf16Pos;
                     }
 
-                    ToggleUnicodeCodepoint aToggle = ToggleUnicodeCodepoint();
+                    ToggleUnicodeCodepoint aToggle;
                     while( nUtf16Pos && aToggle.AllowMoreInput( sInput[nUtf16Pos-1]) )
                         --nUtf16Pos;
                     OUString sReplacement = aToggle.ReplacementString();
