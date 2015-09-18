@@ -51,7 +51,7 @@ $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	$(if $(filter MSC,$(COM)),$(if $(MSVC_USE_DEBUG_RUNTIME),-DMSVC_PKG_DEBUG_RUNTIME)) \
 ))
 
-ifeq ($(GUIBASE),unx)
+ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	-DGUIBASE_UNX \
 ))
