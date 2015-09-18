@@ -89,7 +89,6 @@ const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
 
 #include <rtl/digest.h>
 
-#include <boost/scoped_ptr.hpp>
 #include <memory>
 
 using namespace formula;
@@ -950,7 +949,7 @@ class DynamicKernelSlidingArgument : public Base
 {
 public:
     DynamicKernelSlidingArgument( const ScCalcConfig& config, const std::string& s,
-        FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase>& CodeGen,
+        FormulaTreeNodeRef ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index = 0 ) :
         Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(NULL)
     {
@@ -1126,7 +1125,7 @@ protected:
     bool bIsStartFixed, bIsEndFixed;
     const formula::DoubleVectorRefToken* mpDVR;
     // from parent nodes
-    boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
+    std::shared_ptr<SlidingFunctionBase> mpCodeGen;
     // controls whether to invoke the reduction kernel during marshaling or not
     cl_mem mpClmem2;
 };
@@ -1136,7 +1135,7 @@ class DynamicKernelMixedSlidingArgument : public VectorRef
 {
 public:
     DynamicKernelMixedSlidingArgument( const ScCalcConfig& config, const std::string& s,
-        FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase>& CodeGen,
+        FormulaTreeNodeRef ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index = 0 ) :
         VectorRef(config, s, ft),
         mDoubleArgument(mCalcConfig, s, ft, CodeGen, index),
@@ -1250,7 +1249,7 @@ class ParallelReductionVectorRef : public Base
 {
 public:
     ParallelReductionVectorRef( const ScCalcConfig& config, const std::string& s,
-        FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase>& CodeGen,
+        FormulaTreeNodeRef ft, std::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index = 0 ) :
         Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(NULL)
     {
@@ -1663,7 +1662,7 @@ protected:
     bool bIsStartFixed, bIsEndFixed;
     const formula::DoubleVectorRefToken* mpDVR;
     // from parent nodes
-    boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
+    std::shared_ptr<SlidingFunctionBase> mpCodeGen;
     // controls whether to invoke the reduction kernel during marshaling or not
     cl_mem mpClmem2;
 };
@@ -2540,7 +2539,7 @@ public:
 
 private:
     SubArgumentsType mvSubArguments;
-    boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
+    std::shared_ptr<SlidingFunctionBase> mpCodeGen;
     cl_mem mpClmem2;
 };
 
@@ -2554,7 +2553,7 @@ DynamicKernelArgumentRef SoPHelper( const ScCalcConfig& config,
 template<class Base>
 DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, const std::string& s,
     const FormulaTreeNodeRef& ft,
-    boost::shared_ptr<SlidingFunctionBase>& pCodeGen,
+    std::shared_ptr<SlidingFunctionBase>& pCodeGen,
     int index )
 {
     //Black lists ineligible classes here ..

@@ -131,7 +131,6 @@
 
 #include <list>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -1566,7 +1565,7 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
 
         ScDocument& rDoc = pDocShell->GetDocument();
-        boost::scoped_ptr<ScRangeList> pUndoRanges;
+        std::unique_ptr<ScRangeList> pUndoRanges;
         if ( rDoc.HasUnoRefUndo() )
             pUndoRanges.reset(new ScRangeList( aRanges ));
 
@@ -2448,7 +2447,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                        formula::FormulaGrammar::GRAM_UNSPECIFIED :
                                        formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
 
-                                boost::scoped_ptr<ScValidationData> pNewData(
+                                std::unique_ptr<ScValidationData> pNewData(
                                         pValidObj->CreateValidationData( &rDoc, eGrammar ));
                                 sal_uLong nIndex = rDoc.AddValidationEntry( *pNewData );
                                 pNewData.reset();
@@ -2715,8 +2714,8 @@ void SAL_CALL ScCellRangesBase::setPropertyValues( const uno::Sequence< OUString
         }
 
         ScDocument& rDoc = pDocShell->GetDocument();
-        boost::scoped_ptr<ScPatternAttr> pOldPattern;
-        boost::scoped_ptr<ScPatternAttr> pNewPattern;
+        std::unique_ptr<ScPatternAttr> pOldPattern;
+        std::unique_ptr<ScPatternAttr> pNewPattern;
 
         for(i = 0; i < nCount; i++)
         {
@@ -2858,8 +2857,8 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL ScCellRangesBase::set
         }
 
         ScDocument& rDoc = pDocShell->GetDocument();
-        boost::scoped_ptr<ScPatternAttr> pOldPattern;
-        boost::scoped_ptr<ScPatternAttr> pNewPattern;
+        std::unique_ptr<ScPatternAttr> pOldPattern;
+        std::unique_ptr<ScPatternAttr> pNewPattern;
 
         sal_Int32 nFailed(0);
         for(i = 0; i < nCount; i++)
@@ -3080,7 +3079,7 @@ uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    boost::scoped_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
+    std::unique_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
     if ( pMemChart )
     {
         sal_Int32 nColCount = pMemChart->GetColCount();
@@ -3194,7 +3193,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getRowDescriptions()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    boost::scoped_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
+    std::unique_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
     if ( pMemChart )
     {
         sal_Int32 nRowCount = static_cast<sal_Int32>(pMemChart->GetRowCount());
@@ -3265,7 +3264,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesBase::getColumnDescriptions()
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    boost::scoped_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
+    std::unique_ptr<ScMemChart> pMemChart(CreateMemChart_Impl());
     if ( pMemChart )
     {
         sal_Int32 nColCount = pMemChart->GetColCount();
@@ -4088,7 +4087,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
                     for (; itr != itrEnd && *itr < nTabCount; ++itr)
                         if ( *itr != nTab && bUndo)
                             pUndoDoc->AddUndoTab( *itr, *itr );
-                    boost::scoped_ptr<ScMarkData> pUndoMark;
+                    std::unique_ptr<ScMarkData> pUndoMark;
                     if (bUndo)
                         pUndoMark.reset(new ScMarkData(aMark));
 

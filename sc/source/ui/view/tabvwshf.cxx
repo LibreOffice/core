@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "scitems.hxx"
 #include <sfx2/request.hxx>
@@ -53,7 +53,7 @@
 
 #include <vector>
 
-using ::boost::scoped_ptr;
+using std::unique_ptr;
 using namespace com::sun::star;
 
 void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
@@ -132,7 +132,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    boost::scoped_ptr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
+                    std::unique_ptr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     OUString aTabName;
@@ -200,7 +200,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    boost::scoped_ptr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetDialogParent(), rViewData,
+                    std::unique_ptr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetDialogParent(), rViewData,
                         nTabSelCount, nSlot == FID_INS_TABLE_EXT));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     if ( RET_OK == pDlg->Execute() )
@@ -372,7 +372,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    boost::scoped_ptr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
+                    std::unique_ptr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
                         GetDialogParent(), aDlgTitle, OUString(ScResId(SCSTR_NAME)),
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
                         pHelpId));
@@ -497,7 +497,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    boost::scoped_ptr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetDialogParent(),
+                    std::unique_ptr<AbstractScMoveTableDlg> pDlg(pFact->CreateScMoveTableDlg(GetDialogParent(),
                         aDefaultName));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
@@ -664,7 +664,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if ( nTabSelCount > 1 )
                     {
-                        scoped_ptr<ScUndoTabColorInfo::List>
+                        std::unique_ptr<ScUndoTabColorInfo::List>
                             pTabColorList(new ScUndoTabColorInfo::List);
                         ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
                         for (; itr != itrEnd; ++itr)
@@ -696,7 +696,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-                    boost::scoped_ptr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
+                    std::unique_ptr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
                                                                 GetDialogParent(),
                                                                 OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
                                                                 OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)),
@@ -709,7 +709,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         {
                             Color aSelectedColor;
                             pDlg->GetSelectedColor(aSelectedColor);
-                            scoped_ptr<ScUndoTabColorInfo::List>
+                            std::unique_ptr<ScUndoTabColorInfo::List>
                                 pTabColorList(new ScUndoTabColorInfo::List);
                             if ( nTabSelCount > 1 )
                             {
@@ -757,7 +757,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pDlgFactory = SvxAbstractDialogFactory::Create();
                     if (pDlgFactory)
                     {
-                        boost::scoped_ptr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
+                        std::unique_ptr<VclAbstractDialog> pDialog( pDlgFactory->CreateSvxMacroAssignDlg(
                             GetDialogParent(), xFrame, false, xEvents, 0 ) );
                         if ( pDialog.get() && pDialog->Execute() == RET_OK )
                         {

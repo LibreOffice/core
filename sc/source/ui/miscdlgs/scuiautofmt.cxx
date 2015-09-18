@@ -47,7 +47,6 @@
 #include "scuiautofmt.hxx"
 #include "scresid.hxx"
 #include "document.hxx"
-#include <boost/scoped_ptr.hpp>
 
 // AutoFormat-Dialog:
 

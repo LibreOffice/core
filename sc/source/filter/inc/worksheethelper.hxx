@@ -164,7 +164,7 @@ struct ValidationModel
 };
 
 class WorksheetGlobals;
-typedef ::boost::shared_ptr< WorksheetGlobals > WorksheetGlobalsRef;
+typedef std::shared_ptr< WorksheetGlobals > WorksheetGlobalsRef;
 
 class IWorksheetProgress {
 public:

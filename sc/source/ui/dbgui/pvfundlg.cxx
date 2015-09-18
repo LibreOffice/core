@@ -39,7 +39,6 @@
 #include "dputil.hxx"
 
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::sheet;
 

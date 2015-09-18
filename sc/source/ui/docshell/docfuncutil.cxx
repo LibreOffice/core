@@ -74,7 +74,7 @@ ScDocument* DocFuncUtil::createDeleteContentsUndoDoc(
 void DocFuncUtil::addDeleteContentsUndo(
     svl::IUndoManager* pUndoMgr, ScDocShell* pDocSh, const ScMarkData& rMark,
     const ScRange& rRange, ScDocument* pUndoDoc, InsertDeleteFlags nFlags,
-    const boost::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
+    const std::shared_ptr<ScSimpleUndo::DataSpansType>& pSpans,
     bool bMulti, bool bDrawUndo )
 {
     std::unique_ptr<ScUndoDeleteContents> pUndo(

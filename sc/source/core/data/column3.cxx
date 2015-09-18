@@ -50,7 +50,7 @@
 
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <mdds/flat_segment_tree.hpp>
 
@@ -423,7 +423,7 @@ void ScColumn::AttachNewFormulaCell(
     {
         case sc::ConvertToGroupListening:
         {
-            boost::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*pDocument));
+            std::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*pDocument));
             sc::StartListeningContext aStartCxt(*pDocument, pPosSet);
             sc::EndListeningContext aEndCxt(*pDocument, pPosSet);
             SCROW nRow = aPos.first->position + aPos.second;

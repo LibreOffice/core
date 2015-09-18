@@ -40,7 +40,7 @@
 #include "globstr.hrc"
 #include "markdata.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -82,7 +82,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
     const ScPatternAttr* pPattern = NULL;
     const ScPatternAttr* pLastPattern = NULL;
 
-    boost::scoped_ptr<SfxItemSet> pEditDefaults(new SfxItemSet(GetEmptyItemSet()));
+    std::unique_ptr<SfxItemSet> pEditDefaults(new SfxItemSet(GetEmptyItemSet()));
 
     if( IsModified() )
     {
@@ -112,7 +112,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
 
                 if (eCellType == CELLTYPE_EDIT)
                 {
-                    boost::scoped_ptr<EditTextObject> pEditObj(CreateTextObject());
+                    std::unique_ptr<EditTextObject> pEditObj(CreateTextObject());
                     mrDoc.SetEditText(aPos, *pEditObj, GetEditTextObjectPool());
                 }
                 else

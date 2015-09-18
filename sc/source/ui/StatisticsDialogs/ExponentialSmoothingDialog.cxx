@@ -78,7 +78,7 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
     // Exponential Smoothing
     output.push();
 
-    boost::scoped_ptr<DataRangeIterator> pIterator;
+    std::unique_ptr<DataRangeIterator> pIterator;
     if (mGroupedBy == BY_COLUMN)
         pIterator.reset(new DataRangeByColumnIterator(mInputRange));
     else

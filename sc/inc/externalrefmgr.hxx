@@ -34,7 +34,7 @@
 #include <formula/token.hxx>
 #include <osl/mutex.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -91,7 +91,7 @@ class ScExternalRefCache
 {
 public:
     typedef ::formula::FormulaTokenRef          TokenRef;
-    typedef ::boost::shared_ptr<ScTokenArray>   TokenArrayRef;
+    typedef std::shared_ptr<ScTokenArray>   TokenArrayRef;
 
     struct TableName
     {
@@ -198,7 +198,7 @@ public:
         ReferencedFlag                  meReferenced;
     };
 
-    typedef ::boost::shared_ptr<Table> TableTypeRef;
+    typedef std::shared_ptr<Table> TableTypeRef;
     typedef std::unordered_map< OUString, size_t, OUStringHash>
         TableNameIndexMap;
 

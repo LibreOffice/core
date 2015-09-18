@@ -235,7 +235,7 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
 
     VclPtr<PushButton> maBtOptions;
 
-    boost::scoped_ptr<ScDataBarFormatData> mpDataBarData;
+    std::unique_ptr<ScDataBarFormatData> mpDataBarData;
 
     ScFormatEntry* createDatabarEntry() const;
 

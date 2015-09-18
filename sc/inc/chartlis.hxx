@@ -27,12 +27,11 @@
 #include "token.hxx"
 #include "externalrefmgr.hxx"
 
-#include <vector>
-
-#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 class ScDocument;
 class ScChartUnoData;
@@ -62,8 +61,8 @@ public:
 
 private:
 
-    boost::scoped_ptr<ExternalRefListener> mpExtRefListener;
-    boost::scoped_ptr<std::vector<ScTokenRef> > mpTokens;
+    std::unique_ptr<ExternalRefListener> mpExtRefListener;
+    std::unique_ptr<std::vector<ScTokenRef> > mpTokens;
 
     OUString maName;
     ScChartUnoData* pUnoData;

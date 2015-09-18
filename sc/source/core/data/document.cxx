@@ -100,10 +100,10 @@
 
 #include <formula/vectortoken.hxx>
 
-#include <map>
 #include <limits>
+#include <map>
+#include <memory>
 #include <boost/checked_delete.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include "mtvelements.hxx"
 
@@ -2468,7 +2468,7 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
 {
     if (nInsFlag & IDF_CONTENTS)
     {
-        boost::shared_ptr<sc::ColumnBlockPositionSet> pSet(
+        std::shared_ptr<sc::ColumnBlockPositionSet> pSet(
             new sc::ColumnBlockPositionSet(*this));
 
         sc::StartListeningContext aStartCxt(*this, pSet);
@@ -3118,7 +3118,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
         SCROW nStartRow = rSrcArea.aStart.Row();
         SCCOL nEndCol = rSrcArea.aEnd.Col();
         SCROW nEndRow = rSrcArea.aEnd.Row();
-        boost::scoped_ptr<ScDocument> pMixDoc;
+        std::unique_ptr<ScDocument> pMixDoc;
         bool bDoMix = ( bSkipEmpty || nFunction ) && ( nFlags & IDF_CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();
@@ -3175,7 +3175,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 
     if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab])
     {
-        boost::scoped_ptr<ScDocument> pMixDoc;
+        std::unique_ptr<ScDocument> pMixDoc;
         bool bDoMix = ( bSkipEmpty || nFunction ) && ( nFlags & IDF_CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();

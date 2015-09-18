@@ -20,17 +20,16 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XIESCHER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XIESCHER_HXX
 
-#include <vector>
-#include <map>
 #include <filter/msfilter/msdffimp.hxx>
 #include <vcl/graph.hxx>
 #include "xlescher.hxx"
 #include "xiroot.hxx"
 #include "xistring.hxx"
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <oox/ole/olehelper.hxx>
 #include <rtl/ustring.hxx>
+#include <map>
+#include <memory>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace drawing { class XShape; }
@@ -48,7 +47,7 @@ class XclImpDrawing;
 // Drawing objects ============================================================
 
 class XclImpDrawObjBase;
-typedef boost::shared_ptr< XclImpDrawObjBase > XclImpDrawObjRef;
+typedef std::shared_ptr< XclImpDrawObjBase > XclImpDrawObjRef;
 
 /** Base class for drawing objects (OBJ records). */
 class XclImpDrawObjBase : protected XclImpRoot
@@ -206,13 +205,13 @@ private:
 class XclImpDrawObjVector
 {
 private:
-    ::std::vector< XclImpDrawObjRef > mObjs;
+    std::vector< XclImpDrawObjRef > mObjs;
 
 public:
     inline explicit     XclImpDrawObjVector() : mObjs() {}
 
-    ::std::vector< XclImpDrawObjRef >::const_iterator begin() const { return mObjs.begin(); }
-    ::std::vector< XclImpDrawObjRef >::const_iterator end() const { return mObjs.end(); }
+    std::vector< XclImpDrawObjRef >::const_iterator begin() const { return mObjs.begin(); }
+    std::vector< XclImpDrawObjRef >::const_iterator end() const { return mObjs.end(); }
     void push_back(const XclImpDrawObjRef& rObj) { mObjs.push_back(rObj); }
 
     /** Tries to insert the passed object into the last group or appends it. */
@@ -356,7 +355,7 @@ protected:
     virtual SdrObject*  DoCreateSdrObj( XclImpDffConverter& rDffConv, const Rectangle& rAnchorRect ) const SAL_OVERRIDE;
 
 protected:
-    typedef ::std::vector< Point > PointVector;
+    typedef std::vector< Point > PointVector;
     PointVector         maCoords;       /// Coordinates relative to bounding rectangle.
     sal_uInt16          mnPolyFlags;    /// Additional flags.
     sal_uInt16          mnPointCount;   /// Polygon point count.
@@ -429,7 +428,7 @@ private:
     void                FinalizeTabChart();
 
 private:
-    typedef boost::shared_ptr< XclImpChart > XclImpChartRef;
+    typedef std::shared_ptr< XclImpChart > XclImpChartRef;
 
     XclImpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
     bool                mbOwnTab;       /// true = own sheet; false = embedded object.
@@ -483,7 +482,7 @@ protected:
     void ApplySheetLinkProps() const;
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                                    mxShape;        /// The UNO wrapper of the control shape.
-    boost::shared_ptr< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
+    std::shared_ptr< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
 private:
     /** Reads a list of cell ranges from a formula at the current stream position. */
     void                ReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm );
@@ -492,7 +491,7 @@ private:
 
 private:
     const XclImpRoot&            mrRoot;     /// Not derived from XclImpRoot to allow multiple inheritance.
-    boost::shared_ptr< ScRange > mxSrcRange; /// Source data range in the Calc document.
+    std::shared_ptr< ScRange > mxSrcRange; /// Source data range in the Calc document.
     XclCtrlBindMode              meBindMode; /// Value binding mode.
 };
 
@@ -898,8 +897,8 @@ private:
         inline void         Set( SdrObject* pSdrObj, sal_uInt32 nDffFlags )
                                 { mpSdrObj = pSdrObj; mnDffFlags = nDffFlags; }
     };
-    typedef ::std::map< sal_uInt32, XclImpSdrInfo > XclImpSdrInfoMap;
-    typedef ::std::map< SdrObject*, sal_uInt32 >    XclImpSdrObjMap;
+    typedef std::map< sal_uInt32, XclImpSdrInfo > XclImpSdrInfoMap;
+    typedef std::map< SdrObject*, sal_uInt32 >    XclImpSdrObjMap;
 
     XclImpSdrInfoMap    maSdrInfoMap;   /// Maps shape IDs to SdrObjects and flags.
     XclImpSdrObjMap     maSdrObjMap;    /// Maps SdrObjects to shape IDs.
@@ -1026,9 +1025,9 @@ private:
     void                InitControlForm();
 
 private:
-    typedef boost::shared_ptr< ScfProgressBar >     ScfProgressBarRef;
-    typedef boost::shared_ptr< XclImpDffConvData >  XclImpDffConvDataRef;
-    typedef ::std::vector< XclImpDffConvDataRef >   XclImpDffConvDataStack;
+    typedef std::shared_ptr< ScfProgressBar >     ScfProgressBarRef;
+    typedef std::shared_ptr< XclImpDffConvData >  XclImpDffConvDataRef;
+    typedef std::vector< XclImpDffConvDataRef >   XclImpDffConvDataStack;
 
     const OUString maStdFormName;    /// Standard name of control forms.
     tools::SvRef<SotStorageStream> mxCtlsStrm;         /// The 'Ctls' stream for OCX form controls.
@@ -1095,10 +1094,10 @@ private:
     void                ReadTxo( XclImpStream& rStrm );
 
 private:
-    typedef ::std::map< sal_Size, XclImpDrawObjRef >    XclImpObjMap;
-    typedef ::std::map< sal_uInt16, XclImpDrawObjRef >  XclImpObjMapById;
-    typedef boost::shared_ptr< XclImpObjTextData >      XclImpObjTextRef;
-    typedef ::std::map< sal_Size, XclImpObjTextRef >    XclImpObjTextMap;
+    typedef std::map< sal_Size, XclImpDrawObjRef >    XclImpObjMap;
+    typedef std::map< sal_uInt16, XclImpDrawObjRef >  XclImpObjMapById;
+    typedef std::shared_ptr< XclImpObjTextData >      XclImpObjTextRef;
+    typedef std::map< sal_Size, XclImpObjTextRef >    XclImpObjTextMap;
 
     XclImpDrawObjVector maRawObjs;          /// BIFF5 objects without DFF data.
     SvMemoryStream      maDffStrm;          /// Copy of the DFF page stream in memory.
@@ -1170,9 +1169,9 @@ public:
     OUString GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId );
 
 private:
-    typedef ::std::map< sal_uInt16, OUString >          DefObjNameMap;
-    typedef boost::shared_ptr< XclImpSheetDrawing >     XclImpSheetDrawingRef;
-    typedef ::std::map< SCTAB, XclImpSheetDrawingRef >  XclImpSheetDrawingMap;
+    typedef std::map< sal_uInt16, OUString >          DefObjNameMap;
+    typedef std::shared_ptr< XclImpSheetDrawing >     XclImpSheetDrawingRef;
+    typedef std::map< SCTAB, XclImpSheetDrawingRef >  XclImpSheetDrawingMap;
 
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxOleCtrlNameOverride;
     DefObjNameMap       maDefObjNames;      /// Default base names for all object types.
@@ -1203,7 +1202,7 @@ public:
     void                FillToItemSet( SfxItemSet& rItemSet ) const;
 
 private:
-    typedef ::boost::scoped_ptr<SvMemoryStream> SvMemoryStreamPtr;
+    typedef std::unique_ptr<SvMemoryStream> SvMemoryStreamPtr;
 
     SvMemoryStream      maDummyStrm;    /// Dummy DGG stream for DFF manager.
     XclImpSimpleDffConverter maDffConv; /// DFF converter used to resolve palette colors.

@@ -41,7 +41,7 @@
 
 #define ScPivotShell
 #include "scslots.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 TYPEINIT1( ScPivotShell, SfxShell );
 
@@ -108,7 +108,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                boost::scoped_ptr<AbstractScPivotFilterDlg> pDlg(pFact->CreateScPivotFilterDlg(
+                std::unique_ptr<AbstractScPivotFilterDlg> pDlg(pFact->CreateScPivotFilterDlg(
                     pViewShell->GetDialogParent(), aArgSet, nSrcTab));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
 

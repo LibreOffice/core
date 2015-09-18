@@ -11,7 +11,6 @@
 #define INCLUDED_SC_INC_COLORSCALE_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <formula/grammar.hxx>
 #include <tools/color.hxx>
 #include "rangelst.hxx"
@@ -20,6 +19,7 @@
 #include <svl/listener.hxx>
 #include <svl/broadcast.hxx>
 
+#include <memory>
 #include <vector>
 
 //TODO: merge this with conditio.hxx
@@ -50,8 +50,8 @@ class SC_DLLPUBLIC ScColorScaleEntry
 private:
     double mnVal;
     Color maColor;
-    boost::scoped_ptr<ScFormulaCell> mpCell;
-    boost::scoped_ptr<ScFormulaListener> mpListener;
+    std::unique_ptr<ScFormulaCell> mpCell;
+    std::unique_ptr<ScFormulaListener> mpListener;
     ScColorScaleEntryType meType;
 
 public:
@@ -133,7 +133,7 @@ struct SC_DLLPUBLIC ScDataBarFormatData
      *
      * Default color is 0xFF0000, this value is not set
      */
-    boost::scoped_ptr<Color> mpNegativeColor;
+    std::unique_ptr<Color> mpNegativeColor;
     /**
      * Color of the axis if used
      * Default color is black
@@ -177,8 +177,8 @@ struct SC_DLLPUBLIC ScDataBarFormatData
      */
     bool mbOnlyBar;
 
-    boost::scoped_ptr<ScColorScaleEntry> mpUpperLimit;
-    boost::scoped_ptr<ScColorScaleEntry> mpLowerLimit;
+    std::unique_ptr<ScColorScaleEntry> mpUpperLimit;
+    std::unique_ptr<ScColorScaleEntry> mpLowerLimit;
 };
 
 enum ScIconSetType
@@ -242,7 +242,7 @@ private:
     {
         std::vector<double> maValues;
     };
-    mutable boost::scoped_ptr<ScColorFormatCache> mpCache;
+    mutable std::unique_ptr<ScColorFormatCache> mpCache;
 };
 
 typedef std::vector<std::unique_ptr<ScColorScaleEntry>> ScColorScaleEntries;
@@ -323,7 +323,7 @@ private:
     double getMin(double nMin, double nMax) const;
     double getMax(double nMin, double nMax) const;
 
-    boost::scoped_ptr<ScDataBarFormatData> mpFormatData;
+    std::unique_ptr<ScDataBarFormatData> mpFormatData;
 };
 
 struct ScIconSetFormatData
@@ -396,7 +396,7 @@ private:
     double GetMaxValue() const;
     double CalcValue(double nMin, double nMax, ScIconSetFormat::const_iterator& itr) const;
 
-    boost::scoped_ptr<ScIconSetFormatData> mpFormatData;
+    std::unique_ptr<ScIconSetFormatData> mpFormatData;
 };
 
 #endif

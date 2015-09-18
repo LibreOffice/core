@@ -19,9 +19,6 @@
 
 #include <sal/config.h>
 
-#include <utility>
-
-#include <boost/shared_ptr.hpp>
 #include <comphelper/string.hxx>
 #include <o3tl/ptr_container.hxx>
 
@@ -68,7 +65,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <memory>
+#include <utility>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -491,7 +488,7 @@ void ScHTMLLayoutParser::Adjust()
 {
     xLockedList->RemoveAll();
 
-    ::std::stack< ScHTMLAdjustStackEntry* > aStack;
+    std::stack< ScHTMLAdjustStackEntry* > aStack;
     ScHTMLAdjustStackEntry* pS = NULL;
     sal_uInt16 nTab = 0;
     SCCOL nLastCol = SCCOL_MAX;
@@ -642,7 +639,7 @@ sal_uInt16 ScHTMLLayoutParser::GetWidth( ScEEParseEntry* pE )
 {
     if ( pE->nWidth )
         return pE->nWidth;
-    sal_Int32 nTmp = ::std::min( static_cast<sal_Int32>( pE->nCol -
+    sal_Int32 nTmp = std::min( static_cast<sal_Int32>( pE->nCol -
                 nColCntStart + pE->nColOverlap),
             static_cast<sal_Int32>( pLocalColOffset->size() - 1));
     SCCOL nPos = (nTmp < 0 ? 0 : static_cast<SCCOL>(nTmp));
@@ -1718,7 +1715,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
 
 template< typename Type >
 inline Type getLimitedValue( const Type& rValue, const Type& rMin, const Type& rMax )
-{ return ::std::max( ::std::min( rValue, rMax ), rMin ); }
+{ return std::max( std::min( rValue, rMax ), rMin ); }
 
 ScHTMLEntry::ScHTMLEntry( const SfxItemSet& rItemSet, ScHTMLTableId nTableId ) :
     ScEEParseEntry( rItemSet ),
@@ -1782,8 +1779,8 @@ void ScHTMLEntry::Strip( const EditEngine& rEditEngine )
 class ScHTMLTableMap
 {
 private:
-    typedef ::boost::shared_ptr< ScHTMLTable >          ScHTMLTablePtr;
-    typedef ::std::map< ScHTMLTableId, ScHTMLTablePtr > ScHTMLTableStdMap;
+    typedef std::shared_ptr< ScHTMLTable >          ScHTMLTablePtr;
+    typedef std::map< ScHTMLTableId, ScHTMLTablePtr > ScHTMLTableStdMap;
 
 public:
     typedef ScHTMLTableStdMap::iterator             iterator;
@@ -1940,7 +1937,7 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const ImportInfo& rInfo, bo
 ScHTMLTable::ScHTMLTable(
     SfxItemPool& rPool,
     EditEngine& rEditEngine,
-    ::std::vector< ScEEParseEntry* >& rEEParseList,
+    std::vector< ScEEParseEntry* >& rEEParseList,
     ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser
 ) :
     mpParentTable( 0 ),
@@ -2140,7 +2137,7 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
     {
         // read needed options from the <td> tag
         ScHTMLSize aSpanSize( 1, 1 );
-        ::std::unique_ptr<OUString> pValStr, pNumStr;
+        std::unique_ptr<OUString> pValStr, pNumStr;
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
         HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
         sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -2263,8 +2260,8 @@ SCCOLROW ScHTMLTable::GetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellPos ) cons
 SCCOLROW ScHTMLTable::GetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellBegin, SCCOLROW nCellEnd ) const
 {
     const ScSizeVec& rSizes = maCumSizes[ eOrient ];
-    size_t nBeginIdx = static_cast< size_t >( ::std::max< SCCOLROW >( nCellBegin, 0 ) );
-    size_t nEndIdx = static_cast< size_t >( ::std::min< SCCOLROW >( nCellEnd, static_cast< SCCOLROW >( rSizes.size() ) ) );
+    size_t nBeginIdx = static_cast< size_t >( std::max< SCCOLROW >( nCellBegin, 0 ) );
+    size_t nEndIdx = static_cast< size_t >( std::min< SCCOLROW >( nCellEnd, static_cast< SCCOLROW >( rSizes.size() ) ) );
     if (nBeginIdx >= nEndIdx ) return 0;
     return rSizes[ nEndIdx - 1 ] - ((nBeginIdx == 0) ? 0 : rSizes[ nBeginIdx - 1 ]);
 }
@@ -2499,8 +2496,8 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
     }
 
     // adjust table size
-    maSize.mnCols = ::std::max< SCCOL >( maSize.mnCols, aNewRange.aEnd.Col() + 1 );
-    maSize.mnRows = ::std::max< SCROW >( maSize.mnRows, aNewRange.aEnd.Row() + 1 );
+    maSize.mnCols = std::max< SCCOL >( maSize.mnCols, aNewRange.aEnd.Col() + 1 );
+    maSize.mnRows = std::max< SCROW >( maSize.mnRows, aNewRange.aEnd.Row() + 1 );
 }
 
 void ScHTMLTable::ImplRowOn()
@@ -2632,7 +2629,7 @@ void ScHTMLTable::CalcNeededDocSize(
         ++nCellPos;
     }
     // set remaining needed size to last column/row
-    nRealDocSize -= ::std::min< SCCOLROW >( nRealDocSize - 1, nDiffSize );
+    nRealDocSize -= std::min< SCCOLROW >( nRealDocSize - 1, nDiffSize );
     SetDocSize( eOrient, nCellPos, nRealDocSize );
 }
 
@@ -2710,7 +2707,7 @@ void ScHTMLTable::RecalcDocSize()
                     ScHTMLTable* pTable = GetExistingTable( (*aListIter)->GetTableId() );
                     // find entry with maximum width
                     if( bProcessColWidth && pTable )
-                        aDocSize.mnCols = ::std::max( aDocSize.mnCols, static_cast< SCCOL >( pTable->GetDocSize( tdCol ) ) );
+                        aDocSize.mnCols = std::max( aDocSize.mnCols, static_cast< SCCOL >( pTable->GetDocSize( tdCol ) ) );
                     // add up height of each entry
                     if( bProcessRowHeight )
                         aDocSize.mnRows += pTable ? pTable->GetDocSize( tdRow ) : 1;
@@ -2811,7 +2808,7 @@ void ScHTMLTable::RecalcDocPos( const ScHTMLPos& rBasePos )
 ScHTMLGlobalTable::ScHTMLGlobalTable(
     SfxItemPool& rPool,
     EditEngine& rEditEngine,
-    ::std::vector< ScEEParseEntry* >& rEEParseList,
+    std::vector< ScEEParseEntry* >& rEEParseList,
     ScHTMLTableId& rnUnusedId,
     ScHTMLParser* pParser
 ) :

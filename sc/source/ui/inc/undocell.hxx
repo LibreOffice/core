@@ -25,8 +25,7 @@
 #include "cellvalue.hxx"
 #include <cellvalues.hxx>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class ScDocShell;
 class ScPatternAttr;
@@ -72,11 +71,11 @@ private:
     ScPatternAttr*  pOldPattern;
     ScPatternAttr*  pNewPattern;
     ScPatternAttr*  pApplyPattern;
-    ::boost::shared_ptr<EditTextObject> pOldEditData;
-    ::boost::shared_ptr<EditTextObject> pNewEditData;
+    std::shared_ptr<EditTextObject> pOldEditData;
+    std::shared_ptr<EditTextObject> pNewEditData;
     bool            bIsAutomatic;
 
-    void            DoChange( const ScPatternAttr* pWhichPattern, const ::boost::shared_ptr<EditTextObject>& pEditData ) const;
+    void            DoChange( const ScPatternAttr* pWhichPattern, const std::shared_ptr<EditTextObject>& pEditData ) const;
 };
 
 class ScUndoEnterData: public ScSimpleUndo
@@ -113,7 +112,7 @@ private:
     ValuesType maOldValues;
 
     OUString  maNewString;
-    boost::scoped_ptr<EditTextObject> mpNewEditData;
+    std::unique_ptr<EditTextObject> mpNewEditData;
     sal_uLong mnEndChangeAction;
     ScAddress maPos;
 

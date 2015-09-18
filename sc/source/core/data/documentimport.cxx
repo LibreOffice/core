@@ -330,7 +330,7 @@ void ScDocumentImport::setMatrixCells(
         // Reference in each cell must point to the origin cell relative to the current cell.
         aRefData.SetAddress(rBasePos, aPos);
         *t->GetSingleRef() = aRefData;
-        boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
+        std::unique_ptr<ScTokenArray> pTokArr(aArr.Clone());
         pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, MM_REFERENCE);
         pBlockPos->miCellPos =
             rCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
@@ -350,7 +350,7 @@ void ScDocumentImport::setMatrixCells(
             aPos.SetRow(nRow);
             aRefData.SetAddress(rBasePos, aPos);
             *t->GetSingleRef() = aRefData;
-            boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
+            std::unique_ptr<ScTokenArray> pTokArr(aArr.Clone());
             pCell = new ScFormulaCell(&mpImpl->mrDoc, aPos, *pTokArr, eGram, MM_REFERENCE);
             pBlockPos->miCellPos =
                 rColCells.set(pBlockPos->miCellPos, aPos.Row(), pCell);
@@ -503,7 +503,7 @@ public:
         mpImpl(new Impl(MAXROWCOUNT, mrDocImpl.mnDefaultScriptNumeric))
     {}
 
-    boost::shared_ptr<Impl> mpImpl;
+    std::shared_ptr<Impl> mpImpl;
 
     void operator() (const sc::CellStoreType::value_type& node)
     {

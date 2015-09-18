@@ -47,11 +47,10 @@
 #include <svl/itemprop.hxx>
 
 #include <list>
+#include <memory>
 #include <unordered_set>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 
 class ScDocument;
 
@@ -453,9 +452,9 @@ private:
     bool                        m_bIncludeHiddenCells;
 
     // internals
-    typedef boost::scoped_ptr<std::vector<ScTokenRef> >  TokenListPtr;
-    typedef boost::scoped_ptr<std::vector<sal_uInt32> >  RangeIndexMapPtr;
-    typedef boost::scoped_ptr<ExternalRefListener>       ExtRefListenerPtr;
+    typedef std::unique_ptr<std::vector<ScTokenRef> >  TokenListPtr;
+    typedef std::unique_ptr<std::vector<sal_uInt32> >  RangeIndexMapPtr;
+    typedef std::unique_ptr<ExternalRefListener>       ExtRefListenerPtr;
 
     sal_Int64                   m_nObjectId;
     ScDocument*                 m_pDocument;
@@ -465,7 +464,7 @@ private:
     com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
     SfxItemPropertySet          m_aPropSet;
 
-    boost::scoped_ptr<HiddenRangeListener> m_pHiddenListener;
+    std::unique_ptr<HiddenRangeListener> m_pHiddenListener;
 
     ScLinkListener*             m_pValueListener;
     XModifyListenerArr_Impl     m_aValueListeners;

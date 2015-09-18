@@ -308,7 +308,7 @@ bool ScFormulaDlg::Close()
 
 bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult )
 {
-    boost::scoped_ptr<ScSimpleFormulaCalculator> pFCell( new ScSimpleFormulaCalculator( pDoc, aCursorPos, rStrExp ) );
+    std::unique_ptr<ScSimpleFormulaCalculator> pFCell( new ScSimpleFormulaCalculator( pDoc, aCursorPos, rStrExp ) );
     pFCell->SetLimitString(true);
 
     // HACK! to avoid neither #REF! from ColRowNames

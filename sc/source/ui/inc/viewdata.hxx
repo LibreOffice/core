@@ -25,7 +25,7 @@
 #include "viewopti.hxx"
 #include "docsh.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define SC_SIZE_NONE        65535
 const SCCOL SC_TABSTART_NONE = SCCOL_MAX;
@@ -157,7 +157,7 @@ private:
     double              nPPTX, nPPTY;               // Scaling factors
 
     ::std::vector<ScViewDataTable*> maTabData;
-    boost::scoped_ptr<ScMarkData> mpMarkData;
+    std::unique_ptr<ScMarkData> mpMarkData;
     ScViewDataTable*    pThisTab;                   // Data of the displayed sheet
     ScDocShell*         pDocShell;
     ScDocument*         pDoc;

@@ -122,7 +122,7 @@ using ::com::sun::star::chart2::data::LabeledDataSequence;
 
 using ::formula::FormulaToken;
 using ::formula::StackVar;
-using ::boost::shared_ptr;
+using ::std::shared_ptr;
 using ::std::pair;
 using ::std::unique_ptr;
 

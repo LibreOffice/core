@@ -308,7 +308,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit*, pEdit)
 
     ScCompiler aComp( mpDoc, maPos );
     aComp.SetGrammar( mpDoc->GetGrammar() );
-    boost::scoped_ptr<ScTokenArray> ta(aComp.CompileString(aFormula));
+    std::unique_ptr<ScTokenArray> ta(aComp.CompileString(aFormula));
 
     // Error, warn the user
     if( ta->GetCodeError() || ( ta->GetLen() == 0 ) )

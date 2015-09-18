@@ -27,8 +27,8 @@
 #include "paramisc.hxx"
 #include <svl/poolitem.hxx>
 
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 namespace editeng {
     struct MisspellRanges;
@@ -177,7 +177,7 @@ public:
     void        SetAdvancedQuerySource(const ScRange* pSource);
 
 private:
-    boost::scoped_ptr<ScQueryParam> mpQueryData;
+    std::unique_ptr<ScQueryParam> mpQueryData;
     ScViewData*     pViewData;
     ScRange         aAdvSource;
     bool            bIsAdvanced;

@@ -22,7 +22,6 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <boost/scoped_ptr.hpp>
 
 class FixedText;
 class ListBox;

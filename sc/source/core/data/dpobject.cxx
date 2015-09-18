@@ -83,7 +83,7 @@
 using namespace com::sun::star;
 using ::std::vector;
 using ::std::unary_function;
-using ::boost::shared_ptr;
+using ::std::shared_ptr;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
