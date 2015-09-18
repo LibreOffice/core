@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <boost/shared_ptr.hpp>
 #include <memory>
 #include <vector>
 
@@ -42,12 +41,12 @@ class PageCacheManager
 {
 public:
     typedef BitmapCache Cache;
-    typedef ::std::vector< ::std::pair<Size, ::boost::shared_ptr<BitmapCache> > > BestFittingPageCaches;
+    typedef std::vector< std::pair<Size, std::shared_ptr<BitmapCache> > > BestFittingPageCaches;
     typedef css::uno::Reference<css::uno::XInterface> DocumentKey;
 
     /** Return the one instance of the PageCacheManager class.
     */
-    static ::boost::shared_ptr<PageCacheManager> Instance();
+    static std::shared_ptr<PageCacheManager> Instance();
 
     /** Look up the cache for the given model in which the previews have the
         specified size.  If no such cache exists, then one is created.  When
@@ -58,7 +57,7 @@ public:
             The returned cache lives as long as somebody keeps a shared
             pointer and the ReleaseCache() method has not been called.
     */
-    ::boost::shared_ptr<Cache> GetCache (
+    std::shared_ptr<Cache> GetCache (
         DocumentKey pDocument,
         const Size& rPreviewSize);
 
@@ -66,14 +65,14 @@ public:
         cache.  After that the cache will live as long as the caller (and
         maybe others) holds its reference.
     */
-    void ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache);
+    void ReleaseCache (const std::shared_ptr<Cache>& rpCache);
 
     /** This is an information to the cache manager that the size of preview
         bitmaps in the specified cache has changed.
 
     */
-    ::boost::shared_ptr<Cache> ChangeSize (
-        const ::boost::shared_ptr<Cache>& rpCache,
+    std::shared_ptr<Cache> ChangeSize (
+        const std::shared_ptr<Cache>& rpCache,
         const Size& rOldPreviewSize,
         const Size& rNewPreviewSize);
 
@@ -109,15 +108,15 @@ private:
         shared_ptr so that the cache manager has the same life time as the
         ViewShellBase.
     */
-    static ::boost::weak_ptr<PageCacheManager> mpInstance;
+    static std::weak_ptr<PageCacheManager> mpInstance;
 
     /// List of active caches.
     class PageCacheContainer;
-    ::std::unique_ptr<PageCacheContainer> mpPageCaches;
+    std::unique_ptr<PageCacheContainer> mpPageCaches;
 
     /// List of inactive, recently used caches.
     class RecentlyUsedPageCaches;
-    ::std::unique_ptr<RecentlyUsedPageCaches> mpRecentlyUsedPageCaches;
+    std::unique_ptr<RecentlyUsedPageCaches> mpRecentlyUsedPageCaches;
 
     /** The maximal number of recently used caches that are kept alive after
         they have become inactive, i.e. after they are not used anymore by a
@@ -131,7 +130,7 @@ private:
     class Deleter;
     friend class Deleter;
 
-    ::boost::shared_ptr<Cache> GetRecentlyUsedCache(
+    std::shared_ptr<Cache> GetRecentlyUsedCache(
         DocumentKey pDocument,
         const Size& rSize);
 
@@ -142,7 +141,7 @@ private:
     void PutRecentlyUsedCache(
         DocumentKey pDocument,
         const Size& rPreviewSize,
-        const ::boost::shared_ptr<Cache>& rpCache);
+        const std::shared_ptr<Cache>& rpCache);
 
     /** Return a sorted list of the available caches, both active caches and
         those recently used, for the given document.  The sort order is so
@@ -157,7 +156,7 @@ private:
         BitmapCache with already exisiting previews.
     */
     void Recycle (
-        const ::boost::shared_ptr<Cache>& rpCache,
+        const std::shared_ptr<Cache>& rpCache,
         DocumentKey pDocument,
         const Size& rPreviewSize);
 };

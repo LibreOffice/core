@@ -43,8 +43,8 @@
 #include <svx/svditer.hxx>
 
 #include <basegfx/color/bcolor.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -96,7 +96,7 @@ void FuMorph::DoExecute( SfxRequest& )
         SdrObject*  pPolyObj1 = pCloneObj1->ConvertToPolyObj(false, false);
         SdrObject*  pPolyObj2 = pCloneObj2->ConvertToPolyObj(false, false);
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        boost::scoped_ptr<AbstractMorphDlg> pDlg(pFact ? pFact->CreateMorphDlg( static_cast< vcl::Window*>(mpWindow), pObj1, pObj2 ) : 0);
+        std::unique_ptr<AbstractMorphDlg> pDlg(pFact ? pFact->CreateMorphDlg( static_cast< vcl::Window*>(mpWindow), pObj1, pObj2 ) : 0);
         if(pPolyObj1 && pPolyObj2 && pDlg && (pDlg->Execute() == RET_OK))
         {
             B2DPolyPolygonList_impl aPolyPolyList;

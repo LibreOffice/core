@@ -27,9 +27,8 @@
 #include <com/sun/star/drawing/framework/TabBarButton.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <vcl/vclptr.hxx>
+#include <memory>
 
 namespace vcl { class Window; }
 

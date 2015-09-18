@@ -63,7 +63,7 @@
 #include "framework/FrameworkHelper.hxx"
 #include "DrawViewShell.hxx"
 #include "slideshow.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
@@ -312,7 +312,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_PHOTOALBUM:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
+            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 GetActiveWindow(),
                 GetDoc()) : 0);
 
@@ -357,7 +357,7 @@ void OutlineViewShell::ShowSlideShow(SfxRequest& rReq)
 void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 {
     sal_uInt16 nSId = rReq.GetSlot();
-    boost::scoped_ptr< OutlineViewModelChangeGuard > aGuard;
+    std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
     if (nSId != SID_OUTLINE_BULLET && nSId != FN_SVX_SET_BULLET && nSId != FN_SVX_SET_NUMBER)
     {
         aGuard.reset( new OutlineViewModelChangeGuard(*pOlView) );
@@ -488,7 +488,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_INSERT_FLD_PAGES:
         case SID_INSERT_FLD_FILE:
         {
-            boost::scoped_ptr<SvxFieldItem> pFieldItem;
+            std::unique_ptr<SvxFieldItem> pFieldItem;
 
             switch( nSId )
             {
@@ -583,10 +583,10 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             {
                 // Dialog...
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                boost::scoped_ptr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() ) : 0);
+                std::unique_ptr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() ) : 0);
                 if( pDlg && (pDlg->Execute() == RET_OK) )
                 {
-                    boost::scoped_ptr<SvxFieldData> pField(pDlg->GetField());
+                    std::unique_ptr<SvxFieldData> pField(pDlg->GetField());
                     if( pField )
                     {
                         SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );

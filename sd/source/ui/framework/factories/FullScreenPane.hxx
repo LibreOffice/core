@@ -24,7 +24,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/vclevent.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class WorkWindow;
 

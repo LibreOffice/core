@@ -24,8 +24,8 @@
 
 #include "pres.hxx"
 #include "sal/types.h"
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 class SdDrawDocument;
 
@@ -244,7 +244,7 @@ private:
     static Iterator CreateSelectionIterator (
         const ::std::vector<SdrObjectWeakRef>& rObjectList,
         SdDrawDocument* pDocument,
-        const ::boost::shared_ptr<ViewShell>& rpViewShell,
+        const std::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward=true,
         IteratorLocation aLocation=BEGIN);
 
@@ -261,7 +261,7 @@ private:
     */
     static Iterator CreateDocumentIterator (
         SdDrawDocument* pDocument,
-        const ::boost::shared_ptr<ViewShell>& rpViewShell,
+        const std::shared_ptr<ViewShell>& rpViewShell,
         bool bDirectionIsForward=true,
         IteratorLocation aLocation=BEGIN);
 
@@ -284,7 +284,7 @@ private:
     */
     static sal_Int32 GetPageIndex (
         SdDrawDocument* pDocument,
-        const ::boost::shared_ptr<ViewShell>& rpViewShell,
+        const std::shared_ptr<ViewShell>& rpViewShell,
         PageKind ePageKind,
         EditMode eEditMode,
         bool bDirectionIsForward,

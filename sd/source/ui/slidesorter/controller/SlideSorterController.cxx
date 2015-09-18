@@ -83,7 +83,7 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -240,25 +240,25 @@ ScrollBarManager& SlideSorterController::GetScrollBarManager()
     return *mpScrollBarManager.get();
 }
 
-::boost::shared_ptr<CurrentSlideManager> SlideSorterController::GetCurrentSlideManager() const
+std::shared_ptr<CurrentSlideManager> SlideSorterController::GetCurrentSlideManager() const
 {
     OSL_ASSERT(mpCurrentSlideManager.get()!=NULL);
     return mpCurrentSlideManager;
 }
 
-::boost::shared_ptr<SlotManager> SlideSorterController::GetSlotManager() const
+std::shared_ptr<SlotManager> SlideSorterController::GetSlotManager() const
 {
     OSL_ASSERT(mpSlotManager.get()!=NULL);
     return mpSlotManager;
 }
 
-::boost::shared_ptr<SelectionManager> SlideSorterController::GetSelectionManager() const
+std::shared_ptr<SelectionManager> SlideSorterController::GetSelectionManager() const
 {
     OSL_ASSERT(mpSelectionManager.get()!=NULL);
     return mpSelectionManager;
 }
 
-::boost::shared_ptr<InsertionIndicatorHandler>
+std::shared_ptr<InsertionIndicatorHandler>
     SlideSorterController::GetInsertionIndicatorHandler() const
 {
     OSL_ASSERT(mpInsertionIndicatorHandler.get()!=NULL);
@@ -330,7 +330,7 @@ bool SlideSorterController::Command (
             // view shell, b) the edit mode, and c) on whether the selection
             // is empty or not.
             ViewShell::ShellType eMainViewShellType (ViewShell::ST_NONE);
-            ::boost::shared_ptr<ViewShell> pMainViewShell (
+            std::shared_ptr<ViewShell> pMainViewShell (
                 pViewShell->GetViewShellBase().GetMainViewShell());
             if (pMainViewShell.get() != NULL)
                 eMainViewShellType = pMainViewShell->GetShellType();
@@ -355,7 +355,7 @@ bool SlideSorterController::Command (
                         else
                             nPopupId = RID_SLIDE_SORTER_MASTER_NOSEL_POPUP;
             }
-            ::boost::scoped_ptr<InsertionIndicatorHandler::ForceShowContext> pContext;
+            std::unique_ptr<InsertionIndicatorHandler::ForceShowContext> pContext;
             if (pPage == NULL)
             {
                 // When there is no selection, then we show the insertion
