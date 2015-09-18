@@ -162,7 +162,7 @@ typedef struct defbuf
     char*           repl;           /* -> replacement       */
     int             hash;           /* Symbol table hash    */
     int             nargs;          /* For define(args)     */
-    char            name[1];        /* #define name         */
+    char            name[];         /* #define name         */
 } DEFBUF;
 
 /*

@@ -81,6 +81,8 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4189: 'identifier' : local variable is initialized but not referenced
 
+# C4200: nonstandard extension used : zero-sized array in struct/union
+
 # C4201: nonstandard extension used : nameless struct/union
 
 # C4242: 'identifier' : conversion from 'type1' to 'type2', possible
@@ -150,6 +152,7 @@ gb_CFLAGS := \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4100) \
 	-wd4127 \
 	$(if $(filter 0,$(gb_DEBUGLEVEL)),-wd4189) \
+	-wd4200 \
 	-wd4242 \
 	-wd4244 \
 	-wd4251 \
