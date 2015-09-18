@@ -741,11 +741,16 @@ OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
             if( aRet.isEmpty() )
             {
                 const char *pString = XKeysymToString( nKeySym );
-                int n = strlen( pString );
-                if( n > 2 && pString[n-2] == '_' )
-                    aRet = OUString( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
+                if (pString)
+                {
+                    int n = strlen( pString );
+                    if( n > 2 && pString[n-2] == '_' )
+                        aRet = OUString( pString, n-2, RTL_TEXTENCODING_ISO_8859_1 );
+                    else
+                        aRet = OUString( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
+                }
                 else
-                    aRet = OUString( pString, n, RTL_TEXTENCODING_ISO_8859_1 );
+                    aRet = "???";
             }
         }
     }
