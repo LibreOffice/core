@@ -23,6 +23,7 @@
 #include <hintids.hxx>
 #include <svx/svdmodel.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <sfx2/viewsh.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>
 #include <rootfrm.hxx>
@@ -62,6 +63,7 @@
 #include <comcore.hrc>
 #include <IDocumentLayoutAccess.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 using namespace util;
@@ -2109,8 +2111,13 @@ void SwCrsrShell::ShowCrsr()
         m_bSVCrsrVis = true;
         m_pCurCrsr->SetShowTextInputFieldOverlay( true );
 
-        if (isTiledRendering())
-            libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (comphelper::LibreOfficeKit::isViewCallback())
+                GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
+            else
+                libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
+        }
 
         UpdateCrsr();
     }
@@ -2126,8 +2133,13 @@ void SwCrsrShell::HideCrsr()
         m_pCurCrsr->SetShowTextInputFieldOverlay( false );
         m_pVisCrsr->Hide();
 
-        if (isTiledRendering())
-            libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            if (comphelper::LibreOfficeKit::isViewCallback())
+                GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
+            else
+                libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(false).getStr());
+        }
     }
 }
 
