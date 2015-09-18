@@ -172,7 +172,7 @@ endef
 define gb_CppunitTest__use_vcl
 $(call gb_CppunitTest_get_target,$(1)) : VCL := $(true)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,vclbootstrapprotector)
-ifeq ($(GUIBASE),unx)
+ifeq ($(USING_X11),TRUE)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,desktop_detector)
 $(call gb_CppunitTest_get_target,$(1)) : $(if $(filter $(2),$(true)), \
     $(call gb_Library_get_target,vclplug_gen) \
