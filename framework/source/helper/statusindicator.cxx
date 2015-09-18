@@ -43,7 +43,6 @@ void SAL_CALL StatusIndicator::start(const OUString& sText ,
         m_nLastCallbackPercent = -1;
 
         comphelper::LibreOfficeKit::statusIndicatorStart();
-        return;
     }
 
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
@@ -60,7 +59,6 @@ void SAL_CALL StatusIndicator::end()
     if (comphelper::LibreOfficeKit::isActive())
     {
         comphelper::LibreOfficeKit::statusIndicatorFinish();
-        return;
     }
 
     css::uno::Reference< css::task::XStatusIndicatorFactory > xFactory(m_xFactory);
