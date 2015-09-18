@@ -288,7 +288,9 @@ void Section::GetDictionary(Dictionary& rDict)
     for (sal_uInt32 i = 0; i < nDictCount; ++i)
     {
         sal_uInt32 nId(0), nSize(0);
-        aStream.ReadUInt32( nId ).ReadUInt32( nSize );
+        aStream.ReadUInt32(nId).ReadUInt32(nSize);
+        if (!aStream.good() || nSize > aStream.remainingSize())
+            break;
         if (mnTextEnc == RTL_TEXTENCODING_UCS2)
             nSize >>= 1;
         if (!nSize)
