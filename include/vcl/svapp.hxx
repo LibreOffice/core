@@ -596,7 +596,7 @@ public:
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
           EnableNoYieldMode, DisableNoYieldMode, RemovePostYieldListener
     */
-    static void                 AddPostYieldListener( const Link<>& i_rListener );
+    static void                 AddPostYieldListener( const Link<LinkParamNone*,void>& i_rListener );
 
     /** Remove listener for yield events
 
@@ -606,7 +606,7 @@ public:
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
           AddPostYieldListener, EnableNoYieldMode, DisableNoYieldMode
     */
-    static void                 RemovePostYieldListener( const Link<>& i_rListener );
+    static void                 RemovePostYieldListener( const Link<LinkParamNone*,void>& i_rListener );
 
 
     /** Queries whether the application is in "main", i.e. not yet in

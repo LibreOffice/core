@@ -1788,7 +1788,7 @@ IMPL_LINK_NOARG_TYPED(SlideshowImpl, updateHdl, Timer *, void)
     updateSlideShow();
 }
 
-IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
+IMPL_LINK_NOARG_TYPED(SlideshowImpl, PostYieldListener, LinkParamNone*, void)
 {
     // prevent me from deletion when recursing (App::Reschedule does)
     const rtl::Reference<SlideshowImpl> this_(this);
@@ -1799,9 +1799,9 @@ IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
                                    // *all* outstanding events after
                                    // yield is done.
     if (mbDisposed)
-        return 0;
+        return;
     Application::Reschedule(true);
-    return updateSlideShow();
+    updateSlideShow();
 }
 
 sal_Int32 SlideshowImpl::updateSlideShow()
