@@ -59,6 +59,7 @@ public:
     CPPUNIT_TEST(testSheetNamedRanges);
     CPPUNIT_TEST(testSheets);
     CPPUNIT_TEST(testSum);
+    CPPUNIT_TEST(testFTest);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -71,6 +72,7 @@ private:
     void testSheetNamedRanges();
     void testSheets();
     void testSum();
+    void testFTest();
 
 };
 
@@ -287,6 +289,30 @@ void ScPerfObj::testSum()
     callgrindDump("sc:sum_with_array_formula_condition");
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong Sum - number of elements equal 30" , 99.0, xCell->getValue());
+}
+
+void ScPerfObj::testFTest()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+
+    uno::Any rSheet = xSheets->getByName(OUString::createFromAscii("FTestSheet"));
+
+    // query for the XSpreadsheet interface
+    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
+    uno::Reference< table::XCell > xCell = xSheet->getCellByPosition(0, 0);
+
+    callgrindStart();
+    xCell->setFormula(OUString::createFromAscii("=FTEST(B1:K10;L1:U10)"));
+    xCalculatable->calculate();
+    callgrindDump("sc:ftest");
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong FTest result" , 0.8909, xCell->getValue(), 10e-4);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPerfObj);
