@@ -44,6 +44,7 @@ void Popup::dispose()
 {
     mxControl.disposeAndClear();
     mxContainer.disposeAndClear();
+    mpParent.clear();
 }
 
 Popup::~Popup()

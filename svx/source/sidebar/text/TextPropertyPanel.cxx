@@ -131,6 +131,9 @@ void TextPropertyPanel::dispose()
     maUnderlineControl.dispose();
     maSpacingControl.dispose();
 
+    maCharSpacePopup.dispose();
+    maUnderlinePopup.dispose();
+
     PanelLayout::dispose();
 }
 
