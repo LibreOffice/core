@@ -38,6 +38,7 @@ void WpftDrawFilterTest::test()
     doTest("com.sun.star.comp.Draw.MWAWDrawImportFilter", "/writerperfect/qa/unit/data/draw/libmwaw/");
     doTest("com.sun.star.comp.Draw.VisioImportFilter", "/writerperfect/qa/unit/data/draw/libvisio/");
     doTest("com.sun.star.comp.Draw.WPGImportFilter", "/writerperfect/qa/unit/data/draw/libwpg/");
+    doTest("org.libreoffice.comp.Draw.PageMakerImportFilter", "/writerperfect/qa/unit/data/draw/libpagemaker/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftDrawFilterTest);
