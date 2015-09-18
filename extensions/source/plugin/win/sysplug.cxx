@@ -65,9 +65,9 @@ void TRACEN( char const * s, long n );
 #define TRACEN(x,n)
 #endif
 
-::boost::shared_ptr<SysPlugData> CreateSysPlugData()
+std::shared_ptr<SysPlugData> CreateSysPlugData()
 {
-    return ::boost::shared_ptr<SysPlugData>();
+    return std::shared_ptr<SysPlugData>();
 }
 
 

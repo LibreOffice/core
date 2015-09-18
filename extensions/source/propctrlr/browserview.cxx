@@ -20,8 +20,8 @@
 #include "browserview.hxx"
 #include "propertyeditor.hxx"
 #include "propctrlr.hrc"
-#include <boost/scoped_ptr.hpp>
 #include <vcl/tabpage.hxx>
+#include <memory>
 
 namespace pcr
 {

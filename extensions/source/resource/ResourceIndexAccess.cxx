@@ -26,21 +26,21 @@ using namespace ::com::sun::star::container;
 
 namespace
 {
-    static ::boost::shared_ptr<ResMgr> GetResMgr(Sequence<Any> const& rArgs)
+    static std::shared_ptr<ResMgr> GetResMgr(Sequence<Any> const& rArgs)
     {
         if(rArgs.getLength()!=1)
-            return ::boost::shared_ptr<ResMgr>();
+            return std::shared_ptr<ResMgr>();
         OUString sFilename;
         rArgs[0] >>= sFilename;
         SolarMutexGuard aGuard;
         const OString sEncName(OUStringToOString(sFilename, osl_getThreadTextEncoding()));
-        return ::boost::shared_ptr<ResMgr>(ResMgr::CreateResMgr(sEncName.getStr()));
+        return std::shared_ptr<ResMgr>(ResMgr::CreateResMgr(sEncName.getStr()));
     }
 
     class ResourceIndexAccessBase : public cppu::WeakImplHelper< ::com::sun::star::container::XIndexAccess>
     {
         public:
-            ResourceIndexAccessBase( ::boost::shared_ptr<ResMgr> pResMgr)
+            ResourceIndexAccessBase( std::shared_ptr<ResMgr> pResMgr)
                 : m_pResMgr(pResMgr)
             {
                 OSL_ENSURE(m_pResMgr, "no resource manager given");
@@ -55,13 +55,13 @@ namespace
 
         protected:
             // m_pResMgr should never be NULL
-            const ::boost::shared_ptr<ResMgr> m_pResMgr;
+            const std::shared_ptr<ResMgr> m_pResMgr;
     };
 
     class ResourceStringIndexAccess : public ResourceIndexAccessBase
     {
         public:
-            ResourceStringIndexAccess( ::boost::shared_ptr<ResMgr> pResMgr)
+            ResourceStringIndexAccess( std::shared_ptr<ResMgr> pResMgr)
                 : ResourceIndexAccessBase(pResMgr) {}
             // XIndexAccess
             virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -73,7 +73,7 @@ namespace
     class ResourceStringListIndexAccess : public ResourceIndexAccessBase
     {
         public:
-            ResourceStringListIndexAccess( ::boost::shared_ptr<ResMgr> pResMgr)
+            ResourceStringListIndexAccess( std::shared_ptr<ResMgr> pResMgr)
                 : ResourceIndexAccessBase(pResMgr) {}
             // XIndexAccess
             virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

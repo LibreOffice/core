@@ -24,7 +24,7 @@
 #include "updatehdl.hxx"
 #include "updateprotocol.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -103,7 +103,7 @@ public:
 private:
     uno::Reference<uno::XComponentContext>  m_xContext;
     uno::Reference< frame::XDesktop2 >      m_xDesktop;
-    boost::scoped_ptr< InitUpdateCheckJobThread > m_pInitThread;
+    std::unique_ptr< InitUpdateCheckJobThread > m_pInitThread;
 
     void handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp );
 };

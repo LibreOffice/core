@@ -21,7 +21,7 @@
 #include <sanedlg.hxx>
 #include <osl/thread.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -110,7 +110,7 @@ struct SaneHolder
 
 namespace
 {
-    typedef std::vector< boost::shared_ptr<SaneHolder> > sanevec;
+    typedef std::vector< std::shared_ptr<SaneHolder> > sanevec;
     class allSanes
     {
     private:
@@ -146,7 +146,7 @@ namespace
 
 class ScannerThread : public osl::Thread
 {
-    boost::shared_ptr<SaneHolder>               m_pHolder;
+    std::shared_ptr<SaneHolder>               m_pHolder;
     Reference< com::sun::star::lang::XEventListener > m_xListener;
     ScannerManager*                             m_pManager; // just for the disposing call
 
@@ -154,7 +154,7 @@ public:
     virtual void run() SAL_OVERRIDE;
     virtual void onTerminated() SAL_OVERRIDE { delete this; }
 public:
-    ScannerThread( boost::shared_ptr<SaneHolder> pHolder,
+    ScannerThread( std::shared_ptr<SaneHolder> pHolder,
                    const Reference< com::sun::star::lang::XEventListener >& listener,
                    ScannerManager* pManager );
     virtual ~ScannerThread();
@@ -163,7 +163,7 @@ public:
 
 
 ScannerThread::ScannerThread(
-                             boost::shared_ptr<SaneHolder> pHolder,
+                             std::shared_ptr<SaneHolder> pHolder,
                              const Reference< com::sun::star::lang::XEventListener >& listener,
                              ScannerManager* pManager )
         : m_pHolder( pHolder ), m_xListener( listener ), m_pManager( pManager )
@@ -251,7 +251,7 @@ Sequence< ScannerContext > ScannerManager::getAvailableScanners() throw(std::exc
 
     if( rSanes.empty() )
     {
-        boost::shared_ptr<SaneHolder> pSaneHolder(new SaneHolder);
+        std::shared_ptr<SaneHolder> pSaneHolder(new SaneHolder);
         if( Sane::IsSane() )
             rSanes.push_back( pSaneHolder );
     }
@@ -290,7 +290,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
                 ScanError_InvalidContext
             );
 
-        boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
+        std::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
         if( pHolder->m_bBusy )
             throw ScannerException(
                 "Scanner is busy",
@@ -328,7 +328,7 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
             Reference< XScannerManager >( this ),
             ScanError_InvalidContext
             );
-    boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
+    std::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
     if( pHolder->m_bBusy )
         throw ScannerException(
             "Scanner is busy",
@@ -355,7 +355,7 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
             ScanError_InvalidContext
             );
 
-    boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
+    std::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
 
     return pHolder->m_nError;
 }
@@ -373,7 +373,7 @@ Reference< css::awt::XBitmap > ScannerManager::getBitmap( const ScannerContext& 
             Reference< XScannerManager >( this ),
             ScanError_InvalidContext
             );
-    boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
+    std::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
 
     osl::MutexGuard aProtGuard( pHolder->m_aProtector );
 

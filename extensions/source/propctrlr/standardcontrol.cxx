@@ -49,7 +49,7 @@
 #include <cstdlib>
 #include <limits>
 #include <boost/bind.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace pcr
