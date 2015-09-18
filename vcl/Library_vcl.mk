@@ -406,7 +406,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 # handle X11 platforms, which have additional files and possibly system graphite
-ifneq (,$(or $(filter unx,$(GUIBASE)),$(ENABLE_HEADLESS)))
+#ifneq (,$(or $(filter unx,$(GUIBASE)),$(ENABLE_HEADLESS)))
+ifneq($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/glyphs/graphite_serverfont \
 ))
