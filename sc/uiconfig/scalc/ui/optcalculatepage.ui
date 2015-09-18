@@ -5,7 +5,7 @@
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
-    <property name="upper">1000</property>
+    <property name="upper">32767</property>
     <property name="value">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
