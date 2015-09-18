@@ -31,7 +31,6 @@
 
 #include <memory>
 #include <unordered_map>
-#include <boost/shared_ptr.hpp>
 
 /* An interface to get the clipboard data in either
    system or OOo format.
@@ -123,7 +122,7 @@ private:
   mutable OfficeOnlyTypes maOfficeOnlyTypes;
 };
 
-typedef boost::shared_ptr<DataFlavorMapper> DataFlavorMapperPtr_t;
+typedef std::shared_ptr<DataFlavorMapper> DataFlavorMapperPtr_t;
 
 #endif // INCLUDED_VCL_OSX_DATAFLAVORMAPPING_HXX
 

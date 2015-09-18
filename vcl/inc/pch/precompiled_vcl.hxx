@@ -137,7 +137,6 @@
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <cassert>
 #include <cmath>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>

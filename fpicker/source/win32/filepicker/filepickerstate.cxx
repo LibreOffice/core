@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/scoped_ptr.hpp>
-
 #include "filepickerstate.hxx"
 #include <osl/diagnose.h>
 #include "controlaccess.hxx"
@@ -32,6 +30,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <osl/file.hxx>
 #include "FileOpenDlg.hxx"
+#include <memory>
 
 #include "../misc/WinImplHelper.hxx"
 
@@ -104,7 +103,7 @@ Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int
     if (m_FirstControlCommand)
     {
         // pass the request along the command-chain
-        boost::scoped_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &value_request ) );
+        std::unique_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &value_request ) );
 
         OSL_ENSURE( result.get(), "invalid getValue request" );
 
@@ -168,7 +167,7 @@ OUString SAL_CALL CNonExecuteFilePickerState::getLabel( sal_Int16 aControlId )
     CControlCommandRequest label_request( aControlId );
 
     // pass the request along the command-chain
-    boost::scoped_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &label_request ) );
+    std::unique_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &label_request ) );
 
     OSL_ENSURE( result->hasResult( ), "invalid getValue request" );
 
