@@ -812,6 +812,12 @@ NumericField::NumericField( vcl::Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void NumericField::dispose()
+{
+    NumericFormatter::SetField( NULL );
+    SpinField::dispose();
+}
+
 bool NumericField::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "digits")
@@ -959,6 +965,12 @@ NumericBox::NumericBox( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
     if ( !(nWinStyle & WB_HIDE ) )
         Show();
+}
+
+void NumericBox::dispose()
+{
+    NumericFormatter::SetField( NULL );
+    ComboBox::dispose();
 }
 
 Size NumericBox::CalcMinimumSize() const
@@ -1636,6 +1648,12 @@ MetricField::MetricField( vcl::Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+void MetricField::dispose()
+{
+    MetricFormatter::SetField( NULL );
+    SpinField::dispose();
+}
+
 Size MetricField::CalcMinimumSize() const
 {
     return calcMinimumSize(*this, *this);
@@ -1798,6 +1816,12 @@ MetricBox::MetricBox( vcl::Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
+}
+
+void MetricBox::dispose()
+{
+    MetricFormatter::SetField(NULL);
+    ComboBox::dispose();
 }
 
 Size MetricBox::CalcMinimumSize() const
@@ -2040,6 +2064,12 @@ CurrencyField::CurrencyField( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
+void CurrencyField::dispose()
+{
+    CurrencyFormatter::SetField( NULL );
+    SpinField::dispose();
+}
+
 bool CurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
@@ -2116,6 +2146,12 @@ CurrencyBox::CurrencyBox( vcl::Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
+}
+
+void CurrencyBox::dispose()
+{
+    CurrencyFormatter::SetField( NULL );
+    ComboBox::dispose();
 }
 
 bool CurrencyBox::PreNotify( NotifyEvent& rNEvt )
