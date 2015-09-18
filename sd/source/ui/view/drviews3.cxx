@@ -84,7 +84,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;

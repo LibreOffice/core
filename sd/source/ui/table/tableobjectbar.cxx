@@ -50,7 +50,7 @@
 
 #include "tableobjectbar.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace sd;
 using namespace sd::ui::table;

@@ -47,7 +47,7 @@ using namespace com::sun::star::ui::dialogs;
 
 #include "pres.hxx"
 #include "sdabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class SdHtmlOptionsDialog : public cppu::WeakImplHelper
 <

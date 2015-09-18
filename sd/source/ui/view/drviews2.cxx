@@ -171,7 +171,7 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 
 #include "ViewShellBase.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace {
     const char CustomAnimationPanelId[] = "CustomAnimationPanel";

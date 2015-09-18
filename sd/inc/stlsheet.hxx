@@ -37,7 +37,7 @@
 
 #include <editeng/unoipset.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include "prlayout.hxx"
 

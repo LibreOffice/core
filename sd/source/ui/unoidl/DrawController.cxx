@@ -48,7 +48,7 @@
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <svx/sidebar/ContextChangeEventMultiplexer.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 using namespace ::std;
 using namespace ::cppu;
@@ -138,7 +138,7 @@ void SAL_CALL DrawController::dispose()
         {
             mbDisposing = true;
 
-            boost::shared_ptr<ViewShell> pViewShell;
+            std::shared_ptr<ViewShell> pViewShell;
             if (mpBase)
                 pViewShell = mpBase->GetMainViewShell();
             if ( pViewShell )
@@ -508,7 +508,7 @@ void DrawController::FirePropertyChange (
 
 void DrawController::BroadcastContextChange() const
 {
-    ::boost::shared_ptr<ViewShell> pViewShell (mpBase->GetMainViewShell());
+    std::shared_ptr<ViewShell> pViewShell (mpBase->GetMainViewShell());
     if ( ! pViewShell)
         return;
 
@@ -703,7 +703,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFor
 
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     SdrView* pSdrView = mpBase->GetDrawView();
-    ::boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
+    std::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
     ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
 
     uno::Reference< form::runtime::XFormController > xController( NULL );
@@ -740,7 +740,7 @@ uno::Reference< awt::XControl > SAL_CALL DrawController::getControl( const uno::
 
     FmFormShell* pFormShell = mpBase->GetFormShellManager()->GetFormShell();
     SdrView* pSdrView = mpBase->GetDrawView();
-    ::boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
+    std::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
     ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
 
     uno::Reference< awt::XControl > xControl( NULL );

@@ -29,7 +29,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/compbase.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <set>
 
 namespace {

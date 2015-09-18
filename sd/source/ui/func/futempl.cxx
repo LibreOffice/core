@@ -65,7 +65,7 @@
 #include "strings.hrc"
 #include "helpids.h"
 #include "sdabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;

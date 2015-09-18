@@ -23,8 +23,8 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <map>
+#include <memory>
 
 namespace sd { namespace tools {
 

@@ -32,8 +32,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd { namespace slidesorter {
 
@@ -181,7 +180,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ::boost::shared_ptr<SlideSorter> mpSlideSorter;
+    std::shared_ptr<SlideSorter> mpSlideSorter;
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
     std::unique_ptr<cppu::IPropertyArrayHelper> mpPropertyArrayHelper;

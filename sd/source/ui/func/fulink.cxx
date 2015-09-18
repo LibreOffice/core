@@ -29,7 +29,7 @@
 #include "drawdoc.hxx"
 #include "ViewShell.hxx"
 #include "app.hrc"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class SfxRequest;
 

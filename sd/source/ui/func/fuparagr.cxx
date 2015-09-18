@@ -34,7 +34,7 @@
 #include "drawdoc.hxx"
 #include "sdabstdlg.hxx"
 #include "sdattr.hrc"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 

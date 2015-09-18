@@ -34,7 +34,7 @@
 #include "ViewShell.hxx"
 #include "DrawDocShell.hxx"
 #include "sdabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 

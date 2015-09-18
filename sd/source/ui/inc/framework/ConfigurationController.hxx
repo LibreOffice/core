@@ -35,9 +35,8 @@
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <memory>
 
 namespace {
 

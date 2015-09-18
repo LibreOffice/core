@@ -69,14 +69,14 @@ private:
 
 //===== SlideSorter ===========================================================
 
-::boost::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter(
+std::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter(
     ViewShell& rViewShell,
     sd::Window* pContentWindow,
     ScrollBar* pHorizontalScrollBar,
     ScrollBar* pVerticalScrollBar,
     ScrollBarBox* pScrollBarBox)
 {
-    ::boost::shared_ptr<SlideSorter> pSlideSorter(
+    std::shared_ptr<SlideSorter> pSlideSorter(
         new SlideSorter(
             rViewShell,
             pContentWindow,
@@ -87,12 +87,12 @@ private:
     return pSlideSorter;
 }
 
-::boost::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter (
+std::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter (
     ViewShellBase& rBase,
     ViewShell* pViewShell,
     vcl::Window& rParentWindow)
 {
-    ::boost::shared_ptr<SlideSorter> pSlideSorter(
+    std::shared_ptr<SlideSorter> pSlideSorter(
         new SlideSorter(
             rBase,
             pViewShell,
@@ -419,13 +419,13 @@ void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
     }
 }
 
-::boost::shared_ptr<controller::Properties> SlideSorter::GetProperties() const
+std::shared_ptr<controller::Properties> SlideSorter::GetProperties() const
 {
     OSL_ASSERT(mpProperties);
     return mpProperties;
 }
 
-::boost::shared_ptr<view::Theme> SlideSorter::GetTheme() const
+std::shared_ptr<view::Theme> SlideSorter::GetTheme() const
 {
     OSL_ASSERT(mpTheme);
     return mpTheme;

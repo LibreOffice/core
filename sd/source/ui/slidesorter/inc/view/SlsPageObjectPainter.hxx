@@ -24,7 +24,7 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsTheme.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd { namespace slidesorter { namespace cache {
 class PageCache;
@@ -51,7 +51,7 @@ public:
         the given theme is the same object as the one already in use by this
         painter everything that depends on the theme is updated.
     */
-    void SetTheme (const ::boost::shared_ptr<view::Theme>& rpTheme);
+    void SetTheme (const std::shared_ptr<view::Theme>& rpTheme);
 
     /** Return a preview bitmap for the given page descriptor.  When the
         page is excluded from the show then the preview is marked
@@ -70,10 +70,10 @@ public:
 
 private:
     const Layouter& mrLayouter;
-    ::boost::shared_ptr<cache::PageCache> mpCache;
-    ::boost::shared_ptr<controller::Properties> mpProperties;
-    ::boost::shared_ptr<view::Theme> mpTheme;
-    ::boost::shared_ptr<vcl::Font> mpPageNumberFont;
+    std::shared_ptr<cache::PageCache> mpCache;
+    std::shared_ptr<controller::Properties> mpProperties;
+    std::shared_ptr<view::Theme> mpTheme;
+    std::shared_ptr<vcl::Font> mpPageNumberFont;
     std::unique_ptr<FramePainter> mpShadowPainter;
     std::unique_ptr<FramePainter> mpFocusBorderPainter;
     Bitmap maNormalBackground;

@@ -28,7 +28,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <cppuhelper/compbase.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace {
 

@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 class ViewShellBase;

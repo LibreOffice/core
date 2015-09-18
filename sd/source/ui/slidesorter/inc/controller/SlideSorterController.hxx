@@ -30,7 +30,7 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -116,10 +116,10 @@ public:
     */
     ScrollBarManager& GetScrollBarManager();
 
-    ::boost::shared_ptr<CurrentSlideManager> GetCurrentSlideManager() const;
-    ::boost::shared_ptr<SlotManager> GetSlotManager() const;
-    ::boost::shared_ptr<SelectionManager> GetSelectionManager() const;
-    ::boost::shared_ptr<InsertionIndicatorHandler> GetInsertionIndicatorHandler() const;
+    std::shared_ptr<CurrentSlideManager> GetCurrentSlideManager() const;
+    std::shared_ptr<SlotManager> GetSlotManager() const;
+    std::shared_ptr<SelectionManager> GetSelectionManager() const;
+    std::shared_ptr<InsertionIndicatorHandler> GetInsertionIndicatorHandler() const;
 
     /** This method forwards the call to the SlideSorterView and executes
         pending operations like moving selected pages into the visible area.
@@ -216,7 +216,7 @@ public:
 
     /** Return an Animator object.
     */
-    ::boost::shared_ptr<Animator> GetAnimator() const { return mpAnimator;}
+    std::shared_ptr<Animator> GetAnimator() const { return mpAnimator;}
 
     VisibleAreaManager& GetVisibleAreaManager() const;
 
@@ -229,13 +229,13 @@ private:
     view::SlideSorterView& mrView;
     std::unique_ptr<PageSelector> mpPageSelector;
     std::unique_ptr<FocusManager> mpFocusManager;
-    ::boost::shared_ptr<SlotManager> mpSlotManager;
+    std::shared_ptr<SlotManager> mpSlotManager;
     std::unique_ptr<ScrollBarManager> mpScrollBarManager;
-    mutable ::boost::shared_ptr<CurrentSlideManager> mpCurrentSlideManager;
-    ::boost::shared_ptr<SelectionManager> mpSelectionManager;
+    mutable std::shared_ptr<CurrentSlideManager> mpCurrentSlideManager;
+    std::shared_ptr<SelectionManager> mpSelectionManager;
     std::unique_ptr<controller::Clipboard> mpClipboard;
-    ::boost::shared_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;
-    ::boost::shared_ptr<Animator> mpAnimator;
+    std::shared_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;
+    std::shared_ptr<Animator> mpAnimator;
     std::unique_ptr<VisibleAreaManager> mpVisibleAreaManager;
 
     // The listener listens to UNO events and thus is a UNO object.

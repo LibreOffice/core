@@ -66,9 +66,8 @@
 #include "pptin.hxx"
 #include "randomnode.hxx"
 
-#include <boost/scoped_ptr.hpp>
-
 #include <algorithm>
+#include <memory>
 
 using ::std::map;
 using ::com::sun::star::beans::NamedValue;

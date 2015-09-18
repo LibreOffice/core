@@ -72,7 +72,7 @@
 #include "Outliner.hxx"
 #include "futext.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 
