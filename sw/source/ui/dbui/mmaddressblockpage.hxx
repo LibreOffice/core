@@ -110,12 +110,12 @@ public:
     virtual ~SwSelectAddressBlockDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    void    SetAddressBlocks(const com::sun::star::uno::Sequence< OUString>& rBlocks,
+    void         SetAddressBlocks(const css::uno::Sequence< OUString>& rBlocks,
                                 sal_uInt16 nSelected);
-    const com::sun::star::uno::Sequence< OUString>&    GetAddressBlocks();
+    const css::uno::Sequence< OUString>&    GetAddressBlocks();
 
-    void                SetSettings(bool bIsCountry, const OUString& sCountry);
-    bool            IsIncludeCountry() const {return !m_pNeverRB->IsChecked();}
+    void         SetSettings(bool bIsCountry, const OUString& sCountry);
+    bool         IsIncludeCountry() const {return !m_pNeverRB->IsChecked();}
     OUString     GetCountry() const;
 };
 
@@ -140,7 +140,7 @@ public:
 
 class AddressMultiLineEdit : public VclMultiLineEdit, public SfxListener
 {
-    Link<>                          m_aSelectionLink;
+    Link<AddressMultiLineEdit&,void>       m_aSelectionLink;
     VclPtr<SwCustomizeAddressBlockDialog>  m_pParentDialog;
 
     using VclMultiLineEdit::Notify;
@@ -160,7 +160,7 @@ public:
 
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    void            SetSelectionChangedHdl( const Link<>& rLink ) {m_aSelectionLink = rLink;}
+    void            SetSelectionChangedHdl( const Link<AddressMultiLineEdit&,void>& rLink ) {m_aSelectionLink = rLink;}
 
     void            SetText( const OUString& rStr ) SAL_OVERRIDE;
     OUString        GetAddress();
@@ -224,7 +224,7 @@ private:
     DECL_LINK_TYPED(ListBoxSelectHdl_Impl, SvTreeListBox*, void);
     DECL_LINK(EditModifyHdl_Impl, void *);
     DECL_LINK_TYPED(ImageButtonHdl_Impl, Button*, void);
-    DECL_LINK(SelectionChangedHdl_Impl, AddressMultiLineEdit*);
+    DECL_LINK_TYPED(SelectionChangedHdl_Impl, AddressMultiLineEdit&, void);
     DECL_LINK(FieldChangeHdl_Impl, void *);
 
     bool            HasItem_Impl(sal_Int32 nUserData);

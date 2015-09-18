@@ -668,19 +668,19 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
     return m_pDragED->GetText().indexOf("<" + sEntry + ">") >= 0;
 }
 
-IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiLineEdit*, pEdit)
+IMPL_LINK_TYPED(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiLineEdit&, rEdit, void)
 {
     // called in case the selection of the edit field changes.
     // determine selection - if it's one of the editable fields then
     // enable the related ComboBox and fill it
     static bool bOnEntry = false;
     if(bOnEntry)
-        return 0;
+        return;
 
     bOnEntry = true;
     sal_Int32 nSelected = GetSelectedItem_Impl();
     if(USER_DATA_NONE != nSelected)
-        pEdit->SelectCurrentItem();
+        rEdit.SelectCurrentItem();
 
     if(m_pFieldCB->IsVisible() && (USER_DATA_NONE != nSelected) && (nSelected < 0))
     {
@@ -718,7 +718,6 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, SelectionChangedHdl_Impl, AddressMultiL
 
     UpdateImageButtons_Impl();
     bOnEntry = false;
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, FieldChangeHdl_Impl)
@@ -1354,7 +1353,7 @@ void AddressMultiLineEdit::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
         if (rTextHint.GetId() == TEXT_HINT_VIEWSELECTIONCHANGED ||
             rTextHint.GetId() == TEXT_HINT_VIEWCARETCHANGED)
         {
-            m_aSelectionLink.Call(this);
+            m_aSelectionLink.Call(*this);
         }
     }
 }
@@ -1457,7 +1456,7 @@ void AddressMultiLineEdit::InsertNewEntryAtPosition( const OUString& rStr, sal_u
     TextSelection aEntrySel(aInsertPos);
     ExtTextView* pTextView = GetTextView();
     pTextView->SetSelection(aEntrySel);
-    m_aSelectionLink.Call(this);
+    m_aSelectionLink.Call(*this);
 }
 
 void AddressMultiLineEdit::RemoveCurrentEntry()
