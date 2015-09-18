@@ -245,6 +245,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                         0, 0 };
 
             pSet = new SfxItemSet(GetPool().GetPool(), nWhichPairTable);
+            bMySet = true;
         }
 
         return *pSet;
@@ -270,6 +271,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                         0, 0 };
 
             pSet = new SfxItemSet(GetPool().GetPool(), nWhichPairTable);
+            bMySet = true;
         }
 
         return *pSet;
@@ -309,6 +311,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                              0, 0 };
 
                 pSet = new SfxItemSet(GetPool().GetPool(), nWhichPairTable);
+                bMySet = true;
             }
 
             return(*pSet);
