@@ -21,6 +21,7 @@
 #include <limits>
 
 #include <osl/diagnose.h>
+#include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>

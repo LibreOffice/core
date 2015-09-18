@@ -27,7 +27,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <tools/inetmime.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>

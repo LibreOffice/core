@@ -90,10 +90,8 @@
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <tools/datetime.hxx>
-#include <tools/inetmime.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/asynclink.hxx>
-#include <svl/inettype.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>

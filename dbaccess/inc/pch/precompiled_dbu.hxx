@@ -437,7 +437,6 @@
 #include <tools/contnr.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/inetmime.hxx>
 #include <tools/multisel.hxx>
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>

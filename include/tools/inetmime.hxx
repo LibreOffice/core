@@ -20,18 +20,15 @@
 #define INCLUDED_TOOLS_INETMIME_HXX
 
 #include <tools/toolsdllapi.h>
-#include <rtl/alloc.h>
 #include <rtl/character.hxx>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/debug.hxx>
-#include <tools/errcode.hxx>
 
 #include <unordered_map>
 
-class DateTime;
 class INetMIMEOutputSink;
 
 struct INetContentTypeParameter
