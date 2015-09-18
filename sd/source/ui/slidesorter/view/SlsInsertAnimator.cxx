@@ -25,9 +25,9 @@
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 
+#include <memory>
 #include <set>
 #include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -38,11 +38,11 @@ class PageObjectRun;
 class AnimatorAccess
 {
 public:
-    virtual void AddRun (const ::boost::shared_ptr<PageObjectRun>& rRun) = 0;
-    virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun>& rRun) = 0;
+    virtual void AddRun (const std::shared_ptr<PageObjectRun>& rRun) = 0;
+    virtual void RemoveRun (const std::shared_ptr<PageObjectRun>& rRun) = 0;
     virtual model::SlideSorterModel& GetModel (void) const = 0;
     virtual view::SlideSorterView& GetView (void) const = 0;
-    virtual ::boost::shared_ptr<controller::Animator> GetAnimator (void) = 0;
+    virtual std::shared_ptr<controller::Animator> GetAnimator (void) = 0;
     virtual VclPtr<sd::Window> GetContentWindow (void) = 0;
 
 protected:
@@ -52,7 +52,7 @@ protected:
 /** Controller of the position offsets of all page objects in one row or one
     column.
 */
-class PageObjectRun : public ::boost::enable_shared_from_this<PageObjectRun>
+class PageObjectRun : public std::enable_shared_from_this<PageObjectRun>
 {
 public:
     PageObjectRun (
@@ -88,8 +88,8 @@ public:
     class Comparator
     {
         public: bool operator() (
-            const ::boost::shared_ptr<PageObjectRun>& rpRunA,
-            const ::boost::shared_ptr<PageObjectRun>& rpRunB) const
+            const std::shared_ptr<PageObjectRun>& rpRunA,
+            const std::shared_ptr<PageObjectRun>& rpRunB) const
         {
             return rpRunA->mnRunIndex < rpRunB->mnRunIndex;
         }
@@ -101,7 +101,7 @@ private:
 
     void RestartAnimation();
 };
-typedef ::boost::shared_ptr<PageObjectRun> SharedPageObjectRun;
+typedef std::shared_ptr<PageObjectRun> SharedPageObjectRun;
 
 Point Blend (const Point& rPointA, const Point& rPointB, const double nT)
 {
@@ -122,19 +122,19 @@ public:
         const InsertPosition& rInsertPosition,
         const controller::Animator::AnimationMode eAnimationMode);
 
-    virtual void AddRun (const ::boost::shared_ptr<PageObjectRun>& rRun) SAL_OVERRIDE;
-    virtual void RemoveRun (const ::boost::shared_ptr<PageObjectRun>& rRun) SAL_OVERRIDE;
+    virtual void AddRun (const std::shared_ptr<PageObjectRun>& rRun) SAL_OVERRIDE;
+    virtual void RemoveRun (const std::shared_ptr<PageObjectRun>& rRun) SAL_OVERRIDE;
 
     virtual model::SlideSorterModel& GetModel() const SAL_OVERRIDE { return mrModel; }
     virtual view::SlideSorterView& GetView() const SAL_OVERRIDE { return mrView; }
-    virtual ::boost::shared_ptr<controller::Animator> GetAnimator() SAL_OVERRIDE { return mpAnimator; }
+    virtual std::shared_ptr<controller::Animator> GetAnimator() SAL_OVERRIDE { return mpAnimator; }
     virtual VclPtr<sd::Window> GetContentWindow() SAL_OVERRIDE { return mrSlideSorter.GetContentWindow(); }
 
 private:
     model::SlideSorterModel& mrModel;
     view::SlideSorterView& mrView;
     SlideSorter& mrSlideSorter;
-    ::boost::shared_ptr<controller::Animator> mpAnimator;
+    std::shared_ptr<controller::Animator> mpAnimator;
     typedef ::std::set<SharedPageObjectRun, PageObjectRun::Comparator> RunContainer;
     RunContainer maRuns;
     InsertPosition maInsertPosition;
@@ -264,7 +264,7 @@ InsertAnimator::Implementation::RunContainer::const_iterator
             nRunIndex));
 }
 
-void InsertAnimator::Implementation::AddRun (const ::boost::shared_ptr<PageObjectRun>& rRun)
+void InsertAnimator::Implementation::AddRun (const std::shared_ptr<PageObjectRun>& rRun)
 {
     if (rRun)
     {
@@ -276,7 +276,7 @@ void InsertAnimator::Implementation::AddRun (const ::boost::shared_ptr<PageObjec
     }
 }
 
-void InsertAnimator::Implementation::RemoveRun (const ::boost::shared_ptr<PageObjectRun>& rRun)
+void InsertAnimator::Implementation::RemoveRun (const std::shared_ptr<PageObjectRun>& rRun)
 {
     if (rRun)
     {

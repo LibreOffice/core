@@ -68,7 +68,7 @@ MasterPagesSelector::MasterPagesSelector (
     vcl::Window* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
-    const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
+    const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : PreviewValueSet(pParent),
       maMutex(),
@@ -222,7 +222,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                 }
 
                 // Setup the menu.
-                ::boost::scoped_ptr<PopupMenu> pMenu (new PopupMenu(GetContextMenuResId()));
+                std::unique_ptr<PopupMenu> pMenu (new PopupMenu(GetContextMenuResId()));
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
                 if (pMenuWindow != NULL)
                     pMenuWindow->SetPopupModeFlags(

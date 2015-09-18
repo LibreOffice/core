@@ -125,7 +125,7 @@ struct UndoAnimationPathImpl: private boost::noncopyable
     {
         if( mpPage && xNode.is() )
         {
-            boost::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
+            std::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
             if( pMainSequence.get() )
             {
                 CustomAnimationEffectPtr pEffect( pMainSequence->findEffect( xNode ) );
@@ -143,7 +143,7 @@ struct UndoAnimationPathImpl: private boost::noncopyable
         CustomAnimationEffectPtr pEffect;
         if( mpPage && (mnEffectOffset >= 0) )
         {
-            boost::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
+            std::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
             if( pMainSequence.get() )
                 pEffect = pMainSequence->getEffectFromOffset( mnEffectOffset );
         }

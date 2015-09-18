@@ -36,7 +36,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -308,7 +308,7 @@ void PreviewRenderer::PaintPage (
     }
 
     // Use a special redirector to prevent PresObj shapes from being painted.
-    boost::scoped_ptr<ViewRedirector> pRedirector;
+    std::unique_ptr<ViewRedirector> pRedirector;
     if ( ! bDisplayPresentationObjects)
         pRedirector.reset(new ViewRedirector());
 

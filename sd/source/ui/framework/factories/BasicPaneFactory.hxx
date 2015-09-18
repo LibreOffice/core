@@ -32,8 +32,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace {
 
@@ -109,7 +108,7 @@ private:
     ViewShellBase* mpViewShellBase;
     class PaneDescriptor;
     class PaneContainer;
-    ::boost::scoped_ptr<PaneContainer> mpPaneContainer;
+    std::unique_ptr<PaneContainer> mpPaneContainer;
 
     /** Create a new instance of FrameWindowPane.
         @param rPaneId

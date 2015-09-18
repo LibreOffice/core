@@ -28,7 +28,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <editeng/svxenum.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
 namespace awt { struct FontDescriptor; }
@@ -244,7 +244,7 @@ struct ImplTextObj;
 
 class TextObj
 {
-    boost::shared_ptr<ImplTextObj>    mpImplTextObj;
+    std::shared_ptr<ImplTextObj>    mpImplTextObj;
     void            ImplCalculateTextPositions();
 
 public:

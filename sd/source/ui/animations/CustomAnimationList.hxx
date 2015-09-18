@@ -29,7 +29,7 @@
 namespace sd {
 
 class CustomAnimationEffect;
-typedef boost::shared_ptr< CustomAnimationEffect > CustomAnimationEffectPtr;
+typedef std::shared_ptr< CustomAnimationEffect > CustomAnimationEffectPtr;
 
 class ICustomAnimationListController
 {

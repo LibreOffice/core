@@ -37,7 +37,7 @@
 #include "ViewShellBase.hxx"
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -261,9 +261,9 @@ void PageSelector::DisableBroadcasting()
     mnBroadcastDisableLevel ++;
 }
 
-::boost::shared_ptr<PageSelector::PageSelection> PageSelector::GetPageSelection() const
+std::shared_ptr<PageSelector::PageSelection> PageSelector::GetPageSelection() const
 {
-    ::boost::shared_ptr<PageSelection> pSelection (new PageSelection());
+    std::shared_ptr<PageSelection> pSelection (new PageSelection());
     pSelection->reserve(GetSelectedPageCount());
 
     int nPageCount = GetPageCount();
@@ -278,7 +278,7 @@ void PageSelector::DisableBroadcasting()
 }
 
 void PageSelector::SetPageSelection (
-    const ::boost::shared_ptr<PageSelection>& rpSelection,
+    const std::shared_ptr<PageSelection>& rpSelection,
     const bool bUpdateCurrentPage)
 {
     PageSelection::const_iterator iPage;
@@ -322,7 +322,7 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
         // selection to just the new current slide.  To prevent that,
         // we store (and at the end of this scope restore) the current
         // selection.
-        ::boost::shared_ptr<PageSelection> pSelection (GetPageSelection());
+        std::shared_ptr<PageSelection> pSelection (GetPageSelection());
 
         mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pCurrentPageDescriptor);
 
