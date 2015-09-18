@@ -144,7 +144,6 @@ struct ImplHotKey
     ImplHotKey*             mpNext;
     void*                   mpUserData;
     vcl::KeyCode            maKeyCode;
-    Link<>                  maLink;
 };
 
 struct ImplEventHook
@@ -1425,7 +1424,6 @@ bool ImplCallHotKey( const vcl::KeyCode& rKeyCode )
     {
         if ( pHotKeyData->maKeyCode == rKeyCode )
         {
-            pHotKeyData->maLink.Call( pHotKeyData->mpUserData );
             return true;
         }
 
