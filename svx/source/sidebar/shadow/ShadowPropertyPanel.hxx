@@ -13,7 +13,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/slider.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <sfx2/request.hxx>
 #include <svx/dlgctrl.hxx>

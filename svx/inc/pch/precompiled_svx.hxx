@@ -65,8 +65,6 @@
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <cassert>
 #include <climits>
 #include <cmath>
