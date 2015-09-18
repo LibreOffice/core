@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/ARGBColor.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
 namespace rendering
@@ -173,7 +173,7 @@ namespace pdfi
                                                 css::beans::PropertyValue>& xMask) = 0;
     };
 
-    typedef boost::shared_ptr<ContentSink> ContentSinkSharedPtr;
+    typedef std::shared_ptr<ContentSink> ContentSinkSharedPtr;
 }
 
 #endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_CONTENTSINK_HXX

@@ -60,7 +60,7 @@
 #include <vcl/font.hxx>
 #include <vcl/virdev.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <unordered_map>
 #include <string.h>
 #ifdef WNT
@@ -919,7 +919,7 @@ static bool checkEncryption( const OUString&                               i_rPa
     aPDFFile = OUStringToOString( i_rPath, osl_getThreadTextEncoding() );
 
     pdfparse::PDFReader aParser;
-    boost::scoped_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
+    std::unique_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
     if( pEntry )
     {
         pdfparse::PDFFile* pPDFFile = dynamic_cast<pdfparse::PDFFile*>(pEntry.get());

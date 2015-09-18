@@ -29,7 +29,7 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace {
     typedef cppu::WeakComponentImplHelper<
@@ -102,7 +102,7 @@ private:
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     ::rtl::Reference<PresenterController> mpPresenterController;
     PresenterTheme::SharedFontDescriptor mpFont;
-    ::boost::scoped_ptr<TextContainer> mpTextContainer;
+    std::unique_ptr<TextContainer> mpTextContainer;
     ::rtl::Reference<PresenterButton> mpCloseButton;
     sal_Int32 mnSeparatorY;
     sal_Int32 mnMaximalWidth;

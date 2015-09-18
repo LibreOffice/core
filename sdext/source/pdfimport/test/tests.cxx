@@ -455,7 +455,7 @@ namespace
     public:
         void testXPDFParser()
         {
-            boost::shared_ptr<TestSink> pSink( new TestSink() );
+            std::shared_ptr<TestSink> pSink( new TestSink() );
             CPPUNIT_ASSERT(
                 pdfi::xpdf_ImportFromFile(
                     getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),

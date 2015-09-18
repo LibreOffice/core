@@ -42,7 +42,7 @@ const static double gnVerticalBorder (5);
 ::rtl::Reference<PresenterButton> PresenterButton::Create (
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
     const ::rtl::Reference<PresenterController>& rpPresenterController,
-    const ::boost::shared_ptr<PresenterTheme>& rpTheme,
+    const std::shared_ptr<PresenterTheme>& rpTheme,
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
     const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
     const OUString& rsConfigurationName)
@@ -85,7 +85,7 @@ const static double gnVerticalBorder (5);
 PresenterButton::PresenterButton (
     const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
     const ::rtl::Reference<PresenterController>& rpPresenterController,
-    const ::boost::shared_ptr<PresenterTheme>& rpTheme,
+    const std::shared_ptr<PresenterTheme>& rpTheme,
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
     const PresenterTheme::SharedFontDescriptor& rpFont,
     const PresenterTheme::SharedFontDescriptor& rpMouseOverFont,

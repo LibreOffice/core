@@ -60,7 +60,7 @@ public:
     static ::rtl::Reference<PresenterButton> Create (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController,
-        const ::boost::shared_ptr<PresenterTheme>& rpTheme,
+        const std::shared_ptr<PresenterTheme>& rpTheme,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::rendering::XCanvas>& rxParentCanvas,
         const OUString& rsConfigurationName);
@@ -121,7 +121,7 @@ public:
 
 private:
     ::rtl::Reference<PresenterController> mpPresenterController;
-    ::boost::shared_ptr<PresenterTheme> mpTheme;
+    std::shared_ptr<PresenterTheme> mpTheme;
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
@@ -138,7 +138,7 @@ private:
     PresenterButton (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const ::rtl::Reference<PresenterController>& rpPresenterController,
-        const ::boost::shared_ptr<PresenterTheme>& rpTheme,
+        const std::shared_ptr<PresenterTheme>& rpTheme,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const PresenterTheme::SharedFontDescriptor& rFont,
         const PresenterTheme::SharedFontDescriptor& rMouseOverFont,

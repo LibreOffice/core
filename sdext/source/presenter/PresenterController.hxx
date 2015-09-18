@@ -45,7 +45,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <rtl/ref.hxx>
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sdext { namespace presenter {
 
@@ -97,15 +97,15 @@ public:
         GetViewBackground (const OUString& rsViewURL) const;
     PresenterTheme::SharedFontDescriptor
         GetViewFont (const OUString& rsViewURL) const;
-    ::boost::shared_ptr<PresenterTheme> GetTheme() const;
+    std::shared_ptr<PresenterTheme> GetTheme() const;
     ::rtl::Reference<PresenterWindowManager> GetWindowManager() const;
     css::uno::Reference<css::presentation::XSlideShowController>
         GetSlideShowController() const;
     rtl::Reference<PresenterPaneContainer> GetPaneContainer() const;
     ::rtl::Reference<PresenterPaneBorderPainter> GetPaneBorderPainter() const;
-    ::boost::shared_ptr<PresenterCanvasHelper> GetCanvasHelper() const;
+    std::shared_ptr<PresenterCanvasHelper> GetCanvasHelper() const;
     css::uno::Reference<css::drawing::XPresenterHelper> GetPresenterHelper() const;
-    ::boost::shared_ptr<PresenterPaintManager> GetPaintManager() const;
+    std::shared_ptr<PresenterPaintManager> GetPaintManager() const;
     double GetSlideAspectRatio() const;
     void ShowView (const OUString& rsViewURL);
     void HideView (const OUString& rsViewURL);
@@ -204,13 +204,13 @@ private:
     css::uno::Reference<css::drawing::XDrawPage> mxCurrentSlide;
     css::uno::Reference<css::drawing::XDrawPage> mxNextSlide;
     ::rtl::Reference<PresenterWindowManager> mpWindowManager;
-    ::boost::shared_ptr<PresenterPaneAnimator> mpCurrentPaneAnimation;
-    ::boost::shared_ptr<PresenterTheme> mpTheme;
+    std::shared_ptr<PresenterPaneAnimator> mpCurrentPaneAnimation;
+    std::shared_ptr<PresenterTheme> mpTheme;
     css::uno::Reference<css::awt::XWindow> mxMainWindow;
     ::rtl::Reference<PresenterPaneBorderPainter> mpPaneBorderPainter;
-    ::boost::shared_ptr<PresenterCanvasHelper> mpCanvasHelper;
+    std::shared_ptr<PresenterCanvasHelper> mpCanvasHelper;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
-    ::boost::shared_ptr<PresenterPaintManager> mpPaintManager;
+    std::shared_ptr<PresenterPaintManager> mpPaintManager;
     sal_Int32 mnPendingSlideNumber;
     css::uno::Reference<css::util::XURLTransformer> mxUrlTransformer;
     ::rtl::Reference<PresenterAccessible> mpAccessibleObject;

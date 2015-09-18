@@ -80,7 +80,7 @@ private:
 
     void InvertCaret();
 };
-typedef ::boost::shared_ptr<PresenterTextCaret> SharedPresenterTextCaret;
+typedef std::shared_ptr<PresenterTextCaret> SharedPresenterTextCaret;
 
 //===== PresenterTextParagraph ================================================
 
@@ -208,7 +208,7 @@ private:
     sal_Int8 GetTextDirection() const;
     bool IsTextReferencePointLeft() const;
 };
-typedef ::boost::shared_ptr<PresenterTextParagraph> SharedPresenterTextParagraph;
+typedef std::shared_ptr<PresenterTextParagraph> SharedPresenterTextParagraph;
 
 /** A simple text view that paints text onto a given canvas.
 */

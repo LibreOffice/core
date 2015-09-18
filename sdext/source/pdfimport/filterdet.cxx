@@ -34,7 +34,7 @@
 #include <com/sun/star/io/TempFile.hpp>
 #include <comphelper/fileurl.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <string.h>
 
 using namespace com::sun::star;
@@ -505,7 +505,7 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
     aPDFFile = OUStringToOString( aSysUPath, osl_getThreadTextEncoding() );
 
     pdfparse::PDFReader aParser;
-    boost::scoped_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
+    std::unique_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
     if( pEntry )
     {
         pdfparse::PDFFile* pPDFFile = dynamic_cast<pdfparse::PDFFile*>(pEntry.get());

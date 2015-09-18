@@ -37,6 +37,7 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -218,7 +219,7 @@ public:
 
 private:
     OUString msURLPath;
-    ::boost::scoped_ptr<Command> mpCommand;
+    std::unique_ptr<Command> mpCommand;
     ::rtl::Reference<PresenterController> mpPresenterController;
     typedef ::std::vector<Reference<frame::XStatusListener> > StatusListenerContainer;
     StatusListenerContainer maStatusListenerContainer;
