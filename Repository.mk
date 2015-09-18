@@ -985,6 +985,7 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
 		fonts_emojione_color \
 		fonts_gentium \
 		$(if $(MPL_SUBSET),,fonts_kacst) \
+		fonts_karla \
 		fonts_liberation \
 		fonts_liberation_narrow \
 		fonts_libertineg \
