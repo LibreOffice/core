@@ -274,13 +274,13 @@ private:
 
     void setActiveXToolbarsVisible( bool bVisible );
 
-    DECL_LINK_TYPED(updateHdl, Timer *, void);
-    DECL_LINK( PostYieldListener, void* );
-    DECL_LINK_TYPED(ReadyForNextInputHdl, Timer *, void);
+    DECL_LINK_TYPED( updateHdl, Timer *, void );
+    DECL_LINK_TYPED( PostYieldListener, LinkParamNone*, void );
+    DECL_LINK_TYPED( ReadyForNextInputHdl, Timer *, void );
     DECL_LINK_TYPED( endPresentationHdl, void*, void );
     DECL_LINK_TYPED( ContextMenuSelectHdl, Menu *, bool );
     DECL_LINK_TYPED( ContextMenuHdl, void*, void );
-    DECL_LINK_TYPED(deactivateHdl, Timer *, void);
+    DECL_LINK_TYPED( deactivateHdl, Timer *, void );
     DECL_LINK( EventListenerHdl, VclSimpleEvent* );
 
     // helper

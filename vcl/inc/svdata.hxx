@@ -104,6 +104,11 @@ public:
 
 typedef std::vector<Link<VclWindowEvent&,bool> > SVAppKeyListeners;
 
+struct SVAppPostYieldListeners : public vcl::DeletionNotifier
+{
+    std::vector<Link<LinkParamNone*,void>>   m_aListeners;
+};
+
 struct ImplSVAppData
 {
     enum ImeStatusWindowMode
@@ -128,7 +133,7 @@ struct ImplSVAppData
     VclPtr<ImplWheelWindow> mpWheelWindow;                  // WheelWindow
     ImplHotKey*             mpFirstHotKey;                  // HotKey-Verwaltung
     ImplEventHook*          mpFirstEventHook;               // Event-Hooks
-    VclEventListeners2*     mpPostYieldListeners;           // post yield listeners
+    SVAppPostYieldListeners* mpPostYieldListeners;           // post yield listeners
     sal_uInt64              mnLastInputTime;                // GetLastInputTime()
     sal_uInt16              mnDispatchLevel;                // DispatchLevel
     sal_uInt16              mnModalMode;                    // ModalMode Count

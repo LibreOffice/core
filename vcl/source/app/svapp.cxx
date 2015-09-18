@@ -377,7 +377,20 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 
     // call post yield listeners
     if( pSVData->maAppData.mpPostYieldListeners )
-        pSVData->maAppData.mpPostYieldListeners->callListeners( NULL );
+    {
+        vcl::DeletionListener aDel( pSVData->maAppData.mpPostYieldListeners );
+
+        auto& rYieldListeners = pSVData->maAppData.mpPostYieldListeners->m_aListeners;
+        // Copy the list, because this can be destroyed when calling a Link...
+        std::vector<Link<LinkParamNone*,void>> aCopy( rYieldListeners );
+        for( Link<LinkParamNone*,void>& rLink : aCopy )
+        {
+            if (aDel.isDeleted()) break;
+            // check this hasn't been removed in some re-enterancy scenario fdo#47368
+            if( std::find(rYieldListeners.begin(), rYieldListeners.end(), rLink) != rYieldListeners.end() )
+                rLink.Call( nullptr );
+        }
+    }
 }
 
 void Application::Reschedule( bool i_bAllEvents )
@@ -960,19 +973,25 @@ void Application::DisableNoYieldMode()
     pSVData->maAppData.mbNoYield = false;
 }
 
-void Application::AddPostYieldListener( const Link<>& i_rListener )
+void Application::AddPostYieldListener( const Link<LinkParamNone*,void>& i_rListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->maAppData.mpPostYieldListeners )
-        pSVData->maAppData.mpPostYieldListeners = new VclEventListeners2();
-    pSVData->maAppData.mpPostYieldListeners->addListener( i_rListener );
+        pSVData->maAppData.mpPostYieldListeners = new SVAppPostYieldListeners();
+    // ensure uniqueness
+    auto& rYieldListeners = pSVData->maAppData.mpPostYieldListeners->m_aListeners;
+    if (std::find(rYieldListeners.begin(), rYieldListeners.end(), i_rListener) == rYieldListeners.end())
+       rYieldListeners.push_back( i_rListener );
 }
 
-void Application::RemovePostYieldListener( const Link<>& i_rListener )
+void Application::RemovePostYieldListener( const Link<LinkParamNone*,void>& i_rListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpPostYieldListeners )
-        pSVData->maAppData.mpPostYieldListeners->removeListener( i_rListener );
+    {
+        auto& rYieldListeners = pSVData->maAppData.mpPostYieldListeners->m_aListeners;
+        rYieldListeners.erase( std::remove(rYieldListeners.begin(), rYieldListeners.end(), i_rListener ), rYieldListeners.end() );
+    }
 }
 
 WorkWindow* Application::GetAppWindow()
