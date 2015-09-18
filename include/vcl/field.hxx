@@ -476,6 +476,7 @@ public:
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void            Modify() SAL_OVERRIDE;
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
@@ -505,6 +506,7 @@ public:
     virtual void            First() SAL_OVERRIDE;
     virtual void            Last() SAL_OVERRIDE;
     virtual bool            set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
@@ -575,6 +577,7 @@ public:
     { return ConvertDoubleValue( static_cast<double>(nValue), nDecDigits, eInUnit, eOutUnit ); }
 
     virtual bool            set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
@@ -597,6 +600,7 @@ public:
     virtual void            Down() SAL_OVERRIDE;
     virtual void            First() SAL_OVERRIDE;
     virtual void            Last() SAL_OVERRIDE;
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
@@ -631,6 +635,7 @@ public:
     Date                    GetFirst() const                    { return maFirst; }
     void                    SetLast( const Date& rNewLast )     { maLast = rNewLast; }
     Date                    GetLast() const                     { return maLast; }
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
@@ -666,6 +671,7 @@ public:
     tools::Time             GetLast() const                     { return maLast; }
 
     void                    SetExtFormat( ExtTimeFieldFormat eFormat );
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
@@ -684,6 +690,7 @@ public:
     virtual void            Modify() SAL_OVERRIDE;
 
     virtual void            ReformatAll() SAL_OVERRIDE;
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
@@ -707,6 +714,7 @@ public:
     virtual void            ReformatAll() SAL_OVERRIDE;
 
     void                    InsertValue( sal_Int64 nValue, sal_Int32  nPos = COMBOBOX_APPEND );
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
@@ -762,6 +770,7 @@ public:
     virtual void            ReformatAll() SAL_OVERRIDE;
 
     virtual sal_Int64       GetValue() const SAL_OVERRIDE;
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
@@ -780,6 +789,7 @@ public:
     virtual void            Modify() SAL_OVERRIDE;
 
     virtual void            ReformatAll() SAL_OVERRIDE;
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
@@ -799,6 +809,7 @@ public:
     virtual void            Modify() SAL_OVERRIDE;
 
     virtual void            ReformatAll() SAL_OVERRIDE;
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_FIELD_HXX
