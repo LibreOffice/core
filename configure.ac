@@ -4011,7 +4011,8 @@ AC_SUBST(x_OBJCXXFLAGS)
 AC_SUBST(x_LDFLAGS)
 
 #
-# determine CPUNAME, GUIBASE, ...
+# determine CPUNAME, OS, ...
+# The USING_X11 flag tells whether the host os uses X by default. Can be overriden with the --without-x option.
 #
 SOLARINC=
 
@@ -4020,7 +4021,7 @@ case "$host_os" in
 aix*)
     COM=GCC
     CPUNAME=POWERPC
-    GUIBASE=unx
+    USING_X11=TRUE
     OS=AIX
     RTL_OS=AIX
     RTL_ARCH=PowerPC
@@ -4030,7 +4031,7 @@ aix*)
 
 cygwin*)
     COM=MSC
-    GUIBASE=not-used
+    USING_X11=
     OS=WNT
     RTL_OS=Windows
     if test "$GNUMAKE_WIN_NATIVE" = "TRUE" ; then
@@ -4061,7 +4062,7 @@ cygwin*)
 
 darwin*)
     COM=GCC
-    GUIBASE=not-used
+    USING_X11=
     OS=MACOSX
     RTL_OS=MacOSX
     P_SEP=:
@@ -4089,7 +4090,7 @@ darwin*)
 
 dragonfly*)
     COM=GCC
-    GUIBASE=unx
+    USING_X11=TRUE
     OS=DRAGONFLY
     RTL_OS=DragonFly
     P_SEP=:
@@ -4113,7 +4114,7 @@ dragonfly*)
 
 freebsd*)
     COM=GCC
-    GUIBASE=unx
+    USING_X11=TRUE
     RTL_OS=FreeBSD
     OS=FREEBSD
     P_SEP=:
@@ -4137,7 +4138,7 @@ freebsd*)
 
 kfreebsd*)
     COM=GCC
-    GUIBASE=unx
+    USING_X11=TRUE
     OS=LINUX
     RTL_OS=kFreeBSD
     P_SEP=:
@@ -4162,7 +4163,7 @@ kfreebsd*)
 
 linux-gnu*)
     COM=GCC
-    GUIBASE=unx
+    USING_X11=TRUE
     OS=LINUX
     RTL_OS=Linux
     P_SEP=:
@@ -4279,7 +4280,7 @@ linux-gnu*)
 
 linux-android*)
     COM=GCC
-    GUIBASE=not-used
+    USING_X11=
     OS=ANDROID
     RTL_OS=Android
     P_SEP=:
@@ -4314,7 +4315,7 @@ linux-android*)
 
 mingw*)
     COM=GCC
-    GUIBASE=not-used
+    USING_X11=
     OS=WNT
     RTL_OS=Windows
     P_SEP=:
@@ -4342,7 +4343,7 @@ mingw*)
 *netbsd*)
 
     COM=GCC
-    GUIBASE=unx
+    USING_X11=TRUE
     OS=NETBSD
     RTL_OS=NetBSD
     P_SEP=:
@@ -4376,7 +4377,7 @@ mingw*)
 
 openbsd*)
     COM=GCC
-    GUIBASE=unx
+    USING_X11=TRUE
     OS=OPENBSD
     RTL_OS=OpenBSD
     P_SEP=:
@@ -4402,7 +4403,7 @@ openbsd*)
 solaris*)
 
     COM=GCC
-    GUIBASE=unx
+    USING_X11=TRUE
     OS=SOLARIS
     RTL_OS=Solaris
     P_SEP=:
@@ -4436,10 +4437,10 @@ solaris*)
 esac
 
 if test "$with_x" = "no"; then
-    if test "$GUIBASE" != "unx"; then
+    if test "$USING_X11" != TRUE; then
         AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice with --without-x])
     fi
-    GUIBASE=not-used
+    USING_X11=
 fi
 
 WORKDIR="${BUILDDIR}/workdir"
@@ -4451,7 +4452,7 @@ AC_SUBST(CPUNAME)
 AC_SUBST(RTL_OS)
 AC_SUBST(RTL_ARCH)
 AC_SUBST(EPM_FLAGS)
-AC_SUBST(GUIBASE)
+AC_SUBST(USING_X11)
 AC_SUBST([INSTDIR])
 AC_SUBST([INSTROOT])
 AC_SUBST(OS)
@@ -4526,7 +4527,7 @@ if test "$cross_compiling" = "yes"; then
     cp configure CONF-FOR-BUILD
     test -d config_build && cp -p config_build/*.h CONF-FOR-BUILD/config_host 2>/dev/null
     (
-    unset COM GUIBASE OS CPUNAME
+    unset COM USING_X11 OS CPUNAME
     unset CC CXX SYSBASE CFLAGS
     unset AR NM OBJDUMP PKG_CONFIG RANLIB READELF STRIP
     unset CPPUNIT_CFLAGS CPPUNIT_LIBS
@@ -9949,7 +9950,7 @@ dnl Test which vclplugs have to be built.
 dnl ===================================================================
 R=""
 AC_MSG_CHECKING([which VCLplugs shall be built])
-if test "$GUIBASE" != "unx" -o "$with_x" = "no"; then
+if test "$USING_X11" != TRUE -o "$with_x" = "no"; then
     enable_gtk=no
     enable_gtk3=no
 fi
@@ -11768,7 +11769,7 @@ dnl ===================================================================
 dnl Test whether to build cairo or rely on the system version
 dnl ===================================================================
 
-if test "$GUIBASE" = "unx"; then
+if test "$USING_X11" = TRUE; then
     # Used in vcl/Library_vclplug_gen.mk
     test_cairo=yes
 fi
