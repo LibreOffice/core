@@ -276,14 +276,14 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewShellImp *pI ) :
     // OD 14.04.2003 #106346# - init new flag <mbFormatContentOnInterrupt>.
     mbFormatContentOnInterrupt = false;
 
-    assert(!pImp->pLayAct); // there can be only one SwLayAction
-    pImp->pLayAct = this;   // register there
+    assert(!pImp->m_pLayAction); // there can be only one SwLayAction
+    pImp->m_pLayAction = this;   // register there
 }
 
 SwLayAction::~SwLayAction()
 {
     OSL_ENSURE( !pWait, "Wait object not destroyed" );
-    pImp->pLayAct = 0;      // unregister
+    pImp->m_pLayAction = 0;      // unregister
 }
 
 void SwLayAction::Reset()
@@ -2118,7 +2118,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
 {
     SAL_INFO("sw.idle", "SwLayIdle() entry");
 
-    pImp->pIdleAct = this;
+    pImp->m_pIdleAct = this;
 
     SHOW_IDLE( COL_LIGHTRED );
 
@@ -2306,7 +2306,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
 
 SwLayIdle::~SwLayIdle()
 {
-    pImp->pIdleAct = 0;
+    pImp->m_pIdleAct = 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

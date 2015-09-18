@@ -48,8 +48,8 @@ void SwViewShellImp::StartAction()
     if ( HasDrawView() )
     {
         SET_CURR_SHELL( GetShell() );
-        if ( pSh->ISA(SwFEShell) )
-            static_cast<SwFEShell*>(pSh)->HideChainMarker(); // might have changed
+        if ( m_pShell->ISA(SwFEShell) )
+            static_cast<SwFEShell*>(m_pShell)->HideChainMarker(); // might have changed
     }
 }
 
@@ -58,8 +58,8 @@ void SwViewShellImp::EndAction()
     if ( HasDrawView() )
     {
         SET_CURR_SHELL( GetShell() );
-        if ( pSh->ISA(SwFEShell) )
-            static_cast<SwFEShell*>(pSh)->SetChainMarker(); // might have changed
+        if ( m_pShell->ISA(SwFEShell) )
+            static_cast<SwFEShell*>(m_pShell)->SetChainMarker(); // might have changed
     }
 }
 
@@ -67,18 +67,18 @@ void SwViewShellImp::LockPaint()
 {
     if ( HasDrawView() )
     {
-        bResetHdlHiddenPaint = !GetDrawView()->areMarkHandlesHidden();
+        m_bResetHdlHiddenPaint = !GetDrawView()->areMarkHandlesHidden();
         GetDrawView()->hideMarkHandles();
     }
     else
     {
-        bResetHdlHiddenPaint = false;
+        m_bResetHdlHiddenPaint = false;
     }
 }
 
 void SwViewShellImp::UnlockPaint()
 {
-    if ( bResetHdlHiddenPaint )
+    if ( m_bResetHdlHiddenPaint )
         GetDrawView()->showMarkHandles();
 }
 
@@ -204,8 +204,8 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
     if ( !bCheckDrawObjs )
         return;
 
-    OSL_ENSURE( pSh->getIDocumentDrawModelAccess().GetDrawModel(), "NotifySizeChg without DrawModel" );
-    SdrPage* pPage = pSh->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 );
+    OSL_ENSURE( m_pShell->getIDocumentDrawModelAccess().GetDrawModel(), "NotifySizeChg without DrawModel" );
+    SdrPage* pPage = m_pShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 );
     const size_t nObjs = pPage->GetObjCount();
     for( size_t nObj = 0; nObj < nObjs; ++nObj )
     {

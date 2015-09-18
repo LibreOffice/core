@@ -331,7 +331,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             {
                 SwRootFrm* pCurrentLayout = GetLayout();
 
-                Imp()->pRegion = NULL;
+                Imp()->m_pRegion = NULL;
 
                 //First Invert then Compress, never the other way round!
                 pRegion->Invert();
@@ -1237,7 +1237,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
 
     if(bSmoothScrollAllowed)
     {
-        Imp()->bStopSmooth = false;
+        Imp()->m_bStopSmooth = false;
 
         const SwRect aOldVis( VisArea() );
 
@@ -1333,7 +1333,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
             while ( lDiff )
             {
                 long lScroll;
-                if ( Imp()->bStopSmooth || std::abs(lDiff) <= std::abs(lMaDelta) )
+                if ( Imp()->m_bStopSmooth || std::abs(lDiff) <= std::abs(lMaDelta) )
                 {
                     lScroll = lDiff;
                     lDiff = 0;
@@ -1367,28 +1367,28 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                     Imp()->GetDrawView()->VisAreaChanged( GetWin() );
 
                 SetFirstVisPageInvalid();
-                if ( !Imp()->bStopSmooth )
+                if ( !Imp()->m_bStopSmooth )
                 {
                     const bool bScrollDirectionIsUp(lScroll > 0);
-                    Imp()->aSmoothRect = VisArea();
+                    Imp()->m_aSmoothRect = VisArea();
 
                     if(bScrollDirectionIsUp)
                     {
-                        Imp()->aSmoothRect.Bottom( VisArea().Top() + lScroll + aPixSz.Height());
+                        Imp()->m_aSmoothRect.Bottom( VisArea().Top() + lScroll + aPixSz.Height());
                     }
                     else
                     {
-                        Imp()->aSmoothRect.Top( VisArea().Bottom() + lScroll - aPixSz.Height());
+                        Imp()->m_aSmoothRect.Top( VisArea().Bottom() + lScroll - aPixSz.Height());
                     }
 
-                    Imp()->bSmoothUpdate = true;
+                    Imp()->m_bSmoothUpdate = true;
                     GetWin()->Update();
-                    Imp()->bSmoothUpdate = false;
+                    Imp()->m_bSmoothUpdate = false;
 
-                    if(!Imp()->bStopSmooth)
+                    if(!Imp()->m_bStopSmooth)
                     {
                             // start paint on logic base
-                            const Rectangle aTargetLogic(Imp()->aSmoothRect.SVRect());
+                            const Rectangle aTargetLogic(Imp()->m_aSmoothRect.SVRect());
                             DLPrePaint2(vcl::Region(aTargetLogic));
 
                             // get target rectangle in discrete pixels
@@ -1422,7 +1422,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
             }
             pVout.disposeAndClear();
             GetWin()->Update();
-            if ( !Imp()->bStopSmooth )
+            if ( !Imp()->m_bStopSmooth )
                 --mnLockPaint;
             SetFirstVisPageInvalid();
             return true;
@@ -1720,14 +1720,14 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRe
     RenderContextGuard aGuard(mpOut, &rRenderContext, this);
     if ( mnLockPaint )
     {
-        if ( Imp()->bSmoothUpdate )
+        if ( Imp()->m_bSmoothUpdate )
         {
             SwRect aTmp( rRect );
-            if ( !Imp()->aSmoothRect.IsInside( aTmp ) )
-                Imp()->bStopSmooth = true;
+            if ( !Imp()->m_aSmoothRect.IsInside( aTmp ) )
+                Imp()->m_bStopSmooth = true;
             else
             {
-                Imp()->aSmoothRect = aTmp;
+                Imp()->m_aSmoothRect = aTmp;
                 return;
             }
         }

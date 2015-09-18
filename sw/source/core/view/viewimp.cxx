@@ -43,106 +43,106 @@
 
 void SwViewShellImp::Init( const SwViewOption *pNewOpt )
 {
-    OSL_ENSURE( pDrawView, "SwViewShellImp::Init without DrawView" );
+    OSL_ENSURE( m_pDrawView, "SwViewShellImp::Init without DrawView" );
     //Create PageView if it doesn't exist
-    SwRootFrm *pRoot = pSh->GetLayout();
-    if ( !pSdrPageView )
+    SwRootFrm *pRoot = m_pShell->GetLayout();
+    if ( !m_pSdrPageView )
     {
-        IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
+        IDocumentDrawModelAccess& rIDDMA = m_pShell->getIDocumentDrawModelAccess();
         if ( !pRoot->GetDrawPage() )
             pRoot->SetDrawPage( rIDDMA.GetDrawModel()->GetPage( 0 ) );
 
         if ( pRoot->GetDrawPage()->GetSize() != pRoot->Frm().SSize() )
             pRoot->GetDrawPage()->SetSize( pRoot->Frm().SSize() );
 
-        pSdrPageView = pDrawView->ShowSdrPage( pRoot->GetDrawPage());
+        m_pSdrPageView = m_pDrawView->ShowSdrPage( pRoot->GetDrawPage());
         // OD 26.06.2003 #108784# - notify drawing page view about invisible
         // layers.
-        rIDDMA.NotifyInvisibleLayers( *pSdrPageView );
+        rIDDMA.NotifyInvisibleLayers( *m_pSdrPageView );
     }
-    pDrawView->SetDragStripes( pNewOpt->IsCrossHair() );
-    pDrawView->SetGridSnap( pNewOpt->IsSnap() );
-    pDrawView->SetGridVisible( pNewOpt->IsGridVisible() );
+    m_pDrawView->SetDragStripes( pNewOpt->IsCrossHair() );
+    m_pDrawView->SetGridSnap( pNewOpt->IsSnap() );
+    m_pDrawView->SetGridVisible( pNewOpt->IsGridVisible() );
     const Size &rSz = pNewOpt->GetSnapSize();
-    pDrawView->SetGridCoarse( rSz );
+    m_pDrawView->SetGridCoarse( rSz );
     const Size aFSize
             ( rSz.Width() ? rSz.Width() /std::max(short(1),pNewOpt->GetDivisionX()):0,
               rSz.Height()? rSz.Height()/std::max(short(1),pNewOpt->GetDivisionY()):0);
-     pDrawView->SetGridFine( aFSize );
+     m_pDrawView->SetGridFine( aFSize );
     Fraction aSnGrWdtX(rSz.Width(), pNewOpt->GetDivisionX() + 1);
     Fraction aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);
-    pDrawView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
+    m_pDrawView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
     if ( pRoot->Frm().HasArea() )
-        pDrawView->SetWorkArea( pRoot->Frm().SVRect() );
+        m_pDrawView->SetWorkArea( pRoot->Frm().SVRect() );
 
     if ( GetShell()->IsPreview() )
-        pDrawView->SetAnimationEnabled( false );
+        m_pDrawView->SetAnimationEnabled( false );
 
-    pDrawView->SetUseIncompatiblePathCreateInterface( false );
+    m_pDrawView->SetUseIncompatiblePathCreateInterface( false );
 
     // set handle size to 9 pixels, always
-    pDrawView->SetMarkHdlSizePixel(9);
+    m_pDrawView->SetMarkHdlSizePixel(9);
 }
 
 /// CTor for the core internals
 SwViewShellImp::SwViewShellImp( SwViewShell *pParent ) :
-    pSh( pParent ),
-    pDrawView( 0 ),
-    pSdrPageView( 0 ),
-    pFirstVisPage( 0 ),
-    pRegion( 0 ),
-    pLayAct( 0 ),
-    pIdleAct( 0 ),
-    pAccMap( 0 ),
-    pSdrObjCached(NULL),
-    bFirstPageInvalid( true ),
-    bResetHdlHiddenPaint( false ),
-    bSmoothUpdate( false ),
-    bStopSmooth( false ),
-    nRestoreActions( 0 ),
+    m_pShell( pParent ),
+    m_pDrawView( 0 ),
+    m_pSdrPageView( 0 ),
+    m_pFirstVisiblePage( 0 ),
+    m_pRegion( 0 ),
+    m_pLayAction( 0 ),
+    m_pIdleAct( 0 ),
+    m_pAccessibleMap( 0 ),
+    m_pSdrObjectCached(NULL),
+    m_bFirstPageInvalid( true ),
+    m_bResetHdlHiddenPaint( false ),
+    m_bSmoothUpdate( false ),
+    m_bStopSmooth( false ),
+    m_nRestoreActions( 0 ),
     // OD 12.12.2002 #103492#
-    mpPgPreviewLayout( 0 )
+    m_pPagePreviewLayout( 0 )
 {
 }
 
 SwViewShellImp::~SwViewShellImp()
 {
-    delete pAccMap;
+    delete m_pAccessibleMap;
 
     // OD 12.12.2002 #103492#
-    delete mpPgPreviewLayout;
+    delete m_pPagePreviewLayout;
 
     //JP 29.03.96: after ShowSdrPage  HideSdrPage must also be executed!!!
-    if( pDrawView )
-         pDrawView->HideSdrPage();
+    if( m_pDrawView )
+         m_pDrawView->HideSdrPage();
 
-    delete pDrawView;
+    delete m_pDrawView;
 
     DelRegion();
 
-    OSL_ENSURE( !pLayAct, "Have action for the rest of your life." );
-    OSL_ENSURE( !pIdleAct,"Be idle for the rest of your life." );
+    OSL_ENSURE( !m_pLayAction, "Have action for the rest of your life." );
+    OSL_ENSURE( !m_pIdleAct,"Be idle for the rest of your life." );
 }
 
 void SwViewShellImp::DelRegion()
 {
-    DELETEZ(pRegion);
+    DELETEZ(m_pRegion);
 }
 
 bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
 {
     // In case of tiled rendering the visual area is the last painted tile -> not interesting.
-    if ( rRect.IsOver( pSh->VisArea() ) || pSh->isTiledRendering() )
+    if ( rRect.IsOver( m_pShell->VisArea() ) || m_pShell->isTiledRendering() )
     {
-        if ( !pRegion )
+        if ( !m_pRegion )
         {
             // In case of normal rendering, this makes sure only visible rectangles are painted.
             // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
-            const SwRect& rArea = pSh->isTiledRendering() ? pSh->GetLayout()->Frm() : pSh->VisArea();
-            pRegion = new SwRegionRects( rArea );
+            const SwRect& rArea = m_pShell->isTiledRendering() ? m_pShell->GetLayout()->Frm() : m_pShell->VisArea();
+            m_pRegion = new SwRegionRects( rArea );
         }
-        (*pRegion) -= rRect;
+        (*m_pRegion) -= rRect;
         return true;
     }
     return false;
@@ -150,20 +150,20 @@ bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
 
 void SwViewShellImp::CheckWaitCrsr()
 {
-    if ( pLayAct )
-        pLayAct->CheckWaitCrsr();
+    if ( m_pLayAction )
+        m_pLayAction->CheckWaitCrsr();
 }
 
 bool SwViewShellImp::IsCalcLayoutProgress() const
 {
-    return pLayAct && pLayAct->IsCalcLayout();
+    return m_pLayAction && m_pLayAction->IsCalcLayout();
 }
 
 bool SwViewShellImp::IsUpdateExpFields()
 {
-    if ( pLayAct && pLayAct->IsCalcLayout() )
+    if ( m_pLayAction && m_pLayAction->IsCalcLayout() )
     {
-        pLayAct->SetUpdateExpFields();
+        m_pLayAction->SetUpdateExpFields();
         return true;
     }
     return false;
@@ -171,23 +171,23 @@ bool SwViewShellImp::IsUpdateExpFields()
 
 void SwViewShellImp::SetFirstVisPage(OutputDevice* pRenderContext)
 {
-    if ( pSh->mbDocSizeChgd && pSh->VisArea().Top() > pSh->GetLayout()->Frm().Height() )
+    if ( m_pShell->mbDocSizeChgd && m_pShell->VisArea().Top() > m_pShell->GetLayout()->Frm().Height() )
     {
         //We are in an action and because of erase actions the VisArea is
         //after the first visible page.
         //To avoid excessive formatting, hand back the last page.
-        pFirstVisPage = static_cast<SwPageFrm*>(pSh->GetLayout()->Lower());
-        while ( pFirstVisPage && pFirstVisPage->GetNext() )
-            pFirstVisPage = static_cast<SwPageFrm*>(pFirstVisPage->GetNext());
+        m_pFirstVisiblePage = static_cast<SwPageFrm*>(m_pShell->GetLayout()->Lower());
+        while ( m_pFirstVisiblePage && m_pFirstVisiblePage->GetNext() )
+            m_pFirstVisiblePage = static_cast<SwPageFrm*>(m_pFirstVisiblePage->GetNext());
     }
     else
     {
         const SwViewOption* pSwViewOption = GetShell()->GetViewOptions();
         const bool bBookMode = pSwViewOption->IsViewLayoutBookMode();
 
-        SwPageFrm *pPage = static_cast<SwPageFrm*>(pSh->GetLayout()->Lower());
+        SwPageFrm *pPage = static_cast<SwPageFrm*>(m_pShell->GetLayout()->Lower());
         SwRect aPageRect = pPage->GetBoundRect(pRenderContext);
-        while ( pPage && !aPageRect.IsOver( pSh->VisArea() ) )
+        while ( pPage && !aPageRect.IsOver( m_pShell->VisArea() ) )
         {
             pPage = static_cast<SwPageFrm*>(pPage->GetNext());
             if ( pPage )
@@ -200,9 +200,9 @@ void SwViewShellImp::SetFirstVisPage(OutputDevice* pRenderContext)
                 }
             }
         }
-        pFirstVisPage = pPage ? pPage : static_cast<SwPageFrm*>(pSh->GetLayout()->Lower());
+        m_pFirstVisiblePage = pPage ? pPage : static_cast<SwPageFrm*>(m_pShell->GetLayout()->Lower());
     }
-    bFirstPageInvalid = false;
+    m_bFirstPageInvalid = false;
 }
 
 void SwViewShellImp::MakeDrawView()
@@ -217,7 +217,7 @@ void SwViewShellImp::MakeDrawView()
     }
     else
     {
-        if ( !pDrawView )
+        if ( !m_pDrawView )
         {
             // #i72809#
             // Discussed with FME, he also thinks that the getPrinter is old and not correct. When i got
@@ -232,7 +232,7 @@ void SwViewShellImp::MakeDrawView()
                 pOutDevForDrawView = GetShell()->GetOut();
             }
 
-            pDrawView = new SwDrawView( *this, rIDDMA.GetDrawModel(), pOutDevForDrawView);
+            m_pDrawView = new SwDrawView( *this, rIDDMA.GetDrawModel(), pOutDevForDrawView);
         }
 
         GetDrawView()->SetActiveLayer("Heaven");
@@ -241,11 +241,11 @@ void SwViewShellImp::MakeDrawView()
 
         // #i68597# If document is read-only, we will not profit from overlay,
         // so switch it off.
-        if (pDrawView->IsBufferedOverlayAllowed())
+        if (m_pDrawView->IsBufferedOverlayAllowed())
         {
             if(pSwViewOption->IsReadonly())
             {
-                pDrawView->SetBufferedOverlayAllowed(false);
+                m_pDrawView->SetBufferedOverlayAllowed(false);
             }
         }
     }
@@ -271,24 +271,24 @@ Color SwViewShellImp::GetRetoucheColor() const
 
 SwPageFrm *SwViewShellImp::GetFirstVisPage(OutputDevice* pRenderContext)
 {
-    if ( bFirstPageInvalid )
+    if ( m_bFirstPageInvalid )
         SetFirstVisPage(pRenderContext);
-    return pFirstVisPage;
+    return m_pFirstVisiblePage;
 }
 
 const SwPageFrm *SwViewShellImp::GetFirstVisPage(OutputDevice* pRenderContext) const
 {
-    if ( bFirstPageInvalid )
+    if ( m_bFirstPageInvalid )
         const_cast<SwViewShellImp*>(this)->SetFirstVisPage(pRenderContext);
-    return pFirstVisPage;
+    return m_pFirstVisiblePage;
 }
 
 // create page preview layout
 void SwViewShellImp::InitPagePreviewLayout()
 {
-    OSL_ENSURE( pSh->GetLayout(), "no layout - page preview layout can not be created.");
-    if ( pSh->GetLayout() )
-        mpPgPreviewLayout = new SwPagePreviewLayout( *pSh, *(pSh->GetLayout()) );
+    OSL_ENSURE( m_pShell->GetLayout(), "no layout - page preview layout can not be created.");
+    if ( m_pShell->GetLayout() )
+        m_pPagePreviewLayout = new SwPagePreviewLayout( *m_pShell, *(m_pShell->GetLayout()) );
 }
 
 void SwViewShellImp::UpdateAccessible()
@@ -442,9 +442,9 @@ void SwViewShellImp::InvalidateAccessiblePreviewSelection( sal_uInt16 nSelPage )
 
 SwAccessibleMap *SwViewShellImp::CreateAccessibleMap()
 {
-    OSL_ENSURE( !pAccMap, "accessible map exists" );
-    pAccMap = new SwAccessibleMap( GetShell() );
-    return pAccMap;
+    OSL_ENSURE( !m_pAccessibleMap, "accessible map exists" );
+    m_pAccessibleMap = new SwAccessibleMap( GetShell() );
+    return m_pAccessibleMap;
 }
 
 void SwViewShellImp::FireAccessibleEvents()

@@ -61,33 +61,33 @@ class SwViewShellImp
     // for paint of page preview
     friend class SwPagePreviewLayout;
 
-    SwViewShell *pSh;           // If someone passes an Imp, but needs a SwViewShell, we
+    SwViewShell *m_pShell;           // If someone passes an Imp, but needs a SwViewShell, we
                                 // keep a backlink here
 
-    SwDrawView  *pDrawView;     // Our DrawView
-    SdrPageView *pSdrPageView;  // Exactly one Page for our DrawView
+    SwDrawView  *m_pDrawView;     // Our DrawView
+    SdrPageView *m_pSdrPageView;  // Exactly one Page for our DrawView
 
-    SwPageFrm     *pFirstVisPage; // Always points to the first visible Page
-    SwRegionRects *pRegion;       // Collector of Paintrects from the LayAction
+    SwPageFrm     *m_pFirstVisiblePage; // Always points to the first visible Page
+    SwRegionRects *m_pRegion;       // Collector of Paintrects from the LayAction
 
-    SwLayAction   *pLayAct;      // Is set if an Action object exists
+    SwLayAction   *m_pLayAction;      // Is set if an Action object exists
                                  // Is registered by the SwLayAction ctor and deregistered by the dtor
-    SwLayIdle     *pIdleAct;     // The same as SwLayAction for SwLayIdle
+    SwLayIdle     *m_pIdleAct;     // The same as SwLayAction for SwLayIdle
 
-    SwAccessibleMap *pAccMap;    // Accessible wrappers
+    SwAccessibleMap *m_pAccessibleMap;    // Accessible wrappers
 
-    mutable const SdrObject * pSdrObjCached;
-    mutable OUString sSdrObjCachedComment;
+    mutable const SdrObject * m_pSdrObjectCached;
+    mutable OUString m_sSdrObjectCachedComment;
 
-    bool bFirstPageInvalid : 1; // Pointer to the first Page invalid?
-    bool bResetHdlHiddenPaint : 1; // Ditto
-    bool bSmoothUpdate : 1; // For SmoothScroll
-    bool bStopSmooth : 1;
+    bool m_bFirstPageInvalid : 1; // Pointer to the first Page invalid?
+    bool m_bResetHdlHiddenPaint : 1; // Ditto
+    bool m_bSmoothUpdate : 1; // For SmoothScroll
+    bool m_bStopSmooth : 1;
 
-    sal_uInt16 nRestoreActions  ; // Count for the Action that need to be restored (UNO)
-    SwRect aSmoothRect;
+    sal_uInt16 m_nRestoreActions  ; // Count for the Action that need to be restored (UNO)
+    SwRect m_aSmoothRect;
 
-    SwPagePreviewLayout* mpPgPreviewLayout;
+    SwPagePreviewLayout* m_pPagePreviewLayout;
 
     void SetFirstVisPage(OutputDevice* pRenderContext); // Recalculate the first visible Page
 
@@ -140,26 +140,26 @@ public:
     ~SwViewShellImp();
     void Init( const SwViewOption * ); /// Only for SwViewShell::Init()
 
-    const SwViewShell *GetShell() const { return pSh; }
-          SwViewShell *GetShell()       { return pSh; }
+    const SwViewShell *GetShell() const { return m_pShell; }
+          SwViewShell *GetShell()       { return m_pShell; }
 
     Color GetRetoucheColor() const;
 
     /// Management of the first visible Page
     const SwPageFrm *GetFirstVisPage(OutputDevice* pRenderContext) const;
           SwPageFrm *GetFirstVisPage(OutputDevice* pRenderContext);
-    void SetFirstVisPageInvalid() { bFirstPageInvalid = true; }
+    void SetFirstVisPageInvalid() { m_bFirstPageInvalid = true; }
 
     bool AddPaintRect( const SwRect &rRect );
-    SwRegionRects *GetRegion()      { return pRegion; }
+    SwRegionRects *GetRegion()      { return m_pRegion; }
     void DelRegion();
 
     /// New Interface for StarView Drawing
-    bool  HasDrawView()             const { return 0 != pDrawView; }
-          SwDrawView* GetDrawView()       { return pDrawView; }
-    const SwDrawView* GetDrawView() const { return pDrawView; }
-          SdrPageView*GetPageView()       { return pSdrPageView; }
-    const SdrPageView*GetPageView() const { return pSdrPageView; }
+    bool  HasDrawView()             const { return 0 != m_pDrawView; }
+          SwDrawView* GetDrawView()       { return m_pDrawView; }
+    const SwDrawView* GetDrawView() const { return m_pDrawView; }
+          SdrPageView*GetPageView()       { return m_pSdrPageView; }
+    const SdrPageView*GetPageView() const { return m_pSdrPageView; }
     void MakeDrawView();
 
     /**
@@ -187,10 +187,10 @@ public:
     void NotifySizeChg( const Size &rNewSz );
 
     /// SS for the Lay-/IdleAction and relatives
-    bool  IsAction() const                   { return pLayAct  != 0; }
-    bool  IsIdleAction() const               { return pIdleAct != 0; }
-          SwLayAction &GetLayAction()        { return *pLayAct; }
-    const SwLayAction &GetLayAction() const  { return *pLayAct; }
+    bool  IsAction() const                   { return m_pLayAction  != 0; }
+    bool  IsIdleAction() const               { return m_pIdleAct != 0; }
+          SwLayAction &GetLayAction()        { return *m_pLayAction; }
+    const SwLayAction &GetLayAction() const  { return *m_pLayAction; }
 
     /**
      * If an Action is running we ask it to check whether it's time
@@ -208,18 +208,18 @@ public:
      */
     bool IsUpdateExpFields();
 
-    void    SetRestoreActions(sal_uInt16 nSet){nRestoreActions = nSet;}
-    sal_uInt16  GetRestoreActions() const{return nRestoreActions;}
+    void    SetRestoreActions(sal_uInt16 nSet){m_nRestoreActions = nSet;}
+    sal_uInt16  GetRestoreActions() const{return m_nRestoreActions;}
 
     void InitPagePreviewLayout();
 
     inline SwPagePreviewLayout* PagePreviewLayout()
     {
-        return mpPgPreviewLayout;
+        return m_pPagePreviewLayout;
     }
 
     /// Is this view accessible?
-    bool IsAccessible() const { return pAccMap != 0; }
+    bool IsAccessible() const { return m_pAccessibleMap != 0; }
 
     inline SwAccessibleMap& GetAccessibleMap();
 
@@ -272,10 +272,10 @@ public:
 
 inline SwAccessibleMap& SwViewShellImp::GetAccessibleMap()
 {
-    if( !pAccMap )
+    if( !m_pAccessibleMap )
         CreateAccessibleMap();
 
-    return *pAccMap;
+    return *m_pAccessibleMap;
 }
 
 inline void SwViewShellImp::DisposeAccessibleFrm( const SwFrm *pFrm,
