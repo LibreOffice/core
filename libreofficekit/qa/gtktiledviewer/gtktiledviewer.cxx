@@ -554,8 +554,20 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
 
     if (!lok_doc_view_open_document_finish(pDocView, res, &error))
     {
-        g_warning ("Error occurred while opening the document : %s", error->message);
-        g_error_free (error);
+        GtkDialogFlags eFlags = GTK_DIALOG_DESTROY_WITH_PARENT;
+        GtkWidget* pDialog = gtk_message_dialog_new(GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+                                                    eFlags,
+                                                    GTK_MESSAGE_ERROR,
+                                                    GTK_BUTTONS_CLOSE,
+                                                    "Error occurred while opening the document: '%s'",
+                                                    error->message);
+        gtk_dialog_run(GTK_DIALOG(pDialog));
+        gtk_widget_destroy(pDialog);
+
+        g_error_free(error);
+        gtk_widget_destroy(GTK_WIDGET(pDocView));
+        gtk_main_quit();
+        return;
     }
 
     populatePartSelector(pDocView);

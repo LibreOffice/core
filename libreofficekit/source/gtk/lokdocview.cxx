@@ -1225,9 +1225,7 @@ openDocumentInThread (gpointer data)
     priv->m_pDocument = priv->m_pOffice->pClass->documentLoad( priv->m_pOffice, priv->m_aDocPath );
     if ( !priv->m_pDocument )
     {
-        // FIXME: should have a GError parameter and populate it.
         char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
-        fprintf( stderr, "Error opening document '%s'\n", pError );
         g_task_return_new_error(task, 0, 0, "%s", pError);
     }
     else
