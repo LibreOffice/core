@@ -46,7 +46,7 @@ $(eval $(call gb_Module_add_l10n_targets,vcl,\
     UIConfig_vcl \
 ))
 
-ifeq ($(GUIBASE),unx)
+ifeq ($(USING_X),TRUE)
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gen \
     Library_desktop_detector \
@@ -105,7 +105,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 ))
 
 
-ifeq ($(GUIBASE),unx)
+ifeq ($(USING_X),TRUE)
 $(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_timer \
 ))

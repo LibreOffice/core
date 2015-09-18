@@ -20,7 +20,7 @@ MERGE_LIBRARY_LIST := \
 	deployment \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
-	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
+	$(if $(USING_X),desktop_detector) \
 	drawinglayer \
 	editeng \
 	filterconfig \

@@ -406,7 +406,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 
 # handle X11 platforms, which have additional files and possibly system graphite
-ifneq (,$(or $(filter unx,$(GUIBASE)),$(ENABLE_HEADLESS)))
+ifneq (,$(or $(USING_X),$(ENABLE_HEADLESS)))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/generic/glyphs/graphite_serverfont \
 ))
@@ -427,8 +427,6 @@ vcl_coretext_code= \
     vcl/quartz/ctfonts \
     vcl/quartz/ctlayout \
     vcl/quartz/salgdi \
-
-# GUIBASE specific stuff
 
 ifeq ($(OS),MACOSX)
 
@@ -567,7 +565,7 @@ vcl_headless_freetype_code=\
     vcl/headless/svptext \
     vcl/headless/svptextrender \
 
-ifeq ($(GUIBASE),unx)
+ifeq ($(USING_X),TRUE)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	$(vcl_generic_code) \
     vcl/unx/generic/plugadapt/salplug \
