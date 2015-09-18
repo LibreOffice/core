@@ -302,8 +302,8 @@ bool Section::GetDictionary( Dictionary& rDict )
                         nSize >>= 1;
                         aStream.Seek( nPos );
                         sal_Unicode* pWString = reinterpret_cast<sal_Unicode*>(pString);
-                        for ( i = 0; i < nSize; i++ )
-                            aStream.ReadUInt16( pWString[ i ] );
+                        for (sal_uInt32 j = 0; j < nSize; ++j)
+                            aStream.ReadUInt16(pWString[j]);
                         aString = OUString(pWString, lcl_getMaxSafeStrLen(nSize));
                     }
                     else
