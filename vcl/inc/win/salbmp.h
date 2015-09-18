@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 #include <win/wincomp.hxx>
 #include <salbmp.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 // - SalBitmap  -
 
@@ -32,7 +32,7 @@ class   BitmapColor;
 class   BitmapPalette;
 class   SalGraphics;
 namespace Gdiplus { class Bitmap; }
-typedef boost::shared_ptr< Gdiplus::Bitmap > GdiPlusBmpPtr;
+typedef std::shared_ptr< Gdiplus::Bitmap > GdiPlusBmpPtr;
 
 class WinSalBitmap : public SalBitmap
 {
