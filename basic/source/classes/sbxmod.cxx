@@ -75,6 +75,8 @@
 #include "sbxmod.hxx"
 #include "parser.hxx"
 
+#include <limits>
+
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
@@ -1064,6 +1066,7 @@ void SbModule::SetVBACompat( bool bCompat )
 void SbModule::Run( SbMethod* pMeth )
 {
     SAL_INFO("basic","About to run " << OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() << ", vba compatmode is " << mbVBACompat );
+
     static sal_uInt16 nMaxCallLevel = 0;
 
     bool bDelInst = ( GetSbData()->pInst == NULL );
@@ -1171,7 +1174,9 @@ void SbModule::Run( SbMethod* pMeth )
             {
                 GetSbData()->pInst->EnableCompatibility( true );
             }
+
             while( pRt->Step() ) {}
+
             if( pRt->pNext )
                 pRt->pNext->unblock();
 
@@ -2031,14 +2036,35 @@ bool SbMethod::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     if( !SbxMethod::LoadData( rStrm, 1 ) )
         return false;
-    sal_Int16 n;
-    rStrm.ReadInt16( n );
+
+    sal_uInt16 nFlag;
+    rStrm.ReadUInt16( nFlag );
+
     sal_Int16 nTempStart = (sal_Int16)nStart;
+
     if( nVer == 2 )
+    {
         rStrm.ReadUInt16( nLine1 ).ReadUInt16( nLine2 ).ReadInt16( nTempStart ).ReadCharAsBool( bInvalid );
+        //tdf#94617
+        if (nFlag & 0x8000)
+        {
+            sal_uInt16 nMult = nFlag & 0x7FFF;
+            sal_Int16 nMax = std::numeric_limits<sal_Int16>::max();
+            nStart = nMult * nMax + nTempStart;
+        }
+        else
+        {
+            nStart = nTempStart;
+        }
+    }
+    else
+    {
+        nStart = nTempStart;
+    }
+
     // HACK ue to 'Referenz could not be saved'
     SetFlag( SbxFlagBits::NoModify );
-    nStart = nTempStart;
+
     return true;
 }
 
@@ -2046,11 +2072,19 @@ bool SbMethod::StoreData( SvStream& rStrm ) const
 {
     if( !SbxMethod::StoreData( rStrm ) )
         return false;
-    rStrm.WriteInt16( nDebugFlags )
+
+    //tdf#94617
+    sal_Int16 nMax = std::numeric_limits<sal_Int16>::max();
+    sal_Int16 nStartTemp = nStart % nMax;
+    sal_uInt16 nDebugFlagsTemp = nStart / nMax;
+    nDebugFlagsTemp |= 0x8000;
+
+    rStrm.WriteUInt16( nDebugFlagsTemp )
          .WriteInt16( nLine1 )
          .WriteInt16( nLine2 )
-         .WriteInt16( nStart )
+         .WriteInt16( nStartTemp )
          .WriteBool( bInvalid );
+
     return true;
 }
 
