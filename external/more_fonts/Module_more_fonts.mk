@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_dejavu \
 	ExternalPackage_gentium \
 	$(if $(MPL_SUBSET),,ExternalPackage_kacst) \
+	ExternalPackage_karla \
 	ExternalPackage_liberation \
 	ExternalPackage_liberation_narrow \
 	ExternalPackage_libertineg \
@@ -37,6 +38,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_dejavu \
 	UnpackedTarball_gentium \
 	$(if $(MPL_SUBSET),,UnpackedTarball_kacst) \
+	UnpackedTarball_karla \
 	UnpackedTarball_liberation \
 	UnpackedTarball_liberation_narrow \
 	UnpackedTarball_libertineg \
