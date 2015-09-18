@@ -68,7 +68,6 @@ struct SC_DLLPUBLIC ScCalcConfig
 
 SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig);
 
-SC_DLLPUBLIC OUString ScOpCodeSetToNumberString(const ScCalcConfig::OpCodeSet& rOpCodes);
 SC_DLLPUBLIC OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes);
 SC_DLLPUBLIC ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes);
 
