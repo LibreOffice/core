@@ -25,9 +25,9 @@
 #include <ucbhelper/content.hxx>
 #include "com/sun/star/uno/Reference.hxx"
 
-#include <vector>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <vector>
 
 namespace com { namespace sun { namespace star { namespace ucb {
 class XContent;
@@ -65,7 +65,7 @@ public:
     bool operator()(TemplateEntry* pA, TemplateEntry* pB) const;
 
 private:
-    ::boost::shared_ptr<comphelper::string::NaturalStringSorter> mpStringSorter;
+    std::shared_ptr<comphelper::string::NaturalStringSorter> mpStringSorter;
 };
 
 /** Representation of a template or layout folder.
@@ -137,7 +137,7 @@ public:
     /** Return the TemplateDir object that was last added to
         mpTemplateDirectory.
         @return
-            <NULL/> is returned either before the template scanning is
+            <nullptr/> is returned either before the template scanning is
             started or after it has ended.
     */
     const TemplateEntry* GetLastAddedEntry() const { return mpLastAddedEntry;}

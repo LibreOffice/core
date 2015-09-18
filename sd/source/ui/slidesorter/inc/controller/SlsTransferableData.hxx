@@ -63,7 +63,7 @@ public:
         SlideSorterViewShell* pViewShell,
         const ::std::vector<TransferableData::Representative>& rRepresentatives);
 
-    static ::boost::shared_ptr<TransferableData> GetFromTransferable (const SdTransferable* pTransferable);
+    static std::shared_ptr<TransferableData> GetFromTransferable (const SdTransferable* pTransferable);
 
     TransferableData (
         SlideSorterViewShell* pViewShell,

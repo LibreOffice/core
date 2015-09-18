@@ -22,8 +22,9 @@
 
 #include "cache/SlsCacheContext.hxx"
 #include <sal/types.h>
-#include <boost/scoped_ptr.hpp>
 #include <vcl/bitmap.hxx>
+#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 class Size;
 

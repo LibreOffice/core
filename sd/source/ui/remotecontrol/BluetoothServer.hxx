@@ -10,9 +10,9 @@
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_BLUETOOTHSERVER_HXX
 
 #include <osl/thread.hxx>
-#include <vector>
-
+#include <memory>
 #include <boost/scoped_ptr.hpp>
+#include <vector>
 
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
 #  define LINUX_BLUETOOTH

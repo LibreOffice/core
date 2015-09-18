@@ -52,7 +52,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editdata.hxx>
 #include "sdabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd
 {
@@ -110,7 +110,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             = slidesorter::SlideSorterViewShell::GetSlideSorter(mpViewShell->GetViewShellBase());
         if (pSlideSorterViewShell)
         {
-            boost::shared_ptr<slidesorter::SlideSorterViewShell::PageSelection> xSelection(
+            std::shared_ptr<slidesorter::SlideSorterViewShell::PageSelection> xSelection(
                 pSlideSorterViewShell->GetPageSelection());
             if (xSelection)
             {

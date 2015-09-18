@@ -54,8 +54,7 @@
 #include "pres.hxx"
 #include <osl/mutex.hxx>
 #include <osl/getglobalmutex.hxx>
-#include <boost/scoped_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -78,10 +77,10 @@ class MasterPageContainer::Implementation
 public:
     mutable ::osl::Mutex maMutex;
 
-    static ::boost::weak_ptr<Implementation> mpInstance;
+    static std::weak_ptr<Implementation> mpInstance;
     MasterPageContainerType maContainer;
 
-    static ::boost::shared_ptr<Implementation> Instance();
+    static std::shared_ptr<Implementation> Instance();
 
     void LateInit();
     void AddChangeListener (const Link<MasterPageContainerChangeEvent&,void>& rLink);
@@ -163,7 +162,7 @@ private:
     // We have to remember the tasks for initialization and filling in case
     // a MasterPageContainer object is destroyed before these tasks have
     // been completed.
-    ::boost::weak_ptr<sd::tools::TimerBasedTaskExecution> mpFillerTask;
+    std::weak_ptr<sd::tools::TimerBasedTaskExecution> mpFillerTask;
 
     Size maSmallPreviewSizePixel;
     Size maLargePreviewSizePixel;
@@ -180,13 +179,13 @@ private:
 
 //===== MasterPageContainer ===================================================
 
-::boost::weak_ptr<MasterPageContainer::Implementation>
+std::weak_ptr<MasterPageContainer::Implementation>
     MasterPageContainer::Implementation::mpInstance;
 
-::boost::shared_ptr<MasterPageContainer::Implementation>
+std::shared_ptr<MasterPageContainer::Implementation>
     MasterPageContainer::Implementation::Instance()
 {
-    ::boost::shared_ptr<MasterPageContainer::Implementation> pInstance;
+    std::shared_ptr<MasterPageContainer::Implementation> pInstance;
 
     if (Implementation::mpInstance.expired())
     {
@@ -195,25 +194,25 @@ private:
         if (Implementation::mpInstance.expired())
         {
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            pInstance = ::boost::shared_ptr<MasterPageContainer::Implementation>(
+            pInstance = std::shared_ptr<MasterPageContainer::Implementation>(
                 new MasterPageContainer::Implementation(),
                 MasterPageContainer::Implementation::Deleter());
             SdGlobalResourceContainer::Instance().AddResource(pInstance);
             Implementation::mpInstance = pInstance;
         }
         else
-            pInstance = ::boost::shared_ptr<MasterPageContainer::Implementation>(
+            pInstance = std::shared_ptr<MasterPageContainer::Implementation>(
                 Implementation::mpInstance);
     }
     else
     {
         OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        pInstance = ::boost::shared_ptr<MasterPageContainer::Implementation>(
+        pInstance = std::shared_ptr<MasterPageContainer::Implementation>(
             Implementation::mpInstance);
     }
 
-    DBG_ASSERT (pInstance.get()!=NULL,
-        "MasterPageContainer::Implementation::Instance(): instance is NULL");
+    DBG_ASSERT (pInstance.get()!=nullptr,
+        "MasterPageContainer::Implementation::Instance(): instance is nullptr");
     return pInstance;
 }
 
@@ -260,7 +259,7 @@ MasterPageContainer::Token MasterPageContainer::PutMasterPage (
 void MasterPageContainer::AcquireToken (Token aToken)
 {
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         ++pDescriptor->mnUseCount;
     }
@@ -269,7 +268,7 @@ void MasterPageContainer::AcquireToken (Token aToken)
 void MasterPageContainer::ReleaseToken (Token aToken)
 {
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         OSL_ASSERT(pDescriptor->mnUseCount>0);
         --pDescriptor->mnUseCount;
@@ -357,7 +356,7 @@ MasterPageContainer::Token MasterPageContainer::GetTokenForPageObject (
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     Token aResult (NIL_TOKEN);
-    if (pPage != NULL)
+    if (pPage != nullptr)
     {
         MasterPageContainerType::iterator iEntry (
             ::std::find_if (
@@ -376,7 +375,7 @@ OUString MasterPageContainer::GetURLForToken (
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
         return pDescriptor->msURL;
     else
         return OUString();
@@ -388,7 +387,7 @@ OUString MasterPageContainer::GetPageNameForToken (
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
         return pDescriptor->msPageName;
     else
         return OUString();
@@ -400,7 +399,7 @@ OUString MasterPageContainer::GetStyleNameForToken (
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
         return pDescriptor->msStyleName;
     else
         return OUString();
@@ -412,12 +411,12 @@ SdPage* MasterPageContainer::GetPageObjectForToken (
 {
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
-    SdPage* pPageObject = NULL;
+    SdPage* pPageObject = nullptr;
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         pPageObject = pDescriptor->mpMasterPage;
-        if (pPageObject == NULL)
+        if (pPageObject == nullptr)
         {
             // The page object is not (yet) present.  Call
             // UpdateDescriptor() to trigger the PageObjectProvider() to
@@ -436,7 +435,7 @@ MasterPageContainer::Origin MasterPageContainer::GetOriginForToken (Token aToken
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
         return pDescriptor->meOrigin;
     else
         return UNKNOWN;
@@ -447,7 +446,7 @@ sal_Int32 MasterPageContainer::GetTemplateIndexForToken (Token aToken)
     const ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
         return pDescriptor->mnTemplateIndex;
     else
         return -1;
@@ -487,9 +486,9 @@ MasterPageContainer::Implementation::Implementation()
     : maMutex(),
       maContainer(),
       meInitializationState(NOT_INITIALIZED),
-      mpRequestQueue(NULL),
-      mxModel(NULL),
-      mpDocument(NULL),
+      mpRequestQueue(nullptr),
+      mxModel(nullptr),
+      mpDocument(nullptr),
       maPreviewRenderer(),
       mbFirstPageObjectSeen(false),
       maLargePreviewBeingCreated(),
@@ -524,7 +523,7 @@ MasterPageContainer::Implementation::~Implementation()
         {
         }
     }
-    mxModel = NULL;
+    mxModel = nullptr;
 }
 
 void MasterPageContainer::Implementation::LateInit()
@@ -537,10 +536,10 @@ void MasterPageContainer::Implementation::LateInit()
 
         OSL_ASSERT(Instance().get()==this);
         mpRequestQueue.reset(MasterPageContainerQueue::Create(
-            ::boost::shared_ptr<MasterPageContainerQueue::ContainerAdapter>(Instance())));
+            std::shared_ptr<MasterPageContainerQueue::ContainerAdapter>(Instance())));
 
         mpFillerTask = ::sd::tools::TimerBasedTaskExecution::Create(
-            ::boost::shared_ptr<tools::AsynchronousTask>(new MasterPageContainerFiller(*this)),
+            std::shared_ptr<tools::AsynchronousTask>(new MasterPageContainerFiller(*this)),
             5,
             50);
 
@@ -581,7 +580,7 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel()
     MasterPageContainerType::const_iterator iDescriptor;
     MasterPageContainerType::const_iterator iContainerEnd(maContainer.end());
     for (iDescriptor=maContainer.begin(); iDescriptor!=iContainerEnd; ++iDescriptor)
-        if (*iDescriptor!=0 && (*iDescriptor)->mpMasterPage != NULL)
+        if (*iDescriptor!=0 && (*iDescriptor)->mpMasterPage != nullptr)
         {
             Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
             OSL_ASSERT(aPageSize.Width() > 0 && aPageSize.Height() > 0);
@@ -623,7 +622,7 @@ IMPL_LINK_TYPED(MasterPageContainer::Implementation,AsynchronousNotifyCallback, 
     EventData* pData = static_cast<EventData*>(p);
     const ::osl::MutexGuard aGuard (maMutex);
 
-    if (pData != NULL)
+    if (pData != nullptr)
     {
         FireContainerChange(pData->first, pData->second);
         delete pData;
@@ -650,7 +649,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     if (aEntry == maContainer.end())
     {
         // Insert a new MasterPageDescriptor.
-        bool bIgnore (rpDescriptor->mpPageObjectProvider.get()==NULL
+        bool bIgnore (rpDescriptor->mpPageObjectProvider.get()==nullptr
             && rpDescriptor->msURL.isEmpty());
 
         if ( ! bIgnore)
@@ -687,7 +686,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
         aResult = (*aEntry)->maToken;
         std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pEventTypes(
             (*aEntry)->Update(*rpDescriptor));
-        if (pEventTypes.get()!=NULL && pEventTypes->size()>0)
+        if (pEventTypes.get()!=nullptr && pEventTypes->size()>0)
         {
             // One or more aspects of the descriptor have changed.  Send
             // appropriate events to the listeners.
@@ -708,7 +707,7 @@ bool MasterPageContainer::Implementation::HasToken (Token aToken) const
 {
     return aToken>=0
         && (unsigned)aToken<maContainer.size()
-        && maContainer[aToken].get()!=NULL;
+        && maContainer[aToken].get()!=nullptr;
 }
 
 const SharedMasterPageDescriptor MasterPageContainer::Implementation::GetDescriptor (
@@ -733,7 +732,7 @@ void MasterPageContainer::Implementation::InvalidatePreview (Token aToken)
     const ::osl::MutexGuard aGuard (maMutex);
 
     SharedMasterPageDescriptor pDescriptor (GetDescriptor(aToken));
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         pDescriptor->maSmallPreview = Image();
         pDescriptor->maLargePreview = Image();
@@ -754,7 +753,7 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
 
     // When the preview is missing but inexpensively creatable then do that
     // now.
-    if (pDescriptor.get()!=NULL)
+    if (pDescriptor.get()!=nullptr)
     {
         if (ePreviewState == PS_CREATABLE)
             if (UpdateDescriptor(pDescriptor, false,false, true))
@@ -802,11 +801,11 @@ MasterPageContainer::PreviewState MasterPageContainer::Implementation::GetPrevie
     PreviewState eState (PS_NOT_AVAILABLE);
 
     SharedMasterPageDescriptor pDescriptor = GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
     {
         if (pDescriptor->maLargePreview.GetSizePixel().Width() != 0)
             eState = PS_AVAILABLE;
-        else if (pDescriptor->mpPreviewProvider.get() != NULL)
+        else if (pDescriptor->mpPreviewProvider.get() != nullptr)
         {
             // The preview does not exist but can be created.  When that is
             // not expensive then do it at once.
@@ -825,7 +824,7 @@ MasterPageContainer::PreviewState MasterPageContainer::Implementation::GetPrevie
 bool MasterPageContainer::Implementation::RequestPreview (Token aToken)
 {
     SharedMasterPageDescriptor pDescriptor = GetDescriptor(aToken);
-    if (pDescriptor.get() != NULL)
+    if (pDescriptor.get() != nullptr)
         return mpRequestQueue->RequestPreview(pDescriptor);
     else
         return false;
@@ -939,7 +938,7 @@ void MasterPageContainer::Implementation::CleanContainer()
     // elements in the middle can not be removed because that would
     // invalidate the references still held by others.
     int nIndex (maContainer.size()-1);
-    while (nIndex>=0 && maContainer[nIndex].get()==NULL)
+    while (nIndex>=0 && maContainer[nIndex].get()==nullptr)
         --nIndex;
     maContainer.resize(++nIndex);
 }
@@ -979,7 +978,7 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
     // and the caller needs the preview.
     bForcePageObject |= (bForcePreview
         && rpDescriptor->mpPreviewProvider->NeedsPageObject()
-        && rpDescriptor->mpMasterPage==NULL);
+        && rpDescriptor->mpMasterPage==nullptr);
 
     // Define a cost threshold so that an update or page object or preview
     // that is at least this cost are made at once. Updates with higher cost

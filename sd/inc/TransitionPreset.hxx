@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SD_INC_TRANSITIONPRESET_HXX
 #define INCLUDED_SD_INC_TRANSITIONPRESET_HXX
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <list>
+#include <memory>
 #include <unordered_map>
 
 namespace com { namespace sun { namespace star {
@@ -36,7 +36,7 @@ class SdPage;
 namespace sd {
 
 class TransitionPreset;
-typedef boost::shared_ptr< TransitionPreset > TransitionPresetPtr;
+typedef std::shared_ptr< TransitionPreset > TransitionPresetPtr;
 typedef std::list< TransitionPresetPtr > TransitionPresetList;
 typedef std::unordered_map< OUString, OUString, OUStringHash > UStringMap;
 

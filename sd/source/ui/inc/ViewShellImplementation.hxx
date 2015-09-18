@@ -24,8 +24,6 @@
 #include "ViewShellManager.hxx"
 #include "ToolBarManager.hxx"
 
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <memory>
 
 class SvxIMapDlg;
@@ -64,8 +62,8 @@ public:
         /** Create a new instance.  This allows the mpSelf member to be set
             automatically.
         */
-        static ::boost::shared_ptr<ToolBarManagerLock> Create (
-            const ::boost::shared_ptr<ToolBarManager>& rpManager);
+        static std::shared_ptr<ToolBarManagerLock> Create (
+            const std::shared_ptr<ToolBarManager>& rpManager);
         /** Release the lock.  When the UI is captured
             (Application::IsUICaptured() returns <TRUE/>) then the lock is
             released later asynchronously.
@@ -87,8 +85,8 @@ public:
             its own lifetime.  This, of course, does work only when no one
             holds another shared_ptr longer than only temporary.
         */
-        ::boost::shared_ptr<ToolBarManagerLock> mpSelf;
-        ToolBarManagerLock (const ::boost::shared_ptr<sd::ToolBarManager>& rpManager);
+        std::shared_ptr<ToolBarManagerLock> mpSelf;
+        ToolBarManagerLock (const std::shared_ptr<sd::ToolBarManager>& rpManager);
         ~ToolBarManagerLock();
 
         class Deleter;
@@ -96,7 +94,7 @@ public:
     };
     // The member is not a unqiue_ptr because it takes over its own life time
     // control.
-    ::boost::weak_ptr<ToolBarManagerLock> mpUpdateLockForMouse;
+    std::weak_ptr<ToolBarManagerLock> mpUpdateLockForMouse;
 
     Implementation (ViewShell& rViewShell);
     ~Implementation();
