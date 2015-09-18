@@ -800,7 +800,7 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
     if (pBreak)
         *pBreak = nBreak;       // X/Y position of the moved page break
     if (pPrev)
-        *pPrev = nPrev;         // X/Y begining of the page, which is above the break
+        *pPrev = nPrev;         // X/Y beginning of the page, which is above the break
     return nFound;
 }
 

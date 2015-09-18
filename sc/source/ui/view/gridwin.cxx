@@ -1974,7 +1974,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
         pViewData->GetViewShell()->SetDrawShell( false );               // no Draw-Objekt selected
 
-        // TestMouse has already happend above
+        // TestMouse has already happened above
     }
 
     Point aPos = rMEvt.GetPosPixel();

@@ -196,7 +196,7 @@ long GetLen(const Point& rPnt);
  * shear and then the rotation.                              /          /
  *                                                          /          / \
  *                                                         /          /   |
- * A) Inital rectangle aRect  B) After applying Shear      /0        3/ Rot|
+ * A) Initial rectangle aRect  B) After applying Shear     /0        3/ Rot|
  * +------------------+       --------------------        ------------------
  * |0                1|        \0                1\       C) After applying Rotate
  * |                  |         \                  \

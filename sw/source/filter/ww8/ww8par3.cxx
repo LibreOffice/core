@@ -508,7 +508,7 @@ OUString sanitizeString(const OUString& rString)
             }
             ++i;    //skip correct low
         }
-        if (rtl::isLowSurrogate(c)) //bare low without preceeding high
+        if (rtl::isLowSurrogate(c)) //bare low without preceding high
         {
             SAL_WARN("sw.ww8", "Surrogate error: low without high");
             return rString.copy(0, i);

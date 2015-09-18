@@ -624,7 +624,7 @@ IsProcessRunning(LPCWSTR filename)
 }
 
 /**
- * Waits for the specified applicaiton to exit.
+ * Waits for the specified application to exit.
  *
  * @param filename   The application to wait for.
  * @param maxSeconds The maximum amount of seconds to wait for all
