@@ -36,7 +36,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
-#include <boost/scoped_ptr.hpp>
 #include <officecfg/Office/Recovery.hxx>
 
 namespace svxdr = svx::DocRecovery;

@@ -23,7 +23,6 @@
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <svx/rectenum.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svl/poolitem.hxx>
