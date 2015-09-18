@@ -936,7 +936,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         return uno::Sequence<OUString>(); // cancelled
 
     m_sLastFolderURL = xFilePicker->getDisplayDirectory();
-    uno::Sequence< OUString > files( xFilePicker->getFiles() );
+    uno::Sequence< OUString > files( xFilePicker->getSelectedFiles() );
     OSL_ASSERT( files.getLength() > 0 );
     return files;
 }
