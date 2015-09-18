@@ -58,10 +58,10 @@ class BasicViewFactory::ViewDescriptor
 {
 public:
     Reference<XResource> mxView;
-    ::boost::shared_ptr<sd::ViewShell> mpViewShell;
+    std::shared_ptr<sd::ViewShell> mpViewShell;
     ViewShellWrapper* mpWrapper;
     Reference<XResourceId> mxViewId;
-    static bool CompareView (const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor,
+    static bool CompareView (const std::shared_ptr<ViewDescriptor>& rpDescriptor,
         const Reference<XResource>& rxView)
     { return rpDescriptor->mxView.get() == rxView.get(); }
 };
@@ -69,14 +69,14 @@ public:
 //===== BasicViewFactory::ViewShellContainer ==================================
 
 class BasicViewFactory::ViewShellContainer
-    : public ::std::vector<boost::shared_ptr<ViewDescriptor> >
+    : public ::std::vector<std::shared_ptr<ViewDescriptor> >
 {
 public:
     ViewShellContainer() {};
 };
 
 class BasicViewFactory::ViewCache
-    : public ::std::vector<boost::shared_ptr<ViewDescriptor> >
+    : public ::std::vector<std::shared_ptr<ViewDescriptor> >
 {
 public:
     ViewCache() {};
@@ -164,7 +164,7 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     if (pFrame != NULL && mpBase!=NULL && pWindow!=NULL)
     {
         // Try to get the view from the cache.
-        ::boost::shared_ptr<ViewDescriptor> pDescriptor (GetViewFromCache(rxViewId, xPane));
+        std::shared_ptr<ViewDescriptor> pDescriptor (GetViewFromCache(rxViewId, xPane));
 
         // When the requested view is not in the cache then create a new view.
         if (pDescriptor.get() == NULL)
@@ -201,7 +201,7 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
                 ::boost::bind(&ViewDescriptor::CompareView, _1, rxView)));
         if (iViewShell != mpViewShellContainer->end())
         {
-            ::boost::shared_ptr<ViewShell> pViewShell ((*iViewShell)->mpViewShell);
+            std::shared_ptr<ViewShell> pViewShell ((*iViewShell)->mpViewShell);
 
             if ((*iViewShell)->mxViewId->isBoundToURL(
                 FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
@@ -278,7 +278,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
     }
 }
 
-::boost::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
+std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
     const Reference<XResourceId>& rxViewId,
     SfxViewFrame& rFrame,
     vcl::Window& rWindow,
@@ -286,7 +286,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
     FrameView* pFrameView,
     const bool bIsCenterPane)
 {
-    ::boost::shared_ptr<ViewDescriptor> pDescriptor (new ViewDescriptor());
+    std::shared_ptr<ViewDescriptor> pDescriptor (new ViewDescriptor());
 
     pDescriptor->mpViewShell = CreateViewShell(
         rxViewId,
@@ -323,14 +323,14 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
     return pDescriptor;
 }
 
-::boost::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
+std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     const Reference<XResourceId>& rxViewId,
     SfxViewFrame& rFrame,
     vcl::Window& rWindow,
     FrameView* pFrameView,
     const bool bIsCenterPane)
 {
-    ::boost::shared_ptr<ViewShell> pViewShell;
+    std::shared_ptr<ViewShell> pViewShell;
     const OUString& rsViewURL (rxViewId->getResourceURL());
     if (rsViewURL.equals(FrameworkHelper::msImpressViewURL))
     {
@@ -403,7 +403,7 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
 }
 
 void BasicViewFactory::ReleaseView (
-    const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor,
+    const std::shared_ptr<ViewDescriptor>& rpDescriptor,
     bool bDoNotCache)
 {
     bool bIsCacheable (!bDoNotCache && IsCacheable(rpDescriptor));
@@ -441,7 +441,7 @@ void BasicViewFactory::ReleaseView (
     }
 }
 
-bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor)
+bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDescriptor)
 {
     bool bIsCacheable (false);
 
@@ -451,7 +451,7 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
         static ::std::vector<Reference<XResourceId> > maCacheableResources;
         if (maCacheableResources.empty() )
         {
-            ::boost::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*mpBase));
+            std::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*mpBase));
 
             // The slide sorter and the task panel are cacheable and relocatable.
             maCacheableResources.push_back(FrameworkHelper::CreateResourceId(
@@ -474,11 +474,11 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
     return bIsCacheable;
 }
 
-::boost::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromCache (
+std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromCache (
     const Reference<XResourceId>& rxViewId,
     const Reference<XPane>& rxPane)
 {
-    ::boost::shared_ptr<ViewDescriptor> pDescriptor;
+    std::shared_ptr<ViewDescriptor> pDescriptor;
 
     // Search for the requested view in the cache.
     ViewCache::iterator iEntry;
@@ -515,7 +515,7 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
 }
 
 void BasicViewFactory::ActivateCenterView (
-    const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor)
+    const std::shared_ptr<ViewDescriptor>& rpDescriptor)
 {
     mpBase->GetDocShell()->Connect(rpDescriptor->mpViewShell.get());
 

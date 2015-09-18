@@ -25,9 +25,8 @@
 #include <ucbhelper/content.hxx>
 #include "com/sun/star/uno/Reference.hxx"
 
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star { namespace ucb {
 class XContent;
@@ -65,7 +64,7 @@ public:
     bool operator()(TemplateEntry* pA, TemplateEntry* pB) const;
 
 private:
-    ::boost::shared_ptr<comphelper::string::NaturalStringSorter> mpStringSorter;
+    std::shared_ptr<comphelper::string::NaturalStringSorter> mpStringSorter;
 };
 
 /** Representation of a template or layout folder.
@@ -75,7 +74,7 @@ class TemplateDir
 public:
     TemplateDir (const OUString& rsRegion, const OUString& rsUrl )
         :   msRegion(rsRegion), msUrl(rsUrl), maEntries(),
-            mbSortingEnabled(false), mpEntryCompare(NULL) {}
+            mbSortingEnabled(false), mpEntryCompare(nullptr) {}
 
     OUString msRegion;
     OUString msUrl;
@@ -86,7 +85,7 @@ public:
 
 private:
     bool mbSortingEnabled;
-    ::boost::scoped_ptr<TemplateEntryCompare> mpEntryCompare;
+    std::unique_ptr<TemplateEntryCompare> mpEntryCompare;
 };
 
 /** This class scans the template folders for impress templates.  There are
@@ -137,7 +136,7 @@ public:
     /** Return the TemplateDir object that was last added to
         mpTemplateDirectory.
         @return
-            <NULL/> is returned either before the template scanning is
+            <nullptr/> is returned either before the template scanning is
             started or after it has ended.
     */
     const TemplateEntry* GetLastAddedEntry() const { return mpLastAddedEntry;}
@@ -183,7 +182,7 @@ private:
     /** The folders that are collected by GatherFolderList().
     */
     class FolderDescriptorList;
-    ::boost::scoped_ptr<FolderDescriptorList> mpFolderDescriptors;
+    std::unique_ptr<FolderDescriptorList> mpFolderDescriptors;
 
     /** Set of state variables used by the methods
         InitializeFolderScanning(), GatherFolderList(), ScanFolder(),

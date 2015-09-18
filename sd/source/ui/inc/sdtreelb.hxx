@@ -29,8 +29,8 @@
 #include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 class SdDrawDocument;
 class SfxMedium;

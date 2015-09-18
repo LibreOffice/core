@@ -73,7 +73,6 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <boost/bind.hpp>
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -112,7 +111,7 @@ class Clipboard::UndoContext
 public:
     UndoContext (
         SdDrawDocument* pDocument,
-        const ::boost::shared_ptr<ViewShell>& rpMainViewShell)
+        const std::shared_ptr<ViewShell>& rpMainViewShell)
         : mpDocument(pDocument),
           mpMainViewShell(rpMainViewShell)
     {
@@ -138,7 +137,7 @@ public:
     }
 private:
     SdDrawDocument* mpDocument;
-    ::boost::shared_ptr<ViewShell> mpMainViewShell;
+    std::shared_ptr<ViewShell> mpMainViewShell;
 };
 
 Clipboard::Clipboard (SlideSorter& rSlideSorter)
@@ -271,7 +270,7 @@ sal_Int32 Clipboard::GetInsertionPosition (vcl::Window* pWindow)
     // selection.
     // d) After the last page when there is no selection and no focus.
 
-    ::boost::shared_ptr<controller::InsertionIndicatorHandler> pInsertionIndicatorHandler (
+    std::shared_ptr<controller::InsertionIndicatorHandler> pInsertionIndicatorHandler (
         mrController.GetInsertionIndicatorHandler());
     if (pInsertionIndicatorHandler->IsActive())
     {
@@ -400,7 +399,7 @@ void Clipboard::CreateSlideTransferable (
     aSelectedPages.Rewind();
     ::std::vector<TransferableData::Representative> aRepresentatives;
     aRepresentatives.reserve(3);
-    ::boost::shared_ptr<cache::PageCache> pPreviewCache (
+    std::shared_ptr<cache::PageCache> pPreviewCache (
         mrSlideSorter.GetView().GetPreviewCache());
     while (aSelectedPages.HasMoreElements())
     {
@@ -469,7 +468,7 @@ void Clipboard::CreateSlideTransferable (
     }
 }
 
-::boost::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData (SdTransferable* pTransferable)
+std::shared_ptr<SdTransferable::UserData> Clipboard::CreateTransferableUserData (SdTransferable* pTransferable)
 {
     do
     {
@@ -514,7 +513,7 @@ void Clipboard::CreateSlideTransferable (
         // Create preview.
         ::std::vector<TransferableData::Representative> aRepresentatives;
         aRepresentatives.reserve(1);
-        ::boost::shared_ptr<cache::PageCache> pPreviewCache (
+        std::shared_ptr<cache::PageCache> pPreviewCache (
             rSlideSorter.GetView().GetPreviewCache());
         model::SharedPageDescriptor pDescriptor (rSlideSorter.GetModel().GetPageDescriptor((nPageIndex-1)/2));
         if ( ! pDescriptor || pDescriptor->GetPage()==NULL)
@@ -531,7 +530,7 @@ void Clipboard::CreateSlideTransferable (
         rOtherClipboard.maPagesToRemove.push_back(pDescriptor->GetPage());
 
         // Create the new transferable.
-        ::boost::shared_ptr<SdTransferable::UserData> pNewTransferable (
+        std::shared_ptr<SdTransferable::UserData> pNewTransferable (
             new TransferableData(
                 pSlideSorterViewShell,
                 aRepresentatives));
@@ -551,7 +550,7 @@ void Clipboard::CreateSlideTransferable (
     }
     while (false);
 
-    return ::boost::shared_ptr<SdTransferable::UserData>();
+    return std::shared_ptr<SdTransferable::UserData>();
 }
 
 void Clipboard::StartDrag (
@@ -704,7 +703,7 @@ sal_Int8 Clipboard::ExecuteDrop (
                 ( pDragTransferable->GetView() != &mrSlideSorter.GetView() )
                 || ( nXOffset >= 2 && nYOffset >= 2 );
 
-            ::boost::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler(
+            std::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler(
                         mrController.GetInsertionIndicatorHandler());
             // Get insertion position and then turn off the insertion indicator.
             pInsertionIndicatorHandler->UpdatePosition(aEventModelPosition, rEvent.mnAction);
@@ -744,7 +743,7 @@ sal_Int8 Clipboard::ExecuteDrop (
             // only that is notified automatically about the drag
             // operation being finished.  Because the target slide sorter
             // has be notified, too, add a callback for that.
-            ::boost::shared_ptr<TransferableData> pSlideSorterTransferable (
+            std::shared_ptr<TransferableData> pSlideSorterTransferable (
                 TransferableData::GetFromTransferable(pDragTransferable));
             BOOST_ASSERT(pSlideSorterTransferable);
             if (pSlideSorterTransferable
@@ -785,7 +784,7 @@ bool Clipboard::IsInsertionTrivial (
     SdTransferable* pTransferable,
     const sal_Int8 nDndAction) const
 {
-    ::boost::shared_ptr<TransferableData> pSlideSorterTransferable (
+    std::shared_ptr<TransferableData> pSlideSorterTransferable (
         TransferableData::GetFromTransferable(pTransferable));
     if (pSlideSorterTransferable
         && pSlideSorterTransferable->GetSourceViewShell() != mrSlideSorter.GetViewShell())
@@ -877,9 +876,9 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     // technical reasons:  The actual code to accept or execute a shape drop
     // is implemented in the ViewShell class and uses the page view of the
     // main edit view.  This is not possible without a DrawViewShell.
-    ::boost::shared_ptr<DrawViewShell> pDrawViewShell;
+    std::shared_ptr<DrawViewShell> pDrawViewShell;
     if (mrSlideSorter.GetViewShell() != NULL)
-        pDrawViewShell = ::boost::dynamic_pointer_cast<DrawViewShell>(
+        pDrawViewShell = std::dynamic_pointer_cast<DrawViewShell>(
             mrSlideSorter.GetViewShell()->GetViewShellBase().GetMainViewShell());
     if (pDrawViewShell.get() != NULL
         && (pDrawViewShell->GetShellType() == ViewShell::ST_IMPRESS

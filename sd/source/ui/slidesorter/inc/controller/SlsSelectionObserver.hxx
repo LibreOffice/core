@@ -21,8 +21,8 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_CONTROLLER_SLSSELECTIONOBSERVER_HXX
 
 #include <sal/types.h>
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -60,7 +60,7 @@ public:
         ~Context();
         void Abort();
     private:
-        ::boost::shared_ptr<SelectionObserver> mpSelectionObserver;
+        std::shared_ptr<SelectionObserver> mpSelectionObserver;
     };
 
 private:

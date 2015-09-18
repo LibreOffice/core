@@ -47,7 +47,7 @@ using namespace com::sun::star::ui::dialogs;
 
 #include "pres.hxx"
 #include "sdabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class SdHtmlOptionsDialog : public cppu::WeakImplHelper
 <
@@ -198,7 +198,7 @@ sal_Int16 SdHtmlOptionsDialog::execute()
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     if( pFact )
     {
-        boost::scoped_ptr<AbstractSdPublishingDlg> pDlg(pFact->CreateSdPublishingDlg( Application::GetDefDialogParent(), meDocType ));
+        std::unique_ptr<AbstractSdPublishingDlg> pDlg(pFact->CreateSdPublishingDlg( Application::GetDefDialogParent(), meDocType ));
         if( pDlg )
         {
             if( pDlg->Execute() )

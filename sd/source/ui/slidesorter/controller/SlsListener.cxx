@@ -595,7 +595,7 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
 
     // Invalidate the preview of the page (in all slide sorters that display
     // it.)
-    ::boost::shared_ptr<cache::PageCacheManager> pCacheManager (cache::PageCacheManager::Instance());
+    std::shared_ptr<cache::PageCacheManager> pCacheManager (cache::PageCacheManager::Instance());
     if ( ! pCacheManager)
         return;
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();

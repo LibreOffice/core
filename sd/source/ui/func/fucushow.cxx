@@ -31,7 +31,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include "sdabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 
@@ -57,7 +57,7 @@ rtl::Reference<FuPoor> FuCustomShowDlg::Create( ViewShell* pViewSh, ::sd::Window
 void FuCustomShowDlg::DoExecute( SfxRequest& )
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    boost::scoped_ptr<AbstractSdCustomShowDlg> pDlg(pFact ? pFact->CreateSdCustomShowDlg( NULL, *mpDoc ) : 0);
+    std::unique_ptr<AbstractSdCustomShowDlg> pDlg(pFact ? pFact->CreateSdCustomShowDlg( NULL, *mpDoc ) : 0);
     if( pDlg )
     {
         sal_uInt16 nRet = pDlg->Execute();
