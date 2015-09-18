@@ -819,6 +819,12 @@ PatternField::PatternField( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
+void PatternField::dispose()
+{
+    PatternFormatter::SetField( NULL );
+    SpinField::dispose();
+}
+
 bool PatternField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
@@ -863,6 +869,12 @@ PatternBox::PatternBox( vcl::Window* pParent, WinBits nWinStyle ) :
 {
     SetField( this );
     Reformat();
+}
+
+void PatternBox::dispose()
+{
+    PatternFormatter::SetField( NULL );
+    ComboBox::dispose();
 }
 
 bool PatternBox::PreNotify( NotifyEvent& rNEvt )
@@ -1729,6 +1741,12 @@ DateField::DateField( vcl::Window* pParent, WinBits nWinStyle ) :
     ResetLastDate();
 }
 
+void DateField::dispose()
+{
+    DateFormatter::SetField( NULL );
+    SpinField::dispose();
+}
+
 bool DateField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && IsStrictFormat() &&
@@ -1826,6 +1844,12 @@ DateBox::DateBox( vcl::Window* pParent, WinBits nWinStyle ) :
     SetField( this );
     SetText( ImplGetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     Reformat();
+}
+
+void DateBox::dispose()
+{
+    DateFormatter::SetField( NULL );
+    ComboBox::dispose();
 }
 
 bool DateBox::PreNotify( NotifyEvent& rNEvt )
@@ -2515,6 +2539,12 @@ TimeField::TimeField( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
+void TimeField::dispose()
+{
+    TimeFormatter::SetField( NULL );
+    SpinField::dispose();
+}
+
 bool TimeField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
@@ -2650,6 +2680,12 @@ TimeBox::TimeBox( vcl::Window* pParent, WinBits nWinStyle ) :
     SetField( this );
     SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, false, false ) );
     Reformat();
+}
+
+void TimeBox::dispose()
+{
+    TimeFormatter::SetField( NULL );
+    ComboBox::dispose();
 }
 
 bool TimeBox::PreNotify( NotifyEvent& rNEvt )
