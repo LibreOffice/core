@@ -20,6 +20,8 @@
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/XArrayFormulaRange.hpp>
+#include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
@@ -50,12 +52,13 @@ public:
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
-    uno::Reference< uno::XInterface > init();
+    uno::Reference< uno::XInterface > init(const OUString& aFileName);
 
     CPPUNIT_TEST_SUITE(ScPerfObj);
     CPPUNIT_TEST(testSheetFindAll);
     CPPUNIT_TEST(testSheetNamedRanges);
     CPPUNIT_TEST(testSheets);
+    CPPUNIT_TEST(testSum);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -67,6 +70,7 @@ private:
     void testSheetFindAll();
     void testSheetNamedRanges();
     void testSheets();
+    void testSum();
 
 };
 
@@ -78,13 +82,13 @@ ScPerfObj::ScPerfObj()
 {
 }
 
-uno::Reference< uno::XInterface > ScPerfObj::init()
+uno::Reference< uno::XInterface > ScPerfObj::init(const OUString& aFileName)
 {
     if (mxComponent.is())
         closeDocument(mxComponent);
 
     OUString aFileURL;
-    createFileURL(OUString("scBigFile.ods"), aFileURL);
+    createFileURL(aFileName, aFileURL);
 
     mxComponent = loadFromDesktop(aFileURL);
 
@@ -115,7 +119,7 @@ void ScPerfObj::tearDown()
 void ScPerfObj::testSheetFindAll()
 {
 
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scBigFile.ods"), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
 
@@ -171,7 +175,7 @@ void ScPerfObj::testSheetFindAll()
 void ScPerfObj::testSheetNamedRanges()
 {
 
-    uno::Reference< lang::XComponent > xComponent (init(), UNO_QUERY_THROW);
+    uno::Reference< lang::XComponent > xComponent (init("scBigFile.ods"), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComponent, UNO_QUERY_THROW);
 
     // get NamedRanges
@@ -218,7 +222,7 @@ void ScPerfObj::testSheetNamedRanges()
 void ScPerfObj::testSheets()
 {
 
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init(), UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scBigFile.ods"), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
 
@@ -244,6 +248,45 @@ void ScPerfObj::testSheets()
     xSheetsNameContainer->removeByName(aSheetName);
     callgrindDump("sc:remove_sheet_by_name");
 
+}
+
+void ScPerfObj::testSum()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+
+    uno::Any rSheet = xSheets->getByName(OUString::createFromAscii("SumSheet"));
+
+    // query for the XSpreadsheet interface
+    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
+    uno::Reference< table::XCell > xCell = xSheet->getCellByPosition(1, 0);
+
+
+    callgrindStart();
+    xCell->setFormula(OUString::createFromAscii("=SUM(A1:A10000)"));
+    xCalculatable->calculate();
+    callgrindDump("sc:sum_numbers_column");
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong Sum" , 504178.0, xCell->getValue());
+
+    // query for the XCellRange interface
+    uno::Reference< table::XCellRange > rCellRange(rSheet, UNO_QUERY);
+    // query the cell range
+    uno::Reference< table::XCellRange > xCellRange = rCellRange->getCellRangeByName(OUString::createFromAscii("B1"));
+
+    uno::Reference< sheet::XArrayFormulaRange > xArrayFormulaRange(xCellRange, UNO_QUERY_THROW);
+
+    callgrindStart();
+    xArrayFormulaRange->setArrayFormula("=SUM(A1:A10000=30)");
+    xCalculatable->calculate();
+    callgrindDump("sc:sum_with_array_formula_condition");
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong Sum - number of elements equal 30" , 99.0, xCell->getValue());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPerfObj);
