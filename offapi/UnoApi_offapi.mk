@@ -319,6 +319,8 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/scanner,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/script,\
 	DocumentDialogLibraryContainer \
 	DocumentScriptLibraryContainer \
+	XServiceDocumenter \
+	theServiceDocumenter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/script/browse,\
 	theBrowseNodeFactory \
