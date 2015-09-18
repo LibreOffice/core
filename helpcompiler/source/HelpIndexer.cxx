@@ -14,8 +14,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
-#include <boost/scoped_ptr.hpp>
 #include <algorithm>
+#include <memory>
 
 #include "LuceneHelper.hxx"
 
@@ -42,7 +42,7 @@ bool HelpIndexer::indexDocuments()
         bool bUseCJK = sLang == "ja" || sLang == "ko" || sLang == "zh";
 
         // Construct the analyzer appropriate for the given language
-        boost::scoped_ptr<lucene::analysis::Analyzer> analyzer;
+        std::unique_ptr<lucene::analysis::Analyzer> analyzer;
         if (bUseCJK)
             analyzer.reset(new lucene::analysis::LanguageBasedAnalyzer(L"cjk"));
         else

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTMANAGERAGENT_HXX
 #define INCLUDED_WINACCESSIBILITY_INC_ACCOBJECTMANAGERAGENT_HXX
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
@@ -37,7 +37,7 @@ class AccObjectManagerAgent
 {
 private:
 
-    boost::scoped_ptr<AccObjectWinManager> pWinManager;
+    std::unique_ptr<AccObjectWinManager> pWinManager;
 
 public:
 

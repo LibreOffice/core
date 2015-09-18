@@ -19,9 +19,9 @@
 
 #include <HelpCompiler.hxx>
 #include <HelpLinker.hxx>
-#include <iostream>
 #include <sal/main.h>
-#include <boost/scoped_ptr.hpp>
+#include <iostream>
+#include <memory>
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     std::vector<std::string> args;
@@ -29,7 +29,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         args.push_back(std::string(argv[i]));
     try
     {
-        boost::scoped_ptr<HelpLinker> pHelpLinker(new HelpLinker());
+        std::unique_ptr<HelpLinker> pHelpLinker(new HelpLinker());
         pHelpLinker->main( args );
     }
     catch( const HelpProcessingException& e )
