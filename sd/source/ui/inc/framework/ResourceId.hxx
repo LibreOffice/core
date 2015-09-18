@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 namespace {

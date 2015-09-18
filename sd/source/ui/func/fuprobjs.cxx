@@ -39,7 +39,7 @@
 #include "prlayout.hxx"
 #include "unchss.hxx"
 #include "sdabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 

@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <cppuhelper/compbase.hxx>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 namespace {

@@ -39,7 +39,7 @@
 #include "drawview.hxx"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace sd;
 

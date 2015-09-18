@@ -1292,7 +1292,7 @@ void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj* pPathObj )
             SdPage* pPage = dynamic_cast< SdPage* >(pPathObj->GetPage());
             if( pPage )
             {
-                boost::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
+                std::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
                 if( pMainSequence.get() )
                     CustomAnimationEffectPtr pCreated( pMainSequence->append( *pPathObj, makeAny( xShape ), -1.0 ) );
             }
@@ -1372,7 +1372,7 @@ void EffectMigration::CreateAnimatedGroup(SdrObjGroup& rGroupObj, SdPage& rPage)
 
     if(aIter.Count())
     {
-        boost::shared_ptr< sd::MainSequence > pMainSequence(rPage.getMainSequence());
+        std::shared_ptr< sd::MainSequence > pMainSequence(rPage.getMainSequence());
 
         if(pMainSequence.get())
         {

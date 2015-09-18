@@ -32,7 +32,7 @@
 #include "drawdoc.hxx"
 #include "View.hxx"
 #include "Window.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 

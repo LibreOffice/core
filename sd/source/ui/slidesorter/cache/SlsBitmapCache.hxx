@@ -24,7 +24,7 @@ class SdrPage;
 
 #include <vcl/bitmapex.hxx>
 #include <osl/mutex.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace cache {
@@ -170,7 +170,7 @@ public:
     */
     void Compress (
         const CacheKey& rKey,
-        const ::boost::shared_ptr<BitmapCompressor>& rpCompressor);
+        const std::shared_ptr<BitmapCompressor>& rpCompressor);
 
 private:
     mutable ::osl::Mutex maMutex;
