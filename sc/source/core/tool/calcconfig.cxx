@@ -35,7 +35,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
 {
     // Keep in order of opcode value, is that clearest? (Random order,
     // at least, would make no sense at all.)
-    static const std::set<OpCode> aDefaultOpenCLSubsetOpCodes {
+    static OpCodeSet pDefaultOpenCLSubsetOpCodes(new std::set<OpCode>({
         ocAdd,
         ocSub,
         ocMul,
@@ -66,7 +66,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
         ocCovar,
         ocPearson,
         ocSlope,
-        ocSumIfs};
+        ocSumIfs}));
 
     // Note that these defaults better be kept in sync with those in
     // officecfg/registry/schema/org/openoffice/Office/Calc.xcs.
@@ -74,7 +74,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     mbOpenCLSubsetOnly = true;
     mbOpenCLAutoSelect = true;
     mnOpenCLMinimumFormulaGroupSize = 100;
-    mpOpenCLSubsetOpCodes.reset(new std::set<OpCode>(aDefaultOpenCLSubsetOpCodes));
+    mpOpenCLSubsetOpCodes = pDefaultOpenCLSubsetOpCodes;
 }
 
 void ScCalcConfig::reset()
