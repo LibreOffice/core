@@ -15,6 +15,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_carlito \
 	ExternalPackage_dejavu \
 	ExternalPackage_gentium \
+	ExternalPackage_karla \
 	ExternalPackage_liberation \
 	ExternalPackage_liberation_narrow \
 	ExternalPackage_libertineg \
@@ -26,6 +27,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_carlito \
 	UnpackedTarball_dejavu \
 	UnpackedTarball_gentium \
+	UnpackedTarball_karla \
 	UnpackedTarball_liberation \
 	UnpackedTarball_liberation_narrow \
 	UnpackedTarball_libertineg \

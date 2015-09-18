@@ -170,6 +170,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,MORE_FONTS,FONT_CARLITO_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_DEJAVU_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_GENTIUM_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_KARLA_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_NARROW_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LIBERATION_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LINLIBERTINEG_TARBALL) \

@@ -47,6 +47,7 @@ export FONT_CALADEA_TARBALL := 368f114c078f94214a308a74c7e991bc-crosextrafonts-2
 export FONT_CARLITO_TARBALL := c74b7223abe75949b4af367942d96c7a-crosextrafonts-carlito-20130920.tar.gz
 export FONT_DEJAVU_TARBALL := a4e565e220b5de082c23995e256e3c12-dejavu-fonts-ttf-2.34.zip
 export FONT_GENTIUM_TARBALL := 35efabc239af896dfb79be7ebdd6e6b9-gentiumbasic-fonts-1.10.zip
+export FONT_KARLA_TARBALL := 506757f768adb2331881d5186f7286bd-karla.zip
 export FONT_LIBERATION_NARROW_TARBALL := 134d8262145fc793c6af494dcace3e71-liberation-fonts-ttf-1.07.4.tar.gz
 export FONT_LIBERATION_TARBALL := 5c781723a0d9ed6188960defba8e91cf-liberation-fonts-ttf-2.00.1.tar.gz
 export FONT_LINLIBERTINEG_TARBALL := e7a384790b13c29113e22e596ade9687-LinLibertineG-20120116.zip

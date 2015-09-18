@@ -102,6 +102,7 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	gid_File_Fnt_Carlito,
 	gid_File_Fnt_DejaVu,
 	gid_File_Fnt_Gentium,
+	gid_File_Fnt_Karla,
 	gid_File_Fnt_LibSansNarrow,
 	gid_File_Fnt_Liberation,
 	gid_File_Fnt_LinuxLibertineG,

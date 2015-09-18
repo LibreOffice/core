@@ -1333,11 +1333,11 @@ libxml2
 
    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FIT- NESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE DANIEL VEILLARD BE LIABLE FOR
-   ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
-   CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CON- NECTION
-   WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE DANIEL VEILLARD BE LIABLE FOR ANY CLAIM, DAMAGES
+   OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+   THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
    Except as contained in this notice, the name of Daniel Veillard shall
    not be used in advertising or otherwise to promote the sale, use or
@@ -3070,6 +3070,22 @@ Gentium
 
    Copyright (c) 2003-2008 SIL International (http://www.sil.org/),
    with Reserved Font Names "Gentium" and "SIL".
+
+   This Font Software is licensed under the SIL Open Font License, Version
+   1.1. This license is copied below, and is also available with a
+   FAQ at: http://scripts.sil.org/OFL
+
+   See SIL Open Font License, Version 1.1 below
+
+Karla
+
+   The following software may be included in this product: Karla fonts.
+   Use of any of this software is governed by the terms of the license
+   below:
+
+   Copyright (c) 2011, Jonathan Pinhorn
+   (pinhorn.typedesign@gmail.com), with Reserved Font Names “Karla”
+   and “Karla Tamil”.
 
    This Font Software is licensed under the SIL Open Font License, Version
    1.1. This license is copied below, and is also available with a
