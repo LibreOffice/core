@@ -613,7 +613,7 @@ DEFBUF* defendel(char* name, int delete)
     }
     if (!delete)
     {
-        dp = (DEFBUF*) getmem(sizeof (DEFBUF) + size);
+        dp = (DEFBUF*) getmem(sizeof (DEFBUF) + size + 1);
         dp->link = *prevp;
         *prevp = dp;
         dp->hash = nhash;
