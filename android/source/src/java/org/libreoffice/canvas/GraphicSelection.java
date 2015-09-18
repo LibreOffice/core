@@ -253,7 +253,7 @@ public class GraphicSelection extends CommonCanvasElement {
     }
 
     /**
-     * When a single press (no dragging happend) was performed.
+     * When a single press (no dragging happened) was performed.
      */
     private void onSinglePress(PointF screenPosition) {
         sendGraphicSelection("LongPress", screenPosition);

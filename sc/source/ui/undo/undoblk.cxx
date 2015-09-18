@@ -1245,7 +1245,7 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
 
     // Additionally discard/forget caption ownership during deletion, as
     // Drag&Drop is a special case in that the Undo holds captions of the
-    // transfered target range, which would get deleted and
+    // transferred target range, which would get deleted and
     // SdrGroupUndo::Undo() would attempt to access invalidated captions and
     // crash, tdf#92995
     InsertDeleteFlags nDelFlags = nUndoFlags | IDF_FORGETCAPTIONS;

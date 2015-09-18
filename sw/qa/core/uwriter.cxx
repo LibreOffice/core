@@ -1456,7 +1456,7 @@ namespace
         }
     };
     TYPEINIT1( TestClient, SwClient );
-    // sad copypasta as tools/rtti.hxxs little brain cant cope with templates
+    // sad copypasta as tools/rtti.hxxs little brain can't cope with templates
     struct OtherTestClient : SwClient
     {
         TYPEINFO_OVERRIDE();

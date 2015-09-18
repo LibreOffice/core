@@ -1672,14 +1672,14 @@ void SwUiWriterTest::testTdf77342()
     SwGetRefFieldType* pRefType = static_cast<SwGetRefFieldType*>(pField);
     //moving cursor to the starting of document
     pWrtShell->SttDoc();
-    //inserting refernce field 1
+    //inserting reference field 1
     SwGetRefField aField1(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(0), REF_CONTENT);
     pWrtShell->Insert(aField1);
     //inserting second footnote
     pWrtShell->InsertFootnote(OUString(""));
     pWrtShell->SttDoc();
     pCrsr->Move(fnMoveForward);
-    //inserting refernce field 2
+    //inserting reference field 2
     SwGetRefField aField2(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(1), REF_CONTENT);
     pWrtShell->Insert(aField2);
     //inserting third footnote
@@ -1687,7 +1687,7 @@ void SwUiWriterTest::testTdf77342()
     pWrtShell->SttDoc();
     pCrsr->Move(fnMoveForward);
     pCrsr->Move(fnMoveForward);
-    //inserting refernce field 3
+    //inserting reference field 3
     SwGetRefField aField3(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(2), REF_CONTENT);
     pWrtShell->Insert(aField3);
     //updating the fields

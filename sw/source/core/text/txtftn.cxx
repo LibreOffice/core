@@ -847,7 +847,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
     // The Footnote2 Reference remains on the Page/Column. The Footnote itself
     // is on the next Page/Column.
     //
-    // Exception: If the Page/Column cannot accomodate another line,
+    // Exception: If the Page/Column cannot accommodate another line,
     // the Footnote Reference should be moved to the next one.
     if( !rFootnote.IsEndNote() )
     {

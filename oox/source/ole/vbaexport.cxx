@@ -417,7 +417,7 @@ void writePROJECTVERSION(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x0009); // id
     rStrm.WriteUInt32(0x00000004); // Reserved
-    rStrm.WriteUInt32(1467127224); // VersionMajor // TODO: where is this magic number comming from
+    rStrm.WriteUInt32(1467127224); // VersionMajor // TODO: where is this magic number coming from
     rStrm.WriteUInt16(5); // VersionMinor // TODO: where is this magic number coming from
 }
 

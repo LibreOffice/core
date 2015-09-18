@@ -85,7 +85,7 @@ public abstract class BaseNLPSolver extends WeakBase
     public BaseNLPSolver(XComponentContext xContext, String name) {
         m_xContext = xContext;
         m_name = name;
-            // init members exposed as XSolver properties thru uno bridge
+            // init members exposed as XSolver properties through uno bridge
         m_objective = new CellAddress();
         m_variables = new CellAddress[0];
         m_constraints = new SolverConstraint[0];

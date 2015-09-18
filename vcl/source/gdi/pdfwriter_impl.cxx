@@ -6118,7 +6118,7 @@ typedef struct {
     Extension *extensions;
 } TimeStampReq;
 
-// (Partial) ASN.1 for the time stamp responce. Very complicated. Pulled
+// (Partial) ASN.1 for the time stamp response. Very complicated. Pulled
 // together from varuous RFCs.
 
 /*
