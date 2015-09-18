@@ -23,7 +23,7 @@
 #include "viewupdate.hxx"
 #include "unoviewcontainer.hxx"
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 /* Definition of ScreenUpdater class */
 
@@ -128,7 +128,7 @@ namespace slideshow
 
         private:
             struct ImplScreenUpdater;
-            boost::scoped_ptr<ImplScreenUpdater> mpImpl;
+            std::unique_ptr<ImplScreenUpdater> mpImpl;
 
         };
     }

@@ -52,7 +52,7 @@
 #include "slideshowcontext.hxx"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -116,7 +116,7 @@ bool importShapeGraphic(
         // no special string found, graphic must be
         // external. Load via GraphicIm porter
         INetURLObject aTmp( aURL );
-        boost::scoped_ptr<SvStream> pGraphicStream(
+        std::unique_ptr<SvStream> pGraphicStream(
             utl::UcbStreamHelper::CreateStream(
                 aTmp.GetMainURL( INetURLObject::NO_DECODE ),
                 StreamMode::READ ) );

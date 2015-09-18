@@ -27,7 +27,7 @@
 #include "vieweventhandler.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -727,7 +727,7 @@ public:
     bool notifyHyperlinkClicked( OUString const& hyperLink );
 
 private:
-    boost::scoped_ptr<EventMultiplexerImpl> mpImpl;
+    std::unique_ptr<EventMultiplexerImpl> mpImpl;
 };
 
 } // namespace internal
