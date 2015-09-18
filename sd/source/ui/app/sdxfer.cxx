@@ -751,7 +751,7 @@ sal_Int64 SAL_CALL SdTransferable::getSomething( const ::com::sun::star::uno::Se
     return nRet;
 }
 
-void SdTransferable::AddUserData (const ::boost::shared_ptr<UserData>& rpData)
+void SdTransferable::AddUserData (const std::shared_ptr<UserData>& rpData)
 {
     maUserData.push_back(rpData);
 }
@@ -761,12 +761,12 @@ sal_Int32 SdTransferable::GetUserDataCount() const
     return maUserData.size();
 }
 
-::boost::shared_ptr<SdTransferable::UserData> SdTransferable::GetUserData (const sal_Int32 nIndex) const
+std::shared_ptr<SdTransferable::UserData> SdTransferable::GetUserData (const sal_Int32 nIndex) const
 {
     if (nIndex>=0 && nIndex<sal_Int32(maUserData.size()))
         return maUserData[nIndex];
     else
-        return ::boost::shared_ptr<UserData>();
+        return std::shared_ptr<UserData>();
 }
 
 namespace

@@ -68,7 +68,7 @@ MasterPagesSelector::MasterPagesSelector (
     vcl::Window* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
-    const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
+    const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : PreviewValueSet(pParent),
       maMutex(),

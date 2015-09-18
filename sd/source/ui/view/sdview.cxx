@@ -93,8 +93,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "DrawController.hxx"
 
+#include <memory>
 #include <numeric>
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

@@ -528,7 +528,7 @@ void SlideTransitionPane::onChangeCurrentPage()
 {
     ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell
         = ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(mrBase);
-    ::boost::shared_ptr<sd::slidesorter::SlideSorterViewShell::PageSelection> pSelection;
+    std::shared_ptr<sd::slidesorter::SlideSorterViewShell::PageSelection> pSelection;
 
     if( pSlideSorterViewShell )
     {

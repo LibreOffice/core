@@ -76,7 +76,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/xbtmpit.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // - Namespaces -
 

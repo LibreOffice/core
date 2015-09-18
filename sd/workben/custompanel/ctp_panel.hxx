@@ -30,7 +30,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd { namespace colortoolpanel
 {

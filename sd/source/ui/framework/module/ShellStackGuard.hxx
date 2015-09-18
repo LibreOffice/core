@@ -31,7 +31,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace {
 

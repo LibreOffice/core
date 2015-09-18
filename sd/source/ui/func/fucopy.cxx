@@ -38,7 +38,7 @@
 #include <svx/xfillit0.hxx>
 #include <sfx2/request.hxx>
 #include "sdabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 

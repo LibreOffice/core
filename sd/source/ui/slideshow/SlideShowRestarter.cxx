@@ -100,7 +100,7 @@ IMPL_LINK_NOARG_TYPED(SlideShowRestarter, EndPresentation, void*, void)
             // restart of the slide show.
             if (mpViewShellBase != NULL)
             {
-                ::boost::shared_ptr<FrameworkHelper> pHelper(
+                ::std::shared_ptr<FrameworkHelper> pHelper(
                     FrameworkHelper::Instance(*mpViewShellBase));
                 if (pHelper->GetConfigurationController()->getResource(
                     FrameworkHelper::CreateResourceId(FrameworkHelper::msFullScreenPaneURL)).is())

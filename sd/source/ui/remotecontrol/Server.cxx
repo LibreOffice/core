@@ -129,7 +129,7 @@ void RemoteServer::execute()
             OUString aAddress = aClientAddr.getHostname();
 
             MutexGuard aGuard( sDataMutex );
-            ::boost::shared_ptr< ClientInfoInternal > pClient(
+            std::shared_ptr< ClientInfoInternal > pClient(
                 new ClientInfoInternal(
                     OStringToOUString( aName, RTL_TEXTENCODING_UTF8 ),
                     aAddress, false, pSocket, OStringToOUString( aPin,
@@ -239,10 +239,10 @@ void RemoteServer::removeCommunicator( Communicator* mCommunicator )
     }
 }
 
-std::vector< ::boost::shared_ptr< ClientInfo > > RemoteServer::getClients()
+std::vector< std::shared_ptr< ClientInfo > > RemoteServer::getClients()
 {
     SAL_INFO( "sdremote", "RemoteServer::getClients() called" );
-    std::vector< ::boost::shared_ptr< ClientInfo > > aClients;
+    std::vector< std::shared_ptr< ClientInfo > > aClients;
     if ( spServer )
     {
         MutexGuard aGuard( sDataMutex );
@@ -266,13 +266,13 @@ std::vector< ::boost::shared_ptr< ClientInfo > > RemoteServer::getClients()
     Sequence< OUString > aNames = xConfig->getElementNames();
     for ( int i = 0; i < aNames.getLength(); i++ )
     {
-        aClients.push_back( ::boost::shared_ptr< ClientInfo > ( new ClientInfo( aNames[i], "", true ) ) );
+        aClients.push_back( std::shared_ptr< ClientInfo > ( new ClientInfo( aNames[i], "", true ) ) );
     }
 
     return aClients;
 }
 
-bool RemoteServer::connectClient( ::boost::shared_ptr< ClientInfo > pClient, const OUString& aPin )
+bool RemoteServer::connectClient( std::shared_ptr< ClientInfo > pClient, const OUString& aPin )
 {
     SAL_INFO( "sdremote", "RemoteServer::connectClient called" );
     if ( !spServer )
@@ -321,7 +321,7 @@ bool RemoteServer::connectClient( ::boost::shared_ptr< ClientInfo > pClient, con
 
         sCommunicators.push_back( pCommunicator );
 
-        for ( vector< ::boost::shared_ptr< ClientInfoInternal > >::iterator aIt = spServer->mAvailableClients.begin();
+        for ( vector< std::shared_ptr< ClientInfoInternal > >::iterator aIt = spServer->mAvailableClients.begin();
             aIt != spServer->mAvailableClients.end(); ++aIt )
         {
             if ( pClient == *aIt )
@@ -339,7 +339,7 @@ bool RemoteServer::connectClient( ::boost::shared_ptr< ClientInfo > pClient, con
     }
 }
 
-void RemoteServer::deauthoriseClient( ::boost::shared_ptr< ClientInfo > pClient )
+void RemoteServer::deauthoriseClient( std::shared_ptr< ClientInfo > pClient )
 {
     // TODO: we probably want to forcefully disconnect at this point too?
     // But possibly via a separate function to allow just disconnecting from

@@ -635,7 +635,7 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         if ( ! mpImpl->mpUpdateLockForMouse.expired())
         {
-            ::boost::shared_ptr<ViewShell::Implementation::ToolBarManagerLock> pLock(
+            std::shared_ptr<ViewShell::Implementation::ToolBarManagerLock> pLock(
                 mpImpl->mpUpdateLockForMouse);
             if (pLock.get() != NULL)
                 pLock->Release();
@@ -683,7 +683,7 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
     if ( ! mpImpl->mpUpdateLockForMouse.expired())
     {
-        ::boost::shared_ptr<ViewShell::Implementation::ToolBarManagerLock> pLock(
+        std::shared_ptr<ViewShell::Implementation::ToolBarManagerLock> pLock(
             mpImpl->mpUpdateLockForMouse);
         if (pLock.get() != NULL)
             pLock->Release();

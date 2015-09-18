@@ -43,9 +43,9 @@ public:
     virtual sal_Int32 GetMemorySize() const SAL_OVERRIDE { return maPreview.GetSizeBytes(); }
 };
 
-::boost::shared_ptr<BitmapReplacement> NoBitmapCompression::Compress (const Bitmap& rBitmap) const
+std::shared_ptr<BitmapReplacement> NoBitmapCompression::Compress (const Bitmap& rBitmap) const
 {
-    return ::boost::shared_ptr<BitmapReplacement>(new DummyReplacement(rBitmap));
+    return std::shared_ptr<BitmapReplacement>(new DummyReplacement(rBitmap));
 }
 
 Bitmap NoBitmapCompression::Decompress (const BitmapReplacement& rBitmapData) const
@@ -60,9 +60,9 @@ bool NoBitmapCompression::IsLossless() const
 
 //===== CompressionByDeletion =================================================
 
-::boost::shared_ptr<BitmapReplacement> CompressionByDeletion::Compress (const Bitmap& ) const
+std::shared_ptr<BitmapReplacement> CompressionByDeletion::Compress (const Bitmap& ) const
 {
-    return ::boost::shared_ptr<BitmapReplacement>();
+    return std::shared_ptr<BitmapReplacement>();
 }
 
 Bitmap CompressionByDeletion::Decompress (const BitmapReplacement& ) const
@@ -100,7 +100,7 @@ sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize() con
     return maPreview.GetSizeBytes();
 }
 
-::boost::shared_ptr<BitmapReplacement> ResolutionReduction::Compress (
+std::shared_ptr<BitmapReplacement> ResolutionReduction::Compress (
     const Bitmap& rBitmap) const
 {
     ResolutionReducedReplacement* pResult = new ResolutionReducedReplacement();
@@ -113,7 +113,7 @@ sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize() con
         pResult->maPreview.Scale(Size(mnWidth,nHeight));
     }
 
-    return ::boost::shared_ptr<BitmapReplacement>(pResult);
+    return std::shared_ptr<BitmapReplacement>(pResult);
 }
 
 Bitmap ResolutionReduction::Decompress (const BitmapReplacement& rBitmapData) const
@@ -161,7 +161,7 @@ public:
     }
 };
 
-::boost::shared_ptr<BitmapReplacement> PngCompression::Compress (const Bitmap& rBitmap) const
+std::shared_ptr<BitmapReplacement> PngCompression::Compress (const Bitmap& rBitmap) const
 {
     vcl::PNGWriter aWriter (rBitmap);
     SvMemoryStream aStream (32768, 32768);
@@ -173,7 +173,7 @@ public:
     pResult->mpData = new char[pResult->mnDataSize];
     memcpy(pResult->mpData, aStream.GetData(), pResult->mnDataSize);
 
-    return ::boost::shared_ptr<BitmapReplacement>(pResult);
+    return std::shared_ptr<BitmapReplacement>(pResult);
 }
 
 Bitmap PngCompression::Decompress (

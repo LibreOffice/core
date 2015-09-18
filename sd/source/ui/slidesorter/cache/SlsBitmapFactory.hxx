@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_CACHE_SLSBITMAPFACTORY_HXX
 
 #include "PreviewRenderer.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class SdPage;
 class Size;

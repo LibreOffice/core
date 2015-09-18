@@ -94,7 +94,7 @@ namespace {
         }
 
     private:
-        ::boost::shared_ptr<SlideShowRestarter> mpRestarter;
+        ::std::shared_ptr<SlideShowRestarter> mpRestarter;
     };
 }
 
@@ -701,7 +701,7 @@ void SAL_CALL SlideShow::end()
                 // Get the shell pointer in its own scope to be sure that
                 // the shared_ptr to the shell is released before DoClose()
                 // is called.
-                ::boost::shared_ptr<ViewShell> pSharedView (pFullScreenViewShellBase->GetMainViewShell());
+                ::std::shared_ptr<ViewShell> pSharedView (pFullScreenViewShellBase->GetMainViewShell());
                 pShell = dynamic_cast<PresentationViewShell*>(pSharedView.get());
             }
             if( pShell && pShell->GetViewFrame() )
@@ -973,7 +973,7 @@ void SlideShow::activate( ViewShellBase& rBase )
 {
     if( (mpFullScreenViewShellBase == &rBase) && !mxController.is() )
     {
-        ::boost::shared_ptr<PresentationViewShell> pShell = ::boost::dynamic_pointer_cast<PresentationViewShell>(rBase.GetMainViewShell());
+        ::std::shared_ptr<PresentationViewShell> pShell = std::dynamic_pointer_cast<PresentationViewShell>(rBase.GetMainViewShell());
         if(pShell.get() != NULL)
         {
             pShell->FinishInitialization( mpFullScreenFrameView );
@@ -1093,8 +1093,8 @@ void SlideShow::StartInPlacePresentation()
 
         ViewShell::ShellType eShell = ViewShell::ST_NONE;
 
-        ::boost::shared_ptr<FrameworkHelper> pHelper(FrameworkHelper::Instance(*mpCurrentViewShellBase));
-        ::boost::shared_ptr<ViewShell> pMainViewShell(pHelper->GetViewShell(FrameworkHelper::msCenterPaneURL));
+        ::std::shared_ptr<FrameworkHelper> pHelper(FrameworkHelper::Instance(*mpCurrentViewShellBase));
+        ::std::shared_ptr<ViewShell> pMainViewShell(pHelper->GetViewShell(FrameworkHelper::msCenterPaneURL));
 
         if( pMainViewShell.get() )
             eShell = pMainViewShell->GetShellType();
@@ -1170,7 +1170,7 @@ void SlideShow::StartFullscreenPresentation( )
         // changes made by the presentation have an effect on the other
         // view shells.
         FrameView* pOriginalFrameView = 0;
-        ::boost::shared_ptr<ViewShell> xShell(mpCurrentViewShellBase->GetMainViewShell());
+        ::std::shared_ptr<ViewShell> xShell(mpCurrentViewShellBase->GetMainViewShell());
         if (xShell.get())
             pOriginalFrameView = xShell->GetFrameView();
 

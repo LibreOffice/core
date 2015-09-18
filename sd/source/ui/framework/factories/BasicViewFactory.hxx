@@ -32,9 +32,9 @@
 #include <cppuhelper/compbase.hxx>
 #include <osl/mutex.hxx>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <vcl/vclptr.hxx>
+#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 class ViewShell;
@@ -106,11 +106,11 @@ private:
 
     class ViewCache;
     ScopedVclPtr<vcl::Window> mpWindow;
-    ::boost::shared_ptr<ViewCache> mpViewCache;
+    std::shared_ptr<ViewCache> mpViewCache;
 
     css::uno::Reference<css::drawing::framework::XPane> mxLocalPane;
 
-    ::boost::shared_ptr<ViewDescriptor> CreateView (
+    std::shared_ptr<ViewDescriptor> CreateView (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         SfxViewFrame& rFrame,
         vcl::Window& rWindow,
@@ -118,7 +118,7 @@ private:
         FrameView* pFrameView,
         const bool bIsCenterView);
 
-    ::boost::shared_ptr<ViewShell> CreateViewShell (
+    std::shared_ptr<ViewShell> CreateViewShell (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         SfxViewFrame& rFrame,
         vcl::Window& rWindow,
@@ -126,16 +126,16 @@ private:
         const bool bIsCenterView);
 
     void ActivateCenterView (
-        const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor);
+        const std::shared_ptr<ViewDescriptor>& rpDescriptor);
 
     void ReleaseView (
-        const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor,
+        const std::shared_ptr<ViewDescriptor>& rpDescriptor,
         bool bDoNotCache = false);
 
     bool IsCacheable (
-        const ::boost::shared_ptr<ViewDescriptor>& rpDescriptor);
+        const std::shared_ptr<ViewDescriptor>& rpDescriptor);
 
-    ::boost::shared_ptr<ViewDescriptor> GetViewFromCache (
+    std::shared_ptr<ViewDescriptor> GetViewFromCache (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
 };

@@ -142,7 +142,7 @@ void CenterViewFocusModule::HandleNewView (
                 xTunnel->getSomething(ViewShellWrapper::getUnoTunnelId()));
             if (pViewShellWrapper != NULL)
             {
-                ::boost::shared_ptr<ViewShell> pViewShell = pViewShellWrapper->GetViewShell();
+                std::shared_ptr<ViewShell> pViewShell = pViewShellWrapper->GetViewShell();
                 if (pViewShell.get() != NULL)
                     mpBase->GetViewShellManager()->MoveToTop(*pViewShell);
             }

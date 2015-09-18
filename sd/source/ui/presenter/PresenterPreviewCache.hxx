@@ -27,7 +27,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sd { namespace presenter {
 
@@ -97,8 +97,8 @@ private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
     class PresenterCacheContext;
     Size maPreviewSize;
-    ::boost::shared_ptr<PresenterCacheContext> mpCacheContext;
-    ::boost::shared_ptr<sd::slidesorter::cache::PageCache> mpCache;
+    std::shared_ptr<PresenterCacheContext> mpCacheContext;
+    std::shared_ptr<sd::slidesorter::cache::PageCache> mpCache;
 
     /** This method throws a DisposedException when the object has already been
         disposed.

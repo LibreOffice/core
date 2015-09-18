@@ -37,8 +37,9 @@
 #include "sdresid.hxx"
 #include "htmlpublishmode.hxx"
 
-#include <vector>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
+#include <vector>
 
 #define PUB_LOWRES_WIDTH    640
 #define PUB_MEDRES_WIDTH    800

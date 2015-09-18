@@ -20,14 +20,13 @@
 #ifndef INCLUDED_SD_INC_SDPAGE_HXX
 #define INCLUDED_SD_INC_SDPAGE_HXX
 
-#include <boost/shared_ptr.hpp>
-
-#include <functional>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 
+#include <functional>
 #include <list>
+#include <memory>
 #include <vector>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
@@ -57,11 +56,6 @@ class SdStyleSheet;
 namespace sd
 {
     class MainSequence;
-}
-
-namespace boost
-{
-    template<class X> class shared_ptr;
 }
 
 namespace sd {
@@ -138,7 +132,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxAnimationNode;
 
     /** a helper class to manipulate effects inside the main sequence */
-    boost::shared_ptr< sd::MainSequence > mpMainSequence;
+    std::shared_ptr< sd::MainSequence > mpMainSequence;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() SAL_OVERRIDE;
 
@@ -307,7 +301,7 @@ public:
     void setAnimationNode( ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) throw (::com::sun::star::uno::RuntimeException);
 
     /// @return a helper class to manipulate effects inside the main sequence
-    boost::shared_ptr< sd::MainSequence > getMainSequence();
+    std::shared_ptr< sd::MainSequence > getMainSequence();
 
     /** quick check if this slide has an animation node.
         This can be used to have a cost free check if there are no animations ad this slide.

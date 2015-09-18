@@ -488,7 +488,7 @@ bool ViewOverlayManager::CreateTags()
 {
     bool bChanges = false;
 
-    ::boost::shared_ptr<ViewShell> aMainShell = mrBase.GetMainViewShell();
+    std::shared_ptr<ViewShell> aMainShell = mrBase.GetMainViewShell();
 
     SdPage* pPage = aMainShell.get() ? aMainShell->getCurrentPage() : NULL;
 

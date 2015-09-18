@@ -11,9 +11,8 @@
 
 #include <iostream>
 #include <iomanip>
+#include <memory>
 #include <new>
-
-#include <boost/scoped_ptr.hpp>
 
 #include <sal/log.hxx>
 

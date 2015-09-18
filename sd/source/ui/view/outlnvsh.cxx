@@ -86,7 +86,7 @@
 #include "DrawController.hxx"
 #include "framework/FrameworkHelper.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

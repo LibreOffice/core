@@ -86,7 +86,7 @@ VclPtr<vcl::Window> AllMasterPagesSelector::Create (
     if (pDocument == NULL)
         return NULL;
 
-    ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
+    std::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
     VclPtrInstance<AllMasterPagesSelector> pSelector(
             pParent,
@@ -104,7 +104,7 @@ AllMasterPagesSelector::AllMasterPagesSelector (
     vcl::Window* pParent,
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
-    const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
+    const std::shared_ptr<MasterPageContainer>& rpContainer,
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : MasterPagesSelector(pParent, rDocument, rBase, rpContainer, rxSidebar),
       mpSortedMasterPages(new SortedMasterPageDescriptorList())

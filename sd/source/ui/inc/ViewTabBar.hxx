@@ -32,9 +32,8 @@
 #include <cppuhelper/compbase.hxx>
 #include "MutexOwner.hxx"
 
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 namespace sd {
     class ViewShellBase;

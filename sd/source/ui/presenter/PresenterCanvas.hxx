@@ -35,7 +35,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sd { namespace presenter {
 
@@ -375,7 +375,7 @@ private:
     /** The UpdateRequester is used by updateScreen() to schedule
         updateScreen() calls at the shared canvas.
     */
-    ::boost::shared_ptr<CanvasUpdateRequester> mpUpdateRequester;
+    std::shared_ptr<CanvasUpdateRequester> mpUpdateRequester;
 
     /** The clip rectangle as given to SetClip().
     */

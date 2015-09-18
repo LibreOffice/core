@@ -44,7 +44,7 @@
 #include "sdresid.hxx"
 #include <tools/helpers.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 

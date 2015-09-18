@@ -65,7 +65,7 @@
 #include <vcl/svapp.hxx>
 
 #include "slideshow.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 

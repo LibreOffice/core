@@ -31,8 +31,9 @@
 #include "pres.hxx"
 #include "assclass.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 
 class FixedText;
 class RadioButton;

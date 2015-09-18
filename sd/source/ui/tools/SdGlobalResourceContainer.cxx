@@ -43,7 +43,7 @@ private:
     typedef ::std::vector<SdGlobalResource*> ResourceList;
     ResourceList maResources;
 
-    typedef ::std::vector<boost::shared_ptr<SdGlobalResource> > SharedResourceList;
+    typedef ::std::vector<std::shared_ptr<SdGlobalResource> > SharedResourceList;
     SharedResourceList maSharedResources;
 
     typedef ::std::vector<Reference<XInterface> > XInterfaceResourceList;
@@ -89,7 +89,7 @@ void SdGlobalResourceContainer::AddResource (
 }
 
 void SdGlobalResourceContainer::AddResource (
-    ::boost::shared_ptr<SdGlobalResource> pResource)
+    std::shared_ptr<SdGlobalResource> pResource)
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 

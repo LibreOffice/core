@@ -62,7 +62,7 @@
 #include "unmovss.hxx"
 #include "Outliner.hxx"
 #include "sdabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;

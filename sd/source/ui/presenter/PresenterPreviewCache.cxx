@@ -55,7 +55,7 @@ public:
     virtual bool IsIdle() SAL_OVERRIDE;
     virtual bool IsVisible (CacheKey aKey) SAL_OVERRIDE;
     virtual const SdrPage* GetPage (CacheKey aKey) SAL_OVERRIDE;
-    virtual ::boost::shared_ptr<std::vector<CacheKey> > GetEntryList (bool bVisible) SAL_OVERRIDE;
+    virtual std::shared_ptr<std::vector<CacheKey> > GetEntryList (bool bVisible) SAL_OVERRIDE;
     virtual sal_Int32 GetPriority (CacheKey aKey) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel() SAL_OVERRIDE;
 
@@ -297,10 +297,10 @@ const SdrPage* PresenterPreviewCache::PresenterCacheContext::GetPage (CacheKey a
     return static_cast<const SdrPage*>(aKey);
 }
 
-::boost::shared_ptr<std::vector<CacheKey> >
+std::shared_ptr<std::vector<CacheKey> >
     PresenterPreviewCache::PresenterCacheContext::GetEntryList (bool bVisible)
 {
-    ::boost::shared_ptr<std::vector<CacheKey> > pKeys (new std::vector<CacheKey>());
+    std::shared_ptr<std::vector<CacheKey> > pKeys (new std::vector<CacheKey>());
 
     if ( ! mxSlides.is())
         return pKeys;

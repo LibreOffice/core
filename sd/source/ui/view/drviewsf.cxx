@@ -63,7 +63,7 @@
 #include <editeng/adjustitem.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace svx::sidebar;
 using namespace ::com::sun::star;

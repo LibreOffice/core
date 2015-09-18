@@ -82,7 +82,7 @@
 #include "sdxfer.hxx"
 #include <vcl/svapp.hxx>
 #include "undo/undoobjects.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include "glob.hrc"
 
 #include <config_features.h>

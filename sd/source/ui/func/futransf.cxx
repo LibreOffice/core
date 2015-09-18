@@ -31,7 +31,7 @@
 #include "drawdoc.hxx"
 #include <svx/svxdlg.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 

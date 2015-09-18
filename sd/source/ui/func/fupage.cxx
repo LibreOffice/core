@@ -67,7 +67,7 @@
 #include "sdundogr.hxx"
 #include "helpids.h"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 

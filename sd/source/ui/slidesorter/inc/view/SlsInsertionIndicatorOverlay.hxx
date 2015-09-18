@@ -27,8 +27,8 @@
 
 #include <tools/gen.hxx>
 #include <vcl/bitmapex.hxx>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <vector>
 
 class OutputDevice;
@@ -50,7 +50,7 @@ class FramePainter;
 */
 class InsertionIndicatorOverlay
     : public ILayerPainter,
-      public ::boost::enable_shared_from_this<InsertionIndicatorOverlay>
+      public std::enable_shared_from_this<InsertionIndicatorOverlay>
 {
 public:
     InsertionIndicatorOverlay (SlideSorter& rSlideSorter);

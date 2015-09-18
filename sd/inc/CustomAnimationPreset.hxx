@@ -22,9 +22,9 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <vector>
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 
@@ -71,7 +71,7 @@ private:
     EffectsSubTypeMap maSubTypes;
 };
 
-typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
+typedef std::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
 typedef std::unordered_map<OUString, CustomAnimationPresetPtr, OUStringHash> EffectDescriptorMap;
 typedef std::vector< CustomAnimationPresetPtr > EffectDescriptorList;
 
@@ -83,7 +83,7 @@ struct PresetCategory
     PresetCategory( const OUString& rLabel, const EffectDescriptorList& rEffects )
         : maLabel( rLabel ), maEffects( rEffects ) {}
 };
-typedef boost::shared_ptr< PresetCategory > PresetCategoryPtr;
+typedef std::shared_ptr< PresetCategory > PresetCategoryPtr;
 typedef std::vector< PresetCategoryPtr > PresetCategoryList;
 
 class SD_DLLPUBLIC CustomAnimationPresets

@@ -39,7 +39,7 @@
 #include <sfx2/zoomitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxdlg.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 

@@ -26,7 +26,7 @@
 #include "View.hxx"
 #include "ViewShell.hxx"
 #include "drawdoc.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 

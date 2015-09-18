@@ -64,13 +64,13 @@ public:
     CacheCompactionByCompression (
         ::sd::slidesorter::cache::BitmapCache& rCache,
         sal_Int32 nMaximalCacheSize,
-        const ::boost::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>& rpCompressor);
+        const std::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>& rpCompressor);
 
 protected:
     virtual void Run() SAL_OVERRIDE;
 
 private:
-    ::boost::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>  mpCompressor;
+    std::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>  mpCompressor;
 };
 
 } // end of anonymous namespace
@@ -87,7 +87,7 @@ namespace sd { namespace slidesorter { namespace cache {
     static const char sResolution[] = "ResolutionReduction";
     static const char sPNGCompression[] = "PNGCompression";
 
-    ::boost::shared_ptr<BitmapCompressor> pCompressor;
+    std::shared_ptr<BitmapCompressor> pCompressor;
     OUString sCompressionPolicy(sPNGCompression);
     Any aCompressionPolicy (CacheConfiguration::Instance()->GetValue("CompressionPolicy"));
     if (aCompressionPolicy.has<OUString>())
@@ -159,7 +159,7 @@ namespace {
 CacheCompactionByCompression::CacheCompactionByCompression (
     ::sd::slidesorter::cache::BitmapCache& rCache,
     sal_Int32 nMaximalCacheSize,
-    const ::boost::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>& rpCompressor)
+    const std::shared_ptr< ::sd::slidesorter::cache::BitmapCompressor>& rpCompressor)
     : CacheCompactor(rCache,nMaximalCacheSize),
       mpCompressor(rpCompressor)
 {

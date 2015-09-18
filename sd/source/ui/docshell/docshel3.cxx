@@ -56,7 +56,7 @@
 #include "View.hxx"
 #include "slideshow.hxx"
 #include "fuhhconv.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

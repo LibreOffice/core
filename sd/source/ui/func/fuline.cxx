@@ -36,7 +36,7 @@
 #include "app.hrc"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 

@@ -85,7 +85,7 @@
 #include "textapi.hxx"
 #include "sdresid.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::sd;
 using namespace ::com::sun::star;

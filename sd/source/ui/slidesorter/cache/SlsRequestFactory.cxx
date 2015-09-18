@@ -34,7 +34,7 @@ void RequestFactory::operator()(
     RequestQueue& rRequestQueue,
     const SharedCacheContext& rpCacheContext)
 {
-    ::boost::shared_ptr<std::vector<CacheKey> > aKeys;
+    std::shared_ptr<std::vector<CacheKey> > aKeys;
 
     // Add the requests for the visible pages.
     aKeys = rpCacheContext->GetEntryList(true);

@@ -81,7 +81,7 @@
 #include "textapi.hxx"
 #include "optsitem.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -668,7 +668,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
             if( pPage && !pPage->getAnnotations().empty() )
             {
                 // switch to next/previous slide with annotations
-                ::boost::shared_ptr<DrawViewShell> pDrawViewShell(::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
+                std::shared_ptr<DrawViewShell> pDrawViewShell(std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
                 if (pDrawViewShell.get() != NULL)
                 {
                     pDrawViewShell->ChangeEditMode(pPage->IsMasterPage() ? EM_MASTERPAGE : EM_PAGE, false);
