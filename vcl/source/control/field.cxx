@@ -1776,6 +1776,12 @@ MetricBox::MetricBox( vcl::Window* pParent, WinBits nWinStyle ) :
     Reformat();
 }
 
+void MetricBox::dispose()
+{
+    MetricFormatter::SetField(NULL);
+    ComboBox::dispose();
+}
+
 Size MetricBox::CalcMinimumSize() const
 {
     Size aRet(calcMinimumSize(*this, *this));

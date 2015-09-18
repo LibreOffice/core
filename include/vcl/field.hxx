@@ -739,6 +739,8 @@ public:
     // Needed, because GetValue() with nPos hide these functions
     virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const SAL_OVERRIDE;
     virtual sal_Int64       GetValue() const SAL_OVERRIDE;
+
+    virtual void            dispose() SAL_OVERRIDE;
 };
 
 
