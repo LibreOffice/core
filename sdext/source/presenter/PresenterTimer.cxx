@@ -23,9 +23,10 @@
 #include <osl/doublecheckedlocking.h>
 #include <osl/thread.hxx>
 #include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <set>
+#include <algorithm>
 #include <iterator>
+#include <memory>
+#include <set>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -50,7 +51,7 @@ public:
     bool mbIsCanceled;
 };
 
-typedef ::boost::shared_ptr<TimerTask> SharedTimerTask;
+typedef std::shared_ptr<TimerTask> SharedTimerTask;
 
 class TimerTaskComparator
 {
@@ -66,11 +67,11 @@ public:
 /** Queue all scheduled tasks and process them when their time has come.
 */
 class TimerScheduler
-    : public ::boost::enable_shared_from_this<TimerScheduler>,
+    : public std::enable_shared_from_this<TimerScheduler>,
       public ::osl::Thread
 {
 public:
-    static ::boost::shared_ptr<TimerScheduler> Instance();
+    static std::shared_ptr<TimerScheduler> Instance();
     static SharedTimerTask CreateTimerTask (
         const PresenterTimer::Task& rTask,
         const TimeValue& rDueTime,
@@ -90,9 +91,9 @@ public:
         const TimeValue& rTimeValue);
 
 private:
-    static ::boost::shared_ptr<TimerScheduler> mpInstance;
+    static std::shared_ptr<TimerScheduler> mpInstance;
     static ::osl::Mutex maInstanceMutex;
-    ::boost::shared_ptr<TimerScheduler> mpLateDestroy; // for clean exit
+    std::shared_ptr<TimerScheduler> mpLateDestroy; // for clean exit
     static sal_Int32 mnTaskId;
 
     ::osl::Mutex maTaskContainerMutex;
@@ -141,11 +142,11 @@ void PresenterTimer::CancelTask (const sal_Int32 nTaskId)
 
 //===== TimerScheduler ========================================================
 
-::boost::shared_ptr<TimerScheduler> TimerScheduler::mpInstance;
+std::shared_ptr<TimerScheduler> TimerScheduler::mpInstance;
 ::osl::Mutex TimerScheduler::maInstanceMutex;
 sal_Int32 TimerScheduler::mnTaskId = PresenterTimer::NotAValidTaskId;
 
-::boost::shared_ptr<TimerScheduler> TimerScheduler::Instance()
+std::shared_ptr<TimerScheduler> TimerScheduler::Instance()
 {
     ::osl::MutexGuard aGuard (maInstanceMutex);
     if (mpInstance.get() == NULL)

@@ -29,9 +29,8 @@
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 
-#include <boost/shared_ptr.hpp>
-
 #include <functional>
+#include <memory>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace uno {
@@ -84,7 +83,7 @@ public:
     protected:
         ~Listener() {}
     };
-    typedef ::boost::shared_ptr<Listener> SharedListener;
+    typedef std::shared_ptr<Listener> SharedListener;
 
     static ::rtl::Reference<PresenterClockTimer> Instance (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);

@@ -30,7 +30,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sdext { namespace presenter {
 
@@ -122,7 +122,7 @@ private:
     typedef ::std::pair<css::uno::Reference<css::drawing::framework::XView>,
         css::uno::Reference<css::drawing::framework::XPane> > ViewResourceDescriptor;
     typedef ::std::map<OUString, ViewResourceDescriptor> ResourceContainer;
-    ::boost::scoped_ptr<ResourceContainer> mpResourceCache;
+    std::unique_ptr<ResourceContainer> mpResourceCache;
 
     PresenterViewFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,

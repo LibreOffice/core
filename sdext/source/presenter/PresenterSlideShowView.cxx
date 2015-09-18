@@ -773,7 +773,7 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
     {
         if (mpPresenterController.get() == NULL)
             break;
-        ::boost::shared_ptr<PresenterTheme> pTheme (mpPresenterController->GetTheme());
+        std::shared_ptr<PresenterTheme> pTheme (mpPresenterController->GetTheme());
         if (pTheme.get() == NULL)
             break;
 

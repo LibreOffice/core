@@ -30,8 +30,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sdext { namespace presenter {
 
@@ -84,7 +83,7 @@ public:
         const css::awt::Rectangle& rOuterBox,
         const css::drawing::framework::BorderType eBorderType) const;
 
-    void SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme);
+    void SetTheme (const std::shared_ptr<PresenterTheme>& rpTheme);
 
     class Renderer;
 
@@ -125,8 +124,8 @@ public:
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxContext;
-    ::boost::shared_ptr<PresenterTheme> mpTheme;
-    ::boost::scoped_ptr<Renderer> mpRenderer;
+    std::shared_ptr<PresenterTheme> mpTheme;
+    std::unique_ptr<Renderer> mpRenderer;
 
     /** When the theme for the border has not yet been loaded then try again
         when this method is called.

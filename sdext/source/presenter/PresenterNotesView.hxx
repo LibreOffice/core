@@ -37,7 +37,7 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <rtl/ref.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace {
     typedef cppu::WeakComponentImplHelper<
@@ -85,7 +85,7 @@ public:
 
     void ChangeFontSize (const sal_Int32 nSizeChange);
 
-    ::boost::shared_ptr<PresenterTextView> GetTextView() const;
+    std::shared_ptr<PresenterTextView> GetTextView() const;
 
     // lang::XEventListener
 
@@ -153,7 +153,7 @@ private:
     SharedBitmapDescriptor mpBackground;
     double mnTop;
     PresenterTheme::SharedFontDescriptor mpFont;
-    ::boost::shared_ptr<PresenterTextView> mpTextView;
+    std::shared_ptr<PresenterTextView> mpTextView;
 
     void CreateToolBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,

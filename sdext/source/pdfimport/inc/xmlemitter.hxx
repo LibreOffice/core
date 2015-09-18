@@ -21,7 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_XMLEMITTER_HXX
 
 #include "pdfihelper.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace pdfi
 {
@@ -45,7 +45,7 @@ namespace pdfi
         virtual void endTag( const char* pTag ) = 0;
     };
 
-    typedef boost::shared_ptr<XmlEmitter> XmlEmitterSharedPtr;
+    typedef std::shared_ptr<XmlEmitter> XmlEmitterSharedPtr;
 }
 
 #endif

@@ -30,10 +30,9 @@
 #include <cppuhelper/compbase.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <functional>
+#include <memory>
 
 namespace sdext { namespace presenter {
 
@@ -167,7 +166,7 @@ protected:
     css::uno::Reference<css::awt::XWindow> mxWindow;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
-    ::boost::shared_ptr<PresenterPaintManager> mpPaintManager;
+    std::shared_ptr<PresenterPaintManager> mpPaintManager;
     double mnThumbPosition;
     double mnTotalSize;
     double mnThumbSize;
@@ -178,8 +177,8 @@ protected:
     Area meMouseMoveArea;
     css::geometry::RealRectangle2D maBox[__AreaCount__];
     bool mbIsNotificationActive;
-    static boost::weak_ptr<PresenterBitmapContainer> mpSharedBitmaps;
-    boost::shared_ptr<PresenterBitmapContainer> mpBitmaps;
+    static std::weak_ptr<PresenterBitmapContainer> mpSharedBitmaps;
+    std::shared_ptr<PresenterBitmapContainer> mpBitmaps;
     SharedBitmapDescriptor mpPrevButtonDescriptor;
     SharedBitmapDescriptor mpNextButtonDescriptor;
     SharedBitmapDescriptor mpPagerStartDescriptor;
@@ -206,7 +205,7 @@ protected:
     PresenterScrollBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
+        const std::shared_ptr<PresenterPaintManager>& rpPaintManager,
         const ::std::function<void (double)>& rThumbMotionListener);
 
     void Repaint (
@@ -236,9 +235,9 @@ protected:
 
 private:
     class MousePressRepeater;
-    ::boost::shared_ptr<MousePressRepeater> mpMousePressRepeater;
+    std::shared_ptr<MousePressRepeater> mpMousePressRepeater;
     SharedBitmapDescriptor mpBackgroundBitmap;
-    ::boost::scoped_ptr<PresenterCanvasHelper> mpCanvasHelper;
+    std::unique_ptr<PresenterCanvasHelper> mpCanvasHelper;
 
     Area GetArea (const double nX, const double nY) const;
 };
@@ -251,7 +250,7 @@ public:
     PresenterVerticalScrollBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
-        const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager,
+        const std::shared_ptr<PresenterPaintManager>& rpPaintManager,
         const ::std::function<void (double)>& rThumbMotionListener);
     virtual ~PresenterVerticalScrollBar();
     virtual sal_Int32 GetSize() const SAL_OVERRIDE;

@@ -164,11 +164,11 @@ private:
     bool mbIsPaintPending;
     bool mbIsLayoutPending;
     class Layout;
-    ::boost::shared_ptr<Layout> mpLayout;
+    std::shared_ptr<Layout> mpLayout;
     ::rtl::Reference<PresenterScrollBar> mpVerticalScrollBar;
     ::rtl::Reference<PresenterButton> mpCloseButton;
     class MouseOverManager;
-    ::boost::scoped_ptr<MouseOverManager> mpMouseOverManager;
+    std::unique_ptr<MouseOverManager> mpMouseOverManager;
     sal_Int32 mnSlideIndexMousePressed;
     sal_Int32 mnCurrentSlideIndex;
     sal_Int32 mnSeparatorY;
@@ -176,7 +176,7 @@ private:
     css::awt::Point maCloseButtonCenter;
     css::awt::Rectangle maCurrentSlideFrameBoundingBox;
     class CurrentSlideFrameRenderer;
-    ::boost::shared_ptr<CurrentSlideFrameRenderer> mpCurrentSlideFrameRenderer;
+    std::shared_ptr<CurrentSlideFrameRenderer> mpCurrentSlideFrameRenderer;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxPreviewFrame;
 
     void UpdateLayout();

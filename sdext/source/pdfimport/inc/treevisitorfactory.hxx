@@ -21,7 +21,7 @@
 #define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_TREEVISITORFACTORY_HXX
 
 #include "pdfihelper.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace pdfi
 {
@@ -40,15 +40,15 @@ namespace pdfi
         virtual ~TreeVisitorFactory() {}
 
         /// Create visitor that combines tree nodes
-        virtual boost::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor&) const = 0;
+        virtual std::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor&) const = 0;
         /// Create visitor that prepares style info
-        virtual boost::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
+        virtual std::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
             StyleContainer&, PDFIProcessor&) const = 0;
         /// Create visitor that emits tree to an output target
-        virtual boost::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext&) const = 0;
+        virtual std::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext&) const = 0;
     };
 
-    typedef boost::shared_ptr<TreeVisitorFactory> TreeVisitorFactorySharedPtr;
+    typedef std::shared_ptr<TreeVisitorFactory> TreeVisitorFactorySharedPtr;
 
     TreeVisitorFactorySharedPtr createWriterTreeVisitorFactory();
     TreeVisitorFactorySharedPtr createImpressTreeVisitorFactory();
