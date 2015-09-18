@@ -93,7 +93,7 @@ if [ -n "$INTROSPECTION_SCANNER" ]; then
     g-ir-scanner "${SRCDIR}/include/LibreOfficeKit/LibreOfficeKitGtk.h" "${SRCDIR}/libreofficekit/source/gtk/lokdocview.cxx" \
                  `${PKG_CONFIG} --cflags gobject-introspection-1.0 gtk+-3.0` -I"${SRCDIR}/include/" \
                  --include=GLib-2.0 --include=GObject-2.0 --include=Gio-2.0 \
-                 --library=libreofficekitgtk --library-path="${DESTDIR}/${INSTALLDIR}/program" \
+                 --library=libreofficekitgtk --library-path="${INSTDIR}/program" \
                  --include=Gdk-3.0 --include=GdkPixbuf-2.0 --include=Gtk-3.0 \
                  --namespace=LOKDocView --nsversion=0.1 --identifier-prefix=LOKDoc --symbol-prefix=lok_doc \
                  --output="${DESTDIR}/${PREFIXDIR}/share/gir-1.0/LOKDocView-0.1.gir" --warn-all --no-libtool
