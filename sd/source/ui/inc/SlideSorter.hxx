@@ -26,10 +26,9 @@
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <boost/current_function.hpp>
 #include <vcl/scrbar.hxx>
+#include <memory>
 
 class ScrollBar;
 class ScrollBarBox;
@@ -95,7 +94,7 @@ public:
             The little square enclosed by the two scroll bars.  Typically
             the one from the ViewShell.
     */
-    static ::boost::shared_ptr<SlideSorter> CreateSlideSorter (
+    static std::shared_ptr<SlideSorter> CreateSlideSorter (
         ViewShell& rViewShell,
         sd::Window* pContentWindow,
         ScrollBar* pHorizontalScrollBar,
@@ -112,7 +111,7 @@ public:
             The parent window of the internally created content window and
             scroll bars.
     */
-    static ::boost::shared_ptr<SlideSorter> CreateSlideSorter (
+    static std::shared_ptr<SlideSorter> CreateSlideSorter (
         ViewShellBase& rBase,
         ViewShell* pViewShell,
         vcl::Window& rParentWindow);
@@ -179,11 +178,11 @@ public:
     /** Return a collection of properties that are used throughout the slide
         sorter.
     */
-    ::boost::shared_ptr<controller::Properties> GetProperties() const;
+    std::shared_ptr<controller::Properties> GetProperties() const;
 
     /** Return the active theme which gives access to colors and fonts.
     */
-    ::boost::shared_ptr<view::Theme> GetTheme() const;
+    std::shared_ptr<view::Theme> GetTheme() const;
 
 protected:
     /** This virtual method makes it possible to create a specialization of
@@ -215,9 +214,9 @@ protected:
 private:
     bool mbIsValid;
 
-    ::boost::scoped_ptr<controller::SlideSorterController> mpSlideSorterController;
-    ::boost::scoped_ptr<model::SlideSorterModel> mpSlideSorterModel;
-    ::boost::scoped_ptr<view::SlideSorterView> mpSlideSorterView;
+    std::unique_ptr<controller::SlideSorterController> mpSlideSorterController;
+    std::unique_ptr<model::SlideSorterModel> mpSlideSorterModel;
+    std::unique_ptr<view::SlideSorterView> mpSlideSorterView;
     ::com::sun::star::uno::WeakReference<com::sun::star::frame::XController> mxControllerWeak;
     ViewShell* mpViewShell;
     ViewShellBase* mpViewShellBase;
@@ -234,8 +233,8 @@ private:
     /** Some slide sorter wide properties that are used in different
         classes.
     */
-    ::boost::shared_ptr<controller::Properties> mpProperties;
-    ::boost::shared_ptr<view::Theme> mpTheme;
+    std::shared_ptr<controller::Properties> mpProperties;
+    std::shared_ptr<view::Theme> mpTheme;
 
     SlideSorter (
         ViewShell& rViewShell,

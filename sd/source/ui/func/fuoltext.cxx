@@ -35,7 +35,7 @@
 #include "ViewShell.hxx"
 #include "OutlineViewShell.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <stdio.h>
 
@@ -189,7 +189,7 @@ bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
     {
         mpWindow->GrabFocus();
 
-        boost::scoped_ptr< OutlineViewModelChangeGuard > aGuard;
+        std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
         if( (nKeyGroup != KEYGROUP_CURSOR) && (nKeyGroup != KEYGROUP_FKEYS) )
             aGuard.reset( new OutlineViewModelChangeGuard( *pOutlineView ) );
 

@@ -25,7 +25,7 @@
 
 #include <deque>
 #include <map>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 
 namespace {
 
@@ -62,12 +62,12 @@ class RecentlyUsedCacheDescriptor
 public:
     ::sd::slidesorter::cache::PageCacheManager::DocumentKey mpDocument;
     Size maPreviewSize;
-    ::boost::shared_ptr< ::sd::slidesorter::cache::PageCacheManager::Cache> mpCache;
+    std::shared_ptr< ::sd::slidesorter::cache::PageCacheManager::Cache> mpCache;
 
     RecentlyUsedCacheDescriptor(
         ::sd::slidesorter::cache::PageCacheManager::DocumentKey pDocument,
         const Size& rPreviewSize,
-        const ::boost::shared_ptr< ::sd::slidesorter::cache::PageCacheManager::Cache>& rpCache)
+        const std::shared_ptr< ::sd::slidesorter::cache::PageCacheManager::Cache>& rpCache)
         :mpDocument(pDocument),maPreviewSize(rPreviewSize),mpCache(rpCache)
     {}
 };
@@ -112,7 +112,7 @@ namespace sd { namespace slidesorter { namespace cache {
 */
 class PageCacheManager::PageCacheContainer
     : public std::unordered_map<CacheDescriptor,
-                             ::boost::shared_ptr<PageCacheManager::Cache>,
+                             std::shared_ptr<PageCacheManager::Cache>,
                              CacheDescriptor::Hash,
                              CacheDescriptor::Equal>
 {
@@ -123,12 +123,12 @@ public:
         address only.
     */
     class CompareWithCache { public:
-        CompareWithCache(const ::boost::shared_ptr<PageCacheManager::Cache>& rpCache)
+        CompareWithCache(const std::shared_ptr<PageCacheManager::Cache>& rpCache)
             : mpCache(rpCache) {}
         bool operator () (const PageCacheContainer::value_type& rValue) const
         { return rValue.second == mpCache; }
     private:
-        ::boost::shared_ptr<PageCacheManager::Cache> mpCache;
+        std::shared_ptr<PageCacheManager::Cache> mpCache;
     };
 };
 
@@ -160,18 +160,18 @@ public:
 
 //===== PageCacheManager ====================================================
 
-::boost::weak_ptr<PageCacheManager> PageCacheManager::mpInstance;
+std::weak_ptr<PageCacheManager> PageCacheManager::mpInstance;
 
-::boost::shared_ptr<PageCacheManager> PageCacheManager::Instance()
+std::shared_ptr<PageCacheManager> PageCacheManager::Instance()
 {
-    ::boost::shared_ptr<PageCacheManager> pInstance;
+    std::shared_ptr<PageCacheManager> pInstance;
 
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
     pInstance = mpInstance.lock();
     if (pInstance.get() == NULL)
     {
-        pInstance = ::boost::shared_ptr<PageCacheManager>(
+        pInstance = std::shared_ptr<PageCacheManager>(
             new PageCacheManager(),
             PageCacheManager::Deleter());
         mpInstance = pInstance;
@@ -191,11 +191,11 @@ PageCacheManager::~PageCacheManager()
 {
 }
 
-::boost::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetCache (
+std::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetCache (
     DocumentKey pDocument,
     const Size& rPreviewSize)
 {
-    ::boost::shared_ptr<Cache> pResult;
+    std::shared_ptr<Cache> pResult;
 
     // Look for the cache in the list of active caches.
     CacheDescriptor aKey (pDocument, rPreviewSize);
@@ -224,7 +224,7 @@ PageCacheManager::~PageCacheManager()
 }
 
 void PageCacheManager::Recycle (
-    const ::boost::shared_ptr<Cache>& rpCache,
+    const std::shared_ptr<Cache>& rpCache,
     DocumentKey pDocument,
     const Size& rPreviewSize)
 {
@@ -258,7 +258,7 @@ void PageCacheManager::Recycle (
     }
 }
 
-void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
+void PageCacheManager::ReleaseCache (const std::shared_ptr<Cache>& rpCache)
 {
     PageCacheContainer::iterator iCache (::std::find_if(
         mpPageCaches->begin(),
@@ -275,14 +275,14 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
     }
 }
 
-::boost::shared_ptr<PageCacheManager::Cache> PageCacheManager::ChangeSize (
-    const ::boost::shared_ptr<Cache>& rpCache,
+std::shared_ptr<PageCacheManager::Cache> PageCacheManager::ChangeSize (
+    const std::shared_ptr<Cache>& rpCache,
     const Size& rOldPreviewSize,
     const Size& rNewPreviewSize)
 {
     (void)rOldPreviewSize;
 
-    ::boost::shared_ptr<Cache> pResult;
+    std::shared_ptr<Cache> pResult;
 
     if (rpCache.get() != NULL)
     {
@@ -388,11 +388,11 @@ void PageCacheManager::ReleasePreviewBitmap (const SdrPage* pPage)
         iCache->second->ReleaseBitmap(pPage);
 }
 
-::boost::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetRecentlyUsedCache (
+std::shared_ptr<PageCacheManager::Cache> PageCacheManager::GetRecentlyUsedCache (
     DocumentKey pDocument,
     const Size& rPreviewSize)
 {
-    ::boost::shared_ptr<Cache> pCache;
+    std::shared_ptr<Cache> pCache;
 
     // Look for the cache in the list of recently used caches.
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));
@@ -414,7 +414,7 @@ void PageCacheManager::ReleasePreviewBitmap (const SdrPage* pPage)
 void PageCacheManager::PutRecentlyUsedCache(
     DocumentKey pDocument,
     const Size& rPreviewSize,
-    const ::boost::shared_ptr<Cache>& rpCache)
+    const std::shared_ptr<Cache>& rpCache)
 {
     // Look up the list of recently used caches for the given document.
     RecentlyUsedPageCaches::iterator iQueue (mpRecentlyUsedPageCaches->find(pDocument));

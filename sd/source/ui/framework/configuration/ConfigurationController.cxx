@@ -58,7 +58,7 @@ public:
 
     /** The Broadcaster class implements storing and calling of listeners.
     */
-    ::boost::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
+    std::shared_ptr<ConfigurationControllerBroadcaster> mpBroadcaster;
 
     /** The requested configuration which is modified (asynchronously) by
         calls to requestResourceActivation() and
@@ -70,18 +70,18 @@ public:
 
     ViewShellBase* mpBase;
 
-    ::boost::shared_ptr<ResourceFactoryManager> mpResourceFactoryContainer;
+    std::shared_ptr<ResourceFactoryManager> mpResourceFactoryContainer;
 
-    ::boost::shared_ptr<ConfigurationControllerResourceManager> mpResourceManager;
+    std::shared_ptr<ConfigurationControllerResourceManager> mpResourceManager;
 
-    ::boost::shared_ptr<ConfigurationUpdater> mpConfigurationUpdater;
+    std::shared_ptr<ConfigurationUpdater> mpConfigurationUpdater;
 
     /** The queue processor ownes the queue of configuration change request
         objects and processes the objects.
     */
-    ::boost::scoped_ptr<ChangeRequestQueueProcessor> mpQueueProcessor;
+    std::unique_ptr<ChangeRequestQueueProcessor> mpQueueProcessor;
 
-    ::boost::shared_ptr<ConfigurationUpdaterLock> mpConfigurationUpdaterLock;
+    std::shared_ptr<ConfigurationUpdaterLock> mpConfigurationUpdaterLock;
 
     sal_Int32 mnLockCount;
 };
@@ -420,7 +420,7 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
     // We will probably be making a couple of activation and deactivation
     // requests so lock the configuration controller and let it later update
     // all changes at once.
-    ::boost::shared_ptr<ConfigurationUpdaterLock> pLock (
+    std::shared_ptr<ConfigurationUpdaterLock> pLock (
         mpImplementation->mpConfigurationUpdater->GetLock());
 
     // Get lists of resources that are to be activated or deactivated.

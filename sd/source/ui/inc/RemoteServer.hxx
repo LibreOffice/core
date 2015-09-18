@@ -16,9 +16,8 @@
 #include <unistd.h>
 #endif
 #include <sys/types.h>
+#include <memory>
 #include <vector>
-
-#include <boost/shared_ptr.hpp>
 
 #include <osl/mutex.hxx>
 #include <osl/socket.hxx>
@@ -73,10 +72,10 @@ namespace sd
             static void presentationStopped();
 
             // For the control dialog
-            SD_DLLPUBLIC static std::vector< ::boost::shared_ptr< ClientInfo > > getClients();
-            SD_DLLPUBLIC static bool connectClient( ::boost::shared_ptr< ClientInfo > pClient,
+            SD_DLLPUBLIC static std::vector< std::shared_ptr< ClientInfo > > getClients();
+            SD_DLLPUBLIC static bool connectClient( std::shared_ptr< ClientInfo > pClient,
                                                         const OUString& aPin );
-            SD_DLLPUBLIC static void deauthoriseClient( ::boost::shared_ptr< ClientInfo > pClient );
+            SD_DLLPUBLIC static void deauthoriseClient( std::shared_ptr< ClientInfo > pClient );
 
             /// ensure that discoverability (eg. for Bluetooth) is enabled
             SD_DLLPUBLIC static void ensureDiscoverable();
@@ -93,7 +92,7 @@ namespace sd
             static ::std::vector<Communicator*> sCommunicators;
             osl::AcceptorSocket mSocket;
 
-            ::std::vector< ::boost::shared_ptr< ClientInfoInternal > > mAvailableClients;
+            ::std::vector< std::shared_ptr< ClientInfoInternal > > mAvailableClients;
 
             void execute() SAL_OVERRIDE;
     };

@@ -171,7 +171,7 @@ void InsertionIndicatorHandler::SetPosition (
     }
 }
 
-::boost::shared_ptr<view::InsertAnimator> InsertionIndicatorHandler::GetInsertAnimator()
+std::shared_ptr<view::InsertAnimator> InsertionIndicatorHandler::GetInsertAnimator()
 {
     if ( ! mpInsertAnimator)
         mpInsertAnimator.reset(new view::InsertAnimator(mrSlideSorter));
@@ -234,7 +234,7 @@ bool InsertionIndicatorHandler::IsInsertionTrivial (const sal_Int8 nDndAction)
 //===== InsertionIndicatorHandler::ForceShowContext ===========================
 
 InsertionIndicatorHandler::ForceShowContext::ForceShowContext (
-    const ::boost::shared_ptr<InsertionIndicatorHandler>& rpHandler)
+    const std::shared_ptr<InsertionIndicatorHandler>& rpHandler)
     : mpHandler(rpHandler)
 {
     mpHandler->ForceShow();

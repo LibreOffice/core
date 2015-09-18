@@ -32,7 +32,7 @@
 #include <vcl/button.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd
 {

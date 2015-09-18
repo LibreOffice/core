@@ -59,7 +59,6 @@
 #include "FrameView.hxx"
 #include "FactoryIds.hxx"
 #include "sdabstdlg.hxx"
-#include <boost/shared_ptr.hpp>
 #include <memory>
 #include "slideshow.hxx"
 
@@ -85,7 +84,7 @@ public:
 private:
     ::sd::ViewShellBase& mrBase;
     SdDrawDocument& mrDocument;
-    ::boost::shared_ptr<SvMemoryStream> mpStream;
+    std::shared_ptr<SvMemoryStream> mpStream;
 };
 
 } //end of anonymous namespace
@@ -294,7 +293,7 @@ bool SdModule::OutlineToImpress(SfxRequest& rRequest)
                     = dynamic_cast< ::sd::ViewShellBase*>(pViewFrame->GetViewShell());
                 if (pBase != NULL)
                 {
-                    ::boost::shared_ptr<FrameworkHelper> pHelper (
+                    std::shared_ptr<FrameworkHelper> pHelper (
                         FrameworkHelper::Instance(*pBase));
                     pHelper->RequestView(
                         FrameworkHelper::msOutlineViewURL,
@@ -556,7 +555,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         else
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            boost::scoped_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( NULL, !bNewDocDirect ) : 0 );
+            std::unique_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( NULL, !bNewDocDirect ) : 0 );
 
             // Open the Pilot
             if( pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
@@ -626,7 +625,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                     pOpt->SetStartWithTemplate(bStartWithTemplate);
                     if(bNewDocDirect && !bStartWithTemplate)
                     {
-                        boost::scoped_ptr< SfxItemSet > pRet( CreateItemSet( SID_SD_EDITOPTIONS ) );
+                        std::unique_ptr< SfxItemSet > pRet( CreateItemSet( SID_SD_EDITOPTIONS ) );
                         if(pRet.get())
                             ApplyItemSet( SID_SD_EDITOPTIONS, *pRet.get() );
 
@@ -644,7 +643,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                         if(bNewDocDirect && !bStartWithTemplate)
                         {
-                            boost::scoped_ptr< SfxItemSet > pRet( CreateItemSet( SID_SD_EDITOPTIONS ) );
+                            std::unique_ptr< SfxItemSet > pRet( CreateItemSet( SID_SD_EDITOPTIONS ) );
                             if(pRet.get())
                                 ApplyItemSet( SID_SD_EDITOPTIONS, *pRet.get() );
                         }
@@ -661,7 +660,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                         if (pDoc && pBase)
                         {
-                            ::boost::shared_ptr<sd::ViewShell> pViewSh = pBase->GetMainViewShell();
+                            std::shared_ptr<sd::ViewShell> pViewSh = pBase->GetMainViewShell();
                             SdOptions* pOptions = GetSdOptions(pDoc->GetDocumentType());
 
                             if (pOptions && pViewSh.get())

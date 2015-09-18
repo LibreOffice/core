@@ -54,7 +54,7 @@ protected:
     */
     virtual void AssignMasterPageToPageList (
         SdPage* pMasterPage,
-        const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList) SAL_OVERRIDE;
+        const std::shared_ptr<std::vector<SdPage*> >& rpPageList) SAL_OVERRIDE;
 
     virtual void ProcessPopupMenu (Menu& rMenu) SAL_OVERRIDE;
 
@@ -63,7 +63,7 @@ private:
         vcl::Window* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
-        const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
+        const std::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~RecentMasterPagesSelector();
     virtual void dispose() SAL_OVERRIDE;

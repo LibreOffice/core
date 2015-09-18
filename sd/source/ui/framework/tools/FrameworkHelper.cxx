@@ -230,9 +230,9 @@ const OUString FrameworkHelper::msConfigurationControllerService("com.sun.star.d
 //----- helper ----------------------------------------------------------------
 namespace
 {
-    static ::boost::shared_ptr< ViewShell > lcl_getViewShell( const Reference< XResource >& i_rViewShellWrapper )
+    static ::std::shared_ptr< ViewShell > lcl_getViewShell( const Reference< XResource >& i_rViewShellWrapper )
     {
-        ::boost::shared_ptr< ViewShell > pViewShell;
+        ::std::shared_ptr< ViewShell > pViewShell;
         if ( !i_rViewShellWrapper.is() )
             return pViewShell;
 
@@ -295,7 +295,7 @@ class FrameworkHelper::DisposeListener
       public FrameworkHelperDisposeListenerInterfaceBase
 {
 public:
-    DisposeListener (const ::boost::shared_ptr<FrameworkHelper>& rpHelper);
+    DisposeListener (const ::std::shared_ptr<FrameworkHelper>& rpHelper);
     virtual ~DisposeListener();
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -304,7 +304,7 @@ public:
         throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ::boost::shared_ptr<FrameworkHelper> mpHelper;
+    ::std::shared_ptr<FrameworkHelper> mpHelper;
 };
 
 //----- FrameworkHelper::Deleter ----------------------------------------------
@@ -320,14 +320,14 @@ public:
 
 //----- FrameworkHelper -------------------------------------------------------
 
-::boost::scoped_ptr<FrameworkHelper::ViewURLMap> FrameworkHelper::mpViewURLMap(new ViewURLMap());
+std::unique_ptr<FrameworkHelper::ViewURLMap> FrameworkHelper::mpViewURLMap(new ViewURLMap());
 
 FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
 
-::boost::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (ViewShellBase& rBase)
+::std::shared_ptr<FrameworkHelper> FrameworkHelper::Instance (ViewShellBase& rBase)
 {
 
-    ::boost::shared_ptr<FrameworkHelper> pHelper;
+    ::std::shared_ptr<FrameworkHelper> pHelper;
 
     InstanceMap::const_iterator iHelper (maInstanceMap.find(&rBase));
     if (iHelper == maInstanceMap.end())
@@ -336,7 +336,7 @@ FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
         ::osl::MutexGuard aGuard (aMutexFunctor());
         if (iHelper == maInstanceMap.end())
         {
-            pHelper = ::boost::shared_ptr<FrameworkHelper>(
+            pHelper = ::std::shared_ptr<FrameworkHelper>(
                 new FrameworkHelper(rBase),
                 FrameworkHelper::Deleter());
             pHelper->Initialize();
@@ -405,16 +405,16 @@ bool FrameworkHelper::IsValid()
     return mxConfigurationController.is();
 }
 
-::boost::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const OUString& rsPaneURL)
+::std::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const OUString& rsPaneURL)
 {
     if ( !mxConfigurationController.is() )
-        return ::boost::shared_ptr<ViewShell>();
+        return ::std::shared_ptr<ViewShell>();
 
     Reference<XResourceId> xPaneId( CreateResourceId( rsPaneURL ) );
     return lcl_getViewShell( lcl_getFirstViewInPane( mxConfigurationController, xPaneId ) );
 }
 
-::boost::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const Reference<XView>& rxView)
+::std::shared_ptr<ViewShell> FrameworkHelper::GetViewShell (const Reference<XView>& rxView)
 {
     return lcl_getViewShell( rxView.get() );
 }
@@ -556,7 +556,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         Reference<XResourceId> xPaneId (
             CreateResourceId(framework::FrameworkHelper::msCenterPaneURL));
         Reference<XView> xView (GetView(xPaneId));
-        ::boost::shared_ptr<ViewShell> pCenterViewShell (GetViewShell(xView));
+        ::std::shared_ptr<ViewShell> pCenterViewShell (GetViewShell(xView));
 
         OUString sRequestedView;
         if (bIsActive)
@@ -775,7 +775,7 @@ Reference<XResourceId> FrameworkHelper::CreateResourceId (
 //----- FrameworkHelper::DisposeListener --------------------------------------
 
 FrameworkHelper::DisposeListener::DisposeListener (
-    const ::boost::shared_ptr<FrameworkHelper>& rpHelper)
+    const ::std::shared_ptr<FrameworkHelper>& rpHelper)
     : FrameworkHelperDisposeListenerInterfaceBase(maMutex),
       mpHelper(rpHelper)
 {

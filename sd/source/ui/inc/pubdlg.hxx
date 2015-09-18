@@ -31,7 +31,7 @@
 #include "pres.hxx"
 #include "assclass.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class FixedText;
@@ -145,7 +145,7 @@ private:
     VclPtr<RadioButton>    pPage6_DocColors;
     VclPtr<SdHtmlAttrPreview>  pPage6_Preview;
 
-    boost::scoped_ptr< ButtonSet > mpButtonSet;
+    std::unique_ptr< ButtonSet > mpButtonSet;
 
     // standard controls
     VclPtr<PushButton>     pLastPageButton;

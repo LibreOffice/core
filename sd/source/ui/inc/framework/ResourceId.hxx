@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace {
 
@@ -172,7 +172,7 @@ private:
     */
     ::std::vector<OUString> maResourceURLs;
 
-    ::boost::scoped_ptr<css::util::URL> mpURL;
+    std::unique_ptr<css::util::URL> mpURL;
 
     static css::uno::WeakReference<css::util::XURLTransformer> mxURLTransformerWeak;
 

@@ -35,7 +35,7 @@
 #include "sdabstdlg.hxx"
 #include "app.hrc"
 #include <svx/svdpagv.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 
@@ -111,7 +111,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         aNewAttr.Put(SfxInt32Item(ATTR_SNAPLINE_Y, aLinePos.Y()));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        boost::scoped_ptr<AbstractSdSnapLineDlg> pDlg(pFact ? pFact->CreateSdSnapLineDlg( NULL, aNewAttr, mpView ) : 0);
+        std::unique_ptr<AbstractSdSnapLineDlg> pDlg(pFact ? pFact->CreateSdSnapLineDlg( NULL, aNewAttr, mpView ) : 0);
         OSL_ASSERT(pDlg);
         if (!pDlg)
             return;
