@@ -68,7 +68,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const OUString& rFile )
     bReadOnly = true;
     pDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
-    pDoc->SetOle2Link( Link<>() );
+    pDoc->SetOle2Link( Link<bool,void>() );
     pDoc->GetIDocumentUndoRedo().DoUndo(false);
     pDoc->acquire();
     uno::Reference< embed::XStorage > refStg;
@@ -114,7 +114,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg
     bReadOnly = false;
     pDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
-    pDoc->SetOle2Link( Link<>() );
+    pDoc->SetOle2Link( Link<bool,void>() );
     pDoc->GetIDocumentUndoRedo().DoUndo(false);
     pDoc->acquire();
 

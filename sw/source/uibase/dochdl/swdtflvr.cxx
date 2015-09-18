@@ -3773,8 +3773,8 @@ void SwTrnsfrDdeLink::Disconnect( bool bRemoveDataAdvise )
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         // #i58448#
-        Link<> aSavedOle2Link( pDoc->GetOle2Link() );
-        pDoc->SetOle2Link( Link<>() );
+        Link<bool,void> aSavedOle2Link( pDoc->GetOle2Link() );
+        pDoc->SetOle2Link( Link<bool,void>() );
 
         bool bIsModified = pDoc->getIDocumentState().IsModified();
 

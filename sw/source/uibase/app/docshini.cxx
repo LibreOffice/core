@@ -464,7 +464,7 @@ void SwDocShell::RemoveLink()
             m_xBasePool.clear();
         }
         sal_Int8 nRefCt = static_cast< sal_Int8 >(m_pDoc->release());
-        m_pDoc->SetOle2Link(Link<>());
+        m_pDoc->SetOle2Link(Link<bool,void>());
         m_pDoc->SetDocShell( 0 );
         if( !nRefCt )
             delete m_pDoc;

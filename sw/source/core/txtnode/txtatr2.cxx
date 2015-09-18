@@ -141,11 +141,11 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //      correct charstyle.
         bool bResetMod = !pDoc->getIDocumentState().IsModified();
-        Link<> aOle2Lnk;
+        Link<bool,void> aOle2Lnk;
         if ( bResetMod )
         {
             aOle2Lnk = pDoc->GetOle2Link();
-            pDoc->SetOle2Link( Link<>() );
+            pDoc->SetOle2Link( Link<bool,void>() );
         }
 
         pRet = IsPoolUserFormat( nId )
@@ -263,11 +263,11 @@ SwCharFormat* SwTextRuby::GetCharFormat()
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //              correct charstyle.
         const bool bResetMod = !pDoc->getIDocumentState().IsModified();
-        Link<> aOle2Lnk;
+        Link<bool,void> aOle2Lnk;
         if( bResetMod )
         {
             aOle2Lnk = pDoc->GetOle2Link();
-            const_cast<SwDoc*>(pDoc)->SetOle2Link( Link<>() );
+            const_cast<SwDoc*>(pDoc)->SetOle2Link( Link<bool,void>() );
         }
 
         pRet = IsPoolUserFormat( nId )

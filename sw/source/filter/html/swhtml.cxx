@@ -605,8 +605,8 @@ void SwHTMLParser::Continue( int nToken )
     }
 
     // waehrend des einlesens kein OLE-Modified rufen
-    Link<> aOLELink( pDoc->GetOle2Link() );
-    pDoc->SetOle2Link( Link<>() );
+    Link<bool,void> aOLELink( pDoc->GetOle2Link() );
+    pDoc->SetOle2Link( Link<bool,void>() );
 
     bool bModified = pDoc->getIDocumentState().IsModified();
     bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();

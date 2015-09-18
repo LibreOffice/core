@@ -250,10 +250,10 @@ class SW_DLLPUBLIC SwDoc :
     friend void _FinitCore();
 
     // private Member
-    std::unique_ptr<SwNodes> m_pNodes;  //< document content (Nodes Array)
-    SwAttrPool* mpAttrPool;             //< the attribute pool
-    SwPageDescs m_PageDescs;             //< PageDescriptors
-    Link<>      maOle2Link;              //< OLE 2.0-notification
+    std::unique_ptr<SwNodes> m_pNodes;    //< document content (Nodes Array)
+    SwAttrPool*              mpAttrPool;  //< the attribute pool
+    SwPageDescs              m_PageDescs; //< PageDescriptors
+    Link<bool,void>          maOle2Link;  //< OLE 2.0-notification
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
     */
@@ -1329,8 +1329,8 @@ public:
     ::sw::IShellCursorSupplier * GetIShellCursorSupplier();
 
     // OLE 2.0-notification.
-    inline       void  SetOle2Link(const Link<>& rLink) {maOle2Link = rLink;}
-    inline const Link<>& GetOle2Link() const {return maOle2Link;}
+    inline       void  SetOle2Link(const Link<bool,void>& rLink) {maOle2Link = rLink;}
+    inline const Link<bool,void>& GetOle2Link() const {return maOle2Link;}
 
     // insert section (the ODF kind of section, not the nodesarray kind)
     SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,

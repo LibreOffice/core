@@ -40,16 +40,12 @@ DocumentStateManager::DocumentStateManager( SwDoc& i_rSwdoc ) :
 void DocumentStateManager::SetModified()
 {
     m_rDoc.GetDocumentLayoutManager().ClearSwLayouterEntries();
-    // give the old and new modified state to the link
-    //  Bit 0:  -> old state
-    //  Bit 1:  -> new state
-    sal_IntPtr nCall = mbModified ? 3 : 2;
     mbModified = true;
     m_rDoc.GetDocumentStatisticsManager().GetDocStat().bModified = true;
     if( m_rDoc.GetOle2Link().IsSet() )
     {
         mbInCallModified = true;
-        m_rDoc.GetOle2Link().Call( reinterpret_cast<void*>(nCall) );
+        m_rDoc.GetOle2Link().Call( true );
         mbInCallModified = false;
     }
 
@@ -62,14 +58,14 @@ void DocumentStateManager::ResetModified()
     // give the old and new modified state to the link
     //  Bit 0:  -> old state
     //  Bit 1:  -> new state
-    sal_IntPtr nCall = mbModified ? 1 : 0;
+    bool bOldModified = mbModified;
     mbModified = false;
     m_rDoc.GetDocumentStatisticsManager().GetDocStat().bModified = false;
     m_rDoc.GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
-    if( nCall && m_rDoc.GetOle2Link().IsSet() )
+    if( bOldModified && m_rDoc.GetOle2Link().IsSet() )
     {
         mbInCallModified = true;
-        m_rDoc.GetOle2Link().Call( reinterpret_cast<void*>(nCall) );
+        m_rDoc.GetOle2Link().Call( false );
         mbInCallModified = false;
     }
 }

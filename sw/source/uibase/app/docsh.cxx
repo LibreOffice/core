@@ -482,8 +482,8 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // (for OLE; after Statement from MM)
         const bool bIsModified = m_pDoc->getIDocumentState().IsModified();
         m_pDoc->GetIDocumentUndoRedo().LockUndoNoModifiedPosition();
-        Link<> aOldOLELnk( m_pDoc->GetOle2Link() );
-        m_pDoc->SetOle2Link( Link<>() );
+        Link<bool,void> aOldOLELnk( m_pDoc->GetOle2Link() );
+        m_pDoc->SetOle2Link( Link<bool,void>() );
 
             // Suppress SfxProgress when we are Embedded
         SW_MOD()->SetEmbeddedLoadSave(
@@ -1069,15 +1069,10 @@ void SwDocShell::GetState(SfxItemSet& rSet)
 }
 
 // OLE-Hdls
-IMPL_LINK( SwDocShell, Ole2ModifiedHdl, void *, p )
+IMPL_LINK_TYPED( SwDocShell, Ole2ModifiedHdl, bool, bNewStatus, void )
 {
-    // the Status is handed over from Doc (see doc.cxx)
-    //  Bit 0:  -> old state
-    //  Bit 1:  -> new state
-    sal_IntPtr nStatus = reinterpret_cast<sal_IntPtr>(p);
     if( IsEnableSetModified() )
-        SetModified( (nStatus & 2) != 0 );
-    return 0;
+        SetModified( bNewStatus );
 }
 
 // return Pool here, because virtual

@@ -87,8 +87,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     GetDoc();
 
     // while reading, do not call OLE-Modified
-    Link<> aOLELink( pDoc->GetOle2Link() );
-    pDoc->SetOle2Link( Link<>() );
+    Link<bool,void> aOLELink( pDoc->GetOle2Link() );
+    pDoc->SetOle2Link( Link<bool,void>() );
 
     pDoc->SetInReading( true );
     pDoc->SetInXMLImport( 0 != dynamic_cast< XMLReader* >(po) );
@@ -503,7 +503,7 @@ SwDoc* Reader::GetTemplateDoc()
                     if( pDocSh->DoInitNew( 0 ) )
                     {
                         pTemplate = pDocSh->GetDoc();
-                        pTemplate->SetOle2Link( Link<>() );
+                        pTemplate->SetOle2Link( Link<bool,void>() );
                         // always FALSE
                         pTemplate->GetIDocumentUndoRedo().DoUndo( false );
                         pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
