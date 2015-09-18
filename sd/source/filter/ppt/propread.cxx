@@ -269,10 +269,8 @@ void Section::AddProperty( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBu
     maEntries.push_back( new PropEntry( nId, pBuf, nBufSize, mnTextEnc ) );
 }
 
-bool Section::GetDictionary( Dictionary& rDict )
+void Section::GetDictionary(Dictionary& rDict)
 {
-    bool bRetValue = false;
-
     boost::ptr_vector<PropEntry>::iterator iter;
     for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
     {
@@ -280,48 +278,47 @@ bool Section::GetDictionary( Dictionary& rDict )
             break;
     }
 
-    if ( iter != maEntries.end() )
+    if (iter == maEntries.end())
+        return;
+
+    SvMemoryStream aStream( iter->mpBuf, iter->mnSize, StreamMode::READ );
+    aStream.Seek( STREAM_SEEK_TO_BEGIN );
+    sal_uInt32 nDictCount(0);
+    aStream.ReadUInt32( nDictCount );
+    for (sal_uInt32 i = 0; i < nDictCount; ++i)
     {
-        sal_uInt32 nDictCount, nId, nSize, nPos;
-        SvMemoryStream aStream( iter->mpBuf, iter->mnSize, StreamMode::READ );
-        aStream.Seek( STREAM_SEEK_TO_BEGIN );
-        aStream.ReadUInt32( nDictCount );
-        for ( sal_uInt32 i = 0; i < nDictCount; i++ )
+        sal_uInt32 nId(0), nSize(0);
+        aStream.ReadUInt32( nId ).ReadUInt32( nSize );
+        if (!nSize)
+            continue;
+        OUString aString;
+        try
         {
-            aStream.ReadUInt32( nId ).ReadUInt32( nSize );
-            if ( nSize )
+            if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
             {
-                OUString aString;
-                nPos = aStream.Tell();
-                try
-                {
-                    sal_Char* pString = new sal_Char[ nSize ];
-                    aStream.Read( pString, nSize );
-                    if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
-                    {
-                        nSize >>= 1;
-                        aStream.Seek( nPos );
-                        sal_Unicode* pWString = reinterpret_cast<sal_Unicode*>(pString);
-                        for (sal_uInt32 j = 0; j < nSize; ++j)
-                            aStream.ReadUInt16(pWString[j]);
-                        aString = OUString(pWString, lcl_getMaxSafeStrLen(nSize));
-                    }
-                    else
-                        aString = OUString(pString, lcl_getMaxSafeStrLen(nSize), mnTextEnc);
-                    delete[] pString;
-                }
-                catch( const std::bad_alloc& )
-                {
-                    OSL_FAIL( "sd Section::GetDictionary bad alloc" );
-                }
-                if ( aString.isEmpty() )
-                    break;
-                rDict.insert( std::make_pair(aString,nId) );
+                nSize >>= 1;
+                sal_Unicode* pWString = new sal_Unicode[nSize];
+                for (sal_uInt32 j = 0; j < nSize; ++j)
+                    aStream.ReadUInt16(pWString[j]);
+                aString = OUString(pWString, lcl_getMaxSafeStrLen(nSize));
+                delete[] pWString;
             }
-            bRetValue = true;
+            else
+            {
+                sal_Char* pString = new sal_Char[nSize];
+                aStream.Read(pString, nSize);
+                aString = OUString(pString, lcl_getMaxSafeStrLen(nSize), mnTextEnc);
+                delete[] pString;
+            }
         }
+        catch( const std::bad_alloc& )
+        {
+            OSL_FAIL( "sd Section::GetDictionary bad alloc" );
+        }
+        if (aString.isEmpty())
+            break;
+        rDict.insert( std::make_pair(aString,nId) );
     }
-    return bRetValue;
 }
 
 void Section::Read( SotStorageStream *pStrm )

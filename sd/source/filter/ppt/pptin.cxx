@@ -368,7 +368,8 @@ bool ImplSdPPTImport::Import()
             if ( pSection )
             {
                 Dictionary aDict;
-                if ( pSection->GetDictionary( aDict ) )
+                pSection->GetDictionary(aDict);
+                if (!aDict.empty())
                 {
                     Dictionary::const_iterator iter = aDict.find( OUString("_PID_HLINKS") );
 
