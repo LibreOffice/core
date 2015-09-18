@@ -801,9 +801,9 @@ class SwAssignFieldsControl : public Control
     ::std::vector<VclPtr<ListBox> >     m_aMatches;
     ::std::vector<VclPtr<FixedText> >   m_aPreviews;
 
-    SwMailMergeConfigItem*      m_rConfigItem;
+    SwMailMergeConfigItem*              m_rConfigItem;
 
-    Link<>                      m_aModifyHdl;
+    Link<LinkParamNone*,void>   m_aModifyHdl;
 
     long                        m_nLBStartTopPos;
     long                        m_nYOffset;
@@ -823,10 +823,10 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     void        Init(SwMailMergeConfigItem& rConfigItem);
-    void        SetModifyHdl(const Link<>& rModifyHdl)
+    void        SetModifyHdl(const Link<LinkParamNone*,void>& rModifyHdl)
                 {
                     m_aModifyHdl = rModifyHdl;
-                    m_aModifyHdl.Call(this);
+                    m_aModifyHdl.Call(nullptr);
                 }
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -1234,13 +1234,12 @@ IMPL_LINK_NOARG_TYPED(SwAssignFieldsDialog, OkHdl_Impl, Button*, void)
     EndDialog(RET_OK);
 }
 
-IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwAssignFieldsDialog, AssignmentModifyHdl_Impl, LinkParamNone*, void)
 {
     uno::Sequence< OUString > aAssignments = CreateAssignments();
     const OUString sPreview = SwAddressPreview::FillData(
             m_rPreviewString, m_rConfigItem, &aAssignments);
     m_pPreviewWIN->SetAddress(sPreview);
-    return 0;
 }
 
 DDListBox::DDListBox(vcl::Window* pParent, WinBits nStyle)

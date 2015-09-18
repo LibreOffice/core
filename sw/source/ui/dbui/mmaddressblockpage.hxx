@@ -258,7 +258,7 @@ class SwAssignFieldsDialog : public SfxModalDialog
 
     ::com::sun::star::uno::Sequence< OUString > CreateAssignments();
     DECL_LINK_TYPED(OkHdl_Impl, Button*, void);
-    DECL_LINK(AssignmentModifyHdl_Impl, void*);
+    DECL_LINK_TYPED(AssignmentModifyHdl_Impl, LinkParamNone*, void);
 
 public:
     SwAssignFieldsDialog(vcl::Window* pParent,
