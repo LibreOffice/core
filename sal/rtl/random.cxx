@@ -298,8 +298,8 @@ void SAL_CALL rtl_random_destroyPool (rtlRandomPool Pool) SAL_THROW_EXTERN_C()
         if(pImpl->m_hDigest)
         {
             rtl_digest_destroy (pImpl->m_hDigest);
-            rtl_freeZeroMemory (pImpl, sizeof (RandomPool_Impl));
         }
+        rtl_freeZeroMemory (pImpl, sizeof (RandomPool_Impl));
     }
 }
 
