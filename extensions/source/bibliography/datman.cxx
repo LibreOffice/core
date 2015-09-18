@@ -71,7 +71,7 @@
 #include "bib.hrc"
 #include "bibliography.hrc"
 #include <connectivity/dbtools.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

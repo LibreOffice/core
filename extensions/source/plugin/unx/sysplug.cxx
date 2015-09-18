@@ -45,9 +45,9 @@
 #include <plugin/impl.hxx>
 
 
-::boost::shared_ptr<SysPlugData> CreateSysPlugData()
+std::shared_ptr<SysPlugData> CreateSysPlugData()
 {
-    return ::boost::shared_ptr<SysPlugData>();
+    return std::shared_ptr<SysPlugData>();
 }
 
 UnxPluginComm::UnxPluginComm(

@@ -26,8 +26,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <map>
+#include <memory>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::resource;
@@ -94,7 +94,7 @@ namespace extensions { namespace resource
     class OpenOfficeResourceBundle : public OpenOfficeResourceBundle_Base
     {
     private:
-        typedef ::boost::shared_ptr< IResourceType >            ResourceTypePtr;
+        typedef std::shared_ptr< IResourceType >            ResourceTypePtr;
         typedef ::std::map< OUString, ResourceTypePtr >  ResourceTypes;
 
         ::osl::Mutex                    m_aMutex;

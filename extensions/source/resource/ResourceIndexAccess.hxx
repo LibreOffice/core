@@ -11,12 +11,12 @@
 #define INCLUDED_EXTENSIONS_SOURCE_RESOURCE_RESOURCEINDEXACCESS_HXX
 
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -46,7 +46,7 @@ namespace extensions { namespace resource
 
         private:
             // m_pResMgr should never be NULL
-            const ::boost::shared_ptr<ResMgr> m_pResMgr;
+            const std::shared_ptr<ResMgr> m_pResMgr;
     };
 }}
 

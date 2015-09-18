@@ -75,9 +75,9 @@ struct SysPlugData
     }
 };
 
-::boost::shared_ptr<SysPlugData> CreateSysPlugData()
+std::shared_ptr<SysPlugData> CreateSysPlugData()
 {
-    return ::boost::shared_ptr<SysPlugData>(new SysPlugData);
+    return std::shared_ptr<SysPlugData>(new SysPlugData);
 }
 
 void XPlugin_Impl::SetSysPlugDataParentView(SystemEnvData const& rEnvData)

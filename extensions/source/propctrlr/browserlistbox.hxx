@@ -32,10 +32,10 @@
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
+#include <memory>
 #include <set>
 #include <unordered_map>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 
 namespace pcr
@@ -51,7 +51,7 @@ namespace pcr
 
     // administrative structures for OBrowserListBox
 
-    typedef ::boost::shared_ptr< OBrowserLine > BrowserLinePointer;
+    typedef std::shared_ptr< OBrowserLine > BrowserLinePointer;
     struct ListBoxLine
     {
         OUString                         aName;

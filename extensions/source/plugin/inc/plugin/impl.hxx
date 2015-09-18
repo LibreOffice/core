@@ -30,11 +30,8 @@
 
 #include <config_lgpl.h>
 
-#ifdef SOLARIS
 #include <limits>
-#endif
-
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "cppuhelper/weak.hxx"
 
@@ -83,7 +80,7 @@
 
 struct SysPlugData;
 
-::boost::shared_ptr<SysPlugData> CreateSysPlugData();
+std::shared_ptr<SysPlugData> CreateSysPlugData();
 
 extern "C" {
 
@@ -130,7 +127,7 @@ private:
     PluginComm*                 m_pPluginComm;
     NPP_t                       m_aInstance;
     NPWindow                    m_aNPWindow;
-    ::boost::shared_ptr<SysPlugData> m_pSysPlugData;
+    std::shared_ptr<SysPlugData> m_pSysPlugData;
     rtl_TextEncoding            m_aEncoding;
 
     const char**                m_pArgv;
