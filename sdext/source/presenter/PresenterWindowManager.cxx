@@ -156,7 +156,7 @@ void PresenterWindowManager::SetParentPane (
     }
 }
 
-void PresenterWindowManager::SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme)
+void PresenterWindowManager::SetTheme (const std::shared_ptr<PresenterTheme>& rpTheme)
 {
     mpTheme = rpTheme;
 

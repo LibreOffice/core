@@ -165,7 +165,7 @@ private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
 
     class ElementContainerPart;
-    typedef ::boost::shared_ptr<ElementContainerPart> SharedElementContainerPart;
+    typedef std::shared_ptr<ElementContainerPart> SharedElementContainerPart;
     typedef ::std::vector<SharedElementContainerPart> ElementContainer;
     ElementContainer maElementContainer;
     SharedElementContainerPart mpCurrentContainerPart;

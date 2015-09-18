@@ -103,10 +103,10 @@ namespace {
         void ReadElementMode (
             const Reference<beans::XPropertySet>& rxProperties,
             const OUString& rsModeName,
-            ::boost::shared_ptr<ElementMode>& rpDefaultMode,
+            std::shared_ptr<ElementMode>& rpDefaultMode,
             ::sdext::presenter::PresenterToolBar::Context& rContext);
     };
-    typedef ::boost::shared_ptr<ElementMode> SharedElementMode;
+    typedef std::shared_ptr<ElementMode> SharedElementMode;
 
 }  // end of anonymous namespace
 
@@ -290,7 +290,7 @@ namespace {
         private:
             ::rtl::Reference<TimeLabel> mxLabel;
         };
-        ::boost::shared_ptr<PresenterClockTimer::Listener> mpListener;
+        std::shared_ptr<PresenterClockTimer::Listener> mpListener;
     };
 
     class CurrentTimeLabel : public TimeLabel
@@ -458,7 +458,7 @@ void PresenterToolBar::InvalidateArea (
     const awt::Rectangle& rRepaintBox,
     const bool bSynchronous)
 {
-    ::boost::shared_ptr<PresenterPaintManager> xManager(mpPresenterController->GetPaintManager());
+    std::shared_ptr<PresenterPaintManager> xManager(mpPresenterController->GetPaintManager());
     if (!xManager)
         return;
     xManager->Invalidate(
@@ -471,7 +471,7 @@ void PresenterToolBar::RequestLayout()
 {
     mbIsLayoutPending = true;
 
-    ::boost::shared_ptr<PresenterPaintManager> xManager(mpPresenterController->GetPaintManager());
+    std::shared_ptr<PresenterPaintManager> xManager(mpPresenterController->GetPaintManager());
     if (!xManager)
         return;
 
@@ -830,7 +830,7 @@ void PresenterToolBar::Layout (
     }
 
     // The whole window has to be repainted.
-    ::boost::shared_ptr<PresenterPaintManager> xManager(mpPresenterController->GetPaintManager());
+    std::shared_ptr<PresenterPaintManager> xManager(mpPresenterController->GetPaintManager());
     if (!xManager)
         return;
     xManager->Invalidate(mxWindow);
@@ -1418,7 +1418,7 @@ ElementMode::ElementMode()
 void ElementMode::ReadElementMode (
     const Reference<beans::XPropertySet>& rxElementProperties,
     const OUString& rsModeName,
-    ::boost::shared_ptr<ElementMode>& rpDefaultMode,
+    std::shared_ptr<ElementMode>& rpDefaultMode,
     ::sdext::presenter::PresenterToolBar::Context& rContext)
 {
     try

@@ -30,7 +30,7 @@
 #include <com/sun/star/util/Color.hpp>
 #include <boost/noncopyable.hpp>
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sdext { namespace presenter {
 
@@ -50,7 +50,7 @@ public:
     {
     public:
         BitmapDescriptor();
-        BitmapDescriptor (const ::boost::shared_ptr<BitmapDescriptor>& rpDefault);
+        BitmapDescriptor (const std::shared_ptr<BitmapDescriptor>& rpDefault);
 
         enum Mode {Normal, MouseOver, ButtonDown, Disabled, Mask};
         css::uno::Reference<css::rendering::XBitmap> GetNormalBitmap() const;
@@ -89,13 +89,13 @@ public:
     */
     PresenterBitmapContainer (
         const OUString& rsConfigurationBase,
-        const ::boost::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
+        const std::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper = NULL);
     PresenterBitmapContainer (
         const css::uno::Reference<css::container::XNameAccess>& rsRootNode,
-        const ::boost::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
+        const std::shared_ptr<PresenterBitmapContainer>& rpParentContainer,
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper = NULL);
@@ -106,18 +106,18 @@ public:
 
     /** Return the bitmap set that is associated with the given name.
     */
-    ::boost::shared_ptr<BitmapDescriptor> GetBitmap (const OUString& rsName) const;
+    std::shared_ptr<BitmapDescriptor> GetBitmap (const OUString& rsName) const;
 
-    static ::boost::shared_ptr<BitmapDescriptor> LoadBitmap (
+    static std::shared_ptr<BitmapDescriptor> LoadBitmap (
         const css::uno::Reference<css::container::XHierarchicalNameAccess>& rxNode,
         const OUString& rsPathToBitmapNode,
         const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const ::boost::shared_ptr<BitmapDescriptor>& rpDefaultBitmap);
+        const std::shared_ptr<BitmapDescriptor>& rpDefaultBitmap);
 
 private:
-    ::boost::shared_ptr<PresenterBitmapContainer> mpParentContainer;
-    typedef ::std::map<OUString, ::boost::shared_ptr<BitmapDescriptor> > BitmapContainer;
+    std::shared_ptr<PresenterBitmapContainer> mpParentContainer;
+    typedef ::std::map<OUString, std::shared_ptr<BitmapDescriptor> > BitmapContainer;
     BitmapContainer maIconContainer;
     css::uno::Reference<css::rendering::XCanvas> mxCanvas;
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
@@ -127,17 +127,17 @@ private:
     void ProcessBitmap (
         const OUString& rsKey,
         const css::uno::Reference<css::beans::XPropertySet>& rProperties);
-    static ::boost::shared_ptr<BitmapDescriptor> LoadBitmap (
+    static std::shared_ptr<BitmapDescriptor> LoadBitmap (
         const css::uno::Reference<css::beans::XPropertySet>& rxProperties,
         const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
-        const ::boost::shared_ptr<PresenterBitmapContainer::BitmapDescriptor>& rpDefault);
+        const std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor>& rpDefault);
     static BitmapDescriptor::TexturingMode
         StringToTexturingMode (const OUString& rsTexturingMode);
 };
 
 typedef PresenterBitmapContainer::BitmapDescriptor PresenterBitmapDescriptor;
-typedef ::boost::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> SharedBitmapDescriptor;
+typedef std::shared_ptr<PresenterBitmapContainer::BitmapDescriptor> SharedBitmapDescriptor;
 
 } } // end of namespace ::sdext::presenter
 

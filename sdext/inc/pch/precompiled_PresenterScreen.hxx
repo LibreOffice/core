@@ -18,13 +18,11 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
-#include <algorithm>
 #include <boost/bind.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <algorithm>
 #include <cmath>
+#include <memory>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

@@ -37,8 +37,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <list>
+#include <memory>
 #include <unordered_map>
 
 #include "imagecontainer.hxx"
@@ -178,8 +178,8 @@ namespace pdfi
 
         std::vector<CharGlyph>             m_GlyphsList;
 
-        boost::shared_ptr<ElementFactory>  m_pElFactory;
-        boost::shared_ptr<DocumentElement> m_pDocument;
+        std::shared_ptr<ElementFactory>  m_pElFactory;
+        std::shared_ptr<DocumentElement> m_pDocument;
         PageElement*                       m_pCurPage;
         Element*                           m_pCurElement;
         sal_Int32                          m_nNextFontId;

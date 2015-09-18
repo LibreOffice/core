@@ -37,7 +37,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace sdext { namespace presenter {
@@ -120,7 +120,7 @@ private:
         const OUString& rsTitle,
         const css::uno::Reference<css::awt::XWindow>& rxNotesContentWindow,
         const css::uno::Reference<css::awt::XWindow>& rxNotesBorderWindow,
-        const ::boost::shared_ptr<PresenterTextView>& rpNotesTextView);
+        const std::shared_ptr<PresenterTextView>& rpNotesTextView);
     PresenterPaneContainer::SharedPaneDescriptor GetPreviewPane() const;
 };
 

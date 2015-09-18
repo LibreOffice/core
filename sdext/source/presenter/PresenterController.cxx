@@ -448,7 +448,7 @@ PresenterTheme::SharedFontDescriptor
     return PresenterTheme::SharedFontDescriptor();
 }
 
-::boost::shared_ptr<PresenterTheme> PresenterController::GetTheme() const
+std::shared_ptr<PresenterTheme> PresenterController::GetTheme() const
 {
     return mpTheme;
 }
@@ -474,7 +474,7 @@ rtl::Reference<PresenterPaneContainer> PresenterController::GetPaneContainer() c
     return mpPaneBorderPainter;
 }
 
-::boost::shared_ptr<PresenterCanvasHelper> PresenterController::GetCanvasHelper() const
+std::shared_ptr<PresenterCanvasHelper> PresenterController::GetCanvasHelper() const
 {
     return mpCanvasHelper;
 }
@@ -484,7 +484,7 @@ Reference<drawing::XPresenterHelper> PresenterController::GetPresenterHelper() c
     return mxPresenterHelper;
 }
 
-::boost::shared_ptr<PresenterPaintManager> PresenterController::GetPaintManager() const
+std::shared_ptr<PresenterPaintManager> PresenterController::GetPaintManager() const
 {
     return mpPaintManager;
 }
