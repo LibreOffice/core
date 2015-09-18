@@ -17,13 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "XTempFile.hxx"
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/servicedecl.hxx>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
-#include "XTempFile.hxx"
 
 OTempFileService::OTempFileService(css::uno::Reference< css::uno::XComponentContext > const & context)
 : ::cppu::PropertySetMixin< css::io::XTempFile >(
@@ -411,72 +412,11 @@ throw ( css::io::IOException, css::uno::RuntimeException, std::exception )
     checkError();
 }
 
-// XServiceInfo
-
-OUString SAL_CALL OTempFileService::getImplementationName()
-throw ( css::uno::RuntimeException, std::exception )
-{
-    return getImplementationName_Static();
-}
-
-sal_Bool SAL_CALL OTempFileService::supportsService( OUString const & rServiceName )
-throw ( css::uno::RuntimeException, std::exception )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-css::uno::Sequence < OUString > SAL_CALL OTempFileService::getSupportedServiceNames()
-throw ( css::uno::RuntimeException, std::exception )
-{
-    return getSupportedServiceNames_Static();
-}
-
-OUString OTempFileService::getImplementationName_Static ()
-{
-    return OUString ( "com.sun.star.io.comp.TempFile" );
-}
-css::uno::Sequence < OUString > OTempFileService::getSupportedServiceNames_Static()
-{
-    css::uno::Sequence < OUString > aNames ( 1 );
-    aNames[0] = "com.sun.star.io.TempFile";
-    return aNames;
-}
-css::uno::Reference < css::uno::XInterface >SAL_CALL XTempFile_createInstance(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
-{
-    return static_cast< ::cppu::OWeakObject * >( new OTempFileService(context) );
-}
-
-css::uno::Reference < css::lang::XSingleComponentFactory > OTempFileService::createServiceFactory_Static()
-{
-    return ::cppu::createSingleComponentFactory( XTempFile_createInstance, getImplementationName_Static(), getSupportedServiceNames_Static() );
-}
-
-/**
- * This function is called to get service factories for an implementation.
- * @param pImplName name of implementation
- * @param pServiceManager generic uno interface providing a service manager to instantiate components
- * @param pRegistryKey registry data key to read and write component persistent data
- * @return a component factory (generic uno interface)
- */
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL utl_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager,
-    SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )
-{
-    void * pRet = 0;
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMgr(
-        static_cast< css::lang::XMultiServiceFactory * >( pServiceManager ) );
-    css::uno::Reference< css::lang::XSingleComponentFactory > xFactory;
-
-    if (OTempFileService::getImplementationName_Static().equalsAscii( pImplName ) )
-        xFactory = OTempFileService::createServiceFactory_Static();
-
-    if ( xFactory.is() )
-    {
-        xFactory->acquire();
-        pRet = xFactory.get();
-    }
-    return pRet;
-}
+namespace sdecl = ::comphelper::service_decl;
+sdecl::class_< OTempFileService> OTempFileServiceImpl;
+extern const sdecl::ServiceDecl OTempFileServiceDecl(
+    OTempFileServiceImpl,
+    "com.sun.star.io.comp.TempFile",
+    "com.sun.star.io.TempFile");
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

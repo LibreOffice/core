@@ -34,28 +34,25 @@
 class SvStream;
 namespace utl { class TempFile; }
 
-typedef  ::cppu::WeakImplHelper<   ::com::sun::star::io::XTempFile
-                                    ,   ::com::sun::star::io::XInputStream
-                                                  , ::com::sun::star::io::XOutputStream
-                                                  , ::com::sun::star::io::XTruncate
-                                                  , ::com::sun::star::lang::XServiceInfo
-                                                  >
-                                    OTempFileBase;
 
-class OTempFileService :
-    public OTempFileBase,
-    public ::cppu::PropertySetMixin< ::com::sun::star::io::XTempFile >
+typedef ::cppu::WeakImplHelper< ::com::sun::star::io::XTempFile
+    , ::com::sun::star::io::XInputStream
+    , ::com::sun::star::io::XOutputStream
+    , ::com::sun::star::io::XTruncate > OTempFileBase;
+
+class OTempFileService : public OTempFileBase
+    , public ::cppu::PropertySetMixin< ::com::sun::star::io::XTempFile >
 {
 protected:
-    ::utl::TempFile*    mpTempFile;
-    ::osl::Mutex        maMutex;
-    SvStream*           mpStream;
-    bool            mbRemoveFile;
-    bool            mbInClosed;
-    bool            mbOutClosed;
+    ::utl::TempFile* mpTempFile;
+    ::osl::Mutex maMutex;
+    SvStream* mpStream;
+    bool mbRemoveFile;
+    bool mbInClosed;
+    bool mbOutClosed;
 
-    sal_Int64           mnCachedPos;
-    bool            mbHasCachedPos;
+    sal_Int64 mnCachedPos;
+    bool mbHasCachedPos;
 
     void checkError () const;
     void checkConnected ();
@@ -120,24 +117,8 @@ public:
     // XTruncate
     virtual void SAL_CALL truncate()
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > SAL_CALL XTempFile_createInstance( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
-    static OUString getImplementationName_Static ();
-    static ::com::sun::star::uno::Sequence < OUString > getSupportedServiceNames_Static();
-
-    static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleComponentFactory > createServiceFactory_Static();
-
-private:
-    OTempFileService( OTempFileService & ) SAL_DELETED_FUNCTION;
     virtual ~OTempFileService ();
-
 };
 #endif
 

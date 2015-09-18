@@ -22,4 +22,7 @@
   <implementation name="com.sun.star.io.comp.TempFile">
     <service name="com.sun.star.io.TempFile"/>
   </implementation>
+  <implementation name="com.sun.star.comp.unotools.misc.ServiceDocumenter">
+    <singleton name="com.sun.star.util.theServiceDocumenter"/>
+  </implementation>
 </component>
