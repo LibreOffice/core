@@ -361,7 +361,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         // talks about "the" cursor at the moment. As long as that's true,
         // don't say anything about the Writer cursor till a draw object is
         // being edited.
-        if (GetShell()->isTiledRendering() && !pView->GetTextEditObject())
+        if (comphelper::LibreOfficeKit::isActive() && !pView->GetTextEditObject())
         {
             if (!empty())
             {
@@ -377,12 +377,18 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
                 if (aStartRect.HasArea())
                 {
                     OString sRect = aStartRect.SVRect().toString();
-                    GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
+                    if (comphelper::LibreOfficeKit::isViewCallback())
+                        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
+                    else
+                        GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
                 }
                 if (aEndRect.HasArea())
                 {
                     OString sRect = aEndRect.SVRect().toString();
-                    GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
+                    if (comphelper::LibreOfficeKit::isViewCallback())
+                        GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
+                    else
+                        GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
                 }
             }
 
@@ -396,7 +402,12 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
             }
             OString sRect = ss.str().c_str();
             if (!pSelectionRectangles)
-                GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+            {
+                if (comphelper::LibreOfficeKit::isViewCallback())
+                    GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+                else
+                    GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+            }
             else
                 pSelectionRectangles->push_back(sRect);
         }
@@ -593,7 +604,7 @@ void SwShellCrsr::Show()
             pShCrsr->SwSelPaintRects::Show(&aSelectionRectangles);
     }
 
-    if (GetShell()->isTiledRendering())
+    if (comphelper::LibreOfficeKit::isActive())
     {
         std::stringstream ss;
         bool bFirst = true;
@@ -609,7 +620,10 @@ void SwShellCrsr::Show()
             ss << rSelectionRectangle.getStr();
         }
         OString sRect = ss.str().c_str();
-        GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+        if (comphelper::LibreOfficeKit::isViewCallback())
+            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+        else
+            GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
     }
 }
 

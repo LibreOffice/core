@@ -383,6 +383,8 @@ void SwTiledRenderingTest::testSearchViewArea()
 void SwTiledRenderingTest::testSearchTextFrame()
 {
 #if !defined(WNT) && !defined(MACOSX)
+    comphelper::LibreOfficeKit::setActive();
+
     SwXTextDocument* pXTextDocument = createDoc("search.odt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
@@ -393,6 +395,8 @@ void SwTiledRenderingTest::testSearchTextFrame()
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was empty: nothing was highlighted after searching for 'TextFrame'.
     CPPUNIT_ASSERT(!m_aTextSelection.isEmpty());
+
+    comphelper::LibreOfficeKit::setActive(false);
 #endif
 }
 
