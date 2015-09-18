@@ -1806,6 +1806,11 @@ bool SbModule::HasExeCode()
 }
 
 // Store only image, no source
+bool SbModule::StoreBinaryData( SvStream& rStrm )
+{
+    return StoreBinaryData( rStrm, 0 );
+}
+
 bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
 {
     bool bRet = Compile();
