@@ -145,8 +145,8 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,writer_brand, \
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
-	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
-	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_TDE)),tdefilepicker) \
+	$(if $(filter TRUE-TRUE,$(USING_X11)-$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
+	$(if $(ENABLE_TDE),tdefilepicker) \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
 	ui-previewer \
 	$(if $(filter WNT,$(OS)), \
@@ -166,7 +166,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,python, \
 	) \
 ))
 
-ifeq ($(GUIBASE),unx)
+ifeq ($(USING_X11), TRUE)
 $(eval $(call gb_Helper_register_executables_for_install,OOO,gnome, \
 	$(if $(ENABLE_GTK),\
 		xid-fullscreen-on-all-monitors \
@@ -252,7 +252,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	$(if $(ENABLE_KDE4),kde4be1) \
-	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
+	$(if $(USING_X11), \
 		$(if $(ENABLE_KDE4),vclplug_kde4) \
 	) \
 ))
@@ -302,7 +302,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 		dbaxml) \
 	deploymentmisc \
 	$(if $(filter-out MACOSX WNT,$(OS)),desktopbe1) \
-	$(if $(filter unx,$(GUIBASE)),desktop_detector) \
+	$(if $(USING_X11),desktop_detector) \
 	$(call gb_Helper_optional,SCRIPTING,dlgprov) \
 	$(if $(ENABLE_DIRECTX),directx9canvas) \
 	$(if $(ENABLE_OPENGL_CANVAS),oglcanvas) \
@@ -424,7 +424,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	) \
 	vcl \
 	vclcanvas \
-	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
+	$(if $(USING_X11), \
 		vclplug_gen \
 		$(if $(ENABLE_TDE),vclplug_tde) \
 	) \
@@ -589,7 +589,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	) \
 	$(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
 	package2 \
-	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))),recentfile) \
+	$(if $(USING_X11),recentfile) \
 	$(call gb_Helper_optional,SCRIPTING,scriptframe) \
 	sdbc2 \
 	sofficeapp \
@@ -854,7 +854,7 @@ $(eval $(call gb_Helper_register_packages_for_install,xsltfilter,\
 	filter_xslt \
 ))
 
-ifeq ($(GUIBASE),unx)
+ifeq ($(USING_X11), TRUE)
 $(eval $(call gb_Helper_register_packages_for_install,base_brand,\
 	desktop_sbase_sh \
 ))
@@ -878,7 +878,7 @@ $(eval $(call gb_Helper_register_packages_for_install,math_brand,\
 $(eval $(call gb_Helper_register_packages_for_install,writer_brand,\
 	desktop_swriter_sh \
 ))
-endif # GUIBASE=unx
+endif # USING_X11=TRUE
 
 ifneq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_Helper_register_packages_for_install,python, \
