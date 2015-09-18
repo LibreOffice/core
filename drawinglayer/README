@@ -19,7 +19,7 @@ A stripped down version with extended comments:
      VirtualDevice aVirtualDevice;
 
      // Create processor and draw primitives, to get it ready for rendering.
-     boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
+     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
          drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(...));
 
      if (pProcessor2D)

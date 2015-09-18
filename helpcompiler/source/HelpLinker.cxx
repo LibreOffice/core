@@ -37,7 +37,6 @@
 
 #include <expat.h>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 IndexerPreProcessor::IndexerPreProcessor
     ( const std::string& aModuleName, const fs::path& fsIndexBaseDir,
@@ -945,7 +944,7 @@ bool compileExtensionHelp
     xmlSetStructuredErrorFunc( NULL, StructuredXMLErrorFunction );
     try
     {
-        boost::scoped_ptr<HelpLinker> pHelpLinker(new HelpLinker());
+        std::unique_ptr<HelpLinker> pHelpLinker(new HelpLinker());
         pHelpLinker->main( args, &aStdStrExtensionPath, &aStdStrDestination, &aOfficeHelpPath );
     }
     catch( const HelpProcessingException& e )
