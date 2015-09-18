@@ -41,18 +41,6 @@ private:
     std::vector<Link<>> m_aListeners;
 };
 
-class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
-{
-    std::vector<Link<>>   m_aListeners;
-public:
-    VclEventListeners2();
-    ~VclEventListeners2();
-
-    void addListener( const Link<>& );
-    void removeListener( const Link<>& );
-    void callListeners( VclSimpleEvent* );
-};
-
 #endif // INCLUDED_VCL_INC_VCLEVENTLISTENERS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

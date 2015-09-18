@@ -87,46 +87,6 @@ void VclEventListeners::removeListener( const Link<>& rListener )
     m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), rListener ), m_aListeners.end() );
 }
 
-VclEventListeners2::VclEventListeners2()
-{
-}
-
-VclEventListeners2::~VclEventListeners2()
-{
-}
-
-void VclEventListeners2::addListener( const Link<>& rListener )
-{
-    // ensure uniqueness
-    if (std::find(m_aListeners.begin(), m_aListeners.end(), rListener) == m_aListeners.end())
-       m_aListeners.push_back( rListener );
-}
-
-void VclEventListeners2::removeListener( const Link<>& rListener )
-{
-    m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), rListener ), m_aListeners.end() );
-}
-
-void VclEventListeners2::callListeners( VclSimpleEvent* pEvent )
-{
-    vcl::DeletionListener aDel( this );
-
-    // Copy the list, because this can be destroyed when calling a Link...
-    std::vector<Link<>> aCopy( m_aListeners );
-    std::vector<Link<>>::iterator aIter( aCopy.begin() );
-    std::vector<Link<>>::const_iterator aEnd( aCopy.end() );
-
-    while ( aIter != aEnd && ! aDel.isDeleted() )
-    {
-        Link<> &rLink = *aIter;
-        // check this hasn't been removed in some re-enterancy scenario fdo#47368
-        if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
-            rLink.Call( pEvent );
-        ++aIter;
-    }
-}
-
-
 VclWindowEvent::VclWindowEvent( vcl::Window* pWin, sal_uLong n, void* pDat ) : VclSimpleEvent(n)
 {
     pWindow = pWin; pData = pDat;
