@@ -145,8 +145,8 @@ class Section
                                 Section( const Section& rSection );
 
         Section&                operator=( const Section& rSection );
-        bool                GetProperty( sal_uInt32 nId, PropItem& rPropItem );
-        bool                GetDictionary( Dictionary& rDict );
+        bool                    GetProperty( sal_uInt32 nId, PropItem& rPropItem );
+        void                    GetDictionary( Dictionary& rDict );
         const sal_uInt8*        GetFMTID() const { return aFMTID; };
         void                    Read( SvStorageStream* pStrm );
 };
