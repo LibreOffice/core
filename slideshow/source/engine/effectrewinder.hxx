@@ -28,9 +28,8 @@
 
 #include <com/sun/star/presentation/XSlideShow.hpp>
 
-#include <boost/scoped_ptr.hpp>
-
 #include <functional>
+#include <memory>
 #include <vector>
 
 namespace slideshow { namespace internal {
