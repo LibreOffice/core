@@ -36,7 +36,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sdext { namespace presenter {
 
@@ -57,7 +57,7 @@ public:
 
     using PresenterPaneBase::disposing;
 
-    ::boost::shared_ptr<PresenterSprite> GetSprite();
+    std::shared_ptr<PresenterSprite> GetSprite();
 
     // XPane
 
@@ -89,7 +89,7 @@ public:
 private:
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
     css::uno::Reference<css::rendering::XSpriteCanvas> mxParentCanvas;
-    ::boost::shared_ptr<PresenterSprite> mpSprite;
+    std::shared_ptr<PresenterSprite> mpSprite;
 
     virtual void CreateCanvases (
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,

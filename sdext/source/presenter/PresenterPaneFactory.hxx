@@ -30,8 +30,8 @@
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <map>
+#include <memory>
 
 namespace sdext { namespace presenter {
 
@@ -97,7 +97,7 @@ private:
     ::rtl::Reference<PresenterController> mpPresenterController;
     typedef ::std::map<OUString, css::uno::Reference<css::drawing::framework::XResource> >
         ResourceContainer;
-    ::boost::scoped_ptr<ResourceContainer> mpResourceCache;
+    std::unique_ptr<ResourceContainer> mpResourceCache;
 
     PresenterPaneFactory (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,

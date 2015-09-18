@@ -40,7 +40,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace sdext { namespace presenter {
 
@@ -76,7 +76,7 @@ public:
     void SAL_CALL disposing() SAL_OVERRIDE;
 
     void SetParentPane (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);
-    void SetTheme (const ::boost::shared_ptr<PresenterTheme>& rpTheme);
+    void SetTheme (const std::shared_ptr<PresenterTheme>& rpTheme);
     void NotifyViewCreation (const css::uno::Reference<css::drawing::framework::XView>& rxView);
     void SetPanePosSizeAbsolute (
         const OUString& rsPaneURL,
@@ -175,7 +175,7 @@ private:
         the window sizes.
     */
     bool mbIsLayouting;
-    ::boost::shared_ptr<PresenterTheme> mpTheme;
+    std::shared_ptr<PresenterTheme> mpTheme;
     SharedBitmapDescriptor mpBackgroundBitmap;
     css::uno::Reference<css::rendering::XBitmap> mxScaledBackgroundBitmap;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxClipPolygon;

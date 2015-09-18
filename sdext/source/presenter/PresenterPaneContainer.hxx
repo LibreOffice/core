@@ -35,10 +35,10 @@
 #include <rtl/ref.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 
-#include <vector>
 #include <functional>
+#include <memory>
+#include <vector>
 
 namespace sdext { namespace presenter {
 
@@ -82,7 +82,7 @@ public:
     {
     public:
         typedef ::std::function<void (bool)> Activator;
-        typedef ::std::function<boost::shared_ptr<PresenterSprite> ()> SpriteProvider;
+        typedef ::std::function<std::shared_ptr<PresenterSprite> ()> SpriteProvider;
         css::uno::Reference<css::drawing::framework::XResourceId> mxPaneId;
         OUString msViewURL;
         ::rtl::Reference<PresenterPaneBase> mxPane;
@@ -109,7 +109,7 @@ public:
 
         void SetActivationState (const bool bIsActive);
     };
-    typedef ::boost::shared_ptr<PaneDescriptor> SharedPaneDescriptor;
+    typedef std::shared_ptr<PaneDescriptor> SharedPaneDescriptor;
     typedef ::std::vector<SharedPaneDescriptor> PaneList;
     PaneList maPanes;
 

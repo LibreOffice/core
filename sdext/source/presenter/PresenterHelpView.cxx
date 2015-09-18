@@ -87,7 +87,7 @@ namespace {
 
     private:
         const OUString msText;
-        ::boost::shared_ptr<vector<LineDescriptor> > mpLineDescriptors;
+        std::shared_ptr<vector<LineDescriptor> > mpLineDescriptors;
 
         static void SplitText (const OUString& rsText, vector<OUString>& rTextParts);
         void FormatText (
@@ -113,7 +113,7 @@ namespace {
     };
 } // end of anonymous namespace
 
-class PresenterHelpView::TextContainer : public vector<boost::shared_ptr<Block> >
+class PresenterHelpView::TextContainer : public vector<std::shared_ptr<Block> >
 {
 };
 
@@ -379,7 +379,7 @@ void PresenterHelpView::ProcessString (
     OUString sRightText;
     PresenterConfigurationAccess::GetProperty(rsProperties, "Right") >>= sRightText;
     mpTextContainer->push_back(
-        ::boost::shared_ptr<Block>(
+        std::shared_ptr<Block>(
             new Block(sLeftText, sRightText, mpFont->mxFont, mnMaximalWidth)));
 }
 

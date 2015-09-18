@@ -141,9 +141,9 @@ class PresenterSlideSorter::MouseOverManager
 public:
     MouseOverManager (
         const Reference<container::XIndexAccess>& rxSlides,
-        const ::boost::shared_ptr<PresenterTheme>& rpTheme,
+        const std::shared_ptr<PresenterTheme>& rpTheme,
         const Reference<awt::XWindow>& rxInvalidateTarget,
-        const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager);
+        const std::shared_ptr<PresenterPaintManager>& rpPaintManager);
     ~MouseOverManager();
 
     void Paint (
@@ -167,7 +167,7 @@ private:
     OUString msText;
     Reference<rendering::XBitmap> mxBitmap;
     Reference<awt::XWindow> mxInvalidateTarget;
-    ::boost::shared_ptr<PresenterPaintManager> mpPaintManager;
+    std::shared_ptr<PresenterPaintManager> mpPaintManager;
 
     void SetCanvas (
         const Reference<rendering::XCanvas>& rxCanvas);
@@ -906,7 +906,7 @@ void PresenterSlideSorter::PaintPreview (
 
     PresenterBitmapContainer aContainer (
         "PresenterScreenSettings/ScrollBar/Bitmaps",
-        ::boost::shared_ptr<PresenterBitmapContainer>(),
+        std::shared_ptr<PresenterBitmapContainer>(),
         mxComponentContext,
         rxCanvas);
     Reference<container::XIndexAccess> xIndexAccess(mxSlideShowController, UNO_QUERY);
@@ -1488,9 +1488,9 @@ sal_Int32 PresenterSlideSorter::Layout::GetColumn (const sal_Int32 nSlideIndex) 
 
 PresenterSlideSorter::MouseOverManager::MouseOverManager (
     const Reference<container::XIndexAccess>& rxSlides,
-    const ::boost::shared_ptr<PresenterTheme>& rpTheme,
+    const std::shared_ptr<PresenterTheme>& rpTheme,
     const Reference<awt::XWindow>& rxInvalidateTarget,
-    const ::boost::shared_ptr<PresenterPaintManager>& rpPaintManager)
+    const std::shared_ptr<PresenterPaintManager>& rpPaintManager)
     : mxCanvas(),
       mxSlides(rxSlides),
       mpLeftLabelBitmap(),
@@ -1504,7 +1504,7 @@ PresenterSlideSorter::MouseOverManager::MouseOverManager (
 {
     if (rpTheme.get()!=NULL)
     {
-        ::boost::shared_ptr<PresenterBitmapContainer> pBitmaps (rpTheme->GetBitmapContainer());
+        std::shared_ptr<PresenterBitmapContainer> pBitmaps (rpTheme->GetBitmapContainer());
         if (pBitmaps.get() != NULL)
         {
             mpLeftLabelBitmap = pBitmaps->GetBitmap("LabelLeft");
@@ -1807,7 +1807,7 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
 
     PresenterBitmapContainer aContainer (
         "PresenterScreenSettings/SlideSorter/CurrentSlideBorderBitmaps",
-        ::boost::shared_ptr<PresenterBitmapContainer>(),
+        std::shared_ptr<PresenterBitmapContainer>(),
         rxContext,
         rxCanvas);
 
