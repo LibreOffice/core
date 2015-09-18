@@ -7,7 +7,6 @@
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <editeng/fhgtitem.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
