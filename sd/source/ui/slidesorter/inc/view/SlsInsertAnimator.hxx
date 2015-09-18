@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_SLIDESORTER_INC_VIEW_SLSINSERTANIMATOR_HXX
 
 #include "controller/SlsAnimator.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 
 namespace sd { namespace slidesorter { namespace view {
@@ -53,7 +53,7 @@ public:
 
 private:
     class Implementation;
-    ::boost::shared_ptr<Implementation> mpImplementation;
+    std::shared_ptr<Implementation> mpImplementation;
 };
 
 } } } // end of namespace ::sd::slidesorter::view

@@ -22,7 +22,7 @@
 
 #include <svx/svdobj.hxx>
 #include "OutlinerIterator.hxx"
-#include <boost/weak_ptr.hpp>
+#include <memory>
 
 class SdDrawDocument;
 class SdPage;
@@ -55,10 +55,10 @@ public:
             the direction is forwards otherwise it is backwards.
     */
     IteratorImplBase (SdDrawDocument* pDocument,
-        const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
+        const std::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
     IteratorImplBase (SdDrawDocument* pDocument,
-        const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
+        const std::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward, PageKind ePageKind, EditMode eEditMode);
     virtual ~IteratorImplBase();
 
@@ -115,7 +115,7 @@ protected:
     /// The document on whose data the iterator operates.
     SdDrawDocument* mpDocument;
     /// Necessary secondary source of information.
-    ::boost::weak_ptr<ViewShell> mpViewShellWeak;
+    std::weak_ptr<ViewShell> mpViewShellWeak;
     /// Specifies the search direction.
     bool mbDirectionIsForward;
 };
@@ -137,7 +137,7 @@ public:
         const ::std::vector< SdrObjectWeakRef >& rObjectList,
         sal_Int32 nObjectIndex,
         SdDrawDocument* pDocument,
-        const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
+        const std::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
     SelectionIteratorImpl (const SelectionIteratorImpl& rObject);
     virtual ~SelectionIteratorImpl();
@@ -179,12 +179,12 @@ public:
     ViewIteratorImpl (
         sal_Int32 nPageIndex,
         SdDrawDocument* pDocument,
-        const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
+        const std::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
     ViewIteratorImpl (
         sal_Int32 nPageIndex,
         SdDrawDocument* pDocument,
-        const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
+        const std::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward,
         PageKind ePageKind,
         EditMode eEditMode);
@@ -234,7 +234,7 @@ public:
         PageKind ePageKind,
         EditMode eEditMode,
         SdDrawDocument* pDocument,
-        const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
+        const std::weak_ptr<ViewShell>& rpViewShellWeak,
         bool bDirectionIsForward);
     virtual ~DocumentIteratorImpl();
 

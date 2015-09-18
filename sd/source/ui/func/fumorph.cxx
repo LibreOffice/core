@@ -43,8 +43,8 @@
 #include <svx/svditer.hxx>
 
 #include <basegfx/color/bcolor.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 

@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <svx/svdundo.hxx>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 #include "sdundo.hxx"

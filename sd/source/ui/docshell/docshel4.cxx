@@ -768,7 +768,7 @@ bool DrawDocShell::GotoBookmark(const OUString& rBookmark)
                 }
                 if (!sViewURL.isEmpty())
                 {
-                    ::boost::shared_ptr<FrameworkHelper> pHelper (
+                    std::shared_ptr<FrameworkHelper> pHelper (
                         FrameworkHelper::Instance(rBase));
                     pHelper->RequestView(
                         sViewURL,

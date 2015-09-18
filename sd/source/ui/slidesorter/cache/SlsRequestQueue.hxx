@@ -27,6 +27,7 @@
 #include <osl/mutex.hxx>
 #include <svx/sdrpageuser.hxx>
 
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 
