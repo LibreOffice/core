@@ -35,7 +35,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
 {
     // Keep in order of opcode value, is that clearest? (Random order,
     // at least, would make no sense at all.)
-    static const OpCodeSet aDefaultOpenCLSubsetOpCodes {
+    static const std::set<OpCode> aDefaultOpenCLSubsetOpCodes {
         ocAdd,
         ocSub,
         ocMul,
@@ -74,7 +74,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     mbOpenCLSubsetOnly = true;
     mbOpenCLAutoSelect = true;
     mnOpenCLMinimumFormulaGroupSize = 100;
-    maOpenCLSubsetOpCodes = aDefaultOpenCLSubsetOpCodes;
+    mpOpenCLSubsetOpCodes.reset(new std::set<OpCode>(aDefaultOpenCLSubsetOpCodes));
 }
 
 void ScCalcConfig::reset()
@@ -108,7 +108,7 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
            mbOpenCLAutoSelect == r.mbOpenCLAutoSelect &&
            maOpenCLDevice == r.maOpenCLDevice &&
            mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize &&
-           maOpenCLSubsetOpCodes == r.maOpenCLSubsetOpCodes &&
+           *mpOpenCLSubsetOpCodes == *r.mpOpenCLSubsetOpCodes &&
            true;
 }
 
@@ -144,7 +144,7 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
         "OpenCLAutoSelect=" << (rConfig.mbOpenCLAutoSelect?"Y":"N") << ","
         "OpenCLDevice='" << rConfig.maOpenCLDevice << "',"
         "OpenCLMinimumFormulaGroupSize=" << rConfig.mnOpenCLMinimumFormulaGroupSize << ","
-        "OpenCLSubsetOpCodes={" << ScOpCodeSetToSymbolicString(rConfig.maOpenCLSubsetOpCodes) << "},"
+        "OpenCLSubsetOpCodes={" << ScOpCodeSetToSymbolicString(rConfig.mpOpenCLSubsetOpCodes) << "},"
         "}";
     return rStream;
 }
@@ -155,9 +155,9 @@ OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
     formula::FormulaCompiler aCompiler;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 
-    for (auto i = rOpCodes.cbegin(); i != rOpCodes.cend(); ++i)
+    for (auto i = rOpCodes->cbegin(); i != rOpCodes->cend(); ++i)
     {
-        if (i != rOpCodes.cbegin())
+        if (i != rOpCodes->cbegin())
             result.append(';');
         result.append(pOpCodeMap->getSymbol(*i));
     }
@@ -167,7 +167,7 @@ OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
 
 ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
 {
-    ScCalcConfig::OpCodeSet result;
+    ScCalcConfig::OpCodeSet result(new std::set< OpCode >());
     formula::FormulaCompiler aCompiler;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 
@@ -184,12 +184,12 @@ ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
             OUString element(s.copy(fromIndex, semicolon - fromIndex));
             sal_Int32 n = element.toInt32();
             if (n > 0 || (n == 0 && element == "0"))
-                result.insert(static_cast<OpCode>(n));
+                result->insert(static_cast<OpCode>(n));
             else
             {
                 auto opcode(pHashMap->find(element));
                 if (opcode != pHashMap->end())
-                    result.insert(static_cast<OpCode>(opcode->second));
+                    result->insert(static_cast<OpCode>(opcode->second));
                 else
                     SAL_WARN("sc.opencl", "Unrecognized OpCode " << element << " in OpCode set string");
             }

@@ -12,6 +12,7 @@
 
 #include "scdllapi.h"
 
+#include <memory>
 #include <ostream>
 #include <set>
 
@@ -50,9 +51,9 @@ struct SC_DLLPUBLIC ScCalcConfig
     OUString maOpenCLDevice;
     sal_Int32 mnOpenCLMinimumFormulaGroupSize;
 
-    typedef std::set<OpCode> OpCodeSet;
+    typedef std::shared_ptr<std::set<OpCode>> OpCodeSet;
 
-    OpCodeSet maOpenCLSubsetOpCodes;
+    OpCodeSet mpOpenCLSubsetOpCodes;
 
     ScCalcConfig();
 
