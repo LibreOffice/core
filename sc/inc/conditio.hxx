@@ -32,10 +32,10 @@
 #include <tools/date.hxx>
 
 #include <map>
+#include <memory>
 #include <set>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 
 class ScFormulaCell;
 class ScTokenArray;
@@ -280,7 +280,7 @@ private:
             nValueItems(0) {}
     };
 
-    mutable boost::scoped_ptr<ScConditionEntryCache> mpCache;
+    mutable std::unique_ptr<ScConditionEntryCache> mpCache;
 };
 
 //  single condition entry for conditional formatting
@@ -370,7 +370,7 @@ public:
 private:
     condformat::ScCondFormatDateType meType;
 
-    mutable boost::scoped_ptr<Date> mpCache;
+    mutable std::unique_ptr<Date> mpCache;
 
     OUString maStyleName;
 };

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_WORKBOOKHELPER_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_WORKBOOKHELPER_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <rtl/ref.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
@@ -103,7 +103,7 @@ class WorksheetBuffer;
 class FormulaBuffer;
 
 class WorkbookGlobals;
-typedef ::boost::shared_ptr< WorkbookGlobals > WorkbookGlobalsRef;
+typedef std::shared_ptr< WorkbookGlobals > WorkbookGlobalsRef;
 
 /** Helper class to provice access to global workbook data.
 

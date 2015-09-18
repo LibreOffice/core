@@ -32,7 +32,7 @@
 
 #include <sal/types.h>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #if defined(SCQAHELPER_DLLIMPLEMENTATION)
 #define SCQAHELPER_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
@@ -230,7 +230,7 @@ public:
 
     ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat );
 
-    static boost::shared_ptr<utl::TempFile> exportTo( ScDocShell* pShell, sal_Int32 nFormat );
+    static std::shared_ptr<utl::TempFile> exportTo( ScDocShell* pShell, sal_Int32 nFormat );
 
     void miscRowHeightsTest( TestParam* aTestValues, unsigned int numElems );
 };

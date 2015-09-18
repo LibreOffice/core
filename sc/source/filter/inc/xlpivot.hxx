@@ -32,7 +32,7 @@
 #include "xladdress.hxx"
 #include "dpobject.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class XclImpStream;
 class XclExpStream;
@@ -618,7 +618,7 @@ struct XclPTFieldExtInfo
     sal_uInt16          mnSortField;    /// Index to data field sorting bases on.
     sal_uInt16          mnShowField;    /// Index to data field AutoShow bases on.
     sal_uInt16          mnNumFmt;
-    boost::scoped_ptr<OUString> mpFieldTotalName;
+    std::unique_ptr<OUString> mpFieldTotalName;
 
     explicit            XclPTFieldExtInfo();
 

@@ -82,7 +82,7 @@
 #include "scabstdlg.hxx"
 #include <editeng/fontitem.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -779,7 +779,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             if ( pStyleSheet )
             {
                 SfxStyleFamily  eFam    = pStyleSheet->GetFamily();
-                boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
+                std::unique_ptr<SfxAbstractTabDialog> pDlg;
                 sal_uInt16          nRsc    = 0;
 
                 // Store old Items from the style
@@ -819,7 +819,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 }
                             }
 
-                            boost::scoped_ptr<SvxNumberInfoItem> pNumberInfoItem(
+                            std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem(
                                 ScTabViewShell::MakeNumberInfoItem(&rDoc, GetViewData()));
 
                             pDocSh->PutItem( *pNumberInfoItem );
@@ -1792,12 +1792,12 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 {
                     ::editeng::SvxBorderLine*          pDefLine = pTabViewShell->GetDefaultFrameLine();
                     const ScPatternAttr*    pOldAttrs = pTabViewShell->GetSelectionPattern();
-                    boost::scoped_ptr<SfxItemSet> pOldSet(
+                    std::unique_ptr<SfxItemSet> pOldSet(
                                                 new SfxItemSet(
                                                         *(pDoc->GetPool()),
                                                         ATTR_PATTERN_START,
                                                         ATTR_PATTERN_END ));
-                    boost::scoped_ptr<SfxItemSet> pNewSet(
+                    std::unique_ptr<SfxItemSet> pNewSet(
                                                 new SfxItemSet(
                                                         *(pDoc->GetPool()),
                                                         ATTR_PATTERN_START,
@@ -1858,8 +1858,8 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_BORDER_DIAG_BLTR:
                 {
                     const ScPatternAttr* pOldAttrs = pTabViewShell->GetSelectionPattern();
-                    boost::scoped_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
-                    boost::scoped_ptr<SfxItemSet> pNewSet(new SfxItemSet(pOldAttrs->GetItemSet()));
+                    std::unique_ptr<SfxItemSet> pOldSet(new SfxItemSet(pOldAttrs->GetItemSet()));
+                    std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(pOldAttrs->GetItemSet()));
                     const SfxPoolItem* pItem = 0;
 
                     if(SID_ATTR_BORDER_DIAG_TLBR == nSlot)

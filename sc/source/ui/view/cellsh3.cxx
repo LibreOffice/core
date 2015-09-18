@@ -48,7 +48,7 @@
 #include "sccollaboration.hxx"
 #endif
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define IS_EDITMODE() GetViewData()->HasEditView( GetViewData()->GetActivePart() )
 
@@ -321,12 +321,12 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     // set cell attribute without dialog:
 
-                    boost::scoped_ptr<SfxItemSet> pEmptySet(
+                    std::unique_ptr<SfxItemSet> pEmptySet(
                                         new SfxItemSet( *pReqArgs->GetPool(),
                                                         ATTR_PATTERN_START,
                                                         ATTR_PATTERN_END ));
 
-                    boost::scoped_ptr<SfxItemSet> pNewSet(
+                    std::unique_ptr<SfxItemSet> pNewSet(
                                         new SfxItemSet( *pReqArgs->GetPool(),
                                                         ATTR_PATTERN_START,
                                                         ATTR_PATTERN_END ));
@@ -489,7 +489,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                            boost::scoped_ptr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(pTabViewShell->GetDialogParent(), aName, false, bSheetProtected));
+                            std::unique_ptr<AbstractScNewScenarioDlg> pNewDlg(pFact->CreateScNewScenarioDlg(pTabViewShell->GetDialogParent(), aName, false, bSheetProtected));
                             OSL_ENSURE(pNewDlg, "Dialog create fail!");
                             if ( pNewDlg->Execute() == RET_OK )
                             {
@@ -539,7 +539,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     assert(pFact); //ScAbstractFactory create fail!
 
-                    boost::scoped_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
+                    std::unique_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "RowHeightDialog",
                         nCurHeight, ScGlobal::nStdRowHeight,
                         eMetric, 2, MAX_ROW_HEIGHT));
@@ -580,7 +580,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     assert(pFact); //ScAbstractFactory create fail!
 
-                    boost::scoped_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
+                    std::unique_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "OptimalRowHeightDialog",
                         ScGlobal::nLastRowHeightExtra, 0, eMetric, 1, MAX_EXTRA_HEIGHT));
                     assert(pDlg); //Dialog create fail!
@@ -622,7 +622,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     assert(pFact); //ScAbstractFactory create fail!
 
-                    boost::scoped_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
+                    std::unique_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "ColWidthDialog", nCurHeight,
                         STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH));
                     assert(pDlg); //Dialog create fail!
@@ -662,7 +662,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     assert(pFact); //ScAbstractFactory create fail!
 
-                    boost::scoped_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
+                    std::unique_ptr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "OptimalColWidthDialog",
                         ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 1, MAX_EXTRA_WIDTH));
                     assert(pDlg); //Dialog create fail!
@@ -809,11 +809,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     else
                     {
                         ScGlobal::ClearAutoFormat();
-                        boost::scoped_ptr<ScAutoFormatData> pNewEntry(pTabViewShell->CreateAutoFormatData());
+                        std::unique_ptr<ScAutoFormatData> pNewEntry(pTabViewShell->CreateAutoFormatData());
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                        boost::scoped_ptr<AbstractScAutoFormatDlg> pDlg(pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry.get(), GetViewData()));
+                        std::unique_ptr<AbstractScAutoFormatDlg> pDlg(pFact->CreateScAutoFormatDlg(pDlgParent, ScGlobal::GetOrCreateAutoFormat(), pNewEntry.get(), GetViewData()));
                         OSL_ENSURE(pDlg, "Dialog create fail!");
 
                         if ( pDlg->Execute() == RET_OK )

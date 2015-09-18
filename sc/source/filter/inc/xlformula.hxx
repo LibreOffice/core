@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLFORMULA_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLFORMULA_HXX
 
-#include <map>
 #include <osl/diagnose.h>
 #include <formula/opcode.hxx>
 #include "address.hxx"
 #include "ftools.hxx"
-#include <boost/shared_ptr.hpp>
+#include <map>
+#include <memory>
 
 namespace svl {
 
@@ -414,7 +414,7 @@ private:
     bool                mbVolatile;     /// True = Formula contains volatile function.
 };
 
-typedef boost::shared_ptr< XclTokenArray > XclTokenArrayRef;
+typedef std::shared_ptr< XclTokenArray > XclTokenArrayRef;
 
 /** Calls the Read() function at the passed token array. */
 XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArray& rTokArr );

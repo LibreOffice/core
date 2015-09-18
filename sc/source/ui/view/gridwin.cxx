@@ -138,8 +138,8 @@
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 using namespace css;
 using namespace css::uno;
@@ -5292,11 +5292,11 @@ SvxAdjust toSvxAdjust( const ScPatternAttr& rPat )
     return eSvxAdjust;
 }
 
-boost::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell* pDocSh, const ScPatternAttr& rPat )
+std::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell* pDocSh, const ScPatternAttr& rPat )
 {
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    boost::shared_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(&rDoc, rDoc.GetEditPool()));
+    std::shared_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(&rDoc, rDoc.GetEditPool()));
     ScSizeDeviceProvider aProv(pDocSh);
     pEngine->SetRefDevice(aProv.GetDevice());
     pEngine->SetRefMapMode(MAP_100TH_MM);
@@ -5375,7 +5375,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
 
         //  EditEngine
 
-    boost::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
+    std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
 
     MapMode aEditMode = pViewData->GetLogicMode(eWhich);            // without draw scaleing
     Rectangle aLogicEdit = PixelToLogic( aEditRect, aEditMode );
@@ -5481,7 +5481,7 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow
     if (rPos.Y() < aEditRect.Top())
         return false;
 
-    boost::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
+    std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
 
     Size aPaperSize = Size(1000000, 1000000);
     pEngine->SetPaperSize(aPaperSize);

@@ -45,7 +45,7 @@
 #include "AccessibleEditObject.hxx"
 
 #include "scabstdlg.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // STATIC DATA -----------------------------------------------------------
 static VclPtr<ScEditWindow> pActiveEdWnd = NULL;
@@ -205,7 +205,7 @@ void ScEditWindow::SetCharAttributes()
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
             GetParent(),  &aSet, pDocSh));
         OSL_ENSURE(pDlg, "Dialog create fail!");
         pDlg->SetText( ScGlobal::GetRscString( STR_TEXTATTRS ) );

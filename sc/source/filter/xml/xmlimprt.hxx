@@ -42,12 +42,12 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 
 class ScMyStyleNumberFormats;
 class XMLNumberFormatAttributesExportHelper;
@@ -828,12 +828,12 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     CellTypeMap             aCellTypeMap;
 
     ScDocument*             pDoc;
-    boost::scoped_ptr<ScDocumentImport> mpDocImport;
-    boost::scoped_ptr<ScCompiler> mpComp; // For error-checking of cached string cell values.
-    boost::scoped_ptr<ScEditEngineDefaulter> mpEditEngine;
-    boost::scoped_ptr<sc::PivotTableSources> mpPivotSources;
+    std::unique_ptr<ScDocumentImport> mpDocImport;
+    std::unique_ptr<ScCompiler> mpComp; // For error-checking of cached string cell values.
+    std::unique_ptr<ScEditEngineDefaulter> mpEditEngine;
+    std::unique_ptr<sc::PivotTableSources> mpPivotSources;
 
-    mutable boost::scoped_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
+    mutable std::unique_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
     std::list<SvXMLImportContext*>      aViewContextList;
     ScMyStylesImportHelper*        pStylesImportHelper;

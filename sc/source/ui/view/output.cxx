@@ -66,10 +66,10 @@
 #include "colorscale.hxx"
 
 #include <math.h>
-#include <map>
-#include <utility>
 #include <iostream>
-#include <boost/scoped_ptr.hpp>
+#include <map>
+#include <memory>
+#include <utility>
 
 using namespace com::sun::star;
 
@@ -1424,7 +1424,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 
     // draw only rows with set RowInfo::bChanged flag
     size_t nRow1 = nFirstRow;
-    boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D());
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D());
     if (!pProcessor)
         return;
 
@@ -1546,7 +1546,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
         rRenderContext.SetClipRegion( vcl::Region( aClipRect ) );
 
     svx::frame::Array& rArray = mrTabInfo.maArray;
-    boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D( ));
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D( ));
 
     long nPosY = nScrY;
     for (SCSIZE nArrY=1; nArrY<nArrCount; nArrY++)

@@ -26,8 +26,7 @@
 #include "cellmergeoption.hxx"
 #include "paramisc.hxx"
 
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class ScDocShell;
 class ScDocument;
@@ -267,10 +266,10 @@ public:
 
     virtual OUString GetComment() const SAL_OVERRIDE;
 
-    void SetDataSpans( const boost::shared_ptr<DataSpansType>& pSpans );
+    void SetDataSpans( const std::shared_ptr<DataSpansType>& pSpans );
 
 private:
-    boost::shared_ptr<DataSpansType> mpDataSpans; // Spans of non-empty cells.
+    std::shared_ptr<DataSpansType> mpDataSpans; // Spans of non-empty cells.
 
     ScRange         aRange;
     ScMarkData      aMarkData;
@@ -346,7 +345,7 @@ public:
 private:
     ScMarkData      aMarkData;
     ScRange         aRange;
-    boost::scoped_ptr<ScEditDataArray> mpDataArray;
+    std::unique_ptr<ScEditDataArray> mpDataArray;
     ScDocument*     pUndoDoc;
     bool            bMulti;
     ScPatternAttr*  pApplyPattern;
@@ -641,8 +640,8 @@ public:
 
 private:
     void DoChange(ScDocument* pDoc);
-    boost::scoped_ptr<ScDocument> mpUndoDoc;
-    boost::scoped_ptr<ScDocument> mpRedoDoc;
+    std::unique_ptr<ScDocument> mpUndoDoc;
+    std::unique_ptr<ScDocument> mpRedoDoc;
     ScRange maRange;
 };
 

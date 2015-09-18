@@ -241,7 +241,7 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
                     // make this process simpler.
                     ScFieldEditEngine& rEngine = mrDestDoc.GetEditEngine();
                     rEngine.SetText(rSrcCell.mpFormula->GetString().getString());
-                    boost::scoped_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
+                    std::unique_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
                     pObj->NormalizeString(mrDestDoc.GetSharedStringPool());
                     rSrcCell.set(*pObj);
                 }

@@ -40,7 +40,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     mnNameIndex( nXclNameIdx ),
     mbVBName( false ),
     mbMacro( false ),
-    mpTokensData( NULL )
+    mpTokensData( nullptr )
 {
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 
@@ -218,7 +218,7 @@ void XclImpName::ConvertTokens()
 
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
     rFmlaConv.Reset();
-    const ScTokenArray* pArray = NULL;
+    const ScTokenArray* pArray = nullptr;
 
     XclImpStreamPos aOldPos;
     XclImpStream& rStrm = mpTokensData->mrStrm;
@@ -242,7 +242,7 @@ void XclImpName::InsertName(const ScTokenArray* pArray)
     if (mnXclTab == EXC_NAME_GLOBAL)
     {
         if (!GetDoc().GetRangeName()->insert(pData))
-            pData = NULL;
+            pData = nullptr;
     }
     else
     {
@@ -250,7 +250,7 @@ void XclImpName::InsertName(const ScTokenArray* pArray)
         if (pLocalNames)
         {
             if (!pLocalNames->insert(pData))
-                pData = NULL;
+                pData = nullptr;
         }
 
         if (GetBiff() == EXC_BIFF8 && pData)
@@ -299,7 +299,7 @@ const XclImpName* XclImpNameManager::FindName( const OUString& rXclName, SCTAB n
 const XclImpName* XclImpNameManager::GetName( sal_uInt16 nXclNameIdx ) const
 {
     OSL_ENSURE( nXclNameIdx > 0, "XclImpNameManager::GetName - index must be >0" );
-    return ( nXclNameIdx <= 0 ||  nXclNameIdx > maNameList.size() ) ? NULL : &(maNameList.at( nXclNameIdx - 1 ));
+    return ( nXclNameIdx <= 0 ||  nXclNameIdx > maNameList.size() ) ? nullptr : &(maNameList.at( nXclNameIdx - 1 ));
 }
 
 void XclImpNameManager::ConvertAllTokens()

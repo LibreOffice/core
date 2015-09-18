@@ -80,7 +80,7 @@
 #include <oox/export/vmlexport.hxx>
 
 #include <boost/checked_delete.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -374,7 +374,7 @@ void XclObj::ImplWriteAnchor( const XclExpRoot& /*rRoot*/, const SdrObject* pSdr
     }
     else if( pSdrObj )
     {
-        boost::scoped_ptr< XclExpDffAnchorBase > xDffAnchor( mrEscherEx.CreateDffAnchor( *pSdrObj ) );
+        std::unique_ptr< XclExpDffAnchorBase > xDffAnchor( mrEscherEx.CreateDffAnchor( *pSdrObj ) );
         xDffAnchor->WriteDffData( mrEscherEx );
     }
 }
@@ -427,7 +427,7 @@ void XclObj::WriteBody( XclExpStream& rStrm )
 
     // create a substream to be able to create subrecords
     SvMemoryStream aMemStrm;
-    boost::scoped_ptr< XclExpStream > pXclStrm( new XclExpStream( aMemStrm, rStrm.GetRoot() ) );
+    std::unique_ptr< XclExpStream > pXclStrm( new XclExpStream( aMemStrm, rStrm.GetRoot() ) );
 
     // write the ftCmo subrecord
     pXclStrm->StartRecord( EXC_ID_OBJCMO, 18 );

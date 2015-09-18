@@ -26,7 +26,7 @@
 #include "xehelper.hxx"
 #include "xeformula.hxx"
 #include "externalrefmgr.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 struct ScSingleRefData;
 struct ScComplexRefData;
@@ -204,7 +204,7 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    typedef boost::shared_ptr< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;
+    typedef std::shared_ptr< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;
     XclExpLinkMgrImplPtr mxImpl;
 };
 

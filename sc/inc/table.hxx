@@ -36,7 +36,7 @@
 
 #include <set>
 #include <map>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <boost/noncopyable.hpp>
 
 namespace utl {
@@ -140,17 +140,17 @@ private:
     SCROW           nRepeatStartY;
     SCROW           nRepeatEndY;
 
-    boost::scoped_ptr<ScTableProtection> pTabProtection;
+    std::unique_ptr<ScTableProtection> pTabProtection;
 
     sal_uInt16*         pColWidth;
-    boost::scoped_ptr<ScFlatUInt16RowSegments> mpRowHeights;
+    std::unique_ptr<ScFlatUInt16RowSegments> mpRowHeights;
 
     sal_uInt8*          pColFlags;
     ScBitMaskCompressedArray< SCROW, sal_uInt8>*     pRowFlags;
-    boost::scoped_ptr<ScFlatBoolColSegments>  mpHiddenCols;
-    boost::scoped_ptr<ScFlatBoolRowSegments>  mpHiddenRows;
-    boost::scoped_ptr<ScFlatBoolColSegments>  mpFilteredCols;
-    boost::scoped_ptr<ScFlatBoolRowSegments>  mpFilteredRows;
+    std::unique_ptr<ScFlatBoolColSegments>  mpHiddenCols;
+    std::unique_ptr<ScFlatBoolRowSegments>  mpHiddenRows;
+    std::unique_ptr<ScFlatBoolColSegments>  mpFilteredCols;
+    std::unique_ptr<ScFlatBoolRowSegments>  mpFilteredRows;
 
     ::std::set<SCROW>                      maRowPageBreaks;
     ::std::set<SCROW>                      maRowManualBreaks;
@@ -188,7 +188,7 @@ private:
     ScDBData*       pDBDataNoName;
     mutable ScRangeName* mpRangeName;
 
-    boost::scoped_ptr<ScConditionalFormatList> mpCondFormatList;
+    std::unique_ptr<ScConditionalFormatList> mpCondFormatList;
 
     bool            bScenario:1;
     bool            bLayoutRTL:1;

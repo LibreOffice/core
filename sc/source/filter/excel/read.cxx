@@ -39,7 +39,7 @@
 #include "imp_op.hxx"
 #include "excimp8.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 FltError ImportExcel::Read()
 {
@@ -81,7 +81,7 @@ FltError ImportExcel::Read()
 
     OSL_ENSURE( &aIn != NULL, "-ImportExcel::Read(): No Stream - what happened?!" );
 
-    boost::scoped_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
+    std::unique_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
     /*  #i104057# Need to track a base position for progress bar calculation,
@@ -811,7 +811,7 @@ FltError ImportExcel8::Read()
 
     FltError eLastErr = eERR_OK;
 
-    boost::scoped_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
+    std::unique_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
     /*  #i104057# Need to track a base position for progress bar calculation,

@@ -40,7 +40,7 @@
 #include <osl/mutex.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class ScEditSource;
 class SvxFieldItem;
@@ -207,7 +207,7 @@ class ScEditFieldObj : public cppu::WeakImplHelper<
     ESelection aSelection;
 
     sal_Int32 meType;
-    boost::scoped_ptr<SvxFieldData> mpData;
+    std::unique_ptr<SvxFieldData> mpData;
     com::sun::star::uno::Reference<com::sun::star::text::XTextRange> mpContent;
 
     com::sun::star::util::DateTime maDateTime;

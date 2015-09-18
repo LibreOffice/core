@@ -68,7 +68,7 @@ static void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xPro
 
 ScDPSaveMember::ScDPSaveMember(const OUString& rName) :
     aName( rName ),
-    mpLayoutName(NULL),
+    mpLayoutName(nullptr),
     nVisibleMode( SC_DPSAVEMODE_DONTKNOW ),
     nShowDetailsMode( SC_DPSAVEMODE_DONTKNOW )
 {
@@ -76,7 +76,7 @@ ScDPSaveMember::ScDPSaveMember(const OUString& rName) :
 
 ScDPSaveMember::ScDPSaveMember(const ScDPSaveMember& r) :
     aName( r.aName ),
-    mpLayoutName(NULL),
+    mpLayoutName(nullptr),
     nVisibleMode( r.nVisibleMode ),
     nShowDetailsMode( r.nShowDetailsMode )
 {
@@ -191,8 +191,8 @@ void ScDPSaveMember::Dump(int nIndent) const
 
 ScDPSaveDimension::ScDPSaveDimension(const OUString& rName, bool bDataLayout) :
     aName( rName ),
-    mpLayoutName(NULL),
-    mpSubtotalName(NULL),
+    mpLayoutName(nullptr),
+    mpSubtotalName(nullptr),
     bIsDataLayout( bDataLayout ),
     bDupFlag( false ),
     nOrientation( sheet::DataPilotFieldOrientation_HIDDEN ),
@@ -202,18 +202,18 @@ ScDPSaveDimension::ScDPSaveDimension(const OUString& rName, bool bDataLayout) :
     bRepeatItemLabels( false ),
     bSubTotalDefault( true ),
     nSubTotalCount( 0 ),
-    pSubTotalFuncs( NULL ),
-    pReferenceValue( NULL ),
-    pSortInfo( NULL ),
-    pAutoShowInfo( NULL ),
-    pLayoutInfo( NULL )
+    pSubTotalFuncs( nullptr ),
+    pReferenceValue( nullptr ),
+    pSortInfo( nullptr ),
+    pAutoShowInfo( nullptr ),
+    pLayoutInfo( nullptr )
 {
 }
 
 ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
     aName( r.aName ),
-    mpLayoutName(NULL),
-    mpSubtotalName(NULL),
+    mpLayoutName(nullptr),
+    mpSubtotalName(nullptr),
     bIsDataLayout( r.bIsDataLayout ),
     bDupFlag( r.bDupFlag ),
     nOrientation( r.nOrientation ),
@@ -223,7 +223,7 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
     bRepeatItemLabels( r.bRepeatItemLabels ),
     bSubTotalDefault( r.bSubTotalDefault ),
     nSubTotalCount( r.nSubTotalCount ),
-    pSubTotalFuncs( NULL )
+    pSubTotalFuncs( nullptr )
 {
     if ( nSubTotalCount && r.pSubTotalFuncs )
     {
@@ -242,19 +242,19 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
     if (r.pReferenceValue)
         pReferenceValue = new sheet::DataPilotFieldReference( *(r.pReferenceValue) );
     else
-        pReferenceValue = NULL;
+        pReferenceValue = nullptr;
     if (r.pSortInfo)
         pSortInfo = new sheet::DataPilotFieldSortInfo( *(r.pSortInfo) );
     else
-        pSortInfo = NULL;
+        pSortInfo = nullptr;
     if (r.pAutoShowInfo)
         pAutoShowInfo = new sheet::DataPilotFieldAutoShowInfo( *(r.pAutoShowInfo) );
     else
-        pAutoShowInfo = NULL;
+        pAutoShowInfo = nullptr;
     if (r.pLayoutInfo)
         pLayoutInfo = new sheet::DataPilotFieldLayoutInfo( *(r.pLayoutInfo) );
     else
-        pLayoutInfo = NULL;
+        pLayoutInfo = nullptr;
     if (r.mpLayoutName)
         mpLayoutName.reset(new OUString(*r.mpLayoutName));
     if (r.mpSubtotalName)
@@ -383,7 +383,7 @@ void ScDPSaveDimension::SetSubTotals(long nCount, const sal_uInt16* pFuncs)
             pSubTotalFuncs[i] = pFuncs[i];
     }
     else
-        pSubTotalFuncs = NULL;
+        pSubTotalFuncs = nullptr;
 
     bSubTotalDefault = false;
 }
@@ -465,7 +465,7 @@ void ScDPSaveDimension::SetReferenceValue(const sheet::DataPilotFieldReference* 
     if (pNew)
         pReferenceValue = new sheet::DataPilotFieldReference(*pNew);
     else
-        pReferenceValue = NULL;
+        pReferenceValue = nullptr;
 }
 
 void ScDPSaveDimension::SetSortInfo(const sheet::DataPilotFieldSortInfo* pNew)
@@ -474,7 +474,7 @@ void ScDPSaveDimension::SetSortInfo(const sheet::DataPilotFieldSortInfo* pNew)
     if (pNew)
         pSortInfo = new sheet::DataPilotFieldSortInfo(*pNew);
     else
-        pSortInfo = NULL;
+        pSortInfo = nullptr;
 }
 
 void ScDPSaveDimension::SetAutoShowInfo(const sheet::DataPilotFieldAutoShowInfo* pNew)
@@ -483,7 +483,7 @@ void ScDPSaveDimension::SetAutoShowInfo(const sheet::DataPilotFieldAutoShowInfo*
     if (pNew)
         pAutoShowInfo = new sheet::DataPilotFieldAutoShowInfo(*pNew);
     else
-        pAutoShowInfo = NULL;
+        pAutoShowInfo = nullptr;
 }
 
 void ScDPSaveDimension::SetLayoutInfo(const sheet::DataPilotFieldLayoutInfo* pNew)
@@ -492,14 +492,14 @@ void ScDPSaveDimension::SetLayoutInfo(const sheet::DataPilotFieldLayoutInfo* pNe
     if (pNew)
         pLayoutInfo = new sheet::DataPilotFieldLayoutInfo(*pNew);
     else
-        pLayoutInfo = NULL;
+        pLayoutInfo = nullptr;
 }
 
 void ScDPSaveDimension::SetCurrentPage( const OUString* pPage )
 {
     // We use member's visibility attribute to filter by page dimension.
 
-    // pPage == NULL -> all members visible.
+    // pPage == nullptr -> all members visible.
     MemberList::iterator it = maMemberList.begin(), itEnd = maMemberList.end();
     for (; it != itEnd; ++it)
     {
@@ -527,7 +527,7 @@ ScDPSaveMember* ScDPSaveDimension::GetExistingMemberByName(const OUString& rName
     MemberHash::const_iterator res = maMemberHash.find (rName);
     if (res != maMemberHash.end())
         return res->second;
-    return NULL;
+    return nullptr;
 }
 
 ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const OUString& rName)
@@ -797,7 +797,7 @@ void ScDPSaveDimension::Dump(int nIndent) const
 #endif
 
 ScDPSaveData::ScDPSaveData() :
-    pDimensionData( NULL ),
+    pDimensionData( nullptr ),
     nColumnGrandMode( SC_DPSAVEMODE_DONTKNOW ),
     nRowGrandMode( SC_DPSAVEMODE_DONTKNOW ),
     nIgnoreEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
@@ -805,7 +805,7 @@ ScDPSaveData::ScDPSaveData() :
     bFilterButton( true ),
     bDrillDown( true ),
     mbDimensionMembersBuilt(false),
-    mpGrandTotalName(NULL)
+    mpGrandTotalName(nullptr)
 {
 }
 
@@ -817,13 +817,13 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     bFilterButton( r.bFilterButton ),
     bDrillDown( r.bDrillDown ),
     mbDimensionMembersBuilt(r.mbDimensionMembersBuilt),
-    mpGrandTotalName(NULL),
-    mpDimOrder(NULL)
+    mpGrandTotalName(nullptr),
+    mpDimOrder(nullptr)
 {
     if ( r.pDimensionData )
         pDimensionData = new ScDPDimensionSaveData( *r.pDimensionData );
     else
-        pDimensionData = NULL;
+        pDimensionData = nullptr;
 
     aDimList = r.aDimList.clone();
 
@@ -971,7 +971,7 @@ ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(const OUString& rNam
         if (iter->GetName() == rName && !iter->IsDataLayout() )
             return const_cast<ScDPSaveDimension*>(&(*iter));
     }
-    return NULL; // don't create new
+    return nullptr; // don't create new
 }
 
 ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const OUString& rName)
@@ -1003,7 +1003,7 @@ ScDPSaveDimension* ScDPSaveData::GetExistingDataLayoutDimension() const
         if ( iter->IsDataLayout() )
             return const_cast<ScDPSaveDimension*>(&(*iter));
     }
-    return NULL;
+    return nullptr;
 }
 
 ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const OUString& rName)
@@ -1012,7 +1012,7 @@ ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const OUString& rName)
 
     ScDPSaveDimension* pOld = GetExistingDimensionByName(rName);
     if (!pOld)
-        return NULL;
+        return nullptr;
 
     ScDPSaveDimension* pNew = new ScDPSaveDimension( *pOld );
     AddDimension(pNew);
@@ -1053,7 +1053,7 @@ ScDPSaveDimension* ScDPSaveData::GetInnermostDimension(sal_uInt16 nOrientation)
             return const_cast<ScDPSaveDimension*>(&(*iter));
     }
 
-    return NULL;
+    return nullptr;
 }
 
 ScDPSaveDimension* ScDPSaveData::GetFirstDimension(sheet::DataPilotFieldOrientation eOrientation)
@@ -1064,7 +1064,7 @@ ScDPSaveDimension* ScDPSaveData::GetFirstDimension(sheet::DataPilotFieldOrientat
         if (iter->GetOrientation() == eOrientation && !iter->IsDataLayout())
             return const_cast<ScDPSaveDimension*>(&(*iter));
     }
-    return NULL;
+    return nullptr;
 }
 
 long ScDPSaveData::GetDataDimensionCount() const
@@ -1326,7 +1326,7 @@ void ScDPSaveData::RemoveAllGroupDimensions( const OUString& rSrcDimName, std::v
         {
             // still get the same group dimension?
             OSL_FAIL("couldn't remove group dimension");
-            pExistingGroup = NULL;      // avoid endless loop
+            pExistingGroup = nullptr;      // avoid endless loop
         }
     }
 }
@@ -1344,7 +1344,7 @@ void ScDPSaveData::SetDimensionData( const ScDPDimensionSaveData* pNew )
     if ( pNew )
         pDimensionData = new ScDPDimensionSaveData( *pNew );
     else
-        pDimensionData = NULL;
+        pDimensionData = nullptr;
 }
 
 void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
@@ -1495,7 +1495,7 @@ ScDPSaveDimension* ScDPSaveData::AppendNewDimension(const OUString& rName, bool 
 {
     if (ScDPUtil::isDuplicateDimension(rName))
         // This call is for original dimensions only.
-        return NULL;
+        return nullptr;
 
     ScDPSaveDimension* pNew = new ScDPSaveDimension(rName, bDataLayout);
     aDimList.push_back(pNew);

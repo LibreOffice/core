@@ -64,7 +64,7 @@
 #include <docpool.hxx>
 #include <patattr.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -507,7 +507,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
                 static_cast<const ScPatternAttr&>(
                     rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN));
 
-            boost::scoped_ptr<ScEditEngineDefaulter> pEditEng(
+            std::unique_ptr<ScEditEngineDefaulter> pEditEng(
                 new ScEditEngineDefaulter(EditEngine::CreatePool(), true));
 
             pEditEng->SetRefMapMode(aMMMode);

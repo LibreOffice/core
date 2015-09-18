@@ -48,8 +48,8 @@
 #include "dpresfilter.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <list>
+#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -319,8 +319,8 @@ class ScDPDimension : boost::noncopyable, public cppu::WeakImplHelper<
     long                nUsedHier;
     sal_uInt16              nFunction;          // enum GeneralFunction
     OUString       aName;              // if empty, take from source
-    boost::scoped_ptr<OUString> mpLayoutName;
-    boost::scoped_ptr<OUString> mpSubtotalName;
+    std::unique_ptr<OUString> mpLayoutName;
+    std::unique_ptr<OUString> mpSubtotalName;
     long                nSourceDim;         // >=0 if dup'ed
     ::com::sun::star::sheet::DataPilotFieldReference
                         aReferenceValue;    // settings for "show data as" / "displayed value"
@@ -732,7 +732,7 @@ private:
     long            nLev;
 
     SCROW       mnDataId;
-    boost::scoped_ptr<OUString> mpLayoutName;
+    std::unique_ptr<OUString> mpLayoutName;
 
     sal_Int32       nPosition;          // manual sorting
     bool            bVisible;

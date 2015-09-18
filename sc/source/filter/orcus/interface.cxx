@@ -663,7 +663,7 @@ void ScOrcusSheet::set_array_formula(
 
     ScCompiler aComp(&mrDoc.getDoc(), aRange.aStart);
     aComp.SetGrammar(eGrammar);
-    boost::scoped_ptr<ScTokenArray> pArray(aComp.CompileString(aFormula));
+    std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(aFormula));
     if (!pArray)
         return;
 

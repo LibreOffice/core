@@ -81,7 +81,7 @@ struct XclExpTokenConvInfo
 
 /** Vector of token position and conversion for all operands of an operator,
     or for all parameters of a function. */
-struct XclExpOperandList : public ::std::vector< XclExpTokenConvInfo >
+struct XclExpOperandList : public std::vector< XclExpTokenConvInfo >
 {
     inline explicit     XclExpOperandList() { reserve( 2 ); }
     void                AppendOperand( sal_uInt16 nTokPos, XclFuncParamConv eConv, bool bValType );
@@ -96,8 +96,8 @@ void XclExpOperandList::AppendOperand( sal_uInt16 nTokPos, XclFuncParamConv eCon
     rConvInfo.mbValType = bValType;
 }
 
-typedef boost::shared_ptr< XclExpOperandList > XclExpOperandListRef;
-typedef ::std::vector< XclExpOperandListRef > XclExpOperandListVector;
+typedef std::shared_ptr< XclExpOperandList > XclExpOperandListRef;
+typedef std::vector< XclExpOperandListRef > XclExpOperandListVector;
 
 /** Encapsulates all data needed for a call to an external function (macro, add-in). */
 struct XclExpExtFuncData
@@ -256,7 +256,7 @@ static const XclExpCompConfig spConfigTable[] =
 /** Working data of the formula compiler. Used to push onto a stack for recursive calls. */
 struct XclExpCompData
 {
-    typedef boost::shared_ptr< ScTokenArray > ScTokenArrayRef;
+    typedef std::shared_ptr< ScTokenArray > ScTokenArrayRef;
 
     const XclExpCompConfig& mrCfg;          /// Configuration for current formula type.
     ScTokenArrayRef     mxOwnScTokArr;      /// Own clone of a Calc token array.
@@ -449,9 +449,9 @@ private:
     void                AppendExt( const OUString& rString );
 
 private:
-    typedef ::std::map< XclFormulaType, XclExpCompConfig >  XclExpCompConfigMap;
-    typedef boost::shared_ptr< XclExpCompData >             XclExpCompDataRef;
-    typedef ::std::vector< XclExpCompDataRef >              XclExpCompDataVector;
+    typedef std::map< XclFormulaType, XclExpCompConfig >  XclExpCompConfigMap;
+    typedef std::shared_ptr< XclExpCompData >             XclExpCompDataRef;
+    typedef std::vector< XclExpCompDataRef >              XclExpCompDataVector;
 
     XclExpCompConfigMap maCfgMap;       /// Compiler configuration map for all formula types.
     XclFunctionProvider maFuncProv;     /// Excel function data provider.

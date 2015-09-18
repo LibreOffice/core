@@ -89,7 +89,7 @@ void XclPCItem::SetError( sal_uInt16 nError )
     mnError = nError;
     switch( nError )
     {
-    case 0x00: maText = "#NULL!"; break;
+    case 0x00: maText = "#nullptr!"; break;
     case 0x07: maText = "#DIV/0!"; break;
     case 0x0F: maText = "#VALUE!"; break;
     case 0x17: maText = "#REF!"; break;
@@ -132,7 +132,7 @@ bool XclPCItem::IsEmpty() const
 
 const OUString* XclPCItem::GetText() const
 {
-    return (meType == EXC_PCITEM_TEXT || meType == EXC_PCITEM_ERROR) ? &maText : NULL;
+    return (meType == EXC_PCITEM_TEXT || meType == EXC_PCITEM_ERROR) ? &maText : nullptr;
 }
 
 const double* XclPCItem::GetDouble() const
@@ -567,7 +567,7 @@ XclPTFieldExtInfo::XclPTFieldExtInfo() :
     mnSortField( EXC_SXVDEX_SORT_OWN ),
     mnShowField( EXC_SXVDEX_SHOW_NONE ),
     mnNumFmt(0),
-    mpFieldTotalName(NULL)
+    mpFieldTotalName(nullptr)
 {
 }
 

@@ -27,7 +27,7 @@
 #include <vcl/layout.hxx>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sc {
 
@@ -35,11 +35,11 @@ struct DocumentLinkManagerImpl : boost::noncopyable
 {
     ScDocument& mrDoc;
     SfxObjectShell* mpShell;
-    boost::scoped_ptr<DataStream> mpDataStream;
-    boost::scoped_ptr<sfx2::LinkManager> mpLinkManager;
+    std::unique_ptr<DataStream> mpDataStream;
+    std::unique_ptr<sfx2::LinkManager> mpLinkManager;
 
     DocumentLinkManagerImpl( ScDocument& rDoc, SfxObjectShell* pShell ) :
-        mrDoc(rDoc), mpShell(pShell), mpDataStream(NULL), mpLinkManager(NULL) {}
+        mrDoc(rDoc), mpShell(pShell), mpDataStream(nullptr), mpLinkManager(nullptr) {}
 
     ~DocumentLinkManagerImpl()
     {

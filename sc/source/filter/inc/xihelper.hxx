@@ -22,12 +22,12 @@
 
 #include <editeng/editdata.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "types.hxx"
 #include "xladdress.hxx"
 #include "xiroot.hxx"
 #include "xistring.hxx"
+#include <memory>
 
 class ScRangeList;
 
@@ -185,7 +185,7 @@ private:    // types
     /** Contains all information about a header/footer portion. */
     struct XclImpHFPortionInfo
     {
-        typedef boost::shared_ptr< EditTextObject > EditTextObjectRef;
+        typedef std::shared_ptr< EditTextObject > EditTextObjectRef;
         EditTextObjectRef   mxObj;          /// Edit engine text object.
         ESelection          maSel;          /// Edit engine selection.
         sal_Int32           mnHeight;       /// Height of previous lines in twips.

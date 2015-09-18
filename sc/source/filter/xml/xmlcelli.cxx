@@ -415,7 +415,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
     ScAddress aCellPos = rXMLImport.GetTables().GetCurrentCellPos();
     pSheetData->AddTextStyle(rStyleName, aCellPos, rFmt.maSelection);
 
-    boost::scoped_ptr<SfxPoolItem> pPoolItem;
+    std::unique_ptr<SfxPoolItem> pPoolItem;
     sal_uInt16 nLastItemID = EE_CHAR_END + 1;
 
     std::vector<XMLPropertyState>::const_iterator it = rProps.begin(), itEnd = rProps.end();
@@ -1369,7 +1369,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 
     OUString aText = maFormula->first;
 
-    ::boost::scoped_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard (
+    std::unique_ptr<ScExternalRefManager::ApiGuard> pExtRefGuard (
             new ScExternalRefManager::ApiGuard(pDoc));
 
     if ( !aText.isEmpty() )

@@ -1247,7 +1247,7 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
     if(rFormula.isEmpty())
         return OUString();
 
-    boost::scoped_ptr<ScSimpleFormulaCalculator> pCalc( new ScSimpleFormulaCalculator( pDoc, rPos, rFormula ) );
+    std::unique_ptr<ScSimpleFormulaCalculator> pCalc( new ScSimpleFormulaCalculator( pDoc, rPos, rFormula ) );
 
     // FIXME: HACK! In order to not get a #REF! for ColRowNames, if a name is actually inserted as a Range
     // into the whole Formula, but is interpreted as a single cell reference when displaying it on its own
