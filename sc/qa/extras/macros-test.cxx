@@ -118,13 +118,37 @@ void ScMacrosTest::testPasswordProtectedStarBasic()
     ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = xDocSh->GetDocument();
 
+
+    // User defined types
+
     SfxObjectShell::CallXScript(
         xComponent,
         "vnd.sun.Star.script:MyLibrary.Module1.Main?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
 
     OUString aValue = rDoc.GetString(0,0,0);
-    CPPUNIT_ASSERT_MESSAGE("script did not change the value of Sheet1.A1", aValue == "success");
+    CPPUNIT_ASSERT_MESSAGE("User defined types script did not change the value of Sheet1.A1", aValue == "success");
+
+    // Big Module
+
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:MyLibrary.BigModule.bigMethod?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    aValue = rDoc.GetString(1,0,0);
+    CPPUNIT_ASSERT_MESSAGE("Big module script did not change the value of Sheet1.B1", aValue == "success");
+
+    // far big method tdf#94617
+
+        SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:MyLibrary.BigModule.farBigMethod?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    aValue = rDoc.GetString(2,0,0);
+    CPPUNIT_ASSERT_MESSAGE("Far Method script did not change the value of Sheet1.C1", aValue == "success");
+
 
     xDocSh->DoClose();
 }

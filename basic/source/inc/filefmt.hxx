@@ -40,11 +40,12 @@ class SvStream;
 // Version 11: #29955 force anew compilation because of build-inconsistences
 // Version 12: aoo#64377 increase code size that basic can handle
 //             tdf#75973 support user defined types B_USERTYPES in password protected macros
+// Version 13: tdf#94617 store methods nStart information greater than sal_Int16 limit
 //
 
 #define B_LEGACYVERSION 0x00000011L
 #define B_EXT_IMG_VERSION 0x00000012L
-#define B_CURVERSION 0x00000012L
+#define B_CURVERSION 0x00000013L
 
 // The file contains either a module- or a library-record.
 // Those records contain further records. Every record's got
