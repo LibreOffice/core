@@ -303,7 +303,7 @@ postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Office/Paths-macosx.xcu
 		# Inet-macosx.xcu must come after Inet.xcu
 postprocess_DRIVERS += macab
-else ifeq (unx,$(GUIBASE))
+else ifeq ($(USING_X), TRUE)
 postprocess_FILES_main += \
 	$(postprocess_MOD)/org/openoffice/Inet-unixdesktop.xcu \
 	$(postprocess_MOD)/org/openoffice/Office/Accelerators-unxwnt.xcu \
@@ -431,7 +431,7 @@ postprocess_FILES_postgresql := $(call gb_XcuModuleTarget_get_target,connectivit
 postprocess_DRIVERS += postgresql
 endif
 
-ifeq (unx,$(GUIBASE))
+ifeq ($(USING_X), TRUE)
 ifneq (,$(or $(filter TRUETRUE,$(ENABLE_GCONF)$(ENABLE_LOCKDOWN))$(filter TRUE,$(ENABLE_GIO))))
 postprocess_XCDS += gnome.xcd
 postprocess_DEPS_gnome := main
@@ -446,7 +446,7 @@ postprocess_FILES_gnome += \
 	$(postprocess_MOD)/org/openoffice/ucb/Configuration-gio.xcu
 endif
 endif
-endif # unx == $(GUIBASE)
+endif # $(USING_X) == TRUE
 
 ifeq ($(ENABLE_ONLINE_UPDATE),TRUE)
 postprocess_XCDS += onlineupdate.xcd
