@@ -103,9 +103,9 @@ private:
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
-    DECL_LINK_TYPED(CloseHdl, ToolBox*, void);
-    DECL_LINK( ToolboxEventHdl, VclWindowEvent* );
-    DECL_LINK( ShowHideListener, VclWindowEvent* );
+    DECL_LINK_TYPED( CloseHdl, ToolBox*, void );
+    DECL_LINK_TYPED( ToolboxEventHdl, VclWindowEvent&, void );
+    DECL_LINK_TYPED( ShowHideListener, VclWindowEvent&, void );
 
     void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

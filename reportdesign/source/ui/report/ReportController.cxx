@@ -2590,15 +2590,14 @@ sal_Int32 OReportController::getGroupPosition(const uno::Reference< report::XGro
 }
 
 
-IMPL_LINK( OReportController, EventLstHdl, VclWindowEvent*, _pEvent )
+IMPL_LINK_TYPED( OReportController, EventLstHdl, VclWindowEvent&, _rEvent, void )
 {
-    if ( _pEvent && _pEvent->GetId() == VCLEVENT_WINDOW_CLOSE )
+    if ( _rEvent.GetId() == VCLEVENT_WINDOW_CLOSE )
     {
         InvalidateFeature(SID_SORTINGANDGROUPING);
         InvalidateFeature(SID_FM_ADD_FIELD);
         InvalidateFeature(SID_RPT_SHOWREPORTEXPLORER);
     }
-    return 1L;
 }
 
 void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHint)

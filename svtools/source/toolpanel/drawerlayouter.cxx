@@ -230,18 +230,15 @@ namespace svt
     }
 
 
-    IMPL_LINK( DrawerDeckLayouter, OnWindowEvent, VclSimpleEvent*, i_pEvent )
+    IMPL_LINK_TYPED( DrawerDeckLayouter, OnWindowEvent, VclWindowEvent&, rWindowEvent, void )
     {
-        const VclWindowEvent* pWindowEvent = PTR_CAST( VclWindowEvent, i_pEvent );
-        ENSURE_OR_RETURN( pWindowEvent, "no WindowEvent", 0L );
-
         bool bActivatePanel = false;
-        switch ( pWindowEvent->GetId() )
+        switch ( rWindowEvent.GetId() )
         {
             case VCLEVENT_WINDOW_MOUSEBUTTONUP:
             {
-                const MouseEvent* pMouseEvent = static_cast< const MouseEvent* >( pWindowEvent->GetData() );
-                ENSURE_OR_RETURN( pMouseEvent, "no mouse event with MouseButtonUp", 0L );
+                const MouseEvent* pMouseEvent = static_cast< const MouseEvent* >( rWindowEvent.GetData() );
+                ENSURE_OR_RETURN_VOID( pMouseEvent, "no mouse event with MouseButtonUp" );
                 if ( pMouseEvent->GetButtons() == MOUSE_LEFT )
                 {
                     bActivatePanel = true;
@@ -250,8 +247,8 @@ namespace svt
             break;
             case VCLEVENT_WINDOW_KEYINPUT:
             {
-                const KeyEvent* pKeyEvent = static_cast< const KeyEvent* >( pWindowEvent->GetData() );
-                ENSURE_OR_RETURN( pKeyEvent, "no key event with KeyInput", 0L );
+                const KeyEvent* pKeyEvent = static_cast< const KeyEvent* >( rWindowEvent.GetData() );
+                ENSURE_OR_RETURN_VOID( pKeyEvent, "no key event with KeyInput" );
                 const vcl::KeyCode& rKeyCode( pKeyEvent->GetKeyCode() );
                 if ( ( rKeyCode.GetModifier() == 0 ) && ( rKeyCode.GetCode() == KEY_RETURN ) )
                 {
@@ -262,7 +259,7 @@ namespace svt
         }
         if ( bActivatePanel )
         {
-            const size_t nPanelPos = impl_getPanelPositionFromWindow( pWindowEvent->GetWindow() );
+            const size_t nPanelPos = impl_getPanelPositionFromWindow( rWindowEvent.GetWindow() );
             if ( nPanelPos != m_rPanelDeck.GetActivePanel() )
             {
                 m_rPanelDeck.ActivatePanel( nPanelPos );
@@ -272,9 +269,7 @@ namespace svt
                 PToolPanel pPanel( m_rPanelDeck.GetPanel( nPanelPos ) );
                 pPanel->GrabFocus();
             }
-            return 1L;
         }
-        return 0L;
     }
 
 

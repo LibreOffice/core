@@ -363,16 +363,15 @@ IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, SubmenuClose, Timer *, void)
     }
 }
 
-IMPL_LINK( MenuFloatingWindow, ShowHideListener, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( MenuFloatingWindow, ShowHideListener, VclWindowEvent&, rEvent, void )
 {
     if( ! pMenu )
-        return 0;
+        return;
 
-    if( pEvent->GetId() == VCLEVENT_WINDOW_SHOW )
+    if( rEvent.GetId() == VCLEVENT_WINDOW_SHOW )
         pMenu->ImplCallEventListeners( VCLEVENT_MENU_SHOW, ITEMPOS_INVALID );
-    else if( pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
+    else if( rEvent.GetId() == VCLEVENT_WINDOW_HIDE )
         pMenu->ImplCallEventListeners( VCLEVENT_MENU_HIDE, ITEMPOS_INVALID );
-    return 0;
 }
 
 void MenuFloatingWindow::EnableScrollMenu( bool b )

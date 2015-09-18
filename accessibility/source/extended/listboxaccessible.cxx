@@ -41,17 +41,12 @@ namespace accessibility
         }
     }
 
-    IMPL_LINK( ListBoxAccessibleBase, WindowEventListener, VclSimpleEvent*, pEvent )
+    IMPL_LINK_TYPED( ListBoxAccessibleBase, WindowEventListener, VclWindowEvent&, rEvent, void )
     {
-        OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "ListBoxAccessibleBase::WindowEventListener: unexpected WindowEvent!" );
-        if ( pEvent && pEvent->ISA( VclWindowEvent ) )
-        {
-            OSL_ENSURE( static_cast< VclWindowEvent* >( pEvent )->GetWindow() , "ListBoxAccessibleBase::WindowEventListener: no event window!" );
-            OSL_ENSURE( static_cast< VclWindowEvent* >( pEvent )->GetWindow() == m_pWindow, "ListBoxAccessibleBase::WindowEventListener: where did this come from?" );
+        OSL_ENSURE( rEvent.GetWindow() , "ListBoxAccessibleBase::WindowEventListener: no event window!" );
+        OSL_ENSURE( rEvent.GetWindow() == m_pWindow, "ListBoxAccessibleBase::WindowEventListener: where did this come from?" );
 
-            ProcessWindowEvent( *static_cast< VclWindowEvent* >( pEvent ) );
-        }
-        return 0;
+        ProcessWindowEvent( rEvent );
     }
 
     void ListBoxAccessibleBase::disposing()

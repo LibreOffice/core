@@ -70,13 +70,12 @@ vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point location)
     return pChildWindow;
 }
 
-IMPL_LINK(DNDEventDispatcher, WindowEventListener, VclSimpleEvent*, pEvent)
+IMPL_LINK_TYPED(DNDEventDispatcher, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
-    if (pEvent && pEvent->GetId() == VCLEVENT_OBJECT_DYING)
+    if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
     {
         designate_currentwindow(NULL);
     }
-    return 0;
 }
 
 void DNDEventDispatcher::designate_currentwindow(vcl::Window *pWindow)

@@ -98,7 +98,7 @@ protected:
     void                    UpdateChildren();
     void                    SortChildren();
 
-    DECL_LINK( WindowEventListener, VclSimpleEvent* );
+    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
 
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );

@@ -102,7 +102,7 @@ public:
     void    NotifyAccessibleEvent( const sal_Int16 _nEventId, const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Any& _rNewValue );
 
 protected:
-    DECL_LINK( WindowEventListener, VclSimpleEvent* );
+    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
 
     void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 

@@ -201,11 +201,11 @@ void SAL_CALL OGLWindow::removePaintListener( const uno::Reference< awt::XPaintL
 {
 }
 
-IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED(OGLWindow, FocusGrabber, VclWindowEvent&, rEvent, void)
 {
-    if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
+    if( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
-        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pEvent->GetData());
+        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rEvent.GetData());
         if(pMouseEvt)
         {
             const Point& rMousePos = pMouseEvt->GetPosPixel();
@@ -225,15 +225,13 @@ IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent*, pEvent)
             }
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED(OGLWindow, CameraHandler, VclWindowEvent&, rEvent, void)
 {
-    if( pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT )
+    if( rEvent.GetId() == VCLEVENT_WINDOW_KEYINPUT )
     {
-        KeyEvent* pKeyEvt = static_cast<KeyEvent*>(pEvent->GetData());
+        KeyEvent* pKeyEvt = static_cast<KeyEvent*>(rEvent.GetData());
         if(pKeyEvt)
         {
             const sal_uInt16 nCode = pKeyEvt->GetKeyCode().GetCode();
@@ -336,21 +334,21 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
             }
         }
     }
-    else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEBUTTONDOWN )
+    else if( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEBUTTONDOWN )
     {
-        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pEvent->GetData());
+        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rEvent.GetData());
         if(pMouseEvt && pMouseEvt->IsLeft() && pMouseEvt->GetClicks() == 1)
         {
             m_aLastMousePos = pMouseEvt->GetPosPixel();
         }
     }
-    else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
+    else if( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
         if ( !m_rEventHandler.HasFocus() )
         {
             m_rEventHandler.GrabFocus();
         }
-        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pEvent->GetData());
+        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rEvent.GetData());
         if(pMouseEvt && pMouseEvt->IsLeft() && m_aLastMousePos != Point(0,0))
         {
             const Point& aCurPos = pMouseEvt->GetPosPixel();
@@ -378,15 +376,14 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
             m_aLastMousePos = aCurPos;
         }
     }
-    else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEBUTTONUP )
+    else if( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEBUTTONUP )
     {
-        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pEvent->GetData());
+        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rEvent.GetData());
         if(pMouseEvt && pMouseEvt->IsLeft() && pMouseEvt->GetClicks() == 1)
         {
             m_aLastMousePos = Point(0,0);
         }
     }
-    return 0;
 }
 
 } // namespace ogl

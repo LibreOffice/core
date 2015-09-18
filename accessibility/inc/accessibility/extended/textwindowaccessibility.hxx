@@ -86,7 +86,7 @@ private:
 class WindowListenerGuard
 {
 public:
-    inline WindowListenerGuard(::Link<> const & rListener):
+    inline WindowListenerGuard(::Link<VclWindowEvent&,void> const & rListener):
         m_aListener(rListener), m_pNotifier(0) {}
 
     inline ~WindowListenerGuard() { endListening(); }
@@ -98,7 +98,7 @@ public:
     void endListening();
 
 private:
-    ::Link<> m_aListener;
+    ::Link<VclWindowEvent&,void> m_aListener;
     VclPtr<vcl::Window> m_pNotifier;
 };
 
@@ -580,7 +580,7 @@ private:
     // Assuming that this will only be called with the external (Solar) mutex
     // locked.
     // init will already have been called.
-    DECL_LINK(WindowEventHandler, VclSimpleEvent *);
+    DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
 
     // Must be called with both the external (Solar) and internal mutex
     // locked.

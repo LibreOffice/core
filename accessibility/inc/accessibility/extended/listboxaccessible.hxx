@@ -68,7 +68,7 @@ namespace accessibility
         void disposing();
 
     private:
-        DECL_LINK( WindowEventListener, VclSimpleEvent* );
+        DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
 
     private:
         ListBoxAccessibleBase( const ListBoxAccessibleBase& ) SAL_DELETED_FUNCTION;

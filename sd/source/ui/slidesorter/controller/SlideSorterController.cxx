@@ -540,13 +540,17 @@ void SlideSorterController::HandleModelChange()
     }
 }
 
-IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
+IMPL_LINK(SlideSorterController, ApplicationEventHandler, VclWindowEvent*, pEvent)
 {
-    if (pEvent != NULL)
-    {
-        vcl::Window* pWindow = pEvent->GetWindow();
+    if (pEvent)
+        WindowEventHandler(*pEvent);
+    return 1;
+}
+IMPL_LINK_TYPED(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, void)
+{
+        vcl::Window* pWindow = rEvent.GetWindow();
         sd::Window *pActiveWindow (mrSlideSorter.GetContentWindow());
-        switch (pEvent->GetId())
+        switch (rEvent.GetId())
         {
             case VCLEVENT_WINDOW_ACTIVATE:
             case VCLEVENT_WINDOW_SHOW:
@@ -606,9 +610,6 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
             default:
                 break;
         }
-    }
-
-    return sal_IntPtr(true);
 }
 
 void SlideSorterController::GetCtrlState (SfxItemSet& rSet)

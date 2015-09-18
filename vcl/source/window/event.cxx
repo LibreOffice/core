@@ -212,7 +212,18 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
     if ( aDelData.IsDead() )
         return;
 
-    mpWindowImpl->maEventListeners.Call( &aEvent );
+    if (!mpWindowImpl->maEventListeners.empty())
+    {
+         // Copy the list, because this can be destroyed when calling a Link...
+         std::vector<Link<VclWindowEvent&,void>> aCopy( mpWindowImpl->maEventListeners );
+        for ( Link<VclWindowEvent&,void>& rLink : aCopy )
+        {
+            if (aDelData.IsDead()) break;
+            // check this hasn't been removed in some re-enterancy scenario fdo#47368
+            if( std::find(mpWindowImpl->maEventListeners.begin(), mpWindowImpl->maEventListeners.end(), rLink) != mpWindowImpl->maEventListeners.end() )
+                rLink.Call( aEvent );
+        }
+    }
 
     if ( aDelData.IsDead() )
         return;
@@ -243,15 +254,18 @@ void Window::FireVclEvent( VclSimpleEvent& rEvent )
     Application::ImplCallEventListeners(rEvent);
 }
 
-void Window::AddEventListener( const Link<>& rEventListener )
+void Window::AddEventListener( const Link<VclWindowEvent&,void>& rEventListener )
 {
-    mpWindowImpl->maEventListeners.addListener( rEventListener );
+    mpWindowImpl->maEventListeners.push_back( rEventListener );
 }
 
-void Window::RemoveEventListener( const Link<>& rEventListener )
+void Window::RemoveEventListener( const Link<VclWindowEvent&,void>& rEventListener )
 {
     if (mpWindowImpl)
-        mpWindowImpl->maEventListeners.removeListener( rEventListener );
+    {
+        auto& rListeners = mpWindowImpl->maEventListeners;
+        rListeners.erase( std::remove(rListeners.begin(), rListeners.end(), rEventListener ), rListeners.end() );
+    }
 }
 
 void Window::AddChildEventListener( const Link<>& rEventListener )

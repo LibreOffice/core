@@ -251,15 +251,10 @@ namespace accessibility
         }
     }
 
-    IMPL_LINK( AccessibleTabListBoxTable, WindowEventListener, VclSimpleEvent*, pEvent )
+    IMPL_LINK_TYPED( AccessibleTabListBoxTable, WindowEventListener, VclWindowEvent&, rEvent, void )
     {
-        OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-        if ( pEvent && pEvent->ISA( VclWindowEvent ) )
-        {
-            OSL_ENSURE( static_cast<VclWindowEvent*>( pEvent )->GetWindow() && m_pTabListBox, "no event window" );
-            ProcessWindowEvent( *static_cast<VclWindowEvent*>(pEvent) );
-        }
-        return 0;
+        OSL_ENSURE( rEvent.GetWindow() && m_pTabListBox, "no event window" );
+        ProcessWindowEvent( rEvent );
     }
     // helpers --------------------------------------------------------------------
 

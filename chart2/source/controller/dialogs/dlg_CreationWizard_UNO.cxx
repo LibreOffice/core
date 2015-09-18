@@ -217,11 +217,10 @@ void CreationWizardUnoDlg::createDialogOnDemand()
         }
     }
 }
-IMPL_LINK( CreationWizardUnoDlg, DialogEventHdl, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( CreationWizardUnoDlg, DialogEventHdl, VclWindowEvent&, rEvent, void )
 {
-    if(pEvent && (pEvent->GetId() == VCLEVENT_OBJECT_DYING) )
+    if(rEvent.GetId() == VCLEVENT_OBJECT_DYING)
         m_pDialog = 0;//avoid duplicate destruction of m_pDialog
-    return 0;
 }
 
 sal_Int16 SAL_CALL CreationWizardUnoDlg::execute(  ) throw(uno::RuntimeException, std::exception)

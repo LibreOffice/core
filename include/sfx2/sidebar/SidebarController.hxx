@@ -206,7 +206,7 @@ private:
     */
     VclPtr<vcl::Window> mpCloseIndicator;
 
-    DECL_LINK(WindowEventHandler, VclWindowEvent*);
+    DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
     /** Make maRequestedContext the current context.
     */
     void UpdateConfigurations();

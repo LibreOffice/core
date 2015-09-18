@@ -135,7 +135,7 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper
     ResMgr*             mpSfxResMgr;
     Idle                maWaitIdle;
     Timer               maTimeoutTimer;
-    Link<>              maWindowEventHdl;
+    Link<VclWindowEvent&,void> maWindowEventHdl;
     Link<>              maApplicationEventHdl;
     bool                mbShowBubble;
     bool                mbShowMenuIcon;
@@ -148,7 +148,7 @@ private:
                     DECL_LINK_TYPED(WaitTimeOutHdl, Idle *, void);
                     DECL_LINK_TYPED(TimeOutHdl, Timer *, void);
                     DECL_LINK_TYPED(UserEventHdl, void *, void);
-                    DECL_LINK( WindowEventHdl, VclWindowEvent* );
+                    DECL_LINK_TYPED(WindowEventHdl, VclWindowEvent&, void);
                     DECL_LINK( ApplicationEventHdl, VclSimpleEvent* );
 
     BubbleWindow*   GetBubbleWindow();
@@ -662,14 +662,14 @@ IMPL_LINK_NOARG_TYPED(UpdateCheckUI, UserEventHdl, void*, void)
 }
 
 
-IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
 {
-    sal_uLong nEventID = pEvent->GetId();
+    sal_uLong nEventID = rEvent.GetId();
 
     if ( VCLEVENT_OBJECT_DYING == nEventID )
     {
         SolarMutexGuard aGuard;
-        if ( mpIconSysWin == pEvent->GetWindow() )
+        if ( mpIconSysWin == rEvent.GetWindow() )
         {
             mpIconSysWin->RemoveEventListener( maWindowEventHdl );
             RemoveBubbleWindow( true );
@@ -678,7 +678,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     else if ( VCLEVENT_WINDOW_MENUBARADDED == nEventID )
     {
         SolarMutexGuard aGuard;
-        vcl::Window *pWindow = pEvent->GetWindow();
+        vcl::Window *pWindow = rEvent.GetWindow();
         if ( pWindow )
         {
             SystemWindow *pSysWin = pWindow->GetSystemWindow();
@@ -691,7 +691,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     else if ( VCLEVENT_WINDOW_MENUBARREMOVED == nEventID )
     {
         SolarMutexGuard aGuard;
-        MenuBar *pMBar = static_cast<MenuBar*>(pEvent->GetData());
+        MenuBar *pMBar = static_cast<MenuBar*>(rEvent.GetData());
         if ( pMBar && ( pMBar == mpIconMBar ) )
             RemoveBubbleWindow( true );
     }
@@ -699,7 +699,7 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
               ( nEventID == VCLEVENT_WINDOW_RESIZE ) )
     {
         SolarMutexGuard aGuard;
-        if ( ( mpIconSysWin == pEvent->GetWindow() ) &&
+        if ( ( mpIconSysWin == rEvent.GetWindow() ) &&
              mpBubbleWin && ( mpIconMBar != NULL ) )
         {
             Rectangle aIconRect = mpIconMBar->GetMenuBarButtonRectPixel( mnIconID );
@@ -709,8 +709,6 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
                 mpBubbleWin->Show();    // This will recalc the screen position of the bubble
         }
     }
-
-    return 0;
 }
 
 

@@ -159,8 +159,8 @@ private:
     bool            GetFuncName( OUString& aStart, OUString& aResult );  // fdo75264
     void            ShowArgumentsTip( OUString& rSelText );
     DECL_LINK_TYPED( ModifyHdl, LinkParamNone*, void );
-    DECL_LINK( ShowHideTipVisibleParentListener, VclWindowEvent* );
-    DECL_LINK( ShowHideTipVisibleSecParentListener, VclWindowEvent* );
+    DECL_LINK_TYPED( ShowHideTipVisibleParentListener, VclWindowEvent&, void );
+    DECL_LINK_TYPED( ShowHideTipVisibleSecParentListener, VclWindowEvent&, void );
 
 public:
                     ScInputHandler();

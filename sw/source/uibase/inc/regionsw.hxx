@@ -124,7 +124,7 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK( FileNameHdl, Edit* );
     DECL_LINK_TYPED( DDEHdl, Button*, void );
     DECL_LINK_TYPED( DlgClosedHdl, sfx2::FileDialogHelper*, void );
-    DECL_LINK( SubRegionEventHdl, VclWindowEvent * );
+    DECL_LINK_TYPED( SubRegionEventHdl, VclWindowEvent&, void );
 
     bool CheckPasswd(CheckBox* pBox = 0);
 

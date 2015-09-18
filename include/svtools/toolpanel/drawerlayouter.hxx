@@ -70,7 +70,7 @@ namespace svt
         size_t  impl_getPanelPositionFromWindow( const vcl::Window* i_pDrawerWindow ) const;
         void    impl_removeDrawer( const size_t i_nPosition );
 
-        DECL_LINK( OnWindowEvent, VclSimpleEvent* );
+        DECL_LINK_TYPED( OnWindowEvent, VclWindowEvent&, void );
 
 private:
         vcl::Window&                             m_rParentWindow;

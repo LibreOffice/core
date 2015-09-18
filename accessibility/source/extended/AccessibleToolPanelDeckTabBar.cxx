@@ -116,7 +116,7 @@ namespace accessibility
         virtual void LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter ) SAL_OVERRIDE;
         virtual void Dying() SAL_OVERRIDE;
 
-        DECL_LINK( OnWindowEvent, const VclSimpleEvent* );
+        DECL_LINK_TYPED( OnWindowEvent, VclWindowEvent&, void );
 
     private:
         AccessibleToolPanelTabBar&                  m_rAntiImpl;
@@ -228,30 +228,24 @@ namespace accessibility
         m_rAntiImpl.dispose();
     }
 
-    IMPL_LINK( AccessibleToolPanelTabBar_Impl, OnWindowEvent, const VclSimpleEvent*, i_pEvent )
+    IMPL_LINK_TYPED( AccessibleToolPanelTabBar_Impl, OnWindowEvent, VclWindowEvent&, rWindowEvent, void )
     {
-        ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelTabBar_Impl::OnWindowEvent: already disposed!", 0L );
+        ENSURE_OR_RETURN_VOID( !isDisposed(), "AccessibleToolPanelTabBar_Impl::OnWindowEvent: already disposed!" );
 
-        const VclWindowEvent* pWindowEvent( dynamic_cast< const VclWindowEvent* >( i_pEvent ) );
-        if ( !pWindowEvent )
-            return 0L;
+        const bool bForwardButton = ( rWindowEvent.GetWindow() == &m_pTabBar->GetScrollButton( true ) );
+        const bool bBackwardButton = ( rWindowEvent.GetWindow() == &m_pTabBar->GetScrollButton( false ) );
+        ENSURE_OR_RETURN_VOID( bForwardButton || bBackwardButton, "AccessibleToolPanelTabBar_Impl::OnWindowEvent: where does this come from?" );
 
-        const bool bForwardButton = ( pWindowEvent->GetWindow() == &m_pTabBar->GetScrollButton( true ) );
-        const bool bBackwardButton = ( pWindowEvent->GetWindow() == &m_pTabBar->GetScrollButton( false ) );
-        ENSURE_OR_RETURN( bForwardButton || bBackwardButton, "AccessibleToolPanelTabBar_Impl::OnWindowEvent: where does this come from?", 0L );
-
-        const bool bShow = ( i_pEvent->GetId() == VCLEVENT_WINDOW_SHOW );
-        const bool bHide = ( i_pEvent->GetId() == VCLEVENT_WINDOW_HIDE );
+        const bool bShow = ( rWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW );
+        const bool bHide = ( rWindowEvent.GetId() == VCLEVENT_WINDOW_HIDE );
         if ( !bShow && !bHide )
             // not interested in events other than visibility changes
-            return 0L;
+            return;
 
         const Reference< XAccessible > xButtonAccessible( m_pTabBar->GetScrollButton( bForwardButton ).GetAccessible() );
         const Any aOldChild( bHide ? xButtonAccessible : Reference< XAccessible >() );
         const Any aNewChild( bShow ? xButtonAccessible : Reference< XAccessible >() );
         m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldChild, aNewChild );
-
-        return 1L;
     }
 
     // MethodGuard

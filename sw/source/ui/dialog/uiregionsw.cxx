@@ -1349,9 +1349,9 @@ IMPL_LINK_TYPED( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFile
     Application::SetDefDialogParent( m_pOldDefDlgParent );
 }
 
-IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
+IMPL_LINK_TYPED( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, void )
 {
-    if( !m_bSubRegionsFilled && pEvent && pEvent->GetId() == VCLEVENT_DROPDOWN_PRE_OPEN )
+    if( !m_bSubRegionsFilled && rEvent.GetId() == VCLEVENT_DROPDOWN_PRE_OPEN )
     {
         //if necessary fill the names bookmarks/sections/tables now
 
@@ -1374,7 +1374,6 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
             lcl_FillSubRegionList(rSh, *m_pSubRegionED, 0);
         m_bSubRegionsFilled = true;
     }
-    return 0;
 }
 
 Image SwEditRegionDlg::BuildBitmap( bool bProtect, bool bHidden )

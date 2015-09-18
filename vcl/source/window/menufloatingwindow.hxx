@@ -57,11 +57,11 @@ private:
     bool bIgnoreFirstMove : 1;
     bool bKeyInput : 1;
 
-    DECL_LINK_TYPED(PopupEnd, FloatingWindow*, void);
+    DECL_LINK_TYPED( PopupEnd, FloatingWindow*, void );
     DECL_LINK_TYPED( HighlightChanged, Timer*, void );
-    DECL_LINK_TYPED(SubmenuClose, Timer *, void);
-    DECL_LINK_TYPED(AutoScroll, Timer *, void);
-    DECL_LINK( ShowHideListener, VclWindowEvent* );
+    DECL_LINK_TYPED( SubmenuClose, Timer *, void );
+    DECL_LINK_TYPED( AutoScroll, Timer *, void );
+    DECL_LINK_TYPED( ShowHideListener, VclWindowEvent&, void );
 
     virtual void StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

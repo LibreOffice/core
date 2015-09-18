@@ -403,18 +403,13 @@ void VCLXWindow::notifyWindowRemoved( vcl::Window& _rWindow )
     }
 }
 
-IMPL_LINK( VCLXWindow, WindowEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( VCLXWindow, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     if ( mpImpl->mnListenerLockLevel )
-        return 0L;
+        return;
 
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
-    {
-        DBG_ASSERT( static_cast<VclWindowEvent*>(pEvent)->GetWindow() && GetWindow(), "Window???" );
-        ProcessWindowEvent( *static_cast<VclWindowEvent*>(pEvent) );
-    }
-    return 0;
+    DBG_ASSERT( rEvent.GetWindow() && GetWindow(), "Window???" );
+    ProcessWindowEvent( rEvent );
 }
 
 namespace

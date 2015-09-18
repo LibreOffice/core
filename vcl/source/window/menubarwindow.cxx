@@ -251,20 +251,20 @@ IMPL_LINK_NOARG_TYPED(MenuBarWindow, CloseHdl, ToolBox *, void)
     }
 }
 
-IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( MenuBarWindow, ToolboxEventHdl, VclWindowEvent&, rEvent, void )
 {
     if( ! pMenu )
-        return 0;
+        return;
 
     MenuBar::MenuBarButtonCallbackArg aArg;
     aArg.nId = 0xffff;
-    aArg.bHighlight = (pEvent->GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT);
+    aArg.bHighlight = (rEvent.GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT);
     aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
-    if( pEvent->GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT )
+    if( rEvent.GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT )
         aArg.nId = aCloseBtn->GetHighlightItemId();
-    else if( pEvent->GetId() == VCLEVENT_TOOLBOX_HIGHLIGHTOFF )
+    else if( rEvent.GetId() == VCLEVENT_TOOLBOX_HIGHLIGHTOFF )
     {
-        sal_uInt16 nPos = static_cast< sal_uInt16 >(reinterpret_cast<sal_IntPtr>(pEvent->GetData()));
+        sal_uInt16 nPos = static_cast< sal_uInt16 >(reinterpret_cast<sal_IntPtr>(rEvent.GetData()));
         aArg.nId = aCloseBtn->GetItemId(nPos);
     }
     std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( aArg.nId );
@@ -272,19 +272,17 @@ IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent*, pEvent )
     {
         it->second.m_aHighlightLink.Call( aArg );
     }
-    return 0;
 }
 
-IMPL_LINK( MenuBarWindow, ShowHideListener, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( MenuBarWindow, ShowHideListener, VclWindowEvent&, rEvent, void )
 {
     if( ! pMenu )
-        return 0;
+        return;
 
-    if( pEvent->GetId() == VCLEVENT_WINDOW_SHOW )
+    if( rEvent.GetId() == VCLEVENT_WINDOW_SHOW )
         pMenu->ImplCallEventListeners( VCLEVENT_MENU_SHOW, ITEMPOS_INVALID );
-    else if( pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
+    else if( rEvent.GetId() == VCLEVENT_WINDOW_HIDE )
         pMenu->ImplCallEventListeners( VCLEVENT_MENU_HIDE, ITEMPOS_INVALID );
-    return 0;
 }
 
 void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )

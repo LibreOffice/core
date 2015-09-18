@@ -344,17 +344,11 @@ void AccessibleDialogWindow::SortChildren()
 
 
 
-IMPL_LINK( AccessibleDialogWindow, WindowEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( AccessibleDialogWindow, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    if (VclWindowEvent* pWinEvent = dynamic_cast<VclWindowEvent*>(pEvent))
-    {
-        DBG_ASSERT(pWinEvent->GetWindow(), "AccessibleDialogWindow::WindowEventListener: no window!");
-        if (!pWinEvent->GetWindow()->IsAccessibilityEventsSuppressed() || pEvent->GetId() == VCLEVENT_OBJECT_DYING)
-            ProcessWindowEvent(*pWinEvent);
-    }
-    else
-        DBG_ASSERT(false, "AccessibleDialogWindow::WindowEventListener: unknown window event!");
-    return 0;
+    DBG_ASSERT(rEvent.GetWindow(), "AccessibleDialogWindow::WindowEventListener: no window!");
+    if (!rEvent.GetWindow()->IsAccessibilityEventsSuppressed() || rEvent.GetId() == VCLEVENT_OBJECT_DYING)
+        ProcessWindowEvent(rEvent);
 }
 
 

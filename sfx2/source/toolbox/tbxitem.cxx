@@ -193,25 +193,21 @@ struct SfxToolBoxControl_Impl
     sal_uInt16              nSlotId;
     VclPtr<SfxPopupWindow>  mpFloatingWindow;
     VclPtr<SfxPopupWindow>  mpPopupWindow;
-    DECL_LINK( WindowEventListener, VclSimpleEvent* );
+    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
 };
 
-IMPL_LINK( SfxToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( SfxToolBoxControl_Impl, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    if ( pEvent &&
-         pEvent->ISA( VclWindowEvent ) &&
-         (( pEvent->GetId() == VCLEVENT_WINDOW_MOVE ) ||
-          ( pEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE )))
+    if ( ( rEvent.GetId() == VCLEVENT_WINDOW_MOVE ) ||
+         ( rEvent.GetId() == VCLEVENT_WINDOW_ACTIVATE ))
     {
-        vcl::Window* pWindow( static_cast<VclWindowEvent*>(pEvent)->GetWindow() );
+        vcl::Window* pWindow( rEvent.GetWindow() );
         if (( pWindow == mpFloatingWindow ) &&
             ( mpPopupWindow != nullptr ))
         {
             mpPopupWindow.disposeAndClear();
         }
     }
-
-    return 1;
 }
 
 

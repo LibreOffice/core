@@ -1646,9 +1646,9 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
     }
 }
 
-IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
+IMPL_LINK_TYPED(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
 {
-    switch (pEvent->GetId())
+    switch (rEvent.GetId())
     {
     case VCLEVENT_WINDOW_RESIZE:
         {
@@ -1750,7 +1750,6 @@ IMPL_LINK(Document, WindowEventHandler, ::VclSimpleEvent *, pEvent)
             break;
         }
     }
-    return 0;
 }
 
 void Document::init()

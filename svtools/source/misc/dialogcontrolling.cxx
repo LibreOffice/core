@@ -103,11 +103,10 @@ namespace svt
     }
 
 
-    IMPL_LINK( DialogController, OnWindowEvent, const VclWindowEvent*, _pEvent )
+    IMPL_LINK_TYPED( DialogController, OnWindowEvent, VclWindowEvent&, _rEvent, void )
     {
-        if ( m_pImpl->pEventFilter->payAttentionTo( *_pEvent ) )
-            impl_updateAll( *_pEvent );
-        return 0L;
+        if ( m_pImpl->pEventFilter->payAttentionTo( _rEvent ) )
+            impl_updateAll( _rEvent );
     }
 
 

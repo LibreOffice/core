@@ -71,7 +71,7 @@ FullScreenPane::FullScreenPane (
     // afterwards may or may not work.
 
     // Add resize listener at the work window.
-    Link<> aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
+    Link<VclWindowEvent&,void> aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
     mpWorkWindow->AddEventListener(aWindowEventHandler);
 
     // Set title and icon of the new window to those of the current window
@@ -107,7 +107,7 @@ void SAL_CALL FullScreenPane::disposing()
 
     if (mpWorkWindow.get() != NULL)
     {
-        Link<> aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
+        Link<VclWindowEvent&,void> aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
         mpWorkWindow->RemoveEventListener(aWindowEventHandler);
         mpWorkWindow.disposeAndClear();
     }
@@ -173,9 +173,9 @@ void SAL_CALL FullScreenPane::setAccessible (
     }
 }
 
-IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
-    switch (pEvent->GetId())
+    switch (rEvent.GetId())
     {
         case VCLEVENT_WINDOW_RESIZE:
             GetWindow()->SetPosPixel(Point(0,0));
@@ -188,7 +188,6 @@ IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent*, pEvent)
             mpWorkWindow.disposeAndClear();
             break;
     }
-    return 1;
 }
 
 Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()

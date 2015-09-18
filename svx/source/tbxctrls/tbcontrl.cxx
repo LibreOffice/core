@@ -193,7 +193,7 @@ private:
                                          OUString( ".uno:CharEndPreviewFontName" ),
                                          aArgs );
     }
-    DECL_DLLPRIVATE_LINK( CheckAndMarkUnknownFont, VclWindowEvent* );
+    DECL_DLLPRIVATE_LINK_TYPED( CheckAndMarkUnknownFont, VclWindowEvent&, void );
 
     void            SetOptimalSize();
 
@@ -960,10 +960,10 @@ void SvxFontNameBox_Impl::FillList()
     SetSelection( aOldSel );
 }
 
-IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent*, event )
+IMPL_LINK_TYPED( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent&, event, void )
 {
-    if( event->GetId() != VCLEVENT_EDIT_MODIFY )
-        return 0;
+    if( event.GetId() != VCLEVENT_EDIT_MODIFY )
+        return;
     OUString fontname = GetSubEdit()->GetText();
     lcl_GetDocFontList( &pFontList, this );
     // If the font is unknown, show it in italic.
@@ -986,7 +986,6 @@ IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent*, event 
             SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE ));
         }
     }
-    return 0;
 }
 
 void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )

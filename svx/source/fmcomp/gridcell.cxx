@@ -3406,12 +3406,10 @@ void SAL_CALL FmXGridCell::removePaintListener( const Reference< awt::XPaintList
 }
 
 
-IMPL_LINK( FmXGridCell, OnWindowEvent, VclWindowEvent*, _pEvent )
+IMPL_LINK_TYPED( FmXGridCell, OnWindowEvent, VclWindowEvent&, _rEvent, void )
 {
-    ENSURE_OR_THROW( _pEvent, "illegal event pointer" );
-    ENSURE_OR_THROW( _pEvent->GetWindow(), "illegal window" );
-    onWindowEvent( _pEvent->GetId(), *_pEvent->GetWindow(), _pEvent->GetData() );
-    return 1L;
+    ENSURE_OR_THROW( _rEvent.GetWindow(), "illegal window" );
+    onWindowEvent( _rEvent.GetId(), *_rEvent.GetWindow(), _rEvent.GetData() );
 }
 
 

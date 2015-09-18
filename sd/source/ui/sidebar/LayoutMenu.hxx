@@ -192,7 +192,7 @@ private:
     DECL_LINK_TYPED(RightClickHandler, const MouseEvent&, void);
     DECL_LINK_TYPED(StateChangeHandler, const OUString&, void);
     DECL_LINK_TYPED(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent&, void);
-    DECL_LINK(WindowEventHandler, VclWindowEvent*);
+    DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
     DECL_LINK_TYPED(OnMenuItemSelected, Menu*, bool);
 };
 
