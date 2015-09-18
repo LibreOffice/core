@@ -112,8 +112,8 @@ public:
     virtual ~FwkTabWindow();
     virtual void    dispose() SAL_OVERRIDE;
 
-    void            AddEventListener( const Link<>& rEventListener );
-    void            RemoveEventListener( const Link<>& rEventListener );
+    void            AddEventListener( const Link<VclWindowEvent&,void>& rEventListener );
+    void            RemoveEventListener( const Link<VclWindowEvent&,void>& rEventListener );
     FwkTabPage*     AddTabPage( sal_Int32 nIndex, const css::uno::Sequence< css::beans::NamedValue >& rProperties );
     void            ActivatePage( sal_Int32 nIndex );
     void            RemovePage( sal_Int32 nIndex );

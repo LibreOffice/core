@@ -283,12 +283,12 @@ IMPL_LINK_NOARG_TYPED(FwkTabWindow, DeactivatePageHdl, TabControl *, bool)
     return true;
 }
 
-void FwkTabWindow::AddEventListener( const Link<>& rEventListener )
+void FwkTabWindow::AddEventListener( const Link<VclWindowEvent&,void>& rEventListener )
 {
     m_aTabCtrl->AddEventListener( rEventListener );
 }
 
-void FwkTabWindow::RemoveEventListener( const Link<>& rEventListener )
+void FwkTabWindow::RemoveEventListener( const Link<VclWindowEvent&,void>& rEventListener )
 {
     m_aTabCtrl->RemoveEventListener( rEventListener );
 }

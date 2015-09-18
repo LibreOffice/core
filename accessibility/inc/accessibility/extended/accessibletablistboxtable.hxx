@@ -42,7 +42,7 @@ private:
     css::uno::Reference< css::accessibility::XAccessible >  m_xCurChild;
 
     void                    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    DECL_LINK(              WindowEventListener, VclSimpleEvent* );
+    DECL_LINK_TYPED(        WindowEventListener, VclWindowEvent&, void );
 
     // helpers ----------------------------------------------------------------
 

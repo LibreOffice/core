@@ -69,7 +69,7 @@ private:
     VCLExternalSolarLock*           m_pSolarLock;
 
 protected:
-     DECL_LINK( WindowEventListener, VclSimpleEvent* );
+     DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
      DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );

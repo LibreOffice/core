@@ -108,7 +108,7 @@ private:
         when the window gets the focus.  In this case the form shell is
         moved to the bottom of the shell stack.
     */
-    DECL_LINK(WindowEventHandler, VclWindowEvent*);
+    DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
 
     /** This call back is called when view in the center pane is replaced.
         When this happens then we unregister at the window of the old and

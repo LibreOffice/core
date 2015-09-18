@@ -204,7 +204,7 @@ private:
     */
     void CreateTargetStack (ShellStack& rStack) const;
 
-    DECL_LINK(WindowEventHandler, VclWindowEvent*);
+    DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
 
 #if OSL_DEBUG_LEVEL >= 2
     void DumpShellStack (const ShellStack& rStack);
@@ -984,14 +984,11 @@ void ViewShellManager::Implementation::CreateTargetStack (ShellStack& rStack) co
     }
 }
 
-IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
-    if (pEvent != NULL)
-    {
-        vcl::Window* pEventWindow
-            = static_cast<VclWindowEvent*>(pEvent)->GetWindow();
+        vcl::Window* pEventWindow = rEvent.GetWindow();
 
-        switch (pEvent->GetId())
+        switch (rEvent.GetId())
         {
             case VCLEVENT_WINDOW_GETFOCUS:
             {
@@ -1028,8 +1025,6 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
                 }
                 break;
         }
-    }
-    return sal_IntPtr(true);
 }
 
 ShellDescriptor ViewShellManager::Implementation::CreateSubShell (

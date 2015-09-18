@@ -151,14 +151,13 @@ public:
         }
     }
 
-    DECL_LINK( DestroyedLink, VclWindowEvent* );
+    DECL_LINK_TYPED( DestroyedLink, VclWindowEvent&, void );
 };
 
-IMPL_LINK( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent&, rEvent, void )
 {
-    if( pEvent->GetId() == VCLEVENT_OBJECT_DYING )
+    if( rEvent.GetId() == VCLEVENT_OBJECT_DYING )
         m_pFocusWindow = NULL;
-    return 0;
 }
 
 sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )

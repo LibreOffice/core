@@ -62,8 +62,8 @@ public:
     virtual void SAL_CALL removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    DECL_LINK( FocusGrabber, VclWindowEvent* );
-    DECL_LINK( CameraHandler, VclWindowEvent* );
+    DECL_LINK_TYPED( FocusGrabber, VclWindowEvent&, void );
+    DECL_LINK_TYPED( CameraHandler, VclWindowEvent&, void );
 
     libgltf::glTFHandle& m_rHandle;
     rtl::Reference<OpenGLContext> m_xContext;

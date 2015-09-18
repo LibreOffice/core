@@ -608,17 +608,15 @@ void AnnotationTag::ClosePopup()
     }
 }
 
-IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
-    if( pEvent != NULL )
-    {
-        vcl::Window* pWindow = pEvent->GetWindow();
+        vcl::Window* pWindow = rEvent.GetWindow();
 
         if( pWindow )
         {
             if( pWindow == mpAnnotationWindow.get() )
             {
-                if( pEvent->GetId() == VCLEVENT_WINDOW_DEACTIVATE )
+                if( rEvent.GetId() == VCLEVENT_WINDOW_DEACTIVATE )
                 {
                     if( mnClosePopupEvent )
                         Application::RemoveUserEvent( mnClosePopupEvent );
@@ -628,7 +626,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
             }
             else if( pWindow == mpListenWindow )
             {
-                switch( pEvent->GetId() )
+                switch( rEvent.GetId() )
                 {
                 case VCLEVENT_WINDOW_MOUSEBUTTONUP:
                     {
@@ -664,8 +662,6 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
                 }
             }
         }
-    }
-    return sal_IntPtr(true);
 }
 
 IMPL_LINK_NOARG_TYPED(AnnotationTag, ClosePopupHdl, void*, void)

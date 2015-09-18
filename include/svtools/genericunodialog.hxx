@@ -144,7 +144,7 @@ namespace svt
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
 
     private:
-        DECL_LINK( OnDialogDying, VclWindowEvent* );
+        DECL_LINK_TYPED( OnDialogDying, VclWindowEvent&, void );
 
         /** ensures that m_pDialog is not <NULL/>
 

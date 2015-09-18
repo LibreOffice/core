@@ -68,6 +68,7 @@ class SystemWindow;
 class SalFrame;
 class MenuFloatingWindow;
 class VCLXWindow;
+class VclWindowEvent;
 
 namespace com { namespace sun { namespace star {
 namespace accessibility {
@@ -879,8 +880,8 @@ public:
     bool                                CompatPreNotify( NotifyEvent& rNEvt );
     bool                                CompatNotify( NotifyEvent& rNEvt );
 
-    void                                AddEventListener( const Link<>& rEventListener );
-    void                                RemoveEventListener( const Link<>& rEventListener );
+    void                                AddEventListener( const Link<VclWindowEvent&,void>& rEventListener );
+    void                                RemoveEventListener( const Link<VclWindowEvent&,void>& rEventListener );
     void                                AddChildEventListener( const Link<>& rEventListener );
     void                                RemoveChildEventListener( const Link<>& rEventListener );
 

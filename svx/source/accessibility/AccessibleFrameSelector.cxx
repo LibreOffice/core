@@ -488,21 +488,14 @@ void AccFrameSelector::NotifyFocusListeners(bool bGetFocus)
 
 
 
-IMPL_LINK( AccFrameSelector, WindowEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( AccFrameSelector, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    VclWindowEvent* pWinEvent = dynamic_cast< VclWindowEvent* >( pEvent );
-    DBG_ASSERT( pWinEvent, "AccFrameSelector::WindowEventListener - unknown window event" );
-    if ( pWinEvent )
+    vcl::Window* pWindow = rEvent.GetWindow();
+    DBG_ASSERT( pWindow, "AccFrameSelector::WindowEventListener: no window!" );
+    if ( !pWindow->IsAccessibilityEventsSuppressed() || ( rEvent.GetId() == VCLEVENT_OBJECT_DYING ) )
     {
-        vcl::Window* pWindow = pWinEvent->GetWindow();
-        DBG_ASSERT( pWindow, "AccFrameSelector::WindowEventListener: no window!" );
-        if ( !pWindow->IsAccessibilityEventsSuppressed() || ( pWinEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
-        {
-            ProcessWindowEvent( *pWinEvent );
-        }
+        ProcessWindowEvent( rEvent );
     }
-
-    return 0;
 }
 
 

@@ -147,7 +147,7 @@ private:
     virtual css::uno::Any SAL_CALL impl_getPropertyValue(const OUString& sProperty,
                                                                sal_Int32        nHandle  ) SAL_OVERRIDE;
 
-    DECL_DLLPRIVATE_LINK( EventListener, VclSimpleEvent * );
+    DECL_DLLPRIVATE_LINK_TYPED( EventListener, VclWindowEvent&, void );
 
     void impl_checkTabIndex (::sal_Int32 nID) throw (css::lang::IndexOutOfBoundsException);
     TTabPageInfoHash::iterator impl_getTabPageInfo(::sal_Int32 nID) throw (css::lang::IndexOutOfBoundsException);
@@ -418,13 +418,9 @@ css::uno::Any SAL_CALL TabWindowService::impl_getPropertyValue(const OUString& /
 }
 
 //  TabWindowService
-IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( TabWindowService, EventListener, VclWindowEvent&, rEvent, void )
 {
-    if (!pEvent || !pEvent->ISA(VclWindowEvent))
-        return 0;
-
-    sal_uLong           nEventId = pEvent->GetId();
-    VclWindowEvent* pWinEvt  = static_cast< VclWindowEvent* >(pEvent);
+    sal_uLong           nEventId = rEvent.GetId();
 
     css::uno::Reference< css::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::lang::EventObject aEvent( xThis );
@@ -437,12 +433,12 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
         m_pTabWin = NULL;
         m_xTabWin.clear();
 
-        return 0;
+        return;
     }
 
     ::cppu::OInterfaceContainerHelper* pContainer = m_lListener.getContainer(cppu::UnoType<css::awt::XTabListener>::get());
     if ( ! pContainer)
-        return 0;
+        return;
 
     ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
     while (pIterator.hasMoreElements())
@@ -454,19 +450,19 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
             switch (nEventId)
             {
                 case VCLEVENT_TABPAGE_ACTIVATE :
-                    pListener->activated( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
+                    pListener->activated( (sal_Int32)reinterpret_cast<sal_uLong>(rEvent.GetData()) );
                     break;
 
                 case VCLEVENT_TABPAGE_DEACTIVATE :
-                    pListener->deactivated( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
+                    pListener->deactivated( (sal_Int32)reinterpret_cast<sal_uLong>(rEvent.GetData()) );
                     break;
 
                 case VCLEVENT_TABPAGE_INSERTED :
-                    pListener->inserted( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
+                    pListener->inserted( (sal_Int32)reinterpret_cast<sal_uLong>(rEvent.GetData()) );
                     break;
 
                 case VCLEVENT_TABPAGE_REMOVED :
-                    pListener->removed( (sal_Int32)reinterpret_cast<sal_uLong>(pWinEvt->GetData()) );
+                    pListener->removed( (sal_Int32)reinterpret_cast<sal_uLong>(rEvent.GetData()) );
                     break;
 
                 case VCLEVENT_TABPAGE_PAGETEXTCHANGED :
@@ -479,8 +475,6 @@ IMPL_LINK( TabWindowService, EventListener, VclSimpleEvent*, pEvent )
             pIterator.remove();
         }
     }
-
-    return 0;
 }
 
 //  TabWindowService

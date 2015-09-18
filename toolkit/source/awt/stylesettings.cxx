@@ -65,23 +65,23 @@ namespace toolkit
         {
         }
 
-        DECL_LINK( OnWindowEvent, const VclWindowEvent* );
+        DECL_LINK_TYPED( OnWindowEvent, VclWindowEvent&, void );
     };
 
 
-    IMPL_LINK( WindowStyleSettings_Data, OnWindowEvent, const VclWindowEvent*, i_pEvent )
+    IMPL_LINK_TYPED( WindowStyleSettings_Data, OnWindowEvent, VclWindowEvent&, rEvent, void )
     {
-        if ( !i_pEvent || ( i_pEvent->GetId() != VCLEVENT_WINDOW_DATACHANGED ) )
-            return 0L;
-        const DataChangedEvent* pDataChangedEvent = static_cast< const DataChangedEvent* >( i_pEvent->GetData() );
+        if ( rEvent.GetId() != VCLEVENT_WINDOW_DATACHANGED )
+            return;
+        const DataChangedEvent* pDataChangedEvent = static_cast< const DataChangedEvent* >( rEvent.GetData() );
         if ( !pDataChangedEvent || ( pDataChangedEvent->GetType() != DataChangedEventType::SETTINGS ) )
-            return 0L;
+            return;
         if ( !( pDataChangedEvent->GetFlags() & AllSettingsFlags::STYLE ) )
-            return 0L;
+            return;
 
         EventObject aEvent( *pOwningWindow );
         aStyleChangeListeners.notifyEach( &XStyleChangeListener::styleSettingsChanged, aEvent );
-        return 1L;
+        return;
     }
 
 

@@ -271,7 +271,7 @@ void SlideSorter::SetupListeners()
         LINK(
             mpSlideSorterController.get(),
             controller::SlideSorterController,
-            WindowEventHandler));
+            ApplicationEventHandler));
 
     mpSlideSorterController->GetScrollBarManager().Connect();
 }
@@ -298,7 +298,7 @@ void SlideSorter::ReleaseListeners()
     Application::RemoveEventListener(
         LINK(mpSlideSorterController.get(),
             controller::SlideSorterController,
-            WindowEventHandler));
+            ApplicationEventHandler));
 }
 
 void SlideSorter::CreateModelViewController()

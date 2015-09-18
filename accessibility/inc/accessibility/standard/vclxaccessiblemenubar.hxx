@@ -39,7 +39,7 @@ protected:
 
     virtual bool            IsFocused() SAL_OVERRIDE;
 
-    DECL_LINK( WindowEventListener, VclSimpleEvent* );
+    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
 
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 

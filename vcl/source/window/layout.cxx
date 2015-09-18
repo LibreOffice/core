@@ -1351,11 +1351,10 @@ void VclFrame::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
-IMPL_LINK(VclFrame, WindowEventListener, VclSimpleEvent*, pEvent)
+IMPL_LINK_TYPED(VclFrame, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
-    if (pEvent && pEvent->GetId() == VCLEVENT_OBJECT_DYING)
+    if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
         designate_label(NULL);
-    return 0;
 }
 
 void VclFrame::designate_label(vcl::Window *pWindow)

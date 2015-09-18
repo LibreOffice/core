@@ -80,7 +80,7 @@ public:
     void ConnectListeners();
     void ReleaseListeners();
     void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
-    DECL_LINK(WindowEventListener, VclWindowEvent*);
+    DECL_LINK_TYPED(WindowEventListener, VclWindowEvent&, void);
     DECL_LINK(SelectionChangeListener, void*);
     DECL_LINK_TYPED(BroadcastSelectionChange, void*, void);
     DECL_LINK_TYPED(FocusChangeListener, LinkParamNone*, void);
@@ -898,9 +898,9 @@ void AccessibleSlideSorterView::Implementation::Activated()
 
 }
 
-IMPL_LINK(AccessibleSlideSorterView::Implementation, WindowEventListener, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED(AccessibleSlideSorterView::Implementation, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
-    switch (pEvent->GetId())
+    switch (rEvent.GetId())
     {
         case VCLEVENT_WINDOW_MOVE:
         case VCLEVENT_WINDOW_RESIZE:
@@ -917,7 +917,6 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, WindowEventListener, VclWin
         default:
             break;
     }
-    return 1;
 }
 
 IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, SelectionChangeListener)

@@ -43,26 +43,20 @@ AccessibleTabBarBase::~AccessibleTabBarBase()
     DELETEZ( m_pExternalLock );
 }
 
-IMPL_LINK( AccessibleTabBarBase, WindowEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( AccessibleTabBarBase, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    VclWindowEvent* pWinEvent = dynamic_cast< VclWindowEvent* >( pEvent );
-    OSL_ENSURE( pWinEvent, "AccessibleTabBarBase::WindowEventListener - unknown window event" );
-    if( pWinEvent )
+    vcl::Window* pEventWindow = rEvent.GetWindow();
+    OSL_ENSURE( pEventWindow, "AccessibleTabBarBase::WindowEventListener: no window!" );
+
+    if( ( rEvent.GetId() == VCLEVENT_TABBAR_PAGEREMOVED ) &&
+        ( (sal_uInt16)reinterpret_cast<sal_IntPtr>(rEvent.GetData()) == TabBar::PAGE_NOT_FOUND ) &&
+        ( dynamic_cast< AccessibleTabBarPageList *> (this) != NULL ) )
     {
-        vcl::Window* pEventWindow = pWinEvent->GetWindow();
-        OSL_ENSURE( pEventWindow, "AccessibleTabBarBase::WindowEventListener: no window!" );
-
-        if( ( pWinEvent->GetId() == VCLEVENT_TABBAR_PAGEREMOVED ) &&
-            ( (sal_uInt16)reinterpret_cast<sal_IntPtr>(pWinEvent->GetData()) == TabBar::PAGE_NOT_FOUND ) &&
-            ( dynamic_cast< AccessibleTabBarPageList *> (this) != NULL ) )
-        {
-            return 0;
-        }
-
-        if ( !pEventWindow->IsAccessibilityEventsSuppressed() || (pWinEvent->GetId() == VCLEVENT_OBJECT_DYING) )
-            ProcessWindowEvent( *pWinEvent );
+        return;
     }
-    return 0;
+
+    if ( !pEventWindow->IsAccessibilityEventsSuppressed() || (rEvent.GetId() == VCLEVENT_OBJECT_DYING) )
+        ProcessWindowEvent( rEvent );
 }
 
 void AccessibleTabBarBase::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )

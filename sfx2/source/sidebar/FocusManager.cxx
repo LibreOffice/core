@@ -508,42 +508,33 @@ void FocusManager::HandleKeyEvent (
     }
 }
 
-IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
+IMPL_LINK_TYPED(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent, void)
 {
-    if (pEvent == NULL)
-        return 0;
-
-    if ( ! pEvent->ISA(VclWindowEvent))
-        return 0;
-
-    VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
-    vcl::Window* pSource = pWindowEvent->GetWindow();
+    vcl::Window* pSource = rWindowEvent.GetWindow();
     if (pSource == NULL)
-        return 0;
+        return;
 
-    switch (pWindowEvent->GetId())
+    switch (rWindowEvent.GetId())
     {
         case VCLEVENT_WINDOW_KEYINPUT:
         {
-            KeyEvent* pKeyEvent = static_cast<KeyEvent*>(pWindowEvent->GetData());
+            KeyEvent* pKeyEvent = static_cast<KeyEvent*>(rWindowEvent.GetData());
             HandleKeyEvent(pKeyEvent->GetKeyCode(), *pSource);
-            return 1;
+            break;
         }
 
         case VCLEVENT_OBJECT_DYING:
             RemoveWindow(*pSource);
-            return 1;
+            break;
 
         case VCLEVENT_WINDOW_GETFOCUS:
         case VCLEVENT_WINDOW_LOSEFOCUS:
             pSource->Invalidate();
-            return 1;
+            break;
 
         default:
             break;
     }
-
-    return 0;
 }
 
 IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)

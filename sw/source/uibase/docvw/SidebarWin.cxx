@@ -1114,52 +1114,47 @@ void SwSidebarWin::SwitchToPostIt(sal_uInt16 aDirection)
         pPostIt->GrabFocus();
 }
 
-IMPL_LINK( SwSidebarWin, WindowEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( SwSidebarWin, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    VclWindowEvent* pWinEvent = dynamic_cast<VclWindowEvent*>(pEvent);
-    if ( pWinEvent )
+    if ( rEvent.GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
-        if ( pWinEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
+        MouseEvent* pMouseEvt = static_cast<MouseEvent*>(rEvent.GetData());
+        if ( pMouseEvt->IsEnterWindow() )
         {
-            MouseEvent* pMouseEvt = static_cast<MouseEvent*>(pWinEvent->GetData());
-            if ( pMouseEvt->IsEnterWindow() )
+            mbMouseOver = true;
+            if ( !HasFocus() )
             {
-                mbMouseOver = true;
+                SetViewState(ViewState::VIEW);
+                Invalidate();
+            }
+        }
+        else if ( pMouseEvt->IsLeaveWindow())
+        {
+            if (!IsPreview())
+            {
+                mbMouseOver = false;
                 if ( !HasFocus() )
                 {
-                    SetViewState(ViewState::VIEW);
+                    SetViewState(ViewState::NORMAL);
                     Invalidate();
                 }
             }
-            else if ( pMouseEvt->IsLeaveWindow())
-            {
-                if (!IsPreview())
-                {
-                    mbMouseOver = false;
-                    if ( !HasFocus() )
-                    {
-                        SetViewState(ViewState::NORMAL);
-                        Invalidate();
-                    }
-                }
-            }
-        }
-        else if ( pWinEvent->GetId() == VCLEVENT_WINDOW_ACTIVATE &&
-                  pWinEvent->GetWindow() == mpSidebarTextControl )
-        {
-            const bool bLockView = mrView.GetWrtShell().IsViewLocked();
-            mrView.GetWrtShell().LockView( true );
-
-            if ( !IsPreview() )
-            {
-                mrMgr.SetActiveSidebarWin( this );
-            }
-
-            mrView.GetWrtShell().LockView( bLockView );
-            mrMgr.MakeVisible( this );
         }
     }
-    return sal_IntPtr(true);
+    else if ( rEvent.GetId() == VCLEVENT_WINDOW_ACTIVATE &&
+              rEvent.GetWindow() == mpSidebarTextControl )
+    {
+        const bool bLockView = mrView.GetWrtShell().IsViewLocked();
+        mrView.GetWrtShell().LockView( true );
+
+        if ( !IsPreview() )
+        {
+            mrMgr.SetActiveSidebarWin( this );
+        }
+
+        mrView.GetWrtShell().LockView( bLockView );
+        mrMgr.MakeVisible( this );
+    }
 }
 
 void SwSidebarWin::Delete()

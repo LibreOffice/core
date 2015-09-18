@@ -820,14 +820,11 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
     }
 }
 
-IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED(SidebarController, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
-    if (pEvent==NULL)
-        return sal_IntPtr(false);
-
-    if (pEvent->GetWindow() == mpParentWindow)
+    if (rEvent.GetWindow() == mpParentWindow)
     {
-        switch (pEvent->GetId())
+        switch (rEvent.GetId())
         {
             case VCLEVENT_WINDOW_SHOW:
             case VCLEVENT_WINDOW_RESIZE:
@@ -857,9 +854,9 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
                 break;
         }
     }
-    else if (pEvent->GetWindow()==mpSplitWindow && mpSplitWindow!=nullptr)
+    else if (rEvent.GetWindow()==mpSplitWindow && mpSplitWindow!=nullptr)
     {
-        switch (pEvent->GetId())
+        switch (rEvent.GetId())
         {
             case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
                 mnWidthOnSplitterButtonDown = mpParentWindow->GetSizePixel().Width();
@@ -877,8 +874,6 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
                 break;
          }
     }
-
-    return sal_IntPtr(true);
 }
 
 void SidebarController::ShowPopupMenu (

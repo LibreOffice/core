@@ -92,27 +92,23 @@ void WindowCommandDispatch::impl_stopListening()
     }
 }
 
-IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
+IMPL_LINK_TYPED(WindowCommandDispatch, impl_notifyCommand, VclWindowEvent&, rEvent, void)
 {
-    if ( ! pParam)
-        return 0L;
-
-    const VclWindowEvent* pEvent = static_cast<VclWindowEvent*>(pParam);
-    if (pEvent->GetId() == VCLEVENT_OBJECT_DYING)
+    if (rEvent.GetId() == VCLEVENT_OBJECT_DYING)
     {
         impl_stopListening();
-        return 0L;
+        return;
     }
-    if (pEvent->GetId() != VCLEVENT_WINDOW_COMMAND)
-        return 0L;
+    if (rEvent.GetId() != VCLEVENT_WINDOW_COMMAND)
+        return;
 
-    const CommandEvent* pCommand = static_cast<CommandEvent*>(pEvent->GetData());
+    const CommandEvent* pCommand = static_cast<CommandEvent*>(rEvent.GetData());
     if (pCommand->GetCommand() != CommandEventId::ShowDialog)
-        return 0L;
+        return;
 
     const CommandDialogData* pData = pCommand->GetDialogData();
     if ( ! pData)
-        return 0L;
+        return;
 
     const ShowDialogId nCommand = pData->GetDialogId();
     OUString sCommand;
@@ -128,12 +124,10 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
                 break;
 
         default :
-                return 0L;
+                return;
     }
 
     impl_dispatchCommand(sCommand);
-
-    return 0L;
 }
 
 void WindowCommandDispatch::impl_dispatchCommand(const OUString& sCommand)

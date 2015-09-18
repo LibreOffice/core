@@ -229,7 +229,7 @@ public:
     VclPtr<vcl::Window> mpNextOverlap;
     VclPtr<vcl::Window> mpLastFocusWindow;
     VclPtr<vcl::Window> mpDlgCtrlDownWindow;
-    VclEventListeners   maEventListeners;
+    std::vector<Link<VclWindowEvent&,void>> maEventListeners;
     VclEventListeners   maChildEventListeners;
 
     // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call

@@ -223,45 +223,40 @@ IMPL_LINK_TYPED(FormShellManager, ConfigurationUpdateHandler, sd::tools::EventMu
     }
 }
 
-IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED(FormShellManager, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
-    if (pEvent != NULL)
+    switch (rEvent.GetId())
     {
-        switch (pEvent->GetId())
+        case VCLEVENT_WINDOW_GETFOCUS:
         {
-            case VCLEVENT_WINDOW_GETFOCUS:
+            // The window of the center pane got the focus.  Therefore
+            // the form shell is moved to the bottom of the object bar
+            // stack.
+            ViewShell* pShell = mrBase.GetMainViewShell().get();
+            if (pShell!=NULL && mbFormShellAboveViewShell)
             {
-                // The window of the center pane got the focus.  Therefore
-                // the form shell is moved to the bottom of the object bar
-                // stack.
-                ViewShell* pShell = mrBase.GetMainViewShell().get();
-                if (pShell!=NULL && mbFormShellAboveViewShell)
-                {
-                    mbFormShellAboveViewShell = false;
-                    ViewShellManager::UpdateLock aLock (mrBase.GetViewShellManager());
-                    mrBase.GetViewShellManager()->SetFormShell(
-                        pShell,
-                        mpFormShell,
-                        mbFormShellAboveViewShell);
-                }
+                mbFormShellAboveViewShell = false;
+                ViewShellManager::UpdateLock aLock (mrBase.GetViewShellManager());
+                mrBase.GetViewShellManager()->SetFormShell(
+                    pShell,
+                    mpFormShell,
+                    mbFormShellAboveViewShell);
             }
+        }
+        break;
+
+        case VCLEVENT_WINDOW_LOSEFOCUS:
+            // We follow the sloppy focus policy.  Losing the focus is
+            // ignored.  We wait for the focus to be placed either in
+            // the window or the form shell.  The later, however, is
+            // notified over the FormControlActivated handler, not this
+            // one.
             break;
 
-            case VCLEVENT_WINDOW_LOSEFOCUS:
-                // We follow the sloppy focus policy.  Losing the focus is
-                // ignored.  We wait for the focus to be placed either in
-                // the window or the form shell.  The later, however, is
-                // notified over the FormControlActivated handler, not this
-                // one.
-                break;
-
-            case VCLEVENT_OBJECT_DYING:
-                mpMainViewShellWindow = NULL;
-                break;
-        }
+        case VCLEVENT_OBJECT_DYING:
+            mpMainViewShellWindow = NULL;
+           break;
     }
-
-    return 0;
 }
 
 void FormShellManager::Notify(SfxBroadcaster&, const SfxHint& rHint)

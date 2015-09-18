@@ -42,7 +42,7 @@ public:
     ~PopupWindowControllerImpl();
 
     void SetPopupWindow( vcl::Window* pPopupWindow, ToolBox* pToolBox );
-    DECL_LINK( WindowEventListener, VclSimpleEvent* );
+    DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
 
 private:
     VclPtr<vcl::Window> mpPopupWindow;
@@ -77,46 +77,41 @@ void PopupWindowControllerImpl::SetPopupWindow( vcl::Window* pPopupWindow, ToolB
     }
 }
 
-IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( PopupWindowControllerImpl, WindowEventListener, VclWindowEvent&, rWindowEvent, void )
 {
-    VclWindowEvent* pWindowEvent = dynamic_cast< VclWindowEvent* >( pEvent );
-    if( pWindowEvent )
+    switch( rWindowEvent.GetId() )
     {
-        switch( pWindowEvent->GetId() )
-        {
-        case VCLEVENT_WINDOW_CLOSE:
-        case VCLEVENT_WINDOW_ENDPOPUPMODE:
-            SetPopupWindow(0,0);
-            break;
+    case VCLEVENT_WINDOW_CLOSE:
+    case VCLEVENT_WINDOW_ENDPOPUPMODE:
+        SetPopupWindow(0,0);
+        break;
 
-        case VCLEVENT_WINDOW_SHOW:
+    case VCLEVENT_WINDOW_SHOW:
+    {
+        if( mpPopupWindow )
         {
-            if( mpPopupWindow )
-            {
-                if( mpToolBox )
-                    mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_OPEN, static_cast<void*>(mpPopupWindow) );
-                mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_GETFOCUS, 0 );
+            if( mpToolBox )
+                mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_OPEN, static_cast<void*>(mpPopupWindow) );
+            mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_GETFOCUS, 0 );
 
-                svtools::ToolbarMenu* pToolbarMenu = dynamic_cast< svtools::ToolbarMenu* >( mpPopupWindow.get() );
-                if( pToolbarMenu )
-                    pToolbarMenu->highlightFirstEntry();
-                break;
-            }
+            svtools::ToolbarMenu* pToolbarMenu = dynamic_cast< svtools::ToolbarMenu* >( mpPopupWindow.get() );
+            if( pToolbarMenu )
+                pToolbarMenu->highlightFirstEntry();
             break;
         }
-        case VCLEVENT_WINDOW_HIDE:
-        {
-            if( mpPopupWindow )
-            {
-                mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS, 0 );
-                if( mpToolBox )
-                    mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_CLOSE, static_cast<void*>(mpPopupWindow) );
-            }
-            break;
-        }
-        }
+        break;
     }
-    return 1;
+    case VCLEVENT_WINDOW_HIDE:
+    {
+        if( mpPopupWindow )
+        {
+            mpPopupWindow->CallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS, 0 );
+            if( mpToolBox )
+                mpToolBox->CallEventListeners( VCLEVENT_DROPDOWN_CLOSE, static_cast<void*>(mpPopupWindow) );
+        }
+        break;
+    }
+    }
 }
 
 

@@ -334,7 +334,7 @@ namespace rptui
     public:
         OReportController(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & the_context);
 
-        DECL_LINK( EventLstHdl, VclWindowEvent* );
+        DECL_LINK_TYPED( EventLstHdl, VclWindowEvent&, void );
         DECL_LINK_TYPED( OnCreateHdl, OAddFieldWindow&, void);
 
         DECLARE_XINTERFACE( )

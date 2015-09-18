@@ -583,17 +583,16 @@ IMPL_LINK_NOARG_TYPED(ShowWindow, MouseTimeoutHdl, Timer *, void)
     }
 }
 
-IMPL_LINK( ShowWindow, EventHdl, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( ShowWindow, EventHdl, VclWindowEvent&, rEvent, void )
 {
     if( mbMouseAutoHide )
     {
-        if (pEvent->GetId() == VCLEVENT_WINDOW_SHOW)
+        if (rEvent.GetId() == VCLEVENT_WINDOW_SHOW)
         {
             maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
             maMouseTimer.Start();
         }
     }
-    return 0L;
 }
 
 void ShowWindow::SetPresentationArea( const Rectangle& rPresArea )

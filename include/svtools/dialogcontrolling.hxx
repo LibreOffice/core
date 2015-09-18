@@ -115,7 +115,7 @@ namespace svt
         void    impl_updateAll( const VclWindowEvent& _rTriggerEvent );
         void    impl_update( const VclWindowEvent& _rTriggerEvent, vcl::Window& _rWindow );
 
-        DECL_LINK( OnWindowEvent, const VclWindowEvent* );
+        DECL_LINK_TYPED( OnWindowEvent, VclWindowEvent&, void );
 
     private:
         DialogController( const DialogController& ) SAL_DELETED_FUNCTION;

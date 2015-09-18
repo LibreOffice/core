@@ -82,7 +82,7 @@ private:
 
 protected:
     Size            ImplCalcWindowSize( const Size& rOutSz ) const;
-    DECL_LINK(      WindowEventListener, VclSimpleEvent* );
+    DECL_LINK_TYPED(WindowEventListener, VclWindowEvent&, void );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >

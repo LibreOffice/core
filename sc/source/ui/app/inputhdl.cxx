@@ -765,18 +765,16 @@ void ScInputHandler::GetFormulaData()
     }
 }
 
-IMPL_LINK( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent&, rEvent, void )
 {
-    if( pEvent->GetId() == VCLEVENT_OBJECT_DYING || pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
+    if( rEvent.GetId() == VCLEVENT_OBJECT_DYING || rEvent.GetId() == VCLEVENT_WINDOW_HIDE )
         HideTip();
-    return 0;
 }
 
-IMPL_LINK( ScInputHandler, ShowHideTipVisibleSecParentListener, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( ScInputHandler, ShowHideTipVisibleSecParentListener, VclWindowEvent&, rEvent, void )
 {
-    if( pEvent->GetId() == VCLEVENT_OBJECT_DYING || pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
+    if( rEvent.GetId() == VCLEVENT_OBJECT_DYING || rEvent.GetId() == VCLEVENT_WINDOW_HIDE )
         HideTipBelow();
-    return 0;
 }
 
 void ScInputHandler::HideTip()

@@ -817,7 +817,7 @@ protected:
     virtual void onFocusLost( const ::com::sun::star::awt::FocusEvent& _rEvent );
 
 private:
-    DECL_LINK( OnWindowEvent, VclWindowEvent* );
+    DECL_LINK_TYPED( OnWindowEvent, VclWindowEvent&, void );
 };
 
 

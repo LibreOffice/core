@@ -168,7 +168,7 @@ class SwSidebarWin : public vcl::Window
             return mbReadonly;
         }
 
-        DECL_LINK( WindowEventListener, VclSimpleEvent* );
+        DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
         inline bool IsMouseOverSidebarWin() const { return mbMouseOver; }
 
         void SetLanguage(const SvxLanguageItem& rNewItem);

@@ -188,7 +188,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
         ".uno:VerticalTextState");
 
     SetSizePixel(GetParent()->GetSizePixel());
-    Link<> aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
+    Link<VclWindowEvent&,void> aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
     GetParent()->AddEventListener(aWindowEventHandlerLink);
 }
 
@@ -221,7 +221,7 @@ void LayoutMenu::Dispose()
     Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,LayoutMenu,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener (aLink);
 
-    Link<> aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
+    Link<VclWindowEvent&,void> aWindowEventHandlerLink (LINK(this,LayoutMenu,WindowEventHandler));
     GetParent()->RemoveEventListener(aWindowEventHandlerLink);
 }
 
@@ -736,23 +736,17 @@ IMPL_LINK_TYPED(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiple
     }
 }
 
-IMPL_LINK(LayoutMenu, WindowEventHandler, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED(LayoutMenu, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {
-    if (pEvent != NULL)
+    switch (rEvent.GetId())
     {
-        switch (pEvent->GetId())
-        {
-            case VCLEVENT_WINDOW_SHOW:
-            case VCLEVENT_WINDOW_RESIZE:
-                SetSizePixel(GetParent()->GetSizePixel());
-                return sal_IntPtr(true);
+        case VCLEVENT_WINDOW_SHOW:
+        case VCLEVENT_WINDOW_RESIZE:
+            SetSizePixel(GetParent()->GetSizePixel());
+            break;
 
-            default:
-                return sal_IntPtr(false);
-        }
+        default: break;
     }
-
-    return sal_IntPtr(false);
 }
 
 void LayoutMenu::DataChanged (const DataChangedEvent& rEvent)
