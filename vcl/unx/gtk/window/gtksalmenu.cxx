@@ -392,20 +392,19 @@ static gboolean RefreshMenusUnity(gpointer)
     return FALSE;
 }
 
-static long RefreshMenusUnity(void*, void*)
+static void RefreshMenusUnity(void*, LinkParamNone*)
 {
     if(!bInvalidMenus) {
         g_timeout_add(10, &RefreshMenusUnity, NULL);
         bInvalidMenus = true;
     }
-    return 0;
 }
 
-static Link<>* getRefreshLinkInstance()
+static Link<LinkParamNone*,void>* getRefreshLinkInstance()
 {
-    static Link<>* pLink = NULL;
+    static Link<LinkParamNone*,void>* pLink = NULL;
     if(!pLink) {
-        pLink = new Link<>(NULL, &RefreshMenusUnity);
+        pLink = new Link<LinkParamNone*,void>(NULL, &RefreshMenusUnity);
     }
     return pLink;
 }
