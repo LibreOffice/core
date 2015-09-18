@@ -1,11 +1,13 @@
 diff -ur graphite.org/src/inc/Main.h graphite/src/inc/Main.h
 --- graphite.org/src/inc/Main.h	2015-09-07 20:09:25.572279671 +0700
---- graphite/src/inc/Main.h	2015-09-07 20:09:25.572279671 +0700
-@@ -25,6 +25,7 @@
++++ graphite/src/inc/Main.h	2015-09-07 20:09:25.572279671 +0700
+@@ -25,6 +25,9 @@
  of the License or (at your option) any later version.
  */
  #pragma once
++#ifdef _WIN32
 +#pragma warning(disable: 4510 4610)
++#endif
  
  #include <cstdlib>
  #include "graphite2/Types.h"
@@ -33,7 +35,7 @@ diff -ur graphite.org/src/json.cpp graphite/src/json.cpp
 +#endif
  json & json::operator << (json::boolean b) throw()  { context(seq); fputs(b ? "true" : "false", _stream); return *this; }
  json & json::operator << (json::_null_t) throw()    { context(seq); fputs("null",_stream); return *this; }
- 
+
 diff -ur graphite.org/src/Pass.cpp graphite/src/Pass.cpp
 --- graphite.org/src/Pass.cpp	2015-02-03 14:49:24.413102200 +0100
 +++ graphite/src/Pass.cpp	2015-02-03 14:50:37.873303900 +0100
