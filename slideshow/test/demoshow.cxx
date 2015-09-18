@@ -19,11 +19,13 @@
  *
  *************************************************************/
 
-
+#include "precompiled_slideshow.hxx"
 
 #include <sal/main.h>
 #include <rtl/ref.hxx>
 #include <rtl/bootstrap.hxx>
+#include <osl/process.h>
+#include <tools/extendapplicationenvironment.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/servicefactory.hxx>
@@ -575,4 +577,14 @@ void DemoApp::Main()
 }
 }
 
-DemoApp aApp;
+sal_Bool SVMain();
+
+int main(int argc, char **argv)
+{
+    tools::extendApplicationEnvironment();
+
+    DemoApp aApp;
+    SVMain();
+
+    return 0;
+}
