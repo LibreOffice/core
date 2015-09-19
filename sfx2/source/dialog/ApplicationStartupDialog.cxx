@@ -14,6 +14,7 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <tools/date.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -60,6 +61,7 @@ IMPL_LINK_NOARG(SfxApplicationStartupDialog, OkButtonClick)
     {
         std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
         officecfg::Office::Common::Startup::StartupMessage::set(false, batch);
+        officecfg::Office::Common::Startup::StartupMessageLastShown::set(::Date(::Date::SYSTEM).GetDate(), batch);
         batch->commit();
     }
 

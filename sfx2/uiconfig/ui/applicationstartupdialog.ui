@@ -85,7 +85,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkbutton1">
-                <property name="label" translatable="yes">Don't show this at next startup</property>
+                <property name="label" translatable="yes">Hide this message for a month</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
