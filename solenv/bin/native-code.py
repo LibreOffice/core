@@ -52,7 +52,7 @@ core_factory_list = [
     ("libxmlsecurity.a", "xmlsecurity_component_getFactory"),
     ("libxoflo.a", "xof_component_getFactory"),
     ("libxolo.a", "xo_component_getFactory"),
-    ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#ifndef ANDROID"),
+    ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#if !defined ANDROID && !defined IOS"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libvclcanvaslo.a", "vclcanvas_component_getFactory"),
     ("libmtfrendererlo.a", "mtfrenderer_component_getFactory"),
