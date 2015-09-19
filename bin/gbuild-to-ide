@@ -117,19 +117,21 @@ class GbuildParser:
         libmatch = GbuildParser.libpattern.match(line)
         if libmatch:
             libname = self.libnames.get(state.ilib, None)
-            self.libs.append(
-                GbuildLib(libmatch.group(2), libname, libmatch.group(1),
-                          state.include, state.include_sys, state.defs, state.cxxobjects,
-                          state.cxxflags, state.linked_libs))
+            if state.cxxobjects:
+                self.libs.append(
+                    GbuildLib(libmatch.group(2), libname, libmatch.group(1),
+                              state.include, state.include_sys, state.defs, state.cxxobjects,
+                              state.cxxflags, state.linked_libs))
             state = GbuildParserState()
             return state
         exematch = GbuildParser.exepattern.match(line)
         if exematch:
             exename = self.exenames.get(state.target, None)
-            self.exes.append(
-                GbuildExe(exematch.group(2), exename, exematch.group(1),
-                          state.include, state.include_sys, state.defs, state.cxxobjects,
-                          state.cxxflags, state.linked_libs))
+            if state.cxxobjects:
+                self.exes.append(
+                    GbuildExe(exematch.group(2), exename, exematch.group(1),
+                              state.include, state.include_sys, state.defs, state.cxxobjects,
+                              state.cxxflags, state.linked_libs))
             state = GbuildParserState()
             return state
         if line.find('# INCLUDE :=') == 0:
