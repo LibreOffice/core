@@ -44,8 +44,6 @@ ANDROID)
     ;;
 IOS)
     oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
-    oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/.libs/*.a"
-    oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/nss/.libs/*.a"
     ;;
 *)
     oslibs=
