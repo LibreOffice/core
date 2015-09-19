@@ -1139,7 +1139,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         {
             sal_uInt16          nItemId  = pMenu->GetItemId( nPos );
             OUString aCommand = pMenu->GetItemCommand( nItemId );
-            if ( nItemId == SID_MDIWINDOWLIST || aCommand == aSpecialWindowCommand)
+            if ( nItemId == SID_MDIWINDOWLIST || aCommand == aSpecialWindowCommand ||
+                 nItemId == SID_HELPMENU || aCommand == aCmdHelpMenu )
             {
                 // Retrieve addon popup menus and add them to our menu bar
                 framework::AddonMenuManager::MergeAddonPopupMenus( rFrame, nPos, static_cast<MenuBar *>(pMenu), m_xContext );
