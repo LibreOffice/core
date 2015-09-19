@@ -113,7 +113,7 @@ class SystemDialog(object):
             self.systemDialog.setMultiSelectionMode(multiSelect)
             self.systemDialog.setDisplayDirectory(self.subst(displayDirectory))
             if self.execute(self.systemDialog):
-                return self.systemDialog.getFiles()
+                return self.systemDialog.getSelectedFiles()
 
         except Exception:
             traceback.print_exc()
