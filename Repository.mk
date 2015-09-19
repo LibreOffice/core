@@ -909,4 +909,7 @@ $(eval $(call gb_ExternalExecutable_register_executables,\
 	xsltproc \
 ))
 
+$(eval $(call gb_Helper_register_external,abw,ABW))
+$(eval $(call gb_Helper_register_external,revenge,REVENGE))
+
 # vim: set noet sw=4 ts=4:

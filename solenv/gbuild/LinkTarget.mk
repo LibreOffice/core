@@ -407,12 +407,12 @@ $(WORKDIR)/Clean/LinkTarget/% :
 		$(call gb_LinkTarget_get_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_dep_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_headers_target,$(LINKTARGET)) \
+		$(call gb_LinkTarget_get_external_target,$(LINKTARGET)) \
 		$(call gb_LinkTarget_get_objects_list,$(LINKTARGET)) \
 		$(ILIBTARGET) \
 		$(AUXTARGETS)) && \
 		cat $${RESPONSEFILE} /dev/null | xargs -n 200 rm -fr && \
 		rm -f $${RESPONSEFILE}
-
 
 # cat the deps of all objects in one file, then we need only open that one file
 # call gb_LinkTarget__command_dep,dep_target,linktargetname
@@ -518,6 +518,9 @@ $(WORKDIR)/Headers/% :
 	$(eval $(gb_LinkTarget__get_headers_check))
 	$(COMMAND)
 
+$(WORKDIR)/LinkTarget/%.external : $(gb_Helper_MISCDUMMY)
+	touch $@
+
 # Explanation of some of the targets:
 # - gb_LinkTarget_get_headers_target is the target that guarantees all headers
 #   from the linked against libraries and the linktargets own generated headers
@@ -562,6 +565,7 @@ $(call gb_LinkTarget_get_headers_target,$(1)) : \
 	| $(dir $(call gb_LinkTarget_get_headers_target,$(1))).dir \
 	  $(dir $(call gb_LinkTarget_get_target,$(1))).dir \
 	  $(dir $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))).dir
+$(call gb_LinkTarget_get_external_target,$(1)) :| $(dir $(call gb_LinkTarget_get_external_target,$(1))).dir
 $(call gb_LinkTarget_get_target,$(1)) : ILIBTARGET :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS :=
@@ -905,6 +909,7 @@ $(call gb_LinkTarget_get_target,$(1)) : COBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : COBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_CObject_get_target,$(2))
+$(call gb_CObject_get_target,$(2)) : $(call gb_LinkTarget_get_external_target,$(1))
 $(call gb_CObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_CObject_get_target,$(2)) : T_CFLAGS += $(call gb_LinkTarget__get_cflags,$(4)) $(3)
 $(call gb_CObject_get_target,$(2)) : \
@@ -926,6 +931,7 @@ $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : CXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_CxxObject_get_target,$(2))
+$(call gb_CxxObject_get_target,$(2)) : $(call gb_LinkTarget_get_external_target,$(1))
 $(call gb_CxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_CxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_CxxObject_get_target,$(2)) : \
@@ -1344,6 +1350,13 @@ $(if $(filter undefined,$(origin gb_LinkTarget__use_$(2))),\
   $(if $(call gb_LinkTarget__is_merged,$(1)),$(call gb_LinkTarget__use_$(2),$(call gb_Library_get_linktarget,merged))) \
     $(call gb_LinkTarget__use_$(2),$(1)) \
 )
+
+$(if $(filter $(2):%,$(gb_Externals_REGISTERED)),\
+	$(call gb_LinkTarget_get_external_target,$(if $(call gb_LinkTarget__is_merged,$(1)),$(call gb_Library_get_linktarget,merged),$(1))) : \
+		$(call gb_External_get_target,$(2)) \
+	,$(call gb_Output_info,gb_LinkTarget_use_external: external $(2) is not registered) \
+)
+
 endef
 
 # $(call gb_LinkTarget_use_externals,library,externals)
