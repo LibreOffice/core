@@ -46,17 +46,6 @@ IOS)
     oslibs="$WORKDIR/UnpackedTarball/icu/source/stubdata/*.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/.libs/*.a"
     oslibs="$oslibs $WORKDIR/UnpackedTarball/xmlsec/src/nss/.libs/*.a"
-
-    # The NSS dylibs (which we don't build for iOS) are constructed
-    # from a bunch of static archives and some freestanding object
-    # files (that are not present in any of the static archives). We
-    # need the latter too, so collect them here into an archive of
-    # their own.
-    ar cr $WORKDIR/UnpackedTarball/nss/nss/lib/ckfw/builtins/out/libLOtemp.a \
-        $WORKDIR/UnpackedTarball/nss/nss/lib/ckfw/builtins/out/*.o \
-        $WORKDIR/UnpackedTarball/nss/nss/lib/freebl/out/Darwin_SINGLE_SHLIB/*.o
-
-    nsslibs=`find $WORKDIR/UnpackedTarball/nss -name 'lib*.a'`
     ;;
 *)
     oslibs=
@@ -67,7 +56,6 @@ echo $INSTDIR/$LIBO_LIB_FOLDER/lib*.a \
      $foolibs \
      $WORKDIR/LinkTarget/StaticLibrary/lib*.a \
      $oslibs \
-     $nsslibs \
      $WORKDIR/UnpackedTarball/coinmp/Cbc/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/coinmp/Cgl/src/.libs/*.a \
      $WORKDIR/UnpackedTarball/coinmp/Clp/src/.libs/*.a \
