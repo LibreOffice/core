@@ -35,4 +35,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
 ))
 endif
 
+$(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
+    external/libmwaw/c++11-narrowing.patch \
+))
+
 # vim: set noet sw=4 ts=4:

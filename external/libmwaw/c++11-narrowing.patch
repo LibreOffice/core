@@ -1,0 +1,11 @@
+--- src/lib/RagTime5StructManager.cxx
++++ src/lib/RagTime5StructManager.cxx
+@@ -307,7 +307,7 @@
+     fSz-=4;
+   long debDataPos=input->tell();
+   long endDataPos=debDataPos+fSz;
+-  switch (type) {
++  switch ((unsigned long) type) {
+   case 0x360c0:
+   case 0x368c0:
+     if (fSz!=1) {
