@@ -64,6 +64,7 @@ gb_Extension_get_workdir = $(WORKDIR)/Extension/$(1)
 gb_ExtensionPackage_get_target = $(WORKDIR)/ExtensionPackage/$(1).filelist
 gb_ExtensionPackage_get_preparation_target = $(WORKDIR)/ExtensionPackage/$(1).prepare
 gb_ExtensionPackageSet_get_target = $(WORKDIR)/ExtensionPackage/$(1).set
+gb_External_get_target = $(WORKDIR)/External/$(1)
 gb_ExternalPackage_get_target = $(WORKDIR)/ExternalPackage/$(1)
 gb_ExternalProject_get_statedir = $(WORKDIR)/ExternalProject/$(1)
 gb_ExternalProject_get_preparation_target = $(WORKDIR)/ExternalProject/$(1).prepare
@@ -107,6 +108,8 @@ gb_PythonTest_get_target = $(WORKDIR)/PythonTest/$(1)/done
 gb_LinkTarget__get_workdir_linktargetname = $(firstword $(subst <>,  ,$(1)))
 gb_LinkTarget_get_headers_target = \
  $(WORKDIR)/Headers/$(call gb_LinkTarget__get_workdir_linktargetname,$(1))
+gb_LinkTarget_get_external_target = \
+ $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).external
 gb_LinkTarget_get_objects_list = \
  $(WORKDIR)/LinkTarget/$(call gb_LinkTarget__get_workdir_linktargetname,$(1)).objectlist
 gb_LinkTarget_get_dep_target = \
