@@ -239,6 +239,18 @@ gb_Package_MODULE_$(1) += $(2)
 
 endef
 
+define gb_Helper_register_external
+$(if $(filter $(1):%,$(gb_Externals_REGISTERED)),\
+	$(call gb_Output_error,gb_Helper_register_external: already registered: $(1)))
+$(if $(filter undefined,$(origin SYSTEM_$(2))),\
+	$(call gb_Output_error,gb_Helper_register_external: SYSTEM_$(2), needed by $(1), is not defined))
+$(if $(and $(filter $(2),$(BUILD_TYPE)),$(SYSTEM_$(2))),\
+	$(call gb_Output_error,gb_Helper_register_external: inconsistent setting of BUILD_TYPE and SYSTEM_$(2)))
+
+gb_Externals_REGISTERED += $(1):$(2)
+
+endef
+
 # call gb_Helper_replace_if_different_and_touch,source,target,optional-touch-reference-file
 define gb_Helper_replace_if_different_and_touch
 if cmp -s $(1) $(2); then rm $(1); \

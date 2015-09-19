@@ -139,6 +139,12 @@ define gb_ExternalProject_use_external
 $(if $(filter undefined,$(origin gb_ExternalProject__use_$(2))),\
   $(error gb_ExternalProject_use_external: unknown external: $(2)),\
   $(call gb_ExternalProject__use_$(2),$(1)))
+
+$(if $(filter $(2):%,$(gb_Externals_REGISTERED)),\
+	$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_External_get_target,$(2)) \
+	,$(call gb_Output_info,gb_LinkTarget_use_external: external $(2) is not registered) \
+)
+
 endef
 
 define gb_ExternalProject_use_externals
