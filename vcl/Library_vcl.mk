@@ -61,7 +61,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	$(if $(filter LINUX MACOSX,$(OS)), \
 		curl) \
 	jpeg \
-	$(if $(filter-out WNT,$(OS)), \
+	$(if $(filter-out IOS WNT,$(OS)), \
 		nss3 \
 		plc4) \
 	libeot \
