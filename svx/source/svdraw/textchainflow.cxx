@@ -28,7 +28,7 @@
 TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
     : mpTargetLink(pChainTarget)
 {
-    fprintf(stderr, "\n[TEXTCHAINFLOW] Creating a new TextChainFlow\n");
+    SAL_INFO("svx.chaining", "[TEXTCHAINFLOW] Creating a new TextChainFlow");
 
     mpTextChain = mpTargetLink->GetTextChain();
     mpNextLink = mpTargetLink->GetNextLinkInChain();
@@ -205,7 +205,8 @@ void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
     OutlinerParaObject *pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
 
-    fprintf(stderr, "[TEXTCHAINFLOW - OF] SOURCE box set to %d paras \n", pNewText->GetTextObject().GetParagraphCount());
+    SAL_INFO("svx.chaining", "[TEXTCHAINFLOW - OF] SOURCE box set to "
+             << pNewText->GetTextObject().GetParagraphCount() << " paras");
 
     // adds it to current outliner anyway (useful in static decomposition)
     pNonOverflOutl->SetText(*pNewText);
@@ -221,20 +222,22 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
 {
     // prevent copying text in same box
     if ( mpNextLink ==  mpTargetLink ) {
-        fprintf(stderr, "[CHAINING] Trying to copy text for next link in same object\n");
+        SAL_INFO("svx.chaining", "[CHAINING] Trying to copy text for next link in same object");
         return;
     }
 
     OutlinerParaObject *pNewText =
         mpOverflChText->InsertOverflowingText(pOverflOutl,
                                               mpNextLink->GetOutlinerParaObject());
-    fprintf(stderr, "[TEXTCHAINFLOW - OF] DEST box set to %d paras \n", pNewText->GetTextObject().GetParagraphCount());
+    SAL_INFO("svx.chaining", "[TEXTCHAINFLOW - OF] DEST box set to "
+             << pNewText->GetTextObject().GetParagraphCount() << " paras");
 
     if (pNewText)
         mpNextLink->NbcSetOutlinerParaObject(pNewText);
 
     // Set Deep Merge status
-    fprintf(stderr, "[DEEPMERGE] Setting deepMerge to %d\n", mpOverflChText->IsLastParaInterrupted());
+    SAL_INFO("svx.chaining", "[DEEPMERGE] Setting deepMerge to "
+             << mpOverflChText->IsLastParaInterrupted());
     GetTextChain()->SetIsPartOfLastParaInNextLink(
                           mpTargetLink,
                           mpOverflChText->IsLastParaInterrupted());
@@ -284,7 +287,7 @@ UFlowChainedText *TextChainFlow::GetUnderflowChainedText() const
 EditingTextChainFlow::EditingTextChainFlow(SdrTextObj *pLinkTarget) :
     TextChainFlow(pLinkTarget)
 {
-    fprintf(stderr, "[TEXTCHAINFLOW] Creating a new EditingTextChainFlow\n");
+    SAL_INFO("svx.chaining", "[TEXTCHAINFLOW] Creating a new EditingTextChainFlow");
 }
 
 void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)

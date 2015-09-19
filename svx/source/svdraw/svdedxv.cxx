@@ -543,7 +543,7 @@ void SdrObjEditView::ImpChainingEventHdl()
             pTextChain->SetNilChainingEvent(pTextObj, false);
         } else {
             // XXX
-            fprintf(stderr, "[OnChaining] No Edit Outliner View\n");
+            SAL_INFO("svx.chaining", "[OnChaining] No Edit Outliner View");
         }
     }
 

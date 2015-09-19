@@ -564,18 +564,13 @@ void ImpEditEngine::CheckAutoPageSize()
 
 void ImpEditEngine::CheckPageOverflow()
 {
-    // FIXME(matteocam)
-    /* fprintf( stderr, IsPageOverflow(aPaperSize, aPrevPaperSize)
-                        ? "YES Overflow!\n"  : "NO Overflow!\n" ); */
-    // setting overflow status
-
-    fprintf(stderr, "[CONTROL_STATUS] AutoPageSize is %s",  ( aStatus.GetControlWord() & EEControlBits::AUTOPAGESIZE ) ? "ON\n" : "OFF\n" );
+    SAL_INFO("editeng.chaining", "[CONTROL_STATUS] AutoPageSize is " << (( aStatus.GetControlWord() & EEControlBits::AUTOPAGESIZE ) ? "ON" : "OFF") );
 
     sal_uInt32 nBoxHeight = GetMaxAutoPaperSize().Height();
-    fprintf(stderr, "[OVERFLOW-CHECK] Current MaxAutoPaperHeight is %d\n", nBoxHeight);
+    SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current MaxAutoPaperHeight is " << nBoxHeight);
 
     sal_uInt32 nTxtHeight = CalcTextHeight(NULL);
-    fprintf(stderr, "[OVERFLOW-CHECK] Current Text Height is %d\n", nTxtHeight);
+    SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current Text Height is " << nTxtHeight);
 
     sal_uInt32 nParaCount = GetParaPortions().Count();
     sal_uInt32 nFirstLineCount = GetLineCount(0);
@@ -4638,7 +4633,7 @@ void ImpEditEngine::ImplUpdateOverflowingParaNum(sal_uInt32 nPaperHeight)
         if ( nY > nPaperHeight /*nCurTextHeight*/ ) // found first paragraph overflowing
         {
             mnOverflowingPara = nPara;
-            fprintf(stderr, "[CHAINING] Setting first overflowing #Para#: %d\n", nPara);
+            SAL_INFO("editeng.chaining", "[CHAINING] Setting first overflowing #Para#: " << nPara);
             ImplUpdateOverflowingLineNum( nPaperHeight, nPara, nY-nPH);
             return;
         }
@@ -4664,13 +4659,13 @@ void ImpEditEngine::ImplUpdateOverflowingLineNum(sal_uInt32 nPaperHeight,
 
         // Debugging output
         if (nLine == 0) {
-            fprintf(stderr, "[CHAINING] First line has height %d\n", nLH);
+            SAL_INFO("editeng.chaining", "[CHAINING] First line has height " << nLH);
         }
 
         if ( nY > nPaperHeight ) // found first line overflowing
         {
             mnOverflowingLine = nLine;
-            fprintf(stderr, "[CHAINING] Setting first overflowing -Line- to: %d\n", nLine);
+            SAL_INFO("editeng.chaining", "[CHAINING] Setting first overflowing -Line- to: " << nLine);
             return;
         }
     }

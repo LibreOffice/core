@@ -2081,17 +2081,16 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
 
     // Defensive check: oveflowing para index beyond actual # of paragraphs?
     if ( nCount > GetParagraphCount()-1) {
-        fprintf(stderr,
-                "[Overflowing] Ops, trying to retrieve para %d when max index is %d\n",
-                nCount,
-                GetParagraphCount()-1);
+        SAL_INFO("editeng.chaining",
+                 "[Overflowing] Ops, trying to retrieve para "
+                 << nCount << " when max index is " << GetParagraphCount()-1 );
         return NULL;
     }
 
      if (nCount < 0)
      {
-        fprintf(stderr,
-                "[Overflowing] No Overflowing text but GetNonOverflowinText called?!\n");
+        SAL_INFO("editeng.chaining",
+                 "[Overflowing] No Overflowing text but GetNonOverflowinText called?!");
         return NULL;
      }
 
@@ -2189,10 +2188,10 @@ OverflowingText *Outliner::GetOverflowingText() const
 
     // Defensive check: oveflowing para index beyond actual # of paragraphs?
     if ( pEditEngine->GetOverflowingParaNum() > GetParagraphCount()-1) {
-        fprintf(stderr,
-                "[Overflowing] Ops, trying to retrieve para %d when max index is %d\n",
-                pEditEngine->GetOverflowingParaNum(),
-                GetParagraphCount()-1);
+        SAL_INFO("editeng.chaining",
+                 "[Overflowing] Ops, trying to retrieve para "
+                 << pEditEngine->GetOverflowingParaNum() << " when max index is "
+                 << GetParagraphCount()-1 );
         return NULL;
     }
 
