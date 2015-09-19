@@ -27,11 +27,11 @@ class ServiceDocumenter : public ::cppu::WeakImplHelper<
         // XServiceDocumenter
         virtual ::rtl::OUString SAL_CALL getCoreBaseUrl() /* throw (::css::uno::RuntimeException, ::std::exception) */ SAL_OVERRIDE
             { return m_sCoreBaseUrl; };
-        virtual void SAL_CALL setCoreBaseUrl( const ::rtl::OUString& _corebaseurl ) /* throw (::css::uno::RuntimeException, ::std::exception) */ SAL_OVERRIDE
+        virtual void SAL_CALL setCoreBaseUrl( const ::rtl::OUString& sCoreBaseUrl ) /* throw (::css::uno::RuntimeException, ::std::exception) */ SAL_OVERRIDE
             { m_sCoreBaseUrl = sCoreBaseUrl; };
         virtual ::rtl::OUString SAL_CALL getServiceBaseUrl() /* throw (::css::uno::RuntimeException, ::std::exception) */ SAL_OVERRIDE
             { return m_sServiceBaseUrl; };
-        virtual void SAL_CALL setServiceBaseUrl( const ::rtl::OUString& _servicebaseurl ) /* throw (::css::uno::RuntimeException, ::std::exception) */ SAL_OVERRIDE
+        virtual void SAL_CALL setServiceBaseUrl( const ::rtl::OUString& sServiceBaseUrl ) /* throw (::css::uno::RuntimeException, ::std::exception) */ SAL_OVERRIDE
             { m_sServiceBaseUrl = sServiceBaseUrl; };
         virtual void showServiceDocs( const ::css::uno::Reference< ::css::lang::XServiceInfo >& xService) SAL_OVERRIDE;
         virtual void showInterfaceDocs( const ::css::uno::Reference< ::css::lang::XTypeProvider >& xTypeProvider ) SAL_OVERRIDE;
