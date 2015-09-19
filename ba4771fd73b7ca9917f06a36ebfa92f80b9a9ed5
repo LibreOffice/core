@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_6241c739",
+        "filename": "sw/source/core/layout/findfrm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-09-19T05:38:20Z",
+      "side": 1,
+      "message": "Will simplify as this is no longer needed (hide-whitespace is only active in single-page view).",
+      "range": {
+        "startLine": 597,
+        "startChar": 0,
+        "endLine": 598,
+        "endChar": 40
+      },
+      "revId": "ba4771fd73b7ca9917f06a36ebfa92f80b9a9ed5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
