@@ -2020,7 +2020,7 @@ void ImpUpdateChainLinks(SdrTextObj *pTextObj, OUString aNextLinkName)
     SdrTextObj *pNextTextObj = dynamic_cast< SdrTextObj * >
                                 (ImpGetObjByName(pPage, aNextLinkName));
     if (!pNextTextObj) {
-        fprintf(stderr, "[CHAINING] Can't find object as next link.\n");
+        SAL_INFO("svx.chaining", "[CHAINING] Can't find object as next link.");
         return;
     }
 
@@ -2061,25 +2061,21 @@ void SdrTextObj::onChainingEvent()
     EditingTextChainFlow aTxtChainFlow(this);
     aTxtChainFlow.CheckForFlowEvents(pEdtOutl);
 
-
     if (aTxtChainFlow.IsOverflow()) {
-        fprintf(stderr, "[CHAINING] Overflow going on\n");
+        SAL_INFO("svx.chaining", "[CHAINING] Overflow going on");
         // One outliner is for non-overflowing text, the other for overflowing text
         // We remove text directly from the editing outliner
         aTxtChainFlow.ExecuteOverflow(pEdtOutl, &aDrawOutliner);
     } else if (aTxtChainFlow.IsUnderflow()) {
-        fprintf(stderr, "[CHAINING] Underflow going on\n");
+        SAL_INFO("svx.chaining", "[CHAINING] Underflow going on");
         // underflow-induced overflow
         aTxtChainFlow.ExecuteUnderflow(&aDrawOutliner);
         bool bIsOverflowFromUnderflow = aTxtChainFlow.IsOverflow();
         // handle overflow
         if (bIsOverflowFromUnderflow) {
-            fprintf(stderr, "[CHAINING] Overflow going on (underflow induced)\n");
+            SAL_INFO("svx.chaining", "[CHAINING] Overflow going on (underflow induced)");
             // prevents infinite loops when setting text for editing outliner
-
-
             aTxtChainFlow.ExecuteOverflow(&aDrawOutliner, &aDrawOutliner);
-
         }
     }
 }

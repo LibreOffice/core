@@ -19,7 +19,6 @@
 
 #include "rtl/ustring.hxx"
 #include "tools/debug.hxx"
-#include "sal/info.hxx"
 
 #include "editeng/overflowingtxt.hxx"
 #include "editeng/outliner.hxx"
@@ -158,11 +157,9 @@ bool NonOverflowingText::IsLastParaInterrupted() const
 OutlinerParaObject *NonOverflowingText::RemoveOverflowingText(Outliner *pOutliner) const
 {
     pOutliner->QuickDelete(maContentSel);
-    fprintf(stderr, "Deleting selection from (Para: %d, Pos: %d) to (Para: %d, Pos: %d)\n",
-            maContentSel.nStartPara,
-            maContentSel.nStartPos,
-            maContentSel.nEndPara,
-            maContentSel.nEndPos);
+    SAL_INFO("editeng.chaining", "Deleting selection from (Para: " << maContentSel.nStartPara
+             << ", Pos: " << maContentSel.nStartPos << ") to (Para: " << maContentSel.nEndPara
+             << ", Pos: " << maContentSel.nEndPos << ")");
     return pOutliner->CreateParaObject();
 }
 
@@ -213,10 +210,10 @@ OutlinerParaObject *OFlowChainedText::InsertOverflowingText(Outliner *pOutliner,
         return NULL;
 
     if (mbIsDeepMerge) {
-        fprintf(stderr, "[TEXTCHAINFLOW - OF] Deep merging paras\n" );
+        SAL_INFO("editeng.chaining", "[TEXTCHAINFLOW - OF] Deep merging paras" );
         return mpOverflowingTxt->DeeplyMergeParaObject(pOutliner, pTextToBeMerged );
     } else {
-        fprintf(stderr, "[TEXTCHAINFLOW - OF] Juxtaposing paras\n" );
+        SAL_INFO("editeng.chaining", "[TEXTCHAINFLOW - OF] Juxtaposing paras" );
         return mpOverflowingTxt->JuxtaposeParaObject(pOutliner, pTextToBeMerged );
     }
 }
@@ -249,11 +246,11 @@ OutlinerParaObject *UFlowChainedText::CreateMergedUnderflowParaObject(Outliner *
     OutlinerParaObject *pNewText = NULL;
 
     if (mbIsDeepMerge) {
-        fprintf(stderr, "[TEXTCHAINFLOW - UF] Deep merging paras\n" );
+        SAL_INFO("editeng.chaining", "[TEXTCHAINFLOW - UF] Deep merging paras" );
         pNewText = TextChainingUtils::DeeplyMergeParaObject(mxUnderflowingTxt, pOutl, pNextLinkWholeText);
     } else {
         // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
-        fprintf(stderr, "[TEXTCHAINFLOW - UF] Juxtaposing paras\n" );
+        SAL_INFO("editeng.chaining", "[TEXTCHAINFLOW - UF] Juxtaposing paras" );
         pNewText = TextChainingUtils::JuxtaposeParaObject(mxUnderflowingTxt, pOutl, pNextLinkWholeText);
     }
 
