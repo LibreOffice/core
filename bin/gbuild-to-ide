@@ -20,6 +20,7 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 import traceback
 
+
 class GbuildParserState:
 
     def __init__(self):
@@ -242,7 +243,9 @@ class IdeIntegrationGenerator:
     def emit(self):
         pass
 
+
 class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
+
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
         self.oe_cdt = 'org.eclipse.cdt'
@@ -260,13 +263,13 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
         </projects>
         <buildSpec>
                 <buildCommand>
-                        <name>"""+ self.cdt_mb +""".genmakebuilder</name>
+                        <name>""" + self.cdt_mb + """.genmakebuilder</name>
                         <triggers>clean,full,incremental,</triggers>
                         <arguments>
                         </arguments>
                 </buildCommand>
                 <buildCommand>
-                        <name>"""+ self.cdt_mb +""".ScannerConfigBuilder</name>
+                        <name>""" + self.cdt_mb + """.ScannerConfigBuilder</name>
                         <triggers>full,incremental,</triggers>
                         <arguments>
                         </arguments>
@@ -281,7 +284,8 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 </projectDescription>
 """
 
-        return projectfiletemplate % {'name': name, 'comment': comment, 'xmlversion': xmlversion, 'encoding':encoding}
+        return projectfiletemplate % {'name': name, 'comment': comment, 'xmlversion': xmlversion, 'encoding': encoding}
+
 
 class DebugIntegrationGenerator(IdeIntegrationGenerator):
 
@@ -485,7 +489,6 @@ VersionControl=kdevgit
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
-
     def emit(self):
         for path in self.gbuildparser.target_by_path:
             self.write_includepaths(path)
@@ -668,11 +671,12 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
     def emit(self):
         self.rootlocation = './'
         for location in self.gbuildparser.target_by_location:
-            module = location.split('/')[-1]
-            module_directory = os.path.join(self.rootlocation, module)
+            # module = location.split('/')[-1]
+            # module_directory = os.path.join(self.rootlocation, module)
             for target in self.gbuildparser.target_by_location[location]:
                 # project_path = os.path.join(module_directory, '%s.pbxroj' % target.name)
                 self.write_xcodeproj(location, target)
+
 
 class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
@@ -924,9 +928,6 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         self.write_pretty_xml(proj_node, filters_path)
 
 
-
-
-
 class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
     def __init__(self, gbuildparser, ide):
@@ -937,7 +938,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 self.target_by_location[target.location] = set()
             self.target_by_location[target.location] |= set([target])
 
-        self._do_log = False # set to 'True' to activate log of QtCreatorIntegrationGenerator
+        self._do_log = False  # set to 'True' to activate log of QtCreatorIntegrationGenerator
         if self._do_log:
             qtlog_path = os.path.abspath('../qtlog_.txt')
             self.qtlog = open(qtlog_path, 'w')
@@ -957,63 +958,63 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         # so it can be different from the creation order.
         # So we prefix the names with the index.
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '0',
-            'base_folder' : module_folder,
-            'arg' : "",
-            'name' : "1-Build %s" % lib_folder,
-            }
+            'index': '0',
+            'base_folder': module_folder,
+            'arg': "",
+            'name': "1-Build %s" % lib_folder,
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '1',
-            'base_folder' : module_folder,
-            'arg' : "unitcheck",
-            'name' : "2-Local tests -- quick tests (unitcheck)",
-            }
+            'index': '1',
+            'base_folder': module_folder,
+            'arg': "unitcheck",
+            'name': "2-Local tests -- quick tests (unitcheck)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '2',
-            'base_folder' : module_folder,
-            'arg' : "unitcheck slowcheck",
-            'name' : "3-Local tests -- slow tests (unitcheck, slowcheck)",
-            }
+            'index': '2',
+            'base_folder': module_folder,
+            'arg': "unitcheck slowcheck",
+            'name': "3-Local tests -- slow tests (unitcheck, slowcheck)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '3',
-            'base_folder' : module_folder,
-            'arg' : "unitcheck slowcheck subsequentcheck",
-            'name' : "4-Local tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
-            }
+            'index': '3',
+            'base_folder': module_folder,
+            'arg': "unitcheck slowcheck subsequentcheck",
+            'name': "4-Local tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '4',
-            'base_folder' : self.base_folder,
-            'arg' : "unitcheck",
-            'name' : "5-Global tests -- quick tests (unitcheck)",
-            }
+            'index': '4',
+            'base_folder': self.base_folder,
+            'arg': "unitcheck",
+            'name': "5-Global tests -- quick tests (unitcheck)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '5',
-            'base_folder' : self.base_folder,
-            'arg' : "unitcheck slowcheck",
-            'name' : "6-Global tests -- slow tests (unitcheck, slowcheck)",
-            }
+            'index': '5',
+            'base_folder': self.base_folder,
+            'arg': "unitcheck slowcheck",
+            'name': "6-Global tests -- slow tests (unitcheck, slowcheck)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '6',
-            'base_folder' : self.base_folder,
-            'arg' : "unitcheck slowcheck subsequentcheck",
-            'name' : "7-Global tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
-            }
+            'index': '6',
+            'base_folder': self.base_folder,
+            'arg': "unitcheck slowcheck subsequentcheck",
+            'name': "7-Global tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '7',
-            'base_folder' : self.base_folder,
-            'arg' : "build-nocheck",
-            'name' : "8-Global build -- nocheck",
-            }
+            'index': '7',
+            'base_folder': self.base_folder,
+            'arg': "build-nocheck",
+            'name': "8-Global build -- nocheck",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '8',
-            'base_folder' : self.base_folder,
-            'arg' : "",
-            'name' : "9-Global build",
-            }
+            'index': '8',
+            'base_folder': self.base_folder,
+            'arg': "",
+            'name': "9-Global build",
+        }
 
         xml += QtCreatorIntegrationGenerator.build_configs_count_template % {
-            'nb' : '9',
-            }
+            'nb': '9',
+        }
         return xml
 
     def generate_meta_build_configs(self):
@@ -1022,80 +1023,80 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         # so it can be different from the creation order.
         # So we prefix the names with the index.
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '0',
-            'base_folder' : self.base_folder,
-            'arg' : "",
-            'name' : "01-Global Build",
-            }
+            'index': '0',
+            'base_folder': self.base_folder,
+            'arg': "",
+            'name': "01-Global Build",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '1',
-            'base_folder' : self.base_folder,
-            'arg' : "unitcheck",
-            'name' : "02-Global tests -- quick tests (unitcheck)",
-            }
+            'index': '1',
+            'base_folder': self.base_folder,
+            'arg': "unitcheck",
+            'name': "02-Global tests -- quick tests (unitcheck)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '2',
-            'base_folder' : self.base_folder,
-            'arg' : "unitcheck slowcheck",
-            'name' : "03-Global tests -- slow tests (unitcheck, slowcheck)",
-            }
+            'index': '2',
+            'base_folder': self.base_folder,
+            'arg': "unitcheck slowcheck",
+            'name': "03-Global tests -- slow tests (unitcheck, slowcheck)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '3',
-            'base_folder' : self.base_folder,
-            'arg' : "unitcheck slowcheck subsequentcheck",
-            'name' : "04-Global tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
-            }
+            'index': '3',
+            'base_folder': self.base_folder,
+            'arg': "unitcheck slowcheck subsequentcheck",
+            'name': "04-Global tests -- integration tests (unitcheck, slowcheck, subsequentcheck)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '4',
-            'base_folder' : self.base_folder,
-            'arg' : "perfcheck",
-            'name' : "05-Global tests -- performance tests (perfcheck)",
-            }
+            'index': '4',
+            'base_folder': self.base_folder,
+            'arg': "perfcheck",
+            'name': "05-Global tests -- performance tests (perfcheck)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '5',
-            'base_folder' : self.base_folder,
-            'arg' : "check",
-            'name' : "06-Global tests -- tests (check)",
-            }
+            'index': '5',
+            'base_folder': self.base_folder,
+            'arg': "check",
+            'name': "06-Global tests -- tests (check)",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '6',
-            'base_folder' : self.base_folder,
-            'arg' : "build-nocheck",
-            'name' : "07-Global build -- nocheck",
-            }
+            'index': '6',
+            'base_folder': self.base_folder,
+            'arg': "build-nocheck",
+            'name': "07-Global build -- nocheck",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '7',
-            'base_folder' : self.base_folder,
-            'arg' : "build-l10n-only",
-            'name' : "08-Global build -- build-l10n-only",
-            }
+            'index': '7',
+            'base_folder': self.base_folder,
+            'arg': "build-l10n-only",
+            'name': "08-Global build -- build-l10n-only",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '8',
-            'base_folder' : self.base_folder,
-            'arg' : "build-non-l10n-only",
-            'name' : "09-Global build -- build-non-l10n-only",
-            }
+            'index': '8',
+            'base_folder': self.base_folder,
+            'arg': "build-non-l10n-only",
+            'name': "09-Global build -- build-non-l10n-only",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '9',
-            'base_folder' : self.base_folder,
-            'arg' : "clean",
-            'name' : "10-Global build -- clean",
-            }
+            'index': '9',
+            'base_folder': self.base_folder,
+            'arg': "clean",
+            'name': "10-Global build -- clean",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '10',
-            'base_folder' : self.base_folder,
-            'arg' : "clean-build",
-            'name' : "11-Global build -- clean-build",
-            }
+            'index': '10',
+            'base_folder': self.base_folder,
+            'arg': "clean-build",
+            'name': "11-Global build -- clean-build",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_template % {
-            'index' : '11',
-            'base_folder' : self.base_folder,
-            'arg' : "clean-host",
-            'name' : "12-Global build -- clean-host",
-            }
+            'index': '11',
+            'base_folder': self.base_folder,
+            'arg': "clean-host",
+            'name': "12-Global build -- clean-host",
+        }
         xml += QtCreatorIntegrationGenerator.build_configs_count_template % {
-            'nb' : '12',
-            }
+            'nb': '12',
+        }
         return xml
 
     # By default, QtCreator creates 2 BuildStepList : "Build" et "Clean"
@@ -1168,9 +1169,9 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         # So we put "soffice.bin" that is ok for both.
         loexec = "%s/instdir/program/soffice.bin" % self.base_folder
         xml = QtCreatorIntegrationGenerator.run_configs_template % {
-                'loexec' : loexec,
-                'workdir' : self.base_folder
-            }
+            'loexec': loexec,
+            'workdir': self.base_folder
+        }
         return xml
 
     run_configs_template = """
@@ -1237,10 +1238,10 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         run_configs = self.generate_run_configs(lib_folder)
 
         xml = QtCreatorIntegrationGenerator.pro_user_template % {
-                'build_configs' : build_configs,
-                'deploy_configs' : deploy_configs,
-                'run_configs' : run_configs,
-            }
+            'build_configs': build_configs,
+            'deploy_configs': deploy_configs,
+            'run_configs': run_configs,
+        }
         return xml
 
     def generate_meta_pro_user_content(self):
@@ -1250,10 +1251,10 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         run_configs = self.generate_run_configs("")
 
         xml = QtCreatorIntegrationGenerator.pro_user_template % {
-                'build_configs' : build_configs,
-                'deploy_configs' : deploy_configs,
-                'run_configs' : run_configs,
-            }
+            'build_configs': build_configs,
+            'deploy_configs': deploy_configs,
+            'run_configs': run_configs,
+        }
         return xml
 
     pro_user_template = """<?xml version="1.0" encoding="UTF-8"?>
@@ -1373,14 +1374,14 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
     def get_source_extension(self, src_file):
         path = os.path.join(self.base_folder, src_file)
         for ext in (".cxx", ".cpp", ".c", ".mm"):
-            if os.path.isfile(path+ext):
+            if os.path.isfile(path + ext):
                 return ext
         return ""
 
     def get_header_extension(self, src_file):
         path = os.path.join(self.base_folder, src_file)
         for ext in (".hxx", ".hpp", ".h"):
-            if os.path.isfile(path+ext):
+            if os.path.isfile(path + ext):
                 return ext
         return ""
 
@@ -1410,12 +1411,12 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 # self._log("\n    file : %s" % file_)
                 ext = self.get_source_extension(file_)
                 if ext:
-                    sources_list.append(lopath(file_+ext))
+                    sources_list.append(lopath(file_ + ext))
 
                 # few cxxobject files have a header beside
                 ext = self.get_header_extension(file_)
                 if ext:
-                    headers_list.append(lopath(file_+ext))
+                    headers_list.append(lopath(file_ + ext))
 
             # List all include paths
             for hdir in lib.include:
@@ -1437,11 +1438,11 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 self.data_libs[lib_folder]['includepath'] |= set(includepath_list)
             else:
                 self.data_libs[lib_folder] = {
-                    'sources' : set(sources_list),
-                    'headers' : set(headers_list),
-                    'includepath' : set(includepath_list),
-                    'loc' : lib.location,
-                    'name' : lib_name
+                    'sources': set(sources_list),
+                    'headers': set(headers_list),
+                    'includepath': set(includepath_list),
+                    'loc': lib.location,
+                    'name': lib_name
                 }
 
     def emit(self):
@@ -1471,16 +1472,16 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             # create .pro file
             qt_pro_file = '%s/%s.pro' % (lib_loc, lib_name)
             try:
-                content = QtCreatorIntegrationGenerator.pro_template % {'sources' : sources, 'headers' : headers, 'includepath' : includepath}
+                content = QtCreatorIntegrationGenerator.pro_template % {'sources': sources, 'headers': headers, 'includepath': includepath}
                 mode = 'w+'
                 with open(qt_pro_file, mode) as fpro:
                     fpro.write(content)
                 self._log("created %s\n" % qt_pro_file)
 
             except Exception as e:
-                print("ERROR : creating pro file="+qt_pro_file, file=sys.stderr)
+                print("ERROR : creating pro file=" + qt_pro_file, file=sys.stderr)
                 print(e, file=sys.stderr)
-                temp = traceback.format_exc() # .decode('utf8')
+                temp = traceback.format_exc()  # .decode('utf8')
                 print(temp, file=sys.stderr)
                 print("\n\n", file=sys.stderr)
 
@@ -1492,7 +1493,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 self._log("created %s\n" % qt_pro_user_file)
 
             except Exception as e:
-                print("ERROR : creating pro.user file="+qt_pro_user_file, file=sys.stderr)
+                print("ERROR : creating pro.user file=" + qt_pro_user_file, file=sys.stderr)
                 print(e, file=sys.stderr)
                 temp = traceback.format_exc()
                 print(temp, file=sys.stderr)
@@ -1502,12 +1503,12 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         qt_meta_pro_file = 'lo.pro'
         try:
             subdirs = " \\\n".join(subdirs_list)
-            content = QtCreatorIntegrationGenerator.pro_meta_template % {'subdirs' : subdirs}
+            content = QtCreatorIntegrationGenerator.pro_meta_template % {'subdirs': subdirs}
             with open(qt_meta_pro_file, 'w+') as fmpro:
                 fmpro.write(content)
 
         except Exception as e:
-            print("ERROR : creating lo.pro file="+qt_meta_pro_file, file=sys.stderr)
+            print("ERROR : creating lo.pro file=" + qt_meta_pro_file, file=sys.stderr)
             print(e, file=sys.stderr)
             temp = traceback.format_exc()
             print(temp, file=sys.stderr)
@@ -1521,7 +1522,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             self._log("created %s\n" % qt_meta_pro_user_file)
 
         except Exception as e:
-            print("ERROR : creating lo.pro.user file="+qt_meta_pro_user_file, file=sys.stderr)
+            print("ERROR : creating lo.pro.user file=" + qt_meta_pro_user_file, file=sys.stderr)
             print(e, file=sys.stderr)
             temp = traceback.format_exc()
             print(temp, file=sys.stderr)
@@ -1565,7 +1566,7 @@ if __name__ == '__main__':
         'vim': VimIntegrationGenerator,
         'debug': DebugIntegrationGenerator,
         'qtcreator': QtCreatorIntegrationGenerator,
-        }
+    }
 
     if args.ide not in generators.keys():
         print("Invalid ide. valid values are %s" % ','.join(generators.keys()))
@@ -1577,7 +1578,7 @@ if __name__ == '__main__':
         gbuildparser = GbuildParser().parse(sys.stdin)
 
     generators[args.ide](gbuildparser, args.ide).emit()
-    print("Successfully created the project files.");
+    print("Successfully created the project files.")
 
 # Local Variables:
 # indent-tabs-mode: nil
