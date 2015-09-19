@@ -459,7 +459,7 @@ class WWD_Events(WWD_Startup):
         zipFile = sd.callStoreDialog(
             self.settings.cp_DefaultSession.cp_OutDirectory,
             self.resources.resDefaultArchiveFilename)
-        self.setPublishUrl(ZIP_PUBLISHER, zipFile, 4)
+        self.setPublishUrl(ZIP_PUBLISHER, zipFile, 2)
         self.getPublisher(ZIP_PUBLISHER).overwriteApproved = True
 
     '''
