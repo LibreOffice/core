@@ -12,7 +12,7 @@ $(eval $(call gb_Module_Module,xmlsecurity))
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	Library_xmlsecurity \
 	Library_xsec_fw \
-	$(if $(filter-out ANDROID,$(OS)),Library_xsec_xmlsec) \
+	$(if $(filter-out ANDROID IOS,$(OS)),Library_xsec_xmlsec) \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,xmlsecurity,\
