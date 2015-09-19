@@ -55,4 +55,4 @@ TASK_FINISH = "t_fin"
 when the user adds more than this number
 of documents to the list, a status dialog opens.
 '''
-MIN_ADD_FILES_FOR_DIALOG = 2
+MIN_ADD_FILES_FOR_DIALOG = 1

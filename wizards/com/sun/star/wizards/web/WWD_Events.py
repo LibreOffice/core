@@ -894,39 +894,23 @@ class WWD_Events(WWD_Startup):
         def loadDocuments(self):
             offset = self.parent.selectedDoc[0] + 1 if (len(self.parent.selectedDoc) > 0) else self.parent.getDocsCount()
 
-            '''
-            if the user chose one file, the list starts at 0,
-            if he chose more than one, the first entry is a directory name,
-            all the others are filenames.
-            '''
-            if len(self.files) > 1:
-                start = 1
-            else:
-                start = 0
-
             #Number of documents failed to validate.
             failed = 0
 
             # store the directory
-            if start == 1:
-                self.parent.settings.cp_DefaultSession.cp_InDirectory = self.files[0]
-            else:
-                self.parent.settings.cp_DefaultSession.cp_InDirectory = \
-                    FileAccess.getParentDir(self.files[0])
+            self.parent.settings.cp_DefaultSession.cp_InDirectory = \
+                FileAccess.getParentDir(self.files[0])
 
             '''
             Here i go through each file, and validate it.
             If its ok, I add it to the ListModel/ConfigSet
             '''
 
-            for i in range(start, len(self.files)):
+            for i in range(0, len(self.files)):
                 doc = CGDocument()
                 doc.setRoot(self.parent.settings)
 
-                if start == 0:
-                    doc.cp_URL = self.files[i]
-                else:
-                    doc.cp_URL = FileAccess.connectURLs(self.files[0], self.files[i])
+                doc.cp_URL = self.files[i]
 
                 '''
                 so - i check each document and if it is ok I add it.
@@ -935,14 +919,14 @@ class WWD_Events(WWD_Startup):
                 done in the checkDocument(...) method
                 '''
                 if self.parent.checkDocument(doc, self.task, self.xC):
-                    index = offset + i - failed - start
+                    index = offset + i - failed
                     self.parent.settings.cp_DefaultSession.cp_Content.cp_Documents.add(index, doc)
                 else:
                     failed += 1
 
             # if any documents where added,
             # set the first one to be the current-selected document.
-            if len(self.files) > start + failed:
+            if len(self.files) > failed:
                 self.parent.setSelectedDoc([offset])
 
             # update the ui...
