@@ -2430,7 +2430,7 @@
 					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
 					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(LINK_LDFLAGS)";
 				SDKROOT = iphoneos;
