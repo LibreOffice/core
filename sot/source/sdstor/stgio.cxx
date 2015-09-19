@@ -127,12 +127,12 @@ bool StgIo::CommitAll()
             if( m_aHdr.Store( *this ) )
             {
                 m_pStrm->Flush();
-                sal_uLong n = m_pStrm->GetError();
+                const ErrCode n = pStrm->GetError();
                 SetError( n );
 #ifdef DBG_UTIL
-                if( n==0 ) ValidateFATs();
+                if( n==SVSTREAM_OK ) ValidateFATs();
 #endif
-                return n == 0;
+                return n == SVSTREAM_OK;
             }
         }
     }

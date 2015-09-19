@@ -469,7 +469,7 @@ SotStorage::SotStorage( BaseStorage * pStor )
     }
 
     m_pOwnStg = pStor;
-    sal_uLong nErr = m_pOwnStg ? m_pOwnStg->GetError() : SVSTREAM_CANNOT_MAKE;
+    const ErrCode nErr = m_pOwnStg ? m_pOwnStg->GetError() : SVSTREAM_CANNOT_MAKE;
     SetError( nErr );
     if ( IsOLEStorage() )
         m_nVersion = SOFFICE_FILEFORMAT_50;

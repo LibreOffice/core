@@ -62,14 +62,14 @@ StorageBase::~StorageBase()
 // The following three methods are declared as const, since they
 // may be called from within a const method.
 
-sal_uLong StorageBase::GetError() const
+ErrCode StorageBase::GetError() const
 {
-    sal_uLong n = m_nError;
+    const ErrCode n = m_nError;
     m_nError = SVSTREAM_OK;
     return n;
 }
 
-void StorageBase::SetError( sal_uLong n ) const
+void StorageBase::SetError( ErrCode n ) const
 {
     if( !m_nError )
         m_nError = n;
@@ -689,7 +689,7 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
 
             if ( p2 )
             {
-                sal_uLong nTmpErr = p2->GetError();
+                ErrCode nTmpErr = p2->GetError();
                 if( !nTmpErr )
                 {
                     p2->SetClassId( p1->GetClassId() );
@@ -718,7 +718,7 @@ bool Storage::CopyTo( const OUString& rElem, BaseStorage* pDest, const OUString&
 
             if ( p2 )
             {
-                sal_uLong nTmpErr = p2->GetError();
+                ErrCode nTmpErr = p2->GetError();
                 if( !nTmpErr )
                 {
                     p1->CopyTo( p2 );

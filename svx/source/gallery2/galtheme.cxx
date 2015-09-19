@@ -658,7 +658,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
         CopyFile( aTmpURL, aInURL );
         KillFile( aTmpURL );
 
-        sal_uIntPtr nStorErr = 0;
+        ErrCode nStorErr = ERRCODE_NONE;
 
         try
         {
@@ -674,7 +674,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
             nStorErr = ERRCODE_IO_GENERAL;
         }
 
-        if( !nStorErr )
+        if( nStorErr == ERRCODE_NONE )
         {
             aSvDrawStorageRef.Clear();
             CopyFile( aTmpURL, GetSdvURL() );

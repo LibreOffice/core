@@ -392,7 +392,7 @@ bool StgCache::SetSize( sal_Int32 n )
     return Good();
 }
 
-void StgCache::SetError( sal_uLong n )
+void StgCache::SetError( ErrCode n )
 {
     if( n && !m_nError )
         m_nError = n;

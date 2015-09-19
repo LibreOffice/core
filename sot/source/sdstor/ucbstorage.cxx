@@ -428,7 +428,7 @@ public:
                                                 // for read/write streams it's a copy into a temporary file
     OUString                    m_aTempURL;     // URL of this temporary stream
     RepresentModes              m_nRepresentMode; // should it be used as XInputStream or as SvStream
-    long                        m_nError;
+    ErrCode                     m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
     bool                        m_bSourceRead;  // Source still contains useful information
     bool                        m_bModified;    // only modified streams will be sent to the original content
@@ -457,7 +457,7 @@ public:
                                                                         // but the writing is done at the end of temporary
                                                                         // pointer position is not changed
     using SvStream::SetError;
-    void                        SetError( sal_uInt32 nError );
+    void                        SetError( ErrCode nError );
     void                        PrepareCachedForReopen( StreamMode nMode );
 };
 
@@ -480,7 +480,7 @@ public:
     ::ucbhelper::Content*       m_pContent;     // the content that provides the storage elements
     ::utl::TempFile*            m_pTempFile;    // temporary file, only for storages on stream
     SvStream*                   m_pSource;      // original stream, only for storages on a stream
-    long                        m_nError;
+    ErrCode                     m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
     bool                        m_bModified;    // only modified elements will be sent to the original content
     bool                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
@@ -524,7 +524,7 @@ public:
                                 }
     UCBStorageElementList_Impl& GetChildrenList()
                                 {
-                                    long nError = m_nError;
+                                    const ErrCode nError = m_nError;
                                     ReadContent();
                                     if ( m_nMode & StreamMode::WRITE )
                                     {
@@ -538,7 +538,7 @@ public:
                                     return m_aChildrenList;
                                 }
 
-    void                        SetError( long nError );
+    void                        SetError( ErrCode nError );
 };
 
 typedef tools::SvRef<UCBStorage_Impl> UCBStorage_ImplRef;
@@ -1038,7 +1038,7 @@ void  UCBStorageStream_Impl::FlushData()
     m_bCommited = true;
 }
 
-void UCBStorageStream_Impl::SetError( sal_uInt32 nErr )
+void UCBStorageStream_Impl::SetError( ErrCode nErr )
 {
     if ( !m_nError )
     {
@@ -1078,7 +1078,7 @@ BaseStorage* UCBStorageStream_Impl::CreateStorage()
     Storage *pStorage = new Storage( *pNewStorageStream, m_bDirect );
 
     // GetError() call cleares error code for OLE storages, must be changed in future
-    long nTmpErr = pStorage->GetError();
+    const ErrCode nTmpErr = pStorage->GetError();
     pStorage->SetError( nTmpErr );
 
     m_bIsOLEStorage = !nTmpErr;
@@ -1882,7 +1882,7 @@ void UCBStorage_Impl::ReadContent()
     }
 }
 
-void UCBStorage_Impl::SetError( long nError )
+void UCBStorage_Impl::SetError( ErrCode nError )
 {
     if ( !m_nError )
     {

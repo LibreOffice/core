@@ -45,7 +45,7 @@ class StgCache
 
     typedef std::vector< rtl::Reference< StgPage > > LRUList;
 
-    sal_uLong m_nError;                       // error code
+    ErrCode m_nError;                         // error code
     sal_Int32 m_nPages;                       // size of data area in pages
     sal_uInt16 m_nRef;                        // reference count
     IndexToStgPage maDirtyPages;            // hash of all dirty pages
@@ -74,9 +74,9 @@ public:
     void  SetStrm( UCBStorageStream* );
     bool  IsWritable()                      { return ( m_pStrm && m_pStrm->IsWritable() ); }
     bool  Good()                            { return m_nError == SVSTREAM_OK; }
-    sal_uLong GetError()                    { return m_nError;    }
+    ErrCode GetError()                      { return m_nError;    }
     void  MoveError( StorageBase& );
-    void  SetError( sal_uLong );
+    void  SetError( ErrCode );
     void  ResetError();
     bool  Open( const OUString& rName, StreamMode );
     void  Close();

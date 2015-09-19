@@ -48,7 +48,7 @@ typedef struct SvGUID ClsId;
 class SOT_DLLPUBLIC StorageBase : public SvRefBase
 {
 protected:
-    mutable sal_uLong m_nError;                   // error code
+    mutable ErrCode m_nError;                   // error code
     StreamMode      m_nMode;                    // open mode
     bool            m_bAutoCommit;
                     StorageBase();
@@ -58,8 +58,8 @@ public:
     virtual bool    Validate( bool=false ) const = 0;
     virtual bool    ValidateMode( StreamMode ) const = 0;
     void            ResetError() const;
-    void            SetError( sal_uLong ) const;
-    sal_uLong       GetError() const;
+    void            SetError( ErrCode ) const;
+    ErrCode         GetError() const;
     bool            Good() const          { return bool( m_nError == SVSTREAM_OK ); }
     StreamMode      GetMode() const  { return m_nMode;  }
     void            SetAutoCommit( bool bSet )

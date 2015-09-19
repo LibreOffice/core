@@ -86,7 +86,7 @@ friend class SotStorageStream;
 
     BaseStorage *   m_pOwnStg;   // target storage
     SvStream *      m_pStorStm;  // only for SDSTORAGES
-    sal_uLong       m_nError;
+    ErrCode         m_nError;
     OUString        m_aName;     // name of the storage
     bool            m_bIsRoot;   // e.g.: File Storage
     bool            m_bDelStm;
@@ -135,8 +135,8 @@ public:
                             return m_nVersion;
                         }
 
-    sal_uLong           GetError() const { return ERRCODE_TOERROR(m_nError); }
-    void                SetError( sal_uLong nErrorCode )
+    ErrCode             GetError() const { return ERRCODE_TOERROR(m_nError); }
+    void                SetError( ErrCode nErrorCode )
                         {
                             if( m_nError == SVSTREAM_OK )
                                 m_nError = nErrorCode;
