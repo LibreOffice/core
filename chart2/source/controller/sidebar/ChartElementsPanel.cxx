@@ -446,14 +446,6 @@ void ChartElementsPanel::HandleContextChange(
     updateData();
 }
 
-void ChartElementsPanel::NotifyItemUpdate(
-    sal_uInt16 /*nSID*/,
-    SfxItemState /*eState*/,
-    const SfxPoolItem* /*pState*/,
-    const bool )
-{
-}
-
 void ChartElementsPanel::modelInvalid()
 {
     mbModelValid = false;

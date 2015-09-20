@@ -40,7 +40,6 @@ namespace sidebar {
 
 class ChartElementsPanel : public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface,
     public sfx2::sidebar::SidebarModelUpdate,
     public ChartSidebarModifyListenerParent
 {
@@ -56,18 +55,14 @@ public:
     virtual void HandleContextChange(
         const ::sfx2::sidebar::EnumContext& rContext) SAL_OVERRIDE;
 
-    virtual void NotifyItemUpdate(
-        const sal_uInt16 nSId,
-        const SfxItemState eState,
-        const SfxPoolItem* pState,
-        const bool bIsEnabled) SAL_OVERRIDE;
-
     // constructor/destuctor
     ChartElementsPanel(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
         ChartController* pController);
+
     virtual ~ChartElementsPanel();
+
     virtual void dispose() SAL_OVERRIDE;
 
     virtual void updateData() SAL_OVERRIDE;
