@@ -557,7 +557,12 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
                                                    UNO_NAME_PARA_CONTINUEING_PREVIOUS_SUB_TREE,
                                                    UNO_NAME_CHAR_STYLE_NAME,
                                                    UNO_NAME_NUMBERING_LEVEL,
-                                                   UNO_NAME_PARRSID };
+                                                   UNO_NAME_PARRSID,
+                                                   UNO_NAME_CHAR_COLOR_THEME,
+                                                   UNO_NAME_CHAR_COLOR_TINT_OR_SHADE };
+
+    const std::vector<OUString> aHiddenCharacterProperties{ UNO_NAME_CHAR_COLOR_THEME,
+                                                            UNO_NAME_CHAR_COLOR_TINT_OR_SHADE };
 
     InsertValues(xRange, aIsDefined, aCharDFNode, false, aHiddenProperties, aFieldsNode);
 
@@ -580,7 +585,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, false, {}, aFieldsNode);
+        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, false, aHiddenCharacterProperties,
+                     aFieldsNode);
 
         aCharNode.children.push_back(aCurrentChild);
     }
@@ -610,8 +616,8 @@ static void UpdateTree(SwDocShell* pDocSh, std::vector<svx::sidebar::TreeNode>& 
         aCurrentChild.sNodeName = sDisplayName;
         aCurrentChild.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
-        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, aParentParaStyle.isEmpty(), {},
-                     aFieldsNode);
+        InsertValues(xPropertiesSet, aIsDefined, aCurrentChild, aParentParaStyle.isEmpty(),
+                     aHiddenCharacterProperties, aFieldsNode);
 
         aParaNode.children.push_back(aCurrentChild);
         sCurrentParaStyle = aParentParaStyle;

@@ -74,21 +74,6 @@ public:
     {
         maVariable = aVariable;
     }
-
-    Color getColor(svx::ColorSet const & rColorSet)
-    {
-        Color aColor;
-        if (maVariable.mnIndex > -1)
-        {
-            aColor = rColorSet.getColor(maVariable.mnIndex);
-            aColor.ApplyTintOrShade(maVariable.mnTintShade);
-        }
-        else
-        {
-            aColor = COL_BLACK;
-        }
-        return aColor;
-    }
 };
 
 class StyleSet
@@ -228,13 +213,17 @@ void changeFont(SwFormat* pFormat, SwDocStyleSheet const * pStyle, FontSet const
     }
 }*/
 
-void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const & rColorSet, StyleRedefinition* pRedefinition)
+void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const& rColorSet, StyleRedefinition* /*pRedefinition*/)
 {
-    Color aColor = pRedefinition->getColor(rColorSet);
-
     SvxColorItem aColorItem(pCollection->GetColor());
-    aColorItem.SetValue(aColor);
-    pCollection->SetFormatAttr(aColorItem);
+    auto nThemeIndex = aColorItem.GetThemeColor().GetThemeIndex();
+    if (nThemeIndex >= 0)
+    {
+        Color aColor = rColorSet.getColor(nThemeIndex);
+        aColor.ApplyTintOrShade(aColorItem.GetTintOrShade());
+        aColorItem.SetValue(aColor);
+        pCollection->SetFormatAttr(aColorItem);
+    }
 }
 
 std::vector<FontSet> initFontSets()
