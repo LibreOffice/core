@@ -33,6 +33,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -40,27 +46,19 @@ CFLAGS+=/Ob0
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:joblist by codegen.pl
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/test_comtools.obj
 
-SHL1TARGET= test_comtools
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB) uuid.lib
-
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
+APP1TARGET= test_comtools
+APP1STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB) uuid.lib
+APP1RPATH = NONE
+APP1TEST = enabled
 # auto generated Target:joblist
 # END ------------------------------------------------------------------
 
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
 
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
