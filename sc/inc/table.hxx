@@ -457,12 +457,12 @@ public:
 
                 // mark of this document
     void MixMarked(
-        sc::MixDocContext& rCxt, const ScMarkData& rMark, sal_uInt16 nFunction,
+        sc::MixDocContext& rCxt, const ScMarkData& rMark, ScPasteFunc nFunction,
         bool bSkipEmpty, const ScTable* pSrcTab );
 
     void MixData(
         sc::MixDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        sal_uInt16 nFunction, bool bSkipEmpty, const ScTable* pSrcTab );
+        ScPasteFunc nFunction, bool bSkipEmpty, const ScTable* pSrcTab );
 
     void        CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             SCCOL nDestCol, SCROW nDestRow, SCTAB nDestTab );

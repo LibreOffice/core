@@ -224,7 +224,7 @@ ScUndoFillTable::ScUndoFillTable( ScDocShell* pNewDocShell,
                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                 ScDocument* pNewUndoDoc, bool bNewMulti, SCTAB nSrc,
-                InsertDeleteFlags nFlg, sal_uInt16 nFunc, bool bSkip, bool bLink )
+                InsertDeleteFlags nFlg, ScPasteFunc nFunc, bool bSkip, bool bLink )
     :   ScSimpleUndo( pNewDocShell ),
         aRange      ( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
         aMarkData   ( rMark ),

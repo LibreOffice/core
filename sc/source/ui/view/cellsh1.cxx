@@ -444,7 +444,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_FILL_TAB:
             {
                 InsertDeleteFlags nFlags = IDF_NONE;
-                sal_uInt16 nFunction = PASTE_NOFUNC;
+                ScPasteFunc nFunction = ScPasteFunc::NONE;
                 bool bSkipEmpty = false;
                 bool bAsLink    = false;
 
@@ -1316,7 +1316,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case FID_INS_CELL_CONTENTS:
             {
                 InsertDeleteFlags nFlags = IDF_NONE;
-                sal_uInt16 nFunction = PASTE_NOFUNC;
+                ScPasteFunc nFunction = ScPasteFunc::NONE;
                 InsCellCmd eMoveMode = INS_NONE;
 
                 vcl::Window* pWin = GetViewData()->GetActiveWin();
@@ -1365,7 +1365,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         SFX_REQUEST_ARG( rReq, pLinkItem, SfxBoolItem, FN_PARAM_4, false );
                         SFX_REQUEST_ARG( rReq, pMoveItem, SfxInt16Item, FN_PARAM_5, false );
                         if ( pFuncItem )
-                            nFunction = pFuncItem->GetValue();
+                            nFunction = static_cast<ScPasteFunc>(pFuncItem->GetValue());
                         if ( pSkipItem )
                             bSkipEmpty = pSkipItem->GetValue();
                         if ( pTransposeItem )
@@ -1498,7 +1498,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bSkipEmpty ) );
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_3, bTranspose ) );
                             rReq.AppendItem( SfxBoolItem( FN_PARAM_4, bAsLink ) );
-                            rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, nFunction ) );
+                            rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nFunction) ) );
                             rReq.AppendItem( SfxInt16Item( FN_PARAM_5, (sal_Int16) eMoveMode ) );
                             rReq.Done();
                         }

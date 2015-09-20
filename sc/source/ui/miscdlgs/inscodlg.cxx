@@ -25,7 +25,7 @@
 
 bool       ScInsertContentsDlg::bPreviousAllCheck = false;
 InsertDeleteFlags ScInsertContentsDlg::nPreviousChecks   = (IDF_VALUE | IDF_DATETIME | IDF_STRING);
-sal_uInt16 ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
+ScPasteFunc  ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::NONE;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
 sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
 
@@ -41,7 +41,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     bMoveRightDisabled( false ),
     bUsedShortCut   ( false ),
     nShortCutInsContentsCmdBits( IDF_NONE ),
-    nShortCutFormulaCmdBits(0),
+    nShortCutFormulaCmdBits(ScPasteFunc::NONE),
     bShortCutSkipEmptyCells(false),
     bShortCutTranspose(false),
     bShortCutIsLink(false),
@@ -98,11 +98,11 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
 
     switch( ScInsertContentsDlg::nPreviousFormulaChecks )
     {
-        case PASTE_NOFUNC: mpRbNoOp->Check(); break;
-        case PASTE_ADD:    mpRbAdd->Check(); break;
-        case PASTE_SUB:    mpRbSub->Check(); break;
-        case PASTE_MUL:    mpRbMul->Check(); break;
-        case PASTE_DIV:    mpRbDiv->Check(); break;
+        case ScPasteFunc::NONE: mpRbNoOp->Check(); break;
+        case ScPasteFunc::ADD:    mpRbAdd->Check(); break;
+        case ScPasteFunc::SUB:    mpRbSub->Check(); break;
+        case ScPasteFunc::MUL:    mpRbMul->Check(); break;
+        case ScPasteFunc::DIV:    mpRbDiv->Check(); break;
     }
 
     switch( ScInsertContentsDlg::nPreviousMoveMode )
@@ -312,7 +312,7 @@ IMPL_LINK_TYPED( ScInsertContentsDlg, ShortCutHdl, Button*, pBtn, void )
     {
         bUsedShortCut = true;
         nShortCutInsContentsCmdBits = IDF_STRING | IDF_VALUE | IDF_DATETIME;
-        nShortCutFormulaCmdBits = PASTE_NOFUNC;
+        nShortCutFormulaCmdBits = ScPasteFunc::NONE;
         bShortCutSkipEmptyCells = false;
         bShortCutTranspose = false;
         bShortCutIsLink = false;
@@ -323,7 +323,7 @@ IMPL_LINK_TYPED( ScInsertContentsDlg, ShortCutHdl, Button*, pBtn, void )
     {
         bUsedShortCut = true;
         nShortCutInsContentsCmdBits = IDF_STRING | IDF_VALUE | IDF_DATETIME | IDF_ATTRIB;
-        nShortCutFormulaCmdBits = PASTE_NOFUNC;
+        nShortCutFormulaCmdBits = ScPasteFunc::NONE;
         bShortCutSkipEmptyCells = false;
         bShortCutTranspose = false;
         bShortCutIsLink = false;
@@ -334,7 +334,7 @@ IMPL_LINK_TYPED( ScInsertContentsDlg, ShortCutHdl, Button*, pBtn, void )
     {
         bUsedShortCut = true;
         nShortCutInsContentsCmdBits = IDF_ALL;
-        nShortCutFormulaCmdBits = PASTE_NOFUNC;
+        nShortCutFormulaCmdBits = ScPasteFunc::NONE;
         bShortCutSkipEmptyCells = false;
         bShortCutTranspose = true;
         bShortCutIsLink = false;
@@ -403,17 +403,17 @@ void ScInsertContentsDlg::dispose()
     ModalDialog::dispose();
 }
 
-sal_uInt16  ScInsertContentsDlg::GetFormulaCmdBits() const
+ScPasteFunc  ScInsertContentsDlg::GetFormulaCmdBits() const
 {
-    ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
+    ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::NONE;
     if(mpRbAdd->IsChecked())
-        ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_ADD;
+        ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::ADD;
     else if(mpRbSub->IsChecked())
-        ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_SUB;
+        ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::SUB;
     else if(mpRbMul->IsChecked())
-        ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_MUL;
+        ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::MUL;
     else if(mpRbDiv->IsChecked())
-        ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_DIV;
+        ScInsertContentsDlg::nPreviousFormulaChecks = ScPasteFunc::DIV;
     if (bUsedShortCut)
         return nShortCutFormulaCmdBits;
     return ScInsertContentsDlg::nPreviousFormulaChecks;

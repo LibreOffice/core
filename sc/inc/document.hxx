@@ -1345,14 +1345,14 @@ public:
     ScClipParam&    GetClipParam();
     void            SetClipParam(const ScClipParam& rParam);
 
-    void            MixDocument( const ScRange& rRange, sal_uInt16 nFunction, bool bSkipEmpty,
+    void            MixDocument( const ScRange& rRange, ScPasteFunc nFunction, bool bSkipEmpty,
                                     ScDocument* pSrcDoc );
 
     void            FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
-                                InsertDeleteFlags nFlags, sal_uInt16 nFunction,
+                                InsertDeleteFlags nFlags, ScPasteFunc nFunction,
                                 bool bSkipEmpty, bool bAsLink );
     void            FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
-                                InsertDeleteFlags nFlags, sal_uInt16 nFunction,
+                                InsertDeleteFlags nFlags, ScPasteFunc nFunction,
                                 bool bSkipEmpty, bool bAsLink );
 
     void            TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType );

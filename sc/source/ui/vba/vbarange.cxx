@@ -2823,27 +2823,27 @@ static InsertDeleteFlags getPasteFlags (sal_Int32 Paste)
     return nFlags;
 }
 
-static sal_uInt16
+static ScPasteFunc
 getPasteFormulaBits( sal_Int32 Operation)
 {
-    sal_uInt16 nFormulaBits = PASTE_NOFUNC ;
+    ScPasteFunc nFormulaBits = ScPasteFunc::NONE;
     switch (Operation)
     {
     case excel::XlPasteSpecialOperation::xlPasteSpecialOperationAdd:
-        nFormulaBits = PASTE_ADD;break;
+        nFormulaBits = ScPasteFunc::ADD; break;
     case excel::XlPasteSpecialOperation::xlPasteSpecialOperationSubtract:
-        nFormulaBits = PASTE_SUB;break;
+        nFormulaBits = ScPasteFunc::SUB;break;
     case excel::XlPasteSpecialOperation::xlPasteSpecialOperationMultiply:
-        nFormulaBits = PASTE_MUL;break;
+        nFormulaBits = ScPasteFunc::MUL;break;
     case excel::XlPasteSpecialOperation::xlPasteSpecialOperationDivide:
-        nFormulaBits = PASTE_DIV;break;
+        nFormulaBits = ScPasteFunc::DIV;break;
 
     case excel::XlPasteSpecialOperation::xlPasteSpecialOperationNone:
     default:
-        nFormulaBits = PASTE_NOFUNC; break;
+        nFormulaBits = ScPasteFunc::NONE; break;
     }
 
-return nFormulaBits;
+    return nFormulaBits;
 }
 void SAL_CALL
 ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, const uno::Any& SkipBlanks, const uno::Any& Transpose ) throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -2875,7 +2875,7 @@ ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, cons
         Transpose >>= bTranspose;
 
     InsertDeleteFlags nFlags = getPasteFlags(nPaste);
-    sal_uInt16 nFormulaBits = getPasteFormulaBits(nOperation);
+    ScPasteFunc nFormulaBits = getPasteFormulaBits(nOperation);
     excel::implnPasteSpecial(pShell->GetModel(), nFlags,nFormulaBits,bSkipBlanks,bTranspose);
 }
 

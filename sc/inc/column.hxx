@@ -280,10 +280,10 @@ public:
 
                 //  Selection (?) of this document
     void MixMarked(
-        sc::MixDocContext& rCxt, const ScMarkData& rMark, sal_uInt16 nFunction,
+        sc::MixDocContext& rCxt, const ScMarkData& rMark, ScPasteFunc nFunction,
         bool bSkipEmpty, const ScColumn& rSrcCol );
     void MixData(
-        sc::MixDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFunction, bool bSkipEmpty,
+        sc::MixDocContext& rCxt, SCROW nRow1, SCROW nRow2, ScPasteFunc nFunction, bool bSkipEmpty,
         const ScColumn& rSrcCol );
 
     ScAttrIterator* CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
@@ -301,7 +301,7 @@ public:
 
     void        CopyScenarioFrom( const ScColumn& rSrcCol );
     void        CopyScenarioTo( ScColumn& rDestCol ) const;
-    bool    TestCopyScenarioTo( const ScColumn& rDestCol ) const;
+    bool       TestCopyScenarioTo( const ScColumn& rDestCol ) const;
     void        MarkScenarioIn( ScMarkData& rDestMark ) const;
 
     void        CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const;
