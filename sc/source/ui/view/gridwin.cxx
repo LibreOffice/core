@@ -1601,7 +1601,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
 
                         if ( lcl_IsEditableMatrix( pViewData->GetDocument(), aMarkRange ) )
                             pViewData->SetDragMode(
-                                aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), nX, nY, SC_FILL_MATRIX );
+                                aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), nX, nY, ScFillMode::MATRIX );
                         else
                             pViewData->SetFillMode(
                                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), nX, nY );
@@ -1640,7 +1640,7 @@ bool ScGridWindow::TestMouse( const MouseEvent& rMEvt, bool bAction )
                     SetPointer( Pointer( PointerStyle::Cross ) );
                     if (bAction)
                     {
-                        sal_uInt8 nMode = bTop ? SC_FILL_EMBED_LT : SC_FILL_EMBED_RB;
+                        ScFillMode nMode = bTop ? ScFillMode::EMBED_LT : ScFillMode::EMBED_RB;
                         pViewData->SetDragMode(
                                     aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(), aRange.aEnd.Row(), nMode );
@@ -2215,7 +2215,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     SetPointer( Pointer( PointerStyle::Arrow ) );
 
     if (pViewData->IsFillMode() ||
-        ( pViewData->GetFillMode() == SC_FILL_MATRIX && rMEvt.IsMod1() ))
+        ( pViewData->GetFillMode() == ScFillMode::MATRIX && rMEvt.IsMod1() ))
     {
         nScFillModeMouseModifier = rMEvt.GetModifier();
         SCCOL nStartCol;
@@ -2249,7 +2249,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         else
             pViewData->GetDispatcher().Execute( FID_FILL_AUTO, SfxCallMode::SLOT | SfxCallMode::RECORD );
     }
-    else if (pViewData->GetFillMode() == SC_FILL_MATRIX)
+    else if (pViewData->GetFillMode() == ScFillMode::MATRIX)
     {
         SCTAB nTab = pViewData->GetTabNo();
         SCCOL nStartCol;

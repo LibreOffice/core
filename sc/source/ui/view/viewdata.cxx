@@ -321,7 +321,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         nFillEndY(0),
         nPasteFlags ( SC_PASTE_NONE ),
         eEditActivePart( SC_SPLIT_BOTTOMLEFT ),
-        nFillMode   ( SC_FILL_NONE ),
+        nFillMode   ( ScFillMode::NONE ),
         bActive     ( true ),                   // how to initialize?
         bIsRefMode  ( false ),
         bDelMarkValid( false ),
@@ -409,7 +409,7 @@ ScViewData::ScViewData( const ScViewData& rViewData ) :
         nFillEndY(0),
         nPasteFlags ( SC_PASTE_NONE ),
         eEditActivePart( rViewData.eEditActivePart ),
-        nFillMode   ( SC_FILL_NONE ),
+        nFillMode   ( ScFillMode::NONE ),
         bActive     ( true ),                               // how to initialize?
         bIsRefMode  ( false ),
         bDelMarkValid( false ),
@@ -841,7 +841,7 @@ bool ScViewData::IsMultiMarked()
 
 void ScViewData::SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
-    nFillMode   = SC_FILL_FILL;
+    nFillMode   = ScFillMode::FILL;
     nFillStartX = nStartCol;
     nFillStartY = nStartRow;
     nFillEndX   = nEndCol;
@@ -849,7 +849,7 @@ void ScViewData::SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, S
 }
 
 void ScViewData::SetDragMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                sal_uInt8 nMode )
+                                ScFillMode nMode )
 {
     nFillMode   = nMode;
     nFillStartX = nStartCol;
@@ -860,7 +860,7 @@ void ScViewData::SetDragMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, S
 
 void ScViewData::ResetFillMode()
 {
-    nFillMode   = SC_FILL_NONE;
+    nFillMode   = ScFillMode::NONE;
 }
 
 void ScViewData::GetFillData( SCCOL& rStartCol, SCROW& rStartRow,
