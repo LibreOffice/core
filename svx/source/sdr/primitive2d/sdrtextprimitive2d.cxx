@@ -505,7 +505,7 @@ namespace drawinglayer
          {
              if(SdrTextPrimitive2D::operator==(rPrimitive))
              {
-                 const SdrBlockTextPrimitive2D& rCompare = (SdrBlockTextPrimitive2D&)rPrimitive;
+                 const SdrBlockTextPrimitive2D& rCompare = static_cast<const SdrBlockTextPrimitive2D&>(rPrimitive);
 
                  return (getTextRangeTransform() == rCompare.getTextRangeTransform());
              }
