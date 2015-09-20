@@ -75,7 +75,7 @@ class OverflowingText
 public:
     OutlinerParaObject *JuxtaposeParaObject(Outliner *, OutlinerParaObject *);
     OutlinerParaObject *DeeplyMergeParaObject(Outliner *, OutlinerParaObject *);
-    ESelection GetInsertionPointSel() const;
+    static ESelection GetInsertionPointSel();
 
 private:
     friend class Outliner;
@@ -116,7 +116,7 @@ public:
     OutlinerParaObject *InsertOverflowingText(Outliner *, OutlinerParaObject *);
     OutlinerParaObject *RemoveOverflowingText(Outliner *);
 
-    ESelection GetInsertionPointSel() const;
+    static ESelection GetInsertionPointSel();
     ESelection GetOverflowPointSel() const;
 
     bool IsLastParaInterrupted() const;

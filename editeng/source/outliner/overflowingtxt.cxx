@@ -127,7 +127,7 @@ OverflowingText::OverflowingText(TranferableText xOverflowingContent) :
 }
 
 
-ESelection OverflowingText::GetInsertionPointSel() const
+ESelection OverflowingText::GetInsertionPointSel()
 {
     assert(false && "You should never get here");
     return getLastPositionSel(NULL);
@@ -193,9 +193,9 @@ OFlowChainedText::OFlowChainedText(Outliner *pOutl, bool bIsDeepMerge)
     mbIsDeepMerge = bIsDeepMerge;
 }
 
-ESelection OFlowChainedText::GetInsertionPointSel() const
+ESelection OFlowChainedText::GetInsertionPointSel()
 {
-    return mpOverflowingTxt->GetInsertionPointSel();
+    return OverflowingText::GetInsertionPointSel();
 }
 
 ESelection OFlowChainedText::GetOverflowPointSel() const
