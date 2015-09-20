@@ -332,7 +332,7 @@ public:
 
     SdrOutliner&         GetChainingOutliner(const SdrTextObj* pObj=NULL) const;
     TextChain *GetTextChain() const;
-    void SetNextLinkInTextChain(SdrTextObj *pPrev, SdrTextObj *pNext);
+    static void SetNextLinkInTextChain(SdrTextObj *pPrev, SdrTextObj *pNext);
 
     // ReferenceDevice for the EditEngine
     void                 SetRefDevice(OutputDevice* pDev);
