@@ -19,6 +19,6 @@ template <typename EnumT> struct SvXMLEnumMapEntry;
 extern SvXMLEnumMapEntry<css::drawing::FillStyle> const aXML_FillStyle_EnumMap[];
 extern SvXMLEnumMapEntry<css::drawing::RectanglePoint> const aXML_RefPoint_EnumMap[];
 extern SvXMLEnumMapEntry<css::drawing::BitmapMode> const aXML_BitmapMode_EnumMap[];
-extern SvXMLEnumMapEntry<sal_uInt16> const pXML_ThemeColor_Enum[];
+extern SvXMLEnumMapEntry<sal_Int16> const pXML_ThemeColor_Enum[];
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

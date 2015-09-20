@@ -1031,12 +1031,28 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             // footnote or endnote reference id - not needed
         break;
         case NS_ooxml::LN_CT_Color_themeColor:
+            if (m_pImpl->GetTopContext())
+            {
+                sal_Int16 nIndex = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
+                if (nIndex >= 0 && nIndex <= 11)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_THEME_INDEX, uno::Any(nIndex));
+            }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Color_themeTint:
+            if (m_pImpl->GetTopContext())
+            {
+                if (nIntValue != 0)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_TINT_OR_SHADE, uno::Any(sal_Int16((256 - nIntValue) * 10000 / 256)));
+            }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeTint", OUString::number(nIntValue, 16));
         break;
         case NS_ooxml::LN_CT_Color_themeShade:
+            if (m_pImpl->GetTopContext())
+            {
+                if (nIntValue != 0)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_TINT_OR_SHADE, uno::Any(sal_Int16((nIntValue - 256) * 10000 / 256)));
+            }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeShade", OUString::number(nIntValue, 16));
         break;
         case NS_ooxml::LN_CT_DocGrid_linePitch:

@@ -56,6 +56,7 @@
 #include <XMLFillBitmapSizePropertyHandler.hxx>
 #include <XMLBitmapLogicalSizePropertyHandler.hxx>
 #include <XMLBitmapRepeatOffsetPropertyHandler.hxx>
+#include <XMLThemeColorHandler.hxx>
 #include <vcl/graph.hxx>
 
 using namespace ::com::sun::star;
@@ -249,8 +250,9 @@ SvXMLEnumMapEntry<drawing::TextVerticalAdjust> const pXML_VerticalAlign_Enum[] =
     { XML_TOKEN_INVALID, drawing::TextVerticalAdjust(0) }
 };
 
-SvXMLEnumMapEntry<sal_uInt16> const pXML_ThemeColor_Enum[] =
+SvXMLEnumMapEntry<sal_Int16> const pXML_ThemeColor_Enum[] =
 {
+    { XML_NONE, -1 },
     { XML_DK1, 0 },
     { XML_LT1, 1 },
     { XML_DK2, 2 },
@@ -1430,7 +1432,7 @@ static const XMLPropertyHandler *GetPropertyHandler
         pHdl = new XMLGraphicPropertyHandler;
         break;
     case XML_TYPE_THEME_COLOR:
-        pHdl = new XMLConstantsPropertyHandler(pXML_ThemeColor_Enum, XML_TOKEN_INVALID);
+        pHdl = new XMLThemeColorHandler;
         break;
     default:
     {
