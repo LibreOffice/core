@@ -1421,7 +1421,7 @@ void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutlin
 
     // Some debug output
     size_t nObjCount = pPage->GetObjCount();
-    for (unsigned i = 0; i < nObjCount; i++) {
+    for (size_t i = 0; i < nObjCount; i++) {
         SdrTextObj *pCurObj = static_cast<SdrTextObj *>(pPage->GetObj(i));
 
         if (pCurObj == this) {
