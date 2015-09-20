@@ -25,6 +25,12 @@
 nothing .PHONY:
 .ELSE
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 PRJ := ../..
 PRJNAME := cppuhelper
 
@@ -45,15 +51,13 @@ my_file = file://
 
 DLLPRE = # no leading "lib" on .so files
 INCPRE += -I$(MISC)/$(TARGET)/inc
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-SHL1TARGET = $(TARGET)
-SHL1OBJS = $(SLO)/test_propertysetmixin.obj
-SHL1VERSIONMAP = test.map
-SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB)
-SHL1IMPLIB = i$(SHL1TARGET)
-SHL1RPATH = NONE
-DEF1NAME = $(SHL1TARGET)
+APP1TARGET = $(TARGET)
+APP1OBJS = $(SLO)/test_propertysetmixin.obj
+APP1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(GTESTLIB) $(SALLIB)
+APP1RPATH = NONE
+# this is a custom test, can't use APP1TARGET_run so disable it here:
+APP1TEST = disabled
 
 SHL2TARGET = $(TARGET).uno
 SHL2OBJS = $(SLO)/comp_propertysetmixin.obj
@@ -63,14 +67,15 @@ SHL2IMPLIB = i$(SHL2TARGET)
 SH21RPATH = NONE
 DEF2NAME = $(SHL2TARGET)
 
-SLOFILES = $(SHL1OBJS) $(SHL2OBJS)
+SLOFILES = $(APP1OBJS) $(SHL2OBJS)
 
 JAVAFILES = JavaSupplier.java
 JARFILES = java_uno.jar juh.jar jurt.jar ridl.jar
 
-.INCLUDE: target.mk
 
 ALLTAR: test
+
+.INCLUDE: target.mk
 
 $(MISC)/$(TARGET)/types.urd: types.idl
     $(MKDIRHIER) $(@:d)
@@ -121,14 +126,19 @@ $(MISC)/$(TARGET)/$(TARGET).uno.jar: $(JAVATARGET) \
         $(MISC)/$(TARGET)/javamaker.flag manifest
     jar cfm $@ manifest -C $(CLASSDIR) test/cppuhelper/propertysetmixin
 
-test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(MISC)/$(TARGET)/$(TARGET).uno.jar \
-        $(MISC)/$(TARGET)/types.rdb $(MISC)/$(TARGET)/services.rdb
-    $(CPPUNITTESTER) $(SHL1TARGETN) \
-        '-env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/udkapi.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb' \
-        '-env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb'\
-        -env:URE_INTERNAL_LIB_DIR=$(my_file)$(SOLARSHAREDBIN) \
-        -env:URE_INTERNAL_JAVA_DIR=$(my_file)$(SOLARBINDIR) \
-        -env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(PWD)/$(DLLDEST) \
-        -env:OOO_INBUILD_JAR_DIR=$(my_file)$(PWD)/$(MISC)/$(TARGET)
 
-.END
+test .PHONY: $(APP1TARGETN) $(SHL2TARGETN) $(MISC)/$(TARGET)/$(TARGET).uno.jar \
+        $(MISC)/$(TARGET)/types.rdb $(MISC)/$(TARGET)/services.rdb
+        $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) \
+        UNO_TYPES='$(my_file)$(SOLARBINDIR)/udkapi.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb' \
+        UNO_SERVICES='$(my_file)$(SOLARXMLDIR)/ure/services.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb'\
+        URE_INTERNAL_LIB_DIR=$(my_file)$(SOLARSHAREDBIN) \
+        URE_INTERNAL_JAVA_DIR=$(my_file)$(SOLARBINDIR) \
+        OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(PWD)/$(DLLDEST) \
+        OOO_INBUILD_JAR_DIR=$(my_file)$(PWD)/$(MISC)/$(TARGET) \
+        $(APP1TARGETN) --gtest_output="xml:$(BIN)/$(APP1TARGET)_result.xml"
+
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
+
+.ENDIF # "$(OOO_SUBSEQUENT_TESTS)" == ""
