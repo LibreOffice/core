@@ -178,8 +178,12 @@
 #define MID_SHADOW_TRANSPARENCE 1
 
 // SvxColorItem
-#define MID_COLOR_RGB 0
-#define MID_COLOR_ALPHA 1
+#define MID_COLOR_RGB           0
+#define MID_COLOR_ALPHA         1
+//#define MID_GRAPHIC_TRANSPARENT 3 // used, but already defined above
+#define MID_COLOR_THEME_INDEX   4
+#define MID_COLOR_TINT_OR_SHADE 5
+
 
 #endif
 
