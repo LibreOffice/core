@@ -1993,7 +1993,7 @@ SdrObject *ImpGetObjByName(SdrObjList *pObjList, OUString const& aObjName)
 {
     // scan the whole list
     size_t nObjCount = pObjList->GetObjCount();
-    for (unsigned i = 0; i < nObjCount; i++) {
+    for (size_t i = 0; i < nObjCount; i++) {
         SdrObject *pCurObj = pObjList->GetObj(i);
 
         if (pCurObj->GetName() == aObjName) {
