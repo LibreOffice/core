@@ -60,6 +60,7 @@
 #include <XMLIsPercentagePropertyHandler.hxx>
 #include <XMLPercentOrMeasurePropertyHandler.hxx>
 #include <XMLTextColumnsPropertyHandler.hxx>
+#include <XMLThemeColorHandler.hxx>
 #include <animations.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmlsdtypes.hxx>
@@ -1308,7 +1309,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLTextColumnsPropertyHandler;
                 break;
             case XML_TYPE_THEME_COLOR:
-                pHdl = new XMLConstantsPropertyHandler(pXML_ThemeColor_Enum, XML_TOKEN_INVALID);
+                pHdl = new XMLThemeColorHandler;
                 break;
         }
 
