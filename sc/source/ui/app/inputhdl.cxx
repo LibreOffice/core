@@ -2409,7 +2409,7 @@ static void lcl_SelectionToEnd( EditView* pView )
     }
 }
 
-void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
+void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 {
     // Macro calls for validity can cause a lot of problems, so inhibit
     // nested calls of EnterHandler().
@@ -2419,7 +2419,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
 
     ImplCreateEditEngine();
 
-    bool bMatrix = ( nBlockMode == SC_ENTER_MATRIX );
+    bool bMatrix = ( nBlockMode == ScEnterMode::MATRIX );
 
     SfxApplication* pSfxApp     = SfxGetpApp();
     EditTextObject* pObject     = NULL;
@@ -2705,9 +2705,9 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             SfxBindings& rBindings = pExecuteSh->GetViewFrame()->GetBindings();
 
             sal_uInt16 nId = FID_INPUTLINE_ENTER;
-            if ( nBlockMode == SC_ENTER_BLOCK )
+            if ( nBlockMode == ScEnterMode::BLOCK )
                 nId = FID_INPUTLINE_BLOCK;
-            else if ( nBlockMode == SC_ENTER_MATRIX )
+            else if ( nBlockMode == ScEnterMode::MATRIX )
                 nId = FID_INPUTLINE_MATRIX;
 
             ScInputStatusItem aItem( FID_INPUTLINE_STATUS,
@@ -3055,11 +3055,11 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
             }
             else
             {
-                sal_uInt8 nMode = SC_ENTER_NORMAL;
+                ScEnterMode nMode = ScEnterMode::NORMAL;
                 if ( bShift && bControl )
-                    nMode = SC_ENTER_MATRIX;
+                    nMode = ScEnterMode::MATRIX;
                 else if ( bAlt )
-                    nMode = SC_ENTER_BLOCK;
+                    nMode = ScEnterMode::BLOCK;
                 EnterHandler( nMode );
 
                 if (pActiveViewSh)

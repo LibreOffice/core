@@ -104,7 +104,7 @@ class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
     SvtUserOptions*     pUserOptions;
     SfxErrorHandler*    pErrorHdl;
     ScFormEditData*     pFormEditData;
-    sal_uInt16              nCurRefDlgId;
+    sal_uInt16          nCurRefDlgId;
     bool                bIsWaterCan:1;
     bool                bIsInEditCommand:1;
     bool                bIsInExecuteDrop:1;
@@ -120,8 +120,8 @@ private:
     static void InitInterface_Impl();
 
 public:
-                    ScModule( SfxObjectFactory* pFact );
-    virtual         ~ScModule();
+                        ScModule( SfxObjectFactory* pFact );
+    virtual            ~ScModule();
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
@@ -168,28 +168,28 @@ public:
 
     // Options:
     const ScViewOptions&    GetViewOptions  ();
-SC_DLLPUBLIC    const ScDocOptions&     GetDocOptions   ();
-SC_DLLPUBLIC    const ScAppOptions&     GetAppOptions   ();
-SC_DLLPUBLIC    const ScDefaultsOptions&   GetDefaultsOptions ();
-    SC_DLLPUBLIC const ScFormulaOptions&   GetFormulaOptions ();
-    SC_DLLPUBLIC const ScInputOptions& GetInputOptions ();
-SC_DLLPUBLIC    const ScPrintOptions&   GetPrintOptions ();
-    void                    SetViewOptions  ( const ScViewOptions& rOpt );
-SC_DLLPUBLIC    void                    SetDocOptions   ( const ScDocOptions& rOpt );
-SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rOpt );
-    void                    SetDefaultsOptions ( const ScDefaultsOptions& rOpt );
-    SC_DLLPUBLIC void                    SetFormulaOptions ( const ScFormulaOptions& rOpt );
+    SC_DLLPUBLIC const ScDocOptions&        GetDocOptions   ();
+    SC_DLLPUBLIC const ScAppOptions&        GetAppOptions   ();
+    SC_DLLPUBLIC const ScDefaultsOptions&   GetDefaultsOptions ();
+    SC_DLLPUBLIC const ScFormulaOptions&    GetFormulaOptions ();
+    SC_DLLPUBLIC const ScInputOptions&      GetInputOptions ();
+    SC_DLLPUBLIC const ScPrintOptions&      GetPrintOptions ();
+    void                SetViewOptions  ( const ScViewOptions& rOpt );
+    SC_DLLPUBLIC void   SetDocOptions   ( const ScDocOptions& rOpt );
+    SC_DLLPUBLIC void   SetAppOptions   ( const ScAppOptions& rOpt );
+    void                SetDefaultsOptions ( const ScDefaultsOptions& rOpt );
+    SC_DLLPUBLIC void   SetFormulaOptions ( const ScFormulaOptions& rOpt );
     SC_DLLPUBLIC void   SetInputOptions ( const ScInputOptions& rOpt );
-    void                    SetPrintOptions ( const ScPrintOptions& rOpt );
-    void                    InsertEntryToLRUList(sal_uInt16 nFIndex);
+    void                SetPrintOptions ( const ScPrintOptions& rOpt );
+    void                InsertEntryToLRUList(sal_uInt16 nFIndex);
     static void         RecentFunctionsChanged();
 
     static void         GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
-                                        bool& rAutoSpell );
+                                          bool& rAutoSpell );
     static void         SetAutoSpellProperty( bool bSet );
     static bool         HasThesaurusLanguage( sal_uInt16 nLang );
 
-    sal_uInt16              GetOptDigitLanguage();      // from CTL options
+    sal_uInt16           GetOptDigitLanguage();      // from CTL options
 
     ScNavipiCfg&        GetNavipiCfg();
     ScAddInCfg&         GetAddInCfg();
@@ -203,9 +203,9 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     // InputHandler:
     bool                IsEditMode();   // not for SC_INPUT_TYPE
     bool                IsInputMode();  // also for SC_INPUT_TYPE
-    void SetInputMode( ScInputMode eMode, const OUString* pInitText = NULL );
+    void                SetInputMode( ScInputMode eMode, const OUString* pInitText = NULL );
     bool                InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit = false );
-    SC_DLLPUBLIC void                InputEnterHandler( sal_uInt8 nBlockMode = 0 );
+    SC_DLLPUBLIC void   InputEnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL );
     void                InputCancelHandler();
     void                InputSelection( EditView* pView );
     void                InputChanged( EditView* pView );
@@ -230,7 +230,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     ScFormEditData*     GetFormEditData()       { return pFormEditData; }
 
     // input of reference:
-    SC_DLLPUBLIC void               SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm = NULL );
+    SC_DLLPUBLIC void   SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm = NULL );
     bool                IsModalMode(SfxObjectShell* pDocSh = NULL);
     bool                IsFormulaMode();
     bool                IsRefDialogOpen();
@@ -239,7 +239,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
                                         const ScMarkData* pMarkData = NULL );
     void                AddRefEntry();
     void                EndReference();
-    sal_uInt16              GetCurRefDlgId() const                  { return nCurRefDlgId; }
+    sal_uInt16          GetCurRefDlgId() const                  { return nCurRefDlgId; }
 
     // virtual methods for the options dialog
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;

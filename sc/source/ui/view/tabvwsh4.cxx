@@ -1310,14 +1310,14 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
                         if ( bOnRefSheet )
                             HideAllCursors();
 
-                        sal_uInt8 nMode = SC_ENTER_NORMAL;
+                        ScEnterMode nMode = ScEnterMode::NORMAL;
                         if ( bShift && bControl )
-                            nMode = SC_ENTER_MATRIX;
+                            nMode = ScEnterMode::MATRIX;
                         else if ( bAlt )
-                            nMode = SC_ENTER_BLOCK;
+                            nMode = ScEnterMode::BLOCK;
                         pScMod->InputEnterHandler(nMode);
 
-                        if (nMode == SC_ENTER_NORMAL)
+                        if (nMode == ScEnterMode::NORMAL)
                         {
                             if( bShift )
                                 GetViewData().GetDispatcher().Execute( SID_CURSORENTERUP,
