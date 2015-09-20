@@ -37,7 +37,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include "LegendHelper.hxx"
-#include "TitleHelper.hxx"
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"
 #include "DiagramHelper.hxx"
@@ -117,18 +116,6 @@ void setLegendVisible(css::uno::Reference<css::frame::XModel> xModel, bool bVisi
 bool isTitleVisisble(css::uno::Reference<css::frame::XModel> xModel, TitleHelper::eTitleType eTitle)
 {
     return TitleHelper::getTitle(eTitle, xModel).is();
-}
-
-void setTitleVisible(css::uno::Reference<css::frame::XModel> xModel, TitleHelper::eTitleType eTitle, bool bVisible)
-{
-    if (bVisible)
-    {
-        TitleHelper::createTitle(eTitle, "Title", xModel, comphelper::getProcessComponentContext());
-    }
-    else
-    {
-        TitleHelper::removeTitle(eTitle, xModel);
-    }
 }
 
 bool isGridVisible(css::uno::Reference<css::frame::XModel> xModel, GridType eType)
@@ -313,6 +300,12 @@ ChartElementsPanel::ChartElementsPanel(
     get(mpLBLegendPosition, "comboboxtext_legend");
     get(mpBoxLegend, "box_legend");
 
+    get(mpTextTitle, "text_title");
+    get(mpTextSubTitle, "text_subtitle");
+
+    maTextTitle = mpTextTitle->GetText();
+    maTextSubTitle = mpTextSubTitle->GetText();
+
     Initialize();
 }
 
@@ -346,6 +339,9 @@ void ChartElementsPanel::dispose()
 
     mpLBLegendPosition.clear();
     mpBoxLegend.clear();
+
+    mpTextTitle.clear();
+    mpTextSubTitle.clear();
 
     PanelLayout::dispose();
 }
@@ -472,29 +468,29 @@ IMPL_LINK_TYPED(ChartElementsPanel, CheckBoxHdl, Button*, pButton, void)
     CheckBox* pCheckBox = static_cast<CheckBox*>(pButton);
     bool bChecked = pCheckBox->IsChecked();
     if (pCheckBox == mpCBTitle.get())
-        setTitleVisible(mxModel, TitleHelper::MAIN_TITLE, bChecked);
+        setTitleVisible(TitleHelper::MAIN_TITLE, bChecked);
     else if (pCheckBox == mpCBSubtitle.get())
-        setTitleVisible(mxModel, TitleHelper::SUB_TITLE, bChecked);
+        setTitleVisible(TitleHelper::SUB_TITLE, bChecked);
     else if (pCheckBox == mpCBXAxis.get())
         setAxisVisible(mxModel, AxisType::X_MAIN, bChecked);
     else if (pCheckBox == mpCBXAxisTitle.get())
-        setTitleVisible(mxModel, TitleHelper::X_AXIS_TITLE, bChecked);
+        setTitleVisible(TitleHelper::X_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCBYAxis.get())
         setAxisVisible(mxModel, AxisType::Y_MAIN, bChecked);
     else if (pCheckBox == mpCBYAxisTitle.get())
-        setTitleVisible(mxModel, TitleHelper::Y_AXIS_TITLE, bChecked);
+        setTitleVisible(TitleHelper::Y_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCBZAxis.get())
         setAxisVisible(mxModel, AxisType::Z_MAIN, bChecked);
     else if (pCheckBox == mpCBZAxisTitle.get())
-        setTitleVisible(mxModel, TitleHelper::Z_AXIS_TITLE, bChecked);
+        setTitleVisible(TitleHelper::Z_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCB2ndXAxis.get())
         setAxisVisible(mxModel, AxisType::X_SECOND, bChecked);
     else if (pCheckBox == mpCB2ndXAxisTitle.get())
-        setTitleVisible(mxModel, TitleHelper::SECONDARY_X_AXIS_TITLE, bChecked);
+        setTitleVisible(TitleHelper::SECONDARY_X_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCB2ndYAxis.get())
         setAxisVisible(mxModel, AxisType::Y_SECOND, bChecked);
     else if (pCheckBox == mpCB2ndYAxisTitle.get())
-        setTitleVisible(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE, bChecked);
+        setTitleVisible(TitleHelper::SECONDARY_Y_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCBLegend.get())
     {
         mpBoxLegend->Enable( bChecked );
@@ -515,6 +511,19 @@ IMPL_LINK_NOARG(ChartElementsPanel, LegendPosHdl)
     sal_Int32 nPos = mpLBLegendPosition->GetSelectEntryPos();
     setLegendPos(mxModel, nPos);
     return 0;
+}
+
+void ChartElementsPanel::setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible)
+{
+    if (bVisible)
+    {
+        OUString aText = eTitle == TitleHelper::SUB_TITLE ? maTextSubTitle : maTextTitle;
+        TitleHelper::createTitle(eTitle, aText, mxModel, comphelper::getProcessComponentContext());
+    }
+    else
+    {
+        TitleHelper::removeTitle(eTitle, mxModel);
+    }
 }
 
 }} // end of namespace ::chart::sidebar

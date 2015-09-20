@@ -25,6 +25,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/layout.hxx>
 #include "ChartSidebarModifyListener.hxx"
+#include "TitleHelper.hxx"
 
 #include <com/sun/star/util/XModifyListener.hpp>
 
@@ -89,6 +90,8 @@ private:
     VclPtr<CheckBox> mpCBGridHorizontalMajor;
     VclPtr<CheckBox> mpCBGridVerticalMinor;
     VclPtr<CheckBox> mpCBGridHorizontalMinor;
+    VclPtr<FixedText> mpTextTitle;
+    VclPtr<FixedText> mpTextSubTitle;
 
     VclPtr<ListBox> mpLBLegendPosition;
     VclPtr<VclHBox> mpBoxLegend;
@@ -101,7 +104,12 @@ private:
 
     bool mbModelValid;
 
+    OUString maTextTitle;
+    OUString maTextSubTitle;
+
     void Initialize();
+
+    void setTitleVisible(TitleHelper::eTitleType eTitle, bool bVisible);
 
     DECL_LINK_TYPED(CheckBoxHdl, Button*, void);
     DECL_LINK(LegendPosHdl, void*);
