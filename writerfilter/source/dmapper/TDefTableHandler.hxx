@@ -78,6 +78,7 @@ public:
     css::beans::PropertyValue getInteropGrabBag(const OUString& aName = OUString());
     static OUString getBorderTypeString(sal_Int32 nType);
     static OUString getThemeColorTypeString(sal_Int32 nType);
+    static sal_Int16 getThemeColorTypeIndex(sal_Int32 nType);
 };
 }}
 

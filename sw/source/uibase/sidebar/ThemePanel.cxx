@@ -254,13 +254,17 @@ void changeFont(SwFormat* pFormat, SwDocStyleSheet* pStyle, FontSet& rFontSet)
     }
 }*/
 
-void changeColor(SwTextFormatColl* pCollection, svx::ColorSet& rColorSet, StyleRedefinition* pRedefinition)
+void changeColor(SwTextFormatColl* pCollection, svx::ColorSet& rColorSet, StyleRedefinition* /*pRedefinition*/)
 {
-    Color aColor = pRedefinition->getColor(rColorSet);
-
     SvxColorItem aColorItem(pCollection->GetColor());
-    aColorItem.SetValue(aColor);
-    pCollection->SetFormatAttr(aColorItem);
+    if (aColorItem.GetThemeIndex() >= 0)
+    {
+        sal_Int16 nIndex = aColorItem.GetThemeIndex();
+        Color aColor = Color(rColorSet.getColor(nIndex));
+        aColor.ApplyTintOrShade(aColorItem.GetTintOrShade());
+        aColorItem.SetValue(aColor);
+        pCollection->SetFormatAttr(aColorItem);
+    }
 }
 
 std::vector<FontSet> initFontSets()

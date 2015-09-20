@@ -272,6 +272,50 @@ OUString TDefTableHandler::getThemeColorTypeString(sal_Int32 nType)
     return OUString();
 }
 
+sal_Int16 TDefTableHandler::getThemeColorTypeIndex(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case NS_ooxml::LN_Value_St_ThemeColor_dark1:
+                return 0;
+        case NS_ooxml::LN_Value_St_ThemeColor_light1:
+                return 1;
+        case NS_ooxml::LN_Value_St_ThemeColor_dark2:
+                return 2;
+        case NS_ooxml::LN_Value_St_ThemeColor_light2:
+                return 3;
+        case NS_ooxml::LN_Value_St_ThemeColor_accent1:
+                return 4;
+        case NS_ooxml::LN_Value_St_ThemeColor_accent2:
+                return 5;
+        case NS_ooxml::LN_Value_St_ThemeColor_accent3:
+                return 6;
+        case NS_ooxml::LN_Value_St_ThemeColor_accent4:
+                return 7;
+        case NS_ooxml::LN_Value_St_ThemeColor_accent5:
+                return 8;
+        case NS_ooxml::LN_Value_St_ThemeColor_accent6:
+                return 9;
+        case NS_ooxml::LN_Value_St_ThemeColor_hyperlink:
+                return 10;
+        case NS_ooxml::LN_Value_St_ThemeColor_followedHyperlink:
+                return 11;
+        case NS_ooxml::LN_Value_St_ThemeColor_none:
+                return 12;
+        case NS_ooxml::LN_Value_St_ThemeColor_background1:
+                return 13;
+        case NS_ooxml::LN_Value_St_ThemeColor_text1:
+                return 14;
+        case NS_ooxml::LN_Value_St_ThemeColor_background2:
+                return 15;
+        case NS_ooxml::LN_Value_St_ThemeColor_text2:
+                return 16;
+        default:
+                break;
+    }
+    return -1;
+}
+
 void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();

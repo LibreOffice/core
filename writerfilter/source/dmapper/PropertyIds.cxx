@@ -33,6 +33,8 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_CHAR_SHADOWED:   sName = "CharShadowed"; break;
         case PROP_CHAR_CASE_MAP:   sName = "CharCaseMap"; break;
         case PROP_CHAR_COLOR:      sName = "CharColor"; break;
+        case PROP_CHAR_COLOR_THEME_INDEX: sName = "CharColorTheme"; break;
+        case PROP_CHAR_COLOR_TINT_OR_SHADE: sName = "CharColorTintOrShade"; break;
         case PROP_CHAR_RELIEF:     sName = "CharRelief"; break;
         case PROP_CHAR_UNDERLINE:  sName = "CharUnderline"; break;
         case PROP_CHAR_UNDERLINE_COLOR:  sName = "CharUnderlineColor"; break;
