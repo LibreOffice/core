@@ -57,7 +57,7 @@ ScPointerChangedHint::~ScPointerChangedHint()
 //      ScLinkRefreshedHint - a link has been refreshed
 
 ScLinkRefreshedHint::ScLinkRefreshedHint() :
-    nLinkType( SC_LINKREFTYPE_NONE ),
+    nLinkType( ScLinkRefType::NONE ),
     nDdeMode( 0 )
 {
 }
@@ -68,14 +68,14 @@ ScLinkRefreshedHint::~ScLinkRefreshedHint()
 
 void ScLinkRefreshedHint::SetSheetLink( const OUString& rSourceUrl )
 {
-    nLinkType = SC_LINKREFTYPE_SHEET;
+    nLinkType = ScLinkRefType::SHEET;
     aUrl = rSourceUrl;
 }
 
 void ScLinkRefreshedHint::SetDdeLink(
             const OUString& rA, const OUString& rT, const OUString& rI, sal_uInt8 nM )
 {
-    nLinkType = SC_LINKREFTYPE_DDE;
+    nLinkType = ScLinkRefType::DDE;
     aDdeAppl  = rA;
     aDdeTopic = rT;
     aDdeItem  = rI;
@@ -84,7 +84,7 @@ void ScLinkRefreshedHint::SetDdeLink(
 
 void ScLinkRefreshedHint::SetAreaLink( const ScAddress& rPos )
 {
-    nLinkType = SC_LINKREFTYPE_AREA;
+    nLinkType = ScLinkRefType::AREA;
     aDestPos = rPos;
 }
 

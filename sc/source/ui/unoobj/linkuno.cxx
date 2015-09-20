@@ -102,7 +102,7 @@ void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
         const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
-        if ( rLH.GetLinkType() == SC_LINKREFTYPE_SHEET && rLH.GetUrl() == aFileName )
+        if ( rLH.GetLinkType() == ScLinkRefType::SHEET && rLH.GetUrl() == aFileName )
             Refreshed_Impl();
     }
 }
@@ -628,7 +628,7 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
         const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
-        if ( rLH.GetLinkType() == SC_LINKREFTYPE_AREA )
+        if ( rLH.GetLinkType() == ScLinkRefType::AREA )
         {
             //  get this link to compare dest position
             ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
@@ -1074,7 +1074,7 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if ( dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
     {
         const ScLinkRefreshedHint& rLH = static_cast<const ScLinkRefreshedHint&>(rHint);
-        if ( rLH.GetLinkType() == SC_LINKREFTYPE_DDE &&
+        if ( rLH.GetLinkType() == ScLinkRefType::DDE &&
              rLH.GetDdeAppl()  == aAppl &&
              rLH.GetDdeTopic() == aTopic &&
              rLH.GetDdeItem()  == aItem )       //! mode is ignored

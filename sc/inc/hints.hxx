@@ -81,15 +81,13 @@ public:
 };
 
 //! move ScLinkRefreshedHint to a different file?
-
-#define SC_LINKREFTYPE_NONE     0
-#define SC_LINKREFTYPE_SHEET    1
-#define SC_LINKREFTYPE_AREA     2
-#define SC_LINKREFTYPE_DDE      3
+enum class ScLinkRefType {
+    NONE, SHEET, AREA, DDE
+};
 
 class ScLinkRefreshedHint : public SfxHint
 {
-    sal_uInt16  nLinkType;  // SC_LINKREFTYPE_...
+    ScLinkRefType nLinkType;
     OUString    aUrl;       // used for sheet links
     OUString    aDdeAppl;   // used for dde links:
     OUString    aDdeTopic;
@@ -106,7 +104,7 @@ public:
     void            SetDdeLink( const OUString& rA, const OUString& rT, const OUString& rI, sal_uInt8 nM );
     void            SetAreaLink( const ScAddress& rPos );
 
-    sal_uInt16          GetLinkType() const { return nLinkType; }
+    ScLinkRefType       GetLinkType() const { return nLinkType; }
     const OUString&     GetUrl() const      { return aUrl; }
     const OUString&     GetDdeAppl() const  { return aDdeAppl; }
     const OUString&     GetDdeTopic() const { return aDdeTopic; }
