@@ -714,19 +714,19 @@ public:
     SC_DLLPUBLIC formula::FormulaGrammar::AddressConvention GetAddressConvention() const;
     SC_DLLPUBLIC formula::FormulaGrammar::Grammar GetGrammar() const { return eGrammar;}
     SC_DLLPUBLIC void SetGrammar( formula::FormulaGrammar::Grammar eGram );
-    SC_DLLPUBLIC sal_uInt8          GetLinkMode( SCTAB nTab ) const;
-    bool            IsLinked( SCTAB nTab ) const;
+    SC_DLLPUBLIC ScLinkMode GetLinkMode( SCTAB nTab ) const;
+    bool             IsLinked( SCTAB nTab ) const;
     SC_DLLPUBLIC const OUString  GetLinkDoc( SCTAB nTab ) const;
     const OUString   GetLinkFlt( SCTAB nTab ) const;
     const OUString   GetLinkOpt( SCTAB nTab ) const;
     SC_DLLPUBLIC const OUString  GetLinkTab( SCTAB nTab ) const;
     sal_uLong       GetLinkRefreshDelay( SCTAB nTab ) const;
-    void            SetLink( SCTAB nTab, sal_uInt8 nMode, const OUString& rDoc,
+    void            SetLink( SCTAB nTab, ScLinkMode nMode, const OUString& rDoc,
                             const OUString& rFilter, const OUString& rOptions,
                             const OUString& rTabName, sal_uLong nRefreshDelay );
     bool            HasLink( const OUString& rDoc,
                             const OUString& rFilter, const OUString& rOptions ) const;
-    SC_DLLPUBLIC bool           LinkExternalTab( SCTAB& nTab, const OUString& aDocTab,
+    SC_DLLPUBLIC bool LinkExternalTab( SCTAB& nTab, const OUString& aDocTab,
                                     const OUString& aFileName,
                                     const OUString& aTabName );
 
@@ -734,7 +734,7 @@ public:
     SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager() const;
     bool            IsInExternalReferenceMarking() const;
     void            MarkUsedExternalReferences();
-    bool MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress& rPos );
+    bool            MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress& rPos );
 
     /** Returns the pool containing external formula parsers. Creates the pool
         on first call. */

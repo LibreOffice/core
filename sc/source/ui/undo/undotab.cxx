@@ -1042,13 +1042,13 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const OUString& rDocName
     ScDocument& rDoc = pDocShell->GetDocument();
     SCTAB nTabCount = rDoc.GetTableCount();
     pTabs     = new SCTAB[nTabCount];
-    pModes    = new sal_uInt8[nTabCount];
+    pModes    = new ScLinkMode[nTabCount];
     pTabNames = new OUString[nTabCount];
 
     for (SCTAB i=0; i<nTabCount; i++)
     {
-        sal_uInt8 nMode = rDoc.GetLinkMode(i);
-        if (nMode)
+        ScLinkMode nMode = rDoc.GetLinkMode(i);
+        if (nMode != ScLinkMode::NONE)
             if (rDoc.GetLinkDoc(i) == aDocName)
             {
                 if (!nCount)
@@ -1090,7 +1090,7 @@ void ScUndoRemoveLink::DoChange( bool bLink ) const
         if (bLink)      // establish link
             rDoc.SetLink( pTabs[i], pModes[i], aDocName, aFltName, aOptions, pTabNames[i], nRefreshDelay );
         else            // remove link
-            rDoc.SetLink( pTabs[i], SC_LINK_NONE, "", "", "", "", 0 );
+            rDoc.SetLink( pTabs[i], ScLinkMode::NONE, "", "", "", "", 0 );
     pDocShell->UpdateLinks();
 }
 

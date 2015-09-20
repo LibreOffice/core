@@ -230,7 +230,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
     aName( rNewName ),
     aCodeName( rNewName ),
     nLinkRefreshDelay( 0 ),
-    nLinkMode( 0 ),
+    nLinkMode( ScLinkMode::NONE ),
     aPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) ),
     nRepeatStartX( SCCOL_REPEAT_NONE ),
     nRepeatEndX( SCCOL_REPEAT_NONE ),
@@ -419,7 +419,7 @@ void ScTable::SetScenario( bool bFlag )
     bScenario = bFlag;
 }
 
-void ScTable::SetLink( sal_uInt8 nMode,
+void ScTable::SetLink( ScLinkMode nMode,
                         const OUString& rDoc, const OUString& rFlt, const OUString& rOpt,
                         const OUString& rTab, sal_uLong nRefreshDelay )
 {

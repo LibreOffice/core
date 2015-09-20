@@ -464,11 +464,11 @@ void ScDocument::SetGrammar( formula::FormulaGrammar::Grammar eGram )
     eGrammar = eGram;
 }
 
-sal_uInt8 ScDocument::GetLinkMode( SCTAB nTab ) const
+ScLinkMode ScDocument::GetLinkMode( SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         return maTabs[nTab]->GetLinkMode();
-    return SC_LINK_NONE;
+    return ScLinkMode::NONE;
 }
 
 const OUString ScDocument::GetLinkDoc( SCTAB nTab ) const
@@ -506,7 +506,7 @@ sal_uLong ScDocument::GetLinkRefreshDelay( SCTAB nTab ) const
     return 0;
 }
 
-void ScDocument::SetLink( SCTAB nTab, sal_uInt8 nMode, const OUString& rDoc,
+void ScDocument::SetLink( SCTAB nTab, ScLinkMode nMode, const OUString& rDoc,
                             const OUString& rFilter, const OUString& rOptions,
                             const OUString& rTabName, sal_uLong nRefreshDelay )
 {
@@ -564,7 +564,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
     sal_uLong nRefreshDelay = 0;
 
     bool bWasThere = HasLink( aFileName, aFilterName, aOptions );
-    SetLink( rTab, SC_LINK_VALUE, aFileName, aFilterName, aOptions, aTabName, nRefreshDelay );
+    SetLink( rTab, ScLinkMode::VALUE, aFileName, aFilterName, aOptions, aTabName, nRefreshDelay );
     if ( !bWasThere ) // Add link only once per source document
     {
         ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
