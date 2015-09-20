@@ -255,7 +255,7 @@ SdrTextObj *TextChainFlow::GetNextLink() const
 
 OutlinerParaObject *TextChainFlow::impGetOverflowingParaObject(SdrOutliner *)
 {   // XXX: Should never be called (to be deleted)
-    assert(0);
+    assert(false);
     return NULL;
     //return mpOverflChText->CreateOverflowingParaObject(pOutliner,
 //                                                      mpNextLink->GetOutlinerParaObject());
