@@ -6518,7 +6518,7 @@ void Test::testMixData()
 
     // Paste A1:B1 to A2:B2 and perform addition.
     pasteFromClip(m_pDoc, ScRange(0,1,0,1,1,0), &aClipDoc);
-    m_pDoc->MixDocument(ScRange(0,1,0,1,1,0), PASTE_ADD, false, &aMixDoc);
+    m_pDoc->MixDocument(ScRange(0,1,0,1,1,0), ScPasteFunc::ADD, false, &aMixDoc);
 
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,1,0)); // A2
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1,1,0)); // B2
@@ -6544,7 +6544,7 @@ void Test::testMixData()
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(ScAddress(1,1,0)), aMixDoc.GetValue(ScAddress(1,1,0)));
 
     pasteFromClip(m_pDoc, ScRange(1,0,0,1,1,0), &aClipDoc);
-    m_pDoc->MixDocument(ScRange(1,0,0,1,1,0), PASTE_SUB, false, &aMixDoc);
+    m_pDoc->MixDocument(ScRange(1,0,0,1,1,0), ScPasteFunc::SUB, false, &aMixDoc);
 
     CPPUNIT_ASSERT_EQUAL( -3.0, m_pDoc->GetValue(ScAddress(1,0,0))); // 12 - 15
     CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(ScAddress(1,1,0))); //  0 - 16

@@ -302,7 +302,7 @@ InsertDeleteFlags AbstractScInsertContentsDlg_Impl::GetInsContentsCmdBits() cons
     return pDlg->GetInsContentsCmdBits();
 }
 
-sal_uInt16  AbstractScInsertContentsDlg_Impl::GetFormulaCmdBits() const
+ScPasteFunc  AbstractScInsertContentsDlg_Impl::GetFormulaCmdBits() const
 {
     return pDlg->GetFormulaCmdBits();
 }
