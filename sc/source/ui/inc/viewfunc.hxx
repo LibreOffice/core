@@ -105,13 +105,13 @@ public:
                                             bool bApi = false, bool bIncludeObjects = false, bool bStopEdit = true, bool bUseRangeForVBA = true );
     ScTransferObj*              CopyToTransferable();
     SC_DLLPUBLIC bool           PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
-                                    sal_uInt16 nFunction = PASTE_NOFUNC, bool bSkipEmpty = false,
+                                    ScPasteFunc nFunction = ScPasteFunc::NONE, bool bSkipEmpty = false,
                                     bool bTranspose = false, bool bAsLink = false,
                                     InsCellCmd eMoveMode = INS_NONE,
                                     InsertDeleteFlags nUndoExtraFlags = IDF_NONE,
                                     bool bAllowDialogs = false );
 
-    void                        FillTab( InsertDeleteFlags nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bAsLink );
+    void                        FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bAsLink );
 
     SC_DLLPUBLIC void           PasteFromSystem();
     SC_DLLPUBLIC bool           PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi = false );
@@ -119,8 +119,8 @@ public:
                                                        ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
     void            PasteDraw();
-    void PasteDraw( const Point& rLogicPos, SdrModel* pModel, bool bGroup,
-                    const OUString& rSrcShellID, const OUString& rDestShellID );
+    void            PasteDraw( const Point& rLogicPos, SdrModel* pModel, bool bGroup,
+                        const OUString& rSrcShellID, const OUString& rDestShellID );
 
     bool            PasteOnDrawObjectLinked(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable,
@@ -341,11 +341,11 @@ private:
                                 const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
-    bool             PasteMultiRangesFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+    bool             PasteMultiRangesFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc, ScPasteFunc nFunction,
                                    bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
                                    InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags );
 
-    bool             PasteFromClipToMultiRanges( InsertDeleteFlags nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+    bool             PasteFromClipToMultiRanges( InsertDeleteFlags nFlags, ScDocument* pClipDoc, ScPasteFunc nFunction,
                                      bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
                                      InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags );
 

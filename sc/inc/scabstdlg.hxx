@@ -159,7 +159,7 @@ class AbstractScInsertContentsDlg : public VclAbstractDialog
 {
 public:
     virtual InsertDeleteFlags GetInsContentsCmdBits() const = 0;
-    virtual sal_uInt16  GetFormulaCmdBits() const = 0 ;
+    virtual ScPasteFunc   GetFormulaCmdBits() const = 0 ;
     virtual bool        IsSkipEmptyCells() const = 0;
     virtual bool        IsLink() const = 0;
     virtual void        SetFillMode( bool bSet ) = 0;

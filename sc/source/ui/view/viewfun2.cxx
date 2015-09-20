@@ -791,7 +791,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
 
     pInsDoc->SetClipArea( ScRange(aPos) );
     // insert Block, with Undo etc.
-    if ( PasteFromClip( IDF_CONTENTS, pInsDoc.get(), PASTE_NOFUNC, false, false,
+    if ( PasteFromClip( IDF_CONTENTS, pInsDoc.get(), ScPasteFunc::NONE, false, false,
             false, INS_NONE, IDF_ATTRIB ) )
     {
         const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>( pInsDoc->GetAttr(
@@ -1418,7 +1418,7 @@ void ScViewFunc::CopyAutoSpellData( FillDir eDir, SCCOL nStartCol, SCROW nStartR
 
 }
 
-void ScViewFunc::FillTab( InsertDeleteFlags nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bAsLink )
+void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bAsLink )
 {
     //! allow source sheet to be protected
     ScEditableTester aTester( this );
