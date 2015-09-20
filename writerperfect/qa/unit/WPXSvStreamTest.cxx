@@ -328,7 +328,6 @@ void WPXSvStreamTest::testStructured()
         CPPUNIT_ASSERT(!pSubStream->isEnd());
 
         // check for not existing substream
-        CPPUNIT_ASSERT(pInput->existsSubStream("content.xml"));
         CPPUNIT_ASSERT(!pInput->existsSubStream("foo"));
         pSubStream.reset(pInput->getSubStreamByName("foo"));
         CPPUNIT_ASSERT(!pSubStream);
