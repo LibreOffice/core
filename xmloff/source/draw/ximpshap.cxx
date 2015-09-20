@@ -1760,7 +1760,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
             }
         }
 
-        if(maChainNextName != "")
+        if(!maChainNextName.isEmpty())
         {
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if(xPropSet.is())
