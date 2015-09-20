@@ -8,9 +8,6 @@
  */
 
 #include <rtfsprm.hxx>
-
-#include <rtl/strbuf.hxx>
-
 #include <ooxml/resourceids.hxx>
 #include <ooxml/QNameToString.hxx>
 

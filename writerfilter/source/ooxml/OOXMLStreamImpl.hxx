@@ -24,7 +24,6 @@
 #include <ooxml/OOXMLDocument.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
-#include <com/sun/star/io/XStream.hpp>
 
 extern OUString customTarget;
 extern OUString embeddingsTarget;

@@ -10,14 +10,11 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSPRM_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFSPRM_HXX
 
-#include <sal/config.h>
-
 #include <string>
 #include <utility>
 #include <vector>
 
 #include <boost/intrusive_ptr.hpp>
-#include <rtfcontrolwords.hxx>
 #include <rtfvalue.hxx>
 
 namespace writerfilter
