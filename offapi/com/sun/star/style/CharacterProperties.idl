@@ -452,6 +452,17 @@ published service CharacterProperties
     */
     [optional, property] sequence<com::sun::star::beans::PropertyValue> CharInteropGrabBag;
 
+    /** TODO
+     *
+     *  @since LibreOffice 5.1
+     **/
+    [optional, property] short CharColorTheme;
+
+    /** TODO
+     *
+     *  @since LibreOffice 5.1
+     **/
+    [optional, property] short CharColorTintOrShade;
 };
 
 }; }; }; };

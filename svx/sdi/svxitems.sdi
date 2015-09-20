@@ -314,12 +314,19 @@ enum SvxShadowLocation
 };
 item SvxShadowLocation      SvxShadowLocationItem;
 
+struct SvxColor
+{
+    INT32 ColorValue       MID_COLOR_VALUE;
+    INT16 ThemeIndex       MID_COLOR_THEME_INDEX;
+    INT32 ThemeTintOrShade MID_COLOR_TINT_OR_SHADE;
+};
+item SvxColor SvxColorItem;
+
 item INT16                  SvxCharScaleWidthItem;
 item INT16                  SvxParaVertAlignItem;
 item INT16                  SvxCharReliefItem;
 item BOOL                   SvxBlinkItem;
 item BOOL                   SvxAutoKernItem;
-item INT32                  SvxColorItem;
 item INT32                  SvxBackgroundColorItem;
 item BOOL                   SvxContourItem;
 item INT16                  SvxFormatBreakItem;  // enum

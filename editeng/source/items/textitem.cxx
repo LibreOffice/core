@@ -1927,19 +1927,25 @@ bool SvxBackgroundColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId
 
 // class SvxColorItem ----------------------------------------------------
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
-    SfxPoolItem( nId ),
-    mColor( COL_BLACK )
+    SfxPoolItem(nId),
+    mColor( COL_BLACK ),
+    maThemeIndex(-1),
+    maTintShade(0)
 {
 }
 
 SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
-    mColor( rCol )
+    mColor( rCol ),
+    maThemeIndex(-1),
+    maTintShade(0)
 {
 }
 
 SvxColorItem::SvxColorItem( SvStream &rStrm, const sal_uInt16 nId ) :
-    SfxPoolItem( nId )
+    SfxPoolItem( nId ),
+    maThemeIndex(-1),
+    maTintShade(0)
 {
     Color aColor;
     ReadColor( rStrm, aColor );
@@ -1948,7 +1954,9 @@ SvxColorItem::SvxColorItem( SvStream &rStrm, const sal_uInt16 nId ) :
 
 SvxColorItem::SvxColorItem( const SvxColorItem &rCopy ) :
     SfxPoolItem( rCopy ),
-    mColor( rCopy.mColor )
+    mColor( rCopy.mColor ),
+    maThemeIndex(rCopy.maThemeIndex),
+    maTintShade(rCopy.maTintShade)
 {
 }
 
@@ -1968,8 +1976,11 @@ sal_uInt16 SvxColorItem::GetVersion( sal_uInt16 nFFVer ) const
 bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
+    const SvxColorItem& rColorItem = static_cast<const SvxColorItem&>(rAttr);
 
-    return  mColor == static_cast<const SvxColorItem&>( rAttr ).mColor;
+    return mColor == rColorItem.mColor &&
+           maThemeIndex == rColorItem.maThemeIndex &&
+           maTintShade == rColorItem.maTintShade;
 }
 
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
@@ -1978,13 +1989,36 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
     return true;
 }
 
-bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
+bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    sal_Int32 nColor = 0;
-    if(!(rVal >>= nColor))
-        return false;
-
-    mColor.SetColor( nColor );
+    switch(nMemberId)
+    {
+        case 0:
+        case MID_COLOR_VALUE:
+        {
+            sal_Int32 nColor = 0;
+            if (!(rVal >>= nColor))
+                return false;
+            mColor.SetColor( nColor );
+        }
+        break;
+        case MID_COLOR_THEME_INDEX:
+        {
+            sal_Int16 nIndex = -1;
+            if (!(rVal >>= nIndex))
+                return false;
+            maThemeIndex = nIndex;
+        }
+        break;
+        case MID_COLOR_TINT_OR_SHADE:
+        {
+            sal_Int16 nTintShade = -1;
+            if (!(rVal >>= nTintShade))
+                return false;
+            maTintShade = nTintShade;
+        }
+        break;
+    }
     return true;
 }
 

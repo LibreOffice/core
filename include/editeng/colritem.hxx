@@ -33,6 +33,8 @@ class EDITENG_DLLPUBLIC SvxColorItem : public SfxPoolItem
 {
 private:
     Color mColor;
+    sal_Int16 maThemeIndex;
+    sal_Int16 maTintShade;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -68,6 +70,24 @@ public:
         return mColor;
     }
     void SetValue(const Color& rNewColor);
+
+    sal_Int16 GetThemeIndex() const
+    {
+        return maThemeIndex;
+    }
+    void SetThemeIndex(sal_Int16 nIndex)
+    {
+        maThemeIndex = nIndex;
+    }
+
+    sal_Int16 GetTintOrShade() const
+    {
+        return maTintShade;
+    }
+    void SetTintOrShade(sal_Int16 nTintOrShade)
+    {
+        maTintShade = nTintOrShade;
+    }
 };
 
 // XXX: to be moved in a separate header.
