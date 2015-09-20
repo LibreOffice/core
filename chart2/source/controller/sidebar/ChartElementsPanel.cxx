@@ -210,13 +210,13 @@ sal_Int32 getLegendPos(css::uno::Reference<css::frame::XModel> xModel)
     switch(eLegendPos)
     {
         case chart2::LegendPosition_LINE_START:
-            return 1;
-        case chart2::LegendPosition_LINE_END:
-            return 2;
-        case chart2::LegendPosition_PAGE_START:
             return 3;
-        case chart2::LegendPosition_PAGE_END:
+        case chart2::LegendPosition_LINE_END:
             return 0;
+        case chart2::LegendPosition_PAGE_START:
+            return 1;
+        case chart2::LegendPosition_PAGE_END:
+            return 2;
         default:
             return 4;
     }
@@ -236,17 +236,17 @@ void setLegendPos(css::uno::Reference<css::frame::XModel> xModel, sal_Int32 nPos
     css::chart::ChartLegendExpansion eExpansion = css::chart::ChartLegendExpansion_HIGH;
     switch(nPos)
     {
-        case 3:
+        case 1:
             eLegendPos = chart2::LegendPosition_PAGE_START;
             eExpansion = css::chart::ChartLegendExpansion_WIDE;
             break;
-        case 1:
+        case 3:
             eLegendPos = chart2::LegendPosition_LINE_START;
             break;
-        case 2:
+        case 0:
             eLegendPos = chart2::LegendPosition_LINE_END;
             break;
-        case 0:
+        case 2:
             eLegendPos = chart2::LegendPosition_PAGE_END;
             eExpansion = css::chart::ChartLegendExpansion_WIDE;
             break;
