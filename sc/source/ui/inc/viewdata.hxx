@@ -30,11 +30,14 @@
 #define SC_SIZE_NONE        65535
 const SCCOL SC_TABSTART_NONE = SCCOL_MAX;
 
-#define SC_FILL_NONE        0
-#define SC_FILL_FILL        1
-#define SC_FILL_EMBED_LT    2
-#define SC_FILL_EMBED_RB    3
-#define SC_FILL_MATRIX      4
+enum class ScFillMode
+{
+    NONE        = 0,
+    FILL        = 1,
+    EMBED_LT    = 2,
+    EMBED_RB    = 3,
+    MATRIX      = 4,
+};
 
 enum ScSplitMode { SC_SPLIT_NONE = 0, SC_SPLIT_NORMAL, SC_SPLIT_FIX };
 
@@ -203,7 +206,7 @@ private:
     ScPasteFlags        nPasteFlags;
 
     ScSplitPos          eEditActivePart;            // the part that was active when edit mode was started
-    sal_uInt8           nFillMode;
+    ScFillMode          nFillMode;
     bool                bEditActive[4];             // Active?
     bool                bActive:1;                  // Active Window ?
     bool                bIsRefMode:1;               // Reference input
@@ -336,13 +339,13 @@ public:
 
     void            SetFillMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
     void            SetDragMode( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    sal_uInt8 nMode );
+                                    ScFillMode nMode );
     void            GetFillData( SCCOL& rStartCol, SCROW& rStartRow,
                                  SCCOL& rEndCol, SCROW& rEndRow );
     void            ResetFillMode();
-    bool            IsAnyFillMode()             { return nFillMode != SC_FILL_NONE; }
-    bool            IsFillMode()                { return nFillMode == SC_FILL_FILL; }
-    sal_uInt8       GetFillMode()               { return nFillMode; }
+    bool            IsAnyFillMode()             { return nFillMode != ScFillMode::NONE; }
+    bool            IsFillMode()                { return nFillMode == ScFillMode::FILL; }
+    ScFillMode      GetFillMode()               { return nFillMode; }
 
                     // TRUE: Cell is merged
     bool            GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const;

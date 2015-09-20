@@ -326,7 +326,7 @@ bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
 
     // for Autofill switch in the center of cell
     // thereby don't prevent scrolling to bottom/right
-    if ( pViewData->IsFillMode() || pViewData->GetFillMode() == SC_FILL_MATRIX )
+    if ( pViewData->IsFillMode() || pViewData->GetFillMode() == ScFillMode::MATRIX )
     {
         bool bLeft, bTop;
         pViewData->GetMouseQuadrant( aEffPos, GetWhich(), nPosX, nPosY, bLeft, bTop );
@@ -450,7 +450,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
         }
     }
     else if (pViewData->IsFillMode() ||
-            (pViewData->GetFillMode() == SC_FILL_MATRIX && (nScFillModeMouseModifier & KEY_MOD1) ))
+            (pViewData->GetFillMode() == ScFillMode::MATRIX && (nScFillModeMouseModifier & KEY_MOD1) ))
     {
         // If a matrix got touched, switch back to Autofill is possible with Ctrl
 
@@ -575,16 +575,16 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
     }
     else if (pViewData->IsAnyFillMode())
     {
-        sal_uInt8 nMode = pViewData->GetFillMode();
-        if ( nMode == SC_FILL_EMBED_LT || nMode == SC_FILL_EMBED_RB )
+        ScFillMode nMode = pViewData->GetFillMode();
+        if ( nMode == ScFillMode::EMBED_LT || nMode == ScFillMode::EMBED_RB )
         {
             OSL_ENSURE( pDoc->IsEmbedded(), "!pDoc->IsEmbedded()" );
             ScRange aRange;
             pDoc->GetEmbedded( aRange);
-            ScRefType eRefMode = (nMode == SC_FILL_EMBED_LT) ? SC_REFTYPE_EMBED_LT : SC_REFTYPE_EMBED_RB;
+            ScRefType eRefMode = (nMode == ScFillMode::EMBED_LT) ? SC_REFTYPE_EMBED_LT : SC_REFTYPE_EMBED_RB;
             if (pViewData->GetRefType() != eRefMode)
             {
-                if ( nMode == SC_FILL_EMBED_LT )
+                if ( nMode == ScFillMode::EMBED_LT )
                     pView->InitRefMode( aRange.aEnd.Col(), aRange.aEnd.Row(), nTab, eRefMode );
                 else
                     pView->InitRefMode( aRange.aStart.Col(), aRange.aStart.Row(), nTab, eRefMode );
@@ -593,7 +593,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
 
             pView->UpdateRef( nPosX, nPosY, nTab );
         }
-        else if ( nMode == SC_FILL_MATRIX )
+        else if ( nMode == ScFillMode::MATRIX )
         {
             SCCOL nStartX, nEndX;
             SCROW nStartY, nEndY; // Block

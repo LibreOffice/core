@@ -254,7 +254,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             SCCOL nEndX = aViewData.GetRefEndX();
             SCROW nEndY = aViewData.GetRefEndY();
             ScRange aDelRange;
-            if ( aViewData.GetFillMode() == SC_FILL_MATRIX && !(nScFillModeMouseModifier & KEY_MOD1) )
+            if ( aViewData.GetFillMode() == ScFillMode::MATRIX && !(nScFillModeMouseModifier & KEY_MOD1) )
             {
                 aHelpStr = ScGlobal::GetRscString( STR_TIP_RESIZEMATRIX );
                 SCCOL nCols = nEndX + 1 - aViewData.GetRefStartX(); // Reihenfolge ist richtig
