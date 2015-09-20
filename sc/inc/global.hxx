@@ -239,9 +239,9 @@ enum class ScLinkMode {
     NONE, NORMAL, VALUE
 };
                                         //  input
-#define SC_ENTER_NORMAL     0
-#define SC_ENTER_BLOCK      1
-#define SC_ENTER_MATRIX     2
+enum class ScEnterMode {
+    NORMAL, BLOCK, MATRIX
+};
 
                                         //  step = 10pt, max. indention = 100 steps
 #define SC_INDENT_STEP      200

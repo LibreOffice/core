@@ -180,7 +180,7 @@ public:
     bool            GetTextAndFields( ScEditEngineDefaulter& rDestEngine );
 
     bool            KeyInput( const KeyEvent& rKEvt, bool bStartEdit = false );
-    void            EnterHandler( sal_uInt8 nBlockMode = 0 );
+    void            EnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL );
     void            CancelHandler();
     void            SetReference( const ScRange& rRef, ScDocument* pDoc );
     void            AddRefEntry();

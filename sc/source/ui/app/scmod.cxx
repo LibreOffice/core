@@ -1415,7 +1415,7 @@ bool ScModule::InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit )
     return pHdl && pHdl->KeyInput( rKEvt, bStartEdit );
 }
 
-void ScModule::InputEnterHandler( sal_uInt8 nBlockMode )
+void ScModule::InputEnterHandler( ScEnterMode nBlockMode )
 {
     if ( !SfxGetpApp()->IsDowning() ) // Not when quitting the program
     {
@@ -1509,7 +1509,7 @@ void ScModule::ActivateInputWindow( const OUString* pStrFormula, bool bMatrix )
                 pWin->SetFuncString( *pStrFormula, false );
                 // SetSumAssignMode due to sal_False not necessary
             }
-            sal_uInt8 nMode = bMatrix ? SC_ENTER_MATRIX : SC_ENTER_NORMAL;
+            ScEnterMode nMode = bMatrix ? ScEnterMode::MATRIX : ScEnterMode::NORMAL;
             pHdl->EnterHandler( nMode );
 
             // Without Invalidate the selection remains active, if the formula has not changed
