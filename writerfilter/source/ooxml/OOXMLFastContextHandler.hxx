@@ -20,27 +20,22 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTCONTEXTHANDLER_HXX
 
-#include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
-
 #include <string>
 #include <set>
-#include "sal/config.h"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/implbase.hxx"
-#include "com/sun/star/xml/sax/XFastContextHandler.hpp"
-#include "OOXMLParserState.hxx"
-#include "OOXMLPropertySet.hxx"
-#include "OOXMLDocumentImpl.hxx"
-#include <oox/token/tokens.hxx>
-#include <svtools/embedhlp.hxx>
-
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 #include <oox/mathml/import.hxx>
 #include <oox/mathml/importutils.hxx>
+#include <svtools/embedhlp.hxx>
+#include "OOXMLParserState.hxx"
+#include "OOXMLPropertySet.hxx"
 
 namespace writerfilter {
 namespace ooxml
 {
-
+class OOXMLDocumentImpl;
 
 class OOXMLFastContextHandler: public ::cppu::WeakImplHelper<css::xml::sax::XFastContextHandler>
 {
