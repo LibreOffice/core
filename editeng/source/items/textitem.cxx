@@ -1354,14 +1354,18 @@ bool SvxContourItem::GetPresentation
 
 // class SvxColorItem ----------------------------------------------------
 SvxColorItem::SvxColorItem( const sal_uInt16 nId ) :
-    SfxPoolItem( nId ),
-    mColor( COL_BLACK )
+    SfxPoolItem(nId),
+    mColor( COL_BLACK ),
+    maThemeIndex(-1),
+    maTintShade(0)
 {
 }
 
 SvxColorItem::SvxColorItem( const Color& rCol, const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
-    mColor( rCol )
+    mColor( rCol ),
+    maThemeIndex(-1),
+    maTintShade(0)
 {
 }
 
@@ -1372,8 +1376,11 @@ SvxColorItem::~SvxColorItem()
 bool SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
+    const SvxColorItem& rColorItem = static_cast<const SvxColorItem&>(rAttr);
 
-    return  mColor == static_cast<const SvxColorItem&>( rAttr ).mColor;
+    return mColor == rColorItem.mColor &&
+           maThemeIndex == rColorItem.maThemeIndex &&
+           maTintShade == rColorItem.maTintShade;
 }
 
 bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1390,6 +1397,16 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_GRAPHIC_TRANSPARENT:
         {
             rVal <<= mColor.GetAlpha() == 0;
+            break;
+        }
+        case MID_COLOR_THEME_INDEX:
+        {
+            rVal <<= maThemeIndex;
+            break;
+        }
+        case MID_COLOR_TINT_OR_SHADE:
+        {
+            rVal <<= maTintShade;
             break;
         }
         default:
@@ -1422,11 +1439,29 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             mColor.SetAlpha( Any2Bool( rVal ) ? 0 : 255 );
             return true;
         }
+        case MID_COLOR_THEME_INDEX:
+        {
+            sal_Int16 nIndex = -1;
+            if (!(rVal >>= nIndex))
+                return false;
+            maThemeIndex = nIndex;
+        }
+        break;
+        case MID_COLOR_TINT_OR_SHADE:
+        {
+            sal_Int16 nTintShade = -1;
+            if (!(rVal >>= nTintShade))
+                return false;
+            maTintShade = nTintShade;
+        }
+        break;
         default:
         {
             return rVal >>= mColor;
         }
+        break;
     }
+    return true;
 }
 
 SvxColorItem* SvxColorItem::Clone( SfxItemPool * ) const

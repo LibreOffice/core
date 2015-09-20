@@ -468,6 +468,18 @@ published service CharacterProperties
     */
     [optional, property] short CharTransparence;
 
+    /** If available, keeps the color theme index, so that the character can
+     *  be re-colored easily based on a theme.
+     *
+     *  @since LibreOffice 7.3
+     **/
+    [optional, property] short CharColorTheme;
+
+    /** Tint or shade of the character color.
+     *
+     *  @since LibreOffice 7.3
+     **/
+    [optional, property] short CharColorTintOrShade;
 };
 
 }; }; }; };
