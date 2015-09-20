@@ -59,7 +59,7 @@ static bool startsWith(const std::string& s, const char* other)
 
 bool BaseCheckNotWindowSubclass(
     const CXXRecordDecl *BaseDefinition
-#if __clang_major__ == 3 && __clang_minor__ < 7
+#if __clang_major__ == 3 && __clang_minor__ <= 7
     , void *
 #endif
     )

@@ -51,7 +51,7 @@ void UnusedVariableCheck::run()
 
 bool BaseCheckNotDialogSubclass(
     const CXXRecordDecl *BaseDefinition
-#if __clang_major__ == 3 && __clang_minor__ < 7
+#if __clang_major__ == 3 && __clang_minor__ <= 7
     , void *
 #endif
     )

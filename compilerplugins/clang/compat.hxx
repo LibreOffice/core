@@ -71,7 +71,7 @@ inline bool forallBases(
     void* callbackParam,
     bool AllowShortCircuit)
 {
-#if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
+#if (__clang_major__ == 3 && __clang_minor__ > 7) || __clang_major__ > 3
     (void) callbackParam;
     return decl.forallBases(BaseMatches, AllowShortCircuit);
 #else
@@ -147,7 +147,7 @@ inline clang::Stmt::const_child_iterator begin(
     clang::Stmt::const_child_range const & range)
 {
 #if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
-    return range.begin();
+    return range->child_begin();
 #else
     return range.first;
 #endif
@@ -157,7 +157,7 @@ inline clang::Stmt::const_child_iterator end(
     clang::Stmt::const_child_range const & range)
 {
 #if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
-    return range.end();
+    return range->child_end();
 #else
     return range.second;
 #endif
