@@ -46,7 +46,7 @@ OutlinerParaObject *TextChainingUtils::JuxtaposeParaObject(
     // Special case: if only empty text remove it at the end
     bool bOnlyOneEmptyPara = !pNextPObj ||
                              (pOutl->GetParagraphCount() == 1 &&
-                              pNextPObj->GetTextObject().GetText(0) == "");
+                              pNextPObj->GetTextObject().GetText(0).isEmpty());
 
     EditEngine &rEditEngine = const_cast<EditEngine &>(pOutl->GetEditEngine());
 
