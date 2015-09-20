@@ -29,20 +29,25 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
 
 SLOFILES = $(SLO)/test.obj
 
-SHL1OBJS = $(SLOFILES)
-SHL1STDLIBS = \
+APP1OBJS = $(SLOFILES)
+APP1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    $(CPPUNITLIB) \
+    $(GTESTLIB) \
     $(SALLIB) \
     $(TESTSHL2LIB)
-SHL1TARGET = unit
-SHL1VERSIONMAP = version.map
-DEF1NAME = $(SHL1TARGET)
+APP1TARGET = unit
+APP1RPATH = NONE
+# this is a custom test, can't use APP1TARGET_run so disable it here:
+APP1TEST = disabled
 
 .INCLUDE: target.mk
 
@@ -54,11 +59,13 @@ MY_INI = .ini
 MY_INI = rc
 .ENDIF
 
+DLLPRE = # no leading "lib" on .so files
+
 $(MISC)/unit.rdb .ERRREMOVE:
     cp $(SOLARBINDIR)/types.rdb $@
-    $(REGCOMP) -register -r $@ -c $(DLLDEST)/$(DLLPRE)configmgr$(DLLPOST)
+    $(REGCOMP) -register -r $@ -c $(DLLDEST)/$(DLLPRE)configmgr.uno$(DLLPOST)
 
-TEST .PHONY: $(SHL1TARGETN) $(MISC)/unit.rdb
+TEST .PHONY: $(APP1TARGETN) $(MISC)/unit.rdb
     rm -rf $(MISC)/unitdata
     mkdir $(MISC)/unitdata
     cp urebootstrap.ini $(MISC)/unitdata
@@ -78,12 +85,9 @@ TEST .PHONY: $(SHL1TARGETN) $(MISC)/unit.rdb
     echo '[Bootstrap]' > $(MISC)/unitdata/brand/program/bootstrap$(MY_INI)
     echo 'UserInstallation = $$ORIGIN/../../user' \
         >> $(MISC)/unitdata/brand/program/bootstrap$(MY_INI)
-.IF "$(USE_SHELL)" == "bash"
-    export \
-        URE_BOOTSTRAP=vnd.sun.star.pathname:$(MISC)/unitdata/urebootstrap.ini \
-        && $(TESTSHL2) $(SHL1TARGETN) -forward $(MISC)/unit.rdb
-.ELSE
-    setenv \
-        URE_BOOTSTRAP vnd.sun.star.pathname:$(MISC)/unitdata/urebootstrap.ini \
-        && $(TESTSHL2) $(SHL1TARGETN) -forward $(MISC)/unit.rdb
-.ENDIF
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) \
+    URE_BOOTSTRAP=vnd.sun.star.pathname:$(MISC)/unitdata/urebootstrap.ini \
+    CONFIGMGR_UNIT_FORWARD_STRING=$(MISC)/unit.rdb \
+    $(APP1TARGETN) --gtest_output="xml:$(BIN)/$(APP1TARGET)_result.xml"
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"

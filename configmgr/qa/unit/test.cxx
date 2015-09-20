@@ -25,6 +25,7 @@
 #include "sal/config.h"
 
 #include <cstddef>
+#include <cstdlib>
 
 #include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/beans/PropertyChangeEvent.hpp"
@@ -47,6 +48,7 @@
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/servicefactory.hxx"
 #include "osl/conditn.hxx"
+#include "osl/process.h"
 #include "osl/thread.h"
 #include "osl/thread.hxx"
 #include "osl/time.h"
@@ -57,7 +59,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-#include "testshl/simpleheader.hxx"
+#include "gtest/gtest.h"
 
 namespace {
 
@@ -80,27 +82,11 @@ void normalize(
     }
 }
 
-class Test: public CppUnit::TestFixture {
+class Test: public ::testing::Test {
 public:
-    virtual void setUp();
+    virtual void SetUp();
 
-    virtual void tearDown();
-
-    void testKeyFetch();
-
-    void testKeySet();
-
-    void testKeyReset();
-
-    void testSetSetMemberName();
-
-    void testReadCommands();
-
-    void testThreads();
-
-    void testRecursive();
-
-    void testCrossThreads();
+    virtual void TearDown();
 
     css::uno::Any getKey(
         rtl::OUString const & path, rtl::OUString const & relative) const;
@@ -116,17 +102,6 @@ public:
 
     css::uno::Reference< css::uno::XInterface > createUpdateAccess(
         rtl::OUString const & path) const;
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testKeyFetch);
-    CPPUNIT_TEST(testKeySet);
-    CPPUNIT_TEST(testKeyReset);
-    CPPUNIT_TEST(testSetSetMemberName);
-    CPPUNIT_TEST(testReadCommands);
-    CPPUNIT_TEST(testThreads);
-    CPPUNIT_TEST(testRecursive);
-    CPPUNIT_TEST(testCrossThreads);
-    CPPUNIT_TEST_SUITE_END();
 
 private:
     css::uno::Reference< css::uno::XComponentContext > context_;
@@ -275,7 +250,7 @@ void RecursiveTest::test() {
     properties_->addPropertyChangeListener(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")), this);
     step();
-    CPPUNIT_ASSERT(count_ == 0);
+    ASSERT_TRUE(count_ == 0);
     css::uno::Reference< css::lang::XComponent >(
         properties_, css::uno::UNO_QUERY_THROW)->dispose();
 }
@@ -287,14 +262,14 @@ RecursiveTest::~RecursiveTest() {
 void RecursiveTest::disposing(css::lang::EventObject const & Source)
     throw (css::uno::RuntimeException)
 {
-    CPPUNIT_ASSERT(properties_.is() && Source.Source == properties_);
+    ASSERT_TRUE(properties_.is() && Source.Source == properties_);
     properties_.clear();
 }
 
 void RecursiveTest::propertyChange(css::beans::PropertyChangeEvent const & evt)
     throw (css::uno::RuntimeException)
 {
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         evt.Source == properties_ &&
         evt.PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Label")));
     if (count_ > 0) {
@@ -357,10 +332,10 @@ void CrossThreadTest::step() const {
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")));
 }
 
-void Test::setUp() {
-    char const * forward = getForwardString();
+void Test::SetUp() {
+    char const * forward = getenv("CONFIGMGR_UNIT_FORWARD_STRING");
     rtl_uString * registry = 0;
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         rtl_convertStringToUString(
             &registry, forward, rtl_str_getLength(forward),
             osl_getThreadTextEncoding(),
@@ -374,7 +349,7 @@ void Test::setUp() {
             css::uno::UNO_QUERY_THROW)->getPropertyValue(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))),
         css::uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         context_->getValueByName(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -383,61 +358,61 @@ void Test::setUp() {
         provider_);
 }
 
-void Test::tearDown() {
+void Test::TearDown() {
     css::uno::Reference< css::lang::XComponent >(
         context_, css::uno::UNO_QUERY_THROW)->dispose();
 }
 
-void Test::testKeyFetch() {
+TEST_F(Test, testKeyFetch) {
     rtl::OUString s;
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         getKey(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N/ooLocale"))) >>=
         s);
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         getKey(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Test/AString"))) >>=
         s);
 }
 
-void Test::testKeySet() {
+TEST_F(Test, testKeySet) {
     setKey(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Test")),
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AString")),
         css::uno::makeAny(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baa"))));
     rtl::OUString s;
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         getKey(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Test")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AString"))) >>=
         s);
-    CPPUNIT_ASSERT(s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("baa")));
+    ASSERT_TRUE(s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("baa")));
 }
 
-void Test::testKeyReset() {
+TEST_F(Test, testKeyReset) {
     if (resetKey(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Test")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AString"))))
     {
         rtl::OUString s;
-        CPPUNIT_ASSERT(
+        ASSERT_TRUE(
             getKey(
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Test")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AString"))) >>=
             s);
-        CPPUNIT_ASSERT(s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Foo")));
+        ASSERT_TRUE(s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Foo")));
     }
 }
 
-void Test::testSetSetMemberName() {
+TEST_F(Test, testSetSetMemberName) {
     rtl::OUString s;
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         getKey(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -445,7 +420,7 @@ void Test::testSetSetMemberName() {
                     ".uno:FontworkShapeType")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label"))) >>=
         s);
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Fontwork Shape")));
 
     css::uno::Reference< css::container::XNameAccess > access(
@@ -460,7 +435,7 @@ void Test::testSetSetMemberName() {
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(".uno:FontworkGalleryFloater"))) >>=
         member;
-    CPPUNIT_ASSERT(member.is());
+    ASSERT_TRUE(member.is());
     member->setName(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(".uno:FontworkShapeType")));
@@ -469,7 +444,7 @@ void Test::testSetSetMemberName() {
     css::uno::Reference< css::lang::XComponent >(
         access, css::uno::UNO_QUERY_THROW)->dispose();
 
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         getKey(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
@@ -477,11 +452,11 @@ void Test::testSetSetMemberName() {
                     ".uno:FontworkShapeType")),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label"))) >>=
         s);
-    CPPUNIT_ASSERT(
+    ASSERT_TRUE(
         s.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Fontwork Gallery")));
 }
 
-void Test::testReadCommands() {
+TEST_F(Test, testReadCommands) {
     css::uno::Reference< css::container::XNameAccess > access(
         createViewAccess(
             rtl::OUString(
@@ -490,14 +465,14 @@ void Test::testReadCommands() {
                     "Commands"))),
         css::uno::UNO_QUERY_THROW);
     css::uno::Sequence< rtl::OUString > names(access->getElementNames());
-    CPPUNIT_ASSERT(names.getLength() == 695);
+    ASSERT_TRUE(names.getLength() == 695);
         // testSetSetMemberName() already removed ".uno:FontworkGalleryFloater"
     sal_uInt32 n = osl_getGlobalTimer();
     for (int i = 0; i < 8; ++i) {
         for (sal_Int32 j = 0; j < names.getLength(); ++j) {
             css::uno::Reference< css::container::XNameAccess > child;
             if (access->getByName(names[j]) >>= child) {
-                CPPUNIT_ASSERT(child.is());
+                ASSERT_TRUE(child.is());
                 child->getByName(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")));
                 child->getByName(
@@ -508,12 +483,12 @@ void Test::testReadCommands() {
         }
     }
     n = osl_getGlobalTimer() - n;
-    t_print("Reading elements took %" SAL_PRIuUINT32 " ms\n", n);
+    printf("Reading elements took %" SAL_PRIuUINT32 " ms\n", n);
     css::uno::Reference< css::lang::XComponent >(
         access, css::uno::UNO_QUERY_THROW)->dispose();
 }
 
-void Test::testThreads() {
+TEST_F(Test, testThreads) {
     struct Entry { rtl::OUString path; rtl::OUString relative; };
     Entry list[] = {
         { rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup")),
@@ -549,7 +524,7 @@ void Test::testThreads() {
     WriterThread * writers[numWriters];
     osl::Condition stop;
     for (std::size_t i = 0; i < numReaders; ++i) {
-        CPPUNIT_ASSERT(getKey(list[i].path, list[i].relative).hasValue());
+        ASSERT_TRUE(getKey(list[i].path, list[i].relative).hasValue());
         readers[i] = new ReaderThread(
             stop, *this, list[i].path, list[i].relative);
     }
@@ -578,21 +553,21 @@ void Test::testThreads() {
         success = success && writers[i]->getSuccess();
         delete writers[i];
     }
-    CPPUNIT_ASSERT(success);
+    ASSERT_TRUE(success);
 }
 
-void Test::testRecursive() {
+TEST_F(Test, testRecursive) {
     bool destroyed = false;
     rtl::Reference< RecursiveTest >(
         new SimpleRecursiveTest(*this, 100, &destroyed))->test();
-    CPPUNIT_ASSERT(destroyed);
+    ASSERT_TRUE(destroyed);
 }
 
-void Test::testCrossThreads() {
+TEST_F(Test, testCrossThreads) {
     bool destroyed = false;
     rtl::Reference< RecursiveTest >(
         new SimpleRecursiveTest(*this, 10, &destroyed))->test();
-    CPPUNIT_ASSERT(destroyed);
+    ASSERT_TRUE(destroyed);
 }
 
 css::uno::Any Test::getKey(
@@ -667,8 +642,12 @@ css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
         css::uno::Sequence< css::uno::Any >(&arg, 1));
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltest");
 
 }
 
-NOADDITIONAL;
+int main(int argc, char **argv)
+{
+    osl_setCommandArgs(argc, argv);
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
