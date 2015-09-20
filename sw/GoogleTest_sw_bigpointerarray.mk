@@ -20,34 +20,32 @@
 #**************************************************************
 
 
-
-$(eval $(call gb_Module_Module,sw))
-
-$(eval $(call gb_Module_add_targets,sw,\
-    AllLangResTarget_sw \
-    Library_msword \
-    Library_sw \
-    Library_swd \
-    Library_swui \
-    Library_vbaswobj \
-    Package_misc \
-    Package_uiconfig \
-    Package_xml \
+$(eval $(call gb_GoogleTest_GoogleTest,sw_bigpointerarray))
+ 
+$(eval $(call gb_GoogleTest_add_exception_objects,sw_bigpointerarray, \
+	sw/qa/core/Test-BigPtrArray \
+))
+ 
+$(eval $(call gb_GoogleTest_add_linked_libs,sw_bigpointerarray, \
+    sal \
+    sfx \
+    stl \
+    sw \
+    tl \
+    $(gb_STDLIBS) \
+))
+ 
+$(eval $(call gb_GoogleTest_set_include,sw_bigpointerarray,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/sw/inc \
+	-I$(SRCDIR)/sw/inc/pch \
+	-I$(SRCDIR)/sw/qa/core \
+	-I$(OUTDIR)/inc/offuh \
+	-I$(OUTDIR)/inc \
+))
+ 
+$(eval $(call gb_GoogleTest_set_ldflags,sw_bigpointerarray,\
+    $$(LDFLAGS) \
 ))
 
-
-ifeq ($(ENABLE_UNIT_TESTS),YES)
-$(eval $(call gb_Module_add_check_targets,sw,\
-    GoogleTest_sw_bigpointerarray \
-))
-endif
-
-
-ifneq ($(OOO_JUNIT_JAR),)
-$(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
-    JunitTest_sw_complex \
-    JunitTest_sw_unoapi \
-))
-endif
-
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:
