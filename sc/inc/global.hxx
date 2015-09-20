@@ -497,7 +497,6 @@ namespace utl {
     class TransliterationWrapper;
 }
 
-#ifndef _SCALC_EXE
 class ScGlobal
 {
     static SvxSearchItem*   pSearchItem;
@@ -708,7 +707,6 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
                                                      const OUString& rPlaceholder,
                                                      const OUString& rReplacement );
 };
-#endif
 
 // maybe move to dbdata.hxx (?):
 
