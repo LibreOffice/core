@@ -35,18 +35,22 @@ my_components = stocservices
 
 .INCLUDE: settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 DLLPRE = # no leading "lib" on .so files
 
-SHL1TARGET = $(TARGET)
-SHL1OBJS = $(SLO)/test_uriproc.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(SALLIB)
-SHL1VERSIONMAP = version.map
-SHL1RPATH = NONE
-SHL1IMPLIB = i$(SHL1TARGET)
-DEF1NAME = $(SHL1TARGET)
+APP1TARGET = $(TARGET)
+APP1OBJS = $(SLO)/test_uriproc.obj
+APP1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(GTESTLIB) $(SALLIB)
+APP1RPATH = NONE
+# this is a custom test, can't use APP1TARGET_run so disable it here:
+APP1TEST = disabled
 
-SLOFILES = $(SHL1OBJS)
+SLOFILES = $(APP1OBJS)
 
 .INCLUDE: target.mk
 
@@ -59,10 +63,11 @@ my_file = file://
 ALLTAR: test
 
 test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb
-    $(CPPUNITTESTER) $(SHL1TARGETN) \
-        -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/udkapi.rdb \
-        -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
-        -env:URE_INTERNAL_LIB_DIR=$(my_file)$(PWD)/$(DLLDEST)
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) \
+    UNO_TYPES=$(my_file)$(SOLARBINDIR)/udkapi.rdb \
+    UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
+    URE_INTERNAL_LIB_DIR=$(my_file)$(PWD)/$(DLLDEST) \
+    $(APP1TARGETN) --gtest_output="xml:$(BIN)/$(APP1TARGET)_result.xml"
 
 $(MISC)/$(TARGET)/services.rdb .ERRREMOVE: $(SOLARENV)/bin/packcomponents.xslt \
         $(MISC)/$(TARGET)/services.input \
@@ -76,4 +81,6 @@ $(MISC)/$(TARGET)/services.input:
         '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
         > $@
 
-.END
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
+
+.ENDIF # "$(OOO_SUBSEQUENT_TESTS)" == ""

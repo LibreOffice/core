@@ -39,11 +39,9 @@
 #include "com/sun/star/uri/XVndSunStarScriptUrlReference.hpp"
 #include "com/sun/star/util/XMacroExpander.hpp"
 #include "cppuhelper/bootstrap.hxx"
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include "gtest/gtest.h"
 #include "osl/diagnose.h"
+#include "osl/process.h"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/textenc.h"
@@ -58,11 +56,11 @@ namespace css = com::sun::star;
 namespace {
 
 #define TEST_ASSERT_EQUAL(token1, token2, token3, expected, actual) \
-    CPPUNIT_ASSERT_MESSAGE( \
+    ASSERT_TRUE( \
+        (actual) == (expected)) << \
         createTestAssertEqualMessage( \
             token1, token2, token3, #expected, #actual, expected, actual). \
-            getStr(), \
-        (actual) == (expected))
+            getStr()
 
 template< typename T > void append(
     rtl::OUStringBuffer & buffer, T const & value)
@@ -109,53 +107,29 @@ rtl::OString createTestAssertEqualMessage(
         buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
 }
 
-class Test: public CppUnit::TestFixture {
+class Test: public ::testing::Test {
 public:
-    virtual void setUp();
+    virtual void SetUp();
 
-    virtual void tearDown();
+    virtual void TearDown();
 
-    void testParse();
-
-    void testMakeAbsolute();
-
-    void testMakeRelative();
-
-    void testVndSunStarExpand();
-
-    void testVndSunStarScript();
-
-    void testTranslator();
-
-    void testPkgUrlFactory();
-
-    CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testParse);
-    CPPUNIT_TEST(testMakeAbsolute);
-    CPPUNIT_TEST(testMakeRelative);
-    CPPUNIT_TEST(testVndSunStarExpand);
-    CPPUNIT_TEST(testVndSunStarScript);
-    CPPUNIT_TEST(testTranslator);
-    CPPUNIT_TEST(testPkgUrlFactory);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
+protected:
     css::uno::Reference< css::uno::XComponentContext > m_context;
     css::uno::Reference< css::uri::XUriReferenceFactory > m_uriFactory;
 };
 
-void Test::setUp() {
+void Test::SetUp() {
     m_context = cppu::defaultBootstrap_InitialComponentContext();
     m_uriFactory = css::uri::UriReferenceFactory::create(m_context);
 }
 
-void Test::tearDown() {
+void Test::TearDown() {
     m_uriFactory.clear();
     css::uno::Reference< css::lang::XComponent >(
         m_context, css::uno::UNO_QUERY_THROW)->dispose();
 }
 
-void Test::testParse() {
+TEST_F(Test, testParse) {
     struct Data {
         char const * uriReference;
         char const * scheme;
@@ -204,7 +178,7 @@ void Test::testParse() {
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
                 rtl::OUString::createFromAscii(data[i].uriReference)));
-        CPPUNIT_ASSERT(uriRef.is() == (data[i].schemeSpecificPart != 0));
+        ASSERT_TRUE(uriRef.is() == (data[i].schemeSpecificPart != 0));
         if (uriRef.is()) {
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
@@ -291,7 +265,7 @@ void Test::testParse() {
     }
 }
 
-void Test::testMakeAbsolute() {
+TEST_F(Test, testMakeAbsolute) {
     struct Data {
         char const * baseUriReference;
         char const * uriReference;
@@ -594,11 +568,11 @@ void Test::testMakeAbsolute() {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
             m_uriFactory->parse(
                 rtl::OUString::createFromAscii(data[i].baseUriReference)));
-        CPPUNIT_ASSERT(baseUriRef.is());
+        ASSERT_TRUE(baseUriRef.is());
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
                 rtl::OUString::createFromAscii(data[i].uriReference)));
-        CPPUNIT_ASSERT(uriRef.is());
+        ASSERT_TRUE(uriRef.is());
         css::uno::Reference< css::uri::XUriReference > absolute(
             m_uriFactory->makeAbsolute(
                 baseUriRef, uriRef, data[i].processSpecialBaseSegments,
@@ -615,7 +589,7 @@ void Test::testMakeAbsolute() {
     }
 }
 
-void Test::testMakeRelative() {
+TEST_F(Test, testMakeRelative) {
     struct Data {
         char const * baseUriReference;
         char const * uriReference;
@@ -699,11 +673,11 @@ void Test::testMakeRelative() {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
             m_uriFactory->parse(
                 rtl::OUString::createFromAscii(data[i].baseUriReference)));
-        CPPUNIT_ASSERT(baseUriRef.is());
+        ASSERT_TRUE(baseUriRef.is());
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
                 rtl::OUString::createFromAscii(data[i].uriReference)));
-        CPPUNIT_ASSERT(uriRef.is());
+        ASSERT_TRUE(uriRef.is());
         css::uno::Reference< css::uri::XUriReference > relative(
             m_uriFactory->makeRelative(
                 baseUriRef, uriRef, data[i].preferAuthorityOverRelativePath,
@@ -721,7 +695,7 @@ void Test::testMakeRelative() {
                 m_uriFactory->makeAbsolute(
                     baseUriRef, relative, true,
                     css::uri::RelativeUriExcessParentSegments_ERROR));
-            CPPUNIT_ASSERT(absolute.is());
+            ASSERT_TRUE(absolute.is());
             TEST_ASSERT_EQUAL(
                 "testMakeRelative", i, data[i].uriReference,
                 rtl::OUString::createFromAscii(
@@ -732,7 +706,7 @@ void Test::testMakeRelative() {
     }
 }
 
-void Test::testVndSunStarExpand() {
+TEST_F(Test, testVndSunStarExpand) {
     struct Data {
         char const * uriReference;
         char const * expanded;
@@ -766,7 +740,7 @@ void Test::testVndSunStarExpand() {
     }
 }
 
-void Test::testVndSunStarScript() {
+TEST_F(Test, testVndSunStarScript) {
     struct Parameter {
         char const * key;
         char const * value;
@@ -920,7 +894,7 @@ void Test::testVndSunStarScript() {
         true);
 }
 
-void Test::testTranslator() {
+TEST_F(Test, testTranslator) {
     struct Data {
         char const * externalUriReference;
         char const * internalUriReference;
@@ -964,7 +938,7 @@ void Test::testTranslator() {
     }
 }
 
-void Test::testPkgUrlFactory() {
+TEST_F(Test, testPkgUrlFactory) {
     struct Data {
         char const * authority;
         char const * result;
@@ -993,8 +967,12 @@ void Test::testPkgUrlFactory() {
     }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-CPPUNIT_PLUGIN_IMPLEMENT();
+int main(int argc, char **argv)
+{
+    osl_setCommandArgs(argc, argv);
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
