@@ -73,7 +73,6 @@ protected:
 
     virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *);
 
-    OutlinerParaObject *impGetOverflowingParaObject(SdrOutliner *pOutliner);
     // impGetMergedUnderflowingParaObject merges underflowing text with the one in the next box
     OutlinerParaObject *impGetMergedUnderflowParaObject(SdrOutliner *pOutliner);
 
