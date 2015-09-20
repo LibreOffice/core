@@ -7566,10 +7566,10 @@ sheet::SheetLinkMode SAL_CALL ScTableSheetObj::getLinkMode() throw(uno::RuntimeE
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        sal_uInt8 nMode = pDocSh->GetDocument().GetLinkMode( GetTab_Impl() );
-        if ( nMode == SC_LINK_NORMAL )
+        ScLinkMode nMode = pDocSh->GetDocument().GetLinkMode( GetTab_Impl() );
+        if ( nMode == ScLinkMode::NORMAL )
             eRet = sheet::SheetLinkMode_NORMAL;
-        else if ( nMode == SC_LINK_VALUE )
+        else if ( nMode == ScLinkMode::VALUE )
             eRet = sheet::SheetLinkMode_VALUE;
     }
     return eRet;
@@ -7658,11 +7658,11 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
         //  aren't reset when the filter name is changed in ScTableLink::DataChanged
         ScDocumentLoader::RemoveAppPrefix( aFilterString );
 
-        sal_uInt8 nLinkMode = SC_LINK_NONE;
+        ScLinkMode nLinkMode = ScLinkMode::NONE;
         if ( nMode == sheet::SheetLinkMode_NORMAL )
-            nLinkMode = SC_LINK_NORMAL;
+            nLinkMode = ScLinkMode::NORMAL;
         else if ( nMode == sheet::SheetLinkMode_VALUE )
-            nLinkMode = SC_LINK_VALUE;
+            nLinkMode = ScLinkMode::VALUE;
 
         sal_uLong nRefresh = 0;
         rDoc.SetLink( nTab, nLinkMode, aFileString, aFilterString, aOptString, aSheetString, nRefresh );
@@ -7674,7 +7674,7 @@ void SAL_CALL ScTableSheetObj::link( const OUString& aUrl, const OUString& aShee
 
         //! Undo fuer Link-Daten an der Table
 
-        if ( nLinkMode != SC_LINK_NONE && rDoc.IsExecuteLinkEnabled() )        // Link updaten
+        if ( nLinkMode != ScLinkMode::NONE && rDoc.IsExecuteLinkEnabled() )        // Link updaten
         {
             //  Update immer, auch wenn der Link schon da war
             //! Update nur fuer die betroffene Tabelle???

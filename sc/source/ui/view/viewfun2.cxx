@@ -2462,7 +2462,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
         for (i=0; i<nInsCount; i++)
         {
             rSrcDoc.GetName( pSrcTabs[i], aTabStr );
-            rDoc.SetLink( nTab+i, SC_LINK_NORMAL,
+            rDoc.SetLink( nTab+i, ScLinkMode::NORMAL,
                         aFileName, aFilterName, aOptions, aTabStr, nRefresh );
         }
 

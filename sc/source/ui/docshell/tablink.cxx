@@ -101,7 +101,7 @@ ScTableLink::~ScTableLink()
     SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (rDoc.IsLinked(nTab) && aFileName.equals(rDoc.GetLinkDoc(nTab)))
-            rDoc.SetLink( nTab, SC_LINK_NONE, "", "", "", "", 0 );
+            rDoc.SetLink( nTab, ScLinkMode::NONE, "", "", "", "", 0 );
     delete pImpl;
 }
 
@@ -230,8 +230,8 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
     {
-        sal_uInt8 nMode = rDoc.GetLinkMode(nTab);
-        if (nMode && aFileName.equals(rDoc.GetLinkDoc(nTab)))
+        ScLinkMode nMode = rDoc.GetLinkMode(nTab);
+        if (nMode != ScLinkMode::NONE && aFileName.equals(rDoc.GetLinkDoc(nTab)))
         {
             OUString aTabName = rDoc.GetLinkTab(nTab);
 
@@ -254,7 +254,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
             //  Tabellenname einer ExtDocRef anpassen
 
-            if ( bNewUrlName && nMode == SC_LINK_VALUE )
+            if ( bNewUrlName && nMode == ScLinkMode::VALUE )
             {
                 OUString aName;
                 rDoc.GetName( nTab, aName );
@@ -285,13 +285,13 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
             if (bFound)
                 rDoc.TransferTab( &rSrcDoc, nSrcTab, nTab, false,       // nicht neu einfuegen
-                                        (nMode == SC_LINK_VALUE) );     // nur Werte?
+                                        (nMode == ScLinkMode::VALUE) );     // nur Werte?
             else
             {
                 rDoc.DeleteAreaTab( 0,0,MAXCOL,MAXROW, nTab, IDF_ALL );
 
                 bool bShowError = true;
-                if ( nMode == SC_LINK_VALUE )
+                if ( nMode == ScLinkMode::VALUE )
                 {
                     //  Value link (used with external references in formulas):
                     //  Look for formulas that reference the sheet, and put errors in the referenced cells.

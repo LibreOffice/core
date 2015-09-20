@@ -2165,7 +2165,7 @@ void ScInterpreter::ScCell()
                 OUString aFuncResult;
                 if( nTab < pDok->GetTableCount() )
                 {
-                    if( pDok->GetLinkMode( nTab ) == SC_LINK_VALUE )
+                    if( pDok->GetLinkMode( nTab ) == ScLinkMode::VALUE )
                         pDok->GetName( nTab, aFuncResult );
                     else
                     {

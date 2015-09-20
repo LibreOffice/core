@@ -125,15 +125,15 @@ private:
     OUString aCodeName;
     OUString aComment;
 
-    OUString       aLinkDoc;
-    OUString       aLinkFlt;
-    OUString       aLinkOpt;
-    OUString       aLinkTab;
-    sal_uLong           nLinkRefreshDelay;
-    sal_uInt8           nLinkMode;
+    OUString        aLinkDoc;
+    OUString        aLinkFlt;
+    OUString        aLinkOpt;
+    OUString        aLinkTab;
+    sal_uLong       nLinkRefreshDelay;
+    ScLinkMode      nLinkMode;
 
     // page style template
-    OUString   aPageStyle;
+    OUString        aPageStyle;
     Size            aPageSizeTwips;                 // size of the print-page
     SCCOL           nRepeatStartX;                  // repeating rows/columns
     SCCOL           nRepeatEndX;                    // REPEAT_NONE, if not used
@@ -282,15 +282,15 @@ public:
     void        SetActiveScenario(bool bSet)                 { bActiveScenario = bSet; }
     bool        IsActiveScenario() const                     { return bActiveScenario; }
 
-    sal_uInt8   GetLinkMode() const                          { return nLinkMode; }
-    bool        IsLinked() const                             { return nLinkMode != SC_LINK_NONE; }
+    ScLinkMode  GetLinkMode() const                          { return nLinkMode; }
+    bool        IsLinked() const                             { return nLinkMode != ScLinkMode::NONE; }
     const OUString& GetLinkDoc() const                       { return aLinkDoc; }
     const OUString& GetLinkFlt() const                       { return aLinkFlt; }
     const OUString& GetLinkOpt() const                       { return aLinkOpt; }
     const OUString& GetLinkTab() const                       { return aLinkTab; }
     sal_uLong   GetLinkRefreshDelay() const                  { return nLinkRefreshDelay; }
 
-    void        SetLink( sal_uInt8 nMode, const OUString& rDoc, const OUString& rFlt,
+    void        SetLink( ScLinkMode nMode, const OUString& rDoc, const OUString& rFlt,
                         const OUString& rOpt, const OUString& rTab, sal_uLong nRefreshDelay );
 
     void        GetName( OUString& rName ) const;

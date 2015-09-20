@@ -234,11 +234,10 @@ const InsertDeleteFlags IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 #define SC_LAYER_CONTROLS   3
 #define SC_LAYER_HIDDEN     4
 
-                                        //  link tables
-#define SC_LINK_NONE        0
-#define SC_LINK_NORMAL      1
-#define SC_LINK_VALUE       2
-
+//  link tables
+enum class ScLinkMode {
+    NONE, NORMAL, VALUE
+};
                                         //  input
 #define SC_ENTER_NORMAL     0
 #define SC_ENTER_BLOCK      1

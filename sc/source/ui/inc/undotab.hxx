@@ -311,7 +311,7 @@ private:
     sal_uLong   nRefreshDelay;
     sal_uInt16  nCount;
     SCTAB*      pTabs;
-    sal_uInt8*  pModes;
+    ScLinkMode* pModes;
     OUString*   pTabNames;
 
     void DoChange( bool bLink ) const;

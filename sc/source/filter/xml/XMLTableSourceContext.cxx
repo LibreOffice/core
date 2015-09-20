@@ -108,11 +108,11 @@ void ScXMLTableSourceContext::EndElement()
                 if (sFilterName.isEmpty())
                     ScDocumentLoader::GetFilterName( sLink, sFilterName, sFilterOptions, false, false );
 
-                sal_uInt8 nLinkMode = SC_LINK_NONE;
+                ScLinkMode nLinkMode = ScLinkMode::NONE;
                 if ( nMode == sheet::SheetLinkMode_NORMAL )
-                    nLinkMode = SC_LINK_NORMAL;
+                    nLinkMode = ScLinkMode::NORMAL;
                 else if ( nMode == sheet::SheetLinkMode_VALUE )
-                    nLinkMode = SC_LINK_VALUE;
+                    nLinkMode = ScLinkMode::VALUE;
 
                 pDoc->SetLink( GetScImport().GetTables().GetCurrentSheet(),
                     nLinkMode, sLink, sFilterName, sFilterOptions,

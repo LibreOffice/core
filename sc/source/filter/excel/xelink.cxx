@@ -693,7 +693,7 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
         }
 
         // external sheets (skipped, but with valid Excel sheet index for ref's)
-        else if( rDoc.GetLinkMode( nScTab ) == SC_LINK_VALUE )
+        else if( rDoc.GetLinkMode( nScTab ) == ScLinkMode::VALUE )
         {
             SetFlag( nScTab, EXC_TABBUF_EXTERN );
         }
