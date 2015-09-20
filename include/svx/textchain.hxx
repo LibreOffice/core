@@ -127,7 +127,6 @@ public:
     //SdrTextObj *GetNextLink(const SdrTextObj *) const;
     //SdrTextObj *GetPrevLink(const SdrTextObj *) const;
 
-    ChainLinkId GetId(const SdrTextObj *) const;
     ImpChainLinkProperties *GetLinkProperties(const SdrTextObj *);
 
     // Specific Link Properties

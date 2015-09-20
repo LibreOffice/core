@@ -49,6 +49,15 @@ TextChain::~TextChain()
     // XXX: Should free all LinkProperties
 }
 
+namespace {
+
+ChainLinkId GetId(const SdrTextObj *pLink)
+{
+    return pLink->GetName();
+}
+
+}
+
 ImpChainLinkProperties *TextChain::GetLinkProperties(const SdrTextObj *pLink)
 {
     // if the guy does not already have properties in the map make them
@@ -58,11 +67,6 @@ ImpChainLinkProperties *TextChain::GetLinkProperties(const SdrTextObj *pLink)
     }
 
     return maLinkPropertiesMap[aLinkId];
-}
-
-ChainLinkId TextChain::GetId(const SdrTextObj *pLink) const
-{
-    return pLink->GetName();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
