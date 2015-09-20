@@ -20,7 +20,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTDOCUMENTHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLFASTDOCUMENTHANDLER_HXX
 
-#include <sal/config.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
