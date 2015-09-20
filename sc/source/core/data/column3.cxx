@@ -1110,7 +1110,7 @@ void ScColumn::CopyFromClip(
 }
 
 void ScColumn::MixMarked(
-    sc::MixDocContext& rCxt, const ScMarkData& rMark, sal_uInt16 nFunction,
+    sc::MixDocContext& rCxt, const ScMarkData& rMark, ScPasteFunc nFunction,
     bool bSkipEmpty, const ScColumn& rSrcCol )
 {
     SCROW nRow1, nRow2;
@@ -1126,24 +1126,25 @@ void ScColumn::MixMarked(
 namespace {
 
 // Result in rVal1
-bool lcl_DoFunction( double& rVal1, double nVal2, sal_uInt16 nFunction )
+bool lcl_DoFunction( double& rVal1, double nVal2, ScPasteFunc nFunction )
 {
     bool bOk = false;
     switch (nFunction)
     {
-        case PASTE_ADD:
+        case ScPasteFunc::ADD:
             bOk = SubTotal::SafePlus( rVal1, nVal2 );
             break;
-        case PASTE_SUB:
+        case ScPasteFunc::SUB:
             nVal2 = -nVal2;     // FIXME: Can we do this always without error?
             bOk = SubTotal::SafePlus( rVal1, nVal2 );
             break;
-        case PASTE_MUL:
+        case ScPasteFunc::MUL:
             bOk = SubTotal::SafeMult( rVal1, nVal2 );
             break;
-        case PASTE_DIV:
+        case ScPasteFunc::DIV:
             bOk = SubTotal::SafeDiv( rVal1, nVal2 );
             break;
+        default: break;
     }
     return bOk;
 }
@@ -1175,7 +1176,7 @@ class MixDataHandler
     sc::CellStoreType::iterator miNewCellsPos;
 
     size_t mnRowOffset;
-    sal_uInt16 mnFunction;
+    ScPasteFunc mnFunction;
 
     bool mbSkipEmpty;
 
@@ -1201,7 +1202,7 @@ public:
         sc::ColumnBlockPosition& rBlockPos,
         ScColumn& rDestColumn,
         SCROW nRow1, SCROW nRow2,
-        sal_uInt16 nFunction, bool bSkipEmpty) :
+        ScPasteFunc nFunction, bool bSkipEmpty) :
         mrDestColumn(rDestColumn),
         mrBlockPos(rBlockPos),
         maNewCells(nRow2 - nRow1 + 1),
@@ -1241,10 +1242,11 @@ public:
                 OpCode eOp = ocAdd;
                 switch (mnFunction)
                 {
-                    case PASTE_ADD: eOp = ocAdd; break;
-                    case PASTE_SUB: eOp = ocSub; break;
-                    case PASTE_MUL: eOp = ocMul; break;
-                    case PASTE_DIV: eOp = ocDiv; break;
+                    case ScPasteFunc::ADD: eOp = ocAdd; break;
+                    case ScPasteFunc::SUB: eOp = ocSub; break;
+                    case ScPasteFunc::MUL: eOp = ocMul; break;
+                    case ScPasteFunc::DIV: eOp = ocDiv; break;
+                    default: break;
                 }
                 aArr.AddOpCode(eOp); // Function
 
@@ -1298,10 +1300,11 @@ public:
                 OpCode eOp = ocAdd;
                 switch (mnFunction)
                 {
-                    case PASTE_ADD: eOp = ocAdd; break;
-                    case PASTE_SUB: eOp = ocSub; break;
-                    case PASTE_MUL: eOp = ocMul; break;
-                    case PASTE_DIV: eOp = ocDiv; break;
+                    case ScPasteFunc::ADD: eOp = ocAdd; break;
+                    case ScPasteFunc::SUB: eOp = ocSub; break;
+                    case ScPasteFunc::MUL: eOp = ocMul; break;
+                    case ScPasteFunc::DIV: eOp = ocDiv; break;
+                    default: break;
                 }
                 aArr.AddOpCode(eOp); // Function
 
@@ -1326,10 +1329,11 @@ public:
                 OpCode eOp = ocAdd;
                 switch (mnFunction)
                 {
-                    case PASTE_ADD: eOp = ocAdd; break;
-                    case PASTE_SUB: eOp = ocSub; break;
-                    case PASTE_MUL: eOp = ocMul; break;
-                    case PASTE_DIV: eOp = ocDiv; break;
+                    case ScPasteFunc::ADD: eOp = ocAdd; break;
+                    case ScPasteFunc::SUB: eOp = ocSub; break;
+                    case ScPasteFunc::MUL: eOp = ocMul; break;
+                    case ScPasteFunc::DIV: eOp = ocDiv; break;
+                    default: break;
                 }
                 aArr.AddOpCode(eOp); // Function
 
@@ -1407,10 +1411,11 @@ public:
                     OpCode eOp = ocAdd;
                     switch (mnFunction)
                     {
-                        case PASTE_ADD: eOp = ocAdd; break;
-                        case PASTE_SUB: eOp = ocSub; break;
-                        case PASTE_MUL: eOp = ocMul; break;
-                        case PASTE_DIV: eOp = ocDiv; break;
+                        case ScPasteFunc::ADD: eOp = ocAdd; break;
+                        case ScPasteFunc::SUB: eOp = ocSub; break;
+                        case ScPasteFunc::MUL: eOp = ocMul; break;
+                        case ScPasteFunc::DIV: eOp = ocDiv; break;
+                        default: break;
                     }
 
                     aArr.AddOpCode(eOp); // Function
@@ -1523,7 +1528,7 @@ public:
 }
 
 void ScColumn::MixData(
-    sc::MixDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFunction,
+    sc::MixDocContext& rCxt, SCROW nRow1, SCROW nRow2, ScPasteFunc nFunction,
     bool bSkipEmpty, const ScColumn& rSrcCol )
 {
     // destination (this column) block position.

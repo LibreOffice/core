@@ -84,7 +84,7 @@ private:
     bool              bUsedShortCut;
 
     InsertDeleteFlags nShortCutInsContentsCmdBits;
-    sal_uInt16        nShortCutFormulaCmdBits;
+    ScPasteFunc       nShortCutFormulaCmdBits;
     bool              bShortCutSkipEmptyCells;
     bool              bShortCutTranspose;
     bool              bShortCutIsLink;
@@ -93,7 +93,7 @@ private:
     static bool         bPreviousAllCheck;
     static InsertDeleteFlags nPreviousChecks;
     static sal_uInt16   nPreviousChecks2;
-    static sal_uInt16   nPreviousFormulaChecks;
+    static ScPasteFunc  nPreviousFormulaChecks;
     static sal_uInt16   nPreviousMoveMode;          // enum InsCellCmd
 
     void DisableChecks( bool bInsAllChecked = true );

@@ -705,7 +705,7 @@ void ScTable::CopyFromClip(
 
 void ScTable::MixData(
     sc::MixDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    sal_uInt16 nFunction, bool bSkipEmpty, const ScTable* pSrcTab )
+    ScPasteFunc nFunction, bool bSkipEmpty, const ScTable* pSrcTab )
 {
     for (SCCOL i=nCol1; i<=nCol2; i++)
         aCol[i].MixData(rCxt, nRow1, nRow2, nFunction, bSkipEmpty, pSrcTab->aCol[i]);
@@ -713,7 +713,7 @@ void ScTable::MixData(
 
 // Selection form this document
 void ScTable::MixMarked(
-    sc::MixDocContext& rCxt, const ScMarkData& rMark, sal_uInt16 nFunction,
+    sc::MixDocContext& rCxt, const ScMarkData& rMark, ScPasteFunc nFunction,
     bool bSkipEmpty, const ScTable* pSrcTab )
 {
     for (SCCOL i=0; i<=MAXCOL; i++)

@@ -3082,7 +3082,7 @@ bool ScDocument::HasClipFilteredRows()
     return false;
 }
 
-void ScDocument::MixDocument( const ScRange& rRange, sal_uInt16 nFunction, bool bSkipEmpty,
+void ScDocument::MixDocument( const ScRange& rRange, ScPasteFunc nFunction, bool bSkipEmpty,
                                     ScDocument* pSrcDoc )
 {
     SCTAB nTab1 = rRange.aStart.Tab();
@@ -3103,7 +3103,7 @@ void ScDocument::MixDocument( const ScRange& rRange, sal_uInt16 nFunction, bool 
 }
 
 void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
-                                InsertDeleteFlags nFlags, sal_uInt16 nFunction,
+                                InsertDeleteFlags nFlags, ScPasteFunc nFunction,
                                 bool bSkipEmpty, bool bAsLink )
 {
     InsertDeleteFlags nDelFlags = nFlags;
@@ -3119,7 +3119,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
         SCCOL nEndCol = rSrcArea.aEnd.Col();
         SCROW nEndRow = rSrcArea.aEnd.Row();
         std::unique_ptr<ScDocument> pMixDoc;
-        bool bDoMix = ( bSkipEmpty || nFunction ) && ( nFlags & IDF_CONTENTS );
+        bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & IDF_CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();
         SetAutoCalc( false );                   // avoid multiple calculations
@@ -3166,7 +3166,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
 }
 
 void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
-                                InsertDeleteFlags nFlags, sal_uInt16 nFunction,
+                                InsertDeleteFlags nFlags, ScPasteFunc nFunction,
                                 bool bSkipEmpty, bool bAsLink )
 {
     InsertDeleteFlags nDelFlags = nFlags;
@@ -3176,7 +3176,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
     if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab])
     {
         std::unique_ptr<ScDocument> pMixDoc;
-        bool bDoMix = ( bSkipEmpty || nFunction ) && ( nFlags & IDF_CONTENTS );
+        bool bDoMix = ( bSkipEmpty || nFunction != ScPasteFunc::NONE ) && ( nFlags & IDF_CONTENTS );
 
         bool bOldAutoCalc = GetAutoCalc();
         SetAutoCalc( false );                   // avoid multiple calculations

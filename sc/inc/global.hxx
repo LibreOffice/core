@@ -201,12 +201,9 @@ inline InsertDeleteFlags operator~ (const InsertDeleteFlags& rhs)
 /// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
 const InsertDeleteFlags IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
-#define PASTE_NOFUNC        0
-#define PASTE_ADD           1
-#define PASTE_SUB           2
-#define PASTE_MUL           3
-#define PASTE_DIV           4
-
+enum class ScPasteFunc {
+    NONE, ADD, SUB, MUL, DIV
+};
                                         // bits for HasAttr
 #define HASATTR_LINES           1
 #define HASATTR_MERGED          2
