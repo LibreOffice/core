@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <libxml/xmlstring.h>
 #include <string.h>
 #include "TagLogger.hxx"
 #include <ooxml/QNameToString.hxx>
