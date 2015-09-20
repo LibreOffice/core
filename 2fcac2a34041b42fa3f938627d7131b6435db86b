@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_4292c358",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 9055,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2015-09-20T15:25:44Z",
+      "side": 1,
+      "message": "What is the point of building Graphite on Mac and iOS if we don’t have Graphite integration for their SalLayout classes?",
+      "revId": "2fcac2a34041b42fa3f938627d7131b6435db86b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
