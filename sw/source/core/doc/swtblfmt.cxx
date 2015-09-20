@@ -242,7 +242,7 @@ sal_uInt16 SwTableFormat::GetRepeatHeading() const
 {
     const SfxPoolItem* pItem;
 
-    if( SFX_ITEM_SET == GetItemState( FN_PARAM_TABLE_HEADLINE, sal_False, &pItem ) )
+    if( SfxItemState::SET == GetItemState( FN_PARAM_TABLE_HEADLINE, sal_False, &pItem ) )
         return ((const SfxUInt16Item*)pItem)->GetValue();
 
     return 0;
