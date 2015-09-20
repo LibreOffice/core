@@ -50,7 +50,7 @@
 #include <pwd.h>
 #endif
 
-#include <testshl/simpleheader.hxx>
+#include "gtest/gtest.h"
 // LLA: #include <testshl2/cmdlinebits.hxx>
 
 

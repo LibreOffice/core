@@ -41,8 +41,8 @@ using namespace rtl;
 */
 inline void printBool( sal_Bool bOk )
 {
-    //t_print("#printBool# " );
-    ( sal_True == bOk ) ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
+    //printf("#printBool# " );
+    ( sal_True == bOk ) ? printf("TRUE!\n" ): printf("FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -51,9 +51,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    //t_print("#printUString_u# " );
+    //printf("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
+    printf("%s\n", aString.getStr( ) );
 }
 
 
@@ -67,24 +67,19 @@ namespace osl_Security
     /** testing the method:
         Security()
     */
-    class ctors : public CppUnit::TestFixture
+    class ctors : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
 
-        void ctors_001( )
-        {
-            ::osl::Security aSec;
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: create a security  its handle should not be NULL.",
-                                    aSec.getHandle( ) != NULL );
-        }
-
-        CPPUNIT_TEST_SUITE( ctors );
-        CPPUNIT_TEST( ctors_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class ctors
 
+    TEST_F(ctors, ctors_001)
+    {
+        ::osl::Security aSec;
+
+        ASSERT_TRUE(aSec.getHandle( ) != NULL) << "#test comment#: create a security  its handle should not be NULL.";
+    }
 
     /** testing the methods:
         inline sal_Bool SAL_CALL logonUser(const ::rtl::OUString& strName,
@@ -93,7 +88,7 @@ namespace osl_Security
                                        const ::rtl::OUString & strPasswd,
                                        const ::rtl::OUString & strFileServer);
     */
-    class logonUser : public CppUnit::TestFixture
+    class logonUser : public ::testing::Test
     {
     public:
         sal_Bool bRes;
@@ -103,8 +98,7 @@ namespace osl_Security
             ::osl::Security aSec;
             bRes = aSec.logonUser( aLogonUser, aLogonPasswd );
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: check logon user through forwarded user name, pwd, passed in (UNX), failed in (W32).",
-                                    ( sal_True == bRes )  );
+            ASSERT_TRUE(( sal_True == bRes )) << "#test comment#: check logon user through forwarded user name, pwd, passed in (UNX), failed in (W32).";
         }
 
         void logonUser_user_pwd_server( )
@@ -112,258 +106,200 @@ namespace osl_Security
             ::osl::Security aSec;
             bRes = aSec.logonUser( aLogonUser, aLogonPasswd, aFileServer );
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: check logon user through forwarded user name, pwd and server name, failed in (UNX)(W32).",
-                                    ( sal_True == bRes )  );
+            ASSERT_TRUE(( sal_True == bRes )) << "#test comment#: check logon user through forwarded user name, pwd and server name, failed in (UNX)(W32).";
         }
+    }; // class logonUser
 
-
-        CPPUNIT_TEST_SUITE( logonUser );
+    TEST_F(logonUser, logonUser_001)
+    {
         if  ( !aStringForward.equals( aNullURL )  && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) ==  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
         /// if user name and passwd are forwarded
         {
-            CPPUNIT_TEST( logonUser_user_pwd );
+            logonUser_user_pwd();
         }
+    }
+
+    TEST_F(logonUser, logonUser_002)
+    {
         if  ( !aStringForward.equals( aNullURL )  && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) !=  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
         /// if user name and passwd and file server are forwarded
         {
-            CPPUNIT_TEST( logonUser_user_pwd_server );
+            logonUser_user_pwd_server();
         }
-        CPPUNIT_TEST_SUITE_END( );
-    }; // class logonUser
-
+    }
 
     /** testing the method:
         inline sal_Bool Security::getUserIdent( rtl::OUString& strIdent) const
     */
-    class getUserIdent : public CppUnit::TestFixture
+    class getUserIdent : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void getUserIdent_001( )
-        {
-            ::osl::Security aSec;
-            ::rtl::OUString strID;
-            bRes = aSec.getUserIdent( strID );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: get UserID and compare it with names got at the beginning of the test.",
-                                     ( sal_True == strUserID.equals( strID ) ) && ( sal_True == bRes ));
-        }
-
-        CPPUNIT_TEST_SUITE( getUserIdent );
-        CPPUNIT_TEST( getUserIdent_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class getUserIdent
+
+    TEST_F(getUserIdent, getUserIdent_001)
+    {
+        ::osl::Security aSec;
+        ::rtl::OUString strID;
+        bRes = aSec.getUserIdent( strID );
+
+        ASSERT_TRUE(( sal_True == strUserID.equals( strID ) ) && ( sal_True == bRes )) << "#test comment#: get UserID and compare it with names got at the beginning of the test.";
+    }
 
 
     /** testing the method:
         inline sal_Bool SAL_CALL getUserName( ::rtl::OUString& strName) const;
     */
-    class getUserName : public CppUnit::TestFixture
+    class getUserName : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void getUserName_001( )
-        {
-            ::osl::Security aSec;
-#ifdef WNT
-            ::rtl::OUString strName( strUserName ), strGetName;
-#else
-            ::rtl::OUString strName( strUserName ), strGetName;
-#endif
-            bRes = aSec.getUserName( strGetName );
-
-            sal_Int32 nPos = -1;
-            if (strName.getLength() > 0)
-            {
-                nPos = strGetName.indexOf(strName);
-            }
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: get UserName and compare it with names got at the beginning of the test.",
-                                    ( nPos >= 0 ) && ( sal_True == bRes ) );
-        }
-
-        CPPUNIT_TEST_SUITE( getUserName );
-        CPPUNIT_TEST( getUserName_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class getUserName
 
+    TEST_F(getUserName, getUserName_001)
+    {
+        ::osl::Security aSec;
+#ifdef WNT
+        ::rtl::OUString strName( strUserName ), strGetName;
+#else
+        ::rtl::OUString strName( strUserName ), strGetName;
+#endif
+        bRes = aSec.getUserName( strGetName );
 
+        sal_Int32 nPos = -1;
+        if (strName.getLength() > 0)
+        {
+            nPos = strGetName.indexOf(strName);
+        }
+        ASSERT_TRUE(( nPos >= 0 ) && ( sal_True == bRes )) << "#test comment#: get UserName and compare it with names got at the beginning of the test.";
+    }
 
     /** testing the method:
         inline sal_Bool SAL_CALL getHomeDir( ::rtl::OUString& strDirectory) const;
     */
-    class getHomeDir : public CppUnit::TestFixture
+    class getHomeDir : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void getHomeDir_001( )
-        {
-            ::osl::Security aSec;
-            ::rtl::OUString strHome;
-            bRes = aSec.getHomeDir( strHome );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: getHomeDir and compare it with the info we get at the beginning.",
-                                     ( sal_True == strHomeDirectory.equals( strHome ) ) && ( sal_True == bRes ) );
-        }
-
-        CPPUNIT_TEST_SUITE( getHomeDir );
-        CPPUNIT_TEST( getHomeDir_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class getHomeDir
+
+    TEST_F(getHomeDir, getHomeDir_001)
+    {
+        ::osl::Security aSec;
+        ::rtl::OUString strHome;
+        bRes = aSec.getHomeDir( strHome );
+
+        ASSERT_TRUE(( sal_True == strHomeDirectory.equals( strHome ) ) && ( sal_True == bRes )) << "#test comment#: getHomeDir and compare it with the info we get at the beginning.";
+    }
 
     /** testing the method:
         inline sal_Bool Security::getConfigDir( rtl::OUString& strDirectory ) const
     */
-    class getConfigDir : public CppUnit::TestFixture
+    class getConfigDir : public ::testing::Test
     {
     public:
         sal_Bool bRes, bRes1;
-
-        void getConfigDir_001( )
-        {
-            ::osl::Security aSec;
-            ::rtl::OUString strConfig;
-            bRes = aSec.getConfigDir( strConfig );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: getHomeDir and compare it with the info we get at the beginning.",
-                                     ( sal_True == strConfigDirectory.equals( strConfig ) ) && ( sal_True == bRes ) );
-        }
-
-        CPPUNIT_TEST_SUITE( getConfigDir );
-        CPPUNIT_TEST( getConfigDir_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class getConfigDir
+
+    TEST_F(getConfigDir, getConfigDir_001)
+    {
+        ::osl::Security aSec;
+        ::rtl::OUString strConfig;
+        bRes = aSec.getConfigDir( strConfig );
+
+        ASSERT_TRUE(( sal_True == strConfigDirectory.equals( strConfig ) ) && ( sal_True == bRes )) << "#test comment#: getHomeDir and compare it with the info we get at the beginning.";
+    }
 
     /** testing the method:
         inline sal_Bool SAL_CALL isAdministrator() const;
     */
-    class isAdministrator : public CppUnit::TestFixture
+    class isAdministrator : public ::testing::Test
     {
     public:
         sal_Bool bRes;
-
-        void isAdministrator_001( )
-        {
-            ::osl::Security aSec;
-            bRes = aSec.isAdministrator(  );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: check if the user is administrator at beginning, compare here.",
-                                     bRes == isAdmin );
-        }
-
-        CPPUNIT_TEST_SUITE( isAdministrator );
-        CPPUNIT_TEST( isAdministrator_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class isAdministrator
+
+    TEST_F(isAdministrator, isAdministrator_001)
+    {
+        ::osl::Security aSec;
+        bRes = aSec.isAdministrator(  );
+
+        ASSERT_TRUE(bRes == isAdmin) << "#test comment#: check if the user is administrator at beginning, compare here.";
+    }
 
     /** testing the method:
         inline oslSecurity getHandle() const;
     */
-    class getHandle : public CppUnit::TestFixture
+    class getHandle : public ::testing::Test
     {
     public:
         sal_Bool bRes;
-
-        void getHandle_001( )
-        {
-            ::osl::Security aSec;
-            bRes = aSec.isAdministrator( ) == osl_isAdministrator( aSec.getHandle( ) );
-
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: use getHandle function to call C API.",
-                                     bRes == sal_True );
-        }
-
-        CPPUNIT_TEST_SUITE( getHandle );
-        CPPUNIT_TEST( getHandle_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class getHandle
 
+    TEST_F(getHandle, getHandle_001)
+    {
+        ::osl::Security aSec;
+        bRes = aSec.isAdministrator( ) == osl_isAdministrator( aSec.getHandle( ) );
 
-    class UserProfile : public CppUnit::TestFixture
+        ASSERT_TRUE(bRes == sal_True) << "#test comment#: use getHandle function to call C API.";
+    }
+
+    class UserProfile : public ::testing::Test
     {
     public:
-
-        void loadUserProfile( )
-            {
-                ::osl::Security aSec;
-                sal_Bool bValue = osl_loadUserProfile(aSec.getHandle());
-
-                CPPUNIT_ASSERT_MESSAGE( "empty function.", bValue == sal_False );
-            }
-
-        void unloadUserProfile( )
-            {
-                ::osl::Security aSec;
-                osl_unloadUserProfile(aSec.getHandle());
-                CPPUNIT_ASSERT_MESSAGE( "empty function.", sal_True );
-            }
-
-        CPPUNIT_TEST_SUITE( UserProfile );
-        CPPUNIT_TEST( loadUserProfile );
-        CPPUNIT_TEST( unloadUserProfile );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class UserProfile
 
-    class loginUserOnFileServer : public CppUnit::TestFixture
+    TEST_F(UserProfile, loadUserProfile)
+    {
+        ::osl::Security aSec;
+        sal_Bool bValue = osl_loadUserProfile(aSec.getHandle());
+
+        ASSERT_TRUE(bValue == sal_False) << "empty function.";
+    }
+
+    TEST_F(UserProfile, unloadUserProfile)
+    {
+        ::osl::Security aSec;
+        osl_unloadUserProfile(aSec.getHandle());
+        ASSERT_TRUE(sal_True) << "empty function.";
+    }
+
+    class loginUserOnFileServer : public ::testing::Test
     {
     public:
-
-        void loginUserOnFileServer_001( )
-            {
-                rtl::OUString suUserName;
-                rtl::OUString suPassword;
-                rtl::OUString suFileServer;
-                ::osl::Security aSec;
-                oslSecurity pSec = aSec.getHandle();
-
-                oslSecurityError erg = osl_loginUserOnFileServer(suUserName.pData, suPassword.pData, suFileServer.pData, &pSec);
-
-                CPPUNIT_ASSERT_MESSAGE( "empty function.", erg == osl_Security_E_UserUnknown );
-            }
-
-        CPPUNIT_TEST_SUITE( loginUserOnFileServer );
-        CPPUNIT_TEST( loginUserOnFileServer_001 );
-        CPPUNIT_TEST_SUITE_END( );
     }; // class loginUserOnFileServer
 
-// -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::ctors, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::logonUser, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getUserIdent, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getUserName, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getHomeDir, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getConfigDir, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::isAdministrator, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getHandle, "osl_Security");
+    TEST_F(loginUserOnFileServer, loginUserOnFileServer_001)
+    {
+        rtl::OUString suUserName;
+        rtl::OUString suPassword;
+        rtl::OUString suFileServer;
+        ::osl::Security aSec;
+        oslSecurity pSec = aSec.getHandle();
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::UserProfile, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::loginUserOnFileServer, "osl_Security");
+        oslSecurityError erg = osl_loginUserOnFileServer(suUserName.pData, suPassword.pData, suFileServer.pData, &pSec);
 
-// -----------------------------------------------------------------------------
+        ASSERT_TRUE(erg == osl_Security_E_UserUnknown) << "empty function.";
+    }
 
 } // namespace osl_Security
 
 
 // -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-
 /** to do some initialized work, we replace the NOADDITIONAL macro with the initialize work which
       get current user name, .
 */
 
-void RegisterAdditionalFunctions(FktRegFuncPtr)
+int main(int argc, char **argv)
 {
     /// start message
-    t_print("#Initializing ...\n" );
-    t_print("#\n#logonUser function need root/Administrator account to test.\n" );
-    t_print("#You can test by login with root/Administrator, and excute:\n" );
-    t_print("#testshl2 -forward \"username password\" ../../../wntmsci9/bin/Security.dll\n" );
-    t_print("#      where username and password are forwarded account info.\n" );
-    t_print("#if no text forwarded, this function will be skipped.\n" );
+    printf("#Initializing ...\n" );
+    printf("#\n#logonUser function need root/Administrator account to test.\n" );
+    printf("#You can test by login with root/Administrator, and excute:\n" );
+    printf("#testshl2 -forward \"username password\" ../../../wntmsci9/bin/Security.dll\n" );
+    printf("#      where username and password are forwarded account info.\n" );
+    printf("#if no text forwarded, this function will be skipped.\n" );
 
     /// get system information
 #if ( defined UNX ) || ( defined OS2 )
@@ -371,7 +307,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
 
 
     struct passwd* pw;
-    CPPUNIT_ASSERT_MESSAGE( "getpwuid: no password entry\n",( pw = getpwuid( getuid() ) ) != NULL );
+    EXPECT_TRUE(( pw = getpwuid( getuid() ) ) != NULL) << "getpwuid: no password entry\n";
 
     /// get user ID;
     strUserID = ::rtl::OUString::valueOf( ( sal_Int32 )getuid( ) );
@@ -380,8 +316,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
     strUserName = ::rtl::OUString::createFromAscii( pw->pw_name );
 
     /// get home directory;
-    CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
-                            ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw->pw_dir ), strHomeDirectory ) );
+    EXPECT_TRUE(::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw->pw_dir ), strHomeDirectory )) << "#Convert from system path to URL failed.";
 
     /// get config directory;
     strConfigDirectory = strHomeDirectory.copy(0);
@@ -420,15 +355,13 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
         lRet = RegQueryValueEx(hRegKey, "AppData", NULL, &Type, ( unsigned char * )PathA, ( unsigned long * )&lSize);
         if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _access( PathA, 0 ) == 0 ) )
         {
-            CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
-                                    ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strConfigDirectory ) );
+            EXPECT_TRUE(::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strConfigDirectory )) << "#Convert from system path to URL failed.";
         }
 
         lRet = RegQueryValueEx(hRegKey, "Personal", NULL, &Type, ( unsigned char * )PathA, ( unsigned long * )&lSize);
         if ( ( lRet == ERROR_SUCCESS ) && ( Type == REG_SZ ) &&  ( _access( PathA, 0 ) == 0 ) )
         {
-            CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
-                                    ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strHomeDirectory ) );
+            EXPECT_TRUE(::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( PathA ), strHomeDirectory )) << "#Convert from system path to URL failed.";
         }
 
         RegCloseKey(hRegKey);
@@ -451,11 +384,11 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
 
     // Create buffers for the SID and the domain name.
     PSID pSid = (PSID) new WIN_BYTE[dwSidBufferSize];
-    CPPUNIT_ASSERT_MESSAGE("# creating SID buffer failed.\n", pSid!= NULL );
+    EXPECT_TRUE(pSid!= NULL) << "# creating SID buffer failed.\n";
     memset( pSid, 0, dwSidBufferSize);
 
     wszDomainName = new WCHAR[dwDomainBufferSize];
-    CPPUNIT_ASSERT_MESSAGE("# creating Domain name buffer failed.\n", wszDomainName != NULL );
+    EXPECT_TRUE(wszDomainName != NULL) << "# creating Domain name buffer failed.\n";
     memset(wszDomainName, 0, dwDomainBufferSize*sizeof(WCHAR));
 
     // Obtain the SID for the account name passed.
@@ -489,7 +422,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
                 wprintf(L"# The SID buffer was too small. It will be reallocated.\n");
                 FreeSid( pSid);
                 pSid = (PSID) new WIN_BYTE[cbSid];
-                CPPUNIT_ASSERT_MESSAGE("# re-creating SID buffer failed.\n",  pSid!= NULL );
+                EXPECT_TRUE(pSid!= NULL) << "# re-creating SID buffer failed.\n";
                 memset( pSid, 0, cbSid);
                 dwSidBufferSize = cbSid;
             }
@@ -499,7 +432,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
                 wprintf(L"# The domain name buffer was too small. It will be reallocated.\n");
                 delete [] wszDomainName;
                 wszDomainName = new WCHAR[cchDomainName];
-                CPPUNIT_ASSERT_MESSAGE("# re-creating domain name buffer failed.\n", wszDomainName!= NULL );
+                EXPECT_TRUE(wszDomainName!= NULL) << "# re-creating domain name buffer failed.\n";
                 memset(wszDomainName, 0, cchDomainName*sizeof(WCHAR));
                 dwDomainBufferSize = cchDomainName;
             }
@@ -593,43 +526,43 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
 #endif
 
     /// print the information.
-    t_print("#\n#Retrived system information is below:\n");
+    printf("#\n#Retrived system information is below:\n");
 
-    t_print("Computer Name:              ");
+    printf("Computer Name:              ");
     if ( strComputerName == aNullURL )
-        t_print(" Not retrived\n" );
+        printf(" Not retrived\n" );
     else
         printUString( strComputerName );
 
-    t_print("Current User Name:          ");
+    printf("Current User Name:          ");
     if ( strUserName == aNullURL )
-        t_print(" Not retrived\n" );
+        printf(" Not retrived\n" );
     else
         printUString( strUserName );
 
-    t_print("Current User Home Directory:");
+    printf("Current User Home Directory:");
     if ( strHomeDirectory == aNullURL )
-        t_print(" Not retrived\n" );
+        printf(" Not retrived\n" );
     else
         printUString( strHomeDirectory );
 
-    t_print("Current Config Directory:   ");
+    printf("Current Config Directory:   ");
     if ( strConfigDirectory == aNullURL )
-        t_print(" Not retrived\n" );
+        printf(" Not retrived\n" );
     else
         printUString( strConfigDirectory );
 
-    t_print("Current UserID:             ");
+    printf("Current UserID:             ");
     if ( strUserID == aNullURL )
-        t_print(" Not retrived\n" );
+        printf(" Not retrived\n" );
     else
         printUString( strUserID );
 
-    t_print("Current User is");
+    printf("Current User is");
     if ( isAdmin == sal_False )
-        t_print(" NOT Administrator.\n" );
+        printf(" NOT Administrator.\n" );
     else
-        t_print(" Administrator.\n" );
+        printf(" Administrator.\n" );
 
 
     /// get and display forwarded text if available.
@@ -642,33 +575,35 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
         /// only forwarded two parameters, username and password.
         {
             aLogonUser = aStringForward.copy( 0, nFirstSpacePoint );
-            t_print("\n#Forwarded username: ");
+            printf("\n#Forwarded username: ");
             printUString( aLogonUser);
 
             aLogonPasswd = aStringForward.copy( nFirstSpacePoint +1, aStringForward.getLength( ) - 1 );
-            t_print("#Forwarded password: ");
-            for ( int i = nFirstSpacePoint +1; i <= aStringForward.getLength( ) - 1; i++, t_print("*") );
-            t_print("\n" );
+            printf("#Forwarded password: ");
+            for ( int i = nFirstSpacePoint +1; i <= aStringForward.getLength( ) - 1; i++, printf("*") );
+            printf("\n" );
         }
         else
         /// forwarded three parameters, username, password and fileserver.
         {
             aLogonUser = aStringForward.copy( 0, nFirstSpacePoint );
-            t_print("#Forwarded username: ");
+            printf("#Forwarded username: ");
             printUString( aLogonUser);
 
             aLogonPasswd = aStringForward.copy( nFirstSpacePoint +1, nLastSpacePoint );
-            t_print("#Forwarded password: ");
-            for ( int i = nFirstSpacePoint +1; i <= nLastSpacePoint; i++, t_print("*") );
-            t_print("\n" );
+            printf("#Forwarded password: ");
+            for ( int i = nFirstSpacePoint +1; i <= nLastSpacePoint; i++, printf("*") );
+            printf("\n" );
 
             aFileServer = aStringForward.copy( nLastSpacePoint +1, aStringForward.getLength( ) - 1 );
-            t_print("#Forwarded FileServer: ");
+            printf("#Forwarded FileServer: ");
             printUString( aFileServer );
 
         }
     }
 
-    t_print("#\n#Initialization Done.\n" );
+    printf("#\n#Initialization Done.\n" );
 
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

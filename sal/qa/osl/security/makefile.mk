@@ -32,29 +32,33 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
+
+.ELSE
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Security by codegen.pl
-SHL1OBJS=  \
+APP1OBJS=  \
     $(SLO)$/osl_Security.obj
 
-SHL1TARGET= osl_Security
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+APP1TARGET= osl_Security
+APP1STDLIBS= $(SALLIB) $(GTESTLIB) $(TESTSHL2LIB)
 .IF "$(GUI)" == "WNT"
-SHL1STDLIBS+= $(ADVAPI32LIB)
+APP1STDLIBS+= $(ADVAPI32LIB)
 .ENDIF
 
-SHL1IMPLIB= i$(SHL1TARGET)
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
+APP1RPATH = NONE
+APP1TEST = enabled
 # auto generated Target:Security
 # END ------------------------------------------------------------------
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+
+.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
