@@ -4670,9 +4670,7 @@ void ImpEditEngine::ImplUpdateOverflowingLineNum(sal_uInt32 nPaperHeight,
         }
     }
 
-    assert(0); // You should never get here
-
+    assert(false && "You should never get here");
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

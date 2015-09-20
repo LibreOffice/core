@@ -129,7 +129,7 @@ OverflowingText::OverflowingText(TranferableText xOverflowingContent) :
 
 ESelection OverflowingText::GetInsertionPointSel() const
 {
-    assert(0);
+    assert(false && "You should never get here");
     return getLastPositionSel(NULL);
 }
 
