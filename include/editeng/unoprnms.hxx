@@ -22,6 +22,8 @@
 
 
 #define UNO_NAME_CHAR_COLOR                     "CharColor"
+#define UNO_NAME_CHAR_COLOR_THEME               "CharColorTheme"
+#define UNO_NAME_CHAR_COLOR_TINT_OR_SHADE       "CharColorTintOrShade"
 #define UNO_NAME_CHAR_HEIGHT                    "CharHeight"
 #define UNO_NAME_CHAR_POSTURE                   "CharPosture"
 #define UNO_NAME_CHAR_SHADOWED                  "CharShadowed"
