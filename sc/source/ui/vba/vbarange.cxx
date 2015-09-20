@@ -2875,7 +2875,7 @@ ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, cons
         Transpose >>= bTranspose;
 
     InsertDeleteFlags nFlags = getPasteFlags(nPaste);
-    sal_uInt16 nFormulaBits = getPasteFormulaBits(nOperation);
+    ScPasteFunc nFormulaBits = getPasteFormulaBits(nOperation);
     excel::implnPasteSpecial(pShell->GetModel(), nFlags,nFormulaBits,bSkipBlanks,bTranspose);
 }
 

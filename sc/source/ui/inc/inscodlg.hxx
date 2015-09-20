@@ -37,7 +37,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     InsertDeleteFlags GetInsContentsCmdBits() const;
-    sal_uInt16      GetFormulaCmdBits() const;
+    ScPasteFunc       GetFormulaCmdBits() const;
     bool            IsSkipEmptyCells() const;
     bool            IsTranspose() const;
     bool            IsLink() const;

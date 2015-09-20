@@ -463,7 +463,7 @@ void ScViewFunc::PasteFromSystem()
         // keep a reference in case the clipboard is changed during PasteFromClip
         uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
-                        PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                        ScPasteFunc::NONE, false, false, false, INS_NONE, IDF_NONE,
                         true );     // allow warning dialog
     }
     else if (pDrawClip)
@@ -605,7 +605,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     if (pOwnClip)
     {
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
-                        PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                        ScPasteFunc::NONE, false, false, false, INS_NONE, IDF_NONE,
                         true );     // allow warning dialog
     }
     else if (pDrawClip)
@@ -700,7 +700,7 @@ bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi )
         // keep a reference in case the clipboard is changed during PasteFromClip
         uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
-                        PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
+                        ScPasteFunc::NONE, false, false, false, INS_NONE, IDF_NONE,
                         !bApi );        // allow warning dialog
     }
     else
@@ -843,7 +843,7 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
 }
 
 bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
-                                sal_uInt16 nFunction, bool bSkipEmpty,
+                                ScPasteFunc nFunction, bool bSkipEmpty,
                                 bool bTranspose, bool bAsLink,
                                 InsCellCmd eMoveMode, InsertDeleteFlags nUndoExtraFlags,
                                 bool bAllowDialogs )
@@ -1120,7 +1120,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
     {
         bool bAskIfNotEmpty = bAllowDialogs &&
                                 ( nFlags & IDF_CONTENTS ) &&
-                                nFunction == PASTE_NOFUNC &&
+                                nFunction == ScPasteFunc::NONE &&
                                 SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
         if ( bAskIfNotEmpty )
         {
@@ -1247,7 +1247,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         //  save original data in case of calculation
 
     std::unique_ptr<ScDocument> pMixDoc;
-    if (nFunction)
+    if (nFunction != ScPasteFunc::NONE)
     {
         bSkipEmpty = false;
         if ( nFlags & IDF_CONTENTS )
@@ -1431,7 +1431,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
 }
 
 bool ScViewFunc::PasteMultiRangesFromClip(
-    InsertDeleteFlags nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+    InsertDeleteFlags nFlags, ScDocument* pClipDoc, ScPasteFunc nFunction,
     bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
     InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags)
 {
@@ -1488,7 +1488,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
 
     bool bAskIfNotEmpty =
         bAllowDialogs && (nFlags & IDF_CONTENTS) &&
-        nFunction == PASTE_NOFUNC && SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
+        nFunction == ScPasteFunc::NONE && SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
 
     if (bAskIfNotEmpty)
     {
@@ -1517,7 +1517,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     }
 
     ::std::unique_ptr<ScDocument> pMixDoc;
-    if ( bSkipEmpty || nFunction )
+    if ( bSkipEmpty || nFunction != ScPasteFunc::NONE)
     {
         if ( nFlags & IDF_CONTENTS )
         {
@@ -1589,7 +1589,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
 }
 
 bool ScViewFunc::PasteFromClipToMultiRanges(
-    InsertDeleteFlags nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+    InsertDeleteFlags nFlags, ScDocument* pClipDoc, ScPasteFunc nFunction,
     bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
     InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags )
 {
@@ -1646,7 +1646,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
     bool bAskIfNotEmpty =
         bAllowDialogs && (nFlags & IDF_CONTENTS) &&
-        nFunction == PASTE_NOFUNC && SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
+        nFunction == ScPasteFunc::NONE && SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
 
     if (bAskIfNotEmpty)
     {
@@ -1667,7 +1667,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
     }
 
     std::unique_ptr<ScDocument> pMixDoc;
-    if (bSkipEmpty || nFunction)
+    if (bSkipEmpty || nFunction != ScPasteFunc::NONE)
     {
         if (nFlags & IDF_CONTENTS)
         {
@@ -1900,7 +1900,7 @@ bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, b
 
     //  Paste
 
-    PasteFromClip( IDF_ALL, pClipDoc.get(), PASTE_NOFUNC, false, false, true );       // as a link
+    PasteFromClip( IDF_ALL, pClipDoc.get(), ScPasteFunc::NONE, false, false, true );       // as a link
 
     return true;
 }

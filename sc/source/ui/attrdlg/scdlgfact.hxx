@@ -209,7 +209,7 @@ class AbstractScInsertContentsDlg_Impl : public AbstractScInsertContentsDlg
 {
     DECL_ABSTDLG_BASE(AbstractScInsertContentsDlg_Impl, ScInsertContentsDlg)
     virtual InsertDeleteFlags GetInsContentsCmdBits() const SAL_OVERRIDE;
-    virtual sal_uInt16  GetFormulaCmdBits() const SAL_OVERRIDE;
+    virtual ScPasteFunc   GetFormulaCmdBits() const SAL_OVERRIDE;
     virtual bool        IsSkipEmptyCells() const SAL_OVERRIDE;
     virtual bool        IsLink() const SAL_OVERRIDE;
     virtual void        SetFillMode( bool bSet ) SAL_OVERRIDE;

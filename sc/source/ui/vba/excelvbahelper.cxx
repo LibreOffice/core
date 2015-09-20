@@ -186,7 +186,7 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
     }
 }
 
-void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDeleteFlags nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bTranspose)
+void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool bSkipEmpty, bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
     InsCellCmd eMoveMode = INS_NONE;

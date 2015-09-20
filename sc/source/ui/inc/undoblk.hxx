@@ -163,14 +163,14 @@ private:
 
 struct ScUndoPasteOptions
 {
-    sal_uInt16 nFunction;
+    ScPasteFunc  nFunction;
     bool       bSkipEmpty;
     bool       bTranspose;
     bool       bAsLink;
     InsCellCmd eMoveMode;
 
     ScUndoPasteOptions() :
-        nFunction( PASTE_NOFUNC ),
+        nFunction( ScPasteFunc::NONE ),
         bSkipEmpty( false ),
         bTranspose( false ),
         bAsLink( false ),
@@ -293,7 +293,7 @@ public:
                                      SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                      SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                      ScDocument* pNewUndoDoc, bool bNewMulti, SCTAB nSrc,
-                                     InsertDeleteFlags nFlg, sal_uInt16 nFunc, bool bSkip, bool bLink );
+                                     InsertDeleteFlags nFlg, ScPasteFunc nFunc, bool bSkip, bool bLink );
     virtual         ~ScUndoFillTable();
 
     virtual void    Undo() SAL_OVERRIDE;
@@ -310,7 +310,7 @@ private:
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
     InsertDeleteFlags nFlags;
-    sal_uInt16      nFunction;
+    ScPasteFunc       nFunction;
     SCTAB           nSrcTab;
     bool            bMulti;         // Multi selection
     bool            bSkipEmpty;
