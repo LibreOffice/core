@@ -170,7 +170,6 @@ void SwAccessiblePortionData::Special(
             sDisplay = String(sal_Unicode(0xfffc));
             break;
         case POR_GRFNUM:
-        case POR_BULLET:
                 break;
         case POR_FLD:
         //Added by yanjun for 6854
@@ -202,6 +201,7 @@ void SwAccessiblePortionData::Special(
             }
             break;
         case POR_NUMBER:
+        case POR_BULLET:
         {
             OUStringBuffer aTmpBuffer( rText.Len() + 1 );
             aTmpBuffer.append( rText );
