@@ -2010,7 +2010,7 @@ void ImpUpdateChainLinks(SdrTextObj *pTextObj, OUString const& aNextLinkName)
     // XXX: Current implementation constraints text boxes to be on the same page
 
     // No next link
-    if (aNextLinkName == "") {
+    if (aNextLinkName.isEmpty()) {
         pTextObj->SetNextLinkInChain(NULL);
         return;
     }
@@ -2034,14 +2034,14 @@ bool SdrTextObj::IsChainable() const
     OUString aNextLinkName = static_cast<const SfxStringItem&>(rSet.Get(SDRATTR_TEXT_CHAINNEXTNAME)).GetValue();
 
     // Update links if any inconsistency is found
-    bool bNextLinkUnsetYet = (aNextLinkName != "") && !mpNextInChain;
+    bool bNextLinkUnsetYet = !aNextLinkName.isEmpty() && !mpNextInChain;
     bool bInconsistentNextLink = mpNextInChain && mpNextInChain->GetName() != aNextLinkName;
     // if the link is not set despite there should be one OR if it has changed
     if (bNextLinkUnsetYet || bInconsistentNextLink) {
         ImpUpdateChainLinks(const_cast<SdrTextObj *>(this), aNextLinkName);
     }
 
-    return aNextLinkName != ""; // XXX: Should we also check for GetNilChainingEvent? (see old code below)
+    return !aNextLinkName.isEmpty(); // XXX: Should we also check for GetNilChainingEvent? (see old code below)
 
 /*
     // Check that no overflow is going on
