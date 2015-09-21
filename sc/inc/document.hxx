@@ -188,6 +188,7 @@ struct ScQueryParam;
 class ScHint;
 class SvtBroadcaster;
 enum class ScDBDataPortion;
+enum class ScSheetEventId;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -815,8 +816,8 @@ public:
 
     const ScSheetEvents* GetSheetEvents( SCTAB nTab ) const;
     void            SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew );
-    bool            HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVbaEvents = false ) const;
-    bool            HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents = false ) const;  // on any sheet
+    bool            HasSheetEventScript( SCTAB nTab, ScSheetEventId nEvent, bool bWithVbaEvents = false ) const;
+    bool            HasAnySheetEventScript( ScSheetEventId nEvent, bool bWithVbaEvents = false ) const;  // on any sheet
 
     bool            HasAnyCalcNotification() const;
     bool            HasCalcNotification( SCTAB nTab ) const;
@@ -837,7 +838,7 @@ public:
     SC_DLLPUBLIC void EnsureTable( SCTAB nTab );
 
                     //  return TRUE = number format is set
-    SC_DLLPUBLIC bool           SetString(
+    SC_DLLPUBLIC bool SetString(
         SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
         ScSetStringParam* pParam = NULL );
     SC_DLLPUBLIC bool SetString( const ScAddress& rPos, const OUString& rString, ScSetStringParam* pParam = NULL );

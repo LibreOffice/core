@@ -1249,7 +1249,7 @@ void ScDocShell::DoHardRecalc( bool /* bApi */ )
     // (might check for the presence of any formulas on each sheet)
     SCTAB nTabCount = aDocument.GetTableCount();
     SCTAB nTab;
-    if (aDocument.HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true )) // search also for VBA hendler
+    if (aDocument.HasAnySheetEventScript( ScSheetEventId::CALCULATE, true )) // search also for VBA hendler
         for (nTab=0; nTab<nTabCount; nTab++)
             aDocument.SetCalcNotification(nTab);
 

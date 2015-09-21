@@ -595,7 +595,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
     if ( pFormulaTrack )
     {
         // outside the loop, check if any sheet has a "calculate" event script
-        bool bCalcEvent = HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true );
+        bool bCalcEvent = HasAnySheetEventScript( ScSheetEventId::CALCULATE, true );
         ScFormulaCell* pTrack;
         ScFormulaCell* pNext;
         pTrack = pFormulaTrack;

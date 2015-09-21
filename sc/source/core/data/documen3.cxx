@@ -630,7 +630,7 @@ void ScDocument::SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew )
         maTabs[nTab]->SetSheetEvents( pNew );
 }
 
-bool ScDocument::HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVbaEvents ) const
+bool ScDocument::HasSheetEventScript( SCTAB nTab, ScSheetEventId nEvent, bool bWithVbaEvents ) const
 {
     if (nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
@@ -654,7 +654,7 @@ bool ScDocument::HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVb
     return false;
 }
 
-bool ScDocument::HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents ) const
+bool ScDocument::HasAnySheetEventScript( ScSheetEventId nEvent, bool bWithVbaEvents ) const
 {
     SCTAB nSize = static_cast<SCTAB>(maTabs.size());
     for (SCTAB nTab = 0; nTab < nSize; nTab++)

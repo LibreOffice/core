@@ -22,14 +22,10 @@
 
 #include <rtl/ustring.hxx>
 
-#define SC_SHEETEVENT_FOCUS         0
-#define SC_SHEETEVENT_UNFOCUS       1
-#define SC_SHEETEVENT_SELECT        2
-#define SC_SHEETEVENT_DOUBLECLICK   3
-#define SC_SHEETEVENT_RIGHTCLICK    4
-#define SC_SHEETEVENT_CHANGE        5
-#define SC_SHEETEVENT_CALCULATE     6
-#define SC_SHEETEVENT_COUNT         7
+enum class ScSheetEventId {
+    FOCUS, UNFOCUS, SELECT, DOUBLECLICK, RIGHTCLICK, CHANGE, CALCULATE, COUNT,
+    NOTFOUND = -1 // used as a an error return value
+};
 
 class ScSheetEvents
 {
@@ -44,12 +40,12 @@ public:
 
     const ScSheetEvents&    operator= (const ScSheetEvents& rOther);
 
-    const OUString*    GetScript(sal_Int32 nEvent) const;
-    void                    SetScript(sal_Int32 nEvent, const OUString* pNew);
+    const OUString*         GetScript(ScSheetEventId nEvent) const;
+    void                    SetScript(ScSheetEventId nEvent, const OUString* pNew);
 
-    static OUString    GetEventName(sal_Int32 nEvent);
-    static sal_Int32        GetVbaSheetEventId(sal_Int32 nEvent);
-    static sal_Int32        GetVbaDocumentEventId(sal_Int32 nEvent);
+    static OUString         GetEventName(ScSheetEventId nEvent);
+    static sal_Int32        GetVbaSheetEventId(ScSheetEventId nEvent);
+    static sal_Int32        GetVbaDocumentEventId(ScSheetEventId nEvent);
 };
 
 #endif
