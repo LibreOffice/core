@@ -870,9 +870,9 @@ bool SvxNumRule::UnLinkGraphics()
     {
         SvxNumberFormat aFmt(GetLevel(i));
         const SvxBrushItem* pBrush = aFmt.GetBrush();
-        const Graphic* pGraphic = NULL;
         if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
         {
+            const Graphic* pGraphic = NULL;
             if(pBrush &&
                 !pBrush->GetGraphicLink().isEmpty() &&
                     0 != (pGraphic = pBrush->GetGraphic()))

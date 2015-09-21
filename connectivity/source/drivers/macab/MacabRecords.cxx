@@ -381,7 +381,6 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     /* While searching through the properties for required properties, these
      * sal_Bools will keep track of what we have found.
      */
-    bool bFoundProperty;
     bool bFoundRequiredProperties[numRequiredProperties];
 
 
@@ -411,8 +410,8 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     /* Determine the non-required properties... */
     for(i = 0; i < numProperties; i++)
     {
+        bool bFoundProperty = false;
         property = static_cast<CFStringRef>(CFArrayGetValueAtIndex(allProperties, i));
-        bFoundProperty = false;
         for(j = 0; j < numRequiredProperties; j++)
         {
             if(CFEqual(property, requiredProperties[j]))

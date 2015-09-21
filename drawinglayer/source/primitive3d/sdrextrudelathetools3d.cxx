@@ -596,9 +596,6 @@ namespace drawinglayer
 
                 // tetxture parameters
                 double fInvTexHeight(1.0);
-                double fTexHeightPos(0.0);
-                double fTexStart(0.0);
-                double fTexStop(1.0);
                 ::std::vector<double> aTexHeightArray;
                 basegfx::B3DRange aTexRangeFront;
                 basegfx::B3DRange aTexRangeBack;
@@ -640,6 +637,7 @@ namespace drawinglayer
                 {
                     for(a = 0L; a < nLoopCount; a++)
                     {
+                        double fTexHeightPos(0.0);
                         const Slice3D& rSliceA(rSliceVector[a]);
                         const Slice3D& rSliceB(rSliceVector[(a + 1L) % nNumSlices]);
                         const bool bAcceptPair(SLICETYPE3D_REGULAR == rSliceA.getSliceType() && SLICETYPE3D_REGULAR == rSliceB.getSliceType());
@@ -648,6 +646,9 @@ namespace drawinglayer
 
                         if(bAcceptPair)
                         {
+                            double fTexStart(0.0);
+                            double fTexStop(1.0);
+
                             if(bCreateNormals)
                             {
                                 impCreateInBetweenNormals(aPolB, aPolA, bSmoothHorizontalNormals);

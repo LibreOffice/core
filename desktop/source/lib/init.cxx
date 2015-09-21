@@ -553,7 +553,6 @@ static void doc_iniUnoCommands ()
     };
 
     util::URL aCommandURL;
-    const SfxSlot* pSlot = NULL;
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SfxViewFrame* pViewFrame = pViewShell? pViewShell->GetViewFrame(): NULL;
 
@@ -569,6 +568,8 @@ static void doc_iniUnoCommands ()
 
     for (sal_uInt32 nIterator = 0; nIterator < SAL_N_ELEMENTS(sUnoCommands); nIterator++)
     {
+        const SfxSlot* pSlot = NULL;
+
         aCommandURL.Complete = sUnoCommands[nIterator];
         xParser->parseStrict(aCommandURL);
         pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
