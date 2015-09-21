@@ -626,4 +626,19 @@ namespace slideshow
     }
 }
 
+// debug hooks
+
+namespace boost
+{
+
+void sp_scalar_constructor_hook(void *)
+{
+}
+
+void sp_scalar_destructor_hook(void *)
+{
+}
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

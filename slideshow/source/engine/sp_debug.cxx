@@ -198,10 +198,6 @@ std::size_t find_unreachable_objects(bool report)
 namespace boost
 {
 
-void sp_scalar_constructor_hook(void *)
-{
-}
-
 void sp_scalar_constructor_hook(void * px, std::size_t size, void * pn)
 {
 #ifdef BOOST_HAS_THREADS
@@ -211,10 +207,6 @@ void sp_scalar_constructor_hook(void * px, std::size_t size, void * pn)
 #endif
 
     get_map()[pn] = std::make_pair(px, size);
-}
-
-void sp_scalar_destructor_hook(void *)
-{
 }
 
 void sp_scalar_destructor_hook(void *, std::size_t, void * pn)
