@@ -264,7 +264,7 @@ namespace svt
                 if ( !( i_rEvent.GetFlags() & AllSettingsFlags::STYLE ) )
                     break;
                 SetSettings( Application::GetSettings() );
-                m_pPaintDevice.reset( VclPtr<VirtualDevice>::Create( *this ) );
+                m_pPaintDevice.disposeAndReset( VclPtr<VirtualDevice>::Create( *this ) );
 
                 // fall through.
 
