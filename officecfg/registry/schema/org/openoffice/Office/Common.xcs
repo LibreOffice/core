@@ -3598,14 +3598,14 @@
           <info>
             <desc>Specifies the background color of the start center.</desc>
           </info>
-          <value>14540253</value>
+          <value>9903402</value>
         </prop>
         <prop oor:name="StartCenterTextColor" oor:type="xs:int" oor:nillable="false">
           <!-- Default 3355443 = 0x333333 as specified in tdf#90452, comment 45 -->
           <info>
             <desc>Specifies the text color of the buttons in the start center.</desc>
           </info>
-          <value>3355443</value>
+          <value>15658734</value>
         </prop>
         <prop oor:name="StartCenterThumbnailsBackgroundColor" oor:type="xs:int" oor:nillable="false">
           <!-- Default 6710886 = 0x666666 as specified in tdf#90452, comment 45 -->
