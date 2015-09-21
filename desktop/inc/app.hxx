@@ -148,7 +148,7 @@ class Desktop : public Application
         void                    OpenSplashScreen();
         void                    CloseSplashScreen();
 
-        DECL_STATIC_LINK( Desktop, ImplInitFilterHdl, ConvertData* );
+        DECL_STATIC_LINK_TYPED( Desktop, ImplInitFilterHdl, ::ConvertData&, bool );
         DECL_STATIC_LINK_TYPED( Desktop, AsyncInitFirstRun, Timer*, void );
         /** checks if the office is run the first time
             <p>If so, <method>DoFirstRunInitializations</method> is called (asynchronously and delayed) and the

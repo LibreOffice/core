@@ -58,6 +58,7 @@ class MouseEvent;
 class ZoomEvent;
 class ScrollEvent;
 struct ImplSVEvent;
+struct ConvertData;
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/connection/XConnection.hpp>
@@ -1344,7 +1345,7 @@ public:
 
      @see GetFilterHdl
     */
-    static void                 SetFilterHdl( const Link<>& rLink );
+    static void                 SetFilterHdl( const Link<ConvertData&,bool>& rLink );
 
     ///@}
 

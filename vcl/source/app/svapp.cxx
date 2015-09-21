@@ -1430,7 +1430,7 @@ void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
     return pSVData->mxDisplayConnection.get();
 }
 
-void Application::SetFilterHdl( const Link<>& rLink )
+void Application::SetFilterHdl( const Link<ConvertData&,bool>& rLink )
 {
     ImplGetSVData()->maGDIData.mpGrfConverter->SetFilterHdl( rLink );
 }
