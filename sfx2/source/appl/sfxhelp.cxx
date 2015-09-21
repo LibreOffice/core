@@ -78,7 +78,7 @@ using namespace ::com::sun::star::system;
 class NoHelpErrorBox : public MessageDialog
 {
 public:
-    NoHelpErrorBox( vcl::Window* _pParent );
+    explicit NoHelpErrorBox( vcl::Window* _pParent );
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 };

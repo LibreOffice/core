@@ -50,7 +50,7 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper<com::sun::star:
         com::sun::star::uno::WeakReference<com::sun::star::beans::XPropertyChangeListener> mxOwner;
 
     public:
-        WeakPropertyChangeListener(com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner)
+        explicit WeakPropertyChangeListener(com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> xOwner)
             : mxOwner(xOwner)
         {
         }

@@ -321,7 +321,7 @@ private:
     DECL_LINK_TYPED(TabPageDoubleClickHdl, ListBox&, void);
 
 public:
-    SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
+    explicit SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
     virtual ~SfxHelpIndexWindow_Impl();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -402,7 +402,7 @@ bool SfxHelpIndexWindow_Impl::WasCursorLeftOrRight()
 class TextWin_Impl : public DockingWindow
 {
 public:
-                            TextWin_Impl( vcl::Window* pParent );
+    explicit                TextWin_Impl( vcl::Window* pParent );
 
     virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
@@ -460,7 +460,7 @@ private:
     void                    FindHdl(sfx2::SearchDialog*);
 
 public:
-    SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
+    explicit SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
     virtual ~SfxHelpTextWindow_Impl();
     virtual void dispose() SAL_OVERRIDE;
 

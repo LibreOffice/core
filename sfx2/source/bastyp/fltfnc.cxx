@@ -153,11 +153,11 @@ public:
     OUString            aName;
     OUString            aServiceName;
 
-                        SfxFilterContainer_Impl( const OUString& rName )
-                            : aName( rName )
-                        {
-                            aServiceName = SfxObjectShell::GetServiceNameFromFactory( rName );
-                        }
+    explicit SfxFilterContainer_Impl( const OUString& rName )
+        : aName( rName )
+    {
+        aServiceName = SfxObjectShell::GetServiceNameFromFactory( rName );
+    }
 };
 
 #define IMPL_FORWARD_LOOP( aMethod, ArgType, aArg )         \
@@ -263,7 +263,7 @@ public:
 
     void InitForIterating() const;
     void Update() const;
-    SfxFilterMatcher_Impl(const OUString &rName)
+    explicit SfxFilterMatcher_Impl(const OUString &rName)
         : aName(rName)
         , pList(0)
     {
@@ -290,7 +290,7 @@ namespace
     private:
         const OUString& mrName;
     public:
-        hasName(const OUString &rName) : mrName(rName) {}
+        explicit hasName(const OUString &rName) : mrName(rName) {}
         bool operator() (const SfxFilterMatcher_Impl& rImpl) const
         {
             return rImpl.aName == mrName;

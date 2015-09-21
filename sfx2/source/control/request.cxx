@@ -70,21 +70,21 @@ struct SfxRequest_Impl: public SfxListener
 
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
 
-                        SfxRequest_Impl( SfxRequest *pOwner )
-                        : pAnti( pOwner)
-                        , pPool(0)
-                        , pRetVal(0)
-                        , pShell(0)
-                        , pSlot(0)
-                        , nModifier(0)
-                        , bDone(false)
-                        , bIgnored(false)
-                        , bCancelled(false)
-                        , nCallMode( SfxCallMode::SYNCHRON )
-                        , bAllowRecording( false )
-                        , pInternalArgs( 0 )
-                        , pViewFrame(0)
-                        {}
+    explicit SfxRequest_Impl( SfxRequest *pOwner )
+        : pAnti( pOwner)
+        , pPool(0)
+        , pRetVal(0)
+        , pShell(0)
+        , pSlot(0)
+        , nModifier(0)
+        , bDone(false)
+        , bIgnored(false)
+        , bCancelled(false)
+        , nCallMode( SfxCallMode::SYNCHRON )
+        , bAllowRecording( false )
+        , pInternalArgs( 0 )
+        , pViewFrame(0)
+        {}
     virtual ~SfxRequest_Impl() { delete pInternalArgs; }
 
 

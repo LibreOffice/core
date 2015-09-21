@@ -64,7 +64,7 @@ OUString SfxDdeServiceName_Impl( const OUString& sIn )
 class ImplDdeService : public DdeService
 {
 public:
-    ImplDdeService( const OUString& rNm )
+    explicit ImplDdeService( const OUString& rNm )
         : DdeService( rNm )
     {}
     virtual bool MakeTopic( const OUString& );
@@ -217,7 +217,7 @@ public:
     DdeData aData;
     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
 
-    SfxDdeDocTopic_Impl( SfxObjectShell* pShell )
+    explicit SfxDdeDocTopic_Impl( SfxObjectShell* pShell )
         : DdeTopic( pShell->GetTitle(SFX_TITLE_FULLNAME) ), pSh( pShell )
     {}
 

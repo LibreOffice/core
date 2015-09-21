@@ -123,7 +123,7 @@ private:
     OUString                aFactory;
 
 public:
-    HelpListener_Impl( HelpInterceptor_Impl* pInter );
+    explicit HelpListener_Impl( HelpInterceptor_Impl* pInter );
 
     virtual void SAL_CALL   statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
                                 throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

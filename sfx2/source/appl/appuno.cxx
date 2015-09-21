@@ -1716,7 +1716,7 @@ class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper< task::XInte
     comphelper::OInteractionDisapprove*  m_pDisapprove;
 
 public:
-    RequestPackageReparation_Impl( const OUString& aName );
+    explicit RequestPackageReparation_Impl( const OUString& aName );
     bool    isApproved();
     virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations()
@@ -1785,7 +1785,7 @@ class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper< task::XInteracti
     comphelper::OInteractionAbort*  m_pAbort;
 
 public:
-    NotifyBrokenPackage_Impl( const OUString& aName );
+    explicit NotifyBrokenPackage_Impl(const OUString& rName);
     virtual uno::Any SAL_CALL getRequest() throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations()
         throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;

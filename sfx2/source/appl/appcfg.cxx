@@ -89,7 +89,7 @@ class SfxEventAsyncer_Impl : public SfxListener
 public:
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
-    SfxEventAsyncer_Impl( const SfxEventHint& rHint );
+    explicit SfxEventAsyncer_Impl(const SfxEventHint& rHint);
     virtual ~SfxEventAsyncer_Impl();
     DECL_LINK_TYPED( IdleHdl, Idle*, void );
 };

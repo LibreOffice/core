@@ -62,7 +62,10 @@ private:
     SfxAppData_Impl& m_rAppData;
 
 public:
-    SfxBasicManagerCreationListener( SfxAppData_Impl& _rAppData ) :m_rAppData( _rAppData ) { }
+    explicit SfxBasicManagerCreationListener(SfxAppData_Impl& _rAppData)
+        : m_rAppData(_rAppData)
+    {
+    }
 
     virtual ~SfxBasicManagerCreationListener();
 

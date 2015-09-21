@@ -244,7 +244,7 @@ namespace
     private:
         DECL_LINK_TYPED(ShowHdl, Button*, void);
     public:
-        LicenseDialog(vcl::Window *pParent=NULL);
+        explicit LicenseDialog(vcl::Window *pParent=NULL);
     };
 
     LicenseDialog::LicenseDialog(vcl::Window *pParent)

@@ -37,7 +37,7 @@ private:
     DECL_LINK_TYPED( Delete, Application*, void );
 
 public:
-    SfxItemDisruptor_Impl( SfxPoolItem *pItemToDesrupt );
+    explicit SfxItemDisruptor_Impl(SfxPoolItem *pItemToDesrupt);
     void LaunchDeleteOnIdle();
     ~SfxItemDisruptor_Impl();
 };

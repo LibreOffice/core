@@ -44,7 +44,7 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper<com::sun::star::util::X
         SfxFilterListener *m_pOwner;
 
     public:
-        SfxRefreshListener(SfxFilterListener *pOwner)
+        explicit SfxRefreshListener(SfxFilterListener *pOwner)
             : m_pOwner(pOwner)
         {
         }

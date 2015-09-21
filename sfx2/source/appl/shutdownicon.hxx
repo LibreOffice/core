@@ -80,7 +80,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         friend class SfxNotificationListener_Impl;
 
     public:
-        ShutdownIcon( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext );
+        explicit ShutdownIcon( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext );
 
         virtual ~ShutdownIcon();
 

@@ -40,7 +40,7 @@ class SvLinkSourceTimer : public Timer
     SvLinkSource *  pOwner;
     virtual void    Invoke() SAL_OVERRIDE;
 public:
-            SvLinkSourceTimer( SvLinkSource * pOwn );
+    explicit SvLinkSourceTimer( SvLinkSource * pOwn );
 };
 
 SvLinkSourceTimer::SvLinkSourceTimer( SvLinkSource * pOwn )
@@ -80,7 +80,7 @@ struct SvLinkSource_Entry_Impl
             nAdviseModes( nAdvMode ), bIsDataSink( true )
     {}
 
-    SvLinkSource_Entry_Impl( SvBaseLink* pLink )
+    explicit SvLinkSource_Entry_Impl( SvBaseLink* pLink )
         : xSink( pLink ), nAdviseModes( 0 ), bIsDataSink( false )
     {}
 
@@ -129,7 +129,7 @@ class SvLinkSource_EntryIter_Impl
     const SvLinkSource_Array_Impl& rOrigArr;
     sal_uInt16 nPos;
 public:
-    SvLinkSource_EntryIter_Impl( const SvLinkSource_Array_Impl& rArr );
+    explicit SvLinkSource_EntryIter_Impl( const SvLinkSource_Array_Impl& rArr );
     ~SvLinkSource_EntryIter_Impl();
     SvLinkSource_Entry_Impl* Curr()
                             { return nPos < aArr.size() ? aArr[ nPos ] : 0; }

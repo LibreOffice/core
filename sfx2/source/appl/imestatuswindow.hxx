@@ -48,7 +48,7 @@ ImeStatusWindow_Impl;
 class ImeStatusWindow: private ImeStatusWindow_Impl
 {
 public:
-    ImeStatusWindow( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const& rxContext );
+    explicit ImeStatusWindow( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const& rxContext );
 
     /** Set up VCL according to the configuration.
 
