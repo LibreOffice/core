@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_3510a74e",
+        "filename": "compilerplugins/clang/compat.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-21T12:06:46Z",
+      "side": 1,
+      "message": "Thanks! You\u0027re right. Patch set one is semantically incorrect as clang 3.7.0 still uses range.first.",
+      "revId": "d3365e3226222ddb18fcff4686ca11279d84a9d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
