@@ -22,7 +22,6 @@
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
-#include <tools/link.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/vclptr.hxx>
@@ -69,7 +68,6 @@ private:
 
     MapMode         aPrefMapMode;
     Size            aPrefSize;
-    Link<>          aHookHdlLink;
     GDIMetaFile*    pPrev;
     GDIMetaFile*    pNext;
     VclPtr<OutputDevice> pOutDev;
@@ -111,7 +109,6 @@ private:
 protected:
 
     void                                Linker( OutputDevice* pOut, bool bLink );
-    long                                Hook();
 
 public:
                     GDIMetaFile();

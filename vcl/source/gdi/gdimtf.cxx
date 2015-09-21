@@ -126,7 +126,6 @@ GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
     nCurrentActionElement( rMtf.nCurrentActionElement ),
     aPrefMapMode    ( rMtf.aPrefMapMode ),
     aPrefSize       ( rMtf.aPrefSize ),
-    aHookHdlLink    ( rMtf.aHookHdlLink ),
     pPrev           ( rMtf.pPrev ),
     pNext           ( rMtf.pNext ),
     pOutDev         ( NULL ),
@@ -206,7 +205,6 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
 
         aPrefMapMode = rMtf.aPrefMapMode;
         aPrefSize = rMtf.aPrefSize;
-        aHookHdlLink = rMtf.aHookHdlLink;
         pPrev = rMtf.pPrev;
         pNext = rMtf.pNext;
         pOutDev = NULL;
@@ -295,11 +293,6 @@ void GDIMetaFile::Linker( OutputDevice* pOut, bool bLink )
     }
 }
 
-long GDIMetaFile::Hook()
-{
-    return aHookHdlLink.Call( this );
-}
-
 void GDIMetaFile::Record( OutputDevice* pOut )
 {
     if( bRecord )
@@ -325,7 +318,7 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf, size_t nPos )
 
         for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
         {
-            if( !Hook() && pAction )
+            if( pAction )
             {
                 pAction->Duplicate();
                 rMtf.AddAction( pAction );
@@ -361,7 +354,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
             size_t  i  = 0;
             for( size_t nCurPos = nCurrentActionElement; nCurPos < nPos; nCurPos++ )
             {
-                if( !Hook() && pAction )
+                if( pAction )
                 {
                     if( pAction->GetType() == MetaActionType::COMMENT &&
                         static_cast<MetaCommentAction*>(pAction)->GetComment() == "DELEGATE_PLUGGABLE_RENDERER" )
