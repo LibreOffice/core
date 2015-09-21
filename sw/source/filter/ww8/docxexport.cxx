@@ -501,6 +501,9 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
             m_pSections->AppendSection( pAktPageDesc, pParentFmt, nRstLnNum );
         }
     }
+    else if (TXT_MAINTEXT == nTxtTyp && rEndNode.StartOfSectionNode()->IsTableNode())
+        // End node of a table: see if a section break should be written after the table.
+        AttrOutput().SectionBreaks(rEndNode);
 }
 
 void DocxExport::OutputTableNode( const SwTableNode& )
