@@ -105,7 +105,6 @@ child_spawn ( Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus )
     rtl_uString *pApp = NULL, *pTmp = NULL;
     rtl_uString **ppArgs;
     sal_uInt32 nArgs, i;
-    char buffer[64];
     ChildInfo *info;
     int status_pipe[2];
     oslProcessError nError;
@@ -136,6 +135,8 @@ child_spawn ( Args *args, sal_Bool bAllArgs, sal_Bool bWithStatus )
 
     if( bWithStatus )
     {
+        char buffer[64];
+
         /* add the pipe arg */
         snprintf (buffer, 63, "--splash-pipe=%d", status_pipe[1]);
         rtl_uString_newFromAscii( &pTmp, buffer );
@@ -754,7 +755,6 @@ void sigterm_handler(int ignored)
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
-    int fd = 0;
     sal_Bool bSentArgs = sal_False;
     const char* pUsePlugin;
     rtl_uString *pPipePath = NULL;
@@ -794,6 +794,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 
     if ( !args->bInhibitPipe )
     {
+        int fd = 0;
         pPipePath = get_pipe_path( args->pAppPath );
 
         if ( ( fd = connect_pipe( pPipePath ) ) >= 0 )
