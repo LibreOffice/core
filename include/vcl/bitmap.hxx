@@ -624,15 +624,11 @@ public:
         Whether the inline or the outline of the color areas should be
         represented by the polygon
 
-        @param pProgress
-        A callback for showing the progress of the vectorization
-
         @return true, if the operation was completed successfully.
      */
     bool                    Vectorize(
                                 tools::PolyPolygon& rPolyPoly,
-                                BmpVectorizeFlags nFlags = BmpVectorizeFlags::Outer,
-                                const Link<>* pProgress = NULL );
+                                BmpVectorizeFlags nFlags = BmpVectorizeFlags::Outer );
 
     /** Convert the bitmap to a meta file
 
@@ -659,7 +655,7 @@ public:
                                 GDIMetaFile& rMtf,
                                 sal_uInt8 cReduce = 0,
                                 BmpVectorizeFlags nFlags = BmpVectorizeFlags::Inner,
-                                const Link<>* pProgress = NULL );
+                                const Link<long,void>* pProgress = NULL );
 
     /** Change various global color characteristics
 

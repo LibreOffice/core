@@ -42,8 +42,8 @@
 #define VECT_MAP( _def_pIn, _def_pOut, _def_nVal )  _def_pOut[_def_nVal]=(_def_pIn[_def_nVal]=((_def_nVal)*4L)+1L)+5L;
 #define BACK_MAP( _def_nVal )                       ((((_def_nVal)+2)>>2)-1)
 #define VECT_PROGRESS( _def_pProgress, _def_nVal ) \
-  if(_def_pProgress&&_def_pProgress->IsSet())      \
-      (_def_pProgress->Call(reinterpret_cast<void*>(_def_nVal)));
+  if(_def_pProgress && _def_pProgress->IsSet())      \
+      (_def_pProgress->Call(_def_nVal));
 
 class ImplVectMap;
 class ImplChain;
@@ -632,7 +632,7 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
 namespace ImplVectorizer {
 
 bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                                    sal_uInt8 cReduce, BmpVectorizeFlags nFlags, const Link<>* pProgress )
+                                    sal_uInt8 cReduce, BmpVectorizeFlags nFlags, const Link<long,void>* pProgress )
 {
     bool bRet = false;
 
@@ -735,25 +735,19 @@ bool ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
 bool ImplVectorize( const Bitmap& rMonoBmp,
                                     tools::PolyPolygon& rPolyPoly,
-                                    BmpVectorizeFlags nFlags, const Link<>* pProgress )
+                                    BmpVectorizeFlags nFlags )
 {
     std::unique_ptr<Bitmap> xBmp(new Bitmap( rMonoBmp ));
     BitmapReadAccess*   pRAcc;
     bool                bRet = false;
 
-    VECT_PROGRESS( pProgress, 10 );
-
     if( xBmp->GetBitCount() > 1 )
         xBmp->Convert( BMP_CONVERSION_1BIT_THRESHOLD );
-
-    VECT_PROGRESS( pProgress, 30 );
 
     pRAcc = xBmp->AcquireReadAccess();
     std::unique_ptr <ImplVectMap> xMap(ImplExpand( pRAcc, COL_BLACK ));
     Bitmap::ReleaseAccess( pRAcc );
     xBmp.reset();
-
-    VECT_PROGRESS( pProgress, 60 );
 
     if( xMap )
     {
@@ -821,8 +815,6 @@ bool ImplVectorize( const Bitmap& rMonoBmp,
 
         bRet = true;
     }
-
-    VECT_PROGRESS( pProgress, 100 );
 
     return bRet;
 }
