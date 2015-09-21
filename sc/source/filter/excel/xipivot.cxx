@@ -1026,13 +1026,19 @@ void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
 
     XclPTDataFieldInfoList::const_iterator aIt = maDataInfoList.begin(), aEnd = maDataInfoList.end();
 
-    ScDPSaveDimension& rSaveDim = *rSaveData.GetNewDimensionByName(aFieldName);
-    ConvertDataField( rSaveDim, *aIt );
+    ScDPSaveDimension* pSaveDim = rSaveData.GetNewDimensionByName(aFieldName);
+    if (!pSaveDim)
+    {
+        SAL_WARN("sc.filter","XclImpPTField::ConvertDataField - field name not found: " << aFieldName);
+        return;
+    }
+
+    ConvertDataField( *pSaveDim, *aIt );
 
     // multiple data fields -> clone dimension
     for( ++aIt; aIt != aEnd; ++aIt )
     {
-        ScDPSaveDimension& rDupDim = rSaveData.DuplicateDimension( rSaveDim );
+        ScDPSaveDimension& rDupDim = rSaveData.DuplicateDimension( *pSaveDim );
         ConvertDataFieldInfo( rDupDim, *aIt );
     }
 }
