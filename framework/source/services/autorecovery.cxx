@@ -638,7 +638,7 @@ private:
 
     /** @short  makes our dispatch() method asynchronous!
      */
-    DECL_LINK(implts_asyncDispatch, void*);
+    DECL_LINK_TYPED(implts_asyncDispatch, LinkParamNone*, void);
 
     /** @short  implements the dispatch real. */
     void implts_dispatch(const DispatchParams& aParams);
@@ -1389,7 +1389,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     } /* SAFE */
 
     if (bAsync)
-        m_aAsyncDispatcher.Post(0);
+        m_aAsyncDispatcher.Post();
     else
         implts_dispatch(aParams);
 }
@@ -2420,14 +2420,14 @@ IMPL_LINK_NOARG_TYPED(AutoRecovery, implts_timerExpired, Timer *, void)
     }
 }
 
-IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch)
+IMPL_LINK_NOARG_TYPED(AutoRecovery, implts_asyncDispatch, LinkParamNone*, void)
 {
     DispatchParams aParams;
     /* SAFE */ {
-    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
-    aParams = m_aDispatchParams;
-    css::uno::Reference< css::uno::XInterface > xHoldRefForMethodAlive = aParams.m_xHoldRefForAsyncOpAlive;
-    m_aDispatchParams.forget(); // clears all members ... including the ref-hold object .-)
+        osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+        aParams = m_aDispatchParams;
+        css::uno::Reference< css::uno::XInterface > xHoldRefForMethodAlive = aParams.m_xHoldRefForAsyncOpAlive;
+        m_aDispatchParams.forget(); // clears all members ... including the ref-hold object .-)
     } /* SAFE */
 
     try
@@ -2437,7 +2437,6 @@ IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch)
     catch (...)
     {
     }
-    return 0;
 }
 
 void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame::XModel >& xDocument)

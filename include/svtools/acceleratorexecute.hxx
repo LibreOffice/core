@@ -232,7 +232,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         /** @deprecated
                 replaced by internal class AsyncAccelExec ...
                 remove this resource here if we go forwards to next major */
-        DECL_DLLPRIVATE_LINK(impl_ts_asyncCallback, void*);
+        DECL_DLLPRIVATE_LINK_TYPED(impl_ts_asyncCallback, LinkParamNone*, void);
 };
 
 } // namespace svt

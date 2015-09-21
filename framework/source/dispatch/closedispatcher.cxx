@@ -221,7 +221,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     else
     {
         SolarMutexGuard g;
-        m_aAsyncCallback->Post(0);
+        m_aAsyncCallback->Post();
     }
 }
 
@@ -241,7 +241,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
                 - decide then, if we must close this frame only, establish the backing mode
                   or shutdown the whole application.
 */
-IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
+IMPL_LINK_NOARG_TYPED(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
 {
     try
     {
@@ -273,7 +273,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     // frame already dead ?!
     // Nothing to do !
     if (! xCloseFrame.is())
-        return 0;
+        return;
 
     bool bCloseFrame           = false;
     bool bEstablishBackingMode = false;
@@ -418,8 +418,6 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     catch(const css::lang::DisposedException&)
     {
     }
-
-    return 0;
 }
 
 bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
