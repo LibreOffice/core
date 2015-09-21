@@ -577,12 +577,11 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
 
 /*****************************************************************************/
 
-sal_IntPtr WindowEventHandler(void *, void * p)
+void WindowEventHandler(void *, VclSimpleEvent& rEvent)
 {
-    VclSimpleEvent * pEvent = static_cast<VclSimpleEvent *>(p);
     try
     {
-        switch (pEvent->GetId())
+        switch (rEvent.GetId())
         {
         case VCLEVENT_WINDOW_SHOW:
             break;
@@ -591,7 +590,7 @@ sal_IntPtr WindowEventHandler(void *, void * p)
         case VCLEVENT_WINDOW_CLOSE:
             break;
         case VCLEVENT_WINDOW_GETFOCUS:
-            handle_get_focus(static_cast< ::VclWindowEvent const * >(pEvent));
+            handle_get_focus(static_cast< ::VclWindowEvent const * >(&rEvent));
             break;
         case VCLEVENT_WINDOW_LOSEFOCUS:
             break;
@@ -606,11 +605,11 @@ sal_IntPtr WindowEventHandler(void *, void * p)
             break;
 
         case VCLEVENT_MENU_HIGHLIGHT:
-            if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(pEvent))
+            if (const VclMenuEvent* pMenuEvent = dynamic_cast<const VclMenuEvent*>(&rEvent))
             {
                 handle_menu_highlighted(pMenuEvent);
             }
-            else if (const VclAccessibleEvent* pAccEvent = dynamic_cast<const VclAccessibleEvent*>(pEvent))
+            else if (const VclAccessibleEvent* pAccEvent = dynamic_cast<const VclAccessibleEvent*>(&rEvent))
             {
                 uno::Reference< accessibility::XAccessible > xAccessible = pAccEvent->GetAccessible();
                 if (xAccessible.is())
@@ -619,22 +618,22 @@ sal_IntPtr WindowEventHandler(void *, void * p)
             break;
 
         case VCLEVENT_TOOLBOX_HIGHLIGHT:
-            handle_toolbox_highlight(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+            handle_toolbox_highlight(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;
 
         case VCLEVENT_TOOLBOX_BUTTONSTATECHANGED:
-            handle_toolbox_buttonchange(static_cast< ::VclWindowEvent const * >(pEvent));
+            handle_toolbox_buttonchange(static_cast< ::VclWindowEvent const * >(&rEvent));
             break;
 
         case VCLEVENT_OBJECT_DYING:
-            g_aWindowList.erase( static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow() );
+            g_aWindowList.erase( static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow() );
             // fallthrough intentional !
         case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
-            handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+            handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;
 
         case VCLEVENT_TABPAGE_ACTIVATE:
-            handle_tabpage_activated(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+            handle_tabpage_activated(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;
 
         case VCLEVENT_COMBOBOX_SETTEXT:
@@ -653,10 +652,9 @@ sal_IntPtr WindowEventHandler(void *, void * p)
     {
         g_warning("Focused object has invalid index in parent");
     }
-    return 0;
 }
 
-static Link<> g_aEventListenerLink( NULL, WindowEventHandler );
+static Link<VclSimpleEvent&,void> g_aEventListenerLink( NULL, WindowEventHandler );
 
 /*****************************************************************************/
 

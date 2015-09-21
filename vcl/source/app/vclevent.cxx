@@ -43,25 +43,25 @@ VclAccessibleEvent::~VclAccessibleEvent()
 }
 
 
-void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
+void VclEventListeners::Call( VclSimpleEvent& rEvent ) const
 {
     if ( m_aListeners.empty() )
         return;
 
     // Copy the list, because this can be destroyed when calling a Link...
-    std::vector<Link<>> aCopy( m_aListeners );
-    std::vector<Link<>>::iterator aIter( aCopy.begin() );
-    std::vector<Link<>>::const_iterator aEnd( aCopy.end() );
-    if( pEvent->IsA( VclWindowEvent::StaticType() ) )
+    std::vector<Link<VclSimpleEvent&,void>> aCopy( m_aListeners );
+    std::vector<Link<VclSimpleEvent&,void>>::iterator aIter( aCopy.begin() );
+    std::vector<Link<VclSimpleEvent&,void>>::const_iterator aEnd( aCopy.end() );
+    if( rEvent.IsA( VclWindowEvent::StaticType() ) )
     {
-        VclWindowEvent* pWinEvent = static_cast<VclWindowEvent*>(pEvent);
+        VclWindowEvent* pWinEvent = static_cast<VclWindowEvent*>(&rEvent);
         ImplDelData aDel( pWinEvent->GetWindow() );
         while ( aIter != aEnd && ! aDel.IsDead() )
         {
-            Link<> &rLink = *aIter;
+            Link<VclSimpleEvent&,void> &rLink = *aIter;
             // check this hasn't been removed in some re-enterancy scenario fdo#47368
             if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
-                rLink.Call( pEvent );
+                rLink.Call( rEvent );
             ++aIter;
         }
     }
@@ -69,20 +69,20 @@ void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
     {
         while ( aIter != aEnd )
         {
-            Link<> &rLink = *aIter;
+            Link<VclSimpleEvent&,void> &rLink = *aIter;
             if( std::find(m_aListeners.begin(), m_aListeners.end(), rLink) != m_aListeners.end() )
-                rLink.Call( pEvent );
+                rLink.Call( rEvent );
             ++aIter;
         }
     }
 }
 
-void VclEventListeners::addListener( const Link<>& rListener )
+void VclEventListeners::addListener( const Link<VclSimpleEvent&,void>& rListener )
 {
     m_aListeners.push_back( rListener );
 }
 
-void VclEventListeners::removeListener( const Link<>& rListener )
+void VclEventListeners::removeListener( const Link<VclSimpleEvent&,void>& rListener )
 {
     m_aListeners.erase( std::remove(m_aListeners.begin(), m_aListeners.end(), rListener ), m_aListeners.end() );
 }

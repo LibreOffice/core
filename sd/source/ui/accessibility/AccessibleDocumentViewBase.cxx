@@ -160,15 +160,11 @@ void AccessibleDocumentViewBase::Init()
         SetState(AccessibleStateType::EDITABLE);
 }
 
-IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
-    VclSimpleEvent*, pEvent)
+IMPL_LINK_TYPED(AccessibleDocumentViewBase, WindowChildEventListener,
+    VclWindowEvent&, rEvent, void)
 {
-    OSL_ASSERT(pEvent!=NULL && pEvent->ISA(VclWindowEvent));
-    if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
-    {
-        VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
         //      DBG_ASSERT( pVclEvent->GetWindow(), "Window???" );
-        switch (pWindowEvent->GetId())
+        switch (rEvent.GetId())
         {
             case VCLEVENT_OBJECT_DYING:
             {
@@ -176,11 +172,11 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
                 // This is also attempted in the disposing() method.
                 vcl::Window* pWindow = maShapeTreeInfo.GetWindow();
                 vcl::Window* pDyingWindow = static_cast<vcl::Window*>(
-                    pWindowEvent->GetWindow());
+                    rEvent.GetWindow());
                 if (pWindow==pDyingWindow && pWindow!=NULL && maWindowLink.IsSet())
                 {
                     pWindow->RemoveChildEventListener (maWindowLink);
-                    maWindowLink = Link<>();
+                    maWindowLink = Link<VclWindowEvent&,void>();
                 }
             }
             break;
@@ -189,7 +185,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
             {
                 // A new window has been created.  Is it an OLE object?
                 vcl::Window* pChildWindow = static_cast<vcl::Window*>(
-                    pWindowEvent->GetData());
+                    rEvent.GetData());
                 if (pChildWindow!=NULL
                     && (pChildWindow->GetAccessibleRole()
                         == AccessibleRole::EMBEDDED_OBJECT))
@@ -204,7 +200,7 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
                 // A window has been destroyed.  Has that been an OLE
                 // object?
                 vcl::Window* pChildWindow = static_cast<vcl::Window*>(
-                    pWindowEvent->GetData());
+                    rEvent.GetData());
                 if (pChildWindow!=NULL
                     && (pChildWindow->GetAccessibleRole()
                         == AccessibleRole::EMBEDDED_OBJECT))
@@ -214,9 +210,6 @@ IMPL_LINK(AccessibleDocumentViewBase, WindowChildEventListener,
             }
             break;
         }
-    }
-
-    return 0;
 }
 
 //=====  IAccessibleViewForwarderListener  ====================================
@@ -487,7 +480,7 @@ void AccessibleDocumentViewBase::impl_dispose()
     {
         if (pWindow)
             pWindow->RemoveChildEventListener (maWindowLink);
-        maWindowLink = Link<>();
+        maWindowLink = Link<VclWindowEvent&,void>();
     }
     else
     {

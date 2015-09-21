@@ -101,7 +101,7 @@ public:
     bool GetAutoDetectSystemHC() {return m_bAutoDetectSystemHC;}
 
     // #100822#
-    DECL_LINK( DataChangedEventListener, VclWindowEvent* );
+    DECL_LINK_TYPED( DataChangedEventListener, VclSimpleEvent&, void );
 
     void ImplUpdateApplicationSettings();
 };
@@ -349,20 +349,17 @@ void ColorConfig_Impl::SettingsChanged()
     NotifyListeners(0);
 }
 
-IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, void )
 {
-    if ( pEvent->GetId() == VCLEVENT_APPLICATION_DATACHANGED )
+    if ( rEvent.GetId() == VCLEVENT_APPLICATION_DATACHANGED )
     {
-        DataChangedEvent* pData = static_cast<DataChangedEvent*>(pEvent->GetData());
+        DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
         if ( (pData->GetType() == DataChangedEventType::SETTINGS) &&
              (pData->GetFlags() & AllSettingsFlags::STYLE) )
         {
             SettingsChanged();
-            return 1L;
-        } else
-            return 0L;
-    } else
-        return 0L;
+        }
+    }
 }
 
 

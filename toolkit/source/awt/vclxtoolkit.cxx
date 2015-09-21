@@ -160,12 +160,12 @@ class VCLXToolkit : public VCLXToolkit_Impl,
     ::cppu::OInterfaceContainerHelper m_aTopWindowListeners;
     ::cppu::OInterfaceContainerHelper m_aKeyHandlers;
     ::cppu::OInterfaceContainerHelper m_aFocusListeners;
-    ::Link<> m_aEventListenerLink;
+    ::Link<VclSimpleEvent&,void> m_aEventListenerLink;
     ::Link<VclWindowEvent&,bool> m_aKeyListenerLink;
     bool m_bEventListener;
     bool m_bKeyListener;
 
-    DECL_LINK(eventListenerHandler, ::VclSimpleEvent const *);
+    DECL_LINK_TYPED(eventListenerHandler, ::VclSimpleEvent&, void);
 
     DECL_LINK_TYPED(keyListenerHandler, ::VclWindowEvent&, bool);
 
@@ -1695,46 +1695,45 @@ void SAL_CALL VCLXToolkit::fireFocusLost(
 }
 
 
-IMPL_LINK(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent const *, pEvent)
+IMPL_LINK_TYPED(VCLXToolkit, eventListenerHandler, ::VclSimpleEvent&, rEvent, void)
 {
-    switch (pEvent->GetId())
+    switch (rEvent.GetId())
     {
     case VCLEVENT_WINDOW_SHOW:
         callTopWindowListeners(
-            pEvent, &css::awt::XTopWindowListener::windowOpened);
+            &rEvent, &css::awt::XTopWindowListener::windowOpened);
         break;
     case VCLEVENT_WINDOW_HIDE:
         callTopWindowListeners(
-            pEvent, &css::awt::XTopWindowListener::windowClosed);
+            &rEvent, &css::awt::XTopWindowListener::windowClosed);
         break;
     case VCLEVENT_WINDOW_ACTIVATE:
         callTopWindowListeners(
-            pEvent, &css::awt::XTopWindowListener::windowActivated);
+            &rEvent, &css::awt::XTopWindowListener::windowActivated);
         break;
     case VCLEVENT_WINDOW_DEACTIVATE:
         callTopWindowListeners(
-            pEvent, &css::awt::XTopWindowListener::windowDeactivated);
+            &rEvent, &css::awt::XTopWindowListener::windowDeactivated);
         break;
     case VCLEVENT_WINDOW_CLOSE:
         callTopWindowListeners(
-            pEvent, &css::awt::XTopWindowListener::windowClosing);
+            &rEvent, &css::awt::XTopWindowListener::windowClosing);
         break;
     case VCLEVENT_WINDOW_GETFOCUS:
-        callFocusListeners(pEvent, true);
+        callFocusListeners(&rEvent, true);
         break;
     case VCLEVENT_WINDOW_LOSEFOCUS:
-        callFocusListeners(pEvent, false);
+        callFocusListeners(&rEvent, false);
         break;
     case VCLEVENT_WINDOW_MINIMIZE:
         callTopWindowListeners(
-            pEvent, &css::awt::XTopWindowListener::windowMinimized);
+            &rEvent, &css::awt::XTopWindowListener::windowMinimized);
         break;
     case VCLEVENT_WINDOW_NORMALIZE:
         callTopWindowListeners(
-            pEvent, &css::awt::XTopWindowListener::windowNormalized);
+            &rEvent, &css::awt::XTopWindowListener::windowNormalized);
         break;
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED(VCLXToolkit, keyListenerHandler, ::VclWindowEvent&, rEvent, bool)

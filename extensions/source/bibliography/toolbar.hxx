@@ -132,7 +132,7 @@ class BibToolBar:   public ToolBox
         DECL_LINK_TYPED( SendSelHdl, Idle*, void );
         DECL_LINK_TYPED( MenuHdl, ToolBox*, void );
         DECL_LINK_TYPED( OptionsChanged_Impl, LinkParamNone*, void );
-        DECL_LINK( SettingsChanged_Impl, void* );
+        DECL_LINK_TYPED( SettingsChanged_Impl, VclSimpleEvent&, void );
 
         void                    ApplyImageList();
         void                    RebuildToolbar();

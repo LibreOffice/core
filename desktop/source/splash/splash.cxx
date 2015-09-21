@@ -72,7 +72,7 @@ private:
 
     VclPtr<SplashScreenWindow> pWindow;
 
-    DECL_LINK( AppEventListenerHdl, VclWindowEvent * );
+    DECL_LINK_TYPED( AppEventListenerHdl, VclSimpleEvent&, void );
     virtual ~SplashScreen();
     void loadConfig();
     void updateStatus();
@@ -366,11 +366,11 @@ void SplashScreen::updateStatus()
 }
 
 // internal private methods
-IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
+IMPL_LINK_TYPED( SplashScreen, AppEventListenerHdl, VclSimpleEvent&, inEvent, void )
 {
-    if (inEvent != 0 && inEvent->GetWindow() == pWindow)
+    if (static_cast<VclWindowEvent&>(inEvent).GetWindow() == pWindow)
     {
-        switch ( inEvent->GetId() )
+        switch ( inEvent.GetId() )
         {
             case VCLEVENT_WINDOW_SHOW:
                 pWindow->Redraw();
@@ -379,7 +379,6 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
                 break;
         }
     }
-    return 0;
 }
 
 // Read keys from soffice{.ini|rc}:

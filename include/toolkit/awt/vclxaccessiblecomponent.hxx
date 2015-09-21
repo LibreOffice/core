@@ -70,7 +70,7 @@ private:
 
 protected:
      DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void );
-     DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
+     DECL_LINK_TYPED( WindowChildEventListener, VclWindowEvent&, void );
 
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );

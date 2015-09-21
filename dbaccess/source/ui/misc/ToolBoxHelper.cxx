@@ -74,19 +74,17 @@ namespace dbaui
                 m_pToolBox->SetOutStyle(aOptions.GetToolboxStyle());
         }
     }
-    IMPL_LINK(OToolBoxHelper, SettingsChanged, VclWindowEvent*, _pEvt)
+    IMPL_LINK_TYPED(OToolBoxHelper, SettingsChanged, VclSimpleEvent&, _rEvt, void)
     {
-        if ( m_pToolBox && _pEvt && _pEvt->GetId() == VCLEVENT_APPLICATION_DATACHANGED )
+        if ( m_pToolBox && _rEvt.GetId() == VCLEVENT_APPLICATION_DATACHANGED )
         {
-            DataChangedEvent* pData = static_cast<DataChangedEvent*>(_pEvt->GetData());
+            DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(_rEvt).GetData());
             if ( pData && ((( pData->GetType() == DataChangedEventType::SETTINGS  )   ||
             ( pData->GetType() == DataChangedEventType::DISPLAY   ))  &&
             ( pData->GetFlags() & AllSettingsFlags::STYLE        )))
                 // check if imagelist changed
                 checkImageList();
         }
-
-        return 0L;
     }
     void OToolBoxHelper::setToolBox(ToolBox* _pTB)
     {

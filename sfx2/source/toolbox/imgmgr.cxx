@@ -63,7 +63,7 @@ public:
     void                    SetSymbolsSize_Impl( sal_Int16 );
 
     DECL_LINK_TYPED( OptionsChanged_Impl, LinkParamNone*, void );
-    DECL_LINK( SettingsChanged_Impl, VclWindowEvent* );
+    DECL_LINK_TYPED( SettingsChanged_Impl, VclSimpleEvent&, void );
 
     explicit SfxImageManager_Impl(SfxModule& rModule);
     ~SfxImageManager_Impl();
@@ -207,32 +207,28 @@ IMPL_LINK_NOARG_TYPED(SfxImageManager_Impl, OptionsChanged_Impl, LinkParamNone*,
 
 
 
-IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED( SfxImageManager_Impl, SettingsChanged_Impl, VclSimpleEvent&, rEvent, void)
 {
-    if (pEvent)
+    switch (rEvent.GetId())
     {
-        switch (pEvent->GetId())
+    case VCLEVENT_OBJECT_DYING:
+        if (m_bAppEventListener)
         {
-            case VCLEVENT_OBJECT_DYING:
-                if (m_bAppEventListener)
-                {
-                    Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
-                    m_bAppEventListener = false;
-                }
-                break;
-            case VCLEVENT_APPLICATION_DATACHANGED:
-                // Check if toolbar button size have changed and we have to use system settings
-                {
-                    sal_Int16 nSymbolsSize = m_aOpt.GetCurrentSymbolsSize();
-                    if (m_nSymbolsSize != nSymbolsSize)
-                        SetSymbolsSize_Impl(nSymbolsSize);
-                }
-                break;
-            default:
-                break;
+            Application::RemoveEventListener( LINK( this, SfxImageManager_Impl, SettingsChanged_Impl ) );
+            m_bAppEventListener = false;
         }
+        break;
+    case VCLEVENT_APPLICATION_DATACHANGED:
+        // Check if toolbar button size have changed and we have to use system settings
+        {
+            sal_Int16 nSymbolsSize = m_aOpt.GetCurrentSymbolsSize();
+            if (m_nSymbolsSize != nSymbolsSize)
+                SetSymbolsSize_Impl(nSymbolsSize);
+        }
+        break;
+    default:
+        break;
     }
-    return 0L;
 }
 
 SfxImageManager::SfxImageManager(SfxModule& rModule)

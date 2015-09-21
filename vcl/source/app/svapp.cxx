@@ -674,7 +674,7 @@ void Application::ImplCallEventListeners( sal_uLong nEvent, vcl::Window *pWin, v
     VclWindowEvent aEvent( pWin, nEvent, pData );
 
     if ( pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners->Call( &aEvent );
+        pSVData->maAppData.mpEventListeners->Call( aEvent );
 }
 
 void Application::ImplCallEventListeners( VclSimpleEvent& rEvent )
@@ -682,10 +682,10 @@ void Application::ImplCallEventListeners( VclSimpleEvent& rEvent )
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners->Call( &rEvent );
+        pSVData->maAppData.mpEventListeners->Call( rEvent );
 }
 
-void Application::AddEventListener( const Link<>& rEventListener )
+void Application::AddEventListener( const Link<VclSimpleEvent&,void>& rEventListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( !pSVData->maAppData.mpEventListeners )
@@ -693,7 +693,7 @@ void Application::AddEventListener( const Link<>& rEventListener )
     pSVData->maAppData.mpEventListeners->addListener( rEventListener );
 }
 
-void Application::RemoveEventListener( const Link<>& rEventListener )
+void Application::RemoveEventListener( const Link<VclSimpleEvent&,void>& rEventListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpEventListeners )

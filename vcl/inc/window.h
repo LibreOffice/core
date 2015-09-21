@@ -230,7 +230,7 @@ public:
     VclPtr<vcl::Window> mpLastFocusWindow;
     VclPtr<vcl::Window> mpDlgCtrlDownWindow;
     std::vector<Link<VclWindowEvent&,void>> maEventListeners;
-    VclEventListeners   maChildEventListeners;
+    std::vector<Link<VclWindowEvent&,void>> maChildEventListeners;
 
     // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
     ::com::sun::star::uno::WeakReference< ::com::sun::star::rendering::XCanvas >    mxCanvas;

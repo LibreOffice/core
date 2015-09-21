@@ -2003,14 +2003,14 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
     return bRet;
 }
 
-IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( SlideshowImpl, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void )
 {
     if( !mxShow.is() || mbInputFreeze )
-        return 0;
+        return;
 
-    if( pEvent && (pEvent->GetId() == VCLEVENT_WINDOW_COMMAND) && static_cast<VclWindowEvent*>(pEvent)->GetData() )
+    if( (rSimpleEvent.GetId() == VCLEVENT_WINDOW_COMMAND) && static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData() )
     {
-        const CommandEvent& rEvent = *static_cast<const CommandEvent*>(static_cast<VclWindowEvent*>(pEvent)->GetData());
+        const CommandEvent& rEvent = *static_cast<const CommandEvent*>(static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData());
 
         if( rEvent.GetCommand() == CommandEventId::Media )
         {
@@ -2078,8 +2078,6 @@ IMPL_LINK( SlideshowImpl, EventListenerHdl, VclSimpleEvent*, pEvent )
             }
         }
     }
-
-    return 0;
 }
 
 void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)

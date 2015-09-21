@@ -540,11 +540,9 @@ void SlideSorterController::HandleModelChange()
     }
 }
 
-IMPL_LINK(SlideSorterController, ApplicationEventHandler, VclWindowEvent*, pEvent)
+IMPL_LINK_TYPED(SlideSorterController, ApplicationEventHandler, VclSimpleEvent&, rEvent, void)
 {
-    if (pEvent)
-        WindowEventHandler(*pEvent);
-    return 1;
+    WindowEventHandler(static_cast<VclWindowEvent&>(rEvent));
 }
 IMPL_LINK_TYPED(SlideSorterController, WindowEventHandler, VclWindowEvent&, rEvent, void)
 {

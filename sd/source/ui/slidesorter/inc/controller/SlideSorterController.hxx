@@ -161,7 +161,7 @@ public:
     void HandleModelChange();
 
     DECL_LINK_TYPED(WindowEventHandler, VclWindowEvent&, void);
-    DECL_LINK(ApplicationEventHandler, VclWindowEvent*);
+    DECL_LINK_TYPED(ApplicationEventHandler, VclSimpleEvent&, void);
 
     /** Update the display of all pages.  This involves a redraw and
         releasing previews and caches.

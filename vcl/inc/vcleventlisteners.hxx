@@ -34,11 +34,11 @@
 class VCL_DLLPUBLIC VclEventListeners
 {
 public:
-    void Call( VclSimpleEvent* pEvent ) const;
-    void addListener( const Link<>& rListener );
-    void removeListener( const Link<>& rListener );
+    void Call( VclSimpleEvent& rEvent ) const;
+    void addListener( const Link<VclSimpleEvent&,void>& rListener );
+    void removeListener( const Link<VclSimpleEvent&,void>& rListener );
 private:
-    std::vector<Link<>> m_aListeners;
+    std::vector<Link<VclSimpleEvent&,void>> m_aListeners;
 };
 
 #endif // INCLUDED_VCL_INC_VCLEVENTLISTENERS_HXX

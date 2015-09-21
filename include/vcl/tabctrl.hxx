@@ -78,7 +78,7 @@ private:
     SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 
     DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, void* );
-    DECL_DLLPRIVATE_LINK(       ImplWindowEventListener, VclSimpleEvent* );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplWindowEventListener, VclWindowEvent&, void );
 
 
 protected:

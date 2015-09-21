@@ -28,7 +28,7 @@
 
 class SvtMiscOptions;
 class ToolBox;
-class VclWindowEvent;
+class VclSimpleEvent;
 
 namespace dbaui
 {
@@ -72,7 +72,7 @@ namespace dbaui
 
     protected:
         DECL_LINK_TYPED(ConfigOptionsChanged, LinkParamNone*, void);
-        DECL_LINK(SettingsChanged, VclWindowEvent* );
+        DECL_LINK_TYPED(SettingsChanged, VclSimpleEvent&, void );
     };
 }
 #endif // INCLUDED_DBACCESS_TOOLBOXHELPER_HXX

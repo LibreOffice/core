@@ -882,8 +882,8 @@ public:
 
     void                                AddEventListener( const Link<VclWindowEvent&,void>& rEventListener );
     void                                RemoveEventListener( const Link<VclWindowEvent&,void>& rEventListener );
-    void                                AddChildEventListener( const Link<>& rEventListener );
-    void                                RemoveChildEventListener( const Link<>& rEventListener );
+    void                                AddChildEventListener( const Link<VclWindowEvent&,void>& rEventListener );
+    void                                RemoveChildEventListener( const Link<VclWindowEvent&,void>& rEventListener );
 
     ImplSVEvent *                       PostUserEvent( const Link<void*,void>& rLink, void* pCaller = NULL, bool bReferenceLink = false );
     void                                RemoveUserEvent( ImplSVEvent * nUserEvent );

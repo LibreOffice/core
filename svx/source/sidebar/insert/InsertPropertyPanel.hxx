@@ -49,7 +49,7 @@ private:
     VclPtr<ToolBox>        mpCustomShapesToolBox;
     const css::uno::Reference<css::frame::XFrame> mxFrame;
 
-    DECL_LINK(WindowEventListener, VclSimpleEvent*);
+    DECL_LINK_TYPED(WindowEventListener, VclWindowEvent&, void);
 };
 
 

@@ -65,7 +65,7 @@ public:
 
     virtual void Init() SAL_OVERRIDE;
 
-    DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
+    DECL_LINK_TYPED( WindowChildEventListener, VclWindowEvent&, void );
 protected:
     virtual ~ScAccessibleDocument();
 

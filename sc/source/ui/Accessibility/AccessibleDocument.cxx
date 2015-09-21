@@ -1483,36 +1483,30 @@ void SAL_CALL ScAccessibleDocument::disposing( const lang::EventObject& /* Sourc
 
     //=====  SfxListener  =====================================================
 
-IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( ScAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 {
-    OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    OSL_ENSURE( rEvent.GetWindow(), "Window???" );
+    switch ( rEvent.GetId() )
     {
-        VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
-        OSL_ENSURE( pVclEvent->GetWindow(), "Window???" );
-        switch ( pVclEvent->GetId() )
+    case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
         {
-        case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
+            vcl::Window* pChildWin = static_cast < vcl::Window * >( rEvent.GetData() );
+            if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
             {
-                vcl::Window* pChildWin = static_cast < vcl::Window * >( pVclEvent->GetData() );
-                if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
-                {
-                    AddChild( pChildWin->GetAccessible(), true );
-                }
+                AddChild( pChildWin->GetAccessible(), true );
             }
-            break;
-        case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
-            {
-                vcl::Window* pChildWin = static_cast < vcl::Window * >( pVclEvent->GetData() );
-                if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
-                {
-                    RemoveChild( pChildWin->GetAccessible(), true );
-                }
-            }
-            break;
         }
+        break;
+    case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
+        {
+            vcl::Window* pChildWin = static_cast < vcl::Window * >( rEvent.GetData() );
+            if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
+            {
+                RemoveChild( pChildWin->GetAccessible(), true );
+            }
+        }
+        break;
     }
-    return 0;
 }
 
 void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

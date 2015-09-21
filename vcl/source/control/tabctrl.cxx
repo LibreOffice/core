@@ -1008,19 +1008,17 @@ IMPL_LINK_NOARG(TabControl, ImplListBoxSelectHdl)
     return 0;
 }
 
-IMPL_LINK( TabControl, ImplWindowEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( TabControl, ImplWindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) && (pEvent->GetId() == VCLEVENT_WINDOW_KEYINPUT) )
+    if ( rEvent.GetId() == VCLEVENT_WINDOW_KEYINPUT )
     {
-        VclWindowEvent* pWindowEvent = static_cast< VclWindowEvent* >(pEvent);
         // Do not handle events from TabControl or its children, which is done in Notify(), where the events can be consumed.
-        if ( !IsWindowOrChild( pWindowEvent->GetWindow() ) )
+        if ( !IsWindowOrChild( rEvent.GetWindow() ) )
         {
-            KeyEvent* pKeyEvent = static_cast< KeyEvent* >(pWindowEvent->GetData());
+            KeyEvent* pKeyEvent = static_cast< KeyEvent* >(rEvent.GetData());
             ImplHandleKeyEvent( *pKeyEvent );
         }
     }
-    return 0;
 }
 
 void TabControl::MouseButtonDown( const MouseEvent& rMEvt )

@@ -760,7 +760,7 @@ public:
 
      @see RemoveEventListener, AddKeyListener, RemoveKeyListener
     */
-    static void                 AddEventListener( const Link<>& rEventListener );
+    static void                 AddEventListener( const Link<VclSimpleEvent&,void>& rEventListener );
 
     /** Remove a VCL event listener from the application.
 
@@ -768,7 +768,7 @@ public:
 
      @see AddEventListener, AddKeyListener, RemoveKeyListener
     */
-    static void                 RemoveEventListener( const Link<>& rEventListener );
+    static void                 RemoveEventListener( const Link<VclSimpleEvent&,void>& rEventListener );
 
     /** Add a keypress listener to the application. If keypress listener exists,
      then initialize the application's keypress event listener with a new one, then

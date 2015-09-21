@@ -1398,25 +1398,18 @@ uno::Reference< ui::XUIElement > LayoutManager::implts_createDockingWindow( cons
     return xUIElement;
 }
 
-IMPL_LINK( LayoutManager, WindowEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( LayoutManager, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
-    long nResult( 1 );
-
-    if ( pEvent && pEvent->ISA( VclWindowEvent ))
+    vcl::Window* pWindow = rEvent.GetWindow();
+    if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
     {
-        vcl::Window* pWindow = static_cast< VclWindowEvent* >(pEvent)->GetWindow();
-        if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
-        {
-            SolarMutexClearableGuard aReadLock;
-            ToolbarLayoutManager* pToolbarManager( m_pToolbarManager );
-            aReadLock.clear();
+        SolarMutexClearableGuard aReadLock;
+        ToolbarLayoutManager* pToolbarManager( m_pToolbarManager );
+        aReadLock.clear();
 
-            if ( pToolbarManager )
-                nResult = pToolbarManager->childWindowEvent( pEvent );
-        }
+        if ( pToolbarManager )
+            pToolbarManager->childWindowEvent( &rEvent );
     }
-
-    return nResult;
 }
 
 void SAL_CALL LayoutManager::createElement( const OUString& aName )

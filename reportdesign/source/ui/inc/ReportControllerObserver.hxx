@@ -103,7 +103,7 @@ namespace rptui
         void switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& _rxContainer, bool _bStartListening );
         void switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, bool _bStartListening );
 
-        DECL_LINK(SettingsChanged, VclWindowEvent* );
+        DECL_LINK_TYPED(SettingsChanged, VclSimpleEvent&, void );
     private:
 
         ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild> >::const_iterator getSection(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild>& _xContainer) const;

@@ -91,59 +91,52 @@ void InsertPropertyPanel::dispose()
 
 
 
-IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
+IMPL_LINK_TYPED(InsertPropertyPanel, WindowEventListener, VclWindowEvent&, rEvent, void)
 {
     // We will be getting a lot of window events (well, basically all
     // of them), so reject early everything that is not connected to
     // toolbox selection.
-    if (pEvent == NULL)
-        return 1;
-    if ( ! pEvent->ISA(VclWindowEvent))
-        return 1;
-    if (pEvent->GetId() != VCLEVENT_TOOLBOX_SELECT)
-        return 1;
+    if (rEvent.GetId() != VCLEVENT_TOOLBOX_SELECT)
+        return;
 
-    VclWindowEvent* pWindowEvent = dynamic_cast<VclWindowEvent*>(pEvent);
-    vcl::Window* pWindow = pWindowEvent ? pWindowEvent->GetWindow() : NULL;
+    vcl::Window* pWindow = rEvent.GetWindow();
     ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
     if (pToolBox == NULL)
-        return 1;
+        return;
 
     // Extract name of (sub)toolbar from help id.
     OUString sToolbarName (rtl::OStringToOUString(pToolBox->GetHelpId(), RTL_TEXTENCODING_UTF8));
     if (sToolbarName.getLength() == 0)
-        return 1;
+        return;
     const util::URL aURL (sfx2::sidebar::Tools::GetURL(sToolbarName));
     if (aURL.Path.getLength() == 0)
-        return 1;
+        return;
 
     // Get item id.
     sal_uInt16 nId = pToolBox->GetCurItemId();
     if (nId == 0)
-        return 1;
+        return;
 
     SidebarToolBox* pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpStandardShapesToolBox.get());
     if (pSidebarToolBox == NULL)
-        return 1;
+        return;
     sal_uInt16 nItemId (pSidebarToolBox->GetItemIdForSubToolbarName(aURL.Path));
     if (nItemId == 0)
     {
         pSidebarToolBox = dynamic_cast<SidebarToolBox*>(mpCustomShapesToolBox.get());
         if (pSidebarToolBox == NULL)
-            return 1;
+            return;
         nItemId = pSidebarToolBox->GetItemIdForSubToolbarName(aURL.Path);
         if (nItemId == 0)
-            return 1;
+            return;
     }
 
     Reference<frame::XSubToolbarController> xController (pSidebarToolBox->GetControllerForItemId(nItemId), UNO_QUERY);
     if ( ! xController.is() )
-        return 1;
+        return;
 
     const OUString sCommand (pToolBox->GetItemCommand(nId));
     xController->functionSelected(sCommand);
-
-    return 1;
 }
 
 

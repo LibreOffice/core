@@ -295,7 +295,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     DECL_DLLPRIVATE_LINK_TYPED(  ScrollHdl, ScrollBar*, void );
     DECL_DLLPRIVATE_LINK_TYPED(  EndScrollHdl, ScrollBar*, void );
     SAL_DLLPRIVATE bool          UpdateScrollbars();
-    DECL_DLLPRIVATE_LINK( WindowChildEventListener, VclSimpleEvent* );
+    DECL_DLLPRIVATE_LINK_TYPED( WindowChildEventListener, VclWindowEvent&, void );
     SAL_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );
 
     // linguistics functions

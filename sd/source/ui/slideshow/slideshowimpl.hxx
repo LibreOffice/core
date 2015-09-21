@@ -281,7 +281,7 @@ private:
     DECL_LINK_TYPED( ContextMenuSelectHdl, Menu *, bool );
     DECL_LINK_TYPED( ContextMenuHdl, void*, void );
     DECL_LINK_TYPED( deactivateHdl, Timer *, void );
-    DECL_LINK( EventListenerHdl, VclSimpleEvent* );
+    DECL_LINK_TYPED( EventListenerHdl, VclSimpleEvent&, void );
 
     // helper
     void receiveRequest(SfxRequest& rReq);

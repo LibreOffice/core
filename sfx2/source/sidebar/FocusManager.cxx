@@ -537,24 +537,17 @@ IMPL_LINK_TYPED(FocusManager, WindowEventListener, VclWindowEvent&, rWindowEvent
     }
 }
 
-IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
+IMPL_LINK_TYPED(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
 {
-    if (pEvent == NULL)
-        return 0;
-
-    if (!pEvent->ISA(VclWindowEvent))
-        return 0;
-
-    VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
-    vcl::Window* pSource = pWindowEvent->GetWindow();
+    vcl::Window* pSource = rEvent.GetWindow();
     if (pSource == NULL)
-        return 0;
+        return;
 
-    switch (pWindowEvent->GetId())
+    switch (rEvent.GetId())
     {
         case VCLEVENT_WINDOW_KEYINPUT:
         {
-            KeyEvent* pKeyEvent = static_cast<KeyEvent*>(pWindowEvent->GetData());
+            KeyEvent* pKeyEvent = static_cast<KeyEvent*>(rEvent.GetData());
 
             // Go up the window hierarchy to find out whether the
             // parent of the event source is known to us.
@@ -593,7 +586,7 @@ IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
                         break;
                 }
             }
-            return 1;
+            return;
         }
 
         case VCLEVENT_WINDOW_GETFOCUS:
@@ -609,8 +602,6 @@ IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
         default:
             break;
     }
-
-    return 0;
 }
 
 } } // end of namespace sfx2::sidebar

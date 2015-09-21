@@ -416,11 +416,11 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     }
 }
 
-IMPL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent*, pEvent )
+IMPL_STATIC_LINK_TYPED( SdModule, EventListenerHdl, VclSimpleEvent&, rSimpleEvent, void )
 {
-    if( pEvent && (pEvent->GetId() == VCLEVENT_WINDOW_COMMAND) && static_cast<VclWindowEvent*>(pEvent)->GetData() )
+    if( (rSimpleEvent.GetId() == VCLEVENT_WINDOW_COMMAND) && static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData() )
     {
-        const CommandEvent& rEvent = *static_cast<const CommandEvent*>(static_cast<VclWindowEvent*>(pEvent)->GetData());
+        const CommandEvent& rEvent = *static_cast<const CommandEvent*>(static_cast<VclWindowEvent*>(&rSimpleEvent)->GetData());
 
         if( rEvent.GetCommand() == CommandEventId::Media )
         {
@@ -447,7 +447,6 @@ IMPL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent*, pEvent )
             }
         }
     }
-    return 0;
 }
 
 void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocument)

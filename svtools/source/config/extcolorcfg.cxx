@@ -132,7 +132,7 @@ public:
     static void                     UnlockBroadcast();
 
     // #100822#
-    DECL_LINK( DataChangedEventListener, VclWindowEvent* );
+    DECL_LINK_TYPED( DataChangedEventListener, VclSimpleEvent&, void );
 };
 
 uno::Sequence< OUString> ExtendedColorConfig_Impl::GetPropertyNames(const OUString& rScheme)
@@ -542,20 +542,17 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
     m_bLockBroadcast = false;
 }
 
-IMPL_LINK( ExtendedColorConfig_Impl, DataChangedEventListener, VclWindowEvent*, pEvent )
+IMPL_LINK_TYPED( ExtendedColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, void )
 {
-    if ( pEvent->GetId() == VCLEVENT_APPLICATION_DATACHANGED )
+    if ( rEvent.GetId() == VCLEVENT_APPLICATION_DATACHANGED )
     {
-        DataChangedEvent* pData = static_cast<DataChangedEvent*>(pEvent->GetData());
+        DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
         if ( (pData->GetType() == DataChangedEventType::SETTINGS) &&
              (pData->GetFlags() & AllSettingsFlags::STYLE) )
         {
             SettingsChanged();
-            return 1L;
-        } else
-            return 0L;
-    } else
-        return 0L;
+        }
+    }
 }
 
 

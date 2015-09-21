@@ -43,42 +43,40 @@ getWindow(const ::VclSimpleEvent *pEvent)
 
 // callback function for Application::addEventListener
 
-sal_IntPtr AquaA11yFocusTracker::WindowEventHandler(
-    void * pThis, void * pCaller)
+void AquaA11yFocusTracker::WindowEventHandler(void * pThis, VclSimpleEvent& rEvent)
 {
     AquaA11yFocusTracker *pFocusTracker = static_cast<AquaA11yFocusTracker *>(
         pThis);
-    VclSimpleEvent const *pEvent = static_cast<VclSimpleEvent const *>(pCaller);
-    switch (pEvent->GetId())
+    switch (rEvent.GetId())
     {
     case VCLEVENT_WINDOW_PAINT:
-        pFocusTracker-> toolbox_open_floater( getWindow(pEvent) );
+        pFocusTracker-> toolbox_open_floater( getWindow(&rEvent) );
         break;
     case VCLEVENT_WINDOW_GETFOCUS:
-        pFocusTracker->window_got_focus( getWindow(pEvent) );
+        pFocusTracker->window_got_focus( getWindow(&rEvent) );
         break;
     case VCLEVENT_OBJECT_DYING:
-        pFocusTracker->m_aDocumentWindowList.erase( getWindow(pEvent) );
+        pFocusTracker->m_aDocumentWindowList.erase( getWindow(&rEvent) );
         // intentional pass through ..
     case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
-        pFocusTracker->toolbox_highlight_off( getWindow(pEvent) );
+        pFocusTracker->toolbox_highlight_off( getWindow(&rEvent) );
         break;
     case VCLEVENT_TOOLBOX_HIGHLIGHT:
-        pFocusTracker->toolbox_highlight_on( getWindow(pEvent) );
+        pFocusTracker->toolbox_highlight_on( getWindow(&rEvent) );
         break;
     case VCLEVENT_TABPAGE_ACTIVATE:
-        pFocusTracker->tabpage_activated( getWindow(pEvent) );
+        pFocusTracker->tabpage_activated( getWindow(&rEvent) );
         break;
     case VCLEVENT_MENU_HIGHLIGHT:
         // Inspired by code in WindowEventHandler in
         // vcl/unx/gtk/a11y/atkutil.cxx, find out what kind of event
         // it is to avoid blindly using a static_cast and crash,
         // fdo#47275.
-        if( const VclMenuEvent* pMenuEvent = dynamic_cast < const VclMenuEvent* > (pEvent) )
+        if( const VclMenuEvent* pMenuEvent = dynamic_cast < const VclMenuEvent* > (&rEvent) )
         {
             pFocusTracker->menu_highlighted( pMenuEvent );
         }
-        else if( const VclAccessibleEvent* pAccEvent = dynamic_cast < const VclAccessibleEvent* > (pEvent) )
+        else if( const VclAccessibleEvent* pAccEvent = dynamic_cast < const VclAccessibleEvent* > (&rEvent) )
         {
             Reference< XAccessible > xAccessible = pAccEvent->GetAccessible();
             if( xAccessible.is() )
@@ -88,8 +86,6 @@ sal_IntPtr AquaA11yFocusTracker::WindowEventHandler(
     default:
         break;
     };
-
-    return 0;
 }
 
 AquaA11yFocusTracker::AquaA11yFocusTracker() :

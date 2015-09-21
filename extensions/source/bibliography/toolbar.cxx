@@ -555,7 +555,7 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, OptionsChanged_Impl, LinkParamNone*, void )
 
 
 
-IMPL_LINK_NOARG( BibToolBar, SettingsChanged_Impl )
+IMPL_LINK_NOARG_TYPED( BibToolBar, SettingsChanged_Impl, VclSimpleEvent&, void )
 {
     // Check if toolbar button size have changed and we have to use system settings
     sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
@@ -564,8 +564,6 @@ IMPL_LINK_NOARG( BibToolBar, SettingsChanged_Impl )
         nSymbolsSize = eSymbolsSize;
         RebuildToolbar();
     }
-
-    return 0L;
 }
 
 

@@ -258,33 +258,26 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
 
 // Scrollbar - Handler
 
-IMPL_LINK( SwView, WindowChildEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( SwView, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 {
-    OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    OSL_ENSURE( rEvent.GetWindow(), "Window???" );
+    vcl::Window* pChildWin = static_cast< vcl::Window* >( rEvent.GetData() );
+
+    switch ( rEvent.GetId() )
     {
-        VclWindowEvent *pVclEvent = static_cast< VclWindowEvent * >( pEvent );
-        OSL_ENSURE( pVclEvent->GetWindow(), "Window???" );
-        vcl::Window* pChildWin = static_cast< vcl::Window* >( pVclEvent->GetData() );
-
-        switch ( pVclEvent->GetId() )
-        {
-            case VCLEVENT_WINDOW_HIDE:
-                if( pChildWin == m_pHScrollbar )
-                    ShowHScrollbar( false );
-                else if( pChildWin == m_pVScrollbar )
-                    ShowVScrollbar( false );
-                break;
-            case VCLEVENT_WINDOW_SHOW:
-                if( pChildWin == m_pHScrollbar )
-                    ShowHScrollbar( true );
-                else if( pChildWin == m_pVScrollbar )
-                    ShowVScrollbar( true );
-                break;
-        }
+        case VCLEVENT_WINDOW_HIDE:
+            if( pChildWin == m_pHScrollbar )
+                ShowHScrollbar( false );
+            else if( pChildWin == m_pVScrollbar )
+                ShowVScrollbar( false );
+            break;
+        case VCLEVENT_WINDOW_SHOW:
+            if( pChildWin == m_pHScrollbar )
+                ShowHScrollbar( true );
+            else if( pChildWin == m_pVScrollbar )
+                ShowVScrollbar( true );
+            break;
     }
-
-    return 0;
 }
 
 int SwView::_CreateScrollbar( bool bHori )

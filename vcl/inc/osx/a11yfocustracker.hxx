@@ -74,7 +74,7 @@ protected:
     void toolbox_open_floater(vcl::Window *pWindow);
 
     // callback function for Application::addEventListener
-    static sal_IntPtr WindowEventHandler(void * pThis, void * pCaller);
+    static void WindowEventHandler(void * pThis, VclSimpleEvent&);
 
 private:
     // the accessible object that has the keyboard focus (if any)

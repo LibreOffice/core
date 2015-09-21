@@ -118,21 +118,19 @@ IMPL_LINK_TYPED( VCLXAccessibleComponent, WindowEventListener, VclWindowEvent&, 
     }
 }
 
-IMPL_LINK( VCLXAccessibleComponent, WindowChildEventListener, VclSimpleEvent*, pEvent )
+IMPL_LINK_TYPED( VCLXAccessibleComponent, WindowChildEventListener, VclWindowEvent&, rEvent, void )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
-    if ( pEvent && pEvent->ISA( VclWindowEvent ) && mxWindow.is() /* #i68079# */ )
+    if ( mxWindow.is() /* #i68079# */ )
     {
-        DBG_ASSERT( static_cast<VclWindowEvent*>(pEvent)->GetWindow(), "Window???" );
-        if( !static_cast<VclWindowEvent*>(pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() )
+        DBG_ASSERT( rEvent.GetWindow(), "Window???" );
+        if( !rEvent.GetWindow()->IsAccessibilityEventsSuppressed() )
         {
             // #103087# to prevent an early release of the component
             uno::Reference< accessibility::XAccessibleContext > xTmp = this;
 
-            ProcessWindowChildEvent( *static_cast<VclWindowEvent*>(pEvent) );
+            ProcessWindowChildEvent( rEvent );
         }
     }
-    return 0;
 }
 
 uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAccessible( const VclWindowEvent& rVclWindowEvent )

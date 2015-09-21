@@ -94,15 +94,13 @@ public:
     }
 
 
-    IMPL_LINK(OXReportControllerObserver, SettingsChanged, VclWindowEvent*, _pEvt)
+    IMPL_LINK_TYPED(OXReportControllerObserver, SettingsChanged, VclSimpleEvent&, _rEvt, void)
     {
-        if ( _pEvt )
-        {
-            sal_Int32 nEvent = _pEvt->GetId();
+            sal_Int32 nEvent = _rEvt.GetId();
 
             if (nEvent == VCLEVENT_APPLICATION_DATACHANGED )
             {
-                DataChangedEvent* pData = static_cast<DataChangedEvent*>(_pEvt->GetData());
+                DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(_rEvt).GetData());
                 if ( pData && ((( pData->GetType() == DataChangedEventType::SETTINGS  )   ||
                                 ( pData->GetType() == DataChangedEventType::DISPLAY   ))  &&
                                ( pData->GetFlags() & AllSettingsFlags::STYLE     )))
@@ -137,9 +135,6 @@ public:
                     }
                 }
             }
-        }
-
-        return 0L;
     }
 
     // XEventListener

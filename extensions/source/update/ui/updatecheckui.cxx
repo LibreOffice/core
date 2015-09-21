@@ -136,7 +136,7 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper
     Idle                maWaitIdle;
     Timer               maTimeoutTimer;
     Link<VclWindowEvent&,void> maWindowEventHdl;
-    Link<>              maApplicationEventHdl;
+    Link<VclSimpleEvent&,void> maApplicationEventHdl;
     bool                mbShowBubble;
     bool                mbShowMenuIcon;
     bool                mbBubbleChanged;
@@ -149,7 +149,7 @@ private:
                     DECL_LINK_TYPED(TimeOutHdl, Timer *, void);
                     DECL_LINK_TYPED(UserEventHdl, void *, void);
                     DECL_LINK_TYPED(WindowEventHdl, VclWindowEvent&, void);
-                    DECL_LINK( ApplicationEventHdl, VclSimpleEvent* );
+                    DECL_LINK_TYPED(ApplicationEventHdl, VclSimpleEvent&, void);
 
     BubbleWindow*   GetBubbleWindow();
     void            RemoveBubbleWindow( bool bRemoveIcon );
@@ -712,16 +712,16 @@ IMPL_LINK_TYPED( UpdateCheckUI, WindowEventHdl, VclWindowEvent&, rEvent, void )
 }
 
 
-IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
+IMPL_LINK_TYPED( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent&, rEvent, void)
 {
-    switch (pEvent->GetId())
+    switch (rEvent.GetId())
     {
         case VCLEVENT_WINDOW_SHOW:
         case VCLEVENT_WINDOW_ACTIVATE:
         case VCLEVENT_WINDOW_GETFOCUS: {
             SolarMutexGuard aGuard;
 
-            vcl::Window *pWindow = static_cast< VclWindowEvent * >(pEvent)->GetWindow();
+            vcl::Window *pWindow = static_cast< VclWindowEvent * >(&rEvent)->GetWindow();
             if ( pWindow && pWindow->IsTopWindow() )
             {
                 SystemWindow *pSysWin = pWindow->GetSystemWindow();
@@ -734,7 +734,6 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
             break;
         }
     }
-    return 0;
 }
 
 

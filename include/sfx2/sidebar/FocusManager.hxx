@@ -97,7 +97,7 @@ private:
     /** Listen for key events for panels and buttons.
     */
     DECL_LINK_TYPED( WindowEventListener, VclWindowEvent&, void);
-    DECL_LINK(ChildEventListener, VclSimpleEvent*);
+    DECL_LINK_TYPED(ChildEventListener, VclWindowEvent&, void);
 
     void ClearPanels();
     void ClearButtons();

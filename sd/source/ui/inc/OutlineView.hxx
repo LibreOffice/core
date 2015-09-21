@@ -200,7 +200,7 @@ private:
     /** this link is called from the vcl application when the stylesettings
         change. Its only purpose is to call onUpdateStyleSettings() then.
     */
-    DECL_LINK( AppEventListenerHdl, void * );
+    DECL_LINK_TYPED( AppEventListenerHdl, VclSimpleEvent&, void );
 
     DECL_LINK_TYPED(EventMultiplexerListener, sd::tools::EventMultiplexerEvent&, void);
 

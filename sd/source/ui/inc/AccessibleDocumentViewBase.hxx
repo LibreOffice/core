@@ -127,7 +127,7 @@ public:
     /** Define callback for listening to window child events of VCL.
         Listen for creation or destruction of OLE objects.
     */
-    DECL_LINK (WindowChildEventListener, VclSimpleEvent*);
+    DECL_LINK_TYPED( WindowChildEventListener, VclWindowEvent&, void );
 
     //=====  IAccessibleViewForwarderListener  ================================
 
@@ -305,7 +305,7 @@ protected:
         ::com::sun::star::accessibility::XAccessible>
         mxAccessibleOLEObject;
 
-    Link<> maWindowLink;
+    Link<VclWindowEvent&,void> maWindowLink;
 
     // This method is called from the component helper base class while
     // disposing.
