@@ -43,7 +43,7 @@ Calendar_jewish::Calendar_jewish()
 
 // This code is in the public domain, but any use of it
 // should acknowledge its source.
-// http://www.ntu.edu.sg/home/ayxyan/date1.txt
+// https://web.archive.org/web/20010222054702/http://www.ntu.edu.sg/home/ayxyan/date1.txt
 
 // Hebrew dates
 
