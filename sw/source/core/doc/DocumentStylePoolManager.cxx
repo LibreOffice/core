@@ -204,15 +204,10 @@ namespace
                         pColl->SetFormatAttr( aLR );
                     }
 
-                    // #i71764#
-                    // Check on document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE no longer needed.
                     // All paragraph styles, which are assigned to a level of the
                     // outline style has to have the outline style set as its list style.
-                    {
-                        SwNumRuleItem aItem(pOutlineRule->GetName());
-
-                        pColl->SetFormatAttr(aItem);
-                    }
+                    SwNumRuleItem aItem(pOutlineRule->GetName());
+                    pColl->SetFormatAttr(aItem);
                 }
             }
             pColl->SetNextTextFormatColl( *pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
