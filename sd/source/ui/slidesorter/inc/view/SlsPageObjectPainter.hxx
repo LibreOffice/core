@@ -74,8 +74,8 @@ private:
     ::boost::shared_ptr<controller::Properties> mpProperties;
     ::boost::shared_ptr<view::Theme> mpTheme;
     ::boost::shared_ptr<vcl::Font> mpPageNumberFont;
-    ::boost::scoped_ptr<FramePainter> mpShadowPainter;
-    ::boost::scoped_ptr<FramePainter> mpFocusBorderPainter;
+    std::unique_ptr<FramePainter> mpShadowPainter;
+    std::unique_ptr<FramePainter> mpFocusBorderPainter;
     Bitmap maNormalBackground;
     Bitmap maSelectionBackground;
     Bitmap maFocusedSelectionBackground;

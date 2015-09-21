@@ -82,7 +82,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         // create and execute dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0);
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0);
         if( pDlg )
         {
             if ( pPageItem )
@@ -97,7 +97,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
                     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
-                    boost::scoped_ptr< OutlineViewModelChangeGuard > aGuard;
+                    std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
 
                     if (mpView->ISA(OutlineView))
                     {
@@ -234,7 +234,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     }
 
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
-    boost::scoped_ptr< OutlineViewModelChangeGuard > aGuard;
+    std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
     {
         if (mpView->ISA(OutlineView))
         {

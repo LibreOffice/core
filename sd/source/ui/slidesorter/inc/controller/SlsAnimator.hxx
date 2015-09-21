@@ -103,7 +103,7 @@ private:
     AnimationList maAnimations;
     ::canvas::tools::ElapsedTime maElapsedTime;
 
-    ::boost::scoped_ptr<view::SlideSorterView::DrawLock> mpDrawLock;
+    std::unique_ptr<view::SlideSorterView::DrawLock> mpDrawLock;
 
     AnimationId mnNextAnimationId;
 

@@ -110,7 +110,7 @@ public:
 private:
     ::osl::Mutex maMutex;
     class Container;
-    ::boost::scoped_ptr<Container> mpRequestQueue;
+    std::unique_ptr<Container> mpRequestQueue;
     SharedCacheContext mpCacheContext;
 
     /** A lower bound of the lowest priority of all elements in the queues.

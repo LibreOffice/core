@@ -146,7 +146,7 @@ protected:
     /** broadcast helper for events */
     ::cppu::OBroadcastHelper mrBHelper;
 
-    boost::scoped_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;
+    std::unique_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;
 
 private:
     SdStyleSheet& operator=( const SdStyleSheet& ) SAL_DELETED_FUNCTION;

@@ -263,7 +263,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_PHOTOALBUM:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
+            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 mrSlideSorter.GetContentWindow(),
                 pDocument) : 0);
 
@@ -904,7 +904,7 @@ void SlotManager::RenameSlide()
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialog creation failed!");
-            boost::scoped_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
+            std::unique_ptr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(
                 mrSlideSorter.GetContentWindow(),
                 aPageName, aDescr));
             DBG_ASSERT(aNameDlg, "Dialog creation failed!");

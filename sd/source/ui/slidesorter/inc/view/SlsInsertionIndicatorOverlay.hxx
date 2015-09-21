@@ -87,7 +87,7 @@ private:
     Point maLocation;
     BitmapEx maIcon;
     Point maIconOffset;
-    ::boost::scoped_ptr<FramePainter> mpShadowPainter;
+    std::unique_ptr<FramePainter> mpShadowPainter;
 
     void SetPositionAndSize (const Rectangle& rBoundingBox);
     Point PaintRepresentatives (

@@ -74,7 +74,7 @@ public:
 private:
     VclPtr<sd::Window> mpTargetWindow;
     class LayerContainer;
-    ::boost::scoped_ptr<LayerContainer> mpLayers;
+    std::unique_ptr<LayerContainer> mpLayers;
     ScopedVclPtr<VirtualDevice> mpBackBuffer;
     MapMode maSavedMapMode;
 

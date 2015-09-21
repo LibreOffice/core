@@ -215,9 +215,9 @@ protected:
 private:
     bool mbIsValid;
 
-    ::boost::scoped_ptr<controller::SlideSorterController> mpSlideSorterController;
-    ::boost::scoped_ptr<model::SlideSorterModel> mpSlideSorterModel;
-    ::boost::scoped_ptr<view::SlideSorterView> mpSlideSorterView;
+    std::unique_ptr<controller::SlideSorterController> mpSlideSorterController;
+    std::unique_ptr<model::SlideSorterModel> mpSlideSorterModel;
+    std::unique_ptr<view::SlideSorterView> mpSlideSorterView;
     ::com::sun::star::uno::WeakReference<com::sun::star::frame::XController> mxControllerWeak;
     ViewShell* mpViewShell;
     ViewShellBase* mpViewShellBase;

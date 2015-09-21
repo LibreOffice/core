@@ -142,7 +142,7 @@ class HtmlExport
 
     const OUString maHTMLHeader;
 
-    boost::scoped_ptr< ButtonSet > mpButtonSet;
+    std::unique_ptr< ButtonSet > mpButtonSet;
 
     static SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
 

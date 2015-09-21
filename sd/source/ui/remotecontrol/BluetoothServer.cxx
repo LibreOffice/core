@@ -702,7 +702,7 @@ getDBusBooleanProperty( DBusConnection *pConnection, DBusObject *pAdapter,
     *pBoolean = false;
     bool bRet = false;
 
-    ::boost::scoped_ptr< DBusObject > pProperties (
+    std::unique_ptr< DBusObject > pProperties (
             pAdapter->cloneForInterface( "org.freedesktop.DBus.Properties" ) );
 
     DBusMessage *pMsg = pProperties->getMethodCall( "Get" );
@@ -763,7 +763,7 @@ setDBusBooleanProperty( DBusConnection *pConnection, DBusObject *pAdapter,
 {
     assert( pAdapter );
 
-    ::boost::scoped_ptr< DBusObject > pProperties(
+    std::unique_ptr< DBusObject > pProperties(
             pAdapter->cloneForInterface( "org.freedesktop.DBus.Properties" ) );
 
     DBusMessage *pMsg = pProperties->getMethodCall( "Set" );

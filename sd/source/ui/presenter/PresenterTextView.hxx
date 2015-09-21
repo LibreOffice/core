@@ -68,7 +68,7 @@ protected:
 
 private:
     class Implementation;
-    ::boost::scoped_ptr<Implementation> mpImplementation;
+    std::unique_ptr<Implementation> mpImplementation;
 
     /** This method throws a DisposedException when the object has already been
         disposed.

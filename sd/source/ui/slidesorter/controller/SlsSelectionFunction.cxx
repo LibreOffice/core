@@ -306,7 +306,7 @@ protected:
     virtual bool ProcessDragEvent (SelectionFunction::EventDescriptor& rDescriptor) SAL_OVERRIDE;
 
 private:
-    ::boost::scoped_ptr<DragAndDropContext> mpDragAndDropContext;
+    std::unique_ptr<DragAndDropContext> mpDragAndDropContext;
 };
 
 //===== SelectionFunction =====================================================

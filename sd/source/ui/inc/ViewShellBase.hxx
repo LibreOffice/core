@@ -234,7 +234,7 @@ protected:
 
 private:
     class Implementation;
-    ::boost::scoped_ptr<Implementation> mpImpl;
+    std::unique_ptr<Implementation> mpImpl;
     DrawDocShell* mpDocShell;
     SdDrawDocument* mpDocument;
 

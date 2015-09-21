@@ -47,7 +47,7 @@ namespace sd
 
 #ifdef LINUX_BLUETOOTH
         struct Impl;
-        boost::scoped_ptr<Impl> mpImpl;
+        std::unique_ptr<Impl> mpImpl;
 #endif
         virtual void SAL_CALL run() SAL_OVERRIDE;
 

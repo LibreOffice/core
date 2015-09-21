@@ -134,7 +134,7 @@ private:
     Animator::AnimationId mnAnimationId;
 
     class PageInsertionListener;
-    ::boost::scoped_ptr<PageInsertionListener> mpPageInsertionListener;
+    std::unique_ptr<PageInsertionListener> mpPageInsertionListener;
 
     ::boost::shared_ptr<SelectionObserver> mpSelectionObserver;
 

@@ -71,7 +71,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
         aNewAttr.Put( aEditAttr, false );
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdTabCharDialog( NULL, &aNewAttr, mpDoc->GetDocSh() ) : 0);
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdTabCharDialog( NULL, &aNewAttr, mpDoc->GetDocSh() ) : 0);
         sal_uInt16 nResult = RET_CANCEL;
         if( pDlg )
         {

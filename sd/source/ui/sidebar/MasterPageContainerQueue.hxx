@@ -81,7 +81,7 @@ private:
     ::boost::weak_ptr<ContainerAdapter> mpWeakContainer;
     class PreviewCreationRequest;
     class RequestQueue;
-    ::boost::scoped_ptr<RequestQueue> mpRequestQueue;
+    std::unique_ptr<RequestQueue> mpRequestQueue;
     Timer maDelayedPreviewCreationTimer;
     sal_uInt32 mnRequestsServedCount;
 

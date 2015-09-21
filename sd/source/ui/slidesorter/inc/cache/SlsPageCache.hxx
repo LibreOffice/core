@@ -152,7 +152,7 @@ public:
     void Resume();
 
 private:
-    ::boost::scoped_ptr<GenericPageCache> mpImplementation;
+    std::unique_ptr<GenericPageCache> mpImplementation;
 };
 
 } } } // end of namespace ::sd::slidesorter::cache

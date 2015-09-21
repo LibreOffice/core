@@ -90,9 +90,9 @@ private:
         css::frame::XController> mxController;
 
     class ResourceToFactoryMap;
-    ::boost::scoped_ptr<ResourceToFactoryMap> mpResourceToFactoryMap;
+    std::unique_ptr<ResourceToFactoryMap> mpResourceToFactoryMap;
     class LoadedFactoryContainer;
-    ::boost::scoped_ptr<LoadedFactoryContainer> mpLoadedFactories;
+    std::unique_ptr<LoadedFactoryContainer> mpLoadedFactories;
 
     ModuleController (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)

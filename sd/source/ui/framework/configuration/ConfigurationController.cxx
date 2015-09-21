@@ -79,7 +79,7 @@ public:
     /** The queue processor ownes the queue of configuration change request
         objects and processes the objects.
     */
-    ::boost::scoped_ptr<ChangeRequestQueueProcessor> mpQueueProcessor;
+    std::unique_ptr<ChangeRequestQueueProcessor> mpQueueProcessor;
 
     ::boost::shared_ptr<ConfigurationUpdaterLock> mpConfigurationUpdaterLock;
 

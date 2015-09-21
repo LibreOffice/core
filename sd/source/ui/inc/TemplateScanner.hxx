@@ -75,7 +75,7 @@ class TemplateDir
 public:
     TemplateDir (const OUString& rsRegion, const OUString& rsUrl )
         :   msRegion(rsRegion), msUrl(rsUrl), maEntries(),
-            mbSortingEnabled(false), mpEntryCompare(NULL) {}
+            mbSortingEnabled(false), mpEntryCompare(nullptr) {}
 
     OUString msRegion;
     OUString msUrl;
@@ -86,7 +86,7 @@ public:
 
 private:
     bool mbSortingEnabled;
-    ::boost::scoped_ptr<TemplateEntryCompare> mpEntryCompare;
+    std::unique_ptr<TemplateEntryCompare> mpEntryCompare;
 };
 
 /** This class scans the template folders for impress templates.  There are
@@ -183,7 +183,7 @@ private:
     /** The folders that are collected by GatherFolderList().
     */
     class FolderDescriptorList;
-    ::boost::scoped_ptr<FolderDescriptorList> mpFolderDescriptors;
+    std::unique_ptr<FolderDescriptorList> mpFolderDescriptors;
 
     /** Set of state variables used by the methods
         InitializeFolderScanning(), GatherFolderList(), ScanFolder(),

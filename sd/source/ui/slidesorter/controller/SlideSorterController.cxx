@@ -355,7 +355,7 @@ bool SlideSorterController::Command (
                         else
                             nPopupId = RID_SLIDE_SORTER_MASTER_NOSEL_POPUP;
             }
-            ::boost::scoped_ptr<InsertionIndicatorHandler::ForceShowContext> pContext;
+            std::unique_ptr<InsertionIndicatorHandler::ForceShowContext> pContext;
             if (pPage == NULL)
             {
                 // When there is no selection, then we show the insertion

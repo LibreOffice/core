@@ -111,7 +111,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
         aNewAttr.Put(SfxInt32Item(ATTR_SNAPLINE_Y, aLinePos.Y()));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        boost::scoped_ptr<AbstractSdSnapLineDlg> pDlg(pFact ? pFact->CreateSdSnapLineDlg( NULL, aNewAttr, mpView ) : 0);
+        std::unique_ptr<AbstractSdSnapLineDlg> pDlg(pFact ? pFact->CreateSdSnapLineDlg( NULL, aNewAttr, mpView ) : 0);
         OSL_ASSERT(pDlg);
         if (!pDlg)
             return;

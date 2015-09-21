@@ -329,7 +329,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     mpDocSh->SetWaitCursor( false );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    boost::scoped_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg( NULL, mpDoc, pMedium, aFile ) : 0);
+    std::unique_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg( NULL, mpDoc, pMedium, aFile ) : 0);
 
     if( !pDlg )
         return false;
@@ -421,7 +421,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    boost::scoped_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg(NULL, mpDoc, NULL, aFile ) : 0);
+    std::unique_ptr<AbstractSdInsertPagesObjsDlg> pDlg(pFact ? pFact->CreateSdInsertPagesObjsDlg(NULL, mpDoc, NULL, aFile ) : 0);
     if( !pDlg )
         return;
 
@@ -446,7 +446,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
            - the draw outliner of the drawing engine has to draw something in
              between
            - the global outliner could be used in SdPage::CreatePresObj */
-        boost::scoped_ptr<SdrOutliner> pOutliner(new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT ));
+        std::unique_ptr<SdrOutliner> pOutliner(new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT ));
 
         // set reference device
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
@@ -596,7 +596,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
        - the draw outliner of the drawing engine has to draw something in
          between
        - the global outliner could be used in SdPage::CreatePresObj */
-    boost::scoped_ptr< ::Outliner> pOutliner(new ::Outliner( &mpDoc->GetItemPool(), OUTLINERMODE_OUTLINEOBJECT ));
+    std::unique_ptr< ::Outliner> pOutliner(new ::Outliner( &mpDoc->GetItemPool(), OUTLINERMODE_OUTLINEOBJECT ));
     pOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
 
     // set reference device
@@ -631,7 +631,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         mpDocSh->SetWaitCursor( false );
 
-        boost::scoped_ptr<SfxProgress> pProgress(new SfxProgress( mpDocSh, SD_RESSTR(STR_CREATE_PAGES), nNewPages));
+        std::unique_ptr<SfxProgress> pProgress(new SfxProgress( mpDocSh, SD_RESSTR(STR_CREATE_PAGES), nNewPages));
         if( pProgress )
             pProgress->SetState( 0, 100 );
 

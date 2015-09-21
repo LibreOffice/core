@@ -109,7 +109,7 @@ private:
     ViewShellBase* mpViewShellBase;
     class PaneDescriptor;
     class PaneContainer;
-    ::boost::scoped_ptr<PaneContainer> mpPaneContainer;
+    std::unique_ptr<PaneContainer> mpPaneContainer;
 
     /** Create a new instance of FrameWindowPane.
         @param rPaneId

@@ -227,16 +227,16 @@ private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
     view::SlideSorterView& mrView;
-    ::boost::scoped_ptr<PageSelector> mpPageSelector;
-    ::boost::scoped_ptr<FocusManager> mpFocusManager;
+    std::unique_ptr<PageSelector> mpPageSelector;
+    std::unique_ptr<FocusManager> mpFocusManager;
     ::boost::shared_ptr<SlotManager> mpSlotManager;
-    ::boost::scoped_ptr<ScrollBarManager> mpScrollBarManager;
+    std::unique_ptr<ScrollBarManager> mpScrollBarManager;
     mutable ::boost::shared_ptr<CurrentSlideManager> mpCurrentSlideManager;
     ::boost::shared_ptr<SelectionManager> mpSelectionManager;
-    ::boost::scoped_ptr<controller::Clipboard> mpClipboard;
+    std::unique_ptr<controller::Clipboard> mpClipboard;
     ::boost::shared_ptr<InsertionIndicatorHandler> mpInsertionIndicatorHandler;
     ::boost::shared_ptr<Animator> mpAnimator;
-    ::boost::scoped_ptr<VisibleAreaManager> mpVisibleAreaManager;
+    std::unique_ptr<VisibleAreaManager> mpVisibleAreaManager;
 
     // The listener listens to UNO events and thus is a UNO object.
     ::rtl::Reference<controller::Listener> mpListener;

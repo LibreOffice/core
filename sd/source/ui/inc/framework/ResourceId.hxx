@@ -172,7 +172,7 @@ private:
     */
     ::std::vector<OUString> maResourceURLs;
 
-    ::boost::scoped_ptr<css::util::URL> mpURL;
+    std::unique_ptr<css::util::URL> mpURL;
 
     static css::uno::WeakReference<css::util::XURLTransformer> mxURLTransformerWeak;
 

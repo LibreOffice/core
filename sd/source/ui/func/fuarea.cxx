@@ -61,7 +61,7 @@ void FuArea::DoExecute( SfxRequest& rReq )
         mpView->GetAttributes( aNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        boost::scoped_ptr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog( NULL,
+        std::unique_ptr<AbstractSvxAreaTabDialog> pDlg(pFact ? pFact->CreateSvxAreaTabDialog( NULL,
                                                                         &aNewAttr,
                                                                         mpDoc,
                                                                         true) : 0);

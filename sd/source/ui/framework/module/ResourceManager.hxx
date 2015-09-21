@@ -82,7 +82,7 @@ protected:
 
 private:
     class MainViewContainer;
-    ::boost::scoped_ptr<MainViewContainer> mpActiveMainViewContainer;
+    std::unique_ptr<MainViewContainer> mpActiveMainViewContainer;
 
     /// The resource managed by this class.
     css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;
