@@ -815,6 +815,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf83227, "tdf83227.docx")
     CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("word/media/image2.png")));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf92521, "tdf92521.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        // There should be a section break that's in the middle of the document: right after the table.
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
