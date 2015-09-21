@@ -156,7 +156,7 @@ public:
     virtual void EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) = 0;
 
     /// Called in order to output section breaks.
-    virtual void SectionBreaks(const SwTextNode& rNode) = 0;
+    virtual void SectionBreaks(const SwNode& rNode) = 0;
 
     /// Called before we start outputting the attributes.
     virtual void StartParagraphProperties() = 0;
