@@ -82,7 +82,7 @@ long ZCodec::EndCompression()
 {
     long retvalue = 0;
 
-    if (meState != STATE_INIT)
+    if (mbStatus && meState != STATE_INIT)
     {
         if (meState == STATE_COMPRESS)
         {
@@ -106,7 +106,7 @@ long ZCodec::EndCompression()
         delete[] mpInBuf;
         meState = STATE_INIT;
     }
-    return ( mbStatus ) ? retvalue : -1;
+    return mbStatus ? retvalue : -1;
 }
 
 long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
