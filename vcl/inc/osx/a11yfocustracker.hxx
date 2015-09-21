@@ -87,7 +87,7 @@ private:
     std::set<VclPtr<vcl::Window>> m_aDocumentWindowList;
 
     // the link object needed for Application::addEventListener
-    Link<> m_aWindowEventLink;
+    Link<VclSimpleEvent&,void> m_aWindowEventLink;
 
     // the UNO XAccessibilityEventListener for Documents and other non VCL objects
     const ::com::sun::star::uno::Reference< DocumentFocusListener > m_xDocumentFocusListener;
