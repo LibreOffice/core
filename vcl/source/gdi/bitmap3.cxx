@@ -2452,12 +2452,12 @@ void Bitmap::ImplMedianCut( sal_uLong* pColBuf, BitmapPalette& rPal,
     }
 }
 
-bool Bitmap::Vectorize( tools::PolyPolygon& rPolyPoly, BmpVectorizeFlags nFlags, const Link<>* pProgress )
+bool Bitmap::Vectorize( tools::PolyPolygon& rPolyPoly, BmpVectorizeFlags nFlags )
 {
-    return ImplVectorizer::ImplVectorize( *this, rPolyPoly, nFlags, pProgress );
+    return ImplVectorizer::ImplVectorize( *this, rPolyPoly, nFlags );
 }
 
-bool Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, BmpVectorizeFlags nFlags, const Link<>* pProgress )
+bool Bitmap::Vectorize( GDIMetaFile& rMtf, sal_uInt8 cReduce, BmpVectorizeFlags nFlags, const Link<long,void>* pProgress )
 {
     return ImplVectorizer::ImplVectorize( *this, rMtf, cReduce, nFlags, pProgress );
 }
