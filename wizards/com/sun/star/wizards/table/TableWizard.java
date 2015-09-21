@@ -389,7 +389,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         {
             int maxfieldcount = curTableDescriptor.getMaxColumnsInTable();
             if (_icount >= (maxfieldcount - 1))
-            {   // keep one column as reserve for the automaticcally created key
+            {   // keep one column as reserve for the automatically created key
                 String smessage = serrToManyFields;
                 smessage = JavaTools.replaceSubString(smessage, String.valueOf(maxfieldcount), "%COUNT");
                 showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, smessage);
