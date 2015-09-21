@@ -629,9 +629,9 @@ void DataPointItemConverter::FillSpecialItem(
 
         case SCHATTR_DATADESCR_WRAP_TEXT:
         {
-            bool bValue = false;
             try
             {
+                bool bValue = false;
                 GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bValue;
                 rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
             }

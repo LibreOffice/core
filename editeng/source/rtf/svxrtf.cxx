@@ -446,7 +446,6 @@ void SvxRTFParser::ReadColorTable()
 
 void SvxRTFParser::ReadFontTable()
 {
-    int nToken = 0;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
     std::unique_ptr<vcl::Font> pFont(new vcl::Font);
     short nFontNo(0), nInsFontNo (0);
@@ -459,6 +458,7 @@ void SvxRTFParser::ReadFontTable()
 
     while( _nOpenBrakets && IsParserWorking() )
     {
+        int nToken = 0;
         bool bCheckNewFont = false;
         switch( ( nToken = GetNextToken() ))
         {
@@ -593,10 +593,11 @@ void SvxRTFParser::ReadOLEData()
 OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
 {
     rStr.clear();
-    int _nOpenBrakets = 1, nToken = 0;  // the first was already detected earlier!!
+    int _nOpenBrakets = 1;  // the first was already detected earlier!!
 
     while( _nOpenBrakets && IsParserWorking() )
     {
+        int nToken = 0;
         switch( nToken = GetNextToken() )
         {
         case '}':       --_nOpenBrakets;    break;
@@ -653,7 +654,7 @@ util::DateTime SvxRTFParser::GetDateTimeStamp( )
 
 void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 {
-    int _nOpenBrakets = 1, nToken = 0;  // the first was already detected earlier!!
+    int _nOpenBrakets = 1;  // the first was already detected earlier!!
     DBG_ASSERT(m_xDocProps.is(),
         "SvxRTFParser::ReadInfo: no DocumentProperties");
     OUString sStr, sComment;
@@ -661,6 +662,7 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 
     while( _nOpenBrakets && IsParserWorking() )
     {
+        int nToken = 0;
         switch( nToken = GetNextToken() )
         {
         case '}':       --_nOpenBrakets;    break;
