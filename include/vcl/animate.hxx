@@ -184,8 +184,7 @@ public:
 
     bool            Filter(
                         BmpFilter eFilter,
-                        const BmpFilterParam* pFilterParam = NULL,
-                        const Link<>* pProgress = NULL );
+                        const BmpFilterParam* pFilterParam = NULL );
 
     friend VCL_DLLPUBLIC SvStream& ReadAnimation( SvStream& rIStream, Animation& rAnimation );
     friend VCL_DLLPUBLIC SvStream& WriteAnimation( SvStream& rOStream, const Animation& rAnimation );

@@ -666,7 +666,7 @@ bool Animation::Adjust( short nLuminancePercent, short nContrastPercent,
     return bRet;
 }
 
-bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link<>* pProgress )
+bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
 {
     DBG_ASSERT( !IsInAnimation(), "Animation modified while it is animated" );
 
@@ -677,9 +677,9 @@ bool Animation::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, c
         bRet = true;
 
         for( size_t i = 0, n = maList.size(); ( i < n ) && bRet; ++i )
-            bRet = maList[ i ]->aBmpEx.Filter( eFilter, pFilterParam, pProgress );
+            bRet = maList[ i ]->aBmpEx.Filter( eFilter, pFilterParam );
 
-        (void)maBitmapEx.Filter(eFilter, pFilterParam, pProgress);
+        (void)maBitmapEx.Filter(eFilter, pFilterParam);
     }
     else
         bRet = false;
