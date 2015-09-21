@@ -36,13 +36,13 @@ GraphicConverter::~GraphicConverter()
 sal_uLong GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ConvertDataFormat nFormat )
 {
     GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
-    sal_uLong               nRet = ERRCODE_IO_GENERAL;
+    sal_uLong           nRet = ERRCODE_IO_GENERAL;
 
     if( pCvt && pCvt->GetFilterHdl().IsSet() )
     {
         ConvertData aData( rGraphic, rIStm, nFormat );
 
-        if( pCvt->GetFilterHdl().Call( &aData ) )
+        if( pCvt->GetFilterHdl().Call( aData ) )
         {
             rGraphic = aData.maGraphic;
             nRet = ERRCODE_NONE;
@@ -57,13 +57,13 @@ sal_uLong GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ConvertD
 sal_uLong GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, ConvertDataFormat nFormat )
 {
     GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
-    sal_uLong               nRet = ERRCODE_IO_GENERAL;
+    sal_uLong           nRet = ERRCODE_IO_GENERAL;
 
     if( pCvt && pCvt->GetFilterHdl().IsSet() )
     {
         ConvertData aData( rGraphic, rOStm, nFormat );
 
-        if( pCvt->GetFilterHdl().Call( &aData ) )
+        if( pCvt->GetFilterHdl().Call( aData ) )
             nRet = ERRCODE_NONE;
         else if( rOStm.GetError() )
             nRet = rOStm.GetError();

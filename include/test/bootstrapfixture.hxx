@@ -46,7 +46,7 @@ class OOO_DLLPUBLIC_TEST BootstrapFixture : public BootstrapFixtureBase
   bool m_bAssertOnDialog;
 
 public:
-  DECL_STATIC_LINK( BootstrapFixture, ImplInitFilterHdl, ConvertData* );
+  DECL_STATIC_LINK_TYPED( BootstrapFixture, ImplInitFilterHdl, ConvertData&, bool );
 
   BootstrapFixture( bool bAssertOnDialog = true, bool bNeedUCB = true );
   virtual ~BootstrapFixture();

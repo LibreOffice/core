@@ -35,8 +35,8 @@ class VCL_DLLPUBLIC GraphicConverter
 {
 private:
 
-    Link<>              maFilterHdl;
-    ConvertData*        mpConvertData;
+    Link<ConvertData&,bool>  maFilterHdl;
+    ConvertData*             mpConvertData;
 
 public:
 
@@ -48,8 +48,8 @@ public:
 
     ConvertData*        GetConvertData() { return mpConvertData; }
 
-    void                SetFilterHdl( const Link<>& rLink ) { maFilterHdl = rLink; }
-    const Link<>&       GetFilterHdl() const { return maFilterHdl; }
+    void                SetFilterHdl( const Link<ConvertData&,bool>& rLink ) { maFilterHdl = rLink; }
+    const Link<ConvertData&,bool>&  GetFilterHdl() const { return maFilterHdl; }
 };
 
 #endif // INCLUDED_VCL_CVTGRF_HXX
