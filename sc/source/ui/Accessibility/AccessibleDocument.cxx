@@ -1412,10 +1412,15 @@ ScAccessibleDocument::ScAccessibleDocument(
     mpTempAccEdit(NULL),
     mbCompleteSheetSelected(false)
 {
-    if (pViewShell)
+    maVisArea = GetVisibleArea_Impl();
+}
+
+void ScAccessibleDocument::Init()
+{
+    if (mpViewShell)
     {
-        pViewShell->AddAccessibilityObject(*this);
-        vcl::Window *pWin = pViewShell->GetWindowByPos(eSplitPos);
+        mpViewShell->AddAccessibilityObject(*this);
+        vcl::Window *pWin = mpViewShell->GetWindowByPos(meSplitPos);
         if( pWin )
         {
             pWin->AddChildEventListener( LINK( this, ScAccessibleDocument, WindowChildEventListener ));
@@ -1428,20 +1433,15 @@ ScAccessibleDocument::ScAccessibleDocument(
                     AddChild( pChildWin->GetAccessible(), false );
             }
         }
-        ScViewData& rViewData = pViewShell->GetViewData();
-        if (rViewData.HasEditView(eSplitPos))
+        ScViewData& rViewData = mpViewShell->GetViewData();
+        if (rViewData.HasEditView(meSplitPos))
         {
-            uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, rViewData.GetEditView(eSplitPos),
-                pViewShell->GetWindowByPos(eSplitPos), GetCurrentCellName(), GetCurrentCellDescription(),
+            uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, rViewData.GetEditView(meSplitPos),
+                mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(), GetCurrentCellDescription(),
                 ScAccessibleEditObject::CellInEditMode);
             AddChild(xAcc, false);
         }
     }
-    maVisArea = GetVisibleArea_Impl();
-}
-
-void ScAccessibleDocument::Init()
-{
     if(!mpChildrenShapes)
         mpChildrenShapes = new ScChildrenShapes(this, mpViewShell, meSplitPos);
 }
