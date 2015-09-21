@@ -27,23 +27,17 @@ struct ImplSVEvent;
 
 namespace vcl
 {
-    struct UserEvent
-    {
-        sal_uLong           m_nWhich;
-        void*           m_pData;
-    };
-
     class VCL_DLLPUBLIC EventPoster
     {
-        ImplSVEvent *   m_nId;
-        Link<>          m_aLink;
+        ImplSVEvent *             m_nId;
+        Link<LinkParamNone*,void> m_aLink;
 
         DECL_DLLPRIVATE_LINK_TYPED( DoEvent_Impl, void*, void );
 
     public:
-                        EventPoster( const Link<>& rLink );
+                        EventPoster( const Link<LinkParamNone*,void>& rLink );
                         ~EventPoster();
-        void            Post( UserEvent* pEvent );
+        void            Post();
     };
 }
 

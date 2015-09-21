@@ -67,7 +67,7 @@ class SVT_DLLPRIVATE AsyncAccelExec
         SVT_DLLPRIVATE AsyncAccelExec(const css::uno::Reference< css::frame::XDispatch >& xDispatch,
                                       const css::util::URL&                               aURL     );
 
-        DECL_DLLPRIVATE_LINK(impl_ts_asyncCallback, void*);
+        DECL_DLLPRIVATE_LINK_TYPED(impl_ts_asyncCallback, LinkParamNone*, void);
 
     private:
         vcl::EventPoster m_aAsyncCallback;
@@ -425,10 +425,9 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
 }
 
 
-IMPL_LINK_NOARG(AcceleratorExecute, impl_ts_asyncCallback)
+IMPL_LINK_NOARG_TYPED(AcceleratorExecute, impl_ts_asyncCallback, LinkParamNone*, void)
 {
     // replaced by AsyncAccelExec!
-    return 0;
 }
 
 
@@ -451,14 +450,14 @@ AsyncAccelExec* AsyncAccelExec::createOnShotInstance(const css::uno::Reference< 
 
 void AsyncAccelExec::execAsync()
 {
-    m_aAsyncCallback.Post(0);
+    m_aAsyncCallback.Post();
 }
 
 
-IMPL_LINK_NOARG(AsyncAccelExec, impl_ts_asyncCallback)
+IMPL_LINK_NOARG_TYPED(AsyncAccelExec, impl_ts_asyncCallback, LinkParamNone*, void)
 {
     if (! m_xDispatch.is())
-        return 0;
+        return;
 
     try
     {
@@ -472,8 +471,6 @@ IMPL_LINK_NOARG(AsyncAccelExec, impl_ts_asyncCallback)
         {}
 
     delete this;
-
-    return 0;
 }
 
 } // namespace svt

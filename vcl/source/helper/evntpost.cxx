@@ -26,7 +26,7 @@
 namespace vcl
 {
 
-EventPoster::EventPoster( const Link<>& rLink )
+EventPoster::EventPoster( const Link<LinkParamNone*,void>& rLink )
     : m_aLink(rLink)
 {
     m_nId = 0;
@@ -39,19 +39,18 @@ EventPoster::~EventPoster()
         Application::RemoveUserEvent( m_nId );
 }
 
-void EventPoster::Post( UserEvent* pEvent )
+void EventPoster::Post()
 
 {
     DBG_TESTSOLARMUTEX();
-    m_nId = Application::PostUserEvent( ( LINK( this, EventPoster, DoEvent_Impl ) ), pEvent );
+    m_nId = Application::PostUserEvent( ( LINK( this, EventPoster, DoEvent_Impl ) ), nullptr );
 }
 
-IMPL_LINK_TYPED( EventPoster, DoEvent_Impl, void*, p, void )
+IMPL_LINK_TYPED( EventPoster, DoEvent_Impl, void*, /*p*/, void )
 {
-    UserEvent* pEvent = static_cast<UserEvent*>(p);
     DBG_TESTSOLARMUTEX();
     m_nId = 0;
-    m_aLink.Call( pEvent );
+    m_aLink.Call( nullptr );
 }
 
 }
