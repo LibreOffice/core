@@ -494,8 +494,8 @@ class WWD_Startup(WWD_General):
         self.mountList(session.cp_GeneralInfo, self.genAware)
         task.advance(True)
         self.mountDataAware(session.cp_Publishing.getElement(LOCAL_PUBLISHER), 0)
-        self.mountDataAware(session.cp_Publishing.getElement(FTP_PUBLISHER), 1)
-        self.mountDataAware(session.cp_Publishing.getElement(ZIP_PUBLISHER), 2)
+        self.mountDataAware(session.cp_Publishing.getElement(ZIP_PUBLISHER), 1)
+        self.mountDataAware(session.cp_Publishing.getElement(FTP_PUBLISHER), 2)
         task.advance(True)
         self.sessionNameDA.setDataObject(session, True)
         self.chkSaveSettings.Model.State = 1
