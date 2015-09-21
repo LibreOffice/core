@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_82e21b9e",
+        "filename": "compilerplugins/clang/compat.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-09-21T06:31:46Z",
+      "side": 1,
+      "message": "the current code works fine for me with a recent Clang trunk build (towards Clang 3.8), so the conservative approach (assuming your suggested changes would potentially not work with Clang 3.8) is to add an\n\n  #elif __clang_major__ \u003d\u003d 3 \u0026\u0026 __clang__minor \u003d\u003d 7",
+      "revId": "46d604c2115069e0d7309c697ad20e673064c5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
