@@ -4409,11 +4409,15 @@ void WW8PLCFxDesc::ReduceByOffset()
         else
             nStartPos -= nCpOfs;
     }
-    if( nEndPos != WW8_CP_MAX )
+    if (nEndPos != WW8_CP_MAX)
     {
-        OSL_ENSURE(nCpOfs <= nEndPos,
-            "oh oh, so much for the subdocument piece theory");
-        nEndPos   -= nCpOfs;
+        if (nCpOfs > nEndPos)
+        {
+            SAL_WARN("sw.ww8", "broken subdocument piece entry");
+            nEndPos = WW8_CP_MAX;
+        }
+        else
+            nEndPos -= nCpOfs;
     }
 }
 
