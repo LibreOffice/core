@@ -510,7 +510,7 @@ void SAL_CALL ScTabViewObj::release() throw()
     SfxBaseController::release();
 }
 
-static void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, sal_Int32 nEvent )
+static void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, ScSheetEventId nEvent )
 {
     ScDocument& rDoc = pDocSh->GetDocument();
     // when deleting a sheet, nPreviousTab can be invalid
@@ -579,8 +579,8 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
     SCTAB nNewTab = rViewData.GetTabNo();
     if ( !bSameTabButMoved && (nNewTab != nPreviousTab) )
     {
-        lcl_CallActivate( pDocSh, nPreviousTab, SC_SHEETEVENT_UNFOCUS );
-        lcl_CallActivate( pDocSh, nNewTab, SC_SHEETEVENT_FOCUS );
+        lcl_CallActivate( pDocSh, nPreviousTab, ScSheetEventId::UNFOCUS );
+        lcl_CallActivate( pDocSh, nNewTab, ScSheetEventId::FOCUS );
     }
     nPreviousTab = nNewTab;
 }
@@ -1171,9 +1171,9 @@ bool ScTabViewObj::IsMouseListening() const
     ScDocument* pDoc = rViewData.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
     return
-        pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_RIGHTCLICK, true ) ||
-        pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_DOUBLECLICK, true ) ||
-        pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_SELECT, true );
+        pDoc->HasSheetEventScript( nTab, ScSheetEventId::RIGHTCLICK, true ) ||
+        pDoc->HasSheetEventScript( nTab, ScSheetEventId::DOUBLECLICK, true ) ||
+        pDoc->HasSheetEventScript( nTab, ScSheetEventId::SELECT, true );
 
 }
 
@@ -1217,7 +1217,7 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
     bool bRightClick = ( e.Buttons == awt::MouseButton::RIGHT && e.ClickCount == 1 );
     if ( ( bDoubleClick || bRightClick ) && !bReturn && xTarget.is())
     {
-        sal_Int32 nEvent = bDoubleClick ? SC_SHEETEVENT_DOUBLECLICK : SC_SHEETEVENT_RIGHTCLICK;
+        ScSheetEventId nEvent = bDoubleClick ? ScSheetEventId::DOUBLECLICK : ScSheetEventId::RIGHTCLICK;
 
         ScTabViewShell* pViewSh = GetViewShell();
         ScViewData& rViewData = pViewSh->GetViewData();
@@ -1286,7 +1286,7 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= getSelection();
-            xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( SC_SHEETEVENT_SELECT ), aArgs );
+            xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
         }
         catch( uno::Exception& )
         {
@@ -1741,7 +1741,7 @@ void ScTabViewObj::SelectionChanged()
     const ScSheetEvents* pEvents = rDoc.GetSheetEvents(nTab);
     if (pEvents)
     {
-        const OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_SELECT);
+        const OUString* pScript = pEvents->GetScript(ScSheetEventId::SELECT);
         if (pScript)
         {
             // the macro parameter is the selection as returned by getSelection
@@ -1761,7 +1761,7 @@ void ScTabViewObj::SelectionChanged()
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= getSelection();
-            xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( SC_SHEETEVENT_SELECT ), aArgs );
+            xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::SELECT ), aArgs );
         }
         catch( uno::Exception& )
         {

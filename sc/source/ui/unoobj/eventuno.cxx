@@ -53,13 +53,13 @@ void ScSheetEventsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-static sal_Int32 lcl_GetEventFromName( const OUString& aName )
+static ScSheetEventId lcl_GetEventFromName( const OUString& aName )
 {
-    for (sal_Int32 nEvent=0; nEvent<SC_SHEETEVENT_COUNT; ++nEvent)
-        if ( aName == ScSheetEvents::GetEventName(nEvent) )
-            return nEvent;
+    for (sal_Int32 nEvent=0; nEvent<static_cast<sal_Int32>(ScSheetEventId::COUNT); ++nEvent)
+        if ( aName == ScSheetEvents::GetEventName(static_cast<ScSheetEventId>(nEvent)) )
+            return static_cast<ScSheetEventId>(nEvent);
 
-    return -1;      // not found
+    return ScSheetEventId::NOTFOUND;      // not found
 }
 
 // XNameReplace
@@ -72,8 +72,8 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
     if (!mpDocShell)
         throw uno::RuntimeException();
 
-    sal_Int32 nEvent = lcl_GetEventFromName(aName);
-    if (nEvent < 0)
+    ScSheetEventId nEvent = lcl_GetEventFromName(aName);
+    if (nEvent == ScSheetEventId::NOTFOUND)
         throw container::NoSuchElementException();
 
     ScSheetEvents aNewEvents;
@@ -121,8 +121,8 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nEvent = lcl_GetEventFromName(aName);
-    if (nEvent < 0)
+    ScSheetEventId nEvent = lcl_GetEventFromName(aName);
+    if (nEvent == ScSheetEventId::NOTFOUND)
         throw container::NoSuchElementException();
 
     const OUString* pScript = NULL;
@@ -152,17 +152,17 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
 uno::Sequence<OUString> SAL_CALL ScSheetEventsObj::getElementNames() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aNames(SC_SHEETEVENT_COUNT);
-    for (sal_Int32 nEvent=0; nEvent<SC_SHEETEVENT_COUNT; ++nEvent)
-        aNames[nEvent] = ScSheetEvents::GetEventName(nEvent);
+    uno::Sequence<OUString> aNames((int)ScSheetEventId::COUNT);
+    for (sal_Int32 nEvent=0; nEvent<(int)ScSheetEventId::COUNT; ++nEvent)
+        aNames[nEvent] = ScSheetEvents::GetEventName((ScSheetEventId)nEvent);
     return aNames;
 }
 
 sal_Bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nEvent = lcl_GetEventFromName(aName);
-    return (nEvent >= 0);
+    ScSheetEventId nEvent = lcl_GetEventFromName(aName);
+    return (nEvent != ScSheetEventId::NOTFOUND);
 }
 
 // XElementAccess

@@ -21,14 +21,8 @@
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <osl/diagnose.h>
 
-OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
+OUString ScSheetEvents::GetEventName(ScSheetEventId nEvent)
 {
-    if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
-    {
-        OSL_FAIL("invalid event number");
-        return OUString();
-    }
-
     static const sal_Char* aEventNames[] =
     {
         "OnFocus",                  // SC_SHEETEVENT_FOCUS
@@ -39,17 +33,12 @@ OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
         "OnChange",                 // SC_SHEETEVENT_CHANGE
         "OnCalculate"               // SC_SHEETEVENT_CALCULATE
     };
-    return OUString::createFromAscii(aEventNames[nEvent]);
+    return OUString::createFromAscii(aEventNames[static_cast<int>(nEvent)]);
 }
 
-sal_Int32 ScSheetEvents::GetVbaSheetEventId(sal_Int32 nEvent)
+sal_Int32 ScSheetEvents::GetVbaSheetEventId(ScSheetEventId nEvent)
 {
     using namespace ::com::sun::star::script::vba::VBAEventId;
-    if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
-    {
-        OSL_FAIL("invalid event number");
-        return NO_EVENT;
-    }
 
     static const sal_Int32 nVbaEventIds[] =
     {
@@ -61,10 +50,12 @@ sal_Int32 ScSheetEvents::GetVbaSheetEventId(sal_Int32 nEvent)
         WORKSHEET_CHANGE,               // SC_SHEETEVENT_CHANGE
         WORKSHEET_CALCULATE             // SC_SHEETEVENT_CALCULATE
     };
-    return nVbaEventIds[nEvent];
+    return nVbaEventIds[static_cast<int>(nEvent)];
 }
 
-sal_Int32 ScSheetEvents::GetVbaDocumentEventId(sal_Int32 nEvent)
+static const int COUNT = static_cast<int>(ScSheetEventId::COUNT);
+
+sal_Int32 ScSheetEvents::GetVbaDocumentEventId(ScSheetEventId nEvent)
 {
     using namespace ::com::sun::star::script::vba::VBAEventId;
     sal_Int32 nSheetEventId = GetVbaSheetEventId(nEvent);
@@ -85,7 +76,7 @@ void ScSheetEvents::Clear()
 {
     if (mpScriptNames)
     {
-        for (sal_Int32 nEvent=0; nEvent<SC_SHEETEVENT_COUNT; ++nEvent)
+        for (sal_Int32 nEvent=0; nEvent<COUNT; ++nEvent)
             delete mpScriptNames[nEvent];
         delete[] mpScriptNames;
         mpScriptNames = NULL;
@@ -103,8 +94,8 @@ const ScSheetEvents& ScSheetEvents::operator=(const ScSheetEvents& rOther)
     Clear();
     if (rOther.mpScriptNames)
     {
-        mpScriptNames = new OUString*[SC_SHEETEVENT_COUNT];
-        for (sal_Int32 nEvent=0; nEvent<SC_SHEETEVENT_COUNT; ++nEvent)
+        mpScriptNames = new OUString*[COUNT];
+        for (sal_Int32 nEvent=0; nEvent<COUNT; ++nEvent)
             if (rOther.mpScriptNames[nEvent])
                 mpScriptNames[nEvent] = new OUString(*rOther.mpScriptNames[nEvent]);
             else
@@ -113,31 +104,20 @@ const ScSheetEvents& ScSheetEvents::operator=(const ScSheetEvents& rOther)
     return *this;
 }
 
-const OUString* ScSheetEvents::GetScript(sal_Int32 nEvent) const
+const OUString* ScSheetEvents::GetScript(ScSheetEventId nEvent) const
 {
-    if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
-    {
-        OSL_FAIL("invalid event number");
-        return NULL;
-    }
-
     if (mpScriptNames)
-        return mpScriptNames[nEvent];
+        return mpScriptNames[static_cast<int>(nEvent)];
     return NULL;
 }
 
-void ScSheetEvents::SetScript(sal_Int32 nEvent, const OUString* pNew)
+void ScSheetEvents::SetScript(ScSheetEventId eEvent, const OUString* pNew)
 {
-    if (nEvent<0 || nEvent>=SC_SHEETEVENT_COUNT)
-    {
-        OSL_FAIL("invalid event number");
-        return;
-    }
-
+    int nEvent = static_cast<int>(eEvent);
     if (!mpScriptNames)
     {
-        mpScriptNames = new OUString*[SC_SHEETEVENT_COUNT];
-        for (sal_Int32 nEventIdx=0; nEventIdx<SC_SHEETEVENT_COUNT; ++nEventIdx)
+        mpScriptNames = new OUString*[COUNT];
+        for (sal_Int32 nEventIdx=0; nEventIdx<COUNT; ++nEventIdx)
             mpScriptNames[nEventIdx] = NULL;
     }
     delete mpScriptNames[nEvent];

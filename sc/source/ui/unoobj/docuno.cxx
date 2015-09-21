@@ -1002,12 +1002,12 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if ( rDoc.GetVbaEventProcessor().is() )
                 {
                     // If the VBA event processor is set, HasAnyCalcNotification is much faster than HasAnySheetEventScript
-                    if ( rDoc.HasAnyCalcNotification() && rDoc.HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true ) )
+                    if ( rDoc.HasAnyCalcNotification() && rDoc.HasAnySheetEventScript( ScSheetEventId::CALCULATE, true ) )
                         HandleCalculateEvents();
                 }
                 else
                 {
-                    if ( rDoc.HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE ) )
+                    if ( rDoc.HasAnySheetEventScript( ScSheetEventId::CALCULATE ) )
                         HandleCalculateEvents();
                 }
             }
@@ -2565,7 +2565,7 @@ bool ScModelObj::HasChangesListeners() const
         return true;
 
     // "change" event set in any sheet?
-    return pDocShell && pDocShell->GetDocument().HasAnySheetEventScript(SC_SHEETEVENT_CHANGE);
+    return pDocShell && pDocShell->GetDocument().HasAnySheetEventScript(ScSheetEventId::CHANGE);
 }
 
 void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& rRanges,
@@ -2627,7 +2627,7 @@ void ScModelObj::NotifyChanges( const OUString& rOperation, const ScRangeList& r
             const ScSheetEvents* pEvents = rDoc.GetSheetEvents(nTab);
             if (pEvents)
             {
-                const OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_CHANGE);
+                const OUString* pScript = pEvents->GetScript(ScSheetEventId::CHANGE);
                 if (pScript)
                 {
                     ScRangeList aTabRanges;     // collect ranges on this sheet
@@ -2684,7 +2684,7 @@ void ScModelObj::HandleCalculateEvents()
                 {
                     if (const ScSheetEvents* pEvents = rDoc.GetSheetEvents( nTab ))
                     {
-                        if (const OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_CALCULATE))
+                        if (const OUString* pScript = pEvents->GetScript(ScSheetEventId::CALCULATE))
                         {
                             uno::Any aRet;
                             uno::Sequence<uno::Any> aParams;
@@ -2699,7 +2699,7 @@ void ScModelObj::HandleCalculateEvents()
                         uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( rDoc.GetVbaEventProcessor(), uno::UNO_SET_THROW );
                         uno::Sequence< uno::Any > aArgs( 1 );
                         aArgs[ 0 ] <<= nTab;
-                        xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( SC_SHEETEVENT_CALCULATE ), aArgs );
+                        xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( ScSheetEventId::CALCULATE ), aArgs );
                     }
                     catch( uno::Exception& )
                     {
