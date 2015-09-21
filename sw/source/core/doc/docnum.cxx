@@ -158,7 +158,6 @@ void SwDoc::PropagateOutlineRule()
             // Check only the list style, which is set at the paragraph style
             const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule( false );
 
-            // Check on document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE no longer needed.
             if ( rCollRuleItem.GetValue().isEmpty() )
             {
                 SwNumRule * pMyOutlineRule = GetOutlineNumRule();
