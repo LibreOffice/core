@@ -422,7 +422,7 @@ storeError SAL_CALL store_openStream (
 
     xLockBytes->acquire();
 
-    *phStream = static_cast<storeStreamHandle>(&(*xLockBytes));
+    *phStream = xLockBytes.get();
     return store_E_None;
 }
 
