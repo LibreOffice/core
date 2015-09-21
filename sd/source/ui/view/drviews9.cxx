@@ -202,7 +202,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
     CheckLineTo (rReq);
 
     SfxBindings&    rBindings = GetViewFrame()->GetBindings();
-    boost::scoped_ptr<SfxItemSet> pAttr(new SfxItemSet ( GetDoc()->GetPool() ));
+    std::unique_ptr<SfxItemSet> pAttr(new SfxItemSet ( GetDoc()->GetPool() ));
 
     GetView()->GetAttributes( *pAttr );
     const SfxItemSet* pArgs = rReq.GetArgs();

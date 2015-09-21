@@ -140,7 +140,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, NULL, SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool ) : 0);
+            std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, NULL, SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool ) : 0);
             if( pDlg && (pDlg->Execute() == RET_OK) )
             {
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();

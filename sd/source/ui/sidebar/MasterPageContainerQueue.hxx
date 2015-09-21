@@ -24,7 +24,6 @@
 #include "MasterPageDescriptor.hxx"
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace sidebar {
 
@@ -81,7 +80,7 @@ private:
     std::weak_ptr<ContainerAdapter> mpWeakContainer;
     class PreviewCreationRequest;
     class RequestQueue;
-    ::boost::scoped_ptr<RequestQueue> mpRequestQueue;
+    std::unique_ptr<RequestQueue> mpRequestQueue;
     Timer maDelayedPreviewCreationTimer;
     sal_uInt32 mnRequestsServedCount;
 

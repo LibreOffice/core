@@ -222,7 +222,7 @@ void MasterPagesSelector::Command (const CommandEvent& rEvent)
                 }
 
                 // Setup the menu.
-                ::boost::scoped_ptr<PopupMenu> pMenu (new PopupMenu(GetContextMenuResId()));
+                std::unique_ptr<PopupMenu> pMenu (new PopupMenu(GetContextMenuResId()));
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
                 if (pMenuWindow != NULL)
                     pMenuWindow->SetPopupModeFlags(

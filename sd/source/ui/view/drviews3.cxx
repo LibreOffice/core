@@ -293,7 +293,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_INSERT_DATE_TIME:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            boost::scoped_ptr<AbstractHeaderFooterDialog> pDlg(pFact ? pFact->CreateHeaderFooterDialog( this, GetActiveWindow(), GetDoc(), mpActualPage ) : 0);
+            std::unique_ptr<AbstractHeaderFooterDialog> pDlg(pFact ? pFact->CreateHeaderFooterDialog( this, GetActiveWindow(), GetDoc(), mpActualPage ) : 0);
             if( pDlg )
             {
                 pDlg->Execute();
@@ -317,7 +317,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 pPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage ) : 0);
+            std::unique_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage ) : 0);
             if( pDlg )
             {
                 pDlg->Execute();

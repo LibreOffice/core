@@ -34,7 +34,6 @@
 
 #include <vcl/vclptr.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 class ViewShell;
@@ -100,7 +99,7 @@ private:
         mxConfigurationController;
     class ViewDescriptor;
     class ViewShellContainer;
-    ::boost::scoped_ptr<ViewShellContainer> mpViewShellContainer;
+    std::unique_ptr<ViewShellContainer> mpViewShellContainer;
     ViewShellBase* mpBase;
     FrameView* mpFrameView;
 

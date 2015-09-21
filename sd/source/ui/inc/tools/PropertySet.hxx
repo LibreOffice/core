@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <map>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace tools {
 
@@ -118,7 +117,7 @@ protected:
 private:
     typedef ::std::multimap<OUString,
         css::uno::Reference<css::beans::XPropertyChangeListener> > ChangeListenerContainer;
-    ::boost::scoped_ptr<ChangeListenerContainer> mpChangeListeners;
+    std::unique_ptr<ChangeListenerContainer> mpChangeListeners;
 
     /** Call all listeners that are registered for the given property name.
         Call this method with an empty property name to call listeners that

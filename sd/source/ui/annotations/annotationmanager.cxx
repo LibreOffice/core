@@ -426,7 +426,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     TextApiObject* pTextApi = getTextApiObject( xAnnotation );
     if( pTextApi )
     {
-        boost::scoped_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT) );
+        std::unique_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT) );
 
         mpDoc->SetCalcFieldValueHdl( pOutliner.get() );
         pOutliner->SetUpdateMode( true );
@@ -462,7 +462,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
             pOutliner->QuickSetAttribs( aAnswerSet, aSel );
         }
 
-        boost::scoped_ptr< OutlinerParaObject > pOPO( pOutliner->CreateParaObject() );
+        std::unique_ptr< OutlinerParaObject > pOPO( pOutliner->CreateParaObject() );
         pTextApi->SetText( *pOPO.get() );
 
         SvtUserOptions aUserOptions;
@@ -912,7 +912,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     if( bReadOnly && !pAnnotationWindow )
         return;
 
-    boost::scoped_ptr< PopupMenu > pMenu( new PopupMenu( SdResId( pAnnotationWindow ? RID_ANNOTATION_CONTEXTMENU : RID_ANNOTATION_TAG_CONTEXTMENU ) ) );
+    std::unique_ptr< PopupMenu > pMenu( new PopupMenu( SdResId( pAnnotationWindow ? RID_ANNOTATION_CONTEXTMENU : RID_ANNOTATION_TAG_CONTEXTMENU ) ) );
 
     SvtUserOptions aUserOptions;
     OUString sCurrentAuthor( aUserOptions.GetFullName() );

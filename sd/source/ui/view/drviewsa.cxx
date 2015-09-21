@@ -553,7 +553,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         }
         else
         {
-            boost::scoped_ptr<SvxZoomItem> pZoomItem;
+            std::unique_ptr<SvxZoomItem> pZoomItem;
             sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
 
             if( mbZoomOnPage )

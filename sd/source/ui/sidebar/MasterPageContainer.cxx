@@ -131,7 +131,7 @@ private:
 
     enum InitializationState { NOT_INITIALIZED, INITIALIZING, INITIALIZED } meInitializationState;
 
-    ::boost::scoped_ptr<MasterPageContainerQueue> mpRequestQueue;
+    std::unique_ptr<MasterPageContainerQueue> mpRequestQueue;
     ::com::sun::star::uno::Reference<com::sun::star::frame::XModel> mxModel;
     SdDrawDocument* mpDocument;
     PreviewRenderer maPreviewRenderer;

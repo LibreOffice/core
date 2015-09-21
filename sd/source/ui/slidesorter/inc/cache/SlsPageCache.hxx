@@ -24,7 +24,6 @@
 #include <sal/types.h>
 #include <vcl/bitmap.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 class Size;
 
@@ -153,7 +152,7 @@ public:
     void Resume();
 
 private:
-    ::boost::scoped_ptr<GenericPageCache> mpImplementation;
+    std::unique_ptr<GenericPageCache> mpImplementation;
 };
 
 } } } // end of namespace ::sd::slidesorter::cache

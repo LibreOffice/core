@@ -578,7 +578,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 SfxItemSet aNewAttr( GetPool(), EE_ITEMS_START, EE_ITEMS_END );
                 aNewAttr.Put( aEditAttr, false );
 
-                boost::scoped_ptr<SvxNumRule> pNumRule;
+                std::unique_ptr<SvxNumRule> pNumRule;
                 const SfxPoolItem* pTmpItem=NULL;
                 sal_uInt16 nNumItemId = SID_ATTR_NUMBERING_RULE;
                 sal_uInt16 nActNumLvl = mpDrawView->GetSelectionLevel();
@@ -676,7 +676,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    boost::scoped_ptr<SfxItemSet> pSet;
+    std::unique_ptr<SfxItemSet> pSet;
 
     if( bAttr )
     {

@@ -24,7 +24,6 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <svx/svdundo.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 #include "sdundo.hxx"
 
@@ -47,7 +46,7 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 
 private:
-    boost::scoped_ptr<UndoAnimationImpl>  mpImpl;
+    std::unique_ptr<UndoAnimationImpl>  mpImpl;
 };
 
 struct UndoAnimationPathImpl;
@@ -63,7 +62,7 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 
 private:
-    boost::scoped_ptr<UndoAnimationPathImpl> mpImpl;
+    std::unique_ptr<UndoAnimationPathImpl> mpImpl;
 };
 
 struct UndoTransitionImpl;
@@ -80,7 +79,7 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 
 private:
-    boost::scoped_ptr<UndoTransitionImpl> mpImpl;
+    std::unique_ptr<UndoTransitionImpl> mpImpl;
 };
 
 }
