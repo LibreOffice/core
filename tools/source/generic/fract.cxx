@@ -432,7 +432,7 @@ static int impl_NumberOfBits( unsigned long nNum )
     // background paper: Using de Bruijn Sequences to Index a 1 in a
     // Computer Word (1998) Charles E. Leiserson,
     // Harald Prokop, Keith H. Randall
-    // (e.g. http://citeseer.ist.psu.edu/leiserson98using.html)
+    // (e.g. https://web.archive.org/web/20080329044633/http://citeseer.ist.psu.edu/leiserson98using.html)
     const sal_uInt32 nDeBruijn = 0x7DCD629;
 
     if ( nNum == 0 )

@@ -1,7 +1,7 @@
 /* This comment added at LibrOffice:
 
    This file is covered by the "TWAIN License", at the time of this
-   writing in http://www.twain.org/devfiles/readme.txt, which says:
+   writing in https://web.archive.org/web/20120130193105/http://www.twain.org/devfiles/readme.txt, which says:
 
    The TWAIN Working Group grants customer ("Customer") the worldwide,
    royalty-free, non-exclusive license to reproduce and distribute the
