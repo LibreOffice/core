@@ -162,9 +162,9 @@ Bitmap PageObjectPainter::CreateMarkedPreview (
 {
     ScopedVclPtr<VirtualDevice> pDevice;
     if (pReferenceDevice != NULL)
-        pDevice.reset(VclPtr<VirtualDevice>::Create(*pReferenceDevice));
+        pDevice.disposeAndReset(VclPtr<VirtualDevice>::Create(*pReferenceDevice));
     else
-        pDevice.reset(VclPtr<VirtualDevice>::Create());
+        pDevice.disposeAndReset(VclPtr<VirtualDevice>::Create());
     pDevice->SetOutputSizePixel(rSize);
 
     pDevice->DrawBitmap(Point(0,0), rSize, rPreview);

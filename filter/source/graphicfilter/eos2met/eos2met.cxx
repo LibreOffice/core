@@ -261,8 +261,7 @@ public:
         pCompDev = reinterpret_cast< OutputDevice* >( Application::GetAppWindow() );
         if( !pCompDev )
         {
-            apDummyVDev.disposeAndClear();
-            apDummyVDev.reset( VclPtr<VirtualDevice>::Create() );
+            apDummyVDev.disposeAndReset(VclPtr<VirtualDevice>::Create());
             pCompDev = apDummyVDev.get();
         }
     }

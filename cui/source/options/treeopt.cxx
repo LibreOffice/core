@@ -1045,17 +1045,17 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
         if(pPageInfo->m_nPageId == RID_SVXPAGE_COLOR)
         {
-            pPageInfo->m_pPage.reset( ::CreateGeneralTabPage(
+            pPageInfo->m_pPage.disposeAndReset( ::CreateGeneralTabPage(
                 pPageInfo->m_nPageId, pTabBox, *pColorPageItemSet ) );
             mpColorPage = static_cast<SvxColorTabPage*>(pPageInfo->m_pPage.get());
             mpColorPage->SetupForViewFrame( SfxViewFrame::Current() );
         }
         else
         {
-            pPageInfo->m_pPage.reset( ::CreateGeneralTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet ) );
+            pPageInfo->m_pPage.disposeAndReset( ::CreateGeneralTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet ) );
 
             if(!pPageInfo->m_pPage && pGroupInfo->m_pModule)
-                pPageInfo->m_pPage.reset( pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet) );
+                pPageInfo->m_pPage.disposeAndReset( pGroupInfo->m_pModule->CreateTabPage(pPageInfo->m_nPageId, pTabBox, *pGroupInfo->m_pInItemSet) );
 
         }
 

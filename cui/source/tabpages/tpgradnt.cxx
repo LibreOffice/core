@@ -476,7 +476,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 
         if( !pWarnBox )
         {
-            pWarnBox.reset(VclPtr<MessageDialog>::Create( GetParentDialog()
+            pWarnBox.disposeAndReset(VclPtr<MessageDialog>::Create( GetParentDialog()
                                         ,"DuplicateNameDialog"
                                         ,"cui/ui/queryduplicatedialog.ui"));
         }
@@ -485,7 +485,7 @@ IMPL_LINK_NOARG_TYPED(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
             break;
     }
     pDlg.reset();
-    pWarnBox.reset();
+    pWarnBox.disposeAndClear();
 
     if( !nError )
     {

@@ -388,7 +388,7 @@ void Layer::Initialize (sd::Window *pTargetWindow)
 #else
     if ( ! mpLayerDevice)
     {
-        mpLayerDevice.reset(VclPtr<VirtualDevice>::Create(*pTargetWindow));
+        mpLayerDevice.disposeAndReset(VclPtr<VirtualDevice>::Create(*pTargetWindow));
         mpLayerDevice->SetOutputSizePixel(pTargetWindow->GetSizePixel());
     }
 #endif
