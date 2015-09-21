@@ -29,7 +29,6 @@ $(eval $(call gb_GoogleTest_add_exception_objects,tools_fractiontest, \
 $(eval $(call gb_GoogleTest_add_linked_libs,tools_fractiontest, \
     tl \
     sal \
-    sfx \
     stl \
     $(gb_STDLIBS) \
 ))
