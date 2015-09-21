@@ -1153,7 +1153,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJus
             pDlg->ShowExtras( SfxShowExtras::CONFIRM );
         if ( pDlg->Execute() == RET_OK )
             aPassword = pDlg->GetPassword();
-        pDlg.reset();
+        pDlg.disposeAndClear();
 
         if (!aPassword.isEmpty())
         {

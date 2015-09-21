@@ -313,10 +313,18 @@ public:
     /**
        Assignment that releases the last reference.
      */
-    inline ScopedVclPtr<reference_type>& operator= (reference_type * pBody)
+    inline void disposeAndReset(reference_type *pBody)
     {
         VclPtr<reference_type>::disposeAndClear();
         VclPtr<reference_type>::set(pBody);
+    }
+
+    /**
+       Assignment that releases the last reference.
+     */
+    inline ScopedVclPtr<reference_type>& operator= (reference_type * pBody)
+    {
+        disposeAndReset(pBody);
         return *this;
     }
 
@@ -347,6 +355,9 @@ private:
     ScopedVclPtr (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
     // And certainly we don't want a default assignment operator.
     ScopedVclPtr<reference_type>& operator= (const ScopedVclPtr<reference_type> &) SAL_DELETED_FUNCTION;
+    // And disallow reset as that doesn't call disposeAndClear on the original reference
+    void reset() SAL_DELETED_FUNCTION;
+    void reset(reference_type *pBody) SAL_DELETED_FUNCTION;
 
 protected:
     inline ScopedVclPtr (reference_type * pBody, __sal_NoAcquire)

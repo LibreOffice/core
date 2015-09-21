@@ -682,7 +682,7 @@ IMPL_LINK_NOARG_TYPED(SaveDialog, OKButtonHdl, Button*, void)
     // start crash-save with progress
     ScopedVclPtrInstance< SaveProgressDialog > pProgress(this, m_pCore);
     short nResult = pProgress->Execute();
-    pProgress.reset();
+    pProgress.disposeAndClear();
 
     // if "CANCEL" => return "CANCEL"
     // if "OK"     => "AUTOLUNCH" always !
@@ -993,7 +993,7 @@ short RecoveryDialog::execute()
                      nRet = pBrokenRecoveryDialog->Execute();
                      sSaveDir = pBrokenRecoveryDialog->getSaveDirURL();
                  }
-                 pBrokenRecoveryDialog.reset();
+                 pBrokenRecoveryDialog.disposeAndClear();
 
                  switch(nRet)
                  {
@@ -1065,7 +1065,7 @@ short RecoveryDialog::execute()
                      nRet     = pBrokenRecoveryDialog->Execute();
                      sSaveDir = pBrokenRecoveryDialog->getSaveDirURL();
                  }
-                 pBrokenRecoveryDialog.reset();
+                 pBrokenRecoveryDialog.disposeAndClear();
 
                  // Possible states:
                  // a) nRet == DLG_RET_UNKNOWN

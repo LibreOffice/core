@@ -496,7 +496,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         //  #i45033# For OLE inplace editing with different zoom factors,
         //  use a virtual device with 1/100th mm as text formatting reference
 
-        xFmtVirtDev.reset( VclPtr<VirtualDevice>::Create() );
+        xFmtVirtDev.disposeAndReset( VclPtr<VirtualDevice>::Create() );
         xFmtVirtDev->SetMapMode( MAP_100TH_MM );
         aOutputData.SetFmtDevice( xFmtVirtDev.get() );
 

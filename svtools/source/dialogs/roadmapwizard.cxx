@@ -130,7 +130,7 @@ namespace svt
         SetLeftAlignedButtonCount( 1 );
         SetEmptyViewMargin();
 
-        m_pImpl->pRoadmap.reset( VclPtr<ORoadmap>::Create( this, WB_TABSTOP ) );
+        m_pImpl->pRoadmap.disposeAndReset( VclPtr<ORoadmap>::Create( this, WB_TABSTOP ) );
         m_pImpl->pRoadmap->SetText( SVT_RESSTR( STR_WIZDLG_ROADMAP_TITLE ) );
         m_pImpl->pRoadmap->SetPosPixel( Point( 0, 0 ) );
         m_pImpl->pRoadmap->SetItemSelectHdl( LINK( this, RoadmapWizard, OnRoadmapItemSelected ) );

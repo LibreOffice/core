@@ -528,7 +528,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickAddHdl_Impl, Button*, void)
 
         if( !pWarnBox )
         {
-            pWarnBox.reset(VclPtr<MessageDialog>::Create( GetParentDialog()
+            pWarnBox.disposeAndReset(VclPtr<MessageDialog>::Create( GetParentDialog()
                                         ,"DuplicateNameDialog"
                                         ,"cui/ui/queryduplicatedialog.ui"));
         }
@@ -538,7 +538,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickAddHdl_Impl, Button*, void)
     }
 
     pDlg.reset();
-    pWarnBox.reset();
+    pWarnBox.disposeAndClear();
 
     if( !nError )
     {
@@ -636,7 +636,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickImportHdl_Impl, Button*, void)
 
                 if( !pWarnBox )
                 {
-                    pWarnBox.reset(VclPtr<MessageDialog>::Create( GetParentDialog()
+                    pWarnBox.disposeAndReset(VclPtr<MessageDialog>::Create( GetParentDialog()
                                                  ,"DuplicateNameDialog"
                                                  ,"cui/ui/queryduplicatedialog.ui"));
                 }
@@ -646,7 +646,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapTabPage, ClickImportHdl_Impl, Button*, void)
             }
 
             pDlg.reset();
-            pWarnBox.reset();
+            pWarnBox.disposeAndClear();
 
             if( !nError )
             {

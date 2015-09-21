@@ -144,7 +144,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         aPrinterName = retrievePrinterName( m_xFrame );
         if ( !aPrinterName.isEmpty() )
         {
-            pInfoPrinter.reset(VclPtr<Printer>::Create( aPrinterName ));
+            pInfoPrinter.disposeAndReset(VclPtr<Printer>::Create( aPrinterName ));
             if ( pInfoPrinter && pInfoPrinter->GetDevFontCount() > 0 )
                 pFontList.reset(new FontList( pInfoPrinter.get() ));
         }
