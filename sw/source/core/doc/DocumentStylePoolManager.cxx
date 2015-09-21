@@ -245,9 +245,12 @@ namespace
                             SwTwips nUpper, SwTwips nLower )
     {
 
-        SvxLRSpaceItem aLR( RES_LR_SPACE ); SvxULSpaceItem aUL( RES_UL_SPACE );
-        aLR.SetTextFirstLineOfst( sal_uInt16(nEZ) ); aLR.SetTextLeft( sal_uInt16(nLeft) );
-        aUL.SetUpper( sal_uInt16(nUpper) ); aUL.SetLower( sal_uInt16(nLower) );
+        SvxLRSpaceItem aLR( RES_LR_SPACE );
+        SvxULSpaceItem aUL( RES_UL_SPACE );
+        aLR.SetTextFirstLineOfst( sal_uInt16(nEZ) );
+        aLR.SetTextLeft( sal_uInt16(nLeft) );
+        aUL.SetUpper( sal_uInt16(nUpper) );
+        aUL.SetLower( sal_uInt16(nLower) );
         rSet.Put( aLR );
         rSet.Put( aUL );
 
@@ -370,8 +373,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
         case RES_POOLCOLL_TEXT:                 // Text body
             {
-                SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT,
-                                        RES_PARATR_LINESPACING );
+                SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
                 SvxULSpaceItem aUL( 0, PT_7, RES_UL_SPACE );
                 aLSpc.SetPropLineSpace( (const sal_uInt8) 120 );
                 if( m_rDoc.GetDocumentSettingManager().get(DocumentSettingId::HTML_MODE) ) aUL.SetLower( HTML_PARSPACE );
@@ -391,7 +393,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
                 aLR.SetTextFirstLineOfst( -(short)GetMetricVal( CM_05 ));
                 aLR.SetTextLeft( GetMetricVal( CM_1 ));
-                SvxTabStopItem aTStops(RES_PARATR_TABSTOP);    aTStops.Insert( SvxTabStop( 0 ));
+                SvxTabStopItem aTStops(RES_PARATR_TABSTOP);
+                aTStops.Insert( SvxTabStop( 0 ));
 
                 aSet.Put( aLR );
                 aSet.Put( aTStops );
@@ -411,7 +414,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 aLR.SetTextFirstLineOfst( - short( GetMetricVal( CM_1 ) * 4 +
                                                   GetMetricVal( CM_05)) );
                 aLR.SetTextLeft( GetMetricVal( CM_1 ) * 5 );
-                SvxTabStopItem aTStops( RES_PARATR_TABSTOP );    aTStops.Insert( SvxTabStop( 0 ));
+                SvxTabStopItem aTStops( RES_PARATR_TABSTOP );
+                aTStops.Insert( SvxTabStop( 0 ));
 
                 aSet.Put( aLR );
                 aSet.Put( aTStops );
@@ -486,7 +490,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_SIGNATURE:            // Signatures
         case RES_POOLCOLL_TABLE:                // Tabele content
             {
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -572,7 +577,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_FOOTERL:
         case RES_POOLCOLL_FOOTERR:
             {
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
 
                 long nRightMargin = lcl_GetRightMargin( m_rDoc );
@@ -589,7 +595,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 SetAllScriptItem( aSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
                 aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ) );
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -602,18 +609,22 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 aLR.SetTextLeft( GetMetricVal( CM_05 ) + GetMetricVal( CM_01 ) );
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
                 aSet.Put( aLR );
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
 
         case RES_POOLCOLL_LABEL:                // basic caption
             {
-                SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetUpper( PT_6 ); aUL.SetLower( PT_6 );
+                SvxULSpaceItem aUL( RES_UL_SPACE );
+                aUL.SetUpper( PT_6 );
+                aUL.SetLower( PT_6 );
                 aSet.Put( aUL );
                 SetAllScriptItem( aSet, SvxPostureItem( ITALIC_NORMAL, RES_CHRATR_POSTURE ) );
                 SetAllScriptItem( aSet, SvxFontHeightItem( PT_10, 100, RES_CHRATR_FONTSIZE ) );
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -627,9 +638,11 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
         case RES_POOLCOLL_JAKETADRESS:          // envelope address
             {
-                SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
+                SvxULSpaceItem aUL( RES_UL_SPACE );
+                aUL.SetLower( PT_3 );
                 aSet.Put( aUL );
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -643,7 +656,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                     SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
                     aSet.Put( aUL );
                 }
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -652,7 +666,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TOX_USERH:            // Header
             lcl_SetRegister( &m_rDoc, aSet, 0, true, false );
             {
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -691,7 +706,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TOX_IDXH:         // Header
             lcl_SetRegister( &m_rDoc, aSet, 0, true, false );
             {
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -712,7 +728,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TOX_CNTNTH:       // Header
             lcl_SetRegister( &m_rDoc, aSet, 0, true, false );
             {
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -753,7 +770,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TOX_AUTHORITIESH:
             lcl_SetRegister( &m_rDoc, aSet, 0, true, false );
             {
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -975,8 +993,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
                 aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST ));
 
-                pNewColl->SetNextTextFormatColl( *GetTextCollFromPool(
-                                                    RES_POOLCOLL_TEXT ));
+                pNewColl->SetNextTextFormatColl( *GetTextCollFromPool( RES_POOLCOLL_TEXT ));
             }
             break;
 
@@ -1022,13 +1039,13 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
 
                 SvxULSpaceItem aUL( RES_UL_SPACE );
                 {
-                    pNewColl->SetNextTextFormatColl( *GetTextCollFromPool(
-                                                    RES_POOLCOLL_TEXT ));
+                    pNewColl->SetNextTextFormatColl( *GetTextCollFromPool( RES_POOLCOLL_TEXT ));
                     aUL = pNewColl->GetULSpace();
                 }
                 aUL.SetLower( HTML_PARSPACE );
                 aSet.Put( aUL);
-                SwFormatLineNumber aLN; aLN.SetCountLines( false );
+                SwFormatLineNumber aLN;
+                aLN.SetCountLines( false );
                 aSet.Put( aLN );
             }
             break;
@@ -1046,8 +1063,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
                 {
-                    pNewColl->SetNextTextFormatColl( *GetTextCollFromPool(
-                                                        RES_POOLCOLL_HTML_DD ));
+                    pNewColl->SetNextTextFormatColl( *GetTextCollFromPool( RES_POOLCOLL_HTML_DD ));
                     aLR = pNewColl->GetLRSpace();
                 }
                 // We indent by 0 cm. The IDs are always 2 away from each other!
