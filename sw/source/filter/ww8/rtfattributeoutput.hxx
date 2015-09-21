@@ -53,7 +53,7 @@ public:
     virtual void EmptyParagraph() SAL_OVERRIDE;
 
     /// Called in order to output section breaks.
-    virtual void SectionBreaks(const SwTextNode& rNode) SAL_OVERRIDE;
+    virtual void SectionBreaks(const SwNode& rNode) SAL_OVERRIDE;
 
     /// Called before we start outputting the attributes.
     virtual void StartParagraphProperties() SAL_OVERRIDE;

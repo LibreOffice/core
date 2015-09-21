@@ -794,7 +794,7 @@ void DocxAttributeOutput::EmptyParagraph()
     m_pSerializer->singleElementNS( XML_w, XML_p, FSEND );
 }
 
-void DocxAttributeOutput::SectionBreaks(const SwTextNode& rNode)
+void DocxAttributeOutput::SectionBreaks(const SwNode& rNode)
 {
     // output page/section breaks
     // Writer can have them at the beginning of a paragraph, or at the end, but
@@ -802,16 +802,31 @@ void DocxAttributeOutput::SectionBreaks(const SwTextNode& rNode)
     // paragraph in a section.  To get it right, we have to switch to the next
     // paragraph, and detect the section breaks there.
     SwNodeIndex aNextIndex( rNode, 1 );
-    if ( aNextIndex.GetNode().IsTextNode() )
+
+    if (rNode.IsTextNode())
     {
-        const SwTextNode* pTextNode = static_cast< SwTextNode* >( &aNextIndex.GetNode() );
-        m_rExport.OutputSectionBreaks( pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen, pTextNode->GetText().isEmpty() );
+        if (aNextIndex.GetNode().IsTextNode())
+        {
+            const SwTextNode* pTextNode = static_cast<SwTextNode*>(&aNextIndex.GetNode());
+            m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen, pTextNode->GetText().isEmpty());
+        }
+        else if (aNextIndex.GetNode().IsTableNode())
+        {
+            const SwTableNode* pTableNode = static_cast<SwTableNode*>(&aNextIndex.GetNode());
+            const SwFrameFormat *pFormat = pTableNode->GetTable().GetFrameFormat();
+            m_rExport.OutputSectionBreaks(&(pFormat->GetAttrSet()), *pTableNode);
+        }
     }
-    else if ( aNextIndex.GetNode().IsTableNode() )
+    else if (rNode.IsEndNode())
     {
-        const SwTableNode* pTableNode = static_cast< SwTableNode* >( &aNextIndex.GetNode() );
-        const SwFrameFormat *pFormat = pTableNode->GetTable().GetFrameFormat();
-        m_rExport.OutputSectionBreaks( &(pFormat->GetAttrSet()), *pTableNode );
+        // End of something: make sure that it's the end of a table.
+        assert(rNode.StartOfSectionNode()->IsTableNode());
+        if (aNextIndex.GetNode().IsTextNode())
+        {
+            // Handle section break between a table and a text node following it.
+            const SwTextNode* pTextNode = aNextIndex.GetNode().GetTextNode();
+            m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode, m_tableReference->m_bTableCellOpen, pTextNode->GetText().isEmpty());
+        }
     }
 }
 
