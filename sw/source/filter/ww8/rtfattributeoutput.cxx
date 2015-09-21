@@ -324,33 +324,36 @@ void RtfAttributeOutput::EmptyParagraph()
     m_rExport.Strm().WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_PAR).WriteChar(' ');
 }
 
-void RtfAttributeOutput::SectionBreaks(const SwTxtNode& rNode)
+void RtfAttributeOutput::SectionBreaks(const SwNode& rNode)
 {
-    OSL_ENSURE(m_aStyles.getLength() == 0, "m_aStyles is not empty");
-
-    // output page/section breaks
-    SwNodeIndex aNextIndex(rNode, 1);
-    m_rExport.Strm().WriteCharPtr(m_aSectionBreaks.makeStringAndClear().getStr());
-    m_bBufferSectionBreaks = true;
-
-    // output section headers / footers
-    if (!m_bBufferSectionHeaders)
-        m_rExport.Strm().WriteCharPtr(m_aSectionHeaders.makeStringAndClear().getStr());
-
-    if (aNextIndex.GetNode().IsTxtNode())
+    if (rNode.IsTxtNode())
     {
-        const SwTxtNode* pTxtNode = static_cast< SwTxtNode* >(&aNextIndex.GetNode());
-        m_rExport.OutputSectionBreaks(pTxtNode->GetpSwAttrSet(), *pTxtNode);
-        // Save the current page description for now, so later we will be able to access the previous one.
-        m_pPrevPageDesc = pTxtNode->FindPageDesc(false);
+        OSL_ENSURE(m_aStyles.getLength() == 0, "m_aStyles is not empty");
+
+        // output page/section breaks
+        SwNodeIndex aNextIndex(rNode, 1);
+        m_rExport.Strm().WriteCharPtr(m_aSectionBreaks.makeStringAndClear().getStr());
+        m_bBufferSectionBreaks = true;
+
+        // output section headers / footers
+        if (!m_bBufferSectionHeaders)
+            m_rExport.Strm().WriteCharPtr(m_aSectionHeaders.makeStringAndClear().getStr());
+
+        if (aNextIndex.GetNode().IsTxtNode())
+        {
+            const SwTxtNode* pTxtNode = static_cast< SwTxtNode* >(&aNextIndex.GetNode());
+            m_rExport.OutputSectionBreaks(pTxtNode->GetpSwAttrSet(), *pTxtNode);
+            // Save the current page description for now, so later we will be able to access the previous one.
+            m_pPrevPageDesc = pTxtNode->FindPageDesc(false);
+        }
+        else if (aNextIndex.GetNode().IsTableNode())
+        {
+            const SwTableNode* pTableNode = static_cast< SwTableNode* >(&aNextIndex.GetNode());
+            const SwFrmFmt* pFmt = pTableNode->GetTable().GetFrmFmt();
+            m_rExport.OutputSectionBreaks(&(pFmt->GetAttrSet()), *pTableNode);
+        }
+        m_bBufferSectionBreaks = false;
     }
-    else if (aNextIndex.GetNode().IsTableNode())
-    {
-        const SwTableNode* pTableNode = static_cast< SwTableNode* >(&aNextIndex.GetNode());
-        const SwFrmFmt* pFmt = pTableNode->GetTable().GetFrmFmt();
-        m_rExport.OutputSectionBreaks(&(pFmt->GetAttrSet()), *pTableNode);
-    }
-    m_bBufferSectionBreaks = false;
 }
 
 void RtfAttributeOutput::StartParagraphProperties()
