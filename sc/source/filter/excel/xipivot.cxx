@@ -1029,14 +1029,14 @@ void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
     if (aFieldName.isEmpty())
         return;
 
-    XclPTDataFieldInfoList::const_iterator aIt = maDataInfoList.begin(), aEnd = maDataInfoList.end();
-
     ScDPSaveDimension* pSaveDim = rSaveData.GetNewDimensionByName(aFieldName);
     if (!pSaveDim)
     {
         SAL_WARN("sc.filter","XclImpPTField::ConvertDataField - field name not found: " << aFieldName);
         return;
     }
+
+    XclPTDataFieldInfoList::const_iterator aIt = maDataInfoList.begin(), aEnd = maDataInfoList.end();
 
     ConvertDataField( *pSaveDim, *aIt );
 
