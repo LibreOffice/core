@@ -51,13 +51,13 @@ constants FileFormat
     /// <a href="http://www.w3.org/DesignIssues/Notation3">N3 (Notation-3)</a>
     const short N3          = 1;    // "text/rdf+n3";
 
-    /// <a href="http://www.w3.org/TR/rdf-testcases/#ntriples">N-Triples</a>
+    /// <a href="http://www.w3.org/TR/n-triples/">N-Triples</a>
     const short NTRIPLES    = 2;    // "text/plain";
 
-    /// <a href="http://www.wiwiss.fu-berlin.de/suhl/bizer/TriG/Spec/">TriG</a>
+    /// <a href="http://www.w3.org/TR/trig/">TriG</a>
     const short TRIG        = 3;    // "application/x-trig";
 
-    /// <a href="http://sw.nokia.com/trix/">TriX</a>
+    /// <a href="https://web.archive.org/web/20110724134923/http://sw.nokia.com/trix/">TriX</a>
     const short TRIX        = 4;    // "if only the damn server were up I'd know";
 
     /// <a href="http://www.dajobe.org/2004/01/turtle/">Turtle</a>
