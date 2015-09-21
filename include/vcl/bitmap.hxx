@@ -716,8 +716,7 @@ public:
      */
     bool                    Filter(
                                 BmpFilter eFilter,
-                                const BmpFilterParam* pFilterParam = NULL,
-                                const Link<>* pProgress = NULL );
+                                const BmpFilterParam* pFilterParam = NULL );
 
 public:
 
@@ -759,17 +758,15 @@ public:
                                 long nColors, long nPixels, long& rIndex );
 
     SAL_DLLPRIVATE bool     ImplConvolute3(
-                                const long* pMatrix, long nDivisor,
-                                const BmpFilterParam* pFilterParam,
-                                const Link<>* pProgress );
+                                const long* pMatrix, long nDivisor );
 
-    SAL_DLLPRIVATE bool     ImplMedianFilter( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
-    SAL_DLLPRIVATE bool     ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
-    SAL_DLLPRIVATE bool     ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
-    SAL_DLLPRIVATE bool     ImplSolarize( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
-    SAL_DLLPRIVATE bool     ImplSepia( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
-    SAL_DLLPRIVATE bool     ImplMosaic( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
-    SAL_DLLPRIVATE bool     ImplPopArt( const BmpFilterParam* pFilterParam, const Link<>* pProgress );
+    SAL_DLLPRIVATE bool     ImplMedianFilter();
+    SAL_DLLPRIVATE bool     ImplSobelGrey();
+    SAL_DLLPRIVATE bool     ImplEmbossGrey( const BmpFilterParam* pFilterParam );
+    SAL_DLLPRIVATE bool     ImplSolarize( const BmpFilterParam* pFilterParam );
+    SAL_DLLPRIVATE bool     ImplSepia( const BmpFilterParam* pFilterParam );
+    SAL_DLLPRIVATE bool     ImplMosaic( const BmpFilterParam* pFilterParam );
+    SAL_DLLPRIVATE bool     ImplPopArt();
 
     SAL_DLLPRIVATE bool     ImplSeparableBlurFilter( const double aRadius = 0.7 );
     SAL_DLLPRIVATE bool     ImplSeparableUnsharpenFilter( const double aRadius = 0.7 );

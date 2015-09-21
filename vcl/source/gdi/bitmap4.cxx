@@ -38,7 +38,7 @@ static inline sal_uInt8 lcl_getDuotoneColorComponent( sal_uInt8 base, sal_uInt16
     return (sal_uInt8) (color1+color2);
 }
 
-bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, const Link<>* pProgress )
+bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam )
 {
     bool bRet = false;
 
@@ -66,36 +66,36 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, cons
         case( BMP_FILTER_SHARPEN ):
         {
             const long pSharpenMatrix[] = { -1, -1,  -1, -1, 16, -1, -1, -1,  -1 };
-            bRet = ImplConvolute3( &pSharpenMatrix[ 0 ], 8, pFilterParam, pProgress );
+            bRet = ImplConvolute3( &pSharpenMatrix[ 0 ], 8 );
         }
         break;
 
         case( BMP_FILTER_REMOVENOISE ):
-            bRet = ImplMedianFilter( pFilterParam, pProgress );
+            bRet = ImplMedianFilter();
         break;
 
         case( BMP_FILTER_SOBEL_GREY ):
-            bRet = ImplSobelGrey( pFilterParam, pProgress );
+            bRet = ImplSobelGrey();
         break;
 
         case( BMP_FILTER_SOLARIZE ):
-            bRet = ImplSolarize( pFilterParam, pProgress );
+            bRet = ImplSolarize( pFilterParam );
         break;
 
         case( BMP_FILTER_SEPIA ):
-            bRet = ImplSepia( pFilterParam, pProgress );
+            bRet = ImplSepia( pFilterParam );
         break;
 
         case( BMP_FILTER_MOSAIC ):
-            bRet = ImplMosaic( pFilterParam, pProgress );
+            bRet = ImplMosaic( pFilterParam );
         break;
 
         case( BMP_FILTER_EMBOSS_GREY ):
-            bRet = ImplEmbossGrey( pFilterParam, pProgress );
+            bRet = ImplEmbossGrey( pFilterParam );
         break;
 
         case( BMP_FILTER_POPART ):
-            bRet = ImplPopArt( pFilterParam, pProgress );
+            bRet = ImplPopArt();
         break;
 
         case( BMP_FILTER_DUOTONE ):
@@ -110,8 +110,7 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, cons
     return bRet;
 }
 
-bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
-                             const BmpFilterParam* /*pFilterParam*/, const Link<>* /*pProgress*/ )
+bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     bool                bRet = false;
@@ -256,7 +255,7 @@ bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
     return bRet;
 }
 
-bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Link<>* /*pProgress*/ )
+bool Bitmap::ImplMedianFilter()
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     bool                bRet = false;
@@ -385,7 +384,7 @@ bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
     return bRet;
 }
 
-bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link<>* /*pProgress*/ )
+bool Bitmap::ImplSobelGrey()
 {
     bool bRet = ImplMakeGreyscales( 256 );
 
@@ -511,7 +510,7 @@ bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link<>
     return bRet;
 }
 
-bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link<>* /*pProgress*/ )
+bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam )
 {
     bool bRet = ImplMakeGreyscales( 256 );
 
@@ -623,7 +622,7 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link<>* /
     return bRet;
 }
 
-bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link<>* /*pProgress*/ )
+bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam )
 {
     bool                bRet = false;
     BitmapWriteAccess*  pWriteAcc = AcquireWriteAccess();
@@ -671,7 +670,7 @@ bool Bitmap::ImplSolarize( const BmpFilterParam* pFilterParam, const Link<>* /*p
     return bRet;
 }
 
-bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link<>* /*pProgress*/ )
+bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
 {
     BitmapReadAccess*   pReadAcc = AcquireReadAccess();
     bool                bRet = false;
@@ -756,7 +755,7 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam, const Link<>* /*pPro
     return bRet;
 }
 
-bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link<>* /*pProgress*/ )
+bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam )
 {
     sal_uLong               nTileWidth = ( pFilterParam && pFilterParam->meFilter == BMP_FILTER_MOSAIC ) ?
                                      pFilterParam->maMosaicTileSize.mnTileWidth : 4;
@@ -941,7 +940,7 @@ extern "C" int SAL_CALL ImplPopArtCmpFnc( const void* p1, const void* p2 )
     return nRet;
 }
 
-bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link<>* /*pProgress*/ )
+bool Bitmap::ImplPopArt()
 {
     bool bRet = ( GetBitCount() <= 8 ) || Convert( BMP_CONVERSION_8BIT_COLORS );
 
