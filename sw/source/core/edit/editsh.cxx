@@ -423,8 +423,6 @@ const SwDocStat& SwEditShell::GetUpdatedDocStat()
     return rRet;
 }
 
-// OPT: eddocinl.cxx
-
 /// get the reference of a given name in the Doc
 const SwFormatRefMark* SwEditShell::GetRefMark( const OUString& rName ) const
 {
