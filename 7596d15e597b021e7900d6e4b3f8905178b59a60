@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_f5b8efe7",
+        "filename": "configure.ac",
+        "patchSetId": 8
+      },
+      "lineNbr": 4339,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2015-09-22T09:06:59Z",
+      "side": 1,
+      "message": "typo",
+      "revId": "7596d15e597b021e7900d6e4b3f8905178b59a60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_55cefb83",
+        "filename": "include/sal/config.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2015-09-22T09:06:59Z",
+      "side": 1,
+      "message": "Is this is really the case for EMSCRIPTEN?",
+      "revId": "7596d15e597b021e7900d6e4b3f8905178b59a60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
