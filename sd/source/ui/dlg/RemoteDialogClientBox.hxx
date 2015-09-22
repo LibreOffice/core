@@ -153,7 +153,6 @@ public:
     Rectangle GetEntryRect( const long nPos ) const;
     bool HasActive() { return m_bHasActive; }
     long PointToPos( const Point& rPos );
-    void SetScrollHdl( const Link<>& rLink );
     void DoScroll( long nDelta );
     void RecalcAll();
     void RemoveUnlocked();
