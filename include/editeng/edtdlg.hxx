@@ -57,7 +57,7 @@ class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
     virtual void     SetByCharacter( bool _bByCharacter ) = 0;
     virtual void     SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) = 0;
     virtual void     SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) = 0;
-    virtual void     SetOptionsChangedHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetOptionsChangedHdl( const Link<LinkParamNone*,void>& _rHdl ) = 0;
     virtual void     SetIgnoreHdl( const Link<Button*,void>& _rHdl ) = 0;
     virtual void     SetIgnoreAllHdl( const Link<Button*,void>& _rHdl ) = 0;
     virtual void     SetChangeHdl( const Link<Button*,void>& _rHdl ) = 0;

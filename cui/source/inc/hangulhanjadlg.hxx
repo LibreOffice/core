@@ -124,14 +124,14 @@ namespace svx
         VclPtr<CheckBox>           m_pHanjaOnly;
         VclPtr<CheckBox>           m_pReplaceByChar;
 
-        VclPtr<CheckBox>       m_pIgnoreNonPrimary;
+        VclPtr<CheckBox>           m_pIgnoreNonPrimary;
         /** are we working for a document? This is normally true, but in case
             the user uses the "find" functionality, we switch to working
             with what the user entered, which then does not have any relation to
             the document anymore. Some functionality must be disabled then */
         bool            m_bDocumentMode;
 
-        Link<>          m_aOptionsChangedLink;
+        Link<LinkParamNone*,void>  m_aOptionsChangedLink;
         Link<>          m_aClickByCharacterLink;
 
     public:
@@ -142,7 +142,7 @@ namespace svx
         virtual void dispose() SAL_OVERRIDE;
 
     public:
-        void    SetOptionsChangedHdl( const Link<>& _rHdl );
+        void    SetOptionsChangedHdl( const Link<LinkParamNone*,void>& _rHdl );
         void    SetIgnoreHdl( const Link<Button*,void>& _rHdl );
         void    SetIgnoreAllHdl( const Link<Button*,void>& _rHdl );
         void    SetChangeHdl( const Link<Button*,void>& _rHdl );
