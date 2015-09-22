@@ -243,7 +243,8 @@
                             <property name="has_entry">True</property>
                             <child internal-child="entry">
                               <object class="GtkEntry" id="foo">
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="has_focus">True</property>
                               </object>
                             </child>
                           </object>
