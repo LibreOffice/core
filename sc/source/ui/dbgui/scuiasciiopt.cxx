@@ -739,7 +739,7 @@ IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox*, pListBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl)
+IMPL_LINK_NOARG_TYPED(ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox&, void)
 {
     sal_Int32 nBaseLine = mpTableBox->GetFirstVisLine();
     sal_Int32 nRead = mpTableBox->GetVisLineCount();
@@ -762,15 +762,11 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl)
     mpTableBox->Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
     bool bMergeSep = pCkbAsOnce->IsChecked();
     mpTableBox->SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep);
-
-    return 0;
 }
 
-IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox*, pTableBox )
+IMPL_LINK_TYPED( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox&, rTableBox, void )
 {
-    OSL_ENSURE( pTableBox, "ScImportAsciiDlg::ColTypeHdl - missing sender" );
-
-    sal_Int32 nType = pTableBox->GetSelColumnType();
+    sal_Int32 nType = rTableBox.GetSelColumnType();
     sal_Int32 nTypeCount = pLbType->GetEntryCount();
     bool bEmpty = (nType == CSV_TYPE_MULTI);
     bool bEnable = ((0 <= nType) && (nType < nTypeCount)) || bEmpty;
@@ -785,8 +781,6 @@ IMPL_LINK( ScImportAsciiDlg, ColTypeHdl, ScCsvTableBox*, pTableBox )
     else if( bEnable )
         pLbType->SelectEntryPos( static_cast< sal_uInt16 >( nType ) );
     pLbType->SetSelectHdl( aSelHdl );
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
