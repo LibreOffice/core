@@ -523,6 +523,9 @@ public:
     CPPUNIT_TEST(testFuncFTEST);
     CPPUNIT_TEST_FAIL(testFuncFTESTBug);
     CPPUNIT_TEST(testFuncCHITEST);
+    CPPUNIT_TEST(testFuncSUMX2PY2);
+    CPPUNIT_TEST(testFuncGCD);
+    CPPUNIT_TEST(testFuncLCM);
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testCopyToDocument);

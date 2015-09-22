@@ -6010,7 +6010,7 @@ void Test::testFuncSUMX2PY2()
     m_pDoc->SetValue(0, 1, 0, 10.0); // A2
     m_pDoc->SetValue(3, 1, 0, -10.0); // D2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 227.0, m_pDoc->GetValue(aPos));
-    m_pDoc->SetValue(2, 1, 0, -5.0); // C2
+    m_pDoc->SetValue(1, 1, 0, -5.0); // B2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 227.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(4, 1, 0, -5.0); // E2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 277.0, m_pDoc->GetValue(aPos));
@@ -6022,20 +6022,20 @@ void Test::testFuncSUMX2PY2()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 405.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(1, 2, 0, 0.0); // B3
     m_pDoc->SetValue(4, 2, 0, 0.0); // E3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 503.0, m_pDoc->GetValue(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 405.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(2, 2, 0, 1.0); // C3
     m_pDoc->SetValue(5, 2, 0, 1.0); // F3
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 505.0, m_pDoc->GetValue(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 407.0, m_pDoc->GetValue(aPos));
 
     // add some strings
     m_pDoc->SetString(4, 1, 0, "a"); // E2
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 455.0, m_pDoc->GetValue(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 357.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(1, 1, 0, "a"); // B2
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 455.0, m_pDoc->GetValue(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 357.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(0, 0, 0, "a"); // A1
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 450.0, m_pDoc->GetValue(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 352.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(3, 0, 0, "a"); // D1
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 450.0, m_pDoc->GetValue(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 352.0, m_pDoc->GetValue(aPos));
 
     m_pDoc->SetString(aPos, "=SUMX2PY2({1;2;3};{2;3;4})");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2PY2 failed", 43.0, m_pDoc->GetValue(aPos));
@@ -6092,6 +6092,7 @@ void Test::testFuncGCD()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 10.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(1, 1, 0, 120.0); // B2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 10.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, 80.0); // A2
     m_pDoc->SetValue(1, 0, 0, 40.0); // B1
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 20.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(1, 0, 0, 45.0); // B1
@@ -6118,8 +6119,8 @@ void Test::testFuncGCD()
             OUString("Err:502"), aVal);
     m_pDoc->SetString(aPos, "=GCD({\"a\";6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return #VALUE! for a array with strings",
-            OUString("#VALUE!"), aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GCD should return Err:502 for a array with strings",
+            OUString("Err:502"), aVal);
 
     // inline list of values
     m_pDoc->SetString(aPos, "=GCD(12;24;36;48;60)");
@@ -6157,16 +6158,16 @@ void Test::testFuncLCM()
             OUString("#VALUE!"), aVal);
 
     m_pDoc->SetString(aPos, "=LCM(A1:B2)");
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 0.0, m_pDoc->GetValue(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of GCD for failed", 1.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(0, 1, 0, -12.0); // B1
     aVal = m_pDoc->GetString(aPos);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for a matrix with values less then 0",
             OUString("Err:502"), aVal);
     m_pDoc->SetValue(0, 0, 0, 15.0); // A1
-    m_pDoc->SetValue(0, 1, 0, 0.0); // B1
+    m_pDoc->SetValue(0, 1, 0, 0.0); // A2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(1, 0, 0, 5.0); // B1
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 15.0, m_pDoc->GetValue(aPos));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 0.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(0, 1, 0, 10.0); // A2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 30.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue(1, 0, 0, 30.0); // B1
@@ -6201,8 +6202,8 @@ void Test::testFuncLCM()
             OUString("Err:502"), aVal);
     m_pDoc->SetString(aPos, "=LCM({\"a\";6;9})");
     aVal = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return #VALUE! for a array with strings",
-            OUString("#VALUE!"), aVal);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("LCM should return Err:502 for a array with strings",
+            OUString("Err:502"), aVal);
 
     m_pDoc->SetString(aPos, "=LCM(12;24;36;48;60)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of LCM for failed", 720.0, m_pDoc->GetValue(aPos));
