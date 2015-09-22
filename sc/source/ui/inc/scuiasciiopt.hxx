@@ -106,8 +106,8 @@ private:
                                 DECL_LINK( SeparatorHdl, Control* );
                                 DECL_LINK_TYPED( SeparatorClickHdl, Button*, void );
                                 DECL_LINK( LbColTypeHdl, ListBox* );
-                                DECL_LINK(UpdateTextHdl, void *);
-                                DECL_LINK( ColTypeHdl, ScCsvTableBox* );
+                                DECL_LINK_TYPED( UpdateTextHdl, ScCsvTableBox&, void );
+                                DECL_LINK_TYPED( ColTypeHdl, ScCsvTableBox&, void );
 };
 
 inline bool ScImportAsciiDlg::Seek(sal_uLong nPos)

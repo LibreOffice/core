@@ -290,13 +290,13 @@ IMPL_LINK_TYPED( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
             }
         break;
         case CSVCMD_UPDATECELLTEXTS:
-            maUpdateTextHdl.Call( this );
+            maUpdateTextHdl.Call( *this );
         break;
         case CSVCMD_SETCOLUMNTYPE:
             maGrid->SetSelColumnType( nParam1 );
         break;
         case CSVCMD_EXPORTCOLUMNTYPE:
-            maColTypeHdl.Call( this );
+            maColTypeHdl.Call( *this );
         break;
         case CSVCMD_SETFIRSTIMPORTLINE:
             maGrid->SetFirstImportedLine( nParam1 );

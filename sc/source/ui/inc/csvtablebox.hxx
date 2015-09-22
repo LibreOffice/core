@@ -51,8 +51,8 @@ private:
     VclPtr<ScrollBar>           maVScroll;          /// Vertical scroll bar.
     VclPtr<ScrollBarBox>        maScrollBox;        /// For the bottom right edge.
 
-    Link<>                      maUpdateTextHdl;    /// Updates all cell texts.
-    Link<>                      maColTypeHdl;       /// Handler for exporting the column type.
+    Link<ScCsvTableBox&,void>   maUpdateTextHdl;    /// Updates all cell texts.
+    Link<ScCsvTableBox&,void>   maColTypeHdl;       /// Handler for exporting the column type.
 
     ScCsvColStateVec            maFixColStates;     /// Column states in fixed width mode.
     ScCsvColStateVec            maSepColStates;     /// Column states in separators mode.
@@ -113,9 +113,9 @@ public:
     // event handling ---------------------------------------------------------
 public:
     /** Sets a new handler for "update cell texts" requests. */
-    inline void                 SetUpdateTextHdl( const Link<>& rHdl ) { maUpdateTextHdl = rHdl; }
+    inline void                 SetUpdateTextHdl( const Link<ScCsvTableBox&,void>& rHdl ) { maUpdateTextHdl = rHdl; }
     /** Sets a new handler for "column selection changed" events. */
-    inline void                 SetColTypeHdl( const Link<>& rHdl ) { maColTypeHdl = rHdl; }
+    inline void                 SetColTypeHdl( const Link<ScCsvTableBox&,void>& rHdl ) { maColTypeHdl = rHdl; }
 
 protected:
     virtual void                Resize() SAL_OVERRIDE;
