@@ -35,7 +35,7 @@ ScCompiler::AddInMap ScCompiler::maAddInMap[] =
     { "WORKDAY", "WORKDAY", "com.sun.star.sheet.addin.Analysis.getWorkday", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETWORKDAY" },
     { "YEARFRAC", "YEARFRAC", "com.sun.star.sheet.addin.Analysis.getYearfrac", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETYEARFRAC" },
     { "EDATE", "EDATE", "com.sun.star.sheet.addin.Analysis.getEdate", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEDATE" },
-    { "WEEKNUM", "WEEKNUM_ADD", "com.sun.star.sheet.addin.Analysis.getWeeknum", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETWEEKNUM" },
+    { "WEEKNUM", "WEEKNUM_EXCEL2003", "com.sun.star.sheet.addin.Analysis.getWeeknum", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETWEEKNUM" },
     { "EOMONTH", "EOMONTH", "com.sun.star.sheet.addin.Analysis.getEomonth", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETEOMONTH" },
     { "NETWORKDAYS", "NETWORKDAYS_XCL", "com.sun.star.sheet.addin.Analysis.getNetworkdays", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETNETWORKDAYS" },
     { "ISEVEN", "ISEVEN_ADD", "com.sun.star.sheet.addin.Analysis.getIseven", "COM.SUN.STAR.SHEET.ADDIN.ANALYSIS.GETISEVEN" },

@@ -2364,6 +2364,7 @@ void Test::testFunctionLists()
         "EASTERSUNDAY",
         "HOUR",
         "ISLEAPYEAR",
+        "ISOWEEKNUM",
         "MINUTE",
         "MONTH",
         "MONTHS",

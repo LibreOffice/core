@@ -1185,7 +1185,31 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "Indicates the first day of the week (1 = Sunday, other values = Monday)." ;
+            Text [ en-US ] = "Indicates the first day of the week and when week 1 starts." ;
+        };
+    };
+     // -=*# Resource for function ISOWEEKNUM #*=-
+    Resource SC_OPCODE_ISOWEEKNUM
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates the ISO 8601 calender week for the given date." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_DATETIME;
+            U2S( HID_FUNC_ISOWEEKNUM );
+            1;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Number" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The internal number of the date." ;
         };
     };
      // -=*# Resource for function EASTERSUNDAY #*=-

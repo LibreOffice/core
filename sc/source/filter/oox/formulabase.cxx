@@ -876,9 +876,7 @@ static const FunctionData saFuncTable2013[] =
     { "IMSINH",                 "IMSINH",               NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
     { "IMTAN",                  "IMTAN",                NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW | FUNCFLAG_EXTERNAL },
     { "ISFORMULA",              "ISFORMULA",            NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALL_NEW },
-    /* FIXME: ISOWEEKNUM vs. WEEKNUM mess needs to be sorted out before we can
-     * import. */
-    { 0/*"ISOWEEKNUM"*/,        "ISOWEEKNUM",           NOID,   NOID,   1,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "ISOWEEKNUM",             "ISOWEEKNUM",           NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "MUNIT",                  "MUNIT",                NOID,   NOID,   1,  1,  A, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "NUMBERVALUE",            "NUMBERVALUE",          NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "PDURATION",              "PDURATION",            NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },

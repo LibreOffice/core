@@ -449,6 +449,7 @@ enum OpCode : sal_uInt16
         ocBitLshift         = SC_OPCODE_BITLSHIFT,
     // miscellaneous
         ocWeek              = SC_OPCODE_WEEK,
+        ocIsoWeeknum        = SC_OPCODE_ISOWEEKNUM,
         ocGetDayOfWeek      = SC_OPCODE_GET_DAY_OF_WEEK,
         ocNetWorkdays       = SC_OPCODE_NETWORKDAYS,
         ocNetWorkdays_MS    = SC_OPCODE_NETWORKDAYS_MS,
