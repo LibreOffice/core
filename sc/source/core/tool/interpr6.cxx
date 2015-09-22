@@ -392,6 +392,7 @@ void IterateMatrix(
         case ifSUMSQ:
         {
             ScMatrix::IterateResult aRes = pMat->SumSquare(bTextAsZero);
+            fRes = aRes.mfFirst;
             fRes += aRes.mfRest;
             rCount += aRes.mnCount;
         }
