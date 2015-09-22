@@ -584,11 +584,10 @@ IMPL_LINK_NOARG_TYPED(ScGridWindow, PopupModeEndHdl, FloatingWindow*, void)
     GrabFocus();
 }
 
-IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo*, pInfo )
+IMPL_LINK_TYPED( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo&, rInfo, void )
 {
-    if( pInfo->nCommand == SpellCallbackCommand::STARTSPELLDLG )
+    if( rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG )
         pViewData->GetDispatcher().Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
-    return 0;
 }
 
 void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, bool bHasSelection, const OUString& rStr )
@@ -3180,7 +3179,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 if (pHdl)
                     pHdl->SetModified();
 
-                Link<> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
+                Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
                 pEditView->ExecuteSpellPopup( aMenuPos, &aLink );
 
                 bDone = true;

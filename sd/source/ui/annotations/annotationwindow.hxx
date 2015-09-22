@@ -135,7 +135,7 @@ class AnnotationWindow : public FloatingWindow
 
         void            ToggleInsMode();
 
-        DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);
+        DECL_LINK_TYPED( OnlineSpellCallback, SpellCallbackInfo&, void );
 
         virtual void    Deactivate() SAL_OVERRIDE;
         virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect) SAL_OVERRIDE;
