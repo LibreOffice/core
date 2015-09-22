@@ -265,7 +265,7 @@ if (defined $ENV{NOCONFIGURE}) {
     push @args, "--srcdir=$src_path";
     push @args, "--enable-option-checking=$option_checking";
 
-    print "Running ./configure with '" . join ("' '", @args), "'\n";
+    print "Running ./configure with '" . join (" ", @args), "'\n";
     system ("./configure", @args) && die "Error running configure";
 }
 
