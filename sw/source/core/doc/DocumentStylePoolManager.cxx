@@ -184,35 +184,34 @@ namespace
                                 DefaultFontType::CTL_TEXT, rSet );
         }
 
-        if( pColl )
+        if( !pColl )
+            return;
+
+        if( !( nOutLvlBits & ( 1 << nLevel )) )
         {
-            if( !( nOutLvlBits & ( 1 << nLevel )) )
+            pColl->AssignToListLevelOfOutlineStyle(nLevel);
+            if( !bHTMLMode )
             {
-                pColl->AssignToListLevelOfOutlineStyle(nLevel);
-                if( !bHTMLMode )
+                SwNumRule * pOutlineRule = pDoc->GetOutlineNumRule();
+                const SwNumFormat& rNFormat = pOutlineRule->Get( nLevel );
+
+                if ( rNFormat.GetPositionAndSpaceMode() ==
+                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION &&
+                        ( rNFormat.GetAbsLSpace() || rNFormat.GetFirstLineOffset() ) )
                 {
-                    SwNumRule * pOutlineRule = pDoc->GetOutlineNumRule();
-                    const SwNumFormat& rNFormat = pOutlineRule->Get( nLevel );
-
-                    if ( rNFormat.GetPositionAndSpaceMode() ==
-                                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION &&
-                         ( rNFormat.GetAbsLSpace() || rNFormat.GetFirstLineOffset() ) )
-                    {
-                        SvxLRSpaceItem aLR( static_cast<const SvxLRSpaceItem&>(pColl->GetFormatAttr( RES_LR_SPACE )) );
-                        aLR.SetTextFirstLineOfstValue( rNFormat.GetFirstLineOffset() );
-                        aLR.SetTextLeft( rNFormat.GetAbsLSpace() );
-                        pColl->SetFormatAttr( aLR );
-                    }
-
-                    // All paragraph styles, which are assigned to a level of the
-                    // outline style has to have the outline style set as its list style.
-                    SwNumRuleItem aItem(pOutlineRule->GetName());
-                    pColl->SetFormatAttr(aItem);
+                    SvxLRSpaceItem aLR( static_cast<const SvxLRSpaceItem&>(pColl->GetFormatAttr( RES_LR_SPACE )) );
+                    aLR.SetTextFirstLineOfstValue( rNFormat.GetFirstLineOffset() );
+                    aLR.SetTextLeft( rNFormat.GetAbsLSpace() );
+                    pColl->SetFormatAttr( aLR );
                 }
+
+                // All paragraph styles, which are assigned to a level of the
+                // outline style has to have the outline style set as its list style.
+                SwNumRuleItem aItem(pOutlineRule->GetName());
+                pColl->SetFormatAttr(aItem);
             }
-            pColl->SetNextTextFormatColl( *pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(
-                                            RES_POOLCOLL_TEXT ));
         }
+        pColl->SetNextTextFormatColl( *pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT ));
     }
 
     static void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
@@ -1075,11 +1074,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
     }
 
     if( aSet.Count() )
-    {
-        {
-            pNewColl->SetFormatAttr( aSet );
-        }
-    }
+        pNewColl->SetFormatAttr( aSet );
     return pNewColl;
 }
 
