@@ -2897,9 +2897,8 @@ void ScViewFunc::NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument
     pInfoBar->addButton( pButtonGotoCell);
 }
 
-IMPL_LINK( ScViewFunc, EditUnitErrorFormulaHandler, PushButton*, pButton )
+IMPL_LINK_TYPED( ScViewFunc, EditUnitErrorFormulaHandler, Button*, pButton, void )
 {
-
     OUString sAddress;
     {
         // keep pInfoBar within this scope only as we'll be deleting it just below (using RemoveInfoBar)
@@ -2920,8 +2919,6 @@ IMPL_LINK( ScViewFunc, EditUnitErrorFormulaHandler, PushButton*, pButton )
     // UI making it a bit easier to see where the data is coming from).
     ScModule* pScMod = SC_MOD();
     pScMod->SetInputMode( SC_INPUT_TABLE );
-
-    return 0;
 }
 
 /*
@@ -2995,14 +2992,20 @@ void ScViewFunc::NotifyUnitConversionRecommended( const ScAddress& rCellAddress,
     pInfoBar->addButton( pButtonConvertCell );
 }
 
-IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButton*, pButton )
+IMPL_LINK_TYPED( ScViewFunc, UnitConversionRecommendedHandler, Button*, pButton, void )
 {
     // Do conversion first, and only then remove the infobar as we need data from the infobar
     // (specifically from the pushbutton) to do the conversion.
 #ifdef ENABLE_CALC_UNITVERIFICATION
+
+    // We can't pass in a UnitConversionPushButton* as this would require template-parameter downcasting
+    // (which is illegal) when setting pButtonConvertCell->SetClickHdl (which expects a
+    // Link<Button*, void>). Instead we can just cast back to the expected type here.
+    UnitConversionPushButton* pPushButton = dynamic_cast<UnitConversionPushButton*>( pButton );
+
     boost::shared_ptr< Units > pUnits = Units::GetUnits();
 
-    ScDocument* pDoc = pButton->mpDoc;
+    ScDocument* pDoc = pPushButton->mpDoc;
     ScDocShell* pDocShell = static_cast<ScDocShell*>(pDoc->GetDocumentShell());
 
     ScDocShellModificator aModificator( *pDocShell );
@@ -3018,12 +3021,12 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
     {
         pUndoManager = pDocShell->GetUndoManager();
 
-        aOldVal.assign( *pDoc, pButton->aCellAddress );
+        aOldVal.assign( *pDoc, pPushButton->aCellAddress );
 
-        aMark.SetMarkArea( pButton->aCellAddress );
+        aMark.SetMarkArea( pPushButton->aCellAddress );
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pUndoDoc->InitUndo( pDoc, pButton->aCellAddress.Tab(), pButton->aCellAddress.Tab() );
-        pDoc->CopyToDocument( ScRange( pButton->aCellAddress ), IDF_ATTRIB, false, pUndoDoc, &aMark );
+        pUndoDoc->InitUndo( pDoc, pPushButton->aCellAddress.Tab(), pPushButton->aCellAddress.Tab() );
+        pDoc->CopyToDocument( ScRange( pPushButton->aCellAddress ), IDF_ATTRIB, false, pUndoDoc, &aMark );
 
         // This commences logging of changes to the drawing layer
         // (i.e. notes) for storing in an undo. (See more below.)
@@ -3031,14 +3034,14 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
         pDrawLayer->BeginCalcUndo(false);
     }
 
-    OUString sOriginalValue = pDoc->GetString( pButton->aCellAddress );
+    OUString sOriginalValue = pDoc->GetString( pPushButton->aCellAddress );
 
-    pUnits->convertCellToHeaderUnit( pButton->aCellAddress,
+    pUnits->convertCellToHeaderUnit( pPushButton->aCellAddress,
                                      pDoc,
-                                     pButton->sHeaderUnit,
-                                     pButton->sCellUnit );
+                                     pPushButton->sHeaderUnit,
+                                     pPushButton->sCellUnit );
 
-    const OUString sCurrentNoteText = pDoc->GetOrCreateNote( pButton->aCellAddress )->GetText();
+    const OUString sCurrentNoteText = pDoc->GetOrCreateNote( pPushButton->aCellAddress )->GetText();
     const OUString sConversionNote("Original input: " + sOriginalValue);
     OUString sNewNoteText;
 
@@ -3052,11 +3055,11 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
     }
 
     // ensure existing caption object before draw undo tracking starts
-    ScPostIt* pOldNote = pDoc->ReleaseNote( pButton->aCellAddress );
+    ScPostIt* pOldNote = pDoc->ReleaseNote( pPushButton->aCellAddress );
     ScNoteData aOldNoteData = pOldNote->GetNoteData();
     delete pOldNote;
 
-    ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( *pDoc, pButton->aCellAddress, sNewNoteText, false, true );
+    ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( *pDoc, pPushButton->aCellAddress, sNewNoteText, false, true );
     assert( pNewNote );
 
     if ( bUndo )
@@ -3065,14 +3068,14 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
         pUndoManager->EnterListAction( aUndo, aUndo );
 
         ScCellValue aNewVal;
-        aNewVal.assign( *pDoc, pButton->aCellAddress );
-        const ScPatternAttr* pNewPat = pDoc->GetPattern( pButton->aCellAddress );
+        aNewVal.assign( *pDoc, pPushButton->aCellAddress );
+        const ScPatternAttr* pNewPat = pDoc->GetPattern( pPushButton->aCellAddress );
 
-        pUndoManager->AddUndoAction( new ScUndoSetCell( pDocShell, pButton->aCellAddress, aOldVal, aNewVal ) );
+        pUndoManager->AddUndoAction( new ScUndoSetCell( pDocShell, pPushButton->aCellAddress, aOldVal, aNewVal ) );
         pUndoManager->AddUndoAction( new ScUndoSelectionAttr( pDocShell,
                                                               aMark,
-                                                              pButton->aCellAddress.Col(), pButton->aCellAddress.Row(), pButton->aCellAddress.Tab(),
-                                                              pButton->aCellAddress.Col(), pButton->aCellAddress.Row(), pButton->aCellAddress.Tab(),
+                                                              pPushButton->aCellAddress.Col(), pPushButton->aCellAddress.Row(), pPushButton->aCellAddress.Tab(),
+                                                              pPushButton->aCellAddress.Col(), pPushButton->aCellAddress.Row(), pPushButton->aCellAddress.Tab(),
                                                               pUndoDoc,
                                                               false,
                                                               pNewPat) );
@@ -3083,7 +3086,7 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
         // different constructors for each case.
         if ( sCurrentNoteText.isEmpty() )
         {
-            pUndoManager->AddUndoAction( new ScUndoReplaceNote( *pDocShell, pButton->aCellAddress,
+            pUndoManager->AddUndoAction( new ScUndoReplaceNote( *pDocShell, pPushButton->aCellAddress,
                                                                 aNewNoteData, true, nullptr ) );
         }
         else
@@ -3091,14 +3094,14 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
             // Actual note content changes are stored in the DrawLayer CalcUndo,
             // as opposed to being the NoteData (which just seems to store note
             // metadata) - hence we need to make sure that we save that too.
-            pUndoManager->AddUndoAction( new ScUndoReplaceNote( *pDocShell, pButton->aCellAddress,
+            pUndoManager->AddUndoAction( new ScUndoReplaceNote( *pDocShell, pPushButton->aCellAddress,
                                                                 aOldNoteData, aNewNoteData,
                                                                 pDrawLayer->GetCalcUndo() ) );
         }
         pUndoManager->LeaveListAction();
     }
 
-    pDocShell->PostPaint(ScRange( pButton->aCellAddress), PAINT_GRID);
+    pDocShell->PostPaint(ScRange( pPushButton->aCellAddress), PAINT_GRID);
 
     aModificator.SetDocumentModified();
     SfxGetpApp()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
@@ -3122,8 +3125,6 @@ IMPL_LINK( ScViewFunc, UnitConversionRecommendedHandler, UnitConversionPushButto
     GetViewData().GetDispatcher().Execute( SID_CURRENTCELL,
                                            SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                                            &aPosition, &aUnmark, 0L );
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

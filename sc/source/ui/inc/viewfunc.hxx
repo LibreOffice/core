@@ -371,14 +371,14 @@ private:
     void            NotifyUnitErrorInFormula( const ScAddress& rAddress,
                                               ScDocument* pDoc,
                                               const sc::units::FormulaStatus& rStatus);
-    DECL_LINK( EditUnitErrorFormulaHandler, PushButton* );
+    DECL_LINK_TYPED( EditUnitErrorFormulaHandler, Button*, void);
 
     void            NotifyUnitConversionRecommended( const ScAddress& rCellAddress,
                                                      ScDocument* pDoc,
                                                      const OUString& sHeaderUnit,
                                                      const ScAddress& rHeaderAddress,
                                                      const OUString& sCellUnit );
-    DECL_LINK( UnitConversionRecommendedHandler, UnitConversionPushButton* );
+    DECL_LINK_TYPED( UnitConversionRecommendedHandler, Button*, void);
 };
 
 #endif

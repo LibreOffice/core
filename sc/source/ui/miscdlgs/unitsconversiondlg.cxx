@@ -192,26 +192,25 @@ bool ScUnitsConversionDialog::CheckUnitsAreConvertible()
     return bCompatibleInputFound;
 }
 
-IMPL_LINK( ScUnitsConversionDialog, OkClicked, PushButton*, /*pButton*/ )
+IMPL_LINK_TYPED( ScUnitsConversionDialog, OkClicked, Button*, /*pButton*/, void )
 {
     if (!CheckUnitsAreConvertible())
     {
         // As we have now clicked on this button, the output units entry
         // box has lost focus, so the "no conversion possible" warning
         // will already be shown by the OutputUnitsComplete handler.
-        return 0;
+        return;
     }
 
     PerformConversion();
     Close();
-    return 0;
 }
 
 IMPL_LINK( ScUnitsConversionDialog, GetFocusHandler, Control*, pCtrl )
 {
     Edit* pEdit = NULL;
 
-    if( (pCtrl == (Control*) mpInputRangeEdit) || (pCtrl == (Control*) mpInputRangeButton) ) {
+    if( (pCtrl == mpInputRangeEdit.get()) || (pCtrl == mpInputRangeButton.get()) ) {
         pEdit = mpInputRangeEdit;
     }
 
