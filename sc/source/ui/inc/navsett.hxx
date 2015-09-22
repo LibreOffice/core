@@ -23,27 +23,29 @@
 #include <tools/solar.h>
 
 #include <vector>
+#include <o3tl/enumarray.hxx>
+#include <content.hxx>
 
 /** Contains settings of the navigator listbox. This includes the expand state
     of each listbox entry and the index of the selected entry and sub entry. */
 class ScNavigatorSettings
 {
 private:
-    ::std::vector< bool >           maExpandedVec;      /// Array of Booleans for expand state.
-    sal_uInt16                      mnRootSelected;     /// Index of selected root entry.
+    o3tl::enumarray<ScContentId,bool> maExpandedVec;      /// Array of Booleans for expand state.
+    ScContentId                     mnRootSelected;     /// Index of selected root entry.
     sal_uLong                       mnChildSelected;    /// Index of selected child entry.
 
 public:
                                 ScNavigatorSettings();
 
-    inline void                 SetExpanded( sal_uInt16 nIndex, bool bExpand ) { maExpandedVec[ nIndex ] = bExpand; }
-    inline bool                 IsExpanded( sal_uInt16 nIndex ) const { return maExpandedVec[ nIndex ]; }
+    inline void                 SetExpanded( ScContentId nIndex, bool bExpand ) { maExpandedVec[ nIndex ] = bExpand; }
+    inline bool                 IsExpanded( ScContentId nIndex ) const { return maExpandedVec[ nIndex ]; }
 
-    inline void                 SetRootSelected( sal_uInt16 nIndex ) { mnRootSelected = nIndex; }
-    inline sal_uInt16               GetRootSelected() const { return mnRootSelected; }
+    inline void                 SetRootSelected( ScContentId nIndex ) { mnRootSelected = nIndex; }
+    inline ScContentId          GetRootSelected() const { return mnRootSelected; }
 
     inline void                 SetChildSelected( sal_uLong nIndex ) { mnChildSelected = nIndex; }
-    inline sal_uLong                GetChildSelected() const { return mnChildSelected; }
+    inline sal_uLong            GetChildSelected() const { return mnChildSelected; }
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_NAVSETT_HXX
