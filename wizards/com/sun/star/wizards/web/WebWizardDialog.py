@@ -525,7 +525,7 @@ class WebWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (True, 12, HelpIds.getHelpIdString(HID6_DATE_SITE_CREATED),
-                "dateSiteCreated", 179, 124, 6, tabIndex + 1, 49), self)
+                "dateSiteCreated", 179, 124, 6, tabIndex + 1, 60), self)
         self.insertLabel("lblSiteUpdated", WebWizardDialog.PROPNAMES_LBL,
             (8, self.resources.reslblSiteUpdated_value, "lblSiteUpdated",
                 103, 144, 6, tabIndex + 1, 80))
@@ -540,7 +540,7 @@ class WebWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (True, 12, HelpIds.getHelpIdString(HID6_DATE_SITE_UPDATED),
-                "dateSiteUpdate", 179, 142, 6, tabIndex + 1, 49), self)
+                "dateSiteUpdate", 179, 142, 6, tabIndex + 1, 60), self)
 
     def buildStep7(self, disableFTP, exclamationURL):
         tabIndex = 700
