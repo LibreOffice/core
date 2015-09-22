@@ -22,24 +22,26 @@
 
 #include <sal/types.h>
 
+enum class ScContentId;
+
 // CfgItem for navigator-state
 
 class ScNavipiCfg
 {
 private:
-    sal_uInt16  nListMode;
-    sal_uInt16  nDragMode;
-    sal_uInt16  nRootType;
+    sal_uInt16   nListMode;
+    sal_uInt16   nDragMode;
+    ScContentId  nRootType;
 
 public:
             ScNavipiCfg();
 
-    void    SetListMode(sal_uInt16 nNew);
+    void        SetListMode(sal_uInt16 nNew);
     sal_uInt16  GetListMode() const         { return nListMode; }
-    void    SetDragMode(sal_uInt16 nNew);
+    void        SetDragMode(sal_uInt16 nNew);
     sal_uInt16  GetDragMode() const         { return nDragMode; }
-    void    SetRootType(sal_uInt16 nNew);
-    sal_uInt16  GetRootType() const         { return nRootType; }
+    void        SetRootType(ScContentId nNew);
+    ScContentId GetRootType() const         { return nRootType; }
 };
 
 #endif

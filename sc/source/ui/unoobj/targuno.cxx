@@ -211,23 +211,23 @@ void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const OUString& /* aProperty
 
 void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType )
 {
-    sal_uInt16 nImgId = 0;
+    ScContentId nImgId = ScContentId::ROOT;
     switch ( nType )
     {
         case SC_LINKTARGETTYPE_SHEET:
-            nImgId = SC_CONTENT_TABLE;
+            nImgId = ScContentId::TABLE;
             break;
         case SC_LINKTARGETTYPE_RANGENAME:
-            nImgId = SC_CONTENT_RANGENAME;
+            nImgId = ScContentId::RANGENAME;
             break;
         case SC_LINKTARGETTYPE_DBAREA:
-            nImgId = SC_CONTENT_DBAREA;
+            nImgId = ScContentId::DBAREA;
             break;
     }
-    if (nImgId)
+    if (nImgId != ScContentId::ROOT)
     {
         ImageList aEntryImages( ScResId( RID_IMAGELIST_NAVCONT ) );
-        const Image& rImage = aEntryImages.GetImage( nImgId );
+        const Image& rImage = aEntryImages.GetImage( (sal_uInt16)nImgId );
         rRet <<= uno::Reference< awt::XBitmap > (VCLUnoHelper::CreateBitmap( rImage.GetBitmapEx() ));
     }
 }

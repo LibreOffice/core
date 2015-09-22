@@ -422,7 +422,7 @@ void CommandToolBox::UpdateButtons()
     else
     {
         EnableItem( IID_CHANGEROOT );
-        bool bRootSet = rDlg.aLbEntries->GetRootType() != SC_CONTENT_ROOT;
+        bool bRootSet = rDlg.aLbEntries->GetRootType() != ScContentId::ROOT;
         CheckItem( IID_CHANGEROOT, bRootSet );
     }
 
@@ -464,8 +464,7 @@ void CommandToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 //  class ScNavigatorSettings
 
 ScNavigatorSettings::ScNavigatorSettings() :
-    maExpandedVec( SC_CONTENT_COUNT, false ),
-    mnRootSelected( SC_CONTENT_ROOT ),
+    mnRootSelected( ScContentId::ROOT ),
     mnChildSelected( SC_CONTENT_NOCHILD )
 {
 }
@@ -638,8 +637,8 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
                                  DragDropMode::ENABLE_TOP );
 
     //  was a category chosen as root?
-    sal_uInt16 nLastRoot = rCfg.GetRootType();
-    if ( nLastRoot )
+    ScContentId nLastRoot = rCfg.GetRootType();
+    if ( nLastRoot != ScContentId::ROOT )
         aLbEntries->SetRootType( nLastRoot );
 
     aLbEntries->Refresh();
@@ -839,25 +838,25 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
             switch ( nHintId )
             {
                 case SC_HINT_TABLES_CHANGED:
-                    aLbEntries->Refresh( SC_CONTENT_TABLE );
+                    aLbEntries->Refresh( ScContentId::TABLE );
                     break;
 
                 case SC_HINT_DBAREAS_CHANGED:
-                    aLbEntries->Refresh( SC_CONTENT_DBAREA );
+                    aLbEntries->Refresh( ScContentId::DBAREA );
                     break;
 
                 case SC_HINT_AREAS_CHANGED:
-                    aLbEntries->Refresh( SC_CONTENT_RANGENAME );
+                    aLbEntries->Refresh( ScContentId::RANGENAME );
                     break;
 
                 case SC_HINT_DRAW_CHANGED:
-                    aLbEntries->Refresh( SC_CONTENT_GRAPHIC );
-                    aLbEntries->Refresh( SC_CONTENT_OLEOBJECT );
-                    aLbEntries->Refresh( SC_CONTENT_DRAWING );
+                    aLbEntries->Refresh( ScContentId::GRAPHIC );
+                    aLbEntries->Refresh( ScContentId::OLEOBJECT );
+                    aLbEntries->Refresh( ScContentId::DRAWING );
                     break;
 
                 case SC_HINT_AREALINKS_CHANGED:
-                    aLbEntries->Refresh( SC_CONTENT_AREALINK );
+                    aLbEntries->Refresh( ScContentId::AREALINK );
                     break;
 
                 //  SFX_HINT_DOCCHANGED not only at document change
@@ -871,9 +870,9 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     aContentIdle.Start();      // Do not search notes immediately
                     break;
                 case FID_KILLEDITVIEW:
-                    aLbEntries->ObjectFresh( SC_CONTENT_OLEOBJECT );
-                    aLbEntries->ObjectFresh( SC_CONTENT_DRAWING );
-                    aLbEntries->ObjectFresh( SC_CONTENT_GRAPHIC );
+                    aLbEntries->ObjectFresh( ScContentId::OLEOBJECT );
+                    aLbEntries->ObjectFresh( ScContentId::DRAWING );
+                    aLbEntries->ObjectFresh( ScContentId::GRAPHIC );
                     break;
                 default:
                     break;
@@ -896,7 +895,7 @@ IMPL_LINK_TYPED( ScNavigatorDlg, TimeHdl, Idle*, pIdle, void )
     if ( pIdle != &aContentIdle )
         return;
 
-    aLbEntries->Refresh( SC_CONTENT_NOTE );
+    aLbEntries->Refresh( ScContentId::NOTE );
 }
 
 void ScNavigatorDlg::SetDropMode(sal_uInt16 nNew)
