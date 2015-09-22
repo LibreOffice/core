@@ -133,7 +133,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK_TYPED(InsertHdl, Button *, void);
     DECL_LINK_TYPED( PathHdl, Button *, void );
     DECL_LINK_TYPED( CheckBoxHdl, Button*, void );
-    DECL_LINK( PreviewLoadedHdl, void * );
+    DECL_LINK_TYPED( PreviewLoadedHdl, SwOneExampleFrame&, void );
 
     virtual void    Apply() SAL_OVERRIDE;
     void            Init();

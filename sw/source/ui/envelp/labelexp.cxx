@@ -38,7 +38,7 @@ using namespace ::comphelper;
 
 void SwVisitingCardPage::InitFrameControl()
 {
-    Link<> aLink(LINK(this, SwVisitingCardPage, FrameControlInitializedHdl));
+    Link<SwOneExampleFrame&,void> aLink(LINK(this, SwVisitingCardPage, FrameControlInitializedHdl));
     m_pExampleWIN->Show();
     pExampleFrame = new SwOneExampleFrame( *m_pExampleWIN,
                                     EX_SHOW_BUSINESS_CARDS, &aLink );
@@ -101,7 +101,7 @@ void SwVisitingCardPage::InitFrameControl()
     }
 }
 
-IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
+IMPL_LINK_NOARG_TYPED(SwVisitingCardPage, FrameControlInitializedHdl, SwOneExampleFrame&, void)
 {
     SvTreeListEntry* pSel = m_pAutoTextLB->FirstSelected();
     OUString sEntry;
@@ -130,7 +130,6 @@ IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
             UpdateFields();
         }
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwVisitingCardPage, AutoTextSelectTreeListBoxHdl, SvTreeListBox*, pBox, void )

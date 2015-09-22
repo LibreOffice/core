@@ -75,7 +75,7 @@ class SW_DLLPUBLIC SwOneExampleFrame
 
     VclPtr<SwFrmCtrlWindow> aTopWindow;
     Idle            aLoadedIdle;
-    Link<>          aInitializedLink;
+    Link<SwOneExampleFrame&,void> aInitializedLink;
 
     MenuResource    aMenuRes;
     OUString        sArgumentURL;
@@ -98,7 +98,7 @@ class SW_DLLPUBLIC SwOneExampleFrame
 public:
     SwOneExampleFrame(vcl::Window& rWin,
                     sal_uInt32 nStyleFlags = EX_SHOW_ONLINE_LAYOUT,
-                    const Link<>* pInitalizedLink = 0,
+                    const Link<SwOneExampleFrame&,void>* pInitalizedLink = 0,
                     const OUString* pURL = 0);
     ~SwOneExampleFrame();
 

@@ -64,7 +64,7 @@ bool SwOneExampleFrame::bShowServiceNotAvailableMessage = true;
 
 SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
                                         sal_uInt32 nFlags,
-                                        const Link<>* pInitializedLink,
+                                        const Link<SwOneExampleFrame&,void>* pInitializedLink,
                                         const OUString* pURL ) :
     aTopWindow(VclPtr<SwFrmCtrlWindow>::Create(&rWin, this)),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
@@ -369,7 +369,7 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
         disableScrollBars(xViewProps, (nStyleFlags&EX_SHOW_ONLINE_LAYOUT) != 0);
 
         if (aInitializedLink.IsSet())
-            aInitializedLink.Call(this);
+            aInitializedLink.Call(*this);
 
         uno::Reference< text::XTextViewCursorSupplier >  xCrsrSupp(_xController, uno::UNO_QUERY);
         uno::Reference< view::XScreenCursor >  xScrCrsr(xCrsrSupp->getViewCursor(), uno::UNO_QUERY);

@@ -1063,7 +1063,7 @@ void SwGlossaryDlg::ShowPreview()
     //create example
     if (!pExampleFrame)
     {
-        Link<> aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
+        Link<SwOneExampleFrame&,void> aLink(LINK(this, SwGlossaryDlg, PreviewLoadedHdl));
         pExampleFrame = new SwOneExampleFrame( *m_pExampleWIN,
                         EX_SHOW_ONLINE_LAYOUT, &aLink );
     }
@@ -1071,10 +1071,9 @@ void SwGlossaryDlg::ShowPreview()
     ShowAutoText(::GetCurrGlosGroup(), m_pShortNameEdit->GetText());
 };
 
-IMPL_LINK_NOARG(SwGlossaryDlg, PreviewLoadedHdl)
+IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, PreviewLoadedHdl, SwOneExampleFrame&, void)
 {
     ResumeShowAutoText();
-    return 0;
 }
 
 void SwGlossaryDlg::ShowAutoText(const OUString& rGroup, const OUString& rShortName)

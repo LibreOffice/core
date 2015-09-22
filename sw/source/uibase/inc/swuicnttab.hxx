@@ -93,7 +93,7 @@ class SwMultiTOXTabDialog : public SfxTabDialog
     virtual short       Ok() SAL_OVERRIDE;
     SwTOXDescription*   CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
 
-    DECL_LINK(CreateExample_Hdl, void*);
+    DECL_LINK_TYPED(CreateExample_Hdl, SwOneExampleFrame&, void);
     DECL_LINK_TYPED(ShowPreviewHdl, Button*, void);
 
 public:

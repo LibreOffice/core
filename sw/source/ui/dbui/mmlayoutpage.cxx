@@ -118,7 +118,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     uno::Reference< frame::XStorable > xStore( pView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( m_sExampleURL, aValues   );
 
-    Link<> aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
+    Link<SwOneExampleFrame&,void> aLink(LINK(this, SwMailMergeLayoutPage, PreviewLoadedHdl_Impl));
     m_pExampleFrame = new SwOneExampleFrame( *m_pExampleContainerWIN,
                                     EX_SHOW_DEFAULT_PAGE, &aLink, &m_sExampleURL );
 
@@ -619,7 +619,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     OSL_ENSURE(0 == rShell.GetTableFormat(), "What to do with a table here?");
 }
 
-IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl, SwOneExampleFrame&, void)
 {
     m_pExampleContainerWIN->Show(true);
 
@@ -633,7 +633,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
     m_pExampleWrtShell = pDocShell->GetWrtShell();
     OSL_ENSURE(m_pExampleWrtShell, "No SwWrtShell found!");
     if(!m_pExampleWrtShell)
-        return 0;
+        return;
 
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     if(rConfigItem.IsAddressBlock())
@@ -657,7 +657,6 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
                                      m_pExampleWrtShell->GetCurPageDesc()).GetMaster().GetFrmSize();
     m_pLeftMF->SetMax(rPageSize.GetWidth() - DEFAULT_LEFT_DISTANCE);
     m_pTopMF->SetMax(rPageSize.GetHeight() - DEFAULT_TOP_DISTANCE);
-    return 0;
 }
 
 IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
