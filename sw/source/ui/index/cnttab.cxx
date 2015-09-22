@@ -494,7 +494,7 @@ IMPL_LINK_NOARG_TYPED( SwMultiTOXTabDialog, ShowPreviewHdl, Button*, void )
             }
             else
             {
-                Link<> aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
+                Link<SwOneExampleFrame&,void> aLink(LINK(this, SwMultiTOXTabDialog, CreateExample_Hdl));
                 pExampleFrame = new SwOneExampleFrame(
                         *m_pExampleContainerWIN, EX_SHOW_ONLINE_LAYOUT, &aLink, &sTemplate);
 

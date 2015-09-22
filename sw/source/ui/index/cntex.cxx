@@ -96,7 +96,7 @@ static void lcl_SetBOOLProp(
     }
 }
 
-IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl)
+IMPL_LINK_NOARG_TYPED(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void)
 {
     try
     {
@@ -139,7 +139,6 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl)
     {
         OSL_FAIL("::CreateExample() - exception caught");
     }
-    return 0;
 }
 
 void SwMultiTOXTabDialog::CreateOrUpdateExample(

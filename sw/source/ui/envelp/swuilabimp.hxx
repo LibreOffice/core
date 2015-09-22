@@ -99,7 +99,7 @@ class SwVisitingCardPage : public SfxTabPage
 
     DECL_LINK_TYPED( AutoTextSelectTreeListBoxHdl, SvTreeListBox*, void );
     DECL_LINK( AutoTextSelectHdl, void* );
-    DECL_LINK( FrameControlInitializedHdl, void* );
+    DECL_LINK_TYPED( FrameControlInitializedHdl, SwOneExampleFrame&, void );
 
     void            InitFrameControl();
     void            UpdateFields();
