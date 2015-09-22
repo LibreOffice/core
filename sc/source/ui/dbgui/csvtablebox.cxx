@@ -39,7 +39,7 @@ ScCsvTableBox::ScCsvTableBox( vcl::Window* pParent, WinBits nBits ) :
     maHScroll->SetLineSize( 1 );
     maVScroll->SetLineSize( 1 );
 
-    Link<> aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
+    Link<ScCsvControl&,void> aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
     SetCmdHdl( aLink );
     maRuler->SetCmdHdl( aLink );
     maGrid->SetCmdHdl( aLink );
@@ -251,11 +251,9 @@ void ScCsvTableBox::DataChanged( const DataChangedEvent& rDCEvt )
     ScCsvControl::DataChanged( rDCEvt );
 }
 
-IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
+IMPL_LINK_TYPED( ScCsvTableBox, CsvCmdHdl, ScCsvControl&, rCtrl, void )
 {
-    OSL_ENSURE( pCtrl, "ScCsvTableBox::CsvCmdHdl - missing sender" );
-
-    const ScCsvCmd& rCmd = pCtrl->GetCmd();
+    const ScCsvCmd& rCmd = rCtrl.GetCmd();
     ScCsvCmdType eType = rCmd.GetType();
     sal_Int32 nParam1 = rCmd.GetParam1();
     sal_Int32 nParam2 = rCmd.GetParam2();
@@ -334,7 +332,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
             bFound = false;
     }
     if( bFound )
-        return 0;
+        return;
 
     const ScCsvLayoutData aOldData( maData );
     switch( eType )
@@ -388,8 +386,6 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
         maGrid->ApplyLayout( aOldData );
         EnableRepaint();
     }
-
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScCsvTableBox, ScrollHdl, ScrollBar*, pScrollBar, void )

@@ -167,7 +167,7 @@ void ScCsvControl::EnableRepaint( bool bInvalidate )
 void ScCsvControl::Execute( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 )
 {
     maCmd.Set( eType, nParam1, nParam2 );
-    maCmdHdl.Call( this );
+    maCmdHdl.Call( *this );
 }
 
 // layout helpers -------------------------------------------------------------

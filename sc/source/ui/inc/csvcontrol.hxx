@@ -229,7 +229,7 @@ protected:
         ::css::accessibility::XAccessible > XAccessibleRef;
 
 private:
-    Link<>                      maCmdHdl;           /// External command handler.
+    Link<ScCsvControl&,void>    maCmdHdl;           /// External command handler.
     ScCsvCmd                    maCmd;              /// Data of last command.
     const ScCsvLayoutData&      mrData;             /// Shared layout data.
 
@@ -285,7 +285,7 @@ public:
     // command handling -------------------------------------------------------
 
     /** Sets a new command handler. */
-    inline void                 SetCmdHdl( const Link<>& rHdl ) { maCmdHdl = rHdl; }
+    inline void                 SetCmdHdl( const Link<ScCsvControl&,void>& rHdl ) { maCmdHdl = rHdl; }
     /** Returns data of the last command. */
     inline const ScCsvCmd&      GetCmd() const { return maCmd; }
 
