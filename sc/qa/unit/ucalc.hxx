@@ -190,6 +190,7 @@ public:
     void testFuncSUMX2PY2();
     void testFuncGCD();
     void testFuncLCM();
+    void testFuncSUMSQ();
 
     void testExternalRef();
     void testExternalRefFunctions();
@@ -526,6 +527,7 @@ public:
     CPPUNIT_TEST(testFuncSUMX2PY2);
     CPPUNIT_TEST(testFuncGCD);
     CPPUNIT_TEST(testFuncLCM);
+    CPPUNIT_TEST(testFuncSUMSQ);
     CPPUNIT_TEST(testExternalRef);
     CPPUNIT_TEST(testExternalRefFunctions);
     CPPUNIT_TEST(testCopyToDocument);
