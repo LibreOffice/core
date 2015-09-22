@@ -545,7 +545,8 @@ static const XclFunctionInfo saFuncTable_2013[] =
     // IMCOSH, IMCOT, IMCSC, IMCSCH, IMSEC, IMSECH, IMSINH and IMTAN are
     // implemented in the Analysis Add-In.
     EXC_FUNCENTRY_V_RO(         ocIsFormula,     1,  1,  0,  "ISFORMULA" ),
-    EXC_FUNCENTRY_V_VR(         ocWeek,          1,  2,  0,  "ISOWEEKNUM" ),
+    EXC_FUNCENTRY_V_VR(         ocWeek,          1,  2,  0,  "WEEKNUM" ),
+    EXC_FUNCENTRY_V_VR(         ocIsoWeeknum,    1,  1,  0,  "ISOWEEKNUM" ),
     EXC_FUNCENTRY_A_VR(         ocMatrixUnit,    1,  1,  0,  "MUNIT" ),
     EXC_FUNCENTRY_V_VR(         ocNumberValue,   1,  3,  0,  "NUMBERVALUE" ),
     EXC_FUNCENTRY_V_VR(         ocDuration,      3,  3,  0,  "PDURATION" ),

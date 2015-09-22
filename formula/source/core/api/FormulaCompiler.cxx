@@ -1247,23 +1247,66 @@ void FormulaCompiler::Factor()
         else if( eOp == ocNot || eOp == ocNeg
               || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR) )
         {
-            pFacToken = mpToken;
-            eOp = NextToken();
-            if( nNumFmt == css::util::NumberFormat::UNDEFINED && eOp == ocNot )
-                nNumFmt = css::util::NumberFormat::LOGICAL;
-            if (eOp == ocOpen)
+            if (eOp == ocIsoWeeknum && FormulaGrammar::isODFF( meGrammar ))
             {
-                NextToken();
-                eOp = Expression();
+                // tdf#50950 ocIsoWeeknum can have 2 arguments when saved by older versions of Calc;
+                // the opcode then has to be changed to ocWeek for backward compatibilty
+                pFacToken = mpToken;
+                eOp = NextToken();
+                bool bNoParam = false;
+                if (eOp == ocOpen)
+                {
+                    eOp = NextToken();
+                    if (eOp == ocClose)
+                        bNoParam = true;
+                    else
+                        eOp = Expression();
+                }
+                else
+                    SetError( errPairExpected);
+                sal_uInt8 nSepCount = 0;
+                if( !bNoParam )
+                {
+                    nSepCount++;
+                    while ((eOp == ocSep) && (!pArr->GetCodeError() || !mbStopOnError))
+                    {
+                        nSepCount++;
+                        NextToken();
+                        eOp = Expression();
+                    }
+                }
+                if (eOp != ocClose)
+                    SetError( errPairExpected);
+                else
+                    eOp = NextToken();
+                pFacToken->SetByte( nSepCount );
+                if (nSepCount == 2)
+                {
+                    pFacToken->NewOpCode( ocWeek, FormulaToken::PrivateAccess());
+                }
+                PutCode( pFacToken );
             }
             else
-                SetError( errPairExpected);
-            if (eOp != ocClose)
-                SetError( errPairExpected);
-            else if ( !pArr->GetCodeError() )
-                pFacToken->SetByte( 1 );
-            PutCode( pFacToken );
-            eOp = NextToken();
+            {
+                // standard handling of ocNot, ocNeg and 1-parameter opcodes
+                pFacToken = mpToken;
+                eOp = NextToken();
+                if( nNumFmt == css::util::NumberFormat::UNDEFINED && eOp == ocNot )
+                    nNumFmt = css::util::NumberFormat::LOGICAL;
+                if (eOp == ocOpen)
+                {
+                    NextToken();
+                    eOp = Expression();
+                }
+                else
+                    SetError( errPairExpected);
+                if (eOp != ocClose)
+                    SetError( errPairExpected);
+                else if ( !pArr->GetCodeError() )
+                    pFacToken->SetByte( 1 );
+                PutCode( pFacToken );
+                eOp = NextToken();
+            }
         }
         else if ((SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)
                 || eOp == ocExternal
