@@ -2818,6 +2818,15 @@ DECLARE_OOXMLIMPORT_TEST(testIndents, "indents.docx")
     } while (xParaEnum->hasMoreElements());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf92454, "tdf92454.docx")
+{
+    // The first paragraph had a large indentation / left margin as inheritance
+    // in Word and Writer works differently, and no direct value was set to be
+    // explicit.
+    uno::Reference<beans::XPropertyState> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    // This was beans::PropertyState_DEFAULT_VALUE.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, xParagraph->getPropertyState("ParaFirstLineIndent"));
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

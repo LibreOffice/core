@@ -2042,6 +2042,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 
                     rContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::makeAny(nParaRightMargin));
                 }
+
+                // Indent properties from the paragraph style have priority
+                // over the ones from the numbering styles in Word, not in
+                // Writer.
+                boost::optional<PropertyMap::Property> oProperty;
+                if (pStyleSheetProperties && (oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT)))
+                    rContext->Insert(PROP_PARA_FIRST_LINE_INDENT, oProperty->second);
             }
 
             if( pStyleSheetProperties && pStyleSheetProperties->GetListLevel() >= 0 )
