@@ -37,6 +37,7 @@ namespace vcl { class Window; }
 class ResId;
 class SvxSpellWrapper;
 class Button;
+class CheckBox;
 
 class AbstractThesaurusDialog : public VclAbstractDialog
 {
@@ -62,7 +63,7 @@ class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog
     virtual void     SetIgnoreAllHdl( const Link<Button*,void>& _rHdl ) = 0;
     virtual void     SetChangeHdl( const Link<Button*,void>& _rHdl ) = 0;
     virtual void     SetChangeAllHdl( const Link<Button*,void>& _rHdl ) = 0;
-    virtual void     SetClickByCharacterHdl( const Link<>& _rHdl ) = 0;
+    virtual void     SetClickByCharacterHdl( const Link<CheckBox*,void>& _rHdl ) = 0;
     virtual void     SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl ) = 0;
     virtual void     SetFindHdl( const Link<Button*,void>& _rHdl ) = 0;
     virtual bool     GetUseBothDirections() const= 0;

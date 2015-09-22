@@ -706,7 +706,7 @@ namespace svx
     }
 
 
-    void HangulHanjaConversionDialog::SetClickByCharacterHdl( const Link<>& _rHdl )
+    void HangulHanjaConversionDialog::SetClickByCharacterHdl( const Link<CheckBox*,void>& _rHdl )
     {
         m_aClickByCharacterLink = _rHdl;
     }
@@ -733,7 +733,7 @@ namespace svx
 
     IMPL_LINK_TYPED( HangulHanjaConversionDialog, ClickByCharacterHdl, Button*, pBox, void )
     {
-        m_aClickByCharacterLink.Call( pBox );
+        m_aClickByCharacterLink.Call( static_cast<CheckBox*>(pBox) );
 
         bool bByCharacter = static_cast<CheckBox*>(pBox)->IsChecked();
         m_pSuggestions->DisplayListBox( !bByCharacter );
