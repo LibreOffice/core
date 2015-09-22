@@ -236,11 +236,9 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
             pViewShell->UpdatePreview(pDescriptor->GetPage());
 
         // Tell the selection change listeners that the selection has changed.
-        ::std::vector<Link<>>::iterator iListener (maSelectionChangeListeners.begin());
-        ::std::vector<Link<>>::iterator iEnd (maSelectionChangeListeners.end());
-        for (; iListener!=iEnd; ++iListener)
+        for (auto& rLink : maSelectionChangeListeners)
         {
-            iListener->Call(NULL);
+            rLink.Call(NULL);
         }
 
         // Reset the insertion position: until set again it is calculated from
@@ -249,7 +247,7 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
     }
 }
 
-void SelectionManager::AddSelectionChangeListener (const Link<>& rListener)
+void SelectionManager::AddSelectionChangeListener (const Link<LinkParamNone*,void>& rListener)
 {
     if (::std::find (
         maSelectionChangeListeners.begin(),
@@ -260,7 +258,7 @@ void SelectionManager::AddSelectionChangeListener (const Link<>& rListener)
     }
 }
 
-void SelectionManager::RemoveSelectionChangeListener(const Link<>&rListener)
+void SelectionManager::RemoveSelectionChangeListener(const Link<LinkParamNone*,void>& rListener)
 {
     maSelectionChangeListeners.erase (
         ::std::find (

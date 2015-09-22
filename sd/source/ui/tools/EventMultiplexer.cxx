@@ -155,7 +155,7 @@ private:
     void ThrowIfDisposed()
         throw (::com::sun::star::lang::DisposedException);
 
-    DECL_LINK(SlideSorterSelectionChangeListener, void*);
+    DECL_LINK_TYPED(SlideSorterSelectionChangeListener, LinkParamNone*, void);
 };
 
 const char aCurrentPagePropertyName[] = "CurrentPage";
@@ -704,10 +704,9 @@ void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEv
     }
 }
 
-IMPL_LINK_NOARG(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener)
+IMPL_LINK_NOARG_TYPED(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener, LinkParamNone*, void)
 {
-    CallListeners (EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION);
-    return 0;
+    CallListeners(EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION);
 }
 
 //===== EventMultiplexerEvent =================================================

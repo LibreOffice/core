@@ -693,14 +693,14 @@ void SlideSorterViewShell::SetPageSelection (
 }
 
 void SlideSorterViewShell::AddSelectionChangeListener (
-    const Link<>& rCallback)
+    const Link<LinkParamNone*,void>& rCallback)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetSelectionManager()->AddSelectionChangeListener(rCallback);
 }
 
 void SlideSorterViewShell::RemoveSelectionChangeListener (
-    const Link<>& rCallback)
+    const Link<LinkParamNone*,void>& rCallback)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     mpSlideSorter->GetController().GetSelectionManager()->RemoveSelectionChangeListener(rCallback);
