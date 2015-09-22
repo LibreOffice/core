@@ -25,7 +25,7 @@
 // numerical input
 class SW_DLLPUBLIC NumEditAction: public NumericField
 {
-    Link<> aActionLink;
+    Link<NumEditAction&,void> aActionLink;
 
 protected:
     void Action();
@@ -34,7 +34,7 @@ public:
     NumEditAction( vcl::Window* pParent, const ResId& rResId ) :
                                 NumericField(pParent, rResId) {}
 
-    void        SetActionHdl( const Link<>& rLink ) { aActionLink = rLink;}
+    void        SetActionHdl( const Link<NumEditAction&,void>& rLink ) { aActionLink = rLink;}
 };
 
 // call a link when KEY_RETURN is pressed
