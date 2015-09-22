@@ -60,7 +60,7 @@ struct PageDesc
 
 //PostScript Printer Description File Format Specification
 //http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf
-//http://www.y-adagio.com/public/committees/docsii/doc_00-49/symp_ulaan/china_ppr.pdf (Kai)
+//https://web.archive.org/web/20040912070512/http://www.y-adagio.com/public/committees/docsii/doc_00-49/symp_ulaan/china_ppr.pdf (Kai)
 //http://www.sls.psi.ch/controls/help/howto/Howto_Print_a_A0_Poster_at_WSLA_012_2.pdf (Dia)
 static const PageDesc aDinTab[] =
 {
