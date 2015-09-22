@@ -606,7 +606,7 @@ void SvParser::BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
 }
 
 
-IMPL_LINK_NOARG( SvParser, NewDataRead )
+IMPL_LINK_NOARG_TYPED( SvParser, NewDataRead, LinkParamNone*, void )
 {
     switch( eState )
     {
@@ -640,8 +640,6 @@ IMPL_LINK_NOARG( SvParser, NewDataRead )
         ReleaseRef();                    // ready otherwise!
         break;
     }
-
-    return 0;
 }
 
 /*========================================================================
