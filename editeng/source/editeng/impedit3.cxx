@@ -4066,17 +4066,6 @@ void ImpEditEngine::CallStatusHdl()
     }
 }
 
-void ImpEditEngine::CallChainingEventHdl()
-{
-    // XXX: We don't use this method any more at the moment.
-    // only if it's the right ImpEditEngine (with right info on changes in text)
-    if ( aChainingHdlLink.IsSet() /* && aStatus.GetStatusWord() */)
-    {
-        aChainingHdlLink.Call( &mbNeedsChainingHandling );
-
-    }
-}
-
 ContentNode* ImpEditEngine::GetPrevVisNode( ContentNode* pCurNode )
 {
     const ParaPortion* pPortion = FindParaPortion( pCurNode );

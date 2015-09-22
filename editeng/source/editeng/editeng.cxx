@@ -1529,11 +1529,6 @@ void EditEngine::SetImportHdl( const Link<ImportInfo&,void>& rLink )
     pImpEditEngine->aImportHdl = rLink;
 }
 
-void EditEngine::SetChainingEventHdl( const Link<>& rLink )
-{
-    pImpEditEngine->SetChainingEventHdl( rLink );
-}
-
 Link<ImportInfo&,void> EditEngine::GetImportHdl() const
 {
     return pImpEditEngine->aImportHdl;
