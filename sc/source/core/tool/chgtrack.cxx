@@ -2328,7 +2328,7 @@ void ScChangeTrack::EndBlockModify( sal_uLong nEndAction )
                 bNew = true;
             }
             if ( bNew )
-                aModifiedLink.Call( this );
+                aModifiedLink.Call( *this );
         }
     }
 }

@@ -233,7 +233,7 @@ void ScTabViewShell::Deactivate(bool bMDI)
 
     if(pChanges!=NULL)
     {
-        Link<> aLink;
+        Link<ScChangeTrack&,void> aLink;
         pChanges->SetModifiedLink(aLink);
     }
 

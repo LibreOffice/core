@@ -108,7 +108,7 @@ private:
     DECL_LINK( RefInfoHandle, OUString*);
 
     DECL_LINK_TYPED( UpdateSelectionHdl, Idle*, void );
-    DECL_LINK( ChgTrackModHdl, ScChangeTrack*);
+    DECL_LINK_TYPED( ChgTrackModHdl, ScChangeTrack&, void);
     DECL_LINK_TYPED( CommandHdl, SvSimpleTable*, void);
     DECL_LINK_TYPED( ReOpenTimerHdl, Idle*, void );
     DECL_LINK_TYPED( ColCompareHdl, const SvSortData*, sal_Int32);
