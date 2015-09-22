@@ -1086,7 +1086,7 @@ namespace sw { namespace mark
     }
 
 
-    OUString MarkManager::getUniqueMarkName(const OUString& rName) const
+    OUString MarkManager::getUniqueMarkName(const OUString& rName)
     {
         OSL_ENSURE(rName.getLength(),
             "<MarkManager::getUniqueMarkName(..)> - a name should be proposed");
@@ -1105,18 +1105,34 @@ namespace sw { namespace mark
         OUStringBuffer sBuf;
         OUString sTmp;
 
-        // Try the name "<rName>XXX", where XXX is a number. Start the number at the existing count rather than 1
-        // in order to increase the chance that already the first one will not exist.
-        sal_Int32 nCnt = m_vAllMarks.size() + 1;
+        // add the count number to the name, to get a unique new name; for each name the last used number is kept
+        sal_Int32 nCnt = 1;
+        sal_Int32 nNameLngth = rName.getLength();
+        // get the name without number (makes copies of e.g. bookmarks with a numerical name, having only the counter as name)
+        while (nNameLngth > 0 && rName[nNameLngth - 1] >= '0' && rName[nNameLngth - 1] <= '9')
+                --nNameLngth;
+        OUString aBaseName;
+        if (nNameLngth > 0)
+            aBaseName = rName.copy(0, nNameLngth);
+
+        MarkBasenameMapUniqueOffset_t::const_iterator aIter = m_aMarkBasenameMapUniqueOffset.find(aBaseName);
+        if (aIter != m_aMarkBasenameMapUniqueOffset.end())
+            nCnt = aIter->second;
+
+        // make sure the chosen name really is available
         while(nCnt < SAL_MAX_INT32)
         {
-            sTmp = sBuf.append(rName).append(nCnt).makeStringAndClear();
+            sTmp = sBuf.append(aBaseName).append(nCnt).makeStringAndClear();
             nCnt++;
             if ( findMark(sTmp) == getAllMarksEnd() )
             {
                 break;
             }
         }
+
+        // remember the higest used number
+        m_aMarkBasenameMapUniqueOffset[aBaseName] = nCnt;
+
         return sTmp;
     }
 
