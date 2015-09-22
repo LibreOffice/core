@@ -195,15 +195,21 @@ namespace
                 SwNumRule * pOutlineRule = pDoc->GetOutlineNumRule();
                 const SwNumFormat& rNFormat = pOutlineRule->Get( nLevel );
 
-                if ( rNFormat.GetPositionAndSpaceMode() ==
-                                    SvxNumberFormat::LABEL_WIDTH_AND_POSITION &&
+                SvxLRSpaceItem aLR( static_cast<const SvxLRSpaceItem&>(pColl->GetFormatAttr( RES_LR_SPACE )) );
+                if ( rNFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION &&
                         ( rNFormat.GetAbsLSpace() || rNFormat.GetFirstLineOffset() ) )
                 {
-                    SvxLRSpaceItem aLR( static_cast<const SvxLRSpaceItem&>(pColl->GetFormatAttr( RES_LR_SPACE )) );
                     aLR.SetTextFirstLineOfstValue( rNFormat.GetFirstLineOffset() );
                     aLR.SetTextLeft( rNFormat.GetAbsLSpace() );
-                    pColl->SetFormatAttr( aLR );
                 }
+                else
+                {
+                    // tdf#93970 The indent set at the associated outline style also affects this paragraph.
+                    // We don't want this here, so override it. This doesn't affect the outline style properties.
+                    aLR.SetTextFirstLineOfstValue( 0 );
+                    aLR.SetTextLeft( 0 );
+                }
+                pColl->SetFormatAttr( aLR );
 
                 // All paragraph styles, which are assigned to a level of the
                 // outline style has to have the outline style set as its list style.
