@@ -887,7 +887,7 @@ ScLinkListener::~ScLinkListener()
 
 void ScLinkListener::Notify( const SfxHint& rHint )
 {
-    aLink.Call( const_cast<SfxHint*>(&rHint) );
+    aLink.Call( rHint );
 }
 
 static void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet& rSource )
@@ -2795,10 +2795,10 @@ void SAL_CALL ScCellRangesBase::firePropertiesChangeEvent( const uno::Sequence< 
     OSL_FAIL("not implemented");
 }
 
-IMPL_LINK( ScCellRangesBase, ValueListenerHdl, SfxHint*, pHint )
+IMPL_LINK_TYPED( ScCellRangesBase, ValueListenerHdl, const SfxHint&, rHint, void )
 {
-    if ( pDocShell && pHint && dynamic_cast<const SfxSimpleHint*>(pHint) &&
-            (static_cast<const SfxSimpleHint*>(pHint)->GetId() & SC_HINT_DATACHANGED))
+    if ( pDocShell && dynamic_cast<const SfxSimpleHint*>(&rHint) &&
+            (static_cast<const SfxSimpleHint&>(rHint).GetId() & SC_HINT_DATACHANGED))
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when
@@ -2806,7 +2806,6 @@ IMPL_LINK( ScCellRangesBase, ValueListenerHdl, SfxHint*, pHint )
 
         bGotDataChangedHint = true;
     }
-    return 0;
 }
 
 // XTolerantMultiPropertySet

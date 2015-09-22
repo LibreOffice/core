@@ -370,7 +370,7 @@ private:
 
     // Implementation
     void    RefChanged();
-    DECL_LINK( ValueListenerHdl, SfxHint* );
+    DECL_LINK_TYPED( ValueListenerHdl, const SfxHint&, void );
 
 private:
     ScChart2DataSequence(const ScChart2DataSequence& r) SAL_DELETED_FUNCTION;
