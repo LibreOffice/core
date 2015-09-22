@@ -41,9 +41,9 @@ enum SmParseError
 
 struct SmErrorDesc
 {
-    SmParseError  Type;
-    SmNode       *pNode;
-    OUString      Text;
+    SmParseError m_eType;
+    SmNode      *m_pNode;
+    OUString     m_aText;
 };
 
 #endif
