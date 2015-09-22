@@ -1105,9 +1105,13 @@ namespace sw { namespace mark
         OUStringBuffer sBuf;
         OUString sTmp;
 
-        // Try the name "<rName>XXX", where XXX is a number. Start the number at the existing count rather than 1
-        // in order to increase the chance that already the first one will not exist.
-        sal_Int32 nCnt = m_vAllMarks.size() + 1;
+        // try the name "<rName>XXX" (where XXX is a number starting from 1) unless there is
+        // a unused name. Due to performance-reasons (especially in mailmerge-Szenarios) there
+        // is a map m_aMarkBasenameMapUniqueOffset which holds the next possible offset (XXX) for
+        // rName (so there is no need to test for nCnt-values smaller than the offset).
+        sal_Int32 nCnt = 1;
+        MarkBasenameMapUniqueOffset_t::const_iterator aIter = m_aMarkBasenameMapUniqueOffset.find(rName);
+        if(aIter != m_aMarkBasenameMapUniqueOffset.end()) nCnt = aIter->second;
         while(nCnt < SAL_MAX_INT32)
         {
             sTmp = sBuf.append(rName).append(nCnt).makeStringAndClear();
@@ -1117,6 +1121,8 @@ namespace sw { namespace mark
                 break;
             }
         }
+        m_aMarkBasenameMapUniqueOffset[rName] = nCnt;
+
         return sTmp;
     }
 
