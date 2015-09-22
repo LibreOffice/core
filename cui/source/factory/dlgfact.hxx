@@ -139,7 +139,7 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void      SetByCharacter( bool _bByCharacter ) SAL_OVERRIDE ;
     virtual void      SetConversionDirectionState( bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) SAL_OVERRIDE;
     virtual void      SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType ) SAL_OVERRIDE;
-    virtual void      SetOptionsChangedHdl( const Link<>& _rHdl ) SAL_OVERRIDE;
+    virtual void      SetOptionsChangedHdl( const Link<LinkParamNone*,void>& _rHdl ) SAL_OVERRIDE;
     virtual void      SetIgnoreHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE;
     virtual void      SetIgnoreAllHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE ;
     virtual void      SetChangeHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE ;

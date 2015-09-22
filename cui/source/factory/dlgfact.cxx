@@ -261,7 +261,7 @@ void AbstractHangulHanjaConversionDialog_Impl::SetConversionFormat( editeng::Han
      pDlg->SetConversionFormat(_eType);
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetOptionsChangedHdl( const Link<>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetOptionsChangedHdl( const Link<LinkParamNone*,void>& _rHdl )
 {
      pDlg->SetOptionsChangedHdl(_rHdl );
 }

@@ -658,7 +658,7 @@ namespace svx
     }
 
 
-    void HangulHanjaConversionDialog::SetOptionsChangedHdl( const Link<>& _rHdl )
+    void HangulHanjaConversionDialog::SetOptionsChangedHdl( const Link<LinkParamNone*,void>& _rHdl )
     {
         m_aOptionsChangedLink = _rHdl;
     }
@@ -760,7 +760,7 @@ namespace svx
     {
         ScopedVclPtrInstance< HangulHanjaOptionsDialog > aOptDlg(this);
         aOptDlg->Execute();
-        m_aOptionsChangedLink.Call( this );
+        m_aOptionsChangedLink.Call( nullptr );
     }
 
 

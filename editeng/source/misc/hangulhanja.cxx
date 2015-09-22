@@ -152,7 +152,7 @@ namespace editeng
         bool ContinueConversion( bool _bRepeatCurrentUnit );
 
     private:
-        DECL_LINK( OnOptionsChanged, void* );
+        DECL_LINK_TYPED( OnOptionsChanged, LinkParamNone*, void );
         DECL_LINK_TYPED( OnIgnore, Button*, void );
         DECL_LINK_TYPED( OnIgnoreAll, Button*, void );
         DECL_LINK_TYPED( OnChange, Button*, void );
@@ -810,13 +810,11 @@ namespace editeng
         m_pAntiImpl->HandleNewUnit( m_nCurrentStartIndex - m_nReplacementBaseIndex, m_nCurrentEndIndex - m_nReplacementBaseIndex );
     }
 
-    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnOptionsChanged)
+    IMPL_LINK_NOARG_TYPED(HangulHanjaConversion_Impl, OnOptionsChanged, LinkParamNone*, void)
     {
         //options and dictionaries might have been changed
         //-> update our internal settings and the dialog
         implUpdateData();
-
-        return 0L;
     }
 
     IMPL_LINK_NOARG_TYPED(HangulHanjaConversion_Impl, OnIgnore, Button*, void)
