@@ -2892,7 +2892,7 @@ void ScViewFunc::NotifyUnitErrorInFormula( const ScAddress& rAddress, ScDocument
     SfxInfoBarWindow* pInfoBar = pViewFrame->AppendInfoBar( sCellAddress, sTitle );
 
     assert( pInfoBar );
-    PushButton* pButtonGotoCell = new PushButton( &pViewFrame->GetWindow(), ScResId(BT_UNITS_EDIT_CELL) );
+    VclPtr<PushButton> pButtonGotoCell = VclPtr<PushButton>::Create( &pViewFrame->GetWindow(), ScResId(BT_UNITS_EDIT_CELL) );
     pButtonGotoCell->SetClickHdl( LINK( this, ScViewFunc, EditUnitErrorFormulaHandler ) );
     pInfoBar->addButton( pButtonGotoCell);
 }
@@ -2979,12 +2979,13 @@ void ScViewFunc::NotifyUnitConversionRecommended( const ScAddress& rCellAddress,
 
     assert( pInfoBar );
 
-    UnitConversionPushButton* pButtonConvertCell = new UnitConversionPushButton( &pViewFrame->GetWindow(),
-                                                                                 ScResId(BT_UNITS_CONVERT_THIS_CELL),
-                                                                                 rCellAddress,
-                                                                                 pDoc,
-                                                                                 rsHeaderUnit,
-                                                                                 rsCellUnit );
+    VclPtr<UnitConversionPushButton> pButtonConvertCell =
+        VclPtr<UnitConversionPushButton>::Create( &pViewFrame->GetWindow(),
+                                                  ScResId(BT_UNITS_CONVERT_THIS_CELL),
+                                                  rCellAddress,
+                                                  pDoc,
+                                                  rsHeaderUnit,
+                                                  rsCellUnit );
     pButtonConvertCell->SetClickHdl( LINK( this, ScViewFunc, UnitConversionRecommendedHandler ) );
 
     OUString sConvertText = pButtonConvertCell->GetText();
