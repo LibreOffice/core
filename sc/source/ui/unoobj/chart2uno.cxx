@@ -2953,10 +2953,10 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     }
 }
 
-IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, SfxHint*, pHint )
+IMPL_LINK_TYPED( ScChart2DataSequence, ValueListenerHdl, const SfxHint&, rHint, void )
 {
-    if ( m_pDocument && pHint && dynamic_cast<const SfxSimpleHint*>(pHint) &&
-            static_cast<const SfxSimpleHint*>(pHint)->GetId() & SC_HINT_DATACHANGED)
+    if ( m_pDocument && dynamic_cast<const SfxSimpleHint*>(&rHint) &&
+            static_cast<const SfxSimpleHint&>(rHint).GetId() & SC_HINT_DATACHANGED)
     {
         //  This may be called several times for a single change, if several formulas
         //  in the range are notified. So only a flag is set that is checked when
@@ -2964,7 +2964,6 @@ IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, SfxHint*, pHint )
 
         setDataChangedHint(true);
     }
-    return 0;
 }
 
 ScChart2DataSequence::ExternalRefListener::ExternalRefListener(

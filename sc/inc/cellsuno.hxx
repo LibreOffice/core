@@ -109,9 +109,9 @@ namespace editeng { class SvxBorderLine; }
 
 class ScLinkListener : public SvtListener
 {
-    Link<>  aLink;
+    Link<const SfxHint&,void>  aLink;
 public:
-                    ScLinkListener(const Link<>& rL) : aLink(rL) {}
+                    ScLinkListener(const Link<const SfxHint&,void>& rL) : aLink(rL) {}
     virtual         ~ScLinkListener();
     virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
 };
@@ -190,7 +190,7 @@ private:
     bool                    bGotDataChangedHint;
     XModifyListenerArr_Impl aValueListeners;
 
-    DECL_LINK( ValueListenerHdl, SfxHint* );
+    DECL_LINK_TYPED( ValueListenerHdl, const SfxHint&, void );
 
 private:
     void            PaintRanges_Impl( sal_uInt16 nPart );
