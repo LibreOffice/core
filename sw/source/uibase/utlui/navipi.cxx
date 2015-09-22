@@ -454,18 +454,17 @@ void  SwNavHelpToolBox::RequestHelp( const HelpEvent& rHEvt )
 // Action-Handler Edit:
 // Switches to the page if the structure view is not turned on.
 
-IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
+IMPL_LINK_TYPED( SwNavigationPI, EditAction, NumEditAction&, rEdit, void )
 {
     SwView *pView = GetCreateView();
     if (pView)
     {
         if(aPageChgIdle.IsActive())
             aPageChgIdle.Stop();
-        pCreateView->GetWrtShell().GotoPage((sal_uInt16)pEdit->GetValue(), true);
+        pCreateView->GetWrtShell().GotoPage((sal_uInt16)rEdit.GetValue(), true);
         pCreateView->GetEditWin().GrabFocus();
         pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
     }
-    return 0;
 }
 
 // If the page can be set here, the maximum is set.
@@ -1250,7 +1249,7 @@ IMPL_LINK_NOARG_TYPED(SwNavigationPI, ChangePageHdl, Idle *, void)
 {
     if (!IsDisposed())
     {
-        EditAction(&GetPageEdit());
+        EditAction(GetPageEdit());
         GetPageEdit().GrabFocus();
     }
 }

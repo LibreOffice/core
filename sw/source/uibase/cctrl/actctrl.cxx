@@ -23,7 +23,7 @@
 
 void NumEditAction::Action()
 {
-    aActionLink.Call( this );
+    aActionLink.Call( *this );
 }
 
 bool NumEditAction::Notify( NotifyEvent& rNEvt )
