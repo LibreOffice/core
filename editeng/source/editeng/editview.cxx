@@ -760,7 +760,7 @@ bool EditView::IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWron
     return pImpEditView->IsWrongSpelledWord( aPaM , bMarkIfWrong );
 }
 
-void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack )
+void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack )
 {
 
     Point aPos ( pImpEditView->GetWindow()->PixelToLogic( rPosPixel ) );
@@ -938,7 +938,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack )
             if ( pCallBack )
             {
                 SpellCallbackInfo aInf( SpellCallbackCommand::IGNOREWORD, aWord );
-                pCallBack->Call( &aInf );
+                pCallBack->Call( aInf );
             }
             SetSelection( aOldSel );
         }
@@ -967,7 +967,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack )
             if ( pCallBack )
             {
                 SpellCallbackInfo aInf( ( nId == MN_WORDLANGUAGE ) ? SpellCallbackCommand::WORDLANGUAGE : SpellCallbackCommand::PARALANGUAGE, nLangToUse );
-                pCallBack->Call( &aInf );
+                pCallBack->Call( aInf );
             }
             SetSelection( aOldSel );
         }
@@ -986,7 +986,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack )
             else
             {
                 SpellCallbackInfo aInf( SpellCallbackCommand::STARTSPELLDLG, OUString() );
-                pCallBack->Call( &aInf );
+                pCallBack->Call( aInf );
             }
         }
         else if ( nId >= MN_DICTSTART || nId == MN_INSERT_SINGLE )
@@ -1014,7 +1014,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack )
             if ( pCallBack )
             {
                 SpellCallbackInfo aInf( SpellCallbackCommand::ADDTODICTIONARY, aSelected );
-                pCallBack->Call( &aInf );
+                pCallBack->Call( aInf );
             }
             SetSelection( aOldSel );
         }

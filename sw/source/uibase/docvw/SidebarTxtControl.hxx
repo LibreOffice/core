@@ -64,7 +64,7 @@ class SidebarTextControl : public Control
 
         OutlinerView* GetTextView() const;
 
-        DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);
+        DECL_LINK_TYPED( OnlineSpellCallback, SpellCallbackInfo&, void );
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 

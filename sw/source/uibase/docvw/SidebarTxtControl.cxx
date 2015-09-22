@@ -317,13 +317,12 @@ void SidebarTextControl::MouseButtonUp( const MouseEvent& rMEvt )
         GetTextView()->MouseButtonUp( rMEvt );
 }
 
-IMPL_LINK( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo*, pInfo )
+IMPL_LINK_TYPED( SidebarTextControl, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void )
 {
-    if ( pInfo->nCommand == SpellCallbackCommand::STARTSPELLDLG )
+    if ( rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG )
     {
         mrDocView.GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SidebarTextControl, Select, Menu*, pSelMenu, bool )
@@ -340,7 +339,7 @@ void SidebarTextControl::Command( const CommandEvent& rCEvt )
              GetTextView() &&
              GetTextView()->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(), true ))
         {
-            Link<> aLink = LINK(this, SidebarTextControl, OnlineSpellCallback);
+            Link<SpellCallbackInfo&,void> aLink = LINK(this, SidebarTextControl, OnlineSpellCallback);
             GetTextView()->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);
         }
         else

@@ -609,7 +609,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     ( !rCEvt.IsMouseEvent() && pOutlinerView->IsCursorAtWrongSpelledWord() ) )
                                 {
                                     // Popup for Online-Spelling now handled by DrawDocShell
-                                    Link<> aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
+                                    Link<SpellCallbackInfo&,void> aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
                                     if( !rCEvt.IsMouseEvent() )
                                     {

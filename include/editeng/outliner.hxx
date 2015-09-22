@@ -368,7 +368,7 @@ public:
 
     bool        IsCursorAtWrongSpelledWord( bool bMarkIfWrong = false );
     bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    void        ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack = 0 );
+    void        ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo&,void>* pCallBack = 0 );
 
     void        SetInvalidateMore( sal_uInt16 nPixel );
     sal_uInt16  GetInvalidateMore() const;

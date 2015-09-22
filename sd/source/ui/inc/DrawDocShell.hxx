@@ -199,8 +199,8 @@ public:
 
     DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
 
-                            // ExecuteSpellPopup now handled by DrawDocShell
-                            DECL_LINK( OnlineSpellCallback, SpellCallbackInfo* );
+    // ExecuteSpellPopup now handled by DrawDocShell
+    DECL_LINK_TYPED( OnlineSpellCallback, SpellCallbackInfo&, void );
 
     void                    ClearUndoBuffer();
 

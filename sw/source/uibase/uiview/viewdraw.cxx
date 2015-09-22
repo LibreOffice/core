@@ -725,11 +725,10 @@ bool SwView::HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const
 }
 
 //#i87414# mod
-IMPL_LINK(SwView, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
+IMPL_LINK_TYPED(SwView, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
 {
-    if (pInfo->nCommand == SpellCallbackCommand::STARTSPELLDLG)
+    if (rInfo.nCommand == SpellCallbackCommand::STARTSPELLDLG)
         GetViewFrame()->GetDispatcher()->Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
-    return 0;
 }
 
 bool SwView::ExecDrwTextSpellPopup(const Point& rPt)
@@ -742,7 +741,7 @@ bool SwView::ExecDrwTextSpellPopup(const Point& rPt)
     if (pOLV->IsWrongSpelledWordAtPos( aPos ))
     {
         bRet = true;
-        Link<> aLink = LINK(this, SwView, OnlineSpellCallback);
+        Link<SpellCallbackInfo&,void> aLink = LINK(this, SwView, OnlineSpellCallback);
         pOLV->ExecuteSpellPopup( aPos,&aLink );
     }
     return bRet;

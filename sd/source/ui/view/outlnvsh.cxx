@@ -1374,7 +1374,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
         if (pOLV && pOLV->IsWrongSpelledWordAtPos(aPos))
         {
             // Popup for Online-Spelling now handled by DrawDocShell
-            Link<> aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
+            Link<SpellCallbackInfo&,void> aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
             pOLV->ExecuteSpellPopup(aPos, &aLink);
         }

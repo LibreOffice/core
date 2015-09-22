@@ -433,7 +433,7 @@ public:
     void                ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
     bool            ExecSmartTagPopup( const Point& rPt );
 
-    DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);
+    DECL_LINK_TYPED( OnlineSpellCallback, SpellCallbackInfo&, void );
     bool            ExecDrwTextSpellPopup(const Point& rPt);
 
     void            SetTabColFromDocPos( const Point &rPt ) { m_aTabColFromDocPos = rPt; }
