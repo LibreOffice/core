@@ -6217,4 +6217,70 @@ void Test::testFuncLCM()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncSUMSQ()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "SUMSQTest");
+
+    ScAddress aPos(4,0,0);
+
+    m_pDoc->SetString(aPos, "=SUMSQ(A1)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 0.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, 1.0); // A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 1.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, -1.0); // A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 1.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, -2.0); // A2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 1.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->SetString(aPos, "=SUMSQ(A1:A3)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 5.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 0, 0, 3.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 5.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ(A1:C3)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 14.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 1, 0, -4.0); // B2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 30.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(1, 2, 0, "a"); // B3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ with a string for failed", 30.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 2, 0, 0.0); // B3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ with a string for failed", 30.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 2, 0, 6.0); // A3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ with a string for failed", 66.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(2, 0, 0, -5.0); // C1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ with a string for failed", 91.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(2, 1, 0, 3.0); // C2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ with a string for failed", 100.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(2, 2, 0, 2.0); // C3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ with a string for failed", 104.0, m_pDoc->GetValue(aPos));
+
+    // inline array
+    m_pDoc->SetString(aPos, "=SUMSQ({1;2;3})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 14.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ({3;6;9})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 126.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ({15;0})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 225.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ({-3;3;1})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 19.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ({\"a\";-4;-5})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 41.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->SetString(aPos, "=SUMSQ(4;1;-3)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 26.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ(0;5;13;-7;-4)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 259.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ(0;12;24;36;48;60)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 7920.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ(0;-12;-24;36;-48;60)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 7920.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ(\"a\";1;\"d\";-4;2)");
+    OUString aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUMSQ should return #VALUE! for a array with strings",
+            OUString("#VALUE!"), aVal);
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
