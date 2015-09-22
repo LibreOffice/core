@@ -55,6 +55,7 @@ class FmFormShell;
 class Graphic;
 class SdrObject;
 class SvxSpellWrapper;
+struct FmSearchContext;
 
 typedef ::std::vector< OUString > TargetList;
 
@@ -363,7 +364,7 @@ public:
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
-                                                        const Link<>& lnkContextSupplier)=0;
+                                                        const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(vcl::Window* pParent,
                                                 const Graphic& rGraphic,
                                                 RECT_POINT eLightSource)=0;

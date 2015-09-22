@@ -606,7 +606,7 @@ public:
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
-                                                        const Link<>& lnkContextSupplier) SAL_OVERRIDE;
+                                                        const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier) SAL_OVERRIDE;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss(vcl::Window* pParent,
                                                 const Graphic& rGraphic, RECT_POINT eLightSource) SAL_OVERRIDE;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterPoster(vcl::Window* pParent,

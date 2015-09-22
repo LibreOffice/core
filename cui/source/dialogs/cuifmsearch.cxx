@@ -74,7 +74,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 }
 
 FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
-    const Link<>& lnkContextSupplier)
+    const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)
     :ModalDialog(pParent, "RecordSearchDialog", "cui/ui/fmsearchdialog.ui")
     ,m_sCancel( Button::GetStandardText( StandardButtonType::Cancel ) )
     ,m_pPreSearchFocus( NULL )
@@ -115,7 +115,7 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
 
     FmSearchContext fmscInitial;
     fmscInitial.nContext = nInitialContext;
-    m_lnkContextSupplier.Call(&fmscInitial);
+    m_lnkContextSupplier.Call(fmscInitial);
     DBG_ASSERT(fmscInitial.xCursor.is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
     DBG_ASSERT(comphelper::string::getTokenCount(fmscInitial.strUsedFields, ';') == (sal_Int32)fmscInitial.arrFields.size(),
         "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplied !");
@@ -520,7 +520,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     FmSearchContext fmscContext;
     fmscContext.nContext = nContext;
 
-    sal_uInt32 nResult = m_lnkContextSupplier.Call(&fmscContext);
+    sal_uInt32 nResult = m_lnkContextSupplier.Call(fmscContext);
     DBG_ASSERT(nResult > 0, "FmSearchDialog::InitContext : ContextSupplier didn't give me any controls !");
 
     // put the field names into the respective listbox
