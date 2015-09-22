@@ -210,7 +210,7 @@ class SwAuthorMarkPane
     DECL_LINK_TYPED(CreateEntryHdl, Button*, void);
     DECL_LINK(CompEntryHdl, ListBox*);
     DECL_LINK_TYPED(ChangeSourceHdl, Button*, void);
-    DECL_LINK(IsEntryAllowedHdl, Edit*);
+    DECL_LINK_TYPED(IsEntryAllowedHdl, Edit*, bool);
     DECL_LINK(EditModifyHdl, Edit*);
 
     void InitControls();

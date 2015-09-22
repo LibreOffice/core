@@ -981,7 +981,7 @@ class SwCreateAuthEntryDlg_Impl : public ModalDialog
 
     VclPtr<OKButton>       m_pOKBT;
 
-    Link<>          aShortNameCheckLink;
+    Link<Edit*,bool>       aShortNameCheckLink;
 
     SwWrtShell&     rWrtSh;
 
@@ -1003,7 +1003,7 @@ public:
 
     OUString        GetEntryText(ToxAuthorityField eField) const;
 
-    void            SetCheckNameHdl(const Link<>& rLink) {aShortNameCheckLink = rLink;}
+    void            SetCheckNameHdl(const Link<Edit*,bool>& rLink) {aShortNameCheckLink = rLink;}
 
 };
 
@@ -1332,10 +1332,10 @@ IMPL_LINK_TYPED(SwAuthorMarkPane, ChangeSourceHdl, Button*, pButton, void)
 
 IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit*, pEdit)
 {
-    Link<> aAllowed = LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl);
-    long nResult = aAllowed.Call(pEdit);
-    m_pActionBT->Enable(nResult > 0);
-    if(nResult)
+    Link<Edit*,bool> aAllowed = LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl);
+    bool bResult = aAllowed.Call(pEdit);
+    m_pActionBT->Enable(bResult);
+    if(bResult)
     {
         OUString sEntry(pEdit->GetText());
         m_sFields[AUTH_FIELD_IDENTIFIER] = sEntry;
@@ -1344,14 +1344,14 @@ IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit*, pEdit)
     return 0;
 };
 
-IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit)
+IMPL_LINK_TYPED(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit, bool)
 {
     OUString sEntry = pEdit->GetText();
     bool bAllowed = false;
     if(!sEntry.isEmpty())
     {
         if(m_pEntryLB->GetEntryPos(sEntry) != LISTBOX_ENTRY_NOTFOUND)
-            return 0;
+            return false;
         else if(bIsFromComponent)
         {
             const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
@@ -1363,7 +1363,7 @@ IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit)
             bAllowed = !xBibAccess.is() || !xBibAccess->hasByName(sEntry);
         }
     }
-    return bAllowed ? 1 : 0;
+    return bAllowed;
 }
 
 void SwAuthorMarkPane::InitControls()
@@ -1581,7 +1581,7 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, ShortNameHdl, Edit*, pEdit)
 {
     if(aShortNameCheckLink.IsSet())
     {
-        bool bEnable = 0 != aShortNameCheckLink.Call(pEdit);
+        bool bEnable = aShortNameCheckLink.Call(pEdit);
         m_bNameAllowed |= bEnable;
         m_pOKBT->Enable(pTypeListBox->GetSelectEntryCount() && bEnable);
     }
