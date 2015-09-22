@@ -160,7 +160,7 @@ private:
 
                         DECL_LINK_TYPED( ClickCancelBtn, Button*, void );
                         DECL_LINK_TYPED( TimeoutHdl, Idle*, void );
-                        DECL_LINK( ActualizeHdl, INetURLObject* );
+                        DECL_LINK_TYPED( ActualizeHdl, const INetURLObject&, void );
 
 public:
                         ActualizeProgress( vcl::Window* pWindow, GalleryTheme* pThm );

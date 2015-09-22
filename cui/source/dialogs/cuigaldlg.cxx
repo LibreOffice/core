@@ -511,7 +511,7 @@ IMPL_LINK_TYPED( ActualizeProgress, TimeoutHdl, Idle*, _pTimer, void)
 
 
 
-IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
+IMPL_LINK_TYPED( ActualizeProgress, ActualizeHdl, const INetURLObject&, rURL, void )
 {
     for( long i = 0; i < 128; i++ )
         Application::Reschedule();
@@ -519,14 +519,9 @@ IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
     Flush();
     Sync();
 
-    if( pURL )
-    {
-        m_pFtActualizeFile->SetText( GetReducedString( *pURL, 30 ) );
-        m_pFtActualizeFile->Flush();
-        m_pFtActualizeFile->Sync();
-    }
-
-    return 0;
+    m_pFtActualizeFile->SetText( GetReducedString( rURL, 30 ) );
+    m_pFtActualizeFile->Flush();
+    m_pFtActualizeFile->Sync();
 }
 
 TitleDialog::TitleDialog(vcl::Window* pParent, const OUString& rOldTitle)
