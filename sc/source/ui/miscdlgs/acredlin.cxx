@@ -163,7 +163,7 @@ void ScAcceptChgDlg::dispose()
 
     if(pChanges!=NULL)
     {
-        Link<> aLink;
+        Link<ScChangeTrack&,void> aLink;
         pChanges->SetModifiedLink(aLink);
     }
 
@@ -1586,10 +1586,10 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartActi
 
 }
 
-IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
+IMPL_LINK_TYPED( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void)
 {
     ScChangeTrackMsgQueue::iterator iter;
-    ScChangeTrackMsgQueue& aMsgQueue= pChgTrack->GetMsgQueue();
+    ScChangeTrackMsgQueue& aMsgQueue= rChgTrack.GetMsgQueue();
 
     sal_uLong   nStartAction;
     sal_uLong   nEndAction;
@@ -1605,13 +1605,13 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
 
             switch((*iter)->eMsgType)
             {
-                case SC_CTM_APPEND: AppendChanges(pChgTrack,nStartAction,nEndAction);
+                case SC_CTM_APPEND: AppendChanges(&rChgTrack,nStartAction,nEndAction);
                                     break;
                 case SC_CTM_REMOVE: RemoveEntrys(nStartAction,nEndAction);
                                     break;
                 case SC_CTM_PARENT:
                 case SC_CTM_CHANGE: //bNeedsUpdate=true;
-                                    UpdateEntrys(pChgTrack,nStartAction,nEndAction);
+                                    UpdateEntrys(&rChgTrack,nStartAction,nEndAction);
                                     break;
                 default:
                 {
@@ -1623,8 +1623,6 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
     }
 
     aMsgQueue.clear();
-
-    return 0;
 }
 IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, ReOpenTimerHdl, Idle *, void)
 {
