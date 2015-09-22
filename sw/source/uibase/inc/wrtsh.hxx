@@ -419,8 +419,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet = 0, SbxArray* pArgs = 0 );
     // call into the dark Basic/JavaScript
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
-                        bool bCheckPtr = false, SbxArray* pArgs = 0,
-                        const Link<>* pCallBack = 0 );
+                        bool bCheckPtr = false, SbxArray* pArgs = 0 );
 
     // a click at the given field. the cursor is on it.
     // execute the predefined actions.

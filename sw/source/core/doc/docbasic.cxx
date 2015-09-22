@@ -131,7 +131,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
 }
 
 sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
-                    bool bCheckPtr, SbxArray* pArgs, const Link<>* )
+                    bool bCheckPtr, SbxArray* pArgs )
 {
     if( !mpDocShell )        // we can't do that without a DocShell!
         return 0;
