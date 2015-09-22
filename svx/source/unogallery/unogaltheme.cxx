@@ -206,7 +206,7 @@ void SAL_CALL GalleryTheme::update(  )
 
     if( mpTheme )
     {
-        const Link<> aDummyLink;
+        const Link<const INetURLObject&, void> aDummyLink;
         mpTheme->Actualize( aDummyLink );
     }
 }

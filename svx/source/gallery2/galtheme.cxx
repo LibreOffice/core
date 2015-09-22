@@ -509,7 +509,7 @@ bool GalleryTheme::ChangeObjectPos( size_t nOldPos, size_t nNewPos )
     return true;
 }
 
-void GalleryTheme::Actualize( const Link<>& rActualizeLink, GalleryProgress* pProgress )
+void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualizeLink, GalleryProgress* pProgress )
 {
     if( !IsReadOnly() )
     {
@@ -534,7 +534,7 @@ void GalleryTheme::Actualize( const Link<>& rActualizeLink, GalleryProgress* pPr
 
             const INetURLObject aURL( pEntry->aURL );
 
-            rActualizeLink.Call( const_cast<INetURLObject *>(&aURL) );
+            rActualizeLink.Call( aURL );
 
             // SvDraw objects will be updated later
             if( pEntry->eObjKind != SGA_OBJ_SVDRAW )

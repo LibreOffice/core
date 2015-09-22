@@ -178,7 +178,7 @@ public:
     bool                        IsDefault() const;
     SAL_DLLPRIVATE bool         IsModified() const;
 
-    void                        Actualize( const Link<>& rActualizeLink, GalleryProgress* pProgress = NULL );
+    void                        Actualize( const Link<const INetURLObject&, void>& rActualizeLink, GalleryProgress* pProgress = NULL );
     SAL_DLLPRIVATE void         AbortActualize() { bAbortActualize = true; }
 
     SAL_DLLPRIVATE Gallery*     GetParent() const { return pParent; }
