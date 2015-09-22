@@ -116,7 +116,7 @@ protected:
 
     // Chaining
     void ImpChainingEventHdl();
-    DECL_LINK(ImpAfterCutOrPasteChainingEventHdl,void*);
+    DECL_LINK_TYPED(ImpAfterCutOrPasteChainingEventHdl, LinkParamNone*, void);
 
 
     // Check if the whole text is selected.

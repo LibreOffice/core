@@ -549,15 +549,14 @@ void SdrObjEditView::ImpChainingEventHdl()
 
 }
 
-IMPL_LINK_NOARG(SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl)
+IMPL_LINK_NOARG_TYPED(SdrObjEditView,ImpAfterCutOrPasteChainingEventHdl, LinkParamNone*, void)
 {
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( GetTextEditObject());
     if (!pTextObj)
-        return 0;
+        return;
     ImpChainingEventHdl();
     TextChainCursorManager *pCursorManager = new TextChainCursorManager(this, pTextObj);
     ImpMoveCursorAfterChainingEvent(pCursorManager);
-    return 0;
 }
 
 void SdrObjEditView::ImpMoveCursorAfterChainingEvent(TextChainCursorManager *pCursorManager)
