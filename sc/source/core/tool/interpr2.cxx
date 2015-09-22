@@ -213,7 +213,44 @@ void ScInterpreter::ScGetWeekOfYear()
 
         Date aDate = *(pFormatter->GetNullDate());
         aDate += (long)::rtl::math::approxFloor(GetDouble());
-        PushInt( (int) aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY ));
+
+        sal_Int32 nMinimumNumberOfDaysInWeek;
+        DayOfWeek eFirstDayOfWeek;
+        switch ( nFlag )
+        {
+            case   1 :
+            case  11 :
+            case   2 :
+            case  12 :
+            case  13 :
+            case  14 :
+            case  15 :
+            case  16 :
+            case  17 :
+                eFirstDayOfWeek = (DayOfWeek) ( ( nFlag - 1 )  % 10 );
+                nMinimumNumberOfDaysInWeek = 1; //the week containing January 1 is week 1
+                break;
+            case  21 :
+            case 150 :
+                // ISO 8601
+                eFirstDayOfWeek = MONDAY;
+                nMinimumNumberOfDaysInWeek = 4;
+                break;
+            default :
+                PushIllegalArgument();
+                return;
+        }
+        PushInt( (int) aDate.GetWeekOfYear( eFirstDayOfWeek, nMinimumNumberOfDaysInWeek ) );
+    }
+}
+
+void ScInterpreter::ScGetIsoWeekOfYear()
+{
+    if ( MustHaveParamCount( GetByte(), 1 ) )
+    {
+        Date aDate = *(pFormatter->GetNullDate());
+        aDate += (long)::rtl::math::approxFloor(GetDouble());
+        PushInt( (int) aDate.GetWeekOfYear( MONDAY, 4 ) );
     }
 }
 
