@@ -172,8 +172,6 @@ protected:
 
 private:
     TreeNode* mpParent;
-    typedef ::std::vector<Link<>> StateChangeListenerContainer;
-    StateChangeListenerContainer maStateChangeListeners;
 };
 
 /** Objects of this class are sent to listeners to notify them about state
