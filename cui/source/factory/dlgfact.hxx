@@ -144,7 +144,7 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void      SetIgnoreAllHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE ;
     virtual void      SetChangeHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE ;
     virtual void      SetChangeAllHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE ;
-    virtual void      SetClickByCharacterHdl( const Link<>& _rHdl ) SAL_OVERRIDE ;
+    virtual void      SetClickByCharacterHdl( const Link<CheckBox*,void>& _rHdl ) SAL_OVERRIDE ;
     virtual void      SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE ;
     virtual void      SetFindHdl( const Link<Button*,void>& _rHdl ) SAL_OVERRIDE;
     virtual bool      GetUseBothDirections( ) const SAL_OVERRIDE;

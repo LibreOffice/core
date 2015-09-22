@@ -286,7 +286,7 @@ void AbstractHangulHanjaConversionDialog_Impl::SetChangeAllHdl( const Link<Butto
     pDlg->SetChangeAllHdl(_rHdl );
 }
 
-void AbstractHangulHanjaConversionDialog_Impl::SetClickByCharacterHdl( const Link<>& _rHdl )
+void AbstractHangulHanjaConversionDialog_Impl::SetClickByCharacterHdl( const Link<CheckBox*,void>& _rHdl )
 {
      pDlg->SetClickByCharacterHdl(_rHdl );
 }

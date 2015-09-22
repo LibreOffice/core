@@ -157,7 +157,7 @@ namespace editeng
         DECL_LINK_TYPED( OnIgnoreAll, Button*, void );
         DECL_LINK_TYPED( OnChange, Button*, void );
         DECL_LINK_TYPED( OnChangeAll, Button*, void );
-        DECL_LINK( OnByCharClicked, CheckBox* );
+        DECL_LINK_TYPED( OnByCharClicked, CheckBox*, void );
         DECL_LINK_TYPED( OnConversionTypeChanged, Button*, void );
         DECL_LINK_TYPED( OnFind, Button*, void );
 
@@ -873,13 +873,12 @@ namespace editeng
         }
     }
 
-    IMPL_LINK( HangulHanjaConversion_Impl, OnByCharClicked, CheckBox*, _pBox )
+    IMPL_LINK_TYPED( HangulHanjaConversion_Impl, OnByCharClicked, CheckBox*, _pBox, void )
     {
         m_bByCharacter = _pBox->IsChecked();
 
         // continue conversion, without advancing to the next unit, but instead continuing with the current unit
         implProceed( true );
-        return 0L;
     }
 
     IMPL_LINK_NOARG_TYPED(HangulHanjaConversion_Impl, OnConversionTypeChanged, Button*, void)

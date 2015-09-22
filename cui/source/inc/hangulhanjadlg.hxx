@@ -129,10 +129,10 @@ namespace svx
             the user uses the "find" functionality, we switch to working
             with what the user entered, which then does not have any relation to
             the document anymore. Some functionality must be disabled then */
-        bool            m_bDocumentMode;
+        bool                       m_bDocumentMode;
 
         Link<LinkParamNone*,void>  m_aOptionsChangedLink;
-        Link<>          m_aClickByCharacterLink;
+        Link<CheckBox*,void>       m_aClickByCharacterLink;
 
     public:
         HangulHanjaConversionDialog(
@@ -148,7 +148,7 @@ namespace svx
         void    SetChangeHdl( const Link<Button*,void>& _rHdl );
         void    SetChangeAllHdl( const Link<Button*,void>& _rHdl );
 
-        void    SetClickByCharacterHdl( const Link<>& _rHdl );
+        void    SetClickByCharacterHdl( const Link<CheckBox*,void>& _rHdl );
         void    SetConversionFormatChangedHdl( const Link<Button*,void>& _rHdl );
         void    SetFindHdl( const Link<Button*,void>& _rHdl );
 
