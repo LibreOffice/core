@@ -65,47 +65,47 @@ namespace com{ namespace sun{ namespace star{ namespace scanner{
 
 class SW_DLLPUBLIC SwModule: public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
-    OUString            sActAuthor;
+    OUString            m_sActAuthor;
 
     // ConfigItems
-    SwModuleOptions*    pModuleConfig;
-    SwMasterUsrPref*    pUsrPref;
-    SwMasterUsrPref*    pWebUsrPref;
-    SwPrintOptions*     pPrtOpt;
-    SwPrintOptions*     pWebPrtOpt;
-    SwChapterNumRules*  pChapterNumRules;
-    SwStdFontConfig*    pStdFontConfig;
-    SwNavigationConfig* pNavigationConfig;
-    SwToolbarConfigItem*pToolbarConfig;     //For stacked toolbars. Which one was visible?
-    SwToolbarConfigItem*pWebToolbarConfig;
-    SwDBConfig*         pDBConfig;
-    svtools::ColorConfig*   pColorConfig;
-    SvtAccessibilityOptions* pAccessibilityOptions;
-    SvtCTLOptions*      pCTLOptions;
-    SvtUserOptions*     pUserOptions;
+    SwModuleOptions*    m_pModuleConfig;
+    SwMasterUsrPref*    m_pUsrPref;
+    SwMasterUsrPref*    m_pWebUsrPref;
+    SwPrintOptions*     m_pPrintOptions;
+    SwPrintOptions*     m_pWebPrintOptions;
+    SwChapterNumRules*  m_pChapterNumRules;
+    SwStdFontConfig*    m_pStdFontConfig;
+    SwNavigationConfig* m_pNavigationConfig;
+    SwToolbarConfigItem*m_pToolbarConfig;     //For stacked toolbars. Which one was visible?
+    SwToolbarConfigItem*m_pWebToolbarConfig;
+    SwDBConfig*         m_pDBConfig;
+    svtools::ColorConfig*   m_pColorConfig;
+    SvtAccessibilityOptions* m_pAccessibilityOptions;
+    SvtCTLOptions*      m_pCTLOptions;
+    SvtUserOptions*     m_pUserOptions;
 
-    SfxErrorHandler*    pErrorHdl;
+    SfxErrorHandler*    m_pErrorHandler;
 
-    SwAttrPool          *pAttrPool;
+    SwAttrPool          *m_pAttrPool;
 
     // Current view is held here in order to avoid one's being forced
     // to work via GetActiveView.
     // View is valid until destroyed in Activate or exchanged.
-    SwView*             pView;
+    SwView*             m_pView;
 
     // List of all Redline-authors.
-    std::vector<OUString>* pAuthorNames;
+    std::vector<OUString>* m_pAuthorNames;
 
     // DictionaryList listener to trigger spellchecking or hyphenation
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceEventListener > xLngSvcEvtListener;
+        ::com::sun::star::linguistic2::XLinguServiceEventListener > m_xLinguServiceEventListener;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::scanner::XScannerManager2 >    m_xScannerManager;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
 
-    bool                bAuthorInitialised : 1;
-    bool                bEmbeddedLoadSave : 1;
+    bool                m_bAuthorInitialised : 1;
+    bool                m_bEmbeddedLoadSave : 1;
 
     // Catch hint for DocInfo.
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
@@ -119,7 +119,7 @@ protected:
 
 public:
     // public Data - used for internal Clipboard / Drag & Drop / XSelection
-    SwTransferable  *pDragDrop, *pXSelection;
+    SwTransferable  *m_pDragDrop, *m_pXSelection;
 
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SW_INTERFACE_MODULE)
@@ -137,8 +137,8 @@ public:
     virtual ~SwModule();
 
     // Set view for internal use only. It is public only for technical reasons.
-    inline  void        SetView(SwView* pVw) { pView = pVw; }
-    inline  SwView*     GetView() { return pView; }
+    inline  void        SetView(SwView* pVw) { m_pView = pVw; }
+    inline  SwView*     GetView() { return m_pView; }
 
     // Handler for slots.
     void                StateOther(SfxItemSet &);
@@ -161,13 +161,13 @@ public:
     void ApplyUserCharUnit(bool bApplyChar, bool bWeb);  // apply_char_unit
 
     // Create ConfigItems.
-    SwModuleOptions*    GetModuleConfig()       { return pModuleConfig;}
+    SwModuleOptions*    GetModuleConfig()       { return m_pModuleConfig;}
     SwPrintOptions*     GetPrtOptions(bool bWeb);
     SwChapterNumRules*  GetChapterNumRules();
-    SwStdFontConfig*    GetStdFontConfig()      { return pStdFontConfig; }
+    SwStdFontConfig*    GetStdFontConfig()      { return m_pStdFontConfig; }
     SwNavigationConfig* GetNavigationConfig();
-    SwToolbarConfigItem*GetToolbarConfig()      { return pToolbarConfig;    }
-    SwToolbarConfigItem*GetWebToolbarConfig()   { return pWebToolbarConfig; }
+    SwToolbarConfigItem*GetToolbarConfig()      { return m_pToolbarConfig;    }
+    SwToolbarConfigItem*GetWebToolbarConfig()   { return m_pWebToolbarConfig; }
     SwDBConfig*         GetDBConfig();
     svtools::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions&    GetAccessibilityOptions();
@@ -178,8 +178,8 @@ public:
     static SwView*      GetFirstView();
     static SwView*      GetNextView(SwView*);
 
-    bool IsEmbeddedLoadSave() const         { return bEmbeddedLoadSave; }
-    void SetEmbeddedLoadSave( bool bFlag )  { bEmbeddedLoadSave = bFlag; }
+    bool IsEmbeddedLoadSave() const         { return m_bEmbeddedLoadSave; }
+    void SetEmbeddedLoadSave( bool bFlag )  { m_bEmbeddedLoadSave = bFlag; }
 
     static void ShowDBObj( SwView& rView, const SwDBData& rData, bool bOnlyIfAvailable = false);
 
@@ -248,7 +248,7 @@ inline ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XLinguServiceEventListener >
         SwModule::GetLngSvcEvtListener()
 {
-    return xLngSvcEvtListener;
+    return m_xLinguServiceEventListener;
 }
 
 //    Access to SwModule, the View and the shell.

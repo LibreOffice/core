@@ -235,9 +235,9 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     if( !SwTransferable::PasteData( aData, rSh, m_nDropAction, m_nDropFormat,
                                 m_nDropDestination, false, rEvt.mbDefault, &aDocPt, nRet))
         nRet = DND_ACTION_NONE;
-    else if ( SW_MOD()->pDragDrop )
+    else if ( SW_MOD()->m_pDragDrop )
         //Don't clean up anymore at internal D&D!
-        SW_MOD()->pDragDrop->SetCleanUp( false );
+        SW_MOD()->m_pDragDrop->SetCleanUp( false );
 
     return nRet;
 }
@@ -390,12 +390,12 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
         //With the default action we still want to have a say.
         SwModule *pMod = SW_MOD();
-        if( pMod->pDragDrop )
+        if( pMod->m_pDragDrop )
         {
             bool bCleanup = false;
             //Drawing objects in Headers/Footers are not allowed
 
-            SwWrtShell *pSrcSh = pMod->pDragDrop->GetShell();
+            SwWrtShell *pSrcSh = pMod->m_pDragDrop->GetShell();
             if( (pSrcSh->GetSelFrmType() == FrmTypeFlags::DRAWOBJ) &&
                 pSrcSh->IsSelContainsControl() &&
                  (rSh.GetFrmType( &aDocPt, false ) & (FrmTypeFlags::HEADER|FrmTypeFlags::FOOTER)) )

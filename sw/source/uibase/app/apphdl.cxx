@@ -197,7 +197,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast< sal_uInt16 >(::GetDfltMetric(bWebView))));
             break;
             case FN_SET_MODOPT_TBLNUMFMT:
-                rSet.Put( SfxBoolItem( nWhich, pModuleConfig->
+                rSet.Put( SfxBoolItem( nWhich, m_pModuleConfig->
                                             IsInsTableFormatNum( bWebView )));
             break;
             default:
@@ -670,9 +670,9 @@ void SwModule::ExecOther(SfxRequest& rReq)
                         nWhich, false, &pItem ))
                     bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 else
-                    bSet = !pModuleConfig->IsInsTableFormatNum( bWebView );
+                    bSet = !m_pModuleConfig->IsInsTableFormatNum( bWebView );
 
-                pModuleConfig->SetInsTableFormatNum( bWebView, bSet );
+                m_pModuleConfig->SetInsTableFormatNum( bWebView, bSet );
             }
             break;
 #if HAVE_FEATURE_DBCONNECTIVITY
@@ -757,37 +757,37 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         sal_uInt16 nHintId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if(SFX_HINT_DEINITIALIZING == nHintId)
         {
-            DELETEZ(pWebUsrPref);
-            DELETEZ(pUsrPref)   ;
-            DELETEZ(pModuleConfig);
-            DELETEZ(pPrtOpt)      ;
-            DELETEZ(pWebPrtOpt)   ;
-            DELETEZ(pChapterNumRules);
-            DELETEZ(pStdFontConfig)     ;
-            DELETEZ(pNavigationConfig)  ;
-            DELETEZ(pToolbarConfig)     ;
-            DELETEZ(pWebToolbarConfig)  ;
-            DELETEZ(pAuthorNames)       ;
-            DELETEZ(pDBConfig);
-            if( pColorConfig )
+            DELETEZ(m_pWebUsrPref);
+            DELETEZ(m_pUsrPref)   ;
+            DELETEZ(m_pModuleConfig);
+            DELETEZ(m_pPrintOptions)      ;
+            DELETEZ(m_pWebPrintOptions)   ;
+            DELETEZ(m_pChapterNumRules);
+            DELETEZ(m_pStdFontConfig)     ;
+            DELETEZ(m_pNavigationConfig)  ;
+            DELETEZ(m_pToolbarConfig)     ;
+            DELETEZ(m_pWebToolbarConfig)  ;
+            DELETEZ(m_pAuthorNames)       ;
+            DELETEZ(m_pDBConfig);
+            if( m_pColorConfig )
             {
-                pColorConfig->RemoveListener(this);
-                DELETEZ(pColorConfig);
+                m_pColorConfig->RemoveListener(this);
+                DELETEZ(m_pColorConfig);
             }
-            if( pAccessibilityOptions )
+            if( m_pAccessibilityOptions )
             {
-                pAccessibilityOptions->RemoveListener(this);
-                DELETEZ(pAccessibilityOptions);
+                m_pAccessibilityOptions->RemoveListener(this);
+                DELETEZ(m_pAccessibilityOptions);
             }
-            if( pCTLOptions )
+            if( m_pCTLOptions )
             {
-                pCTLOptions->RemoveListener(this);
-                DELETEZ(pCTLOptions);
+                m_pCTLOptions->RemoveListener(this);
+                DELETEZ(m_pCTLOptions);
             }
-            if( pUserOptions )
+            if( m_pUserOptions )
             {
-                pUserOptions->RemoveListener(this);
-                DELETEZ(pUserOptions);
+                m_pUserOptions->RemoveListener(this);
+                DELETEZ(m_pUserOptions);
             }
         }
     }
@@ -795,15 +795,15 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal_uInt32 )
 {
-    if( pBrdCst == pUserOptions )
+    if( pBrdCst == m_pUserOptions )
     {
-        bAuthorInitialised = false;
+        m_bAuthorInitialised = false;
     }
-    else if ( pBrdCst == pColorConfig || pBrdCst == pAccessibilityOptions )
+    else if ( pBrdCst == m_pColorConfig || pBrdCst == m_pAccessibilityOptions )
     {
         bool bAccessibility = false;
-        if( pBrdCst == pColorConfig )
-            SwViewOption::ApplyColorConfigValues(*pColorConfig);
+        if( pBrdCst == m_pColorConfig )
+            SwViewOption::ApplyColorConfigValues(*m_pColorConfig);
         else
             bAccessibility = true;
 
@@ -823,9 +823,9 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
                     if(bAccessibility)
                     {
                         if(pViewShell->IsA(aSwViewTypeId))
-                            static_cast<SwView*>(pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                            static_cast<SwView*>(pViewShell)->ApplyAccessiblityOptions(*m_pAccessibilityOptions);
                         else if(pViewShell->IsA(aSwPreviewTypeId))
-                            static_cast<SwPagePreview*>(pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                            static_cast<SwPagePreview*>(pViewShell)->ApplyAccessiblityOptions(*m_pAccessibilityOptions);
                     }
                     pViewShell->GetWindow()->Invalidate();
                 }
@@ -833,7 +833,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
             pViewShell = SfxViewShell::GetNext( *pViewShell );
         }
     }
-    else if( pBrdCst == pCTLOptions )
+    else if( pBrdCst == m_pCTLOptions )
     {
         const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while( pObjSh )
@@ -853,66 +853,66 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
 
 SwDBConfig* SwModule::GetDBConfig()
 {
-    if(!pDBConfig)
-        pDBConfig = new SwDBConfig;
-    return pDBConfig;
+    if(!m_pDBConfig)
+        m_pDBConfig = new SwDBConfig;
+    return m_pDBConfig;
 }
 
 svtools::ColorConfig& SwModule::GetColorConfig()
 {
-    if(!pColorConfig)
+    if(!m_pColorConfig)
     {
-        pColorConfig = new svtools::ColorConfig;
-        SwViewOption::ApplyColorConfigValues(*pColorConfig);
-        pColorConfig->AddListener(this);
+        m_pColorConfig = new svtools::ColorConfig;
+        SwViewOption::ApplyColorConfigValues(*m_pColorConfig);
+        m_pColorConfig->AddListener(this);
     }
-    return *pColorConfig;
+    return *m_pColorConfig;
 }
 
 SvtAccessibilityOptions& SwModule::GetAccessibilityOptions()
 {
-    if(!pAccessibilityOptions)
+    if(!m_pAccessibilityOptions)
     {
-        pAccessibilityOptions = new SvtAccessibilityOptions;
-        pAccessibilityOptions->AddListener(this);
+        m_pAccessibilityOptions = new SvtAccessibilityOptions;
+        m_pAccessibilityOptions->AddListener(this);
     }
-    return *pAccessibilityOptions;
+    return *m_pAccessibilityOptions;
 }
 
 SvtCTLOptions& SwModule::GetCTLOptions()
 {
-    if(!pCTLOptions)
+    if(!m_pCTLOptions)
     {
-        pCTLOptions = new SvtCTLOptions;
-        pCTLOptions->AddListener(this);
+        m_pCTLOptions = new SvtCTLOptions;
+        m_pCTLOptions->AddListener(this);
     }
-    return *pCTLOptions;
+    return *m_pCTLOptions;
 }
 
 SvtUserOptions& SwModule::GetUserOptions()
 {
-    if(!pUserOptions)
+    if(!m_pUserOptions)
     {
-        pUserOptions = new SvtUserOptions;
-        pUserOptions->AddListener(this);
+        m_pUserOptions = new SvtUserOptions;
+        m_pUserOptions->AddListener(this);
     }
-    return *pUserOptions;
+    return *m_pUserOptions;
 }
 
 const SwMasterUsrPref *SwModule::GetUsrPref(bool bWeb) const
 {
     SwModule* pNonConstModule = const_cast<SwModule*>(this);
-    if(bWeb && !pWebUsrPref)
+    if(bWeb && !m_pWebUsrPref)
     {
         // The SpellChecker is needed in SwMasterUsrPref's Load, but it must not
         // be created there #58256#
-        pNonConstModule->pWebUsrPref = new SwMasterUsrPref(true);
+        pNonConstModule->m_pWebUsrPref = new SwMasterUsrPref(true);
     }
-    else if(!bWeb && !pUsrPref)
+    else if(!bWeb && !m_pUsrPref)
     {
-        pNonConstModule->pUsrPref = new SwMasterUsrPref(false);
+        pNonConstModule->m_pUsrPref = new SwMasterUsrPref(false);
     }
-    return  bWeb ? pWebUsrPref : pUsrPref;
+    return  bWeb ? m_pWebUsrPref : m_pUsrPref;
 }
 
 void NewXForms( SfxRequest& rReq )

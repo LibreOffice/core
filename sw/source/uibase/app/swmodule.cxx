@@ -147,45 +147,45 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pGlobalFact )
     : SfxModule( ResMgr::CreateResMgr( "sw" ), false, pWebFact,
                      pFact, pGlobalFact, NULL ),
-    pModuleConfig(0),
-    pUsrPref(0),
-    pWebUsrPref(0),
-    pPrtOpt(0),
-    pWebPrtOpt(0),
-    pChapterNumRules(0),
-    pStdFontConfig(0),
-    pNavigationConfig(0),
-    pToolbarConfig(0),
-    pWebToolbarConfig(0),
-    pDBConfig(0),
-    pColorConfig(0),
-    pAccessibilityOptions(0),
-    pCTLOptions(0),
-    pUserOptions(0),
-    pAttrPool(0),
-    pView(0),
-    bAuthorInitialised(false),
-    bEmbeddedLoadSave( false ),
-    pDragDrop( 0 ),
-    pXSelection( 0 )
+    m_pModuleConfig(0),
+    m_pUsrPref(0),
+    m_pWebUsrPref(0),
+    m_pPrintOptions(0),
+    m_pWebPrintOptions(0),
+    m_pChapterNumRules(0),
+    m_pStdFontConfig(0),
+    m_pNavigationConfig(0),
+    m_pToolbarConfig(0),
+    m_pWebToolbarConfig(0),
+    m_pDBConfig(0),
+    m_pColorConfig(0),
+    m_pAccessibilityOptions(0),
+    m_pCTLOptions(0),
+    m_pUserOptions(0),
+    m_pAttrPool(0),
+    m_pView(0),
+    m_bAuthorInitialised(false),
+    m_bEmbeddedLoadSave( false ),
+    m_pDragDrop( 0 ),
+    m_pXSelection( 0 )
 {
     SetName( OUString("StarWriter") );
     pSwResMgr = GetResMgr();
     SvxErrorHandler::ensure();
-    pErrorHdl = new SfxErrorHandler( RID_SW_ERRHDL,
+    m_pErrorHandler = new SfxErrorHandler( RID_SW_ERRHDL,
                                      ERRCODE_AREA_SW,
                                      ERRCODE_AREA_SW_END,
                                      pSwResMgr );
 
-    pModuleConfig = new SwModuleOptions;
+    m_pModuleConfig = new SwModuleOptions;
 
     // We need them anyways
-    pToolbarConfig = new SwToolbarConfigItem( false );
-    pWebToolbarConfig = new SwToolbarConfigItem( true );
+    m_pToolbarConfig = new SwToolbarConfigItem( false );
+    m_pWebToolbarConfig = new SwToolbarConfigItem( true );
 
-    pStdFontConfig = new SwStdFontConfig;
+    m_pStdFontConfig = new SwStdFontConfig;
 
-    pAuthorNames = new std::vector<OUString>;  // All Redlining-Authors
+    m_pAuthorNames = new std::vector<OUString>;  // All Redlining-Authors
 
     StartListening( *SfxGetpApp() );
 
@@ -218,14 +218,14 @@ uno::Reference< linguistic2::XLanguageGuessing > SwModule::GetLanguageGuesser()
 
 SwModule::~SwModule()
 {
-    delete pErrorHdl;
+    delete m_pErrorHandler;
     EndListening( *SfxGetpApp() );
 }
 
 void SwModule::CreateLngSvcEvtListener()
 {
-    if (!xLngSvcEvtListener.is())
-        xLngSvcEvtListener = new SwLinguServiceEventListener;
+    if (!m_xLinguServiceEventListener.is())
+        m_xLinguServiceEventListener = new SwLinguServiceEventListener;
 }
 
 void SwDLL::RegisterFactories()
@@ -387,15 +387,15 @@ void SwDLL::RegisterControls()
 // Load Module (only dummy for linking of the DLL)
 void    SwModule::InitAttrPool()
 {
-    OSL_ENSURE(!pAttrPool, "Pool already exists!");
-    pAttrPool = new SwAttrPool(0);
-    SetPool(pAttrPool);
+    OSL_ENSURE(!m_pAttrPool, "Pool already exists!");
+    m_pAttrPool = new SwAttrPool(0);
+    SetPool(m_pAttrPool);
 }
 
 void    SwModule::RemoveAttrPool()
 {
     SetPool(0);
-    SfxItemPool::Free(pAttrPool);
+    SfxItemPool::Free(m_pAttrPool);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

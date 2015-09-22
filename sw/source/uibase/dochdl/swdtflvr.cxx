@@ -264,10 +264,10 @@ SwTransferable::~SwTransferable()
     SwModule* pMod = SW_MOD();
     if(pMod)
     {
-        if ( pMod->pDragDrop == this )
-            pMod->pDragDrop = 0;
-        else if ( pMod->pXSelection == this )
-            pMod->pXSelection = 0;
+        if ( pMod->m_pDragDrop == this )
+            pMod->m_pDragDrop = 0;
+        else if ( pMod->m_pXSelection == this )
+            pMod->m_pXSelection = 0;
     }
 
     delete m_pClpGraphic;
@@ -295,17 +295,17 @@ static SwDoc * lcl_GetDoc(SwDocFac & rDocFac)
 void SwTransferable::ObjectReleased()
 {
     SwModule *pMod = SW_MOD();
-    if( this == pMod->pDragDrop )
-        pMod->pDragDrop = 0;
-    else if( this == pMod->pXSelection )
-        pMod->pXSelection = 0;
+    if( this == pMod->m_pDragDrop )
+        pMod->m_pDragDrop = 0;
+    else if( this == pMod->m_pXSelection )
+        pMod->m_pXSelection = 0;
 }
 
 void SwTransferable::AddSupportedFormats()
 {
     // only need if we are the current XSelection Object
     SwModule *pMod = SW_MOD();
-    if( this == pMod->pXSelection || comphelper::LibreOfficeKit::isActive())
+    if( this == pMod->m_pXSelection || comphelper::LibreOfficeKit::isActive())
     {
         SetDataForDragAndDrop( Point( 0,0) );
     }
@@ -1194,7 +1194,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     if( pPt )
     {
         // external Drop
-        if( bPasteSelection ? !pMod->pXSelection : !pMod->pDragDrop )
+        if( bPasteSelection ? !pMod->m_pXSelection : !pMod->m_pDragDrop )
         {
             switch( nDestination )
             {
@@ -1248,7 +1248,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     SwTransferable *pTrans=0, *pTunneledTrans=GetSwTransferable( rData );
 
     // check for private drop
-    bool bPrivateDrop(pPt && (bPasteSelection ? 0 != (pTrans = pMod->pXSelection) : 0 != (pTrans = pMod->pDragDrop)));
+    bool bPrivateDrop(pPt && (bPasteSelection ? 0 != (pTrans = pMod->m_pXSelection) : 0 != (pTrans = pMod->m_pDragDrop)));
     bool bNeedToSelectBeforePaste(false);
 
     if(bPrivateDrop && DND_ACTION_LINK == nDropAction)
@@ -3168,7 +3168,7 @@ void SwTransferable::StartDrag( vcl::Window* pWin, const Point& rPos )
     if( m_pWrtShell->IsSelFrmMode() )
         m_pWrtShell->ShowCrsr();
 
-    SW_MOD()->pDragDrop = this;
+    SW_MOD()->m_pDragDrop = this;
 
     SetDataForDragAndDrop( rPos );
 
@@ -3564,7 +3564,7 @@ void SwTransferable::CreateSelection( SwWrtShell& rSh,
     pNew->m_pCreatorView = _pCreatorView;
 
     uno::Reference< XTransferable > xRef( pNew );
-    pMod->pXSelection = pNew;
+    pMod->m_pXSelection = pNew;
     pNew->CopyToSelection( rSh.GetWin() );
 }
 
@@ -3572,9 +3572,9 @@ void SwTransferable::ClearSelection( SwWrtShell& rSh,
                                      const SwFrameShell * _pCreatorView)
 {
     SwModule *pMod = SW_MOD();
-    if( pMod->pXSelection &&
-        ((!pMod->pXSelection->m_pWrtShell) || (pMod->pXSelection->m_pWrtShell == &rSh)) &&
-        (!_pCreatorView || (pMod->pXSelection->m_pCreatorView == _pCreatorView)) )
+    if( pMod->m_pXSelection &&
+        ((!pMod->m_pXSelection->m_pWrtShell) || (pMod->m_pXSelection->m_pWrtShell == &rSh)) &&
+        (!_pCreatorView || (pMod->m_pXSelection->m_pCreatorView == _pCreatorView)) )
     {
         TransferableHelper::ClearSelection( rSh.GetWin() );
     }

@@ -210,15 +210,15 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, bool bWeb )
         SwMasterUsrPref* pPref;
         if(bWeb)
         {
-            if(!pWebUsrPref)
+            if(!m_pWebUsrPref)
                 GetUsrPref(true);
-            pPref = pWebUsrPref;
+            pPref = m_pWebUsrPref;
         }
         else
         {
-            if(!pUsrPref)
+            if(!m_pUsrPref)
                 GetUsrPref(false);
-            pPref = pUsrPref;
+            pPref = m_pUsrPref;
         }
         FieldUnit eOldMetric = pPref->GetMetric();
         if(eOldMetric != eMetric)
@@ -246,15 +246,15 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, bool bHorizontal, bool bWeb 
     SwMasterUsrPref* pPref;
     if(bWeb)
     {
-        if(!pWebUsrPref)
+        if(!m_pWebUsrPref)
             GetUsrPref(true);
-        pPref = pWebUsrPref;
+        pPref = m_pWebUsrPref;
     }
     else
     {
-        if(!pUsrPref)
+        if(!m_pUsrPref)
             GetUsrPref(false);
-        pPref = pUsrPref;
+        pPref = m_pUsrPref;
     }
     if( bHorizontal )
         pPref->SetHScrollMetric(eMetric);
@@ -282,15 +282,15 @@ void SwModule::ApplyUserCharUnit(bool bApplyChar, bool bWeb)
     SwMasterUsrPref* pPref;
     if(bWeb)
     {
-        if(!pWebUsrPref)
+        if(!m_pWebUsrPref)
             GetUsrPref(true);
-        pPref = pWebUsrPref;
+        pPref = m_pWebUsrPref;
     }
     else
     {
-        if(!pUsrPref)
+        if(!m_pUsrPref)
             GetUsrPref(false);
-        pPref = pUsrPref;
+        pPref = m_pUsrPref;
     }
     bool bOldApplyCharUnit = pPref->IsApplyCharUnit();
     bool bHasChanged = false;
@@ -338,32 +338,32 @@ void SwModule::ApplyUserCharUnit(bool bApplyChar, bool bWeb)
 
 SwNavigationConfig*  SwModule::GetNavigationConfig()
 {
-    if(!pNavigationConfig)
+    if(!m_pNavigationConfig)
     {
-        pNavigationConfig = new SwNavigationConfig;
+        m_pNavigationConfig = new SwNavigationConfig;
     }
-    return pNavigationConfig;
+    return m_pNavigationConfig;
 }
 
 SwPrintOptions*     SwModule::GetPrtOptions(bool bWeb)
 {
-    if(bWeb && !pWebPrtOpt)
+    if(bWeb && !m_pWebPrintOptions)
     {
-        pWebPrtOpt = new SwPrintOptions(true);
+        m_pWebPrintOptions = new SwPrintOptions(true);
     }
-    else if(!bWeb && !pPrtOpt)
+    else if(!bWeb && !m_pPrintOptions)
     {
-        pPrtOpt = new SwPrintOptions(false);
+        m_pPrintOptions = new SwPrintOptions(false);
     }
 
-    return bWeb ? pWebPrtOpt : pPrtOpt;
+    return bWeb ? m_pWebPrintOptions : m_pPrintOptions;
 }
 
 SwChapterNumRules*  SwModule::GetChapterNumRules()
 {
-    if(!pChapterNumRules)
-        pChapterNumRules = new SwChapterNumRules;
-    return pChapterNumRules;
+    if(!m_pChapterNumRules)
+        m_pChapterNumRules = new SwChapterNumRules;
+    return m_pChapterNumRules;
 }
 
 void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, bool /*bOnlyIfAvailable*/)
@@ -393,47 +393,47 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, bool /*bOnlyIfAva
 
 sal_uInt16 SwModule::GetRedlineAuthor()
 {
-    if (!bAuthorInitialised)
+    if (!m_bAuthorInitialised)
     {
         const SvtUserOptions& rOpt = GetUserOptions();
-        sActAuthor = rOpt.GetFullName();
-        if (sActAuthor.isEmpty())
+        m_sActAuthor = rOpt.GetFullName();
+        if (m_sActAuthor.isEmpty())
         {
-            sActAuthor = rOpt.GetID();
-            if (sActAuthor.isEmpty())
-                sActAuthor = SW_RESSTR( STR_REDLINE_UNKNOWN_AUTHOR );
+            m_sActAuthor = rOpt.GetID();
+            if (m_sActAuthor.isEmpty())
+                m_sActAuthor = SW_RESSTR( STR_REDLINE_UNKNOWN_AUTHOR );
         }
-        bAuthorInitialised = true;
+        m_bAuthorInitialised = true;
     }
-    return InsertRedlineAuthor( sActAuthor );
+    return InsertRedlineAuthor( m_sActAuthor );
 }
 
 void SwModule::SetRedlineAuthor(const OUString &rAuthor)
 {
-    bAuthorInitialised = true;
-    sActAuthor = rAuthor;
-    InsertRedlineAuthor( sActAuthor );
+    m_bAuthorInitialised = true;
+    m_sActAuthor = rAuthor;
+    InsertRedlineAuthor( m_sActAuthor );
 }
 
 OUString SwModule::GetRedlineAuthor(sal_uInt16 nPos)
 {
-    OSL_ENSURE(nPos < pAuthorNames->size(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
-    while(!(nPos < pAuthorNames->size()))
+    OSL_ENSURE(nPos < m_pAuthorNames->size(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
+    while(!(nPos < m_pAuthorNames->size()))
     {
         InsertRedlineAuthor("nn");
     }
-    return (*pAuthorNames)[nPos];
+    return (*m_pAuthorNames)[nPos];
 }
 
 sal_uInt16 SwModule::InsertRedlineAuthor(const OUString& rAuthor)
 {
     sal_uInt16 nPos = 0;
 
-    while(nPos < pAuthorNames->size() && (*pAuthorNames)[nPos] != rAuthor)
+    while(nPos < m_pAuthorNames->size() && (*m_pAuthorNames)[nPos] != rAuthor)
         ++nPos;
 
-    if (nPos == pAuthorNames->size())
-        pAuthorNames->push_back(rAuthor);
+    if (nPos == m_pAuthorNames->size())
+        m_pAuthorNames->push_back(rAuthor);
 
     return nPos;
 }
@@ -507,43 +507,43 @@ static void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
 
 void SwModule::GetInsertAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
 {
-    lcl_FillAuthorAttr(nAuthor, rSet, pModuleConfig->GetInsertAuthorAttr());
+    lcl_FillAuthorAttr(nAuthor, rSet, m_pModuleConfig->GetInsertAuthorAttr());
 }
 
 void SwModule::GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
 {
-    lcl_FillAuthorAttr(nAuthor, rSet, pModuleConfig->GetDeletedAuthorAttr());
+    lcl_FillAuthorAttr(nAuthor, rSet, m_pModuleConfig->GetDeletedAuthorAttr());
 }
 
 // For future extension:
 void SwModule::GetFormatAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet )
 {
-    lcl_FillAuthorAttr( nAuthor, rSet, pModuleConfig->GetFormatAuthorAttr() );
+    lcl_FillAuthorAttr( nAuthor, rSet, m_pModuleConfig->GetFormatAuthorAttr() );
 }
 
 sal_uInt16 SwModule::GetRedlineMarkPos()
 {
-    return pModuleConfig->GetMarkAlignMode();
+    return m_pModuleConfig->GetMarkAlignMode();
 }
 
 bool SwModule::IsInsTableFormatNum(bool bHTML) const
 {
-    return pModuleConfig->IsInsTableFormatNum(bHTML);
+    return m_pModuleConfig->IsInsTableFormatNum(bHTML);
 }
 
 bool SwModule::IsInsTableChangeNumFormat(bool bHTML) const
 {
-    return pModuleConfig->IsInsTableChangeNumFormat(bHTML);
+    return m_pModuleConfig->IsInsTableChangeNumFormat(bHTML);
 }
 
 bool SwModule::IsInsTableAlignNum(bool bHTML) const
 {
-    return pModuleConfig->IsInsTableAlignNum(bHTML);
+    return m_pModuleConfig->IsInsTableAlignNum(bHTML);
 }
 
 const Color &SwModule::GetRedlineMarkColor()
 {
-    return pModuleConfig->GetMarkAlignColor();
+    return m_pModuleConfig->GetMarkAlignColor();
 }
 
 const SwViewOption* SwModule::GetViewOption(bool bWeb)
@@ -553,7 +553,7 @@ const SwViewOption* SwModule::GetViewOption(bool bWeb)
 
 OUString SwModule::GetDocStatWordDelim() const
 {
-    return pModuleConfig->GetWordDelimiter();
+    return m_pModuleConfig->GetWordDelimiter();
 }
 
 // Passing-through of the ModuleConfig's Metric (for HTML-Export)
@@ -562,15 +562,15 @@ FieldUnit SwModule::GetMetric( bool bWeb ) const
     SwMasterUsrPref* pPref;
     if(bWeb)
     {
-        if(!pWebUsrPref)
+        if(!m_pWebUsrPref)
             GetUsrPref(true);
-        pPref = pWebUsrPref;
+        pPref = m_pWebUsrPref;
     }
     else
     {
-        if(!pUsrPref)
+        if(!m_pUsrPref)
             GetUsrPref(false);
-        pPref = pUsrPref;
+        pPref = m_pUsrPref;
     }
     return pPref->GetMetric();
 }
@@ -578,30 +578,30 @@ FieldUnit SwModule::GetMetric( bool bWeb ) const
 // Pass-through Update-Status
 sal_uInt16 SwModule::GetLinkUpdMode( bool ) const
 {
-    if(!pUsrPref)
+    if(!m_pUsrPref)
         GetUsrPref(false);
-    return (sal_uInt16)pUsrPref->GetUpdateLinkMode();
+    return (sal_uInt16)m_pUsrPref->GetUpdateLinkMode();
 }
 
 SwFieldUpdateFlags SwModule::GetFieldUpdateFlags( bool ) const
 {
-    if(!pUsrPref)
+    if(!m_pUsrPref)
         GetUsrPref(false);
-    return pUsrPref->GetFieldUpdateFlags();
+    return m_pUsrPref->GetFieldUpdateFlags();
 }
 
 void SwModule::ApplyFieldUpdateFlags(SwFieldUpdateFlags eFieldFlags)
 {
-    if(!pUsrPref)
+    if(!m_pUsrPref)
         GetUsrPref(false);
-    pUsrPref->SetFieldUpdateFlags(eFieldFlags);
+    m_pUsrPref->SetFieldUpdateFlags(eFieldFlags);
 }
 
 void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)
 {
-    if(!pUsrPref)
+    if(!m_pUsrPref)
         GetUsrPref(false);
-    pUsrPref->SetUpdateLinkMode(nNewLinkMode);
+    m_pUsrPref->SetUpdateLinkMode(nNewLinkMode);
 }
 
 void SwModule::CheckSpellChanges( bool bOnlineSpelling,
@@ -630,29 +630,29 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
 
 void SwModule::ApplyDefaultPageMode(bool bIsSquaredPageMode)
 {
-    if(!pUsrPref)
+    if(!m_pUsrPref)
         GetUsrPref(false);
-    pUsrPref->SetDefaultPageMode(bIsSquaredPageMode);
+    m_pUsrPref->SetDefaultPageMode(bIsSquaredPageMode);
 }
 
 SvxCompareMode SwModule::GetCompareMode() const
 {
-    return pModuleConfig->GetCompareMode();
+    return m_pModuleConfig->GetCompareMode();
 }
 
 bool SwModule::IsUseRsid() const
 {
-    return pModuleConfig->IsUseRsid();
+    return m_pModuleConfig->IsUseRsid();
 }
 
 bool SwModule::IsIgnorePieces() const
 {
-    return pModuleConfig->IsIgnorePieces();
+    return m_pModuleConfig->IsIgnorePieces();
 }
 
 sal_uInt16 SwModule::GetPieceLen() const
 {
-    return pModuleConfig->GetPieceLen();
+    return m_pModuleConfig->GetPieceLen();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
