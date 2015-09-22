@@ -34,24 +34,29 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 
 
-SmToken::SmToken() :
-    eType       (TUNKNOWN),
-    cMathChar   ('\0')
+SmToken::SmToken()
+    : eType(TUNKNOWN)
+    , cMathChar('\0')
+    , nGroup(0)
+    , nLevel(0)
+    , nRow(0)
+    , nCol(0)
 {
-    nGroup = nCol = nRow = nLevel = 0;
 }
 
 SmToken::SmToken(SmTokenType eTokenType,
                  sal_Unicode cMath,
                  const sal_Char* pText,
                  sal_uLong nTokenGroup,
-                 sal_uInt16 nTokenLevel) {
-    eType = eTokenType;
-    cMathChar = cMath;
-    aText = OUString::createFromAscii(pText);
-    nGroup = nTokenGroup;
-    nLevel = nTokenLevel;
-    nCol = nRow = 0;
+                 sal_uInt16 nTokenLevel)
+    : aText(OUString::createFromAscii(pText))
+    , eType(eTokenType)
+    , cMathChar(cMath)
+    , nGroup(nTokenGroup)
+    , nLevel(nTokenLevel)
+    , nRow(0)
+    , nCol(0)
+{
 }
 
 
