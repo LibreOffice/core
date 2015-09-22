@@ -495,8 +495,6 @@ private:
     Link<EditView*,void>           maBeginDropHdl;
     Link<EditView*,void>           maEndDropHdl;
 
-    Link<>              aChainingHdlLink;
-
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
 
     bool            bKernAsianPunctuation:1;
@@ -837,8 +835,6 @@ public:
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rLink ) { aModifyHdl = rLink; }
     Link<LinkParamNone*,void> GetModifyHdl() const { return aModifyHdl; }
 
-    void            SetChainingEventHdl( const Link<>& rLink )  { aChainingHdlLink = rLink; }
-
     bool            IsInSelectionMode() { return bInSelection; }
 
     void            IndentBlock( EditView* pView, bool bRight );
@@ -870,8 +866,6 @@ public:
     inline EditPaM        CreateEditPaM( const EPaM& rEPaM );
     inline ESelection     CreateESel( const EditSelection& rSel );
     inline EditSelection  CreateSel( const ESelection& rSel );
-
-    void                CallChainingEventHdl();
 
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
     SfxStyleSheetPool*  GetStyleSheetPool() const { return pStylePool; }

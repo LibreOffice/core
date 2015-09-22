@@ -372,7 +372,6 @@ public:
     void            SetStatusEventHdl( const Link<EditStatus&,void>& rLink );
     Link<EditStatus&,void> GetStatusEventHdl() const;
 
-    void            SetChainingEventHdl( const Link<>& rLink );
     void            SetNotifyHdl( const Link<EENotify&,void>& rLink );
     Link<EENotify&,void>  GetNotifyHdl() const;
 
