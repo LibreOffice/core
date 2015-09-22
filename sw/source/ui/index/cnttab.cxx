@@ -1603,10 +1603,10 @@ void SwTOXEdit::AdjustSize()
 
 class SwTOXButton : public PushButton
 {
-    SwFormToken aFormToken;
-    Link<>      aPrevNextControlLink;
-    bool        bNextControl;
-    VclPtr<SwTokenWindow> m_pParent;
+    SwFormToken             aFormToken;
+    Link<SwTOXButton&,void> aPrevNextControlLink;
+    bool                    bNextControl;
+    VclPtr<SwTokenWindow>   m_pParent;
 public:
     SwTOXButton( vcl::Window* pParent, SwTokenWindow* pTokenWin,
                 const SwFormToken& rToken)
@@ -1623,7 +1623,7 @@ public:
     virtual void RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     bool IsNextControl() const          {return bNextControl;}
-    void SetPrevNextLink(const Link<>& rLink) {aPrevNextControlLink = rLink;}
+    void SetPrevNextLink(const Link<SwTOXButton&,void>& rLink) {aPrevNextControlLink = rLink;}
     const SwFormToken& GetFormToken() const {return aFormToken;}
 
     void SetCharStyleName(const OUString& rSet, sal_uInt16 nPoolId)
@@ -1721,7 +1721,7 @@ void SwTOXButton::KeyInput( const KeyEvent& rKEvt )
         }
     }
     if(bCall && aPrevNextControlLink.IsSet())
-            aPrevNextControlLink.Call(this);
+            aPrevNextControlLink.Call(*this);
     else
         PushButton::KeyInput(rKEvt);
 }
@@ -3502,19 +3502,19 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
     return 0;
 }
 
-IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
+IMPL_LINK_TYPED(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
 {
-    ctrl_iterator it = std::find(aControlList.begin(),aControlList.end(),pBtn);
+    ctrl_iterator it = std::find(aControlList.begin(),aControlList.end(),&rBtn);
 
     if (it == aControlList.end())
-        return 0;
+        return;
 
     ctrl_iterator itTest = it;
     ++itTest;
 
-    if (!pBtn->IsNextControl() || (itTest != aControlList.end() && pBtn->IsNextControl()))
+    if (!rBtn.IsNextControl() || (itTest != aControlList.end() && rBtn.IsNextControl()))
     {
-        bool isNext = pBtn->IsNextControl();
+        bool isNext = rBtn.IsNextControl();
 
         ctrl_iterator iterFocus = it;
         isNext ? ++iterFocus : --iterFocus;
@@ -3533,12 +3533,10 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 
         static_cast<SwTOXEdit*>(pCtrlFocus)->SetSelection(aSel);
 
-        pBtn->Check(false);
+        rBtn.Check(false);
 
         AdjustScrolling();
     }
-
-    return 0;
 }
 
 IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )

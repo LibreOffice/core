@@ -270,7 +270,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     DECL_LINK(EditResize, Edit*);
     DECL_LINK_TYPED(NextItemHdl, SwTOXEdit&, void );
     DECL_LINK(TbxFocusHdl, SwTOXEdit* );
-    DECL_LINK(NextItemBtnHdl, SwTOXButton* );
+    DECL_LINK_TYPED(NextItemBtnHdl, SwTOXButton&, void );
     DECL_LINK(TbxFocusBtnHdl, SwTOXButton* );
     DECL_LINK_TYPED(ScrollHdl, Button*, void );
 
