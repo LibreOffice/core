@@ -295,7 +295,7 @@ ScDocCfg::ScDocCfg() :
     aLayoutItem.SetCommitLink( LINK( this, ScDocCfg, LayoutCommitHdl ) );
 }
 
-IMPL_LINK_NOARG(ScDocCfg, CalcCommitHdl)
+IMPL_LINK_NOARG_TYPED(ScDocCfg, CalcCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetCalcPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -347,11 +347,9 @@ IMPL_LINK_NOARG(ScDocCfg, CalcCommitHdl)
         }
     }
     aCalcItem.PutProperties(aNames, aValues);
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScDocCfg, LayoutCommitHdl)
+IMPL_LINK_NOARG_TYPED(ScDocCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -370,8 +368,6 @@ IMPL_LINK_NOARG(ScDocCfg, LayoutCommitHdl)
         }
     }
     aLayoutItem.PutProperties(aNames, aValues);
-
-    return 0;
 }
 
 void ScDocCfg::SetOptions( const ScDocOptions& rNew )

@@ -42,7 +42,7 @@ ScLinkConfigItem::ScLinkConfigItem( const OUString& rSubTree, ConfigItemMode nMo
 {
 }
 
-void ScLinkConfigItem::SetCommitLink( const Link<>& rLink )
+void ScLinkConfigItem::SetCommitLink( const Link<ScLinkConfigItem&,void>& rLink )
 {
     aCommitLink = rLink;
 }
@@ -54,7 +54,7 @@ void ScLinkConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& /*
 
 void ScLinkConfigItem::ImplCommit()
 {
-    aCommitLink.Call( this );
+    aCommitLink.Call( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

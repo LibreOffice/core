@@ -137,9 +137,9 @@ class ScViewCfg : public ScViewOptions
     ScLinkConfigItem    aDisplayItem;
     ScLinkConfigItem    aGridItem;
 
-    DECL_LINK( LayoutCommitHdl, void* );
-    DECL_LINK( DisplayCommitHdl, void* );
-    DECL_LINK( GridCommitHdl, void* );
+    DECL_LINK_TYPED( LayoutCommitHdl, ScLinkConfigItem&, void );
+    DECL_LINK_TYPED( DisplayCommitHdl, ScLinkConfigItem&, void );
+    DECL_LINK_TYPED( GridCommitHdl, ScLinkConfigItem&, void );
 
     static com::sun::star::uno::Sequence<OUString> GetLayoutPropertyNames();
     static com::sun::star::uno::Sequence<OUString> GetDisplayPropertyNames();
