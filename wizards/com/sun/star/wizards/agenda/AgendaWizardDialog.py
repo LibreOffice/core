@@ -284,11 +284,11 @@ class AgendaWizardDialog(WizardDialog):
         self.btnUp = self.insertButton("btnUp",
             AgendaWizardDialogConst.BTNUP_ACTION_PERFORMED,
             self.PROPS_BUTTON, (14, AgendaWizardDialogConst.BTNUP_HID,
-                self.resources.resButtonUp, 202, 136, 5, 582, 50), self)
+                self.resources.resButtonUp, 180, 136, 5, 582, 60), self)
         self.btnDown = self.insertButton("btnDown",
             AgendaWizardDialogConst.BTNDOWN_ACTION_PERFORMED,
             self.PROPS_BUTTON, (14, AgendaWizardDialogConst.BTNDOWN_HID,
-                self.resources.resButtonDown, 254, 136, 5, 583, 50), self)
+                self.resources.resButtonDown, 244, 136, 5, 583, 60), self)
 
     def buildStep6(self):
         self.insertLabel("lblTitle6", self.PROPS_LABEL_B,
