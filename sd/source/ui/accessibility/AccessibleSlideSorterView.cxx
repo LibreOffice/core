@@ -81,7 +81,7 @@ public:
     void ReleaseListeners();
     void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
     DECL_LINK_TYPED(WindowEventListener, VclWindowEvent&, void);
-    DECL_LINK(SelectionChangeListener, void*);
+    DECL_LINK_TYPED(SelectionChangeListener, LinkParamNone*, void);
     DECL_LINK_TYPED(BroadcastSelectionChange, void*, void);
     DECL_LINK_TYPED(FocusChangeListener, LinkParamNone*, void);
     DECL_LINK_TYPED(VisibilityChangeListener, LinkParamNone*, void);
@@ -919,12 +919,11 @@ IMPL_LINK_TYPED(AccessibleSlideSorterView::Implementation, WindowEventListener, 
     }
 }
 
-IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, SelectionChangeListener)
+IMPL_LINK_NOARG_TYPED(AccessibleSlideSorterView::Implementation, SelectionChangeListener, LinkParamNone*, void)
 {
     if (mnSelectionChangeUserEventId == 0)
         mnSelectionChangeUserEventId = Application::PostUserEvent(
             LINK(this, AccessibleSlideSorterView::Implementation, BroadcastSelectionChange));
-    return 1;
 }
 
 IMPL_LINK_NOARG_TYPED(AccessibleSlideSorterView::Implementation, BroadcastSelectionChange, void*, void)
