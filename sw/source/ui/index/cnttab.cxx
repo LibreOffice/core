@@ -1516,9 +1516,9 @@ IMPL_LINK_TYPED(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu, bool)
 
 class SwTOXEdit : public Edit
 {
-    SwFormToken aFormToken;
-    Link<>      aPrevNextControlLink;
-    bool     bNextControl;
+    SwFormToken           aFormToken;
+    Link<SwTOXEdit&,void> aPrevNextControlLink;
+    bool                  bNextControl;
     VclPtr<SwTokenWindow> m_pParent;
 public:
     SwTOXEdit( vcl::Window* pParent, SwTokenWindow* pTokenWin,
@@ -1536,7 +1536,7 @@ public:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
     bool    IsNextControl() const {return bNextControl;}
-    void SetPrevNextLink( const Link<>& rLink ) {aPrevNextControlLink = rLink;}
+    void SetPrevNextLink( const Link<SwTOXEdit&,void>& rLink ) {aPrevNextControlLink = rLink;}
 
     const SwFormToken& GetFormToken()
         {
@@ -1586,7 +1586,7 @@ void SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
             }
         }
         if(bCall && aPrevNextControlLink.IsSet())
-            aPrevNextControlLink.Call(this);
+            aPrevNextControlLink.Call(*this);
 
     }
     Edit::KeyInput(rKEvt);
@@ -3463,21 +3463,21 @@ IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)
     return 0;
 }
 
-IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
+IMPL_LINK_TYPED(SwTokenWindow, NextItemHdl, SwTOXEdit&, rEdit, void)
 {
-    ctrl_iterator it = std::find(aControlList.begin(),aControlList.end(),pEdit);
+    ctrl_iterator it = std::find(aControlList.begin(),aControlList.end(),&rEdit);
 
     if (it == aControlList.end())
-        return 0;
+        return;
 
     ctrl_iterator itTest = it;
     ++itTest;
 
-    if ((it != aControlList.begin() && !pEdit->IsNextControl()) ||
-        (itTest != aControlList.end() && pEdit->IsNextControl()))
+    if ((it != aControlList.begin() && !rEdit.IsNextControl()) ||
+        (itTest != aControlList.end() && rEdit.IsNextControl()))
     {
         ctrl_iterator iterFocus = it;
-        pEdit->IsNextControl() ? ++iterFocus : --iterFocus;
+        rEdit.IsNextControl() ? ++iterFocus : --iterFocus;
 
         Control *pCtrlFocus = *iterFocus;
         pCtrlFocus->GrabFocus();
@@ -3485,8 +3485,6 @@ IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
 
         AdjustScrolling();
     }
-
-    return 0;
 }
 
 IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
