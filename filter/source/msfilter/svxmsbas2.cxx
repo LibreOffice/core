@@ -27,10 +27,10 @@
 
 using namespace com::sun::star;
 
-sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
+ErrCode SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
                                                 const OUString& rStorageName )
 {
-    sal_uLong nRet = ERRCODE_NONE;
+    ErrCode nRet = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
     OUString aDstStgName( GetMSBasicStorageName() );
     tools::SvRef<SotStorage> xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName,
@@ -62,7 +62,7 @@ sal_uLong SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
 
 // check if the MS-VBA-Storage exists in the RootStorage of the DocShell.
 // If it exists, then return the WarningId for losing the information.
-sal_uLong SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocSh)
+ErrCode SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocSh)
 {
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
     tools::SvRef<SotStorage> xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, GetMSBasicStorageName(),

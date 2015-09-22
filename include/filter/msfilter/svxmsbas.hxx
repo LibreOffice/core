@@ -58,11 +58,11 @@ public:
     // form the ObjectShell
     // - returns a warning code if a modified basic exist, in all other
     //   cases return ERRCODE_NONE.
-    sal_uLong SaveOrDelMSVBAStorage( bool bSaveInto, const OUString& rStorageName );
+    ErrCode SaveOrDelMSVBAStorage( bool bSaveInto, const OUString& rStorageName );
 
     // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
     // If it exist, then return the WarningId for losing the information.
-    static sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
+    static ErrCode GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
     static OUString GetMSBasicStorageName();
 private:
