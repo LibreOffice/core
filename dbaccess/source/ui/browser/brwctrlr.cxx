@@ -2323,7 +2323,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
     return xEmptyReturn;
 }
 
-IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, pContext)
+IMPL_LINK_TYPED(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext&, rContext, sal_uInt32)
 {
     Reference< css::container::XIndexAccess >  xPeerContainer(getBrowserView()->getGridControl(), UNO_QUERY);
 
@@ -2350,23 +2350,23 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
 
         sFieldList += aName + ";";
 
-        pContext->arrFields.push_back(xCurrentColumn);
+        rContext.arrFields.push_back(xCurrentColumn);
     }
     sFieldList = comphelper::string::stripEnd(sFieldList, ';');
 
-    pContext->xCursor.set(getRowSet(),UNO_QUERY);
-    pContext->strUsedFields = sFieldList;
+    rContext.xCursor.set(getRowSet(),UNO_QUERY);
+    rContext.strUsedFields = sFieldList;
 
     // if the cursor is in a mode other than STANDARD -> reset
-    Reference< XPropertySet >  xCursorSet(pContext->xCursor, UNO_QUERY);
+    Reference< XPropertySet >  xCursorSet(rContext.xCursor, UNO_QUERY);
     OSL_ENSURE(xCursorSet.is() && !::comphelper::getBOOL(xCursorSet->getPropertyValue(PROPERTY_ISMODIFIED)),
         "SbaXDataBrowserController::OnSearchContextRequest : please do not call for cursors with modified rows !");
     if (xCursorSet.is() && ::comphelper::getBOOL(xCursorSet->getPropertyValue(PROPERTY_ISNEW)))
     {
-        Reference< XResultSetUpdate >  xUpdateCursor(pContext->xCursor, UNO_QUERY);
+        Reference< XResultSetUpdate >  xUpdateCursor(rContext.xCursor, UNO_QUERY);
         xUpdateCursor->moveToCurrentRow();
     }
-    return pContext->arrFields.size();
+    return rContext.arrFields.size();
 }
 
 IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pInfo)

@@ -1468,7 +1468,7 @@ void FmXFormShell::ExecuteSearch()
         {
             FmSearchContext aTestContext;
             aTestContext.nContext = static_cast< sal_Int16 >( form - m_aSearchForms.begin() );
-            sal_uInt32 nValidControls = OnSearchContextRequest( &aTestContext );
+            sal_uInt32 nValidControls = OnSearchContextRequest(aTestContext );
             if ( nValidControls > 0 )
             {
                 aValidForms.push_back( *form );
@@ -2314,13 +2314,13 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
 }
 
 
-IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextInfo)
+IMPL_LINK_TYPED(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscContextInfo, sal_uInt32)
 {
     if ( impl_checkDisposed() )
         return 0;
 
-    DBG_ASSERT(pfmscContextInfo->nContext < (sal_Int16)m_aSearchForms.size(), "FmXFormShell::OnSearchContextRequest : invalid parameter !");
-    Reference< XForm> xForm( m_aSearchForms.at(pfmscContextInfo->nContext));
+    DBG_ASSERT(rfmscContextInfo.nContext < (sal_Int16)m_aSearchForms.size(), "FmXFormShell::OnSearchContextRequest : invalid parameter !");
+    Reference< XForm> xForm( m_aSearchForms.at(rfmscContextInfo.nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnSearchContextRequest : unexpected : invalid context !");
 
     Reference< XResultSet> xIter(xForm, UNO_QUERY);
@@ -2438,7 +2438,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                                     OUString(::comphelper::getString(xCurrentColModel->getPropertyValue(FM_PROP_LABEL)).getStr()) +
                                     ";";
 
-                            pfmscContextInfo->arrFields.push_back(xCurrentColumn);
+                            rfmscContextInfo.arrFields.push_back(xCurrentColumn);
 
                             // and the SdrOject to the Field
                             m_arrSearchedControls.push_back(pCurrent);
@@ -2476,7 +2476,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
                         m_arrRelativeGridColumn.push_back(-1);
 
                         // and for the formatted search...
-                        pfmscContextInfo->arrFields.push_back(Reference<XInterface>( xControl, UNO_QUERY ));
+                        rfmscContextInfo.arrFields.push_back(Reference<XInterface>( xControl, UNO_QUERY ));
                     }
                 }
             }
@@ -2488,22 +2488,22 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
     strFieldList = comphelper::string::stripEnd(strFieldList, ';');
     sFieldDisplayNames = comphelper::string::stripEnd(sFieldDisplayNames, ';');
 
-    if (pfmscContextInfo->arrFields.empty())
+    if (rfmscContextInfo.arrFields.empty())
     {
-        pfmscContextInfo->arrFields.clear();
-        pfmscContextInfo->xCursor = NULL;
-        pfmscContextInfo->strUsedFields.clear();
+        rfmscContextInfo.arrFields.clear();
+        rfmscContextInfo.xCursor = NULL;
+        rfmscContextInfo.strUsedFields.clear();
         return 0L;
     }
 
-    pfmscContextInfo->xCursor = xIter;
-    pfmscContextInfo->strUsedFields = strFieldList;
-    pfmscContextInfo->sFieldDisplayNames = sFieldDisplayNames;
+    rfmscContextInfo.xCursor = xIter;
+    rfmscContextInfo.strUsedFields = strFieldList;
+    rfmscContextInfo.sFieldDisplayNames = sFieldDisplayNames;
 
     // 66463 - 31.05.99 - FS
     // when the cursor is a non-STANDARD RecordMode, set it back
-    Reference< XPropertySet> xCursorSet(pfmscContextInfo->xCursor, UNO_QUERY);
-    Reference< XResultSetUpdate> xUpdateCursor(pfmscContextInfo->xCursor, UNO_QUERY);
+    Reference< XPropertySet> xCursorSet(rfmscContextInfo.xCursor, UNO_QUERY);
+    Reference< XResultSetUpdate> xUpdateCursor(rfmscContextInfo.xCursor, UNO_QUERY);
     if (xUpdateCursor.is() && xCursorSet.is())
     {
         if (::comphelper::getBOOL(xCursorSet->getPropertyValue(FM_PROP_ISNEW)))
@@ -2512,7 +2512,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextIn
             xUpdateCursor->cancelRowUpdates();
     }
 
-    return pfmscContextInfo->arrFields.size();
+    return rfmscContextInfo.arrFields.size();
 }
 
   // XContainerListener

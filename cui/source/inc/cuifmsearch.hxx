@@ -81,7 +81,7 @@ class FmSearchDialog : public ModalDialog
     Link<>  m_lnkFoundHandler;          ///< Handler for "found"
     Link<>  m_lnkCanceledNotFoundHdl;   ///< Handler for Positioning the Cursors
 
-    Link<>  m_lnkContextSupplier;       ///< for search in contexts
+    Link<FmSearchContext&,sal_uInt32>  m_lnkContextSupplier;       ///< for search in contexts
 
     /// memorize the currently selected field for every context
     ::std::vector<OUString> m_arrContextFields;
@@ -108,7 +108,7 @@ public:
         arrFields of the context)
     */
     FmSearchDialog(vcl::Window* pParent, const OUString& strInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
-        const Link<>& lnkContextSupplier);
+        const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier);
 
     virtual ~FmSearchDialog();
     virtual void dispose() SAL_OVERRIDE;

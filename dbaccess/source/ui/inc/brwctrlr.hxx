@@ -331,7 +331,7 @@ namespace dbaui
         DECL_LINK_TYPED( OnClipboardChanged, TransferableDataHelper*, void );
 
         // search callbacks
-        DECL_LINK(OnSearchContextRequest, FmSearchContext*);
+        DECL_LINK_TYPED(OnSearchContextRequest, FmSearchContext&, sal_uInt32);
         DECL_LINK(OnFoundData, FmFoundRecordInformation*);
         DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
 

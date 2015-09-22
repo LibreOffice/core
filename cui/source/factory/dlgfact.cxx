@@ -1266,7 +1266,7 @@ AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(vcl::W
                                                         const OUString& strInitialText,
                                                         const ::std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
-                                                        const Link<>& lnkContextSupplier)
+                                                        const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier)
 {
     VclPtrInstance<FmSearchDialog> pDlg( pParent, strInitialText, _rContexts,
                                          nInitialContext, lnkContextSupplier );

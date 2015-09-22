@@ -466,7 +466,7 @@ public:
 private:
     DECL_DLLPRIVATE_LINK(OnFoundData, FmFoundRecordInformation*);
     DECL_DLLPRIVATE_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
-    DECL_DLLPRIVATE_LINK(OnSearchContextRequest, FmSearchContext*);
+    DECL_DLLPRIVATE_LINK_TYPED(OnSearchContextRequest, FmSearchContext&, sal_uInt32);
     DECL_DLLPRIVATE_LINK_TYPED(OnTimeOut, Timer*, void);
     DECL_DLLPRIVATE_LINK_TYPED(OnFirstTimeActivation, void*, void);
     DECL_DLLPRIVATE_LINK_TYPED(OnFormsCreated, FmFormPageImpl&, void);
