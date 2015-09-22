@@ -152,7 +152,12 @@ GraphiteLayout::fillFrom(gr_segment * pSegment, ImplLayoutArgs &rArgs, float fSc
         nextBaseSlot = get_next_base(bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot), bRtl);
         nextBoundary = nextBaseSlot ? gr_slot_origin_X(nextBaseSlot) : gr_seg_advance_X(pSegment);
         if (firstChar < mnMinCharPos || firstChar >= mnEndCharPos)
+        {
+            // handle clipping of diacritic from base
+            nextBaseSlot = bRtl ? gr_slot_prev_in_segment(baseSlot) : gr_slot_next_in_segment(baseSlot);
+            nextBoundary = nextBaseSlot ? gr_slot_origin_X(nextBaseSlot) : gr_seg_advance_X(pSegment);
             continue;
+        }
         // handle reordered clusters. Presumes reordered glyphs have monotonic opposite char index until the cluster base.
         bool isReordered = (nextBaseSlot && ((bRtl != (gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(nextBaseSlot))) < firstChar - mnSegCharOffset))
                                              || gr_cinfo_base(gr_seg_cinfo(pSegment, gr_slot_before(nextBaseSlot))) == firstChar - mnSegCharOffset));
@@ -523,7 +528,7 @@ DeviceCoordinate GraphiteLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
 void  GraphiteLayout::AdjustLayout(ImplLayoutArgs& rArgs)
 {
     SalLayout::AdjustLayout(rArgs);
-    if(rArgs.mpDXArray)
+    if(rArgs.mpDXArray && mvGlyphs.size())
     {
         std::vector<int> vDeltaWidths(mvGlyphs.size(), 0);
         ApplyDXArray(rArgs, vDeltaWidths);
