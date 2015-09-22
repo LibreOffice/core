@@ -1,11 +1,13 @@
 diff -ur graphite.org/src/inc/Main.h graphite/src/inc/Main.h
 --- graphite.org/src/inc/Main.h	2015-09-07 20:09:25.572279671 +0700
 --- graphite/src/inc/Main.h	2015-09-07 20:09:25.572279671 +0700
-@@ -25,6 +25,7 @@
+@@ -25,6 +25,9 @@
  of the License or (at your option) any later version.
  */
  #pragma once
++#ifdef _WIN32
 +#pragma warning(disable: 4510 4610)
++#endif
  
  #include <cstdlib>
  #include "graphite2/Types.h"
