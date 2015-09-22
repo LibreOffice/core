@@ -2414,9 +2414,9 @@ size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
 {
     SmErrorDesc *pErrDesc = new SmErrorDesc;
 
-    pErrDesc->Type  = Type;
-    pErrDesc->pNode = pNode;
-    pErrDesc->Text  = SM_RESSTR(RID_ERR_IDENT);
+    pErrDesc->m_eType = Type;
+    pErrDesc->m_pNode = pNode;
+    pErrDesc->m_aText = SM_RESSTR(RID_ERR_IDENT);
 
     sal_uInt16  nRID;
     switch (Type)
@@ -2438,7 +2438,7 @@ size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
         default:
             nRID = RID_ERR_UNKNOWN;
     }
-    pErrDesc->Text += SM_RESSTR(nRID);
+    pErrDesc->m_aText += SM_RESSTR(nRID);
 
     m_aErrDescList.push_back( pErrDesc );
 

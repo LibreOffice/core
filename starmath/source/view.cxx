@@ -1349,9 +1349,9 @@ void SmViewShell::ShowError(const SmErrorDesc* pErrorDesc)
     SAL_WARN_IF( !GetDoc(), "starmath", "Document missing" );
     if (pErrorDesc || 0 != (pErrorDesc = GetDoc()->GetParser().GetError(0)) )
     {
-        SetStatusText( pErrorDesc->Text );
-        GetEditWindow()->MarkError( Point( pErrorDesc->pNode->GetColumn(),
-                                           pErrorDesc->pNode->GetRow()));
+        SetStatusText( pErrorDesc->m_aText );
+        GetEditWindow()->MarkError( Point( pErrorDesc->m_pNode->GetColumn(),
+                                           pErrorDesc->m_pNode->GetRow()));
     }
 }
 
