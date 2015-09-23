@@ -1074,7 +1074,7 @@ void ScTabViewShell::StopEditShell()
 
 // close handler to ensure function of dialog:
 
-IMPL_LINK_NOARG(ScTabViewShell, SimpleRefClose)
+IMPL_LINK_NOARG_TYPED(ScTabViewShell, SimpleRefClose, const OUString*, void)
 {
     SfxInPlaceClient* pClient = GetIPClient();
     if ( pClient && pClient->IsObjectInPlaceActive() )
@@ -1086,7 +1086,6 @@ IMPL_LINK_NOARG(ScTabViewShell, SimpleRefClose)
     }
 
     ScSimpleRefDlgWrapper::SetAutoReOpen( true );
-    return 0;
 }
 
 // handlers to call UNO listeners:

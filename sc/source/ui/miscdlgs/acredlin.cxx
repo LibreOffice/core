@@ -890,7 +890,7 @@ IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, RefHandle, SvxTPFilter*, void)
     }
 }
 
-IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, OUString*, pResult)
+IMPL_LINK_TYPED( ScAcceptChgDlg, RefInfoHandle, const OUString*, pResult, void)
 {
     sal_uInt16 nId;
 
@@ -921,7 +921,6 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, OUString*, pResult)
         nId = ScAcceptChgDlgWrapper::GetChildWindowId();
         pViewFrm->SetChildWindow( nId, false );
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef, void )

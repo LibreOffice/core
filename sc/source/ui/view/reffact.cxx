@@ -194,7 +194,7 @@ void ScSimpleRefDlgWrapper::SetRefString(const OUString& rStr)
     }
 }
 
-void ScSimpleRefDlgWrapper::SetCloseHdl( const Link<>& rLink )
+void ScSimpleRefDlgWrapper::SetCloseHdl( const Link<const OUString*,void>& rLink )
 {
     if(GetWindow())
     {
