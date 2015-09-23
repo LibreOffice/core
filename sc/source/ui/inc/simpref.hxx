@@ -36,9 +36,9 @@ class ScSimpleRefDlg: public ScAnyRefDlg
 {
 private:
     Link<const OUString*,void> aCloseHdl;
-    Link<>          aDoneHdl;
-    Link<>          aAbortedHdl;
-    Link<>          aChangeHdl;
+    Link<const OUString&,void> aDoneHdl;
+    Link<const OUString&,void> aAbortedHdl;
+    Link<const OUString&,void> aChangeHdl;
 
     VclPtr<FixedText> m_pFtAssign;
     VclPtr<formula::RefEdit> m_pEdAssign;
@@ -80,8 +80,8 @@ public:
     virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
 
     void            SetCloseHdl( const Link<const OUString*,void>& rLink );
-    void            SetUnoLinks( const Link<>& rDone, const Link<>& rAbort,
-                                const Link<>& rChange );
+    void            SetUnoLinks( const Link<const OUString&,void>& rDone, const Link<const OUString&,void>& rAbort,
+                                const Link<const OUString&,void>& rChange );
 
     void            SetFlags( bool bSetCloseOnButtonUp, bool bSetSingleCell, bool bSetMultiSelection );
 };

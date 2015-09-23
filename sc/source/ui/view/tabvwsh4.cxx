@@ -1104,28 +1104,25 @@ static ScTabViewObj* lcl_GetViewObj( ScTabViewShell& rShell )
     return pRet;
 }
 
-IMPL_LINK( ScTabViewShell, SimpleRefDone, OUString*, pResult )
+IMPL_LINK_TYPED( ScTabViewShell, SimpleRefDone, const OUString&, aResult, void )
 {
     ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
-    if ( pImpObj && pResult )
-        pImpObj->RangeSelDone( *pResult );
-    return 0;
+    if ( pImpObj )
+        pImpObj->RangeSelDone( aResult );
 }
 
-IMPL_LINK( ScTabViewShell, SimpleRefAborted, OUString*, pResult )
+IMPL_LINK_TYPED( ScTabViewShell, SimpleRefAborted, const OUString&, rResult, void )
 {
     ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
-    if ( pImpObj && pResult )
-        pImpObj->RangeSelAborted( *pResult );
-    return 0;
+    if ( pImpObj )
+        pImpObj->RangeSelAborted( rResult );
 }
 
-IMPL_LINK( ScTabViewShell, SimpleRefChange, OUString*, pResult )
+IMPL_LINK_TYPED( ScTabViewShell, SimpleRefChange, const OUString&, rResult, void )
 {
     ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
-    if ( pImpObj && pResult )
-        pImpObj->RangeSelChanged( *pResult );
-    return 0;
+    if ( pImpObj )
+        pImpObj->RangeSelChanged( rResult );
 }
 
 void ScTabViewShell::StartSimpleRefDialog(

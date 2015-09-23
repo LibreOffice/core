@@ -123,7 +123,7 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
         else
             m_pEdAssign->SetRefString( aRefStr );
 
-        aChangeHdl.Call( &aRefStr );
+        aChangeHdl.Call( aRefStr );
     }
 }
 
@@ -154,8 +154,9 @@ void ScSimpleRefDlg::SetCloseHdl( const Link<const OUString*,void>& rLink )
     aCloseHdl=rLink;
 }
 
-void ScSimpleRefDlg::SetUnoLinks( const Link<>& rDone, const Link<>& rAbort,
-                                    const Link<>& rChange )
+void ScSimpleRefDlg::SetUnoLinks( const Link<const OUString&,void>& rDone,
+                                  const Link<const OUString&,void>& rAbort,
+                                  const Link<const OUString&,void>& rChange )
 {
     aDoneHdl    = rDone;
     aAbortedHdl = rAbort;
@@ -195,9 +196,9 @@ IMPL_LINK_NOARG_TYPED(ScSimpleRefDlg, OkBtnHdl, Button*, void)
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();
     aCloseHdl.Call(&aResult);
-    Link<> aUnoLink = aDoneHdl;     // stack var because this is deleted in DoClose
+    Link<const OUString&,void> aUnoLink = aDoneHdl;     // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
-    aUnoLink.Call( &aResult );
+    aUnoLink.Call( aResult );
 }
 
 IMPL_LINK_NOARG_TYPED(ScSimpleRefDlg, CancelBtnHdl, Button*, void)
@@ -205,9 +206,9 @@ IMPL_LINK_NOARG_TYPED(ScSimpleRefDlg, CancelBtnHdl, Button*, void)
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();
     aCloseHdl.Call(NULL);
-    Link<> aUnoLink = aAbortedHdl;  // stack var because this is deleted in DoClose
+    Link<const OUString&,void> aUnoLink = aAbortedHdl;  // stack var because this is deleted in DoClose
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
-    aUnoLink.Call( &aResult );
+    aUnoLink.Call( aResult );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
