@@ -202,8 +202,8 @@ void ScSimpleRefDlgWrapper::SetCloseHdl( const Link<const OUString*,void>& rLink
     }
 }
 
-void ScSimpleRefDlgWrapper::SetUnoLinks( const Link<>& rDone,
-                    const Link<>& rAbort, const Link<>& rChange )
+void ScSimpleRefDlgWrapper::SetUnoLinks( const Link<const OUString&,void>& rDone,
+                    const Link<const OUString&,void>& rAbort, const Link<const OUString&,void>& rChange )
 {
     if(GetWindow())
     {

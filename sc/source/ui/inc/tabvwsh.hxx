@@ -184,9 +184,9 @@ private:
                                      ::com::sun::star::beans::PropertyValue >& rSettings );
 
     DECL_LINK_TYPED( SimpleRefClose, const OUString*, void );
-    DECL_LINK( SimpleRefDone, OUString* );
-    DECL_LINK( SimpleRefAborted, OUString* );
-    DECL_LINK( SimpleRefChange, OUString* );
+    DECL_LINK_TYPED( SimpleRefDone, const OUString&, void );
+    DECL_LINK_TYPED( SimpleRefAborted, const OUString&, void );
+    DECL_LINK_TYPED( SimpleRefChange, const OUString&, void );
     DECL_LINK_TYPED( FormControlActivated, LinkParamNone*, void );
 
 protected:

@@ -162,8 +162,8 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
         static void     SetDefaultPosSize(Point aPos, Size aSize, bool bSet = true);
         void            SetRefString(const OUString& rStr);
         void            SetCloseHdl( const Link<const OUString*,void>& rLink );
-        void            SetUnoLinks( const Link<>& rDone, const Link<>& rAbort,
-                                        const Link<>& rChange );
+        void            SetUnoLinks( const Link<const OUString&,void>& rDone, const Link<const OUString&,void>& rAbort,
+                                        const Link<const OUString&,void>& rChange );
         void            SetFlags( bool bCloseOnButtonUp, bool bSingleCell, bool bMultiSelection );
         static void     SetAutoReOpen(bool bFlag);
 
