@@ -87,7 +87,7 @@ public:
 
     void            ShowWin();
 
-    DECL_LINK( SelTableCellsNotify, SwWrtShell * );
+    DECL_LINK_TYPED( SelTableCellsNotify, SwWrtShell&, void );
 
     void            SetFormula( const OUString& rFormula, bool bDelSel = true );
     const SwView*   GetView() const{return pView;}

@@ -783,7 +783,7 @@ long SwWrtShell::BeginDrag(const Point * /*pPt*/, bool )
 long SwWrtShell::DefaultDrag(const Point *, bool )
 {
     if( IsSelTableCells() )
-        m_aSelTableLink.Call(this);
+        m_aSelTableLink.Call(*this);
 
     return 1;
 }
@@ -795,7 +795,7 @@ long SwWrtShell::DefaultEndDrag(const Point * /*pPt*/, bool )
         LeaveExtSel();
 
     if( IsSelTableCells() )
-        m_aSelTableLink.Call(this);
+        m_aSelTableLink.Call(*this);
     EndSelect();
     return 1;
 }
