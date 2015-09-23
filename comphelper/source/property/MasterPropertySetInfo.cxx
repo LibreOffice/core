@@ -46,27 +46,21 @@ MasterPropertySetInfo::MasterPropertySetInfo( PropertyInfo const * pMap )
 MasterPropertySetInfo::~MasterPropertySetInfo()
     throw()
 {
-    PropertyDataHash::iterator aEnd = maMap.end(), aIter = maMap.begin();
-    while (aIter != aEnd )
-    {
-        delete (*aIter).second;
-        ++aIter;
-    }
+    for( auto& rObj : maMap )
+        delete rObj.second;
 }
 
 void MasterPropertySetInfo::add( PropertyInfoHash &rHash, sal_uInt8 nMapId )
 {
     if( maProperties.getLength() )
         maProperties.realloc( 0 );
-    PropertyInfoHash::iterator aIter = rHash.begin(), aEnd = rHash.end();
 
-    while ( aIter != aEnd )
+    for( const auto& rObj : rHash )
     {
         SAL_WARN_IF(
-            maMap.find(aIter->first) != maMap.end(),
-            "comphelper", "Duplicate property name \"" << aIter->first << "\"");
-        maMap[(*aIter).first] = new PropertyData ( nMapId, (*aIter).second );
-        ++aIter;
+            maMap.find(rObj.first) != maMap.end(),
+            "comphelper", "Duplicate property name \"" << rObj.first << "\"");
+        maMap[rObj.first] = new PropertyData ( nMapId, rObj.second );
     }
 }
 

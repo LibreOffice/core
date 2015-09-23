@@ -151,16 +151,11 @@ css::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& 
 css::uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer::getElementNames(  )
     throw(css::uno::RuntimeException, std::exception)
 {
-    NamedPropertyValues::iterator aIter = maProperties.begin();
-    const NamedPropertyValues::iterator aEnd = maProperties.end();
-
     uno::Sequence< OUString > aNames( maProperties.size() );
     OUString* pNames = aNames.getArray();
 
-    while( aIter != aEnd )
-    {
-        *pNames++ = (*aIter++).first;
-    }
+    for( const auto& rProperty : maProperties )
+        *pNames++ = rProperty.first;
 
     return aNames;
 }

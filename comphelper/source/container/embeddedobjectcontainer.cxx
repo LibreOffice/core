@@ -196,11 +196,10 @@ EmbeddedObjectContainer::~EmbeddedObjectContainer()
 
 void EmbeddedObjectContainer::CloseEmbeddedObjects()
 {
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
-    while ( aIt != pImpl->maObjectContainer.end() )
+    for( const auto& rObj : pImpl->maObjectContainer )
     {
-        uno::Reference < util::XCloseable > xClose( (*aIt).second, uno::UNO_QUERY );
-        if ( xClose.is() )
+        uno::Reference < util::XCloseable > xClose( rObj.second, uno::UNO_QUERY );
+        if( xClose.is() )
         {
             try
             {
@@ -210,8 +209,6 @@ void EmbeddedObjectContainer::CloseEmbeddedObjects()
             {
             }
         }
-
-        ++aIt;
     }
 }
 
@@ -234,10 +231,11 @@ OUString EmbeddedObjectContainer::CreateUniqueObjectName()
 uno::Sequence < OUString > EmbeddedObjectContainer::GetObjectNames()
 {
     uno::Sequence < OUString > aSeq( pImpl->maObjectContainer.size() );
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
-    sal_Int32 nIdx=0;
-    while ( aIt != pImpl->maObjectContainer.end() )
-        aSeq[nIdx++] = (*aIt++).first;
+    OUString* pNames = aSeq.getArray();
+
+    for( const auto& rObj : pImpl->maObjectContainer )
+        *pNames++ = rObj.first;
+
     return aSeq;
 }
 
@@ -260,15 +258,11 @@ bool EmbeddedObjectContainer::HasEmbeddedObject( const OUString& rName )
 
 bool EmbeddedObjectContainer::HasEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj )
 {
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
-    while ( aIt != pImpl->maObjectContainer.end() )
+    for( const auto& rObj : pImpl->maObjectContainer )
     {
-        if ( (*aIt).second == xObj )
+        if( rObj.second == xObj )
             return true;
-        else
-            ++aIt;
     }
-
     return false;
 }
 
@@ -283,15 +277,11 @@ bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const OUString& rNa
 
 OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const css::uno::Reference < css::embed::XEmbeddedObject >& xObj )
 {
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
-    while ( aIt != pImpl->maObjectContainer.end() )
+    for( const auto& rObj : pImpl->maObjectContainer )
     {
-        if ( (*aIt).second == xObj )
-            return (*aIt).first;
-        else
-            ++aIt;
+        if( rObj.second == xObj )
+            return rObj.first;
     }
-
     SAL_WARN( "comphelper.container", "Unknown object!" );
     return OUString();
 }
@@ -434,13 +424,15 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css
     // look for object in temporary container
     if ( pImpl->mpTempObjectContainer )
     {
-        aIt = pImpl->mpTempObjectContainer->pImpl->maObjectContainer.begin();
-        while ( aIt != pImpl->mpTempObjectContainer->pImpl->maObjectContainer.end() )
+        EmbeddedObjectContainerNameMap::iterator aEnd = pImpl->mpTempObjectContainer->pImpl->maObjectContainer.end();
+        for( EmbeddedObjectContainerNameMap::iterator aIter = pImpl->mpTempObjectContainer->pImpl->maObjectContainer.end();
+             aIter != aEnd;
+             ++aIter )
         {
-            if ( (*aIt).second == xObj )
+            if ( aIter->second == xObj )
             {
                 // copy replacement image from temporary container (if there is any)
-                OUString aTempName = (*aIt).first;
+                OUString aTempName = aIter->first;
                 OUString aMediaType;
                 uno::Reference < io::XInputStream > xStream = pImpl->mpTempObjectContainer->GetGraphicStream( xObj, &aMediaType );
                 if ( xStream.is() )
@@ -464,11 +456,9 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const css::uno::Reference < css
                 }
 
                 // temp. container needs to forget the object
-                pImpl->mpTempObjectContainer->pImpl->maObjectContainer.erase( aIt );
+                pImpl->mpTempObjectContainer->pImpl->maObjectContainer.erase( aIter );
                 break;
             }
-            else
-                ++aIt;
         }
     }
 }
@@ -857,17 +847,17 @@ bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& rSrc,
     {
         // now remove the object from the former container
         bRet = false;
-        EmbeddedObjectContainerNameMap::iterator aIt = rSrc.pImpl->maObjectContainer.begin();
-        while ( aIt != rSrc.pImpl->maObjectContainer.end() )
+        EmbeddedObjectContainerNameMap::iterator aEnd = rSrc.pImpl->maObjectContainer.end();
+        for( EmbeddedObjectContainerNameMap::iterator aIter = rSrc.pImpl->maObjectContainer.begin();
+             aIter != aEnd;
+             ++aIter )
         {
-            if ( (*aIt).second == xObj )
+            if ( aIter->second == xObj )
             {
-                rSrc.pImpl->maObjectContainer.erase( aIt );
+                rSrc.pImpl->maObjectContainer.erase( aIter );
                 bRet = true;
                 break;
             }
-
-            ++aIt;
         }
 
         SAL_WARN_IF( !bRet, "comphelper.container", "Object not found for removal!" );
@@ -1055,20 +1045,20 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
     }
 
     bool bFound = false;
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
-    while ( aIt != pImpl->maObjectContainer.end() )
+    EmbeddedObjectContainerNameMap::iterator aEnd = pImpl->maObjectContainer.end();
+    for( EmbeddedObjectContainerNameMap::iterator aIter = pImpl->maObjectContainer.begin();
+         aIter != aEnd;
+         ++aIter )
     {
-        if ( (*aIt).second == xObj )
+        if ( aIter->second == xObj )
         {
-            pImpl->maObjectContainer.erase( aIt );
+            pImpl->maObjectContainer.erase( aIter );
             bFound = true;
             uno::Reference < container::XChild > xChild( xObj, uno::UNO_QUERY );
             if ( xChild.is() )
                 xChild->setParent( uno::Reference < uno::XInterface >() );
             break;
         }
-
-        ++aIt;
     }
 
     SAL_WARN_IF( !bFound,"comphelper.container", "Object not found for removal!" );
@@ -1103,17 +1093,17 @@ bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed:
     // disconnect the object from the container and close it if possible
 
     bool bFound = false;
-    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.begin();
-    while ( aIt != pImpl->maObjectContainer.end() )
+    EmbeddedObjectContainerNameMap::iterator aEnd = pImpl->maObjectContainer.end();
+    for( EmbeddedObjectContainerNameMap::iterator aIter = pImpl->maObjectContainer.begin();
+         aIter != aEnd;
+         ++aIter )
     {
-        if ( (*aIt).second == xObj )
+        if ( aIter->second == xObj )
         {
-            pImpl->maObjectContainer.erase( aIt );
+            pImpl->maObjectContainer.erase( aIter );
             bFound = true;
             break;
         }
-
-        ++aIt;
     }
 
     if ( bFound )
