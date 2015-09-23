@@ -3270,12 +3270,12 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
             // Why not for other Scripts? If TRNSFR_DOCUMENT_WORD is set, we have a word
             // in the buffer, word in this context means 'something with spaces at beginning
             // and end'. In this case we definitely want these spaces to be inserted here.
-            bInWrd = rShell.IsInWrd();
+            bInWrd = rShell.IsInWord();
             bEndWrd = rShell.IsEndWrd();
             bSmart = bInWrd || bEndWrd;
             if( bSmart )
             {
-                bSttWrd = rShell.IsSttWrd();
+                bSttWrd = rShell.IsStartWord();
                 if( bSmart && !bSttWrd && (bInWrd || bEndWrd) )
                     rShell.SwEditShell::Insert(' ');
             }
@@ -3415,9 +3415,9 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         rSh.GoNextCrsr();
     }
 
-    bInWrd  = rSh.IsInWrd();
+    bInWrd  = rSh.IsInWord();
     bEndWrd = rSh.IsEndWrd();
-    bSttWrd = !bEndWrd && rSh.IsSttWrd();
+    bSttWrd = !bEndWrd && rSh.IsStartWord();
     bSttPara= rSh.IsSttPara();
 
     Point aSttPt( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY() );

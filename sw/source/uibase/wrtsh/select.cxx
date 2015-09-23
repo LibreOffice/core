@@ -63,7 +63,7 @@ void SwWrtShell::Invalidate()
 bool SwWrtShell::SelNearestWrd()
 {
     SwMvContext aMvContext(this);
-    if( !IsInWrd() && !IsEndWrd() && !IsSttWrd() )
+    if( !IsInWord() && !IsEndWrd() && !IsStartWord() )
         PrvWrd();
     if( IsEndWrd() )
         Left(CRSR_SKIP_CELLS, false, 1, false );

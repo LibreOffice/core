@@ -171,8 +171,6 @@ public:
     inline bool Is_FnDragEQBeginDrag() const;
 
     // base requests
-    bool    IsInWrd()           { return IsInWord(); }
-    bool    IsSttWrd()          { return IsStartWord(); }
     bool    IsEndWrd();
     bool    IsSttOfPara() const { return IsSttPara(); }
     bool    IsEndOfPara() const { return IsEndPara(); }
