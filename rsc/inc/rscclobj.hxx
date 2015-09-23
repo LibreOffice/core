@@ -38,8 +38,8 @@ public:
                 ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey );
     ObjNode *   DelObjNode( RscTop * pClass, sal_uLong lFileKey );
     sal_uInt32  GetId() const SAL_OVERRIDE;
-    RscId       GetRscId(){ return aRscId; }
-    sal_uLong   GetFileKey(){ return lFileKey; };
+    RscId       GetRscId() const { return aRscId; }
+    sal_uLong   GetFileKey() const { return lFileKey; };
     ObjNode*    Search( const RscId &rName ) const //< search the index in the b-tree
                     {
                         return static_cast<ObjNode *>(IdNode::Search( rName ));
@@ -49,7 +49,7 @@ public:
                     {
                         return IdNode::Insert( static_cast<IdNode *>(pTN) );
                     }
-    CLASS_DATA  GetRscObj() //< get the Object from this Node
+    CLASS_DATA  GetRscObj() const//< get the Object from this Node
 
                     {
                         return pRscObj;
@@ -79,7 +79,7 @@ public:
                 // insert new node in b-tree pObjBiTree
     ObjNode *   GetObjNode( const RscId &rRscId );
 
-    ObjNode *   GetObjNode()
+    ObjNode *   GetObjNode() const
                     {
                         // hole  pObjBiTree
                         return pObjBiTree;

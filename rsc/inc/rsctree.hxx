@@ -43,7 +43,7 @@ protected:
                         NameNode* ChangeBTreeDLList();
 
 public:
-            void        EnumNodes( Link<> aLink ) const;
+            void        EnumNodes( Link<const NameNode&,void> aLink ) const;
             NameNode*   Left() const { return pLeft; }
             NameNode*   Right() const{ return pRight; }
             NameNode*   Search( const NameNode * pName ) const;

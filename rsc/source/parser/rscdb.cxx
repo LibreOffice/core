@@ -349,8 +349,8 @@ private:
     sal_uLong   lFileKey;   // what source file
     RscTop *    pClass;
 
-    DECL_LINK( CallBackWriteRc, ObjNode * );
-    DECL_LINK( CallBackWriteSrc, ObjNode * );
+    DECL_LINK_TYPED( CallBackWriteRc, const NameNode&, void );
+    DECL_LINK_TYPED( CallBackWriteSrc, const NameNode&, void );
 
     ERRTYPE WriteRc( RscTop * pCl, ObjNode * pRoot )
     {
@@ -369,30 +369,30 @@ public:
     void WriteRcFile( RscWriteRc & rMem, FILE * fOutput );
 };
 
-IMPL_LINK( RscEnumerateObj, CallBackWriteRc, ObjNode *, pObjNode )
+IMPL_LINK_TYPED( RscEnumerateObj, CallBackWriteRc, const NameNode&, rNode, void )
 {
-    RscWriteRc      aMem( pTypCont->GetByteOrder() );
+    const ObjNode& rObjNode = static_cast<const ObjNode&>(rNode);
+    RscWriteRc     aMem( pTypCont->GetByteOrder() );
 
-    aError = pClass->WriteRcHeader( RSCINST( pClass, pObjNode->GetRscObj() ),
+    aError = pClass->WriteRcHeader( RSCINST( pClass, rObjNode.GetRscObj() ),
                                      aMem, pTypCont,
-                                     pObjNode->GetRscId(), 0, true );
+                                     rObjNode.GetRscId(), 0, true );
     if( aError.IsError() || aError.IsWarning() )
-        pTypCont->pEH->Error( aError, pClass, pObjNode->GetRscId() );
+        pTypCont->pEH->Error( aError, pClass, rObjNode.GetRscId() );
 
     WriteRcFile( aMem, fOutput );
-    return 0;
 }
 
-IMPL_LINK( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
+IMPL_LINK_TYPED( RscEnumerateObj, CallBackWriteSrc, const NameNode&, rNode, void )
 {
-    if( pObjNode->GetFileKey() == lFileKey )
+    const ObjNode& rObjNode = static_cast<const ObjNode&>(rNode);
+    if( rObjNode.GetFileKey() == lFileKey )
     {
-        pClass->WriteSrcHeader( RSCINST( pClass, pObjNode->GetRscObj() ),
+        pClass->WriteSrcHeader( RSCINST( pClass, rObjNode.GetRscObj() ),
                                 fOutput, pTypCont, 0,
-                                pObjNode->GetRscId(), "" );
+                                rObjNode.GetRscId(), "" );
         fprintf( fOutput, ";\n" );
     }
-    return 0;
 }
 
 void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut )
@@ -445,8 +445,8 @@ class RscEnumerateRef
 private:
     RscTop *        pRoot;
 
-    DECL_LINK( CallBackWriteRc, RscTop * );
-    DECL_LINK( CallBackWriteSrc, RscTop * );
+    DECL_LINK_TYPED( CallBackWriteRc, const NameNode&, void );
+    DECL_LINK_TYPED( CallBackWriteSrc, const NameNode&, void );
 public:
     RscEnumerateObj aEnumObj;
 
@@ -473,16 +473,16 @@ public:
         }
 };
 
-IMPL_LINK( RscEnumerateRef, CallBackWriteRc, RscTop *, pRef )
+IMPL_LINK_TYPED( RscEnumerateRef, CallBackWriteRc, const NameNode&, rNode, void )
 {
-    aEnumObj.WriteRc( pRef, pRef->GetObjNode() );
-    return 0;
+    const RscTop& rRef = static_cast<const RscTop&>(rNode);
+    aEnumObj.WriteRc( const_cast<RscTop*>(&rRef), rRef.GetObjNode() );
 }
 
-IMPL_LINK( RscEnumerateRef, CallBackWriteSrc, RscTop *, pRef )
+IMPL_LINK_TYPED( RscEnumerateRef, CallBackWriteSrc, const NameNode&, rNode, void )
 {
-    aEnumObj.WriteSrc( pRef, pRef->GetObjNode() );
-    return 0;
+    const RscTop& rRef = static_cast<const RscTop&>(rNode);
+    aEnumObj.WriteSrc( const_cast<RscTop*>(&rRef), rRef.GetObjNode() );
 }
 
 ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
@@ -561,7 +561,7 @@ void RscTypCont :: WriteSrc( FILE * fOutput, sal_uLong nFileKey,
 class RscDel
 {
     sal_uLong lFileKey;
-    DECL_LINK( Delete, RscTop * );
+    DECL_LINK_TYPED( Delete, const NameNode&, void );
 public:
     RscDel( RscTop * pRoot, sal_uLong lKey );
 };
@@ -573,11 +573,11 @@ inline RscDel::RscDel( RscTop * pRoot, sal_uLong lKey )
     pRoot->EnumNodes( LINK( this, RscDel, Delete ) );
 }
 
-IMPL_LINK( RscDel, Delete, RscTop *, pNode )
+IMPL_LINK_TYPED( RscDel, Delete, const NameNode&, r, void )
 {
+    RscTop* pNode = const_cast<RscTop*>(static_cast<const RscTop*>(&r));
     if( pNode->GetObjNode() )
         pNode->pObjBiTree = pNode->GetObjNode()->DelObjNode( pNode, lFileKey );
-    return 0;
 }
 
 void RscTypCont :: Delete( sal_uLong lFileKey )
