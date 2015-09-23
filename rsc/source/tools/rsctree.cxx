@@ -35,11 +35,11 @@ NameNode::~NameNode()
 {
 }
 
-void NameNode::EnumNodes( Link<> aLink ) const
+void NameNode::EnumNodes( Link<const NameNode&,void> aLink ) const
 {
     if( Left() )
         Left()->EnumNodes( aLink );
-    aLink.Call( const_cast<NameNode *>(this) );
+    aLink.Call( *this );
     if( Right() )
         Right()->EnumNodes( aLink );
 }
