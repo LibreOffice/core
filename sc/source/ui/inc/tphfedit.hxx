@@ -103,7 +103,7 @@ private:
 
     Idle            aIdle;
     PopupMenu*      pPopupMenu;
-    Link<>          aMLink;
+    Link<ScExtIButton&,void> aMLink;
     sal_uInt16      nSelected;
     OString         aSelectedIdent;
 
@@ -126,7 +126,7 @@ public:
     sal_uInt16      GetSelected() const { return nSelected;}
     OString         GetSelectedIdent() const { return aSelectedIdent;}
 
-    void            SetMenuHdl( const Link<>& rLink ) { aMLink = rLink; }
+    void            SetMenuHdl( const Link<ScExtIButton&,void>& rLink ) { aMLink = rLink; }
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };

@@ -99,7 +99,7 @@ private:
     static bool IsExtFileNameEntry(EditTextObject* pTextObj);
     DECL_LINK( ListHdl_Impl, ListBox* );
     DECL_LINK_TYPED( ClickHdl, Button*, void );
-    DECL_STATIC_LINK( ScHFEditPage, MenuHdl, ScExtIButton* );
+    DECL_STATIC_LINK_TYPED( ScHFEditPage, MenuHdl, ScExtIButton&, void );
 };
 
 class ScRightHeaderEditPage : public ScHFEditPage

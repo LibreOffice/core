@@ -823,33 +823,29 @@ IMPL_LINK_TYPED( ScHFEditPage, ClickHdl, Button*, pBtn, void )
     pActiveEdWnd->GrabFocus();
 }
 
-IMPL_STATIC_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
+IMPL_STATIC_LINK_TYPED( ScHFEditPage, MenuHdl, ScExtIButton&, rBtn, void )
 {
     pActiveEdWnd = ::GetScEditWindow();
     if ( !pActiveEdWnd )
-        return 0;
+        return;
 
-    if(pBtn!=NULL)
+    SAL_WARN_IF(rBtn.GetSelected() == 0, "sc.ui", "nothing selected");
+    OString sSelectedId = rBtn.GetSelectedIdent();
+
+    if (sSelectedId == "title")
     {
-        SAL_WARN_IF(pBtn->GetSelected() == 0, "sc.ui", "nothing selected");
-        OString sSelectedId = pBtn->GetSelectedIdent();
-
-        if (sSelectedId == "title")
-        {
-            pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD ) );
-        }
-        else if (sSelectedId == "filename")
-        {
-            pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
-                OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ), EE_FEATURE_FIELD ) );
-        }
-        else if (sSelectedId == "pathname")
-        {
-            pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
-                OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ), EE_FEATURE_FIELD ) );
-        }
+        pActiveEdWnd->InsertField( SvxFieldItem( SvxFileField(), EE_FEATURE_FIELD ) );
     }
-    return 0;
+    else if (sSelectedId == "filename")
+    {
+        pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
+            OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_NAME_EXT ), EE_FEATURE_FIELD ) );
+    }
+    else if (sSelectedId == "pathname")
+    {
+        pActiveEdWnd->InsertField( SvxFieldItem( SvxExtFileField(
+            OUString(), SVXFILETYPE_VAR, SVXFILEFORMAT_FULLPATH ), EE_FEATURE_FIELD ) );
+    }
 }
 
 // class ScRightHeaderEditPage

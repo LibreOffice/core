@@ -395,7 +395,7 @@ void ScExtIButton::StartPopup()
         if(nSelected)
         {
             aSelectedIdent = pPopupMenu->GetItemIdent(nSelected);
-            aMLink.Call(this);
+            aMLink.Call(*this);
         }
 
         SetPressed( false);
