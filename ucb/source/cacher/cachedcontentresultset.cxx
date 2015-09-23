@@ -30,7 +30,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
@@ -477,7 +477,7 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     if( nFetchDirection != -1 )
         nDeleted++;
 
-    boost::scoped_ptr<Sequence< Property > > pOrigProps(new Sequence<Property> ( *m_pProperties ));
+    std::unique_ptr<Sequence< Property > > pOrigProps(new Sequence<Property> ( *m_pProperties ));
     sal_Int32 nOrigProps = pOrigProps->getLength();
 
     m_pProperties->realloc( nOrigProps + 2 - nDeleted );//note that nDeleted is <= 2

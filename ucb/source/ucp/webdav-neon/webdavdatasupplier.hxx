@@ -30,8 +30,8 @@
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_NEON_WEBDAVDATASUPPLIER_HXX
 
 #include <config_lgpl.h>
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 
@@ -42,7 +42,7 @@ class Content;
 
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
-    boost::scoped_ptr<DataSupplier_Impl> m_pImpl;
+    std::unique_ptr<DataSupplier_Impl> m_pImpl;
 
 private:
     bool getData();

@@ -24,7 +24,6 @@
 
 #include <memory>
 #include <list>
-#include <boost/scoped_ptr.hpp>
 #include <rtl/ref.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
@@ -76,8 +75,8 @@ class Content : public ::ucbhelper::ContentImplHelper,
         DAV
     };
 
-    boost::scoped_ptr< DAVResourceAccess > m_xResAccess;
-    boost::scoped_ptr< CachableContentProperties > m_xCachedProps; // locally cached props
+    std::unique_ptr< DAVResourceAccess > m_xResAccess;
+    std::unique_ptr< CachableContentProperties > m_xCachedProps; // locally cached props
     OUString     m_aEscapedTitle;
     ResourceType      m_eResourceType;
     ContentProvider*  m_pProvider; // No need for a ref, base class holds object
@@ -123,7 +122,7 @@ private:
                           ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
     const OUString
-    getBaseURI( const boost::scoped_ptr< DAVResourceAccess > & rResAccess );
+    getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess );
 
     ResourceType
     getResourceType( const ::com::sun::star::uno::Reference<
@@ -133,7 +132,7 @@ private:
     ResourceType
     getResourceType( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
-                     const boost::scoped_ptr< DAVResourceAccess > & rResAccess,
+                     const std::unique_ptr< DAVResourceAccess > & rResAccess,
                      bool * networkAccessAllowed = 0 )
         throw ( ::com::sun::star::uno::Exception );
 
