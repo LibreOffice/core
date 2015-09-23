@@ -28,10 +28,10 @@ void ColorSets::init()
 {
     {
         ColorSet aColorSet("Breeze");
-        aColorSet.add(0,  0x232629);
-        aColorSet.add(1,  0xFCFCFC);
-        aColorSet.add(2,  0x31363B);
-        aColorSet.add(3,  0xEFF0F1);
+        aColorSet.add(0,  0xFCFCFC);
+        aColorSet.add(1,  0x232629);
+        aColorSet.add(2,  0xEFF0F1);
+        aColorSet.add(3,  0x31363B);
         aColorSet.add(4,  0xDA4453);
         aColorSet.add(5,  0xF47750);
         aColorSet.add(6,  0xFDBC4B);
@@ -44,10 +44,10 @@ void ColorSets::init()
     }
     {
         ColorSet aColorSet("Material Blue");
-        aColorSet.add(0,  0x212121);
-        aColorSet.add(1,  0xFFFFFF);
-        aColorSet.add(2,  0x37474F);
-        aColorSet.add(3,  0xECEFF1);
+        aColorSet.add(0,  0xFFFFFF);
+        aColorSet.add(1,  0x212121);
+        aColorSet.add(2,  0xECEFF1);
+        aColorSet.add(3,  0x37474F);
         aColorSet.add(4,  0x7986CB);
         aColorSet.add(5,  0x303F9F);
         aColorSet.add(6,  0x64B5F6);
@@ -60,10 +60,10 @@ void ColorSets::init()
     }
     {
         ColorSet aColorSet("Material Red");
-        aColorSet.add(0,  0x212121);
-        aColorSet.add(1,  0xFFFFFF);
-        aColorSet.add(2,  0x424242);
-        aColorSet.add(3,  0xF5F5F5);
+        aColorSet.add(0,  0xFFFFFF);
+        aColorSet.add(1,  0x212121);
+        aColorSet.add(2,  0xF5F5F5);
+        aColorSet.add(3,  0x424242);
         aColorSet.add(4,  0xFF9800);
         aColorSet.add(5,  0xFF6D00);
         aColorSet.add(6,  0xFF5722);
@@ -76,10 +76,10 @@ void ColorSets::init()
     }
     {
         ColorSet aColorSet("Material Green");
-        aColorSet.add(0,  0x212121);
-        aColorSet.add(1,  0xFFFFFF);
-        aColorSet.add(2,  0x424242);
-        aColorSet.add(3,  0xF5F5F5);
+        aColorSet.add(0,  0xFFFFFF);
+        aColorSet.add(1,  0x212121);
+        aColorSet.add(2,  0xF5F5F5);
+        aColorSet.add(3,  0x424242);
         aColorSet.add(4,  0x009688);
         aColorSet.add(5,  0x00bfa5);
         aColorSet.add(6,  0x4caf50);
