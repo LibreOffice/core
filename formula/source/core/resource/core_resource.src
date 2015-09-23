@@ -378,7 +378,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_T_INV_2T { Text = "COM.MICROSOFT.T.INV.2T" ; };
     String SC_OPCODE_T_INV_MS { Text = "COM.MICROSOFT.T.INV" ; };
     String SC_OPCODE_F_INV { Text = "LEGACY.FINV" ; };
-    String SC_OPCODE_F_INV_LT { Text = "COM.MICROSOFT.F.INV" ; };
+    String SC_OPCODE_F_INV_LT { Text = "FINV" ; };
     String SC_OPCODE_F_INV_RT { Text = "COM.MICROSOFT.F.INV.RT" ; };
     String SC_OPCODE_CHI_TEST { Text = "LEGACY.CHITEST" ; };
     String SC_OPCODE_CHI_TEST_MS { Text = "COM.MICROSOFT.CHISQ.TEST" ; };

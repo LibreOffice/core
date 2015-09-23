@@ -775,7 +775,7 @@ static const FunctionData saFuncTable2010[] =
     { "COM.MICROSOFT.CONFIDENCE.T",           "CONFIDENCE.T",        NOID,    NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "FDIST",                                "F.DIST",              NOID,   NOID,    4,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.F.DIST.RT",              "F.DIST.RT",           NOID,   NOID,    3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.F.INV",                  "F.INV",               NOID,   NOID,    3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "FINV",                                 "F.INV",               NOID,   NOID,    3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.F.INV.RT",               "F.INV.RT",            NOID,   NOID,    3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.F.TEST",                 "F.TEST",              NOID,   NOID,    2,  2,  V, { VA }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.EXPON.DIST",             "EXPON.DIST",          NOID,   NOID,    3,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
