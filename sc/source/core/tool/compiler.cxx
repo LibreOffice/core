@@ -2465,6 +2465,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             { "GOALSEEK",       ocBackSolver },     // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
              // Renamed new names, prepare to read future names:
             { "FDIST",          ocFDist_LT },       // COM.MICROSOFT.F.DIST  -> FDIST
+            { "FINV",           ocFInv_LT },        // COM.MICROSOFT.F.INV  -> FINV
             //{ "ORG.OPENOFFICE.XXX", ocXXX }         // XXX -> ORG.OPENOFFICE.XXX
         };
         static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
