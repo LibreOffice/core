@@ -37,7 +37,7 @@
 #include "cmis_provider.hxx"
 #include "cmis_repo_content.hxx"
 #include "cmis_resultset.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define OUSTR_TO_STDSTR(s) string( OUStringToOString( s, RTL_TEXTENCODING_UTF8 ).getStr() )
 #define STD_TO_OUSTR( str ) OUString( str.c_str(), str.length( ), RTL_TEXTENCODING_UTF8 )
@@ -188,7 +188,7 @@ namespace cmis
                             ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET ) );
                     }
 
-                    boost::scoped_ptr<libcmis::Session> session(libcmis::SessionFactory::createSession(
+                    std::unique_ptr<libcmis::Session> session(libcmis::SessionFactory::createSession(
                             OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
                             rUsername, rPassword, "", false, oauth2Data ));
                     if (!session)

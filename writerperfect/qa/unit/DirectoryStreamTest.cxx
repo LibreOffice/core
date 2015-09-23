@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -22,7 +22,7 @@
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
 
-using boost::scoped_ptr;
+using std::unique_ptr;
 
 using librevenge::RVNGInputStream;
 
@@ -74,17 +74,17 @@ DirectoryStreamTest::DirectoryStreamTest()
 
 void DirectoryStreamTest::testConstruction()
 {
-    const scoped_ptr<DirectoryStream> pDir(DirectoryStream::createForParent(m_xFile));
+    const unique_ptr<DirectoryStream> pDir(DirectoryStream::createForParent(m_xFile));
     CPPUNIT_ASSERT(bool(pDir));
     CPPUNIT_ASSERT(pDir->isStructured());
 
     // this should work for dirs too
-    const scoped_ptr<DirectoryStream> pDir2(DirectoryStream::createForParent(m_xDir));
+    const unique_ptr<DirectoryStream> pDir2(DirectoryStream::createForParent(m_xDir));
     CPPUNIT_ASSERT(bool(pDir2));
     CPPUNIT_ASSERT(pDir2->isStructured());
 
     // for nonexistent dirs nothing is created
-    const scoped_ptr<DirectoryStream> pNondir(DirectoryStream::createForParent(m_xNonexistent));
+    const unique_ptr<DirectoryStream> pNondir(DirectoryStream::createForParent(m_xNonexistent));
     CPPUNIT_ASSERT(!pNondir);
 
     // even if we try harder, just an empty shell is created
@@ -125,7 +125,7 @@ void DirectoryStreamTest::testDataOperations()
 void lcl_testStructuredOperations(RVNGInputStream &rStream)
 {
     CPPUNIT_ASSERT(rStream.isStructured());
-    scoped_ptr<RVNGInputStream> pSubstream(rStream.getSubStreamByName("mimetype"));
+    unique_ptr<RVNGInputStream> pSubstream(rStream.getSubStreamByName("mimetype"));
     CPPUNIT_ASSERT(bool(pSubstream));
 
     // TODO: test for other operations when they are implemented =)
@@ -136,7 +136,7 @@ void DirectoryStreamTest::testStructuredOperations()
     DirectoryStream aDir(m_xDir);
     lcl_testStructuredOperations(aDir);
 
-    scoped_ptr<DirectoryStream> pDir(DirectoryStream::createForParent(m_xFile));
+    unique_ptr<DirectoryStream> pDir(DirectoryStream::createForParent(m_xFile));
     CPPUNIT_ASSERT(bool(pDir));
     lcl_testStructuredOperations(*pDir.get());
 }

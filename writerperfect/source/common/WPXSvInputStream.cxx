@@ -23,12 +23,11 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
-#include <limits>
-#include <vector>
-
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <limits>
+#include <memory>
 #include <unordered_map>
+#include <vector>
 
 namespace writerperfect
 {
@@ -431,8 +430,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > mxStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable > mxSeekable;
     ::com::sun::star::uno::Sequence< sal_Int8 > maData;
-    boost::scoped_ptr< OLEStorageImpl > mpOLEStorage;
-    boost::scoped_ptr< ZipStorageImpl > mpZipStorage;
+    std::unique_ptr< OLEStorageImpl > mpOLEStorage;
+    std::unique_ptr< ZipStorageImpl > mpZipStorage;
     bool mbCheckedOLE;
     bool mbCheckedZip;
 public:
@@ -446,8 +445,8 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl(Reference< XInputStream > xStream) :
     mxStream(xStream),
     mxSeekable(xStream, UNO_QUERY),
     maData(0),
-    mpOLEStorage(0),
-    mpZipStorage(0),
+    mpOLEStorage(nullptr),
+    mpZipStorage(nullptr),
     mbCheckedOLE(false),
     mbCheckedZip(false),
     mnLength(0),
@@ -755,7 +754,7 @@ bool WPXSvInputStreamImpl::isOLE()
     {
         assert(0 == mxSeekable->getPosition());
 
-        boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(mxStream));
+        std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(mxStream));
         if (pStream && SotStorage::IsOLEStorage(pStream.get()))
             mpOLEStorage.reset(new OLEStorageImpl());
 

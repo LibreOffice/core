@@ -23,7 +23,7 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 namespace ucb { namespace ucp { namespace ext
@@ -69,7 +69,7 @@ namespace ucb { namespace ucp { namespace ext
         virtual void validate() throw( com::sun::star::ucb::ResultSetException ) SAL_OVERRIDE;
 
     private:
-        ::boost::scoped_ptr< DataSupplier_Impl >    m_pImpl;
+        std::unique_ptr< DataSupplier_Impl >    m_pImpl;
     };
 
 

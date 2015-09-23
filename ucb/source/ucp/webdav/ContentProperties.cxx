@@ -595,7 +595,7 @@ CachableContentProperties::CachableContentProperties(
 void CachableContentProperties::addProperties(
     const ContentProperties & rProps )
 {
-    const boost::scoped_ptr< PropertyValueMap > & props = rProps.getProperties();
+    const std::unique_ptr< PropertyValueMap > & props = rProps.getProperties();
 
     PropertyValueMap::const_iterator it = props->begin();
     const PropertyValueMap::const_iterator end = props->end();

@@ -271,8 +271,8 @@ uno::Sequence< beans::Property > Content::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     bool bTransient;
-    boost::scoped_ptr< DAVResourceAccess > xResAccess;
-    boost::scoped_ptr< ContentProperties > xCachedProps;
+    std::unique_ptr< DAVResourceAccess > xResAccess;
+    std::unique_ptr< ContentProperties > xCachedProps;
     rtl::Reference< ContentProvider >  xProvider;
 
     {
@@ -451,7 +451,7 @@ uno::Sequence< beans::Property > Content::getProperties(
         const std::set< OUString >::const_iterator set_end
             = aPropSet.end();
 
-        const boost::scoped_ptr< PropertyValueMap > & xProps
+        const std::unique_ptr< PropertyValueMap > & xProps
             = xCachedProps->getProperties();
 
         PropertyValueMap::const_iterator       map_it  = xProps->begin();
