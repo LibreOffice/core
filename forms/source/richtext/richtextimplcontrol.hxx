@@ -173,7 +173,7 @@ namespace frm
         virtual void EditEngineStatusChanged( const EditStatus& _rStatus ) SAL_OVERRIDE;
 
     private:
-        DECL_LINK( OnInvalidateAllAttributes, void* );
+        DECL_LINK_TYPED( OnInvalidateAllAttributes, LinkParamNone*, void );
         DECL_LINK_TYPED( OnHScroll, ScrollBar*, void );
         DECL_LINK_TYPED( OnVScroll, ScrollBar*, void );
     };
