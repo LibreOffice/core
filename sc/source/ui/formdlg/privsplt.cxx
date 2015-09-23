@@ -221,7 +221,7 @@ short ScPrivatSplit::GetDeltaY()
 #************************************************************************/
 void ScPrivatSplit::CtrModified()
 {
-    aCtrModifiedLink.Call( this );
+    aCtrModifiedLink.Call( *this );
 }
 
 void ScPrivatSplit::MoveSplitTo(Point aPos)

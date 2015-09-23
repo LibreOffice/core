@@ -84,7 +84,7 @@ private:
                     DECL_LINK_TYPED( SetSelectionHdl, ListBox&, void );
                     DECL_LINK_TYPED( SetSelectionClickHdl, Button*, void );
                     DECL_LINK( SelHdl, ListBox* );
-                    DECL_LINK(SetSplitHdl,ScPrivatSplit*);
+                    DECL_LINK_TYPED( SetSplitHdl, ScPrivatSplit&, void );
                     DECL_LINK_TYPED( TimerHdl, Idle*, void );
 
 protected:
