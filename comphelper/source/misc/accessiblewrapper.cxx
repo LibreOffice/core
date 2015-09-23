@@ -32,42 +32,6 @@ using namespace ::com::sun::star::lang;
 
 namespace comphelper
 {
-
-    struct RemoveEventListener
-            : public ::std::unary_function< AccessibleMap::value_type, void >
-    {
-    private:
-        Reference< XEventListener > m_xListener;
-
-    public:
-        explicit RemoveEventListener( const Reference< XEventListener >& _rxListener )
-            :m_xListener( _rxListener  )
-        {
-        }
-
-        void operator()( const AccessibleMap::value_type& _rMapEntry ) const
-        {
-            Reference< XComponent > xComp( _rMapEntry.first, UNO_QUERY );
-            if ( xComp.is() )
-                xComp->removeEventListener( m_xListener );
-        }
-    };
-
-
-    struct DisposeMappedChild
-            : public ::std::unary_function< AccessibleMap::value_type, void >
-    {
-        void operator()( const AccessibleMap::value_type& _rMapEntry ) const
-        {
-            Reference< XComponent > xContextComponent;
-            if ( _rMapEntry.second.is() )
-                xContextComponent.set(_rMapEntry.second->getAccessibleContext(), css::uno::UNO_QUERY);
-            if ( xContextComponent.is() )
-                xContextComponent->dispose();
-        }
-    };
-
-
     OWrappedAccessibleChildrenManager::OWrappedAccessibleChildrenManager( const Reference< XComponentContext >& _rxContext )
         :m_xContext( _rxContext )
         ,m_bTransientChildren( true )
@@ -99,8 +63,9 @@ namespace comphelper
         if ( m_aChildrenMap.end() != aRemovedPos )
         {   // it was cached
             // remove ourself as event listener
-            RemoveEventListener aOperator( this );
-            aOperator( *aRemovedPos );
+            Reference< XComponent > xComp( aRemovedPos->first, UNO_QUERY );
+            if( xComp.is() )
+                xComp->removeEventListener( this );
             // and remove the entry from the map
             m_aChildrenMap.erase( aRemovedPos );
         }
@@ -110,7 +75,12 @@ namespace comphelper
     void OWrappedAccessibleChildrenManager::invalidateAll( )
     {
         // remove as event listener from the map elements
-        ::std::for_each( m_aChildrenMap.begin(), m_aChildrenMap.end(), RemoveEventListener( this ) );
+        for( const auto& rChild : m_aChildrenMap )
+        {
+            Reference< XComponent > xComp( rChild.first, UNO_QUERY );
+            if( xComp.is() )
+                xComp->removeEventListener( this );
+        }
         // clear the map
         AccessibleMap aMap;
         m_aChildrenMap.swap( aMap );
@@ -167,8 +137,20 @@ namespace comphelper
     void OWrappedAccessibleChildrenManager::dispose()
     {
         // dispose our children
-        ::std::for_each( m_aChildrenMap.begin(), m_aChildrenMap.end(), RemoveEventListener( this ) );
-        ::std::for_each( m_aChildrenMap.begin(), m_aChildrenMap.end(), DisposeMappedChild( ) );
+        for( const auto rChild : m_aChildrenMap )
+        {
+            Reference< XComponent > xComp( rChild.first, UNO_QUERY );
+            if( xComp.is() )
+                xComp->removeEventListener( this );
+
+            Reference< XComponent > xContextComponent;
+            if( rChild.second.is() )
+                xContextComponent.set( rChild.second->getAccessibleContext(),
+                                       ::css::uno::UNO_QUERY );
+            if( xContextComponent.is() )
+                xContextComponent->dispose();
+        }
+
         // clear our children
         AccessibleMap aMap;
         m_aChildrenMap.swap( aMap );

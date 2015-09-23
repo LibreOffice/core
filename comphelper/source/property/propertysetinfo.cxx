@@ -93,11 +93,9 @@ Sequence< Property > PropertyMapImpl::getProperties() throw()
         maProperties = Sequence< Property >( maPropertyMap.size() );
         Property* pProperties = maProperties.getArray();
 
-        PropertyMap::iterator aIter = maPropertyMap.begin();
-        const PropertyMap::iterator aEnd = maPropertyMap.end();
-        while( aIter != aEnd )
+        for( const auto& rProperty : maPropertyMap )
         {
-            PropertyMapEntry const * pEntry = (*aIter).second;
+            PropertyMapEntry const * pEntry = rProperty.second;
 
             pProperties->Name = pEntry->maName;
             pProperties->Handle = pEntry->mnHandle;
@@ -105,7 +103,6 @@ Sequence< Property > PropertyMapImpl::getProperties() throw()
             pProperties->Attributes = pEntry->mnAttributes;
 
             ++pProperties;
-            ++aIter;
         }
     }
 
