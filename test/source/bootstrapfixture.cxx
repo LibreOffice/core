@@ -236,7 +236,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
 IMPL_STATIC_LINK_TYPED(
         test::BootstrapFixture, ImplInitFilterHdl, ConvertData&, rData, bool)
 {
-    return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( &rData );
+    return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( rData );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
