@@ -999,7 +999,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Color_themeTint:
             if (m_pImpl->GetTopContext())
             {
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_TINT_OR_SHADE, uno::makeAny(sal_Int16(nIntValue * 10000 / 256)));
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR_TINT_OR_SHADE, uno::makeAny(sal_Int16((256 - nIntValue) * 10000 / 256)));
             }
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "themeTint", OUString::number(nIntValue, 16));
         break;
