@@ -488,9 +488,9 @@ long SwWrtShell::DelNxtWord()
     ResetCursorStack();
     EnterStdMode();
     SetMark();
-    if(IsEndWrd() && !IsSttWrd())
+    if(IsEndWrd() && !IsStartWord())
         _NxtWrdForDelete(); // #i92468#
-    if(IsSttWrd() || IsEndPara())
+    if(IsStartWord() || IsEndPara())
         _NxtWrdForDelete(); // #i92468#
     else
         _EndWrd();
@@ -512,7 +512,7 @@ long SwWrtShell::DelPrvWord()
     ResetCursorStack();
     EnterStdMode();
     SetMark();
-    if ( !IsSttWrd() ||
+    if ( !IsStartWord() ||
          !_PrvWrdForDelete() ) // #i92468#
     {
         if (IsEndWrd() || IsSttPara())
