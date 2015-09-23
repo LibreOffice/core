@@ -25,9 +25,11 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
+using namespace com::sun::star;
+
 namespace desktop
 {
-    UnxSplashScreen::UnxSplashScreen( const Reference< uno::XComponentContext >& xCtx )
+    UnxSplashScreen::UnxSplashScreen( const uno::Reference< uno::XComponentContext >& xCtx )
     : m_xCtx( xCtx ),
       m_pOutFd( NULL )
 {
@@ -47,12 +49,12 @@ UnxSplashScreen::~UnxSplashScreen()
 }
 
 void SAL_CALL UnxSplashScreen::start( const OUString& /*aText*/, sal_Int32 /*nRange*/ )
-    throw ( RuntimeException, std::exception )
+    throw ( uno::RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL UnxSplashScreen::end()
-    throw ( RuntimeException, std::exception )
+    throw ( uno::RuntimeException, std::exception )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "UnxSplashScreen::end()\n" );
@@ -65,7 +67,7 @@ void SAL_CALL UnxSplashScreen::end()
 }
 
 void SAL_CALL UnxSplashScreen::reset()
-    throw ( RuntimeException, std::exception )
+    throw ( uno::RuntimeException, std::exception )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "UnxSplashScreen::reset()\n" );
@@ -78,13 +80,13 @@ void SAL_CALL UnxSplashScreen::reset()
 }
 
 void SAL_CALL UnxSplashScreen::setText( const OUString& /*aText*/ )
-    throw ( RuntimeException, std::exception )
+    throw ( uno::RuntimeException, std::exception )
 {
     // TODO?
 }
 
 void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
-    throw ( RuntimeException, std::exception )
+    throw ( uno::RuntimeException, std::exception )
 {
     if ( m_pOutFd )
     {
@@ -96,7 +98,7 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 // XInitialize
 void SAL_CALL
 UnxSplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& )
-    throw ( RuntimeException, std::exception )
+    throw ( uno::RuntimeException, std::exception )
 {
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )
     {

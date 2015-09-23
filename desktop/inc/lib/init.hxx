@@ -12,16 +12,15 @@
 #include <memory>
 #include "../../source/inc/desktopdllapi.h"
 
-using namespace css;
-using namespace boost;
-
 namespace desktop {
     struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public _LibreOfficeKitDocument
     {
-        uno::Reference<css::lang::XComponent> mxComponent;
+        css::uno::Reference<css::lang::XComponent> mxComponent;
         std::shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
 
-        explicit LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent);
+        explicit LibLODocument_Impl(const css::uno::Reference <css::lang::XComponent> &xComponent);
         ~LibLODocument_Impl();
     };
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,10 +26,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::uno;
-
 namespace desktop {
 
 class  UnxSplashScreen : public ::cppu::WeakImplHelper< css::task::XStatusIndicator, css::lang::XInitialization, css::lang::XServiceInfo >
@@ -72,7 +68,7 @@ public:
 
 }
 
-uno::Reference< uno::XInterface > SAL_CALL UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception );
+css::uno::Reference< css::uno::XInterface > SAL_CALL UnxSplash_createInstance(const css::uno::Reference< css::uno::XComponentContext > & xCtx ) throw( css::uno::Exception );
 OUString UnxSplash_getImplementationName();
 css::uno::Sequence< OUString > SAL_CALL UnxSplash_getSupportedServiceNames() throw ();
 
