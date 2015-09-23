@@ -603,7 +603,18 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     if (it != aLvlProps.end())
                     {
                         sal_Int16 nNumberFormat = it->Value.get<sal_Int16>();
-                        if (nNumberFormat == style::NumberingType::NUMBER_NONE)
+
+                        // No need for a zero width space without a real LabelFollowedBy.
+                        bool bLabelFollowedBy = true;
+                        it = std::find_if(aLvlProps.begin(), aLvlProps.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "LabelFollowedBy"; });
+                        if (it != aLvlProps.end())
+                        {
+                            sal_Int16 nValue;
+                            if (it->Value >>= nValue)
+                                bLabelFollowedBy = nValue != SvxNumberFormat::NOTHING;
+                        }
+
+                        if (bLabelFollowedBy && nNumberFormat == style::NumberingType::NUMBER_NONE)
                             rSuffix = OUString(static_cast<sal_Unicode>(0x200B));
                     }
                 }

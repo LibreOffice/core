@@ -2828,6 +2828,18 @@ DECLARE_OOXMLIMPORT_TEST(testTdf92454, "tdf92454.docx")
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, xParagraph->getPropertyState("ParaFirstLineIndent"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf92124, "tdf92124.docx")
+{
+    // Get the second paragraph's numbering style's 1st level's suffix.
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(2);
+    auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
+    uno::Sequence<beans::PropertyValue> aLevel;
+    xLevels->getByIndex(0) >>= aLevel; // 1st level
+    OUString aSuffix = std::find_if(aLevel.begin(), aLevel.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "Suffix"; })->Value.get<OUString>();
+    // Make sure it's empty as the source document contains <w:suff w:val="nothing"/>.
+    CPPUNIT_ASSERT(aSuffix.isEmpty());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
