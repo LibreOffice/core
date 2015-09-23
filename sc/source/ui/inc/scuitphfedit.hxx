@@ -85,7 +85,7 @@ private:
     sal_uInt16       nWhich;
     OUString         aCmdArr[6];
 
-    DECL_LINK( ObjectSelectHdl, ScEditWindow* );
+    DECL_LINK_TYPED( ObjectSelectHdl, ScEditWindow&, void );
 
 private:
     void FillCmdArr();

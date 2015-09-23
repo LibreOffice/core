@@ -149,11 +149,9 @@ ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
 
 }
 
-IMPL_LINK( ScHFEditPage, ObjectSelectHdl, ScEditWindow*, pEdit )
+IMPL_LINK_NOARG_TYPED( ScHFEditPage, ObjectSelectHdl, ScEditWindow&, void )
 {
-    (void)pEdit;
     m_pBtnText->GrabFocus();
-    return 0;
 }
 
 ScHFEditPage::~ScHFEditPage()
