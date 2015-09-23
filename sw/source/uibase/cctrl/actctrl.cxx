@@ -56,7 +56,7 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
             !nModifier)
     {
         if(aReturnActionLink.IsSet())
-            aReturnActionLink.Call(this);
+            aReturnActionLink.Call(*this);
     }
     else
         Edit::KeyInput(rEvt);

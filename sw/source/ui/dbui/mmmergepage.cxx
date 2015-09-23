@@ -95,10 +95,9 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeMergePage, FindHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK_NOARG(SwMailMergeMergePage, EnteredFindStringHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SwMailMergeMergePage, EnteredFindStringHdl_Impl, ReturnActionEdit&, void)
 {
     m_pFindPB->GetClickHdl().Call(m_pFindPB);
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

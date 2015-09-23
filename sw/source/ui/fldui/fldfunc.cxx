@@ -168,7 +168,7 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
     m_pSelectionLB->SetDoubleClickHdl  (LINK(this, SwFieldFuncPage, InsertMacroHdl));
     m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFieldFuncPage, ListBoxInsertHdl));
     m_pMacroBT->SetClickHdl            (LINK(this, SwFieldFuncPage, MacroHdl));
-    Link<Button*,void> aListModifyLk( LINK(this, SwFieldFuncPage, ListModifyHdl));
+    Link<Button*,void> aListModifyLk( LINK(this, SwFieldFuncPage, ListModifyButtonHdl));
     m_pListAddPB->SetClickHdl(aListModifyLk);
     m_pListRemovePB->SetClickHdl(aListModifyLk);
     m_pListUpPB->SetClickHdl(aListModifyLk);
@@ -421,11 +421,15 @@ IMPL_LINK_NOARG_TYPED(SwFieldFuncPage, InsertMacroHdl, ListBox&, void)
     InsertHdl(nullptr);
 }
 
-IMPL_LINK_TYPED( SwFieldFuncPage, ListModifyHdl, Button*, pControl, void)
+IMPL_LINK_TYPED( SwFieldFuncPage, ListModifyButtonHdl, Button*, pControl, void)
 {
-    ListModifyReturnActionHdl(pControl);
+    ListModifyHdl(pControl);
 }
-IMPL_LINK( SwFieldFuncPage, ListModifyReturnActionHdl, Control*, pControl)
+IMPL_LINK_TYPED( SwFieldFuncPage, ListModifyReturnActionHdl, ReturnActionEdit&, rControl, void)
+{
+    ListModifyHdl(&rControl);
+}
+void SwFieldFuncPage::ListModifyHdl(Control* pControl)
 {
     m_pListItemsLB->SetUpdateMode(false);
     if(pControl == m_pListAddPB ||
@@ -469,7 +473,6 @@ IMPL_LINK( SwFieldFuncPage, ListModifyReturnActionHdl, Control*, pControl)
     bDropDownLBChanged = true;
     m_pListItemsLB->SetUpdateMode(true);
     ListEnableHdl(0);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwFieldFuncPage, ListEnableHdl)

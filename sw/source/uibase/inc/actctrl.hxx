@@ -40,7 +40,7 @@ public:
 // call a link when KEY_RETURN is pressed
 class SW_DLLPUBLIC ReturnActionEdit : public Edit
 {
-    Link<>  aReturnActionLink;
+    Link<ReturnActionEdit&,void>  aReturnActionLink;
 public:
     ReturnActionEdit(vcl::Window* pParent, WinBits nStyle)
         : Edit(pParent, nStyle)
@@ -48,7 +48,7 @@ public:
     }
     virtual void KeyInput( const KeyEvent& ) SAL_OVERRIDE;
 
-    void SetReturnActionLink(const Link<>& rLink)
+    void SetReturnActionLink(const Link<ReturnActionEdit&,void>& rLink)
             { aReturnActionLink = rLink;}
 };
 
