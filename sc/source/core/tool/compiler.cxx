@@ -2634,6 +2634,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             { "COLOR",          ocColor },          // COLOR -> ORG.LIBREOFFICE.COLOR
             { "GOALSEEK",       ocBackSolver },     // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
             { "COM.MICROSOFT.F.DIST", ocFDist_LT }, // fdo#40835, -> FDIST -> COM.MICROSOFT.F.DIST
+            { "COM.MICROSOFT.F.INV",  ocFInv_LT }   // tdf#94214, COM.MICROSOFT.F.INV -> FINV (ODF)
             // Renamed new names, prepare to read future names:
             //{ "ORG.OPENOFFICE.XXX", ocXXX }         // XXX -> ORG.OPENOFFICE.XXX
         };
