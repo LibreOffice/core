@@ -298,15 +298,15 @@ sal_Int16 TDefTableHandler::getThemeColorTypeIndex(sal_Int32 nType)
         case NS_ooxml::LN_Value_St_ThemeColor_followedHyperlink:
                 return 11;
         case NS_ooxml::LN_Value_St_ThemeColor_none:
-                return 12;
+                return -1;
         case NS_ooxml::LN_Value_St_ThemeColor_background1:
-                return 13;
+                return 0;
         case NS_ooxml::LN_Value_St_ThemeColor_text1:
-                return 14;
+                return 1;
         case NS_ooxml::LN_Value_St_ThemeColor_background2:
-                return 15;
+                return 2;
         case NS_ooxml::LN_Value_St_ThemeColor_text2:
-                return 16;
+                return 3;
         default:
                 break;
     }
