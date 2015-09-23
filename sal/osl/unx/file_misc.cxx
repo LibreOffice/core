@@ -816,7 +816,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
                     "sal.osl",
                     "rename(" << pszDestFileName << ", " << tmpDestFile
                         << ") failed with errno " << e);
-                return osl_File_E_BUSY; // for want of a better error code
+                return osl_File_E_EXIST; // for want of a better error code
             }
         }
     }
