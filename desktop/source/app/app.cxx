@@ -1699,7 +1699,7 @@ int Desktop::doShutdown()
 
 IMPL_STATIC_LINK_TYPED( Desktop, ImplInitFilterHdl, ::ConvertData&, rData, bool )
 {
-    return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( &rData );
+    return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( rData );
 }
 
 bool Desktop::InitializeConfiguration()

@@ -2177,53 +2177,50 @@ void GraphicFilter::ResetLastError()
     pErrorEx->nFilterError = pErrorEx->nStreamError = 0UL;
 }
 
-const Link<> GraphicFilter::GetFilterCallback() const
+const Link<ConvertData&,bool> GraphicFilter::GetFilterCallback() const
 {
-    const Link<> aLink( LINK( const_cast<GraphicFilter*>(this), GraphicFilter, FilterCallback ) );
+    const Link<ConvertData&,bool> aLink( LINK( const_cast<GraphicFilter*>(this), GraphicFilter, FilterCallback ) );
     return aLink;
 }
 
-IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
+IMPL_LINK_TYPED( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
 {
     bool nRet = false;
 
-    if( pData )
+    sal_uInt16      nFormat = GRFILTER_FORMAT_DONTKNOW;
+    OString aShortName;
+    switch( rData.mnFormat )
     {
-        sal_uInt16      nFormat = GRFILTER_FORMAT_DONTKNOW;
-        OString aShortName;
-        switch( pData->mnFormat )
-        {
-            case( ConvertDataFormat::BMP ): aShortName = BMP_SHORTNAME; break;
-            case( ConvertDataFormat::GIF ): aShortName = GIF_SHORTNAME; break;
-            case( ConvertDataFormat::JPG ): aShortName = JPG_SHORTNAME; break;
-            case( ConvertDataFormat::MET ): aShortName = MET_SHORTNAME; break;
-            case( ConvertDataFormat::PCT ): aShortName = PCT_SHORTNAME; break;
-            case( ConvertDataFormat::PNG ): aShortName = PNG_SHORTNAME; break;
-            case( ConvertDataFormat::SVM ): aShortName = SVM_SHORTNAME; break;
-            case( ConvertDataFormat::TIF ): aShortName = TIF_SHORTNAME; break;
-            case( ConvertDataFormat::WMF ): aShortName = WMF_SHORTNAME; break;
-            case( ConvertDataFormat::EMF ): aShortName = EMF_SHORTNAME; break;
-            case( ConvertDataFormat::SVG ): aShortName = SVG_SHORTNAME; break;
+        case( ConvertDataFormat::BMP ): aShortName = BMP_SHORTNAME; break;
+        case( ConvertDataFormat::GIF ): aShortName = GIF_SHORTNAME; break;
+        case( ConvertDataFormat::JPG ): aShortName = JPG_SHORTNAME; break;
+        case( ConvertDataFormat::MET ): aShortName = MET_SHORTNAME; break;
+        case( ConvertDataFormat::PCT ): aShortName = PCT_SHORTNAME; break;
+        case( ConvertDataFormat::PNG ): aShortName = PNG_SHORTNAME; break;
+        case( ConvertDataFormat::SVM ): aShortName = SVM_SHORTNAME; break;
+        case( ConvertDataFormat::TIF ): aShortName = TIF_SHORTNAME; break;
+        case( ConvertDataFormat::WMF ): aShortName = WMF_SHORTNAME; break;
+        case( ConvertDataFormat::EMF ): aShortName = EMF_SHORTNAME; break;
+        case( ConvertDataFormat::SVG ): aShortName = SVG_SHORTNAME; break;
 
-            default:
-            break;
-        }
-        if( GRAPHIC_NONE == pData->maGraphic.GetType() || pData->maGraphic.GetContext() ) // Import
-        {
-            // Import
-            nFormat = GetImportFormatNumberForShortName( OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );
-            nRet = ImportGraphic( pData->maGraphic, OUString(), pData->mrStm, nFormat ) == 0;
-        }
-#ifndef DISABLE_EXPORT
-        else if( !aShortName.isEmpty() )
-        {
-            // Export
-            nFormat = GetExportFormatNumberForShortName( OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
-            nRet = ExportGraphic( pData->maGraphic, OUString(), pData->mrStm, nFormat ) == 0;
-        }
-#endif
+        default:
+        break;
     }
-    return long(nRet);
+    if( GRAPHIC_NONE == rData.maGraphic.GetType() || rData.maGraphic.GetContext() ) // Import
+    {
+        // Import
+        nFormat = GetImportFormatNumberForShortName( OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );
+        nRet = ImportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == 0;
+    }
+#ifndef DISABLE_EXPORT
+    else if( !aShortName.isEmpty() )
+    {
+        // Export
+        nFormat = GetExportFormatNumberForShortName( OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
+        nRet = ExportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == 0;
+    }
+#endif
+    return nRet;
 }
 
 namespace

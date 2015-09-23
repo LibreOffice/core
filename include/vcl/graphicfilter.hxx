@@ -241,7 +241,7 @@ private:
     sal_uLong           ImplSetError( sal_uLong nError, const SvStream* pStm = NULL );
     sal_uInt16      ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
 
-                    DECL_LINK( FilterCallback, ConvertData* );
+                    DECL_LINK_TYPED( FilterCallback, ConvertData&, bool );
 
 protected:
 
@@ -324,7 +324,7 @@ public:
     const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();
 
-    const Link<>    GetFilterCallback() const;
+    const Link<ConvertData&,bool> GetFilterCallback() const;
     static GraphicFilter& GetGraphicFilter();
     static int      LoadGraphic( const OUString& rPath, const OUString& rFilter,
                      Graphic& rGraphic,
