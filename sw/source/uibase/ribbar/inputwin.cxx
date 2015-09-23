@@ -418,12 +418,12 @@ void  SwInputWindow::CancelFormula()
 const sal_Unicode CH_LRE = 0x202a;
 const sal_Unicode CH_PDF = 0x202c;
 
-IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell *, pCaller )
+IMPL_LINK_TYPED( SwInputWindow, SelTableCellsNotify, SwWrtShell&, rCaller, void )
 {
     if(bIsTable)
     {
-        SwFrameFormat* pTableFormat = pCaller->GetTableFormat();
-        OUString sBoxNms( pCaller->GetBoxNms() );
+        SwFrameFormat* pTableFormat = rCaller.GetTableFormat();
+        OUString sBoxNms( rCaller.GetBoxNms() );
         OUString sTableNm;
         if( pTableFormat && aAktTableName != pTableFormat->GetName() )
             sTableNm = pTableFormat->GetName();
@@ -456,7 +456,6 @@ IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell *, pCaller )
     }
     else
         aEdit->GrabFocus();
-    return 0;
 }
 
 void SwInputWindow::SetFormula( const OUString& rFormula, bool bDelFlag )

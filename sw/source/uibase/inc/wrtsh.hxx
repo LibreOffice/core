@@ -160,7 +160,7 @@ public:
     void    Invalidate();
 
     // select table cells for editing of formulas in the ribbonbar
-    inline void SelTableCells( const Link<> &rLink, bool bMark = true );
+    inline void SelTableCells( const Link<SwWrtShell&,void> &rLink, bool bMark = true );
     inline void EndSelTableCells();
 
     // leave per word or per line selection mode. Is usually called in MB-Up.
@@ -560,7 +560,7 @@ private:
     bool    m_bRetainSelection :1; // Do not remove selections
 
     Point   m_aStart;
-    Link<>  m_aSelTableLink;
+    Link<SwWrtShell&,void>  m_aSelTableLink;
 
     // resets the cursor stack after movement by PageUp/-Down
     SAL_DLLPRIVATE void  _ResetCursorStack();
@@ -609,7 +609,7 @@ inline void SwWrtShell::ResetCursorStack()
         _ResetCursorStack();
 }
 
-inline void SwWrtShell::SelTableCells(const Link<> &rLink, bool bMark )
+inline void SwWrtShell::SelTableCells(const Link<SwWrtShell&,void> &rLink, bool bMark )
 {
     SetSelTableCells( true );
     m_bClearMark = bMark;
