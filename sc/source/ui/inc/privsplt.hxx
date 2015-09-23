@@ -26,7 +26,7 @@ class ScPrivatSplit : public Control
 {
 private:
 
-        Link<>              aCtrModifiedLink;
+        Link<ScPrivatSplit&,void> aCtrModifiedLink;
         bool                aMovingFlag;
         Pointer             aWinPointer;
         short               nOldX;
@@ -60,7 +60,7 @@ public:
         virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-        void            SetCtrModifiedHdl( const Link<>& rLink ) { aCtrModifiedLink = rLink; }
+        void            SetCtrModifiedHdl( const Link<ScPrivatSplit&,void>& rLink ) { aCtrModifiedLink = rLink; }
 };
 
 #endif

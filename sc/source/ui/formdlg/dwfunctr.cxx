@@ -133,7 +133,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     aDDFuncList->SetSelectHdl(aLink);
     aInsertButton->SetClickHdl(LINK( this, ScFunctionDockWin, SetSelectionClickHdl));
 
-    Link<> a3Link=LINK( this, ScFunctionDockWin, SetSplitHdl);
+    Link<ScPrivatSplit&,void> a3Link=LINK( this, ScFunctionDockWin, SetSplitHdl);
     aPrivatSplit->SetCtrModifiedHdl(a3Link);
     StartListening( *pBindingsP, true );
 
@@ -978,9 +978,9 @@ IMPL_LINK_NOARG_TYPED( ScFunctionDockWin, SetSelectionHdl, ListBox&, void )
 #*
 #************************************************************************/
 
-IMPL_LINK( ScFunctionDockWin, SetSplitHdl, ScPrivatSplit*, pCtrl )
+IMPL_LINK_TYPED( ScFunctionDockWin, SetSplitHdl, ScPrivatSplit&, rCtrl, void )
 {
-    if (pCtrl == aPrivatSplit.get())
+    if (&rCtrl == aPrivatSplit.get())
     {
         short nDeltaY=aPrivatSplit->GetDeltaY();
         Size aFLSize=aFuncList->GetSizePixel();
@@ -994,8 +994,6 @@ IMPL_LINK( ScFunctionDockWin, SetSplitHdl, ScPrivatSplit*, pCtrl )
         aFiFuncDesc->SetPosPixel(aFDTopLeft);
         aFiFuncDesc->SetSizePixel(aFDSize);
     }
-
-    return 0;
 }
 
 void ScFunctionDockWin::ToggleFloatingMode()
