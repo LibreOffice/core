@@ -160,15 +160,12 @@ Sequence< OUString > SAL_CALL NameContainer::getElementNames(  )
 {
     MutexGuard aGuard( maMutex );
 
-    SvGenericNameContainerMapImpl::iterator aIter = maProperties.begin();
-    const SvGenericNameContainerMapImpl::iterator aEnd = maProperties.end();
-
     Sequence< OUString > aNames( maProperties.size() );
     OUString* pNames = aNames.getArray();
 
-    while( aIter != aEnd )
+    for( const auto& rProperty : maProperties )
     {
-        *pNames++ = (*aIter++).first;
+        *pNames++ = rProperty.first;
     }
 
     return aNames;

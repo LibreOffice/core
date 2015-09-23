@@ -78,12 +78,8 @@ MasterPropertySet::MasterPropertySet( comphelper::MasterPropertySetInfo* pInfo, 
 MasterPropertySet::~MasterPropertySet()
     throw()
 {
-    SlaveMap::iterator aEnd = maSlaveMap.end(), aIter = maSlaveMap.begin();
-    while (aIter != aEnd )
-    {
-        delete (*aIter).second;
-        ++aIter;
-    }
+    for( auto& rSlave : maSlaveMap )
+        delete rSlave.second;
 }
 
 // XPropertySet
@@ -248,15 +244,13 @@ void SAL_CALL MasterPropertySet::setPropertyValues( const Sequence< OUString >& 
         }
 
         _postSetValues();
-        SlaveMap::const_iterator aSlaveIter = maSlaveMap.begin(), aSlaveEnd = maSlaveMap.end();
-        while (aSlaveIter != aSlaveEnd)
+        for( const auto& rSlave : maSlaveMap )
         {
-            if ( (*aSlaveIter).second->IsInit())
+            if( rSlave.second->IsInit() )
             {
-                (*aSlaveIter).second->mpSlave->_postSetValues();
-                (*aSlaveIter).second->SetInit ( false );
+                rSlave.second->mpSlave->_postSetValues();
+                rSlave.second->SetInit( false );
             }
-            ++aSlaveIter;
         }
     }
 }
@@ -313,15 +307,13 @@ Sequence< Any > SAL_CALL MasterPropertySet::getPropertyValues( const Sequence< O
         }
 
         _postSetValues();
-        SlaveMap::const_iterator aSlaveIter = maSlaveMap.begin(), aSlaveEnd = maSlaveMap.end();
-        while (aSlaveIter != aSlaveEnd)
+        for( const auto& rSlave : maSlaveMap )
         {
-            if ( (*aSlaveIter).second->IsInit())
+            if( rSlave.second->IsInit() )
             {
-                (*aSlaveIter).second->mpSlave->_postSetValues();
-                (*aSlaveIter).second->SetInit ( false );
+                rSlave.second->mpSlave->_postSetValues();
+                rSlave.second->SetInit( false );
             }
-            ++aSlaveIter;
         }
     }
     return aValues;
@@ -415,15 +407,13 @@ Sequence< PropertyState > SAL_CALL MasterPropertySet::getPropertyStates( const S
             }
         }
         _postGetPropertyState();
-        SlaveMap::const_iterator aSlaveIter = maSlaveMap.begin(), aSlaveEnd = maSlaveMap.end();
-        while (aSlaveIter != aSlaveEnd)
+        for( const auto& rSlave : maSlaveMap )
         {
-            if ( (*aSlaveIter).second->IsInit())
+            if( rSlave.second->IsInit() )
             {
                 comphelper::ChainablePropertySet::_postGetPropertyState();
-                (*aSlaveIter).second->SetInit ( false );
+                rSlave.second->SetInit( false );
             }
-            ++aSlaveIter;
         }
     }
     return aStates;
