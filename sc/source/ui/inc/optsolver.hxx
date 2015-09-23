@@ -36,12 +36,12 @@ namespace com { namespace sun { namespace star {
 
 class ScCursorRefEdit : public formula::RefEdit
 {
-    Link<>  maCursorUpLink;
-    Link<>  maCursorDownLink;
+    Link<ScCursorRefEdit&,void>  maCursorUpLink;
+    Link<ScCursorRefEdit&,void>  maCursorDownLink;
 
 public:
             ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel );
-    void    SetCursorLinks( const Link<>& rUp, const Link<>& rDown );
+    void    SetCursorLinks( const Link<ScCursorRefEdit&,void>& rUp, const Link<ScCursorRefEdit&,void>& rDown );
 
 protected:
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
@@ -194,8 +194,8 @@ private:
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, void* );
     DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void);
-    DECL_LINK( CursorUpHdl, ScCursorRefEdit* );
-    DECL_LINK( CursorDownHdl, ScCursorRefEdit* );
+    DECL_LINK_TYPED( CursorUpHdl, ScCursorRefEdit&, void );
+    DECL_LINK_TYPED( CursorDownHdl, ScCursorRefEdit&, void );
     DECL_LINK( CondModifyHdl, void* );
     DECL_LINK( TargetModifyHdl, void* );
     DECL_LINK( SelectHdl, void* );

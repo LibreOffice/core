@@ -135,7 +135,7 @@ ScCursorRefEdit::ScCursorRefEdit( vcl::Window* pParent, vcl::Window *pLabel )
 
 VCL_BUILDER_FACTORY_ARGS(ScCursorRefEdit, nullptr)
 
-void ScCursorRefEdit::SetCursorLinks( const Link<>& rUp, const Link<>& rDown )
+void ScCursorRefEdit::SetCursorLinks( const Link<ScCursorRefEdit&,void>& rUp, const Link<ScCursorRefEdit&,void>& rDown )
 {
     maCursorUpLink = rUp;
     maCursorDownLink = rDown;
@@ -149,9 +149,9 @@ void ScCursorRefEdit::KeyInput( const KeyEvent& rKEvt )
     if ( !aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() && ( bUp || bDown ) )
     {
         if ( bUp )
-            maCursorUpLink.Call( this );
+            maCursorUpLink.Call( *this );
         else
-            maCursorDownLink.Call( this );
+            maCursorDownLink.Call( *this );
     }
     else
         formula::RefEdit::KeyInput( rKEvt );
@@ -408,8 +408,8 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
         mpRightButton[nRow]->SetLoseFocusHdl( aLink );
     }
 
-    Link<> aCursorUp = LINK( this, ScOptSolverDlg, CursorUpHdl );
-    Link<> aCursorDown = LINK( this, ScOptSolverDlg, CursorDownHdl );
+    Link<ScCursorRefEdit&,void> aCursorUp = LINK( this, ScOptSolverDlg, CursorUpHdl );
+    Link<ScCursorRefEdit&,void> aCursorDown = LINK( this, ScOptSolverDlg, CursorDownHdl );
     Link<> aCondModify = LINK( this, ScOptSolverDlg, CondModifyHdl );
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
@@ -736,9 +736,9 @@ IMPL_LINK_NOARG_TYPED(ScOptSolverDlg, ScrollHdl, ScrollBar*, void)
         mpEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
 }
 
-IMPL_LINK( ScOptSolverDlg, CursorUpHdl, ScCursorRefEdit*, pEdit )
+IMPL_LINK_TYPED( ScOptSolverDlg, CursorUpHdl, ScCursorRefEdit&, rEdit, void )
 {
-    if ( pEdit == mpLeftEdit[0] || pEdit == mpRightEdit[0] )
+    if ( &rEdit == mpLeftEdit[0] || &rEdit == mpRightEdit[0] )
     {
         if ( nScrollPos > 0 )
         {
@@ -754,9 +754,9 @@ IMPL_LINK( ScOptSolverDlg, CursorUpHdl, ScCursorRefEdit*, pEdit )
         formula::RefEdit* pFocus = NULL;
         for ( sal_uInt16 nRow = 1; nRow < EDIT_ROW_COUNT; ++nRow )      // second row or below: move focus
         {
-            if ( pEdit == mpLeftEdit[nRow] )
+            if ( &rEdit == mpLeftEdit[nRow] )
                 pFocus = mpLeftEdit[nRow-1];
-            else if ( pEdit == mpRightEdit[nRow] )
+            else if ( &rEdit == mpRightEdit[nRow] )
                 pFocus = mpRightEdit[nRow-1];
         }
         if (pFocus)
@@ -765,13 +765,11 @@ IMPL_LINK( ScOptSolverDlg, CursorUpHdl, ScCursorRefEdit*, pEdit )
             pFocus->GrabFocus();
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit*, pEdit )
+IMPL_LINK_TYPED( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit&, rEdit, void )
 {
-    if ( pEdit == mpLeftEdit[EDIT_ROW_COUNT-1] || pEdit == mpRightEdit[EDIT_ROW_COUNT-1] )
+    if ( &rEdit == mpLeftEdit[EDIT_ROW_COUNT-1] || &rEdit == mpRightEdit[EDIT_ROW_COUNT-1] )
     {
         //! limit scroll position?
         ReadConditions();
@@ -785,9 +783,9 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit*, pEdit )
         formula::RefEdit* pFocus = NULL;
         for ( sal_uInt16 nRow = 0; nRow+1 < EDIT_ROW_COUNT; ++nRow )      // before last row: move focus
         {
-            if ( pEdit == mpLeftEdit[nRow] )
+            if ( &rEdit == mpLeftEdit[nRow] )
                 pFocus = mpLeftEdit[nRow+1];
-            else if ( pEdit == mpRightEdit[nRow] )
+            else if ( &rEdit == mpRightEdit[nRow] )
                 pFocus = mpRightEdit[nRow+1];
         }
         if (pFocus)
@@ -796,8 +794,6 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit*, pEdit )
             pFocus->GrabFocus();
         }
     }
-
-    return 0;
 }
 
 void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
