@@ -269,8 +269,7 @@ css::uno::Any ChildAccess::asValue()
                 rtl::Reference< ChildAccess > child(getChild("*" + locale));
                 // As a last resort, return a nil value even though it may be
                 // illegal for the given property:
-                if (child.is())
-                    return child->asValue();
+                return child.is() ? child->asValue() : css::uno::Any();
             }
         }
         value = css::uno::makeAny(
