@@ -29,7 +29,7 @@ namespace frm
     {
     private:
         EditView*   m_pView;
-        Link<>      m_aInvalidationHandler;
+        Link<LinkParamNone*,void> m_aInvalidationHandler;
         bool        m_bHideInactiveSelection;
 
     public:
@@ -37,7 +37,7 @@ namespace frm
 
         void    setView( EditView& _rView );
 
-        inline void    setAttributeInvalidationHandler( const Link<>& _rHandler ) { m_aInvalidationHandler = _rHandler; }
+        inline void    setAttributeInvalidationHandler( const Link<LinkParamNone*,void>& _rHandler ) { m_aInvalidationHandler = _rHandler; }
 
         void    SetHideInactiveSelection( bool _bHide );
         bool    GetHideInactiveSelection() const { return m_bHideInactiveSelection; }

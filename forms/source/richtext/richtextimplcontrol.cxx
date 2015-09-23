@@ -311,10 +311,9 @@ namespace frm
     }
 
 
-    IMPL_LINK_NOARG( RichTextControlImpl, OnInvalidateAllAttributes )
+    IMPL_LINK_NOARG_TYPED( RichTextControlImpl, OnInvalidateAllAttributes, LinkParamNone*, void )
     {
         updateAllAttributes();
-        return 0L;
     }
 
 
