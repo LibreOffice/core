@@ -232,9 +232,9 @@ void changeFont(SwFormat* pFormat, SwDocStyleSheet const * pStyle, FontSet const
 void changeColor(SwTextFormatColl* pCollection, svx::ColorSet const& rColorSet, StyleRedefinition* /*pRedefinition*/)
 {
     SvxColorItem aColorItem(pCollection->GetColor());
-    if (aColorItem.GetThemeIndex() >= 0)
+    sal_Int16 nIndex = aColorItem.GetThemeIndex();
+    if (nIndex >= 0 && nIndex < 12)
     {
-        sal_Int16 nIndex = aColorItem.GetThemeIndex();
         Color aColor = Color(rColorSet.getColor(nIndex));
         aColor.ApplyTintOrShade(aColorItem.GetTintOrShade());
         aColorItem.SetValue(aColor);
