@@ -257,8 +257,8 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     OUString        aButtonTexts[TOKEN_END]; // Text of the buttons
     OUString        aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
     OUString        sCharStyle;
-    Link<>          aButtonSelectedHdl;
-    VclPtr<Control>        pActiveCtrl;
+    Link<SwFormToken&,void> aButtonSelectedHdl;
+    VclPtr<Control>         pActiveCtrl;
     Link<>          aModifyHdl;
     OUString        accessibleName;
     OUString        sAdditionalAccnameString1;
@@ -297,7 +297,7 @@ public:
 
     OUString    GetPattern() const;
 
-    void        SetButtonSelectedHdl(const Link<>& rLink)
+    void        SetButtonSelectedHdl(const Link<SwFormToken&,void>& rLink)
                 { aButtonSelectedHdl = rLink;}
 
     void        SetModifyHdl(const Link<>& rLink){aModifyHdl = rLink;}
@@ -415,7 +415,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     DECL_LINK_TYPED(InsertTokenHdl, Button*, void);
     DECL_LINK_TYPED(LevelHdl, SvTreeListBox*, void);
     DECL_LINK_TYPED(AutoRightHdl, Button*, void);
-    DECL_LINK(TokenSelectedHdl, SwFormToken*);
+    DECL_LINK_TYPED(TokenSelectedHdl, SwFormToken&, void);
     DECL_LINK(TabPosHdl, MetricField*);
     DECL_LINK(FillCharHdl, ComboBox*);
     DECL_LINK_TYPED(RemoveInsertAuthHdl, Button*, void);

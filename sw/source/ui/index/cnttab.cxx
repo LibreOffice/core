@@ -2416,20 +2416,20 @@ IMPL_LINK_TYPED(SwTOXEntryTabPage, SortKeyHdl, Button*, pButton, void)
     m_pSortKeyFrame->Enable(bEnable);
 }
 
-IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
+IMPL_LINK_TYPED(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken&, rToken, void)
 {
-    if (!pToken->sCharStyleName.isEmpty())
-        m_pCharStyleLB->SelectEntry(pToken->sCharStyleName);
+    if (!rToken.sCharStyleName.isEmpty())
+        m_pCharStyleLB->SelectEntry(rToken.sCharStyleName);
     else
         m_pCharStyleLB->SelectEntry(sNoCharStyle);
 
     const OUString sEntry = m_pCharStyleLB->GetSelectEntry();
     m_pEditStylePB->Enable(sEntry != sNoCharStyle);
 
-    if(pToken->eTokenType == TOKEN_CHAPTER_INFO)
+    if(rToken.eTokenType == TOKEN_CHAPTER_INFO)
     {
 //---> i89791
-        switch(pToken->nChapterFormat)
+        switch(rToken.nChapterFormat)
         {
         default:
             m_pChapterEntryLB->SetNoSelection();//to alert the user
@@ -2446,19 +2446,19 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
         }
 //i53420
 
-        m_pEntryOutlineLevelNF->SetValue(pToken->nOutlineLevel);
+        m_pEntryOutlineLevelNF->SetValue(rToken.nOutlineLevel);
     }
 
 //i53420
-    if(pToken->eTokenType == TOKEN_ENTRY_NO)
+    if(rToken.eTokenType == TOKEN_ENTRY_NO)
     {
-        m_pEntryOutlineLevelNF->SetValue(pToken->nOutlineLevel);
+        m_pEntryOutlineLevelNF->SetValue(rToken.nOutlineLevel);
         const sal_uInt16 nFormat =
-            pToken->nChapterFormat == CF_NUM_NOPREPST_TITLE ? 1 : 0;
+            rToken.nChapterFormat == CF_NUM_NOPREPST_TITLE ? 1 : 0;
         m_pNumberFormatLB->SelectEntryPos(nFormat);
     }
 
-    bool bTabStop = TOKEN_TAB_STOP == pToken->eTokenType;
+    bool bTabStop = TOKEN_TAB_STOP == rToken.eTokenType;
     m_pFillCharFT->Show(bTabStop);
     m_pFillCharCB->Show(bTabStop);
     m_pTabPosFT->Show(bTabStop);
@@ -2467,9 +2467,9 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     m_pAutoRightCB->Enable(bTabStop);
     if(bTabStop)
     {
-        m_pTabPosMF->SetValue(m_pTabPosMF->Normalize(pToken->nTabStopPosition), FUNIT_TWIP);
-        m_pAutoRightCB->Check(SVX_TAB_ADJUST_END == pToken->eTabAlign);
-        m_pFillCharCB->SetText(OUString(pToken->cTabFillChar));
+        m_pTabPosMF->SetValue(m_pTabPosMF->Normalize(rToken.nTabStopPosition), FUNIT_TWIP);
+        m_pAutoRightCB->Check(SVX_TAB_ADJUST_END == rToken.eTabAlign);
+        m_pFillCharCB->SetText(OUString(rToken.cTabFillChar));
         m_pTabPosFT->Enable(!m_pAutoRightCB->IsChecked());
         m_pTabPosMF->Enable(!m_pAutoRightCB->IsChecked());
     }
@@ -2478,8 +2478,8 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
         m_pTabPosMF->Enable(false);
     }
 
-    bool bIsChapterInfo = pToken->eTokenType == TOKEN_CHAPTER_INFO;
-    bool bIsEntryNumber = pToken->eTokenType == TOKEN_ENTRY_NO;
+    bool bIsChapterInfo = rToken.eTokenType == TOKEN_CHAPTER_INFO;
+    bool bIsEntryNumber = rToken.eTokenType == TOKEN_ENTRY_NO;
     m_pChapterEntryFT->Show( bIsChapterInfo );
     m_pChapterEntryLB->Show( bIsChapterInfo );
     m_pEntryOutlineLevelFT->Show( bIsChapterInfo || bIsEntryNumber );
@@ -2493,22 +2493,22 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 
     if(m_pEntryNoPB->IsVisible())
     {
-        m_pEntryNoPB->Enable(TOKEN_ENTRY_NO != pToken->eTokenType );
+        m_pEntryNoPB->Enable(TOKEN_ENTRY_NO != rToken.eTokenType );
     }
     if(m_pEntryPB->IsVisible())
     {
-        m_pEntryPB->Enable(TOKEN_ENTRY_TEXT != pToken->eTokenType &&
+        m_pEntryPB->Enable(TOKEN_ENTRY_TEXT != rToken.eTokenType &&
                                 !m_pTokenWIN->Contains(TOKEN_ENTRY_TEXT)
                                 && !m_pTokenWIN->Contains(TOKEN_ENTRY));
     }
 
     if(m_pChapterInfoPB->IsVisible())
     {
-        m_pChapterInfoPB->Enable(TOKEN_CHAPTER_INFO != pToken->eTokenType);
+        m_pChapterInfoPB->Enable(TOKEN_CHAPTER_INFO != rToken.eTokenType);
     }
     if(m_pPageNoPB->IsVisible())
     {
-        m_pPageNoPB->Enable(TOKEN_PAGE_NUMS != pToken->eTokenType &&
+        m_pPageNoPB->Enable(TOKEN_PAGE_NUMS != rToken.eTokenType &&
                                 !m_pTokenWIN->Contains(TOKEN_PAGE_NUMS));
     }
     if(m_pTabPB->IsVisible())
@@ -2517,18 +2517,16 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     }
     if(m_pHyperLinkPB->IsVisible())
     {
-        m_pHyperLinkPB->Enable(TOKEN_LINK_START != pToken->eTokenType &&
-                            TOKEN_LINK_END != pToken->eTokenType);
+        m_pHyperLinkPB->Enable(TOKEN_LINK_START != rToken.eTokenType &&
+                            TOKEN_LINK_END != rToken.eTokenType);
     }
     //table of authorities
     if(m_pAuthInsertPB->IsVisible())
     {
-        bool bText = TOKEN_TEXT == pToken->eTokenType;
+        bool bText = TOKEN_TEXT == rToken.eTokenType;
         m_pAuthInsertPB->Enable(bText && !m_pAuthFieldsLB->GetSelectEntry().isEmpty());
         m_pAuthRemovePB->Enable(!bText);
     }
-
-    return 0;
 }
 
 IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
@@ -2864,7 +2862,7 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
                 pFToken = &static_cast<SwTOXButton*>(pActiveCtrl.get())->GetFormToken();
 
             SwFormToken aTemp( *pFToken );
-            aButtonSelectedHdl.Call( &aTemp );
+            aButtonSelectedHdl.Call( aTemp );
         }
     }
 }
