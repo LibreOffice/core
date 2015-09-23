@@ -183,7 +183,7 @@ private:
     void          DoReadUserDataSequence( const ::com::sun::star::uno::Sequence<
                                      ::com::sun::star::beans::PropertyValue >& rSettings );
 
-    DECL_LINK( SimpleRefClose, void* );
+    DECL_LINK_TYPED( SimpleRefClose, const OUString*, void );
     DECL_LINK( SimpleRefDone, OUString* );
     DECL_LINK( SimpleRefAborted, OUString* );
     DECL_LINK( SimpleRefChange, OUString* );

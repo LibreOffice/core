@@ -35,7 +35,7 @@ class ScDocument;
 class ScSimpleRefDlg: public ScAnyRefDlg
 {
 private:
-    Link<>          aCloseHdl;
+    Link<const OUString*,void> aCloseHdl;
     Link<>          aDoneHdl;
     Link<>          aAbortedHdl;
     Link<>          aChangeHdl;
@@ -65,7 +65,7 @@ protected:
 
 public:
                     ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent);
-                    virtual ~ScSimpleRefDlg();
+    virtual        ~ScSimpleRefDlg();
     virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;
@@ -76,10 +76,10 @@ public:
 
     void            StartRefInput();
 
-    void           SetRefString(const OUString &rStr);
-    virtual void   FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
+    void            SetRefString(const OUString &rStr);
+    virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
 
-    void            SetCloseHdl( const Link<>& rLink );
+    void            SetCloseHdl( const Link<const OUString*,void>& rLink );
     void            SetUnoLinks( const Link<>& rDone, const Link<>& rAbort,
                                 const Link<>& rChange );
 

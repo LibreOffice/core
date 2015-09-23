@@ -149,7 +149,7 @@ bool ScSimpleRefDlg::IsRefInputMode() const
     return true;
 }
 
-void ScSimpleRefDlg::SetCloseHdl( const Link<>& rLink )
+void ScSimpleRefDlg::SetCloseHdl( const Link<const OUString*,void>& rLink )
 {
     aCloseHdl=rLink;
 }
