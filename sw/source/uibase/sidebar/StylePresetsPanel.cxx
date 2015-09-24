@@ -13,8 +13,9 @@
 #include "StylePresetsPanel.hxx"
 
 #include <vcl/image.hxx>
-#include <vcl/virdev.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/StylePreviewRenderer.hxx>
@@ -145,6 +146,7 @@ StylePresetsPanel::StylePresetsPanel(weld::Widget* pParent)
 {
     mxValueSet->SetColCount(2);
 
+    mxValueSet->SetColor(Application::GetSettings().GetStyleSettings().GetFaceColor());
     mxValueSet->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
 
     RefreshList();
