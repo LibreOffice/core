@@ -274,33 +274,61 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
     {
         if (!bAutoWidth)
             nAutoColWidth = pColMgr->GetColWidth(i);
-        aRect.Right() = aRect.Left() + nAutoColWidth;
+
+        if (!m_bVertical)
+            aRect.Right() = aRect.Left() + nAutoColWidth;
+        else
+            aRect.Bottom() = aRect.Top() + nAutoColWidth;
 
         //UUUU use primitive draw command
         drawFillAttributes(rRenderContext, getPageFillAttributes(), aRect, aDefineRect);
 
         if (i < nColumnCount - 1)
-            aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
+        {
+            if (!m_bVertical)
+                aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
+            else
+                aRect.Top() = aRect.Bottom() + pColMgr->GetGutterWidth(i);
+        }
     }
     if (pColMgr->HasLine())
     {
         Point aUp(rOrg.X() + nL, rOrg.Y() + GetTop());
         Point aDown(rOrg.X() + nL,
-                    rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist());
+                        rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist());
 
         if (pColMgr->GetLineHeightPercent() != 100)
         {
-            long nLength = aDown.Y() - aUp.Y();
+            long nLength = !m_bVertical ? aDown.Y() - aUp.Y() : aDown.X() - aUp.X();
             nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
             switch (pColMgr->GetAdjust())
             {
-                case COLADJ_BOTTOM: aUp.Y() += nLength; break;
-                case COLADJ_TOP: aDown.Y() -= nLength; break;
+                case COLADJ_BOTTOM:
+                    if (!m_bVertical)
+                        aUp.Y() += nLength;
+                    else
+                        aUp.X() += nLength;
+                    break;
+                case COLADJ_TOP:
+                    if (!m_bVertical)
+                        aDown.Y() -= nLength;
+                    else
+                        aDown.X() -= nLength;
+                    break;
                 case COLADJ_CENTER:
-                    aUp.Y() += nLength / 2;
-                    aDown.Y() -= nLength / 2;
-                break;
-                default:; // prevent warning
+                    if (!m_bVertical)
+                    {
+                        aUp.Y() += nLength / 2;
+                        aDown.Y() -= nLength / 2;
+                    }
+                    else
+                    {
+                        aUp.X() += nLength / 2;
+                        aDown.X() -= nLength / 2;
+                    }
+                    break;
+                default:
+                    break; // prevent warning
             }
         }
 
@@ -309,8 +337,17 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
             int nGutter = pColMgr->GetGutterWidth(i);
             int nDist = pColMgr->GetColWidth( i ) + nGutter;
             nDist -= (i == 0) ? nGutter / 2 : 0;
-            aUp.X() += nDist;
-            aDown.X() += nDist;
+            if (!m_bVertical)
+            {
+                aUp.X() += nDist;
+                aDown.X() += nDist;
+            }
+            else
+            {
+                aUp.Y() += nDist;
+                aDown.Y() += nDist;
+            }
+
             rRenderContext.DrawLine(aUp, aDown);
         }
     }
