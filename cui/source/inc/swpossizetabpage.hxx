@@ -30,6 +30,8 @@
 // SvxSwPosSizeTabPage - position and size page for Writer drawing objects
 struct FrmMap;
 class SdrView;
+struct SvxSwFrameValidation;
+
 class SvxSwPosSizeTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
@@ -68,7 +70,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
     VclPtr<SvxSwFrameExample> m_pExampleWN;
 
-    Link<>      m_aValidateLink;
+    Link<SvxSwFrameValidation&,void> m_aValidateLink;
 
     //'string provider'
     SvxSwFramePosString m_aFramePosString;
@@ -137,7 +139,7 @@ public:
 
     void    EnableAnchorTypes(sal_uInt16 nAnchorEnable);
 
-    void SetValidateFramePosLink( const Link<>& rLink )
+    void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink )
             {m_aValidateLink = rLink;}
 
     void SetView( const SdrView* pSdrView );

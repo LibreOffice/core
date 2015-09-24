@@ -282,7 +282,7 @@ class AbstractSvxJSearchOptionsDialog_Impl :public AbstractSvxJSearchOptionsDial
 class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl,SvxTransformTabDialog)
-    virtual void SetValidateFramePosLink( const Link<>& rLink ) SAL_OVERRIDE;
+    virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) SAL_OVERRIDE;
     virtual void                SetCurPageId( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual void                SetCurPageId( const OString& rName ) SAL_OVERRIDE;
     virtual const SfxItemSet*   GetOutputItemSet() const SAL_OVERRIDE;
@@ -295,7 +295,7 @@ class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
 class AbstractSvxCaptionDialog_Impl : public AbstractSvxCaptionDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl,SvxCaptionTabDialog)
-    virtual void SetValidateFramePosLink( const Link<>& rLink ) SAL_OVERRIDE;
+    virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) SAL_OVERRIDE;
     virtual void                SetCurPageId( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual void                SetCurPageId( const OString& rName ) SAL_OVERRIDE;
     virtual const SfxItemSet*   GetOutputItemSet() const SAL_OVERRIDE;

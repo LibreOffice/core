@@ -92,7 +92,7 @@ public:
 };
 
 // class SvxCaptionTabDialog ---------------------------------------------
-
+struct SvxSwFrameValidation;
 class SvxCaptionTabDialog : public SfxTabDialog
 {
 private:
@@ -102,7 +102,7 @@ private:
     sal_uInt16 m_nPositionSizePageId;
     sal_uInt16 m_nCaptionPageId;
 
-    Link<>              aValidateLink;
+    Link<SvxSwFrameValidation&,void> aValidateLink;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
@@ -111,7 +111,7 @@ public:
                             sal_uInt16 nAnchorTypes = 0);
 
     /// link for the Writer to validate positions
-    void SetValidateFramePosLink( const Link<>& rLink );
+    void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );
 };
 
 

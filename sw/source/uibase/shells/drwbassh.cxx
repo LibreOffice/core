@@ -748,17 +748,17 @@ bool SwDrawBaseShell::Disable(SfxItemSet& rSet, sal_uInt16 nWhich)
 
 // Validate of drawing positions
 
-IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation )
+IMPL_LINK_TYPED(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation&, rValidation, void )
 {
     SwWrtShell *pSh = &GetShell();
-    pValidation->nMinHeight = MINFLY;
-    pValidation->nMinWidth =  MINFLY;
+    rValidation.nMinHeight = MINFLY;
+    rValidation.nMinWidth =  MINFLY;
 
     SwRect aBoundRect;
 
     // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
     //      aligned to page for fly frame anchored to paragraph or to character.
-    const RndStdIds eAnchorType = static_cast<RndStdIds >(pValidation->nAnchorType);
+    const RndStdIds eAnchorType = static_cast<RndStdIds >(rValidation.nAnchorType);
     const SwPosition* pContentPos = 0;
     SdrView*  pSdrView = pSh->GetDrawView();
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
@@ -770,11 +770,11 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
     }
 
     pSh->CalcBoundRect( aBoundRect, eAnchorType,
-                           pValidation->nHRelOrient,
-                           pValidation->nVRelOrient,
+                           rValidation.nHRelOrient,
+                           rValidation.nVRelOrient,
                            pContentPos,
-                           pValidation->bFollowTextFlow,
-                           pValidation->bMirror, NULL, &pValidation->aPercentSize);
+                           rValidation.bFollowTextFlow,
+                           rValidation.bMirror, NULL, &rValidation.aPercentSize);
 
     bool bIsInVertical( false );
     {
@@ -794,148 +794,147 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         aSize.Height() = nTmp;
         aBoundRect.Chg( aPos, aSize );
         //exchange width/height to enable correct values
-        nTmp = pValidation->nWidth;
-        pValidation->nWidth = pValidation->nHeight;
-        pValidation->nHeight = nTmp;
+        nTmp = rValidation.nWidth;
+        rValidation.nWidth = rValidation.nHeight;
+        rValidation.nHeight = nTmp;
     }
     if ((eAnchorType == FLY_AT_PAGE) || (eAnchorType == FLY_AT_FLY))
     {
         // MinimalPosition
-        pValidation->nMinHPos = aBoundRect.Left();
-        pValidation->nMinVPos = aBoundRect.Top();
-        SwTwips nH = pValidation->nHPos;
-        SwTwips nV = pValidation->nVPos;
+        rValidation.nMinHPos = aBoundRect.Left();
+        rValidation.nMinVPos = aBoundRect.Top();
+        SwTwips nH = rValidation.nHPos;
+        SwTwips nV = rValidation.nVPos;
 
-        if (pValidation->nHPos + pValidation->nWidth > aBoundRect.Right())
+        if (rValidation.nHPos + rValidation.nWidth > aBoundRect.Right())
         {
-            if (pValidation->nHoriOrient == text::HoriOrientation::NONE)
+            if (rValidation.nHoriOrient == text::HoriOrientation::NONE)
             {
-                pValidation->nHPos -= ((pValidation->nHPos + pValidation->nWidth) - aBoundRect.Right());
-                nH = pValidation->nHPos;
+                rValidation.nHPos -= ((rValidation.nHPos + rValidation.nWidth) - aBoundRect.Right());
+                nH = rValidation.nHPos;
             }
             else
-                pValidation->nWidth = aBoundRect.Right() - pValidation->nHPos;
+                rValidation.nWidth = aBoundRect.Right() - rValidation.nHPos;
         }
 
-        if (pValidation->nHPos + pValidation->nWidth > aBoundRect.Right())
-            pValidation->nWidth = aBoundRect.Right() - pValidation->nHPos;
+        if (rValidation.nHPos + rValidation.nWidth > aBoundRect.Right())
+            rValidation.nWidth = aBoundRect.Right() - rValidation.nHPos;
 
-        if (pValidation->nVPos + pValidation->nHeight > aBoundRect.Bottom())
+        if (rValidation.nVPos + rValidation.nHeight > aBoundRect.Bottom())
         {
-            if (pValidation->nVertOrient == text::VertOrientation::NONE)
+            if (rValidation.nVertOrient == text::VertOrientation::NONE)
             {
-                pValidation->nVPos -= ((pValidation->nVPos + pValidation->nHeight) - aBoundRect.Bottom());
-                nV = pValidation->nVPos;
+                rValidation.nVPos -= ((rValidation.nVPos + rValidation.nHeight) - aBoundRect.Bottom());
+                nV = rValidation.nVPos;
             }
             else
-                pValidation->nHeight = aBoundRect.Bottom() - pValidation->nVPos;
+                rValidation.nHeight = aBoundRect.Bottom() - rValidation.nVPos;
         }
 
-        if (pValidation->nVPos + pValidation->nHeight > aBoundRect.Bottom())
-            pValidation->nHeight = aBoundRect.Bottom() - pValidation->nVPos;
+        if (rValidation.nVPos + rValidation.nHeight > aBoundRect.Bottom())
+            rValidation.nHeight = aBoundRect.Bottom() - rValidation.nVPos;
 
-        if ( pValidation->nVertOrient != text::VertOrientation::NONE )
+        if ( rValidation.nVertOrient != text::VertOrientation::NONE )
             nV = aBoundRect.Top();
 
-        if ( pValidation->nHoriOrient != text::HoriOrientation::NONE )
+        if ( rValidation.nHoriOrient != text::HoriOrientation::NONE )
             nH = aBoundRect.Left();
 
-        pValidation->nMaxHPos   = aBoundRect.Right()  - pValidation->nWidth;
-        pValidation->nMaxHeight = aBoundRect.Bottom() - nV;
+        rValidation.nMaxHPos   = aBoundRect.Right()  - rValidation.nWidth;
+        rValidation.nMaxHeight = aBoundRect.Bottom() - nV;
 
-        pValidation->nMaxVPos   = aBoundRect.Bottom() - pValidation->nHeight;
-        pValidation->nMaxWidth  = aBoundRect.Right()  - nH;
+        rValidation.nMaxVPos   = aBoundRect.Bottom() - rValidation.nHeight;
+        rValidation.nMaxWidth  = aBoundRect.Right()  - nH;
     }
     else if ((eAnchorType == FLY_AT_PARA) || (eAnchorType == FLY_AT_CHAR))
     {
-        if (pValidation->nHPos + pValidation->nWidth > aBoundRect.Right())
+        if (rValidation.nHPos + rValidation.nWidth > aBoundRect.Right())
         {
-            if (pValidation->nHoriOrient == text::HoriOrientation::NONE)
+            if (rValidation.nHoriOrient == text::HoriOrientation::NONE)
             {
-                pValidation->nHPos -= ((pValidation->nHPos + pValidation->nWidth) - aBoundRect.Right());
+                rValidation.nHPos -= ((rValidation.nHPos + rValidation.nWidth) - aBoundRect.Right());
             }
             else
-                pValidation->nWidth = aBoundRect.Right() - pValidation->nHPos;
+                rValidation.nWidth = aBoundRect.Right() - rValidation.nHPos;
         }
 
         // OD 29.09.2003 #i17567#, #i18732# - consider following the text flow
         // and alignment at page areas.
-        const bool bMaxVPosAtBottom = !pValidation->bFollowTextFlow ||
-                                      pValidation->nVRelOrient == text::RelOrientation::PAGE_FRAME ||
-                                      pValidation->nVRelOrient == text::RelOrientation::PAGE_PRINT_AREA;
+        const bool bMaxVPosAtBottom = !rValidation.bFollowTextFlow ||
+                                      rValidation.nVRelOrient == text::RelOrientation::PAGE_FRAME ||
+                                      rValidation.nVRelOrient == text::RelOrientation::PAGE_PRINT_AREA;
         {
             SwTwips nTmpMaxVPos = ( bMaxVPosAtBottom
                                     ? aBoundRect.Bottom()
                                     : aBoundRect.Height() ) -
-                                  pValidation->nHeight;
-            if ( pValidation->nVPos > nTmpMaxVPos )
+                                  rValidation.nHeight;
+            if ( rValidation.nVPos > nTmpMaxVPos )
             {
-                if (pValidation->nVertOrient == text::VertOrientation::NONE)
+                if (rValidation.nVertOrient == text::VertOrientation::NONE)
                 {
-                    pValidation->nVPos = nTmpMaxVPos;
+                    rValidation.nVPos = nTmpMaxVPos;
                 }
                 else
                 {
-                    pValidation->nHeight = ( bMaxVPosAtBottom
+                    rValidation.nHeight = ( bMaxVPosAtBottom
                                      ? aBoundRect.Bottom()
-                                     : aBoundRect.Height() ) - pValidation->nVPos;
+                                     : aBoundRect.Height() ) - rValidation.nVPos;
                 }
             }
         }
 
-        pValidation->nMinHPos  = aBoundRect.Left();
-        pValidation->nMaxHPos  = aBoundRect.Right() - pValidation->nWidth;
+        rValidation.nMinHPos  = aBoundRect.Left();
+        rValidation.nMaxHPos  = aBoundRect.Right() - rValidation.nWidth;
 
-        pValidation->nMinVPos  = aBoundRect.Top();
+        rValidation.nMinVPos  = aBoundRect.Top();
         // OD 26.09.2003 #i17567#, #i18732# - determine maximum vertical position
         if ( bMaxVPosAtBottom )
         {
-            pValidation->nMaxVPos  = aBoundRect.Bottom() - pValidation->nHeight;
+            rValidation.nMaxVPos  = aBoundRect.Bottom() - rValidation.nHeight;
         }
         else
         {
-            pValidation->nMaxVPos  = aBoundRect.Height() - pValidation->nHeight;
+            rValidation.nMaxVPos  = aBoundRect.Height() - rValidation.nHeight;
         }
 
         // Maximum width height
-        const SwTwips nH = ( pValidation->nHoriOrient != text::HoriOrientation::NONE )
+        const SwTwips nH = ( rValidation.nHoriOrient != text::HoriOrientation::NONE )
                            ? aBoundRect.Left()
-                           : pValidation->nHPos;
-        const SwTwips nV = ( pValidation->nVertOrient != text::VertOrientation::NONE )
+                           : rValidation.nHPos;
+        const SwTwips nV = ( rValidation.nVertOrient != text::VertOrientation::NONE )
                            ? aBoundRect.Top()
-                           : pValidation->nVPos;
-        pValidation->nMaxHeight  = pValidation->nMaxVPos + pValidation->nHeight - nV;
-        pValidation->nMaxWidth   = pValidation->nMaxHPos + pValidation->nWidth - nH;
+                           : rValidation.nVPos;
+        rValidation.nMaxHeight  = rValidation.nMaxVPos + rValidation.nHeight - nV;
+        rValidation.nMaxWidth   = rValidation.nMaxHPos + rValidation.nWidth - nH;
     }
     else if (eAnchorType == FLY_AS_CHAR)
     {
-        pValidation->nMinHPos = 0;
-        pValidation->nMaxHPos = 0;
+        rValidation.nMinHPos = 0;
+        rValidation.nMaxHPos = 0;
 
-        pValidation->nMaxHeight = aBoundRect.Height();
-        pValidation->nMaxWidth  = aBoundRect.Width();
+        rValidation.nMaxHeight = aBoundRect.Height();
+        rValidation.nMaxWidth  = aBoundRect.Width();
 
-        pValidation->nMaxVPos   = aBoundRect.Height();
-        pValidation->nMinVPos   = -aBoundRect.Height() + pValidation->nHeight;
-        if (pValidation->nMaxVPos < pValidation->nMinVPos)
+        rValidation.nMaxVPos   = aBoundRect.Height();
+        rValidation.nMinVPos   = -aBoundRect.Height() + rValidation.nHeight;
+        if (rValidation.nMaxVPos < rValidation.nMinVPos)
         {
-            pValidation->nMinVPos = pValidation->nMaxVPos;
-            pValidation->nMaxVPos = -aBoundRect.Height();
+            rValidation.nMinVPos = rValidation.nMaxVPos;
+            rValidation.nMaxVPos = -aBoundRect.Height();
         }
     }
     if(bIsInVertical)
     {
         //restore width/height exchange
-        long nTmp = pValidation->nWidth;
-        pValidation->nWidth = pValidation->nHeight;
-        pValidation->nHeight = nTmp;
+        long nTmp = rValidation.nWidth;
+        rValidation.nWidth = rValidation.nHeight;
+        rValidation.nHeight = nTmp;
     }
 
-    if (pValidation->nMaxWidth < pValidation->nWidth)
-        pValidation->nWidth = pValidation->nMaxWidth;
-    if (pValidation->nMaxHeight < pValidation->nHeight)
-        pValidation->nHeight = pValidation->nMaxHeight;
-    return 0;
+    if (rValidation.nMaxWidth < rValidation.nWidth)
+        rValidation.nWidth = rValidation.nMaxWidth;
+    if (rValidation.nMaxHeight < rValidation.nHeight)
+        rValidation.nHeight = rValidation.nMaxHeight;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

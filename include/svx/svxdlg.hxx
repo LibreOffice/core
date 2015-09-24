@@ -216,16 +216,17 @@ class AbstractSvxAreaTabDialog :public SfxAbstractTabDialog
 {
 };
 
+struct SvxSwFrameValidation;
 class AbstractSvxTransformTabDialog : public SfxAbstractTabDialog
 {
 public:
-    virtual void SetValidateFramePosLink( const Link<>& rLink ) = 0;
+    virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) = 0;
 };
 
 class AbstractSvxCaptionDialog : public SfxAbstractTabDialog
 {
 public:
-    virtual void SetValidateFramePosLink( const Link<>& rLink ) = 0;
+    virtual void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink ) = 0;
 };
 
 class AbstractSvxPostItDialog :public VclAbstractDialog
