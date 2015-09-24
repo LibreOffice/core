@@ -64,6 +64,7 @@
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace svx::sidebar;
 using namespace ::com::sun::star;

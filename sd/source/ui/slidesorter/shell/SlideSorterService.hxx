@@ -33,6 +33,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <boost/noncopyable.hpp>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter {
 

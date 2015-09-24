@@ -28,6 +28,7 @@
 #include <vcl/mapmod.hxx>
 #include <vector>
 #include <utility>
+#include <boost/scoped_ptr.hpp>
 
 class Size;
 

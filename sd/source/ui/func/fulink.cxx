@@ -30,6 +30,7 @@
 #include "ViewShell.hxx"
 #include "app.hrc"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 class SfxRequest;
 
