@@ -785,7 +785,7 @@ void AbstractSvxPostItDialog_Impl::SetNextHdl( const Link<>& rLink )
     if( rLink.IsSet() )
         pDlg->SetNextHdl( LINK(this, AbstractSvxPostItDialog_Impl, NextHdl ) );
     else
-        pDlg->SetNextHdl( Link<>() );
+        pDlg->SetNextHdl( Link<SvxPostItDialog&,void>() );
 }
 void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link<>& rLink )
 {
@@ -793,19 +793,17 @@ void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link<>& rLink )
     if( rLink.IsSet() )
         pDlg->SetPrevHdl( LINK(this, AbstractSvxPostItDialog_Impl, PrevHdl ) );
     else
-        pDlg->SetPrevHdl( Link<>() );
+        pDlg->SetPrevHdl( Link<SvxPostItDialog&,void>() );
 }
-IMPL_LINK_NOARG(AbstractSvxPostItDialog_Impl, NextHdl)
+IMPL_LINK_NOARG_TYPED(AbstractSvxPostItDialog_Impl, NextHdl, SvxPostItDialog&, void)
 {
     if( aNextHdl.IsSet() )
         aNextHdl.Call(this);
-    return 0;
 }
-IMPL_LINK_NOARG(AbstractSvxPostItDialog_Impl, PrevHdl)
+IMPL_LINK_NOARG_TYPED(AbstractSvxPostItDialog_Impl, PrevHdl, SvxPostItDialog&, void)
 {
     if( aPrevHdl.IsSet() )
         aPrevHdl.Call(this);
-    return 0;
 }
 vcl::Window * AbstractSvxPostItDialog_Impl::GetWindow()
 {

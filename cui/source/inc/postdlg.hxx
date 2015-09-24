@@ -51,9 +51,9 @@ public:
     static const sal_uInt16*      GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
-    void                SetPrevHdl( const Link<>& rLink )
+    void                SetPrevHdl( const Link<SvxPostItDialog&,void>& rLink )
                             { aPrevHdlLink = rLink; }
-    void                SetNextHdl( const Link<>& rLink )
+    void                SetNextHdl( const Link<SvxPostItDialog&,void>& rLink )
                             { aNextHdlLink = rLink; }
 
     void EnableTravel(bool bNext, bool bPrev);
@@ -91,8 +91,8 @@ private:
     const SfxItemSet&   rSet;
     SfxItemSet*         pOutSet;
 
-    Link<>              aPrevHdlLink;
-    Link<>              aNextHdlLink;
+    Link<SvxPostItDialog&,void>  aPrevHdlLink;
+    Link<SvxPostItDialog&,void>  aNextHdlLink;
 
     DECL_LINK_TYPED(Stamp, Button*, void);
     DECL_LINK_TYPED(OKHdl, Button*, void);
