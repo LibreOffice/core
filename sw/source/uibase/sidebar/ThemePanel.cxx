@@ -19,6 +19,7 @@
 #include <editeng/fontitem.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <charatr.hxx>
@@ -367,17 +368,39 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev(*Application::GetDefaultDevice());
     float fScaleFactor = pVirtualDev->GetDPIScaleFactor();
-    tools::Long BORDER = 2 * fScaleFactor;
-    tools::Long SIZE = 12 * fScaleFactor;
+    tools::Long BORDER = 3 * fScaleFactor;
+    tools::Long SIZE = 14 * fScaleFactor;
+    tools::Long LABEL_HEIGHT = 16 * fScaleFactor;
+    tools::Long LABEL_TEXT_HEIGHT = 14 * fScaleFactor;
 
-    Size aSize(BORDER * 7 + SIZE * 6, BORDER * 3 + SIZE * 2);
+    Size aSize(BORDER * 7 + SIZE * 6 + BORDER * 2, BORDER * 3 + SIZE * 2 + LABEL_HEIGHT);
     pVirtualDev->SetOutputSizePixel(aSize);
+    pVirtualDev->SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetFaceColor()));
+    pVirtualDev->Erase();
 
     tools::Long x = BORDER;
-    tools::Long y1 = BORDER;
+    tools::Long y1 = BORDER + LABEL_HEIGHT;
     tools::Long y2 = y1 + SIZE + BORDER;
 
     pVirtualDev->SetLineColor(COL_LIGHTGRAY);
+    pVirtualDev->SetFillColor(COL_LIGHTGRAY);
+    tools::Rectangle aNameRect(Point(0, 0), Size(aSize.Width(), LABEL_HEIGHT));
+    pVirtualDev->DrawRect(aNameRect);
+
+    vcl::Font aFont;
+    OUString aName = rColorSet.getName();
+    aFont.SetFontHeight(LABEL_TEXT_HEIGHT);
+    pVirtualDev->SetFont(aFont);
+
+    Size aTextSize(pVirtualDev->GetTextWidth(aName), pVirtualDev->GetTextHeight());
+
+    Point aPoint((aNameRect.GetWidth()  / 2.0) - (aTextSize.Width()  / 2.0),
+                 (aNameRect.GetHeight() / 2.0) - (aTextSize.Height() / 2.0));
+
+    pVirtualDev->DrawText(aPoint, aName);
+
+    pVirtualDev->SetLineColor(COL_LIGHTGRAY);
+    pVirtualDev->SetFillColor();
 
     for (sal_uInt32 i = 0; i < 12; i += 2)
     {
@@ -388,6 +411,8 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
         pVirtualDev->DrawRect(tools::Rectangle(x, y2, x + SIZE, y2 + SIZE));
 
         x += SIZE + BORDER;
+        if (i == 2 || i == 8)
+            x += BORDER;
     }
 
     return pVirtualDev->GetBitmapEx(Point(), aSize);
@@ -415,6 +440,7 @@ ThemePanel::ThemePanel(weld::Widget* pParent)
 {
     mxValueSetColors->SetColCount(2);
     mxValueSetColors->SetLineCount(3);
+    mxValueSetColors->SetColor(Application::GetSettings().GetStyleSettings().GetFaceColor());
 
     mxApplyButton->connect_clicked(LINK(this, ThemePanel, ClickHdl));
     mxListBoxFonts->connect_row_activated(LINK(this, ThemePanel, DoubleClickHdl));
