@@ -41,7 +41,7 @@ endif
 $(call gb_ExternalProject_get_state_target,libgltf,build) :
 	$(call gb_ExternalProject_run,build,\
 		msbuild.exe libgltf.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
-			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) /m \
 			$(if $(filter 120,$(VCVER)),/p:PlatformToolset=v120 /p:VisualStudioVersion=12.0 /ToolsVersion:12.0) \
 			$(if $(filter 140,$(VCVER)),/p:PlatformToolset=v140 /p:VisualStudioVersion=14.0 /ToolsVersion:14.0) \
 			'/p:AdditionalIncludeDirectories=$(subst $(WHITESPACE),;,$(subst /,\,$(strip $(libgltf_AdditionalIncludes))))' \

@@ -17,10 +17,10 @@ ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,glew,build) :
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter 140,$(VCVER)),$(DEVENV) /Upgrade glew.sln,echo up-to-date) && \
-		msbuild.exe glew_shared.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+		msbuild.exe glew_shared.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) /m \
 	,build/vc12) \
 	$(call gb_ExternalProject_run,build,\
-		msbuild.exe glewinfo.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:Configuration=Release \
+		msbuild.exe glewinfo.vcxproj /p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) /p:Configuration=Release /m \
 	,build/vc12)
 
 else

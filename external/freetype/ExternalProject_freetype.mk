@@ -17,7 +17,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 $(call gb_ExternalProject_get_state_target,freetype,build) :
 	$(call gb_ExternalProject_run,build,\
 		cd ../builds/win32/vc2010/ && \
-		msbuild.exe freetype.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
+		msbuild.exe freetype.vcxproj /p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) /m \
 	,objs)
 else
 $(call gb_ExternalProject_get_state_target,freetype,build) :

@@ -32,7 +32,7 @@ ifeq ($(OS)$(COM),WNTMSC)
 # nmake is invoked
 $(call gb_ExternalProject_get_state_target,python3,build) :
 	$(call gb_ExternalProject_run,build,\
-		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build \
+		MAKEFLAGS= MSBuild.exe pcbuild.sln /t:Build /m \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
 			$(if $(filter 120,$(VCVER)),/p:PlatformToolset=v120 \

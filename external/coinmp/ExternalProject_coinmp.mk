@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,coinmp,\
 ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,coinmp,build) :
 	$(call gb_ExternalProject_run,build,\
-		MSBuild.exe CoinMP.sln /t:Build \
+		MSBuild.exe CoinMP.sln /t:Build /m \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(if $(filter INTEL,$(CPUNAME)),Win32,x64) \
 			$(if $(filter 120,$(VCVER)),/p:PlatformToolset=v120 /p:VisualStudioVersion=12.0 /ToolsVersion:12.0) \
