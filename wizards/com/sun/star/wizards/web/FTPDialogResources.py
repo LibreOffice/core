@@ -21,8 +21,6 @@ class FTPDialogResources(object):
     RID_COMMON_START = 500
 
     def __init__(self, oWizardResource):
-        super(FTPDialogResources, self).__init__(xmsf, self.MODULE_NAME)
-
         self.resFTPDialog_title = oWizardResource.getResText(
             self.RID_FTPDIALOG_START + 0)
         self.reslblUsername_value = oWizardResource.getResText(
