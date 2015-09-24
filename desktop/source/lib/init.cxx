@@ -317,6 +317,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThi
 static void                    lo_registerCallback (LibreOfficeKit* pThis,
                                                     LibreOfficeKitCallback pCallback,
                                                     void* pData);
+static char* lo_getFilterTypes(LibreOfficeKit* pThis);
+
 struct LibLibreOffice_Impl : public _LibreOfficeKit
 {
     OUString maLastExceptionMsg;
@@ -339,6 +341,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->getError = lo_getError;
             m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
             m_pOfficeClass->registerCallback = lo_registerCallback;
+            m_pOfficeClass->getFilterTypes = lo_getFilterTypes;
 
             gOfficeClass = m_pOfficeClass;
         }
@@ -1093,6 +1096,42 @@ static char* lo_getError (LibreOfficeKit *pThis)
     char* pMemory = static_cast<char*>(malloc(aString.getLength() + 1));
     strcpy(pMemory, aString.getStr());
     return pMemory;
+}
+
+static char* lo_getFilterTypes(LibreOfficeKit* pThis)
+{
+    LibLibreOffice_Impl* pImpl = static_cast<LibLibreOffice_Impl*>(pThis);
+
+    if (!xSFactory.is())
+        xSFactory = comphelper::getProcessServiceFactory();
+
+    if (!xSFactory.is())
+    {
+        pImpl->maLastExceptionMsg = "Service factory is not available";
+        return 0;
+    }
+
+    uno::Reference<container::XNameAccess> xTypeDetection(xSFactory->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY);
+    uno::Sequence<OUString> aTypes = xTypeDetection->getElementNames();
+    boost::property_tree::ptree aTree;
+    for (const OUString& rType : aTypes)
+    {
+        uno::Sequence<beans::PropertyValue> aValues;
+        if (xTypeDetection->getByName(rType) >>= aValues)
+        {
+            auto it = std::find_if(aValues.begin(), aValues.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "MediaType"; });
+            OUString aValue;
+            if (it != aValues.end() && (it->Value >>= aValue) && !aValue.isEmpty())
+            {
+                boost::property_tree::ptree aChild;
+                aChild.put("MediaType", aValue.toUtf8());
+                aTree.add_child(rType.toUtf8().getStr(), aChild);
+            }
+        }
+    }
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    return strdup(aStream.str().c_str());
 }
 
 static void force_c_locale()
