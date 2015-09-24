@@ -54,6 +54,9 @@ struct _LibreOfficeKitClass
     void (*registerCallback) (LibreOfficeKit* pThis,
                               LibreOfficeKitCallback pCallback,
                               void* pData);
+
+    /// @see lok::Office::getFilterTypes().
+    char* (*getFilterTypes) (LibreOfficeKit* pThis);
 #endif
 };
 

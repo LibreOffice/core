@@ -353,6 +353,27 @@ public:
     {
         return mpThis->pClass->getError(mpThis);
     }
+
+#ifdef LOK_USE_UNSTABLE_API
+    /**
+     * Returns details of filter types.
+     *
+     * Example returned string:
+     *
+     * {
+     *     "writer8": {
+     *         "MediaType": "application/vnd.oasis.opendocument.text"
+     *     },
+     *     "calc8": {
+     *         "MediaType": "application/vnd.oasis.opendocument.spreadsheet"
+     *     }
+     * }
+     */
+    inline char* getFilterTypes()
+    {
+        return mpThis->pClass->getFilterTypes(mpThis);
+    }
+#endif // LOK_USE_UNSTABLE_API
 };
 
 /// Factory method to create a lok::Office instance.
