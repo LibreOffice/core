@@ -2417,7 +2417,7 @@ SmNode *SmParser::ParseExpression(const OUString &rBuffer)
 
 size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
 {
-    SmErrorDesc *pErrDesc = new SmErrorDesc;
+    std::unique_ptr<SmErrorDesc> pErrDesc(new SmErrorDesc);
 
     pErrDesc->m_eType = Type;
     pErrDesc->m_pNode = pNode;
@@ -2445,7 +2445,7 @@ size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
     }
     pErrDesc->m_aText += SM_RESSTR(nRID);
 
-    m_aErrDescList.push_back( pErrDesc );
+    m_aErrDescList.push_back(std::move(pErrDesc));
 
     return m_aErrDescList.size()-1;
 }
@@ -2454,11 +2454,11 @@ size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
 const SmErrorDesc *SmParser::NextError()
 {
     if ( !m_aErrDescList.empty() )
-        if (m_nCurError > 0) return &m_aErrDescList[ --m_nCurError ];
+        if (m_nCurError > 0) return m_aErrDescList[ --m_nCurError ].get();
         else
         {
             m_nCurError = 0;
-            return &m_aErrDescList[ m_nCurError ];
+            return m_aErrDescList[ m_nCurError ].get();
         }
     else return NULL;
 }
@@ -2467,11 +2467,11 @@ const SmErrorDesc *SmParser::NextError()
 const SmErrorDesc *SmParser::PrevError()
 {
     if ( !m_aErrDescList.empty() )
-        if (m_nCurError < (int) (m_aErrDescList.size() - 1)) return &m_aErrDescList[ ++m_nCurError ];
+        if (m_nCurError < (int) (m_aErrDescList.size() - 1)) return m_aErrDescList[ ++m_nCurError ].get();
         else
         {
             m_nCurError = (int) (m_aErrDescList.size() - 1);
-            return &m_aErrDescList[ m_nCurError ];
+            return m_aErrDescList[ m_nCurError ].get();
         }
     else return NULL;
 }
@@ -2480,10 +2480,10 @@ const SmErrorDesc *SmParser::PrevError()
 const SmErrorDesc *SmParser::GetError(size_t i)
 {
     if ( i < m_aErrDescList.size() )
-        return &m_aErrDescList[ i ];
+        return m_aErrDescList[ i ].get();
 
     if ( (size_t)m_nCurError < m_aErrDescList.size() )
-        return &m_aErrDescList[ m_nCurError ];
+        return m_aErrDescList[ m_nCurError ].get();
 
     return NULL;
 }
