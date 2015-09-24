@@ -460,8 +460,8 @@ class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
 private:
     Link<> aNextHdl;
     Link<> aPrevHdl;
-    DECL_LINK(NextHdl, void *);
-    DECL_LINK(PrevHdl, void *);
+    DECL_LINK_TYPED(NextHdl, SvxPostItDialog&, void);
+    DECL_LINK_TYPED(PrevHdl, SvxPostItDialog&, void);
 };
 
 class PasswordToOpenModifyDialog;

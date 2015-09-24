@@ -176,12 +176,12 @@ void SvxPostItDialog::EnableTravel(bool bNext, bool bPrev)
 
 IMPL_LINK_NOARG_TYPED(SvxPostItDialog, PrevHdl, Button*, void)
 {
-    aPrevHdlLink.Call( this );
+    aPrevHdlLink.Call( *this );
 }
 
 IMPL_LINK_NOARG_TYPED(SvxPostItDialog, NextHdl, Button*, void)
 {
-    aNextHdlLink.Call( this );
+    aNextHdlLink.Call( *this );
 }
 
 IMPL_LINK_NOARG_TYPED(SvxPostItDialog, Stamp, Button*, void)
