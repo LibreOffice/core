@@ -139,6 +139,9 @@ protected:
     /// Output SwTextNode is depending on outline export mode
     virtual void OutputTextNode(const SwTextNode&) SAL_OVERRIDE;
 
+    /// Output SwEndNode
+    virtual void OutputEndNode(const SwEndNode&) SAL_OVERRIDE;
+
     /// Output SwGrfNode
     virtual void OutputGrfNode(const SwGrfNode&) SAL_OVERRIDE;
 

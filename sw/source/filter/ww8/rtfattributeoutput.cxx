@@ -316,12 +316,12 @@ void RtfAttributeOutput::EmptyParagraph()
 
 void RtfAttributeOutput::SectionBreaks(const SwNode& rNode)
 {
+    SwNodeIndex aNextIndex(rNode, 1);
     if (rNode.IsTextNode())
     {
         OSL_ENSURE(m_aStyles.getLength() == 0, "m_aStyles is not empty");
 
         // output page/section breaks
-        SwNodeIndex aNextIndex(rNode, 1);
         m_rExport.Strm().WriteCharPtr(m_aSectionBreaks.makeStringAndClear().getStr());
         m_bBufferSectionBreaks = true;
 
@@ -343,6 +343,17 @@ void RtfAttributeOutput::SectionBreaks(const SwNode& rNode)
             m_rExport.OutputSectionBreaks(&(pFormat->GetAttrSet()), *pTableNode);
         }
         m_bBufferSectionBreaks = false;
+    }
+    else if (rNode.IsEndNode())
+    {
+        // End of something: make sure that it's the end of a table.
+        assert(rNode.StartOfSectionNode()->IsTableNode());
+        if (aNextIndex.GetNode().IsTextNode())
+        {
+            // Handle section break between a table and a text node following it.
+            const SwTextNode* pTextNode = aNextIndex.GetNode().GetTextNode();
+            m_rExport.OutputSectionBreaks(pTextNode->GetpSwAttrSet(), *pTextNode);
+        }
     }
 }
 

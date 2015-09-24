@@ -936,6 +936,13 @@ DECLARE_RTFEXPORT_TEST(testTdf90421, "tdf90421.fodt")
     }
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf92521, "tdf92521.odt")
+{
+    // There should be a page break that's in the middle of the document: right after the table.
+    // But there wasn't, so this was 1.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

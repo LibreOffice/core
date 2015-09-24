@@ -772,6 +772,13 @@ bool RtfExport::DisallowInheritingOutlineNumbering(const SwFormat& rFormat)
     return bRet;
 }
 
+void RtfExport::OutputEndNode(const SwEndNode& rEndNode)
+{
+    if (TXT_MAINTEXT == m_nTextTyp && rEndNode.StartOfSectionNode()->IsTableNode())
+        // End node of a table: see if a section break should be written after the table.
+        AttrOutput().SectionBreaks(rEndNode);
+}
+
 void RtfExport::OutputGrfNode(const SwGrfNode&)
 {
     /* noop, see RtfAttributeOutput::FlyFrameGraphic */
