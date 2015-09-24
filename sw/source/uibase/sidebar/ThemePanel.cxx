@@ -401,17 +401,39 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev(*Application::GetDefaultDevice());
     sal_Int32 nScaleFactor = pVirtualDev->GetDPIScaleFactor();
-    long BORDER = 2 * nScaleFactor;
-    long SIZE = 12 * nScaleFactor;
+    long BORDER = 3 * nScaleFactor;
+    long SIZE = 14 * nScaleFactor;
+    long LABEL_HEIGHT = 16 * nScaleFactor;
+    long LABEL_TEXT_HEIGHT = 14 * nScaleFactor;
 
-    Size aSize(BORDER * 7 + SIZE * 6, BORDER * 3 + SIZE * 2);
+    Size aSize(BORDER * 7 + SIZE * 6 + BORDER * 2, BORDER * 3 + SIZE * 2 + LABEL_HEIGHT);
     pVirtualDev->SetOutputSizePixel(aSize);
+    pVirtualDev->SetBackground(Wallpaper(Application::GetSettings().GetStyleSettings().GetFaceColor()));
+    pVirtualDev->Erase();
 
     long x = BORDER;
-    long y1 = BORDER;
+    long y1 = BORDER + LABEL_HEIGHT;
     long y2 = y1 + SIZE + BORDER;
 
     pVirtualDev->SetLineColor(COL_LIGHTGRAY);
+    pVirtualDev->SetFillColor(COL_LIGHTGRAY);
+    Rectangle aNameRect(Point(0, 0), Size(aSize.Width(), LABEL_HEIGHT));
+    pVirtualDev->DrawRect(aNameRect);
+
+    vcl::Font aFont;
+    OUString aName = rColorSet.getName();
+    aFont.SetSize(Size(0, LABEL_TEXT_HEIGHT));
+    pVirtualDev->SetFont(aFont);
+
+    Size aTextSize(pVirtualDev->GetTextWidth(aName), pVirtualDev->GetTextHeight());
+
+    Point aPoint((aNameRect.GetWidth()  / 2.0) - (aTextSize.Width()  / 2.0),
+                 (aNameRect.GetHeight() / 2.0) - (aTextSize.Height() / 2.0));
+
+    pVirtualDev->DrawText(aPoint, aName);
+
+    pVirtualDev->SetLineColor(COL_LIGHTGRAY);
+    pVirtualDev->SetFillColor();
 
     for (sal_uInt32 i = 0; i < 12; i += 2)
     {
@@ -422,6 +444,8 @@ BitmapEx GenerateColorPreview(const svx::ColorSet& rColorSet)
         pVirtualDev->DrawRect(Rectangle(x, y2, x + SIZE, y2 + SIZE));
 
         x += SIZE + BORDER;
+        if (i == 2 || i == 8)
+            x += BORDER;
     }
 
     return pVirtualDev->GetBitmapEx(Point(), aSize);
@@ -456,6 +480,7 @@ ThemePanel::ThemePanel(vcl::Window* pParent,
     get(mpValueSetColors, "valueset_colors");
     get(mpApplyButton, "apply");
 
+    mpValueSetColors->SetColor(Application::GetSettings().GetStyleSettings().GetFaceColor());
     mpValueSetColors->SetColCount(2);
     mpValueSetColors->SetLineCount(4);
 
