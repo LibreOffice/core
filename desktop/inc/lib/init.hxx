@@ -6,6 +6,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#ifndef INCLUDED_DESKTOP_INC_LIB_INIT_HXX
+#define INCLUDED_DESKTOP_INC_LIB_INIT_HXX
+
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -22,5 +26,7 @@ namespace desktop {
         ~LibLODocument_Impl();
     };
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
