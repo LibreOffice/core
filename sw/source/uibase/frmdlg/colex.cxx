@@ -210,100 +210,100 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
                             const bool bSecond, const bool bEnabled)
 {
     SwPageExample::DrawPage(rRenderContext, rOrg, bSecond, bEnabled);
-    sal_uInt16 nColumnCount;
-    if (pColMgr && 0 != (nColumnCount = pColMgr->GetCount()))
+    if (!pColMgr)
+        return;
+    sal_uInt16 nColumnCount = pColMgr->GetCount();
+    if (!nColumnCount)
+        return;
+
+    long nL = GetLeft();
+    long nR = GetRight();
+
+    if (GetUsage() == SVX_PAGE_MIRROR && !bSecond)
     {
-        long nL = GetLeft();
-        long nR = GetRight();
+        // swap for mirrored
+        nL = GetRight();
+        nR = GetLeft();
+    }
 
-        if (GetUsage() == SVX_PAGE_MIRROR && !bSecond)
+    rRenderContext.SetFillColor(Color(COL_LIGHTGRAY));
+    Rectangle aRect;
+    aRect.Right() = rOrg.X() + GetSize().Width() - nR;
+    aRect.Left()  = rOrg.X() + nL;
+    aRect.Top()   = rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist();
+    aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist();
+    rRenderContext.DrawRect(aRect);
+
+    //UUUU
+    const Rectangle aDefineRect(aRect);
+
+    //UUUU
+    const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes = getPageFillAttributes();
+
+    if (!rFillAttributes.get() || !rFillAttributes->isUsed())
+    {
+        //UUUU If there is no fill, use fallback color
+        const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+        const Color& rFieldColor = rStyleSettings.GetFieldColor();
+
+        setPageFillAttributes(
+            drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
+                new drawinglayer::attribute::SdrAllFillAttributesHelper(rFieldColor)));
+    }
+
+    // #97495# make sure that the automatic column width's are always equal
+    bool bAutoWidth = pColMgr->IsAutoWidth();
+    sal_Int32 nAutoColWidth = 0;
+    if (bAutoWidth)
+    {
+        sal_Int32 nColumnWidthSum = 0;
+        for (sal_uInt16 i = 0; i < nColumnCount; ++i)
+            nColumnWidthSum += pColMgr->GetColWidth( i );
+        nAutoColWidth = nColumnWidthSum / nColumnCount;
+    }
+
+    for (sal_uInt16 i = 0; i < nColumnCount; ++i)
+    {
+        if (!bAutoWidth)
+            nAutoColWidth = pColMgr->GetColWidth(i);
+        aRect.Right() = aRect.Left() + nAutoColWidth;
+
+        //UUUU use primitive draw command
+        drawFillAttributes(rRenderContext, getPageFillAttributes(), aRect, aDefineRect);
+
+        if (i < nColumnCount - 1)
+            aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
+    }
+    if (pColMgr->HasLine())
+    {
+        Point aUp(rOrg.X() + nL, rOrg.Y() + GetTop());
+        Point aDown(rOrg.X() + nL,
+                    rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist());
+
+        if (pColMgr->GetLineHeightPercent() != 100)
         {
-            // rotate for mirrored
-            nL = GetRight();
-            nR = GetLeft();
-        }
-
-        rRenderContext.SetFillColor(Color(COL_LIGHTGRAY));
-        Rectangle aRect;
-        aRect.Right() = rOrg.X() + GetSize().Width() - nR;
-        aRect.Left()  = rOrg.X() + nL;
-        aRect.Top()   = rOrg.Y() + GetTop() + GetHdHeight() + GetHdDist();
-        aRect.Bottom()= rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist();
-        rRenderContext.DrawRect(aRect);
-
-        //UUUU
-        const Rectangle aDefineRect(aRect);
-
-        //UUUU
-        const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes = getPageFillAttributes();
-
-        if (!rFillAttributes.get() || !rFillAttributes->isUsed())
-        {
-            //UUUU If there is no fill, use fallback color
-            const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-            const Color& rFieldColor = rStyleSettings.GetFieldColor();
-
-            setPageFillAttributes(
-                drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
-                    new drawinglayer::attribute::SdrAllFillAttributesHelper(rFieldColor)));
-        }
-
-        // #97495# make sure that the automatic column width's are always equal
-        bool bAutoWidth = pColMgr->IsAutoWidth();
-        sal_Int32 nAutoColWidth = 0;
-        if (bAutoWidth)
-        {
-            sal_Int32 nColumnWidthSum = 0;
-            sal_uInt16 i;
-            for (i = 0; i < nColumnCount; ++i)
-                nColumnWidthSum += pColMgr->GetColWidth( i );
-            nAutoColWidth = nColumnWidthSum / nColumnCount;
-        }
-
-        sal_uInt16 i;
-        for (i = 0; i < nColumnCount; i++)
-        {
-            if (!bAutoWidth)
-                nAutoColWidth = pColMgr->GetColWidth(i);
-            aRect.Right() = aRect.Left() + nAutoColWidth;
-
-            //UUUU use primitive draw command
-            drawFillAttributes(rRenderContext, getPageFillAttributes(), aRect, aDefineRect);
-
-            if (i < nColumnCount - 1)
-                aRect.Left() = aRect.Right() + pColMgr->GetGutterWidth(i);
-        }
-        if (pColMgr->HasLine())
-        {
-            Point aUp(rOrg.X() + nL, rOrg.Y() + GetTop());
-            Point aDown(rOrg.X() + nL,
-                        rOrg.Y() + GetSize().Height() - GetBottom() - GetFtHeight() - GetFtDist());
-
-            if (pColMgr->GetLineHeightPercent() != 100)
+            long nLength = aDown.Y() - aUp.Y();
+            nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
+            switch (pColMgr->GetAdjust())
             {
-                long nLength = aDown.Y() - aUp.Y();
-                nLength -= nLength * pColMgr->GetLineHeightPercent() / 100;
-                switch (pColMgr->GetAdjust())
-                {
-                    case COLADJ_BOTTOM: aUp.Y() += nLength; break;
-                    case COLADJ_TOP: aDown.Y() -= nLength; break;
-                    case COLADJ_CENTER:
-                        aUp.Y() += nLength / 2;
-                        aDown.Y() -= nLength / 2;
-                    break;
-                    default:; // prevent warning
-                }
+                case COLADJ_BOTTOM: aUp.Y() += nLength; break;
+                case COLADJ_TOP: aDown.Y() -= nLength; break;
+                case COLADJ_CENTER:
+                    aUp.Y() += nLength / 2;
+                    aDown.Y() -= nLength / 2;
+                break;
+                default:; // prevent warning
             }
+        }
 
-            for (i = 0; i < nColumnCount -  1; i++)
-            {
-                int nGutter = pColMgr->GetGutterWidth(i);
-                int nDist = pColMgr->GetColWidth( i ) + nGutter;
-                nDist -= (i == 0) ? nGutter / 2 : 0;
-                aUp.X() += nDist;
-                aDown.X() += nDist;
-                rRenderContext.DrawLine(aUp, aDown);
-            }
+        for (sal_uInt16 i = 0; i < nColumnCount -  1; ++i)
+        {
+            int nGutter = pColMgr->GetGutterWidth(i);
+            int nDist = pColMgr->GetColWidth( i ) + nGutter;
+            nDist -= (i == 0) ? nGutter / 2 : 0;
+            aUp.X() += nDist;
+            aDown.X() += nDist;
+            rRenderContext.DrawLine(aUp, aDown);
         }
     }
 }
