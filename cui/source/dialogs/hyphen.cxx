@@ -428,10 +428,9 @@ IMPL_LINK_NOARG_TYPED(SvxHyphenWordDialog, Right_Impl, Button*, void)
 }
 
 
-IMPL_LINK_NOARG(SvxHyphenWordDialog, GetFocusHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyphenWordDialog, GetFocusHdl_Impl, Control&, void)
 {
     m_pWordEdit->SetSelection( Selection( m_nOldPos, m_nOldPos + 1 ) );
-    return 0;
 }
 
 

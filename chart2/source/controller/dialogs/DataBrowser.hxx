@@ -180,7 +180,7 @@ private:
     OUString GetColString( sal_Int32 nColumnId ) const;
     static OUString GetRowString( sal_Int32 nRow );
 
-    DECL_LINK( SeriesHeaderGotFocus, impl::SeriesHeaderEdit* );
+    DECL_LINK_TYPED( SeriesHeaderGotFocus, Control&, void );
     DECL_LINK_TYPED( SeriesHeaderChanged,  impl::SeriesHeaderEdit*, void );
 
     DataBrowser( const DataBrowser & ) SAL_DELETED_FUNCTION;

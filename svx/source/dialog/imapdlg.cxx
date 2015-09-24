@@ -345,7 +345,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
 
     if(nNewItemId == mnApplyId)
     {
-        URLLoseFocusHdl( NULL );
+        URLLoseFocusHdl( *m_pURLBox );
         SfxBoolItem aBoolItem( SID_IMAP_EXEC, true );
         GetBindings().GetDispatcher()->Execute(
             SID_IMAP_EXEC, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aBoolItem, 0L );
@@ -408,7 +408,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     }
     else if(nNewItemId == mnActiveId)
     {
-        URLLoseFocusHdl( NULL );
+        URLLoseFocusHdl( *m_pURLBox );
         bool bNewState = !pTbx->IsItemChecked( TBI_ACTIVE );
         pTbx->CheckItem( TBI_ACTIVE, bNewState );
         pIMapWnd->SetCurrentObjState( !bNewState );
@@ -441,12 +441,12 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
     }
     else if(nNewItemId == mnUndoId)
     {
-        URLLoseFocusHdl( NULL );
+        URLLoseFocusHdl( *m_pURLBox );
         pIMapWnd->GetSdrModel()->Undo();
     }
     else if(nNewItemId == mnRedoId)
     {
-        URLLoseFocusHdl( NULL );
+        URLLoseFocusHdl( *m_pURLBox );
         pIMapWnd->GetSdrModel()->Redo();
     }
 }
@@ -695,7 +695,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLModifyHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl)
+IMPL_LINK_NOARG_TYPED(SvxIMapDlg, URLLoseFocusHdl, Control&, void)
 {
     NotifyInfo        aNewInfo;
     const OUString    aURLText( m_pURLBox->GetText() );
@@ -719,8 +719,6 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl)
         aNewInfo.aMarkTarget = aTargetText;
 
     pIMapWnd->ReplaceActualIMapInfo( aNewInfo );
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxIMapDlg, UpdateHdl, Idle *, void)

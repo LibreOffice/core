@@ -112,7 +112,7 @@ void ScRandomNumberGeneratorDialog::Init()
     mpButtonClose->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, CloseClicked ) );
     mpButtonApply->SetClickHdl( LINK( this, ScRandomNumberGeneratorDialog, ApplyClicked ) );
 
-    Link<> aLink = LINK( this, ScRandomNumberGeneratorDialog, GetFocusHandler );
+    Link<Control&,void> aLink = LINK( this, ScRandomNumberGeneratorDialog, GetFocusHandler );
     mpInputRangeEdit->SetGetFocusHdl( aLink );
     mpInputRangeButton->SetGetFocusHdl( aLink );
 
@@ -342,23 +342,20 @@ IMPL_LINK_NOARG_TYPED( ScRandomNumberGeneratorDialog, CloseClicked, Button*, voi
     Close();
 }
 
-IMPL_LINK( ScRandomNumberGeneratorDialog, GetFocusHandler, Control*, pCtrl )
+IMPL_LINK_TYPED( ScRandomNumberGeneratorDialog, GetFocusHandler, Control&, rCtrl, void )
 {
     Edit* pEdit = NULL;
 
-    if( (pCtrl == static_cast<Control*>(mpInputRangeEdit)) || (pCtrl == static_cast<Control*>(mpInputRangeButton)) )
+    if( (&rCtrl == static_cast<Control*>(mpInputRangeEdit)) || (&rCtrl == static_cast<Control*>(mpInputRangeButton)) )
         pEdit = mpInputRangeEdit;
 
     if( pEdit )
         pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, LoseFocusHandler)
+IMPL_LINK_NOARG_TYPED(ScRandomNumberGeneratorDialog, LoseFocusHandler, Control&, void)
 {
     mbDialogLostFocus = !IsActive();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, InputRangeModified)

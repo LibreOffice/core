@@ -1569,31 +1569,23 @@ IMPL_LINK_TYPED( CustomPropertiesWindow, RemoveHdl, Button*, pBtn, void )
     m_aRemovedHdl.Call(0);
 }
 
-IMPL_LINK( CustomPropertiesWindow, EditLoseFocusHdl, CustomPropertiesEdit*, pEdit )
+IMPL_LINK_TYPED( CustomPropertiesWindow, EditLoseFocusHdl, Control&, rControl, void )
 {
-    if ( pEdit )
+    CustomPropertiesEdit* pEdit = static_cast<CustomPropertiesEdit*>(&rControl);
+    CustomPropertyLine* pLine = pEdit->GetLine();
+    if ( !pLine->m_bTypeLostFocus )
     {
-        CustomPropertyLine* pLine = pEdit->GetLine();
-        if ( !pLine->m_bTypeLostFocus )
-        {
-            m_pCurrentLine = pLine;
-            m_aEditLoseFocusIdle.Start();
-        }
-        else
-            pLine->m_bTypeLostFocus = false;
+        m_pCurrentLine = pLine;
+        m_aEditLoseFocusIdle.Start();
     }
-    return 0;
+    else
+        pLine->m_bTypeLostFocus = false;
 }
 
-IMPL_LINK( CustomPropertiesWindow, BoxLoseFocusHdl, CustomPropertiesTypeBox*, pBox )
+IMPL_LINK_TYPED( CustomPropertiesWindow, BoxLoseFocusHdl, Control&, rControl, void )
 {
-    if ( pBox )
-    {
-        m_pCurrentLine = pBox->GetLine();
-        m_aBoxLoseFocusIdle.Start();
-    }
-
-    return 0;
+    m_pCurrentLine = static_cast<CustomPropertiesTypeBox*>(&rControl)->GetLine();
+    m_aBoxLoseFocusIdle.Start();
 }
 
 IMPL_LINK_NOARG_TYPED(CustomPropertiesWindow, EditTimeoutHdl, Idle *, void)

@@ -124,8 +124,8 @@ private:
     OUString                    maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
-    DECL_LINK(EditSetFocusHdl, void *);
-    DECL_LINK( KillFocusHdl, vcl::Window *);
+    DECL_LINK_TYPED( EditSetFocusHdl, Control&, void );
+    DECL_LINK_TYPED( KillFocusHdl, Control&, void );
     void    OnClick( Button *pBtn );
     VclPtr<formula::RefEdit>           m_pRefEdit;
 public:

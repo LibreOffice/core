@@ -576,7 +576,7 @@ void ScTPValidationValue::RemoveRefDlg()
     }
 }
 
-IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl)
+IMPL_LINK_NOARG_TYPED(ScTPValidationValue, EditSetFocusHdl, Control&, void)
 {
     const sal_Int32 nPos = m_pLbAllow->GetSelectEntryPos();
 
@@ -584,12 +584,11 @@ IMPL_LINK_NOARG(ScTPValidationValue, EditSetFocusHdl)
     {
         SetupRefDlg();
     }
-
-    return 0;
 }
 
-IMPL_LINK( ScTPValidationValue, KillFocusHdl, vcl::Window *, pWnd )
+IMPL_LINK_TYPED( ScTPValidationValue, KillFocusHdl, Control&, rControl, void )
 {
+    vcl::Window* pWnd = static_cast<vcl::Window*>(&rControl);
     if( pWnd == m_pRefEdit || pWnd == m_pBtnRef )
         if( ScValidationDlg *pValidationDlg = GetValidationDlg() )
             if ( (pValidationDlg->IsActive() || pValidationDlg->IsChildFocus() ) && !pValidationDlg->IsRefInputting() )
@@ -597,8 +596,6 @@ IMPL_LINK( ScTPValidationValue, KillFocusHdl, vcl::Window *, pWnd )
                 {
                     RemoveRefDlg();
                 }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)

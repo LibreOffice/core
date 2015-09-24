@@ -126,7 +126,7 @@ namespace pcr
 
             if (nKey == KEY_RETURN && !aKeyCode.IsShift())
             {
-                LoseFocusHdl(m_pControlWindow);
+                notifyModifiedValue();
                 impl_activateNextControl_nothrow();
                 return true;
             }
@@ -143,7 +143,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( ControlHelper, GetFocusHdl, vcl::Window*, /*_pWin*/ )
+    IMPL_LINK_NOARG_TYPED( ControlHelper, GetFocusHdl, Control&, void )
     {
         try
         {
@@ -154,17 +154,15 @@ namespace pcr
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return 0;
     }
 
 
-    IMPL_LINK( ControlHelper, LoseFocusHdl, vcl::Window*, /*_pWin*/ )
+    IMPL_LINK_NOARG_TYPED( ControlHelper, LoseFocusHdl, Control&, void )
     {
         // TODO/UNOize: should this be outside the default control's implementations? If somebody
         // has an own control implementation, which does *not* do this - would this be allowed?
         // If not, then we must move this logic out of here.
         notifyModifiedValue();
-        return 0;
     }
 
 

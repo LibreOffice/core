@@ -98,8 +98,8 @@ private:
     VclPtr<RefButton>      pRefBtn;
 
     DECL_LINK_TYPED( FxBtnClickHdl, Button*, void );
-    DECL_LINK(  FxBtnFocusHdl, ImageButton* );
-    DECL_LINK(  EdFocusHdl, ArgEdit* );
+    DECL_LINK_TYPED( FxBtnFocusHdl, Control&, void );
+    DECL_LINK_TYPED( EdFocusHdl, Control&, void );
     DECL_LINK(  EdModifyHdl,ArgEdit* );
 
 protected:

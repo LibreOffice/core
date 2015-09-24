@@ -557,14 +557,14 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(vcl::Window* pParent, const SfxItemSet&
 
     SetExchangeSupport();
 
-    Link<> aLk = LINK(this, SvxSwPosSizeTabPage, RangeModifyHdl);
-    m_pWidthMF->SetLoseFocusHdl( aLk );
-    m_pHeightMF->SetLoseFocusHdl( aLk );
-    m_pHoriByMF->SetLoseFocusHdl( aLk );
-    m_pVertByMF->SetLoseFocusHdl( aLk );
+    Link<Control&,void> aLk3 = LINK(this, SvxSwPosSizeTabPage, RangeModifyHdl);
+    m_pWidthMF->SetLoseFocusHdl( aLk3 );
+    m_pHeightMF->SetLoseFocusHdl( aLk3 );
+    m_pHoriByMF->SetLoseFocusHdl( aLk3 );
+    m_pVertByMF->SetLoseFocusHdl( aLk3 );
     m_pFollowCB->SetClickHdl( LINK(this, SvxSwPosSizeTabPage, RangeModifyClickHdl) );
 
-    aLk = LINK(this, SvxSwPosSizeTabPage, ModifyHdl);
+    Link<> aLk = LINK(this, SvxSwPosSizeTabPage, ModifyHdl);
     m_pWidthMF->SetModifyHdl( aLk );
     m_pHeightMF->SetModifyHdl( aLk );
     m_pHoriByMF->SetModifyHdl( aLk );
@@ -1075,7 +1075,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
         // #i18732#
         m_pFollowCB->SaveValue();
 
-        RangeModifyHdl(m_pWidthMF);  // initially set maximum values
+        RangeModifyHdl(*m_pWidthMF);  // initially set maximum values
     }
 }
 
@@ -1138,12 +1138,12 @@ short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
 
 IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, RangeModifyClickHdl, Button*, void)
 {
-    RangeModifyHdl(NULL);
+    RangeModifyHdl(*m_pWidthMF);
 }
-IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
+IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, RangeModifyHdl, Control&, void)
 {
     if(m_bPositioningDisabled)
-        return 0;
+        return;
     SvxSwFrameValidation        aVal;
 
     aVal.nAnchorType = GetAnchorType();
@@ -1220,8 +1220,6 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
     m_pVertByMF->SetMax(m_pVertByMF->Normalize(aVal.nMaxVPos), FUNIT_TWIP);
     if ( aVal.nVPos != nAtVertPosVal )
         m_pVertByMF->SetValue(m_pVertByMF->Normalize(aVal.nVPos), FUNIT_TWIP);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, AnchorTypeHdl, Button*, void)
@@ -1235,7 +1233,7 @@ IMPL_LINK_NOARG_TYPED(SvxSwPosSizeTabPage, AnchorTypeHdl, Button*, void)
     short nId = GetAnchorType();
 
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
-    RangeModifyHdl(0);
+    RangeModifyHdl(*m_pWidthMF);
 
     if(m_bHtmlMode)
     {
@@ -1277,7 +1275,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
         }
     }
     if (pLB)    // only if the hanlder has been called by a change of the controller
-        RangeModifyHdl(0);
+        RangeModifyHdl(*m_pWidthMF);
 
     return 0;
 
@@ -1307,7 +1305,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
         m_pVertByFT->Enable( bEnable );
     }
 
-    RangeModifyHdl( 0 );
+    RangeModifyHdl( *m_pWidthMF );
 
     short nRel = 0;
     if (pLB->GetSelectEntryCount())

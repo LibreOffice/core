@@ -299,7 +299,7 @@ private:
     DECL_LINK_TYPED(    FitToLineHdl_Impl, Button*, void );
     DECL_LINK(          KerningSelectHdl_Impl, void *);
     DECL_LINK(          KerningModifyHdl_Impl, void *);
-    DECL_LINK(          LoseFocusHdl_Impl, MetricField* );
+    DECL_LINK_TYPED(    LoseFocusHdl_Impl, Control&, void );
     DECL_LINK(          ScaleWidthModifyHdl_Impl, void *);
 
 public:

@@ -69,10 +69,10 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
     mpEdSepArrayCol->SetModifyHdl(aLink);
     mpEdSepArrayRow->SetModifyHdl(aLink);
 
-    aLink = LINK( this, ScTpFormulaOptions, SepEditOnFocusHdl );
-    mpEdSepFuncArg->SetGetFocusHdl(aLink);
-    mpEdSepArrayCol->SetGetFocusHdl(aLink);
-    mpEdSepArrayRow->SetGetFocusHdl(aLink);
+    Link<Control&,void> aLink3 = LINK( this, ScTpFormulaOptions, SepEditOnFocusHdl );
+    mpEdSepFuncArg->SetGetFocusHdl(aLink3);
+    mpEdSepArrayCol->SetGetFocusHdl(aLink3);
+    mpEdSepArrayRow->SetGetFocusHdl(aLink3);
 
     // Get the decimal separator for current locale.
     OUString aSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
@@ -229,10 +229,9 @@ IMPL_LINK( ScTpFormulaOptions, SepModifyHdl, Edit*, pEdit )
     return 0;
 }
 
-IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, Edit*, pEdit )
+IMPL_LINK_TYPED( ScTpFormulaOptions, SepEditOnFocusHdl, Control&, rControl, void )
 {
-    OnFocusSeparatorInput(pEdit);
-    return 0;
+    OnFocusSeparatorInput(static_cast<Edit*>(&rControl));
 }
 
 VclPtr<SfxTabPage> ScTpFormulaOptions::Create(vcl::Window* pParent, const SfxItemSet* rCoreSet)

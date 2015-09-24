@@ -102,7 +102,7 @@ public:
     virtual ~SvxStdParagraphTabPage();
     virtual void dispose() SAL_OVERRIDE;
 
-    DECL_LINK(ELRLoseFocusHdl, void *);
+    DECL_LINK_TYPED(ELRLoseFocusHdl, Control&, void);
 
     static VclPtr<SfxTabPage>      Create( vcl::Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16* GetRanges() { return pStdRanges; }

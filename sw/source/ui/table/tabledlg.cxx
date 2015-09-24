@@ -145,7 +145,7 @@ void  SwFormatTablePage::Init()
     m_pRightBtn->SetClickHdl( aLk2 );
     m_pCenterBtn->SetClickHdl( aLk2 );
 
-    Link<> aLk = LINK( this, SwFormatTablePage, UpDownLoseFocusHdl );
+    Link<> aLk = LINK( this, SwFormatTablePage, UpDownHdl );
     m_pTopMF->SetUpHdl( aLk );
     m_pBottomMF->SetUpHdl( aLk );
     m_aRightMF.SetUpHdl( aLk );
@@ -158,11 +158,12 @@ void  SwFormatTablePage::Init()
     m_aLeftMF.SetDownHdl( aLk );
     m_aWidthMF.SetDownHdl( aLk );
 
-    m_pTopMF->SetLoseFocusHdl( aLk );
-    m_pBottomMF->SetLoseFocusHdl( aLk );
-    m_aRightMF.SetLoseFocusHdl( aLk );
-    m_aLeftMF.SetLoseFocusHdl( aLk );
-    m_aWidthMF.SetLoseFocusHdl( aLk );
+    Link<Control&,void> aLk3 = LINK( this, SwFormatTablePage, LoseFocusHdl );
+    m_pTopMF->SetLoseFocusHdl( aLk3 );
+    m_pBottomMF->SetLoseFocusHdl( aLk3 );
+    m_aRightMF.SetLoseFocusHdl( aLk3 );
+    m_aLeftMF.SetLoseFocusHdl( aLk3 );
+    m_aWidthMF.SetLoseFocusHdl( aLk3 );
 
     m_pRelWidthCB->SetClickHdl(LINK( this, SwFormatTablePage, RelWidthClickHdl ));
 }
@@ -283,7 +284,11 @@ void SwFormatTablePage::RightModify()
     }
 }
 
-IMPL_LINK( SwFormatTablePage, UpDownLoseFocusHdl, MetricField *, pEdit )
+IMPL_LINK_TYPED( SwFormatTablePage, LoseFocusHdl, Control&, rControl, void )
+{
+    UpDownHdl(static_cast<MetricField*>(&rControl));
+}
+IMPL_LINK( SwFormatTablePage, UpDownHdl, MetricField *, pEdit )
 {
     if( m_aRightMF.get() == pEdit)
         RightModify();
@@ -845,7 +850,7 @@ void  SwTableColumnPage::Init(bool bWeb)
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
     Link<> aLkUp = LINK( this, SwTableColumnPage, UpHdl );
     Link<> aLkDown = LINK( this, SwTableColumnPage, DownHdl );
-    Link<> aLkLF = LINK( this, SwTableColumnPage, LoseFocusHdl );
+    Link<Control&,void> aLkLF = LINK( this, SwTableColumnPage, LoseFocusHdl );
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
     {
         aValueTable[i] = i;
@@ -916,14 +921,14 @@ IMPL_LINK( SwTableColumnPage, DownHdl, MetricField*, pEdit )
     return 0;
 }
 
-IMPL_LINK( SwTableColumnPage, LoseFocusHdl, MetricField*, pEdit )
+IMPL_LINK_TYPED( SwTableColumnPage, LoseFocusHdl, Control&, rControl, void )
 {
+    MetricField* pEdit = static_cast<MetricField*>(&rControl);
     if (pEdit->IsModified())
     {
         bModified = true;
         ModifyHdl( pEdit );
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SwTableColumnPage, ModeHdl, Button*, pBox, void )
@@ -943,7 +948,7 @@ bool  SwTableColumnPage::FillItemSet( SfxItemSet* )
     {
         if (m_aFieldArr[i].HasFocus())
         {
-            LoseFocusHdl(m_aFieldArr[i].get());
+            LoseFocusHdl(*m_aFieldArr[i].get());
             break;
         }
     }

@@ -192,7 +192,7 @@ private:
     DECL_LINK_TYPED( DoubleClickHdl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( SelectHdl, SvTreeListBox*, void );
 
-    DECL_LINK( FileNameGetFocusHdl, void * );
+    DECL_LINK_TYPED( FileNameGetFocusHdl, Control&, void );
     DECL_LINK( FileNameModifyHdl, void * );
 
     DECL_LINK_TYPED( SplitHdl, Splitter*, void );

@@ -28,6 +28,7 @@
 #include <vcl/window.hxx>
 
 class NotifyEvent;
+class Control;
 
 namespace pcr
 {
@@ -152,8 +153,8 @@ namespace pcr
 
         /// may be used by derived classes, they forward the event to the PropCtrListener
         DECL_LINK( ModifiedHdl, vcl::Window* );
-        DECL_LINK( GetFocusHdl, vcl::Window* );
-        DECL_LINK( LoseFocusHdl, vcl::Window* );
+        DECL_LINK_TYPED( GetFocusHdl, Control&, void );
+        DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
 
     private:
         /** fail-safe wrapper around calling our context's activateNextControl

@@ -37,7 +37,7 @@ private:
 
     DECL_LINK(NumModifiedHdl, void *);
     DECL_LINK( PrefixModifiedHdl, Edit* );
-    DECL_LINK( PrefixEditOnFocusHdl, Edit* );
+    DECL_LINK_TYPED( PrefixEditOnFocusHdl, Control&, void );
 
 private:
     VclPtr<NumericField> m_pEdNSheets;

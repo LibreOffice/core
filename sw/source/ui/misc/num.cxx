@@ -116,15 +116,16 @@ SwNumPositionTabPage::SwNumPositionTabPage(vcl::Window* pParent,
     m_pAlign2FT->SetText( m_pAlignFT->GetText() );
 
     Link<> aLk = LINK(this, SwNumPositionTabPage, DistanceHdl);
+    Link<Control&,void> aLk2 = LINK(this, SwNumPositionTabPage, DistanceLoseFocusHdl);
     m_pDistBorderMF->SetUpHdl(aLk);
     m_pDistNumMF->SetUpHdl(aLk);
     m_pIndentMF->SetUpHdl(aLk);
     m_pDistBorderMF->SetDownHdl(aLk);
     m_pDistNumMF->SetDownHdl(aLk);
     m_pIndentMF->SetDownHdl(aLk);
-    m_pDistBorderMF->SetLoseFocusHdl(aLk);
-    m_pDistNumMF->SetLoseFocusHdl(aLk);
-    m_pIndentMF->SetLoseFocusHdl(aLk);
+    m_pDistBorderMF->SetLoseFocusHdl(aLk2);
+    m_pDistNumMF->SetLoseFocusHdl(aLk2);
+    m_pIndentMF->SetLoseFocusHdl(aLk2);
 
     m_pLabelFollowedByLB->SetDropDownLineCount( m_pLabelFollowedByLB->GetEntryCount() );
     m_pLabelFollowedByLB->SetSelectHdl( LINK(this, SwNumPositionTabPage, LabelFollowedByHdl_Impl) );
@@ -132,17 +133,17 @@ SwNumPositionTabPage::SwNumPositionTabPage(vcl::Window* pParent,
     aLk = LINK(this, SwNumPositionTabPage, ListtabPosHdl_Impl);
     m_pListtabMF->SetUpHdl(aLk);
     m_pListtabMF->SetDownHdl(aLk);
-    m_pListtabMF->SetLoseFocusHdl(aLk);
+    m_pListtabMF->SetLoseFocusHdl(aLk2);
 
     aLk = LINK(this, SwNumPositionTabPage, AlignAtHdl_Impl);
     m_pAlignedAtMF->SetUpHdl(aLk);
     m_pAlignedAtMF->SetDownHdl(aLk);
-    m_pAlignedAtMF->SetLoseFocusHdl(aLk);
+    m_pAlignedAtMF->SetLoseFocusHdl(aLk2);
 
     aLk = LINK(this, SwNumPositionTabPage, IndentAtHdl_Impl);
     m_pIndentAtMF->SetUpHdl(aLk);
     m_pIndentAtMF->SetDownHdl(aLk);
-    m_pIndentAtMF->SetLoseFocusHdl(aLk);
+    m_pIndentAtMF->SetLoseFocusHdl(aLk2);
 
     m_pLevelLB->SetSelectHdl(LINK(this, SwNumPositionTabPage, LevelHdl));
     m_pRelativeCB->SetClickHdl(LINK(this, SwNumPositionTabPage, RelativeHdl));
@@ -659,6 +660,10 @@ IMPL_LINK( SwNumPositionTabPage, LevelHdl, ListBox *, pBox )
     return 0;
 }
 
+IMPL_LINK_TYPED( SwNumPositionTabPage, DistanceLoseFocusHdl, Control&, rControl, void )
+{
+    DistanceHdl(static_cast<MetricField*>(&rControl));
+}
 IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pField )
 {
     if(bInInintControl)

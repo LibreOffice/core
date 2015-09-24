@@ -130,8 +130,9 @@ class SwFrmPage: public SfxTabPage
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
-    DECL_LINK(RangeModifyHdl, void *);
+    DECL_LINK_TYPED(RangeModifyLoseFocusHdl, Control&, void);
     DECL_LINK_TYPED(RangeModifyClickHdl, Button*, void);
+    void RangeModifyHdl();
     DECL_LINK_TYPED(AnchorTypeHdl, Button*, void);
     DECL_LINK( PosHdl, ListBox * );
     DECL_LINK( RelHdl, ListBox * );

@@ -60,6 +60,7 @@ private:
 
     DECL_LINK( TwoFigureHdl, NumericField* );
     DECL_LINK( TwoFigureConfigHdl, NumericField* );
+    DECL_LINK_TYPED( TwoFigureConfigFocusHdl, Control&, void );
 #ifdef WNT
     DECL_LINK( OnFileDlgToggled, void* );
 #endif

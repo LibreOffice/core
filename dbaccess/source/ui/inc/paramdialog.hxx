@@ -99,7 +99,8 @@ namespace dbaui
         DECL_LINK(OnValueModified, Control*);
         DECL_LINK(OnEntrySelected, ListBox*);
         DECL_LINK_TYPED(OnButtonClicked, Button*, void);
-        DECL_LINK(OnValueLoseFocus, Control*);
+        DECL_LINK_TYPED(OnValueLoseFocusHdl, Control&, void);
+        bool OnValueLoseFocus();
     };
 
 }   // namespace dbaui

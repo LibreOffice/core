@@ -118,7 +118,7 @@ namespace dbaui
         void            BuildWherePart();
 
     protected:
-        DECL_LINK( PredicateLoseFocus, Edit* );
+        DECL_LINK_TYPED( PredicateLoseFocus, Control&, void );
     };
 
 }

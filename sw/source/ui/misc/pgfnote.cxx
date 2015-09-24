@@ -64,7 +64,7 @@ IMPL_LINK_NOARG_TYPED(SwFootNotePage, HeightMetric, Button*, void)
 }
 
 // handler limit values
-IMPL_LINK_NOARG(SwFootNotePage, HeightModify)
+IMPL_LINK_NOARG_TYPED(SwFootNotePage, HeightModify, Control&, void)
 {
     m_pMaxHeightEdit->SetMax(m_pMaxHeightEdit->Normalize(lMaxHeight -
             (m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP)) +
@@ -82,7 +82,6 @@ IMPL_LINK_NOARG(SwFootNotePage, HeightModify)
             (m_pMaxHeightEdit->Denormalize(m_pMaxHeightEdit->GetValue(FUNIT_TWIP)) +
             m_pDistEdit->Denormalize(m_pDistEdit->GetValue(FUNIT_TWIP)))),
             FUNIT_TWIP);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl)
@@ -185,7 +184,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     }
     m_pMaxHeightPageBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightPage));
     m_pMaxHeightBtn->SetClickHdl(LINK(this,SwFootNotePage,HeightMetric));
-    Link<> aLk = LINK(this, SwFootNotePage, HeightModify);
+    Link<Control&,void> aLk = LINK(this, SwFootNotePage, HeightModify);
     m_pMaxHeightEdit->SetLoseFocusHdl( aLk );
     m_pDistEdit->SetLoseFocusHdl( aLk );
     m_pLineDistEdit->SetLoseFocusHdl( aLk );
@@ -359,7 +358,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     lMaxHeight /= 10;
 
     // set maximum values
-    HeightModify(0);
+    HeightModify(*m_pMaxHeightEdit);
 }
 
 SfxTabPage::sfxpg SwFootNotePage::DeactivatePage( SfxItemSet* _pSet)

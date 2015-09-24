@@ -285,20 +285,16 @@ IMPL_LINK_TYPED( ArgInput, FxBtnClickHdl, Button*, pBtn, void )
         FxClick();
 }
 
-IMPL_LINK( ArgInput, FxBtnFocusHdl, ImageButton*, pBtn )
+IMPL_LINK_TYPED( ArgInput, FxBtnFocusHdl, Control&, rControl, void )
 {
-    if(pBtn == pBtnFx)
+    if(&rControl == pBtnFx)
         FxFocus();
-
-    return 0;
 }
 
-IMPL_LINK( ArgInput, EdFocusHdl, ArgEdit*, pEd )
+IMPL_LINK_TYPED( ArgInput, EdFocusHdl, Control&, rControl, void )
 {
-    if(pEd == pEdArg)
+    if(&rControl == pEdArg)
         EdFocus();
-
-    return 0;
 }
 
 IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )

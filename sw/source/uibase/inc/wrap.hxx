@@ -86,6 +86,7 @@ class SwWrapTabPage: public SfxTabPage
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     DECL_LINK( RangeModifyHdl, MetricField * );
+    DECL_LINK_TYPED( RangeLoseFocusHdl, Control&, void );
     DECL_LINK_TYPED( WrapTypeHdl, Button *, void );
     DECL_LINK_TYPED( ContourHdl, Button *, void);
 

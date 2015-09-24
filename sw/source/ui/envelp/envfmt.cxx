@@ -156,12 +156,13 @@ SwEnvFormatPage::SwEnvFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pSizeWidthField->SetDownHdl( aLk );
     m_pSizeHeightField->SetDownHdl( aLk );
 
-    m_pAddrLeftField->SetLoseFocusHdl( aLk );
-    m_pAddrTopField->SetLoseFocusHdl( aLk );
-    m_pSendLeftField->SetLoseFocusHdl( aLk );
-    m_pSendTopField->SetLoseFocusHdl( aLk );
-    m_pSizeWidthField->SetLoseFocusHdl( aLk );
-    m_pSizeHeightField->SetLoseFocusHdl( aLk );
+    Link<Control&,void> aLk3 = LINK(this, SwEnvFormatPage, LoseFocusHdl);
+    m_pAddrLeftField->SetLoseFocusHdl( aLk3 );
+    m_pAddrTopField->SetLoseFocusHdl( aLk3 );
+    m_pSendLeftField->SetLoseFocusHdl( aLk3 );
+    m_pSendTopField->SetLoseFocusHdl( aLk3 );
+    m_pSizeWidthField->SetLoseFocusHdl( aLk3 );
+    m_pSizeHeightField->SetLoseFocusHdl( aLk3 );
 
     Link<MenuButton *, void> aLk2 = LINK(this, SwEnvFormatPage, EditHdl );
     m_pAddrEditButton->SetSelectHdl( aLk2 );
@@ -217,6 +218,10 @@ void SwEnvFormatPage::dispose()
 }
 
 
+IMPL_LINK_TYPED( SwEnvFormatPage, LoseFocusHdl, Control&, rControl, void )
+{
+    ModifyHdl(static_cast<Edit*>(&rControl));
+}
 IMPL_LINK( SwEnvFormatPage, ModifyHdl, Edit *, pEdit )
 {
     long lWVal = static_cast< long >(GetFieldVal(*m_pSizeWidthField ));

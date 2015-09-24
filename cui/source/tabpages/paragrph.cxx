@@ -155,7 +155,7 @@ sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
 
 }
 
-IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl)
+IMPL_LINK_NOARG_TYPED(SvxStdParagraphTabPage, ELRLoseFocusHdl, Control&, void)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -190,7 +190,6 @@ IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl)
 
     if ( aTmp.isEmpty() )
         m_pRightIndent->SetEmptyFieldValue();
-    return 0;
 }
 
 VclPtr<SfxTabPage> SvxStdParagraphTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet)
@@ -580,7 +579,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
     // this sets the min/max limits; do this _after_ setting the values,
     // because for Impress the min of first-line indent depends on value of
     // left-indent!
-    ELRLoseFocusHdl( NULL );
+    ELRLoseFocusHdl( *m_pFLineIndent );
     m_pAutoCB->SaveValue();
     m_pContextualCB->SaveValue();
     m_pLineDist->SaveValue();
@@ -614,7 +613,7 @@ void SvxStdParagraphTabPage::EnableRelativeMode()
 
 SfxTabPage::sfxpg SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    ELRLoseFocusHdl( NULL );
+    ELRLoseFocusHdl( *m_pFLineIndent );
 
     if ( _pSet )
         FillItemSet( _pSet );
@@ -847,12 +846,12 @@ void SvxStdParagraphTabPage::Init_Impl()
     m_pLineDist->SetSelectHdl(
         LINK( this, SvxStdParagraphTabPage, LineDistHdl_Impl ) );
 
-    Link<> aLink = LINK( this, SvxStdParagraphTabPage, ELRLoseFocusHdl );
-    m_pFLineIndent->SetLoseFocusHdl( aLink );
-    m_pLeftIndent->SetLoseFocusHdl( aLink );
-    m_pRightIndent->SetLoseFocusHdl( aLink );
+    Link<Control&,void> aLink2 = LINK( this, SvxStdParagraphTabPage, ELRLoseFocusHdl );
+    m_pFLineIndent->SetLoseFocusHdl( aLink2 );
+    m_pLeftIndent->SetLoseFocusHdl( aLink2 );
+    m_pRightIndent->SetLoseFocusHdl( aLink2 );
 
-    aLink = LINK( this, SvxStdParagraphTabPage, ModifyHdl_Impl );
+    Link<> aLink = LINK( this, SvxStdParagraphTabPage, ModifyHdl_Impl );
     m_pFLineIndent->SetModifyHdl( aLink );
     m_pLeftIndent->SetModifyHdl( aLink );
     m_pRightIndent->SetModifyHdl( aLink );

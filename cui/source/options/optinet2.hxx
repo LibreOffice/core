@@ -96,7 +96,7 @@ private:
     void RestoreConfigDefaults_Impl();
 
     DECL_LINK( ProxyHdl_Impl, ListBox * );
-    DECL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit * );
+    DECL_STATIC_LINK_TYPED( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, void );
 
 public:
     SvxProxyTabPage( vcl::Window* pParent, const SfxItemSet& rSet );

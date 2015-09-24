@@ -95,7 +95,7 @@ void ScStatisticsTwoVariableDialog::Init()
     mpButtonOk->SetClickHdl( LINK( this, ScStatisticsTwoVariableDialog, OkClicked ) );
     mpButtonOk->Enable(false);
 
-    Link<> aLink = LINK( this, ScStatisticsTwoVariableDialog, GetFocusHandler );
+    Link<Control&,void> aLink = LINK( this, ScStatisticsTwoVariableDialog, GetFocusHandler );
     mpVariable1RangeEdit->SetGetFocusHdl( aLink );
     mpVariable1RangeButton->SetGetFocusHdl( aLink );
     mpVariable2RangeEdit->SetGetFocusHdl( aLink );
@@ -111,10 +111,10 @@ void ScStatisticsTwoVariableDialog::Init()
     mpOutputRangeEdit->SetLoseFocusHdl( aLink );
     mpOutputRangeButton->SetLoseFocusHdl( aLink );
 
-    aLink = LINK( this, ScStatisticsTwoVariableDialog, RefInputModifyHandler);
-    mpVariable1RangeEdit->SetModifyHdl( aLink);
-    mpVariable2RangeEdit->SetModifyHdl( aLink);
-    mpOutputRangeEdit->SetModifyHdl( aLink);
+    Link<> aLink2 = LINK( this, ScStatisticsTwoVariableDialog, RefInputModifyHandler);
+    mpVariable1RangeEdit->SetModifyHdl( aLink2);
+    mpVariable2RangeEdit->SetModifyHdl( aLink2);
+    mpOutputRangeEdit->SetModifyHdl( aLink2);
 
     mpOutputRangeEdit->GrabFocus();
 
@@ -211,35 +211,32 @@ IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, OkClicked, Button*, void )
     Close();
 }
 
-IMPL_LINK( ScStatisticsTwoVariableDialog, GetFocusHandler, Control*, pCtrl )
+IMPL_LINK_TYPED( ScStatisticsTwoVariableDialog, GetFocusHandler, Control&, rCtrl, void )
 {
     mpActiveEdit = NULL;
-    if(      pCtrl == mpVariable1RangeEdit
-          || pCtrl == mpVariable1RangeButton )
+    if(      &rCtrl == mpVariable1RangeEdit
+          || &rCtrl == mpVariable1RangeButton )
     {
         mpActiveEdit = mpVariable1RangeEdit;
     }
-    else if( pCtrl == mpVariable2RangeEdit
-          || pCtrl == mpVariable2RangeButton )
+    else if( &rCtrl == mpVariable2RangeEdit
+          || &rCtrl == mpVariable2RangeButton )
     {
         mpActiveEdit = mpVariable2RangeEdit;
     }
-    else if( pCtrl == mpOutputRangeEdit
-          || pCtrl == mpOutputRangeButton )
+    else if( &rCtrl == mpOutputRangeEdit
+          || &rCtrl == mpOutputRangeButton )
     {
         mpActiveEdit = mpOutputRangeEdit;
     }
 
     if( mpActiveEdit )
         mpActiveEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, LoseFocusHandler )
+IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, LoseFocusHandler, Control&, void )
 {
     mDialogLostFocus = !IsActive();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( ScStatisticsTwoVariableDialog, GroupByChanged, RadioButton&, void )

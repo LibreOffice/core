@@ -77,7 +77,7 @@ class SvxHyphenWordDialog : public SfxModalDialog
     DECL_LINK_TYPED(DeleteHdl_Impl, Button*, void);
     DECL_LINK_TYPED( HyphenateAllHdl_Impl, Button*, void );
     DECL_LINK_TYPED(CancelHdl_Impl, Button*, void);
-    DECL_LINK(GetFocusHdl_Impl, void *);
+    DECL_LINK_TYPED(GetFocusHdl_Impl, Control&, void);
 
 public:
     SvxHyphenWordDialog( const OUString &rWord, LanguageType nLang,

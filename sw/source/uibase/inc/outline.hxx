@@ -105,7 +105,7 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     DECL_LINK( LevelHdl, ListBox * );
     DECL_LINK( ToggleComplete, NumericField * );
     DECL_LINK( CollSelect, ListBox * );
-    DECL_LINK(CollSelectGetFocus, void *);
+    DECL_LINK_TYPED(CollSelectGetFocus, Control&, void);
     DECL_LINK( NumberSelect, SwNumberingTypeListBox * );
     DECL_LINK(DelimModify, void *);
     DECL_LINK( StartModified, NumericField * );

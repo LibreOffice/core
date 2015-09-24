@@ -113,7 +113,7 @@ void ScStatisticsInputOutputDialog::Init()
     mpButtonOk->SetClickHdl( LINK( this, ScStatisticsInputOutputDialog, OkClicked ) );
     mpButtonOk->Enable(false);
 
-    Link<> aLink = LINK( this, ScStatisticsInputOutputDialog, GetFocusHandler );
+    Link<Control&,void> aLink = LINK( this, ScStatisticsInputOutputDialog, GetFocusHandler );
     mpInputRangeEdit->SetGetFocusHdl( aLink );
     mpInputRangeButton->SetGetFocusHdl( aLink );
     mpOutputRangeEdit->SetGetFocusHdl( aLink );
@@ -125,9 +125,9 @@ void ScStatisticsInputOutputDialog::Init()
     mpOutputRangeEdit->SetLoseFocusHdl( aLink );
     mpOutputRangeButton->SetLoseFocusHdl( aLink );
 
-    aLink = LINK( this, ScStatisticsInputOutputDialog, RefInputModifyHandler);
-    mpInputRangeEdit->SetModifyHdl( aLink);
-    mpOutputRangeEdit->SetModifyHdl( aLink);
+    Link<> aLink2 = LINK( this, ScStatisticsInputOutputDialog, RefInputModifyHandler);
+    mpInputRangeEdit->SetModifyHdl( aLink2);
+    mpOutputRangeEdit->SetModifyHdl( aLink2);
 
     mpOutputRangeEdit->GrabFocus();
 
@@ -198,25 +198,22 @@ IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, OkClicked, Button*, void )
     Close();
 }
 
-IMPL_LINK( ScStatisticsInputOutputDialog, GetFocusHandler, Control*, pCtrl )
+IMPL_LINK_TYPED( ScStatisticsInputOutputDialog, GetFocusHandler, Control&, rCtrl, void )
 {
     mpActiveEdit = NULL;
 
-    if(      (pCtrl == static_cast<Control*>(mpInputRangeEdit))  || (pCtrl == static_cast<Control*>(mpInputRangeButton)) )
+    if(      (&rCtrl == static_cast<Control*>(mpInputRangeEdit))  || (&rCtrl == static_cast<Control*>(mpInputRangeButton)) )
         mpActiveEdit = mpInputRangeEdit;
-    else if( (pCtrl == static_cast<Control*>(mpOutputRangeEdit)) || (pCtrl == static_cast<Control*>(mpOutputRangeButton)) )
+    else if( (&rCtrl == static_cast<Control*>(mpOutputRangeEdit)) || (&rCtrl == static_cast<Control*>(mpOutputRangeButton)) )
         mpActiveEdit = mpOutputRangeEdit;
 
     if( mpActiveEdit )
         mpActiveEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, LoseFocusHandler )
+IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, LoseFocusHandler, Control&, void )
 {
     mDialogLostFocus = !IsActive();
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( ScStatisticsInputOutputDialog, GroupByChanged, RadioButton&, void )

@@ -356,9 +356,9 @@ void SvxNumberFormatTabPage::Init_Impl()
     m_pIbInfo->SetClickHdl( HDL( ClickHdl_Impl ) );
     UpdateThousandEngineeringText();
 
-    aLink = LINK( this, SvxNumberFormatTabPage, LostFocusHdl_Impl);
+    Link<Control&,void> aLink2 = LINK( this, SvxNumberFormatTabPage, LostFocusHdl_Impl);
 
-    m_pEdComment->SetLoseFocusHdl( aLink);
+    m_pEdComment->SetLoseFocusHdl( aLink2);
     aResetWinTimer.SetTimeoutHdl(LINK( this, SvxNumberFormatTabPage, TimeHdl_Impl));
     aResetWinTimer.SetTimeout( 10);
 
@@ -1636,8 +1636,9 @@ IMPL_LINK_NOARG_TYPED(SvxNumberFormatTabPage, TimeHdl_Impl, Timer *, void)
 #*
 #************************************************************************/
 
-IMPL_LINK( SvxNumberFormatTabPage, LostFocusHdl_Impl, Edit *, pEd)
+IMPL_LINK_TYPED( SvxNumberFormatTabPage, LostFocusHdl_Impl, Control&, rControl, void)
 {
+    Edit* pEd = static_cast<Edit*>(&rControl);
     if (pEd == m_pEdComment)
     {
         aResetWinTimer.Start();
@@ -1652,7 +1653,6 @@ IMPL_LINK( SvxNumberFormatTabPage, LostFocusHdl_Impl, Edit *, pEd)
             m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    // String for user defined
         }
     }
-    return 0;
 }
 
 /*************************************************************************

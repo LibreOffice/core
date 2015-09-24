@@ -111,11 +111,11 @@ SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
     m_pTopMF->SetModifyHdl( aLk );
     m_pBottomMF->SetModifyHdl( aLk );
 
-    aLk = LINK(this, SvxGrfCropPage, CropLoseFocusHdl);
-    m_pLeftMF->SetLoseFocusHdl( aLk );
-    m_pRightMF->SetLoseFocusHdl( aLk );
-    m_pTopMF->SetLoseFocusHdl( aLk );
-    m_pBottomMF->SetLoseFocusHdl( aLk );
+    Link<Control&,void> aLk2 = LINK(this, SvxGrfCropPage, CropLoseFocusHdl);
+    m_pLeftMF->SetLoseFocusHdl( aLk2 );
+    m_pRightMF->SetLoseFocusHdl( aLk2 );
+    m_pTopMF->SetLoseFocusHdl( aLk2 );
+    m_pBottomMF->SetLoseFocusHdl( aLk2 );
 
     m_pOrigSizePB->SetClickHdl( LINK(this, SvxGrfCropPage, OrigSizeHdl) );
 
@@ -740,12 +740,12 @@ IMPL_LINK_NOARG_TYPED(SvxGrfCropPage, Timeout, Timer *, void)
 }
 
 
-IMPL_LINK( SvxGrfCropPage, CropLoseFocusHdl, MetricField*, pField )
+IMPL_LINK_TYPED( SvxGrfCropPage, CropLoseFocusHdl, Control&, rControl, void )
 {
+    MetricField* pField = static_cast<MetricField*>(&rControl);
     aTimer.Stop();
     CropHdl(pField);
     pLastCropField = 0;
-    return 0;
 }
 
 

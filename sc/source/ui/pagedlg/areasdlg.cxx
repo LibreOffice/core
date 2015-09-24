@@ -517,28 +517,26 @@ IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_BtnHdl, Button*, pBtn, void )
         Close();
 }
 
-IMPL_LINK( ScPrintAreasDlg, Impl_GetFocusHdl, Control*, pCtr )
+IMPL_LINK_TYPED( ScPrintAreasDlg, Impl_GetFocusHdl, Control&, rCtrl, void )
 {
-    if ( pCtr ==static_cast<Control *>(pEdPrintArea) ||
-         pCtr ==static_cast<Control *>(pEdRepeatRow) ||
-         pCtr ==static_cast<Control *>(pEdRepeatCol))
+    if ( &rCtrl ==static_cast<Control *>(pEdPrintArea) ||
+         &rCtrl ==static_cast<Control *>(pEdRepeatRow) ||
+         &rCtrl ==static_cast<Control *>(pEdRepeatCol))
     {
-         pRefInputEdit = static_cast<formula::RefEdit*>(pCtr);
+         pRefInputEdit = static_cast<formula::RefEdit*>(&rCtrl);
     }
-    else if ( pCtr ==static_cast<Control *>(pLbPrintArea))
+    else if ( &rCtrl ==static_cast<Control *>(pLbPrintArea))
     {
         pRefInputEdit = pEdPrintArea;
     }
-    else if ( pCtr ==static_cast<Control *>(pLbRepeatRow))
+    else if ( &rCtrl ==static_cast<Control *>(pLbRepeatRow))
     {
         pRefInputEdit = pEdRepeatRow;
     }
-    else if ( pCtr ==static_cast<Control *>(pLbRepeatCol))
+    else if ( &rCtrl ==static_cast<Control *>(pLbRepeatCol))
     {
         pRefInputEdit = pEdRepeatCol;
     }
-
-    return 0;
 }
 
 IMPL_LINK( ScPrintAreasDlg, Impl_SelectHdl, ListBox*, pLb )

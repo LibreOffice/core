@@ -176,7 +176,7 @@ class SwStdFontTabPage : public SfxTabPage
     DECL_LINK_TYPED(StandardHdl, Button*, void);
     DECL_LINK(ModifyHdl, ComboBox * );
     DECL_LINK(ModifyHeightHdl, FontSizeBox * );
-    DECL_LINK(LoseFocusHdl, ComboBox * );
+    DECL_LINK_TYPED(LoseFocusHdl, Control&, void );
 
     SwStdFontTabPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwStdFontTabPage();

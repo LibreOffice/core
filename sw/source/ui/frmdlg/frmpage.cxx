@@ -677,14 +677,14 @@ SwFrmPage::SwFrmPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     SetExchangeSupport();
 
-    Link<> aLk = LINK(this, SwFrmPage, RangeModifyHdl);
-    m_aWidthED.SetLoseFocusHdl( aLk );
-    m_aHeightED.SetLoseFocusHdl( aLk );
-    m_pAtHorzPosED->SetLoseFocusHdl( aLk );
-    m_pAtVertPosED->SetLoseFocusHdl( aLk );
+    Link<Control&,void> aLk3 = LINK(this, SwFrmPage, RangeModifyLoseFocusHdl);
+    m_aWidthED.SetLoseFocusHdl( aLk3 );
+    m_aHeightED.SetLoseFocusHdl( aLk3 );
+    m_pAtHorzPosED->SetLoseFocusHdl( aLk3 );
+    m_pAtVertPosED->SetLoseFocusHdl( aLk3 );
     m_pFollowTextFlowCB->SetClickHdl( LINK(this, SwFrmPage, RangeModifyClickHdl) );
 
-    aLk = LINK(this, SwFrmPage, ModifyHdl);
+    Link<> aLk = LINK(this, SwFrmPage, ModifyHdl);
     m_aWidthED.SetModifyHdl( aLk );
     m_aHeightED.SetModifyHdl( aLk );
     m_pAtHorzPosED->SetModifyHdl( aLk );
@@ -1047,7 +1047,7 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
     //lock PercentFields
     m_aWidthED.LockAutoCalculation(true);
     m_aHeightED.LockAutoCalculation(true);
-    RangeModifyHdl(&m_aWidthED);  // set all maximum values initially
+    RangeModifyHdl();  // set all maximum values initially
     m_aHeightED.LockAutoCalculation(false);
     m_aWidthED.LockAutoCalculation(false);
 
@@ -1736,7 +1736,7 @@ void SwFrmPage::ActivatePage(const SfxItemSet& rSet)
     //lock PercentFields
     m_aWidthED.LockAutoCalculation(true);
     m_aHeightED.LockAutoCalculation(true);
-    RangeModifyHdl(&m_aWidthED);  // set all maximum values initially
+    RangeModifyHdl();  // set all maximum values initially
     m_aHeightED.LockAutoCalculation(false);
     m_aWidthED.LockAutoCalculation(false);
     m_pFollowTextFlowCB->SaveValue();
@@ -1785,7 +1785,7 @@ IMPL_LINK_TYPED( SwFrmPage, RelSizeClickHdl, Button *, p, void )
             m_aHeightED.get()->SetMax(MAX_PERCENT_HEIGHT);
     }
 
-    RangeModifyHdl(m_aWidthED.get());  // correct the values again
+    RangeModifyHdl();  // correct the values again
 
     if (pBtn == m_pRelWidthCB)
         ModifyHdl(m_aWidthED.get());
@@ -1796,12 +1796,16 @@ IMPL_LINK_TYPED( SwFrmPage, RelSizeClickHdl, Button *, p, void )
 // range check
 IMPL_LINK_NOARG_TYPED(SwFrmPage, RangeModifyClickHdl, Button*, void)
 {
-    RangeModifyHdl(NULL);
+    RangeModifyHdl();
 }
-IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
+IMPL_LINK_NOARG_TYPED(SwFrmPage, RangeModifyLoseFocusHdl, Control&, void)
+{
+    RangeModifyHdl();
+}
+void SwFrmPage::RangeModifyHdl()
 {
     if (bNoModifyHdl)
-        return 0;
+        return;
 
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
                         : getFrmDlgParentShell();
@@ -1915,8 +1919,6 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
     m_pAtVertPosED->SetMax(m_pAtVertPosED->Normalize(aVal.nMaxVPos), FUNIT_TWIP);
     if ( aVal.nVPos != nAtVertPosVal )
         m_pAtVertPosED->SetValue(m_pAtVertPosED->Normalize(aVal.nVPos), FUNIT_TWIP);
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(SwFrmPage, AnchorTypeHdl, Button*, void)
@@ -1934,7 +1936,7 @@ IMPL_LINK_NOARG_TYPED(SwFrmPage, AnchorTypeHdl, Button*, void)
     RndStdIds eId = GetAnchor();
 
     InitPos( eId, -1, 0, -1, 0, LONG_MAX, LONG_MAX);
-    RangeModifyHdl(0);
+    RangeModifyHdl();
 
     if(bHtmlMode)
     {
@@ -1969,7 +1971,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
         m_pAtVertPosFT->Enable( bEnable );
     }
 
-    RangeModifyHdl( 0 );
+    RangeModifyHdl();
 
     sal_Int16 nRel = 0;
     if (pLB->GetSelectEntryCount())
@@ -2076,7 +2078,7 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
         }
     }
     if (pLB)    // Only when Handler was called by changing of the controller
-        RangeModifyHdl(0);
+        RangeModifyHdl();
 
     return 0;
 }
@@ -2322,7 +2324,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
     }
 
     // switch to percent if applicable
-    RangeModifyHdl(&m_aWidthED);  // set reference values (for 100%)
+    RangeModifyHdl();  // set reference values (for 100%)
 
     if (rSize.GetWidthPercent() == SwFormatFrmSize::SYNCED || rSize.GetHeightPercent() == SwFormatFrmSize::SYNCED)
         m_pFixedRatioCB->Check();

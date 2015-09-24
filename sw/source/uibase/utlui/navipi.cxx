@@ -469,17 +469,17 @@ IMPL_LINK_TYPED( SwNavigationPI, EditAction, NumEditAction&, rEdit, void )
 
 // If the page can be set here, the maximum is set.
 
-IMPL_LINK( SwNavigationPI, EditGetFocus, NumEditAction *, pEdit )
+IMPL_LINK_TYPED( SwNavigationPI, EditGetFocus, Control&, rControl, void )
 {
+    NumEditAction* pEdit = static_cast<NumEditAction*>(&rControl);
     SwView *pView = GetCreateView();
     if (!pView)
-        return 0;
+        return;
     SwWrtShell &rSh = pView->GetWrtShell();
 
     const sal_uInt16 nPageCnt = rSh.GetPageCnt();
     pEdit->SetMax(nPageCnt);
     pEdit->SetLast(nPageCnt);
-    return 0;
 }
 
 // Setting of an automatic mark

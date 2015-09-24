@@ -35,8 +35,8 @@ private:
 
 protected:
     DECL_LINK_TYPED( EditAccHdl, Accelerator&, void );
-    DECL_LINK(ImplGetFocusHdl, void *);
-    DECL_LINK(ImplLoseFocusHdl, void *);
+    DECL_LINK_TYPED( ImplGetFocusHdl, Control&, void );
+    DECL_LINK_TYPED( ImplLoseFocusHdl, Control&, void );
 
 public:
                     ExtendedEdit( vcl::Window* pParent, IDEResId nRes );

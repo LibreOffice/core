@@ -376,7 +376,7 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     m_pBtnCancel->SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );
     m_pBtnSolve->SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );
 
-    Link<> aLink = LINK( this, ScOptSolverDlg, GetFocusHdl );
+    Link<Control&,void> aLink = LINK( this, ScOptSolverDlg, GetFocusHdl );
     m_pEdObjectiveCell->SetGetFocusHdl( aLink );
     m_pRBObjectiveCell->SetGetFocusHdl( aLink );
     m_pEdTargetValue->SetGetFocusHdl( aLink );
@@ -641,39 +641,36 @@ IMPL_LINK_TYPED( ScOptSolverDlg, BtnHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK( ScOptSolverDlg, GetFocusHdl, Control*, pCtrl )
+IMPL_LINK_TYPED( ScOptSolverDlg, GetFocusHdl, Control&, rCtrl, void )
 {
     Edit* pEdit = NULL;
     mpEdActive = NULL;
 
-    if( pCtrl == m_pEdObjectiveCell || pCtrl == m_pRBObjectiveCell )
+    if( &rCtrl == m_pEdObjectiveCell || &rCtrl == m_pRBObjectiveCell )
         pEdit = mpEdActive = m_pEdObjectiveCell;
-    else if( pCtrl == m_pEdTargetValue || pCtrl == m_pRBTargetValue )
+    else if( &rCtrl == m_pEdTargetValue || &rCtrl == m_pRBTargetValue )
         pEdit = mpEdActive = m_pEdTargetValue;
-    else if( pCtrl == m_pEdVariableCells || pCtrl == m_pRBVariableCells )
+    else if( &rCtrl == m_pEdVariableCells || &rCtrl == m_pRBVariableCells )
         pEdit = mpEdActive = m_pEdVariableCells;
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
-        if( pCtrl == mpLeftEdit[nRow] || pCtrl == mpLeftButton[nRow] )
+        if( &rCtrl == mpLeftEdit[nRow] || &rCtrl == mpLeftButton[nRow] )
             pEdit = mpEdActive = mpLeftEdit[nRow].get();
-        else if( pCtrl == mpRightEdit[nRow] || pCtrl == mpRightButton[nRow] )
+        else if( &rCtrl == mpRightEdit[nRow] || &rCtrl == mpRightButton[nRow] )
             pEdit = mpEdActive = mpRightEdit[nRow].get();
-        else if( pCtrl == mpOperator[nRow] )    // focus on "operator" list box
+        else if( &rCtrl == mpOperator[nRow] )    // focus on "operator" list box
             mpEdActive = mpRightEdit[nRow].get();     // use right edit for ref input, but don't change selection
     }
-    if( pCtrl == m_pRbValue )                   // focus on "Value of" radio button
+    if( &rCtrl == m_pRbValue )                   // focus on "Value of" radio button
         mpEdActive = m_pEdTargetValue;          // use value edit for ref input, but don't change selection
 
     if( pEdit )
         pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScOptSolverDlg, LoseFocusHdl)
+IMPL_LINK_NOARG_TYPED(ScOptSolverDlg, LoseFocusHdl, Control&, void)
 {
     mbDlgLostFocus = !IsActive();
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScOptSolverDlg, DelBtnHdl, Button*, pBtn, void )

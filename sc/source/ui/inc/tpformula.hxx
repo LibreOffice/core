@@ -54,7 +54,7 @@ private:
 
     DECL_LINK_TYPED( ButtonHdl, Button*, void );
     DECL_LINK( SepModifyHdl, Edit* );
-    DECL_LINK( SepEditOnFocusHdl, Edit* );
+    DECL_LINK_TYPED( SepEditOnFocusHdl, Control&, void );
 
 private:
     VclPtr<ListBox>     mpLbFormulaSyntax;

@@ -2751,8 +2751,8 @@ void SwTokenWindow::dispose()
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
         VclPtr<Control> pControl = (*it);
-        pControl->SetGetFocusHdl( Link<>() );
-        pControl->SetLoseFocusHdl( Link<>() );
+        pControl->SetGetFocusHdl( Link<Control&,void>() );
+        pControl->SetLoseFocusHdl( Link<Control&,void>() );
         pControl.disposeAndClear();
     }
     aControlList.clear();
@@ -3485,8 +3485,9 @@ IMPL_LINK_TYPED(SwTokenWindow, NextItemHdl, SwTOXEdit&, rEdit, void)
     }
 }
 
-IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
+IMPL_LINK_TYPED(SwTokenWindow, TbxFocusHdl, Control&, rControl, void)
 {
+    SwTOXEdit* pEdit = static_cast<SwTOXEdit*>(&rControl);
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
         Control *pCtrl = *it;
@@ -3496,8 +3497,6 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
     }
 
     SetActiveControl(pEdit);
-
-    return 0;
 }
 
 IMPL_LINK_TYPED(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
@@ -3537,8 +3536,9 @@ IMPL_LINK_TYPED(SwTokenWindow, NextItemBtnHdl, SwTOXButton&, rBtn, void )
     }
 }
 
-IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )
+IMPL_LINK_TYPED(SwTokenWindow, TbxFocusBtnHdl, Control&, rControl, void )
 {
+    SwTOXButton* pBtn = static_cast<SwTOXButton*>(&rControl);
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
         Control *pControl = *it;
@@ -3548,8 +3548,6 @@ IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )
     }
 
     SetActiveControl(pBtn);
-
-    return 0;
 }
 
 void SwTokenWindow::GetFocus()

@@ -73,7 +73,9 @@ class SwTextGridPage: public SfxTabPage
 
     DECL_LINK_TYPED(GridTypeHdl, Button*, void);
     DECL_LINK(CharorLineChangedHdl, SpinField*);
+    DECL_LINK_TYPED(CharorLineLoseFocusdHdl, Control&, void);
     DECL_LINK(TextSizeChangedHdl, SpinField*);
+    DECL_LINK_TYPED(TextSizeLoseFocusHdl, Control&, void);
     DECL_LINK(GridModifyHdl, void*);
     DECL_LINK_TYPED(GridModifyClickHdl, Button*, void);
     DECL_LINK_TYPED(DisplayGridHdl, Button*, void);

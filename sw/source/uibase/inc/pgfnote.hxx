@@ -59,7 +59,7 @@ private:
 
     DECL_LINK_TYPED(HeightPage, Button*, void);
     DECL_LINK_TYPED(HeightMetric, Button*, void);
-    DECL_LINK(HeightModify, void *);
+    DECL_LINK_TYPED(HeightModify, Control&, void);
     DECL_LINK( LineWidthChanged_Impl, void * );
     DECL_LINK( LineColorSelected_Impl, void * );
 

@@ -160,6 +160,8 @@ private:
 
 
     DECL_LINK( LinkedFieldModifyHdl, NumericField* );
+    DECL_LINK_TYPED( LinkedFieldFocusHdl, Control&, void );
+    void LinkedFieldModifyHdl();
 };
 
 /** Wrapper for usage of a DialControl in item connections. */

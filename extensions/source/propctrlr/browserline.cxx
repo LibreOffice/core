@@ -485,7 +485,7 @@ namespace pcr
     }
 
 
-    IMPL_LINK( OBrowserLine, OnButtonFocus, PushButton*, /*pPB*/ )
+    IMPL_LINK_NOARG_TYPED( OBrowserLine, OnButtonFocus, Control&, void )
     {
         if ( m_xControl.is() )
         {
@@ -499,7 +499,6 @@ namespace pcr
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
-        return 0;
     }
 
 } // namespace pcr

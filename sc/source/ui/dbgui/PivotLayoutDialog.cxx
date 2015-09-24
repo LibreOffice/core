@@ -78,8 +78,6 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     maAddressDetails      (mpDocument->GetAddressConvention(), 0, 0),
     mbDialogLostFocus     (false)
 {
-    Link<> aLink;
-
     get(mpListBoxField,    "listbox-fields");
     get(mpListBoxPage,     "listbox-page");
     get(mpListBoxColumn,   "listbox-column");
@@ -117,7 +115,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mpSourceEdit->SetReferences(this, mpSourceRadioSelection);
     mpSourceButton->SetReferences(this, mpSourceEdit);
 
-    aLink = LINK(this, ScPivotLayoutDialog, GetFocusHandler);
+    Link<Control&,void> aLink = LINK(this, ScPivotLayoutDialog, GetFocusHandler);
     mpSourceEdit->SetGetFocusHdl(aLink);
     mpSourceButton->SetGetFocusHdl(aLink);
 
@@ -655,31 +653,28 @@ IMPL_LINK_NOARG_TYPED( ScPivotLayoutDialog, CancelClicked, Button*, void )
     Close();
 }
 
-IMPL_LINK(ScPivotLayoutDialog, GetFocusHandler, Control*, pCtrl)
+IMPL_LINK_TYPED(ScPivotLayoutDialog, GetFocusHandler, Control&, rCtrl, void)
 {
     mpActiveEdit = NULL;
 
-    if (pCtrl == static_cast<Control*>(mpSourceEdit)  ||
-        pCtrl == static_cast<Control*>(mpSourceButton))
+    if (&rCtrl == static_cast<Control*>(mpSourceEdit)  ||
+        &rCtrl == static_cast<Control*>(mpSourceButton))
     {
         mpActiveEdit = mpSourceEdit;
     }
-    else if (pCtrl == static_cast<Control*>(mpDestinationEdit)  ||
-             pCtrl == static_cast<Control*>(mpDestinationButton))
+    else if (&rCtrl == static_cast<Control*>(mpDestinationEdit)  ||
+             &rCtrl == static_cast<Control*>(mpDestinationButton))
     {
         mpActiveEdit = mpDestinationEdit;
     }
 
     if (mpActiveEdit)
         mpActiveEdit->SetSelection(Selection(0, SELECTION_MAX));
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScPivotLayoutDialog, LoseFocusHandler)
+IMPL_LINK_NOARG_TYPED(ScPivotLayoutDialog, LoseFocusHandler, Control&, void)
 {
     mbDialogLostFocus = !IsActive();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScPivotLayoutDialog, SourceEditModified)

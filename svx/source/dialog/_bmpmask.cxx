@@ -174,7 +174,7 @@ public:
                 DECL_LINK_TYPED( PipetteHdl, ToolBox*, void );
                 DECL_LINK_TYPED( CbxHdl, Button*, void);
                 DECL_LINK_TYPED( CbxTransHdl, Button*, void );
-                DECL_LINK( FocusLbHdl, ColorLB* );
+                DECL_LINK_TYPED( FocusLbHdl, Control&, void );
                 DECL_LINK_TYPED(ExecHdl, Button*, void);
 };
 
@@ -295,15 +295,14 @@ IMPL_LINK_TYPED( MaskData, CbxTransHdl, Button*, pButton, void )
 
 
 
-IMPL_LINK( MaskData, FocusLbHdl, ColorLB*, pLb )
+IMPL_LINK_TYPED( MaskData, FocusLbHdl, Control&, rControl, void )
 {
+    ColorLB* pLb = static_cast<ColorLB*>(&rControl);
     // MT: bFireFox as API parameter is ugly, find better solution????
     pMask->m_pQSet1->SelectItem( pLb == pMask->m_pLbColor1 ? 1 : 0 /* , false */ );
     pMask->m_pQSet2->SelectItem( pLb == pMask->m_pLbColor2 ? 1 : 0 /* , false */ );
     pMask->m_pQSet3->SelectItem( pLb == pMask->m_pLbColor3 ? 1 : 0 /* , false */ );
     pMask->m_pQSet4->SelectItem( pLb == pMask->m_pLbColor4 ? 1 : 0 /* , false */ );
-
-    return 0;
 }
 
 

@@ -94,6 +94,7 @@ class SwNumPositionTabPage : public SfxTabPage
     DECL_LINK( LevelHdl, ListBox * );
     DECL_LINK(EditModifyHdl, void *);
     DECL_LINK( DistanceHdl, MetricField * );
+    DECL_LINK_TYPED( DistanceLoseFocusHdl, Control&, void );
     DECL_LINK_TYPED( RelativeHdl, Button*, void );
     DECL_LINK_TYPED(StandardHdl, Button*, void);
 

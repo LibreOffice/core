@@ -343,10 +343,9 @@ IMPL_LINK_NOARG(ScNameDefDlg, NameModifyHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScNameDefDlg, AssignGetFocusHdl)
+IMPL_LINK_NOARG_TYPED(ScNameDefDlg, AssignGetFocusHdl, Control&, void)
 {
     IsNameValid();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

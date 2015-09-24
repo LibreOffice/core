@@ -228,7 +228,7 @@ void ParaWin::dispose()
 {
     // #i66422# if the focus changes during destruction of the controls,
     // don't call the focus handlers
-    Link<> aEmptyLink;
+    Link<Control&,void> aEmptyLink;
     m_pBtnFx1->SetGetFocusHdl( aEmptyLink );
     m_pBtnFx2->SetGetFocusHdl( aEmptyLink );
     m_pBtnFx3->SetGetFocusHdl( aEmptyLink );

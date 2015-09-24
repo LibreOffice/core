@@ -489,15 +489,15 @@ void SvxHFPage::InitHandler()
 {
     m_pTurnOnBox->SetClickHdl(LINK(this,   SvxHFPage, TurnOnHdl));
     m_pDistEdit->SetModifyHdl(LINK(this,   SvxHFPage, DistModify));
-    m_pDistEdit->SetLoseFocusHdl(LINK(this, SvxHFPage, RangeHdl));
+    m_pDistEdit->SetLoseFocusHdl(LINK(this, SvxHFPage, RangeFocusHdl));
 
     m_pHeightEdit->SetModifyHdl(LINK(this,     SvxHFPage, HeightModify));
-    m_pHeightEdit->SetLoseFocusHdl(LINK(this,SvxHFPage,RangeHdl));
+    m_pHeightEdit->SetLoseFocusHdl(LINK(this,SvxHFPage,RangeFocusHdl));
 
     m_pLMEdit->SetModifyHdl(LINK(this,         SvxHFPage, BorderModify));
-    m_pLMEdit->SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeHdl));
+    m_pLMEdit->SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeFocusHdl));
     m_pRMEdit->SetModifyHdl(LINK(this,         SvxHFPage, BorderModify));
-    m_pRMEdit->SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeHdl));
+    m_pRMEdit->SetLoseFocusHdl(LINK(this,  SvxHFPage, RangeFocusHdl));
     m_pBackgroundBtn->SetClickHdl(LINK(this,SvxHFPage, BackgroundHdl));
 }
 
@@ -1062,6 +1062,15 @@ SfxTabPage::sfxpg SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
 
 IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
 {
+    RangeHdl();
+    return 0;
+}
+IMPL_LINK_NOARG_TYPED(SvxHFPage, RangeFocusHdl, Control&, void)
+{
+    RangeHdl();
+}
+void SvxHFPage::RangeHdl()
+{
     long nHHeight = m_pBspWin->GetHdHeight();
     long nHDist   = m_pBspWin->GetHdDist();
 
@@ -1130,7 +1139,6 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
     nMax = nW - nBL - nBR -
            static_cast<long>(m_pLMEdit->Denormalize( m_pLMEdit->GetValue( FUNIT_TWIP ) )) - MINBODY;
     m_pRMEdit->SetMax( m_pLMEdit->Normalize( nMax ), FUNIT_TWIP );
-    return 0;
 }
 
 static void lcl_Move(vcl::Window& rWin, sal_Int32 nDiff)

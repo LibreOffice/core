@@ -134,10 +134,9 @@ IMPL_LINK( ScTpDefaultsOptions, PrefixModifiedHdl, Edit*, pEdit )
     return 0;
 }
 
-IMPL_LINK( ScTpDefaultsOptions, PrefixEditOnFocusHdl, Edit*, pEdit )
+IMPL_LINK_TYPED( ScTpDefaultsOptions, PrefixEditOnFocusHdl, Control&, rControl, void )
 {
-    OnFocusPrefixInput(pEdit);
-    return 0;
+    OnFocusPrefixInput(static_cast<Edit*>(&rControl));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

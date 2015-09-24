@@ -2720,9 +2720,9 @@ void SvxCharPositionPage::Initialize()
     m_pHighLowMF->SetModifyHdl( aLink );
     m_pFontSizeMF->SetModifyHdl( aLink );
 
-    aLink = LINK( this, SvxCharPositionPage, LoseFocusHdl_Impl );
-    m_pHighLowMF->SetLoseFocusHdl( aLink );
-    m_pFontSizeMF->SetLoseFocusHdl( aLink );
+    Link<Control&,void> aLink3 = LINK( this, SvxCharPositionPage, LoseFocusHdl_Impl );
+    m_pHighLowMF->SetLoseFocusHdl( aLink3 );
+    m_pFontSizeMF->SetLoseFocusHdl( aLink3 );
 
     m_pHighLowRB->SetClickHdl( LINK( this, SvxCharPositionPage, AutoPositionHdl_Impl ) );
     m_pFitToLineCB->SetClickHdl( LINK( this, SvxCharPositionPage, FitToLineHdl_Impl ) );
@@ -2911,8 +2911,9 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
 
 
 
-IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
+IMPL_LINK_TYPED( SvxCharPositionPage, LoseFocusHdl_Impl, Control&, rControl, void )
 {
+    MetricField* pField = static_cast<MetricField*>(&rControl);
     bool bHigh = m_pHighPosBtn->IsChecked();
     bool bLow = m_pLowPosBtn->IsChecked();
     DBG_ASSERT( bHigh || bLow, "normal position is not valid" );
@@ -2931,7 +2932,6 @@ IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
         else
             m_nSuperProp = (sal_uInt8)m_pFontSizeMF->GetValue();
     }
-    return 0;
 }
 
 

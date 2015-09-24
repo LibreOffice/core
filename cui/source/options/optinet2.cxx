@@ -182,7 +182,7 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pNoProxyForED, "noproxy");
     get(m_pNoProxyDescFT, "noproxydesc");
 
-    Link<> aLink = LINK( this, SvxProxyTabPage, LoseFocusHdl_Impl );
+    Link<Control&,void> aLink = LINK( this, SvxProxyTabPage, LoseFocusHdl_Impl );
     m_pHttpPortED->SetLoseFocusHdl( aLink );
     m_pHttpsPortED->SetLoseFocusHdl( aLink );
     m_pFtpPortED->SetLoseFocusHdl( aLink );
@@ -541,13 +541,13 @@ IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
 
 
 
-IMPL_STATIC_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
+IMPL_STATIC_LINK_TYPED( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, void )
 {
+    Edit* pEdit = static_cast<Edit*>(&rControl);
     OUString aValue = pEdit->GetText();
 
     if ( !comphelper::string::isdigitAsciiString(aValue) || (long)aValue.toInt32() > USHRT_MAX )
         pEdit->SetText( OUString('0') );
-    return 0;
 }
 
 
