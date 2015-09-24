@@ -56,7 +56,7 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
         pOutItem        ( NULL ),
         pViewData       ( NULL ),
         pDoc            ( NULL ),
-        nSrcTab         ( nSourceTab ),     // ist nicht im QueryParam
+        nSrcTab         ( nSourceTab ),     // is not in QueryParam
         nFieldCount     ( 0 )
 {
     get(m_pLbField1, "field1");
@@ -133,7 +133,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     pViewData   = rQueryItem.GetViewData();
     pDoc        = pViewData ? pViewData->GetDocument() : NULL;
 
-    // fuer leichteren Zugriff:
+    // for easier access:
     aFieldLbArr  [0] = m_pLbField1;
     aFieldLbArr  [1] = m_pLbField2;
     aFieldLbArr  [2] = m_pLbField3;
@@ -155,10 +155,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         OUString theDbName = OUString(STR_DB_LOCAL_NONAME);
 
-        /*
-         * Ueberpruefen, ob es sich bei dem uebergebenen
-         * Bereich um einen Datenbankbereich handelt:
-         */
+         // Check if the passed range is a database range
 
         if ( pDBColl )
         {
@@ -182,7 +179,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         m_pFtDbArea->SetText( EMPTY_OUSTRING );
     }
 
-    // Feldlisten einlesen und Eintraege selektieren:
+    // Read the field lists and select the entries:
 
     FillFieldLists();
 
@@ -209,15 +206,15 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         }
         else
         {
-            aFieldLbArr[i]->SelectEntryPos( 0 ); // "keiner" selektieren
-            aCondLbArr [i]->SelectEntryPos( 0 ); // "=" selektieren
+            aFieldLbArr[i]->SelectEntryPos( 0 ); // "none" selected
+            aCondLbArr [i]->SelectEntryPos( 0 ); // "=" selected
             UpdateValueList( static_cast<sal_uInt16>(i) );
             aValueEdArr[i]->SetText( EMPTY_OUSTRING );
         }
         aValueEdArr[i]->SetModifyHdl( LINK( this, ScPivotFilterDlg, ValModifyHdl ) );
     }
 
-    // Disable/Enable Logik:
+    // disable/enable logic:
 
        (m_pLbField1->GetSelectEntryPos() != 0)
     && (m_pLbField2->GetSelectEntryPos() != 0)
@@ -381,9 +378,9 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
             OUString aStrVal = aValueEdArr[i]->GetText();
 
             /*
-             * Dialog liefert die ausgezeichneten Feldwerte "leer"/"nicht leer"
-             * als Konstanten in nVal in Verbindung mit dem Schalter
-             * bQueryByString auf FALSE.
+             * The dialog returns the specifc field values "empty"/"non empty"
+             * as constant in nVal in connection with the bQueryByString switch
+             * set to false
              */
             if ( aStrVal.equals(aStrEmpty) )
             {
@@ -416,7 +413,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
                                     : SC_AND;
 
     theParam.bInplace   = false;
-    theParam.nDestTab   = 0;    // Woher kommen diese Werte?
+    theParam.nDestTab   = 0;    // Where do those values come from?
     theParam.nDestCol   = 0;
     theParam.nDestRow   = 0;
 
@@ -434,11 +431,10 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 
 IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
-    /*
-     * Behandlung der Enable/Disable-Logik,
-     * abhaengig davon, welche ListBox angefasst wurde:
-     */
 
+    /*
+     * Handling the enable/disable logic based on which ListBox was touched:
+     */
     if (pLb == m_pLbConnect1)
     {
         if ( !m_pLbField2->IsEnabled() )
@@ -525,9 +521,9 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
 
 IMPL_LINK_TYPED( ScPivotFilterDlg, CheckBoxHdl, Button*, pBox, void )
 {
-    //  bei Gross-/Kleinschreibung die Werte-Listen aktualisieren
+    // update the value lists when dealing with uppercase/lowercase
 
-    if (pBox == m_pBtnCase)                    // Wertlisten
+    if (pBox == m_pBtnCase)                    // value lists
     {
         for (sal_uInt16 i=0; i<=MAXCOL; i++)
             DELETEZ( pEntryLists[i] );
@@ -554,8 +550,8 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
         if ( pEd == m_pEdVal2 ) pLb = m_pLbCond2;
         else if ( pEd == m_pEdVal3 ) pLb = m_pLbCond3;
 
-        // wenn einer der Sonderwerte leer/nicht-leer
-        // gewaehlt wird, so macht nur der =-Operator Sinn:
+        // if ond of the special values "empty"/"non-empty" was chosen only the
+        // =-operand makes sense:
 
         if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
         {
