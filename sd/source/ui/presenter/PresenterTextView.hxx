@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <boost/noncopyable.hpp>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;

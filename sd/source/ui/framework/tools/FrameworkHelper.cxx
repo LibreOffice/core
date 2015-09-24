@@ -43,6 +43,7 @@
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 #include <tools/diagnose_ex.h>
+#include <memory>
 #include <unordered_map>
 
 using namespace ::com::sun::star;

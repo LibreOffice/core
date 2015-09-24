@@ -34,7 +34,6 @@
 
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 class SdPage;
 class SvxRuler;

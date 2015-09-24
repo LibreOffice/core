@@ -39,6 +39,7 @@
 #include <svx/nbdtmgfact.hxx>
 #include <svx/svdoutl.hxx>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 using namespace svx::sidebar;
 namespace sd {
 

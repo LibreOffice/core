@@ -36,6 +36,7 @@
 #include "app.hrc"
 #include <svx/svdpagv.hxx>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 

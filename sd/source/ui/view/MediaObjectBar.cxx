@@ -40,6 +40,7 @@
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace sd;
 
