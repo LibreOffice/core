@@ -52,18 +52,22 @@ Menu MN_SPELL_POPUP
         };
         MenuItem
         {
+            Identifier = MN_SPELLING_DLG ;
+            HelpID = HID_LINGU_SPELLING_DLG ;
+        };
+        SEPARATOR
+        MenuItem
+        {
             Identifier = MN_AUTOCORR ;
             HelpID = HID_LINGU_AUTOCORR ;
             SubMenu = Menu
             {
             };
-            Text [ en-US ] = "Always correct to" ;
+            Text [ en-US ] = "Always correct ~to" ;
         };
         MenuItem
         {
-            Identifier = MN_SPELLING_DLG ;
-            HelpID = HID_LINGU_SPELLING_DLG ;
-            Text [ en-US ] = "~Spellcheck..." ;
+            Identifier = MN_AUTO_CORRECT_DLG ;
         };
         SEPARATOR
         MenuItem

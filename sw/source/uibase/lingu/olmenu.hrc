@@ -46,6 +46,7 @@
 #define MN_SHORT_COMMENT                208
 #define MN_EXPLANATION_LINK             209
 #define MN_ADD_TO_DIC_SINGLE            210
+#define MN_AUTO_CORRECT_DLG             211
 
 // id range for dictionaries sub menu
 #define MN_DICTIONARIES_START               300

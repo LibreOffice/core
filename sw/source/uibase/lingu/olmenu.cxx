@@ -326,6 +326,7 @@ SwSpellPopup::SwSpellPopup(
     OUString aIgnoreSelection( SW_RES( STR_IGNORE_SELECTION ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( ".uno:SpellingAndGrammarDialog" );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
+    SetItemText(MN_AUTO_CORRECT_DLG, RetrieveLabelFromCommand(".uno:AutoCorrectDlg"));
     sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
     InsertItem(MN_IGNORE_SELECTION, aIgnoreSelection, MenuItemBits::NONE, OString(), nItemPos);
     SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
@@ -720,6 +721,10 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             m_pSh->GetView().GetViewFrame()->GetDispatcher()->
                 Execute( FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON );
         }
+    }
+    else if (nId == MN_AUTO_CORRECT_DLG)
+    {
+        m_pSh->GetView().GetViewFrame()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
     }
     else if (nId == MN_IGNORE_SELECTION)
     {
