@@ -22,9 +22,9 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFSESSION_HXX
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_SERFSESSION_HXX
 
-#include <vector>
-#include <boost/shared_ptr.hpp>
 #include <osl/mutex.hxx>
+#include <memory>
+#include <vector>
 #include "DAVSession.hxx"
 #include "SerfUri.hxx"
 
@@ -259,7 +259,7 @@ private:
     void Init( const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
-    void HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc )
+    void HandleError( std::shared_ptr<SerfRequestProcessor> rReqProc )
         throw ( DAVException );
 
     const ucbhelper::InternetProxyServer & getProxySettings() const;
