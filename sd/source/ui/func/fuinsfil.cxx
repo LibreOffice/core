@@ -63,6 +63,7 @@
 #include "Outliner.hxx"
 #include "sdabstdlg.hxx"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;

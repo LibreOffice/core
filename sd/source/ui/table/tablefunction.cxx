@@ -64,6 +64,7 @@
 #include "undo/undoobjects.hxx"
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::sd;
 using namespace sdr::table;

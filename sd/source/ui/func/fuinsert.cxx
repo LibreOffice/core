@@ -83,6 +83,7 @@
 #include <vcl/svapp.hxx>
 #include "undo/undoobjects.hxx"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 #include "glob.hrc"
 
 #include <config_features.h>

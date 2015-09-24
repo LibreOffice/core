@@ -26,6 +26,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 

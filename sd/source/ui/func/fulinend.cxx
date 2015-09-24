@@ -33,6 +33,7 @@
 #include "View.hxx"
 #include "Window.hxx"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
