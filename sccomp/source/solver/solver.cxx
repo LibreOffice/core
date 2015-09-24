@@ -143,7 +143,7 @@ SolverComponent::SolverComponent( const uno::Reference<uno::XComponentContext>& 
     mbMaximize( sal_True ),
     mbNonNegative( sal_False ),
     mbInteger( sal_False ),
-    mnTimeout( 100 ),
+    mnTimeout( 120 ),
     mnEpsilonLevel( 0 ),
     mbLimitBBDepth( sal_True ),
     mbSuccess( sal_False ),
