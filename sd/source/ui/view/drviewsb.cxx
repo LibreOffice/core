@@ -138,17 +138,14 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
     return bSuccess;
 }
 
-IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
+IMPL_LINK_TYPED( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
 {
-    if( ! pDialog )
-        return 0;
-
     OUString aNewName;
-    pDialog->GetName( aNewName );
+    rDialog.GetName( aNewName );
 
     SdPage* pCurrentPage = GetDoc()->GetSdPage( maTabControl->GetCurPageId() - 1, GetPageKind() );
 
-    return long(pCurrentPage && ( aNewName == pCurrentPage->GetName() || GetDocSh()->IsNewPageNameValid( aNewName ) ));
+    return pCurrentPage && ( aNewName == pCurrentPage->GetName() || GetDocSh()->IsNewPageNameValid( aNewName ) );
 }
 
 void DrawViewShell::ModifyLayer (

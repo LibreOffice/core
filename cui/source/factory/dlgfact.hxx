@@ -325,13 +325,13 @@ class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl,SvxNameDialog)
     virtual void    GetName( OUString& rName ) SAL_OVERRIDE ;
-    virtual void    SetCheckNameHdl( const Link<>& rLink, bool bCheckImmediately = false ) SAL_OVERRIDE ;
+    virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) SAL_OVERRIDE ;
     virtual void    SetEditHelpId(const OString&) SAL_OVERRIDE ;
     //from class Window
     virtual void    SetHelpId( const OString& ) SAL_OVERRIDE ;
     virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE ;
 private:
-    Link<> aCheckNameHdl;
+    Link<AbstractSvxNameDialog&,bool> aCheckNameHdl;
     DECL_LINK_TYPED(CheckNameHdl, SvxNameDialog&, bool);
 };
 

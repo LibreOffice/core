@@ -934,13 +934,10 @@ void SlotManager::RenameSlide()
     }
 }
 
-IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog*, pDialog)
+IMPL_LINK_TYPED(SlotManager, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool)
 {
-    if( ! pDialog )
-        return 0;
-
     OUString aNewName;
-    pDialog->GetName( aNewName );
+    rDialog.GetName( aNewName );
 
     model::SharedPageDescriptor pDescriptor (
         mrSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
@@ -948,9 +945,9 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog*, pDialog)
     if (pDescriptor.get() != NULL)
         pCurrentPage = pDescriptor->GetPage();
 
-    return long( (pCurrentPage!=NULL && aNewName == pCurrentPage->GetName())
+    return (pCurrentPage!=NULL && aNewName == pCurrentPage->GetName())
         || (mrSlideSorter.GetViewShell()
-            && mrSlideSorter.GetViewShell()->GetDocSh()->IsNewPageNameValid( aNewName ) ));
+            && mrSlideSorter.GetViewShell()->GetDocSh()->IsNewPageNameValid( aNewName ) );
 }
 
 bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUString & rName  )

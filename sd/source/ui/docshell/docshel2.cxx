@@ -410,16 +410,13 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
     return bCanUseNewName;
 }
 
-IMPL_LINK( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
+IMPL_LINK_TYPED( DrawDocShell, RenameSlideHdl, AbstractSvxNameDialog&, rDialog, bool )
 {
-    if( ! pDialog )
-        return long(false);
-
     OUString aNewName;
-    pDialog->GetName( aNewName );
-
-    return long(IsNewPageNameValid( aNewName ));
+    rDialog.GetName( aNewName );
+    return IsNewPageNameValid( aNewName );
 }
+
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

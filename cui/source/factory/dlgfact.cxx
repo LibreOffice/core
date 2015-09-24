@@ -587,7 +587,7 @@ void AbstractSvxNameDialog_Impl::GetName(OUString& rName)
     pDlg->GetName( rName );
 }
 
-void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link<>& rLink, bool bCheckImmediately )
+void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately )
 {
     aCheckNameHdl = rLink;
     if( rLink.IsSet() )
@@ -610,7 +610,7 @@ void AbstractSvxNameDialog_Impl::SetText( const OUString& rStr )
 IMPL_LINK_NOARG_TYPED(AbstractSvxNameDialog_Impl, CheckNameHdl, SvxNameDialog&, bool)
 {
     if( aCheckNameHdl.IsSet() )
-        return aCheckNameHdl.Call(this);
+        return aCheckNameHdl.Call(*this);
     return false;
 }
 
