@@ -55,7 +55,7 @@ android_version_setup : $(BOOTSTRAPDIR)/no-resource-compress.xml
 prepare-appcompat:
 	mkdir $(APPCOMPATDIR) 2>/dev/null; true
 	cp -rf $(ANDROID_SDK_HOME)/extras/android/support/v7/appcompat/* $(APPCOMPATDIR)
-	$(ANDROID_SDK_HOME)/tools/android update lib-project --target android-21 --path $(APPCOMPATDIR)
+	$(ANDROID_SDK_HOME)/tools/android update lib-project --target android-23 --path $(APPCOMPATDIR)
 
 properties:
 	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties

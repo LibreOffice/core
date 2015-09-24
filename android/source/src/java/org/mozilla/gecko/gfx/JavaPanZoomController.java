@@ -8,7 +8,6 @@ package org.mozilla.gecko.gfx;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Build;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.InputDevice;
@@ -428,7 +427,7 @@ public class JavaPanZoomController
     private float panDistance(MotionEvent move) {
         float dx = mX.panDistance(move.getX(0));
         float dy = mY.panDistance(move.getY(0));
-        return FloatMath.sqrt(dx * dx + dy * dy);
+        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
     private void track(float x, float y, long time) {
@@ -544,7 +543,7 @@ public class JavaPanZoomController
     private float getVelocity() {
         float xvel = mX.getRealVelocity();
         float yvel = mY.getRealVelocity();
-        return FloatMath.sqrt(xvel * xvel + yvel * yvel);
+        return (float) Math.sqrt(xvel * xvel + yvel * yvel);
     }
 
     public PointF getVelocityVector() {
