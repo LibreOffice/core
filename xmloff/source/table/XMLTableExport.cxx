@@ -516,7 +516,7 @@ void XMLTableExport::exportTableTemplates()
             Reference< XNameAccess > xStyleNames( xTableStyle, UNO_QUERY_THROW );
 
             mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
-             SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, true, true );
+            SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, true, true );
 
             const TableStyleElement* pElements = getTableStyleMap();
             while( pElements->meElement != XML_TOKEN_END )
@@ -527,7 +527,7 @@ void XMLTableExport::exportTableTemplates()
                     if( xStyle.is() )
                     {
                         mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, GetExport().EncodeStyleName( xStyle->getName() ) );
-                         SvXMLElementExport element( mrExport, XML_NAMESPACE_TABLE, pElements->meElement, true, true );
+                        SvXMLElementExport element( mrExport, XML_NAMESPACE_TABLE, pElements->meElement, true, true );
                     }
                 }
                 catch(const Exception&)
