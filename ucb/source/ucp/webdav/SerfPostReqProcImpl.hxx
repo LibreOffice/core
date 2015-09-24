@@ -37,6 +37,7 @@ public:
                          const DAVRequestHeaders& inRequestHeaders,
                          const char* inData,
                          apr_size_t inDataLen,
+                         const char* inLockToken,
                          const char* inContentType,
                          const char* inReferer,
                          const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm );
@@ -45,6 +46,7 @@ public:
                          const DAVRequestHeaders& inRequestHeaders,
                          const char* inData,
                          apr_size_t inDataLen,
+                         const char* inLockToken,
                          const char* inContentType,
                          const char* inReferer,
                          const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm );
@@ -64,6 +66,7 @@ protected:
 private:
     const char* mpPostData;
     apr_size_t mnPostDataLen;
+    const char* mpLockToken;
     const char* mpContentType;
     const char* mpReferer;
     com::sun::star::uno::Reference< SerfInputStream > xInputStream;

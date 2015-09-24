@@ -138,18 +138,27 @@ class DAVException
     private:
         ExceptionCode   mExceptionCode;
         rtl::OUString   mData;
+    //owner of the lock in case of DAV_LOCKED
+        rtl::OUString   mOwner;
+    //extendend error information, if the server has a specific header
+    //see in SerfRequestProcessor::handleSerfResponse for detail on how this is obtained
+        rtl::OUString   mExtendedError;
         sal_uInt16      mStatusCode;
 
     public:
          DAVException( ExceptionCode inExceptionCode )
              : mExceptionCode( inExceptionCode )
              , mData()
+             , mOwner()
+             , mExtendedError()
              , mStatusCode( SC_NONE )
          {};
          DAVException( ExceptionCode inExceptionCode,
                        const rtl::OUString & rData )
              : mExceptionCode( inExceptionCode )
              , mData( rData )
+             , mOwner()
+             , mExtendedError()
              , mStatusCode( SC_NONE )
          {};
          DAVException( ExceptionCode inExceptionCode,
@@ -157,13 +166,29 @@ class DAVException
                        sal_uInt16 nStatusCode )
             : mExceptionCode( inExceptionCode )
             , mData( rData )
+            , mOwner()
+            , mExtendedError()
+            , mStatusCode( nStatusCode )
+         {};
+         DAVException( ExceptionCode inExceptionCode,
+                       const rtl::OUString & rData,
+                       const rtl::OUString & rExtendedError,
+                       sal_uInt16 nStatusCode = SC_NONE )
+            : mExceptionCode( inExceptionCode )
+            , mData( rData )
+            , mOwner()
+            , mExtendedError( rExtendedError )
             , mStatusCode( nStatusCode )
          {};
         ~DAVException( ) {};
 
     const ExceptionCode & getError() const { return mExceptionCode; }
     const rtl::OUString & getData() const  { return mData; }
+    const rtl::OUString & getExtendedError() const { return  mExtendedError; }
     sal_uInt16 getStatus() const { return mStatusCode; }
+    const rtl::OUString & getOwner() const { return mOwner; }
+    void setOwner(const rtl::OUString & rOwner) { mOwner = rOwner; }
+
 };
 
 } // namespace http_dav_ucp

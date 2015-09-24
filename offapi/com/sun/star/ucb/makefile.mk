@@ -117,6 +117,7 @@ IDLFILES=\
     InteractiveFileIOException.idl\
     InteractiveIOException.idl\
     InteractiveLockingException.idl\
+    InteractiveLockingLockNotAvailableException.idl\
     InteractiveLockingLockExpiredException.idl\
     InteractiveLockingLockedException.idl\
     InteractiveLockingNotLockedException.idl\

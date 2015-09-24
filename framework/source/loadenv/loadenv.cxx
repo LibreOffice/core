@@ -376,6 +376,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::lang::XMulti
        )
     {
         io_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
+        io_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()] <<= xInteractionHandler;
     }
 
     if (io_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_MACROEXECUTIONMODE()) == io_lMediaDescriptor.end())

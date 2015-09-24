@@ -76,6 +76,8 @@ struct ProppatchValue
     : operation( o ), name( n ), value( v ) {}
 };
 
+enum LockScope { EXCLUSIVE = 0, SHARED = 1 };
+
 } // namespace http_dav_ucp
 
 #endif // _DAVTYPES_HXX_

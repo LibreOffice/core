@@ -29,9 +29,12 @@ namespace http_dav_ucp
 
 class SerfMkColReqProcImpl : public SerfRequestProcessorImpl
 {
+private:
+    const char* mpLockToken;
 public:
     SerfMkColReqProcImpl( const char* inPath,
-                          const DAVRequestHeaders& inRequestHeaders );
+                          const DAVRequestHeaders& inRequestHeaders,
+                          const char* inLockToken );
 
     virtual ~SerfMkColReqProcImpl();
 

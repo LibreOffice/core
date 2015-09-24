@@ -50,6 +50,10 @@
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
+#include <com/sun/star/ucb/Lock.hpp>
+#include <com/sun/star/ucb/InteractiveLockingLockNotAvailableException.hpp>
+#include <com/sun/star/ucb/InteractiveLockingLockedException.hpp>
+#include <com/sun/star/ucb/InteractiveNetworkReadException.hpp>
 #include <com/sun/star/util/XArchiver.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -309,6 +313,8 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteraction;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xCredentialInteraction;
+
     sal_Bool        m_bRemoveBackup;
     ::rtl::OUString m_aBackupURL;
 
@@ -486,7 +492,11 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 //------------------------------------------------------------------
 sal_Bool SfxMedium::DocNeedsFileDateCheck()
 {
-    return ( !IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
+    ::rtl::OUString aScheme =  INetURLObject::GetScheme( GetURLObject().GetProtocol() );
+    sal_Bool bIsWebDAV = ( aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTP_SCHEME ) ||
+                                  aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTPS_SCHEME ) );
+    return ( !IsReadOnly() &&
+             ( ::utl::LocalFileHelper::IsLocalFile( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) || bIsWebDAV ) );
 }
 
 //------------------------------------------------------------------
@@ -910,6 +920,86 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
     }
 }
 
+//->i126305 -----------------------------------------------------------------
+//for the time being the aData holds a single OUString, the owner of the lock
+sal_Int8 SfxMedium::ShowLockedWebDAVDocumentDialog( const uno::Sequence< ::rtl::OUString >& aData, sal_Bool bIsLoading )
+{
+    sal_Int8 nResult = LOCK_UI_NOLOCK;
+
+    // show the interaction regarding the document opening
+    uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+
+    if ( ::svt::DocumentLockFile::IsInteractionAllowed() && xHandler.is() && bIsLoading )
+    {
+        ::rtl::OUString aDocumentURL = GetURLObject().GetLastName();
+        ::rtl::OUString aInfo;
+        ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl;
+
+        aInfo = aData[0];
+        if(aData.getLength() > 1 && aData[1].getLength() > 0)
+        {
+            aInfo += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
+            aInfo += aData[1];
+        }
+
+        if ( bIsLoading )
+        {
+            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(
+                uno::makeAny( document::LockedDocumentRequest( ::rtl::OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
+        }
+        else
+        {
+            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(
+                uno::makeAny( document::LockedOnSavingRequest( ::rtl::OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
+        }
+
+        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
+        aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
+        aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
+        aContinuations[2] = new ::ucbhelper::InteractionDisapprove( xInteractionRequestImpl.get() );
+        xInteractionRequestImpl->setContinuations( aContinuations );
+
+        xHandler->handle( xInteractionRequestImpl.get() );
+
+        ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xInteractionRequestImpl->getSelection();
+        if ( uno::Reference< task::XInteractionAbort >( xSelected.get(), uno::UNO_QUERY ).is() )
+        {
+            SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+        }
+        else if ( uno::Reference< task::XInteractionDisapprove >( xSelected.get(), uno::UNO_QUERY ).is() )
+        {
+            // alien lock on loading, user has selected to edit a copy of document
+            // TODO/LATER: alien lock on saving, user has selected to do SaveAs to different location
+            // means that a copy of the document should be opened
+            GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
+        }
+        else // if ( XSelected == aContinuations[1] )
+        {
+            // alien lock on loading, user has selected to retry saving
+            // TODO/LATER: alien lock on saving, user has selected to retry saving
+            if ( bIsLoading )
+                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+            else
+                nResult = LOCK_UI_TRY;
+        }
+    }
+    else
+    {
+        if ( bIsLoading )
+        {
+            // if no interaction handler is provided the default answer is open readonly
+            // that usually happens in case the document is loaded per API
+            // so the document must be opened readonly for backward compatibility
+            GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+        }
+        else
+            SetError( ERRCODE_IO_ACCESSDENIED, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+    }
+
+    return nResult;
+}
+//<-i126305
+
 //------------------------------------------------------------------
 sal_Int8 SfxMedium::ShowLockedDocumentDialog( const uno::Sequence< ::rtl::OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock )
 {
@@ -1216,8 +1306,112 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
             }
             else
             {
-                // this is no file URL, check whether the file is readonly
-                bResult = !bContentReadonly;
+                //->i126305
+                // check if path scheme is http:// or https://
+                ::rtl::OUString aScheme =  INetURLObject::GetScheme(GetURLObject().GetProtocol());
+                if( aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTP_SCHEME ) ||
+                    aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTPS_SCHEME ) )
+                {
+                    //so, this is webdav stuff...
+                    Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
+                    if ( !bResult )
+                    {
+                        // no read-write access is necessary on loading if the document is explicitly opened as copy
+                        SFX_ITEMSET_ARG( GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+                        bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
+                    }
+
+                    if ( !bResult && !IsReadOnly() )
+                    {
+
+                        // in case of storing the document should request the output before locking
+                        if ( bLoading )
+                        {
+                            // let the stream be opened to check the system file locking
+                            GetMedium_Impl();
+                        }
+
+                        sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
+                        do
+                        {
+                            if( !bResult )
+                            {
+                                Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+                                uno::Reference< task::XInteractionHandler > xCHandler = GetAuthenticationInteractionHandler();
+                                xComEnv = new ::ucbhelper::CommandEnvironment( xCHandler,
+                                                                               Reference< ::com::sun::star::ucb::XProgressHandler >() );
+                                ::ucbhelper::Content aContentToLock( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xComEnv);
+                                rtl::OUString   aOwner;
+                                try {
+                                    aContentToLock.lock();
+                                    bResult = sal_True;
+                                }
+                                catch( ucb::InteractiveLockingLockNotAvailableException )
+                                {
+                                    // signalled when the lock can not be done because the method is known but not allowed on the resource
+                                    // the resource is still available, can be worked upon, at your risk
+                                    // so ask user whether he wants to open the document without any locking
+                                    uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
+
+                                    if ( xHandler.is() )
+                                    {
+                                        ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl
+                                            = new ::ucbhelper::InteractionRequest( uno::makeAny( document::LockFileIgnoreRequest() ) );
+
+                                        uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
+                                        aContinuations[0] = new ::ucbhelper::InteractionAbort( xIgnoreRequestImpl.get() );
+                                        aContinuations[1] = new ::ucbhelper::InteractionApprove( xIgnoreRequestImpl.get() );
+                                        xIgnoreRequestImpl->setContinuations( aContinuations );
+
+                                        xHandler->handle( xIgnoreRequestImpl.get() );
+
+                                        ::rtl::Reference< ::ucbhelper::InteractionContinuation > xSelected = xIgnoreRequestImpl->getSelection();
+                                        bResult = (  uno::Reference< task::XInteractionApprove >( xSelected.get(), uno::UNO_QUERY ).is() );
+                                    }
+                                }
+                                catch( ucb::InteractiveLockingLockedException& e )
+                                {
+                                    // here get the lock owner currently active
+                                    aOwner = e.Owner;
+                                    rtl::OUString aExtendedError;
+
+                                    if ( !bResult && !bNoUI )
+                                    {
+                                        uno::Sequence< ::rtl::OUString > aData( 2 );
+
+                                        aData[0] = aOwner;
+                                        aData[1] = aExtendedError;
+                                        bUIStatus = ShowLockedWebDAVDocumentDialog( aData, bLoading );
+                                        if ( bUIStatus == LOCK_UI_SUCCEEDED )
+                                        {
+                                            // take the ownership over the lock file, accept the current lock (already there)
+                                            bResult = sal_True;
+                                        }
+                                    }
+                                }
+                            }
+                        } while( !bResult && bUIStatus == LOCK_UI_TRY );
+                    }
+
+                    if ( !bResult && GetError() == ERRCODE_NONE )
+                    {
+                        // the error should be set in case it is storing process
+                        // or the document has been opened for editing explicitly
+                        SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
+                        if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
+                            SetError( ERRCODE_IO_ACCESSDENIED, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                        else
+                            GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+                    }
+
+                    pImp->m_bLocked = bResult;
+                }
+                else
+                {
+                    // this is neither file URL nor WebDAV, check whether the file is readonly
+                    bResult = !bContentReadonly;
+                }
+                //<-i126305
             }
         }
     }
@@ -2309,7 +2503,17 @@ void SfxMedium::GetMedium_Impl()
                         aMedium.addInputStreamOwnLock();
                     }
                     else
+                    {
+                        //add acheck for protocol, to see if it's http or https then add
+                        //the interecation handler to be used by the authentication dialog
+                        ::rtl::OUString aScheme =  INetURLObject::GetScheme(GetURLObject().GetProtocol());
+                        if( aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTP_SCHEME ) ||
+                            aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTPS_SCHEME ) )
+                        {
+                            aMedium[comphelper::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()] <<= GetAuthenticationInteractionHandler();
+                        }
                         aMedium.addInputStream();
+                    }
 
                     // the ReadOnly property set in aMedium is ignored
                     // the check is done in LockOrigFileOnDemand() for file and non-file URLs
@@ -2531,6 +2735,36 @@ void SfxMedium::UseInteractionHandler( sal_Bool bUse )
 //------------------------------------------------------------------
 
 ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
+SfxMedium::GetAuthenticationInteractionHandler()
+{
+    // search a possible existing handler inside cached item set
+    if ( pSet )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xHandler;
+        SFX_ITEMSET_ARG( pSet, pHandler, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False);
+        if ( pHandler && (pHandler->GetValue() >>= xHandler) && xHandler.is() )
+            return xHandler;
+    }
+
+    // otherwhise return cached default handler ... if it exist.
+    if ( pImp->xCredentialInteraction.is() )
+        return pImp->xCredentialInteraction;
+
+    // create default handler and cache it!
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    if ( xFactory.is() )
+    {
+        pImp->xCredentialInteraction = ::com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >(
+            xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), ::com::sun::star::uno::UNO_QUERY );
+        return pImp->xCredentialInteraction;
+    }
+
+    return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
+}
+
+//------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
 SfxMedium::GetInteractionHandler()
 {
     // if interaction isn't allowed explicitly ... return empty reference!
@@ -2558,7 +2792,8 @@ SfxMedium::GetInteractionHandler()
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     if ( xFactory.is() )
     {
-        pImp->xInteraction = ::com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >( xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), ::com::sun::star::uno::UNO_QUERY );
+        pImp->xInteraction = ::com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >(
+            xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), ::com::sun::star::uno::UNO_QUERY );
         return pImp->xInteraction;
     }
 
@@ -2708,38 +2943,74 @@ void SfxMedium::CloseAndRelease()
 
 void SfxMedium::UnlockFile( sal_Bool bReleaseLockStream )
 {
-    if ( pImp->m_xLockingStream.is() )
+    //->i126305
+    //check if the file is local
+    if ( ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
     {
-        if ( bReleaseLockStream )
+    //<-i126305
+        if ( pImp->m_xLockingStream.is() )
+        {
+            if ( bReleaseLockStream )
+            {
+                try
+                {
+                    uno::Reference< io::XInputStream > xInStream = pImp->m_xLockingStream->getInputStream();
+                    uno::Reference< io::XOutputStream > xOutStream = pImp->m_xLockingStream->getOutputStream();
+                    if ( xInStream.is() )
+                        xInStream->closeInput();
+                    if ( xOutStream.is() )
+                        xOutStream->closeOutput();
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
+            pImp->m_xLockingStream = uno::Reference< io::XStream >();
+        }
+
+        if ( pImp->m_bLocked )
         {
             try
             {
-                uno::Reference< io::XInputStream > xInStream = pImp->m_xLockingStream->getInputStream();
-                uno::Reference< io::XOutputStream > xOutStream = pImp->m_xLockingStream->getOutputStream();
-                if ( xInStream.is() )
-                    xInStream->closeInput();
-                if ( xOutStream.is() )
-                    xOutStream->closeOutput();
+                pImp->m_bLocked = sal_False;
+                ::svt::DocumentLockFile aLockFile( aLogicName );
+                // TODO/LATER: A warning could be shown in case the file is not the own one
+                aLockFile.RemoveFile();
             }
             catch( uno::Exception& )
             {}
         }
-
-        pImp->m_xLockingStream = uno::Reference< io::XStream >();
+    //->i126305
     }
-
-    if ( pImp->m_bLocked )
+    else
     {
-        try
+        //not local, check if webdav
+        ::rtl::OUString aScheme =  INetURLObject::GetScheme(GetURLObject().GetProtocol());
+        if( aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTP_SCHEME ) ||
+            aScheme.equalsIgnoreAsciiCaseAscii( INET_HTTPS_SCHEME ) )
         {
-            pImp->m_bLocked = sal_False;
-            ::svt::DocumentLockFile aLockFile( aLogicName );
-            // TODO/LATER: A warning could be shown in case the file is not the own one
-            aLockFile.RemoveFile();
+            if ( pImp->m_bLocked )
+            {
+                // an interaction handler should be used for authentication
+                try {
+                    Reference< ::com::sun::star::task::XInteractionHandler > xHandler = GetAuthenticationInteractionHandler();
+                    Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+                    xComEnv = new ::ucbhelper::CommandEnvironment( xHandler,
+                                                                   Reference< ::com::sun::star::ucb::XProgressHandler >() );
+                    ::ucbhelper::Content aContentToUnlock( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xComEnv);
+                    pImp->m_bLocked = sal_False;
+                    aContentToUnlock.unlock();
+                }
+                catch (ucb::InteractiveNetworkReadException& e)
+                {
+                    //signalled when this resource can not be unlocked, for whatever reason
+                }
+                catch( uno::Exception& )
+                {}
+            }
         }
-        catch( uno::Exception& )
-        {}
     }
+    //<-i126305
 }
 
 void SfxMedium::CloseAndReleaseStreams_Impl()

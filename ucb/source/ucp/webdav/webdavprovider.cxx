@@ -47,6 +47,7 @@ using namespace http_dav_ucp;
 rtl::OUString &WebDAVUserAgent::operator()() const
 {
     rtl::OUStringBuffer aBuffer;
+    aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Apache " ));
     aBuffer.appendAscii( RTL_CONSTASCII_STRINGPARAM( "$ooName/$ooSetupVersion" ));
 #if OSL_DEBUG_LEVEL > 0
 #ifdef APR_VERSION

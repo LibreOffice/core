@@ -35,12 +35,14 @@ SerfPostReqProcImpl::SerfPostReqProcImpl( const char* inPath,
                                           const DAVRequestHeaders& inRequestHeaders,
                                           const char* inData,
                                           apr_size_t inDataLen,
+                                          const char* inLockToken,
                                           const char* inContentType,
                                           const char* inReferer,
                                           const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpPostData( inData )
     , mnPostDataLen( inDataLen )
+    , mpLockToken( inLockToken )
     , mpContentType( inContentType )
     , mpReferer( inReferer )
     , xInputStream( xioInStrm )
@@ -52,12 +54,14 @@ SerfPostReqProcImpl::SerfPostReqProcImpl( const char* inPath,
                                           const DAVRequestHeaders& inRequestHeaders,
                                           const char* inData,
                                           apr_size_t inDataLen,
+                                          const char* inLockToken,
                                           const char* inContentType,
                                           const char* inReferer,
                                           const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpPostData( inData )
     , mnPostDataLen( inDataLen )
+    , mpLockToken( inLockToken )
     , mpContentType( inContentType )
     , mpReferer( inReferer )
     , xInputStream()
@@ -101,6 +105,10 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
     if ( mpReferer != 0 )
     {
         serf_bucket_headers_set( hdrs_bkt, "Referer", mpReferer );
+    }
+    if(mpLockToken)
+    {
+        serf_bucket_headers_set( hdrs_bkt, "if", mpLockToken );
     }
 
     return req_bkt;

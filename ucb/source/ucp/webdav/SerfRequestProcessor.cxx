@@ -30,6 +30,9 @@
 
 #include <apr_strings.h>
 
+//to examine returned http code
+#include "DAVException.hxx"
+
 namespace http_dav_ucp
 {
 
@@ -111,11 +114,19 @@ bool SerfRequestProcessor::processPropFind( const Depth inDepth,
 
 // PROPPATCH
 bool SerfRequestProcessor::processPropPatch( const std::vector< ProppatchValue > & inProperties,
+                                             const com::sun::star::ucb::Lock  inLock,
                                              apr_status_t& outSerfStatus )
 {
+    char * inLockToken = static_cast<char*>(0);
+    if(inLock.LockTokens.getLength() > 0)
+    {
+        inLockToken = apr_psprintf( mrSerfSession.getAprPool(), "(<%s>)",
+                               rtl::OUStringToOString(inLock.LockTokens[0], RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
     mpProcImpl = createPropPatchReqProcImpl( mPathStr,
                                              mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
-                                             inProperties );
+                                             inProperties,
+                                             inLockToken );
     outSerfStatus = runProcessor();
 
     return outSerfStatus == APR_SUCCESS;
@@ -194,11 +205,19 @@ bool SerfRequestProcessor::processHead( const std::vector< ::rtl::OUString > & i
 // PUT
 bool SerfRequestProcessor::processPut( const char* inData,
                                        apr_size_t inDataLen,
+                                       const com::sun::star::ucb::Lock inLock,
                                        apr_status_t& outSerfStatus )
 {
+    char * inLockToken = static_cast<char*>(0);
+    if(inLock.LockTokens.getLength() > 0)
+    {
+        inLockToken = apr_psprintf( mrSerfSession.getAprPool(), "(<%s>)",
+                               rtl::OUStringToOString(inLock.LockTokens[0], RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
     mpProcImpl = createPutReqProcImpl( mPathStr,
                                        mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                        inData,
+                                       inLockToken,
                                        inDataLen );
     outSerfStatus = runProcessor();
 
@@ -210,6 +229,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_size_t inDataLen,
                                         const rtl::OUString & inContentType,
                                         const rtl::OUString & inReferer,
+                                        const com::sun::star::ucb::Lock inLock,
                                         const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
                                         apr_status_t& outSerfStatus )
 {
@@ -217,10 +237,17 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                 rtl::OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ).getStr() );
     mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
                                 rtl::OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ).getStr() );
+    char * inLockToken = static_cast<char*>(0);
+    if(inLock.LockTokens.getLength() > 0)
+    {
+        inLockToken = apr_psprintf( mrSerfSession.getAprPool(), "(<%s>)",
+                               rtl::OUStringToOString(inLock.LockTokens[0], RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
     mpProcImpl = createPostReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         inData,
                                         inDataLen,
+                                        inLockToken,
                                         mContentType,
                                         mReferer,
                                         xioInStrm );
@@ -234,6 +261,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                         apr_size_t inDataLen,
                                         const rtl::OUString & inContentType,
                                         const rtl::OUString & inReferer,
+                                        const com::sun::star::ucb::Lock inLock,
                                         const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
                                         apr_status_t& outSerfStatus )
 {
@@ -241,10 +269,17 @@ bool SerfRequestProcessor::processPost( const char* inData,
                                 rtl::OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ).getStr() );
     mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
                             rtl::OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ).getStr() );
+    char * inLockToken = static_cast<char*>(0);
+    if(inLock.LockTokens.getLength() > 0)
+    {
+        inLockToken = apr_psprintf( mrSerfSession.getAprPool(), "(<%s>)",
+                               rtl::OUStringToOString(inLock.LockTokens[0], RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
     mpProcImpl = createPostReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         inData,
                                         inDataLen,
+                                        inLockToken,
                                         mContentType,
                                         mReferer,
                                         xioOutStrm );
@@ -254,20 +289,36 @@ bool SerfRequestProcessor::processPost( const char* inData,
 }
 
 // DELETE
-bool SerfRequestProcessor::processDelete( apr_status_t& outSerfStatus )
+bool SerfRequestProcessor::processDelete( const com::sun::star::ucb::Lock inLock,
+                                          apr_status_t& outSerfStatus )
 {
+    char * inLockToken = static_cast<char*>(0);
+    if(inLock.LockTokens.getLength() > 0)
+    {
+        inLockToken = apr_psprintf( mrSerfSession.getAprPool(), "(<%s>)",
+                               rtl::OUStringToOString(inLock.LockTokens[0], RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
     mpProcImpl = createDeleteReqProcImpl( mPathStr,
-                                          mrSerfSession.getRequestEnvironment().m_aRequestHeaders );
+                                          mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
+                                          inLockToken );
     outSerfStatus = runProcessor();
 
     return outSerfStatus == APR_SUCCESS;
 }
 
 // MKCOL
-bool SerfRequestProcessor::processMkCol( apr_status_t& outSerfStatus )
+bool SerfRequestProcessor::processMkCol( const com::sun::star::ucb::Lock inLock,
+                                         apr_status_t& outSerfStatus )
 {
+    char * inLockToken = static_cast<char*>(0);
+    if(inLock.LockTokens.getLength() > 0)
+    {
+        inLockToken = apr_psprintf( mrSerfSession.getAprPool(), "(<%s>)",
+                               rtl::OUStringToOString(inLock.LockTokens[0], RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
     mpProcImpl = createMkColReqProcImpl( mPathStr,
-                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders );
+                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
+                                         inLockToken );
     outSerfStatus = runProcessor();
 
     return outSerfStatus == APR_SUCCESS;
@@ -276,14 +327,22 @@ bool SerfRequestProcessor::processMkCol( apr_status_t& outSerfStatus )
 // COPY
 bool SerfRequestProcessor::processCopy( const rtl::OUString & inDestinationPath,
                                         const bool inOverwrite,
+                                        const com::sun::star::ucb::Lock inLock,
                                         apr_status_t& outSerfStatus )
 {
     mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
                                 rtl::OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
+    char * inLockToken = static_cast<char*>(0);
+    if(inLock.LockTokens.getLength() > 0)
+    {
+        inLockToken = apr_psprintf( mrSerfSession.getAprPool(), "(<%s>)",
+                               rtl::OUStringToOString(inLock.LockTokens[0], RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
     mpProcImpl = createCopyReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         mDestPathStr,
-                                        inOverwrite );
+                                        inOverwrite,
+                                        inLockToken );
     outSerfStatus = runProcessor();
 
     return outSerfStatus == APR_SUCCESS;
@@ -292,14 +351,95 @@ bool SerfRequestProcessor::processCopy( const rtl::OUString & inDestinationPath,
 // MOVE
 bool SerfRequestProcessor::processMove( const rtl::OUString & inDestinationPath,
                                         const bool inOverwrite,
+                                        const com::sun::star::ucb::Lock  inLock,
                                         apr_status_t& outSerfStatus )
 {
     mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
                                 rtl::OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
+    char * inLockToken = static_cast<char*>(0);
+    if(inLock.LockTokens.getLength() > 0)
+    {
+        inLockToken = apr_psprintf( mrSerfSession.getAprPool(), "(<%s>)",
+                               rtl::OUStringToOString(inLock.LockTokens[0], RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
     mpProcImpl = createMoveReqProcImpl( mPathStr,
                                         mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
                                         mDestPathStr,
-                                        inOverwrite );
+                                        inOverwrite,
+                                        inLockToken );
+    outSerfStatus = runProcessor();
+
+    return outSerfStatus == APR_SUCCESS;
+}
+
+//LOCK creating a new lock
+bool SerfRequestProcessor::processLock( const rtl::OUString & inDestinationPath,
+                                        const com::sun::star::ucb::Lock& inLock,
+                                        DAVPropertyValue & outLock,
+                                        apr_status_t& outSerfStatus )
+{
+    mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
+                                rtl::OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
+    char * Timeout;
+    if(inLock.Timeout == -1)
+        Timeout = apr_psprintf( mrSerfSession.getAprPool(), "Infinite" );
+    else
+        Timeout = apr_psprintf( mrSerfSession.getAprPool(), "Second-%ld", inLock.Timeout );
+
+    mpProcImpl = createLockReqProcImpl( mPathStr,
+                                        mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
+                                        inLock,
+                                        Timeout,
+                                        outLock);
+    outSerfStatus = runProcessor();
+
+    return outSerfStatus == APR_SUCCESS;
+}
+
+//LOCK refresh an existing lock
+bool SerfRequestProcessor::processLockRefresh( const rtl::OUString & inDestinationPath,
+                                        const com::sun::star::ucb::Lock& inLock,
+                                        DAVPropertyValue & outLock,
+                                        apr_status_t& outSerfStatus )
+{
+    mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
+                                rtl::OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
+    char * Timeout;
+    if(inLock.Timeout == -1)
+        Timeout = apr_psprintf( mrSerfSession.getAprPool(), "Infinite" );
+    else
+        Timeout = apr_psprintf( mrSerfSession.getAprPool(), "Second-%ld", inLock.Timeout );
+
+    char * inLockToken = apr_psprintf( mrSerfSession.getAprPool(), "(<%s>)",
+                                 rtl::OUStringToOString(inLock.LockTokens[0], RTL_TEXTENCODING_UTF8 ).getStr() );
+
+    mpProcImpl = createLockRefreshProcImpl( mPathStr,
+                                            mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
+                                            inLock,
+                                            inLockToken,
+                                            Timeout,
+                                            outLock);
+    outSerfStatus = runProcessor();
+
+    return outSerfStatus == APR_SUCCESS;
+}
+
+//ULOCK unlock an existing lock
+bool SerfRequestProcessor::processUnlock( const rtl::OUString & inDestinationPath,
+                                        const com::sun::star::ucb::Lock& inLock,
+                                        apr_status_t& outSerfStatus )
+{
+    mDestPathStr = apr_pstrdup( mrSerfSession.getAprPool(),
+                                rtl::OUStringToOString( inDestinationPath, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+    char * aToken = apr_psprintf( mrSerfSession.getAprPool(), "<%s>",
+                                 rtl::OUStringToOString(inLock.LockTokens[0], RTL_TEXTENCODING_UTF8 ).getStr() );
+
+    mpProcImpl = createUnlockProcImpl( mPathStr,
+                                       mrSerfSession.getRequestEnvironment().m_aRequestHeaders,
+                                       inLock,
+                                       aToken );
+
     outSerfStatus = runProcessor();
 
     return outSerfStatus == APR_SUCCESS;
@@ -316,6 +456,7 @@ apr_status_t SerfRequestProcessor::runProcessor()
     }
 
     // create serf request
+    OSL_ASSERT(mrSerfSession.getSerfConnection() != NULL);
     serf_connection_request_create( mrSerfSession.getSerfConnection(),
                                     Serf_SetupRequest,
                                     this );
@@ -336,6 +477,10 @@ apr_status_t SerfRequestProcessor::runProcessor()
         }
         if ( status != APR_SUCCESS )
         {
+#if OSL_DEBUG_LEVEL > 0
+            char buff[512];
+            OSL_TRACE("SerfRequestProcessor::runProcessor, status != APR_SUCCESS: %d (%s)",status, apr_strerror(status, buff, 512));
+#endif
             break;
         }
         if ( mbProcessingDone )
@@ -356,6 +501,7 @@ void SerfRequestProcessor::postprocessProcessor( const apr_status_t inStatus )
         return;
     }
 
+    OSL_TRACE("SerfRequestProcessor::postprocessProcessor:%d",__LINE__);
     switch ( inStatus )
     {
     case APR_EGENERAL:
@@ -391,6 +537,11 @@ void SerfRequestProcessor::postprocessProcessor( const apr_status_t inStatus )
                 mpDAVException = new DAVException( DAVException::DAV_HTTP_REDIRECT,
                                                    mRedirectLocation );
                 break;
+            case SC_LOCKED:
+                mpDAVException = new DAVException( DAVException::DAV_LOCKED,
+                                                   mHTTPStatusCodeText,
+                                                   mnHTTPStatusCode );
+                break;
             default:
                 mpDAVException = new DAVException( DAVException::DAV_HTTP_ERROR,
                                                    mHTTPStatusCodeText,
@@ -404,7 +555,6 @@ void SerfRequestProcessor::postprocessProcessor( const apr_status_t inStatus )
         mpDAVException = new DAVException( DAVException::DAV_HTTP_ERROR );
         break;
     }
-
 }
 
 apr_status_t SerfRequestProcessor::provideSerfCredentials( char ** outUsername,
@@ -500,6 +650,24 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
             mbProcessingDone = false; // allow another try in order to get a response
             return status;
         }
+        serf_bucket_t *headers = serf_bucket_response_get_headers( inSerfResponseBucket );
+
+        // check header according:
+        // http://tools.ietf.org/html/rfc7231#section-7.4.2
+        // need to do this so we can adjust the protocol accordingly
+        // serf_bucket_headers_get is case independent
+        const char* server = serf_bucket_headers_get( headers, "server" );
+        if( server )
+        {
+            //update the server type on session
+            mrSerfSession.setServerHeaderField( ::rtl::OUString::createFromAscii( server ) );
+        }
+        //the following extension is MS IIS specific,
+        //see https://msdn.microsoft.com/en-us/library/cc250064.aspx
+        //site last checked on 2015-03-02
+        //TODO i126305 need to be added when serf is updated to a version supporting Windows authentication
+        //const char* msDavExtErr = serf_bucket_headers_get( headers, "X-MSDAVEXT_ERROR" );
+
         // TODO - check, if response status code handling is correct
         mnHTTPStatusCode = ( sl.version != 0 && sl.code >= 0 )
                            ? static_cast< sal_uInt16 >( sl.code )
@@ -517,7 +685,6 @@ apr_status_t SerfRequestProcessor::handleSerfResponse( serf_request_t * inSerfRe
                  mnHTTPStatusCode == 307 )
             {
                 // new location for certain redirections
-                serf_bucket_t *headers = serf_bucket_response_get_headers( inSerfResponseBucket );
                 const char* location = serf_bucket_headers_get( headers, "Location" );
                 if ( location )
                 {

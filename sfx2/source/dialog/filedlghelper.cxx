@@ -2710,7 +2710,7 @@ static int impl_isFolder( const OUString& rPath )
     {
     }
 
-    ::rtl::Reference< ::comphelper::StillReadWriteInteraction > aHandler = new ::comphelper::StillReadWriteInteraction( xHandler );
+    ::rtl::Reference< ::comphelper::StillReadWriteInteraction > aHandler = new ::comphelper::StillReadWriteInteraction( xHandler , uno::Reference< task::XInteractionHandler >());
 
     try
     {

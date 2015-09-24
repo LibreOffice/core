@@ -140,6 +140,8 @@ public:
     void                UseInteractionHandler( sal_Bool );
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
                         GetInteractionHandler();
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
+                        GetAuthenticationInteractionHandler();
 
     void setStreamToLoadFrom(const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream,sal_Bool bIsReadOnly )
     { m_xInputStreamToLoadFrom = xInputStream; m_bIsReadOnly = bIsReadOnly; }
@@ -211,6 +213,9 @@ public:
     sal_Bool            Commit();
     sal_Bool            IsStorage();
 
+    //->i126305
+    sal_Int8            ShowLockedWebDAVDocumentDialog( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aData, sal_Bool bIsLoading );
+    //<-i126305
     sal_Int8            ShowLockedDocumentDialog( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aData, sal_Bool bIsLoading, sal_Bool bOwnLock );
     sal_Bool            LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI );
     void                UnlockFile( sal_Bool bReleaseLockStream );

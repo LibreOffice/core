@@ -30,8 +30,10 @@ namespace http_dav_ucp
 {
 
 SerfDeleteReqProcImpl::SerfDeleteReqProcImpl( const char* inPath,
-                                              const DAVRequestHeaders& inRequestHeaders )
+                                              const DAVRequestHeaders& inRequestHeaders,
+                                              const char* inLockToken )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
+    , mpLockToken( inLockToken )
 {
 }
 
@@ -52,6 +54,11 @@ serf_bucket_t * SerfDeleteReqProcImpl::createSerfRequestBucket( serf_request_t *
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
     // general header fields provided by caller
     setRequestHeaders( hdrs_bkt );
+    // specific header field
+    if(mpLockToken)
+    {
+        serf_bucket_headers_set( hdrs_bkt, "if", mpLockToken );
+    }
 
     return req_bkt;
 }

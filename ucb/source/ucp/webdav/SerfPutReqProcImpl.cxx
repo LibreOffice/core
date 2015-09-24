@@ -34,9 +34,11 @@ namespace http_dav_ucp
 SerfPutReqProcImpl::SerfPutReqProcImpl( const char* inPath,
                                         const DAVRequestHeaders& inRequestHeaders,
                                         const char* inData,
+                                        const char* inLockToken,
                                         apr_size_t inDataLen )
     : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpData( inData )
+    , mpLockToken( inLockToken)
     , mnDataLen( inDataLen )
 {
 }
@@ -68,6 +70,11 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
     // general header fields provided by caller
     setRequestHeaders( hdrs_bkt );
+    if(mpLockToken)
+    {
+    // request specific header field
+        serf_bucket_headers_set( hdrs_bkt, "if", mpLockToken );
+    }
 
     return req_bkt;
 }

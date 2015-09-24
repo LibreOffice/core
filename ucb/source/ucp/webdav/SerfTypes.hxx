@@ -25,13 +25,42 @@
 #define INCLUDED_SERFTYPES_HXX
 
 #include <serf.h>
+#include <com/sun/star/ucb/Lock.hpp>
+#include "DAVTypes.hxx"
+#include "DAVRequestEnvironment.hxx"
+
+using namespace com::sun::star;
+
+namespace http_dav_ucp
+{
 
 typedef serf_connection_t SerfConnection;
 
-// TODO, figure out type of <SerfLock>
-typedef int SerfLock;
+class SerfLock
+{
+private:
+    ucb::Lock               mLock;
+    const rtl::OUString     mResourceUri;
+    const rtl::OUString     mPathStr;
+    // const DAVRequestEnvironment& mrRequestEnvironment;
+public:
+
+    SerfLock(const ucb::Lock inLock, rtl::OUString inUri, rtl::OUString inPath)
+        : mLock( inLock )
+        , mResourceUri( inUri )
+        , mPathStr( inPath )
+        // , mrRequestEnvironment( rEnv )
+        {};
+
+    void setLock(const ucb::Lock inLock)  { mLock = inLock; };
+    const ucb::Lock                 getLock() { return mLock; };
+    const rtl::OUString             getResourceUri() { return mResourceUri; };
+    const rtl::OUString             getResourcePath() { return mPathStr; };
+    // const DAVRequestEnvironment&    getRequestEnvironment() { return mrRequestEnvironment; };
+};
 
 // TODO, check if we need it later on
 typedef struct { const char *nspace, *name; } SerfPropName;
 
+};
 #endif // INCLUDED_SERFTYPES_HXX

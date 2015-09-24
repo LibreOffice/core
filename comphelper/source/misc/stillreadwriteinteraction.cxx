@@ -37,14 +37,18 @@
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #endif
 
+#include <com/sun/star/ucb/AuthenticationRequest.hpp>
+
 namespace comphelper{
 
     namespace css = ::com::sun::star;
 
-StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler)
+    StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
+                                                         const css::uno::Reference< css::task::XInteractionHandler >& xAuthenticationHandler)
              : m_bUsed                    (sal_False)
              , m_bHandledByMySelf         (sal_False)
              , m_bHandledByInternalHandler(sal_False)
+             , m_xAuthenticationHandler(xAuthenticationHandler)
 {
     ::std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
     ::ucbhelper::InterceptedInteraction::InterceptedRequest                  aInterceptedRequest;
@@ -57,6 +61,12 @@ StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< 
 
     aInterceptedRequest.Handle = HANDLE_UNSUPPORTEDDATASINKEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::UnsupportedDataSinkException();
+    aInterceptedRequest.Continuation = ::getCppuType(static_cast< css::uno::Reference< css::task::XInteractionAbort >* >(0));
+    aInterceptedRequest.MatchExact = sal_False;
+    lInterceptions.push_back(aInterceptedRequest);
+
+    aInterceptedRequest.Handle = HANDLE_AUTHENTICATIONREQUESTEXCEPTION;
+    aInterceptedRequest.Request <<= css::ucb::AuthenticationRequest();
     aInterceptedRequest.Continuation = ::getCppuType(static_cast< css::uno::Reference< css::task::XInteractionAbort >* >(0));
     aInterceptedRequest.MatchExact = sal_False;
     lInterceptions.push_back(aInterceptedRequest);
@@ -112,6 +122,18 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
     case HANDLE_UNSUPPORTEDDATASINKEXCEPTION:
         {
             bAbort = sal_True;
+        }
+        break;
+    case HANDLE_AUTHENTICATIONREQUESTEXCEPTION:
+        {
+//use internal authentication dedicated handler and return
+            if (m_xAuthenticationHandler.is())
+            {
+                m_xAuthenticationHandler->handle(xRequest);
+                return ::ucbhelper::InterceptedInteraction::E_INTERCEPTED;
+            }
+            else //simply abort
+                bAbort = sal_True;;
         }
         break;
     }

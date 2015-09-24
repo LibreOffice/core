@@ -32,6 +32,7 @@
 #include "DAVResource.hxx"
 #include "DAVException.hxx"
 
+#include "SerfTypes.hxx"
 #include "SerfInputStream.hxx"
 #include <com/sun/star/io/XOutputStream.hpp>
 
@@ -62,6 +63,7 @@ public:
 
     // PROPPATCH
     bool processPropPatch( const std::vector< ProppatchValue > & inProperties,
+                           const com::sun::star::ucb::Lock  inLock,
                            apr_status_t& outSerfStatus );
 
     // GET
@@ -92,6 +94,7 @@ public:
     // PUT
     bool processPut( const char* inData,
                      apr_size_t inDataLen,
+                     const com::sun::star::ucb::Lock  inLock,
                      apr_status_t& outSerfStatus );
 
     // POST
@@ -99,6 +102,7 @@ public:
                       apr_size_t inDataLen,
                       const rtl::OUString & inContentType,
                       const rtl::OUString & inReferer,
+                      const com::sun::star::ucb::Lock  inLock,
                       const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
                       apr_status_t& outSerfStatus );
 
@@ -107,24 +111,46 @@ public:
                       apr_size_t inDataLen,
                       const rtl::OUString & inContentType,
                       const rtl::OUString & inReferer,
+                      const com::sun::star::ucb::Lock  inLock,
                       const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
                       apr_status_t& outSerfStatus );
 
     // DELETE
-    bool processDelete( apr_status_t& outSerfStatus );
+    bool processDelete( const com::sun::star::ucb::Lock inLock,
+                        apr_status_t& outSerfStatus );
 
     // MKCOL
-    bool processMkCol( apr_status_t& outSerfStatus );
+    bool processMkCol( const com::sun::star::ucb::Lock inLock,
+                       apr_status_t& outSerfStatus );
 
     // COPY
     bool processCopy( const rtl::OUString & inDestinationPath,
                       const bool inOverwrite,
+                      const com::sun::star::ucb::Lock inLock,
                       apr_status_t& outSerfStatus );
 
     // MOVE
     bool processMove( const rtl::OUString & inDestinationPath,
                       const bool inOverwrite,
+                      const com::sun::star::ucb::Lock inLock,
                       apr_status_t& outSerfStatus );
+
+    // LOCK
+    bool processLock( const rtl::OUString & inDestinationPath,
+                      const com::sun::star::ucb::Lock& inLock,
+                      DAVPropertyValue & outLock,
+                      apr_status_t& outSerfStatus );
+
+    // LOCK refresh
+    bool processLockRefresh( const rtl::OUString & inDestinationPath,
+                      const com::sun::star::ucb::Lock& inLock,
+                      DAVPropertyValue & outLock,
+                      apr_status_t& outSerfStatus );
+
+    //UNLOCK
+    bool processUnlock( const rtl::OUString & inDestinationPath,
+                        const com::sun::star::ucb::Lock& inLock,
+                        apr_status_t& outSerfStatus );
 
     apr_status_t provideSerfCredentials( char ** outUsername,
                                          char ** outPassword,

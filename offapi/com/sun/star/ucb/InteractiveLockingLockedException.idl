@@ -46,6 +46,13 @@ module com { module sun { module star { module ucb {
         <false/> the lock has been obtained by another principal.
     */
     boolean SelfOwned;
+    //->i126305 -------------------------------------------------------------------------
+    /** The owner of the lock.
+     *
+     *  Used for WevDAV interface
+    */
+    string Owner;
+    //<-i126305
 };
 
 //=============================================================================

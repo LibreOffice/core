@@ -24,11 +24,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
 
-#include <ne_locks.h>
-#include <ne_uri.h>
 #include <rtl/ustring.hxx>
 #include <osl/time.h>
 #include <osl/thread.hxx>
+#include "SerfTypes.hxx"
 #include "SerfSession.hxx"
 #include "SerfLockStore.hxx"
 
@@ -58,7 +57,7 @@ protected:
 // -------------------------------------------------------------------
 void TickerThread::run()
 {
-    OSL_TRACE( "TickerThread: start." );
+    OSL_TRACE( "TickerThread::run: start." );
 
     // we have to go through the loop more often to be able to finish ~quickly
     const int nNth = 25;
@@ -83,10 +82,8 @@ void TickerThread::run()
 
 // -------------------------------------------------------------------
 SerfLockStore::SerfLockStore()
-    : m_pSerfLockStore( ne_lockstore_create() ),
-      m_pTickerThread( 0 )
+    : m_pTickerThread( 0 )
 {
-    OSL_ENSURE( m_pSerfLockStore, "Unable to create neon lock store!" );
 }
 
 // -------------------------------------------------------------------
@@ -103,15 +100,15 @@ SerfLockStore::~SerfLockStore()
     while ( it != end )
     {
         SerfLock * pLock = (*it).first;
-        (*it).second.xSession->UNLOCK( pLock );
-
-        ne_lockstore_remove( m_pSerfLockStore, pLock );
-        ne_lock_destroy( pLock );
-
+        try
+        {
+            (*it).second.xSession->UNLOCK( pLock );
+            (*it).second.xSession->release();
+        }
+        catch (DAVException & )
+        {}
         ++it;
     }
-
-    ne_lockstore_destroy( m_pSerfLockStore );
 }
 
 // -------------------------------------------------------------------
@@ -140,23 +137,34 @@ void SerfLockStore::stopTicker()
     }
 }
 
+#if 0       //not currently used
 // -------------------------------------------------------------------
-void SerfLockStore::registerSession( HttpSession * pHttpSession )
+void SerfLockStore::registerSession( SerfSession /* aSession */ )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ne_lockstore_register( m_pSerfLockStore, pHttpSession );
 }
+#endif
 
 // -------------------------------------------------------------------
-SerfLock * SerfLockStore::findByUri( rtl::OUString const & rUri )
+SerfLock * SerfLockStore::findByUri( rtl::OUString const & rUri)
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ne_uri aUri;
-    ne_uri_parse( rtl::OUStringToOString(
-        rUri, RTL_TEXTENCODING_UTF8 ).getStr(), &aUri );
-    return ne_lockstore_findbyuri( m_pSerfLockStore, &aUri );
+    LockInfoMap::const_iterator it( m_aLockInfoMap.begin() );
+    const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
+
+    while ( it != end )
+    {
+        SerfLock * pLock = (*it).first;
+        if( pLock->getResourceUri().equals( rUri ) )
+        {
+            return pLock;
+        }
+        ++it;
+    }
+
+    return static_cast<SerfLock*>(0);
 }
 
 // -------------------------------------------------------------------
@@ -166,13 +174,24 @@ void SerfLockStore::addLock( SerfLock * pLock,
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ne_lockstore_add( m_pSerfLockStore, pLock );
     m_aLockInfoMap[ pLock ]
         = LockInfo( xSession, nLastChanceToSendRefreshRequest );
+    //acquire this session, needed to manage the lock refresh
+    xSession->acquire();
 
+#if OSL_DEBUG_LEVEL > 0
+    rtl::OUString   aOwner;
+    pLock->getLock().Owner >>= aOwner;
+    rtl::OUString   aToken;
+    aToken = pLock->getLock().LockTokens[0];
+    OSL_TRACE("SerfLockStore::addLock: new lock added aOwner '%s', token '%s'",
+              rtl::OUStringToOString(aOwner, RTL_TEXTENCODING_UTF8).getStr(),
+              rtl::OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr() );
+#endif
     startTicker();
 }
 
+#if 0       //not currently used
 // -------------------------------------------------------------------
 void SerfLockStore::updateLock( SerfLock * pLock,
                                 sal_Int32 nLastChanceToSendRefreshRequest )
@@ -189,17 +208,23 @@ void SerfLockStore::updateLock( SerfLock * pLock,
             = nLastChanceToSendRefreshRequest;
     }
 }
+#endif
 
 // -------------------------------------------------------------------
 void SerfLockStore::removeLock( SerfLock * pLock )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    m_aLockInfoMap.erase( pLock );
-    ne_lockstore_remove( m_pSerfLockStore, pLock );
-
-    if ( m_aLockInfoMap.size() == 0 )
-        stopTicker();
+    LockInfoMap::iterator it( m_aLockInfoMap.find( pLock ) );
+    if(it != m_aLockInfoMap.end())
+    {
+        LockInfo & rInfo = (*it).second;
+        rInfo.xSession->release();
+        m_aLockInfoMap.erase( pLock );
+        //the caller should deallocate SerfLock class after the call!
+        if ( m_aLockInfoMap.size() == 0 )
+            stopTicker();
+    }
 }
 
 // -------------------------------------------------------------------
@@ -221,18 +246,39 @@ void SerfLockStore::refreshLocks()
                      <= sal_Int32( t1.Seconds ) )
             {
                 // refresh the lock.
+#if OSL_DEBUG_LEVEL > 0
+                ucb::Lock aLock = (*it).first->getLock();
+                rtl::OUString   aOwner;
+                aLock.Owner >>= aOwner;
+                rtl::OUString   aToken;
+                aToken = aLock.LockTokens[0];
+                OSL_TRACE( "SerfLockStore::refreshLocks: refresh started for lock: aOwner '%s', token '%s'",
+                    rtl::OUStringToOString(aOwner, RTL_TEXTENCODING_UTF8).getStr(),
+                    rtl::OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr() );
+#endif
                 sal_Int32 nlastChanceToSendRefreshRequest = -1;
-                if ( rInfo.xSession->LOCK(
-                         (*it).first,
-                         /* out param */ nlastChanceToSendRefreshRequest ) )
+                try
                 {
+                    rInfo.xSession->LOCK( (*it).first,
+                                          /* out param */ nlastChanceToSendRefreshRequest );
                     rInfo.nLastChanceToSendRefreshRequest
                         = nlastChanceToSendRefreshRequest;
+#if OSL_DEBUG_LEVEL > 0
+                    OSL_TRACE( "Lock '%s' successfully refreshed." ,
+                        rtl::OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr() );
+#endif
                 }
-                else
+                catch ( DAVException & e )
                 {
                     // refresh failed. stop auto-refresh.
+                    // TODO i126305 discuss:
+                    // probably not a good idea to stop the refresh?
+                    // may be just ignore and go on, it's possible the net is temporary down?
                     rInfo.nLastChanceToSendRefreshRequest = -1;
+#if OSL_DEBUG_LEVEL > 0
+                    OSL_TRACE( "SerfLockStore::refreshLocks: Lock '%s' not refreshed! (error: DAVException.mStatusCode %d)",
+                         rtl::OUStringToOString(aToken, RTL_TEXTENCODING_UTF8).getStr(), e.getStatus()  );
+#endif
                 }
             }
         }

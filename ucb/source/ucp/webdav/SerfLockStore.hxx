@@ -27,6 +27,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include "SerfTypes.hxx"
+#include "SerfSession.hxx"
 
 namespace http_dav_ucp
 {
@@ -52,8 +53,8 @@ typedef struct _LockInfo
 
     _LockInfo( rtl::Reference< SerfSession > const & _xSession,
               sal_Int32 _nLastChanceToSendRefreshRequest )
-    : xSession( _xSession ),
-      nLastChanceToSendRefreshRequest( _nLastChanceToSendRefreshRequest ) {}
+        : xSession( _xSession )
+        , nLastChanceToSendRefreshRequest( _nLastChanceToSendRefreshRequest ) {}
 
 } LockInfo;
 
@@ -62,7 +63,6 @@ typedef std::map< SerfLock *, LockInfo, ltptr > LockInfoMap;
 class SerfLockStore
 {
     osl::Mutex         m_aMutex;
-//    ne_lock_store    * m_pSerfLockStore;
     TickerThread     * m_pTickerThread;
     LockInfoMap        m_aLockInfoMap;
 
@@ -70,7 +70,7 @@ public:
     SerfLockStore();
     ~SerfLockStore();
 
-    void registerSession( HttpSession * pHttpSession );
+    void registerSession( SerfSession aSession );
 
     SerfLock * findByUri( rtl::OUString const & rUri );
 

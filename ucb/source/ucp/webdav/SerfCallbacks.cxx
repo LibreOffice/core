@@ -36,6 +36,7 @@ extern "C" apr_status_t Serf_ConnectSetup( apr_socket_t *skt,
                                            apr_pool_t *pool )
 {
     SerfSession* pSerfSession = static_cast< SerfSession* >( setup_baton );
+    OSL_TRACE("Serf_ConnectSetup");
     return pSerfSession->setupSerfConnection( skt,
                                               read_bkt,
                                               write_bkt,
@@ -52,6 +53,7 @@ extern "C" apr_status_t Serf_Credentials( char **username,
                                           apr_pool_t *pool )
 {
     SerfRequestProcessor* pReqProc = static_cast< SerfRequestProcessor* >( baton );
+    OSL_TRACE("Serf_Credential");
     return pReqProc->provideSerfCredentials( username,
                                              password,
                                              request,
@@ -68,6 +70,7 @@ extern "C" apr_status_t Serf_CertificateChainValidation(
     const serf_ssl_certificate_t * const * pCertificateChainBase64Encoded,
     apr_size_t nCertificateChainLength)
 {
+    OSL_TRACE("Serf_CertificateChainValidation");
     return static_cast<SerfSession*>(pSerfSession)
         ->verifySerfCertificateChain(nFailures, pCertificateChainBase64Encoded, nCertificateChainLength);
 }
@@ -82,6 +85,7 @@ extern "C" apr_status_t Serf_SetupRequest( serf_request_t *request,
                                            apr_pool_t * pool )
 {
     SerfRequestProcessor* pReqProc = static_cast< SerfRequestProcessor* >( setup_baton );
+    OSL_TRACE("Serf_SetupRequest");
     return pReqProc->setupSerfRequest( request,
                                        req_bkt,
                                        acceptor,
@@ -97,6 +101,7 @@ extern "C" serf_bucket_t* Serf_AcceptResponse( serf_request_t *request,
                                                apr_pool_t *pool )
 {
     SerfRequestProcessor* pReqProc = static_cast< SerfRequestProcessor* >( acceptor_baton );
+    OSL_TRACE("Serf_AcceptResponse");
     return pReqProc->acceptSerfResponse( request,
                                          stream,
                                          pool );
@@ -108,6 +113,7 @@ extern "C" apr_status_t Serf_HandleResponse( serf_request_t *request,
                                              apr_pool_t *pool )
 {
     SerfRequestProcessor* pReqProc = static_cast< SerfRequestProcessor* >( handler_baton );
+    OSL_TRACE("Serf_HandleResponse");
     return pReqProc->handleSerfResponse( request,
                                          response,
                                          pool );

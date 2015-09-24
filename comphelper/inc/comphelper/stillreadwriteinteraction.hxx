@@ -44,17 +44,22 @@ class COMPHELPER_DLLPUBLIC StillReadWriteInteraction : public ::ucbhelper::Inter
 private:
     static const sal_Int32 HANDLE_INTERACTIVEIOEXCEPTION       = 0;
     static const sal_Int32 HANDLE_UNSUPPORTEDDATASINKEXCEPTION = 1;
+    static const sal_Int32 HANDLE_AUTHENTICATIONREQUESTEXCEPTION = 2;
 
     sal_Bool m_bUsed;
     sal_Bool m_bHandledByMySelf;
     sal_Bool m_bHandledByInternalHandler;
 
 public:
-    StillReadWriteInteraction(const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler);
+    StillReadWriteInteraction(const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xHandler,
+                              const com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >& xAuthenticationHandler);
 
     void resetInterceptions();
     void resetErrorStates();
     sal_Bool wasWriteError();
+
+protected:
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > m_xAuthenticationHandler;
 
 private:
     virtual ucbhelper::InterceptedInteraction::EInterceptionState intercepted(const ::ucbhelper::InterceptedInteraction::InterceptedRequest&                         aRequest,

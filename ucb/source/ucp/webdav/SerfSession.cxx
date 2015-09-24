@@ -26,6 +26,8 @@
 #include <vector>
 #include <string.h>
 #include <rtl/string.h>
+#include <rtl/ustrbuf.hxx>
+#include <osl/time.h>
 #include "comphelper/sequence.hxx"
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
 
@@ -57,10 +59,9 @@
 using namespace com::sun::star;
 using namespace http_dav_ucp;
 
-
 // -------------------------------------------------------------------
 // static members!
-//SerfLockStore SerfSession::m_aSerfLockStore;
+SerfLockStore SerfSession::m_aSerfLockStore;
 
 // -------------------------------------------------------------------
 // Constructor
@@ -75,6 +76,7 @@ SerfSession::SerfSession(
     , m_aUri( inUri )
     , m_aProxyName()
     , m_nProxyPort( 0 )
+    , m_aServerHeaderField()
     , m_pSerfConnection( 0 )
     , m_pSerfContext( 0 )
     , m_bIsHeadRequestInProgress( false )
@@ -97,6 +99,7 @@ SerfSession::~SerfSession( )
     {
         serf_connection_close( m_pSerfConnection );
         m_pSerfConnection = 0;
+        OSL_TRACE("SerfSession::~SerfSession: closed serf connection");
     }
 }
 
@@ -126,6 +129,7 @@ void SerfSession::Init()
 
         // Not yet initialized. Create new session.
         bCreateNewSession = true;
+        OSL_TRACE("SerfSession::Init: serf connection created");
     }
     else
     {
@@ -223,6 +227,55 @@ char* SerfSession::getHostinfo()
     return m_aUri.getAprUri()->hostinfo;
 }
 
+// -------------------------------------------------------------------
+// helper function
+// it composes the uri for lockstore registration
+rtl::OUString SerfSession::composeCurrentUri(const rtl::OUString & inPath)
+{
+    rtl::OUString aScheme( m_aUri.GetScheme() );
+    rtl::OUStringBuffer aBuf( aScheme );
+    aBuf.appendAscii( "://" );
+    if ( m_aUri.GetUserInfo().getLength() > 0 )
+    {
+        aBuf.append( m_aUri.GetUserInfo() );
+        aBuf.appendAscii( "@" );
+    }
+    // Is host a numeric IPv6 address?
+    if ( ( m_aUri.GetHost().indexOf( ':' ) != -1 ) &&
+         ( m_aUri.GetHost()[ 0 ] != sal_Unicode( '[' ) ) )
+    {
+        aBuf.appendAscii( "[" );
+        aBuf.append( m_aUri.GetHost() );
+        aBuf.appendAscii( "]" );
+    }
+    else
+    {
+        aBuf.append( m_aUri.GetHost() );
+    }
+
+    // append port, but only, if not default port.
+    bool bAppendPort = true;
+    sal_Int32 aPort = m_aUri.GetPort();
+    switch ( aPort )
+    {
+    case DEFAULT_HTTP_PORT:
+        bAppendPort = aScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http" ) );
+        break;
+
+    case DEFAULT_HTTPS_PORT:
+        bAppendPort = !aScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "https" ) );
+        break;
+    }
+    if ( bAppendPort )
+    {
+        aBuf.appendAscii( ":" );
+        aBuf.append( rtl::OUString::valueOf( aPort ) );
+    }
+    aBuf.append( inPath );
+
+    rtl::OUString   aUri(aBuf.makeStringAndClear() );
+    return aUri;
+}
 
 // -------------------------------------------------------------------
 // virtual
@@ -693,7 +746,16 @@ void SerfSession::PROPPATCH( const rtl::OUString & inPath,
 
     apr_status_t status = APR_SUCCESS;
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    //check whether a lock on this resource is already owned
+    rtl::OUString aUri( composeCurrentUri( inPath ) );
+    ucb::Lock inLock;
+    SerfLock * pLock = m_aSerfLockStore.findByUri( aUri );
+    if ( pLock )
+    {
+        inLock = pLock->getLock();
+    }
     aReqProc->processPropPatch( inValues,
+                                inLock,
                                 status );
 
     HandleError( aReqProc );
@@ -843,8 +905,18 @@ void SerfSession::PUT( const rtl::OUString & inPath,
     if ( !getDataFromInputStream( inInputStream, aDataToSend, false ) )
         throw DAVException( DAVException::DAV_INVALID_ARG );
     apr_status_t status = APR_SUCCESS;
+
+    //check whether a lock on this resource is already owned
+    rtl::OUString aUri( composeCurrentUri( inPath ) );
+    ucb::Lock inLock;
+    SerfLock * pLock = m_aSerfLockStore.findByUri( aUri );
+    if ( pLock )
+    {
+        inLock = pLock->getLock();
+    }
     aReqProc->processPut( reinterpret_cast< const char * >( aDataToSend.getConstArray() ),
                           aDataToSend.getLength(),
+                          inLock,
                           status );
 
     HandleError( aReqProc );
@@ -874,10 +946,19 @@ SerfSession::POST( const rtl::OUString & inPath,
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     uno::Reference< SerfInputStream > xInputStream( new SerfInputStream );
     apr_status_t status = APR_SUCCESS;
+    //check whether a lock on this resource is already owned
+    rtl::OUString aUri( composeCurrentUri( inPath ) );
+    ucb::Lock inLock;
+    SerfLock * pLock = m_aSerfLockStore.findByUri( aUri );
+    if ( pLock )
+    {
+        inLock = pLock->getLock();
+    }
     aReqProc->processPost( reinterpret_cast< const char * >( aDataToSend.getConstArray() ),
                            aDataToSend.getLength(),
                            rContentType,
                            rReferer,
+                           inLock,
                            xInputStream,
                            status );
 
@@ -908,10 +989,19 @@ void SerfSession::POST( const rtl::OUString & inPath,
 
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     apr_status_t status = APR_SUCCESS;
+    //check whether a lock on this resource is already owned
+    rtl::OUString aUri( composeCurrentUri( inPath ) );
+    ucb::Lock inLock;
+    SerfLock * pLock = m_aSerfLockStore.findByUri( aUri );
+    if ( pLock )
+    {
+        inLock = pLock->getLock();
+    }
     aReqProc->processPost( reinterpret_cast< const char * >( aDataToSend.getConstArray() ),
                            aDataToSend.getLength(),
                            rContentType,
                            rReferer,
+                           inLock,
                            oOutputStream,
                            status );
 
@@ -931,7 +1021,15 @@ void SerfSession::MKCOL( const rtl::OUString & inPath,
 
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     apr_status_t status = APR_SUCCESS;
-    aReqProc->processMkCol( status );
+    //check whether a lock on the destination resource is already owned
+    rtl::OUString aUri( composeCurrentUri( inPath ) );
+    ucb::Lock inLock;
+    SerfLock * pLock = m_aSerfLockStore.findByUri( aUri );
+    if ( pLock )
+    {
+        inLock = pLock->getLock();
+    }
+    aReqProc->processMkCol( inLock, status );
 
     HandleError( aReqProc );
 }
@@ -952,8 +1050,17 @@ void SerfSession::COPY( const rtl::OUString & inSourceURL,
     SerfUri theSourceUri( inSourceURL );
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( theSourceUri.GetPath() ) );
     apr_status_t status = APR_SUCCESS;
+    //check whether a lock on the destination resource is already owned
+    rtl::OUString aUri( composeCurrentUri( inDestinationURL ) );
+    ucb::Lock inLock;
+    SerfLock * pLock = m_aSerfLockStore.findByUri( aUri );
+    if ( pLock )
+    {
+        inLock = pLock->getLock();
+    }
     aReqProc->processCopy( inDestinationURL,
                            (inOverWrite ? true : false),
+                           inLock,
                            status );
 
     HandleError( aReqProc );
@@ -975,8 +1082,17 @@ void SerfSession::MOVE( const rtl::OUString & inSourceURL,
     SerfUri theSourceUri( inSourceURL );
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( theSourceUri.GetPath() ) );
     apr_status_t status = APR_SUCCESS;
+    //check whether a lock on the destination resource is already owned
+    rtl::OUString aUri( composeCurrentUri( inDestinationURL ) );
+    ucb::Lock inLock;
+    SerfLock * pLock = m_aSerfLockStore.findByUri( aUri );
+    if ( pLock )
+    {
+        inLock = pLock->getLock();
+    }
     aReqProc->processMove( inDestinationURL,
                            (inOverWrite ? true : false),
+                           inLock,
                            status );
 
     HandleError( aReqProc );
@@ -995,25 +1111,33 @@ void SerfSession::DESTROY( const rtl::OUString & inPath,
 
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     apr_status_t status = APR_SUCCESS;
-    aReqProc->processDelete( status );
+    //check whether a lock on this resource is already owned
+    rtl::OUString aUri( composeCurrentUri( inPath ) );
+    ucb::Lock inLock;
+    SerfLock * pLock = m_aSerfLockStore.findByUri( aUri );
+    if ( pLock )
+    {
+        inLock = pLock->getLock();
+    }
+    aReqProc->processDelete( inLock, status );
 
     HandleError( aReqProc );
 }
 
 // -------------------------------------------------------------------
-/*
+
 namespace
 {
     sal_Int32 lastChanceToSendRefreshRequest( TimeValue const & rStart,
-                                              int timeout )
+                                              sal_Int32 timeout )
     {
         TimeValue aEnd;
         osl_getSystemTime( &aEnd );
 
         // Try to estimate a safe absolute time for sending the
         // lock refresh request.
-        sal_Int32 lastChanceToSendRefreshRequest = -1;
-        if ( timeout != NE_TIMEOUT_INFINITE )
+        sal_Int32 lastChanceToSendRefreshRequest = DAVINFINITY;
+        if ( timeout != DAVINFINITY )
         {
             sal_Int32 calltime = aEnd.Seconds - rStart.Seconds;
             if ( calltime <= timeout )
@@ -1030,108 +1154,62 @@ namespace
     }
 
 } // namespace
-*/
+
 // -------------------------------------------------------------------
 // LOCK (set new lock)
 // -------------------------------------------------------------------
 void SerfSession::LOCK( const ::rtl::OUString & inPath,
-                        ucb::Lock & /*rLock*/,
+                        ucb::Lock & rLock,
                         const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
+    //before locking, search in the lock store if we already own a lock for this resource
+    //if present, return with exception DAV_LOCKED_SELF
+    rtl::OUString   aUri( composeCurrentUri( inPath ) );
+    SerfLock * pLock = m_aSerfLockStore.findByUri( aUri );
+    if ( pLock )
+    {
+//already present, meaning already locked by the same AOO session and already in the lockstore
+//just return, nothing to do
+        return;
+    }
+
     Init( rEnv );
 
     boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
-    HandleError( aReqProc );
-    /* Create a depth zero, exclusive write lock, with default timeout
-     * (allowing a server to pick a default).  token, owner and uri are
-     * unset. */
-    /*
-    SerfLock * theLock = ne_lock_create();
+    apr_status_t status = APR_SUCCESS;
 
-    // Set the lock uri
-    ne_uri aUri;
-    ne_uri_parse( rtl::OUStringToOString( makeAbsoluteURL( inPath ),
-                                          RTL_TEXTENCODING_UTF8 ).getStr(),
-                  &aUri );
-    theLock->uri = aUri;
+    //the returned property, a sequence of locks
+    //only the first is used
+    DAVPropertyValue outLock;
 
-    // Set the lock depth
-    switch( rLock.Depth )
-    {
-    case ucb::LockDepth_ZERO:
-        theLock->depth = NE_DEPTH_ZERO;
-        break;
-    case ucb::LockDepth_ONE:
-        theLock->depth = NE_DEPTH_ONE;
-        break;
-    case ucb::LockDepth_INFINITY:
-        theLock->depth = NE_DEPTH_INFINITE;
-        break;
-    default:
-        throw DAVException( DAVException::DAV_INVALID_ARG );
-    }
-
-    // Set the lock scope
-    switch ( rLock.Scope )
-    {
-    case ucb::LockScope_EXCLUSIVE:
-        theLock->scope = ne_lockscope_exclusive;
-        break;
-    case ucb::LockScope_SHARED:
-        theLock->scope = ne_lockscope_shared;
-        break;
-    default:
-        throw DAVException( DAVException::DAV_INVALID_ARG );
-    }
-
-    // Set the lock timeout
-    theLock->timeout = (long)rLock.Timeout;
-
-    // Set the lock owner
-    rtl::OUString aValue;
-    rLock.Owner >>= aValue;
-    theLock->owner =
-        ne_strdup( rtl::OUStringToOString( aValue,
-                                           RTL_TEXTENCODING_UTF8 ).getStr() );
     TimeValue startCall;
     osl_getSystemTime( &startCall );
+    aReqProc->processLock(inPath, rLock, outLock, status);
 
-    int theRetVal = ne_lock( m_pHttpSession, theLock );
+    //HandleError will handle the error and throw an exception, if needed
+    HandleError( aReqProc );
 
-    if ( theRetVal == NE_OK )
+    if(outLock.Name.compareToAscii(RTL_CONSTASCII_STRINGPARAM( "DAV:lockdiscovery" )) == 0 )
     {
-        m_aSerfLockStore.addLock( theLock,
-                                  this,
-                                  lastChanceToSendRefreshRequest(
-                                      startCall, theLock->timeout ) );
+        //got a lock, use only the first returned
+        uno::Sequence< ucb::Lock >      aLocks;
+        outLock.Value >>= aLocks;
+        ucb::Lock aLock = aLocks[0];
 
-        uno::Sequence< rtl::OUString > aTokens( 1 );
-        aTokens[ 0 ] = rtl::OUString::createFromAscii( theLock->token );
-        rLock.LockTokens = aTokens;
-
-        OSL_TRACE( "SerfSession::LOCK: created lock for %s. token: %s",
-                   rtl::OUStringToOString( makeAbsoluteURL( inPath ),
-                                           RTL_TEXTENCODING_UTF8 ).getStr(),
-                   theLock->token );
-    }
-    else
-    {
-        ne_lock_destroy( theLock );
-
-        OSL_TRACE( "SerfSession::LOCK: obtaining lock for %s failed!",
-                   rtl::OUStringToOString( makeAbsoluteURL( inPath ),
-                                           RTL_TEXTENCODING_UTF8 ).getStr() );
+        SerfLock* aNewLock = new SerfLock( aLock, aUri, inPath );
+        // add the store the new lock
+        m_aSerfLockStore.addLock(aNewLock,this,
+                                 lastChanceToSendRefreshRequest(
+                                     startCall, static_cast< sal_Int32 >(aLock.Timeout) ) );
     }
 
-    HandleError( theRetVal, inPath, rEnv );
-    */
 }
 
 // -------------------------------------------------------------------
-// LOCK (refresh existing lock)
+// LOCK (refresh existing lock from DAVResourceAccess)
 // -------------------------------------------------------------------
 sal_Int64 SerfSession::LOCK( const ::rtl::OUString & /*inPath*/,
                              sal_Int64 nTimeout,
@@ -1172,92 +1250,102 @@ sal_Int64 SerfSession::LOCK( const ::rtl::OUString & /*inPath*/,
 }
 
 // -------------------------------------------------------------------
-// LOCK (refresh existing lock)
+// LOCK (refresh existing lock from SerfLockStore)
 // -------------------------------------------------------------------
-bool SerfSession::LOCK( SerfLock * /*pLock*/,
-                        sal_Int32 & /*rlastChanceToSendRefreshRequest*/ )
+bool SerfSession::LOCK( SerfLock * pLock,
+                        sal_Int32 & rlastChanceToSendRefreshRequest )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
+    rtl::OUString inPath = pLock->getResourcePath();
 
-    return true;
-    /*
-    // refresh existing lock.
+    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    apr_status_t status = APR_SUCCESS;
+
+    //the returned property, a sequence of locks
+    //only the first is used
+    DAVPropertyValue outLock;
 
     TimeValue startCall;
     osl_getSystemTime( &startCall );
 
-    if ( ne_lock_refresh( m_pHttpSession, pLock ) == NE_OK )
-    {
-        rlastChanceToSendRefreshRequest
-            = lastChanceToSendRefreshRequest( startCall, pLock->timeout );
+    // refresh existing lock.
+    aReqProc->processLockRefresh( inPath, pLock->getLock(), outLock, status);
 
-        OSL_TRACE( "Lock successfully refreshed." );
-        return true;
-    }
-    else
-    {
-        OSL_TRACE( "Lock not refreshed!" );
-        return false;
-    }
-    */
+    // TODO: possible enhancement as the following:
+    // - use an interaction handler to alert the user if the lock was not refreshed,
+    //   offering to try again with a new session, asking the user for credential, if necessary.
+    //   This may happen if the WebDAV server goes off-line for whatever reason, or the connection is dropped for time-out
+    //   To implement this behavior, some redesigning of the current session implementation may be needed.
+    //
+
+    //HandleError will handle the error and throw an exception, if needed
+    HandleError( aReqProc );
+
+    uno::Sequence< ucb::Lock >      aLocks;
+    outLock.Value >>= aLocks;
+    ucb::Lock aLock = aLocks[0];
+
+    //if ok, udate the lastchance refresh time in lock
+    rlastChanceToSendRefreshRequest
+        = lastChanceToSendRefreshRequest( startCall, static_cast< sal_Int32 >(aLock.Timeout) );
+
+    return true;
 }
 
 // -------------------------------------------------------------------
-// UNLOCK
+// UNLOCK called from external (DAVResourceAccess)
 // -------------------------------------------------------------------
-void SerfSession::UNLOCK( const ::rtl::OUString & /*inPath*/,
-                          const DAVRequestEnvironment & /*rEnv*/ )
+void SerfSession::UNLOCK( const ::rtl::OUString & inPath,
+                          const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    /*
-    // get the neon lock from lock store
-    SerfLock * theLock
-        = m_aSerfLockStore.findByUri( makeAbsoluteURL( inPath ) );
-    if ( !theLock )
+    rtl::OUString aUri( composeCurrentUri( inPath ) );
+    SerfLock * pLock = m_aSerfLockStore.findByUri( aUri );
+    if ( !pLock )
+    {
         throw DAVException( DAVException::DAV_NOT_LOCKED );
+    }
 
     Init( rEnv );
 
-    int theRetVal = ne_unlock( m_pHttpSession, theLock );
+    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    apr_status_t status = APR_SUCCESS;
 
-    if ( theRetVal == NE_OK )
-    {
-        m_aSerfLockStore.removeLock( theLock );
-        ne_lock_destroy( theLock );
-    }
-    else
-    {
-        OSL_TRACE( "SerfSession::UNLOCK: unlocking of %s failed.",
-                   rtl::OUStringToOString( makeAbsoluteURL( inPath ),
-                                           RTL_TEXTENCODING_UTF8 ).getStr() );
-    }
+    ucb::Lock inLock = pLock->getLock();
+    //remove lock from lockstore
+    // so, if something goes wrong, we don't refresh it anymore
+    m_aSerfLockStore.removeLock(pLock);
+    delete pLock;
 
-    HandleError( theRetVal, inPath, rEnv );
-    */
+    // remove existing lock
+    aReqProc->processUnlock( inPath, inLock, status);
+
+    //HandleError will handle the error and throw an exception, if needed
+    HandleError( aReqProc );
 }
 
 // -------------------------------------------------------------------
-// UNLOCK
+// UNLOCK (called from SerfLockStore)
 // -------------------------------------------------------------------
-bool SerfSession::UNLOCK( SerfLock * /*pLock*/ )
+bool SerfSession::UNLOCK( SerfLock * pLock )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
+    rtl::OUString inPath = pLock->getResourcePath();
+
+    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    apr_status_t status = APR_SUCCESS;
+
+    rtl::OUString   aToken;
+    aToken = pLock->getLock().LockTokens[0];
+
+    aReqProc->processUnlock( inPath, pLock->getLock(), status);
+
+    //HandleError will handle the error and throw an exception, if needed
+    HandleError( aReqProc );
 
     return true;
-    /*
-    if ( ne_unlock( m_pHttpSession, pLock ) == NE_OK )
-    {
-        OSL_TRACE( "UNLOCK succeeded." );
-        return true;
-    }
-    else
-    {
-        OSL_TRACE( "UNLOCK failed!" );
-        return false;
-    }
-    */
 }
 
 // -------------------------------------------------------------------
@@ -1315,6 +1403,10 @@ bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
 */
 
 // -------------------------------------------------------------------
+// This method doesn't seem to be used.
+// In any case the default behavior is to ask a lock whith a life of 3 minutes
+// it will then be refreshed automatically (see SerfLockStore class)
+// In case of AOO crash the lock will expire by itself
 bool SerfSession::removeExpiredLocktoken( const rtl::OUString & /*inURL*/,
                                           const DAVRequestEnvironment & /*rEnv*/ )
 {
@@ -1612,37 +1704,3 @@ SerfSession::isDomainMatch( rtl::OUString certHostName )
     }
     return sal_False;
 }
-
-/*
-// ---------------------------------------------------------------------
-rtl::OUString SerfSession::makeAbsoluteURL( rtl::OUString const & rURL ) const
-{
-    try
-    {
-        // Is URL relative or already absolute?
-        if ( rURL[ 0 ] != sal_Unicode( '/' ) )
-        {
-            // absolute.
-            return rtl::OUString( rURL );
-        }
-        else
-        {
-            ne_uri aUri;
-            memset( &aUri, 0, sizeof( aUri ) );
-
-            ne_fill_server_uri( m_pHttpSession, &aUri );
-            aUri.path
-                = ne_strdup( rtl::OUStringToOString(
-                    rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-            SerfUri aSerfUri( &aUri );
-            ne_uri_free( &aUri );
-            return aSerfUri.GetURI();
-        }
-    }
-    catch ( DAVException const & )
-    {
-    }
-    // error.
-    return rtl::OUString();
-}
-*/

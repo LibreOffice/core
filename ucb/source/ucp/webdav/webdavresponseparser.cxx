@@ -29,6 +29,8 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
+#include <com/sun/star/ucb/Lock.hpp>
+#include <com/sun/star/ucb/LockDepth.hpp>
 #include <com/sun/star/ucb/LockEntry.hpp>
 #include <com/sun/star/ucb/LockScope.hpp>
 #include <com/sun/star/ucb/LockType.hpp>
@@ -94,6 +96,12 @@ namespace
         WebDAVName_locktype,
         WebDAVName_write,
         WebDAVName_shared,
+        WebDAVName_lockdiscovery,
+        WebDAVName_activelock,
+        WebDAVName_depth,
+        WebDAVName_owner,
+        WebDAVName_timeout,
+        WebDAVName_locktoken,
         WebDAVName_status,
         WebDAVName_getlastmodified,
         WebDAVName_creationdate,
@@ -125,6 +133,12 @@ namespace
             aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("locktype"), WebDAVName_locktype));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("write"), WebDAVName_write));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("shared"), WebDAVName_shared));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("lockdiscovery"), WebDAVName_lockdiscovery));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("activelock"), WebDAVName_activelock));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("depth"), WebDAVName_depth));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("owner"), WebDAVName_owner));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("timeout"), WebDAVName_timeout));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("locktoken"), WebDAVName_locktoken));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("status"), WebDAVName_status));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("getlastmodified"), WebDAVName_getlastmodified));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(rtl::OUString::createFromAscii("creationdate"), WebDAVName_creationdate));
@@ -288,7 +302,8 @@ namespace
     enum WebDAVResponseParserMode
     {
         WebDAVResponseParserMode_PropFind = 0,
-        WebDAVResponseParserMode_PropName
+        WebDAVResponseParserMode_PropName,
+        WebDAVResponseParserMode_LockResponse
     };
 
     class WebDAVResponseParser : public cppu::WeakImplHelper1< com::sun::star::xml::sax::XDocumentHandler >
@@ -296,23 +311,36 @@ namespace
     private:
         std::vector< http_dav_ucp::DAVResource >      maResult_PropFind;
         std::vector< http_dav_ucp::DAVResourceInfo >  maResult_PropName;
+        http_dav_ucp::DAVPropertyValue                maResult_Lock;
 
         WebDAVContext*                              mpContext;
         ::rtl::OUString                             maHref;
+        ::rtl::OUString                             maHrefLocks; //this is used for locks, when lockdiscoveryactive
+
         ::rtl::OUString                             maStatus;
         std::vector< http_dav_ucp::DAVPropertyValue > maResponseProperties;
         std::vector< http_dav_ucp::DAVPropertyValue > maPropStatProperties;
         std::vector< ::rtl::OUString >              maResponseNames;
         std::vector< ::rtl::OUString >              maPropStatNames;
+        uno::Sequence< ::rtl::OUString >            maLockTokens;
         uno::Sequence< ucb::LockEntry >             maLockEntries;
+        uno::Sequence< ucb::Lock >                  maLocks;    //the returned locks following a lockdiscovery request
         ucb::LockScope                              maLockScope;
         ucb::LockType                               maLockType;
-        WebDAVResponseParserMode                    meWebDAVResponseParserMode;
+        ucb::LockDepth                              maLockDepth;
+        ::rtl::OUString                             maLockOwner;
+        sal_Int64                                   maLockTimeout;
+        ::rtl::OUString                             maLockToken;
+
+      WebDAVResponseParserMode                    meWebDAVResponseParserMode;
 
         // bitfield
         bool                                        mbResourceTypeCollection : 1;
         bool                                        mbLockScopeSet : 1;
         bool                                        mbLockTypeSet : 1;
+        bool                                        mbLockTokenSet : 1;
+        //TODO: add other flag to manage reading od token, depth, timeout, owner
+        bool                                        mbLockDiscoveryActive : 1;
 
         // local helpers
         bool whitespaceIsAvailable() const
@@ -334,6 +362,10 @@ namespace
         bool isCollectingPropNames() const
         {
             return WebDAVResponseParserMode_PropName == meWebDAVResponseParserMode;
+        }
+        bool isWaitingLockResponse() const
+        {
+            return WebDAVResponseParserMode_LockResponse == meWebDAVResponseParserMode;
         }
         bool collectThisPropertyAsName() const
         {
@@ -360,7 +392,8 @@ namespace
         // Methods XDocumentHandler
         virtual void SAL_CALL startDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException);
         virtual void SAL_CALL endDocument(  ) throw (xml::sax::SAXException, uno::RuntimeException);
-        virtual void SAL_CALL startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException);
+        virtual void SAL_CALL startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
+            throw (xml::sax::SAXException, uno::RuntimeException);
         virtual void SAL_CALL endElement( const ::rtl::OUString& aName ) throw (xml::sax::SAXException, uno::RuntimeException);
         virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) throw (xml::sax::SAXException, uno::RuntimeException);
         virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (xml::sax::SAXException, uno::RuntimeException);
@@ -369,25 +402,34 @@ namespace
 
         const std::vector< http_dav_ucp::DAVResource >& getResult_PropFind() const { return maResult_PropFind; }
         const std::vector< http_dav_ucp::DAVResourceInfo >& getResult_PropName() const { return maResult_PropName; }
+        const http_dav_ucp::DAVPropertyValue& getResult_Lock() const { return maResult_Lock; }
     };
 
     WebDAVResponseParser::WebDAVResponseParser(WebDAVResponseParserMode eWebDAVResponseParserMode)
     :   maResult_PropFind(),
         maResult_PropName(),
+        maResult_Lock(),
         mpContext(0),
         maHref(),
+        maHrefLocks(),
         maStatus(),
         maResponseProperties(),
         maPropStatProperties(),
         maResponseNames(),
         maPropStatNames(),
+        maLockTokens(),
         maLockEntries(),
+        maLocks(),
         maLockScope(ucb::LockScope_EXCLUSIVE),
         maLockType(ucb::LockType_WRITE),
+        maLockDepth(ucb::LockDepth_ZERO),
+        maLockOwner(),
+        maLockTimeout(0),
         meWebDAVResponseParserMode(eWebDAVResponseParserMode),
         mbResourceTypeCollection(false),
         mbLockScopeSet(false),
-        mbLockTypeSet(false)
+        mbLockTypeSet(false),
+        mbLockDiscoveryActive(false)
     {
     }
 
@@ -410,7 +452,8 @@ namespace
         OSL_ENSURE(!mpContext, "Parser end with existing content (!)");
     }
 
-    void SAL_CALL WebDAVResponseParser::startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs ) throw (xml::sax::SAXException, uno::RuntimeException)
+    void SAL_CALL WebDAVResponseParser::startElement( const ::rtl::OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
+        throw (xml::sax::SAXException, uno::RuntimeException)
     {
         const sal_Int32 nLen(aName.getLength());
 
@@ -491,6 +534,28 @@ namespace
                                 mbLockTypeSet = false;
                                 break;
                             }
+                            case WebDAVName_lockdiscovery:
+                            {
+                                // lockentry start, reset maLocks
+                                maLocks.realloc(0);
+                                mbLockDiscoveryActive = true;
+                                break;
+                            }
+                            case WebDAVName_activelock:
+                            {
+                                //  activelockstart, reset vars
+                                mbLockScopeSet = false;
+                                mbLockTypeSet = false;
+                                mbLockTokenSet = false;
+                                maLockTokens.realloc(0);
+                                maHrefLocks = ::rtl::OUString();
+                                break;
+                            }
+                            case WebDAVName_locktoken:
+                            {
+                                mbLockTokenSet = true;
+                                break;
+                            }
                         }
                         break;
                     }
@@ -537,7 +602,14 @@ namespace
                                 // href end, save it if we have whitespace
                                 if(whitespaceIsAvailable())
                                 {
-                                    maHref = mpContext->getWhiteSpace();
+                                    if(mbLockDiscoveryActive)
+                                    {
+                                        maHrefLocks = mpContext->getWhiteSpace();
+                                    }
+                                    else
+                                    {
+                                        maHref = mpContext->getWhiteSpace();
+                                    }
                                 }
                                 break;
                             }
@@ -662,7 +734,7 @@ namespace
                             case WebDAVName_exclusive:
                             {
                                 // exclusive lockscope end
-                                if(hasParent(WebDAVName_lockscope))
+                                if(hasParent(WebDAVName_lockscope) || hasParent(WebDAVName_activelock))
                                 {
                                     maLockScope = ucb::LockScope_EXCLUSIVE;
                                     mbLockScopeSet = true;
@@ -672,7 +744,7 @@ namespace
                             case WebDAVName_shared:
                             {
                                 // shared lockscope end
-                                if(hasParent(WebDAVName_lockscope))
+                                if(hasParent(WebDAVName_lockscope) || hasParent(WebDAVName_activelock))
                                 {
                                     maLockScope = ucb::LockScope_SHARED;
                                     mbLockScopeSet = true;
@@ -682,10 +754,114 @@ namespace
                             case WebDAVName_write:
                             {
                                 // write locktype end
-                                if(hasParent(WebDAVName_locktype))
+                                if(hasParent(WebDAVName_locktype) || hasParent(WebDAVName_activelock))
                                 {
                                     maLockType = ucb::LockType_WRITE;
                                     mbLockTypeSet = true;
+                                }
+                                break;
+                            }
+                            case WebDAVName_lockdiscovery:
+                            {
+                                // lockdiscovery end
+                                if(hasParent(WebDAVName_prop))
+                                {
+                                    static ::rtl::OUString aStr(rtl::OUString::createFromAscii("DAV:lockdiscovery"));
+                                    if(isWaitingLockResponse())
+                                    {
+                                        maResult_Lock.Name = aStr;
+                                        maResult_Lock.Value <<= maLocks;
+                                    }
+                                    else
+                                    {
+                                        ::http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
+
+                                        aDAVPropertyValue.Name = aStr;
+                                        aDAVPropertyValue.Value <<= maLocks;
+                                        maPropStatProperties.push_back(aDAVPropertyValue);
+                                    }
+                                }
+                                mbLockDiscoveryActive = false;
+                                break;
+                            }
+                            case WebDAVName_activelock:
+                            {
+                                if(hasParent(WebDAVName_lockdiscovery) &&
+                                   mbLockScopeSet && mbLockTypeSet && mbLockTokenSet)
+                                {
+                                    const sal_Int32 nLength(maLocks.getLength());
+                                    ucb::Lock aLock;
+
+                                    aLock.Scope = maLockScope;
+                                    aLock.Type = maLockType;
+                                    //add tokens, depth, timeout, owner
+                                    aLock.LockTokens = maLockTokens;
+                                    aLock.Depth = maLockDepth;
+                                    aLock.Owner <<= maLockOwner;
+                                    aLock.Timeout = maLockTimeout;
+                                    maLocks.realloc(nLength + 1);
+                                    maLocks[nLength] = aLock;
+                                }
+                                break;
+                            }
+                            case WebDAVName_locktoken:
+                            {
+                                if(hasParent(WebDAVName_activelock))
+                                {
+                                    //add a token to the list of tokens
+                                    const sal_Int32 nLength(maLockTokens.getLength());
+                                    maLockTokens.realloc(nLength + 1);
+                                    maLockTokens[nLength] = maHrefLocks;
+                                    mbLockTokenSet = true;
+                                }
+                                break;
+                            }
+                            case WebDAVName_timeout:
+                            {
+                                if(hasParent(WebDAVName_activelock))
+                                {
+                                    ::rtl::OUString aStr( mpContext->getWhiteSpace().toAsciiLowerCase());
+                                    static ::rtl::OUString aInfinite( ::rtl::OUString::createFromAscii( "infinite" ) );
+                                    static ::rtl::OUString aSecond( ::rtl::OUString::createFromAscii( "second-" ) );
+                                    //look for infinity
+                                    sal_Int32 secondIndex;
+                                    if(aStr.indexOf(aInfinite) != -1)
+                                    {
+                                        maLockTimeout = -1;
+                                    }
+                                    else if((secondIndex = aStr.indexOf(aSecond)) != -1)
+                                    {
+                                        secondIndex += aSecond.getLength();
+                                        maLockTimeout = aStr.copy(secondIndex).toInt64();
+                                    }
+                                }
+                                break;
+                            }
+                            case WebDAVName_owner:
+                            {
+                                if(whitespaceIsAvailable())
+                                {
+                                    if(hasParent(WebDAVName_activelock))
+                                    {
+                                        maLockOwner = mpContext->getWhiteSpace();
+                                    }
+                                }
+                                break;
+                            }
+                            case WebDAVName_depth:
+                            {
+                                if(hasParent(WebDAVName_activelock))
+                                {
+                                    //set depth, one of three values
+                                    ::rtl::OUString aStr( mpContext->getWhiteSpace() );
+                                    //default to zero, if not found
+                                    maLockDepth = ucb::LockDepth_ZERO;
+                                    if(aStr.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("0")))
+                                       maLockDepth = ucb::LockDepth_ZERO;
+                                    else if(aStr.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("1")))
+                                       maLockDepth = ucb::LockDepth_ONE;
+                                    else if(aStr.equalsIgnoreAsciiCase(::rtl::OUString::createFromAscii("infinity")))
+                                       maLockDepth = ucb::LockDepth_INFINITY;
                                 }
                                 break;
                             }
@@ -720,7 +896,7 @@ namespace
                             }
                             case WebDAVName_response:
                             {
-                                // respose end
+                                // response end
                                 if(maHref.getLength())
                                 {
                                     if(isCollectingProperties())
@@ -728,7 +904,7 @@ namespace
                                         // create DAVResource when we have content
                                         if(maResponseProperties.size())
                                         {
-                                            http_dav_ucp::DAVResource aDAVResource;
+                                            ::http_dav_ucp::DAVResource aDAVResource;
 
                                             aDAVResource.uri = maHref;
                                             aDAVResource.properties = maResponseProperties;
@@ -795,7 +971,8 @@ namespace
     {
     }
 
-    void SAL_CALL WebDAVResponseParser::processingInstruction( const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ ) throw (xml::sax::SAXException, uno::RuntimeException)
+    void SAL_CALL WebDAVResponseParser::processingInstruction( const ::rtl::OUString& /*aTarget*/, const ::rtl::OUString& /*aData*/ )
+        throw (xml::sax::SAXException, uno::RuntimeException)
     {
     }
 
@@ -813,6 +990,7 @@ namespace
         const uno::Reference< io::XInputStream >& xInputStream,
         std::vector< http_dav_ucp::DAVResource >& rPropFind,
         std::vector< http_dav_ucp::DAVResourceInfo >& rPropName,
+        http_dav_ucp::DAVPropertyValue&           rPropValue,
         WebDAVResponseParserMode eWebDAVResponseParserMode)
     {
         if(xInputStream.is())
@@ -850,6 +1028,11 @@ namespace
                         rPropName = pWebDAVResponseParser->getResult_PropName();
                         break;
                     }
+                    case WebDAVResponseParserMode_LockResponse:
+                    {
+                        rPropValue = pWebDAVResponseParser->getResult_Lock();
+                        break;
+                    }
                 }
             }
             catch(uno::Exception&)
@@ -869,8 +1052,9 @@ namespace http_dav_ucp
     {
         std::vector< DAVResource > aRetval;
         std::vector< DAVResourceInfo > aFoo;
+        DAVPropertyValue               aFoo2;
 
-        parseWebDAVPropNameResponse(xInputStream, aRetval, aFoo, WebDAVResponseParserMode_PropFind);
+        parseWebDAVPropNameResponse(xInputStream, aRetval, aFoo, aFoo2, WebDAVResponseParserMode_PropFind);
         return aRetval;
     }
 
@@ -878,10 +1062,23 @@ namespace http_dav_ucp
     {
         std::vector< DAVResource > aFoo;
         std::vector< DAVResourceInfo > aRetval;
+        DAVPropertyValue               aFoo2;
 
-        parseWebDAVPropNameResponse(xInputStream, aFoo, aRetval, WebDAVResponseParserMode_PropName);
+        parseWebDAVPropNameResponse(xInputStream, aFoo, aRetval, aFoo2, WebDAVResponseParserMode_PropName);
         return aRetval;
     }
+
+    http_dav_ucp::DAVPropertyValue parseWebDAVLockResponse(const uno::Reference< io::XInputStream >& xInputStream)
+    {
+        std::vector< DAVResource > aFoo2;
+        std::vector< DAVResourceInfo > aFoo;
+        http_dav_ucp::DAVPropertyValue               aRetval;
+
+
+        parseWebDAVPropNameResponse(xInputStream, aFoo2, aFoo, aRetval, WebDAVResponseParserMode_LockResponse);
+        return aRetval;
+    }
+
 } // namespace http_dav_ucp
 
 //////////////////////////////////////////////////////////////////////////////

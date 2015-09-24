@@ -303,7 +303,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
     SfxFrame *pParent = GetFrame().GetParentFrame();
     if ( rReq.GetSlot() == SID_RELOAD )
     {
-        // Bei CTRL-Reload den aktiven Frame reloaden
+        // With CTRL-Reload reload the active frame
         SfxViewFrame* pActFrame = this;
         while ( pActFrame )
             pActFrame = pActFrame->GetActiveChildFrame_Impl();
@@ -318,8 +318,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             }
         }
 
-        // Wenn nur ein Reload der Graphiken eines oder mehrerer ChildFrames
-        // gemacht werden soll
+        // If only reloading of the graphs or more child frames
+        // is needed
         SfxFrame& rFrame = GetFrame();
         if ( pParent == &rFrame && rFrame.GetChildFrameCount() )
         {
@@ -338,16 +338,16 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 pChild = pNext;
             }
 
-            // Der TopLevel-Frame selbst het keine Graphiken!
+            // The TopLevel frame itself had no graphics
             if ( bReloadAvailable )
                 return;
         }
     }
     else
     {
-        // Bei CTRL-Edit den TopFrame bearbeiten
+        // With CTRL-Edit edit the top frame
         sal_uInt16 nModifier = rReq.GetModifier();
-
+        //KEY_MOD1 is the Ctrl modifier key
         if ( ( nModifier & KEY_MOD1 ) && pParent )
         {
             SfxViewFrame *pTop = GetTopViewFrame();
@@ -364,9 +364,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( GetFrame().HasComponent() )
                 break;
 
-            // Wg. Doppeltbelegung in Toolboxen (mit/ohne Ctrl) ist es auch
-            // m"oglich, da\s der Slot zwar enabled ist, aber Ctrl-Click
-            // trotzdem nicht geht!
+            // Because of double functioning of the toolbox button (with/without Ctrl)
+            // it's possible that the slot is enabled, but Ctrl-click is not.
             if( !pSh || !pSh->HasName() || !(pSh->Get_Impl()->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
                 break;
 
@@ -446,11 +445,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     return;
             }
 
-            // Parameter auswerten
+            // Evaluate parameters
             // sal_Bool bReload = sal_True;
             if ( rReq.IsAPI() )
             {
-                // per API steuern ob r/w oder r/o
+                // Control through API if r/w or r/o
                 SFX_REQUEST_ARG(rReq, pEditItem, SfxBoolItem, SID_EDITDOC, sal_False);
                 if ( pEditItem )
                     nOpenMode = pEditItem->GetValue() ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY;
@@ -466,13 +465,27 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             INetURLObject aMedObj( pMed->GetName() );
 
-            // the logic below is following, if the document seems not to need to be reloaded and the physical name is different
-            // to the logical one, then on file system it can be checked that the copy is still newer than the original and no document reload is required
-            if ( ( !bNeedsReload && ( (aMedObj.GetProtocol() == INET_PROT_FILE &&
-                    aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT) &&
-                    !::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::NO_DECODE ), aPhysObj.GetMainURL( INetURLObject::NO_DECODE ) ))
-                  || pMed->IsRemote() ) )
-               || pVersionItem )
+            // -> i126305
+            // the logic below is following:
+            // if the document seems not to need to be reloaded
+            //     and the physical name is different to the logical one,
+            // then on file system it can be checked that the copy is still newer than the original and no document reload is required.
+            // some semplification to enhance readability of the 'if' expression
+            //
+            // on the 'http/https' protocol case, the bool bPhysObjIsYounger relies upon the getlastmodified Property of a WebDAV resource.
+            // Said property should be implemented, but sometimes it's not. This happens on some small webdav servers, where it's not
+            // implemented. On this case the reload will not work properly.
+            // Details at this link: http://tools.ietf.org/html/rfc4918#section-15, section 15.7
+            // TODO: add an indication to the user? Difficult to implement I think.
+            sal_Bool bPhysObjIsYounger = ::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::NO_DECODE ), aPhysObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            sal_Bool bIsHttpOrHttps = (aMedObj.GetProtocol() == INET_PROT_HTTP || aMedObj.GetProtocol() == INET_PROT_HTTPS);
+            if ( ( !bNeedsReload && ( ( aMedObj.GetProtocol() == INET_PROT_FILE &&
+                                        aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT) &&
+                                        !bPhysObjIsYounger )
+                                      || ( bIsHttpOrHttps && !bPhysObjIsYounger )
+                                      || ( pMed->IsRemote() && !bIsHttpOrHttps ) ) )
+                 || pVersionItem )
+            // <- i126305
             {
                 sal_Bool bOK = sal_False;
                 if ( !pVersionItem )
@@ -514,13 +527,15 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pSh->DoSaveCompleted( pMed );
                     }
 
-                    // r/o-Doc kann nicht in Editmode geschaltet werden?
+                    // r/o-Doc can not be switched to edit mode?
                     rReq.Done( sal_False );
 
                     if ( nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI() )
                     {
-                        // dem ::com::sun::star::sdbcx::User anbieten, als Vorlage zu oeffnen
+                        // ::com::sun::star::sdbcx::User ask to open as template (a copy of the document)
                         QueryBox aBox( &GetWindow(), SfxResId(MSG_QUERY_OPENASTEMPLATE) );
+                        // this is the querybox that is opened when the file is asked to move from r/o to edit using the button
+                        // on the toolbar
                         if ( RET_YES == aBox.Execute() )
                         {
                             SfxApplication* pApp = SFX_APP();
@@ -572,9 +587,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
         case SID_RELOAD:
         {
-            // Wg. Doppeltbelegung in Toolboxen (mit/ohne Ctrl) ist es auch
-            // m"oglich, da\s der Slot zwar enabled ist, aber Ctrl-Click
-            // trotzdem nicht geht!
+            // Because of double functioning of the toolbox button (with/without Ctrl)
+            // it's possible that the slot is enabled, but Ctrl-click is not.
             if ( !pSh || !pSh->CanReload_Impl() )
                 break;
             SfxApplication* pApp = SFX_APP();
@@ -596,12 +610,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             pImp->bReloading = sal_True;
             SFX_REQUEST_ARG(rReq, pURLItem, SfxStringItem,
                             SID_FILE_NAME, sal_False);
-            // editierbar "offnen?
+            // open to edit?
             sal_Bool bForEdit = !pSh->IsReadOnly();
             if ( rReq.GetSlot() == SID_EDITDOC )
                 bForEdit = !bForEdit;
 
-            // ggf. beim User nachfragen
+            // if necessary ask the user
             sal_Bool bDo = ( GetViewShell()->PrepareClose() != sal_False );
             SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
             if ( bDo && GetFrame().DocIsModified_Impl() &&
@@ -615,15 +629,15 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             {
                 SfxMedium *pMedium = xOldObj->GetMedium();
 
-                // Frameset abziehen, bevor FramesetView evtl. verschwindet
+                //Pull frameset before FramesetView possibly disappear
                 String aURL = pURLItem ? pURLItem->GetValue() :
                                 pMedium->GetName();
 
                 sal_Bool bHandsOff =
                     ( pMedium->GetURLObject().GetProtocol() == INET_PROT_FILE && !xOldObj->IsDocShared() );
 
-                // bestehende SfxMDIFrames f"ur dieses Doc leeren
-                // eigenes Format oder R/O jetzt editierbar "offnen?
+                // empty existing SfxMDIFrames of this Doc
+                // own format or R/O is now open editable?
                 SfxObjectShellLock xNewObj;
 
                 // collect the views of the document
@@ -704,7 +718,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 xOldObj->CancelTransfers();
 
-                // eigentliches Reload
+                //actual reload
                 //pNewSet->Put( SfxFrameItem ( SID_DOCFRAME, GetFrame() ) );
 
                 if ( pSilentItem && pSilentItem->GetValue() )
@@ -727,8 +741,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pNewSet->Put( SfxUInt16Item(SID_UPDATEDOCMODE,::com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG) );
 
                 xOldObj->SetModified( sal_False );
-                // Altes Dok nicht cachen! Gilt nicht, wenn anderes
-                // Doc geladen wird.
+                // Old Doc not cached! Does not apply if another Doc is loaded.
 
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSavedOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False);
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSavedReferer, SfxStringItem, SID_REFERER, sal_False);
@@ -760,6 +773,26 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
                 catch ( uno::Exception& )
                 {
+                    //->i126305 OBSERVATION
+                    // When this exception is thrown the r/o refresh of a file locked by another user
+                    // is not completed.
+                    // Code flow arrives here with a 'com.sun.star.task.ErrorCodeIOException'.
+                    // It's thrown at around line 1970 of main/sfx2/source/doc/sfxbasemodel.cxx,
+                    // in method 'SfxBaseModel::load'.
+                    // Because of this exception, the document is not reloaded when it should be.
+                    // The error generating the exception is 1287, or ERRCODE_IO_ACCESSDENIED.
+                    // It seems that the reason for this is the way the property PROP_READONLY seems used
+                    // in MediaDescriptor: both as property of the media and a request from GUI.
+                    // See main/comphelper/source/misc/mediadescriptor.cxx around line 755, where the behavior
+                    // leading to the error originates in the code flow.
+                    // This problem doesn't arise in WebDAV, since the stream is monodirectional (read or write) in UCB implementation.
+                    //<-i126305
+                    //->i126305 WORKAROUND
+                    // Code flow needs to reset the reloading, since it will no longer take part in the following code.
+                    // This specific flag, if not reset, will break the code flow on the next call of this method,
+                    // when it appears that the toolbar button stops functioning.
+                    pImp->bReloading = sal_False;
+                    //<-i126305
                     xNewObj->DoClose();
                     xNewObj = 0;
                 }
@@ -857,14 +890,14 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), xOldObj ) );
                 }
 
-                // als erledigt recorden
+                // register as done
                 rReq.Done( sal_True );
                 rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), sal_True));
                 return;
             }
             else
             {
-                // als nicht erledigt recorden
+                // register as not done
                 rReq.Done();
                 rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), sal_False));
                 pImp->bReloading = sal_False;
