@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_18d15ace",
+        "filename": "comphelper/source/eventattachermgr/eventattachermgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-09-24T09:19:00Z",
+      "side": 1,
+      "message": "the code used to make a defensive copy here?",
+      "revId": "b94dd7f90147e159149093ea860aca2dc53d52be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
