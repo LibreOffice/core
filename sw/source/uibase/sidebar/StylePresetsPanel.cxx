@@ -167,7 +167,7 @@ StylePresetsPanel::StylePresetsPanel(vcl::Window* pParent,
     get(mpValueSet, "valueset");
 
     mpValueSet->SetColCount(2);
-
+    mpValueSet->SetColor(Application::GetSettings().GetStyleSettings().GetFaceColor());
     mpValueSet->SetDoubleClickHdl(LINK(this, StylePresetsPanel, DoubleClickHdl));
 
     RefreshList();
