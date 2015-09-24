@@ -86,6 +86,7 @@
 #include "sdresid.hxx"
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::sd;
 using namespace ::com::sun::star;

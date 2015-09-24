@@ -51,6 +51,7 @@
 #include "tableobjectbar.hxx"
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace sd;
 using namespace sd::ui::table;

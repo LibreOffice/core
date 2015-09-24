@@ -36,6 +36,7 @@
 #include "OutlineViewShell.hxx"
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #include <stdio.h>
 

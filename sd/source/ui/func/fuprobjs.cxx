@@ -40,6 +40,7 @@
 #include "unchss.hxx"
 #include "sdabstdlg.hxx"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 

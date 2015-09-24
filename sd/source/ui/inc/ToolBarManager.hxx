@@ -253,7 +253,7 @@ public:
 
 private:
     class Implementation;
-    ::boost::scoped_ptr<Implementation> mpImpl;
+    std::unique_ptr<Implementation> mpImpl;
 
     /** The ViewShellBase is used to get the XLayoutManager and to determine
         the plug in mode.
