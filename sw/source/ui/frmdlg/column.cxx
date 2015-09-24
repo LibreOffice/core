@@ -1217,17 +1217,41 @@ void SwColumnPage::Update(MetricField *pInteractiveField)
 // Update Bsp
 void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
 {
-    if(!bFrm)
+    bool bVertical = false;
+    if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR, true))
+    {
+        const SvxFrameDirectionItem& rDirItem =
+                    static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
+        bVertical = rDirItem.GetValue() == FRMDIR_VERT_TOP_RIGHT||
+                    rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
+    }
+
+    if (!bFrm)
     {
         if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
         {
             const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get(
                                                 SID_ATTR_PAGE_SIZE));
-            const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get(
-                                                                RES_LR_SPACE ));
-            const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
-            const sal_uInt16 nActWidth = static_cast< sal_uInt16 >(rSize.GetSize().Width()
-                            - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetDistance());
+
+            sal_uInt16 nActWidth;
+
+            if (!bVertical)
+            {
+                const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get(
+                                                                    RES_LR_SPACE ));
+                const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
+                nActWidth = rSize.GetSize().Width()
+                                - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetDistance();
+            }
+            else
+            {
+                const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(rSet.Get(
+                                                                    RES_UL_SPACE ));
+                const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
+                nActWidth = rSize.GetSize().Height()
+                                - rULSpace.GetUpper() - rULSpace.GetLower() - rBox.GetDistance();
+
+            }
 
             if( pColMgr->GetActualSize() != nActWidth)
             {
@@ -1250,8 +1274,14 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         const SwFormatFrmSize& rSize = static_cast<const SwFormatFrmSize&>(rSet.Get(RES_FRM_SIZE));
         const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
 
-        long nDistance = rBox.GetDistance();
-        const sal_uInt16 nTotalWish = bFormat ? FRAME_FORMAT_WIDTH : sal_uInt16(rSize.GetWidth() - 2 * nDistance);
+        sal_uInt16 nTotalWish;
+        if (bFormat)
+            nTotalWish = FRAME_FORMAT_WIDTH;
+        else
+        {
+            long nDistance = rBox.GetDistance();
+            nTotalWish = (!bVertical ? rSize.GetWidth() : rSize.GetHeight()) - 2 * nDistance;
+        }
 
         // set maximum values of column width
         SetPageWidth(nTotalWish);
