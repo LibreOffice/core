@@ -16,6 +16,24 @@
       "revId": "b94dd7f90147e159149093ea860aca2dc53d52be",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_9893aafa",
+        "filename": "comphelper/source/eventattachermgr/eventattachermgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 563,
+      "author": {
+        "id": 1001044
+      },
+      "writtenOn": "2015-09-24T12:35:09Z",
+      "side": 1,
+      "message": "Good point",
+      "parentUuid": "ba0121b8_18d15ace",
+      "revId": "b94dd7f90147e159149093ea860aca2dc53d52be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
