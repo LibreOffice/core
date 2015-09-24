@@ -38,7 +38,6 @@
 #include "htmlpublishmode.hxx"
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include <vector>
 
 #define PUB_LOWRES_WIDTH    640
@@ -143,7 +142,7 @@ class HtmlExport
 
     const OUString maHTMLHeader;
 
-    boost::scoped_ptr< ButtonSet > mpButtonSet;
+    std::unique_ptr< ButtonSet > mpButtonSet;
 
     static SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
 
