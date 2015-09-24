@@ -85,8 +85,6 @@ using namespace vcl;
 using namespace desktop;
 using namespace utl;
 
-struct LibLibreOffice_Impl;
-
 static LibLibreOffice_Impl *gImpl = NULL;
 static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
 static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
@@ -319,36 +317,27 @@ static void                    lo_registerCallback (LibreOfficeKit* pThis,
                                                     void* pData);
 static char* lo_getFilterTypes(LibreOfficeKit* pThis);
 
-struct LibLibreOffice_Impl : public _LibreOfficeKit
+LibLibreOffice_Impl::LibLibreOffice_Impl()
+    : maThread(0)
+    , mpCallback(nullptr)
+    , mpCallbackData(nullptr)
 {
-    OUString maLastExceptionMsg;
-    std::shared_ptr< LibreOfficeKitClass > m_pOfficeClass;
-    oslThread maThread;
-    LibreOfficeKitCallback mpCallback;
-    void *mpCallbackData;
+    if(!(m_pOfficeClass = gOfficeClass.lock())) {
+        m_pOfficeClass.reset(new LibreOfficeKitClass);
+        m_pOfficeClass->nSize = sizeof(LibreOfficeKitClass);
 
-    LibLibreOffice_Impl()
-        : maThread(0)
-        , mpCallback(nullptr)
-        , mpCallbackData(nullptr)
-    {
-        if(!(m_pOfficeClass = gOfficeClass.lock())) {
-            m_pOfficeClass.reset(new LibreOfficeKitClass);
-            m_pOfficeClass->nSize = sizeof(LibreOfficeKitClass);
+        m_pOfficeClass->destroy = lo_destroy;
+        m_pOfficeClass->documentLoad = lo_documentLoad;
+        m_pOfficeClass->getError = lo_getError;
+        m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
+        m_pOfficeClass->registerCallback = lo_registerCallback;
+        m_pOfficeClass->getFilterTypes = lo_getFilterTypes;
 
-            m_pOfficeClass->destroy = lo_destroy;
-            m_pOfficeClass->documentLoad = lo_documentLoad;
-            m_pOfficeClass->getError = lo_getError;
-            m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
-            m_pOfficeClass->registerCallback = lo_registerCallback;
-            m_pOfficeClass->getFilterTypes = lo_getFilterTypes;
-
-            gOfficeClass = m_pOfficeClass;
-        }
-
-        pClass = m_pOfficeClass.get();
+        gOfficeClass = m_pOfficeClass;
     }
-};
+
+    pClass = m_pOfficeClass.get();
+}
 
 namespace
 {

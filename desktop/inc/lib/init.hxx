@@ -15,6 +15,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <memory>
 #include "../../source/inc/desktopdllapi.h"
+#include <osl/thread.h>
 
 namespace desktop {
     struct DESKTOP_DLLPUBLIC LibLODocument_Impl : public _LibreOfficeKitDocument
@@ -24,6 +25,17 @@ namespace desktop {
 
         explicit LibLODocument_Impl(const css::uno::Reference <css::lang::XComponent> &xComponent);
         ~LibLODocument_Impl();
+    };
+
+    struct DESKTOP_DLLPUBLIC LibLibreOffice_Impl : public _LibreOfficeKit
+    {
+        OUString maLastExceptionMsg;
+        std::shared_ptr< LibreOfficeKitClass > m_pOfficeClass;
+        oslThread maThread;
+        LibreOfficeKitCallback mpCallback;
+        void *mpCallbackData;
+
+        LibLibreOffice_Impl();
     };
 }
 
