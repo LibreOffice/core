@@ -6051,6 +6051,82 @@ void Test::testFuncSUMX2PY2()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncSUMX2MY2()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "SumX2MY2 Test");
+
+    OUString aVal;
+    ScAddress aPos(6,0,0);
+    m_pDoc->SetString(aPos, "=SUMX2MY2(A1:C3;D1:F3)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 0.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->SetValue(0, 0, 0, 10.0); // A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 0.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(3, 0, 0, -9.0); // D1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 19.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 0, 0, 2.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 19.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(4, 0, 0, 1.0); // E1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 22.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(2, 0, 0, 3.0); // C1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 22.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(5, 0, 0, 3.0); // F1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 22.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, 10.0); // A2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 22.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(3, 1, 0, -10.0); // D2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 22.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 1, 0, -5.0); // B2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 22.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(4, 1, 0, -5.0); // E2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 22.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(2, 1, 0, -3.0); // C2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 22.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(5, 1, 0, 3.0); // F2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 22.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 2, 0, -8.0); // A3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 22.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(3, 2, 0, 3.0); // D3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 77.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 2, 0, 2.0); // B3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 77.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(4, 2, 0, -6.0); // E3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 45.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(2, 2, 0, -4.0); // C3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 45.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(5, 2, 0, 6.0); // F3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 25.0, m_pDoc->GetValue(aPos));
+
+    // add some strings
+    m_pDoc->SetString(5, 2, 0, "a"); // F3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 45.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(0, 2, 0, "a"); // A3
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", -10.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(1, 0, 0, "a"); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", -13.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(3, 0, 0, "a"); // D1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", -32.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->SetString(aPos, "=SUMX2MY2({1;3;5};{0;4;4})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 3.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMX2MY2({1;-3;-5};{0;-4;4})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 3.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMX2MY2({9;5;1};{3;-3;3})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMX2MY2 failed", 80.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMX2MY2({1;2;3};{2;3})");
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUMX2MY2 should return #VALUE! for matrices with different sizes",
+            OUString("#VALUE!"), aVal);
+    m_pDoc->SetString(aPos, "=SUMX2MY2({1;2;3})");
+    aVal = m_pDoc->GetString(aPos);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUMX2MY2 needs two parameters",
+            OUString("Err:511"), aVal);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncGCD()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
