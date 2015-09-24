@@ -1986,6 +1986,43 @@ lok_doc_view_reset_view(LOKDocView* pDocView)
 {
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
     priv->m_aTileBuffer.resetAllTiles();
+    priv->m_nLoadProgress = 0.0;
+
+    memset(&priv->m_aVisibleCursor, 0, sizeof(priv->m_aVisibleCursor));
+    priv->m_bCursorOverlayVisible = false;
+    priv->m_bCursorVisible = false;
+
+    priv->m_nLastButtonPressTime = 0;
+    priv->m_nLastButtonReleaseTime = 0;
+    priv->m_aTextSelectionRectangles.clear();
+
+    memset(&priv->m_aTextSelectionStart, 0, sizeof(priv->m_aTextSelectionStart));
+    memset(&priv->m_aTextSelectionEnd, 0, sizeof(priv->m_aTextSelectionEnd));
+    memset(&priv->m_aGraphicSelection, 0, sizeof(priv->m_aGraphicSelection));
+    priv->m_bInDragGraphicSelection = false;
+
+    cairo_surface_destroy(priv->m_pHandleStart);
+    priv->m_pHandleStart = 0;
+    memset(&priv->m_aHandleStartRect, 0, sizeof(priv->m_aHandleStartRect));
+    priv->m_bInDragStartHandle = false;
+
+    cairo_surface_destroy(priv->m_pHandleMiddle);
+    priv->m_pHandleMiddle = 0;
+    memset(&priv->m_aHandleMiddleRect, 0, sizeof(priv->m_aHandleMiddleRect));
+    priv->m_bInDragMiddleHandle = false;
+
+    cairo_surface_destroy(priv->m_pHandleEnd);
+    priv->m_pHandleEnd = 0;
+    memset(&priv->m_aHandleEndRect, 0, sizeof(priv->m_aHandleEndRect));
+    priv->m_bInDragEndHandle = false;
+
+    cairo_surface_destroy(priv->m_pGraphicHandle);
+    priv->m_pGraphicHandle = 0;
+    memset(&priv->m_aGraphicHandleRects, 0, sizeof(priv->m_aGraphicHandleRects));
+    memset(&priv->m_bInDragGraphicHandles, 0, sizeof(priv->m_bInDragGraphicHandles));
+
+    priv->m_nViewId = 0;
+
     gtk_widget_queue_draw(GTK_WIDGET(pDocView));
 }
 
