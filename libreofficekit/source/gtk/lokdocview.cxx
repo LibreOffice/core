@@ -1843,15 +1843,6 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_INT, G_TYPE_INT);
 }
 
-/**
- * lok_doc_view_new:
- * @pPath: LibreOffice install path.
- * @cancellable: The cancellable object that you can use to cancel this
- * operation.
- * @error: The error that will be set if the object fails to initialize.
- *
- * Returns: (transfer none): The #LOKDocView widget instance.
- */
 SAL_DLLPUBLIC_EXPORT GtkWidget*
 lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
 {
@@ -1873,14 +1864,6 @@ SAL_DLLPUBLIC_EXPORT GtkWidget* lok_doc_view_new_from_widget(LOKDocView* pOldLOK
     return pNewDocView;
 }
 
-/**
- * lok_doc_view_open_document_finish:
- * @pDocView: The #LOKDocView instance
- * @res:
- * @error:
- *
- * Returns: %TRUE if the document is loaded succesfully, %FALSE otherwise
- */
 SAL_DLLPUBLIC_EXPORT gboolean
 lok_doc_view_open_document_finish (LOKDocView* pDocView, GAsyncResult* res, GError** error)
 {
@@ -1894,17 +1877,6 @@ lok_doc_view_open_document_finish (LOKDocView* pDocView, GAsyncResult* res, GErr
     return g_task_propagate_boolean(task, error);
 }
 
-
-/**
- * lok_doc_view_open_document:
- * @pDocView: The #LOKDocView instance
- * @pPath: (transfer full): The path of the document that #LOKDocView widget should try to open
- * @cancellable:
- * @callback:
- * @userdata:
- *
- * Returns: %TRUE if the document is loaded succesfully, %FALSE otherwise
- */
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_open_document (LOKDocView* pDocView,
                             const gchar* pPath,
@@ -1925,12 +1897,6 @@ lok_doc_view_open_document (LOKDocView* pDocView,
     g_object_unref(task);
 }
 
-/**
- * lok_doc_view_get_document:
- * @pDocView: The #LOKDocView instance
- *
- * Returns: The #LibreOfficeKitDocument instance the widget is currently showing
- */
 SAL_DLLPUBLIC_EXPORT LibreOfficeKitDocument*
 lok_doc_view_get_document (LOKDocView* pDocView)
 {
@@ -1938,13 +1904,6 @@ lok_doc_view_get_document (LOKDocView* pDocView)
     return priv->m_pDocument;
 }
 
-/**
- * lok_doc_view_set_zoom:
- * @pDocView: The #LOKDocView instance
- * @fZoom: The new zoom level that pDocView must set it into.
- *
- * Sets the new zoom level for the widget.
- */
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
 {
@@ -1963,12 +1922,6 @@ lok_doc_view_set_zoom (LOKDocView* pDocView, float fZoom)
                                 nDocumentHeightPixels);
 }
 
-/**
- * lok_doc_view_get_zoom:
- * @pDocView: The #LOKDocView instance
- *
- * Returns: The current zoom factor value in float for pDocView
- */
 SAL_DLLPUBLIC_EXPORT float
 lok_doc_view_get_zoom (LOKDocView* pDocView)
 {
@@ -2036,13 +1989,6 @@ lok_doc_view_reset_view(LOKDocView* pDocView)
     gtk_widget_queue_draw(GTK_WIDGET(pDocView));
 }
 
-/**
- * lok_doc_view_set_edit:
- * @pDocView: The #LOKDocView instance
- * @bEdit: %TRUE if the pDocView should go in edit mode, %FALSE otherwise
- *
- * Sets the edit-mode for pDocView
- */
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_edit(LOKDocView* pDocView,
                       gboolean bEdit)
@@ -2057,12 +2003,6 @@ lok_doc_view_set_edit(LOKDocView* pDocView,
     g_object_unref(task);
 }
 
-/**
- * lok_doc_view_get_edit:
- * @pDocView: The #LOKDocView instance
- *
- * Returns: %TRUE if the given pDocView is in edit mode.
- */
 SAL_DLLPUBLIC_EXPORT gboolean
 lok_doc_view_get_edit (LOKDocView* pDocView)
 {
@@ -2070,14 +2010,7 @@ lok_doc_view_get_edit (LOKDocView* pDocView)
     return priv->m_bEdit;
 }
 
-/**
- * lok_doc_view_post_command:
- * @pDocView: the #LOKDocView instance
- * @pCommand: the command to issue to LO core
- * @pArguments: the arguments to the given command
- *
- * This methods forwards your command to LO core.
-*/
+
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_post_command (LOKDocView* pDocView,
                            const gchar* pCommand,
@@ -2094,15 +2027,6 @@ lok_doc_view_post_command (LOKDocView* pDocView,
     g_object_unref(task);
 }
 
-/**
- * lok_doc_view_pixel_to_twip:
- * @pDocView: The #LOKDocView instance
- * @fInput: The value in pixels to convert to twips
- *
- * Converts the value in pixels to twips according to zoom level.
- *
- * Returns: The corresponding value in twips
- */
 SAL_DLLPUBLIC_EXPORT float
 lok_doc_view_pixel_to_twip (LOKDocView* pDocView, float fInput)
 {
@@ -2110,15 +2034,6 @@ lok_doc_view_pixel_to_twip (LOKDocView* pDocView, float fInput)
     return pixelToTwip(fInput, priv->m_fZoom);
 }
 
-/**
- * lok_doc_view_twip_to_pixel:
- * @pDocView: The #LOKDocView instance
- * @fInput: The value in twips to convert to pixels
- *
- * Converts the value in twips to pixels according to zoom level.
- *
- * Returns: The corresponding value in pixels
- */
 SAL_DLLPUBLIC_EXPORT float
 lok_doc_view_twip_to_pixel (LOKDocView* pDocView, float fInput)
 {
