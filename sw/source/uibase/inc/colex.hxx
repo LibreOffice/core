@@ -30,9 +30,12 @@ class SfxItemSet;
 
 class SW_DLLPUBLIC SwPageExample : public SvxPageWindow
 {
+protected:
+    bool            m_bVertical;
 public:
     SwPageExample(vcl::Window* pPar)
         : SvxPageWindow(pPar)
+        , m_bVertical(false)
     {
         SetSize(SvxPaperInfo::GetPaperSize(PAPER_A4));
     }
@@ -45,7 +48,6 @@ class SwTextGridItem;
 class SW_DLLPUBLIC SwPageGridExample : public SwPageExample
 {
     SwTextGridItem*     pGridItem;
-    bool            m_bVertical;
 protected:
     virtual void DrawPage(vcl::RenderContext& rRenderContext,
                           const Point& rPoint,
@@ -55,7 +57,6 @@ public:
     SwPageGridExample(vcl::Window* pPar)
         : SwPageExample(pPar)
         , pGridItem(0)
-        , m_bVertical(false)
     {}
 
     virtual ~SwPageGridExample();

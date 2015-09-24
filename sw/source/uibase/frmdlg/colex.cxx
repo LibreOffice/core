@@ -44,6 +44,14 @@
 // Taking the updated values from the set
 void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
+    if (SfxItemState::DEFAULT <= rSet.GetItemState(RES_FRAMEDIR, true))
+    {
+        const SvxFrameDirectionItem& rDirItem =
+                    static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
+        m_bVertical = rDirItem.GetValue() == FRMDIR_VERT_TOP_RIGHT||
+                    rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
+    }
+
     SfxItemPool* pPool = rSet.GetPool();
     sal_uInt16 nWhich = pPool->GetWhich( SID_ATTR_PAGE );
     if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
@@ -590,13 +598,6 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     //get the grid information
     if(SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID, true))
         pGridItem = static_cast<SwTextGridItem*>(static_cast<const SwTextGridItem&>(rSet.Get(RES_TEXTGRID)).Clone());
-    if( SfxItemState::DEFAULT <= rSet.GetItemState( RES_FRAMEDIR, true ))
-    {
-        const SvxFrameDirectionItem& rDirItem =
-                    static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
-        m_bVertical = rDirItem.GetValue() == FRMDIR_VERT_TOP_RIGHT||
-                    rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
-    }
     SwPageExample::UpdateExample(rSet);
 }
 
