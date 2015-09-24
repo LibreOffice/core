@@ -51,11 +51,13 @@ public:
     void testGetStyles();
     void testGetFonts();
     void testCreateView();
+    void testGetFilterTypes();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
     CPPUNIT_TEST(testGetFonts);
     CPPUNIT_TEST(testCreateView);
+    CPPUNIT_TEST(testGetFilterTypes);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -148,6 +150,20 @@ void DesktopLOKTest::testCreateView()
     pDocument->m_pDocumentClass->destroyView(pDocument, nId);
     CPPUNIT_ASSERT_EQUAL(1, pDocument->m_pDocumentClass->getViews(pDocument));
     closeDoc();
+}
+
+void DesktopLOKTest::testGetFilterTypes()
+{
+    LibLibreOffice_Impl aOffice;
+    char* pJSON = aOffice.m_pOfficeClass->getFilterTypes(&aOffice);
+
+    std::stringstream aStream(pJSON);
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+
+    CPPUNIT_ASSERT(aTree.size() > 0);
+    CPPUNIT_ASSERT_EQUAL(std::string("application/vnd.oasis.opendocument.text"), aTree.get_child("writer8").get_child("MediaType").get_value<std::string>());
+    free(pJSON);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
