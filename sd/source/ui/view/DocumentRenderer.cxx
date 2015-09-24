@@ -52,6 +52,7 @@
 #include <unotools/moduleoptions.hxx>
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

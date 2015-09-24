@@ -59,6 +59,7 @@
 #include <sfx2/request.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/sidebar/Theme.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::text;
 

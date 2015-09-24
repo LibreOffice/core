@@ -35,6 +35,7 @@
 #include "sdabstdlg.hxx"
 #include "sdattr.hrc"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
