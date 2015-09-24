@@ -368,6 +368,10 @@ namespace fileaccess {
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
 
+                case FileBase::E_LOCKED:  // file is locked by another user
+                    ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
+                    break;
+
                 case FileBase::E_FAULT: // Bad address
                 case FileBase::E_LOOP:  // Too many symbolic links encountered
                 case FileBase::E_NOSPC: // No space left on device

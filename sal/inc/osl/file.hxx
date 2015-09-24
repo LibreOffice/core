@@ -99,6 +99,7 @@ public:
         E_USERS        = osl_File_E_USERS,
         E_OVERFLOW     = osl_File_E_OVERFLOW,
         E_NOTREADY     = osl_File_E_NOTREADY,
+        E_LOCKED       = osl_File_E_LOCKED,
         E_invalidError = osl_File_E_invalidError,   /* unmapped error: always last entry in enum! */
         E_TIMEDOUT     = osl_File_E_TIMEDOUT,
         E_NETWORK      = osl_File_E_NETWORK

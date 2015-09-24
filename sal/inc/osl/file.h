@@ -132,6 +132,7 @@ typedef enum {
     osl_File_E_USERS,
     osl_File_E_OVERFLOW,
     osl_File_E_NOTREADY,
+    osl_File_E_LOCKED,
     osl_File_E_invalidError,        /* unmapped error: always last entry in enum! */
     osl_File_E_TIMEDOUT,
     osl_File_E_NETWORK,
