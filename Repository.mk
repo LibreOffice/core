@@ -50,6 +50,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     drawinglayer \
     svgio \
     editeng \
+    for \
+    forui \
     fwe \
     fwi \
     fwk \

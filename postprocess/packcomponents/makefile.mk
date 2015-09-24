@@ -71,6 +71,7 @@ my_components = \
     component/comphelper/util/comphelp \
     component/cui/util/cui \
     component/drawinglayer/drawinglayer \
+    component/formula/util/for \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
@@ -116,7 +117,6 @@ my_components = \
     filterconfig1 \
     flash \
     flat \
-    for \
     fpicker \
     fps_office \
     frm \

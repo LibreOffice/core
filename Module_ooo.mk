@@ -42,6 +42,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     unoxml \
     xmloff \
     vbahelper \
+    formula \
 ))
 
 # vim: set noet ts=4 sw=4:

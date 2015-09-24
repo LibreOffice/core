@@ -21,25 +21,15 @@
 
 
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
-PRJNAME=formula
-TARGET=ui_resource
-ENABLE_EXCEPTIONS=TRUE
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_Module,formula))
 
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-#SRS1NAME=ui_res
-#SRC1FILES= \
-#    ui_resource.src
+$(eval $(call gb_Module_add_targets,formula,\
+	AllLangResTarget_for \
+	AllLangResTarget_forui \
+	Library_for \
+	Library_forui \
+	Package_inc \
+))
 
 
-SLOFILES=	$(SLO)$/ModuleHelper.obj \
-
-# --- Targets ----------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

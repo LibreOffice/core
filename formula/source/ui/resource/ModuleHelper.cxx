@@ -20,6 +20,7 @@
  *************************************************************/
 
 
+#include "precompiled_formula.hxx"
 #include "ModuleHelper.hxx"
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>

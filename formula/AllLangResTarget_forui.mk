@@ -21,24 +21,28 @@
 
 
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
-PRJNAME=formula
-TARGET=core_resource
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,forui))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_AllLangResTarget_set_reslocation,forui,formula))
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_AllLangResTarget_add_srs,forui,\
+	forui/res \
+))
 
-# --- Files --------------------------------------------------------
+$(eval $(call gb_SrsTarget_SrsTarget,forui/res))
 
-SRS1NAME=core_strings
-SRC1FILES= \
-    core_resource.src
+$(eval $(call gb_SrsTarget_set_include,forui/res,\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc \
+	-I$(WORKDIR)/inc/formula \
+	-I$(SRCDIR)/formula/inc \
+	-I$(SRCDIR)/formula/inc/formula \
+	-I$(SRCDIR)/formula/source/ui/inc \
+	-I$(SRCDIR)/formula/source/ui/dlg \
+	-I$(SRCDIR)/formula/source/ui/resource \
+))
 
-SLOFILES=	$(SLO)$/core_resource.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE :  target.mk
+$(eval $(call gb_SrsTarget_add_files,forui/res,\
+	formula/source/ui/dlg/formdlgs.src \
+	formula/source/ui/dlg/parawin.src \
+))

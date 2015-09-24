@@ -19,25 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
-PRJNAME=formula
-TARGET=core_api
-ENABLE_EXCEPTIONS=TRUE
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES=	$(SLO)$/FormulaOpCodeMapperObj.obj  \
-            $(SLO)$/FormulaCompiler.obj         \
-            $(SLO)$/token.obj                   \
-            $(SLO)$/services.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

@@ -21,42 +21,25 @@
 
 
 
-PRJ=..$/..$/..
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,for))
 
-PRJNAME=formula
-TARGET=uidlg
-IMGLST_SRS=$(SRS)$/$(TARGET).srs
-BMP_IN=$(PRJ)$/res
+$(eval $(call gb_AllLangResTarget_set_reslocation,for,formula))
 
-# --- Settings ----------------------------------
+$(eval $(call gb_AllLangResTarget_add_srs,for,\
+	for/res \
+))
 
-.INCLUDE : settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_SrsTarget_SrsTarget,for/res))
 
-# --- Files -------------------------------------
+$(eval $(call gb_SrsTarget_set_include,for/res,\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc \
+	-I$(WORKDIR)/inc/formula \
+	-I$(SRCDIR)/formula/source/core/inc \
+	-I$(SRCDIR)/formula/source/core/api \
+	-I$(SRCDIR)/formula/source/core/resource \
+))
 
-# ... resource files ............................
-
-SRS1NAME=$(TARGET)
-SRC1FILES =	\
-        formdlgs.src	\
-        parawin.src	
-
-# ... object files ............................
-
-EXCEPTIONSFILES=	\
-        $(SLO)$/formula.obj					\
-        $(SLO)$/FormulaHelper.obj			\
-        $(SLO)$/parawin.obj				    \
-        $(SLO)$/funcutl.obj			        \
-        $(SLO)$/funcpage.obj			        \
-        $(SLO)$/structpg.obj
-        
-SLOFILES=	\
-        $(EXCEPTIONSFILES)
-
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+$(eval $(call gb_SrsTarget_add_files,for/res,\
+	formula/source/core/resource/core_resource.src \
+))
