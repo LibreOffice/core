@@ -888,7 +888,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
 
     Parm aParm( rNew, rOld );
 
-    OSL_ENSURE( rOld.Count() == rNew.Count(), "Columnanzahl veraendert.");
+    OSL_ENSURE( rOld.Count() == rNew.Count(), "Number of columns changed.");
 
     // Convert the edges. We need to adjust the size of the table and some boxes.
     // For the size adjustment, we must not make use of the Modify, since that'd
@@ -2239,7 +2239,7 @@ void SwTableBoxFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
                 SwTableBox* pBox = aIter.First();
                 if( pBox )
                 {
-                    OSL_ENSURE( !aIter.Next(), "zeor or more than one box at format" );
+                    OSL_ENSURE( !aIter.Next(), "zero or more than one box at format" );
 
                     sal_uLong nNewFormat;
                     if( pNewFormat )
