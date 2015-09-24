@@ -103,6 +103,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)' \
 	) > $@
 
+# for release-builds (building installers) adjust values in openoffice.lst.in
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,soffice) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \

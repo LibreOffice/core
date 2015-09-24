@@ -16,11 +16,11 @@ Globals
             SOLSUREPACKAGEPREFIX libreoffice
             REGISTRATION_HOST https://registration.libreoffice.org/RegistrationWeb
             REGISTRATIONURL http://survey.libreoffice.org/user/index.php
-            PROGRESSBARCOLOR 128,128,128
-            PROGRESSSIZE 409,8
-            PROGRESSPOSITION 72,189
-            PROGRESSFRAMECOLOR 245,245,245
-            PROGRESSTEXTBASELINE 170
+            PROGRESSBARCOLOR 0,0,0
+            PROGRESSSIZE 444,8
+            PROGRESSPOSITION 35,153
+            PROGRESSFRAMECOLOR 102,102,102
+            PROGRESSTEXTBASELINE 145
             PROGRESSTEXTCOLOR 255,255,255
             NATIVEPROGRESS false
             REGISTRYLAYERNAME Layers
