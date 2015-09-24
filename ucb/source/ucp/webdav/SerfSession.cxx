@@ -605,7 +605,7 @@ void SerfSession::PROPFIND( const OUString & inPath,
     Init( rEnv );
 
     apr_status_t status = APR_SUCCESS;
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     aReqProc->processPropFind( inDepth,
                                inPropNames,
                                ioResources,
@@ -635,7 +635,7 @@ void SerfSession::PROPFIND( const OUString & inPath,
     Init( rEnv );
 
     apr_status_t status = APR_SUCCESS;
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     aReqProc->processPropFind( inDepth,
                                ioResInfo,
                                status );
@@ -663,7 +663,7 @@ void SerfSession::PROPPATCH( const OUString & inPath,
     Init( rEnv );
 
     apr_status_t status = APR_SUCCESS;
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     aReqProc->processPropPatch( inValues,
                                 status );
 
@@ -685,7 +685,7 @@ void SerfSession::HEAD( const OUString & inPath,
 
     m_bIsHeadRequestInProgress = true;
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     ioResource.uri = inPath;
     ioResource.properties.clear();
     apr_status_t status = APR_SUCCESS;
@@ -712,7 +712,7 @@ SerfSession::GET( const OUString & inPath,
 
     uno::Reference< SerfInputStream > xInputStream( new SerfInputStream );
     apr_status_t status = APR_SUCCESS;
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     aReqProc->processGet( xInputStream,
                           status );
 
@@ -734,7 +734,7 @@ void SerfSession::GET( const OUString & inPath,
     Init( rEnv );
 
     apr_status_t status = APR_SUCCESS;
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     aReqProc->processGet( ioOutputStream,
                           status );
 
@@ -755,7 +755,7 @@ SerfSession::GET( const OUString & inPath,
 
     Init( rEnv );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     uno::Reference< SerfInputStream > xInputStream( new SerfInputStream );
     ioResource.uri = inPath;
     ioResource.properties.clear();
@@ -785,7 +785,7 @@ void SerfSession::GET( const OUString & inPath,
 
     Init( rEnv );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     ioResource.uri = inPath;
     ioResource.properties.clear();
     apr_status_t status = APR_SUCCESS;
@@ -809,7 +809,7 @@ void SerfSession::PUT( const OUString & inPath,
 
     Init( rEnv );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     uno::Sequence< sal_Int8 > aDataToSend;
     if ( !getDataFromInputStream( inInputStream, aDataToSend, false ) )
         throw DAVException( DAVException::DAV_INVALID_ARG );
@@ -842,7 +842,7 @@ SerfSession::POST( const OUString & inPath,
 
     Init( rEnv );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     uno::Reference< SerfInputStream > xInputStream( new SerfInputStream );
     apr_status_t status = APR_SUCCESS;
     aReqProc->processPost( reinterpret_cast< const char * >( aDataToSend.getConstArray() ),
@@ -877,7 +877,7 @@ void SerfSession::POST( const OUString & inPath,
 
     Init( rEnv );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     apr_status_t status = APR_SUCCESS;
     aReqProc->processPost( reinterpret_cast< const char * >( aDataToSend.getConstArray() ),
                            aDataToSend.getLength(),
@@ -900,7 +900,7 @@ void SerfSession::MKCOL( const OUString & inPath,
 
     Init( rEnv );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     apr_status_t status = APR_SUCCESS;
     aReqProc->processMkCol( status );
 
@@ -921,7 +921,7 @@ void SerfSession::COPY( const OUString & inSourceURL,
     Init( rEnv );
 
     SerfUri theSourceUri( inSourceURL );
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( theSourceUri.GetPath() ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( theSourceUri.GetPath() ) );
     apr_status_t status = APR_SUCCESS;
     aReqProc->processCopy( inDestinationURL, inOverWrite, status );
 
@@ -942,7 +942,7 @@ void SerfSession::MOVE( const OUString & inSourceURL,
     Init( rEnv );
 
     SerfUri theSourceUri( inSourceURL );
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( theSourceUri.GetPath() ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( theSourceUri.GetPath() ) );
     apr_status_t status = APR_SUCCESS;
     aReqProc->processMove( inDestinationURL, inOverWrite, status );
 
@@ -960,7 +960,7 @@ void SerfSession::DESTROY( const OUString & inPath,
 
     Init( rEnv );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     apr_status_t status = APR_SUCCESS;
     aReqProc->processDelete( status );
 
@@ -1010,7 +1010,7 @@ void SerfSession::LOCK( const OUString & inPath,
 
     Init( rEnv );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     aReqProc->processLock( rLock );
 
     HandleError( aReqProc );
@@ -1065,7 +1065,7 @@ bool SerfSession::LOCK( const OUString& rLock,
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( rLock ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( rLock ) );
     aReqProc->processLock( ucb::Lock(), plastChanceToSendRefreshRequest );
 
     try
@@ -1092,7 +1092,7 @@ void SerfSession::UNLOCK( const OUString & inPath,
 
     Init( rEnv );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( inPath ) );
     aReqProc->processUnlock();
 
     try
@@ -1114,7 +1114,7 @@ void SerfSession::UNLOCK( const OUString& rLock )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
-    boost::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( rLock ) );
+    std::shared_ptr<SerfRequestProcessor> aReqProc( createReqProc( rLock ) );
     aReqProc->processUnlock();
 
     try
@@ -1250,7 +1250,7 @@ bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
 // HandleError
 // Common Error Handler
 
-void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc )
+void SerfSession::HandleError( std::shared_ptr<SerfRequestProcessor> rReqProc )
     throw ( DAVException )
 {
     m_aEnv = DAVRequestEnvironment();

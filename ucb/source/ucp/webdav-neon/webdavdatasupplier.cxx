@@ -33,11 +33,11 @@
 
  *************************************************************************/
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/shared_ptr.hpp>
 #include <osl/diagnose.h>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
+#include <memory>
 #include "webdavdatasupplier.hxx"
 #include "webdavcontent.hxx"
 #include "ContentProperties.hxx"
@@ -62,9 +62,9 @@ struct ResultListEntry
     uno::Reference< ucb::XContentIdentifier > xId;
     uno::Reference< ucb::XContent >           xContent;
     uno::Reference< sdbc::XRow >              xRow;
-    boost::shared_ptr<ContentProperties> const pData;
+    std::shared_ptr<ContentProperties> const pData;
 
-    explicit ResultListEntry(boost::shared_ptr<ContentProperties> const& pEntry)
+    explicit ResultListEntry(std::shared_ptr<ContentProperties> const& pEntry)
         : pData(pEntry)
     {}
 };
@@ -429,7 +429,7 @@ bool DataSupplier::getData()
                         }
                     }
 
-                    boost::shared_ptr<ContentProperties> const
+                    std::shared_ptr<ContentProperties> const
                         pContentProperties(new ContentProperties(rRes));
 
                     // Check resource against open mode.

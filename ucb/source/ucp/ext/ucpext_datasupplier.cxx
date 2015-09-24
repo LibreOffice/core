@@ -32,8 +32,8 @@
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 
 namespace ucb { namespace ucp { namespace ext

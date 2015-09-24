@@ -31,8 +31,8 @@
 #import <Cocoa/Cocoa.h>
 #include <postmac.h>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <memory>
 #include <vector>
 
 class OSXTransferable : public ::cppu::WeakImplHelper<com::sun::star::datatransfer::XTransferable>,
