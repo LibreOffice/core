@@ -99,13 +99,13 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     mpBtnOk->SetClickHdl(aBtnHdl);
     mpBtnCancel->SetClickHdl(aBtnHdl);
 
-    Link<> aLink = LINK(this, ScXMLSourceDlg, GetFocusHdl);
-    mpRefEdit->SetGetFocusHdl(aLink);
-    mpRefBtn->SetGetFocusHdl(aLink);
+    Link<Control&,void> aLink2 = LINK(this, ScXMLSourceDlg, GetFocusHdl);
+    mpRefEdit->SetGetFocusHdl(aLink2);
+    mpRefBtn->SetGetFocusHdl(aLink2);
 
     mpLbTree->SetSelectHdl(LINK(this, ScXMLSourceDlg, TreeItemSelectHdl));
 
-    aLink = LINK(this, ScXMLSourceDlg, RefModifiedHdl);
+    Link<> aLink = LINK(this, ScXMLSourceDlg, RefModifiedHdl);
     mpRefEdit->SetModifyHdl(aLink);
 
     mpBtnOk->Disable();
@@ -662,10 +662,9 @@ void ScXMLSourceDlg::RefEditModified()
     mpBtnOk->Enable(bHasLink);
 }
 
-IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
+IMPL_LINK_TYPED(ScXMLSourceDlg, GetFocusHdl, Control&, rCtrl, void)
 {
-    HandleGetFocus(pCtrl);
-    return 0;
+    HandleGetFocus(&rCtrl);
 }
 
 IMPL_LINK_TYPED(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn, void)

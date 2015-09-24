@@ -632,7 +632,7 @@ void SvxSearchDialog::InitControls_Impl()
     m_pSearchLB->SetModifyHdl( LINK( this, SvxSearchDialog, ModifyHdl_Impl ) );
     m_pReplaceLB->SetModifyHdl( LINK( this, SvxSearchDialog, ModifyHdl_Impl ) );
 
-    Link<> aLink = LINK( this, SvxSearchDialog, FocusHdl_Impl );
+    Link<Control&,void> aLink = LINK( this, SvxSearchDialog, FocusHdl_Impl );
     m_pSearchLB->SetGetFocusHdl( aLink );
     m_pReplaceLB->SetGetFocusHdl( aLink );
 
@@ -992,7 +992,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
         bDisableSearch = m_pSearchLB->GetText().isEmpty() &&
             m_pSearchAttrText->GetText().isEmpty();
     }
-    FocusHdl_Impl(m_pSearchLB);
+    FocusHdl_Impl(*m_pSearchLB);
 
     if ( bDisableSearch )
     {
@@ -1511,7 +1511,7 @@ IMPL_LINK_NOARG_TYPED(SvxSearchDialog, TemplateHdl_Impl, Button*, void)
         EnableControl_Impl(m_pAttributeBtn);
         EnableControl_Impl(m_pSimilarityBox);
 
-        FocusHdl_Impl( bSearch ? m_pSearchLB : m_pReplaceLB );
+        FocusHdl_Impl( bSearch ? *m_pSearchLB : *m_pReplaceLB );
     }
     bSet = true;
     pImpl->bSaveToModule = false;
@@ -1809,10 +1809,10 @@ void SvxSearchDialog::SetItem_Impl( const SvxSearchItem* pItem )
 
 
 
-IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
+IMPL_LINK_TYPED( SvxSearchDialog, FocusHdl_Impl, Control&, rControl, void )
 {
     sal_Int32 nTxtLen = m_pSearchAttrText->GetText().getLength();
-
+    Control* pCtrl = &rControl;
     if ( pCtrl == m_pSearchLB )
     {
         if ( pCtrl->HasChildPathFocus() )
@@ -1865,15 +1865,13 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
                 m_pLayoutBtn->SetText(aStylesStr);
         }
     }
-    return 0;
 }
 
 
 
-IMPL_LINK_NOARG(SvxSearchDialog, LoseFocusHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxSearchDialog, LoseFocusHdl_Impl, Control&, void)
 {
     SaveToModule_Impl();
-    return 0;
 }
 
 
@@ -2127,12 +2125,12 @@ void SvxSearchDialog::PaintAttrText_Impl()
     if ( bSearch )
     {
         m_pSearchAttrText->SetText( aDesc );
-        FocusHdl_Impl(m_pSearchLB);
+        FocusHdl_Impl(*m_pSearchLB);
     }
     else
     {
         m_pReplaceAttrText->SetText( aDesc );
-        FocusHdl_Impl(m_pReplaceLB);
+        FocusHdl_Impl(*m_pReplaceLB);
     }
 }
 

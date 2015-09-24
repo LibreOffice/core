@@ -135,12 +135,13 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_pZoomLB->SetSelectHdl(LINK(this, SwMailMergeLayoutPage, ZoomHdl_Impl));
 
     Link<> aFrameHdl = LINK(this, SwMailMergeLayoutPage, ChangeAddressHdl_Impl);
+    Link<Control&,void> aFocusHdl = LINK(this, SwMailMergeLayoutPage, ChangeAddressLoseFocusHdl_Impl);
     m_pLeftMF->SetUpHdl(aFrameHdl);
     m_pLeftMF->SetDownHdl(aFrameHdl);
-    m_pLeftMF->SetLoseFocusHdl(aFrameHdl);
+    m_pLeftMF->SetLoseFocusHdl(aFocusHdl);
     m_pTopMF->SetUpHdl(aFrameHdl);
     m_pTopMF->SetDownHdl(aFrameHdl);
-    m_pTopMF->SetLoseFocusHdl(aFrameHdl);
+    m_pTopMF->SetLoseFocusHdl(aFocusHdl);
 
     FieldUnit eFieldUnit = ::GetDfltMetric(false);
     ::SetFieldUnit( *m_pLeftMF, eFieldUnit );
@@ -682,6 +683,10 @@ IMPL_LINK(SwMailMergeLayoutPage, ZoomHdl_Impl, ListBox*, pBox)
     return 0;
 }
 
+IMPL_LINK_NOARG_TYPED(SwMailMergeLayoutPage, ChangeAddressLoseFocusHdl_Impl, Control&, void)
+{
+    ChangeAddressHdl_Impl(nullptr);
+}
 IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl)
 {
     if(m_pExampleWrtShell && m_pAddressBlockFormat)

@@ -58,6 +58,7 @@ private:
     Link<Slider*,void>   maEndSlideHdl;
 
     DECL_LINK(LinkedFieldModifyHdl, NumericField*);
+    DECL_LINK_TYPED(LinkedFieldLoseFocusHdl, Control&, void);
 
     using Control::ImplInitSettings;
     using Window::ImplInit;

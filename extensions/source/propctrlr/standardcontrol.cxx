@@ -1112,7 +1112,7 @@ namespace pcr
             {
                 if ( m_pHelper )
                 {
-                    m_pHelper->LoseFocusHdl( m_pImplEdit.get() );
+                    m_pHelper->LoseFocusHdl( *m_pImplEdit.get() );
                     m_pHelper->activateNextControl();
                 }
             }

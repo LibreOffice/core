@@ -428,8 +428,8 @@ private:
 
     DECL_STATIC_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox* );
     DECL_LINK_TYPED(  RemoveHdl, Button*, void );
-    DECL_LINK(  EditLoseFocusHdl, CustomPropertiesEdit* );
-    DECL_LINK(  BoxLoseFocusHdl, CustomPropertiesTypeBox* );
+    DECL_LINK_TYPED(  EditLoseFocusHdl, Control&, void );
+    DECL_LINK_TYPED(  BoxLoseFocusHdl, Control&, void );
     //add lose focus handlers of Date/TimeField?
 
     DECL_LINK_TYPED(EditTimeoutHdl, Idle *, void);

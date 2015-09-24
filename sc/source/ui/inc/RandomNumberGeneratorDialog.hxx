@@ -73,8 +73,8 @@ private:
     DECL_LINK_TYPED( OkClicked,        Button*, void );
     DECL_LINK_TYPED( CloseClicked,     Button*, void );
     DECL_LINK_TYPED( ApplyClicked,     Button*, void );
-    DECL_LINK( GetFocusHandler,  Control* );
-    DECL_LINK( LoseFocusHandler, void* );
+    DECL_LINK_TYPED( GetFocusHandler,  Control&, void );
+    DECL_LINK_TYPED( LoseFocusHandler, Control&, void );
 
     DECL_LINK( InputRangeModified, void* );
     DECL_LINK( Parameter1ValueModified, void* );

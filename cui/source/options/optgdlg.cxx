@@ -290,7 +290,7 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     Link<> aLink = LINK( this, OfaMiscTabPage, TwoFigureConfigHdl );
     m_pYearValueField->SetDownHdl( aLink );
     m_pYearValueField->SetUpHdl( aLink );
-    m_pYearValueField->SetLoseFocusHdl( aLink );
+    m_pYearValueField->SetLoseFocusHdl( LINK( this, OfaMiscTabPage, TwoFigureConfigFocusHdl ) );
     m_pYearValueField->SetFirstHdl( aLink );
     TwoFigureConfigHdl(m_pYearValueField);
 
@@ -434,6 +434,10 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
     return 0;
 }
 
+IMPL_LINK_TYPED( OfaMiscTabPage, TwoFigureConfigFocusHdl, Control&, rControl, void )
+{
+    TwoFigureConfigHdl(static_cast<NumericField*>(&rControl));
+}
 IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 {
     sal_Int64 nNum = m_pYearValueField->GetValue();

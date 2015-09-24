@@ -96,29 +96,30 @@ SwWrapTabPage::SwWrapTabPage(vcl::Window *pParent, const SfxItemSet &rSet)
     SetExchangeSupport();
 
     Link<> aLk = LINK(this, SwWrapTabPage, RangeModifyHdl);
+    Link<Control&,void> aLk3 = LINK(this, SwWrapTabPage, RangeLoseFocusHdl);
     m_pLeftMarginED->SetUpHdl(aLk);
     m_pLeftMarginED->SetDownHdl(aLk);
     m_pLeftMarginED->SetFirstHdl(aLk);
     m_pLeftMarginED->SetLastHdl(aLk);
-    m_pLeftMarginED->SetLoseFocusHdl(aLk);
+    m_pLeftMarginED->SetLoseFocusHdl(aLk3);
 
     m_pRightMarginED->SetUpHdl(aLk);
     m_pRightMarginED->SetDownHdl(aLk);
     m_pRightMarginED->SetFirstHdl(aLk);
     m_pRightMarginED->SetLastHdl(aLk);
-    m_pRightMarginED->SetLoseFocusHdl(aLk);
+    m_pRightMarginED->SetLoseFocusHdl(aLk3);
 
     m_pTopMarginED->SetUpHdl(aLk);
     m_pTopMarginED->SetDownHdl(aLk);
     m_pTopMarginED->SetFirstHdl(aLk);
     m_pTopMarginED->SetLastHdl(aLk);
-    m_pTopMarginED->SetLoseFocusHdl(aLk);
+    m_pTopMarginED->SetLoseFocusHdl(aLk3);
 
     m_pBottomMarginED->SetUpHdl(aLk);
     m_pBottomMarginED->SetDownHdl(aLk);
     m_pBottomMarginED->SetFirstHdl(aLk);
     m_pBottomMarginED->SetLastHdl(aLk);
-    m_pBottomMarginED->SetLoseFocusHdl(aLk);
+    m_pBottomMarginED->SetLoseFocusHdl(aLk3);
 
     Link<Button*,void> aLk2 = LINK(this, SwWrapTabPage, WrapTypeHdl);
     m_pNoWrapRB->SetClickHdl(aLk2);
@@ -586,29 +587,32 @@ SfxTabPage::sfxpg SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 }
 
 // range check
-IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
+IMPL_LINK_TYPED( SwWrapTabPage, RangeLoseFocusHdl, Control&, rControl, void )
 {
-        sal_Int64 nValue = pEdit->GetValue();
-        MetricField *pOpposite = 0;
-        if (pEdit == m_pLeftMarginED)
-            pOpposite = m_pRightMarginED;
-        else if (pEdit == m_pRightMarginED)
-            pOpposite = m_pLeftMarginED;
-        else if (pEdit == m_pTopMarginED)
-            pOpposite = m_pBottomMarginED;
-        else if (pEdit == m_pBottomMarginED)
-            pOpposite = m_pTopMarginED;
+    RangeModifyHdl( static_cast<MetricField*>(&rControl) );
+}
+IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField*, pEdit )
+{
+    sal_Int64 nValue = pEdit->GetValue();
+    MetricField *pOpposite = 0;
+    if (pEdit == m_pLeftMarginED)
+        pOpposite = m_pRightMarginED;
+    else if (pEdit == m_pRightMarginED)
+        pOpposite = m_pLeftMarginED;
+    else if (pEdit == m_pTopMarginED)
+        pOpposite = m_pBottomMarginED;
+    else if (pEdit == m_pBottomMarginED)
+        pOpposite = m_pTopMarginED;
 
-        OSL_ASSERT(pOpposite);
+    OSL_ASSERT(pOpposite);
 
-        if (pOpposite)
-        {
-            sal_Int64 nOpposite = pOpposite->GetValue();
+    if (pOpposite)
+    {
+        sal_Int64 nOpposite = pOpposite->GetValue();
 
-            if (nValue + nOpposite > std::max(pEdit->GetMax(), pOpposite->GetMax()))
-                pOpposite->SetValue(pOpposite->GetMax() - nValue);
-        }
-
+        if (nValue + nOpposite > std::max(pEdit->GetMax(), pOpposite->GetMax()))
+            pOpposite->SetValue(pOpposite->GetMax() - nValue);
+    }
     return 0;
 }
 

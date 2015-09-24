@@ -90,8 +90,8 @@ private:
 
     DECL_LINK_TYPED(CancelClicked,       Button*, void);
     DECL_LINK_TYPED(OKClicked,           Button*, void);
-    DECL_LINK(GetFocusHandler,        Control*);
-    DECL_LINK(LoseFocusHandler,       void*);
+    DECL_LINK_TYPED(GetFocusHandler,     Control&, void);
+    DECL_LINK_TYPED(LoseFocusHandler,    Control&, void);
     DECL_LINK_TYPED(ToggleSource,        RadioButton&, void);
     DECL_LINK_TYPED(ToggleDestination,   RadioButton&, void);
     DECL_LINK(SourceEditModified, void*);

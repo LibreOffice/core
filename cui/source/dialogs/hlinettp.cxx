@@ -383,10 +383,9 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, Button*, v
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, Control&, void)
 {
     RefreshMarkWindow();
-    return 0L;
 }
 
 /*************************************************************************

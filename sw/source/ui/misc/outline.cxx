@@ -647,11 +647,10 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CollSelectGetFocus)
+IMPL_LINK_NOARG_TYPED(SwOutlineSettingsTabPage, CollSelectGetFocus, Control&, void)
 {
     for( sal_uInt8 i = 0; i < MAXLEVEL; ++i)
         aSaveCollNames[i] =  pCollNames[i];
-    return 0;
 }
 
 IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBox )

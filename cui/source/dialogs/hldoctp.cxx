@@ -315,13 +315,11 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl)
 |*
 |************************************************************************/
 
-IMPL_LINK_NOARG(SvxHyperlinkDocTp, LostFocusPathHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxHyperlinkDocTp, LostFocusPathHdl_Impl, Control&, void)
 {
     maStrURL = GetCurrentURL();
 
     m_pFtFullURL->SetText( maStrURL );
-
-    return 0L;
 }
 
 /*************************************************************************

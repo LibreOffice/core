@@ -177,7 +177,7 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
 public:
-    void SetLinks (Link<Button*,void> const&, Link<> const&, Link<> const&);
+    void SetLinks (Link<Button*,void> const&, Link<> const&, Link<Control&,void> const&);
     unsigned GetEntryHeight () const { return vEntries[0]->GetHeight(); }
     void Update (EditableColorConfig const*, EditableExtendedColorConfig const*);
     void ScrollHdl(const ScrollBar&);
@@ -219,7 +219,7 @@ private:
         void SetAppearance(Wallpaper const& aTextWall, ColorListBox const& aSampleList);
         void SetTextColor (Color C) { m_pText->SetTextColor(C); }
     public:
-        void SetLinks (Link<Button*,void> const&, Link<> const&, Link<> const&);
+        void SetLinks (Link<Button*,void> const&, Link<> const&, Link<Control&,void> const&);
         void Update (ColorConfigEntry, ColorConfigValue const&);
         void Update (ExtendedColorConfigValue const&);
         void ColorChanged (ColorConfigEntry, ColorConfigValue&);
@@ -415,7 +415,7 @@ void ColorConfigWindow_Impl::Entry::SetAppearance(
 // SetLinks()
 void ColorConfigWindow_Impl::Entry::SetLinks(
     Link<Button*,void> const& aCheckLink, Link<> const& aColorLink,
-    Link<> const& aGetFocusLink)
+    Link<Control&,void> const& aGetFocusLink)
 {
     m_pColorList->SetSelectHdl(aColorLink);
     m_pColorList->SetGetFocusHdl(aGetFocusLink);
@@ -689,7 +689,7 @@ void ColorConfigWindow_Impl::Init(ScrollBar *pVScroll, HeaderBar *pHeaderHB)
 
 // SetLinks()
 void ColorConfigWindow_Impl::SetLinks (
-    Link<Button*,void> const& aCheckLink, Link<> const& aColorLink, Link<> const& aGetFocusLink
+    Link<Button*,void> const& aCheckLink, Link<> const& aColorLink, Link<Control&,void> const& aGetFocusLink
 ) {
     for (unsigned i = 0; i != vEntries.size(); ++i)
         vEntries[i]->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
@@ -847,7 +847,7 @@ class ColorConfigCtrl_Impl : public VclVBox
     DECL_LINK_TYPED(ScrollHdl, ScrollBar*, void);
     DECL_LINK_TYPED(ClickHdl, Button*, void);
     DECL_LINK(ColorHdl, ColorListBox*);
-    DECL_LINK(ControlFocusHdl, Control*);
+    DECL_LINK_TYPED(ControlFocusHdl, Control&, void);
 
     virtual bool PreNotify (NotifyEvent& rNEvt) SAL_OVERRIDE;
     virtual void Command (CommandEvent const& rCEvt) SAL_OVERRIDE;
@@ -901,7 +901,7 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(vcl::Window* pParent)
 
     Link<Button*,void> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
     Link<> aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
-    Link<> aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
+    Link<Control&,void> aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
     m_pScrollWindow->SetLinks(aCheckLink, aColorLink, aGetFocusLink);
 
     m_pHeaderHB->Show();
@@ -1013,14 +1013,14 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
         m_pScrollWindow->ColorHdl(pColorConfig, pExtColorConfig, pBox);
     return 0;
 }
-IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
+IMPL_LINK_TYPED(ColorConfigCtrl_Impl, ControlFocusHdl, Control&, rCtrl, void)
 {
     // determine whether a control is completely visible
     // and make it visible
-    long aCtrlPosY = pCtrl->GetPosPixel().Y();
+    long aCtrlPosY = rCtrl.GetPosPixel().Y();
     unsigned const nWinHeight = m_pScrollWindow->GetSizePixel().Height();
     unsigned const nEntryHeight = m_pScrollWindow->GetEntryHeight();
-    if ((GetFocusFlags::Tab & pCtrl->GetGetFocusFlags()) &&
+    if ((GetFocusFlags::Tab & rCtrl.GetGetFocusFlags()) &&
         (aCtrlPosY < 0 || nWinHeight < aCtrlPosY + nEntryHeight)
     ) {
         long nThumbPos = m_pVScroll->GetThumbPos();
@@ -1039,7 +1039,6 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
         m_pVScroll->SetThumbPos(nThumbPos);
         ScrollHdl(m_pVScroll);
     }
-    return 0;
 };
 
 

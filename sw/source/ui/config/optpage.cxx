@@ -588,7 +588,7 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
     pListBox    ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
     pLabelBox   ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
     pIdxBox     ->SetModifyHdl( LINK(this, SwStdFontTabPage, ModifyHdl));
-    Link<> aFocusLink = LINK( this, SwStdFontTabPage, LoseFocusHdl);
+    Link<Control&,void> aFocusLink = LINK( this, SwStdFontTabPage, LoseFocusHdl);
     pStandardBox->SetLoseFocusHdl( aFocusLink );
     pTitleBox   ->SetLoseFocusHdl( aFocusLink );
     pListBox    ->SetLoseFocusHdl( aFocusLink );
@@ -1061,8 +1061,9 @@ IMPL_LINK( SwStdFontTabPage, ModifyHeightHdl, FontSizeBox*, pBox )
     return 0;
 }
 
-IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
+IMPL_LINK_TYPED( SwStdFontTabPage, LoseFocusHdl, Control&, rControl, void )
 {
+    ComboBox* pBox = static_cast<ComboBox*>(&rControl);
     FontSizeBox* pHeightLB = 0;
     const OUString sEntry = pBox->GetText();
     if(pBox == pStandardBox)
@@ -1087,7 +1088,6 @@ IMPL_LINK( SwStdFontTabPage, LoseFocusHdl, ComboBox*, pBox )
     }
     vcl::FontInfo aFontInfo( pFontList->Get(sEntry, sEntry) );
     pHeightLB->Fill( &aFontInfo, pFontList );
-    return 0;
 }
 
 void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)

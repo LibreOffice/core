@@ -172,7 +172,7 @@ public:
      */
     void applyChanges();
 
-    void SetGetFocusHdl( const Link<>& rLink );
+    void SetGetFocusHdl( const Link<Control&,void>& rLink );
 
     void SetEditChangedHdl( const Link<SeriesHeaderEdit*,void> & rLink );
 
@@ -340,7 +340,7 @@ IMPL_LINK_NOARG(SeriesHeader, SeriesNameEdited)
     return 0;
 }
 
-void SeriesHeader::SetGetFocusHdl( const Link<>& rLink )
+void SeriesHeader::SetGetFocusHdl( const Link<Control&,void>& rLink )
 {
     m_spSeriesName->SetGetFocusHdl( rLink );
 }
@@ -591,7 +591,7 @@ void DataBrowser::RenewTable()
     // fill series headers
     clearHeaders();
     const DataBrowserModel::tDataHeaderVector& aHeaders( m_apDataBrowserModel->getDataHeaders());
-    Link<> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
+    Link<Control&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link<impl::SeriesHeaderEdit*,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
 
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
@@ -1225,7 +1225,7 @@ void DataBrowser::RenewSeriesHeaders()
 
     clearHeaders();
     DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
-    Link<> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
+    Link<Control&,void> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link<impl::SeriesHeaderEdit*,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
 
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
@@ -1305,22 +1305,19 @@ void DataBrowser::ImplAdjustHeaderControls()
     }
 }
 
-IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, impl::SeriesHeaderEdit*, pEdit )
+IMPL_LINK_TYPED( DataBrowser, SeriesHeaderGotFocus, Control&, rControl, void )
 {
-    if( pEdit )
-    {
-        pEdit->SetShowWarningBox( !m_bDataValid );
+    impl::SeriesHeaderEdit* pEdit = static_cast<impl::SeriesHeaderEdit*>(&rControl);
+    pEdit->SetShowWarningBox( !m_bDataValid );
 
-        if( !m_bDataValid )
-            GoToCell( 0, 0 );
-        else
-        {
-            MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()), true /* bComplete */ );
-            ActivateCell();
-            m_aCursorMovedHdlLink.Call( this );
-        }
+    if( !m_bDataValid )
+        GoToCell( 0, 0 );
+    else
+    {
+        MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()), true /* bComplete */ );
+        ActivateCell();
+        m_aCursorMovedHdlLink.Call( this );
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit, void )

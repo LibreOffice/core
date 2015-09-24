@@ -980,10 +980,9 @@ IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, SelectHdl, SvTreeListBox*, void )
     }
 }
 
-IMPL_LINK_NOARG( RemoteFilesDialog, FileNameGetFocusHdl )
+IMPL_LINK_NOARG_TYPED( RemoteFilesDialog, FileNameGetFocusHdl, Control&, void )
 {
     m_pFileView->SetNoSelection();
-    return 1;
 }
 
 IMPL_LINK_NOARG( RemoteFilesDialog, FileNameModifyHdl )

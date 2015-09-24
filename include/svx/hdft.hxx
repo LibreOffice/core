@@ -102,6 +102,8 @@ protected:
 
     void            UpdateExample();
     DECL_LINK(RangeHdl, void *);
+    DECL_LINK_TYPED(RangeFocusHdl, Control&, void);
+    void RangeHdl();
 
 private:
     SVX_DLLPRIVATE void         ResetBackground_Impl( const SfxItemSet& rSet );

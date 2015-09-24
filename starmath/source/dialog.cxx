@@ -689,25 +689,24 @@ SmCategoryDesc::~SmCategoryDesc()
 
 /**************************************************************************/
 
-IMPL_LINK( SmDistanceDialog, GetFocusHdl, Control *, pControl )
+IMPL_LINK_TYPED( SmDistanceDialog, GetFocusHdl, Control&, rControl, void )
 {
     if (Categories[nActiveCategory])
     {
         sal_uInt16  i;
 
-        if (pControl == m_pMetricField1)
+        if (&rControl == m_pMetricField1)
             i = 0;
-        else if (pControl == m_pMetricField2)
+        else if (&rControl == m_pMetricField2)
             i = 1;
-        else if (pControl == m_pMetricField3)
+        else if (&rControl == m_pMetricField3)
             i = 2;
-        else if (pControl == m_pMetricField4)
+        else if (&rControl == m_pMetricField4)
             i = 3;
         else
-            return 0;
+            return;
         m_pBitmap->SetImage(*(Categories[nActiveCategory]->GetGraphic(i)));
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( SmDistanceDialog, MenuSelectHdl, Menu *, pMenu, bool )

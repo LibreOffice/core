@@ -77,23 +77,25 @@ SwTextGridPage::SwTextGridPage(vcl::Window *pParent, const SfxItemSet &rSet) :
     get(m_pColorLB,"listLB_COLOR");
 
     Link<> aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
+    Link<Control&,void> aLink2 = LINK(this, SwTextGridPage, CharorLineLoseFocusdHdl);
     m_pCharsPerLineNF->SetUpHdl(aLink);
     m_pCharsPerLineNF->SetDownHdl(aLink);
-    m_pCharsPerLineNF->SetLoseFocusHdl(aLink);
+    m_pCharsPerLineNF->SetLoseFocusHdl(aLink2);
     m_pLinesPerPageNF->SetUpHdl(aLink);
     m_pLinesPerPageNF->SetDownHdl(aLink);
-    m_pLinesPerPageNF->SetLoseFocusHdl(aLink);
+    m_pLinesPerPageNF->SetLoseFocusHdl(aLink2);
 
     Link<> aSizeLink = LINK(this, SwTextGridPage, TextSizeChangedHdl);
+    Link<Control&,void> aSizeLink2 = LINK(this, SwTextGridPage, TextSizeLoseFocusHdl);
     m_pTextSizeMF->SetUpHdl(aSizeLink);
     m_pTextSizeMF->SetDownHdl(aSizeLink);
-    m_pTextSizeMF->SetLoseFocusHdl(aSizeLink);
+    m_pTextSizeMF->SetLoseFocusHdl(aSizeLink2);
     m_pRubySizeMF->SetUpHdl(aSizeLink);
     m_pRubySizeMF->SetDownHdl(aSizeLink);
-    m_pRubySizeMF->SetLoseFocusHdl(aSizeLink);
+    m_pRubySizeMF->SetLoseFocusHdl(aSizeLink2);
     m_pCharWidthMF->SetUpHdl(aSizeLink);
     m_pCharWidthMF->SetDownHdl(aSizeLink);
-    m_pCharWidthMF->SetLoseFocusHdl(aSizeLink);
+    m_pCharWidthMF->SetLoseFocusHdl(aSizeLink2);
 
     Link<Button*,void> aGridTypeHdl = LINK(this, SwTextGridPage, GridTypeHdl);
     m_pNoGridRB->SetClickHdl(aGridTypeHdl);
@@ -385,6 +387,10 @@ const sal_uInt16* SwTextGridPage::GetRanges()
     return aPageRg;
 }
 
+IMPL_LINK_TYPED(SwTextGridPage, CharorLineLoseFocusdHdl, Control&, rControl, void)
+{
+    CharorLineChangedHdl(static_cast<SpinField*>(&rControl));
+}
 IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
 {
     //if in squared mode
@@ -432,6 +438,10 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
     return 0;
 }
 
+IMPL_LINK_TYPED(SwTextGridPage, TextSizeLoseFocusHdl, Control&, rControl, void)
+{
+    TextSizeChangedHdl(static_cast<SpinField*>(&rControl));
+}
 IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
 {
     //if in squared mode

@@ -1380,9 +1380,9 @@ namespace svx
 
     void SuggestionEdit::DoJump( bool _bUp )
     {
-        const Link<>&   rLoseFocusHdl = GetLoseFocusHdl();
+        const Link<Control&,void>& rLoseFocusHdl = GetLoseFocusHdl();
         if( rLoseFocusHdl.IsSet() )
-            rLoseFocusHdl.Call( this );
+            rLoseFocusHdl.Call( *this );
         m_pScrollBar->SetThumbPos( m_pScrollBar->GetThumbPos() + ( _bUp? -1 : 1 ) );
 
         ( static_cast< HangulHanjaEditDictDialog* >( GetParentDialog() ) )->UpdateScrollbar();

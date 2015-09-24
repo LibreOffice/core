@@ -453,23 +453,18 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
     return getColumn( sField );
 }
 
-IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
+IMPL_LINK_TYPED( DlgFilterCrit, PredicateLoseFocus, Control&, rControl, void )
 {
-    OSL_ENSURE( _pField, "DlgFilterCrit::PredicateLoseFocus: invalid event source!" );
-    if ( _pField )
+    Edit* _pField = static_cast<Edit*>(&rControl);
+    // retrieve the field affected
+    Reference< XPropertySet> xColumn( getMatchingColumn( *_pField ) );
+    // and normalize it's content
+    if ( xColumn.is() )
     {
-        // retrieve the field affected
-        Reference< XPropertySet> xColumn( getMatchingColumn( *_pField ) );
-        // and normalize it's content
-        if ( xColumn.is() )
-        {
-            OUString sText( _pField->GetText() );
-            m_aPredicateInput.normalizePredicateString( sText, xColumn );
-            _pField->SetText( sText );
-        }
+        OUString sText( _pField->GetText() );
+        m_aPredicateInput.normalizePredicateString( sText, xColumn );
+        _pField->SetText( sText );
     }
-
-    return 0L;
 }
 
 void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,bool _bOr  )

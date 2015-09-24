@@ -44,6 +44,7 @@ class SwEnvFormatPage : public SfxTabPage
     std::vector<sal_uInt16>  aIDs;
 
     DECL_LINK( ModifyHdl, Edit * );
+    DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
     DECL_LINK_TYPED( EditHdl, MenuButton *, void );
     DECL_LINK(FormatHdl, void *);
 

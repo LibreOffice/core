@@ -116,8 +116,8 @@ private:
 
     DECL_LINK(SelectHdl_Impl, void *);
     DECL_LINK(ModifyHdl_Impl, void *);
-    DECL_LINK( GetFillCharHdl_Impl, Edit* );
-    DECL_LINK( GetDezCharHdl_Impl, Edit* );
+    DECL_LINK_TYPED( GetFillCharHdl_Impl, Control&, void );
+    DECL_LINK_TYPED( GetDezCharHdl_Impl, Control&, void );
 
     virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };

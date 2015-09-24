@@ -82,8 +82,8 @@ class OGroupsSortingDialog :    public FloatingWindow
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
     bool                                m_bReadOnly;
 private:
-    DECL_LINK( OnControlFocusLost, Control* );
-    DECL_LINK( OnControlFocusGot, Control* );
+    DECL_LINK_TYPED( OnControlFocusLost, Control&, void );
+    DECL_LINK_TYPED( OnControlFocusGot, Control&, void );
     DECL_LINK( LBChangeHdl, ListBox* );
     DECL_LINK_TYPED( OnFormatAction, ToolBox*, void );
 

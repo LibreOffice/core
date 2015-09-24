@@ -216,32 +216,10 @@ void Slider::ImplUpdateRects( bool bUpdate )
     }
 }
 
-void Slider::ImplSetFieldLink(const Link<>& rLink)
-{
-    if (mpLinkedField != nullptr)
-    {
-        mpLinkedField->SetModifyHdl(rLink);
-        mpLinkedField->SetUpHdl(rLink);
-        mpLinkedField->SetDownHdl(rLink);
-        mpLinkedField->SetFirstHdl(rLink);
-        mpLinkedField->SetLastHdl(rLink);
-        mpLinkedField->SetLoseFocusHdl(rLink);
-    }
-}
-
 void Slider::ImplUpdateLinkedField()
 {
     if (mpLinkedField)
         mpLinkedField->SetValue(mnThumbPos);
-}
-
-IMPL_LINK(Slider, LinkedFieldModifyHdl, NumericField*, pField)
-{
-    if (pField)
-    {
-        SetThumbPos(pField->GetValue());
-    }
-    return 0;
 }
 
 long Slider::ImplCalcThumbPos( long nPixPos )
@@ -851,8 +829,38 @@ void Slider::Resize()
 void Slider::SetLinkedField(VclPtr<NumericField> pField)
 {
     ImplSetFieldLink(Link<>());
+    if (mpLinkedField)
+        mpLinkedField->SetLoseFocusHdl(Link<Control&,void>());
     mpLinkedField = pField;
     ImplSetFieldLink(LINK(this, Slider, LinkedFieldModifyHdl));
+    if (mpLinkedField)
+        mpLinkedField->SetLoseFocusHdl(LINK(this, Slider, LinkedFieldLoseFocusHdl));
+}
+
+void Slider::ImplSetFieldLink(const Link<>& rLink)
+{
+    if (mpLinkedField != nullptr)
+    {
+        mpLinkedField->SetModifyHdl(rLink);
+        mpLinkedField->SetUpHdl(rLink);
+        mpLinkedField->SetDownHdl(rLink);
+        mpLinkedField->SetFirstHdl(rLink);
+        mpLinkedField->SetLastHdl(rLink);
+    }
+}
+
+IMPL_LINK_NOARG_TYPED(Slider, LinkedFieldLoseFocusHdl, Control&, void)
+{
+    if (mpLinkedField)
+        SetThumbPos(mpLinkedField->GetValue());
+}
+
+IMPL_LINK(Slider, LinkedFieldModifyHdl, NumericField*, /*pField*/)
+{
+    if (mpLinkedField)
+        SetThumbPos(mpLinkedField->GetValue());
+
+    return 0;
 }
 
 void Slider::RequestHelp( const HelpEvent& rHEvt )

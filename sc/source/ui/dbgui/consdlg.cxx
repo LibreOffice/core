@@ -345,22 +345,21 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 
 // Handler:
 
-IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
+IMPL_LINK_TYPED( ScConsolidateDlg, GetFocusHdl, Control&, rControl, void )
 {
-    if ( pCtr ==static_cast<Control*>(pEdDataArea) ||
-         pCtr ==static_cast<Control*>(pEdDestArea))
+    if ( &rControl ==static_cast<Control*>(pEdDataArea) ||
+         &rControl ==static_cast<Control*>(pEdDestArea))
     {
-        pRefInputEdit = static_cast<formula::RefEdit*>(pCtr);
+        pRefInputEdit = static_cast<formula::RefEdit*>(&rControl);
     }
-    else if(pCtr ==static_cast<Control*>(pLbDataArea) )
+    else if(&rControl ==static_cast<Control*>(pLbDataArea) )
     {
         pRefInputEdit = pEdDataArea;
     }
-    else if(pCtr ==static_cast<Control*>(pLbDestArea) )
+    else if(&rControl ==static_cast<Control*>(pLbDestArea) )
     {
         pRefInputEdit = pEdDestArea;
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED(ScConsolidateDlg, OkHdl, Button*, void)

@@ -47,9 +47,9 @@ private:
     DECL_LINK (ModifiedPathHdl_Impl  , void * ); ///< Contens of combobox "Path" modified
     DECL_LINK (ModifiedTargetHdl_Impl, void * ); ///< Contens of editfield "Target" modified
 
-    DECL_LINK (LostFocusPathHdl_Impl,  void * ); ///< Combobox "path" lost its focus
+    DECL_LINK_TYPED( LostFocusPathHdl_Impl, Control&, void ); ///< Combobox "path" lost its focus
 
-    DECL_LINK_TYPED(TimeoutHdl_Impl, Timer *, void); ///< Handler for timer -timeout
+    DECL_LINK_TYPED( TimeoutHdl_Impl, Timer *, void ); ///< Handler for timer -timeout
 
     enum EPathType { Type_Unknown, Type_Invalid,
                      Type_ExistsFile, Type_File,

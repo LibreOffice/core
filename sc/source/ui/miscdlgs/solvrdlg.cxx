@@ -96,7 +96,7 @@ void ScSolverDlg::Init()
     m_pBtnOk->SetClickHdl( LINK( this, ScSolverDlg, BtnHdl ) );
     m_pBtnCancel->SetClickHdl( LINK( this, ScSolverDlg, BtnHdl ) );
 
-    Link<> aLink = LINK( this, ScSolverDlg, GetFocusHdl );
+    Link<Control&,void> aLink = LINK( this, ScSolverDlg, GetFocusHdl );
     m_pEdFormulaCell->SetGetFocusHdl( aLink );
     m_pRBFormulaCell->SetGetFocusHdl( aLink );
     m_pEdVariableCell->SetGetFocusHdl( aLink );
@@ -255,28 +255,25 @@ IMPL_LINK_TYPED( ScSolverDlg, BtnHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
+IMPL_LINK_TYPED( ScSolverDlg, GetFocusHdl, Control&, rCtrl, void )
 {
     Edit* pEdit = NULL;
     pEdActive = NULL;
 
-    if( (pCtrl == static_cast<Control*>(m_pEdFormulaCell)) || (pCtrl == static_cast<Control*>(m_pRBFormulaCell)) )
+    if( (&rCtrl == static_cast<Control*>(m_pEdFormulaCell)) || (&rCtrl == static_cast<Control*>(m_pRBFormulaCell)) )
         pEdit = pEdActive = m_pEdFormulaCell;
-    else if( (pCtrl == static_cast<Control*>(m_pEdVariableCell)) || (pCtrl == static_cast<Control*>(m_pRBVariableCell)) )
+    else if( (&rCtrl == static_cast<Control*>(m_pEdVariableCell)) || (&rCtrl == static_cast<Control*>(m_pRBVariableCell)) )
         pEdit = pEdActive = m_pEdVariableCell;
-    else if( pCtrl == static_cast<Control*>(m_pEdTargetVal) )
+    else if( &rCtrl == static_cast<Control*>(m_pEdTargetVal) )
         pEdit = m_pEdTargetVal;
 
     if( pEdit )
         pEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScSolverDlg, LoseFocusHdl)
+IMPL_LINK_NOARG_TYPED(ScSolverDlg, LoseFocusHdl, Control&, void)
 {
     bDlgLostFocus = !IsActive();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

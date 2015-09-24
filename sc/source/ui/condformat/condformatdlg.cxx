@@ -786,10 +786,9 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
     return 0;
 }
 
-IMPL_LINK( ScCondFormatDlg, RangeGetFocusHdl, formula::RefEdit*, pEdit )
+IMPL_LINK_TYPED( ScCondFormatDlg, RangeGetFocusHdl, Control&, rControl, void )
 {
-    mpLastEdit = pEdit;
-    return 0;
+    mpLastEdit = static_cast<formula::RefEdit*>(&rControl);
 }
 
 // ------------------------------------------------------

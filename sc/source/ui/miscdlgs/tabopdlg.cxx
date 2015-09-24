@@ -103,7 +103,7 @@ void ScTabOpDlg::Init()
     m_pBtnOk->SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
     m_pBtnCancel->SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
 
-    Link<> aLink = LINK( this, ScTabOpDlg, GetFocusHdl );
+    Link<Control&,void> aLink = LINK( this, ScTabOpDlg, GetFocusHdl );
     m_pEdFormulaRange->SetGetFocusHdl( aLink );
     m_pRBFormulaRange->SetGetFocusHdl( aLink );
     m_pEdRowCell->SetGetFocusHdl( aLink );
@@ -322,27 +322,24 @@ IMPL_LINK_TYPED( ScTabOpDlg, BtnHdl, Button*, pBtn, void )
         Close();
 }
 
-IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
+IMPL_LINK_TYPED( ScTabOpDlg, GetFocusHdl, Control&, rCtrl, void )
 {
-    if( (pCtrl == static_cast<Control*>(m_pEdFormulaRange)) || (pCtrl == static_cast<Control*>(m_pRBFormulaRange)) )
+    if( (&rCtrl == static_cast<Control*>(m_pEdFormulaRange)) || (&rCtrl == static_cast<Control*>(m_pRBFormulaRange)) )
         pEdActive = m_pEdFormulaRange;
-    else if( (pCtrl == static_cast<Control*>(m_pEdRowCell)) || (pCtrl == static_cast<Control*>(m_pRBRowCell)) )
+    else if( (&rCtrl == static_cast<Control*>(m_pEdRowCell)) || (&rCtrl == static_cast<Control*>(m_pRBRowCell)) )
         pEdActive = m_pEdRowCell;
-    else if( (pCtrl == static_cast<Control*>(m_pEdColCell)) || (pCtrl == static_cast<Control*>(m_pRBColCell)) )
+    else if( (&rCtrl == static_cast<Control*>(m_pEdColCell)) || (&rCtrl == static_cast<Control*>(m_pRBColCell)) )
         pEdActive = m_pEdColCell;
     else
         pEdActive = NULL;
 
     if( pEdActive )
         pEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScTabOpDlg, LoseFocusHdl)
+IMPL_LINK_NOARG_TYPED(ScTabOpDlg, LoseFocusHdl, Control&, void)
 {
     bDlgLostFocus = !IsActive();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

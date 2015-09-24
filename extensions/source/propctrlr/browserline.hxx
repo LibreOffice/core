@@ -115,7 +115,7 @@ namespace pcr
 
     private:
         DECL_LINK_TYPED( OnButtonClicked, Button*, void );
-        DECL_LINK( OnButtonFocus, PushButton* );
+        DECL_LINK_TYPED( OnButtonFocus, Control&, void );
 
         void    implHideBrowseButton( bool _bPrimary, bool _bReLayout );
         void    implUpdateEnabledDisabled();

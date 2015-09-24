@@ -394,10 +394,14 @@ void DialControl::SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces
 
     // remove modify handler from old linked field
     ImplSetFieldLink( Link<>() );
+    if( mpImpl->mpLinkField )
+            mpImpl->mpLinkField->SetLoseFocusHdl( Link<Control&,void>() );
     // remember the new linked field
     mpImpl->mpLinkField = pField;
     // set modify handler at new linked field
     ImplSetFieldLink( LINK( this, DialControl, LinkedFieldModifyHdl ) );
+    if( mpImpl->mpLinkField )
+            mpImpl->mpLinkField->SetLoseFocusHdl( LINK( this, DialControl, LinkedFieldFocusHdl ) );
 }
 
 void DialControl::SaveValue()
@@ -472,7 +476,6 @@ void DialControl::ImplSetFieldLink( const Link<>& rLink )
         rField.SetDownHdl( rLink );
         rField.SetFirstHdl( rLink );
         rField.SetLastHdl( rLink );
-        rField.SetLoseFocusHdl( rLink );
     }
 }
 
@@ -506,11 +509,19 @@ void DialControl::HandleEscapeEvent()
     }
 }
 
-IMPL_LINK( DialControl, LinkedFieldModifyHdl, NumericField*, pField )
+IMPL_LINK( DialControl, LinkedFieldModifyHdl, NumericField*, /*pField*/ )
 {
-    if( pField )
-        SetRotation( static_cast< sal_Int32 >( pField->GetValue() * mpImpl->mnLinkedFieldValueMultiplyer ), false );
+    LinkedFieldModifyHdl();
     return 0;
+}
+IMPL_LINK_NOARG_TYPED( DialControl, LinkedFieldFocusHdl, Control&, void )
+{
+    LinkedFieldModifyHdl();
+}
+void DialControl::LinkedFieldModifyHdl()
+{
+    if( mpImpl->mpLinkField )
+        SetRotation( static_cast< sal_Int32 >( mpImpl->mpLinkField->GetValue() * mpImpl->mnLinkedFieldValueMultiplyer ), false );
 }
 
 

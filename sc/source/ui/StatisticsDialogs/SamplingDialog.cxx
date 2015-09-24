@@ -89,7 +89,7 @@ void ScSamplingDialog::Init()
     mpButtonOk->SetClickHdl( LINK( this, ScSamplingDialog, OkClicked ) );
     mpButtonOk->Enable(false);
 
-    Link<> aLink = LINK( this, ScSamplingDialog, GetFocusHandler );
+    Link<Control&,void> aLink = LINK( this, ScSamplingDialog, GetFocusHandler );
     mpInputRangeEdit->SetGetFocusHdl( aLink );
     mpInputRangeButton->SetGetFocusHdl( aLink );
     mpOutputRangeEdit->SetGetFocusHdl( aLink );
@@ -101,9 +101,9 @@ void ScSamplingDialog::Init()
     mpOutputRangeEdit->SetLoseFocusHdl( aLink );
     mpOutputRangeButton->SetLoseFocusHdl( aLink );
 
-    aLink = LINK( this, ScSamplingDialog, RefInputModifyHandler);
-    mpInputRangeEdit->SetModifyHdl( aLink);
-    mpOutputRangeEdit->SetModifyHdl( aLink);
+    Link<> aLink2 = LINK( this, ScSamplingDialog, RefInputModifyHandler);
+    mpInputRangeEdit->SetModifyHdl( aLink2);
+    mpOutputRangeEdit->SetModifyHdl( aLink2);
 
     mpSampleSize->SetModifyHdl( LINK( this, ScSamplingDialog, SamplingSizeValueModified ));
 
@@ -294,25 +294,22 @@ IMPL_LINK_NOARG_TYPED( ScSamplingDialog, OkClicked, Button*, void )
     Close();
 }
 
-IMPL_LINK( ScSamplingDialog, GetFocusHandler, Control*, pCtrl )
+IMPL_LINK_TYPED( ScSamplingDialog, GetFocusHandler, Control&, rCtrl, void )
 {
     mpActiveEdit = NULL;
 
-    if(      (pCtrl == static_cast<Control*>(mpInputRangeEdit))  || (pCtrl == static_cast<Control*>(mpInputRangeButton)) )
+    if(      (&rCtrl == static_cast<Control*>(mpInputRangeEdit))  || (&rCtrl == static_cast<Control*>(mpInputRangeButton)) )
         mpActiveEdit = mpInputRangeEdit;
-    else if( (pCtrl == static_cast<Control*>(mpOutputRangeEdit)) || (pCtrl == static_cast<Control*>(mpOutputRangeButton)) )
+    else if( (&rCtrl == static_cast<Control*>(mpOutputRangeEdit)) || (&rCtrl == static_cast<Control*>(mpOutputRangeButton)) )
         mpActiveEdit = mpOutputRangeEdit;
 
     if( mpActiveEdit )
         mpActiveEdit->SetSelection( Selection( 0, SELECTION_MAX ) );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScSamplingDialog, LoseFocusHandler)
+IMPL_LINK_NOARG_TYPED(ScSamplingDialog, LoseFocusHandler, Control&, void)
 {
     mDialogLostFocus = !IsActive();
-    return 0;
 }
 
 IMPL_LINK_NOARG(ScSamplingDialog, SamplingSizeValueModified)

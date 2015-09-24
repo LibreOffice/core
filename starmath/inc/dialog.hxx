@@ -222,7 +222,7 @@ class SmDistanceDialog : public ModalDialog
     sal_uInt16          nActiveCategory;
     bool            bScaleAllBrackets;
 
-    DECL_LINK(GetFocusHdl, Control *);
+    DECL_LINK_TYPED(GetFocusHdl, Control&, void);
     DECL_LINK_TYPED(MenuSelectHdl, Menu *, bool);
     DECL_LINK_TYPED(DefaultButtonClickHdl, Button *, void);
     DECL_LINK_TYPED(CheckBoxClickHdl, Button *, void);

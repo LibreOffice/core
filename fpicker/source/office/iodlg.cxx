@@ -1312,18 +1312,17 @@ IMPL_LINK_NOARG_TYPED(SvtFileDialog, FilterSelectTimerHdl_Impl, Timer*, void)
     ExecuteFilter();
 }
 
-IMPL_LINK_NOARG( SvtFileDialog, FileNameGetFocusHdl_Impl )
+IMPL_LINK_NOARG_TYPED( SvtFileDialog, FileNameGetFocusHdl_Impl, Control&, void )
 {
     _pFileView->SetNoSelection();
     _pFileView->Update();
-    return 0;
 }
 
 
 
 IMPL_LINK_NOARG( SvtFileDialog, FileNameModifiedHdl_Impl )
 {
-    FileNameGetFocusHdl_Impl( NULL );
+    FileNameGetFocusHdl_Impl( *_pImp->_pEdFileName );
     return 0;
 }
 

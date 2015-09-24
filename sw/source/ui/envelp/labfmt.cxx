@@ -338,17 +338,17 @@ SwLabFormatPage::SwLabFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pPWidthField->SetModifyHdl( aLk );
     m_pPHeightField->SetModifyHdl( aLk );
 
-    aLk = LINK(this, SwLabFormatPage, LoseFocusHdl);
-    m_pHDistField->SetLoseFocusHdl( aLk );
-    m_pVDistField->SetLoseFocusHdl( aLk );
-    m_pWidthField->SetLoseFocusHdl( aLk );
-    m_pHeightField->SetLoseFocusHdl( aLk );
-    m_pLeftField->SetLoseFocusHdl( aLk );
-    m_pUpperField->SetLoseFocusHdl( aLk );
-    m_pColsField->SetLoseFocusHdl( aLk );
-    m_pRowsField->SetLoseFocusHdl( aLk );
-    m_pPWidthField->SetLoseFocusHdl( aLk );
-    m_pPHeightField->SetLoseFocusHdl( aLk );
+    Link<Control&,void> aLk2 = LINK(this, SwLabFormatPage, LoseFocusHdl);
+    m_pHDistField->SetLoseFocusHdl( aLk2 );
+    m_pVDistField->SetLoseFocusHdl( aLk2 );
+    m_pWidthField->SetLoseFocusHdl( aLk2 );
+    m_pHeightField->SetLoseFocusHdl( aLk2 );
+    m_pLeftField->SetLoseFocusHdl( aLk2 );
+    m_pUpperField->SetLoseFocusHdl( aLk2 );
+    m_pColsField->SetLoseFocusHdl( aLk2 );
+    m_pRowsField->SetLoseFocusHdl( aLk2 );
+    m_pPWidthField->SetLoseFocusHdl( aLk2 );
+    m_pPHeightField->SetLoseFocusHdl( aLk2 );
 
     m_pSavePB->SetClickHdl( LINK (this, SwLabFormatPage, SaveHdl));
     // Set timer
@@ -399,11 +399,10 @@ IMPL_LINK_NOARG_TYPED(SwLabFormatPage, PreviewHdl, Idle *, void)
 }
 
 // LoseFocus-Handler: Update on change
-IMPL_LINK( SwLabFormatPage, LoseFocusHdl, Control *, pControl )
+IMPL_LINK_TYPED( SwLabFormatPage, LoseFocusHdl, Control&, rControl, void )
 {
-    if (static_cast<Edit*>( pControl)->IsModified())
+    if (static_cast<Edit*>( &rControl)->IsModified())
         PreviewHdl(0);
-    return 0;
 }
 
 void SwLabFormatPage::ChangeMinMax()

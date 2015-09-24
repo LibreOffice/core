@@ -82,7 +82,7 @@ private:
     DECL_LINK_TYPED( ClickSearchHdl, Button*, void );
     DECL_LINK( ClickActionHdl, void * );
     DECL_LINK_TYPED( SelectTreeHdl, SvTreeListBox*, void );
-    DECL_LINK( CheckFileHdl, void * );
+    DECL_LINK_TYPED( CheckFileHdl, Control&, void );
 
     void                    UpdateTree();
     void                    OpenFileDialog();

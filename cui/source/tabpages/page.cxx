@@ -428,13 +428,13 @@ void SvxPageDescPage::Init_Impl()
     m_pTopMarginEdit->SetModifyHdl( aLink );
     m_pBottomMarginEdit->SetModifyHdl( aLink );
 
-    aLink = LINK( this, SvxPageDescPage, RangeHdl_Impl );
-    m_pPaperWidthEdit->SetLoseFocusHdl( aLink );
-    m_pPaperHeightEdit->SetLoseFocusHdl( aLink );
-    m_pLeftMarginEdit->SetLoseFocusHdl( aLink );
-    m_pRightMarginEdit->SetLoseFocusHdl( aLink );
-    m_pTopMarginEdit->SetLoseFocusHdl( aLink );
-    m_pBottomMarginEdit->SetLoseFocusHdl( aLink );
+    Link<Control&,void> aLink2 = LINK( this, SvxPageDescPage, RangeHdl_Impl );
+    m_pPaperWidthEdit->SetLoseFocusHdl( aLink2 );
+    m_pPaperHeightEdit->SetLoseFocusHdl( aLink2 );
+    m_pLeftMarginEdit->SetLoseFocusHdl( aLink2 );
+    m_pRightMarginEdit->SetLoseFocusHdl( aLink2 );
+    m_pTopMarginEdit->SetLoseFocusHdl( aLink2 );
+    m_pBottomMarginEdit->SetLoseFocusHdl( aLink2 );
 
     m_pHorzBox->SetClickHdl( LINK( this, SvxPageDescPage, CenterHdl_Impl ) );
     m_pVertBox->SetClickHdl( LINK( this, SvxPageDescPage, CenterHdl_Impl ) );
@@ -637,7 +637,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     // display background and border in the example
     ResetBackground_Impl( *rSet );
 //! UpdateExample_Impl();
-    RangeHdl_Impl( 0 );
+    RangeHdl_Impl( *m_pPaperWidthEdit );
 
     InitHeadFoot_Impl( *rSet );
 
@@ -952,11 +952,11 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl)
 
 
 
-IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
 {
     if ( m_pPaperTrayBox->GetEntryCount() > 1 )
         // already filled
-        return 0;
+        return;
 
     OUString aOldName = m_pPaperTrayBox->GetSelectEntry();
     m_pPaperTrayBox->SetUpdateMode( false );
@@ -983,8 +983,6 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
     }
     m_pPaperTrayBox->SelectEntry( aOldName );
     m_pPaperTrayBox->SetUpdateMode( true );
-
-    return 0;
 }
 
 
@@ -1012,7 +1010,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
 
         CalcMargin_Impl();
 
-        RangeHdl_Impl( 0 );
+        RangeHdl_Impl( *m_pPaperWidthEdit );
         UpdateExample_Impl( true );
 
         if ( eMode == SVX_PAGE_MODE_PRESENTATION )
@@ -1106,7 +1104,7 @@ IMPL_LINK_TYPED( SvxPageDescPage, SwapOrientation_Impl, Button *, pBtn, void )
         CalcMargin_Impl();
 
         PaperSizeSelect_Impl( m_pPaperSizeBox );
-        RangeHdl_Impl( 0 );
+        RangeHdl_Impl( *m_pPaperWidthEdit );
         SwapFirstValues_Impl( bBorderModified );
         UpdateExample_Impl( true );
     }
@@ -1476,7 +1474,7 @@ void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
     InitHeadFoot_Impl( rSet );
     UpdateExample_Impl();
     ResetBackground_Impl( rSet );
-    RangeHdl_Impl( 0 );
+    RangeHdl_Impl( *m_pPaperWidthEdit );
 }
 
 
@@ -1535,7 +1533,7 @@ SfxTabPage::sfxpg SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 
-IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
+IMPL_LINK_NOARG_TYPED(SvxPageDescPage, RangeHdl_Impl, Control&, void)
 {
     // example window
     long nHHeight = m_pBspWin->GetHdHeight();
@@ -1599,7 +1597,6 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
     // Right
     nMax = nW - nBL - MINBODY - aBorder.Width() - nHFLeft - nHFRight;
     m_pRightMarginEdit->SetMax(m_pRightMarginEdit->Normalize(nMax), FUNIT_TWIP);
-    return 0;
 }
 
 

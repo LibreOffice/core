@@ -811,7 +811,7 @@ class SwAssignFieldsControl : public Control
 
     DECL_LINK_TYPED(ScrollHdl_Impl, ScrollBar*, void);
     DECL_LINK(MatchHdl_Impl, ListBox*);
-    DECL_LINK(GotFocusHdl_Impl, ListBox*);
+    DECL_LINK_TYPED(GotFocusHdl_Impl, Control&, void);
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
@@ -882,7 +882,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
     //if no assignment is available an empty sequence will be returned
     uno::Sequence< OUString> aAssignments = rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
     Link<> aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
-    Link<> aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
+    Link<Control&,void> aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
 
     //fill the controls
     long nControlWidth = aOutputSize.Width() / 3;
@@ -1133,8 +1133,9 @@ IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, ListBox*, pBox)
+IMPL_LINK_TYPED(SwAssignFieldsControl, GotFocusHdl_Impl, Control&, rControl, void)
 {
+    ListBox* pBox = static_cast<ListBox*>(&rControl);
     if(GetFocusFlags::Tab & pBox->GetGetFocusFlags())
     {
         sal_Int32 nIndex = 0;
@@ -1147,7 +1148,6 @@ IMPL_LINK(SwAssignFieldsControl, GotFocusHdl_Impl, ListBox*, pBox)
             }
         }
     }
-    return 0;
 }
 
 SwAssignFieldsDialog::SwAssignFieldsDialog(

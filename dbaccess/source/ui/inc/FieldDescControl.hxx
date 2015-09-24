@@ -120,8 +120,8 @@ namespace dbaui
         DECL_LINK( ChangeHdl, ListBox * );
 
         // used by ActivatePropertyField
-        DECL_LINK( OnControlFocusLost, Control* );
-        DECL_LINK( OnControlFocusGot, Control* );
+        DECL_LINK_TYPED( OnControlFocusLost, Control&, void );
+        DECL_LINK_TYPED( OnControlFocusGot, Control&, void );
 
         void                UpdateFormatSample(OFieldDescription* pFieldDescr);
         void                ArrangeAggregates();

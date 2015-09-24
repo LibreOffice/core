@@ -67,7 +67,7 @@ private:
     DECL_LINK_TYPED( CancelBtnHdl, Button*, void );
     DECL_LINK_TYPED( AddBtnHdl, Button*, void );
     DECL_LINK( NameModifyHdl, void* );
-    DECL_LINK( AssignGetFocusHdl, void * );
+    DECL_LINK_TYPED( AssignGetFocusHdl, Control&, void );
 
 protected:
     virtual void    RefInputDone( bool bForced = false ) SAL_OVERRIDE;

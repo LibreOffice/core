@@ -268,11 +268,11 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     VclPtr<SwTOXEntryTabPage>  m_pParent;
 
     DECL_LINK(EditResize, Edit*);
-    DECL_LINK_TYPED(NextItemHdl, SwTOXEdit&, void );
-    DECL_LINK(TbxFocusHdl, SwTOXEdit* );
-    DECL_LINK_TYPED(NextItemBtnHdl, SwTOXButton&, void );
-    DECL_LINK(TbxFocusBtnHdl, SwTOXButton* );
-    DECL_LINK_TYPED(ScrollHdl, Button*, void );
+    DECL_LINK_TYPED( NextItemHdl, SwTOXEdit&, void );
+    DECL_LINK_TYPED( TbxFocusHdl, Control&, void );
+    DECL_LINK_TYPED( NextItemBtnHdl, SwTOXButton&, void );
+    DECL_LINK_TYPED( TbxFocusBtnHdl, Control&, void );
+    DECL_LINK_TYPED( ScrollHdl, Button*, void );
 
     void    SetActiveControl(Control* pSet);
 

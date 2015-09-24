@@ -256,8 +256,8 @@ SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 
 void SfxManageStyleSheetPage::dispose()
 {
-    m_pNameRw->SetGetFocusHdl( Link<>() );
-    m_pNameRw->SetLoseFocusHdl( Link<>() );
+    m_pNameRw->SetGetFocusHdl( Link<Control&,void>() );
+    m_pNameRw->SetLoseFocusHdl( Link<Control&,void>() );
     delete pFamilies;
     pItem = 0;
     pStyle = 0;
@@ -414,7 +414,7 @@ bool SfxManageStyleSheetPage::Execute_Impl(
 
 }
 
-IMPL_LINK( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
+IMPL_LINK_TYPED( SfxManageStyleSheetPage, GetFocusHdl, Control&, rControl, void )
 
 /*  [Description]
 
@@ -422,11 +422,11 @@ IMPL_LINK( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 */
 
 {
+    Edit* pEdit = static_cast<Edit*>(&rControl);
     aBuf = comphelper::string::stripStart(pEdit->GetText(), ' ');
-    return 0;
 }
 
-IMPL_LINK( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
+IMPL_LINK_TYPED( SfxManageStyleSheetPage, LoseFocusHdl, Control&, rControl, void )
 
 /*  [Description]
 
@@ -436,12 +436,12 @@ IMPL_LINK( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 */
 
 {
+    Edit* pEdit = static_cast<Edit*>(&rControl);
     const OUString aStr(comphelper::string::stripStart(pEdit->GetText(), ' '));
     pEdit->SetText( aStr );
     // Update the Listbox of the base template if possible
     if ( aStr != aBuf )
         UpdateName_Impl(m_pFollowLb, aStr);
-    return 0;
 }
 
 bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
@@ -622,7 +622,7 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
     {
         // By pressing <Enter> LoseFocus() is not trigged through StarView
         if ( m_pNameRw->HasFocus() )
-            LoseFocusHdl( m_pNameRw );
+            LoseFocusHdl( *m_pNameRw );
 
         if (!pStyle->SetName(comphelper::string::stripStart(m_pNameRw->GetText(), ' ')))
         {

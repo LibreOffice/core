@@ -151,7 +151,7 @@ private:
     void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect);
     bool    Click_Impl(PushButton* pIB);
     // Handler
-    DECL_LINK( LostFocusHdl_Impl, Edit* );
+    DECL_LINK_TYPED( LostFocusHdl_Impl, Control&, void );
     DECL_LINK_TYPED( DoubleClickHdl_Impl, SvTreeListBox*, bool );
     DECL_LINK( SelFormatHdl_Impl, void * );
     DECL_LINK_TYPED( SelFormatListBoxHdl_Impl, SvTreeListBox*, void );

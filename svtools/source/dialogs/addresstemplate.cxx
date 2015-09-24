@@ -1131,16 +1131,16 @@ void AssignmentPersistentData::ImplCommit()
     }
 
 
-    IMPL_STATIC_LINK(
-        AddressBookSourceDialog, OnComboGetFocus, ComboBox*, _pBox)
+    IMPL_STATIC_LINK_TYPED(
+        AddressBookSourceDialog, OnComboGetFocus, Control&, _rBox, void)
     {
-        _pBox->SaveValue();
-        return 0L;
+        static_cast<ComboBox&>(_rBox).SaveValue();
     }
 
 
-    IMPL_LINK(AddressBookSourceDialog, OnComboLoseFocus, ComboBox*, _pBox)
+    IMPL_LINK_TYPED(AddressBookSourceDialog, OnComboLoseFocus, Control&, rControl, void)
     {
+        ComboBox* _pBox = static_cast<ComboBox*>(&rControl);
         if ( _pBox->IsValueChangedFromSaved() )
         {
             if (_pBox == m_pDatasource)
@@ -1148,7 +1148,6 @@ void AssignmentPersistentData::ImplCommit()
             else
                 resetFields();
         }
-        return 0L;
     }
 
 

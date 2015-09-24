@@ -1439,81 +1439,77 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
     SetReadOnly( bRead );
 }
 
-IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
+IMPL_LINK_TYPED(OFieldDescControl, OnControlFocusGot, Control&, rControl, void )
 {
     OUString strHelpText;
-    OPropNumericEditCtrl* pNumeric = dynamic_cast< OPropNumericEditCtrl* >( pControl );
+    OPropNumericEditCtrl* pNumeric = dynamic_cast< OPropNumericEditCtrl* >( &rControl );
     if ( pNumeric )
     {
         pNumeric->SaveValue();
         strHelpText = pNumeric->GetHelp();
     }
 
-    OPropColumnEditCtrl* pColumn = dynamic_cast< OPropColumnEditCtrl* >( pControl );
+    OPropColumnEditCtrl* pColumn = dynamic_cast< OPropColumnEditCtrl* >( &rControl );
     if ( pColumn )
     {
         pColumn->SaveValue();
         strHelpText = pColumn->GetHelp();
     }
 
-    OPropEditCtrl* pEdit = dynamic_cast< OPropEditCtrl* >( pControl );
+    OPropEditCtrl* pEdit = dynamic_cast< OPropEditCtrl* >( &rControl );
     if ( pEdit )
     {
         pEdit->SaveValue();
         strHelpText = pEdit->GetHelp();
     }
 
-    OPropListBoxCtrl* pListBox = dynamic_cast< OPropListBoxCtrl* >( pControl );
+    OPropListBoxCtrl* pListBox = dynamic_cast< OPropListBoxCtrl* >( &rControl );
     if ( pListBox )
     {
         pListBox->SaveValue();
         strHelpText = pListBox->GetHelp();
     }
 
-    if (pControl == pFormat)
+    if (&rControl == pFormat)
         strHelpText = ModuleRes(STR_HELP_FORMAT_BUTTON);
 
     if (!strHelpText.isEmpty() && (pHelp != nullptr))
         pHelp->SetHelpText(strHelpText);
 
-    m_pActFocusWindow = pControl;
-
-    return 0L;
+    m_pActFocusWindow = &rControl;
 }
 
-IMPL_LINK(OFieldDescControl, OnControlFocusLost, Control*, pControl )
+IMPL_LINK_TYPED(OFieldDescControl, OnControlFocusLost, Control&, rControl, void )
 {
-    if ((pControl == pLength) || (pControl == pTextLen) || (pControl == pScale))
+    if ((&rControl == pLength) || (&rControl == pTextLen) || (&rControl == pScale))
     {
-        OPropNumericEditCtrl* pConverted = static_cast<OPropNumericEditCtrl*>(pControl);
+        OPropNumericEditCtrl* pConverted = static_cast<OPropNumericEditCtrl*>(&rControl);
         if (pConverted->IsModified())
             CellModified(-1, pConverted->GetPos());
     }
-    if(pControl == m_pColumnName)
+    if(&rControl == m_pColumnName)
     {
-        OPropColumnEditCtrl* pConverted = static_cast<OPropColumnEditCtrl*>(pControl);
+        OPropColumnEditCtrl* pConverted = static_cast<OPropColumnEditCtrl*>(&rControl);
         if (pConverted->IsModified())
             CellModified(-1, pConverted->GetPos());
     }
-    else if ((pControl == pDefault) || (pControl == pFormatSample) || (pControl == m_pAutoIncrementValue) )
+    else if ((&rControl == pDefault) || (&rControl == pFormatSample) || (&rControl == m_pAutoIncrementValue) )
     {
-        OPropEditCtrl* pConverted = static_cast<OPropEditCtrl*>(pControl);
+        OPropEditCtrl* pConverted = static_cast<OPropEditCtrl*>(&rControl);
         if (pConverted->IsModified())
             CellModified(-1, pConverted->GetPos());
     }
-    else if ((pControl == pRequired) || (pControl == pNumType) || (pControl == pAutoIncrement) || (pControl == pBoolDefault) || (pControl == m_pType))
+    else if ((&rControl == pRequired) || (&rControl == pNumType) || (&rControl == pAutoIncrement) || (&rControl == pBoolDefault) || (&rControl == m_pType))
     {
-        OPropListBoxCtrl* pConverted = static_cast<OPropListBoxCtrl*>(pControl);
+        OPropListBoxCtrl* pConverted = static_cast<OPropListBoxCtrl*>(&rControl);
         if (pConverted->IsModified())
             CellModified(-1, pConverted->GetPos());
     }
 
-    if (pControl == pDefault)
+    if (&rControl == pDefault)
         UpdateFormatSample(pActFieldDescr);
 
-    implFocusLost(pControl);
-
-    return 0L;
+    implFocusLost(&rControl);
 }
 
 void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )

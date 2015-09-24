@@ -467,7 +467,7 @@ void SdTPAction::OpenFileDialog()
                 SetEditText( aFile );
             }
             if( bDocument )
-                CheckFileHdl( NULL );
+                CheckFileHdl( *m_pEdtDocument );
         }
     }
 }
@@ -621,7 +621,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
             m_pFtTree->SetText( SD_RESSTR( STR_EFFECTDLG_JUMP ) );
             m_pFrame->set_label( SD_RESSTR( STR_EFFECTDLG_DOCUMENT ) );
 
-            CheckFileHdl( NULL );
+            CheckFileHdl( *m_pEdtDocument );
             break;
 
         case presentation::ClickAction_VERB:
@@ -656,7 +656,7 @@ IMPL_LINK_NOARG_TYPED(SdTPAction, SelectTreeHdl, SvTreeListBox*, void)
     m_pEdtBookmark->SetText( m_pLbTree->GetSelectEntry() );
 }
 
-IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
+IMPL_LINK_NOARG_TYPED(SdTPAction, CheckFileHdl, Control&, void)
 {
     OUString aFile( GetEditText() );
 
@@ -700,8 +700,6 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
         else
             m_pLbTreeDocument->Hide();
     }
-
-    return 0L;
 }
 
 presentation::ClickAction SdTPAction::GetActualClickAction()

@@ -148,7 +148,7 @@ public:
     void InvalidateRefData();
 
     DECL_LINK_TYPED( BtnPressedHdl, Button*, void );
-    DECL_LINK( RangeGetFocusHdl, formula::RefEdit* );
+    DECL_LINK_TYPED( RangeGetFocusHdl, Control&, void );
 };
 
 #endif

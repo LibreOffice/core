@@ -1104,19 +1104,19 @@ sal_Int32 OGroupsSortingDialog::getColumnDataType(const OUString& _sColumnName)
     return nDataType;
 }
 
-IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control*, pControl )
+IMPL_LINK_TYPED(OGroupsSortingDialog, OnControlFocusGot, Control&, rControl, void )
 {
     if ( m_pFieldExpression && m_pFieldExpression->getExpressionControl() )
     {
         Control* pControls[] = { m_pFieldExpression->getExpressionControl(), m_pHeaderLst, m_pFooterLst, m_pGroupOnLst, m_pGroupIntervalEd, m_pKeepTogetherLst, m_pOrderLst};
         for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
         {
-            if ( pControl == pControls[i] )
+            if ( &rControl == pControls[i] )
             {
-                ListBox* pListBox = dynamic_cast< ListBox* >( pControl );
+                ListBox* pListBox = dynamic_cast< ListBox* >( &rControl );
                 if ( pListBox )
                     pListBox->SaveValue();
-                NumericField* pNumericField = dynamic_cast< NumericField* >( pControl );
+                NumericField* pNumericField = dynamic_cast< NumericField* >( &rControl );
                 if ( pNumericField )
                     pNumericField->SaveValue();
                 showHelpText(static_cast<sal_uInt16>(i+STR_RPT_HELP_FIELD));
@@ -1124,17 +1124,15 @@ IMPL_LINK(OGroupsSortingDialog, OnControlFocusGot, Control*, pControl )
             }
         }
     }
-    return 0L;
 }
 
-IMPL_LINK(OGroupsSortingDialog, OnControlFocusLost, Control*, pControl )
+IMPL_LINK_TYPED(OGroupsSortingDialog, OnControlFocusLost, Control&, rControl, void )
 {
-    if (m_pFieldExpression && pControl == m_pGroupIntervalEd)
+    if (m_pFieldExpression && &rControl == m_pGroupIntervalEd)
     {
         if ( m_pGroupIntervalEd->IsModified() )
             SaveData(m_pFieldExpression->GetCurRow());
     }
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED( OGroupsSortingDialog, OnFormatAction, ToolBox*, void )

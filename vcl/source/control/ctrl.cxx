@@ -258,7 +258,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
             {
                 mbHasControlFocus = true;
                 CompatStateChanged( StateChangedType::ControlFocus );
-                if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, [this] () { maGetFocusHdl.Call(this); } ) )
+                if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, [this] () { maGetFocusHdl.Call(*this); } ) )
                     // been destroyed within the handler
                     return true;
             }
@@ -272,7 +272,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
                 {
                     mbHasControlFocus = false;
                     CompatStateChanged( StateChangedType::ControlFocus );
-                    if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, [this] () { maLoseFocusHdl.Call(this); } ) )
+                    if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, [this] () { maLoseFocusHdl.Call(*this); } ) )
                         // been destroyed within the handler
                         return true;
                 }

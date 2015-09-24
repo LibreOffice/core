@@ -86,8 +86,8 @@ private:
     DECL_LINK_TYPED( ColClickHdl, Button*, void );
     DECL_LINK_TYPED( RowClickHdl, Button*, void );
     DECL_LINK( Range2DataModifyHdl, void * );
-    DECL_LINK( GetFocusHdl, Control* );
-    DECL_LINK( LoseFocusHdl, void* );
+    DECL_LINK_TYPED( GetFocusHdl, Control&, void );
+    DECL_LINK_TYPED( LoseFocusHdl, Control&, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX

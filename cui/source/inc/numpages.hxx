@@ -429,6 +429,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     DECL_LINK( LevelHdl_Impl, ListBox * );
     DECL_LINK( EditModifyHdl_Impl, void *);
     DECL_LINK( DistanceHdl_Impl, MetricField * );
+    DECL_LINK_TYPED( DistanceFocusHdl_Impl, Control&, void );
     DECL_LINK_TYPED( RelativeHdl_Impl, Button*, void );
     DECL_LINK_TYPED( StandardHdl_Impl, Button*, void);
 

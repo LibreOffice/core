@@ -107,7 +107,7 @@ void ScColRowNameRangesDlg::Init()
     pBtnRowHead->SetClickHdl ( LINK( this, ScColRowNameRangesDlg, RowClickHdl ) );
     pEdAssign2->SetModifyHdl ( LINK( this, ScColRowNameRangesDlg, Range2DataModifyHdl ) );
 
-    Link<> aLink = LINK( this, ScColRowNameRangesDlg, GetFocusHdl );
+    Link<Control&,void> aLink = LINK( this, ScColRowNameRangesDlg, GetFocusHdl );
     pEdAssign->SetGetFocusHdl( aLink );
     pRbAssign->SetGetFocusHdl( aLink );
     pEdAssign2->SetGetFocusHdl( aLink );
@@ -802,25 +802,22 @@ IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, RowClickHdl, Button*, void)
     }
 }
 
-IMPL_LINK( ScColRowNameRangesDlg, GetFocusHdl, Control*, pCtrl )
+IMPL_LINK_TYPED( ScColRowNameRangesDlg, GetFocusHdl, Control&, rCtrl, void )
 {
-    if( (pCtrl == static_cast<Control*>(pEdAssign)) || (pCtrl == static_cast<Control*>(pRbAssign)) )
+    if( (&rCtrl == static_cast<Control*>(pEdAssign)) || (&rCtrl == static_cast<Control*>(pRbAssign)) )
         pEdActive = pEdAssign;
-    else if( (pCtrl == static_cast<Control*>(pEdAssign2)) || (pCtrl == static_cast<Control*>(pRbAssign2)) )
+    else if( (&rCtrl == static_cast<Control*>(pEdAssign2)) || (&rCtrl == static_cast<Control*>(pRbAssign2)) )
         pEdActive = pEdAssign2;
     else
         pEdActive = NULL;
 
     if( pEdActive )
         pEdActive->SetSelection( Selection( 0, SELECTION_MAX ) );
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ScColRowNameRangesDlg, LoseFocusHdl)
+IMPL_LINK_NOARG_TYPED(ScColRowNameRangesDlg, LoseFocusHdl, Control&, void)
 {
     bDlgLostFocus = !IsActive();
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

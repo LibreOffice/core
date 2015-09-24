@@ -216,8 +216,8 @@ bool SvxTabulatorTabPage::FillItemSet(SfxItemSet* rSet)
         NewHdl_Impl( 0 );
 
     // Call the LoseFocus-Handler first
-    GetDezCharHdl_Impl(m_pDezChar);
-    GetFillCharHdl_Impl(m_pFillChar);
+    GetDezCharHdl_Impl(*m_pDezChar);
+    GetFillCharHdl_Impl(*m_pFillChar);
 
     FillUpWithDefTabs_Impl(nDefDist, aNewTabs);
     SfxItemPool* pPool = rSet->GetPool();
@@ -628,9 +628,9 @@ IMPL_LINK_TYPED( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, Button *, pBox, voi
     }
 }
 
-IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
+IMPL_LINK_TYPED( SvxTabulatorTabPage, GetFillCharHdl_Impl, Control&, rControl, void )
 {
-    OUString aChar( pEdit->GetText() );
+    OUString aChar( static_cast<Edit&>(rControl).GetText() );
 
     if ( !aChar.isEmpty() )
         aAktTab.GetFill() = aChar[0];
@@ -641,12 +641,11 @@ IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
         aNewTabs.Remove( nPos );
         aNewTabs.Insert( aAktTab );
     }
-    return 0;
 }
 
-IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
+IMPL_LINK_TYPED( SvxTabulatorTabPage, GetDezCharHdl_Impl, Control&, rControl, void )
 {
-    OUString aChar( pEdit->GetText() );
+    OUString aChar( static_cast<Edit*>(&rControl)->GetText() );
     if ( !aChar.isEmpty() && ( aChar[0] >= ' '))
         aAktTab.GetDecimal() = aChar[0];
 
@@ -656,7 +655,6 @@ IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
         aNewTabs.Remove( nPos );
         aNewTabs.Insert( aAktTab );
     }
-    return 0;
 }
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)

@@ -131,7 +131,7 @@ namespace dbaui
     void OParameterDialog::Construct()
     {
         m_pAllParams->SetSelectHdl(LINK(this, OParameterDialog, OnEntrySelected));
-        m_pParam->SetLoseFocusHdl(LINK(this, OParameterDialog, OnValueLoseFocus));
+        m_pParam->SetLoseFocusHdl(LINK(this, OParameterDialog, OnValueLoseFocusHdl));
         m_pParam->SetModifyHdl(LINK(this, OParameterDialog, OnValueModified));
         m_pTravelNext->SetClickHdl(LINK(this, OParameterDialog, OnButtonClicked));
         m_pOKBtn->SetClickHdl(LINK(this, OParameterDialog, OnButtonClicked));
@@ -157,13 +157,18 @@ namespace dbaui
         m_pParam->GrabFocus();
     }
 
-    IMPL_LINK(OParameterDialog, OnValueLoseFocus, Control*, /*pSource*/)
+    IMPL_LINK_NOARG_TYPED(OParameterDialog, OnValueLoseFocusHdl, Control&, void)
+    {
+        OnValueLoseFocus();
+    }
+
+    bool OParameterDialog::OnValueLoseFocus()
     {
         if (m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND)
         {
             if ( ( m_aVisitedParams[ m_nCurrentlySelected ] & EF_DIRTY ) == 0 )
                 // nothing to do, the value isn't dirty
-                return 0L;
+                return false;
         }
 
         Reference< XPropertySet >  xParamAsSet;
@@ -184,7 +189,7 @@ namespace dbaui
                 else
                 {
                     if (!m_bNeedErrorOnCurrent)
-                        return 1L;
+                        return true;
 
                     OUString sName;
                     try
@@ -200,12 +205,12 @@ namespace dbaui
                     sMessage = sMessage.replaceAll( "$name$", sName );
                     ScopedVclPtrInstance<MessageDialog>::Create(nullptr, sMessage)->Execute();
                     m_pParam->GrabFocus();
-                    return 1L;
+                    return true;
                 }
             }
         }
 
-        return 0L;
+        return false;
     }
 
     IMPL_LINK_TYPED(OParameterDialog, OnButtonClicked, Button*, pButton, void)
@@ -213,7 +218,7 @@ namespace dbaui
         if (m_pCancelBtn == pButton)
         {
             // no interpreting of the given values anymore ....
-            m_pParam->SetLoseFocusHdl(Link<>()); // no direct call from the control anymore ...
+            m_pParam->SetLoseFocusHdl(Link<Control&,void>()); // no direct call from the control anymore ...
             m_bNeedErrorOnCurrent = false;      // in case of any indirect calls -> no error message
             m_pCancelBtn->SetClickHdl(Link<Button*,void>());
             m_pCancelBtn->Click();
@@ -291,7 +296,7 @@ namespace dbaui
         if (m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND)
         {
             // do the transformation of the current text
-            if (LINK(this, OParameterDialog, OnValueLoseFocus).Call(m_pParam) != 0L)
+            if (OnValueLoseFocus())
             {   // there was an error interpreting the text
                 m_pAllParams->SelectEntryPos(m_nCurrentlySelected);
                 return 1L;
@@ -347,7 +352,7 @@ namespace dbaui
             Selection aSel;
             if (pOldFocus == m_pParam)
             {
-                m_pParam->SetLoseFocusHdl(Link<>());
+                m_pParam->SetLoseFocusHdl(Link<Control&,void>());
                 aSel = m_pParam->GetSelection();
             }
             m_pTravelNext->GrabFocus();
@@ -357,7 +362,7 @@ namespace dbaui
             // restore the settings for the value edit
             if (pOldFocus == m_pParam)
             {
-                m_pParam->SetLoseFocusHdl(LINK(this, OParameterDialog, OnValueLoseFocus));
+                m_pParam->SetLoseFocusHdl(LINK(this, OParameterDialog, OnValueLoseFocusHdl));
                 m_pParam->SetSelection(aSel);
             }
         }
