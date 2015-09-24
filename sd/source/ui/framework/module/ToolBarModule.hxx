@@ -29,7 +29,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 class ViewShellBase;
@@ -77,7 +76,7 @@ private:
     css::uno::Reference<
         css::drawing::framework::XConfigurationController> mxConfigurationController;
     ViewShellBase* mpBase;
-    ::boost::scoped_ptr<ToolBarManager::UpdateLock> mpToolBarManagerLock;
+    std::unique_ptr<ToolBarManager::UpdateLock> mpToolBarManagerLock;
     bool mbMainViewSwitchUpdatePending;
 
     void HandleUpdateStart();
