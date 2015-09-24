@@ -43,6 +43,7 @@
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 #include <tools/diagnose_ex.h>
+#include <memory>
 #include <unordered_map>
 
 using namespace ::com::sun::star;
@@ -320,7 +321,7 @@ public:
 
 //----- FrameworkHelper -------------------------------------------------------
 
-::boost::scoped_ptr<FrameworkHelper::ViewURLMap> FrameworkHelper::mpViewURLMap(new ViewURLMap());
+std::unique_ptr<FrameworkHelper::ViewURLMap> FrameworkHelper::mpViewURLMap(new ViewURLMap());
 
 FrameworkHelper::InstanceMap FrameworkHelper::maInstanceMap;
 

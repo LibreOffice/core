@@ -31,6 +31,7 @@
 #include <tools/gen.hxx>
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter {
 class SlideSorter;

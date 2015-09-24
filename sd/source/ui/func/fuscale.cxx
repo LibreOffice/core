@@ -40,6 +40,7 @@
 #include <sfx2/request.hxx>
 #include <svx/svxdlg.hxx>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 

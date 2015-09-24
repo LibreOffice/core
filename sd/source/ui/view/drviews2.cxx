@@ -172,6 +172,7 @@
 
 #include "ViewShellBase.hxx"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 namespace {
     const char CustomAnimationPanelId[] = "CustomAnimationPanel";

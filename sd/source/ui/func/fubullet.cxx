@@ -39,6 +39,7 @@
 #include <svx/dialogs.hrc>
 #include "drawview.hxx"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #include "app.hrc"
 

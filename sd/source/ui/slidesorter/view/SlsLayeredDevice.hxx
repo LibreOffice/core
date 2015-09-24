@@ -29,6 +29,7 @@
 #include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 class Rectangle;
 

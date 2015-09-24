@@ -68,6 +68,7 @@
 #include "helpids.h"
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 

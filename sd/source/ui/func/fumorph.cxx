@@ -45,6 +45,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 

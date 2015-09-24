@@ -64,6 +64,7 @@
 #include "DrawViewShell.hxx"
 #include "slideshow.hxx"
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
