@@ -1227,11 +1227,11 @@ IMPL_LINK_TYPED(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, Button*, pButton, vo
     m_pDeleteSchemePB->Enable( m_pColorSchemeLB->GetEntryCount() > 1 );
 }
 
-IMPL_LINK(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog*, pDialog )
+IMPL_LINK_TYPED(SvxColorOptionsTabPage, CheckNameHdl_Impl, AbstractSvxNameDialog&, rDialog, bool )
 {
     OUString sName;
-    pDialog->GetName(sName);
-    return long(!sName.isEmpty() && LISTBOX_ENTRY_NOTFOUND == m_pColorSchemeLB->GetEntryPos( sName ));
+    rDialog.GetName(sName);
+    return !sName.isEmpty() && LISTBOX_ENTRY_NOTFOUND == m_pColorSchemeLB->GetEntryPos( sName );
 }
 
 void SvxColorOptionsTabPage::FillUserData()

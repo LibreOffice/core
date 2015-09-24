@@ -197,7 +197,7 @@ public:
     */
     virtual OutputDevice* GetDocumentRefDev() SAL_OVERRIDE;
 
-    DECL_LINK( RenameSlideHdl, AbstractSvxNameDialog* );
+    DECL_LINK_TYPED( RenameSlideHdl, AbstractSvxNameDialog&, bool );
 
     // ExecuteSpellPopup now handled by DrawDocShell
     DECL_LINK_TYPED( OnlineSpellCallback, SpellCallbackInfo&, void );
@@ -216,9 +216,9 @@ protected:
     FontList*               mpFontList;
     rtl::Reference<FuPoor> mxDocShellFunction;
     DocumentType            meDocType;
-    sal_uInt16                  mnStyleFamily;
-    const sal_uInt16*           mpFilterSIDs;
-    sal_uInt16                  mnFilterCount;
+    sal_uInt16              mnStyleFamily;
+    const sal_uInt16*       mpFilterSIDs;
+    sal_uInt16              mnFilterCount;
     bool                    mbFilterEnable;
     bool                    mbSdDataObj;
     bool                    mbInDestruction;
