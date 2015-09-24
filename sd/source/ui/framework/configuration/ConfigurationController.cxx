@@ -36,7 +36,7 @@
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -80,7 +80,7 @@ public:
     /** The queue processor ownes the queue of configuration change request
         objects and processes the objects.
     */
-    ::boost::scoped_ptr<ChangeRequestQueueProcessor> mpQueueProcessor;
+    std::unique_ptr<ChangeRequestQueueProcessor> mpQueueProcessor;
 
     std::shared_ptr<ConfigurationUpdaterLock> mpConfigurationUpdaterLock;
 
