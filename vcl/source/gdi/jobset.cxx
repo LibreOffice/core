@@ -301,10 +301,10 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
 
         sal_uInt16 nLen = 0;
         rIStream >> nLen;
-        if ( !nLen )
-            return rIStream;
 
         sal_uInt16 nSystem = 0;
+        if ( nLen < sizeof( nLen ) + sizeof( nSystem) )
+            return rIStream;
         rIStream >> nSystem;
 
         char* pTempBuf = new char[nLen];
