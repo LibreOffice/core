@@ -369,12 +369,6 @@ void SAL_CALL SolverComponent::solve() throw(uno::RuntimeException)
             double fInitial = aCellsIter->second.front();
             double fCoeff   = aCellsIter->second.back();       // last appended: coefficient for this variable
             double fTwo     = lcl_GetValue( mxDoc, aCellsIter->first );
-
-            bool bLinear = rtl::math::approxEqual( fTwo, fInitial + 2.0 * fCoeff ) ||
-                           rtl::math::approxEqual( fInitial, fTwo - 2.0 * fCoeff );
-            // second comparison is needed in case fTwo is zero
-            if ( !bLinear )
-                maStatus = lcl_GetResourceString( RID_ERROR_NONLINEAR );
         }
 
         lcl_SetValue( mxDoc, *aVarIter, 0.0 );      // set back to zero for examining next variable
