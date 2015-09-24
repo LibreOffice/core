@@ -518,7 +518,7 @@ OUString AbstractSvxTransformTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
-void AbstractSvxTransformTabDialog_Impl::SetValidateFramePosLink( const Link<>& rLink )
+void AbstractSvxTransformTabDialog_Impl::SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink )
 {
     pDlg->SetValidateFramePosLink( rLink );
 }
@@ -557,7 +557,7 @@ OUString AbstractSvxCaptionDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
-void AbstractSvxCaptionDialog_Impl::SetValidateFramePosLink( const Link<>& rLink )
+void AbstractSvxCaptionDialog_Impl::SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink )
 {
     pDlg->SetValidateFramePosLink( rLink );
 }

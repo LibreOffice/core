@@ -163,7 +163,7 @@ void SvxTransformTabDialog::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 
 
 
-void SvxTransformTabDialog::SetValidateFramePosLink(const Link<>& rLink)
+void SvxTransformTabDialog::SetValidateFramePosLink(const Link<SvxSwFrameValidation&,void>& rLink)
 {
     aValidateLink = rLink;
 }

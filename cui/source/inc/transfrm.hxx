@@ -43,6 +43,7 @@ const sal_uInt16 SVX_OBJ_NORESIZE = 0x0100;
     to disable the protect controls */
 const sal_uInt16 SVX_OBJ_NOPROTECT = 0x0200;
 
+struct SvxSwFrameValidation;
 class SvxTransformTabDialog : public SfxTabDialog
 {
     sal_uInt16         nPosSize;
@@ -53,7 +54,7 @@ private:
     const SdrView*      pView;
 
     sal_uInt16          nAnchorCtrls;
-    Link<>              aValidateLink;
+    Link<SvxSwFrameValidation&,void> aValidateLink;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
@@ -64,7 +65,7 @@ public:
                             sal_uInt16 nAnchorTypes = 0);
 
             //link for the Writer to validate positions
-            void SetValidateFramePosLink( const Link<>& rLink );
+            void SetValidateFramePosLink( const Link<SvxSwFrameValidation&,void>& rLink );
 };
 
 /*************************************************************************
