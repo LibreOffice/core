@@ -27,9 +27,11 @@
 #include <vcl/field.hxx>
 #include <svx/databaseregistrationui.hxx>
 
+
 namespace offapp
 {
 
+    struct DriverPooling;
     class DriverListControl;
     class ConnectionPoolOptionsPage : public SfxTabPage
     {
@@ -60,7 +62,7 @@ namespace offapp
 
     protected:
         DECL_LINK_TYPED( OnEnabledDisabled, Button*, void );
-        DECL_LINK( OnDriverRowChanged, const void* );
+        DECL_LINK_TYPED( OnDriverRowChanged, const DriverPooling*, void );
 
         void implInitControls(const SfxItemSet& _rSet, bool _bFromReset);
 
