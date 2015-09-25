@@ -60,6 +60,7 @@ public:
     CPPUNIT_TEST(testSheets);
     CPPUNIT_TEST(testSum);
     CPPUNIT_TEST(testFTest);
+    CPPUNIT_TEST(testChiTest);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -73,6 +74,7 @@ private:
     void testSheets();
     void testSum();
     void testFTest();
+    void testChiTest();
 
 };
 
@@ -313,6 +315,30 @@ void ScPerfObj::testFTest()
     callgrindDump("sc:ftest");
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong FTest result" , 0.8909, xCell->getValue(), 10e-4);
+}
+
+void ScPerfObj::testChiTest()
+{
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(init("scMathFunctions.ods"), UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_MESSAGE("Problem in document loading" , xDoc.is());
+    uno::Reference< sheet::XCalculatable > xCalculatable(xDoc, UNO_QUERY_THROW);
+
+    // get getSheets
+    uno::Reference< sheet::XSpreadsheets > xSheets (xDoc->getSheets(), UNO_QUERY_THROW);
+
+    uno::Any rSheet = xSheets->getByName(OUString::createFromAscii("ChiTestSheet"));
+
+    // query for the XSpreadsheet interface
+    uno::Reference< sheet::XSpreadsheet > xSheet (rSheet, UNO_QUERY);
+    uno::Reference< table::XCell > xCell = xSheet->getCellByPosition(0, 0);
+
+    callgrindStart();
+    xCell->setFormula(OUString::createFromAscii("=CHITEST(B1:CV100;CW1:GQ100)"));
+    xCalculatable->calculate();
+    callgrindDump("sc:chitest");
+
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Wrong ChiTest result" , 0.0, xCell->getValue(), 10e-4);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPerfObj);
