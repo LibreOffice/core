@@ -111,16 +111,16 @@ public:
     void SetBreak( const SvxFormatBreakItem& rNew );
     void SetPageDesc( const SwFormatPageDesc& rNew );
     void SetKeepWithNextPara( const SvxFormatKeepItem& rNew );
-    void SetLayoutSplit( const sal_Bool& rNew );
-    void SetCollapsingBorders( const sal_Bool& rNew );
-    void SetRowSplit( const sal_Bool& rNew );
+    void SetLayoutSplit( const bool& rNew );
+    void SetCollapsingBorders( const bool& rNew );
+    void SetRowSplit( const bool& rNew );
     void SetRepeatHeading( const sal_uInt16& rNew );
     void SetShadow( const SvxShadowItem& rNew );
 
     const SvxFormatKeepItem& GetKeepWithNextPara() const;
-    sal_Bool GetLayoutSplit() const;
-    sal_Bool GetCollapsingBorders() const;
-    sal_Bool GetRowSplit() const;
+    bool GetLayoutSplit() const;
+    bool GetCollapsingBorders() const;
+    bool GetRowSplit() const;
     sal_uInt16 GetRepeatHeading() const;
 
     bool IsFont() const;

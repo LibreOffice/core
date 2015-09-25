@@ -178,17 +178,17 @@ void SwTableFormat::SetKeepWithNextPara( const SvxFormatKeepItem& rNew )
     SetFormatAttr( rNew );
 }
 
-void SwTableFormat::SetLayoutSplit( const sal_Bool& rNew )
+void SwTableFormat::SetLayoutSplit( const bool& rNew )
 {
     SetFormatAttr( SwFormatLayoutSplit( rNew ) );
 }
 
-void SwTableFormat::SetCollapsingBorders( const sal_Bool& rNew )
+void SwTableFormat::SetCollapsingBorders( const bool& rNew )
 {
     SetFormatAttr( SfxBoolItem( RES_COLLAPSING_BORDERS, rNew ) );
 }
 
-void SwTableFormat::SetRowSplit( const sal_Bool& rNew )
+void SwTableFormat::SetRowSplit( const bool& rNew )
 {
     SetFormatAttr( SwFormatRowSplit( rNew ) );
 }
@@ -208,17 +208,17 @@ const SvxFormatKeepItem& SwTableFormat::GetKeepWithNextPara() const
     return SwFormat::GetKeep();
 }
 
-sal_Bool SwTableFormat::GetLayoutSplit() const
+bool SwTableFormat::GetLayoutSplit() const
 {
     return SwFormat::GetLayoutSplit().GetValue();
 }
 
-sal_Bool SwTableFormat::GetCollapsingBorders() const
+bool SwTableFormat::GetCollapsingBorders() const
 {
     return (static_cast<const SfxBoolItem&>( GetFormatAttr( RES_COLLAPSING_BORDERS ) )).GetValue();
 }
 
-sal_Bool SwTableFormat::GetRowSplit() const
+bool SwTableFormat::GetRowSplit() const
 {
     return SwFormat::GetRowSplit().GetValue();
 }
@@ -227,7 +227,7 @@ sal_uInt16 SwTableFormat::GetRepeatHeading() const
 {
     const SfxPoolItem* pItem;
 
-    if( SfxItemState::SET == GetItemState( FN_PARAM_TABLE_HEADLINE, sal_False, &pItem ) )
+    if( SfxItemState::SET == GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem ) )
         return ((const SfxUInt16Item*)pItem)->GetValue();
 
     return 0;
@@ -238,9 +238,9 @@ bool SwTableFormat::IsFont() const
     for( sal_uInt8 n = 0; n < 16; ++n )
     {
         if( GetBoxFormat( n )->IsFont() )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 bool SwTableFormat::IsJustify() const
@@ -248,9 +248,9 @@ bool SwTableFormat::IsJustify() const
     for( sal_uInt8 n = 0; n < 16; ++n )
     {
         if( GetBoxFormat( n )->IsJustify() )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 bool SwTableFormat::IsFrame() const
@@ -258,9 +258,9 @@ bool SwTableFormat::IsFrame() const
     for( sal_uInt8 n = 0; n < 16; ++n )
     {
         if( GetBoxFormat( n )->IsFrame() )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 bool SwTableFormat::IsBackground() const
@@ -268,9 +268,9 @@ bool SwTableFormat::IsBackground() const
     for( sal_uInt8 n = 0; n < 16; ++n )
     {
         if( GetBoxFormat( n )->IsBackground() )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 bool SwTableFormat::IsValueFormat() const
@@ -278,9 +278,9 @@ bool SwTableFormat::IsValueFormat() const
     for( sal_uInt8 n = 0; n < 16; ++n )
     {
         if( GetBoxFormat( n )->IsValueFormat() )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 void SwTableFormat::RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &rTable )
@@ -294,7 +294,7 @@ void SwTableFormat::RestoreTableProperties( SwTableFormat* pSrcFormat, SwTable &
         return;
 
     SwTableFormat *pTableStyle = (SwTableFormat*)pHardFormat->GetRegisteredIn();
-    sal_Bool bRowSplit = sal_True;
+    bool bRowSplit = true;
     sal_uInt16 nRepeatHeading = 0;
 
     if( pSrcFormat )

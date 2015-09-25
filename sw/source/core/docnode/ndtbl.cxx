@@ -2007,7 +2007,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
 
         getIDocumentState().SetModified();
         getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
-        return sal_True;
+        return true;
     }
 
     SwUndoTableNdsChg* pUndo = 0;
@@ -3408,7 +3408,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
 
     if( pTableNd->GetTable().ISA( SwDDETable ) ||
         pDelTableNd->GetTable().ISA( SwDDETable ))
-        return sal_False;
+        return false;
 
     // Delete HTML Layout
     pTableNd->GetTable().SetHTMLTableLayout( 0 );
