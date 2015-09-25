@@ -698,7 +698,7 @@ void AbstractFmSearchDialog_Impl::SetFoundHandler(const Link<FmFoundRecordInform
 {
     pDlg->SetFoundHandler(lnk);
 }
-void AbstractFmSearchDialog_Impl::SetCanceledNotFoundHdl(const Link<>& lnk)
+void AbstractFmSearchDialog_Impl::SetCanceledNotFoundHdl(const Link<FmFoundRecordInformation&,void>& lnk)
 {
     pDlg->SetCanceledNotFoundHdl(lnk);
 }

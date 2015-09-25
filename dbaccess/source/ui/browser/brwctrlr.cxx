@@ -2404,7 +2404,7 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation
     xGrid->setCurrentColumnPosition(nViewPos);
 }
 
-IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformation*, pInfo)
+IMPL_LINK_TYPED(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformation&, rInfo, void)
 {
     Reference< css::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
 
@@ -2412,7 +2412,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
     {
         OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnCanceledNotFound : xCursor is empty");
         // move the cursor
-        xCursor->moveToBookmark(pInfo->aPosition);
+        xCursor->moveToBookmark(rInfo.aPosition);
     }
     catch( const Exception& )
     {
@@ -2432,8 +2432,6 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-
-    return 0L;
 }
 
 IMPL_LINK_NOARG_TYPED(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, void)

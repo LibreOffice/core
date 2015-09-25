@@ -751,7 +751,7 @@ IMPL_LINK_TYPED(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProg
                 friInfo.nContext = m_plbForm->GetSelectEntryPos();
                 // if I don't do a search in a context, this has an invalid value - but then it doesn't matter anyway
                 friInfo.aPosition = pProgress->aBookmark;
-                m_lnkCanceledNotFoundHdl.Call(&friInfo);
+                m_lnkCanceledNotFoundHdl.Call(friInfo);
             }
             break;
     }
