@@ -2282,24 +2282,24 @@ IMPL_LINK_TYPED(FmXFormShell, OnFoundData, FmFoundRecordInformation&, rfriWhere,
 }
 
 
-IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere)
+IMPL_LINK_TYPED(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation&, rfriWhere, void)
 {
     if ( impl_checkDisposed() )
-        return 0;
+        return;
 
-    DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < (sal_Int16)m_aSearchForms.size()),
+    DBG_ASSERT((rfriWhere.nContext >= 0) && (rfriWhere.nContext < (sal_Int16)m_aSearchForms.size()),
         "FmXFormShell::OnCanceledNotFound : ungueltiger Kontext !");
-    Reference< XForm> xForm( m_aSearchForms.at(pfriWhere->nContext));
+    Reference< XForm> xForm( m_aSearchForms.at(rfriWhere.nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnCanceledNotFound : ungueltige Form !");
 
     Reference< XRowLocate> xCursor(xForm, UNO_QUERY);
     if (!xCursor.is())
-        return 0;       // was soll ich da machen ?
+        return;       // was soll ich da machen ?
 
     // zum Datensatz
     try
     {
-        xCursor->moveToBookmark(pfriWhere->aPosition);
+        xCursor->moveToBookmark(rfriWhere.aPosition);
     }
     catch(const SQLException&)
     {
@@ -2308,7 +2308,6 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
 
 
     m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());
-    return 0L;
 }
 
 

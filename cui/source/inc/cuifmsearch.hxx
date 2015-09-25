@@ -79,7 +79,7 @@ class FmSearchDialog : public ModalDialog
     VclPtr<vcl::Window>         m_pPreSearchFocus;
 
     Link<FmFoundRecordInformation&,void>  m_lnkFoundHandler;          ///< Handler for "found"
-    Link<>  m_lnkCanceledNotFoundHdl;   ///< Handler for Positioning the Cursors
+    Link<FmFoundRecordInformation&,void>  m_lnkCanceledNotFoundHdl;   ///< Handler for Positioning the Cursors
 
     Link<FmSearchContext&,sal_uInt32>  m_lnkContextSupplier;       ///< for search in contexts
 
@@ -127,7 +127,7 @@ public:
         The pointer that is passed to the handler points to a FmFoundRecordInformation-structure, for which aPosition and
         possibly (in a search with contexts) nContext are valid.
     */
-    void SetCanceledNotFoundHdl(const Link<>& lnk) { m_lnkCanceledNotFoundHdl = lnk; }
+    void SetCanceledNotFoundHdl(const Link<FmFoundRecordInformation&,void>& lnk) { m_lnkCanceledNotFoundHdl = lnk; }
 
     inline void SetActiveField(const OUString& strField);
 

@@ -203,7 +203,7 @@ class AbstractFmSearchDialog :public VclAbstractDialog
 {
 public:
     virtual void SetFoundHandler(const Link<FmFoundRecordInformation&,void>& lnk) = 0;
-    virtual void SetCanceledNotFoundHdl(const Link<>& lnk)=0;
+    virtual void SetCanceledNotFoundHdl(const Link<FmFoundRecordInformation&,void>& lnk)=0;
     virtual void SetActiveField(const OUString& strField)=0;
 };
 
