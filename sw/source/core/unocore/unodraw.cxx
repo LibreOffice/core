@@ -57,7 +57,6 @@
 #include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/makesequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/scene3d.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -437,7 +436,7 @@ sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName) thro
 
 uno::Sequence< OUString > SwXShapesEnumeration::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
 {
-    return ::comphelper::makeSequence(OUString("com.sun.star.container.XEnumeration"));
+    return { OUString("com.sun.star.container.XEnumeration") };
 }
 
 uno::Reference< container::XEnumeration > SwXDrawPage::createEnumeration() throw( uno::RuntimeException, std::exception )

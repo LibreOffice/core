@@ -60,7 +60,6 @@
 #include <authfld.hxx>
 #include <SwXTextDefaults.hxx>
 #include <unochart.hxx>
-#include <comphelper/makesequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <list>
@@ -1142,7 +1141,7 @@ sal_Bool SwXFrameEnumeration<T>::supportsService(const OUString& ServiceName) th
 template<FlyCntType T>
 Sequence< OUString > SwXFrameEnumeration<T>::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    return ::comphelper::makeSequence(OUString("com.sun.star.container.XEnumeration"));
+    return { OUString("com.sun.star.container.XEnumeration") };
 }
 
 OUString SwXFrames::getImplementationName() throw( RuntimeException, std::exception )
@@ -1157,7 +1156,7 @@ sal_Bool SwXFrames::supportsService(const OUString& rServiceName) throw( Runtime
 
 Sequence<OUString> SwXFrames::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    return ::comphelper::makeSequence(OUString("com.sun.star.text.TextFrames"));
+    return { OUString("com.sun.star.text.TextFrames") };
 }
 
 SwXFrames::SwXFrames(SwDoc* _pDoc, FlyCntType eSet) :

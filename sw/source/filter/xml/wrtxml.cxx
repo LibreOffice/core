@@ -51,7 +51,6 @@
 #include <statstr.hrc>
 
 #include <comphelper/documentconstants.hxx>
-#include <comphelper/makesequence.hxx>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 
 using namespace ::com::sun::star;

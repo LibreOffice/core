@@ -24,7 +24,6 @@
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/seqstream.hxx>
-#include <comphelper/makesequence.hxx>
 #include <comphelper/processfactory.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
@@ -469,7 +468,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlaforms() const
     //When there is no description.xml then we assume that we support all platforms
     if (! m_element.is())
     {
-        return comphelper::makeSequence( OUString("all") );
+        return { OUString("all") };
     }
 
     //Check if the <platform> element was provided. If not the default is "all" platforms
@@ -477,7 +476,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlaforms() const
         m_xpath->selectSingleNode(m_element, "desc:platform"));
     if (!nodePlatform.is())
     {
-        return comphelper::makeSequence( OUString("all") );
+        return { OUString("all") };
     }
 
     //There is a platform element.

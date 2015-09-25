@@ -59,7 +59,6 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <comphelper/sequence.hxx>
-#include <comphelper/makesequence.hxx>
 #include <comphelper/xmltools.hxx>
 
 #include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>

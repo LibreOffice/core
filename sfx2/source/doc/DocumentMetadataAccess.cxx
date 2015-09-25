@@ -39,7 +39,6 @@
 #include <rtl/bootstrap.hxx>
 
 #include <comphelper/interaction.hxx>
-#include <comphelper/makesequence.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -437,8 +436,7 @@ mkException( OUString const & i_rMessage,
     const beans::PropertyValue rnProp(
         OUString("ResourceName"),
         -1, uno::makeAny(i_rResource), static_cast<beans::PropertyState>(0));
-    iaioe.Arguments = ::comphelper::makeSequence(
-        uno::makeAny(uriProp), uno::makeAny(rnProp));
+    iaioe.Arguments = { uno::makeAny(uriProp), uno::makeAny(rnProp) };
     return iaioe;
 }
 
