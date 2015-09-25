@@ -30,7 +30,6 @@
 #include "ViewShell.hxx"
 #include "app.hrc"
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 class SfxRequest;
 
@@ -60,7 +59,7 @@ void FuLink::DoExecute( SfxRequest& )
     sfx2::LinkManager* pLinkManager = mpDoc->GetLinkManager();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    boost::scoped_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( mpViewShell->GetActiveWindow(), pLinkManager ));
+    std::unique_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( mpViewShell->GetActiveWindow(), pLinkManager ));
     if ( pDlg )
     {
         pDlg->Execute();

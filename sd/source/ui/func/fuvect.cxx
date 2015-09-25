@@ -30,7 +30,6 @@
 #include "sdresid.hxx"
 #include "sdabstdlg.hxx"
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd
 {
@@ -65,7 +64,7 @@ void FuVectorize::DoExecute( SfxRequest& )
         if( pObj && pObj->ISA( SdrGrafObj ) )
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            boost::scoped_ptr<AbstractSdVectorizeDlg> pDlg(pFact ? pFact->CreateSdVectorizeDlg( mpWindow, static_cast<SdrGrafObj*>( pObj )->GetGraphic().GetBitmap(), mpDocSh ) : 0);
+            std::unique_ptr<AbstractSdVectorizeDlg> pDlg(pFact ? pFact->CreateSdVectorizeDlg( mpWindow, static_cast<SdrGrafObj*>( pObj )->GetGraphic().GetBitmap(), mpDocSh ) : 0);
             if( pDlg && pDlg->Execute() == RET_OK )
             {
                 const GDIMetaFile&  rMtf = pDlg->GetGDIMetaFile();

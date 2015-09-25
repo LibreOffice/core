@@ -45,7 +45,6 @@
 #include <tools/helpers.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -447,7 +446,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact ? pFact->CreatSdActionDialog( NULL, &aSet, mpView ) : 0);
+        std::unique_ptr<SfxAbstractDialog> pDlg(pFact ? pFact->CreatSdActionDialog( NULL, &aSet, mpView ) : 0);
 
         short nResult = pDlg ? pDlg->Execute() : static_cast<short>(RET_CANCEL);
 

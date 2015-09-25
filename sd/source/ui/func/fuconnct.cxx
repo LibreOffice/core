@@ -26,7 +26,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -59,7 +58,7 @@ void FuConnectionDlg::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        boost::scoped_ptr<SfxAbstractDialog> pDlg( pFact ? pFact->CreateSfxDialog( NULL, aNewAttr, mpView, RID_SVXPAGE_CONNECTION) : 0);
+        std::unique_ptr<SfxAbstractDialog> pDlg( pFact ? pFact->CreateSfxDialog( NULL, aNewAttr, mpView, RID_SVXPAGE_CONNECTION) : 0);
 
         if( pDlg.get() && (pDlg->Execute() == RET_OK) )
         {

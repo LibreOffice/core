@@ -83,7 +83,6 @@
 #include <vcl/svapp.hxx>
 #include "undo/undoobjects.hxx"
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include "glob.hrc"
 
 #include <config_features.h>
@@ -203,7 +202,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     SotClipboardFormatId                        nFormatId;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( mpViewShell->GetActiveWindow() ));
+    std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( mpViewShell->GetActiveWindow() ));
     if ( pDlg )
     {
         ::com::sun::star::datatransfer::DataFlavor  aFlavor;
@@ -458,7 +457,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 case SID_INSERT_FLOATINGFRAME :
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    boost::scoped_ptr<SfxAbstractInsertObjectDialog> pDlg(
+                    std::unique_ptr<SfxAbstractInsertObjectDialog> pDlg(
                             pFact->CreateInsertObjectDialog( mpViewShell->GetActiveWindow(), SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommandString(),
                             xStorage, &aServerLst ));
                     if ( pDlg )
