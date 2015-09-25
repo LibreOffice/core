@@ -87,7 +87,6 @@
 #include "framework/FrameworkHelper.hxx"
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -426,7 +425,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
     bool bPreviewState = false;
     sal_uLong nSlot = rReq.GetSlot();
 
-    boost::scoped_ptr< OutlineViewModelChangeGuard > aGuard;
+    std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
     if( pOlView && (
         (nSlot == SID_TRANSLITERATE_SENTENCE_CASE) ||
         (nSlot == SID_TRANSLITERATE_TITLE_CASE) ||
@@ -1273,7 +1272,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     {
         sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
 
-        boost::scoped_ptr<SvxZoomItem> pZoomItem(new SvxZoomItem( SvxZoomType::PERCENT, nZoom ));
+        std::unique_ptr<SvxZoomItem> pZoomItem(new SvxZoomItem( SvxZoomType::PERCENT, nZoom ));
 
         // limit area
         SvxZoomEnableFlags nZoomValues = SvxZoomEnableFlags::ALL;

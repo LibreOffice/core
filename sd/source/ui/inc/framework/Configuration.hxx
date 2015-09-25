@@ -29,7 +29,6 @@
 #include <cppuhelper/compbase.hxx>
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace {
 
@@ -145,7 +144,7 @@ private:
     /** The resource container holds the URLs of unique resource and of
         resource linked to unique resources.
     */
-    ::boost::scoped_ptr<ResourceContainer> mpResourceContainer;
+    std::unique_ptr<ResourceContainer> mpResourceContainer;
 
     /** The broadcaster used for notifying listeners of requests for
         configuration changes.
