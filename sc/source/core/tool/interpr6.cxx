@@ -400,7 +400,7 @@ void IterateMatrix(
         case ifPRODUCT:
         {
             ScMatrix::IterateResult aRes = pMat->Product(bTextAsZero);
-            fRes = aRes.mfFirst;
+            fRes *= aRes.mfFirst;
             fRes *= aRes.mfRest;
             rCount += aRes.mnCount;
         }
@@ -408,6 +408,7 @@ void IterateMatrix(
         case ifSUMSQ:
         {
             ScMatrix::IterateResult aRes = pMat->SumSquare(bTextAsZero);
+            fRes += aRes.mfFirst;
             fRes += aRes.mfRest;
             rCount += aRes.mnCount;
         }
