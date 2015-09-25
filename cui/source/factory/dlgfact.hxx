@@ -342,10 +342,10 @@ class AbstractSvxObjectNameDialog_Impl :public AbstractSvxObjectNameDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxObjectNameDialog_Impl, SvxObjectNameDialog)
     virtual void GetName(OUString& rName) SAL_OVERRIDE ;
-    virtual void SetCheckNameHdl(const Link<>& rLink, bool bCheckImmediately = false) SAL_OVERRIDE;
+    virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink, bool bCheckImmediately = false) SAL_OVERRIDE;
 
 private:
-    Link<> aCheckNameHdl;
+    Link<AbstractSvxObjectNameDialog&,bool> aCheckNameHdl;
     DECL_LINK_TYPED(CheckNameHdl, SvxObjectNameDialog&, bool);
 };
 

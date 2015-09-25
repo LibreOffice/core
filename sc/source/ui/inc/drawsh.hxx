@@ -27,7 +27,7 @@
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
-class AbstractSvxNameDialog;
+class AbstractSvxObjectNameDialog;
 class ScViewData;
 class ScDrawView;
 namespace svx { namespace sidebar {
@@ -39,7 +39,7 @@ class ScDrawShell : public SfxShell
     ScViewData* pViewData;
     ::rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
 
-    DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
+    DECL_LINK_TYPED( NameObjectHdl, AbstractSvxObjectNameDialog&, bool );
 
     void SetHlinkForObject( SdrObject* pObj, const OUString& rHlnk );
 

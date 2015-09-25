@@ -588,7 +588,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
 // Checks whether a given name is allowed for a group shape
 
-IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNameDialog )
+IMPL_LINK_TYPED( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&, rNameDialog, bool )
 {
     SwWrtShell          &rSh = GetShell();
     SdrView *pSdrView = rSh.GetDrawView();
@@ -597,13 +597,13 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
     const OUString sCurrentName = pObj->GetName();
     OUString sNewName;
-    pNameDialog->GetName(sNewName);
-    long nRet = 0;
+    rNameDialog.GetName(sNewName);
+    bool nRet = false;
     if (sNewName.isEmpty() || sCurrentName == sNewName)
-        nRet = 1;
+        nRet = true;
     else
     {
-        nRet = 1;
+        nRet = true;
         SwDrawModel* pModel = rSh.getIDocumentDrawModelAccess().GetDrawModel();
         SdrObjListIter aIter( *(pModel->GetPage(0)), IM_DEEPWITHGROUPS );
         while( aIter.IsMore() )
@@ -611,7 +611,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
             SdrObject* pTempObj = aIter.Next();
             if ( pObj != pTempObj && pTempObj->GetName().equals(sNewName) )
             {
-                nRet = 0;
+                nRet = false;
                 break;
             }
         }

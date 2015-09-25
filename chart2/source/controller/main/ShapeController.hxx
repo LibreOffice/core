@@ -22,7 +22,7 @@
 #include "FeatureCommandDispatchBase.hxx"
 #include <tools/link.hxx>
 
-class AbstractSvxNameDialog;
+class AbstractSvxObjectNameDialog;
 class SdrObject;
 
 namespace chart
@@ -62,7 +62,7 @@ protected:
     virtual void describeSupportedFeatures() SAL_OVERRIDE;
 
 private:
-    DECL_LINK( CheckNameHdl, AbstractSvxNameDialog* );
+    DECL_LINK_TYPED( CheckNameHdl, AbstractSvxObjectNameDialog&, bool);
 
     void executeDispatch_FormatLine();
     void executeDispatch_FormatArea();

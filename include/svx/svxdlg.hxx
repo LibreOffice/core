@@ -169,7 +169,7 @@ class AbstractSvxObjectNameDialog :public VclAbstractDialog
 {
 public:
     virtual void GetName(OUString& rName) = 0;
-    virtual void SetCheckNameHdl(const Link<>& rLink, bool bCheckImmediately = false) = 0;
+    virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink, bool bCheckImmediately = false) = 0;
 };
 
 class AbstractSvxObjectTitleDescDialog :public VclAbstractDialog

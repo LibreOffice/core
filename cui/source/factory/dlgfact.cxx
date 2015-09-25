@@ -619,7 +619,7 @@ void AbstractSvxObjectNameDialog_Impl::GetName(OUString& rName)
     pDlg->GetName(rName);
 }
 
-void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<>& rLink, bool bCheckImmediately)
+void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink, bool bCheckImmediately)
 {
     aCheckNameHdl = rLink;
 
@@ -637,7 +637,7 @@ IMPL_LINK_NOARG_TYPED(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, SvxObjectN
 {
     if(aCheckNameHdl.IsSet())
     {
-        return aCheckNameHdl.Call(this);
+        return aCheckNameHdl.Call(*this);
     }
 
     return false;

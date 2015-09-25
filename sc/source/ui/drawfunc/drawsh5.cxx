@@ -617,12 +617,10 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
     }
 }
 
-IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
+IMPL_LINK_TYPED( ScDrawShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
 {
     OUString aName;
-
-    if( pDialog )
-        pDialog->GetName( aName );
+    rDialog.GetName( aName );
 
     ScDrawLayer* pModel = pViewData->GetDocument()->GetDrawLayer();
     if ( !aName.isEmpty() && pModel )
@@ -631,11 +629,11 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
         if ( pModel->GetNamedObject( aName, 0, nDummyTab ) )
         {
             // existing object found -> name invalid
-            return 0;
+            return false;
         }
     }
 
-    return 1;   // name is valid
+    return true;   // name is valid
 }
 
 void ScDrawShell::ExecFormText(SfxRequest& rReq)
