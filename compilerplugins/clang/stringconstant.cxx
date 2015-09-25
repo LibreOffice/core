@@ -123,15 +123,15 @@ bool StringConstant::TraverseCallExpr(CallExpr * expr) {
         return false;
     }
     calls_.push(expr);
-    bool res = true;
+    bool bRes = true;
     for (auto * e: expr->children()) {
         if (!TraverseStmt(e)) {
-            res = false;
+            bRes = false;
             break;
         }
     }
     calls_.pop();
-    return res;
+    return bRes;
 }
 
 bool StringConstant::TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr) {
@@ -139,15 +139,15 @@ bool StringConstant::TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr) {
         return false;
     }
     calls_.push(expr);
-    bool res = true;
+    bool bRes = true;
     for (auto * e: expr->children()) {
         if (!TraverseStmt(e)) {
-            res = false;
+            bRes = false;
             break;
         }
     }
     calls_.pop();
-    return res;
+    return bRes;
 }
 
 bool StringConstant::TraverseCXXOperatorCallExpr(CXXOperatorCallExpr * expr)
@@ -156,15 +156,15 @@ bool StringConstant::TraverseCXXOperatorCallExpr(CXXOperatorCallExpr * expr)
         return false;
     }
     calls_.push(expr);
-    bool res = true;
+    bool bRes = true;
     for (auto * e: expr->children()) {
         if (!TraverseStmt(e)) {
-            res = false;
+            bRes = false;
             break;
         }
     }
     calls_.pop();
-    return res;
+    return bRes;
 }
 
 bool StringConstant::TraverseCXXConstructExpr(CXXConstructExpr * expr) {
@@ -172,15 +172,15 @@ bool StringConstant::TraverseCXXConstructExpr(CXXConstructExpr * expr) {
         return false;
     }
     calls_.push(expr);
-    bool res = true;
+    bool bRes = true;
     for (auto * e: expr->children()) {
         if (!TraverseStmt(e)) {
-            res = false;
+            bRes = false;
             break;
         }
     }
     calls_.pop();
-    return res;
+    return bRes;
 }
 
 bool StringConstant::VisitCallExpr(CallExpr const * expr) {

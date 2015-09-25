@@ -606,12 +606,12 @@ void writeClassFile(
         path = options.getOption("-O");
     }
     OString filename(createFileNameFromType(path, type, ".class"));
-    bool check = false;
+    bool bCheck = false;
     if (fileExists(filename)) {
         if (options.isValid("-G")) {
             return;
         }
-        check = options.isValid("-Gc");
+        bCheck = options.isValid("-Gc");
     }
     FileStream tempfile;
     tempfile.createTempFile(getTempDir(filename));
@@ -632,7 +632,7 @@ void writeClassFile(
         throw;
     }
     tempfile.close();
-    if (!makeValidTypeFile(filename, tempname, check)) {
+    if (!makeValidTypeFile(filename, tempname, bCheck)) {
         throw CannotDumpException(
             "Cannot create " + b2u(filename) + " from temporary file "
             + b2u(tempname));
@@ -1263,7 +1263,7 @@ sal_uInt16 addLoadLocal(
                     + "\" in call to addLoadLocal");
             }
         } else {
-            bool wrap = false;
+            bool bWrap = false;
             if (any) {
                 switch (sort) {
                 case codemaker::UnoType::SORT_BOOLEAN:
@@ -1291,7 +1291,7 @@ sal_uInt16 addLoadLocal(
                 case codemaker::UnoType::
                     SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
                 case codemaker::UnoType::SORT_INTERFACE_TYPE:
-                    wrap = true;
+                    bWrap = true;
                     break;
                 case codemaker::UnoType::SORT_SEQUENCE_TYPE:
                 case codemaker::UnoType::SORT_TYPEDEF:
@@ -1303,7 +1303,7 @@ sal_uInt16 addLoadLocal(
                         + "\" in call to addLoadLocal");
                 }
             }
-            if (wrap) {
+            if (bWrap) {
                 code->instrNew("com/sun/star/uno/Any");
                 code->instrDup();
                 code->instrNew("com/sun/star/uno/Type");

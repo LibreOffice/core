@@ -49,7 +49,7 @@ struct PluginData
 const int MAX_PLUGINS = 100;
 static PluginData plugins[ MAX_PLUGINS ];
 static int pluginCount = 0;
-static bool pluginObjectsCreated = false;
+static bool bPluginObjectsCreated = false;
 
 PluginHandler::PluginHandler( CompilerInstance& compiler, const vector< string >& args )
     : compiler( compiler )
@@ -67,7 +67,7 @@ PluginHandler::PluginHandler( CompilerInstance& compiler, const vector< string >
             rewriters.insert( *it );
         }
     createPlugins( rewriters );
-    pluginObjectsCreated = true;
+    bPluginObjectsCreated = true;
     }
 
 PluginHandler::~PluginHandler()
@@ -122,7 +122,7 @@ void PluginHandler::createPlugins( set< string > rewriters )
 
 void PluginHandler::registerPlugin( Plugin* (*create)( const Plugin::InstantiationData& ), const char* optionName, bool isPPCallback, bool byDefault )
     {
-    assert( !pluginObjectsCreated );
+    assert( !bPluginObjectsCreated );
     assert( pluginCount < MAX_PLUGINS );
     plugins[ pluginCount ].create = create;
     plugins[ pluginCount ].object = NULL;
@@ -197,7 +197,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
            and BUILDDIR is sometimes in SRCDIR. */
         string modifyFile;
         const char* pathWarning = NULL;
-        bool skip = false;
+        bool bSkip = false;
         if( strncmp( e->getName(), WORKDIR "/", strlen( WORKDIR "/" )) == 0 )
             pathWarning = "modified source in workdir/ : %0";
         else if( strcmp( SRCDIR, BUILDDIR ) != 0 && strncmp( e->getName(), BUILDDIR "/", strlen( BUILDDIR "/" )) == 0 )
@@ -207,7 +207,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         else
             {
             pathWarning = "modified source in unknown location, not modifying : %0";
-            skip = true;
+            bSkip = true;
             }
         if( modifyFile.empty())
             modifyFile = e->getName();
@@ -227,12 +227,12 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         // Warn only now, so that files not in scope do not cause warnings.
         if( pathWarning != NULL )
             report( DiagnosticsEngine::Warning, pathWarning ) << e->getName();
-        if( skip )
+        if( bSkip )
             continue;
         char* filename = new char[ modifyFile.length() + 100 ];
         sprintf( filename, "%s.new.%d", modifyFile.c_str(), getpid());
         string error;
-        bool ok = false;
+        bool bOk = false;
         std::unique_ptr<raw_fd_ostream> ostream(
             compat::create_raw_fd_ostream(filename, error) );
         if( error.empty())
@@ -240,11 +240,11 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             it->second.write( *ostream );
             ostream->close();
             if( !ostream->has_error() && rename( filename, modifyFile.c_str()) == 0 )
-                ok = true;
+                bOk = true;
             }
         ostream->clear_error();
         unlink( filename );
-        if( !ok )
+        if( !bOk )
             report( DiagnosticsEngine::Error, "cannot write modified source to %0 (%1)" ) << modifyFile << error;
         delete[] filename;
         }

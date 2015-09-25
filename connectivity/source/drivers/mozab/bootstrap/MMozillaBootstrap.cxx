@@ -60,9 +60,6 @@ MozillaBootstrap::~MozillaBootstrap()
 
 void MozillaBootstrap::Init()
 {
-    bool aProfileExists=false;
-
-    (void)aProfileExists; /* avoid warning about unused parameter */
     m_ProfileAccess = new ProfileAccess();
     bootupProfile(::com::sun::star::mozilla::MozillaProductType_Mozilla,OUString());
 }

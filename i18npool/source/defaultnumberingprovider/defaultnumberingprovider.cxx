@@ -566,7 +566,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
      sal_Int16 natNum = 0;
      sal_Int16 tableSize = 0;
      const sal_Unicode *table = NULL;     // initialize to avoid compiler warning
-     bool recycleSymbol = false;
+     bool bRecycleSymbol = false;
      Locale locale;
 
      OUString  prefix;
@@ -705,42 +705,42 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
           case AIU_FULLWIDTH_JA:
               table = table_AIUFullWidth_ja_JP;
               tableSize = SAL_N_ELEMENTS(table_AIUFullWidth_ja_JP);
-              recycleSymbol = true;
+              bRecycleSymbol = true;
               break;
           case AIU_HALFWIDTH_JA:
               table = table_AIUHalfWidth_ja_JP;
               tableSize = SAL_N_ELEMENTS(table_AIUHalfWidth_ja_JP);
-              recycleSymbol = true;
+              bRecycleSymbol = true;
               break;
           case IROHA_FULLWIDTH_JA:
               table = table_IROHAFullWidth_ja_JP;
               tableSize = SAL_N_ELEMENTS(table_IROHAFullWidth_ja_JP);
-              recycleSymbol = true;
+              bRecycleSymbol = true;
               break;
           case IROHA_HALFWIDTH_JA:
               table = table_IROHAHalfWidth_ja_JP;
               tableSize = SAL_N_ELEMENTS(table_IROHAHalfWidth_ja_JP);
-              recycleSymbol = true;
+              bRecycleSymbol = true;
               break;
           case HANGUL_JAMO_KO:
               table = table_HangulJamo_ko;
               tableSize = SAL_N_ELEMENTS(table_HangulJamo_ko);
-              recycleSymbol = true;
+              bRecycleSymbol = true;
               break;
           case HANGUL_SYLLABLE_KO:
               table = table_HangulSyllable_ko;
               tableSize = SAL_N_ELEMENTS(table_HangulSyllable_ko);
-              recycleSymbol = true;
+              bRecycleSymbol = true;
               break;
           case HANGUL_CIRCLED_JAMO_KO:
               table = table_HangulCircledJamo_ko;
               tableSize = SAL_N_ELEMENTS(table_HangulCircledJamo_ko);
-              recycleSymbol = true;
+              bRecycleSymbol = true;
               break;
           case HANGUL_CIRCLED_SYLLABLE_KO:
               table = table_HangulCircledSyllable_ko;
               tableSize = SAL_N_ELEMENTS(table_HangulCircledSyllable_ko);
-              recycleSymbol = true;
+              bRecycleSymbol = true;
               break;
           case CHARS_ARABIC:
               lcl_formatChars(table_Alphabet_ar, SAL_N_ELEMENTS(table_Alphabet_ar), number - 1, result);
@@ -861,7 +861,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
             uno::Reference<NativeNumberSupplierService> xNatNum(new NativeNumberSupplierService);
             result += xNatNum->getNativeNumberString(OUString::number( number ), locale, natNum);
         } else if (tableSize) {
-            if ( number > tableSize && !recycleSymbol)
+            if ( number > tableSize && !bRecycleSymbol)
                 result += OUString::number( number);
             else
                 result += OUString(&table[--number % tableSize], 1);

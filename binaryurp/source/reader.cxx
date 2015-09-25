@@ -231,14 +231,14 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         ("superfluous MUSTREPLY/SYNCHRONOUS ignored in request message with"
          " non-oneway function ID"));
     bool synchronous = !oneWay || forceSynchronous;
-    bool setter = false;
+    bool bSetter = false;
     std::vector< BinaryAny > inArgs;
     switch (memberTd.get()->eTypeClass) {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
-        setter = itd->pMapMemberIndexToFunctionIndex[memberId] != functionId;
+        bSetter = itd->pMapMemberIndexToFunctionIndex[memberId] != functionId;
             // pMapMemberIndexToFunctionIndex contains function index of
             // attribute getter
-        if (setter) {
+        if (bSetter) {
             inArgs.push_back(
                 unmarshal.readValue(
                     css::uno::TypeDescription(
@@ -330,7 +330,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         std::unique_ptr< IncomingRequest > req(
             new IncomingRequest(
                 bridge_, tid, oid, obj, type, functionId, synchronous, memberTd,
-                setter, inArgs, ccMode, cc));
+                bSetter, inArgs, ccMode, cc));
         if (synchronous) {
             bridge_->incrementActiveCalls();
         }
@@ -386,18 +386,18 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
                 assert(false); // this cannot happen
                 break;
             }
-            bool ok = false;
+            bool bOk = false;
             for (sal_Int32 i = 0; i != n; ++i) {
                 if (typelib_typedescriptionreference_isAssignableFrom(
                         p[i],
                         reinterpret_cast< typelib_TypeDescriptionReference * >(
                             ret.getType().get())))
                 {
-                    ok = true;
+                    bOk = true;
                     break;
                 }
             }
-            if (!ok) {
+            if (!bOk) {
                 throw css::uno::RuntimeException(
                     "URP: reply message with bad exception type received");
             }

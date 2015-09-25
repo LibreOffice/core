@@ -1563,20 +1563,20 @@ void InterfaceType::dumpExceptionSpecification(
     out << " /*";
 #endif
     out << " throw (";
-    bool first = true;
+    bool bFirst = true;
     for (std::vector< OUString >::const_iterator i(exceptions.begin());
          i != exceptions.end(); ++i)
     {
         if (*i != "com.sun.star.uno.RuntimeException") {
-            if (!first) {
+            if (!bFirst) {
                 out << ", ";
             }
             out << codemaker::cpp::scopedCppName(u2b(*i));
-            first = false;
+            bFirst = false;
         }
     }
     if (runtimeException) {
-        if (!first) {
+        if (!bFirst) {
             out << ", ";
         }
         out << "::css::uno::RuntimeException, ::std::exception";
@@ -1822,17 +1822,17 @@ void PlainStructType::dumpDeclaration(FileStream & out) {
     out << indent() << "inline " << id_ << "();\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << "\n" << indent() << "inline " << id_ << "(";
-        bool first = !dumpBaseMembers(out, base, true);
+        bool bFirst = !dumpBaseMembers(out, base, true);
         for (std::vector< unoidl::PlainStructTypeEntity::Member >::
                  const_iterator i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
         {
-            if (!first) {
+            if (!bFirst) {
                 out << ", ";
             }
             dumpType(out, i->type, true, true);
             out << " " << i->name << "_";
-            first = false;
+            bFirst = false;
         }
         out << ");\n";
     }
@@ -1872,55 +1872,55 @@ void PlainStructType::dumpHxxFile(
     out << "\ninline " << id_ << "::" << id_ << "()\n";
     inc();
     OUString base(entity_->getDirectBase());
-    bool first = true;
+    bool bFirst = true;
     if (!base.isEmpty()) {
         out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
             << "()\n";
-        first = false;
+        bFirst = false;
     }
     for (std::vector< unoidl::PlainStructTypeEntity::Member >::const_iterator i(
              entity_->getDirectMembers().begin());
          i != entity_->getDirectMembers().end(); ++i)
     {
-        out << indent() << (first ? ":" : ",") << " " << i->name;
+        out << indent() << (bFirst ? ":" : ",") << " " << i->name;
         dumpInitializer(out, false, i->type);
         out << "\n";
-        first = false;
+        bFirst = false;
     }
     dec();
     out << "{\n}\n\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << "inline " << id_;
         out << "::" << id_ << "(";
-        first = !dumpBaseMembers(out, base, true);
+        bFirst = !dumpBaseMembers(out, base, true);
         for (std::vector< unoidl::PlainStructTypeEntity::Member >::
                  const_iterator i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
         {
-            if (!first) {
+            if (!bFirst) {
                 out << ", ";
             }
             dumpType(out, i->type, true, true);
             out << " " << i->name << "_";
-            first = false;
+            bFirst = false;
         }
         out << ")\n";
         inc();
-        first = true;
+        bFirst = true;
         if (!base.isEmpty()) {
             out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
                 << "(";
             dumpBaseMembers(out, base, false);
             out << ")\n";
-            first = false;
+            bFirst = false;
         }
         for (std::vector< unoidl::PlainStructTypeEntity::Member >::
                  const_iterator i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
         {
-            out << indent() << (first ? ":" : ",") << " " << i->name << "("
+            out << indent() << (bFirst ? ":" : ",") << " " << i->name << "("
                 << i->name << "_)\n";
-            first = false;
+            bFirst = false;
         }
         dec();
         out << "{\n}\n\n";
@@ -2710,21 +2710,21 @@ void ExceptionType::dumpHxxFile(
     out << "\ninline " << id_ << "::" << id_ << "()\n";
     inc();
     OUString base(entity_->getDirectBase());
-    bool first = true;
+    bool bFirst = true;
     if (!base.isEmpty()) {
         out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
             << "()\n";
-        first = false;
+        bFirst = false;
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity_->getDirectMembers().begin());
          i != entity_->getDirectMembers().end(); ++i)
     {
-        out << indent() << (first ? ":" : ",") << " ";
+        out << indent() << (bFirst ? ":" : ",") << " ";
         out << i->name;
         dumpInitializer(out, false, i->type);
         out << "\n";
-        first = false;
+        bFirst = false;
     }
     dec();
     out << "{";
@@ -2739,35 +2739,35 @@ void ExceptionType::dumpHxxFile(
     out << "}\n\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline " << id_ << "::" << id_ << "(";
-        first = !dumpBaseMembers(out, base, true, false);
+        bFirst = !dumpBaseMembers(out, base, true, false);
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
         {
-            if (!first) {
+            if (!bFirst) {
                 out << ", ";
             }
             dumpType(out, i->type, true, true);
             out << " " << i->name << "_";
-            first = false;
+            bFirst = false;
         }
         out << ")\n";
         inc();
-        first = true;
+        bFirst = true;
         if (!base.isEmpty()) {
             out << indent() << ": " << codemaker::cpp::scopedCppName(u2b(base))
                 << "(";
             dumpBaseMembers(out, base, false, false);
             out << ")\n";
-            first = false;
+            bFirst = false;
         }
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
         {
-            out << indent() << (first ? ":" : ",") << " " << i->name << "("
+            out << indent() << (bFirst ? ":" : ",") << " " << i->name << "("
                 << i->name << "_)\n";
-            first = false;
+            bFirst = false;
         }
         dec();
         out << "{";
@@ -2783,19 +2783,19 @@ void ExceptionType::dumpHxxFile(
     }
     out << indent() << id_ << "::" << id_ << "(" << id_
         << " const & the_other)";
-    first = true;
+    bFirst = true;
     if (!base.isEmpty()) {
         out << ": " << codemaker::cpp::scopedCppName(u2b(base))
             << "(the_other)";
-        first = false;
+        bFirst = false;
     }
     for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator i(
              entity_->getDirectMembers().begin());
          i != entity_->getDirectMembers().end(); ++i)
     {
-        out << (first ? ":" : ",") << " " << i->name << "(the_other." << i->name
+        out << (bFirst ? ":" : ",") << " " << i->name << "(the_other." << i->name
             << ")";
-        first = false;
+        bFirst = false;
     }
     out << indent() << " {}\n\n" << indent() << id_ << "::~" << id_
         << "() {}\n\n" << indent() << id_ << " & " << id_ << "::operator =("
@@ -2994,17 +2994,17 @@ void ExceptionType::dumpDeclaration(FileStream & out) {
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(";
         bool eligibleForDefaults = entity_->getDirectMembers().empty();
-        bool first = !dumpBaseMembers(out, base, true, eligibleForDefaults);
+        bool bFirst = !dumpBaseMembers(out, base, true, eligibleForDefaults);
         for (std::vector< unoidl::ExceptionTypeEntity::Member >::const_iterator
                  i(entity_->getDirectMembers().begin());
              i != entity_->getDirectMembers().end(); ++i)
         {
-            if (!first) {
+            if (!bFirst) {
                 out << ", ";
             }
             dumpType(out, i->type, true, true);
             out << " " << i->name << "_";
-            first = false;
+            bFirst = false;
         }
         out << ");\n\n";
     }

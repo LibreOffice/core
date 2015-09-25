@@ -75,31 +75,31 @@ OString createFileNameFromType( const OString& destination,
 
     sal_uInt32 length = destination.getLength();
 
-    bool withPoint = false;
+    bool bWithPoint = false;
     if (length == 0)
     {
         length++;
-        withPoint = true;
+        bWithPoint = true;
     }
 
     length += prefix.getLength() + type.getLength() + postfix.getLength();
 
-    bool withSeparator = false;
+    bool bWithSeparator = false;
     if (!(destination.endsWith("\\") || destination.endsWith("/"))
         && !(type.startsWith("\\") || type.startsWith("/")))
     {
         length++;
-        withSeparator = true;
+        bWithSeparator = true;
     }
 
     OStringBuffer fileNameBuf(length);
 
-    if (withPoint)
+    if (bWithPoint)
         fileNameBuf.append('.');
     else
         fileNameBuf.append(destination.getStr(), destination.getLength());
 
-    if (withSeparator)
+    if (bWithSeparator)
         fileNameBuf.append("/", 1);
 
     OString tmpStr(type);

@@ -770,7 +770,7 @@ void Chart2ImportTest::testTextCanOverlapXLSX()
     load("/chart2/qa/extras/data/xlsx/", "chart-text-can-overlap.xlsx");
     uno::Reference< chart::XDiagram > mxDiagram;
     uno::Reference< beans::XPropertySet > xAxisProp;
-    bool textCanOverlap = false;
+    bool bTextCanOverlap = false;
     uno::Reference< chart::XChartDocument > xChartDoc ( getChartCompFromSheet( 0, mxComponent ), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
     mxDiagram.set(xChartDoc->getDiagram());
@@ -778,9 +778,9 @@ void Chart2ImportTest::testTextCanOverlapXLSX()
     uno::Reference< chart::XAxisXSupplier > xAxisXSupp( mxDiagram, uno::UNO_QUERY );
     CPPUNIT_ASSERT(xAxisXSupp.is());
     xAxisProp = xAxisXSupp->getXAxis();
-    xAxisProp->getPropertyValue("TextCanOverlap") >>= textCanOverlap;
+    xAxisProp->getPropertyValue("TextCanOverlap") >>= bTextCanOverlap;
     // Expected value of 'TextCanOverlap' is true
-    CPPUNIT_ASSERT(textCanOverlap);
+    CPPUNIT_ASSERT(bTextCanOverlap);
 }
 */
 

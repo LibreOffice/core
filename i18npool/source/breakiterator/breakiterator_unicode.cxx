@@ -79,7 +79,7 @@ class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator
 void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocale,
         sal_Int16 rBreakType, sal_Int16 nWordType, const sal_Char *rule, const OUString& rText) throw(uno::RuntimeException)
 {
-    bool newBreak = false;
+    bool bNewBreak = false;
     UErrorCode status = U_ZERO_ERROR;
     sal_Int16 breakType = 0;
     switch (rBreakType) {
@@ -178,13 +178,13 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
         }
         if (icuBI->aBreakIterator) {
             icuBI->maLocale=rLocale;
-            newBreak=true;
+            bNewBreak=true;
         } else {
             throw uno::RuntimeException();
         }
     }
 
-    if (newBreak || icuBI->aICUText.pData != rText.pData)
+    if (bNewBreak || icuBI->aICUText.pData != rText.pData)
     {
         // UChar != sal_Unicode in MinGW
         const UChar *pText = reinterpret_cast<const UChar *>(rText.getStr());

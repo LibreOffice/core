@@ -1090,7 +1090,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
         sal_Int32 aPeriod = 2;
         double aExtrapolateForward = 0.0;
         double aExtrapolateBackward = 0.0;
-        bool aForceIntercept = false;
+        bool bForceIntercept = false;
         double aInterceptValue = 0.0;
 
         if ( xProperties.is() && !bAverageLine )
@@ -1099,8 +1099,8 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
             xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
             xProperties->getPropertyValue( "ExtrapolateForward") >>= aExtrapolateForward;
             xProperties->getPropertyValue( "ExtrapolateBackward") >>= aExtrapolateBackward;
-            xProperties->getPropertyValue( "ForceIntercept") >>= aForceIntercept;
-            if (aForceIntercept)
+            xProperties->getPropertyValue( "ForceIntercept") >>= bForceIntercept;
+            if (bForceIntercept)
                 xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
         }
 
@@ -1121,7 +1121,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries,
             fPointScale = (fMaxX - fMinX) / (fChartMaxX - fChartMinX);
         }
 
-        xCalculator->setRegressionProperties(aDegree, aForceIntercept, aInterceptValue, aPeriod);
+        xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, aPeriod);
         xCalculator->recalculateRegression( rVDataSeries.getAllX(), rVDataSeries.getAllY() );
         sal_Int32 nPointCount = 100 * fPointScale;
 

@@ -458,25 +458,25 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
 
         // Get the last number in the string to check
         sal_Int32 nNumEnd = nEndPos;
-        bool foundEnd = false;
-        bool validNumber = true;
+        bool bFoundEnd = false;
+        bool isValidNumber = true;
         sal_Int32 i = nEndPos;
 
         while (i > nSttPos)
         {
             i--;
             bool isDigit = rCC.isDigit(rTxt, i);
-            if (foundEnd)
-                validNumber |= isDigit;
+            if (bFoundEnd)
+                isValidNumber |= isDigit;
 
-            if (isDigit && !foundEnd)
+            if (isDigit && !bFoundEnd)
             {
-                foundEnd = true;
+                bFoundEnd = true;
                 nNumEnd = i;
             }
         }
 
-        if (foundEnd && validNumber) {
+        if (bFoundEnd && isValidNumber) {
             sal_Int32 nNum = rTxt.copy(nSttPos, nNumEnd - nSttPos + 1).toInt32();
 
             // Check if the characters after that number correspond to the ordinal suffix
@@ -2160,7 +2160,7 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
 
 bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
 {
-    bool aRet = false;
+    bool bRet = false;
     if( !rNew.isEmpty() && GetCplSttExceptList()->insert( rNew ).second )
     {
         MakeUserStorage_Impl();
@@ -2173,14 +2173,14 @@ bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
         FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
         aLastCheckTime = tools::Time( tools::Time::SYSTEM );
-        aRet = true;
+        bRet = true;
     }
-    return aRet;
+    return bRet;
 }
 
 bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const OUString& rNew)
 {
-    bool aRet = false;
+    bool bRet = false;
     SvStringsISortDtor* pExceptList = LoadWrdSttExceptList();
     if( !rNew.isEmpty() && pExceptList && pExceptList->insert( rNew ).second )
     {
@@ -2194,9 +2194,9 @@ bool SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const OUString& rNew)
         FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
                                             &aModifiedDate, &aModifiedTime );
         aLastCheckTime = tools::Time( tools::Time::SYSTEM );
-        aRet = true;
+        bRet = true;
     }
-    return aRet;
+    return bRet;
 }
 
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()

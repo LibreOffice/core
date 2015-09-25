@@ -306,15 +306,15 @@ private:
 
     std::stack<std::vector<ImplicitCastExpr const *>> nested;
     std::stack<CallExpr const *> calls;
-    bool externCIntFunctionDefinition = false;
+    bool bExternCIntFunctionDefinition = false;
 };
 
 bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
     calls.push(expr);
-    bool ret = RecursiveASTVisitor::TraverseCallExpr(expr);
+    bool bRet = RecursiveASTVisitor::TraverseCallExpr(expr);
     FunctionProtoType const * t;
-    bool ext = isExternCFunctionCall(expr, &t);
+    bool bExt = isExternCFunctionCall(expr, &t);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         auto j = std::find_if(
@@ -332,7 +332,7 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
             {
                 assert(t->isVariadic());
                 // ignore bool to int promotions of variadic arguments
-            } else if (ext) {
+            } else if (bExt) {
                 if (t != nullptr) {
                     assert(
                         static_cast<std::size_t>(n) < compat::getNumParams(*t));
@@ -386,13 +386,13 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
     }
     calls.pop();
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr)
 {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseCXXMemberCallExpr(expr);
+    bool bRet = RecursiveASTVisitor::TraverseCXXMemberCallExpr(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         auto j = std::find_if(
@@ -445,30 +445,30 @@ bool ImplicitBoolConversion::TraverseCXXMemberCallExpr(CXXMemberCallExpr * expr)
         reportWarning(i);
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseCXXConstructExpr(CXXConstructExpr * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseCXXConstructExpr(expr);
+    bool bRet = RecursiveASTVisitor::TraverseCXXConstructExpr(expr);
     checkCXXConstructExpr(expr);
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseCXXTemporaryObjectExpr(
     CXXTemporaryObjectExpr * expr)
 {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseCXXTemporaryObjectExpr(expr);
+    bool bRet = RecursiveASTVisitor::TraverseCXXTemporaryObjectExpr(expr);
     checkCXXConstructExpr(expr);
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseCStyleCastExpr(CStyleCastExpr * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseCStyleCastExpr(expr);
+    bool bRet = RecursiveASTVisitor::TraverseCStyleCastExpr(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (i != expr->getSubExpr()->IgnoreParens()) {
@@ -476,13 +476,13 @@ bool ImplicitBoolConversion::TraverseCStyleCastExpr(CStyleCastExpr * expr) {
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseCXXStaticCastExpr(CXXStaticCastExpr * expr)
 {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseCXXStaticCastExpr(expr);
+    bool bRet = RecursiveASTVisitor::TraverseCXXStaticCastExpr(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (i != expr->getSubExpr()->IgnoreParens()) {
@@ -490,14 +490,14 @@ bool ImplicitBoolConversion::TraverseCXXStaticCastExpr(CXXStaticCastExpr * expr)
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseCXXFunctionalCastExpr(
     CXXFunctionalCastExpr * expr)
 {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseCXXFunctionalCastExpr(expr);
+    bool bRet = RecursiveASTVisitor::TraverseCXXFunctionalCastExpr(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (i != expr->getSubExpr()->IgnoreParens()) {
@@ -505,14 +505,14 @@ bool ImplicitBoolConversion::TraverseCXXFunctionalCastExpr(
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseConditionalOperator(
     ConditionalOperator * expr)
 {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseConditionalOperator(expr);
+    bool bRet = RecursiveASTVisitor::TraverseConditionalOperator(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getTrueExpr()->IgnoreParens()
@@ -529,12 +529,12 @@ bool ImplicitBoolConversion::TraverseConditionalOperator(
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseBinLT(BinaryOperator * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseBinLT(expr);
+    bool bRet = RecursiveASTVisitor::TraverseBinLT(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
@@ -549,12 +549,12 @@ bool ImplicitBoolConversion::TraverseBinLT(BinaryOperator * expr) {
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseBinLE(BinaryOperator * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseBinLE(expr);
+    bool bRet = RecursiveASTVisitor::TraverseBinLE(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
@@ -569,12 +569,12 @@ bool ImplicitBoolConversion::TraverseBinLE(BinaryOperator * expr) {
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseBinGT(BinaryOperator * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseBinGT(expr);
+    bool bRet = RecursiveASTVisitor::TraverseBinGT(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
@@ -589,12 +589,12 @@ bool ImplicitBoolConversion::TraverseBinGT(BinaryOperator * expr) {
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseBinGE(BinaryOperator * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseBinGE(expr);
+    bool bRet = RecursiveASTVisitor::TraverseBinGE(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
@@ -609,12 +609,12 @@ bool ImplicitBoolConversion::TraverseBinGE(BinaryOperator * expr) {
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseBinEQ(BinaryOperator * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseBinEQ(expr);
+    bool bRet = RecursiveASTVisitor::TraverseBinEQ(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
@@ -629,12 +629,12 @@ bool ImplicitBoolConversion::TraverseBinEQ(BinaryOperator * expr) {
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseBinNE(BinaryOperator * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseBinNE(expr);
+    bool bRet = RecursiveASTVisitor::TraverseBinNE(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (!((i == expr->getLHS()->IgnoreParens()
@@ -649,17 +649,17 @@ bool ImplicitBoolConversion::TraverseBinNE(BinaryOperator * expr) {
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseBinAssign(BinaryOperator * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseBinAssign(expr);
+    bool bRet = RecursiveASTVisitor::TraverseBinAssign(expr);
     // /usr/include/gtk-2.0/gtk/gtktogglebutton.h: struct _GtkToggleButton:
     //  guint GSEAL (active) : 1;
     // even though <http://www.gtk.org/api/2.6/gtk/GtkToggleButton.html>:
     //  "active"               gboolean              : Read / Write
-    bool ext = false;
+    bool bExt = false;
     MemberExpr const * me = dyn_cast<MemberExpr>(expr->getLHS());
     if (me != nullptr) {
         FieldDecl const * fd = dyn_cast<FieldDecl>(me->getMemberDecl());
@@ -667,25 +667,25 @@ bool ImplicitBoolConversion::TraverseBinAssign(BinaryOperator * expr) {
             && fd->getBitWidthValue(compiler.getASTContext()) == 1)
         {
             TypedefType const * t = fd->getType()->getAs<TypedefType>();
-            ext = t != nullptr && t->getDecl()->getNameAsString() == "guint";
+            bExt = t != nullptr && t->getDecl()->getNameAsString() == "guint";
         }
     }
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (i != expr->getRHS()->IgnoreParens()
-            || !(ext || isBoolExpr(expr->getLHS())))
+            || !(bExt || isBoolExpr(expr->getLHS())))
         {
             reportWarning(i);
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseBinAndAssign(CompoundAssignOperator * expr)
 {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseBinAndAssign(expr);
+    bool bRet = RecursiveASTVisitor::TraverseBinAndAssign(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (i != expr->getRHS()->IgnoreParens()
@@ -705,13 +705,13 @@ bool ImplicitBoolConversion::TraverseBinAndAssign(CompoundAssignOperator * expr)
             << expr->getRHS()->IgnoreParenImpCasts()->getType()
             << expr->getSourceRange();
     }
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseBinOrAssign(CompoundAssignOperator * expr)
 {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseBinOrAssign(expr);
+    bool bRet = RecursiveASTVisitor::TraverseBinOrAssign(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (i != expr->getRHS()->IgnoreParens()
@@ -731,13 +731,13 @@ bool ImplicitBoolConversion::TraverseBinOrAssign(CompoundAssignOperator * expr)
             << expr->getRHS()->IgnoreParenImpCasts()->getType()
             << expr->getSourceRange();
     }
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseBinXorAssign(CompoundAssignOperator * expr)
 {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseBinXorAssign(expr);
+    bool bRet = RecursiveASTVisitor::TraverseBinXorAssign(expr);
     assert(!nested.empty());
     for (auto i: nested.top()) {
         if (i != expr->getRHS()->IgnoreParens()
@@ -757,12 +757,12 @@ bool ImplicitBoolConversion::TraverseBinXorAssign(CompoundAssignOperator * expr)
             << expr->getRHS()->IgnoreParenImpCasts()->getType()
             << expr->getSourceRange();
     }
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseReturnStmt(ReturnStmt * stmt) {
     nested.push(std::vector<ImplicitCastExpr const *>());
-    bool ret = RecursiveASTVisitor::TraverseReturnStmt(stmt);
+    bool bRet = RecursiveASTVisitor::TraverseReturnStmt(stmt);
     Expr const * expr = stmt->getRetValue();
     if (expr != nullptr) {
         ExprWithCleanups const * ec = dyn_cast<ExprWithCleanups>(expr);
@@ -773,41 +773,41 @@ bool ImplicitBoolConversion::TraverseReturnStmt(ReturnStmt * stmt) {
     }
     assert(!nested.empty());
     for (auto i: nested.top()) {
-        if (i != expr || !externCIntFunctionDefinition) {
+        if (i != expr || !bExternCIntFunctionDefinition) {
             reportWarning(i);
         }
     }
     nested.pop();
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::TraverseFunctionDecl(FunctionDecl * decl) {
-    bool ext = false;
+    bool bExt = false;
     if (hasCLanguageLinkageType(decl) && decl->isThisDeclarationADefinition()) {
         QualType t { compat::getReturnType(*decl) };
         if (t->isSpecificBuiltinType(BuiltinType::Int)
             || t->isSpecificBuiltinType(BuiltinType::UInt))
         {
-            ext = true;
+            bExt = true;
         } else {
             TypedefType const * t2 = t->getAs<TypedefType>();
             // cf. rtl_locale_equals (and sal_Int32 can be long):
             if (t2 != nullptr
                 && t2->getDecl()->getNameAsString() == "sal_Int32")
             {
-                ext = true;
+                bExt = true;
             }
         }
     }
-    if (ext) {
-        assert(!externCIntFunctionDefinition);
-        externCIntFunctionDefinition = true;
+    if (bExt) {
+        assert(!bExternCIntFunctionDefinition);
+        bExternCIntFunctionDefinition = true;
     }
-    bool ret = RecursiveASTVisitor::TraverseFunctionDecl(decl);
-    if (ext) {
-        externCIntFunctionDefinition = false;
+    bool bRet = RecursiveASTVisitor::TraverseFunctionDecl(decl);
+    if (bExt) {
+        bExternCIntFunctionDefinition = false;
     }
-    return ret;
+    return bRet;
 }
 
 bool ImplicitBoolConversion::VisitImplicitCastExpr(

@@ -85,7 +85,7 @@ void getOwnUpdateInfos(
         UpdateInfoMap& inout_map, std::vector<std::pair<Reference<deployment::XPackage>, uno::Any> > & out_errors,
         bool & out_allFound)
 {
-    bool allHaveOwnUpdateInformation = true;
+    bool bAllHaveOwnUpdateInformation = true;
     for (UpdateInfoMap::iterator i = inout_map.begin(); i != inout_map.end(); ++i)
     {
         OSL_ASSERT(i->second.extension.is());
@@ -122,10 +122,10 @@ void getOwnUpdateInfos(
         }
         else
         {
-            allHaveOwnUpdateInformation &= false;
+            bAllHaveOwnUpdateInformation &= false;
         }
     }
-    out_allFound = allHaveOwnUpdateInformation;
+    out_allFound = bAllHaveOwnUpdateInformation;
 }
 
 void getDefaultUpdateInfos(
@@ -186,16 +186,16 @@ bool onlyBundledExtensions(
     std::vector< Reference<deployment::XPackage > > const * extensionList)
 {
     OSL_ASSERT(xExtMgr.is());
-    bool onlyBundled = true;
+    bool bOnlyBundled = true;
     if (extensionList)
     {
         typedef std::vector<Reference<deployment::XPackage > >::const_iterator CIT;
-        for (CIT i(extensionList->begin()), aEnd(extensionList->end()); onlyBundled && i != aEnd; ++i)
+        for (CIT i(extensionList->begin()), aEnd(extensionList->end()); bOnlyBundled && i != aEnd; ++i)
         {
             Sequence<Reference<deployment::XPackage> > seqExt = xExtMgr->getExtensionsWithSameIdentifier(
                 dp_misc::getIdentifier(*i), (*i)->getName(), Reference<ucb::XCommandEnvironment>());
 
-            onlyBundled = containsBundledOnly(seqExt);
+            bOnlyBundled = containsBundledOnly(seqExt);
         }
     }
     else
@@ -203,12 +203,12 @@ bool onlyBundledExtensions(
         const uno::Sequence< uno::Sequence< Reference<deployment::XPackage > > > seqAllExt =
             xExtMgr->getAllExtensions(Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>());
 
-        for (int pos(0), nLen(seqAllExt.getLength()); onlyBundled && pos != nLen; ++pos)
+        for (int pos(0), nLen(seqAllExt.getLength()); bOnlyBundled && pos != nLen; ++pos)
         {
-            onlyBundled = containsBundledOnly(seqAllExt[pos]);
+            bOnlyBundled = containsBundledOnly(seqAllExt[pos]);
         }
     }
-    return onlyBundled;
+    return bOnlyBundled;
 }
 
 } // anon namespace
@@ -381,10 +381,10 @@ UpdateInfoMap getOnlineUpdateInfos(
 
     //Now find the update information for the extensions which provide their own
     //URLs to update information.
-    bool allInfosObtained = false;
-    getOwnUpdateInfos(xContext, updateInformation, infoMap, out_errors, allInfosObtained);
+    bool bAllInfosObtained = false;
+    getOwnUpdateInfos(xContext, updateInformation, infoMap, out_errors, bAllInfosObtained);
 
-    if (!allInfosObtained)
+    if (!bAllInfosObtained)
         getDefaultUpdateInfos(xContext, updateInformation, infoMap, out_errors);
     return infoMap;
 }

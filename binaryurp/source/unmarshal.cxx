@@ -321,14 +321,14 @@ BinaryAny Unmarshal::readValue(css::uno::TypeDescription const & type) {
             type.makeComplete();
             typelib_EnumTypeDescription * etd =
                 reinterpret_cast< typelib_EnumTypeDescription * >(type.get());
-            bool found = false;
+            bool bFound = false;
             for (sal_Int32 i = 0; i != etd->nEnumValues; ++i) {
                 if (etd->pEnumValues[i] == v) {
-                    found = true;
+                    bFound = true;
                     break;
                 }
             }
-            if (!found) {
+            if (!bFound) {
                 throw css::io::IOException(
                     "binaryurp::Unmarshal: unknown enum value");
             }
