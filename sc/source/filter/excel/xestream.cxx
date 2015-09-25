@@ -928,9 +928,10 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     return pStream;
 }
 
-XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rCC )
+XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rCC, bool bExportVBA )
     : XmlFilterBase( rCC ),
-      mpRoot( NULL )
+      mpRoot( NULL ),
+      mbExportVBA(bExportVBA)
 {
 }
 
@@ -1088,25 +1089,34 @@ bool XclExpXmlStream::exportDocument()
         ScDocShell::GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );
 
     OUString const workbook = "xl/workbook.xml";
+    const char* pWorkbookContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml";
+
+
+    if (mbExportVBA)
+        pWorkbookContentType = "application/vnd.ms-excel.sheet.macroEnabled.main+xml";
+
     PushStream( CreateOutputStream( workbook, workbook,
                                     Reference <XOutputStream>(),
-                                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
+                                    pWorkbookContentType,
                                     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) );
 
-    VbaExport aExport(getModel());
-    if (aExport.containsVBAProject())
+    if (mbExportVBA)
     {
-        SvMemoryStream aVbaStream(4096, 4096);
-        tools::SvRef<SotStorage> pVBAStorage(new SotStorage(aVbaStream));
-        aExport.exportVBA(pVBAStorage);
-        aVbaStream.Seek(0);
-        css::uno::Reference<css::io::XInputStream> xVBAStream(
-                new utl::OInputStreamWrapper(aVbaStream));
-        css::uno::Reference<css::io::XOutputStream> xVBAOutput =
-            openFragmentStream("xl/vbaProject.bin", "VBA");
-        comphelper::OStorageHelper::CopyInputToOutput(xVBAStream, xVBAOutput);
+        VbaExport aExport(getModel());
+        if (aExport.containsVBAProject())
+        {
+            SvMemoryStream aVbaStream(4096, 4096);
+            tools::SvRef<SotStorage> pVBAStorage(new SotStorage(aVbaStream));
+            aExport.exportVBA(pVBAStorage);
+            aVbaStream.Seek(0);
+            css::uno::Reference<css::io::XInputStream> xVBAStream(
+                    new utl::OInputStreamWrapper(aVbaStream));
+            css::uno::Reference<css::io::XOutputStream> xVBAOutput =
+                openFragmentStream("xl/vbaProject.bin", "application/vnd.ms-office.vbaProject");
+            comphelper::OStorageHelper::CopyInputToOutput(xVBAStream, xVBAOutput);
 
-        addRelation(GetCurrentStream()->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
+            addRelation(GetCurrentStream()->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
+        }
     }
 
     // destruct at the end of the block

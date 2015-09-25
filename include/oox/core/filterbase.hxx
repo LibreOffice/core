@@ -245,6 +245,7 @@ public:
     virtual void SAL_CALL cancel()
                             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
+    bool exportVBA() const;
 
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >

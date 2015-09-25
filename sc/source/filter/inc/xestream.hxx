@@ -293,7 +293,7 @@ public:
 class XclExpXmlStream : public oox::core::XmlFilterBase
 {
 public:
-    XclExpXmlStream( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rCC );
+    XclExpXmlStream( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rCC, bool bExportVBA );
     virtual ~XclExpXmlStream();
 
     /** Returns the filter root data. */
@@ -374,6 +374,8 @@ private:
     const XclExpRoot*                           mpRoot;
     std::stack< sax_fastparser::FSHelperPtr >   maStreams;
     XclExpXmlPathToStateMap                     maOpenedStreamMap;
+
+    bool mbExportVBA;
 };
 
 #endif

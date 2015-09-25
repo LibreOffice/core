@@ -148,6 +148,8 @@ struct FilterBaseImpl
     Reference< XInteractionHandler >    mxInteractionHandler;
     Reference< XShape >                 mxParentShape;
 
+    bool mbExportVBA;
+
     explicit            FilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
 
     void                setDocumentModel( const Reference< XComponent >& rxComponent ) throw( IllegalArgumentException );
@@ -159,7 +161,8 @@ FilterBaseImpl::FilterBaseImpl( const Reference< XComponentContext >& rxContext 
     meDirection( FILTERDIRECTION_UNKNOWN ),
     meVersion( ECMA_DIALECT ),
     mxComponentContext( rxContext, UNO_SET_THROW ),
-    mxComponentFactory( rxContext->getServiceManager(), UNO_SET_THROW )
+    mxComponentFactory( rxContext->getServiceManager(), UNO_SET_THROW ),
+    mbExportVBA(false)
 {
 }
 
@@ -417,6 +420,30 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exce
     catch( Exception& )
     {
     }
+
+    if (rArgs.getLength() >= 1)
+    {
+        Sequence<css::beans::PropertyValue> aSeq;
+        rArgs[0] >>= aSeq;
+        sal_Int32 nLen = aSeq.getLength();
+        for (sal_Int32 i = 0; i < nLen; ++i)
+        {
+            css::beans::PropertyValue& rVal = aSeq[i];
+            if (rVal.Name == "UserData")
+            {
+                css::uno::Sequence<OUString> aUserDataSeq;
+                rVal.Value >>= aUserDataSeq;
+                sal_Int32 nUserDataSeqLen = aUserDataSeq.getLength();
+                for (sal_Int32 j = 0; j < nUserDataSeqLen; ++j)
+                {
+                    if (aUserDataSeq[j] == "macro-enabled")
+                    {
+                        mxImpl->mbExportVBA = true;
+                    }
+                }
+            }
+        }
+    }
 }
 
 // com.sun.star.document.XImporter interface
@@ -551,6 +578,11 @@ GraphicHelper* FilterBase::implCreateGraphicHelper() const
 {
     // default: return base implementation without any special behaviour
     return new GraphicHelper( mxImpl->mxComponentContext, mxImpl->mxTargetFrame, mxImpl->mxStorage );
+}
+
+bool FilterBase::exportVBA() const
+{
+    return mxImpl->mbExportVBA;
 }
 
 } // namespace core

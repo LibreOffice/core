@@ -158,8 +158,9 @@ sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::
 
     if ( isExportFilter() )
     {
+        bool bExportVBA = exportVBA();
         Reference< XExporter > xExporter(
-            new XclExpXmlStream( getComponentContext() ) );
+            new XclExpXmlStream( getComponentContext(), bExportVBA ) );
 
         Reference< XComponent > xDocument( getModel(), UNO_QUERY );
         Reference< XFilter > xFilter( xExporter, UNO_QUERY );
