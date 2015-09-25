@@ -66,6 +66,12 @@ void exportUTF16String(SvStream& rStrm, const OUString& rString)
     }
 }
 
+bool isWorkbook(css::uno::Reference<css::uno::XInterface> xInterface)
+{
+    css::uno::Reference<ooo::vba::excel::XWorkbook> xWorkbook(xInterface, css::uno::UNO_QUERY);
+    return xWorkbook.is();
+}
+
 }
 
 VBACompressionChunk::VBACompressionChunk(SvStream& rCompressedStream, const sal_uInt8* pData, sal_Size nChunkSize)
@@ -636,14 +642,18 @@ void exportDirStream(SvStream& rStrm, css::uno::Reference<css::container::XNameC
 }
 
 // section 2.3.4.3 Module Stream
-void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUString& aElementName, sal_Int32 nModuleType)
+void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUString& aElementName, css::script::ModuleInfo& rInfo)
 {
     SvMemoryStream aModuleStream(4096, 4096);
 
     exportString(aModuleStream, "Attribute VB_Name = \"" + aElementName + "\"\r\n");
-    if (nModuleType == 4)
+    if (rInfo.ModuleType == 4)
     {
-        exportString(aModuleStream, "Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n");
+        if (isWorkbook(rInfo.ModuleObject))
+            exportString(aModuleStream, "Attribute VB_Base = \"0{00020819-0000-0000-C000-000000000046}\"\r\n");
+        else
+            exportString(aModuleStream, "Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n");
+
         exportString(aModuleStream, "Attribute VB_GlobalNameSpace = False\r\n");
         exportString(aModuleStream, "Attribute VB_Creatable = False\r\n");
         exportString(aModuleStream, "Attribute VB_PredeclaredId = True\r\n");
@@ -834,8 +844,8 @@ void getCorrectExportOrder(css::uno::Reference<css::container::XNameContainer> x
     for (sal_Int32 i = 0; i < n; ++i)
     {
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(aElementNames[i]);
-        css::uno::Reference<ooo::vba::excel::XWorkbook> xWorkbook(aModuleInfo.ModuleObject, css::uno::UNO_QUERY);
-        if (xWorkbook.is())
+        bool bWorkbook = isWorkbook(aModuleInfo.ModuleObject);
+        if (bWorkbook)
         {
             nWorkbookIndex = i;
             rLibraryMap[nCurrentId] = i;
@@ -952,7 +962,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         OUString aSourceCode;
         aCode >>= aSourceCode;
-        exportModuleStream(*pModuleStream, aSourceCode, rModuleName, aModuleInfo.ModuleType);
+        exportModuleStream(*pModuleStream, aSourceCode, rModuleName, aModuleInfo);
         pModuleStream->Commit();
     }
 
