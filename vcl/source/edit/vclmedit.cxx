@@ -1439,24 +1439,24 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
 
 bool VclMultiLineEdit::Notify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     if( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
-        nDone = pImpVclMEdit->HandleCommand( *rNEvt.GetCommandEvent() );
+        bDone = pImpVclMEdit->HandleCommand( *rNEvt.GetCommandEvent() );
     }
-    return nDone || Edit::Notify( rNEvt );
+    return bDone || Edit::Notify( rNEvt );
 }
 
 bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
 
     if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && ( !GetTextView()->IsCursorEnabled() ) )
     {
         const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();
         if ( !rKEvent.GetKeyCode().IsShift() && ( rKEvent.GetKeyCode().GetGroup() == KEYGROUP_CURSOR ) )
         {
-            nDone = true;
+            bDone = true;
             TextSelection aSel = pImpVclMEdit->GetTextWindow()->GetTextView()->GetSelection();
             if ( aSel.HasRange() )
             {
@@ -1519,14 +1519,14 @@ bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
                     break;
                     default:
                     {
-                        nDone = false;
+                        bDone = false;
                     }
                 }
             }
         }
     }
 
-    return nDone || Edit::PreNotify( rNEvt );
+    return bDone || Edit::PreNotify( rNEvt );
 }
 
 // Internals for derived classes, e.g. TextComponent

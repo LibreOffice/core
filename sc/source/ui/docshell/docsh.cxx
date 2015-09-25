@@ -2539,11 +2539,11 @@ bool ScDocShell::PrepareClose( bool bUI )
     }
     // end handler code
 
-    bool nRet = SfxObjectShell::PrepareClose( bUI );
-    if (nRet) // true == close
+    bool bRet = SfxObjectShell::PrepareClose( bUI );
+    if (bRet) // true == close
         aDocument.EnableIdle(false); // Do not mess around with it anymore!
 
-    return nRet;
+    return bRet;
 }
 
 void ScDocShell::PrepareReload()

@@ -435,7 +435,7 @@ void BibToolBar::SetQueryString(const OUString& aStr)
 
 bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nResult = true;
+    bool bResult = true;
 
     MouseNotifyEvent nSwitch=rNEvt.GetType();
     if(aEdQuery->HasFocus() && nSwitch==MouseNotifyEvent::KEYINPUT)
@@ -452,14 +452,14 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
             pPropertyVal[1].Name="QueryField";
             pPropertyVal[1].Value <<= aQueryField;
             SendDispatch(TBC_BT_AUTOFILTER,aPropVal);
-            return nResult;
+            return bResult;
         }
 
     }
 
-    nResult=ToolBox::PreNotify(rNEvt);
+    bResult=ToolBox::PreNotify(rNEvt);
 
-    return nResult;
+    return bResult;
 }
 
 IMPL_LINK( BibToolBar, SelHdl, ListBox*, /*pLb*/ )

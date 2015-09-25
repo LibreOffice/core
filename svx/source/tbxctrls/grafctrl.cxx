@@ -376,7 +376,7 @@ bool ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
 
 bool ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = ListBox::Notify( rNEvt );
+    bool bHandled = ListBox::Notify( rNEvt );
 
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -387,7 +387,7 @@ bool ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
             case KEY_RETURN:
             {
                 Select();
-                nHandled = true;
+                bHandled = true;
             }
             break;
 
@@ -395,13 +395,13 @@ bool ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
             {
                 SelectEntryPos( mnCurPos );
                 ImplReleaseFocus();
-                nHandled = true;
+                bHandled = true;
             }
             break;
         }
     }
 
-    return nHandled;
+    return bHandled;
 }
 
 void ImplGrafModeControl::ImplReleaseFocus()

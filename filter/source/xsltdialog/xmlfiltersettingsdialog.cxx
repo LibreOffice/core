@@ -986,8 +986,8 @@ void XMLFilterSettingsDialog::onClose()
 bool XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
 {
     // Because of tab control first call the base class.
-    bool nRet = ModelessDialog::Notify( rNEvt );
-    if ( !nRet )
+    bool bRet = ModelessDialog::Notify( rNEvt );
+    if ( !bRet )
     {
         if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
@@ -1004,7 +1004,7 @@ bool XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return nRet;
+    return bRet;
 }
 
 void XMLFilterSettingsDialog::disposeFilterList()
@@ -1386,12 +1386,12 @@ VCL_BUILDER_FACTORY(SvxPathControl)
 
 bool SvxPathControl::Notify(NotifyEvent& rNEvt)
 {
-    bool nRet = Window::Notify(rNEvt);
+    bool bRet = Window::Notify(rNEvt);
 
     if ( m_pFocusCtrl && rNEvt.GetWindow() != m_pFocusCtrl && rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         m_pFocusCtrl->GrabFocus();
 
-    return nRet;
+    return bRet;
 }
 
 XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl)

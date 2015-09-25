@@ -47,7 +47,7 @@ public:
     virtual void                    EndSetClipRegion() SAL_OVERRIDE;
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void                    Show( bool bVisible ) SAL_OVERRIDE;
-    virtual void                    Enable( bool nEnable ) SAL_OVERRIDE;
+    virtual void                    Enable( bool bEnable ) SAL_OVERRIDE;
     virtual void                    GrabFocus() SAL_OVERRIDE;
     virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
 };

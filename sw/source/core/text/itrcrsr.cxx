@@ -1259,7 +1259,7 @@ bool SwTextCursor::GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
 
 // Return: Offset in String
 sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
-                                    bool nChgNode, SwCrsrMoveState* pCMS ) const
+                                    bool bChgNode, SwCrsrMoveState* pCMS ) const
 {
     // If necessary, as catch up, do the adjustment
     GetAdjusted();
@@ -1468,7 +1468,7 @@ sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 sal_uInt16 nHeight = pPor->Height();
                 if ( !nHeight || nHeight > nWidth )
                     nHeight = nWidth;
-                if( nChgNode && nWidth - nHeight/2 > nX )
+                if( bChgNode && nWidth - nHeight/2 > nX )
                     --nCurrStart;
             }
         }
@@ -1479,7 +1479,7 @@ sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         if ( nWidth )
         {
             // Else we may not enter the character-supplying frame...
-            if( !( nChgNode && pPos && pPor->IsFlyCntPortion() ) )
+            if( !( bChgNode && pPos && pPor->IsFlyCntPortion() ) )
             {
                 if ( pPor->InFieldGrp() ||
                      ( pPor->IsMultiPortion() &&
@@ -1585,7 +1585,7 @@ sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             }
 
             return GetCrsrOfst( pPos, Point( GetLineStart() + nX, rPoint.Y() ),
-                                nChgNode, pCMS );
+                                bChgNode, pCMS );
         }
         if( pPor->InTextGrp() )
         {
@@ -1694,7 +1694,7 @@ sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         }
         else
         {
-            if( nChgNode && pPos && pPor->IsFlyCntPortion()
+            if( bChgNode && pPos && pPor->IsFlyCntPortion()
                 && !static_cast<SwFlyCntPortion*>(pPor)->IsDraw() )
             {
                 // JP 24.11.94: if the Position is not in Fly, then
@@ -1702,7 +1702,7 @@ sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 //              (BugId: 9692 + Change in feshview)
                 SwFlyInCntFrm *pTmp = static_cast<SwFlyCntPortion*>(pPor)->GetFlyFrm();
                 SwFrm* pLower = pTmp->GetLower();
-                bool bChgNode = pLower
+                bool bChgNodeInner = pLower
                     && (pLower->IsTextFrm() || pLower->IsLayoutFrm());
                 Point aTmpPoint( rPoint );
 
@@ -1712,7 +1712,7 @@ sal_Int32 SwTextCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 if ( pFrm->IsVertical() )
                     pFrm->SwitchHorizontalToVertical( aTmpPoint );
 
-                if( bChgNode && pTmp->Frm().IsInside( aTmpPoint ) &&
+                if( bChgNodeInner && pTmp->Frm().IsInside( aTmpPoint ) &&
                     !( pTmp->IsProtected() ) )
                 {
                     nLength = static_cast<SwFlyCntPortion*>(pPor)->

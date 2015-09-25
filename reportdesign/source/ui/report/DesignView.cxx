@@ -180,7 +180,7 @@ void ODesignView::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool ODesignView::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nRet = ODataView::PreNotify(rNEvt); // 1 := has to be handled here
+    bool bRet = ODataView::PreNotify(rNEvt); // 1 := has to be handled here
     switch(rNEvt.GetType())
     {
         case MouseNotifyEvent::KEYINPUT:
@@ -193,14 +193,14 @@ bool ODesignView::PreNotify( NotifyEvent& rNEvt )
             {
                 const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
                 if ( handleKeyEvent(*pKeyEvent) )
-                    nRet = true;
-                else if ( nRet && m_pAccel.get() )
+                    bRet = true;
+                else if ( bRet && m_pAccel.get() )
                 {
                     const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
                     util::URL aUrl;
                     aUrl.Complete = m_pAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rCode));
                     if ( aUrl.Complete.isEmpty() || !m_xController->isCommandEnabled( aUrl.Complete ) )
-                        nRet = false;
+                        bRet = false;
                 }
             }
             break;
@@ -208,7 +208,7 @@ bool ODesignView::PreNotify( NotifyEvent& rNEvt )
             break;
     }
 
-    return nRet;
+    return bRet;
 }
 
 void ODesignView::resizeDocumentView(Rectangle& _rPlayground)

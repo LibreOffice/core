@@ -92,7 +92,7 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
 
 bool Window::Notify( NotifyEvent& rNEvt )
 {
-    bool nRet = false;
+    bool bRet = false;
 
     if (IsDisposed())
         return false;
@@ -174,7 +174,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
             if ( ImplIsOverlapWindow() ||
                  ((getNonLayoutRealParent(this)->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
             {
-                nRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == MouseNotifyEvent::KEYINPUT );
+                bRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == MouseNotifyEvent::KEYINPUT );
             }
         }
         else if ( (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS) || (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS) )
@@ -191,13 +191,13 @@ bool Window::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    if ( !nRet )
+    if ( !bRet )
     {
         if ( mpWindowImpl->mpParent && !ImplIsOverlapWindow() )
-            nRet = mpWindowImpl->mpParent->CompatNotify( rNEvt );
+            bRet = mpWindowImpl->mpParent->CompatNotify( rNEvt );
     }
 
-    return nRet;
+    return bRet;
 }
 
 void Window::CallEventListeners( sal_uLong nEvent, void* pData )

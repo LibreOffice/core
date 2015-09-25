@@ -30,8 +30,8 @@ bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess* pReadAccess)
     long nHeightHalf = nHeight / 2;
     long nWidthHalf = nWidth / 2;
 
-    bool nHeightEven = (nHeight % 2) == 0;
-    bool nWidthEven = (nWidth % 2) == 0;
+    bool bHeightEven = (nHeight % 2) == 0;
+    bool bWidthEven = (nWidth % 2) == 0;
 
     for (long y = 0; y < nHeightHalf; ++y)
     {
@@ -52,7 +52,7 @@ bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess* pReadAccess)
         }
     }
 
-    if (nWidthEven)
+    if (bWidthEven)
     {
         for (long y = 0; y < nHeightHalf; ++y)
         {
@@ -63,7 +63,7 @@ bool BitmapSymmetryCheck::checkImpl(BitmapReadAccess* pReadAccess)
         }
     }
 
-    if (nHeightEven)
+    if (bHeightEven)
     {
         for (long x = 0; x < nWidthHalf; ++x)
         {

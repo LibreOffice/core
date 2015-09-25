@@ -141,10 +141,10 @@ namespace
     }
     bool OTablePreviewWindow::Notify( NotifyEvent& rNEvt )
     {
-        bool nRet = Window::Notify( rNEvt );
+        bool bRet = Window::Notify( rNEvt );
         if ( rNEvt.GetType() == MouseNotifyEvent::INPUTENABLE && IsInputEnabled() )
             PostUserEvent( LINK( this, OTablePreviewWindow, OnDisableInput), NULL, true );
-        return nRet;
+        return bRet;
     }
     IMPL_LINK_NOARG_TYPED(OTablePreviewWindow, OnDisableInput, void*, void)
     {

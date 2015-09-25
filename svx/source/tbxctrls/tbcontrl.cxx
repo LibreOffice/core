@@ -498,7 +498,7 @@ bool SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
 
 bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = false;
+    bool bHandled = false;
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -513,7 +513,7 @@ bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
                     const sal_Int32 nItem = GetSelectEntryPos() - 1;
                     if(nItem < MAX_STYLES_ENTRIES)
                         m_pButtons[nItem]->ExecuteMenu();
-                    nHandled = true;
+                    bHandled = true;
                 }
                 break;
             }
@@ -523,7 +523,7 @@ bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
                 if ( KEY_TAB == nCode )
                     bRelease = false;
                 else
-                    nHandled = true;
+                    bHandled = true;
                 Select();
                 break;
             }
@@ -531,11 +531,11 @@ bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_ESCAPE:
                 SelectEntryPos( nCurSel );
                 ReleaseFocus();
-                nHandled = true;
+                bHandled = true;
                 break;
         }
     }
-    return nHandled || ComboBox::Notify( rNEvt );
+    return bHandled || ComboBox::Notify( rNEvt );
 }
 
 void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1017,7 +1017,7 @@ bool SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
 
 bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = false;
+    bool bHandled = false;
     mbEndPreview = false;
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYUP )
         mbEndPreview = true;
@@ -1034,7 +1034,7 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
                 if ( KEY_TAB == nCode )
                     bRelease = false;
                 else
-                    nHandled = true;
+                    bHandled = true;
                 Select();
                 break;
             }
@@ -1055,7 +1055,7 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
         EndPreview();
     }
 
-    return nHandled || FontNameBox::Notify( rNEvt );
+    return bHandled || FontNameBox::Notify( rNEvt );
 }
 
 void SvxFontNameBox_Impl::SetOptimalSize()

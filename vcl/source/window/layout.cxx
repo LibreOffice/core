@@ -1823,7 +1823,7 @@ bool VclScrolledWindow::set_property(const OString &rKey, const OString &rValue)
 
 bool VclScrolledWindow::Notify(NotifyEvent& rNEvt)
 {
-    bool nDone = false;
+    bool bDone = false;
     if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
@@ -1832,12 +1832,12 @@ bool VclScrolledWindow::Notify(NotifyEvent& rNEvt)
             const CommandWheelData* pData = rCEvt.GetWheelData();
             if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
             {
-                nDone = HandleScrollCommand(rCEvt, m_pHScroll, m_pVScroll);
+                bDone = HandleScrollCommand(rCEvt, m_pHScroll, m_pVScroll);
             }
         }
     }
 
-    return nDone || VclBin::Notify( rNEvt );
+    return bDone || VclBin::Notify( rNEvt );
 }
 
 void VclViewport::setAllocation(const Size &rAllocation)

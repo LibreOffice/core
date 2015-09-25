@@ -1282,7 +1282,7 @@ VCL_BUILDER_DECL_FACTORY(SelectionListBox)
 
 bool SelectionListBox::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nHandled = ListBox::PreNotify( rNEvt );
+    bool bHandled = ListBox::PreNotify( rNEvt );
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYUP )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
@@ -1299,7 +1299,7 @@ bool SelectionListBox::PreNotify( NotifyEvent& rNEvt )
             bCallAddSelection = true;
     }
 
-    return nHandled;
+    return bHandled;
 }
 
 void SwFieldVarPage::FillUserData()

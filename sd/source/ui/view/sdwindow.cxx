@@ -268,15 +268,15 @@ void Window::Command(const CommandEvent& rCEvt)
 
 bool Window::Notify( NotifyEvent& rNEvt )
 {
-    bool nResult = false;
+    bool bResult = false;
     if ( mpViewShell )
     {
-        nResult = mpViewShell->Notify(rNEvt, this);
+        bResult = mpViewShell->Notify(rNEvt, this);
     }
-    if( !nResult )
-        nResult = vcl::Window::Notify( rNEvt );
+    if( !bResult )
+        bResult = vcl::Window::Notify( rNEvt );
 
-    return nResult;
+    return bResult;
 }
 
 void Window::RequestHelp(const HelpEvent& rEvt)

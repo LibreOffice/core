@@ -373,11 +373,11 @@ namespace slideshow
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
-            bool nTmp;
+            bool bTmp;
             // try to extract bool value
-            if( (rSourceAny >>= nTmp) )
+            if( (rSourceAny >>= bTmp) )
             {
-                o_rValue = nTmp;
+                o_rValue = bTmp;
 
                 // succeeded
                 return true;
