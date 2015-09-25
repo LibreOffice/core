@@ -51,8 +51,6 @@ namespace comphelper
         See OListenerContainerBase for an implementation which even saves
         you some more work, by doing the casts for you.
 
-        @see http://www.openoffice.org/servlets/ReadMsg?list=interface-announce&msgId=494345
-        @see OListenerContainerBase
     */
     class COMPHELPER_DLLPUBLIC OListenerContainer
     {
