@@ -69,17 +69,17 @@ using namespace ::com::sun::star;
 
 static bool SwWw8ReadScaling(long& rX, long& rY, tools::SvRef<SotStorage>& rSrc1)
 {
-    // Skalierungsfaktoren holen:
-    //      Informationen in PIC-Stream ( durch ausprobieren )
+    // Getting the scaling factor:
+    //      Information in the PIC-stream (by trying out)
     //      0x0  (l)cb
     //      0x08 .. 0x0a Flags ??
-    //      0x08 Inh: 1 / 0
-    //      0x09 Inh: 0,8,0x18
-    //      0x0a Inh: immer 8, MAP_ANISOTROPIC ???
-    //      0x0b Inh: immer 0
-    //      0x0c, 0x10 Originalgroesse x,y in 1/100 mm
-    //      0x14, 0x16 Originalgroesse x,y in tw
-    //      0x2c, 0x30 Skalierung x,y in Promille
+    //      0x08 contains: 1 / 0
+    //      0x09 contains: 0,8,0x18
+    //      0x0a contains: always 8, MAP_ANISOTROPIC ???
+    //      0x0b contains: always 0
+    //      0x0c, 0x10 original size x,y in 1/100 mm
+    //      0x14, 0x16 original size x,y in tw
+    //      0x2c, 0x30 scaling x,y in per thousand
     //      0x34, 0x38, 0x3c, 0x40 Crop Left, Top, Right, Bot in tw
 
     tools::SvRef<SotStorageStream> xSrc3 = rSrc1->OpenSotStream( OUString("\3PIC"),
@@ -113,7 +113,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, tools::SvRef<SotStorage>& rSrc1
     rY = nOrgHeight - nCropTop  - nCropBottom;
     if (10 > nScaleX || 65536 < nScaleX || 10 > nScaleY || 65536 < nScaleY)
     {
-        OSL_ENSURE( !pS, "+OLE-Scalinginformation in PIC-Stream wrong" );
+        OSL_ENSURE( !pS, "+OLE-scaling information in PIC-stream wrong" );
         return false;
     }
     else
@@ -132,7 +132,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     SotStorageStream* pSt = xSrc2;
     pSt->SetEndian( SvStreamEndian::LITTLE );
     sal_uLong nRead = pSt->Read( pMfp, sizeof(*pMfp ) );
-                                // Mini-Placable-Header lesen
+                                // read mini-placable-header
     if (nRead != sizeof(*pMfp))
         return false;
 
@@ -144,30 +144,29 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 
     if( pMfp->mm == 94 || pMfp->mm == 99 )
     {
-        OSL_ENSURE( !pSt, "+OLE: Falscher Metafile-Typ" );
+        OSL_ENSURE( !pSt, "+OLE: wrong metafile type" );
         return false;
     }
     if( pMfp->mm != 8 )
     {
-        OSL_ENSURE( !pSt, "+OLE: Falscher Metafile-Typ ( nicht Anisotropic )" );
+        OSL_ENSURE( !pSt, "+OLE: wrong mMetafile type (not anisotropic)" );
     }
     if( !pMfp->xExt || !pMfp->yExt )
     {
-        OSL_ENSURE( !pSt, "+OLE: Groesse von 0 ???" );
+        OSL_ENSURE( !pSt, "+OLE: size of 0?" );
         return false;
     }
-    bool bOk = ReadWindowMetafile( *pSt, rWMF, NULL );   // WMF lesen
-                    // *pSt >> aWMF  geht nicht ohne placable Header
+    bool bOk = ReadWindowMetafile( *pSt, rWMF, NULL );   // read WMF
+                    // *pSt >> aWMF  doesn't work without the placable header
     if (!bOk || pSt->GetError() || rWMF.GetActionSize() == 0)
     {
-        OSL_ENSURE( !pSt, "+OLE: Konnte Metafile nicht lesen" );
+        OSL_ENSURE( !pSt, "+OLE: could not read the metafile" );
         return false;
     }
 
     rWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
 
-    // MetaFile auf neue Groesse skalieren und
-    // neue Groesse am MetaFile setzen
+    // Scale MetaFile to new size and save new size to MetaFile
     Size        aOldSiz( rWMF.GetPrefSize() );
     Size        aNewSiz( pMfp->xExt, pMfp->yExt );
     Fraction    aFracX( aNewSiz.Width(), aOldSiz.Width() );
@@ -181,19 +180,19 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
 
 static bool SwWw6ReadMacPICTStream(Graphic& rGraph, tools::SvRef<SotStorage>& rSrc1)
 {
-    // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
+    // 03-META-stream does not exist. Maybe a 03-PICT?
     tools::SvRef<SotStorageStream> xSrc4 = rSrc1->OpenSotStream(OUString("\3PICT"));
     SotStorageStream* pStp = xSrc4;
     pStp->SetEndian( SvStreamEndian::LITTLE );
-    sal_uInt8 aTestA[10];        // Ist der 01Ole-Stream ueberhaupt vorhanden
+    sal_uInt8 aTestA[10];        // Does the 01Ole-stream even exist?
     sal_uLong nReadTst = pStp->Read( aTestA, sizeof( aTestA ) );
     if (nReadTst != sizeof(aTestA))
         return false;
 
     pStp->Seek( STREAM_SEEK_TO_BEGIN );
 
-    // Mac-Pict steht im 03PICT-StorageStream allerdings ohne die ersten 512
-    // Bytes, die bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
+    // Mac-Pict is in the 03PICT-StorageStream but without the first 512 Bytes
+    // which are not relevant in a MAC-PICT (they are not evaluated)
     return SwWW8ImplReader::GetPictGrafFromStream(rGraph, *pStp);
 }
 
@@ -214,10 +213,8 @@ SwFlyFrameFormat* SwWW8ImplReader::InsertOle(SdrOle2Obj &rObject,
         SvGlobalName aClassName( xClass->getClassID() );
         if (SotExchange::IsMath(aClassName))
         {
-            /*
-            StarMath sets it own fixed size, so its counter productive to use the
-            size word says it is. i.e. Don't attempt to override its size.
-            */
+            // StarMath sets it own fixed size, so its counter productive to use
+            // the size word says it is. i.e. Don't attempt to override its size.
             pMathFlySet = new SfxItemSet(rFlySet);
             pMathFlySet->ClearItem(RES_FRM_SIZE);
         }
@@ -264,7 +261,7 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
 
         pFlySet = pTempSet;
 
-        // Abstand/Umrandung raus
+        // Remove distance/borders
         if (!m_bNewDoc)
             Reader::ResetFrameFormatAttrs( *pTempSet );
 
@@ -281,18 +278,18 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
 
         if( m_pSFlyPara )
         {
-            // OLE im Rahmen ?  ok, Rahmen auf Bildgroesse vergroessern (
-            // nur wenn Auto-Breite )
+            // Resize the frame to the picture size if there is an OLE object
+            // in the frame (only if auto-width)
             m_pSFlyPara->BoxUpWidth( aSizeTwip.Width() );
         }
     }
 
-    if (pRet)       // Ole-Object wurde eingefuegt
+    if (pRet)       // OLE object was inserted
     {
         if (pRet->ISA(SdrOle2Obj))
         {
             pFormat = InsertOle(*static_cast<SdrOle2Obj*>(pRet), *pFlySet, pGrfSet);
-            SdrObject::Free( pRet );        // das brauchen wir nicht mehr
+            SdrObject::Free( pRet );        // we don't need this anymore
         }
         else
             pFormat = m_rDoc.getIDocumentContentOperations().InsertDrawObj(*m_pPaM, *pRet, *pFlySet );
@@ -316,9 +313,7 @@ bool SwWW8ImplReader::ImportOleWMF(tools::SvRef<SotStorage> xSrc1,GDIMetaFile &r
     OLE_MFP aMfp;
     if( SwWw6ReadMetaStream( rWMF, &aMfp, xSrc1 ) )
     {
-        /*
-        take scaling factor as found in PIC and apply it to graphic.
-        */
+        // take scaling factor as found in PIC and apply it to graphic.
         SwWw8ReadScaling( rX, rY, xSrc1 );
         Size aFinalSize, aOrigSize;
         aFinalSize.Width() = rX;
@@ -349,7 +344,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
     bool bOleOk = true;
 
     OUString aSrcStgName('_');
-    // ergibt Name "_4711"
+    // results in the name "_4711"
     aSrcStgName += OUString::number( m_nObjLocFc );
 
     tools::SvRef<SotStorage> xSrc0 = m_pStg->OpenSotStorage(OUString(SL::aObjectPool));
@@ -372,15 +367,15 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             rGraph = Graphic( aWMF );
         else if( SwWw6ReadMacPICTStream( rGraph, xSrc1 ) )
         {
-            // 03-META-Stream nicht da. Vielleicht ein 03-PICT ?
+            // 03-META stream is not available. Maybe it's a 03-PICT?
             const Size aSizeTwip = OutputDevice::LogicToLogic(
                 rGraph.GetPrefSize(), rGraph.GetPrefMapMode(), MAP_TWIP );
             nX = aSizeTwip.Width();
             nY = aSizeTwip.Height();
-            // PICT: kein WMF da -> Grafik statt OLE
+            // PICT: no WMF available -> Graphic instead of OLE
             bOleOk = false;
         }
-    }       // StorageStreams wieder zu
+    }       // StorageStreams closed again
 
     Rectangle aRect(0, 0, nX, nY);
 
@@ -487,11 +482,10 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
     }
     else
     {
-        /*
-         It is possible to have a number of date stamps for the created time
-         of the change, (possibly a word bug) so we must use the "get a full
-         list" variant of HasCharSprm and take the last one as the true one.
-        */
+        /* It is possible to have a number of date stamps for the created time
+         * of the change, (possibly a word bug) so we must use the "get a full
+         * list" variant of HasCharSprm and take the last one as the true one.
+         */
         std::vector<const sal_uInt8 *> aResult;
         bool bIns = (nsRedlineType_t::REDLINE_INSERT == eType);
         if( m_bVer67 )
