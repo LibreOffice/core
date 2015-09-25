@@ -15,8 +15,6 @@ cmd/lc_rightpara.png cmd/lc_alignright.png
 cmd/lc_leftpara.png cmd/lc_alignleft.png
 cmd/lc_justifypara.png cmd/lc_alignblock.png
 cmd/lc_centerpara.png cmd/lc_alignhorizontalcenter.png
-cmd/lc_showsinglepage.png cmd/lc_adddirect.png
-cmd/sc_showsinglepage.png cmd/sc_adddirect.png
 
 # Split button categories
 cmd/lc_arrowshapes.png cmd/lc_arrowshapes.left-right-arrow.png

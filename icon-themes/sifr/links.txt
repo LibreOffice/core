@@ -65,7 +65,6 @@ cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
 cmd/lc_insertavmedia.png cmd/lc_avmediaplayer.png
 cmd/sc_insertavmedia.png cmd/sc_avmediaplayer.png
 cmd/lc_insertmath.png cmd/lc_insertobjectstarmath.png
-cmd/sc_insertmath.png cmd/sc_insertobjectstarmath.png
 cmd/lc_arrowtoolbox.png cmd/lc_linearrowend.png
 cmd/sc_arrowtoolbox.png cmd/sc_linearrowend.png
 
