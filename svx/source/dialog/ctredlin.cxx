@@ -473,39 +473,39 @@ void SvxTPView::InsertCalcHeader()
     m_pViewData->InsertHeaderEntry(aString);
 }
 
-void SvxTPView::EnableAccept(bool nFlag)
+void SvxTPView::EnableAccept(bool bFlag)
 {
-    bEnableAccept = nFlag;
-    m_pAccept->Enable(nFlag);
+    bEnableAccept = bFlag;
+    m_pAccept->Enable(bFlag);
 }
 
-void SvxTPView::EnableAcceptAll(bool nFlag)
+void SvxTPView::EnableAcceptAll(bool bFlag)
 {
-    bEnableAcceptAll = nFlag;
-    m_pAcceptAll->Enable(nFlag);
+    bEnableAcceptAll = bFlag;
+    m_pAcceptAll->Enable(bFlag);
 }
 
-void SvxTPView::EnableReject(bool nFlag)
+void SvxTPView::EnableReject(bool bFlag)
 {
-    bEnableReject = nFlag;
-    m_pReject->Enable(nFlag);
+    bEnableReject = bFlag;
+    m_pReject->Enable(bFlag);
 }
 
-void SvxTPView::EnableRejectAll(bool nFlag)
+void SvxTPView::EnableRejectAll(bool bFlag)
 {
-    bEnableRejectAll = nFlag;
-    m_pRejectAll->Enable(nFlag);
+    bEnableRejectAll = bFlag;
+    m_pRejectAll->Enable(bFlag);
 }
 
-void SvxTPView::ShowUndo(bool nFlag)
+void SvxTPView::ShowUndo(bool bFlag)
 {
-    m_pUndo->Show(nFlag);
+    m_pUndo->Show(bFlag);
 }
 
-void SvxTPView::EnableUndo(bool nFlag)
+void SvxTPView::EnableUndo(bool bFlag)
 {
-    bEnableUndo = nFlag;
-    m_pUndo->Enable(nFlag);
+    bEnableUndo = bFlag;
+    m_pUndo->Enable(bFlag);
 }
 
 

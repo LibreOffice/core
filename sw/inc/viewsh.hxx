@@ -400,7 +400,7 @@ public:
     void SetAddExtLeading( bool bNew );
 
     // Formatting by virtual device or printer.
-    void SetUseVirDev( bool nNew );
+    void SetUseVirDev( bool bNew );
 
     // Adding paragraph and table spacing at bottom
     // of table cells.

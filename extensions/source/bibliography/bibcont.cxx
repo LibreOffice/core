@@ -216,7 +216,7 @@ void BibBookContainer::GetFocus()
 
 bool BibBookContainer::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nHandled = false;
+    bool bHandled = false;
     if( MouseNotifyEvent::KEYINPUT == rNEvt.GetType()  )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
@@ -239,14 +239,14 @@ bool BibBookContainer::PreNotify( NotifyEvent& rNEvt )
                     SetItemSize( nFirstWinId, nHeight );
                     SetItemSize( nSecondWinId, 100 - nHeight );
                 }
-                nHandled = true;
+                bHandled = true;
             }
             else if( pKEvt->GetCharCode() && HandleShortCutKey( *pKEvt ) )
-                nHandled = true;
+                bHandled = true;
         }
     }
 
-    return nHandled;
+    return bHandled;
 }
 
 bool BibBookContainer::HandleShortCutKey( const KeyEvent& rKeyEvent )

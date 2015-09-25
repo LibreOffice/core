@@ -116,7 +116,7 @@ IMPL_LINK_TYPED( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar, void )
 
 bool MacroEventListBox::Notify( NotifyEvent& rNEvt )
 {
-    bool nRet = Control::Notify( rNEvt );
+    bool bRet = Control::Notify( rNEvt );
 
     if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
@@ -125,7 +125,7 @@ bool MacroEventListBox::Notify( NotifyEvent& rNEvt )
                 maListBox->GrabFocus();
     }
 
-    return nRet;
+    return bRet;
 }
 
 MacroEventListBox::MacroEventListBox( vcl::Window* pParent, WinBits nStyle )

@@ -130,13 +130,13 @@ void ComboBoxControl::LoseFocus()
 
 bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nRet = false;
+    bool bRet = false;
     if ( m_pComboBoxListener )
-        nRet = m_pComboBoxListener->PreNotify( rNEvt );
-    if ( !nRet )
-        nRet = ComboBox::PreNotify( rNEvt );
+        bRet = m_pComboBoxListener->PreNotify( rNEvt );
+    if ( !bRet )
+        bRet = ComboBox::PreNotify( rNEvt );
 
-    return nRet;
+    return bRet;
 }
 
 ComboboxToolbarController::ComboboxToolbarController(

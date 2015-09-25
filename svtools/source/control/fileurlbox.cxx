@@ -85,9 +85,9 @@ namespace svt
                 &&  ( IsInDropDown()                                             )
                 )
             {
-                bool nReturn = SvtURLBox::Notify(_rNEvt);
+                bool bReturn = SvtURLBox::Notify(_rNEvt);
                 DisplayURL( m_sPreservedText );
-                return nReturn;
+                return bReturn;
             }
         }
 

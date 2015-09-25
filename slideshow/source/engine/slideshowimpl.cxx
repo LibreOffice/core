@@ -1586,14 +1586,14 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
     //adding support for erasing features in UserPaintOverlay
     if ( rProperty.Name == "EraseAllInk" )
     {
-        bool nEraseAllInk(false);
-        if (rProperty.Value >>= nEraseAllInk)
+        bool bEraseAllInk(false);
+        if (rProperty.Value >>= bEraseAllInk)
         {
             OSL_ENSURE( mbMouseVisible,
                         "setProperty(): User paint overrides invisible mouse" );
 
             // enable user paint
-            maEraseAllInk.reset( nEraseAllInk );
+            maEraseAllInk.reset( bEraseAllInk );
             maEventMultiplexer.notifyEraseAllInk( *maEraseAllInk );
         }
 
@@ -1602,15 +1602,15 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
 
     if ( rProperty.Name == "SwitchPenMode" )
     {
-        bool nSwitchPenMode(false);
-        if (rProperty.Value >>= nSwitchPenMode)
+        bool bSwitchPenMode(false);
+        if (rProperty.Value >>= bSwitchPenMode)
         {
             OSL_ENSURE( mbMouseVisible,
                         "setProperty(): User paint overrides invisible mouse" );
 
-            if(nSwitchPenMode){
+            if(bSwitchPenMode){
             // Switch to Pen Mode
-            maSwitchPenMode.reset( nSwitchPenMode );
+            maSwitchPenMode.reset( bSwitchPenMode );
             maEventMultiplexer.notifySwitchPenMode();
             }
         }
@@ -1619,14 +1619,14 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
 
     if ( rProperty.Name == "SwitchEraserMode" )
     {
-        bool nSwitchEraserMode(false);
-        if (rProperty.Value >>= nSwitchEraserMode)
+        bool bSwitchEraserMode(false);
+        if (rProperty.Value >>= bSwitchEraserMode)
         {
             OSL_ENSURE( mbMouseVisible,
                         "setProperty(): User paint overrides invisible mouse" );
-            if(nSwitchEraserMode){
+            if(bSwitchEraserMode){
             // switch to Eraser mode
-            maSwitchEraserMode.reset( nSwitchEraserMode );
+            maSwitchEraserMode.reset( bSwitchEraserMode );
             maEventMultiplexer.notifySwitchEraserMode();
             }
         }

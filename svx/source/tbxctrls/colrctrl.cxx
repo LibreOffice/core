@@ -497,7 +497,7 @@ void SvxColorDockingWindow::GetFocus()
 
 bool SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
 {
-    bool nRet = false;
+    bool bRet = false;
     if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
@@ -506,12 +506,12 @@ bool SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
         {
             case KEY_ESCAPE:
                 GrabFocusToDocument();
-                nRet = true;
+                bRet = true;
                 break;
         }
     }
 
-    return nRet || SfxDockingWindow::Notify( rNEvt );
+    return bRet || SfxDockingWindow::Notify( rNEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

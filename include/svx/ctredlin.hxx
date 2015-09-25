@@ -305,13 +305,13 @@ public:
     void            InsertCalcHeader();
     SvxRedlinTable* GetTableControl() { return m_pViewData;}
 
-    void            EnableAccept(bool nFlag=true);
-    void            EnableAcceptAll(bool nFlag=true);
-    void            EnableReject(bool nFlag=true);
-    void            EnableRejectAll(bool nFlag=true);
-    void            EnableUndo(bool nFlag=true);
+    void            EnableAccept(bool bFlag=true);
+    void            EnableAcceptAll(bool bFlag=true);
+    void            EnableReject(bool bFlag=true);
+    void            EnableRejectAll(bool bFlag=true);
+    void            EnableUndo(bool bFlag=true);
     void            DisableUndo()       {EnableUndo(false);}
-    void            ShowUndo(bool nFlag=true);
+    void            ShowUndo(bool bFlag=true);
 
     void            SetAcceptClickHdl( const Link<SvxTPView*,void>& rLink ) { AcceptClickLk = rLink; }
 

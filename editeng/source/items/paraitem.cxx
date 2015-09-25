@@ -1358,9 +1358,9 @@ SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SvxHangingPunctuationItem::Create(SvStream & rStrm, sal_uInt16) const
 {
-    bool nValue;
-    rStrm.ReadCharAsBool( nValue );
-    return new SvxHangingPunctuationItem( nValue, Which() );
+    bool bValue;
+    rStrm.ReadCharAsBool( bValue );
+    return new SvxHangingPunctuationItem( bValue, Which() );
 }
 
 sal_uInt16 SvxHangingPunctuationItem::GetVersion( sal_uInt16 nFFVer ) const
@@ -1398,9 +1398,9 @@ SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool * ) const
 
 SfxPoolItem* SvxForbiddenRuleItem::Create(SvStream & rStrm, sal_uInt16) const
 {
-    bool nValue;
-    rStrm.ReadCharAsBool( nValue );
-    return new SvxForbiddenRuleItem( nValue, Which() );
+    bool bValue;
+    rStrm.ReadCharAsBool( bValue );
+    return new SvxForbiddenRuleItem( bValue, Which() );
 }
 
 sal_uInt16 SvxForbiddenRuleItem::GetVersion( sal_uInt16 nFFVer ) const

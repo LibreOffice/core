@@ -179,7 +179,7 @@ bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 
 bool SvxLineBox::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = LineLB::Notify( rNEvt );
+    bool bHandled = LineLB::Notify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -189,17 +189,17 @@ bool SvxLineBox::Notify( NotifyEvent& rNEvt )
         {
             case KEY_RETURN:
                 Select();
-                nHandled = true;
+                bHandled = true;
                 break;
 
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );
                 ReleaseFocus_Impl();
-                nHandled = true;
+                bHandled = true;
                 break;
         }
     }
-    return nHandled;
+    return bHandled;
 }
 
 
@@ -352,7 +352,7 @@ bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 
 bool SvxMetricField::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = MetricField::Notify( rNEvt );
+    bool bHandled = MetricField::Notify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -364,13 +364,13 @@ bool SvxMetricField::Notify( NotifyEvent& rNEvt )
             (void)pSh->KeyInput( *pKEvt );
         else
         {
-            bool bHandled = false;
+            bool bHandledInside = false;
 
             switch ( rKey.GetCode() )
             {
                 case KEY_RETURN:
                     Reformat();
-                    bHandled = true;
+                    bHandledInside = true;
                     break;
 
                 case KEY_ESCAPE:
@@ -379,15 +379,15 @@ bool SvxMetricField::Notify( NotifyEvent& rNEvt )
                     break;
             }
 
-            if ( bHandled )
+            if ( bHandledInside )
             {
-                nHandled = true;
+                bHandled = true;
                 Modify();
                 ReleaseFocus_Impl();
             }
         }
     }
-    return nHandled;
+    return bHandled;
 }
 
 void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
@@ -438,7 +438,7 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 
 bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = FillTypeLB::Notify( rNEvt );
+    bool bHandled = FillTypeLB::Notify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -446,7 +446,7 @@ bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
         switch ( pKEvt->GetKeyCode().GetCode() )
         {
             case KEY_RETURN:
-                nHandled = true;
+                bHandled = true;
                 ( (Link<>&)GetSelectHdl() ).Call( this );
             break;
             case KEY_TAB:
@@ -458,11 +458,11 @@ bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );
                 ReleaseFocus_Impl();
-                nHandled = true;
+                bHandled = true;
                 break;
         }
     }
-    return nHandled;
+    return bHandled;
 }
 
 
@@ -505,7 +505,7 @@ bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 
 bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = FillAttrLB::Notify( rNEvt );
+    bool bHandled = FillAttrLB::Notify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -515,7 +515,7 @@ bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
         {
             case KEY_RETURN:
                 ( (Link<>&)GetSelectHdl() ).Call( this );
-                nHandled = true;
+                bHandled = true;
             break;
             case KEY_TAB:
                 bRelease = false;
@@ -525,11 +525,11 @@ bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );
                 ReleaseFocus_Impl();
-                nHandled = true;
+                bHandled = true;
                 break;
         }
     }
-    return nHandled;
+    return bHandled;
 }
 
 

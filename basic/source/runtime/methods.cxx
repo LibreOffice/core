@@ -1636,26 +1636,26 @@ RTLFUNC(StrComp)
     const OUString& rStr2 = rPar.Get(2)->GetOUString();
 
     SbiInstance* pInst = GetSbData()->pInst;
-    bool nTextCompare;
+    bool bTextCompare;
     bool bCompatibility = ( pInst && pInst->IsCompatibility() );
     if( bCompatibility )
     {
         SbiRuntime* pRT = pInst->pRun;
-        nTextCompare = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
+        bTextCompare = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
     }
     else
     {
-        nTextCompare = true;
+        bTextCompare = true;
     }
     if ( rPar.Count() == 4 )
-        nTextCompare = rPar.Get(3)->GetInteger();
+        bTextCompare = rPar.Get(3)->GetInteger();
 
     if( !bCompatibility )
     {
-        nTextCompare = !nTextCompare;
+        bTextCompare = !bTextCompare;
     }
     sal_Int32 nRetValue = 0;
-    if( nTextCompare )
+    if( bTextCompare )
     {
         ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper;
         if( !pTransliterationWrapper )

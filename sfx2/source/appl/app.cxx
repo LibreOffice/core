@@ -501,15 +501,15 @@ IMPL_LINK_TYPED( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasi
     aMod.release();
 
     // call basicide_handle_basic_error in basctl
-    bool nRet = pSymbol && pSymbol( pStarBasic );
+    bool bRet = pSymbol && pSymbol( pStarBasic );
 
 #else
 
-    bool nRet = basicide_handle_basic_error( pStarBasic );
+    bool bRet = basicide_handle_basic_error( pStarBasic );
 
 #endif
 
-    return nRet;
+    return bRet;
 
 #endif
 }

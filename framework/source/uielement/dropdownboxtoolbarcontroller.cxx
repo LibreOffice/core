@@ -113,13 +113,13 @@ void ListBoxControl::LoseFocus()
 
 bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nRet = false;
+    bool bRet = false;
     if ( m_pListBoxListener )
-        nRet = m_pListBoxListener->PreNotify( rNEvt );
-    if ( !nRet )
-        nRet = ListBox::PreNotify( rNEvt );
+        bRet = m_pListBoxListener->PreNotify( rNEvt );
+    if ( !bRet )
+        bRet = ListBox::PreNotify( rNEvt );
 
-    return nRet;
+    return bRet;
 }
 
 DropdownToolbarController::DropdownToolbarController(

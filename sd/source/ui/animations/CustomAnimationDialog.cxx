@@ -376,7 +376,7 @@ void DropdownMenuBox::Resize()
 
 bool DropdownMenuBox::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nResult = true;
+    bool bResult = true;
 
     MouseNotifyEvent nSwitch=rNEvt.GetType();
     if (nSwitch==MouseNotifyEvent::KEYINPUT)
@@ -390,13 +390,13 @@ bool DropdownMenuBox::PreNotify( NotifyEvent& rNEvt )
         }
         else
         {
-            nResult=Edit::PreNotify(rNEvt);
+            bResult=Edit::PreNotify(rNEvt);
         }
     }
     else
-        nResult=Edit::PreNotify(rNEvt);
+        bResult=Edit::PreNotify(rNEvt);
 
-    return nResult;
+    return bResult;
 }
 
 class CharHeightPropertyBox : public PropertySubControl

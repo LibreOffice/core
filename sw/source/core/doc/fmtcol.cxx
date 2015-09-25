@@ -521,7 +521,7 @@ void SwCollCondition::RegisterToFormat( SwFormat& rFormat )
 
 bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
 {
-    bool nRet = false;
+    bool bRet = false;
     if( nCondition == rCmp.nCondition )
     {
         if( USRFLD_EXPRESSION & nCondition )
@@ -539,15 +539,15 @@ bool SwCollCondition::operator==( const SwCollCondition& rCmp ) const
                 if( pColl )
                 {
                     SwCalc aCalc( *pColl->GetDoc() );
-                    nRet = aCalc.Calculate( *pTmp ).GetBool();
+                    bRet = aCalc.Calculate( *pTmp ).GetBool();
                 }
             }
         }
         else if( aSubCondition.nSubCondition ==
                     rCmp.aSubCondition.nSubCondition )
-            nRet = true;
+            bRet = true;
     }
-    return nRet;
+    return bRet;
 }
 
 void SwCollCondition::SetCondition( sal_uLong nCond, sal_uLong nSubCond )

@@ -412,10 +412,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
 GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 {
     PCXReader aPCXReader(rStream);
-    bool nRetValue = aPCXReader.ReadPCX(rGraphic);
-    if ( !nRetValue )
+    bool bRetValue = aPCXReader.ReadPCX(rGraphic);
+    if ( !bRetValue )
         rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
-    return nRetValue;
+    return bRetValue;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -225,17 +225,17 @@ sal_Int32 BookmarkCombo::GetSelectEntryPos( sal_Int32 nSelIndex ) const
 
 bool BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nHandled = false;
+    bool bHandled = false;
     if( MouseNotifyEvent::KEYINPUT == rNEvt.GetType() &&
          rNEvt.GetKeyEvent()->GetCharCode() )
     {
         OUString sKey( rNEvt.GetKeyEvent()->GetCharCode() );
         if(-1 != aForbiddenChars.indexOf(sKey))
-            nHandled = true;
+            bHandled = true;
     }
-    if(!nHandled)
-        nHandled = SwComboBox::PreNotify( rNEvt );
-    return nHandled;
+    if(!bHandled)
+        bHandled = SwComboBox::PreNotify( rNEvt );
+    return bHandled;
 }
 
 VCL_BUILDER_FACTORY_ARGS(BookmarkCombo, 0)
