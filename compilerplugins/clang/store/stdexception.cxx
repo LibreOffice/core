@@ -116,7 +116,7 @@ found:
     assert(
         l == end
         || compiler.getSourceManager().isBeforeInTranslationUnit(l, end));
-    bool seenThrow = false;
+    bool bSeenThrow = false;
     unsigned parens = 0;
     SourceLocation openParen;
     SourceLocation loc;
@@ -127,9 +127,9 @@ found:
         if (s == "{" || s == ";") {
             break;
         }
-        if (!seenThrow) {
+        if (!bSeenThrow) {
             if (s == "throw") {
-                seenThrow = true;
+                bSeenThrow = true;
             }
         } else if (s == "(") {
             assert(parens < std::numeric_limits<unsigned>::max());

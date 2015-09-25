@@ -512,7 +512,7 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( const OUString&
 
 void CuiAboutConfigTabPage::AddToModifiedVector( const std::shared_ptr< Prop_Impl >& rProp )
 {
-    bool isModifiedBefore = false;
+    bool bIsModifiedBefore = false;
     //Check if value modified before
     for( size_t nInd = 0; nInd < m_vectorOfModified.size() ; ++nInd )
     {
@@ -521,12 +521,12 @@ void CuiAboutConfigTabPage::AddToModifiedVector( const std::shared_ptr< Prop_Imp
             //property modified before. Assign reference to the modified value
             //do your changes on this object. They will be saved later.
             m_vectorOfModified[nInd] = rProp;
-            isModifiedBefore = true;
+            bIsModifiedBefore = true;
             break;
         }
     }
 
-    if( !isModifiedBefore )
+    if( !bIsModifiedBefore )
         m_vectorOfModified.push_back( rProp );
     //property is not modified before
 }
@@ -883,15 +883,15 @@ void CuiAboutConfigTabPage::InsertEntry( SvTreeListEntry *pEntry)
         index = sPath.indexOf("/", index+1);
         OUString sParentName = sPath.copy(prevIndex+1, index - prevIndex - 1);
 
-        bool hasEntry = false;
+        bool bHasEntry = false;
         for(pParentEntry = m_pPrefBox->FirstChild(pGrandParentEntry); pParentEntry != nullptr; pParentEntry = SvTreeListBox::NextSibling(pParentEntry))
             if(static_cast< SvLBoxString& >(pParentEntry->GetItem(1)).GetText() == sParentName)
             {
-                hasEntry = true;
+                bHasEntry = true;
                 break;
             }
 
-        if(!hasEntry)
+        if(!bHasEntry)
         {
             pParentEntry = new SvTreeListEntry;
             pParentEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(

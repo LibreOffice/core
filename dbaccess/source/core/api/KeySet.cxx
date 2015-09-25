@@ -1077,11 +1077,11 @@ bool SAL_CALL OKeySet::last(  ) throw(SQLException, RuntimeException)
 bool OKeySet::last_checked( bool /* i_bFetchRow */ )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
-    bool fetchedRow = fillAllRows();
+    bool bFetchedRow = fillAllRows();
 
     m_aKeyIter = m_aKeyMap.end();
     --m_aKeyIter;
-    if ( !fetchedRow )
+    if ( !bFetchedRow )
     {
         invalidateRow();
     }
@@ -1105,11 +1105,11 @@ bool OKeySet::absolute_checked( sal_Int32 row, bool /* i_bFetchRow */ )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     OSL_ENSURE(row,"absolute(0) isn't allowed!");
-    bool fetchedRow = false;
+    bool bFetchedRow = false;
     if(row < 0)
     {
         if(!m_bRowCountFinal)
-            fetchedRow = fillAllRows();
+            bFetchedRow = fillAllRows();
 
         for(;row < 0 && m_aKeyIter != m_aKeyMap.begin();++row)
             --m_aKeyIter;
@@ -1129,7 +1129,7 @@ bool OKeySet::absolute_checked( sal_Int32 row, bool /* i_bFetchRow */ )
                 // that is fetchRow called at least once.
                 if ( bNext )
                 {
-                    fetchedRow = true;
+                    bFetchedRow = true;
                 }
                 else
                 {
@@ -1152,7 +1152,7 @@ bool OKeySet::absolute_checked( sal_Int32 row, bool /* i_bFetchRow */ )
                 ++m_aKeyIter;
         }
     }
-    if ( !fetchedRow )
+    if ( !bFetchedRow )
     {
         invalidateRow();
     }

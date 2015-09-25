@@ -84,11 +84,11 @@ static void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled );
 
 bool SbiRuntime::isVBAEnabled()
 {
-    bool result = false;
+    bool bResult = false;
     SbiInstance* pInst = GetSbData()->pInst;
     if ( pInst && GetSbData()->pInst->pRun )
-        result = pInst->pRun->bVBAEnabled;
-    return result;
+        bResult = pInst->pRun->bVBAEnabled;
+    return bResult;
 }
 
 void StarBASIC::SetVBAEnabled( bool bEnabled )

@@ -196,7 +196,7 @@ void Writer::sendRequest(
     OSL_ASSERT(tid.getLength() != 0 && !oid.isEmpty() && member.is());
     css::uno::TypeDescription t(type);
     sal_Int32 functionId = 0;
-    bool forceSynchronous = false;
+    bool bForceSynchronous = false;
     member.makeComplete();
     switch (member.get()->eTypeClass) {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -228,7 +228,7 @@ void Writer::sendRequest(
             t.makeComplete();
             functionId = mtd->pInterface->pMapMemberIndexToFunctionIndex[
                 mtd->aBase.nPosition];
-            forceSynchronous = mtd->bOneWay &&
+            bForceSynchronous = mtd->bOneWay &&
                 functionId != SPECIAL_FUNCTION_ID_RELEASE;
             break;
         }
@@ -244,17 +244,17 @@ void Writer::sendRequest(
     bool newType = !(lastType_.is() && t.equals(lastType_));
     bool newOid = oid != lastOid_;
     bool newTid = tid != lastTid_;
-    if (newType || newOid || newTid || forceSynchronous || functionId > 0x3FFF)
+    if (newType || newOid || newTid || bForceSynchronous || functionId > 0x3FFF)
         // > 14 bit function ID
     {
         Marshal::write8(
             &buf,
             (0xC0 | (newType ? 0x20 : 0) | (newOid ? 0x10 : 0) |
              (newTid ? 0x08 : 0) | (functionId > 0xFF ? 0x04 : 0) |
-             (forceSynchronous ? 0x01 : 0)));
+             (bForceSynchronous ? 0x01 : 0)));
             // bit 7: LONGHEADER, bit 6: REQUEST, bit 5: NEWTYPE, bit 4: NEWOID,
             // bit 3: NEWTID, bit 2: FUNCTIONID16, bit 0: MOREFLAGS
-        if (forceSynchronous) {
+        if (bForceSynchronous) {
             Marshal::write8(&buf, 0xC0); // bit 7: MUSTREPLY, bit 6: SYNCHRONOUS
         }
         if (functionId <= 0xFF) {

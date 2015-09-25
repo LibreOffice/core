@@ -221,11 +221,11 @@ namespace dbtools
     {
         lcl_checkConnected( *m_pImpl );
 
-        bool supportsSubQueries = false;
+        bool bSupportsSubQueries = false;
         try
         {
             sal_Int32 maxTablesInselect = m_pImpl->xConnectionMetaData->getMaxTablesInSelect();
-            supportsSubQueries = ( maxTablesInselect > 1 ) || ( maxTablesInselect == 0 );
+            bSupportsSubQueries = ( maxTablesInselect > 1 ) || ( maxTablesInselect == 0 );
             // TODO: is there a better way to determine this? The above is not really true. More precise,
             // it's a *very* generous heuristics ...
         }
@@ -233,7 +233,7 @@ namespace dbtools
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return supportsSubQueries;
+        return bSupportsSubQueries;
     }
 
 
@@ -241,21 +241,21 @@ namespace dbtools
     {
         lcl_checkConnected( *m_pImpl );
 
-        bool doesSupportPrimaryKeys = false;
+        bool bDoesSupportPrimaryKeys = false;
         try
         {
             Any setting;
             if  (   !( lcl_getConnectionSetting( "PrimaryKeySupport", *m_pImpl, setting ) )
-                ||  !( setting >>= doesSupportPrimaryKeys )
+                ||  !( setting >>= bDoesSupportPrimaryKeys )
                 )
-                doesSupportPrimaryKeys = m_pImpl->xConnectionMetaData->supportsCoreSQLGrammar()
+                bDoesSupportPrimaryKeys = m_pImpl->xConnectionMetaData->supportsCoreSQLGrammar()
                     || m_pImpl->xConnectionMetaData->supportsANSI92EntryLevelSQL();
         }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return doesSupportPrimaryKeys;
+        return bDoesSupportPrimaryKeys;
     }
 
 

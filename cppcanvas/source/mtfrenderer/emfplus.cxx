@@ -311,7 +311,7 @@ namespace cppcanvas
 
                 int last_normal = 0, p = 0;
                 ::basegfx::B2DPoint prev, mapped;
-                bool hasPrev = false;
+                bool bHasPrev = false;
                 for (int i = 0; i < nPoints; i ++) {
                     if (p && pPointTypes && (pPointTypes [i] == 0)) {
                         aPolygon.append (polygon);
@@ -332,7 +332,7 @@ namespace cppcanvas
                                 continue;
                             } else if (((i - last_normal) % 3) == 2) {
                                 prev = mapped;
-                                hasPrev = true;
+                                bHasPrev = true;
                                 continue;
                             }
                         } else
@@ -340,10 +340,10 @@ namespace cppcanvas
                     }
                     polygon.append (mapped);
                     SAL_INFO ("cppcanvas.emf", "polygon append point: " << pPoints [i*2] << "," << pPoints [i*2 + 1] << " mapped: " << mapped.getX () << ":" << mapped.getY ());
-                    if (hasPrev) {
+                    if (bHasPrev) {
                         polygon.setPrevControlPoint (p, prev);
                         SAL_INFO ("cppcanvas.emf", "polygon append  prev: " << p << " mapped: " << prev.getX () << "," << prev.getY ());
-                        hasPrev = false;
+                        bHasPrev = false;
                     }
                     p ++;
                     if (pPointTypes && (pPointTypes [i] & 0x80)) { // closed polygon
@@ -1306,7 +1306,7 @@ namespace cppcanvas
                     // EMF+ like hatching is currently not supported. These are just color blends which serve as an approximation for some of them
                     // for the others the hatch "background" color (secondColor in brush) is used.
 
-                    bool isHatchBlend = true;
+                    bool bIsHatchBlend = true;
                     double blendFactor = 0.0;
 
                     switch (brush->hatchStyle)
@@ -1324,13 +1324,13 @@ namespace cppcanvas
                         case HatchStyle80Percent: blendFactor = 0.80; break;
                         case HatchStyle90Percent: blendFactor = 0.90; break;
                         default:
-                            isHatchBlend = false;
+                            bIsHatchBlend = false;
                             break;
                     }
                     rState.isFillColorSet = true;
                     rState.isLineColorSet = false;
                     ::Color fillColor;
-                    if (isHatchBlend)
+                    if (bIsHatchBlend)
                     {
                         fillColor = brush->solidColor;
                         fillColor.Merge(brush->secondColor, static_cast<sal_uInt8>(255 * blendFactor));

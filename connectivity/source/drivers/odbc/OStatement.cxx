@@ -335,7 +335,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLExcep
 
     OString aSql(OUStringToOString(sql,getOwnConnection()->getTextEncoding()));
 
-    bool hasResultSet = false;
+    bool bHasResultSet = false;
     SQLWarning aWarning;
 
     // Reset the statement handle and warning
@@ -367,10 +367,10 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLExcep
 
     if (getColumnCount () > 0)
     {
-        hasResultSet = true;
+        bHasResultSet = true;
     }
 
-    return hasResultSet;
+    return bHasResultSet;
 }
 
 // getResultSet
@@ -585,7 +585,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
 
 
     SQLWarning  warning;
-    bool hasResultSet = false;
+    bool bHasResultSet = false;
 
     // clear previous warnings
 
@@ -595,7 +595,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
 
     try {
-        hasResultSet = N3SQLMoreResults(m_aStatementHandle) == SQL_SUCCESS;
+        bHasResultSet = N3SQLMoreResults(m_aStatementHandle) == SQL_SUCCESS;
     }
     catch (const SQLWarning &ex) {
 
@@ -607,7 +607,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
 
     // There are more results (it may not be a result set, though)
 
-    if (hasResultSet)
+    if (bHasResultSet)
     {
 
         // Now determine if there is a result set associated
@@ -616,7 +616,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
         // result set.
 
         if (getColumnCount () == 0)
-            hasResultSet = false;
+            bHasResultSet = false;
     }
 
     // Set the warning for the statement, if one was generated
@@ -625,7 +625,7 @@ sal_Bool SAL_CALL OStatement_Base::getMoreResults(  ) throw(SQLException, Runtim
 
     // Return the result set indicator
 
-    return hasResultSet;
+    return bHasResultSet;
 }
 
 

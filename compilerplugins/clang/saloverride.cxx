@@ -78,7 +78,7 @@ bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
         // point at "MACRO" rather than ")", so make the loop always terminate
         // at the first ";" or "{" instead of getSourceRange().getEnd():
         unsigned parens = 0;
-        bool seenSpace = false;
+        bool bSeenSpace = false;
         //TODO: Whether to add a space after the inserted "SAL_OVERRIDE" should
         // depend on the following token at the spelling location where
         // "SAL_OVERRIDE" is inserted, not on the following token in the fully-
@@ -110,7 +110,7 @@ bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
             }
             if (parens == 0) {
                 if (s == "=" || s == "{") {
-                    if (!seenSpace) {
+                    if (!bSeenSpace) {
                         addSpace = true;
                     }
                     break;
@@ -127,17 +127,17 @@ bool SalOverride::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
                 --parens;
             }
             if (s.empty()) {
-                if (!seenSpace) {
+                if (!bSeenSpace) {
                     addSpace = false;
                 }
-                seenSpace = true;
+                bSeenSpace = true;
             } else if (s.startswith("/*") || s.startswith("//") || s == "\\") {
-                if (!seenSpace) {
+                if (!bSeenSpace) {
                     addSpace = true;
                 }
-                seenSpace = true;
+                bSeenSpace = true;
             } else {
-                seenSpace = false;
+                bSeenSpace = false;
                 addSpace = false;
                 loc = sl;
             }

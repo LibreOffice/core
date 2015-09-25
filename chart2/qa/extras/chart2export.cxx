@@ -285,11 +285,11 @@ void checkCommonTrendline(
     CPPUNIT_ASSERT(xProperties->getPropertyValue("ExtrapolateBackward") >>= aExtrapolateBackward);
     CPPUNIT_ASSERT_EQUAL(aExpectedExtrapolateBackward, aExtrapolateBackward);
 
-    bool aForceIntercept = false;
-    CPPUNIT_ASSERT(xProperties->getPropertyValue("ForceIntercept") >>= aForceIntercept);
-    CPPUNIT_ASSERT_EQUAL(aExpectedForceIntercept, aForceIntercept);
+    bool bForceIntercept = false;
+    CPPUNIT_ASSERT(xProperties->getPropertyValue("ForceIntercept") >>= bForceIntercept);
+    CPPUNIT_ASSERT_EQUAL(aExpectedForceIntercept, bForceIntercept);
 
-    if (aForceIntercept)
+    if (bForceIntercept)
     {
         double aInterceptValue = 0.0;
         CPPUNIT_ASSERT(xProperties->getPropertyValue("InterceptValue") >>= aInterceptValue);
@@ -299,13 +299,13 @@ void checkCommonTrendline(
     Reference< XPropertySet > xEquationProperties( xCurve->getEquationProperties() );
     CPPUNIT_ASSERT(xEquationProperties.is());
 
-    bool aShowEquation = false;
-    CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("ShowEquation") >>= aShowEquation);
-    CPPUNIT_ASSERT_EQUAL(aExpectedShowEquation, aShowEquation);
+    bool bShowEquation = false;
+    CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("ShowEquation") >>= bShowEquation);
+    CPPUNIT_ASSERT_EQUAL(aExpectedShowEquation, bShowEquation);
 
-    bool aShowCorrelationCoefficient = false;
-    CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= aShowCorrelationCoefficient);
-    CPPUNIT_ASSERT_EQUAL(aExpectedR2, aShowCorrelationCoefficient);
+    bool bShowCorrelationCoefficient = false;
+    CPPUNIT_ASSERT(xEquationProperties->getPropertyValue("ShowCorrelationCoefficient") >>= bShowCorrelationCoefficient);
+    CPPUNIT_ASSERT_EQUAL(aExpectedR2, bShowCorrelationCoefficient);
 }
 
 void checkNameAndType(Reference<XPropertySet> xProperties, const OUString& aExpectedName, const OUString& aExpectedServiceName)

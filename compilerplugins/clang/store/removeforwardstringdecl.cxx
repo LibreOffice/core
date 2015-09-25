@@ -36,7 +36,7 @@ bool RemoveForwardStringDecl::VisitNamespaceDecl( const NamespaceDecl* declarati
         return true;
     if( declaration->getQualifiedNameAsString() != "rtl" )
         return true;
-    bool canRemove = true;
+    bool bCanRemove = true;
     for( NamespaceDecl::decl_iterator it = declaration->decls_begin();
          it != declaration->decls_end();
          ++it )
@@ -44,10 +44,10 @@ bool RemoveForwardStringDecl::VisitNamespaceDecl( const NamespaceDecl* declarati
         if( *it != NULL )
             {
             if( !tryRemoveStringForwardDecl( *it ))
-                canRemove = false;
+                bCanRemove = false;
             }
         }
-    if( canRemove ) // contained only forward decls that we removed
+    if( bCanRemove ) // contained only forward decls that we removed
         removeText( declaration->getSourceRange(), RemoveLineIfEmpty );
     return true;
     }

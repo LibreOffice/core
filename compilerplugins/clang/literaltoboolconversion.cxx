@@ -121,7 +121,7 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
         || isa<FloatingLiteral>(subExpr) || isa<ImaginaryLiteral>(subExpr)
         || isa<StringLiteral>(subExpr))
     {
-        bool rewritten = false;
+        bool bRewritten = false;
         if (rewriter != nullptr) {
             SourceLocation loc { compiler.getSourceManager().getExpansionLoc(
                     expr2->getLocStart()) };
@@ -135,19 +135,19 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
                     compiler.getLangOpts());
                 std::string tok { s, n };
                 if (tok == "sal_False" || tok == "0") {
-                    rewritten = replaceText(
+                    bRewritten = replaceText(
                         compiler.getSourceManager().getExpansionLoc(
                             expr2->getLocStart()),
                         n, "false");
                 } else if (tok == "sal_True" || tok == "1") {
-                    rewritten = replaceText(
+                    bRewritten = replaceText(
                         compiler.getSourceManager().getExpansionLoc(
                             expr2->getLocStart()),
                         n, "true");
                 }
             }
         }
-        if (!rewritten) {
+        if (!bRewritten) {
             report(
                 DiagnosticsEngine::Warning,
                 "implicit conversion (%0) of literal of type %1 to %2",

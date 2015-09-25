@@ -59,7 +59,7 @@ namespace
     // for now, never use wchar,
     // but most of code is prepared to handle it
     // in case we make this configurable
-    const bool useWChar = false;
+    const bool bUseWChar = false;
 }
 
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OUString& sql)
@@ -312,7 +312,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
     sal_Int32 nCharLen;
     sal_Int32 nByteLen;
     void *pData;
-    if (useWChar)
+    if (bUseWChar)
     {
         /*
          * On Windows, wchar is 16 bits (UTF-16 encoding), the ODBC "W" variants functions take UTF-16 encoded strings
@@ -384,7 +384,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
 void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_Int32 _nType, const SQLULEN _nColumnSize, const sal_Int32 _nScale, const void* const _pData, const SQLULEN _nDataLen, const SQLLEN _nDataAllocLen)
 {
     SQLSMALLINT fCType, fSqlType;
-    OTools::getBindTypes(useWChar, m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
+    OTools::getBindTypes(bUseWChar, m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
 
     SQLLEN& rDataLen = boundParams[parameterIndex-1].getBindLengthBuffer();
     rDataLen = _nDataLen;
@@ -525,7 +525,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, const sal_I
     SQLSMALLINT fCType;
     SQLSMALLINT fSqlType;
 
-    OTools::getBindTypes(   useWChar,
+    OTools::getBindTypes(   bUseWChar,
                             m_pConnection->useOldDateFormat(),
                             OTools::jdbcTypeToOdbc(_nType),
                             fCType,
@@ -853,7 +853,7 @@ void OPreparedStatement::setStream(
     *lenBuf = SQL_LEN_DATA_AT_EXEC (length);
 
     SQLSMALLINT fCType, fSqlType;
-    OTools::getBindTypes(useWChar, m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
+    OTools::getBindTypes(bUseWChar, m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
 
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");

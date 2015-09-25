@@ -249,18 +249,18 @@ bool RewritePlugin::adjustRangeForOptions( CharSourceRange* range, RewriteOption
     SourceLocation fileStartLoc = SM.getLocForStartOfFile( SM.getFileID( range->getBegin()));
     if( fileStartLoc.isInvalid())
         return false;
-    bool invalid = false;
-    const char* fileBuf = SM.getCharacterData( fileStartLoc, &invalid );
-    if( invalid )
+    bool isInvalid = false;
+    const char* fileBuf = SM.getCharacterData( fileStartLoc, &isInvalid );
+    if( isInvalid )
         return false;
-    const char* startBuf = SM.getCharacterData( range->getBegin(), &invalid );
-    if( invalid )
+    const char* startBuf = SM.getCharacterData( range->getBegin(), &isInvalid );
+    if( isInvalid )
         return false;
     SourceLocation locationEnd = range->getEnd();
     if( range->isTokenRange())
         locationEnd = locationAfterToken( locationEnd );
-    const char* endBuf = SM.getCharacterData( locationEnd, &invalid );
-    if( invalid )
+    const char* endBuf = SM.getCharacterData( locationEnd, &isInvalid );
+    if( isInvalid )
         return false;
     const char* startPos = startBuf;
     --startPos;

@@ -120,18 +120,18 @@ Partial::Containment Partial::contains(Path const & path) const {
     // ** If there is some startInclude along its trace: => CONTAINS_NODE
     // ** If there is no startInclude along its trace: => CONTAINS_SUBNODES
     Node const * p = &root_;
-    bool includes = false;
+    bool bIncludes = false;
     for (Path::const_iterator i(path.begin()); i != path.end(); ++i) {
         Node::Children::const_iterator j(p->children.find(*i));
         if (j == p->children.end()) {
             return p->startInclude ? CONTAINS_NODE : CONTAINS_NOT;
         }
         p = &j->second;
-        includes |= p->startInclude;
+        bIncludes |= p->startInclude;
     }
     return p->children.empty() && !p->startInclude
         ? CONTAINS_NOT
-        : includes ? CONTAINS_NODE : CONTAINS_SUBNODES;
+        : bIncludes ? CONTAINS_NODE : CONTAINS_SUBNODES;
 }
 
 }

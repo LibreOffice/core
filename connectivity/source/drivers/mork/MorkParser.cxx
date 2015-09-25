@@ -670,11 +670,11 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
             std::cout << "\t\t\t\t Cells:\r\n";
 #endif
             // Get cells
-            bool listFound = false;
+            bool isListFound = false;
             for ( MorkCells::iterator cellsIter = RowIter->second.begin();
                  cellsIter != RowIter->second.end(); ++cellsIter )
             {
-                if (listFound)
+                if (isListFound)
                 {
                     if (cellsIter->first >= 0xC7)
                     {
@@ -686,7 +686,7 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
                 else if ((cellsIter->first == 0xC1) &&
                          listName == getValue( cellsIter->second ))
                 {
-                    listFound = true;
+                    isListFound = true;
                 }
             }
 

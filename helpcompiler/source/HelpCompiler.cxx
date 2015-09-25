@@ -189,16 +189,16 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
                 }
                 if (tmp.compare("") != 0)
                 {
-                    bool isCase=false;
+                    bool bIsCase=false;
                     xmlNodePtr caseList=list->xmlChildrenNode;
                     while (caseList)
                     {
                         xmlChar *select = xmlGetProp(caseList, reinterpret_cast<xmlChar const *>("select"));
                         if (select)
                         {
-                            if (!strcmp(reinterpret_cast<char*>(select), tmp.c_str()) && !isCase)
+                            if (!strcmp(reinterpret_cast<char*>(select), tmp.c_str()) && !bIsCase)
                             {
-                                isCase=true;
+                                bIsCase=true;
                                 xmlNodePtr clp = caseList->xmlChildrenNode;
                                 while (clp)
                                 {
@@ -216,7 +216,7 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
                             }
                             else
                             {
-                                if (!isCase)
+                                if (!bIsCase)
                                 {
                                     xmlNodePtr clp = caseList->xmlChildrenNode;
                                     while (clp)
