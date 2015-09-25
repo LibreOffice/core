@@ -27,7 +27,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <boost/noncopyable.hpp>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -69,7 +68,7 @@ protected:
 
 private:
     class Implementation;
-    ::boost::scoped_ptr<Implementation> mpImplementation;
+    std::unique_ptr<Implementation> mpImplementation;
 
     /** This method throws a DisposedException when the object has already been
         disposed.
