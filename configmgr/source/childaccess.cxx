@@ -212,13 +212,13 @@ void ChildAccess::setProperty(
 {
     assert(localModifications != 0);
     Type type = TYPE_ERROR;
-    bool nillable = false;
+    bool bNillable = false;
     switch (node_->kind()) {
     case Node::KIND_PROPERTY:
         {
             PropertyNode * prop = static_cast< PropertyNode * >(node_.get());
             type = prop->getStaticType();
-            nillable = prop->isNillable();
+            bNillable = prop->isNillable();
         }
         break;
     case Node::KIND_LOCALIZED_PROPERTY:
@@ -241,13 +241,13 @@ void ChildAccess::setProperty(
             LocalizedPropertyNode * locprop =
                 static_cast< LocalizedPropertyNode * >(getParentNode().get());
             type = locprop->getStaticType();
-            nillable = locprop->isNillable();
+            bNillable = locprop->isNillable();
         }
         break;
     default:
         break;
     }
-    checkValue(value, type, nillable);
+    checkValue(value, type, bNillable);
     getParentAccess()->markChildAsModified(this);
     changedValue_.reset(new css::uno::Any(value));
     localModifications->add(getRelativePath());

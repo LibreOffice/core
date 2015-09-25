@@ -1119,7 +1119,7 @@ bool Shell::CallBasicErrorHdl( StarBASIC* pBasic )
 
 long Shell::CallBasicBreakHdl( StarBASIC* pBasic )
 {
-    long nRet = 0;
+    long bRet = 0;
     ModulWindow* pModWin = ShowActiveModuleWindow( pBasic );
     if ( pModWin )
     {
@@ -1129,7 +1129,7 @@ long Shell::CallBasicBreakHdl( StarBASIC* pBasic )
         BasicStopped( &bAppWindowDisabled, &bDispatcherLocked,
                                 &nWaitCount, &pSWActionCount, &pSWLockViewCount );
 
-        nRet = pModWin->BasicBreakHdl( pBasic );
+        bRet = pModWin->BasicBreakHdl( pBasic );
 
         if ( StarBASIC::IsRunning() )   // if cancelled...
         {
@@ -1144,7 +1144,7 @@ long Shell::CallBasicBreakHdl( StarBASIC* pBasic )
             }
         }
     }
-    return nRet;
+    return bRet;
 }
 
 VclPtr<ModulWindow> Shell::ShowActiveModuleWindow( StarBASIC* pBasic )

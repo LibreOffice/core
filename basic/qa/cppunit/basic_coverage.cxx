@@ -73,7 +73,7 @@ void Coverage::test_success()
 void Coverage::run_test(const OUString& sFileURL)
 {
     m_sCurrentTest = sFileURL;
-    bool result = false;
+    bool bResult = false;
     MacroSnippet testMacro;
     testMacro.LoadSourceFromFile( sFileURL );
     testMacro.Compile();
@@ -82,10 +82,10 @@ void Coverage::run_test(const OUString& sFileURL)
         SbxVariableRef pResult = testMacro.Run();
         if( pResult && pResult->GetInteger() == 1 )
         {
-            result = true;
+            bResult = true;
         }
     }
-    if(result)
+    if(bResult)
     {
         test_success();
     }

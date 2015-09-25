@@ -757,7 +757,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
             buf.append( "SELECT * FROM " );
             bufferQuoteQualifiedIdentifier(buf, schemaName, tableName, pConnectionSettings );
             buf.append( " WHERE " );
-            bool additionalCondition = false;
+            bool bAdditionalCondition = false;
             String2StringMap autoValues;
             for( int i = 0 ; i < keyColumnNames.getLength() ; i ++ )
             {
@@ -813,12 +813,12 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                     }
                 }
 
-                if( additionalCondition )
+                if( bAdditionalCondition )
                     buf.append( " AND " );
                 bufferQuoteIdentifier( buf, keyColumnNames[i], pConnectionSettings );
                 buf.append( " = " );
                 buf.append( value );
-                additionalCondition = true;
+                bAdditionalCondition = true;
             }
             query = buf.makeStringAndClear();
         }

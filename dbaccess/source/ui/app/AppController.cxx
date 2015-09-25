@@ -1787,7 +1787,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
         getContainer()->showPreview(NULL);
     }
 
-    bool isStandaloneDocument = false;
+    bool bIsStandaloneDocument = false;
     switch ( _eType )
     {
     case E_REPORT:
@@ -1795,12 +1795,12 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
         {
             // reports which are opened in a mode other than design are no sub components of our application
             // component, but standalone documents.
-            isStandaloneDocument = true;
+            bIsStandaloneDocument = true;
         }
         // NO break!
     case E_FORM:
     {
-        if ( isStandaloneDocument || !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
+        if ( bIsStandaloneDocument || !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
         {
             ::std::unique_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
             if ( !aHelper->isConnected() )
@@ -1809,7 +1809,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             Reference< XComponent > xDefinition;
             xRet = aHelper->open( _sName, xDefinition, _eOpenMode, _rAdditionalArguments );
 
-            if ( !isStandaloneDocument )
+            if ( !bIsStandaloneDocument )
                 onDocumentOpened( _sName, _eType, _eOpenMode, xRet, xDefinition );
         }
     }

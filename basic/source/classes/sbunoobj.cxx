@@ -119,15 +119,15 @@ static char const defaultNameSpace[] = "ooo.vba";
 
 bool SbUnoObject::getDefaultPropName( SbUnoObject* pUnoObj, OUString& sDfltProp )
 {
-    bool result = false;
+    bool bResult = false;
     Reference< XDefaultProperty> xDefaultProp( pUnoObj->maTmpUnoObj, UNO_QUERY );
     if ( xDefaultProp.is() )
     {
         sDfltProp = xDefaultProp->getDefaultPropertyName();
         if ( !sDfltProp.isEmpty() )
-            result = true;
+            bResult = true;
     }
-    return result;
+    return bResult;
 }
 
 SbxVariable* getDefaultProp( SbxVariable* pRef )
@@ -1680,7 +1680,7 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
     {
         return true;
     }
-    bool result = false;
+    bool bResult = false;
     Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
     if( xTypeProvider.is() )
     {
@@ -1736,11 +1736,11 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
                     if ( sTypeName.isEmpty() || sTypeName == "IDispatch" )
                     {
                         // can't check type, leave it pass
-                        result = true;
+                        bResult = true;
                     }
                     else
                     {
-                        result = sTypeName.equals( rClass );
+                        bResult = sTypeName.equals( rClass );
                     }
                 }
                 break; // finished checking automation object
@@ -1751,12 +1751,12 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj, const OUString& rClass )
             if ( (aClassName.getLength() <= aInterfaceName.getLength()) &&
                     aInterfaceName.endsWithIgnoreAsciiCase( aClassName ) )
             {
-                result = true;
+                bResult = true;
                 break;
             }
         }
     }
-    return result;
+    return bResult;
 }
 
 // Debugging help method to readout the imlemented interfaces of an object

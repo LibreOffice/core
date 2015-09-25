@@ -697,13 +697,13 @@ void Bridge::handleRequestChangeReply(
 void Bridge::handleCommitChangeReply(
     bool exception, BinaryAny const & returnValue)
 {
-    bool ccMode = true;
+    bool b_ccMode = true;
     try {
         throwException(exception, returnValue);
     } catch (const css::bridge::InvalidProtocolChangeException &) {
-        ccMode = false;
+        b_ccMode = false;
     }
-    if (ccMode) {
+    if (b_ccMode) {
         setCurrentContextMode();
     }
     assert(mode_ == MODE_REQUESTED || mode_ == MODE_REPLY_1);
@@ -766,8 +766,8 @@ void Bridge::handleRequestChangeRequest(
 void Bridge::handleCommitChangeRequest(
     rtl::ByteSequence const & tid, std::vector< BinaryAny > const & inArguments)
 {
-    bool ccMode = false;
-    bool exc = false;
+    bool b_ccMode = false;
+    bool bExc = false;
     BinaryAny ret;
     assert(inArguments.size() == 1);
     css::uno::Sequence< css::bridge::ProtocolProperty > s;
@@ -776,10 +776,10 @@ void Bridge::handleCommitChangeRequest(
     (void) ok; // avoid warnings
     for (sal_Int32 i = 0; i != s.getLength(); ++i) {
         if (s[i].Name == "CurrentContext") {
-            ccMode = true;
+            b_ccMode = true;
         } else {
-            ccMode = false;
-            exc = true;
+            b_ccMode = false;
+            bExc = true;
             ret = mapCppToBinaryAny(
                 css::uno::makeAny(
                     css::bridge::InvalidProtocolChangeException(
@@ -792,8 +792,8 @@ void Bridge::handleCommitChangeRequest(
     switch (mode_) {
     case MODE_WAIT:
         getWriter()->sendDirectReply(
-            tid, protPropCommit_, exc, ret, std::vector< BinaryAny >());
-        if (ccMode) {
+            tid, protPropCommit_, bExc, ret, std::vector< BinaryAny >());
+        if (b_ccMode) {
             setCurrentContextMode();
             mode_ = MODE_NORMAL;
             getWriter()->unblock();
@@ -805,7 +805,7 @@ void Bridge::handleCommitChangeRequest(
     case MODE_NORMAL_WAIT:
         getWriter()->queueReply(
             tid, protPropCommit_, false, false, ret, std::vector< BinaryAny >(),
-            ccMode);
+            b_ccMode);
         mode_ = MODE_NORMAL;
         break;
     default:
@@ -873,12 +873,12 @@ css::uno::Reference< css::uno::XInterface > Bridge::getInstance(
             &p));
     BinaryAny ret;
     std::vector< BinaryAny> outArgs;
-    bool exc = makeCall(
+    bool bExc = makeCall(
         sInstanceName,
         css::uno::TypeDescription(
             "com.sun.star.uno.XInterface::queryInterface"),
         false, inArgs, &ret, &outArgs);
-    throwException(exc, ret);
+    throwException(bExc, ret);
     return css::uno::Reference< css::uno::XInterface >(
         static_cast< css::uno::XInterface * >(
             binaryToCppMapping_.mapInterface(

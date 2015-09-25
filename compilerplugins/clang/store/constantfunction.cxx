@@ -432,7 +432,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     }
 
     const CompoundStmt *pCompoundStmt = dyn_cast<CompoundStmt>(pFunctionDecl->getBody());
-    bool aEmptyBody = false;
+    bool bEmptyBody = false;
     if (pCompoundStmt) {
         if (pCompoundStmt->size() > 1) {
             return true;
@@ -454,13 +454,13 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
                 }
             }
         } else {
-            aEmptyBody = true;
+            bEmptyBody = true;
         }
     }
 
     std::string aMessage = "this ";
     aMessage += pCXXMethodDecl ? "method" : "function";
-    if (aEmptyBody) {
+    if (bEmptyBody) {
         aMessage += " is empty and should be removed, " + aFunctionName;
     } else {
         aMessage += " returns a constant value and should be converted to a constant "
