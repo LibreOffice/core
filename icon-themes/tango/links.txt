@@ -84,17 +84,11 @@ svx/res/galnors.png formula/res/fapclose.png
 res/lx03189.png svx/res/galdefl.png
 svx/res/galnorl.png svx/res/galdefl.png
 svx/res/galrdol.png svx/res/galdefl.png
-res/so03127.png res/sx03126.png
-res/so03126.png res/sx03126.png
-res/sx03131.png res/sx03126.png
 res/sx03246.png res/odg_16_8.png
 res/sx03228.png res/sx03160.png
 res/so03227.png res/sx03160.png
 res/sx03227.png res/sx03160.png
 res/sx03245.png res/odb_16_8.png
-res/sx03243.png res/sx03123.png
-res/so03123.png res/sx03123.png
-res/sx03244.png res/sx03123.png
 res/sx03247.png res/odf_16_8.png
 res/fp015.png res/newdoc.png
 fpicker/res/fp014.png res/newdoc.png
@@ -135,7 +129,6 @@ cmd/lc_gotoendofdoc.png cmd/lc_lastpage.png
 cmd/sc_gotostartofdoc.png cmd/sc_firstpage.png
 cmd/sc_gotoendofdoc.png cmd/sc_lastpage.png
 cmd/lc_convertinto3d.png cmd/lc_extrusiontoggle.png
-cmd/sc_convertinto3d.png cmd/sc_extrusiontoggle.png
 cmd/lc_arrowshapes.png cmd/lc_arrowshapes.left-right-arrow.png
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
 cmd/lc_calloutshapes.png cmd/lc_calloutshapes.round-rectangular-callout.png
@@ -147,11 +140,6 @@ cmd/lc_rectangletoolbox.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_linetoolbox.png cmd/lc_freeline_unfilled.png
 cmd/lc_texttoolbox.png cmd/lc_text.png
 cmd/lc_inserttoolbox.png cmd/lc_drawchart.png
-cmd/lc_objects3dtoolbox.png cmd/lc_cube.png
-cmd/lc_connectortoolbox.png cmd/lc_connector.png
-cmd/lc_arrowstoolbox.png cmd/lc_linearrowend.png
-cmd/lc_insertformspin.png cmd/lc_spinbutton.png
-cmd/lc_insertfilecontrol.png cmd/lc_filecontrol.png
 cmd/sc_arrowshapes.png cmd/sc_arrowshapes.left-right-arrow.png
 cmd/sc_basicshapes.png cmd/sc_basicshapes.diamond.png
 cmd/sc_calloutshapes.png cmd/sc_calloutshapes.round-rectangular-callout.png
@@ -163,11 +151,7 @@ cmd/sc_rectangletoolbox.png cmd/sc_basicshapes.rectangle.png
 cmd/sc_linetoolbox.png cmd/sc_freeline_unfilled.png
 cmd/sc_texttoolbox.png cmd/sc_text.png
 cmd/sc_inserttoolbox.png cmd/sc_drawchart.png
-cmd/sc_objects3dtoolbox.png cmd/sc_cube.png
 cmd/sc_connectortoolbox.png cmd/sc_connector.png
-cmd/sc_arrowstoolbox.png cmd/sc_linearrowend.png
-cmd/sc_insertformspin.png cmd/sc_spinbutton.png
-cmd/sc_insertfilecontrol.png cmd/sc_filecontrol.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
 cmd/sc_symbolcatalogue.png cmd/sc_insertsymbol.png
 res/lc05961.png cmd/lc_searchdialog.png
@@ -193,13 +177,10 @@ svtools/res/up_small.png cmd/sc_upsearch.png
 cmd/lc_adddatefield.png cmd/lc_datefield.png
 cmd/lc_insertdatefield.png cmd/lc_datefield.png
 cmd/lc_numberformatdate.png cmd/lc_datefield.png
-cmd/sc_adddatefield.png cmd/sc_datefield.png
-cmd/sc_insertdatefield.png cmd/sc_datefield.png
-cmd/sc_numberformatdate.png cmd/sc_datefield.png
+cmd/sc_datefield.png cmd/sc_numberformatdate.png
 cmd/lc_insertcurrencyfield.png cmd/lc_currencyfield.png
 cmd/lc_numberformatcurrency.png cmd/lc_currencyfield.png
 cmd/sc_inserttimefield.png cmd/sc_timefield.png
-cmd/lc_inserttimefield.png cmd/lc_timefield.png
 cmd/sc_insertcurrencyfield.png cmd/sc_currencyfield.png
 cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
 sfx2/res/favourite_big.png cmd/lc_insertbookmark.png
@@ -298,10 +279,6 @@ cmd/sc_circlepie.png cmd/sc_basicshapes.circle-pie.png
 sfx2/res/sortascending.png cmd/lc_sortascending.png
 svx/res/symphony/rotate_left.png cmd/sc_rotateleft.png
 svx/res/symphony/rotate_right.png cmd/sc_rotateright.png
-svx/res/symphony/sc_backgroundcolor.png cmd/sc_formatarea.png
-svx/res/symphony/sch_backgroundcolor.png cmd/sc_formatarea.png
-sw/res/sidebar/pageproppanel/last_custom_common.png svx/res/symphony/last_custom_common.png
-sw/res/sidebar/pageproppanel/last_custom_common_grey.png svx/res/symphony/last_custom_common_grey.png
 sc/imglst/na05.png cmd/sc_upsearch.png
 sc/imglst/na06.png cmd/sc_downsearch.png
 sc/imglst/nc01.png cmd/sc_inserttable.png
@@ -345,7 +322,6 @@ sw/imglst/sr20002.png cmd/sc_inserttable.png
 sw/imglst/sr20003.png cmd/sc_text.png
 sw/imglst/sr20004.png sd/res/page.png
 sw/imglst/sr20005.png cmd/sc_insertdraw.png
-sw/imglst/sr20006.png cmd/sc_choosecontrols.png
 sw/imglst/sr20007.png cmd/sc_insertsection.png
 sw/imglst/sr20008.png cmd/sc_insertbookmark.png
 sw/imglst/sr20009.png cmd/sc_insertgraphic.png
@@ -358,7 +334,6 @@ sd/imglst/nv09.png sc/res/droplink.png
 sw/imglst/sc20238.png sc/res/droplink.png
 sw/imglst/sr20011.png sw/imglst/nc20000.png
 sw/imglst/sr20013.png cmd/sc_insertfootnote.png
-sw/imglst/sr20014.png sw/imglst/sc20183.png
 sw/imglst/sr20017.png cmd/sc_insertindexesentry.png
 starmath/res/at21717.png cmd/lc_bold.png
 starmath/res/at21718.png cmd/lc_italic.png
@@ -367,8 +342,8 @@ starmath/res/at21720.png cmd/lc_charfontname.png
 formula/res/fx.png cmd/sc_insertformula.png
 sc/res/fx.png cmd/sc_insertformula.png
 sc/res/file.png cmd/sc_open.png
-sc/res/date.png cmd/sc_datefield.png
-sc/res/time.png cmd/lc_timefield.png
+cmd/sc_datefield.png sc/res/date.png
+cmd/lc_timefield.png sc/res/time.png
 sc/res/page.png sd/res/page.png
 sc/res/text.png cmd/sc_text.png
 sfx2/res/deleterow.png cmd/sc_deleterows.png
@@ -392,8 +367,6 @@ extensions/source/scanner/minus.png sfx2/res/minus.png
 extensions/source/scanner/plus.png sfx2/res/plus.png
 res/minus.png sfx2/res/minus.png
 res/plus.png sfx2/res/plus.png
-vcl/res/closedoc.png sfx2/res/closedoc.png
-xmlsecurity/res/signet_11x16.png svx/res/signet_11x16.png
 sc/res/sf02.png sw/imglst/sf04.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara2.png
 cmd/sc_graphicdialog.png cmd/sc_insertgraphic.png
@@ -418,7 +391,6 @@ cmd/he/sc_undo.png cmd/fa/sc_undo.png
 cmd/he/lc_undo.png cmd/fa/lc_undo.png
 
 # calc menu entries
-cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
 cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
 cmd/sc_functiondialog.png cmd/sc_insertformula.png

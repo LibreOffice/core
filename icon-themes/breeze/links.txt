@@ -124,8 +124,8 @@ cmd/sc_setdefault.png cmd/sc_resetattributes.png
 cmd/sc_showgraphics.png cmd/sc_graphic.png
 
 # split cells duplicates
-svx/res/zetlhor2.png /sw/res/zetlhor2.png
-svx/res/zetlver2.png /sw/res/zetlver2.png
+/sw/res/zetlhor2.png svx/res/zetlhor2.png
+/sw/res/zetlver2.png svx/res/zetlver2.png
 
 # FolderTree expanded icon
 svtools/res/folderop.png formula/res/fapopen.png
