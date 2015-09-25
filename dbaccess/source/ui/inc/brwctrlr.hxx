@@ -332,7 +332,7 @@ namespace dbaui
 
         // search callbacks
         DECL_LINK_TYPED(OnSearchContextRequest, FmSearchContext&, sal_uInt32);
-        DECL_LINK(OnFoundData, FmFoundRecordInformation*);
+        DECL_LINK_TYPED(OnFoundData, FmFoundRecordInformation&, void);
         DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
 
         DECL_LINK_TYPED( OnAsyncGetCellFocus, void*, void );

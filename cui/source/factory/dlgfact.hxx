@@ -389,10 +389,11 @@ class AbstractSvxHpLinkDlg_Impl :public AbstractSvxHpLinkDlg
 };
 
 class FmSearchDialog;
+struct FmFoundRecordInformation;
 class AbstractFmSearchDialog_Impl :public AbstractFmSearchDialog
 {
     DECL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl,FmSearchDialog)
-    virtual void SetFoundHandler(const Link<>& lnk) SAL_OVERRIDE ;
+    virtual void SetFoundHandler(const Link<FmFoundRecordInformation&,void>& lnk) SAL_OVERRIDE ;
     virtual void SetCanceledNotFoundHdl(const Link<>& lnk) SAL_OVERRIDE;
     virtual void SetActiveField(const OUString& strField) SAL_OVERRIDE;
 };

@@ -2200,24 +2200,24 @@ void FmXFormShell::ShowSelectionProperties( bool bShow )
 }
 
 
-IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
+IMPL_LINK_TYPED(FmXFormShell, OnFoundData, FmFoundRecordInformation&, rfriWhere, void)
 {
     if ( impl_checkDisposed() )
-        return 0;
+        return;
 
-    DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < (sal_Int16)m_aSearchForms.size()),
+    DBG_ASSERT((rfriWhere.nContext >= 0) && (rfriWhere.nContext < (sal_Int16)m_aSearchForms.size()),
         "FmXFormShell::OnFoundData : ungueltiger Kontext !");
-    Reference< XForm> xForm( m_aSearchForms.at(pfriWhere->nContext));
+    Reference< XForm> xForm( m_aSearchForms.at(rfriWhere.nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnFoundData : ungueltige Form !");
 
     Reference< XRowLocate> xCursor(xForm, UNO_QUERY);
     if (!xCursor.is())
-        return 0;       // was soll ich da machen ?
+        return;       // was soll ich da machen ?
 
     // zum Datensatz
     try
     {
-        xCursor->moveToBookmark(pfriWhere->aPosition);
+        xCursor->moveToBookmark(rfriWhere.aPosition);
     }
     catch(const SQLException&)
     {
@@ -2227,10 +2227,10 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     LoopGrids(LoopGridsSync::FORCE_SYNC);
 
     // und zum Feld (dazu habe ich vor dem Start des Suchens die XVclComponent-Interfaces eingesammelt)
-    SAL_WARN_IF(static_cast<size_t>(pfriWhere->nFieldPos) >=
+    SAL_WARN_IF(static_cast<size_t>(rfriWhere.nFieldPos) >=
             m_arrSearchedControls.size(),
         "svx.form", "FmXFormShell::OnFoundData : invalid index!");
-    SdrObject* pObject = m_arrSearchedControls.at(pfriWhere->nFieldPos);
+    SdrObject* pObject = m_arrSearchedControls.at(rfriWhere.nFieldPos);
 
     m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());
     m_pShell->GetFormView()->MarkObj(pObject, m_pShell->GetFormView()->GetSdrPageView());
@@ -2239,7 +2239,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     Reference< XControlModel > xControlModel( pFormObject ? pFormObject->GetUnoControlModel() : Reference< XControlModel >() );
     DBG_ASSERT( xControlModel.is(), "FmXFormShell::OnFoundData: invalid control!" );
     if ( !xControlModel.is() )
-        return 0;
+        return;
 
     // disable the permanent cursor for the last grid we found a record
     if (m_xLastGridFound.is() && (m_xLastGridFound != xControlModel))
@@ -2254,7 +2254,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     }
 
     // wenn das Feld sich in einem GridControl befindet, muss ich dort noch in die entsprechende Spalte gehen
-    sal_Int32 nGridColumn = m_arrRelativeGridColumn[pfriWhere->nFieldPos];
+    sal_Int32 nGridColumn = m_arrRelativeGridColumn[rfriWhere.nFieldPos];
     if (nGridColumn != -1)
     {   // dummer weise muss ich mir das Control erst wieder besorgen
         Reference<XControl> xControl( pFormObject ? impl_getControl( xControlModel, *pFormObject ) : Reference< XControl>() );
@@ -2279,8 +2279,6 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
     while (DatabaseSlotMap[nPos])
         m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Update(DatabaseSlotMap[nPos++]);
         // leider geht das Update im Gegensatz zum Invalidate nur mit einzelnen Slots)
-
-    return 0;
 }
 
 

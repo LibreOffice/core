@@ -78,7 +78,7 @@ class FmSearchDialog : public ModalDialog
 
     VclPtr<vcl::Window>         m_pPreSearchFocus;
 
-    Link<>  m_lnkFoundHandler;          ///< Handler for "found"
+    Link<FmFoundRecordInformation&,void>  m_lnkFoundHandler;          ///< Handler for "found"
     Link<>  m_lnkCanceledNotFoundHdl;   ///< Handler for Positioning the Cursors
 
     Link<FmSearchContext&,sal_uInt32>  m_lnkContextSupplier;       ///< for search in contexts
@@ -119,7 +119,7 @@ public:
         This handler MUST be set.
         Furthermore, it should be considered, that during the handler the search-dialog is still modal.
     */
-    void SetFoundHandler(const Link<>& lnk) { m_lnkFoundHandler = lnk; }
+    void SetFoundHandler(const Link<FmFoundRecordInformation&,void>& lnk) { m_lnkFoundHandler = lnk; }
     /**
         If the search has been cancelled or has been finished without success, the current data set is always displayed in the
         search dialog. This handler exists to make this synchronous with the possible display of the caller (it does not

@@ -696,7 +696,7 @@ void FmSearchDialog::OnFound(const css::uno::Any& aCursorPos, sal_Int16 nFieldPo
         // this of course implies that I have really searched in the field that is selected in the listbox,
         // which is made sure in RebuildUsedFields
 
-    m_lnkFoundHandler.Call(&friInfo);
+    m_lnkFoundHandler.Call(friInfo);
 
     m_pcmbSearchText->GrabFocus();
 }
