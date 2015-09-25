@@ -78,8 +78,8 @@ public:
 
 class SvxDictEdit : public Edit
 {
-    Link<>  aActionLink;
-    bool    bSpaces;
+    Link<SvxDictEdit&,bool>  aActionLink;
+    bool                     bSpaces;
 
     public:
                     SvxDictEdit(vcl::Window* pParent, const ResId& rResId) :
@@ -87,7 +87,7 @@ class SvxDictEdit : public Edit
                     SvxDictEdit(vcl::Window* pParent, WinBits aWB) :
                         Edit(pParent, aWB), bSpaces(false){}
 
-    void            SetActionHdl( const Link<>& rLink )
+    void            SetActionHdl( const Link<SvxDictEdit&,bool>& rLink )
                                 { aActionLink = rLink;}
 
     void            SetSpaces(bool bSet)
@@ -132,9 +132,10 @@ private:
     DECL_LINK(SelectBookHdl_Impl, void *);
     DECL_LINK(SelectLangHdl_Impl, void *);
     DECL_LINK_TYPED(SelectHdl, SvTreeListBox*, void);
-    DECL_LINK_TYPED(NewDelHdl, Button*, void);
-    DECL_LINK(NewDelActionHdl, PushButton*);
+    DECL_LINK_TYPED(NewDelButtonHdl, Button*, void);
+    DECL_LINK_TYPED(NewDelActionHdl, SvxDictEdit&, bool);
     DECL_LINK(ModifyHdl, Edit*);
+    bool NewDelHdl(void*);
 
 
     void            ShowWords_Impl( sal_uInt16 nId );
