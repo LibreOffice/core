@@ -1635,7 +1635,7 @@ IMPL_LINK_TYPED( VclExpander, ClickHdl, CheckBox&, rBtn, void )
         if (pResizeDialog)
             pResizeDialog->setOptimalLayoutSize();
     }
-    maExpandedHdl.Call(this);
+    maExpandedHdl.Call(*this);
 }
 
 VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent, WinBits nStyle)

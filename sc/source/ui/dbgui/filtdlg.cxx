@@ -740,7 +740,7 @@ IMPL_LINK_TYPED( ScFilterDlg, EndDlgHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
+IMPL_LINK_NOARG_TYPED(ScFilterDlg, MoreExpandedHdl, VclExpander&, void)
 {
     if ( pExpander->get_expanded() )
         pTimer->Start();
@@ -751,7 +751,6 @@ IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
         //@BugID 54702 Enable/disable only in Basic class
         //SFX_APPWINDOW->Disable(FALSE);        //! general method in ScAnyRefDlg
     }
-    return 0;
 }
 
 IMPL_LINK_TYPED( ScFilterDlg, TimeOutHdl, Timer*, _pTimer, void )
