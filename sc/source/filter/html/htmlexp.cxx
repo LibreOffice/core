@@ -52,6 +52,7 @@
 #include "htmlexp.hxx"
 #include "filter.hxx"
 #include "global.hxx"
+#include "postit.hxx"
 #include "document.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"
@@ -1058,6 +1059,12 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         nFormat, *pFormatter, eDestEnc, &aNonConvertibleChars));
 
     TAG_ON(aStrTD.makeStringAndClear().getStr());
+
+    //write the note for this as the first thing in the tag
+    if (pDoc->HasNote(aPos)) {
+        ScPostIt* pNote = pDoc->GetNote(aPos);
+        OUT_COMMENT( pNote->GetText() );
+    }
 
     if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
     if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );
