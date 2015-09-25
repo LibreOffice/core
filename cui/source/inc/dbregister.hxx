@@ -61,7 +61,7 @@ namespace svx
 
         DECL_LINK_TYPED( HeaderSelect_Impl, HeaderBar *, void );
         DECL_LINK_TYPED( HeaderEndDrag_Impl, HeaderBar *, void );
-        DECL_LINK( NameValidator, OUString*);
+        DECL_LINK_TYPED( NameValidator, const OUString&, bool);
 
 
         /** inserts a new entry in the tablistbox

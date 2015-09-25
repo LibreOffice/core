@@ -143,7 +143,7 @@ namespace svx
         OUString sCurrentText = m_pName->GetText();
         if ( m_aNameValidator.IsSet() )
         {
-            if ( !m_aNameValidator.Call( &sCurrentText ) )
+            if ( !m_aNameValidator.Call( sCurrentText ) )
             {
                 OUString sMsg = CUI_RES(STR_NAME_CONFLICT);
                 sMsg = sMsg.replaceFirst("$file$", sCurrentText);
