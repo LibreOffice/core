@@ -40,7 +40,6 @@
 #include <sfx2/request.hxx>
 #include <svx/svxdlg.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -72,7 +71,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         SfxItemSet aNewAttr( mpDoc->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
-        boost::scoped_ptr<SvxZoomItem> pZoomItem;
+        std::unique_ptr<SvxZoomItem> pZoomItem;
         SvxZoomEnableFlags nZoomValues = SvxZoomEnableFlags::ALL;
 
         nValue = (sal_Int16) mpWindow->GetZoom();
@@ -111,7 +110,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
         pZoomItem->SetValueSet( nZoomValues );
         aNewAttr.Put( *pZoomItem );
 
-        boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
+        std::unique_ptr<AbstractSvxZoomDialog> pDlg;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {

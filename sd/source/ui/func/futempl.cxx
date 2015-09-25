@@ -66,7 +66,6 @@
 #include "helpids.h"
 #include "sdabstdlg.hxx"
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -297,8 +296,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
             if( pStyleSheet )
             {
-                boost::scoped_ptr<SfxAbstractTabDialog> pStdDlg;
-                boost::scoped_ptr<SfxAbstractTabDialog> pPresDlg;
+                std::unique_ptr<SfxAbstractTabDialog> pStdDlg;
+                std::unique_ptr<SfxAbstractTabDialog> pPresDlg;
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 bool bOldDocInOtherLanguage = false;
                 SfxItemSet aOriSet( pStyleSheet->GetItemSet() );

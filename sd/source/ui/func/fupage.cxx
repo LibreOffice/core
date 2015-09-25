@@ -68,7 +68,6 @@
 #include "helpids.h"
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -281,7 +280,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
         }
     }
 
-    boost::scoped_ptr< SfxItemSet > pTempSet;
+    std::unique_ptr< SfxItemSet > pTempSet;
 
     if( GetSlotID() == SID_SELECT_BACKGROUND )
     {
@@ -311,7 +310,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     {
         // create the dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        boost::scoped_ptr<SfxAbstractTabDialog> pDlg( pFact ? pFact->CreateSdTabPageDialog(NULL, &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage ) : 0 );
+        std::unique_ptr<SfxAbstractTabDialog> pDlg( pFact ? pFact->CreateSdTabPageDialog(NULL, &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage ) : 0 );
         if( pDlg.get() && pDlg->Execute() == RET_OK )
             pTempSet.reset( new SfxItemSet(*pDlg->GetOutputItemSet()) );
     }
