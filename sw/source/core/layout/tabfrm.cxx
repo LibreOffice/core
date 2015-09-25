@@ -5327,9 +5327,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
     // --> OD 2008-07-16 #158225# no vertical alignment of covered cells
          !IsCoveredCell() &&
     // <--
-    // --> FME 2004-06-29 #116532# Do not consider vertical alignment in grid mode
-         !(pPg = FindPageFrm())->HasGrid() )
-    // <--
+         (pPg = FindPageFrm())!=NULL )
     {
         if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() && !Lower()->IsTabFrm() )
         {
