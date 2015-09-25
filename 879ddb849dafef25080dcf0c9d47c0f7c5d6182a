@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_13d65bc5",
+        "filename": "basctl/source/basicide/basides1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1122,
+      "author": {
+        "id": 1000824
+      },
+      "writtenOn": "2015-09-25T13:58:45Z",
+      "side": 1,
+      "message": "This is a long type variable, not boolean one. The \u0027n\u0027 prefix should stay.",
+      "revId": "879ddb849dafef25080dcf0c9d47c0f7c5d6182a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
