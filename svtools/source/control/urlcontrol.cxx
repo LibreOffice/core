@@ -59,7 +59,7 @@ namespace svt
                 if (KEY_RETURN == _rNEvt.GetKeyEvent()->GetKeyCode().GetCode())
                     if (IsInDropDown())
                     {
-                        bool nReturn = SvtURLBox::Notify(_rNEvt);
+                        bool bReturn = SvtURLBox::Notify(_rNEvt);
 
                         // build a system dependent (thus more user readable) file name
                         OFileNotation aTransformer(m_sPreservedText, OFileNotation::N_URL);
@@ -69,7 +69,7 @@ namespace svt
                         // Update the pick list
                         UpdatePickList();
 
-                        return nReturn;
+                        return bReturn;
                     }
 
         return SvtURLBox::Notify(_rNEvt);

@@ -110,7 +110,7 @@ void BaseWindow::ExecuteGlobal (SfxRequest&)
 
 bool BaseWindow::Notify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -127,14 +127,14 @@ bool BaseWindow::Notify( NotifyEvent& rNEvt )
                 {
                     if (Shell* pShell = GetShell())
                         pShell->NextPage( nCode == KEY_PAGEUP );
-                    nDone = true;
+                    bDone = true;
                 }
             }
             break;
         }
     }
 
-    return nDone || Window::Notify( rNEvt );
+    return bDone || Window::Notify( rNEvt );
 }
 
 

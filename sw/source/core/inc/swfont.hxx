@@ -216,7 +216,7 @@ public:
     inline void SetOverColor( const Color &rColor ) { aOverColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const bool bOutline );
-           void SetVertical( sal_uInt16 nDir, const bool nVertLayout = false );
+           void SetVertical( sal_uInt16 nDir, const bool bVertLayout = false );
     inline void SetShadow( const bool bShadow );
     inline void SetAutoKern( FontKerning nAutoKern );
     inline void SetTransparent( const bool bTrans );
@@ -285,7 +285,7 @@ public:
     FontWeight GetWeight() const { return aSub[nActual].GetWeight(); }
     FontEmphasisMark GetEmphasisMark() const
         { return aSub[nActual].GetEmphasisMark(); }
-    sal_uInt16 GetOrientation( const bool nVertLayout = false ) const;
+    sal_uInt16 GetOrientation( const bool bVertLayout = false ) const;
 
     inline const OUString& GetName( const sal_uInt8 nWhich ) const
         { return aSub[nWhich].GetName(); }

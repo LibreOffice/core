@@ -1259,7 +1259,7 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
 
 bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    bool nRet = false;
+    bool bRet = false;
     MouseNotifyEvent nType = rNEvt.GetType();
     if ( MouseNotifyEvent::KEYINPUT == nType )
     {
@@ -1267,12 +1267,12 @@ bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
         if ( KEY_DELETE == nCode && GetEntryCount() > 0 )
         {
             DoAction( MID_DELETE );
-            nRet = true;
+            bRet = true;
         }
         else if ( KEY_RETURN == nCode )
         {
             GetDoubleClickHdl().Call( *this );
-            nRet = true;
+            bRet = true;
         }
     }
     else if ( MouseNotifyEvent::COMMAND == nType )
@@ -1284,11 +1284,11 @@ bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
             sal_uInt16 nId = aMenu.Execute( this, pCEvt->GetMousePosPixel() );
             if ( nId != MENU_ITEM_NOTFOUND )
                 DoAction( nId );
-            nRet = true;
+            bRet = true;
         }
     }
 
-    return nRet || ListBox::Notify( rNEvt );
+    return bRet || ListBox::Notify( rNEvt );
 }
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -1655,7 +1655,7 @@ Size SfxHelpIndexWindow_Impl::GetOptimalSize() const
 
 bool SfxHelpIndexWindow_Impl::PreNotify(NotifyEvent& rNEvt)
 {
-    bool nDone = false;
+    bool bDone = false;
     MouseNotifyEvent nType = rNEvt.GetType();
     if ( MouseNotifyEvent::KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
@@ -1673,12 +1673,12 @@ bool SfxHelpIndexWindow_Impl::PreNotify(NotifyEvent& rNEvt)
             if ( !bCtrl && bShift && m_pActiveLB->HasChildPathFocus() )
             {
                 pControl->GrabFocus();
-                nDone = true;
+                bDone = true;
             }
             else if ( !bCtrl && !bShift && pControl->HasChildPathFocus() )
             {
                 m_pActiveLB->GrabFocus();
-                nDone = true;
+                bDone = true;
             }
             else if ( bCtrl )
             {
@@ -1692,7 +1692,7 @@ bool SfxHelpIndexWindow_Impl::PreNotify(NotifyEvent& rNEvt)
 
                 m_pTabCtrl->SetCurPageId(m_pTabCtrl->GetPageId(nPagePos));
                 ActivatePageHdl( m_pTabCtrl );
-                nDone = true;
+                bDone = true;
             }
          }
         else if ( m_pTabCtrl->HasFocus() && ( KEY_LEFT == nCode || KEY_RIGHT == nCode ) )
@@ -1701,7 +1701,7 @@ bool SfxHelpIndexWindow_Impl::PreNotify(NotifyEvent& rNEvt)
         }
     }
 
-    return nDone || Window::PreNotify( rNEvt );
+    return bDone || Window::PreNotify( rNEvt );
 }
 
 
@@ -2384,7 +2384,7 @@ void SfxHelpTextWindow_Impl::Resize()
 
 bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     MouseNotifyEvent nType = rNEvt.GetType();
     if ( MouseNotifyEvent::COMMAND == nType && rNEvt.GetCommandEvent() )
     {
@@ -2476,7 +2476,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
             sal_uInt16 nId = aMenu.Execute( this, aPos );
             pHelpWin->DoAction( nId );
-            nDone = true;
+            bDone = true;
         }
     }
     else if ( MouseNotifyEvent::KEYINPUT == nType && rNEvt.GetKeyEvent() )
@@ -2488,22 +2488,22 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         if ( KEYGROUP_ALPHA == nKeyGroup &&  !isHandledKey( rKeyCode ) )
         {
             // do nothing disables the writer accelerators
-            nDone = true;
+            bDone = true;
          }
         else if ( rKeyCode.IsMod1() && ( KEY_F4 == nKey || KEY_W == nKey ) )
         {
             // <CTRL><F4> or <CTRL><W> -> close top frame
             pHelpWin->CloseWindow();
-            nDone = true;
+            bDone = true;
         }
         else if ( KEY_TAB == nKey && aOnStartupCB->HasChildPathFocus() )
         {
             aToolBox->GrabFocus();
-            nDone = true;
+            bDone = true;
         }
     }
 
-    return nDone || Window::PreNotify( rNEvt );
+    return bDone || Window::PreNotify( rNEvt );
 }
 
 

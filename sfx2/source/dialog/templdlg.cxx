@@ -291,7 +291,7 @@ IMPL_LINK_NOARG_TYPED(DropListBox_Impl, OnAsyncExecuteDrop, void*, void)
 
 bool DropListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    bool nRet = false;
+    bool bRet = false;
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
@@ -300,18 +300,18 @@ bool DropListBox_Impl::Notify( NotifyEvent& rNEvt )
             if( pDialog->bCanDel && KEY_DELETE == rKeyCode.GetCode())
             {
                 pDialog->DeleteHdl( NULL );
-                nRet =  true;
+                bRet =  true;
             }
             else if( KEY_RETURN == rKeyCode.GetCode())
             {
                 GetDoubleClickHdl().Call(this);
-                nRet = true;
+                bRet = true;
             }
         }
     }
-    if(!nRet)
-        nRet = SvTreeListBox::Notify( rNEvt );
-    return nRet;
+    if(!bRet)
+        bRet = SvTreeListBox::Notify( rNEvt );
+    return bRet;
 }
 
 /** ListBox class that starts a PopupMenu (designer specific) in the
@@ -447,21 +447,21 @@ bool StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     // handle <RETURN> as double click
 
-    bool nRet = false;
+    bool bRet = false;
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         if ( !rKeyCode.GetModifier() && KEY_RETURN == rKeyCode.GetCode() )
         {
             aDoubleClickLink.Call( nullptr );
-            nRet = true;
+            bRet = true;
         }
     }
 
-    if ( !nRet )
-        nRet = DropListBox_Impl::Notify( rNEvt );
+    if ( !bRet )
+        bRet = DropListBox_Impl::Notify( rNEvt );
 
-    return nRet;
+    return bRet;
 }
 
 /** NotifyMoving Handler; This leads via a link on the event to the dialog.

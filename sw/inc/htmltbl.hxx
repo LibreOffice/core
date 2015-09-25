@@ -97,7 +97,7 @@ public:
     SwHTMLTableLayoutCell( SwHTMLTableLayoutCnts *pCnts,
                          sal_uInt16 nRSpan, sal_uInt16 nCSpan,
                          sal_uInt16 nWidthOpt, bool bPrcWdthOpt,
-                         bool nNWrapOpt );
+                         bool bNWrapOpt );
 
     ~SwHTMLTableLayoutCell();
 

@@ -291,7 +291,7 @@ void ScFilterListBox::LoseFocus()
 
 bool ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
@@ -302,17 +302,17 @@ bool ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
             if ( nKey == KEY_RETURN )
             {
                 SelectHdl(); // select
-                nDone = true;
+                bDone = true;
             }
             else if ( nKey == KEY_ESCAPE )
             {
                 pGridWin->ClickExtern();  // clears the listbox
-                nDone = true;
+                bDone = true;
             }
         }
     }
 
-    return nDone || ListBox::PreNotify( rNEvt );
+    return bDone || ListBox::PreNotify( rNEvt );
 }
 
 void ScFilterListBox::Select()

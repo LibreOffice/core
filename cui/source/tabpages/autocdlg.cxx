@@ -2445,28 +2445,28 @@ void OfaAutoCompleteTabPage::AutoCompleteMultiListBox::dispose()
 bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
             NotifyEvent& rNEvt )
 {
-    bool nHandled = MultiListBox::PreNotify( rNEvt );
+    bool bHandled = MultiListBox::PreNotify( rNEvt );
 
-    if( !nHandled && MouseNotifyEvent::KEYUP == rNEvt.GetType() )
+    if( !bHandled && MouseNotifyEvent::KEYUP == rNEvt.GetType() )
     {
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         switch( rKeyCode.GetModifier() | rKeyCode.GetCode() )
         {
         case KEY_DELETE:
             m_pPage->DeleteHdl( 0 );
-            nHandled = true;
+            bHandled = true;
             break;
 
         default:
             if( KeyFuncType::COPY == rKeyCode.GetFunction() )
             {
                 m_pPage->CopyToClipboard();
-                nHandled = true;
+                bHandled = true;
             }
             break;
         }
     }
-    return nHandled;
+    return bHandled;
 }
 
 VCL_BUILDER_DECL_FACTORY(AutoCompleteMultiListBox)

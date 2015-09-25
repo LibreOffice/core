@@ -515,7 +515,7 @@ void SpinField::MouseMove(const MouseEvent& rMEvt)
 
 bool SpinField::Notify(NotifyEvent& rNEvt)
 {
-    bool nDone = false;
+    bool bDone = false;
     if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
@@ -529,7 +529,7 @@ bool SpinField::Notify(NotifyEvent& rNEvt)
                     if (!nMod)
                     {
                         Up();
-                        nDone = true;
+                        bDone = true;
                     }
                 }
                 break;
@@ -538,13 +538,13 @@ bool SpinField::Notify(NotifyEvent& rNEvt)
                     if (!nMod)
                     {
                         Down();
-                        nDone = true;
+                        bDone = true;
                     }
                     else if ((nMod == KEY_MOD2) && !mbInDropDown && (GetStyle() & WB_DROPDOWN))
                     {
                         mbInDropDown = ShowDropDown(true);
                         Invalidate(Rectangle(Point(), GetOutputSizePixel()));
-                        nDone = true;
+                        bDone = true;
                     }
                 }
                 break;
@@ -553,7 +553,7 @@ bool SpinField::Notify(NotifyEvent& rNEvt)
                     if (!nMod)
                     {
                         Last();
-                        nDone = true;
+                        bDone = true;
                     }
                 }
                 break;
@@ -562,7 +562,7 @@ bool SpinField::Notify(NotifyEvent& rNEvt)
                     if (!nMod)
                     {
                         First();
-                        nDone = true;
+                        bDone = true;
                     }
                 }
                 break;
@@ -585,15 +585,15 @@ bool SpinField::Notify(NotifyEvent& rNEvt)
                         Down();
                     else
                         Up();
-                    nDone = true;
+                    bDone = true;
                 }
             }
             else
-                nDone = false;  // don't eat this event, let the default handling happen (i.e. scroll the context)
+                bDone = false;  // don't eat this event, let the default handling happen (i.e. scroll the context)
         }
     }
 
-    return nDone || Edit::Notify(rNEvt);
+    return bDone || Edit::Notify(rNEvt);
 }
 
 void SpinField::Command(const CommandEvent& rCEvt)

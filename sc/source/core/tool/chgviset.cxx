@@ -82,15 +82,15 @@ ScChangeViewSettings& ScChangeViewSettings::operator=( const ScChangeViewSetting
 
 bool ScChangeViewSettings::IsValidComment(const OUString* pCommentStr) const
 {
-    bool nTheFlag = true;
+    bool bTheFlag = true;
 
     if(pCommentSearcher)
     {
         sal_Int32 nStartPos = 0;
         sal_Int32 nEndPos = pCommentStr->getLength();
-        nTheFlag = pCommentSearcher->SearchForward(*pCommentStr, &nStartPos, &nEndPos);
+        bTheFlag = pCommentSearcher->SearchForward(*pCommentStr, &nStartPos, &nEndPos);
     }
-    return nTheFlag;
+    return bTheFlag;
 }
 
 void ScChangeViewSettings::SetTheComment(const OUString& rString)

@@ -209,7 +209,7 @@ bool TextSearch::SearchForward( const OUString &rStr,
                     sal_Int32* pStart, sal_Int32* pEnd,
                     ::com::sun::star::util::SearchResult* pRes)
 {
-    bool nRet = false;
+    bool bRet = false;
     try
     {
         if( xTextSearch.is() )
@@ -217,7 +217,7 @@ bool TextSearch::SearchForward( const OUString &rStr,
             SearchResult aRet( xTextSearch->searchForward( rStr, *pStart, *pEnd ));
             if( aRet.subRegExpressions > 0 )
             {
-                nRet = true;
+                bRet = true;
                 // the XTextsearch returns in startOffset the higher position
                 // and the endposition is always exclusive.
                 // The caller of this function will have in startPos the
@@ -233,13 +233,13 @@ bool TextSearch::SearchForward( const OUString &rStr,
     {
         SAL_WARN( "unotools.i18n", "SearchForward: Exception caught!" );
     }
-    return nRet;
+    return bRet;
 }
 
 bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
                                 sal_Int32* pEnde, SearchResult* pRes )
 {
-    bool nRet = false;
+    bool bRet = false;
     try
     {
         if( xTextSearch.is() )
@@ -247,7 +247,7 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
             SearchResult aRet( xTextSearch->searchBackward( rStr, *pStart, *pEnde ));
             if( aRet.subRegExpressions )
             {
-                nRet = true;
+                bRet = true;
                 // the XTextsearch returns in startOffset the higher position
                 // and the endposition is always exclusive.
                 // The caller of this function will have in startPos the
@@ -263,7 +263,7 @@ bool TextSearch::SearchBackward( const OUString & rStr, sal_Int32* pStart,
     {
         SAL_WARN( "unotools.i18n", "SearchBackward: Exception caught!" );
     }
-    return nRet;
+    return bRet;
 }
 
 void TextSearch::ReplaceBackReferences( OUString& rReplaceStr, const OUString &rStr, const SearchResult& rResult )

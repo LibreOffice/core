@@ -890,12 +890,12 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             eMvMode = SwPagePreviewWin::MV_DOC_END; bRetVal = true; goto MOVEPAGE;
 MOVEPAGE:
             {
-                bool nRet = ChgPage( eMvMode );
+                bool bRet = ChgPage( eMvMode );
                 // return value fuer Basic
                 if(bRetVal)
-                    rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), !nRet));
+                    rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), !bRet));
 
-                bRefresh = nRet;
+                bRefresh = bRet;
                 rReq.Done();
             }
             break;

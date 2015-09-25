@@ -688,7 +688,7 @@ IMPL_LINK(SvxRubyDialog, EditModifyHdl_Impl, Edit*, pEdit)
 
 IMPL_LINK_TYPED(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32, nParam, bool)
 {
-    bool nRet = false;
+    bool bRet = false;
     if (m_pScrollSB->IsEnabled())
     {
         //scroll forward
@@ -698,7 +698,7 @@ IMPL_LINK_TYPED(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32, nParam, bool)
             {
                 m_pScrollSB->SetThumbPos(m_pScrollSB->GetThumbPos() + 1);
                 aEditArr[6]->GrabFocus();
-                nRet = true;
+                bRet = true;
             }
         }
         //scroll backward
@@ -706,12 +706,12 @@ IMPL_LINK_TYPED(SvxRubyDialog, EditScrollHdl_Impl, sal_Int32, nParam, bool)
         {
             m_pScrollSB->SetThumbPos(m_pScrollSB->GetThumbPos() - 1);
             aEditArr[1]->GrabFocus();
-            nRet = true;
+            bRet = true;
         }
-        if (nRet)
+        if (bRet)
             ScrollHdl_Impl(m_pScrollSB);
     }
-    return nRet;
+    return bRet;
 }
 
 IMPL_LINK_TYPED(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32, nParam, void)
@@ -932,7 +932,7 @@ void RubyEdit::GetFocus()
 
 bool RubyEdit::PreNotify(NotifyEvent& rNEvt)
 {
-    bool nHandled = false;
+    bool bHandled = false;
     if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
@@ -943,7 +943,7 @@ bool RubyEdit::PreNotify(NotifyEvent& rNEvt)
         {
             sal_Int32 nParam = KEY_SHIFT == nMod ? -1 : 1;
             if(aScrollHdl.IsSet() && aScrollHdl.Call(nParam))
-                nHandled = true;
+                bHandled = true;
         }
         else if (KEY_UP == nCode || KEY_DOWN == nCode)
         {
@@ -951,9 +951,9 @@ bool RubyEdit::PreNotify(NotifyEvent& rNEvt)
             aJumpHdl.Call(nParam);
         }
     }
-    if (!nHandled)
-        nHandled = Edit::PreNotify(rNEvt);
-    return nHandled;
+    if (!bHandled)
+        bHandled = Edit::PreNotify(rNEvt);
+    return bHandled;
 }
 
 VCL_BUILDER_FACTORY(RubyEdit)

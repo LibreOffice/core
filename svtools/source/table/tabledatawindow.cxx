@@ -194,7 +194,7 @@ namespace svt { namespace table
 
     bool TableDataWindow::Notify(NotifyEvent& rNEvt )
     {
-        bool nDone = false;
+        bool bDone = false;
         if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
         {
             const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
@@ -203,11 +203,11 @@ namespace svt { namespace table
                 const CommandWheelData* pData = rCEvt.GetWheelData();
                 if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
                 {
-                    nDone = HandleScrollCommand( rCEvt, m_rTableControl.getHorzScrollbar(), m_rTableControl.getVertScrollbar() );
+                    bDone = HandleScrollCommand( rCEvt, m_rTableControl.getHorzScrollbar(), m_rTableControl.getVertScrollbar() );
                 }
             }
         }
-        return nDone || Window::Notify( rNEvt );
+        return bDone || Window::Notify( rNEvt );
     }
 
 }} // namespace svt::table

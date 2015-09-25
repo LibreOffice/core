@@ -401,14 +401,14 @@ VCL_BUILDER_FACTORY(OWizTypeSelectList)
 
 bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     switch( rEvt.GetType() )
     {
         case MouseNotifyEvent::MOUSEBUTTONDOWN:
         {
             const MouseEvent* pMEvt = rEvt.GetMouseEvent();
             if(pMEvt->IsRight() && !pMEvt->GetModifier())
-                nDone = true;
+                bDone = true;
         }
             break;
         case MouseNotifyEvent::COMMAND:
@@ -448,13 +448,13 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
                 }
                 break;
             }
-            nDone = true;
+            bDone = true;
         }
         break;
         default:
         break;
     }
-    return nDone || MultiListBox::PreNotify(rEvt);
+    return bDone || MultiListBox::PreNotify(rEvt);
 }
 
 void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)

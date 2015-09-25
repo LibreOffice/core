@@ -612,8 +612,8 @@ bool Dialog::ImplHandleCmdEvent( const CommandEvent& rCEvent )
 bool Dialog::Notify( NotifyEvent& rNEvt )
 {
     // first call the base class due to Tab control
-    bool nRet = SystemWindow::Notify( rNEvt );
-    if ( !nRet )
+    bool bRet = SystemWindow::Notify( rNEvt );
+    if ( !bRet )
     {
         if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
@@ -659,7 +659,7 @@ bool Dialog::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    return nRet;
+    return bRet;
 }
 
 //What we really want here is something that gives the available width and

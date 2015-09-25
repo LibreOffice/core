@@ -92,7 +92,7 @@ public:
                     // returned pData, pClass may be NULL
     virtual RSCINST GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
-                                 bool nInitDflt = false,
+                                 bool bInitDflt = false,
                                  RscTop * pCreateClass = NULL );
     virtual RSCINST GetCopyVar( const RSCINST & rInst, Atom nVarName );
 

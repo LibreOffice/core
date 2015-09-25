@@ -49,12 +49,12 @@ LimitBoxImpl::LimitBoxImpl( vcl::Window* pParent, LimitBoxController* pCtrl )
 
 bool LimitBoxImpl::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = false;
+    bool bHandled = false;
     switch ( rNEvt.GetType() )
     {
         case MouseNotifyEvent::LOSEFOCUS:
         {
-            nHandled = LimitBox::Notify( rNEvt );
+            bHandled = LimitBox::Notify( rNEvt );
             uno::Sequence< beans::PropertyValue > aArgs( 1 );
             aArgs[0].Name  = "DBLimit.Value";
             aArgs[0].Value = uno::makeAny( GetValue() );
@@ -71,7 +71,7 @@ bool LimitBoxImpl::Notify( NotifyEvent& rNEvt )
                     // fall-through
                 case KEY_RETURN:
                     GrabFocusToDocument();
-                    nHandled = true;
+                    bHandled = true;
                     break;
                 case KEY_TAB:
                     Select();
@@ -82,7 +82,7 @@ bool LimitBoxImpl::Notify( NotifyEvent& rNEvt )
         default:
             break;
     }
-    return nHandled || LimitBox::Notify( rNEvt );
+    return bHandled || LimitBox::Notify( rNEvt );
 }
 
 

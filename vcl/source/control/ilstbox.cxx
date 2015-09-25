@@ -2503,7 +2503,7 @@ void ImplListBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool ImplListBox::Notify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
@@ -2512,12 +2512,12 @@ bool ImplListBox::Notify( NotifyEvent& rNEvt )
             const CommandWheelData* pData = rCEvt.GetWheelData();
             if( !pData->GetModifier() && ( pData->GetMode() == CommandWheelMode::SCROLL ) )
             {
-                nDone = HandleScrollCommand( rCEvt, mpHScrollBar, mpVScrollBar );
+                bDone = HandleScrollCommand( rCEvt, mpHScrollBar, mpVScrollBar );
             }
         }
     }
 
-    return nDone || Window::Notify( rNEvt );
+    return bDone || Window::Notify( rNEvt );
 }
 
 const Wallpaper& ImplListBox::GetDisplayBackground() const

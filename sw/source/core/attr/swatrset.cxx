@@ -196,9 +196,9 @@ bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
 {
     pNewSet = pNew;
     pOldSet = pOld;
-    bool nRet = 0 != SfxItemSet::Put( rAttr );
+    bool bRet = 0 != SfxItemSet::Put( rAttr );
     pOldSet = pNewSet = 0;
-    return nRet;
+    return bRet;
 }
 
 bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
@@ -206,9 +206,9 @@ bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
 {
     pNewSet = pNew;
     pOldSet = pOld;
-    bool nRet = SfxItemSet::Put( rSet );
+    bool bRet = SfxItemSet::Put( rSet );
     pOldSet = pNewSet = 0;
-    return nRet;
+    return bRet;
 }
 
 sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich,

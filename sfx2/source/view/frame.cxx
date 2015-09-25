@@ -187,7 +187,7 @@ bool SfxFrame::DocIsModified_Impl()
 
 bool SfxFrame::PrepareClose_Impl( bool bUI )
 {
-    bool nRet = true;
+    bool bRet = true;
 
     // prevent recursive calls
     if( !pImp->bPrepClosing )
@@ -210,27 +210,27 @@ bool SfxFrame::PrepareClose_Impl( bool bUI )
 
             if ( bOther )
                 // if there are other views only the current view of this frame must be asked
-                nRet = GetCurrentViewFrame()->GetViewShell()->PrepareClose( bUI );
+                bRet = GetCurrentViewFrame()->GetViewShell()->PrepareClose( bUI );
             else
                 // otherwise ask the document
-                nRet = pCur->PrepareClose( bUI );
+                bRet = pCur->PrepareClose( bUI );
         }
 
-        if ( nRet )
+        if ( bRet )
         {
             // if this frame has child frames, ask them too
-            for( sal_uInt16 nPos = GetChildFrameCount(); nRet && nPos--; )
-                nRet = (*pChildArr)[ nPos ]->PrepareClose_Impl( bUI );
+            for( sal_uInt16 nPos = GetChildFrameCount(); bRet && nPos--; )
+                bRet = (*pChildArr)[ nPos ]->PrepareClose_Impl( bUI );
         }
 
         pImp->bPrepClosing = false;
     }
 
-    if ( nRet && pImp->pWorkWin )
+    if ( bRet && pImp->pWorkWin )
         // if closing was accepted by the component the UI subframes must be asked also
-        nRet = pImp->pWorkWin->PrepareClose_Impl();
+        bRet = pImp->pWorkWin->PrepareClose_Impl();
 
-    return nRet;
+    return bRet;
 }
 
 

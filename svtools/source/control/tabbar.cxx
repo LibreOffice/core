@@ -1587,11 +1587,11 @@ void TabBar::ActivatePage()
 
 bool TabBar::ImplDeactivatePage()
 {
-    bool nRet = DeactivatePage();
+    bool bRet = DeactivatePage();
 
     CallEventListeners(VCLEVENT_TABBAR_PAGEDEACTIVATED, reinterpret_cast<void*>(sal::static_int_cast<sal_IntPtr>(mnCurPageId)));
 
-    return nRet;
+    return bRet;
 }
 
 void TabBar::ImplPrePaint(vcl::RenderContext& /*rRenderContext*/)

@@ -156,7 +156,7 @@ bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwContentNode& rNo
         pStyleNames->Put( aNewSet );
     }
 
-    const bool nRet = aNewSet.Put( rSet );
+    const bool bRet = aNewSet.Put( rSet );
 
     // #i76273# Robust
     if ( pStyleNames )
@@ -165,10 +165,10 @@ bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwContentNode& rNo
         delete pStyleNames;
     }
 
-    if ( nRet )
+    if ( bRet )
         GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
 
-    return nRet;
+    return bRet;
 }
 
 bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
@@ -182,12 +182,12 @@ bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
 
-    const bool nRet = aNewSet.Put_BC( rAttr, pOld, pNew );
+    const bool bRet = aNewSet.Put_BC( rAttr, pOld, pNew );
 
-    if ( nRet )
+    if ( bRet )
         GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
 
-    return nRet;
+    return bRet;
 }
 
 bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
@@ -209,7 +209,7 @@ bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
 
-    const bool nRet = aNewSet.Put_BC( rSet, pOld, pNew );
+    const bool bRet = aNewSet.Put_BC( rSet, pOld, pNew );
 
     // #i76273# Robust
     if ( pStyleNames )
@@ -218,10 +218,10 @@ bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
         delete pStyleNames;
     }
 
-    if ( nRet )
+    if ( bRet )
         GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
 
-    return nRet;
+    return bRet;
 }
 
 sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,

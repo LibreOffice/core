@@ -694,10 +694,10 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 #*
 #************************************************************************/
 
-void SvxNumberFormatTabPage::HideLanguage(bool nFlag)
+void SvxNumberFormatTabPage::HideLanguage(bool bFlag)
 {
-    m_pFtLanguage->Show(!nFlag);
-    m_pLbLanguage->Show(!nFlag);
+    m_pFtLanguage->Show(!bFlag);
+    m_pLbLanguage->Show(!bFlag);
 }
 
 /*************************************************************************

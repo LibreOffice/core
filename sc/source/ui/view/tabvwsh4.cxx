@@ -304,9 +304,9 @@ bool ScTabViewShell::PrepareClose(bool bUI)
 
     if ( pFormShell )
     {
-        bool nRet = pFormShell->PrepareClose(bUI);
-        if (!nRet)
-            return nRet;
+        bool bRet = pFormShell->PrepareClose(bUI);
+        if (!bRet)
+            return bRet;
     }
     return SfxViewShell::PrepareClose(bUI);
 }

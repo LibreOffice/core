@@ -89,7 +89,7 @@ public:
     void            fillTree(IStructHelper* _pTree);
     void            UpdateTokenArray( const OUString& rStrExp);
     OUString        RepairFormula(const OUString& aFormula);
-    void            FillDialog(bool nFlag=true);
+    void            FillDialog(bool bFlag=true);
     bool            EditNextFunc( bool bForward, sal_Int32 nFStart=NOT_FOUND );
     void            EditThisFunc(sal_Int32 nFStart);
 
@@ -810,13 +810,13 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
     aCompiler.CompileTokenArray();
 }
 
-void FormulaDlg_Impl::FillDialog(bool nFlag)
+void FormulaDlg_Impl::FillDialog(bool bFlag)
 {
     bool bNext=true, bPrev=true;
-    if(nFlag)
+    if(bFlag)
         FillControls(bNext, bPrev);
     FillListboxes();
-    if(nFlag)
+    if(bFlag)
     {
         m_pBtnBackward->Enable(bPrev);
         m_pBtnForward->Enable(bNext);

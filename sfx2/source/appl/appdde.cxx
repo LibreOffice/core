@@ -534,8 +534,8 @@ DdeData* SfxDdeDocTopic_Impl::Get(SotClipboardFormatId nFormat)
 {
     OUString sMimeType( SotExchange::GetFormatMimeType( nFormat ));
     ::com::sun::star::uno::Any aValue;
-    bool nRet = pSh->DdeGetData( GetCurItem(), sMimeType, aValue );
-    if( nRet && aValue.hasValue() && ( aValue >>= aSeq ) )
+    bool bRet = pSh->DdeGetData( GetCurItem(), sMimeType, aValue );
+    if( bRet && aValue.hasValue() && ( aValue >>= aSeq ) )
     {
         aData = DdeData( aSeq.getConstArray(), aSeq.getLength(), nFormat );
         return &aData;
