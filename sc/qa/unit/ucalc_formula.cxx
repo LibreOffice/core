@@ -3351,23 +3351,44 @@ void Test::testFuncPRODUCT()
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto recalc.
 
     OUString aTabName("foo");
-    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            m_pDoc->InsertTab (0, aTabName));
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab(0, aTabName));
 
-    double val = 1;
-    double result;
-    m_pDoc->SetValue(0, 0, 0, val);
-    val = 2;
-    m_pDoc->SetValue(0, 1, 0, val);
-    val = 3;
-    m_pDoc->SetValue(0, 2, 0, val);
-    m_pDoc->SetString(0, 3, 0, OUString("=PRODUCT(A1:A3)"));
-    m_pDoc->GetValue(0, 3, 0, result);
-    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT failed", result == 6.0);
+    ScAddress aPos(3, 0, 0);
+    m_pDoc->SetValue(0, 0, 0, 3.0); // A1
+    m_pDoc->SetString(aPos, OUString("=PRODUCT(A1)"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", 3.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 0, 0, -3.0); // A1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", -3.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, OUString("=PRODUCT(B1)"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", 0.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 0, 0, 10.0); // B1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", 10.0, m_pDoc->GetValue(aPos));
 
-    m_pDoc->SetString(0, 4, 0, OUString("=PRODUCT({2;3;4})"));
-    m_pDoc->GetValue(0, 4, 0, result);
-    CPPUNIT_ASSERT_MESSAGE("Calculation of PRODUCT with inline array failed", result == 24.0);
+    m_pDoc->SetString(aPos, OUString("=PRODUCT(A1:C3)"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", -30.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(1, 1, 0, -1.0); // B2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", 30.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(2, 0, 0, 4.0); // C1
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", 120.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 1, 0, -2.0); // A2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", -240.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(2, 1, 0, 8.0); // C2
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT failed", -1920.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetValue(0, 2, 0, 0.2); // A3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of PRODUCT failed", -384.0, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(1, 2, 0, -0.25); // B3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of PRODUCT failed", 96.0, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(2, 2, 0, -0.125); // C3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of PRODUCT failed", -12.0, m_pDoc->GetValue(aPos), 10e-4);
+    m_pDoc->SetValue(2, 2, 0, 0.0); // C3
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of PRODUCT failed", 0.0, m_pDoc->GetValue(aPos), 10e-4);
+
+    m_pDoc->SetString(aPos, OUString("=PRODUCT({2;3;4})"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", 24.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, OUString("=PRODUCT({2;-2;2})"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", -8.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, OUString("=PRODUCT({8;0.125;-1})"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", -1.0, m_pDoc->GetValue(aPos));
 
     m_pDoc->DeleteTab(0);
 }
