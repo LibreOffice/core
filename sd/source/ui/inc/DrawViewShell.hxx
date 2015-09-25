@@ -44,6 +44,7 @@ class AbstractSvxNameDialog;
 class SdrLayer;
 class SvxClipboardFormatItem;
 struct ESelection;
+class AbstractSvxObjectNameDialog;
 
 namespace sd {
 
@@ -405,7 +406,7 @@ protected:
 
                     DECL_LINK_TYPED( ClipboardChanged, TransferableDataHelper*, void );
                     DECL_LINK_TYPED( TabSplitHdl, TabBar *, void );
-                    DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
+                    DECL_LINK_TYPED( NameObjectHdl, AbstractSvxObjectNameDialog&, bool );
                     DECL_LINK_TYPED( RenameSlideHdl, AbstractSvxNameDialog&, bool );
 
     void            DeleteActualPage();

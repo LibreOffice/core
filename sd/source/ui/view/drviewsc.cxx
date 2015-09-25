@@ -83,14 +83,11 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
     }
 }
 
-IMPL_LINK( DrawViewShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
+IMPL_LINK_TYPED( DrawViewShell, NameObjectHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
 {
     OUString aName;
-
-    if( pDialog )
-        pDialog->GetName( aName );
-
-    return ( aName.isEmpty() || ( GetDoc() && !GetDoc()->GetObj( aName ) ) ) ? 1 : 0;
+    rDialog.GetName( aName );
+    return aName.isEmpty() || ( GetDoc() && !GetDoc()->GetObj( aName ) );
 }
 
 } // end of namespace sd

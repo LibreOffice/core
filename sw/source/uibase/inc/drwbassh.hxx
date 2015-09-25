@@ -25,12 +25,12 @@
 class SwView;
 class SfxItemSet;
 class SwDrawBase;
-class AbstractSvxNameDialog;
+class AbstractSvxObjectNameDialog;
 struct SvxSwFrameValidation;
 
 class SwDrawBaseShell: public SwBaseShell
 {
-    DECL_LINK( CheckGroupShapeNameHdl, AbstractSvxNameDialog* );
+    DECL_LINK_TYPED( CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&, bool );
     DECL_LINK_TYPED(ValidatePosition, SvxSwFrameValidation&, void );
 public:
                 SwDrawBaseShell(SwView &rShell);

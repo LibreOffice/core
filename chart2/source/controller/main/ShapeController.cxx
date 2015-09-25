@@ -229,22 +229,20 @@ void ShapeController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:ParagraphDialog",           COMMAND_ID_PARAGRAPH_DIALOG,            CommandGroup::EDIT );
 }
 
-IMPL_LINK( ShapeController, CheckNameHdl, AbstractSvxNameDialog*, pDialog )
+IMPL_LINK_TYPED( ShapeController, CheckNameHdl, AbstractSvxObjectNameDialog&, rDialog, bool )
 {
     OUString aName;
-    if ( pDialog )
-    {
-        pDialog->GetName( aName );
-    }
+    rDialog.GetName( aName );
+
     if ( !aName.isEmpty() )
     {
         DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
         if ( pDrawViewWrapper && pDrawViewWrapper->getNamedSdrObject( aName ) )
         {
-            return 0;
+            return false;
         }
     }
-    return 1;
+    return true;
 }
 
 void ShapeController::executeDispatch_FormatLine()
