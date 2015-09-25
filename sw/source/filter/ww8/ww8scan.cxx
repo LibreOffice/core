@@ -1651,7 +1651,7 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
     sal_uInt8 clxt;
 
     pStr->Seek( nClxPos );
-    while( 1 ) // Zaehle Zahl der Grpprls
+    while( nGrpprl < SAL_MAX_INT16 ) // Zaehle Zahl der Grpprls
     {
         *pStr >> clxt;
         nLeft--;
@@ -1666,6 +1666,8 @@ WW8PLCFpcd* WW8ScannerBase::OpenPieceTable( SvStream* pStr, const WW8Fib* pWwF )
             return 0;                           // schiefgegangen
         pStr->SeekRel( nLen );                  // ueberlies grpprl
     }
+    if ( nGrpprl == SAL_MAX_INT16 )
+        return 0;
     pStr->Seek( nClxPos );
     nLeft = nClxLen;
     pPieceGrpprls = new sal_uInt8*[nGrpprl + 1];
