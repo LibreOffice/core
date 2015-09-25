@@ -12,11 +12,7 @@ In general the layering is done like this:
 
 <leaf theme>
 tango
-industrial
 galaxy
-
-The classic theme is left primarily for historical interest, rather
-than intended to be packaged.
 
 
 How to add a new image set:
@@ -36,11 +32,11 @@ How to add a new image set:
 
 - Map the vcl constant to its real name in
     ::rtl::OUString StyleSettings::ImplSymbolsStyleToName( sal_uLong nStyle ) const
-  and 
+  and
     sal_uLong StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) const
   both in vcl/source/app/settings.cxx, e.g.
     case STYLE_SYMBOLS_NEW_SET: return ::rtl::OUString( "new_set" );
-  and 
+  and
     else if ( rName == "new_set" )
     	return STYLE_SYMBOLS_NEW_SET;
 
