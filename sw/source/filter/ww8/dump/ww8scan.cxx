@@ -3750,8 +3750,6 @@ WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTblSt, const WW8Fib& rFib)
 
         if( pBook[0]->GetIMax() < nIMax )   // Count of Bookmarks
             nIMax = pBook[0]->GetIMax();
-        if( pBook[1]->GetIMax() < nIMax )
-            nIMax = pBook[1]->GetIMax();
         pStatus = new eBookStatus[ nIMax ];
         memset( pStatus, 0, nIMax * sizeof( eBookStatus ) );
     }
@@ -3875,7 +3873,8 @@ long WW8PLCFx_Book::GetLen() const
 void WW8PLCFx_Book::SetStatus(sal_uInt16 nIndex, eBookStatus eStat )
 {
     ASSERT(nIndex < nIMax, "set status of non existing bookmark!");
-    pStatus[nIndex] = (eBookStatus)( pStatus[nIndex] | eStat );
+    if ( nIndex < nIMax )
+        pStatus[nIndex] = (eBookStatus)( pStatus[nIndex] | eStat );
 }
 
 eBookStatus WW8PLCFx_Book::GetStatus() const
