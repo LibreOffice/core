@@ -150,7 +150,7 @@ private:
     DECL_LINK_TYPED( CheckBoxHdl,  Button*, void );
     DECL_LINK_TYPED( EndDlgHdl,    Button*, void );
     DECL_LINK_TYPED( ScrollHdl, ScrollBar*, void );
-    DECL_LINK( MoreExpandedHdl, void* );
+    DECL_LINK_TYPED( MoreExpandedHdl, VclExpander&, void );
 
     // Hack: RefInput control
     DECL_LINK_TYPED( TimeOutHdl, Timer*, void );

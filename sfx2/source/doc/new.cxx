@@ -150,7 +150,7 @@ class SfxNewFileDialog_Impl
     DECL_LINK(RegionSelect, ListBox*);
     DECL_LINK(TemplateSelect, void*);
     DECL_LINK_TYPED(DoubleClick, ListBox&, void);
-    DECL_LINK(Expand, void*);
+    DECL_LINK_TYPED(Expand, VclExpander&, void);
     DECL_LINK_TYPED(LoadFile, Button*, void);
     sal_uInt16  GetSelectedTemplatePos() const;
 
@@ -263,10 +263,9 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox*, pBox )
     return 0;
 }
 
-IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Expand)
+IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Expand, VclExpander&, void)
 {
     TemplateSelect(m_pTemplateLb);
-    return 0;
 }
 
 IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
