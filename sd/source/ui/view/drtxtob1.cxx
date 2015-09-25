@@ -73,7 +73,6 @@
 #include "futext.hxx"
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -88,7 +87,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
     sal_uInt16 nSlot = rReq.GetSlot();
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
-    boost::scoped_ptr< OutlineViewModelChangeGuard > aGuard;
+    std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
 
     if (mpView->ISA(OutlineView))
     {
@@ -155,7 +154,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                         SfxItemSet aTmpSet( pOLV->GetOutliner()->GetParaAttribs( nPara ) );
                         aAttr.Put( aTmpSet, false ); // sal_False= InvalidItems is not default, handle it as "holes"
                         const SvxULSpaceItem& rItem = static_cast<const SvxULSpaceItem&>( aAttr.Get( EE_PARA_ULSPACE ) );
-                        boost::scoped_ptr<SvxULSpaceItem> pNewItem(static_cast<SvxULSpaceItem*>(rItem.Clone()));
+                        std::unique_ptr<SvxULSpaceItem> pNewItem(static_cast<SvxULSpaceItem*>(rItem.Clone()));
 
                         long nUpper = pNewItem->GetUpper();
                         if( nSlot == SID_PARASPACE_INCREASE )
@@ -196,7 +195,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 {
                     SfxItemSet aNewAttrs(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
                     const SvxULSpaceItem& rItem = static_cast<const SvxULSpaceItem&>( aEditAttr.Get( EE_PARA_ULSPACE ) );
-                    boost::scoped_ptr<SvxULSpaceItem> pNewItem(static_cast<SvxULSpaceItem*>( rItem.Clone() ));
+                    std::unique_ptr<SvxULSpaceItem> pNewItem(static_cast<SvxULSpaceItem*>( rItem.Clone() ));
                     long nUpper = pNewItem->GetUpper();
 
                     if( nSlot == SID_PARASPACE_INCREASE )

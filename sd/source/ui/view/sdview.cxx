@@ -95,7 +95,6 @@
 
 #include <memory>
 #include <numeric>
-#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -1270,7 +1269,7 @@ bool View::ShouldToggleOn(
         return false;
 
     bool bToggleOn = false;
-    boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel));
+    std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel));
     const size_t nMarkCount = GetMarkedObjectCount();
     for (size_t nIndex = 0; nIndex < nMarkCount && !bToggleOn; ++nIndex)
     {
@@ -1338,8 +1337,8 @@ void View::ChangeMarkedObjectsBulletsNumbering(
 
     const bool bToggleOn = ShouldToggleOn( bToggle, bHandleBullets );
 
-    boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel));
-    boost::scoped_ptr<OutlinerView> pOutlinerView(new OutlinerView(pOutliner.get(), pWindow));
+    std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel));
+    std::unique_ptr<OutlinerView> pOutlinerView(new OutlinerView(pOutliner.get(), pWindow));
 
     const size_t nMarkCount = GetMarkedObjectCount();
     for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
