@@ -767,7 +767,7 @@ bool ComboBox::PreNotify( NotifyEvent& rNEvt )
 
 bool ComboBox::Notify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     if ((rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
         && (rNEvt.GetWindow() == m_pImpl->m_pSubEdit)
         && !IsReadOnly())
@@ -793,18 +793,18 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
                     SetSelection( Selection( 0, SELECTION_MAX ) );
                     m_pImpl->m_pFloatWin->StartFloat( false );
                     CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
-                    nDone = true;
+                    bDone = true;
                 }
                 else if ((nKeyCode == KEY_UP) && m_pImpl->m_pFloatWin
                         && m_pImpl->m_pFloatWin->IsInPopupMode()
                         && aKeyEvt.GetKeyCode().IsMod2())
                 {
                     m_pImpl->m_pFloatWin->EndPopupMode();
-                    nDone = true;
+                    bDone = true;
                 }
                 else
                 {
-                    nDone = m_pImpl->m_pImplLB->ProcessKeyInput( aKeyEvt );
+                    bDone = m_pImpl->m_pImplLB->ProcessKeyInput( aKeyEvt );
                 }
             }
             break;
@@ -814,7 +814,7 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
                 if ((rNEvt.GetWindow() == m_pImpl->m_pSubEdit) && IsInDropDown())
                 {
                     m_pImpl->m_pImplLB->ProcessKeyInput( aKeyEvt );
-                    nDone = true;
+                    bDone = true;
                 }
             }
             break;
@@ -838,11 +838,11 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
                 )
             )
         {
-            nDone = m_pImpl->m_pImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
+            bDone = m_pImpl->m_pImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
         }
         else
         {
-            nDone = false;  // don't eat this event, let the default handling happen (i.e. scroll the context)
+            bDone = false;  // don't eat this event, let the default handling happen (i.e. scroll the context)
         }
     }
     else if ((rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN)
@@ -851,7 +851,7 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
         m_pImpl->m_pSubEdit->GrabFocus();
     }
 
-    return nDone || Edit::Notify( rNEvt );
+    return bDone || Edit::Notify( rNEvt );
 }
 
 void ComboBox::SetText( const OUString& rStr )

@@ -1110,11 +1110,11 @@ VclPtr<BaseWindow> Shell::FindWindow(
 
 bool Shell::CallBasicErrorHdl( StarBASIC* pBasic )
 {
-    bool nRet = false;
+    bool bRet = false;
     ModulWindow* pModWin = ShowActiveModuleWindow( pBasic );
     if ( pModWin )
-        nRet = pModWin->BasicErrorHdl( pBasic );
-    return nRet;
+        bRet = pModWin->BasicErrorHdl( pBasic );
+    return bRet;
 }
 
 long Shell::CallBasicBreakHdl( StarBASIC* pBasic )

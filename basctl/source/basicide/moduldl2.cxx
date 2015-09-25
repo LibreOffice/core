@@ -711,7 +711,7 @@ IMPL_LINK_TYPED( LibPage, ButtonHdl, Button *, pButton, void )
 
 IMPL_LINK_TYPED( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
 {
-    bool nRet = false;
+    bool bRet = false;
 
     SvTreeListEntry* pCurEntry = m_pLibBox->GetCurEntry();
     OUString aLibName( SvTabListBox::GetEntryText( pCurEntry, 0 ) );
@@ -724,14 +724,14 @@ IMPL_LINK_TYPED( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg, bool )
             OUString aOldPassword( pDlg->GetOldPassword() );
             OUString aNewPassword( pDlg->GetNewPassword() );
             xPasswd->changeLibraryPassword( aLibName, aOldPassword, aNewPassword );
-            nRet = true;
+            bRet = true;
         }
         catch (...)
         {
         }
     }
 
-    return nRet;
+    return bRet;
 }
 
 void LibPage::NewLib()

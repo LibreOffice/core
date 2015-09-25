@@ -645,7 +645,7 @@ public:
                                       @return error via enum. */
 
     /// Split cell vertically or horizontally.
-    bool SplitTab( bool nVert = true, sal_uInt16 nCnt = 1, bool bSameHeight = false );
+    bool SplitTab( bool bVert = true, sal_uInt16 nCnt = 1, bool bSameHeight = false );
     bool Sort(const SwSortOptions&);    //Sortieren.
 
     void SetRowHeight( const SwFormatFrmSize &rSz );

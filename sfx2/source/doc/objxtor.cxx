@@ -601,9 +601,9 @@ bool SfxObjectShell::PrepareClose
         DBG_ASSERT(pFrm->GetViewShell(),"No Shell");
         if ( pFrm->GetViewShell() )
         {
-            bool nRet = pFrm->GetViewShell()->PrepareClose( bUI );
-            if ( !nRet )
-                return nRet;
+            bool bRet = pFrm->GetViewShell()->PrepareClose( bUI );
+            if ( !bRet )
+                return bRet;
         }
     }
 

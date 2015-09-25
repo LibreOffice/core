@@ -1671,7 +1671,7 @@ bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
 
 {
     MouseNotifyEvent nType = rNEvt.GetType();
-    bool nRet = false;
+    bool bRet = false;
 
     if ( MouseNotifyEvent::KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
@@ -1681,16 +1681,16 @@ bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
         if ( !rKeyCode.GetModifier() &&
              KEY_BACKSPACE == nCode && !_pImp->_pEdFileName->HasChildPathFocus() )
         {
-            nRet = false;
+            bRet = false;
 
-            if ( !nRet && _pImp->_pBtnUp->IsEnabled() )
+            if ( !bRet && _pImp->_pBtnUp->IsEnabled() )
             {
                 PrevLevel_Impl();
-                nRet = true;
+                bRet = true;
             }
         }
     }
-    return nRet || ModalDialog::Notify( rNEvt );
+    return bRet || ModalDialog::Notify( rNEvt );
 }
 
 

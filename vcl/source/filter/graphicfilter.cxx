@@ -2180,7 +2180,7 @@ const Link<ConvertData&,bool> GraphicFilter::GetFilterCallback() const
 
 IMPL_LINK_TYPED( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
 {
-    bool nRet = false;
+    bool bRet = false;
 
     sal_uInt16      nFormat = GRFILTER_FORMAT_DONTKNOW;
     OString aShortName;
@@ -2205,17 +2205,17 @@ IMPL_LINK_TYPED( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
     {
         // Import
         nFormat = GetImportFormatNumberForShortName( OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );
-        nRet = ImportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == 0;
+        bRet = ImportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == 0;
     }
 #ifndef DISABLE_EXPORT
     else if( !aShortName.isEmpty() )
     {
         // Export
         nFormat = GetExportFormatNumberForShortName( OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
-        nRet = ExportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == 0;
+        bRet = ExportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == 0;
     }
 #endif
-    return nRet;
+    return bRet;
 }
 
 namespace

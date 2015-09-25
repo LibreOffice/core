@@ -717,14 +717,14 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 bool ViewShell::Notify(NotifyEvent& rNEvt, ::sd::Window* pWin)
 {
     // handle scroll commands when they arrived at child windows
-    bool nRet = false;
+    bool bRet = false;
     if( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         // note: dynamic_cast is not possible as GetData() returns a void*
         CommandEvent* pCmdEvent = static_cast< CommandEvent* >(rNEvt.GetData());
-        nRet = HandleScrollCommand(*pCmdEvent, pWin);
+        bRet = HandleScrollCommand(*pCmdEvent, pWin);
     }
-    return nRet;
+    return bRet;
 }
 
 bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin)
@@ -1123,13 +1123,13 @@ void ViewShell::SetDefTabHRuler( sal_uInt16 nDefTab )
 */
 bool ViewShell::PrepareClose (bool bUI)
 {
-    bool nResult = true;
+    bool bResult = true;
 
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
     if (pFormShell != NULL)
-        nResult = pFormShell->PrepareClose (bUI);
+        bResult = pFormShell->PrepareClose (bUI);
 
-    return nResult;
+    return bResult;
 }
 
 void ViewShell::UpdatePreview (SdPage*, bool )

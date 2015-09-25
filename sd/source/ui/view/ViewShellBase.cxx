@@ -748,19 +748,19 @@ void ViewShellBase::SetZoomFactor (
 
 bool ViewShellBase::PrepareClose (bool bUI)
 {
-    bool nResult = SfxViewShell::PrepareClose (bUI);
+    bool bResult = SfxViewShell::PrepareClose (bUI);
 
-    if (nResult)
+    if (bResult)
     {
         mpImpl->mbIsClosing = true;
 
         // Forward call to main sub shell.
         ViewShell* pShell = GetMainViewShell().get();
         if (pShell != NULL)
-            nResult = pShell->PrepareClose (bUI);
+            bResult = pShell->PrepareClose (bUI);
     }
 
-    return nResult;
+    return bResult;
 }
 
 void ViewShellBase::WriteUserData (OUString& rString, bool bBrowse)

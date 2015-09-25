@@ -1030,7 +1030,7 @@ namespace svxform
 
     bool XFormsPage::Notify( NotifyEvent& rNEvt )
     {
-        bool nHandled = false;
+        bool bHandled = false;
 
         if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
@@ -1039,12 +1039,12 @@ namespace svxform
             switch ( nCode )
             {
                 case KEY_DELETE:
-                    nHandled = DoMenuAction( m_nRemoveId );
+                    bHandled = DoMenuAction( m_nRemoveId );
                     break;
             }
         }
 
-        return nHandled || Window::Notify( rNEvt );
+        return bHandled || Window::Notify( rNEvt );
     }
 
     void XFormsPage::Resize()

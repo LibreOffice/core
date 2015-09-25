@@ -316,9 +316,9 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 // Notification Close Doc
 bool SwDocShell::PrepareClose( bool bUI )
 {
-    bool nRet = SfxObjectShell::PrepareClose( bUI );
+    bool bRet = SfxObjectShell::PrepareClose( bUI );
 
-    if( nRet )
+    if( bRet )
         EndListening( *this );
 
     if (m_pDoc && IsInPrepareClose())
@@ -332,7 +332,7 @@ bool SwDocShell::PrepareClose( bool bUI )
             xVbaEvents->processVbaEvent( DOCUMENT_CLOSE, aArgs );
         }
     }
-    return nRet;
+    return bRet;
 }
 
 void SwDocShell::Execute(SfxRequest& rReq)

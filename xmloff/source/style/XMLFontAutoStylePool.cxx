@@ -109,10 +109,10 @@ struct XMLFontAutoStylePoolEntryCmp_Impl {
         XMLFontAutoStylePoolEntry_Impl* const& r1,
         XMLFontAutoStylePoolEntry_Impl* const& r2 ) const
     {
-        bool nEnc1(r1->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
-        bool nEnc2(r2->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
-        if( nEnc1 != nEnc2 )
-            return nEnc1 < nEnc2;
+        bool bEnc1(r1->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
+        bool bEnc2(r2->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
+        if( bEnc1 != bEnc2 )
+            return bEnc1 < bEnc2;
         else if( r1->GetPitch() != r2->GetPitch() )
             return r1->GetPitch() < r2->GetPitch();
         else if( r1->GetFamily() != r2->GetFamily() )

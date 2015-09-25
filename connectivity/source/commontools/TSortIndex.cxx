@@ -39,8 +39,8 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
         ::std::vector<OKeyType>::const_iterator aIter = aKeyType.begin();
         for (::std::vector<sal_Int16>::size_type i=0;aIter != aKeyType.end(); ++aIter,++i)
         {
-            const bool nGreater = pIndex->getAscending(i) != SQL_ASC;
-            const bool nLess = !nGreater;
+            const bool bGreater = pIndex->getAscending(i) != SQL_ASC;
+            const bool bLess = !bGreater;
 
             // compare depending for type
             switch (*aIter)
@@ -49,9 +49,9 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
                 {
                     sal_Int32 nRes = lhs.second->getKeyString(i).compareTo(rhs.second->getKeyString(i));
                     if (nRes < 0)
-                        return nLess;
+                        return bLess;
                     else if (nRes > 0)
-                        return nGreater;
+                        return bGreater;
                 }
                 break;
                 case SQL_ORDERBYKEY_DOUBLE:
@@ -60,9 +60,9 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
                     double d2 = rhs.second->getKeyDouble(i);
 
                     if (d1 < d2)
-                        return nLess;
+                        return bLess;
                     else if (d1 > d2)
-                        return nGreater;
+                        return bGreater;
                 }
                 break;
                 case SQL_ORDERBYKEY_NONE:

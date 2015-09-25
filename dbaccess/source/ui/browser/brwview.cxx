@@ -297,7 +297,7 @@ void UnoDataBrowserView::_disposing( const css::lang::EventObject& /*_rSource*/ 
 
 bool UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     if(rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         bool bGrabAllowed = isGrabVclControlFocusAllowed(this);
@@ -314,11 +314,11 @@ bool UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
                 else if ( m_pTreeView && m_pVclControl && m_pVclControl->HasChildPathFocus() )
                     m_pTreeView->GrabFocus();
 
-                nDone = true;
+                bDone = true;
             }
         }
     }
-    return nDone || ODataView::PreNotify(rNEvt);
+    return bDone || ODataView::PreNotify(rNEvt);
 }
 
 BrowserViewStatusDisplay::BrowserViewStatusDisplay( UnoDataBrowserView* _pView, const OUString& _rStatus )

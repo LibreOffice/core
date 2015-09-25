@@ -369,9 +369,9 @@ void EditBox::GetFocus()
 //first called and a PostUserEvent is sent.
 bool EditBox::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nResult = true;
+    bool bResult = true;
 
-    if(pMEdit==nullptr) return nResult;
+    if(pMEdit==nullptr) return bResult;
 
     MouseNotifyEvent nSwitch=rNEvt.GetType();
     if(nSwitch==MouseNotifyEvent::KEYINPUT)// || nSwitch==MouseNotifyEvent::KEYUP)
@@ -380,18 +380,18 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
         sal_uInt16 nKey=aKeyCode.GetCode();
         if( (nKey==KEY_RETURN && !aKeyCode.IsShift()) || nKey==KEY_TAB )
         {
-            nResult = GetParent()->Notify(rNEvt);
+            bResult = GetParent()->Notify(rNEvt);
         }
         else
         {
-            nResult=Control::PreNotify(rNEvt);
+            bResult=Control::PreNotify(rNEvt);
             Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ), NULL, true );
         }
 
     }
     else
     {
-        nResult=Control::PreNotify(rNEvt);
+        bResult=Control::PreNotify(rNEvt);
 
         if(nSwitch==MouseNotifyEvent::MOUSEBUTTONDOWN || nSwitch==MouseNotifyEvent::MOUSEBUTTONUP)
         {
@@ -399,7 +399,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
             Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ), NULL, true );
         }
     }
-    return nResult;
+    return bResult;
 }
 
 //When an Event cleared wurde, this routine is

@@ -999,7 +999,7 @@ namespace pcr
 
     bool OMultilineFloatingEdit::PreNotify(NotifyEvent& _rNEvt)
     {
-        bool nResult = true;
+        bool bResult = true;
 
         MouseNotifyEvent nSwitch = _rNEvt.GetType();
         if (MouseNotifyEvent::KEYINPUT == nSwitch)
@@ -1018,12 +1018,12 @@ namespace pcr
                 EndPopupMode();
             }
             else
-                nResult=FloatingWindow::PreNotify(_rNEvt);
+                bResult=FloatingWindow::PreNotify(_rNEvt);
         }
         else
-            nResult=FloatingWindow::PreNotify(_rNEvt);
+            bResult=FloatingWindow::PreNotify(_rNEvt);
 
-        return nResult;
+        return bResult;
     }
 
 
@@ -1101,7 +1101,7 @@ namespace pcr
 
     bool DropDownEditControl::PreNotify( NotifyEvent& rNEvt )
     {
-        bool nResult = true;
+        bool bResult = true;
 
         if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
         {
@@ -1127,7 +1127,7 @@ namespace pcr
                     ||  m_nOperationMode == eMultiLineText
                     )
             {
-                nResult = DropDownEditControl_Base::PreNotify( rNEvt );
+                bResult = DropDownEditControl_Base::PreNotify( rNEvt );
             }
             else if ( m_nOperationMode == eStringList )
             {
@@ -1151,9 +1151,9 @@ namespace pcr
             }
         }
         else
-            nResult = DropDownEditControl_Base::PreNotify(rNEvt);
+            bResult = DropDownEditControl_Base::PreNotify(rNEvt);
 
-        return nResult;
+        return bResult;
     }
 
 

@@ -190,7 +190,7 @@ void FindTextFieldControl::SetTextToSelected_Impl()
 
 bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nRet= ComboBox::PreNotify( rNEvt );
+    bool bRet= ComboBox::PreNotify( rNEvt );
 
     switch ( rNEvt.GetType() )
     {
@@ -209,7 +209,7 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             // Close the search bar on Escape
             if ( KEY_ESCAPE == nCode )
             {
-                nRet = true;
+                bRet = true;
                 GrabFocusToDocument();
 
                 // hide the findbar
@@ -240,7 +240,7 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 ToolBox* pToolBox = static_cast<ToolBox*>(pWindow);
 
                 impl_executeSearch( m_xContext, m_xFrame, pToolBox, bShift);
-                nRet = true;
+                bRet = true;
             }
             break;
         }
@@ -253,7 +253,7 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             break;
     }
 
-    return nRet;
+    return bRet;
 }
 
 SearchToolbarControllersManager::SearchToolbarControllersManager()

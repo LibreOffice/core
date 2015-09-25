@@ -366,10 +366,10 @@ long BorderWidthImpl::GetGap( long nWidth ) const
     return result;
 }
 
-static double lcl_getGuessedWidth( long nTested, double nRate, bool nChanging )
+static double lcl_getGuessedWidth( long nTested, double nRate, bool bChanging )
 {
     double nWidth = -1.0;
-    if ( nChanging )
+    if ( bChanging )
         nWidth = double( nTested ) / nRate;
     else
     {

@@ -1359,20 +1359,20 @@ void AddressMultiLineEdit::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 
 bool AddressMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nHandled = false;
+    bool bHandled = false;
     if( MouseNotifyEvent::KEYINPUT == rNEvt.GetType()  &&
         rNEvt.GetKeyEvent()->GetCharCode())
     {
-        nHandled = true;
+        bHandled = true;
     }
     else if(MouseNotifyEvent::MOUSEBUTTONDOWN == rNEvt.GetType()) {
         const MouseEvent *pMEvt = rNEvt.GetMouseEvent();
         if(pMEvt->GetClicks() >= 2)
-            nHandled = true;
+            bHandled = true;
     }
-    if(!nHandled)
-        nHandled = VclMultiLineEdit::PreNotify( rNEvt );
-    return nHandled;
+    if(!bHandled)
+        bHandled = VclMultiLineEdit::PreNotify( rNEvt );
+    return bHandled;
 
 }
 

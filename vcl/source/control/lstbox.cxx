@@ -876,7 +876,7 @@ void ListBox::StateChanged( StateChangedType nType )
 
 bool ListBox::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     if ( mpImplLB )
     {
         if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && ( rNEvt.GetWindow() == mpImplWin ) )
@@ -893,11 +893,11 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
                         mpBtn->SetPressed( true );
                         mpFloatWin->StartFloat( false );
                         CallEventListeners( VCLEVENT_DROPDOWN_OPEN );
-                        nDone = true;
+                        bDone = true;
                     }
                     else
                     {
-                        nDone = mpImplLB->ProcessKeyInput( aKeyEvt );
+                        bDone = mpImplLB->ProcessKeyInput( aKeyEvt );
                     }
                 }
                 break;
@@ -907,11 +907,11 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
                         aKeyEvt.GetKeyCode().IsMod2() )
                     {
                         mpFloatWin->EndPopupMode();
-                        nDone = true;
+                        bDone = true;
                     }
                     else
                     {
-                        nDone = mpImplLB->ProcessKeyInput( aKeyEvt );
+                        bDone = mpImplLB->ProcessKeyInput( aKeyEvt );
                     }
                 }
                 break;
@@ -920,14 +920,14 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
                     if( IsInDropDown() )
                     {
                         mpImplLB->ProcessKeyInput( aKeyEvt );
-                        nDone = true;
+                        bDone = true;
                     }
                 }
                 break;
 
                 default:
                 {
-                    nDone = mpImplLB->ProcessKeyInput( aKeyEvt );
+                    bDone = mpImplLB->ProcessKeyInput( aKeyEvt );
                 }
             }
         }
@@ -947,16 +947,16 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
                     )
                 )
             {
-                nDone = mpImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
+                bDone = mpImplLB->HandleWheelAsCursorTravel( *rNEvt.GetCommandEvent() );
             }
             else
             {
-                nDone = false;  // Don't consume this event, let the default handling take it (i.e. scroll the context)
+                bDone = false;  // Don't consume this event, let the default handling take it (i.e. scroll the context)
             }
         }
     }
 
-    return nDone || Control::PreNotify( rNEvt );
+    return bDone || Control::PreNotify( rNEvt );
 }
 
 void ListBox::Select()

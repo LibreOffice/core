@@ -90,7 +90,7 @@ ColumnEdit::~ColumnEdit()
 
 bool ColumnEdit::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = SpinField::Notify( rNEvt );
+    bool bHandled = SpinField::Notify( rNEvt );
 
     MouseNotifyEvent nType = rNEvt.GetType();
     if ( nType == MouseNotifyEvent::KEYINPUT )
@@ -108,14 +108,14 @@ bool ColumnEdit::Notify( NotifyEvent& rNEvt )
             {
                 ScNavigatorDlg::ReleaseFocus();
                 ExecuteCol();
-                nHandled = true;
+                bHandled = true;
             }
         }
     }
     else if ( nType == MouseNotifyEvent::LOSEFOCUS )    // LoseFocus not called at VCL
         EvalText();                         // nCol set
 
-    return nHandled;
+    return bHandled;
 }
 
 void ColumnEdit::LoseFocus()
@@ -262,7 +262,7 @@ RowEdit::~RowEdit()
 
 bool RowEdit::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = NumericField::Notify( rNEvt );
+    bool bHandled = NumericField::Notify( rNEvt );
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -272,11 +272,11 @@ bool RowEdit::Notify( NotifyEvent& rNEvt )
         {
             ScNavigatorDlg::ReleaseFocus();
             ExecuteRow();
-            nHandled = true;
+            bHandled = true;
         }
     }
 
-    return nHandled;
+    return bHandled;
 }
 
 void RowEdit::LoseFocus()
