@@ -63,6 +63,8 @@
             <menu:menuitem menu:id=".uno:ShowLines"/>
             <menu:menuitem menu:id=".uno:GotoLine"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ObjectCatalog"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
         </menu:menupopup>
     </menu:menu>
