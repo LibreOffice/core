@@ -286,13 +286,13 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
             // Set the 'name' property of the boolString.
             OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
             SAL_INFO("connectivity.mork", "Name = " << attrName.getStr());
-            bool requiresValue = true;
+            bool bRequiresValue = true;
             OUString currentValue = entry->getValue(attrName);
             if (evStr->getCond() == MQueryOp::Exists || evStr->getCond() == MQueryOp::DoesNotExist)
             {
-                requiresValue = false;
+                bRequiresValue = false;
             }
-            if (requiresValue)
+            if (bRequiresValue)
             {
                 SAL_INFO("connectivity.mork", "Value = " << evStr->getValue() );
                 OUString searchedValue = evStr->getValue();

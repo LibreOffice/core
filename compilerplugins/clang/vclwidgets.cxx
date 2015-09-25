@@ -159,7 +159,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     if (!isDerivedFromWindow(pRecordDecl)) {
         return true;
     }
-    bool foundVclPtrField = false;
+    bool bFoundVclPtrField = false;
     for(auto fieldDecl = pRecordDecl->field_begin();
         fieldDecl != pRecordDecl->field_end(); ++fieldDecl)
     {
@@ -167,26 +167,26 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         if (pFieldRecordType) {
             const CXXRecordDecl *pFieldRecordTypeDecl = dyn_cast<CXXRecordDecl>(pFieldRecordType->getDecl());
             if (startsWith(pFieldRecordTypeDecl->getQualifiedNameAsString(), "VclPtr")) {
-               foundVclPtrField = true;
+               bFoundVclPtrField = true;
                break;
             }
        }
     }
-    bool foundDispose = false;
+    bool bFoundDispose = false;
     for(auto methodDecl = pRecordDecl->method_begin();
         methodDecl != pRecordDecl->method_end(); ++methodDecl)
     {
         if (methodDecl->isInstance() && methodDecl->param_size()==0 && methodDecl->getNameAsString() == "dispose") {
-           foundDispose = true;
+           bFoundDispose = true;
            break;
         }
     }
     const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pCXXDestructorDecl->getBody());
     // having an empty body and no dispose() method is fine
-    if (!foundVclPtrField && !foundDispose && pCompoundStatement && pCompoundStatement->size() == 0) {
+    if (!bFoundVclPtrField && !bFoundDispose && pCompoundStatement && pCompoundStatement->size() == 0) {
         return true;
     }
-    if (foundVclPtrField && pCompoundStatement && pCompoundStatement->size() == 0) {
+    if (bFoundVclPtrField && pCompoundStatement && pCompoundStatement->size() == 0) {
         report(
             DiagnosticsEngine::Warning,
             "OutputDevice subclass with VclPtr field must call disposeOnce() from its destructor.",
@@ -195,7 +195,7 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         return true;
     }
     // check that the destructor for a OutputDevice subclass does nothing except call into the disposeOnce() method
-    bool ok = false;
+    bool bOk = false;
     if (pCompoundStatement) {
         bool bFoundDisposeOnce = false;
         int nNumExtraStatements = 0;
@@ -214,9 +214,9 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
             if (!pCallExpr && !dyn_cast<ParenExpr>(x))
                 nNumExtraStatements++;
         }
-        ok = bFoundDisposeOnce && nNumExtraStatements == 0;
+        bOk = bFoundDisposeOnce && nNumExtraStatements == 0;
     }
-    if (!ok) {
+    if (!bOk) {
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
                               pCXXDestructorDecl->getLocStart());
         StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
@@ -330,16 +330,16 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (pParentRecordDecl && isDerivedFromWindow(pParentRecordDecl)
         && startsWith(recordDecl->getQualifiedNameAsString(), "VclPtr"))
     {
-        bool foundDispose = false;
+        bool bFoundDispose = false;
         for(auto methodDecl = pParentRecordDecl->method_begin();
             methodDecl != pParentRecordDecl->method_end(); ++methodDecl)
         {
             if (methodDecl->isInstance() && methodDecl->param_size()==0 && methodDecl->getNameAsString() == "dispose") {
-               foundDispose = true;
+               bFoundDispose = true;
                break;
             }
         }
-        if (!foundDispose) {
+        if (!bFoundDispose) {
             report(
                 DiagnosticsEngine::Warning,
                 "OutputDevice subclass with a VclPtr field MUST have a dispose() method.",

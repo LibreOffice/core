@@ -334,8 +334,8 @@ void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
     //TODO: oor:version, xml:lang attributes
     OStringBuffer buf;
     buf.append('.');
-    bool hasPackage = false;
-    bool hasName = false;
+    bool bHasPackage = false;
+    bool bHasName = false;
     for (;;) {
         int attrNsId;
         xmlreader::Span attrLn;
@@ -344,32 +344,32 @@ void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("package"))
         {
-            if (hasPackage) {
+            if (bHasPackage) {
                 throw css::uno::RuntimeException(
                     "multiple component-schema package attributes in " +
                     reader.getUrl());
             }
-            hasPackage = true;
+            bHasPackage = true;
             xmlreader::Span s(reader.getAttributeValue(false));
             buf.insert(0, s.begin, s.length);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("name"))
         {
-            if (hasName) {
+            if (bHasName) {
                 throw css::uno::RuntimeException(
                     "multiple component-schema name attributes in " +
                     reader.getUrl());
             }
-            hasName = true;
+            bHasName = true;
             xmlreader::Span s(reader.getAttributeValue(false));
             buf.append(s.begin, s.length);
         }
     }
-    if (!hasPackage) {
+    if (!bHasPackage) {
         throw css::uno::RuntimeException(
             "no component-schema package attribute in " + reader.getUrl());
     }
-    if (!hasName) {
+    if (!bHasName) {
         throw css::uno::RuntimeException(
             "no component-schema name attribute in " + reader.getUrl());
     }
@@ -378,10 +378,10 @@ void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
 }
 
 void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
-    bool hasName = false;
+    bool bHasName = false;
     OUString name;
     OUString component(componentName_);
-    bool hasNodeType = false;
+    bool bHasNodeType = false;
     OUString nodeType;
     for (;;) {
         int attrNsId;
@@ -390,7 +390,7 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("name")) {
-            hasName = true;
+            bHasName = true;
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("component"))
@@ -399,11 +399,11 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("node-type"))
         {
-            hasNodeType = true;
+            bHasNodeType = true;
             nodeType = reader.getAttributeValue(false).convertFromUtf8();
         }
     }
-    if (!hasName) {
+    if (!bHasName) {
         throw css::uno::RuntimeException(
             "no node-ref name attribute in " + reader.getUrl());
     }
@@ -411,7 +411,7 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
         data_.getTemplate(
             valueParser_.getLayer(),
             xmldata::parseTemplateReference(
-                component, hasNodeType, nodeType, 0)));
+                component, bHasNodeType, nodeType, 0)));
     if (!tmpl.is()) {
         //TODO: this can erroneously happen as long as import/uses attributes
         // are not correctly processed
@@ -424,7 +424,7 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
 }
 
 void XcsParser::handleProp(xmlreader::XmlReader & reader) {
-    bool hasName = false;
+    bool bHasName = false;
     OUString name;
     valueParser_.type_ = TYPE_ERROR;
     bool localized = false;
@@ -436,7 +436,7 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("name")) {
-            hasName = true;
+            bHasName = true;
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("type"))
@@ -453,7 +453,7 @@ void XcsParser::handleProp(xmlreader::XmlReader & reader) {
             nillable = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
-    if (!hasName) {
+    if (!bHasName) {
         throw css::uno::RuntimeException(
             "no prop name attribute in " + reader.getUrl());
     }
@@ -500,7 +500,7 @@ void XcsParser::handlePropValue(
 }
 
 void XcsParser::handleGroup(xmlreader::XmlReader & reader, bool isTemplate) {
-    bool hasName = false;
+    bool bHasName = false;
     OUString name;
     bool extensible = false;
     for (;;) {
@@ -510,7 +510,7 @@ void XcsParser::handleGroup(xmlreader::XmlReader & reader, bool isTemplate) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("name")) {
-            hasName = true;
+            bHasName = true;
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("extensible"))
@@ -518,7 +518,7 @@ void XcsParser::handleGroup(xmlreader::XmlReader & reader, bool isTemplate) {
             extensible = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
-    if (!hasName) {
+    if (!bHasName) {
         throw css::uno::RuntimeException(
             "no group name attribute in " + reader.getUrl());
     }
@@ -534,10 +534,10 @@ void XcsParser::handleGroup(xmlreader::XmlReader & reader, bool isTemplate) {
 }
 
 void XcsParser::handleSet(xmlreader::XmlReader & reader, bool isTemplate) {
-    bool hasName = false;
+    bool bHasName = false;
     OUString name;
     OUString component(componentName_);
-    bool hasNodeType = false;
+    bool bHasNodeType = false;
     OUString nodeType;
     for (;;) {
         int attrNsId;
@@ -546,7 +546,7 @@ void XcsParser::handleSet(xmlreader::XmlReader & reader, bool isTemplate) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("name")) {
-            hasName = true;
+            bHasName = true;
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("component"))
@@ -555,11 +555,11 @@ void XcsParser::handleSet(xmlreader::XmlReader & reader, bool isTemplate) {
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("node-type"))
         {
-            hasNodeType = true;
+            bHasNodeType = true;
             nodeType = reader.getAttributeValue(false).convertFromUtf8();
         }
     }
-    if (!hasName) {
+    if (!bHasName) {
         throw css::uno::RuntimeException(
             "no set name attribute in " + reader.getUrl());
     }
@@ -571,14 +571,14 @@ void XcsParser::handleSet(xmlreader::XmlReader & reader, bool isTemplate) {
             new SetNode(
                 valueParser_.getLayer(),
                 xmldata::parseTemplateReference(
-                    component, hasNodeType, nodeType, 0),
+                    component, bHasNodeType, nodeType, 0),
                 isTemplate ? name : OUString()),
             name));
 }
 
 void XcsParser::handleSetItem(xmlreader::XmlReader & reader, SetNode * set) {
     OUString component(componentName_);
-    bool hasNodeType = false;
+    bool bHasNodeType = false;
     OUString nodeType;
     for (;;) {
         int attrNsId;
@@ -593,12 +593,12 @@ void XcsParser::handleSetItem(xmlreader::XmlReader & reader, SetNode * set) {
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("node-type"))
         {
-            hasNodeType = true;
+            bHasNodeType = true;
             nodeType = reader.getAttributeValue(false).convertFromUtf8();
         }
     }
     set->getAdditionalTemplateNames().push_back(
-        xmldata::parseTemplateReference(component, hasNodeType, nodeType, 0));
+        xmldata::parseTemplateReference(component, bHasNodeType, nodeType, 0));
     elements_.push(Element(rtl::Reference< Node >(), ""));
 }
 

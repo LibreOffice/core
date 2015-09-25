@@ -617,13 +617,13 @@ namespace
         const Reference< XComponent >* component = aComponents.getConstArray();
         const Reference< XComponent >* componentsEnd = aComponents.getConstArray() + aComponents.getLength();
 
-        bool isAnyModified = false;
+        bool bIsAnyModified = false;
         for ( ; component != componentsEnd; ++component )
         {
             Reference< XModifiable > xModify( *component, UNO_QUERY );
             if ( xModify.is() )
             {
-                isAnyModified = xModify->isModified();
+                bIsAnyModified = xModify->isModified();
                 continue;
             }
 
@@ -632,7 +632,7 @@ namespace
             OSL_FAIL( "lcl_hasAnyModifiedSubComponent_throw: anything left to do here?" );
         }
 
-        return isAnyModified;
+        return bIsAnyModified;
     }
 }
 

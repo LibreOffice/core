@@ -163,23 +163,23 @@ void Data::initProperties(
                 if (attr->isBound()) {
                     attrAttribs |= css::beans::PropertyAttribute::BOUND;
                 }
-                bool setUnknown = false;
+                bool bSetUnknown = false;
                 if (attr->isReadOnly()) {
                     attrAttribs |= css::beans::PropertyAttribute::READONLY;
-                    setUnknown = true;
+                    bSetUnknown = true;
                 }
                 css::uno::Sequence<
                 css::uno::Reference<
                 css::reflection::XCompoundTypeDescription > > excs(
                     attr->getGetExceptions());
-                bool getUnknown = false;
+                bool bGetUnknown = false;
                 //XXX  Special interpretation of getter/setter exceptions only
                 // works if the specified exceptions are of the exact type, not
                 // of a supertype:
                 for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
                     if ( excs[j]->getName() == "com.sun.star.beans.UnknownPropertyException" )
                     {
-                        getUnknown = true;
+                        bGetUnknown = true;
                         break;
                     }
                 }
@@ -187,14 +187,14 @@ void Data::initProperties(
                 for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
                     if ( excs[j]->getName() == "com.sun.star.beans.UnknownPropertyException" )
                     {
-                        setUnknown = true;
+                        bSetUnknown = true;
                     } else if ( excs[j]->getName() == "com.sun.star.beans.PropertyVetoException" )
                     {
                         attrAttribs
                             |= css::beans::PropertyAttribute::CONSTRAINED;
                     }
                 }
-                if (getUnknown && setUnknown) {
+                if (bGetUnknown && bSetUnknown) {
                     attrAttribs |= css::beans::PropertyAttribute::OPTIONAL;
                 }
                 css::uno::Reference< css::reflection::XTypeDescription > t(

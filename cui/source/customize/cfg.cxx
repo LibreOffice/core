@@ -607,7 +607,7 @@ ConvertSvxConfigEntry(
     aPropSeq[2].Name = aDescriptorLabel;
     if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
     {
-        bool isDefaultName = false;
+        bool bIsDefaultName = false;
         try
         {
             uno::Any a( xCommandToLabelMap->getByName( pEntry->GetCommand() ) );
@@ -623,7 +623,7 @@ ConvertSvxConfigEntry(
 
                         if ( tmpLabel.equals( pEntry->GetName() ) )
                         {
-                            isDefaultName = true;
+                            bIsDefaultName = true;
                         }
 
                         break;
@@ -633,10 +633,10 @@ ConvertSvxConfigEntry(
         }
         catch ( container::NoSuchElementException& )
         {
-            // isDefaultName is left as FALSE
+            // bIsDefaultName is left as FALSE
         }
 
-        if ( isDefaultName )
+        if ( bIsDefaultName )
         {
             aPropSeq[2].Value <<= OUString();
         }
@@ -685,7 +685,7 @@ ConvertToolbarEntry(
     aPropSeq[2].Name = aDescriptorLabel;
     if ( !pEntry->HasChangedName() && !pEntry->GetCommand().isEmpty() )
     {
-        bool isDefaultName = false;
+        bool bIsDefaultName = false;
         try
         {
             uno::Any a( xCommandToLabelMap->getByName( pEntry->GetCommand() ) );
@@ -701,7 +701,7 @@ ConvertToolbarEntry(
 
                         if ( tmpLabel.equals( pEntry->GetName() ) )
                         {
-                            isDefaultName = true;
+                            bIsDefaultName = true;
                         }
 
                         break;
@@ -711,10 +711,10 @@ ConvertToolbarEntry(
         }
         catch ( container::NoSuchElementException& )
         {
-            // isDefaultName is left as FALSE
+            // bIsDefaultName is left as FALSE
         }
 
-        if ( isDefaultName )
+        if ( bIsDefaultName )
         {
             aPropSeq[2].Value <<= OUString();
         }
