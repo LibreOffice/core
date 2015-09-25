@@ -29,7 +29,6 @@
 #include <boost/noncopyable.hpp>
 #include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 class Rectangle;
 
@@ -73,7 +72,7 @@ public:
 private:
     VclPtr<sd::Window> mpTargetWindow;
     class LayerContainer;
-    ::boost::scoped_ptr<LayerContainer> mpLayers;
+    std::unique_ptr<LayerContainer> mpLayers;
     ScopedVclPtr<VirtualDevice> mpBackBuffer;
     MapMode maSavedMapMode;
 
