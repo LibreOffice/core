@@ -694,7 +694,7 @@ bool AbstractSvxHpLinkDlg_Impl::QueryClose()
 }
 
 
-void AbstractFmSearchDialog_Impl::SetFoundHandler(const Link<>& lnk)
+void AbstractFmSearchDialog_Impl::SetFoundHandler(const Link<FmFoundRecordInformation&,void>& lnk)
 {
     pDlg->SetFoundHandler(lnk);
 }

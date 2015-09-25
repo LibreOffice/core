@@ -2369,13 +2369,13 @@ IMPL_LINK_TYPED(SbaXDataBrowserController, OnSearchContextRequest, FmSearchConte
     return rContext.arrFields.size();
 }
 
-IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pInfo)
+IMPL_LINK_TYPED(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation&, rInfo, void)
 {
     Reference< css::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
     OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnFoundData : xCursor is empty");
 
     // move the cursor
-    xCursor->moveToBookmark(pInfo->aPosition);
+    xCursor->moveToBookmark(rInfo.aPosition);
 
     // let the grid snyc it's display with the cursor
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
@@ -2393,8 +2393,8 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
         Reference< XInterface >  xCurrent(aColumnControls->getByIndex(nViewPos),UNO_QUERY);
         if (IsSearchableControl(xCurrent))
         {
-            if (pInfo->nFieldPos)
-                --pInfo->nFieldPos;
+            if (rInfo.nFieldPos)
+                --rInfo.nFieldPos;
             else
                 break;
         }
@@ -2402,8 +2402,6 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
 
     Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     xGrid->setCurrentColumnPosition(nViewPos);
-
-    return 0;
 }
 
 IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformation*, pInfo)
