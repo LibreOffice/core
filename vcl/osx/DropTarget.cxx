@@ -20,7 +20,6 @@
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.hpp>
-#include "comphelper/makesequence.hxx"
 #include <cppuhelper/interfacecontainer.hxx>
 #include "clipboard.hxx"
 #include "DropTarget.hxx"
@@ -52,7 +51,7 @@ OUString dropTarget_getImplementationName()
 
 Sequence<OUString> dropTarget_getSupportedServiceNames()
 {
-    return makeSequence(OUString("com.sun.star.datatransfer.dnd.OleDropTarget"));
+    return { OUString("com.sun.star.datatransfer.dnd.OleDropTarget") };
 }
 
 namespace /* private */

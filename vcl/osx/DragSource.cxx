@@ -23,7 +23,6 @@
 
 #include "rtl/ustring.hxx"
 
-#include "comphelper/makesequence.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
 #include "DragSource.hxx"
@@ -62,7 +61,7 @@ OUString dragSource_getImplementationName()
 
 Sequence<OUString> dragSource_getSupportedServiceNames()
 {
-  return makeSequence(OUString("com.sun.star.datatransfer.dnd.OleDragSource"));
+  return { OUString("com.sun.star.datatransfer.dnd.OleDragSource") };
 }
 
 @implementation DragSourceHelper;

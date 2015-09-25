@@ -22,7 +22,6 @@
 #include "DataFlavorMapping.hxx"
 #include "OSXTransferable.hxx"
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
-#include "comphelper/makesequence.hxx"
 #include "comphelper/processfactory.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include <boost/assert.hpp>
@@ -74,7 +73,7 @@ OUString clipboard_getImplementationName()
 
 Sequence<OUString> clipboard_getSupportedServiceNames()
 {
-  return makeSequence(OUString("com.sun.star.datatransfer.clipboard.SystemClipboard"));
+  return { OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") };
 }
 
 AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard) :

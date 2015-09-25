@@ -452,7 +452,6 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/genericpropertyset.hxx>
-#include <comphelper/makesequence.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/unique_disposing_ptr.hxx>

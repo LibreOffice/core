@@ -106,7 +106,6 @@
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include <comphelper/anytostring.hxx>
-#include <comphelper/makesequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <config_features.h>

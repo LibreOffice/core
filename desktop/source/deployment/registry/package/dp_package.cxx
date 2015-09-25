@@ -35,7 +35,6 @@
 #include <ucbhelper/content.hxx>
 #include <svl/inettype.hxx>
 #include <comphelper/anytostring.hxx>
-#include <comphelper/makesequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -344,8 +343,7 @@ sal_Bool BackendImpl::supportsService(OUString const & ServiceName)
 Sequence<OUString> BackendImpl::getSupportedServiceNames()
     throw (RuntimeException, std::exception)
 {
-    return comphelper::makeSequence(
-        OUString(BACKEND_SERVICE_NAME) );
+    return { OUString(BACKEND_SERVICE_NAME) };
 }
 
 // XPackageRegistry
