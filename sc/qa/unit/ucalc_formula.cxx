@@ -3390,6 +3390,13 @@ void Test::testFuncPRODUCT()
     m_pDoc->SetString(aPos, OUString("=PRODUCT({8;0.125;-1})"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", -1.0, m_pDoc->GetValue(aPos));
 
+    m_pDoc->SetString(aPos, OUString("=PRODUCT({2;3};{4;5})"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", 120.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, OUString("=PRODUCT({10;-8};{3;-1};{15;30};{7})"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", 756000.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, OUString("=PRODUCT({10;-0.1;8};{0.125;4;0.25;2};{0.5};{1};{-1})"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of PRODUCT with inline array failed", 1.0, m_pDoc->GetValue(aPos));
+
     m_pDoc->DeleteTab(0);
 }
 
@@ -6363,6 +6370,15 @@ void Test::testFuncSUMSQ()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 19.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetString(aPos, "=SUMSQ({\"a\";-4;-5})");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 41.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->SetString(aPos, "=SUMSQ({2;3};{4;5})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 54.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ({-3;3;1};{-1})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 20.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ({-4};{1;4;2};{-5;7};{9})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 192.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetString(aPos, "=SUMSQ({-2;2};{1};{-1};{0;0;0;4})");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 26.0, m_pDoc->GetValue(aPos));
 
     m_pDoc->SetString(aPos, "=SUMSQ(4;1;-3)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUMSQ for failed", 26.0, m_pDoc->GetValue(aPos));
