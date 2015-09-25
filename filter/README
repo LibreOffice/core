@@ -11,3 +11,15 @@ loaded from other places. For instance "icgm" has ImportCGM, and is
 loaded and used by sd/source/filter/cgm/sdcgmfilter.cxx (!).
 Svgreader is used for "File->Open" and then to choose the svg file.
 For "Insert->Picture->From File", see svgio/source/svgreader directory.
+
+====================
+filter configuration
+====================
+
+The filter configuration consists of two parts, the type definition in
+filter/source/config/fragments/types/ and the actual filter definition
+in filter/source/config/fragments/filters/.
+
+Each file type e.g. text file should be represented by exactly one
+type definition. This type can then be referenced by several different
+filters, e.g. calc text, writer text.
