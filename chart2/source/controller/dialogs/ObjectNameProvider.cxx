@@ -564,18 +564,18 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         Reference< chart2::XRegressionCurveCalculator > xCalculator( xCurve->getCalculator(), uno::UNO_QUERY_THROW );
                         sal_Int32 aDegree = 2;
                         sal_Int32 aPeriod = 2;
-                        bool aForceIntercept = false;
+                        bool bForceIntercept = false;
                         double aInterceptValue = 0.0;
                         uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                         if ( xProperties.is())
                         {
                                 xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
                                 xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
-                                xProperties->getPropertyValue( "ForceIntercept") >>= aForceIntercept;
-                                if (aForceIntercept)
+                                xProperties->getPropertyValue( "ForceIntercept") >>= bForceIntercept;
+                                if (bForceIntercept)
                                         xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
                         }
-                        xCalculator->setRegressionProperties(aDegree, aForceIntercept, aInterceptValue, 2);
+                        xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, 2);
                         RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
 
                         // change text for Moving Average

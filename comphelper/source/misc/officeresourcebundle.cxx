@@ -128,20 +128,20 @@ namespace comphelper
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        bool has = false;
+        bool bHas = false;
 
         if ( const_cast< ResourceBundle_Impl* >( this )->impl_loadBundle_nothrow() )
         {
             try
             {
-                has = m_xBundle->hasByName( impl_getStringResourceKey( _resourceId ) );
+                bHas = m_xBundle->hasByName( impl_getStringResourceKey( _resourceId ) );
             }
             catch( const Exception& )
             {
                 OSL_FAIL( "ResourceBundle_Impl::hasString: caught an exception!" );
             }
         }
-        return has;
+        return bHas;
     }
 
 

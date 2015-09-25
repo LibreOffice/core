@@ -59,15 +59,15 @@ MozillaBootstrap::~MozillaBootstrap()
 
 void MozillaBootstrap::Init()
 {
-    bool aProfileExists=false;
+    bool bProfileExists=false;
 
 #ifndef MINIMAL_PROFILEDISCOVER
     //This must be call before any mozilla code
-    MNS_Init(aProfileExists);
+    MNS_Init(bProfileExists);
 
     m_ProfileManager = new ProfileManager();
 #else
-    (void)aProfileExists; /* avoid warning about unused parameter */
+    (void)bProfileExists; /* avoid warning about unused parameter */
 #endif
     m_ProfileAccess = new ProfileAccess();
     bootupProfile(::com::sun::star::mozilla::MozillaProductType_Mozilla,OUString());

@@ -51,10 +51,10 @@ void ExceptionTree::add(
     rtl::OString const & name, rtl::Reference< TypeManager > const & manager)
 {
     std::vector< rtl::OString > list;
-    bool runtimeException = false;
+    bool bRuntimeException = false;
     for (rtl::OString n(name); n != "com.sun.star.uno.Exception";) {
         if (n == "com.sun.star.uno.RuntimeException") {
-            runtimeException = true;
+            bRuntimeException = true;
             break;
         }
         list.push_back(n);
@@ -67,7 +67,7 @@ void ExceptionTree::add(
             getDirectBase());
         assert(!n.isEmpty());
     }
-    if (!runtimeException) {
+    if (!bRuntimeException) {
         ExceptionTreeNode * node = &m_root;
         for (std::vector< rtl::OString >::reverse_iterator i(list.rbegin());
              !node->present; ++i)

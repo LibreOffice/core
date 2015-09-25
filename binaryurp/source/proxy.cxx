@@ -133,12 +133,12 @@ void Proxy::do_dispatch_throw(
 {
     //TODO: Optimize queryInterface:
     assert(member != 0);
-    bool setter = false;
+    bool bSetter = false;
     std::vector< BinaryAny > inArgs;
     switch (member->eTypeClass) {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
-        setter = returnValue == 0;
-        if (setter) {
+        bSetter = returnValue == 0;
+        if (bSetter) {
             inArgs.push_back(
                 BinaryAny(
                     css::uno::TypeDescription(
@@ -174,7 +174,7 @@ void Proxy::do_dispatch_throw(
             oid_,
             css::uno::TypeDescription(
                 const_cast< typelib_TypeDescription * >(member)),
-            setter, inArgs, &ret, &outArgs))
+            bSetter, inArgs, &ret, &outArgs))
     {
         assert(ret.getType().get()->eTypeClass == typelib_TypeClass_EXCEPTION);
         uno_any_construct(
@@ -182,7 +182,7 @@ void Proxy::do_dispatch_throw(
     } else {
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
-            if (!setter) {
+            if (!bSetter) {
                 css::uno::TypeDescription t(
                     reinterpret_cast<
                         typelib_InterfaceAttributeTypeDescription const * >(

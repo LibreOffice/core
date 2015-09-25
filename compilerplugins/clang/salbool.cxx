@@ -90,25 +90,25 @@ bool hasBoolOverload(FunctionDecl const * decl, bool mustBeDeleted) {
         FunctionDecl const * f = dyn_cast<FunctionDecl>(*d);
         if (f != nullptr && (!mustBeDeleted || f->isDeleted())) {
             if (f->getNumParams() == n) {
-                bool hasSB = false;
+                bool bHasSB = false;
                 for (unsigned i = 0; i != n; ++i) {
                     QualType t1 { decl->getParamDecl(i)->getType() };
-                    bool isSB = isSalBool(t1);
-                    bool isSBRef = !isSB && t1->isReferenceType()
+                    bool bIsSB = isSalBool(t1);
+                    bool bIsSBRef = !bIsSB && t1->isReferenceType()
                         && isSalBool(t1.getNonReferenceType());
                     QualType t2 { f->getParamDecl(i)->getType() };
-                    if (!(isSB
+                    if (!(bIsSB
                           ? t2->isBooleanType()
-                          : isSBRef
+                          : bIsSBRef
                           ? (t2->isReferenceType()
                              && t2.getNonReferenceType()->isBooleanType())
                           : t2 == t1))
                     {
                         goto next;
                     }
-                    hasSB |= isSB || isSBRef;
+                    bHasSB |= bIsSB || bIsSBRef;
                 }
-                return hasSB;
+                return bHasSB;
                     // cheaply protect against the case where decl would have no
                     // sal_Bool parameters at all and would match itself
             next:;

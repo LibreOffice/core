@@ -59,18 +59,18 @@ IncomingRequest::~IncomingRequest() {}
 void IncomingRequest::execute() const {
     BinaryAny ret;
     std::vector< BinaryAny > outArgs;
-    bool isExc;
+    bool bIsExc;
     try {
-        bool resetCc = false;
+        bool bResetCc = false;
         css::uno::UnoInterfaceReference oldCc;
         if (currentContextMode_) {
             oldCc = current_context::get();
             current_context::set(currentContext_);
-            resetCc = true;
+            bResetCc = true;
         }
         try {
             try {
-                isExc = !execute_throw(&ret, &outArgs);
+                bIsExc = !execute_throw(&ret, &outArgs);
             } catch (const std::exception & e) {
                 throw css::uno::RuntimeException(
                     "caught C++ exception: " +
@@ -81,21 +81,21 @@ void IncomingRequest::execute() const {
         } catch (const css::uno::RuntimeException &) {
             css::uno::Any exc(cppu::getCaughtException());
             ret = bridge_->mapCppToBinaryAny(exc);
-            isExc = true;
+            bIsExc = true;
         }
-        if (resetCc) {
+        if (bResetCc) {
             current_context::set(oldCc);
         }
     } catch (const css::uno::RuntimeException &) {
         css::uno::Any exc(cppu::getCaughtException());
         ret = bridge_->mapCppToBinaryAny(exc);
-        isExc = true;
+        bIsExc = true;
     }
     if (synchronous_) {
         bridge_->decrementActiveCalls();
         try {
             bridge_->getWriter()->queueReply(
-                tid_, member_, setter_, isExc, ret, outArgs, false);
+                tid_, member_, setter_, bIsExc, ret, outArgs, false);
             return;
         } catch (const css::uno::RuntimeException & e) {
             OSL_TRACE(
@@ -107,7 +107,7 @@ void IncomingRequest::execute() const {
         }
         bridge_->terminate(false);
     } else {
-        if (isExc) {
+        if (bIsExc) {
             OSL_TRACE("oneway method raised exception");
         }
         bridge_->decrementCalls();
@@ -127,7 +127,7 @@ bool IncomingRequest::execute_throw(
         returnValue->getType().equals(
             css::uno::TypeDescription(cppu::UnoType<void>::get())) &&
         outArguments != 0 && outArguments->empty());
-    bool isExc = false;
+    bool bIsExc = false;
     switch (functionId_) {
     case SPECIAL_FUNCTION_ID_RESERVED:
         OSL_ASSERT(false); // this cannot happen
@@ -239,8 +239,8 @@ bool IncomingRequest::execute_throw(
             (*object_.get()->pDispatcher)(
                 object_.get(), member_.get(), retBuf.empty() ? 0 : &retBuf[0],
                 args.empty() ? 0 : &args[0], &pexc);
-            isExc = pexc != 0;
-            if (isExc) {
+            bIsExc = pexc != 0;
+            if (bIsExc) {
                 *returnValue = BinaryAny(
                     css::uno::TypeDescription(
                         cppu::UnoType< css::uno::Any >::get()),
@@ -281,7 +281,7 @@ bool IncomingRequest::execute_throw(
             break;
         }
     }
-    return !isExc;
+    return !bIsExc;
 }
 
 }

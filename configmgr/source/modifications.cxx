@@ -34,18 +34,18 @@ Modifications::~Modifications() {}
 
 void Modifications::add(Path const & path) {
     Node * p = &root_;
-    bool wasPresent = false;
+    bool bWasPresent = false;
     for (Path::const_iterator i(path.begin()); i != path.end(); ++i) {
         Node::Children::iterator j(p->children.find(*i));
         if (j == p->children.end()) {
-            if (wasPresent && p->children.empty()) {
+            if (bWasPresent && p->children.empty()) {
                 return;
             }
             j = p->children.insert(Node::Children::value_type(*i, Node())).
                 first;
-            wasPresent = false;
+            bWasPresent = false;
         } else {
-            wasPresent = true;
+            bWasPresent = true;
         }
         p = &j->second;
     }

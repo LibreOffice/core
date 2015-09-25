@@ -788,16 +788,16 @@ RTLFUNC(FreeLibrary)
 }
 bool IsBaseIndexOne()
 {
-    bool result = false;
+    bool bResult = false;
     if ( GetSbData()->pInst && GetSbData()->pInst->pRun )
     {
         sal_uInt16 res = GetSbData()->pInst->pRun->GetBase();
         if ( res )
         {
-            result = true;
+            bResult = true;
         }
     }
-    return result;
+    return bResult;
 }
 
 RTLFUNC(Array)

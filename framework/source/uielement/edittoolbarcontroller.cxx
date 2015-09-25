@@ -112,13 +112,13 @@ void EditControl::LoseFocus()
 
 bool EditControl::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nRet = false;
+    bool bRet = false;
     if ( m_pEditListener )
-        nRet = m_pEditListener->PreNotify( rNEvt );
-    if ( !nRet )
-        nRet = Edit::PreNotify( rNEvt );
+        bRet = m_pEditListener->PreNotify( rNEvt );
+    if ( !bRet )
+        bRet = Edit::PreNotify( rNEvt );
 
-    return nRet;
+    return bRet;
 }
 
 EditToolbarController::EditToolbarController(

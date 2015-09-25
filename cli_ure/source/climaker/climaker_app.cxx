@@ -90,7 +90,7 @@ struct OptionInfo
     bool m_has_argument;
 };
 
-bool g_verbose = false;
+bool gb_verbose = false;
 
 
 static const OptionInfo s_option_infos [] = {
@@ -333,7 +333,7 @@ SAL_IMPLEMENT_MAIN()
                 extra_assemblies.push_back(
                     path_make_absolute_file_url( cmd_arg ) );
             }
-            else if (!read_option( &g_verbose, info_verbose, &nPos ) &&
+            else if (!read_option( &gb_verbose, info_verbose, &nPos ) &&
                      !read_argument( &output, info_out, &nPos ) &&
                      !read_argument( &version, info_version, &nPos ) &&
                      !read_argument( &description, info_description, &nPos ) &&
@@ -473,7 +473,7 @@ SAL_IMPLEMENT_MAIN()
         }
         else
         {
-            if (g_verbose)
+            if (gb_verbose)
             {
                 ::System::Console::Write(
                     "> no key file specified. Cannot create strong name!\n");
@@ -596,17 +596,17 @@ SAL_IMPLEMENT_MAIN()
                 css::uno::Reference< reflection::XTypeDescription > td(
                     xTD_enum->nextTypeDescription());
                 OUString name(td->getName());
-                bool emit = false;
+                bool bEmit = false;
                 for (std::vector< rtl::Reference< unoidl::Provider > >::iterator
                          i(unoidlMandatoryProvs.begin());
                      i != unoidlMandatoryProvs.end(); ++i)
                 {
                     if ((*i)->findEntity(name).is()) {
-                        emit = true;
+                        bEmit = true;
                         break;
                     }
                 }
-                if (emit) {
+                if (bEmit) {
                     type_emitter->get_type(td);
                 }
             }
@@ -623,7 +623,7 @@ SAL_IMPLEMENT_MAIN()
         }
         type_emitter->~TypeEmitter();
 
-        if (g_verbose)
+        if (gb_verbose)
         {
             ::System::Console::Write(
                 "> saving assembly {0}{1}{2}...",
@@ -633,7 +633,7 @@ SAL_IMPLEMENT_MAIN()
                 output_file );
         }
         assembly_builder->Save( output_file );
-        if (g_verbose)
+        if (gb_verbose)
         {
             ::System::Console::WriteLine( "ok." );
         }

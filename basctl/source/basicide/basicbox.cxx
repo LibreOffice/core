@@ -249,7 +249,7 @@ void LibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLo
 
 bool LibBox::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
@@ -259,7 +259,7 @@ bool LibBox::PreNotify( NotifyEvent& rNEvt )
             case KEY_RETURN:
             {
                 NotifyIDE();
-                nDone = true;
+                bDone = true;
             }
             break;
 
@@ -267,7 +267,7 @@ bool LibBox::PreNotify( NotifyEvent& rNEvt )
             {
                 SelectEntry( aCurText );
                 ReleaseFocus();
-                nDone = true;
+                bDone = true;
             }
             break;
         }
@@ -289,7 +289,7 @@ bool LibBox::PreNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return nDone || ListBox::PreNotify( rNEvt );
+    return bDone || ListBox::PreNotify( rNEvt );
 }
 
 void LibBox::Select()
@@ -469,7 +469,7 @@ void LanguageBox::Select()
 
 bool LanguageBox::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         sal_uInt16 nKeyCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
@@ -478,14 +478,14 @@ bool LanguageBox::PreNotify( NotifyEvent& rNEvt )
             case KEY_RETURN:
             {
                 SetLanguage();
-                nDone = true;
+                bDone = true;
             }
             break;
 
             case KEY_ESCAPE:
             {
                 SelectEntry( m_sCurrentText );
-                nDone = true;
+                bDone = true;
             }
             break;
         }
@@ -497,7 +497,7 @@ bool LanguageBox::PreNotify( NotifyEvent& rNEvt )
     {
     }
 
-    return nDone || ListBox::PreNotify( rNEvt );
+    return bDone || ListBox::PreNotify( rNEvt );
 }
 
 void LanguageBox::Update( const SfxStringItem* pItem )

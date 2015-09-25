@@ -1411,7 +1411,7 @@ namespace svx
 
     bool SuggestionEdit::PreNotify( NotifyEvent& rNEvt )
     {
-        bool nHandled = false;
+        bool bHandled = false;
         if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             const KeyEvent*     pKEvt = rNEvt.GetKeyEvent();
@@ -1426,7 +1426,7 @@ namespace svx
                     DoJump( bUp );
                     SetSelection( Selection( 0, SELECTION_MAX ) );
                         // Tab-travel doesn't really happen, so emulate it by setting a selection manually
-                    nHandled = true;
+                    bHandled = true;
                 }
             }
             else if( KEY_UP == nCode || KEY_DOWN == nCode )
@@ -1435,27 +1435,27 @@ namespace svx
                 if( ShouldScroll( bUp ) )
                 {
                     DoJump( bUp );
-                    nHandled = true;
+                    bHandled = true;
                 }
                 else if( bUp )
                 {
                     if( m_pPrev )
                     {
                         m_pPrev->GrabFocus();
-                        nHandled = true;
+                        bHandled = true;
                     }
                 }
                 else if( m_pNext )
                 {
                     m_pNext->GrabFocus();
-                    nHandled = true;
+                    bHandled = true;
                 }
             }
         }
 
-        if( !nHandled )
-            nHandled = Edit::PreNotify( rNEvt );
-        return nHandled;
+        if( !bHandled )
+            bHandled = Edit::PreNotify( rNEvt );
+        return bHandled;
     }
 
     void SuggestionEdit::init( ScrollBar* pScrollBar, SuggestionEdit* pPrev, SuggestionEdit* pNext)

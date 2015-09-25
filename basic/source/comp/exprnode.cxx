@@ -304,15 +304,15 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
                    || eTok == IDIV || eTok == MOD )
                 {
                     // Integer operations
-                    bool err = false;
-                    if( nl > SbxMAXLNG ) err = true, nl = SbxMAXLNG;
-                    else if( nl < SbxMINLNG ) err = true, nl = SbxMINLNG;
-                    if( nr > SbxMAXLNG ) err = true, nr = SbxMAXLNG;
-                    else if( nr < SbxMINLNG ) err = true, nr = SbxMINLNG;
+                    bool bErr = false;
+                    if( nl > SbxMAXLNG ) bErr = true, nl = SbxMAXLNG;
+                    else if( nl < SbxMINLNG ) bErr = true, nl = SbxMINLNG;
+                    if( nr > SbxMAXLNG ) bErr = true, nr = SbxMAXLNG;
+                    else if( nr < SbxMINLNG ) bErr = true, nr = SbxMINLNG;
                     ll = static_cast<long>(nl); lr = static_cast<long>(nr);
                     llMod = static_cast<long>(nl);
                     lrMod = static_cast<long>(nr);
-                    if( err )
+                    if( bErr )
                     {
                         pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
                         bError = true;
@@ -419,10 +419,10 @@ void SbiExprNode::FoldConstants(SbiParser* pParser)
                 nVal = -nVal; break;
             case NOT: {
                 // Integer operation!
-                bool err = false;
-                if( nVal > SbxMAXLNG ) err = true, nVal = SbxMAXLNG;
-                else if( nVal < SbxMINLNG ) err = true, nVal = SbxMINLNG;
-                if( err )
+                bool bErr = false;
+                if( nVal > SbxMAXLNG ) bErr = true, nVal = SbxMAXLNG;
+                else if( nVal < SbxMINLNG ) bErr = true, nVal = SbxMINLNG;
+                if( bErr )
                 {
                     pParser->Error( ERRCODE_BASIC_MATH_OVERFLOW );
                     bError = true;

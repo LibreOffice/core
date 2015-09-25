@@ -230,8 +230,8 @@ XcuParser::Operation XcuParser::parseOperation(xmlreader::Span const & text) {
 void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
     OStringBuffer buf;
     buf.append('.');
-    bool hasPackage = false;
-    bool hasName = false;
+    bool bHasPackage = false;
+    bool bHasName = false;
     Operation op = OPERATION_MODIFY;
     bool finalized = false;
     for (;;) {
@@ -242,23 +242,23 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("package"))
         {
-            if (hasPackage) {
+            if (bHasPackage) {
                 throw css::uno::RuntimeException(
                     "multiple component-update package attributes in " +
                     reader.getUrl());
             }
-            hasPackage = true;
+            bHasPackage = true;
             xmlreader::Span s(reader.getAttributeValue(false));
             buf.insert(0, s.begin, s.length);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("name"))
         {
-            if (hasName) {
+            if (bHasName) {
                 throw css::uno::RuntimeException(
                     "multiple component-update name attributes in " +
                     reader.getUrl());
             }
-            hasName = true;
+            bHasName = true;
             xmlreader::Span s(reader.getAttributeValue(false));
             buf.append(s.begin, s.length);
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
@@ -271,11 +271,11 @@ void XcuParser::handleComponentData(xmlreader::XmlReader & reader) {
             finalized = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
-    if (!hasPackage) {
+    if (!bHasPackage) {
         throw css::uno::RuntimeException(
             "no component-data package attribute in " + reader.getUrl());
     }
-    if (!hasName) {
+    if (!bHasName) {
         throw css::uno::RuntimeException(
             "no component-data name attribute in " + reader.getUrl());
     }
@@ -556,7 +556,7 @@ void XcuParser::handleLocpropValue(
 void XcuParser::handleGroupProp(
     xmlreader::XmlReader & reader, GroupNode * group)
 {
-    bool hasName = false;
+    bool bHasName = false;
     OUString name;
     Type type = TYPE_ERROR;
     Operation op = OPERATION_MODIFY;
@@ -568,7 +568,7 @@ void XcuParser::handleGroupProp(
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("name")) {
-            hasName = true;
+            bHasName = true;
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("type"))
@@ -584,7 +584,7 @@ void XcuParser::handleGroupProp(
             finalized = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
-    if (!hasName) {
+    if (!bHasName) {
         throw css::uno::RuntimeException(
             "no prop name attribute in " + reader.getUrl());
     }
@@ -752,7 +752,7 @@ void XcuParser::handleLocalizedGroupProp(
 void XcuParser::handleGroupNode(
     xmlreader::XmlReader & reader, rtl::Reference< Node > const & group)
 {
-    bool hasName = false;
+    bool bHasName = false;
     OUString name;
     Operation op = OPERATION_MODIFY;
     bool finalized = false;
@@ -763,7 +763,7 @@ void XcuParser::handleGroupNode(
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("name")) {
-            hasName = true;
+            bHasName = true;
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("op"))
@@ -775,7 +775,7 @@ void XcuParser::handleGroupNode(
             finalized = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
-    if (!hasName) {
+    if (!bHasName) {
         throw css::uno::RuntimeException(
             "no node name attribute in " + reader.getUrl());
     }
@@ -818,10 +818,10 @@ void XcuParser::handleGroupNode(
 }
 
 void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
-    bool hasName = false;
+    bool bHasName = false;
     OUString name;
     OUString component(componentName_);
-    bool hasNodeType = false;
+    bool bHasNodeType = false;
     OUString nodeType;
     Operation op = OPERATION_MODIFY;
     bool finalized = false;
@@ -833,7 +833,7 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
             break;
         }
         if (attrNsId == ParseManager::NAMESPACE_OOR && attrLn.equals("name")) {
-            hasName = true;
+            bHasName = true;
             name = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("component"))
@@ -842,7 +842,7 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("node-type"))
         {
-            hasNodeType = true;
+            bHasNodeType = true;
             nodeType = reader.getAttributeValue(false).convertFromUtf8();
         } else if (attrNsId == ParseManager::NAMESPACE_OOR &&
                    attrLn.equals("op"))
@@ -858,7 +858,7 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
             mandatory = xmldata::parseBoolean(reader.getAttributeValue(true));
         }
     }
-    if (!hasName) {
+    if (!bHasName) {
         throw css::uno::RuntimeException(
             "no node name attribute in " + reader.getUrl());
     }
@@ -872,7 +872,7 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
     }
     OUString templateName(
         xmldata::parseTemplateReference(
-            component, hasNodeType, nodeType, &set->getDefaultTemplateName()));
+            component, bHasNodeType, nodeType, &set->getDefaultTemplateName()));
     if (!set->isValidTemplate(templateName)) {
         throw css::uno::RuntimeException(
             "set member node " + name + " references invalid template " +

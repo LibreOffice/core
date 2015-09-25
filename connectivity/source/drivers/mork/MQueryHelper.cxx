@@ -189,7 +189,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
 
     OString oStringTable = OUStringToOString( m_aAddressbook, RTL_TEXTENCODING_UTF8 );
     std::set<int> listRecords;
-    bool handleListTable = false;
+    bool bHandleListTable = false;
     MorkParser* xMork;
 
     // check if we are retrieving the default table
@@ -207,7 +207,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
             // TODO : manage case where an address book has been created
             xMork = xConnection->getMorkParser(OString("AddressBook"));
         }
-        handleListTable = true;
+        bHandleListTable = true;
         // retrieve row ids for that list table
         std::string listTable = oStringTable.getStr();
         xMork->getRecordKeysForListTable(listTable, listRecords);
@@ -231,7 +231,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
             {
                 // list specific table
                 // only retrieve rowIds that belong to that list table.
-                if (handleListTable)
+                if (bHandleListTable)
                 {
                     int rowId = rowIter->first;
                     // belongs this row id to the list table?
@@ -286,13 +286,13 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
             // Set the 'name' property of the boolString.
             OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
             SAL_INFO("connectivity.mork", "Name = " << attrName.getStr());
-            bool requiresValue = true;
+            bool bRequiresValue = true;
             OUString currentValue = entry->getValue(attrName);
             if (evStr->getCond() == MQueryOp::Exists || evStr->getCond() == MQueryOp::DoesNotExist)
             {
-                requiresValue = false;
+                bRequiresValue = false;
             }
-            if (requiresValue)
+            if (bRequiresValue)
             {
                 SAL_INFO("connectivity.mork", "Value = " << evStr->getValue() );
                 OUString searchedValue = evStr->getValue();
