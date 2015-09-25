@@ -713,9 +713,13 @@ bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
             pCurNode->GetString(), rSttPos, nEndPos, *this, aLanguageTag);
     if( pFnd && pFnd->IsTextOnly() )
     {
+
+        // replace also last colon of keywords surrounded by colons (for example, ":name:")
+        bool replaceLastChar = pFnd->GetShort()[0] == ':' && pFnd->GetShort().endsWith(":");
+
         // then replace
         EditSelection aSel( EditPaM( pCurNode, rSttPos ),
-                            EditPaM( pCurNode, nEndPos ) );
+                            EditPaM( pCurNode, nEndPos + (replaceLastChar ? 1 : 0) ));
         aSel = mpEditEngine->DeleteSelection(aSel);
         SAL_WARN_IF(nCursor < nEndPos, "editeng",
                 "Cursor in the heart of the action?!");
