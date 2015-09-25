@@ -28,7 +28,6 @@
 #include <vcl/mapmod.hxx>
 #include <vector>
 #include <utility>
-#include <boost/scoped_ptr.hpp>
 
 class Size;
 
@@ -187,7 +186,7 @@ public:
     class Implementation;
 
 private:
-    ::boost::scoped_ptr<Implementation> mpImplementation;
+    std::unique_ptr<Implementation> mpImplementation;
     VclPtr<sd::Window> mpWindow;
 };
 
