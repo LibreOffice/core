@@ -77,7 +77,6 @@
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/xbtmpit.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 // - Namespaces -
 
@@ -268,7 +267,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     TransferableDataHelper  aDataHelper( rDataHelper );
     SdrObject*              pPickObj = NULL;
     SdPage*                 pPage = NULL;
-    boost::scoped_ptr<ImageMap> pImageMap;
+    std::unique_ptr<ImageMap> pImageMap;
     bool bReturn = false;
     bool                    bLink = ( ( mnAction & DND_ACTION_LINK ) != 0 );
     bool                    bCopy = ( ( ( mnAction & DND_ACTION_COPY ) != 0 ) || bLink );
@@ -1505,7 +1504,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
 bool View::PasteRTFTable( ::tools::SvRef<SotStorageStream> xStm, SdrPage* pPage, SdrInsertFlags nPasteOptions )
 {
-    boost::scoped_ptr<SdDrawDocument> pModel(new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh ));
+    std::unique_ptr<SdDrawDocument> pModel(new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh ));
     pModel->NewOrLoadCompleted(NEW_DOC);
     pModel->GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
     pModel->InsertPage(pModel->AllocPage(false));
