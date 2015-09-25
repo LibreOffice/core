@@ -193,7 +193,7 @@ class SwAutoFormat
     void DeleteSel( SwPaM& rPam );
     bool DeleteCurNxtPara( const OUString& rNxtPara );
     /// delete in the node start and/or end
-    void DeleteCurrentParagraph( bool bStart = true, bool nEnd = true );
+    void DeleteCurrentParagraph( bool bStart = true, bool bEnd = true );
     void DelEmptyLine( bool bTstNextPara = true );
     /// when using multiline paragraphs delete the "left" and/or
     /// "right" margins

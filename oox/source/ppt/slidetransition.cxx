@@ -189,15 +189,15 @@ namespace oox { namespace ppt {
 
     bool SlideTransition::ooxToOdpSideDirectionsDirectionNormal( ::sal_Int32 nOoxType )
     {
-        bool nOdpDirection = true;
+        bool bOdpDirection = true;
         switch( nOoxType )
         {
         case XML_u:
         case XML_l:
-            nOdpDirection = false;
+            bOdpDirection = false;
             break;
         }
-        return nOdpDirection;
+        return bOdpDirection;
     }
 
     sal_Int16 SlideTransition::ooxToOdpCornerDirections( ::sal_Int32 nOoxType )

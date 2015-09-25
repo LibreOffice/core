@@ -79,10 +79,10 @@ public:
     ~ScChangeViewSettings();
 
     bool                ShowChanges() const {return bShowIt;}
-    void                SetShowChanges(bool nFlag) {bShowIt=nFlag;}
+    void                SetShowChanges(bool bFlag) {bShowIt=bFlag;}
 
     bool                HasDate() const {return bIsDate;}
-    void                SetHasDate(bool nFlag) {bIsDate=nFlag;}
+    void                SetHasDate(bool bFlag) {bIsDate=bFlag;}
 
     void                SetTheDateMode(SvxRedlinDateMode eDatMod){ eDateMode=eDatMod; }
     SvxRedlinDateMode   GetTheDateMode() const { return eDateMode; }
@@ -94,13 +94,13 @@ public:
     const DateTime&     GetTheLastDateTime()const {return aLastDateTime;}
 
     bool                HasAuthor() const {return bIsAuthor;}
-    void                SetHasAuthor(bool nFlag) {bIsAuthor=nFlag;}
+    void                SetHasAuthor(bool bFlag) {bIsAuthor=bFlag;}
 
     OUString            GetTheAuthorToShow()const {return aAuthorToShow;}
     void                SetTheAuthorToShow(const OUString& aString){aAuthorToShow=aString;}
 
     bool                HasComment() const {return bIsComment;}
-    void                SetHasComment(bool nFlag) {bIsComment=nFlag;}
+    void                SetHasComment(bool bFlag) {bIsComment=bFlag;}
 
     OUString            GetTheComment()const {return aComment;}
     void                SetTheComment(const OUString& aString);
@@ -110,7 +110,7 @@ public:
     bool                IsEveryoneButMe() const {return bEveryoneButMe;}
 
     bool                HasRange() const {return bIsRange;}
-    void                SetHasRange(bool nFlag) {bIsRange=nFlag;}
+    void                SetHasRange(bool bFlag) {bIsRange=bFlag;}
 
     const ScRangeList&  GetTheRangeList()const {return aRangeList;}
     void                SetTheRangeList(const ScRangeList& aRl){aRangeList=aRl;}
@@ -127,7 +127,7 @@ public:
     void                AdjustDateMode( const ScDocument& rDoc );
 
     bool                HasActionRange() const { return mbIsActionRange; }
-    void                SetHasActionRange( bool nFlag = true ) { mbIsActionRange = nFlag; }
+    void                SetHasActionRange( bool bFlag = true ) { mbIsActionRange = bFlag; }
     void                GetTheActionRange( sal_uLong& nFirst, sal_uLong& nLast ) const { nFirst = mnFirstAction; nLast = mnLastAction; }
     void                SetTheActionRange( sal_uLong nFirst, sal_uLong nLast ) { mnFirstAction = nFirst; mnLastAction = nLast; }
 };

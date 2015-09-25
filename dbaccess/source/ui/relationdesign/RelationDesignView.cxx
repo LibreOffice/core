@@ -66,18 +66,18 @@ void ORelationDesignView::initialize()
 
 bool ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nDone = false;
+    bool bDone = false;
     if(rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
         if(m_pTableView && !m_pTableView->HasChildPathFocus())
         {
             m_pTableView->GrabTabWinFocus();
-            nDone = true;
+            bDone = true;
         }
     }
-    if(!nDone)
-        nDone = OJoinDesignView::PreNotify(rNEvt);
-    return nDone;
+    if(!bDone)
+        bDone = OJoinDesignView::PreNotify(rNEvt);
+    return bDone;
 }
 
 void ORelationDesignView::GetFocus()

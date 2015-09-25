@@ -48,14 +48,14 @@ bool FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 {
     NotifyEvent aNotifyEvt=rNEvt;
 
-    bool nResult = ListBox::PreNotify(rNEvt);
+    bool bResult = ListBox::PreNotify(rNEvt);
 
     MouseNotifyEvent nSwitch=aNotifyEvt.GetType();
     if(nSwitch==MouseNotifyEvent::KEYINPUT)
     {
         KeyInput(*aNotifyEvt.GetKeyEvent());
     }
-    return nResult;
+    return bResult;
 }
 
 VCL_BUILDER_FACTORY_ARGS(FormulaListBox, WB_BORDER | WB_SORT)

@@ -807,14 +807,14 @@ bool SdNavigatorWin::Notify(NotifyEvent& rNEvt)
  */
 void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
 {
-    bool nOK = false;
+    bool bOK = false;
 
     if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
     {
         if( SdPageObjsTLB::IsInDrag() )
         {
             // during drag'n'drop we just stop the drag but do not close the navigator
-            nOK = true;
+            bOK = true;
         }
         else
         {
@@ -826,7 +826,7 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    if (!nOK)
+    if (!bOK)
     {
         Window::KeyInput(rKEvt);
     }

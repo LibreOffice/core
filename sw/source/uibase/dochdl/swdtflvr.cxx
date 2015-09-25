@@ -1188,7 +1188,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     std::unique_ptr<SwTrnsfrActionAndUndo> pAction;
     SwModule* pMod = SW_MOD();
 
-    bool nRet = false;
+    bool bRet = false;
     bool bCallAutoCaption = false;
 
     if( pPt )
@@ -1274,14 +1274,14 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     if(bPrivateDrop)
     {
         // then internal Drag & Drop or XSelection
-        nRet = pTrans->PrivateDrop( rSh, *pPt, DND_ACTION_MOVE == nDropAction,
+        bRet = pTrans->PrivateDrop( rSh, *pPt, DND_ACTION_MOVE == nDropAction,
                                     bPasteSelection );
     }
     else if( !pPt && pTunneledTrans &&
             EXCHG_OUT_ACTION_INSERT_PRIVATE == nAction )
     {
         // then internal paste
-        nRet = pTunneledTrans->PrivatePaste( rSh );
+        bRet = pTunneledTrans->PrivatePaste( rSh );
     }
     else if( EXCHG_INOUT_ACTION_NONE != nAction )
     {
@@ -1319,7 +1319,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             switch( nFormat )
             {
             case SotClipboardFormatId::DRAWING:
-                nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
+                bRet = SwTransferable::_PasteSdrFormat( rData, rSh,
                                                 SwPasteSdr::Insert, pPt,
                                                 nActionFlags, bNeedToSelectBeforePaste);
                 break;
@@ -1329,7 +1329,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case SotClipboardFormatId::HTML_NO_COMMENT:
             case SotClipboardFormatId::RTF:
             case SotClipboardFormatId::STRING:
-                nRet = SwTransferable::_PasteFileContent( rData, rSh,
+                bRet = SwTransferable::_PasteFileContent( rData, rSh,
                                                             nFormat, bMsg );
                 break;
 
@@ -1340,25 +1340,25 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                     {
                         SwFormatINetFormat aFormat( aBkmk.GetURL(), OUString() );
                         rSh.InsertURL( aFormat, aBkmk.GetDescription() );
-                        nRet = true;
+                        bRet = true;
                     }
                 }
                 break;
 
             case SotClipboardFormatId::SD_OLE:
-                nRet = SwTransferable::_PasteOLE( rData, rSh, nFormat,
+                bRet = SwTransferable::_PasteOLE( rData, rSh, nFormat,
                                                     nActionFlags, bMsg );
                 break;
 
             case SotClipboardFormatId::SVIM:
-                nRet = SwTransferable::_PasteImageMap( rData, rSh );
+                bRet = SwTransferable::_PasteImageMap( rData, rSh );
                 break;
 
             case SotClipboardFormatId::SVXB:
             case SotClipboardFormatId::BITMAP:
             case SotClipboardFormatId::PNG:
             case SotClipboardFormatId::GDIMETAFILE:
-                nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
+                bRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SwPasteSdr::Insert,pPt,
                                                 nActionFlags, nDropAction, bNeedToSelectBeforePaste);
                 break;
@@ -1367,13 +1367,13 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case SotClipboardFormatId::SBA_FIELDDATAEXCHANGE:
             case SotClipboardFormatId::SBA_DATAEXCHANGE:
             case SotClipboardFormatId::SBA_CTRLDATAEXCHANGE:
-                nRet = SwTransferable::_PasteDBData( rData, rSh, nFormat,
+                bRet = SwTransferable::_PasteDBData( rData, rSh, nFormat,
                                             EXCHG_IN_ACTION_LINK == nClearedAction,
                                             pPt, bMsg );
                 break;
 
             case SotClipboardFormatId::SIMPLE_FILE:
-                nRet = SwTransferable::_PasteFileName( rData, rSh, nFormat,
+                bRet = SwTransferable::_PasteFileName( rData, rSh, nFormat,
                                 ( EXCHG_IN_ACTION_MOVE == nClearedAction
                                     ? SwPasteSdr::Replace
                                     : EXCHG_IN_ACTION_LINK == nClearedAction
@@ -1384,7 +1384,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
 
             case SotClipboardFormatId::FILE_LIST:
                 // then insert as graphics only
-                nRet = SwTransferable::_PasteFileList( rData, rSh,
+                bRet = SwTransferable::_PasteFileList( rData, rSh,
                                     EXCHG_IN_ACTION_LINK == nClearedAction,
                                     pPt, bMsg );
                 break;
@@ -1405,14 +1405,14 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             }
                         }
                         rSh.NavigatorPaste( aBkmk, nClearedAction );
-                        nRet = true;
+                        bRet = true;
                     }
                 }
                 break;
 
             case SotClipboardFormatId::INET_IMAGE:
             case SotClipboardFormatId::NETSCAPE_IMAGE:
-                nRet = SwTransferable::_PasteTargetURL( rData, rSh,
+                bRet = SwTransferable::_PasteTargetURL( rData, rSh,
                                                         SwPasteSdr::Insert,
                                                         pPt, true );
                 break;
@@ -1425,7 +1425,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_INSERT_FILE:
             {
                 bool graphicInserted;
-                nRet = SwTransferable::_PasteFileName( rData, rSh, nFormat,
+                bRet = SwTransferable::_PasteFileName( rData, rSh, nFormat,
                                             SwPasteSdr::Insert, pPt,
                                             nActionFlags, bMsg,
                                             &graphicInserted );
@@ -1435,14 +1435,14 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             break;
 
         case EXCHG_OUT_ACTION_INSERT_OLE:
-            nRet = SwTransferable::_PasteOLE( rData, rSh, nFormat,
+            bRet = SwTransferable::_PasteOLE( rData, rSh, nFormat,
                                                 nActionFlags,bMsg );
             break;
 
         case EXCHG_OUT_ACTION_INSERT_DDE:
             {
                 bool bReRead = 0 != CNT_HasGrf( rSh.GetCntType() );
-                nRet = SwTransferable::_PasteDDE( rData, rSh, bReRead, bMsg );
+                bRet = SwTransferable::_PasteDDE( rData, rSh, bReRead, bMsg );
             }
             break;
 
@@ -1456,7 +1456,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                         SwTransferable::_CheckForURLOrLNKFile( rData, sURL, &sDesc );
                         if( sDesc.isEmpty() )
                             sDesc = sURL;
-                        nRet = true;
+                        bRet = true;
                     }
                 }
                 else
@@ -1466,11 +1466,11 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
                     {
                         sURL = aBkmk.GetURL();
                         sDesc = aBkmk.GetDescription();
-                        nRet = true;
+                        bRet = true;
                     }
                 }
 
-                if( nRet )
+                if( bRet )
                 {
                     SwFormatINetFormat aFormat( sURL, OUString() );
                     rSh.InsertURL( aFormat, sDesc );
@@ -1482,7 +1482,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             switch( nFormat )
             {
             case SotClipboardFormatId::DRAWING:
-                nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
+                bRet = SwTransferable::_PasteSdrFormat( rData, rSh,
                                                 SwPasteSdr::SetAttr, pPt,
                                                 nActionFlags, bNeedToSelectBeforePaste);
                 break;
@@ -1494,7 +1494,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             case SotClipboardFormatId::SIMPLE_FILE:
             case SotClipboardFormatId::FILEGRPDESCRIPTOR:
             case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
-                nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
+                bRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SwPasteSdr::SetAttr, pPt,
                                                 nActionFlags, nDropAction, bNeedToSelectBeforePaste);
                 break;
@@ -1505,7 +1505,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
             break;
 
         case EXCHG_OUT_ACTION_INSERT_DRAWOBJ:
-            nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
+            bRet = SwTransferable::_PasteSdrFormat( rData, rSh,
                                                 SwPasteSdr::Insert, pPt,
                                                 nActionFlags, bNeedToSelectBeforePaste);
             break;
@@ -1513,13 +1513,13 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_INSERT_GDIMETAFILE:
         case EXCHG_OUT_ACTION_INSERT_BITMAP:
         case EXCHG_OUT_ACTION_INSERT_GRAPH:
-            nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
+            bRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SwPasteSdr::Insert, pPt,
                                                 nActionFlags, nDropAction, bNeedToSelectBeforePaste);
             break;
 
         case EXCHG_OUT_ACTION_REPLACE_DRAWOBJ:
-            nRet = SwTransferable::_PasteSdrFormat( rData, rSh,
+            bRet = SwTransferable::_PasteSdrFormat( rData, rSh,
                                                 SwPasteSdr::Replace, pPt,
                                                 nActionFlags, bNeedToSelectBeforePaste);
             break;
@@ -1528,13 +1528,13 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         case EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE:
         case EXCHG_OUT_ACTION_REPLACE_BITMAP:
         case EXCHG_OUT_ACTION_REPLACE_GRAPH:
-            nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
+            bRet = SwTransferable::_PasteGrf( rData, rSh, nFormat,
                                                 SwPasteSdr::Replace,pPt,
                                                 nActionFlags, nDropAction, bNeedToSelectBeforePaste);
             break;
 
         case EXCHG_OUT_ACTION_INSERT_INTERACTIVE:
-            nRet = SwTransferable::_PasteAsHyperlink( rData, rSh, nFormat );
+            bRet = SwTransferable::_PasteAsHyperlink( rData, rSh, nFormat );
             break;
 
         default:
@@ -1553,7 +1553,7 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     if( bCallAutoCaption )
         rSh.GetView().AutoCaption( GRAPHIC_CAP );
 
-    return nRet;
+    return bRet;
 }
 
 SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh,
@@ -1630,7 +1630,7 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg )
 {
     sal_uInt16 nResId = STR_CLPBRD_FORMAT_ERROR;
-    bool nRet = false;
+    bool bRet = false;
 
     MSE40HTMLClipFormatObj aMSE40ClpObj;
 
@@ -1702,10 +1702,10 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
         if( IsError( aReader.Read( *pRead )) )
             nResId = STR_ERROR_CLPBRD_READ;
         else
-            nResId = 0, nRet = true;
+            nResId = 0, bRet = true;
 
         rSh.SetChgLnk( aOldLink );
-        if( nRet )
+        if( bRet )
             rSh.CallChgLnk();
     }
     else
@@ -1719,13 +1719,13 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
     {
         ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SW_RES( nResId ), VCL_MESSAGE_INFO)->Execute();
     }
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 SotClipboardFormatId nFormat, sal_uInt8 nActionFlags, bool bMsg )
 {
-    bool nRet = false;
+    bool bRet = false;
     TransferableObjectDescriptor aObjDesc;
     uno::Reference < io::XInputStream > xStrm;
     uno::Reference < embed::XStorage > xStore;
@@ -1791,7 +1791,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         SwPaM &rPAM = *rSh.GetCrsr();
         SwReader aReader( xStore, aEmptyOUStr, rPAM );
         if( !IsError( aReader.Read( *pRead )) )
-            nRet = true;
+            bRet = true;
         else if( bMsg )
             ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SW_RES(STR_ERROR_CLPBRD_READ), VCL_MESSAGE_INFO )->Execute();
     }
@@ -1932,9 +1932,9 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             //End of Hack!
 
             rSh.InsertOleObject( xObjRef );
-            nRet = true;
+            bRet = true;
 
-            if( nRet && ( nActionFlags &
+            if( bRet && ( nActionFlags &
                 ( EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL >> 8) ))
                 SwTransferable::_PasteTargetURL( rData, rSh, SwPasteSdr::NONE, 0, false );
 
@@ -1942,14 +1942,14 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             SwOLEObj::UnloadObject( xObj, rSh.GetDoc(), embed::Aspects::MSOLE_CONTENT );
         }
     }
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SwPasteSdr nAction,
                                     const Point* pPt, bool bInsertGRF )
 {
-    bool nRet = false;
+    bool bRet = false;
     INetImage aINetImg;
     if( ( rData.HasFormat( SotClipboardFormatId::INET_IMAGE ) &&
           rData.GetINetImage( SotClipboardFormatId::INET_IMAGE, aINetImg )) ||
@@ -1964,9 +1964,9 @@ bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
             //!!! check at FileSystem - only then it make sense to test graphics !!!
             Graphic aGraphic;
             GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
-            nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( sURL, aEmptyOUStr, aGraphic, &rFlt );
+            bRet = GRFILTER_OK == GraphicFilter::LoadGraphic( sURL, aEmptyOUStr, aGraphic, &rFlt );
 
-            if( nRet )
+            if( bRet )
             {
                 //Check and Perform rotation if needed
                 lclCheckAndPerformRotation(aGraphic);
@@ -2001,15 +2001,15 @@ bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
                     }
                     break;
                 default:
-                    nRet = false;
+                    bRet = false;
                 }
             }
         }
         else
-            nRet = true;
+            bRet = true;
     }
 
-    if( nRet )
+    if( bRet )
     {
         SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
         rSh.GetFlyFrmAttr( aSet );
@@ -2024,7 +2024,7 @@ bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
             rSh.SetFlyFrmAttr( aSet );
         }
     }
-    return nRet;
+    return bRet;
 }
 
 void SwTransferable::SetSelInShell( SwWrtShell& rSh, bool bSelectFrm,
@@ -2095,8 +2095,8 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
          rData.HasFormat( nFormat = SotClipboardFormatId::BITMAP )) )
     {
         Graphic aGrf;
-        bool nRet = rData.GetGraphic( nFormat, aGrf );
-        if( nRet )
+        bool bRet = rData.GetGraphic( nFormat, aGrf );
+        if( bRet )
         {
             OUString sLnkTyp("DDE");
             if ( bReReadGrf )
@@ -2104,7 +2104,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             else
                 rWrtShell.Insert( aCmd, sLnkTyp, aGrf );
         }
-        return nRet;
+        return bRet;
     }
 
     SwFieldType* pTyp = 0;
@@ -2233,7 +2233,7 @@ bool SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SwPasteSdr nAction,
                                     const Point* pPt, sal_uInt8 nActionFlags, bool bNeedToSelectBeforePaste)
 {
-    bool nRet = false;
+    bool bRet = false;
     tools::SvRef<SotStorageStream> xStrm;
     if( rData.GetSotStorageStream( SotClipboardFormatId::DRAWING, xStrm ))
     {
@@ -2247,20 +2247,20 @@ bool SwTransferable::_PasteSdrFormat(  TransferableDataHelper& rData,
         }
 
         rSh.Paste( *xStrm, nAction, pPt );
-        nRet = true;
+        bRet = true;
 
-        if( nRet && ( nActionFlags &
+        if( bRet && ( nActionFlags &
             ( EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL >> 8) ))
             SwTransferable::_PasteTargetURL( rData, rSh, SwPasteSdr::NONE, 0, false );
     }
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 SotClipboardFormatId nFormat, SwPasteSdr nAction, const Point* pPt,
                                 sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste)
 {
-    bool nRet = false;
+    bool bRet = false;
 
     Graphic aGraphic;
     INetBookmark aBkmk;
@@ -2271,7 +2271,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     case SotClipboardFormatId::BITMAP:
     case SotClipboardFormatId::PNG:
     case SotClipboardFormatId::GDIMETAFILE:
-        nRet = rData.GetGraphic( nFormat, aGraphic );
+        bRet = rData.GetGraphic( nFormat, aGraphic );
         break;
 
     case SotClipboardFormatId::SVXB:
@@ -2281,7 +2281,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         if(rData.GetSotStorageStream(SotClipboardFormatId::SVXB, xStm))
         {
             ReadGraphic( *xStm, aGraphic );
-            nRet = (GRAPHIC_NONE != aGraphic.GetType() && GRAPHIC_DEFAULT != aGraphic.GetType());
+            bRet = (GRAPHIC_NONE != aGraphic.GetType() && GRAPHIC_DEFAULT != aGraphic.GetType());
         }
 
         break;
@@ -2290,7 +2290,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     case SotClipboardFormatId::NETSCAPE_BOOKMARK:
     case SotClipboardFormatId::FILEGRPDESCRIPTOR:
     case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
-        if( ( nRet = rData.GetINetBookmark( nFormat, aBkmk ) ))
+        if( ( bRet = rData.GetINetBookmark( nFormat, aBkmk ) ))
         {
             if( SwPasteSdr::SetAttr == nAction )
                 nFormat = SotClipboardFormatId::NETSCAPE_BOOKMARK;
@@ -2302,7 +2302,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     case SotClipboardFormatId::SIMPLE_FILE:
         {
             OUString sText;
-            if( ( nRet = rData.GetString( nFormat, sText ) ) )
+            if( ( bRet = rData.GetString( nFormat, sText ) ) )
             {
                 OUString sDesc;
                 SwTransferable::_CheckForURLOrLNKFile( rData, sText, &sDesc );
@@ -2317,7 +2317,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         break;
 
     default:
-        nRet = rData.GetGraphic( nFormat, aGraphic );
+        bRet = rData.GetGraphic( nFormat, aGraphic );
         break;
     }
 
@@ -2325,17 +2325,17 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     {
         //!!! check at FileSystem - only then it makes sense to test the graphics !!!
         GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
-        nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyOUStr,
+        bRet = GRFILTER_OK == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyOUStr,
                                             aGraphic, &rFlt );
 
-        if( !nRet && SwPasteSdr::SetAttr == nAction &&
+        if( !bRet && SwPasteSdr::SetAttr == nAction &&
             SotClipboardFormatId::SIMPLE_FILE == nFormat &&
             // only at frame selection
             rSh.IsFrmSelected() )
         {
             // then set as hyperlink after the graphic
             nFormat = SotClipboardFormatId::NETSCAPE_BOOKMARK;
-            nRet = true;
+            bRet = true;
         }
     }
 
@@ -2348,7 +2348,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         SwTransferable::SetSelInShell( rSh, true, pPt );
     }
 
-    if( nRet )
+    if( bRet )
     {
         //Check and Perform rotation if needed
         lclCheckAndPerformRotation(aGraphic);
@@ -2426,13 +2426,13 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             }
             default:
             {
-                nRet = false;
+                bRet = false;
                 break;
             }
         }
     }
 
-    if( nRet )
+    if( bRet )
     {
 
         if( nActionFlags &
@@ -2463,17 +2463,17 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
             aURL.SetMap( &aMap );
             aSet.Put( aURL );
             rSh.SetFlyFrmAttr( aSet );
-            nRet = true;
+            bRet = true;
         }
     }
 
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::_PasteImageMap( TransferableDataHelper& rData,
                                     SwWrtShell& rSh )
 {
-    bool nRet = false;
+    bool bRet = false;
     if( rData.HasFormat( SotClipboardFormatId::SVIM ))
     {
         SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
@@ -2490,15 +2490,15 @@ bool SwTransferable::_PasteImageMap( TransferableDataHelper& rData,
             aSet.Put( aURL );
             rSh.SetFlyFrmAttr( aSet );
         }
-        nRet = true;
+        bRet = true;
     }
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
                                         SwWrtShell& rSh, SotClipboardFormatId nFormat )
 {
-    bool nRet = false;
+    bool bRet = false;
     OUString sFile;
     if( rData.GetString( nFormat, sFile ) && !sFile.isEmpty() )
     {
@@ -2534,9 +2534,9 @@ bool SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
                                 sDesc.isEmpty() ? sFile : sDesc);
             }
         }
-        nRet = true;
+        bRet = true;
     }
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
@@ -2545,12 +2545,12 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                     sal_uInt8 nActionFlags, bool /* bMsg */,
                     bool * graphicInserted)
 {
-    bool nRet = SwTransferable::_PasteGrf( rData, rSh, nFormat, nAction,
+    bool bRet = SwTransferable::_PasteGrf( rData, rSh, nFormat, nAction,
                                             pPt, nActionFlags, 0, false);
     if (graphicInserted != 0) {
-        *graphicInserted = nRet;
+        *graphicInserted = bRet;
     }
-    if( !nRet )
+    if( !bRet )
     {
         OUString sFile, sDesc;
         if( rData.GetString( nFormat, sFile ) && !sFile.isEmpty() )
@@ -2592,7 +2592,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
 
                     Application::PostUserEvent( LINK( &rSh, SwWrtShell,
                                                       InsertRegionDialog ), pSect );
-                    nRet = true;
+                    bRet = true;
                     }
                 else if( SwPasteSdr::SetAttr == nAction ||
                         ( bIsURLFile && SwPasteSdr::Insert == nAction ))
@@ -2628,19 +2628,19 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                                             sDesc.isEmpty() ? sFile : sDesc );
                         }
                     }
-                    nRet = true;
+                    bRet = true;
                 }
             }
         }
     }
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bLink,
                                     const Point* pDragPt, bool bMsg )
 {
-    bool nRet = false;
+    bool bRet = false;
     OUString sText;
     if( rData.GetString( nFormat, sText ) && !sText.isEmpty() )
     {
@@ -2722,20 +2722,20 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
                     rSh.SwFEShell::InsertDrawObj( *pObj, *pDragPt );
             }
         }
-        nRet = true;
+        bRet = true;
     }
     else if( bMsg )
     {
         ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SW_RES(STR_CLPBRD_FORMAT_ERROR), VCL_MESSAGE_INFO)->Execute();
     }
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::_PasteFileList( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, bool bLink,
                                     const Point* pPt, bool bMsg )
 {
-    bool nRet = false;
+    bool bRet = false;
     FileList aFileList;
     if( rData.GetFileList( SotClipboardFormatId::FILE_LIST, aFileList ) &&
         aFileList.Count() )
@@ -2757,7 +2757,7 @@ bool SwTransferable::_PasteFileList( TransferableDataHelper& rData,
                     sFlyNm = rSh.GetFlyName();
                     SwTransferable::SetSelInShell( rSh, false, pPt );
                 }
-                nRet = true;
+                bRet = true;
             }
         }
         if( !sFlyNm.isEmpty() )
@@ -2767,7 +2767,7 @@ bool SwTransferable::_PasteFileList( TransferableDataHelper& rData,
     {
         ScopedVclPtrInstance<MessageDialog>::Create( nullptr, SW_RES(STR_CLPBRD_FORMAT_ERROR), VCL_MESSAGE_INFO)->Execute();
     }
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::_CheckForURLOrLNKFile( TransferableDataHelper& rData,
@@ -2811,7 +2811,7 @@ bool SwTransferable::PasteFormat( SwWrtShell& rSh,
                                     SotClipboardFormatId nFormat )
 {
     SwWait aWait( *rSh.GetView().GetDocShell(), false );
-    bool nRet = false;
+    bool bRet = false;
 
     SotClipboardFormatId nPrivateFormat = SotClipboardFormatId::PRIVATE;
     SwTransferable *pClipboard = GetSwTransferable( rData );
@@ -2820,7 +2820,7 @@ bool SwTransferable::PasteFormat( SwWrtShell& rSh,
         nPrivateFormat = SotClipboardFormatId::EMBED_SOURCE;
 
     if( pClipboard && nPrivateFormat == nFormat )
-        nRet = pClipboard->PrivatePaste( rSh );
+        bRet = pClipboard->PrivatePaste( rSh );
     else if( rData.HasFormat( nFormat ) )
     {
         uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
@@ -2842,10 +2842,10 @@ bool SwTransferable::PasteFormat( SwWrtShell& rSh,
                                     lcl_getTransferPointer ( xTransferable ) );
 
         if( EXCHG_INOUT_ACTION_NONE != nAction )
-            nRet = SwTransferable::PasteData( rData, rSh, nAction, nFormat,
+            bRet = SwTransferable::PasteData( rData, rSh, nAction, nFormat,
                                                 nDestination, true, false );
     }
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
@@ -2894,7 +2894,7 @@ bool SwTransferable::PasteUnformatted( SwWrtShell& rSh, TransferableDataHelper& 
 
 bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData, SotClipboardFormatId& rFormatUsed )
 {
-    bool nRet = false;
+    bool bRet = false;
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( &rSh.GetView().GetEditWin() ));
 
@@ -2956,12 +2956,12 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
     SotClipboardFormatId nFormat = pDlg->GetFormat( rData.GetTransferable() );
 
     if( nFormat != SotClipboardFormatId::NONE )
-        nRet = SwTransferable::PasteFormat( rSh, rData, nFormat );
+        bRet = SwTransferable::PasteFormat( rSh, rData, nFormat );
 
-    if ( nRet )
+    if ( bRet )
         rFormatUsed = nFormat;
 
-    return nRet;
+    return bRet;
 }
 
 void SwTransferable::FillClipFormatItem( const SwWrtShell& rSh,
@@ -3281,16 +3281,16 @@ bool SwTransferable::PrivatePaste( SwWrtShell& rShell )
             }
     }
 
-    bool nRet = rShell.Paste( m_pClpDocFac->GetDoc() );
+    bool bRet = rShell.Paste( m_pClpDocFac->GetDoc() );
 
     if( bKillPaMs )
         rShell.KillPams();
 
     // If Smart Paste then insert blank
-    if( nRet && bSmart && ((bInWrd && !bEndWrd )|| bSttWrd) )
+    if( bRet && bSmart && ((bInWrd && !bEndWrd )|| bSttWrd) )
         rShell.SwEditShell::Insert(' ');
 
-    return nRet;
+    return bRet;
 }
 
 bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,

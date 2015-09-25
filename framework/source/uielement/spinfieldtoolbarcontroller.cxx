@@ -165,13 +165,13 @@ void SpinfieldControl::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool SpinfieldControl::PreNotify( NotifyEvent& rNEvt )
 {
-    bool nRet = false;
+    bool bRet = false;
     if ( m_pSpinFieldListener )
-        nRet = m_pSpinFieldListener->PreNotify( rNEvt );
-    if ( !nRet )
-        nRet = SpinField::PreNotify( rNEvt );
+        bRet = m_pSpinFieldListener->PreNotify( rNEvt );
+    if ( !bRet )
+        bRet = SpinField::PreNotify( rNEvt );
 
-    return nRet;
+    return bRet;
 }
 
 SpinfieldToolbarController::SpinfieldToolbarController(

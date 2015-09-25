@@ -68,7 +68,7 @@ ResizableMultiLineEdit::ResizableMultiLineEdit (vcl::Window* pParent, ThumbnailV
 
 bool ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
 {
-    bool nDone = false;
+    bool bDone = false;
     if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
@@ -80,7 +80,7 @@ bool ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
                 //fall-through
             case KEY_ESCAPE:
                 mpItem->setEditTitle(false);
-                nDone = true;
+                bDone = true;
                 break;
             default:
                 break;
@@ -91,7 +91,7 @@ bool ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
         mpItem->setTitle( GetText() );
         mpItem->setEditTitle(false, false);
     }
-    return nDone || VclMultiLineEdit::PreNotify(rNEvt);
+    return bDone || VclMultiLineEdit::PreNotify(rNEvt);
 }
 
 void ResizableMultiLineEdit::Modify()

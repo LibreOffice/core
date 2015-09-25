@@ -49,22 +49,22 @@ enum SfxItemKind {
 // warning, if there is no boolean inside the any this will always return the value false
 inline bool Any2Bool( const ::com::sun::star::uno::Any&rValue )
 {
-    bool nValue = false;
+    bool bValue = false;
     if( rValue.hasValue() )
     {
         if( rValue.getValueType() == cppu::UnoType<bool>::get() )
         {
-            nValue = *static_cast<sal_Bool const *>(rValue.getValue());
+            bValue = *static_cast<sal_Bool const *>(rValue.getValue());
         }
         else
         {
             sal_Int32 nNum = 0;
             if( rValue >>= nNum )
-                nValue = nNum != 0;
+                bValue = nNum != 0;
         }
     }
 
-    return nValue;
+    return bValue;
 }
 
 enum SfxMapUnit

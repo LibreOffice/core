@@ -218,7 +218,7 @@ void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescripto
 
 bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = false;
+    bool bHandled = false;
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -232,7 +232,7 @@ bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
                 if ( KEY_TAB == nCode )
                     m_bRelease = false;
                 else
-                    nHandled = true;
+                    bHandled = true;
                 Select();
                 break;
             }
@@ -240,7 +240,7 @@ bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_ESCAPE:
                 SetText( m_aCurText );
                 ReleaseFocus_Impl();
-                nHandled = true;
+                bHandled = true;
                 break;
         }
     }
@@ -251,7 +251,7 @@ bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
             SetText(GetSavedValue());
     }
 
-    return nHandled || FontSizeBox::Notify( rNEvt );
+    return bHandled || FontSizeBox::Notify( rNEvt );
 }
 
 void SvxFontSizeBox_Impl::SetOptimalSize()

@@ -189,8 +189,8 @@ void wwSection::SetDirection()
             break;
     }
 
-    sal_uInt8 nRTLPgn = maSep.fBiDi;
-    if ((meDir == FRMDIR_HORI_LEFT_TOP) && nRTLPgn)
+    sal_uInt8 bRTLPgn = maSep.fBiDi;
+    if ((meDir == FRMDIR_HORI_LEFT_TOP) && bRTLPgn)
         meDir = FRMDIR_HORI_RIGHT_TOP;
 }
 
@@ -649,9 +649,9 @@ SwSectionFormat *wwSectionManager::InsertSection(
 
     SfxItemSet aSet( mrReader.m_rDoc.GetAttrPool(), aFrameFormatSetRange );
 
-    bool nRTLPgn = !maSegments.empty() && maSegments.back().IsBiDi();
+    bool bRTLPgn = !maSegments.empty() && maSegments.back().IsBiDi();
     aSet.Put(SvxFrameDirectionItem(
-        nRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
+        bRTLPgn ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR));
 
     if (2 == mrReader.m_pWDop->fpc)
         aSet.Put( SwFormatFootnoteAtTextEnd(FTNEND_ATTXTEND));

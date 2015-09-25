@@ -971,7 +971,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
 
 bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
 {
-    bool nRet = false;
+    bool bRet = false;
 
     if ( GetPageCount() > 1 )
     {
@@ -985,7 +985,7 @@ bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
                 if ( (nKeyCode == KEY_TAB) || (nKeyCode == KEY_PAGEUP) )
                 {
                     ImplActivateTabPage( false );
-                    nRet = true;
+                    bRet = true;
                 }
             }
             else
@@ -993,13 +993,13 @@ bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
                 if ( (nKeyCode == KEY_TAB) || (nKeyCode == KEY_PAGEDOWN) )
                 {
                     ImplActivateTabPage( true );
-                    nRet = true;
+                    bRet = true;
                 }
             }
         }
     }
 
-    return nRet;
+    return bRet;
 }
 
 IMPL_LINK_NOARG(TabControl, ImplListBoxSelectHdl)
@@ -1609,12 +1609,12 @@ bool TabControl::PreNotify( NotifyEvent& rNEvt )
 
 bool TabControl::Notify( NotifyEvent& rNEvt )
 {
-    bool nRet = false;
+    bool bRet = false;
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-        nRet = ImplHandleKeyEvent( *rNEvt.GetKeyEvent() );
+        bRet = ImplHandleKeyEvent( *rNEvt.GetKeyEvent() );
 
-    return nRet || Control::Notify( rNEvt );
+    return bRet || Control::Notify( rNEvt );
 }
 
 void TabControl::ActivatePage()

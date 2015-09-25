@@ -80,17 +80,17 @@ void SwWrtShell::MoveCrsr( bool bWithSelect )
 
 bool SwWrtShell::SimpleMove( FNSimpleMove FnSimpleMove, bool bSelect )
 {
-    bool nRet;
+    bool bRet;
     if( bSelect )
     {
         SttCrsrMove();
         MoveCrsr( true );
-        nRet = (this->*FnSimpleMove)();
+        bRet = (this->*FnSimpleMove)();
         EndCrsrMove();
     }
-    else if( ( nRet = (this->*FnSimpleMove)() ) )
+    else if( ( bRet = (this->*FnSimpleMove)() ) )
         MoveCrsr();
-    return nRet;
+    return bRet;
 }
 
 bool SwWrtShell::Left( sal_uInt16 nMode, bool bSelect,

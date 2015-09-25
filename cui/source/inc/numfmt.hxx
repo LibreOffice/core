@@ -87,7 +87,7 @@ public:
                                 { SetInfoItem( rItem ); }
 
     void                    SetOkHdl( const Link<SfxPoolItem*,void>& rOkHandler );
-    void                    HideLanguage(bool nFlag=true);
+    void                    HideLanguage(bool bFlag=true);
     virtual bool            PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void            PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 private:

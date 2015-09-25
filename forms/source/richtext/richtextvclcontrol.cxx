@@ -286,13 +286,13 @@ namespace frm
 
     bool RichTextControl::Notify( NotifyEvent& _rNEvt )
     {
-        bool nDone = false;
+        bool bDone = false;
         if ( _rNEvt.GetType() == MouseNotifyEvent::COMMAND )
         {
             const CommandEvent& rEvent = *_rNEvt.GetCommandEvent();
-            nDone = m_pImpl->HandleCommand( rEvent );
+            bDone = m_pImpl->HandleCommand( rEvent );
         }
-        return nDone || Control::Notify( _rNEvt );
+        return bDone || Control::Notify( _rNEvt );
     }
 
 

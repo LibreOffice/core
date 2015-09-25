@@ -1183,7 +1183,7 @@ void ScInterpreter::ScAnd()
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
         bool bHaveValue = false;
-        bool nRes = true;
+        bool bRes = true;
         size_t nRefInList = 0;
         while( nParamCount-- > 0)
         {
@@ -1193,7 +1193,7 @@ void ScInterpreter::ScAnd()
                 {
                     case svDouble :
                         bHaveValue = true;
-                        nRes &= ( PopDouble() != 0.0 );
+                        bRes &= ( PopDouble() != 0.0 );
                     break;
                     case svString :
                         Pop();
@@ -1210,7 +1210,7 @@ void ScInterpreter::ScAnd()
                             if (aCell.hasNumeric())
                             {
                                 bHaveValue = true;
-                                nRes &= ( GetCellValue(aAdr, aCell) != 0.0 );
+                                bRes &= ( GetCellValue(aAdr, aCell) != 0.0 );
                             }
                             // else: Xcl raises no error here
                         }
@@ -1231,7 +1231,7 @@ void ScInterpreter::ScAnd()
                                 bHaveValue = true;
                                 do
                                 {
-                                    nRes &= ( fVal != 0.0 );
+                                    bRes &= ( fVal != 0.0 );
                                 } while ( (nErr == 0) &&
                                     aValIter.GetNext( fVal, nErr ) );
                             }
@@ -1252,10 +1252,10 @@ void ScInterpreter::ScAnd()
                             if ( nErr )
                             {
                                 SetError( nErr );
-                                nRes = false;
+                                bRes = false;
                             }
                             else
-                                nRes &= (fVal != 0.0);
+                                bRes &= (fVal != 0.0);
                         }
                         // else: GetMatrix did set errIllegalParameter
                     }
@@ -1269,7 +1269,7 @@ void ScInterpreter::ScAnd()
                 Pop();
         }
         if ( bHaveValue )
-            PushInt( int(nRes) );
+            PushInt( int(bRes) );
         else
             PushNoValue();
     }
@@ -1282,7 +1282,7 @@ void ScInterpreter::ScOr()
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
         bool bHaveValue = false;
-        bool nRes = false;
+        bool bRes = false;
         size_t nRefInList = 0;
         while( nParamCount-- > 0)
         {
@@ -1292,7 +1292,7 @@ void ScInterpreter::ScOr()
                 {
                     case svDouble :
                         bHaveValue = true;
-                        nRes |= ( PopDouble() != 0.0 );
+                        bRes |= ( PopDouble() != 0.0 );
                     break;
                     case svString :
                         Pop();
@@ -1309,7 +1309,7 @@ void ScInterpreter::ScOr()
                             if (aCell.hasNumeric())
                             {
                                 bHaveValue = true;
-                                nRes |= ( GetCellValue(aAdr, aCell) != 0.0 );
+                                bRes |= ( GetCellValue(aAdr, aCell) != 0.0 );
                             }
                             // else: Xcl raises no error here
                         }
@@ -1330,7 +1330,7 @@ void ScInterpreter::ScOr()
                                 bHaveValue = true;
                                 do
                                 {
-                                    nRes |= ( fVal != 0.0 );
+                                    bRes |= ( fVal != 0.0 );
                                 } while ( (nErr == 0) &&
                                     aValIter.GetNext( fVal, nErr ) );
                             }
@@ -1352,10 +1352,10 @@ void ScInterpreter::ScOr()
                             if ( nErr )
                             {
                                 SetError( nErr );
-                                nRes = false;
+                                bRes = false;
                             }
                             else
-                                nRes |= (fVal != 0.0);
+                                bRes |= (fVal != 0.0);
                         }
                         // else: GetMatrix did set errIllegalParameter
                     }
@@ -1369,7 +1369,7 @@ void ScInterpreter::ScOr()
                 Pop();
         }
         if ( bHaveValue )
-            PushInt( int(nRes) );
+            PushInt( int(bRes) );
         else
             PushNoValue();
     }
@@ -1383,7 +1383,7 @@ void ScInterpreter::ScXor()
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
         bool bHaveValue = false;
-        bool nRes = false;
+        bool bRes = false;
         size_t nRefInList = 0;
         while( nParamCount-- > 0)
         {
@@ -1393,7 +1393,7 @@ void ScInterpreter::ScXor()
                 {
                     case svDouble :
                         bHaveValue = true;
-                        nRes ^= ( PopDouble() != 0.0 );
+                        bRes ^= ( PopDouble() != 0.0 );
                     break;
                     case svString :
                         Pop();
@@ -1410,7 +1410,7 @@ void ScInterpreter::ScXor()
                             if (aCell.hasNumeric())
                             {
                                 bHaveValue = true;
-                                nRes ^= ( GetCellValue(aAdr, aCell) != 0.0 );
+                                bRes ^= ( GetCellValue(aAdr, aCell) != 0.0 );
                             }
                             /* TODO: set error? Excel doesn't have XOR, but
                              * doesn't set an error in this case for AND and
@@ -1433,7 +1433,7 @@ void ScInterpreter::ScXor()
                                 bHaveValue = true;
                                 do
                                 {
-                                    nRes ^= ( fVal != 0.0 );
+                                    bRes ^= ( fVal != 0.0 );
                                 } while ( (nErr == 0) &&
                                     aValIter.GetNext( fVal, nErr ) );
                             }
@@ -1455,10 +1455,10 @@ void ScInterpreter::ScXor()
                             if ( nErr )
                             {
                                 SetError( nErr );
-                                nRes = false;
+                                bRes = false;
                             }
                             else
-                                nRes ^= ( fVal != 0.0 );
+                                bRes ^= ( fVal != 0.0 );
                         }
                         // else: GetMatrix did set errIllegalParameter
                     }
@@ -1472,7 +1472,7 @@ void ScInterpreter::ScXor()
                 Pop();
         }
         if ( bHaveValue )
-            PushInt( int(nRes) );
+            PushInt( int(bRes) );
         else
             PushNoValue();
     }
@@ -1861,12 +1861,12 @@ void ScInterpreter::ScIsEmpty()
 bool ScInterpreter::IsString()
 {
     nFuncFmtType = css::util::NumberFormat::LOGICAL;
-    bool nRes = false;
+    bool bRes = false;
     switch ( GetRawStackType() )
     {
         case svString:
             Pop();
-            nRes = true;
+            bRes = true;
         break;
         case svDoubleRef :
         case svSingleRef :
@@ -1883,10 +1883,10 @@ bool ScInterpreter::IsString()
                 {
                     case CELLTYPE_STRING :
                     case CELLTYPE_EDIT :
-                        nRes = true;
+                        bRes = true;
                         break;
                     case CELLTYPE_FORMULA :
-                        nRes = (!aCell.mpFormula->IsValue() && !aCell.mpFormula->IsEmpty());
+                        bRes = (!aCell.mpFormula->IsValue() && !aCell.mpFormula->IsEmpty());
                         break;
                     default:
                         ; // nothing
@@ -1900,14 +1900,14 @@ bool ScInterpreter::IsString()
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
-                nRes = pMat->IsString(0, 0) && !pMat->IsEmpty(0, 0);
+                bRes = pMat->IsString(0, 0) && !pMat->IsEmpty(0, 0);
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
-                    nRes = pMat->IsString( nC, nR) && !pMat->IsEmpty( nC, nR);
+                    bRes = pMat->IsString( nC, nR) && !pMat->IsEmpty( nC, nR);
             }
         }
         break;
@@ -1915,7 +1915,7 @@ bool ScInterpreter::IsString()
             Pop();
     }
     nGlobalError = 0;
-    return nRes;
+    return bRes;
 }
 
 void ScInterpreter::ScIsString()
@@ -1930,7 +1930,7 @@ void ScInterpreter::ScIsNonString()
 
 void ScInterpreter::ScIsLogical()
 {
-    bool nRes = false;
+    bool bRes = false;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -1947,7 +1947,7 @@ void ScInterpreter::ScIsLogical()
                 if (aCell.hasNumeric())
                 {
                     sal_uLong nFormat = GetCellNumberFormat(aAdr, aCell);
-                    nRes = (pFormatter->GetType(nFormat) == css::util::NumberFormat::LOGICAL);
+                    bRes = (pFormatter->GetType(nFormat) == css::util::NumberFormat::LOGICAL);
                 }
             }
         }
@@ -1959,11 +1959,11 @@ void ScInterpreter::ScIsLogical()
         default:
             PopError();
             if ( !nGlobalError )
-                nRes = ( nCurFmtType == css::util::NumberFormat::LOGICAL );
+                bRes = ( nCurFmtType == css::util::NumberFormat::LOGICAL );
     }
     nCurFmtType = nFuncFmtType = css::util::NumberFormat::LOGICAL;
     nGlobalError = 0;
-    PushInt( int(nRes) );
+    PushInt( int(bRes) );
 }
 
 void ScInterpreter::ScType()
@@ -2438,7 +2438,7 @@ void ScInterpreter::ScCellExternal()
 void ScInterpreter::ScIsRef()
 {
     nFuncFmtType = css::util::NumberFormat::LOGICAL;
-    bool nRes = false;
+    bool bRes = false;
     switch ( GetStackType() )
     {
         case svSingleRef :
@@ -2446,7 +2446,7 @@ void ScInterpreter::ScIsRef()
             ScAddress aAdr;
             PopSingleRef( aAdr );
             if ( !nGlobalError )
-                nRes = true;
+                bRes = true;
         }
         break;
         case svDoubleRef :
@@ -2454,32 +2454,32 @@ void ScInterpreter::ScIsRef()
             ScRange aRange;
             PopDoubleRef( aRange );
             if ( !nGlobalError )
-                nRes = true;
+                bRes = true;
         }
         break;
         case svRefList :
         {
             FormulaTokenRef x = PopToken();
             if ( !nGlobalError )
-                nRes = !x.get()->GetRefList()->empty();
+                bRes = !x.get()->GetRefList()->empty();
         }
         break;
         default:
             Pop();
     }
     nGlobalError = 0;
-    PushInt( int(nRes) );
+    PushInt( int(bRes) );
 }
 
 void ScInterpreter::ScIsValue()
 {
     nFuncFmtType = css::util::NumberFormat::LOGICAL;
-    bool nRes = false;
+    bool bRes = false;
     switch ( GetRawStackType() )
     {
         case svDouble:
             Pop();
-            nRes = true;
+            bRes = true;
         break;
         case svDoubleRef :
         case svSingleRef :
@@ -2495,10 +2495,10 @@ void ScInterpreter::ScIsValue()
                 switch (aCell.meType)
                 {
                     case CELLTYPE_VALUE :
-                        nRes = true;
+                        bRes = true;
                         break;
                     case CELLTYPE_FORMULA :
-                        nRes = (aCell.mpFormula->IsValue() && !aCell.mpFormula->IsEmpty());
+                        bRes = (aCell.mpFormula->IsValue() && !aCell.mpFormula->IsEmpty());
                         break;
                     default:
                         ; // nothing
@@ -2514,7 +2514,7 @@ void ScInterpreter::ScIsValue()
             else if ( !pJumpMatrix )
             {
                 if (pMat->GetErrorIfNotString( 0, 0) == 0)
-                    nRes = pMat->IsValue( 0, 0);
+                    bRes = pMat->IsValue( 0, 0);
             }
             else
             {
@@ -2523,7 +2523,7 @@ void ScInterpreter::ScIsValue()
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
                     if (pMat->GetErrorIfNotString( nC, nR) == 0)
-                        nRes = pMat->IsValue( nC, nR);
+                        bRes = pMat->IsValue( nC, nR);
             }
         }
         break;
@@ -2531,13 +2531,13 @@ void ScInterpreter::ScIsValue()
             Pop();
     }
     nGlobalError = 0;
-    PushInt( int(nRes) );
+    PushInt( int(bRes) );
 }
 
 void ScInterpreter::ScIsFormula()
 {
     nFuncFmtType = css::util::NumberFormat::LOGICAL;
-    bool nRes = false;
+    bool bRes = false;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -2547,14 +2547,14 @@ void ScInterpreter::ScIsFormula()
             if ( !PopDoubleRefOrSingleRef( aAdr ) )
                 break;
 
-            nRes = (pDok->GetCellType(aAdr) == CELLTYPE_FORMULA);
+            bRes = (pDok->GetCellType(aAdr) == CELLTYPE_FORMULA);
         }
         break;
         default:
             Pop();
     }
     nGlobalError = 0;
-    PushInt( int(nRes) );
+    PushInt( int(bRes) );
 }
 
 void ScInterpreter::ScFormula()
@@ -2640,7 +2640,7 @@ void ScInterpreter::ScFormula()
 void ScInterpreter::ScIsNV()
 {
     nFuncFmtType = css::util::NumberFormat::LOGICAL;
-    bool nRes = false;
+    bool bRes = false;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -2649,13 +2649,13 @@ void ScInterpreter::ScIsNV()
             ScAddress aAdr;
             bool bOk = PopDoubleRefOrSingleRef( aAdr );
             if ( nGlobalError == NOTAVAILABLE )
-                nRes = true;
+                bRes = true;
             else if (bOk)
             {
                 ScRefCellValue aCell;
                 aCell.assign(*pDok, aAdr);
                 sal_uInt16 nErr = GetCellErrCode(aCell);
-                nRes = (nErr == NOTAVAILABLE);
+                bRes = (nErr == NOTAVAILABLE);
             }
         }
         break;
@@ -2665,30 +2665,30 @@ void ScInterpreter::ScIsNV()
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
-                nRes = (pMat->GetErrorIfNotString( 0, 0) == NOTAVAILABLE);
+                bRes = (pMat->GetErrorIfNotString( 0, 0) == NOTAVAILABLE);
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
-                    nRes = (pMat->GetErrorIfNotString( nC, nR) == NOTAVAILABLE);
+                    bRes = (pMat->GetErrorIfNotString( nC, nR) == NOTAVAILABLE);
             }
         }
         break;
         default:
             PopError();
             if ( nGlobalError == NOTAVAILABLE )
-                nRes = true;
+                bRes = true;
     }
     nGlobalError = 0;
-    PushInt( int(nRes) );
+    PushInt( int(bRes) );
 }
 
 void ScInterpreter::ScIsErr()
 {
     nFuncFmtType = css::util::NumberFormat::LOGICAL;
-    bool nRes = false;
+    bool bRes = false;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -2697,13 +2697,13 @@ void ScInterpreter::ScIsErr()
             ScAddress aAdr;
             bool bOk = PopDoubleRefOrSingleRef( aAdr );
             if ( !bOk || (nGlobalError && nGlobalError != NOTAVAILABLE) )
-                nRes = true;
+                bRes = true;
             else
             {
                 ScRefCellValue aCell;
                 aCell.assign(*pDok, aAdr);
                 sal_uInt16 nErr = GetCellErrCode(aCell);
-                nRes = (nErr && nErr != NOTAVAILABLE);
+                bRes = (nErr && nErr != NOTAVAILABLE);
             }
         }
         break;
@@ -2711,11 +2711,11 @@ void ScInterpreter::ScIsErr()
         {
             ScMatrixRef pMat = PopMatrix();
             if ( nGlobalError || !pMat )
-                nRes = ((nGlobalError && nGlobalError != NOTAVAILABLE) || !pMat);
+                bRes = ((nGlobalError && nGlobalError != NOTAVAILABLE) || !pMat);
             else if ( !pJumpMatrix )
             {
                 sal_uInt16 nErr = pMat->GetErrorIfNotString( 0, 0);
-                nRes = (nErr && nErr != NOTAVAILABLE);
+                bRes = (nErr && nErr != NOTAVAILABLE);
             }
             else
             {
@@ -2725,7 +2725,7 @@ void ScInterpreter::ScIsErr()
                 if ( nC < nCols && nR < nRows )
                 {
                     sal_uInt16 nErr = pMat->GetErrorIfNotString( nC, nR);
-                    nRes = (nErr && nErr != NOTAVAILABLE);
+                    bRes = (nErr && nErr != NOTAVAILABLE);
                 }
             }
         }
@@ -2733,16 +2733,16 @@ void ScInterpreter::ScIsErr()
         default:
             PopError();
             if ( nGlobalError && nGlobalError != NOTAVAILABLE )
-                nRes = true;
+                bRes = true;
     }
     nGlobalError = 0;
-    PushInt( int(nRes) );
+    PushInt( int(bRes) );
 }
 
 void ScInterpreter::ScIsError()
 {
     nFuncFmtType = css::util::NumberFormat::LOGICAL;
-    bool nRes = false;
+    bool bRes = false;
     switch ( GetStackType() )
     {
         case svDoubleRef :
@@ -2751,16 +2751,16 @@ void ScInterpreter::ScIsError()
             ScAddress aAdr;
             if ( !PopDoubleRefOrSingleRef( aAdr ) )
             {
-                nRes = true;
+                bRes = true;
                 break;
             }
             if ( nGlobalError )
-                nRes = true;
+                bRes = true;
             else
             {
                 ScRefCellValue aCell;
                 aCell.assign(*pDok, aAdr);
-                nRes = (GetCellErrCode(aCell) != 0);
+                bRes = (GetCellErrCode(aCell) != 0);
             }
         }
         break;
@@ -2768,32 +2768,32 @@ void ScInterpreter::ScIsError()
         {
             ScMatrixRef pMat = PopMatrix();
             if ( nGlobalError || !pMat )
-                nRes = true;
+                bRes = true;
             else if ( !pJumpMatrix )
-                nRes = (pMat->GetErrorIfNotString( 0, 0) != 0);
+                bRes = (pMat->GetErrorIfNotString( 0, 0) != 0);
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
-                    nRes = (pMat->GetErrorIfNotString( nC, nR) != 0);
+                    bRes = (pMat->GetErrorIfNotString( nC, nR) != 0);
             }
         }
         break;
         default:
             PopError();
             if ( nGlobalError )
-                nRes = true;
+                bRes = true;
     }
     nGlobalError = 0;
-    PushInt( int(nRes) );
+    PushInt( int(bRes) );
 }
 
 bool ScInterpreter::IsEven()
 {
     nFuncFmtType = css::util::NumberFormat::LOGICAL;
-    bool nRes = false;
+    bool bRes = false;
     double fVal = 0.0;
     switch ( GetStackType() )
     {
@@ -2815,13 +2815,13 @@ bool ScInterpreter::IsEven()
                 {
                     case CELLTYPE_VALUE :
                         fVal = GetCellValue(aAdr, aCell);
-                        nRes = true;
+                        bRes = true;
                     break;
                     case CELLTYPE_FORMULA :
                         if (aCell.mpFormula->IsValue())
                         {
                             fVal = GetCellValue(aAdr, aCell);
-                            nRes = true;
+                            bRes = true;
                         }
                     break;
                     default:
@@ -2833,7 +2833,7 @@ bool ScInterpreter::IsEven()
         case svDouble:
         {
             fVal = PopDouble();
-            nRes = true;
+            bRes = true;
         }
         break;
         case svMatrix:
@@ -2843,8 +2843,8 @@ bool ScInterpreter::IsEven()
                 ;   // nothing
             else if ( !pJumpMatrix )
             {
-                nRes = pMat->IsValue( 0, 0);
-                if ( nRes )
+                bRes = pMat->IsValue( 0, 0);
+                if ( bRes )
                     fVal = pMat->GetDouble( 0, 0);
             }
             else
@@ -2854,8 +2854,8 @@ bool ScInterpreter::IsEven()
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
                 {
-                    nRes = pMat->IsValue( nC, nR);
-                    if ( nRes )
+                    bRes = pMat->IsValue( nC, nR);
+                    if ( bRes )
                         fVal = pMat->GetDouble( nC, nR);
                 }
                 else
@@ -2866,11 +2866,11 @@ bool ScInterpreter::IsEven()
         default:
             ; // nothing
     }
-    if ( !nRes )
+    if ( !bRes )
         SetError( errIllegalParameter);
     else
-        nRes = ( fmod( ::rtl::math::approxFloor( fabs( fVal ) ), 2.0 ) < 0.5 );
-    return nRes;
+        bRes = ( fmod( ::rtl::math::approxFloor( fabs( fVal ) ), 2.0 ) < 0.5 );
+    return bRes;
 }
 
 void ScInterpreter::ScIsEven()
@@ -7957,13 +7957,13 @@ bool SAL_CALL lcl_getScriptClass(sal_uInt32 currentChar)
           (MsLangId::getSystemLanguage() == LANGUAGE_JAPANESE) )
         return true;
     sal_uInt16 i;
-    static bool nRet = false;
+    static bool bRet = false;
     UBlockCode block = (UBlockCode)ublock_getCode((sal_uInt32)currentChar);
     for ( i = 0; i < scriptListCount; i++) {
         if (block <= scriptList[i].to) break;
     }
-    nRet = (i < scriptListCount && block >= scriptList[i].from);
-    return nRet;
+    bRet = (i < scriptListCount && block >= scriptList[i].from);
+    return bRet;
 }
 bool IsDBCS(sal_Unicode ch)
 {
@@ -8173,8 +8173,8 @@ void ScInterpreter::ScSearch()
                 utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL);
             utl::SearchParam sPar(SearchStr, eSearchType, false, false, false);
             utl::TextSearch sT( sPar, *ScGlobal::pCharClass );
-            bool nBool = sT.SearchForward(sStr, &nPos, &nEndPos);
-            if (!nBool)
+            bool bBool = sT.SearchForward(sStr, &nPos, &nEndPos);
+            if (!bBool)
                 PushNoValue();
             else
                 PushDouble((double)(nPos) + 1);

@@ -1006,7 +1006,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
     KeyEvent    aKeyEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     NotifyEvent aNotifyEvt( nSVEvent, pChild, &aKeyEvt );
     bool bKeyPreNotify = ImplCallPreNotify( aNotifyEvt );
-    bool nRet = true;
+    bool bRet = true;
 
     if ( !bKeyPreNotify && !aDelData.IsDead() )
     {
@@ -1054,7 +1054,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
 
             // ContextMenu
             if ( (nCode == KEY_CONTEXTMENU) || ((nCode == KEY_F10) && aKeyCode.IsShift() && !aKeyCode.IsMod1() && !aKeyCode.IsMod2() ) )
-                nRet = !ImplCallCommand( pChild, CommandEventId::ContextMenu, NULL, false );
+                bRet = !ImplCallCommand( pChild, CommandEventId::ContextMenu, NULL, false );
             else if ( ( (nCode == KEY_F2) && aKeyCode.IsShift() ) || ( (nCode == KEY_F1) && aKeyCode.IsMod1() ) ||
                 // #101999# no active help when focus in toolbox, simulate BallonHelp instead
                 ( (nCode == KEY_F1) && aKeyCode.IsShift() && bToolboxFocus ) )
@@ -1083,33 +1083,33 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                         pChild->RequestHelp( aHelpEvent );
                     }
                     else
-                        nRet = false;
+                        bRet = false;
                 }
                 else if ( aKeyCode.IsShift() )
                 {
                     if ( pSVData->maHelpData.mbExtHelp )
                         Help::StartExtHelp();
                     else
-                        nRet = false;
+                        bRet = false;
                 }
             }
             else
             {
                 if ( ImplCallHotKey( aKeyCode ) )
-                    nRet = true;
+                    bRet = true;
                 else
-                    nRet = false;
+                    bRet = false;
             }
         }
     }
     else
     {
         if ( !bKeyPreNotify && pChild->ImplGetWindowImpl()->mbKeyUp )
-            nRet = false;
+            bRet = false;
     }
 
     // #105591# send keyinput to parent if we are a floating window and the key was not pocessed yet
-    if( !nRet && pWindow->ImplGetWindowImpl()->mbFloatWin && pWindow->GetParent() && (pWindow->ImplGetWindowImpl()->mpFrame != pWindow->GetParent()->ImplGetWindowImpl()->mpFrame) )
+    if( !bRet && pWindow->ImplGetWindowImpl()->mbFloatWin && pWindow->GetParent() && (pWindow->ImplGetWindowImpl()->mpFrame != pWindow->GetParent()->ImplGetWindowImpl()->mpFrame) )
     {
         pChild = pWindow->GetParent();
 
@@ -1141,10 +1141,10 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
         }
 
         if( bPreNotify || !pChild->ImplGetWindowImpl()->mbKeyInput )
-            nRet = true;
+            bRet = true;
     }
 
-    return nRet;
+    return bRet;
 }
 
 static bool ImplHandleExtTextInput( vcl::Window* pWindow,
@@ -2093,7 +2093,7 @@ inline bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent* pEv
 static bool ImplHandleMenuEvent( vcl::Window* pWindow, SalMenuEvent* pEvent, sal_uInt16 nEvent )
 {
     // Find SystemWindow and its Menubar and let it dispatch the command
-    bool nRet = false;
+    bool bRet = false;
     vcl::Window *pWin = pWindow->ImplGetWindowImpl()->mpFirstChild;
     while ( pWin )
     {
@@ -2109,26 +2109,26 @@ static bool ImplHandleMenuEvent( vcl::Window* pWindow, SalMenuEvent* pEvent, sal
             switch( nEvent )
             {
                 case SALEVENT_MENUACTIVATE:
-                    nRet = pMenuBar->HandleMenuActivateEvent( static_cast<Menu*>(pEvent->mpMenu) );
+                    bRet = pMenuBar->HandleMenuActivateEvent( static_cast<Menu*>(pEvent->mpMenu) );
                     break;
                 case SALEVENT_MENUDEACTIVATE:
-                    nRet = pMenuBar->HandleMenuDeActivateEvent( static_cast<Menu*>(pEvent->mpMenu) );
+                    bRet = pMenuBar->HandleMenuDeActivateEvent( static_cast<Menu*>(pEvent->mpMenu) );
                     break;
                 case SALEVENT_MENUHIGHLIGHT:
-                    nRet = pMenuBar->HandleMenuHighlightEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
+                    bRet = pMenuBar->HandleMenuHighlightEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
                     break;
                 case SALEVENT_MENUBUTTONCOMMAND:
-                    nRet = pMenuBar->HandleMenuButtonEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
+                    bRet = pMenuBar->HandleMenuButtonEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
                     break;
                 case SALEVENT_MENUCOMMAND:
-                    nRet = pMenuBar->HandleMenuCommandEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
+                    bRet = pMenuBar->HandleMenuCommandEvent( static_cast<Menu*>(pEvent->mpMenu), pEvent->mnId );
                     break;
                 default:
                     break;
             }
         }
     }
-    return nRet;
+    return bRet;
 }
 
 static void ImplHandleSalKeyMod( vcl::Window* pWindow, SalKeyModEvent* pEvent )
@@ -2374,7 +2374,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
     // Ensure the window survives during this method.
     VclPtr<vcl::Window> pWindow( _pWindow );
 
-    bool nRet = false;
+    bool bRet = false;
 
     // #119709# for some unknown reason it is possible to receive events (in this case key events)
     // although the corresponding VCL window must have been destroyed already
@@ -2385,7 +2385,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
     switch ( nEvent )
     {
         case SALEVENT_MOUSEMOVE:
-            nRet = ImplHandleSalMouseMove( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
+            bRet = ImplHandleSalMouseMove( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
             break;
         case SALEVENT_EXTERNALMOUSEMOVE:
         {
@@ -2398,14 +2398,14 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
             aSalMouseEvent.mnButton = 0;
             aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
 
-            nRet = ImplHandleSalMouseMove( pWindow, &aSalMouseEvent );
+            bRet = ImplHandleSalMouseMove( pWindow, &aSalMouseEvent );
         }
         break;
         case SALEVENT_MOUSELEAVE:
-            nRet = ImplHandleSalMouseLeave( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
+            bRet = ImplHandleSalMouseLeave( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
             break;
         case SALEVENT_MOUSEBUTTONDOWN:
-            nRet = ImplHandleSalMouseButtonDown( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
+            bRet = ImplHandleSalMouseButtonDown( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
             break;
         case SALEVENT_EXTERNALMOUSEBUTTONDOWN:
         {
@@ -2418,11 +2418,11 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
             aSalMouseEvent.mnButton = pMouseEvt->GetButtons();
             aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
 
-            nRet = ImplHandleSalMouseButtonDown( pWindow, &aSalMouseEvent );
+            bRet = ImplHandleSalMouseButtonDown( pWindow, &aSalMouseEvent );
         }
         break;
         case SALEVENT_MOUSEBUTTONUP:
-            nRet = ImplHandleSalMouseButtonUp( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
+            bRet = ImplHandleSalMouseButtonUp( pWindow, const_cast<SalMouseEvent *>(static_cast<SalMouseEvent const *>(pEvent)) );
             break;
         case SALEVENT_EXTERNALMOUSEBUTTONUP:
         {
@@ -2435,37 +2435,37 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
             aSalMouseEvent.mnButton = pMouseEvt->GetButtons();
             aSalMouseEvent.mnCode = pMouseEvt->GetButtons() | pMouseEvt->GetModifier();
 
-            nRet = ImplHandleSalMouseButtonUp( pWindow, &aSalMouseEvent );
+            bRet = ImplHandleSalMouseButtonUp( pWindow, &aSalMouseEvent );
         }
         break;
         case SALEVENT_MOUSEACTIVATE:
-            nRet = false;
+            bRet = false;
             break;
         case SALEVENT_KEYINPUT:
             {
             SalKeyEvent const * pKeyEvt = static_cast<SalKeyEvent const *>(pEvent);
-            nRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYINPUT,
+            bRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYINPUT,
                 pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, true );
             }
             break;
         case SALEVENT_EXTERNALKEYINPUT:
             {
             KeyEvent const * pKeyEvt = static_cast<KeyEvent const *>(pEvent);
-            nRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYINPUT,
+            bRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYINPUT,
                 pKeyEvt->GetKeyCode().GetFullCode(), pKeyEvt->GetCharCode(), pKeyEvt->GetRepeat(), false );
             }
             break;
         case SALEVENT_KEYUP:
             {
             SalKeyEvent const * pKeyEvt = static_cast<SalKeyEvent const *>(pEvent);
-            nRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYUP,
+            bRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYUP,
                 pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, true );
             }
             break;
         case SALEVENT_EXTERNALKEYUP:
             {
             KeyEvent const * pKeyEvt = static_cast<KeyEvent const *>(pEvent);
-            nRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYUP,
+            bRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYUP,
                 pKeyEvt->GetKeyCode().GetFullCode(), pKeyEvt->GetCharCode(), pKeyEvt->GetRepeat(), false );
             }
             break;
@@ -2482,11 +2482,11 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
         case SALEVENT_MENUHIGHLIGHT:
         case SALEVENT_MENUCOMMAND:
         case SALEVENT_MENUBUTTONCOMMAND:
-            nRet = ImplHandleMenuEvent( pWindow, const_cast<SalMenuEvent *>(static_cast<SalMenuEvent const *>(pEvent)), nEvent );
+            bRet = ImplHandleMenuEvent( pWindow, const_cast<SalMenuEvent *>(static_cast<SalMenuEvent const *>(pEvent)), nEvent );
             break;
 
         case SALEVENT_WHEELMOUSE:
-            nRet = ImplHandleWheelEvent( pWindow, *static_cast<const SalWheelMouseEvent*>(pEvent));
+            bRet = ImplHandleWheelEvent( pWindow, *static_cast<const SalWheelMouseEvent*>(pEvent));
             break;
 
         case SALEVENT_PAINT:
@@ -2578,24 +2578,24 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
         case SALEVENT_EXTTEXTINPUT:
             {
             SalExtTextInputEvent const * pEvt = static_cast<SalExtTextInputEvent const *>(pEvent);
-            nRet = ImplHandleExtTextInput( pWindow,
+            bRet = ImplHandleExtTextInput( pWindow,
                                            pEvt->maText, pEvt->mpTextAttr,
                                            pEvt->mnCursorPos, pEvt->mnCursorFlags );
             }
             break;
         case SALEVENT_ENDEXTTEXTINPUT:
-            nRet = ImplHandleEndExtTextInput( pWindow );
+            bRet = ImplHandleEndExtTextInput( pWindow );
             break;
         case SALEVENT_EXTTEXTINPUTPOS:
             ImplHandleSalExtTextInputPos( pWindow, const_cast<SalExtTextInputPosEvent *>(static_cast<SalExtTextInputPosEvent const *>(pEvent)) );
             break;
         case SALEVENT_INPUTCONTEXTCHANGE:
-            nRet = ImplHandleInputContextChange( pWindow, static_cast<SalInputContextChangeEvent const *>(pEvent)->meLanguage );
+            bRet = ImplHandleInputContextChange( pWindow, static_cast<SalInputContextChangeEvent const *>(pEvent)->meLanguage );
             break;
         case SALEVENT_SHOWDIALOG:
             {
                 ShowDialogId nDialogID = static_cast<ShowDialogId>(reinterpret_cast<sal_IntPtr>(pEvent));
-                nRet = ImplHandleShowDialog( pWindow, nDialogID );
+                bRet = ImplHandleShowDialog( pWindow, nDialogID );
             }
             break;
         case SALEVENT_SURROUNDINGTEXTREQUEST:
@@ -2626,7 +2626,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
             // Other SalWheelMouseEvent fields ignored when the
             // scaleDirectly parameter to ImplHandleWheelEvent() is
             // true.
-            nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent, true );
+            bRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent, true );
             }
             break;
         case SALEVENT_EXTERNALSCROLL:
@@ -2641,7 +2641,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
             aSalWheelMouseEvent.mnScrollLines = 0;
             if (aSalWheelMouseEvent.mnX != 0 || aSalWheelMouseEvent.mnY != 0)
             {
-                nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
+                bRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
             }
         }
         break;
@@ -2650,11 +2650,11 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
             break;
 
         case SALEVENT_SWIPE:
-            nRet = ImplHandleSwipe(pWindow, *static_cast<const SalSwipeEvent*>(pEvent));
+            bRet = ImplHandleSwipe(pWindow, *static_cast<const SalSwipeEvent*>(pEvent));
             break;
 
         case SALEVENT_LONGPRESS:
-            nRet = ImplHandleLongPress(pWindow, *static_cast<const SalLongPressEvent*>(pEvent));
+            bRet = ImplHandleLongPress(pWindow, *static_cast<const SalLongPressEvent*>(pEvent));
             break;
 
 
@@ -2665,7 +2665,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalFrame* /*pFrame*/,
 #endif
     }
 
-    return nRet;
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

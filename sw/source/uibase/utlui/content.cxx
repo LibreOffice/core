@@ -2274,12 +2274,12 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
 
 void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
 {
-    bool nMove = false;
+    bool bMove = false;
     switch( nCmd )
     {
         case FN_ITEM_DOWN:
         case FN_ITEM_UP:
-            nMove = true;
+            bMove = true;
             //fall-through
         case FN_ITEM_LEFT:
         case FN_ITEM_RIGHT:
@@ -2301,14 +2301,14 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
                 }
             }
             if ( nActPos < USHRT_MAX &&
-                    ( !nMove || pShell->IsOutlineMovable( nActPos )) )
+                    ( !bMove || pShell->IsOutlineMovable( nActPos )) )
             {
                 pShell->StartAllAction();
                 pShell->GotoOutline( nActPos); // If text selection != box selection
                 pShell->Push();
                 pShell->MakeOutlineSel( nActPos, nActPos,
                                     bModifier);
-                if( nMove )
+                if( bMove )
                 {
                     short nDir = nCmd == FN_ITEM_UP ? -1 : 1;
                     if( !bModifier && ( (nDir == -1 && nActPos > 0) ||

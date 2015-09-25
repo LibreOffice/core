@@ -91,12 +91,12 @@ OUString getString(const Any& _rAny)
 
 bool getBOOL(const Any& _rAny)
 {
-    bool nReturn = false;
+    bool bReturn = false;
     if (_rAny.getValueType() == cppu::UnoType<bool>::get())
-        nReturn = *static_cast<sal_Bool const *>(_rAny.getValue());
+        bReturn = *static_cast<sal_Bool const *>(_rAny.getValue());
     else
         OSL_FAIL("comphelper::getBOOL : invalid argument !");
-    return nReturn;
+    return bReturn;
 }
 
 

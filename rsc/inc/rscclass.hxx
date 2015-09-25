@@ -69,7 +69,7 @@ public:
     virtual void    EnumVariables( void * pData, VarEnumCallbackProc ) SAL_OVERRIDE;
     RSCINST         GetVariable( const RSCINST & rInst, Atom nVarName,
                                  const RSCINST & rInitInst,
-                                 bool nInitDflt = false,
+                                 bool bInitDflt = false,
                                  RscTop * pCreateClass = NULL ) SAL_OVERRIDE;
     RSCINST         GetCopyVar( const RSCINST & rInst, Atom nVarName ) SAL_OVERRIDE;
 

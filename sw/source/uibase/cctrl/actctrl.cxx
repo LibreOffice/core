@@ -28,7 +28,7 @@ void NumEditAction::Action()
 
 bool NumEditAction::Notify( NotifyEvent& rNEvt )
 {
-    bool nHandled = false;
+    bool bHandled = false;
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
@@ -39,13 +39,13 @@ bool NumEditAction::Notify( NotifyEvent& rNEvt )
                 !nModifier)
         {
             Action();
-            nHandled = true;
+            bHandled = true;
         }
 
     }
-    if(!nHandled)
+    if(!bHandled)
         NumericField::Notify( rNEvt );
-    return nHandled;
+    return bHandled;
 }
 
 void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)

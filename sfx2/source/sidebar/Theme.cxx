@@ -995,10 +995,10 @@ void Theme::ProcessNewValue (
         }
         case PT_Boolean:
         {
-            bool nValue (false);
-            if (rValue >>= nValue)
+            bool bValue (false);
+            if (rValue >>= bValue)
             {
-                maBooleans[nIndex] = nValue;
+                maBooleans[nIndex] = bValue;
                 if (eItem == Bool_IsHighContrastModeActive)
                 {
                     mbIsHighContrastModeSetManually = true;
