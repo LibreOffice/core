@@ -52,6 +52,7 @@
 #include "htmlexp.hxx"
 #include "filter.hxx"
 #include "global.hxx"
+#include "postit.hxx"
 #include "document.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"
@@ -88,6 +89,13 @@ const static sal_Char sMyBegComment[]   = "<!-- ";
 const static sal_Char sMyEndComment[]   = " -->";
 const static sal_Char sFontFamily[]     = "font-family:";
 const static sal_Char sFontSize[]       = "font-size:";
+const static sal_Char sDisplay[]        = "display:";
+const static sal_Char sBorder[]         = "border:";
+const static sal_Char sPadding[]        = "padding:";
+const static sal_Char sPosition[]       = "position:";
+const static sal_Char sBackground[]     = "background:";
+const static sal_Char sWidth[]          = "width:";
+const static sal_Char sHeight[]         = "height:";
 
 const sal_uInt16 ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
 {
@@ -390,6 +398,38 @@ void ScHTMLExport::WriteHeader()
     }
     rStrm.WriteCharPtr( "; " ).WriteCharPtr( sFontSize )
        .WriteCharPtr( GetFontSizeCss( ( sal_uInt16 ) aHTMLStyle.nFontHeight ) ).WriteCharPtr( " }" );
+
+    OUT_LF();
+
+    // write the style for the comments to make them stand out from normal cell content
+    // this is done through only showing the cell contents when the custom indicator is hovered
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_anchor ).WriteCharPtr(".comment-indicator:hover")
+       .WriteCharPtr(" + ").WriteCharPtr( OOO_STRING_SVTOOLS_HTML_comment2 ).WriteCharPtr(" { ")
+       .WriteCharPtr(sBackground).WriteCharPtr("#ffd").WriteCharPtr("; ")
+       .WriteCharPtr(sPosition).WriteCharPtr("absolute").WriteCharPtr("; ")
+       .WriteCharPtr(sDisplay).WriteCharPtr("block").WriteCharPtr("; ")
+       .WriteCharPtr(sBorder).WriteCharPtr("1px solid black").WriteCharPtr("; ")
+       .WriteCharPtr(sPadding).WriteCharPtr("0.5em").WriteCharPtr("; ")
+       .WriteCharPtr(" } ");
+
+    OUT_LF();
+
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_anchor ).WriteCharPtr(".comment-indicator")
+        .WriteCharPtr(" { ")
+        .WriteCharPtr(sBackground).WriteCharPtr("red").WriteCharPtr("; ")
+        .WriteCharPtr(sDisplay).WriteCharPtr("inline-block").WriteCharPtr("; ")
+        .WriteCharPtr(sBorder).WriteCharPtr("1px solid black").WriteCharPtr("; ")
+        .WriteCharPtr(sWidth).WriteCharPtr("0.5em").WriteCharPtr("; ")
+        .WriteCharPtr(sHeight).WriteCharPtr("0.5em").WriteCharPtr("; ")
+        .WriteCharPtr(" } ");
+
+    OUT_LF();
+
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_comment2  ).WriteCharPtr(" { ")
+       .WriteCharPtr(sDisplay).WriteCharPtr("none").WriteCharPtr("; ")
+       .WriteCharPtr(" } ");
+
+
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
 
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
@@ -1058,6 +1098,28 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         nFormat, *pFormatter, eDestEnc, &aNonConvertibleChars));
 
     TAG_ON(aStrTD.makeStringAndClear().getStr());
+
+    //write the note for this as the first thing in the tag
+    if (pDoc->HasNote(aPos))
+    {
+        ScPostIt* pNote = pDoc->GetNote(aPos);
+
+        //create the comment indicator
+        OStringBuffer aStr(OOO_STRING_SVTOOLS_HTML_anchor);
+        aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_class)
+           .append("=\"").append("comment-indicator").append("\"");
+        TAG_ON(aStr.makeStringAndClear().getStr());
+        TAG_OFF(OOO_STRING_SVTOOLS_HTML_anchor);
+        OUT_LF();
+
+        //create the element holding the contents
+        //this is a bit naive, since it doesn't separate
+        //lines into html breaklines yet
+        TAG_ON(OOO_STRING_SVTOOLS_HTML_comment2);
+        OUT_STR( pNote->GetText() );
+        TAG_OFF(OOO_STRING_SVTOOLS_HTML_comment2);
+        OUT_LF();
+    }
 
     if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
     if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );
