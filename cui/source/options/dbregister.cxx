@@ -436,19 +436,16 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& _sOldName,const O
     }
 }
 
-IMPL_LINK( DbRegistrationOptionsPage, NameValidator, OUString*, _pName )
+IMPL_LINK_TYPED( DbRegistrationOptionsPage, NameValidator, const OUString&, _rName, bool )
 {
-    if ( _pName )
+    sal_uLong nCount = m_pPathBox->GetEntryCount();
+    for ( sal_uLong i = 0; i < nCount; ++i )
     {
-        sal_uLong nCount = m_pPathBox->GetEntryCount();
-        for ( sal_uLong i = 0; i < nCount; ++i )
-        {
-            SvTreeListEntry* pEntry = m_pPathBox->GetEntry(i);
-            if ( (!m_pCurEntry || m_pCurEntry != pEntry) && SvTabListBox::GetEntryText(pEntry,0) == *_pName )
-                return 0L;
-        }
+        SvTreeListEntry* pEntry = m_pPathBox->GetEntry(i);
+        if ( (!m_pCurEntry || m_pCurEntry != pEntry) && SvTabListBox::GetEntryText(pEntry,0) == _rName )
+            return false;
     }
-    return 1L;
+    return true;
 }
 
 }
