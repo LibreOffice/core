@@ -261,9 +261,9 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     nWidth=pWordED->GetSizePixel().Width();
     // install handler
     pNewReplacePB->SetClickHdl(
-        LINK( this, SvxEditDictionaryDialog, NewDelHdl));
+        LINK( this, SvxEditDictionaryDialog, NewDelButtonHdl));
     pDeletePB->SetClickHdl(
-        LINK( this, SvxEditDictionaryDialog, NewDelHdl));
+        LINK( this, SvxEditDictionaryDialog, NewDelButtonHdl));
 
     pLangLB->SetSelectHdl(
         LINK( this, SvxEditDictionaryDialog, SelectLangHdl_Impl ) );
@@ -591,12 +591,16 @@ IMPL_LINK_TYPED(SvxEditDictionaryDialog, SelectHdl, SvTreeListBox*, pBox, void)
 
 
 
-IMPL_LINK_TYPED(SvxEditDictionaryDialog, NewDelHdl, Button*, pBtn, void)
+IMPL_LINK_TYPED(SvxEditDictionaryDialog, NewDelButtonHdl, Button*, pBtn, void)
 {
-    NewDelActionHdl(static_cast<PushButton*>(pBtn));
+    NewDelHdl(static_cast<PushButton*>(pBtn));
 }
 
-IMPL_LINK(SvxEditDictionaryDialog, NewDelActionHdl, PushButton*, pBtn)
+IMPL_LINK_TYPED(SvxEditDictionaryDialog, NewDelActionHdl, SvxDictEdit&, rDictEdit, bool)
+{
+    return NewDelHdl(&rDictEdit);
+}
+bool SvxEditDictionaryDialog::NewDelHdl(void* pBtn)
 {
     SvTreeListEntry* pEntry = pWordsLB->FirstSelected();
 
@@ -686,10 +690,10 @@ IMPL_LINK(SvxEditDictionaryDialog, NewDelActionHdl, PushButton*, pBtn)
     {
         // this can only be an enter in one of the two edit fields
         // which means EndDialog() - has to be evaluated in KeyInput
-        return 0;
+        return false;
     }
     ModifyHdl(pWordED);
-    return 1;
+    return true;
 }
 
 
@@ -804,7 +808,7 @@ void SvxDictEdit::KeyInput( const KeyEvent& rKEvt )
     {
         // if there's nothing done on enter, call the
         // base class after all to close the dialog
-        if(!nModifier && !aActionLink.Call(this))
+        if(!nModifier && !aActionLink.Call(*this))
                  Edit::KeyInput(rKEvt);
     }
     else if(bSpaces || aKeyCode.GetCode() != KEY_SPACE)
