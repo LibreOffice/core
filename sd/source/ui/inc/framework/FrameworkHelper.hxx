@@ -306,7 +306,7 @@ private:
     */
     static InstanceMap maInstanceMap;
     class ViewURLMap;
-    static ::boost::scoped_ptr<ViewURLMap> mpViewURLMap;
+    static std::unique_ptr<ViewURLMap> mpViewURLMap;
 
     ViewShellBase& mrBase;
     css::uno::Reference<css::drawing::framework::XConfigurationController>

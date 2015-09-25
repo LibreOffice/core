@@ -11,7 +11,6 @@
 
 #include <osl/thread.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include <vector>
 
 #if (defined(LINUX) && !defined(__FreeBSD_kernel__)) && defined(ENABLE_DBUS)
@@ -47,7 +46,7 @@ namespace sd
 
 #ifdef LINUX_BLUETOOTH
         struct Impl;
-        boost::scoped_ptr<Impl> mpImpl;
+        std::unique_ptr<Impl> mpImpl;
 #endif
         virtual void SAL_CALL run() SAL_OVERRIDE;
 
