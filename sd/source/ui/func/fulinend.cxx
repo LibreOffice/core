@@ -33,7 +33,6 @@
 #include "View.hxx"
 #include "Window.hxx"
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -115,7 +114,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
         }
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog( NULL, aName, aDesc ) : 0);
+        std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog( NULL, aName, aDesc ) : 0);
 
         if( pDlg )
         {

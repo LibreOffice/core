@@ -32,7 +32,6 @@
 #include <svx/svxdlg.hxx>
 
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -75,7 +74,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    boost::scoped_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, mpView ) );
+                    std::unique_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, mpView ) );
 
                     const sal_uInt16* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
@@ -95,7 +94,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    boost::scoped_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet, mpView ) );
+                    std::unique_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet, mpView ) );
                     if( pDlg.get() && (pDlg->Execute() == RET_OK) )
                     {
                         rReq.Done( *( pDlg->GetOutputItemSet() ) );
