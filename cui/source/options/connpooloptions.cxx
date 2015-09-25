@@ -43,7 +43,7 @@ namespace offapp
         OUString                                m_sYes;
         OUString                                m_sNo;
 
-        Link<>                                  m_aRowChangeHandler;
+        Link<const DriverPooling*,void>               m_aRowChangeHandler;
 
     public:
         explicit DriverListControl(vcl::Window* _pParent);
@@ -54,7 +54,7 @@ namespace offapp
 
         // the handler will be called with a DriverPoolingSettings::const_iterator as parameter,
         // or NULL if no valid current row exists
-        void SetRowChangeHandler(const Link<>& _rHdl) { m_aRowChangeHandler = _rHdl; }
+        void SetRowChangeHandler(const Link<const DriverPooling*,void>& _rHdl) { m_aRowChangeHandler = _rHdl; }
 
         DriverPooling* getCurrentRow();
         void                                    updateCurrentRow();
@@ -413,9 +413,9 @@ namespace offapp
     }
 
 
-    IMPL_LINK( ConnectionPoolOptionsPage, OnDriverRowChanged, const void*, _pRowIterator )
+    IMPL_LINK_TYPED( ConnectionPoolOptionsPage, OnDriverRowChanged, const DriverPooling*, pDriverPos, void )
     {
-        bool bValidRow = (NULL != _pRowIterator);
+        bool bValidRow = (NULL != pDriverPos);
         m_pDriverPoolingEnabled->Enable(bValidRow && m_pEnablePooling->IsChecked());
         m_pTimeoutLabel->Enable(bValidRow);
         m_pTimeout->Enable(bValidRow);
@@ -426,16 +426,12 @@ namespace offapp
         }
         else
         {
-            const DriverPooling *pDriverPos = static_cast<const DriverPooling*>(_pRowIterator);
-
             m_pDriver->SetText(pDriverPos->sName);
             m_pDriverPoolingEnabled->Check(pDriverPos->bEnabled);
             m_pTimeout->SetText(OUString::number(pDriverPos->nTimeoutSeconds));
 
             OnEnabledDisabled(m_pDriverPoolingEnabled);
         }
-
-        return 0L;
     }
 
 
