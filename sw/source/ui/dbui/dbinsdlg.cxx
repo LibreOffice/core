@@ -1757,7 +1757,7 @@ void SwInsertDBColAutoPilot::Load()
 
             pTableStyle = 0;
             sTmp = pNewData->sTAutoFormatNm;
-            if( sTmp.getLength() )
+            if( !sTmp.isEmpty() )
             {
                 pTableStyle = pView->GetWrtShell().GetDoc()->GetTableStyles()->FindStyle( sTmp );
             }
