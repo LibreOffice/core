@@ -46,8 +46,8 @@ private:
     static void InitInterface_Impl();
 
 public:
-    DECL_LINK( RedlineNextHdl, AbstractSvxPostItDialog * );
-    DECL_LINK( RedlinePrevHdl, AbstractSvxPostItDialog * );
+    DECL_LINK_TYPED( RedlineNextHdl, AbstractSvxPostItDialog&, void );
+    DECL_LINK_TYPED( RedlinePrevHdl, AbstractSvxPostItDialog&, void );
 
     void    Execute(SfxRequest &);
     void    GetState(SfxItemSet &);

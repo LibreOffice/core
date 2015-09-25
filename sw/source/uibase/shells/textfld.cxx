@@ -852,13 +852,12 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
     }
 }
 
-IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
+IMPL_LINK_TYPED( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, void )
 {
     SwWrtShell* pSh = GetShellPtr();
-    AbstractSvxPostItDialog *pDlg = pBtn;
 
     // Insert or change a comment.
-    pSh->SetRedlineComment(pDlg->GetNote());
+    pSh->SetRedlineComment(rDlg.GetNote());
 
     const SwRangeRedline *pRedline = pSh->GetCurrRedline();
 
@@ -883,7 +882,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
             pSh->EndAction();
         }
 
-        pDlg->EnableTravel(bEnable, true);
+        rDlg.EnableTravel(bEnable, true);
 
         if( pSh->IsCrsrPtAtEnd() )
             pSh->SwapPam();
@@ -891,24 +890,21 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
         pRedline = pSh->GetCurrRedline();
         OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
 
-        pDlg->SetNote(sComment);
-        pDlg->ShowLastAuthor( pRedline->GetAuthorString(),
+        rDlg.SetNote(sComment);
+        rDlg.ShowLastAuthor( pRedline->GetAuthorString(),
                     GetAppLangDateTimeString(
                                 pRedline->GetRedlineData().GetTimeStamp() ));
 
-        pDlg->SetText(lcl_BuildTitleWithRedline(pRedline));
+        rDlg.SetText(lcl_BuildTitleWithRedline(pRedline));
     }
-
-    return 0;
 }
 
-IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
+IMPL_LINK_TYPED( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog&, rDlg, void )
 {
     SwWrtShell* pSh = GetShellPtr();
-    AbstractSvxPostItDialog *pDlg = pBtn;
 
     // Insert or change a comment.
-    pSh->SetRedlineComment(pDlg->GetNote());
+    pSh->SetRedlineComment(rDlg.GetNote());
 
     const SwRangeRedline *pRedline = pSh->GetCurrRedline();
 
@@ -930,20 +926,18 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
             pSh->EndAction();
         }
 
-        pDlg->EnableTravel(true, bEnable);
+        rDlg.EnableTravel(true, bEnable);
 
         pRedline = pSh->GetCurrRedline();
         OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
 
-        pDlg->SetNote(sComment);
-        pDlg->ShowLastAuthor(pRedline->GetAuthorString(),
+        rDlg.SetNote(sComment);
+        rDlg.ShowLastAuthor(pRedline->GetAuthorString(),
                 GetAppLangDateTimeString(
                                 pRedline->GetRedlineData().GetTimeStamp() ));
 
-        pDlg->SetText(lcl_BuildTitleWithRedline(pRedline));
+        rDlg.SetText(lcl_BuildTitleWithRedline(pRedline));
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
