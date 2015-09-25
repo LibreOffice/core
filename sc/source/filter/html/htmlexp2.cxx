@@ -77,7 +77,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
         while ( pObject )
         {
             Rectangle aObjRect = pObject->GetCurrentBoundRect();
-            if ( bAll || aRect.IsInside( aObjRect ) )
+            if ( (bAll || aRect.IsInside( aObjRect )) && !ScDrawLayer::IsNoteCaption(pObject) )
             {
                 Size aSpace;
                 ScRange aR = pDoc->GetRange( nTab, aObjRect );
