@@ -72,8 +72,6 @@ namespace oox { namespace ole {
 namespace oox {
 namespace core {
 
-
-
 enum OoxmlVersion
 {
     ECMA_DIALECT,
@@ -278,8 +276,6 @@ private:
 private:
     std::unique_ptr< FilterBaseImpl > mxImpl;
 };
-
-
 
 } // namespace core
 } // namespace oox
