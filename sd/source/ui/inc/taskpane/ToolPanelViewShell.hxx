@@ -83,7 +83,7 @@ public:
     virtual bool RelocateToParentWindow (vcl::Window* pParentWindow) SAL_OVERRIDE;
 
 private:
-    ::boost::scoped_ptr< ToolPanelViewShell_Impl >   mpImpl;
+    std::unique_ptr< ToolPanelViewShell_Impl >   mpImpl;
 
     std::shared_ptr<TaskPaneShellManager> mpSubShellManager;
 
