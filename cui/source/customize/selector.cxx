@@ -994,7 +994,7 @@ IMPL_LINK_TYPED( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
     }
     else if (pButton == m_pOKButton)
     {
-        GetAddHdl().Call( this );
+        GetAddHdl().Call( *this );
 
         // If we are displaying Slot API commands then this the dialog is being
         // run from Tools/Configure and we should not close it
