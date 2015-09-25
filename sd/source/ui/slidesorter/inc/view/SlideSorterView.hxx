@@ -231,7 +231,7 @@ private:
     std::shared_ptr<SelectionPainter> mpSelectionPainter;
     vcl::Region maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
-    ::boost::scoped_ptr<ToolTip> mpToolTip;
+    std::unique_ptr<ToolTip> mpToolTip;
     bool mbIsRearrangePending;
     ::std::vector<Link<LinkParamNone*,void>> maVisibilityChangeListeners;
 

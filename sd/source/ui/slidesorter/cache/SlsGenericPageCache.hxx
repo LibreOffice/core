@@ -132,7 +132,7 @@ private:
 
     RequestQueue maRequestQueue;
 
-    ::boost::scoped_ptr<QueueProcessor> mpQueueProcessor;
+    std::unique_ptr<QueueProcessor> mpQueueProcessor;
 
     SharedCacheContext mpCacheContext;
 
