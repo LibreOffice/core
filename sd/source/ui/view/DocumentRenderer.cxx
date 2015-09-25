@@ -52,7 +52,6 @@
 #include <unotools/moduleoptions.hxx>
 
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1120,7 +1119,7 @@ namespace {
         }
 
     private:
-        ::boost::scoped_ptr<OutlinerParaObject> mpParaObject;
+        std::unique_ptr<OutlinerParaObject> mpParaObject;
     };
 }
 
@@ -1323,9 +1322,9 @@ private:
     bool mbIsDisposed;
     VclPtr<Printer> mpPrinter;
     Size maPrinterPageSizePixel;
-    ::boost::scoped_ptr<PrintOptions> mpOptions;
+    std::unique_ptr<PrintOptions> mpOptions;
     std::vector< std::shared_ptr< ::sd::PrinterPage> > maPrinterPages;
-    ::boost::scoped_ptr<DrawView> mpPrintView;
+    std::unique_ptr<DrawView> mpPrintView;
     bool mbHasOrientationWarningBeenShown;
     std::vector<sal_Int32> maSlidesPerPage;
     awt::Size maPrintSize;
