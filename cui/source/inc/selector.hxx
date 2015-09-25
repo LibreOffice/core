@@ -180,9 +180,9 @@ class SvxScriptSelectorDialog : public ModelessDialog
     VclPtr<PushButton>                     m_pOKButton;
     VclPtr<PushButton>                     m_pCancelButton;
     VclPtr<VclMultiLineEdit>               m_pDescriptionText;
-    OUString                        m_sDefaultDesc;
-    bool                        m_bShowSlots;
-    Link<>                          m_aAddHdl;
+    OUString                               m_sDefaultDesc;
+    bool                                   m_bShowSlots;
+    Link<SvxScriptSelectorDialog&,void>    m_aAddHdl;
 
     DECL_LINK_TYPED( ClickHdl, Button *, void );
     DECL_LINK_TYPED( SelectHdl, SvTreeListBox*, void );
@@ -200,8 +200,8 @@ public:
     virtual ~SvxScriptSelectorDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    void        SetAddHdl( const Link<>& rLink ) { m_aAddHdl = rLink; }
-    const Link<>& GetAddHdl() const { return m_aAddHdl; }
+    void        SetAddHdl( const Link<SvxScriptSelectorDialog&,void>& rLink ) { m_aAddHdl = rLink; }
+    const Link<SvxScriptSelectorDialog&,void>& GetAddHdl() const { return m_aAddHdl; }
 
     void        SetImageProvider(SaveInData* provider)
     {

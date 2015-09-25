@@ -2534,14 +2534,9 @@ IMPL_LINK_TYPED( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void 
     }
 }
 
-IMPL_LINK( SvxMenuConfigPage, AddFunctionHdl,
-    SvxScriptSelectorDialog *, pDialog )
+IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
 {
-    (void)pDialog;
-
     AddFunction();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG_TYPED( SvxMenuConfigPage, NewMenuHdl, Button *, void )
@@ -4476,14 +4471,9 @@ IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddCommandsHdl, Button *, void )
     m_pSelectorDlg->Show();
 }
 
-IMPL_LINK( SvxToolbarConfigPage, AddFunctionHdl,
-    SvxScriptSelectorDialog *, pDialog )
+IMPL_LINK_NOARG_TYPED( SvxToolbarConfigPage, AddFunctionHdl, SvxScriptSelectorDialog&, void )
 {
-    (void)pDialog;
-
     AddFunction();
-
-    return 0;
 }
 
 SvTreeListEntry* SvxToolbarConfigPage::AddFunction(

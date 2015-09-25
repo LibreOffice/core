@@ -446,7 +446,7 @@ private:
     DECL_LINK_TYPED( MenuSelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
-    DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );
+    DECL_LINK_TYPED( AddFunctionHdl, SvxScriptSelectorDialog&, void );
 
     void            Init() SAL_OVERRIDE;
     void            UpdateButtonStates() SAL_OVERRIDE;
@@ -538,7 +538,7 @@ private:
     DECL_LINK_TYPED( EntrySelectHdl, MenuButton *, void );
     DECL_LINK_TYPED( NewToolbarHdl, Button *, void );
     DECL_LINK_TYPED( AddCommandsHdl, Button *, void );
-    DECL_LINK( AddFunctionHdl, SvxScriptSelectorDialog * );
+    DECL_LINK_TYPED( AddFunctionHdl, SvxScriptSelectorDialog&, void );
     DECL_LINK_TYPED( MoveHdl, Button *, void );
 
     void            UpdateButtonStates() SAL_OVERRIDE;
