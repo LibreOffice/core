@@ -52,6 +52,7 @@
 #include "htmlexp.hxx"
 #include "filter.hxx"
 #include "global.hxx"
+#include "postit.hxx"
 #include "document.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"
@@ -88,6 +89,9 @@ const static sal_Char sMyBegComment[]   = "<!-- ";
 const static sal_Char sMyEndComment[]   = " -->";
 const static sal_Char sFontFamily[]     = "font-family:";
 const static sal_Char sFontSize[]       = "font-size:";
+const static sal_Char sDisplay[]        = "display:";
+const static sal_Char sBorder[]        = "border:";
+const static sal_Char sPadding[]        = "padding:";
 
 const sal_uInt16 ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
 {
@@ -390,6 +394,17 @@ void ScHTMLExport::WriteHeader()
     }
     rStrm.WriteCharPtr( "; " ).WriteCharPtr( sFontSize )
        .WriteCharPtr( GetFontSizeCss( ( sal_uInt16 ) aHTMLStyle.nFontHeight ) ).WriteCharPtr( " }" );
+
+    OUT_LF();
+
+    // write the style for the comments to make them stand out from normal cell content
+    rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_HTML_comment2  ).WriteCharPtr(" { ")
+       .WriteCharPtr(sDisplay).WriteCharPtr("block").WriteCharPtr("; ")
+       .WriteCharPtr(sBorder).WriteCharPtr("1px solid").WriteCharPtr("; ")
+       .WriteCharPtr(sPadding).WriteCharPtr("0.5em").WriteCharPtr("; ")
+       .WriteCharPtr(" } ");
+
+
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
 
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
@@ -1058,6 +1073,19 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         nFormat, *pFormatter, eDestEnc, &aNonConvertibleChars));
 
     TAG_ON(aStrTD.makeStringAndClear().getStr());
+
+    //write the note for this as the first thing in the tag
+    if (pDoc->HasNote(aPos))
+    {
+        ScPostIt* pNote = pDoc->GetNote(aPos);
+        TAG_ON(OOO_STRING_SVTOOLS_HTML_comment2);
+        OUT_STR( pNote->GetText() );
+        TAG_OFF(OOO_STRING_SVTOOLS_HTML_comment2);
+        OUT_LF();
+
+        //then ensure it is on a separate line from the cell's actual contents
+        TAG_ON_LF(OOO_STRING_SVTOOLS_HTML_linebreak);
+    }
 
     if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
     if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );
