@@ -448,18 +448,18 @@ class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
     DECL_ABSTDLG_BASE( AbstractSvxPostItDialog_Impl, SvxPostItDialog )
     virtual void                SetText( const OUString& rStr ) SAL_OVERRIDE;  //From class Window
     virtual const SfxItemSet*   GetOutputItemSet() const SAL_OVERRIDE;
-    virtual void                SetPrevHdl( const Link<>& rLink ) SAL_OVERRIDE ;
-    virtual void                SetNextHdl( const Link<>& rLink ) SAL_OVERRIDE ;
+    virtual void                SetPrevHdl( const Link<AbstractSvxPostItDialog&,void>& rLink ) SAL_OVERRIDE ;
+    virtual void                SetNextHdl( const Link<AbstractSvxPostItDialog&,void>& rLink ) SAL_OVERRIDE ;
     virtual void                EnableTravel(bool bNext, bool bPrev) SAL_OVERRIDE ;
     virtual OUString            GetNote() SAL_OVERRIDE ;
     virtual void                SetNote(const OUString& rTxt) SAL_OVERRIDE ;
     virtual void                ShowLastAuthor(const OUString& rAuthor, const OUString& rDate) SAL_OVERRIDE ;
     virtual void                DontChangeAuthor() SAL_OVERRIDE ;
     virtual void                HideAuthor() SAL_OVERRIDE ;
-    virtual vcl::Window *            GetWindow() SAL_OVERRIDE;
+    virtual vcl::Window *       GetWindow() SAL_OVERRIDE;
 private:
-    Link<> aNextHdl;
-    Link<> aPrevHdl;
+    Link<AbstractSvxPostItDialog&,void> aNextHdl;
+    Link<AbstractSvxPostItDialog&,void> aPrevHdl;
     DECL_LINK_TYPED(NextHdl, SvxPostItDialog&, void);
     DECL_LINK_TYPED(PrevHdl, SvxPostItDialog&, void);
 };

@@ -234,8 +234,8 @@ class AbstractSvxPostItDialog :public VclAbstractDialog
 public:
     virtual void                SetText( const OUString& rStr ) = 0;  //From class Window
     virtual const SfxItemSet*   GetOutputItemSet() const = 0;
-    virtual void                SetPrevHdl( const Link<>& rLink ) = 0;
-    virtual void                SetNextHdl( const Link<>& rLink ) = 0;
+    virtual void                SetPrevHdl( const Link<AbstractSvxPostItDialog&,void>& rLink ) = 0;
+    virtual void                SetNextHdl( const Link<AbstractSvxPostItDialog&,void>& rLink ) = 0;
     virtual void                EnableTravel(bool bNext, bool bPrev) = 0;
     virtual OUString            GetNote()  = 0;
     virtual void                SetNote(const OUString& rTxt)  = 0;

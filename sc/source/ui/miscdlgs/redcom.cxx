@@ -151,26 +151,22 @@ void ScRedComDialog::SelectCell()
     }
 }
 
-IMPL_LINK(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog*, pDlgP )
+IMPL_LINK_TYPED(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog&, rDlgP, void )
 {
-    if (pDocShell!=NULL && pDlgP->GetNote() != aComment )
-        pDocShell->SetChangeComment( pChangeAction, pDlgP->GetNote());
+    if (pDocShell!=NULL && rDlgP.GetNote() != aComment )
+        pDocShell->SetChangeComment( pChangeAction, rDlgP.GetNote());
 
     ReInit(FindPrev(pChangeAction));
     SelectCell();
-
-    return 0;
 }
 
-IMPL_LINK(ScRedComDialog, NextHdl, AbstractSvxPostItDialog*, pDlgP )
+IMPL_LINK_TYPED(ScRedComDialog, NextHdl, AbstractSvxPostItDialog&, rDlgP, void )
 {
-    if ( pDocShell!=NULL && pDlgP->GetNote() != aComment )
-        pDocShell->SetChangeComment( pChangeAction, pDlgP->GetNote());
+    if ( pDocShell!=NULL && rDlgP.GetNote() != aComment )
+        pDocShell->SetChangeComment( pChangeAction, rDlgP.GetNote());
 
     ReInit(FindNext(pChangeAction));
     SelectCell();
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

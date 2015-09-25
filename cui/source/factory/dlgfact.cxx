@@ -779,7 +779,7 @@ void AbstractSvxPostItDialog_Impl::HideAuthor()
 {
     pDlg->HideAuthor();
 }
-void AbstractSvxPostItDialog_Impl::SetNextHdl( const Link<>& rLink )
+void AbstractSvxPostItDialog_Impl::SetNextHdl( const Link<AbstractSvxPostItDialog&,void>& rLink )
 {
     aNextHdl = rLink;
     if( rLink.IsSet() )
@@ -787,7 +787,7 @@ void AbstractSvxPostItDialog_Impl::SetNextHdl( const Link<>& rLink )
     else
         pDlg->SetNextHdl( Link<SvxPostItDialog&,void>() );
 }
-void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link<>& rLink )
+void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link<AbstractSvxPostItDialog&,void>& rLink )
 {
     aPrevHdl = rLink;
     if( rLink.IsSet() )
@@ -798,12 +798,12 @@ void AbstractSvxPostItDialog_Impl::SetPrevHdl( const Link<>& rLink )
 IMPL_LINK_NOARG_TYPED(AbstractSvxPostItDialog_Impl, NextHdl, SvxPostItDialog&, void)
 {
     if( aNextHdl.IsSet() )
-        aNextHdl.Call(this);
+        aNextHdl.Call(*this);
 }
 IMPL_LINK_NOARG_TYPED(AbstractSvxPostItDialog_Impl, PrevHdl, SvxPostItDialog&, void)
 {
     if( aPrevHdl.IsSet() )
-        aPrevHdl.Call(this);
+        aPrevHdl.Call(*this);
 }
 vcl::Window * AbstractSvxPostItDialog_Impl::GetWindow()
 {
