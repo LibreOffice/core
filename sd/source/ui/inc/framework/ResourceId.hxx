@@ -30,7 +30,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 
 namespace {
 
@@ -171,9 +170,9 @@ private:
     /** The set of URLs that consist of the resource URL at index 0 and the
         anchor URLs and indices 1 and above.
     */
-    ::std::vector<OUString> maResourceURLs;
+    std::vector<OUString> maResourceURLs;
 
-    ::boost::scoped_ptr<css::util::URL> mpURL;
+    std::unique_ptr<css::util::URL> mpURL;
 
     static css::uno::WeakReference<css::util::XURLTransformer> mxURLTransformerWeak;
 
