@@ -700,7 +700,7 @@ AstExprValue* AstExpression::coerce(ExprType t)
      * First, evaluate it, then try to coerce result type
      * If already evaluated, return the result
      */
-    eval_internal();
+    evaluate();
     if (m_exprValue == NULL)
         return NULL;
 
@@ -756,11 +756,6 @@ AstExprValue* AstExpression::coerce(ExprType t)
     m_exprValue = copy;
 
     return copy;
-}
-
-void AstExpression::evaluate()
-{
-    eval_internal();
 }
 
 bool AstExpression::operator==(AstExpression *pExpr)
@@ -873,7 +868,7 @@ void AstExpression::fillDefinitionDetails()
     m_fileName = idlc()->getFileName();
 }
 
-void AstExpression::eval_internal()
+void AstExpression::evaluate()
 {
     /*
      * Already evaluated?
@@ -921,13 +916,13 @@ AstExprValue* AstExpression::eval_bin_op()
 
     if (m_subExpr1 == NULL || m_subExpr2 == NULL)
         return NULL;
-    m_subExpr1->eval_internal();
+    m_subExpr1->evaluate();
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
     m_subExpr1->setExprValue(m_subExpr1->coerce(eType));
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
-    m_subExpr2->eval_internal();
+    m_subExpr2->evaluate();
     if (m_subExpr2->getExprValue() == NULL)
         return NULL;
     m_subExpr2->setExprValue(m_subExpr2->coerce(eType));
@@ -969,13 +964,13 @@ AstExprValue* AstExpression::eval_bit_op()
 {
     if (m_subExpr1 == NULL || m_subExpr2 == NULL)
         return NULL;
-    m_subExpr1->eval_internal();
+    m_subExpr1->evaluate();
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
     m_subExpr1->setExprValue(m_subExpr1->coerce(ET_long));
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
-    m_subExpr2->eval_internal();
+    m_subExpr2->evaluate();
     if (m_subExpr2->getExprValue() == NULL)
         return NULL;
     m_subExpr2->setExprValue(m_subExpr2->coerce(ET_long));
@@ -1016,7 +1011,7 @@ AstExprValue* AstExpression::eval_un_op()
 
     if (m_subExpr1 == NULL)
         return NULL;
-    m_subExpr1->eval_internal();
+    m_subExpr1->evaluate();
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
     m_subExpr1->setExprValue(m_subExpr1->coerce(ET_double));
@@ -1097,7 +1092,7 @@ AstExprValue* AstExpression::eval_symbol()
      * OK, now evaluate the constant we just got, to produce its value
      */
     pConst = static_cast< AstConstant* >(pDecl);
-    pConst->getConstValue()->eval_internal();
+    pConst->getConstValue()->evaluate();
     return pConst->getConstValue()->getExprValue();
 }
 
