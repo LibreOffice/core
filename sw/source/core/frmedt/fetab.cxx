@@ -1190,7 +1190,7 @@ bool SwFEShell::SetTableStyle(const SwTableAutoFormat& rStyle)
     return UpdateTableStyleFormatting(pTableNode);
 }
 
-bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode)
+bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode, bool bResetDirect)
 {
     if (!pTableNode)
     {
@@ -1227,7 +1227,7 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode)
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        bRet = GetDoc()->SetTableAutoFormat(aBoxes, *pTableStyle);
+        bRet = GetDoc()->SetTableAutoFormat(aBoxes, *pTableStyle, bResetDirect);
         DELETEZ( pLastCols );
         DELETEZ( pLastRows );
         EndAllActionAndCall();

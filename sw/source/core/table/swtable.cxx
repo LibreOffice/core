@@ -1650,7 +1650,8 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLin
     aLines(),
     pSttNd( 0 ),
     pUpper( pUp ),
-    pImpl( 0 )
+    pImpl( 0 ),
+    mbDirectFormatting(false)
 {
     aLines.reserve( nLines );
     CheckBoxFormat( pFormat )->Add( this );
@@ -1661,7 +1662,8 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
     : SwClient( 0 ),
     aLines(),
     pUpper( pUp ),
-    pImpl( 0 )
+    pImpl( 0 ),
+    mbDirectFormatting(false)
 {
     CheckBoxFormat( pFormat )->Add( this );
 
@@ -1681,7 +1683,8 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, Sw
     aLines(),
     pSttNd( &rSttNd ),
     pUpper( pUp ),
-    pImpl( 0 )
+    pImpl( 0 ),
+    mbDirectFormatting(false)
 {
     CheckBoxFormat( pFormat )->Add( this );
 

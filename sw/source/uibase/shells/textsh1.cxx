@@ -540,6 +540,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // we don't want to change writing direction.
             aAttribs.erase( RES_FRAMEDIR );
             rWrtSh.ResetAttr( aAttribs );
+
+            // also clear the direct formatting flag inside SwTableBox(es)
+            GetView().GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(nullptr, true);
+
             rReq.Done();
             break;
         }

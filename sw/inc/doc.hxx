@@ -1255,8 +1255,9 @@ public:
 
     void SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet );
 
-    // AutoFormat for table/table selection.
-    bool SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew );
+    /// AutoFormat for table/table selection.
+    /// @param bResetDirect Reset direct formatting that might be applied to the cells.
+    bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect = false);
 
     // Query attributes.
     bool GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet );

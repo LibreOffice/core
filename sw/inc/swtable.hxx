@@ -397,6 +397,9 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
     SwTableLine *pUpper;
     SwTableBox_Impl* pImpl;
 
+    /// Do we contain any direct formatting?
+    bool mbDirectFormatting;
+
     // In case Format contains formulas/values already,
     // a new one must be created for the new box.
     static SwTableBoxFormat* CheckBoxFormat( SwTableBoxFormat* );
@@ -404,7 +407,7 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
 public:
     TYPEINFO_OVERRIDE();
 
-    SwTableBox() : pSttNd(0), pUpper(0), pImpl(0) {}
+    SwTableBox() : pSttNd(0), pUpper(0), pImpl(0), mbDirectFormatting(false) {}
 
     SwTableBox( SwTableBoxFormat*, sal_uInt16 nLines, SwTableLine *pUp = 0 );
     SwTableBox( SwTableBoxFormat*, const SwStartNode&, SwTableLine *pUp = 0 );
@@ -420,6 +423,12 @@ public:
 
     SwFrameFormat* GetFrameFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+
+    /// Set that this table box contains formatting that is not set by the table style.
+    void SetDirectFormatting(bool bDirect) { mbDirectFormatting = bDirect; }
+
+    /// Do we contain any direct formatting (ie. something not affected by the table style)?
+    bool HasDirectFormatting() const { return mbDirectFormatting; }
 
     // Creates its own FrameFormat if more boxes depend on it.
     SwFrameFormat* ClaimFrameFormat();

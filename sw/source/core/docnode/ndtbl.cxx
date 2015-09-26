@@ -3669,19 +3669,19 @@ struct _SetAFormatTabPara
 };
 
 // Forward declare so that the Lines and Boxes can use recursion
-static bool lcl_SetAFormatBox(_FndBox &, _SetAFormatTabPara *pSetPara);
-static bool lcl_SetAFormatLine(_FndLine &, _SetAFormatTabPara *pPara);
+static bool lcl_SetAFormatBox(_FndBox &, _SetAFormatTabPara *pSetPara, bool bResetDirect);
+static bool lcl_SetAFormatLine(_FndLine &, _SetAFormatTabPara *pPara, bool bResetDirect);
 
-static bool lcl_SetAFormatLine(_FndLine & rLine, _SetAFormatTabPara *pPara)
+static bool lcl_SetAFormatLine(_FndLine & rLine, _SetAFormatTabPara *pPara, bool bResetDirect)
 {
     for (auto const& it : rLine.GetBoxes())
     {
-        lcl_SetAFormatBox(*it, pPara);
+        lcl_SetAFormatBox(*it, pPara, bResetDirect);
     }
     return true;
 }
 
-static bool lcl_SetAFormatBox( _FndBox & rBox, _SetAFormatTabPara *pSetPara )
+static bool lcl_SetAFormatBox(_FndBox & rBox, _SetAFormatTabPara *pSetPara, bool bResetDirect)
 {
     if (!rBox.GetUpper()->GetUpper()) // Box on first level?
     {
@@ -3696,41 +3696,44 @@ static bool lcl_SetAFormatBox( _FndBox & rBox, _SetAFormatTabPara *pSetPara )
     if (rBox.GetBox()->GetSttNd())
     {
         SwTableBox* pSetBox = static_cast<SwTableBox*>(rBox.GetBox());
-        SwDoc* pDoc = pSetBox->GetFrameFormat()->GetDoc();
-        SfxItemSet aCharSet( pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
-        SfxItemSet aBoxSet( pDoc->GetAttrPool(), aTableBoxSetRange );
-        sal_uInt8 nPos = pSetPara->nAFormatLine * 4 + pSetPara->nAFormatBox;
-        pSetPara->rTableFormat.UpdateToSet( nPos, aCharSet,
-                                        SwTableAutoFormat::UPDATE_CHAR, 0 );
-        pSetPara->rTableFormat.UpdateToSet( nPos, aBoxSet,
-                                        SwTableAutoFormat::UPDATE_BOX,
-                                        pDoc->GetNumberFormatter() );
-        if( aCharSet.Count() )
+        if (!pSetBox->HasDirectFormatting() || bResetDirect)
         {
-            sal_uLong nSttNd = pSetBox->GetSttIdx()+1;
-            sal_uLong nEndNd = pSetBox->GetSttNd()->EndOfSectionIndex();
-            for( ; nSttNd < nEndNd; ++nSttNd )
+            if (bResetDirect)
+                pSetBox->SetDirectFormatting(false);
+
+            SwDoc* pDoc = pSetBox->GetFrameFormat()->GetDoc();
+            SfxItemSet aCharSet(pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1);
+            SfxItemSet aBoxSet(pDoc->GetAttrPool(), aTableBoxSetRange);
+            sal_uInt8 nPos = pSetPara->nAFormatLine * 4 + pSetPara->nAFormatBox;
+            pSetPara->rTableFormat.UpdateToSet(nPos, aCharSet, SwTableAutoFormat::UPDATE_CHAR, 0);
+            pSetPara->rTableFormat.UpdateToSet(nPos, aBoxSet, SwTableAutoFormat::UPDATE_BOX, pDoc->GetNumberFormatter());
+
+            if (aCharSet.Count())
             {
-                SwContentNode* pNd = pDoc->GetNodes()[ nSttNd ]->GetContentNode();
-                if( pNd )
-                    pNd->SetAttr( aCharSet );
+                sal_uLong nSttNd = pSetBox->GetSttIdx()+1;
+                sal_uLong nEndNd = pSetBox->GetSttNd()->EndOfSectionIndex();
+                for (; nSttNd < nEndNd; ++nSttNd)
+                {
+                    SwContentNode* pNd = pDoc->GetNodes()[ nSttNd ]->GetContentNode();
+                    if (pNd)
+                        pNd->SetAttr(aCharSet);
+                }
             }
-        }
 
-        if( aBoxSet.Count() )
-        {
-            if( pSetPara->pUndo &&
-                SfxItemState::SET == aBoxSet.GetItemState( RES_BOXATR_FORMAT ))
-                pSetPara->pUndo->SaveBoxContent( *pSetBox );
+            if (aBoxSet.Count())
+            {
+                if (pSetPara->pUndo && SfxItemState::SET == aBoxSet.GetItemState(RES_BOXATR_FORMAT))
+                    pSetPara->pUndo->SaveBoxContent( *pSetBox );
 
-            pSetBox->ClaimFrameFormat()->SetFormatAttr( aBoxSet );
+                pSetBox->ClaimFrameFormat()->SetFormatAttr(aBoxSet);
+            }
         }
     }
     else
     {
         for (auto const& rpFndLine : rBox.GetLines())
         {
-            lcl_SetAFormatLine( *rpFndLine, pSetPara );
+            lcl_SetAFormatLine(*rpFndLine, pSetPara, bResetDirect);
         }
     }
 
@@ -3739,10 +3742,7 @@ static bool lcl_SetAFormatBox( _FndBox & rBox, _SetAFormatTabPara *pSetPara )
     return true;
 }
 
-/**
- * AutoFormat for the Table/TableSelection
- */
-bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew )
+bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect)
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
@@ -3807,7 +3807,7 @@ bool SwDoc::SetTableAutoFormat( const SwSelBoxes& rBoxes, const SwTableAutoForma
         aPara.pUndo = pUndo;
         for (auto const& it : pLine->GetBoxes())
         {
-            lcl_SetAFormatBox(*it, &aPara);
+            lcl_SetAFormatBox(*it, &aPara, bResetDirect);
         }
 
         pLine->SetUpper( pSaveBox );
