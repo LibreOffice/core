@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba0121b8_8e69a48e",
+        "filename": "Repository.mk",
+        "patchSetId": 9
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2015-09-26T10:52:35Z",
+      "side": 1,
+      "message": "Does this work on macosx? I don\u0027t think this makes sense with with_x\u003dno. Also it does not seem useful with emscripten.",
+      "range": {
+        "startLine": 592,
+        "startChar": 1,
+        "endLine": 592,
+        "endChar": 11
+      },
+      "revId": "fc6c5cb4a7a0e03f8a14d45f3892db18a433ca05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_ce09dcdf",
+        "filename": "configure.ac",
+        "patchSetId": 9
+      },
+      "lineNbr": 4472,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2015-09-26T10:52:35Z",
+      "side": 1,
+      "message": "why you are not defining USING_X11\u003d? If you plan to build a full desktop version in emscripten it would be quite a bit of work. Keep in mind you have to rebuild in js every dependency you have. I\u0027d start headless and just crosscompile libreofficekit.",
+      "revId": "fc6c5cb4a7a0e03f8a14d45f3892db18a433ca05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba0121b8_ee04a0c7",
+        "filename": "configure.ac",
+        "patchSetId": 9
+      },
+      "lineNbr": 5421,
+      "author": {
+        "id": 1000042
+      },
+      "writtenOn": "2015-09-26T10:52:35Z",
+      "side": 1,
+      "message": "Assuming clang 3.6 is fine as c++ compiler you can just add proper emscripten ifedefery.",
+      "revId": "fc6c5cb4a7a0e03f8a14d45f3892db18a433ca05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
