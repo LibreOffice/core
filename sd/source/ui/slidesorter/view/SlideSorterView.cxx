@@ -83,7 +83,7 @@ namespace sd { namespace slidesorter { namespace view {
 namespace {
     /** Wrapper around the SlideSorterView that supports the IPainter
         interface and that allows the LayeredDevice to hold the
-        SlideSorterView (held as scoped_ptr by the SlideSorter) as
+        SlideSorterView (held as unique_ptr by the SlideSorter) as
         shared_ptr.
     */
     class Painter : public ILayerPainter
