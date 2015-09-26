@@ -60,7 +60,6 @@
 #include "FactoryIds.hxx"
 #include "sdabstdlg.hxx"
 #include <memory>
-#include <boost/scoped_ptr.hpp>
 #include "slideshow.hxx"
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
