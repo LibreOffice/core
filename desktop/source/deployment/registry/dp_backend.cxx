@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <boost/optional.hpp>
 
 #include "dp_backend.h"
 #include "dp_ucb.h"
