@@ -1366,8 +1366,7 @@ void SAL_CALL ChartController::releaseContextMenuInterceptor(
 
 void ChartController::executeDispatch_ChartType()
 {
-    // using assignment for broken gcc 3.3
-    UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
+    UndoLiveUpdateGuard aUndoGuard(
         SCH_RESSTR( STR_ACTION_EDIT_CHARTTYPE ), m_xUndoManager );
 
     SolarMutexGuard aSolarGuard;
