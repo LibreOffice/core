@@ -685,7 +685,7 @@ coerce_value(AstExprValue *ev, ExprType t)
     }
 }
 
-AstExprValue* AstExpression::coerce(ExprType t)
+bool AstExpression::coerce(ExprType t)
 {
     AstExprValue *copy;
 
@@ -693,7 +693,7 @@ AstExprValue* AstExpression::coerce(ExprType t)
      * Is it already of the right type?
      */
     if (m_exprValue != NULL && m_exprValue->et == t)
-        return m_exprValue;
+        return true;
     /*
      * OK, must coerce
      *
@@ -702,7 +702,7 @@ AstExprValue* AstExpression::coerce(ExprType t)
      */
     evaluate();
     if (m_exprValue == NULL)
-        return NULL;
+        return false;
 
     /*
      * Create a copy to contain coercion result
@@ -755,7 +755,7 @@ AstExprValue* AstExpression::coerce(ExprType t)
 
     m_exprValue = copy;
 
-    return copy;
+    return m_exprValue != nullptr;
 }
 
 bool AstExpression::operator==(AstExpression *pExpr)
@@ -919,14 +919,12 @@ AstExprValue* AstExpression::eval_bin_op()
     m_subExpr1->evaluate();
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
-    m_subExpr1->setExprValue(m_subExpr1->coerce(eType));
-    if (m_subExpr1->getExprValue() == NULL)
+    if (!m_subExpr1->coerce(eType))
         return NULL;
     m_subExpr2->evaluate();
     if (m_subExpr2->getExprValue() == NULL)
         return NULL;
-    m_subExpr2->setExprValue(m_subExpr2->coerce(eType));
-    if (m_subExpr2->getExprValue() == NULL)
+    if (!m_subExpr2->coerce(eType))
         return NULL;
 
     std::unique_ptr< AstExprValue > retval(new AstExprValue());
@@ -967,14 +965,12 @@ AstExprValue* AstExpression::eval_bit_op()
     m_subExpr1->evaluate();
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
-    m_subExpr1->setExprValue(m_subExpr1->coerce(ET_long));
-    if (m_subExpr1->getExprValue() == NULL)
+    if (!m_subExpr1->coerce(ET_long))
         return NULL;
     m_subExpr2->evaluate();
     if (m_subExpr2->getExprValue() == NULL)
         return NULL;
-    m_subExpr2->setExprValue(m_subExpr2->coerce(ET_long));
-    if (m_subExpr2->getExprValue() == NULL)
+    if (!m_subExpr2->coerce(ET_long))
         return NULL;
 
     std::unique_ptr< AstExprValue > retval(new AstExprValue());
@@ -1014,8 +1010,7 @@ AstExprValue* AstExpression::eval_un_op()
     m_subExpr1->evaluate();
     if (m_subExpr1->getExprValue() == NULL)
         return NULL;
-    m_subExpr1->setExprValue(m_subExpr1->coerce(ET_double));
-    if (m_subExpr1->getExprValue() == NULL)
+    if (!m_subExpr1->coerce(ET_double))
         return NULL;
 
     std::unique_ptr< AstExprValue > retval(new AstExprValue());
@@ -1030,8 +1025,7 @@ AstExprValue* AstExpression::eval_un_op()
             retval->u.lval = -(m_subExpr1->getExprValue()->u.lval);
             break;
         case EC_bit_neg:
-            m_subExpr1->setExprValue(m_subExpr1->coerce(ET_long));
-            if (m_subExpr1->getExprValue() == NULL)
+            if (!m_subExpr1->coerce(ET_long))
                 return NULL;
             retval->u.lval = ~m_subExpr1->getExprValue()->u.lval;
             break;

@@ -104,11 +104,9 @@ public:
         { return m_combOperator; }
     AstExprValue* getExprValue()
         { return m_exprValue; }
-    void setExprValue(AstExprValue *pEv)
-        { m_exprValue = pEv; }
 
     // Evaluation and value coercion
-    AstExprValue* coerce(ExprType type);
+    bool coerce(ExprType type);
 
     // Evaluate then store value inside this AstExpression
     void evaluate();
