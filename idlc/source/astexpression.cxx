@@ -1002,9 +1002,6 @@ AstExprValue* AstExpression::eval_bit_op()
 
 AstExprValue* AstExpression::eval_un_op()
 {
-    if (m_exprValue != NULL)
-        return m_exprValue;
-
     if (m_subExpr1 == NULL)
         return NULL;
     m_subExpr1->evaluate();
