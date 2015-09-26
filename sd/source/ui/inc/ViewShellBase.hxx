@@ -29,6 +29,7 @@
 #include <sfx2/viewfac.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 class SdDrawDocument;
 class SfxRequest;
